@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://game/scripts/world/facades/r133351_standalone_prototypes.gd" id="1_script"]
+
+[node name="R133351StandalonePrototypeSet" type="Node3D"]
+script = ExtResource("1_script")
+metadata/prototype_only = true
+metadata/runtime_attachment = false
+metadata/exact_receiver_calibration = false
+metadata/native_capture_status = "pending_independent_standalone_evidence"
