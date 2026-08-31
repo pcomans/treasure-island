@@ -1,0 +1,36 @@
+{
+  "schema_version": "ti.runtime-topology-delta/1",
+  "source_key": "w34313525",
+  "receiver_key": "building:w34313525:wall",
+  "before": {
+    "records": 729,
+    "meshes": 886,
+    "surfaces": 894,
+    "triangles": 50273,
+    "collider_pairs": 466
+  },
+  "after": {
+    "records": 729,
+    "meshes": 924,
+    "surfaces": 934,
+    "triangles": 50729,
+    "collider_pairs": 466
+  },
+  "delta": {
+    "records": 0,
+    "meshes": 38,
+    "surfaces": 40,
+    "triangles": 456,
+    "collider_pairs": 0,
+    "receiver_material_surfaces": 2,
+    "module_meshes": 38,
+    "module_surfaces": 38,
+    "module_triangles": 456,
+    "module_collision_nodes": 0,
+    "module_navigation_nodes": 0,
+    "module_spray_nodes": 0,
+    "module_field_or_backing_meshes": 0
+  },
+  "generated_source_and_data_bytes_unchanged": true,
+  "review_status": "pending_independent_actual_world_art_review"
+}

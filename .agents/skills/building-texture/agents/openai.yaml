@@ -1,0 +1,6 @@
+interface:
+  display_name: "Building Texture"
+  short_description: "Create and review recognizable building facade art"
+  default_prompt: "Use $building-texture to classify, create, and validate recognizable facade art on the correct Godot receiver while labeling reversible production inference."
+policy:
+  allow_implicit_invocation: true

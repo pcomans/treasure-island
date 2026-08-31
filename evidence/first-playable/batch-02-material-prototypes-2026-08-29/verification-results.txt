@@ -1,0 +1,48 @@
+Batch 02 material prototype verification — 2026-08-29
+
+1. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit`
+   Exit 0 — project scan/import and script registration pass.
+
+2. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_batch_02_material_contract.gd`
+   Exit 0 — PASS: six deterministic derivative-filtered prototype fields; exact identities/receivers/source geometry/foundations; no runtime attachment/navigation; unchanged collision/spray; accepted prior signatures; Museum/Oasis/non-target controls.
+
+3. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_scene_parse.gd`
+   Exit 0 — PASS: parsed 4 gameplay scenes.
+
+4. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_gameplay_contract.gd`
+   Exit 0 — PASS: inputs, movement/jetpack, boundary, scene, water, billboard, layer and ambient contracts.
+
+5. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_world_material_contract.gd`
+   Exit 0 — PASS: 11 existing semantic materials unchanged.
+
+6. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/validate_generated_world.gd`
+   Exit 0 — PASS: 735 playable + 4 context rows, 38 chunks, content `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164`.
+
+7. `node tools/validate_godot_world.mjs`
+   Exit 0 — valid: 38 chunks, 729 physical objects, 214 roofs, 14,904 foundation samples, 2,492,288 terrain samples.
+
+8. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_hawkins_facade_contract.gd`
+   Exit 0 — PASS: Hawkins facade/massing signature `d311c103c9273b94fc982588f46bae6ab67ba6be54b0d0a111dd305e39c22219`; runtime 48,389 triangles.
+
+9. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_building_3_facade_contract.gd`
+   Exit 0 — PASS: accepted Building 3 exact-run facade unchanged.
+
+10. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_isle_house_facade_contract.gd`
+    Exit 0 — PASS: accepted Isle House high subset unchanged; Museum remains unattached.
+
+11. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/full_runtime_integration.gd`
+    Exit 0 — PASS: 38 chunks, 729 meshes, 48,389 triangles, 466 bodies/shapes; gameplay/interactions and cleanup pass.
+
+12. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/automated_route_qa.gd`
+    Exit 0 — PASS: continuous 262.349 m route, zero recovery, teleport, stall or boundary loss.
+
+13. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/automated_route_qa.gd -- --whole-island-route`
+    Exit 0 — PASS: 3,449.107 m, five regions, zero recovery/teleport/stall, max step 0.348 m.
+
+14. `git diff --exit-code -- data/osm generated/world`
+    Exit 0 — no generated or frozen-source byte changes.
+
+15. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_02_material_proof_capture.gd`
+    Not executed — host escalation rejected pending explicit owner authorization. No workaround or dummy-renderer evidence used.
+
+Environment-only warnings in headless commands: restricted `user://logs` rotation and macOS CA-certificate lookup. No test assertion failed.

@@ -1,0 +1,8 @@
+{
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "earcut": "3.2.3",
+    "polygon-clipping": "0.15.7"
+  }
+}

@@ -1,0 +1,8 @@
+Command: git diff --name-only -- generated
+Result: no output (PASS)
+
+generated/world/manifest.json SHA-256:
+e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3
+
+Generated content hash reported by validate_generated_world.gd:
+01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164

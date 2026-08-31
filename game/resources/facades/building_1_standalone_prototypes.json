@@ -1,0 +1,202 @@
+{
+  "schema_version": "ti.building-1-standalone-prototypes/1",
+  "source_key": "r16681702",
+  "canonical_identity": "Treasure Island Administration Building 1 / Treasure Island Museum",
+  "historical_context_label": "1939 World's Fair Pan Am / Treasure Island Administration Building 1",
+  "receiver_key": "building:r16681702:wall",
+  "scope": "standalone material and complete-module prototypes only",
+  "review_status": "native_capture_pending_independent_standalone_art_review",
+  "runtime_attachment": false,
+  "exact_receiver_calibration": false,
+  "live_placement_count": 0,
+  "approved_observations_only": true,
+  "reference_pixels_stored_or_copied": false,
+  "receiver_audit": {
+    "chunk": "x_-1__z_2",
+    "source_area_m2": 4239.533,
+    "serialized_perimeter_m": 414.381,
+    "height_m": 20.0,
+    "base_elevation_m": 6.281,
+    "top_elevation_m": 26.281,
+    "wall_run_count": 110,
+    "outer_run_indices": [0, 99],
+    "outer_run_count": 100,
+    "outer_run_length_m": 389.121,
+    "inner_run_indices": [100, 109],
+    "inner_run_count": 10,
+    "inner_run_length_m": 25.260,
+    "wall_topology": {"vertices": 440, "triangles": 220, "surfaces": 1},
+    "roof_topology": {"vertices": 82, "triangles": 84},
+    "current_material": "plaster_grey_04 shared placeholder",
+    "separate_excluded_tower_source": "w1222720021",
+    "exact_observed_outer_run_endpoint_mapping": "blocked_not_encoded"
+  },
+  "evidence_boundary": {
+    "observation_ids": ["B1-SV01", "B1-SV02", "B1-SV03"],
+    "observed_regions_not_placements": ["OUTER-WING", "OUTER-CENTRAL", "OUTER-PAVILION", "OUTER-BASE", "OUTER-BANDS"],
+    "side_mapping": "medium-confidence production inference across west-facing outer SW/W/NW with partial outer N/S context; exact runs unresolved",
+    "unobserved": ["east/rear outer facade", "inner-ring runs 100..109", "separate tower w1222720021", "complete main entrance/canopy", "legible pavilion emblems"],
+    "count": "unknown_not_encoded",
+    "cadence": "unknown_not_encoded",
+    "sequence": "unknown_not_encoded",
+    "placement_coordinates": "none"
+  },
+  "asset_kind_inventory": {
+    "homogeneous_material_tile": 1,
+    "architectural_pattern_tile": 0,
+    "module_atlas": 6,
+    "unique_elevation": 0
+  },
+  "materials": [
+    {
+      "id": "B1-MAT-IVORY",
+      "asset_kind": "homogeneous_material_tile",
+      "path": "res://game/resources/materials/world/building_1/building_1_warm_ivory.tres",
+      "sha256": "572c3165cec91f74a49066873c31c071ae02333f85721bbd6b43981d814cdabb",
+      "shader_path": "res://game/resources/materials/world/batch_02_04_aperiodic_field.gdshader",
+      "shader_sha256": "324ba33a7c78f4b05038168a479ebb8e875c56704236492a050cee8da8e5f798",
+      "observed_role": "warm ivory or off-white smooth painted-mineral matte-to-low-satin ordinary field",
+      "channels": {"albedo": "procedural two-color low-contrast aperiodic field", "normal": "procedural tangent-space micro-relief", "roughness": "scalar 0.82 with bounded variation", "metallic": 0.0, "opacity": "opaque"},
+      "one_local_unit_m": 1.0,
+      "proof_primary_scale_m": 1.1,
+      "proof_secondary_scale_m": 0.32,
+      "scale_uncertainty_m": [0.5, 1.8],
+      "scale_status": "reversible_unmeasured_stylized_reference_derived_production_inference",
+      "proof_span_m": [40.0, 10.0],
+      "repeat_contract": {"finite_facade_motif_period": "none_by_design", "mapping": "continuous local metre-space aperiodic field", "macro_repeat_proof_span_m": 40.0, "opposite_edge_identity_required": false, "contains_facade_scale_motifs": false, "contains_baked_lighting": false, "contains_unique_stains": false},
+      "surveyed_color": false,
+      "surveyed_finish_scale": false,
+      "runtime_attachment": false
+    }
+  ],
+  "component_materials": [
+    {"role": "raised light ivory frames, mullions and pilaster strips", "path": "res://game/resources/materials/world/building_1/building_1_light_trim.tres", "sha256": "6e543d57ff078c267e952f633f4cee232e0743e30218d2f341dc3f31e4a4c8d9"},
+    {"role": "muted rose observed base-band exemplar only", "path": "res://game/resources/materials/world/building_1/building_1_rose_base.tres", "sha256": "dd0ad6a95267c6be55ae415d8e044847b3ac53b7c1fceb823b12bb1a4fe44514"},
+    {"role": "opaque muted blue-grey glazing or vent proxy; no transparency, emission or interior fiction", "path": "res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres", "sha256": "41c1c31d4a78da25d4abfac59e82fe919fbb539afa479ab7601d0fb51939d59f"},
+    {"role": "opaque dark blue utility or personnel door leaf", "path": "res://game/resources/materials/world/building_1/building_1_blue_door.tres", "sha256": "6554b282d6a77bcc50859b03eaea4889c18868d1f3a1580dbaa4bc2a9a6ff361"}
+  ],
+  "modules": [
+    {
+      "motif_id": "B1-WING-W",
+      "asset_kind": "module_atlas",
+      "kind": "complete_wing_punched_window_full_raised_frame_and_mullions",
+      "complete_motif": true,
+      "module_not_seamless_wall_tile": true,
+      "nominal_bounds_m": [1.7, 1.7],
+      "uncertainty_bounds_m": {"width": [1.2, 2.0], "height": [1.3, 2.1]},
+      "prototype_topology": {"mesh_instances": 7, "surfaces": 7, "triangles": 84, "face_meshes": 1, "frame_meshes": 4, "mullion_meshes": 2, "field_or_backing_meshes": 0}
+    },
+    {
+      "motif_id": "B1-CENTRAL-W",
+      "asset_kind": "module_atlas",
+      "kind": "complete_tall_narrow_central_multipane_window",
+      "complete_motif": true,
+      "module_not_seamless_wall_tile": true,
+      "nominal_bounds_m": [1.45, 4.6],
+      "uncertainty_bounds_m": {"width": [0.8, 1.8], "height": [3.0, 5.5]},
+      "prototype_topology": {"mesh_instances": 9, "surfaces": 9, "triangles": 108, "face_meshes": 1, "frame_meshes": 4, "mullion_meshes": 4, "field_or_backing_meshes": 0}
+    },
+    {
+      "motif_id": "B1-PAV-W",
+      "asset_kind": "module_atlas",
+      "kind": "complete_full_height_pavilion_multipane_group_with_shallow_pilaster_strips",
+      "complete_motif": true,
+      "module_not_seamless_wall_tile": true,
+      "nominal_bounds_m": [5.4, 10.0],
+      "uncertainty_bounds_m": {"width": [4.0, 7.0], "height": [8.0, 14.0]},
+      "prototype_topology": {"mesh_instances": 13, "surfaces": 13, "triangles": 156, "face_meshes": 1, "frame_meshes": 4, "mullion_meshes": 6, "pilaster_meshes": 2, "field_or_backing_meshes": 0}
+    },
+    {
+      "motif_id": "B1-BASE-O",
+      "asset_kind": "module_atlas",
+      "kind": "complete_small_base_window_or_vent_with_full_frame",
+      "semantic_face_status": "window_or_vent_not_disambiguated_opaque_proxy_only",
+      "complete_motif": true,
+      "module_not_seamless_wall_tile": true,
+      "nominal_bounds_m": [1.25, 0.9],
+      "uncertainty_bounds_m": {"width": [0.6, 1.4], "height": [0.45, 1.2]},
+      "prototype_topology": {"mesh_instances": 6, "surfaces": 6, "triangles": 72, "face_meshes": 1, "frame_meshes": 4, "divider_meshes": 1, "field_or_backing_meshes": 0}
+    },
+    {
+      "motif_id": "B1-DOOR-BLUE",
+      "asset_kind": "module_atlas",
+      "kind": "complete_opaque_blue_personnel_or_utility_door_with_full_frame",
+      "complete_motif": true,
+      "module_not_seamless_wall_tile": true,
+      "nominal_bounds_m": [1.35, 2.75],
+      "uncertainty_bounds_m": {"width": [0.9, 1.7], "height": [2.0, 3.1]},
+      "prototype_topology": {"mesh_instances": 5, "surfaces": 5, "triangles": 60, "leaf_meshes": 1, "frame_meshes": 4, "field_or_backing_meshes": 0}
+    },
+    {
+      "motif_id": "B1-BAND",
+      "asset_kind": "module_atlas",
+      "kind": "complete_shallow_muted_rose_base_band_exemplar_with_finished_terminals",
+      "complete_motif": true,
+      "module_not_seamless_wall_tile": true,
+      "nominal_bounds_m": [4.2, 0.38],
+      "uncertainty_bounds_m": {"width": [2.0, 8.0], "height": [0.2, 0.5]},
+      "prototype_topology": {"mesh_instances": 3, "surfaces": 3, "triangles": 36, "core_meshes": 1, "terminal_meshes": 2, "field_or_backing_meshes": 0}
+    }
+  ],
+  "module_shared_contract": {
+    "opposite_edge_continuity_required": false,
+    "host_field_contract": "receiver warm-ivory field owns every non-module pixel",
+    "allowed_host_material_ids": ["B1-MAT-IVORY"],
+    "module_owns_field_geometry": false,
+    "module_owned_backing_meshes": 0,
+    "module_owned_collision_nodes": 0,
+    "module_owned_navigation_nodes": 0,
+    "module_owned_spray_nodes": 0,
+    "maximum_opaque_relief_m": 0.12,
+    "scale_status": "reversible_unmeasured_stylized_reference_derived_production_inference",
+    "surveyed_dimensions": false,
+    "surveyed_coordinates": false,
+    "surveyed_count": false,
+    "surveyed_cadence": false,
+    "runtime_attachment": false
+  },
+  "prototype_scene": {
+    "path": "res://game/scenes/world/facades/building_1/building_1_standalone_prototype_set.tscn",
+    "sha256": "1d205d4d6e176d4ed1e82746d1f1f8c4c2547910b1a71f87a213d9ada14967ef",
+    "factory_path": "res://game/scripts/world/facades/building_1_standalone_prototypes.gd",
+    "factory_sha256": "cf18bfcfa40c7770d92aad569cba05da7ac85fe0fc89c0fd8cba6167ef62fb1f",
+    "one_local_unit_m": 1.0,
+    "proof_dimensions_m": [40.0, 10.0],
+    "total_mesh_instances": 44,
+    "total_surfaces": 44,
+    "total_triangles": 528,
+    "module_mesh_instances": 43,
+    "module_surfaces": 43,
+    "module_triangles": 516,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "runtime_attachment": false,
+    "exact_receiver_calibration": false,
+    "native_capture_harness_path": "res://game/tests/building_1_standalone_prototype_capture.gd"
+  },
+  "authoritative_source_pins": {
+    "reference_spec": {"path": "res://discovery/facades/TREASURE_ISLAND_MUSEUM_BUILDING_1_REFERENCE_SPEC.md", "sha256": "79fe7b7cc49ea5e40a8611313defacb07ec23fb1a1a711822e0378b8cc32ac5a"},
+    "observation_ledger": {"path": "res://discovery/facades/NEXT_COHORT_STREETVIEW_OBSERVATIONS.md", "sha256": "aee175db92ec39b0ae4f0e2adfe286f297c93d303fee4249cb6f03c25ae12b2a"},
+    "reference_index": {"path": "res://discovery/facades/NEXT_COHORT_REFERENCE_INDEX.md", "sha256": "b634412b0fa41cb0eada84c81f44113b30ff579edf0abddfceefbae61883eed8"}
+  },
+  "runtime_isolation_pins": {
+    "canonical_inventory": {"path": "res://discovery/FACADE_RECEIVER_INVENTORY.json", "sha256": "41d378ccee6685e5d3b9109d33c77742f73a7338cd84ba6e82c66ff22ee2d671"},
+    "generated_manifest": {"path": "res://generated/world/manifest.json", "sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"},
+    "generated_chunk": {"path": "res://generated/world/chunks/x_-1__z_2.json", "sha256": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce"},
+    "world_builder": {"path": "res://game/scripts/world/world_chunk_builder.gd", "sha256": "dec0811b3b6b4947c16f8f69a6a6e60d706b6d7b43a93051ea7be71ad2c203a3"},
+    "accepted_material_helper": {"path": "res://game/scripts/world/facades/accepted_material_run_trials.gd", "sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c"},
+    "prior_batch_06_registry": {"path": "res://game/resources/facades/batch_06_prototype_registry.json", "sha256": "a599df850a3ca51a51a3223820fc840201559ba26eb5ed514211eaedc2304132"}
+  },
+  "blocked_claims": [
+    "exact outer-run endpoints, ordered run indices, anchor or placement coordinates",
+    "surveyed module dimensions, field scale, color or finish",
+    "real motif counts, cadence, sequence or cross-side transfer",
+    "main entrance or canopy assembly",
+    "legible pavilion emblems or signage",
+    "east or rear outer facade, inner-ring runs 100..109 or separate tower w1222720021",
+    "receiver massing, lower-wing or taller-pavilion silhouette, roofline or structural recesses",
+    "completed elevation, unique elevation, exact-receiver acceptance or whole-building resemblance",
+    "standalone art acceptance before independent native-evidence review"
+  ]
+}

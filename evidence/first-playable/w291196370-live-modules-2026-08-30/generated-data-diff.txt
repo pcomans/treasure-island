@@ -1,0 +1,17 @@
+w291196370 live module integration — generated-data audit
+Date: 2026-08-30
+Scope: generated/world/**
+
+Command:
+  git diff --name-only -- generated/world
+
+Result:
+  (no paths; empty diff)
+
+Frozen identities rechecked by the focused/native harnesses:
+  generated/world/manifest.json sha256 e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3
+  generated content sha256 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164
+  exact receiver chunk generated/world/chunks/x_0__z_-3.json sha256 6dfa4b8f4b91f309b313428829e37cedd13e4067ff94f896a8e2e5ef05002a1d
+
+Conclusion:
+  No generated source, record, manifest, chunk, geometry, terrain, foundation, roof, collision, or navigation data changed in this live integration.

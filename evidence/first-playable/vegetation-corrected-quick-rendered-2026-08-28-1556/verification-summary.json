@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "seed": 1414092337,
+  "hashes": {
+    "generated_content_sha256": "1c9fd3ec5a814e48a696267e9ec3b0318543b8b84df407baee6d18b164b03aeb",
+    "manifest_sha256": "fa74ea20f46db226d2aacab76135e76e4928f2619217d18811a3e213c577ed8b",
+    "vegetation_sha256": "9b8d4000da3402428167a727a62b12175df159a1e8ae651c8a0ed23d58db5738"
+  },
+  "counts": {
+    "total": 102,
+    "assets": 15,
+    "multimesh_batches": 19,
+    "rendered_vegetation_triangles": 18858,
+    "physics_bodies_added": 0,
+    "by_species": {
+      "broadleaf": 28,
+      "conifer": 21,
+      "ornamental_grass": 21,
+      "palm": 13,
+      "shrub": 19
+    },
+    "by_zone": {
+      "central_conifer_groves": 21,
+      "legacy_grid_broadleaf": 20,
+      "north_west_lawn_broadleaf": 8,
+      "south_ornamental_beds": 34,
+      "south_palm_rows": 13,
+      "south_shrub_groups": 6
+    }
+  },
+  "clearances_m": {
+    "boundary_shoreline": { "required": 14, "observed_minimum": 25.517 },
+    "roads_paths": { "required": 4, "observed_minimum": 4.017 },
+    "buildings_foundations": { "required": 5, "observed_minimum": 7.274 },
+    "terrain_shoreline_overlays": { "required": 3, "observed_minimum": 3.625 },
+    "ferry_spawn": { "required": 24, "observed_minimum": 162.735 },
+    "ferry_arrival_path": { "required": 16, "observed_minimum": 140.483 },
+    "normal_qa_route": { "required": 7, "observed_minimum": 84.112 },
+    "whole_island_qa_route": { "required": 5, "observed_minimum": 5.27 }
+  },
+  "runtime": {
+    "full_scene_load_ms": 4731,
+    "full_scene_static_memory_mib": 62.8,
+    "existing_world_bodies": 466,
+    "existing_world_shapes": 466
+  },
+  "tests": {
+    "node_world_and_vegetation_validator": "pass",
+    "godot_generated_world_contract": "pass",
+    "two_clean_builds_byte_identical": "pass",
+    "full_runtime_gameplay_and_fail_closed": "pass",
+    "normal_route": "pass: 262.104m traveled, 2400 frames, 0 recoveries/stalls/airborne frames",
+    "whole_island_route": "pass: 3422.321m traveled, 5 landings, 0 recoveries/stalls, max step 0.143m",
+    "quick_forward_plus_metal_render": "pass: 2 frames"
+  },
+  "visual_inspection": "pass: cyan wetland open; no visible plant in wetland; visible palm trunks off road ribbons"
+}

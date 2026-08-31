@@ -1,0 +1,7 @@
+w34313525 detached exact-receiver scope audit
+
+New calibration files are target-specific: registry, exact trial material, detached helper, capture harness, focused contracts, evidence and handoff.
+Pre-existing uncommitted w34313525 standalone package/review files are preserved byte-for-byte.
+The shared retro log receives one appended named round only.
+No runtime builder, accepted-material helper, inventory, lifecycle, generated file, receiver, other building, terrain, player or unrelated material changed.
+No commit or push was performed.

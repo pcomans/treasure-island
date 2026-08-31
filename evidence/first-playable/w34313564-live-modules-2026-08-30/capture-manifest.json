@@ -1,0 +1,716 @@
+{
+  "schema_version": "ti.w34313564-live-module-integration-evidence/1",
+  "review_status": "ready_for_independent_live_gameplay_art_review_not_self_accepted",
+  "evidence_role": "actual loaded-world visibility, attachment, host-boundary, camera-diversity and noninterference proof for exactly five approved stylized/reference-derived production-inference module placements; not lifecycle promotion, surveyed coordinates, cadence, count, or whole-building acceptance",
+  "source_key": "w34313564",
+  "receiver_key": "building:w34313564:wall",
+  "generator": "game/tests/w34313564_live_module_integration_capture.gd",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/w34313564_live_module_integration_capture.gd",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "protected_inputs": {
+    "res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "res://generated/world/chunks/x_0__z_-3.json": "6dfa4b8f4b91f309b313428829e37cedd13e4067ff94f896a8e2e5ef05002a1d",
+    "res://game/resources/facades/w34313564_module_calibration.json": "45a47d333c997887cef7d1c97a633d37ae050efda597186430c7af6d52116f0f",
+    "res://game/tests/support/w34313564_module_calibration.gd": "b49b8c20fbbe40f2728c0acadf8d53f0593856091e6df897a613d4f2f8680b71",
+    "res://game/scripts/world/facades/w34313564_live_modules.gd": "5d0d7816a87e13907d571aaceb2d4af3c01980fd26a043e33d87e9b07f2b71ee",
+    "res://game/scripts/world/facades/accepted_material_run_trials.gd": "545d3d4b42fef07c64a035a65006c533b8549d983e4b28bc510eaada60712c9f",
+    "res://game/scripts/world/world_chunk_builder.gd": "3c9e995aefe4e02fd466e51aa3a762fa53137f69a57091b395a59abda0f27cb9",
+    "res://discovery/facades/W34313564_MODULE_CALIBRATION_CORRECTION_ART_REVIEW.md": "a8f1396e2d126c0c38b37edf770df975c4fa95e25e34fb2c7c1e766630fd1591",
+    "res://discovery/FACADE_RECEIVER_INVENTORY.json": "41fd4b1cdc98b31b33801decb02a1303e9d1b6ee48e86214a90e52656f9a8542",
+    "res://evidence/first-playable/batch-06-w34313564-module-calibration-2026-08-30/capture-manifest.json": "c664d7e0cae794f9d5be979af89c40a4f65096b29b7f2b14e8032271c2209221",
+    "res://evidence/first-playable/batch-06-w34313564-module-calibration-correction-2026-08-30/capture-manifest.json": "d1fcc1a18dacc10c02cef649424b34e0fca5cbd2e8ec933d486d1e2b9a75885e",
+    "res://game/resources/materials/world/w34313564/w34313564_frame.tres": "5487fa17415e4022d85b82e3f013ac9a41be1dd07d88354f1caf4b05a9ab5994",
+    "res://game/resources/materials/world/w34313564/w34313564_glass.tres": "0f5b2ac833346143e777b81e85079f4502ca5a2692944228a9fbfeff28ddd669",
+    "res://game/resources/materials/world/w34313564/w34313564_door.tres": "88babf9bdceb46e8475f6d1acf1853ac451433c91f1264ca70c41d8c19d2aa3d",
+    "res://game/resources/materials/world/w34313564/w34313564_tan_exact_trial.tres": "3b895743b247a20641cb7564004d2f890bacfc286feaec9044b334b5e8e170bb",
+    "res://game/resources/materials/world/w34313564/w34313564_pale_exact_trial.tres": "c7ec2df12b0dcf41e2b5019fd98155dbe3668d16379070210fe9f97ef032a343"
+  },
+  "generated_world_unchanged": {
+    "records": 729,
+    "meshes": 729,
+    "surfaces": 736,
+    "triangles": 48389,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "live_reported_world": {
+    "chunks": 38,
+    "records": 729,
+    "meshes": 763,
+    "surfaces": 770,
+    "triangles": 48797,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "exact_module_delta": {
+    "module_nodes": 5,
+    "motif_instances": {
+      "W34313564-HWIN": 3,
+      "W34313564-PDOOR": 2
+    },
+    "mesh_instances": 34,
+    "surfaces": 34,
+    "triangles": 408,
+    "field_meshes": 0,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0
+  },
+  "receiver": {
+    "ok": true,
+    "child_count": 3,
+    "generated_surface_count": 3,
+    "generated_surface_names": [
+      "placeholder_runs",
+      "trial_w34313564_tan_runs",
+      "trial_w34313564_pale_runs"
+    ],
+    "generated_wall_triangles": 40,
+    "collision_triangles": 40,
+    "module_nodes": 5,
+    "module_mesh_instances": 34,
+    "collision_objects": 1,
+    "collision_shapes": 1,
+    "wall_collision_remains_authoritative": true
+  },
+  "accepted_field_metadata": {
+    "status": "accepted_exact_run_homogeneous_material_live_with_documented_limitation",
+    "source_key": "w34313564",
+    "receiver_key": "building:w34313564:wall",
+    "material_groups": [
+      {
+        "id": "W34313564-MAT-TAN",
+        "surface_name": "trial_w34313564_tan_runs",
+        "run_groups": [
+          [
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        ],
+        "accepted_length_m": 87.651,
+        "mapping_ids": [
+          "B06-34313564-SSE-EAST-RETURN",
+          "B06-34313564-SSE-CENTRAL"
+        ],
+        "prototype_material_path": "res://game/resources/materials/world/w34313564/w34313564_tan_field.tres",
+        "material_path": "res://game/resources/materials/world/w34313564/w34313564_tan_exact_trial.tres",
+        "limitation": "Muted tan SSE homogeneous field only; 0.82 m finish scale remains an unmeasured reversible assumption."
+      },
+      {
+        "id": "W34313564-MAT-PALE",
+        "surface_name": "trial_w34313564_pale_runs",
+        "run_groups": [
+          [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ]
+        ],
+        "accepted_length_m": 141.34,
+        "mapping_ids": [
+          "B06-34313564-ENE-END",
+          "B06-34313564-NNW-OUTER"
+        ],
+        "prototype_material_path": "res://game/resources/materials/world/w34313564/w34313564_pale_field.tres",
+        "material_path": "res://game/resources/materials/world/w34313564/w34313564_pale_exact_trial.tres",
+        "limitation": "Off-white/light-gray ENE and NNW homogeneous field only; 0.88 m finish scale remains an unmeasured reversible assumption."
+      }
+    ],
+    "standalone_blocker": "W34313564-MAT-PLINTH remains standalone because exact vertical extent and side bounds are unresolved; a run-only partition cannot attach it without prohibited geometry splitting.",
+    "modules": 5,
+    "standalone_modules_live": 5,
+    "module_motif_types_live": 2,
+    "module_placement_role": "stylized/reference-derived production inference",
+    "module_position_uncertainty_m": 4.0,
+    "module_cadence_inferred": false,
+    "module_total_opening_count_inferred": false
+  },
+  "live_module_metadata": {
+    "source_key": "w34313564",
+    "receiver_key": "building:w34313564:wall",
+    "runtime_attachment": true,
+    "placement_role": "stylized/reference-derived production inference",
+    "position_uncertainty_m": 4.0,
+    "module_instances": 5,
+    "motif_instance_counts": {
+      "W34313564-HWIN": 3,
+      "W34313564-PDOOR": 2
+    },
+    "mesh_instances": 34,
+    "surfaces": 34,
+    "triangles": 408,
+    "field_meshes": 0,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "cadence_inferred": false,
+    "total_opening_count_inferred": false,
+    "reviewed_registry_path": "res://game/resources/facades/w34313564_module_calibration.json",
+    "reviewed_registry_sha256": "45a47d333c997887cef7d1c97a633d37ae050efda597186430c7af6d52116f0f",
+    "reviewed_geometry_helper_path": "res://game/tests/support/w34313564_module_calibration.gd",
+    "reviewed_geometry_helper_sha256": "b49b8c20fbbe40f2728c0acadf8d53f0593856091e6df897a613d4f2f8680b71"
+  },
+  "placements": [
+    {
+      "placement_id": "CAL-SSE-PDOOR-01",
+      "motif_id": "W34313564-PDOOR",
+      "face": "SSE",
+      "mapping_id": "B06-34313564-SSE-CENTRAL",
+      "anchor_run": 7,
+      "run_ownership": [
+        7
+      ],
+      "center_chain_m": 47.5,
+      "center_chain_uncertainty_m": 4.0,
+      "host_material_id": "W34313564-MAT-TAN",
+      "placement_role": "stylized/reference-derived production inference",
+      "runtime_attachment": true,
+      "complete_motif": true,
+      "module_owns_field_geometry": false,
+      "mesh_instances": 5
+    },
+    {
+      "placement_id": "CAL-SSE-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "SSE",
+      "mapping_id": "B06-34313564-SSE-CENTRAL",
+      "anchor_run": 8,
+      "run_ownership": [
+        8
+      ],
+      "center_chain_m": 68.0,
+      "center_chain_uncertainty_m": 4.0,
+      "host_material_id": "W34313564-MAT-TAN",
+      "placement_role": "stylized/reference-derived production inference",
+      "runtime_attachment": true,
+      "complete_motif": true,
+      "module_owns_field_geometry": false,
+      "mesh_instances": 8
+    },
+    {
+      "placement_id": "CAL-ENE-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "ENE",
+      "mapping_id": "B06-34313564-ENE-END",
+      "anchor_run": 12,
+      "run_ownership": [
+        12
+      ],
+      "center_chain_m": 18.0,
+      "center_chain_uncertainty_m": 4.0,
+      "host_material_id": "W34313564-MAT-PALE",
+      "placement_role": "stylized/reference-derived production inference",
+      "runtime_attachment": true,
+      "complete_motif": true,
+      "module_owns_field_geometry": false,
+      "mesh_instances": 8
+    },
+    {
+      "placement_id": "CAL-NNW-PDOOR-01",
+      "motif_id": "W34313564-PDOOR",
+      "face": "NNW",
+      "mapping_id": "B06-34313564-NNW-OUTER",
+      "anchor_run": 16,
+      "run_ownership": [
+        16
+      ],
+      "center_chain_m": 32.0,
+      "center_chain_uncertainty_m": 4.0,
+      "host_material_id": "W34313564-MAT-PALE",
+      "placement_role": "stylized/reference-derived production inference",
+      "runtime_attachment": true,
+      "complete_motif": true,
+      "module_owns_field_geometry": false,
+      "mesh_instances": 5
+    },
+    {
+      "placement_id": "CAL-NNW-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "NNW",
+      "mapping_id": "B06-34313564-NNW-OUTER",
+      "anchor_run": 17,
+      "run_ownership": [
+        17
+      ],
+      "center_chain_m": 54.0,
+      "center_chain_uncertainty_m": 4.0,
+      "host_material_id": "W34313564-MAT-PALE",
+      "placement_role": "stylized/reference-derived production inference",
+      "runtime_attachment": true,
+      "complete_motif": true,
+      "module_owns_field_geometry": false,
+      "mesh_instances": 8
+    }
+  ],
+  "resolved_placements": [
+    {
+      "placement_id": "CAL-SSE-PDOOR-01",
+      "motif_id": "W34313564-PDOOR",
+      "face": "SSE",
+      "host_material_id": "W34313564-MAT-TAN",
+      "mapping_id": "B06-34313564-SSE-CENTRAL",
+      "run_ownership": [
+        7
+      ],
+      "anchor_run": 7,
+      "anchor_run_fraction": 0.499781377226309,
+      "wall_anchor_world_m": [
+        55.8589401245117,
+        3.26851630210876,
+        -612.345581054688
+      ],
+      "module_origin_world_m": [
+        55.8872032165527,
+        3.26851630210876,
+        -612.292663574219
+      ],
+      "tangent_world_xz": [
+        0.88201504945755,
+        -0.471221297979355
+      ],
+      "outward_normal_world_xz": [
+        0.471055328845978,
+        0.882103681564331
+      ],
+      "base_y_m": 3.26851636715455,
+      "top_y_m": 8.7519998550415
+    },
+    {
+      "placement_id": "CAL-SSE-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "SSE",
+      "host_material_id": "W34313564-MAT-TAN",
+      "mapping_id": "B06-34313564-SSE-CENTRAL",
+      "run_ownership": [
+        8
+      ],
+      "anchor_run": 8,
+      "anchor_run_fraction": 0.532480730693091,
+      "wall_anchor_world_m": [
+        73.9403533935547,
+        3.16710233688354,
+        -622.005432128906
+      ],
+      "module_origin_world_m": [
+        73.968620300293,
+        7.39699983596802,
+        -621.952514648438
+      ],
+      "tangent_world_xz": [
+        0.882023990154266,
+        -0.471204459667206
+      ],
+      "outward_normal_world_xz": [
+        0.471055328845978,
+        0.882103681564331
+      ],
+      "base_y_m": 3.16710231984865,
+      "top_y_m": 8.7519998550415
+    },
+    {
+      "placement_id": "CAL-ENE-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "ENE",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_id": "B06-34313564-ENE-END",
+      "run_ownership": [
+        12
+      ],
+      "anchor_run": 12,
+      "anchor_run_fraction": 0.48466847444398,
+      "wall_anchor_world_m": [
+        82.7906951904297,
+        3.2431423664093,
+        -647.14111328125
+      ],
+      "module_origin_world_m": [
+        82.843620300293,
+        7.39699983596802,
+        -647.169372558594
+      ],
+      "tangent_world_xz": [
+        -0.471234202384949,
+        -0.882008075714111
+      ],
+      "outward_normal_world_xz": [
+        0.882103681564331,
+        -0.471055328845978
+      ],
+      "base_y_m": 3.24314241326749,
+      "top_y_m": 8.7519998550415
+    },
+    {
+      "placement_id": "CAL-NNW-PDOOR-01",
+      "motif_id": "W34313564-PDOOR",
+      "face": "NNW",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_id": "B06-34313564-NNW-OUTER",
+      "run_ownership": [
+        16
+      ],
+      "anchor_run": 16,
+      "anchor_run_fraction": 0.443410224055888,
+      "wall_anchor_world_m": [
+        42.5774345397949,
+        3.7080295085907,
+        -654.502075195312
+      ],
+      "module_origin_world_m": [
+        42.5491714477539,
+        3.7080295085907,
+        -654.554992675781
+      ],
+      "tangent_world_xz": [
+        -0.882014572620392,
+        0.471222192049026
+      ],
+      "outward_normal_world_xz": [
+        -0.471055328845978,
+        -0.882103681564331
+      ],
+      "base_y_m": 3.70802950328372,
+      "top_y_m": 8.7519998550415
+    },
+    {
+      "placement_id": "CAL-NNW-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "NNW",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_id": "B06-34313564-NNW-OUTER",
+      "run_ownership": [
+        17
+      ],
+      "anchor_run": 17,
+      "anchor_run_fraction": 0.532774562987549,
+      "wall_anchor_world_m": [
+        23.1729907989502,
+        3.75200009346008,
+        -644.135437011719
+      ],
+      "module_origin_world_m": [
+        23.1447277069092,
+        7.39699983596802,
+        -644.188354492188
+      ],
+      "tangent_world_xz": [
+        -0.882026731967926,
+        0.471199303865433
+      ],
+      "outward_normal_world_xz": [
+        -0.471055328845978,
+        -0.882103681564331
+      ],
+      "base_y_m": 3.75200009346008,
+      "top_y_m": 8.7519998550415
+    }
+  ],
+  "position_truth_boundary": {
+    "fixed_runtime_centers": true,
+    "uncertainty_m": 4.0,
+    "uncertainty_role": "same-run calibration provenance only; no jitter or surveyed-coordinate claim",
+    "cadence_inferred": false,
+    "total_opening_count_inferred": false,
+    "placement_role": "stylized/reference-derived production inference"
+  },
+  "protected_scope": {
+    "placeholder_runs_0_4_unchanged": true,
+    "tan_runs_5_9_unchanged": true,
+    "pale_runs_10_19_unchanged": true,
+    "plinth_live": false,
+    "other_module_motifs_live": false,
+    "generated_files_modified": false,
+    "terrain_foundation_massing_modified": false,
+    "collision_navigation_spray_modified": false
+  },
+  "captures": [
+    {
+      "id": "01-close-sse-pdoor",
+      "view_kind": "close_live_tan_pdoor",
+      "file": "images/01-close-sse-pdoor.png",
+      "sha256": "c00abd72a37766dc90d4aaa8b61beab110cc47715a8cfe8914f57ca64f321f9e",
+      "bytes": 812985,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        58.184326171875,
+        5.91851663589478,
+        -606.717346191406
+      ],
+      "aim_target_m": [
+        55.8872032165527,
+        4.51851654052734,
+        -612.292663574219
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-PDOOR-01"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 244,
+      "sample_luminance_range": 0.53926195949316
+    },
+    {
+      "id": "02-close-nnw-hwin",
+      "view_kind": "close_live_pale_hwin",
+      "file": "images/02-close-nnw-hwin.png",
+      "sha256": "b2e5e64291cd045526e437e7a6d85b03fb6e7cc57606de8ee291068d77f86d50",
+      "bytes": 81535,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        19.1417179107666,
+        7.64699983596802,
+        -649.986145019531
+      ],
+      "aim_target_m": [
+        23.1447277069092,
+        7.39699983596802,
+        -644.188354492188
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-NNW-HWIN-01"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 18,
+      "sample_luminance_range": 0.646061189472675
+    },
+    {
+      "id": "03-ordinary-sse-layout",
+      "view_kind": "ordinary_live_sse_pair",
+      "file": "images/03-ordinary-sse-layout.png",
+      "sha256": "38aab1d7cc7d0df4554b55046e11530817615ac63422779708c1d37d337edf56",
+      "bytes": 882672,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        82.2583770751953,
+        5.63803195953369,
+        -578.831420898438
+      ],
+      "aim_target_m": [
+        62.4740524291992,
+        5.93803215026855,
+        -615.879760742188
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-PDOOR-01",
+        "CAL-SSE-HWIN-01"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 298,
+      "sample_luminance_range": 0.612418837845325
+    },
+    {
+      "id": "04-ordinary-nnw-layout",
+      "view_kind": "ordinary_live_nnw_pair",
+      "file": "images/04-ordinary-nnw-layout.png",
+      "sha256": "d7241ada81b55732d97e7f309484d53add42df2697bb634b2cdaed3f10ddf29e",
+      "bytes": 671847,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        15.9172821044922,
+        6.14836168289185,
+        -681.074340820312
+      ],
+      "aim_target_m": [
+        32.8752746582031,
+        6.54836177825928,
+        -649.318603515625
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-NNW-PDOOR-01",
+        "CAL-NNW-HWIN-01"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 237,
+      "sample_luminance_range": 0.612418837845325
+    },
+    {
+      "id": "05-changed-light-oblique-ene-hwin",
+      "view_kind": "changed_light_oblique_live_pale_hwin",
+      "file": "images/05-changed-light-oblique-ene-hwin.png",
+      "sha256": "7b04d8bf4f57f2056ba591e58aea0e2c1e6421e32c8e494c1f673f2b08053cc7",
+      "bytes": 683702,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        94.009147644043,
+        8.39699935913086,
+        -664.468444824219
+      ],
+      "aim_target_m": [
+        82.843620300293,
+        7.39699983596802,
+        -647.169372558594
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -24.0,
+        118.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-ENE-HWIN-01"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 209,
+      "sample_luminance_range": 0.775338061153889
+    },
+    {
+      "id": "06-pale-orientation-corner",
+      "view_kind": "live_pale_ene_to_nnw_corner",
+      "file": "images/06-pale-orientation-corner.png",
+      "sha256": "63aa8ded00ec8af476a505beb960ac7b6f8197cffa2e7c9feb4ed52a56ece27f",
+      "bytes": 633713,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        78.3590316772461,
+        6.5,
+        -694.45849609375
+      ],
+      "aim_target_m": [
+        70.802001953125,
+        6.09999990463257,
+        -669.580993652344
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [],
+      "before_run": 13,
+      "after_run": 14,
+      "sample_unique_colors": 225,
+      "sample_luminance_range": 0.612418837845325
+    },
+    {
+      "id": "07-tan-pale-host-boundary",
+      "view_kind": "live_tan_to_pale_host_boundary",
+      "file": "images/07-tan-pale-host-boundary.png",
+      "sha256": "278de7b6a020cedf060dd414b50acc18cefe283e4be6002de90427c8a2ad996b",
+      "bytes": 712600,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        127.632461547852,
+        6.80000019073486,
+        -620.220092773438
+      ],
+      "aim_target_m": [
+        91.2730026245117,
+        6.09999990463257,
+        -631.265014648438
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [],
+      "before_run": 9,
+      "after_run": 10,
+      "sample_unique_colors": 247,
+      "sample_luminance_range": 0.612418837845325
+    },
+    {
+      "id": "08-whole-island-load",
+      "view_kind": "whole_island_live_module_load_proof",
+      "file": "images/08-whole-island-load.png",
+      "sha256": "38d59604b6ebced38193f267522db127cebb7b3ba0001606141e9a26bfd2bc51",
+      "bytes": 401843,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        180.0,
+        1550.0,
+        300.0
+      ],
+      "aim_target_m": [
+        -20.0,
+        0.0,
+        30.0
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "placement_ids": [],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 146,
+      "sample_luminance_range": 0.691317684948444
+    }
+  ],
+  "capture_count": 8,
+  "validity_inspection_only": "Inspect actual live target visibility, complete motifs, grounding, shallow separation, tangent/up/outward orientation, camera diversity, corners and host transitions only. Executor art acceptance is prohibited."
+}

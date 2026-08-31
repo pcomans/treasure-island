@@ -1,0 +1,28 @@
+w34313520 detached exact-receiver calibration dirty-scope audit
+Baseline: HEAD 8a0f313485087d0a4d66ecea811ef05d2c174873
+Date: 2026-08-30
+
+Expected inherited uncommitted scope:
+- w34313520 standalone prototypes, native evidence and handoff from the immediately prior round.
+- discovery/facades/W34313520_STANDALONE_PROTOTYPE_ART_REVIEW.md from the independent reviewer.
+- the existing w34313520 standalone and independent-review additions in discovery/RETRO_LOG.md.
+
+Expected additions from this round:
+- game/resources/facades/w34313520_exact_receiver_calibration.json
+- game/resources/materials/world/w34313520/w34313520_pale_exact_trial.tres
+- game/tests/support/w34313520_exact_receiver_calibration.gd and generated .uid
+- game/tests/headless_w34313520_exact_receiver_calibration_contract.gd and generated .uid
+- game/tests/w34313520_exact_receiver_calibration_capture.gd and generated .uid
+- discovery/facades/W34313520_EXACT_RECEIVER_CALIBRATION_HANDOFF.md
+- evidence/first-playable/batch-06-w34313520-exact-receiver-calibration-2026-08-30/
+- one new named w34313520 calibration section in discovery/RETRO_LOG.md
+
+PASS protected scope:
+- no change under generated/
+- no change to world_chunk_builder.gd, accepted_material_run_trials.gd, main scene or any live adapter
+- no change to FACADE_RECEIVER_INVENTORY.json/.md or lifecycle counts
+- no change to another building's code, materials, geometry, tests, evidence or documentation
+- no change to accepted standalone w34313520 source bytes
+- no commit or push
+
+Unrelated workspace files outside treasure-island-game were already present and were not touched.

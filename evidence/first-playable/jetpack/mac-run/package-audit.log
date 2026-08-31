@@ -1,0 +1,11 @@
+JETPACK STAGED PCK MOUNT AUDIT — 2026-08-28
+
+$ Godot --headless --main-pack 'build/jetpack-staging/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck' --script /private/tmp/treasure_island_jetpack_package_audit.gd
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+JETPACK_PACKAGE_AUDIT: files=91 generated_world=44 chunks=38 manifest_sha256=07b8b195e1a05942e38d9bbbcb801394cf9f184051fb5f7a819c75677e46f160 spawn=(-104.364,1.000,786.024) yaw=-0.119 physical_space=true missing_generated=0 banned=0
+PASS: staged PCK contains all generated world files, exact ferry manifest, physical Space binding, and no banned authoring/audit paths
+exit=0
+
+Banned path prefixes checked: res://addons/, res://build/, res://data/, res://discovery/, res://evidence/, res://node_modules/, res://tools/, res://.tools/.
+Banned root files checked: INSTALL_LOG.md, package.json, package-lock.json.
+

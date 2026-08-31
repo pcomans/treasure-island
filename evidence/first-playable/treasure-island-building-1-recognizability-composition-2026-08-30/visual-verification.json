@@ -1,0 +1,58 @@
+{
+  "schema_version": "ti.building-1-recognizability-visual-verification/1",
+  "result": "PASS_VALIDITY_ONLY",
+  "all_images_opened_and_inspected": true,
+  "image_count": 16,
+  "same_pose_before_after_pairs_inspected": 3,
+  "renderer": "Godot 4.7.2 Forward+ Metal on Apple M1 Pro",
+  "dimensions_verified": [1440, 900],
+  "blank_or_corrupt_images": 0,
+  "framing_failures": 0,
+  "families_visibly_complete": [
+    "B1-WING-W",
+    "B1-CENTRAL-W",
+    "B1-PAV-W",
+    "B1-BASE-O",
+    "B1-DOOR-BLUE",
+    "B1-BAND"
+  ],
+  "validity_findings": {
+    "ordinary_public_curve_before_after_comparable": true,
+    "ordinary_north_end_before_after_comparable": true,
+    "whole_building_before_after_comparable": true,
+    "every_module_family_has_close_oblique_view": true,
+    "multi_side_context_present": true,
+    "changed_light_present": true,
+    "south_end_ordinary_view_present": true,
+    "whole_island_context_present": true,
+    "visible_backing_slabs_or_halos_observed": false,
+    "visible_z_fight_observed": false,
+    "visible_field_join_cracks_observed": false,
+    "module_ground_or_roof_escape_observed": false,
+    "protected_geometry_change_observed": false
+  },
+  "truth_boundary": {
+    "production_inference": true,
+    "reversible": true,
+    "surveyed_dimensions": false,
+    "surveyed_coordinates": false,
+    "real_count_or_cadence": false,
+    "as_built_fidelity_claimed": false,
+    "completed_elevation": false,
+    "whole_building_accepted": false
+  },
+  "self_acceptance": false,
+  "art_verdict": "withheld_for_independent_recognizability_reviewer",
+  "note": "Validity inspection confirms readable, complete, non-corrupt evidence and no observed mechanical rendering defect. This executor-time verdict remains point-in-time provenance.",
+  "post_capture_independent_review": {
+    "status": "independently_reviewed_keep_with_documented_limitation",
+    "review_path": "discovery/facades/TREASURE_ISLAND_BUILDING_1_RECOGNIZABILITY_ART_REVIEW.md",
+    "review_sha256": "328973362b873b80ec8255c78ad7851369db850d3d9bc3f95b31064f83bb584c",
+    "accepted_field_run_count": 63,
+    "accepted_module_placement_count": 45,
+    "correction_or_revert_required": false,
+    "as_built_fidelity_claimed": false,
+    "completed_elevation_claimed": false,
+    "whole_building_fidelity_claimed": false
+  }
+}

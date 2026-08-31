@@ -1,0 +1,1130 @@
+{
+  "boundary_source_key": "w26767313",
+  "chunk_size_m": 256,
+  "chunks": [
+    {
+      "bytes": 10079,
+      "chunk_id": "x_-3__z_-4",
+      "path": "chunks/x_-3__z_-4.json",
+      "sha256": "6256caf542398f17a6ff1e5572657bd5081fee32a7655281a5a8f026f21b3f98"
+    },
+    {
+      "bytes": 274162,
+      "chunk_id": "x_-3__z_-3",
+      "path": "chunks/x_-3__z_-3.json",
+      "sha256": "7f0ecd2e16fe4327f351496ed8c2f8640d68278fbaf33d428b6314ec862d9944"
+    },
+    {
+      "bytes": 428788,
+      "chunk_id": "x_-3__z_-2",
+      "path": "chunks/x_-3__z_-2.json",
+      "sha256": "35bf23d64e860d39c5b79a98be7830f4f477143f7e9490c6739dec0627062d11"
+    },
+    {
+      "bytes": 251083,
+      "chunk_id": "x_-3__z_-1",
+      "path": "chunks/x_-3__z_-1.json",
+      "sha256": "e45c1670c1714cbb982a14a809054a640e53f9a4add5e3c6080a0f98efb877d2"
+    },
+    {
+      "bytes": 11556,
+      "chunk_id": "x_-3__z_0",
+      "path": "chunks/x_-3__z_0.json",
+      "sha256": "1cd2caaf02334a9aa39228e681a85b659b6da8e5fda3e7a875126071260ee74c"
+    },
+    {
+      "bytes": 189757,
+      "chunk_id": "x_-2__z_-4",
+      "path": "chunks/x_-2__z_-4.json",
+      "sha256": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4"
+    },
+    {
+      "bytes": 650675,
+      "chunk_id": "x_-2__z_-3",
+      "path": "chunks/x_-2__z_-3.json",
+      "sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5"
+    },
+    {
+      "bytes": 644248,
+      "chunk_id": "x_-2__z_-2",
+      "path": "chunks/x_-2__z_-2.json",
+      "sha256": "3a07310461da7d9e76667412c6ca18dac8bdea89923cd8392436421882132ef9"
+    },
+    {
+      "bytes": 911426,
+      "chunk_id": "x_-2__z_-1",
+      "path": "chunks/x_-2__z_-1.json",
+      "sha256": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2"
+    },
+    {
+      "bytes": 592643,
+      "chunk_id": "x_-2__z_0",
+      "path": "chunks/x_-2__z_0.json",
+      "sha256": "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b"
+    },
+    {
+      "bytes": 174393,
+      "chunk_id": "x_-2__z_1",
+      "path": "chunks/x_-2__z_1.json",
+      "sha256": "9d57b616cbaadb18c5d6ac0c61493385746e858f9073f2b0bb74e609287dd56e"
+    },
+    {
+      "bytes": 2746,
+      "chunk_id": "x_-2__z_2",
+      "path": "chunks/x_-2__z_2.json",
+      "sha256": "5125928d9ecb21597f2cebf3f21780b9914aa2c752fca923cfbb21f72aadceb0"
+    },
+    {
+      "bytes": 290278,
+      "chunk_id": "x_-1__z_-4",
+      "path": "chunks/x_-1__z_-4.json",
+      "sha256": "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac"
+    },
+    {
+      "bytes": 583940,
+      "chunk_id": "x_-1__z_-3",
+      "path": "chunks/x_-1__z_-3.json",
+      "sha256": "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc"
+    },
+    {
+      "bytes": 177573,
+      "chunk_id": "x_-1__z_-2",
+      "path": "chunks/x_-1__z_-2.json",
+      "sha256": "09f3b10d05f8852964d935a87899fc95a38304fac9d7078c65597a10e66da973"
+    },
+    {
+      "bytes": 448596,
+      "chunk_id": "x_-1__z_-1",
+      "path": "chunks/x_-1__z_-1.json",
+      "sha256": "5e3b7efb7a2c61e1092c6a42ca9c04212c7d2603890b7a3f4c5e46777005f17b"
+    },
+    {
+      "bytes": 469613,
+      "chunk_id": "x_-1__z_0",
+      "path": "chunks/x_-1__z_0.json",
+      "sha256": "b935890b89202fa181248552176364668e506a7630f0024ec86f12a084743d86"
+    },
+    {
+      "bytes": 534226,
+      "chunk_id": "x_-1__z_1",
+      "path": "chunks/x_-1__z_1.json",
+      "sha256": "b8696d4feb4157d39969ec039e610af572f25510d712c802d4a96943d6069c8c"
+    },
+    {
+      "bytes": 578300,
+      "chunk_id": "x_-1__z_2",
+      "path": "chunks/x_-1__z_2.json",
+      "sha256": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce"
+    },
+    {
+      "bytes": 331250,
+      "chunk_id": "x_-1__z_3",
+      "path": "chunks/x_-1__z_3.json",
+      "sha256": "a67aa41bbab215a4b5675d82bcad71de8650fc6379a189ce7ed571a169220403"
+    },
+    {
+      "bytes": 132875,
+      "chunk_id": "x_0__z_-4",
+      "path": "chunks/x_0__z_-4.json",
+      "sha256": "b9ed8d18acdcfe4f89e3d7fb1d69c11ba7152e174398c0943bfe295be2b12954"
+    },
+    {
+      "bytes": 215303,
+      "chunk_id": "x_0__z_-3",
+      "path": "chunks/x_0__z_-3.json",
+      "sha256": "6dfa4b8f4b91f309b313428829e37cedd13e4067ff94f896a8e2e5ef05002a1d"
+    },
+    {
+      "bytes": 262873,
+      "chunk_id": "x_0__z_-2",
+      "path": "chunks/x_0__z_-2.json",
+      "sha256": "c0e1f86787410d975ad90272482e5f4971c4aedc7eb83132cd28b22acf1a3456"
+    },
+    {
+      "bytes": 306658,
+      "chunk_id": "x_0__z_-1",
+      "path": "chunks/x_0__z_-1.json",
+      "sha256": "52ab0da6e6598839261e4b65ce7fadee9bac1b5c727210dccd6b2f7cb962331e"
+    },
+    {
+      "bytes": 245112,
+      "chunk_id": "x_0__z_0",
+      "path": "chunks/x_0__z_0.json",
+      "sha256": "ce3f058affe28f4d4040a2f50a68e2f3f8c0fae667fbf969d233dadfd486add8"
+    },
+    {
+      "bytes": 418952,
+      "chunk_id": "x_0__z_1",
+      "path": "chunks/x_0__z_1.json",
+      "sha256": "a35f63a877588d198e0e905167968bf9948f4616c16e708a6799d0e6c1bde00a"
+    },
+    {
+      "bytes": 324880,
+      "chunk_id": "x_0__z_2",
+      "path": "chunks/x_0__z_2.json",
+      "sha256": "886f4e6ecfbf570dac9cb36f682a089a0cfe51b735692e3220df4d5b4ac3d7b6"
+    },
+    {
+      "bytes": 118331,
+      "chunk_id": "x_0__z_3",
+      "path": "chunks/x_0__z_3.json",
+      "sha256": "9c5bbebdee1c652f780d5315f14afa65313226d31119bd98d856853e5785c706"
+    },
+    {
+      "bytes": 43919,
+      "chunk_id": "x_1__z_-3",
+      "path": "chunks/x_1__z_-3.json",
+      "sha256": "c7413816a37f78f146cd9ac7c3b5aa0e24e59718342a78c98b85fda74531cd0a"
+    },
+    {
+      "bytes": 479124,
+      "chunk_id": "x_1__z_-2",
+      "path": "chunks/x_1__z_-2.json",
+      "sha256": "432cac0daf8d91ec5c642e040fac0a1f3f65053daca722a07fa0062744d18828"
+    },
+    {
+      "bytes": 199328,
+      "chunk_id": "x_1__z_-1",
+      "path": "chunks/x_1__z_-1.json",
+      "sha256": "a952756b1c6d8d547669dffb89723c2be81d6c9a4b3afd2ae7f2dc3702a82b0d"
+    },
+    {
+      "bytes": 119327,
+      "chunk_id": "x_1__z_0",
+      "path": "chunks/x_1__z_0.json",
+      "sha256": "a952e4b16557561f6d8655e20d2c3d02041f859110f1c37d4693acc9952d59f3"
+    },
+    {
+      "bytes": 125231,
+      "chunk_id": "x_1__z_1",
+      "path": "chunks/x_1__z_1.json",
+      "sha256": "784d89c2ac1392f5ff329b8c6c437ad9050363e9f00b4f993dd9d378851f1758"
+    },
+    {
+      "bytes": 180246,
+      "chunk_id": "x_1__z_2",
+      "path": "chunks/x_1__z_2.json",
+      "sha256": "0f1bde8bde1f436e060699852dc4651454f793097b3970712de6fed2180f3b42"
+    },
+    {
+      "bytes": 72444,
+      "chunk_id": "x_2__z_-1",
+      "path": "chunks/x_2__z_-1.json",
+      "sha256": "f4f429d2832f36e43af2c3d612ffa131532b162dd63318bfd6f543f2810a1a64"
+    },
+    {
+      "bytes": 120345,
+      "chunk_id": "x_2__z_0",
+      "path": "chunks/x_2__z_0.json",
+      "sha256": "759351dd4738afa37068dc14ea312a201251be566092c0cc5bab531c949a567d"
+    },
+    {
+      "bytes": 105136,
+      "chunk_id": "x_2__z_1",
+      "path": "chunks/x_2__z_1.json",
+      "sha256": "3d32a78267ae574cc6353e20122791269beb5bddbc13b2ae16afd22cc72a80b9"
+    },
+    {
+      "bytes": 31489,
+      "chunk_id": "x_2__z_2",
+      "path": "chunks/x_2__z_2.json",
+      "sha256": "f6fd17666df382f89b51dff1b5a3b906e1c17fdc36d4af3e1aa4ecf4aad817a5"
+    }
+  ],
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "context": {
+    "bytes": 675130,
+    "path": "context.json",
+    "sha256": "4008473d014530211eba8e77e5b6f3ebe977c283a4750bacb57d6739b239a037"
+  },
+  "coordinate_system": {
+    "coordinate_rounding_m": 0.001,
+    "earth_radius_m": 6378137,
+    "ground_model": "USGS 3DEP bare-earth terrain",
+    "meters_per_unit": 1,
+    "origin_lat": 37.82376155,
+    "origin_lon": -122.37099,
+    "source_crs": "EPSG:4326",
+    "vertical_datum": "NAVD 88",
+    "world_axes": "+X east,+Y up,-Z north"
+  },
+  "counts": {
+    "category_memberships": {
+      "building": 213,
+      "building_part": 2,
+      "land_boundary": 1,
+      "major_area": 80,
+      "roads_paths": 427,
+      "terrain_shoreline": 22
+    },
+    "chunks": 38,
+    "context_rows": 4,
+    "duplicate_source_keys": 0,
+    "playable_rows": 735,
+    "source_rows": 739,
+    "unresolved_rows": 0
+  },
+  "coverage_ledger": {
+    "bytes": 156280,
+    "path": "coverage-ledger.csv",
+    "sha256": "3b4652e0f333d89c5994dd644873b75dd05c1068334f87235cd958177658bb2a"
+  },
+  "feature_kinds": [
+    "building_part_roof",
+    "building_part_wall",
+    "building_roof",
+    "building_wall",
+    "land_ground",
+    "major_area",
+    "road_path",
+    "terrain_overlay"
+  ],
+  "files": [
+    {
+      "bytes": 448596,
+      "path": "chunks/x_-1__z_-1.json",
+      "sha256": "5e3b7efb7a2c61e1092c6a42ca9c04212c7d2603890b7a3f4c5e46777005f17b"
+    },
+    {
+      "bytes": 177573,
+      "path": "chunks/x_-1__z_-2.json",
+      "sha256": "09f3b10d05f8852964d935a87899fc95a38304fac9d7078c65597a10e66da973"
+    },
+    {
+      "bytes": 583940,
+      "path": "chunks/x_-1__z_-3.json",
+      "sha256": "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc"
+    },
+    {
+      "bytes": 290278,
+      "path": "chunks/x_-1__z_-4.json",
+      "sha256": "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac"
+    },
+    {
+      "bytes": 469613,
+      "path": "chunks/x_-1__z_0.json",
+      "sha256": "b935890b89202fa181248552176364668e506a7630f0024ec86f12a084743d86"
+    },
+    {
+      "bytes": 534226,
+      "path": "chunks/x_-1__z_1.json",
+      "sha256": "b8696d4feb4157d39969ec039e610af572f25510d712c802d4a96943d6069c8c"
+    },
+    {
+      "bytes": 578300,
+      "path": "chunks/x_-1__z_2.json",
+      "sha256": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce"
+    },
+    {
+      "bytes": 331250,
+      "path": "chunks/x_-1__z_3.json",
+      "sha256": "a67aa41bbab215a4b5675d82bcad71de8650fc6379a189ce7ed571a169220403"
+    },
+    {
+      "bytes": 911426,
+      "path": "chunks/x_-2__z_-1.json",
+      "sha256": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2"
+    },
+    {
+      "bytes": 644248,
+      "path": "chunks/x_-2__z_-2.json",
+      "sha256": "3a07310461da7d9e76667412c6ca18dac8bdea89923cd8392436421882132ef9"
+    },
+    {
+      "bytes": 650675,
+      "path": "chunks/x_-2__z_-3.json",
+      "sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5"
+    },
+    {
+      "bytes": 189757,
+      "path": "chunks/x_-2__z_-4.json",
+      "sha256": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4"
+    },
+    {
+      "bytes": 592643,
+      "path": "chunks/x_-2__z_0.json",
+      "sha256": "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b"
+    },
+    {
+      "bytes": 174393,
+      "path": "chunks/x_-2__z_1.json",
+      "sha256": "9d57b616cbaadb18c5d6ac0c61493385746e858f9073f2b0bb74e609287dd56e"
+    },
+    {
+      "bytes": 2746,
+      "path": "chunks/x_-2__z_2.json",
+      "sha256": "5125928d9ecb21597f2cebf3f21780b9914aa2c752fca923cfbb21f72aadceb0"
+    },
+    {
+      "bytes": 251083,
+      "path": "chunks/x_-3__z_-1.json",
+      "sha256": "e45c1670c1714cbb982a14a809054a640e53f9a4add5e3c6080a0f98efb877d2"
+    },
+    {
+      "bytes": 428788,
+      "path": "chunks/x_-3__z_-2.json",
+      "sha256": "35bf23d64e860d39c5b79a98be7830f4f477143f7e9490c6739dec0627062d11"
+    },
+    {
+      "bytes": 274162,
+      "path": "chunks/x_-3__z_-3.json",
+      "sha256": "7f0ecd2e16fe4327f351496ed8c2f8640d68278fbaf33d428b6314ec862d9944"
+    },
+    {
+      "bytes": 10079,
+      "path": "chunks/x_-3__z_-4.json",
+      "sha256": "6256caf542398f17a6ff1e5572657bd5081fee32a7655281a5a8f026f21b3f98"
+    },
+    {
+      "bytes": 11556,
+      "path": "chunks/x_-3__z_0.json",
+      "sha256": "1cd2caaf02334a9aa39228e681a85b659b6da8e5fda3e7a875126071260ee74c"
+    },
+    {
+      "bytes": 306658,
+      "path": "chunks/x_0__z_-1.json",
+      "sha256": "52ab0da6e6598839261e4b65ce7fadee9bac1b5c727210dccd6b2f7cb962331e"
+    },
+    {
+      "bytes": 262873,
+      "path": "chunks/x_0__z_-2.json",
+      "sha256": "c0e1f86787410d975ad90272482e5f4971c4aedc7eb83132cd28b22acf1a3456"
+    },
+    {
+      "bytes": 215303,
+      "path": "chunks/x_0__z_-3.json",
+      "sha256": "6dfa4b8f4b91f309b313428829e37cedd13e4067ff94f896a8e2e5ef05002a1d"
+    },
+    {
+      "bytes": 132875,
+      "path": "chunks/x_0__z_-4.json",
+      "sha256": "b9ed8d18acdcfe4f89e3d7fb1d69c11ba7152e174398c0943bfe295be2b12954"
+    },
+    {
+      "bytes": 245112,
+      "path": "chunks/x_0__z_0.json",
+      "sha256": "ce3f058affe28f4d4040a2f50a68e2f3f8c0fae667fbf969d233dadfd486add8"
+    },
+    {
+      "bytes": 418952,
+      "path": "chunks/x_0__z_1.json",
+      "sha256": "a35f63a877588d198e0e905167968bf9948f4616c16e708a6799d0e6c1bde00a"
+    },
+    {
+      "bytes": 324880,
+      "path": "chunks/x_0__z_2.json",
+      "sha256": "886f4e6ecfbf570dac9cb36f682a089a0cfe51b735692e3220df4d5b4ac3d7b6"
+    },
+    {
+      "bytes": 118331,
+      "path": "chunks/x_0__z_3.json",
+      "sha256": "9c5bbebdee1c652f780d5315f14afa65313226d31119bd98d856853e5785c706"
+    },
+    {
+      "bytes": 199328,
+      "path": "chunks/x_1__z_-1.json",
+      "sha256": "a952756b1c6d8d547669dffb89723c2be81d6c9a4b3afd2ae7f2dc3702a82b0d"
+    },
+    {
+      "bytes": 479124,
+      "path": "chunks/x_1__z_-2.json",
+      "sha256": "432cac0daf8d91ec5c642e040fac0a1f3f65053daca722a07fa0062744d18828"
+    },
+    {
+      "bytes": 43919,
+      "path": "chunks/x_1__z_-3.json",
+      "sha256": "c7413816a37f78f146cd9ac7c3b5aa0e24e59718342a78c98b85fda74531cd0a"
+    },
+    {
+      "bytes": 119327,
+      "path": "chunks/x_1__z_0.json",
+      "sha256": "a952e4b16557561f6d8655e20d2c3d02041f859110f1c37d4693acc9952d59f3"
+    },
+    {
+      "bytes": 125231,
+      "path": "chunks/x_1__z_1.json",
+      "sha256": "784d89c2ac1392f5ff329b8c6c437ad9050363e9f00b4f993dd9d378851f1758"
+    },
+    {
+      "bytes": 180246,
+      "path": "chunks/x_1__z_2.json",
+      "sha256": "0f1bde8bde1f436e060699852dc4651454f793097b3970712de6fed2180f3b42"
+    },
+    {
+      "bytes": 72444,
+      "path": "chunks/x_2__z_-1.json",
+      "sha256": "f4f429d2832f36e43af2c3d612ffa131532b162dd63318bfd6f543f2810a1a64"
+    },
+    {
+      "bytes": 120345,
+      "path": "chunks/x_2__z_0.json",
+      "sha256": "759351dd4738afa37068dc14ea312a201251be566092c0cc5bab531c949a567d"
+    },
+    {
+      "bytes": 105136,
+      "path": "chunks/x_2__z_1.json",
+      "sha256": "3d32a78267ae574cc6353e20122791269beb5bddbc13b2ae16afd22cc72a80b9"
+    },
+    {
+      "bytes": 31489,
+      "path": "chunks/x_2__z_2.json",
+      "sha256": "f6fd17666df382f89b51dff1b5a3b906e1c17fdc36d4af3e1aa4ecf4aad817a5"
+    },
+    {
+      "bytes": 675130,
+      "path": "context.json",
+      "sha256": "4008473d014530211eba8e77e5b6f3ebe977c283a4750bacb57d6739b239a037"
+    },
+    {
+      "bytes": 156280,
+      "path": "coverage-ledger.csv",
+      "sha256": "3b4652e0f333d89c5994dd644873b75dd05c1068334f87235cd958177658bb2a"
+    },
+    {
+      "bytes": 81538,
+      "path": "coverage-summary.json",
+      "sha256": "9bd70dce7cbe0080ebebe15cd9d30a98f4396727260d92adf6ed3d96bc2a68a6"
+    },
+    {
+      "bytes": 1285299,
+      "path": "logical-objects.json",
+      "sha256": "5a74a80a7930ef8edfbea4f7c3a15a509d38e59b64e55d17a26ea1061137ba11"
+    },
+    {
+      "bytes": 23820,
+      "path": "qa/pavement-skin.json",
+      "sha256": "60c143462e20c6ca28ed5f096dd88997b5f8dc313c55e123f56edbfdad6b077d"
+    },
+    {
+      "bytes": 3142,
+      "path": "qa/validation-report.json",
+      "sha256": "afe1d34d0c743c9a16f058b8613f4276bd44ee7bddc3cd062657dfe65304e7a9"
+    },
+    {
+      "bytes": 4599,
+      "path": "terrain.json",
+      "sha256": "f2399e68640e92003d40f26362515902bada52838545b9b40271ffe21774d167"
+    },
+    {
+      "bytes": 89950,
+      "path": "vegetation.json",
+      "sha256": "e843ac78c4f5ba769241f330f83b41fd8431fbe06073c9ffd4907c413baad32f"
+    }
+  ],
+  "generator": {
+    "node_version": "v26.7.0",
+    "osmium_version": "1.19.1",
+    "package_lock_sha256": "8d217cd58a24f2ffc2066603ce2bc37e12272016bf1e5676406a5b9736fb0408"
+  },
+  "generator_version": "2.1.0",
+  "initial_spawn": {
+    "origin": [
+      -104.364,
+      3.457,
+      786.024
+    ],
+    "yaw": -0.119
+  },
+  "material_keys": [
+    "building_part_roof",
+    "building_part_wall",
+    "building_roof",
+    "building_wall",
+    "context_bay_bridge",
+    "context_boundary_marina",
+    "context_boundary_pier",
+    "context_ybi",
+    "land_ground",
+    "major_area_amenity",
+    "major_area_landuse",
+    "major_area_leisure",
+    "major_area_paved",
+    "road_path",
+    "road_path_pedestrian",
+    "terrain_breakwater",
+    "terrain_marina",
+    "terrain_pier",
+    "terrain_sand",
+    "terrain_wetland"
+  ],
+  "playable_boundary": {
+    "components": [
+      {
+        "holes": [],
+        "outer": [
+          [
+            -710.705,
+            -339.352
+          ],
+          [
+            -709.685,
+            -328.799
+          ],
+          [
+            -578.219,
+            -62.011
+          ],
+          [
+            -637.309,
+            -191.497
+          ],
+          [
+            -585.148,
+            -89.228
+          ],
+          [
+            -566.208,
+            -57.079
+          ],
+          [
+            -536.786,
+            2.789
+          ],
+          [
+            -516.588,
+            45.19
+          ],
+          [
+            -500.989,
+            90.03
+          ],
+          [
+            -492.53,
+            107.997
+          ],
+          [
+            -481.873,
+            123.069
+          ],
+          [
+            -471.083,
+            137.185
+          ],
+          [
+            -425.517,
+            214.964
+          ],
+          [
+            -381.147,
+            297.251
+          ],
+          [
+            -291.624,
+            461.937
+          ],
+          [
+            -232.051,
+            573.379
+          ],
+          [
+            -215.713,
+            607.765
+          ],
+          [
+            -125.9,
+            777.461
+          ],
+          [
+            -47.685,
+            923.957
+          ],
+          [
+            -34.566,
+            954.002
+          ],
+          [
+            12.425,
+            932.607
+          ],
+          [
+            7.298,
+            918.647
+          ],
+          [
+            1.117,
+            902.105
+          ],
+          [
+            -2.884,
+            893.333
+          ],
+          [
+            -11.95,
+            873.775
+          ],
+          [
+            -12.249,
+            866.784
+          ],
+          [
+            -8.266,
+            862.075
+          ],
+          [
+            31.198,
+            841.347
+          ],
+          [
+            77.775,
+            816.868
+          ],
+          [
+            96.012,
+            807.317
+          ],
+          [
+            99.38,
+            807.461
+          ],
+          [
+            105.421,
+            804.356
+          ],
+          [
+            119.437,
+            797.02
+          ],
+          [
+            160.703,
+            774.288
+          ],
+          [
+            181.218,
+            763.357
+          ],
+          [
+            207.412,
+            751.635
+          ],
+          [
+            208.134,
+            752.982
+          ],
+          [
+            215.731,
+            748.907
+          ],
+          [
+            214.57,
+            746.748
+          ],
+          [
+            305.711,
+            696.999
+          ],
+          [
+            337.085,
+            681.481
+          ],
+          [
+            395.04,
+            649.544
+          ],
+          [
+            395.937,
+            651.202
+          ],
+          [
+            396.641,
+            650.824
+          ],
+          [
+            397.08,
+            651.614
+          ],
+          [
+            402.972,
+            648.419
+          ],
+          [
+            402.655,
+            647.84
+          ],
+          [
+            403.579,
+            647.34
+          ],
+          [
+            405.17,
+            646.193
+          ],
+          [
+            414.491,
+            640.905
+          ],
+          [
+            416.39,
+            636.464
+          ],
+          [
+            421.499,
+            633.97
+          ],
+          [
+            426.872,
+            633.881
+          ],
+          [
+            514.741,
+            585.969
+          ],
+          [
+            520.114,
+            581.015
+          ],
+          [
+            576.566,
+            555.245
+          ],
+          [
+            584.629,
+            547.909
+          ],
+          [
+            589.307,
+            539.059
+          ],
+          [
+            602.893,
+            489.589
+          ],
+          [
+            601.38,
+            486.85
+          ],
+          [
+            604.106,
+            483.989
+          ],
+          [
+            615.898,
+            443.825
+          ],
+          [
+            624.787,
+            416.385
+          ],
+          [
+            634.803,
+            384.036
+          ],
+          [
+            641.037,
+            361.649
+          ],
+          [
+            639.015,
+            355.983
+          ],
+          [
+            649.496,
+            321.329
+          ],
+          [
+            653.805,
+            316.854
+          ],
+          [
+            674.363,
+            255.283
+          ],
+          [
+            698.878,
+            177.026
+          ],
+          [
+            706.801,
+            154.439
+          ],
+          [
+            710.705,
+            135.259
+          ],
+          [
+            710.424,
+            126.921
+          ],
+          [
+            705.623,
+            115.333
+          ],
+          [
+            669.544,
+            46.715
+          ],
+          [
+            638.426,
+            -12.696
+          ],
+          [
+            626.282,
+            -35.717
+          ],
+          [
+            613.277,
+            -62.723
+          ],
+          [
+            604.255,
+            -82.17
+          ],
+          [
+            594.627,
+            -100.16
+          ],
+          [
+            576.83,
+            -133.856
+          ],
+          [
+            513.844,
+            -247.881
+          ],
+          [
+            502.879,
+            -267.773
+          ],
+          [
+            494.719,
+            -284.861
+          ],
+          [
+            478.619,
+            -313.804
+          ],
+          [
+            450.129,
+            -368.139
+          ],
+          [
+            437.036,
+            -393.275
+          ],
+          [
+            424.559,
+            -416.107
+          ],
+          [
+            412.31,
+            -437.825
+          ],
+          [
+            405.654,
+            -448.567
+          ],
+          [
+            393.862,
+            -471.978
+          ],
+          [
+            376.452,
+            -504.517
+          ],
+          [
+            354.654,
+            -546.061
+          ],
+          [
+            306.23,
+            -632.734
+          ],
+          [
+            296.663,
+            -654.62
+          ],
+          [
+            284.379,
+            -684.843
+          ],
+          [
+            273.607,
+            -701.307
+          ],
+          [
+            259.934,
+            -723.126
+          ],
+          [
+            235.867,
+            -767.498
+          ],
+          [
+            210.991,
+            -814.82
+          ],
+          [
+            206.911,
+            -820.53
+          ],
+          [
+            200.888,
+            -823.113
+          ],
+          [
+            138.879,
+            -843.162
+          ],
+          [
+            -61.868,
+            -903.486
+          ],
+          [
+            -154.539,
+            -932.173
+          ],
+          [
+            -175.942,
+            -937.193
+          ],
+          [
+            -196.685,
+            -940.355
+          ],
+          [
+            -201.758,
+            -949.483
+          ],
+          [
+            -208.081,
+            -954.002
+          ],
+          [
+            -221.077,
+            -944.273
+          ],
+          [
+            -252.064,
+            -929.468
+          ],
+          [
+            -294.139,
+            -916.265
+          ],
+          [
+            -326.111,
+            -889.626
+          ],
+          [
+            -356.957,
+            -868.888
+          ],
+          [
+            -372.706,
+            -860.271
+          ],
+          [
+            -373.339,
+            -861.507
+          ],
+          [
+            -374.104,
+            -861.117
+          ],
+          [
+            -377.648,
+            -859.281
+          ],
+          [
+            -378.492,
+            -858.891
+          ],
+          [
+            -377.779,
+            -857.5
+          ],
+          [
+            -383.662,
+            -856.709
+          ],
+          [
+            -412.328,
+            -839.744
+          ],
+          [
+            -493.937,
+            -796.864
+          ],
+          [
+            -533.189,
+            -775.023
+          ],
+          [
+            -573.383,
+            -751.69
+          ],
+          [
+            -586.643,
+            -739.468
+          ],
+          [
+            -602.453,
+            -696.153
+          ],
+          [
+            -625.148,
+            -623.295
+          ],
+          [
+            -640.228,
+            -580.615
+          ],
+          [
+            -658.694,
+            -514.88
+          ],
+          [
+            -694.763,
+            -399.32
+          ],
+          [
+            -709.298,
+            -349.493
+          ]
+        ]
+      }
+    ]
+  },
+  "schema_version": "ti.godot-world/2",
+  "sources": {
+    "extraction_polygon": {
+      "bytes": 12422,
+      "path": "data/osm/treasure-island-polygon.geojson",
+      "sha256": "43adbe335e87f0d839b56c2f5933ae97d35d4f588ce93bd09923a98620dd2b63"
+    },
+    "proper_extract": {
+      "bytes": 103207,
+      "path": "data/osm/treasure-island-proper-2026-08-27.osm.pbf",
+      "sha256": "13984ed8f70c9d5d39d4ba14f83c7307eb75428af7b07df5774df29bda4ccaf9"
+    },
+    "raw_osm": {
+      "bytes": 5594888,
+      "path": "data/osm/treasure-island-2026-08-27.osm",
+      "sha256": "3b6f6af31a1c82de3fa51fcbc02fe7e3723fdb629c948ae6523ef46c157b4549"
+    },
+    "source_ledger": {
+      "bytes": 195590,
+      "path": "data/osm/treasure-island-source-inventory.csv",
+      "sha256": "fdf57f37f5507a7cb9b64a7fc530eabb22e29f3742324d5347c0f6b1949cb4cb"
+    },
+    "source_summary": {
+      "bytes": 1220,
+      "path": "data/osm/treasure-island-source-inventory-summary.json",
+      "sha256": "49eb5c9fadd1b81b3fd687beb59cd9f917eb197069bcb993f5a0a3f2588d90d7"
+    },
+    "terrain_dem": {
+      "bytes": 10160678,
+      "path": "data/terrain/treasure-island-ybi-usgs-3dep-2023.tif",
+      "sha256": "3af54acdd116f3e253af8ece5ec501a08dff94cfca47b7f05f2c326c9ba33f3f"
+    }
+  },
+  "terrain": {
+    "bytes": 4599,
+    "path": "terrain.json",
+    "sha256": "f2399e68640e92003d40f26362515902bada52838545b9b40271ffe21774d167"
+  },
+  "vegetation": {
+    "bytes": 89950,
+    "path": "vegetation.json",
+    "sha256": "e843ac78c4f5ba769241f330f83b41fd8431fbe06073c9ffd4907c413baad32f"
+  }
+}

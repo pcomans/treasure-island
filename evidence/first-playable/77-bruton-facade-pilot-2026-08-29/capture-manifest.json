@@ -1,0 +1,296 @@
+{
+  "schema_version": "ti.hawkins-facade-evidence/2",
+  "generator": "game/tests/hawkins_facade_capture.gd",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "viewport": [
+    1440,
+    900
+  ],
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "target_receiver": "building:w1249412093:wall",
+  "target_source_keys": [
+    "w1249412093"
+  ],
+  "facade_layout": "res://game/resources/facades/hawkins_77_bruton_layout.json",
+  "facade_layout_sha256": "ccce9fd2c8027d25e95bb6750e5b23297786c747242eec607de5e4be41d1b4ef",
+  "facade_signature": "cf5b2a3aeb94e1482b1be9f9895f84463ce78e7ee6d1d38ee14e7833b8b8deff",
+  "source_height_m": 6.0,
+  "base_y_m": 4.274,
+  "top_y_m": 10.274,
+  "maximum_relief_m": 0.05,
+  "module_counts": {
+    "W-P": 30,
+    "S-H": 30,
+    "R-C": 2,
+    "W-N": 2,
+    "L-G": 1,
+    "D-P": 1,
+    "F-SIGN": 1,
+    "C-B": 1,
+    "D-S": 1,
+    "G-G": 1
+  },
+  "generated_world_counts": {
+    "chunks": 38,
+    "meshes": 729,
+    "triangles": 48381,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "default_sun_rotation_degrees": [
+    -51.9999961853027,
+    -27.9999980926514,
+    0.0
+  ],
+  "camera_fov_degrees": 70.0,
+  "captures": [
+    {
+      "id": "01-address-close",
+      "region": "close_address_side",
+      "intent": "Close exact-receiver view of the complete lobby/door/sign language under the default project sun",
+      "file": "01-address-close.png",
+      "sha256": "90e8039999d19da1ee4779a50a7386bbcd28475efb666935a652fa6f48d2cdf7",
+      "bytes": 915546,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -65.8761901855469,
+        4.2010498046875,
+        517.663024902344
+      ],
+      "camera_position": [
+        -61.6538734436035,
+        6.2572021484375,
+        521.187072753906
+      ],
+      "camera_forward": [
+        -0.767690658569336,
+        -0.0102094281464815,
+        -0.640739321708679
+      ],
+      "sample_unique_colors": 288,
+      "sample_luminance_range": 0.737506687641144,
+      "pause_overlay_visible": false,
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.2010498046875,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -69.7148361206055,
+        6.15000009536743,
+        514.459167480469
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "side_u_m": 15.5,
+      "outward_distance_m": 5.0
+    },
+    {
+      "id": "02-address-close-sprayed",
+      "region": "close_address_side_spray",
+      "intent": "Close exact-receiver view after one real-controller spray projected across the render-only facade",
+      "file": "02-address-close-sprayed.png",
+      "sha256": "f62d02229847184dc944068a6e4e7c084d23898b37b72d8831b86cfac6b74f4d",
+      "bytes": 907942,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -65.8761901855469,
+        4.2010498046875,
+        517.663024902344
+      ],
+      "camera_position": [
+        -61.6538734436035,
+        6.2572021484375,
+        521.187072753906
+      ],
+      "camera_forward": [
+        -0.767690658569336,
+        -0.0102094281464815,
+        -0.640739321708679
+      ],
+      "sample_unique_colors": 288,
+      "sample_luminance_range": 0.737506687641144,
+      "pause_overlay_visible": false,
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.2010498046875,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -69.7148361206055,
+        6.15000009536743,
+        514.459167480469
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "side_u_m": 15.5,
+      "outward_distance_m": 5.0,
+      "spray_result": "placed",
+      "spray_hit_object": "building:w1249412093:wall",
+      "spray_hit_sources": [
+        "w1249412093"
+      ],
+      "spray_visual_layer": 2
+    },
+    {
+      "id": "03-broad-gameplay-camera",
+      "region": "ordinary_gameplay_camera",
+      "intent": "Ordinary third-person route-distance view of the owner-photo-mapped WSW facade language",
+      "file": "03-broad-gameplay-camera.png",
+      "sha256": "87e1ab4e237d37668ed15f807f1d098afb084902ded921b0d07b7598a3dbcd7f",
+      "bytes": 537487,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -113.18994140625,
+        4.33062744140625,
+        488.168792724609
+      ],
+      "camera_position": [
+        -114.931945800781,
+        6.13080549240112,
+        489.081085205078
+      ],
+      "camera_forward": [
+        0.88133180141449,
+        0.101093895733356,
+        -0.461556404829025
+      ],
+      "sample_unique_colors": 189,
+      "sample_luminance_range": 0.800916843116283,
+      "pause_overlay_visible": false,
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.33062744140625,
+      "ground_object": "land:w26767313:x_-1__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -102.559494018555,
+        7.55000019073486,
+        482.601593017578
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "side_u_m": 35.0,
+      "outward_distance_m": 12.0
+    },
+    {
+      "id": "04-corner-oblique-gameplay",
+      "region": "oblique_gameplay_camera",
+      "intent": "Ordinary third-person oblique view across the observed WSW and address-side corner",
+      "file": "04-corner-oblique-gameplay.png",
+      "sha256": "d181c583a98db6ae77c59e7a84b7bda9c4bd8b65461f14464ac877353b66054d",
+      "bytes": 903713,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -81.7747497558594,
+        4.24012756347656,
+        546.244567871094
+      ],
+      "camera_position": [
+        -82.3586273193359,
+        5.92169761657715,
+        551.704223632812
+      ],
+      "camera_forward": [
+        0.106158964335918,
+        0.0578964948654175,
+        -0.992662250995636
+      ],
+      "sample_unique_colors": 286,
+      "sample_luminance_range": 0.750105142593384,
+      "pause_overlay_visible": false,
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.24012756347656,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -79.6480026245117,
+        7.40000009536743,
+        526.357971191406
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5
+    },
+    {
+      "id": "05-address-changed-light",
+      "region": "changed_light_exact_receiver",
+      "intent": "Exact address-side receiver under a changed sun direction to expose material response without baked lighting",
+      "file": "05-address-changed-light.png",
+      "sha256": "5697bf07e43c1e42beac524137fae5c9bc7ad5bfacaf7e1e4882d1c1ae40555b",
+      "bytes": 782336,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -60.502082824707,
+        4.32150268554688,
+        522.1484375
+      ],
+      "camera_position": [
+        -56.2796325683594,
+        6.28552532196045,
+        525.672607421875
+      ],
+      "camera_forward": [
+        -0.767713844776154,
+        0.00654145237058401,
+        -0.640759408473969
+      ],
+      "sample_unique_colors": 235,
+      "sample_luminance_range": 0.653270661830902,
+      "pause_overlay_visible": false,
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.32150268554688,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -69.7148361206055,
+        6.40000009536743,
+        514.459167480469
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "side_u_m": 15.5,
+      "outward_distance_m": 12.0,
+      "sun_rotation_degrees": [
+        -37.9999961853027,
+        124.999992370605,
+        0.0
+      ]
+    }
+  ]
+}

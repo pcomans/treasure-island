@@ -1,0 +1,77 @@
+schema_version: "ti.final-independent-art-verdict/1"
+checked_date: "2026-08-29"
+reviewer: "/root/hawkins_texture_v2_review"
+scope: "finite_hawkins_facade_language_correction"
+target_receiver: "building:w1249412093:wall"
+decision: "ACCEPT_WITH_DOCUMENTED_MASSING_LIMITATION"
+
+evidence_integrity:
+  asset_inventory_verified: true
+  five_required_views_reviewed: true
+  owner_reference_inspected: true
+  owner_reference_sha256: "6b6a0f95902bd48c57c4f69b6bd7b97346c672d71c1b300d394170f6447db5cd"
+  external_browsing_performed: false
+  exact_receiver_identity: true
+  corrected_layout_sha256: "2debe810737a98fef19ceaa0bfe6ec241abf3cafdcac3aea8f005eed42cdd8e6"
+  corrected_facade_signature: "6fc4d5aee82a5a496c3e77d3752fe07f18e798a1dba4364a3671fccc8d0d8161"
+
+capture_comparability:
+  prior_and_corrected_transforms_identical: true
+  viewport_identical: true
+  renderer_identical: true
+  camera_fov_identical: true
+  default_and_changed_light_transforms_identical: true
+
+prior_rejectors:
+  unstable_fine_flute_sampling:
+    verdict: "RESOLVED"
+    evidence_views:
+      - "01-address-close.png"
+      - "03-broad-gameplay-camera.png"
+      - "04-corner-oblique-gameplay.png"
+      - "05-address-changed-light.png"
+    finding: "no_dashed_sparkle_diagonal_moire_or_facade_scale_interference_remains"
+  wsw_opening_grammar_and_ground_cadence:
+    verdict: "RESOLVED"
+    evidence_views:
+      - "01-address-close.png"
+      - "03-broad-gameplay-camera.png"
+      - "04-corner-oblique-gameplay.png"
+      - "05-address-changed-light.png"
+    finding: "W-P_uses_complete_low_horizontal_transom_and_WSW_has_15_main_plus_2_companion_G-W_modules"
+
+separated_verdicts:
+  standalone_materials:
+    verdict: "PASS"
+    material_hierarchy: "PASS"
+    albedo_neutrality: "PASS"
+    fine_flute_sampling: "PASS"
+    macro_repetition: "PASS"
+  standalone_modules:
+    verdict: "PASS"
+    topology_and_completeness: "PASS"
+    target_motif_resemblance: "PASS"
+    legal_joins: "PASS"
+  exact_current_receiver:
+    mechanical_attachment_and_gameplay: "PASS_AS_EVIDENCED"
+    art_scale_and_readability: "PASS"
+    address_recognition: "PASS"
+    spray_behavior: "PASS"
+    unobserved_side_restraint: "PASS_AS_EVIDENCED"
+  whole_building_real_world_resemblance:
+    verdict: "BLOCKED_BY_CURRENT_MASSING_INVARIANT"
+    current_height_m: 6.0
+    limitation: "real_Hawkins_is_a_six_story_main_mass_plus_lower_companion"
+
+new_art_defects:
+  found: false
+  findings: []
+
+finite_correction_round:
+  completed: true
+  further_routine_facade_batch_indicated: false
+  residual_limitations:
+    - "unchanged_6m_extrusion_and_single_adapted_upper_row"
+    - "shallow_opaque_glass_proxies"
+    - "reference_relative_not_rectified_as_built_module_placement"
+    - "material_only_unobserved_sides"

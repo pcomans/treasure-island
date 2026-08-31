@@ -1,0 +1,17 @@
+w34313515 live BAY integration — generated-data audit
+Date: 2026-08-30
+Scope: generated/world/**
+
+Command:
+  git diff --name-only -- generated/world
+
+Result:
+  (no paths; empty diff)
+
+Frozen identities independently rechecked by the focused/native harnesses:
+  generated/world/manifest.json sha256 e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3
+  generated content sha256 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164
+  exact receiver chunk generated/world/chunks/x_-1__z_1.json sha256 b8696d4feb4157d39969ec039e610af572f25510d712c802d4a96943d6069c8c
+
+Conclusion:
+  No generated source, record, manifest, chunk, geometry, terrain, foundation, roof, collision, or navigation data changed in this live integration.

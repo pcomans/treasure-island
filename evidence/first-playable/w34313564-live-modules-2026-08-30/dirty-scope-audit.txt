@@ -1,0 +1,38 @@
+w34313564 five-module live integration — dirty-scope audit on 2026-08-30
+
+Owned runtime/source additions:
+- game/scripts/world/facades/w34313564_live_modules.gd (+ generated .uid)
+- game/tests/headless_w34313564_live_module_integration_contract.gd (+ generated .uid)
+- game/tests/w34313564_live_module_integration_capture.gd (+ generated .uid)
+
+Owned narrow integrations/current-state gate updates:
+- game/scripts/world/world_chunk_builder.gd
+- game/scripts/world/facades/accepted_material_run_trials.gd
+- game/tests/headless_w34313564_module_calibration_contract.gd
+- game/tests/headless_batch_06_exact_receiver_trial_contract.gd
+- game/tests/headless_batch_06_prototype_contract.gd
+- game/tests/headless_accepted_material_run_trials_contract.gd
+- game/tests/headless_batch_02_material_contract.gd
+- game/tests/headless_batch_03_material_contract.gd
+- game/tests/headless_batch_04_material_contract.gd
+- game/tests/headless_ymca_wall_tangent_projection_contract.gd
+- game/tests/headless_hawkins_facade_contract.gd
+- game/tests/full_runtime_integration.gd
+
+Owned evidence output:
+- evidence/first-playable/w34313564-live-modules-2026-08-30/
+- append-only entry in discovery/RETRO_LOG.md
+
+Frozen/protected and verified unchanged by this task:
+- generated/
+- game/resources/facades/w34313564_module_calibration.json
+- game/tests/support/w34313564_module_calibration.gd
+- game/scripts/world/facades/batch_06_prototype_set.gd
+- game/resources/facades/batch_06_prototype_registry.json
+- game/resources/materials/world/w34313564/
+- game/scenes/world/facades/batch_06/
+- discovery/FACADE_RECEIVER_INVENTORY.{json,md}
+- lifecycle and art-review documents
+- detached calibration/correction capture harnesses, manifests, and images
+
+The shared worktree contained unrelated pre-existing modified and untracked files. They were preserved; no cleanup, reset, commit, or broad reformat was performed.

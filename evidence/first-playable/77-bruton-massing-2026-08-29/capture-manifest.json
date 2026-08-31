@@ -1,0 +1,354 @@
+{
+  "schema_version": "ti.hawkins-massing-evidence/1",
+  "generator": "game/tests/hawkins_facade_capture.gd",
+  "evidence_role": "owner_approved_hawkins_runtime_massing_change",
+  "prior_evidence_directory": "res://evidence/first-playable/77-bruton-facade-correction-2026-08-29",
+  "pose_policy": "six deterministic Forward+/Metal views: address close/default and lower spray, WSW ordinary, corner-B oblique, companion-roof upper-step spray, exact corner-B changed light",
+  "approved_before_after": "one flat 6 m Hawkins extrusion -> Hawkins-only stepped six-story main plus lower four-story companion with matching collision and spray surfaces",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "viewport": [
+    1440,
+    900
+  ],
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "target_receiver": "building:w1249412093:wall",
+  "target_source_keys": [
+    "w1249412093"
+  ],
+  "facade_layout": "res://game/resources/facades/hawkins_77_bruton_layout.json",
+  "facade_layout_sha256": "4de2239af2e18fe4121930d51dee15e081d2f81a40393da2f1f29c69464761d9",
+  "facade_signature": "d311c103c9273b94fc982588f46bae6ab67ba6be54b0d0a111dd305e39c22219",
+  "source_height_m": 6.0,
+  "base_y_m": 4.274,
+  "main_top_y_m": 25.274,
+  "companion_top_y_m": 18.274,
+  "massing_signature": "7c4fea5fec624ccfc3963b9fa5eb586b73ca61da0c09ae8539df3e0adb8cf291",
+  "runtime_wall_triangles": 46,
+  "runtime_roof_triangles": 4,
+  "maximum_relief_m": 0.05,
+  "module_counts": {
+    "W-P": 128,
+    "S-H": 128,
+    "R-C": 10,
+    "W-N": 10,
+    "G-W": 17,
+    "L-G": 1,
+    "D-P": 1,
+    "F-SIGN": 1,
+    "C-B": 1,
+    "D-S": 1,
+    "G-G": 1
+  },
+  "generated_world_counts": {
+    "chunks": 38,
+    "meshes": 729,
+    "triangles": 48389,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "default_sun_rotation_degrees": [
+    -51.9999961853027,
+    -27.9999980926514,
+    0.0
+  ],
+  "camera_fov_degrees": 70.0,
+  "captures": [
+    {
+      "id": "01-address-close",
+      "region": "close_address_side",
+      "intent": "Close exact-receiver view of the complete lobby/door/sign language under the default project sun",
+      "file": "01-address-close.png",
+      "sha256": "35fd43882bc153ba801f4ae96de889352849c3588309baa29491a61f88495cb5",
+      "bytes": 945545,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -65.8761901855469,
+        4.2010498046875,
+        517.663024902344
+      ],
+      "camera_position": [
+        -61.6538734436035,
+        6.2572021484375,
+        521.187072753906
+      ],
+      "camera_forward": [
+        -0.767690658569336,
+        -0.0102094281464815,
+        -0.640739321708679
+      ],
+      "sample_unique_colors": 290,
+      "sample_luminance_range": 0.629972577095032,
+      "pause_overlay_visible": false,
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.2010498046875,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -69.7148361206055,
+        6.15000009536743,
+        514.459167480469
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "side_u_m": 15.5,
+      "outward_distance_m": 5.0
+    },
+    {
+      "id": "02-address-close-sprayed",
+      "region": "close_address_side_spray",
+      "intent": "Close exact-receiver view after one real-controller spray projected across the render-only facade",
+      "file": "02-address-close-sprayed.png",
+      "sha256": "292714927584e68c04829dbae0426fc024080dbef696a99ab2dd17126c06300d",
+      "bytes": 937843,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -65.8761901855469,
+        4.2010498046875,
+        517.663024902344
+      ],
+      "camera_position": [
+        -61.6538734436035,
+        6.2572021484375,
+        521.187072753906
+      ],
+      "camera_forward": [
+        -0.767690658569336,
+        -0.0102094281464815,
+        -0.640739321708679
+      ],
+      "sample_unique_colors": 290,
+      "sample_luminance_range": 0.629972577095032,
+      "pause_overlay_visible": false,
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.2010498046875,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -69.7148361206055,
+        6.15000009536743,
+        514.459167480469
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "side_u_m": 15.5,
+      "outward_distance_m": 5.0,
+      "spray_result": "placed",
+      "spray_hit_object": "building:w1249412093:wall",
+      "spray_hit_sources": [
+        "w1249412093"
+      ],
+      "spray_visual_layer": 2
+    },
+    {
+      "id": "03-wsw-ordinary-stepped",
+      "region": "ordinary_gameplay_camera",
+      "intent": "Ordinary third-person 40 m view of the six-story WSW main block and lower companion cadence",
+      "file": "03-wsw-ordinary-stepped.png",
+      "sha256": "d67f4dd4666fc719211e4eebe10fe5ea44b01b57134e589761346d53ded2af9a",
+      "bytes": 123482,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -113.18994140625,
+        4.33062744140625,
+        488.168792724609
+      ],
+      "camera_position": [
+        -114.933265686035,
+        4.94597673416138,
+        489.081817626953
+      ],
+      "camera_forward": [
+        0.72450065612793,
+        0.57544469833374,
+        -0.379423409700394
+      ],
+      "sample_unique_colors": 131,
+      "sample_luminance_range": 0.831037580966949,
+      "pause_overlay_visible": false,
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.33062744140625,
+      "ground_object": "land:w26767313:x_-1__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -102.559494018555,
+        14.7740001678467,
+        482.601593017578
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "side_u_m": 35.0,
+      "outward_distance_m": 12.0
+    },
+    {
+      "id": "04-corner-b-oblique",
+      "region": "oblique_gameplay_camera",
+      "intent": "40 m third-person oblique view across the stepped WSW/SE corner B",
+      "file": "04-corner-b-oblique.png",
+      "sha256": "9c026c74d52fd0a795093569dd397603b131cf27790f57008f70129c1a07603d",
+      "bytes": 714837,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -83.9014892578125,
+        4.29159545898438,
+        566.131164550781
+      ],
+      "camera_position": [
+        -84.4736175537109,
+        5.15064430236816,
+        571.481018066406
+      ],
+      "camera_forward": [
+        0.104023955762386,
+        0.207447364926338,
+        -0.972699642181396
+      ],
+      "sample_unique_colors": 270,
+      "sample_luminance_range": 0.774787463247776,
+      "pause_overlay_visible": false,
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.29159545898438,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -79.6480026245117,
+        14.7740001678467,
+        526.357971191406
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5
+    },
+    {
+      "id": "05-companion-roof-upper-step-sprayed",
+      "region": "jetpack_oblique_upper_spray",
+      "intent": "Stable companion-roof view of the exposed step wall after a real within-range spray placement",
+      "file": "05-companion-roof-upper-step-sprayed.png",
+      "sha256": "eae3b6b137cca31c3b0a1a0eb744adba2af1938fdf6983d0789b5922a8ad721c",
+      "bytes": 275103,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -74.3126220703125,
+        18.2740001678467,
+        505.643768310547
+      ],
+      "camera_position": [
+        -73.6485290527344,
+        18.7948112487793,
+        510.899353027344
+      ],
+      "camera_forward": [
+        -0.120743416249752,
+        0.268942534923553,
+        -0.955557942390442
+      ],
+      "sample_unique_colors": 99,
+      "sample_luminance_range": 0.807045511901379,
+      "pause_overlay_visible": false,
+      "pose_id": "companion_roof_step",
+      "player_origin": [
+        -74.3126220703125,
+        18.2740001678467,
+        505.643768310547
+      ],
+      "target": [
+        -74.6385650634766,
+        21.0,
+        503.064270019531
+      ],
+      "support_object": "building:w1249412093:roof",
+      "support_receiver_kind": "none",
+      "support_top_y_m": 18.2740001678467,
+      "access_mode": "deterministic_companion_roof_pose_after_jetpack_contract",
+      "spray_result": "placed",
+      "spray_surface_role": "exposed_step_wall_above_companion_roof",
+      "spray_hit_object": "building:w1249412093:wall",
+      "spray_hit_sources": [
+        "w1249412093"
+      ]
+    },
+    {
+      "id": "06-corner-b-changed-light",
+      "region": "changed_light_exact_pose",
+      "intent": "Exact corner-B oblique pose under sun rotation (-38,125,0) to expose the stepped mass and material response",
+      "file": "06-corner-b-changed-light.png",
+      "sha256": "8c9f2c1d970ca3d533fdf1aa6b22fb67cfa0aa78582fbcf41049e472768f8bb8",
+      "bytes": 635634,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -83.9014892578125,
+        4.29159545898438,
+        566.131164550781
+      ],
+      "camera_position": [
+        -84.4736175537109,
+        5.15064430236816,
+        571.481018066406
+      ],
+      "camera_forward": [
+        0.104023955762386,
+        0.207447722554207,
+        -0.972699582576752
+      ],
+      "sample_unique_colors": 289,
+      "sample_luminance_range": 0.719334937632084,
+      "pause_overlay_visible": false,
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.29159545898438,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -79.6480026245117,
+        14.7740001678467,
+        526.357971191406
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "sun_rotation_degrees": [
+        -37.9999961853027,
+        124.999992370605,
+        0.0
+      ]
+    }
+  ]
+}

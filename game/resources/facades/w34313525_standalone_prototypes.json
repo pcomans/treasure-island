@@ -1,0 +1,276 @@
+{
+  "schema_version": "ti.w34313525-standalone-prototypes/1",
+  "source_key": "w34313525",
+  "receiver_key": "building:w34313525:wall",
+  "scope": "standalone material and complete-module prototypes only",
+  "review_status": "native_capture_pending_owner_session",
+  "runtime_attachment": false,
+  "exact_receiver_calibration": false,
+  "live_placement_count": 0,
+  "approved_observations_only": true,
+  "reference_pixels_stored_or_copied": false,
+  "decision_basis": {
+    "observed_regions": [
+      {
+        "mapping_id": "B06-34313525-SSE-CENTRAL",
+        "side_region": "SSE central outer service elevation",
+        "ordered_run_indices": [8, 9, 10, 11, 12],
+        "mapped_length_m": 75.311,
+        "observation_ids": ["B06-34313525-SV02"],
+        "classification": "observed_public_or_outer_elevation_geometry_only",
+        "placement_coordinates": "none"
+      },
+      {
+        "mapping_id": "B06-34313525-NNW-CENTRAL",
+        "side_region": "NNW central outer service elevation",
+        "ordered_run_indices": [26, 27],
+        "mapped_length_m": 15.936,
+        "observation_ids": ["B06-34313525-SV01"],
+        "classification": "observed_public_or_outer_elevation_geometry_only",
+        "placement_coordinates": "none"
+      }
+    ],
+    "cadence": "unknown_not_encoded",
+    "exact_chain_ownership": "unknown_beyond_bounded_geometry_join"
+  },
+  "receiver_audit": {
+    "chunk": "x_1__z_-1",
+    "source_area_m2": 6959.954,
+    "serialized_area_m2": 6959.954,
+    "height_m": 5.0,
+    "building_levels_tag": "1",
+    "base_elevation_m": 3.711,
+    "top_elevation_m": 8.711,
+    "exterior_run_count": 30,
+    "perimeter_m": 354.736,
+    "shared_run_count": 0,
+    "facing_totals": {
+      "ENE": {"run_count": 9, "length_m": 63.061},
+      "SSE": {"run_count": 9, "length_m": 114.306},
+      "WSW": {"run_count": 6, "length_m": 63.063},
+      "NNW": {"run_count": 6, "length_m": 114.306}
+    },
+    "mapped_run_count": 7,
+    "mapped_run_length_m": 91.247,
+    "unmapped_run_count": 15,
+    "protected_run_count": 8,
+    "generated_wall_topology": {
+      "vertices": 120,
+      "indices": 180,
+      "triangles": 60,
+      "material_key": "building_wall",
+      "collision_kind": "world_solid",
+      "opaque": true,
+      "spray_receiver": true
+    }
+  },
+  "asset_kind_inventory": {
+    "homogeneous_material_tile": 1,
+    "architectural_pattern_tile": 0,
+    "module_atlas": 4,
+    "unique_elevation": 0
+  },
+  "materials": [
+    {
+      "id": "W34313525-MAT-PALE",
+      "asset_kind": "homogeneous_material_tile",
+      "path": "res://game/resources/materials/world/w34313525/w34313525_pale_field.tres",
+      "sha256": "00ad40bbc932d7b7d4a3ce77d13a3798f25a35e908bd45a1a5f7f38ba4c80eff",
+      "shader_path": "res://game/resources/materials/world/batch_02_04_aperiodic_field.gdshader",
+      "shader_sha256": "324ba33a7c78f4b05038168a479ebb8e875c56704236492a050cee8da8e5f798",
+      "observed_role": "aged pale warm off-white or light-gray smooth painted masonry render or panel-like matte host field",
+      "excluded_condition_region": "broad irregular gray repair and repaint patches remain localized nonperiodic treatment, not this tile",
+      "channels": {
+        "albedo": "procedural two-color low-contrast aperiodic field",
+        "normal": "procedural tangent-space micro-relief",
+        "roughness": "scalar 0.82 with subtle bounded variation",
+        "metallic": "0.0",
+        "opacity": "opaque"
+      },
+      "one_local_unit_m": 1.0,
+      "proof_primary_scale_m": 0.88,
+      "proof_secondary_scale_m": 0.31,
+      "scale_uncertainty_m": [0.35, 1.6],
+      "scale_status": "reversible_unmeasured_stylized_reference_derived_production_inference",
+      "proof_span_m": [30.0, 5.0],
+      "repeat_contract": {
+        "finite_facade_motif_period": "none_by_design",
+        "mapping": "continuous local meter-space aperiodic field",
+        "macro_repeat_proof_span_m": 30.0,
+        "opposite_edge_identity_required": false,
+        "contains_facade_scale_motifs": false,
+        "contains_repair_patch_motifs": false
+      },
+      "eligible_regions_not_placements": [
+        "B06-34313525-SSE-CENTRAL:runs_8_12",
+        "B06-34313525-NNW-CENTRAL:runs_26_27"
+      ],
+      "surveyed_color": false,
+      "surveyed_finish_scale": false,
+      "runtime_attachment": false
+    }
+  ],
+  "modules": [
+    {
+      "motif_id": "W34313525-ROLLUP-PALE",
+      "asset_kind": "module_atlas",
+      "kind": "complete_pale_rollup_opening_full_outer_frame_and_slat_field",
+      "complete_motif": true,
+      "module_not_seamless_wall_tile": true,
+      "opposite_edge_continuity_required": false,
+      "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+      "module_owns_field_geometry": false,
+      "module_owned_backing_meshes": 0,
+      "module_owned_collision_nodes": 0,
+      "module_owned_navigation_nodes": 0,
+      "module_owned_spray_nodes": 0,
+      "allowed_host_material_ids": ["W34313525-MAT-PALE"],
+      "nominal_bounds_m": [3.94, 3.49],
+      "uncertainty_bounds_m": {"width": [3.2, 5.2], "height": [3.0, 4.5]},
+      "scale_status": "reversible_unmeasured_stylized_reference_derived_production_inference",
+      "surveyed_dimensions": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_cadence": false,
+      "eligible_regions_not_placements": ["B06-34313525-SSE-CENTRAL:runs_8_12"],
+      "runtime_attachment": false,
+      "materials": [
+        {"role": "full dark gray outer frame and slat bars", "path": "res://game/resources/materials/world/w34313525/w34313525_frame.tres", "sha256": "2298f55a4129757eb69af498236e609384acb1565a2c0654e8200bc79e0ae21e"},
+        {"role": "pale roll-up leaf", "path": "res://game/resources/materials/world/w34313525/w34313525_rollup_pale.tres", "sha256": "ded6d1de11ce4e77c71ee384be689257707c522718c9f8fad20fb3d1933fee47"}
+      ],
+      "prototype_topology": {"mesh_instances": 13, "surfaces": 13, "triangles": 156, "leaf_meshes": 1, "frame_meshes": 4, "slat_meshes": 8, "field_or_backing_meshes": 0}
+    },
+    {
+      "motif_id": "W34313525-ROLLUP-GRAY",
+      "asset_kind": "module_atlas",
+      "kind": "complete_gray_rollup_opening_full_outer_frame_and_slat_field",
+      "complete_motif": true,
+      "module_not_seamless_wall_tile": true,
+      "opposite_edge_continuity_required": false,
+      "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+      "module_owns_field_geometry": false,
+      "module_owned_backing_meshes": 0,
+      "module_owned_collision_nodes": 0,
+      "module_owned_navigation_nodes": 0,
+      "module_owned_spray_nodes": 0,
+      "allowed_host_material_ids": ["W34313525-MAT-PALE"],
+      "nominal_bounds_m": [3.94, 3.49],
+      "uncertainty_bounds_m": {"width": [3.2, 5.2], "height": [3.0, 4.5]},
+      "scale_status": "reversible_unmeasured_stylized_reference_derived_production_inference",
+      "surveyed_dimensions": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_cadence": false,
+      "eligible_regions_not_placements": ["B06-34313525-SSE-CENTRAL:runs_8_12"],
+      "runtime_attachment": false,
+      "materials": [
+        {"role": "full dark gray outer frame and slat bars", "path": "res://game/resources/materials/world/w34313525/w34313525_frame.tres", "sha256": "2298f55a4129757eb69af498236e609384acb1565a2c0654e8200bc79e0ae21e"},
+        {"role": "gray roll-up leaf", "path": "res://game/resources/materials/world/w34313525/w34313525_rollup_gray.tres", "sha256": "b0beeb8e0cf894e3cafd8f7084e0d235074b67daf29c2a863f514d5386173b8a"}
+      ],
+      "prototype_topology": {"mesh_instances": 13, "surfaces": 13, "triangles": 156, "leaf_meshes": 1, "frame_meshes": 4, "slat_meshes": 8, "field_or_backing_meshes": 0}
+    },
+    {
+      "motif_id": "W34313525-PERSONNEL",
+      "asset_kind": "module_atlas",
+      "kind": "complete_plain_personnel_service_door_with_full_outer_frame",
+      "complete_motif": true,
+      "module_not_seamless_wall_tile": true,
+      "opposite_edge_continuity_required": false,
+      "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+      "module_owns_field_geometry": false,
+      "module_owned_backing_meshes": 0,
+      "module_owned_collision_nodes": 0,
+      "module_owned_navigation_nodes": 0,
+      "module_owned_spray_nodes": 0,
+      "allowed_host_material_ids": ["W34313525-MAT-PALE"],
+      "nominal_bounds_m": [1.21, 2.31],
+      "uncertainty_bounds_m": {"width": [0.85, 1.65], "height": [1.9, 2.8]},
+      "scale_status": "reversible_unmeasured_stylized_reference_derived_production_inference",
+      "surveyed_dimensions": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_cadence": false,
+      "eligible_regions_not_placements": ["B06-34313525-SSE-CENTRAL:runs_8_12", "B06-34313525-NNW-CENTRAL:runs_26_27"],
+      "runtime_attachment": false,
+      "materials": [
+        {"role": "full dark gray outer frame", "path": "res://game/resources/materials/world/w34313525/w34313525_frame.tres", "sha256": "2298f55a4129757eb69af498236e609384acb1565a2c0654e8200bc79e0ae21e"},
+        {"role": "plain gray personnel leaf", "path": "res://game/resources/materials/world/w34313525/w34313525_personnel.tres", "sha256": "bcc6295ffe9229f6b7105c13896f0ff0cfcd5d3227e3b30046d9957c2272a88f"}
+      ],
+      "prototype_topology": {"mesh_instances": 5, "surfaces": 5, "triangles": 60, "leaf_meshes": 1, "frame_meshes": 4, "field_or_backing_meshes": 0}
+    },
+    {
+      "motif_id": "W34313525-HIGH-GROUP",
+      "asset_kind": "module_atlas",
+      "kind": "complete_high_horizontal_window_or_grille_group_with_full_outer_frame",
+      "complete_motif": true,
+      "semantic_face_status": "window_or_grille_not_disambiguated_opaque_proxy_only",
+      "module_not_seamless_wall_tile": true,
+      "opposite_edge_continuity_required": false,
+      "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+      "module_owns_field_geometry": false,
+      "module_owned_backing_meshes": 0,
+      "module_owned_collision_nodes": 0,
+      "module_owned_navigation_nodes": 0,
+      "module_owned_spray_nodes": 0,
+      "allowed_host_material_ids": ["W34313525-MAT-PALE"],
+      "nominal_bounds_m": [3.3, 0.85],
+      "uncertainty_bounds_m": {"width": [2.4, 4.8], "height": [0.55, 1.35]},
+      "scale_status": "reversible_unmeasured_stylized_reference_derived_production_inference",
+      "surveyed_dimensions": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_cadence": false,
+      "eligible_regions_not_placements": ["B06-34313525-NNW-CENTRAL:runs_26_27"],
+      "runtime_attachment": false,
+      "materials": [
+        {"role": "full dark gray outer frame and mullions", "path": "res://game/resources/materials/world/w34313525/w34313525_frame.tres", "sha256": "2298f55a4129757eb69af498236e609384acb1565a2c0654e8200bc79e0ae21e"},
+        {"role": "dark opaque window-or-grille proxy face", "path": "res://game/resources/materials/world/w34313525/w34313525_high_group.tres", "sha256": "68f56c35a7e2ef870dd395e5f2e38b8cc5d640b532de32339ae4b22ffbabadfb"}
+      ],
+      "prototype_topology": {"mesh_instances": 7, "surfaces": 7, "triangles": 84, "face_meshes": 1, "frame_meshes": 4, "mullion_meshes": 2, "field_or_backing_meshes": 0}
+    }
+  ],
+  "prototype_scene": {
+    "path": "res://game/scenes/world/facades/batch_06/w34313525_standalone_prototype_set.tscn",
+    "sha256": "9259ab6f231fee7d3d3ad8bfea0a290a455b1490b291a1d05b7cd64df4965cbe",
+    "factory_path": "res://game/scripts/world/facades/w34313525_standalone_prototypes.gd",
+    "factory_sha256": "a8e432b8cae545532aa976b095e2dc012454dd73648dccf09d55be550ccbcc76",
+    "one_local_unit_m": 1.0,
+    "proof_dimensions_m": [30.0, 5.0],
+    "total_mesh_instances": 39,
+    "total_surfaces": 39,
+    "total_triangles": 468,
+    "module_mesh_instances": 38,
+    "module_surfaces": 38,
+    "module_triangles": 456,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "runtime_attachment": false,
+    "native_capture_status": "native_capture_pending_owner_session",
+    "native_capture_harness_path": "res://game/tests/w34313525_standalone_prototype_capture.gd"
+  },
+  "authoritative_source_pins": {
+    "reference_spec": {"path": "res://discovery/facades/W34313525_REFERENCE_SPEC.md", "sha256": "c373708e12ef4aefaabfd678ac8aad455e0a846f9d833c710f569b39fdb1ab42"},
+    "observation_ledger": {"path": "res://discovery/facades/BATCH_06_STREETVIEW_OBSERVATIONS.md", "sha256": "259e562e69b1186912fce2dfb466f4512fbc69cc8e64562574971c0a8c40028b"},
+    "reference_index": {"path": "res://discovery/facades/BATCH_06_REFERENCE_INDEX.md", "sha256": "3808ca452c4ef3ed970a2d2a8d73077353160bc60d6847e5919aefc57a22d9ef"},
+    "run_mapping": {"path": "res://discovery/facades/BATCH_06_RUN_MAPPING.json", "sha256": "0d9ef02bbdf38902bfddb475f96167abd6460163d94c26984ae5b29da0c7497d"}
+  },
+  "runtime_isolation_pins": {
+    "prior_batch_06_registry": {"path": "res://game/resources/facades/batch_06_prototype_registry.json", "sha256": "a599df850a3ca51a51a3223820fc840201559ba26eb5ed514211eaedc2304132"},
+    "canonical_inventory": {"path": "res://discovery/FACADE_RECEIVER_INVENTORY.json", "sha256": "220f8af84f3f16c104858f630be9c4bb7e2d282569ab4d3a00bd49c07cb0b3cf"},
+    "generated_manifest": {"path": "res://generated/world/manifest.json", "sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"},
+    "generated_chunk": {"path": "res://generated/world/chunks/x_1__z_-1.json", "sha256": "a952756b1c6d8d547669dffb89723c2be81d6c9a4b3afd2ae7f2dc3702a82b0d"},
+    "world_builder": {"path": "res://game/scripts/world/world_chunk_builder.gd", "sha256": "e54b31cef98b45f00aadcba0b7a6dec0125f147c1c332c06158198dbe19e508d"},
+    "accepted_material_helper": {"path": "res://game/scripts/world/facades/accepted_material_run_trials.gd", "sha256": "aaea7d6518fda141a0c488a54a7441a70bc52d5b98cd666876aa665d3b5be80e"}
+  },
+  "blocked_claims": [
+    "exact receiver placement, along-run coordinate, anchor, count or cadence",
+    "surveyed dimensions, scale, color, substrate, repair bounds or roughness",
+    "architectural pattern period, uniform opening grid or seamless whole-wall tile",
+    "repeating repair patches or any module-owned surrounding field/backing",
+    "projecting eave, rafters, canopy, roof edge, ramps, bollards, utilities, signs or yard clutter as material/module content",
+    "ENE and WSW ends, deep re-entrant facets, exact corners/endpoints and other unmapped or protected runs",
+    "completed SSE or NNW elevation, unique elevation, cross-side transfer or whole-building resemblance",
+    "native art acceptance before native Forward+/Metal evidence and independent review"
+  ]
+}

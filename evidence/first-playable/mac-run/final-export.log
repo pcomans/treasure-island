@@ -1,0 +1,10 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+preset=macOS Private
+command=.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --export-release "macOS Private" "build/mac/Treasure Island First Playable.app"
+exit=0
+wall=4.65s
+generated_world_files_added=44
+package_stage=complete
+godot_builtin_adhoc_codesign_stage=complete
+warnings=0
+errors=0

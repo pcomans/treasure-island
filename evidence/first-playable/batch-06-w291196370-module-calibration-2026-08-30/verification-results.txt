@@ -1,0 +1,44 @@
+w291196370 detached exact-receiver module calibration verification
+Date: 2026-08-30
+Status: mechanical/native evidence package complete; independent art verdict pending
+
+PASS native capture
+- Godot 4.7.2 / Forward+ / Metal / Apple M1 Pro.
+- Seven 1440x900 nonblank PNGs: close WINSTACK, close ENTRY, close SERVICE, ordinary SSE, ordinary ENE, combined SSE/ENE context, and changed light.
+- Receiver child count 2 -> 2; detached overlay is capture-scene-only.
+
+PASS focused contract
+- game/tests/headless_w291196370_module_calibration_contract.gd
+- Exactly three deterministic module-atlas exemplars at SSE runs 8/10 and ENE run 20.
+- Full motif width plus declared center envelope remains inside each one-run owner.
+- 24 render meshes / 24 surfaces / 288 triangles; zero field/backing/collision/navigation/spray.
+- Live w291196370 remains two surfaces and zero modules.
+
+PASS existing regressions
+- game/tests/headless_batch_06_prototype_contract.gd
+- game/tests/headless_batch_06_exact_receiver_trial_contract.gd
+- game/tests/headless_accepted_material_run_trials_contract.gd
+- game/tests/headless_w34313515_module_calibration_contract.gd
+- game/tests/headless_w34313515_live_module_integration_contract.gd
+- game/tests/headless_w34313564_module_calibration_contract.gd
+- game/tests/headless_w34313564_live_module_integration_contract.gd
+- game/tests/headless_ymca_wall_tangent_projection_contract.gd
+
+PASS generated-world validation
+- node tools/validate_godot_world.mjs
+- content 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164; 38 chunks; 729 physical objects; 14,904 foundation samples; 2,492,288 terrain samples.
+
+PASS full runtime
+- game/tests/full_runtime_integration.gd
+- 729 generated records / 729 generated meshes / 736 generated surfaces / 48,389 generated triangles.
+- 847 loaded meshes / 854 loaded surfaces / 49,805 loaded triangles / 466 collider pairs.
+- Gameplay, interaction, cleanup and fail-closed reload passed.
+
+PASS byte-isolation audit
+- No diff in generated/world, world_chunk_builder.gd, accepted_material_run_trials.gd, existing live-module adapters, existing materials, or canonical facade inventory JSON/Markdown.
+- No runtime route rerun was necessary because the package adds no live runtime path or byte change; full runtime still exercised actual main-scene gameplay.
+
+Environment note
+- Sandboxed headless Godot commands emitted nonfatal user:// log-rotation and macOS certificate-store warnings. Every listed gate exited 0 with its authoritative PASS line; the escalated native capture was warning-free.
+
+No art acceptance, live attachment, lifecycle promotion, commit, or push was performed.

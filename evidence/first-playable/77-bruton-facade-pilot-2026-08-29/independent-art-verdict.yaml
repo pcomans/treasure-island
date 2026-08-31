@@ -1,0 +1,74 @@
+schema_version: "ti.independent-art-verdict/1"
+checked_date: "2026-08-29"
+reviewer: "/root/hawkins_texture_v2_review"
+scope: "hawkins_facade_language_pilot"
+target_receiver: "building:w1249412093:wall"
+decision: "REJECT"
+
+reference_basis:
+  owner_photo:
+    inspected: true
+    path: "/private/tmp/IMG_7170-reference.png"
+    sha256: "6b6a0f95902bd48c57c4f69b6bd7b97346c672d71c1b300d394170f6447db5cd"
+  official_street_view:
+    live_reinspection_available: false
+    fallback_used: "recorded_observations_in_HAWKINS_77_BRUTON_REFERENCE_SPEC.md"
+    imagery_downloaded_or_retained: false
+
+evidence_integrity:
+  asset_inventory_verified: true
+  exact_receiver_identity: true
+  layout_sha256: "ccce9fd2c8027d25e95bb6750e5b23297786c747242eec607de5e4be41d1b4ef"
+  facade_signature: "cf5b2a3aeb94e1482b1be9f9895f84463ce78e7ee6d1d38ee14e7833b8b8deff"
+  five_required_views_reviewed: true
+
+separated_verdicts:
+  standalone_material_fields:
+    verdict: "REJECT"
+    albedo_neutrality: "PASS"
+    fine_flute_receiver_behavior: "REJECT"
+    macro_repetition: "REJECT"
+  standalone_modules:
+    topology_and_completeness: "PASS"
+    target_motif_resemblance: "REJECT"
+  exact_current_receiver:
+    mechanical_attachment_and_gameplay: "PASS_AS_EVIDENCED"
+    art_and_scale: "REJECT"
+  whole_building_real_world_resemblance:
+    verdict: "BLOCKED_BY_CURRENT_MASSING_INVARIANT"
+    current_height_m: 6.0
+    limitation: "real_Hawkins_is_a_six_story_main_mass_plus_lower_companion"
+
+hard_gate_results:
+  material_hierarchy: "PASS"
+  module_completeness: "PASS"
+  legal_seams_and_motif_integrity: "PASS"
+  side_local_cadence_without_foundation_resets: "PASS_AS_EVIDENCED"
+  unobserved_side_restraint: "PASS"
+  ordinary_camera_readability: "REJECT"
+  changed_light_material_behavior: "REJECT"
+  observed_wsw_cadence: "REJECT"
+
+rejectors:
+  - id: "flute_aliasing"
+    evidence_views:
+      - "01-address-close.png"
+      - "03-broad-gameplay-camera.png"
+      - "04-corner-oblique-gameplay.png"
+      - "05-address-changed-light.png"
+    finding: "fine_flute_geometry_resolves_as_dashed_sparkle_and_diagonal_moire"
+  - id: "observed_wsw_opening_grammar"
+    evidence_views:
+      - "03-broad-gameplay-camera.png"
+    finding: "blank_ground_band_and_center_vertical_W-P_split_do_not_match_owner_photo_cadence"
+
+smallest_correction:
+  fits_one_targeted_round: true
+  requires_massing_or_gameplay_change: false
+  actions:
+    - "replace_or_rework_fine_flute_relief_until_alias_free_in_all_five_view_roles"
+    - "use_complete_tall_horizontally_divided_W-P_modules_and_restore_observed_WSW_ground_opening_cadence"
+  preserve:
+    - "address_side_unique_module_layout"
+    - "side_ene_and_side_nnw_material_only_policy"
+    - "all_receiver_collision_spray_navigation_generated_and_massing_invariants"

@@ -1,0 +1,43 @@
+Accepted homogeneous-material run trials — verification results — 2026-08-29
+
+FINAL RESULT: PASS; ready for independent gameplay art review, not self-accepted.
+
+Implementation-focused gates
+- PASS — Godot 4.7.2 headless editor import/scan.
+- PASS — headless_accepted_material_run_trials_contract.gd.
+  Exact source IDs, receiver IDs, run sets, mapped lengths, reviewed resource paths/hashes, placeholder complements, surface names, resource identity, deterministic builds, zero modules/facades/navigation additions, wall render layer, spray identity, generated chunk hashes, and manifest hash are pinned.
+  All target render triangles are disjoint; live render and collision triangle sets/counts match; five correction candidates remain generic; a whole-island load reports 732 record-owned surfaces.
+- PASS — headless_batch_02_material_contract.gd, headless_batch_03_material_contract.gd, headless_batch_04_material_contract.gd.
+  Each batch admits only its independently accepted exact-run target. The current Isle all-side signature was independently emitted as e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1 before the three prior-result pins were updated.
+- PASS — headless_batch_02_04_material_correction_contract.gd; all five correction candidates and their retained proof bytes remain protected.
+
+Existing editor/world/gameplay suites
+- PASS — headless_scene_parse.gd: 4 gameplay scenes.
+- PASS — headless_gameplay_contract.gd.
+- PASS — headless_world_material_contract.gd: 11 semantic materials.
+- PASS — validate_generated_world.gd: 735 playable + 4 context rows, 38 chunks, content 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164.
+- PASS — headless_hawkins_facade_contract.gd.
+- PASS — headless_building_3_facade_contract.gd.
+- PASS — headless_isle_house_facade_contract.gd; emitted signature e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1.
+- PASS — full_runtime_integration.gd: 729 records, 729 record-owned meshes, 732 disjoint surfaces, 48,389 triangles, 466 collision bodies/shapes, 738 source identities; gameplay/cleanup/fail-closed reload passed.
+- PASS — source main-scene --mac-export-smoke: 38/38 chunks, 729 meshes, 732 surfaces, 48,389 triangles, 466 collision bodies/shapes; semantic materials, 4/20 m/s movement defaults, jetpack rise/slow descent passed.
+- PASS — automated_route_qa.gd: 14 checkpoints, 262.349 m actual continuous travel, zero recovery/stall/boundary loss.
+- PASS — automated_route_qa.gd -- --whole-island-route: ferry/southwest/center/north/east-perimeter, 3,449.107 m actual continuous travel, five landings, zero teleport/recovery/stall/boundary loss.
+
+Native render evidence
+- PASS — accepted_material_run_trials_capture.gd using macOS + Forward+ + Metal at 1440×900 on Apple M1 Pro (Apple7).
+- PASS — nine target images (close, ordinary gameplay distance, changed-light oblique) plus one whole-island load image; all ten were manually inspected for nonblank live-world output and correct labels.
+- PASS — capture-manifest.json records exact scopes, runtime counts, render/collision equality, zero modules, limitations, transforms, renderer/device identity, and image hashes.
+
+Generated-data and protected-scope checks
+- PASS — git reports no diff and no new files under generated/.
+- PASS — generated manifest SHA-256 remains e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3.
+- PASS — shared homogeneous shader SHA-256 remains 1918177080126199ddbfc0715a77b85a9355800479a098ec9b81c9726b7cc4d5.
+- PASS — reviewed material SHA-256 values remain 4020e4c7…a61a5, 515135c3…6b188, and fb50d398…69602.
+- PASS — runtime builder SHA-256 is c770a977e879c0d077acb8fb4d33b52d1bd6aa3b454a50ba8e2125cb71e8ba8d; exact-run helper SHA-256 is 9c86fcbccf878a0786cb3d6bed12192c1e131759ab2d0f5ee002ce0e4685309f.
+
+Known environment noise
+- Headless Godot runs emit sandbox-only user:// log-open and macOS CA-certificate warnings. Every listed gate exited 0 and printed PASS.
+
+Capture harness authoring history
+- Three bounded pre-final Metal attempts stopped safely before manifest completion: corrected full material hashes, corrected the Fire Station chunk path, then created the whole-island image directory. The final fourth run captured all ten images and exited 0. No runtime, material, generated, geometry, or collision data was changed by those harness corrections.

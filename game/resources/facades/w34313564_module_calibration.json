@@ -1,0 +1,218 @@
+{
+  "schema_version": "ti.w34313564-controlled-module-calibration/1",
+  "status": "controlled_zero_attachment_calibration_corrected_ready_for_independent_review",
+  "evidence_role": "corrected detached exact-receiver module placement calibration; not live attachment, lifecycle acceptance, exact observed coordinates, cadence acceptance, or whole-building proof",
+  "target": {
+    "source_key": "w34313564",
+    "receiver_key": "building:w34313564:wall",
+    "chunk_path": "res://generated/world/chunks/x_0__z_-3.json",
+    "chunk_sha256": "6dfa4b8f4b91f309b313428829e37cedd13e4067ff94f896a8e2e5ef05002a1d",
+    "run_index_base": 0,
+    "run_count": 20,
+    "valid_run_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+    "placeholder_or_protected_runs": [0, 1, 2, 3, 4],
+    "nonexistent_forbidden_indices": [20],
+    "height_m": 5.0,
+    "base_elevation_role": "per-run terrain-interpolated foundation edge",
+    "top_elevation_m": 8.752
+  },
+  "provenance": [
+    "B06-W34313564-SV01:September_2025:SSE",
+    "B06-W34313564-SV02:September_2025:NNW_partial_occlusion",
+    "B06-W34313564-SV03:September_2025:ENE_and_SSE_return",
+    "discovery/facades/W34313564_REFERENCE_SPEC.md",
+    "discovery/facades/BATCH_06_RUN_MAPPING.json",
+    "discovery/facades/BATCH_06_PROTOTYPE_SET_01_MODULE_CORRECTION_ART_REVIEW.md",
+    "discovery/facades/W34313564_EXACT_MODULE_CALIBRATION_ART_REVIEW.md"
+  ],
+  "protected_input_hashes": {
+    "observation_ledger": "259e562e69b1186912fce2dfb466f4512fbc69cc8e64562574971c0a8c40028b",
+    "reference_spec": "3b3cf3e330ab4848335d0f12729291a4d77d26806160920c2733a120b6c12e70",
+    "run_mapping": "0d9ef02bbdf38902bfddb475f96167abd6460163d94c26984ae5b29da0c7497d",
+    "original_module_review": "bfaccbf182fb04222b5a65356f3287bd7823f5b692d0da6d2d44b2e2af5599eb",
+    "corrected_module_review": "70f6a0e1e9ece07d162aa669aa89e4f4a9a8b19b1785eb7fb91efc0dc8f6aded",
+    "exact_module_calibration_review": "3c5a8e9c22966c443203e900e0a0762c848eb33d4373c9d8f76b74b1a7dc0735",
+    "prototype_registry": "a599df850a3ca51a51a3223820fc840201559ba26eb5ed514211eaedc2304132",
+    "prototype_factory": "fecc656332599acefbf307ce6b5978e62c689ae146f713cf9d935ef66b81de60",
+    "accepted_material_run_helper_current_state": "18d3cdd6cf29349ba8b00283b4e679cd079c176adb24a32cae7f521c7d88a083",
+    "exact_field_trial_evidence_manifest": "034b6ef3ad0e85b81a2565a9443172bec3da9364ed29ab5b4cc6b34258e72449",
+    "predecessor_calibration_evidence_manifest": "c664d7e0cae794f9d5be979af89c40a4f65096b29b7f2b14e8032271c2209221",
+    "generated_manifest": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "world_builder": "c770a977e879c0d077acb8fb4d33b52d1bd6aa3b454a50ba8e2125cb71e8ba8d"
+  },
+  "active_field_trial_roles": [
+    {
+      "material_id": "W34313564-MAT-TAN",
+      "host_role": "SSE_tan",
+      "runs": [5, 6, 7, 8, 9],
+      "length_m": 87.651,
+      "material_path": "res://game/resources/materials/world/w34313564/w34313564_tan_exact_trial.tres",
+      "material_sha256": "3b895743b247a20641cb7564004d2f890bacfc286feaec9044b334b5e8e170bb"
+    },
+    {
+      "material_id": "W34313564-MAT-PALE",
+      "host_role": "ENE_NNW_pale",
+      "runs": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19],
+      "length_m": 141.340,
+      "material_path": "res://game/resources/materials/world/w34313564/w34313564_pale_exact_trial.tres",
+      "material_sha256": "c7ec2df12b0dcf41e2b5019fd98155dbe3668d16379070210fe9f97ef032a343"
+    }
+  ],
+  "face_chains": [
+    {
+      "face": "SSE",
+      "host_material_id": "W34313564-MAT-TAN",
+      "mapping_ids": ["B06-34313564-SSE-EAST-RETURN", "B06-34313564-SSE-CENTRAL"],
+      "runs": [5, 6, 7, 8, 9],
+      "length_m": 87.651,
+      "observation_confidence": "high_coordinate_identity",
+      "module_roles_observed": ["W34313564-HWIN", "W34313564-PDOOR"]
+    },
+    {
+      "face": "ENE",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_ids": ["B06-34313564-ENE-END"],
+      "runs": [10, 11, 12, 13],
+      "length_m": 43.442,
+      "observation_confidence": "high_coordinate_identity",
+      "module_roles_observed": ["W34313564-HWIN"]
+    },
+    {
+      "face": "NNW",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_ids": ["B06-34313564-NNW-OUTER"],
+      "runs": [14, 15, 16, 17, 18, 19],
+      "length_m": 97.898,
+      "observation_confidence": "high_coordinate_identity_partial_occlusion",
+      "module_roles_observed": ["W34313564-HWIN", "W34313564-PDOOR"]
+    }
+  ],
+  "module_contracts": [
+    {
+      "motif_id": "W34313564-HWIN",
+      "kind": "complete_horizontal_four_pane_window",
+      "nominal_bounds_m": [4.9, 1.9],
+      "opening_m": [4.25, 1.2],
+      "opening_uncertainty_m": {"width": [3.4, 5.2], "height": [0.9, 1.5]},
+      "pane_count": 4,
+      "frame_thickness_m": 0.11,
+      "height_anchor": "top_gap",
+      "top_gap_assumption_m": 0.70,
+      "top_gap_uncertainty_m": [0.40, 1.10],
+      "module_owns_field_geometry": false,
+      "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+      "complete_motif": true
+    },
+    {
+      "motif_id": "W34313564-PDOOR",
+      "kind": "complete_plain_personnel_door",
+      "nominal_bounds_m": [1.9, 3.0],
+      "opening_m": [1.15, 2.25],
+      "opening_uncertainty_m": {"width": [0.9, 1.4], "height": [2.0, 2.5]},
+      "frame_thickness_m": 0.10,
+      "height_anchor": "terrain_interpolated_run_base",
+      "base_clearance_assumption_m": 0.08,
+      "base_clearance_uncertainty_m": [0.0, 0.18],
+      "module_owns_field_geometry": false,
+      "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+      "complete_motif": true
+    }
+  ],
+  "placement_policy": {
+    "position_status": "production_inference_for_calibration_only_not_observed_coordinate",
+    "cadence_status": "no_period_or_global_sequence_inferred",
+    "count_status": "five bounded face-role exemplars; not an opening count claim",
+    "horizontal_anchor": "metres along the ordered mapped face chain from its first run start",
+    "horizontal_uncertainty_policy": "each center may move plus_or_minus_4m while the full nominal bounds remain inside the same mapped run",
+    "orientation": "local_X_run_tangent_local_Y_world_up_local_Z_outward_wall_normal",
+    "receiver_field_ownership": "the active exact-run field trial remains the sole nonopening wall field",
+    "maximum_outward_depth_m": 0.18,
+    "runtime_attachment": false,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "placement_count": 5
+  },
+  "placements": [
+    {
+      "placement_id": "CAL-SSE-PDOOR-01",
+      "motif_id": "W34313564-PDOOR",
+      "face": "SSE",
+      "host_material_id": "W34313564-MAT-TAN",
+      "mapping_id": "B06-34313564-SSE-CENTRAL",
+      "face_chain_runs": [5, 6, 7, 8, 9],
+      "center_chain_m": 47.5,
+      "center_chain_uncertainty_m": 4.0,
+      "run_ownership": [7],
+      "anchor_run": 7,
+      "expected_wall_anchor_world_xz_m": [55.858936, -612.345596],
+      "confidence": "production_inference_on_observed_face",
+      "placement_role": "stylized/reference-derived production inference"
+    },
+    {
+      "placement_id": "CAL-SSE-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "SSE",
+      "host_material_id": "W34313564-MAT-TAN",
+      "mapping_id": "B06-34313564-SSE-CENTRAL",
+      "face_chain_runs": [5, 6, 7, 8, 9],
+      "center_chain_m": 68.0,
+      "center_chain_uncertainty_m": 4.0,
+      "run_ownership": [8],
+      "anchor_run": 8,
+      "expected_wall_anchor_world_xz_m": [73.940351, -622.005431],
+      "confidence": "production_inference_on_observed_face"
+    },
+    {
+      "placement_id": "CAL-ENE-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "ENE",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_id": "B06-34313564-ENE-END",
+      "face_chain_runs": [10, 11, 12, 13],
+      "center_chain_m": 18.0,
+      "center_chain_uncertainty_m": 4.0,
+      "run_ownership": [12],
+      "anchor_run": 12,
+      "expected_wall_anchor_world_xz_m": [82.790694, -647.141098],
+      "confidence": "production_inference_on_observed_face"
+    },
+    {
+      "placement_id": "CAL-NNW-PDOOR-01",
+      "motif_id": "W34313564-PDOOR",
+      "face": "NNW",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_id": "B06-34313564-NNW-OUTER",
+      "face_chain_runs": [14, 15, 16, 17, 18, 19],
+      "center_chain_m": 32.0,
+      "center_chain_uncertainty_m": 4.0,
+      "run_ownership": [16],
+      "anchor_run": 16,
+      "expected_wall_anchor_world_xz_m": [42.577443, -654.502062],
+      "confidence": "production_inference_on_partially_occluded_observed_face"
+    },
+    {
+      "placement_id": "CAL-NNW-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "NNW",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_id": "B06-34313564-NNW-OUTER",
+      "face_chain_runs": [14, 15, 16, 17, 18, 19],
+      "center_chain_m": 54.0,
+      "center_chain_uncertainty_m": 4.0,
+      "run_ownership": [17],
+      "anchor_run": 17,
+      "expected_wall_anchor_world_xz_m": [23.172995, -644.135414],
+      "confidence": "production_inference_on_partially_occluded_observed_face"
+    }
+  ],
+  "preserved_blockers": [
+    "exact real-world opening coordinates and total opening count are not observable",
+    "no periodic cadence or door-window alternation is established",
+    "WSW and runs 0..4 remain placeholder/protected with zero calibration modules",
+    "run index 20 does not exist under the zero-based 20-run receiver contract",
+    "plinth vertical extent, pipe/vent placement, eave, ramps, stairs, rails, landings, yard objects, and access geometry remain excluded",
+    "NNW detail remains partially occluded",
+    "live attachment, lifecycle acceptance, and whole-building resemblance remain blocked"
+  ]
+}

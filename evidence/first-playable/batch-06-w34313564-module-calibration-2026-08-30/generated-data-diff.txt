@@ -1,0 +1,2 @@
+Command: git diff --name-only -- generated
+Result: PASS — no output. Generated source bytes are unchanged.

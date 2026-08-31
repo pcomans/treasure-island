@@ -1,0 +1,113 @@
+{
+  "schema_version": 2,
+  "generator": "game/tests/rendered_visual_evidence_capture.gd",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "project_rendering_contract": "Forward+",
+  "viewport": [
+    1440,
+    900
+  ],
+  "content_sha256": "a381b513746df6756f761d683dfb07e4d750dbca05b93d66f30b2665a9bb395b",
+  "manifest_sha256": "d23cca024213ba7de14fe70b84ca54a2b1cd725038ae4c3147eb6631d2ef51c9",
+  "world_counts": {
+    "chunks": 38,
+    "playable_rows": 735,
+    "context_rows": 4,
+    "meshes": 701,
+    "triangles": 40826,
+    "bodies": 466,
+    "shapes": 466,
+    "vegetation_seed": 1414092337,
+    "vegetation_instances": 117,
+    "vegetation_assets": 15,
+    "vegetation_multimesh_batches": 19,
+    "vegetation_rendered_triangles": 21102
+  },
+  "captures": [
+    {
+      "id": "11-vegetation-south-ground",
+      "region": "vegetation_south_ground",
+      "intent": "Ground view north across south ornamental beds toward the deliberate palm rows",
+      "file": "11-vegetation-south-ground.png",
+      "sha256": "8a48145f68785ac74a03c4a94299326f66ea1f9f8a747b9f3035662329177fc7",
+      "bytes": 65123,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -293.542999267578,
+        3.19973945617676,
+        335.720001220703
+      ],
+      "camera_position": [
+        -293.542999267578,
+        5.96519947052002,
+        341.16650390625
+      ],
+      "camera_forward": [
+        -0.000000000000000305307917170349,
+        -0.139173105359077,
+        -0.990268051624298
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 87,
+      "sample_luminance_range": 0.862767040729523,
+      "physics_grounded": true,
+      "settle_spawn_y": 6.19918823242188,
+      "settled_y": 3.19973945617676,
+      "ground_y": 3.19918823242188,
+      "ground_clearance_m": 0.000551223754882812,
+      "settle_physics_frames": 125,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "yaw": 0.0,
+      "pitch": -0.139626340159546
+    },
+    {
+      "id": "12-vegetation-south-aerial",
+      "region": "vegetation_south_aerial",
+      "intent": "Elevated view of sparse south planting beds and repeated palm rows",
+      "file": "12-vegetation-south-aerial.png",
+      "sha256": "38be46ae360eb40fbf8f1120af3ca5ab014d3d7137a96d12ed425a0f461a8117",
+      "bytes": 157945,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -330.0,
+        35.2109375,
+        280.0
+      ],
+      "camera_position": [
+        -330.0,
+        40.4066314697266,
+        284.476318359375
+      ],
+      "camera_forward": [
+        0.0000000000000000832700620391166,
+        -0.581035137176514,
+        -0.81387847661972
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 212,
+      "sample_luminance_range": 0.423215687274933,
+      "physics_grounded": false,
+      "elevated_owner_comparison": true,
+      "ground_y": 3.2109375,
+      "ground_clearance_m": 32.0,
+      "yaw": 0.0,
+      "pitch": -0.62
+    }
+  ]
+}

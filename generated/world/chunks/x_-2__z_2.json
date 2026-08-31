@@ -1,0 +1,164 @@
+{
+  "bounds_m": {
+    "max_x": -256,
+    "max_z": 768,
+    "min_x": -512,
+    "min_z": 512
+  },
+  "chunk_id": "x_-2__z_2",
+  "records": [
+    {
+      "collision_kind": "none",
+      "feature_kind": "major_area",
+      "indices": [
+        1,
+        2,
+        0
+      ],
+      "material_key": "major_area_leisure",
+      "normals": [
+        0.005,
+        1,
+        -0.003,
+        0.005,
+        1,
+        -0.003,
+        0.005,
+        1,
+        -0.003
+      ],
+      "object_key": "area:w1428380753:x_-2__z_2",
+      "opaque": false,
+      "receiver_kind": "none",
+      "source_keys": [
+        "w1428380753"
+      ],
+      "surface_bias_m": 0.04,
+      "uvs": [
+        -25.769,
+        51.2,
+        -25.6,
+        51.535,
+        -25.6,
+        51.2
+      ],
+      "vertices": [
+        -257.695,
+        3.209,
+        512,
+        -256,
+        3.209,
+        515.35,
+        -256,
+        3.2,
+        512
+      ]
+    },
+    {
+      "collision_kind": "world_solid",
+      "feature_kind": "land_ground",
+      "indices": [
+        1,
+        2,
+        0
+      ],
+      "material_key": "land_ground",
+      "normals": [
+        -0.437,
+        0.884,
+        0.167,
+        -0.207,
+        0.97,
+        0.13,
+        0.007,
+        1,
+        -0.005
+      ],
+      "object_key": "land:w26767313:x_-2__z_2",
+      "opaque": true,
+      "receiver_kind": "none",
+      "source_keys": [
+        "w26767313",
+        "w29399800"
+      ],
+      "uvs": [
+        -26.486,
+        51.2,
+        -25.6,
+        52.858,
+        -25.6,
+        51.2
+      ],
+      "vertices": [
+        -264.862,
+        3.208,
+        512,
+        -256,
+        3.203,
+        528.578,
+        -256,
+        3.16,
+        512
+      ]
+    },
+    {
+      "collision_kind": "none",
+      "feature_kind": "terrain_overlay",
+      "indices": [
+        2,
+        3,
+        0,
+        2,
+        0,
+        1
+      ],
+      "material_key": "terrain_breakwater",
+      "normals": [
+        0.005,
+        1,
+        -0.003,
+        0.005,
+        1,
+        -0.003,
+        0.005,
+        1,
+        -0.003,
+        0.005,
+        1,
+        -0.003
+      ],
+      "object_key": "terrain:w1222685424:x_-2__z_2",
+      "opaque": false,
+      "receiver_kind": "none",
+      "source_keys": [
+        "w1222685424"
+      ],
+      "surface_bias_m": 0.03,
+      "uvs": [
+        -26.486,
+        51.2,
+        -25.6,
+        52.858,
+        -25.6,
+        52.03,
+        -26.032,
+        51.2
+      ],
+      "vertices": [
+        -264.862,
+        3.238,
+        512,
+        -256,
+        3.233,
+        528.578,
+        -256,
+        3.212,
+        520.297,
+        -260.318,
+        3.213,
+        512
+      ]
+    }
+  ],
+  "schema_version": "ti.godot-world-chunk/2"
+}

@@ -1,0 +1,22 @@
+Batch 06 corrected module round dirty-scope audit — 2026-08-30
+
+Files authored by this correction round:
+- game/scripts/world/facades/batch_06_prototype_set.gd
+- game/resources/facades/batch_06_prototype_registry.json
+- game/tests/headless_batch_06_prototype_contract.gd
+- game/tests/batch_06_prototype_capture.gd
+- evidence/first-playable/batch-06-prototype-set-01-correction-2026-08-30/**
+- one append-only section at discovery/RETRO_LOG.md EOF
+
+Deliberately byte-identical inputs:
+- all five accepted Batch 06 homogeneous field .tres resources
+- all target-specific frame/glass/leaf/trim .tres resources
+- all three Batch 06 prototype .tscn scene resources
+- discovery/facades/BATCH_06_RUN_MAPPING.json
+- discovery/facades/BATCH_06_STREETVIEW_OBSERVATIONS.md
+- generated/world/manifest.json and every generated/** source file
+- game/scripts/world/world_chunk_builder.gd
+
+Pre-existing and concurrent dirty work preserved without correction-round edits include receiver-inventory/accepted-YMCA reconciliation files, YMCA material/projection/test/evidence changes, initial Batch 06 observation/spec/run-mapping/prototype assets and rejected evidence, and unrelated workspace files outside treasure-island-game.
+
+No commit was created. No live receiver attachment, mapped-run change, builder/runtime/generated geometry, collision, navigation, spray, external asset, or blocked-target asset was introduced.

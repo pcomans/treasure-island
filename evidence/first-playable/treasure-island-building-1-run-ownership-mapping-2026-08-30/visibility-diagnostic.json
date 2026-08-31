@@ -1,0 +1,5238 @@
+{
+  "schema_version": "ti.building-1-run-visibility-diagnostic/1",
+  "source_key": "r16681702",
+  "receiver_key": "building:r16681702:wall",
+  "evidence_role": "deterministic plan/visibility and ring-ownership diagnostic only; not imagery, art acceptance, module placement, or whole-building evidence",
+  "observations": [
+    {
+      "id": "B1-SV01",
+      "panorama_id": "TpG54H0huRdII4VZxBG0TA",
+      "capture_display": "Sep 2025",
+      "latitude": 37.8169175,
+      "longitude": -122.3719989,
+      "heading_deg": 55,
+      "fov_deg": 75,
+      "observed_description": "wide public curved elevation, both wings in context, central tall-window rhythm",
+      "world_xz_m": [
+        -88.714,
+        761.876
+      ],
+      "evidence_status": "reference_observation",
+      "reference_pixels_stored_or_copied": false
+    },
+    {
+      "id": "B1-SV02",
+      "panorama_id": "_jdZk4lGHsH5qq_VmIyd7g",
+      "capture_display": "Sep 2025",
+      "latitude": 37.817523,
+      "longitude": -122.3720371,
+      "heading_deg": 105,
+      "fov_deg": 75,
+      "observed_description": "north end pavilion, curved return, wing windows, base openings and utility door",
+      "world_xz_m": [
+        -92.073,
+        694.472
+      ],
+      "evidence_status": "reference_observation",
+      "reference_pixels_stored_or_copied": false
+    },
+    {
+      "id": "B1-SV03",
+      "panorama_id": "racCKmRzOLLicCqyLct7vA",
+      "capture_display": "Sep 2025",
+      "latitude": 37.8165168,
+      "longitude": -122.3717125,
+      "heading_deg": 55,
+      "fov_deg": 75,
+      "observed_description": "south end pavilion and broad curved public elevation",
+      "world_xz_m": [
+        -63.53,
+        806.482
+      ],
+      "evidence_status": "reference_observation",
+      "reference_pixels_stored_or_copied": false
+    }
+  ],
+  "sample_fractions": [
+    0.05,
+    0.15,
+    0.3,
+    0.5,
+    0.7,
+    0.85,
+    0.95
+  ],
+  "regions": [
+    {
+      "id": "PUBLIC-NORTH-END-CANDIDATE",
+      "ordered_runs": [
+        93,
+        94,
+        95,
+        96,
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "status": "reference_observation_plus_production_inference",
+      "side": "outer north/NW/SW end and California Avenue return",
+      "confidence": "medium",
+      "observation_ids": [
+        "B1-SV02"
+      ],
+      "rationale": "The NW observer directly sees this cyclic end component; the ledger names the north end pavilion and north return, but does not locate individual motifs within it.",
+      "run_count": 13,
+      "run_length_m": 58.505
+    },
+    {
+      "id": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "ordered_runs": [
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "status": "reference_observation_plus_production_inference",
+      "side": "outer south-facing link between north end and public curve",
+      "confidence": "medium-low",
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV03"
+      ],
+      "rationale": "The WSW and SW observations directly see this link, but retained notes do not disambiguate wing windows, transitions, base details, or band endpoints run by run.",
+      "run_count": 12,
+      "run_length_m": 35.452
+    },
+    {
+      "id": "PUBLIC-CURVE-CONFIRMED",
+      "ordered_runs": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47,
+        48,
+        49,
+        50,
+        51
+      ],
+      "status": "verified_geometry_plus_reference_observation",
+      "side": "outer broad curved public/parking-lot elevation",
+      "confidence": "high_for_region_medium_for_internal_motif_zones",
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "rationale": "The continuous curved outer chain is directly visible across the approved WSW/NW/SW views and uniquely matches the repeatedly named broad curved public elevation. The notes do not encode where its central tall-window rhythm begins or ends.",
+      "run_count": 31,
+      "run_length_m": 85.94
+    },
+    {
+      "id": "PUBLIC-SOUTH-END-OBSERVED-FACES",
+      "ordered_runs": [
+        52,
+        53,
+        54,
+        55,
+        56,
+        58,
+        60
+      ],
+      "status": "verified_geometry_plus_reference_observation",
+      "side": "outer south pavilion public faces",
+      "confidence": "medium-high_for_region_medium_for_motif_run",
+      "observation_ids": [
+        "B1-SV03"
+      ],
+      "rationale": "The SW/south observation directly sees these outward faces and names the south end pavilion; no individual full-height group is tied to one run.",
+      "run_count": 7,
+      "run_length_m": 27.012
+    },
+    {
+      "id": "SOUTH-END-OCCLUDED-RETURNS",
+      "ordered_runs": [
+        57,
+        59,
+        61
+      ],
+      "status": "unknown_protected",
+      "side": "outer SE-facing short returns inside the south-end sawtooth",
+      "confidence": "high_geometry_low_appearance",
+      "observation_ids": [],
+      "rationale": "The approved observers are not on the outward side of these short return faces; neighboring public-face evidence must not wrap around them.",
+      "run_count": 3,
+      "run_length_m": 8.087
+    },
+    {
+      "id": "REAR-EAST-UNOBSERVED",
+      "ordered_runs": [
+        62,
+        63,
+        64,
+        65,
+        66,
+        67,
+        68,
+        69,
+        70,
+        71,
+        72,
+        73,
+        74,
+        75,
+        76,
+        77,
+        78,
+        79,
+        80,
+        81,
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        88,
+        89,
+        90,
+        91,
+        92
+      ],
+      "status": "unknown_protected",
+      "side": "main outer rear/east/north chain",
+      "confidence": "high_geometry_unknown_appearance",
+      "observation_ids": [],
+      "rationale": "The approved ledger explicitly leaves the east/rear outer elevation unobserved. Apparent line-of-sight to isolated north edges is not facade grammar evidence.",
+      "run_count": 31,
+      "run_length_m": 163.773
+    },
+    {
+      "id": "SECONDARY-OUTER-UNION-SLIVER",
+      "ordered_runs": [
+        97,
+        98,
+        99
+      ],
+      "status": "verified_geometry_ineligible",
+      "side": "tiny secondary generated outer component",
+      "confidence": "high",
+      "observation_ids": [],
+      "rationale": "This closed 0.0561 m2 generated outer sliver is not the observed public building elevation and cannot host a facade module. Its exact source-member causality is not used as appearance evidence.",
+      "run_count": 3,
+      "run_length_m": 10.352
+    },
+    {
+      "id": "INNER-RING-TOWER-HOLE",
+      "ordered_runs": [
+        100,
+        101,
+        102,
+        103,
+        104,
+        105,
+        106,
+        107,
+        108,
+        109
+      ],
+      "status": "verified_geometry_excluded",
+      "side": "r16681702 inner ring facing the separate tower hole",
+      "confidence": "high",
+      "observation_ids": [],
+      "rationale": "Every endpoint reverses one run of the separately generated building:w1222720021:wall. Public-outer evidence cannot transfer to it.",
+      "run_count": 10,
+      "run_length_m": 25.26
+    }
+  ],
+  "per_run": [
+    {
+      "run": 0,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -59.732,
+        694.539
+      ],
+      "end_xz_m": [
+        -57.96,
+        697.96
+      ],
+      "outward_normal_xz": [
+        -0.888,
+        0.46
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 6,
+          "blocking_runs": [
+            2
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            2
+          ]
+        }
+      }
+    },
+    {
+      "run": 1,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -57.96,
+        697.96
+      ],
+      "end_xz_m": [
+        -57.27,
+        699.292
+      ],
+      "outward_normal_xz": [
+        -0.888,
+        0.46
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            2
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            2
+          ]
+        }
+      }
+    },
+    {
+      "run": 2,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -57.27,
+        699.292
+      ],
+      "end_xz_m": [
+        -59.442,
+        700.394
+      ],
+      "outward_normal_xz": [
+        -0.452,
+        -0.892
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        }
+      }
+    },
+    {
+      "run": 3,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -59.442,
+        700.394
+      ],
+      "end_xz_m": [
+        -57.551,
+        704
+      ],
+      "outward_normal_xz": [
+        -0.886,
+        0.464
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 5,
+          "blocking_runs": [
+            5
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            5
+          ]
+        }
+      }
+    },
+    {
+      "run": 4,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -57.551,
+        704
+      ],
+      "end_xz_m": [
+        -57.463,
+        704.168
+      ],
+      "outward_normal_xz": [
+        -0.886,
+        0.464
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            5
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            5
+          ]
+        }
+      }
+    },
+    {
+      "run": 5,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -57.463,
+        704.168
+      ],
+      "end_xz_m": [
+        -58.976,
+        704.925
+      ],
+      "outward_normal_xz": [
+        -0.448,
+        -0.894
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        }
+      }
+    },
+    {
+      "run": 6,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -58.976,
+        704.925
+      ],
+      "end_xz_m": [
+        -53.902,
+        714.71
+      ],
+      "outward_normal_xz": [
+        -0.888,
+        0.46
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 7,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -53.902,
+        714.71
+      ],
+      "end_xz_m": [
+        -52.354,
+        713.92
+      ],
+      "outward_normal_xz": [
+        0.455,
+        0.891
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 8,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -52.354,
+        713.92
+      ],
+      "end_xz_m": [
+        -50.13,
+        718.161
+      ],
+      "outward_normal_xz": [
+        -0.886,
+        0.465
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 3,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 9,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "start_xz_m": [
+        -50.13,
+        718.161
+      ],
+      "end_xz_m": [
+        -43.676,
+        714.888
+      ],
+      "outward_normal_xz": [
+        0.452,
+        0.892
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            8,
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 10,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "start_xz_m": [
+        -43.676,
+        714.888
+      ],
+      "end_xz_m": [
+        -42.28,
+        714.28
+      ],
+      "outward_normal_xz": [
+        0.399,
+        0.917
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 11,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "start_xz_m": [
+        -42.28,
+        714.28
+      ],
+      "end_xz_m": [
+        -40.176,
+        713.363
+      ],
+      "outward_normal_xz": [
+        0.399,
+        0.917
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 12,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "start_xz_m": [
+        -40.176,
+        713.363
+      ],
+      "end_xz_m": [
+        -39.525,
+        713.074
+      ],
+      "outward_normal_xz": [
+        0.406,
+        0.914
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 13,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "start_xz_m": [
+        -39.525,
+        713.074
+      ],
+      "end_xz_m": [
+        -34.918,
+        711.827
+      ],
+      "outward_normal_xz": [
+        0.261,
+        0.965
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6,
+            5
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 14,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "start_xz_m": [
+        -34.918,
+        711.827
+      ],
+      "end_xz_m": [
+        -32,
+        711.453
+      ],
+      "outward_normal_xz": [
+        0.127,
+        0.992
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            5
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 4,
+          "direct_visible_sample_count": 4,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 15,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "start_xz_m": [
+        -32,
+        711.453
+      ],
+      "end_xz_m": [
+        -29.448,
+        711.126
+      ],
+      "outward_normal_xz": [
+        0.127,
+        0.992
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            5,
+            4,
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 16,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "start_xz_m": [
+        -29.448,
+        711.126
+      ],
+      "end_xz_m": [
+        -24.427,
+        711.059
+      ],
+      "outward_normal_xz": [
+        0.013,
+        1
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 17,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "start_xz_m": [
+        -24.427,
+        711.059
+      ],
+      "end_xz_m": [
+        -21.974,
+        711.337
+      ],
+      "outward_normal_xz": [
+        -0.113,
+        0.994
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 18,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "start_xz_m": [
+        -21.974,
+        711.337
+      ],
+      "end_xz_m": [
+        -22.308,
+        712.74
+      ],
+      "outward_normal_xz": [
+        -0.973,
+        -0.232
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 19,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "start_xz_m": [
+        -22.308,
+        712.74
+      ],
+      "end_xz_m": [
+        -21.06,
+        713.029
+      ],
+      "outward_normal_xz": [
+        -0.226,
+        0.974
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 20,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "start_xz_m": [
+        -21.06,
+        713.029
+      ],
+      "end_xz_m": [
+        -21.71,
+        716.146
+      ],
+      "outward_normal_xz": [
+        -0.979,
+        -0.204
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3,
+            5
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 21,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -21.71,
+        716.146
+      ],
+      "end_xz_m": [
+        -18.061,
+        717.115
+      ],
+      "outward_normal_xz": [
+        -0.257,
+        0.967
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            5
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 22,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -18.061,
+        717.115
+      ],
+      "end_xz_m": [
+        -14.58,
+        718.58
+      ],
+      "outward_normal_xz": [
+        -0.388,
+        0.922
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            5
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 23,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -14.58,
+        718.58
+      ],
+      "end_xz_m": [
+        -14.201,
+        718.74
+      ],
+      "outward_normal_xz": [
+        -0.388,
+        0.922
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            5
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 24,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -14.201,
+        718.74
+      ],
+      "end_xz_m": [
+        -10.956,
+        720.833
+      ],
+      "outward_normal_xz": [
+        -0.542,
+        0.84
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            5,
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 25,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -10.956,
+        720.833
+      ],
+      "end_xz_m": [
+        -7.949,
+        723.237
+      ],
+      "outward_normal_xz": [
+        -0.624,
+        0.781
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 26,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -7.949,
+        723.237
+      ],
+      "end_xz_m": [
+        -4.959,
+        726.477
+      ],
+      "outward_normal_xz": [
+        -0.735,
+        0.678
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 27,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -4.959,
+        726.477
+      ],
+      "end_xz_m": [
+        -2.849,
+        729.493
+      ],
+      "outward_normal_xz": [
+        -0.819,
+        0.573
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 28,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -2.849,
+        729.493
+      ],
+      "end_xz_m": [
+        -1.082,
+        732.788
+      ],
+      "outward_normal_xz": [
+        -0.881,
+        0.473
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 29,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -1.082,
+        732.788
+      ],
+      "end_xz_m": [
+        0,
+        735.764
+      ],
+      "outward_normal_xz": [
+        -0.94,
+        0.342
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 30,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        0,
+        735.764
+      ],
+      "end_xz_m": [
+        0.063,
+        735.937
+      ],
+      "outward_normal_xz": [
+        -0.94,
+        0.342
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 31,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        0.063,
+        735.937
+      ],
+      "end_xz_m": [
+        0.086,
+        736
+      ],
+      "outward_normal_xz": [
+        -0.94,
+        0.342
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 32,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        0.086,
+        736
+      ],
+      "end_xz_m": [
+        0.237,
+        736.417
+      ],
+      "outward_normal_xz": [
+        -0.94,
+        0.342
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 33,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        0.237,
+        736.417
+      ],
+      "end_xz_m": [
+        1.064,
+        739.913
+      ],
+      "outward_normal_xz": [
+        -0.973,
+        0.23
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 34,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        1.064,
+        739.913
+      ],
+      "end_xz_m": [
+        1.442,
+        743.598
+      ],
+      "outward_normal_xz": [
+        -0.995,
+        0.102
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 35,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        1.442,
+        743.598
+      ],
+      "end_xz_m": [
+        1.231,
+        747.716
+      ],
+      "outward_normal_xz": [
+        -0.999,
+        -0.051
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 1,
+          "blocking_runs": [
+            6,
+            8
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 36,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        1.231,
+        747.716
+      ],
+      "end_xz_m": [
+        0.651,
+        751.69
+      ],
+      "outward_normal_xz": [
+        -0.99,
+        -0.144
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 37,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        0.651,
+        751.69
+      ],
+      "end_xz_m": [
+        0,
+        753.787
+      ],
+      "outward_normal_xz": [
+        -0.955,
+        -0.296
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 38,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        0,
+        753.787
+      ],
+      "end_xz_m": [
+        -0.528,
+        755.486
+      ],
+      "outward_normal_xz": [
+        -0.955,
+        -0.296
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 39,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -0.528,
+        755.486
+      ],
+      "end_xz_m": [
+        0,
+        755.678
+      ],
+      "outward_normal_xz": [
+        -0.341,
+        0.94
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            38
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 40,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        0,
+        755.678
+      ],
+      "end_xz_m": [
+        1.715,
+        756.299
+      ],
+      "outward_normal_xz": [
+        -0.341,
+        0.94
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            38
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 41,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        1.715,
+        756.299
+      ],
+      "end_xz_m": [
+        1.31,
+        757.323
+      ],
+      "outward_normal_xz": [
+        -0.93,
+        -0.367
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 3,
+          "blocking_runs": [
+            38
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 42,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        1.31,
+        757.323
+      ],
+      "end_xz_m": [
+        2.893,
+        757.902
+      ],
+      "outward_normal_xz": [
+        -0.343,
+        0.939
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            41
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 43,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        2.893,
+        757.902
+      ],
+      "end_xz_m": [
+        1.847,
+        759.995
+      ],
+      "outward_normal_xz": [
+        -0.894,
+        -0.447
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 5,
+          "blocking_runs": [
+            41
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 44,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        1.847,
+        759.995
+      ],
+      "end_xz_m": [
+        0,
+        763.161
+      ],
+      "outward_normal_xz": [
+        -0.864,
+        -0.504
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 45,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        0,
+        763.161
+      ],
+      "end_xz_m": [
+        -0.387,
+        763.824
+      ],
+      "outward_normal_xz": [
+        -0.864,
+        -0.504
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 46,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -0.387,
+        763.824
+      ],
+      "end_xz_m": [
+        -3.148,
+        767.576
+      ],
+      "outward_normal_xz": [
+        -0.805,
+        -0.593
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 3,
+          "direct_visible_sample_count": 3,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 47,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -3.148,
+        767.576
+      ],
+      "end_xz_m": [
+        -3.576,
+        768
+      ],
+      "outward_normal_xz": [
+        -0.704,
+        -0.711
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 48,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -3.576,
+        768
+      ],
+      "end_xz_m": [
+        -6.621,
+        771.015
+      ],
+      "outward_normal_xz": [
+        -0.704,
+        -0.711
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 5,
+          "blocking_runs": [
+            51
+          ]
+        }
+      }
+    },
+    {
+      "run": 49,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -6.621,
+        771.015
+      ],
+      "end_xz_m": [
+        -10.543,
+        773.899
+      ],
+      "outward_normal_xz": [
+        -0.592,
+        -0.806
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            51,
+            50
+          ]
+        }
+      }
+    },
+    {
+      "run": 50,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -10.543,
+        773.899
+      ],
+      "end_xz_m": [
+        -13.928,
+        775.713
+      ],
+      "outward_normal_xz": [
+        -0.472,
+        -0.881
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            52
+          ]
+        }
+      }
+    },
+    {
+      "run": 51,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-CURVE-CONFIRMED",
+      "start_xz_m": [
+        -13.928,
+        775.713
+      ],
+      "end_xz_m": [
+        -18.307,
+        778.051
+      ],
+      "outward_normal_xz": [
+        -0.471,
+        -0.882
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            52
+          ]
+        }
+      }
+    },
+    {
+      "run": 52,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-SOUTH-END-OBSERVED-FACES",
+      "start_xz_m": [
+        -18.307,
+        778.051
+      ],
+      "end_xz_m": [
+        -16.021,
+        782.392
+      ],
+      "outward_normal_xz": [
+        -0.885,
+        0.466
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 53,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-SOUTH-END-OBSERVED-FACES",
+      "start_xz_m": [
+        -16.021,
+        782.392
+      ],
+      "end_xz_m": [
+        -17.639,
+        783.238
+      ],
+      "outward_normal_xz": [
+        -0.463,
+        -0.886
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 54,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-SOUTH-END-OBSERVED-FACES",
+      "start_xz_m": [
+        -17.639,
+        783.238
+      ],
+      "end_xz_m": [
+        -16.801,
+        784.801
+      ],
+      "outward_normal_xz": [
+        -0.881,
+        0.472
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 55,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-SOUTH-END-OBSERVED-FACES",
+      "start_xz_m": [
+        -16.801,
+        784.801
+      ],
+      "end_xz_m": [
+        -15.652,
+        786.945
+      ],
+      "outward_normal_xz": [
+        -0.881,
+        0.472
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 56,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-SOUTH-END-OBSERVED-FACES",
+      "start_xz_m": [
+        -15.652,
+        786.945
+      ],
+      "end_xz_m": [
+        -13.216,
+        791.654
+      ],
+      "outward_normal_xz": [
+        -0.888,
+        0.459
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": []
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        }
+      }
+    },
+    {
+      "run": 57,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "SOUTH-END-OCCLUDED-RETURNS",
+      "start_xz_m": [
+        -13.216,
+        791.654
+      ],
+      "end_xz_m": [
+        -11.572,
+        790.808
+      ],
+      "outward_normal_xz": [
+        0.458,
+        0.889
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            56
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            56,
+            55,
+            54
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "run": 58,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-SOUTH-END-OBSERVED-FACES",
+      "start_xz_m": [
+        -11.572,
+        790.808
+      ],
+      "end_xz_m": [
+        -9.338,
+        795.038
+      ],
+      "outward_normal_xz": [
+        -0.884,
+        0.467
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            56
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            54,
+            55,
+            56
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 6,
+          "blocking_runs": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "run": 59,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "SOUTH-END-OCCLUDED-RETURNS",
+      "start_xz_m": [
+        -9.338,
+        795.038
+      ],
+      "end_xz_m": [
+        -6.911,
+        793.791
+      ],
+      "outward_normal_xz": [
+        0.457,
+        0.889
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            58,
+            56
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            56,
+            55,
+            53
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            58
+          ]
+        }
+      }
+    },
+    {
+      "run": 60,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-SOUTH-END-OBSERVED-FACES",
+      "start_xz_m": [
+        -6.911,
+        793.791
+      ],
+      "end_xz_m": [
+        -4.186,
+        799.124
+      ],
+      "outward_normal_xz": [
+        -0.89,
+        0.455
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            56,
+            58
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            53
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 6,
+          "blocking_runs": [
+            58
+          ]
+        }
+      }
+    },
+    {
+      "run": 61,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "SOUTH-END-OCCLUDED-RETURNS",
+      "start_xz_m": [
+        -4.186,
+        799.124
+      ],
+      "end_xz_m": [
+        -1.064,
+        797.521
+      ],
+      "outward_normal_xz": [
+        0.457,
+        0.89
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            60,
+            58
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            53,
+            52
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            60
+          ]
+        }
+      }
+    },
+    {
+      "run": 62,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        -1.064,
+        797.521
+      ],
+      "end_xz_m": [
+        0,
+        796.877
+      ],
+      "outward_normal_xz": [
+        0.518,
+        0.856
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            58
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            51
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            60
+          ]
+        }
+      }
+    },
+    {
+      "run": 63,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        0,
+        796.877
+      ],
+      "end_xz_m": [
+        6.551,
+        792.912
+      ],
+      "outward_normal_xz": [
+        0.518,
+        0.856
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            56,
+            55
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            51,
+            50
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            60
+          ]
+        }
+      }
+    },
+    {
+      "run": 64,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        6.551,
+        792.912
+      ],
+      "end_xz_m": [
+        9.97,
+        790.03
+      ],
+      "outward_normal_xz": [
+        0.645,
+        0.765
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            55,
+            54,
+            53
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            50,
+            49
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            60,
+            58
+          ]
+        }
+      }
+    },
+    {
+      "run": 65,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        9.97,
+        790.03
+      ],
+      "end_xz_m": [
+        13.577,
+        786.99
+      ],
+      "outward_normal_xz": [
+        0.645,
+        0.765
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            53,
+            52
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            49,
+            48
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            58
+          ]
+        }
+      }
+    },
+    {
+      "run": 66,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        13.577,
+        786.99
+      ],
+      "end_xz_m": [
+        17.263,
+        782.737
+      ],
+      "outward_normal_xz": [
+        0.756,
+        0.655
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            52,
+            51
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            48,
+            47,
+            46
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            58
+          ]
+        }
+      }
+    },
+    {
+      "run": 67,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        17.263,
+        782.737
+      ],
+      "end_xz_m": [
+        20.119,
+        779.442
+      ],
+      "outward_normal_xz": [
+        0.756,
+        0.655
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            51,
+            50
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            46
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "run": 68,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        20.119,
+        779.442
+      ],
+      "end_xz_m": [
+        24.665,
+        771.884
+      ],
+      "outward_normal_xz": [
+        0.857,
+        0.515
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            50,
+            49,
+            48
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            45,
+            44,
+            43,
+            41
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            56
+          ]
+        }
+      }
+    },
+    {
+      "run": 69,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        24.665,
+        771.884
+      ],
+      "end_xz_m": [
+        26.266,
+        768
+      ],
+      "outward_normal_xz": [
+        0.924,
+        0.381
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            48,
+            47,
+            46
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            38,
+            37
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            56,
+            55
+          ]
+        }
+      }
+    },
+    {
+      "run": 70,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        26.266,
+        768
+      ],
+      "end_xz_m": [
+        28.094,
+        763.568
+      ],
+      "outward_normal_xz": [
+        0.924,
+        0.381
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 5,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            46,
+            45
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            37,
+            36
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            55,
+            54
+          ]
+        }
+      }
+    },
+    {
+      "run": 71,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        28.094,
+        763.568
+      ],
+      "end_xz_m": [
+        30.284,
+        753.75
+      ],
+      "outward_normal_xz": [
+        0.976,
+        0.218
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            44,
+            43,
+            42,
+            41,
+            40
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            35,
+            8,
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            54,
+            52
+          ]
+        }
+      }
+    },
+    {
+      "run": 72,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        30.284,
+        753.75
+      ],
+      "end_xz_m": [
+        31.11,
+        745.022
+      ],
+      "outward_normal_xz": [
+        0.996,
+        0.094
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            39,
+            38,
+            37,
+            36
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            52,
+            48,
+            46
+          ]
+        }
+      }
+    },
+    {
+      "run": 73,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        31.11,
+        745.022
+      ],
+      "end_xz_m": [
+        30.513,
+        737.487
+      ],
+      "outward_normal_xz": [
+        0.997,
+        -0.079
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            36,
+            35
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            46,
+            44,
+            43
+          ]
+        }
+      }
+    },
+    {
+      "run": 74,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        30.513,
+        737.487
+      ],
+      "end_xz_m": [
+        30.396,
+        736
+      ],
+      "outward_normal_xz": [
+        0.997,
+        -0.079
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            34
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            42
+          ]
+        }
+      }
+    },
+    {
+      "run": 75,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        30.396,
+        736
+      ],
+      "end_xz_m": [
+        30.371,
+        735.694
+      ],
+      "outward_normal_xz": [
+        0.997,
+        -0.079
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            34
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            42
+          ]
+        }
+      }
+    },
+    {
+      "run": 76,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        30.371,
+        735.694
+      ],
+      "end_xz_m": [
+        28.507,
+        727.111
+      ],
+      "outward_normal_xz": [
+        0.977,
+        -0.212
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            34,
+            33,
+            30
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6,
+            5,
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            41,
+            40,
+            39,
+            38,
+            37,
+            36
+          ]
+        }
+      }
+    },
+    {
+      "run": 77,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        28.507,
+        727.111
+      ],
+      "end_xz_m": [
+        25.412,
+        719.686
+      ],
+      "outward_normal_xz": [
+        0.923,
+        -0.385
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            29,
+            28
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            36,
+            35,
+            34
+          ]
+        }
+      }
+    },
+    {
+      "run": 78,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        25.412,
+        719.686
+      ],
+      "end_xz_m": [
+        22.695,
+        714.721
+      ],
+      "outward_normal_xz": [
+        0.877,
+        -0.48
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            28,
+            27
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3,
+            2
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            34,
+            33
+          ]
+        }
+      }
+    },
+    {
+      "run": 79,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        22.695,
+        714.721
+      ],
+      "end_xz_m": [
+        22.147,
+        713.853
+      ],
+      "outward_normal_xz": [
+        0.845,
+        -0.534
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            26
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            2
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            33
+          ]
+        }
+      }
+    },
+    {
+      "run": 80,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        22.147,
+        713.853
+      ],
+      "end_xz_m": [
+        18.219,
+        707.641
+      ],
+      "outward_normal_xz": [
+        0.845,
+        -0.534
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            26,
+            25
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            2,
+            1
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            33,
+            32,
+            29,
+            28
+          ]
+        }
+      }
+    },
+    {
+      "run": 81,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        18.219,
+        707.641
+      ],
+      "end_xz_m": [
+        14.894,
+        704
+      ],
+      "outward_normal_xz": [
+        0.738,
+        -0.674
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            25,
+            24
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            1,
+            0
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            28,
+            27
+          ]
+        }
+      }
+    },
+    {
+      "run": 82,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        14.894,
+        704
+      ],
+      "end_xz_m": [
+        13.137,
+        702.075
+      ],
+      "outward_normal_xz": [
+        0.738,
+        -0.674
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            24,
+            23,
+            22
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            0
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            27
+          ]
+        }
+      }
+    },
+    {
+      "run": 83,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        13.137,
+        702.075
+      ],
+      "end_xz_m": [
+        7.43,
+        697.3
+      ],
+      "outward_normal_xz": [
+        0.642,
+        -0.767
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            22,
+            21
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            0
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            26,
+            25
+          ]
+        }
+      }
+    },
+    {
+      "run": 84,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        7.43,
+        697.3
+      ],
+      "end_xz_m": [
+        6.982,
+        697.018
+      ],
+      "outward_normal_xz": [
+        0.531,
+        -0.847
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            21
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            0
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            25
+          ]
+        }
+      }
+    },
+    {
+      "run": 85,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        6.982,
+        697.018
+      ],
+      "end_xz_m": [
+        0.862,
+        693.181
+      ],
+      "outward_normal_xz": [
+        0.531,
+        -0.847
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            21,
+            20,
+            19,
+            18,
+            17
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            0,
+            96
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            25,
+            24
+          ]
+        }
+      }
+    },
+    {
+      "run": 86,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        0.862,
+        693.181
+      ],
+      "end_xz_m": [
+        0,
+        692.806
+      ],
+      "outward_normal_xz": [
+        0.399,
+        -0.917
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            17
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            96
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            24,
+            23
+          ]
+        }
+      }
+    },
+    {
+      "run": 87,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        0,
+        692.806
+      ],
+      "end_xz_m": [
+        -7.202,
+        689.674
+      ],
+      "outward_normal_xz": [
+        0.399,
+        -0.917
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            17,
+            16,
+            15
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            96
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            22,
+            21
+          ]
+        }
+      }
+    },
+    {
+      "run": 88,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        -7.202,
+        689.674
+      ],
+      "end_xz_m": [
+        -15.283,
+        687.283
+      ],
+      "outward_normal_xz": [
+        0.284,
+        -0.959
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            14,
+            13,
+            12,
+            11
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            96
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            21,
+            20,
+            19,
+            17,
+            16
+          ]
+        }
+      }
+    },
+    {
+      "run": 89,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        -15.283,
+        687.283
+      ],
+      "end_xz_m": [
+        -15.555,
+        687.203
+      ],
+      "outward_normal_xz": [
+        0.284,
+        -0.959
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            11
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            96,
+            95
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            16
+          ]
+        }
+      }
+    },
+    {
+      "run": 90,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        -15.555,
+        687.203
+      ],
+      "end_xz_m": [
+        -25.28,
+        685.901
+      ],
+      "outward_normal_xz": [
+        0.133,
+        -0.991
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            10,
+            9,
+            8
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            95,
+            94
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            16,
+            15,
+            14
+          ]
+        }
+      }
+    },
+    {
+      "run": 91,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        -25.28,
+        685.901
+      ],
+      "end_xz_m": [
+        -32,
+        685.994
+      ],
+      "outward_normal_xz": [
+        -0.014,
+        -1
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            8,
+            7
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            94,
+            93
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            14,
+            13
+          ]
+        }
+      }
+    },
+    {
+      "run": 92,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "REAR-EAST-UNOBSERVED",
+      "start_xz_m": [
+        -32,
+        685.994
+      ],
+      "end_xz_m": [
+        -34.065,
+        686.023
+      ],
+      "outward_normal_xz": [
+        -0.014,
+        -1
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            7,
+            6
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            93
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            13,
+            12,
+            11
+          ]
+        }
+      }
+    },
+    {
+      "run": 93,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -34.065,
+        686.023
+      ],
+      "end_xz_m": [
+        -43.297,
+        687.637
+      ],
+      "outward_normal_xz": [
+        -0.172,
+        -0.985
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            11,
+            10,
+            9
+          ]
+        }
+      }
+    },
+    {
+      "run": 94,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -43.297,
+        687.637
+      ],
+      "end_xz_m": [
+        -50.162,
+        690.162
+      ],
+      "outward_normal_xz": [
+        -0.345,
+        -0.939
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6,
+            4
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            9,
+            8,
+            7
+          ]
+        }
+      }
+    },
+    {
+      "run": 95,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -50.162,
+        690.162
+      ],
+      "end_xz_m": [
+        -51.378,
+        690.609
+      ],
+      "outward_normal_xz": [
+        -0.345,
+        -0.939
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            7
+          ]
+        }
+      }
+    },
+    {
+      "run": 96,
+      "ring_ownership": "main_outer_component",
+      "mapping_region": "PUBLIC-NORTH-END-CANDIDATE",
+      "start_xz_m": [
+        -51.378,
+        690.609
+      ],
+      "end_xz_m": [
+        -59.732,
+        694.539
+      ],
+      "outward_normal_xz": [
+        -0.426,
+        -0.905
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3,
+            1,
+            0
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 7,
+          "blocking_runs": []
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 0,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6,
+            1,
+            0
+          ]
+        }
+      }
+    },
+    {
+      "run": 97,
+      "ring_ownership": "secondary_outer_union_sliver",
+      "mapping_region": "SECONDARY-OUTER-UNION-SLIVER",
+      "start_xz_m": [
+        5.496,
+        748.562
+      ],
+      "end_xz_m": [
+        5.821,
+        743.397
+      ],
+      "outward_normal_xz": [
+        0.998,
+        0.063
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            36,
+            35
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            8,
+            6
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            37,
+            36
+          ]
+        }
+      }
+    },
+    {
+      "run": 98,
+      "ring_ownership": "secondary_outer_union_sliver",
+      "mapping_region": "SECONDARY-OUTER-UNION-SLIVER",
+      "start_xz_m": [
+        5.821,
+        743.397
+      ],
+      "end_xz_m": [
+        5.531,
+        748.351
+      ],
+      "outward_normal_xz": [
+        -0.998,
+        -0.058
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            35,
+            36
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            6,
+            8
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            36,
+            37
+          ]
+        }
+      }
+    },
+    {
+      "run": 99,
+      "ring_ownership": "secondary_outer_union_sliver",
+      "mapping_region": "SECONDARY-OUTER-UNION-SLIVER",
+      "start_xz_m": [
+        5.531,
+        748.351
+      ],
+      "end_xz_m": [
+        5.496,
+        748.562
+      ],
+      "outward_normal_xz": [
+        -0.986,
+        -0.164
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            36
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            8
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            37
+          ]
+        }
+      }
+    },
+    {
+      "run": 100,
+      "ring_ownership": "inner_ring_tower_hole",
+      "mapping_region": "INNER-RING-TOWER-HOLE",
+      "start_xz_m": [
+        10.473,
+        722.647
+      ],
+      "end_xz_m": [
+        11.378,
+        719.753
+      ],
+      "outward_normal_xz": [
+        0.954,
+        0.299
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            27
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            29
+          ]
+        }
+      }
+    },
+    {
+      "run": 101,
+      "ring_ownership": "inner_ring_tower_hole",
+      "mapping_region": "INNER-RING-TOWER-HOLE",
+      "start_xz_m": [
+        11.378,
+        719.753
+      ],
+      "end_xz_m": [
+        14.359,
+        718.228
+      ],
+      "outward_normal_xz": [
+        0.455,
+        0.89
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            27,
+            26
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            29
+          ]
+        }
+      }
+    },
+    {
+      "run": 102,
+      "ring_ownership": "inner_ring_tower_hole",
+      "mapping_region": "INNER-RING-TOWER-HOLE",
+      "start_xz_m": [
+        14.359,
+        718.228
+      ],
+      "end_xz_m": [
+        16.892,
+        719.108
+      ],
+      "outward_normal_xz": [
+        -0.328,
+        0.945
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            27
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            29,
+            30,
+            32,
+            33
+          ]
+        }
+      }
+    },
+    {
+      "run": 103,
+      "ring_ownership": "inner_ring_tower_hole",
+      "mapping_region": "INNER-RING-TOWER-HOLE",
+      "start_xz_m": [
+        16.892,
+        719.108
+      ],
+      "end_xz_m": [
+        17.34,
+        719.263
+      ],
+      "outward_normal_xz": [
+        -0.328,
+        0.945
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            27
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            33
+          ]
+        }
+      }
+    },
+    {
+      "run": 104,
+      "ring_ownership": "inner_ring_tower_hole",
+      "mapping_region": "INNER-RING-TOWER-HOLE",
+      "start_xz_m": [
+        17.34,
+        719.263
+      ],
+      "end_xz_m": [
+        18.703,
+        722.035
+      ],
+      "outward_normal_xz": [
+        -0.897,
+        0.441
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            27,
+            28
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            33,
+            34
+          ]
+        }
+      }
+    },
+    {
+      "run": 105,
+      "ring_ownership": "inner_ring_tower_hole",
+      "mapping_region": "INNER-RING-TOWER-HOLE",
+      "start_xz_m": [
+        18.703,
+        722.035
+      ],
+      "end_xz_m": [
+        17.797,
+        724.94
+      ],
+      "outward_normal_xz": [
+        -0.955,
+        -0.298
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            28
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            34
+          ]
+        }
+      }
+    },
+    {
+      "run": 106,
+      "ring_ownership": "inner_ring_tower_hole",
+      "mapping_region": "INNER-RING-TOWER-HOLE",
+      "start_xz_m": [
+        17.797,
+        724.94
+      ],
+      "end_xz_m": [
+        14.825,
+        726.465
+      ],
+      "outward_normal_xz": [
+        -0.457,
+        -0.89
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            28
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 7,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            4,
+            5
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            34
+          ]
+        }
+      }
+    },
+    {
+      "run": 107,
+      "ring_ownership": "inner_ring_tower_hole",
+      "mapping_region": "INNER-RING-TOWER-HOLE",
+      "start_xz_m": [
+        14.825,
+        726.465
+      ],
+      "end_xz_m": [
+        11.844,
+        725.419
+      ],
+      "outward_normal_xz": [
+        0.331,
+        -0.944
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            28
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            5
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            34,
+            33
+          ]
+        }
+      }
+    },
+    {
+      "run": 108,
+      "ring_ownership": "inner_ring_tower_hole",
+      "mapping_region": "INNER-RING-TOWER-HOLE",
+      "start_xz_m": [
+        11.844,
+        725.419
+      ],
+      "end_xz_m": [
+        11.426,
+        724.574
+      ],
+      "outward_normal_xz": [
+        0.896,
+        -0.444
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            28
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            5
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            33
+          ]
+        }
+      }
+    },
+    {
+      "run": 109,
+      "ring_ownership": "inner_ring_tower_hole",
+      "mapping_region": "INNER-RING-TOWER-HOLE",
+      "start_xz_m": [
+        11.426,
+        724.574
+      ],
+      "end_xz_m": [
+        10.473,
+        722.647
+      ],
+      "outward_normal_xz": [
+        0.896,
+        -0.444
+      ],
+      "visibility_diagnostic": {
+        "B1-SV01": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            28,
+            27
+          ]
+        },
+        "B1-SV02": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            5,
+            4,
+            3
+          ]
+        },
+        "B1-SV03": {
+          "sample_count": 7,
+          "outward_side_sample_count": 0,
+          "in_fov_sample_count": 7,
+          "direct_visible_sample_count": 0,
+          "blocking_runs": [
+            33,
+            32,
+            30,
+            29
+          ]
+        }
+      }
+    }
+  ]
+}

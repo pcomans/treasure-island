@@ -1,0 +1,11 @@
+# SHA-256<TAB>bytes<TAB>bundle-relative path
+12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085	1885	Contents/Info.plist
+ef44bf47983147b5b1b66286b47af11b64f3658b798412b7ede33ae829e28749	170963648	Contents/MacOS/Treasure Island First Playable
+7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb	9	Contents/PkgInfo
+0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3	229	Contents/Resources/PrivacyInfo.xcprivacy
+a6c37a783771a38cb323a87dad9f73a9e740ca6fa4cd179563b8083129fbdbc4	24108540	Contents/Resources/Treasure Island First Playable.pck
+779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a	67500	Contents/Resources/icon.icns
+1071935fd8da658cb320535437839fe4123c19ceffdd026691490887a9666cc8	3217	Contents/_CodeSignature/CodeResources
+
+Normalized descriptor SHA-256 (`path\0sha256\0bytes\n`, sorted by path): c3f60f4f236304a5d8456a6e6b37af571c31285b595e845dfa5081cbb14d1520
+

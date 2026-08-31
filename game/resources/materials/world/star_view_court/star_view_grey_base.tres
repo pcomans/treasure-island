@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://game/resources/materials/world/batch_02/batch_02_homogeneous_field.gdshader" id="1_shader"]
+
+[resource]
+resource_name = "star_view_ene_grey_vertical_base_prototype"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(0.34, 0.36, 0.37, 1)
+shader_parameter/secondary_color = Color(0.27, 0.29, 0.30, 1)
+shader_parameter/roughness_value = 0.82
+shader_parameter/field_kind = 2
+shader_parameter/primary_scale_m = 0.085
+shader_parameter/secondary_scale_m = 0.24
+shader_parameter/relief_strength = 0.09
+shader_parameter/color_variation = 0.04
+shader_parameter/filter_start_cycles_per_pixel = 0.12
+shader_parameter/filter_end_cycles_per_pixel = 0.34

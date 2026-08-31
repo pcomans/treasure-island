@@ -1,0 +1,266 @@
+{
+  "counts": {
+    "category_memberships": {
+      "building": 213,
+      "building_part": 2,
+      "land_boundary": 1,
+      "major_area": 80,
+      "roads_paths": 427,
+      "terrain_shoreline": 22
+    },
+    "chunks": 38,
+    "context_rows": 4,
+    "coverage_rows": 739,
+    "duplicate_source_keys": 0,
+    "physical_records": 701,
+    "playable_chunk_records": 697,
+    "playable_rows": 735,
+    "source_rows": 739,
+    "status_totals": {
+      "composite_member": 9,
+      "context": 1,
+      "represented": 729
+    },
+    "unresolved_rows": 0
+  },
+  "derived_feature_kinds": {
+    "building_part_roof": {
+      "records": 2,
+      "triangles": 9,
+      "unique_source_keys": 2
+    },
+    "building_part_wall": {
+      "records": 2,
+      "triangles": 52,
+      "unique_source_keys": 2
+    },
+    "building_roof": {
+      "records": 212,
+      "triangles": 2520,
+      "unique_source_keys": 212
+    },
+    "building_wall": {
+      "records": 212,
+      "triangles": 9890,
+      "unique_source_keys": 212
+    },
+    "land_ground": {
+      "records": 38,
+      "triangles": 3548,
+      "unique_source_keys": 2
+    },
+    "major_area": {
+      "records": 149,
+      "triangles": 4495,
+      "unique_source_keys": 70
+    },
+    "road_path": {
+      "records": 36,
+      "triangles": 16015,
+      "unique_source_keys": 427
+    },
+    "terrain_overlay": {
+      "records": 46,
+      "triangles": 1412,
+      "unique_source_keys": 19
+    }
+  },
+  "explicit_checks": {
+    "all_213_buildings_have_a_roof_record": true,
+    "all_427_roads_have_a_road_path_record": true,
+    "all_80_major_areas_have_visible_generated_geometry": true,
+    "both_building_parts_have_a_part_roof_record": true,
+    "boundary_attached_visual_source_keys": [
+      "w319406837",
+      "w644986117"
+    ],
+    "context_source_keys": [
+      "r13543937",
+      "r13543938",
+      "w1011568818",
+      "w26767311"
+    ],
+    "every_coverage_part_key_resolves_to_a_physical_record": true,
+    "exact_source_polygon_matches_manifest_boundary_at_0_001m": true,
+    "major_area_visual_modes": {
+      "area_or_terrain_layer": 72,
+      "boundary_attached_context": 2,
+      "building_mass": 6
+    },
+    "ybi_source_key_absent_from_playable_chunks": true
+  },
+  "extents": {
+    "areas_m": {
+      "max_north": 954.002,
+      "max_x": 710.705,
+      "min_north": -954.002,
+      "min_x": -710.705
+    },
+    "boundary_attached_visuals_m": {
+      "max_north": -321.329,
+      "max_x": 920.879,
+      "min_north": -1021.451,
+      "min_x": -9.004
+    },
+    "bridge_context_m": {
+      "max_north": -161.742,
+      "max_x": 3806.979,
+      "min_north": -4191.852,
+      "min_x": -1745.341
+    },
+    "building_roofs_m": {
+      "max_north": 888.958,
+      "max_x": 532.6,
+      "min_north": -799.124,
+      "min_x": -621.349
+    },
+    "exact_source_boundary_m": {
+      "max_north": 954.002,
+      "max_x": 710.705,
+      "min_north": -954.002,
+      "min_x": -710.705
+    },
+    "land_m": {
+      "max_north": 954.002,
+      "max_x": 710.705,
+      "min_north": -954.002,
+      "min_x": -710.705
+    },
+    "playable_records_m": {
+      "max_north": 954.002,
+      "max_x": 710.705,
+      "min_north": -954.002,
+      "min_x": -710.705
+    },
+    "roads_m": {
+      "max_north": 946.038,
+      "max_x": 700.085,
+      "min_north": -951.831,
+      "min_x": -700.019
+    },
+    "units": "meters from manifest origin; x=east, north=-world_z",
+    "ybi_context_m": {
+      "max_north": -932.607,
+      "max_x": 1065.57,
+      "min_north": -1863.583,
+      "min_x": -166.217
+    }
+  },
+  "inputs": {
+    "context": {
+      "bytes": 675130,
+      "path": "context.json",
+      "sha256": "4008473d014530211eba8e77e5b6f3ebe977c283a4750bacb57d6739b239a037"
+    },
+    "coverage_ledger": {
+      "bytes": 148105,
+      "path": "coverage-ledger.csv",
+      "sha256": "1525e7fdce7b138cb129d863935920db1a2c46cc0146245b300b9e266ac6d40d"
+    },
+    "exact_ti_polygon": {
+      "bytes": 12422,
+      "path": "data/osm/treasure-island-polygon.geojson",
+      "sha256": "43adbe335e87f0d839b56c2f5933ae97d35d4f588ce93bd09923a98620dd2b63"
+    },
+    "generated_content_sha256": "07eee769e2b888a330546360d9a6cc9f37d88660d8f03ad93a46260918de1470",
+    "manifest": {
+      "bytes": 26566,
+      "path": "manifest.json",
+      "sha256": "dbe582d82bc3c1088e000e080b5df97cf9fc6c9ff5ff061ebf4c1e91287e60b0"
+    },
+    "source_ledger": {
+      "bytes": 195590,
+      "path": "data/osm/treasure-island-source-inventory.csv",
+      "sha256": "fdf57f37f5507a7cb9b64a7fc530eabb22e29f3742324d5347c0f6b1949cb4cb"
+    }
+  },
+  "render_policy": {
+    "artifacts": [
+      {
+        "bytes": 1492368,
+        "path": "whole-island-derived.svg",
+        "sha256": "8487d6d6fe7575cbb82cb3957c2b681fc7c084c5d43b6a9c014f6482901c0f31"
+      },
+      {
+        "bytes": 1493620,
+        "path": "whole-island-diagnostic.svg",
+        "sha256": "74ffc282bfdfbbf7aa26d4537281b5063a055cd788d1983c7f75aff3de24541e"
+      },
+      {
+        "bytes": 203829,
+        "path": "whole-island-derived.png",
+        "sha256": "4857d6195e9a8adde7876d789ed241b7351eb0fe16aad615dc64a746a460c0f5"
+      }
+    ],
+    "context_is_separate_and_non_playable": true,
+    "excluded_from_top_down_fill": [
+      "building_wall",
+      "building_part_wall"
+    ],
+    "exclusion_reason": "Vertical wall triangles have zero top-down area; their corresponding generated roofs show every footprint.",
+    "orientation": "north-up; east-right",
+    "playable_layers": [
+      "land_ground",
+      "terrain_overlay",
+      "major_area",
+      "road_path",
+      "building_roof",
+      "building_part_roof"
+    ],
+    "png": {
+      "dimensions_px": [
+        1600,
+        1200
+      ],
+      "produced": true,
+      "renderer": "Version: ImageMagick 7.1.2-30 Q16-HDRI aarch64 7d45ed032:20260823 https://imagemagick.org"
+    },
+    "source": "actual generated chunk/context triangle records"
+  },
+  "representation_completeness": {
+    "building": {
+      "expected_rows": 213,
+      "observed_rows": 213,
+      "result": "pass",
+      "rows_with_resolved_physical_parts": 213,
+      "unique_physical_record_keys": 428
+    },
+    "building_part": {
+      "expected_rows": 2,
+      "observed_rows": 2,
+      "result": "pass",
+      "rows_with_resolved_physical_parts": 2,
+      "unique_physical_record_keys": 4
+    },
+    "land_boundary": {
+      "expected_rows": 1,
+      "observed_rows": 1,
+      "result": "pass",
+      "rows_with_resolved_physical_parts": 1,
+      "unique_physical_record_keys": 38
+    },
+    "major_area": {
+      "expected_rows": 80,
+      "observed_rows": 80,
+      "result": "pass",
+      "rows_with_resolved_physical_parts": 80,
+      "unique_physical_record_keys": 167
+    },
+    "roads_paths": {
+      "expected_rows": 427,
+      "observed_rows": 427,
+      "result": "pass",
+      "rows_with_resolved_physical_parts": 427,
+      "unique_physical_record_keys": 36
+    },
+    "terrain_shoreline": {
+      "expected_rows": 22,
+      "observed_rows": 22,
+      "result": "pass",
+      "rows_with_resolved_physical_parts": 22,
+      "unique_physical_record_keys": 86
+    }
+  },
+  "result": "pass",
+  "schema_version": "ti.coverage-evidence/1"
+}

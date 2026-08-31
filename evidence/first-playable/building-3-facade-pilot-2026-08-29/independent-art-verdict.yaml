@@ -1,0 +1,69 @@
+schema_version: "ti.independent-art-verdict/1"
+checked_date: "2026-08-29"
+reviewer: "/root/hawkins_texture_v2_review"
+scope: "building_3_600_california_bounded_ene_facade_pilot"
+target_receiver: "building:w34313540:wall"
+decision: "ACCEPT_WITH_DOCUMENTED_MASSING_LIMITATION"
+
+reference_basis:
+  official_street_view:
+    live_reinspection_available: false
+    fallback_used: "dated_observations_in_NEXT_COHORT_STREETVIEW_OBSERVATIONS_and_BUILDING_3_600_CALIFORNIA_REFERENCE_SPEC"
+    imagery_downloaded_copied_or_retained: false
+
+evidence_integrity:
+  asset_inventory_verified: true
+  five_required_views_reviewed: true
+  exact_receiver_identity: true
+  layout_sha256: "312ed89a5bca6e3eadf3034b8e97689b9a99646837aca8f5f1f7f940a11f8299"
+  facade_signature: "737a674d63824d574e28c76f75c86212dfe126c3204870cdb2d0452d5bcf6337"
+
+separated_verdicts:
+  standalone_materials:
+    verdict: "PASS"
+    material_hierarchy: "PASS"
+    albedo_neutrality: "PASS"
+    target_family_resemblance: "PASS_AS_BOUNDED_HOMOGENEOUS_FIELD"
+    aliasing_and_macro_repetition: "PASS"
+  standalone_modules:
+    verdict: "PASS"
+    topology_and_completeness: "PASS"
+    target_motif_resemblance: "PASS"
+    legal_joins: "PASS"
+  exact_current_receiver:
+    mechanical_attachment_and_gameplay: "PASS_AS_EVIDENCED"
+    art_scale_and_readability: "PASS"
+    observed_run_scope: "PASS"
+    spray_behavior: "PASS"
+    unobserved_side_restraint: "PASS_AS_EVIDENCED"
+  whole_building_real_world_resemblance:
+    verdict: "BLOCKED_BY_CURRENT_MASSING_INVARIANT"
+    current_height_m: 20.0
+    limitation: "flat_extrusion_cannot_reproduce_observed_curved_crown_or_taller_shoulder_pylons"
+
+module_evidence:
+  counts:
+    B3-HANGAR-DOOR: 1
+    B3-BAND: 1
+  module_run_scope: [27, 28, 29, 30, 31, 32, 33, 34, 35]
+  motifs_created_resized_duplicated_or_deleted_at_joins: false
+  invented_facade_elements_found: false
+
+hard_gate_results:
+  material_hierarchy_and_neutrality: "PASS"
+  module_completeness: "PASS"
+  legal_seams_and_motif_integrity: "PASS"
+  physical_scale: "PASS_AS_REFERENCE_RELATIVE_PROTOTYPE"
+  ordinary_camera_readability: "PASS"
+  oblique_and_changed_light_stability: "PASS"
+  repetition_or_sampling_artifacts: "PASS"
+  exact_run_scope: "PASS_AS_EVIDENCED"
+  conservative_unobserved_sides: "PASS_AS_EVIDENCED"
+  spray_appearance: "PASS"
+
+correction:
+  facade_only_round_required: false
+  residual_limitations:
+    - "flat_roofline_and_missing_curved_crown_and_shoulders"
+    - "door_and_band_placement_is_reference_relative_not_surveyed"
+    - "subtle_diffuse_weathering_is_not_represented"

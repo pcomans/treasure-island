@@ -1,0 +1,60 @@
+Batch 06 bounded prototype set 01 — verification on 2026-08-30
+
+1. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --editor --quit-after 3
+   PASS: project import completed; no Batch 06 parse/import error.
+
+2. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_batch_06_prototype_contract.gd
+   PASS: exactly 3 evidence-ranked targets, 5 alias-resistant homogeneous fields, 6 complete modules, explicit run bounds, zero collision/navigation/live attachment, zero whole-wall pattern tiles, unchanged builder/manifest, and zero blocked-target assets.
+
+3. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --check-only --script game/tests/batch_06_prototype_capture.gd
+   PASS: capture harness parses.
+
+4. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_06_prototype_capture.gd
+   PASS: 9 native Forward+/Metal controlled images captured; renderer Apple M1 Pro Metal 4.0.
+
+5. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_batch_02_material_contract.gd
+   PASS.
+
+6. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_batch_03_material_contract.gd
+   FAIL (pre-existing/unrelated): stale accepted Batch 02 pin expects ti_ymca_primary.tres SHA-256 c44f1f2e..., current accepted wall-tangent resource is b5e44afc.... Batch 02 and the dedicated YMCA projection contract pass. Batch 06 changed neither file.
+
+7. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_batch_04_material_contract.gd
+   PASS.
+
+8. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_scene_parse.gd
+   PASS: 4 gameplay scenes parsed.
+
+9. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_gameplay_contract.gd
+   PASS.
+
+10. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_world_material_contract.gd
+    PASS.
+
+11. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/validate_generated_world.gd
+    PASS: 735 playable + 4 context rows across 38 chunks; content manifest 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164.
+
+12. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_hawkins_facade_contract.gd
+    PASS: accepted Hawkins massing/facade signature d311c103c9273b94fc982588f46bae6ab67ba6be54b0d0a111dd305e39c22219.
+
+13. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_building_3_facade_contract.gd
+    PASS.
+
+14. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_isle_house_facade_contract.gd
+    PASS: signature e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1.
+
+15. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_ymca_wall_tangent_projection_contract.gd
+    PASS: YMCA exact runs 3..11 retain accepted wall-tangent/vertical metre projection.
+
+16. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/full_runtime_integration.gd
+    PASS: 38 chunks / 729 meshes / 48,389 triangles / 466 bodies; gameplay, spray, recovery and cleanup passed.
+
+17. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/automated_route_qa.gd
+    PASS: continuous ferry-to-Trade-Winds route; 14 checkpoints; no teleport, stall, boundary loss or recovery.
+
+18. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/automated_route_qa.gd -- --whole-island-route
+    PASS: ferry, southwest, center, north and east-perimeter; 3,449.107 m traveled; no teleport or recovery; 5 landings.
+
+19. git diff --name-only -- generated
+    PASS: no output; generated source bytes unchanged.
+
+Headless environment note: recurring user:// log-rotation and macOS CA-certificate warnings were emitted before PASS lines and did not affect test exits.

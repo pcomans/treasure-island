@@ -1,0 +1,20 @@
+Owned by this bounded w34313564 calibration round:
+- game/resources/facades/w34313564_module_calibration.json
+- game/tests/support/w34313564_module_calibration.gd
+- game/tests/support/w34313564_module_calibration.gd.uid
+- game/tests/headless_w34313564_module_calibration_contract.gd
+- game/tests/headless_w34313564_module_calibration_contract.gd.uid
+- game/tests/w34313564_module_calibration_capture.gd
+- game/tests/w34313564_module_calibration_capture.gd.uid
+- evidence/first-playable/batch-06-w34313564-module-calibration-2026-08-30/
+- one append-only section in discovery/RETRO_LOG.md
+
+Explicitly not edited by this calibration:
+- game/scripts/world/facades/accepted_material_run_trials.gd
+- existing w34313564 field resources or their exact-run trial resources
+- generated/
+- world builder, massing, collision, navigation, spray, foundation, terrain, or gameplay sources
+- discovery/FACADE_RECEIVER_INVENTORY.json and .md (concurrent receiver-inventory executor owns them)
+- prior accepted/prototype/correction/exact-field evidence directories
+
+The broader worktree already contained unrelated user and executor changes before this round. Those changes were preserved and are outside this evidence set.

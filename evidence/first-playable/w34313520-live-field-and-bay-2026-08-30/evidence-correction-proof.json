@@ -1,0 +1,80 @@
+{
+  "schema_version": "ti.w34313520-live-evidence-correction-proof/1",
+  "source_key": "w34313520",
+  "review_authority": {
+    "path": "discovery/facades/W34313520_LIVE_FIELD_AND_BAY_ART_REVIEW.md",
+    "sha256": "f0ad7c169c723a2dfb860aa12065af6da9f9dd91f1d8d9142dec024bdad3c865"
+  },
+  "status": "ready_for_independent_correction_re_review_lifecycle_still_pending",
+  "correction": {
+    "before_manifest_sha256": "e13a198ba1dc479e657b1954ad8409b70a2971295d2b989aba84816a951cba66",
+    "after_manifest_sha256": "939cb4a72a839d0ba5a841a3da5accf283acb0a97068093ea985c226f1a401be",
+    "before_capture_harness_sha256": "05872855c571d0ce717762bdf3a9c95887a36804c5fa7371a7777a24ef321df8",
+    "after_capture_harness_sha256": "81742b13399b62ddacf1d395468d216732f7042ddc4c19a3dae7f6d99da46095",
+    "focused_live_capture_contract_sha256": "782a0ae646b3ce614b6ac935fb4f8da27bfefbafd545595a5c601f67e5440569",
+    "removed_manifest_keys": ["placement"],
+    "removed_serializer": "_module_metadata",
+    "retained_authoritative_manifest_keys": ["live_module_metadata", "resolved_placement", "truth_boundary"],
+    "contradictory_snapshot_remaining": false
+  },
+  "canonical_metadata": {
+    "placement_id": "CAL-SSE-BAY-01",
+    "mechanical_safe_center_domain_m": [4.75, 27.038953],
+    "center_uncertainty_half_span_m": 11.144477,
+    "dimensions_surveyed": false,
+    "coordinates_surveyed": false,
+    "count_surveyed": false,
+    "cadence_surveyed": false,
+    "lifecycle_status": "pending_independent_actual_world_art_review"
+  },
+  "image_bytes": {
+    "recaptured": false,
+    "all_eleven_hashes_identical_to_reviewed_set": true,
+    "sha256": {
+      "01-field-join-r6-r7.png": "49b859d0acd6d02c78b897dd5b3466c85599e13bf4f5efb6316f937c40b451ee",
+      "02-field-join-r7-r8.png": "1ff24831d842e9e5fcc1b039539e60d92da047d1d975fcb30bba80e2051ac8fd",
+      "03-field-join-r8-r9.png": "826d8b15cc3c18f2cc788b8e370b32acf78b2cc9f9bb243119c060f5cbf4783b",
+      "04-field-join-r9-r10.png": "91191eaa0bb9139454c2f864c720841908d65bc68ce6a53ddc07cb1c45a56f7f",
+      "05-macro-field-runs6-10.png": "ac6fcd14458ed46e3911dfccffe1d9177ed6440ee68b8218b139094024cc1309",
+      "06-bay-close.png": "0af1f1a9dfe6856a550a7e632f4669b37da6bc0ea238674ddf7fd166550e9b40",
+      "07-bay-oblique.png": "7f735d6c73616d72702e62fd6775c7e65a464bcc6bceb6d819e780cf01a4ed5d",
+      "08-all-runs-ordinary.png": "e78e1ef0c4cb2cd4f9828db2602f2e53d7e5065a1b7a15c99d23108bc90158e4",
+      "09-building-sse-context.png": "8dcac7f16b53056d0be48a5f7b819eb0db76969f894691278901058a9a93fa2b",
+      "10-changed-light-field-and-bay.png": "1dd25442406c74303c4f44b409a5ad4941c8c99de64f14962de6859303572382",
+      "11-whole-island.png": "884b19d93eb1c6c495dcb621589edefbcbde1b7eac91f446b9de5ff9f3117e44"
+    }
+  },
+  "protected_bytes": {
+    "runtime_adapter_sha256": "7675d651d834ac20328c12c9eb543bda1af453730cb3d8d8c8a41e899e63a8d2",
+    "accepted_field_helper_sha256": "aaea7d6518fda141a0c488a54a7441a70bc52d5b98cd666876aa665d3b5be80e",
+    "world_builder_sha256": "e54b31cef98b45f00aadcba0b7a6dec0125f147c1c332c06158198dbe19e508d",
+    "calibration_registry_sha256": "28ea8b6e506d747299a920e4d456d8676031e18ec3b6d9e959cab31fa33de4f1",
+    "calibration_helper_sha256": "d747d9f9ca5798b09909efeeb930cdee119f1b3c310e95f9a2c426a3ee6ceea4",
+    "standalone_registry_sha256": "ab80f0cd0424c22f7f24e5fc82211353e9aee7c95bea4903022681a48c5620a4",
+    "pale_field_material_sha256": "7944151fd5ab8e977e7052d0cdb8df20132c82f967d8ebfefff83ede8fcf07a4",
+    "pale_exact_material_sha256": "89fbb97ed797275a86c394af7eab13f946cbf23f29cba58b89a2b2d467030ab2",
+    "bay_frame_material_sha256": "445d3bec9d2ef3130aab27c816b27e384c689af68298b2db5ada37e0178f249b",
+    "bay_glass_material_sha256": "40caf8b054b51ebf247a41286dec9efdbf925f09acf698a75285a4321a41bba6",
+    "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "generated_receiver_chunk_sha256": "b935890b89202fa181248552176364668e506a7630f0024ec86f12a084743d86"
+  },
+  "runtime_topology_unchanged": {
+    "records": 729,
+    "meshes": 886,
+    "surfaces": 894,
+    "triangles": 50273,
+    "collider_pairs": 466
+  },
+  "routes_rerun": false,
+  "routes_not_rerun_reason": "evidence-only records and tests changed; runtime bytes and topology remained identical",
+  "tests": {
+    "godot_editor_import_and_capture_harness_parse": "pass",
+    "focused_live_and_capture_evidence_contract": "pass",
+    "detached_exact_receiver_contract": "pass",
+    "standalone_prototype_contract": "pass",
+    "accepted_material_lifecycle_contract": "pass",
+    "batch_06_exact_receiver_contract": "pass",
+    "batch_06_prototype_contract": "pass",
+    "full_runtime_contract": "pass"
+  }
+}

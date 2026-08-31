@@ -1,0 +1,29 @@
+RENDERED VISUAL EVIDENCE CAPTURE — 2026-08-28
+
+$ .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/rendered_visual_evidence_capture.gd
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+Metal 4.0 - Forward+ - Apple M1 Pro (Apple7)
+
+VISUAL_CAPTURE: id=01-ferry-spawn region=ferry_spawn player=(-104.364,1.000,786.024) camera=(-104.834,3.057,789.957) image=01-ferry-spawn.png sha256=e9873692e5e9ff06ef8210f7821d3621247e77af7ae1b7dbf02b103b1bc7d555 colors=160 luminance_range=0.662
+VISUAL_CAPTURE: id=02-north region=north player=(-159.535,1.000,-879.905) camera=(-159.236,3.057,-883.855) image=02-north.png sha256=769a3a914a94de9537de73d9a76cd29aaa5dcec2b89559454bb951d82ff06f88 colors=64 luminance_range=0.385
+VISUAL_CAPTURE: id=03-center region=center player=(-159.292,1.000,-104.818) camera=(-163.253,3.057,-104.818) image=03-center.png sha256=34f93a2233bdfdb32b30b6de6dedd66faa7366360bc0668f9ad7487074ef81a1 colors=116 luminance_range=0.445
+VISUAL_CAPTURE: id=04-southwest region=southwest player=(-293.543,1.000,335.720) camera=(-295.473,3.057,339.179) image=04-southwest.png sha256=3d09c84277d2e7d14f031880cd91b061359511cd36339a07e892b5d265dea00f colors=73 luminance_range=0.310
+VISUAL_CAPTURE: id=05-east-perimeter region=perimeter player=(606.249,1.000,385.227) camera=(609.434,3.057,387.582) image=05-east-perimeter.png sha256=b11f5ed7aed019c5347c3868a7c049011909e41a14018d1d29bfe3830abaa781 colors=125 luminance_range=0.450
+VISUAL_CAPTURE_MANIFEST: path=evidence/first-playable/rendered-runtime/capture-manifest.json captures=5 content=5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa manifest=07b8b195e1a05942e38d9bbbcb801394cf9f184051fb5f7a819c75677e46f160
+PASS: captured ferry, north, center, southwest, and perimeter views from the real validated runtime
+exit=0 wall=14.5s
+
+Pre-capture gates:
+- capture harness parse-check: exit 0
+- headless scene parse: PASS, 4 gameplay scenes
+- headless gameplay contract: PASS, including ambient fill
+
+Post-capture regression:
+RUNTIME_LOAD: hash=5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa chunks=38 records=701 meshes=701 surfaces=701 triangles=21210 bodies=466 shapes=466 sources=738 load_ms=1825
+RUNTIME_GAMEPLAY: walk=1.598m run=2.228m jetpack_rise=4.000m air_walk=1.598m air_run=3.280m slow_descent=0.500m renewed_rise=1.210m landed=true resumed=0.932m manual_recovery=manual boundary_recovery=outside_boundary spray=placed ground=receiver_rejection roof=receiver_rejection context=no_hit tags=64 evicted=1
+RUNTIME_HEALTH: static_memory_mib=43.2 failed_reload_code=file_open partial_nodes=0 checkpoint_scene_nodes=109
+RUNTIME_CLEANUP: baseline_scene_nodes=1 final_scene_nodes=1
+PASS: real main scene reached world_ready, enabled player, exercised generated physics/interactions, and failed closed without a partial world
+
+No engine error, authored warning, crash, debugger break, or leak report was emitted by the capture or accepted regression run.
+

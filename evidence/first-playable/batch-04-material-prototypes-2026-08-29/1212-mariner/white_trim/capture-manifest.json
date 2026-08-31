@@ -1,0 +1,101 @@
+{
+  "canonical_name": "1212 Mariner Drive",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_04_material_proof_capture.gd",
+  "captures": [
+    {
+      "bytes": 102694,
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "sha256": "e693ca84b688865cfa561a32c4ebb13e367db70e0709e3f9473c87113a5967e3",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_proof"
+    },
+    {
+      "bytes": 68172,
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "sha256": "9b5962786489e9169bdbf735b28ef13c53cced279b31004f74b0d9c537768e78",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_scale_proof"
+    },
+    {
+      "bytes": 103241,
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "sha256": "9cfb8250360cc17d0ea3d5f0d2509803f1833f766d8ca4240b36af273a165921",
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_proof"
+    }
+  ],
+  "contains_facade_scale_motifs": false,
+  "display_driver": "macOS",
+  "evidence_role": "controlled_material_prototype_not_in_game_acceptance",
+  "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "godot_version": "4.7.2-stable (official)",
+  "material_path": "res://game/resources/materials/world/1212_mariner/1212_mariner_white_trim.tres",
+  "material_role": "white_trim",
+  "material_sha256": "21bdf88cbc0acf6de4a6a02a470d4925722ad6232dc7d39eed0b8e0903f23482",
+  "observed_region_scope": "target-specific observed front/rear/end siding, white trim, red-brown entry and dark privacy accent fields only; no unit sequence",
+  "one_local_unit_m": 1.0,
+  "proof_panel_size_m": [
+    4.8,
+    3.2,
+    0.12
+  ],
+  "proof_primary_scale_m": 0.75,
+  "proof_receiver": "controlled_flat_proof_panel",
+  "prototype_status": "current_reference_prototype_only",
+  "receiver_key": "building:w96215649:wall",
+  "registry_sha256": "97c9e4e07b0680a3c825923cbd0433536e98d9dcc5d511279249a86e2163aac9",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_visual_review_not_self_accepted",
+  "runtime_attachment": false,
+  "scale_status": "finish_only_unmeasured_proof_only",
+  "schema_version": "ti.batch-04-material-proof-evidence/1",
+  "source_key": "w96215649",
+  "temporal_status": "March and September 2025 official front/rear observations",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

@@ -1,0 +1,41 @@
+VISUAL-QA FINAL APP ARTIFACT AND SIGNING — 2026-08-28
+
+App: /Users/philipp/cowork/treasure-island-game/build/visual-qa-staging/Treasure Island First Playable.app
+Host: macOS 26.5.2 build 25F84, arm64, Apple M1 Pro renderer
+Bundle ID: local.treasure-island.first-playable
+Version: 0.1.0 (0.1.0)
+Category: Games
+Architecture priority: arm64, x86_64
+Actual executable architectures: x86_64 arm64
+
+Executable bytes: 170963648
+Executable SHA-256: 78ac62154990ff97ddd9340d70c1a19b10c5bb9981ea37e895d1d60ebeb3fae9
+PCK bytes: 5959788
+PCK SHA-256: 0af209e03f4b511c260570969433ecd2ce7701e5c64da8dfed7ae977a9d98bb5
+Bundle files: 7
+Bundle logical bytes: 176996276
+Bundle allocated KiB: 172868
+Sorted bundle inventory SHA-256: c19ea2b1ad9e77917fdf997ec50eadb26876e5b4659eb3f10e9b73c9c1909ace
+
+Signature: Godot-produced ad-hoc hardened runtime
+TeamIdentifier: not set
+Arm64 CandidateCDHashFull SHA-256: 90d273225f6c6f05f72a2f1c8e4577e6a5e5acdef7a9873e027c20877ddc8819
+codesign --verify --deep --strict exit: 0
+codesign --verify --deep --strict --arch arm64 exit: 0
+Gatekeeper spctl exit: 3, rejected as expected for a private ad-hoc, non-notarized build
+Extended attributes: com.apple.provenance only; no com.apple.quarantine attribute
+
+Info.plist checks:
+- CFBundleDisplayName = Treasure Island First Playable
+- CFBundleExecutable = Treasure Island First Playable
+- CFBundleIdentifier = local.treasure-island.first-playable
+- CFBundleShortVersionString = 0.1.0
+- CFBundleVersion = 0.1.0
+- CFBundlePackageType = APPL
+- LSApplicationCategoryType = public.app-category.games
+- LSArchitecturePriority = arm64, x86_64
+- LSMinimumSystemVersionByArchitecture = arm64 13.00; x86_64 11.00
+- NSHighResolutionCapable = true
+- NSHumanReadableCopyright = Private hobby project
+
+The complete seven-file content inventory and hashes are in bundle-inventory.txt. This is a private local artifact, not a Developer-ID-signed or notarized distribution build.

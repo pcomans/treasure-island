@@ -1,0 +1,127 @@
+{
+  "schema_version": "ti.batch-06-bounded-prototypes/2",
+  "review_status": "corrected_module_round_ready_for_independent_visual_review",
+  "runtime_attachment_policy": "none; all fields and complete modules are standalone controlled prototypes",
+  "correction_round": {
+    "brief": "discovery/facades/BATCH_06_PROTOTYPE_SET_01_ART_REVIEW.md",
+    "scope": "six modules only",
+    "accepted_field_policy": "all five accepted homogeneous field resources remain byte-identical",
+    "before": "each module owned a forward field-colored backing slab, creating a raised halo or siding phase reset",
+    "after": "the continuous host wall owns every nonopening field pixel; modules own only complete frame, mullion, glass, leaf and trim geometry",
+    "attempt_count": 1
+  },
+  "selection_basis": {
+    "rule": "exactly three non-reference-blocked targets with multi-side official coverage and the cleanest exact mapped outer-run groups",
+    "selected_in_order": ["w34313564", "w34313515", "w291196370"],
+    "evidence_summary": [
+      "w34313564: three official observed sides, 15/20 exact mapped runs and 228.991 m mapped",
+      "w34313515: two official observed long sides, two complete outer source-edge groups, 14/48 exact mapped runs and 165.100 m mapped",
+      "w291196370: two official observed sides, two exact outer source-edge groups, 9/36 exact mapped runs and 97.893 m mapped"
+    ],
+    "deferred_candidate": "w34313525 has two useful sides but only 7/30 mapped runs and both retained groups are partial source-edge slices",
+    "run_mapping": "discovery/facades/BATCH_06_RUN_MAPPING.json"
+  },
+  "shared_shader_contracts": [
+    {
+      "path": "res://game/resources/materials/world/batch_02_04_aperiodic_field.gdshader",
+      "sha256": "324ba33a7c78f4b05038168a479ebb8e875c56704236492a050cee8da8e5f798",
+      "role": "alias-resistant scale-free painted/mineral field",
+      "one_local_unit_m": 1.0
+    },
+    {
+      "path": "res://game/resources/materials/world/batch_04/batch_04_horizontal_siding_field.gdshader",
+      "sha256": "63f0be4ab7995f94653298cff1d5a271728209e05ee014c67b76165bc4f0dc8d",
+      "role": "alias-resistant horizontal siding field",
+      "one_local_unit_m": 1.0
+    }
+  ],
+  "prototype_geometry_contract": {
+    "factory_path": "res://game/scripts/world/facades/batch_06_prototype_set.gd",
+    "factory_sha256": "fecc656332599acefbf307ce6b5978e62c689ae146f713cf9d935ef66b81de60",
+    "render_only": true,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "architectural_pattern_tiles": 0,
+    "whole_wall_tiles": 0,
+    "module_edge_rule": "each module owns its complete bounded opening motif but no field geometry; the continuous host field owns all nonopening pixels and opposite-edge continuity is false",
+    "module_owned_field_meshes": 0,
+    "host_field_phase_resets": 0
+  },
+  "targets": [
+    {
+      "source_key": "w34313564",
+      "receiver_key": "building:w34313564:wall",
+      "reference_spec": "discovery/facades/W34313564_REFERENCE_SPEC.md",
+      "provenance": ["B06-W34313564-SV01:September_2025:SSE", "B06-W34313564-SV02:September_2025:NNW", "B06-W34313564-SV03:September_2025:ENE"],
+      "scene": {"path": "res://game/scenes/world/facades/batch_06/w34313564_prototype_set.tscn", "sha256": "ad00442bc2096cafa98f6009f8a896e12d8740f5d634ec9e0577a4d5255bf0dd"},
+      "mapped_groups": [
+        {"id": "B06-34313564-SSE-EAST-RETURN", "runs": [5, 6], "length_m": 38.278},
+        {"id": "B06-34313564-SSE-CENTRAL", "runs": [7, 8, 9], "length_m": 49.373},
+        {"id": "B06-34313564-ENE-END", "runs": [10, 11, 12, 13], "length_m": 43.442},
+        {"id": "B06-34313564-NNW-OUTER", "runs": [14, 15, 16, 17, 18, 19], "length_m": 97.898}
+      ],
+      "materials": [
+        {"id": "W34313564-MAT-TAN", "path": "res://game/resources/materials/world/w34313564/w34313564_tan_field.tres", "sha256": "2503ee946804bd16db9ca60ae05a0a1b9b6ca7c46422e0997ac2891c79a7ea76", "classification": "homogeneous_material_tile", "region": "SSE only", "proof_scale_m": 0.82, "uncertainty_m": [0.38, 1.35], "contains_facade_scale_motifs": false},
+        {"id": "W34313564-MAT-PALE", "path": "res://game/resources/materials/world/w34313564/w34313564_pale_field.tres", "sha256": "4523c071e50875db052e98ac39b9d9eff9cfb487aa37344064834ae82c0aae83", "classification": "homogeneous_material_tile", "region": "NNW and ENE only", "proof_scale_m": 0.88, "uncertainty_m": [0.4, 1.45], "contains_facade_scale_motifs": false},
+        {"id": "W34313564-MAT-PLINTH", "path": "res://game/resources/materials/world/w34313564/w34313564_plinth_field.tres", "sha256": "89a36e7fb036bf8bd3f5db0996076c477641e2c7e97d29537c2c464155b12d88", "classification": "homogeneous_material_tile", "region": "observed pale raised base only", "proof_scale_m": 0.52, "uncertainty_m": [0.24, 0.9], "contains_facade_scale_motifs": false}
+      ],
+      "modules": [
+        {"motif_id": "W34313564-HWIN", "kind": "complete_horizontal_multi_pane_window", "nominal_bounds_m": [4.9, 1.9], "scale_status": "reversible_unmeasured_proof_assumption", "placement_bounds": ["B06-34313564-SSE-CENTRAL:runs_7_9", "B06-34313564-ENE-END:runs_10_13", "B06-34313564-NNW-OUTER:runs_14_19"], "allowed_host_material_ids": ["W34313564-MAT-TAN", "W34313564-MAT-PALE"], "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels", "module_owns_field_geometry": false, "complete_motif": true, "opposite_edge_continuity_required": false},
+        {"motif_id": "W34313564-PDOOR", "kind": "complete_personnel_door", "nominal_bounds_m": [1.9, 3.0], "scale_status": "reversible_unmeasured_proof_assumption", "placement_bounds": ["B06-34313564-SSE-CENTRAL:runs_7_9", "B06-34313564-NNW-OUTER:runs_14_19"], "allowed_host_material_ids": ["W34313564-MAT-TAN", "W34313564-MAT-PALE"], "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels", "module_owns_field_geometry": false, "complete_motif": true, "opposite_edge_continuity_required": false}
+      ],
+      "unobserved_or_excluded": ["WSW", "pipe_cluster", "ramps", "stairs", "rails", "yard_objects", "exact_live_placement"]
+    },
+    {
+      "source_key": "w34313515",
+      "receiver_key": "building:w34313515:wall",
+      "reference_spec": "discovery/facades/W34313515_REFERENCE_SPEC.md",
+      "provenance": ["B06-W34313515-SV01:September_2025:WSW", "B06-W34313515-SV02:September_2025:NNW"],
+      "scene": {"path": "res://game/scenes/world/facades/batch_06/w34313515_prototype_set.tscn", "sha256": "4e205d9ff642c90d6e0b5b0ed285a370e2ae7dab267441ff304c13abcc975933"},
+      "mapped_groups": [
+        {"id": "B06-34313515-WSW-OUTER", "runs": [0, 1, 2, 3, 4, 5, 6, 7, 8], "length_m": 97.649},
+        {"id": "B06-34313515-NNW-OUTER", "runs": [43, 44, 45, 46, 47], "length_m": 67.451}
+      ],
+      "materials": [
+        {"id": "W34313515-MAT-PALE", "path": "res://game/resources/materials/world/w34313515/w34313515_pale_field.tres", "sha256": "0f97c958b35fe8c52e61db532c9caed95566330d9269e4b830e2c319ec47023e", "classification": "homogeneous_material_tile", "region": "observed WSW and NNW uninterrupted pale field only", "proof_scale_m": 1.1, "uncertainty_m": [0.55, 1.8], "contains_facade_scale_motifs": false}
+      ],
+      "modules": [
+        {"motif_id": "W34313515-BAY", "kind": "complete_three_tier_horizontal_window_bay", "nominal_bounds_m": [6.2, 10.2], "scale_status": "reversible_unmeasured_proof_assumption", "placement_bounds": ["B06-34313515-WSW-OUTER:runs_0_8", "B06-34313515-NNW-OUTER:runs_43_47"], "allowed_host_material_ids": ["W34313515-MAT-PALE"], "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels", "module_owns_field_geometry": false, "complete_motif": true, "opposite_edge_continuity_required": false}
+      ],
+      "preserved_module_blocker": "W34313515-VRECESS not built in this bounded first set because lower and roof-transition depth ownership remains occlusion-sensitive",
+      "unobserved_or_excluded": ["ENE", "SSE", "lower_field", "doors", "global_bay_cadence", "storey_claim", "exact_live_placement"]
+    },
+    {
+      "source_key": "w291196370",
+      "receiver_key": "building:w291196370:wall",
+      "reference_spec": "discovery/facades/W291196370_REFERENCE_SPEC.md",
+      "provenance": ["B06-W291196370-SV01:September_2025:SSE", "B06-W291196370-SV02:September_2025:ENE"],
+      "scene": {"path": "res://game/scenes/world/facades/batch_06/w291196370_prototype_set.tscn", "sha256": "20bf67d9bb94c7925380ac49133ad582dce50c708be8a6b6794003a1b03b93cc"},
+      "mapped_groups": [
+        {"id": "B06-291196370-SSE-PUBLIC", "runs": [8, 9, 10], "length_m": 43.304},
+        {"id": "B06-291196370-ENE-OUTER", "runs": [17, 18, 19, 20, 21, 22], "length_m": 54.589}
+      ],
+      "materials": [
+        {"id": "W291196370-SIDING", "path": "res://game/resources/materials/world/w291196370/w291196370_siding_field.tres", "sha256": "f5c359c34f6e4c61020a49391f0dad04f637730b955ae14195a87260588fce5f", "classification": "homogeneous_material_tile", "region": "observed SSE and ENE uninterrupted siding only", "proof_scale_m": 0.2, "uncertainty_m": [0.12, 0.3], "contains_facade_scale_motifs": false}
+      ],
+      "modules": [
+        {"motif_id": "W291196370-WINSTACK", "kind": "complete_narrow_vertical_window_stack", "nominal_bounds_m": [2.0, 4.5], "scale_status": "reversible_unmeasured_proof_assumption", "placement_bounds": ["B06-291196370-SSE-PUBLIC:runs_8_10"], "allowed_host_material_ids": ["W291196370-SIDING"], "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels", "module_owns_field_geometry": false, "complete_motif": true, "opposite_edge_continuity_required": false},
+        {"motif_id": "W291196370-ENTRY", "kind": "complete_dark_personnel_entry", "nominal_bounds_m": [2.1, 3.2], "scale_status": "reversible_unmeasured_proof_assumption", "placement_bounds": ["B06-291196370-SSE-PUBLIC:runs_8_10"], "allowed_host_material_ids": ["W291196370-SIDING"], "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels", "module_owns_field_geometry": false, "complete_motif": true, "opposite_edge_continuity_required": false},
+        {"motif_id": "W291196370-SERVICE", "kind": "complete_pale_service_opening", "nominal_bounds_m": [4.5, 4.4], "scale_status": "reversible_unmeasured_proof_assumption", "placement_bounds": ["B06-291196370-ENE-OUTER:runs_17_22"], "allowed_host_material_ids": ["W291196370-SIDING"], "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels", "module_owns_field_geometry": false, "complete_motif": true, "opposite_edge_continuity_required": false}
+      ],
+      "unobserved_or_excluded": ["NNW", "WSW", "tenant_sign", "stairs", "ramps", "rails", "yard_objects", "divider_cadence", "exact_live_placement"]
+    }
+  ],
+  "nonselected_and_blocked": {
+    "w34313525": "deferred from first set: partial source-edge mappings despite two-side coverage",
+    "w34313520": "deferred: one-side coverage",
+    "r133351": "deferred: relation ownership and inner/outer complexity",
+    "w1222514695": "reference-blocked; zero assets and zero mapped runs",
+    "w1222720021": "reference-blocked; zero assets and zero mapped runs"
+  },
+  "capture_contract": {
+    "renderer": "Forward+/Metal",
+    "views_per_target": ["close", "ordinary_gameplay_distance", "changed_light_oblique"],
+    "evidence_role": "controlled standalone prototype; not live receiver evidence",
+    "art_acceptance": "independent_review_required"
+  }
+}

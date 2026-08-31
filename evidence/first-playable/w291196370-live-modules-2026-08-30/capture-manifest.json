@@ -1,0 +1,771 @@
+{
+  "schema_version": "ti.w291196370-live-module-integration-evidence/1",
+  "review_status": "ready_for_independent_actual_world_art_review_not_self_accepted",
+  "evidence_role": "actual loaded-world visibility, exact attachment, close/gameplay/multi-side/light diversity and noninterference proof for exactly three independently detached-placement-reviewed stylized/reference-derived production-inference complete module-atlas exemplars; not surveyed scale/coordinates/count/cadence, completed elevation, cross-side transfer, whole-building acceptance, or executor art acceptance",
+  "source_key": "w291196370",
+  "receiver_key": "building:w291196370:wall",
+  "generator": "game/tests/w291196370_live_module_integration_capture.gd",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/w291196370_live_module_integration_capture.gd",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "protected_inputs_capture_time": {
+    "res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "res://generated/world/chunks/x_0__z_-3.json": "6dfa4b8f4b91f309b313428829e37cedd13e4067ff94f896a8e2e5ef05002a1d",
+    "res://game/resources/facades/w291196370_module_calibration.json": "b30a8f19091288cde4b8e891ec40287ab28a73776588f96ee86fc5565cfc25b8",
+    "res://game/tests/support/w291196370_module_calibration.gd": "ba621cffc5ee155e8b7c7338c3b5d444d1180dad6dbe11528219ada6de05dfdf",
+    "res://game/scripts/world/facades/w291196370_live_modules.gd": "e297d40ac9841485ee00a76b955f8ec454639b394c23759e8017e170aa84cbf8",
+    "res://game/scripts/world/facades/accepted_material_run_trials.gd": "4741097b177f02074c6b254e03f955dce46703dfef89b0a4cbc0a8b424f7ae6f",
+    "res://game/scripts/world/world_chunk_builder.gd": "84aaf060b6282e956bbae81e4880ac8e203e107760d627c48f7d9e5abb72183e",
+    "res://discovery/facades/W291196370_MODULE_CALIBRATION_ART_REVIEW.md": "967ab07d109096a743be01fb0bce959280967f5eab65c82ac0652eb5dcd3023b",
+    "res://discovery/FACADE_RECEIVER_INVENTORY.json": "c9ed0671a82e58da47394654175269a4f7adc9ae13cdb840532c29b0c9d70d85",
+    "res://discovery/FACADE_RECEIVER_INVENTORY.md": "71d8e2e77ad5de2192663aa3fe6d9b9d4b5873fd2981d9f0fda575a1ad12ffcc",
+    "res://evidence/first-playable/batch-06-w291196370-module-calibration-2026-08-30/capture-manifest.json": "5a92402a7a6742c5c67fa18e904c1af5055c9aaacf6e3001ebb20fb26e738df0",
+    "res://game/resources/materials/world/w291196370/w291196370_siding_exact_trial.tres": "715cf02b3c006c1a492ad61def9b2535fbaf04a3b1a41c69c5f092d705fab677",
+    "res://game/resources/materials/world/w291196370/w291196370_trim.tres": "0223453497849cddb947701aaf6c83044d3bfd1e610dbc2eea49ed79cb5b56ad",
+    "res://game/resources/materials/world/w291196370/w291196370_glass.tres": "bb2727b8bfe6e8228cfe938345fd38950055f13a2c3ee27a7fd0daafaa5ba6ff",
+    "res://game/resources/materials/world/w291196370/w291196370_entry.tres": "da23ac9280107f5cd3ca3f73bfe6e236149634a27213d5a8ac453781a4b7248f",
+    "res://game/resources/materials/world/w291196370/w291196370_service.tres": "ec7973f9b7849a7ae36c2027bed9fa3c019405cedc4c254f8a104391923981a2",
+    "res://game/scripts/world/facades/w34313564_live_modules.gd": "5d0d7816a87e13907d571aaceb2d4af3c01980fd26a043e33d87e9b07f2b71ee",
+    "res://game/scripts/world/facades/w34313515_live_modules.gd": "4420ad2d0a029f03da7a14fe84084d53edfa2323867a5c660c63f875c2a71ccb"
+  },
+  "generated_world_unchanged": {
+    "records": 729,
+    "meshes": 729,
+    "surfaces": 736,
+    "triangles": 48389,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "loaded_world_before_this_integration": {
+    "records": 729,
+    "meshes": 847,
+    "surfaces": 854,
+    "triangles": 49805,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "live_reported_world": {
+    "chunks": 38,
+    "records": 729,
+    "meshes": 871,
+    "surfaces": 878,
+    "triangles": 50093,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "exact_module_delta": {
+    "module_nodes": 3,
+    "motif_instances": {
+      "W291196370-WINSTACK": 1,
+      "W291196370-ENTRY": 1,
+      "W291196370-SERVICE": 1
+    },
+    "mesh_instances": 24,
+    "surfaces": 24,
+    "triangles": 288,
+    "field_meshes": 0,
+    "backing_meshes": 0,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0
+  },
+  "receiver": {
+    "ok": true,
+    "child_count": 3,
+    "generated_surface_count": 2,
+    "generated_surface_names": [
+      "placeholder_runs",
+      "trial_w291196370_siding_runs"
+    ],
+    "generated_wall_triangles": 72,
+    "collision_triangles": 72,
+    "module_nodes": 3,
+    "module_mesh_instances": 24,
+    "module_surfaces": 24,
+    "module_triangles": 288,
+    "collision_objects": 1,
+    "collision_shapes": 1,
+    "wall_collision_remains_authoritative": true
+  },
+  "accepted_field_metadata": {
+    "status": "accepted_exact_run_homogeneous_material_live_with_documented_limitation",
+    "source_key": "w291196370",
+    "receiver_key": "building:w291196370:wall",
+    "material_groups": [
+      {
+        "id": "W291196370-SIDING",
+        "surface_name": "trial_w291196370_siding_runs",
+        "run_groups": [
+          [
+            8,
+            9,
+            10
+          ],
+          [
+            17,
+            18,
+            19,
+            20,
+            21,
+            22
+          ]
+        ],
+        "accepted_length_m": 97.893,
+        "mapping_ids": [
+          "B06-291196370-SSE-PUBLIC",
+          "B06-291196370-ENE-OUTER"
+        ],
+        "prototype_material_path": "res://game/resources/materials/world/w291196370/w291196370_siding_field.tres",
+        "material_path": "res://game/resources/materials/world/w291196370/w291196370_siding_exact_trial.tres",
+        "limitation": "Cool gray-blue horizontal siding on observed SSE and ENE groups only; 0.20 m course height remains an unmeasured reversible assumption."
+      }
+    ],
+    "standalone_blocker": "Exactly three independently detached-placement-reviewed module exemplars are live pending independent actual-world art review. NNW, WSW, short service facets, every additional opening/divider, access geometry, and yard-obscured runs remain placeholder-only or blocked.",
+    "modules": 3,
+    "standalone_modules_live": 3,
+    "module_motif_types_live": 3,
+    "module_placement_role": "stylized/reference-derived production inference",
+    "module_position_uncertainty_m": 0.0,
+    "module_position_uncertainty_by_placement_m": {
+      "CAL-SSE-WINSTACK-01": 2.0,
+      "CAL-SSE-ENTRY-01": 3.0,
+      "CAL-ENE-SERVICE-01": 4.0
+    },
+    "module_cadence_inferred": false,
+    "module_total_opening_count_inferred": false
+  },
+  "live_module_metadata": {
+    "source_key": "w291196370",
+    "receiver_key": "building:w291196370:wall",
+    "runtime_attachment": true,
+    "actual_world_art_review_status": "pending_independent_actual_world_review",
+    "placement_role": "stylized/reference-derived production inference",
+    "position_uncertainty_by_placement_m": {
+      "CAL-SSE-WINSTACK-01": 2.0,
+      "CAL-SSE-ENTRY-01": 3.0,
+      "CAL-ENE-SERVICE-01": 4.0
+    },
+    "module_instances": 3,
+    "motif_instance_counts": {
+      "W291196370-WINSTACK": 1,
+      "W291196370-ENTRY": 1,
+      "W291196370-SERVICE": 1
+    },
+    "asset_classification": "module_atlas",
+    "complete_motif": true,
+    "module_not_seamless_tile": true,
+    "mesh_instances": 24,
+    "surfaces": 24,
+    "triangles": 288,
+    "field_meshes": 0,
+    "backing_meshes": 0,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "coordinates_surveyed": false,
+    "scale_surveyed": false,
+    "count_surveyed": false,
+    "cadence_inferred": false,
+    "total_opening_count_inferred": false,
+    "completed_sse_elevation": false,
+    "completed_ene_elevation": false,
+    "cross_side_transfer_accepted": false,
+    "whole_building_accepted": false,
+    "reviewed_registry_path": "res://game/resources/facades/w291196370_module_calibration.json",
+    "reviewed_registry_sha256": "b30a8f19091288cde4b8e891ec40287ab28a73776588f96ee86fc5565cfc25b8",
+    "reviewed_geometry_helper_path": "res://game/tests/support/w291196370_module_calibration.gd",
+    "reviewed_geometry_helper_sha256": "ba621cffc5ee155e8b7c7338c3b5d444d1180dad6dbe11528219ada6de05dfdf",
+    "independent_detached_art_review_path": "res://discovery/facades/W291196370_MODULE_CALIBRATION_ART_REVIEW.md",
+    "independent_detached_art_review_sha256": "967ab07d109096a743be01fb0bce959280967f5eab65c82ac0652eb5dcd3023b"
+  },
+  "placements": [
+    {
+      "placement_id": "CAL-SSE-WINSTACK-01",
+      "motif_id": "W291196370-WINSTACK",
+      "face": "SSE",
+      "region": "observed_SSE_public_elevation",
+      "mapping_id": "B06-291196370-SSE-PUBLIC",
+      "exact_ordered_runs": [
+        8,
+        9,
+        10
+      ],
+      "anchor_run": 8,
+      "run_ownership": [
+        8
+      ],
+      "center_chain_m": 5.5,
+      "center_chain_uncertainty_m": 2.0,
+      "host_material_id": "W291196370-SIDING",
+      "placement_role": "stylized/reference-derived production inference",
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "coordinates_surveyed": false,
+      "scale_surveyed": false,
+      "count_surveyed": false,
+      "cadence_inferred": false,
+      "runtime_attachment": true,
+      "complete_motif": true,
+      "module_not_seamless_tile": true,
+      "module_owns_field_geometry": false,
+      "mesh_instances": 7
+    },
+    {
+      "placement_id": "CAL-SSE-ENTRY-01",
+      "motif_id": "W291196370-ENTRY",
+      "face": "SSE",
+      "region": "observed_SSE_public_elevation",
+      "mapping_id": "B06-291196370-SSE-PUBLIC",
+      "exact_ordered_runs": [
+        8,
+        9,
+        10
+      ],
+      "anchor_run": 10,
+      "run_ownership": [
+        10
+      ],
+      "center_chain_m": 32.0,
+      "center_chain_uncertainty_m": 3.0,
+      "host_material_id": "W291196370-SIDING",
+      "placement_role": "stylized/reference-derived production inference",
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "coordinates_surveyed": false,
+      "scale_surveyed": false,
+      "count_surveyed": false,
+      "cadence_inferred": false,
+      "runtime_attachment": true,
+      "complete_motif": true,
+      "module_not_seamless_tile": true,
+      "module_owns_field_geometry": false,
+      "mesh_instances": 5
+    },
+    {
+      "placement_id": "CAL-ENE-SERVICE-01",
+      "motif_id": "W291196370-SERVICE",
+      "face": "ENE",
+      "region": "observed_ENE_outer_end",
+      "mapping_id": "B06-291196370-ENE-OUTER",
+      "exact_ordered_runs": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "anchor_run": 20,
+      "run_ownership": [
+        20
+      ],
+      "center_chain_m": 39.5,
+      "center_chain_uncertainty_m": 4.0,
+      "host_material_id": "W291196370-SIDING",
+      "placement_role": "stylized/reference-derived production inference",
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "coordinates_surveyed": false,
+      "scale_surveyed": false,
+      "count_surveyed": false,
+      "cadence_inferred": false,
+      "runtime_attachment": true,
+      "complete_motif": true,
+      "module_not_seamless_tile": true,
+      "module_owns_field_geometry": false,
+      "mesh_instances": 12
+    }
+  ],
+  "resolved_placements": [
+    {
+      "placement_id": "CAL-SSE-WINSTACK-01",
+      "motif_id": "W291196370-WINSTACK",
+      "face": "SSE",
+      "region": "observed_SSE_public_elevation",
+      "host_material_id": "W291196370-SIDING",
+      "mapping_id": "B06-291196370-SSE-PUBLIC",
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "run_ownership": [
+        8
+      ],
+      "anchor_run": 8,
+      "anchor_run_fraction": 0.483398830975013,
+      "center_chain_m": 5.5,
+      "center_chain_uncertainty_m": 2.0,
+      "wall_anchor_world_m": [
+        154.803512573242,
+        3.84351372718811,
+        -663.4912109375
+      ],
+      "module_origin_world_m": [
+        154.83154296875,
+        6.99351358413696,
+        -663.438171386719
+      ],
+      "tangent_world_xz": [
+        0.884093046188354,
+        -0.467310935258865
+      ],
+      "outward_normal_world_xz": [
+        0.467106282711029,
+        0.884201169013977
+      ],
+      "base_y_m": 3.84351376069052,
+      "top_y_m": 9.98700046539307
+    },
+    {
+      "placement_id": "CAL-SSE-ENTRY-01",
+      "motif_id": "W291196370-ENTRY",
+      "face": "SSE",
+      "region": "observed_SSE_public_elevation",
+      "host_material_id": "W291196370-SIDING",
+      "mapping_id": "B06-291196370-SSE-PUBLIC",
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "run_ownership": [
+        10
+      ],
+      "anchor_run": 10,
+      "anchor_run_fraction": 0.423165718447947,
+      "center_chain_m": 32.0,
+      "center_chain_uncertainty_m": 3.0,
+      "wall_anchor_world_m": [
+        178.23176574707,
+        3.63637924194336,
+        -675.875366210938
+      ],
+      "module_origin_world_m": [
+        178.259796142578,
+        3.63637924194336,
+        -675.822326660156
+      ],
+      "tangent_world_xz": [
+        0.884095132350922,
+        -0.467306882143021
+      ],
+      "outward_normal_world_xz": [
+        0.467106282711029,
+        0.884201169013977
+      ],
+      "base_y_m": 3.6363793165014,
+      "top_y_m": 9.98700046539307
+    },
+    {
+      "placement_id": "CAL-ENE-SERVICE-01",
+      "motif_id": "W291196370-SERVICE",
+      "face": "ENE",
+      "region": "observed_ENE_outer_end",
+      "host_material_id": "W291196370-SIDING",
+      "mapping_id": "B06-291196370-ENE-OUTER",
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "run_ownership": [
+        20
+      ],
+      "anchor_run": 20,
+      "anchor_run_fraction": 0.504438629401412,
+      "center_chain_m": 39.5,
+      "center_chain_uncertainty_m": 4.0,
+      "wall_anchor_world_m": [
+        167.308242797852,
+        3.85617184638977,
+        -726.340515136719
+      ],
+      "module_origin_world_m": [
+        167.361297607422,
+        3.85617184638977,
+        -726.368530273438
+      ],
+      "tangent_world_xz": [
+        -0.46748748421669,
+        -0.883999705314636
+      ],
+      "outward_normal_world_xz": [
+        0.884201169013977,
+        -0.467106282711029
+      ],
+      "base_y_m": 3.85617181696455,
+      "top_y_m": 9.98700046539307
+    }
+  ],
+  "position_truth_boundary": {
+    "fixed_runtime_centers": true,
+    "uncertainty_by_placement_m": {
+      "CAL-SSE-WINSTACK-01": 2.0,
+      "CAL-SSE-ENTRY-01": 3.0,
+      "CAL-ENE-SERVICE-01": 4.0
+    },
+    "uncertainty_role": "declared same-run stylized calibration envelope only; no runtime jitter or surveyed-coordinate claim",
+    "coordinates_surveyed": false,
+    "scale_surveyed": false,
+    "count_surveyed": false,
+    "cadence_inferred": false,
+    "total_opening_count_inferred": false,
+    "placement_role": "stylized/reference-derived production inference"
+  },
+  "protected_scope": {
+    "siding_runs_8_10_and_17_22_unchanged": true,
+    "continuous_global_course_phase_unchanged": true,
+    "placeholder_runs_0_7_11_16_23_35_unchanged": true,
+    "modules_elsewhere_live": false,
+    "cross_side_transfer": false,
+    "generated_files_modified": false,
+    "terrain_foundation_massing_modified": false,
+    "collision_navigation_spray_modified": false,
+    "completed_sse_elevation": false,
+    "completed_ene_elevation": false,
+    "whole_building_accepted": false
+  },
+  "captures": [
+    {
+      "id": "01-close-sse-winstack",
+      "view_kind": "close_actual_live_winstack_run8",
+      "file": "images/01-close-sse-winstack.png",
+      "sha256": "d73e60e1061687b812c69fd61eac0bd2dd5f5d5cb693df24a92545a75efd7723",
+      "bytes": 696060,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        159.262435913086,
+        6.34351396560669,
+        -653.338134765625
+      ],
+      "aim_target_m": [
+        154.83154296875,
+        6.99351358413696,
+        -663.438171386719
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-WINSTACK-01"
+      ],
+      "representative_runs": [
+        8
+      ],
+      "sample_unique_colors": 248,
+      "sample_luminance_range": 0.683778055012226
+    },
+    {
+      "id": "02-close-sse-entry",
+      "view_kind": "close_actual_live_entry_run10",
+      "file": "images/02-close-sse-entry.png",
+      "sha256": "2bb579305ecd625d7803c734b383c9479ffa86c1836a0b128f0657f5150869d6",
+      "bytes": 1231165,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        183.549728393555,
+        5.53637933731079,
+        -667.307373046875
+      ],
+      "aim_target_m": [
+        178.259796142578,
+        3.63637924194336,
+        -675.822326660156
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-ENTRY-01"
+      ],
+      "representative_runs": [
+        10
+      ],
+      "sample_unique_colors": 413,
+      "sample_luminance_range": 0.462390586733818
+    },
+    {
+      "id": "03-close-ene-service",
+      "view_kind": "close_actual_live_service_run20",
+      "file": "images/03-close-ene-service.png",
+      "sha256": "38c21872558795b95706c91ba766abcef2497de6b5587f220e07233593861a75",
+      "bytes": 1152885,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        178.647567749023,
+        5.95617198944092,
+        -731.765319824219
+      ],
+      "aim_target_m": [
+        167.361297607422,
+        3.85617184638977,
+        -726.368530273438
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-ENE-SERVICE-01"
+      ],
+      "representative_runs": [
+        20
+      ],
+      "sample_unique_colors": 361,
+      "sample_luminance_range": 0.514220390468836
+    },
+    {
+      "id": "04-ordinary-sse-public-context",
+      "view_kind": "ordinary_gameplay_actual_live_sse",
+      "file": "images/04-ordinary-sse-public-context.png",
+      "sha256": "c1a52feedb808d00963d923f7b7777546658f1bd127eefae2b6601ee2998b985",
+      "bytes": 876998,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        188.567276000977,
+        6.16415405273438,
+        -633.832092285156
+      ],
+      "aim_target_m": [
+        168.948806762695,
+        6.86415386199951,
+        -670.968566894531
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-WINSTACK-01",
+        "CAL-SSE-ENTRY-01"
+      ],
+      "representative_runs": [
+        8,
+        9,
+        10
+      ],
+      "sample_unique_colors": 323,
+      "sample_luminance_range": 0.683778055012226
+    },
+    {
+      "id": "05-ordinary-ene-outer-context",
+      "view_kind": "ordinary_gameplay_actual_live_ene",
+      "file": "images/05-ordinary-ene-outer-context.png",
+      "sha256": "89370c9786c27a9cd79bfa927c8be68e9da07b61fff77623ca092e36beb0685a",
+      "bytes": 821764,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        203.428283691406,
+        6.21426677703857,
+        -741.463684082031
+      ],
+      "aim_target_m": [
+        168.944442749023,
+        6.81426668167114,
+        -723.246520996094
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-ENE-SERVICE-01"
+      ],
+      "representative_runs": [
+        17,
+        18,
+        19,
+        20,
+        21,
+        22
+      ],
+      "sample_unique_colors": 286,
+      "sample_luminance_range": 0.612418837845325
+    },
+    {
+      "id": "06-sse-ene-multi-side-context",
+      "view_kind": "actual_live_supported_sse_ene_multi_side_context",
+      "file": "images/06-sse-ene-multi-side-context.png",
+      "sha256": "841a548464ec833909821e37f05648437738b8384cf1a32d33f72cd6a4bb9069",
+      "bytes": 892424,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        236.830291748047,
+        6.83637952804565,
+        -681.335083007812
+      ],
+      "aim_target_m": [
+        172.810546875,
+        6.74627542495728,
+        -701.095458984375
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-WINSTACK-01",
+        "CAL-SSE-ENTRY-01",
+        "CAL-ENE-SERVICE-01"
+      ],
+      "representative_runs": [
+        8,
+        10,
+        20
+      ],
+      "sample_unique_colors": 295,
+      "sample_luminance_range": 0.612418837845325
+    },
+    {
+      "id": "07-changed-light-oblique-sse",
+      "view_kind": "changed_light_actual_live_sse_pair",
+      "file": "images/07-changed-light-oblique-sse.png",
+      "sha256": "1fe5b45badba4960a8d1f46bb10bcba325b68799e7ceffce937e17e6f7bedd1c",
+      "bytes": 722147,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        190.034591674805,
+        6.66415405273438,
+        -648.181274414062
+      ],
+      "aim_target_m": [
+        168.948806762695,
+        6.86415386199951,
+        -670.968566894531
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -22.0,
+        118.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-WINSTACK-01",
+        "CAL-SSE-ENTRY-01"
+      ],
+      "representative_runs": [
+        8,
+        9,
+        10
+      ],
+      "sample_unique_colors": 228,
+      "sample_luminance_range": 0.629772566258907
+    },
+    {
+      "id": "08-changed-light-exact-ene-service-run20",
+      "view_kind": "changed_light_exact_actual_live_ene_service_run20",
+      "file": "images/08-changed-light-exact-ene-service-run20.png",
+      "sha256": "34c6050a68502d9dfa52316ead74af63de0a860df96fc51c0e00b1709467f42d",
+      "bytes": 1193683,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        180.939483642578,
+        6.55617189407349,
+        -739.196411132812
+      ],
+      "aim_target_m": [
+        167.361297607422,
+        3.85617184638977,
+        -726.368530273438
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -20.0,
+        142.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-ENE-SERVICE-01"
+      ],
+      "representative_runs": [
+        20
+      ],
+      "sample_unique_colors": 416,
+      "sample_luminance_range": 0.836683169007301
+    },
+    {
+      "id": "09-whole-island-load",
+      "view_kind": "whole_island_actual_live_three_motif_load_proof",
+      "file": "images/09-whole-island-load.png",
+      "sha256": "6c1a6baa81c150ff718cfc0737f92ebe94b1cc167022ae9bf3614af5f3536c10",
+      "bytes": 410036,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        180.0,
+        1550.0,
+        300.0
+      ],
+      "aim_target_m": [
+        -20.0,
+        0.0,
+        30.0
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "placement_ids": [],
+      "representative_runs": [],
+      "sample_unique_colors": 146,
+      "sample_luminance_range": 0.691317684948444
+    }
+  ],
+  "capture_count": 9,
+  "changed_light_exact_ene_service_run20_capture_id": "08-changed-light-exact-ene-service-run20",
+  "validity_inspection_only": "Inspect actual live target visibility, complete motifs, grounding, shallow separation, tangent/up/outward orientation, both supported sides, ordinary context, exact ENE SERVICE changed light, whole-island context, and absence of backing/collision changes only. Executor art acceptance is prohibited."
+}

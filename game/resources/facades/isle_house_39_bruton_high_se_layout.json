@@ -1,0 +1,79 @@
+{
+  "schema_version": "ti.isle-house-high-facade-layout/1",
+  "target": {
+    "parent_source_key": "w1249412094",
+    "source_key": "w1282547786",
+    "low_source_key": "w1282547787",
+    "logical_object_key": "building-composite:w1249412094",
+    "receiver_object_key": "building-composite:w1249412094:w1282547786:wall",
+    "low_receiver_object_key": "building-composite:w1249412094:w1282547787:wall",
+    "chunk_id": "x_-1__z_2",
+    "height_m": 67.0,
+    "base_y_m": 4.103,
+    "low_top_y_m": 19.103,
+    "top_y_m": 71.103,
+    "wall_segments": 13,
+    "wall_triangles": 26
+  },
+  "render_contract": {
+    "render_layer": 2,
+    "field_offset_m": 0.012,
+    "maximum_relief_m": 0.08,
+    "collision": "none",
+    "navigation": "none",
+    "spray_ray_owner": "unchanged_underlying_receiver"
+  },
+  "observed_high_se": {
+    "run_indices": [5, 6, 7],
+    "length_m": 42.278,
+    "start_xz_m": [-117.142, 571.175],
+    "end_xz_m": [-89.198, 539.449],
+    "normal_xz": [0.750, 0.661],
+    "module_policy": "observed_complete_modules",
+    "runs": [
+      {"index": 5, "start_xz_m": [-117.142, 571.175], "end_xz_m": [-96.000, 547.172]},
+      {"index": 6, "start_xz_m": [-96.000, 547.172], "end_xz_m": [-93.206, 544.000]},
+      {"index": 7, "start_xz_m": [-93.206, 544.000], "end_xz_m": [-89.198, 539.449]}
+    ],
+    "tower_window_columns_u_m": [2.4, 5.6, 8.8, 12.0, 15.2, 27.0, 30.2, 33.4, 36.6, 39.8],
+    "tower_window_rows_y_m": [21.0, 24.0, 27.0, 30.0, 33.0, 36.0, 39.0, 42.0, 45.0, 48.0, 51.0, 54.0, 57.0, 60.0, 63.0, 66.0, 69.0],
+    "tower_window": {"kind": "IH-TW", "width_m": 1.35, "height_m": 2.05},
+    "tower_accent_regions": [
+      {"u_m": 16.8, "width_m": 1.15, "bottom_y_m": 19.103, "top_y_m": 71.103},
+      {"u_m": 25.0, "width_m": 1.15, "bottom_y_m": 19.103, "top_y_m": 71.103}
+    ],
+    "podium_window_rows_y_m": [12.0, 16.2],
+    "podium_window_families": [
+      {"kind": "IH-PW-W", "columns_u_m": [3.2, 31.0], "width_m": 2.8, "height_m": 2.7},
+      {"kind": "IH-PW-M", "columns_u_m": [8.0, 13.0, 27.0, 36.0], "width_m": 2.0, "height_m": 2.7},
+      {"kind": "IH-PW-N", "columns_u_m": [17.0, 25.0, 40.2], "width_m": 1.1, "height_m": 2.7}
+    ],
+    "single_modules": [
+      {"kind": "IH-CW", "u_m": 21.1, "width_m": 3.2, "height_m": 21.8, "center_y_m": 15.4},
+      {"kind": "IH-GG", "u_m": 2.3, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3},
+      {"kind": "IH-GG", "u_m": 6.1, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3},
+      {"kind": "IH-GG", "u_m": 9.9, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3},
+      {"kind": "IH-ENTRY39", "u_m": 14.3, "width_m": 3.3, "height_m": 4.2, "center_y_m": 6.4},
+      {"kind": "IH-GG", "u_m": 27.5, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3},
+      {"kind": "IH-GG", "u_m": 31.3, "width_m": 3.2, "height_m": 4.0, "center_y_m": 6.3},
+      {"kind": "IH-LVR", "u_m": 29.4, "width_m": 8.3, "height_m": 0.65, "center_y_m": 8.65},
+      {"kind": "IH-CANOPY", "u_m": 37.3, "width_m": 7.2, "height_m": 0.45, "center_y_m": 8.65}
+    ]
+  },
+  "partial_high_ene": {
+    "run_indices": [8, 9],
+    "length_m": 14.442,
+    "start_xz_m": [-89.198, 539.449],
+    "end_xz_m": [-95.775, 526.591],
+    "normal_xz": [0.890, -0.455],
+    "module_policy": "material_only",
+    "runs": [
+      {"index": 8, "start_xz_m": [-89.198, 539.449], "end_xz_m": [-89.959, 537.959]},
+      {"index": 9, "start_xz_m": [-89.959, 537.959], "end_xz_m": [-95.775, 526.591]}
+    ]
+  },
+  "excluded_high_run_indices": [0, 1, 2, 3, 4, 10, 11, 12],
+  "shared_above_low_run_indices": [10, 11, 12],
+  "low_part_policy": "unchanged_no_facade_attachment"
+}
+

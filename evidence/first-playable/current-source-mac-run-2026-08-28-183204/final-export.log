@@ -1,0 +1,33 @@
+CURRENT-SOURCE MAC EXPORT — 2026-08-28
+
+$ .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --export-release "macOS Private" "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app"
+
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Condition "ret != noErr" is true. Returning: ""
+   at: get_system_ca_certificates (platform/macos/os_macos.mm:1035)
+
+[ DONE ] first_scan_filesystem
+[ DONE ] update_scripts_classes
+[ DONE ] reimport
+[   0% ] export | Started Exporting for macOS (3 steps)
+[   0% ] export | Creating app bundle
+[  25% ] export | Making PKG
+[   0% ] savepack | Started Packing (102 steps)
+[   1% ] savepack | Storing File: res://generated/world/manifest.json
+[   1% ] savepack | Storing File: res://generated/world/vegetation.json
+[   7% ] savepack | Storing File: res://game/resources/models/vegetation/kenney_nature_kit/grass.glb.import
+[  34% ] savepack | Storing File: res://game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb.import
+[  40% ] savepack | Storing File: res://game/resources/textures/tag/predefined_tag.svg.import
+[  67% ] savepack | Storing File: res://game/scripts/world/vegetation_builder.gdc
+[  75% ] savepack | Storing File: res://game/scripts/main.gdc
+[  96% ] savepack | Storing File: res://game/scenes/main.tscn.remap
+[ DONE ] savepack
+[  50% ] export | Code signing bundle
+[ DONE ] export
+
+exit=0
+wall_seconds=8.595146292
+
+Warning: the CA-certificate message is caused by the restricted process context and was non-fatal. The pre-export filesystem scan also generated/refreshed `.import` metadata for 45 newly visible NAIP review/staging images; raw source imagery and gameplay/generated data were not rewritten.
+

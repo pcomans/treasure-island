@@ -1,0 +1,27 @@
+bundle=build/mac/Treasure Island First Playable.app
+bundle_identifier=local.treasure-island.first-playable
+bundle_version=0.1.0
+logical_file_bytes=176939284
+logical_mib=168.74
+allocated_kib=172812
+physical_files=7
+
+executable_bytes=170963648
+executable_sha256=16a625b812040035ca7db93b7f9b30db56bd6744f4fa4871c54b49e61e753706
+pck_bytes=5902796
+pck_sha256=fabff3d456331acfdaffd6be1b15a26497c7e78bff32d349e0588edd3290f893
+bundle_sorted_file_hash_manifest_sha256=8a1795d95d5b5aa04902caa6e811e47954e94a8d0836b2cb09917fc674394c63
+
+architectures=x86_64 arm64
+host_architecture=arm64
+signature=adhoc
+signature_flags=adhoc,runtime
+team_identifier=not set
+arm64_code_directory_sha256=0586a480828e113624d8a14cc9d9a8296c1ceb92226552cedfe94b9615e82700
+codesign_whole_strict_exit=0
+codesign_arm64_strict_exit=0
+codesign_result=valid on disk; satisfies its Designated Requirement
+spctl_assess_exit=3
+spctl_result=rejected
+recursive_xattr_names=com.apple.provenance
+quarantine_present=false

@@ -1,0 +1,35 @@
+w34313525 detached exact-receiver calibration verification — 2026-08-30
+
+Native capture:
+PASS — Godot 4.7.2 stable, macOS display driver, Forward+, Metal, Apple M1 Pro
+PASS — 14 final 1440x900 PNGs inspected individually/contact-sheet
+PASS — every SSE/NNW field join, four complete motif close views, ordinary SSE/NNW, building/multi-side context, and changed light on both sides
+PASS — receiver children 2→2 and metadata {}→{}
+PASS — loaded-world topology before=after: 38 chunks / 886 meshes / 894 surfaces / 50,273 triangles / 466 static bodies / 466 shapes
+
+Headless contracts and regressions:
+PASS — headless_w34313525_exact_receiver_calibration_contract.gd
+PASS — headless_w34313525_exact_receiver_calibration_capture_evidence_contract.gd
+PASS — headless_w34313525_standalone_prototype_contract.gd
+PASS — headless_w34313525_standalone_capture_evidence_contract.gd
+PASS — headless_batch_06_exact_receiver_trial_contract.gd
+PASS — headless_batch_06_prototype_contract.gd
+PASS — headless_accepted_material_run_trials_contract.gd
+PASS — headless_w34313520_live_integration_contract.gd
+PASS — headless_w34313515_live_module_integration_contract.gd
+PASS — headless_w34313564_live_module_integration_contract.gd
+PASS — headless_w291196370_live_module_integration_contract.gd
+PASS — headless_ymca_wall_tangent_projection_contract.gd
+PASS — validate_generated_world.gd: 735 playable + 4 context rows across 38 chunks; content 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164
+PASS — headless_world_material_contract.gd
+PASS — headless_scene_parse.gd: 4 gameplay scenes
+PASS — full_runtime_integration.gd: main scene world_ready, player enabled, physics/interactions exercised, fail-closed partial-world behavior
+
+Expected nonfatal environment diagnostics:
+- sandboxed headless runs could not rotate user:// Godot log files
+- macOS system CA certificate query returned noErr warning
+Neither affected exit status or the PASS assertions.
+
+Generated-data diff: empty.
+Live integration/lifecycle promotion: not performed.
+Independent art verdict: pending.

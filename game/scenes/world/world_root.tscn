@@ -1,0 +1,75 @@
+[gd_scene load_steps=11 format=3]
+
+[ext_resource type="Script" path="res://game/scripts/world/world_loader.gd" id="1_loader"]
+[ext_resource type="Script" path="res://game/scripts/world/world_boundary.gd" id="2_boundary"]
+[ext_resource type="Script" path="res://game/scripts/debug/runtime_evidence.gd" id="3_evidence"]
+[ext_resource type="Texture2D" path="res://game/resources/textures/context/sf_skyline_owner_silhouette_final.png" id="4_skyline"]
+[ext_resource type="PackedScene" path="res://game/resources/models/context/baybridge-western-span.glb" id="5_western_bridge"]
+
+[sub_resource type="StandardMaterial3D" id="Material_water"]
+transparency = 1
+albedo_color = Color(0.17, 0.45, 0.61, 0.82)
+roughness = 0.72
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_water"]
+material = SubResource("Material_water")
+size = Vector2(6000, 6000)
+
+[sub_resource type="StandardMaterial3D" id="Material_skyline"]
+transparency = 1
+shading_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("4_skyline")
+billboard_mode = 1
+
+[sub_resource type="QuadMesh" id="QuadMesh_skyline"]
+material = SubResource("Material_skyline")
+size = Vector2(3900, 600)
+
+[node name="WorldRoot" type="Node3D"]
+script = ExtResource("1_loader")
+
+[node name="PlayableWorld" type="Node3D" parent="."]
+
+[node name="GroundAndAreas" type="Node3D" parent="PlayableWorld"]
+
+[node name="RoadsAndPaths" type="Node3D" parent="PlayableWorld"]
+
+[node name="Buildings" type="Node3D" parent="PlayableWorld"]
+
+[node name="Vegetation" type="Node3D" parent="PlayableWorld"]
+
+[node name="ContextWorld" type="Node3D" parent="."]
+
+[node name="Water" type="MeshInstance3D" parent="ContextWorld"]
+position = Vector3(0, -0.12, 0)
+layers = 1
+mesh = SubResource("PlaneMesh_water")
+cast_shadow = 0
+
+[node name="YerbaBuenaIsland" type="MeshInstance3D" parent="ContextWorld"]
+layers = 1
+
+[node name="BayBridge" type="Node3D" parent="ContextWorld"]
+
+[node name="WesternBayBridgeModel" parent="ContextWorld" instance=ExtResource("5_western_bridge")]
+position = Vector3(417.375, 0, 1643.827)
+rotation = Vector3(0, 2.437807, 0)
+scale = Vector3(1.09506, 0.55, 1.09506)
+metadata/source_asset = "Baybridge-western-span by cdr420"
+metadata/source_url = "https://sketchfab.com/3d-models/baybridge-western-span-1c2cd0daa908481aadad7073b91f1732"
+metadata/license = "CC BY 4.0"
+
+[node name="BoundaryAttachedVisuals" type="Node3D" parent="ContextWorld"]
+
+[node name="SanFranciscoBillboard" type="MeshInstance3D" parent="ContextWorld"]
+position = Vector3(-1875, 264.85, 4306.4)
+layers = 1
+mesh = SubResource("QuadMesh_skyline")
+cast_shadow = 0
+
+[node name="WorldBoundary" type="Node" parent="."]
+script = ExtResource("2_boundary")
+
+[node name="RuntimeEvidence" type="Node" parent="."]
+script = ExtResource("3_evidence")

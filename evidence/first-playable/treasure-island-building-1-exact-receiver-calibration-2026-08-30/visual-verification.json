@@ -1,0 +1,45 @@
+{
+  "schema_version": "ti.building-1-detached-calibration-visual-verification/1",
+  "result": "PASS_WITH_DOCUMENTED_VISUAL_LIMITATIONS_PENDING_INDEPENDENT_ART_REVIEW",
+  "inspector": "/root/w34313515_executor",
+  "inspection_date": "2026-08-30",
+  "image_count": 15,
+  "all_images_opened_and_inspected": true,
+  "all_images_dimensions": [1440, 900],
+  "renderer": "Godot 4.7.2 Forward+/Metal on Apple M1 Pro",
+  "self_acceptance": false,
+  "art_verdict": "withheld_for_independent_reviewer",
+  "recapture_after_successful_manifest_recovery": false,
+  "coverage": {
+    "field_join_visual_samples": [[21, 22], [30, 31], [38, 39], [45, 46], [50, 51]],
+    "machine_complete_join_count": 30,
+    "field_macro_span_m": 85.939934,
+    "central_complete_close_oblique_ordinary_changed_light": true,
+    "pavilion_complete_close_oblique_ordinary_changed_light": true,
+    "module_wall_contact_visible": true,
+    "multi_side_whole_building_context": true
+  },
+  "images": [
+    {"id": "01-field-join-21-22", "valid": true, "finding": "Join edge and warm-ivory field response are readable at close range; no visible gap is introduced by the detached overlay."},
+    {"id": "02-field-join-30-31", "valid": true, "finding": "Join faces are continuous but intentionally pale and low-contrast; machine phase proof carries the exact continuity claim."},
+    {"id": "03-field-join-38-39", "valid": true, "finding": "Sharp receiver turn, terrain contact and nearby complete CENTRAL study are readable; this is a join sample, not a placement claim."},
+    {"id": "04-field-join-45-46", "valid": true, "finding": "Join silhouette is visible, while surface variation is subdued by the neutral light angle."},
+    {"id": "05-field-join-50-51", "valid": true, "finding": "End-of-scope join and surrounding island context are visible; adjacent non-scope wall remains undecorated."},
+    {"id": "06-field-macro-85m", "valid": true, "finding": "The full public curve reads at ordinary distance and exposes material behavior across the 85.939934 m chain; it is not a complete elevation proof."},
+    {"id": "07-central-close", "valid": true, "finding": "Complete CENTRAL module, frame, mullions and opaque glazing are visible in direct contact with the representative wall."},
+    {"id": "08-central-oblique", "valid": true, "finding": "CENTRAL shallow relief and wall contact remain legible obliquely; no module-owned backing is visible."},
+    {"id": "09-pavilion-close", "valid": true, "finding": "Complete PAV module and all pilaster/frame/mullion elements are visible; its surrounding patterned field is receiver-owned."},
+    {"id": "10-pavilion-oblique", "valid": true, "finding": "PAV shallow relief, wall contact and multi-region relationship are readable without implying a real placement."},
+    {"id": "11-central-ordinary", "valid": true, "finding": "CENTRAL remains gameplay-readable on the public curve at ordinary distance."},
+    {"id": "12-pavilion-ordinary", "valid": true, "finding": "PAV remains readable in north-end building context and does not imply repetition or a completed elevation."},
+    {"id": "13-whole-building-context", "valid": true, "finding": "Both detached studies and the bounded curve are visible in multi-side context; overlay explicitly blocks whole-building acceptance."},
+    {"id": "14-central-changed-light", "valid": true, "finding": "CENTRAL silhouette and opaque glazing survive changed light; pale field response is deliberately subtle."},
+    {"id": "15-pavilion-changed-light", "valid": true, "finding": "PAV hierarchy, shallow relief and the darker warm-ivory response remain readable under changed light."}
+  ],
+  "documented_limitations": [
+    "Pale-field texture contrast is weak in join views 02 and 04; exact continuity is established by the 30-join machine proof, not by visual inference alone.",
+    "The detached modules are midpoint contact/scale studies within mechanically safe domains, not observed or surveyed real-world anchors.",
+    "PAV sits on a representative north-end run outside the MAT-IVORY 21..51 field scope; surrounding receiver appearance must not be attributed to module backing.",
+    "The whole-building frame is context only and cannot support completed-elevation or whole-building resemblance acceptance."
+  ]
+}

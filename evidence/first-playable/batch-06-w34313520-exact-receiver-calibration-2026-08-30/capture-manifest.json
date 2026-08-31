@@ -1,0 +1,1023 @@
+{
+  "schema_version": "ti.w34313520-exact-receiver-calibration-evidence/1",
+  "review_status": "ready_for_independent_detached_exact_receiver_art_review_not_self_accepted",
+  "evidence_role": "detached exact generated-receiver W34313520-MAT-PALE scale/phase proposal on SSE runs 6..10 plus exactly one complete W34313520-BAY exemplar at run 7 midpoint; not live attachment, lifecycle acceptance, surveyed dimensions/coordinates/count/cadence, completed elevation, or whole-building proof",
+  "source_key": "w34313520",
+  "receiver_key": "building:w34313520:wall",
+  "generator": "game/tests/w34313520_exact_receiver_calibration_capture.gd",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/w34313520_exact_receiver_calibration_capture.gd",
+  "registry_path": "res://game/resources/facades/w34313520_exact_receiver_calibration.json",
+  "registry_sha256": "28ea8b6e506d747299a920e4d456d8676031e18ec3b6d9e959cab31fa33de4f1",
+  "helper_path": "res://game/tests/support/w34313520_exact_receiver_calibration.gd",
+  "helper_sha256": "d747d9f9ca5798b09909efeeb930cdee119f1b3c310e95f9a2c426a3ee6ceea4",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "protected_inputs": {
+    "res://game/resources/facades/w34313520_exact_receiver_calibration.json": "28ea8b6e506d747299a920e4d456d8676031e18ec3b6d9e959cab31fa33de4f1",
+    "res://game/tests/support/w34313520_exact_receiver_calibration.gd": "d747d9f9ca5798b09909efeeb930cdee119f1b3c310e95f9a2c426a3ee6ceea4",
+    "res://generated/world/chunks/x_-1__z_0.json": "b935890b89202fa181248552176364668e506a7630f0024ec86f12a084743d86",
+    "res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "res://discovery/facades/W34313520_STANDALONE_PROTOTYPE_ART_REVIEW.md": "3d778413b2ef8b93c2fb321dd76301677ea2ea1dc532862457a452a6d972f35e",
+    "res://game/resources/facades/w34313520_standalone_prototypes.json": "ab80f0cd0424c22f7f24e5fc82211353e9aee7c95bea4903022681a48c5620a4",
+    "res://game/resources/materials/world/w34313520/w34313520_pale_field.tres": "7944151fd5ab8e977e7052d0cdb8df20132c82f967d8ebfefff83ede8fcf07a4",
+    "res://game/resources/materials/world/w34313520/w34313520_pale_exact_trial.tres": "89fbb97ed797275a86c394af7eab13f946cbf23f29cba58b89a2b2d467030ab2",
+    "res://game/resources/materials/world/w34313520/w34313520_bay_frame.tres": "445d3bec9d2ef3130aab27c816b27e384c689af68298b2db5ada37e0178f249b",
+    "res://game/resources/materials/world/w34313520/w34313520_bay_glass.tres": "40caf8b054b51ebf247a41286dec9efdbf925f09acf698a75285a4321a41bba6",
+    "res://game/scripts/world/facades/w34313520_standalone_prototypes.gd": "1244f590ed0854219f50a25a4c7931f4f094ce19fb65cefcf2d61b8ce4cd8566",
+    "res://game/scenes/world/facades/batch_06/w34313520_standalone_prototype_set.tscn": "4d0ee0e79ea6fd5a7e85b21cdf4a103d125818626b6c97875737cad44cc65785",
+    "res://game/scripts/world/world_chunk_builder.gd": "84aaf060b6282e956bbae81e4880ac8e203e107760d627c48f7d9e5abb72183e",
+    "res://game/scripts/world/facades/accepted_material_run_trials.gd": "4741097b177f02074c6b254e03f955dce46703dfef89b0a4cbc0a8b424f7ae6f",
+    "res://discovery/FACADE_RECEIVER_INVENTORY.json": "efe1c0f531488f1ad3f0e2b2337beea1e93162df35ba7124bb8d5ef37475b544",
+    "res://game/scripts/world/facades/w34313564_live_modules.gd": "5d0d7816a87e13907d571aaceb2d4af3c01980fd26a043e33d87e9b07f2b71ee",
+    "res://game/scripts/world/facades/w34313515_live_modules.gd": "4420ad2d0a029f03da7a14fe84084d53edfa2323867a5c660c63f875c2a71ccb",
+    "res://game/scripts/world/facades/w291196370_live_modules.gd": "e297d40ac9841485ee00a76b955f8ec454639b394c23759e8017e170aa84cbf8"
+  },
+  "generated_world_unchanged": {
+    "records": 729,
+    "meshes": 729,
+    "surfaces": 736,
+    "triangles": 48389,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "loaded_world_before_and_after_overlay": {
+    "before": {
+      "chunks": 38,
+      "meshes": 871,
+      "surfaces": 878,
+      "triangles": 50093,
+      "static_bodies": 466,
+      "shapes": 466
+    },
+    "after": {
+      "chunks": 38,
+      "meshes": 871,
+      "surfaces": 878,
+      "triangles": 50093,
+      "static_bodies": 466,
+      "shapes": 466
+    }
+  },
+  "receiver_child_count_before_and_after_overlay": [
+    2,
+    2
+  ],
+  "receiver_accepted_material_metadata_before_and_after": [
+    {},
+    {}
+  ],
+  "exact_field_scope": {
+    "material_id": "W34313520-MAT-PALE",
+    "asset_kind": "homogeneous_material_tile",
+    "face": "SSE",
+    "region": "observed_long_SSE_outer_elevation",
+    "mapping_id": "B06-34313520-SSE-OUTER",
+    "observation_ids": [
+      "B06-W34313520-SV01"
+    ],
+    "evidence_status": "reference_observation_plus_exact_generated_geometry_join",
+    "exact_ordered_runs": [
+      6.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0
+    ],
+    "physical_wall_length_m": 68.156,
+    "wall_height_m": {
+      "nominal": 11.0,
+      "minimum": 11.0,
+      "maximum": 11.137,
+      "reason": "run 6 begins at terrain-interpolated base 2.928 m and rises to the nominal 3.065 m base; runs 7..10 are 11.0 m high"
+    },
+    "runs": [
+      {
+        "run_index": 6.0,
+        "start_world_m": [
+          -182.088,
+          2.928,
+          126.754
+        ],
+        "end_world_m": [
+          -160.0,
+          3.065,
+          114.948
+        ],
+        "top_start_world_m": [
+          -182.088,
+          14.065,
+          126.754
+        ],
+        "top_end_world_m": [
+          -160.0,
+          14.065,
+          114.948
+        ],
+        "length_m": 25.045,
+        "height_start_m": 11.137,
+        "height_end_m": 11.0,
+        "bearing_deg": 61.9,
+        "tangent_world_xz": [
+          0.881942,
+          -0.471359
+        ],
+        "outward_normal_world_xz": [
+          0.471,
+          0.882
+        ]
+      },
+      {
+        "run_index": 7.0,
+        "start_world_m": [
+          -160.0,
+          3.065,
+          114.948
+        ],
+        "end_world_m": [
+          -131.964,
+          3.065,
+          99.964
+        ],
+        "top_start_world_m": [
+          -160.0,
+          14.065,
+          114.948
+        ],
+        "top_end_world_m": [
+          -131.964,
+          14.065,
+          99.964
+        ],
+        "length_m": 31.789,
+        "height_start_m": 11.0,
+        "height_end_m": 11.0,
+        "bearing_deg": 61.9,
+        "tangent_world_xz": [
+          0.881942,
+          -0.471359
+        ],
+        "outward_normal_world_xz": [
+          0.471,
+          0.882
+        ]
+      },
+      {
+        "run_index": 8.0,
+        "start_world_m": [
+          -131.964,
+          3.065,
+          99.964
+        ],
+        "end_world_m": [
+          -128.0,
+          3.065,
+          97.846
+        ],
+        "top_start_world_m": [
+          -131.964,
+          14.065,
+          99.964
+        ],
+        "top_end_world_m": [
+          -128.0,
+          14.065,
+          97.846
+        ],
+        "length_m": 4.494,
+        "height_start_m": 11.0,
+        "height_end_m": 11.0,
+        "bearing_deg": 61.9,
+        "tangent_world_xz": [
+          0.881942,
+          -0.471359
+        ],
+        "outward_normal_world_xz": [
+          0.471,
+          0.882
+        ]
+      },
+      {
+        "run_index": 9.0,
+        "start_world_m": [
+          -128.0,
+          3.065,
+          97.846
+        ],
+        "end_world_m": [
+          -124.547,
+          3.065,
+          96.0
+        ],
+        "top_start_world_m": [
+          -128.0,
+          14.065,
+          97.846
+        ],
+        "top_end_world_m": [
+          -124.547,
+          14.065,
+          96.0
+        ],
+        "length_m": 3.915,
+        "height_start_m": 11.0,
+        "height_end_m": 11.0,
+        "bearing_deg": 61.9,
+        "tangent_world_xz": [
+          0.881942,
+          -0.471359
+        ],
+        "outward_normal_world_xz": [
+          0.471,
+          0.882
+        ]
+      },
+      {
+        "run_index": 10.0,
+        "start_world_m": [
+          -124.547,
+          3.065,
+          96.0
+        ],
+        "end_world_m": [
+          -121.978,
+          3.065,
+          94.627
+        ],
+        "top_start_world_m": [
+          -124.547,
+          14.065,
+          96.0
+        ],
+        "top_end_world_m": [
+          -121.978,
+          14.065,
+          94.627
+        ],
+        "length_m": 2.913,
+        "height_start_m": 11.0,
+        "height_end_m": 11.0,
+        "bearing_deg": 61.9,
+        "tangent_world_xz": [
+          0.881942,
+          -0.471359
+        ],
+        "outward_normal_world_xz": [
+          0.471,
+          0.882
+        ]
+      }
+    ],
+    "standalone_material_path": "res://game/resources/materials/world/w34313520/w34313520_pale_field.tres",
+    "standalone_material_sha256": "7944151fd5ab8e977e7052d0cdb8df20132c82f967d8ebfefff83ede8fcf07a4",
+    "exact_trial_material_path": "res://game/resources/materials/world/w34313520/w34313520_pale_exact_trial.tres",
+    "exact_trial_material_sha256": "89fbb97ed797275a86c394af7eab13f946cbf23f29cba58b89a2b2d467030ab2",
+    "shader_path": "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_aperiodic_field.gdshader",
+    "shader_sha256": "d4a9dbb7c58443be93362699b0983b7377dab70698fd782b6710315c31be3e69",
+    "material_parameters": {
+      "base_color": [
+        0.76,
+        0.755,
+        0.715,
+        1.0
+      ],
+      "secondary_color": [
+        0.665,
+        0.675,
+        0.65,
+        1.0
+      ],
+      "roughness_value": 0.8,
+      "field_kind": 0.0,
+      "primary_scale_m": 0.95,
+      "secondary_scale_m": 0.29,
+      "relief_strength": 0.01,
+      "color_variation": 0.016,
+      "filter_start_cycles_per_pixel": 0.12,
+      "filter_end_cycles_per_pixel": 0.34
+    },
+    "meter_and_uv_contract": {
+      "one_godot_unit_m": 1.0,
+      "field_position_formula": "vec2(dot(VERTEX.xz, wall_tangent_from_NORMAL_xz), VERTEX.y)",
+      "horizontal_axis": "exact per-run wall tangent in world XZ, one shader coordinate unit per metre",
+      "vertical_axis": "world Y, one shader coordinate unit per metre",
+      "generated_uvs": "retained in detached mesh for exact geometry audit but intentionally ignored by the wall-tangent field shader",
+      "phase_rule": "shared world-position projection with identical collinear normals; no reset at run 6→7→8→9→10 junctions",
+      "finite_repeat_period": "none_by_design_aperiodic",
+      "physical_span_m": [
+        68.156,
+        11.137
+      ],
+      "macro_review_span_m": 56.834
+    },
+    "scale_status": "production_inference_preserved_from_accepted_standalone_not_surveyed",
+    "assignment_status": "detached_proposal_pending_independent_exact_receiver_art_review",
+    "runtime_attachment": false,
+    "surveyed_scale": false,
+    "surveyed_color": false,
+    "surveyed_roughness": false,
+    "completed_elevation": false,
+    "whole_building_accepted": false
+  },
+  "module_contract": {
+    "motif_id": "W34313520-BAY",
+    "asset_kind": "module_atlas",
+    "accepted_standalone_source": "res://game/scenes/world/facades/batch_06/w34313520_standalone_prototype_set.tscn",
+    "accepted_standalone_source_sha256": "4d0ee0e79ea6fd5a7e85b21cdf4a103d125818626b6c97875737cad44cc65785",
+    "accepted_factory_path": "res://game/scripts/world/facades/w34313520_standalone_prototypes.gd",
+    "accepted_factory_sha256": "1244f590ed0854219f50a25a4c7931f4f094ce19fb65cefcf2d61b8ce4cd8566",
+    "accepted_frame_material_sha256": "445d3bec9d2ef3130aab27c816b27e384c689af68298b2db5ada37e0178f249b",
+    "accepted_glass_material_sha256": "40caf8b054b51ebf247a41286dec9efdbf925f09acf698a75285a4321a41bba6",
+    "complete_motif": true,
+    "module_not_seamless_wall_tile": true,
+    "module_owns_field_geometry": false,
+    "host_field_contract": "continuous exact W34313520-MAT-PALE receiver field owns all nonopening pixels",
+    "tier_count": 3.0,
+    "internal_mullion_cadence": "unknown_not_encoded",
+    "mesh_instances": 15.0,
+    "surfaces": 15.0,
+    "triangles": 180.0,
+    "field_or_backing_meshes": 0.0,
+    "nominal_bounds_m": [
+      6.8,
+      9.4
+    ],
+    "uncertainty_bounds_m": {
+      "width": [
+        4.8,
+        9.5
+      ],
+      "height": [
+        7.6,
+        10.5
+      ]
+    },
+    "vertical_anchor": "exact interpolated run base plus center height",
+    "center_height_above_base_m": 5.35,
+    "mechanically_eligible_center_height_domain_m": [
+      5.25,
+      5.75
+    ],
+    "maximum_outward_depth_m": 0.31,
+    "scale_status": "production_inference_preserved_from_accepted_standalone_not_surveyed"
+  },
+  "placement_policy": {
+    "placement_count": 1.0,
+    "position_status": "stylized_reference_derived_production_inference_not_surveyed",
+    "coordinate_status": "production_inference_not_surveyed",
+    "count_status": "one_calibration_exemplar_not_surveyed_real_count",
+    "cadence_status": "unknown_not_surveyed_not_inferred",
+    "horizontal_anchor": "metres along exact run 7 from its ordered start",
+    "orientation": "local X follows exact run tangent, local Y is world up, local Z follows exact outward wall normal",
+    "selection_reason": "run 7 is the longest flat-base member of the reference-supported SSE chain; its midpoint and the complete maximum-width uncertainty envelope are mechanically contained by one run",
+    "field_overlay_offset_m": 0.018,
+    "bay_root_wall_offset_m": 0.06,
+    "runtime_attachment": false,
+    "collision_nodes": 0.0,
+    "navigation_nodes": 0.0,
+    "spray_nodes": 0.0
+  },
+  "placement": {
+    "placement_id": "CAL-SSE-BAY-01",
+    "motif_id": "W34313520-BAY",
+    "face": "SSE",
+    "region": "observed_long_SSE_outer_elevation",
+    "mapping_id": "B06-34313520-SSE-OUTER",
+    "observation_ids": [
+      "B06-W34313520-SV01"
+    ],
+    "exact_ordered_runs": [
+      7.0
+    ],
+    "anchor_run": 7.0,
+    "run_length_m": 31.789,
+    "run_height_m": 11.0,
+    "along_run_center_m": 15.894477,
+    "anchor_run_fraction": 0.5,
+    "mechanically_eligible_center_domain_m": [
+      4.75,
+      27.038953
+    ],
+    "center_uncertainty_half_span_m": 11.144477,
+    "expected_wall_anchor_world_m": [
+      -145.982,
+      3.065,
+      107.456
+    ],
+    "expected_module_origin_world_m": [
+      -145.95374,
+      8.415,
+      107.50892
+    ],
+    "tangent_world_xz": [
+      0.881942,
+      -0.471359
+    ],
+    "outward_normal_world_xz": [
+      0.471,
+      0.882
+    ],
+    "evidence_status": "production_inference_within_reference_observed_region",
+    "coordinate_status": "production_inference_not_surveyed",
+    "dimension_status": "production_inference_not_surveyed",
+    "count_status": "one_calibration_exemplar_not_surveyed_real_count",
+    "cadence_status": "unknown_not_surveyed_not_inferred",
+    "surveyed_dimensions": false,
+    "surveyed_coordinates": false,
+    "surveyed_count": false,
+    "surveyed_cadence": false,
+    "completed_elevation": false,
+    "whole_building_accepted": false,
+    "runtime_attachment": false
+  },
+  "resolved_field_scope": {
+    "exact_ordered_runs": [
+      6,
+      7,
+      8,
+      9,
+      10
+    ],
+    "physical_length_m": 68.156,
+    "run_records": [
+      {
+        "run_index": 6,
+        "length_m": 25.0451850891113,
+        "height_start_m": 11.1369996070862,
+        "height_end_m": 10.9999995231628,
+        "start_world_m": [
+          -182.087997436523,
+          2.92799997329712,
+          126.753997802734
+        ],
+        "end_world_m": [
+          -160.0,
+          3.06500005722046,
+          114.947998046875
+        ],
+        "top_start_world_m": [
+          -182.087997436523,
+          14.0649995803833,
+          126.753997802734
+        ],
+        "top_end_world_m": [
+          -160.0,
+          14.0649995803833,
+          114.947998046875
+        ],
+        "tangent_world_xz": [
+          0.881925880908966,
+          -0.471388012170792
+        ],
+        "outward_normal_world_xz": [
+          0.471055328845978,
+          0.882103681564331
+        ],
+        "field_phase_start_m": -220.328643798828,
+        "field_phase_end_m": -195.283462524414,
+        "previous_junction_phase_delta_m": 0.0
+      },
+      {
+        "run_index": 7,
+        "length_m": 31.7889499664307,
+        "height_start_m": 10.9999995231628,
+        "height_end_m": 10.9999995231628,
+        "start_world_m": [
+          -160.0,
+          3.06500005722046,
+          114.947998046875
+        ],
+        "end_world_m": [
+          -131.964004516602,
+          3.06500005722046,
+          99.963996887207
+        ],
+        "top_start_world_m": [
+          -160.0,
+          14.0649995803833,
+          114.947998046875
+        ],
+        "top_end_world_m": [
+          -131.964004516602,
+          14.0649995803833,
+          99.963996887207
+        ],
+        "tangent_world_xz": [
+          0.881941556930542,
+          -0.471358805894852
+        ],
+        "outward_normal_world_xz": [
+          0.471055328845978,
+          0.882103681564331
+        ],
+        "field_phase_start_m": -195.283462524414,
+        "field_phase_end_m": -163.494506835938,
+        "previous_junction_phase_delta_m": 0.0
+      },
+      {
+        "run_index": 8,
+        "length_m": 4.49435663223267,
+        "height_start_m": 10.9999995231628,
+        "height_end_m": 10.9999995231628,
+        "start_world_m": [
+          -131.964004516602,
+          3.06500005722046,
+          99.963996887207
+        ],
+        "end_world_m": [
+          -128.0,
+          3.06500005722046,
+          97.8460006713867
+        ],
+        "top_start_world_m": [
+          -131.964004516602,
+          14.0649995803833,
+          99.963996887207
+        ],
+        "top_end_world_m": [
+          -128.0,
+          14.0649995803833,
+          97.8460006713867
+        ],
+        "tangent_world_xz": [
+          0.881995975971222,
+          -0.471256822347641
+        ],
+        "outward_normal_world_xz": [
+          0.471055328845978,
+          0.882103681564331
+        ],
+        "field_phase_start_m": -163.494506835938,
+        "field_phase_end_m": -159.000152587891,
+        "previous_junction_phase_delta_m": 0.0
+      },
+      {
+        "run_index": 9,
+        "length_m": 3.91547536849976,
+        "height_start_m": 10.9999995231628,
+        "height_end_m": 10.9999995231628,
+        "start_world_m": [
+          -128.0,
+          3.06500005722046,
+          97.8460006713867
+        ],
+        "end_world_m": [
+          -124.546997070312,
+          3.06500005722046,
+          96.0
+        ],
+        "top_start_world_m": [
+          -128.0,
+          14.0649995803833,
+          97.8460006713867
+        ],
+        "top_end_world_m": [
+          -124.546997070312,
+          14.0649995803833,
+          96.0
+        ],
+        "tangent_world_xz": [
+          0.881886005401611,
+          -0.471462726593018
+        ],
+        "outward_normal_world_xz": [
+          0.471055328845978,
+          0.882103681564331
+        ],
+        "field_phase_start_m": -159.000152587891,
+        "field_phase_end_m": -155.084686279297,
+        "previous_junction_phase_delta_m": 0.0
+      },
+      {
+        "run_index": 10,
+        "length_m": 2.91288423538208,
+        "height_start_m": 10.9999995231628,
+        "height_end_m": 10.9999995231628,
+        "start_world_m": [
+          -124.546997070312,
+          3.06500005722046,
+          96.0
+        ],
+        "end_world_m": [
+          -121.977996826172,
+          3.06500005722046,
+          94.6269989013672
+        ],
+        "top_start_world_m": [
+          -124.546997070312,
+          14.0649995803833,
+          96.0
+        ],
+        "top_end_world_m": [
+          -121.977996826172,
+          14.0649995803833,
+          94.6269989013672
+        ],
+        "tangent_world_xz": [
+          0.881943821907043,
+          -0.471354514360428
+        ],
+        "outward_normal_world_xz": [
+          0.471055328845978,
+          0.882103681564331
+        ],
+        "field_phase_start_m": -155.084686279297,
+        "field_phase_end_m": -152.171783447266,
+        "previous_junction_phase_delta_m": 0.0
+      }
+    ],
+    "maximum_junction_phase_delta_m": 0.0,
+    "vertices": 20,
+    "indices": 30,
+    "triangles": 10,
+    "surfaces": 1,
+    "overlay_offset_m": 0.018
+  },
+  "resolved_placement": {
+    "placement_id": "CAL-SSE-BAY-01",
+    "motif_id": "W34313520-BAY",
+    "face": "SSE",
+    "region": "observed_long_SSE_outer_elevation",
+    "mapping_id": "B06-34313520-SSE-OUTER",
+    "exact_ordered_runs": [
+      7
+    ],
+    "anchor_run": 7,
+    "along_run_center_m": 15.894477,
+    "anchor_run_fraction": 0.500000063442947,
+    "mechanically_eligible_center_domain_m": [
+      4.75,
+      27.038953
+    ],
+    "center_uncertainty_half_span_m": 11.144477,
+    "wall_anchor_world_m": [
+      -145.981994628906,
+      3.06500005722046,
+      107.455993652344
+    ],
+    "module_origin_world_m": [
+      -145.953735351562,
+      8.41499996185303,
+      107.508918762207
+    ],
+    "tangent_world_xz": [
+      0.881941556930542,
+      -0.471358805894852
+    ],
+    "outward_normal_world_xz": [
+      0.471055328845978,
+      0.882103681564331
+    ],
+    "base_y_m": 3.06500005722046,
+    "top_y_m": 14.0649995803833,
+    "center_height_above_base_m": 5.35,
+    "evidence_status": "production_inference_within_reference_observed_region",
+    "coordinate_status": "production_inference_not_surveyed",
+    "count_status": "one_calibration_exemplar_not_surveyed_real_count",
+    "cadence_status": "unknown_not_surveyed_not_inferred"
+  },
+  "detached_overlay": {
+    "parent": "capture_or_test_harness_only_never_receiver",
+    "field_meshes": 1.0,
+    "field_surfaces": 1.0,
+    "field_triangles": 10.0,
+    "bay_instances": 1.0,
+    "bay_meshes": 15.0,
+    "bay_surfaces": 15.0,
+    "bay_triangles": 180.0,
+    "total_meshes": 16.0,
+    "total_surfaces": 16.0,
+    "total_triangles": 190.0,
+    "bay_field_or_backing_meshes": 0.0,
+    "collision_nodes": 0.0,
+    "navigation_nodes": 0.0,
+    "spray_nodes": 0.0,
+    "runtime_attachment": false
+  },
+  "excluded_regions": {
+    "unmapped_runs": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      11.0,
+      12.0,
+      13.0,
+      14.0,
+      15.0,
+      16.0,
+      17.0,
+      18.0,
+      19.0,
+      22.0,
+      23.0,
+      24.0,
+      25.0,
+      26.0,
+      27.0,
+      28.0,
+      29.0,
+      30.0,
+      31.0,
+      32.0,
+      33.0
+    ],
+    "protected_runs": [
+      20.0,
+      21.0
+    ],
+    "faces": [
+      "ENE",
+      "WSW",
+      "NNW",
+      "short_or_reentrant_facets"
+    ],
+    "features": [
+      "inset_glazed_or_entry_wing",
+      "lower_or_recess_field",
+      "occluded_ground",
+      "exact_endpoints",
+      "doors",
+      "entries",
+      "roof_or_massing"
+    ]
+  },
+  "preserved_false_claims": {
+    "surveyed_dimensions": false,
+    "surveyed_coordinates": false,
+    "surveyed_material_scale": false,
+    "surveyed_real_bay_count": false,
+    "surveyed_or_inferred_cadence": false,
+    "architectural_pattern_tile": false,
+    "completed_SSE_elevation": false,
+    "cross_side_transfer": false,
+    "whole_building_accepted": false,
+    "live_attachment": false,
+    "lifecycle_promotion": false
+  },
+  "captures": [
+    {
+      "id": "01-close-field-run06-07-junction",
+      "view_kind": "close_exact_field_continuity_run_6_to_7",
+      "file": "images/01-close-field-run06-07-junction.png",
+      "sha256": "3fa8d7f09f4348428bd7dd3d49d63e843d92db59b9eea29a7253493b3e35d865",
+      "bytes": 151914,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -153.405227661133,
+        8.06500053405762,
+        127.29744720459
+      ],
+      "aim_target_m": [
+        -160.0,
+        8.5,
+        114.947998046875
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [],
+      "representative_runs": [
+        6,
+        7
+      ],
+      "sample_unique_colors": 34,
+      "sample_luminance_range": 0.731886275112629
+    },
+    {
+      "id": "02-macro-field-runs06-07",
+      "view_kind": "macro_56_834m_exact_field_span",
+      "file": "images/02-macro-field-runs06-07.png",
+      "sha256": "e4221f9da4099d7c29cd75a152c5d55e41cefba9ae7a1e21461d09b5465b6168",
+      "bytes": 132970,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -119.489517211914,
+        6.2649998664856,
+        159.060928344727
+      ],
+      "aim_target_m": [
+        -146.810729980469,
+        8.56500053405762,
+        107.898918151855
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-BAY-01"
+      ],
+      "representative_runs": [
+        6,
+        7
+      ],
+      "sample_unique_colors": 42,
+      "sample_luminance_range": 0.799669809639454
+    },
+    {
+      "id": "03-close-complete-bay",
+      "view_kind": "close_complete_bay_run_7_midpoint",
+      "file": "images/03-close-complete-bay.png",
+      "sha256": "a0365cc07ace0028c7f7d26401f09efb58349e78d7d45b971c9c1042c676b0eb",
+      "bytes": 248089,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -138.887908935547,
+        7.56500005722046,
+        120.74047088623
+      ],
+      "aim_target_m": [
+        -145.953735351562,
+        8.41499996185303,
+        107.508918762207
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-BAY-01"
+      ],
+      "representative_runs": [
+        7
+      ],
+      "sample_unique_colors": 87,
+      "sample_luminance_range": 0.746455676853657
+    },
+    {
+      "id": "04-oblique-complete-bay",
+      "view_kind": "oblique_complete_bay_depth_and_zero_backing",
+      "file": "images/04-oblique-complete-bay.png",
+      "sha256": "d5dfb81430dc6783983d65b40864e27113c25c77e9984d34ff5f12d0ea9b912a",
+      "bytes": 310882,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -126.300048828125,
+        8.06500053405762,
+        123.083717346191
+      ],
+      "aim_target_m": [
+        -145.953735351562,
+        8.41499996185303,
+        107.508918762207
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-BAY-01"
+      ],
+      "representative_runs": [
+        7
+      ],
+      "sample_unique_colors": 100,
+      "sample_luminance_range": 0.747289426624775
+    },
+    {
+      "id": "05-ordinary-sse-exact-scope",
+      "view_kind": "ordinary_gameplay_height_all_exact_SSE_runs",
+      "file": "images/05-ordinary-sse-exact-scope.png",
+      "sha256": "85b6b86e0229d01b0e4eaf76baf0df8bc2ded981156281ac49c3b824ef3c5ffa",
+      "bytes": 129132,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -126.194328308105,
+        5.56500005722046,
+        159.242767333984
+      ],
+      "aim_target_m": [
+        -152.10237121582,
+        8.56500053405762,
+        110.727066040039
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-BAY-01"
+      ],
+      "representative_runs": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "sample_unique_colors": 37,
+      "sample_luminance_range": 0.80247450619936
+    },
+    {
+      "id": "06-building-context",
+      "view_kind": "ordinary_building_context_sparse_single_exemplar",
+      "file": "images/06-building-context.png",
+      "sha256": "fe7cd90c97bcc1f79468d66a50d5e1ec9b8d956e9eacdeb4bd9a060a8b5b2481",
+      "bytes": 107601,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -125.582336425781,
+        8.56500053405762,
+        198.600860595703
+      ],
+      "aim_target_m": [
+        -152.10237121582,
+        8.56500053405762,
+        110.727066040039
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-BAY-01"
+      ],
+      "representative_runs": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "sample_unique_colors": 50,
+      "sample_luminance_range": 0.794631369411945
+    },
+    {
+      "id": "07-changed-light-field-and-bay",
+      "view_kind": "changed_light_oblique_exact_field_and_complete_bay",
+      "file": "images/07-changed-light-field-and-bay.png",
+      "sha256": "194a4fd0e5ea828c7443a68c28fd4f30fa218243fc33a15db49af6247d1a62d3",
+      "bytes": 194312,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -139.819717407227,
+        8.36499977111816,
+        135.978698730469
+      ],
+      "aim_target_m": [
+        -145.953735351562,
+        8.41499996185303,
+        107.508918762207
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -20.0,
+        118.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-BAY-01"
+      ],
+      "representative_runs": [
+        7
+      ],
+      "sample_unique_colors": 57,
+      "sample_luminance_range": 0.615659661591053
+    }
+  ],
+  "capture_count": 7,
+  "validity_inspection_only": "Inspect exact run field continuity/scale/phase, one complete BAY contact and shallow depth, ordinary SSE/building context, changed light, sparse exemplar truth, and receiver isolation only. Executor art acceptance is prohibited."
+}

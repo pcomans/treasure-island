@@ -1,0 +1,414 @@
+{
+  "asset_kinds": {
+    "architectural_pattern_tile": [],
+    "homogeneous_material_tile": [
+      "B1-MAT-IVORY"
+    ],
+    "module_atlas": [
+      "B1-WING-W",
+      "B1-CENTRAL-W",
+      "B1-PAV-W",
+      "B1-BASE-O",
+      "B1-DOOR-BLUE",
+      "B1-BAND"
+    ],
+    "unique_elevation": []
+  },
+  "blocked_claims": [
+    "exact ordered run or along-run placement",
+    "surveyed dimensions, scale, color, count, cadence or sequence",
+    "main entrance or canopy",
+    "pavilion emblems",
+    "east/rear, inner ring or separate tower",
+    "receiver massing or silhouette correction",
+    "completed elevation or whole-building resemblance"
+  ],
+  "canonical_identity": "Treasure Island Administration Building 1 / Treasure Island Museum",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/building_1_standalone_prototype_capture.gd",
+  "captures": [
+    {
+      "bytes": 77683,
+      "camera_position_m": [
+        16.0,
+        6.19999980926514,
+        6.19999980926514
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-warm-ivory-neutral-close.png",
+      "id": "01-warm-ivory-neutral-close",
+      "label": "B1-MAT-IVORY",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.763116,
+        "minimum": 0.026067,
+        "range": 0.921852,
+        "sample_count": 4000
+      },
+      "scope_note": "1.10 m primary / 0.32 m secondary production scales · motif-free field, no baked light or unique stain",
+      "sha256": "7125865fadb5fbf7da5e465a631c6205bef931dc4876cbccbe0190d0522c84cd",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "neutral_close_material"
+    },
+    {
+      "bytes": 78726,
+      "camera_position_m": [
+        0.0,
+        11.0,
+        47.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-warm-ivory-macro-40m.png",
+      "id": "02-warm-ivory-macro-40m",
+      "label": "B1-MAT-IVORY",
+      "sampled_luminance": {
+        "maximum": 0.972486,
+        "mean": 0.320077,
+        "minimum": 0.026067,
+        "range": 0.94642,
+        "sample_count": 4000
+      },
+      "scope_note": "40 m continuous aperiodic field · no finite facade motif period and no generated-run phase claim",
+      "sha256": "657056dc0887cc93a84c7c8edbfab9de055c3454423075060b672d9832f9b907",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "macro_repeat_and_alias_control"
+    },
+    {
+      "bytes": 84522,
+      "camera_position_m": [
+        -15.0,
+        6.80000019073486,
+        5.69999980926514
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-wing-window-close.png",
+      "id": "03-wing-window-close",
+      "label": "B1-WING-W",
+      "sampled_luminance": {
+        "maximum": 0.972486,
+        "mean": 0.78091,
+        "minimum": 0.13305,
+        "range": 0.839436,
+        "sample_count": 4000
+      },
+      "scope_note": "complete wing opening study: opaque face, full frame and mullions · host field owns all surrounding pixels",
+      "sha256": "7a0dd27e93fbe3fbfe0b6944bb86c33877d06386cccafb2bc5693beb9b7e0ee9",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "complete_module_neutral_close"
+    },
+    {
+      "bytes": 101008,
+      "camera_position_m": [
+        -10.3999996185303,
+        6.30000019073486,
+        8.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "04-central-window-close.png",
+      "id": "04-central-window-close",
+      "label": "B1-CENTRAL-W",
+      "sampled_luminance": {
+        "maximum": 0.972486,
+        "mean": 0.711645,
+        "minimum": 0.037281,
+        "range": 0.935205,
+        "sample_count": 4000
+      },
+      "scope_note": "complete tall narrow multipane study · distinct family, not stretched from wing window",
+      "sha256": "1b874f14cc3d091cb4a8c92d546cc92f2401956e0412f5d24919423b9854719a",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "complete_module_neutral_close"
+    },
+    {
+      "bytes": 110569,
+      "camera_position_m": [
+        -3.20000004768372,
+        5.09999990463257,
+        17.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "05-pavilion-window-close.png",
+      "id": "05-pavilion-window-close",
+      "label": "B1-PAV-W",
+      "sampled_luminance": {
+        "maximum": 0.972486,
+        "mean": 0.578302,
+        "minimum": 0.026067,
+        "range": 0.94642,
+        "sample_count": 4000
+      },
+      "scope_note": "complete full-height multipane group and shallow pilaster strips · no silhouette ownership",
+      "sha256": "b949aa179ad330456e8b4ffa80f2f097952983af3fc1ef5a27a231d86a5125ec",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "complete_module_neutral_close"
+    },
+    {
+      "bytes": 80473,
+      "camera_position_m": [
+        4.69999980926514,
+        1.35000002384186,
+        4.19999980926514
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "06-base-opening-close.png",
+      "id": "06-base-opening-close",
+      "label": "B1-BASE-O",
+      "sampled_luminance": {
+        "maximum": 0.972486,
+        "mean": 0.714433,
+        "minimum": 0.136972,
+        "range": 0.835514,
+        "sample_count": 4000
+      },
+      "scope_note": "complete base opening · opaque proxy does not disambiguate window versus vent",
+      "sha256": "7e1316cb32ffa8af9918eea32bf8d14f17839251419c6a38b97e720e8bdbc623",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "complete_module_neutral_close"
+    },
+    {
+      "bytes": 100307,
+      "camera_position_m": [
+        8.5,
+        1.54999995231628,
+        5.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "07-blue-door-close.png",
+      "id": "07-blue-door-close",
+      "label": "B1-DOOR-BLUE",
+      "sampled_luminance": {
+        "maximum": 0.972486,
+        "mean": 0.659074,
+        "minimum": 0.136972,
+        "range": 0.835514,
+        "sample_count": 4000
+      },
+      "scope_note": "complete opaque blue utility/personnel leaf and full frame · no main-entrance claim",
+      "sha256": "98df9d98b0fe8f84c7ab67ab84801da68015014e4011a64b56dd997eeba4217a",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "complete_module_neutral_close"
+    },
+    {
+      "bytes": 89730,
+      "camera_position_m": [
+        16.7999992370605,
+        6.40000009536743,
+        5.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "08-band-oblique-close.png",
+      "id": "08-band-oblique-close",
+      "label": "B1-BAND",
+      "sampled_luminance": {
+        "maximum": 0.973603,
+        "mean": 0.789136,
+        "minimum": 0.136972,
+        "range": 0.836631,
+        "sample_count": 4000
+      },
+      "scope_note": "complete shallow muted-rose base-band exemplar with finished terminals · not a seamless wall tile",
+      "sha256": "cbe6fa4dc797f1293faf733d04e237e35bd7bcf5c93331bbabcd307d071883bf",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "complete_module_neutral_oblique"
+    },
+    {
+      "bytes": 83564,
+      "camera_position_m": [
+        -23.0,
+        12.5,
+        36.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "09-all-modules-oblique.png",
+      "id": "09-all-modules-oblique",
+      "label": "SIX COMPLETE MODULE FAMILIES",
+      "sampled_luminance": {
+        "maximum": 0.969398,
+        "mean": 0.333205,
+        "minimum": 0.026067,
+        "range": 0.943332,
+        "sample_count": 4000
+      },
+      "scope_note": "illustrative standalone lineup only · six complete motifs, 43 module meshes, zero field/backing ownership",
+      "sha256": "6246ec0e5fa0ad55e7ebda7f7ee2f459b4ee518933a71e460f71b60aa4c2996f",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "aggregate_oblique_depth_and_zero_backing"
+    },
+    {
+      "bytes": 77778,
+      "camera_position_m": [
+        0.0,
+        11.0,
+        54.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "10-ordinary-distance-aggregate.png",
+      "id": "10-ordinary-distance-aggregate",
+      "label": "FIELD + SIX COMPLETE MODULES",
+      "sampled_luminance": {
+        "maximum": 0.972486,
+        "mean": 0.299672,
+        "minimum": 0.026067,
+        "range": 0.94642,
+        "sample_count": 4000
+      },
+      "scope_note": "40 m proof field and separated family exemplars · not an elevation, sequence, count or cadence",
+      "sha256": "5a89c000dc9417178bd880d245deadf12eb730239affa379404233fee1455ec9",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_readable_scale"
+    },
+    {
+      "bytes": 97037,
+      "camera_position_m": [
+        22.0,
+        13.0,
+        42.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "11-changed-light-aggregate.png",
+      "id": "11-changed-light-aggregate",
+      "label": "FIELD + SIX COMPLETE MODULES",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.214721,
+        "minimum": 0.021642,
+        "range": 0.926277,
+        "sample_count": 4000
+      },
+      "scope_note": "changed sun exposes matte field, opaque component families, shallow relief and zero module backing",
+      "sha256": "f90e2dcf769ddf0f47ff8ac09b0254b1eac8d4c51b05cb20cfb1ba981dd6000f",
+      "sun_rotation_degrees": [
+        -18.0,
+        122.0,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_finish_and_shallow_depth"
+    }
+  ],
+  "display_driver": "macOS",
+  "evidence_role": "controlled native standalone field and complete-module proof; not exact receiver placement, calibration, gameplay-world, elevation, or whole-building evidence",
+  "exact_receiver_calibration": false,
+  "field_repeat_proof": {
+    "baked_lighting": false,
+    "facade_scale_motifs": 0,
+    "finite_facade_motif_period": "none_by_design",
+    "mapping": "continuous local metre-space aperiodic host field",
+    "span_m": 40.0
+  },
+  "godot_version": "4.7.2-stable (official)",
+  "module_proof": {
+    "complete_motifs": 6,
+    "field_or_backing_meshes": 0,
+    "maximum_relief_m": 0.12,
+    "module_meshes": 43,
+    "opaque_proxy_semantics": [
+      "glazing",
+      "base window or vent"
+    ]
+  },
+  "observed_scope": "public west-facing outer region families only; exact outer run endpoints unresolved, inner ring and tower excluded",
+  "one_local_unit_m": 1.0,
+  "proof_dimensions_m": [
+    40.0,
+    10.0
+  ],
+  "receiver_key": "building:r16681702:wall",
+  "registry_path": "res://game/resources/facades/building_1_standalone_prototypes.json",
+  "registry_sha256": "2014040edb3985be4aaae437749063474aacaedc0534b6d54e69b7dfd92612cc",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_standalone_art_review_not_self_accepted",
+  "runtime_attachment": false,
+  "scene_path": "res://game/scenes/world/facades/building_1/building_1_standalone_prototype_set.tscn",
+  "scene_sha256": "1d205d4d6e176d4ed1e82746d1f1f8c4c2547910b1a71f87a213d9ada14967ef",
+  "schema_version": "ti.building-1-standalone-prototype-evidence/1",
+  "source_key": "r16681702",
+  "topology": {
+    "collision_nodes": 0,
+    "module_meshes": 43,
+    "module_surfaces": 43,
+    "module_triangles": 516,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "total_meshes": 44,
+    "total_surfaces": 44,
+    "total_triangles": 528
+  },
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

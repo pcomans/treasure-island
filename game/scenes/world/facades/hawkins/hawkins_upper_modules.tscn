@@ -1,0 +1,24 @@
+[gd_scene format=3]
+
+[node name="HawkinsUpperModuleLibrary" type="Node3D"]
+
+[node name="W_P" type="Node3D" parent="."]
+metadata/motif_id = "W-P"
+metadata/complete_motif = true
+metadata/window_subdivision = "horizontal_transom_lower_pane"
+metadata/description = "Complete tall upper opening with head, sill, both jambs, opaque glass, and a complete low horizontal transom."
+
+[node name="W_N" type="Node3D" parent="."]
+metadata/motif_id = "W-N"
+metadata/complete_motif = true
+metadata/description = "Complete narrow connector opening with head, sill, and both jambs."
+
+[node name="S_H" type="Node3D" parent="."]
+metadata/motif_id = "S-H"
+metadata/complete_motif = true
+metadata/description = "Complete pale spandrel and sill band allocated to one upper opening."
+
+[node name="R_C" type="Node3D" parent="."]
+metadata/motif_id = "R-C"
+metadata/complete_motif = true
+metadata/description = "Complete shallow dark connector proxy with one complete narrow opening."

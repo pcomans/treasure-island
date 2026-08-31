@@ -1,0 +1,70 @@
+Batch 06 controlled exact-receiver field trials — verification on 2026-08-30
+
+1. Godot headless editor import
+   PASS: project import completed with the new target-specific shaders/materials and no parse/import failure.
+
+2. game/tests/batch_06_exact_receiver_trial_capture.gd --check-only
+   PASS: native evidence harness parses.
+
+3. game/tests/headless_batch_06_exact_receiver_trial_contract.gd
+   PASS: exact source IDs, mapped run groups/lengths, material identities, placeholder complements, wall-tangent projection, zero modules, plinth hold, render/collision triangle equality, deterministic builds, and 736-surface whole-island topology.
+
+4. game/tests/headless_accepted_material_run_trials_contract.gd
+   PASS: retained Chapel 9..10, Dormitory 0..5, and YMCA 3..11 partitions remain exact; Fire Station remains fully placeholder; current whole-island count is 736 surfaces.
+
+5. game/tests/headless_batch_06_prototype_contract.gd
+   PASS: all five reviewed standalone field hashes remain exact; six corrected-but-unaccepted modules remain outside runtime.
+
+6. game/tests/headless_batch_02_material_contract.gd
+   PASS.
+
+7. game/tests/headless_batch_03_material_contract.gd
+   PASS.
+
+8. game/tests/headless_batch_04_material_contract.gd
+   PASS.
+
+9. game/tests/headless_batch_02_04_material_correction_contract.gd
+   PASS.
+
+10. game/tests/headless_scene_parse.gd
+    PASS: parsed four gameplay scenes.
+
+11. game/tests/headless_gameplay_contract.gd
+    PASS.
+
+12. game/tests/headless_world_material_contract.gd
+    PASS.
+
+13. game/tests/validate_generated_world.gd
+    PASS: 735 playable + 4 context rows across 38 chunks; generated manifest unchanged.
+
+14. game/tests/headless_hawkins_facade_contract.gd
+    PASS: accepted Hawkins signature `d311c103c9273b94fc982588f46bae6ab67ba6be54b0d0a111dd305e39c22219`.
+
+15. game/tests/headless_building_3_facade_contract.gd
+    PASS.
+
+16. game/tests/headless_isle_house_facade_contract.gd
+    PASS: all-side signature `e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1`.
+
+17. game/tests/headless_ymca_wall_tangent_projection_contract.gd
+    Initial expected failure: the test pinned the immediately prior exact-run helper digest. The current-state helper hash alone was updated after proving YMCA runs/material/projection unchanged.
+    FINAL PASS.
+
+18. game/tests/full_runtime_integration.gd
+    PASS: 38 chunks / 729 records / 729 meshes / 736 surfaces / 48,389 triangles / 466 bodies and shapes; gameplay, spray, recovery, failed-reload, and cleanup contracts passed.
+
+19. game/tests/automated_route_qa.gd
+    PASS: continuous ferry-to-Trade-Winds route, 14 checkpoints, no teleport, stall, boundary loss, or recovery.
+
+20. game/tests/automated_route_qa.gd -- --whole-island-route
+    PASS: ferry, southwest, center, north, and east-perimeter; 3,449.107 m traveled, zero teleport/recovery, five grounded landings.
+
+21. Native capture command recorded in capture-manifest.json
+    PASS: Apple M1 Pro Metal 4.0 / Forward+; 15 target images plus one whole-island image, all 1440 × 900.
+
+22. Static preservation checks
+    PASS: `git diff --name-only -- generated` produced no output; `git diff --check` passed; the runtime helper contains no rejected module IDs or module material paths. Prior YMCA and predecessor accepted-material capture harnesses retain their truthful historical 732-surface capture-time assertions.
+
+Headless note: recurring `user://` log-rotation and macOS CA-certificate warnings preceded PASS lines but did not affect exit status.

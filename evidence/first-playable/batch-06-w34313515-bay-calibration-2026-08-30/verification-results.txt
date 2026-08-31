@@ -1,0 +1,53 @@
+w34313515 detached exact-receiver BAY calibration — verification on 2026-08-30
+
+1. Godot 4.7.2 headless editor import
+   PASS: new registry, helper, focused contract and capture harness parse; script UID sidecars generated.
+
+2. game/tests/w34313515_module_calibration_capture.gd --check-only
+   PASS.
+
+3. Native Godot Forward+/Metal capture
+   PASS: six fresh 1440×900 frames captured with Godot 4.7.2 / Metal 4.0 / Apple M1 Pro.
+   Evidence-validity note: the first WSW ordinary-context camera placed both exemplars outside its useful framing. Only that capture pose was widened, then replaced with a direct ordinary-height run-6 view. The final six-view set was inspected for target visibility, complete motifs, accepted host continuity, shallow transforms, multi-side coverage and evidence labels. No art acceptance was made.
+
+4. game/tests/headless_w34313515_module_calibration_contract.gd
+   PASS: exactly four deterministic complete BAY module-atlas exemplars resolve on WSW runs 0/6 and NNW runs 44/47. Every coordinate/count/cadence row remains explicitly unsurveyed stylized reference-derived production inference; full nominal width plus each calibration envelope remains within one named mapped/accepted run. Overlay owns 84 render meshes, zero field/backing/collision/navigation/spray nodes and zero runtime attachment.
+
+5. game/tests/headless_batch_06_exact_receiver_trial_contract.gd
+   PASS: four accepted-with-limitation Batch 06 fields remain live on the same three receivers; exactly the five previously approved w34313564 modules remain live; world topology remains 729 records / 763 meshes / 770 surfaces / 48,797 triangles / 466 collider pairs.
+
+6. game/tests/headless_batch_06_prototype_contract.gd
+   PASS: corrected prototype registry and standalone geometry remain immutable; other non-live module motifs remain excluded.
+
+7. game/tests/headless_accepted_material_run_trials_contract.gd
+   PASS: all accepted exact-run field partitions, placeholders, prior live-module scope and whole-island load remain unchanged.
+
+8. game/tests/headless_w34313564_module_calibration_contract.gd
+   PASS: prior corrected detached calibration and its live five-placement scope remain byte-identical.
+
+9. game/tests/headless_w34313564_live_module_integration_contract.gd
+   PASS: exact prior live transforms, render topology and zero interaction ownership remain unchanged.
+
+10. game/tests/validate_generated_world.gd
+    PASS: 735 playable + 4 context rows across 38 chunks; manifest content identity 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164.
+
+11. game/tests/full_runtime_integration.gd
+    PASS: clean full world and gameplay exercise; 729 generated records / 763 loaded meshes / 770 surfaces / 48,797 triangles / 466 collider pairs; no partial-world or interaction drift.
+
+12. game/tests/headless_scene_parse.gd
+    PASS: parsed four gameplay scenes.
+
+13. game/tests/headless_gameplay_contract.gd
+    PASS.
+
+14. game/tests/headless_world_material_contract.gd
+    PASS: 11 semantic world materials retain their contracts.
+
+15. git diff --name-only -- generated game/scripts/world game/scenes/world game/resources/materials/world
+    PASS: no output; generated, runtime, live scene and material bytes are unchanged.
+
+16. git diff --check
+    PASS.
+
+Headless note: recurring user:// log-rotation and macOS CA-certificate warnings preceded PASS lines but did not affect exits.
+

@@ -1,0 +1,139 @@
+{
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_06_prototype_capture.gd",
+  "captures": [
+    {
+      "bytes": 161315,
+      "camera_position_m": [
+        -1.20000004768372,
+        6.05000019073486,
+        7.92000007629395
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "sha256": "26eb16bb437bba4d56b54ffd8dce34ec4315c1fb55efde280b8bfaebdd801448",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_and_module_detail"
+    },
+    {
+      "bytes": 104887,
+      "camera_position_m": [
+        0.0,
+        6.38000011444092,
+        17.0499992370605
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "sha256": "a226a8b9645e618928ea47b120da77b3071ab368f080e2ce1c6aa11699a09c10",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_distance_control"
+    },
+    {
+      "bytes": 85713,
+      "camera_position_m": [
+        5.80000019073486,
+        7.48000001907349,
+        13.298999786377
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "sha256": "765f03c2de8109ea296223f61d4f2ed0f492f72ca6806750f4df4038664ceca6",
+      "sun_rotation_degrees": [
+        -13.9999990463257,
+        115.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_alias_and_depth_control"
+    }
+  ],
+  "collision_nodes": 0,
+  "display_driver": "macOS",
+  "evidence_role": "controlled standalone material-and-complete-module prototype; not live receiver evidence",
+  "field_materials": [
+    {
+      "classification": "homogeneous_material_tile",
+      "contains_facade_scale_motifs": false,
+      "id": "W34313515-MAT-PALE",
+      "path": "res://game/resources/materials/world/w34313515/w34313515_pale_field.tres",
+      "proof_scale_m": 1.1,
+      "region": "observed WSW and NNW uninterrupted pale field only",
+      "sha256": "0f97c958b35fe8c52e61db532c9caed95566330d9269e4b830e2c319ec47023e",
+      "uncertainty_m": [
+        0.55,
+        1.8
+      ]
+    }
+  ],
+  "godot_version": "4.7.2-stable (official)",
+  "mapped_placement_bounds": [
+    {
+      "id": "B06-34313515-WSW-OUTER",
+      "length_m": 97.649,
+      "runs": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0
+      ]
+    },
+    {
+      "id": "B06-34313515-NNW-OUTER",
+      "length_m": 67.451,
+      "runs": [
+        43.0,
+        44.0,
+        45.0,
+        46.0,
+        47.0
+      ]
+    }
+  ],
+  "module_ids": [
+    "W34313515-BAY"
+  ],
+  "navigation_nodes": 0,
+  "one_local_unit_m": 1.0,
+  "proof_dimensions_m": [
+    10.0,
+    11.0
+  ],
+  "receiver_key": "building:w34313515:wall",
+  "registry_sha256": "dc0cb7196271626421764052c1659417d58e00fe48d77d32e0e5f7cf6ed9a1e1",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_visual_review_not_self_accepted",
+  "runtime_attachment": false,
+  "scene_path": "res://game/scenes/world/facades/batch_06/w34313515_prototype_set.tscn",
+  "scene_sha256": "4e205d9ff642c90d6e0b5b0ed285a370e2ae7dab267441ff304c13abcc975933",
+  "schema_version": "ti.batch-06-prototype-evidence/1",
+  "source_key": "w34313515",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

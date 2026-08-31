@@ -1,0 +1,53 @@
+{
+  "schema_version": "ti.building-1-detached-miter-correction-visual-verification/1",
+  "result": "PASS_WITH_DOCUMENTED_VISUAL_LIMITATIONS_PENDING_INDEPENDENT_CORRECTION_REREVIEW",
+  "inspector": "/root/w34313515_executor",
+  "inspection_date": "2026-08-30",
+  "image_count": 15,
+  "all_images_opened_and_inspected": true,
+  "all_images_dimensions": [1440, 900],
+  "renderer": "Godot 4.7.2 Forward+/Metal on Apple M1 Pro",
+  "single_authorized_recapture": true,
+  "self_acceptance": false,
+  "art_verdict": "withheld_for_independent_correction_reviewer",
+  "numeric_join_result": {
+    "internal_join_count": 30,
+    "maximum_gap_before_m": 0.0268635451793671,
+    "maximum_gap_after_m": 0.0,
+    "reviewed_42_to_43_gap_m": 0.026857801,
+    "reviewed_38_to_39_gap_m": 0.024844871,
+    "maximum_miter_ratio": 1.50174931805866,
+    "maximum_perpendicular_clearance_residual_m": 0.000020521849393846
+  },
+  "coverage": {
+    "field_join_visual_samples": [[21, 22], [30, 31], [38, 39], [45, 46], [50, 51]],
+    "machine_complete_watertight_join_count": 30,
+    "field_macro_span_m": 85.939934,
+    "central_module_unchanged_close_oblique_ordinary_changed_light": true,
+    "pavilion_module_unchanged_close_oblique_ordinary_changed_light": true,
+    "multi_side_whole_building_context": true
+  },
+  "images": [
+    {"id": "01-field-join-21-22", "valid": true, "finding": "The corrected shared junction is closed at close range; the receiver corner line remains readable without an exposed strip."},
+    {"id": "02-field-join-30-31", "valid": true, "finding": "The pale low-contrast join is visibly closed; exact equality is carried by the complete 30-join numeric proof."},
+    {"id": "03-field-join-38-39", "valid": true, "finding": "The prescribed sharp turn is watertight with no visible background crack; the remaining line is the legitimate receiver turn and shading discontinuity."},
+    {"id": "04-field-join-45-46", "valid": true, "finding": "The corrected faces meet cleanly in neutral light; subtle field variation remains unchanged."},
+    {"id": "05-field-join-50-51", "valid": true, "finding": "The final sampled internal join is closed and the run-51 scope boundary remains explicit."},
+    {"id": "06-field-macro-85m", "valid": true, "finding": "The complete 85.939934 m field scope has no visible exposed strip at ordinary macro scale."},
+    {"id": "07-central-close", "valid": true, "finding": "The complete CENTRAL module remains visually unchanged and is still only a detached fit study."},
+    {"id": "08-central-oblique", "valid": true, "finding": "CENTRAL relief/contact remains intact; it owns no backing field."},
+    {"id": "09-pavilion-close", "valid": true, "finding": "The complete PAV module remains visually unchanged and is still only a detached fit study."},
+    {"id": "10-pavilion-oblique", "valid": true, "finding": "PAV relief/contact remains intact; it owns no backing field."},
+    {"id": "11-central-ordinary", "valid": true, "finding": "The corrected curve and unchanged CENTRAL study remain readable at ordinary distance without implying placement."},
+    {"id": "12-pavilion-ordinary", "valid": true, "finding": "The unchanged PAV study remains readable in north-end context without implying repetition."},
+    {"id": "13-whole-building-context", "valid": true, "finding": "The correction is shown in multi-side context only; this frame cannot support whole-building acceptance."},
+    {"id": "14-central-changed-light", "valid": true, "finding": "Changed light exposes no crack across the corrected curve; CENTRAL remains unchanged."},
+    {"id": "15-pavilion-changed-light", "valid": true, "finding": "PAV hierarchy remains unchanged under alternate light; no broader scope is implied."}
+  ],
+  "documented_limitations": [
+    "Five joins are shown visually while all 30 are established by exact duplicated-endpoint equality in the focused contract and manifest.",
+    "Receiver turns retain legitimate geometric edges and lighting seams; the correction removes open space between adjacent overlay faces, not the physical corner.",
+    "CENTRAL and PAV remain production-inference scale/contact studies with no actual-world anchor, count, cadence, or sequence authorization.",
+    "The whole-building view is context only and cannot support complete-elevation or whole-building resemblance acceptance."
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "schema_version": "codex.building-texture-proof/1",
+  "script_version": "1.0.0",
+  "image_magick": "Version: ImageMagick 7.1.2-30 Q16-HDRI aarch64 7d45ed032:20260823 https://imagemagick.org",
+  "input": {
+    "path": "/Users/philipp/cowork/treasure-island-game/evidence/first-playable/77-bruton-texture-v2-2026-08-29/candidates/candidate-01-source.png",
+    "filename": "candidate-01-source.png",
+    "sha256": "dd6b5f9633faabc3cd1e03052c97e6832290d67d1987b49e890831ee1d7c313c",
+    "dimensions": {
+      "width": 1254,
+      "height": 1254
+    },
+    "colorspace": "sRGB",
+    "channels": "srgb  3.0"
+  },
+  "normalized_input": {
+    "file": "input-srgb-rgb.png",
+    "sha256": "08298be03036bf66934fce276488a89cd3b60b3a0beb2819c77c6b1844a4c8a4",
+    "dimensions": {
+      "width": 1254,
+      "height": 1254
+    },
+    "colorspace": "sRGB",
+    "channels": "srgb  3.0"
+  },
+  "numeric_edge_screen": {
+    "method": "Opposite 1-pixel edges of stripped sRGB RGB input; normalized ImageMagick MAE and RMSE",
+    "thresholds": {
+      "mae": 0.03,
+      "rmse": 0.06
+    },
+    "x_left_right": {
+      "mae": 0.0103825,
+      "rmse": 0.0127579,
+      "verdict": "pass_candidate_screen"
+    },
+    "y_top_bottom": {
+      "mae": 0.0222243,
+      "rmse": 0.0269661,
+      "verdict": "pass_candidate_screen"
+    },
+    "verdict": "pass_candidate_screen",
+    "acceptance_scope": "Candidate rejection screen only; numeric pass is never semantic or overall acceptance."
+  },
+  "proofs": {
+    "borderless_3x3": {
+      "file": "repeat-3x3-borderless.png",
+      "dimensions": {
+        "width": 3762,
+        "height": 3762
+      },
+      "sha256": "edfef9d667dc322d14fa667a3b3d2953a19693fc237b194e9b46abdeafd45d6e"
+    },
+    "boundary_overlay_3x3": {
+      "file": "repeat-3x3-boundary-overlay.png",
+      "dimensions": {
+        "width": 3762,
+        "height": 3762
+      },
+      "sha256": "8ce7f62b7138953bdbf734365b672cb1a737c6cc72e3f6daf63842529b8321bc"
+    },
+    "half_x_roll": {
+      "file": "roll-half-x.png",
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      },
+      "sha256": "5d3f03deb94dcabd1f7d96c5f711b60d7664fdcf053cf4e084edcbf523bf2881"
+    },
+    "half_y_roll": {
+      "file": "roll-half-y.png",
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      },
+      "sha256": "6f50663ef54b695bfe48cd320dfa6be49c9906ad96fdc74d35634d1676e0231b"
+    },
+    "half_xy_roll": {
+      "file": "roll-half-xy.png",
+      "dimensions": {
+        "width": 1254,
+        "height": 1254
+      },
+      "sha256": "eeca4c3844acbc2771ec45f72629156a683ec294b288b7658e0058364475c3e8"
+    },
+    "macro_repeat_8x8": {
+      "file": "repeat-8x8-macro.png",
+      "dimensions": {
+        "width": 2048,
+        "height": 2048
+      },
+      "sha256": "bfc8e8185bed901abc302b2c08d7bc02e18daf19becc1aaecf5a44176335caf0"
+    }
+  },
+  "semantic_repeat_review": {
+    "verdict": "unreviewed",
+    "required": "Compare every boundary motif with the predeclared grammar; fail any new, resized, duplicated, or deleted motif."
+  },
+  "art_review": {
+    "verdict": "unreviewed"
+  },
+  "godot_receiver_review": {
+    "verdict": "unreviewed"
+  },
+  "overall_acceptance": {
+    "verdict": "not_accepted",
+    "reason": "Mechanical proof generation cannot accept a building texture; semantic, absolute art, and exact-receiver reviews remain required."
+  }
+}

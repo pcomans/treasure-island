@@ -1,0 +1,59 @@
+{
+  "schema_version": "ti.w34313525-standalone-capture-runtime-isolation/1",
+  "source_key": "w34313525",
+  "receiver_key": "building:w34313525:wall",
+  "capture_scope": "native standalone proof scene only",
+  "runtime_loaded_for_capture": false,
+  "playable_main_scene_launched": false,
+  "receiver_attachment": false,
+  "exact_receiver_calibration": false,
+  "generated_data_changed": false,
+  "runtime_topology_changed": false,
+  "protected_files": [
+    {
+      "path": "res://discovery/FACADE_RECEIVER_INVENTORY.json",
+      "before_sha256": "220f8af84f3f16c104858f630be9c4bb7e2d282569ab4d3a00bd49c07cb0b3cf",
+      "after_sha256": "220f8af84f3f16c104858f630be9c4bb7e2d282569ab4d3a00bd49c07cb0b3cf"
+    },
+    {
+      "path": "res://generated/world/manifest.json",
+      "before_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+      "after_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+    },
+    {
+      "path": "res://generated/world/chunks/x_1__z_-1.json",
+      "before_sha256": "a952756b1c6d8d547669dffb89723c2be81d6c9a4b3afd2ae7f2dc3702a82b0d",
+      "after_sha256": "a952756b1c6d8d547669dffb89723c2be81d6c9a4b3afd2ae7f2dc3702a82b0d"
+    },
+    {
+      "path": "res://game/scripts/world/world_chunk_builder.gd",
+      "before_sha256": "e54b31cef98b45f00aadcba0b7a6dec0125f147c1c332c06158198dbe19e508d",
+      "after_sha256": "e54b31cef98b45f00aadcba0b7a6dec0125f147c1c332c06158198dbe19e508d"
+    },
+    {
+      "path": "res://game/scripts/world/facades/accepted_material_run_trials.gd",
+      "before_sha256": "aaea7d6518fda141a0c488a54a7441a70bc52d5b98cd666876aa665d3b5be80e",
+      "after_sha256": "aaea7d6518fda141a0c488a54a7441a70bc52d5b98cd666876aa665d3b5be80e"
+    },
+    {
+      "path": "res://game/resources/facades/batch_06_prototype_registry.json",
+      "before_sha256": "a599df850a3ca51a51a3223820fc840201559ba26eb5ed514211eaedc2304132",
+      "after_sha256": "a599df850a3ca51a51a3223820fc840201559ba26eb5ed514211eaedc2304132"
+    }
+  ],
+  "unchanged_runtime_topology": {
+    "records": 729,
+    "meshes": 886,
+    "surfaces": 894,
+    "triangles": 50273,
+    "collider_pairs": 466
+  },
+  "target_serialized_wall_topology": {
+    "receivers": 1,
+    "runs": 30,
+    "vertices": 120,
+    "indices": 180,
+    "triangles": 60,
+    "live_facade_modules": 0
+  }
+}

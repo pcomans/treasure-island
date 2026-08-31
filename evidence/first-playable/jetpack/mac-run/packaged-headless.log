@@ -1,0 +1,11 @@
+JETPACK STAGED EXECUTABLE HEADLESS SMOKE — 2026-08-28
+
+$ /usr/bin/time -p 'build/jetpack-staging/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable' --headless -- --mac-export-smoke
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+MAC_EXPORT_WORLD_READY: hash=5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa spawn=(-104.364,1.000,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=701 triangles=21210 bodies=466 shapes=466 load_ms=1347
+MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps
+PASS: packaged main scene reached full world_ready, enabled the player, and exercised jetpack rise/slow descent
+exit=0 real=5.55s user=1.52s sys=0.17s
+
+The packaged smoke validates that the packaged jetpack action has a physical Space key event before scripting the action and measuring the physics result. Output contained no engine error, warning, debugger break, or leak report. No non-headless process was run.
+

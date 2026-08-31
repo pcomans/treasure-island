@@ -1,0 +1,229 @@
+{
+  "schema_version": "ti.w34313520-standalone-prototypes/1",
+  "source_key": "w34313520",
+  "receiver_key": "building:w34313520:wall",
+  "scope": "standalone material and complete-module prototypes only",
+  "review_status": "ready_for_independent_standalone_art_review_not_self_accepted",
+  "runtime_attachment": false,
+  "exact_receiver_calibration": false,
+  "live_placement_count": 0,
+  "decision_basis": {
+    "approved_observations_only": true,
+    "reference_pixels_stored_or_copied": false,
+    "observed_region": "long SSE-facing outer elevation only",
+    "observation_ids": [
+      "B06-W34313520-SV01"
+    ],
+    "eligible_region_not_placement": {
+      "mapping_id": "B06-34313520-SSE-OUTER",
+      "ordered_run_indices": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "mapped_length_m": 68.156,
+      "evidence_status": "reference_observation_plus_exact_geometry_join",
+      "placement_coordinates": "none",
+      "cadence": "unknown_not_encoded"
+    }
+  },
+  "receiver_audit": {
+    "chunk": "x_-1__z_0",
+    "source_area_m2": 2871.747,
+    "height_m": 11.0,
+    "base_elevation_m": 3.065,
+    "top_elevation_m": 14.065,
+    "exterior_run_count": 34,
+    "perimeter_m": 376.239,
+    "shared_run_count": 0,
+    "mapped_run_count": 5,
+    "unmapped_run_count": 27,
+    "protected_run_count": 2,
+    "generated_wall_topology": {
+      "vertices": 408,
+      "indices": 204,
+      "triangles": 68,
+      "material_key": "building_wall",
+      "collision_kind": "world_solid",
+      "opaque": true
+    }
+  },
+  "asset_kind_inventory": {
+    "homogeneous_material_tile": 1,
+    "architectural_pattern_tile": 0,
+    "module_atlas": 1,
+    "unique_elevation": 0
+  },
+  "materials": [
+    {
+      "id": "W34313520-MAT-PALE",
+      "asset_kind": "homogeneous_material_tile",
+      "path": "res://game/resources/materials/world/w34313520/w34313520_pale_field.tres",
+      "sha256": "7944151fd5ab8e977e7052d0cdb8df20132c82f967d8ebfefff83ede8fcf07a4",
+      "shader_path": "res://game/resources/materials/world/batch_02_04_aperiodic_field.gdshader",
+      "shader_sha256": "324ba33a7c78f4b05038168a479ebb8e875c56704236492a050cee8da8e5f798",
+      "observed_role": "pale warm gray or off-white smooth painted concrete/render-like field",
+      "channels": {
+        "albedo": "procedural two-color low-contrast aperiodic field",
+        "normal": "procedural tangent-space micro-relief",
+        "roughness": "scalar 0.80 with subtle bounded variation",
+        "metallic": "0.0",
+        "opacity": "opaque"
+      },
+      "one_local_unit_m": 1.0,
+      "proof_primary_scale_m": 0.95,
+      "scale_uncertainty_m": [
+        0.35,
+        1.8
+      ],
+      "scale_status": "reversible_unmeasured_stylized_reference_derived_production_inference",
+      "proof_span_m": [
+        30.0,
+        11.0
+      ],
+      "repeat_contract": {
+        "finite_facade_motif_period": "none_by_design",
+        "mapping": "continuous local meter-space aperiodic field",
+        "macro_repeat_proof_span_m": 30.0,
+        "opposite_edge_identity_required": false,
+        "contains_facade_scale_motifs": false
+      },
+      "eligible_region_not_placement": "B06-34313520-SSE-OUTER:runs_6_10",
+      "surveyed_color": false,
+      "surveyed_finish_scale": false,
+      "runtime_attachment": false
+    }
+  ],
+  "modules": [
+    {
+      "motif_id": "W34313520-BAY",
+      "asset_kind": "module_atlas",
+      "representation": "deterministic project-native procedural geometry exemplar",
+      "kind": "complete_three_tier_horizontal_window_group",
+      "complete_motif": true,
+      "module_not_seamless_wall_tile": true,
+      "opposite_edge_continuity_required": false,
+      "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+      "host_provided_boundary": "pale outer and inter-tier pier space remains continuous host field",
+      "module_owns_field_geometry": false,
+      "module_owned_backing_meshes": 0,
+      "module_owned_collision_nodes": 0,
+      "module_owned_navigation_nodes": 0,
+      "module_owned_spray_nodes": 0,
+      "allowed_host_material_ids": [
+        "W34313520-MAT-PALE"
+      ],
+      "nominal_bounds_m": [
+        6.8,
+        9.4
+      ],
+      "uncertainty_bounds_m": {
+        "width": [
+          4.8,
+          9.5
+        ],
+        "height": [
+          7.6,
+          10.5
+        ]
+      },
+      "tier_count": 3,
+      "tier_count_status": "reference_observation",
+      "internal_mullion_cadence": "unknown_not_encoded",
+      "scale_status": "reversible_unmeasured_stylized_reference_derived_production_inference",
+      "surveyed_dimensions": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_cadence": false,
+      "eligible_region_not_placement": "B06-34313520-SSE-OUTER:runs_6_10",
+      "runtime_attachment": false,
+      "materials": [
+        {
+          "role": "full dark blue-gray frame",
+          "path": "res://game/resources/materials/world/w34313520/w34313520_bay_frame.tres",
+          "sha256": "445d3bec9d2ef3130aab27c816b27e384c689af68298b2db5ada37e0178f249b"
+        },
+        {
+          "role": "muted opaque glazing proxy",
+          "path": "res://game/resources/materials/world/w34313520/w34313520_bay_glass.tres",
+          "sha256": "40caf8b054b51ebf247a41286dec9efdbf925f09acf698a75285a4321a41bba6"
+        }
+      ],
+      "prototype_topology": {
+        "mesh_instances": 15,
+        "surfaces": 15,
+        "triangles": 180,
+        "frame_meshes": 12,
+        "glazing_meshes": 3,
+        "field_or_backing_meshes": 0
+      }
+    }
+  ],
+  "prototype_scene": {
+    "path": "res://game/scenes/world/facades/batch_06/w34313520_standalone_prototype_set.tscn",
+    "sha256": "4d0ee0e79ea6fd5a7e85b21cdf4a103d125818626b6c97875737cad44cc65785",
+    "factory_path": "res://game/scripts/world/facades/w34313520_standalone_prototypes.gd",
+    "factory_sha256": "1244f590ed0854219f50a25a4c7931f4f094ce19fb65cefcf2d61b8ce4cd8566",
+    "one_local_unit_m": 1.0,
+    "proof_dimensions_m": [
+      30.0,
+      11.0
+    ],
+    "total_mesh_instances": 16,
+    "total_surfaces": 16,
+    "total_triangles": 192,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "runtime_attachment": false
+  },
+  "authoritative_source_pins": {
+    "reference_spec": {
+      "path": "res://discovery/facades/W34313520_REFERENCE_SPEC.md",
+      "sha256": "b81e453fc711626422e2770a943549c380e25b533d9544cf22d7dc400f597f2f"
+    },
+    "observation_ledger": {
+      "path": "res://discovery/facades/BATCH_06_STREETVIEW_OBSERVATIONS.md",
+      "sha256": "259e562e69b1186912fce2dfb466f4512fbc69cc8e64562574971c0a8c40028b"
+    },
+    "run_mapping": {
+      "path": "res://discovery/facades/BATCH_06_RUN_MAPPING.json",
+      "sha256": "0d9ef02bbdf38902bfddb475f96167abd6460163d94c26984ae5b29da0c7497d"
+    }
+  },
+  "runtime_isolation_pins": {
+    "generated_manifest": {
+      "path": "res://generated/world/manifest.json",
+      "sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+    },
+    "generated_chunk": {
+      "path": "res://generated/world/chunks/x_-1__z_0.json",
+      "sha256": "b935890b89202fa181248552176364668e506a7630f0024ec86f12a084743d86"
+    },
+    "world_builder": {
+      "path": "res://game/scripts/world/world_chunk_builder.gd",
+      "sha256": "84aaf060b6282e956bbae81e4880ac8e203e107760d627c48f7d9e5abb72183e"
+    },
+    "accepted_material_helper": {
+      "path": "res://game/scripts/world/facades/accepted_material_run_trials.gd",
+      "sha256": "4741097b177f02074c6b254e03f955dce46703dfef89b0a4cbc0a8b424f7ae6f"
+    },
+    "canonical_inventory": {
+      "path": "res://discovery/FACADE_RECEIVER_INVENTORY.json",
+      "sha256": "efe1c0f531488f1ad3f0e2b2337beea1e93162df35ba7124bb8d5ef37475b544"
+    }
+  },
+  "blocked_claims": [
+    "exact receiver placement, along-run coordinate, anchor, count or cadence",
+    "surveyed dimensions, scale, color or roughness",
+    "architectural pattern period or whole-wall tile",
+    "complete SSE elevation or unique elevation",
+    "runs 20 and 21, the inset glazed or entry wing and recess ownership",
+    "all ENE, WSW and NNW sides, all other runs and exact endpoints or corners",
+    "darker blue-gray lower or recessed field bounds",
+    "level count despite the observed three-tier grammar",
+    "building identity beyond the source key and coordinate match",
+    "whole-building resemblance or acceptance"
+  ]
+}

@@ -1,0 +1,52 @@
+Fire Station 48 rejected live-trial removal — verification results — 2026-08-29
+
+FINAL RESULT: PASS; Fire Station accepted-material surface excluded and generated placeholder restored. This is not art acceptance.
+
+Removal-focused gates
+- PASS — Godot 4.7.2 headless editor import/scan.
+- PASS — headless_accepted_material_run_trials_contract.gd.
+  The helper contains exactly the accepted Chapel and Dormitory mappings. Fire Station w764313741 has no mapping or accepted metadata and has one generated_record StandardMaterial3D building_wall surface spanning runs 0..25.
+  The rejected Fire material, shared shader, Batch 03 registry, generated chunk, and historical evidence hashes remain pinned. Fire render/collision triangle identity, spray ownership, zero-module state, deterministic rebuild, and absence of duplicate/coplanar render triangles pass.
+- PASS — headless_batch_03_material_contract.gd.
+  Independent rejection/reversion provenance is pinned; Fire Station material and registry remain unchanged while the live receiver is restored to the generated placeholder.
+- PASS — full_runtime_integration.gd.
+  729 records, 729 record-owned meshes, 731 disjoint surfaces, 48,389 triangles, and 466 collision bodies/shapes. The exact +2 surfaces are Chapel and Dormitory only; Fire Station contributes one generated placeholder surface.
+- PASS — source main-scene --mac-export-smoke.
+  38/38 chunks, 729 meshes, 731 surfaces, 48,389 triangles, and 466 collision bodies/shapes; semantic materials, movement defaults, and jetpack rise/slow descent pass.
+
+Existing editor/world/gameplay suites
+- PASS — headless_scene_parse.gd: 4 gameplay scenes.
+- PASS — headless_gameplay_contract.gd.
+- PASS — headless_world_material_contract.gd: 11 semantic materials.
+- PASS — validate_generated_world.gd: 735 playable + 4 context rows, 38 chunks, content 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164.
+- PASS — headless_hawkins_facade_contract.gd.
+- PASS — headless_building_3_facade_contract.gd.
+- PASS — headless_isle_house_facade_contract.gd; accepted deterministic signature e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1.
+- PASS — headless_batch_02_04_material_correction_contract.gd; all five correction candidates and their retained proof bytes remain protected.
+- PASS — headless_batch_02_material_contract.gd.
+- PASS — headless_batch_04_material_contract.gd.
+- PASS — automated_route_qa.gd: 14 checkpoints, 262.349 m actual continuous travel, zero recovery/stall/boundary loss.
+- PASS — automated_route_qa.gd -- --whole-island-route: ferry/southwest/center/north/east-perimeter, 3,449.107 m actual continuous travel, five landings, zero teleport/recovery/stall/boundary loss.
+
+Native render evidence
+- PASS — fire_station_48_live_trial_removal_capture.gd using macOS + Forward+ + Metal at 1440×900 on Apple M1 Pro (Apple7).
+- PASS — Fire Station close, ordinary-distance, and changed-light oblique placeholder-restoration images plus one whole-island post-removal image.
+- PASS — all four images manually inspected for nonblank live-world output, correct exclusion/restoration labels, and the intended viewpoint roles.
+- PASS — capture-manifest.json records zero Fire accepted runs, one generated_record placeholder surface over runs 0..25, exact topology, preserved Chapel/Dormitory scopes, retained prototype identity, renderer/device identity, transforms, and image hashes.
+
+Generated-data and protected-scope checks
+- PASS — git reports no diff and no new files under generated/.
+- PASS — generated manifest SHA-256 remains e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3.
+- PASS — Fire Station generated chunk SHA-256 remains c0e1f86787410d975ad90272482e5f4971c4aedc7eb83132cd28b22acf1a3456.
+- PASS — Fire material SHA-256 remains 515135c3d0da6bb8eb8681e69d7e3f7818d896d948fe5dcc7c2bd8c6d076b188.
+- PASS — shared homogeneous shader SHA-256 remains 1918177080126199ddbfc0715a77b85a9355800479a098ec9b81c9726b7cc4d5.
+- PASS — Batch 03 registry SHA-256 remains 31983ae1529e6248e93ec8d231d2b870de3979778b35eef6019cd19e1a964516.
+- PASS — runtime builder SHA-256 remains c770a977e879c0d077acb8fb4d33b52d1bd6aa3b454a50ba8e2125cb71e8ba8d.
+- PASS — accepted-run helper SHA-256 is a0eadb57bfb1ea4fbbfc46ea9261dc7ff85cbdcb5c2975e009ab4d11dce000e9 after removing only the rejected Fire mapping.
+
+Known environment noise
+- Headless Godot runs emit sandbox-only user:// log-open and macOS CA-certificate warnings. Every listed gate exited 0 and printed PASS.
+
+Art-review boundary
+- These captures establish Fire Station accepted-material exclusion and generated-placeholder restoration only. They do not accept the placeholder, the retained rejected prototype, a correction, or the whole building.
+- A separately authorized correction must follow the independent review brief, receive fresh exact-receiver capture, and obtain independent acceptance before any live reattachment.

@@ -1,0 +1,11 @@
+YMCA exact-run integration — owner-playtest noninterference record — 2026-08-29
+
+- Protected process: exact PID 6358, `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path .`.
+- Initial authoritative checkpoint during staging: PID 6358 live (`Ss+`); no Godot/import/test/capture/focus/stop/relaunch action was taken.
+- Source staging while live was limited to on-disk runtime/test/lifecycle/capture-harness edits; those edits could not alter the already-running process.
+- Root and executor repeatedly revalidated only exact PID 6358. No signal, focus action, stop, restart, replacement launch, or broader process target was used.
+- Exit observed by the exact-PID monitor at `2026-08-29T22:22:39-0700`.
+- Authoritative post-exit check: `/bin/ps -p 6358 -o pid=,state=,etime=,command=` returned exit 1 and no output.
+- Only after that absent-process check did the executor run the first Godot editor import/scan, followed by tests and native Metal capture.
+
+Conclusion: the owner's live playtest process was neither interrupted nor modified by this task.

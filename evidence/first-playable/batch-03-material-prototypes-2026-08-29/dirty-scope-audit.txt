@@ -1,0 +1,26 @@
+Batch 03 dirty-worktree scope audit — 2026-08-29
+
+Authored in this bounded round:
+- game/resources/facades/batch_03_material_registry.json
+- game/resources/materials/world/personnel_support_detachment/psd_outer.tres
+- game/resources/materials/world/fire_training_b600/fire_training_primary.tres
+- game/resources/materials/world/fire_station_48/fire_station_48_primary.tres
+- game/tests/headless_batch_03_material_contract.gd (+ Godot UID)
+- game/tests/batch_03_material_proof_capture.gd (+ Godot UID; authored/parse-checked, not executed)
+- evidence/first-playable/batch-03-material-prototypes-2026-08-29/**
+- one appended Batch 03 prototype section in discovery/RETRO_LOG.md
+
+Explicitly not changed in this round:
+- game/resources/materials/world/batch_02/batch_02_homogeneous_field.gdshader (reused unchanged; SHA-256 1918177080126199ddbfc0715a77b85a9355800479a098ec9b81c9726b7cc4d5)
+- game/scripts/world/world_chunk_builder.gd (SHA-256 f56e77e35f167ccc14ed40843b76a6e28ed87d21e46e697a52b38f018e9427c3; no Batch 03 references)
+- all live receiver, Hawkins, Building 3, Isle House, Museum, Oasis and Batch 02 implementation/material/layout files
+- data/osm/** and generated/world/** (git diff exit 0)
+- gameplay, routes, collision, navigation, spray, terrain, foundation and massing code
+- the five evidence-blocked Batch 03 targets; no resource exists for them
+
+Pre-existing shared-worktree state preserved:
+- tracked modifications already present in AGENTS.md, discovery/RETRO_LOG.md, world_chunk_builder.gd, full_runtime_integration.gd and headless_gameplay_contract.gd
+- prior accepted/untracked facade discovery, implementation, tests and evidence, including Batch 02
+- unrelated workspace files
+
+No commit, GUI/Metal capture, audible prompt, browse, download, install, upload, image generation, external asset/service, or generated-source rewrite occurred.

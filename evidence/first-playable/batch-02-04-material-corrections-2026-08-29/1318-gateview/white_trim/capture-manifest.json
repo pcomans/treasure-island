@@ -1,0 +1,193 @@
+{
+  "after": "Secondary color now exactly equals the 0.84/0.85/0.82 base, preserving roughness 0.66 and zero relief for subtle white painted trim variation.",
+  "before": "A darker secondary color produced unsupported macro blotches in the white trim.",
+  "canonical_name": "1318 Gateview Avenue",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_02_04_material_correction_capture.gd",
+  "captures": [
+    {
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "bytes": 64455,
+      "camera_fov_degrees": 50.0,
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "proof_receiver_only": true,
+      "sha256": "e0501a90ffe794e65f5b08aba45ae258219bbf1e1b81da921007f094bb72c361",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_proof"
+    },
+    {
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "bytes": 56131,
+      "camera_fov_degrees": 50.0,
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "proof_receiver_only": true,
+      "sha256": "04434c4f04c231c2145843d6b862bac57efee88721840482e091147ad69dcd0d",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_scale_proof"
+    },
+    {
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "bytes": 72155,
+      "camera_fov_degrees": 50.0,
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "proof_receiver_only": true,
+      "sha256": "417d2204e1660e634a874205b93266368c19abb5ac63e200570f256f8d77e9e1",
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_proof"
+    }
+  ],
+  "contains_facade_scale_motifs": false,
+  "correction_id": "C5",
+  "display_driver": "macOS",
+  "evidence_role": "controlled_material_correction_proof_not_gameplay_or_live_receiver_acceptance",
+  "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "godot_version": "4.7.2-stable (official)",
+  "material_path": "res://game/resources/materials/world/1318_gateview/1318_gateview_white_trim.tres",
+  "material_role": "white painted trim",
+  "material_sha256": "30c896ddb23419a590744572fe4396c00fee942c3654985be97e2f33694a7452",
+  "one_local_unit_m": 1.0,
+  "prior_rejected_captures": [
+    {
+      "bytes": 106432.0,
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "dimensions": [
+        1440.0,
+        900.0
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "sha256": "55daa73d763a8a6138e6125f1adc367bb63d4519251535d3e280874aa2f07c43",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_proof"
+    },
+    {
+      "bytes": 70697.0,
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "dimensions": [
+        1440.0,
+        900.0
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "sha256": "208e0f0ab926175db469f0d2d8ae6efcaa07826382e4b28bd5f19e507ae6194f",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_scale_proof"
+    },
+    {
+      "bytes": 106198.0,
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440.0,
+        900.0
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "sha256": "53bb850301e05191f391eebb63088b06136e72f1c904c51f4f78bf8a2fccb6a8",
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_proof"
+    }
+  ],
+  "prior_rejected_evidence_manifest": "res://evidence/first-playable/batch-04-material-prototypes-2026-08-29/1318-gateview/white_trim/capture-manifest.json",
+  "prior_rejected_evidence_manifest_sha256": "ff12b15bfa4c60c60a4a6bbd420b59c2fd6e7ce3ae5bbff19eb73a22a5db4d3f",
+  "proof_panel_size_m": [
+    4.8,
+    3.2,
+    0.12
+  ],
+  "proof_primary_scale_m": 0.75,
+  "proof_receiver": "controlled_flat_proof_panel",
+  "proof_secondary_scale_m": 0.25,
+  "receiver_key": "building:w95934092:wall",
+  "registry_path": "res://game/resources/facades/batch_04_material_registry.json",
+  "registry_sha256": "b4c5983a628d076cda0aaa24d0023fc7a43983fd6c00f82c9806871af0409cf7",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_re_review_not_self_accepted",
+  "roughness_value": 0.66,
+  "runtime_attachment": false,
+  "schema_version": "ti.batch-02-04-material-correction-proof/1",
+  "shader_sha256": "1918177080126199ddbfc0715a77b85a9355800479a098ec9b81c9726b7cc4d5",
+  "source_key": "w95934092",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

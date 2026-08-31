@@ -1,0 +1,211 @@
+{
+  "schema_version": "ti.batch-04-material-prototypes/1",
+  "review_status": "mechanically_ready_visual_review_blocked",
+  "runtime_attachment_policy": "none; all Batch 04 fields are controlled prototypes until temporal intent, exact observed region endpoints, and physical scale are approved",
+  "shader_contracts": [
+    {
+      "path": "res://game/resources/materials/world/batch_02/batch_02_homogeneous_field.gdshader",
+      "sha256": "1918177080126199ddbfc0715a77b85a9355800479a098ec9b81c9726b7cc4d5",
+      "role": "unchanged accepted smooth/mineral field shader",
+      "one_local_unit_m": 1.0,
+      "alias_control": "analytic derivative filtering",
+      "external_resources": false
+    },
+    {
+      "path": "res://game/resources/materials/world/batch_04/batch_04_horizontal_siding_field.gdshader",
+      "sha256": "63f0be4ab7995f94653298cff1d5a271728209e05ee014c67b76165bc4f0dc8d",
+      "role": "Batch 04 material-scale horizontal siding courses only",
+      "one_local_unit_m": 1.0,
+      "alias_control": "analytic derivative filtering of course, seam, relief, and broad variation frequencies",
+      "external_resources": false
+    },
+    {
+      "path": "res://game/resources/materials/world/batch_02_04_aperiodic_field.gdshader",
+      "sha256": "324ba33a7c78f4b05038168a479ebb8e875c56704236492a050cee8da8e5f798",
+      "role": "Rejected-only aperiodic mineral/smooth correction shader for 850 H tan and Bldg 461 medium gray",
+      "one_local_unit_m": 1.0,
+      "alias_control": "derivative fade on rotated stochastic octaves",
+      "external_resources": false
+    }
+  ],
+  "controlled_proof_contract": {
+    "receiver_kind": "controlled_flat_proof_panel",
+    "one_local_unit_m": 1.0,
+    "panel_size_m": [4.8, 3.2],
+    "renderer": "Forward+/Metal",
+    "capture_execution": "approval_gated_not_executed",
+    "proof_scales_are_reversible_assumptions": true,
+    "controlled_proofs_are_not_gameplay_or_live_receiver_evidence": true
+  },
+  "targets": [
+    {
+      "source_key": "w291189926",
+      "receiver_key": "building:w291189926:wall",
+      "canonical_name": "US Dept of Labor Job Corps Dormitory Building 369",
+      "chunk_id": "x_0__z_1",
+      "prototype_status": "current_reference_prototype_only",
+      "temporal_status": "official September 2025 observation",
+      "region_scope": "observed southwest/west long elevation warm field plus southeast/end blue-gray field and dark green accents only; never tier/window cadence or unobserved sides",
+      "observed_reference_provenance": [
+        {"id": "D369-SV01", "panorama_id": "NztWn9fwLieghDTyI_iEyQ", "displayed_date": "2025-09", "coverage": "southwest/west long elevation and southeast/end corner", "reuse": "observation_only"},
+        {"id": "D369-NO01", "panorama_id": null, "displayed_date": null, "coverage": "east-side request returned no official coverage", "reuse": "coverage_only"}
+      ],
+      "reference_spec": "discovery/facades/JOB_CORPS_DORMITORY_BUILDING_369_REFERENCE_SPEC.md",
+      "materials": [
+        {"role": "warm_wall", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/job_corps_dormitory_b369/dormitory_b369_warm_field.tres", "sha256": "fb50d3989b7aa41421753ad4db5d195366d9a2c25c15087e5e3a2b7863c69602", "shader_kind": "smooth_field", "roughness_range": [0.70, 0.90], "proof_primary_scale_m": 1.4, "scale_status": "broad_finish_variation_unmeasured_proof_only"},
+        {"role": "blue_gray_end", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/job_corps_dormitory_b369/dormitory_b369_blue_end.tres", "sha256": "03f46e12f4b6b671fc0859e9d68d73ab0fbadd957af97855bbab698b467c4a41", "shader_kind": "smooth_field", "roughness_range": [0.70, 0.90], "proof_primary_scale_m": 1.25, "scale_status": "broad_finish_variation_unmeasured_proof_only"},
+        {"role": "dark_green_accent", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/job_corps_dormitory_b369/dormitory_b369_green_trim.tres", "sha256": "ad4387598f23a327420043f7971ffc4db34274245b639e531071a5f917699ffa", "shader_kind": "smooth_field", "roughness_range": [0.55, 0.75], "proof_primary_scale_m": 0.85, "scale_status": "finish_only_no_architectural_cadence_proof_only"}
+      ],
+      "runtime_attachment": "prototype_only",
+      "placement_blockers": ["five_visible_tiers_vs_default_6m_massing", "exact_run_mapping", "exact_region_endpoints", "physical_scale", "unobserved_opposite_side"],
+      "excluded_motifs": ["tiers", "windows", "doors", "eyebrows", "vents", "eave", "bay_sequence"]
+    },
+    {
+      "source_key": "w34313512",
+      "receiver_key": "building:w34313512:wall",
+      "canonical_name": "449 Avenue H",
+      "chunk_id": "x_0__z_0",
+      "prototype_status": "historical_reference_prototype_only",
+      "temporal_status": "May 2011 building-visible reference; September 2025 cleared redevelopment lot; never current/live",
+      "region_scope": "May 2011 historical north/northeast long-elevation siding and blue-gray trim fields only",
+      "observed_reference_provenance": [
+        {"id": "449H-HIST", "panorama_id": "d4T0RdF4AE250u-CoH7tYw", "displayed_date": "2011-05", "coverage": "historical north/northeast long elevation", "reuse": "observation_only"},
+        {"id": "449H-CURRENT", "panorama_id": "tUuvbI3y3fgy-R_XCvHdDQ", "displayed_date": "2025-09", "coverage": "cleared redevelopment lot; no current facade", "reuse": "lifecycle_rejection_only"}
+      ],
+      "reference_spec": "discovery/facades/449_AVENUE_H_REFERENCE_SPEC.md",
+      "materials": [
+        {"role": "historical_siding", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/449_avenue_h/449_h_historical_siding.tres", "sha256": "a4b6858a9f1997874e74321463429546e10acdaf6eac58521d5239f3360ec34d", "shader_kind": "horizontal_siding", "roughness_range": [0.65, 0.85], "proof_primary_scale_m": 0.17, "scale_status": "may_2011_course_estimate_low_confidence_proof_only"},
+        {"role": "historical_blue_gray_trim", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/449_avenue_h/449_h_historical_trim.tres", "sha256": "10e22c5ce4a5f43140a383b5387e8b83e9eeadcd7672b77a1613f88f22832c68", "shader_kind": "smooth_field", "roughness_range": [0.55, 0.75], "proof_primary_scale_m": 0.8, "scale_status": "may_2011_finish_only_unmeasured_proof_only"}
+      ],
+      "runtime_attachment": "historical_reference_prototype_only",
+      "placement_blockers": ["current_cleared_lot", "395_440_449_address_label_conflict", "temporal_intent_not_approved", "exact_endpoints", "unobserved_sides"],
+      "excluded_motifs": ["window_registers", "doors", "service_openings", "ledge", "overhang", "broken_panes", "damage"]
+    },
+    {
+      "source_key": "w34313546",
+      "receiver_key": "building:w34313546:wall",
+      "canonical_name": "850 Avenue H",
+      "chunk_id": "x_0__z_-2",
+      "prototype_status": "current_reference_prototype_only",
+      "temporal_status": "March and September 2025 partial official observations; medium identity",
+      "region_scope": "provisional exposed east/end tan field and teal accent only; never high windows, repair patch, door, containers, or hidden sides",
+      "observed_reference_provenance": [
+        {"id": "850H-SV01", "panorama_id": "U1HtZQlUKomn07I4TT93ug", "displayed_date": "2025-09", "coverage": "partial east/end", "reuse": "observation_only"},
+        {"id": "850H-SV02", "panorama_id": "QO4Mk2OE0ky1D7lGPsSciQ", "displayed_date": "2025-03", "coverage": "container-occluded north context", "reuse": "observation_only"},
+        {"id": "850H-EX01", "panorama_id": null, "displayed_date": null, "coverage": "contributor panorama excluded", "reuse": "excluded"}
+      ],
+      "reference_spec": "discovery/facades/850_AVENUE_H_REFERENCE_SPEC.md",
+      "materials": [
+        {"role": "tan_wall", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/850_avenue_h/850_h_tan_field.tres", "sha256": "d92f7137edf2be91b0268659843423764528db58c194cbe5d0b1596a4f8303a8", "shader_kind": "aperiodic_smooth_field", "roughness_range": [0.70, 0.90], "proof_primary_scale_m": 0.75, "scale_status": "substrate_and_scale_unmeasured_proof_only"},
+        {"role": "teal_accent", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/850_avenue_h/850_h_teal_edge.tres", "sha256": "76cf6b1231952c05362bf41e29ee473452a87aa6aa6f663404b0fed10e42481f", "shader_kind": "smooth_field", "roughness_range": [0.55, 0.78], "proof_primary_scale_m": 0.75, "scale_status": "finish_only_unmeasured_proof_only"}
+      ],
+      "runtime_attachment": "prototype_only",
+      "placement_blockers": ["medium_identity", "container_occlusion", "exact_endpoints", "long_sides_unobserved", "physical_scale"],
+      "excluded_motifs": ["high_windows", "door", "repair_patch", "roof_edge_geometry", "containers", "gates"]
+    },
+    {
+      "source_key": "w96698660",
+      "receiver_key": "building:w96698660:wall",
+      "canonical_name": "810 Avenue D",
+      "chunk_id": "x_-1__z_-1",
+      "prototype_status": "historical_reference_prototype_only",
+      "temporal_status": "May 2011 building-visible reference; March 2025 fully enclosed with current existence unknown; never current/live",
+      "region_scope": "May 2011 historical front/southwest and partial southeast pale siding and brown trim fields only",
+      "observed_reference_provenance": [
+        {"id": "810D-HIST", "panorama_id": "IYcYMdJYTtaGjJVxo7eraA", "displayed_date": "2011-05", "coverage": "historical front/southwest and partial southeast", "reuse": "observation_only"},
+        {"id": "810D-CURRENT", "panorama_id": "le1q7oLYgiyaWBAv2NBF2w", "displayed_date": "2025-03", "coverage": "fully enclosed; current existence unknown", "reuse": "lifecycle_rejection_only"}
+      ],
+      "reference_spec": "discovery/facades/810_AVENUE_D_REFERENCE_SPEC.md",
+      "materials": [
+        {"role": "historical_siding", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/810_avenue_d/810_d_historical_siding.tres", "sha256": "9c3f2cf0fbc237910652f93fb384444f957b77552f662942f728ec804aae7180", "shader_kind": "horizontal_siding", "roughness_range": [0.62, 0.85], "proof_primary_scale_m": 0.18, "scale_status": "may_2011_course_estimate_low_confidence_proof_only"},
+        {"role": "historical_brown_trim", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/810_avenue_d/810_d_historical_brown_trim.tres", "sha256": "d8810705d79ba8b79c5fb742b32c65b343a607aba0ed86b989d7aa35760e5a65", "shader_kind": "smooth_field", "roughness_range": [0.55, 0.75], "proof_primary_scale_m": 0.75, "scale_status": "may_2011_finish_only_unmeasured_proof_only"}
+      ],
+      "runtime_attachment": "historical_reference_prototype_only",
+      "placement_blockers": ["current_existence_unknown", "march_2025_enclosure", "temporal_intent_not_approved", "exact_six_run_mapping", "hidden_sides"],
+      "excluded_motifs": ["windows", "double_door", "number_810", "deck_rail", "roof", "utility_unit"]
+    },
+    {
+      "source_key": "w34313569",
+      "receiver_key": "building:w34313569:wall",
+      "canonical_name": "Bldg 461",
+      "chunk_id": "x_-1__z_-4",
+      "prototype_status": "current_reference_prototype_only",
+      "temporal_status": "distant November 2025 official observation; medium identity",
+      "region_scope": "distant southeast/east medium-gray field and east/end pale field swatches only",
+      "observed_reference_provenance": [
+        {"id": "B461-SV01", "panorama_id": "JMpuxlpS4Re0BFnlc7D1pA", "displayed_date": "2025-11", "coverage": "distant southeast/east long side and east/end", "reuse": "observation_only"},
+        {"id": "B461-EX01/B461-EX02", "panorama_id": null, "displayed_date": null, "coverage": "contributor panoramas excluded", "reuse": "excluded"}
+      ],
+      "reference_spec": "discovery/facades/BLDG_461_REFERENCE_SPEC.md",
+      "materials": [
+        {"role": "medium_gray", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/bldg_461/bldg_461_gray_field.tres", "sha256": "e44738c8f1d06a34bfc876b610e2c70a0890c85cbb63342b613094d7b8b80a66", "shader_kind": "aperiodic_substrate_neutral_field", "roughness_range": [0.72, 0.90], "proof_primary_scale_m": 0.95, "scale_status": "distant_substrate_and_scale_unresolved_proof_only"},
+        {"role": "pale_end", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/bldg_461/bldg_461_pale_end.tres", "sha256": "fb07e022a7a58c593f97c8aeabede62d849587593dbbaffb629658783dd4874d", "shader_kind": "smooth_field", "roughness_range": [0.78, 0.92], "proof_primary_scale_m": 1.2, "scale_status": "distant_finish_only_unmeasured_proof_only"}
+      ],
+      "runtime_attachment": "prototype_only",
+      "placement_blockers": ["medium_identity", "distant_view", "substrate_unknown", "exact_27_run_map", "opposite_sides_unobserved"],
+      "excluded_motifs": ["windows", "doors", "loading_bays", "signage", "vertical_divisions", "hard_value_band"]
+    },
+    {
+      "source_key": "w95934092",
+      "receiver_key": "building:w95934092:wall",
+      "canonical_name": "1318 Gateview Avenue",
+      "chunk_id": "x_-3__z_-2",
+      "prototype_status": "current_reference_prototype_only",
+      "temporal_status": "March and November 2025 official front/rear observations",
+      "region_scope": "target-specific observed front/rear/end siding and white trim material fields only; no unit sequence or porch grammar",
+      "observed_reference_provenance": [
+        {"id": "1318-SV-FRONT", "panorama_id": "qGPa9ZjJlrtlQpnP52eiAA", "displayed_date": "2025-03", "coverage": "front long elevation and end", "reuse": "observation_only"},
+        {"id": "1318-SV-REAR", "panorama_id": "GmuTsOm1-FO47a4FOWEQHA", "displayed_date": "2025-11", "coverage": "rear long elevation", "reuse": "observation_only"}
+      ],
+      "reference_spec": "discovery/facades/1318_GATEVIEW_AVENUE_REFERENCE_SPEC.md",
+      "materials": [
+        {"role": "gray_blue_siding", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/1318_gateview/1318_gateview_siding.tres", "sha256": "abf1e18a2e55ae511957a92aca271bda811fe683f813d09b1591fc7b51d54327", "shader_kind": "horizontal_siding", "roughness_range": [0.65, 0.85], "proof_primary_scale_m": 0.17, "scale_status": "course_estimate_low_confidence_proof_only"},
+        {"role": "white_trim", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/1318_gateview/1318_gateview_white_trim.tres", "sha256": "30c896ddb23419a590744572fe4396c00fee942c3654985be97e2f33694a7452", "shader_kind": "smooth_field_equalized_secondary", "roughness_range": [0.55, 0.78], "proof_primary_scale_m": 0.75, "scale_status": "finish_only_unmeasured_proof_only"}
+      ],
+      "runtime_attachment": "prototype_only",
+      "placement_blockers": ["exact_unit_to_run_mapping", "small_returns", "physical_scale", "lower_rear_occlusion"],
+      "excluded_motifs": ["unit_windows", "doors", "porch_canopy", "posts", "end_gable", "gutters", "downspouts", "unit_sequence"]
+    },
+    {
+      "source_key": "w96215649",
+      "receiver_key": "building:w96215649:wall",
+      "canonical_name": "1212 Mariner Drive",
+      "chunk_id": "x_-1__z_-3",
+      "prototype_status": "current_reference_prototype_only",
+      "temporal_status": "March and September 2025 official front/rear observations",
+      "region_scope": "target-specific observed front/rear/end siding, white trim, red-brown entry and dark privacy accent fields only; no unit sequence",
+      "observed_reference_provenance": [
+        {"id": "1212-SV-FRONT", "panorama_id": "moV9e3E7bv5UpjOrgfOOKA", "displayed_date": "2025-03", "coverage": "complete front long elevation", "reuse": "observation_only"},
+        {"id": "1212-SV-REAR", "panorama_id": "Z0fcNvA78OpNIXJaa9A79A", "displayed_date": "2025-09", "coverage": "rear long elevation and one end", "reuse": "observation_only"}
+      ],
+      "reference_spec": "discovery/facades/1212_MARINER_DRIVE_REFERENCE_SPEC.md",
+      "materials": [
+        {"role": "gray_blue_siding", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/1212_mariner/1212_mariner_siding.tres", "sha256": "fcf16d01599d9152e4c69c29243005efafb7128ebc989f8ef2ca49b2f76e662e", "shader_kind": "horizontal_siding", "roughness_range": [0.65, 0.85], "proof_primary_scale_m": 0.17, "scale_status": "course_estimate_low_confidence_proof_only"},
+        {"role": "white_trim", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/1212_mariner/1212_mariner_white_trim.tres", "sha256": "21bdf88cbc0acf6de4a6a02a470d4925722ad6232dc7d39eed0b8e0903f23482", "shader_kind": "smooth_field", "roughness_range": [0.55, 0.78], "proof_primary_scale_m": 0.75, "scale_status": "finish_only_unmeasured_proof_only"},
+        {"role": "red_brown_entry_accent", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/1212_mariner/1212_mariner_entry_accent.tres", "sha256": "8b48483e70b6365b67d3d492d4f2e611ea1d09fc6c3fe8cf74f69628f0170f61", "shader_kind": "smooth_field", "roughness_range": [0.55, 0.75], "proof_primary_scale_m": 0.85, "scale_status": "finish_only_unmeasured_proof_only"},
+        {"role": "dark_gray_blue_privacy_accent", "classification": "homogeneous_material_tile", "path": "res://game/resources/materials/world/1212_mariner/1212_mariner_privacy_accent.tres", "sha256": "719ca1fa5e74d298a338e4985a4951551bae47cd3a8a003aee39340a6013d857", "shader_kind": "smooth_field", "roughness_range": [0.65, 0.85], "proof_primary_scale_m": 0.9, "scale_status": "finish_only_unmeasured_proof_only"}
+      ],
+      "runtime_attachment": "prototype_only",
+      "placement_blockers": ["exact_unit_to_run_mapping", "short_facets_and_notches", "opposite_end_unobserved", "physical_scale", "lower_rear_occlusion"],
+      "excluded_motifs": ["unit_windows", "doors", "privacy_wing_geometry", "end_gable", "gutters", "downspouts", "unit_sequence", "1318_porch_grammar"]
+    }
+  ],
+  "explicit_excluded_targets": {
+    "w34313523": "Education Center Building 29B: both 2025 official sides show only enclosure/redevelopment context; no facade material, scale, motif, or current existence is established"
+  },
+  "forbidden_content": [
+    "windows",
+    "doors",
+    "tiers",
+    "unit_sequences",
+    "porch_canopies",
+    "roof_geometry",
+    "damage",
+    "repair_patches",
+    "site_containers",
+    "signage",
+    "module_atlases",
+    "unique_elevations",
+    "facade_scale_motifs"
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "canonical_name": "850 Avenue H",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_04_material_proof_capture.gd",
+  "captures": [
+    {
+      "bytes": 138440,
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "sha256": "07d36dd545513604c3602f1407ae5114d07eabaeaf1c5bc564b5dd4ff6437170",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_proof"
+    },
+    {
+      "bytes": 79343,
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "sha256": "aa0be1ff0f6cefc7af135d918560455a59f0015c572cc7186093baa0ca95f0ea",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_scale_proof"
+    },
+    {
+      "bytes": 78143,
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "sha256": "8e50d1f13e63c713b13fd7b3f421bdf2f5c617b77c0675d5be1d342a834e1d3d",
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_proof"
+    }
+  ],
+  "contains_facade_scale_motifs": false,
+  "display_driver": "macOS",
+  "evidence_role": "controlled_material_prototype_not_in_game_acceptance",
+  "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "godot_version": "4.7.2-stable (official)",
+  "material_path": "res://game/resources/materials/world/850_avenue_h/850_h_teal_edge.tres",
+  "material_role": "teal_accent",
+  "material_sha256": "76cf6b1231952c05362bf41e29ee473452a87aa6aa6f663404b0fed10e42481f",
+  "observed_region_scope": "provisional exposed east/end tan field and teal accent only; never high windows, repair patch, door, containers, or hidden sides",
+  "one_local_unit_m": 1.0,
+  "proof_panel_size_m": [
+    4.8,
+    3.2,
+    0.12
+  ],
+  "proof_primary_scale_m": 0.75,
+  "proof_receiver": "controlled_flat_proof_panel",
+  "prototype_status": "current_reference_prototype_only",
+  "receiver_key": "building:w34313546:wall",
+  "registry_sha256": "97c9e4e07b0680a3c825923cbd0433536e98d9dcc5d511279249a86e2163aac9",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_visual_review_not_self_accepted",
+  "runtime_attachment": false,
+  "scale_status": "finish_only_unmeasured_proof_only",
+  "schema_version": "ti.batch-04-material-proof-evidence/1",
+  "source_key": "w34313546",
+  "temporal_status": "March and September 2025 partial official observations; medium identity",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

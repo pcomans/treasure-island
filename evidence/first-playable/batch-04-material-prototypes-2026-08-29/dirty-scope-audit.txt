@@ -1,0 +1,25 @@
+Batch 04 dirty-worktree scope audit — 2026-08-29
+
+Authored in this bounded round:
+- game/resources/facades/batch_04_material_registry.json
+- game/resources/materials/world/batch_04/batch_04_horizontal_siding_field.gdshader (+ Godot UID)
+- 17 `.tres` files beneath job_corps_dormitory_b369, 449_avenue_h, 850_avenue_h, 810_avenue_d, bldg_461, 1318_gateview and 1212_mariner
+- game/tests/headless_batch_04_material_contract.gd (+ Godot UID)
+- game/tests/batch_04_material_proof_capture.gd (+ Godot UID; authored/parse-checked, not executed)
+- evidence/first-playable/batch-04-material-prototypes-2026-08-29/**
+- one appended Batch 04 prototype section in discovery/RETRO_LOG.md
+
+Explicitly not changed:
+- accepted Batch 02 shader, Batch 02/03 registries and all their materials
+- game/scripts/world/world_chunk_builder.gd (SHA-256 f56e77e35f167ccc14ed40843b76a6e28ed87d21e46e697a52b38f018e9427c3; no Batch 04 references)
+- every live receiver and all Hawkins, Building 3, Isle House, Museum and Oasis implementation/layout/material files
+- data/osm/** and generated/world/**
+- gameplay, routes, collision, navigation, spray, terrain, foundation and massing code
+- Education Center 29B; no material resource exists
+
+Pre-existing shared-worktree state preserved:
+- tracked modifications already present in AGENTS.md, discovery/RETRO_LOG.md, world_chunk_builder.gd, full_runtime_integration.gd and headless_gameplay_contract.gd
+- prior accepted/prototype facade discovery, implementation, tests and evidence
+- unrelated workspace files
+
+No commit, GUI/Metal capture, audible prompt, browse, image generation, download, install, upload, external asset/service or generated-source rewrite occurred.

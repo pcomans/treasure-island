@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "w34313520_complete_bay_muted_opaque_glass_proxy_standalone_prototype"
+albedo_color = Color(0.17, 0.235, 0.26, 1)
+metallic = 0.24
+roughness = 0.3

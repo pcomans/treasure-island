@@ -1,0 +1,13 @@
+Batch 04 frozen/generated source audit — 2026-08-29
+
+Command:
+git diff --exit-code -- data/osm generated/world
+
+Result:
+Exit 0; no output. No OSM or generated-world byte changed.
+
+Generated manifest SHA-256:
+e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3  generated/world/manifest.json
+
+Generated content SHA-256 reported by both validators:
+01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164

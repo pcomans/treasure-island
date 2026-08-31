@@ -1,0 +1,66 @@
+{
+  "schema_version": "ti.w34313520-standalone-runtime-isolation/1",
+  "source_key": "w34313520",
+  "scope": "standalone package only",
+  "runtime_delta": false,
+  "generated_data_delta": false,
+  "canonical_inventory_delta": false,
+  "target_wall_topology_before": {
+    "receiver_records": 1,
+    "exterior_runs": 34,
+    "vertices": 408,
+    "indices": 204,
+    "triangles": 68,
+    "live_facade_module_placements": 0
+  },
+  "target_wall_topology_after": {
+    "receiver_records": 1,
+    "exterior_runs": 34,
+    "vertices": 408,
+    "indices": 204,
+    "triangles": 68,
+    "live_facade_module_placements": 0
+  },
+  "byte_identity": [
+    {
+      "role": "generated manifest",
+      "path": "generated/world/manifest.json",
+      "before_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+      "after_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+    },
+    {
+      "role": "generated target chunk",
+      "path": "generated/world/chunks/x_-1__z_0.json",
+      "before_sha256": "b935890b89202fa181248552176364668e506a7630f0024ec86f12a084743d86",
+      "after_sha256": "b935890b89202fa181248552176364668e506a7630f0024ec86f12a084743d86"
+    },
+    {
+      "role": "world builder",
+      "path": "game/scripts/world/world_chunk_builder.gd",
+      "before_sha256": "84aaf060b6282e956bbae81e4880ac8e203e107760d627c48f7d9e5abb72183e",
+      "after_sha256": "84aaf060b6282e956bbae81e4880ac8e203e107760d627c48f7d9e5abb72183e"
+    },
+    {
+      "role": "accepted run helper",
+      "path": "game/scripts/world/facades/accepted_material_run_trials.gd",
+      "before_sha256": "4741097b177f02074c6b254e03f955dce46703dfef89b0a4cbc0a8b424f7ae6f",
+      "after_sha256": "4741097b177f02074c6b254e03f955dce46703dfef89b0a4cbc0a8b424f7ae6f"
+    },
+    {
+      "role": "canonical facade inventory",
+      "path": "discovery/FACADE_RECEIVER_INVENTORY.json",
+      "before_sha256": "efe1c0f531488f1ad3f0e2b2337beea1e93162df35ba7124bb8d5ef37475b544",
+      "after_sha256": "efe1c0f531488f1ad3f0e2b2337beea1e93162df35ba7124bb8d5ef37475b544"
+    },
+    {
+      "role": "prior shared Batch 06 prototype registry",
+      "path": "game/resources/facades/batch_06_prototype_registry.json",
+      "before_sha256": "a599df850a3ca51a51a3223820fc840201559ba26eb5ed514211eaedc2304132",
+      "after_sha256": "a599df850a3ca51a51a3223820fc840201559ba26eb5ed514211eaedc2304132"
+    }
+  ],
+  "absent_live_paths": [
+    "game/scripts/world/facades/w34313520_live_modules.gd",
+    "game/resources/facades/w34313520_module_calibration.json"
+  ]
+}

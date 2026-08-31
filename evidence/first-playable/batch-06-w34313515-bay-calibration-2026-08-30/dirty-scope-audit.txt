@@ -1,0 +1,23 @@
+Owned by this bounded w34313515 detached BAY calibration round:
+- game/resources/facades/w34313515_module_calibration.json
+- game/tests/support/w34313515_module_calibration.gd
+- game/tests/support/w34313515_module_calibration.gd.uid
+- game/tests/headless_w34313515_module_calibration_contract.gd
+- game/tests/headless_w34313515_module_calibration_contract.gd.uid
+- game/tests/w34313515_module_calibration_capture.gd
+- game/tests/w34313515_module_calibration_capture.gd.uid
+- evidence/first-playable/batch-06-w34313515-bay-calibration-2026-08-30/
+- one append-only section in discovery/RETRO_LOG.md
+
+Explicitly not edited by this calibration:
+- game/scripts/world/facades/accepted_material_run_trials.gd
+- game/scripts/world/facades/w34313564_live_modules.gd
+- game/scripts/world/world_chunk_builder.gd
+- existing w34313515 accepted field or standalone module material resources
+- existing w34313564 live module registry/helper/resources
+- generated/
+- game/scenes/world/ or any gameplay scene
+- massing, collision, navigation, spray, foundation, terrain, gameplay or lifecycle inventory sources
+- other buildings or prior evidence directories
+
+The broader parent workspace contains unrelated untracked user files outside treasure-island-game. They were preserved and are outside this evidence set.

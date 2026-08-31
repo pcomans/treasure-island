@@ -1,0 +1,107 @@
+schema_version: "ti.independent-massing-art-verdict/1"
+checked_date: "2026-08-29"
+reviewer: "/root/hawkins_texture_v2_review"
+scope: "owner_approved_hawkins_stepped_massing_runtime_override"
+target_wall_receiver: "building:w1249412093:wall"
+target_roof_object: "building:w1249412093:roof"
+decision: "ACCEPT_WITH_DOCUMENTED_APPROXIMATION"
+
+reference_basis:
+  owner_photo:
+    inspected: true
+    path: "/private/tmp/IMG_7170-reference.png"
+    sha256: "6b6a0f95902bd48c57c4f69b6bd7b97346c672d71c1b300d394170f6447db5cd"
+  retained_official_street_view_observations:
+    used: true
+    live_browsing_performed: false
+    imagery_downloaded_copied_or_retained: false
+  surveyed_plan_or_elevation_available: false
+
+evidence_integrity:
+  asset_inventory_verified: true
+  six_required_views_reviewed: true
+  generated_data_diff_empty_as_recorded: true
+  exact_receiver_identity: true
+  owner_reference_hash_verified: true
+  facade_layout_sha256: "4de2239af2e18fe4121930d51dee15e081d2f81a40393da2f1f29c69464761d9"
+  facade_signature: "d311c103c9273b94fc982588f46bae6ab67ba6be54b0d0a111dd305e39c22219"
+  massing_signature: "7c4fea5fec624ccfc3963b9fa5eb586b73ca61da0c09ae8539df3e0adb8cf291"
+
+capture_transforms:
+  address_01_02_identical: true
+  corner_04_06_identical_except_light: true
+  prior_flat_and_current_stepped_poses_identical: false
+  pixel_exact_before_after_claimed: false
+  wsw_03_requested_distance_m: "35_to_45"
+  wsw_03_actual_outward_distance_m: 12.0
+  wsw_03_manifest_intent_text_says_40m: true
+  corner_04_06_player_distance_m: 40.0
+  combined_suite_adequate: true
+  qualification: "03_proves_full_main_story_cadence_while_04_and_06_prove_the_whole_step_and_companion"
+
+separated_verdicts:
+  geometry_contract:
+    verdict: "PASS_AS_EVIDENCED"
+    exact_source_and_footprint_preserved: true
+    main_story_count: 6
+    companion_story_count: 4
+    main_top_y_m: 25.274
+    companion_top_y_m: 18.274
+    exposed_step_only_above_companion: true
+    old_10_274m_face_absent: "PASS_AS_EVIDENCED"
+    roof_hierarchy: "PASS_WITH_DOCUMENTED_FLAT_ROOF_APPROXIMATION"
+  facade_remap:
+    verdict: "PASS"
+    material_assets_byte_identical_to_prior_acceptance: true
+    complete_module_topology: "PASS"
+    story_spacing_and_scale: "PASS_AS_APPROVED_PRODUCTION_INFERENCE"
+    connector_alignment: "PASS"
+    address_one_offs_preserved: "PASS"
+    companion_cadence_distinct: "PASS"
+    step_and_unobserved_sides_material_only: "PASS_AS_EVIDENCED"
+    aliasing_moire_or_macro_repeat: "PASS"
+  exact_current_receiver_and_gameplay_presentation:
+    verdict: "PASS"
+    close_readability: "PASS"
+    ordinary_third_person_readability: "PASS_WITH_COMBINED_VIEW_EVIDENCE"
+    oblique_readability: "PASS"
+    changed_light_behavior: "PASS"
+    companion_roof_support: "PASS_AS_EVIDENCED"
+    lower_wall_spray: "PASS"
+    exposed_step_wall_spray: "PASS"
+    visible_foundation_gap_or_z_fighting: false
+    visible_internal_face_or_old_roof_artifact: false
+    visible_collision_or_spray_mismatch: false
+  whole_building_real_world_resemblance:
+    verdict: "PASS_WITH_DOCUMENTED_APPROXIMATION"
+    six_story_main_plus_four_story_companion: "PASS"
+    reads_as_stretched_generic_box: false
+    owner_photo_broad_proportion: "PASS_WITHIN_APPROVED_INFERRED_SPLIT"
+    as_built_claim_supported: false
+
+module_counts:
+  W-P: 128
+  S-H: 128
+  R-C: 10
+  W-N: 10
+  G-W: 17
+  L-G: 1
+  D-P: 1
+  F-SIGN: 1
+  C-B: 1
+  D-S: 1
+  G-G: 1
+
+new_art_defects:
+  found: false
+  findings: []
+
+residual_approximations:
+  routine_correction_round_indicated: false
+  items:
+    - "P_Q_split_is_connector_aligned_production_inference_not_surveyed_plan"
+    - "3_5m_story_grid_and_25_274_18_274m_tops_are_reversible_game_values"
+    - "flat_roofs_omit_parapet_terrace_pavilion_rail_solar_canopy_and_roof_furniture"
+    - "courtyard_setbacks_deep_projections_and_smaller_articulated_planes_are_omitted"
+    - "facade_counts_and_offsets_are_reference_relative_not_rectified_as_built"
+    - "no_single_35_to_45m_WSW_broadside_frames_both_complete_rooflines"

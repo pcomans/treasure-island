@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://game/resources/materials/world/batch_06/batch_06_wall_tangent_aperiodic_field.gdshader" id="1_shader"]
+
+[resource]
+resource_name = "w34313520_pale_warm_render_exact_receiver_detached_trial"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(0.76, 0.755, 0.715, 1)
+shader_parameter/secondary_color = Color(0.665, 0.675, 0.65, 1)
+shader_parameter/roughness_value = 0.8
+shader_parameter/field_kind = 0
+shader_parameter/primary_scale_m = 0.95
+shader_parameter/secondary_scale_m = 0.29
+shader_parameter/relief_strength = 0.01
+shader_parameter/color_variation = 0.016
+shader_parameter/filter_start_cycles_per_pixel = 0.12
+shader_parameter/filter_end_cycles_per_pixel = 0.34

@@ -1,0 +1,68 @@
+{
+  "schema_version": "ti.hawkins-facade-evidence/1",
+  "engine": "4.7.2-stable (official)",
+  "renderer": "Apple M1 Pro (Apple7)",
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "asset_path": "res://game/resources/textures/world/generated/77_bruton_facade_albedo_v1.png",
+  "asset_sha256": "1cf8e3091469f92b28211c5b212fd1e1cc34fb1aaadc1b4a098e856481966e9f",
+  "target_object_key": "building:w1249412093:wall",
+  "target_source_keys": [
+    "w1249412093"
+  ],
+  "generated_material_key": "building_wall",
+  "runtime_override_name": "hawkins_77_bruton_facade_experiment",
+  "bay_width_m": 3.8,
+  "story_height_m": 3.0,
+  "tile_bays": 2.0,
+  "tile_stories": 2.0,
+  "tile_repeat_width_m": 7.6,
+  "tile_repeat_height_m": 6.0,
+  "wall_source_height_m": 6.0,
+  "wall_top_elevation_m": 10.274,
+  "known_uv_limitation": "Wall U restarts at each generated footprint/foundation segment; this capture is the acceptance check for visible phase incoherence.",
+  "player_position": [
+    -113.890998840332,
+    4.49856472015381,
+    399.096008300781
+  ],
+  "player_yaw": -2.685995,
+  "camera_pitch": 0.0172205,
+  "camera_position": [
+    -116.310646057129,
+    6.40385580062866,
+    394.15771484375
+  ],
+  "camera_forward": [
+    0.439933747053146,
+    0.0172197725623846,
+    0.897865116596222
+  ],
+  "camera_target": [
+    -94.0910034179688,
+    7.27400016784668,
+    439.506011962891
+  ],
+  "camera_target_screen_error_px": 0.00546298734843731,
+  "ground_y": 4.49855041503906,
+  "physics_grounded": true,
+  "ground_object": "land:w26767313:x_-1__z_1",
+  "baseline": {
+    "file": "01-baseline-shared-plaster.png",
+    "sha256": "4b079a7b9dc6d2fbd65d37e1ffd9c71bc2fd2fca3f7d9b5ee6cb048aeaaa31b3",
+    "bytes": 1061025,
+    "dimensions": [
+      1440,
+      900
+    ]
+  },
+  "selected": {
+    "file": "02-selected-hawkins-facade.png",
+    "sha256": "6041e1f02d4ecb831b23df86e6a4b2f0936cc15c7a0f9b2bf689d98fbc125b86",
+    "bytes": 1061511,
+    "dimensions": [
+      1440,
+      900
+    ]
+  }
+}

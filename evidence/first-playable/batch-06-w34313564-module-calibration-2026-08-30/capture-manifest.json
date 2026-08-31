@@ -1,0 +1,724 @@
+{
+  "schema_version": "ti.w34313564-module-calibration-evidence/1",
+  "review_status": "ready_for_independent_exact_receiver_module_calibration_review_not_self_accepted",
+  "evidence_role": "detached exact-receiver module calibration over the immutable active field trial; not live attachment, observed coordinate/cadence acceptance, lifecycle change, or whole-building proof",
+  "source_key": "w34313564",
+  "receiver_key": "building:w34313564:wall",
+  "generator": "game/tests/w34313564_module_calibration_capture.gd",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/w34313564_module_calibration_capture.gd",
+  "registry_path": "res://game/resources/facades/w34313564_module_calibration.json",
+  "registry_sha256": "275ef095a0d736fae62c8b243a0efe2780a77c785b0620973e823f4cc3131d30",
+  "helper_path": "res://game/tests/support/w34313564_module_calibration.gd",
+  "helper_sha256": "b49b8c20fbbe40f2728c0acadf8d53f0593856091e6df897a613d4f2f8680b71",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "protected_inputs": {
+    "res://game/resources/facades/w34313564_module_calibration.json": "275ef095a0d736fae62c8b243a0efe2780a77c785b0620973e823f4cc3131d30",
+    "res://game/tests/support/w34313564_module_calibration.gd": "b49b8c20fbbe40f2728c0acadf8d53f0593856091e6df897a613d4f2f8680b71",
+    "res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "res://game/scripts/world/world_chunk_builder.gd": "c770a977e879c0d077acb8fb4d33b52d1bd6aa3b454a50ba8e2125cb71e8ba8d",
+    "res://game/scripts/world/facades/accepted_material_run_trials.gd": "8fd1d899cf658f84a5044597e1194d6d0450b74b00281b73ad9b1c91914b21d0",
+    "res://evidence/first-playable/batch-06-exact-receiver-trials-2026-08-30/capture-manifest.json": "034b6ef3ad0e85b81a2565a9443172bec3da9364ed29ab5b4cc6b34258e72449"
+  },
+  "generated_world_before_overlay": {
+    "chunks": 38,
+    "meshes": 729,
+    "surfaces": 736,
+    "triangles": 48389,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "receiver_child_count_before_and_after_overlay": [
+    2,
+    2
+  ],
+  "active_field_trial_metadata": {
+    "status": "controlled_exact_receiver_scale_trial_pending_independent_review",
+    "source_key": "w34313564",
+    "receiver_key": "building:w34313564:wall",
+    "material_groups": [
+      {
+        "id": "W34313564-MAT-TAN",
+        "surface_name": "trial_w34313564_tan_runs",
+        "run_groups": [
+          [
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        ],
+        "trial_length_m": 87.651,
+        "mapping_ids": [
+          "B06-34313564-SSE-EAST-RETURN",
+          "B06-34313564-SSE-CENTRAL"
+        ],
+        "prototype_material_path": "res://game/resources/materials/world/w34313564/w34313564_tan_field.tres",
+        "material_path": "res://game/resources/materials/world/w34313564/w34313564_tan_exact_trial.tres",
+        "limitation": "Muted tan SSE homogeneous field only; 0.82 m finish scale remains an unmeasured reversible assumption."
+      },
+      {
+        "id": "W34313564-MAT-PALE",
+        "surface_name": "trial_w34313564_pale_runs",
+        "run_groups": [
+          [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19
+          ]
+        ],
+        "trial_length_m": 141.34,
+        "mapping_ids": [
+          "B06-34313564-ENE-END",
+          "B06-34313564-NNW-OUTER"
+        ],
+        "prototype_material_path": "res://game/resources/materials/world/w34313564/w34313564_pale_field.tres",
+        "material_path": "res://game/resources/materials/world/w34313564/w34313564_pale_exact_trial.tres",
+        "limitation": "Off-white/light-gray ENE and NNW homogeneous field only; 0.88 m finish scale remains an unmeasured reversible assumption."
+      }
+    ],
+    "standalone_blocker": "W34313564-MAT-PLINTH remains standalone because exact vertical extent and side bounds are unresolved; a run-only partition cannot attach it without prohibited geometry splitting.",
+    "modules": 0,
+    "rejected_modules_live": 0
+  },
+  "placement_policy": {
+    "position_status": "production_inference_for_calibration_only_not_observed_coordinate",
+    "cadence_status": "no_period_or_global_sequence_inferred",
+    "count_status": "five bounded face-role exemplars; not an opening count claim",
+    "horizontal_anchor": "metres along the ordered mapped face chain from its first run start",
+    "horizontal_uncertainty_policy": "each center may move plus_or_minus_4m while the full nominal bounds remain inside the same mapped run",
+    "orientation": "local_X_run_tangent_local_Y_world_up_local_Z_outward_wall_normal",
+    "receiver_field_ownership": "the active exact-run field trial remains the sole nonopening wall field",
+    "maximum_outward_depth_m": 0.18,
+    "runtime_attachment": false,
+    "collision_nodes": 0.0,
+    "navigation_nodes": 0.0,
+    "spray_nodes": 0.0,
+    "placement_count": 5.0
+  },
+  "module_contracts": [
+    {
+      "motif_id": "W34313564-HWIN",
+      "kind": "complete_horizontal_four_pane_window",
+      "nominal_bounds_m": [
+        4.9,
+        1.9
+      ],
+      "opening_m": [
+        4.25,
+        1.2
+      ],
+      "opening_uncertainty_m": {
+        "width": [
+          3.4,
+          5.2
+        ],
+        "height": [
+          0.9,
+          1.5
+        ]
+      },
+      "pane_count": 4.0,
+      "frame_thickness_m": 0.11,
+      "height_anchor": "top_gap",
+      "top_gap_assumption_m": 0.7,
+      "top_gap_uncertainty_m": [
+        0.4,
+        1.1
+      ],
+      "module_owns_field_geometry": false,
+      "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+      "complete_motif": true
+    },
+    {
+      "motif_id": "W34313564-PDOOR",
+      "kind": "complete_plain_personnel_door",
+      "nominal_bounds_m": [
+        1.9,
+        3.0
+      ],
+      "opening_m": [
+        1.15,
+        2.25
+      ],
+      "opening_uncertainty_m": {
+        "width": [
+          0.9,
+          1.4
+        ],
+        "height": [
+          2.0,
+          2.5
+        ]
+      },
+      "frame_thickness_m": 0.1,
+      "height_anchor": "terrain_interpolated_run_base",
+      "base_clearance_assumption_m": 0.08,
+      "base_clearance_uncertainty_m": [
+        0.0,
+        0.18
+      ],
+      "module_owns_field_geometry": false,
+      "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+      "complete_motif": true
+    }
+  ],
+  "placements": [
+    {
+      "placement_id": "CAL-SSE-PDOOR-01",
+      "motif_id": "W34313564-PDOOR",
+      "face": "SSE",
+      "host_material_id": "W34313564-MAT-TAN",
+      "mapping_id": "B06-34313564-SSE-EAST-RETURN",
+      "face_chain_runs": [
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0
+      ],
+      "center_chain_m": 30.0,
+      "center_chain_uncertainty_m": 4.0,
+      "run_ownership": [
+        6.0
+      ],
+      "anchor_run": 6.0,
+      "expected_wall_anchor_world_xz_m": [
+        40.423639,
+        -604.099286
+      ],
+      "confidence": "production_inference_on_observed_face"
+    },
+    {
+      "placement_id": "CAL-SSE-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "SSE",
+      "host_material_id": "W34313564-MAT-TAN",
+      "mapping_id": "B06-34313564-SSE-CENTRAL",
+      "face_chain_runs": [
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0
+      ],
+      "center_chain_m": 68.0,
+      "center_chain_uncertainty_m": 4.0,
+      "run_ownership": [
+        8.0
+      ],
+      "anchor_run": 8.0,
+      "expected_wall_anchor_world_xz_m": [
+        73.940351,
+        -622.005431
+      ],
+      "confidence": "production_inference_on_observed_face"
+    },
+    {
+      "placement_id": "CAL-ENE-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "ENE",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_id": "B06-34313564-ENE-END",
+      "face_chain_runs": [
+        10.0,
+        11.0,
+        12.0,
+        13.0
+      ],
+      "center_chain_m": 18.0,
+      "center_chain_uncertainty_m": 4.0,
+      "run_ownership": [
+        12.0
+      ],
+      "anchor_run": 12.0,
+      "expected_wall_anchor_world_xz_m": [
+        82.790694,
+        -647.141098
+      ],
+      "confidence": "production_inference_on_observed_face"
+    },
+    {
+      "placement_id": "CAL-NNW-PDOOR-01",
+      "motif_id": "W34313564-PDOOR",
+      "face": "NNW",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_id": "B06-34313564-NNW-OUTER",
+      "face_chain_runs": [
+        14.0,
+        15.0,
+        16.0,
+        17.0,
+        18.0,
+        19.0
+      ],
+      "center_chain_m": 32.0,
+      "center_chain_uncertainty_m": 4.0,
+      "run_ownership": [
+        16.0
+      ],
+      "anchor_run": 16.0,
+      "expected_wall_anchor_world_xz_m": [
+        42.577443,
+        -654.502062
+      ],
+      "confidence": "production_inference_on_partially_occluded_observed_face"
+    },
+    {
+      "placement_id": "CAL-NNW-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "NNW",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_id": "B06-34313564-NNW-OUTER",
+      "face_chain_runs": [
+        14.0,
+        15.0,
+        16.0,
+        17.0,
+        18.0,
+        19.0
+      ],
+      "center_chain_m": 54.0,
+      "center_chain_uncertainty_m": 4.0,
+      "run_ownership": [
+        17.0
+      ],
+      "anchor_run": 17.0,
+      "expected_wall_anchor_world_xz_m": [
+        23.172995,
+        -644.135414
+      ],
+      "confidence": "production_inference_on_partially_occluded_observed_face"
+    }
+  ],
+  "resolved_placements": [
+    {
+      "placement_id": "CAL-SSE-PDOOR-01",
+      "motif_id": "W34313564-PDOOR",
+      "face": "SSE",
+      "host_material_id": "W34313564-MAT-TAN",
+      "mapping_id": "B06-34313564-SSE-EAST-RETURN",
+      "run_ownership": [
+        6
+      ],
+      "anchor_run": 6,
+      "anchor_run_fraction": 0.535685033331821,
+      "wall_anchor_world_m": [
+        40.4236450195312,
+        3.31342911720276,
+        -604.099304199219
+      ],
+      "module_origin_world_m": [
+        40.4519081115723,
+        3.31342911720276,
+        -604.04638671875
+      ],
+      "tangent_world_xz": [
+        0.882018864154816,
+        -0.471214115619659
+      ],
+      "outward_normal_world_xz": [
+        0.471055328845978,
+        0.882103681564331
+      ],
+      "base_y_m": 3.31342904880002,
+      "top_y_m": 8.7519998550415
+    },
+    {
+      "placement_id": "CAL-SSE-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "SSE",
+      "host_material_id": "W34313564-MAT-TAN",
+      "mapping_id": "B06-34313564-SSE-CENTRAL",
+      "run_ownership": [
+        8
+      ],
+      "anchor_run": 8,
+      "anchor_run_fraction": 0.532480730693091,
+      "wall_anchor_world_m": [
+        73.9403533935547,
+        3.16710233688354,
+        -622.005432128906
+      ],
+      "module_origin_world_m": [
+        73.968620300293,
+        7.39699983596802,
+        -621.952514648438
+      ],
+      "tangent_world_xz": [
+        0.882023990154266,
+        -0.471204459667206
+      ],
+      "outward_normal_world_xz": [
+        0.471055328845978,
+        0.882103681564331
+      ],
+      "base_y_m": 3.16710231984865,
+      "top_y_m": 8.7519998550415
+    },
+    {
+      "placement_id": "CAL-ENE-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "ENE",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_id": "B06-34313564-ENE-END",
+      "run_ownership": [
+        12
+      ],
+      "anchor_run": 12,
+      "anchor_run_fraction": 0.48466847444398,
+      "wall_anchor_world_m": [
+        82.7906951904297,
+        3.2431423664093,
+        -647.14111328125
+      ],
+      "module_origin_world_m": [
+        82.843620300293,
+        7.39699983596802,
+        -647.169372558594
+      ],
+      "tangent_world_xz": [
+        -0.471234202384949,
+        -0.882008075714111
+      ],
+      "outward_normal_world_xz": [
+        0.882103681564331,
+        -0.471055328845978
+      ],
+      "base_y_m": 3.24314241326749,
+      "top_y_m": 8.7519998550415
+    },
+    {
+      "placement_id": "CAL-NNW-PDOOR-01",
+      "motif_id": "W34313564-PDOOR",
+      "face": "NNW",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_id": "B06-34313564-NNW-OUTER",
+      "run_ownership": [
+        16
+      ],
+      "anchor_run": 16,
+      "anchor_run_fraction": 0.443410224055888,
+      "wall_anchor_world_m": [
+        42.5774345397949,
+        3.7080295085907,
+        -654.502075195312
+      ],
+      "module_origin_world_m": [
+        42.5491714477539,
+        3.7080295085907,
+        -654.554992675781
+      ],
+      "tangent_world_xz": [
+        -0.882014572620392,
+        0.471222192049026
+      ],
+      "outward_normal_world_xz": [
+        -0.471055328845978,
+        -0.882103681564331
+      ],
+      "base_y_m": 3.70802950328372,
+      "top_y_m": 8.7519998550415
+    },
+    {
+      "placement_id": "CAL-NNW-HWIN-01",
+      "motif_id": "W34313564-HWIN",
+      "face": "NNW",
+      "host_material_id": "W34313564-MAT-PALE",
+      "mapping_id": "B06-34313564-NNW-OUTER",
+      "run_ownership": [
+        17
+      ],
+      "anchor_run": 17,
+      "anchor_run_fraction": 0.532774562987549,
+      "wall_anchor_world_m": [
+        23.1729907989502,
+        3.75200009346008,
+        -644.135437011719
+      ],
+      "module_origin_world_m": [
+        23.1447277069092,
+        7.39699983596802,
+        -644.188354492188
+      ],
+      "tangent_world_xz": [
+        -0.882026731967926,
+        0.471199303865433
+      ],
+      "outward_normal_world_xz": [
+        -0.471055328845978,
+        -0.882103681564331
+      ],
+      "base_y_m": 3.75200009346008,
+      "top_y_m": 8.7519998550415
+    }
+  ],
+  "detached_overlay": {
+    "parent": "main_capture_scene_only",
+    "module_instances": 5,
+    "mesh_instances": 34,
+    "field_meshes": 0,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "runtime_attachment": false
+  },
+  "captures": [
+    {
+      "id": "01-close-sse-hwin",
+      "view_kind": "close_tan_hwin",
+      "file": "images/01-close-sse-hwin.png",
+      "sha256": "49f2c0df61223f9b7baace740b6fe604ffb07b042907eefadb7425e3a6b0ec90",
+      "bytes": 155575,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        77.9716262817383,
+        7.64699983596802,
+        -616.154724121094
+      ],
+      "aim_target_m": [
+        73.968620300293,
+        7.39699983596802,
+        -621.952514648438
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-SSE-HWIN-01"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 62,
+      "sample_luminance_range": 0.612418837845325
+    },
+    {
+      "id": "02-close-nnw-pdoor",
+      "view_kind": "close_pale_pdoor",
+      "file": "images/02-close-nnw-pdoor.png",
+      "sha256": "d8b78dbc32f23b13dd6cb419de06265afc472cc22fb3d800399fe31faffc6f03",
+      "bytes": 746307,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        40.2520484924316,
+        6.35802984237671,
+        -660.130310058594
+      ],
+      "aim_target_m": [
+        42.5491714477539,
+        4.95802974700928,
+        -654.554992675781
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-NNW-PDOOR-01"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 214,
+      "sample_luminance_range": 0.447382770478725
+    },
+    {
+      "id": "03-ordinary-sse-layout",
+      "view_kind": "ordinary_tan_face_layout",
+      "file": "images/03-ordinary-sse-layout.png",
+      "sha256": "cd663a0ddb3eb9a6c9d539770762220e8595a1e2649ee7dd267718c21aa84c79",
+      "bytes": 886881,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        76.9662933349609,
+        5.66241931915283,
+        -576.004089355469
+      ],
+      "aim_target_m": [
+        57.1819648742676,
+        5.9624195098877,
+        -613.052429199219
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 293,
+      "sample_luminance_range": 0.612418837845325
+    },
+    {
+      "id": "04-ordinary-nnw-layout",
+      "view_kind": "ordinary_pale_face_layout",
+      "file": "images/04-ordinary-nnw-layout.png",
+      "sha256": "3c01aafd936cfc78cbc31cfab99b0b4264714b18888806dc3298085211ff1475",
+      "bytes": 785871,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        16.8593940734863,
+        6.14836168289185,
+        -679.310119628906
+      ],
+      "aim_target_m": [
+        32.8752746582031,
+        6.54836177825928,
+        -649.318603515625
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 262,
+      "sample_luminance_range": 0.612418837845325
+    },
+    {
+      "id": "05-changed-light-oblique-ene-hwin",
+      "view_kind": "changed_light_oblique_pale_hwin",
+      "file": "images/05-changed-light-oblique-ene-hwin.png",
+      "sha256": "55889202c2c4ff6ce4c5b11e5d79bca87d16622a031237f0a439f2e20ff0b1b6",
+      "bytes": 686543,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        94.009147644043,
+        8.39699935913086,
+        -664.468444824219
+      ],
+      "aim_target_m": [
+        82.843620300293,
+        7.39699983596802,
+        -647.169372558594
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -24.0,
+        118.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-ENE-HWIN-01"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 209,
+      "sample_luminance_range": 0.775338061153889
+    },
+    {
+      "id": "06-pale-orientation-corner",
+      "view_kind": "pale_ene_to_nnw_corner",
+      "file": "images/06-pale-orientation-corner.png",
+      "sha256": "8763e348646b766be318b8c9b05a66dee56c167ac8a072cdb4121955a1eb65e3",
+      "bytes": 637233,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        78.3590316772461,
+        6.5,
+        -694.45849609375
+      ],
+      "aim_target_m": [
+        70.802001953125,
+        6.09999990463257,
+        -669.580993652344
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [],
+      "before_run": 13,
+      "after_run": 14,
+      "sample_unique_colors": 225,
+      "sample_luminance_range": 0.612418837845325
+    },
+    {
+      "id": "07-tan-pale-host-boundary",
+      "view_kind": "tan_sse_to_pale_ene_host_color_boundary",
+      "file": "images/07-tan-pale-host-boundary.png",
+      "sha256": "2b47a7dd5e16bda039d23bbdc584fd0517c4d07622302f21f527cdbd03100b93",
+      "bytes": 717810,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        127.632461547852,
+        6.80000019073486,
+        -620.220092773438
+      ],
+      "aim_target_m": [
+        91.2730026245117,
+        6.09999990463257,
+        -631.265014648438
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [],
+      "before_run": 9,
+      "after_run": 10,
+      "sample_unique_colors": 247,
+      "sample_luminance_range": 0.612418837845325
+    }
+  ],
+  "capture_count": 7,
+  "preserved_blockers": [
+    "exact real-world opening coordinates and total opening count are not observable",
+    "no periodic cadence or door-window alternation is established",
+    "WSW and runs 0..4 remain placeholder/protected with zero calibration modules",
+    "run index 20 does not exist under the zero-based 20-run receiver contract",
+    "plinth vertical extent, pipe/vent placement, eave, ramps, stairs, rails, landings, yard objects, and access geometry remain excluded",
+    "NNW detail remains partially occluded",
+    "live attachment, lifecycle acceptance, and whole-building resemblance remain blocked"
+  ],
+  "validity_inspection_only": "Inspect target visibility, complete motifs, host roles, transforms, depth, camera diversity and boundary coverage only. Executor art acceptance is prohibited."
+}

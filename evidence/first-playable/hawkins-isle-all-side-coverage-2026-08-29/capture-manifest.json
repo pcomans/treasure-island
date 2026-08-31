@@ -1,0 +1,743 @@
+{
+  "schema_version": "ti.hawkins-isle-all-side-evidence/1",
+  "generator": "game/tests/hawkins_isle_all_side_capture.gd",
+  "evidence_role": "mechanical_render_proof_not_independent_art_review",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "viewport": [
+    1440,
+    900
+  ],
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "hawkins": {
+    "receiver": "building:w1249412093:wall",
+    "source_keys": [
+      "w1249412093"
+    ],
+    "facade_signature": "d311c103c9273b94fc982588f46bae6ab67ba6be54b0d0a111dd305e39c22219",
+    "field_policy": "accepted WSW/SE retained; smooth base plus plain upper on ENE/NNW; plain step; no new modules"
+  },
+  "isle_house_high": {
+    "receiver": "building-composite:w1249412094:w1282547786:wall",
+    "source_keys": [
+      "w1282547786"
+    ],
+    "facade_signature": "e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1",
+    "field_segment_count": 13,
+    "field_quad_count": 23,
+    "module_runs": [
+      5,
+      6,
+      7
+    ],
+    "new_field_runs": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "module_free_runs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "shared_tower_only_runs": [
+      10,
+      11,
+      12
+    ],
+    "low_receiver": "building-composite:w1249412094:w1282547787:wall",
+    "low_receiver_untouched": true
+  },
+  "generated_world_counts": {
+    "chunks": 38,
+    "meshes": 729,
+    "triangles": 48389,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "capture_count": 12,
+  "captures": [
+    {
+      "id": "01-front-close",
+      "target": "hawkins",
+      "role": "accepted_front",
+      "distance_class": "close",
+      "run_scope": [
+        7,
+        8,
+        9
+      ],
+      "file": "images/hawkins/01-front-close.png",
+      "sha256": "35fd43882bc153ba801f4ae96de889352849c3588309baa29491a61f88495cb5",
+      "bytes": 945545,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 290,
+      "sample_luminance_range": 0.629972577095032,
+      "pause_overlay_visible": false,
+      "pose_id": "hawkins_01-front-close",
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.2010498046875,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -69.7148361206055,
+        6.15000009536743,
+        514.459167480469
+      ],
+      "player_position": [
+        -65.8761901855469,
+        4.2010498046875,
+        517.663024902344
+      ],
+      "camera_position": [
+        -61.6538734436035,
+        6.2572021484375,
+        521.187072753906
+      ],
+      "camera_forward": [
+        -0.767690658569336,
+        -0.0102094281464815,
+        -0.640739321708679
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "requested_distance_m": 5.0,
+      "actual_outward_distance_m": 5.0,
+      "side_u_m": 15.5
+    },
+    {
+      "id": "02-front-ordinary",
+      "target": "hawkins",
+      "role": "accepted_front",
+      "distance_class": "ordinary",
+      "run_scope": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6
+      ],
+      "file": "images/hawkins/02-front-ordinary.png",
+      "sha256": "017d69e56b6d593c6fa1de069b0e422c9016590f850f155d670fa53986ee1bd6",
+      "bytes": 104152,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 107,
+      "sample_luminance_range": 0.848108232021332,
+      "pause_overlay_visible": false,
+      "pose_id": "hawkins_02-front-ordinary",
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.26655578613281,
+      "ground_object": "land:w26767313:x_-1__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -100.240135192871,
+        14.7740001678467,
+        487.031097412109
+      ],
+      "player_position": [
+        -110.870582580566,
+        4.26655578613281,
+        492.598297119141
+      ],
+      "camera_position": [
+        -112.671646118164,
+        4.8252010345459,
+        493.541534423828
+      ],
+      "camera_forward": [
+        0.722680330276489,
+        0.578354239463806,
+        -0.378470063209534
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "requested_distance_m": 40.0,
+      "actual_outward_distance_m": 12.0,
+      "side_u_m": 40.0
+    },
+    {
+      "id": "03-ene-covered-close",
+      "target": "hawkins",
+      "role": "conservative_all_side_field",
+      "distance_class": "close",
+      "run_scope": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "file": "images/hawkins/03-ene-covered-close.png",
+      "sha256": "2464f93b39b295479db1ddd947059db6f51c1911a4a86915c6ab371797b1a14e",
+      "bytes": 90808,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 70,
+      "sample_luminance_range": 0.440085500478745,
+      "pause_overlay_visible": false,
+      "pose_id": "hawkins_03-ene-covered-close",
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.42655944824219,
+      "ground_object": "land:w26767313:x_-1__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -54.5139083862305,
+        13.0,
+        455.906799316406
+      ],
+      "player_position": [
+        -43.878532409668,
+        4.42655944824219,
+        450.349029541016
+      ],
+      "camera_position": [
+        -40.7055549621582,
+        4.46544456481934,
+        448.69091796875
+      ],
+      "camera_forward": [
+        -0.777299046516418,
+        0.480427801609039,
+        0.40619620680809
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "requested_distance_m": 12.0,
+      "actual_outward_distance_m": 12.0,
+      "side_u_m": 28.0
+    },
+    {
+      "id": "04-ene-covered-ordinary",
+      "target": "hawkins",
+      "role": "conservative_all_side_field",
+      "distance_class": "ordinary",
+      "run_scope": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15
+      ],
+      "file": "images/hawkins/04-ene-covered-ordinary.png",
+      "sha256": "2e42b9a80a85810c23923016283a0dcc5d01703e1ce8bba946e79d10b7af0c02",
+      "bytes": 211410,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 96,
+      "sample_luminance_range": 0.567730993032455,
+      "pause_overlay_visible": false,
+      "pose_id": "hawkins_04-ene-covered-ordinary",
+      "physics_grounded_pose": true,
+      "ground_y_m": 3.69281005859375,
+      "ground_object": "land:w26767313:x_-1__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -54.5139083862305,
+        15.0,
+        455.906799316406
+      ],
+      "player_position": [
+        -8.42727279663086,
+        3.69281005859375,
+        431.823150634766
+      ],
+      "camera_position": [
+        -3.62896299362183,
+        4.72379589080811,
+        429.315673828125
+      ],
+      "camera_forward": [
+        -0.872417569160461,
+        0.17618465423584,
+        0.455902129411697
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "requested_distance_m": 52.0,
+      "actual_outward_distance_m": 52.0,
+      "side_u_m": 28.0
+    },
+    {
+      "id": "05-nnw-module-free-close",
+      "target": "hawkins",
+      "role": "unobserved_module_free",
+      "distance_class": "close",
+      "run_scope": [
+        16,
+        17,
+        18,
+        19
+      ],
+      "file": "images/hawkins/05-nnw-module-free-close.png",
+      "sha256": "0fa4b12c97d1678edc11664d64df2f7be0a92a1788a54011a4a9211f02a6edf2",
+      "bytes": 116099,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 92,
+      "sample_luminance_range": 0.571960017085075,
+      "pause_overlay_visible": false,
+      "pose_id": "hawkins_05-nnw-module-free-close",
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.6533203125,
+      "ground_object": "land:w26767313:x_-1__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -94.5371398925781,
+        13.0,
+        439.724304199219
+      ],
+      "player_position": [
+        -99.8171310424805,
+        4.6533203125,
+        428.948333740234
+      ],
+      "camera_position": [
+        -101.484237670898,
+        4.64942073822021,
+        425.545928955078
+      ],
+      "camera_forward": [
+        0.388949990272522,
+        0.467527687549591,
+        0.793810963630676
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "requested_distance_m": 12.0,
+      "actual_outward_distance_m": 12.0,
+      "side_u_m": 28.0
+    },
+    {
+      "id": "06-nnw-module-free-ordinary",
+      "target": "hawkins",
+      "role": "unobserved_module_free",
+      "distance_class": "ordinary",
+      "run_scope": [
+        16,
+        17,
+        18,
+        19
+      ],
+      "file": "images/hawkins/06-nnw-module-free-ordinary.png",
+      "sha256": "03c79c675893930f726348b531f4f2cda6d2ff02fded83928fc927e517decf18",
+      "bytes": 704738,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 256,
+      "sample_luminance_range": 0.664600774645805,
+      "pause_overlay_visible": false,
+      "pose_id": "hawkins_06-nnw-module-free-ordinary",
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.48654174804688,
+      "ground_object": "land:w26767313:x_-1__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -94.5371398925781,
+        15.0,
+        439.724304199219
+      ],
+      "player_position": [
+        -115.657096862793,
+        4.48654174804688,
+        396.620391845703
+      ],
+      "camera_position": [
+        -118.039878845215,
+        5.52603960037231,
+        391.757293701172
+      ],
+      "camera_forward": [
+        0.4332375228405,
+        0.174638256430626,
+        0.884198307991028
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "requested_distance_m": 48.0,
+      "actual_outward_distance_m": 48.0,
+      "side_u_m": 28.0
+    },
+    {
+      "id": "07-front-close",
+      "target": "isle-house",
+      "role": "accepted_front",
+      "distance_class": "close",
+      "run_scope": [
+        5,
+        6,
+        7
+      ],
+      "file": "images/isle-house/07-front-close.png",
+      "sha256": "ea9f386a0f04c674927d27a39a2c146606cc673439636d21292894eb67a51d86",
+      "bytes": 726175,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 259,
+      "sample_luminance_range": 0.629276089370251,
+      "pause_overlay_visible": false,
+      "pose_id": "isle-house_07-front-close",
+      "physics_grounded_pose": true,
+      "ground_y_m": 3.99409484863281,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -107.690231323242,
+        6.40000009536743,
+        560.443969726562
+      ],
+      "player_position": [
+        -103.939147949219,
+        3.99409484863281,
+        563.749938964844
+      ],
+      "camera_position": [
+        -99.8264694213867,
+        5.54906177520752,
+        567.374572753906
+      ],
+      "camera_forward": [
+        -0.747755885124207,
+        0.0809148475527763,
+        -0.659025073051453
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "requested_distance_m": 5.0,
+      "actual_outward_distance_m": 5.0,
+      "side_u_m": 14.3
+    },
+    {
+      "id": "08-front-ordinary",
+      "target": "isle-house",
+      "role": "accepted_front",
+      "distance_class": "ordinary",
+      "run_scope": [
+        5,
+        6,
+        7
+      ],
+      "file": "images/isle-house/08-front-ordinary.png",
+      "sha256": "f5459c7d8d3686e7b502d642344b3b0a5823386d08767cc6e082d218b039b51b",
+      "bytes": 460831,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 218,
+      "sample_luminance_range": 0.720719218254089,
+      "pause_overlay_visible": false,
+      "pose_id": "isle-house_08-front-ordinary",
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.29244995117188,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -103.195686340332,
+        34.0,
+        555.341125488281
+      ],
+      "player_position": [
+        -40.1774368286133,
+        4.29244995117188,
+        610.881225585938
+      ],
+      "camera_position": [
+        -36.2589263916016,
+        4.56958675384521,
+        614.334777832031
+      ],
+      "camera_forward": [
+        -0.712459087371826,
+        0.313250541687012,
+        -0.627914190292358
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "requested_distance_m": 84.0,
+      "actual_outward_distance_m": 84.0,
+      "side_u_m": 21.1
+    },
+    {
+      "id": "09-new-wsw-close",
+      "target": "isle-house",
+      "role": "new_homogeneous_field",
+      "distance_class": "close",
+      "run_scope": [
+        0,
+        1,
+        2
+      ],
+      "file": "images/isle-house/09-new-wsw-close.png",
+      "sha256": "1704def3d729c36d806afb35170a50690e4f81235fa498bb047e0dc7d6e568cd",
+      "bytes": 235333,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 155,
+      "sample_luminance_range": 0.468885481357574,
+      "pause_overlay_visible": false,
+      "pose_id": "isle-house_09-new-wsw-close",
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.39254760742188,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -129.737197875977,
+        28.0,
+        555.591552734375
+      ],
+      "player_position": [
+        -145.767944335938,
+        4.39254760742188,
+        563.77783203125
+      ],
+      "camera_position": [
+        -147.21305847168,
+        4.44471120834351,
+        564.515808105469
+      ],
+      "camera_forward": [
+        0.570030212402344,
+        0.768329918384552,
+        -0.291092216968536
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "requested_distance_m": 18.0,
+      "actual_outward_distance_m": 18.0,
+      "side_u_m": 8.0
+    },
+    {
+      "id": "10-new-wsw-ordinary",
+      "target": "isle-house",
+      "role": "new_homogeneous_field",
+      "distance_class": "ordinary",
+      "run_scope": [
+        0,
+        1,
+        2,
+        3,
+        4
+      ],
+      "file": "images/isle-house/10-new-wsw-ordinary.png",
+      "sha256": "77df211df2ce610e9ecdfebba2c168656ee024723064bc3b9e58c0f9c95649d2",
+      "bytes": 303074,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 186,
+      "sample_luminance_range": 0.57423922419548,
+      "pause_overlay_visible": false,
+      "pose_id": "isle-house_10-new-wsw-ordinary",
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.06475830078125,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -125.23291015625,
+        34.0,
+        559.855590820312
+      ],
+      "player_position": [
+        -174.680358886719,
+        4.06475830078125,
+        597.258117675781
+      ],
+      "camera_position": [
+        -178.476516723633,
+        3.92008829116821,
+        600.129577636719
+      ],
+      "camera_forward": [
+        0.727138817310333,
+        0.410795718431473,
+        -0.550014674663544
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "requested_distance_m": 62.0,
+      "actual_outward_distance_m": 62.0,
+      "side_u_m": 14.0
+    },
+    {
+      "id": "11-shared-module-free-close",
+      "target": "isle-house",
+      "role": "shared_tower_module_free",
+      "distance_class": "close",
+      "run_scope": [
+        10,
+        11,
+        12
+      ],
+      "file": "images/isle-house/11-shared-module-free-close.png",
+      "sha256": "14eb738792ff597e1a892a9b15137b896fc8cb81966da22ed2261588b4d32063",
+      "bytes": 85261,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 51,
+      "sample_luminance_range": 0.525978088378906,
+      "pause_overlay_visible": false,
+      "pose_id": "isle-house_11-shared-module-free-close",
+      "physics_grounded_pose": false,
+      "access_mode": "deterministic_jetpack_reachable_pose_after_passing_jetpack_contract",
+      "in_boundary": true,
+      "aim_target": [
+        -118.492141723633,
+        42.0,
+        534.298156738281
+      ],
+      "player_position": [
+        -135.959075927734,
+        30.0,
+        517.838928222656
+      ],
+      "camera_position": [
+        -139.654006958008,
+        29.884614944458,
+        514.357177734375
+      ],
+      "camera_forward": [
+        0.671805024147034,
+        0.384615451097488,
+        0.633047342300415
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "requested_distance_m": 24.0,
+      "actual_outward_distance_m": 24.0,
+      "side_u_m": 16.0
+    },
+    {
+      "id": "12-shared-module-free-ordinary",
+      "target": "isle-house",
+      "role": "shared_tower_module_free",
+      "distance_class": "ordinary",
+      "run_scope": [
+        10,
+        11,
+        12
+      ],
+      "file": "images/isle-house/12-shared-module-free-ordinary.png",
+      "sha256": "0488a6d959d7f08da2b6c568da1fd3ea4bb38030c1d40f56914097cf4a87a524",
+      "bytes": 486323,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 176,
+      "sample_luminance_range": 0.710889384150505,
+      "pause_overlay_visible": false,
+      "pose_id": "isle-house_12-shared-module-free-ordinary",
+      "physics_grounded_pose": false,
+      "access_mode": "deterministic_jetpack_reachable_pose_after_passing_jetpack_contract",
+      "in_boundary": true,
+      "aim_target": [
+        -118.492141723633,
+        40.0,
+        534.298156738281
+      ],
+      "player_position": [
+        -169.437377929688,
+        18.0,
+        486.292083740234
+      ],
+      "camera_position": [
+        -173.286193847656,
+        18.48903465271,
+        482.665313720703
+      ],
+      "camera_forward": [
+        0.69978654384613,
+        0.274721056222916,
+        0.659414231777191
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "requested_distance_m": 70.0,
+      "actual_outward_distance_m": 70.0,
+      "side_u_m": 16.0
+    }
+  ],
+  "limitations": [
+    "Hawkins ENE/NNW and step remain homogeneous and module-free because admissible direct evidence does not authorize architectural schedules.",
+    "Isle House runs 0..4 remain homogeneous and module-free pending exact side-local U mapping and independent review.",
+    "Isle House runs 8..12 remain module-free; the low part w1282547787 remains entirely unchanged.",
+    "The images prove live runtime coverage and framing, not independent semantic/art acceptance."
+  ]
+}

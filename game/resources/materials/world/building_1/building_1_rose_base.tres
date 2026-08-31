@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "building_1_muted_rose_base_standalone_prototype"
+albedo_color = Color(0.54, 0.37, 0.32, 1)
+metallic = 0.0
+roughness = 0.82

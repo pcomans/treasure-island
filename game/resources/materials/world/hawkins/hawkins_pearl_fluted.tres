@@ -1,0 +1,13 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://game/resources/materials/world/hawkins/hawkins_pearl_fluted.gdshader" id="1_shader"]
+
+[resource]
+resource_name = "hawkins_pearl_fluted"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(0.86, 0.865, 0.85, 1)
+shader_parameter/roughness_value = 0.55
+shader_parameter/flute_pitch_m = 0.064
+shader_parameter/flute_normal_strength = 0.18
+shader_parameter/filter_start_cycles_per_pixel = 0.12
+shader_parameter/filter_end_cycles_per_pixel = 0.28

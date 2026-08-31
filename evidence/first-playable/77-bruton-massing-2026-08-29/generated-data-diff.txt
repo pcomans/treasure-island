@@ -1,0 +1,5 @@
+Command: git diff -- generated/world data/osm
+Exit: 0
+Output: (none)
+
+The Hawkins massing is an exact target-only runtime override. No generated world or frozen OSM source byte changed.

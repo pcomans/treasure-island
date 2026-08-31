@@ -1,0 +1,10 @@
+w34313520 detached exact-receiver calibration generated-data audit
+Baseline: HEAD 8a0f313485087d0a4d66ecea811ef05d2c174873
+Date: 2026-08-30
+
+PASS: no tracked or untracked file under generated/ was added, deleted, or modified by this round.
+PASS: generated/world/manifest.json SHA-256 remains e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3.
+PASS: generated/world/chunks/x_-1__z_0.json SHA-256 remains b935890b89202fa181248552176364668e506a7630f0024ec86f12a084743d86.
+PASS: generated topology remains 729 records / 729 meshes / 736 surfaces / 48,389 triangles / 466 collider pairs.
+
+The detached helper reconstructs only the five target wall quads from immutable generated data at test/capture time. It does not rewrite generated source.

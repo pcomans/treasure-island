@@ -1,0 +1,38 @@
+[gd_scene format=3]
+
+[node name="HawkinsGroundModuleLibrary" type="Node3D"]
+
+[node name="L_G" type="Node3D" parent="."]
+metadata/motif_id = "L-G"
+metadata/complete_motif = true
+metadata/description = "Complete opaque lobby storefront with full frame boundary."
+
+[node name="D_P" type="Node3D" parent="."]
+metadata/motif_id = "D-P"
+metadata/complete_motif = true
+metadata/description = "Complete paired glazed entrance doors with outer boundary and meeting rail."
+
+[node name="D_S" type="Node3D" parent="."]
+metadata/motif_id = "D-S"
+metadata/complete_motif = true
+metadata/description = "Complete opaque service door with full surround."
+
+[node name="G_G" type="Node3D" parent="."]
+metadata/motif_id = "G-G"
+metadata/complete_motif = true
+metadata/description = "Complete garage grille with full surround."
+
+[node name="F_SIGN" type="Node3D" parent="."]
+metadata/motif_id = "F-SIGN"
+metadata/complete_motif = true
+metadata/description = "One complete address-side fascia with separate shallow HAWKINS letters."
+
+[node name="C_B" type="Node3D" parent="."]
+metadata/motif_id = "C-B"
+metadata/complete_motif = true
+metadata/description = "Complete thin shallow entrance band proxy."
+
+[node name="G_W" type="Node3D" parent="."]
+metadata/motif_id = "G-W"
+metadata/complete_motif = true
+metadata/description = "Complete owner-photo-supported ground opening with full head, sill, both jambs, and opaque glass."

@@ -1,0 +1,63 @@
+{
+  "schema_version": "ti.w34313520-exact-receiver-runtime-isolation/1",
+  "status": "pass_detached_overlay_only_no_live_or_generated_delta",
+  "receiver_key": "building:w34313520:wall",
+  "runtime_attachment": false,
+  "receiver_children_before": 2,
+  "receiver_children_after": 2,
+  "receiver_accepted_material_metadata_before": {},
+  "receiver_accepted_material_metadata_after": {},
+  "loaded_world_before": {
+    "chunks": 38,
+    "meshes": 871,
+    "surfaces": 878,
+    "triangles": 50093,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "loaded_world_after": {
+    "chunks": 38,
+    "meshes": 871,
+    "surfaces": 878,
+    "triangles": 50093,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "generated_world": {
+    "records": 729,
+    "meshes": 729,
+    "surfaces": 736,
+    "triangles": 48389,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "detached_overlay": {
+    "field_meshes": 1,
+    "field_surfaces": 1,
+    "field_triangles": 10,
+    "bay_instances": 1,
+    "bay_meshes": 15,
+    "bay_surfaces": 15,
+    "bay_triangles": 180,
+    "total_meshes": 16,
+    "total_surfaces": 16,
+    "total_triangles": 190,
+    "bay_field_or_backing_meshes": 0,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0
+  },
+  "protected_hashes": {
+    "generated_manifest": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "generated_chunk_x_-1__z_0": "b935890b89202fa181248552176364668e506a7630f0024ec86f12a084743d86",
+    "world_chunk_builder": "84aaf060b6282e956bbae81e4880ac8e203e107760d627c48f7d9e5abb72183e",
+    "accepted_material_run_trials": "4741097b177f02074c6b254e03f955dce46703dfef89b0a4cbc0a8b424f7ae6f",
+    "facade_receiver_inventory_json": "efe1c0f531488f1ad3f0e2b2337beea1e93162df35ba7124bb8d5ef37475b544",
+    "w34313564_live_modules": "5d0d7816a87e13907d571aaceb2d4af3c01980fd26a043e33d87e9b07f2b71ee",
+    "w34313515_live_modules": "4420ad2d0a029f03da7a14fe84084d53edfa2323867a5c660c63f875c2a71ccb",
+    "w291196370_live_modules": "e297d40ac9841485ee00a76b955f8ec454639b394c23759e8017e170aa84cbf8"
+  },
+  "generated_data_diff_empty": true,
+  "live_runtime_diff_empty": true,
+  "other_building_diff_empty": true
+}

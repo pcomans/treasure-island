@@ -1,0 +1,9 @@
+w34313564 five-module live integration — generated-data audit on 2026-08-30
+
+Command:
+git diff --name-only -- generated
+
+Result:
+PASS — no output. No generated source file changed.
+
+The immutable generated-world manifest remains SHA-256 e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb. Its topology remains 729 meshes, 736 surfaces, 48,389 triangles, and 466 body-shape pairs. The live module delta is attached after generated wall/collision construction and is therefore reported separately.

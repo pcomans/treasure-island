@@ -1,0 +1,312 @@
+{
+  "schema_version": "ti.ymca-exact-run-trial-evidence/1",
+  "review_status": "ready_for_independent_exact_receiver_gameplay_art_review_not_self_accepted",
+  "evidence_role": "live_exact_receiver_runtime_and_render_proof_not_art_acceptance",
+  "generator": "game/tests/ymca_exact_run_trial_capture.gd",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/ymca_exact_run_trial_capture.gd",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "owner_playtest_noninterference": {
+    "protected_pid": 6358,
+    "policy": "No Godot import, test, launch, capture, focus, stop, or relaunch while PID 6358 lived.",
+    "pid_exit_verified_externally_before_capture": true,
+    "running_process_modified_or_signaled": false
+  },
+  "independent_standalone_review": {
+    "path": "res://discovery/facades/BATCH_02_04_MATERIAL_CORRECTION_REVIEW.md",
+    "sha256": "50f5863a1320a7b5d74e56ffa0612930657fa7060d83ba7f1f455c334bd03e99",
+    "verdict": "ACCEPT_WITH_LIMITATION",
+    "exact_receiver_verdict": "pending"
+  },
+  "before": {
+    "receiver_key": "building:w34313547:wall",
+    "source_key": "w34313547",
+    "live_material": "generated building_wall placeholder",
+    "placeholder_runs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "surface_names": [
+      "generated_record"
+    ],
+    "receiver_surfaces": 1,
+    "world_surfaces": 731
+  },
+  "after": {
+    "receiver_key": "building:w34313547:wall",
+    "source_key": "w34313547",
+    "material_path": "res://game/resources/materials/world/ti_ymca/ti_ymca_primary.tres",
+    "accepted_runs": [
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "accepted_length_m": 101.046,
+    "placeholder_runs": [
+      0,
+      1,
+      2,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29
+    ],
+    "surface_names": [
+      "placeholder_runs",
+      "accepted_material_runs"
+    ],
+    "receiver_surfaces": 2,
+    "world_surfaces": 732,
+    "modules": 0
+  },
+  "runtime_inputs": {
+    "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+    "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "generated_chunk_sha256": "c0e1f86787410d975ad90272482e5f4971c4aedc7eb83132cd28b22acf1a3456",
+    "world_chunk_builder_sha256": "c770a977e879c0d077acb8fb4d33b52d1bd6aa3b454a50ba8e2125cb71e8ba8d",
+    "accepted_run_helper_sha256": "fcf128208ad1dcf9eaa4a809e4b3a4fc09f5df8e8450f4ade30d68ace85c4efe",
+    "material_sha256": "c44f1f2e1d12acdda1cd79ca47e4a0188a8543377c1d0ff7742c69d7d01c5681",
+    "shader_sha256": "324ba33a7c78f4b05038168a479ebb8e875c56704236492a050cee8da8e5f798",
+    "registry_sha256": "e7d1167869640867e2857de1f08df81e878e68230b59feff3fb947b16ff56cb7",
+    "mapping_sha256": "d076ee125168cd3dfe499bc56e94c324019d7ba70bb731b9c23c045ca6759b5f",
+    "inventory_sha256": "a59af50ad5876e3eac2aca39f2507ce5deb54fc454dcff5312132c720830036b",
+    "correction_manifest_sha256": "d02fcbe38c56eea263900f89bda13eba044a4ae0af9621f5f1b8da76a465808b"
+  },
+  "world_counts": {
+    "chunks": 38,
+    "records": 729,
+    "meshes": 729,
+    "surfaces": 732,
+    "triangles": 48389,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "surface_delta": {
+    "pre_trial_surfaces": 731,
+    "post_trial_surfaces": 732,
+    "delta": 1,
+    "cause": "one disjoint YMCA accepted-run surface on the existing record-owned mesh"
+  },
+  "receiver_invariants": {
+    "render_triangles": 60,
+    "collision_triangles": 60,
+    "duplicate_or_coplanar_render_triangles": false,
+    "collision_unchanged": true,
+    "spray_identity_unchanged": true,
+    "generated_geometry_unchanged": true
+  },
+  "preserved_live_trials": [
+    {
+      "receiver_key": "building:w291189336:wall",
+      "runs": [
+        9,
+        10
+      ],
+      "length_m": 16.362
+    },
+    {
+      "receiver_key": "building:w291189926:wall",
+      "runs": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "length_m": 49.124
+    }
+  ],
+  "rejected_fire_station": {
+    "receiver_key": "building:w764313741:wall",
+    "accepted_runs": [],
+    "current_surface_contract": "one generated placeholder surface across all 26 runs"
+  },
+  "captures": [
+    {
+      "id": "01-close",
+      "view_kind": "close_live_receiver",
+      "receiver_key": "building:w34313547:wall",
+      "file": "images/01-close.png",
+      "sha256": "fa55a506dc9088323cd4b6d668c903c5468e187748ff68acdf687fb39fecf66e",
+      "bytes": 877366,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        236.094528198242,
+        6.00400018692017,
+        -277.136322021484
+      ],
+      "aim_target_m": [
+        232.80549621582,
+        8.52050018310547,
+        -283.315490722656
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "representative_run": 5,
+      "sample_unique_colors": 236,
+      "sample_luminance_range": 0.300241567194462
+    },
+    {
+      "id": "02-ordinary-gameplay-distance",
+      "view_kind": "ordinary_gameplay_distance_live_receiver",
+      "receiver_key": "building:w34313547:wall",
+      "file": "images/02-ordinary-gameplay-distance.png",
+      "sha256": "223be03b7383fb38d957f497b0998c0971775b6641de5e35112a4887952807b7",
+      "bytes": 848901,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        244.366577148438,
+        6.00400018692017,
+        -250.953979492188
+      ],
+      "aim_target_m": [
+        232.80549621582,
+        8.52050018310547,
+        -283.315490722656
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "representative_run": 5,
+      "sample_unique_colors": 249,
+      "sample_luminance_range": 0.597566276788712
+    },
+    {
+      "id": "03-changed-light-oblique",
+      "view_kind": "changed_light_oblique_live_receiver",
+      "receiver_key": "building:w34313547:wall",
+      "file": "images/03-changed-light-oblique.png",
+      "sha256": "19409f1b500cab30d715a8add2a93f3d0a888ce49221e0a70fdb7265731f8f67",
+      "bytes": 941558,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        259.090515136719,
+        12.5205001831055,
+        -270.114105224609
+      ],
+      "aim_target_m": [
+        232.80549621582,
+        8.52050018310547,
+        -283.315490722656
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -24.0,
+        117.999992370605,
+        0.0
+      ],
+      "representative_run": 5,
+      "sample_unique_colors": 263,
+      "sample_luminance_range": 0.622617229819298
+    },
+    {
+      "id": "04-whole-island-load",
+      "view_kind": "whole_island_ymca_trial_load",
+      "receiver_key": "whole-island",
+      "file": "images/04-whole-island-load.png",
+      "sha256": "ad9c6fed7ed7bd9865a0ade3139d3c42aa994cc4574043ba8f9c1abc00f5b1e7",
+      "bytes": 404911,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        180.0,
+        1550.0,
+        300.0
+      ],
+      "aim_target_m": [
+        -20.0,
+        0.0,
+        30.0
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999923706055,
+        -27.9999961853027,
+        0.0
+      ],
+      "representative_run": -1,
+      "sample_unique_colors": 143,
+      "sample_luminance_range": 0.679552979767323
+    }
+  ],
+  "capture_count": 4,
+  "limitations": [
+    "YMCA is a homogeneous aggregate/background field only on runs 3..11; granular scale and substrate remain receiver-calibration assumptions.",
+    "No opening, panel joint, entry, louver, door, mural, low wing, module, WSW/NNW coverage, geometry, massing, collision, or spray claim is accepted.",
+    "These captures are a handoff for independent exact-receiver and whole-object review, not executor art acceptance."
+  ]
+}

@@ -1,0 +1,50 @@
+Treasure Island Community YMCA exact-run trial — verification results — 2026-08-29
+
+FINAL RESULT: PASS for bounded mechanical integration and evidence capture; independent exact-receiver gameplay art review remains pending.
+
+Owner-playtest gate
+- PASS — exact PID 6358 remained the sole protected process while live; no Godot import/test/capture/focus/stop/relaunch or signal occurred.
+- PASS — monitor recorded exit at 2026-08-29T22:22:39-0700; a subsequent exact `ps -p 6358` returned exit 1/no process before any Godot work began.
+
+YMCA-focused gates
+- PASS — Godot 4.7.2 headless editor import/scan.
+- PASS — `ymca_exact_run_trial_capture.gd` check-only parse.
+- PASS — `headless_accepted_material_run_trials_contract.gd`.
+  Exact live helper set is Chapel `w291189336` runs `9..10`, Dormitory `w291189926` runs `0..5`, and YMCA `w34313547` runs `3..11`; Fire `w764313741` is absent. Reviewed material identity, placeholder complements, zero modules, deterministic partition, render/collision triangle equality, spray ownership, no duplicate/coplanar triangles, protected correction candidates, and a 732-surface whole-island load pass.
+
+Combined editor/world/gameplay/facade suites
+- PASS — `headless_scene_parse.gd`: four gameplay scenes.
+- PASS — `headless_gameplay_contract.gd`.
+- PASS — `headless_world_material_contract.gd`: 11 semantic materials.
+- PASS — `validate_generated_world.gd`: 735 playable + 4 context rows, 38 chunks, content `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164`.
+- PASS — `node tools/validate_godot_world.mjs`: 38 chunks, 729 physical objects, 214 roofs, 14,904 foundation samples, 2,492,288 terrain samples.
+- PASS — `headless_hawkins_facade_contract.gd`.
+- PASS — `headless_building_3_facade_contract.gd`.
+- PASS — `headless_isle_house_facade_contract.gd`; deterministic signature `e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1`.
+- PASS — `headless_batch_02_04_material_correction_contract.gd`; YMCA alone is live among the five corrections, only on exact runs `3..11`; the other four remain detached.
+- PASS — `headless_batch_02_material_contract.gd`.
+- PASS — `headless_batch_03_material_contract.gd`; Fire Station remains reverted and zero-live.
+- PASS — `headless_batch_04_material_contract.gd`.
+- PASS — `full_runtime_integration.gd`: 38 chunks, 729 records/meshes, 732 disjoint surfaces, 48,389 render triangles, 466 bodies/shapes, 738 source identities; gameplay, interaction, cleanup, and fail-closed reload passed.
+- PASS — source main-scene `--mac-export-smoke`: 38/38 chunks, 729 meshes, 732 surfaces, 48,389 triangles, 466 bodies/shapes; semantic palette, movement defaults, and jetpack rise/slow descent passed.
+- PASS — normal `automated_route_qa.gd`: 262.349 m continuous route, zero recovery, teleport, stall, or boundary loss.
+- PASS — `automated_route_qa.gd -- --whole-island-route`: 3,449.107 m actual continuous travel, five regions/landings, zero recovery, teleport, stall, or boundary loss.
+
+Topology and protected scope
+- PASS — before `729 meshes / 731 surfaces / 48,389 triangles / 466 collider pairs` to after `729 / 732 / 48,389 / 466`; the exact `+1` is the new disjoint YMCA material surface on its existing mesh.
+- PASS — YMCA remains 60 render triangles and 60 identical collision triangles; no duplicate/coplanar render triangle, geometry, massing, collision, navigation, spray, or generated-data change.
+- PASS — `git diff --exit-code -- data/osm generated/world`; no generated or frozen OSM status entries.
+- PASS — Chapel `9..10`, Dormitory `0..5`, and Fire all-run placeholder contract are unchanged.
+
+Native render evidence
+- PASS — `ymca_exact_run_trial_capture.gd` on macOS + Forward+ + Metal at 1440×900 on Apple M1 Pro (Apple7).
+- PASS — close, ordinary gameplay-distance, changed-light oblique, and whole-island images were written and manually inspected for nonblank live-world output, intended view role, and pending-review labeling.
+- PASS — `capture-manifest.json` records exact scope/topology, no duplicates, preserved collision/spray/generated identity, renderer/transforms, and image hashes.
+
+Pre-final test diagnostics
+- The first focused run failed closed because the serialized inventory had gained the already-approved Batch 06 queue after staging, changing only its provenance hash; both YMCA guards were repinned to the current serialized inventory bytes.
+- The next focused run exposed a guard-only type mismatch: Godot JSON numbers were floats while the expected run set used integers. The test now normalizes mapped run indices before exact comparison and emits targeted lifecycle-drift diagnostics. The final focused run and every downstream suite passed.
+
+Art-review boundary
+- This executor does not accept the YMCA receiver art or whole object. The captures are a handoff for independent gameplay art review.
+- No opening, panel joint, entry, louver, service door, mural, low wing, trim, module, motif, atlas, WSW/NNW coverage, substrate conclusion, geometry, massing, collision, or spray claim is added.

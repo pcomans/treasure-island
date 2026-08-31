@@ -1,0 +1,43 @@
+JETPACK STAGED ARTIFACT / SIGNING AUDIT — 2026-08-28
+
+App:
+/Users/philipp/cowork/treasure-island-game/build/jetpack-staging/Treasure Island First Playable.app
+
+Sizes:
+bundle_files=7 logical_bytes=176946180
+allocated_kib=172816
+executable_bytes=170963648
+pck_bytes=5909692
+
+SHA-256:
+executable eb82dabcaa777956778fd40504f2c94a08300bf900ac7bb99c14472f1dd70e10
+pck        6fe39d87544a087d2743cdcecd0033177e5657c9f779fd0ca76ebea9169f5579
+bundle sorted file-content inventory 8a35e58e043291c096e7755a286593d59945106feb145bda7e708645f786763e
+
+Bundle inventory hash method:
+cd <app>; find . -type f -print0 | sort -z | xargs -0 shasum -a 256 | shasum -a 256
+
+Architecture:
+Mach-O universal binary with x86_64 and arm64 slices
+lipo -archs: x86_64 arm64
+Note: this actual Universal output differs from the preset's arm64 selection.
+
+Signing:
+codesign --verify --deep --strict --verbose=4: exit 0, valid on disk, satisfies Designated Requirement
+codesign --verify --deep --strict --verbose=4 --arch arm64: exit 0, valid on disk, satisfies Designated Requirement
+Identifier=local.treasure-island.first-playable
+CodeDirectory flags=0x10002(adhoc,runtime)
+Hash type=sha256
+CandidateCDHashFull sha256=75543c1a1e0433e24020c89434dd903d55af16c2baf641973ac46d11467ff055
+Signature=adhoc
+TeamIdentifier=not set
+Runtime Version=11.3.0
+
+Gatekeeper:
+spctl --assess --type execute --verbose=4: exit 3
+Treasure Island First Playable.app: rejected
+This is expected for the approved private ad-hoc, non-notarized build; it is not public-distribution proof.
+
+Extended attributes:
+Recursive xattr inspection found com.apple.provenance only. No com.apple.quarantine attribute was present.
+

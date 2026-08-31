@@ -1,0 +1,215 @@
+{
+  "schema_version": 1,
+  "generator": "game/tests/rendered_visual_evidence_capture.gd",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "project_rendering_contract": "Forward+",
+  "viewport": [
+    1440,
+    900
+  ],
+  "content_sha256": "5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa",
+  "manifest_sha256": "07b8b195e1a05942e38d9bbbcb801394cf9f184051fb5f7a819c75677e46f160",
+  "world_counts": {
+    "chunks": 38,
+    "playable_rows": 735,
+    "context_rows": 4,
+    "meshes": 701,
+    "triangles": 21210,
+    "bodies": 466,
+    "shapes": 466
+  },
+  "captures": [
+    {
+      "id": "01-ferry-spawn",
+      "region": "ferry_spawn",
+      "intent": "Approved ferry arrival looking into Treasure Island",
+      "file": "01-ferry-spawn.png",
+      "sha256": "e9873692e5e9ff06ef8210f7821d3621247e77af7ae1b7dbf02b103b1bc7d555",
+      "bytes": 102102,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -104.363998413086,
+        1.0,
+        786.023986816406
+      ],
+      "camera_position": [
+        -104.834259033203,
+        3.05669236183167,
+        789.95703125
+      ],
+      "camera_forward": [
+        0.117563970386982,
+        -0.139173105359077,
+        -0.983264744281769
+      ],
+      "yaw": -0.119,
+      "pitch": -0.139626340159546,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "sample_unique_colors": 160,
+      "sample_luminance_range": 0.662097215652466
+    },
+    {
+      "id": "02-north",
+      "region": "north",
+      "intent": "North-island road looking south through the island",
+      "file": "02-north.png",
+      "sha256": "769a3a914a94de9537de73d9a76cd29aaa5dcec2b89559454bb951d82ff06f88",
+      "bytes": 128641,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -159.535003662109,
+        1.0,
+        -879.905029296875
+      ],
+      "camera_position": [
+        -159.235855102539,
+        3.05668497085571,
+        -883.854797363281
+      ],
+      "camera_forward": [
+        -0.0747857391834259,
+        -0.139173120260239,
+        0.987440168857574
+      ],
+      "yaw": 3.066,
+      "pitch": -0.139626340159546,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-4",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "sample_unique_colors": 64,
+      "sample_luminance_range": 0.384887039661407
+    },
+    {
+      "id": "03-center",
+      "region": "center",
+      "intent": "Central grid road looking east across representative massing",
+      "file": "03-center.png",
+      "sha256": "34f93a2233bdfdb32b30b6de6dedd66faa7366360bc0668f9ad7487074ef81a1",
+      "bytes": 90347,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -159.292007446289,
+        1.0,
+        -104.818000793457
+      ],
+      "camera_position": [
+        -163.25309753418,
+        3.05669641494751,
+        -104.818000793457
+      ],
+      "camera_forward": [
+        0.990268051624298,
+        -0.139173105359077,
+        0.0000000432860218779751
+      ],
+      "yaw": -1.5707963267949,
+      "pitch": -0.139626340159546,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "sample_unique_colors": 116,
+      "sample_luminance_range": 0.444544315338135
+    },
+    {
+      "id": "04-southwest",
+      "region": "southwest",
+      "intent": "Southwest road looking northeast toward the island interior",
+      "file": "04-southwest.png",
+      "sha256": "3d09c84277d2e7d14f031880cd91b061359511cd36339a07e892b5d265dea00f",
+      "bytes": 71902,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -293.542999267578,
+        1.0,
+        335.720001220703
+      ],
+      "camera_position": [
+        -295.473236083984,
+        3.05669236183167,
+        339.178924560547
+      ],
+      "camera_forward": [
+        0.482561856508255,
+        -0.139173105359077,
+        -0.864733994007111
+      ],
+      "yaw": -0.509,
+      "pitch": -0.139626340159546,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "sample_unique_colors": 73,
+      "sample_luminance_range": 0.309731721878052
+    },
+    {
+      "id": "05-east-perimeter",
+      "region": "perimeter",
+      "intent": "East perimeter road looking northwest across the shoreline side",
+      "file": "05-east-perimeter.png",
+      "sha256": "b11f5ed7aed019c5347c3868a7c049011909e41a14018d1d29bfe3830abaa781",
+      "bytes": 105075,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        606.2490234375,
+        1.00003051757812,
+        385.226989746094
+      ],
+      "camera_position": [
+        609.433776855469,
+        3.05673909187317,
+        387.582366943359
+      ],
+      "camera_forward": [
+        -0.796180307865143,
+        -0.139173105359077,
+        -0.588835895061493
+      ],
+      "yaw": 0.934,
+      "pitch": -0.139626340159546,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_2__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "sample_unique_colors": 125,
+      "sample_luminance_range": 0.449865877628326
+    }
+  ]
+}

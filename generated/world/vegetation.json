@@ -1,0 +1,2812 @@
+{
+  "asset_root": "res://game/resources/models/vegetation/kenney_nature_kit/",
+  "assets": [
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/grass.glb",
+      "species": "ornamental_grass"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_large.glb",
+      "species": "ornamental_grass"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+      "species": "ornamental_grass"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "species": "shrub"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "species": "shrub"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+      "species": "shrub"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb",
+      "species": "broadleaf"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+      "species": "broadleaf"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb",
+      "species": "palm"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb",
+      "species": "palm"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb",
+      "species": "palm"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+      "species": "conifer"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "species": "conifer"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb",
+      "species": "broadleaf"
+    },
+    {
+      "path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb",
+      "species": "broadleaf"
+    }
+  ],
+  "audit": {
+    "candidate_count": 702,
+    "minimum_observed_clearances_m": {
+      "boundary_shoreline": 25.517,
+      "buildings_foundations": 7.274,
+      "ferry_arrival_path": 140.483,
+      "ferry_spawn": 162.735,
+      "normal_qa_route": 84.112,
+      "roads_paths": 4.017,
+      "terrain_shoreline_overlays": 3.625,
+      "whole_island_qa_route": 5.27
+    },
+    "naip_unknown_annotations": {
+      "accepted_ids": [
+        "ti-naip-20220518-px1840-py1011",
+        "ti-naip-20220518-px1860-py1046",
+        "ti-naip-20220518-px1879-py1084",
+        "ti-naip-20220518-px1900-py1121",
+        "ti-naip-20220518-px1924-py1161",
+        "ti-naip-20220518-px1937-py1180",
+        "ti-naip-20220518-px1953-py1200",
+        "ti-naip-20220518-px1968-py1220",
+        "ti-naip-20220518-px1983-py1239",
+        "ti-naip-20220518-px1998-py1260",
+        "ti-naip-20220518-px2059-py1297",
+        "ti-naip-20220518-px2083-py1342",
+        "ti-naip-20220518-px2107-py1387",
+        "ti-naip-20220518-px2130-py1433",
+        "ti-naip-20220518-px1855-py1450",
+        "ti-naip-20220518-px2154-py1479",
+        "ti-naip-20220518-px1451-py1510",
+        "ti-naip-20220518-px2180-py1525",
+        "ti-naip-20220518-px2206-py1571",
+        "ti-naip-20220518-px1875-py1574",
+        "ti-naip-20220518-px2232-py1616",
+        "ti-naip-20220518-px2261-py1661"
+      ],
+      "clearance_policy_m": {
+        "boundary_shoreline": 14,
+        "buildings_foundations": 0.001,
+        "ferry_arrival_path": 16,
+        "ferry_spawn": 24,
+        "normal_qa_route": 7,
+        "roads_paths": 0.001,
+        "terrain_shoreline_overlays": 3,
+        "whole_island_qa_route": 5
+      },
+      "clearance_policy_note": "Fixed source points preserve procedural shoreline, overlay, spawn, and QA-route buffers; road/building buffers are replaced by a 1 mm exterior test with no snapping.",
+      "deterministic_variation": "sha256(seed|naip_unknown_shrubs:annotation_id) selects approved shrub asset, yaw, and scale",
+      "fixed_projected_locations": true,
+      "input_count": 22,
+      "minimum_observed_clearances_m": {
+        "boundary_shoreline": 19.267,
+        "buildings_foundations": 1.109,
+        "ferry_arrival_path": 817.512,
+        "ferry_spawn": 874.855,
+        "normal_qa_route": 688.162,
+        "roads_paths": 0.102,
+        "terrain_shoreline_overlays": 14.45,
+        "whole_island_qa_route": 40.094
+      },
+      "placed_count": 22,
+      "procedural_buffer_exceptions": [
+        {
+          "annotation_id": "ti-naip-20220518-px1840-py1011",
+          "clearance": "buildings_foundations",
+          "observed_m": 1.109,
+          "outcome": "placed_at_fixed_source_location",
+          "position_m": [
+            393.137,
+            -347.291
+          ],
+          "procedural_required_m": 5,
+          "source_annotation_required_m": 0.001
+        },
+        {
+          "annotation_id": "ti-naip-20220518-px1937-py1180",
+          "clearance": "roads_paths",
+          "observed_m": 0.728,
+          "outcome": "placed_at_fixed_source_location",
+          "position_m": [
+            451.313,
+            -245.924
+          ],
+          "procedural_required_m": 4,
+          "source_annotation_required_m": 0.001
+        },
+        {
+          "annotation_id": "ti-naip-20220518-px1855-py1450",
+          "clearance": "roads_paths",
+          "observed_m": 0.36,
+          "outcome": "placed_at_fixed_source_location",
+          "position_m": [
+            402.133,
+            -83.974
+          ],
+          "procedural_required_m": 4,
+          "source_annotation_required_m": 0.001
+        },
+        {
+          "annotation_id": "ti-naip-20220518-px1451-py1510",
+          "clearance": "roads_paths",
+          "observed_m": 3.202,
+          "outcome": "placed_at_fixed_source_location",
+          "position_m": [
+            159.834,
+            -47.985
+          ],
+          "procedural_required_m": 4,
+          "source_annotation_required_m": 0.001
+        },
+        {
+          "annotation_id": "ti-naip-20220518-px2206-py1571",
+          "clearance": "roads_paths",
+          "observed_m": 3.907,
+          "outcome": "placed_at_fixed_source_location",
+          "position_m": [
+            612.646,
+            -11.397
+          ],
+          "procedural_required_m": 4,
+          "source_annotation_required_m": 0.001
+        },
+        {
+          "annotation_id": "ti-naip-20220518-px2232-py1616",
+          "clearance": "roads_paths",
+          "observed_m": 2.973,
+          "outcome": "placed_at_fixed_source_location",
+          "position_m": [
+            628.24,
+            15.595
+          ],
+          "procedural_required_m": 4,
+          "source_annotation_required_m": 0.001
+        },
+        {
+          "annotation_id": "ti-naip-20220518-px2261-py1661",
+          "clearance": "roads_paths",
+          "observed_m": 0.102,
+          "outcome": "placed_at_fixed_source_location",
+          "position_m": [
+            645.632,
+            42.586
+          ],
+          "procedural_required_m": 4,
+          "source_annotation_required_m": 0.001
+        }
+      ],
+      "rejected": [],
+      "rejected_count": 0,
+      "source_imagery_date": "2022-05-18",
+      "source_schema": "ti.naip-tree-annotations-candidate/1",
+      "source_sha256": "03f858180c6ff0d25b974b1fbb0fc82a91139afe91e83b2e3291ef2dd49ade11"
+    },
+    "procedural_candidate_count": 680,
+    "rejected": {
+      "boundary_shoreline": 6,
+      "buildings_foundations": 42,
+      "ferry_arrival_path": 0,
+      "ferry_spawn": 0,
+      "normal_qa_route": 0,
+      "outside_playable_boundary": 7,
+      "roads_paths": 71,
+      "seed_acceptance": 429,
+      "terrain_shoreline_overlays": 15,
+      "whole_island_qa_route": 8
+    },
+    "terrain_grounded_count": 124,
+    "ybi_placements": 0
+  },
+  "clearances_m": {
+    "boundary_shoreline": 14,
+    "buildings_foundations": 5,
+    "ferry_arrival_path": 16,
+    "ferry_spawn": 24,
+    "normal_qa_route": 7,
+    "roads_paths": 4,
+    "terrain_shoreline_overlays": 3,
+    "whole_island_qa_route": 5
+  },
+  "coordinate_system": "+X east,+Y up,-Z north; meters; NAVD 88",
+  "counts": {
+    "by_asset": {
+      "res://game/resources/models/vegetation/kenney_nature_kit/grass_large.glb": 5,
+      "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb": 9,
+      "res://game/resources/models/vegetation/kenney_nature_kit/grass.glb": 7,
+      "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb": 13,
+      "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb": 17,
+      "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb": 11,
+      "res://game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb": 7,
+      "res://game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb": 9,
+      "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb": 4,
+      "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb": 5,
+      "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb": 4,
+      "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb": 8,
+      "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb": 13,
+      "res://game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb": 6,
+      "res://game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb": 6
+    },
+    "by_species": {
+      "broadleaf": 28,
+      "conifer": 21,
+      "ornamental_grass": 21,
+      "palm": 13,
+      "shrub": 41
+    },
+    "by_zone": {
+      "central_conifer_groves": 21,
+      "legacy_grid_broadleaf": 20,
+      "naip_unknown_shrubs": 22,
+      "north_west_lawn_broadleaf": 8,
+      "south_ornamental_beds": 34,
+      "south_palm_rows": 13,
+      "south_shrub_groups": 6
+    },
+    "total": 124
+  },
+  "generator": "tools/lib/vegetation-generation.mjs",
+  "placements": [
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+      "cell_id": "cluster_00:row_0:column_2",
+      "id": "vegetation:central_conifer_groves:cluster_00:row_0:column_2",
+      "position_m": [
+        -74.167,
+        2.938,
+        -329.856
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 2.938,
+        "object_key": "land:w26767313:x_-1__z_-2",
+        "triangle_index": 85
+      },
+      "uniform_scale": 4.311,
+      "yaw_radians": 0.924,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+      "cell_id": "cluster_00:row_1:column_1",
+      "id": "vegetation:central_conifer_groves:cluster_00:row_1:column_1",
+      "position_m": [
+        -86.669,
+        3.07,
+        -319.668
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.07,
+        "object_key": "land:w26767313:x_-1__z_-2",
+        "triangle_index": 82
+      },
+      "uniform_scale": 5.091,
+      "yaw_radians": -0.438,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_00:row_3:column_1",
+      "id": "vegetation:central_conifer_groves:cluster_00:row_3:column_1",
+      "position_m": [
+        -84.793,
+        3.084,
+        -292.214
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.084,
+        "object_key": "land:w26767313:x_-1__z_-2",
+        "triangle_index": 83
+      },
+      "uniform_scale": 4.486,
+      "yaw_radians": 0.321,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_00:row_4:column_2",
+      "id": "vegetation:central_conifer_groves:cluster_00:row_4:column_2",
+      "position_m": [
+        -72.703,
+        3.385,
+        -276.252
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.385,
+        "object_key": "land:w26767313:x_-1__z_-2",
+        "triangle_index": 81
+      },
+      "uniform_scale": 5.181,
+      "yaw_radians": -2.786,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_01:row_2:column_0",
+      "id": "vegetation:central_conifer_groves:cluster_01:row_2:column_0",
+      "position_m": [
+        89.522,
+        8.239,
+        -112.956
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 8.239,
+        "object_key": "land:w26767313:x_0__z_-1",
+        "triangle_index": 39
+      },
+      "uniform_scale": 5.078,
+      "yaw_radians": -0.471,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_01:row_2:column_1",
+      "id": "vegetation:central_conifer_groves:cluster_01:row_2:column_1",
+      "position_m": [
+        103.787,
+        5.808,
+        -113.215
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 5.808,
+        "object_key": "land:w26767313:x_0__z_-1",
+        "triangle_index": 54
+      },
+      "uniform_scale": 4.465,
+      "yaw_radians": 1.431,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+      "cell_id": "cluster_01:row_3:column_1",
+      "id": "vegetation:central_conifer_groves:cluster_01:row_3:column_1",
+      "position_m": [
+        102.52,
+        7.669,
+        -100.415
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 7.669,
+        "object_key": "land:w26767313:x_0__z_-1",
+        "triangle_index": 55
+      },
+      "uniform_scale": 5.25,
+      "yaw_radians": -1.92,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_01:row_3:column_2",
+      "id": "vegetation:central_conifer_groves:cluster_01:row_3:column_2",
+      "position_m": [
+        113.416,
+        5.807,
+        -98.191
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 5.807,
+        "object_key": "land:w26767313:x_0__z_-1",
+        "triangle_index": 55
+      },
+      "uniform_scale": 4.805,
+      "yaw_radians": -2.987,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_02:row_0:column_2",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_0:column_2",
+      "position_m": [
+        29.944,
+        3.029,
+        -463.333
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.029,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 13
+      },
+      "uniform_scale": 4.735,
+      "yaw_radians": 0.109,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_02:row_1:column_1",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_1:column_1",
+      "position_m": [
+        14.699,
+        3.146,
+        -455.21
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.146,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 13
+      },
+      "uniform_scale": 4.323,
+      "yaw_radians": -0.485,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_02:row_1:column_2",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_1:column_2",
+      "position_m": [
+        30.287,
+        3.018,
+        -453.312
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.018,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 13
+      },
+      "uniform_scale": 5.085,
+      "yaw_radians": -0.129,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+      "cell_id": "cluster_02:row_1:column_3",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_1:column_3",
+      "position_m": [
+        42.371,
+        3.082,
+        -455.091
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.082,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 29
+      },
+      "uniform_scale": 4.705,
+      "yaw_radians": 1.432,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_02:row_2:column_0",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_2:column_0",
+      "position_m": [
+        3.084,
+        3.203,
+        -441.764
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.203,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 10
+      },
+      "uniform_scale": 4.54,
+      "yaw_radians": 0.261,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_02:row_2:column_1",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_2:column_1",
+      "position_m": [
+        14.3,
+        3.094,
+        -438.041
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.094,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 10
+      },
+      "uniform_scale": 5.304,
+      "yaw_radians": -1.692,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+      "cell_id": "cluster_02:row_2:column_2",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_2:column_2",
+      "position_m": [
+        28.974,
+        3.038,
+        -439.026
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.038,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 11
+      },
+      "uniform_scale": 4.391,
+      "yaw_radians": 0.206,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+      "cell_id": "cluster_02:row_2:column_3",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_2:column_3",
+      "position_m": [
+        41.969,
+        3.026,
+        -440.279
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.026,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 26
+      },
+      "uniform_scale": 4.869,
+      "yaw_radians": -1.883,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+      "cell_id": "cluster_02:row_2:column_4",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_2:column_4",
+      "position_m": [
+        54.969,
+        3.004,
+        -441.853
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.004,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 26
+      },
+      "uniform_scale": 5.397,
+      "yaw_radians": 2.691,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_02:row_3:column_1",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_3:column_1",
+      "position_m": [
+        12.285,
+        3.066,
+        -427.424
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.066,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 11
+      },
+      "uniform_scale": 5.012,
+      "yaw_radians": -0.39,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_02:row_3:column_2",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_3:column_2",
+      "position_m": [
+        25.612,
+        3.081,
+        -428.866
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.081,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 11
+      },
+      "uniform_scale": 4.437,
+      "yaw_radians": 0.518,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+      "cell_id": "cluster_02:row_3:column_3",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_3:column_3",
+      "position_m": [
+        41.705,
+        3.096,
+        -425.272
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.096,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 27
+      },
+      "uniform_scale": 4.934,
+      "yaw_radians": -1.374,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+      "cell_id": "cluster_02:row_4:column_2",
+      "id": "vegetation:central_conifer_groves:cluster_02:row_4:column_2",
+      "position_m": [
+        25.991,
+        3.128,
+        -412.269
+      ],
+      "source_id": "streetview:37.82690,-122.37108",
+      "species": "conifer",
+      "terrain_support": {
+        "elevation_m": 3.128,
+        "object_key": "land:w26767313:x_0__z_-2",
+        "triangle_index": 8
+      },
+      "uniform_scale": 4.497,
+      "yaw_radians": 1.378,
+      "zone": "central_conifer_groves"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb",
+      "cell_id": "row_00:cell_001",
+      "id": "vegetation:legacy_grid_broadleaf:row_00:cell_001",
+      "position_m": [
+        297.117,
+        4.39,
+        -235.327
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 4.39,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 30
+      },
+      "uniform_scale": 6.631,
+      "yaw_radians": -0.946,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+      "cell_id": "row_00:cell_003",
+      "id": "vegetation:legacy_grid_broadleaf:row_00:cell_003",
+      "position_m": [
+        331.076,
+        3.686,
+        -173.216
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.686,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 42
+      },
+      "uniform_scale": 6.251,
+      "yaw_radians": 0.572,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+      "cell_id": "row_00:cell_005",
+      "id": "vegetation:legacy_grid_broadleaf:row_00:cell_005",
+      "position_m": [
+        367.061,
+        3.617,
+        -107.56
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.617,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 55
+      },
+      "uniform_scale": 5.783,
+      "yaw_radians": -0.032,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb",
+      "cell_id": "row_00:cell_007",
+      "id": "vegetation:legacy_grid_broadleaf:row_00:cell_007",
+      "position_m": [
+        400.576,
+        3.619,
+        -45.201
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.619,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 67
+      },
+      "uniform_scale": 4.842,
+      "yaw_radians": 2.877,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb",
+      "cell_id": "row_00:cell_008",
+      "id": "vegetation:legacy_grid_broadleaf:row_00:cell_008",
+      "position_m": [
+        420.684,
+        3.629,
+        -14.211
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.629,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 80
+      },
+      "uniform_scale": 6.473,
+      "yaw_radians": -2.073,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb",
+      "cell_id": "row_00:cell_009",
+      "id": "vegetation:legacy_grid_broadleaf:row_00:cell_009",
+      "position_m": [
+        434.675,
+        3.661,
+        17.125
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.661,
+        "object_key": "land:w26767313:x_1__z_0",
+        "triangle_index": 95
+      },
+      "uniform_scale": 6.194,
+      "yaw_radians": -0.562,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb",
+      "cell_id": "row_00:cell_010",
+      "id": "vegetation:legacy_grid_broadleaf:row_00:cell_010",
+      "position_m": [
+        451.887,
+        3.763,
+        51.282
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.763,
+        "object_key": "land:w26767313:x_1__z_0",
+        "triangle_index": 108
+      },
+      "uniform_scale": 5.134,
+      "yaw_radians": 1.292,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+      "cell_id": "row_01:cell_000",
+      "id": "vegetation:legacy_grid_broadleaf:row_01:cell_000",
+      "position_m": [
+        304.263,
+        4.116,
+        -282.966
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 4.116,
+        "object_key": "land:w26767313:x_1__z_-2",
+        "triangle_index": 16
+      },
+      "uniform_scale": 5.167,
+      "yaw_radians": -0.478,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb",
+      "cell_id": "row_01:cell_001",
+      "id": "vegetation:legacy_grid_broadleaf:row_01:cell_001",
+      "position_m": [
+        319.219,
+        3.805,
+        -250.902
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.805,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 31
+      },
+      "uniform_scale": 4.983,
+      "yaw_radians": -2.533,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+      "cell_id": "row_01:cell_004",
+      "id": "vegetation:legacy_grid_broadleaf:row_01:cell_004",
+      "position_m": [
+        375.345,
+        7.104,
+        -155.899
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 7.104,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 56
+      },
+      "uniform_scale": 5.645,
+      "yaw_radians": -2.711,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb",
+      "cell_id": "row_01:cell_005",
+      "id": "vegetation:legacy_grid_broadleaf:row_01:cell_005",
+      "position_m": [
+        389.325,
+        3.592,
+        -128.372
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.592,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 73
+      },
+      "uniform_scale": 6.166,
+      "yaw_radians": 1.765,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb",
+      "cell_id": "row_01:cell_006",
+      "id": "vegetation:legacy_grid_broadleaf:row_01:cell_006",
+      "position_m": [
+        408.34,
+        3.807,
+        -93.593
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.807,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 68
+      },
+      "uniform_scale": 5.615,
+      "yaw_radians": 2.592,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb",
+      "cell_id": "row_01:cell_008",
+      "id": "vegetation:legacy_grid_broadleaf:row_01:cell_008",
+      "position_m": [
+        440.84,
+        3.655,
+        -31.088
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.655,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 80
+      },
+      "uniform_scale": 4.902,
+      "yaw_radians": -0.174,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+      "cell_id": "row_01:cell_009",
+      "id": "vegetation:legacy_grid_broadleaf:row_01:cell_009",
+      "position_m": [
+        461.265,
+        3.688,
+        2.161
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.688,
+        "object_key": "land:w26767313:x_1__z_0",
+        "triangle_index": 110
+      },
+      "uniform_scale": 5.508,
+      "yaw_radians": -2.161,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+      "cell_id": "row_02:cell_000",
+      "id": "vegetation:legacy_grid_broadleaf:row_02:cell_000",
+      "position_m": [
+        109.001,
+        6.979,
+        167.937
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 6.979,
+        "object_key": "land:w26767313:x_0__z_0",
+        "triangle_index": 52
+      },
+      "uniform_scale": 5.179,
+      "yaw_radians": 0.22,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb",
+      "cell_id": "row_02:cell_005",
+      "id": "vegetation:legacy_grid_broadleaf:row_02:cell_005",
+      "position_m": [
+        270.123,
+        4.042,
+        245.882
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 4.042,
+        "object_key": "land:w26767313:x_1__z_0",
+        "triangle_index": 1
+      },
+      "uniform_scale": 5.129,
+      "yaw_radians": -3.092,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb",
+      "cell_id": "row_02:cell_008",
+      "id": "vegetation:legacy_grid_broadleaf:row_02:cell_008",
+      "position_m": [
+        361.071,
+        2.623,
+        299.631
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 2.623,
+        "object_key": "land:w26767313:x_1__z_1",
+        "triangle_index": 60
+      },
+      "uniform_scale": 6.468,
+      "yaw_radians": 2.061,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb",
+      "cell_id": "row_02:cell_009",
+      "id": "vegetation:legacy_grid_broadleaf:row_02:cell_009",
+      "position_m": [
+        395.198,
+        2.513,
+        316.725
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 2.513,
+        "object_key": "land:w26767313:x_1__z_1",
+        "triangle_index": 77
+      },
+      "uniform_scale": 6.16,
+      "yaw_radians": 1.327,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb",
+      "cell_id": "row_02:cell_011",
+      "id": "vegetation:legacy_grid_broadleaf:row_02:cell_011",
+      "position_m": [
+        459.837,
+        4.95,
+        348.377
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 4.95,
+        "object_key": "land:w26767313:x_1__z_1",
+        "triangle_index": 107
+      },
+      "uniform_scale": 6.448,
+      "yaw_radians": 0.626,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb",
+      "cell_id": "row_02:cell_012",
+      "id": "vegetation:legacy_grid_broadleaf:row_02:cell_012",
+      "position_m": [
+        489.552,
+        10.002,
+        363.398
+      ],
+      "source_id": "osm:w8921372:avenue-m",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 10.002,
+        "object_key": "land:w26767313:x_1__z_1",
+        "triangle_index": 120
+      },
+      "uniform_scale": 5.124,
+      "yaw_radians": -0.19,
+      "zone": "legacy_grid_broadleaf"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1451-py1510",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "ti-naip-20220518-px1451-py1510",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1451-py1510",
+      "position_m": [
+        159.834,
+        3.473,
+        -47.985
+      ],
+      "source_id": "naip:2022-05-18:tile-10",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.473,
+        "object_key": "land:w26767313:x_0__z_-1",
+        "triangle_index": 67
+      },
+      "uniform_scale": 3.786,
+      "yaw_radians": -0.918,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1840-py1011",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "ti-naip-20220518-px1840-py1011",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1840-py1011",
+      "position_m": [
+        393.137,
+        4.135,
+        -347.291
+      ],
+      "source_id": "naip:2022-05-18:tile-07",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 4.135,
+        "object_key": "land:w26767313:x_1__z_-2",
+        "triangle_index": 70
+      },
+      "uniform_scale": 3.856,
+      "yaw_radians": 1.957,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1855-py1450",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "ti-naip-20220518-px1855-py1450",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1855-py1450",
+      "position_m": [
+        402.133,
+        3.826,
+        -83.974
+      ],
+      "source_id": "naip:2022-05-18:tile-11",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.826,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 68
+      },
+      "uniform_scale": 3.192,
+      "yaw_radians": -2.523,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1860-py1046",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "ti-naip-20220518-px1860-py1046",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1860-py1046",
+      "position_m": [
+        405.132,
+        4.008,
+        -326.299
+      ],
+      "source_id": "naip:2022-05-18:tile-07",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 4.008,
+        "object_key": "land:w26767313:x_1__z_-2",
+        "triangle_index": 71
+      },
+      "uniform_scale": 3.868,
+      "yaw_radians": -0.595,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1875-py1574",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "ti-naip-20220518-px1875-py1574",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1875-py1574",
+      "position_m": [
+        414.129,
+        3.642,
+        -9.597
+      ],
+      "source_id": "naip:2022-05-18:tile-11",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.642,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 65
+      },
+      "uniform_scale": 3.412,
+      "yaw_radians": -0.95,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1879-py1084",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "ti-naip-20220518-px1879-py1084",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1879-py1084",
+      "position_m": [
+        416.527,
+        3.86,
+        -303.505
+      ],
+      "source_id": "naip:2022-05-18:tile-07",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.86,
+        "object_key": "land:w26767313:x_1__z_-2",
+        "triangle_index": 87
+      },
+      "uniform_scale": 3.184,
+      "yaw_radians": 0.929,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1900-py1121",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "ti-naip-20220518-px1900-py1121",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1900-py1121",
+      "position_m": [
+        429.122,
+        3.765,
+        -281.312
+      ],
+      "source_id": "naip:2022-05-18:tile-07",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.765,
+        "object_key": "land:w26767313:x_1__z_-2",
+        "triangle_index": 85
+      },
+      "uniform_scale": 4.106,
+      "yaw_radians": -0.275,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1924-py1161",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "ti-naip-20220518-px1924-py1161",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1924-py1161",
+      "position_m": [
+        443.516,
+        3.661,
+        -257.319
+      ],
+      "source_id": "naip:2022-05-18:tile-07",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.661,
+        "object_key": "land:w26767313:x_1__z_-2",
+        "triangle_index": 86
+      },
+      "uniform_scale": 4.181,
+      "yaw_radians": -0.154,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1937-py1180",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "ti-naip-20220518-px1937-py1180",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1937-py1180",
+      "position_m": [
+        451.313,
+        3.716,
+        -245.924
+      ],
+      "source_id": "naip:2022-05-18:tile-07",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.716,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 110
+      },
+      "uniform_scale": 3.763,
+      "yaw_radians": -1.07,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1953-py1200",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "ti-naip-20220518-px1953-py1200",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1953-py1200",
+      "position_m": [
+        460.909,
+        3.795,
+        -233.927
+      ],
+      "source_id": "naip:2022-05-18:tile-07",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.795,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 111
+      },
+      "uniform_scale": 4.539,
+      "yaw_radians": -1.338,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1968-py1220",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+      "cell_id": "ti-naip-20220518-px1968-py1220",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1968-py1220",
+      "position_m": [
+        469.905,
+        3.772,
+        -221.931
+      ],
+      "source_id": "naip:2022-05-18:tile-07",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.772,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 108
+      },
+      "uniform_scale": 3.053,
+      "yaw_radians": 2.286,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1983-py1239",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "ti-naip-20220518-px1983-py1239",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1983-py1239",
+      "position_m": [
+        478.901,
+        3.741,
+        -210.534
+      ],
+      "source_id": "naip:2022-05-18:tile-07",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.741,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 109
+      },
+      "uniform_scale": 4.44,
+      "yaw_radians": 2.763,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px1998-py1260",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+      "cell_id": "ti-naip-20220518-px1998-py1260",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px1998-py1260",
+      "position_m": [
+        487.898,
+        3.756,
+        -197.938
+      ],
+      "source_id": "naip:2022-05-18:tile-07",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.756,
+        "object_key": "land:w26767313:x_1__z_-1",
+        "triangle_index": 125
+      },
+      "uniform_scale": 3.195,
+      "yaw_radians": 0.99,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px2059-py1297",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "ti-naip-20220518-px2059-py1297",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px2059-py1297",
+      "position_m": [
+        524.482,
+        3.069,
+        -175.746
+      ],
+      "source_id": "naip:2022-05-18:tile-11",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.069,
+        "object_key": "land:w26767313:x_2__z_-1",
+        "triangle_index": 10
+      },
+      "uniform_scale": 3.622,
+      "yaw_radians": -2.095,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px2083-py1342",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "ti-naip-20220518-px2083-py1342",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px2083-py1342",
+      "position_m": [
+        538.877,
+        3.841,
+        -148.754
+      ],
+      "source_id": "naip:2022-05-18:tile-11",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.841,
+        "object_key": "land:w26767313:x_2__z_-1",
+        "triangle_index": 9
+      },
+      "uniform_scale": 4.523,
+      "yaw_radians": 0.409,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px2107-py1387",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+      "cell_id": "ti-naip-20220518-px2107-py1387",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px2107-py1387",
+      "position_m": [
+        553.27,
+        3.827,
+        -121.762
+      ],
+      "source_id": "naip:2022-05-18:tile-11",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.827,
+        "object_key": "land:w26767313:x_2__z_-1",
+        "triangle_index": 23
+      },
+      "uniform_scale": 3.705,
+      "yaw_radians": -0.766,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px2130-py1433",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+      "cell_id": "ti-naip-20220518-px2130-py1433",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px2130-py1433",
+      "position_m": [
+        567.065,
+        3.798,
+        -94.171
+      ],
+      "source_id": "naip:2022-05-18:tile-11",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.798,
+        "object_key": "land:w26767313:x_2__z_-1",
+        "triangle_index": 21
+      },
+      "uniform_scale": 3.766,
+      "yaw_radians": -0.711,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px2154-py1479",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "ti-naip-20220518-px2154-py1479",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px2154-py1479",
+      "position_m": [
+        581.458,
+        3.612,
+        -66.579
+      ],
+      "source_id": "naip:2022-05-18:tile-11",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.612,
+        "object_key": "land:w26767313:x_2__z_-1",
+        "triangle_index": 36
+      },
+      "uniform_scale": 4.331,
+      "yaw_radians": 0.313,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px2180-py1525",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+      "cell_id": "ti-naip-20220518-px2180-py1525",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px2180-py1525",
+      "position_m": [
+        597.052,
+        3.625,
+        -38.987
+      ],
+      "source_id": "naip:2022-05-18:tile-11",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.625,
+        "object_key": "land:w26767313:x_2__z_-1",
+        "triangle_index": 34
+      },
+      "uniform_scale": 4.566,
+      "yaw_radians": -0.599,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px2206-py1571",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "ti-naip-20220518-px2206-py1571",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px2206-py1571",
+      "position_m": [
+        612.646,
+        3.346,
+        -11.397
+      ],
+      "source_id": "naip:2022-05-18:tile-11",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.346,
+        "object_key": "land:w26767313:x_2__z_-1",
+        "triangle_index": 44
+      },
+      "uniform_scale": 3.043,
+      "yaw_radians": -2.033,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px2232-py1616",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "ti-naip-20220518-px2232-py1616",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px2232-py1616",
+      "position_m": [
+        628.24,
+        3.706,
+        15.595
+      ],
+      "source_id": "naip:2022-05-18:tile-11",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.706,
+        "object_key": "land:w26767313:x_2__z_0",
+        "triangle_index": 63
+      },
+      "uniform_scale": 4.457,
+      "yaw_radians": -0.571,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "annotation_id": "ti-naip-20220518-px2261-py1661",
+      "annotation_tree_type": "unknown",
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "ti-naip-20220518-px2261-py1661",
+      "id": "vegetation:naip_unknown_shrubs:ti-naip-20220518-px2261-py1661",
+      "position_m": [
+        645.632,
+        3.459,
+        42.586
+      ],
+      "source_id": "naip:2022-05-18:tile-11",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.459,
+        "object_key": "land:w26767313:x_2__z_0",
+        "triangle_index": 76
+      },
+      "uniform_scale": 4.619,
+      "yaw_radians": 2.716,
+      "zone": "naip_unknown_shrubs"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+      "cell_id": "row_003:column_001",
+      "id": "vegetation:north_west_lawn_broadleaf:row_003:column_001",
+      "position_m": [
+        -507.861,
+        2.247,
+        -703.218
+      ],
+      "source_id": "streetview:37.83110,-122.37455|37.82568,-122.37696",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 2.247,
+        "object_key": "land:w26767313:x_-2__z_-3",
+        "triangle_index": 10
+      },
+      "uniform_scale": 5.107,
+      "yaw_radians": -0.711,
+      "zone": "north_west_lawn_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb",
+      "cell_id": "row_008:column_003",
+      "id": "vegetation:north_west_lawn_broadleaf:row_008:column_003",
+      "position_m": [
+        -404.32,
+        2.299,
+        -448.853
+      ],
+      "source_id": "streetview:37.83110,-122.37455|37.82568,-122.37696",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 2.299,
+        "object_key": "land:w26767313:x_-2__z_-2",
+        "triangle_index": 61
+      },
+      "uniform_scale": 6.305,
+      "yaw_radians": -3.117,
+      "zone": "north_west_lawn_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb",
+      "cell_id": "row_008:column_004",
+      "id": "vegetation:north_west_lawn_broadleaf:row_008:column_004",
+      "position_m": [
+        -351.836,
+        2.576,
+        -454.523
+      ],
+      "source_id": "streetview:37.83110,-122.37455|37.82568,-122.37696",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 2.576,
+        "object_key": "land:w26767313:x_-2__z_-2",
+        "triangle_index": 92
+      },
+      "uniform_scale": 6.517,
+      "yaw_radians": -0.158,
+      "zone": "north_west_lawn_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+      "cell_id": "row_009:column_006",
+      "id": "vegetation:north_west_lawn_broadleaf:row_009:column_006",
+      "position_m": [
+        -251.266,
+        3.123,
+        -401.487
+      ],
+      "source_id": "streetview:37.83110,-122.37455|37.82568,-122.37696",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.123,
+        "object_key": "land:w26767313:x_-1__z_-2",
+        "triangle_index": 8
+      },
+      "uniform_scale": 5.583,
+      "yaw_radians": -1.217,
+      "zone": "north_west_lawn_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb",
+      "cell_id": "row_010:column_003",
+      "id": "vegetation:north_west_lawn_broadleaf:row_010:column_003",
+      "position_m": [
+        -404.885,
+        2.477,
+        -361.07
+      ],
+      "source_id": "streetview:37.83110,-122.37455|37.82568,-122.37696",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 2.477,
+        "object_key": "land:w26767313:x_-2__z_-2",
+        "triangle_index": 55
+      },
+      "uniform_scale": 5.28,
+      "yaw_radians": -1.285,
+      "zone": "north_west_lawn_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb",
+      "cell_id": "row_012:column_007",
+      "id": "vegetation:north_west_lawn_broadleaf:row_012:column_007",
+      "position_m": [
+        -211.221,
+        3.188,
+        -260.383
+      ],
+      "source_id": "streetview:37.83110,-122.37455|37.82568,-122.37696",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.188,
+        "object_key": "land:w26767313:x_-1__z_-2",
+        "triangle_index": 17
+      },
+      "uniform_scale": 5.295,
+      "yaw_radians": 2.51,
+      "zone": "north_west_lawn_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb",
+      "cell_id": "row_013:column_004",
+      "id": "vegetation:north_west_lawn_broadleaf:row_013:column_004",
+      "position_m": [
+        -353.083,
+        3.146,
+        -202.11
+      ],
+      "source_id": "streetview:37.83110,-122.37455|37.82568,-122.37696",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 3.146,
+        "object_key": "land:w26767313:x_-2__z_-1",
+        "triangle_index": 77
+      },
+      "uniform_scale": 5.238,
+      "yaw_radians": -2.479,
+      "zone": "north_west_lawn_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+      "cell_id": "row_014:column_000",
+      "id": "vegetation:north_west_lawn_broadleaf:row_014:column_000",
+      "position_m": [
+        -559.398,
+        2.055,
+        -165.023
+      ],
+      "source_id": "streetview:37.83110,-122.37455|37.82568,-122.37696",
+      "species": "broadleaf",
+      "terrain_support": {
+        "elevation_m": 2.055,
+        "object_key": "land:w26767313:x_-3__z_-1",
+        "triangle_index": 52
+      },
+      "uniform_scale": 5.242,
+      "yaw_radians": 2.869,
+      "zone": "north_west_lawn_broadleaf"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass.glb",
+      "cell_id": "row_000:column_000",
+      "id": "vegetation:south_ornamental_beds:row_000:column_000",
+      "position_m": [
+        -351.677,
+        2.77,
+        208.808
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 2.77,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 76
+      },
+      "uniform_scale": 2.851,
+      "yaw_radians": -1.971,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_large.glb",
+      "cell_id": "row_000:column_008",
+      "id": "vegetation:south_ornamental_beds:row_000:column_008",
+      "position_m": [
+        -260.85,
+        4.099,
+        210.361
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 4.099,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 109
+      },
+      "uniform_scale": 3.414,
+      "yaw_radians": 0.051,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "row_002:column_006",
+      "id": "vegetation:south_ornamental_beds:row_002:column_006",
+      "position_m": [
+        -286.169,
+        3.428,
+        231.351
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.428,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 106
+      },
+      "uniform_scale": 3.79,
+      "yaw_radians": -2.049,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "row_006:column_004",
+      "id": "vegetation:south_ornamental_beds:row_006:column_004",
+      "position_m": [
+        -306.856,
+        3.909,
+        277.227
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.909,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 34
+      },
+      "uniform_scale": 3.738,
+      "yaw_radians": -2.422,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+      "cell_id": "row_008:column_002",
+      "id": "vegetation:south_ornamental_beds:row_008:column_002",
+      "position_m": [
+        -329.815,
+        3.437,
+        299.434
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.437,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 17
+      },
+      "uniform_scale": 3.433,
+      "yaw_radians": 2.701,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass.glb",
+      "cell_id": "row_010:column_005",
+      "id": "vegetation:south_ornamental_beds:row_010:column_005",
+      "position_m": [
+        -295.687,
+        3.295,
+        319.729
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 3.295,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 32
+      },
+      "uniform_scale": 3.108,
+      "yaw_radians": 2.777,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+      "cell_id": "row_011:column_003",
+      "id": "vegetation:south_ornamental_beds:row_011:column_003",
+      "position_m": [
+        -319.379,
+        2.236,
+        331.551
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 2.236,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 29
+      },
+      "uniform_scale": 4.153,
+      "yaw_radians": -2.811,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+      "cell_id": "row_011:column_004",
+      "id": "vegetation:south_ornamental_beds:row_011:column_004",
+      "position_m": [
+        -307.863,
+        2.874,
+        329.473
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 2.874,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 29
+      },
+      "uniform_scale": 4.389,
+      "yaw_radians": -2.195,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+      "cell_id": "row_013:column_003",
+      "id": "vegetation:south_ornamental_beds:row_013:column_003",
+      "position_m": [
+        -315.322,
+        2.864,
+        354.945
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 2.864,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 27
+      },
+      "uniform_scale": 4.017,
+      "yaw_radians": -2.637,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "row_013:column_004",
+      "id": "vegetation:south_ornamental_beds:row_013:column_004",
+      "position_m": [
+        -305.675,
+        2.748,
+        350.991
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 2.748,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 30
+      },
+      "uniform_scale": 4.407,
+      "yaw_radians": -2.966,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "row_013:column_015",
+      "id": "vegetation:south_ornamental_beds:row_013:column_015",
+      "position_m": [
+        -184.17,
+        4.383,
+        350.807
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 4.383,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 43
+      },
+      "uniform_scale": 3.216,
+      "yaw_radians": 2.882,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "row_014:column_003",
+      "id": "vegetation:south_ornamental_beds:row_014:column_003",
+      "position_m": [
+        -315.145,
+        2.913,
+        365.241
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 2.913,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 27
+      },
+      "uniform_scale": 3.15,
+      "yaw_radians": -0.091,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+      "cell_id": "row_014:column_015",
+      "id": "vegetation:south_ornamental_beds:row_014:column_015",
+      "position_m": [
+        -183.154,
+        4.277,
+        365.2
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 4.277,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 40
+      },
+      "uniform_scale": 4.32,
+      "yaw_radians": -2.156,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "row_015:column_004",
+      "id": "vegetation:south_ornamental_beds:row_015:column_004",
+      "position_m": [
+        -305.168,
+        2.804,
+        373.288
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 2.804,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 28
+      },
+      "uniform_scale": 3.335,
+      "yaw_radians": 0.702,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+      "cell_id": "row_015:column_006",
+      "id": "vegetation:south_ornamental_beds:row_015:column_006",
+      "position_m": [
+        -284.688,
+        2.697,
+        372.844
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 2.697,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 44
+      },
+      "uniform_scale": 3.895,
+      "yaw_radians": 2.979,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+      "cell_id": "row_015:column_007",
+      "id": "vegetation:south_ornamental_beds:row_015:column_007",
+      "position_m": [
+        -272.586,
+        3.226,
+        373.67
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 3.226,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 45
+      },
+      "uniform_scale": 4.156,
+      "yaw_radians": -0.517,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+      "cell_id": "row_016:column_007",
+      "id": "vegetation:south_ornamental_beds:row_016:column_007",
+      "position_m": [
+        -273.687,
+        3.133,
+        385.049
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 3.133,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 42
+      },
+      "uniform_scale": 3.466,
+      "yaw_radians": 0.051,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass.glb",
+      "cell_id": "row_016:column_009",
+      "id": "vegetation:south_ornamental_beds:row_016:column_009",
+      "position_m": [
+        -251.395,
+        3.914,
+        387.454
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 3.914,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 6
+      },
+      "uniform_scale": 3.447,
+      "yaw_radians": 2.842,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "row_016:column_016",
+      "id": "vegetation:south_ornamental_beds:row_016:column_016",
+      "position_m": [
+        -171.908,
+        4.156,
+        383.878
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 4.156,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 41
+      },
+      "uniform_scale": 3.625,
+      "yaw_radians": 1.172,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_large.glb",
+      "cell_id": "row_017:column_005",
+      "id": "vegetation:south_ornamental_beds:row_017:column_005",
+      "position_m": [
+        -294.694,
+        2.492,
+        398.655
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 2.492,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 26
+      },
+      "uniform_scale": 4.518,
+      "yaw_radians": 0.355,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass.glb",
+      "cell_id": "row_017:column_006",
+      "id": "vegetation:south_ornamental_beds:row_017:column_006",
+      "position_m": [
+        -285.78,
+        2.47,
+        397.645
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 2.47,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 42
+      },
+      "uniform_scale": 4.022,
+      "yaw_radians": -1.2,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+      "cell_id": "row_017:column_008",
+      "id": "vegetation:south_ornamental_beds:row_017:column_008",
+      "position_m": [
+        -264.02,
+        3.502,
+        397.583
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 3.502,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 43
+      },
+      "uniform_scale": 4.105,
+      "yaw_radians": 1.639,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+      "cell_id": "row_017:column_009",
+      "id": "vegetation:south_ornamental_beds:row_017:column_009",
+      "position_m": [
+        -250.152,
+        4.066,
+        395.487
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 4.066,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 6
+      },
+      "uniform_scale": 4.56,
+      "yaw_radians": 1.277,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass.glb",
+      "cell_id": "row_017:column_013",
+      "id": "vegetation:south_ornamental_beds:row_017:column_013",
+      "position_m": [
+        -205.893,
+        4.064,
+        395.904
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 4.064,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 22
+      },
+      "uniform_scale": 3.955,
+      "yaw_radians": 2.188,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass.glb",
+      "cell_id": "row_017:column_015",
+      "id": "vegetation:south_ornamental_beds:row_017:column_015",
+      "position_m": [
+        -184.28,
+        4.122,
+        394.984
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 4.122,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 38
+      },
+      "uniform_scale": 4.463,
+      "yaw_radians": 0.868,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+      "cell_id": "row_018:column_008",
+      "id": "vegetation:south_ornamental_beds:row_018:column_008",
+      "position_m": [
+        -261.675,
+        3.878,
+        408.885
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 3.878,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 43
+      },
+      "uniform_scale": 3.339,
+      "yaw_radians": -1.725,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+      "cell_id": "row_018:column_010",
+      "id": "vegetation:south_ornamental_beds:row_018:column_010",
+      "position_m": [
+        -240.888,
+        4.189,
+        406.33
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 4.189,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 7
+      },
+      "uniform_scale": 4.331,
+      "yaw_radians": 0.496,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass.glb",
+      "cell_id": "row_019:column_007",
+      "id": "vegetation:south_ornamental_beds:row_019:column_007",
+      "position_m": [
+        -275.059,
+        3.104,
+        418.37
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 3.104,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 40
+      },
+      "uniform_scale": 3.133,
+      "yaw_radians": -1.967,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_large.glb",
+      "cell_id": "row_019:column_008",
+      "id": "vegetation:south_ornamental_beds:row_019:column_008",
+      "position_m": [
+        -263.088,
+        3.981,
+        418.7
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 3.981,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 40
+      },
+      "uniform_scale": 2.865,
+      "yaw_radians": 1.949,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_large.glb",
+      "cell_id": "row_020:column_010",
+      "id": "vegetation:south_ornamental_beds:row_020:column_010",
+      "position_m": [
+        -239.801,
+        4.189,
+        431.241
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 4.189,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 4
+      },
+      "uniform_scale": 3.188,
+      "yaw_radians": -2.03,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "row_020:column_011",
+      "id": "vegetation:south_ornamental_beds:row_020:column_011",
+      "position_m": [
+        -227.868,
+        4.05,
+        428.774
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 4.05,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 5
+      },
+      "uniform_scale": 4.203,
+      "yaw_radians": 1.031,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_large.glb",
+      "cell_id": "row_021:column_008",
+      "id": "vegetation:south_ornamental_beds:row_021:column_008",
+      "position_m": [
+        -263.456,
+        4.126,
+        441.532
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 4.126,
+        "object_key": "land:w26767313:x_-2__z_1",
+        "triangle_index": 41
+      },
+      "uniform_scale": 3.598,
+      "yaw_radians": 2.713,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "row_021:column_010",
+      "id": "vegetation:south_ornamental_beds:row_021:column_010",
+      "position_m": [
+        -239.752,
+        4.292,
+        443.015
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 4.292,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 5
+      },
+      "uniform_scale": 4.679,
+      "yaw_radians": -0.893,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+      "cell_id": "row_021:column_012",
+      "id": "vegetation:south_ornamental_beds:row_021:column_012",
+      "position_m": [
+        -218.121,
+        4.162,
+        442.335
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "ornamental_grass",
+      "terrain_support": {
+        "elevation_m": 4.162,
+        "object_key": "land:w26767313:x_-1__z_1",
+        "triangle_index": 21
+      },
+      "uniform_scale": 3.062,
+      "yaw_radians": 0.331,
+      "zone": "south_ornamental_beds"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb",
+      "cell_id": "row_00:cell_001",
+      "id": "vegetation:south_palm_rows:row_00:cell_001",
+      "position_m": [
+        -328.705,
+        2.754,
+        200.63
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 2.754,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 76
+      },
+      "uniform_scale": 6.356,
+      "yaw_radians": -1.385,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb",
+      "cell_id": "row_00:cell_002",
+      "id": "vegetation:south_palm_rows:row_00:cell_002",
+      "position_m": [
+        -335.606,
+        2.488,
+        183.864
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 2.488,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 79
+      },
+      "uniform_scale": 7.303,
+      "yaw_radians": -2.24,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb",
+      "cell_id": "row_00:cell_003",
+      "id": "vegetation:south_palm_rows:row_00:cell_003",
+      "position_m": [
+        -341.22,
+        2.476,
+        168.055
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 2.476,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 78
+      },
+      "uniform_scale": 5.654,
+      "yaw_radians": 2.871,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb",
+      "cell_id": "row_00:cell_004",
+      "id": "vegetation:south_palm_rows:row_00:cell_004",
+      "position_m": [
+        -348.052,
+        2.769,
+        150.8
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 2.769,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 80
+      },
+      "uniform_scale": 5.602,
+      "yaw_radians": -2.658,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb",
+      "cell_id": "row_00:cell_005",
+      "id": "vegetation:south_palm_rows:row_00:cell_005",
+      "position_m": [
+        -355.323,
+        2.98,
+        132.859
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 2.98,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 65
+      },
+      "uniform_scale": 5.705,
+      "yaw_radians": -1.446,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb",
+      "cell_id": "row_00:cell_006",
+      "id": "vegetation:south_palm_rows:row_00:cell_006",
+      "position_m": [
+        -362.941,
+        2.95,
+        116.315
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 2.95,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 67
+      },
+      "uniform_scale": 6.869,
+      "yaw_radians": -3.067,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb",
+      "cell_id": "row_00:cell_007",
+      "id": "vegetation:south_palm_rows:row_00:cell_007",
+      "position_m": [
+        -368.58,
+        2.885,
+        98.589
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 2.885,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 66
+      },
+      "uniform_scale": 6.849,
+      "yaw_radians": 0.291,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb",
+      "cell_id": "row_01:cell_001",
+      "id": "vegetation:south_palm_rows:row_01:cell_001",
+      "position_m": [
+        -350.546,
+        2.693,
+        191.011
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 2.693,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 79
+      },
+      "uniform_scale": 6.55,
+      "yaw_radians": -3.018,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb",
+      "cell_id": "row_01:cell_002",
+      "id": "vegetation:south_palm_rows:row_01:cell_002",
+      "position_m": [
+        -357.849,
+        2.839,
+        175.494
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 2.839,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 63
+      },
+      "uniform_scale": 6.077,
+      "yaw_radians": 2.806,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb",
+      "cell_id": "row_01:cell_003",
+      "id": "vegetation:south_palm_rows:row_01:cell_003",
+      "position_m": [
+        -366.836,
+        2.861,
+        158.617
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 2.861,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 65
+      },
+      "uniform_scale": 5.324,
+      "yaw_radians": 2.953,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb",
+      "cell_id": "row_01:cell_004",
+      "id": "vegetation:south_palm_rows:row_01:cell_004",
+      "position_m": [
+        -374.287,
+        2.957,
+        142.35
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 2.957,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 64
+      },
+      "uniform_scale": 6.571,
+      "yaw_radians": 1.094,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb",
+      "cell_id": "row_01:cell_005",
+      "id": "vegetation:south_palm_rows:row_01:cell_005",
+      "position_m": [
+        -382.052,
+        3.114,
+        126.452
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 3.114,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 67
+      },
+      "uniform_scale": 5.326,
+      "yaw_radians": 0.432,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb",
+      "cell_id": "row_01:cell_006",
+      "id": "vegetation:south_palm_rows:row_01:cell_006",
+      "position_m": [
+        -390.618,
+        3.117,
+        109.61
+      ],
+      "source_id": "streetview:37.82080,-122.37400",
+      "species": "palm",
+      "terrain_support": {
+        "elevation_m": 3.117,
+        "object_key": "land:w26767313:x_-2__z_0",
+        "triangle_index": 51
+      },
+      "uniform_scale": 7.003,
+      "yaw_radians": -3.005,
+      "zone": "south_palm_rows"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+      "cell_id": "cluster_02:row_0:column_2",
+      "id": "vegetation:south_shrub_groups:cluster_02:row_0:column_2",
+      "position_m": [
+        57.536,
+        4.169,
+        714.725
+      ],
+      "source_id": "streetview:37.81663,-122.37035|37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 4.169,
+        "object_key": "land:w26767313:x_0__z_2",
+        "triangle_index": 19
+      },
+      "uniform_scale": 3.62,
+      "yaw_radians": -2.45,
+      "zone": "south_shrub_groups"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "cluster_02:row_1:column_1",
+      "id": "vegetation:south_shrub_groups:cluster_02:row_1:column_1",
+      "position_m": [
+        50.155,
+        4.151,
+        722.337
+      ],
+      "source_id": "streetview:37.81663,-122.37035|37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 4.151,
+        "object_key": "land:w26767313:x_0__z_2",
+        "triangle_index": 19
+      },
+      "uniform_scale": 4.584,
+      "yaw_radians": 2.739,
+      "zone": "south_shrub_groups"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+      "cell_id": "cluster_02:row_1:column_2",
+      "id": "vegetation:south_shrub_groups:cluster_02:row_1:column_2",
+      "position_m": [
+        56.896,
+        4.169,
+        722.329
+      ],
+      "source_id": "streetview:37.81663,-122.37035|37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 4.169,
+        "object_key": "land:w26767313:x_0__z_2",
+        "triangle_index": 19
+      },
+      "uniform_scale": 4.308,
+      "yaw_radians": 0.338,
+      "zone": "south_shrub_groups"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "cluster_02:row_2:column_4",
+      "id": "vegetation:south_shrub_groups:cluster_02:row_2:column_4",
+      "position_m": [
+        72.413,
+        4.13,
+        731.697
+      ],
+      "source_id": "streetview:37.81663,-122.37035|37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 4.13,
+        "object_key": "land:w26767313:x_0__z_2",
+        "triangle_index": 35
+      },
+      "uniform_scale": 3.748,
+      "yaw_radians": 0.347,
+      "zone": "south_shrub_groups"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+      "cell_id": "cluster_02:row_3:column_1",
+      "id": "vegetation:south_shrub_groups:cluster_02:row_3:column_1",
+      "position_m": [
+        51.579,
+        4.142,
+        739.5
+      ],
+      "source_id": "streetview:37.81663,-122.37035|37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 4.142,
+        "object_key": "land:w26767313:x_0__z_2",
+        "triangle_index": 16
+      },
+      "uniform_scale": 3.125,
+      "yaw_radians": 2.746,
+      "zone": "south_shrub_groups"
+    },
+    {
+      "asset_path": "res://game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+      "cell_id": "cluster_02:row_3:column_3",
+      "id": "vegetation:south_shrub_groups:cluster_02:row_3:column_3",
+      "position_m": [
+        67.091,
+        4.189,
+        738.819
+      ],
+      "source_id": "streetview:37.81663,-122.37035|37.82080,-122.37400",
+      "species": "shrub",
+      "terrain_support": {
+        "elevation_m": 4.189,
+        "object_key": "land:w26767313:x_0__z_2",
+        "triangle_index": 32
+      },
+      "uniform_scale": 3.181,
+      "yaw_radians": -2.63,
+      "zone": "south_shrub_groups"
+    }
+  ],
+  "schema_version": "ti.vegetation/1",
+  "seed": 1414092337,
+  "visual_only": true
+}

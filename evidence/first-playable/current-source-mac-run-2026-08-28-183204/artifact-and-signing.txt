@@ -1,0 +1,31 @@
+CURRENT-SOURCE MAC ARTIFACT AND SIGNING — 2026-08-28
+
+App:
+/Users/philipp/cowork/treasure-island-game/build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app
+
+Bundle logical bytes: 195145028
+Bundle allocated KiB: 190588
+Bundle files: 7
+Bundle descriptor SHA-256: c3f60f4f236304a5d8456a6e6b37af571c31285b595e845dfa5081cbb14d1520
+Executable bytes: 170963648
+Executable SHA-256: ef44bf47983147b5b1b66286b47af11b64f3658b798412b7ede33ae829e28749
+PCK bytes: 24108540
+PCK SHA-256: a6c37a783771a38cb323a87dad9f73a9e740ca6fa4cd179563b8083129fbdbc4
+Architectures: x86_64 arm64
+Bundle identifier: local.treasure-island.first-playable
+Bundle short version: 0.1.0
+Bundle version: 0.1.0
+
+$ /usr/bin/codesign --verify --deep --strict --verbose=4 "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app"
+build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app: valid on disk
+build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app: satisfies its Designated Requirement
+exit=0
+
+Signature: adhoc
+Hardened runtime: yes
+TeamIdentifier: not set
+arm64 CandidateCDHashFull sha256: d5b7a856121d5e84bd426d233dcb79690de1f4069443861aa2803d0e6280a049
+
+Recursive extended-attribute inspection found com.apple.provenance only. No com.apple.quarantine attribute was present.
+This private app is not Developer-ID signed or notarized; no public-distribution claim is made.
+

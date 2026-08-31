@@ -1,0 +1,27 @@
+$ .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/automated_route_qa.gd -- --visual-evidence-output=/Users/philipp/cowork/treasure-island-game/evidence/first-playable/automated-route
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M1 Pro (Apple7)
+
+ROUTE_CONTRACT: checkpoints=14 centerline_length=264.122m start=00-ferry-spawn end=13-trade-winds-east road_validation=pass
+ROUTE_CAPTURE: id=00-ferry-spawn image=/Users/philipp/cowork/treasure-island-game/evidence/first-playable/automated-route/route-00-ferry-spawn.png sha256=79e42797bfaa6620c42dbda627d3851d7d60f530cb5bb206513795e3bb28d543 position=(-104.364,0.000,786.024)
+ROUTE_CHECKPOINT: index=1 id=01-waterfront-approach source=w1222514694 node=n11609333225 mode=walk frames=182 error=0.490m position=(-94.111,0.000,780.280) traveled=11.761m
+ROUTE_CHECKPOINT: index=2 id=02-waterfront-join source=w1212173450 node=n11230504400 mode=walk frames=35 error=0.489m position=(-92.077,0.000,779.137) traveled=14.094m
+ROUTE_CHECKPOINT: index=3 id=03-waterfront-crossing source=w1249797944 node=n9551738100 mode=walk frames=122 error=0.705m position=(-85.025,0.000,775.086) traveled=22.227m
+ROUTE_CAPTURE: id=03-waterfront-crossing image=/Users/philipp/cowork/treasure-island-game/evidence/first-playable/automated-route/route-03-waterfront-crossing.png sha256=62a64635599c251acd43a11dff39937f8d3b88425b61a67caa6100537a80e5a2 position=(-84.803,0.000,775.019)
+ROUTE_CHECKPOINT: index=4 id=04-ti-road-north-1 source=w1249797944 node=n10206762981 mode=run frames=203 error=1.212m position=(-95.677,0.000,755.263) traveled=45.037m
+ROUTE_CHECKPOINT: index=5 id=05-ti-road-north-2 source=w1249797944 node=n11617861468 mode=run frames=232 error=1.238m position=(-108.258,0.000,731.302) traveled=72.099m
+ROUTE_CHECKPOINT: index=6 id=06-trade-winds-turn source=w255330044 node=n10206762967 mode=run frames=69 error=1.175m position=(-111.675,0.000,724.012) traveled=80.150m
+ROUTE_CAPTURE: id=06-trade-winds-turn image=/Users/philipp/cowork/treasure-island-game/evidence/first-playable/automated-route/route-06-trade-winds-turn.png sha256=c0639e6773c5408a0014f1695d62f2f8728ad24e0485a53c9cbd79a6e100db51 position=(-111.835,0.000,723.228)
+ROUTE_CHECKPOINT: index=7 id=07-trade-winds-1 source=w255330044 node=n11230505956 mode=run frames=47 error=1.191m position=(-112.517,0.000,719.186) traveled=85.074m
+ROUTE_CHECKPOINT: index=8 id=08-trade-winds-2 source=w255330044 node=n10206762980 mode=run frames=45 error=1.144m position=(-111.726,0.000,714.011) traveled=90.318m
+ROUTE_CHECKPOINT: index=9 id=09-trade-winds-3 source=w255330044 node=n10206762979 mode=run frames=19 error=1.161m position=(-110.739,0.000,712.082) traveled=92.494m
+ROUTE_CHECKPOINT: index=10 id=10-trade-winds-4 source=w255330044 node=n5022051218 mode=run frames=71 error=1.192m position=(-104.447,0.000,706.734) traveled=100.761m
+ROUTE_CHECKPOINT: index=11 id=11-trade-winds-west source=w1249797946 node=n11617873669 mode=run frames=347 error=1.466m position=(-69.356,0.000,686.542) traveled=141.248m
+ROUTE_CHECKPOINT: index=12 id=12-trade-winds-center source=w1249797946 node=n13515946901 mode=run frames=611 error=1.471m position=(-6.253,0.000,653.389) traveled=212.530m
+ROUTE_CHECKPOINT: index=13 id=13-trade-winds-east source=w1249797946 node=n11612881904 mode=run frames=425 error=1.392m position=(37.514,0.000,630.093) traveled=262.111m
+ROUTE_CAPTURE: id=13-trade-winds-east image=/Users/philipp/cowork/treasure-island-game/evidence/first-playable/automated-route/route-13-trade-winds-east.png sha256=e5ed4e2052a950998357cc402a29025823065dc3fd46ae9677ff89d5317921c4 position=(38.259,0.000,629.895)
+ROUTE_CAPTURE_MANIFEST: path=/Users/philipp/cowork/treasure-island-game/evidence/first-playable/automated-route/route-capture-manifest.json captures=4
+AUTOMATED_ROUTE: checkpoints=14 centerline=264.122m traveled=262.111m elapsed=40.873s physics_frames=2408 walk_frames=339 run_frames=2069 airborne_peak=0 recoveries=0 final_error=0.665m continuous=true boundary=pass grounded=pass stalls=0 captures=4
+PASS: actual PlayerController continuously traversed the validated ferry-to-Trade-Winds road route without teleport, stall, boundary loss, or recovery
+
+[exit 0]

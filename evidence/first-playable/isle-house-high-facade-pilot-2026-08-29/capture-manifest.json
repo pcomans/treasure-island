@@ -1,0 +1,312 @@
+{
+  "schema_version": "ti.isle-house-high-facade-evidence/1",
+  "generator": "game/tests/next_cohort_facade_capture.gd",
+  "evidence_role": "bounded_facade_pilot_ready_for_independent_review",
+  "review_status": "ready_for_independent_review_not_self_accepted",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "viewport": [
+    1440,
+    900
+  ],
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "target_receiver": "building-composite:w1249412094:w1282547786:wall",
+  "target_source_keys": [
+    "w1282547786"
+  ],
+  "facade_layout": "res://game/resources/facades/isle_house_39_bruton_high_se_layout.json",
+  "facade_layout_sha256": "c5e6393e90152cef62f6478d7bd87750f3db5598d6ebc36cd307ce20acaa090d",
+  "facade_signature": "fdc41a59b4805b49bc6872d4f5e85a7339d328a317c398f3eb7dfb747be5e73c",
+  "maximum_relief_m": 0.08,
+  "module_counts": {
+    "IH-TW": 170,
+    "IH-PW-W": 4,
+    "IH-PW-M": 8,
+    "IH-PW-N": 6,
+    "IH-CW": 1,
+    "IH-GG": 5,
+    "IH-ENTRY39": 1,
+    "IH-LVR": 1,
+    "IH-CANOPY": 1
+  },
+  "module_run_scope": [
+    5,
+    6,
+    7
+  ],
+  "material_only_run_scope": [
+    8,
+    9
+  ],
+  "known_limitation": "The exact generated five-level low part differs from the locally recorded seven-level podium; all low/shared-above-low geometry and unobserved schedules remain intentionally unchanged.",
+  "generated_world_counts": {
+    "chunks": 38,
+    "meshes": 729,
+    "triangles": 48381,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "default_sun_rotation_degrees": [
+    -51.9999923706055,
+    -27.9999961853027,
+    0.0
+  ],
+  "camera_fov_degrees": 70.0,
+  "captures": [
+    {
+      "id": "01-close",
+      "region": "close_exact_receiver",
+      "intent": "Close exact-receiver view of complete target-specific facade modules under the default sun",
+      "file": "01-close.png",
+      "sha256": "201135b7604c88c6e31a0a898dd2384545607b68af3173f597c308682db20063",
+      "bytes": 735159,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -103.939147949219,
+        3.99409484863281,
+        563.749938964844
+      ],
+      "camera_position": [
+        -99.8264694213867,
+        5.54906177520752,
+        567.374572753906
+      ],
+      "camera_forward": [
+        -0.747755944728851,
+        0.0809147134423256,
+        -0.659025013446808
+      ],
+      "sample_unique_colors": 260,
+      "sample_luminance_range": 0.629276089370251,
+      "pause_overlay_visible": false,
+      "pose_id": "observed_high_se_u14.3_d5.0",
+      "physics_grounded_pose": true,
+      "ground_y_m": 3.99409484863281,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -107.690231323242,
+        6.40000009536743,
+        560.443969726562
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "side_u_m": 14.3,
+      "outward_distance_m": 5.0
+    },
+    {
+      "id": "02-close-sprayed",
+      "region": "close_exact_receiver_spray",
+      "intent": "Close exact-receiver view after one real-controller spray projected across render-only visuals",
+      "file": "02-close-sprayed.png",
+      "sha256": "df8d264cbf330d7a6fb9f8a32494219ae9c1c158934c7185206096aa2f572913",
+      "bytes": 737255,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -103.939147949219,
+        3.99409484863281,
+        563.749938964844
+      ],
+      "camera_position": [
+        -99.8264694213867,
+        5.54906177520752,
+        567.374572753906
+      ],
+      "camera_forward": [
+        -0.747755944728851,
+        0.080914668738842,
+        -0.659025013446808
+      ],
+      "sample_unique_colors": 259,
+      "sample_luminance_range": 0.629276089370251,
+      "pause_overlay_visible": false,
+      "pose_id": "observed_high_se_u14.3_d5.0",
+      "physics_grounded_pose": true,
+      "ground_y_m": 3.99409484863281,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -107.690231323242,
+        6.40000009536743,
+        560.443969726562
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "side_u_m": 14.3,
+      "outward_distance_m": 5.0,
+      "spray_result": "placed",
+      "spray_hit_object": "building-composite:w1249412094:w1282547786:wall",
+      "spray_hit_sources": [
+        "w1282547786"
+      ],
+      "spray_visual_layer": 2
+    },
+    {
+      "id": "03-ordinary-gameplay-camera",
+      "region": "ordinary_third_person",
+      "intent": "Ordinary third-person route-distance view of the target facade language",
+      "file": "03-ordinary-gameplay-camera.png",
+      "sha256": "c12754daebf863f069fb5040be30a586c69d7218c42e650e1d58d626b0746cd4",
+      "bytes": 448844,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -40.1774368286133,
+        4.29244995117188,
+        610.881225585938
+      ],
+      "camera_position": [
+        -36.2589263916016,
+        4.56958675384521,
+        614.334777832031
+      ],
+      "camera_forward": [
+        -0.712459206581116,
+        0.313250303268433,
+        -0.627914130687714
+      ],
+      "sample_unique_colors": 215,
+      "sample_luminance_range": 0.567011773586273,
+      "pause_overlay_visible": false,
+      "pose_id": "observed_high_se_u21.1_d84.0",
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.29244995117188,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -103.195686340332,
+        34.0,
+        555.341125488281
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "side_u_m": 21.1,
+      "outward_distance_m": 84.0
+    },
+    {
+      "id": "04-oblique-gameplay-camera",
+      "region": "oblique_third_person",
+      "intent": "Ordinary third-person oblique view exposing side-local endpoints and material response",
+      "file": "04-oblique-gameplay-camera.png",
+      "sha256": "5ee613b6e1883daacbc58aec77a001a4d3595874195378035aa1939350cc5b66",
+      "bytes": 255384,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -36.6154937744141,
+        4.4339599609375,
+        567.500610351562
+      ],
+      "camera_position": [
+        -32.2791137695312,
+        4.43316173553467,
+        569.444702148438
+      ],
+      "camera_forward": [
+        -0.840995073318481,
+        0.388033270835876,
+        -0.377037674188614
+      ],
+      "sample_unique_colors": 199,
+      "sample_luminance_range": 0.634763926267624,
+      "pause_overlay_visible": false,
+      "pose_id": "observed_high_se_oblique",
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.4339599609375,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -92.0254211425781,
+        32.0,
+        542.659057617188
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "side_u_m": 38.0,
+      "outward_distance_m": 58.0,
+      "along_side_offset_m": 18.0
+    },
+    {
+      "id": "05-changed-light",
+      "region": "changed_light_exact_receiver",
+      "intent": "Exact receiver under a changed sun direction to expose scalar PBR and shallow relief response",
+      "file": "05-changed-light.png",
+      "sha256": "4f766695fd869ebe933280996b2738a2e52d010646745aa56744e51b7aabc976",
+      "bytes": 149909,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -68.6856918334961,
+        4.47982788085938,
+        585.755920410156
+      ],
+      "camera_position": [
+        -65.7581481933594,
+        4.48455190658569,
+        588.336059570312
+      ],
+      "camera_forward": [
+        -0.667966246604919,
+        0.45524987578392,
+        -0.588700890541077
+      ],
+      "sample_unique_colors": 132,
+      "sample_luminance_range": 0.625001586973667,
+      "pause_overlay_visible": false,
+      "pose_id": "observed_high_se_u21.1_d46.0",
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.47982788085938,
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "aim_target": [
+        -103.195686340332,
+        30.0,
+        555.341125488281
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "side_u_m": 21.1,
+      "outward_distance_m": 46.0,
+      "sun_rotation_degrees": [
+        -39.9999961853027,
+        144.999984741211,
+        0.0
+      ]
+    }
+  ]
+}

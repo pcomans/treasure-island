@@ -1,0 +1,81 @@
+w34313564 five-module live integration — verification on 2026-08-30
+
+1. Godot headless editor import
+   PASS: project filesystem scan completed and emitted the new capture-harness UID. A recurring macOS CA-certificate warning was nonfatal.
+
+2. game/tests/w34313564_live_module_integration_capture.gd --check-only
+   PASS: the actual-world capture harness parses after final import.
+
+3. game/tests/headless_w34313564_live_module_integration_contract.gd
+   PASS: exactly five reviewed placements attach on runs [7, 8, 12, 16, 17] with exact motif/resource/face/mapping/center/transform/height metadata; five module nodes contain 34 render-only meshes, 34 surfaces, and 408 triangles; minimum host-wall clearance is positive; collision/navigation/spray counts are zero; all other receivers are protected.
+
+4. game/tests/headless_w34313564_module_calibration_contract.gd
+   PASS: corrected calibration remains run 7 at 47.5 m for CAL-SSE-PDOOR-01, the other four reviewed placements remain exact, and detached evidence/resources remain immutable while current live metadata reports the five approved exemplars.
+
+5. Native Forward+/Metal capture
+   PASS: eight fresh 1440x900 actual-loaded-world images captured with Godot 4.7.2 / Metal / Apple M1 Pro and passed evidence-validity inspection without self-acceptance.
+
+6. game/tests/headless_batch_06_exact_receiver_trial_contract.gd
+   PASS: accepted fields and exact run partitions remain unchanged; only w34313564 reports the five approved live modules; other Batch 06 receivers retain zero modules.
+
+7. game/tests/headless_batch_06_prototype_contract.gd
+   PASS: reviewed Batch 06 field and module assets retain their contracts; rejected/unapproved motifs remain absent from runtime.
+
+8. game/tests/headless_accepted_material_run_trials_contract.gd
+   PASS: current helper identity, exact accepted partitions, placeholder complements, exact five-module metadata, and clean whole-island load pass.
+
+9. game/tests/headless_scene_parse.gd
+   PASS: gameplay scenes parse.
+
+10. game/tests/headless_gameplay_contract.gd
+    PASS.
+
+11. game/tests/headless_world_material_contract.gd
+    PASS: semantic world materials retain their contracts.
+
+12. game/tests/validate_generated_world.gd
+    PASS: generated source topology remains 729 meshes / 736 surfaces / 48,389 triangles / 466 body-shape pairs across 38 chunks.
+
+13. game/tests/headless_hawkins_facade_contract.gd
+    PASS: prior Hawkins facade contract remains green with loaded-world triangle expectation 48,797.
+
+14. game/tests/headless_building_3_facade_contract.gd
+    PASS.
+
+15. game/tests/headless_isle_house_facade_contract.gd
+    PASS: prior Isle House facade remains unchanged.
+
+16. game/tests/headless_ymca_wall_tangent_projection_contract.gd
+    PASS: YMCA exact receiver and wall-tangent projection remain unchanged.
+
+17. game/tests/headless_batch_02_material_contract.gd
+    PASS.
+
+18. game/tests/headless_batch_03_material_contract.gd
+    PASS.
+
+19. game/tests/headless_batch_04_material_contract.gd
+    PASS.
+
+20. game/tests/headless_batch_02_04_material_correction_contract.gd
+    PASS.
+
+21. game/tests/full_runtime_integration.gd
+    PASS: 38 chunks / 729 generated records / 763 loaded meshes / 770 loaded surfaces / 48,797 loaded triangles / 466 collider pairs; exact +34/+34/+408 module attribution, gameplay, spray, recovery, failed-reload, and cleanup contracts passed.
+
+22. game/tests/automated_route_qa.gd
+    PASS: normal route completed 14 checkpoints and 262.349 m with zero recovery or stall.
+
+23. game/tests/automated_route_qa.gd -- --whole-island-route
+    PASS: ferry, southwest, center, north, and east regions loaded; 3,449.107 m traveled; five grounded landings and zero recovery/stalls.
+
+24. Current-state digest scan
+    PASS: executable headless/full-runtime gates contain no superseded accepted-helper SHA-256 18d3cdd6... or predecessor builder SHA-256 c770a977.... Those values remain only in immutable historical capture harnesses where they truthfully identify capture-time inputs.
+
+25. git diff --name-only -- generated
+    PASS: no output; generated source bytes unchanged.
+
+26. git diff --check
+    PASS.
+
+Headless note: recurring user:// log-rotation and macOS CA-certificate warnings preceded some PASS lines but did not affect successful exits. The first sandboxed native-capture attempt produced no evidence; the authorized native Forward+/Metal rerun completed and only that successful output is recorded in the manifest.

@@ -1,0 +1,43 @@
+Hawkins stepped-massing retained verification — 2026-08-29
+Working directory for every command: /Users/philipp/cowork/treasure-island-game
+
+1. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit
+EXIT 0 — project scan and script/shader registration completed.
+
+2. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_scene_parse.gd
+EXIT 0 — PASS: parsed 4 gameplay scenes.
+
+3. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_gameplay_contract.gd
+EXIT 0 — PASS: gameplay inputs, movement/jetpack, boundary, scene, water, billboard, layer, and ambient contracts.
+
+4. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_world_material_contract.gd
+EXIT 0 — PASS: 11 Poly Haven semantic materials retain maps, scale, filtering, and subtle normals.
+
+5. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/validate_generated_world.gd
+EXIT 0 — PASS: 735 playable + 4 context rows, 38 chunks, content 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164.
+
+6. node tools/validate_godot_world.mjs
+EXIT 0 — status valid; 38 chunks, 729 physical objects, 124 vegetation instances; content hash unchanged.
+
+7. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_hawkins_facade_contract.gd
+EXIT 0 — HAWKINS_MASSING_PERF direct build 40 ms, full reloads 6,783/6,776 ms; PASS exact P/Q/areas/perimeter, volumes/stories, 23 wall quads, four roof triangles, foundation interpolation, collision/spray, deterministic facade rows/reloads, accepted materials/cohort, Museum non-attach, and no spillover.
+
+8. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_building_3_facade_contract.gd
+EXIT 0 — PASS: accepted Building 3 receiver/massing/foundation/spray/facade result unchanged.
+
+9. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_isle_house_facade_contract.gd
+EXIT 0 — PASS: accepted Isle House high/low/shared/Museum/Hawkins control result unchanged.
+
+10. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/full_runtime_integration.gd
+EXIT 0 — PASS: real main scene; 38 chunks, 729 meshes/surfaces, 48,389 triangles, 466 bodies/shapes, movement/jetpack/camera/recovery/spray and fail-closed reload.
+
+11. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/automated_route_qa.gd
+EXIT 0 — PASS: actual PlayerController completed 14 checkpoints / 264.122 m centerline continuously with no teleport, stall, boundary loss, or recovery.
+
+12. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/hawkins_facade_capture.gd
+EXIT 0 — Metal 4.0 / Forward+ / Apple M1 Pro; PASS: six exact views and real lower plus upper-step spray placed.
+
+13. git diff -- generated/world data/osm
+EXIT 0 — no output; generated world and frozen OSM bytes untouched.
+
+Expected environment-only warnings: restricted user:// log rotation and macOS CA-certificate lookup in headless runs. No validator assertion failed.

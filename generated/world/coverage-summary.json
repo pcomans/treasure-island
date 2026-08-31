@@ -1,0 +1,3490 @@
+{
+  "area_audit": {
+    "maximum_post_serialization_area_delta_m2": 2.0395368557074107,
+    "maximum_post_serialization_normalized_error": 0.500268232846368,
+    "maximum_post_serialization_tolerance_m2": 15.46667689533369,
+    "maximum_pre_serialization_area_delta_m2": 8.731149137020111e-10
+  },
+  "building_foundations": {
+    "burial_margin_m": 0.02,
+    "exterior_segments": 4968,
+    "flat_roof_cells": 214,
+    "maximum_height_deviation_m": 0,
+    "maximum_positive_gap_m": 0,
+    "maximum_roof_elevation_range_m": 0,
+    "minimum_embed_m": -4.062,
+    "sample_points": 14904,
+    "shared_segments": 3,
+    "tolerance_m": 0.001,
+    "water_datum_m": 0,
+    "water_supported_exterior_segments": 0
+  },
+  "composites": {
+    "bay_bridge": {
+      "derived_object_key": "context:bay-bridge",
+      "source_keys": [
+        "r13543937",
+        "r13543938",
+        "w1011568818"
+      ]
+    },
+    "boundary_attached_visuals": [
+      {
+        "derived_object_key": "boundary_context:w319406837",
+        "source_keys": [
+          "w319406837"
+        ]
+      },
+      {
+        "derived_object_key": "boundary_context:w644986117",
+        "source_keys": [
+          "w644986117"
+        ]
+      }
+    ],
+    "coastline": {
+      "derived_object_key": "land:w26767313",
+      "source_keys": [
+        "w29399800"
+      ]
+    },
+    "isle_house": {
+      "derived_object_key": "building-composite:w1249412094",
+      "source_keys": [
+        "w1249412094",
+        "w1282547786",
+        "w1282547787"
+      ]
+    }
+  },
+  "context_bridge_member_ways": 23,
+  "counts": {
+    "category_memberships": {
+      "building": 213,
+      "building_part": 2,
+      "land_boundary": 1,
+      "major_area": 80,
+      "roads_paths": 427,
+      "terrain_shoreline": 22
+    },
+    "chunks": 38,
+    "context_rows": 4,
+    "duplicate_source_keys": 0,
+    "height_rules": {
+      "building": {
+        "default_6m": 27,
+        "osm_height": 176,
+        "osm_levels": 10
+      },
+      "building_part": {
+        "default_6m": 0,
+        "osm_height": 1,
+        "osm_levels": 1
+      }
+    },
+    "physical_objects": 729,
+    "playable_rows": 735,
+    "source_rows": 739,
+    "status_totals": {
+      "composite_member": 9,
+      "context": 1,
+      "represented": 729
+    },
+    "unresolved_rows": 0
+  },
+  "pavement_skin": {
+    "materials": {
+      "paved_area": {
+        "albedo_srgb_hex": "707573",
+        "material_key": "major_area_paved",
+        "relative_luminance": 0.174,
+        "source_count": 17,
+        "source_tag_rule": "amenity=parking"
+      },
+      "pedestrian": {
+        "albedo_srgb_hex": "8b918e",
+        "material_key": "road_path_pedestrian",
+        "relative_luminance": 0.277,
+        "surface_bias_m": 0.08
+      },
+      "pedestrian_vs_vehicle_relative_luminance_difference": 1.7,
+      "vehicle": {
+        "albedo_srgb_hex": "555b60",
+        "material_key": "road_path",
+        "relative_luminance": 0.103,
+        "surface_bias_m": 0.078
+      }
+    },
+    "source_classification": {
+      "assumption": "tertiary/residential/unclassified/service/track retain vehicle-road precedence; footway/path/cycleway/pedestrian/platform receive the lighter pedestrian skin; OSM access and gameplay collision are unchanged",
+      "by_highway": {
+        "cycleway": 13,
+        "footway": 197,
+        "path": 4,
+        "pedestrian": 4,
+        "platform": 1,
+        "residential": 69,
+        "service": 116,
+        "tertiary": 18,
+        "track": 2,
+        "unclassified": 3
+      },
+      "by_visual_class": {
+        "pedestrian": 219,
+        "vehicle": 208
+      },
+      "highway_tags_by_visual_class": {
+        "pedestrian": [
+          "cycleway",
+          "footway",
+          "path",
+          "pedestrian",
+          "platform"
+        ],
+        "vehicle": [
+          "residential",
+          "service",
+          "tertiary",
+          "track",
+          "unclassified"
+        ]
+      },
+      "source_count": 427
+    },
+    "topology": {
+      "base_record_count": 36,
+      "base_source_count": 427,
+      "continuous_filled_base_union": true,
+      "maximum_pedestrian_vehicle_overlap_m2": 0,
+      "pedestrian_record_count": 28,
+      "pedestrian_source_count": 219,
+      "pedestrian_sources_with_visible_skin": 219,
+      "physical_collision_changed": false,
+      "vehicle_precedence_at_crossings": true,
+      "vertical_separation_m": 0.002
+    }
+  },
+  "playable_surface_conformance": {
+    "maximum_bias_deviation_m": 0.003,
+    "maximum_clearance_m": 0.081,
+    "maximum_serialization_tolerance_m": 0.01,
+    "minimum_clearance_m": 0.019,
+    "sample_points": 206339
+  },
+  "road_batch_quantization_audits": [
+    {
+      "chunk_id": "x_-3__z_-4",
+      "observed_area_delta_m2": 0.0017743590869940817,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w109023441"
+      ],
+      "tolerance_m2": 0.029937352803145467
+    },
+    {
+      "chunk_id": "x_-3__z_-3",
+      "observed_area_delta_m2": 0.030392336542718112,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w109023441",
+        "w11315798",
+        "w499105889",
+        "w499105898",
+        "w52721875",
+        "w8916727",
+        "w8917169",
+        "w8921589"
+      ],
+      "tolerance_m2": 1.0811402006938657
+    },
+    {
+      "chunk_id": "x_-3__z_-2",
+      "observed_area_delta_m2": 0.01603852611151524,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            40,
+            42
+          ],
+          "intersection": [
+            -599.032,
+            345.297
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 1,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -599.032,
+              345.297
+            ],
+            [
+              -599.032,
+              345.297
+            ],
+            [
+              -599.032,
+              345.297
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w108982423",
+        "w109023441",
+        "w1098437847",
+        "w1098437851",
+        "w1098437884",
+        "w1098437885",
+        "w1098437886",
+        "w1098437887",
+        "w11315799",
+        "w1307987453",
+        "w1473022594",
+        "w1473022595",
+        "w499105898",
+        "w499105903",
+        "w52721875",
+        "w8918733",
+        "w8919233",
+        "w8919778",
+        "w8921273",
+        "w8921589",
+        "w8922388"
+      ],
+      "tolerance_m2": 1.779081085917018
+    },
+    {
+      "chunk_id": "x_-3__z_-1",
+      "observed_area_delta_m2": 0.06387376805287204,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w109023441",
+        "w1098437847",
+        "w1098437851",
+        "w1473022592",
+        "w1473022593",
+        "w8920409",
+        "w8922388"
+      ],
+      "tolerance_m2": 1.3787141233020228
+    },
+    {
+      "chunk_id": "x_-3__z_0",
+      "observed_area_delta_m2": 0.0038902068463357864,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w109023441"
+      ],
+      "tolerance_m2": 0.05503062607496774
+    },
+    {
+      "chunk_id": "x_-2__z_-4",
+      "observed_area_delta_m2": 0.007028812251519412,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1026591681",
+        "w109023441",
+        "w8917169",
+        "w8920838"
+      ],
+      "tolerance_m2": 0.7929115273100957
+    },
+    {
+      "chunk_id": "x_-2__z_-3",
+      "observed_area_delta_m2": 0.020852445202763192,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1026591681",
+        "w11315798",
+        "w499105894",
+        "w499105909",
+        "w499105911",
+        "w499105912",
+        "w499105914",
+        "w52721875",
+        "w8916716",
+        "w8916727",
+        "w8917169",
+        "w8919063",
+        "w8919923",
+        "w8920838"
+      ],
+      "tolerance_m2": 2.0817833019084553
+    },
+    {
+      "chunk_id": "x_-2__z_-2",
+      "observed_area_delta_m2": 0.0018784128697006963,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            11,
+            13
+          ],
+          "intersection": [
+            -461.177,
+            297.429
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 1,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -461.177,
+              297.429
+            ],
+            [
+              -461.177,
+              297.429
+            ],
+            [
+              -461.177,
+              297.429
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            61,
+            63
+          ],
+          "intersection": [
+            -449.404,
+            446.417
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 3,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -449.404,
+              446.417
+            ],
+            [
+              -449.404,
+              446.417
+            ],
+            [
+              -449.404,
+              446.417
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1098437885",
+        "w1098437886",
+        "w1098437891",
+        "w1098437892",
+        "w11315799",
+        "w11315800",
+        "w1144270956",
+        "w1473022607",
+        "w1473022608",
+        "w1473022609",
+        "w1473253277",
+        "w499105903",
+        "w499105911",
+        "w499105912",
+        "w499105913",
+        "w499105914",
+        "w499105915",
+        "w569260848",
+        "w569260849",
+        "w8916045",
+        "w8916874",
+        "w8917439",
+        "w8918733",
+        "w8919233",
+        "w8921121",
+        "w8921273"
+      ],
+      "tolerance_m2": 2.5086500176159263
+    },
+    {
+      "chunk_id": "x_-2__z_-1",
+      "observed_area_delta_m2": 0.10458953509260027,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1098437826",
+        "w1098437847",
+        "w1098437851",
+        "w1098437852",
+        "w1098437853",
+        "w1098437882",
+        "w1098437885",
+        "w1098437886",
+        "w1098437890",
+        "w11315404",
+        "w11315406",
+        "w1473253277",
+        "w28353434",
+        "w569260851",
+        "w8916349",
+        "w8917439",
+        "w8918733",
+        "w8921121",
+        "w8921273",
+        "w8922388",
+        "w95934094"
+      ],
+      "tolerance_m2": 3.2642837541726473
+    },
+    {
+      "chunk_id": "x_-2__z_0",
+      "observed_area_delta_m2": 0.09829270662248746,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            62,
+            64
+          ],
+          "intersection": [
+            -299.581,
+            -93.22
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -299.581,
+              -93.22
+            ],
+            [
+              -299.581,
+              -93.22
+            ],
+            [
+              -299.581,
+              -93.22
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            43,
+            45
+          ],
+          "intersection": [
+            -304.639,
+            -33.268
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -304.639,
+              -33.268
+            ],
+            [
+              -304.639,
+              -33.268
+            ],
+            [
+              -304.639,
+              -33.268
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": 5,
+          "intersecting_edges": [
+            3,
+            5
+          ],
+          "intersection": [
+            -321.931,
+            -64.757
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -321.931,
+              -64.757
+            ],
+            [
+              -321.931,
+              -64.757
+            ],
+            [
+              -321.931,
+              -64.757
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 6,
+          "intersecting_edges": [
+            2,
+            4
+          ],
+          "intersection": [
+            -380.726,
+            -98.399
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -380.726,
+              -98.399
+            ],
+            [
+              -380.726,
+              -98.399
+            ],
+            [
+              -380.726,
+              -98.399
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 6,
+          "intersecting_edges": [
+            1,
+            15
+          ],
+          "intersection": [
+            -380.726,
+            -98.399
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -380.726,
+              -98.399
+            ],
+            [
+              -380.726,
+              -98.399
+            ],
+            [
+              -380.726,
+              -98.399
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1001544693",
+        "w1001544696",
+        "w1001544697",
+        "w1068363012",
+        "w1076140200",
+        "w109023441",
+        "w1098437825",
+        "w1098437826",
+        "w1098437838",
+        "w1098437842",
+        "w1098437843",
+        "w1098437844",
+        "w1098437847",
+        "w1098437848",
+        "w1098437849",
+        "w1098437850",
+        "w1098437854",
+        "w1098437856",
+        "w1098437857",
+        "w1098437858",
+        "w1098437883",
+        "w11315406",
+        "w1212173434",
+        "w1212173435",
+        "w1212173470",
+        "w1212173471",
+        "w1212176121",
+        "w1530613465",
+        "w1530613466",
+        "w1530615890",
+        "w255330072",
+        "w28356848",
+        "w28356864",
+        "w775796577",
+        "w8919277",
+        "w8921273",
+        "w8922388",
+        "w95934111"
+      ],
+      "tolerance_m2": 3.0686821842265357
+    },
+    {
+      "chunk_id": "x_-2__z_1",
+      "observed_area_delta_m2": 0.021334731973183807,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1001544697",
+        "w1076140200",
+        "w1212173434",
+        "w1212173435",
+        "w1212173471",
+        "w1375156134",
+        "w1375156141",
+        "w1375156142",
+        "w1375156144",
+        "w1473022591",
+        "w1530613461",
+        "w1530613466",
+        "w1530615890"
+      ],
+      "tolerance_m2": 1.303666340469974
+    },
+    {
+      "chunk_id": "x_-1__z_-4",
+      "observed_area_delta_m2": 0.023410453202814097,
+      "repairs": [
+        {
+          "hole_area_m2": 0,
+          "hole_index": 0,
+          "polygon_index": 1,
+          "reason": "boolean-created snapped road ribbon hole is invalid before serialization",
+          "repair_kind": "micro_hole"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1026591680",
+        "w109023441",
+        "w11315850",
+        "w1473022597",
+        "w1473022598",
+        "w1473022599",
+        "w499105931",
+        "w499105933",
+        "w8920838"
+      ],
+      "tolerance_m2": 1.1011570449110193
+    },
+    {
+      "chunk_id": "x_-1__z_-3",
+      "observed_area_delta_m2": 0.035691563636646606,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1026591680",
+        "w11315800",
+        "w11315848",
+        "w11315850",
+        "w1197022260",
+        "w1473022606",
+        "w499105909",
+        "w499105911",
+        "w499105914",
+        "w52721875",
+        "w681687035",
+        "w8916719",
+        "w8916722",
+        "w8917767",
+        "w8919063",
+        "w8920838",
+        "w8921338"
+      ],
+      "tolerance_m2": 1.9847397373729296
+    },
+    {
+      "chunk_id": "x_-1__z_-2",
+      "observed_area_delta_m2": 0.10076590364951699,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            29,
+            31
+          ],
+          "intersection": [
+            -93.129,
+            289.475
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 1,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -93.129,
+              289.475
+            ],
+            [
+              -93.129,
+              289.475
+            ],
+            [
+              -93.129,
+              289.475
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": 0,
+          "intersecting_edges": [
+            6,
+            8
+          ],
+          "intersection": [
+            -90.957,
+            498.683
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 1,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -90.957,
+              498.683
+            ],
+            [
+              -90.957,
+              498.683
+            ],
+            [
+              -90.957,
+              498.683
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w11315800",
+        "w1144270956",
+        "w1197022260",
+        "w1473022610",
+        "w1473022611",
+        "w1473022612",
+        "w1473022613",
+        "w1473022621",
+        "w1473253283",
+        "w1473253284",
+        "w1473253285",
+        "w499105909",
+        "w499105911",
+        "w499105914",
+        "w499105915",
+        "w52721875",
+        "w569260849",
+        "w569261760",
+        "w681687035",
+        "w8917790",
+        "w8921299",
+        "w8921331"
+      ],
+      "tolerance_m2": 1.8714294239715523
+    },
+    {
+      "chunk_id": "x_-1__z_-1",
+      "observed_area_delta_m2": 0.14073028679013078,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            96,
+            98
+          ],
+          "intersection": [
+            -75.636,
+            91.7
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 3,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -75.636,
+              91.7
+            ],
+            [
+              -75.636,
+              91.7
+            ],
+            [
+              -75.636,
+              91.7
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            36,
+            38
+          ],
+          "intersection": [
+            -161.556,
+            245.163
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 3,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -161.556,
+              245.163
+            ],
+            [
+              -161.556,
+              245.163
+            ],
+            [
+              -161.556,
+              245.163
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            33,
+            35
+          ],
+          "intersection": [
+            -150.068,
+            55.646
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 3,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -150.068,
+              55.646
+            ],
+            [
+              -150.068,
+              55.646
+            ],
+            [
+              -150.068,
+              55.646
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            1,
+            3
+          ],
+          "intersection": [
+            -75.725,
+            255.791
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 5,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -75.725,
+              255.791
+            ],
+            [
+              -75.725,
+              255.791
+            ],
+            [
+              -75.725,
+              255.791
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            3,
+            5
+          ],
+          "intersection": [
+            -26.283,
+            179.957
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 6,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -26.283,
+              179.957
+            ],
+            [
+              -26.283,
+              179.957
+            ],
+            [
+              -26.283,
+              179.957
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1098437823",
+        "w1098437824",
+        "w1098437825",
+        "w1098437826",
+        "w1098437827",
+        "w1098437828",
+        "w1098437831",
+        "w1098437832",
+        "w1098437859",
+        "w1098437860",
+        "w11315406",
+        "w1473022611",
+        "w1473022612",
+        "w1473022614",
+        "w1473022616",
+        "w1473022617",
+        "w1473022619",
+        "w1473022620",
+        "w1473022621",
+        "w1473253277",
+        "w255330072",
+        "w484288330",
+        "w499105917",
+        "w569261760",
+        "w569261761",
+        "w8917790",
+        "w8921299"
+      ],
+      "tolerance_m2": 3.3626668658155734
+    },
+    {
+      "chunk_id": "x_-1__z_0",
+      "observed_area_delta_m2": 0.0969969337911607,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            53,
+            55
+          ],
+          "intersection": [
+            -188.008,
+            -151.566
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -188.008,
+              -151.566
+            ],
+            [
+              -188.008,
+              -151.566
+            ],
+            [
+              -188.008,
+              -151.566
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            58,
+            60
+          ],
+          "intersection": [
+            -251.478,
+            -221.765
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -251.478,
+              -221.765
+            ],
+            [
+              -251.478,
+              -221.765
+            ],
+            [
+              -251.478,
+              -221.765
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            4,
+            6
+          ],
+          "intersection": [
+            -243.293,
+            -228.866
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -243.293,
+              -228.866
+            ],
+            [
+              -243.293,
+              -228.866
+            ],
+            [
+              -243.293,
+              -228.866
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": 0,
+          "intersecting_edges": [
+            1,
+            3
+          ],
+          "intersection": [
+            -239.969,
+            -208.246
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -239.969,
+              -208.246
+            ],
+            [
+              -239.969,
+              -208.246
+            ],
+            [
+              -239.969,
+              -208.246
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 1,
+          "intersecting_edges": [
+            2,
+            4
+          ],
+          "intersection": [
+            -236.639,
+            -222.177
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -236.639,
+              -222.177
+            ],
+            [
+              -236.639,
+              -222.177
+            ],
+            [
+              -236.639,
+              -222.177
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 1,
+          "intersecting_edges": [
+            2,
+            4
+          ],
+          "intersection": [
+            -242.004,
+            -227.378
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -242.004,
+              -227.378
+            ],
+            [
+              -242.004,
+              -227.378
+            ],
+            [
+              -242.004,
+              -227.378
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 3,
+          "intersecting_edges": [
+            1,
+            3
+          ],
+          "intersection": [
+            -231.6,
+            -215.358
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -231.6,
+              -215.358
+            ],
+            [
+              -231.6,
+              -215.358
+            ],
+            [
+              -231.6,
+              -215.358
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 3,
+          "intersecting_edges": [
+            1,
+            3
+          ],
+          "intersection": [
+            -232.513,
+            -217.32
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -232.513,
+              -217.32
+            ],
+            [
+              -232.513,
+              -217.32
+            ],
+            [
+              -232.513,
+              -217.32
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 8,
+          "intersecting_edges": [
+            3,
+            5
+          ],
+          "intersection": [
+            -181.602,
+            -171.576
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -181.602,
+              -171.576
+            ],
+            [
+              -181.602,
+              -171.576
+            ],
+            [
+              -181.602,
+              -171.576
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1001544696",
+        "w1076140200",
+        "w1098437825",
+        "w1098437859",
+        "w1098437860",
+        "w1212173429",
+        "w1212173431",
+        "w1212173432",
+        "w1212173433",
+        "w1212173434",
+        "w1212173435",
+        "w1212173446",
+        "w1212173447",
+        "w1242725088",
+        "w1249412095",
+        "w1375156143",
+        "w1375156145",
+        "w1375156146",
+        "w1375156147",
+        "w1375156148",
+        "w1375156149",
+        "w1375156150",
+        "w1375156151",
+        "w1375156152",
+        "w1375156153",
+        "w1375156154",
+        "w1375156155",
+        "w1375156156",
+        "w1375156157",
+        "w1375156158",
+        "w1473253277",
+        "w1473253278",
+        "w1473253279",
+        "w1473253280",
+        "w1473253281",
+        "w198399306",
+        "w255330072",
+        "w484288330",
+        "w484288331",
+        "w484288332",
+        "w484288333",
+        "w484288334",
+        "w484288335",
+        "w484288336",
+        "w8917792",
+        "w8921288"
+      ],
+      "tolerance_m2": 3.5469465794405988
+    },
+    {
+      "chunk_id": "x_-1__z_1",
+      "observed_area_delta_m2": 0.10428818238688109,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            89,
+            91
+          ],
+          "intersection": [
+            -152.15,
+            -397.707
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -152.15,
+              -397.707
+            ],
+            [
+              -152.15,
+              -397.707
+            ],
+            [
+              -152.15,
+              -397.707
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            114,
+            116
+          ],
+          "intersection": [
+            -149.497,
+            -368.102
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -149.497,
+              -368.102
+            ],
+            [
+              -149.497,
+              -368.102
+            ],
+            [
+              -149.497,
+              -368.102
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            19,
+            21
+          ],
+          "intersection": [
+            -206.718,
+            -426.527
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -206.718,
+              -426.527
+            ],
+            [
+              -206.718,
+              -426.527
+            ],
+            [
+              -206.718,
+              -426.527
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            4,
+            6
+          ],
+          "intersection": [
+            -213.159,
+            -429.831
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -213.159,
+              -429.831
+            ],
+            [
+              -213.159,
+              -429.831
+            ],
+            [
+              -213.159,
+              -429.831
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": 0,
+          "intersecting_edges": [
+            10,
+            12
+          ],
+          "intersection": [
+            -203.014,
+            -449.16
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -203.014,
+              -449.16
+            ],
+            [
+              -203.014,
+              -449.16
+            ],
+            [
+              -203.014,
+              -449.16
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 3,
+          "intersecting_edges": [
+            4,
+            6
+          ],
+          "intersection": [
+            -153.937,
+            -376.381
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -153.937,
+              -376.381
+            ],
+            [
+              -153.937,
+              -376.381
+            ],
+            [
+              -153.937,
+              -376.381
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 4,
+          "intersecting_edges": [
+            6,
+            8
+          ],
+          "intersection": [
+            -158.469,
+            -402.081
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -158.469,
+              -402.081
+            ],
+            [
+              -158.469,
+              -402.081
+            ],
+            [
+              -158.469,
+              -402.081
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 9,
+          "intersecting_edges": [
+            9,
+            11
+          ],
+          "intersection": [
+            -35.274,
+            -477.231
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -35.274,
+              -477.231
+            ],
+            [
+              -35.274,
+              -477.231
+            ],
+            [
+              -35.274,
+              -477.231
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 10,
+          "intersecting_edges": [
+            0,
+            2
+          ],
+          "intersection": [
+            -102.46,
+            -323.638
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -102.46,
+              -323.638
+            ],
+            [
+              -102.46,
+              -323.638
+            ],
+            [
+              -102.46,
+              -323.638
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 15,
+          "intersecting_edges": [
+            7,
+            9
+          ],
+          "intersection": [
+            -25.548,
+            -472.288
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -25.548,
+              -472.288
+            ],
+            [
+              -25.548,
+              -472.288
+            ],
+            [
+              -25.548,
+              -472.288
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 16,
+          "intersecting_edges": [
+            6,
+            8
+          ],
+          "intersection": [
+            -14.56,
+            -491.112
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -14.56,
+              -491.112
+            ],
+            [
+              -14.56,
+              -491.112
+            ],
+            [
+              -14.56,
+              -491.112
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 17,
+          "intersecting_edges": [
+            1,
+            3
+          ],
+          "intersection": [
+            -22.369,
+            -495.26
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -22.369,
+              -495.26
+            ],
+            [
+              -22.369,
+              -495.26
+            ],
+            [
+              -22.369,
+              -495.26
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1001544695",
+        "w1001544696",
+        "w1001544697",
+        "w1098437859",
+        "w1169705410",
+        "w1169705411",
+        "w1169705412",
+        "w1169705413",
+        "w1212173425",
+        "w1212173426",
+        "w1212173427",
+        "w1212173428",
+        "w1212173429",
+        "w1212173436",
+        "w1212173438",
+        "w1212173439",
+        "w1212173440",
+        "w1212173441",
+        "w1212173442",
+        "w1212173443",
+        "w1212173444",
+        "w1212173445",
+        "w1212173446",
+        "w1212173471",
+        "w1212176122",
+        "w1212176708",
+        "w1242725087",
+        "w1242725089",
+        "w1249412095",
+        "w1249412096",
+        "w1370667326",
+        "w1375156123",
+        "w1375156130",
+        "w1375156131",
+        "w1375156132",
+        "w1375156133",
+        "w1375156134",
+        "w1375156135",
+        "w1375156136",
+        "w1375156137",
+        "w1375156138",
+        "w1375156139",
+        "w1375156140",
+        "w1375156159",
+        "w1375156160",
+        "w1375156161",
+        "w1375156162",
+        "w1473022590",
+        "w1530613461",
+        "w1530615890",
+        "w198399306",
+        "w28356898",
+        "w28356904",
+        "w484288330",
+        "w484288331",
+        "w484288338",
+        "w484288342",
+        "w484288343",
+        "w52721873"
+      ],
+      "tolerance_m2": 4.245517727303388
+    },
+    {
+      "chunk_id": "x_-1__z_2",
+      "observed_area_delta_m2": 0.06908281551295659,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            158,
+            160
+          ],
+          "intersection": [
+            -90.435,
+            -746.019
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -90.435,
+              -746.019
+            ],
+            [
+              -90.435,
+              -746.019
+            ],
+            [
+              -90.435,
+              -746.019
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            185,
+            187
+          ],
+          "intersection": [
+            -79.966,
+            -531.326
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -79.966,
+              -531.326
+            ],
+            [
+              -79.966,
+              -531.326
+            ],
+            [
+              -79.966,
+              -531.326
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            36,
+            38
+          ],
+          "intersection": [
+            -132.718,
+            -585.531
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -132.718,
+              -585.531
+            ],
+            [
+              -132.718,
+              -585.531
+            ],
+            [
+              -132.718,
+              -585.531
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            11,
+            13
+          ],
+          "intersection": [
+            -134.193,
+            -588.816
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -134.193,
+              -588.816
+            ],
+            [
+              -134.193,
+              -588.816
+            ],
+            [
+              -134.193,
+              -588.816
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": 0,
+          "intersecting_edges": [
+            6,
+            8
+          ],
+          "intersection": [
+            -159.805,
+            -652.237
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -159.805,
+              -652.237
+            ],
+            [
+              -159.805,
+              -652.237
+            ],
+            [
+              -159.805,
+              -652.237
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 2,
+          "intersecting_edges": [
+            2,
+            4
+          ],
+          "intersection": [
+            -134.947,
+            -701.643
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -134.947,
+              -701.643
+            ],
+            [
+              -134.947,
+              -701.643
+            ],
+            [
+              -134.947,
+              -701.643
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 9,
+          "intersecting_edges": [
+            7,
+            9
+          ],
+          "intersection": [
+            -81.115,
+            -551.512
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -81.115,
+              -551.512
+            ],
+            [
+              -81.115,
+              -551.512
+            ],
+            [
+              -81.115,
+              -551.512
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 13,
+          "intersecting_edges": [
+            5,
+            7
+          ],
+          "intersection": [
+            -69.539,
+            -538.024
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -69.539,
+              -538.024
+            ],
+            [
+              -69.539,
+              -538.024
+            ],
+            [
+              -69.539,
+              -538.024
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 14,
+          "intersecting_edges": [
+            6,
+            8
+          ],
+          "intersection": [
+            -75.889,
+            -532.524
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -75.889,
+              -532.524
+            ],
+            [
+              -75.889,
+              -532.524
+            ],
+            [
+              -75.889,
+              -532.524
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1001544696",
+        "w1001544697",
+        "w1115934723",
+        "w1212173429",
+        "w1212173444",
+        "w1212173445",
+        "w1212173449",
+        "w1212173451",
+        "w1212173452",
+        "w1212173459",
+        "w1212173463",
+        "w1212173464",
+        "w1212173465",
+        "w1212173466",
+        "w1212173467",
+        "w1212173471",
+        "w1212176122",
+        "w1212176708",
+        "w1242725089",
+        "w1248964744",
+        "w1249412096",
+        "w1249412116",
+        "w1249797944",
+        "w1249797945",
+        "w1249797946",
+        "w1370667325",
+        "w1370667326",
+        "w1370667327",
+        "w1370667328",
+        "w1370667329",
+        "w1370667330",
+        "w1370667331",
+        "w1370667332",
+        "w1370667333",
+        "w1370667334",
+        "w1370667335",
+        "w1370667337",
+        "w1370667338",
+        "w1370667339",
+        "w1375156122",
+        "w1375156123",
+        "w1375156124",
+        "w1375156125",
+        "w1375156126",
+        "w1375156127",
+        "w1375156128",
+        "w1375156129",
+        "w1473253282",
+        "w1530613461",
+        "w1530613463",
+        "w1530613464",
+        "w1530615890",
+        "w255330044",
+        "w43102143",
+        "w43102144",
+        "w43102145",
+        "w775796580"
+      ],
+      "tolerance_m2": 3.5650680466355755
+    },
+    {
+      "chunk_id": "x_-1__z_3",
+      "observed_area_delta_m2": 0.014154825223158696,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            96,
+            98
+          ],
+          "intersection": [
+            -16.834,
+            -945.929
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -16.834,
+              -945.929
+            ],
+            [
+              -16.834,
+              -945.929
+            ],
+            [
+              -16.834,
+              -945.929
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            161,
+            163
+          ],
+          "intersection": [
+            -31.7,
+            -841.459
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -31.7,
+              -841.459
+            ],
+            [
+              -31.7,
+              -841.459
+            ],
+            [
+              -31.7,
+              -841.459
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            109,
+            111
+          ],
+          "intersection": [
+            -92.15,
+            -778.03
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -92.15,
+              -778.03
+            ],
+            [
+              -92.15,
+              -778.03
+            ],
+            [
+              -92.149,
+              -778.03
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            1,
+            3
+          ],
+          "intersection": [
+            -92.151,
+            -778.031
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -92.151,
+              -778.031
+            ],
+            [
+              -92.151,
+              -778.031
+            ],
+            [
+              -92.151,
+              -778.031
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            380,
+            382
+          ],
+          "intersection": [
+            -92.15,
+            -778.03
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -92.15,
+              -778.03
+            ],
+            [
+              -92.15,
+              -778.03
+            ],
+            [
+              -92.15,
+              -778.03
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": 3,
+          "intersecting_edges": [
+            16,
+            18
+          ],
+          "intersection": [
+            -57.105,
+            -848.025
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -57.105,
+              -848.025
+            ],
+            [
+              -57.105,
+              -848.025
+            ],
+            [
+              -57.105,
+              -848.025
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 5,
+          "intersecting_edges": [
+            3,
+            5
+          ],
+          "intersection": [
+            -57.531,
+            -851.49
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -57.531,
+              -851.49
+            ],
+            [
+              -57.531,
+              -851.49
+            ],
+            [
+              -57.531,
+              -851.49
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 5,
+          "intersecting_edges": [
+            10,
+            12
+          ],
+          "intersection": [
+            -59.338,
+            -887.221
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -59.338,
+              -887.221
+            ],
+            [
+              -59.338,
+              -887.221
+            ],
+            [
+              -59.338,
+              -887.221
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 7,
+          "intersecting_edges": [
+            1,
+            3
+          ],
+          "intersection": [
+            -64.145,
+            -796.836
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -64.145,
+              -796.836
+            ],
+            [
+              -64.145,
+              -796.836
+            ],
+            [
+              -64.145,
+              -796.836
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 8,
+          "intersecting_edges": [
+            0,
+            2
+          ],
+          "intersection": [
+            -54.299,
+            -850.927
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -54.299,
+              -850.927
+            ],
+            [
+              -54.299,
+              -850.927
+            ],
+            [
+              -54.299,
+              -850.927
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 8,
+          "intersecting_edges": [
+            8,
+            10
+          ],
+          "intersection": [
+            -42.799,
+            -872.381
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -42.799,
+              -872.381
+            ],
+            [
+              -42.799,
+              -872.381
+            ],
+            [
+              -42.799,
+              -872.381
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 9,
+          "intersecting_edges": [
+            0,
+            2
+          ],
+          "intersection": [
+            -40.216,
+            -843.615
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              -40.216,
+              -843.615
+            ],
+            [
+              -40.216,
+              -843.615
+            ],
+            [
+              -40.216,
+              -843.615
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1036802527",
+        "w1115934722",
+        "w1115934724",
+        "w1212173450",
+        "w1212173452",
+        "w1212173453",
+        "w1212173454",
+        "w1212173455",
+        "w1212173456",
+        "w1212173457",
+        "w1212173458",
+        "w1212173460",
+        "w1212173461",
+        "w1212173462",
+        "w1212173466",
+        "w1212176123",
+        "w1222514694",
+        "w1248964738",
+        "w1248964740",
+        "w1248964742",
+        "w1248964743",
+        "w1248964745",
+        "w1249412121",
+        "w1249412122",
+        "w1249412123",
+        "w1249412124",
+        "w1249412125",
+        "w1249412126",
+        "w1249797943",
+        "w1249797944",
+        "w131820353",
+        "w1370667339",
+        "w1370667340",
+        "w1370667341",
+        "w1370667342",
+        "w1370667343",
+        "w1428130463",
+        "w1472754371",
+        "w1473253282",
+        "w28353118",
+        "w43102143",
+        "w43102144",
+        "w775796580",
+        "w775796581",
+        "w784887524",
+        "w850003198"
+      ],
+      "tolerance_m2": 1.901599448515605
+    },
+    {
+      "chunk_id": "x_0__z_-4",
+      "observed_area_delta_m2": 0.02229245342186914,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            42,
+            44
+          ],
+          "intersection": [
+            35.546,
+            776.105
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              35.546,
+              776.105
+            ],
+            [
+              35.546,
+              776.105
+            ],
+            [
+              35.546,
+              776.105
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1473022598",
+        "w1473022600",
+        "w1473022601",
+        "w499105922",
+        "w499105924",
+        "w499105925",
+        "w499105928",
+        "w499105931",
+        "w499105933",
+        "w775820809"
+      ],
+      "tolerance_m2": 0.4464468090085836
+    },
+    {
+      "chunk_id": "x_0__z_-3",
+      "observed_area_delta_m2": 0.04116884898303397,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            81,
+            83
+          ],
+          "intersection": [
+            206.524,
+            691.6
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              206.524,
+              691.6
+            ],
+            [
+              206.524,
+              691.6
+            ],
+            [
+              206.524,
+              691.6
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            16,
+            18
+          ],
+          "intersection": [
+            142.378,
+            652.093
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              142.378,
+              652.093
+            ],
+            [
+              142.378,
+              652.093
+            ],
+            [
+              142.378,
+              652.093
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w109022546",
+        "w11315800",
+        "w11315848",
+        "w1473022603",
+        "w1473022604",
+        "w1473022605",
+        "w484288320",
+        "w569263877",
+        "w775820809",
+        "w8921338"
+      ],
+      "tolerance_m2": 1.1732679637514358
+    },
+    {
+      "chunk_id": "x_0__z_-2",
+      "observed_area_delta_m2": 0.014238729512726422,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1068394269",
+        "w1098437835",
+        "w1158136791",
+        "w1252737736",
+        "w1252737737",
+        "w1473022611",
+        "w1473022613",
+        "w1473022614",
+        "w1473022622",
+        "w255330071",
+        "w466953902",
+        "w484288324",
+        "w484288325",
+        "w484288326",
+        "w484288328",
+        "w8917790",
+        "w8921331",
+        "w8921338",
+        "w945294692"
+      ],
+      "tolerance_m2": 1.7142587497404793
+    },
+    {
+      "chunk_id": "x_0__z_-1",
+      "observed_area_delta_m2": 0.0177880735918734,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            155,
+            157
+          ],
+          "intersection": [
+            18.586,
+            241.363
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              18.586,
+              241.363
+            ],
+            [
+              18.586,
+              241.363
+            ],
+            [
+              18.586,
+              241.363
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_area_m2": 0.000014999998711573426,
+          "hole_index": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole touches or lies outside its outer ring",
+          "repair_kind": "micro_hole"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1098437831",
+        "w1098437835",
+        "w1098437836",
+        "w1098437837",
+        "w1098437888",
+        "w110188515",
+        "w1158136791",
+        "w1473022614",
+        "w1473022615",
+        "w1473022616",
+        "w1473022617",
+        "w1473022618",
+        "w255330034",
+        "w255330071",
+        "w255330072",
+        "w8921138",
+        "w8921331",
+        "w8921338",
+        "w8921339"
+      ],
+      "tolerance_m2": 2.4068103017080547
+    },
+    {
+      "chunk_id": "x_0__z_0",
+      "observed_area_delta_m2": 0.03905159595342411,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            66,
+            68
+          ],
+          "intersection": [
+            189.63,
+            -149.466
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              189.63,
+              -149.466
+            ],
+            [
+              189.63,
+              -149.466
+            ],
+            [
+              189.63,
+              -149.466
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1098437860",
+        "w1098437874",
+        "w1098437875",
+        "w1098437889",
+        "w1246235705",
+        "w1252738866",
+        "w215879079",
+        "w255330034",
+        "w499106724",
+        "w499106725",
+        "w499106726",
+        "w499106727",
+        "w499106728",
+        "w499106729",
+        "w499106730",
+        "w8917792",
+        "w8921288"
+      ],
+      "tolerance_m2": 1.5627498415613876
+    },
+    {
+      "chunk_id": "x_0__z_1",
+      "observed_area_delta_m2": 0.021417463308353035,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            50,
+            52
+          ],
+          "intersection": [
+            61.799,
+            -338.198
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              61.799,
+              -338.198
+            ],
+            [
+              61.799,
+              -338.198
+            ],
+            [
+              61.799,
+              -338.198
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            88,
+            90
+          ],
+          "intersection": [
+            54.848,
+            -322.817
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              54.848,
+              -322.817
+            ],
+            [
+              54.848,
+              -322.817
+            ],
+            [
+              54.848,
+              -322.817
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            47,
+            49
+          ],
+          "intersection": [
+            51.025,
+            -317.324
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              51.025,
+              -317.324
+            ],
+            [
+              51.025,
+              -317.324
+            ],
+            [
+              51.025,
+              -317.324
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w109022534",
+        "w1098437859",
+        "w1098437874",
+        "w1098437875",
+        "w1098437876",
+        "w1098437877",
+        "w1098437878",
+        "w1098437880",
+        "w1098437881",
+        "w1246235705",
+        "w1252737730",
+        "w1252737731",
+        "w1252738864",
+        "w1252738865",
+        "w28356898",
+        "w484288338",
+        "w484288342",
+        "w484288343",
+        "w484288344",
+        "w52721873",
+        "w569257247",
+        "w569260156",
+        "w569260157",
+        "w8921288"
+      ],
+      "tolerance_m2": 2.005838673404426
+    },
+    {
+      "chunk_id": "x_0__z_2",
+      "observed_area_delta_m2": 0.051170049401662254,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            19,
+            21
+          ],
+          "intersection": [
+            112.258,
+            -760.058
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              112.258,
+              -760.058
+            ],
+            [
+              112.258,
+              -760.058
+            ],
+            [
+              112.258,
+              -760.058
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            133,
+            135
+          ],
+          "intersection": [
+            32.158,
+            -620.112
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              32.158,
+              -620.112
+            ],
+            [
+              32.158,
+              -620.112
+            ],
+            [
+              32.158,
+              -620.112
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": 4,
+          "intersecting_edges": [
+            0,
+            2
+          ],
+          "intersection": [
+            46.754,
+            -609.456
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              46.754,
+              -609.456
+            ],
+            [
+              46.754,
+              -609.456
+            ],
+            [
+              46.754,
+              -609.456
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 8,
+          "intersecting_edges": [
+            0,
+            2
+          ],
+          "intersection": [
+            72.235,
+            -683.567
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              72.235,
+              -683.567
+            ],
+            [
+              72.235,
+              -683.567
+            ],
+            [
+              72.235,
+              -683.567
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 8,
+          "intersecting_edges": [
+            3,
+            5
+          ],
+          "intersection": [
+            79.296,
+            -696.682
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              79.296,
+              -696.682
+            ],
+            [
+              79.296,
+              -696.682
+            ],
+            [
+              79.296,
+              -696.682
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 11,
+          "intersecting_edges": [
+            1,
+            3
+          ],
+          "intersection": [
+            90.694,
+            -686.364
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              90.694,
+              -686.364
+            ],
+            [
+              90.694,
+              -686.364
+            ],
+            [
+              90.694,
+              -686.364
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        },
+        {
+          "hole_index": 12,
+          "intersecting_edges": [
+            4,
+            6
+          ],
+          "intersection": [
+            122.007,
+            -752.742
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon hole backtrack/spike loop",
+          "removed_vertices": [
+            [
+              122.007,
+              -752.742
+            ],
+            [
+              122.007,
+              -752.742
+            ],
+            [
+              122.007,
+              -752.742
+            ]
+          ],
+          "repair_kind": "hole_spike_loop",
+          "ring_role": "hole"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1001544696",
+        "w109022534",
+        "w1212173429",
+        "w1212173445",
+        "w1212173448",
+        "w1212173462",
+        "w1212173464",
+        "w1212173467",
+        "w1242725089",
+        "w1249412098",
+        "w1249412099",
+        "w1249412100",
+        "w1249412102",
+        "w1249412103",
+        "w1249412104",
+        "w1249412105",
+        "w1249412106",
+        "w1249412107",
+        "w1249412108",
+        "w1249412109",
+        "w1249412110",
+        "w1249412111",
+        "w1249412112",
+        "w1249412113",
+        "w1249412114",
+        "w1249412115",
+        "w1249412116",
+        "w1249412117",
+        "w1249412118",
+        "w1249412119",
+        "w1249412120",
+        "w1249797946",
+        "w1252737731",
+        "w131820353",
+        "w1369812234",
+        "w1370667321",
+        "w1370667322",
+        "w1428130464",
+        "w569257247"
+      ],
+      "tolerance_m2": 1.9529577599587562
+    },
+    {
+      "chunk_id": "x_0__z_3",
+      "observed_area_delta_m2": 0.041088314157605055,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            38,
+            40
+          ],
+          "intersection": [
+            78.652,
+            -816.409
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 2,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              78.652,
+              -816.409
+            ],
+            [
+              78.652,
+              -816.409
+            ],
+            [
+              78.652,
+              -816.409
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            2,
+            4
+          ],
+          "intersection": [
+            78.656,
+            -816.394
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 2,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              78.656,
+              -816.394
+            ],
+            [
+              78.656,
+              -816.394
+            ],
+            [
+              78.656,
+              -816.394
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        },
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            14,
+            16
+          ],
+          "intersection": [
+            124.17,
+            -769.773
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 4,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              124.17,
+              -769.773
+            ],
+            [
+              124.17,
+              -769.773
+            ],
+            [
+              124.17,
+              -769.773
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1115934722",
+        "w1212173448",
+        "w1212173456",
+        "w1212173457",
+        "w1212173458",
+        "w1212173462",
+        "w1249412102",
+        "w131820353",
+        "w1369812234",
+        "w1370667321",
+        "w28353157",
+        "w28353163",
+        "w784887524"
+      ],
+      "tolerance_m2": 0.7932574288641846
+    },
+    {
+      "chunk_id": "x_1__z_-2",
+      "observed_area_delta_m2": 0.03552934252365958,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1098437835",
+        "w1098437836",
+        "w255330071",
+        "w466953902",
+        "w8921139",
+        "w8921372",
+        "w8921530",
+        "w945294692"
+      ],
+      "tolerance_m2": 0.8639446460555291
+    },
+    {
+      "chunk_id": "x_1__z_-1",
+      "observed_area_delta_m2": 0.04241160698074964,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            52,
+            54
+          ],
+          "intersection": [
+            352.787,
+            174.332
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              352.787,
+              174.332
+            ],
+            [
+              352.787,
+              174.332
+            ],
+            [
+              352.787,
+              174.332
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1098437836",
+        "w1252737735",
+        "w255330071",
+        "w569262993",
+        "w8916310",
+        "w8921138",
+        "w8921139",
+        "w8921339",
+        "w8921372",
+        "w8921530"
+      ],
+      "tolerance_m2": 1.494118824254135
+    },
+    {
+      "chunk_id": "x_1__z_0",
+      "observed_area_delta_m2": 0.04543864433435374,
+      "repairs": [
+        {
+          "hole_index": null,
+          "intersecting_edges": [
+            117,
+            119
+          ],
+          "intersection": [
+            275.029,
+            -211.453
+          ],
+          "loop_area_m2": 0,
+          "polygon_index": 0,
+          "reason": "boolean-created snapped road ribbon outer backtrack/spike loop",
+          "removed_vertices": [
+            [
+              275.029,
+              -211.453
+            ],
+            [
+              275.029,
+              -211.453
+            ],
+            [
+              275.029,
+              -211.453
+            ]
+          ],
+          "repair_kind": "outer_spike_loop",
+          "ring_role": "outer"
+        }
+      ],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1246235705",
+        "w1252737727",
+        "w1252737728",
+        "w1252737753",
+        "w1473253272",
+        "w1473253275",
+        "w215879087",
+        "w255330034",
+        "w499106727",
+        "w499106728",
+        "w569259009",
+        "w8920145",
+        "w8921372",
+        "w945294691"
+      ],
+      "tolerance_m2": 1.2833519190498566
+    },
+    {
+      "chunk_id": "x_1__z_1",
+      "observed_area_delta_m2": 0.004004104768682737,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1252737727"
+      ],
+      "tolerance_m2": 0.0574925402469123
+    },
+    {
+      "chunk_id": "x_1__z_2",
+      "observed_area_delta_m2": 0.04283787519671023,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1222505189",
+        "w1222505190",
+        "w131937148",
+        "w1369812234",
+        "w1473253274",
+        "w1512043163",
+        "w1512043164",
+        "w1512043165",
+        "w484287675",
+        "w484287680",
+        "w742390005"
+      ],
+      "tolerance_m2": 1.1699770847681925
+    },
+    {
+      "chunk_id": "x_2__z_-1",
+      "observed_area_delta_m2": 0.010374715711805038,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w8921530"
+      ],
+      "tolerance_m2": 0.3606942816178289
+    },
+    {
+      "chunk_id": "x_2__z_0",
+      "observed_area_delta_m2": 0.021728494441049406,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w11315153",
+        "w8920145",
+        "w8921530",
+        "w945294691"
+      ],
+      "tolerance_m2": 1.030934848444896
+    },
+    {
+      "chunk_id": "x_2__z_1",
+      "observed_area_delta_m2": 0.1136724983662134,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1222505189",
+        "w1252737729",
+        "w1473253273",
+        "w484287680",
+        "w8921530",
+        "w945294691"
+      ],
+      "tolerance_m2": 0.6081209277786044
+    },
+    {
+      "chunk_id": "x_2__z_2",
+      "observed_area_delta_m2": 0.0013852086558472365,
+      "repairs": [],
+      "snap_stage": "post_union",
+      "source_keys": [
+        "w1222505189",
+        "w484287680"
+      ],
+      "tolerance_m2": 0.19161794169163984
+    }
+  ],
+  "schema_version": "ti.godot-world/2",
+  "validation": "pass"
+}

@@ -1,0 +1,200 @@
+{
+  "after": "the one continuous host field owns all nonopening pixels; modules own frame, mullion, glass, leaf and trim geometry only",
+  "before": "module-owned forward field-colored backing slabs created raised halos and siding phase resets",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_06_prototype_capture.gd",
+  "captures": [
+    {
+      "bytes": 319304,
+      "camera_position_m": [
+        -1.79999995231628,
+        3.29999995231628,
+        6.80000019073486
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "sha256": "d6d3e144e1e0ff01899e5fab0ca06825591a14b57feb9548a88e4fea9f8e6a27",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_and_module_detail"
+    },
+    {
+      "bytes": 94617,
+      "camera_position_m": [
+        0.0,
+        3.48000001907349,
+        23.25
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "sha256": "b14c1ed89e04283b41733ea23527ba5b9095c74b29731f20be9e8498a6673071",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_distance_control"
+    },
+    {
+      "bytes": 94755,
+      "camera_position_m": [
+        8.69999980926514,
+        4.07999992370605,
+        18.1350002288818
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "sha256": "030caaab8a38b571cdffa3c7c7b456d4421064c126bdfc13c610069d01ab6399",
+      "sun_rotation_degrees": [
+        -13.9999990463257,
+        115.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_alias_and_depth_control"
+    }
+  ],
+  "collision_nodes": 0,
+  "correction_brief": "discovery/facades/BATCH_06_PROTOTYPE_SET_01_ART_REVIEW.md",
+  "display_driver": "macOS",
+  "evidence_role": "controlled standalone corrected complete-module proof over byte-identical accepted fields; not live receiver evidence",
+  "field_materials": [
+    {
+      "classification": "homogeneous_material_tile",
+      "contains_facade_scale_motifs": false,
+      "id": "W291196370-SIDING",
+      "path": "res://game/resources/materials/world/w291196370/w291196370_siding_field.tres",
+      "proof_scale_m": 0.2,
+      "region": "observed SSE and ENE uninterrupted siding only",
+      "sha256": "f5c359c34f6e4c61020a49391f0dad04f637730b955ae14195a87260588fce5f",
+      "uncertainty_m": [
+        0.12,
+        0.3
+      ]
+    }
+  ],
+  "godot_version": "4.7.2-stable (official)",
+  "host_field_phase_resets": 0,
+  "host_material_compatibility": [
+    {
+      "allowed_host_material_ids": [
+        "W291196370-SIDING"
+      ],
+      "complete_motif": true,
+      "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+      "kind": "complete_narrow_vertical_window_stack",
+      "module_owns_field_geometry": false,
+      "motif_id": "W291196370-WINSTACK",
+      "nominal_bounds_m": [
+        2.0,
+        4.5
+      ],
+      "opposite_edge_continuity_required": false,
+      "placement_bounds": [
+        "B06-291196370-SSE-PUBLIC:runs_8_10"
+      ],
+      "scale_status": "reversible_unmeasured_proof_assumption"
+    },
+    {
+      "allowed_host_material_ids": [
+        "W291196370-SIDING"
+      ],
+      "complete_motif": true,
+      "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+      "kind": "complete_dark_personnel_entry",
+      "module_owns_field_geometry": false,
+      "motif_id": "W291196370-ENTRY",
+      "nominal_bounds_m": [
+        2.1,
+        3.2
+      ],
+      "opposite_edge_continuity_required": false,
+      "placement_bounds": [
+        "B06-291196370-SSE-PUBLIC:runs_8_10"
+      ],
+      "scale_status": "reversible_unmeasured_proof_assumption"
+    },
+    {
+      "allowed_host_material_ids": [
+        "W291196370-SIDING"
+      ],
+      "complete_motif": true,
+      "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+      "kind": "complete_pale_service_opening",
+      "module_owns_field_geometry": false,
+      "motif_id": "W291196370-SERVICE",
+      "nominal_bounds_m": [
+        4.5,
+        4.4
+      ],
+      "opposite_edge_continuity_required": false,
+      "placement_bounds": [
+        "B06-291196370-ENE-OUTER:runs_17_22"
+      ],
+      "scale_status": "reversible_unmeasured_proof_assumption"
+    }
+  ],
+  "mapped_placement_bounds": [
+    {
+      "id": "B06-291196370-SSE-PUBLIC",
+      "length_m": 43.304,
+      "runs": [
+        8.0,
+        9.0,
+        10.0
+      ]
+    },
+    {
+      "id": "B06-291196370-ENE-OUTER",
+      "length_m": 54.589,
+      "runs": [
+        17.0,
+        18.0,
+        19.0,
+        20.0,
+        21.0,
+        22.0
+      ]
+    }
+  ],
+  "module_ids": [
+    "W291196370-WINSTACK",
+    "W291196370-ENTRY",
+    "W291196370-SERVICE"
+  ],
+  "module_owned_field_meshes": 0,
+  "navigation_nodes": 0,
+  "one_local_unit_m": 1.0,
+  "proof_dimensions_m": [
+    15.0,
+    6.0
+  ],
+  "receiver_key": "building:w291196370:wall",
+  "registry_sha256": "a599df850a3ca51a51a3223820fc840201559ba26eb5ed514211eaedc2304132",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_visual_review_not_self_accepted",
+  "runtime_attachment": false,
+  "scene_path": "res://game/scenes/world/facades/batch_06/w291196370_prototype_set.tscn",
+  "scene_sha256": "20bf67d9bb94c7925380ac49133ad582dce50c708be8a6b6794003a1b03b93cc",
+  "schema_version": "ti.batch-06-prototype-correction-evidence/1",
+  "source_key": "w291196370",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

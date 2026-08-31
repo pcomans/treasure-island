@@ -1,0 +1,209 @@
+{
+  "building_foundations": {
+    "burial_margin_m": 0.02,
+    "exterior_segments": 4968,
+    "flat_roof_cells": 214,
+    "maximum_height_deviation_m": 0,
+    "maximum_positive_gap_m": 0,
+    "maximum_roof_elevation_range_m": 0,
+    "minimum_embed_m": -4.062,
+    "sample_points": 14904,
+    "shared_segments": 3,
+    "tolerance_m": 0.001,
+    "water_datum_m": 0,
+    "water_supported_exterior_segments": 0
+  },
+  "export_bbox_wgs84": [
+    -122.38,
+    37.806,
+    -122.358,
+    37.833
+  ],
+  "export_size_pixels": [
+    1669,
+    2048
+  ],
+  "interpolation": "bilinear",
+  "locked_raster_object_id": 71423,
+  "mesh_grid_size_m": 32,
+  "pinned_samples": [
+    {
+      "elevation_m": 4.037,
+      "id": "ferry_vicinity",
+      "latitude": 37.8167,
+      "longitude": -122.3722
+    },
+    {
+      "elevation_m": 3.265,
+      "id": "treasure_island_center",
+      "latitude": 37.823,
+      "longitude": -122.372
+    },
+    {
+      "elevation_m": 3.467,
+      "id": "treasure_island_north",
+      "latitude": 37.83,
+      "longitude": -122.37
+    },
+    {
+      "elevation_m": 104.756,
+      "id": "ybi_high_ground",
+      "latitude": 37.809790283,
+      "longitude": -122.365849121
+    },
+    {
+      "elevation_m": 0,
+      "id": "ybi_low_shoreline",
+      "latitude": 37.8085,
+      "longitude": -122.373
+    }
+  ],
+  "pixel_size_degrees": [
+    0.000013183593749998433,
+    0.00001318359374999703
+  ],
+  "pixel_type": "F32",
+  "playable_surface_conformance": {
+    "maximum_bias_deviation_m": 0.003,
+    "maximum_clearance_m": 0.081,
+    "maximum_serialization_tolerance_m": 0.01,
+    "minimum_clearance_m": 0.019,
+    "sample_points": 206339
+  },
+  "raster_bbox_wgs84": [
+    -122.380001708984,
+    37.806,
+    -122.357998291016,
+    37.833
+  ],
+  "schema_version": "ti.usgs-terrain/1",
+  "service_url": "https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer",
+  "shoreline_plan_authority": "frozen OSM snapshot",
+  "source_tile_id": "USGS_1M_10_x55y419_CA_SanFrancisco_B23.tif",
+  "source_tile_url": "https://prd-tnm.s3.amazonaws.com/StagedProducts/Elevation/1m/Projects/CA_SanFrancisco_B23/TIFF/USGS_1M_10_x55y419_CA_SanFrancisco_B23.tif",
+  "source_title": "USGS 1 Meter 10 x55y419 CA_SanFrancisco_B23",
+  "statistics": {
+    "maximum_elevation_m": 104.756,
+    "maximum_lon_lat": [
+      -122.365849121,
+      37.809790283
+    ],
+    "minimum_elevation_m": -1.08,
+    "minimum_lon_lat": [
+      -122.374299805,
+      37.832993408
+    ],
+    "valid_sample_count": 2492288
+  },
+  "surface_anchors": [
+    {
+      "elevation_m": 3.457,
+      "id": "01-ferry-spawn",
+      "x": -104.364,
+      "z": 786.024
+    },
+    {
+      "elevation_m": 2.829,
+      "id": "02-north",
+      "x": -159.535,
+      "z": -879.905
+    },
+    {
+      "elevation_m": 3.318,
+      "id": "03-center",
+      "x": -159.292,
+      "z": -104.818
+    },
+    {
+      "elevation_m": 3.199,
+      "id": "04-southwest",
+      "x": -293.543,
+      "z": 335.72
+    },
+    {
+      "elevation_m": 2.58,
+      "id": "05-east-perimeter",
+      "x": 606.249,
+      "z": 385.227
+    },
+    {
+      "elevation_m": 3.897,
+      "id": "01-waterfront-approach",
+      "x": -93.682,
+      "z": 780.044
+    },
+    {
+      "elevation_m": 3.919,
+      "id": "02-waterfront-join",
+      "x": -91.651,
+      "z": 778.897
+    },
+    {
+      "elevation_m": 3.998,
+      "id": "03-waterfront-crossing",
+      "x": -84.414,
+      "z": 774.734
+    },
+    {
+      "elevation_m": 4.062,
+      "id": "04-ti-road-north-1",
+      "x": -96.25,
+      "z": 754.195
+    },
+    {
+      "elevation_m": 3.863,
+      "id": "05-ti-road-north-2",
+      "x": -108.833,
+      "z": 730.206
+    },
+    {
+      "elevation_m": 3.733,
+      "id": "06-trade-winds-turn",
+      "x": -112.174,
+      "z": 722.948
+    },
+    {
+      "elevation_m": 3.751,
+      "id": "07-trade-winds-1",
+      "x": -112.666,
+      "z": 718.005
+    },
+    {
+      "elevation_m": 3.836,
+      "id": "08-trade-winds-2",
+      "x": -111.532,
+      "z": 712.884
+    },
+    {
+      "elevation_m": 3.858,
+      "id": "09-trade-winds-3",
+      "x": -110.152,
+      "z": 711.081
+    },
+    {
+      "elevation_m": 3.9,
+      "id": "10-trade-winds-4",
+      "x": -103.53,
+      "z": 705.972
+    },
+    {
+      "elevation_m": 4.038,
+      "id": "11-trade-winds-west",
+      "x": -68.085,
+      "z": 685.812
+    },
+    {
+      "elevation_m": 4.11,
+      "id": "12-trade-winds-center",
+      "x": -4.951,
+      "z": 652.705
+    },
+    {
+      "elevation_m": 3.884,
+      "id": "13-trade-winds-east",
+      "x": 38.743,
+      "z": 629.439
+    }
+  ],
+  "vertical_datum": "NAVD 88"
+}

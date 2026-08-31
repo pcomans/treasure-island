@@ -1,0 +1,48 @@
+[gd_scene format=3]
+
+[node name="IsleHouseHighModuleLibrary" type="Node3D"]
+
+[node name="IH_TW" type="Node3D" parent="."]
+metadata/motif_id = "IH-TW"
+metadata/complete_motif = true
+metadata/description = "Complete one-story tower glazing token with all four frame edges."
+
+[node name="IH_PW_W" type="Node3D" parent="."]
+metadata/motif_id = "IH-PW-W"
+metadata/complete_motif = true
+metadata/description = "Complete wide podium opening with full boundary."
+
+[node name="IH_PW_M" type="Node3D" parent="."]
+metadata/motif_id = "IH-PW-M"
+metadata/complete_motif = true
+metadata/description = "Complete medium podium opening with full boundary."
+
+[node name="IH_PW_N" type="Node3D" parent="."]
+metadata/motif_id = "IH-PW-N"
+metadata/complete_motif = true
+metadata/description = "Complete narrow podium opening with full boundary."
+
+[node name="IH_CW" type="Node3D" parent="."]
+metadata/motif_id = "IH-CW"
+metadata/complete_motif = true
+metadata/description = "Complete bounded vertical curtain-wall strip."
+
+[node name="IH_GG" type="Node3D" parent="."]
+metadata/motif_id = "IH-GG"
+metadata/complete_motif = true
+metadata/description = "Complete ground glazing and full-height support bay."
+
+[node name="IH_ENTRY39" type="Node3D" parent="."]
+metadata/motif_id = "IH-ENTRY39"
+metadata/complete_motif = true
+metadata/description = "Complete address entrance with door, transom, full surround, and separate 39 identifier."
+
+[node name="IH_LVR" type="Node3D" parent="."]
+metadata/motif_id = "IH-LVR"
+metadata/complete_motif = true
+metadata/description = "Complete localized louver band terminating in ordinary material."
+
+[node name="IH_CANOPY" type="Node3D" parent="."]
+metadata/motif_id = "IH-CANOPY"
+metadata/complete_motif = true
+metadata/description = "Complete thin commercial canopy band terminating in ordinary material."

@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+command=build/ferry-spawn-staging/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable --headless -- --mac-export-smoke
+exit=0 wall=3.35s
+MAC_EXPORT_WORLD_READY: hash=5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa spawn=(-104.364,1.000,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=701 triangles=21210 bodies=466 shapes=466 load_ms=1337
+PASS: packaged main scene reached full world_ready and enabled the player
+
+No non-headless process was run. No engine errors, authored warnings, crash output, or leak warnings were emitted.

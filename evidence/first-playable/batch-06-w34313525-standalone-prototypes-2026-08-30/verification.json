@@ -1,0 +1,140 @@
+{
+  "schema_version": "ti.w34313525-standalone-capture-verification/1",
+  "source_key": "w34313525",
+  "status": "native_capture_complete_pending_independent_review",
+  "verdict_boundary": {
+    "mechanical_capture_validity": "pass",
+    "executor_visual_validity_inspection": "pass_with_disclosed_framing_limitations",
+    "semantic_repeat_verdict": "unreviewed",
+    "material_art_verdict": "unreviewed",
+    "standalone_asset_acceptance": "not_self_accepted",
+    "exact_receiver_verdict": "not_started",
+    "whole_building_verdict": "blocked"
+  },
+  "capture_environment": {
+    "godot_version": "4.7.2-stable (official)",
+    "display_driver": "macOS",
+    "rendering_method": "Forward+",
+    "rendering_driver": "Metal",
+    "video_adapter": "Apple M1 Pro (Apple7)",
+    "viewport": [1440, 900],
+    "audio_driver": "Dummy",
+    "one_local_unit_m": 1.0
+  },
+  "preflight": {
+    "owner_treasure_island_or_godot_process_found": false,
+    "capture_process_found_after_harness_exit": false,
+    "playable_main_game_launched": false,
+    "external_resource_used": false
+  },
+  "capture_attempts": {
+    "native_pass_count": 2,
+    "targeted_pose_correction_count": 1,
+    "correction_scope": "camera-only: move MAT-PALE close to the broad clear right span and make HIGH-GROUP close straight-on",
+    "prototype_art_or_geometry_changed": false,
+    "final_image_count": 8,
+    "superseded_images_retained": false
+  },
+  "final_images": [
+    {
+      "file": "01-neutral-field-close.png",
+      "sha256": "c09a9af4a2e768537d592de822fe477bb6445ed132ae0c42ad19356c91d67efb",
+      "bytes": 101433,
+      "dimensions": [1440, 900],
+      "valid": true,
+      "finding": "Broad neutral pale field is sharp and unobstructed through the center/right; a clipped high-group edge remains at the far left and is not part of the material claim. No repeated repair motif is visible."
+    },
+    {
+      "file": "02-rollup-pale-close.png",
+      "sha256": "277106ad3a8402f2bbb14dffbeb9691ff7b240365a1023fdb2175548d1094d61",
+      "bytes": 197404,
+      "dimensions": [1440, 900],
+      "valid": true,
+      "finding": "The labeled pale roll-up is centered and complete with leaf, all four frame edges and eight slat bars; the adjacent gray module is only a contextual margin fragment."
+    },
+    {
+      "file": "03-rollup-gray-close.png",
+      "sha256": "a3a6d79d7a6b0beede652c8bf4387911af33ed266c11bbe2a7c709947b395419",
+      "bytes": 211899,
+      "dimensions": [1440, 900],
+      "valid": true,
+      "finding": "The labeled gray roll-up is centered and complete with leaf, all four frame edges and eight slat bars; clipped neighbors do not obscure its boundary."
+    },
+    {
+      "file": "04-personnel-close.png",
+      "sha256": "6981bc628dea4549989af15118363c70601981088457f584c5c77bc693680e4d",
+      "bytes": 158413,
+      "dimensions": [1440, 900],
+      "valid": true,
+      "finding": "The personnel leaf and full four-edge frame are centered, sharp and complete; surrounding pale pixels visibly belong to the continuous host field."
+    },
+    {
+      "file": "05-high-group-close.png",
+      "sha256": "b5a31c2b55ab01e582bd000e00d998d21b8394ac643f150b8397c2bb1cf3840a",
+      "bytes": 103141,
+      "dimensions": [1440, 900],
+      "valid": true,
+      "finding": "The final corrected straight-on view shows the complete high group, full outer frame, opaque unresolved face and both internal mullions without implying glazing semantics."
+    },
+    {
+      "file": "06-ordinary-complete-set.png",
+      "sha256": "80964f7117254f6b90883b9a735ef12d299200edc15f0a77ffb05cfe2a9d805a",
+      "bytes": 83864,
+      "dimensions": [1440, 900],
+      "valid": true,
+      "finding": "All four complete motifs and the pale host field remain legible together at ordinary distance; the lineup is explicitly illustrative and carries no sequence or cadence claim."
+    },
+    {
+      "file": "07-macro-repeat-span.png",
+      "sha256": "b32a2c2640911f04f1bd0ac61f696de185b0e458b2fcceb6768ef39a5c4fd8d7",
+      "bytes": 74669,
+      "dimensions": [1440, 900],
+      "valid": true,
+      "finding": "The entire 30 m continuous field is visible with no panel reset or decorative repair repetition apparent in this mechanical inspection; art judgment remains independent."
+    },
+    {
+      "file": "08-changed-light-oblique.png",
+      "sha256": "6f2ef029cebeafa6827683090c92f805df1669ef2b1e005d2c6fd083554e43c1",
+      "bytes": 136950,
+      "dimensions": [1440, 900],
+      "valid": true,
+      "finding": "Changed light covers every material family and all four motifs, exposes shallow projection/shadows, and shows no module-owned field slab or backing halo. The deliberately dark frame remains within the measured luminance-valid image."
+    }
+  ],
+  "coverage": {
+    "mat_pale_neutral_close": true,
+    "mat_pale_macro_span_m": 30.0,
+    "mat_pale_changed_light": true,
+    "rollup_pale_complete_front": true,
+    "rollup_pale_oblique_or_combined": true,
+    "rollup_gray_complete_front": true,
+    "rollup_gray_oblique_or_combined": true,
+    "personnel_complete_front": true,
+    "personnel_ordinary_scale": true,
+    "high_group_complete_front": true,
+    "high_group_oblique": true,
+    "high_group_ordinary_scale": true,
+    "combined_ordinary_all_material_families": true,
+    "combined_changed_light_all_material_families": true,
+    "zero_module_backing_visible_and_mechanically_proven": true
+  },
+  "topology": {
+    "total_meshes": 39,
+    "total_surfaces": 39,
+    "total_triangles": 468,
+    "module_meshes": 38,
+    "module_surfaces": 38,
+    "module_triangles": 456,
+    "field_or_backing_meshes_owned_by_modules": 0,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0
+  },
+  "remaining_blocked_claims": [
+    "surveyed material color, roughness, scale or module dimensions",
+    "exact receiver run, along-run coordinate, anchor, count, cadence or sequence",
+    "repair-patch bounds or repeated repair treatment",
+    "ENE/WSW ends, deep re-entrants, protected/unmapped runs or exact endpoints",
+    "completed SSE/NNW elevation, live attachment or whole-building acceptance"
+  ]
+}

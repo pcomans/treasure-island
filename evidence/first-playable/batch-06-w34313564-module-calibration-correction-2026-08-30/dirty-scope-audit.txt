@@ -1,0 +1,19 @@
+Owned by this one-door correction round:
+- game/resources/facades/w34313564_module_calibration.json
+- game/tests/headless_w34313564_module_calibration_contract.gd
+- game/tests/w34313564_module_calibration_correction_capture.gd
+- game/tests/w34313564_module_calibration_correction_capture.gd.uid
+- evidence/first-playable/batch-06-w34313564-module-calibration-correction-2026-08-30/
+- current-state provenance/checksum refreshes in the predecessor calibration README, verification results, and asset inventory
+- one append-only section in discovery/RETRO_LOG.md
+
+Read-only/frozen by this correction:
+- game/tests/support/w34313564_module_calibration.gd and .uid
+- game/scripts/world/facades/accepted_material_run_trials.gd
+- all w34313564 field/module materials and shaders
+- generated/, world builder, massing, foundation, terrain, collision, navigation, spray, and gameplay sources
+- predecessor capture-manifest.json and all seven predecessor PNGs
+- other buildings, lifecycle inventory, and prior reviews/evidence
+
+The broader worktree contains unrelated user and executor changes. They were preserved and are outside this correction scope.
+

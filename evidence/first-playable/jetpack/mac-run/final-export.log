@@ -1,0 +1,16 @@
+JETPACK STAGED MAC EXPORT — 2026-08-28
+
+$ /usr/bin/time -p .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --export-release 'macOS Private' 'build/jetpack-staging/Treasure Island First Playable.app'
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+Project initialization: DONE
+Registering global classes: DONE
+Exporting for macOS: Creating app bundle
+Packing: 102 steps
+Packing included all 38 generated chunk JSON files plus context.json, coverage-ledger.csv, coverage-summary.json, logical-objects.json, manifest.json, and qa/validation-report.json.
+Packing: DONE
+Code signing bundle
+Exporting for macOS: DONE
+exit=0 real=5.07s user=3.63s sys=1.00s
+
+No export error or warning was emitted. Output was created only at the isolated jetpack-staging path; no older bundle was accessed or changed.
+

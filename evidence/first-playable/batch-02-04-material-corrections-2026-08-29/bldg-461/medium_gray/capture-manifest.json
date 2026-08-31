@@ -1,0 +1,193 @@
+{
+  "after": "Sub-perceptual nondirectional variation preserves the substrate-neutral medium-gray identity and roughness with zero relief and no two-value band.",
+  "before": "Diagonal/cellular modulation created an unsupported two-value material pattern.",
+  "canonical_name": "Building 461",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_02_04_material_correction_capture.gd",
+  "captures": [
+    {
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "bytes": 82413,
+      "camera_fov_degrees": 50.0,
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "proof_receiver_only": true,
+      "sha256": "372fae5549e3f1b3c1763fe2b3208f15f44eb39252922e73b6e7b42d215054f4",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_proof"
+    },
+    {
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "bytes": 63302,
+      "camera_fov_degrees": 50.0,
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "proof_receiver_only": true,
+      "sha256": "bc4c070f014326d7d8147f83498a198404cd3e47b834adb7f4fda5cd3ec45084",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_scale_proof"
+    },
+    {
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "bytes": 70185,
+      "camera_fov_degrees": 50.0,
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "proof_receiver_only": true,
+      "sha256": "647c9bb6e196295256eb856b17bd67bd05b31f938f8f25e11745bcb7a27e42e4",
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_proof"
+    }
+  ],
+  "contains_facade_scale_motifs": false,
+  "correction_id": "C4",
+  "display_driver": "macOS",
+  "evidence_role": "controlled_material_correction_proof_not_gameplay_or_live_receiver_acceptance",
+  "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "godot_version": "4.7.2-stable (official)",
+  "material_path": "res://game/resources/materials/world/bldg_461/bldg_461_gray_field.tres",
+  "material_role": "medium-gray wall field",
+  "material_sha256": "e44738c8f1d06a34bfc876b610e2c70a0890c85cbb63342b613094d7b8b80a66",
+  "one_local_unit_m": 1.0,
+  "prior_rejected_captures": [
+    {
+      "bytes": 216856.0,
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "dimensions": [
+        1440.0,
+        900.0
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "sha256": "626823c3517de2e9b815f178a6a724a00cf27e0c825cd2d6e203ccca42f1e2ce",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_proof"
+    },
+    {
+      "bytes": 101988.0,
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "dimensions": [
+        1440.0,
+        900.0
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "sha256": "2852b4ae9efdd130f40310710d308f60508a6bede9f2792e61705325371aebcf",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_scale_proof"
+    },
+    {
+      "bytes": 118734.0,
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440.0,
+        900.0
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "sha256": "d10d9abd6862a922d223b4b6bb1cb93c0a5d95143f89d7ff33d034f452855e6d",
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_proof"
+    }
+  ],
+  "prior_rejected_evidence_manifest": "res://evidence/first-playable/batch-04-material-prototypes-2026-08-29/bldg-461/medium_gray/capture-manifest.json",
+  "prior_rejected_evidence_manifest_sha256": "3c5eda55b675f752a8767b6d8fa5336d05926d02d8405dfc64632ed269dd7e50",
+  "proof_panel_size_m": [
+    4.8,
+    3.2,
+    0.12
+  ],
+  "proof_primary_scale_m": 0.95,
+  "proof_receiver": "controlled_flat_proof_panel",
+  "proof_secondary_scale_m": 0.38,
+  "receiver_key": "building:w34313569:wall",
+  "registry_path": "res://game/resources/facades/batch_04_material_registry.json",
+  "registry_sha256": "b4c5983a628d076cda0aaa24d0023fc7a43983fd6c00f82c9806871af0409cf7",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_re_review_not_self_accepted",
+  "roughness_value": 0.82,
+  "runtime_attachment": false,
+  "schema_version": "ti.batch-02-04-material-correction-proof/1",
+  "shader_sha256": "324ba33a7c78f4b05038168a479ebb8e875c56704236492a050cee8da8e5f798",
+  "source_key": "w34313569",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

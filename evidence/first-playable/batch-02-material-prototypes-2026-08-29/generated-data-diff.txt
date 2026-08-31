@@ -1,0 +1,3 @@
+Command: git diff --exit-code -- data/osm generated/world
+Exit: 0
+Result: no diff; frozen OSM and generated-world bytes are unchanged.

@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "isle_house_glass_proxy"
+albedo_color = Color(0.08, 0.14, 0.18, 1)
+metallic = 0.0
+roughness = 0.24

@@ -1,0 +1,43 @@
+# Sanitized retained console record — 2026-08-28
+
+FINAL_RENDER_COMMAND:
+.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/rendered_visual_evidence_capture.gd
+
+FINAL_RENDER_RESULT: exit=0 wall_s=18.258 engine=4.7.2.stable.official.ed1daf0bf renderer="Metal 4.0 Forward+" adapter="Apple M1 Pro"
+VISUAL_SETTLED: id=01-ferry-spawn spawn_y=3.000 settled_y=0.000 ground_y=0.000 clearance=0.000 frames=124 recovery_delta=0
+VISUAL_SETTLED: id=02-north spawn_y=3.000 settled_y=-0.006 ground_y=0.000 clearance=-0.006 frames=126 recovery_delta=0
+VISUAL_SETTLED: id=03-center spawn_y=3.000 settled_y=-0.000 ground_y=0.000 clearance=-0.000 frames=126 recovery_delta=0
+VISUAL_SETTLED: id=04-southwest spawn_y=3.000 settled_y=0.000 ground_y=0.000 clearance=0.000 frames=126 recovery_delta=0
+VISUAL_SETTLED: id=05-east-perimeter spawn_y=3.000 settled_y=0.000 ground_y=0.000 clearance=0.000 frames=126 recovery_delta=0
+VISUAL_SETTLED: id=06-near-wall-tag spawn_y=3.000 settled_y=-0.000 ground_y=0.000 clearance=-0.000 frames=126 recovery_delta=0
+VISUAL_TAG: object=building:w1222514695:wall sources=["w1222514695"] active=1 player_distance=4.031 tag=(-110.865,2.000,790.775)
+VISUAL_SETTLED: id=context spawn_y=3.000 settled_y=0.000 ground_y=0.000 clearance=0.000 frames=126 recovery_delta=0
+VISUAL_CONTEXT: billboard_screen=(720.0,450.0) billboard_collision=0 ybi_screen=(697.6,450.8) bridge_screen=(730.3,449.6) context_collision=0
+VISUAL_CAPTURE: id=01-ferry-spawn sha256=31035727e462afce0098756c1eacb9eedca7fa392e8bde247a17220d66ec5096 bytes=129335
+VISUAL_CAPTURE: id=02-north sha256=55ef4f4032e80efa7c3fbeb8166ff9b81388162d866ce0c459b7bb1c68a558f9 bytes=121463
+VISUAL_CAPTURE: id=03-center sha256=652696f09d960e5a61156f5545751f6709962e281cb09fe48a733ec573884569 bytes=60350
+VISUAL_CAPTURE: id=04-southwest sha256=c0e474d0bac272e495ada9f3d984973766f7662850e72f82ee376d1901bde96f bytes=47153
+VISUAL_CAPTURE: id=05-east-perimeter sha256=cfe41bad9ee53b2f77239e89941248fac53a5bcbc2915b4ad102db1d07dd015d bytes=69326
+VISUAL_CAPTURE: id=06-near-wall-tag sha256=1441d1883edb2113cfaaa7faacdef1c3111aa99d8b68da9287291c4be43ed870 bytes=104384
+VISUAL_CAPTURE: id=07-horizon-context sha256=564704e15b92c89babebf14f2c5af6858150b078b8945eaee5b33e37ebc37ab6 bytes=72302
+VISUAL_CAPTURE: id=08-ybi-bridge-context sha256=41a2b17b6c3165a104db406cdacb11706e191c4a5c4f295854548d15343afad9 bytes=93378
+VISUAL_CAPTURE_MANIFEST: path=res://evidence/first-playable/rendered-runtime-grounded/capture-manifest.json captures=8 content=5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa manifest=07b8b195e1a05942e38d9bbbcb801394cf9f184051fb5f7a819c75677e46f160
+PASS: captured five physics-grounded regions, one real-controller wall tag, and two projected non-colliding horizon-context views
+
+POST_CAPTURE_RUNTIME_COMMAND:
+.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/full_runtime_integration.gd
+
+POST_CAPTURE_RUNTIME_RESULT: exit=0 no_engine_errors=true no_authored_warnings=true no_leak_warnings=true
+RUNTIME_CAMERA: baseline=5.500m compressed=1.783m restored=5.500m configured=5.500m
+RUNTIME_LOAD: hash=5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa chunks=38 records=701 meshes=701 surfaces=701 triangles=21210 bodies=466 shapes=466 sources=738 load_ms=1807
+RUNTIME_GAMEPLAY: walk=1.598m run=2.228m jetpack_rise=4.000m air_walk=1.598m air_run=3.280m slow_descent=0.500m renewed_rise=1.210m landed=true resumed=0.932m manual_recovery=manual boundary_recovery=outside_boundary spray=placed ground=receiver_rejection roof=receiver_rejection context=no_hit tags=64 evicted=1
+RUNTIME_HEALTH: static_memory_mib=43.2 failed_reload_code=file_open partial_nodes=0 checkpoint_scene_nodes=109
+RUNTIME_CLEANUP: baseline_scene_nodes=1 final_scene_nodes=1
+PASS: real main scene reached world_ready, enabled player, exercised generated physics/interactions, and failed closed without a partial world
+
+NON_AUTHORITATIVE_FAILED_ATTEMPTS:
+- The original five-image `rendered-runtime/` baseline placed the origin at ground + 1 m with physics disabled. It visibly hovered and is superseded.
+- First corrected attempt exited 1 at 4.7 s: stale `is_on_floor` survived teleport; the new measured-clearance assertion rejected 3.0 m clearance.
+- Second corrected attempt exited 1 at 13.17 s after five grounded frames: the tag search examined category proxies instead of recursively owned records. Generated YBI lookup also initially targeted its empty attachment parent. Both searches were corrected.
+- A subsequent seven-frame run exited 0 but its combined context frame was visually occluded despite tree visibility. It was rejected after image inspection and replaced by separately aimed SF and YBI/bridge views with projection, frustum, and blocker assertions.
+- Interrupted partial frames exposed focus-out Pause HUD contamination. Final capture refuses to save unless both tree and HUD are unpaused.

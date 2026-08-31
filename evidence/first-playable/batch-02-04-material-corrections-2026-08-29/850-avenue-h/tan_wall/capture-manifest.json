@@ -1,0 +1,193 @@
+{
+  "after": "Smooth low-amplitude aperiodic variation preserves the warm tan homogeneous identity and roughness with zero relief and no diagonal banding.",
+  "before": "Diagonal periodic banding overpowered the warm tan field.",
+  "canonical_name": "850 Avenue H",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_02_04_material_correction_capture.gd",
+  "captures": [
+    {
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "bytes": 85128,
+      "camera_fov_degrees": 50.0,
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "proof_receiver_only": true,
+      "sha256": "039417243983e899fecb828a622614e76605966da550fdd4d761ead05f90755d",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_proof"
+    },
+    {
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "bytes": 64135,
+      "camera_fov_degrees": 50.0,
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "proof_receiver_only": true,
+      "sha256": "b898d9c297514f00954edf8e9b124f855756bfa3378e615cc7233ed3291f4a14",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_scale_proof"
+    },
+    {
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "bytes": 71113,
+      "camera_fov_degrees": 50.0,
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "proof_receiver_only": true,
+      "sha256": "4047f5807a7375f93a7785369a0318bdee5d365e956666c75e10a411b01f930b",
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_proof"
+    }
+  ],
+  "contains_facade_scale_motifs": false,
+  "correction_id": "C3",
+  "display_driver": "macOS",
+  "evidence_role": "controlled_material_correction_proof_not_gameplay_or_live_receiver_acceptance",
+  "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "godot_version": "4.7.2-stable (official)",
+  "material_path": "res://game/resources/materials/world/850_avenue_h/850_h_tan_field.tres",
+  "material_role": "warm tan homogeneous wall field",
+  "material_sha256": "d92f7137edf2be91b0268659843423764528db58c194cbe5d0b1596a4f8303a8",
+  "one_local_unit_m": 1.0,
+  "prior_rejected_captures": [
+    {
+      "bytes": 208751.0,
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "dimensions": [
+        1440.0,
+        900.0
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "sha256": "8a892487cb8c7e8b1e513646df8a9a072006a1dedf301f4f6a89ac5b3df417a2",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_proof"
+    },
+    {
+      "bytes": 103118.0,
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "dimensions": [
+        1440.0,
+        900.0
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "sha256": "da531fe5ca713982c91be6df106371ce57ced09caf575e92be5214fd9dd8cce0",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_scale_proof"
+    },
+    {
+      "bytes": 119678.0,
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440.0,
+        900.0
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "sha256": "aa36596dc2dbe0f5cca43652cb295c4d1b9b3c59114dce8774703f7ead0626b8",
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_proof"
+    }
+  ],
+  "prior_rejected_evidence_manifest": "res://evidence/first-playable/batch-04-material-prototypes-2026-08-29/850-avenue-h/tan_wall/capture-manifest.json",
+  "prior_rejected_evidence_manifest_sha256": "03ea10d1872a90f10f0d94cda267f2cdffbe19875023eeb2f0d0fb90a569aac2",
+  "proof_panel_size_m": [
+    4.8,
+    3.2,
+    0.12
+  ],
+  "proof_primary_scale_m": 0.75,
+  "proof_receiver": "controlled_flat_proof_panel",
+  "proof_secondary_scale_m": 0.28,
+  "receiver_key": "building:w34313546:wall",
+  "registry_path": "res://game/resources/facades/batch_04_material_registry.json",
+  "registry_sha256": "b4c5983a628d076cda0aaa24d0023fc7a43983fd6c00f82c9806871af0409cf7",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_re_review_not_self_accepted",
+  "roughness_value": 0.8,
+  "runtime_attachment": false,
+  "schema_version": "ti.batch-02-04-material-correction-proof/1",
+  "shader_sha256": "324ba33a7c78f4b05038168a479ebb8e875c56704236492a050cee8da8e5f798",
+  "source_key": "w34313546",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

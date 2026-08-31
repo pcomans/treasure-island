@@ -1,0 +1,33 @@
+{
+  "byte_identical": true,
+  "clean_renders": 2,
+  "compared_files": [
+    {
+      "bytes": 7162,
+      "path": "coverage-comparison-summary.json",
+      "sha256": "875683c8bbfda477c5d6d7a9dc94a31561de5d8378dcb9b14cb18241e18674f6"
+    },
+    {
+      "bytes": 1287,
+      "path": "README.md",
+      "sha256": "a8acc4d67777a0f1cfd070c0ecb8beca9be2c500e890b5f923311d7bbd116909"
+    },
+    {
+      "bytes": 203532,
+      "path": "whole-island-derived.png",
+      "sha256": "d1770aa1905405c0fa26ddc3c48ba4bde3400aeeba966bbb278b173f7d114c58"
+    },
+    {
+      "bytes": 758575,
+      "path": "whole-island-derived.svg",
+      "sha256": "d06dbe68bde4b25d731270dd0275a9386d18233f9a1548d858a8a6dc1f92e47b"
+    },
+    {
+      "bytes": 759827,
+      "path": "whole-island-diagnostic.svg",
+      "sha256": "76a9a024c1c83a906fadcfa21a39a00e664caf1a52956eed1876b45edef8684f"
+    }
+  ],
+  "generated_content_sha256": "5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa",
+  "schema_version": "ti.coverage-evidence-determinism/1"
+}

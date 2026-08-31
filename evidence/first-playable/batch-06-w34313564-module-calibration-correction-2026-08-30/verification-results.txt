@@ -1,0 +1,76 @@
+w34313564 one-door exact-receiver calibration correction — verification on 2026-08-30
+
+1. Godot headless editor import
+   PASS: project import completed; the corrected registry, focused contract, and new capture harness parse.
+
+2. game/tests/w34313564_module_calibration_correction_capture.gd --check-only
+   PASS.
+
+3. game/tests/headless_w34313564_module_calibration_contract.gd
+   PASS: CAL-SSE-PDOOR-01 is SSE-CENTRAL run 7 at 47.5 m ±4 m with explicit stylized/reference-derived production-inference role; all five placements satisfy motif-specific prototype bounds, the other four match the predecessor manifest, helper geometry remains byte-identical, and zero field backing/collision/navigation/spray/live attachment/cadence/count claims were introduced.
+
+4. Native Forward+/Metal correction capture
+   PASS: two fresh 1440×900 images captured with Godot 4.7.2 / Metal 4.0 / Apple M1 Pro and passed evidence-validity inspection without self-acceptance.
+
+5. game/tests/headless_batch_06_exact_receiver_trial_contract.gd
+   PASS: four accepted-with-limitation fields remain live on the same three exact receivers; w34313564 plinth and all six standalone modules remain zero-live; topology remains 729 / 736 / 48,389 / 466.
+
+6. game/tests/headless_batch_06_prototype_contract.gd
+   PASS: all accepted field and standalone module assets retain their contracts; zero runtime module attachment.
+
+7. game/tests/headless_accepted_material_run_trials_contract.gd
+   PASS: current canonical inventory/helper hashes, exact accepted partitions, placeholders, and clean whole-island load pass.
+
+8. game/tests/headless_ymca_wall_tangent_projection_contract.gd
+   PASS.
+
+9. game/tests/headless_batch_02_material_contract.gd
+   PASS.
+
+10. game/tests/headless_batch_03_material_contract.gd
+    PASS.
+
+11. game/tests/headless_batch_04_material_contract.gd
+    PASS.
+
+12. game/tests/headless_batch_02_04_material_correction_contract.gd
+    PASS.
+
+13. game/tests/headless_scene_parse.gd
+    PASS: parsed four gameplay scenes.
+
+14. game/tests/headless_gameplay_contract.gd
+    PASS.
+
+15. game/tests/headless_world_material_contract.gd
+    PASS: 11 semantic world materials retain their contracts.
+
+16. game/tests/validate_generated_world.gd
+    PASS: 735 playable + 4 context rows across 38 chunks; manifest 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164.
+
+17. game/tests/headless_hawkins_facade_contract.gd
+    PASS: signature d311c103c9273b94fc982588f46bae6ab67ba6be54b0d0a111dd305e39c22219.
+
+18. game/tests/headless_building_3_facade_contract.gd
+    PASS.
+
+19. game/tests/headless_isle_house_facade_contract.gd
+    PASS: signature e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1.
+
+20. game/tests/full_runtime_integration.gd
+    PASS: 38 chunks / 729 meshes / 736 surfaces / 48,389 triangles / 466 collider pairs; gameplay, spray, recovery, failed-reload, and cleanup contracts passed.
+
+21. game/tests/automated_route_qa.gd
+    PASS: continuous ferry-to-Trade-Winds route; 14 checkpoints; no teleport, stall, boundary loss, or recovery.
+
+22. game/tests/automated_route_qa.gd -- --whole-island-route
+    PASS: ferry, southwest, center, north, and east-perimeter; 3,449.107 m traveled; no teleport/recovery/stalls; five grounded landings.
+
+23. git diff --name-only -- generated
+    PASS: no output; generated source bytes unchanged.
+
+24. git diff --check
+    PASS.
+
+Headless note: recurring user:// log-rotation and macOS CA-certificate warnings preceded PASS lines but did not affect exits.
+

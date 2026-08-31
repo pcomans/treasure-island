@@ -1,0 +1,179 @@
+{
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_06_prototype_capture.gd",
+  "captures": [
+    {
+      "bytes": 199009,
+      "camera_position_m": [
+        -1.62000000476837,
+        2.75,
+        6.80000019073486
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "sha256": "0d41cb1c4cba58bd21a3ba40c781943eb90f9313d7b11e4968755c939fb0371f",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_and_module_detail"
+    },
+    {
+      "bytes": 86630,
+      "camera_position_m": [
+        0.0,
+        2.90000009536743,
+        20.9249992370605
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "sha256": "9d5e3e6bf9c78201ef7457b119919287fcacecf9ac7f8527a3601f19e4c1bbb1",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_distance_control"
+    },
+    {
+      "bytes": 77187,
+      "camera_position_m": [
+        7.82999992370605,
+        3.40000009536743,
+        16.3215007781982
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "sha256": "71e06c309b672e87b41650c8713ff0a3cfc4a7b34d071209252b4a92fe228d7a",
+      "sun_rotation_degrees": [
+        -13.9999990463257,
+        115.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_alias_and_depth_control"
+    }
+  ],
+  "collision_nodes": 0,
+  "display_driver": "macOS",
+  "evidence_role": "controlled standalone material-and-complete-module prototype; not live receiver evidence",
+  "field_materials": [
+    {
+      "classification": "homogeneous_material_tile",
+      "contains_facade_scale_motifs": false,
+      "id": "W34313564-MAT-TAN",
+      "path": "res://game/resources/materials/world/w34313564/w34313564_tan_field.tres",
+      "proof_scale_m": 0.82,
+      "region": "SSE only",
+      "sha256": "2503ee946804bd16db9ca60ae05a0a1b9b6ca7c46422e0997ac2891c79a7ea76",
+      "uncertainty_m": [
+        0.38,
+        1.35
+      ]
+    },
+    {
+      "classification": "homogeneous_material_tile",
+      "contains_facade_scale_motifs": false,
+      "id": "W34313564-MAT-PALE",
+      "path": "res://game/resources/materials/world/w34313564/w34313564_pale_field.tres",
+      "proof_scale_m": 0.88,
+      "region": "NNW and ENE only",
+      "sha256": "4523c071e50875db052e98ac39b9d9eff9cfb487aa37344064834ae82c0aae83",
+      "uncertainty_m": [
+        0.4,
+        1.45
+      ]
+    },
+    {
+      "classification": "homogeneous_material_tile",
+      "contains_facade_scale_motifs": false,
+      "id": "W34313564-MAT-PLINTH",
+      "path": "res://game/resources/materials/world/w34313564/w34313564_plinth_field.tres",
+      "proof_scale_m": 0.52,
+      "region": "observed pale raised base only",
+      "sha256": "89a36e7fb036bf8bd3f5db0996076c477641e2c7e97d29537c2c464155b12d88",
+      "uncertainty_m": [
+        0.24,
+        0.9
+      ]
+    }
+  ],
+  "godot_version": "4.7.2-stable (official)",
+  "mapped_placement_bounds": [
+    {
+      "id": "B06-34313564-SSE-EAST-RETURN",
+      "length_m": 38.278,
+      "runs": [
+        5.0,
+        6.0
+      ]
+    },
+    {
+      "id": "B06-34313564-SSE-CENTRAL",
+      "length_m": 49.373,
+      "runs": [
+        7.0,
+        8.0,
+        9.0
+      ]
+    },
+    {
+      "id": "B06-34313564-ENE-END",
+      "length_m": 43.442,
+      "runs": [
+        10.0,
+        11.0,
+        12.0,
+        13.0
+      ]
+    },
+    {
+      "id": "B06-34313564-NNW-OUTER",
+      "length_m": 97.898,
+      "runs": [
+        14.0,
+        15.0,
+        16.0,
+        17.0,
+        18.0,
+        19.0
+      ]
+    }
+  ],
+  "module_ids": [
+    "W34313564-HWIN",
+    "W34313564-PDOOR"
+  ],
+  "navigation_nodes": 0,
+  "one_local_unit_m": 1.0,
+  "proof_dimensions_m": [
+    13.5,
+    5.0
+  ],
+  "receiver_key": "building:w34313564:wall",
+  "registry_sha256": "dc0cb7196271626421764052c1659417d58e00fe48d77d32e0e5f7cf6ed9a1e1",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_visual_review_not_self_accepted",
+  "runtime_attachment": false,
+  "scene_path": "res://game/scenes/world/facades/batch_06/w34313564_prototype_set.tscn",
+  "scene_sha256": "ad00442bc2096cafa98f6009f8a896e12d8740f5d634ec9e0577a4d5255bf0dd",
+  "schema_version": "ti.batch-06-prototype-evidence/1",
+  "source_key": "w34313564",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

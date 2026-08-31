@@ -1,0 +1,3940 @@
+{
+  "adapter_path": "res://game/scripts/world/facades/building_1_recognizable_facade.gd",
+  "adapter_sha256": "29eb9a6585ed9d6722210d90a514e7dfe75fd4b690680b4b21f185e9c7471ac6",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/building_1_recognizability_capture.gd",
+  "capture_count": 16,
+  "captures": [
+    {
+      "bytes": 721224,
+      "camera_position_m": [
+        -72.9087524414062,
+        25.0,
+        757.150634765625
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/01-before-ordinary-public-curve.png",
+      "id": "01-before-ordinary-public-curve",
+      "representative_runs": [
+        36
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.556458,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "6e895b4351fe55cb87dcf3a149bdd87106f85128357714b5a509bcbd0515f473",
+      "stage": "before",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        0.940999984741211,
+        16.2810001373291,
+        749.703002929688
+      ],
+      "view_kind": "same_pose_ordinary_gameplay_public_curve_before"
+    },
+    {
+      "bytes": 569802,
+      "camera_position_m": [
+        -72.9087524414062,
+        25.0,
+        757.150634765625
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/02-after-ordinary-public-curve.png",
+      "id": "02-after-ordinary-public-curve",
+      "representative_runs": [
+        36
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.565816,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "6f64992e9455139e394670b50455a9874d248c65ed1d4f30c94560c16f99d1ad",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        0.940999984741211,
+        16.2810001373291,
+        749.703002929688
+      ],
+      "view_kind": "same_pose_ordinary_gameplay_public_curve_after"
+    },
+    {
+      "bytes": 1099915,
+      "camera_position_m": [
+        -76.4227600097656,
+        20.0,
+        648.677062988281
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/03-before-ordinary-north-end.png",
+      "id": "03-before-ordinary-north-end",
+      "representative_runs": [
+        94
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.433457,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "a5b76b31a0ed04e2d593d8970fd5b1effad67518ece3a6ade865697a4ae1aa96",
+      "stage": "before",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -46.7294998168945,
+        13.960000038147,
+        688.899536132812
+      ],
+      "view_kind": "same_pose_ordinary_gameplay_north_end_before"
+    },
+    {
+      "bytes": 862406,
+      "camera_position_m": [
+        -76.4227600097656,
+        20.0,
+        648.677062988281
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/04-after-ordinary-north-end.png",
+      "id": "04-after-ordinary-north-end",
+      "representative_runs": [
+        94
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.459235,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "ed62fbc04605905fb464ad87c237bda5ffffadabb5d22a6b0f0b86017ad443ed",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -46.7294998168945,
+        13.960000038147,
+        688.899536132812
+      ],
+      "view_kind": "same_pose_ordinary_gameplay_north_end_after"
+    },
+    {
+      "bytes": 981263,
+      "camera_position_m": [
+        -165.0,
+        72.0,
+        750.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/05-before-whole-building.png",
+      "id": "05-before-whole-building",
+      "representative_runs": [
+        0,
+        21,
+        38,
+        51,
+        60,
+        93,
+        96
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.471301,
+        "minimum": 0.114611,
+        "range": 0.827635,
+        "sample_count": 4000
+      },
+      "sha256": "5d07e5e46139340b322f2870608e740e9d2e0449fae677a53ed19805e9d3d612",
+      "stage": "before",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -8.0,
+        15.0,
+        737.0
+      ],
+      "view_kind": "same_pose_whole_building_before_not_acceptance"
+    },
+    {
+      "bytes": 929405,
+      "camera_position_m": [
+        -165.0,
+        72.0,
+        750.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/06-after-whole-building.png",
+      "id": "06-after-whole-building",
+      "representative_runs": [
+        0,
+        21,
+        38,
+        51,
+        60,
+        93,
+        96
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.477064,
+        "minimum": 0.114611,
+        "range": 0.827635,
+        "sample_count": 4000
+      },
+      "sha256": "e52bdd10db10bde8fc74c043cd2e7549a2f205067e9cfe0045f71fca3bdbecff",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -8.0,
+        15.0,
+        737.0
+      ],
+      "view_kind": "same_pose_whole_building_after_not_acceptance"
+    },
+    {
+      "bytes": 181961,
+      "camera_position_m": [
+        -30.2078342437744,
+        14.0725002288818,
+        723.061584472656
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/07-wing-family-close-oblique.png",
+      "id": "07-wing-family-close-oblique",
+      "representative_runs": [
+        13
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.719978,
+        "minimum": 0.124656,
+        "range": 0.81759,
+        "sample_count": 4000
+      },
+      "sha256": "97cfdabaac967c373f86ffcf7043a16f37c43c038a3d98265e648d84cbdde270",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -37.2019195556641,
+        12.272500038147,
+        712.522888183594
+      ],
+      "view_kind": "complete_b1_wing_w_close_oblique"
+    },
+    {
+      "bytes": 231364,
+      "camera_position_m": [
+        -12.9338512420654,
+        18.8810005187988,
+        749.109252929688
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/08-central-family-close-oblique.png",
+      "id": "08-central-family-close-oblique",
+      "representative_runs": [
+        35
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.636204,
+        "minimum": 0.10897,
+        "range": 0.833276,
+        "sample_count": 4000
+      },
+      "sha256": "e547ea70810637979f08d88ad4bef4fea0c86452fba3f7d3286198d9e6f23d79",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        1.30379796028137,
+        16.7810001373291,
+        744.82958984375
+      ],
+      "view_kind": "complete_b1_central_w_close_oblique"
+    },
+    {
+      "bytes": 693216,
+      "camera_position_m": [
+        -51.3437995910645,
+        17.3819999694824,
+        666.633972167969
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/09-pavilion-family-close-oblique.png",
+      "id": "09-pavilion-family-close-oblique",
+      "representative_runs": [
+        93
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.438355,
+        "minimum": 0.068921,
+        "range": 0.873325,
+        "sample_count": 4000
+      },
+      "sha256": "5073fbbbc3ef96c33192ff1a02e26c126f273841d9d5ed2274ca13756a6c6792",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -38.6939010620117,
+        14.3819999694824,
+        686.756103515625
+      ],
+      "view_kind": "complete_b1_pav_w_close_oblique"
+    },
+    {
+      "bytes": 805495,
+      "camera_position_m": [
+        -53.0196685791016,
+        6.65999984741211,
+        680.478210449219
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/10-base-family-close-oblique.png",
+      "id": "10-base-family-close-oblique",
+      "representative_runs": [
+        94
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.376298,
+        "minimum": 0.033642,
+        "range": 0.908604,
+        "sample_count": 4000
+      },
+      "sha256": "9842dc5ac4adcf1828ecbaf789aaeab4a62d44d2b1a7ef779a378097e67be9f5",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -46.7553634643555,
+        5.15999984741211,
+        688.8291015625
+      ],
+      "view_kind": "complete_b1_base_o_close_oblique"
+    },
+    {
+      "bytes": 938985,
+      "camera_position_m": [
+        -62.8369178771973,
+        7.5610499382019,
+        719.365417480469
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/11-door-family-close-oblique.png",
+      "id": "11-door-family-close-oblique",
+      "representative_runs": [
+        6
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.569776,
+        "minimum": 0.132216,
+        "range": 0.81003,
+        "sample_count": 4000
+      },
+      "sha256": "29e3e28b83fd909493c355488e9d66c069b0a713df12e9de3522f47b48a072f7",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -55.3385734558105,
+        6.0610499382019,
+        712.1025390625
+      ],
+      "view_kind": "complete_b1_door_blue_close_oblique"
+    },
+    {
+      "bytes": 669873,
+      "camera_position_m": [
+        -22.4345359802246,
+        9.50799942016602,
+        797.937683105469
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/12-band-family-close-oblique.png",
+      "id": "12-band-family-close-oblique",
+      "representative_runs": [
+        56
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.615319,
+        "minimum": 0.097205,
+        "range": 0.845041,
+        "sample_count": 4000
+      },
+      "sha256": "3696ec1a45a93130e45b939670728b8c7b6c6ccda3119e826917405653439b22",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -14.5006256103516,
+        7.85799980163574,
+        789.333923339844
+      ],
+      "view_kind": "complete_b1_band_close_oblique"
+    },
+    {
+      "bytes": 813839,
+      "camera_position_m": [
+        -135.0,
+        48.0,
+        710.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/13-multiside-context.png",
+      "id": "13-multiside-context",
+      "representative_runs": [
+        0,
+        9,
+        21,
+        38,
+        51,
+        60,
+        93,
+        96
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.492848,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "392f7470115eaf87f2ff688da0bbb8207a0ab39e3c375865e20f295e93ff4a7a",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -7.0,
+        15.0,
+        744.0
+      ],
+      "view_kind": "multiside_actual_world_composition_context"
+    },
+    {
+      "bytes": 428070,
+      "camera_position_m": [
+        -58.1880340576172,
+        24.0,
+        753.228698730469
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/14-changed-light-public-curve.png",
+      "id": "14-changed-light-public-curve",
+      "representative_runs": [
+        36
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.461511,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "a3a6986a78a4ff4bd6c1a95daa9c76c0d9bb482fea67f4d2b4f3f0fe7b3ed310",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -18.0,
+        118.0,
+        0.0
+      ],
+      "target_position_m": [
+        0.940999984741211,
+        16.2810001373291,
+        749.703002929688
+      ],
+      "view_kind": "changed_light_complete_composition"
+    },
+    {
+      "bytes": 806509,
+      "camera_position_m": [
+        -38.3947563171387,
+        18.0,
+        824.480712890625
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/15-south-end-ordinary.png",
+      "id": "15-south-end-ordinary",
+      "representative_runs": [
+        60
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.546509,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "61cbbc12c1eab9c73f896f9ce7581475e26de60869fe83b1edd3e838e32f9db9",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -5.54850006103516,
+        14.2434997558594,
+        796.45751953125
+      ],
+      "view_kind": "ordinary_gameplay_south_end_pavilion_and_bands"
+    },
+    {
+      "bytes": 408708,
+      "camera_position_m": [
+        180.0,
+        1550.0,
+        300.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/16-whole-island.png",
+      "id": "16-whole-island",
+      "representative_runs": [],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.586443,
+        "minimum": 0.096104,
+        "range": 0.846142,
+        "sample_count": 4000
+      },
+      "sha256": "e5518f9b75e90b2a457a44e328c1b3297f35064a67b448700e859e03fa9f6706",
+      "stage": "after",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -20.0,
+        0.0,
+        30.0
+      ],
+      "view_kind": "whole_island_actual_loaded_world_context"
+    }
+  ],
+  "composition_topology": {
+    "collision_nodes": 0.0,
+    "field_meshes": 3.0,
+    "field_surfaces": 3.0,
+    "field_triangles": 126.0,
+    "module_meshes": 351.0,
+    "module_placements": 45.0,
+    "module_surfaces": 351.0,
+    "module_triangles": 4212.0,
+    "navigation_nodes": 0.0,
+    "spray_nodes": 0.0,
+    "total_meshes": 354.0,
+    "total_surfaces": 354.0,
+    "total_triangles": 4338.0
+  },
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "context_capture_ids": [
+    "13-multiside-context",
+    "14-changed-light-public-curve",
+    "15-south-end-ordinary",
+    "16-whole-island"
+  ],
+  "display_driver": "macOS",
+  "evidence_role": "native actual-loaded-world before/after proof of a reversible recognizability-first Building 1 composition; production inference, not surveyed reconstruction",
+  "exact_runtime_delta_vs_accepted_ivory_baseline": {
+    "collision_nodes": 0,
+    "meshes": 353,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "surfaces": 353,
+    "triangles": 4276
+  },
+  "family_close_oblique_capture_ids": [
+    "07-wing-family-close-oblique",
+    "08-central-family-close-oblique",
+    "09-pavilion-family-close-oblique",
+    "10-base-family-close-oblique",
+    "11-door-family-close-oblique",
+    "12-band-family-close-oblique"
+  ],
+  "field_composition": {
+    "asset_kind": "homogeneous_material_tile",
+    "exact_eligible_runs": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0,
+      11.0,
+      12.0,
+      13.0,
+      14.0,
+      15.0,
+      16.0,
+      17.0,
+      18.0,
+      19.0,
+      20.0,
+      21.0,
+      22.0,
+      23.0,
+      24.0,
+      25.0,
+      26.0,
+      27.0,
+      28.0,
+      29.0,
+      30.0,
+      31.0,
+      32.0,
+      33.0,
+      34.0,
+      35.0,
+      36.0,
+      37.0,
+      38.0,
+      39.0,
+      40.0,
+      41.0,
+      42.0,
+      43.0,
+      44.0,
+      45.0,
+      46.0,
+      47.0,
+      48.0,
+      49.0,
+      50.0,
+      51.0,
+      52.0,
+      53.0,
+      54.0,
+      55.0,
+      56.0,
+      58.0,
+      60.0,
+      93.0,
+      94.0,
+      95.0,
+      96.0
+    ],
+    "field_id": "B1-MAT-IVORY",
+    "generated_mesh_surface_area_m2": 4350.511117,
+    "independently_accepted_prior_scope": {
+      "exact_ordered_runs": [
+        21.0,
+        22.0,
+        23.0,
+        24.0,
+        25.0,
+        26.0,
+        27.0,
+        28.0,
+        29.0,
+        30.0,
+        31.0,
+        32.0,
+        33.0,
+        34.0,
+        35.0,
+        36.0,
+        37.0,
+        38.0,
+        39.0,
+        40.0,
+        41.0,
+        42.0,
+        43.0,
+        44.0,
+        45.0,
+        46.0,
+        47.0,
+        48.0,
+        49.0,
+        50.0,
+        51.0
+      ],
+      "generated_mesh_surface_area_m2": 1740.731069,
+      "physical_length_m": 85.939934,
+      "review_sha256": "35d8e0d306b381feee997c068824222e22ff4199c8ef5433bbe5ae082fa4c048",
+      "run_count": 31.0,
+      "verdict": "KEEP_WITH_DOCUMENTED_LIMITATION"
+    },
+    "material_scale_status": "reviewed_reversible_world_metre_projection_not_surveyed",
+    "maximum_join_phase_delta_m": 0.0,
+    "overlay_offset_m": 0.018,
+    "physical_length_m": 206.908708,
+    "recognizability_extension_runs_pending_review": [
+      0.0,
+      1.0,
+      2.0,
+      3.0,
+      4.0,
+      5.0,
+      6.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0,
+      11.0,
+      12.0,
+      13.0,
+      14.0,
+      15.0,
+      16.0,
+      17.0,
+      18.0,
+      19.0,
+      20.0,
+      52.0,
+      53.0,
+      54.0,
+      55.0,
+      56.0,
+      58.0,
+      60.0,
+      93.0,
+      94.0,
+      95.0,
+      96.0
+    ],
+    "render_chains": [
+      {
+        "asset_kind": "homogeneous_material_tile",
+        "exact_ordered_runs": [
+          93.0,
+          94.0,
+          95.0,
+          96.0,
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0,
+          8.0,
+          9.0,
+          10.0,
+          11.0,
+          12.0,
+          13.0,
+          14.0,
+          15.0,
+          16.0,
+          17.0,
+          18.0,
+          19.0,
+          20.0,
+          21.0,
+          22.0,
+          23.0,
+          24.0,
+          25.0,
+          26.0,
+          27.0,
+          28.0,
+          29.0,
+          30.0,
+          31.0,
+          32.0,
+          33.0,
+          34.0,
+          35.0,
+          36.0,
+          37.0,
+          38.0,
+          39.0,
+          40.0,
+          41.0,
+          42.0,
+          43.0,
+          44.0,
+          45.0,
+          46.0,
+          47.0,
+          48.0,
+          49.0,
+          50.0,
+          51.0,
+          52.0,
+          53.0,
+          54.0,
+          55.0,
+          56.0
+        ],
+        "field_id": "B1-MAT-IVORY",
+        "generated_mesh_surface_area_m2": 4113.40041,
+        "internal_join_count": 60.0,
+        "join_geometry": "shared_xz_mitered_offset_junctions",
+        "lifecycle_status": "recognizability_composition_pending_independent_review",
+        "maximum_join_phase_delta_m": 0.0,
+        "overlay_offset_m": 0.018,
+        "physical_length_m": 196.136156,
+        "run_count": 61.0,
+        "scope_id": "B1-IVORY-PUBLIC-WRAP",
+        "uv_contract": "UV.x cumulative ordered chain metres; UV.y source world Y metres"
+      },
+      {
+        "asset_kind": "homogeneous_material_tile",
+        "exact_ordered_runs": [
+          58.0
+        ],
+        "field_id": "B1-MAT-IVORY",
+        "generated_mesh_surface_area_m2": 105.131077,
+        "internal_join_count": 0.0,
+        "join_geometry": "shared_xz_mitered_offset_junctions",
+        "lifecycle_status": "recognizability_composition_pending_independent_review",
+        "maximum_join_phase_delta_m": 0.0,
+        "overlay_offset_m": 0.018,
+        "physical_length_m": 4.783686,
+        "run_count": 1.0,
+        "scope_id": "B1-IVORY-PUBLIC-SOUTH-58",
+        "uv_contract": "UV.x cumulative ordered chain metres; UV.y source world Y metres"
+      },
+      {
+        "asset_kind": "homogeneous_material_tile",
+        "exact_ordered_runs": [
+          60.0
+        ],
+        "field_id": "B1-MAT-IVORY",
+        "generated_mesh_surface_area_m2": 131.979631,
+        "internal_join_count": 0.0,
+        "join_geometry": "shared_xz_mitered_offset_junctions",
+        "lifecycle_status": "recognizability_composition_pending_independent_review",
+        "maximum_join_phase_delta_m": 0.0,
+        "overlay_offset_m": 0.018,
+        "physical_length_m": 5.988866,
+        "run_count": 1.0,
+        "scope_id": "B1-IVORY-PUBLIC-SOUTH-60",
+        "uv_contract": "UV.x cumulative ordered chain metres; UV.y source world Y metres"
+      }
+    ],
+    "run_count": 63.0
+  },
+  "generated_source_and_data_bytes_unchanged": true,
+  "generator": "game/tests/building_1_recognizability_capture.gd",
+  "godot_version": "4.7.2-stable (official)",
+  "immutable_inputs_capture_time": {
+    "res://discovery/facades/TREASURE_ISLAND_BUILDING_1_LIVE_IVORY_FIELD_ART_REVIEW.md": "35d8e0d306b381feee997c068824222e22ff4199c8ef5433bbe5ae082fa4c048",
+    "res://discovery/facades/TREASURE_ISLAND_BUILDING_1_RECOGNIZABILITY_PLACEMENT_BRIEF.md": "f4f9d3d123ce923713b113d4c020e64d0d83356e2d8f3d8bc6dd3b1eac3c5be4",
+    "res://game/resources/facades/building_1_standalone_prototypes.json": "2014040edb3985be4aaae437749063474aacaedc0534b6d54e69b7dfd92612cc",
+    "res://game/resources/facades/r133351_standalone_prototypes.json": "ecde7b80ba595f61d03bfd21f57407956c3b8988e381f0457f95bfe1aa580ad9",
+    "res://game/resources/materials/world/building_1/building_1_chain_metres_aperiodic_field.gdshader": "a4a5df4fbb8fd4f13187ec284708879b540677ac2c827642b4c3040b4bce4c09",
+    "res://game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres": "12d059d9d806c629225254f1aaf945be69a00ce5878db276ce299ad0c8cdbb9a",
+    "res://game/scripts/world/facades/building_1_standalone_prototypes.gd": "cf18bfcfa40c7770d92aad569cba05da7ac85fe0fc89c0fd8cba6167ef62fb1f",
+    "res://generated/world/chunks/x_-1__z_2.json": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce",
+    "res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+  },
+  "placement_summary": {
+    "module_collision_nodes": 0.0,
+    "module_field_or_backing_meshes": 0.0,
+    "module_meshes": 351.0,
+    "module_navigation_nodes": 0.0,
+    "module_spray_nodes": 0.0,
+    "module_surfaces": 351.0,
+    "module_triangles": 4212.0,
+    "motif_instance_counts": {
+      "B1-BAND": 4.0,
+      "B1-BASE-O": 6.0,
+      "B1-CENTRAL-W": 24.0,
+      "B1-DOOR-BLUE": 1.0,
+      "B1-PAV-W": 2.0,
+      "B1-WING-W": 8.0
+    },
+    "placement_count": 45.0
+  },
+  "placements": [
+    {
+      "along_run_center_m": 3.618240076,
+      "along_run_fraction": 0.5,
+      "anchor_run": 9.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 6.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        9.0
+      ],
+      "expected_module_origin_world_m": [
+        -46.869099,
+        11.8395,
+        716.591401
+      ],
+      "host_run_length_m": 7.23648,
+      "host_wall_height_m": 20.9415,
+      "motif_id": "B1-WING-W",
+      "nominal_bounds_m": [
+        1.7,
+        1.7
+      ],
+      "nominal_horizontal_containment_margin_m": 2.768240076,
+      "nominal_vertical_containment_margin_m": 5.65,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        0.452007232,
+        0.892014272
+      ],
+      "placement_id": "REC-WING-R09-LOW",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "two-level wing-window rhythm at nominal reviewed scale",
+      "side": "public wing/link",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.891870062,
+        -0.452291712
+      ],
+      "wall_anchor_world_m": [
+        -46.903,
+        5.3395,
+        716.5245
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 3.618240076,
+      "along_run_fraction": 0.5,
+      "anchor_run": 9.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 14.0,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        9.0
+      ],
+      "expected_module_origin_world_m": [
+        -46.869099,
+        19.3395,
+        716.591401
+      ],
+      "host_run_length_m": 7.23648,
+      "host_wall_height_m": 20.9415,
+      "motif_id": "B1-WING-W",
+      "nominal_bounds_m": [
+        1.7,
+        1.7
+      ],
+      "nominal_horizontal_containment_margin_m": 2.768240076,
+      "nominal_vertical_containment_margin_m": 6.0915,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        0.452007232,
+        0.892014272
+      ],
+      "placement_id": "REC-WING-R09-HIGH",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "two-level wing-window rhythm at nominal reviewed scale",
+      "side": "public wing/link",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.891870062,
+        -0.452291712
+      ],
+      "wall_anchor_world_m": [
+        -46.903,
+        5.3395,
+        716.5245
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.386391523,
+      "along_run_fraction": 0.5,
+      "anchor_run": 13.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 6.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        13.0
+      ],
+      "expected_module_origin_world_m": [
+        -37.201919,
+        12.2725,
+        712.522899
+      ],
+      "host_run_length_m": 4.772783,
+      "host_wall_height_m": 20.5085,
+      "motif_id": "B1-WING-W",
+      "nominal_bounds_m": [
+        1.7,
+        1.7
+      ],
+      "nominal_horizontal_containment_margin_m": 1.536391523,
+      "nominal_vertical_containment_margin_m": 5.65,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        0.261085389,
+        0.96531571
+      ],
+      "placement_id": "REC-WING-R13-LOW",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "two-level wing-window rhythm at nominal reviewed scale",
+      "side": "public wing/link",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.965264911,
+        -0.261273137
+      ],
+      "wall_anchor_world_m": [
+        -37.2215,
+        5.7725,
+        712.4505
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.386391523,
+      "along_run_fraction": 0.5,
+      "anchor_run": 13.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 14.0,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        13.0
+      ],
+      "expected_module_origin_world_m": [
+        -37.201919,
+        19.7725,
+        712.522899
+      ],
+      "host_run_length_m": 4.772783,
+      "host_wall_height_m": 20.5085,
+      "motif_id": "B1-WING-W",
+      "nominal_bounds_m": [
+        1.7,
+        1.7
+      ],
+      "nominal_horizontal_containment_margin_m": 1.536391523,
+      "nominal_vertical_containment_margin_m": 5.6585,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        0.261085389,
+        0.96531571
+      ],
+      "placement_id": "REC-WING-R13-HIGH",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "two-level wing-window rhythm at nominal reviewed scale",
+      "side": "public wing/link",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.965264911,
+        -0.261273137
+      ],
+      "wall_anchor_world_m": [
+        -37.2215,
+        5.7725,
+        712.4505
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.510723501,
+      "along_run_fraction": 0.5,
+      "anchor_run": 16.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 6.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        16.0
+      ],
+      "expected_module_origin_world_m": [
+        -26.936525,
+        12.3445,
+        711.167494
+      ],
+      "host_run_length_m": 5.021447,
+      "host_wall_height_m": 20.4365,
+      "motif_id": "B1-WING-W",
+      "nominal_bounds_m": [
+        1.7,
+        1.7
+      ],
+      "nominal_horizontal_containment_margin_m": 1.660723501,
+      "nominal_vertical_containment_margin_m": 5.65,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        0.012998902,
+        0.999915511
+      ],
+      "placement_id": "REC-WING-R16-LOW",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "two-level wing-window rhythm at nominal reviewed scale",
+      "side": "public wing/link",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.999910981,
+        -0.013342768
+      ],
+      "wall_anchor_world_m": [
+        -26.9375,
+        5.8445,
+        711.0925
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.510723501,
+      "along_run_fraction": 0.5,
+      "anchor_run": 16.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 14.0,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        16.0
+      ],
+      "expected_module_origin_world_m": [
+        -26.936525,
+        19.8445,
+        711.167494
+      ],
+      "host_run_length_m": 5.021447,
+      "host_wall_height_m": 20.4365,
+      "motif_id": "B1-WING-W",
+      "nominal_bounds_m": [
+        1.7,
+        1.7
+      ],
+      "nominal_horizontal_containment_margin_m": 1.660723501,
+      "nominal_vertical_containment_margin_m": 5.5865,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        0.012998902,
+        0.999915511
+      ],
+      "placement_id": "REC-WING-R16-HIGH",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "two-level wing-window rhythm at nominal reviewed scale",
+      "side": "public wing/link",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.999910981,
+        -0.013342768
+      ],
+      "wall_anchor_world_m": [
+        -26.9375,
+        5.8445,
+        711.0925
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.592026146,
+      "along_run_fraction": 0.5,
+      "anchor_run": 20.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 6.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        20.0
+      ],
+      "expected_module_origin_world_m": [
+        -21.458423,
+        12.222,
+        714.5722
+      ],
+      "host_run_length_m": 3.184052,
+      "host_wall_height_m": 20.559,
+      "motif_id": "B1-WING-W",
+      "nominal_bounds_m": [
+        1.7,
+        1.7
+      ],
+      "nominal_horizontal_containment_margin_m": 0.742026146,
+      "nominal_vertical_containment_margin_m": 5.65,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        -0.9789721,
+        -0.203994186
+      ],
+      "placement_id": "REC-WING-R20-LOW",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "two-level wing-window rhythm at nominal reviewed scale",
+      "side": "public wing/link",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.204142376,
+        0.978941209
+      ],
+      "wall_anchor_world_m": [
+        -21.385,
+        5.722,
+        714.5875
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.592026146,
+      "along_run_fraction": 0.5,
+      "anchor_run": 20.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 14.0,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        20.0
+      ],
+      "expected_module_origin_world_m": [
+        -21.458423,
+        19.722,
+        714.5722
+      ],
+      "host_run_length_m": 3.184052,
+      "host_wall_height_m": 20.559,
+      "motif_id": "B1-WING-W",
+      "nominal_bounds_m": [
+        1.7,
+        1.7
+      ],
+      "nominal_horizontal_containment_margin_m": 0.742026146,
+      "nominal_vertical_containment_margin_m": 5.709,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        -0.9789721,
+        -0.203994186
+      ],
+      "placement_id": "REC-WING-R20-HIGH",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "two-level wing-window rhythm at nominal reviewed scale",
+      "side": "public wing/link",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.204142376,
+        0.978941209
+      ],
+      "wall_anchor_world_m": [
+        -21.385,
+        5.722,
+        714.5875
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.132640534,
+      "along_run_fraction": 0.3,
+      "anchor_run": 21.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        21.0
+      ],
+      "expected_module_origin_world_m": [
+        -20.634564,
+        16.2126,
+        716.509184
+      ],
+      "host_run_length_m": 3.775468,
+      "host_wall_height_m": 20.5684,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.407640534,
+      "nominal_vertical_containment_margin_m": 7.7684,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.256853892,
+        0.966450246
+      ],
+      "placement_id": "REC-CENTRAL-R21-A",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.966502581,
+        0.256656893
+      ],
+      "wall_anchor_world_m": [
+        -20.6153,
+        5.7126,
+        716.4367
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.642827913,
+      "along_run_fraction": 0.7,
+      "anchor_run": 21.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        21.0
+      ],
+      "expected_module_origin_world_m": [
+        -19.174964,
+        16.1774,
+        716.896784
+      ],
+      "host_run_length_m": 3.775468,
+      "host_wall_height_m": 20.6036,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.407640534,
+      "nominal_vertical_containment_margin_m": 7.8036,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.256853892,
+        0.966450246
+      ],
+      "placement_id": "REC-CENTRAL-R21-B",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.966502581,
+        0.256656893
+      ],
+      "wall_anchor_world_m": [
+        -19.1557,
+        5.6774,
+        716.8243
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.13301489,
+      "along_run_fraction": 0.3,
+      "anchor_run": 22.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        22.0
+      ],
+      "expected_module_origin_world_m": [
+        -17.045791,
+        16.1267,
+        717.623628
+      ],
+      "host_run_length_m": 3.776716,
+      "host_wall_height_m": 20.6543,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.40801489,
+      "nominal_vertical_containment_margin_m": 7.8543,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.387878225,
+        0.921710628
+      ],
+      "placement_id": "REC-CENTRAL-R22-A",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.921700156,
+        0.387903111
+      ],
+      "wall_anchor_world_m": [
+        -17.0167,
+        5.6267,
+        717.5545
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.643701409,
+      "along_run_fraction": 0.7,
+      "anchor_run": 22.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        22.0
+      ],
+      "expected_module_origin_world_m": [
+        -15.653391,
+        16.0943,
+        718.209628
+      ],
+      "host_run_length_m": 3.776716,
+      "host_wall_height_m": 20.6867,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.40801489,
+      "nominal_vertical_containment_margin_m": 7.8867,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.387878225,
+        0.921710628
+      ],
+      "placement_id": "REC-CENTRAL-R22-B",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.921700156,
+        0.387903111
+      ],
+      "wall_anchor_world_m": [
+        -15.6243,
+        5.5943,
+        718.1405
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.158430257,
+      "along_run_fraction": 0.3,
+      "anchor_run": 24.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        24.0
+      ],
+      "expected_module_origin_world_m": [
+        -13.268163,
+        16.1185,
+        719.43092
+      ],
+      "host_run_length_m": 3.861434,
+      "host_wall_height_m": 20.6625,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.433430257,
+      "nominal_vertical_containment_margin_m": 7.8625,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.542172438,
+        0.840267247
+      ],
+      "placement_id": "REC-CENTRAL-R24-A",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.840361337,
+        0.542026588
+      ],
+      "wall_anchor_world_m": [
+        -13.2275,
+        5.6185,
+        719.3679
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.703003933,
+      "along_run_fraction": 0.7,
+      "anchor_run": 24.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        24.0
+      ],
+      "expected_module_origin_world_m": [
+        -11.970163,
+        16.1685,
+        720.26812
+      ],
+      "host_run_length_m": 3.861434,
+      "host_wall_height_m": 20.6125,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.433430257,
+      "nominal_vertical_containment_margin_m": 7.8125,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.542172438,
+        0.840267247
+      ],
+      "placement_id": "REC-CENTRAL-R24-B",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.840361337,
+        0.542026588
+      ],
+      "wall_anchor_world_m": [
+        -11.9295,
+        5.6685,
+        720.2051
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.322646211,
+      "along_run_fraction": 0.3,
+      "anchor_run": 26.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        26.0
+      ],
+      "expected_module_origin_world_m": [
+        -7.107128,
+        16.391,
+        724.259852
+      ],
+      "host_run_length_m": 4.408821,
+      "host_wall_height_m": 20.39,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.597646211,
+      "nominal_vertical_containment_margin_m": 7.59,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.735033445,
+        0.678030851
+      ],
+      "placement_id": "REC-CENTRAL-R26-A",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.678185892,
+        0.734890398
+      ],
+      "wall_anchor_world_m": [
+        -7.052,
+        5.891,
+        724.209
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 3.086174493,
+      "along_run_fraction": 0.7,
+      "anchor_run": 26.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        26.0
+      ],
+      "expected_module_origin_world_m": [
+        -5.911128,
+        16.459,
+        725.555852
+      ],
+      "host_run_length_m": 4.408821,
+      "host_wall_height_m": 20.322,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.597646211,
+      "nominal_vertical_containment_margin_m": 7.522,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.735033445,
+        0.678030851
+      ],
+      "placement_id": "REC-CENTRAL-R26-B",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.678185892,
+        0.734890398
+      ],
+      "wall_anchor_world_m": [
+        -5.856,
+        5.959,
+        725.505
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.121667625,
+      "along_run_fraction": 0.3,
+      "anchor_run": 28.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        28.0
+      ],
+      "expected_module_origin_world_m": [
+        -2.384979,
+        16.697,
+        730.516977
+      ],
+      "host_run_length_m": 3.738892,
+      "host_wall_height_m": 20.084,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.396667625,
+      "nominal_vertical_containment_margin_m": 7.284,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.881048459,
+        0.473026017
+      ],
+      "placement_id": "REC-CENTRAL-R28-A",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.472599894,
+        0.881277108
+      ],
+      "wall_anchor_world_m": [
+        -2.3189,
+        6.197,
+        730.4815
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.617224457,
+      "along_run_fraction": 0.7,
+      "anchor_run": 28.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        28.0
+      ],
+      "expected_module_origin_world_m": [
+        -1.678179,
+        16.745,
+        731.834977
+      ],
+      "host_run_length_m": 3.738892,
+      "host_wall_height_m": 20.036,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.396667625,
+      "nominal_vertical_containment_margin_m": 7.236,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.881048459,
+        0.473026017
+      ],
+      "placement_id": "REC-CENTRAL-R28-B",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.472599894,
+        0.881277108
+      ],
+      "wall_anchor_world_m": [
+        -1.6121,
+        6.245,
+        731.7995
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.077745355,
+      "along_run_fraction": 0.3,
+      "anchor_run": 33.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        33.0
+      ],
+      "expected_module_origin_world_m": [
+        0.412111,
+        16.781,
+        737.483053
+      ],
+      "host_run_length_m": 3.592485,
+      "host_wall_height_m": 20.0,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.352745355,
+      "nominal_vertical_containment_margin_m": 7.2,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.973180542,
+        0.230042677
+      ],
+      "placement_id": "REC-CENTRAL-R33-A",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.230202801,
+        0.973142677
+      ],
+      "wall_anchor_world_m": [
+        0.4851,
+        6.281,
+        737.4658
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.514739161,
+      "along_run_fraction": 0.7,
+      "anchor_run": 33.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        33.0
+      ],
+      "expected_module_origin_world_m": [
+        0.742911,
+        16.781,
+        738.881453
+      ],
+      "host_run_length_m": 3.592485,
+      "host_wall_height_m": 20.0,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.352745355,
+      "nominal_vertical_containment_margin_m": 7.2,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.973180542,
+        0.230042677
+      ],
+      "placement_id": "REC-CENTRAL-R33-B",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.230202801,
+        0.973142677
+      ],
+      "wall_anchor_world_m": [
+        0.8159,
+        6.281,
+        738.8642
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.237020634,
+      "along_run_fraction": 0.3,
+      "anchor_run": 35.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        35.0
+      ],
+      "expected_module_origin_world_m": [
+        1.303798,
+        16.781,
+        744.829576
+      ],
+      "host_run_length_m": 4.123402,
+      "host_wall_height_m": 20.0,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.512020634,
+      "nominal_vertical_containment_margin_m": 7.2,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.998699437,
+        -0.050984656
+      ],
+      "placement_id": "REC-CENTRAL-R35-A",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.051171337,
+        0.998689889
+      ],
+      "wall_anchor_world_m": [
+        1.3787,
+        6.281,
+        744.8334
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.88638148,
+      "along_run_fraction": 0.7,
+      "anchor_run": 35.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        35.0
+      ],
+      "expected_module_origin_world_m": [
+        1.219398,
+        16.781,
+        746.476776
+      ],
+      "host_run_length_m": 4.123402,
+      "host_wall_height_m": 20.0,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.512020634,
+      "nominal_vertical_containment_margin_m": 7.2,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.998699437,
+        -0.050984656
+      ],
+      "placement_id": "REC-CENTRAL-R35-B",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.051171337,
+        0.998689889
+      ],
+      "wall_anchor_world_m": [
+        1.2943,
+        6.281,
+        746.4806
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.204830627,
+      "along_run_fraction": 0.3,
+      "anchor_run": 36.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        36.0
+      ],
+      "expected_module_origin_world_m": [
+        0.982781,
+        16.781,
+        748.897405
+      ],
+      "host_run_length_m": 4.016102,
+      "host_wall_height_m": 20.0,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.479830627,
+      "nominal_vertical_containment_margin_m": 7.2,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.989586439,
+        -0.143939846
+      ],
+      "placement_id": "REC-CENTRAL-R36-A",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.14441864,
+        0.989516678
+      ],
+      "wall_anchor_world_m": [
+        1.057,
+        6.281,
+        748.9082
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.811271463,
+      "along_run_fraction": 0.7,
+      "anchor_run": 36.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        36.0
+      ],
+      "expected_module_origin_world_m": [
+        0.750781,
+        16.781,
+        750.487005
+      ],
+      "host_run_length_m": 4.016102,
+      "host_wall_height_m": 20.0,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.479830627,
+      "nominal_vertical_containment_margin_m": 7.2,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.989586439,
+        -0.143939846
+      ],
+      "placement_id": "REC-CENTRAL-R36-B",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.14441864,
+        0.989516678
+      ],
+      "wall_anchor_world_m": [
+        0.825,
+        6.281,
+        750.4978
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.099612136,
+      "along_run_fraction": 0.3,
+      "anchor_run": 44.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        44.0
+      ],
+      "expected_module_origin_world_m": [
+        1.228117,
+        16.781,
+        760.90701
+      ],
+      "host_run_length_m": 3.665374,
+      "host_wall_height_m": 20.0,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.374612136,
+      "nominal_vertical_containment_margin_m": 7.2,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.863778901,
+        -0.503871026
+      ],
+      "placement_id": "REC-CENTRAL-R44-A",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.503904951,
+        0.86375911
+      ],
+      "wall_anchor_world_m": [
+        1.2929,
+        6.281,
+        760.9448
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.565761651,
+      "along_run_fraction": 0.7,
+      "anchor_run": 44.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        44.0
+      ],
+      "expected_module_origin_world_m": [
+        0.489317,
+        16.781,
+        762.17341
+      ],
+      "host_run_length_m": 3.665374,
+      "host_wall_height_m": 20.0,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.374612136,
+      "nominal_vertical_containment_margin_m": 7.2,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.863778901,
+        -0.503871026
+      ],
+      "placement_id": "REC-CENTRAL-R44-B",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.503904951,
+        0.86375911
+      ],
+      "wall_anchor_world_m": [
+        0.5541,
+        6.281,
+        762.2112
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.397517889,
+      "along_run_fraction": 0.3,
+      "anchor_run": 46.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        46.0
+      ],
+      "expected_module_origin_world_m": [
+        -1.275685,
+        16.781,
+        764.905118
+      ],
+      "host_run_length_m": 4.658393,
+      "host_wall_height_m": 20.0,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.672517889,
+      "nominal_vertical_containment_margin_m": 7.2,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.805131247,
+        -0.593096683
+      ],
+      "placement_id": "REC-CENTRAL-R46-A",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.592693665,
+        0.805427973
+      ],
+      "wall_anchor_world_m": [
+        -1.2153,
+        6.281,
+        764.9496
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 3.260875074,
+      "along_run_fraction": 0.7,
+      "anchor_run": 46.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        46.0
+      ],
+      "expected_module_origin_world_m": [
+        -2.380085,
+        16.781,
+        766.405918
+      ],
+      "host_run_length_m": 4.658393,
+      "host_wall_height_m": 20.0,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.672517889,
+      "nominal_vertical_containment_margin_m": 7.2,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.805131247,
+        -0.593096683
+      ],
+      "placement_id": "REC-CENTRAL-R46-B",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.592693665,
+        0.805427973
+      ],
+      "wall_anchor_world_m": [
+        -2.3197,
+        6.281,
+        766.4504
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.4604652,
+      "along_run_fraction": 0.3,
+      "anchor_run": 49.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        49.0
+      ],
+      "expected_module_origin_world_m": [
+        -7.841998,
+        16.453,
+        771.819753
+      ],
+      "host_run_length_m": 4.868217,
+      "host_wall_height_m": 20.328,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.7354652,
+      "nominal_vertical_containment_margin_m": 7.528,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.591970402,
+        -0.805959703
+      ],
+      "placement_id": "REC-CENTRAL-R49-A",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.805633712,
+        0.592413979
+      ],
+      "wall_anchor_world_m": [
+        -7.7976,
+        5.953,
+        771.8802
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 3.407752133,
+      "along_run_fraction": 0.7,
+      "anchor_run": 49.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        49.0
+      ],
+      "expected_module_origin_world_m": [
+        -9.410798,
+        16.313,
+        772.973353
+      ],
+      "host_run_length_m": 4.868217,
+      "host_wall_height_m": 20.468,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.7354652,
+      "nominal_vertical_containment_margin_m": 7.668,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.591970402,
+        -0.805959703
+      ],
+      "placement_id": "REC-CENTRAL-R49-B",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.805633712,
+        0.592413979
+      ],
+      "wall_anchor_world_m": [
+        -9.3664,
+        5.813,
+        773.0338
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.489217798,
+      "along_run_fraction": 0.3,
+      "anchor_run": 51.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        51.0
+      ],
+      "expected_module_origin_world_m": [
+        -15.277029,
+        15.8653,
+        776.348242
+      ],
+      "host_run_length_m": 4.964059,
+      "host_wall_height_m": 20.9157,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.764217798,
+      "nominal_vertical_containment_margin_m": 8.1157,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.471055352,
+        -0.882103653
+      ],
+      "placement_id": "REC-CENTRAL-R51-A",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.882140948,
+        0.470985507
+      ],
+      "wall_anchor_world_m": [
+        -15.2417,
+        5.3653,
+        776.4144
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 3.474841529,
+      "along_run_fraction": 0.7,
+      "anchor_run": 51.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.5,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        51.0
+      ],
+      "expected_module_origin_world_m": [
+        -17.028629,
+        15.7377,
+        777.283442
+      ],
+      "host_run_length_m": 4.964059,
+      "host_wall_height_m": 21.0433,
+      "motif_id": "B1-CENTRAL-W",
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "nominal_horizontal_containment_margin_m": 0.764217798,
+      "nominal_vertical_containment_margin_m": 8.2,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.471055352,
+        -0.882103653
+      ],
+      "placement_id": "REC-CENTRAL-R51-B",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "dense tall-window cluster separated by retained plain ivory piers",
+      "side": "outer public curve",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.882140948,
+        0.470985507
+      ],
+      "wall_anchor_world_m": [
+        -16.9933,
+        5.2377,
+        777.3496
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 4.68601163,
+      "along_run_fraction": 0.5,
+      "anchor_run": 93.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.0,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        93.0
+      ],
+      "expected_module_origin_world_m": [
+        -38.693901,
+        14.382,
+        686.756118
+      ],
+      "host_run_length_m": 9.372023,
+      "host_wall_height_m": 21.899,
+      "motif_id": "B1-PAV-W",
+      "nominal_bounds_m": [
+        5.4,
+        10.0
+      ],
+      "nominal_horizontal_containment_margin_m": 1.98601163,
+      "nominal_vertical_containment_margin_m": 5.0,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        -0.172016428,
+        -0.985094081
+      ],
+      "placement_id": "REC-PAV-NORTH-R93",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-END-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "one dominant complete pavilion group at the mapped north end",
+      "side": "north/end public face",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.985059442,
+        0.172214681
+      ],
+      "wall_anchor_world_m": [
+        -38.681,
+        4.382,
+        686.83
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.994432918,
+      "along_run_fraction": 0.5,
+      "anchor_run": 60.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 10.0,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        60.0
+      ],
+      "expected_module_origin_world_m": [
+        -5.615279,
+        14.2435,
+        796.49164
+      ],
+      "host_run_length_m": 5.988866,
+      "host_wall_height_m": 22.0375,
+      "motif_id": "B1-PAV-W",
+      "nominal_bounds_m": [
+        5.4,
+        10.0
+      ],
+      "nominal_horizontal_containment_margin_m": 0.294432918,
+      "nominal_vertical_containment_margin_m": 5.0,
+      "observation_ids": [
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.890389631,
+        0.455199193
+      ],
+      "placement_id": "REC-PAV-SOUTH-R60",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-SOUTH-END-OBSERVED-FACES",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "one dominant complete pavilion group at the mapped south end",
+      "side": "south/end observed face",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.455011028,
+        0.890485803
+      ],
+      "wall_anchor_world_m": [
+        -5.5485,
+        4.2435,
+        796.4575
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.462926519,
+      "along_run_fraction": 0.2,
+      "anchor_run": 94.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 1.2,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        94.0
+      ],
+      "expected_module_origin_world_m": [
+        -44.695865,
+        5.2536,
+        688.071601
+      ],
+      "host_run_length_m": 7.314633,
+      "host_wall_height_m": 22.2274,
+      "motif_id": "B1-BASE-O",
+      "nominal_bounds_m": [
+        1.25,
+        0.9
+      ],
+      "nominal_horizontal_containment_margin_m": 0.837926519,
+      "nominal_vertical_containment_margin_m": 0.75,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        -0.344871387,
+        -0.938649949
+      ],
+      "placement_id": "REC-BASE-R94-1",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-END-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "small opaque base-opening rhythm; window-versus-vent semantics unresolved",
+      "side": "north-view public base",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.938529709,
+        0.345198473
+      ],
+      "wall_anchor_world_m": [
+        -44.67,
+        4.0536,
+        688.142
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 3.657316298,
+      "along_run_fraction": 0.5,
+      "anchor_run": 94.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 1.2,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        94.0
+      ],
+      "expected_module_origin_world_m": [
+        -46.755365,
+        5.16,
+        688.829101
+      ],
+      "host_run_length_m": 7.314633,
+      "host_wall_height_m": 22.321,
+      "motif_id": "B1-BASE-O",
+      "nominal_bounds_m": [
+        1.25,
+        0.9
+      ],
+      "nominal_horizontal_containment_margin_m": 3.032316298,
+      "nominal_vertical_containment_margin_m": 0.75,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        -0.344871387,
+        -0.938649949
+      ],
+      "placement_id": "REC-BASE-R94-2",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-END-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "small opaque base-opening rhythm; window-versus-vent semantics unresolved",
+      "side": "north-view public base",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.938529709,
+        0.345198473
+      ],
+      "wall_anchor_world_m": [
+        -46.7295,
+        3.96,
+        688.8995
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 5.851706076,
+      "along_run_fraction": 0.8,
+      "anchor_run": 94.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 1.2,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        94.0
+      ],
+      "expected_module_origin_world_m": [
+        -48.814865,
+        5.0664,
+        689.586601
+      ],
+      "host_run_length_m": 7.314633,
+      "host_wall_height_m": 22.4146,
+      "motif_id": "B1-BASE-O",
+      "nominal_bounds_m": [
+        1.25,
+        0.9
+      ],
+      "nominal_horizontal_containment_margin_m": 0.837926519,
+      "nominal_vertical_containment_margin_m": 0.75,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        -0.344871387,
+        -0.938649949
+      ],
+      "placement_id": "REC-BASE-R94-3",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-END-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "small opaque base-opening rhythm; window-versus-vent semantics unresolved",
+      "side": "north-view public base",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.938529709,
+        0.345198473
+      ],
+      "wall_anchor_world_m": [
+        -48.789,
+        3.8664,
+        689.657
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 1.846447573,
+      "along_run_fraction": 0.2,
+      "anchor_run": 96.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 1.2,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        96.0
+      ],
+      "expected_module_origin_world_m": [
+        -53.080742,
+        5.0144,
+        691.327142
+      ],
+      "host_run_length_m": 9.232238,
+      "host_wall_height_m": 22.4666,
+      "motif_id": "B1-BASE-O",
+      "nominal_bounds_m": [
+        1.25,
+        0.9
+      ],
+      "nominal_horizontal_containment_margin_m": 1.221447573,
+      "nominal_vertical_containment_margin_m": 0.75,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        -0.425893327,
+        -0.904773383
+      ],
+      "placement_id": "REC-BASE-R96-1",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-END-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "small opaque base-opening rhythm; window-versus-vent semantics unresolved",
+      "side": "north-view public base",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.9048727,
+        0.425682273
+      ],
+      "wall_anchor_world_m": [
+        -53.0488,
+        3.8144,
+        691.395
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 4.616118933,
+      "along_run_fraction": 0.5,
+      "anchor_run": 96.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 1.2,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        96.0
+      ],
+      "expected_module_origin_world_m": [
+        -55.586942,
+        5.021,
+        692.506142
+      ],
+      "host_run_length_m": 9.232238,
+      "host_wall_height_m": 22.46,
+      "motif_id": "B1-BASE-O",
+      "nominal_bounds_m": [
+        1.25,
+        0.9
+      ],
+      "nominal_horizontal_containment_margin_m": 3.991118933,
+      "nominal_vertical_containment_margin_m": 0.75,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        -0.425893327,
+        -0.904773383
+      ],
+      "placement_id": "REC-BASE-R96-2",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-END-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "small opaque base-opening rhythm; window-versus-vent semantics unresolved",
+      "side": "north-view public base",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.9048727,
+        0.425682273
+      ],
+      "wall_anchor_world_m": [
+        -55.555,
+        3.821,
+        692.574
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 7.385790292,
+      "along_run_fraction": 0.8,
+      "anchor_run": 96.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 1.2,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        96.0
+      ],
+      "expected_module_origin_world_m": [
+        -58.093142,
+        5.0276,
+        693.685142
+      ],
+      "host_run_length_m": 9.232238,
+      "host_wall_height_m": 22.4534,
+      "motif_id": "B1-BASE-O",
+      "nominal_bounds_m": [
+        1.25,
+        0.9
+      ],
+      "nominal_horizontal_containment_margin_m": 1.221447573,
+      "nominal_vertical_containment_margin_m": 0.75,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        -0.425893327,
+        -0.904773383
+      ],
+      "placement_id": "REC-BASE-R96-3",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-END-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "small opaque base-opening rhythm; window-versus-vent semantics unresolved",
+      "side": "north-view public base",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        -0.9048727,
+        0.425682273
+      ],
+      "wall_anchor_world_m": [
+        -58.0612,
+        3.8276,
+        693.753
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 8.046298992,
+      "along_run_fraction": 0.73,
+      "anchor_run": 6.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 1.45,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        6.0
+      ],
+      "expected_module_origin_world_m": [
+        -55.338575,
+        6.06105,
+        712.102548
+      ],
+      "host_run_length_m": 11.022327,
+      "host_wall_height_m": 21.66995,
+      "motif_id": "B1-DOOR-BLUE",
+      "nominal_bounds_m": [
+        1.35,
+        2.75
+      ],
+      "nominal_horizontal_containment_margin_m": 2.301028394,
+      "nominal_vertical_containment_margin_m": 0.075,
+      "observation_ids": [
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        -0.887936071,
+        0.459966884
+      ],
+      "placement_id": "REC-DOOR-BLUE-R06",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-END-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "isolated personnel/utility door, explicitly not the main entrance",
+      "side": "north-view public service face",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.46033835,
+        0.887743546
+      ],
+      "wall_anchor_world_m": [
+        -55.27198,
+        4.61105,
+        712.06805
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 3.618240076,
+      "along_run_fraction": 0.5,
+      "anchor_run": 9.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 3.45,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        9.0
+      ],
+      "expected_module_origin_world_m": [
+        -46.869099,
+        8.7895,
+        716.591401
+      ],
+      "host_run_length_m": 7.23648,
+      "host_wall_height_m": 20.9415,
+      "motif_id": "B1-BAND",
+      "nominal_bounds_m": [
+        4.2,
+        0.38
+      ],
+      "nominal_horizontal_containment_margin_m": 1.518240076,
+      "nominal_vertical_containment_margin_m": 3.26,
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "outward_normal_world_xz": [
+        0.452007232,
+        0.892014272
+      ],
+      "placement_id": "REC-BAND-R09",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-NORTH-LINK-CANDIDATE",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "finite muted-rose organizing accent with finished terminals, not a continuous belt",
+      "side": "public wing/link",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.891870062,
+        -0.452291712
+      ],
+      "wall_anchor_world_m": [
+        -46.903,
+        5.3395,
+        716.5245
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.453063238,
+      "along_run_fraction": 0.5,
+      "anchor_run": 52.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 3.45,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        52.0
+      ],
+      "expected_module_origin_world_m": [
+        -17.230362,
+        8.449,
+        780.256443
+      ],
+      "host_run_length_m": 4.906126,
+      "host_wall_height_m": 21.282,
+      "motif_id": "B1-BAND",
+      "nominal_bounds_m": [
+        4.2,
+        0.38
+      ],
+      "nominal_horizontal_containment_margin_m": 0.353063238,
+      "nominal_vertical_containment_margin_m": 3.26,
+      "observation_ids": [
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.884831456,
+        0.465911252
+      ],
+      "placement_id": "REC-BAND-R52",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-SOUTH-END-OBSERVED-FACES",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "finite muted-rose organizing accent with finished terminals, not a continuous belt",
+      "side": "south/end observed face",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.465948037,
+        0.884812086
+      ],
+      "wall_anchor_world_m": [
+        -17.164,
+        4.999,
+        780.2215
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.65088556,
+      "along_run_fraction": 0.5,
+      "anchor_run": 56.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 3.45,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        56.0
+      ],
+      "expected_module_origin_world_m": [
+        -14.500626,
+        7.858,
+        789.333938
+      ],
+      "host_run_length_m": 5.301771,
+      "host_wall_height_m": 21.873,
+      "motif_id": "B1-BAND",
+      "nominal_bounds_m": [
+        4.2,
+        0.38
+      ],
+      "nominal_horizontal_containment_margin_m": 0.55088556,
+      "nominal_vertical_containment_margin_m": 3.26,
+      "observation_ids": [
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.8883443,
+        0.459177966
+      ],
+      "placement_id": "REC-BAND-R56",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-SOUTH-END-OBSERVED-FACES",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "finite muted-rose organizing accent with finished terminals, not a continuous belt",
+      "side": "south/end observed face",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.459469099,
+        0.888193755
+      ],
+      "wall_anchor_world_m": [
+        -14.434,
+        4.408,
+        789.2995
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    },
+    {
+      "along_run_center_m": 2.391843222,
+      "along_run_fraction": 0.5,
+      "anchor_run": 58.0,
+      "asset_kind": "module_atlas",
+      "center_height_above_base_m": 3.45,
+      "complete_motif": true,
+      "completed_elevation": false,
+      "evidence_status": "recognizable_reference_derived_production_inference",
+      "exact_ordered_runs": [
+        58.0
+      ],
+      "expected_module_origin_world_m": [
+        -10.521315,
+        7.754,
+        792.958033
+      ],
+      "host_run_length_m": 4.783686,
+      "host_wall_height_m": 21.977,
+      "motif_id": "B1-BAND",
+      "nominal_bounds_m": [
+        4.2,
+        0.38
+      ],
+      "nominal_horizontal_containment_margin_m": 0.291843222,
+      "nominal_vertical_containment_margin_m": 3.26,
+      "observation_ids": [
+        "B1-SV03"
+      ],
+      "outward_normal_world_xz": [
+        -0.884201179,
+        0.467106279
+      ],
+      "placement_id": "REC-BAND-R58",
+      "placement_lifecycle": "pending_independent_recognizability_review",
+      "region": "PUBLIC-SOUTH-END-OBSERVED-FACES",
+      "reversible": true,
+      "selected_scale": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "selection_rationale": "finite muted-rose organizing accent with finished terminals, not a continuous belt",
+      "side": "south/end observed face",
+      "surveyed_cadence": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_dimensions": false,
+      "surveyed_scale": false,
+      "surveyed_sequence": false,
+      "tangent_world_xz": [
+        0.467003853,
+        0.884255281
+      ],
+      "wall_anchor_world_m": [
+        -10.455,
+        4.304,
+        792.923
+      ],
+      "wall_offset_m": 0.075,
+      "whole_building_accepted": false
+    }
+  ],
+  "protected_scope": {
+    "protected_geometry": [
+      "runs_57_59_61",
+      "runs_62_92",
+      "runs_97_109",
+      "inner_ring",
+      "w1222720021_tower",
+      "entrance_canopy_emblems",
+      "massing_roof_source_geometry",
+      "collision_navigation_spray_terrain_generated_data",
+      "other_buildings",
+      "r133351"
+    ],
+    "protected_runs": [
+      57.0,
+      59.0,
+      61.0,
+      62.0,
+      63.0,
+      64.0,
+      65.0,
+      66.0,
+      67.0,
+      68.0,
+      69.0,
+      70.0,
+      71.0,
+      72.0,
+      73.0,
+      74.0,
+      75.0,
+      76.0,
+      77.0,
+      78.0,
+      79.0,
+      80.0,
+      81.0,
+      82.0,
+      83.0,
+      84.0,
+      85.0,
+      86.0,
+      87.0,
+      88.0,
+      89.0,
+      90.0,
+      91.0,
+      92.0,
+      97.0,
+      98.0,
+      99.0,
+      100.0,
+      101.0,
+      102.0,
+      103.0,
+      104.0,
+      105.0,
+      106.0,
+      107.0,
+      108.0,
+      109.0
+    ]
+  },
+  "receiver_contract": {
+    "child_count": 3,
+    "collision_face_vertices": 660,
+    "collision_navigation_spray_owned_by_composition": false,
+    "composition_meshes": 354,
+    "composition_surfaces": 354,
+    "composition_triangles": 4338,
+    "generated_receiver_meshes": 1,
+    "generated_receiver_surfaces": 1,
+    "generated_receiver_triangles": 220
+  },
+  "receiver_key": "building:r16681702:wall",
+  "registry_path": "res://game/resources/facades/building_1_recognizability_placements.json",
+  "registry_sha256": "affc41797999b83610352c5945c21d5206167a67bdc1aa5134a3021dd280df05",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "pending_independent_recognizability_art_review_not_self_accepted",
+  "runtime_after_recognizability_composition": {
+    "meshes": 1278,
+    "records": 729,
+    "shapes": 466,
+    "static_bodies": 466,
+    "surfaces": 1288,
+    "triangles": 55067
+  },
+  "runtime_before_recognizability_composition": {
+    "meshes": 925,
+    "records": 729,
+    "shapes": 466,
+    "static_bodies": 466,
+    "surfaces": 935,
+    "triangles": 50791
+  },
+  "same_pose_before_after_pairs": [
+    [
+      "01-before-ordinary-public-curve",
+      "02-after-ordinary-public-curve"
+    ],
+    [
+      "03-before-ordinary-north-end",
+      "04-after-ordinary-north-end"
+    ],
+    [
+      "05-before-whole-building",
+      "06-after-whole-building"
+    ]
+  ],
+  "schema_version": "ti.building-1-recognizability-live-evidence/1",
+  "source_key": "r16681702",
+  "truth_boundary": {
+    "as_built_fidelity_claimed": false,
+    "completed_elevation": false,
+    "goal": "ordinary_third_person_recognizability_not_surveyed_reconstruction",
+    "reversible": true,
+    "role": "recognizable_reference_derived_production_inference",
+    "surveyed_cadence": false,
+    "surveyed_coordinates": false,
+    "surveyed_count": false,
+    "surveyed_dimensions": false,
+    "surveyed_scale": false,
+    "surveyed_sequence": false,
+    "whole_building_accepted": false
+  },
+  "validity_inspection_only": "Independent reviewer must judge ordinary-distance recognizability, complete motif read, field continuity, contact/containment, changed light, and protected-scope noninterference. Executor art acceptance is prohibited.",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ],
+  "world_builder_sha256": "e3d0ca4b6c9d39a444aa5b55592d63a32e7794bae3e12f1f3fac125243839d42"
+}

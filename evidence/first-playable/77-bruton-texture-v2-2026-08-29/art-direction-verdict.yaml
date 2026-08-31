@@ -1,0 +1,219 @@
+schema_version: codex.building-texture-art-review/1
+review:
+  date: '2026-08-29'
+  reviewer: '/root/hawkins_texture_v2_review'
+  independent_of_generation: true
+  stage: candidate_source_and_proof_only
+  exact_receiver_integrated: false
+  reference:
+    path: '/private/tmp/IMG_7170-reference.png'
+    dimensions: [5712, 4284]
+    sha256: '6b6a0f95902bd48c57c4f69b6bd7b97346c672d71c1b300d394170f6447db5cd'
+contract:
+  asset_kind: architectural_pattern_tile
+  region: hawkins_main_left_six_story_upper_plane
+  cell: one_complete_paired_window_bay_by_one_upper_residential_story
+  canonical_motifs: [W-P]
+  allowed_border_fields: [P-F, S-H]
+  edge_fragments_allowed: false
+  reject_if:
+    - partial_or_resized_architectural_motif
+    - non_homogeneous_border_field
+    - invented_jamb_frame_column_panel_or_rail
+    - visible_macro_grid_band_or_clone_echo
+    - numeric_edge_screen_failure
+batch_verdict:
+  status: fail_no_candidates_pass_all_application_stage_hard_gates_correction_budget_exhausted
+  correction_budget: exhausted
+  ranked_candidates: []
+  selected_candidate: null
+  selected_for_receiver_trial: null
+  exact_godot_receiver: unreviewed
+  whole_object_resemblance: unreviewed
+  integrated_overall_acceptance: unreviewed
+  production_method_change:
+    status: proposed_not_implemented
+    before: 'One generated square albedo encodes fluted cladding plus paired window and repeats as the facade cell.'
+    after: 'One deterministic homogeneous fluted material tile plus one separately authored complete W-P/S-H facade module or atlas element placed explicitly per bay and story.'
+    approval_required_before_implementation: true
+candidates:
+  - id: candidate-01
+    source:
+      path: candidates/candidate-01-source.png
+      dimensions: [1254, 1254]
+      sha256: 'dd6b5f9633faabc3cd1e03052c97e6832290d67d1987b49e890831ee1d7c313c'
+    proofs: proofs/candidate-01
+    numeric_edge_screen:
+      verdict: pass_candidate_screen
+      x_mae: 0.0103825
+      x_rmse: 0.0127579
+      y_mae: 0.0222243
+      y_rmse: 0.0269661
+    semantic_repeat:
+      verdict: fail
+      canonical_window_survives_translation: true
+      reasons:
+        - top_and_bottom_borders_mix_fluted_and_smooth_fields
+        - panel_termination_lines_touch_top_and_bottom_edges
+        - repeated_smooth_columns_and_horizontal_join_bands_change_declared_panel_cadence
+    material_facade_resemblance:
+      verdict: fail
+      reasons:
+        - smooth_story_height_center_columns_do_not_match_reference_fluted_pier_and_spandrel_grammar
+    albedo_neutrality:
+      verdict: fail
+      reasons:
+        - baked_frame_and_reveal_shadow
+        - fixed_glass_panel_and_rib_shading
+    macro_repetition:
+      verdict: fail
+      reasons:
+        - visible_vertical_column_grid
+        - synchronized_horizontal_bands
+        - cloned_opening_echo
+    physical_scale_and_map_channel_coherence: unreviewed
+    exact_godot_receiver: unreviewed
+    whole_object_resemblance: unreviewed
+    rank_eligible: false
+    candidate_stage_overall: fail
+  - id: candidate-02
+    source:
+      path: candidates/candidate-02-source.png
+      dimensions: [1254, 1254]
+      sha256: '9f62ee807cbf92047585b186741281f81367d4851b3ae78a206b54ff3d19bd6d'
+    proofs: proofs/candidate-02
+    numeric_edge_screen:
+      verdict: fail
+      x_mae: 0.0636301
+      x_rmse: 0.0646907
+      y_mae: 0.0137484
+      y_rmse: 0.0175768
+    semantic_repeat:
+      verdict: fail
+      canonical_window_survives_translation: true
+      reasons:
+        - undeclared_side_members_extend_below_glazing
+        - doubled_lower_horizontal_rails_form_false_balcony_or_frame_module
+        - left_right_material_join_is_not_seam_safe
+    material_facade_resemblance:
+      verdict: fail
+      reasons:
+        - heavy_balcony_like_surround_conflicts_with_reference_window_spandrel_grammar
+    albedo_neutrality:
+      verdict: fail
+      reasons:
+        - strong_baked_recess_rail_and_frame_shadows
+        - fixed_glass_and_rib_shading
+    macro_repetition:
+      verdict: fail
+      reasons:
+        - false_rail_module_dominates_grid
+        - visible_vertical_join_and_clone_echo
+    physical_scale_and_map_channel_coherence: unreviewed
+    exact_godot_receiver: unreviewed
+    whole_object_resemblance: unreviewed
+    rank_eligible: false
+    candidate_stage_overall: fail
+  - id: candidate-03
+    source:
+      path: candidates/candidate-03-source.png
+      dimensions: [1254, 1254]
+      sha256: '8f307893b0ce6bb8ce4d08f9e875bac68f049c8a78cf17b80d69dbda6fe49956'
+    proofs: proofs/candidate-03
+    numeric_edge_screen:
+      verdict: fail
+      x_mae: 0.0310525
+      x_rmse: 0.0322592
+      y_mae: 0.00686222
+      y_rmse: 0.0102767
+    semantic_repeat:
+      verdict: fail
+      canonical_window_survives_translation: true
+      reasons:
+        - pale_panels_have_undeclared_side_returns_and_ledge_lines
+        - extra_frame_fragment_panel_motif_changes_declared_cadence
+        - left_right_material_join_is_not_seam_safe
+    material_facade_resemblance:
+      verdict: fail
+      reasons:
+        - window_is_too_small_and_squat_for_reference_upper_opening_rhythm
+        - large_blank_field_and_recessed_panel_motif_do_not_match_reference_local_bay_grammar
+    albedo_neutrality:
+      verdict: fail
+      reasons:
+        - baked_recess_and_frame_shadow
+        - fixed_glass_and_rib_highlight_gradient
+    macro_repetition:
+      verdict: fail
+      reasons:
+        - sparse_cloned_window_grid
+        - persistent_vertical_field_discontinuity
+    physical_scale_and_map_channel_coherence: unreviewed
+    exact_godot_receiver: unreviewed
+    whole_object_resemblance: unreviewed
+    rank_eligible: false
+    candidate_stage_overall: fail
+  - id: candidate-04-correction
+    correction_count: 1
+    generation_mode: precise_object_edit
+    edited_from: candidate-01
+    source:
+      path: candidates/candidate-04-correction-source.png
+      dimensions: [1254, 1254]
+      sha256: '2935ae920722948a1dfb35c6ae837c600c53deb4a006370dfb131eba79a4d4cb'
+    proofs: proofs/candidate-04-correction
+    numeric_edge_screen:
+      verdict: pass_candidate_screen
+      x_mae: 0.0120295
+      x_rmse: 0.0144214
+      y_mae: 0.013739
+      y_rmse: 0.0169552
+    semantic_repeat:
+      verdict: pass
+      canonical_window_survives_translation: true
+      reasons:
+        - exactly_one_complete_W-P_per_tile
+        - no_join_creates_resizes_deletes_merges_or_splits_a_motif
+        - no_invented_facade_element_or_edge_fragment
+    border_field_continuity:
+      verdict: fail
+      reasons:
+        - half_x_and_half_xy_expose_centered_vertical_value_or_phase_discontinuity
+        - half_y_half_xy_and_borderless_3x3_expose_horizontal_join_or_exposure_band
+        - numeric_pixel_similarity_does_not_make_the_field_visually_phase_neutral
+    material_facade_resemblance:
+      verdict: fail
+      reasons:
+        - opening_occupies_only_roughly_one_third_of_repeat_width
+        - inter_row_fluted_field_is_too_expansive_for_reference_local_cadence
+        - pale_inter_story_spandrel_rhythm_is_absent
+    albedo_neutrality:
+      verdict: fail
+      reasons:
+        - broad_baked_background_brightness_variation
+        - fixed_frame_reveal_glass_and_rib_shading
+    macro_repetition:
+      verdict: fail
+      reasons:
+        - synchronized_horizontal_exposure_bands
+        - broad_vertical_bay_brightness_columns
+        - cloned_opening_grid_is_not_subordinate
+    physical_scale_and_map_channel_coherence: unreviewed
+    exact_godot_receiver: unreviewed
+    whole_object_resemblance: unreviewed
+    rank_eligible: false
+    candidate_stage_overall: fail
+evidence_reviewed:
+  per_candidate:
+    - source
+    - borderless_3x3
+    - boundary_overlay_3x3
+    - half_x_roll
+    - half_y_roll
+    - half_xy_roll
+    - macro_repeat_8x8
+  proof_hash_sources:
+    - proofs/candidate-01/proof-report.json
+    - proofs/candidate-02/proof-report.json
+    - proofs/candidate-03/proof-report.json
+    - proofs/candidate-04-correction/proof-report.json

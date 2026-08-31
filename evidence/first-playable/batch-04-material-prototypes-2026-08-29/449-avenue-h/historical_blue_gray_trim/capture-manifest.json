@@ -1,0 +1,101 @@
+{
+  "canonical_name": "449 Avenue H",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_04_material_proof_capture.gd",
+  "captures": [
+    {
+      "bytes": 153556,
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "sha256": "6707a7a096c95d70713954cf4ac49c4cb29bff50427b85fc125bd44a591a043d",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_proof"
+    },
+    {
+      "bytes": 85984,
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "sha256": "34fecca787f645f57232a1a76658e6322ca72fc7c30c51f2a721d6b458b73619",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_scale_proof"
+    },
+    {
+      "bytes": 87400,
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "sha256": "ec619905ecc46845acac254159050428578cf1779483c7a2e1f06c3ba574eb18",
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_proof"
+    }
+  ],
+  "contains_facade_scale_motifs": false,
+  "display_driver": "macOS",
+  "evidence_role": "controlled_material_prototype_not_in_game_acceptance",
+  "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "godot_version": "4.7.2-stable (official)",
+  "material_path": "res://game/resources/materials/world/449_avenue_h/449_h_historical_trim.tres",
+  "material_role": "historical_blue_gray_trim",
+  "material_sha256": "10e22c5ce4a5f43140a383b5387e8b83e9eeadcd7672b77a1613f88f22832c68",
+  "observed_region_scope": "May 2011 historical north/northeast long-elevation siding and blue-gray trim fields only",
+  "one_local_unit_m": 1.0,
+  "proof_panel_size_m": [
+    4.8,
+    3.2,
+    0.12
+  ],
+  "proof_primary_scale_m": 0.8,
+  "proof_receiver": "controlled_flat_proof_panel",
+  "prototype_status": "historical_reference_prototype_only",
+  "receiver_key": "building:w34313512:wall",
+  "registry_sha256": "97c9e4e07b0680a3c825923cbd0433536e98d9dcc5d511279249a86e2163aac9",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_visual_review_not_self_accepted",
+  "runtime_attachment": false,
+  "scale_status": "may_2011_finish_only_unmeasured_proof_only",
+  "schema_version": "ti.batch-04-material-proof-evidence/1",
+  "source_key": "w34313512",
+  "temporal_status": "May 2011 building-visible reference; September 2025 cleared redevelopment lot; never current/live",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

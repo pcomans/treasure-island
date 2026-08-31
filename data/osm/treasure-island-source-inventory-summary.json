@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "source": {
+    "raw_file": "data/osm/treasure-island-2026-08-27.osm",
+    "raw_sha256": "3b6f6af31a1c82de3fa51fcbc02fe7e3723fdb629c948ae6523ef46c157b4549",
+    "proper_file": "data/osm/treasure-island-proper-2026-08-27.osm.pbf",
+    "proper_sha256": "13984ed8f70c9d5d39d4ba14f83c7307eb75428af7b07df5774df29bda4ccaf9",
+    "playable_boundary": "w26767313"
+  },
+  "status": "source inventory only; no derived game geometry exists",
+  "one_row_per_source_key": true,
+  "counts": {
+    "total_unique_rows": 739,
+    "playable_unique_rows": 735,
+    "context_unique_rows": 4,
+    "playable_category_memberships": {
+      "land_boundary": 1,
+      "terrain_shoreline": 22,
+      "roads_paths": 427,
+      "major_area": 80,
+      "building": 213,
+      "building_part": 2
+    },
+    "playable_rows_with_multiple_categories": 10,
+    "building_rows_missing_height_and_levels": 27
+  },
+  "validation": {
+    "all_rows_derived_world_status": "not_started",
+    "duplicate_source_keys": 0,
+    "ybi_in_playable_scope": false,
+    "shared_coastline_requires_ti_clip_or_composite": "w29399800",
+    "context_ids": [
+      "w26767311",
+      "w1011568818",
+      "r13543937",
+      "r13543938"
+    ]
+  }
+}

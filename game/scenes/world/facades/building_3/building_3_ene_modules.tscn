@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[node name="Building3ENEModuleLibrary" type="Node3D"]
+
+[node name="B3_HANGAR_DOOR" type="Node3D" parent="."]
+metadata/motif_id = "B3-HANGAR-DOOR"
+metadata/complete_motif = true
+metadata/description = "One complete opaque dark-teal hangar door with an uninterrupted pale surround."
+
+[node name="B3_BAND" type="Node3D" parent="."]
+metadata/motif_id = "B3-BAND"
+metadata/complete_motif = true
+metadata/description = "One complete shallow horizontal band terminating in ordinary field before both corners."

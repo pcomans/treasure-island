@@ -1,0 +1,9 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+renderer=Metal 4.0 Forward+
+device=Apple M1 Pro (Apple7)
+command=build/mac/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable -- --mac-export-smoke
+exit=0 wall=12.23s
+MAC_EXPORT_WORLD_READY: hash=5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa chunks=38/38 coverage=735+4 meshes=701 triangles=21210 bodies=466 shapes=466 load_ms=1374
+PASS: packaged main scene reached full world_ready and enabled the player
+
+The ordinary non-headless process opened and closed automatically without user interaction. No screenshot or visual-quality claim is made. No errors or leak warnings were emitted.

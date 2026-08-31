@@ -1,0 +1,255 @@
+{
+  "asset_kinds": {
+    "architectural_pattern_tile": [],
+    "homogeneous_material_tile": [
+      "W34313520-MAT-PALE"
+    ],
+    "module_atlas": [
+      "W34313520-BAY"
+    ],
+    "unique_elevation": []
+  },
+  "bay_proof": {
+    "field_or_backing_meshes": 0,
+    "internal_mullion_cadence": "unknown_not_encoded",
+    "module_meshes": 15,
+    "nominal_bounds_m": [
+      6.8,
+      9.4
+    ],
+    "tier_count": 3
+  },
+  "blocked_claims": [
+    "exact placement, count or cadence",
+    "surveyed dimensions or scale",
+    "runs 20..21 and inset wing",
+    "non-SSE sides",
+    "complete SSE elevation",
+    "whole-building resemblance or acceptance"
+  ],
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/w34313520_standalone_prototype_capture.gd",
+  "captures": [
+    {
+      "bytes": 97609,
+      "camera_position_m": [
+        -9.19999980926514,
+        5.5,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-neutral-field-close.png",
+      "id": "01-neutral-field-close",
+      "label": "W34313520-MAT-PALE",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.790927,
+        "minimum": 0.1325,
+        "range": 0.815419,
+        "sample_count": 4000
+      },
+      "scope_note": "0.95 m proof scale, uncertainty 0.35–1.80 m · motif-free host field",
+      "sha256": "bea4fc4e175ed1370fc3979d800a5016bf5ea7371e32f5a63ef115d741f5be62",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "neutral_close_material"
+    },
+    {
+      "bytes": 150082,
+      "camera_position_m": [
+        0.0,
+        5.40000009536743,
+        14.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-complete-bay-neutral.png",
+      "id": "02-complete-bay-neutral",
+      "label": "W34313520-BAY",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.624173,
+        "minimum": 0.022428,
+        "range": 0.92549,
+        "sample_count": 4000
+      },
+      "scope_note": "complete three-tier motif · full frames · host field supplies pale pier space",
+      "sha256": "76eb27cd0917c182b361425c0740f03f6eab4ada177c591e2067affd8a1b6618",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "complete_module_neutral"
+    },
+    {
+      "bytes": 143902,
+      "camera_position_m": [
+        8.0,
+        6.40000009536743,
+        14.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-complete-bay-oblique.png",
+      "id": "03-complete-bay-oblique",
+      "label": "W34313520-BAY",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.56096,
+        "minimum": 0.007576,
+        "range": 0.940343,
+        "sample_count": 4000
+      },
+      "scope_note": "15 module meshes · zero field/backing meshes · mullion cadence left unknown",
+      "sha256": "733a51cc52a02e24873244dc3da453e6ba4370edccb2a0a84ceee2f5e5516847",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "complete_module_oblique_depth"
+    },
+    {
+      "bytes": 107290,
+      "camera_position_m": [
+        0.0,
+        4.40000009536743,
+        34.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "04-ordinary-gameplay-scale.png",
+      "id": "04-ordinary-gameplay-scale",
+      "label": "SSE FAMILY EXEMPLAR",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.352028,
+        "minimum": 0.022428,
+        "range": 0.92549,
+        "sample_count": 4000
+      },
+      "scope_note": "one illustrative standalone motif on continuous field · not a proposed placement",
+      "sha256": "a409e6b325c46e08c52706a4099f5d746ccd206434cd42e49366e518821ded6a",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_readable_scale"
+    },
+    {
+      "bytes": 92225,
+      "camera_position_m": [
+        0.0,
+        8.80000019073486,
+        43.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "05-macro-repeat-span.png",
+      "id": "05-macro-repeat-span",
+      "label": "W34313520-MAT-PALE",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.300991,
+        "minimum": 0.022428,
+        "range": 0.92549,
+        "sample_count": 4000
+      },
+      "scope_note": "30 m continuous aperiodic field · no finite facade motif period or phase reset",
+      "sha256": "44318fc0ab9a6c3b6e4feff6688f0273b0abfcee0d9d68ccbe4209728e97a948",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "macro_repeat_and_alias_control"
+    },
+    {
+      "bytes": 143035,
+      "camera_position_m": [
+        -14.0,
+        8.0,
+        34.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "06-changed-light-oblique.png",
+      "id": "06-changed-light-oblique",
+      "label": "FIELD + COMPLETE BAY",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.213474,
+        "minimum": 0.007576,
+        "range": 0.940343,
+        "sample_count": 4000
+      },
+      "scope_note": "changed sun exposes roughness, relief and bounded module depth",
+      "sha256": "fa32e3a35bcdd25d7e6b16fda06e3e125bd07f26792741ddf2429ecfa67c7e72",
+      "sun_rotation_degrees": [
+        -15.9999990463257,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_finish_and_depth"
+    }
+  ],
+  "display_driver": "macOS",
+  "evidence_role": "controlled native standalone field and complete module proof; not receiver placement, calibration, gameplay-world, elevation or whole-building evidence",
+  "exact_receiver_calibration": false,
+  "field_repeat_proof": {
+    "finite_facade_motif_period": "none_by_design",
+    "mapping": "continuous meter-space aperiodic host field",
+    "span_m": 30.0
+  },
+  "godot_version": "4.7.2-stable (official)",
+  "observed_scope": "long SSE outer elevation family only; runs 6..10 are eligibility bounds, not placements",
+  "one_local_unit_m": 1.0,
+  "proof_dimensions_m": [
+    30.0,
+    11.0
+  ],
+  "receiver_key": "building:w34313520:wall",
+  "registry_path": "res://game/resources/facades/w34313520_standalone_prototypes.json",
+  "registry_sha256": "ab80f0cd0424c22f7f24e5fc82211353e9aee7c95bea4903022681a48c5620a4",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_standalone_art_review_not_self_accepted",
+  "runtime_attachment": false,
+  "scene_path": "res://game/scenes/world/facades/batch_06/w34313520_standalone_prototype_set.tscn",
+  "scene_sha256": "4d0ee0e79ea6fd5a7e85b21cdf4a103d125818626b6c97875737cad44cc65785",
+  "schema_version": "ti.w34313520-standalone-prototype-evidence/1",
+  "source_key": "w34313520",
+  "topology": {
+    "collision_nodes": 0,
+    "module_meshes": 15,
+    "module_surfaces": 15,
+    "module_triangles": 180,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "total_meshes": 16,
+    "total_surfaces": 16,
+    "total_triangles": 192
+  },
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

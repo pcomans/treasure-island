@@ -1,0 +1,146 @@
+{
+  "checks": [
+    {
+      "name": "source_rows",
+      "result": "pass",
+      "threshold": 739,
+      "value": 739
+    },
+    {
+      "name": "playable_rows",
+      "result": "pass",
+      "threshold": 735,
+      "value": 735
+    },
+    {
+      "name": "context_rows",
+      "result": "pass",
+      "threshold": 4,
+      "value": 4
+    },
+    {
+      "name": "unresolved_rows",
+      "result": "pass",
+      "threshold": 0,
+      "value": 0
+    },
+    {
+      "name": "duplicate_source_keys",
+      "result": "pass",
+      "threshold": 0,
+      "value": 0
+    },
+    {
+      "name": "building_height_rules",
+      "result": "pass",
+      "threshold": {
+        "default_6m": 27,
+        "osm_height": 176,
+        "osm_levels": 10
+      },
+      "value": {
+        "default_6m": 27,
+        "osm_height": 176,
+        "osm_levels": 10
+      }
+    },
+    {
+      "name": "building_part_height_rules",
+      "result": "pass",
+      "threshold": {
+        "default_6m": 0,
+        "osm_height": 1,
+        "osm_levels": 1
+      },
+      "value": {
+        "default_6m": 0,
+        "osm_height": 1,
+        "osm_levels": 1
+      }
+    },
+    {
+      "name": "bridge_member_ways",
+      "result": "pass",
+      "threshold": 23,
+      "value": 23
+    },
+    {
+      "name": "maximum_pre_serialization_area_delta_m2",
+      "result": "pass",
+      "threshold": 0.01,
+      "value": 8.731149137020111e-10
+    },
+    {
+      "name": "maximum_post_serialization_area_delta_m2",
+      "result": "pass",
+      "threshold": 15.46667689533369,
+      "value": 2.0395368557074107
+    },
+    {
+      "name": "maximum_post_serialization_normalized_error",
+      "result": "pass",
+      "threshold": 1,
+      "value": 0.500268232846368
+    },
+    {
+      "name": "road_batch_topology_repairs",
+      "result": "pass",
+      "threshold": "every repair individually bounded and revalidated",
+      "value": 79
+    },
+    {
+      "name": "playable_surface_maximum_bias_deviation_m",
+      "result": "pass",
+      "threshold": 0.01,
+      "value": 0.003
+    },
+    {
+      "name": "exterior_foundation_maximum_positive_gap_m",
+      "result": "pass",
+      "threshold": 0,
+      "value": 0
+    },
+    {
+      "name": "building_roof_flatness_and_height",
+      "result": "pass",
+      "threshold": 0.001,
+      "value": {
+        "maximum_height_deviation_m": 0,
+        "maximum_roof_elevation_range_m": 0
+      }
+    },
+    {
+      "name": "pavement_skin_source_classification",
+      "result": "pass",
+      "threshold": {
+        "pedestrian": 219,
+        "total": 427,
+        "vehicle": 208
+      },
+      "value": {
+        "pedestrian": 219,
+        "vehicle": 208
+      }
+    },
+    {
+      "name": "pavement_skin_vehicle_precedence_overlap_m2",
+      "result": "pass",
+      "threshold": 0,
+      "value": 0
+    },
+    {
+      "name": "pavement_skin_pedestrian_relative_luminance_difference",
+      "result": "pass",
+      "threshold": 0.12,
+      "value": 1.7
+    },
+    {
+      "name": "paved_area_source_count",
+      "result": "pass",
+      "threshold": 17,
+      "value": 17
+    }
+  ],
+  "result": "pass",
+  "schema_version": "ti.godot-world/2"
+}

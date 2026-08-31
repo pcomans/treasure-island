@@ -1,0 +1,1684 @@
+{
+  "schema_version": "ti.building-1-detached-exact-receiver-calibration/1",
+  "status": "detached_calibration_ready_for_independent_exact_receiver_art_review_not_self_accepted",
+  "evidence_role": "exact detached MAT-IVORY field scale/chain-phase study on outer runs 21..51 plus two complete calibration-only CENTRAL/PAV fit studies; not actual-world anchors, real placements, count, cadence, sequence, completed elevation, or live attachment",
+  "target": {
+    "canonical_identity": "Treasure Island Administration Building 1 / Treasure Island Museum",
+    "source_key": "r16681702",
+    "receiver_key": "building:r16681702:wall",
+    "chunk": "x_-1__z_2",
+    "run_count": 110,
+    "height_m": 20,
+    "flat_base_elevation_m": 6.281,
+    "top_elevation_m": 26.281,
+    "generated_wall_topology": {
+      "vertices": 440,
+      "indices": 660,
+      "triangles": 220,
+      "surfaces": 1,
+      "collision_kind": "world_solid",
+      "opaque": true
+    }
+  },
+  "authorization": {
+    "run_ownership_mapping_path": "res://discovery/facades/TREASURE_ISLAND_BUILDING_1_RUN_OWNERSHIP.json",
+    "run_ownership_mapping_sha256": "716f90b9d7cb3267e901d438a5c583047c8eaeb912e544a459005c2dbe6a4359",
+    "mapping_gate": {
+      "status": "partially_authorized",
+      "authorized_assets": [
+        "B1-MAT-IVORY",
+        "B1-CENTRAL-W",
+        "B1-PAV-W"
+      ],
+      "blocked_assets": [
+        "B1-WING-W",
+        "B1-BASE-O",
+        "B1-DOOR-BLUE",
+        "B1-BAND"
+      ],
+      "authorization_boundary": "A later detached study may calibrate the ivory field over a narrowed subset of exact eligible public runs and may test sparse CENTRAL/PAV exemplars only inside their exact candidate regions. This mapping supplies no anchor, count, cadence, sequence, scale acceptance, completed elevation, or live attachment."
+    },
+    "standalone_review_path": "res://discovery/facades/TREASURE_ISLAND_BUILDING_1_STANDALONE_PROTOTYPE_ART_REVIEW.md",
+    "standalone_review_sha256": "8d33bf21c29bf6347a17eabf98e7a8c66eb23a38649a0e3af0f03c0a82feedcb",
+    "standalone_review_verdict": "PASS_WITH_DOCUMENTED_LIMITATION",
+    "one_calibration_pass": true,
+    "correction_count": 0
+  },
+  "exact_field_scope": {
+    "material_id": "B1-MAT-IVORY",
+    "asset_kind": "homogeneous_material_tile",
+    "side": "outer broad curved public/parking-lot elevation",
+    "region": "PUBLIC-CURVE-CONFIRMED",
+    "observation_ids": [
+      "B1-SV01",
+      "B1-SV02",
+      "B1-SV03"
+    ],
+    "evidence_status": "reference_observation_plus_verified_exact_generated_geometry",
+    "exact_ordered_runs": [
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51
+    ],
+    "run_count": 31,
+    "physical_wall_length_m": 85.939934,
+    "authoritative_mapping_rounded_length_m": 85.94,
+    "generated_mesh_surface_area_m2": 1740.731069,
+    "wall_height_m": {
+      "nominal": 20,
+      "minimum": 20,
+      "maximum": 21.139,
+      "reason": "generated terrain-following lower edge varies while every top vertex remains at 26.281 m"
+    },
+    "runs": [
+      {
+        "run_index": 21,
+        "start_world_m": [
+          -21.71,
+          5.739,
+          716.146
+        ],
+        "end_world_m": [
+          -18.061,
+          5.651,
+          717.115
+        ],
+        "top_start_world_m": [
+          -21.71,
+          26.281,
+          716.146
+        ],
+        "top_end_world_m": [
+          -18.061,
+          26.281,
+          717.115
+        ],
+        "length_m": 3.775468,
+        "surface_area_m2": 77.721793,
+        "height_start_m": 20.542,
+        "height_end_m": 20.63,
+        "tangent_world_xz": [
+          0.966503,
+          0.256657
+        ],
+        "outward_normal_world_xz": [
+          -0.256854,
+          0.96645
+        ],
+        "facing_azimuth_deg": 194.9,
+        "chain_phase_start_m": 0,
+        "chain_phase_end_m": 3.775468448,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 22,
+        "start_world_m": [
+          -18.061,
+          5.651,
+          717.115
+        ],
+        "end_world_m": [
+          -14.58,
+          5.57,
+          718.58
+        ],
+        "top_start_world_m": [
+          -18.061,
+          26.281,
+          717.115
+        ],
+        "top_end_world_m": [
+          -14.58,
+          26.281,
+          718.58
+        ],
+        "length_m": 3.776716,
+        "surface_area_m2": 78.066614,
+        "height_start_m": 20.63,
+        "height_end_m": 20.711,
+        "tangent_world_xz": [
+          0.9217,
+          0.387903
+        ],
+        "outward_normal_world_xz": [
+          -0.387878,
+          0.921711
+        ],
+        "facing_azimuth_deg": 202.8,
+        "chain_phase_start_m": 3.775468448,
+        "chain_phase_end_m": 7.552184746,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 23,
+        "start_world_m": [
+          -14.58,
+          5.57,
+          718.58
+        ],
+        "end_world_m": [
+          -14.201,
+          5.581,
+          718.74
+        ],
+        "top_start_world_m": [
+          -14.58,
+          26.281,
+          718.58
+        ],
+        "top_end_world_m": [
+          -14.201,
+          26.281,
+          718.74
+        ],
+        "length_m": 0.411389,
+        "surface_area_m2": 8.518017,
+        "height_start_m": 20.711,
+        "height_end_m": 20.7,
+        "tangent_world_xz": [
+          0.921269,
+          0.388926
+        ],
+        "outward_normal_world_xz": [
+          -0.387878,
+          0.921711
+        ],
+        "facing_azimuth_deg": 202.8,
+        "chain_phase_start_m": 7.552184746,
+        "chain_phase_end_m": 7.963573857,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 24,
+        "start_world_m": [
+          -14.201,
+          5.581,
+          718.74
+        ],
+        "end_world_m": [
+          -10.956,
+          5.706,
+          720.833
+        ],
+        "top_start_world_m": [
+          -14.201,
+          26.281,
+          718.74
+        ],
+        "top_end_world_m": [
+          -10.956,
+          26.281,
+          720.833
+        ],
+        "length_m": 3.861434,
+        "surface_area_m2": 79.690348,
+        "height_start_m": 20.7,
+        "height_end_m": 20.575,
+        "tangent_world_xz": [
+          0.840361,
+          0.542027
+        ],
+        "outward_normal_world_xz": [
+          -0.542172,
+          0.840267
+        ],
+        "facing_azimuth_deg": 212.8,
+        "chain_phase_start_m": 7.963573857,
+        "chain_phase_end_m": 11.825008046,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 25,
+        "start_world_m": [
+          -10.956,
+          5.706,
+          720.833
+        ],
+        "end_world_m": [
+          -7.949,
+          5.84,
+          723.237
+        ],
+        "top_start_world_m": [
+          -10.956,
+          26.281,
+          720.833
+        ],
+        "top_end_world_m": [
+          -7.949,
+          26.281,
+          723.237
+        ],
+        "length_m": 3.84984,
+        "surface_area_m2": 78.952511,
+        "height_start_m": 20.575,
+        "height_end_m": 20.441,
+        "tangent_world_xz": [
+          0.781072,
+          0.624442
+        ],
+        "outward_normal_world_xz": [
+          -0.624207,
+          0.781259
+        ],
+        "facing_azimuth_deg": 218.6,
+        "chain_phase_start_m": 11.825008046,
+        "chain_phase_end_m": 15.674847653,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 26,
+        "start_world_m": [
+          -7.949,
+          5.84,
+          723.237
+        ],
+        "end_world_m": [
+          -4.959,
+          6.01,
+          726.477
+        ],
+        "top_start_world_m": [
+          -7.949,
+          26.281,
+          723.237
+        ],
+        "top_end_world_m": [
+          -4.959,
+          26.281,
+          726.477
+        ],
+        "length_m": 4.408821,
+        "surface_area_m2": 89.745954,
+        "height_start_m": 20.441,
+        "height_end_m": 20.271,
+        "tangent_world_xz": [
+          0.678186,
+          0.73489
+        ],
+        "outward_normal_world_xz": [
+          -0.735033,
+          0.678031
+        ],
+        "facing_azimuth_deg": 227.3,
+        "chain_phase_start_m": 15.674847653,
+        "chain_phase_end_m": 20.083668357,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 27,
+        "start_world_m": [
+          -4.959,
+          6.01,
+          726.477
+        ],
+        "end_world_m": [
+          -2.849,
+          6.161,
+          729.493
+        ],
+        "top_start_world_m": [
+          -4.959,
+          26.281,
+          726.477
+        ],
+        "top_end_world_m": [
+          -2.849,
+          26.281,
+          729.493
+        ],
+        "length_m": 3.680809,
+        "surface_area_m2": 74.335781,
+        "height_start_m": 20.271,
+        "height_end_m": 20.12,
+        "tangent_world_xz": [
+          0.573244,
+          0.819385
+        ],
+        "outward_normal_world_xz": [
+          -0.819373,
+          0.573261
+        ],
+        "facing_azimuth_deg": 235,
+        "chain_phase_start_m": 20.083668357,
+        "chain_phase_end_m": 23.764477507,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 28,
+        "start_world_m": [
+          -2.849,
+          6.161,
+          729.493
+        ],
+        "end_world_m": [
+          -1.082,
+          6.281,
+          732.788
+        ],
+        "top_start_world_m": [
+          -2.849,
+          26.281,
+          729.493
+        ],
+        "top_end_world_m": [
+          -1.082,
+          26.281,
+          732.788
+        ],
+        "length_m": 3.738892,
+        "surface_area_m2": 75.002175,
+        "height_start_m": 20.12,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          0.4726,
+          0.881277
+        ],
+        "outward_normal_world_xz": [
+          -0.881048,
+          0.473026
+        ],
+        "facing_azimuth_deg": 241.8,
+        "chain_phase_start_m": 23.764477507,
+        "chain_phase_end_m": 27.503369589,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 29,
+        "start_world_m": [
+          -1.082,
+          6.281,
+          732.788
+        ],
+        "end_world_m": [
+          0,
+          6.281,
+          735.764
+        ],
+        "top_start_world_m": [
+          -1.082,
+          26.281,
+          732.788
+        ],
+        "top_end_world_m": [
+          0,
+          26.281,
+          735.764
+        ],
+        "length_m": 3.166591,
+        "surface_area_m2": 63.331825,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          0.341692,
+          0.939812
+        ],
+        "outward_normal_world_xz": [
+          -0.939735,
+          0.341904
+        ],
+        "facing_azimuth_deg": 250,
+        "chain_phase_start_m": 27.503369589,
+        "chain_phase_end_m": 30.669960816,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 30,
+        "start_world_m": [
+          0,
+          6.281,
+          735.764
+        ],
+        "end_world_m": [
+          0.063,
+          6.281,
+          735.937
+        ],
+        "top_start_world_m": [
+          0,
+          26.281,
+          735.764
+        ],
+        "top_end_world_m": [
+          0.063,
+          26.281,
+          735.937
+        ],
+        "length_m": 0.184114,
+        "surface_area_m2": 3.682282,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          0.342179,
+          0.939635
+        ],
+        "outward_normal_world_xz": [
+          -0.939735,
+          0.341904
+        ],
+        "facing_azimuth_deg": 250,
+        "chain_phase_start_m": 30.669960816,
+        "chain_phase_end_m": 30.854074911,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 31,
+        "start_world_m": [
+          0.063,
+          6.281,
+          735.937
+        ],
+        "end_world_m": [
+          0.086,
+          6.281,
+          736
+        ],
+        "top_start_world_m": [
+          0.063,
+          26.281,
+          735.937
+        ],
+        "top_end_world_m": [
+          0.086,
+          26.281,
+          736
+        ],
+        "length_m": 0.067067,
+        "surface_area_m2": 1.341343,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          0.34294,
+          0.939357
+        ],
+        "outward_normal_world_xz": [
+          -0.939735,
+          0.341904
+        ],
+        "facing_azimuth_deg": 250,
+        "chain_phase_start_m": 30.854074911,
+        "chain_phase_end_m": 30.921142042,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 32,
+        "start_world_m": [
+          0.086,
+          6.281,
+          736
+        ],
+        "end_world_m": [
+          0.237,
+          6.281,
+          736.417
+        ],
+        "top_start_world_m": [
+          0.086,
+          26.281,
+          736
+        ],
+        "top_end_world_m": [
+          0.237,
+          26.281,
+          736.417
+        ],
+        "length_m": 0.443497,
+        "surface_area_m2": 8.869949,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          0.340475,
+          0.940253
+        ],
+        "outward_normal_world_xz": [
+          -0.939735,
+          0.341904
+        ],
+        "facing_azimuth_deg": 250,
+        "chain_phase_start_m": 30.921142042,
+        "chain_phase_end_m": 31.364639505,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 33,
+        "start_world_m": [
+          0.237,
+          6.281,
+          736.417
+        ],
+        "end_world_m": [
+          1.064,
+          6.281,
+          739.913
+        ],
+        "top_start_world_m": [
+          0.237,
+          26.281,
+          736.417
+        ],
+        "top_end_world_m": [
+          1.064,
+          26.281,
+          739.913
+        ],
+        "length_m": 3.592485,
+        "surface_area_m2": 71.84969,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          0.230203,
+          0.973143
+        ],
+        "outward_normal_world_xz": [
+          -0.973181,
+          0.230043
+        ],
+        "facing_azimuth_deg": 256.7,
+        "chain_phase_start_m": 31.364639505,
+        "chain_phase_end_m": 34.957124022,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 34,
+        "start_world_m": [
+          1.064,
+          6.281,
+          739.913
+        ],
+        "end_world_m": [
+          1.442,
+          6.281,
+          743.598
+        ],
+        "top_start_world_m": [
+          1.064,
+          26.281,
+          739.913
+        ],
+        "top_end_world_m": [
+          1.442,
+          26.281,
+          743.598
+        ],
+        "length_m": 3.704337,
+        "surface_area_m2": 74.08673,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          0.102043,
+          0.99478
+        ],
+        "outward_normal_world_xz": [
+          -0.994787,
+          0.101978
+        ],
+        "facing_azimuth_deg": 264.1,
+        "chain_phase_start_m": 34.957124022,
+        "chain_phase_end_m": 38.661460534,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 35,
+        "start_world_m": [
+          1.442,
+          6.281,
+          743.598
+        ],
+        "end_world_m": [
+          1.231,
+          6.281,
+          747.716
+        ],
+        "top_start_world_m": [
+          1.442,
+          26.281,
+          743.598
+        ],
+        "top_end_world_m": [
+          1.231,
+          26.281,
+          747.716
+        ],
+        "length_m": 4.123402,
+        "surface_area_m2": 82.468042,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          -0.051171,
+          0.99869
+        ],
+        "outward_normal_world_xz": [
+          -0.998699,
+          -0.050985
+        ],
+        "facing_azimuth_deg": 272.9,
+        "chain_phase_start_m": 38.661460534,
+        "chain_phase_end_m": 42.784862649,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 36,
+        "start_world_m": [
+          1.231,
+          6.281,
+          747.716
+        ],
+        "end_world_m": [
+          0.651,
+          6.281,
+          751.69
+        ],
+        "top_start_world_m": [
+          1.231,
+          26.281,
+          747.716
+        ],
+        "top_end_world_m": [
+          0.651,
+          26.281,
+          751.69
+        ],
+        "length_m": 4.016102,
+        "surface_area_m2": 80.322042,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          -0.144419,
+          0.989517
+        ],
+        "outward_normal_world_xz": [
+          -0.989586,
+          -0.14394
+        ],
+        "facing_azimuth_deg": 278.3,
+        "chain_phase_start_m": 42.784862649,
+        "chain_phase_end_m": 46.80096474,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 37,
+        "start_world_m": [
+          0.651,
+          6.281,
+          751.69
+        ],
+        "end_world_m": [
+          0,
+          6.281,
+          753.787
+        ],
+        "top_start_world_m": [
+          0.651,
+          26.281,
+          751.69
+        ],
+        "top_end_world_m": [
+          0,
+          26.281,
+          753.787
+        ],
+        "length_m": 2.195725,
+        "surface_area_m2": 43.914508,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          -0.296485,
+          0.955037
+        ],
+        "outward_normal_world_xz": [
+          -0.955171,
+          -0.296053
+        ],
+        "facing_azimuth_deg": 287.2,
+        "chain_phase_start_m": 46.80096474,
+        "chain_phase_end_m": 48.996690132,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 38,
+        "start_world_m": [
+          0,
+          6.281,
+          753.787
+        ],
+        "end_world_m": [
+          -0.528,
+          6.281,
+          755.486
+        ],
+        "top_start_world_m": [
+          0,
+          26.281,
+          753.787
+        ],
+        "top_end_world_m": [
+          -0.528,
+          26.281,
+          755.486
+        ],
+        "length_m": 1.779153,
+        "surface_area_m2": 35.583058,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          -0.29677,
+          0.954949
+        ],
+        "outward_normal_world_xz": [
+          -0.955171,
+          -0.296053
+        ],
+        "facing_azimuth_deg": 287.2,
+        "chain_phase_start_m": 48.996690132,
+        "chain_phase_end_m": 50.775843021,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 39,
+        "start_world_m": [
+          -0.528,
+          6.281,
+          755.486
+        ],
+        "end_world_m": [
+          0,
+          6.281,
+          755.678
+        ],
+        "top_start_world_m": [
+          -0.528,
+          26.281,
+          755.486
+        ],
+        "top_end_world_m": [
+          0,
+          26.281,
+          755.678
+        ],
+        "length_m": 0.561826,
+        "surface_area_m2": 11.236512,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          0.939793,
+          0.341743
+        ],
+        "outward_normal_world_xz": [
+          -0.34102,
+          0.940056
+        ],
+        "facing_azimuth_deg": 199.9,
+        "chain_phase_start_m": 50.775843021,
+        "chain_phase_end_m": 51.337668616,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 40,
+        "start_world_m": [
+          0,
+          6.281,
+          755.678
+        ],
+        "end_world_m": [
+          1.715,
+          6.281,
+          756.299
+        ],
+        "top_start_world_m": [
+          0,
+          26.281,
+          755.678
+        ],
+        "top_end_world_m": [
+          1.715,
+          26.281,
+          756.299
+        ],
+        "length_m": 1.82397,
+        "surface_area_m2": 36.479397,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          0.940257,
+          0.340466
+        ],
+        "outward_normal_world_xz": [
+          -0.34102,
+          0.940056
+        ],
+        "facing_azimuth_deg": 199.9,
+        "chain_phase_start_m": 51.337668616,
+        "chain_phase_end_m": 53.161638462,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 41,
+        "start_world_m": [
+          1.715,
+          6.281,
+          756.299
+        ],
+        "end_world_m": [
+          1.31,
+          6.281,
+          757.323
+        ],
+        "top_start_world_m": [
+          1.715,
+          26.281,
+          756.299
+        ],
+        "top_end_world_m": [
+          1.31,
+          26.281,
+          757.323
+        ],
+        "length_m": 1.101182,
+        "surface_area_m2": 22.023633,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          -0.367787,
+          0.92991
+        ],
+        "outward_normal_world_xz": [
+          -0.930191,
+          -0.367075
+        ],
+        "facing_azimuth_deg": 291.5,
+        "chain_phase_start_m": 53.161638462,
+        "chain_phase_end_m": 54.262820101,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 42,
+        "start_world_m": [
+          1.31,
+          6.281,
+          757.323
+        ],
+        "end_world_m": [
+          2.893,
+          6.274,
+          757.902
+        ],
+        "top_start_world_m": [
+          1.31,
+          26.281,
+          757.323
+        ],
+        "top_end_world_m": [
+          2.893,
+          26.281,
+          757.902
+        ],
+        "length_m": 1.685565,
+        "surface_area_m2": 33.717203,
+        "height_start_m": 20,
+        "height_end_m": 20.007,
+        "tangent_world_xz": [
+          0.939151,
+          0.343505
+        ],
+        "outward_normal_world_xz": [
+          -0.343108,
+          0.939296
+        ],
+        "facing_azimuth_deg": 200.1,
+        "chain_phase_start_m": 54.262820101,
+        "chain_phase_end_m": 55.948385288,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 43,
+        "start_world_m": [
+          2.893,
+          6.274,
+          757.902
+        ],
+        "end_world_m": [
+          1.847,
+          6.281,
+          759.995
+        ],
+        "top_start_world_m": [
+          2.893,
+          26.281,
+          757.902
+        ],
+        "top_end_world_m": [
+          1.847,
+          26.281,
+          759.995
+        ],
+        "length_m": 2.339822,
+        "surface_area_m2": 46.804621,
+        "height_start_m": 20.007,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          -0.447043,
+          0.894513
+        ],
+        "outward_normal_world_xz": [
+          -0.894427,
+          -0.447214
+        ],
+        "facing_azimuth_deg": 296.6,
+        "chain_phase_start_m": 55.948385288,
+        "chain_phase_end_m": 58.288206862,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 44,
+        "start_world_m": [
+          1.847,
+          6.281,
+          759.995
+        ],
+        "end_world_m": [
+          0,
+          6.281,
+          763.161
+        ],
+        "top_start_world_m": [
+          1.847,
+          26.281,
+          759.995
+        ],
+        "top_end_world_m": [
+          0,
+          26.281,
+          763.161
+        ],
+        "length_m": 3.665374,
+        "surface_area_m2": 73.307476,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          -0.503905,
+          0.863759
+        ],
+        "outward_normal_world_xz": [
+          -0.863779,
+          -0.503871
+        ],
+        "facing_azimuth_deg": 300.3,
+        "chain_phase_start_m": 58.288206862,
+        "chain_phase_end_m": 61.953580649,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 45,
+        "start_world_m": [
+          0,
+          6.281,
+          763.161
+        ],
+        "end_world_m": [
+          -0.387,
+          6.281,
+          763.824
+        ],
+        "top_start_world_m": [
+          0,
+          26.281,
+          763.161
+        ],
+        "top_end_world_m": [
+          -0.387,
+          26.281,
+          763.824
+        ],
+        "length_m": 0.767684,
+        "surface_area_m2": 15.353671,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          -0.504114,
+          0.863637
+        ],
+        "outward_normal_world_xz": [
+          -0.863779,
+          -0.503871
+        ],
+        "facing_azimuth_deg": 300.3,
+        "chain_phase_start_m": 61.953580649,
+        "chain_phase_end_m": 62.721264178,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 46,
+        "start_world_m": [
+          -0.387,
+          6.281,
+          763.824
+        ],
+        "end_world_m": [
+          -3.148,
+          6.281,
+          767.576
+        ],
+        "top_start_world_m": [
+          -0.387,
+          26.281,
+          763.824
+        ],
+        "top_end_world_m": [
+          -3.148,
+          26.281,
+          767.576
+        ],
+        "length_m": 4.658393,
+        "surface_area_m2": 93.167859,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          -0.592694,
+          0.805428
+        ],
+        "outward_normal_world_xz": [
+          -0.805131,
+          -0.593097
+        ],
+        "facing_azimuth_deg": 306.4,
+        "chain_phase_start_m": 62.721264178,
+        "chain_phase_end_m": 67.379657141,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 47,
+        "start_world_m": [
+          -3.148,
+          6.281,
+          767.576
+        ],
+        "end_world_m": [
+          -3.576,
+          6.281,
+          768
+        ],
+        "top_start_world_m": [
+          -3.148,
+          26.281,
+          767.576
+        ],
+        "top_end_world_m": [
+          -3.576,
+          26.281,
+          768
+        ],
+        "length_m": 0.602462,
+        "surface_area_m2": 12.049232,
+        "height_start_m": 20,
+        "height_end_m": 20,
+        "tangent_world_xz": [
+          -0.710419,
+          0.703779
+        ],
+        "outward_normal_world_xz": [
+          -0.7036,
+          -0.710596
+        ],
+        "facing_azimuth_deg": 315.3,
+        "chain_phase_start_m": 67.379657141,
+        "chain_phase_end_m": 67.982118758,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 48,
+        "start_world_m": [
+          -3.576,
+          6.281,
+          768
+        ],
+        "end_world_m": [
+          -6.621,
+          6.058,
+          771.015
+        ],
+        "top_start_world_m": [
+          -3.576,
+          26.281,
+          768
+        ],
+        "top_end_world_m": [
+          -6.621,
+          26.281,
+          771.015
+        ],
+        "length_m": 4.28512,
+        "surface_area_m2": 86.180183,
+        "height_start_m": 20,
+        "height_end_m": 20.223,
+        "tangent_world_xz": [
+          -0.710599,
+          0.703598
+        ],
+        "outward_normal_world_xz": [
+          -0.7036,
+          -0.710596
+        ],
+        "facing_azimuth_deg": 315.3,
+        "chain_phase_start_m": 67.982118758,
+        "chain_phase_end_m": 72.26723836,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 49,
+        "start_world_m": [
+          -6.621,
+          6.058,
+          771.015
+        ],
+        "end_world_m": [
+          -10.543,
+          5.708,
+          773.899
+        ],
+        "top_start_world_m": [
+          -6.621,
+          26.281,
+          771.015
+        ],
+        "top_end_world_m": [
+          -10.543,
+          26.281,
+          773.899
+        ],
+        "length_m": 4.868217,
+        "surface_area_m2": 99.301897,
+        "height_start_m": 20.223,
+        "height_end_m": 20.573,
+        "tangent_world_xz": [
+          -0.805634,
+          0.592414
+        ],
+        "outward_normal_world_xz": [
+          -0.59197,
+          -0.80596
+        ],
+        "facing_azimuth_deg": 323.7,
+        "chain_phase_start_m": 72.26723836,
+        "chain_phase_end_m": 77.135455693,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 50,
+        "start_world_m": [
+          -10.543,
+          5.708,
+          773.899
+        ],
+        "end_world_m": [
+          -13.928,
+          5.461,
+          775.713
+        ],
+        "top_start_world_m": [
+          -10.543,
+          26.281,
+          773.899
+        ],
+        "top_end_world_m": [
+          -13.928,
+          26.281,
+          775.713
+        ],
+        "length_m": 3.840419,
+        "surface_area_m2": 79.48324,
+        "height_start_m": 20.573,
+        "height_end_m": 20.82,
+        "tangent_world_xz": [
+          -0.881414,
+          0.472344
+        ],
+        "outward_normal_world_xz": [
+          -0.472249,
+          -0.881465
+        ],
+        "facing_azimuth_deg": 331.8,
+        "chain_phase_start_m": 77.135455693,
+        "chain_phase_end_m": 80.975875071,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      },
+      {
+        "run_index": 51,
+        "start_world_m": [
+          -13.928,
+          5.461,
+          775.713
+        ],
+        "end_world_m": [
+          -18.307,
+          5.142,
+          778.051
+        ],
+        "top_start_world_m": [
+          -13.928,
+          26.281,
+          775.713
+        ],
+        "top_end_world_m": [
+          -18.307,
+          26.281,
+          778.051
+        ],
+        "length_m": 4.964059,
+        "surface_area_m2": 104.143483,
+        "height_start_m": 20.82,
+        "height_end_m": 21.139,
+        "tangent_world_xz": [
+          -0.882141,
+          0.470986
+        ],
+        "outward_normal_world_xz": [
+          -0.471055,
+          -0.882104
+        ],
+        "facing_azimuth_deg": 331.9,
+        "chain_phase_start_m": 80.975875071,
+        "chain_phase_end_m": 85.939934397,
+        "previous_join_phase_delta_m": 0,
+        "previous_endpoint_delta_m": 0
+      }
+    ],
+    "standalone_material_path": "res://game/resources/materials/world/building_1/building_1_warm_ivory.tres",
+    "standalone_material_sha256": "572c3165cec91f74a49066873c31c071ae02333f85721bbd6b43981d814cdabb",
+    "exact_trial_material_path": "res://game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres",
+    "exact_trial_material_sha256": "12d059d9d806c629225254f1aaf945be69a00ce5878db276ce299ad0c8cdbb9a",
+    "exact_trial_shader_path": "res://game/resources/materials/world/building_1/building_1_chain_metres_aperiodic_field.gdshader",
+    "exact_trial_shader_sha256": "a4a5df4fbb8fd4f13187ec284708879b540677ac2c827642b4c3040b4bce4c09",
+    "material_parameters": {
+      "base_color": [
+        0.82,
+        0.79,
+        0.69,
+        1
+      ],
+      "secondary_color": [
+        0.74,
+        0.715,
+        0.64,
+        1
+      ],
+      "roughness_value": 0.82,
+      "field_kind": 0,
+      "primary_scale_m": 1.1,
+      "secondary_scale_m": 0.32,
+      "relief_strength": 0.008,
+      "color_variation": 0.015,
+      "filter_start_cycles_per_pixel": 0.12,
+      "filter_end_cycles_per_pixel": 0.34
+    },
+    "meter_and_uv_contract": {
+      "one_godot_unit_m": 1,
+      "generated_uv1_role": "retained only in source; detached overlay rebuilds exact chain metre UV",
+      "overlay_uv_formula": "UV.x = cumulative ordered horizontal run length from run 21 start; UV.y = source world Y metres",
+      "shader_formula": "field_position_m = UV",
+      "horizontal_phase_origin": "0.0 m at ordered run 21 start",
+      "vertical_phase_origin": "absolute source world Y metres",
+      "internal_join_count": 30,
+      "maximum_endpoint_delta_m": 0,
+      "maximum_join_phase_delta_m": 0,
+      "finite_repeat_period": "none_by_design_aperiodic",
+      "physical_span_m": [
+        85.939934,
+        21.139
+      ]
+    },
+    "scale_status": "accepted_standalone_scale_preserved_as_unsurveyed_production_inference",
+    "assignment_status": "detached_proposal_pending_independent_exact_receiver_art_review",
+    "runtime_attachment": false,
+    "surveyed_scale": false,
+    "surveyed_color": false,
+    "surveyed_roughness": false,
+    "completed_elevation": false,
+    "whole_building_accepted": false
+  },
+  "fit_study_policy": {
+    "fit_study_count": 2,
+    "actual_world_placement_count": 0,
+    "position_status": "deterministic_calibration_only_production_inference_not_real_anchor",
+    "count_status": "two_distinct_family_fit_studies_not_real_count",
+    "cadence_status": "unknown_not_inferred",
+    "sequence_status": "unknown_not_inferred",
+    "orientation": "local X run tangent, local Y world up, local Z outward wall normal",
+    "wall_offset_m": 0.06,
+    "module_owns_field_geometry": false,
+    "module_owned_backing_meshes": 0,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "runtime_attachment": false
+  },
+  "fit_studies": [
+    {
+      "fit_study_id": "FIT-CENTRAL-W-R36",
+      "motif_id": "B1-CENTRAL-W",
+      "asset_kind": "module_atlas",
+      "study_kind": "detached_scale_contact_fit_only_not_actual_world_anchor",
+      "exact_ordered_runs": [
+        36
+      ],
+      "representative_run": 36,
+      "side": "outer west-facing public curve",
+      "region": "PUBLIC-CURVE-CONFIRMED",
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02",
+        "B1-SV03"
+      ],
+      "evidence_status": "production_inference_inside_reference_mapped_receiver_region",
+      "selection_rule": "run 36 is the mechanically eligible run whose midpoint is nearest the exact 85.939934 m curve-chain midpoint; midpoint use is deterministic and not a real opening coordinate",
+      "run_length_m": 4.016102,
+      "run_height_at_center_m": 20,
+      "along_run_center_m": 2.008051045,
+      "along_run_fraction": 0.5,
+      "mechanically_eligible_center_domain_m": [
+        0.9,
+        3.11610209
+      ],
+      "center_uncertainty_half_span_m": 1.108051045,
+      "center_height_above_base_m": 10,
+      "mechanically_eligible_center_height_domain_m": [
+        2.75,
+        17.25
+      ],
+      "wall_anchor_world_m": [
+        0.941,
+        6.281,
+        749.703
+      ],
+      "expected_module_origin_world_m": [
+        0.881625,
+        16.281,
+        749.694364
+      ],
+      "tangent_world_xz": [
+        -0.144419,
+        0.989517
+      ],
+      "outward_normal_world_xz": [
+        -0.989586,
+        -0.14394
+      ],
+      "facing_azimuth_deg": 278.3,
+      "nominal_bounds_m": [
+        1.45,
+        4.6
+      ],
+      "uncertainty_bounds_m": {
+        "width": [
+          0.8,
+          1.8
+        ],
+        "height": [
+          3,
+          5.5
+        ]
+      },
+      "prototype_topology": {
+        "mesh_instances": 9,
+        "surfaces": 9,
+        "triangles": 108,
+        "face_meshes": 1,
+        "frame_meshes": 4,
+        "mullion_meshes": 4,
+        "field_or_backing_meshes": 0
+      },
+      "wall_offset_m": 0.06,
+      "surveyed_dimensions": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_cadence": false,
+      "real_placement_authorized": false,
+      "completed_elevation": false,
+      "whole_building_accepted": false,
+      "runtime_attachment": false
+    },
+    {
+      "fit_study_id": "FIT-PAV-W-R06",
+      "motif_id": "B1-PAV-W",
+      "asset_kind": "module_atlas",
+      "study_kind": "detached_scale_contact_fit_only_not_actual_world_anchor",
+      "exact_ordered_runs": [
+        6
+      ],
+      "representative_run": 6,
+      "side": "outer SW-facing north public end",
+      "region": "PUBLIC-NORTH-END-CANDIDATE",
+      "observation_ids": [
+        "B1-SV01",
+        "B1-SV02"
+      ],
+      "evidence_status": "production_inference_inside_reference_mapped_receiver_region",
+      "selection_rule": "run 6 is the longest mechanically eligible run in the mapped pavilion candidate regions; midpoint use is deterministic and not a real pavilion-window coordinate",
+      "run_length_m": 11.022327,
+      "run_height_at_center_m": 21.8275,
+      "along_run_center_m": 5.511163693,
+      "along_run_fraction": 0.5,
+      "mechanically_eligible_center_domain_m": [
+        3.5,
+        7.522327386
+      ],
+      "center_uncertainty_half_span_m": 2.011163693,
+      "center_height_above_base_m": 10,
+      "mechanically_eligible_center_height_domain_m": [
+        7,
+        14.8275
+      ],
+      "wall_anchor_world_m": [
+        -56.439,
+        4.4535,
+        709.8175
+      ],
+      "expected_module_origin_world_m": [
+        -56.492276,
+        14.4535,
+        709.845098
+      ],
+      "tangent_world_xz": [
+        0.460338,
+        0.887744
+      ],
+      "outward_normal_world_xz": [
+        -0.887936,
+        0.459967
+      ],
+      "facing_azimuth_deg": 242.6,
+      "nominal_bounds_m": [
+        5.4,
+        10
+      ],
+      "uncertainty_bounds_m": {
+        "width": [
+          4,
+          7
+        ],
+        "height": [
+          8,
+          14
+        ]
+      },
+      "prototype_topology": {
+        "mesh_instances": 13,
+        "surfaces": 13,
+        "triangles": 156,
+        "face_meshes": 1,
+        "frame_meshes": 4,
+        "mullion_meshes": 6,
+        "pilaster_meshes": 2,
+        "field_or_backing_meshes": 0
+      },
+      "wall_offset_m": 0.06,
+      "surveyed_dimensions": false,
+      "surveyed_coordinates": false,
+      "surveyed_count": false,
+      "surveyed_cadence": false,
+      "real_placement_authorized": false,
+      "completed_elevation": false,
+      "whole_building_accepted": false,
+      "runtime_attachment": false
+    }
+  ],
+  "detached_overlay_contract": {
+    "parent": "detached_scene_or_capture_harness_only_never_receiver",
+    "field_meshes": 1,
+    "field_surfaces": 1,
+    "field_vertices": 124,
+    "field_triangles": 62,
+    "module_fit_study_instances": 2,
+    "module_meshes": 22,
+    "module_surfaces": 22,
+    "module_triangles": 264,
+    "total_meshes": 23,
+    "total_surfaces": 23,
+    "total_triangles": 326,
+    "module_field_or_backing_meshes": 0,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "runtime_attachment": false
+  },
+  "excluded_checksum_locked_assets": [
+    {
+      "motif_id": "B1-WING-W",
+      "reason": "exact run blocker retained",
+      "prototype_topology": {
+        "mesh_instances": 7,
+        "surfaces": 7,
+        "triangles": 84,
+        "face_meshes": 1,
+        "frame_meshes": 4,
+        "mullion_meshes": 2,
+        "field_or_backing_meshes": 0
+      }
+    },
+    {
+      "motif_id": "B1-BASE-O",
+      "reason": "exact run and window-versus-vent blockers retained",
+      "prototype_topology": {
+        "mesh_instances": 6,
+        "surfaces": 6,
+        "triangles": 72,
+        "face_meshes": 1,
+        "frame_meshes": 4,
+        "divider_meshes": 1,
+        "field_or_backing_meshes": 0
+      }
+    },
+    {
+      "motif_id": "B1-DOOR-BLUE",
+      "reason": "exact run blocker retained",
+      "prototype_topology": {
+        "mesh_instances": 5,
+        "surfaces": 5,
+        "triangles": 60,
+        "leaf_meshes": 1,
+        "frame_meshes": 4,
+        "field_or_backing_meshes": 0
+      }
+    },
+    {
+      "motif_id": "B1-BAND",
+      "reason": "exact run and terminal blockers retained",
+      "prototype_topology": {
+        "mesh_instances": 3,
+        "surfaces": 3,
+        "triangles": 36,
+        "core_meshes": 1,
+        "terminal_meshes": 2,
+        "field_or_backing_meshes": 0
+      }
+    }
+  ],
+  "protected_input_hashes": {
+    "standalone_registry": "2014040edb3985be4aaae437749063474aacaedc0534b6d54e69b7dfd92612cc",
+    "standalone_scene": "1d205d4d6e176d4ed1e82746d1f1f8c4c2547910b1a71f87a213d9ada14967ef",
+    "standalone_factory": "cf18bfcfa40c7770d92aad569cba05da7ac85fe0fc89c0fd8cba6167ef62fb1f",
+    "standalone_evidence_ledger": "d1e7ab8987f64d01165555fdade3b52dfa042b1ef1a9d5eb2b32ec88cb85ac65",
+    "run_ownership_mapping": "716f90b9d7cb3267e901d438a5c583047c8eaeb912e544a459005c2dbe6a4359",
+    "run_ownership_handoff": "43c0a7f0d0c8387dc4e2223bdfb187ed572bcbf55d0f26ef5225f6064fbea2f7",
+    "run_ownership_evidence_ledger": "c5f3372a5f982cd37021802b833b9c3c2eabed59007dcc45cb024f25fa9e1814",
+    "generated_manifest": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "generated_chunk": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce",
+    "world_builder": "dec0811b3b6b4947c16f8f69a6a6e60d706b6d7b43a93051ea7be71ad2c203a3",
+    "accepted_material_helper": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+    "canonical_inventory": "41d378ccee6685e5d3b9109d33c77742f73a7338cd84ba6e82c66ff22ee2d671",
+    "r133351_registry": "ecde7b80ba595f61d03bfd21f57407956c3b8988e381f0457f95bfe1aa580ad9"
+  },
+  "preserved_false_claims": {
+    "actual_world_anchor": false,
+    "surveyed_dimensions": false,
+    "surveyed_coordinates": false,
+    "surveyed_material_scale": false,
+    "surveyed_real_count": false,
+    "surveyed_or_inferred_cadence": false,
+    "surveyed_or_inferred_sequence": false,
+    "architectural_pattern_tile": false,
+    "wing_base_door_band_calibrated": false,
+    "east_rear_or_inner_scope": false,
+    "completed_public_elevation": false,
+    "whole_building_accepted": false,
+    "live_attachment": false,
+    "lifecycle_promotion": false
+  }
+}

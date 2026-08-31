@@ -1,0 +1,61 @@
+{
+  "boundary_clearance_m": 14.964491636832381,
+  "boundary_source_key": "w26767313",
+  "camera": {
+    "boom_probe_distance_m": 5.65,
+    "conservative_boundary_clearance_m": 9.314491636832381,
+    "conservative_building_clearance_m": 2.349442952833707,
+    "direction": "toward exact playable-boundary centroid",
+    "world_forward_from_manifest_yaw": [
+      0.11871933896243493,
+      0,
+      -0.9929278516369265
+    ]
+  },
+  "candidate_before_serialization": {
+    "east_north_m": [
+      -104.36446481606473,
+      -786.0239954289626
+    ],
+    "wgs84_lon_lat": [
+      -122.37217688572613,
+      37.816700576312215
+    ],
+    "yaw_rad": -0.11946884831572939
+  },
+  "content_sha256": "5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa",
+  "derivation": "8.000 m inland from n9551738109 along the reversed frozen w1222514694 centerline",
+  "landing_footprint_clearance_m": 7.999623977672535,
+  "manifest_file_sha256": "07b8b195e1a05942e38d9bbbcb801394cf9f184051fb5f7a819c75677e46f160",
+  "manifest_spawn": {
+    "origin": [
+      -104.364,
+      1,
+      786.024
+    ],
+    "yaw": -0.119
+  },
+  "minimum_building_clearance_m": 7.999442952833707,
+  "nearest_building_source_key": "w1222514695",
+  "player_capsule_radius_m": 0.35,
+  "required_capsule_plus_margin_m": 1,
+  "source_keys": {
+    "landing_connection": "n9551738109",
+    "landing_pier": "w1011830367",
+    "terminal_access_footway": "w1036802527",
+    "terminal_platform": "w1036802529",
+    "terminal_platform_footway": "w1036802526",
+    "terminal_stop": "n9335172179",
+    "waterfront_plaza_footway": "w1222514694"
+  },
+  "terminal_platform_clearance_m": 76.80407266096222,
+  "world_counts": {
+    "chunks": 38,
+    "context_rows": 4,
+    "duplicate_source_keys": 0,
+    "physical_objects": 701,
+    "playable_rows": 735,
+    "source_rows": 739,
+    "unresolved_rows": 0
+  }
+}

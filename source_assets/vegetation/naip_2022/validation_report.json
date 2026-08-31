@@ -1,0 +1,24 @@
+{
+  "schema": "ti.naip-tree-annotation-validation/1",
+  "status": "passed",
+  "features": 80,
+  "unique_ids": 80,
+  "finite_wgs84": 80,
+  "inside_treasure_island": 80,
+  "ybi_annotations": 0,
+  "road_or_building_intersections": 0,
+  "rejected_surface_intersections_preserved": 30,
+  "serialized_surface_triangles_checked": 18544,
+  "canonical_order": "source pixel y ascending, x ascending, id ascending",
+  "type_counts": {
+    "palm": 0,
+    "conifer": 0,
+    "broadleaf": 58,
+    "unknown": 22
+  },
+  "confidence_counts": {
+    "high": 51,
+    "medium": 29,
+    "low": 0
+  }
+}

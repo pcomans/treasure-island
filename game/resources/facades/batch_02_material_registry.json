@@ -1,0 +1,114 @@
+{
+  "schema_version": "ti.batch-02-material-prototypes/1",
+  "review_status": "ready_for_independent_review_not_self_accepted",
+  "runtime_attachment_policy": "none_until_exact_observed_region_endpoints_are_reconciled",
+  "correction_shader": {
+    "path": "res://game/resources/materials/world/batch_02_04_aperiodic_field.gdshader",
+    "sha256": "324ba33a7c78f4b05038168a479ebb8e875c56704236492a050cee8da8e5f798",
+    "scope": "w34313547 rejected aggregate correction only",
+    "one_local_unit_m": 1.0,
+    "external_resources": false
+  },
+  "controlled_proof_contract": {
+    "receiver_kind": "controlled_flat_proof_panel",
+    "one_local_unit_m": 1.0,
+    "panel_size_m": [4.8, 3.2],
+    "renderer": "Forward+/Metal",
+    "proof_scales_are_reversible_assumptions": true
+  },
+  "targets": [
+    {
+      "source_key": "w24274434",
+      "receiver_key": "building:w24274434:wall",
+      "canonical_name": "Building 2",
+      "chunk_id": "x_1__z_2",
+      "region_scope": "WSW CREAM-FIELD only; exact endpoints unresolved",
+      "material_path": "res://game/resources/materials/world/building_2/building_2_primary.tres",
+      "field_kind": 0,
+      "roughness_range": [0.68, 0.88],
+      "proof_primary_scale_m": 1.35,
+      "scale_status": "plausible_not_measured_proof_only",
+      "runtime_attachment": "prototype_only"
+    },
+    {
+      "source_key": "w1272162518",
+      "receiver_key": "building:w1272162518:wall",
+      "canonical_name": "490 Avenue of the Palms",
+      "chunk_id": "x_-1__z_1",
+      "region_scope": "WSW taupe thin-brick field only; exact subregion endpoints unresolved",
+      "material_path": "res://game/resources/materials/world/490_avenue_palms/490_thin_brick.tres",
+      "field_kind": 1,
+      "roughness_range": [0.72, 0.90],
+      "proof_primary_scale_m": 0.24,
+      "scale_status": "thin_brick_unit_assumption_not_measured_proof_only",
+      "runtime_attachment": "prototype_only"
+    },
+    {
+      "source_key": "w1212173437",
+      "receiver_key": "building:w1212173437:wall",
+      "canonical_name": "Star View Court",
+      "chunk_id": "x_-1__z_0",
+      "region_scope": "ENE grey textured base only; exact endpoints unresolved",
+      "material_path": "res://game/resources/materials/world/star_view_court/star_view_grey_base.tres",
+      "field_kind": 2,
+      "roughness_range": [0.70, 0.90],
+      "proof_primary_scale_m": 0.085,
+      "scale_status": "vertical_texture_pitch_unmeasured_proof_only",
+      "runtime_attachment": "prototype_only"
+    },
+    {
+      "source_key": "r19685981",
+      "receiver_key": "building:r19685981:wall",
+      "canonical_name": "Maceo May",
+      "chunk_id": "x_-1__z_1",
+      "region_scope": "OUTER-SSE fine-rib field only; outer endpoints unresolved; never inner courtyard",
+      "material_path": "res://game/resources/materials/world/maceo_may/maceo_may_sse_rib.tres",
+      "field_kind": 3,
+      "roughness_range": [0.60, 0.82],
+      "proof_primary_scale_m": 0.08,
+      "scale_status": "rib_pitch_unmeasured_proof_only",
+      "runtime_attachment": "prototype_only"
+    },
+    {
+      "source_key": "w291189336",
+      "receiver_key": "building:w291189336:wall",
+      "canonical_name": "Navy Chapel Building 187",
+      "chunk_id": "x_-1__z_2",
+      "region_scope": "SSE uninterrupted warm-cream field only; exact endpoints unresolved",
+      "material_path": "res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres",
+      "field_kind": 4,
+      "roughness_range": [0.62, 0.84],
+      "proof_primary_scale_m": 1.65,
+      "scale_status": "color_finish_ready_substrate_relief_blocked_proof_only",
+      "runtime_attachment": "prototype_only"
+    },
+    {
+      "source_key": "w34313547",
+      "receiver_key": "building:w34313547:wall",
+      "canonical_name": "Treasure Island Community YMCA",
+      "chunk_id": "x_0__z_-2",
+      "region_scope": "observed SSE/ENE main-volume aggregate field only; exact endpoints unresolved",
+      "material_path": "res://game/resources/materials/world/ti_ymca/ti_ymca_primary.tres",
+      "field_kind": 5,
+      "roughness_range": [0.82, 0.96],
+      "proof_primary_scale_m": 0.42,
+      "scale_status": "aggregate_scale_unmeasured_proof_only",
+      "runtime_attachment": "prototype_only"
+    }
+  ],
+  "explicit_non_targets": {
+    "w291189918": "Oasis identity/branding/coverage remains blocked; no material resource or runtime attachment",
+    "r16681702": "Museum public elevations remain unreconciled to exact outer-ring endpoints; no attachment"
+  },
+  "forbidden_content": [
+    "windows",
+    "doors",
+    "murals",
+    "signs",
+    "canopies",
+    "bands",
+    "module_atlases",
+    "unique_elevations",
+    "facade_scale_motifs"
+  ]
+}

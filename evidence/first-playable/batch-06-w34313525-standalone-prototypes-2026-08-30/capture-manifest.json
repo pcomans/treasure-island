@@ -1,0 +1,315 @@
+{
+  "asset_kinds": {
+    "architectural_pattern_tile": [],
+    "homogeneous_material_tile": [
+      "W34313525-MAT-PALE"
+    ],
+    "module_atlas": [
+      "W34313525-ROLLUP-PALE",
+      "W34313525-ROLLUP-GRAY",
+      "W34313525-PERSONNEL",
+      "W34313525-HIGH-GROUP"
+    ],
+    "unique_elevation": []
+  },
+  "blocked_claims": [
+    "exact placement, count or cadence",
+    "surveyed dimensions or scale",
+    "repair-patch repeat",
+    "ENE/WSW ends and deep re-entrants",
+    "completed SSE or NNW elevation",
+    "whole-building resemblance or acceptance"
+  ],
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/w34313525_standalone_prototype_capture.gd",
+  "captures": [
+    {
+      "bytes": 101433,
+      "camera_position_m": [
+        11.1999998092651,
+        2.5,
+        6.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-neutral-field-close.png",
+      "id": "01-neutral-field-close",
+      "label": "W34313525-MAT-PALE",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.641898,
+        "minimum": 0.015136,
+        "range": 0.932783,
+        "sample_count": 4000
+      },
+      "scope_note": "0.88 m proof scale, uncertainty 0.35–1.60 m · motif-free field with no repair-patch repeat",
+      "sha256": "c09a9af4a2e768537d592de822fe477bb6445ed132ae0c42ad19356c91d67efb",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "neutral_close_material"
+    },
+    {
+      "bytes": 197404,
+      "camera_position_m": [
+        -10.3999996185303,
+        1.89999997615814,
+        7.40000009536743
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-rollup-pale-close.png",
+      "id": "02-rollup-pale-close",
+      "label": "W34313525-ROLLUP-PALE",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.52987,
+        "minimum": 0.022428,
+        "range": 0.92549,
+        "sample_count": 4000
+      },
+      "scope_note": "complete pale leaf, full outer frame and 8-bar slat study · zero field/backing ownership",
+      "sha256": "277106ad3a8402f2bbb14dffbeb9691ff7b240365a1023fdb2175548d1094d61",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "complete_module_neutral"
+    },
+    {
+      "bytes": 211899,
+      "camera_position_m": [
+        -4.80000019073486,
+        1.89999997615814,
+        7.40000009536743
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-rollup-gray-close.png",
+      "id": "03-rollup-gray-close",
+      "label": "W34313525-ROLLUP-GRAY",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.526165,
+        "minimum": 0.045108,
+        "range": 0.90281,
+        "sample_count": 4000
+      },
+      "scope_note": "separate complete gray state, full outer frame and 8-bar slat study · no inferred alternate cadence",
+      "sha256": "a3a6d79d7a6b0beede652c8bf4387911af33ed266c11bbe2a7c709947b395419",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "complete_module_neutral"
+    },
+    {
+      "bytes": 158413,
+      "camera_position_m": [
+        0.0,
+        1.5,
+        5.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "04-personnel-close.png",
+      "id": "04-personnel-close",
+      "label": "W34313525-PERSONNEL",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.593249,
+        "minimum": 0.015136,
+        "range": 0.932783,
+        "sample_count": 4000
+      },
+      "scope_note": "complete plain service-door leaf and full outer frame · host field owns the surround",
+      "sha256": "6981bc628dea4549989af15118363c70601981088457f584c5c77bc693680e4d",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "complete_module_neutral"
+    },
+    {
+      "bytes": 103141,
+      "camera_position_m": [
+        6.19999980926514,
+        3.75,
+        7.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "05-high-group-close.png",
+      "id": "05-high-group-close",
+      "label": "W34313525-HIGH-GROUP",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.596871,
+        "minimum": 0.015136,
+        "range": 0.932783,
+        "sample_count": 4000
+      },
+      "scope_note": "complete high group · dark opaque proxy does not claim window-versus-grille semantics",
+      "sha256": "b5a31c2b55ab01e582bd000e00d998d21b8394ac643f150b8397c2bb1cf3840a",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "complete_module_front"
+    },
+    {
+      "bytes": 83864,
+      "camera_position_m": [
+        0.0,
+        3.70000004768372,
+        34.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "06-ordinary-complete-set.png",
+      "id": "06-ordinary-complete-set",
+      "label": "TWO-SIDE FAMILY EXEMPLARS",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.292102,
+        "minimum": 0.022428,
+        "range": 0.92549,
+        "sample_count": 4000
+      },
+      "scope_note": "four bounded motifs on one proof field · illustrative layout only, not receiver sequence or cadence",
+      "sha256": "80964f7117254f6b90883b9a735ef12d299200edc15f0a77ffb05cfe2a9d805a",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_readable_scale"
+    },
+    {
+      "bytes": 74669,
+      "camera_position_m": [
+        0.0,
+        8.0,
+        44.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "07-macro-repeat-span.png",
+      "id": "07-macro-repeat-span",
+      "label": "W34313525-MAT-PALE",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.26595,
+        "minimum": 0.015136,
+        "range": 0.932783,
+        "sample_count": 4000
+      },
+      "scope_note": "30 m continuous aperiodic field · no finite facade motif period, repair repetition or phase reset",
+      "sha256": "b32a2c2640911f04f1bd0ac61f696de185b0e458b2fcceb6768ef39a5c4fd8d7",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "macro_repeat_and_alias_control"
+    },
+    {
+      "bytes": 136950,
+      "camera_position_m": [
+        -13.0,
+        7.0,
+        35.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "08-changed-light-oblique.png",
+      "id": "08-changed-light-oblique",
+      "label": "FIELD + FOUR COMPLETE MOTIFS",
+      "sampled_luminance": {
+        "maximum": 0.947918,
+        "mean": 0.208044,
+        "minimum": 0.007293,
+        "range": 0.940626,
+        "sample_count": 4000
+      },
+      "scope_note": "changed sun exposes matte finish, shallow depth and zero module backing",
+      "sha256": "6f2ef029cebeafa6827683090c92f805df1669ef2b1e005d2c6fd083554e43c1",
+      "sun_rotation_degrees": [
+        -15.9999990463257,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_finish_depth_and_backing"
+    }
+  ],
+  "display_driver": "macOS",
+  "evidence_role": "controlled native standalone field and complete-module proof; not receiver placement, calibration, gameplay-world, elevation or whole-building evidence",
+  "exact_receiver_calibration": false,
+  "field_repeat_proof": {
+    "finite_facade_motif_period": "none_by_design",
+    "mapping": "continuous meter-space aperiodic host field",
+    "repair_patch_motifs": 0,
+    "span_m": 30.0
+  },
+  "godot_version": "4.7.2-stable (official)",
+  "module_proof": {
+    "complete_motifs": 4,
+    "field_or_backing_meshes": 0,
+    "high_group_semantics": "window_or_grille_not_disambiguated_opaque_proxy_only",
+    "module_meshes": 38
+  },
+  "observed_scope": "SSE central runs 8..12 and NNW central runs 26..27 are evidence eligibility bounds, never placements",
+  "one_local_unit_m": 1.0,
+  "proof_dimensions_m": [
+    30.0,
+    5.0
+  ],
+  "receiver_key": "building:w34313525:wall",
+  "registry_path": "res://game/resources/facades/w34313525_standalone_prototypes.json",
+  "registry_sha256": "86d3634e62f367f24bef98206fe1e6f34124023f0d9672bbd318c45c0a33b170",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_standalone_art_review_not_self_accepted",
+  "runtime_attachment": false,
+  "scene_path": "res://game/scenes/world/facades/batch_06/w34313525_standalone_prototype_set.tscn",
+  "scene_sha256": "9259ab6f231fee7d3d3ad8bfea0a290a455b1490b291a1d05b7cd64df4965cbe",
+  "schema_version": "ti.w34313525-standalone-prototype-evidence/1",
+  "source_key": "w34313525",
+  "topology": {
+    "collision_nodes": 0,
+    "module_meshes": 38,
+    "module_surfaces": 38,
+    "module_triangles": 456,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "total_meshes": 39,
+    "total_surfaces": 39,
+    "total_triangles": 468
+  },
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

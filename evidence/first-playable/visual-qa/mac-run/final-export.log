@@ -1,0 +1,12 @@
+VISUAL-QA FINAL ISOLATED MAC EXPORT — 2026-08-28
+
+$ /usr/bin/time -p .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --export-release "macOS Private" "build/visual-qa-staging/Treasure Island First Playable.app"
+
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+Preset: macOS Private
+Output: build/visual-qa-staging/Treasure Island First Playable.app
+Export phases: project scan; app bundle; PCK packing; built-in code signing
+Generated-world hook output: all 44 generated-world files, including 38 chunk JSON files
+Result: exit=0 real=4.86s user=3.55s sys=1.04s
+
+This is the authoritative re-export after the test-only smoke-focus correction. The first visual-qa-staging export from earlier in the round is superseded and none of its hashes are retained as current identity. Historical build/mac, build/ferry-spawn-staging, and build/jetpack-staging bundles were not exported, overwritten, launched, or modified by this round.

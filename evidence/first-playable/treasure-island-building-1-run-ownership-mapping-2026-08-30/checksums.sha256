@@ -1,0 +1,16 @@
+3909cce94425aa7ed6361c8a63a472ac052d68f4bef1e48e83b7539aa88fed0d  README.md
+cc843232dffa0ba96787b6dfa34c881a2e2dcb9d9419551fb6b9449bda3c3cd8  visibility-diagnostic.json
+c90fd6dd3ee4f1533caa285a7bda6de62d14b0c64b4e147502ab4e2034b46bc1  plan-view.svg
+49becc798db903dd6c10230da1fd08fb4477231cd4414743f68340b3b3c23a47  plan-view.png
+716f90b9d7cb3267e901d438a5c583047c8eaeb912e544a459005c2dbe6a4359  ../../../discovery/facades/TREASURE_ISLAND_BUILDING_1_RUN_OWNERSHIP.json
+43c0a7f0d0c8387dc4e2223bdfb187ed572bcbf55d0f26ef5225f6064fbea2f7  ../../../discovery/facades/TREASURE_ISLAND_BUILDING_1_RUN_OWNERSHIP_HANDOFF.md
+bb712a917b184359a5ef30b2a8f935080243839422485cd1151176b89aeb716a  ../../../tools/build_building_1_run_ownership_mapping.mjs
+dfcb1475d679ca05e70499e1f17ed56deb3719a6d66cf1ab06b8ee6a79c61eb2  ../../../tools/test_building_1_run_ownership_mapping.mjs
+8d33bf21c29bf6347a17eabf98e7a8c66eb23a38649a0e3af0f03c0a82feedcb  ../../../discovery/facades/TREASURE_ISLAND_BUILDING_1_STANDALONE_PROTOTYPE_ART_REVIEW.md
+2014040edb3985be4aaae437749063474aacaedc0534b6d54e69b7dfd92612cc  ../../../game/resources/facades/building_1_standalone_prototypes.json
+d1e7ab8987f64d01165555fdade3b52dfa042b1ef1a9d5eb2b32ec88cb85ac65  ../treasure-island-building-1-standalone-prototypes-2026-08-30/checksums.sha256
+79fe7b7cc49ea5e40a8611313defacb07ec23fb1a1a711822e0378b8cc32ac5a  ../../../discovery/facades/TREASURE_ISLAND_MUSEUM_BUILDING_1_REFERENCE_SPEC.md
+aee175db92ec39b0ae4f0e2adfe286f297c93d303fee4249cb6f03c25ae12b2a  ../../../discovery/facades/NEXT_COHORT_STREETVIEW_OBSERVATIONS.md
+3b6f6af31a1c82de3fa51fcbc02fe7e3723fdb629c948ae6523ef46c157b4549  ../../../data/osm/treasure-island-2026-08-27.osm
+dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce  ../../../generated/world/chunks/x_-1__z_2.json
+886f4e6ecfbf570dac9cb36f682a089a0cfe51b735692e3220df4d5b4ac3d7b6  ../../../generated/world/chunks/x_0__z_2.json

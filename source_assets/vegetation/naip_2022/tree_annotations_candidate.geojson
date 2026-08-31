@@ -1,0 +1,2670 @@
+{
+  "type": "FeatureCollection",
+  "schema": "ti.naip-tree-annotations-candidate/1",
+  "name": "Treasure Island NAIP 2022 tree annotation candidates",
+  "crs": {
+    "type": "name",
+    "properties": {
+      "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+    }
+  },
+  "source": {
+    "imagery_date": "2022-05-18",
+    "source_image": "third_party_staging/naip_2022_treasure_island/treasure_island_naip_2022-05-18.tif",
+    "source_bbox_wgs84": [
+      -122.3790725,
+      37.8151916,
+      -122.3629075,
+      37.8323315
+    ],
+    "source_dimensions_px": [
+      2370,
+      3181
+    ],
+    "pixel_coordinate_rule": "integer crown-center pixel; WGS84 uses pixel-center interpolation over export bbox",
+    "attribution": "Imagery: USDA Farm Service Agency NAIP, acquired 2022-05-18; served by USGS The National Map."
+  },
+  "review_status": "candidate",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1156-py0418",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37118439,
+          37.83007653
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1156-py0418",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-01",
+        "source_pixel_xy": [
+          1156,
+          418
+        ],
+        "cell_pixel_xy": [
+          563,
+          418
+        ],
+        "world_position_m": [
+          -17.093,
+          0,
+          -702.98
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0823-py0419",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37345567,
+          37.83007115
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0823-py0419",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-01",
+        "source_pixel_xy": [
+          823,
+          419
+        ],
+        "cell_pixel_xy": [
+          230,
+          419
+        ],
+        "world_position_m": [
+          -216.81,
+          0,
+          -702.381
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0811-py0452",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37353752,
+          37.82989333
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0811-py0452",
+        "tree_type": "broadleaf",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-01",
+        "source_pixel_xy": [
+          811,
+          452
+        ],
+        "cell_pixel_xy": [
+          218,
+          452
+        ],
+        "world_position_m": [
+          -224.007,
+          0,
+          -682.587
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0781-py0482",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37374214,
+          37.82973169
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0781-py0482",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-01",
+        "source_pixel_xy": [
+          781,
+          482
+        ],
+        "cell_pixel_xy": [
+          188,
+          482
+        ],
+        "world_position_m": [
+          -241.999,
+          0,
+          -664.593
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0748-py0500",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37396722,
+          37.8296347
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0748-py0500",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-01",
+        "source_pixel_xy": [
+          748,
+          500
+        ],
+        "cell_pixel_xy": [
+          155,
+          500
+        ],
+        "world_position_m": [
+          -261.791,
+          0,
+          -653.796
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0868-py0537",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37314874,
+          37.82943534
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0868-py0537",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-01",
+        "source_pixel_xy": [
+          868,
+          537
+        ],
+        "cell_pixel_xy": [
+          275,
+          537
+        ],
+        "world_position_m": [
+          -189.821,
+          0,
+          -631.603
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0873-py0560",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37311464,
+          37.82931141
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0873-py0560",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-01",
+        "source_pixel_xy": [
+          873,
+          560
+        ],
+        "cell_pixel_xy": [
+          280,
+          560
+        ],
+        "world_position_m": [
+          -186.822,
+          0,
+          -617.808
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0489-py0578",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37573378,
+          37.82921442
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0489-py0578",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-00",
+        "source_pixel_xy": [
+          489,
+          578
+        ],
+        "cell_pixel_xy": [
+          489,
+          578
+        ],
+        "world_position_m": [
+          -417.127,
+          0,
+          -607.011
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0955-py0718",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37255534,
+          37.82846007
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0955-py0718",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          955,
+          718
+        ],
+        "cell_pixel_xy": [
+          362,
+          82
+        ],
+        "world_position_m": [
+          -137.642,
+          0,
+          -523.037
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1116-py0718",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37145722,
+          37.82846007
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1116-py0718",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          1116,
+          718
+        ],
+        "cell_pixel_xy": [
+          523,
+          82
+        ],
+        "world_position_m": [
+          -41.083,
+          0,
+          -523.037
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0341-py0723",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37674324,
+          37.82843313
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0341-py0723",
+        "tree_type": "broadleaf",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          341,
+          723
+        ],
+        "cell_pixel_xy": [
+          341,
+          87
+        ],
+        "world_position_m": [
+          -505.89,
+          0,
+          -520.038
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0907-py0776",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37288274,
+          37.82814755
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0907-py0776",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          907,
+          776
+        ],
+        "cell_pixel_xy": [
+          314,
+          140
+        ],
+        "world_position_m": [
+          -166.431,
+          0,
+          -488.247
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1115-py0780",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37146404,
+          37.828126
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1115-py0780",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          1115,
+          780
+        ],
+        "cell_pixel_xy": [
+          522,
+          144
+        ],
+        "world_position_m": [
+          -41.683,
+          0,
+          -485.848
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0861-py0790",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37319649,
+          37.82807212
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0861-py0790",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          861,
+          790
+        ],
+        "cell_pixel_xy": [
+          268,
+          154
+        ],
+        "world_position_m": [
+          -194.02,
+          0,
+          -479.85
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0443-py0795",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37604753,
+          37.82804518
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0443-py0795",
+        "tree_type": "broadleaf",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          443,
+          795
+        ],
+        "cell_pixel_xy": [
+          443,
+          159
+        ],
+        "world_position_m": [
+          -444.715,
+          0,
+          -476.852
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0999-py0816",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37225524,
+          37.82793203
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0999-py0816",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          999,
+          816
+        ],
+        "cell_pixel_xy": [
+          406,
+          180
+        ],
+        "world_position_m": [
+          -111.254,
+          0,
+          -464.256
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0530-py0866",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37545413,
+          37.82766261
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0530-py0866",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          530,
+          866
+        ],
+        "cell_pixel_xy": [
+          530,
+          230
+        ],
+        "world_position_m": [
+          -392.537,
+          0,
+          -434.264
+        ],
+        "evidence": "Isolated visible crown; form is clear but coarse type is uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0975-py0875",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37241893,
+          37.82761412
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0975-py0875",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          975,
+          875
+        ],
+        "cell_pixel_xy": [
+          382,
+          239
+        ],
+        "world_position_m": [
+          -125.648,
+          0,
+          -428.866
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1001-py0916",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37224159,
+          37.8273932
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1001-py0916",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          1001,
+          916
+        ],
+        "cell_pixel_xy": [
+          408,
+          280
+        ],
+        "world_position_m": [
+          -110.054,
+          0,
+          -404.273
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1438-py0917",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36926096,
+          37.82738782
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1438-py0917",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-06",
+        "source_pixel_xy": [
+          1438,
+          917
+        ],
+        "cell_pixel_xy": [
+          253,
+          281
+        ],
+        "world_position_m": [
+          152.037,
+          0,
+          -403.675
+        ],
+        "evidence": "Isolated visible crown; form is clear but coarse type is uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0410-py0934",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37627261,
+          37.82729622
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0410-py0934",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          410,
+          934
+        ],
+        "cell_pixel_xy": [
+          410,
+          298
+        ],
+        "world_position_m": [
+          -464.507,
+          0,
+          -393.478
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0179-py0945",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37784819,
+          37.82723695
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0179-py0945",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          179,
+          945
+        ],
+        "cell_pixel_xy": [
+          179,
+          309
+        ],
+        "world_position_m": [
+          -603.05,
+          0,
+          -386.88
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0270-py0950",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37722751,
+          37.82721001
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0270-py0950",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          270,
+          950
+        ],
+        "cell_pixel_xy": [
+          270,
+          314
+        ],
+        "world_position_m": [
+          -548.473,
+          0,
+          -383.881
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1462-py0971",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36909726,
+          37.82709685
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1462-py0971",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-06",
+        "source_pixel_xy": [
+          1462,
+          971
+        ],
+        "cell_pixel_xy": [
+          277,
+          335
+        ],
+        "world_position_m": [
+          166.431,
+          0,
+          -371.284
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0437-py0974",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37608845,
+          37.82708069
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0437-py0974",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          437,
+          974
+        ],
+        "cell_pixel_xy": [
+          437,
+          338
+        ],
+        "world_position_m": [
+          -448.314,
+          0,
+          -369.485
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0346-py0995",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37670914,
+          37.82696754
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0346-py0995",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          346,
+          995
+        ],
+        "cell_pixel_xy": [
+          346,
+          359
+        ],
+        "world_position_m": [
+          -502.892,
+          0,
+          -356.889
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1840-py1011",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36651905,
+          37.82688132
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1840-py1011",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-07",
+        "source_pixel_xy": [
+          1840,
+          1011
+        ],
+        "cell_pixel_xy": [
+          62,
+          375
+        ],
+        "world_position_m": [
+          393.137,
+          0,
+          -347.291
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0270-py1020",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37722751,
+          37.82683283
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0270-py1020",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          270,
+          1020
+        ],
+        "cell_pixel_xy": [
+          270,
+          384
+        ],
+        "world_position_m": [
+          -548.473,
+          0,
+          -341.893
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0670-py1022",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37449924,
+          37.82682205
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0670-py1022",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          670,
+          1022
+        ],
+        "cell_pixel_xy": [
+          77,
+          386
+        ],
+        "world_position_m": [
+          -308.572,
+          0,
+          -340.693
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1860-py1046",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36638263,
+          37.82669274
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1860-py1046",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-07",
+        "source_pixel_xy": [
+          1860,
+          1046
+        ],
+        "cell_pixel_xy": [
+          82,
+          410
+        ],
+        "world_position_m": [
+          405.132,
+          0,
+          -326.299
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0387-py1056",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37642949,
+          37.82663885
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0387-py1056",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          387,
+          1056
+        ],
+        "cell_pixel_xy": [
+          387,
+          420
+        ],
+        "world_position_m": [
+          -478.302,
+          0,
+          -320.3
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0773-py1056",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37379671,
+          37.82663885
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0773-py1056",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          773,
+          1056
+        ],
+        "cell_pixel_xy": [
+          180,
+          420
+        ],
+        "world_position_m": [
+          -246.798,
+          0,
+          -320.3
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0471-py1063",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37585655,
+          37.82660114
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0471-py1063",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          471,
+          1063
+        ],
+        "cell_pixel_xy": [
+          471,
+          427
+        ],
+        "world_position_m": [
+          -427.922,
+          0,
+          -316.102
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1879-py1084",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36625304,
+          37.82648798
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1879-py1084",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-07",
+        "source_pixel_xy": [
+          1879,
+          1084
+        ],
+        "cell_pixel_xy": [
+          101,
+          448
+        ],
+        "world_position_m": [
+          416.527,
+          0,
+          -303.505
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1621-py1097",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36801278,
+          37.82641794
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1621-py1097",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-06",
+        "source_pixel_xy": [
+          1621,
+          1097
+        ],
+        "cell_pixel_xy": [
+          436,
+          461
+        ],
+        "world_position_m": [
+          261.791,
+          0,
+          -295.708
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1900-py1121",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36610981,
+          37.82628862
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1900-py1121",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-07",
+        "source_pixel_xy": [
+          1900,
+          1121
+        ],
+        "cell_pixel_xy": [
+          122,
+          485
+        ],
+        "world_position_m": [
+          429.122,
+          0,
+          -281.312
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0787-py1129",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37370122,
+          37.82624552
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0787-py1129",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          787,
+          1129
+        ],
+        "cell_pixel_xy": [
+          194,
+          493
+        ],
+        "world_position_m": [
+          -238.401,
+          0,
+          -276.514
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1924-py1161",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36594611,
+          37.82607309
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1924-py1161",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-07",
+        "source_pixel_xy": [
+          1924,
+          1161
+        ],
+        "cell_pixel_xy": [
+          146,
+          525
+        ],
+        "world_position_m": [
+          443.516,
+          0,
+          -257.319
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1937-py1180",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36585744,
+          37.82597072
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1937-py1180",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-07",
+        "source_pixel_xy": [
+          1937,
+          1180
+        ],
+        "cell_pixel_xy": [
+          159,
+          544
+        ],
+        "world_position_m": [
+          451.313,
+          0,
+          -245.924
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0382-py1189",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37646359,
+          37.82592222
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0382-py1189",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          382,
+          1189
+        ],
+        "cell_pixel_xy": [
+          382,
+          553
+        ],
+        "world_position_m": [
+          -481.3,
+          0,
+          -240.525
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1466-py1192",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36906998,
+          37.82590606
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1466-py1192",
+        "tree_type": "broadleaf",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-06",
+        "source_pixel_xy": [
+          1466,
+          1192
+        ],
+        "cell_pixel_xy": [
+          281,
+          556
+        ],
+        "world_position_m": [
+          168.83,
+          0,
+          -238.726
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1953-py1200",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36574831,
+          37.82586295
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1953-py1200",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-07",
+        "source_pixel_xy": [
+          1953,
+          1200
+        ],
+        "cell_pixel_xy": [
+          175,
+          564
+        ],
+        "world_position_m": [
+          460.909,
+          0,
+          -233.927
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1968-py1220",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.365646,
+          37.82575519
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1968-py1220",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-07",
+        "source_pixel_xy": [
+          1968,
+          1220
+        ],
+        "cell_pixel_xy": [
+          190,
+          584
+        ],
+        "world_position_m": [
+          469.905,
+          0,
+          -221.931
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1557-py1233",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.3684493,
+          37.82568514
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1557-py1233",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-06",
+        "source_pixel_xy": [
+          1557,
+          1233
+        ],
+        "cell_pixel_xy": [
+          372,
+          597
+        ],
+        "world_position_m": [
+          223.407,
+          0,
+          -214.133
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1983-py1239",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36554369,
+          37.82565281
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1983-py1239",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-07",
+        "source_pixel_xy": [
+          1983,
+          1239
+        ],
+        "cell_pixel_xy": [
+          205,
+          603
+        ],
+        "world_position_m": [
+          478.901,
+          0,
+          -210.534
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1998-py1260",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36544138,
+          37.82553966
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1998-py1260",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-07",
+        "source_pixel_xy": [
+          1998,
+          1260
+        ],
+        "cell_pixel_xy": [
+          220,
+          624
+        ],
+        "world_position_m": [
+          487.898,
+          0,
+          -197.938
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px2059-py1297",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36502532,
+          37.8253403
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px2059-py1297",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-11",
+        "source_pixel_xy": [
+          2059,
+          1297
+        ],
+        "cell_pixel_xy": [
+          281,
+          25
+        ],
+        "world_position_m": [
+          524.482,
+          0,
+          -175.746
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0738-py1301",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37403543,
+          37.82531874
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0738-py1301",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-09",
+        "source_pixel_xy": [
+          738,
+          1301
+        ],
+        "cell_pixel_xy": [
+          145,
+          29
+        ],
+        "world_position_m": [
+          -267.789,
+          0,
+          -173.346
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0619-py1312",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37484709,
+          37.82525947
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0619-py1312",
+        "tree_type": "broadleaf",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-09",
+        "source_pixel_xy": [
+          619,
+          1312
+        ],
+        "cell_pixel_xy": [
+          26,
+          40
+        ],
+        "world_position_m": [
+          -339.159,
+          0,
+          -166.748
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1262-py1312",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.3704614,
+          37.82525947
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1262-py1312",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-10",
+        "source_pixel_xy": [
+          1262,
+          1312
+        ],
+        "cell_pixel_xy": [
+          77,
+          40
+        ],
+        "world_position_m": [
+          46.481,
+          0,
+          -166.748
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1383-py1337",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.3696361,
+          37.82512477
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1383-py1337",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-10",
+        "source_pixel_xy": [
+          1383,
+          1337
+        ],
+        "cell_pixel_xy": [
+          198,
+          65
+        ],
+        "world_position_m": [
+          119.05,
+          0,
+          -151.753
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px2083-py1342",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36486162,
+          37.82509783
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px2083-py1342",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-11",
+        "source_pixel_xy": [
+          2083,
+          1342
+        ],
+        "cell_pixel_xy": [
+          305,
+          70
+        ],
+        "world_position_m": [
+          538.877,
+          0,
+          -148.754
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0350-py1371",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37668185,
+          37.82494157
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0350-py1371",
+        "tree_type": "broadleaf",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-08",
+        "source_pixel_xy": [
+          350,
+          1371
+        ],
+        "cell_pixel_xy": [
+          350,
+          99
+        ],
+        "world_position_m": [
+          -500.492,
+          0,
+          -131.359
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px2107-py1387",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36469793,
+          37.82485536
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px2107-py1387",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-11",
+        "source_pixel_xy": [
+          2107,
+          1387
+        ],
+        "cell_pixel_xy": [
+          329,
+          115
+        ],
+        "world_position_m": [
+          553.27,
+          0,
+          -121.762
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0492-py1392",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37571332,
+          37.82482842
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0492-py1392",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-08",
+        "source_pixel_xy": [
+          492,
+          1392
+        ],
+        "cell_pixel_xy": [
+          492,
+          120
+        ],
+        "world_position_m": [
+          -415.328,
+          0,
+          -118.763
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px2130-py1433",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36454105,
+          37.8246075
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px2130-py1433",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-11",
+        "source_pixel_xy": [
+          2130,
+          1433
+        ],
+        "cell_pixel_xy": [
+          352,
+          161
+        ],
+        "world_position_m": [
+          567.065,
+          0,
+          -94.171
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0491-py1445",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37572014,
+          37.82454284
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0491-py1445",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-08",
+        "source_pixel_xy": [
+          491,
+          1445
+        ],
+        "cell_pixel_xy": [
+          491,
+          173
+        ],
+        "world_position_m": [
+          -415.928,
+          0,
+          -86.973
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1855-py1450",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36641674,
+          37.8245159
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1855-py1450",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-11",
+        "source_pixel_xy": [
+          1855,
+          1450
+        ],
+        "cell_pixel_xy": [
+          77,
+          178
+        ],
+        "world_position_m": [
+          402.133,
+          0,
+          -83.974
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px2154-py1479",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36437736,
+          37.82435964
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px2154-py1479",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-11",
+        "source_pixel_xy": [
+          2154,
+          1479
+        ],
+        "cell_pixel_xy": [
+          376,
+          207
+        ],
+        "world_position_m": [
+          581.458,
+          0,
+          -66.579
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1451-py1510",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36917229,
+          37.82419261
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1451-py1510",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-10",
+        "source_pixel_xy": [
+          1451,
+          1510
+        ],
+        "cell_pixel_xy": [
+          266,
+          238
+        ],
+        "world_position_m": [
+          159.834,
+          0,
+          -47.985
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px2180-py1525",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36420002,
+          37.82411178
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px2180-py1525",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-11",
+        "source_pixel_xy": [
+          2180,
+          1525
+        ],
+        "cell_pixel_xy": [
+          402,
+          253
+        ],
+        "world_position_m": [
+          597.052,
+          0,
+          -38.987
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0639-py1528",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37471068,
+          37.82409562
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0639-py1528",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-09",
+        "source_pixel_xy": [
+          639,
+          1528
+        ],
+        "cell_pixel_xy": [
+          46,
+          256
+        ],
+        "world_position_m": [
+          -327.164,
+          0,
+          -37.189
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1559-py1569",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36843566,
+          37.8238747
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1559-py1569",
+        "tree_type": "broadleaf",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-10",
+        "source_pixel_xy": [
+          1559,
+          1569
+        ],
+        "cell_pixel_xy": [
+          374,
+          297
+        ],
+        "world_position_m": [
+          224.607,
+          0,
+          -12.596
+        ],
+        "evidence": "Isolated visible crown; form is clear but coarse type is uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px2206-py1571",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36402268,
+          37.82386393
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px2206-py1571",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-11",
+        "source_pixel_xy": [
+          2206,
+          1571
+        ],
+        "cell_pixel_xy": [
+          428,
+          299
+        ],
+        "world_position_m": [
+          612.646,
+          0,
+          -11.397
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1875-py1574",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36628032,
+          37.82384776
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1875-py1574",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-11",
+        "source_pixel_xy": [
+          1875,
+          1574
+        ],
+        "cell_pixel_xy": [
+          97,
+          302
+        ],
+        "world_position_m": [
+          414.129,
+          0,
+          -9.597
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0739-py1596",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37402861,
+          37.82372922
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0739-py1596",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-09",
+        "source_pixel_xy": [
+          739,
+          1596
+        ],
+        "cell_pixel_xy": [
+          146,
+          324
+        ],
+        "world_position_m": [
+          -267.189,
+          0,
+          3.599
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0388-py1612",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37642267,
+          37.82364301
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0388-py1612",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-08",
+        "source_pixel_xy": [
+          388,
+          1612
+        ],
+        "cell_pixel_xy": [
+          388,
+          340
+        ],
+        "world_position_m": [
+          -477.702,
+          0,
+          13.196
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px2232-py1616",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36384534,
+          37.82362146
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px2232-py1616",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-11",
+        "source_pixel_xy": [
+          2232,
+          1616
+        ],
+        "cell_pixel_xy": [
+          454,
+          344
+        ],
+        "world_position_m": [
+          628.24,
+          0,
+          15.595
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px2261-py1661",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36364754,
+          37.82337899
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px2261-py1661",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-11",
+        "source_pixel_xy": [
+          2261,
+          1661
+        ],
+        "cell_pixel_xy": [
+          483,
+          389
+        ],
+        "world_position_m": [
+          645.632,
+          0,
+          42.586
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0405-py1666",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37630672,
+          37.82335205
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0405-py1666",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-08",
+        "source_pixel_xy": [
+          405,
+          1666
+        ],
+        "cell_pixel_xy": [
+          405,
+          394
+        ],
+        "world_position_m": [
+          -467.506,
+          0,
+          45.585
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0781-py1828",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37374214,
+          37.82247916
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0781-py1828",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-09",
+        "source_pixel_xy": [
+          781,
+          1828
+        ],
+        "cell_pixel_xy": [
+          188,
+          556
+        ],
+        "world_position_m": [
+          -241.999,
+          0,
+          142.755
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1505-py1846",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36880397,
+          37.82238217
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1505-py1846",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-10",
+        "source_pixel_xy": [
+          1505,
+          1846
+        ],
+        "cell_pixel_xy": [
+          320,
+          574
+        ],
+        "world_position_m": [
+          192.221,
+          0,
+          153.552
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1306-py1930",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37016129,
+          37.82192956
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1306-py1930",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-14",
+        "source_pixel_xy": [
+          1306,
+          1930
+        ],
+        "cell_pixel_xy": [
+          121,
+          21
+        ],
+        "world_position_m": [
+          72.87,
+          0,
+          203.936
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1662-py1958",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36773313,
+          37.82177869
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1662-py1958",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-14",
+        "source_pixel_xy": [
+          1662,
+          1958
+        ],
+        "cell_pixel_xy": [
+          477,
+          49
+        ],
+        "world_position_m": [
+          286.381,
+          0,
+          220.731
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1419-py2020",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36939055,
+          37.82144462
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1419-py2020",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-14",
+        "source_pixel_xy": [
+          1419,
+          2020
+        ],
+        "cell_pixel_xy": [
+          234,
+          111
+        ],
+        "world_position_m": [
+          140.642,
+          0,
+          257.919
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1277-py2090",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37035909,
+          37.82106744
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1277-py2090",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-14",
+        "source_pixel_xy": [
+          1277,
+          2090
+        ],
+        "cell_pixel_xy": [
+          92,
+          181
+        ],
+        "world_position_m": [
+          55.477,
+          0,
+          299.907
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1433-py2099",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36929506,
+          37.82101895
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1433-py2099",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-14",
+        "source_pixel_xy": [
+          1433,
+          2099
+        ],
+        "cell_pixel_xy": [
+          248,
+          190
+        ],
+        "world_position_m": [
+          149.038,
+          0,
+          305.305
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1369-py2110",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36973159,
+          37.82095968
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1369-py2110",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-14",
+        "source_pixel_xy": [
+          1369,
+          2110
+        ],
+        "cell_pixel_xy": [
+          184,
+          201
+        ],
+        "world_position_m": [
+          110.654,
+          0,
+          311.903
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1390-py2227",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36958835,
+          37.82032926
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1390-py2227",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-14",
+        "source_pixel_xy": [
+          1390,
+          2227
+        ],
+        "cell_pixel_xy": [
+          205,
+          318
+        ],
+        "world_position_m": [
+          123.249,
+          0,
+          382.081
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1247-py2298",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37056371,
+          37.8199467
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1247-py2298",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-14",
+        "source_pixel_xy": [
+          1247,
+          2298
+        ],
+        "cell_pixel_xy": [
+          62,
+          389
+        ],
+        "world_position_m": [
+          37.484,
+          0,
+          424.667
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "candidate"
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+exit=0
+FERRY_PACKAGE_AUDIT: files=91 generated_world=44 manifest_sha256=07b8b195e1a05942e38d9bbbcb801394cf9f184051fb5f7a819c75677e46f160 spawn=(-104.364,1.000,786.024) yaw=-0.119 banned=0
+PASS: staged PCK contains the exact ferry-spawn manifest and excludes authoring/audit inputs
+
+Banned prefixes checked: addons, build, data, discovery, evidence, node_modules, tools, .tools.
+Banned root files checked: INSTALL_LOG.md, package.json, package-lock.json.

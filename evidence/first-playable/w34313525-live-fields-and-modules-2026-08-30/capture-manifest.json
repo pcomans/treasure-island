@@ -1,0 +1,1243 @@
+{
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/w34313525_live_integration_capture.gd",
+  "capture_count": 15,
+  "captures": [
+    {
+      "bytes": 873827,
+      "camera_position_m": [
+        302.646728515625,
+        8.20100021362305,
+        -50.7780227661133
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/01-sse-field-join-08-09.png",
+      "id": "01-sse-field-join-08-09",
+      "placement_ids": [],
+      "representative_runs": [
+        8,
+        9
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.533864,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "79e689c51dd6e67c5a24aae704dd291f317b9c73bb55e567db49164bcd01cdc2",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        295.56298828125,
+        6.19999980926514,
+        -64.0
+      ],
+      "view_kind": "exact_live_SSE_field_join_8_to_9"
+    },
+    {
+      "bytes": 809100,
+      "camera_position_m": [
+        327.083740234375,
+        8.21100044250488,
+        -63.8730239868164
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/02-sse-field-join-09-10.png",
+      "id": "02-sse-field-join-09-10",
+      "placement_ids": [],
+      "representative_runs": [
+        9,
+        10
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.540729,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "ef03c7735e7aa275e36b6049841b6a4f86410140ba5d71d0edef07c3285b49dd",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        320.0,
+        6.19999980926514,
+        -77.0950012207031
+      ],
+      "view_kind": "exact_live_SSE_field_join_9_to_10"
+    },
+    {
+      "bytes": 889439,
+      "camera_position_m": [
+        354.823486328125,
+        8.19099998474121,
+        -79.8714828491211
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/03-sse-field-join-10-11.png",
+      "id": "03-sse-field-join-10-11",
+      "placement_ids": [],
+      "representative_runs": [
+        10,
+        11
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.531531,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "1a8a529edc502167f8ea76e287949ec11ecccff798915173f3b740b101c14fda",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        348.212005615234,
+        6.19999980926514,
+        -92.2119979858398
+      ],
+      "view_kind": "exact_live_SSE_field_join_10_to_11"
+    },
+    {
+      "bytes": 946850,
+      "camera_position_m": [
+        357.194732666016,
+        8.1830005645752,
+        -84.5458831787109
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/04-sse-field-join-11-12.png",
+      "id": "04-sse-field-join-11-12",
+      "placement_ids": [],
+      "representative_runs": [
+        11,
+        12
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.520362,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "dea0fd5f2bcafd9edf52cf5c17a7456e856b8b03f1611010fab1c0acf2024a19",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        352.0,
+        6.19999980926514,
+        -94.2419967651367
+      ],
+      "view_kind": "exact_live_SSE_field_join_11_to_12"
+    },
+    {
+      "bytes": 667223,
+      "camera_position_m": [
+        281.860748291016,
+        8.21100044250488,
+        -142.953048706055
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/05-nnw-field-join-26-27.png",
+      "id": "05-nnw-field-join-26-27",
+      "placement_ids": [],
+      "representative_runs": [
+        26,
+        27
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.438117,
+        "minimum": 0.089131,
+        "range": 0.853115,
+        "sample_count": 4000
+      },
+      "sha256": "4fac427ebb995abfa306a8556822ba3b31bbbd5b7ca5eeba9501aeb6afec0671",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        288.0,
+        6.19999980926514,
+        -131.494003295898
+      ],
+      "view_kind": "exact_live_NNW_field_join_26_to_27"
+    },
+    {
+      "bytes": 876308,
+      "camera_position_m": [
+        315.239654541016,
+        7.30599975585938,
+        -60.8616828918457
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/06-close-rollup-pale.png",
+      "id": "06-close-rollup-pale",
+      "placement_ids": [
+        "CAL-SSE-ROLLUP-PALE-01"
+      ],
+      "representative_runs": [
+        9
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.525559,
+        "minimum": 0.106202,
+        "range": 0.836045,
+        "sample_count": 4000
+      },
+      "sha256": "2942c0eca4e7ecfa51c165be28b4d454d6c0dcaa69aa9d7cbb974cda837832d9",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        307.809814453125,
+        5.56599998474121,
+        -70.4946136474609
+      ],
+      "view_kind": "exact_live_complete_ROLLUP_PALE"
+    },
+    {
+      "bytes": 872883,
+      "camera_position_m": [
+        338.038421630859,
+        7.30100011825562,
+        -73.0784149169922
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/07-close-rollup-gray.png",
+      "id": "07-close-rollup-gray",
+      "placement_ids": [
+        "CAL-SSE-ROLLUP-GRAY-01"
+      ],
+      "representative_runs": [
+        10
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.508629,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "c895ff4ea370ff10940481669e9b68986d56b84147ce4e807d29ac0fa478604b",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        334.134307861328,
+        5.56099987030029,
+        -84.6006088256836
+      ],
+      "view_kind": "exact_live_complete_ROLLUP_GRAY"
+    },
+    {
+      "bytes": 904171,
+      "camera_position_m": [
+        286.250915527344,
+        6.46000003814697,
+        -140.835372924805
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/08-close-personnel.png",
+      "id": "08-close-personnel",
+      "placement_ids": [
+        "CAL-NNW-PERSONNEL-01"
+      ],
+      "representative_runs": [
+        26
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.397957,
+        "minimum": 0.068921,
+        "range": 0.873325,
+        "sample_count": 4000
+      },
+      "sha256": "f632dbdf0355bd4d37938d699b5f4247e35b39eb389d1b82c8119ed0eef714f3",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        291.735198974609,
+        4.92000007629395,
+        -133.563385009766
+      ],
+      "view_kind": "exact_live_complete_PERSONNEL"
+    },
+    {
+      "bytes": 503418,
+      "camera_position_m": [
+        281.046875,
+        7.85799980163574,
+        -139.181350708008
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/09-close-high-group.png",
+      "id": "09-close-high-group",
+      "placement_ids": [
+        "CAL-NNW-HIGH-GROUP-01"
+      ],
+      "representative_runs": [
+        27
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.477211,
+        "minimum": 0.085209,
+        "range": 0.857037,
+        "sample_count": 4000
+      },
+      "sha256": "36d7413ef2225e94d8e5b57dee38920e9acb6675bf0fe52e5d3ff8bbcf615e31",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        284.711669921875,
+        7.40799999237061,
+        -129.799880981445
+      ],
+      "view_kind": "exact_live_complete_opaque_HIGH_GROUP"
+    },
+    {
+      "bytes": 651876,
+      "camera_position_m": [
+        333.331787109375,
+        7.61025333404541,
+        -54.7413101196289
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/10-ordinary-sse-macro.png",
+      "id": "10-ordinary-sse-macro",
+      "placement_ids": [
+        "CAL-SSE-ROLLUP-PALE-01",
+        "CAL-SSE-ROLLUP-GRAY-01"
+      ],
+      "representative_runs": [
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.492006,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "ab594cc3ee93c65c945f1a0928fd09b3792ac0c9528ef3fb843b0ccc8bf116c2",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        321.053314208984,
+        6.31025314331055,
+        -77.6594009399414
+      ],
+      "view_kind": "ordinary_gameplay_SSE_modules_and_30m_plus_field"
+    },
+    {
+      "bytes": 933833,
+      "camera_position_m": [
+        275.724700927734,
+        7.70455741882324,
+        -155.548294067383
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/11-ordinary-nnw-full-scope.png",
+      "id": "11-ordinary-nnw-full-scope",
+      "placement_ids": [
+        "CAL-NNW-PERSONNEL-01",
+        "CAL-NNW-HIGH-GROUP-01"
+      ],
+      "representative_runs": [
+        26,
+        27
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.465342,
+        "minimum": 0.102013,
+        "range": 0.840234,
+        "sample_count": 4000
+      },
+      "sha256": "2c063cc8bf31e6c364a7510ed2e5daecacd07f0dcb2d8d6d14e801c314e979d4",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        288.475433349609,
+        6.30455732345581,
+        -131.748733520508
+      ],
+      "view_kind": "ordinary_gameplay_NNW_modules_and_full_field_scope"
+    },
+    {
+      "bytes": 1309227,
+      "camera_position_m": [
+        365.0,
+        86.0,
+        -38.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/12-building-multiside-context.png",
+      "id": "12-building-multiside-context",
+      "placement_ids": [
+        "CAL-SSE-ROLLUP-PALE-01",
+        "CAL-SSE-ROLLUP-GRAY-01",
+        "CAL-NNW-PERSONNEL-01",
+        "CAL-NNW-HIGH-GROUP-01"
+      ],
+      "representative_runs": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        26,
+        27
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.327077,
+        "minimum": 0.054068,
+        "range": 0.888178,
+        "sample_count": 4000
+      },
+      "sha256": "c5129fdc2885c8ae5e8ffdb0fde81396efbb637c39e84a4bee36d521841129e4",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        318.0,
+        5.5,
+        -99.0
+      ],
+      "view_kind": "building_context_with_both_bounded_sides"
+    },
+    {
+      "bytes": 662396,
+      "camera_position_m": [
+        333.331787109375,
+        8.51025295257568,
+        -54.7413101196289
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/13-changed-light-sse.png",
+      "id": "13-changed-light-sse",
+      "placement_ids": [
+        "CAL-SSE-ROLLUP-PALE-01",
+        "CAL-SSE-ROLLUP-GRAY-01"
+      ],
+      "representative_runs": [
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.424079,
+        "minimum": 0.119634,
+        "range": 0.822613,
+        "sample_count": 4000
+      },
+      "sha256": "81462e8f1322c4c006a15c683d74965a50ded301362f7d29780e06e6c9b09c3c",
+      "sun_rotation_degrees": [
+        -18.0,
+        118.0,
+        0.0
+      ],
+      "target_position_m": [
+        321.053314208984,
+        6.31025314331055,
+        -77.6594009399414
+      ],
+      "view_kind": "changed_light_SSE_field_and_both_rollups"
+    },
+    {
+      "bytes": 903378,
+      "camera_position_m": [
+        275.850799560547,
+        8.90455722808838,
+        -151.077865600586
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/14-changed-light-nnw.png",
+      "id": "14-changed-light-nnw",
+      "placement_ids": [
+        "CAL-NNW-PERSONNEL-01",
+        "CAL-NNW-HIGH-GROUP-01"
+      ],
+      "representative_runs": [
+        26,
+        27
+      ],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.408039,
+        "minimum": 0.098091,
+        "range": 0.844155,
+        "sample_count": 4000
+      },
+      "sha256": "a93e4a198fca0e2ed3d2312f6efc0c86bcf9e72c98973d8bf284e933fe0021d2",
+      "sun_rotation_degrees": [
+        -18.0,
+        118.0,
+        0.0
+      ],
+      "target_position_m": [
+        288.475433349609,
+        6.30455732345581,
+        -131.748733520508
+      ],
+      "view_kind": "changed_light_NNW_field_PERSONNEL_and_opaque_HIGH_GROUP"
+    },
+    {
+      "bytes": 403109,
+      "camera_position_m": [
+        180.0,
+        1550.0,
+        300.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/15-whole-island.png",
+      "id": "15-whole-island",
+      "placement_ids": [],
+      "representative_runs": [],
+      "sampled_luminance": {
+        "maximum": 0.942246,
+        "mean": 0.574372,
+        "minimum": 0.096104,
+        "range": 0.846142,
+        "sample_count": 4000
+      },
+      "sha256": "97fbd5102f362dbe47a789283548bcc005808c29cfd1b1660bca4a8ca52cb952",
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "target_position_m": [
+        -20.0,
+        0.0,
+        30.0
+      ],
+      "view_kind": "whole_island_actual_loaded_world"
+    }
+  ],
+  "changed_light_capture_ids": [
+    "13-changed-light-sse",
+    "14-changed-light-nnw"
+  ],
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "display_driver": "macOS",
+  "evidence_role": "actual loaded-world exact two-scope MAT-PALE continuity/macro behavior and four exact complete module-atlas placements; not surveyed scale/dimensions/coordinates/count/cadence/sequence, maximum uncertainty-envelope containment, completed SSE/NNW elevations, cross-side transfer, whole-building acceptance, or executor art acceptance",
+  "exact_runtime_delta": {
+    "backing_meshes": 0,
+    "collision_nodes": 0,
+    "field_meshes": 0,
+    "field_runs": 7,
+    "field_scopes": 2,
+    "loaded_surfaces": 40,
+    "mesh_instances": 38,
+    "module_nodes": 4,
+    "navigation_nodes": 0,
+    "record_material_surfaces": 2,
+    "spray_nodes": 0,
+    "triangles": 456
+  },
+  "field_join_capture_ids": [
+    "01-sse-field-join-08-09",
+    "02-sse-field-join-09-10",
+    "03-sse-field-join-10-11",
+    "04-sse-field-join-11-12",
+    "05-nnw-field-join-26-27"
+  ],
+  "field_metadata": {
+    "field_actual_world_review_status": "pending_independent_actual_world_art_review",
+    "material_groups": [
+      {
+        "accepted_length_m": 75.31091,
+        "id": "CAL-FIELD-SSE-PALE-01",
+        "limitation": "Pale homogeneous field on observed SSE runs 8..12 only; 0.88 m / 0.31 m scales remain unmeasured production inference and actual-world art review is pending.",
+        "mapping_ids": [
+          "B06-34313525-SSE-CENTRAL"
+        ],
+        "material_path": "res://game/resources/materials/world/w34313525/w34313525_pale_exact_trial.tres",
+        "prototype_material_path": "res://game/resources/materials/world/w34313525/w34313525_pale_field.tres",
+        "run_groups": [
+          [
+            8,
+            9,
+            10,
+            11,
+            12
+          ]
+        ],
+        "surface_name": "trial_w34313525_pale_sse_runs"
+      },
+      {
+        "accepted_length_m": 15.93656,
+        "id": "CAL-FIELD-NNW-PALE-01",
+        "limitation": "Pale homogeneous field on observed NNW runs 26..27 only; phase continuity is claimed only within this scope, scale is unmeasured production inference, and actual-world art review is pending.",
+        "mapping_ids": [
+          "B06-34313525-NNW-CENTRAL"
+        ],
+        "material_path": "res://game/resources/materials/world/w34313525/w34313525_pale_exact_trial.tres",
+        "prototype_material_path": "res://game/resources/materials/world/w34313525/w34313525_pale_field.tres",
+        "run_groups": [
+          [
+            26,
+            27
+          ]
+        ],
+        "surface_name": "trial_w34313525_pale_nnw_runs"
+      }
+    ],
+    "module_cadence_inferred": false,
+    "module_motif_types_live": 4,
+    "module_placement_role": "stylized/reference-derived production inference",
+    "module_position_uncertainty_by_placement_m": {
+      "CAL-NNW-HIGH-GROUP-01": 1.298596,
+      "CAL-NNW-PERSONNEL-01": 3.444684,
+      "CAL-SSE-ROLLUP-GRAY-01": 13.403442,
+      "CAL-SSE-ROLLUP-PALE-01": 11.262233
+    },
+    "module_position_uncertainty_m": 0.0,
+    "module_total_opening_count_inferred": false,
+    "modules": 4,
+    "receiver_key": "building:w34313525:wall",
+    "source_key": "w34313525",
+    "standalone_blocker": "Exactly four independently detached-calibration-reviewed type exemplars are live on runs 9, 10, 26, and 27 pending independent actual-world art review. All other runs/sides/modules, real count/cadence/sequence, maximum uncertainty-envelope containment, completed SSE/NNW elevations, and whole building remain placeholder-only or blocked.",
+    "standalone_modules_live": 4,
+    "status": "corrected_prototype_accepted_exact_run_trial_live_receiver_review_pending"
+  },
+  "field_scopes": [
+    {
+      "completed_elevation": false,
+      "exact_ordered_runs": [
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "face": "SSE",
+      "field_id": "W34313525-MAT-PALE",
+      "length_m": 75.31091,
+      "maximum_join_phase_delta_m": 0.0,
+      "primary_scale_m": 0.88,
+      "scale_surveyed": false,
+      "scope_id": "CAL-FIELD-SSE-PALE-01",
+      "secondary_scale_m": 0.31,
+      "wall_area_m2": 377.392952
+    },
+    {
+      "completed_elevation": false,
+      "exact_ordered_runs": [
+        26,
+        27
+      ],
+      "face": "NNW",
+      "field_id": "W34313525-MAT-PALE",
+      "length_m": 15.93656,
+      "maximum_join_phase_delta_m": 0.0,
+      "primary_scale_m": 0.88,
+      "scale_surveyed": false,
+      "scope_id": "CAL-FIELD-NNW-PALE-01",
+      "secondary_scale_m": 0.31,
+      "wall_area_m2": 80.510358
+    }
+  ],
+  "generated_source_and_data_bytes_unchanged": true,
+  "generator": "game/tests/w34313525_live_integration_capture.gd",
+  "godot_version": "4.7.2-stable (official)",
+  "live_module_metadata": {
+    "actual_world_review_status": "pending_independent_actual_world_art_review",
+    "asset_classification": "module_atlas",
+    "backing_meshes": 0,
+    "cadence_inferred": false,
+    "collision_nodes": 0,
+    "complete_motif": true,
+    "completed_nnw_elevation": false,
+    "completed_sse_elevation": false,
+    "cross_side_transfer_accepted": false,
+    "field_meshes": 0,
+    "high_group_semantic_face_status": "window_or_grille_not_disambiguated_opaque_proxy_only",
+    "independent_calibration_review_path": "res://discovery/facades/W34313525_EXACT_RECEIVER_CALIBRATION_ART_REVIEW.md",
+    "independent_calibration_review_sha256": "d19fdae403d11117b13ce1fe04476f0d62edfdd3adbc8238936845e481831de2",
+    "maximum_uncertainty_envelope_contained_for_all_modules": false,
+    "mesh_instances": 38,
+    "module_instances": 4,
+    "module_not_seamless_tile": true,
+    "motif_instance_counts": {
+      "W34313525-HIGH-GROUP": 1,
+      "W34313525-PERSONNEL": 1,
+      "W34313525-ROLLUP-GRAY": 1,
+      "W34313525-ROLLUP-PALE": 1
+    },
+    "navigation_nodes": 0,
+    "placement_review_verdict": "ACCEPT_WITH_DOCUMENTED_LIMITATION",
+    "placement_role": "stylized/reference-derived production inference",
+    "receiver_key": "building:w34313525:wall",
+    "resolved_placements": [
+      {
+        "along_run_center_m": 13.862233,
+        "anchor_run": 9,
+        "anchor_run_fraction": 0.499999822168041,
+        "base_y_m": 3.70599996865778,
+        "cadence_status": "unknown_not_surveyed_not_inferred",
+        "center_height_above_base_m": 1.86,
+        "center_uncertainty_half_span_m": 11.262233,
+        "coordinate_status": "production_inference_not_surveyed",
+        "count_status": "one_type_exemplar_not_surveyed_real_count",
+        "dimension_status": "production_inference_not_surveyed",
+        "evidence_status": "production_inference_within_reference_observed_region",
+        "exact_ordered_runs": [
+          9
+        ],
+        "face": "SSE",
+        "mapping_id": "B06-34313525-SSE-CENTRAL",
+        "mechanically_eligible_center_domain_m": [
+          2.6,
+          25.124466
+        ],
+        "module_origin_world_m": [
+          307.809814453125,
+          5.56599998474121,
+          -70.4946136474609
+        ],
+        "motif_id": "W34313525-ROLLUP-PALE",
+        "outward_normal_world_xz": [
+          0.472249209880829,
+          0.881465137004852
+        ],
+        "placement_id": "CAL-SSE-ROLLUP-PALE-01",
+        "region": "SSE central outer service elevation",
+        "semantic_face_status": "",
+        "tangent_world_xz": [
+          0.881423771381378,
+          -0.472326368093491
+        ],
+        "top_y_m": 8.71100044250488,
+        "wall_anchor_world_m": [
+          307.781494140625,
+          3.70599985122681,
+          -70.5475006103516
+        ]
+      },
+      {
+        "along_run_center_m": 16.003442,
+        "anchor_run": 10,
+        "anchor_run_fraction": 0.499999976121318,
+        "base_y_m": 3.70099997568204,
+        "cadence_status": "unknown_not_surveyed_not_inferred",
+        "center_height_above_base_m": 1.86,
+        "center_uncertainty_half_span_m": 13.403442,
+        "coordinate_status": "production_inference_not_surveyed",
+        "count_status": "one_type_exemplar_not_surveyed_real_count",
+        "dimension_status": "production_inference_not_surveyed",
+        "evidence_status": "production_inference_within_reference_observed_region",
+        "exact_ordered_runs": [
+          10
+        ],
+        "face": "SSE",
+        "mapping_id": "B06-34313525-SSE-CENTRAL",
+        "mechanically_eligible_center_domain_m": [
+          2.6,
+          29.406884
+        ],
+        "module_origin_world_m": [
+          334.134307861328,
+          5.56099987030029,
+          -84.6006088256836
+        ],
+        "motif_id": "W34313525-ROLLUP-GRAY",
+        "outward_normal_world_xz": [
+          0.472249209880829,
+          0.881465137004852
+        ],
+        "placement_id": "CAL-SSE-ROLLUP-GRAY-01",
+        "region": "SSE central outer service elevation",
+        "semantic_face_status": "",
+        "tangent_world_xz": [
+          0.881435513496399,
+          -0.47230452299118
+        ],
+        "top_y_m": 8.71100044250488,
+        "wall_anchor_world_m": [
+          334.105987548828,
+          3.70099997520447,
+          -84.6534957885742
+        ]
+      },
+      {
+        "along_run_center_m": 4.269684,
+        "anchor_run": 26,
+        "anchor_run_fraction": 0.499999851464216,
+        "base_y_m": 3.65999995147075,
+        "cadence_status": "unknown_not_surveyed_not_inferred",
+        "center_height_above_base_m": 1.26,
+        "center_uncertainty_half_span_m": 3.444684,
+        "coordinate_status": "production_inference_not_surveyed",
+        "count_status": "one_type_exemplar_not_surveyed_real_count",
+        "dimension_status": "production_inference_not_surveyed",
+        "evidence_status": "production_inference_within_reference_observed_region",
+        "exact_ordered_runs": [
+          26
+        ],
+        "face": "NNW",
+        "mapping_id": "B06-34313525-NNW-CENTRAL",
+        "mechanically_eligible_center_domain_m": [
+          0.825,
+          7.714369
+        ],
+        "module_origin_world_m": [
+          291.735198974609,
+          4.92000007629395,
+          -133.563385009766
+        ],
+        "motif_id": "W34313525-PERSONNEL",
+        "outward_normal_world_xz": [
+          -0.472249209880829,
+          -0.881465137004852
+        ],
+        "placement_id": "CAL-NNW-PERSONNEL-01",
+        "region": "NNW central outer service elevation",
+        "semantic_face_status": "",
+        "tangent_world_xz": [
+          -0.881447672843933,
+          0.472281813621521
+        ],
+        "top_y_m": 8.71100044250488,
+        "wall_anchor_world_m": [
+          291.763519287109,
+          3.65999984741211,
+          -133.510498046875
+        ]
+      },
+      {
+        "along_run_center_m": 3.698596,
+        "anchor_run": 27,
+        "anchor_run_fraction": 0.500000612298175,
+        "base_y_m": 3.65799992746703,
+        "cadence_status": "unknown_not_surveyed_not_inferred",
+        "center_height_above_base_m": 3.75,
+        "center_uncertainty_half_span_m": 1.298596,
+        "coordinate_status": "production_inference_not_surveyed",
+        "count_status": "one_opaque_proxy_exemplar_not_surveyed_real_count",
+        "dimension_status": "production_inference_not_surveyed",
+        "evidence_status": "production_inference_within_reference_observed_region",
+        "exact_ordered_runs": [
+          27
+        ],
+        "face": "NNW",
+        "mapping_id": "B06-34313525-NNW-CENTRAL",
+        "mechanically_eligible_center_domain_m": [
+          2.4,
+          4.997191
+        ],
+        "module_origin_world_m": [
+          284.711669921875,
+          7.40799999237061,
+          -129.799880981445
+        ],
+        "motif_id": "W34313525-HIGH-GROUP",
+        "outward_normal_world_xz": [
+          -0.472249209880829,
+          -0.881465137004852
+        ],
+        "placement_id": "CAL-NNW-HIGH-GROUP-01",
+        "region": "NNW central outer service elevation",
+        "semantic_face_status": "window_or_grille_not_disambiguated_opaque_proxy_only",
+        "tangent_world_xz": [
+          -0.881415128707886,
+          0.472342431545258
+        ],
+        "top_y_m": 8.71100044250488,
+        "wall_anchor_world_m": [
+          284.739990234375,
+          3.65799999237061,
+          -129.746994018555
+        ]
+      }
+    ],
+    "reviewed_geometry_helper_path": "res://game/tests/support/w34313525_exact_receiver_calibration.gd",
+    "reviewed_geometry_helper_sha256": "a9ff1f94274509cdb39c6208117c59b84ba67598ff8a59a1eb57bf30a4b03532",
+    "reviewed_registry_path": "res://game/resources/facades/w34313525_exact_receiver_calibration.json",
+    "reviewed_registry_sha256": "ba22916618510f610719606c1c18f84b8965bbd76fe74eddc5430745470bbddd",
+    "runtime_attachment": true,
+    "sequence_inferred": false,
+    "source_key": "w34313525",
+    "spray_nodes": 0,
+    "surfaces": 38,
+    "surveyed_cadence": false,
+    "surveyed_coordinates": false,
+    "surveyed_count": false,
+    "surveyed_dimensions": false,
+    "surveyed_scale": false,
+    "triangles": 456,
+    "whole_building_accepted": false
+  },
+  "live_reported_world": {
+    "chunks": 38,
+    "meshes": 924,
+    "record_meshes": 729,
+    "record_surfaces": 737,
+    "records": 729,
+    "shapes": 466,
+    "static_bodies": 466,
+    "surfaces": 934,
+    "triangles": 50729
+  },
+  "loaded_world_before_this_integration": {
+    "meshes": 886,
+    "record_meshes": 729,
+    "record_surfaces": 739,
+    "records": 729,
+    "shapes": 466,
+    "static_bodies": 466,
+    "surfaces": 894,
+    "triangles": 50273
+  },
+  "ordinary_macro_capture_ids": [
+    "10-ordinary-sse-macro",
+    "11-ordinary-nnw-full-scope"
+  ],
+  "protected_inputs_capture_time": {
+    "res://discovery/facades/W34313525_EXACT_RECEIVER_CALIBRATION_ART_REVIEW.md": "d19fdae403d11117b13ce1fe04476f0d62edfdd3adbc8238936845e481831de2",
+    "res://game/resources/facades/w34313525_exact_receiver_calibration.json": "ba22916618510f610719606c1c18f84b8965bbd76fe74eddc5430745470bbddd",
+    "res://game/resources/facades/w34313525_standalone_prototypes.json": "86d3634e62f367f24bef98206fe1e6f34124023f0d9672bbd318c45c0a33b170",
+    "res://game/resources/materials/world/w34313525/w34313525_frame.tres": "2298f55a4129757eb69af498236e609384acb1565a2c0654e8200bc79e0ae21e",
+    "res://game/resources/materials/world/w34313525/w34313525_high_group.tres": "68f56c35a7e2ef870dd395e5f2e38b8cc5d640b532de32339ae4b22ffbabadfb",
+    "res://game/resources/materials/world/w34313525/w34313525_pale_exact_trial.tres": "d8a4500d3f3ec036b5e0b4c4273caf0644abdc3bda626fb831e2989d63559752",
+    "res://game/resources/materials/world/w34313525/w34313525_pale_field.tres": "00ad40bbc932d7b7d4a3ce77d13a3798f25a35e908bd45a1a5f7f38ba4c80eff",
+    "res://game/resources/materials/world/w34313525/w34313525_personnel.tres": "bcc6295ffe9229f6b7105c13896f0ff0cfcd5d3227e3b30046d9957c2272a88f",
+    "res://game/resources/materials/world/w34313525/w34313525_rollup_gray.tres": "b0beeb8e0cf894e3cafd8f7084e0d235074b67daf29c2a863f514d5386173b8a",
+    "res://game/resources/materials/world/w34313525/w34313525_rollup_pale.tres": "ded6d1de11ce4e77c71ee384be689257707c522718c9f8fad20fb3d1933fee47",
+    "res://game/scenes/world/facades/batch_06/w34313525_standalone_prototype_set.tscn": "9259ab6f231fee7d3d3ad8bfea0a290a455b1490b291a1d05b7cd64df4965cbe",
+    "res://game/scripts/world/facades/accepted_material_run_trials.gd": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+    "res://game/scripts/world/facades/w34313525_live_modules.gd": "f9b31302eaf98fd4185aed4f28d3651794e2e50958ad2641c04aec0dd45f05e1",
+    "res://game/scripts/world/facades/w34313525_standalone_prototypes.gd": "a8e432b8cae545532aa976b095e2dc012454dd73648dccf09d55be550ccbcc76",
+    "res://game/scripts/world/world_chunk_builder.gd": "dec0811b3b6b4947c16f8f69a6a6e60d706b6d7b43a93051ea7be71ad2c203a3",
+    "res://game/tests/support/w34313525_exact_receiver_calibration.gd": "a9ff1f94274509cdb39c6208117c59b84ba67598ff8a59a1eb57bf30a4b03532",
+    "res://generated/world/chunks/x_1__z_-1.json": "a952756b1c6d8d547669dffb89723c2be81d6c9a4b3afd2ae7f2dc3702a82b0d",
+    "res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+  },
+  "receiver": {
+    "child_count": 3,
+    "collision_triangles": 60,
+    "generated_wall_triangles": 60,
+    "module_mesh_instances": 38,
+    "module_nodes": 4,
+    "module_surfaces": 38,
+    "module_triangles": 456,
+    "nnw_field_runs": [
+      26,
+      27
+    ],
+    "ok": true,
+    "record_surface_count": 3,
+    "record_surface_names": [
+      "placeholder_runs",
+      "trial_w34313525_pale_sse_runs",
+      "trial_w34313525_pale_nnw_runs"
+    ],
+    "sse_field_runs": [
+      8,
+      9,
+      10,
+      11,
+      12
+    ],
+    "wall_collision_remains_authoritative": true
+  },
+  "receiver_key": "building:w34313525:wall",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "resolved_placements": [
+    {
+      "along_run_center_m": 13.862233,
+      "anchor_run": 9,
+      "anchor_run_fraction": 0.499999822168041,
+      "base_y_m": 3.70599996865778,
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "center_height_above_base_m": 1.86,
+      "center_uncertainty_half_span_m": 11.262233,
+      "coordinate_status": "production_inference_not_surveyed",
+      "count_status": "one_type_exemplar_not_surveyed_real_count",
+      "dimension_status": "production_inference_not_surveyed",
+      "evidence_status": "production_inference_within_reference_observed_region",
+      "exact_ordered_runs": [
+        9
+      ],
+      "face": "SSE",
+      "mapping_id": "B06-34313525-SSE-CENTRAL",
+      "mechanically_eligible_center_domain_m": [
+        2.6,
+        25.124466
+      ],
+      "module_origin_world_m": [
+        307.809814453125,
+        5.56599998474121,
+        -70.4946136474609
+      ],
+      "motif_id": "W34313525-ROLLUP-PALE",
+      "outward_normal_world_xz": [
+        0.472249209880829,
+        0.881465137004852
+      ],
+      "placement_id": "CAL-SSE-ROLLUP-PALE-01",
+      "region": "SSE central outer service elevation",
+      "semantic_face_status": "",
+      "tangent_world_xz": [
+        0.881423771381378,
+        -0.472326368093491
+      ],
+      "top_y_m": 8.71100044250488,
+      "wall_anchor_world_m": [
+        307.781494140625,
+        3.70599985122681,
+        -70.5475006103516
+      ]
+    },
+    {
+      "along_run_center_m": 16.003442,
+      "anchor_run": 10,
+      "anchor_run_fraction": 0.499999976121318,
+      "base_y_m": 3.70099997568204,
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "center_height_above_base_m": 1.86,
+      "center_uncertainty_half_span_m": 13.403442,
+      "coordinate_status": "production_inference_not_surveyed",
+      "count_status": "one_type_exemplar_not_surveyed_real_count",
+      "dimension_status": "production_inference_not_surveyed",
+      "evidence_status": "production_inference_within_reference_observed_region",
+      "exact_ordered_runs": [
+        10
+      ],
+      "face": "SSE",
+      "mapping_id": "B06-34313525-SSE-CENTRAL",
+      "mechanically_eligible_center_domain_m": [
+        2.6,
+        29.406884
+      ],
+      "module_origin_world_m": [
+        334.134307861328,
+        5.56099987030029,
+        -84.6006088256836
+      ],
+      "motif_id": "W34313525-ROLLUP-GRAY",
+      "outward_normal_world_xz": [
+        0.472249209880829,
+        0.881465137004852
+      ],
+      "placement_id": "CAL-SSE-ROLLUP-GRAY-01",
+      "region": "SSE central outer service elevation",
+      "semantic_face_status": "",
+      "tangent_world_xz": [
+        0.881435513496399,
+        -0.47230452299118
+      ],
+      "top_y_m": 8.71100044250488,
+      "wall_anchor_world_m": [
+        334.105987548828,
+        3.70099997520447,
+        -84.6534957885742
+      ]
+    },
+    {
+      "along_run_center_m": 4.269684,
+      "anchor_run": 26,
+      "anchor_run_fraction": 0.499999851464216,
+      "base_y_m": 3.65999995147075,
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "center_height_above_base_m": 1.26,
+      "center_uncertainty_half_span_m": 3.444684,
+      "coordinate_status": "production_inference_not_surveyed",
+      "count_status": "one_type_exemplar_not_surveyed_real_count",
+      "dimension_status": "production_inference_not_surveyed",
+      "evidence_status": "production_inference_within_reference_observed_region",
+      "exact_ordered_runs": [
+        26
+      ],
+      "face": "NNW",
+      "mapping_id": "B06-34313525-NNW-CENTRAL",
+      "mechanically_eligible_center_domain_m": [
+        0.825,
+        7.714369
+      ],
+      "module_origin_world_m": [
+        291.735198974609,
+        4.92000007629395,
+        -133.563385009766
+      ],
+      "motif_id": "W34313525-PERSONNEL",
+      "outward_normal_world_xz": [
+        -0.472249209880829,
+        -0.881465137004852
+      ],
+      "placement_id": "CAL-NNW-PERSONNEL-01",
+      "region": "NNW central outer service elevation",
+      "semantic_face_status": "",
+      "tangent_world_xz": [
+        -0.881447672843933,
+        0.472281813621521
+      ],
+      "top_y_m": 8.71100044250488,
+      "wall_anchor_world_m": [
+        291.763519287109,
+        3.65999984741211,
+        -133.510498046875
+      ]
+    },
+    {
+      "along_run_center_m": 3.698596,
+      "anchor_run": 27,
+      "anchor_run_fraction": 0.500000612298175,
+      "base_y_m": 3.65799992746703,
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "center_height_above_base_m": 3.75,
+      "center_uncertainty_half_span_m": 1.298596,
+      "coordinate_status": "production_inference_not_surveyed",
+      "count_status": "one_opaque_proxy_exemplar_not_surveyed_real_count",
+      "dimension_status": "production_inference_not_surveyed",
+      "evidence_status": "production_inference_within_reference_observed_region",
+      "exact_ordered_runs": [
+        27
+      ],
+      "face": "NNW",
+      "mapping_id": "B06-34313525-NNW-CENTRAL",
+      "mechanically_eligible_center_domain_m": [
+        2.4,
+        4.997191
+      ],
+      "module_origin_world_m": [
+        284.711669921875,
+        7.40799999237061,
+        -129.799880981445
+      ],
+      "motif_id": "W34313525-HIGH-GROUP",
+      "outward_normal_world_xz": [
+        -0.472249209880829,
+        -0.881465137004852
+      ],
+      "placement_id": "CAL-NNW-HIGH-GROUP-01",
+      "region": "NNW central outer service elevation",
+      "semantic_face_status": "window_or_grille_not_disambiguated_opaque_proxy_only",
+      "tangent_world_xz": [
+        -0.881415128707886,
+        0.472342431545258
+      ],
+      "top_y_m": 8.71100044250488,
+      "wall_anchor_world_m": [
+        284.739990234375,
+        3.65799999237061,
+        -129.746994018555
+      ]
+    }
+  ],
+  "review_status": "ready_for_independent_actual_world_art_review_not_self_accepted",
+  "schema_version": "ti.w34313525-live-fields-and-modules-evidence/1",
+  "source_key": "w34313525",
+  "truth_boundary": {
+    "cadence_inferred": false,
+    "cadence_surveyed": false,
+    "completed_nnw_elevation": false,
+    "completed_sse_elevation": false,
+    "coordinates_surveyed": false,
+    "count_surveyed": false,
+    "cross_side_transfer_accepted": false,
+    "dimensions_surveyed": false,
+    "high_group_semantic_face_status": "window_or_grille_not_disambiguated_opaque_proxy_only",
+    "maximum_uncertainty_envelope_contained_for_all_modules": false,
+    "placement_role": "stylized/reference-derived production inference",
+    "scale_surveyed": false,
+    "sequence_inferred": false,
+    "whole_building_accepted": false
+  },
+  "validity_inspection_only": "Inspect five exact joins, both bounded field spans, every complete motif, ordinary side/building context, changed-light response, opaque HIGH-GROUP ambiguity and whole-island noninterference only. Executor art acceptance is prohibited.",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ],
+  "whole_island_capture_id": "15-whole-island"
+}

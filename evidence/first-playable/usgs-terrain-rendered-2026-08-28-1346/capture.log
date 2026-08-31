@@ -1,0 +1,5 @@
+Godot 4.7.2 / Forward+ / Metal / Apple M1 Pro
+Command: .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/rendered_visual_evidence_capture.gd -- --visual-evidence-output=res://evidence/first-playable/usgs-terrain-rendered-2026-08-28-1346
+Result: PASS; 8 captures; five terrain-grounded regions, one real-controller tag, SF context, and USGS YBI/light-bridge context; zero context collision.
+Generated content: 77a154d5d52815a68de57be6ebe8ac222b859649a7b741416d46f1ddbce3e804
+Manifest SHA-256: cc66404953a709dadcdb64e5b85c6f18f51a7556053ac2e72a911dedf589ea18

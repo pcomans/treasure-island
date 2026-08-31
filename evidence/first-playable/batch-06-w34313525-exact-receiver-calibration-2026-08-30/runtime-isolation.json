@@ -1,0 +1,21 @@
+{
+  "schema_version": "ti.w34313525-exact-receiver-runtime-isolation/1",
+  "source_key": "w34313525",
+  "receiver_key": "building:w34313525:wall",
+  "capture_manifest_sha256": "2d5bb60145357287c4b45ad10bccfc74ad73e0abd658851868c42cf332e8a0ec",
+  "calibration_parent": "main_scene_sibling_never_receiver",
+  "receiver_child_count_before": 2,
+  "receiver_child_count_after": 2,
+  "receiver_accepted_material_metadata_before": {},
+  "receiver_accepted_material_metadata_after": {},
+  "loaded_world_before": {"chunks": 38, "meshes": 886, "surfaces": 894, "triangles": 50273, "static_bodies": 466, "shapes": 466},
+  "loaded_world_after": {"chunks": 38, "meshes": 886, "surfaces": 894, "triangles": 50273, "static_bodies": 466, "shapes": 466},
+  "generated_world": {"records": 729, "meshes": 729, "surfaces": 736, "triangles": 48389, "static_bodies": 466, "shapes": 466},
+  "detached_overlay": {"field_meshes": 2, "field_surfaces": 2, "field_triangles": 14, "module_meshes": 38, "module_surfaces": 38, "module_triangles": 456, "total_meshes": 40, "total_surfaces": 40, "total_triangles": 470},
+  "module_owned_field_or_backing_meshes": 0,
+  "collision_nodes": 0,
+  "navigation_nodes": 0,
+  "spray_nodes": 0,
+  "runtime_attachment": false,
+  "live_or_generated_delta": false
+}

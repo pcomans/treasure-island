@@ -1,0 +1,28 @@
+bundle=build/ferry-spawn-staging/Treasure Island First Playable.app
+bundle_identifier=local.treasure-island.first-playable
+logical_file_bytes=176940340
+logical_mib=168.74
+allocated_kib=172812
+physical_files=7
+
+executable_bytes=170963648
+executable_sha256=12895a3ae887f614dfd2e1db8c58898911d7bbb1a57713bf6bf77b9a949619e9
+pck_bytes=5903852
+pck_sha256=3bdb09ce607f492b299b78d89338e98d27f79ee26d1c164626f27047fc60b2f5
+bundle_sorted_file_hash_manifest_sha256=e8139b8ec7feb7313f92941817070c91dd1ce7ef0bf74322d7ffa04b9c4707f2
+
+packaged_manifest_sha256=07b8b195e1a05942e38d9bbbcb801394cf9f184051fb5f7a819c75677e46f160
+packaged_spawn_origin=-104.364,1.000,786.024
+packaged_spawn_yaw=-0.119
+architectures=x86_64 arm64
+signature=adhoc
+signature_flags=adhoc,runtime
+team_identifier=not set
+arm64_code_directory_sha256=67242e14a38035d68178db1d0cf51b6ef9679489cc8b33768a02644eef94f79d
+codesign_whole_strict_exit=0
+codesign_arm64_strict_exit=0
+codesign_result=valid on disk; satisfies its Designated Requirement
+spctl_assess_exit=3
+spctl_result=rejected
+recursive_xattr_names=com.apple.provenance
+quarantine_present=false

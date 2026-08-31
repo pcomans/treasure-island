@@ -1,0 +1,9 @@
+{
+  "schema_version": "ti.building-1-recognizability-runtime-topology/1",
+  "baseline": "independently accepted live B1-MAT-IVORY runs21..51",
+  "runtime_before": {"records": 729, "meshes": 925, "surfaces": 935, "triangles": 50791, "collider_pairs": 466},
+  "runtime_after": {"records": 729, "meshes": 1278, "surfaces": 1288, "triangles": 55067, "collider_pairs": 466},
+  "delta": {"records": 0, "meshes": 353, "surfaces": 353, "triangles": 4276, "collider_pairs": 0},
+  "current_building_1_render_attachment": {"field_meshes": 3, "field_surfaces": 3, "field_triangles": 126, "module_placements": 45, "module_meshes": 351, "module_surfaces": 351, "module_triangles": 4212, "total_meshes": 354, "total_surfaces": 354, "total_triangles": 4338},
+  "protected_runtime": {"receiver_mesh_changed": false, "receiver_collision_changed": false, "navigation_changed": false, "spray_ownership_changed": false, "generated_data_changed": false}
+}

@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "w34313564_complete_opening_frame_prototype"
+albedo_color = Color(0.16, 0.14, 0.12, 1)
+metallic = 0.08
+roughness = 0.48

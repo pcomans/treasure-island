@@ -1,0 +1,59 @@
+w34313520 detached exact-receiver field and BAY calibration verification
+Date: 2026-08-30
+Status: mechanical/native evidence package complete; independent exact-receiver art verdict pending
+
+PASS native capture
+- Godot 4.7.2 / Forward+ / Metal / Apple M1 Pro.
+- Seven 1440x900 nonblank PNGs: close run 6->7 field join, 56.834 m macro field, straight BAY close, BAY oblique, ordinary all-run SSE, wider building context, and changed light.
+- Receiver child count 2 -> 2; receiver accepted-material metadata {} -> {}; detached overlay is capture/test-scene-only.
+- Loaded world before and after overlay: 871 meshes / 878 surfaces / 50,093 triangles / 466 collider pairs.
+
+PASS focused exact-receiver contract
+- game/tests/headless_w34313520_exact_receiver_calibration_contract.gd
+- Exact homogeneous field proposal covers only SSE runs 6..10: 68.156 m total, exact 11.000..11.137 m receiver height, one-metre world wall-tangent projection, 0.0 m phase delta at all four joins.
+- Exactly one complete W34313520-BAY at run 7 midpoint 15.894477 m; full maximum-width uncertainty envelope remains inside one run.
+- Detached topology 16 meshes / 16 surfaces / 190 triangles; BAY owns zero backing/field, collision, navigation or spray nodes.
+- Every surveyed dimension/coordinate/material-scale/count/cadence/completed-elevation/whole-building flag remains false.
+
+PASS accepted standalone immutability
+- game/tests/headless_w34313520_standalone_prototype_contract.gd
+- Accepted W34313520-MAT-PALE and complete 15-mesh W34313520-BAY source bytes/topology remain unchanged.
+
+PASS existing Batch 06 and accepted-material regressions
+- game/tests/headless_batch_06_prototype_contract.gd
+- game/tests/headless_batch_06_exact_receiver_trial_contract.gd
+- game/tests/headless_accepted_material_run_trials_contract.gd
+
+PASS current live-building regressions
+- game/tests/headless_w34313564_module_calibration_contract.gd
+- game/tests/headless_w34313564_live_module_integration_contract.gd
+- game/tests/headless_w34313515_module_calibration_contract.gd
+- game/tests/headless_w34313515_live_module_integration_contract.gd
+- game/tests/headless_w291196370_module_calibration_contract.gd
+- game/tests/headless_w291196370_live_module_integration_contract.gd
+- Existing accepted state remains exactly 3 live receivers / 12 placements / 142 module meshes / 142 surfaces / 1,704 triangles.
+
+PASS YMCA projection regression
+- game/tests/headless_ymca_wall_tangent_projection_contract.gd
+- Exact YMCA metre projection, accepted/placeholder boundary and non-YMCA byte scope remain unchanged.
+
+PASS generated-world validation
+- node tools/validate_godot_world.mjs
+- Content 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164; 38 chunks; 729 physical objects; 14,904 foundation samples; 2,492,288 terrain samples.
+
+PASS full runtime
+- game/tests/full_runtime_integration.gd
+- 729 generated records / 729 generated meshes / 736 generated surfaces / 48,389 generated triangles.
+- 871 loaded meshes / 878 loaded surfaces / 50,093 loaded triangles / 466 collider pairs.
+- Main scene reached world_ready, enabled the player, exercised generated physics/interactions, cleaned up, and failed closed without a partial world.
+
+PASS byte-isolation audit
+- No diff in generated/world, world_chunk_builder.gd, accepted_material_run_trials.gd, canonical facade inventory JSON/Markdown, existing live adapters, existing materials, or another building's content.
+- Accepted standalone material, factory, scene and registry hashes match the independent standalone review inputs.
+- The only new material is the detached target-specific exact projection trial and it is unreferenced by live runtime paths.
+- No ordinary or whole-island route rerun was necessary because this package adds no live runtime path or runtime byte change; native actual-loaded-world capture plus full runtime exercised the authoritative main scene.
+
+Environment note
+- Sandboxed headless Godot commands emitted the known nonfatal macOS certificate-store diagnostic. Every listed gate exited 0 with its authoritative PASS line; the escalated native capture was warning-free.
+
+No art acceptance, live attachment, lifecycle promotion, commit, or push was performed.

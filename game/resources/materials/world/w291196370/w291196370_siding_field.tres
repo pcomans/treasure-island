@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://game/resources/materials/world/batch_04/batch_04_horizontal_siding_field.gdshader" id="1_shader"]
+
+[resource]
+resource_name = "w291196370_gray_blue_siding_field_prototype"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(0.34, 0.42, 0.44, 1)
+shader_parameter/seam_color = Color(0.24, 0.31, 0.33, 1)
+shader_parameter/roughness_value = 0.72
+shader_parameter/course_height_m = 0.2
+shader_parameter/relief_strength = 0.035
+shader_parameter/color_variation = 0.025
+shader_parameter/filter_start_cycles_per_pixel = 0.12
+shader_parameter/filter_end_cycles_per_pixel = 0.34

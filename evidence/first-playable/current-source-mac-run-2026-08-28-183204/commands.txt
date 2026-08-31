@@ -1,0 +1,28 @@
+$ .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --version
+
+$ test ! -e "build/current-source-staging-2026-08-28-183204"
+$ test ! -e "evidence/first-playable/current-source-mac-run-2026-08-28-183204"
+$ mkdir -p "build/current-source-staging-2026-08-28-183204" "evidence/first-playable/current-source-mac-run-2026-08-28-183204"
+
+$ .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --export-release "macOS Private" "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app"
+
+$ "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable" --headless -- --mac-export-smoke
+
+$ .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --main-pack "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck" --script /private/tmp/treasure_island_current_source_package_audit.gd
+
+$ shasum -a 256 "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable" "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck"
+
+$ find "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app" -type f -print | LC_ALL=C sort
+
+$ /usr/bin/codesign --verify --deep --strict --verbose=4 "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app"
+
+$ /usr/bin/codesign -d --arch arm64 --verbose=6 "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app"
+
+$ /usr/bin/lipo -archs "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
+
+$ /usr/bin/plutil -p "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app/Contents/Info.plist"
+
+$ xattr -lr "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app"
+
+The sorted bundle descriptor hash used records formatted as `bundle-relative-path\0sha256\0bytes\n` and piped the complete sorted stream to `shasum -a 256`.
+

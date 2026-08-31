@@ -1,0 +1,3 @@
+Command: git diff --name-only -- generated
+Result: PASS — no output; generated source bytes are unchanged.
+Pinned generated manifest SHA-256: e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3

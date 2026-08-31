@@ -1,0 +1,60 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://game/scripts/player/player_controller.gd" id="1_player"]
+[ext_resource type="Script" path="res://game/scripts/player/player_camera.gd" id="2_camera"]
+[ext_resource type="Script" path="res://game/scripts/player/recovery_controller.gd" id="3_recovery"]
+[ext_resource type="Script" path="res://game/scripts/interaction/spray_controller.gd" id="4_spray"]
+[ext_resource type="Script" path="res://game/scripts/interaction/tag_instance_pool.gd" id="5_pool"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape_player"]
+radius = 0.35
+height = 1.8
+
+[sub_resource type="StandardMaterial3D" id="Material_avatar"]
+albedo_color = Color(0.12, 0.72, 0.67, 1)
+roughness = 0.85
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_avatar"]
+material = SubResource("Material_avatar")
+radius = 0.32
+height = 1.65
+
+[node name="Player" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 1
+script = ExtResource("1_player")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+position = Vector3(0, 0.9, 0)
+shape = SubResource("CapsuleShape_player")
+
+[node name="AvatarPivot" type="Node3D" parent="."]
+
+[node name="PlaceholderAvatar" type="MeshInstance3D" parent="AvatarPivot"]
+position = Vector3(0, 0.825, 0)
+mesh = SubResource("CapsuleMesh_avatar")
+
+[node name="CameraPivot" type="Node3D" parent="."]
+position = Vector3(0, 2, 0)
+script = ExtResource("2_camera")
+
+[node name="SpringArm3D" type="SpringArm3D" parent="CameraPivot"]
+rotation_degrees = Vector3(-8, 0, 0)
+spring_length = 5.5
+margin = 0.15
+collision_mask = 1
+
+[node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D"]
+current = true
+fov = 70.0
+near = 0.08
+far = 5000.0
+
+[node name="RecoveryController" type="Node" parent="."]
+script = ExtResource("3_recovery")
+
+[node name="SprayController" type="Node" parent="."]
+script = ExtResource("4_spray")
+
+[node name="TagInstances" type="Node3D" parent="SprayController"]
+script = ExtResource("5_pool")

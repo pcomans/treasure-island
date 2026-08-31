@@ -1,0 +1,27 @@
+W34313525 live actual-world evidence verification
+date: 2026-08-30
+renderer: Godot 4.7.2 stable / Forward+ / Metal / Apple M1 Pro
+capture_count: 15
+image_dimensions: 1440x900 all
+all_five_field_joins_present: PASS
+all_four_motifs_close_and_complete: PASS
+sse_ordinary_and_75m_macro_present: PASS
+nnw_ordinary_and_full_scope_present: PASS
+multiside_building_context_present: PASS
+changed_light_sse_present: PASS
+changed_light_nnw_present: PASS
+whole_island_present: PASS
+minimum_sampled_luminance_range: 0.822613
+manifest_matches_image_hashes: PASS
+reviewed_registry_transform_identity: PASS
+module_backing_field_collision_navigation_spray_zero: PASS
+generated_data_diff_empty: PASS
+loaded_runtime_topology: 729 records / 924 meshes / 934 surfaces / 50729 triangles / 466 collider pairs
+runtime_delta: +0 records / +38 meshes / +40 surfaces / +456 triangles / +0 collider pairs
+independent_live_review_sha256: d11041e1abf41fc11843d2f2631e4c33da25f8fc565f93e6ee822589ad229f45
+lifecycle_status: independently accepted live KEEP_WITH_DOCUMENTED_LIMITATION
+accepted_field_scope: 1 receiver / 2 scopes / 7 runs / 91.247470 m / 457.903310 m2
+accepted_module_scope: 1 receiver / 4 placements / 38 meshes / 38 surfaces / 456 triangles
+pending_actual_world_review: 0 receivers / 0 field scopes / 0 module placements
+art_verdict: KEEP_WITH_DOCUMENTED_LIMITATION; exact bounded scopes only
+blocked_claims_preserved: PASS — surveyed scale/dimensions/coordinates/count/cadence/sequence, maximum module envelopes, HIGH-GROUP semantics, other runs/sides/modules, completed elevations, whole building

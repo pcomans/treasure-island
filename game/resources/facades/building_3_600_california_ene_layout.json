@@ -1,0 +1,47 @@
+{
+  "schema_version": "ti.building-3-facade-layout/1",
+  "target": {
+    "source_key": "w34313540",
+    "logical_object_key": "building:w34313540",
+    "receiver_object_key": "building:w34313540:wall",
+    "chunk_id": "x_1__z_1",
+    "height_m": 20.0,
+    "base_y_m": 3.478,
+    "top_y_m": 23.478,
+    "wall_segments": 59,
+    "wall_triangles": 118
+  },
+  "render_contract": {
+    "render_layer": 2,
+    "field_offset_m": 0.012,
+    "maximum_relief_m": 0.08,
+    "collision": "none",
+    "navigation": "none",
+    "spray_ray_owner": "unchanged_underlying_receiver"
+  },
+  "observed_ene_main": {
+    "run_indices": [27, 28, 29, 30, 31, 32, 33, 34, 35],
+    "length_m": 90.320,
+    "start_xz_m": [528.784, 488.910],
+    "end_xz_m": [486.955, 408.860],
+    "normal_xz": [0.886, -0.463],
+    "module_policy": "observed_complete_modules",
+    "runs": [
+      {"index": 27, "start_xz_m": [528.784, 488.910], "end_xz_m": [524.128, 480.000]},
+      {"index": 28, "start_xz_m": [524.128, 480.000], "end_xz_m": [519.966, 472.034]},
+      {"index": 29, "start_xz_m": [519.966, 472.034], "end_xz_m": [512.000, 456.789]},
+      {"index": 30, "start_xz_m": [512.000, 456.789], "end_xz_m": [508.983, 451.017]},
+      {"index": 31, "start_xz_m": [508.983, 451.017], "end_xz_m": [507.407, 448.000]},
+      {"index": 32, "start_xz_m": [507.407, 448.000], "end_xz_m": [498.001, 429.999]},
+      {"index": 33, "start_xz_m": [498.001, 429.999], "end_xz_m": [490.686, 416.000]},
+      {"index": 34, "start_xz_m": [490.686, 416.000], "end_xz_m": [487.019, 408.981]},
+      {"index": 35, "start_xz_m": [487.019, 408.981], "end_xz_m": [486.955, 408.860]}
+    ],
+    "modules": [
+      {"kind": "B3-HANGAR-DOOR", "u_m": 45.160, "width_m": 44.0, "height_m": 12.0, "center_y_m": 9.728},
+      {"kind": "B3-BAND", "u_m": 45.160, "width_m": 82.0, "height_m": 0.5, "center_y_m": 19.228}
+    ]
+  },
+  "excluded_run_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58]
+}
+

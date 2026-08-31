@@ -1,0 +1,294 @@
+{
+  "schema_version": 1,
+  "generator": "game/tests/automated_route_qa.gd",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "content_sha256": "5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa",
+  "manifest_sha256": "07b8b195e1a05942e38d9bbbcb801394cf9f184051fb5f7a819c75677e46f160",
+  "route": [
+    {
+      "id": "00-ferry-spawn",
+      "xz": [
+        -104.363998413086,
+        786.023986816406
+      ],
+      "source_key": "w1222514694",
+      "node_id": "spawn",
+      "mode": "walk",
+      "radius_m": 0.35,
+      "capture": true
+    },
+    {
+      "id": "01-waterfront-approach",
+      "xz": [
+        -93.681999206543,
+        780.044006347656
+      ],
+      "source_key": "w1222514694",
+      "node_id": "n11609333225",
+      "mode": "walk",
+      "radius_m": 0.55,
+      "capture": false
+    },
+    {
+      "id": "02-waterfront-join",
+      "xz": [
+        -91.6510009765625,
+        778.89697265625
+      ],
+      "source_key": "w1212173450",
+      "node_id": "n11230504400",
+      "mode": "walk",
+      "radius_m": 0.55,
+      "capture": false
+    },
+    {
+      "id": "03-waterfront-crossing",
+      "xz": [
+        -84.4140014648438,
+        774.734008789062
+      ],
+      "source_key": "w1249797944",
+      "node_id": "n9551738100",
+      "mode": "walk",
+      "radius_m": 0.75,
+      "capture": true
+    },
+    {
+      "id": "04-ti-road-north-1",
+      "xz": [
+        -96.25,
+        754.195007324219
+      ],
+      "source_key": "w1249797944",
+      "node_id": "n10206762981",
+      "mode": "run",
+      "radius_m": 1.25,
+      "capture": false
+    },
+    {
+      "id": "05-ti-road-north-2",
+      "xz": [
+        -108.833000183105,
+        730.205993652344
+      ],
+      "source_key": "w1249797944",
+      "node_id": "n11617861468",
+      "mode": "run",
+      "radius_m": 1.25,
+      "capture": false
+    },
+    {
+      "id": "06-trade-winds-turn",
+      "xz": [
+        -112.174003601074,
+        722.947998046875
+      ],
+      "source_key": "w255330044",
+      "node_id": "n10206762967",
+      "mode": "run",
+      "radius_m": 1.25,
+      "capture": true
+    },
+    {
+      "id": "07-trade-winds-1",
+      "xz": [
+        -112.666000366211,
+        718.005004882812
+      ],
+      "source_key": "w255330044",
+      "node_id": "n11230505956",
+      "mode": "run",
+      "radius_m": 1.25,
+      "capture": false
+    },
+    {
+      "id": "08-trade-winds-2",
+      "xz": [
+        -111.531997680664,
+        712.883972167969
+      ],
+      "source_key": "w255330044",
+      "node_id": "n10206762980",
+      "mode": "run",
+      "radius_m": 1.25,
+      "capture": false
+    },
+    {
+      "id": "09-trade-winds-3",
+      "xz": [
+        -110.152000427246,
+        711.080993652344
+      ],
+      "source_key": "w255330044",
+      "node_id": "n10206762979",
+      "mode": "run",
+      "radius_m": 1.25,
+      "capture": false
+    },
+    {
+      "id": "10-trade-winds-4",
+      "xz": [
+        -103.529998779297,
+        705.971984863281
+      ],
+      "source_key": "w255330044",
+      "node_id": "n5022051218",
+      "mode": "run",
+      "radius_m": 1.25,
+      "capture": false
+    },
+    {
+      "id": "11-trade-winds-west",
+      "xz": [
+        -68.0849990844727,
+        685.81201171875
+      ],
+      "source_key": "w1249797946",
+      "node_id": "n11617873669",
+      "mode": "run",
+      "radius_m": 1.5,
+      "capture": false
+    },
+    {
+      "id": "12-trade-winds-center",
+      "xz": [
+        -4.95100021362305,
+        652.705017089844
+      ],
+      "source_key": "w1249797946",
+      "node_id": "n13515946901",
+      "mode": "run",
+      "radius_m": 1.5,
+      "capture": false
+    },
+    {
+      "id": "13-trade-winds-east",
+      "xz": [
+        38.7430000305176,
+        629.439025878906
+      ],
+      "source_key": "w1249797946",
+      "node_id": "n11612881904",
+      "mode": "run",
+      "radius_m": 1.5,
+      "capture": true
+    }
+  ],
+  "metrics": {
+    "checkpoints": 14,
+    "centerline_length_m": 264.121661901474,
+    "traveled_distance_m": 262.111097302753,
+    "elapsed_seconds": 40.873,
+    "physics_frames": 2408,
+    "walk_frames": 339,
+    "run_frames": 2069,
+    "airborne_peak_frames": 0,
+    "recovery_delta": 0,
+    "final_error_m": 0.664617657661438,
+    "final_position": [
+      38.2590827941895,
+      0.000124059617519379,
+      629.894592285156
+    ],
+    "continuous_without_teleport": true,
+    "boundary": "pass",
+    "grounded": "pass",
+    "stall": "none"
+  },
+  "captures": [
+    {
+      "id": "00-ferry-spawn",
+      "file": "route-00-ferry-spawn.png",
+      "sha256": "79e42797bfaa6620c42dbda627d3851d7d60f530cb5bb206513795e3bb28d543",
+      "bytes": 63850,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "source_key": "w1222514694",
+      "node_id": "spawn",
+      "player_position": [
+        -104.363998413086,
+        0.000124059617519379,
+        786.023986816406
+      ],
+      "camera_position": [
+        -109.116546630859,
+        2.76558446884155,
+        788.684448242188
+      ],
+      "grounded": true
+    },
+    {
+      "id": "03-waterfront-crossing",
+      "file": "route-03-waterfront-crossing.png",
+      "sha256": "62a64635599c251acd43a11dff39937f8d3b88425b61a67caa6100537a80e5a2",
+      "bytes": 69958,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "source_key": "w1249797944",
+      "node_id": "n9551738100",
+      "player_position": [
+        -84.8028945922852,
+        0.000124059617519379,
+        775.019226074219
+      ],
+      "camera_position": [
+        -82.1792602539062,
+        2.76557612419128,
+        779.792114257812
+      ],
+      "grounded": true
+    },
+    {
+      "id": "06-trade-winds-turn",
+      "file": "route-06-trade-winds-turn.png",
+      "sha256": "c0639e6773c5408a0014f1695d62f2f8728ad24e0485a53c9cbd79a6e100db51",
+      "bytes": 67594,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "source_key": "w255330044",
+      "node_id": "n10206762967",
+      "player_position": [
+        -111.835006713867,
+        0.000124059617519379,
+        723.227844238281
+      ],
+      "camera_position": [
+        -110.979194641113,
+        2.76556849479675,
+        728.606689453125
+      ],
+      "grounded": true
+    },
+    {
+      "id": "13-trade-winds-east",
+      "file": "route-13-trade-winds-east.png",
+      "sha256": "e5ed4e2052a950998357cc402a29025823065dc3fd46ae9677ff89d5317921c4",
+      "bytes": 57939,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "source_key": "w1249797946",
+      "node_id": "n11612881904",
+      "player_position": [
+        38.2590827941895,
+        0.000124059617519379,
+        629.894592285156
+      ],
+      "camera_position": [
+        33.4606323242188,
+        2.76557183265686,
+        632.471130371094
+      ],
+      "grounded": true
+    }
+  ]
+}

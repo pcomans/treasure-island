@@ -1,0 +1,42 @@
+Batch 02–04 rejected-material correction verification — 2026-08-29
+
+1. Godot 4.7.2 headless editor import/scan
+   Exit 0 — project initialization, shader import and script registration pass.
+
+2. Godot check-only: headless_batch_02_material_contract.gd, headless_batch_03_material_contract.gd, headless_batch_04_material_contract.gd, batch_02_04_material_correction_capture.gd
+   Exit 0 for all four scripts — parse pass.
+
+3. Godot headless: game/tests/headless_batch_02_04_material_correction_contract.gd
+   Exit 0 — PASS: exactly five corrected parameter/resource contracts; exactly 15 new hash-verified 1440×900 Forward+/Metal proof PNGs; all 21 accepted candidate resources, two accepted shared shaders, generated data, five old rejected manifests and 15 old rejected PNGs remain hash-identical; no correction-resource runtime reference.
+
+4. Godot Forward+/Metal: game/tests/batch_02_04_material_correction_capture.gd
+   Exit 0 — Apple M1 Pro / Metal 4.0 / Forward+; exactly five targets × close, ordinary-distance and changed-light-oblique = 15 PNGs and five manifests.
+
+5. Pre/post `.tres` hash audit across game/resources/materials/world
+   Exactly five changed resources: YMCA primary, Fire Training B600 primary, 850 Avenue H tan, Bldg 461 gray and 1318 Gateview white trim. Every other material resource is byte-identical to the task-start baseline.
+
+6. Godot headless: game/tests/headless_scene_parse.gd
+   Exit 0 — PASS: parsed four gameplay scenes.
+
+7. Godot headless: game/tests/headless_world_material_contract.gd
+   Exit 0 — PASS: 11 existing semantic materials retain their pinned contracts.
+
+8. Godot headless: game/tests/validate_generated_world.gd
+   Exit 0 — PASS: 735 playable + 4 context rows across 38 chunks; generated content 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164.
+
+9. Godot headless: game/tests/headless_gameplay_contract.gd
+   Exit 0 — PASS: gameplay, scene hierarchy, layer and ambient contracts.
+
+10. node tools/validate_godot_world.mjs
+    Exit 0 — valid: 38 chunks, 729 physical objects, 14,904 foundation samples and 2,492,288 terrain samples.
+
+11. Legacy Batch 02/03/04 aggregate contracts
+    Before authorized concurrent integration changed the builder, all three passed their corrected registry/material/shader/runtime-control assertions and then exited 1 at the unrelated aggregate accepted-facade signature gate. Their pinned expected signatures were already stale relative to the shared worktree. During this round, /root/accepted_material_integration then changed world_chunk_builder.gd as separately authorized concurrent work. That file is excluded from this correction changed-file set and was neither reset nor overwritten. No full-runtime stabilization result is claimed by this correction executor.
+
+12. C5 1318 Gateview provenance-only repair
+    PASS — authoritative target agreement across `1318_GATEVIEW_AVENUE_REFERENCE_SPEC.md`, `BATCH_04_REFERENCE_INDEX.md`, `BATCH_04_RUN_MAPPING.json/.md`, Batch 04 registry and the predecessor manifest: canonical name `1318 Gateview Avenue`, source `w95934092`, receiver `building:w95934092:wall`. Corrected manifest SHA-256 changed deterministically from `4672d73ced8a48d377a9cb6dd9d738eedfb267a684bc990e17089193439cb90a` to `d95b71313e19faab0138f38fc96979ede8a5a3683c14f8a3b1c0719472242af0` solely because those three metadata fields changed.
+    PASS — all three corrected C5 PNG hashes/byte counts/dimensions match the repaired manifest; its embedded predecessor captures exactly equal the predecessor manifest; predecessor manifest hash remains `ff12b15bfa4c60c60a4a6bbd420b59c2fd6e7ce3ae5bbff19eb73a22a5db4d3f`.
+    PASS — unchanged C5 bytes: close PNG `e0501a90ffe794e65f5b08aba45ae258219bbf1e1b81da921007f094bb72c361`, ordinary PNG `04434c4f04c231c2145843d6b862bac57efee88721840482e091147ad69dcd0d`, changed-light PNG `417d2204e1660e634a874205b93266368c19abb5ac63e200570f256f8d77e9e1`, material `30c896ddb23419a590744572fe4396c00fee942c3654985be97e2f33694a7452`, accepted generic shader `1918177080126199ddbfc0715a77b85a9355800479a098ec9b81c9726b7cc4d5`, Batch 04 registry `b4c5983a628d076cda0aaa24d0023fc7a43983fd6c00f82c9806871af0409cf7`.
+    PASS — the other four corrected manifests and all 15 correction PNG hashes remain unchanged. No recapture, Godot launch, shader/material/registry/runtime/mapping/test edit or second C2 correction occurred.
+
+Expected environment-only warnings from the original correction round: restricted user:// log rotation and macOS CA-certificate lookup. The independent reviewer supplied the visual C5 pass; this provenance repair makes no new art judgment. C5 remains live-ineligible because exact white-trim endpoints are unmapped.

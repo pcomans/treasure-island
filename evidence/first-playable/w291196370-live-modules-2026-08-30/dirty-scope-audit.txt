@@ -1,0 +1,33 @@
+w291196370 live module integration — dirty-scope audit
+Date: 2026-08-30
+Base commit: 39f35da3ecab57e6b9193fa1e30fd0e9f58540c0
+
+Authorized live implementation scope:
+  game/scripts/world/facades/w291196370_live_modules.gd (+ Godot UID)
+  game/scripts/world/world_chunk_builder.gd (one exact-receiver adapter hook)
+  game/scripts/world/facades/accepted_material_run_trials.gd (exact-three pending-review metadata only)
+  game/tests/headless_w291196370_live_module_integration_contract.gd (+ Godot UID)
+  game/tests/w291196370_live_module_integration_capture.gd (+ Godot UID)
+  focused current-state regression expectation updates under game/tests/
+  discovery/FACADE_RECEIVER_INVENTORY.json
+  discovery/FACADE_RECEIVER_INVENTORY.md
+  discovery/RETRO_LOG.md
+  evidence/first-playable/w291196370-live-modules-2026-08-30/**
+
+Authoritative pre-existing detached/review inputs retained in the same uncommitted tree:
+  game/resources/facades/w291196370_module_calibration.json
+  game/tests/support/w291196370_module_calibration.gd (+ UID)
+  game/tests/headless_w291196370_module_calibration_contract.gd (+ UID)
+  game/tests/w291196370_module_calibration_capture.gd (+ UID)
+  evidence/first-playable/batch-06-w291196370-module-calibration-2026-08-30/**
+  discovery/facades/W291196370_MODULE_CALIBRATION_ART_REVIEW.md
+
+Explicitly absent:
+  no generated/world diff
+  no material/resource edits
+  no terrain/foundation/massing/roof edits
+  no collision/navigation/spray/player/gameplay edits
+  no other-building runtime implementation edits
+  no browsing, download, install, external service, account, upload, commit, or push
+
+Regression-only files naming other buildings are updated solely to recognize the new aggregate topology/helper identity or to narrow an over-broad target guard. They do not change those buildings' runtime implementation or accepted scope.

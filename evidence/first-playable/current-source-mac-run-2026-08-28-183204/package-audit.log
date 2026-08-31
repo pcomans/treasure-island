@@ -1,0 +1,28 @@
+$ .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --main-pack "build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck" --script /private/tmp/treasure_island_current_source_package_audit.gd
+
+ERROR: Failed to open 'user://logs/godot2026-08-28T18.37.45.log'.
+   at: copy (core/io/dir_access.cpp:429)
+ERROR: Failed to open log file for writing: user://logs/godot.log
+   at: rotate_file (core/io/logger.cpp:169)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Condition "ret != noErr" is true. Returning: ""
+   at: get_system_ca_certificates (platform/macos/os_macos.mm:1035)
+REVIEW_PACKAGE_FILE: path=res://source_assets/vegetation/naip_2022/naip_vs_generated_vegetation_review.png.import bytes=224 sha256=7f1bc123799539eedc3fbcef46c28b9dfca29d24b4cd48a9e65b8d0e0eeb0535
+REVIEW_PACKAGE_FILE: path=res://source_assets/vegetation/naip_2022/naip_vs_generated_vegetation_review.svg.import bytes=224 sha256=30e17a78ab38444f633f695d304996dbf69e9ab6cfd19d5ca2ca7a5d6c115291
+REVIEW_PACKAGE_FILE: path=res://source_assets/vegetation/naip_2022/tree_annotations_review.png.import bytes=212 sha256=0547dd52db179a5feff8a8bc50e170f6646f8ba363944f1819c82b0ea9f1dbee
+REVIEW_PACKAGE_FILE: path=res://source_assets/vegetation/naip_2022/tree_annotations_review.svg.import bytes=212 sha256=2d9f6ad11774ca2b8ff3c4e85c381994a3a785cecbdefdffacba3c70f588168e
+REVIEW_PACKAGE_FILE: path=res://source_assets/vegetation/naip_2022/validation_report.json bytes=580 sha256=6a78234bad24ee94fe680d89e9426db7f56a6f29913bc6da95ac20cb02c25ba7
+REVIEW_PACKAGE_FILE: path=res://.godot/imported/naip_vs_generated_vegetation_review.png-a014dc07bde718d24620ada7bb42caaf.ctex bytes=58428 sha256=ac80aee33b610e85dec97a220431fd70b2eecf8fd1791cd43abc1ff09d679f15
+REVIEW_PACKAGE_FILE: path=res://.godot/imported/naip_vs_generated_vegetation_review.svg-e0bd27eb97ba0acbc3e183d46d974434.ctex bytes=28008 sha256=e4492541889718e83a000e5c9ec03dda5a7f7d9e050e0280bb46ce9e9eb79601
+REVIEW_PACKAGE_FILE: path=res://.godot/imported/tree_annotations_review.png-b6de0089c9b9dd2a355f6bba4095aa43.ctex bytes=62334 sha256=3be0959e93e8edc9b92dced4a4185ca92d4b4b48f2797a886afb8113311490bf
+REVIEW_PACKAGE_FILE: path=res://.godot/imported/tree_annotations_review.svg-b0702a2151b67c184c85e6091cd97a1c.ctex bytes=30250 sha256=2e003e7cde4837dfdecbdda3f35c2d5191d327443fccd341106c69d9d3fdf703
+CURRENT_SOURCE_PACKAGE_AUDIT: files=142 generated_world=46 chunks=38 manifest_sha256=fa74ea20f46db226d2aacab76135e76e4928f2619217d18811a3e213c577ed8b content_sha256=1c9fd3ec5a814e48a696267e9ec3b0318543b8b84df407baee6d18b164b03aeb spawn=(-104.364,3.457,786.024) yaw=-0.119 runtime_resources=13 vegetation_assets=15 review_source_files=5 physical_space=true banned=0
+PASS: mounted PCK contains the exact generated world and current main/player/HUD/world/spray/tag/context/vegetation resources, physical Space, and no banned authoring paths
+
+exit=0
+
+Configured banned prefixes: res://addons/, res://build/, res://data/, res://discovery/, res://evidence/, res://node_modules/, res://third_party_staging/, res://tools/, res://.tools/.
+Configured banned root files: res://INSTALL_LOG.md, res://package.json, res://package-lock.json.
+Raw NAIP crop, review tiles, GeoJSON annotations, and original source PNG/SVG bytes: absent.
+

@@ -1,0 +1,224 @@
+{
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_06_prototype_capture.gd",
+  "correction_brief": "discovery/facades/BATCH_06_PROTOTYPE_SET_01_ART_REVIEW.md",
+  "evidence_role": "one corrected controlled module round over byte-identical accepted fields; not live receiver or whole-building acceptance",
+  "host_field_phase_resets": 0,
+  "module_owned_field_meshes": 0,
+  "registry_path": "res://game/resources/facades/batch_06_prototype_registry.json",
+  "registry_sha256": "a599df850a3ca51a51a3223820fc840201559ba26eb5ed514211eaedc2304132",
+  "renderer": "Forward+/Metal",
+  "review_status": "ready_for_independent_visual_review_not_self_accepted",
+  "schema_version": "ti.batch-06-prototype-correction-evidence-set/1",
+  "targets": [
+    {
+      "captures": [
+        {
+          "bytes": 176335,
+          "camera_position_m": [
+            -1.62000000476837,
+            2.75,
+            6.80000019073486
+          ],
+          "dimensions": [
+            1440,
+            900
+          ],
+          "file": "01-close.png",
+          "id": "01-close",
+          "sha256": "533be68c3982a93f07f98118b5b20b9940c956d55a19447c394561065505468b",
+          "sun_rotation_degrees": [
+            -33.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "view_kind": "close_material_and_module_detail"
+        },
+        {
+          "bytes": 87348,
+          "camera_position_m": [
+            0.0,
+            2.90000009536743,
+            20.9249992370605
+          ],
+          "dimensions": [
+            1440,
+            900
+          ],
+          "file": "02-ordinary-distance.png",
+          "id": "02-ordinary-distance",
+          "sha256": "3201ccaaa1bf00bf34a29c126def968f7d46cb4d6305557ca14d7dcf14ccc35d",
+          "sun_rotation_degrees": [
+            -33.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "view_kind": "ordinary_gameplay_distance_control"
+        },
+        {
+          "bytes": 77113,
+          "camera_position_m": [
+            7.82999992370605,
+            3.40000009536743,
+            16.3215007781982
+          ],
+          "dimensions": [
+            1440,
+            900
+          ],
+          "file": "03-changed-light-oblique.png",
+          "id": "03-changed-light-oblique",
+          "sha256": "522c0ad9238c8e9d85204fdcf08de66e218f1dd8b3a24b6060c9f460f48069e8",
+          "sun_rotation_degrees": [
+            -13.9999990463257,
+            115.999992370605,
+            0.0
+          ],
+          "view_kind": "changed_light_oblique_alias_and_depth_control"
+        }
+      ],
+      "directory": "w34313564",
+      "scene_sha256": "ad00442bc2096cafa98f6009f8a896e12d8740f5d634ec9e0577a4d5255bf0dd",
+      "source_key": "w34313564"
+    },
+    {
+      "captures": [
+        {
+          "bytes": 156104,
+          "camera_position_m": [
+            -1.20000004768372,
+            6.05000019073486,
+            7.92000007629395
+          ],
+          "dimensions": [
+            1440,
+            900
+          ],
+          "file": "01-close.png",
+          "id": "01-close",
+          "sha256": "8ea1ae244dc2edc2fe0e45ef1f9334ed023cabf1a4f69aae87e81b16c9bb3e35",
+          "sun_rotation_degrees": [
+            -33.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "view_kind": "close_material_and_module_detail"
+        },
+        {
+          "bytes": 97501,
+          "camera_position_m": [
+            0.0,
+            6.38000011444092,
+            17.0499992370605
+          ],
+          "dimensions": [
+            1440,
+            900
+          ],
+          "file": "02-ordinary-distance.png",
+          "id": "02-ordinary-distance",
+          "sha256": "f74221eac6c2dad09ace375c4ef744aa92508ed6ec2b80f96e10ebbc5a764478",
+          "sun_rotation_degrees": [
+            -33.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "view_kind": "ordinary_gameplay_distance_control"
+        },
+        {
+          "bytes": 85048,
+          "camera_position_m": [
+            5.80000019073486,
+            7.48000001907349,
+            13.298999786377
+          ],
+          "dimensions": [
+            1440,
+            900
+          ],
+          "file": "03-changed-light-oblique.png",
+          "id": "03-changed-light-oblique",
+          "sha256": "4808997da6c7384fafa4ba916af3fc6de4294130f821b4fecdb1a5403ab66761",
+          "sun_rotation_degrees": [
+            -13.9999990463257,
+            115.999992370605,
+            0.0
+          ],
+          "view_kind": "changed_light_oblique_alias_and_depth_control"
+        }
+      ],
+      "directory": "w34313515",
+      "scene_sha256": "4e205d9ff642c90d6e0b5b0ed285a370e2ae7dab267441ff304c13abcc975933",
+      "source_key": "w34313515"
+    },
+    {
+      "captures": [
+        {
+          "bytes": 319304,
+          "camera_position_m": [
+            -1.79999995231628,
+            3.29999995231628,
+            6.80000019073486
+          ],
+          "dimensions": [
+            1440,
+            900
+          ],
+          "file": "01-close.png",
+          "id": "01-close",
+          "sha256": "d6d3e144e1e0ff01899e5fab0ca06825591a14b57feb9548a88e4fea9f8e6a27",
+          "sun_rotation_degrees": [
+            -33.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "view_kind": "close_material_and_module_detail"
+        },
+        {
+          "bytes": 94617,
+          "camera_position_m": [
+            0.0,
+            3.48000001907349,
+            23.25
+          ],
+          "dimensions": [
+            1440,
+            900
+          ],
+          "file": "02-ordinary-distance.png",
+          "id": "02-ordinary-distance",
+          "sha256": "b14c1ed89e04283b41733ea23527ba5b9095c74b29731f20be9e8498a6673071",
+          "sun_rotation_degrees": [
+            -33.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "view_kind": "ordinary_gameplay_distance_control"
+        },
+        {
+          "bytes": 94755,
+          "camera_position_m": [
+            8.69999980926514,
+            4.07999992370605,
+            18.1350002288818
+          ],
+          "dimensions": [
+            1440,
+            900
+          ],
+          "file": "03-changed-light-oblique.png",
+          "id": "03-changed-light-oblique",
+          "sha256": "030caaab8a38b571cdffa3c7c7b456d4421064c126bdfc13c610069d01ab6399",
+          "sun_rotation_degrees": [
+            -13.9999990463257,
+            115.999992370605,
+            0.0
+          ],
+          "view_kind": "changed_light_oblique_alias_and_depth_control"
+        }
+      ],
+      "directory": "w291196370",
+      "scene_sha256": "20bf67d9bb94c7925380ac49133ad582dce50c708be8a6b6794003a1b03b93cc",
+      "source_key": "w291196370"
+    }
+  ]
+}

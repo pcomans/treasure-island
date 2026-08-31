@@ -1,0 +1,13 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://game/scripts/world/facades/building_1_exact_receiver_calibration_scene.gd" id="1_script"]
+
+[node name="Building1ExactReceiverCalibrationStudy" type="Node3D"]
+script = ExtResource("1_script")
+metadata/detached_calibration_only = true
+metadata/runtime_attachment = false
+metadata/source_key = "r16681702"
+metadata/receiver_key = "building:r16681702:wall"
+metadata/exact_field_runs = [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51]
+metadata/fit_studies_not_actual_placements = ["FIT-CENTRAL-W-R36", "FIT-PAV-W-R06"]
+metadata/actual_world_placement_count = 0

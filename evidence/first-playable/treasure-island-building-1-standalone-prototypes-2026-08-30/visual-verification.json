@@ -1,0 +1,36 @@
+{
+  "schema_version": "ti.building-1-standalone-visual-verification/1",
+  "checked_date": "2026-08-30",
+  "inspection_method": "manual inspection of every native PNG after the single authorized first capture pass",
+  "result": "PASS_WITH_DOCUMENTED_FRAMING_LIMITATIONS_PENDING_INDEPENDENT_ART_REVIEW",
+  "self_acceptance": false,
+  "recapture_or_art_correction_performed": false,
+  "renderer": "Godot 4.7.2 stable official; macOS display; Forward+; Metal; Apple M1 Pro (Apple7)",
+  "common_checks": {
+    "dimensions": [1440, 900],
+    "nonempty": true,
+    "overlay_truth_boundary_present": true,
+    "gross_clipping_of_named_target": false,
+    "named_target_readable": true,
+    "reference_pixels_present": false
+  },
+  "images": [
+    {"file": "01-warm-ivory-neutral-close.png", "sha256": "7125865fadb5fbf7da5e465a631c6205bef931dc4876cbccbe0190d0522c84cd", "valid": true, "finding": "warm-ivory field is clean and neutral; surface variation is deliberately subtle; B1-BAND remains visible low in frame and must not be mistaken for field content"},
+    {"file": "02-warm-ivory-macro-40m.png", "sha256": "657056dc0887cc93a84c7c8edbfab9de055c3454423075060b672d9832f9b907", "valid": true, "finding": "full 40 m field span is visible with no obvious finite material repeat; six modules are scale exemplars, not a placement schedule"},
+    {"file": "03-wing-window-close.png", "sha256": "7a0dd27e93fbe3fbfe0b6944bb86c33877d06386cccafb2bc5693beb9b7e0ee9", "valid": true, "finding": "complete wing motif is centered and readable; a pavilion sliver at far right is a proof-lineup framing artifact"},
+    {"file": "04-central-window-close.png", "sha256": "1b874f14cc3d091cb4a8c92d546cc92f2401956e0412f5d24919423b9854719a", "valid": true, "finding": "complete central motif is centered and readable; neighboring family fragments remain at the side margins"},
+    {"file": "05-pavilion-window-close.png", "sha256": "b949aa179ad330456e8b4ffa80f2f097952983af3fc1ef5a27a231d86a5125ec", "valid": true, "finding": "complete pavilion group, multipane subdivisions and shallow pilaster strips are readable at full height; smaller motifs provide scale context only"},
+    {"file": "06-base-opening-close.png", "sha256": "7e1316cb32ffa8af9918eea32bf8d14f17839251419c6a38b97e720e8bdbc623", "valid": true, "finding": "complete base opening is isolated and readable; opaque face intentionally leaves window-versus-vent semantics unresolved"},
+    {"file": "07-blue-door-close.png", "sha256": "98df9d98b0fe8f84c7ab67ab84801da68015014e4011a64b56dd997eeba4217a", "valid": true, "finding": "complete blue door and frame are readable; base-opening fragment at left is a proof-lineup framing artifact"},
+    {"file": "08-band-oblique-close.png", "sha256": "cbe6fa4dc797f1293faf733d04e237e35bd7bcf5c93331bbabcd307d071883bf", "valid": true, "finding": "band core, both finished terminals and shallow relief are readable; door appears as ordinary scale context"},
+    {"file": "09-all-modules-oblique.png", "sha256": "6246ec0e5fa0ad55e7ebda7f7ee2f459b4ee518933a71e460f71b60aa4c2996f", "valid": true, "finding": "all six families remain legible in oblique depth context; flat lineup is explicitly illustrative and not an elevation"},
+    {"file": "10-ordinary-distance-aggregate.png", "sha256": "5a89c000dc9417178bd880d245deadf12eb730239affa379404233fee1455ec9", "valid": true, "finding": "all families remain distinguishable at ordinary-distance scale; composition must not be read as count, cadence or receiver sequence"},
+    {"file": "11-changed-light-aggregate.png", "sha256": "f90e2dcf769ddf0f47ff8ac09b0254b1eac8d4c51b05cb20cfb1ba981dd6000f", "valid": true, "finding": "changed light exposes matte response, shallow depth and opaque component behavior; darker exposure still preserves all family silhouettes"}
+  ],
+  "blocked_review_claims": [
+    "photographic or whole-building likeness",
+    "exact receiver placement or elevation composition",
+    "surveyed scale, count, cadence or sequence",
+    "correctness of unobserved east/rear, inner ring, tower, canopy or emblems"
+  ]
+}

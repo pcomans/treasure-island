@@ -1,0 +1,23 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+
+game/tests/headless_scene_parse.gd
+exit=0 wall=0.281464917s
+PASS: parsed 4 gameplay scenes
+
+game/tests/headless_gameplay_contract.gd
+exit=0 wall=0.189370833s
+PASS: gameplay inputs, boundary cases, scene hierarchies, and layer defaults
+
+game/tests/validate_generated_world.gd
+exit=0 wall=1.996492167s
+PASS: 735 playable + 4 context rows across 38 chunks; manifest 5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa
+
+game/tests/full_runtime_integration.gd
+exit=0 wall=5.132154375s
+RUNTIME_LOAD: hash=5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa chunks=38 records=701 meshes=701 surfaces=701 triangles=21210 bodies=466 shapes=466 sources=738 load_ms=1823
+RUNTIME_GAMEPLAY: walk=1.588m run=2.197m resumed=0.922m manual_recovery=manual boundary_recovery=outside_boundary spray=placed ground=receiver_rejection roof=receiver_rejection context=no_hit tags=64 evicted=1
+RUNTIME_HEALTH: static_memory_mib=43.1 failed_reload_code=file_open partial_nodes=0 checkpoint_scene_nodes=109
+RUNTIME_CLEANUP: baseline_scene_nodes=1 final_scene_nodes=1
+PASS: real main scene reached world_ready, enabled player, exercised generated physics/interactions, and failed closed without a partial world
+
+The final evidence suite was run headlessly outside the filesystem/process sandbox with the cleared project-local binary. It emitted no engine errors, authored warnings, crash output, or leak warnings. Earlier in-sandbox runs emitted only the known sandbox-caused macOS system-CA lookup error; those runs are not used as the clean final evidence.

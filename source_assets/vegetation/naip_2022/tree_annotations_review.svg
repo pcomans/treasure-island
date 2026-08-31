@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="1180" viewBox="0 0 1000 1180" role="img" aria-labelledby="title desc">
+  <title id="title">Treasure Island 2022 NAIP tree annotation candidates</title>
+  <desc id="desc">Frozen Treasure Island boundary with 80 manually marked candidate tree centers colored by coarse crown type. No Yerba Buena Island annotations.</desc>
+  <style>text{font-family:Arial,sans-serif;fill:#263238}.title{font-size:24px;font-weight:700}.subtitle{font-size:14px;fill:#546e7a}.label{font-size:13px}.small{font-size:11px;fill:#607d8b}</style>
+  <rect width="1000" height="1180" fill="#f7f5ef"/>
+  <text x="55" y="48" class="title">Treasure Island — NAIP 2022 candidate tree centers</text>
+  <text x="55" y="76" class="subtitle">Manual natural-color review · imagery 2022-05-18 · candidate data only · north up</text>
+  <path d="M55,435.7 L55.49,441.12 L118.38,578.15 L90.11,511.64 L115.07,564.17 L124.13,580.68 L138.2,611.43 L147.87,633.21 L155.33,656.24 L159.37,665.47 L164.47,673.21 L169.63,680.46 L191.43,720.41 L212.66,762.68 L255.49,847.26 L283.99,904.5 L291.8,922.16 L334.77,1009.32 L372.19,1084.57 L378.46,1100 L400.94,1089.01 L398.49,1081.84 L395.53,1073.34 L393.62,1068.84 L389.28,1058.79 L389.14,1055.2 L391.05,1052.78 L409.93,1042.14 L432.21,1029.56 L440.93,1024.66 L442.54,1024.73 L445.43,1023.14 L452.14,1019.37 L471.88,1007.69 L481.69,1002.08 L494.23,996.06 L494.57,996.75 L498.21,994.66 L497.65,993.55 L541.25,968 L556.26,960.03 L583.99,943.62 L584.42,944.47 L584.75,944.28 L584.96,944.69 L587.78,943.04 L587.63,942.75 L588.07,942.49 L588.83,941.9 L593.29,939.19 L594.2,936.9 L596.64,935.62 L599.21,935.58 L641.25,910.97 L643.82,908.42 L670.83,895.19 L674.69,891.42 L676.92,886.87 L683.42,861.47 L682.7,860.06 L684,858.59 L689.64,837.96 L693.9,823.87 L698.69,807.25 L701.67,795.75 L700.7,792.84 L705.72,775.04 L707.78,772.74 L717.61,741.12 L729.34,700.92 L733.13,689.32 L735,679.47 L734.87,675.19 L732.57,669.24 L715.31,633.99 L700.42,603.48 L694.61,591.65 L688.39,577.78 L684.07,567.8 L679.47,558.56 L670.95,541.25 L640.82,482.68 L635.58,472.46 L631.67,463.69 L623.97,448.82 L610.34,420.91 L604.08,408 L598.11,396.28 L592.25,385.12 L589.06,379.6 L583.42,367.58 L575.09,350.87 L564.67,329.53 L541.5,285.01 L536.92,273.77 L531.05,258.25 L525.89,249.79 L519.35,238.58 L507.84,215.79 L495.94,191.49 L493.99,188.55 L491.1,187.23 L461.44,176.93 L365.4,145.95 L321.07,131.21 L310.83,128.63 L300.91,127.01 L298.48,122.32 L295.45,120 L289.24,125 L274.41,132.6 L254.28,139.38 L238.99,153.07 L224.23,163.72 L216.7,168.14 L216.4,167.51 L216.03,167.71 L214.33,168.65 L213.93,168.85 L214.27,169.57 L211.46,169.97 L197.74,178.69 L158.7,200.71 L139.92,211.93 L120.69,223.91 L114.35,230.19 L106.79,252.44 L95.93,289.86 L88.72,311.78 L79.88,345.54 L62.63,404.9 L55.67,430.49 Z" fill="#e7e1cf" fill-rule="evenodd" stroke="#263238" stroke-width="2"/>
+  <g><circle cx="386.82" cy="248.93" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="291.28" cy="249.24" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="287.84" cy="259.41" r="3.5" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="279.23" cy="268.65" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="269.76" cy="274.19" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="304.19" cy="285.59" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="305.62" cy="292.68" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="195.45" cy="298.22" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="329.15" cy="341.35" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="375.35" cy="341.35" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="152.98" cy="342.9" r="3.5" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="315.38" cy="359.22" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="375.06" cy="360.46" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="302.18" cy="363.54" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="182.25" cy="365.08" r="3.5" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="341.78" cy="371.55" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="207.21" cy="386.95" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="334.89" cy="389.72" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="342.35" cy="402.35" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="467.73" cy="402.66" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="172.78" cy="407.9" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="106.5" cy="411.29" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="132.61" cy="412.83" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="474.62" cy="419.3" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="180.53" cy="420.22" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="154.42" cy="426.69" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="583.08" cy="431.62" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="132.61" cy="434.39" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="247.38" cy="435.01" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="588.81" cy="442.4" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="166.18" cy="445.49" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="276.93" cy="445.49" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="190.28" cy="447.64" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="594.27" cy="454.11" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="520.24" cy="458.12" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="600.29" cy="465.51" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="280.95" cy="467.98" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="607.18" cy="477.83" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="610.91" cy="483.69" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="164.75" cy="486.46" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="475.77" cy="487.38" r="3.5" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="615.5" cy="489.85" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="619.8" cy="496.01" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="501.88" cy="500.02" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="624.11" cy="501.86" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="628.41" cy="508.33" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="645.91" cy="519.73" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="266.89" cy="520.97" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="232.75" cy="524.35" r="3.5" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="417.24" cy="524.35" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="451.95" cy="532.06" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="652.8" cy="533.6" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="155.57" cy="542.53" r="3.5" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="659.68" cy="547.46" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="196.31" cy="549" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="666.28" cy="561.63" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="196.02" cy="565.33" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="587.38" cy="566.87" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="673.17" cy="575.8" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="471.46" cy="585.35" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="680.63" cy="589.98" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="238.49" cy="590.9" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="502.45" cy="603.53" r="3.5" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="688.09" cy="604.15" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="593.12" cy="605.07" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="267.18" cy="611.85" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="166.47" cy="616.78" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="695.55" cy="618.01" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="703.87" cy="631.87" r="3.5" fill="#8b6fb3" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="171.35" cy="633.41" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="279.23" cy="683.32" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="486.96" cy="688.87" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="429.86" cy="714.75" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="532" cy="723.37" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="462.28" cy="742.47" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="421.54" cy="764.04" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="466.3" cy="766.81" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="447.94" cy="770.2" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="453.96" cy="806.25" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/>
+    <circle cx="412.93" cy="828.12" r="4.4" fill="#59a14f" fill-opacity=".88" stroke="#fff" stroke-width=".7"/></g>
+  <path d="M730,120 l0,980" stroke="#c7c2b7"/>
+  <text x="770" y="145" font-size="17" font-weight="700">80 candidates</text>
+  <text x="770" y="170" class="small">Color = coarse crown type</text>
+  <circle cx="790" cy="190" r="6" fill="#e78f2f"/><text x="806" y="195">palm: 0</text>
+    <circle cx="790" cy="220" r="6" fill="#176b45"/><text x="806" y="225">conifer: 0</text>
+    <circle cx="790" cy="250" r="6" fill="#59a14f"/><text x="806" y="255">broadleaf: 58</text>
+    <circle cx="790" cy="280" r="6" fill="#8b6fb3"/><text x="806" y="285">unknown: 22</text>
+  <text x="770" y="345" class="label">Confidence</text>
+  <text x="790" y="372" class="label">high: 51</text>
+  <text x="790" y="397" class="label">medium: 29</text>
+  <text x="790" y="422" class="label">low: 0</text>
+  <text x="770" y="480" class="label">Scope</text>
+  <text x="790" y="507" class="small">Treasure Island only</text>
+  <text x="790" y="529" class="small">YBI candidates: 0</text>
+  <text x="770" y="580" class="label">Limits</text>
+  <text x="790" y="607" class="small">2022 canopy state</text>
+  <text x="790" y="629" class="small">crown, not surveyed trunk</text>
+  <text x="790" y="651" class="small">species not inferred</text>
+  <text x="790" y="673" class="small">shrubs omitted</text>
+  <g transform="translate(680 102)"><path d="M0,0 l8,18 h-16 z" fill="#263238"/><text x="0" y="-7" text-anchor="middle" class="small">N</text></g>
+  <text x="55" y="1135" class="small">Imagery: USDA FSA NAIP, acquired 2022-05-18; served by USGS The National Map. Boundary: existing generated-world manifest.</text>
+</svg>

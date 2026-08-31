@@ -1,0 +1,67 @@
+{
+  "schema_version": "ti.w34313520-standalone-prototype-asset-ledger/1",
+  "source_key": "w34313520",
+  "review_status": "ready_for_independent_standalone_art_review_not_self_accepted",
+  "inputs": [
+    {
+      "path": "game/resources/facades/w34313520_standalone_prototypes.json",
+      "sha256": "ab80f0cd0424c22f7f24e5fc82211353e9aee7c95bea4903022681a48c5620a4"
+    },
+    {
+      "path": "game/resources/materials/world/w34313520/w34313520_pale_field.tres",
+      "sha256": "7944151fd5ab8e977e7052d0cdb8df20132c82f967d8ebfefff83ede8fcf07a4"
+    },
+    {
+      "path": "game/resources/materials/world/w34313520/w34313520_bay_frame.tres",
+      "sha256": "445d3bec9d2ef3130aab27c816b27e384c689af68298b2db5ada37e0178f249b"
+    },
+    {
+      "path": "game/resources/materials/world/w34313520/w34313520_bay_glass.tres",
+      "sha256": "40caf8b054b51ebf247a41286dec9efdbf925f09acf698a75285a4321a41bba6"
+    },
+    {
+      "path": "game/scripts/world/facades/w34313520_standalone_prototypes.gd",
+      "sha256": "1244f590ed0854219f50a25a4c7931f4f094ce19fb65cefcf2d61b8ce4cd8566"
+    },
+    {
+      "path": "game/scenes/world/facades/batch_06/w34313520_standalone_prototype_set.tscn",
+      "sha256": "4d0ee0e79ea6fd5a7e85b21cdf4a103d125818626b6c97875737cad44cc65785"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "01-neutral-field-close.png",
+      "sha256": "bea4fc4e175ed1370fc3979d800a5016bf5ea7371e32f5a63ef115d741f5be62",
+      "bytes": 97609
+    },
+    {
+      "path": "02-complete-bay-neutral.png",
+      "sha256": "76eb27cd0917c182b361425c0740f03f6eab4ada177c591e2067affd8a1b6618",
+      "bytes": 150082
+    },
+    {
+      "path": "03-complete-bay-oblique.png",
+      "sha256": "733a51cc52a02e24873244dc3da453e6ba4370edccb2a0a84ceee2f5e5516847",
+      "bytes": 143902
+    },
+    {
+      "path": "04-ordinary-gameplay-scale.png",
+      "sha256": "a409e6b325c46e08c52706a4099f5d746ccd206434cd42e49366e518821ded6a",
+      "bytes": 107290
+    },
+    {
+      "path": "05-macro-repeat-span.png",
+      "sha256": "44318fc0ab9a6c3b6e4feff6688f0273b0abfcee0d9d68ccbe4209728e97a948",
+      "bytes": 92225
+    },
+    {
+      "path": "06-changed-light-oblique.png",
+      "sha256": "fa32e3a35bcdd25d7e6b16fda06e3e125bd07f26792741ddf2429ecfa67c7e72",
+      "bytes": 143035
+    },
+    {
+      "path": "capture-manifest.json",
+      "sha256": "0d87391095217ad728b54dfb2abd025a99bc59d1001e1b4ef7ec78eba3e1a623"
+    }
+  ]
+}

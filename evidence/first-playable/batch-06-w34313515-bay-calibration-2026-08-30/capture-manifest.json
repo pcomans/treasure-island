@@ -1,0 +1,782 @@
+{
+  "schema_version": "ti.w34313515-bay-calibration-evidence/1",
+  "review_status": "ready_for_independent_exact_receiver_module_calibration_review_not_self_accepted",
+  "evidence_role": "detached exact-receiver complete BAY module-atlas calibration over the immutable accepted WSW/NNW pale field; not live attachment, surveyed coordinate/count/cadence acceptance, lifecycle change, or whole-building proof",
+  "source_key": "w34313515",
+  "receiver_key": "building:w34313515:wall",
+  "generator": "game/tests/w34313515_module_calibration_capture.gd",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/w34313515_module_calibration_capture.gd",
+  "registry_path": "res://game/resources/facades/w34313515_module_calibration.json",
+  "registry_sha256": "2d378a94da4b7badd334d5c00f926a26a4ff9109782abb18e4859301df4b5c1d",
+  "helper_path": "res://game/tests/support/w34313515_module_calibration.gd",
+  "helper_sha256": "1edfdf4b736a7b1cc2883569a4c09b48814cabf30e3056e9dac86152de22d5f1",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "protected_inputs": {
+    "res://game/resources/facades/w34313515_module_calibration.json": "2d378a94da4b7badd334d5c00f926a26a4ff9109782abb18e4859301df4b5c1d",
+    "res://game/tests/support/w34313515_module_calibration.gd": "1edfdf4b736a7b1cc2883569a4c09b48814cabf30e3056e9dac86152de22d5f1",
+    "res://generated/world/chunks/x_-1__z_1.json": "b8696d4feb4157d39969ec039e610af572f25510d712c802d4a96943d6069c8c",
+    "res://discovery/facades/BATCH_06_STREETVIEW_OBSERVATIONS.md": "259e562e69b1186912fce2dfb466f4512fbc69cc8e64562574971c0a8c40028b",
+    "res://discovery/facades/W34313515_REFERENCE_SPEC.md": "7b5da4a8a25d7f328f086ac0b7995323039f1e49e0335f1c121f854138606ace",
+    "res://discovery/facades/BATCH_06_RUN_MAPPING.json": "0d9ef02bbdf38902bfddb475f96167abd6460163d94c26984ae5b29da0c7497d",
+    "res://discovery/facades/BATCH_06_PROTOTYPE_SET_01_MODULE_CORRECTION_ART_REVIEW.md": "70f6a0e1e9ece07d162aa669aa89e4f4a9a8b19b1785eb7fb91efc0dc8f6aded",
+    "res://game/resources/facades/batch_06_prototype_registry.json": "a599df850a3ca51a51a3223820fc840201559ba26eb5ed514211eaedc2304132",
+    "res://game/scripts/world/facades/batch_06_prototype_set.gd": "fecc656332599acefbf307ce6b5978e62c689ae146f713cf9d935ef66b81de60",
+    "res://game/scripts/world/facades/accepted_material_run_trials.gd": "545d3d4b42fef07c64a035a65006c533b8549d983e4b28bc510eaada60712c9f",
+    "res://game/resources/materials/world/w34313515/w34313515_pale_exact_trial.tres": "0b8704ccc352374adc1d6a553ff3d985ae2b70559d92b5171092450783b4395f",
+    "res://game/resources/materials/world/w34313515/w34313515_frame.tres": "716afbdf12f55975747b08c615236462d335b62ca0c46730b4cb8439b9691aa5",
+    "res://game/resources/materials/world/w34313515/w34313515_glass.tres": "963160407868064dcbb66b56cf477d0901f53a27351cbb23905474b5b613a4cc",
+    "res://game/scripts/world/world_chunk_builder.gd": "3c9e995aefe4e02fd466e51aa3a762fa53137f69a57091b395a59abda0f27cb9",
+    "res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "res://discovery/FACADE_RECEIVER_INVENTORY.json": "768ab70a84f3e5e5b0e400a1ce7347ee50e073aa59be5f98cb34f73194e6ae5d",
+    "res://game/scripts/world/facades/w34313564_live_modules.gd": "5d0d7816a87e13907d571aaceb2d4af3c01980fd26a043e33d87e9b07f2b71ee",
+    "res://game/resources/facades/w34313564_module_calibration.json": "45a47d333c997887cef7d1c97a633d37ae050efda597186430c7af6d52116f0f",
+    "res://evidence/first-playable/batch-06-exact-receiver-trials-2026-08-30/capture-manifest.json": "034b6ef3ad0e85b81a2565a9443172bec3da9364ed29ab5b4cc6b34258e72449"
+  },
+  "loaded_world_before_overlay": {
+    "chunks": 38,
+    "meshes": 763,
+    "surfaces": 770,
+    "triangles": 48797,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "receiver_child_count_before_and_after_overlay": [
+    2,
+    2
+  ],
+  "accepted_field_metadata": {
+    "status": "accepted_exact_run_homogeneous_material_live_with_documented_limitation",
+    "source_key": "w34313515",
+    "receiver_key": "building:w34313515:wall",
+    "material_groups": [
+      {
+        "id": "W34313515-MAT-PALE",
+        "surface_name": "trial_w34313515_pale_runs",
+        "run_groups": [
+          [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8
+          ],
+          [
+            43,
+            44,
+            45,
+            46,
+            47
+          ]
+        ],
+        "accepted_length_m": 165.1,
+        "mapping_ids": [
+          "B06-34313515-WSW-OUTER",
+          "B06-34313515-NNW-OUTER"
+        ],
+        "prototype_material_path": "res://game/resources/materials/world/w34313515/w34313515_pale_field.tres",
+        "material_path": "res://game/resources/materials/world/w34313515/w34313515_pale_exact_trial.tres",
+        "limitation": "Pale warm-gray/off-white WSW and NNW homogeneous field only; 1.10 m grain scale remains an unmeasured reversible assumption."
+      }
+    ],
+    "standalone_blocker": "No other Batch 06 field is authorized for this receiver; ENE, SSE, lower regions, openings, and cadence remain placeholder-only.",
+    "modules": 0,
+    "standalone_modules_live": 0,
+    "module_motif_types_live": 0,
+    "module_placement_role": "",
+    "module_position_uncertainty_m": 0.0,
+    "module_cadence_inferred": false,
+    "module_total_opening_count_inferred": false
+  },
+  "face_chains": [
+    {
+      "face": "WSW",
+      "region": "observed_WSW_outer_elevation",
+      "host_material_id": "W34313515-MAT-PALE",
+      "mapping_id": "B06-34313515-WSW-OUTER",
+      "ordered_runs": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0
+      ],
+      "length_m": 97.649,
+      "observation_ids": [
+        "B06-W34313515-SV01"
+      ],
+      "evidence_status": "reference_observation",
+      "observation_confidence": "high_coordinate_identity_and_outer_edge_ownership",
+      "eligible_motif_ids": [
+        "W34313515-BAY"
+      ]
+    },
+    {
+      "face": "NNW",
+      "region": "observed_NNW_outer_elevation",
+      "host_material_id": "W34313515-MAT-PALE",
+      "mapping_id": "B06-34313515-NNW-OUTER",
+      "ordered_runs": [
+        43.0,
+        44.0,
+        45.0,
+        46.0,
+        47.0
+      ],
+      "length_m": 67.451,
+      "observation_ids": [
+        "B06-W34313515-SV02"
+      ],
+      "evidence_status": "reference_observation",
+      "observation_confidence": "high_coordinate_identity_and_outer_edge_ownership",
+      "eligible_motif_ids": [
+        "W34313515-BAY"
+      ]
+    }
+  ],
+  "module_contract": {
+    "motif_id": "W34313515-BAY",
+    "asset_classification": "module_atlas",
+    "kind": "complete_three_tier_horizontal_window_bay",
+    "nominal_bounds_m": [
+      6.2,
+      10.2
+    ],
+    "opening_per_tier_m": [
+      5.1,
+      1.72
+    ],
+    "opening_uncertainty_m": {
+      "width": [
+        4.3,
+        5.9
+      ],
+      "height": [
+        1.35,
+        2.1
+      ]
+    },
+    "tier_count": 3.0,
+    "tier_offsets_from_center_m": [
+      -3.15,
+      0.0,
+      3.15
+    ],
+    "tier_spacing_uncertainty_m": [
+      2.65,
+      3.65
+    ],
+    "pane_count_per_tier": 3.0,
+    "frame_thickness_m": 0.11,
+    "vertical_anchor": "terrain_interpolated_run_base_plus_center_height",
+    "center_height_above_base_assumption_m": 5.35,
+    "center_height_above_base_uncertainty_m": [
+      4.95,
+      5.75
+    ],
+    "scale_status": "reversible_unmeasured_proof_assumption",
+    "module_owns_field_geometry": false,
+    "host_field_contract": "continuous_receiver_field_owns_all_nonopening_pixels",
+    "complete_motif": true,
+    "module_not_seamless_tile": true,
+    "opposite_edge_continuity_required": false
+  },
+  "placement_policy": {
+    "position_status": "stylized_reference_derived_production_inference_not_surveyed",
+    "count_status": "four_bounded_exemplars_not_surveyed_total_not_a_real_opening_count",
+    "cadence_status": "unknown_not_surveyed_not_inferred",
+    "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+    "horizontal_anchor": "metres along each exact ordered mapped face chain from its first run start",
+    "horizontal_uncertainty_policy": "declared calibration envelope only; not measurement error; full nominal width and center envelope remain within one accepted mapped run",
+    "orientation": "local_X_run_tangent_local_Y_world_up_local_Z_outward_wall_normal",
+    "receiver_field_ownership": "the accepted exact-run pale field remains the sole nonopening wall field",
+    "maximum_outward_depth_m": 0.18,
+    "runtime_attachment": false,
+    "collision_nodes": 0.0,
+    "navigation_nodes": 0.0,
+    "spray_nodes": 0.0,
+    "placement_count": 4.0
+  },
+  "placements": [
+    {
+      "placement_id": "CAL-WSW-BAY-01",
+      "motif_id": "W34313515-BAY",
+      "face": "WSW",
+      "region": "observed_WSW_outer_elevation",
+      "host_material_id": "W34313515-MAT-PALE",
+      "mapping_id": "B06-34313515-WSW-OUTER",
+      "observation_ids": [
+        "B06-W34313515-SV01"
+      ],
+      "exact_ordered_runs": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0
+      ],
+      "center_chain_m": 6.0,
+      "center_chain_uncertainty_m": 1.2,
+      "center_chain_bounds_m": [
+        4.8,
+        7.2
+      ],
+      "run_ownership": [
+        0.0
+      ],
+      "anchor_run": 0.0,
+      "anchor_run_fraction": 0.501288,
+      "expected_wall_anchor_world_xz_m": [
+        -120.705255,
+        240.630602
+      ],
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred"
+    },
+    {
+      "placement_id": "CAL-WSW-BAY-02",
+      "motif_id": "W34313515-BAY",
+      "face": "WSW",
+      "region": "observed_WSW_outer_elevation",
+      "host_material_id": "W34313515-MAT-PALE",
+      "mapping_id": "B06-34313515-WSW-OUTER",
+      "observation_ids": [
+        "B06-W34313515-SV01"
+      ],
+      "exact_ordered_runs": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0
+      ],
+      "center_chain_m": 71.5,
+      "center_chain_uncertainty_m": 3.0,
+      "center_chain_bounds_m": [
+        68.5,
+        74.5
+      ],
+      "run_ownership": [
+        6.0
+      ],
+      "anchor_run": 6.0,
+      "anchor_run_fraction": 0.508434,
+      "expected_wall_anchor_world_xz_m": [
+        -89.910747,
+        298.440187
+      ],
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred"
+    },
+    {
+      "placement_id": "CAL-NNW-BAY-01",
+      "motif_id": "W34313515-BAY",
+      "face": "NNW",
+      "region": "observed_NNW_outer_elevation",
+      "host_material_id": "W34313515-MAT-PALE",
+      "mapping_id": "B06-34313515-NNW-OUTER",
+      "observation_ids": [
+        "B06-W34313515-SV02"
+      ],
+      "exact_ordered_runs": [
+        43.0,
+        44.0,
+        45.0,
+        46.0,
+        47.0
+      ],
+      "center_chain_m": 14.0,
+      "center_chain_uncertainty_m": 3.0,
+      "center_chain_bounds_m": [
+        11.0,
+        17.0
+      ],
+      "run_ownership": [
+        44.0
+      ],
+      "anchor_run": 44.0,
+      "anchor_run_fraction": 0.496579,
+      "expected_wall_anchor_world_xz_m": [
+        -76.351908,
+        210.202666
+      ],
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred"
+    },
+    {
+      "placement_id": "CAL-NNW-BAY-02",
+      "motif_id": "W34313515-BAY",
+      "face": "NNW",
+      "region": "observed_NNW_outer_elevation",
+      "host_material_id": "W34313515-MAT-PALE",
+      "mapping_id": "B06-34313515-NNW-OUTER",
+      "observation_ids": [
+        "B06-W34313515-SV02"
+      ],
+      "exact_ordered_runs": [
+        43.0,
+        44.0,
+        45.0,
+        46.0,
+        47.0
+      ],
+      "center_chain_m": 55.5,
+      "center_chain_uncertainty_m": 3.0,
+      "center_chain_bounds_m": [
+        52.5,
+        58.5
+      ],
+      "run_ownership": [
+        47.0
+      ],
+      "anchor_run": 47.0,
+      "anchor_run_fraction": 0.504245,
+      "expected_wall_anchor_world_xz_m": [
+        -112.978327,
+        229.715622
+      ],
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred"
+    }
+  ],
+  "resolved_placements": [
+    {
+      "placement_id": "CAL-WSW-BAY-01",
+      "motif_id": "W34313515-BAY",
+      "face": "WSW",
+      "region": "observed_WSW_outer_elevation",
+      "host_material_id": "W34313515-MAT-PALE",
+      "mapping_id": "B06-34313515-WSW-OUTER",
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "run_ownership": [
+        0
+      ],
+      "anchor_run": 0,
+      "anchor_run_fraction": 0.501287748430591,
+      "center_chain_m": 6.0,
+      "center_chain_uncertainty_m": 1.2,
+      "wall_anchor_world_m": [
+        -120.705253601074,
+        2.81042385101318,
+        240.630615234375
+      ],
+      "module_origin_world_m": [
+        -120.75821685791,
+        8.16042423248291,
+        240.658813476562
+      ],
+      "tangent_world_xz": [
+        0.470124274492264,
+        0.882600247859955
+      ],
+      "outward_normal_world_xz": [
+        -0.882740080356598,
+        0.469861656427383
+      ],
+      "base_y_m": 2.81042392936286,
+      "top_y_m": 14.3570003509521
+    },
+    {
+      "placement_id": "CAL-WSW-BAY-02",
+      "motif_id": "W34313515-BAY",
+      "face": "WSW",
+      "region": "observed_WSW_outer_elevation",
+      "host_material_id": "W34313515-MAT-PALE",
+      "mapping_id": "B06-34313515-WSW-OUTER",
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "run_ownership": [
+        6
+      ],
+      "anchor_run": 6,
+      "anchor_run_fraction": 0.508434482662009,
+      "center_chain_m": 71.5,
+      "center_chain_uncertainty_m": 3.0,
+      "wall_anchor_world_m": [
+        -89.9107437133789,
+        2.97665786743164,
+        298.440185546875
+      ],
+      "module_origin_world_m": [
+        -89.9637069702148,
+        8.32665824890137,
+        298.468383789062
+      ],
+      "tangent_world_xz": [
+        0.470137745141983,
+        0.882593154907227
+      ],
+      "outward_normal_world_xz": [
+        -0.882740080356598,
+        0.469861656427383
+      ],
+      "base_y_m": 2.97665796079869,
+      "top_y_m": 14.3570003509521
+    },
+    {
+      "placement_id": "CAL-NNW-BAY-01",
+      "motif_id": "W34313515-BAY",
+      "face": "NNW",
+      "region": "observed_NNW_outer_elevation",
+      "host_material_id": "W34313515-MAT-PALE",
+      "mapping_id": "B06-34313515-NNW-OUTER",
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "run_ownership": [
+        44
+      ],
+      "anchor_run": 44,
+      "anchor_run_fraction": 0.496579042357914,
+      "center_chain_m": 14.0,
+      "center_chain_uncertainty_m": 3.0,
+      "wall_anchor_world_m": [
+        -76.3519058227539,
+        2.97835302352905,
+        210.202651977539
+      ],
+      "module_origin_world_m": [
+        -76.3800964355469,
+        8.32835292816162,
+        210.149688720703
+      ],
+      "tangent_world_xz": [
+        -0.882561087608337,
+        0.470197737216949
+      ],
+      "outward_normal_world_xz": [
+        -0.469861656427383,
+        -0.882740080356598
+      ],
+      "base_y_m": 2.97835290746318,
+      "top_y_m": 14.3570003509521
+    },
+    {
+      "placement_id": "CAL-NNW-BAY-02",
+      "motif_id": "W34313515-BAY",
+      "face": "NNW",
+      "region": "observed_NNW_outer_elevation",
+      "host_material_id": "W34313515-MAT-PALE",
+      "mapping_id": "B06-34313515-NNW-OUTER",
+      "evidence_status": "production_inference",
+      "coordinate_status": "stylized_reference_derived_inference_not_surveyed",
+      "count_status": "bounded_exemplar_not_surveyed_total",
+      "cadence_status": "unknown_not_surveyed_not_inferred",
+      "run_ownership": [
+        47
+      ],
+      "anchor_run": 47,
+      "anchor_run_fraction": 0.504245203001301,
+      "center_chain_m": 55.5,
+      "center_chain_uncertainty_m": 3.0,
+      "wall_anchor_world_m": [
+        -112.978324890137,
+        2.91535472869873,
+        229.715621948242
+      ],
+      "module_origin_world_m": [
+        -113.00651550293,
+        8.26535511016846,
+        229.662658691406
+      ],
+      "tangent_world_xz": [
+        -0.882562875747681,
+        0.470194399356842
+      ],
+      "outward_normal_world_xz": [
+        -0.469861656427383,
+        -0.882740080356598
+      ],
+      "base_y_m": 2.91535473692526,
+      "top_y_m": 14.3570003509521
+    }
+  ],
+  "detached_overlay": {
+    "parent": "main_capture_scene_only",
+    "module_instances": 4,
+    "mesh_instances": 84,
+    "field_meshes": 0,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "runtime_attachment": false
+  },
+  "excluded_regions": [
+    {
+      "region": "ENE",
+      "evidence_status": "unknown",
+      "reason": "no target-identifiable approved facade observation"
+    },
+    {
+      "region": "SSE",
+      "evidence_status": "unknown",
+      "reason": "no target-identifiable approved facade observation"
+    },
+    {
+      "region": "reentrant_and_short_facets",
+      "evidence_status": "unknown",
+      "reason": "outer-elevation observations do not establish ownership"
+    },
+    {
+      "region": "lower_and_recess_areas",
+      "evidence_status": "unknown",
+      "reason": "fence and vegetation occlusion prevent exact region bounds"
+    }
+  ],
+  "captures": [
+    {
+      "id": "01-close-wsw-bay",
+      "view_kind": "close_complete_wsw_bay",
+      "file": "images/01-close-wsw-bay.png",
+      "sha256": "a6df81b2008264d53563e13d72ef4dfe699c76c5fe7f6ac321461cd902234151",
+      "bytes": 213884,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -134.469436645508,
+        5.06042385101318,
+        246.824142456055
+      ],
+      "aim_target_m": [
+        -120.75821685791,
+        8.16042423248291,
+        240.658813476562
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-WSW-BAY-01"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 94,
+      "sample_luminance_range": 0.799386687576771
+    },
+    {
+      "id": "02-close-nnw-bay",
+      "view_kind": "close_complete_nnw_bay",
+      "file": "images/02-close-nnw-bay.png",
+      "sha256": "78dcee6d73266233f8a004da9dee3d43d55144aed1979e85c9f6ce45b8f5c32c",
+      "bytes": 136972,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -84.4870986938477,
+        5.22835302352905,
+        197.47282409668
+      ],
+      "aim_target_m": [
+        -76.3800964355469,
+        8.32835292816162,
+        210.149688720703
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-NNW-BAY-01"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 42,
+      "sample_luminance_range": 0.776407845318317
+    },
+    {
+      "id": "03-ordinary-wsw-context",
+      "view_kind": "ordinary_gameplay_height_wsw_building_context",
+      "file": "images/03-ordinary-wsw-context.png",
+      "sha256": "adbc5da06838a6f2f7686fc3d1bafe63b130cb1570a914028eaa1c6dfa01b1a5",
+      "bytes": 671313,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -138.514404296875,
+        5.22665786743164,
+        324.310791015625
+      ],
+      "aim_target_m": [
+        -89.9637069702148,
+        8.32665824890137,
+        298.468383789062
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-WSW-BAY-02"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 266,
+      "sample_luminance_range": 0.795080780982971
+    },
+    {
+      "id": "04-ordinary-nnw-context",
+      "view_kind": "ordinary_gameplay_height_nnw_building_context",
+      "file": "images/04-ordinary-nnw-context.png",
+      "sha256": "0809ae4ef30cc0072b9ee24349eca554f9a5f59967727d879d551f717a1f2bd0",
+      "bytes": 148864,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -120.785385131836,
+        5.24928045272827,
+        169.290161132812
+      ],
+      "aim_target_m": [
+        -94.0032730102539,
+        8.34928035736084,
+        219.606338500977
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-NNW-BAY-01",
+        "CAL-NNW-BAY-02"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 51,
+      "sample_luminance_range": 0.756516858935356
+    },
+    {
+      "id": "05-wrap-corner-two-side-context",
+      "view_kind": "ordinary_wrap_corner_wsw_nnw_multi_side_context",
+      "file": "images/05-wrap-corner-two-side-context.png",
+      "sha256": "68e1070f5144b818d5b272d45b82f3f4284f952de68461f88744ae89772da39f",
+      "bytes": 605999,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -167.521957397461,
+        5.19000005722046,
+        221.905349731445
+      ],
+      "aim_target_m": [
+        -123.526000976562,
+        8.10000038146973,
+        235.335006713867
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-NNW-BAY-02",
+        "CAL-WSW-BAY-01"
+      ],
+      "before_run": 47,
+      "after_run": 0,
+      "sample_unique_colors": 190,
+      "sample_luminance_range": 0.783684782683849
+    },
+    {
+      "id": "06-changed-light-oblique-wsw-bay",
+      "view_kind": "changed_light_oblique_complete_wsw_bay",
+      "file": "images/06-changed-light-oblique-wsw-bay.png",
+      "sha256": "63a5712cd320fc9c114f857125ed5de4f4fe69ebb3004c11a66d2e9c3b39ecfd",
+      "bytes": 312759,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -107.330833435059,
+        5.37665796279907,
+        319.040863037109
+      ],
+      "aim_target_m": [
+        -89.9637069702148,
+        8.32665824890137,
+        298.468383789062
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -24.0,
+        118.0,
+        0.0
+      ],
+      "placement_ids": [
+        "CAL-WSW-BAY-02"
+      ],
+      "before_run": -1,
+      "after_run": -1,
+      "sample_unique_colors": 89,
+      "sample_luminance_range": 0.612418837845325
+    }
+  ],
+  "capture_count": 6,
+  "preserved_blockers": [
+    "exact real-world bay coordinates and total bay count are not observable from the approved evidence",
+    "no periodic cadence, alternate sequence, or surveyed spacing is established",
+    "all four centers and their calibration envelopes are stylized reference-derived production inference, not measurement uncertainty",
+    "ENE, SSE, re-entrant and short facets, and runs 9..42 receive zero calibration modules",
+    "W34313515-VRECESS remains reference-blocked and unbuilt",
+    "lower-region ownership, doors, entry grammar, roof/recess depth, massing, collision, navigation, and spray ownership remain excluded",
+    "live attachment, lifecycle acceptance, exact placement acceptance, and whole-building resemblance remain blocked pending independent art review"
+  ],
+  "validity_inspection_only": "Inspect target visibility, complete three-tier motifs, accepted host field continuity, exact transforms, shallow depth, camera diversity, multi-side coverage and evidence labels only. Executor art acceptance is prohibited."
+}

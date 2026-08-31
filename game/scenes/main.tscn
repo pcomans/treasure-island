@@ -1,0 +1,40 @@
+[gd_scene load_steps=8 format=3]
+
+[ext_resource type="Script" path="res://game/scripts/main.gd" id="1_main"]
+[ext_resource type="PackedScene" path="res://game/scenes/world/world_root.tscn" id="2_world"]
+[ext_resource type="PackedScene" path="res://game/scenes/player/player.tscn" id="3_player"]
+[ext_resource type="PackedScene" path="res://game/scenes/ui/hud.tscn" id="4_hud"]
+
+[sub_resource type="Environment" id="Environment_main"]
+background_mode = 1
+background_color = Color(0.46, 0.69, 0.86, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.71, 0.77, 0.82, 1)
+ambient_light_energy = 0.65
+ambient_light_sky_contribution = 0.0
+tonemap_mode = 2
+fog_enabled = true
+fog_light_color = Color(0.72, 0.79, 0.84, 1)
+fog_light_energy = 0.55
+fog_density = 0.00035
+fog_height = 0.0
+fog_height_density = 0.0
+
+[node name="Main" type="Node3D"]
+script = ExtResource("1_main")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_main")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+rotation_degrees = Vector3(-52, -28, 0)
+shadow_enabled = true
+directional_shadow_max_distance = 800.0
+
+[node name="WorldRoot" parent="." instance=ExtResource("2_world")]
+
+[node name="Player" parent="." instance=ExtResource("3_player")]
+
+[node name="Interface" type="CanvasLayer" parent="."]
+
+[node name="HUD" parent="Interface" instance=ExtResource("4_hud")]

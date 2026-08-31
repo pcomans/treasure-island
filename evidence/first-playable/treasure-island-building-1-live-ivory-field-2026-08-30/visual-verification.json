@@ -1,0 +1,31 @@
+{
+  "schema_version": "ti.building-1-live-ivory-field-visual-verification/1",
+  "status": "PASS_VALIDITY_ONLY_PENDING_INDEPENDENT_ACTUAL_WORLD_ART_REVIEW",
+  "all_images_opened_and_inspected": true,
+  "image_count": 11,
+  "dimensions_verified": [1440, 900],
+  "renderer_verified": "Godot 4.7.2 Forward+/Metal",
+  "checks": {
+    "all_frames_nonempty": true,
+    "labels_readable": true,
+    "close_join_38_to_39_visible": true,
+    "close_join_42_to_43_visible": true,
+    "scope_start_join_21_to_22_visible": true,
+    "no_visible_crack_at_sampled_joins": true,
+    "macro_public_curve_visible": true,
+    "nearest_and_ordinary_gameplay_views_present": true,
+    "oblique_and_multiside_context_present": true,
+    "whole_building_context_present_not_acceptance": true,
+    "changed_light_present": true,
+    "whole_island_context_present": true,
+    "zero_live_modules_consistent_with_frames_and_manifest": true,
+    "no_receiver_intrusion_or_z_fight_observed": true
+  },
+  "limitations": [
+    "Legitimate receiver corners and lighting discontinuities remain visible and are not cracks.",
+    "The field is intentionally homogeneous; this evidence does not imply openings, cadence, a complete elevation, or whole-building resemblance.",
+    "Visual inspection is an evidence-validity check only, not an art acceptance verdict."
+  ],
+  "art_verdict": "withheld_for_independent_actual_world_reviewer",
+  "self_acceptance": false
+}

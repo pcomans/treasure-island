@@ -1,0 +1,100 @@
+{
+  "canonical_name": "Treasure Island Personnel Support Detachment",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_03_material_proof_capture.gd",
+  "captures": [
+    {
+      "bytes": 106626,
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "sha256": "b226f27c721b42a6ef5a716b567911b42995313f51bd7cc5ae1f4bf2df1c4902",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_proof"
+    },
+    {
+      "bytes": 68280,
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "sha256": "4367b6fcb8a54e6b0fba9f729dec7cf85460eb189c6dfeedf94bda121622e814",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_scale_proof"
+    },
+    {
+      "bytes": 67627,
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "sha256": "0de8d6e0c581fd9b0651f585daaa719b8287d575a0f09984fa88db8cdf3acd5d",
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_proof"
+    }
+  ],
+  "contains_facade_scale_motifs": false,
+  "display_driver": "macOS",
+  "evidence_role": "controlled_material_prototype_not_in_game_acceptance",
+  "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "godot_version": "4.7.2-stable (official)",
+  "material_path": "res://game/resources/materials/world/personnel_support_detachment/psd_outer.tres",
+  "material_sha256": "ec103e8a030903e17c3d863e80f6c904fafd0806b24db0385c8aac999c821692",
+  "observed_region_scope": "observed east and north outer elevation opaque dark structural/infill field only; never the inner courtyard or unobserved south/west outer elevations",
+  "one_local_unit_m": 1.0,
+  "proof_panel_size_m": [
+    4.8,
+    3.2,
+    0.12
+  ],
+  "proof_primary_scale_m": 1.2,
+  "proof_receiver": "controlled_flat_proof_panel",
+  "receiver_key": "building:r133347:wall",
+  "registry_sha256": "3967f455469e7c480c611b53a7502833f1582c5b73a5f2aa00783d71719c4139",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_visual_review_not_self_accepted",
+  "runtime_attachment": false,
+  "runtime_attachment_reason": "Exact observed material-region endpoints and physical module scale remain unreconciled.",
+  "scale_status": "broad_finish_variation_unmeasured_proof_only",
+  "schema_version": "ti.batch-03-material-proof-evidence/1",
+  "shared_shader_sha256": "1918177080126199ddbfc0715a77b85a9355800479a098ec9b81c9726b7cc4d5",
+  "source_key": "r133347",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

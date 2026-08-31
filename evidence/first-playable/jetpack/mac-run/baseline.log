@@ -1,0 +1,32 @@
+JETPACK MAC EXPORT FINAL-SOURCE GATES — 2026-08-28
+
+$ /usr/bin/time -p node tools/validate_godot_world.mjs generated/world
+exit=0 real=0.11s
+PASS: 38 chunks; content_sha256=5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa; 701 physical objects; 739 coverage rows consistent.
+
+$ Godot --headless --path . --script game/tests/headless_scene_parse.gd
+exit=0 real=0.27s
+PASS: parsed 4 scenes.
+
+$ Godot --headless --path . --script game/tests/headless_gameplay_contract.gd
+exit=0 real=0.26s
+PASS: gameplay inputs, physical Space jetpack binding, jetpack defaults, boundary cases, scene hierarchies, and layer defaults.
+
+$ /usr/bin/time -p Godot --headless --path . --script game/tests/full_runtime_integration.gd
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+RUNTIME_LOAD: hash=5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa chunks=38 records=701 meshes=701 surfaces=701 triangles=21210 bodies=466 shapes=466 sources=738 load_ms=1809
+RUNTIME_GAMEPLAY: walk=1.598m run=2.228m jetpack_rise=4.000m air_walk=1.598m air_run=3.280m slow_descent=0.500m renewed_rise=1.210m landed=true resumed=0.932m manual_recovery=manual boundary_recovery=outside_boundary spray=placed ground=receiver_rejection roof=receiver_rejection context=no_hit tags=64 evicted=1
+RUNTIME_HEALTH: static_memory_mib=43.2 failed_reload_code=file_open partial_nodes=0 checkpoint_scene_nodes=109
+RUNTIME_CLEANUP: baseline_scene_nodes=1 final_scene_nodes=1
+PASS: real main scene reached world_ready, enabled player, exercised generated physics/interactions, and failed closed without a partial world
+exit=0 real=14.33s user=2.42s sys=0.39s
+
+$ /usr/bin/time -p Godot --headless --path . -- --mac-export-smoke
+Godot Engine v4.7.2.stable.official.ed1daf0bf
+MAC_EXPORT_WORLD_READY: hash=5899ebe131bbf05525fedebdac703a321a7aaf95523a57960cb937085068cfaa spawn=(-104.364,1.000,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=701 triangles=21210 bodies=466 shapes=466 load_ms=1792
+MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps
+PASS: packaged main scene reached full world_ready, enabled the player, and exercised jetpack rise/slow descent
+exit=0 real=4.15s user=2.01s sys=0.15s
+
+All accepted gates used the cleared project-local Godot 4.7.2 binary. No engine errors, warnings, or leak reports appeared.
+

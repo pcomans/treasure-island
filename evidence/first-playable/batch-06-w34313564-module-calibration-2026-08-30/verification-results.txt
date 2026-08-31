@@ -1,0 +1,75 @@
+w34313564 detached exact-receiver module calibration — verification on 2026-08-30
+
+1. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --headless --editor --quit --audio-driver Dummy
+   PASS: project import completed; no calibration parse/import error.
+
+2. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --headless --check-only --script game/tests/w34313564_module_calibration_capture.gd
+   PASS: native capture harness parses.
+
+3. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --headless --audio-driver Dummy --script game/tests/headless_w34313564_module_calibration_contract.gd
+   PASS: one deterministic detached calibration has 3 complete HWIN and 2 complete PDOOR exemplars on observed mapped runs 6/8/12/16/17; both tan and pale host roles, wall-tangent/world-up/outward orientation, bounded height and ±4 m same-run position uncertainty, zero field backings/collision/navigation/spray/live attachment, immutable active field trials, no cadence claim, and zero use of placeholder runs 0..4 or nonexistent run 20.
+
+4. .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/w34313564_module_calibration_capture.gd
+   PASS: seven fresh native Forward+/Metal images captured with Apple M1 Pro Metal 4.0; all seven passed evidence-validity inspection without self-acceptance.
+
+5. game/tests/headless_batch_06_exact_receiver_trial_contract.gd
+   PASS: exact field scopes, complements, zero live modules, wall projection, render/collision equivalence, and 729 meshes / 736 surfaces / 48,389 triangles / 466 collider pairs remain exact.
+
+6. game/tests/headless_batch_06_prototype_contract.gd
+   PASS: all five reviewed standalone field hashes remain exact; six corrected modules remain outside runtime with zero backings, phase resets, or blocked-target assets.
+
+7. game/tests/headless_batch_02_material_contract.gd
+   PASS.
+
+8. game/tests/headless_batch_03_material_contract.gd
+   PASS.
+
+9. game/tests/headless_batch_04_material_contract.gd
+   PASS.
+
+10. game/tests/headless_batch_02_04_material_correction_contract.gd
+    PASS.
+
+11. game/tests/headless_scene_parse.gd
+    PASS: parsed four gameplay scenes.
+
+12. game/tests/headless_gameplay_contract.gd
+    PASS.
+
+13. game/tests/headless_world_material_contract.gd
+    PASS: 11 semantic world materials retain their contracts.
+
+14. game/tests/validate_generated_world.gd
+    PASS: 735 playable + 4 context rows across 38 chunks; manifest 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164.
+
+15. game/tests/headless_hawkins_facade_contract.gd
+    PASS: accepted Hawkins facade/massing signature d311c103c9273b94fc982588f46bae6ab67ba6be54b0d0a111dd305e39c22219.
+
+16. game/tests/headless_building_3_facade_contract.gd
+    PASS.
+
+17. game/tests/headless_isle_house_facade_contract.gd
+    PASS: signature e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1.
+
+18. game/tests/headless_ymca_wall_tangent_projection_contract.gd
+    PASS.
+
+19. game/tests/full_runtime_integration.gd
+    PASS: 38 chunks / 729 meshes / 736 surfaces / 48,389 triangles / 466 collider pairs; gameplay, spray, recovery, failed-reload, and cleanup contracts passed.
+
+20. game/tests/automated_route_qa.gd
+    PASS: continuous ferry-to-Trade-Winds route; 14 checkpoints; no teleport, stall, boundary loss, or recovery.
+
+21. game/tests/automated_route_qa.gd -- --whole-island-route
+    PASS: ferry, southwest, center, north, and east-perimeter; 3,449.107 m traveled; no teleport or recovery; five grounded landings.
+
+22. game/tests/headless_accepted_material_run_trials_contract.gd
+    RESOLVED CURRENT-STATE PASS: post-review lifecycle maintenance updated the current helper/test metadata without changing exact runs, materials, surfaces, or geometry. The aggregate gate passes against inventory 41fd4b1cdc98b31b33801decb02a1303e9d1b6ee48e86214a90e52656f9a8542 and current helper 18d3cdd6cf29349ba8b00283b4e679cd079c176adb24a32cae7f521c7d88a083. The immutable capture manifest retains capture-time helper 8fd1d899cf658f84a5044597e1194d6d0450b74b00281b73ad9b1c91914b21d0.
+
+23. git diff --name-only -- generated
+    PASS: no output; generated source bytes unchanged.
+
+24. git diff --check
+    PASS.
+
+Headless environment note: recurring user:// log-rotation and macOS CA-certificate warnings were emitted before PASS lines and did not affect test exits.

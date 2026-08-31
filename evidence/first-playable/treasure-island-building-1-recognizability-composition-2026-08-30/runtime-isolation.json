@@ -1,0 +1,38 @@
+{
+  "composition_review_status": "pending_independent_recognizability_art_review",
+  "delta_vs_accepted_ivory_baseline": {
+    "collision_nodes": 0,
+    "meshes": 353,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "surfaces": 353,
+    "triangles": 4276
+  },
+  "generated_data_changed": false,
+  "module_field_or_backing_meshes": 0,
+  "navigation_changed": false,
+  "protected_run_attachment_count": 0,
+  "receiver_child_count": 3,
+  "receiver_collision_changed": false,
+  "receiver_collision_face_vertices": 660,
+  "receiver_geometry_changed": false,
+  "result": "PASS",
+  "runtime_after": {
+    "meshes": 1278,
+    "records": 729,
+    "shapes": 466,
+    "static_bodies": 466,
+    "surfaces": 1288,
+    "triangles": 55067
+  },
+  "runtime_before": {
+    "meshes": 925,
+    "records": 729,
+    "shapes": 466,
+    "static_bodies": 466,
+    "surfaces": 935,
+    "triangles": 50791
+  },
+  "schema_version": "ti.building-1-recognizability-runtime-isolation/1",
+  "spray_ownership_changed": false
+}

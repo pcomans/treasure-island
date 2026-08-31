@@ -1,0 +1,82 @@
+schema_version: "ti.independent-art-verdict/1"
+checked_date: "2026-08-29"
+reviewer: "/root/hawkins_texture_v2_review"
+scope: "isle_house_39_bruton_bounded_high_facade_pilot"
+target_receiver: "building-composite:w1249412094:w1282547786:wall"
+decision: "ACCEPT_WITH_DOCUMENTED_MASSING_LIMITATION"
+
+reference_basis:
+  official_street_view:
+    live_reinspection_available: false
+    fallback_used: "dated_observations_in_NEXT_COHORT_STREETVIEW_OBSERVATIONS_and_ISLE_HOUSE_39_BRUTON_REFERENCE_SPEC"
+    imagery_downloaded_copied_or_retained: false
+
+evidence_integrity:
+  asset_inventory_verified: true
+  five_required_views_reviewed: true
+  exact_receiver_identity: true
+  layout_sha256: "c5e6393e90152cef62f6478d7bd87750f3db5598d6ebc36cd307ce20acaa090d"
+  facade_signature: "fdc41a59b4805b49bc6872d4f5e85a7339d328a317c398f3eb7dfb747be5e73c"
+
+separated_verdicts:
+  standalone_materials:
+    verdict: "PASS"
+    material_hierarchy: "PASS"
+    albedo_neutrality: "PASS"
+    target_family_resemblance: "PASS_AS_BOUNDED_HOMOGENEOUS_FIELDS"
+    aliasing_and_macro_repetition: "PASS"
+  standalone_modules:
+    verdict: "PASS"
+    topology_and_completeness: "PASS"
+    target_motif_resemblance: "PASS_AS_REFERENCE_RELATIVE_PROTOTYPE"
+    legal_joins: "PASS"
+  exact_current_receiver:
+    mechanical_attachment_and_gameplay: "PASS_AS_EVIDENCED"
+    art_scale_and_readability: "PASS"
+    module_run_scope_5_to_7: "PASS_AS_EVIDENCED"
+    partial_ene_material_only_runs_8_to_9: "PASS_AS_EVIDENCED"
+    low_shared_and_unobserved_restraint: "PASS_AS_EVIDENCED"
+    spray_behavior: "PASS"
+  whole_building_real_world_resemblance:
+    verdict: "BLOCKED_BY_CURRENT_MASSING_INVARIANT"
+    generated_low_part_height_m: 15.0
+    generated_low_part_levels: 5
+    observed_podium_levels: 7
+    limitation: "frozen_low_part_and_simplified_composite_cannot_match_observed_podium_tower_proportions"
+
+module_evidence:
+  counts:
+    IH-TW: 170
+    IH-PW-W: 4
+    IH-PW-M: 8
+    IH-PW-N: 6
+    IH-CW: 1
+    IH-GG: 5
+    IH-ENTRY39: 1
+    IH-LVR: 1
+    IH-CANOPY: 1
+  module_run_scope: [5, 6, 7]
+  material_only_run_scope: [8, 9]
+  motifs_created_resized_duplicated_or_deleted_at_joins: false
+  invented_facade_elements_found: false
+
+hard_gate_results:
+  material_hierarchy_and_neutrality: "PASS"
+  module_completeness: "PASS"
+  legal_seams_and_motif_integrity: "PASS"
+  distinct_tower_podium_and_ground_grammar: "PASS"
+  physical_scale: "PASS_AS_REFERENCE_RELATIVE_PROTOTYPE"
+  address_side_recognition: "PASS_WITHIN_CURRENT_RECEIVER"
+  ordinary_camera_readability: "PASS"
+  oblique_and_changed_light_stability: "PASS"
+  repetition_or_sampling_artifacts: "PASS"
+  exact_run_and_part_scope: "PASS_AS_EVIDENCED"
+  conservative_unobserved_sides: "PASS_AS_EVIDENCED"
+  spray_appearance: "PASS"
+
+correction:
+  facade_only_round_required: false
+  residual_limitations:
+    - "generated_five_level_podium_differs_from_observed_seven_level_podium"
+    - "exact_module_counts_offsets_accent_order_and_louver_pitch_are_not_surveyed"
+    - "podium_masonry_bond_is_unknown_and_intentionally_homogeneous"

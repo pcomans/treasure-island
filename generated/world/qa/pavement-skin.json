@@ -1,0 +1,760 @@
+{
+  "materials": {
+    "paved_area": {
+      "albedo_srgb_hex": "707573",
+      "material_key": "major_area_paved",
+      "relative_luminance": 0.174,
+      "source_count": 17,
+      "source_tag_rule": "amenity=parking"
+    },
+    "pedestrian": {
+      "albedo_srgb_hex": "8b918e",
+      "material_key": "road_path_pedestrian",
+      "relative_luminance": 0.277,
+      "surface_bias_m": 0.08
+    },
+    "pedestrian_vs_vehicle_relative_luminance_difference": 1.7,
+    "vehicle": {
+      "albedo_srgb_hex": "555b60",
+      "material_key": "road_path",
+      "relative_luminance": 0.103,
+      "surface_bias_m": 0.078
+    }
+  },
+  "schema_version": "ti.pavement-skin/1",
+  "source_classification": {
+    "assumption": "tertiary/residential/unclassified/service/track retain vehicle-road precedence; footway/path/cycleway/pedestrian/platform receive the lighter pedestrian skin; OSM access and gameplay collision are unchanged",
+    "by_highway": {
+      "cycleway": 13,
+      "footway": 197,
+      "path": 4,
+      "pedestrian": 4,
+      "platform": 1,
+      "residential": 69,
+      "service": 116,
+      "tertiary": 18,
+      "track": 2,
+      "unclassified": 3
+    },
+    "by_visual_class": {
+      "pedestrian": 219,
+      "vehicle": 208
+    },
+    "highway_tags_by_visual_class": {
+      "pedestrian": [
+        "cycleway",
+        "footway",
+        "path",
+        "pedestrian",
+        "platform"
+      ],
+      "vehicle": [
+        "residential",
+        "service",
+        "tertiary",
+        "track",
+        "unclassified"
+      ]
+    },
+    "source_count": 427
+  },
+  "topology": {
+    "base_record_count": 36,
+    "base_source_count": 427,
+    "batches": [
+      {
+        "base_object_key": "roads:x_-3__z_-4",
+        "chunk_id": "x_-3__z_-4",
+        "pedestrian_object_key": "roads-pedestrian:x_-3__z_-4",
+        "plan_area_m2": {
+          "base_union": 35.633,
+          "pedestrian_union_before_precedence": 35.633,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 35.633,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 0
+        },
+        "source_counts": {
+          "all": 1,
+          "pedestrian": 1,
+          "pedestrian_visible": 1,
+          "vehicle": 0
+        }
+      },
+      {
+        "base_object_key": "roads:x_-3__z_-3",
+        "chunk_id": "x_-3__z_-3",
+        "pedestrian_object_key": "roads-pedestrian:x_-3__z_-3",
+        "plan_area_m2": {
+          "base_union": 2597.967,
+          "pedestrian_union_before_precedence": 837.835,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 821.573,
+          "vehicle_precedence_removed": 16.262,
+          "vehicle_union": 1776.397
+        },
+        "source_counts": {
+          "all": 8,
+          "pedestrian": 2,
+          "pedestrian_visible": 2,
+          "vehicle": 6
+        }
+      },
+      {
+        "base_object_key": "roads:x_-3__z_-2",
+        "chunk_id": "x_-3__z_-2",
+        "pedestrian_object_key": "roads-pedestrian:x_-3__z_-2",
+        "plan_area_m2": {
+          "base_union": 5357.395,
+          "pedestrian_union_before_precedence": 1202.853,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 1162.271,
+          "vehicle_precedence_removed": 40.583,
+          "vehicle_union": 4195.124
+        },
+        "source_counts": {
+          "all": 21,
+          "pedestrian": 8,
+          "pedestrian_visible": 8,
+          "vehicle": 13
+        }
+      },
+      {
+        "base_object_key": "roads:x_-3__z_-1",
+        "chunk_id": "x_-3__z_-1",
+        "pedestrian_object_key": "roads-pedestrian:x_-3__z_-1",
+        "plan_area_m2": {
+          "base_union": 2823.339,
+          "pedestrian_union_before_precedence": 1379.829,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 1361.2,
+          "vehicle_precedence_removed": 18.63,
+          "vehicle_union": 1462.13
+        },
+        "source_counts": {
+          "all": 7,
+          "pedestrian": 4,
+          "pedestrian_visible": 4,
+          "vehicle": 3
+        }
+      },
+      {
+        "base_object_key": "roads:x_-3__z_0",
+        "chunk_id": "x_-3__z_0",
+        "pedestrian_object_key": "roads-pedestrian:x_-3__z_0",
+        "plan_area_m2": {
+          "base_union": 71.21,
+          "pedestrian_union_before_precedence": 71.21,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 71.21,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 0
+        },
+        "source_counts": {
+          "all": 1,
+          "pedestrian": 1,
+          "pedestrian_visible": 1,
+          "vehicle": 0
+        }
+      },
+      {
+        "base_object_key": "roads:x_-2__z_-4",
+        "chunk_id": "x_-2__z_-4",
+        "pedestrian_object_key": "roads-pedestrian:x_-2__z_-4",
+        "plan_area_m2": {
+          "base_union": 1743.76,
+          "pedestrian_union_before_precedence": 745.402,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 745.402,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 998.358
+        },
+        "source_counts": {
+          "all": 4,
+          "pedestrian": 2,
+          "pedestrian_visible": 2,
+          "vehicle": 2
+        }
+      },
+      {
+        "base_object_key": "roads:x_-2__z_-3",
+        "chunk_id": "x_-2__z_-3",
+        "pedestrian_object_key": "roads-pedestrian:x_-2__z_-3",
+        "plan_area_m2": {
+          "base_union": 7710.501,
+          "pedestrian_union_before_precedence": 461.11,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 446.201,
+          "vehicle_precedence_removed": 14.908,
+          "vehicle_union": 7264.295
+        },
+        "source_counts": {
+          "all": 14,
+          "pedestrian": 2,
+          "pedestrian_visible": 2,
+          "vehicle": 12
+        }
+      },
+      {
+        "base_object_key": "roads:x_-2__z_-2",
+        "chunk_id": "x_-2__z_-2",
+        "pedestrian_object_key": "roads-pedestrian:x_-2__z_-2",
+        "plan_area_m2": {
+          "base_union": 7510.224,
+          "pedestrian_union_before_precedence": 779.627,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 755.627,
+          "vehicle_precedence_removed": 24,
+          "vehicle_union": 6754.614
+        },
+        "source_counts": {
+          "all": 26,
+          "pedestrian": 4,
+          "pedestrian_visible": 4,
+          "vehicle": 22
+        }
+      },
+      {
+        "base_object_key": "roads:x_-2__z_-1",
+        "chunk_id": "x_-2__z_-1",
+        "pedestrian_object_key": "roads-pedestrian:x_-2__z_-1",
+        "plan_area_m2": {
+          "base_union": 9585.706,
+          "pedestrian_union_before_precedence": 2261.607,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 2182.502,
+          "vehicle_precedence_removed": 79.106,
+          "vehicle_union": 7403.168
+        },
+        "source_counts": {
+          "all": 21,
+          "pedestrian": 10,
+          "pedestrian_visible": 10,
+          "vehicle": 11
+        }
+      },
+      {
+        "base_object_key": "roads:x_-2__z_0",
+        "chunk_id": "x_-2__z_0",
+        "pedestrian_object_key": "roads-pedestrian:x_-2__z_0",
+        "plan_area_m2": {
+          "base_union": 7289.513,
+          "pedestrian_union_before_precedence": 2896.684,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 2780.411,
+          "vehicle_precedence_removed": 116.273,
+          "vehicle_union": 4509.111
+        },
+        "source_counts": {
+          "all": 38,
+          "pedestrian": 25,
+          "pedestrian_visible": 25,
+          "vehicle": 13
+        }
+      },
+      {
+        "base_object_key": "roads:x_-2__z_1",
+        "chunk_id": "x_-2__z_1",
+        "pedestrian_object_key": "roads-pedestrian:x_-2__z_1",
+        "plan_area_m2": {
+          "base_union": 2790.7,
+          "pedestrian_union_before_precedence": 2128.024,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 2101.833,
+          "vehicle_precedence_removed": 26.191,
+          "vehicle_union": 688.859
+        },
+        "source_counts": {
+          "all": 13,
+          "pedestrian": 11,
+          "pedestrian_visible": 11,
+          "vehicle": 2
+        }
+      },
+      {
+        "base_object_key": "roads:x_-1__z_-4",
+        "chunk_id": "x_-1__z_-4",
+        "pedestrian_object_key": "roads-pedestrian:x_-1__z_-4",
+        "plan_area_m2": {
+          "base_union": 3229.953,
+          "pedestrian_union_before_precedence": 543.925,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 527.635,
+          "vehicle_precedence_removed": 16.29,
+          "vehicle_union": 2702.32
+        },
+        "source_counts": {
+          "all": 9,
+          "pedestrian": 2,
+          "pedestrian_visible": 2,
+          "vehicle": 7
+        }
+      },
+      {
+        "base_object_key": "roads:x_-1__z_-3",
+        "chunk_id": "x_-1__z_-3",
+        "pedestrian_object_key": "roads-pedestrian:x_-1__z_-3",
+        "plan_area_m2": {
+          "base_union": 7915.778,
+          "pedestrian_union_before_precedence": 357.287,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 342.278,
+          "vehicle_precedence_removed": 15.008,
+          "vehicle_union": 7573.497
+        },
+        "source_counts": {
+          "all": 17,
+          "pedestrian": 3,
+          "pedestrian_visible": 3,
+          "vehicle": 14
+        }
+      },
+      {
+        "base_object_key": "roads:x_-1__z_-2",
+        "chunk_id": "x_-1__z_-2",
+        "pedestrian_object_key": "roads-pedestrian:x_-1__z_-2",
+        "plan_area_m2": {
+          "base_union": 7005.034,
+          "pedestrian_union_before_precedence": 45.176,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 45.176,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 6959.858
+        },
+        "source_counts": {
+          "all": 22,
+          "pedestrian": 1,
+          "pedestrian_visible": 1,
+          "vehicle": 21
+        }
+      },
+      {
+        "base_object_key": "roads:x_-1__z_-1",
+        "chunk_id": "x_-1__z_-1",
+        "pedestrian_object_key": "roads-pedestrian:x_-1__z_-1",
+        "plan_area_m2": {
+          "base_union": 10092.016,
+          "pedestrian_union_before_precedence": 1570.511,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 1538.758,
+          "vehicle_precedence_removed": 31.754,
+          "vehicle_union": 8553.275
+        },
+        "source_counts": {
+          "all": 27,
+          "pedestrian": 10,
+          "pedestrian_visible": 10,
+          "vehicle": 17
+        }
+      },
+      {
+        "base_object_key": "roads:x_-1__z_0",
+        "chunk_id": "x_-1__z_0",
+        "pedestrian_object_key": "roads-pedestrian:x_-1__z_0",
+        "plan_area_m2": {
+          "base_union": 10359.047,
+          "pedestrian_union_before_precedence": 2516.917,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 2271.089,
+          "vehicle_precedence_removed": 245.828,
+          "vehicle_union": 8087.901
+        },
+        "source_counts": {
+          "all": 46,
+          "pedestrian": 28,
+          "pedestrian_visible": 28,
+          "vehicle": 18
+        }
+      },
+      {
+        "base_object_key": "roads:x_-1__z_1",
+        "chunk_id": "x_-1__z_1",
+        "pedestrian_object_key": "roads-pedestrian:x_-1__z_1",
+        "plan_area_m2": {
+          "base_union": 11265.008,
+          "pedestrian_union_before_precedence": 4963.061,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 4734.72,
+          "vehicle_precedence_removed": 228.341,
+          "vehicle_union": 6530.217
+        },
+        "source_counts": {
+          "all": 59,
+          "pedestrian": 46,
+          "pedestrian_visible": 46,
+          "vehicle": 13
+        }
+      },
+      {
+        "base_object_key": "roads:x_-1__z_2",
+        "chunk_id": "x_-1__z_2",
+        "pedestrian_object_key": "roads-pedestrian:x_-1__z_2",
+        "plan_area_m2": {
+          "base_union": 8384.212,
+          "pedestrian_union_before_precedence": 4160.148,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 4021.16,
+          "vehicle_precedence_removed": 138.988,
+          "vehicle_union": 4363.032
+        },
+        "source_counts": {
+          "all": 57,
+          "pedestrian": 44,
+          "pedestrian_visible": 44,
+          "vehicle": 13
+        }
+      },
+      {
+        "base_object_key": "roads:x_-1__z_3",
+        "chunk_id": "x_-1__z_3",
+        "pedestrian_object_key": "roads-pedestrian:x_-1__z_3",
+        "plan_area_m2": {
+          "base_union": 5153.953,
+          "pedestrian_union_before_precedence": 1883.554,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 1799.545,
+          "vehicle_precedence_removed": 84.009,
+          "vehicle_union": 3354.401
+        },
+        "source_counts": {
+          "all": 46,
+          "pedestrian": 31,
+          "pedestrian_visible": 31,
+          "vehicle": 15
+        }
+      },
+      {
+        "base_object_key": "roads:x_0__z_-4",
+        "chunk_id": "x_0__z_-4",
+        "pedestrian_object_key": null,
+        "plan_area_m2": {
+          "base_union": 1355.365,
+          "pedestrian_union_before_precedence": 0,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 0,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 1355.365
+        },
+        "source_counts": {
+          "all": 10,
+          "pedestrian": 0,
+          "pedestrian_visible": 0,
+          "vehicle": 10
+        }
+      },
+      {
+        "base_object_key": "roads:x_0__z_-3",
+        "chunk_id": "x_0__z_-3",
+        "pedestrian_object_key": null,
+        "plan_area_m2": {
+          "base_union": 4368.353,
+          "pedestrian_union_before_precedence": 0,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 0,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 4368.353
+        },
+        "source_counts": {
+          "all": 10,
+          "pedestrian": 0,
+          "pedestrian_visible": 0,
+          "vehicle": 10
+        }
+      },
+      {
+        "base_object_key": "roads:x_0__z_-2",
+        "chunk_id": "x_0__z_-2",
+        "pedestrian_object_key": "roads-pedestrian:x_0__z_-2",
+        "plan_area_m2": {
+          "base_union": 6016.656,
+          "pedestrian_union_before_precedence": 116.905,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 116.905,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 5899.751
+        },
+        "source_counts": {
+          "all": 19,
+          "pedestrian": 1,
+          "pedestrian_visible": 1,
+          "vehicle": 18
+        }
+      },
+      {
+        "base_object_key": "roads:x_0__z_-1",
+        "chunk_id": "x_0__z_-1",
+        "pedestrian_object_key": "roads-pedestrian:x_0__z_-1",
+        "plan_area_m2": {
+          "base_union": 8446.943,
+          "pedestrian_union_before_precedence": 835.933,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 739.922,
+          "vehicle_precedence_removed": 96.011,
+          "vehicle_union": 7707.009
+        },
+        "source_counts": {
+          "all": 19,
+          "pedestrian": 5,
+          "pedestrian_visible": 5,
+          "vehicle": 14
+        }
+      },
+      {
+        "base_object_key": "roads:x_0__z_0",
+        "chunk_id": "x_0__z_0",
+        "pedestrian_object_key": "roads-pedestrian:x_0__z_0",
+        "plan_area_m2": {
+          "base_union": 5383.32,
+          "pedestrian_union_before_precedence": 418.229,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 405.249,
+          "vehicle_precedence_removed": 12.98,
+          "vehicle_union": 4978.088
+        },
+        "source_counts": {
+          "all": 17,
+          "pedestrian": 4,
+          "pedestrian_visible": 4,
+          "vehicle": 13
+        }
+      },
+      {
+        "base_object_key": "roads:x_0__z_1",
+        "chunk_id": "x_0__z_1",
+        "pedestrian_object_key": "roads-pedestrian:x_0__z_1",
+        "plan_area_m2": {
+          "base_union": 5350.614,
+          "pedestrian_union_before_precedence": 1241.298,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 1161.284,
+          "vehicle_precedence_removed": 80.014,
+          "vehicle_union": 4189.355
+        },
+        "source_counts": {
+          "all": 24,
+          "pedestrian": 9,
+          "pedestrian_visible": 9,
+          "vehicle": 15
+        }
+      },
+      {
+        "base_object_key": "roads:x_0__z_2",
+        "chunk_id": "x_0__z_2",
+        "pedestrian_object_key": "roads-pedestrian:x_0__z_2",
+        "plan_area_m2": {
+          "base_union": 4967.927,
+          "pedestrian_union_before_precedence": 1848.312,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 1703.101,
+          "vehicle_precedence_removed": 145.211,
+          "vehicle_union": 3264.86
+        },
+        "source_counts": {
+          "all": 39,
+          "pedestrian": 31,
+          "pedestrian_visible": 31,
+          "vehicle": 8
+        }
+      },
+      {
+        "base_object_key": "roads:x_0__z_3",
+        "chunk_id": "x_0__z_3",
+        "pedestrian_object_key": "roads-pedestrian:x_0__z_3",
+        "plan_area_m2": {
+          "base_union": 1692.957,
+          "pedestrian_union_before_precedence": 697.016,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 685.013,
+          "vehicle_precedence_removed": 12.002,
+          "vehicle_union": 1007.964
+        },
+        "source_counts": {
+          "all": 13,
+          "pedestrian": 9,
+          "pedestrian_visible": 9,
+          "vehicle": 4
+        }
+      },
+      {
+        "base_object_key": "roads:x_1__z_-2",
+        "chunk_id": "x_1__z_-2",
+        "pedestrian_object_key": "roads-pedestrian:x_1__z_-2",
+        "plan_area_m2": {
+          "base_union": 3269.19,
+          "pedestrian_union_before_precedence": 122.971,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 122.971,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 3146.219
+        },
+        "source_counts": {
+          "all": 8,
+          "pedestrian": 2,
+          "pedestrian_visible": 2,
+          "vehicle": 6
+        }
+      },
+      {
+        "base_object_key": "roads:x_1__z_-1",
+        "chunk_id": "x_1__z_-1",
+        "pedestrian_object_key": "roads-pedestrian:x_1__z_-1",
+        "plan_area_m2": {
+          "base_union": 5503.052,
+          "pedestrian_union_before_precedence": 215.212,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 215.212,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 5287.841
+        },
+        "source_counts": {
+          "all": 10,
+          "pedestrian": 1,
+          "pedestrian_visible": 1,
+          "vehicle": 9
+        }
+      },
+      {
+        "base_object_key": "roads:x_1__z_0",
+        "chunk_id": "x_1__z_0",
+        "pedestrian_object_key": null,
+        "plan_area_m2": {
+          "base_union": 4846.833,
+          "pedestrian_union_before_precedence": 0,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 0,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 4846.833
+        },
+        "source_counts": {
+          "all": 14,
+          "pedestrian": 0,
+          "pedestrian_visible": 0,
+          "vehicle": 14
+        }
+      },
+      {
+        "base_object_key": "roads:x_1__z_1",
+        "chunk_id": "x_1__z_1",
+        "pedestrian_object_key": null,
+        "plan_area_m2": {
+          "base_union": 263.03,
+          "pedestrian_union_before_precedence": 0,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 0,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 263.03
+        },
+        "source_counts": {
+          "all": 1,
+          "pedestrian": 0,
+          "pedestrian_visible": 0,
+          "vehicle": 1
+        }
+      },
+      {
+        "base_object_key": "roads:x_1__z_2",
+        "chunk_id": "x_1__z_2",
+        "pedestrian_object_key": "roads-pedestrian:x_1__z_2",
+        "plan_area_m2": {
+          "base_union": 3259.168,
+          "pedestrian_union_before_precedence": 92.529,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 87.224,
+          "vehicle_precedence_removed": 5.304,
+          "vehicle_union": 3171.936
+        },
+        "source_counts": {
+          "all": 11,
+          "pedestrian": 1,
+          "pedestrian_visible": 1,
+          "vehicle": 10
+        }
+      },
+      {
+        "base_object_key": "roads:x_2__z_-1",
+        "chunk_id": "x_2__z_-1",
+        "pedestrian_object_key": null,
+        "plan_area_m2": {
+          "base_union": 1470.788,
+          "pedestrian_union_before_precedence": 0,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 0,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 1470.788
+        },
+        "source_counts": {
+          "all": 1,
+          "pedestrian": 0,
+          "pedestrian_visible": 0,
+          "vehicle": 1
+        }
+      },
+      {
+        "base_object_key": "roads:x_2__z_0",
+        "chunk_id": "x_2__z_0",
+        "pedestrian_object_key": null,
+        "plan_area_m2": {
+          "base_union": 4306.744,
+          "pedestrian_union_before_precedence": 0,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 0,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 4306.744
+        },
+        "source_counts": {
+          "all": 4,
+          "pedestrian": 0,
+          "pedestrian_visible": 0,
+          "vehicle": 4
+        }
+      },
+      {
+        "base_object_key": "roads:x_2__z_1",
+        "chunk_id": "x_2__z_1",
+        "pedestrian_object_key": null,
+        "plan_area_m2": {
+          "base_union": 2363.298,
+          "pedestrian_union_before_precedence": 0,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 0,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 2363.298
+        },
+        "source_counts": {
+          "all": 6,
+          "pedestrian": 0,
+          "pedestrian_visible": 0,
+          "vehicle": 6
+        }
+      },
+      {
+        "base_object_key": "roads:x_2__z_2",
+        "chunk_id": "x_2__z_2",
+        "pedestrian_object_key": null,
+        "plan_area_m2": {
+          "base_union": 498.72,
+          "pedestrian_union_before_precedence": 0,
+          "pedestrian_vehicle_overlap": 0,
+          "pedestrian_visible_after_precedence": 0,
+          "vehicle_precedence_removed": 0,
+          "vehicle_union": 498.72
+        },
+        "source_counts": {
+          "all": 2,
+          "pedestrian": 0,
+          "pedestrian_visible": 0,
+          "vehicle": 2
+        }
+      }
+    ],
+    "continuous_filled_base_union": true,
+    "maximum_pedestrian_vehicle_overlap_m2": 0,
+    "pedestrian_record_count": 28,
+    "pedestrian_source_count": 219,
+    "pedestrian_sources_with_visible_skin": 219,
+    "physical_collision_changed": false,
+    "vehicle_precedence_at_crossings": true,
+    "vertical_separation_m": 0.002
+  },
+  "visual_only": true
+}

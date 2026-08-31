@@ -1,0 +1,1119 @@
+{
+  "type": "FeatureCollection",
+  "schema": "ti.naip-tree-annotation-rejections/1",
+  "name": "Treasure Island NAIP 2022 tree annotation rejection audit",
+  "review_status": "rejected",
+  "policy": "Preserve original mark and ID; omit from accepted candidates; do not snap or loosen the road/building invariant.",
+  "features": [
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1115-py0409",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37146404,
+          37.83012503
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1115-py0409",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-01",
+        "source_pixel_xy": [
+          1115,
+          409
+        ],
+        "cell_pixel_xy": [
+          522,
+          409
+        ],
+        "world_position_m": [
+          -41.683,
+          0,
+          -708.379
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_-1__z_-3",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0844-py0493",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37331244,
+          37.82967242
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0844-py0493",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-01",
+        "source_pixel_xy": [
+          844,
+          493
+        ],
+        "cell_pixel_xy": [
+          251,
+          493
+        ],
+        "world_position_m": [
+          -204.215,
+          0,
+          -657.995
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_-1__z_-3",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0879-py0589",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37307372,
+          37.82915515
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0879-py0589",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-01",
+        "source_pixel_xy": [
+          879,
+          589
+        ],
+        "cell_pixel_xy": [
+          286,
+          589
+        ],
+        "world_position_m": [
+          -183.224,
+          0,
+          -600.413
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_-1__z_-3",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0265-py0712",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37726161,
+          37.8284924
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0265-py0712",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          265,
+          712
+        ],
+        "cell_pixel_xy": [
+          265,
+          76
+        ],
+        "world_position_m": [
+          -551.471,
+          0,
+          -526.636
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w96665892:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0875-py0727",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.373101,
+          37.82841158
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0875-py0727",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          875,
+          727
+        ],
+        "cell_pixel_xy": [
+          282,
+          91
+        ],
+        "world_position_m": [
+          -185.623,
+          0,
+          -517.639
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w96698627:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0245-py0754",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37739802,
+          37.82826609
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0245-py0754",
+        "tree_type": "broadleaf",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          245,
+          754
+        ],
+        "cell_pixel_xy": [
+          245,
+          118
+        ],
+        "world_position_m": [
+          -563.466,
+          0,
+          -501.443
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w96665907:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0360-py0790",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37661365,
+          37.82807212
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0360-py0790",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          360,
+          790
+        ],
+        "cell_pixel_xy": [
+          360,
+          154
+        ],
+        "world_position_m": [
+          -494.495,
+          0,
+          -479.85
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w96665885:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0218-py0938",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37758218,
+          37.82727466
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0218-py0938",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          218,
+          938
+        ],
+        "cell_pixel_xy": [
+          218,
+          302
+        ],
+        "world_position_m": [
+          -579.659,
+          0,
+          -391.078
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_-3__z_-2",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0328-py0955",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37683191,
+          37.82718306
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0328-py0955",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          328,
+          955
+        ],
+        "cell_pixel_xy": [
+          328,
+          319
+        ],
+        "world_position_m": [
+          -513.687,
+          0,
+          -380.881
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w96665921:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0382-py0963",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37646359,
+          37.82713996
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0382-py0963",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-04",
+        "source_pixel_xy": [
+          382,
+          963
+        ],
+        "cell_pixel_xy": [
+          382,
+          327
+        ],
+        "world_position_m": [
+          -481.3,
+          0,
+          -376.083
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w96665921:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0760-py0998",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37388538,
+          37.82695137
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0760-py0998",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          760,
+          998
+        ],
+        "cell_pixel_xy": [
+          167,
+          362
+        ],
+        "world_position_m": [
+          -254.595,
+          0,
+          -355.089
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w34313556:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0740-py1040",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37402179,
+          37.82672507
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0740-py1040",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          740,
+          1040
+        ],
+        "cell_pixel_xy": [
+          147,
+          404
+        ],
+        "world_position_m": [
+          -266.589,
+          0,
+          -329.898
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_-2__z_-2",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0670-py1067",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37449924,
+          37.82657958
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0670-py1067",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          670,
+          1067
+        ],
+        "cell_pixel_xy": [
+          77,
+          431
+        ],
+        "world_position_m": [
+          -308.572,
+          0,
+          -313.702
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w95934101:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1514-py1196",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36874259,
+          37.82588451
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1514-py1196",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-06",
+        "source_pixel_xy": [
+          1514,
+          1196
+        ],
+        "cell_pixel_xy": [
+          329,
+          560
+        ],
+        "world_position_m": [
+          197.618,
+          0,
+          -236.327
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_0__z_-1",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0774-py1210",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37378989,
+          37.82580907
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0774-py1210",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-05",
+        "source_pixel_xy": [
+          774,
+          1210
+        ],
+        "cell_pixel_xy": [
+          181,
+          574
+        ],
+        "world_position_m": [
+          -246.198,
+          0,
+          -227.929
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_-1__z_-1",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0657-py1316",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37458791,
+          37.82523792
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0657-py1316",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-09",
+        "source_pixel_xy": [
+          657,
+          1316
+        ],
+        "cell_pixel_xy": [
+          64,
+          44
+        ],
+        "world_position_m": [
+          -316.369,
+          0,
+          -164.349
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w95934122:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0333-py1331",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.3767978,
+          37.8251571
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0333-py1331",
+        "tree_type": "broadleaf",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-08",
+        "source_pixel_xy": [
+          333,
+          1331
+        ],
+        "cell_pixel_xy": [
+          333,
+          59
+        ],
+        "world_position_m": [
+          -510.688,
+          0,
+          -155.352
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w96215655:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0402-py1369",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37632718,
+          37.82495234
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0402-py1369",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-08",
+        "source_pixel_xy": [
+          402,
+          1369
+        ],
+        "cell_pixel_xy": [
+          402,
+          97
+        ],
+        "world_position_m": [
+          -469.305,
+          0,
+          -132.558
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w95934116:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0313-py1412",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37693422,
+          37.82472065
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0313-py1412",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-08",
+        "source_pixel_xy": [
+          313,
+          1412
+        ],
+        "cell_pixel_xy": [
+          313,
+          140
+        ],
+        "world_position_m": [
+          -522.683,
+          0,
+          -106.767
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_-3__z_-1",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0860-py1418",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37320331,
+          37.82468832
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0860-py1418",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-09",
+        "source_pixel_xy": [
+          860,
+          1418
+        ],
+        "cell_pixel_xy": [
+          267,
+          146
+        ],
+        "world_position_m": [
+          -194.619,
+          0,
+          -103.168
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_-1__z_-1",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0833-py1420",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37338747,
+          37.82467755
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0833-py1420",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-09",
+        "source_pixel_xy": [
+          833,
+          1420
+        ],
+        "cell_pixel_xy": [
+          240,
+          148
+        ],
+        "world_position_m": [
+          -210.813,
+          0,
+          -101.969
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w96665886:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0682-py1446",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37441739,
+          37.82453745
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0682-py1446",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-09",
+        "source_pixel_xy": [
+          682,
+          1446
+        ],
+        "cell_pixel_xy": [
+          89,
+          174
+        ],
+        "world_position_m": [
+          -301.375,
+          0,
+          -86.373
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_-2__z_-1",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0776-py1517",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37377625,
+          37.82415489
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0776-py1517",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-09",
+        "source_pixel_xy": [
+          776,
+          1517
+        ],
+        "cell_pixel_xy": [
+          183,
+          245
+        ],
+        "world_position_m": [
+          -244.999,
+          0,
+          -43.786
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_-1__z_-1",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0365-py1519",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37657954,
+          37.82414411
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0365-py1519",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-08",
+        "source_pixel_xy": [
+          365,
+          1519
+        ],
+        "cell_pixel_xy": [
+          365,
+          247
+        ],
+        "world_position_m": [
+          -491.496,
+          0,
+          -42.586
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_-2__z_-1",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px0492-py1549",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37571332,
+          37.82398247
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px0492-py1549",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-08",
+        "source_pixel_xy": [
+          492,
+          1549
+        ],
+        "cell_pixel_xy": [
+          492,
+          277
+        ],
+        "world_position_m": [
+          -415.328,
+          0,
+          -24.593
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_-2__z_-1",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px2290-py1706",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36344974,
+          37.82313652
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px2290-py1706",
+        "tree_type": "unknown",
+        "confidence": "medium",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-11",
+        "source_pixel_xy": [
+          2290,
+          1706
+        ],
+        "cell_pixel_xy": [
+          512,
+          434
+        ],
+        "world_position_m": [
+          663.025,
+          0,
+          69.578
+        ],
+        "evidence": "Deliberate evenly spaced row; crown center clear, coarse type uncertain.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_2__z_0",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1438-py1949",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36926096,
+          37.82182718
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1438-py1949",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-14",
+        "source_pixel_xy": [
+          1438,
+          1949
+        ],
+        "cell_pixel_xy": [
+          253,
+          40
+        ],
+        "world_position_m": [
+          152.037,
+          0,
+          215.333
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w34313513:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1280-py2145",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37033863,
+          37.82077109
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1280-py2145",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-14",
+        "source_pixel_xy": [
+          1280,
+          2145
+        ],
+        "cell_pixel_xy": [
+          95,
+          236
+        ],
+        "world_position_m": [
+          57.276,
+          0,
+          332.896
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "road_path",
+        "intersected_object_key": "roads:x_0__z_1",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1337-py2192",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.36994985,
+          37.82051785
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1337-py2192",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-14",
+        "source_pixel_xy": [
+          1337,
+          2192
+        ],
+        "cell_pixel_xy": [
+          152,
+          283
+        ],
+        "world_position_m": [
+          91.462,
+          0,
+          361.087
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w34313544:roof",
+        "decision": "omit_without_snapping"
+      }
+    },
+    {
+      "type": "Feature",
+      "id": "ti-naip-20220518-px1309-py2335",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -122.37014083,
+          37.81974733
+        ]
+      },
+      "properties": {
+        "id": "ti-naip-20220518-px1309-py2335",
+        "tree_type": "broadleaf",
+        "confidence": "high",
+        "imagery_date": "2022-05-18",
+        "source_cell": "tile-14",
+        "source_pixel_xy": [
+          1309,
+          2335
+        ],
+        "cell_pixel_xy": [
+          124,
+          426
+        ],
+        "world_position_m": [
+          74.669,
+          0,
+          446.861
+        ],
+        "evidence": "Distinct rounded mature crown; center is visually clear.",
+        "review_status": "rejected",
+        "rejection_reason": "intersects_existing_serialized_road_or_building_surface",
+        "intersected_feature_kind": "building_roof",
+        "intersected_object_key": "building:w291189926:roof",
+        "decision": "omit_without_snapping"
+      }
+    }
+  ]
+}

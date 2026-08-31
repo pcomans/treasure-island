@@ -1,0 +1,7 @@
+Generated-data diff audit for w34313525 detached exact-receiver calibration
+Base: HEAD e1ee137c2c9742281fe264cce592e8bfb0ad8095
+Command-equivalent scope: git diff -- generated
+Result: empty
+Generated manifest SHA-256: e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3
+Target chunk SHA-256: a952756b1c6d8d547669dffb89723c2be81d6c9a4b3afd2ae7f2dc3702a82b0d
+No generated source/data was edited.

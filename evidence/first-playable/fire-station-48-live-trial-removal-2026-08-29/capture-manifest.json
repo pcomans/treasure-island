@@ -1,0 +1,279 @@
+{
+  "schema_version": "ti.fire-station-48-live-trial-removal-evidence/1",
+  "status": "live_trial_removed_placeholder_restored_independent_correction_review_pending",
+  "evidence_role": "mechanical_exclusion_and_generated_placeholder_restoration_proof_not_art_acceptance",
+  "generator": "game/tests/fire_station_48_live_trial_removal_capture.gd",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/fire_station_48_live_trial_removal_capture.gd",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "independent_review": {
+    "path": "res://discovery/facades/ACCEPTED_MATERIAL_RUN_TRIALS_ART_REVIEW.md",
+    "sha256": "c89d34f28b7a65288182747a8fb866501b5b653ce3dca677e45406f0603663bd",
+    "verdict": "REJECT_CORRECTABLE",
+    "failure": "unsupported repeating broad vertical facade-scale value bands"
+  },
+  "before": {
+    "receiver_key": "building:w764313741:wall",
+    "source_key": "w764313741",
+    "live_material_path": "res://game/resources/materials/world/fire_station_48/fire_station_48_primary.tres",
+    "accepted_runs": [
+      0,
+      1,
+      2,
+      3,
+      5,
+      6,
+      8,
+      9,
+      24,
+      25
+    ],
+    "accepted_length_m": 76.157,
+    "surface_names": [
+      "placeholder_runs",
+      "accepted_material_runs"
+    ],
+    "world_surfaces": 732,
+    "prior_manifest": "res://evidence/first-playable/accepted-material-run-trials-2026-08-29/capture-manifest.json",
+    "prior_manifest_sha256": "d5ac382a622fcec84fe8f3613e4b85461d656d53acec41a8e76ced21f3b72bd8",
+    "ordinary_distance_rejection_image": "res://evidence/first-playable/accepted-material-run-trials-2026-08-29/images/fire-station-48/02-ordinary-gameplay-distance.png",
+    "ordinary_distance_rejection_image_sha256": "eb028d6c1f88a8f70366c85090e423703e5c22737d6ef0e54cb97e4094d49a99"
+  },
+  "after": {
+    "receiver_key": "building:w764313741:wall",
+    "source_key": "w764313741",
+    "live_material": "generated building_wall placeholder",
+    "live_material_resource_name": "building_wall",
+    "live_material_surface_count": 1,
+    "surface_names": [
+      "generated_record"
+    ],
+    "placeholder_runs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25
+    ],
+    "accepted_material_runs": [],
+    "accepted_material_metadata": false,
+    "modules": 0,
+    "world_surfaces": 731
+  },
+  "retained_prototype": {
+    "path": "res://game/resources/materials/world/fire_station_48/fire_station_48_primary.tres",
+    "sha256": "515135c3d0da6bb8eb8681e69d7e3f7818d896d948fe5dcc7c2bd8c6d076b188",
+    "registry_path": "res://game/resources/facades/batch_03_material_registry.json",
+    "registry_sha256": "31983ae1529e6248e93ec8d231d2b870de3979778b35eef6019cd19e1a964516",
+    "shared_shader_path": "res://game/resources/materials/world/batch_02/batch_02_homogeneous_field.gdshader",
+    "shared_shader_sha256": "1918177080126199ddbfc0715a77b85a9355800479a098ec9b81c9726b7cc4d5",
+    "correction_status": "not_attempted_not_authorized"
+  },
+  "runtime_inputs": {
+    "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+    "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "generated_chunk_sha256": "c0e1f86787410d975ad90272482e5f4971c4aedc7eb83132cd28b22acf1a3456",
+    "world_chunk_builder_sha256": "c770a977e879c0d077acb8fb4d33b52d1bd6aa3b454a50ba8e2125cb71e8ba8d",
+    "accepted_run_helper_sha256": "a0eadb57bfb1ea4fbbfc46ea9261dc7ff85cbdcb5c2975e009ab4d11dce000e9"
+  },
+  "world_counts": {
+    "chunks": 38,
+    "records": 729,
+    "meshes": 729,
+    "surfaces": 731,
+    "triangles": 48389,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "receiver_invariants": {
+    "render_triangles": 52,
+    "collision_triangles": 52,
+    "duplicate_or_coplanar_render_triangles": false,
+    "collision_unchanged": true,
+    "spray_identity_unchanged": true,
+    "generated_geometry_unchanged": true
+  },
+  "preserved_live_trials": [
+    {
+      "receiver_key": "building:w291189336:wall",
+      "runs": [
+        9,
+        10
+      ],
+      "length_m": 16.362
+    },
+    {
+      "receiver_key": "building:w291189926:wall",
+      "runs": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "length_m": 49.124
+    }
+  ],
+  "captures": [
+    {
+      "id": "01-close-placeholder",
+      "view_kind": "close_generated_placeholder_exclusion",
+      "receiver_key": "building:w764313741:wall",
+      "file": "images/01-close-placeholder.png",
+      "sha256": "1b0bf49e1786cc1aaef5035e4b15baaaa90834f046c113ad2b563ce3edb9d9a4",
+      "bytes": 1301022,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        124.969291687012,
+        5.5310001373291,
+        -350.001495361328
+      ],
+      "aim_target_m": [
+        131.167510986328,
+        6.4692497253418,
+        -353.254516601562
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "representative_run": 2,
+      "sample_unique_colors": 351,
+      "sample_luminance_range": 0.658210195600986
+    },
+    {
+      "id": "02-ordinary-placeholder",
+      "view_kind": "ordinary_gameplay_distance_generated_placeholder_exclusion",
+      "receiver_key": "building:w764313741:wall",
+      "file": "images/02-ordinary-placeholder.png",
+      "sha256": "3cbc9ca5de5f9d383901eb67dc35691d4f08c04fd377b22ed10718d60fa066b7",
+      "bytes": 941309,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        109.916481018066,
+        5.5310001373291,
+        -342.101318359375
+      ],
+      "aim_target_m": [
+        131.167510986328,
+        6.4692497253418,
+        -353.254516601562
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "representative_run": 2,
+      "sample_unique_colors": 269,
+      "sample_luminance_range": 0.612418837845325
+    },
+    {
+      "id": "03-changed-light-oblique-placeholder",
+      "view_kind": "changed_light_oblique_generated_placeholder_exclusion",
+      "receiver_key": "building:w764313741:wall",
+      "file": "images/03-changed-light-oblique-placeholder.png",
+      "sha256": "3e65aa84d9207770b8aa77f74d57f8bf380bf18c5941ef7ae2d0b3e0d718c01b",
+      "bytes": 1160194,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        122.068565368652,
+        9.4692497253418,
+        -338.314910888672
+      ],
+      "aim_target_m": [
+        131.167510986328,
+        6.4692497253418,
+        -353.254516601562
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -24.0,
+        117.999992370605,
+        0.0
+      ],
+      "representative_run": 2,
+      "sample_unique_colors": 365,
+      "sample_luminance_range": 0.61622354388237
+    },
+    {
+      "id": "04-whole-island-load",
+      "view_kind": "whole_island_post_removal_load",
+      "receiver_key": "whole-island",
+      "file": "images/04-whole-island-load.png",
+      "sha256": "3578335c58803d385be58e2ea45869db8132a7aad73bd81f67a9819dd4f1a279",
+      "bytes": 404196,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        180.0,
+        1550.0,
+        300.0
+      ],
+      "aim_target_m": [
+        -20.0,
+        0.0,
+        30.0
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999923706055,
+        -27.9999961853027,
+        0.0
+      ],
+      "representative_run": -1,
+      "sample_unique_colors": 147,
+      "sample_luminance_range": 0.691317684948444
+    }
+  ],
+  "capture_count": 4,
+  "remaining_correction_brief": "Do not edit in this round. In a separately authorized correction, make Fire Station albedo phase-neutral at the existing mean Color(0.595, 0.6275, 0.5825, 1), set color_variation to 0.0, retain roughness 0.81 and relief 0.0, add no normal/joint/panel/opening/motif, then recapture the exact receiver and obtain independent acceptance before any reattachment.",
+  "limitations": [
+    "This proof establishes exclusion and restored placeholder coverage, not Fire Station material or whole-building art acceptance.",
+    "The rejected prototype and prior failure evidence remain intact for a later separately authorized correction.",
+    "Chapel and Dormitory remain bounded by their independent exact-run limitations; no other coverage is authorized."
+  ]
+}

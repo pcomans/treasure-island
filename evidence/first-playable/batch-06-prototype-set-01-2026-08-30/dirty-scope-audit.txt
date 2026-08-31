@@ -1,0 +1,42 @@
+Batch 06 bounded prototype set 01 — final dirty-scope audit
+Checked: 2026-08-30
+
+Owned by this executor:
+- game/resources/facades/batch_06_prototype_registry.json
+- game/resources/materials/world/w34313515/
+- game/resources/materials/world/w34313564/
+- game/resources/materials/world/w291196370/
+- game/scripts/world/facades/batch_06_prototype_set.gd
+- game/scripts/world/facades/batch_06_prototype_set.gd.uid
+- game/scenes/world/facades/batch_06/
+- game/tests/headless_batch_06_prototype_contract.gd
+- game/tests/batch_06_prototype_capture.gd
+- evidence/first-playable/batch-06-prototype-set-01-2026-08-30/
+- one appended Batch 06 section at the end of discovery/RETRO_LOG.md
+
+Read-only inputs used but not authored here:
+- discovery/facades/BATCH_06_REFERENCE_INDEX.md
+- discovery/facades/BATCH_06_RUN_MAPPING.json and .md
+- discovery/facades/BATCH_06_STREETVIEW_OBSERVATIONS.md
+- all eight Batch 06 target reference specs
+- generated/world/**
+- shared accepted field shaders under game/resources/materials/world/batch_02_04_aperiodic_field.gdshader and batch_04/batch_04_horizontal_siding_field.gdshader
+
+Concurrent/pre-existing Treasure Island changes preserved and not owned here:
+- discovery/FACADE_RECEIVER_INVENTORY.json and .md
+- YMCA lifecycle/review/evidence/material/shader/test changes, including ti_ymca_primary.tres, the wall-tangent shader, accepted-material contracts, full_runtime_integration.gd, and YMCA capture/projection files
+- earlier agents' existing sections in discovery/RETRO_LOG.md
+- all accepted Hawkins, Building 3, Isle House, Batch 02/03/04 and other evidence/assets
+
+Workspace-level untracked files and directories outside treasure-island-game were not touched.
+
+Generated-data audit:
+- git diff --name-only -- generated produced no output.
+- generated/world/manifest.json remains e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3.
+
+Runtime boundary:
+- world_chunk_builder.gd was not edited and remains c770a977e879c0d077acb8fb4d33b52d1bd6aa3b454a50ba8e2125cb71e8ba8d.
+- zero Batch 06 prototype paths or source keys occur in the runtime builder.
+- no live receiver, massing, geometry, collision, navigation, spray or generated-data change was made.
+
+Commit status: no commit created.

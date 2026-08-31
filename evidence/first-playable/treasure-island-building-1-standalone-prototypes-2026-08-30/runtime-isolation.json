@@ -1,0 +1,42 @@
+{
+  "schema_version": "ti.building-1-standalone-runtime-isolation/1",
+  "checked_date": "2026-08-30",
+  "source_key": "r16681702",
+  "receiver_key": "building:r16681702:wall",
+  "result": "PASS",
+  "standalone_only": true,
+  "runtime_attachment": false,
+  "exact_receiver_calibration": false,
+  "live_placement_count": 0,
+  "generated_data_changed": false,
+  "world_builder_changed": false,
+  "accepted_material_helper_changed": false,
+  "canonical_inventory_changed": false,
+  "receiver_children_added": 0,
+  "receiver_material_overrides_added": 0,
+  "collision_nodes_added": 0,
+  "navigation_nodes_added": 0,
+  "spray_nodes_added": 0,
+  "separate_tower_w1222720021_touched": false,
+  "pinned_unchanged_files": [
+    {"path": "generated/world/manifest.json", "sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"},
+    {"path": "generated/world/chunks/x_-1__z_2.json", "sha256": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce"},
+    {"path": "game/scripts/world/world_chunk_builder.gd", "sha256": "dec0811b3b6b4947c16f8f69a6a6e60d706b6d7b43a93051ea7be71ad2c203a3"},
+    {"path": "game/scripts/world/facades/accepted_material_run_trials.gd", "sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c"},
+    {"path": "discovery/FACADE_RECEIVER_INVENTORY.json", "sha256": "41d378ccee6685e5d3b9109d33c77742f73a7338cd84ba6e82c66ff22ee2d671"},
+    {"path": "game/resources/facades/batch_06_prototype_registry.json", "sha256": "a599df850a3ca51a51a3223820fc840201559ba26eb5ed514211eaedc2304132"}
+  ],
+  "interrupted_r133351_bytes_unchanged": true,
+  "interrupted_r133351_review_status": "unreviewed_held_uncommitted",
+  "interrupted_r133351_hashes": [
+    {"path": "game/resources/facades/r133351_standalone_prototypes.json", "sha256": "ecde7b80ba595f61d03bfd21f57407956c3b8988e381f0457f95bfe1aa580ad9"},
+    {"path": "game/resources/materials/world/r133351/r133351_frame.tres", "sha256": "e49560ac110ead76b38ea737599009843a2188a6853a9e825cf583f52e08f7a8"},
+    {"path": "game/resources/materials/world/r133351/r133351_glass.tres", "sha256": "9341d310e5587a13844bb6ae12e9734f56caff4092b54cf013e8b2109125ab8f"},
+    {"path": "game/resources/materials/world/r133351/r133351_light_field.tres", "sha256": "7e7a332b067268695eb102e82e35360322d5cf4fcb2c7c2d4f681351eb10d66e"},
+    {"path": "game/resources/materials/world/r133351/r133351_lower_field.tres", "sha256": "6d2e7928f15d69864af25e1a0af36bc7082269eecd9600f20236cefaba69455a"},
+    {"path": "game/resources/materials/world/r133351/r133351_olive_field.tres", "sha256": "c679dbd2002c4a9a66ef0727498f5b41f1cdd38e8d44ae30abf50fad2e6a9a8b"},
+    {"path": "game/scenes/world/facades/batch_06/r133351_standalone_prototype_set.tscn", "sha256": "4bc35012542e0c6c6d8c1ebe2b18433c31b8cfcd57ff3a74c7ab6278d497df13"},
+    {"path": "game/scripts/world/facades/r133351_standalone_prototypes.gd", "sha256": "34507e27e8cfe518c71a75c2a410b35e6cb335f2a88abbfb91624a537b1945f6"},
+    {"path": "game/scripts/world/facades/r133351_standalone_prototypes.gd.uid", "sha256": "a7049d6d6a2c98606d6189ee22b77e06da5f7588383797c983e5bee4f392b2ee"}
+  ]
+}

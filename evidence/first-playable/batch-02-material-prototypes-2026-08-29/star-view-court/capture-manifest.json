@@ -1,0 +1,130 @@
+{
+  "schema_version": "ti.batch-02-material-proof-evidence/1",
+  "review_status": "ready_for_independent_review_not_self_accepted",
+  "evidence_role": "controlled_material_prototype_not_in_game_acceptance",
+  "runtime_attachment": false,
+  "runtime_attachment_reason": "Exact observed material-region endpoints and/or physical scale remain unreconciled in the target reference spec.",
+  "source_key": "w1212173437",
+  "receiver_key": "building:w1212173437:wall",
+  "canonical_name": "Star View Court",
+  "observed_region_scope": "ENE grey textured base only; exact endpoints unresolved",
+  "material_path": "res://game/resources/materials/world/star_view_court/star_view_grey_base.tres",
+  "material_sha256": "c7cd8fc95b76539a9bf20d6aa05cba5b494efdbb27ff93ba74a9a0077f60dc9c",
+  "shared_shader_path": "res://game/resources/materials/world/batch_02/batch_02_homogeneous_field.gdshader",
+  "shared_shader_sha256": "1918177080126199ddbfc0715a77b85a9355800479a098ec9b81c9726b7cc4d5",
+  "registry_path": "res://game/resources/facades/batch_02_material_registry.json",
+  "registry_sha256": "ff879daa15726fff144eba798ba87dace0a79debb7199375d84764107572c0b2",
+  "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "proof_receiver": "controlled_flat_proof_panel",
+  "proof_panel_size_m": [
+    4.8,
+    3.2,
+    0.12
+  ],
+  "one_local_unit_m": 1.0,
+  "proof_primary_scale_m": 0.085,
+  "scale_status": "vertical_texture_pitch_unmeasured_proof_only",
+  "scale_truth_status": "reversible_proof_assumption_not_observed_measurement",
+  "contains_facade_scale_motifs": false,
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "viewport": [
+    1440,
+    900
+  ],
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_02_material_proof_capture.gd",
+  "captures": [
+    {
+      "id": "01-close",
+      "view_kind": "close_material_proof",
+      "file": "01-close.png",
+      "sha256": "f831acc32a2c468a07fac67de7fa18ad6ebac1be9c5f6d0c269e5f4c6f151e62",
+      "bytes": 272757,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "sample_unique_colors": 107,
+      "sample_luminance_range": 0.80113891325891,
+      "proof_receiver_only": true
+    },
+    {
+      "id": "02-ordinary-distance",
+      "view_kind": "ordinary_gameplay_scale_proof",
+      "file": "02-ordinary-distance.png",
+      "sha256": "ef98af927489d96a7cd8ccd838d0466a5109f28fe6bbb6f46447ea48dfb07456",
+      "bytes": 96913,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "sample_unique_colors": 108,
+      "sample_luminance_range": 0.80113891325891,
+      "proof_receiver_only": true
+    },
+    {
+      "id": "03-changed-light-oblique",
+      "view_kind": "changed_light_oblique_proof",
+      "file": "03-changed-light-oblique.png",
+      "sha256": "1c00cb97972cbccd7e309d3b86732cea7be2aa2a3bf6a615f508bf7e082bc597",
+      "bytes": 123945,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "sample_unique_colors": 75,
+      "sample_luminance_range": 0.80113891325891,
+      "proof_receiver_only": true
+    }
+  ]
+}

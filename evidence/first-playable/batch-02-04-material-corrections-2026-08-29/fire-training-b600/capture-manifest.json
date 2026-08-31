@@ -1,0 +1,193 @@
+{
+  "after": "Low-amplitude rotated stochastic octaves preserve the pale cream-gray 0.20-0.50 m mineral reading and roughness without diagonal quilting.",
+  "before": "Diagonal quilting dominated the pale mineral field.",
+  "canonical_name": "Fire Training Building 600",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_02_04_material_correction_capture.gd",
+  "captures": [
+    {
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "bytes": 107780,
+      "camera_fov_degrees": 50.0,
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "proof_receiver_only": true,
+      "sha256": "619121f761736f89592d655298685e98f9f948aa708ddcd8209c333fc3134dab",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_proof"
+    },
+    {
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "bytes": 75563,
+      "camera_fov_degrees": 50.0,
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "proof_receiver_only": true,
+      "sha256": "b128176dca332aff8eed76e1642c77280f59e45b220a5067e3311f12b6dc242c",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_scale_proof"
+    },
+    {
+      "aim_target_m": [
+        0.0,
+        1.89999997615814,
+        0.0
+      ],
+      "bytes": 89781,
+      "camera_fov_degrees": 50.0,
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "proof_receiver_only": true,
+      "sha256": "85d5ecc50f30f5e70db3b15dc1eebb7f944fae89df0047f6dc0df1a2f7f467c9",
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_proof"
+    }
+  ],
+  "contains_facade_scale_motifs": false,
+  "correction_id": "C2",
+  "display_driver": "macOS",
+  "evidence_role": "controlled_material_correction_proof_not_gameplay_or_live_receiver_acceptance",
+  "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "godot_version": "4.7.2-stable (official)",
+  "material_path": "res://game/resources/materials/world/fire_training_b600/fire_training_primary.tres",
+  "material_role": "pale cream-gray coarse mineral field",
+  "material_sha256": "fd1437ed9c0e00508d10d9a3c5d859d9a07c73fb28edc3fad62c473e9d865483",
+  "one_local_unit_m": 1.0,
+  "prior_rejected_captures": [
+    {
+      "bytes": 287285.0,
+      "camera_position_m": [
+        0.0,
+        1.89999997615814,
+        4.90000009536743
+      ],
+      "dimensions": [
+        1440.0,
+        900.0
+      ],
+      "file": "01-close.png",
+      "id": "01-close",
+      "sha256": "48c240a6ada0ed7f45d9952e9a2fcfe376be979c0aeef1737778f26b8ffa72e3",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "close_material_proof"
+    },
+    {
+      "bytes": 115315.0,
+      "camera_position_m": [
+        0.0,
+        2.20000004768372,
+        11.5
+      ],
+      "dimensions": [
+        1440.0,
+        900.0
+      ],
+      "file": "02-ordinary-distance.png",
+      "id": "02-ordinary-distance",
+      "sha256": "20ee719f040f6d4e86a703d6d5eb3f78156f7914243375e97f58104b29f045d1",
+      "sun_rotation_degrees": [
+        -33.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_gameplay_scale_proof"
+    },
+    {
+      "bytes": 190603.0,
+      "camera_position_m": [
+        3.20000004768372,
+        2.40000009536743,
+        7.19999980926514
+      ],
+      "dimensions": [
+        1440.0,
+        900.0
+      ],
+      "file": "03-changed-light-oblique.png",
+      "id": "03-changed-light-oblique",
+      "sha256": "ac4cb509c126f915d4c3900bbf1bad4ed33e8ec0cfaea3251bb3dc76a183b12b",
+      "sun_rotation_degrees": [
+        -12.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_proof"
+    }
+  ],
+  "prior_rejected_evidence_manifest": "res://evidence/first-playable/batch-03-material-prototypes-2026-08-29/fire-training-b600/capture-manifest.json",
+  "prior_rejected_evidence_manifest_sha256": "ccdad3ba144c7011bbfa887a27ccc497f3455f27372f69b065f012d25a9f2138",
+  "proof_panel_size_m": [
+    4.8,
+    3.2,
+    0.12
+  ],
+  "proof_primary_scale_m": 0.38,
+  "proof_receiver": "controlled_flat_proof_panel",
+  "proof_secondary_scale_m": 0.22,
+  "receiver_key": "building:w34313548:wall",
+  "registry_path": "res://game/resources/facades/batch_03_material_registry.json",
+  "registry_sha256": "31983ae1529e6248e93ec8d231d2b870de3979778b35eef6019cd19e1a964516",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "ready_for_independent_re_review_not_self_accepted",
+  "roughness_value": 0.84,
+  "runtime_attachment": false,
+  "schema_version": "ti.batch-02-04-material-correction-proof/1",
+  "shader_sha256": "324ba33a7c78f4b05038168a479ebb8e875c56704236492a050cee8da8e5f798",
+  "source_key": "w34313548",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

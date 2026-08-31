@@ -1,0 +1,42 @@
+{
+  "actual_world_review_status": "pending_independent_actual_world_art_review",
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "exact_delta": {
+    "collision_nodes": 0,
+    "field_runs": 31,
+    "field_scopes": 1,
+    "module_meshes": 0,
+    "module_placements": 0,
+    "navigation_nodes": 0,
+    "overlay_meshes": 1,
+    "overlay_surfaces": 1,
+    "overlay_triangles": 62,
+    "spray_nodes": 0
+  },
+  "generated_data_changed": false,
+  "module_placements": 0,
+  "navigation_changed": false,
+  "receiver_child_count": 3,
+  "receiver_collision_changed": false,
+  "receiver_collision_faces": 660,
+  "receiver_geometry_changed": false,
+  "result": "PASS",
+  "runtime_after": {
+    "meshes": 925,
+    "records": 729,
+    "shapes": 466,
+    "static_bodies": 466,
+    "surfaces": 935,
+    "triangles": 50791
+  },
+  "runtime_before": {
+    "meshes": 924,
+    "records": 729,
+    "shapes": 466,
+    "static_bodies": 466,
+    "surfaces": 934,
+    "triangles": 50729
+  },
+  "schema_version": "ti.building-1-live-field-runtime-isolation/1",
+  "spray_ownership_changed": false
+}

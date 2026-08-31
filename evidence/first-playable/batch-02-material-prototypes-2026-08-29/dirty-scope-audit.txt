@@ -1,0 +1,28 @@
+Batch 02 dirty-worktree scope audit — 2026-08-29
+
+Authored in this bounded round:
+- game/resources/facades/batch_02_material_registry.json
+- game/resources/materials/world/batch_02/batch_02_homogeneous_field.gdshader (+ Godot UID)
+- game/resources/materials/world/building_2/building_2_primary.tres
+- game/resources/materials/world/490_avenue_palms/490_thin_brick.tres
+- game/resources/materials/world/star_view_court/star_view_grey_base.tres
+- game/resources/materials/world/maceo_may/maceo_may_sse_rib.tres
+- game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres
+- game/resources/materials/world/ti_ymca/ti_ymca_primary.tres
+- game/tests/headless_batch_02_material_contract.gd (+ Godot UID)
+- game/tests/batch_02_material_proof_capture.gd (+ Godot UID)
+- evidence/first-playable/batch-02-material-prototypes-2026-08-29/**
+- one appended Batch 02 prototype section in discovery/RETRO_LOG.md
+
+Explicitly not changed in this round:
+- game/scripts/world/world_chunk_builder.gd (current SHA-256 f56e77e35f167ccc14ed40843b76a6e28ed87d21e46e697a52b38f018e9427c3; no Batch 02 references)
+- all Hawkins, Building 3, Isle House and Museum implementation/layout/material files
+- data/osm/** and generated/world/** (git diff exit 0)
+- gameplay, routes, collision, navigation, spray, terrain, foundation and massing code
+- Oasis resources/registry/runtime; no Oasis material exists
+
+Pre-existing shared-worktree state preserved:
+- tracked modifications already present in AGENTS.md, discovery/RETRO_LOG.md, world_chunk_builder.gd, full_runtime_integration.gd and headless_gameplay_contract.gd
+- earlier untracked facade discovery, accepted Hawkins/Building 3/Isle assets/tests/evidence, Museum blocker evidence, and unrelated workspace files
+
+No commit, download, install, upload, image generation, external asset, external service or generated-source rewrite occurred.

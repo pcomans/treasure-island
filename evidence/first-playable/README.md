@@ -1,0 +1,122 @@
+# First-playable evidence index
+
+Checked: 2026-08-28
+
+This directory separates reproducible automated proof from owner feedback. Current source and packaged evidence are bound to generated content SHA-256 `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164` and manifest SHA-256 `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`. The active skyline is the single-color `2212x340` silhouette with SHA-256 `9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5`, on a `3900x600 m` billboard at `(-1875,264.85,4306.4)`. The sole current private handoff is `build/car-speed-staging-2026-08-28-231815/Treasure Island First Playable.app`; the `224622` textured-world app is historical pre-tuning evidence.
+
+## Current result
+
+- **Generated world: pass.** `739` unique OSM source rows resolve as `735` playable plus `4` context, with zero unresolved or duplicate rows across `38` chunks and `729` physical records. OSM remains authoritative for horizontal geometry; the frozen USGS crop supplies elevation.
+- **Whole-island coverage evidence: pass.** The source polygon and playable derived edge coincide at 0.001 m precision. All `213` buildings have roof representation, both building parts have part roofs, all `427` roads/paths resolve to road geometry, and all `80` major areas have visible generated representation. Two clean renders are byte-identical.
+- **USGS terrain source and derivation: pass.** The accepted `1669x2048` crop has `2,492,288` valid samples from `-1.080` to `104.756 m`; five in-bounds pins, exact source hash, bounds, locked raster ID, and 18 derived surface anchors are enforced. The rejected over-limit export is not retained. See [terrain provenance](../../data/terrain/README.md).
+- **Coherent surfaces/foundations and pavement skin: pass.** Exact serialized land collision planes support every road/major-area/terrain-overlay triangle. The independent validator checked `206,339` road/area points and `14,904` exterior-foundation samples, with zero positive foundation gap, roof-flatness error, source-height deviation, or unsupported-water fallback segments. The visual-only pavement skin preserves all `208` vehicle-road sources plus `219` pedestrian sources without changing physical collision.
+- **Ferry-arrival spawn: pass in current generated/runtime world.** The exact foot-level transform is `[-104.364, 3.457, 786.024]`, yaw `-0.119`; startup settles on collision while hidden and reveals only when grounded.
+- **Clean full-runtime headless suite: pass.** The real main scene loaded `38/38` chunks, instantiated `729` meshes with `48,381` triangles and `466` nonempty static bodies/shapes, revealed grounded at `0.000 m` clearance, kept walk/run clearance within `-0.002..+0.001 m`, landed/recovered at `0.000 m`, exercised camera, spray, tag eviction, and fail-closed reload behavior, then exited cleanly.
+- **Deterministic visual-only vegetation: pass.** Seed `1414092337` produces `124` exactly grounded placements across all `15` curated Kenney GLBs in `19` MultiMesh batches, with zero added collision. The 102-placement procedural set is preserved and the 22 accepted NAIP shrub points are included with deterministic assets/transforms and no YBI placements. See [final rendered evidence](textured-world-final-rendered-2026-08-28-223242/README.md).
+- **Semantic Poly Haven material contract: pass.** All 11 semantic material keys use their approved diffuse/OpenGL-normal/roughness identities and effective repeats, backed by 18 packaged 1K texture maps with repeat, anisotropic mipmaps, subtle normals, and displacement disabled.
+- **Jetpack source runtime: pass.** Physical Space provides sustained capped ascent, walk/run steering remains active in air, release caps slow descent, a second mid-air press renews ascent, and the player lands without recovery. The strengthened source package-smoke path also exercises rise/release physics. See [jetpack evidence](jetpack/README.md).
+- **Automated continuous route: pass across the whole island.** With the current movement tuning, the real player completed the `262.349 m` grounded ferry/road route and used real run/Space input to land at southwest, center, north, and east-perimeter anchors during a `3,449.107 m` whole-island route. Both recorded zero stalls, recoveries, boundary escapes, or post-start transform writes. The retained [coherent-surface route record](coherent-surface-route-2026-08-28-1458/README.md) remains historical geometry evidence from the earlier tuning.
+- **Final textured-world source-project visuals: pass.** The inspected 13-frame `1440×900` Forward+/Metal set includes five grounded island regions, two elevated owner-comparison angles, one real-controller tag, SF/YBI/bridge context, vegetation views, and the fixed NAIP shrub row. Final art review passed the surface/material hierarchy and accepted the remaining large-field/wall repetition at hobby-project scope. See [final rendered evidence](textured-world-final-rendered-2026-08-28-223242/README.md). These frames did not come from an exported bundle.
+- **Current car-speed native export: pass.** `build/car-speed-staging-2026-08-28-231815/Treasure Island First Playable.app` contains the exact current world and `4/20/30/40` movement defaults. Headless packaged smoke and the native Metal/Forward+ smoke with `--max-fps 60` pass through jetpack. Its mounted PCK contains 185 virtual files, including 47 generated files, 38 chunks, 18 textures, 15 vegetation imports, and all 22 NAIP shrubs; it reports `private=0` and `banned=0`. Universal architecture and strict deep signing pass. See [current package evidence](car-speed-mac-run-2026-08-28-231815/README.md).
+- **The `224622` app is historical.** It contains the same approved world and final textured presentation but predates the `20 m/s` Shift-run amendment, so it must not be used to judge current movement. See [historical pre-tuning package evidence](textured-world-final-mac-run-2026-08-28-224622/README.md).
+- **The `224144` export is not current.** That earlier staging export failed only the stale, superseded flat-palette smoke assertion. It is retained only as historical diagnostic context and is not a handoff candidate.
+- **Historical pre-placement evidence remains retained.** The preceding render and app use `1950x300 m` at `(-2500,132.5,750)` and are not current. See [historical render](owner-silhouette-rendered-2026-08-28-1921/README.md) and [historical package](owner-silhouette-mac-run-2026-08-28-192220/README.md).
+- **Historical owner-outline evidence remains retained.** Its source Metal and private Mac package records remain valid only for the preceding outline and are not the current handoff. See [historical render](owner-skyline-rendered-2026-08-28-1900/README.md) and [historical package](owner-skyline-mac-run-2026-08-28-190242/README.md).
+- **Owner acceptance of this exact app: pending.** Earlier owner feedback confirmed the island, ordinary tag placement, and held-Space jetpack behavior in prior builds. Ordinary play of the exact `231815` car-speed app is still required, especially for fast-run feel; its automated and art-review passes do not substitute for that verdict.
+
+The required next step is the ordinary play pass in [`PLAYTEST.md`](../../PLAYTEST.md). Tight-gap camera polish and exhaustive spray rejection/isolation remain optional unless that playtest reproduces a blocker.
+
+## Evidence files
+
+- [`acceptance-audit.md`](acceptance-audit.md) — requirement-by-requirement verdict separating proven, incomplete, and owner-only acceptance items.
+- [`textured-world-final-rendered-2026-08-28-223242/README.md`](textured-world-final-rendered-2026-08-28-223242/README.md) — current 13-frame Metal/Forward+ art pass, exact revision, hashes, and evidence limits.
+- [`car-speed-mac-run-2026-08-28-231815/README.md`](car-speed-mac-run-2026-08-28-231815/README.md) — sole current package identity, mounted-PCK movement/world/privacy audit, packaged smokes, signatures, architecture, and plist facts.
+- [`textured-world-final-mac-run-2026-08-28-224622/README.md`](textured-world-final-mac-run-2026-08-28-224622/README.md) — historical pre-tuning package identity and audit.
+- [`spawn/README.md`](spawn/README.md) — frozen ferry source chain, projected coordinates, exact clearance proof, hashes, and clean follow-up test results.
+- [`jetpack/README.md`](jetpack/README.md) — source input/controller behavior, live ascent/air-control/descent/landing metrics, and strengthened source package-smoke result.
+- [`visual-qa/mac-run/README.md`](visual-qa/mac-run/README.md) — historical predecessor's full PCK inventory, visual/jetpack packaged smokes, architecture/signing/plist checks, and exact hashes.
+- [`owner-bridge-connected-rendered-2026-08-28-1944-retry/README.md`](owner-bridge-connected-rendered-2026-08-28-1944-retry/README.md) — historical pre-texture bridge-connected skyline scale, placement, Metal frames, and exact hashes.
+- [`owner-bridge-connected-mac-run-2026-08-28-194611/README.md`](owner-bridge-connected-mac-run-2026-08-28-194611/README.md) — historical pre-texture package identity and audit.
+- [`owner-silhouette-mac-run-2026-08-28-192220/README.md`](owner-silhouette-mac-run-2026-08-28-192220/README.md) — historical pre-placement solid-silhouette package.
+- [`jetpack/mac-run/README.md`](jetpack/mac-run/README.md) — historical pre-visual-refresh jetpack Mac app identity and package audit.
+- [`automated-route/README.md`](automated-route/README.md) — frozen OSM route, continuous-controller method, exact headless metrics, retained output, and remaining geographic/visual limits.
+- [`coherent-surface-route-2026-08-28-1458/README.md`](coherent-surface-route-2026-08-28-1458/README.md) — historical normal and whole-island route results for the unchanged geometry/controller.
+- [`coherent-surface-rendered-2026-08-28-1458/README.md`](coherent-surface-rendered-2026-08-28-1458/README.md) — historical pre-texture grounded and owner-angle Metal/Forward+ frames.
+- [`owner-skyline-rendered-2026-08-28-1900/README.md`](owner-skyline-rendered-2026-08-28-1900/README.md) — historical owner-outline scale, projected width, Metal frames, hashes, and context-isolation proof.
+- [`vegetation-corrected-quick-rendered-2026-08-28-1556/README.md`](vegetation-corrected-quick-rendered-2026-08-28-1556/README.md) — historical 102-placement deterministic vegetation evidence.
+- [`owner-skyline-mac-run-2026-08-28-190242/README.md`](owner-skyline-mac-run-2026-08-28-190242/README.md) — historical owner-outline app identity, exact hashes, owner-photo privacy audit, mounted-PCK inventory, signatures, and packaged-main-scene smoke.
+- [`current-source-mac-run-2026-08-28-183204/README.md`](current-source-mac-run-2026-08-28-183204/README.md) — historical pre-skyline app identity and package proof.
+- [`coherent-surface-coverage-2026-08-28-1458/README.md`](coherent-surface-coverage-2026-08-28-1458/README.md) — historical deterministic coverage render and validation outputs.
+- [`coherent-surface-mac-run-2026-08-28-1500/README.md`](coherent-surface-mac-run-2026-08-28-1500/README.md) — historical pre-texture app identity and package audit.
+- [`usgs-terrain-route-2026-08-28/README.md`](usgs-terrain-route-2026-08-28/README.md) — historical first terrain-aware route results.
+- [`usgs-terrain-rendered-2026-08-28-1346/README.md`](usgs-terrain-rendered-2026-08-28-1346/README.md) — historical first USGS terrain/YBI/bridge frames and hashes.
+- [`usgs-terrain-mac-run-2026-08-28-1400/README.md`](usgs-terrain-mac-run-2026-08-28-1400/README.md) — historical first USGS app identity and package results.
+- [`rendered-runtime-grounded/README.md`](rendered-runtime-grounded/README.md) — eight corrected physics-grounded source-project frames, exact hashes, tag identity, context visibility, and explicit evidence limits.
+- [`ybi-solid-rendered/README.md`](ybi-solid-rendered/README.md) — historical physics-grounded frames from the synthetic-YBI stage.
+- [`spawn/mac-run/README.md`](spawn/mac-run/README.md) — historical ferry-only app identity, exact packaged manifest/spawn audit, signature checks, and headless startup.
+- [`mac-run/README.md`](mac-run/README.md) — exact export command, build identity, artifact hashes, package audit, signing limits, and packaged launch results.
+- [`coverage/whole-island-derived.png`](coverage/whole-island-derived.png) — clean north-up visual made from actual generated triangles.
+- [`coverage/whole-island-diagnostic.svg`](coverage/whole-island-diagnostic.svg) — generated layers with the 256 m chunk grid.
+- [`coverage/coverage-comparison-summary.json`](coverage/coverage-comparison-summary.json) — independent source-ledger, hash, physical-reference, category, context-isolation, and extent checks.
+- [`coverage/determinism-report.json`](coverage/determinism-report.json) — two clean coverage renders compared byte-for-byte.
+- [`runtime/headless-suite.log`](runtime/headless-suite.log) — sanitized exit codes and summaries for the complete four-test suite.
+- [`runtime/full-runtime-headless.log`](runtime/full-runtime-headless.log) — raw sanitized full-runtime integration result.
+- [`runtime/README.md`](runtime/README.md) — runtime measurements, corrections, and the precise proof boundary.
+
+## Coverage totals
+
+| Obligation | Count |
+|---|---:|
+| Unique source rows | 739 |
+| Playable rows | 735 |
+| Non-playable context rows | 4 |
+| Land-boundary memberships | 1 |
+| Terrain/shoreline memberships | 22 |
+| Road/path memberships | 427 |
+| Major-area memberships | 80 |
+| Building memberships | 213 |
+| Building-part memberships | 2 |
+| Generated chunks | 38 |
+| Physical records | 729 |
+| Unresolved / duplicate source rows | 0 / 0 |
+
+Membership categories overlap: ten playable rows belong to two categories, so the membership sum is not the unique-row total. The clean runtime reports `738` direct geometry source keys; the approved composite-only Isle House parent completes all `739` ledger obligations.
+
+## Frozen source integrity
+
+The manifest binds the world to the five existing OSM inputs plus the USGS terrain crop:
+
+| Input | SHA-256 |
+|---|---|
+| Raw OSM snapshot | `3b6f6af31a1c82de3fa51fcbc02fe7e3723fdb629c948ae6523ef46c157b4549` |
+| Treasure Island extraction polygon | `43adbe335e87f0d839b56c2f5933ae97d35d4f588ce93bd09923a98620dd2b63` |
+| Treasure Island proper PBF | `13984ed8f70c9d5d39d4ba14f83c7307eb75428af7b07df5774df29bda4ccaf9` |
+| Source-ledger CSV | `fdf57f37f5507a7cb9b64a7fc530eabb22e29f3742324d5347c0f6b1949cb4cb` |
+| Source-ledger summary | `49eb5c9fadd1b81b3fd687beb59cd9f917eb197069bcb993f5a0a3f2588d90d7` |
+| USGS 3DEP TI+YBI crop | `3af54acdd116f3e253af8ece5ec501a08dff94cfca47b7f05f2c326c9ba33f3f` |
+
+Acquisition, file roles, source counts, OpenStreetMap attribution, and ODbL terms are recorded in [`data/osm/README.md`](../../data/osm/README.md). USGS acquisition, datum, crop request, integrity pins, and public-domain status are in [`data/terrain/README.md`](../../data/terrain/README.md).
+
+## Reproduce
+
+From the project root:
+
+```sh
+node tools/validate_godot_world.mjs generated/world
+node tools/check_godot_world_determinism.mjs
+node tools/render_world_coverage_evidence.mjs --validate-only evidence/first-playable/coherent-surface-coverage-2026-08-28-1458
+
+GODOT=".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot"
+"$GODOT" --headless --path . --script game/tests/headless_scene_parse.gd
+"$GODOT" --headless --path . --script game/tests/headless_gameplay_contract.gd
+"$GODOT" --headless --path . --script game/tests/headless_world_material_contract.gd
+"$GODOT" --headless --path . --script game/tests/validate_generated_world.gd
+"$GODOT" --headless --path . --script game/tests/full_runtime_integration.gd
+"$GODOT" --headless --path . --script game/tests/automated_route_qa.gd
+
+APP_BINARY="build/car-speed-staging-2026-08-28-231815/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
+"$APP_BINARY" --headless -- --mac-export-smoke
+"$APP_BINARY" --max-fps 60 --rendering-method forward_plus --rendering-driver metal -- --mac-export-smoke
+```
+
+Regeneration and export commands are kept in the root [`README.md`](../../README.md). The owner's remaining ground-level acceptance pass is in [`PLAYTEST.md`](../../PLAYTEST.md).

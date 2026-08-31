@@ -1,0 +1,39 @@
+Authorized live-integration scope: w34313520 exact field/BAY adapter, focused/current-state tests, canonical inventory/lifecycle docs, native evidence, and named retro entry.
+
+Runtime production edits:
+- game/scripts/world/facades/w34313520_live_modules.gd
+- game/scripts/world/facades/accepted_material_run_trials.gd
+- game/scripts/world/world_chunk_builder.gd
+
+Focused/current-state proof edits:
+- game/tests/headless_w34313520_live_integration_contract.gd
+- game/tests/w34313520_live_integration_capture.gd
+- w34313520 standalone/detached current-state contracts
+- Batch 02/03/04/06, accepted-material, w34313515, w34313564, w291196370, YMCA, Hawkins, and full-runtime current-topology/hash pins
+
+Canonical/evidence edits:
+- discovery/FACADE_RECEIVER_INVENTORY.json
+- discovery/FACADE_RECEIVER_INVENTORY.md
+- discovery/RETRO_LOG.md
+- evidence/first-playable/w34313520-live-field-and-bay-2026-08-30/
+
+Protected exact inputs verified byte-identical:
+- exact calibration registry 28ea8b6e506d747299a920e4d456d8676031e18ec3b6d9e959cab31fa33de4f1
+- exact calibration helper d747d9f9ca5798b09909efeeb930cdee119f1b3c310e95f9a2c426a3ee6ceea4
+- standalone registry ab80f0cd0424c22f7f24e5fc82211353e9aee7c95bea4903022681a48c5620a4
+- standalone field 7944151fd5ab8e977e7052d0cdb8df20132c82f967d8ebfefff83ede8fcf07a4
+- exact field material 89fbb97ed797275a86c394af7eab13f946cbf23f29cba58b89a2b2d467030ab2
+- BAY frame 445d3bec9d2ef3130aab27c816b27e384c689af68298b2db5ada37e0178f249b
+- BAY glass 40caf8b054b51ebf247a41286dec9efdbf925f09acf698a75285a4321a41bba6
+- standalone factory 1244f590ed0854219f50a25a4c7931f4f094ce19fb65cefcf2d61b8ce4cd8566
+- standalone scene 4d0ee0e79ea6fd5a7e85b21cdf4a103d125818626b6c97875737cad44cc65785
+
+Generated source/data diff: empty.
+Other workspace dirt outside treasure-island-game was not touched.
+
+Evidence-only correction scope:
+- removed only the redundant top-level placement snapshot from capture-manifest.json
+- removed only its unused broken serializer from game/tests/w34313520_live_integration_capture.gd
+- updated focused evidence assertions, README, verification, checksum ledger, dirty-scope audit, and the required named retro
+- no PNG recapture or pixel change
+- no art, runtime, material, registry, calibration, transform, field scope, lifecycle, generated-data, topology, route, or other-building change

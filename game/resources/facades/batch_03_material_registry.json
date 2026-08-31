@@ -1,0 +1,111 @@
+{
+  "schema_version": "ti.batch-03-material-prototypes/1",
+  "review_status": "mechanically_ready_visual_review_blocked",
+  "runtime_attachment_policy": "none; every Batch 03 asset is a controlled prototype until exact observed region endpoints and physical scale are reconciled",
+  "shared_shader": {
+    "path": "res://game/resources/materials/world/batch_02/batch_02_homogeneous_field.gdshader",
+    "sha256": "1918177080126199ddbfc0715a77b85a9355800479a098ec9b81c9726b7cc4d5",
+    "one_local_unit_m": 1.0,
+    "alias_control": "analytic derivative filtering",
+    "external_resources": false
+  },
+  "correction_shader": {
+    "path": "res://game/resources/materials/world/batch_02_04_aperiodic_field.gdshader",
+    "sha256": "324ba33a7c78f4b05038168a479ebb8e875c56704236492a050cee8da8e5f798",
+    "scope": "w34313548 rejected pale-mineral correction only",
+    "one_local_unit_m": 1.0,
+    "external_resources": false
+  },
+  "controlled_proof_contract": {
+    "receiver_kind": "controlled_flat_proof_panel",
+    "one_local_unit_m": 1.0,
+    "panel_size_m": [4.8, 3.2],
+    "renderer": "Forward+/Metal",
+    "capture_execution": "approval_gated_not_executed",
+    "proof_scales_are_reversible_assumptions": true
+  },
+  "targets": [
+    {
+      "source_key": "r133347",
+      "receiver_key": "building:r133347:wall",
+      "canonical_name": "Treasure Island Personnel Support Detachment",
+      "chunk_id": "x_0__z_1",
+      "classification": "homogeneous_material_tile",
+      "region_scope": "observed east and north outer elevation opaque dark structural/infill field only; never the inner courtyard or unobserved south/west outer elevations",
+      "material_path": "res://game/resources/materials/world/personnel_support_detachment/psd_outer.tres",
+      "field_kind": 4,
+      "roughness_range": [0.55, 0.88],
+      "proof_primary_scale_m": 1.2,
+      "scale_status": "broad_finish_variation_unmeasured_proof_only",
+      "runtime_attachment": "prototype_only",
+      "observed_reference_provenance": [
+        {"id": "PSD-SV01", "panorama_id": "GAuBhldmLlZOQwXj8qav3w", "displayed_date": "2021-06", "coverage": "east-facing outer elevation", "reuse": "observation_only"},
+        {"id": "PSD-SV02", "panorama_id": "_rk3B0PasMLUEPCQCA_sJw", "displayed_date": "2025-09", "coverage": "north-facing outer elevation and east corner", "reuse": "observation_only"}
+      ],
+      "reference_spec": "discovery/facades/PERSONNEL_SUPPORT_DETACHMENT_550_4TH_REFERENCE_SPEC.md",
+      "placement_blockers": ["exact_outer_run_mapping", "exact_material_region_endpoints", "physical_module_scale", "courtyard_unobserved"],
+      "excluded_motifs": ["structural_grid", "window_bays", "glazing", "opening_cadence"]
+    },
+    {
+      "source_key": "w34313548",
+      "receiver_key": "building:w34313548:wall",
+      "canonical_name": "Fire Training Facility Building 600",
+      "chunk_id": "x_1__z_-2",
+      "classification": "homogeneous_material_tile",
+      "region_scope": "observed WSW pale coarse cream wall field only; no inference onto SSE portal or unobserved ENE/NNW elevations",
+      "material_path": "res://game/resources/materials/world/fire_training_b600/fire_training_primary.tres",
+      "field_kind": 0,
+      "roughness_range": [0.75, 0.92],
+      "proof_primary_scale_m": 0.38,
+      "scale_status": "coarse_mineral_scale_band_low_confidence_proof_only",
+      "runtime_attachment": "prototype_only",
+      "observed_reference_provenance": [
+        {"id": "B600-SV01", "panorama_id": "ifdNQ-gh7K1ryx3rVMvW2w", "displayed_date": "2025-09", "coverage": "SSE entry and start of WSW side", "reuse": "observation_only"},
+        {"id": "B600-SV02", "panorama_id": "t8V4SOhQFPRXL_vukoMRog", "displayed_date": "2025-09", "coverage": "tree-occluded WSW long side", "reuse": "observation_only"}
+      ],
+      "reference_spec": "discovery/facades/FIRE_TRAINING_FACILITY_BUILDING_600_REFERENCE_SPEC.md",
+      "placement_blockers": ["exact_run_mapping", "exact_material_region_endpoints", "substrate_identity", "physical_module_scale"],
+      "excluded_motifs": ["windows", "red_entry_portal", "door", "arch", "bay_cadence"]
+    },
+    {
+      "source_key": "w764313741",
+      "receiver_key": "building:w764313741:wall",
+      "canonical_name": "San Francisco Fire Station 48",
+      "chunk_id": "x_0__z_-2",
+      "classification": "homogeneous_material_tile",
+      "region_scope": "observed WSW and NNW pale sage-gray wall field only; never hidden SSE/ENE or operational openings",
+      "material_path": "res://game/resources/materials/world/fire_station_48/fire_station_48_primary.tres",
+      "field_kind": 4,
+      "roughness_range": [0.70, 0.90],
+      "proof_primary_scale_m": 1.8,
+      "scale_status": "color_finish_ready_substrate_and_scale_unmeasured_proof_only",
+      "runtime_attachment": "prototype_only",
+      "observed_reference_provenance": [
+        {"id": "FS48-SV01", "panorama_id": "UQGBH77cFgLZE2Utr1MI4Q", "displayed_date": "2019-05", "coverage": "NNW side and service-yard context", "reuse": "observation_only"},
+        {"id": "FS48-SV02", "panorama_id": "U1HtZQlUKomn07I4TT93ug", "displayed_date": "2025-09", "coverage": "WSW side and NNW corner", "reuse": "observation_only"}
+      ],
+      "reference_spec": "discovery/facades/FIRE_STATION_48_REFERENCE_SPEC.md",
+      "placement_blockers": ["exact_run_mapping", "operational_openings", "substrate_identity", "physical_module_scale", "fallback_height_not_observed"],
+      "excluded_motifs": ["high_windows", "apparatus_doors", "signage", "operational_openings", "bay_cadence"]
+    }
+  ],
+  "explicit_excluded_targets": {
+    "w34313513": "Harvey Milk Recreation Center: no official target-identifiable public elevation evidence",
+    "w34313544": "Naval Station administration building: no official target-identifiable public elevation evidence",
+    "w34313521": "Job Corps Food Service Building 368: no official elevation; excluded contributor-image path was not used",
+    "w109905031": "Education Center Building 29A: official viewpoints are facade-occluded by containers and fence",
+    "w34313514": "Advanced Culinary Academy: no official frontage and target identity remains uncertain"
+  },
+  "forbidden_content": [
+    "windows",
+    "doors",
+    "structural_grids",
+    "bays",
+    "red_portal",
+    "apparatus_openings",
+    "signage",
+    "module_atlases",
+    "unique_elevations",
+    "facade_scale_motifs"
+  ]
+}

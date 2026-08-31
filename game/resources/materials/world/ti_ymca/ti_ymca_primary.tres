@@ -1,0 +1,17 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3]
+
+[ext_resource type="Shader" path="res://game/resources/materials/world/ti_ymca/ti_ymca_wall_tangent_aperiodic_field.gdshader" id="1_shader"]
+
+[resource]
+resource_name = "ti_ymca_sse_ene_dark_aggregate_prototype"
+shader = ExtResource("1_shader")
+shader_parameter/base_color = Color(0.25, 0.22, 0.19, 1)
+shader_parameter/secondary_color = Color(0.16, 0.15, 0.14, 1)
+shader_parameter/roughness_value = 0.91
+shader_parameter/field_kind = 5
+shader_parameter/primary_scale_m = 0.42
+shader_parameter/secondary_scale_m = 0.095
+shader_parameter/relief_strength = 0.08
+shader_parameter/color_variation = 0.065
+shader_parameter/filter_start_cycles_per_pixel = 0.12
+shader_parameter/filter_end_cycles_per_pixel = 0.34

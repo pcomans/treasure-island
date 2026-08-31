@@ -1,0 +1,723 @@
+{
+  "schema_version": "ti.accepted-material-run-trials-evidence/1",
+  "review_status": "ready_for_independent_gameplay_art_review_not_self_accepted",
+  "evidence_role": "live_receiver_runtime_and_render_proof_with_preserved_review_limitations",
+  "generator": "game/tests/accepted_material_run_trials_capture.gd",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/accepted_material_run_trials_capture.gd",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M1 Pro (Apple7)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "world_chunk_builder_sha256": "c770a977e879c0d077acb8fb4d33b52d1bd6aa3b454a50ba8e2125cb71e8ba8d",
+  "accepted_run_helper_sha256": "9c86fcbccf878a0786cb3d6bed12192c1e131759ab2d0f5ee002ce0e4685309f",
+  "shared_shader_sha256": "1918177080126199ddbfc0715a77b85a9355800479a098ec9b81c9726b7cc4d5",
+  "generated_world_counts": {
+    "chunks": 38,
+    "records": 729,
+    "meshes": 729,
+    "surfaces": 732,
+    "triangles": 48389,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "surface_delta": {
+    "baseline_one_surface_per_mesh": 729,
+    "actual": 732,
+    "delta": 3,
+    "cause": "one disjoint accepted-run surface on each of exactly three target receivers"
+  },
+  "targets": [
+    {
+      "canonical_name": "Navy Chapel",
+      "source_key": "w291189336",
+      "receiver_key": "building:w291189336:wall",
+      "accepted_runs": [
+        9,
+        10
+      ],
+      "accepted_length_m": 16.362,
+      "material_path": "res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres",
+      "material_sha256": "4020e4c75350929359be9c16686ad80a2a0eac46918cc32746089694017a61a5",
+      "surface_names": [
+        "placeholder_runs",
+        "accepted_material_runs"
+      ],
+      "modules": 0,
+      "render_triangles": 68,
+      "collision_triangles": 68,
+      "captures": [
+        {
+          "id": "01-close",
+          "view_kind": "close_live_receiver",
+          "receiver_key": "building:w291189336:wall",
+          "file": "images/navy-chapel-187/01-close.png",
+          "sha256": "fba33c8449c9c58f860e525a7ae2e870c336566e0e095af5f5183a11227714c1",
+          "bytes": 95539,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "camera_position_m": [
+            -97.1987609863281,
+            6.05800008773804,
+            654.884338378906
+          ],
+          "aim_target_m": [
+            -100.468505859375,
+            9.01949977874756,
+            648.694946289062
+          ],
+          "camera_fov_degrees": 50.0,
+          "sun_rotation_degrees": [
+            -51.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "representative_run": 9,
+          "sample_unique_colors": 53,
+          "sample_luminance_range": 0.662918418645859
+        },
+        {
+          "id": "02-ordinary-gameplay-distance",
+          "view_kind": "ordinary_gameplay_distance_live_receiver",
+          "receiver_key": "building:w291189336:wall",
+          "file": "images/navy-chapel-187/02-ordinary-gameplay-distance.png",
+          "sha256": "28c41e6e860187804d40b9917d6b4929c9e0e59cc89eca46ae33348521fb4af3",
+          "bytes": 658306,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "camera_position_m": [
+            -89.2579574584961,
+            6.05800008773804,
+            669.915771484375
+          ],
+          "aim_target_m": [
+            -100.468505859375,
+            9.01949977874756,
+            648.694946289062
+          ],
+          "camera_fov_degrees": 50.0,
+          "sun_rotation_degrees": [
+            -51.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "representative_run": 9,
+          "sample_unique_colors": 259,
+          "sample_luminance_range": 0.836431384086609
+        },
+        {
+          "id": "03-changed-light-oblique",
+          "view_kind": "changed_light_oblique_live_receiver",
+          "receiver_key": "building:w291189336:wall",
+          "file": "images/navy-chapel-187/03-changed-light-oblique.png",
+          "sha256": "5692418619d6c6acdfda16f6f10d38b2887638627cbb6f06c9927483523162e4",
+          "bytes": 681648,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "camera_position_m": [
+            -85.505859375,
+            12.0194997787476,
+            657.750671386719
+          ],
+          "aim_target_m": [
+            -100.468505859375,
+            9.01949977874756,
+            648.694946289062
+          ],
+          "camera_fov_degrees": 50.0,
+          "sun_rotation_degrees": [
+            -24.0,
+            117.999992370605,
+            0.0
+          ],
+          "representative_run": 9,
+          "sample_unique_colors": 237,
+          "sample_luminance_range": 0.597566276788712
+        }
+      ],
+      "limitation": "Warm-cream homogeneous albedo/roughness background only; substrate and relief remain blocked."
+    },
+    {
+      "canonical_name": "Fire Station 48",
+      "source_key": "w764313741",
+      "receiver_key": "building:w764313741:wall",
+      "accepted_runs": [
+        0,
+        1,
+        2,
+        3,
+        5,
+        6,
+        8,
+        9,
+        24,
+        25
+      ],
+      "accepted_length_m": 76.157,
+      "material_path": "res://game/resources/materials/world/fire_station_48/fire_station_48_primary.tres",
+      "material_sha256": "515135c3d0da6bb8eb8681e69d7e3f7818d896d948fe5dcc7c2bd8c6d076b188",
+      "surface_names": [
+        "placeholder_runs",
+        "accepted_material_runs"
+      ],
+      "modules": 0,
+      "render_triangles": 52,
+      "collision_triangles": 52,
+      "captures": [
+        {
+          "id": "01-close",
+          "view_kind": "close_live_receiver",
+          "receiver_key": "building:w764313741:wall",
+          "file": "images/fire-station-48/01-close.png",
+          "sha256": "e93924086b5cb9569ad2484ae3efd0c8d7ff6587e0b9a0c2e61176b78fd5b125",
+          "bytes": 129444,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "camera_position_m": [
+            124.969291687012,
+            5.5310001373291,
+            -350.001495361328
+          ],
+          "aim_target_m": [
+            131.167510986328,
+            6.4692497253418,
+            -353.254516601562
+          ],
+          "camera_fov_degrees": 50.0,
+          "sun_rotation_degrees": [
+            -51.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "representative_run": 2,
+          "sample_unique_colors": 54,
+          "sample_luminance_range": 0.625525549054146
+        },
+        {
+          "id": "02-ordinary-gameplay-distance",
+          "view_kind": "ordinary_gameplay_distance_live_receiver",
+          "receiver_key": "building:w764313741:wall",
+          "file": "images/fire-station-48/02-ordinary-gameplay-distance.png",
+          "sha256": "eb028d6c1f88a8f70366c85090e423703e5c22737d6ef0e54cb97e4094d49a99",
+          "bytes": 681497,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "camera_position_m": [
+            109.916481018066,
+            5.5310001373291,
+            -342.101318359375
+          ],
+          "aim_target_m": [
+            131.167510986328,
+            6.4692497253418,
+            -353.254516601562
+          ],
+          "camera_fov_degrees": 50.0,
+          "sun_rotation_degrees": [
+            -51.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "representative_run": 2,
+          "sample_unique_colors": 208,
+          "sample_luminance_range": 0.617399245500565
+        },
+        {
+          "id": "03-changed-light-oblique",
+          "view_kind": "changed_light_oblique_live_receiver",
+          "receiver_key": "building:w764313741:wall",
+          "file": "images/fire-station-48/03-changed-light-oblique.png",
+          "sha256": "382ccbc7e7e3fd0f79427e6d0f2012620ec40d0709ad56999a2a7943c6ccc57d",
+          "bytes": 728898,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "camera_position_m": [
+            122.068565368652,
+            9.4692497253418,
+            -338.314910888672
+          ],
+          "aim_target_m": [
+            131.167510986328,
+            6.4692497253418,
+            -353.254516601562
+          ],
+          "camera_fov_degrees": 50.0,
+          "sun_rotation_degrees": [
+            -24.0,
+            117.999992370605,
+            0.0
+          ],
+          "representative_run": 2,
+          "sample_unique_colors": 252,
+          "sample_luminance_range": 0.61622354388237
+        }
+      ],
+      "limitation": "Flat pale sage-gray/warm-gray albedo/roughness only; substrate, scale, normals, and relief remain blocked."
+    },
+    {
+      "canonical_name": "Dormitory 369",
+      "source_key": "w291189926",
+      "receiver_key": "building:w291189926:wall",
+      "accepted_runs": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "accepted_length_m": 49.124,
+      "material_path": "res://game/resources/materials/world/job_corps_dormitory_b369/dormitory_b369_warm_field.tres",
+      "material_sha256": "fb50d3989b7aa41421753ad4db5d195366d9a2c25c15087e5e3a2b7863c69602",
+      "surface_names": [
+        "placeholder_runs",
+        "accepted_material_runs"
+      ],
+      "modules": 0,
+      "render_triangles": 144,
+      "collision_triangles": 144,
+      "captures": [
+        {
+          "id": "01-close",
+          "view_kind": "close_live_receiver",
+          "receiver_key": "building:w291189926:wall",
+          "file": "images/dormitory-369/01-close.png",
+          "sha256": "7b23cb2d56734f247a241ec985cb57e3977abcebf0c8c76d5f04938b71be6f1d",
+          "bytes": 94320,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "camera_position_m": [
+            -10.3515815734863,
+            5.28399991989136,
+            467.479064941406
+          ],
+          "aim_target_m": [
+            -4.16949987411499,
+            6.33850002288818,
+            464.195495605469
+          ],
+          "camera_fov_degrees": 50.0,
+          "sun_rotation_degrees": [
+            -51.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "representative_run": 2,
+          "sample_unique_colors": 65,
+          "sample_luminance_range": 0.732719987630844
+        },
+        {
+          "id": "02-ordinary-gameplay-distance",
+          "view_kind": "ordinary_gameplay_distance_live_receiver",
+          "receiver_key": "building:w291189926:wall",
+          "file": "images/dormitory-369/02-ordinary-gameplay-distance.png",
+          "sha256": "efd15e8576ee954bdba26097c87a580974e804930e42f30970d9eceae1f4ee57",
+          "bytes": 695056,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "camera_position_m": [
+            -25.3652095794678,
+            5.28399991989136,
+            475.453460693359
+          ],
+          "aim_target_m": [
+            -4.16949987411499,
+            6.33850002288818,
+            464.195495605469
+          ],
+          "camera_fov_degrees": 50.0,
+          "sun_rotation_degrees": [
+            -51.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "representative_run": 2,
+          "sample_unique_colors": 237,
+          "sample_luminance_range": 0.784534126520157
+        },
+        {
+          "id": "03-changed-light-oblique",
+          "view_kind": "changed_light_oblique_live_receiver",
+          "receiver_key": "building:w291189926:wall",
+          "file": "images/dormitory-369/03-changed-light-oblique.png",
+          "sha256": "dcf1fa509265646ad4c2ef3882f2dbdd03940586eadcf9645554bb8e12df7940",
+          "bytes": 120030,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "camera_position_m": [
+            -13.1977910995483,
+            9.33850002288818,
+            479.181549072266
+          ],
+          "aim_target_m": [
+            -4.16949987411499,
+            6.33850002288818,
+            464.195495605469
+          ],
+          "camera_fov_degrees": 50.0,
+          "sun_rotation_degrees": [
+            -24.0,
+            117.999992370605,
+            0.0
+          ],
+          "representative_run": 2,
+          "sample_unique_colors": 49,
+          "sample_luminance_range": 0.606128662824631
+        }
+      ],
+      "limitation": "Smooth warm-wall albedo/roughness only; five visible tiers versus fallback 6 m remains unresolved."
+    }
+  ],
+  "capture_count": 10,
+  "captures": [
+    {
+      "id": "01-close",
+      "view_kind": "close_live_receiver",
+      "receiver_key": "building:w291189336:wall",
+      "file": "images/navy-chapel-187/01-close.png",
+      "sha256": "fba33c8449c9c58f860e525a7ae2e870c336566e0e095af5f5183a11227714c1",
+      "bytes": 95539,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -97.1987609863281,
+        6.05800008773804,
+        654.884338378906
+      ],
+      "aim_target_m": [
+        -100.468505859375,
+        9.01949977874756,
+        648.694946289062
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "representative_run": 9,
+      "sample_unique_colors": 53,
+      "sample_luminance_range": 0.662918418645859
+    },
+    {
+      "id": "02-ordinary-gameplay-distance",
+      "view_kind": "ordinary_gameplay_distance_live_receiver",
+      "receiver_key": "building:w291189336:wall",
+      "file": "images/navy-chapel-187/02-ordinary-gameplay-distance.png",
+      "sha256": "28c41e6e860187804d40b9917d6b4929c9e0e59cc89eca46ae33348521fb4af3",
+      "bytes": 658306,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -89.2579574584961,
+        6.05800008773804,
+        669.915771484375
+      ],
+      "aim_target_m": [
+        -100.468505859375,
+        9.01949977874756,
+        648.694946289062
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "representative_run": 9,
+      "sample_unique_colors": 259,
+      "sample_luminance_range": 0.836431384086609
+    },
+    {
+      "id": "03-changed-light-oblique",
+      "view_kind": "changed_light_oblique_live_receiver",
+      "receiver_key": "building:w291189336:wall",
+      "file": "images/navy-chapel-187/03-changed-light-oblique.png",
+      "sha256": "5692418619d6c6acdfda16f6f10d38b2887638627cbb6f06c9927483523162e4",
+      "bytes": 681648,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -85.505859375,
+        12.0194997787476,
+        657.750671386719
+      ],
+      "aim_target_m": [
+        -100.468505859375,
+        9.01949977874756,
+        648.694946289062
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -24.0,
+        117.999992370605,
+        0.0
+      ],
+      "representative_run": 9,
+      "sample_unique_colors": 237,
+      "sample_luminance_range": 0.597566276788712
+    },
+    {
+      "id": "01-close",
+      "view_kind": "close_live_receiver",
+      "receiver_key": "building:w764313741:wall",
+      "file": "images/fire-station-48/01-close.png",
+      "sha256": "e93924086b5cb9569ad2484ae3efd0c8d7ff6587e0b9a0c2e61176b78fd5b125",
+      "bytes": 129444,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        124.969291687012,
+        5.5310001373291,
+        -350.001495361328
+      ],
+      "aim_target_m": [
+        131.167510986328,
+        6.4692497253418,
+        -353.254516601562
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "representative_run": 2,
+      "sample_unique_colors": 54,
+      "sample_luminance_range": 0.625525549054146
+    },
+    {
+      "id": "02-ordinary-gameplay-distance",
+      "view_kind": "ordinary_gameplay_distance_live_receiver",
+      "receiver_key": "building:w764313741:wall",
+      "file": "images/fire-station-48/02-ordinary-gameplay-distance.png",
+      "sha256": "eb028d6c1f88a8f70366c85090e423703e5c22737d6ef0e54cb97e4094d49a99",
+      "bytes": 681497,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        109.916481018066,
+        5.5310001373291,
+        -342.101318359375
+      ],
+      "aim_target_m": [
+        131.167510986328,
+        6.4692497253418,
+        -353.254516601562
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "representative_run": 2,
+      "sample_unique_colors": 208,
+      "sample_luminance_range": 0.617399245500565
+    },
+    {
+      "id": "03-changed-light-oblique",
+      "view_kind": "changed_light_oblique_live_receiver",
+      "receiver_key": "building:w764313741:wall",
+      "file": "images/fire-station-48/03-changed-light-oblique.png",
+      "sha256": "382ccbc7e7e3fd0f79427e6d0f2012620ec40d0709ad56999a2a7943c6ccc57d",
+      "bytes": 728898,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        122.068565368652,
+        9.4692497253418,
+        -338.314910888672
+      ],
+      "aim_target_m": [
+        131.167510986328,
+        6.4692497253418,
+        -353.254516601562
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -24.0,
+        117.999992370605,
+        0.0
+      ],
+      "representative_run": 2,
+      "sample_unique_colors": 252,
+      "sample_luminance_range": 0.61622354388237
+    },
+    {
+      "id": "01-close",
+      "view_kind": "close_live_receiver",
+      "receiver_key": "building:w291189926:wall",
+      "file": "images/dormitory-369/01-close.png",
+      "sha256": "7b23cb2d56734f247a241ec985cb57e3977abcebf0c8c76d5f04938b71be6f1d",
+      "bytes": 94320,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -10.3515815734863,
+        5.28399991989136,
+        467.479064941406
+      ],
+      "aim_target_m": [
+        -4.16949987411499,
+        6.33850002288818,
+        464.195495605469
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "representative_run": 2,
+      "sample_unique_colors": 65,
+      "sample_luminance_range": 0.732719987630844
+    },
+    {
+      "id": "02-ordinary-gameplay-distance",
+      "view_kind": "ordinary_gameplay_distance_live_receiver",
+      "receiver_key": "building:w291189926:wall",
+      "file": "images/dormitory-369/02-ordinary-gameplay-distance.png",
+      "sha256": "efd15e8576ee954bdba26097c87a580974e804930e42f30970d9eceae1f4ee57",
+      "bytes": 695056,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -25.3652095794678,
+        5.28399991989136,
+        475.453460693359
+      ],
+      "aim_target_m": [
+        -4.16949987411499,
+        6.33850002288818,
+        464.195495605469
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "representative_run": 2,
+      "sample_unique_colors": 237,
+      "sample_luminance_range": 0.784534126520157
+    },
+    {
+      "id": "03-changed-light-oblique",
+      "view_kind": "changed_light_oblique_live_receiver",
+      "receiver_key": "building:w291189926:wall",
+      "file": "images/dormitory-369/03-changed-light-oblique.png",
+      "sha256": "dcf1fa509265646ad4c2ef3882f2dbdd03940586eadcf9645554bb8e12df7940",
+      "bytes": 120030,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        -13.1977910995483,
+        9.33850002288818,
+        479.181549072266
+      ],
+      "aim_target_m": [
+        -4.16949987411499,
+        6.33850002288818,
+        464.195495605469
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -24.0,
+        117.999992370605,
+        0.0
+      ],
+      "representative_run": 2,
+      "sample_unique_colors": 49,
+      "sample_luminance_range": 0.606128662824631
+    },
+    {
+      "id": "whole-island-load",
+      "view_kind": "whole_island_load_proof",
+      "receiver_key": "whole-island",
+      "file": "images/whole-island/whole-island-load.png",
+      "sha256": "754fd1268fca8a9f7fd478e622314314f347c84016f7b46cfcc465cdbf8920a4",
+      "bytes": 404617,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "camera_position_m": [
+        180.0,
+        1550.0,
+        300.0
+      ],
+      "aim_target_m": [
+        -20.0,
+        0.0,
+        30.0
+      ],
+      "camera_fov_degrees": 50.0,
+      "sun_rotation_degrees": [
+        -51.9999923706055,
+        -27.9999961853027,
+        0.0
+      ],
+      "representative_run": -1,
+      "sample_unique_colors": 143,
+      "sample_luminance_range": 0.679552979767323
+    }
+  ],
+  "protected_scope": {
+    "generated_files_modified": false,
+    "geometry_modified": false,
+    "massing_modified": false,
+    "terrain_or_foundations_modified": false,
+    "collision_modified": false,
+    "spray_or_gameplay_modified": false,
+    "modules_added": 0
+  },
+  "limitations": [
+    "Navy Chapel is accepted only as a warm-cream homogeneous albedo/roughness background on runs 9..10; substrate and relief remain blocked.",
+    "Fire Station 48 is accepted only as a flat pale sage-gray/warm-gray albedo/roughness field on runs 0,1,2,3,5,6,8,9,24,25; substrate, scale, normals, and relief remain blocked.",
+    "Dormitory 369 is accepted only as a smooth warm-wall albedo/roughness field on runs 0..5; the five-visible-tier versus fallback-6-m discrepancy remains unresolved.",
+    "No image in this set is an independent gameplay art acceptance."
+  ]
+}

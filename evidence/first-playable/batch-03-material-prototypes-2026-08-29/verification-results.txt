@@ -1,0 +1,54 @@
+Batch 03 material prototype verification — 2026-08-29
+
+1. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --editor --path . --quit`
+   Exit 0 — project scan/import and script registration pass.
+
+2. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_batch_03_material_contract.gd`
+   Exit 0 — PASS: three deterministic derivative-filtered prototype fields; exact identities/receivers/source geometry/foundation; zero runtime attachment/navigation; unchanged collision/spray; accepted Batch 02 bytes and prior facade signatures; five evidence-blocked exclusions; Museum/Oasis/non-target controls.
+
+3. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --check-only --script game/tests/batch_03_material_proof_capture.gd`
+   Exit 0 — the approval-gated controlled proof harness parses; it was not executed.
+
+4. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_batch_02_material_contract.gd`
+   Exit 0 — PASS: accepted six Batch 02 prototype controls unchanged.
+
+5. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_scene_parse.gd`
+   Exit 0 — PASS: parsed 4 gameplay scenes.
+
+6. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_gameplay_contract.gd`
+   Exit 0 — PASS: input, movement, jetpack, boundary, scene, water, billboard, layer and ambient contracts.
+
+7. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_world_material_contract.gd`
+   Exit 0 — PASS: 11 existing semantic materials unchanged.
+
+8. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/validate_generated_world.gd`
+   Exit 0 — PASS: 735 playable + 4 context rows, 38 chunks, content `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164`.
+
+9. `node tools/validate_godot_world.mjs`
+   Exit 0 — valid: 38 chunks, 729 physical objects, 214 roofs, 14,904 foundation samples, 2,492,288 terrain samples.
+
+10. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_hawkins_facade_contract.gd`
+    Exit 0 — PASS: accepted Hawkins facade/massing signature `d311c103c9273b94fc982588f46bae6ab67ba6be54b0d0a111dd305e39c22219`; runtime 48,389 triangles.
+
+11. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_building_3_facade_contract.gd`
+    Exit 0 — PASS: accepted Building 3 exact-run facade unchanged.
+
+12. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_isle_house_facade_contract.gd`
+    Exit 0 — PASS: accepted Isle House high subset unchanged; Museum remains unattached.
+
+13. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/full_runtime_integration.gd`
+    Exit 0 — PASS: 38 chunks, 729 meshes, 48,389 triangles, 466 bodies/shapes; gameplay/interactions and cleanup pass.
+
+14. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/automated_route_qa.gd`
+    Exit 0 — PASS: continuous 262.349 m route, zero recovery, teleport, stall or boundary loss.
+
+15. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/automated_route_qa.gd -- --whole-island-route`
+    Exit 0 — PASS: 3,449.107 m, five regions, zero recovery/teleport/stall, max step 0.348 m.
+
+16. `git diff --exit-code -- data/osm generated/world`
+    Exit 0 — no generated or frozen-source byte changes.
+
+17. `.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/batch_03_material_proof_capture.gd`
+    Not executed — explicit owner approval remains unanswered. No retry, GUI launch, audible prompt, or substitute renderer was used in this round.
+
+Expected environment-only warnings in headless commands: restricted `user://logs` rotation and macOS CA-certificate lookup. No test assertion failed.
