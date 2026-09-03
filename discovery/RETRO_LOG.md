@@ -5811,3 +5811,32 @@ No approach selected.
   interactive keychain helper directly.
 - Put every genuinely human-only action in `HUMAN.md`, state exactly what it
   blocks, and continue all work outside that scope.
+
+## 2026-09-03 — GitHub delivery recovery and closeout
+
+### Delivery-state recovery (`/root/delivery_state_recovery`)
+
+#### What worked well
+
+- Comparing the exact local head, local remote-tracking ref, and live remote
+  ref before each normal push made the fast-forward boundary explicit.
+- Checking repository permission through the authenticated client before the
+  first push distinguished usable delivery access from mere login state.
+- Keeping human-only acceptance separate from technical publication allowed
+  delivery to continue without weakening the remaining owner-facing caveat.
+
+#### What did not work well
+
+- A system-wide command lookup initially made the authenticated client appear
+  absent even though the project-local installation was complete and usable.
+- Delivery required a second small fast-forward because the owner-action queue
+  could only truthfully record the first push after it had succeeded.
+
+#### What the team should change next time
+
+- Resolve the recorded project-local tool path before treating a missing
+  system-wide command as an access blocker.
+- Record authentication, write permission, and live remote publication as
+  separate gates; verify all three before declaring delivery complete.
+- Keep committing locally and advance every independent workstream whenever an
+  external gate affects only one narrow part of the handoff.
