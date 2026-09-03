@@ -1,0 +1,6 @@
+command=/usr/bin/python3 - build/final-verification-staging-2026-09-03-111725/Treasure\ Island\ First\ Playable.app/Contents/Resources/Treasure\ Island\ First\ Playable.pck evidence/first-playable/final-verification-2026-09-03-105408/checks/candidate-2-pck-generated-descriptors.tsv <<PY [independent Godot PCK v4 parser]
+FAIL: content hash 595949ded9bf1ca769806d0f18467011a0618ca38b283c1c135f5a9c6f1d5eca
+real 2.03
+user 0.09
+sys 0.05
+exit_status=1

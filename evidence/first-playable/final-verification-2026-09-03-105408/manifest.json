@@ -1,0 +1,185 @@
+{
+  "schema": "treasure-island.final-verification/2",
+  "status": "technical_pass_with_native_warm_state_limitation_and_pending_owner_acceptance",
+  "review_status": "independently_cleared_pass_with_limitations",
+  "evidence_directory": "evidence/first-playable/final-verification-2026-09-03-105408",
+  "candidate": {
+    "absolute_path": "$ROOT/build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app",
+    "relative_path": "build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app",
+    "executable": {
+      "relative_path": "Contents/MacOS/Treasure Island First Playable",
+      "sha256": "49c7518acfb5443b0cee2f22d65a45405ab62c79a2112d7e770ca1c030eca594",
+      "bytes": 170963648,
+      "architectures": ["x86_64", "arm64"]
+    },
+    "pck": {
+      "relative_path": "Contents/Resources/Treasure Island First Playable.pck",
+      "sha256": "4d9e1d47f8777dbe2d7ca57f9a93d840a708dfcc35c18e99e54a77c36eeb266e",
+      "bytes": 55816660,
+      "virtual_files": 574
+    },
+    "bundle_inventory": {
+      "files": 7,
+      "logical_bytes": 226853148,
+      "algorithm": "sorted path\\0sha256\\0bytes\\n",
+      "sha256": "7816c944b470a7542dea1030d9b09cd28c2ec25880fe5131f69bb60460089960"
+    },
+    "identity": {
+      "name": "Treasure Island First Playable",
+      "bundle_id": "local.treasure-island.first-playable",
+      "version": "0.1.0",
+      "package_type": "APPL",
+      "platform": "MacOSX"
+    },
+    "signature": {
+      "deep_strict": true,
+      "arm64_strict": true,
+      "x86_64_strict": true,
+      "kind": "adhoc_hardened_runtime",
+      "team_identifier": null,
+      "entitlements": {},
+      "arm64_candidate_cdhash_full": "2afd4a14f28c020d2f767f6ef86470ace4e8d22f5b51382c999fb2edb2333c4d",
+      "x86_64_candidate_cdhash_full": "91edec9bffd4260fc7cbe0cf5baa370fc9b5433c3cc0040d3b5ca67e88435c0e"
+    }
+  },
+  "source": {
+    "branch": "main",
+    "head": "08219c9e11c8bd6ce681e48860bb906db07e82f7",
+    "origin_main": "08219c9e11c8bd6ce681e48860bb906db07e82f7",
+    "head_tree": "a02b1c5b645c02d60a18d01e89f6e2f71bb7e04f",
+    "pre_export_tracked_diff_sha256": "f105c301003405fbf888b8b5fd5c8d7d0ad49a67f12b0c21ff0cc4e4c35fad72",
+    "pre_export_export_impact_diff_sha256": "4693b5c4c133a8b6b18c8167c470aabfa921d732deec9bb65fafad402f72d97a",
+    "source_inventory": {
+      "files_at_export": 496,
+      "sha256_at_export": "808dbdba8b90cc7b6c2b74cae52f3a5dd9bf0560e2ec827d9af6dd3f726c3872",
+      "pre_post_export_exact_match": true,
+      "post_export_reconciled": {
+        "files": 496,
+        "sha256": "6fa2989e4a7a9c9fc93f6cf519e67731088ff875c545592da6d68c14e576d98c",
+        "exact_match_to_export_snapshot": false,
+        "changed_paths": 1,
+        "documentation_only_path": "game/tests/README.md",
+        "export_snapshot_sha256": "1cdbde5b6b3ad9c163f5c617431ea354c34f592c9da2a83051a1a77891695ba8",
+        "export_snapshot_bytes": 16362,
+        "reconciled_sha256": "9ebec1bc5b725b698897cb83dfb5509e48bb51dd5a122042e53df8ea7d1ca8e2",
+        "reconciled_bytes": 18503,
+        "other_495_exact_match": true,
+        "other_495_inventory_sha256": "dd70d46ce100951ac9ce7713bd771582dfe6787015b631cc12721b13f01fd0c0"
+      }
+    }
+  },
+  "engine": {
+    "path": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+    "version": "4.7.2.stable.official.ed1daf0bf"
+  },
+  "verifier_system": {
+    "product": "macOS",
+    "version": "26.2",
+    "build": "25C56",
+    "architecture": "arm64",
+    "renderer_device": "Apple M2 (Apple8)",
+    "approved_owner_target": "Apple M1 Pro",
+    "recorded_after_run_during_same_boot": true,
+    "recorded_at_launch_time": false,
+    "record": "checks/same-boot-system-record-2026-09-03.md"
+  },
+  "generated_world": {
+    "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "manifest_bytes": 27087,
+    "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+    "generated_files": 47,
+    "indexed_files": 46,
+    "chunks": 38,
+    "source_rows": 739,
+    "playable_rows": 735,
+    "context_rows": 4,
+    "generated_topology": {"meshes": 729, "surfaces": 739, "triangles": 48389},
+    "runtime_topology": {"meshes": 1278, "surfaces": 1288, "triangles": 55067, "bodies": 466, "shapes": 466}
+  },
+  "visual_evidence": {
+    "relative_path": "evidence/first-playable/exact-current-visual-repair-2026-09-03-104510",
+    "kind": "native_forward_plus_metal_source_project",
+    "views": 12,
+    "independent_review": "pass_with_limitation",
+    "package_pixels": false,
+    "owner_recognition": false
+  },
+  "package_gates": {
+    "export_exit": 0,
+    "independent_pck_parse_exit": 0,
+    "bundle_inventory_exit": 0,
+    "plist_privacy_architecture_exit": 0,
+    "codesign_exit": 0,
+    "mounted_pck_audit_exit": 0,
+    "packaged_headless_smoke": {"exit": 0, "pid": 47736, "elapsed_seconds": 8},
+    "native_metal_first_retained_invocation": {
+      "exit": 1,
+      "pid": 48373,
+      "elapsed_seconds": 42,
+      "renderer": "Metal 4.0 Forward+",
+      "device": "Apple M2 (Apple8)",
+      "world_visual_movement_readiness": true,
+      "jetpack_assertion_reached": false,
+      "reason": "unchanged_internal_60_simulation_second_timeout"
+    },
+    "native_metal_smoke_warm_rerun": {
+      "exit": 0,
+      "pid": 49420,
+      "elapsed_seconds": 10,
+      "renderer": "Metal 4.0 Forward+",
+      "device": "Apple M2 (Apple8)",
+      "warm_state_rerun": true
+    }
+  },
+  "smoke_metrics": {
+    "walk_mps": 4.0,
+    "run_mps": 20.0,
+    "acceleration_mps2": 30.0,
+    "braking_mps2": 40.0,
+    "jetpack_rise_m": 2.751,
+    "jetpack_ascent_velocity_mps": 5.0,
+    "released_descent_m": 0.3,
+    "minimum_vertical_velocity_mps": -1.5
+  },
+  "pre_sanitization_verification_round_end": {
+    "timestamp": "2026-09-03T11:34:47-0700",
+    "tracked_diff_sha256_after_round_retro": "e2f66f8cdeba34461bfa7056c3ba0e73fa880b0e805e2adde301d3febb876a75",
+    "staged_changes": 0,
+    "git_diff_check": "pass",
+    "exact_candidate_processes": 0,
+    "godot_processes": 0
+  },
+  "evidence_publication": {
+    "pre_sanitization_independent_review": "blocked_for_evidence_sanitization",
+    "post_sanitization_independent_review": "pass_with_limitations",
+    "post_sanitization_review": "POST_SANITIZATION_REVIEW.md",
+    "account_path_replacement": "$ROOT",
+    "configured_private_account_hits_in_publishable_text": 0,
+    "configured_private_account_hits_in_candidate_pck": 0,
+    "raw_unsanitized_copy": "ignored build/private-evidence-preservation-2026-09-03-115715",
+    "raw_unsanitized_copy_must_not_be_committed": true,
+    "partial_capture_directories_unpublished": [
+      "exact-current-visual-repair-2026-09-03-104116",
+      "exact-current-visual-repair-2026-09-03-104322"
+    ],
+    "superseded_raw_log_unpublished": "logs/29_codesign.log",
+    "checksum_ledger": {
+      "path": "checksums.sha256",
+      "entries": 86,
+      "hashes_itself": false
+    }
+  },
+  "limits": {
+    "owner_play_acceptance": false,
+    "owner_visual_recognition_acceptance": false,
+    "developer_id_signed": false,
+    "notarized": false,
+    "gatekeeper_distribution_claim": false,
+    "x86_64_executed": false,
+    "approved_m1_pro_executed": false,
+    "cold_first_run_native_smoke_passed": false,
+    "post_sanitization_independent_review_passed": true,
+    "source_visual_capture_claimed_as_package_pixels": false,
+    "decompressed_whole_package_privacy_scan_claimed": false
+  }
+}

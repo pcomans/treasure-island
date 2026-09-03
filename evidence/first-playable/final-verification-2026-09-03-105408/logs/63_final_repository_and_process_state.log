@@ -1,0 +1,47 @@
+timestamp=2026-09-03T11:34:47-0700
+branch=main
+head=08219c9e11c8bd6ce681e48860bb906db07e82f7
+origin_main=08219c9e11c8bd6ce681e48860bb906db07e82f7
+head_tree=a02b1c5b645c02d60a18d01e89f6e2f71bb7e04f
+final_tracked_diff_command=git diff --binary --no-ext-diff | shasum -a 256
+final_tracked_diff_sha256=e2f66f8cdeba34461bfa7056c3ba0e73fa880b0e805e2adde301d3febb876a75
+staged_changes=none
+diff_check=PASS
+candidate_executable_sha256=49c7518acfb5443b0cee2f22d65a45405ab62c79a2112d7e770ca1c030eca594
+candidate_pck_sha256=4d9e1d47f8777dbe2d7ca57f9a93d840a708dfcc35c18e99e54a77c36eeb266e
+exact_candidate_processes=none
+Godot_processes=none
+git_status_short_begin
+ M INSTALL_LOG.md
+ M PLAYTEST.md
+ M README.md
+ M discovery/RESOURCE_REQUESTS.md
+ M discovery/RETRO_LOG.md
+ M evidence/first-playable/README.md
+ M export_presets.cfg
+ M game/scripts/main.gd
+ M game/scripts/world/facades/building_1_live_field.gd
+ M game/scripts/world/facades/building_1_recognizable_facade.gd
+ M game/scripts/world/facades/w291196370_live_modules.gd
+ M game/scripts/world/facades/w34313515_live_modules.gd
+ M game/scripts/world/facades/w34313520_live_modules.gd
+ M game/scripts/world/facades/w34313525_live_modules.gd
+ M game/scripts/world/facades/w34313564_live_modules.gd
+ M game/scripts/world/vegetation_builder.gd
+ M game/tests/README.md
+ M game/tests/headless_batch_06_exact_receiver_trial_contract.gd
+ M game/tests/headless_building_1_recognizability_evidence_contract.gd
+ M game/tests/rendered_visual_evidence_capture.gd
+ M project.godot
+?? evidence/first-playable/exact-current-visual-qa-2026-09-03-095709/
+?? evidence/first-playable/exact-current-visual-repair-2026-09-03-104116/
+?? evidence/first-playable/exact-current-visual-repair-2026-09-03-104322/
+?? evidence/first-playable/exact-current-visual-repair-2026-09-03-104510/
+?? evidence/first-playable/final-verification-2026-09-03-105408/
+?? evidence/first-playable/startup-repair-mac-run-2026-08-31-190724/
+?? game/tests/headless_startup_configuration_contract.gd
+?? game/tests/headless_startup_configuration_contract.gd.uid
+?? game/tests/mounted_pck_content_audit.gd
+?? game/tests/mounted_pck_content_audit.gd.uid
+git_status_short_end
+exit_status=0

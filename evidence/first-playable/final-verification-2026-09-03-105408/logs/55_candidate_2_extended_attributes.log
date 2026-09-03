@@ -1,0 +1,4 @@
+command=/usr/bin/xattr -lr build/final-verification-staging-2026-09-03-111725/Treasure\ Island\ First\ Playable.app; /usr/bin/xattr -p com.apple.quarantine build/final-verification-staging-2026-09-03-111725/Treasure\ Island\ First\ Playable.app
+recursive_xattr_names=none
+quarantine_present=false
+exit_status=0

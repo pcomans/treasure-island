@@ -1,0 +1,7 @@
+command=.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_ymca_wall_tangent_projection_contract.gd
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: YMCA alone uses a generated-normal wall-tangent/vertical metre projection on exact runs 3..11; SSE 3..7 and ENE 8..11 each preserve collinear phase and physical scale, the orthogonal 7-to-8 corner and accepted-to-placeholder 11-to-12 boundary remain exact, and all protected shared/non-YMCA resources are unchanged
+real 0.80
+user 0.13
+sys 0.13

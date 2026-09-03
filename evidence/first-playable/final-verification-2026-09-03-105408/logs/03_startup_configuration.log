@@ -1,0 +1,7 @@
+command=.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_startup_configuration_contract.gd
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: project startup selects exact Dummy audio before AudioServer initialization and packaged smoke expects accepted runtime topology 1278/1288/55067
+real 1.19
+user 0.67
+sys 0.14

@@ -1,0 +1,10 @@
+command=/usr/bin/python3 - build/final-verification-staging-2026-09-03-111725/Treasure\ Island\ First\ Playable.app/Contents/Resources/Treasure\ Island\ First\ Playable.pck evidence/first-playable/final-verification-2026-09-03-105408/checks/candidate-2-pck-generated-descriptors.tsv <<PY [independent Godot PCK v4 parser; canonical path\0sha256\0bytes\n content hash]
+PCK_HEADER: format=4 engine=4.7.2 flags=2 file_base=112 directory_offset=55754464
+PCK_IDENTITY: sha256=4d9e1d47f8777dbe2d7ca57f9a93d840a708dfcc35c18e99e54a77c36eeb266e bytes=55816660 virtual_files=574
+GENERATED_IDENTITY: files=47 indexed=46 manifest_sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3 manifest_bytes=27087 content_sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 canonical_input_bytes=4290
+DESCRIPTOR_TSV: path=evidence/first-playable/final-verification-2026-09-03-105408/checks/candidate-2-pck-generated-descriptors.tsv sha256=595949ded9bf1ca769806d0f18467011a0618ca38b283c1c135f5a9c6f1d5eca bytes=4290
+PASS: independent raw PCK v4 parser verified directory bounds, exact generated set, per-file PCK directory MD5, manifest SHA-256, byte counts, indexed SHA-256 values, and canonical NUL-delimited content identity
+real 0.17
+user 0.08
+sys 0.04
+exit_status=0

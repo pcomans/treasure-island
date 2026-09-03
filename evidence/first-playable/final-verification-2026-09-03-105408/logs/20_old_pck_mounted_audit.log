@@ -1,0 +1,11 @@
+command=$ROOT/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --main-pack $ROOT/build/startup-repair-staging-2026-08-31-190724/Treasure\ Island\ First\ Playable.app/Contents/Resources/Treasure\ Island\ First\ Playable.pck --script $ROOT/game/tests/mounted_pck_content_audit.gd -- --pck-audit-pck=$ROOT/build/startup-repair-staging-2026-08-31-190724/Treasure\ Island\ First\ Playable.app/Contents/Resources/Treasure\ Island\ First\ Playable.pck --pck-audit-pck-sha256=57bd62fdacacbc62c5443506e2ee5a4e5e96675bbb43ff36f4e5e4522115fee5 --pck-audit-manifest-sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3 --pck-audit-content-sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: PCK_AUDIT_FAIL [mount_boundary]: The resource root is not an exported project.binary-only mount.
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail ($ROOT/game/tests/mounted_pck_content_audit.gd:597)
+       [1] _initialize ($ROOT/game/tests/mounted_pck_content_audit.gd:97)
+real 0.88
+user 0.28
+sys 0.11

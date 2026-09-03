@@ -1,8 +1,8 @@
 # First-playable evidence index
 
-Checked: 2026-08-28
+Checked: 2026-09-03
 
-This directory separates reproducible automated proof from owner feedback. Current source and packaged evidence are bound to generated content SHA-256 `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164` and manifest SHA-256 `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`. The active skyline is the single-color `2212x340` silhouette with SHA-256 `9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5`, on a `3900x600 m` billboard at `(-1875,264.85,4306.4)`. The sole current private handoff is `build/car-speed-staging-2026-08-28-231815/Treasure Island First Playable.app`; the `224622` textured-world app is historical pre-tuning evidence.
+This directory separates reproducible automated proof, native-launch proof, autonomous-review status, and owner feedback. Current source and packaged evidence are bound to generated content SHA-256 `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164` and manifest SHA-256 `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`. The active skyline is the single-color `2212x340` silhouette with SHA-256 `9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5`, on a `3900x600 m` billboard at `(-1875,264.85,4306.4)`. The sole current private handoff is `build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app`; the `190724` startup-repair, `231815` car-speed, and `224622` textured-world apps are historical.
 
 ## Current result
 
@@ -11,26 +11,39 @@ This directory separates reproducible automated proof from owner feedback. Curre
 - **USGS terrain source and derivation: pass.** The accepted `1669x2048` crop has `2,492,288` valid samples from `-1.080` to `104.756 m`; five in-bounds pins, exact source hash, bounds, locked raster ID, and 18 derived surface anchors are enforced. The rejected over-limit export is not retained. See [terrain provenance](../../data/terrain/README.md).
 - **Coherent surfaces/foundations and pavement skin: pass.** Exact serialized land collision planes support every road/major-area/terrain-overlay triangle. The independent validator checked `206,339` road/area points and `14,904` exterior-foundation samples, with zero positive foundation gap, roof-flatness error, source-height deviation, or unsupported-water fallback segments. The visual-only pavement skin preserves all `208` vehicle-road sources plus `219` pedestrian sources without changing physical collision.
 - **Ferry-arrival spawn: pass in current generated/runtime world.** The exact foot-level transform is `[-104.364, 3.457, 786.024]`, yaw `-0.119`; startup settles on collision while hidden and reveals only when grounded.
-- **Clean full-runtime headless suite: pass.** The real main scene loaded `38/38` chunks, instantiated `729` meshes with `48,381` triangles and `466` nonempty static bodies/shapes, revealed grounded at `0.000 m` clearance, kept walk/run clearance within `-0.002..+0.001 m`, landed/recovered at `0.000 m`, exercised camera, spray, tag eviction, and fail-closed reload behavior, then exited cleanly.
+- **Audio-startup source repair: pass.** `project.godot` selects the exact case-sensitive `Dummy` driver before Godot initializes audio, which removes the affected CoreAudio startup dependency without removing any approved behavior because this milestone has no audio nodes, assets, or promise. The focused contract also pins the corrected package-smoke oracle at `1,278/1,288/55,067` meshes/surfaces/triangles.
+- **Clean full-runtime headless suite: pass.** The real main scene loaded `38/38` chunks and `729` physical records, instantiated `1,278` meshes, `1,288` surfaces, `55,067` triangles, and `466` nonempty static body/shape pairs, revealed grounded at `0.000 m` clearance, kept walk/run clearance within `-0.002..+0.001 m`, landed/recovered at `0.000 m`, exercised camera, spray, tag eviction, and fail-closed reload behavior, then exited cleanly.
 - **Deterministic visual-only vegetation: pass.** Seed `1414092337` produces `124` exactly grounded placements across all `15` curated Kenney GLBs in `19` MultiMesh batches, with zero added collision. The 102-placement procedural set is preserved and the 22 accepted NAIP shrub points are included with deterministic assets/transforms and no YBI placements. See [final rendered evidence](textured-world-final-rendered-2026-08-28-223242/README.md).
 - **Semantic Poly Haven material contract: pass.** All 11 semantic material keys use their approved diffuse/OpenGL-normal/roughness identities and effective repeats, backed by 18 packaged 1K texture maps with repeat, anisotropic mipmaps, subtle normals, and displacement disabled.
 - **Jetpack source runtime: pass.** Physical Space provides sustained capped ascent, walk/run steering remains active in air, release caps slow descent, a second mid-air press renews ascent, and the player lands without recovery. The strengthened source package-smoke path also exercises rise/release physics. See [jetpack evidence](jetpack/README.md).
 - **Automated continuous route: pass across the whole island.** With the current movement tuning, the real player completed the `262.349 m` grounded ferry/road route and used real run/Space input to land at southwest, center, north, and east-perimeter anchors during a `3,449.107 m` whole-island route. Both recorded zero stalls, recoveries, boundary escapes, or post-start transform writes. The retained [coherent-surface route record](coherent-surface-route-2026-08-28-1458/README.md) remains historical geometry evidence from the earlier tuning.
-- **Final textured-world source-project visuals: pass.** The inspected 13-frame `1440×900` Forward+/Metal set includes five grounded island regions, two elevated owner-comparison angles, one real-controller tag, SF/YBI/bridge context, vegetation views, and the fixed NAIP shrub row. Final art review passed the surface/material hierarchy and accepted the remaining large-field/wall repetition at hobby-project scope. See [final rendered evidence](textured-world-final-rendered-2026-08-28-223242/README.md). These frames did not come from an exported bundle.
-- **Current car-speed native export: pass.** `build/car-speed-staging-2026-08-28-231815/Treasure Island First Playable.app` contains the exact current world and `4/20/30/40` movement defaults. Headless packaged smoke and the native Metal/Forward+ smoke with `--max-fps 60` pass through jetpack. Its mounted PCK contains 185 virtual files, including 47 generated files, 38 chunks, 18 textures, 15 vegetation imports, and all 22 NAIP shrubs; it reports `private=0` and `banned=0`. Universal architecture and strict deep signing pass. See [current package evidence](car-speed-mac-run-2026-08-28-231815/README.md).
+- **Current exact-source visuals: pass with limitation.** The canonical `104510` set contains twelve ordered `1440×900` native Forward+/Metal source-project originals spanning ferry, north, center, southwest, east perimeter, Building 1, SF/YBI/bridge context, an eligible tag, south vegetation, and a time-connected public-input jetpack pair. Independent review advanced it to full verification while retaining sparse/generic massing, the cyan overlay edge, and owner-recognition limits. These are not package pixels. See [current visual evidence](exact-current-visual-repair-2026-09-03-104510/README.md) and its [independent review](exact-current-visual-repair-2026-09-03-104510/INDEPENDENT_REVIEW.md).
+- **Superseded `095709` source-project visuals: historical point-in-time evidence.** Its internal README, manifest, and twelve PNG checksum entries remain byte-valid, but the ledger also pins the external capture harness as it existed before the later objective-ground-support repair. That one external entry now has expected current-tree drift; a whole-ledger check therefore reports exactly that mismatch. Do not rewrite or cite this superseded set as current—the canonical successor is `104510`.
+- **Historical August source-project visuals: retained.** The older 13-frame textured-world set preserves its byte-specific material review, but it predates the exact-current facade/capture repair. See [historical rendered evidence](textured-world-final-rendered-2026-08-28-223242/README.md).
+- **Current `111725` native export: technical pass with native-startup limitation.** The app has executable SHA-256 `49c7518acfb5443b0cee2f22d65a45405ab62c79a2112d7e770ca1c030eca594` (`170,963,648` bytes), PCK SHA-256 `4d9e1d47f8777dbe2d7ca57f9a93d840a708dfcc35c18e99e54a77c36eeb266e` (`55,816,660` bytes), and normalized seven-file inventory SHA-256 `7816c944b470a7542dea1030d9b09cd28c2ec25880fe5131f69bb60460089960` (`226,853,148` logical bytes). Export, raw PCK parsing, Universal architecture, strict deep/per-architecture signing, plist/privacy/xattr checks, outside-project mounted audit, and packaged headless smoke pass. The first retained Apple M2 native invocation timed out after world/visual/movement readiness; the identical warm-state rerun passed. Independent post-sanitization review cleared the publishable record as `PASS_WITH_LIMITATIONS`; owner/target/runtime limits remain. See [current package evidence](final-verification-2026-09-03-105408/README.md).
+- **The `190724` startup-repair app is historical.** Its static checks and ordinary verifier-host window/render-loop observation remain valid for its own bytes. A later outside-project mounted audit intentionally retains its PCK as an expected `node_modules/earcut/package.json` banned-path negative. See [historical startup-repair evidence](startup-repair-mac-run-2026-08-31-190724/README.md).
+- **The `231815` car-speed app is historical.** Its headless/capped-Metal packaged smokes and mounted-PCK audit remain valid for its own bytes, but it predates the final accepted facade attachment stack and the audio-startup repair. See [historical package evidence](car-speed-mac-run-2026-08-28-231815/README.md).
 - **The `224622` app is historical.** It contains the same approved world and final textured presentation but predates the `20 m/s` Shift-run amendment, so it must not be used to judge current movement. See [historical pre-tuning package evidence](textured-world-final-mac-run-2026-08-28-224622/README.md).
 - **The `224144` export is not current.** That earlier staging export failed only the stale, superseded flat-palette smoke assertion. It is retained only as historical diagnostic context and is not a handoff candidate.
 - **Historical pre-placement evidence remains retained.** The preceding render and app use `1950x300 m` at `(-2500,132.5,750)` and are not current. See [historical render](owner-silhouette-rendered-2026-08-28-1921/README.md) and [historical package](owner-silhouette-mac-run-2026-08-28-192220/README.md).
 - **Historical owner-outline evidence remains retained.** Its source Metal and private Mac package records remain valid only for the preceding outline and are not the current handoff. See [historical render](owner-skyline-rendered-2026-08-28-1900/README.md) and [historical package](owner-skyline-mac-run-2026-08-28-190242/README.md).
-- **Owner acceptance of this exact app: pending.** Earlier owner feedback confirmed the island, ordinary tag placement, and held-Space jetpack behavior in prior builds. Ordinary play of the exact `231815` car-speed app is still required, especially for fast-run feel; its automated and art-review passes do not substitute for that verdict.
+- **Owner acceptance of this exact app: pending.** Current source/static/package/deterministic-smoke evidence was produced on an Apple M2 verifier host, not the approved Apple M1 Pro owner target. Earlier owner feedback confirmed the island, ordinary tag placement, and held-Space jetpack behavior in prior builds. Ordinary mouse/keyboard play of exact candidate `111725` is still required, especially for Treasure Island recognition and fast-run/camera/jetpack/spray feel; source-project pixels and deterministic smokes do not substitute for that verdict.
 
-The required next step is the ordinary play pass in [`PLAYTEST.md`](../../PLAYTEST.md). Tight-gap camera polish and exhaustive spray rejection/isolation remain optional unless that playtest reproduces a blocker.
+The current package's headless and bounded Metal main-scene smokes are complete
+with the first-in-sequence timeout/warm-pass limitation above. The required
+acceptance step remains the ordinary play pass in
+[`PLAYTEST.md`](../../PLAYTEST.md). Tight-gap camera polish and exhaustive
+spray rejection/isolation remain optional unless that playtest reproduces a
+blocker.
 
 ## Evidence files
 
 - [`acceptance-audit.md`](acceptance-audit.md) — requirement-by-requirement verdict separating proven, incomplete, and owner-only acceptance items.
-- [`textured-world-final-rendered-2026-08-28-223242/README.md`](textured-world-final-rendered-2026-08-28-223242/README.md) — current 13-frame Metal/Forward+ art pass, exact revision, hashes, and evidence limits.
-- [`car-speed-mac-run-2026-08-28-231815/README.md`](car-speed-mac-run-2026-08-28-231815/README.md) — sole current package identity, mounted-PCK movement/world/privacy audit, packaged smokes, signatures, architecture, and plist facts.
+- [`exact-current-visual-repair-2026-09-03-104510/README.md`](exact-current-visual-repair-2026-09-03-104510/README.md) — canonical 12-view exact-source Metal/Forward+ set, hashes, physics/input evidence boundary, and independent `PASS_WITH_LIMITATION`.
+- [`final-verification-2026-09-03-105408/README.md`](final-verification-2026-09-03-105408/README.md) — current `111725` package identity, source binding, complete source/package gates, first native timeout plus identical warm pass, and remaining owner/target/distribution gates.
+- [`textured-world-final-rendered-2026-08-28-223242/README.md`](textured-world-final-rendered-2026-08-28-223242/README.md) — historical August 13-frame Metal/Forward+ art pass.
+- [`startup-repair-mac-run-2026-08-31-190724/README.md`](startup-repair-mac-run-2026-08-31-190724/README.md) — historical repaired package identity, source/static and ordinary verifier-host launch proof, plus its later expected-negative PCK classification.
+- [`car-speed-mac-run-2026-08-28-231815/README.md`](car-speed-mac-run-2026-08-28-231815/README.md) — historical pre-facade/pre-startup-repair package identity, mounted-PCK movement/world/privacy audit, packaged smokes, signatures, architecture, and plist facts.
 - [`textured-world-final-mac-run-2026-08-28-224622/README.md`](textured-world-final-mac-run-2026-08-28-224622/README.md) — historical pre-tuning package identity and audit.
 - [`spawn/README.md`](spawn/README.md) — frozen ferry source chain, projected coordinates, exact clearance proof, hashes, and clean follow-up test results.
 - [`jetpack/README.md`](jetpack/README.md) — source input/controller behavior, live ascent/air-control/descent/landing metrics, and strengthened source package-smoke result.
@@ -78,6 +91,10 @@ The required next step is the ordinary play pass in [`PLAYTEST.md`](../../PLAYTE
 | Building-part memberships | 2 |
 | Generated chunks | 38 |
 | Physical records | 729 |
+| Generated record-owned meshes / surfaces / triangles | 729 / 739 / 48,389 |
+| Loaded total meshes / surfaces / triangles | 1,278 / 1,288 / 55,067 |
+| Loaded static bodies / shapes | 466 / 466 |
+| Collision-free vegetation instances / batches | 124 / 19 |
 | Unresolved / duplicate source rows | 0 / 0 |
 
 Membership categories overlap: ten playable rows belong to two categories, so the membership sum is not the unique-row total. The clean runtime reports `738` direct geometry source keys; the approved composite-only Isle House parent completes all `739` ledger obligations.
@@ -107,16 +124,24 @@ node tools/check_godot_world_determinism.mjs
 node tools/render_world_coverage_evidence.mjs --validate-only evidence/first-playable/coherent-surface-coverage-2026-08-28-1458
 
 GODOT=".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot"
+"$GODOT" --headless --path . --script game/tests/headless_startup_configuration_contract.gd
 "$GODOT" --headless --path . --script game/tests/headless_scene_parse.gd
 "$GODOT" --headless --path . --script game/tests/headless_gameplay_contract.gd
 "$GODOT" --headless --path . --script game/tests/headless_world_material_contract.gd
 "$GODOT" --headless --path . --script game/tests/validate_generated_world.gd
 "$GODOT" --headless --path . --script game/tests/full_runtime_integration.gd
 "$GODOT" --headless --path . --script game/tests/automated_route_qa.gd
+"$GODOT" --headless --path . -- --mac-export-smoke
 
-APP_BINARY="build/car-speed-staging-2026-08-28-231815/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
+APP_BINARY="build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
 "$APP_BINARY" --headless -- --mac-export-smoke
 "$APP_BINARY" --max-fps 60 --rendering-method forward_plus --rendering-driver metal -- --mac-export-smoke
 ```
 
-Regeneration and export commands are kept in the root [`README.md`](../../README.md). The owner's remaining ground-level acceptance pass is in [`PLAYTEST.md`](../../PLAYTEST.md).
+The source command above passed. The exact `111725` headless package command
+passed; the first retained bounded Metal invocation reached
+world/visual/movement readiness and timed out before jetpack, while its
+identical immediate warm-state rerun passed. Regeneration and export commands
+are kept in the root [`README.md`](../../README.md). The owner's remaining
+ground-level Apple M1 Pro acceptance pass is in
+[`PLAYTEST.md`](../../PLAYTEST.md).

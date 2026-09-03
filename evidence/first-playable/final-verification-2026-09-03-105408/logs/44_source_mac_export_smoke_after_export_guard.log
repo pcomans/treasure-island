@@ -1,0 +1,12 @@
+command= .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . -- --mac-export-smoke
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=1278 surfaces=1288 triangles=55067 bodies=466 shapes=466 vegetation=124 seed=1414092337 batches=19 load_ms=6537
+MAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass
+MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass
+MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps
+PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent
+real 9.20
+user 7.16
+sys 0.26
+exit_status=0

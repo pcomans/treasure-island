@@ -1,0 +1,36 @@
+timestamp=2026-09-03T10:54:38-0700
+branch=main
+head=08219c9e11c8bd6ce681e48860bb906db07e82f7
+head_tree=a02b1c5b645c02d60a18d01e89f6e2f71bb7e04f
+origin_main=08219c9e11c8bd6ce681e48860bb906db07e82f7
+tracked_diff_sha256=7df4a796792e0d707c696509b0e9aee718f49c401f9045508364ed241c259cee
+source_change_diff_sha256=7c6def71e9869852830bf1f969917dd11e3c766173fe24c218a5920051844ba6
+startup_contract_sha256=c83702f06882cc15c61000a6f71c50cb063daabd0942b6c4d4ca08ec49fa4644
+pck_auditor_sha256=8a48c8ffc55d122fc934136d9d1c1c2439e1dc5b3ced7e3bb9f9ab790b60be18
+manifest_sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3
+manifest_content_sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164
+staged_paths=status_begin
+ M INSTALL_LOG.md
+ M PLAYTEST.md
+ M README.md
+ M discovery/RESOURCE_REQUESTS.md
+ M discovery/RETRO_LOG.md
+ M evidence/first-playable/README.md
+ M game/scripts/main.gd
+ M game/scripts/world/vegetation_builder.gd
+ M game/tests/README.md
+ M game/tests/rendered_visual_evidence_capture.gd
+ M project.godot
+?? evidence/first-playable/exact-current-visual-qa-2026-09-03-095709/
+?? evidence/first-playable/exact-current-visual-repair-2026-09-03-104116/
+?? evidence/first-playable/exact-current-visual-repair-2026-09-03-104322/
+?? evidence/first-playable/exact-current-visual-repair-2026-09-03-104510/
+?? evidence/first-playable/final-verification-2026-09-03-105408/
+?? evidence/first-playable/startup-repair-mac-run-2026-08-31-190724/
+?? game/tests/headless_startup_configuration_contract.gd
+?? game/tests/headless_startup_configuration_contract.gd.uid
+?? game/tests/mounted_pck_content_audit.gd
+?? game/tests/mounted_pck_content_audit.gd.uid
+status_end
+process_scan_begin
+process_scan_end

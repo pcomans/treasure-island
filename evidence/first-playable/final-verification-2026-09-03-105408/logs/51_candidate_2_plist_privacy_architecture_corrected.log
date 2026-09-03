@@ -1,0 +1,9 @@
+commands=/usr/bin/plutil -lint INFO PRIVACY; /usr/bin/file BINARY; /usr/bin/lipo -archs BINARY; /usr/libexec/PlistBuddy exact-key assertions; privacy key/exclusion assertions; uname -m
+build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app/Contents/Info.plist: OK
+build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy: OK
+build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable: Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64]
+build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable (for architecture x86_64):	Mach-O 64-bit executable x86_64
+build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable (for architecture arm64):	Mach-O 64-bit executable arm64
+lipo_archs=x86_64 arm64
+host_arch=arm64
+plist_identity=PASS executable=Treasure Island First Playable name=Treasure Island First Playable display=Treasure Island First Playable id=local.treasure-island.first-playable short_version=0.1.0 bundle_version=0.1.0 package_type=APPL platform=MacOSX high_res=true

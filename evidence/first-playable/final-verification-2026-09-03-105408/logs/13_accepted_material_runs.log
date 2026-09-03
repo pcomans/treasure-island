@@ -1,0 +1,7 @@
+command=.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_accepted_material_run_trials_contract.gd
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: three retained homogeneous fields and the eight accepted Batch 06/Building 1 field scopes remain unchanged; Building 1's complete 63-run ivory field and 45-module recognizability composition are independently accepted with documented limitations, immutable integration-time metadata remains byte-stable provenance, Fire Station and protected candidates remain unchanged, and the whole island is 729/1278/1288/55,067
+real 7.19
+user 6.91
+sys 0.11

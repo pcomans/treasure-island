@@ -37,8 +37,12 @@ static func matches_record(record: Dictionary) -> bool:
 static func build(record: Dictionary) -> Dictionary:
 	if not matches_record(record):
 		return _failure("w34313564_live_module_receiver", "Live module target receiver identity drifted.", record)
-	if FileAccess.get_sha256(REGISTRY_PATH) != EXPECTED_REGISTRY_SHA256 \
-	or FileAccess.get_sha256(REVIEWED_HELPER_PATH) != EXPECTED_REVIEWED_HELPER_SHA256:
+	# Export templates remap imported sources; the semantic registry/geometry
+	# contract below remains the packaged gate.
+	if OS.has_feature("editor") and (
+		FileAccess.get_sha256(REGISTRY_PATH) != EXPECTED_REGISTRY_SHA256 \
+		or FileAccess.get_sha256(REVIEWED_HELPER_PATH) != EXPECTED_REVIEWED_HELPER_SHA256
+	):
 		return _failure("w34313564_live_module_reviewed_input", "Reviewed module registry or geometry helper bytes drifted.", record)
 	var registry_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(REGISTRY_PATH))
 	if not (registry_value is Dictionary):

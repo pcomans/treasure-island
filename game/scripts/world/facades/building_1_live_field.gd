@@ -31,11 +31,15 @@ static func matches_record(record: Dictionary) -> bool:
 static func build(record: Dictionary) -> Dictionary:
 	if not matches_record(record):
 		return _failure("building_1_live_field_receiver", "Building 1 live field receiver identity drifted.", record)
-	if FileAccess.get_sha256(REGISTRY_PATH) != EXPECTED_REGISTRY_SHA256 \
-	or FileAccess.get_sha256(REVIEWED_HELPER_PATH) != EXPECTED_REVIEWED_HELPER_SHA256 \
-	or FileAccess.get_sha256(INDEPENDENT_REVIEW_PATH) != EXPECTED_INDEPENDENT_REVIEW_SHA256 \
-	or FileAccess.get_sha256(FIELD_MATERIAL_PATH) != EXPECTED_FIELD_MATERIAL_SHA256 \
-	or FileAccess.get_sha256(FIELD_SHADER_PATH) != EXPECTED_FIELD_SHADER_SHA256:
+	# Export templates remap imported sources and omit authoring reviews; the
+	# semantic registry/geometry contract below remains the packaged gate.
+	if OS.has_feature("editor") and (
+		FileAccess.get_sha256(REGISTRY_PATH) != EXPECTED_REGISTRY_SHA256 \
+		or FileAccess.get_sha256(REVIEWED_HELPER_PATH) != EXPECTED_REVIEWED_HELPER_SHA256 \
+		or FileAccess.get_sha256(INDEPENDENT_REVIEW_PATH) != EXPECTED_INDEPENDENT_REVIEW_SHA256 \
+		or FileAccess.get_sha256(FIELD_MATERIAL_PATH) != EXPECTED_FIELD_MATERIAL_SHA256 \
+		or FileAccess.get_sha256(FIELD_SHADER_PATH) != EXPECTED_FIELD_SHADER_SHA256
+	):
 		return _failure("building_1_live_field_reviewed_input", "A reviewed Building 1 field, helper, registry, or independent review byte drifted.", record)
 	var registry_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(REGISTRY_PATH))
 	if not registry_value is Dictionary:

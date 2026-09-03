@@ -1,0 +1,59 @@
+command=plutil -lint <Info.plist> <PrivacyInfo.xcprivacy>
+build/final-verification-staging-2026-09-03-105408/Treasure Island First Playable.app/Contents/Info.plist: OK
+build/final-verification-staging-2026-09-03-105408/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy: OK
+command=plutil -p <Info.plist>
+{
+  "CFBundleDevelopmentRegion" => "English"
+  "CFBundleDisplayName" => "Treasure Island First Playable"
+  "CFBundleExecutable" => "Treasure Island First Playable"
+  "CFBundleIconFile" => "icon.icns"
+  "CFBundleIdentifier" => "local.treasure-island.first-playable"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "Treasure Island First Playable"
+  "CFBundlePackageType" => "APPL"
+  "CFBundleShortVersionString" => "0.1.0"
+  "CFBundleSignature" => "TreasureIsland"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "0.1.0"
+  "DTPlatformBuild" => "14C18"
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "13.1"
+  "DTSDKBuild" => "22C55"
+  "DTSDKName" => "macosx13.1"
+  "DTXcode" => "1420"
+  "DTXcodeBuild" => "14C18"
+  "LSApplicationCategoryType" => "public.app-category.games"
+  "LSArchitecturePriority" => [
+    0 => "arm64"
+    1 => "x86_64"
+  ]
+  "LSMinimumSystemVersionByArchitecture" => {
+    "arm64" => "13.00"
+    "x86_64" => "11.00"
+  }
+  "NSHighResolutionCapable" => true
+  "NSHumanReadableCopyright" => "Private hobby project"
+  "NSPrincipalClass" => "NSApplication"
+}
+command=plutil -p <PrivacyInfo.xcprivacy>
+{
+  "NSPrivacyTracking" => false
+}
+command=file <executable>
+build/final-verification-staging-2026-09-03-105408/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable: Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64]
+build/final-verification-staging-2026-09-03-105408/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable (for architecture x86_64):	Mach-O 64-bit executable x86_64
+build/final-verification-staging-2026-09-03-105408/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable (for architecture arm64):	Mach-O 64-bit executable arm64
+command=lipo -archs <executable>
+x86_64 arm64
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/lib/python3.14/plistlib.py", line 70, in <module>
+    from xml.parsers.expat import ParserCreate
+  File "/opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/lib/python3.14/xml/parsers/expat.py", line 4, in <module>
+    from pyexpat import *
+ImportError: dlopen(/opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/lib/python3.14/lib-dynload/pyexpat.cpython-314-darwin.so, 0x0002): Symbol not found: _XML_SetAllocTrackerActivationThreshold
+  Referenced from: <1AAB1AFF-0B6A-3B67-86F5-A72CB69F8B1B> /opt/homebrew/Cellar/python@3.14/3.14.5/Frameworks/Python.framework/Versions/3.14/lib/python3.14/lib-dynload/pyexpat.cpython-314-darwin.so
+  Expected in:     <4D62FA9D-D86A-3DD0-98F2-C6D0718849E8> /usr/lib/libexpat.1.dylib
+architecture_contract=PASS universal=x86_64+arm64 native_host=arm64

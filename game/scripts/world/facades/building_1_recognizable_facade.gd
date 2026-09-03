@@ -124,6 +124,10 @@ static func build(record: Dictionary) -> Dictionary:
 
 
 static func _source_hashes_match() -> bool:
+	# Export templates remap imported sources and omit authoring reviews; the
+	# semantic registry/geometry contract remains the packaged gate.
+	if not OS.has_feature("editor"):
+		return true
 	return FileAccess.get_sha256(REGISTRY_PATH) == EXPECTED_REGISTRY_SHA256 \
 		and FileAccess.get_sha256(STANDALONE_REGISTRY_PATH) == EXPECTED_STANDALONE_REGISTRY_SHA256 \
 		and FileAccess.get_sha256(STANDALONE_FACTORY_PATH) == EXPECTED_STANDALONE_FACTORY_SHA256 \

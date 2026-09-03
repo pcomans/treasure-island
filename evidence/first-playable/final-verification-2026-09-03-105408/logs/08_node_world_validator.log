@@ -1,0 +1,29 @@
+command=node tools/validate_godot_world.mjs
+{
+  "chunks": 38,
+  "coherent_surface_samples": 206339,
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "flat_roof_cells": 214,
+  "foundation_samples": 14904,
+  "pavement": {
+    "base_records": 36,
+    "collision_sha256": "3c5571828de1498622fbcf074a0f3ec03790b14ad36160c9302652421c345296",
+    "pedestrian_records": 28,
+    "relative_luminance_difference": 1.7,
+    "visible_pedestrian_sources": 219
+  },
+  "physical_objects": 729,
+  "source_rows": 739,
+  "status": "valid",
+  "terrain_elevation_range_m": [
+    -1.08,
+    104.756
+  ],
+  "terrain_valid_samples": 2492288,
+  "vegetation_instances": 124,
+  "vegetation_seed": 1414092337,
+  "world": "generated/world"
+}
+real 2.87
+user 3.15
+sys 0.06

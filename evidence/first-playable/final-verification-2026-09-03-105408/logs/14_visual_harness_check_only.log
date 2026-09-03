@@ -1,0 +1,6 @@
+command=.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --check-only --script game/tests/rendered_visual_evidence_capture.gd
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+real 0.98
+user 0.65
+sys 0.08

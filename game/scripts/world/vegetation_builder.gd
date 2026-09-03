@@ -2,6 +2,10 @@ class_name VegetationBuilder
 extends RefCounted
 
 const RENDER_WORLD_VISIBLE := 1
+const FOLIAGE_MATERIAL_MARKERS := ["leaf", "grass"]
+const MIN_VEGETATION_ROUGHNESS := 0.82
+const PALM_FOLIAGE_ALBEDO := Color(0.16, 0.38, 0.16, 1.0)
+const PALM_WOOD_ALBEDO := Color(0.36, 0.23, 0.12, 1.0)
 
 
 func build(document: Dictionary) -> Dictionary:
@@ -39,7 +43,11 @@ func build(document: Dictionary) -> Dictionary:
 		var placements: Array = placements_by_asset[asset_path]
 		for component_index in components.size():
 			var component: Dictionary = components[component_index]
-			var mesh: Mesh = component.mesh
+			var mesh := _normalized_visual_mesh(component.mesh as Mesh, asset_path)
+			if mesh == null:
+				source.free()
+				root.free()
+				return {"ok": false, "code": "vegetation_asset_material", "message": "Could not prepare non-metallic vegetation materials for %s." % asset_path, "source_keys": []}
 			var multi_mesh := MultiMesh.new()
 			multi_mesh.transform_format = MultiMesh.TRANSFORM_3D
 			multi_mesh.use_colors = false
@@ -90,3 +98,43 @@ func _collect_mesh_components(node: Node, parent_transform: Transform3D, output:
 			output.append({"mesh": mesh_instance.mesh, "transform": current_transform})
 	for child: Node in node.get_children():
 		_collect_mesh_components(child, current_transform, output)
+
+
+func _normalized_visual_mesh(source_mesh: Mesh, asset_path: String) -> Mesh:
+	if source_mesh == null:
+		return null
+	var mesh := source_mesh.duplicate(true) as Mesh
+	if mesh == null:
+		return null
+	for surface_index in mesh.get_surface_count():
+		var source_material := mesh.surface_get_material(surface_index) as StandardMaterial3D
+		if source_material == null:
+			return null
+		var material := source_material.duplicate(true) as StandardMaterial3D
+		if material == null:
+			return null
+		var is_foliage := _is_foliage_material(source_material.resource_name)
+		# The curated Kenney GLBs declare even bark and foliage fully metallic.
+		# Correct that import-time placeholder while retaining the asset-authored
+		# palette, geometry, transforms, and deterministic placement contract.
+		material.metallic = 0.0
+		material.roughness = maxf(material.roughness, MIN_VEGETATION_ROUGHNESS)
+		if is_foliage:
+			material.cull_mode = BaseMaterial3D.CULL_DISABLED
+		if asset_path.get_file().begins_with("tree_palm"):
+			# Keep the source hue roles but pull the enlarged palms out of the
+			# conspicuous pastel placeholder range used by their raw GLB colors.
+			material.albedo_color = PALM_FOLIAGE_ALBEDO if is_foliage else PALM_WOOD_ALBEDO
+		material.set_meta("vegetation_material_normalized", true)
+		material.set_meta("vegetation_source_material_name", source_material.resource_name)
+		material.set_meta("vegetation_foliage_two_sided", is_foliage)
+		mesh.surface_set_material(surface_index, material)
+	return mesh
+
+
+func _is_foliage_material(material_name: String) -> bool:
+	var normalized_name := material_name.to_lower()
+	for marker: String in FOLIAGE_MATERIAL_MARKERS:
+		if normalized_name.contains(marker):
+			return true
+	return false

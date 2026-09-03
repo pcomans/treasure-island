@@ -1,0 +1,8 @@
+command=/usr/bin/python3 - build/final-verification-staging-2026-09-03-111725/Treasure\ Island\ First\ Playable.app evidence/first-playable/final-verification-2026-09-03-105408/checks/candidate-2-bundle-inventory.tsv <<PY [exact seven-file bundle inventory; canonical path\0sha256\0bytes\n digest]
+Traceback (most recent call last):
+  File "<stdin>", line 26, in <module>
+TypeError: cannot unpack non-iterable int object
+real 0.06
+user 0.02
+sys 0.01
+exit_status=1

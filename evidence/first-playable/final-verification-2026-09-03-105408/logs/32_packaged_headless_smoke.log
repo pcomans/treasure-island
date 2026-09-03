@@ -1,0 +1,8 @@
+command=$ROOT/build/final-verification-staging-2026-09-03-105408/Treasure\ Island\ First\ Playable.app/Contents/MacOS/Treasure\ Island\ First\ Playable --headless -- --mac-export-smoke
+pid=99128
+99128 00:00 $ROOT/build/final-verification-staging-2026-09-03-105408/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable --headless -- --mac-export-smoke
+ERROR: MAC_EXPORT_WORLD_FAILED: code=w34313520_live_module_reviewed_input message=Reviewed field/BAY registry, exact helper, or independent calibration review bytes drifted. sources=["w34313520"]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+process_exit=1

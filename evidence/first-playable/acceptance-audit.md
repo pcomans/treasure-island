@@ -1,11 +1,71 @@
 # First-playable acceptance audit
 
-Checked: 2026-08-28  
+Original audit checked: 2026-08-28
+Canonical reconciliation: 2026-09-03
 Original reviewer: acceptance audit agent (`/root/runtime_review_sol`)  
 Jetpack/package delivery recheck: completion audit agent (`/root/completion_audit_sol`)  
-Scope: the current repository and retained evidence for the approved private Treasure Island first playable
+Scope: the repository and retained evidence for the approved private Treasure Island first playable
 
-## Result
+> **Historical-boundary notice:** the detailed 18-ID matrix, package rows, and
+> byte-specific measurements below are a sealed 2026-08-28 point-in-time audit.
+> They are preserved rather than rewritten to describe later bytes. The
+> 2026-09-03 addendum immediately below is the canonical current status.
+
+## 2026-09-03 exact-current addendum
+
+The sole current private handoff is
+`build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app`.
+It is bound to `main` HEAD/origin
+`08219c9e11c8bd6ce681e48860bb906db07e82f7`, tree
+`a02b1c5b645c02d60a18d01e89f6e2f71bb7e04f`, plus the retained
+working-tree snapshot recorded in
+[`final-verification-2026-09-03-105408/`](final-verification-2026-09-03-105408/README.md).
+
+- Executable:
+  `49c7518acfb5443b0cee2f22d65a45405ab62c79a2112d7e770ca1c030eca594`,
+  `170,963,648` bytes.
+- PCK:
+  `4d9e1d47f8777dbe2d7ca57f9a93d840a708dfcc35c18e99e54a77c36eeb266e`,
+  `55,816,660` bytes.
+- Seven-file bundle: `226,853,148` logical bytes; normalized inventory
+  SHA-256
+  `7816c944b470a7542dea1030d9b09cd28c2ec25880fe5131f69bb60460089960`.
+- World denominator: `739` unique source rows
+  (`735` playable + `4` context), `38` chunks, and `729` physical
+  generated records. Generated record-owned render topology is
+  `729 meshes / 739 surfaces / 48,389 triangles`; total loaded topology
+  after visual facade attachments is
+  `1,278 / 1,288 / 55,067`, with `466` body/shape pairs. The `124`
+  collision-free vegetation instances in `19` batches remain outside the
+  fixed generated-record denominator.
+- Exact-current source contracts, full runtime, ordinary controller route,
+  continuous whole-island route, export, raw PCK parsing, bundle/plist/privacy/
+  architecture/signature/xattr checks, outside-project mounted-PCK audit, and
+  packaged headless semantic smoke pass. The first retained native Apple M2
+  invocation reached world/visual/movement readiness and timed out before
+  jetpack; its identical immediate warm-state rerun passed. This is not a
+  cold-start pass.
+- The canonical
+  [`104510` twelve-view source-project set](exact-current-visual-repair-2026-09-03-104510/README.md)
+  received independent `PASS_WITH_LIMITATION`. It proves its bounded
+  source-view and time-connected jetpack invariants, not package pixels or
+  owner recognition.
+
+The verifier host was Apple M2 arm64; the approved owner target remains Apple
+M1 Pro. The Universal `x86_64` slice is statically present and strictly
+signed but unexecuted. Developer ID signing, notarization, and Gatekeeper
+distribution acceptance remain outside the private-local scope. Ordinary owner
+mouse/keyboard play on exact candidate `111725`—including Treasure Island
+recognition and walk/run/camera/jetpack/spray feel—is still the completion gate.
+The sanitized evidence record has now received independent
+`PASS_WITH_LIMITATIONS`, clearing its publication blocker; technical automation
+still does not close either owner gate.
+
+The `190724` startup-repair package, `231815` car-speed package, and August
+13-frame visual set remain historical. Their byte-specific facts below are not
+rewritten or inherited by candidate `111725`.
+
+## Historical 2026-08-28 result
 
 **The current car-speed first playable passes its focused source, full runtime, 13-frame Forward+/Metal art review, packaged headless and capped Metal smokes, mounted-PCK movement/privacy/content audit, architecture, and signing gates.** The complete frozen-OSM island inventory, USGS 3DEP elevation on both islands, third-person `4 m/s` walk / `20 m/s` Shift-run / jetpack controller, all-region continuous traversal, one predefined building-wall tag, 124-instance vegetation pass, eleven semantic Poly Haven materials, owner-photo-derived solid SF silhouette, and intentionally deferred cars have direct evidence.
 
@@ -13,7 +73,7 @@ The sole current handoff is `build/car-speed-staging-2026-08-28-231815/Treasure 
 
 The original 18-ID matrix below is retained as a stricter historical audit of the earlier visual-QA snapshot. Its `6 proven / 11 incomplete / 1 missing` aggregate is not the current objective-level tally: the current addendum below supersedes its old traversal, terrain/YBI, material, and package-freshness gaps without claiming that every optional forensic check was performed or that owner acceptance occurred.
 
-### 2026-08-28 current car-speed source and private package
+### 2026-08-28 historical car-speed source and private package
 
 - Current generated content SHA-256 is `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164`; manifest SHA-256 is `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`. Runtime totals are `38` chunks, `735 + 4` rows, `729` meshes, `48,381` triangles, `466` bodies/shapes, and `124` vegetation instances across `15` assets and `19` batches. The current controller defaults are `4/20 m/s` walk/run with `30/40 m/s²` acceleration/braking.
 - The eleven semantic Poly Haven material keys and their 18 1K maps pass focused and live-runtime checks. The complete [13-frame Metal evidence](textured-world-final-rendered-2026-08-28-223242/README.md) received final art-direction `PASS` for the private hobby-project scope.
@@ -38,7 +98,7 @@ The original 18-ID matrix below is retained as a stricter historical audit of th
 - The direct packaged smoke loaded the exact current world/vegetation and physical-Space jetpack before a clean exit 0. The mounted-PCK privacy audit proves the full HEIC, full-resolution photo, ignored source-photo tree, and discarded generated variants are absent. See [owner-skyline Mac evidence](owner-skyline-mac-run-2026-08-28-190242/README.md).
 - These checks remain historical proof of the preceding outline. The owner's ordinary-play judgment of the current solid silhouette and repaired world remains the sole open objective-level decision.
 
-### 2026-08-28 current-source package supersession
+### 2026-08-28 historical current-source package supersession
 
 - The historical handoff is `build/current-source-staging-2026-08-28-183204/Treasure Island First Playable.app`; executable SHA-256 `ef44bf47983147b5b1b66286b47af11b64f3658b798412b7ede33ae829e28749`, PCK SHA-256 `a6c37a783771a38cb323a87dad9f73a9e740ca6fa4cd179563b8083129fbdbc4`, and normalized bundle-inventory SHA-256 `c3f60f4f236304a5d8456a6e6b37af571c31285b595e845dfa5081cbb14d1520`. Strict deep signing passes and the executable contains universal `x86_64 arm64` slices.
 - The bundle contains current generated content `1c9fd3ec5a814e48a696267e9ec3b0318543b8b84df407baee6d18b164b03aeb`, manifest file SHA-256 `fa74ea20f46db226d2aacab76135e76e4928f2619217d18811a3e213c577ed8b`, and the deterministic 102-instance/15-asset/19-batch vegetation pass.
@@ -203,9 +263,9 @@ The original map work order numbers its checks but does not assign IDs, so this 
 | `WP5` generated-wall tag | **incomplete** | Live wall placement/rejections/pool/resume pass and the eligible tag is visibly inspected with exact identity/count; the complete rejection set and adjacent-surface isolation capture remain absent. |
 | `WP6` context/Mac/compact evidence | **incomplete** | Grounded SF/YBI/bridge context and the final isolated package audit are present; interactive target-Mac play and owner acceptance remain open. |
 
-## Remaining blockers and smallest safe verification actions
+## Historical snapshot blockers and smallest safe verification actions
 
-1. **Current owner verdict — pending.** Any ordinary-play verdict must refer to `build/car-speed-staging-2026-08-28-231815/Treasure Island First Playable.app`; the `224622` bundle predates the car-speed Shift-run tuning. In addition to the established grounding, surface, foundation, context, vegetation, and skyline checks, the owner must judge whether the `20 m/s` cap and short acceleration/braking ramp feel responsive and controllable in ordinary play.
+1. **Owner verdict at this historical snapshot — pending.** At that time, any ordinary-play verdict had to refer to `build/car-speed-staging-2026-08-28-231815/Treasure Island First Playable.app`; the `224622` bundle predates the car-speed Shift-run tuning. In addition to the established grounding, surface, foundation, context, vegetation, and skyline checks, the owner still had to judge whether the `20 m/s` cap and short acceleration/braking ramp felt responsive and controllable in ordinary play.
 2. **If the owner reports a blocker, reproduce and repair that exact ordinary-play failure.** Existing continuous whole-island movement, tag, jetpack, surface, foundation, package, and rendered evidence already cover the technical contract. Additional optional forensic captures are not a reason to delay the hobby milestone when ordinary play is coherent.
 
 The current movement agent, package-audit agent, and project lead have recorded candid retrospectives. The app's disclosed 179,020 bytes of derived NAIP comparison textures are package tidiness only: no raw NAIP crop, tiles, or annotations are present, and no runtime behavior depends on them.

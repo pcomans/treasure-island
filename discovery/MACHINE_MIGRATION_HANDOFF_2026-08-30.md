@@ -6,6 +6,38 @@ Repository: `https://github.com/pcomans/treasure-island.git`
 Project layout: **the repository root is the Godot game root**
 Resume revision: **the destination `origin/main` commit containing this handoff**
 
+> **Post-migration status — 2026-09-03:** migration and exact toolchain
+> restoration are complete. This document remains the authoritative dated
+> baseline for the accepted Building 1 state, source boundaries, toolchain, and
+> paused `r133351` branch, but its “next action” and clean-resume steps are
+> historical. The current uncommitted implementation/evidence snapshot is
+> intentionally based on `main` HEAD/origin
+> `08219c9e11c8bd6ce681e48860bb906db07e82f7`, tree
+> `a02b1c5b645c02d60a18d01e89f6e2f71bb7e04f`. The current private app is
+> `build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app`;
+> executable SHA-256
+> `49c7518acfb5443b0cee2f22d65a45405ab62c79a2112d7e770ca1c030eca594`,
+> PCK SHA-256
+> `4d9e1d47f8777dbe2d7ca57f9a93d840a708dfcc35c18e99e54a77c36eeb266e`,
+> seven-file inventory SHA-256
+> `7816c944b470a7542dea1030d9b09cd28c2ec25880fe5131f69bb60460089960`.
+> Current source/package results are in
+> `evidence/first-playable/final-verification-2026-09-03-105408/`; the
+> canonical twelve-view source-project evidence is
+> `evidence/first-playable/exact-current-visual-repair-2026-09-03-104510/`.
+> Do not discard the present working tree merely because the historical
+> migration procedure below expected a clean clone.
+
+The current topology distinction is: `729` physical/generated records render
+`729 meshes / 739 surfaces / 48,389 triangles`; accepted visual attachments
+bring the loaded total to `1,278 / 1,288 / 55,067`, with `466`
+body/shape pairs. Verification ran on an Apple M2 arm64 host, not the approved
+Apple M1 Pro owner target. Ordinary owner recognition and
+walk/run/camera/jetpack/spray play on exact candidate `111725` remain
+pending, as do x86_64 runtime coverage and any distribution
+signing/notarization claim. The `190724`, `231815`, and August rendered
+records are historical and retain only their own byte-specific facts.
+
 ## Owner goal and operating boundary
 
 The owner wants a recognizable, complete Treasure Island first playable for private use: island-scale exterior coverage plus third-person walk/run, unlimited hold-to-rise jetpack, and one predefined spray interaction. Recognition and playability are co-primary. Building-specific facade work prioritizes recognizable ordinary-gameplay art over survey precision; reversible scale, count, cadence, and anchors may be labeled `production_inference`, while exact receiver/protected-scope and physics integrity stay mandatory.

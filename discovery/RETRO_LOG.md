@@ -5033,3 +5033,710 @@ No approach selected.
 - Keep the game, its governing agreement, and its canonical task skill in one project-only repository from the start.
 - Label evidence ledgers as package-local or capture-time external-input inventories so later lifecycle work cannot be mistaken for evidence corruption.
 - Record destination commit, branch mapping, path counts, size limits, and direct-remote proof in every machine migration handoff.
+
+## 2026-08-31 — Gameplay and native-platform evidence scan
+
+### Evidence scanner (`/root/goal_evidence_auditor/gameplay_evidence_scan`)
+
+#### What worked well
+
+- Current controller, scene, input-map, receiver-layer, and export sources make the walk/run, third-person camera, unlimited jetpack, predefined tag, and private macOS design directly traceable.
+- Focused contracts and retained runtime logs separate static defaults from exercised displacement, ascent/descent, wall placement/rejection, tag eviction, and packaged Metal startup.
+- Final Building 1 native evidence explicitly records Apple M1 Pro rendering and unchanged collision/navigation/spray ownership, so later facade art is not silently treated as a gameplay-system rewrite.
+
+#### What did not work well
+
+- The newest packaged-app evidence predates the final facade/runtime attachment stack and migration commit; it is strong historical compatibility evidence, not proof of the exact accepted `origin/main` package.
+- Owner feedback proves an earlier island/tag/jetpack experience, but the exact `20 m/s` run tuning and final migrated build have no retained ordinary-play verdict.
+- Several status documents call an August 28 package “current” even though the August 31 migration handoff correctly requires fresh destination verification, making revision scope easy to overstate.
+
+#### What the team should change next time
+
+- Bind every runtime, native-render, package-smoke, and owner-play record to the exact Git commit plus hashes of the gameplay controller, spray controller, player scene, and export preset.
+- Keep four evidence labels distinct: source implementation, automated source execution, packaged native execution, and owner ordinary-play acceptance.
+- After migration, run the documented exact-current smoke first; launch the unchanged playable only on explicit owner request and record any owner verdict against that exact bundle.
+
+## 2026-08-31 — Accepted-main migration verification preflight
+
+### Migration verification executor (`/root/migration_verifier`)
+
+#### What worked well
+
+- Separate branch, ref, index, and worktree checks proved local `main` exactly matched `origin/main` at `08219c9e11c8bd6ce681e48860bb906db07e82f7` before any project action.
+- Explicit prerequisite probes distinguished correct repository pins from absent ignored installations and prevented a false smoke-pass claim.
+- The handoff's exact executable path and dependency contract prevented silent tool or version substitution.
+
+#### What did not work well
+
+- The ignored Godot bundle, staged vetted archives, project-local npm cache, and `node_modules/` were absent on this machine, so the no-install/no-download assignment could not run the minimum headless smoke.
+- A clean migrated Git checkout does not carry the ignored toolchain state needed to verify runtime behavior.
+
+#### What the team should change next time
+
+- Restore the exact vetted Godot 4.7.2 bundle and lockfile-pinned packages before assigning the migration smoke, then run the handoff commands without substitutions.
+- Report prerequisite failures and skipped tests separately from product-test failures; never infer a pass from preserved historical results.
+
+## 2026-08-31 — New-machine restoration logging gate
+
+### Migration verification executor (`/root/migration_verifier`)
+
+#### What worked well
+
+- Re-reading the trusted plan and completed audit confirmed exact official sources, hashes, install boundaries, and prior authorization before any network or filesystem action.
+- Read-only readiness checks confirmed the required local Apple and npm tooling and sufficient disk capacity while preserving the accepted product tree.
+- A second named documentation executor independently reproduced the logging failure, showing that it was a workspace-sandbox defect rather than an incorrect command or working directory.
+
+#### What did not work well
+
+- Every `apply_patch` route failed before file access because the task workspace contained a symlinked writable-root mapping.
+- Because the install policy requires a planned ledger entry before acquisition, no download, extraction, dependency restoration, or migration smoke could begin.
+- The same workspace defect also prevented this executor's required retrospective sections from being written during their original rounds.
+
+#### What the team should change next time
+
+- Ensure every writable workspace root resolves through a canonical non-symlink path before assigning work that requires logged installation or documentation edits.
+- Add a preflight that proves the planned install-log patch can be applied before granting or starting network acquisition.
+- Preserve the logging gate: when documentation cannot be recorded as required, stop and report skipped restoration and smoke rather than bypassing the audit trail.
+
+## 2026-08-31 — Migration documentation handoff
+
+### Documentation executor (`/root/goal_evidence_auditor/gameplay_evidence_scan`)
+
+#### What worked well
+
+- The verifier supplied exact patch text and stable terminal anchors, so the planned installation record and both deferred retrospectives could be transferred without reinterpretation.
+- Rereading both log tails before editing preserved the concurrent gameplay evidence retrospective and confirmed that no historical entry needed modification.
+- Post-patch line-number and diff inspection made the logging-only boundary directly auditable.
+
+#### What did not work well
+
+- The task workspace's symlinked writable-root mapping still prevented the normal sandboxed patch route, requiring the canonical repository path and explicit escalation for documentation-only edits.
+- PTY echo during patch application was visually misleading, so the files had to be reread before their content could be trusted.
+
+#### What the team should change next time
+
+- Start documentation tasks in a canonical, non-symlinked writable root so the required patch utility works without escalation.
+- Keep prepared handoff patches anchored to unique final lines and verify the resulting file content rather than relying on terminal echo.
+
+## 2026-08-31 — New-machine toolchain restoration and migration smoke
+
+### Migration verification executor (`/root/migration_verifier`)
+
+#### What worked well
+
+- Pre-recording exact sources, hashes, stop gates, commands, and install boundaries made restoration mechanical and prevented substitution.
+- Archive safety, Apple trust, npm integrity, and lifecycle-script gates passed before exact-current smoke.
+- Focused contracts plus full-runtime integration produced migrated-machine evidence for facade state, world loading, movement, jetpack, recovery, and spray.
+
+#### What did not work well
+
+- An initial lockfile host query used unsupported regex lookahead; a direct parser then proved all four entries valid.
+- First headless import emitted one non-fatal GLTF conversion warning.
+- Ignored tool/cache state required substantial destination restoration despite exact tracked Git state.
+
+#### What the team should change next time
+
+- Reuse a project-owned lockfile validator rather than ad hoc regex.
+- Report importer warnings separately from command/contract verdicts.
+- When practical, pre-stage exact hash-verified ignored archives while keeping install/execution behind the logged gate.
+
+## 2026-08-31 — Restoration record closeout
+
+### Documentation executor (`/root/goal_evidence_auditor/gameplay_evidence_scan`)
+
+#### What worked well
+
+- The executor supplied exact timestamps and completed verification substance, allowing the planned ledger entry to be closed without interpreting raw tool output.
+- Scoped replacement preserved the approved sources, hashes, methods, trust gates, authorization, install boundaries, and removal procedure already recorded in the entry.
+- Separate line-range and two-file diff checks make the closeout easy to review against the prior documentation handoff.
+
+#### What did not work well
+
+- The completed result is necessarily dense because archive, trust, dependency, smoke, and side-effect evidence share one installation entry.
+- The symlinked workspace root still prevents the normal sandboxed patch path, so documentation closeout again required canonical-path escalation.
+
+#### What the team should change next time
+
+- Keep a stable result sub-bullet schema in planned installation entries so completion data can replace placeholders mechanically.
+- Use canonical non-symlinked writable roots for follow-up documentation rounds as well as initial logging.
+
+## 2026-08-31 — Exact-current private macOS bundle static verification
+
+### Migration verification executor (`/root/migration_verifier`)
+
+#### What worked well
+
+- An ignored timestamped staging path kept the package outside tracked source while preserving an exact artifact identity.
+- The unchanged preset, exact commit/tree IDs, docs-only diff hash, and post-export clean-product checks provided a reproducible procedural binding between source and bundle.
+- Seven-file inventory, per-file hashes, universal Mach-O inspection, per-slice and deep strict signature verification, and plist/privacy checks established the package's static private-build contract without launching it.
+
+#### What did not work well
+
+- The sandbox's symlinked writable-root defect interrupted the first inspection attempt and required canonical-path read-only escalation.
+- Static inspection cannot mount the new PCK or prove packaged startup, gameplay behavior, rendered recognition, input feel, or owner acceptance.
+- The bundle does not embed the Git commit, so its source binding is procedural evidence from the captured export boundary rather than a self-authenticating commit marker.
+
+#### What the team should change next time
+
+- Embed a small generated build-manifest with commit, tree, preset hash, and source-diff policy in future private exports if the owner approves that contract change.
+- Keep static integrity, packaged runtime smoke, native rendered behavior, and owner ordinary-play acceptance as separate gates.
+- Retain exact per-file hashes and export timestamps for every handoff candidate before any launch.
+
+## 2026-08-31 — Static-bundle verification documentation closeout
+
+### Documentation executor (`/root/goal_evidence_auditor/gameplay_evidence_scan`)
+
+#### What worked well
+
+- The supplied section kept static package integrity distinct from runtime behavior and owner acceptance.
+- Rereading the live tail before appending preserved all concurrent migration retrospectives.
+- A final two-file status and whitespace check keeps this documentation-only boundary auditable.
+
+#### What did not work well
+
+- Related migration evidence now spans several adjacent retrospective sections whose gate boundaries can be easy to blur.
+- The symlinked workspace-root defect still requires canonical-path escalation for a documentation-only append.
+
+#### What the team should change next time
+
+- Keep static package, packaged runtime, native rendering, and owner-play evidence in clearly named adjacent sections or a small index.
+- Run documentation closeouts from a canonical non-symlinked writable root so `apply_patch` works directly.
+
+## 2026-08-31 — Packaged-startup source diagnosis
+
+### Source diagnosis executor (`/root/source_diagnoser`)
+
+#### What worked well
+
+- Reproducing the main-scene smoke with the exact pinned headless binary separated engine/tool health from the packaged-startup contract and exposed the stale runtime totals with one deterministic exit-1 result.
+- Tracing from `project.godot` through the main scene, loader, builder preloads, HUD, player grounding, pause, and quit paths ruled out an autoload or main-scene configuration error.
+- Measuring `load_ms` and reading the loader control flow connected the perceived hang to a synchronous 38-chunk build that provides no event-loop yield or ordinary startup marker.
+
+#### What did not work well
+
+- The ordinary launch path emits no stage marker before or after world construction, so a live native process with no output cannot distinguish resource loading, world validation, chunk construction, grounding, or a completed world.
+- Migration smoke covered the separate full-runtime harness but did not run the main-scene `--mac-export-smoke` gate, allowing stale pre-facade mesh, surface, and triangle constants to survive into the exported source.
+- The loading HUD updates inside a main-thread loop that never yields, so its progress values cannot make the window observably responsive during the expensive work they describe.
+
+#### What the team should change next time
+
+- Include the source main-scene smoke and both packaged smoke modes whenever accepted runtime attachments change aggregate topology.
+- Give long startup work cooperative frame yields while retaining staged fail-closed attachment, and log bounded stage transitions that identify where startup is spending time.
+- Keep aggregate runtime expectations in one current-world fixture consumed by the full-runtime and packaged-smoke gates instead of duplicating numeric constants.
+
+## 2026-08-31 — Failed macOS launch runtime-evidence audit
+
+### Runtime evidence auditor (`/root/runtime_evidence_auditor`)
+
+#### What worked well
+
+- Exact PID checks plus Godot's rotated per-project logs distinguished a live-but-pre-scene process from a crash, clean quit, focus loss, or gameplay failure.
+- Coordinating the controlled exact-bundle sample with crash forensics identified the synchronous CoreAudio wait and the independently stopped host audio daemon without relaunching or touching product source.
+- The pinned binary's own help, exact 4.7.2 engine source, and a project-wide audio scan established a supported pre-initialization Dummy-driver path and proved the current first playable has no audio behavior to lose.
+
+#### What did not work well
+
+- Repeated PID-liveness polling was treated as launch health even though it never proved a window, renderer, scene, or world-ready state.
+- The original `open` launch had no dedicated stdout or launch-specific log, and concurrent Godot diagnostics rotate the same default log path, making session attribution unnecessarily difficult.
+- The exact-current packaged smoke reaches the world but fails a stale pre-facade mesh/surface/triangle oracle, so it cannot currently serve as a clean package-runtime verdict.
+
+#### What the team should change next time
+
+- Require a bounded renderer/world-ready marker, not process liveness alone, before reporting an interactive launch as working.
+- Give every launch or diagnostic a unique explicit log path and keep concurrent Godot processes from sharing the default rotating log.
+- For silent private builds, set the supported `audio/driver/driver` project setting to case-sensitive `Dummy` before export; keep aggregate smoke totals in one current-world fixture and rerun packaged startup gates after topology changes.
+
+## 2026-08-31 — macOS audio-startup hang forensics and bypass proof
+
+### Crash forensics executor (`/root/crash_forensics`)
+
+#### What worked well
+
+- A timed stack sample of the exact exported process localized the apparent hang to a synchronous `AVAudioSession` XPC reply inside `AudioOutputUnitStart`, before scene entry, while Metal initialization and bundle validation were healthy.
+- Host inspection found `_audiomxd` stopped in `Ts` state while `coreaudiod` and both output devices remained available, explaining why process-liveness checks had mistaken a launch deadlock for a working game.
+- Relaunching the unchanged exported executable with the supported `--audio-driver Dummy` argument bypassed CoreAudio, loaded the exported main/world/player/HUD resources, entered an active Metal render loop, and produced one on-screen 1280×832 game window.
+
+#### What did not work well
+
+- The privacy boundary denied access to the unified macOS log store, and the original ordinary launch left a zero-byte Godot log, so neither source could identify the blocked subsystem.
+- The stopped audio daemon is owned by `_audiomxd`; direct `SIGCONT` was denied and passwordless elevation was unavailable, so the host service itself could not be repaired from the Codex process.
+- Default rotating Godot logs were touched by concurrent diagnostics, making timestamp attribution weaker than the captured process stdout and stack samples.
+
+#### What the team should change next time
+
+- Treat an on-screen window plus renderer or world-ready evidence as the minimum native-launch proof; a long-lived PID alone is insufficient.
+- Give each native launch a unique explicit log destination and record its PID, command line, launch time, and window identity before parallel diagnostics begin.
+- Because this first playable has no audio behavior, make the `Dummy` driver an explicit exported-project default and verify ordinary Finder launch on the affected host; retain CoreAudio only when audio becomes an approved, tested product requirement.
+
+## 2026-08-31 — macOS audio-startup source repair
+
+### Startup fix implementer (`/root/startup_fix_implementer`)
+
+#### What worked well
+
+- A failing-first startup contract isolated the absent project audio selection before the source patch and passed immediately after the exact `Dummy` setting was added.
+- Checking the serialized config, loaded `ProjectSettings` value, active test driver, and `GameMain` smoke constants guarded both startup intent and the accepted `1,278/1,288/55,067` runtime oracle.
+- Focused scene-parse and gameplay contracts passed without any world, art, controller, or async-loader changes.
+
+#### What did not work well
+
+- A headless process selects `Dummy` independently, so its active-driver result alone cannot prove the serialized project default; the contract needed explicit source and loaded-setting checks as well.
+- The packaged smoke topology was duplicated in `main.gd`, which allowed it to remain stale after accepted facade attachments changed the live totals.
+- This bounded source round could not prove Finder launch or the exported package; those runtime gates remain with the separate launch verifier.
+
+#### What the team should change next time
+
+- Run the startup configuration contract and main-scene packaged smoke whenever export startup settings or accepted runtime attachments change.
+- Move aggregate world totals to one current-world fixture consumed by both full-runtime and package-smoke checks in a separately reviewed refactor.
+- Keep source repair, export, and native launch as distinct evidence gates, but hand off exact commands and expected markers between their owners.
+
+## 2026-08-31 — macOS audio-startup source repair review
+
+### Startup fix reviewer (`/root/fix_reviewer`)
+
+#### What worked well
+
+- Reading the exact Godot `4.7.2-stable` startup source established the full ordering from project-setting load, through case-sensitive driver selection, to audio-driver initialization instead of relying on a headless result alone.
+- Separate scans of product files and approved scope showed that selecting `Dummy` removes no current audio asset, node, or promised player behavior.
+- The migration handoff, facade inventory, full-runtime contract, and Building 1 whole-world contract independently converged on the corrected `1,278 / 1,288 / 55,067` loaded topology.
+
+#### What did not work well
+
+- The focused test's active-driver assertion is not independently probative under `--headless`, because headless mode itself selects `Dummy`; the serialized and loaded project-setting assertions are what prevent that false confidence.
+- Aggregate runtime totals remain duplicated across the main-scene smoke and several contracts, so future accepted topology changes still require coordinated intentional updates.
+- Static review can validate configuration semantics and regression scope but cannot replace the pending exact exported-bundle Finder launch.
+
+#### What the team should change next time
+
+- Keep direct serialized-setting and loaded-setting checks whenever a command-line mode can independently force the same driver.
+- Centralize accepted loaded-world totals in one reviewed fixture consumed by both runtime and packaged-smoke gates.
+- Continue treating source review, headless contracts, export, and ordinary native launch as separate evidence layers.
+
+## 2026-08-31 — Startup repair verification and export gate
+
+### Migration verification executor (`/root/migration_verifier`)
+
+#### What worked well
+
+- Fingerprinting the pre-existing source, test, and documentation changes kept this verification round from claiming or overwriting concurrent work.
+- The exact Godot 4.7.2 import refresh, startup configuration, scene, gameplay, material, generated-world, facade, and full-runtime contracts all passed with accepted hash `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164` and reported topology `1278/1288/55067`.
+- Keeping export behind the source main-scene smoke prevented a fresh bundle from being produced after an incomplete runtime verdict.
+
+#### What did not work well
+
+- The required source `--mac-export-smoke` reached exact world, visual, and movement assertions but exited 1 on its 60-second simulation watchdog before jetpack evidence.
+- The watchdog expired in about 7.8 wall seconds under uncapped headless scheduling, so live-system contention is a plausible contributor but not proven causation.
+- Because the source smoke did not print `MAC_EXPORT_JETPACK` or its final PASS, this round could not export or statically certify a repaired app.
+
+#### What the team should change next time
+
+- Make the bounded smoke deadline robust to uncapped headless physics scheduling, using a monotonic wall-time deadline or an explicit verified frame-rate policy in a separately reviewed source change.
+- After the owner session and competing native process are closed, rerun the unchanged source smoke under an isolated non-GUI environment before deciding whether the failure is deterministic.
+- Continue requiring the complete source smoke PASS before export, package verification, or owner-launch claims.
+
+## 2026-08-31 — Diagnostic-process cleanup
+
+### Crash forensics executor (`/root/crash_forensics`)
+
+#### What worked well
+
+- Revalidating both PID and exact executable command before signaling prevented a stale or reused PID from being terminated.
+- Independent `ps`, LaunchServices, exact-path, and diagnostic-report checks confirmed no Treasure Island or Godot GUI process remained and no unrelated process was touched.
+
+#### What did not work well
+
+- The successful Dummy-audio diagnostic process exited before the cleanup assignment arrived, and its retained execution handle had already closed, so neither a cleanup signal nor the original terminal status could be recorded.
+
+#### What the team should change next time
+
+- Close controlled diagnostic launches immediately after their evidence is accepted, while retaining the live execution handle through confirmed termination and exit-status capture.
+
+## 2026-08-31 — Source-smoke timeout isolation
+
+### Smoke-timeout diagnoser (`/root/smoke_timeout_diagnoser`)
+
+#### What worked well
+
+- The failed log proved that world construction, accepted topology, visual materials, movement defaults, and player reveal all completed before the watchdog fired, narrowing the suspect interval to the frame-driven jetpack portion of the smoke.
+- After the competing high-CPU GUI process was gone, the unchanged source smoke passed both capped and uncapped headless runs through exact jetpack rise and slow descent in under ten wall seconds.
+- Unique explicit log paths avoided rotating or overwriting the prior failure record.
+
+#### What did not work well
+
+- The smoke watchdog measures accelerated simulation time, so its `60 seconds` message is misleading under uncapped headless scheduling and can expire in roughly eight wall seconds.
+- The failed run had no stage marker between movement validation and the first jetpack metric, so the exact awaited frame at failure cannot be recovered from its log.
+- Concurrent native and headless Godot work made a transient scheduling failure look like a deterministic source regression.
+
+#### What the team should change next time
+
+- Serialize resource-heavy Godot runtime gates and use a unique log path for every process.
+- Run the source smoke with the documented explicit `--max-fps 60` policy before treating an uncapped timeout as product failure.
+- In a separately reviewed test-harness change, make the watchdog monotonic-wall-time based or emit phase markers around grounding, ascent, and descent.
+
+## 2026-08-31 — Idle-state startup repair export and static closeout
+
+### Migration verification executor (`/root/migration_verifier`)
+
+#### What worked well
+
+- Rerunning the unchanged source smoke only after the competing native process was absent isolated the transient timeout: the idle run reached world, visual, movement, and jetpack PASS in 8.801 wall seconds with `load_ms=6528`.
+- Keeping export behind that full PASS produced a fresh timestamped macOS bundle from the exact pinned Godot 4.7.2 toolchain without launching the editor or game.
+- Seven-file bundle inventory, executable/PCK hashes, universal architectures, strict deep and per-architecture signature checks, plist/privacy/entitlement inspection, and source fingerprints gave a reproducible static handoff while preserving every pre-existing change.
+
+#### What did not work well
+
+- The earlier uncapped headless attempt consumed its simulation-time watchdog under system contention, so its `60 seconds` diagnostic overstated the roughly eight wall seconds available to finish.
+- The private export is intentionally ad-hoc signed: internal strict signature verification passes, but Gatekeeper assessment rejects it because it has no Developer ID team or notarization.
+- The bundle has no embedded commit/worktree manifest, so binding it to HEAD plus the startup-repair files depends on the captured pre-export command, hashes, and clean source-fingerprint recheck.
+
+#### What the team should change next time
+
+- Serialize resource-heavy Godot processes before treating an uncapped source-smoke timeout as a deterministic product failure.
+- Preserve conditional export and complete static package verification as distinct gates before any owner-authorized ordinary launch.
+- If provenance must survive outside this handoff, add a reviewed build manifest containing HEAD and dirty-source hashes rather than relying only on external execution records.
+
+## 2026-08-31 — Repaired bundle ordinary native-launch proof
+
+### Crash forensics executor (`/root/crash_forensics`)
+
+#### What worked well
+
+- An empty LaunchServices slate, strict bundle-signature check, and exact prelaunch path verification prevented the final proof from attaching to a stale process or artifact.
+- Plain `/usr/bin/open` returned zero and produced a PPID-1 native ARM64 process whose executable and complete argument vector matched the repaired bundle with no launch overrides.
+- CoreGraphics, sustained process health, and a timed stack sample proved one on-screen 1280×832 window and an active AppKit/Metal/IOSurface render loop while the host `_audiomxd` service remained stopped; the prior audio-session wait had zero sample matches.
+
+#### What did not work well
+
+- The ordinary live process kept its default Godot log at zero bytes, so launch success had to be established through process, window, and stack evidence rather than an application-level world-ready marker.
+- A process-name preflight initially displayed its own `awk` probe as a textual path match; LaunchServices' GUI inventory remained the reliable empty-slate check.
+
+#### What the team should change next time
+
+- Keep exact PID/argv, on-screen-window, sustained renderer-loop, and host-service-state checks as the minimum ordinary native-launch proof.
+- Add a flushed ordinary-launch stage marker or unique per-launch log so future verification can correlate bundle startup with world readiness without sampling the process.
+
+## 2026-09-03 — Live repaired-build visual/playability review attempt
+
+### Crash forensics executor (`/root/crash_forensics`)
+
+#### What worked well
+
+- Revalidating PID `39577`, its exact startup-repair executable, and its CoreGraphics window before attempting interaction kept the review scoped to the approved live bundle.
+- Process, executable, and window inspection independently showed a sustained healthy native process with one on-screen `1280×832` layer-zero window; this separated app health from verifier-control availability.
+- Preflighting both screenshot and input authorization prevented unobservable synthetic-input attempts from being misreported as play evidence.
+
+#### What did not work well
+
+- The executing environment had neither macOS Screen Recording nor event-posting permission, so the shell could not capture the requested before/after frames or send ordinary keys.
+- The supported Computer Use bridge also failed during initialization because its runtime referenced a missing cached browser-service module, even for a computer-only target.
+- Consequently, this round produced no actual key-driven walk/run/jetpack/camera/spray/pause proof and could not grade live recognition or playability; the limitation belongs to the verifier environment, not the running game.
+
+#### What the team should change next time
+
+- Verify GUI capture and input permissions before preserving a long-lived app session for an interactive acceptance round.
+- Use the repository's deterministic native capture harness when interactive UI access is unavailable, while keeping that harness evidence distinct from human play.
+- Continue reporting application health, visual observation, and actual key-driven behavior as separate claims rather than allowing one to stand in for another.
+
+## 2026-09-03 — Repaired native-session cleanup
+
+### Crash forensics executor (`/root/crash_forensics`)
+
+#### What worked well
+
+- Comparing PID `39577`'s complete command against the exact startup-repair executable immediately before signaling prevented a stale or reused PID from being targeted.
+- A single `SIGTERM` ended the PPID-1 native app within one bounded polling interval, and follow-up process plus CoreGraphics checks found neither the PID nor a Treasure Island/Godot window.
+- The executable-name inventory showed no other Treasure Island or Godot process, so no unrelated engine process was affected.
+
+#### What did not work well
+
+- The first human-readable process inventory also printed its own shell probe because the expected app path appeared literally in that probe's arguments; the exact PID identity check itself was unaffected.
+- Because the app was adopted by `launchd`, this cleanup could verify disappearance after `SIGTERM` but could not collect a parent-owned numeric exit status.
+
+#### What the team should change next time
+
+- Keep complete-command equality as the destructive-action guard and use executable-name fields, rather than full probe command lines, for surrounding-process inventories.
+- Retain a launch handle when a numeric terminal status will be required later; otherwise state explicitly that graceful disappearance, not an exit code, was proven.
+
+## 2026-09-03 — Startup-repair package documentation handoff
+
+### Smoke-timeout diagnoser (`/root/smoke_timeout_diagnoser`)
+
+#### What worked well
+
+- Independent recomputation of the repaired bundle's seven-file inventory matched the exporter-supplied executable and PCK identities before they were promoted into canonical documentation.
+- Separating source smoke, static package integrity, ordinary native launch, packaged smoke, autonomous visual/input review, and owner acceptance prevented older package evidence from being inherited by the new bytes.
+- A path-scoped tracked-diff hash plus individual hashes for the untracked startup contract made the exact export-time source boundary explicit despite the dirty worktree.
+
+#### What did not work well
+
+- The export round retained no dedicated source-smoke or export log, so the durable record must rely on command/result handoff plus artifact recomputation rather than linkable raw output.
+- Several top-level documents still named an August 28 package as current and reported pre-facade runtime totals, even though the migration handoff already recorded the accepted facade-expanded topology.
+- The source-diff digest excludes untracked files by construction; without the separate file ledger, its name could misleadingly imply complete repair-source coverage.
+
+#### What the team should change next time
+
+- Write unique persistent logs for source smoke, export, static audit, and ordinary launch before handing a package to documentation.
+- Update the evidence index and playtest path in the same bounded round that creates a new sole handoff candidate.
+- Prefer a generated build manifest or one normalized source ledger that includes tracked and untracked inputs, and always publish the exact hashing method and exclusions.
+
+## 2026-09-03 — Exact-current 12-view visual QA harness and capture
+
+### Migration verifier (`/root/migration_verifier`)
+
+#### What worked well
+
+- Replacing stale topology/count-only checks with exact generated-versus-runtime totals and an ordered 12-ID gate made the evidence set fail closed against both content drift and mislabeled frames.
+- The first pinned 4.7.2 parser, import, and native Metal/Forward+ capture sequence completed successfully; the manifest retained grounded reset disclosures and time-connected public-input jetpack metrics without changing gameplay/world source.
+- Independent review caught the leftover wall-tag ID before capture, and the final checksum ledger plus manifest-to-image verification bound all twelve original PNGs to the executed source-project files.
+
+#### What did not work well
+
+- The first implementation pass retained the old `06-near-wall-tag` label, which would have duplicated the new Building 1 ordinal if the reviewer had not flagged it before execution.
+- The first checksum-verification shell changed into the evidence directory for one command and then used a root-relative path; because that pipeline lacked `pipefail`, it printed a misleading success marker after `jq` failed. I immediately reran the check in a subshell with `pipefail`, and the corrected verification passed.
+- Objective capture invariants cannot establish semantic island recognition or art quality; those original-image judgments remain with an independent reviewer and the owner.
+
+#### What the team should change next time
+
+- Define and assert the exact ordered capture-ID list before adding scenario implementations so ordinal collisions fail at the harness boundary.
+- Run checksum verification from a stable working directory or a subshell with `set -o pipefail`, and never treat a hand-written success marker as evidence without the command's aggregate exit status.
+- Keep source-project capture, package execution, independent image review, and owner play acceptance as separate evidence gates.
+
+## 2026-09-03 — Exact-current 12-view independent art/play-evidence review
+
+### Crash forensics executor (`/root/crash_forensics`)
+
+#### What worked well
+
+- Inspecting every original PNG at native detail and verifying the complete checksum ledger kept semantic judgment bound to the exact captured bytes rather than a contact sheet or filename.
+- A per-frame rubric separated visible recognition, ground/shoreline, landmarks, tag, and jetpack presentation from manifest-only grounding, controller, and motion facts.
+- The manifest's time-connected positions exposed that the released-descent frame remained higher than the ascent frame even though a later capped drop really occurred.
+
+#### What did not work well
+
+- Static resets for frames `01`–`10` cannot establish traversal, while the two jetpack stills cannot visually communicate descent without telemetry.
+- Several regional compositions are dominated by generic walls, empty terrain, or coarse vegetation, limiting independent ground-level recognition despite valid coverage evidence.
+- The set is source-project evidence and contains neither ordinary exact-package input nor an owner/local-observer recognition judgment.
+
+#### What the team should change next time
+
+- Add landmark-first regional viewpoints that expose useful travel corridors instead of blank-wall occlusion, while retaining the exact fixed-reset disclosure.
+- Capture a peak/release jetpack frame and a clearly lower same-pose descent frame, and pair still evidence with an input-driven sequence when motion presentation matters.
+- Keep checksum integrity, pixel judgment, input metrics, package execution, and owner acceptance as explicit separate gates.
+
+## 2026-09-03 — Project-owned direct-mounted PCK content audit
+
+### Smoke-timeout diagnoser (`/root/smoke_timeout_diagnoser`)
+
+#### What worked well
+
+- Retained package logs preserved the exact reliable `--main-pack ... --script ...` execution shape and successful semantic assertions even though their disposable `/private/tmp` script bodies were gone.
+- Reusing the production generated-world contract's byte-level `path\0sha256\0bytes\n` algorithm avoided inventing a second content-identity definition.
+- Explicit absolute PCK and independent PCK/manifest/content hashes make the new auditor reusable across uniquely staged bundles without embedding a temp or artifact path.
+
+#### What did not work well
+
+- The earlier successful auditors were recorded only as commands and outputs, so their implementation could not be reviewed or rerun after the temporary files disappeared.
+- Historical summaries sometimes collapsed virtual-path exclusion and raw-byte privacy scans into one `private=0` claim, obscuring which boundary each check proved.
+- This capture-concurrent round could perform only static checks; the new external GDScript still requires a later serialized direct-mount execution against an exact bundle.
+
+#### What the team should change next time
+
+- Keep package auditors under `game/tests/` before the first candidate export and invoke them by absolute source path against an explicit mounted PCK.
+- Record PCK identity, generated manifest identity, semantic audit, packaged behavior, native rendering, and owner acceptance as separate gates.
+- Publish the exact command and unique log path with each candidate, then run the direct-mount audit only after other resource-heavy Godot work is idle.
+
+## 2026-09-03 — Ranked visual repair and exact-current recapture
+
+### Migration verifier (`/root/migration_verifier`)
+
+#### What worked well
+
+- Tracing failed frames back to exact receiver/camera relationships avoided changing valid frozen OSM massing: the repair used capture-only grounded sightlines to accepted receivers and left the unresolved 490 Avenue of the Palms facade unpromoted.
+- Correcting imported Kenney vegetation materials at runtime preserved all placement/topology/gameplay counts while making the palm contract explicit: non-metallic high-roughness surfaces, two-sided foliage, and a reversible muted source-role palette.
+- Extending the same public-input jetpack sequence until frame `12` was measurably lower than frame `11` produced a fail-closed `1.068 m` separation with capped velocity, zero recovery, and zero post-input transform writes.
+
+#### What did not work well
+
+- My first new frame-10 anchor carried an inferred terrain elevation that did not match the live collision interpolation, so the non-overwriting attempt correctly stopped after frame `09`.
+- The next complete attempt grounded above the cyan overlay presentation area; objective inspection caught that poor evidence anchor, requiring one final fresh capture from exposed land.
+- Camera changes can reduce accidental blank-wall dominance, but they cannot solve sparse generic massing or the cyan overlay boundary; those limitations still need independent review rather than an implementer-authored visual verdict.
+
+#### What the team should change next time
+
+- Probe new grounded anchors through the live collision contract before starting a full native capture; generated triangle endpoint/max-height approximations are not reliable interpolated elevations.
+- Treat a successful capture exit as necessary but not sufficient: inspect objective composition hazards such as occlusion and overlay occupancy before freezing the evidence directory, then hand originals to an independent reviewer.
+- Keep material correction, capture composition, pixel review, exported-package execution, and owner play acceptance as separate gates with distinct claims.
+
+## 2026-09-03 — Final canonical visual-repair independent review
+
+### Crash forensics executor (`/root/crash_forensics`)
+
+#### What worked well
+
+- Switching immediately from the superseded `104322` set to the explicitly frozen `104510` target prevented an authoritative review from landing on obsolete bytes.
+- Inspecting all twelve originals at native detail and verifying the complete checksum/source ledger kept the semantic grades bound to the exact executed project and images.
+- Separating visible shadow/ground parallax from the manifest's time-connected public-input metrics supported a limited jetpack pass without overclaiming screen-locked stills as standalone movement proof.
+
+#### What did not work well
+
+- Review began while evidence directories and their README/ledger were still being finalized, causing avoidable inspection of one superseded set and a second metadata pass after freeze.
+- The repaired vegetation frame still exposes a broad pale-cyan overlay boundary, while generic massing and a flat atmosphere continue to weaken ground-level recognition.
+- The follow camera and unchanged placeholder avatar make descent subtle; the ordered pair still needs telemetry to establish input and velocity.
+
+#### What the team should change next time
+
+- Publish a frozen/ready marker only after the canonical directory, README, manifest, and ledger are complete, then dispatch independent review once against that immutable target.
+- Treat the cyan overlay/shoreline presentation and landmark-specific regional massing as the next art-quality priorities, without weakening the frozen geometry and play contracts.
+- Preserve the current pixel-versus-metrics separation and carry this source-project pass into distinct ordinary-package, complete-control-loop, and owner-recognition gates.
+
+## 2026-09-03 — Exact-current serialized verification and private macOS export
+
+### Migration verifier (`/root/migration_verifier`)
+
+#### What worked well
+
+- Serializing every Godot invocation and retaining command, exit, timing, PID/path, source snapshot, static identity, and package output produced a replayable chain from exact source through the fresh `111725` app.
+- Treating the old PCK boundary failure and `node_modules/earcut` leak as genuine negative tests led to a narrowly corrected export filter and a clean 574-file mounted-PCK pass without rewriting historical evidence.
+- The first package smoke exposed export-template source-hash assumptions; keeping raw byte checks in editor runs while retaining semantic registry/geometry/topology gates in exports restored package startup without weakening the accepted world or gameplay assertions.
+
+#### What did not work well
+
+- Several ad hoc verification wrappers initially mishandled NUL-delimited hashing, Python tuple assignment, zero-match `pipefail`, early pipe closure, or their own process command line; the preserved superseded logs add avoidable noise even though corrected gates passed.
+- The first capped native Metal run reached exact world/visual/movement readiness but shader/startup pressure let the 60-simulation-second timer expire before jetpack; only the single identical warm-state rerun completed the full smoke.
+- Source-byte acceptance sentinels embedded in runtime builders did not account for Godot's `.gdc` remapping and omitted authoring reviews, so the defect appeared only after the first fresh export.
+
+#### What the team should change next time
+
+- Keep a reviewed, project-owned static-package verifier alongside the mounted-PCK auditor so inventory, plist, signature, architecture, and process checks do not depend on improvised shell pipelines.
+- Separate immutable historical acceptance hashes from current adapter hashes and make source-only versus export-runtime integrity boundaries explicit before packaging.
+- Run one documented cold native readiness observation followed by at most one identical warm semantic smoke when shader compilation can starve physics, preserving both outcomes and never weakening the hard assertions.
+
+## 2026-09-03 — Final candidate independent artifact and evidence audit
+
+### Crash forensics executor (`/root/crash_forensics`)
+
+#### What worked well
+
+- Recomputing the seven-file app inventory and parsing the PCK directory and indexed payloads independently confirmed that the executable, PCK, generated manifest, generated-content identity, and per-entry MD5 records all match the retained candidate.
+- Reading raw logs rather than trusting summary status preserved the distinction between the first-in-sequence native timeout and the identical warm-state PASS, and exposed which verifier-failure causes were not reconstructable from retained output.
+- A late cross-check against the private-launch work order correctly changed the evidence verdict from technically ready to publication-blocked without turning an evidence-record defect into an unsupported product-byte defect.
+
+#### What did not work well
+
+- The evidence set was frozen and hashed before applying the launch-record rule that forbids account-bearing paths and requires the local macOS version, so otherwise coherent records and their checksum ledger now require sanitation and re-audit.
+- The machine-readable manifest records only the warm native success; the preceding exact-candidate timeout remains visible only in the README, package-results table, and raw log.
+- Several ad hoc wrapper diagnostics retained only partial output, making their precise claimed shell failure modes impossible to verify independently even though corrected successor checks pass.
+
+#### What the team should change next time
+
+- Generate launch logs with repository-relative placeholders from the outset, record the required OS product version before hashing, and scan the evidence tree for account-bearing paths before declaring it frozen.
+- Represent every retained attempt in the machine-readable manifest, including first-run failure and warm rerun, rather than summarizing only the final successful attempt.
+- Use reviewed project-owned verifiers with fail-fast aggregate status and complete command capture, then dispatch independent audit only after a privacy-safe frozen marker exists.
+
+## 2026-09-03 — Evidence sanitization and canonical handoff reconciliation
+
+### Migration verifier (`/root/migration_verifier`)
+
+#### What worked well
+
+- Copying the complete unsanitized evidence, both partial capture attempts, the
+  historical startup record, and the install log into ignored private storage
+  before any rewrite made every normalization/removal recoverable and
+  independently checkable by relative-path, size, and SHA-256 inventories.
+- Comparing the frozen 496-file export inventory to the reconciled source
+  inventory isolated one documentation-only path and proved the other 495
+  source/config/generated records byte-identical instead of extending the
+  original package claim past its snapshot.
+- A broad changed/new-text scan plus an exact-PCK raw scan caught the remaining
+  historical install-log paths and reached zero configured account-path hits
+  before the publishable ledger was regenerated.
+
+#### What did not work well
+
+- The original verification logs recorded absolute repository paths and the
+  evidence set was hashed before the privacy contract and required OS metadata
+  were checked, forcing a separate preservation, normalization, and re-review
+  cycle.
+- The first machine-readable manifest omitted the first retained native
+  timeout, and the aggregate table called a wrapper exit zero a pass even
+  though its Python subcheck had failed.
+- Partial capture directories and a multi-megabyte superseded codesign log
+  remained beside canonical evidence until final reconciliation, making bulk
+  publication unsafe.
+
+#### What the team should change next time
+
+- Emit `$ROOT` or repository-relative paths at command-capture time, record
+  the three-field same-boot OS evidence before sealing, and run the configured
+  privacy scan before generating any checksum ledger.
+- Give every retained invocation an explicit authoritative, expected-negative,
+  diagnostic, or superseded classification, and fail aggregate result capture
+  when any semantic subcheck fails regardless of wrapper exit.
+- Freeze only the selected candidate and canonical capture set in publishable
+  evidence; move incomplete attempts and noisy raw diagnostics into ignored
+  private preservation before independent review starts.
+
+## 2026-09-03 — Independent post-sanitization evidence re-review
+
+### Crash forensics executor (`/root/crash_forensics`)
+
+#### What worked well
+
+- Recomputing candidate hashes, the NUL-delimited bundle inventory, and both
+  496-row source inventories independently preserved a hard boundary between
+  unchanged product bytes and the one documented post-export README edit.
+- Scanning the complete changed/untracked publishable set and exact PCK after
+  every review addition closed the prior privacy blocker without relying on the
+  ignored unsanitized backup.
+- Reading raw native logs and every result-table row kept the first readiness
+  timeout, identical warm pass, and all wrapper diagnostics visible instead of
+  collapsing them into an unconditional package pass.
+
+#### What did not work well
+
+- Independent review had to occur twice because privacy and required host
+  metadata were checked after the first evidence ledger was frozen.
+- A superseded visual set's checksum ledger mixed internal immutable artifacts
+  with an external live harness path, so ordinary current-tree verification now
+  reports one expected drift unless the historical boundary is read first.
+- Clearing a review status required synchronized edits in several canonical
+  summaries; a single generated status source would reduce contradiction risk.
+
+#### What the team should change next time
+
+- Run privacy, host-metadata, exact-fileset, and result-classification gates
+  before the first independent audit and freeze the candidate directory once.
+- Keep historical ledgers internal to their evidence directory; store external
+  source bindings as explicit at-capture hashes that are not expected to verify
+  against a later working tree.
+- Generate canonical review-status summaries from one manifest while retaining
+  owner acceptance, hardware execution, and distribution as separate gates.
+
+## 2026-09-03 — Controlled staging, commit, and publication round
+
+### Migration verifier (`/root/migration_verifier`)
+
+#### What worked well
+
+- An independently audited explicit path allowlist made it possible to separate
+  the publishable first-playable record from ignored apps, caches, private
+  backups, partial captures, and superseded raw diagnostics before staging.
+- Freezing exact candidate and evidence checksums before publication provided
+  objective gates for detecting any accidental byte change during the Git
+  workflow.
+
+#### What did not work well
+
+- Publication required a separate round because privacy normalization,
+  canonical-document reconciliation, and independent re-review happened only
+  after the initial verification evidence had already been sealed.
+- The mixed tracked/untracked worktree made broad staging commands unsafe and
+  required an exact fileset comparison before a commit could be trusted.
+
+#### What the team should change next time
+
+- Define the publishable allowlist, privacy needles, and ignored preservation
+  boundary before generating the first final-evidence ledger.
+- Treat remote non-divergence, exact staged-path equality, staged-text privacy,
+  checksum replay, and a post-push clean-tree check as one standard release
+  checklist.

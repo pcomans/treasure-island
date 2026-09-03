@@ -1,0 +1,7 @@
+command=.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_building_1_recognizability_live_contract.gd
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: independently accepted Building 1 recognizability composition remains deterministic and reversible: MAT-IVORY on exactly 63 verified public runs in 3 watertight chains plus 45 complete production-inference modules (8 WING / 24 CENTRAL / 2 PAV / 6 BASE / 1 DOOR / 4 BAND), 354 meshes / 354 surfaces / 4,338 triangles / 0 colliders, loaded world 729/1,278/1,288/55,067/466
+real 7.93
+user 7.15
+sys 0.23

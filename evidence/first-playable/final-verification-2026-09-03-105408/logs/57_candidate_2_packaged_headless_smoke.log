@@ -1,0 +1,17 @@
+command= $ROOT/build/final-verification-staging-2026-09-03-111725/Treasure\ Island\ First\ Playable.app/Contents/MacOS/Treasure\ Island\ First\ Playable --headless -- --mac-export-smoke
+watchdog_seconds=90
+start_timestamp=2026-09-03T11:26:14-0700
+pid=47736
+process_command=$ROOT/build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable --headless -- --mac-export-smoke
+process_path_check=PASS
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=1278 surfaces=1288 triangles=55067 bodies=466 shapes=466 vegetation=124 seed=1414092337 batches=19 load_ms=4604
+MAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass
+MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass
+MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps
+PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent
+end_timestamp=2026-09-03T11:26:22-0700
+elapsed_seconds=8
+timed_out=0
+process_exit=0

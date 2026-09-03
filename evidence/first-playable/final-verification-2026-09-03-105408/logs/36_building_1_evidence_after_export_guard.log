@@ -1,0 +1,8 @@
+command= .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_building_1_recognizability_evidence_contract.gd
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: Building 1 recognizability evidence seals 16 unchanged native Metal views, three exact before/after pairs, all six complete motif families, 63 accepted public field runs, 45 accepted production-inference placements, protected runtime, independent review 32897336, and zero pending lifecycle scope
+real 0.54
+user 0.35
+sys 0.02
+exit_status=0

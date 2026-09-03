@@ -1,0 +1,88 @@
+command=(cd evidence/first-playable/final-verification-2026-09-03-105408 && shasum -a 256 -c checksums.sha256)
+scope=all retained README/manifest/check/log files except checksums.sha256 itself and this verification log
+README.md: OK
+checks/bundle-inventory.tsv: OK
+checks/candidate-2-bundle-inventory.tsv: OK
+checks/candidate-2-pck-generated-descriptors.tsv: OK
+checks/candidate-2-post-export-provenance.txt: OK
+checks/candidate-2-post-export-source-changes.tsv: OK
+checks/candidate-2-pre-export-provenance.txt: OK
+checks/candidate-2-source-inventory-final.tsv: OK
+checks/candidate-2-source-inventory-post.tsv: OK
+checks/candidate-2-source-inventory-pre.tsv: OK
+checks/final-git-status.txt: OK
+checks/fresh-pck-generated-descriptors.tsv: OK
+checks/package-results.tsv: OK
+checks/pre-export-provenance.txt: OK
+checks/source-results.tsv: OK
+logs/00_preflight.log: OK
+logs/01_godot_version.log: OK
+logs/02_import_refresh.log: OK
+logs/03_startup_configuration.log: OK
+logs/04_scene_parse.log: OK
+logs/05_gameplay_contract.log: OK
+logs/06_world_material_contract.log: OK
+logs/07_validate_generated_world.log: OK
+logs/08_node_world_validator.log: OK
+logs/09_hawkins_facade.log: OK
+logs/10_building_1_live.log: OK
+logs/11_building_1_evidence.log: OK
+logs/12_batch_06_exact_receiver.log: OK
+logs/13_accepted_material_runs.log: OK
+logs/14_visual_harness_check_only.log: OK
+logs/15_ymca_wall_tangent.log: OK
+logs/16_full_runtime_integration.log: OK
+logs/17_normal_route.log: OK
+logs/18_whole_island_route.log: OK
+logs/19_old_pck_identity.log: OK
+logs/20_old_pck_mounted_audit.log: OK
+logs/21_old_pck_mounted_audit_empty_cwd.log: OK
+logs/22_post_export_filter_import_refresh.log: OK
+logs/23_source_mac_export_smoke.log: OK
+logs/24_fresh_export.log: OK
+logs/27_plist_privacy_architecture.log: OK
+logs/28_plist_privacy_architecture_failfast.log: OK
+logs/29_codesign.log: OK
+logs/30_extended_attributes.log: OK
+logs/31_fresh_pck_mounted_audit.log: OK
+logs/32_packaged_headless_smoke.log: OK
+logs/33_export_hash_guard_import_refresh.log: OK
+logs/34_batch_06_after_export_guard.log: OK
+logs/35_building_1_live_after_export_guard.log: OK
+logs/36_building_1_evidence_after_export_guard.log: OK
+logs/37_batch_06_after_pin_update.log: OK
+logs/38_accepted_material_after_export_guard.log: OK
+logs/39_full_runtime_after_export_guard.log: OK
+logs/40_final_import_refresh.log: OK
+logs/41_visual_harness_check_only_after_export_guard.log: OK
+logs/42_normal_route_after_export_guard.log: OK
+logs/43_whole_island_route_after_export_guard.log: OK
+logs/44_source_mac_export_smoke_after_export_guard.log: OK
+logs/45_candidate_2_export.log: OK
+logs/46_candidate_2_independent_pck_parse.log: OK
+logs/47_candidate_2_independent_pck_parse_corrected.log: OK
+logs/48_candidate_2_bundle_inventory.log: OK
+logs/49_candidate_2_bundle_inventory_corrected.log: OK
+logs/50_candidate_2_plist_privacy_architecture.log: OK
+logs/51_candidate_2_plist_privacy_architecture_corrected.log: OK
+logs/52_candidate_2_plist_privacy_architecture_final.log: OK
+logs/53_candidate_2_codesign.log: OK
+logs/54_candidate_2_codesign_final.log: OK
+logs/55_candidate_2_extended_attributes.log: OK
+logs/56_candidate_2_mounted_pck_audit.log: OK
+logs/57_candidate_2_packaged_headless_smoke.log: OK
+logs/58_candidate_2_native_metal_smoke.log: OK
+logs/59_candidate_2_native_metal_smoke.log: OK
+logs/60_candidate_2_native_metal_smoke_warm_rerun.log: OK
+logs/61_candidate_2_post_export_source_classification.log: OK
+logs/62_candidate_2_final_artifact_recheck.log: OK
+logs/63_final_repository_and_process_state.log: OK
+manifest.json: OK
+ledger_entries=78
+ledger_sha256=12d8e0c07c9696d86c608c06347d6e91a5c0567f7cafa0d21149496ab6a457bc
+exit_status=0
+final_readonly_recheck_timestamp=2026-09-03T11:35:47-0700
+checksum_ledger_recheck=PASS entries=78 sha256=12d8e0c07c9696d86c608c06347d6e91a5c0567f7cafa0d21149496ab6a457bc
+git_diff_check=PASS staged_changes=none tracked_diff_sha256=e2f66f8cdeba34461bfa7056c3ba0e73fa880b0e805e2adde301d3febb876a75
+artifact_identity_recheck=PASS
+process_state=PASS exact_candidate:none Godot:none

@@ -1,0 +1,814 @@
+{
+  "schema_version": 3,
+  "generator": "game/tests/rendered_visual_evidence_capture.gd",
+  "evidence_scope": "exact-current source-project native renderer; static views do not prove traversal; only captures 11 and 12 provide time-connected public-input movement evidence",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M2 (Apple8)",
+  "project_rendering_contract": "Forward+",
+  "viewport": [
+    1440,
+    900
+  ],
+  "source_project_identity": {
+    "project_file": "project.godot",
+    "project_file_sha256": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af",
+    "capture_harness": "game/tests/rendered_visual_evidence_capture.gd",
+    "capture_harness_sha256": "34f55dd4a8a6627be89322199f2d38ede6ca6fb5b9b0cfda19adf05d0685a47b",
+    "main_script": "game/scripts/main.gd",
+    "main_script_sha256": "eee67da945914adbbbe3c50a4a7f62e01cfcb66773abe812a541c22f61f5f642",
+    "binding_scope": "Exact source-project files executed by this harness; no exported-package execution is claimed."
+  },
+  "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+  "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+  "capture_count": 12,
+  "capture_ids": [
+    "01-ferry-spawn",
+    "02-north",
+    "03-center",
+    "04-southwest",
+    "05-east-perimeter",
+    "06-building-1-public-curve",
+    "07-horizon-context",
+    "08-ybi-bridge-context",
+    "09-eligible-wall-tag",
+    "10-vegetation-south-ground",
+    "11-jetpack-ascent",
+    "12-jetpack-released-descent"
+  ],
+  "scenario_reset_policy": "Every scenario starts from a disclosed fixed player-transform reset; grounded scenarios run real physics to land before capture.",
+  "movement_proof_capture_ids": [
+    "11-jetpack-ascent",
+    "12-jetpack-released-descent"
+  ],
+  "world_counts": {
+    "chunks": 38,
+    "playable_rows": 735,
+    "context_rows": 4,
+    "records": 729,
+    "generated_meshes": 729,
+    "generated_surfaces": 739,
+    "generated_triangles": 48389,
+    "runtime_meshes": 1278,
+    "runtime_surfaces": 1288,
+    "runtime_triangles": 55067,
+    "bodies": 466,
+    "shapes": 466,
+    "vegetation_seed": 1414092337,
+    "vegetation_instances": 124,
+    "vegetation_assets": 15,
+    "vegetation_multimesh_batches": 19,
+    "vegetation_rendered_triangles": 20178
+  },
+  "captures": [
+    {
+      "id": "01-ferry-spawn",
+      "region": "ferry_spawn",
+      "intent": "Approved ferry arrival looking into Treasure Island",
+      "file": "01-ferry-spawn.png",
+      "sha256": "8e3ab2a2a0cdfecd6a9c169c13ec7b32dcfce0be53e118fe93229f563aa33f1b",
+      "bytes": 1170952,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -104.363998413086,
+        3.45696306228638,
+        786.023986816406
+      ],
+      "camera_position": [
+        -105.010597229004,
+        6.22241497039795,
+        791.431945800781
+      ],
+      "camera_forward": [
+        0.117563970386982,
+        -0.139173105359077,
+        -0.983264744281769
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 391,
+      "sample_luminance_range": 0.772380411624908,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "movement_proof": false,
+      "input_driven_after_reset": false,
+      "physics_grounded": true,
+      "settle_spawn_y": 6.45655822753906,
+      "settled_y": 3.45696306228638,
+      "ground_y": 3.45655822753906,
+      "ground_clearance_m": 0.000404834747314453,
+      "settle_physics_frames": 125,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "yaw": -0.119,
+      "pitch": -0.139626340159546
+    },
+    {
+      "id": "02-north",
+      "region": "north",
+      "intent": "North-island road looking south through the island",
+      "file": "02-north.png",
+      "sha256": "9bdd0e0d6f63595c732ae15b56fc678c49f7d55b69eb6fbef3658c949df3c4a8",
+      "bytes": 1412670,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -159.535003662109,
+        2.82948184013367,
+        -879.905029296875
+      ],
+      "camera_position": [
+        -159.12370300293,
+        5.59492588043213,
+        -885.335876464844
+      ],
+      "camera_forward": [
+        -0.0747857391834259,
+        -0.139173120260239,
+        0.987440168857574
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 428,
+      "sample_luminance_range": 0.604494914412498,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "movement_proof": false,
+      "input_driven_after_reset": false,
+      "physics_grounded": true,
+      "settle_spawn_y": 5.8294677734375,
+      "settled_y": 2.82948184013367,
+      "ground_y": 2.8294677734375,
+      "ground_clearance_m": 0.0000140666961669922,
+      "settle_physics_frames": 126,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-4",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "yaw": 3.066,
+      "pitch": -0.139626340159546
+    },
+    {
+      "id": "03-center",
+      "region": "center",
+      "intent": "Central grid road looking east across representative massing",
+      "file": "03-center.png",
+      "sha256": "935789e3c64116c831e1b08ba7a0a2f837a7231ed4cf7be9cc4a58d030c41735",
+      "bytes": 1223605,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -159.292007446289,
+        3.31779980659485,
+        -104.818000793457
+      ],
+      "camera_position": [
+        -164.738464355469,
+        6.08324956893921,
+        -104.818000793457
+      ],
+      "camera_forward": [
+        0.990268051624298,
+        -0.139173105359077,
+        0.0000000432860041144068
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 387,
+      "sample_luminance_range": 0.680218011140823,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "movement_proof": false,
+      "input_driven_after_reset": false,
+      "physics_grounded": true,
+      "settle_spawn_y": 6.31768798828125,
+      "settled_y": 3.31779980659485,
+      "ground_y": 3.31768798828125,
+      "ground_clearance_m": 0.000111818313598633,
+      "settle_physics_frames": 126,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "yaw": -1.5707963267949,
+      "pitch": -0.139626340159546
+    },
+    {
+      "id": "04-southwest",
+      "region": "southwest",
+      "intent": "Southwest road looking northeast toward the island interior",
+      "file": "04-southwest.png",
+      "sha256": "fe38c714ac39e775e12ef1236b33c4ffd86ee97455ea1fcdd1b6f6563af9cec8",
+      "bytes": 1400220,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -293.542999267578,
+        3.19973945617676,
+        335.720001220703
+      ],
+      "camera_position": [
+        -296.197082519531,
+        5.96519136428833,
+        340.476043701172
+      ],
+      "camera_forward": [
+        0.482561856508255,
+        -0.139173105359077,
+        -0.864733994007111
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 419,
+      "sample_luminance_range": 0.453283905982971,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "movement_proof": false,
+      "input_driven_after_reset": false,
+      "physics_grounded": true,
+      "settle_spawn_y": 6.19918823242188,
+      "settled_y": 3.19973945617676,
+      "ground_y": 3.19918823242188,
+      "ground_clearance_m": 0.000551223754882812,
+      "settle_physics_frames": 126,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "yaw": -0.509,
+      "pitch": -0.139626340159546
+    },
+    {
+      "id": "05-east-perimeter",
+      "region": "perimeter",
+      "intent": "East perimeter road looking northwest across the shoreline side",
+      "file": "05-east-perimeter.png",
+      "sha256": "68fb8bd3d660654241ee420bcbd92c59f9d8ebb97028d70166c2b0f0bee62a06",
+      "bytes": 1224390,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        606.2490234375,
+        2.57990002632141,
+        385.226989746094
+      ],
+      "camera_position": [
+        610.628051757812,
+        5.3453516960144,
+        388.465576171875
+      ],
+      "camera_forward": [
+        -0.796180307865143,
+        -0.139173105359077,
+        -0.588835895061493
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 408,
+      "sample_luminance_range": 0.533516898751259,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "movement_proof": false,
+      "input_driven_after_reset": false,
+      "physics_grounded": true,
+      "settle_spawn_y": 5.57978820800781,
+      "settled_y": 2.57990002632141,
+      "ground_y": 2.57978820800781,
+      "ground_clearance_m": 0.000111818313598633,
+      "settle_physics_frames": 126,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_2__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "yaw": 0.934,
+      "pitch": -0.139626340159546
+    },
+    {
+      "id": "06-building-1-public-curve",
+      "region": "building_1_public_curve",
+      "intent": "Physics-grounded ordinary third-person view of the independently accepted Building 1 public-curve composition",
+      "file": "06-building-1-public-curve.png",
+      "sha256": "4f70060da643586e2b4b7b6da75a06637f7f8d69af2df2254c9c4932e4413547",
+      "bytes": 796615,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -72.9087524414062,
+        4.35417652130127,
+        757.150634765625
+      ],
+      "camera_position": [
+        -78.3327026367188,
+        5.62509536743164,
+        757.697631835938
+      ],
+      "camera_forward": [
+        0.986172735691071,
+        0.132560521364212,
+        -0.0994540080428123
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 272,
+      "sample_luminance_range": 0.723939642310143,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "movement_proof": false,
+      "input_driven_after_reset": false,
+      "physics_grounded": true,
+      "settle_spawn_y": 7.35406494140625,
+      "settled_y": 4.35417652130127,
+      "ground_y": 4.35406494140625,
+      "ground_clearance_m": 0.000111579895019531,
+      "settle_physics_frames": 126,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "camera_aim_target": [
+        0.940999984741211,
+        16.2810001373291,
+        749.703002929688
+      ],
+      "receiver_key": "building:r16681702:wall",
+      "accepted_facade_present": true,
+      "reference_capture": "evidence/first-playable/treasure-island-building-1-recognizability-composition-2026-08-30/images/02-after-ordinary-public-curve.png",
+      "reference_pose_use": "The accepted target and horizontal camera anchor are reused; this frame uses the real third-person player camera at grounded eye height."
+    },
+    {
+      "id": "07-horizon-context",
+      "region": "sf_horizon_context",
+      "intent": "Physics-grounded ferry/southwest-facing view with unobstructed bridge-aligned SF billboard center",
+      "file": "07-horizon-context.png",
+      "sha256": "078a6746cf12e0cff7216377618e920860874b324c507215c9db694f6571a268",
+      "bytes": 897941,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -104.363998413086,
+        3.45696306228638,
+        786.023986816406
+      ],
+      "camera_position": [
+        -101.898025512695,
+        5.09570169448853,
+        781.12109375
+      ],
+      "camera_forward": [
+        -0.448363184928894,
+        0.0656839087605476,
+        0.891434848308563
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 323,
+      "sample_luminance_range": 0.578974142670631,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "movement_proof": false,
+      "input_driven_after_reset": false,
+      "physics_grounded": true,
+      "settle_spawn_y": 6.45655822753906,
+      "settled_y": 3.45696306228638,
+      "ground_y": 3.45655822753906,
+      "ground_clearance_m": 0.000404834747314453,
+      "settle_physics_frames": 126,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "camera_aim_target": [
+        -1875.0,
+        264.850006103516,
+        4306.39990234375
+      ],
+      "billboard_visible": true,
+      "billboard_mesh_present": true,
+      "billboard_render_layer_1": true,
+      "billboard_collision_nodes": 0,
+      "billboard_position": [
+        -1875.0,
+        264.850006103516,
+        4306.39990234375
+      ],
+      "billboard_size": [
+        3900.0,
+        600.0
+      ],
+      "billboard_texture": "res://game/resources/textures/context/sf_skyline_owner_silhouette_final.png",
+      "billboard_center_in_frustum": true,
+      "billboard_center_screen": [
+        719.999938964844,
+        450.0
+      ],
+      "billboard_projected_bounds": [
+        403.104095458984,
+        401.246795654297,
+        633.791748046875,
+        97.5064086914062
+      ],
+      "billboard_projected_width_px": 633.791748046875,
+      "billboard_projected_width_ratio": 0.440133158365885,
+      "billboard_world_blocker": false,
+      "context_collision_nodes": 0
+    },
+    {
+      "id": "08-ybi-bridge-context",
+      "region": "ybi_bridge_context",
+      "intent": "Physics-grounded ferry/southeast-facing view with unobstructed projected YBI and Bay Bridge runtime-mesh centers",
+      "file": "08-ybi-bridge-context.png",
+      "sha256": "5978730e29133c6213a924f5b5ab512ca120245089ae28c7ef869dd162997a86",
+      "bytes": 916804,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -104.363998413086,
+        3.45696306228638,
+        786.023986816406
+      ],
+      "camera_position": [
+        -107.909278869629,
+        5.34571695327759,
+        781.820556640625
+      ],
+      "camera_forward": [
+        0.64458817243576,
+        0.0202265288680792,
+        0.76426237821579
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 327,
+      "sample_luminance_range": 0.635127872228622,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "movement_proof": false,
+      "input_driven_after_reset": false,
+      "physics_grounded": true,
+      "settle_spawn_y": 6.45655822753906,
+      "settled_y": 3.45696306228638,
+      "ground_y": 3.45655822753906,
+      "ground_clearance_m": 0.000404834747314453,
+      "settle_physics_frames": 126,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "camera_aim_target": [
+        740.247741699219,
+        31.9600009918213,
+        1787.44604492188
+      ],
+      "ybi_visible": true,
+      "ybi_runtime_meshes": 1,
+      "ybi_aabb_center": [
+        449.676513671875,
+        51.9199981689453,
+        1398.09497070312
+      ],
+      "ybi_center_in_frustum": true,
+      "ybi_center_screen": [
+        697.655639648438,
+        426.990478515625
+      ],
+      "ybi_world_blocker": false,
+      "bridge_runtime_meshes": 1,
+      "bridge_aabb_center": [
+        1030.81896972656,
+        12.0000047683716,
+        2176.79711914062
+      ],
+      "bridge_center_in_frustum": true,
+      "bridge_center_screen": [
+        730.318298339844,
+        460.625610351562
+      ],
+      "bridge_world_blocker": false,
+      "context_collision_nodes": 0
+    },
+    {
+      "id": "09-eligible-wall-tag",
+      "region": "eligible_wall_tag",
+      "intent": "Physics-grounded close wall view after one real-controller eligible spray placement",
+      "file": "09-eligible-wall-tag.png",
+      "sha256": "7d3760b5f06ac120b14a1f5d157d0f8125d428ce5b981e5946607e1785f093bc",
+      "bytes": 1004321,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -107.809837341309,
+        3.27630805969238,
+        789.098449707031
+      ],
+      "camera_position": [
+        -102.999435424805,
+        5.65616846084595,
+        786.459106445312
+      ],
+      "camera_forward": [
+        -0.874613642692566,
+        -0.069065049290657,
+        0.479876101016998
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 373,
+      "sample_luminance_range": 0.58624629676342,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "movement_proof": false,
+      "input_driven_after_reset": false,
+      "physics_grounded": true,
+      "settle_spawn_y": 6.2760009765625,
+      "settled_y": 3.27630805969238,
+      "ground_y": 3.2760009765625,
+      "ground_clearance_m": 0.000307083129882812,
+      "settle_physics_frames": 126,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "camera_aim_target": [
+        -110.878326416016,
+        5.03400039672852,
+        790.782043457031
+      ],
+      "spray_result": "placed",
+      "tag_active_count": 1,
+      "tag_object": "building:w1222514695:wall",
+      "tag_sources": [
+        "w1222514695"
+      ],
+      "tag_position": [
+        -110.865173339844,
+        5.03400135040283,
+        790.774841308594
+      ],
+      "tag_wall_normal": [
+        0.876710295677185,
+        0.0,
+        -0.48101881146431
+      ],
+      "tag_player_distance_m": 3.91658020019531,
+      "tag_identity_matches_hit": true,
+      "tag_texture_present": true
+    },
+    {
+      "id": "10-vegetation-south-ground",
+      "region": "vegetation_south_ground",
+      "intent": "Ground view from serialized non-overlay land along the deliberate south palm rows",
+      "file": "10-vegetation-south-ground.png",
+      "sha256": "5a31194329ec947ac962e3013b5fdff6523a115543be57a8b345d1f2c28f212f",
+      "bytes": 1104769,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -350.0,
+        2.88400459289551,
+        140.0
+      ],
+      "camera_position": [
+        -350.0,
+        5.6494574546814,
+        145.446472167969
+      ],
+      "camera_forward": [
+        -0.0000000298023543621184,
+        -0.139173001050949,
+        -0.990268051624298
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 363,
+      "sample_luminance_range": 0.841432947665453,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "movement_proof": false,
+      "input_driven_after_reset": false,
+      "physics_grounded": true,
+      "settle_spawn_y": 5.88369750976562,
+      "settled_y": 2.88400459289551,
+      "ground_y": 2.88369750976562,
+      "ground_clearance_m": 0.000307083129882812,
+      "settle_physics_frames": 126,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_0",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "yaw": 0.0,
+      "pitch": -0.139626340159546
+    },
+    {
+      "id": "11-jetpack-ascent",
+      "region": "ferry_jetpack_ascent",
+      "intent": "Time-connected ordinary third-person frame during a held public jetpack action with measured positive ascent",
+      "file": "11-jetpack-ascent.png",
+      "sha256": "e1492b266d79e4d3d86ad0225e1f2b13ae0ce4f0a06fb22e50d272232190bfe9",
+      "bytes": 1074903,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -104.363998413086,
+        6.29108667373657,
+        786.023986816406
+      ],
+      "camera_position": [
+        -105.010597229004,
+        9.05653858184814,
+        791.431945800781
+      ],
+      "camera_forward": [
+        0.11756394058466,
+        -0.13917301595211,
+        -0.983264744281769
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 374,
+      "sample_luminance_range": 0.774618849158287,
+      "scenario_reset": "fixed_player_transform_then_physics_settle_before_input",
+      "movement_proof": true,
+      "input_driven_after_reset": true,
+      "physics_grounded": false,
+      "settle_spawn_y": 6.45655822753906,
+      "settled_y": 3.45696306228638,
+      "ground_y": 3.45655822753906,
+      "ground_clearance_m": 2.83452844619751,
+      "settle_physics_frames": 126,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "public_input_action": "jetpack",
+      "physical_key": "Space",
+      "input_state_at_capture": "pressed",
+      "harness_transform_policy_after_input_start": "no player transform writes",
+      "start_position": [
+        -104.363998413086,
+        3.45696306228638,
+        786.023986816406
+      ],
+      "capture_position": [
+        -104.363998413086,
+        6.29108667373657,
+        786.023986816406
+      ],
+      "input_start_physics_frame": 1301,
+      "capture_physics_frame": 1347,
+      "physics_frames_since_input_start": 46,
+      "rise_m": 2.8341236114502,
+      "vertical_velocity_mps": 5.0,
+      "recovery_delta": 0,
+      "harness_transform_writes_after_input_start": 0,
+      "motion_samples": 46,
+      "maximum_observed_step_m": 0.166666984558105
+    },
+    {
+      "id": "12-jetpack-released-descent",
+      "region": "ferry_jetpack_released_descent",
+      "intent": "Time-connected ordinary third-person frame after releasing the public jetpack action at the measured slow-descent cap",
+      "file": "12-jetpack-released-descent.png",
+      "sha256": "15450d086181aff6a71e48786b39653a6773bc653ffffe9f62cc42de3a603ecc",
+      "bytes": 1058331,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "player_position": [
+        -104.363998413086,
+        6.82275342941284,
+        786.023986816406
+      ],
+      "camera_position": [
+        -105.010597229004,
+        9.58820629119873,
+        791.431945800781
+      ],
+      "camera_forward": [
+        0.11756394058466,
+        -0.13917301595211,
+        -0.983264744281769
+      ],
+      "pause_overlay_visible": false,
+      "sample_unique_colors": 364,
+      "sample_luminance_range": 0.742999240756035,
+      "scenario_reset": "same_time_connected_sequence_as_11_jetpack_ascent",
+      "movement_proof": true,
+      "input_driven_after_reset": true,
+      "physics_grounded": false,
+      "settle_spawn_y": 6.45655822753906,
+      "settled_y": 3.45696306228638,
+      "ground_y": 3.45655822753906,
+      "ground_clearance_m": 3.36619520187378,
+      "settle_physics_frames": 126,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_boundary": true,
+      "public_input_action": "jetpack",
+      "physical_key": "Space",
+      "input_state_at_capture": "released",
+      "harness_transform_policy_after_input_start": "no player transform writes",
+      "start_position": [
+        -104.363998413086,
+        3.45696306228638,
+        786.023986816406
+      ],
+      "ascent_capture_position": [
+        -104.363998413086,
+        6.29108667373657,
+        786.023986816406
+      ],
+      "release_position": [
+        -104.363998413086,
+        6.29108667373657,
+        786.023986816406
+      ],
+      "capped_descent_start_position": [
+        -104.363998413086,
+        7.17275476455688,
+        786.023986816406
+      ],
+      "capture_position": [
+        -104.363998413086,
+        6.82275342941284,
+        786.023986816406
+      ],
+      "input_start_physics_frame": 1301,
+      "release_physics_frame": 1347,
+      "capture_physics_frame": 1394,
+      "physics_frames_since_release": 47,
+      "rise_before_release_m": 2.8341236114502,
+      "drop_at_capped_descent_m": 0.350001335144043,
+      "vertical_velocity_mps": -1.5,
+      "recovery_delta": 0,
+      "harness_transform_writes_after_input_start": 0,
+      "motion_samples": 93,
+      "maximum_observed_step_m": 0.166666984558105
+    }
+  ]
+}

@@ -11,7 +11,7 @@ const RECORD_HASHES := {
 	ROOT + "/asset-inventory.sha256": "34cc2420fc0d56db9f55b3f90f89366677b9b2f1f8366a381abd924ad57295a6",
 	ROOT + "/generated-data-diff.txt": "ecdde4706e92b5d57d790c064afb8575f22b1360cb8363a7282ac0f0a43e182a",
 	"res://game/resources/facades/building_1_recognizability_placements.json": "affc41797999b83610352c5945c21d5206167a67bdc1aa5134a3021dd280df05",
-	"res://game/scripts/world/facades/building_1_recognizable_facade.gd": "29eb9a6585ed9d6722210d90a514e7dfe75fd4b690680b4b21f185e9c7471ac6",
+	"res://game/scripts/world/facades/building_1_recognizable_facade.gd": "f39ce8b043dda6c78e1b7cabc223552b6afcceed67538ce973aa6cdc53fbd507",
 	"res://game/scripts/world/world_chunk_builder.gd": "e3d0ca4b6c9d39a444aa5b55592d63a32e7794bae3e12f1f3fac125243839d42",
 	"res://game/tests/building_1_recognizability_capture.gd": "8c2d4b4d87e70d263812c15a783576ae48b694d7ae6945cfcd3df76e74bf80e9",
 	"res://discovery/FACADE_RECEIVER_INVENTORY.json": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f",

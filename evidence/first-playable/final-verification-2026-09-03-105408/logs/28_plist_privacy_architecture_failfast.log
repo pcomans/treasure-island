@@ -1,0 +1,46 @@
+build/final-verification-staging-2026-09-03-105408/Treasure Island First Playable.app/Contents/Info.plist: OK
+build/final-verification-staging-2026-09-03-105408/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy: OK
+build/final-verification-staging-2026-09-03-105408/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable: Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64]
+build/final-verification-staging-2026-09-03-105408/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable (for architecture x86_64):	Mach-O 64-bit executable x86_64
+build/final-verification-staging-2026-09-03-105408/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable (for architecture arm64):	Mach-O 64-bit executable arm64
+{
+  "CFBundleDevelopmentRegion" => "English"
+  "CFBundleDisplayName" => "Treasure Island First Playable"
+  "CFBundleExecutable" => "Treasure Island First Playable"
+  "CFBundleIconFile" => "icon.icns"
+  "CFBundleIdentifier" => "local.treasure-island.first-playable"
+  "CFBundleInfoDictionaryVersion" => "6.0"
+  "CFBundleName" => "Treasure Island First Playable"
+  "CFBundlePackageType" => "APPL"
+  "CFBundleShortVersionString" => "0.1.0"
+  "CFBundleSignature" => "TreasureIsland"
+  "CFBundleSupportedPlatforms" => [
+    0 => "MacOSX"
+  ]
+  "CFBundleVersion" => "0.1.0"
+  "DTPlatformBuild" => "14C18"
+  "DTPlatformName" => "macosx"
+  "DTPlatformVersion" => "13.1"
+  "DTSDKBuild" => "22C55"
+  "DTSDKName" => "macosx13.1"
+  "DTXcode" => "1420"
+  "DTXcodeBuild" => "14C18"
+  "LSApplicationCategoryType" => "public.app-category.games"
+  "LSArchitecturePriority" => [
+    0 => "arm64"
+    1 => "x86_64"
+  ]
+  "LSMinimumSystemVersionByArchitecture" => {
+    "arm64" => "13.00"
+    "x86_64" => "11.00"
+  }
+  "NSHighResolutionCapable" => true
+  "NSHumanReadableCopyright" => "Private hobby project"
+  "NSPrincipalClass" => "NSApplication"
+}
+{
+  "NSPrivacyTracking" => false
+}
+plist_identity=PASS executable/name/display_name/package_type/platform/version/bundle_id
+privacy_contract=PASS tracking=false optional_arrays_absent sensitive_usage_description_keys=0
+architecture_contract=PASS slices=x86_64+arm64 native_host=arm64

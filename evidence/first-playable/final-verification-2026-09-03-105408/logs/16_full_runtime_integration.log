@@ -1,0 +1,12 @@
+command=.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/full_runtime_integration.gd
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+RUNTIME_CAMERA: baseline=5.500m compressed=1.783m restored=5.500m configured=5.500m
+RUNTIME_LOAD: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 chunks=38 records=729 generated_meshes=729 generated_surfaces=739 generated_triangles=48389 reported_meshes=1278 reported_surfaces=1288 reported_triangles=55067 bodies=466 shapes=466 sources=738 vegetation=1414092337/124 assets=15 batches=19 vegetation_triangles=20178 load_ms=6235
+RUNTIME_GAMEPLAY: first_visible_grounded=true first_clearance=0.000m walk=1.771m run=4.030m movement_clearance=-0.002..0.001m jetpack_rise=4.000m air_walk=1.773m air_run=5.971m slow_descent=0.500m renewed_rise=1.210m landed=true landing_clearance=0.000m resumed=1.105m manual_recovery=manual boundary_recovery=outside_boundary recovery_clearance=0.000m spray=placed ground=receiver_rejection roof=receiver_rejection context=no_hit tags=64 evicted=1
+RUNTIME_HEALTH: static_memory_mib=135.3 failed_reload_code=file_open partial_nodes=0 checkpoint_scene_nodes=119
+RUNTIME_CLEANUP: baseline_scene_nodes=1 final_scene_nodes=1
+PASS: real main scene reached world_ready, enabled player, exercised generated physics/interactions, and failed closed without a partial world
+real 16.31
+user 7.39
+sys 0.37

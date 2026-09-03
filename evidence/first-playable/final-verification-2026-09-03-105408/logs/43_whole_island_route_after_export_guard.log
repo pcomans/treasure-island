@@ -1,0 +1,28 @@
+command= .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/automated_route_qa.gd -- --whole-island-route
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ROUTE_CONTRACT: checkpoints=14 centerline_length=264.122m start=00-ferry-spawn end=13-trade-winds-east road_validation=pass
+WHOLE_ISLAND_CONTRACT: regions=ferry_spawn,southwest,center,north,east-perimeter ground_centerline=264.122m flight_direct=3157.964m no_startup_teleports=true
+ROUTE_CHECKPOINT: index=1 id=01-waterfront-approach source=w1222514694 node=n11609333225 mode=walk frames=179 error=0.501m position=(-94.120,3.891,780.287) traveled=11.746m
+ROUTE_CHECKPOINT: index=2 id=02-waterfront-join source=w1212173450 node=n11230504400 mode=walk frames=35 error=0.500m position=(-92.087,3.914,779.142) traveled=14.079m
+ROUTE_CHECKPOINT: index=3 id=03-waterfront-crossing source=w1249797944 node=n9551738100 mode=walk frames=122 error=0.717m position=(-85.035,3.990,775.091) traveled=22.212m
+ROUTE_CHECKPOINT: index=4 id=04-ti-road-north-1 source=w1249797944 node=n10206762981 mode=run frames=82 error=1.112m position=(-95.700,4.065,755.161) traveled=45.044m
+ROUTE_CHECKPOINT: index=5 id=05-ti-road-north-2 source=w1249797944 node=n11617861468 mode=run frames=81 error=1.199m position=(-108.275,3.884,731.267) traveled=72.045m
+ROUTE_CHECKPOINT: index=6 id=06-trade-winds-turn source=w255330044 node=n10206762967 mode=run frames=24 error=1.186m position=(-111.671,3.753,724.022) traveled=80.046m
+ROUTE_CHECKPOINT: index=7 id=07-trade-winds-1 source=w255330044 node=n11230505956 mode=run frames=15 error=1.079m position=(-112.791,3.733,719.076) traveled=85.146m
+ROUTE_CHECKPOINT: index=8 id=08-trade-winds-2 source=w255330044 node=n10206762980 mode=run frames=16 error=1.147m position=(-111.922,3.820,713.962) traveled=90.369m
+ROUTE_CHECKPOINT: index=9 id=09-trade-winds-3 source=w255330044 node=n10206762979 mode=run frames=7 error=1.175m position=(-110.895,3.848,711.991) traveled=92.597m
+ROUTE_CHECKPOINT: index=10 id=10-trade-winds-4 source=w255330044 node=n5022051218 mode=run frames=26 error=1.114m position=(-104.428,3.894,706.632) traveled=101.036m
+ROUTE_CHECKPOINT: index=11 id=11-trade-winds-west source=w1249797946 node=n11617873669 mode=run frames=122 error=1.209m position=(-69.135,4.033,686.412) traveled=141.712m
+ROUTE_CHECKPOINT: index=12 id=12-trade-winds-center source=w1249797946 node=n13515946901 mode=run frames=213 error=1.495m position=(-6.275,4.101,653.400) traveled=212.713m
+ROUTE_CHECKPOINT: index=13 id=13-trade-winds-east source=w1249797946 node=n11612881904 mode=run frames=174 error=1.495m position=(37.630,3.892,630.437) traveled=262.349m
+WHOLE_ISLAND_ANCHOR: id=southwest input=run+jetpack planned=443.322m traveled=448.978m frames=5031 peak_y=76.058m error=0.125m grounded=true position=(-293.631,3.205,335.631)
+WHOLE_ISLAND_ANCHOR: id=center input=run+jetpack planned=460.480m traveled=468.823m frames=5033 peak_y=76.039m error=0.124m grounded=true position=(-159.274,3.318,-104.941)
+WHOLE_ISLAND_ANCHOR: id=north input=run+jetpack planned=774.964m traveled=783.583m frames=5664 peak_y=76.069m error=0.087m grounded=true position=(-159.535,2.828,-879.992)
+WHOLE_ISLAND_ANCHOR: id=east-perimeter input=run+jetpack planned=1478.920m traveled=1485.373m frames=8125 peak_y=76.079m error=0.141m grounded=true position=(606.323,2.581,385.347)
+WHOLE_ISLAND_ROUTE: regions=5 order=ferry_spawn,southwest,center,north,east-perimeter planned=3422.086m traveled=3449.107m wall_elapsed=52.213s simulated=415.817s physics_frames=24949 walk_frames=594 run_frames=10249 jetpack_frames=5466 airborne_frames=23849 max_step=0.348m recoveries=0 final_error=0.141m continuous=true no_teleport=true boundary=pass landings=5 stalls=0
+PASS: actual PlayerController continuously visited ferry, southwest, center, north, and east-perimeter anchors using walk/run/jetpack input without teleport or recovery
+real 60.32
+user 20.57
+sys 1.23
+exit_status=0
