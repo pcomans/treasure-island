@@ -15,6 +15,9 @@ git status --short --branch
 
 Before restoring tools or opening Godot, read [AGENTS.md](AGENTS.md) and the [machine-migration handoff](discovery/MACHINE_MIGRATION_HANDOFF_2026-08-30.md). The handoff records the exact accepted Building 1 state, vetted toolchain restoration, focused smoke commands, evidence caveats, and paused-branch resume gates. The canonical facade skill is project-local at [.agents/skills/building-texture/SKILL.md](.agents/skills/building-texture/SKILL.md).
 
+Human-only follow-ups are kept in the [owner action queue](HUMAN.md); that
+queue narrows external gates and never pauses safe independent work.
+
 The generated-data and exact-current source-runtime gates pass with USGS 3DEP
 bare-earth terrain on both islands, coherent terrain-following roads/areas,
 terrain-reaching building foundations, exactly grounded visual-only

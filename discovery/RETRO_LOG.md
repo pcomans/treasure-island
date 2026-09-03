@@ -5777,3 +5777,37 @@ No approach selected.
 - If a future product change is approved, emit one privacy-safe ordinary-startup
   readiness marker so launch verification does not depend on an optional log or
   screen-capture permission.
+
+## 2026-09-03 — GitHub CLI restoration and owner-action queue
+
+### Migration verifier (`/root/migration_verifier`)
+
+#### What worked well
+
+- The scoped fallback used an immutable official release, publisher API
+  digests, the published checksum row, archive-path validation, native
+  architecture inspection, and Apple signature verification without changing
+  the shared Homebrew installation.
+- Relaying the short-lived device code immediately while keeping one PTY alive
+  let the owner complete authentication without exposing or retaining a token.
+- The new owner-action queue separates external acceptance and optional future
+  distribution work from autonomous technical delivery.
+
+#### What did not work well
+
+- Homebrew availability was checked before prefix writability, so the first
+  authorized installation command failed on the migrated machine even though
+  it made no changes.
+- A direct credential-helper probe could wait on the platform keychain; it had
+  to be terminated and replaced with the CLI's explicit Git-helper setup.
+- The earlier authentication blocker was reported without a durable queue that
+  made its narrow scope and the remaining autonomous work equally explicit.
+
+#### What the team should change next time
+
+- Preflight package-manager writability before installation and prepare a
+  publisher-verified project-local fallback when a shared prefix is read-only.
+- Use `gh auth setup-git` after a successful CLI login instead of probing an
+  interactive keychain helper directly.
+- Put every genuinely human-only action in `HUMAN.md`, state exactly what it
+  blocks, and continue all work outside that scope.
