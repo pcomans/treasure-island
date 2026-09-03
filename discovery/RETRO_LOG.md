@@ -5740,3 +5740,40 @@ No approach selected.
 - Treat remote non-divergence, exact staged-path equality, staged-text privacy,
   checksum replay, and a post-push clean-tree check as one standard release
   checklist.
+
+## 2026-09-03 — Final persistent ordinary app launch
+
+### Migration verifier (`/root/migration_verifier`)
+
+#### What worked well
+
+- Hashing the exact executable and PCK before launch, requiring zero existing
+  matching processes, and resolving the new PID by its full executable mapping
+  prevented a stale or similarly named process from being mistaken for the
+  approved candidate.
+- LaunchServices, sustained process activity, Metal mappings, Cocoa finished-
+  launch state, and one visible backed layer-0 window provided independent,
+  nonintrusive startup evidence while the game remained untouched for owner
+  play.
+
+#### What did not work well
+
+- The ordinary runtime log was created but remained empty, so it could not
+  provide a textual world-ready milestone.
+- The window reported a non-shareable state and the permitted window-only
+  screenshot attempt failed, leaving no launch-time pixel artifact despite the
+  decisive process and window evidence.
+- An initial open-file check treated the PCK remaining open as mandatory even
+  though the engine had already loaded and closed it, causing a diagnostic
+  wrapper failure that did not represent a product failure.
+
+#### What the team should change next time
+
+- Define persistent-launch readiness as a layered gate—exact process mapping,
+  finished application launch, stable render activity, Metal state, and a
+  visible backed window—without requiring a package file to remain open.
+- Check screen-capture availability before the handoff when pixel evidence is
+  desired, and keep screenshot availability separate from runtime acceptance.
+- If a future product change is approved, emit one privacy-safe ordinary-startup
+  readiness marker so launch verification does not depend on an optional log or
+  screen-capture permission.
