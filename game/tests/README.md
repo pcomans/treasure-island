@@ -48,11 +48,14 @@ Apple M1 Pro owner play. The `231815` and `224622` packages are historical.
 
 These automated checks do not establish ground-level visual quality, owner recognition of Treasure Island, or owner acceptance of the exported app. Those checks belong to [`PLAYTEST.md`](../../PLAYTEST.md).
 
-This README was reconciled after candidate `111725` was exported and is not
-claimed to be byte-identical to the copy in the frozen 496-file source
-inventory. The exact old/new README hashes and sizes, plus the verified
-byte-identical comparison for the other 495 scoped source/config/generated
-files, are retained in that candidate's final-verification evidence.
+The retained post-sanitization review binds an immutable 496-file review-time
+snapshot, not live HEAD. In that dated snapshot this README had SHA-256
+`9ebec1bc5b725b698897cb83dfb5509e48bb51dd5a122042e53df8ea7d1ca8e2`
+at 18,503 bytes and the complete inventory had SHA-256
+`6fa2989e4a7a9c9fc93f6cf519e67731088ff875c545592da6d68c14e576d98c`.
+Later edits to this README are documentation-only and intentionally unbound by
+that sealed snapshot. See the [first-playable evidence index](../../evidence/first-playable/README.md)
+for the separate live-HEAD source binding.
 
 ## Automated continuous route QA
 

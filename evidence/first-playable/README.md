@@ -4,6 +4,32 @@ Checked: 2026-09-03
 
 This directory separates reproducible automated proof, native-launch proof, autonomous-review status, and owner feedback. Current source and packaged evidence are bound to generated content SHA-256 `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164` and manifest SHA-256 `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`. The active skyline is the single-color `2212x340` silhouette with SHA-256 `9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5`, on a `3900x600 m` billboard at `(-1875,264.85,4306.4)`. The sole current private handoff is `build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app`; the `190724` startup-repair, `231815` car-speed, and `224622` textured-world apps are historical.
 
+## Live HEAD source binding — 2026-09-03
+
+The live scoped inventory retains the same 496 paths as the immutable
+post-sanitization review-time snapshot. Exactly one row differs:
+`game/tests/README.md` is now SHA-256
+`0c15754b52a286a1a3f56fee62988594267236b3eb73e9c665306b0f5389ecd4`
+at 19,029 bytes. The newly computed canonical
+`path\0sha256\0bytes\n` identity over all 496 live rows is
+`fa3b7479b7410e88180a6b4959c03adabf043792453d4332614e7d8914782c13`;
+the same rows serialized in the sealed inventory's historical tab-delimited
+TSV form hash to
+`4b463d8dd42338193a12cced552f5298149f74090ec8fcb56fd7c17c6ee99c3f`.
+
+Removing that documentation row leaves all other 495 rows byte-identical to
+the retained snapshot. Their historical TSV aggregate remains
+`dd70d46ce100951ac9ce7713bd771582dfe6787015b631cc12721b13f01fd0c0`;
+their newly computed canonical NUL-delimited identity is
+`7cb5cea8c3c9bc99f136dd2c9ae2c390f641c3c05667028f2f3239e0c59161bd`.
+The words “current” and “current inventory” inside the dated sealed README and
+post-sanitization review mean current at review time, when that complete TSV
+inventory was `6fa2989e4a7a9c9fc93f6cf519e67731088ff875c545592da6d68c14e576d98c`
+and the README row was `9ebec1bc5b725b698897cb83dfb5509e48bb51dd5a122042e53df8ea7d1ca8e2`
+at 18,503 bytes. Later README edits are documentation-only and intentionally
+unbound by that sealed snapshot. Product, project-configuration, generated,
+source-asset, and exact candidate-app bytes are unchanged.
+
 ## Current result
 
 - **Generated world: pass.** `739` unique OSM source rows resolve as `735` playable plus `4` context, with zero unresolved or duplicate rows across `38` chunks and `729` physical records. OSM remains authoritative for horizontal geometry; the frozen USGS crop supplies elevation.

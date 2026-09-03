@@ -5869,3 +5869,29 @@ No approach selected.
   correction commit.
 - Keep exact deterministic distance, frame, simulated-time, and pass metrics;
   round environmental wall time and link the authoritative retained log.
+
+## 2026-09-03 — External live-source provenance binding
+
+### Delivery-state recovery (`/root/delivery_state_recovery`)
+
+#### What worked well
+
+- Regenerating the complete scoped inventory before editing its external index
+  proved that one documentation row remained the sole delta and that the other
+  495 records were byte-identical.
+- Recording both the sealed TSV aggregates and newly computed canonical
+  NUL-delimited identities kept two distinct serialization contracts explicit.
+
+#### What did not work well
+
+- A mutable README described its own earlier hash through a sealed snapshot,
+  which made later documentation-only edits appear to invalidate a live claim.
+- The earlier wording used “current” inside a dated review without explicitly
+  limiting that word to review time.
+
+#### What the team should change next time
+
+- Bind self-referential mutable documentation from a separate file outside the
+  sealed scope rather than trying to place its future hash inside itself.
+- Label every retained inventory by lifecycle time and serialization before
+  comparing its aggregate with a regenerated live-HEAD identity.
