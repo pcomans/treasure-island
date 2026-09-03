@@ -10,10 +10,11 @@ Resume revision: **the destination `origin/main` commit containing this handoff*
 > restoration are complete. This document remains the authoritative dated
 > baseline for the accepted Building 1 state, source boundaries, toolchain, and
 > paused `r133351` branch, but its “next action” and clean-resume steps are
-> historical. The current uncommitted implementation/evidence snapshot is
-> intentionally based on `main` HEAD/origin
+> historical. The exact at-export base provenance was `main` HEAD/origin
 > `08219c9e11c8bd6ce681e48860bb906db07e82f7`, tree
-> `a02b1c5b645c02d60a18d01e89f6e2f71bb7e04f`. The current private app is
+> `a02b1c5b645c02d60a18d01e89f6e2f71bb7e04f`; the verified deliverable
+> source and evidence were committed in `921be43`, and clean local and live
+> `origin/main` have since been durably pushed. The current private app is
 > `build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app`;
 > executable SHA-256
 > `49c7518acfb5443b0cee2f22d65a45405ab62c79a2112d7e770ca1c030eca594`,
@@ -25,8 +26,9 @@ Resume revision: **the destination `origin/main` commit containing this handoff*
 > `evidence/first-playable/final-verification-2026-09-03-105408/`; the
 > canonical twelve-view source-project evidence is
 > `evidence/first-playable/exact-current-visual-repair-2026-09-03-104510/`.
-> Do not discard the present working tree merely because the historical
-> migration procedure below expected a clean clone.
+> The earlier dirty-worktree preservation warning is historical: source and
+> evidence are on pushed `main`, while the exact ignored candidate app remains
+> local at the path above.
 
 The current topology distinction is: `729` physical/generated records render
 `729 meshes / 739 surfaces / 48,389 triangles`; accepted visual attachments

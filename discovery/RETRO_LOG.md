@@ -5840,3 +5840,32 @@ No approach selected.
   separate gates; verify all three before declaring delivery complete.
 - Keep committing locally and advance every independent workstream whenever an
   external gate affects only one narrow part of the handoff.
+
+## 2026-09-03 — Final handoff status and route-timing reconciliation
+
+### Delivery-state recovery (`/root/delivery_state_recovery`)
+
+#### What worked well
+
+- The completion audit compared the migration-status prose with live branch
+  refs and the retained final route logs, exposing two stale point-in-time
+  claims without requiring any product or evidence changes.
+- Direct links to the final post-export-guard logs keep exact observed results
+  available while rounded wall times avoid presenting run-to-run noise as a
+  stable contract.
+
+#### What did not work well
+
+- The migration handoff blended exact at-export base provenance with mutable
+  live branch status, so a successful push made its status paragraph
+  contradictory.
+- Repeated documentation copied one run's wall-clock values as if they were
+  invariant, even though the deterministic route metrics continued to pass.
+
+#### What the team should change next time
+
+- Label commit and tree pins by lifecycle stage, especially “at export,” and
+  describe live publication status without embedding a self-referential
+  correction commit.
+- Keep exact deterministic distance, frame, simulated-time, and pass metrics;
+  round environmental wall time and link the authoritative retained log.
