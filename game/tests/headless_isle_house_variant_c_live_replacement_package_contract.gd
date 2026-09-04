@@ -21,7 +21,7 @@ const SOURCE_HASHES := {
 	FACTORY_PATH: "4336e821e240b973f8d97e5cb46e17332b19dea03869abb1fa81b96a7e380582",
 	REVIEWED_FACTORY_PATH: "b24fd72cd12aa0c6c45a123f005fc834ea657c343e8332a872eae07fa017ace7",
 	CONFIG_PATH: "bafdef392ee638e860ba15f140c10de61e266ae63005b12e0e310e52c176897a",
-	BUILDER_PATH: "28be094c674108f42be040f2b3ae6d242838d15e2060f6cf4668b0a003f1a682",
+	BUILDER_PATH: "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c",
 	CHUNK_PATH: "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce",
 	MANIFEST_PATH: "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
 }
@@ -134,7 +134,7 @@ func _world_matches() -> Dictionary:
 	var lows := _nodes_for_key(world, LOW_WALL_KEY)
 	var highs := _nodes_for_key(world, HIGH_WALL_KEY)
 	var e := world.get_runtime_evidence()
-	var topology_ok := e.playable_rows == 735 and e.mesh_instances == 940 and e.surfaces == 954 and e.triangles == 64118 and e.static_bodies == 466 and e.shapes == 466
+	var topology_ok := e.playable_rows == 735 and e.mesh_instances == 944 and e.surfaces == 957 and e.triangles == 64572 and e.static_bodies == 466 and e.shapes == 466
 	var ok := failures.is_empty() and reports.size() == 1 and lows.size() == 1 and highs.size() == 1 and topology_ok
 	if ok:
 		ok = _count_named(lows[0], "IsleHouseCompositeRepairVariantCLiveAttachment") == 1 \
@@ -201,5 +201,5 @@ func _finish(mounted: bool) -> void:
 		if mounted:
 			print("PASS: mounted Variant C live replacement package resolves exact 7/11/2242 output and 8/12/2268 receiver without discovery/evidence payloads, fallback stacking, or decorative ownership")
 		else:
-			print("PASS: source Variant C live replacement package resolves exact 7/11/2242 output and 735/940/954/64118/466/466 world without discovery/evidence payloads, fallback stacking, or decorative ownership")
+			print("PASS: source Variant C live replacement package resolves exact 7/11/2242 output and 735/944/957/64572/466/466 world without discovery/evidence payloads, fallback stacking, or decorative ownership")
 	quit(1 if _failed else 0)

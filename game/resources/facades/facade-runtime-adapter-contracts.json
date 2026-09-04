@@ -1,8 +1,8 @@
 {
   "build_contract": {
-    "authoring_catalog_sha256": "2b457965d2e25d522d2ca3d73afb109b03a57247eaefbb6b70775bd83fb07311",
-    "compiler_version": "1.3.0",
-    "runtime_registry_schema_version": "ti.facade-runtime-registry/4",
+    "authoring_catalog_sha256": "56d7257fa4e3486b3299683c45d4ae1057858c6e1edb3e49f6b6241d7f1a9be7",
+    "compiler_version": "1.4.0",
+    "runtime_registry_schema_version": "ti.facade-runtime-registry/5",
     "unknown_version_policy": "reject"
   },
   "contract_id": "treasure-island-facade-runtime-adapters",
@@ -22,10 +22,10 @@
       "res://game/scenes/world/",
       "res://game/scripts/world/"
     ],
-    "api_version": "ti.facade-runtime-registry-loader/3",
+    "api_version": "ti.facade-runtime-registry-loader/4",
     "instantiation_authorized": false,
     "loader_path": "res://game/scripts/world/facades/facade_runtime_registry_loader.gd",
-    "loader_sha256": "7a245be61167cf774f5f693944fe3adc6640b5dd7f7cb98fcb6425a7c82f7832",
+    "loader_sha256": "5975480c124cb3dd4b4f61a2099e284286d7c5c6b808f4c7ecef1cd7b5332395",
     "projection_execution_policy": "forbidden",
     "unknown_version_policy": "reject"
   },
@@ -86,12 +86,12 @@
           "overlay_repair_signature": "41868b77a8b51b56ee7381e5549423e97547270d2dc77d9ce5cf958b31e2cb69",
           "overlay_surfaces": 11,
           "overlay_triangles": 2242,
-          "world_mesh_instances": 940,
+          "world_mesh_instances": 944,
           "world_records": 735,
           "world_shapes": 466,
           "world_static_bodies": 466,
-          "world_surfaces": 954,
-          "world_triangles": 64118
+          "world_surfaces": 957,
+          "world_triangles": 64572
         },
         "ownership_contract": {
           "decorative_collision_nodes": 0,
@@ -299,19 +299,112 @@
       "source_key": "w1249412093"
     },
     {
-      "adapter_id": "legacy-adapter:building:w291189336:wall",
-      "behavior_contract": null,
-      "content_mode": "legacy_adapter",
+      "adapter_id": "active-adapter:navy-chapel-187:building:w291189336:wall",
+      "behavior_contract": {
+        "acceptance_contract": {
+          "accepted_physical_unit_id": "physical-building:w291189336",
+          "independent_live_review_receipt_sha256": "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9",
+          "numerator_effect": 1,
+          "reference_recognizable": true,
+          "wall_and_roof_are_one_physical_unit": true
+        },
+        "geometry_contract": {
+          "canonical_roof_record_sha256": "54bcd378997d0778bdaee432dc24ecdbb142c5dc5371166cf2d690ebb245b832",
+          "canonical_wall_record_sha256": "69769fef402b480f1626fdce47e6d4ad49ecb710dab2b2e7373e5efa5acf0080",
+          "horizontal_source_footprint_preserved": true,
+          "visual_geometry_signature": "076e081df86e884f04cf7cb680304c35c64e6f76238de7060528c59097ae5c46",
+          "visual_mesh_instances": 6,
+          "visual_surfaces": 6,
+          "visual_triangles": 540,
+          "world_mesh_instances": 944,
+          "world_records": 735,
+          "world_shapes": 466,
+          "world_static_bodies": 466,
+          "world_surfaces": 957,
+          "world_triangles": 64572
+        },
+        "ownership_contract": {
+          "live_ownership_signature": "4766c5d562933eb632f1ef3bdcec828fc40be81c996db919c53405f776fa04a7",
+          "navigation_owner_count": 0,
+          "roof_collision_triangles": 50,
+          "roof_is_wall_spray_receiver": false,
+          "shape_count": 2,
+          "spray_owner_count": 1,
+          "structural_owner_count": 2,
+          "wall_collision_triangles": 94,
+          "wall_is_sole_spray_receiver": true
+        },
+        "replacement_contract": {
+          "actual_supplied_chunk_pair_required": true,
+          "fallback_allowed": false,
+          "generic_stack_allowed": false,
+          "roof_object_key": "building:w291189336:roof",
+          "source_key": "w291189336",
+          "wall_object_key": "building:w291189336:wall"
+        },
+        "schema_version": "ti.navy-chapel-187-live-parity/1",
+        "truth_boundary": {
+          "as_built_fidelity_claimed": false,
+          "game_distinctive_claimed": false,
+          "protected_runs_module_free": true,
+          "receiver_complete_inferred_from_art": false,
+          "side_count_and_spacing_are_production_inference": true
+        }
+      },
+      "content_mode": "active_navy_chapel_187_paired_replacement",
       "disabled_reason_code": null,
-      "executable_assets": [],
+      "executable_assets": [
+        {
+          "path": "res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd",
+          "resource_kind": "gdscript",
+          "sha256": "deffb5956d8e808565d1c557208647a89dff4730c15f97aa9b1085a087968cad"
+        },
+        {
+          "path": "res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd",
+          "resource_kind": "gdscript",
+          "sha256": "067c12e29c9fd352915ef2a501fcd7687b450081c79a4281d63bbfef1c19e7db"
+        }
+      ],
       "integration_state": "package_safe_ready_for_integration",
       "projection_descriptor_ids": [],
       "receiver_key": "building:w291189336:wall",
       "resolution_policy": "resolve_only_without_instantiation",
       "runtime_assets": [
         {
+          "path": "res://game/resources/facades/navy_chapel_187_standalone_hero_prototype.json",
+          "sha256": "c8f2ab09f3943a5ec8abea7cb9a108f49990bff1d83003c3b3622187a269dea2"
+        },
+        {
           "path": "res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres",
           "sha256": "4020e4c75350929359be9c16686ad80a2a0eac46918cc32746089694017a61a5"
+        },
+        {
+          "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_inferred_cream_structure.tres",
+          "sha256": "2ee243415387c9f3d9dfd5664c0a5e13107745a83d9dcb489dd39e5aeb2ff17a"
+        },
+        {
+          "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres",
+          "sha256": "89be7fbe0feb68525c5423540d3a6f17f269567875174f23522b4e964ba737b1"
+        },
+        {
+          "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres",
+          "sha256": "253e9c2a5013f81aed446f6e55b702dea3792189658ce285726788d15376bc41"
+        },
+        {
+          "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres",
+          "sha256": "b565aa44566a0bb93d07d041b1e8331d9f35cb83ec34f6a2ec403b362311c380"
+        },
+        {
+          "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_protected_neutral.tres",
+          "sha256": "91cd7ce14550bdfb6773a4013ef0db8bbb24bd5cc9d0734f6c591f23d6552206"
+        },
+        {
+          "path": "res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd",
+          "sha256": "deffb5956d8e808565d1c557208647a89dff4730c15f97aa9b1085a087968cad"
+        },
+        {
+          "path": "res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd",
+          "sha256": "067c12e29c9fd352915ef2a501fcd7687b450081c79a4281d63bbfef1c19e7db"
         }
       ],
       "source_key": "w291189336"
@@ -814,5 +907,5 @@
       "source_asset_type": "gd"
     }
   ],
-  "schema_version": "ti.facade-runtime-adapter-contracts/3"
+  "schema_version": "ti.facade-runtime-adapter-contracts/4"
 }

@@ -65,7 +65,7 @@ func _run() -> void:
 
 	await _whole_world_contract()
 	if not _failed:
-		print("PASS: historical Building 1 recognizability remains sealed but inert; four separately keyed accepted-current hero components supersede the generic placeholders at 13 meshes / 13 surfaces / 10,711 triangles with world 735/940/954/64,118/466")
+		print("PASS: historical Building 1 recognizability remains sealed but inert; four separately keyed accepted-current hero components supersede the generic placeholders at 13 meshes / 13 surfaces / 10,711 triangles with world 735/944/957/64,572/466")
 	_finish()
 
 
@@ -83,8 +83,8 @@ func _whole_world_contract() -> void:
 	_require(
 		failures.is_empty() and reports.size() == 1 and evidence != null \
 		and evidence.playable_rows == 735 and evidence.context_rows == 4 \
-		and evidence.mesh_instances == 940 and evidence.surfaces == 954 \
-		and evidence.triangles == 64118 and evidence.static_bodies == 466 and evidence.shapes == 466,
+		and evidence.mesh_instances == 944 and evidence.surfaces == 957 \
+		and evidence.triangles == 64572 and evidence.static_bodies == 466 and evidence.shapes == 466,
 		"Whole-island topology or load drifted after Building 1 hero supersession.",
 	)
 	for key in HERO.TARGET_KEYS:

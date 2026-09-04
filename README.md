@@ -33,11 +33,14 @@ and tower placeholder records are intercepted before generic visual/collision
 construction, leaving a `725 / 735 / 48,059` placeholder-free record baseline.
 Building 3's accepted congruent arched wall/roof replacement raises the active
 record-owned triangle total to `48,825` without changing mesh, surface, or body
-counts. The accepted four-component Building 1/tower hero owns
+counts. Navy Chapel's accepted paired wall/roof replacement then supersedes its
+two generic record meshes, leaving active record-root topology at
+`723 / 732 / 48,739`; its descendant hero geometry owns `6 / 6 / 540` with the
+same two structural owners. The accepted four-component Building 1/tower hero owns
 `13 / 13 / 10,711`; the accepted Isle House Variant C overlay owns
 `7 / 11 / 2,242` without decorative collision. With the unchanged runtime
 attachments and context, all `735` playable rows load as
-`940 meshes / 954 surfaces / 64,118 triangles`, with `466` body/shape pairs.
+`944 meshes / 957 surfaces / 64,572 triangles`, with `466` body/shape pairs.
 These exact-current source replacements are not present in the retained
 `111725` app. Movement remains `4/20 m/s` with `30/40 m/s²`
 acceleration/braking.
@@ -103,12 +106,14 @@ The visual-only pavement skin keeps one filled union for all `427` OSM road/path
 - `38` generated chunks and `729` physical records for all `735` playable rows.
   Their frozen serialized
   topology remains `729 meshes / 739 surfaces / 48,389 triangles`. The runtime
-  uses `725 / 735 / 48,825` runtime record topology after intercepting the four
-  Building 1/tower records and replacing the two Building 3 records; the
+  uses `723 / 732 / 48,739` runtime record-root topology after intercepting the four
+  Building 1/tower records and replacing the Building 3 and Navy Chapel wall/roof pairs; the
   accepted Building 1/tower replacement owns `13 / 13 / 10,711` and four
   congruent body/shape pairs, while the accepted Isle House Variant C overlay
-  owns `7 / 11 / 2,242` and no decorative collision. The exact-current loaded
-  source project instantiates `940` meshes, `954` surfaces, `64,118` triangles,
+  owns `7 / 11 / 2,242` and no decorative collision. The accepted Navy Chapel
+  hero owns `6 / 6 / 540` and replaces, rather than duplicates, two structural
+  owners. The exact-current loaded source project instantiates `944` meshes,
+  `957` surfaces, `64,572` triangles,
   and `466` nonempty static body/shape pairs. The additional `28`
   records are visual-only pedestrian pavement skins. Other facade attachments
   and pavement skins do not change physical collision. YBI, both bridges, and
@@ -199,7 +204,7 @@ APP_BINARY="build/final-verification-staging-YYYY-MM-DD-HHMMSS/Treasure Island F
 
 The packaged smoke starts the exported PCK's normal main scene and fails after
 60 seconds of simulation time if its checks do not finish. It exits nonzero if
-the exact ferry spawn/yaw, approved hash, source-current `940/954/64,118`
+the exact ferry spawn/yaw, approved hash, source-current `944/957/64,572`
 topology, grounded player-enable gate, exact `4/20 m/s` speed and
 `30/40 m/s²` response defaults, ambient/camera defaults, live eleven-key
 Poly Haven texture identities/effective repeats/filtering/normals, Space-bound

@@ -20,12 +20,12 @@ import {
 } from "./lib/world-contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const COMPILER_VERSION = "1.3.0";
-const CATALOG_SCHEMA = "ti.facade-recognition-catalog/4";
-const RUNTIME_SCHEMA = "ti.facade-runtime-registry/4";
-const REPORT_SCHEMA = "ti.facade-recognition-validation-report/3";
-const ADAPTER_CONTRACT_SCHEMA = "ti.facade-runtime-adapter-contracts/3";
-const LOADER_API_VERSION = "ti.facade-runtime-registry-loader/3";
+const COMPILER_VERSION = "1.4.0";
+const CATALOG_SCHEMA = "ti.facade-recognition-catalog/5";
+const RUNTIME_SCHEMA = "ti.facade-runtime-registry/5";
+const REPORT_SCHEMA = "ti.facade-recognition-validation-report/4";
+const ADAPTER_CONTRACT_SCHEMA = "ti.facade-runtime-adapter-contracts/4";
+const LOADER_API_VERSION = "ti.facade-runtime-registry-loader/4";
 const UNKNOWN_VERSION_POLICY = "reject";
 const CATALOG_ID = "treasure-island-physical-building-recognition";
 const CATALOG_SCHEMA_REFERENCE = "./facade-recognition-catalog.schema.json";
@@ -71,12 +71,31 @@ const BUILDING_3_FACADE_ASSET_PATHS = Object.freeze([
 ]);
 const WORLD_CHUNK_BUILDER_PATH = "game/scripts/world/world_chunk_builder.gd";
 const FACADE_RUNTIME_LOADER_PATH = "game/scripts/world/facades/facade_runtime_registry_loader.gd";
+const NAVY_CHAPEL_SOURCE = "w291189336";
+const NAVY_CHAPEL_WALL = "building:w291189336:wall";
+const NAVY_CHAPEL_ROOF = "building:w291189336:roof";
+const NAVY_CHAPEL_LIVE_ADAPTER_PATH = "game/scripts/world/facades/navy_chapel_187_live_replacement.gd";
+const NAVY_CHAPEL_PROTOTYPE_PATH = "game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd";
+const NAVY_CHAPEL_CONFIG_PATH = "game/resources/facades/navy_chapel_187_standalone_hero_prototype.json";
+const NAVY_CHAPEL_LIVE_REVIEW_RECEIPT_SHA256 = "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9";
+const NAVY_CHAPEL_GEOMETRY_SIGNATURE = "076e081df86e884f04cf7cb680304c35c64e6f76238de7060528c59097ae5c46";
+const NAVY_CHAPEL_OWNERSHIP_SIGNATURE = "4766c5d562933eb632f1ef3bdcec828fc40be81c996db919c53405f776fa04a7";
+const NAVY_CHAPEL_RUNTIME_ASSET_PATHS = Object.freeze([
+  "game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres",
+  "game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_inferred_cream_structure.tres",
+  "game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres",
+  "game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres",
+  "game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres",
+  "game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_protected_neutral.tres",
+  NAVY_CHAPEL_PROTOTYPE_PATH,
+]);
 
 const ACCEPTED_REFERENCE_UNIT_IDS = Object.freeze([
   "physical-building:r16681702",
   "physical-building:w1222720021",
   "physical-building:w1249412093",
   "physical-building:w1249412094",
+  "physical-building:w291189336",
   "physical-building:w34313540",
 ]);
 
@@ -116,6 +135,13 @@ const REVIEW_RECEIPTS = Object.freeze({
     review_receipt_sha256: ISLE_HOUSE_LIVE_REVIEW_RECEIPT_SHA256,
     unit_id: ISLE_HOUSE_UNIT_ID,
   }),
+  "navy-chapel-187-live-replacement-2026-09-04": Object.freeze({
+    evidence_manifest_path: "evidence/first-playable/navy-chapel-187-live-replacement-2026-09-04/capture-manifest.json",
+    evidence_manifest_sha256: "54d434c9283a0e2d86aa836e6a21672a8756e5a170cb5724d66066e799223930",
+    review_path: "evidence/first-playable/navy-chapel-187-live-replacement-2026-09-04/INDEPENDENT_LIVE_BAR_RAISER_REVIEW.md",
+    review_receipt_sha256: NAVY_CHAPEL_LIVE_REVIEW_RECEIPT_SHA256,
+    unit_id: "physical-building:w291189336",
+  }),
 });
 
 const PATHS = Object.freeze({
@@ -129,12 +155,12 @@ const PATHS = Object.freeze({
 });
 
 const EXPECTED = Object.freeze({
-  active_runtime_adapter_receivers: 4,
+  active_runtime_adapter_receivers: 5,
   building_footprints: 213,
   building_parts: 2,
   composite_units: 1,
   direct_wall_receivers: 214,
-  legacy_adapter_receivers: 10,
+  legacy_adapter_receivers: 9,
   recognition_units: 213,
   source_records: 215,
   standalone_units: 212,
@@ -288,6 +314,10 @@ function isleHouseActiveAdapterId(receiverKey) {
   return `active-adapter:isle-house-variant-c:${receiverKey}`;
 }
 
+function navyChapelActiveAdapterId(receiverKey) {
+  return `active-adapter:navy-chapel-187:${receiverKey}`;
+}
+
 function loadInputs() {
   const inventory = readJson(PATHS.inventory);
   const manifest = readJson(PATHS.manifest);
@@ -339,6 +369,13 @@ function loadInputs() {
       isleHouseLiveAdapterText: readFileSync(absolute(ISLE_HOUSE_LIVE_ADAPTER_PATH), "utf8"),
       isleHouseRepairFactorySha256: sha256File(absolute(ISLE_HOUSE_REPAIR_FACTORY_PATH)),
       isleHouseReviewedFactorySha256: sha256File(absolute(ISLE_HOUSE_REVIEWED_FACTORY_PATH)),
+      navyChapelConfig: readJson(NAVY_CHAPEL_CONFIG_PATH),
+      navyChapelConfigPath: NAVY_CHAPEL_CONFIG_PATH,
+      navyChapelConfigSha256: sha256File(absolute(NAVY_CHAPEL_CONFIG_PATH)),
+      navyChapelLiveAdapterPath: NAVY_CHAPEL_LIVE_ADAPTER_PATH,
+      navyChapelLiveAdapterSha256: sha256File(absolute(NAVY_CHAPEL_LIVE_ADAPTER_PATH)),
+      navyChapelLiveAdapterText: readFileSync(absolute(NAVY_CHAPEL_LIVE_ADAPTER_PATH), "utf8"),
+      navyChapelPrototypeSha256: sha256File(absolute(NAVY_CHAPEL_PROTOTYPE_PATH)),
       worldBuilderPath: WORLD_CHUNK_BUILDER_PATH,
       worldBuilderSha256: sha256File(absolute(WORLD_CHUNK_BUILDER_PATH)),
       worldBuilderText: readFileSync(absolute(WORLD_CHUNK_BUILDER_PATH), "utf8"),
@@ -496,7 +533,7 @@ function unitSeed(anchor, memberObjects, unitKind) {
 function deriveLegacyAdapterSeeds(inventory) {
   const inventoryAttachments = inventory.runtime_material_contract.accepted_target_specific_runtime_attachments;
   invariant(inventory.runtime_material_contract.accepted_target_specific_runtime_attachment_count === inventoryAttachments.length, "Inventory accepted runtime count disagrees with its attachment list");
-  const activeReceiverKeys = new Set([BUILDING_1_WALL, BUILDING_3_WALL]);
+  const activeReceiverKeys = new Set([BUILDING_1_WALL, BUILDING_3_WALL, NAVY_CHAPEL_WALL]);
   const attachments = inventoryAttachments.filter((attachment) => !activeReceiverKeys.has(attachment.receiver_key));
   invariant(Array.isArray(attachments), "Inventory accepted runtime attachments are missing");
   invariant(attachments.length === EXPECTED.legacy_adapter_receivers, `Expected ${EXPECTED.legacy_adapter_receivers} accepted legacy receivers, found ${attachments.length}`);
@@ -628,6 +665,46 @@ function validateActiveIsleHouseDispatch(inputs) {
   }
 }
 
+function validateActiveNavyChapelDispatch(inputs) {
+  const contract = inputs.runtimeContracts;
+  const config = contract.navyChapelConfig;
+  const target = config.target ?? {};
+  const truth = config.truth_boundary ?? {};
+  invariant(config.schema_version === "ti.navy-chapel-187-standalone-hero-prototype/1", "Navy Chapel source-model config schema drifted");
+  invariant(target.source_key === NAVY_CHAPEL_SOURCE && target.wall_object_key === NAVY_CHAPEL_WALL && target.roof_object_key === NAVY_CHAPEL_ROOF, "Navy Chapel wall/roof target drifted");
+  invariant(target.wall_run_count === 34 && target.wall_triangles === 68 && target.roof_triangles === 18, "Navy Chapel frozen source topology drifted");
+  invariant(truth.horizontal_source_footprint_changed === false && truth.source_identity_changed === false && truth.as_built_claim === false, "Navy Chapel source/truth boundary drifted");
+  const adapterText = contract.navyChapelLiveAdapterText;
+  for (const expected of [
+    `const SOURCE_KEY := "${NAVY_CHAPEL_SOURCE}"`,
+    `const WALL_KEY := "${NAVY_CHAPEL_WALL}"`,
+    `const ROOF_KEY := "${NAVY_CHAPEL_ROOF}"`,
+    'const CANONICAL_WALL_RECORD_SHA256 := "69769fef402b480f1626fdce47e6d4ad49ecb710dab2b2e7373e5efa5acf0080"',
+    'const CANONICAL_ROOF_RECORD_SHA256 := "54bcd378997d0778bdaee432dc24ecdbb142c5dc5371166cf2d690ebb245b832"',
+    `const EXPECTED_GEOMETRY_SIGNATURE := "${NAVY_CHAPEL_GEOMETRY_SIGNATURE}"`,
+    `const EXPECTED_LIVE_OWNERSHIP_SIGNATURE := "${NAVY_CHAPEL_OWNERSHIP_SIGNATURE}"`,
+    `const PROTOTYPE := preload("res://${NAVY_CHAPEL_PROTOTYPE_PATH}")`,
+    '"fallback_allowed": false',
+    '"stack_allowed": false',
+    '"wall_collision_triangles": EXPECTED_WALL_COLLISION_TRIANGLES',
+    '"roof_collision_triangles": EXPECTED_ROOF_COLLISION_TRIANGLES',
+    '"roof_in_wall_spray_group": false',
+  ]) invariant(adapterText.includes(expected), `Navy Chapel live adapter contract drifted: ${expected}`);
+  const builderText = contract.worldBuilderText;
+  invariant(builderText.includes(`const NAVY_CHAPEL_187_LIVE_REPLACEMENT := preload("res://${NAVY_CHAPEL_LIVE_ADAPTER_PATH}")`), "World builder no longer preloads the Navy Chapel paired replacement");
+  for (const expected of [
+    "NAVY_CHAPEL_187_LIVE_REPLACEMENT.prepare_chunk_records(chunk.records as Array)",
+    "NAVY_CHAPEL_187_LIVE_REPLACEMENT.build_chunk_plan(chapel_pair)",
+    "NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)",
+    "NAVY_CHAPEL_187_LIVE_REPLACEMENT.claims_record(record)",
+    "NAVY_CHAPEL_187_LIVE_REPLACEMENT.consume_record(record, chapel_plan)",
+  ]) invariant(builderText.includes(expected), `World builder Navy Chapel paired dispatch drifted: ${expected}`);
+  invariant(builderText.indexOf("NAVY_CHAPEL_187_LIVE_REPLACEMENT.claims_record(record)") < builderText.indexOf("var vertices := PackedVector3Array()"), "Navy Chapel replacement no longer intercepts both rows before generic visual/collision construction");
+  for (const path of [NAVY_CHAPEL_LIVE_ADAPTER_PATH, NAVY_CHAPEL_CONFIG_PATH, ...NAVY_CHAPEL_RUNTIME_ASSET_PATHS]) {
+    invariant(existsSync(absolute(path)) && statSync(absolute(path)).isFile(), `Navy Chapel current runtime asset is missing: ${path}`);
+  }
+}
+
 function building3BehaviorContract() {
   return {
     collision_contract: {
@@ -679,11 +756,11 @@ function isleHouseBehaviorContract() {
       overlay_repair_signature: ISLE_HOUSE_REPAIR_SIGNATURE,
       overlay_surfaces: 11,
       overlay_triangles: 2242,
-      world_mesh_instances: 940,
+      world_mesh_instances: 944,
       world_records: 735,
       world_static_bodies: 466,
-      world_surfaces: 954,
-      world_triangles: 64118,
+      world_surfaces: 957,
+      world_triangles: 64572,
       world_shapes: 466,
     },
     ownership_contract: {
@@ -708,10 +785,65 @@ function isleHouseBehaviorContract() {
   };
 }
 
+function navyChapelBehaviorContract() {
+  return {
+    acceptance_contract: {
+      accepted_physical_unit_id: unitId(NAVY_CHAPEL_SOURCE),
+      independent_live_review_receipt_sha256: NAVY_CHAPEL_LIVE_REVIEW_RECEIPT_SHA256,
+      numerator_effect: 1,
+      reference_recognizable: true,
+      wall_and_roof_are_one_physical_unit: true,
+    },
+    geometry_contract: {
+      canonical_roof_record_sha256: "54bcd378997d0778bdaee432dc24ecdbb142c5dc5371166cf2d690ebb245b832",
+      canonical_wall_record_sha256: "69769fef402b480f1626fdce47e6d4ad49ecb710dab2b2e7373e5efa5acf0080",
+      horizontal_source_footprint_preserved: true,
+      visual_geometry_signature: NAVY_CHAPEL_GEOMETRY_SIGNATURE,
+      visual_mesh_instances: 6,
+      visual_surfaces: 6,
+      visual_triangles: 540,
+      world_mesh_instances: 944,
+      world_records: 735,
+      world_shapes: 466,
+      world_static_bodies: 466,
+      world_surfaces: 957,
+      world_triangles: 64572,
+    },
+    ownership_contract: {
+      live_ownership_signature: NAVY_CHAPEL_OWNERSHIP_SIGNATURE,
+      navigation_owner_count: 0,
+      roof_collision_triangles: 50,
+      roof_is_wall_spray_receiver: false,
+      shape_count: 2,
+      spray_owner_count: 1,
+      structural_owner_count: 2,
+      wall_collision_triangles: 94,
+      wall_is_sole_spray_receiver: true,
+    },
+    replacement_contract: {
+      actual_supplied_chunk_pair_required: true,
+      fallback_allowed: false,
+      generic_stack_allowed: false,
+      roof_object_key: NAVY_CHAPEL_ROOF,
+      source_key: NAVY_CHAPEL_SOURCE,
+      wall_object_key: NAVY_CHAPEL_WALL,
+    },
+    schema_version: "ti.navy-chapel-187-live-parity/1",
+    truth_boundary: {
+      as_built_fidelity_claimed: false,
+      game_distinctive_claimed: false,
+      protected_runs_module_free: true,
+      receiver_complete_inferred_from_art: false,
+      side_count_and_spacing_are_production_inference: true,
+    },
+  };
+}
+
 function deriveActiveRuntimeAdapterSeeds(inputs) {
   validateActiveHeroDispatch(inputs);
   validateActiveBuilding3Dispatch(inputs);
   validateActiveIsleHouseDispatch(inputs);
+  validateActiveNavyChapelDispatch(inputs);
   const shared = {
     content_classification: "active_target_specific_hero_replacement",
     review_status: inputs.runtimeContracts.heroConfig.truth_boundary.visual_review_status,
@@ -759,6 +891,18 @@ function deriveActiveRuntimeAdapterSeeds(inputs) {
       runtime_config_path: ISLE_HOUSE_VARIANT_C_CONFIG_PATH,
       runtime_dispatch_path: WORLD_CHUNK_BUILDER_PATH,
       source_key: ISLE_HOUSE_LOW_SOURCE,
+      whole_building_recognizability_imported: false,
+    },
+    {
+      adapter_id: navyChapelActiveAdapterId(NAVY_CHAPEL_WALL),
+      content_classification: "active_target_specific_paired_wall_roof_replacement",
+      receiver_key: NAVY_CHAPEL_WALL,
+      review_status: "independent_exact_current_live_pass",
+      runtime_adapter_path: NAVY_CHAPEL_LIVE_ADAPTER_PATH,
+      runtime_asset_paths: [...NAVY_CHAPEL_RUNTIME_ASSET_PATHS],
+      runtime_config_path: NAVY_CHAPEL_CONFIG_PATH,
+      runtime_dispatch_path: WORLD_CHUNK_BUILDER_PATH,
+      source_key: NAVY_CHAPEL_SOURCE,
       whole_building_recognizability_imported: false,
     },
   ].sort((left, right) => left.receiver_key.localeCompare(right.receiver_key));
@@ -927,10 +1071,12 @@ function validateCatalog(catalog, inputs, derivedUnits, receiverByKey) {
     .filter((unit) => unit.claim_status.reference_recognizable === "accepted")
     .map((unit) => unit.unit_id)
     .sort();
-  invariant(equalStable(acceptedReferenceUnitIds, [...ACCEPTED_REFERENCE_UNIT_IDS].sort()), "Catalog reference-recognizable rollup must be exactly the five independently accepted physical units");
+  invariant(equalStable(acceptedReferenceUnitIds, [...ACCEPTED_REFERENCE_UNIT_IDS].sort()), "Catalog reference-recognizable rollup must be exactly the six independently accepted physical units");
   invariant(!catalog.units.some((unit) => ISLE_HOUSE_PARTS.map(unitId).includes(unit.unit_id)), "Isle House receiver source records must never become recognition units");
   const isleHouseUnit = catalog.units.find((unit) => unit.unit_id === ISLE_HOUSE_UNIT_ID);
   invariant(isleHouseUnit?.unit_kind === "composite_building" && isleHouseUnit.claim_status.reference_recognizable === "accepted", "Isle House acceptance must belong to its composite physical-building parent");
+  const navyChapelUnit = catalog.units.find((unit) => unit.unit_id === unitId(NAVY_CHAPEL_SOURCE));
+  invariant(navyChapelUnit?.unit_kind === "standalone_building" && navyChapelUnit.claim_status.reference_recognizable === "accepted" && navyChapelUnit.receiver_keys.length === 1, "Navy Chapel wall/roof acceptance must roll up to one standalone physical-building unit");
 }
 
 function frozenIdentityValue(object, frozenField) {
@@ -1359,9 +1505,35 @@ function sanitizedIsleHouseConfig(config) {
   };
 }
 
+function sanitizedNavyChapelConfig(config) {
+  return {
+    mapped_runs: config.mapped_runs,
+    material_scope: config.material_scope,
+    model_id: config.model_id,
+    protected_regions: config.protected_regions,
+    schema_version: config.schema_version,
+    target: {
+      canonical_name: config.target.canonical_name,
+      source_key: config.target.source_key,
+      wall_object_key: config.target.wall_object_key,
+      roof_object_key: config.target.roof_object_key,
+      wall_run_count: config.target.wall_run_count,
+      wall_triangles: config.target.wall_triangles,
+      roof_triangles: config.target.roof_triangles,
+    },
+    truth_boundary: {
+      all_unsurveyed_dimensions_and_cadence: config.truth_boundary.all_unsurveyed_dimensions_and_cadence,
+      as_built_claim: config.truth_boundary.as_built_claim,
+      horizontal_source_footprint_changed: config.truth_boundary.horizontal_source_footprint_changed,
+      source_identity_changed: config.truth_boundary.source_identity_changed,
+    },
+  };
+}
+
 function activeContentMode(adapter) {
   if (adapter.receiver_key === BUILDING_3_WALL) return "active_building_3_hero";
   if (adapter.receiver_key === ISLE_HOUSE_LOW_WALL) return "active_isle_house_variant_c";
+  if (adapter.receiver_key === NAVY_CHAPEL_WALL) return "active_navy_chapel_187_paired_replacement";
   return "active_building_1_hero";
 }
 
@@ -1371,6 +1543,7 @@ function importActiveRuntimeAdapter(seed, receiver, inputs, packageAudit) {
   const packaged = runtimeAssets(seed, seed.adapter_id, packageAudit);
   const isBuilding3 = seed.receiver_key === BUILDING_3_WALL;
   const isIsleHouse = seed.receiver_key === ISLE_HOUSE_LOW_WALL;
+  const isNavyChapel = seed.receiver_key === NAVY_CHAPEL_WALL;
   const activeRuntimeContract = isBuilding3
     ? {
       adapter_sha256: inputs.runtimeContracts.building3MassingSha256,
@@ -1388,6 +1561,15 @@ function importActiveRuntimeAdapter(seed, receiver, inputs, packageAudit) {
         dispatch_sha256: inputs.runtimeContracts.worldBuilderSha256,
         repair_factory_sha256: inputs.runtimeContracts.isleHouseRepairFactorySha256,
         reviewed_factory_sha256: inputs.runtimeContracts.isleHouseReviewedFactorySha256,
+      }
+    : isNavyChapel
+      ? {
+        adapter_sha256: inputs.runtimeContracts.navyChapelLiveAdapterSha256,
+        behavior_contract: navyChapelBehaviorContract(),
+        config_sha256: inputs.runtimeContracts.navyChapelConfigSha256,
+        config_summary: sanitizedNavyChapelConfig(inputs.runtimeContracts.navyChapelConfig),
+        dispatch_sha256: inputs.runtimeContracts.worldBuilderSha256,
+        prototype_sha256: inputs.runtimeContracts.navyChapelPrototypeSha256,
       }
     : {
       adapter_sha256: inputs.runtimeContracts.heroAdapterSha256,
@@ -1409,6 +1591,8 @@ function importActiveRuntimeAdapter(seed, receiver, inputs, packageAudit) {
       ? "active_building_3_wall_roof_hero_replacement"
       : isIsleHouse
         ? "active_isle_house_variant_c_low_part_replacement"
+        : isNavyChapel
+          ? "active_navy_chapel_187_paired_wall_roof_replacement"
         : "active_building_1_hero_replacement",
     content_classification: seed.content_classification,
     receiver_key: seed.receiver_key,
@@ -1499,6 +1683,7 @@ function unitRuntimeContentMode(directReceivers) {
     if (modes[0] === "active_building_1_hero") return "all_receivers_active_building_1_hero";
     if (modes[0] === "active_building_3_hero") return "all_receivers_active_building_3_hero";
     if (modes[0] === "active_isle_house_variant_c") return "all_receivers_active_isle_house_variant_c";
+    if (modes[0] === "active_navy_chapel_187_paired_replacement") return "all_receivers_active_navy_chapel_187_paired_replacement";
   }
   if (equalStable([...modes].sort(), ["generated_placeholder", "legacy_adapter"])) {
     return "mixed_legacy_adapter_and_generated_placeholder";
@@ -1673,11 +1858,13 @@ function validateAdapterContracts(contracts, registry = null) {
       "runtime_assets",
       "source_key",
     ], `Facade runtime adapter plan ${plan.adapter_id}`);
-    invariant(["legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c"].includes(plan.content_mode), `${plan.adapter_id} has an unknown receiver content mode`);
+    invariant(["legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement"].includes(plan.content_mode), `${plan.adapter_id} has an unknown receiver content mode`);
     if (plan.content_mode === "active_building_3_hero") {
       invariant(equalStable(plan.behavior_contract, building3BehaviorContract()), `${plan.adapter_id} Building 3 behavior parity contract drifted`);
     } else if (plan.content_mode === "active_isle_house_variant_c") {
       invariant(equalStable(plan.behavior_contract, isleHouseBehaviorContract()), `${plan.adapter_id} Isle House exact-current acceptance/parity contract drifted`);
+    } else if (plan.content_mode === "active_navy_chapel_187_paired_replacement") {
+      invariant(equalStable(plan.behavior_contract, navyChapelBehaviorContract()), `${plan.adapter_id} Navy Chapel exact-current acceptance/parity contract drifted`);
     } else {
       invariant(plan.behavior_contract == null, `${plan.adapter_id} unexpectedly exports a target-specific behavior parity contract`);
     }
@@ -1798,7 +1985,7 @@ function buildRuntimeRegistry(catalog, inputs, receiverByKey) {
         status: record.status,
       })),
       active_runtime_adapter_ids: directReceivers
-        .filter((receiver) => ["active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c"].includes(receiver.runtime_content_mode))
+        .filter((receiver) => ["active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement"].includes(receiver.runtime_content_mode))
         .map((receiver) => receiver.runtime_adapter_id),
       capture_contract: runtimeCaptureContract(captureByUnit.get(unit.unit_id)),
       claim_status: unit.claim_status,
@@ -1981,17 +2168,17 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
   }
   invariant(registry.claim_totals.receiver_complete.verified === EXPECTED.recognition_units, "Not every unit is receiver-complete");
   invariant(registry.claim_totals.game_distinctive.accepted === 0, "Recognition acceptance must not import game-distinctive acceptance");
-  invariant(registry.claim_totals.reference_recognizable.accepted === ACCEPTED_REFERENCE_UNIT_IDS.length, "Runtime reference-recognizable numerator must be exactly 5/213");
+  invariant(registry.claim_totals.reference_recognizable.accepted === ACCEPTED_REFERENCE_UNIT_IDS.length, "Runtime reference-recognizable numerator must be exactly 6/213");
   invariant(registry.claim_totals.as_built_fidelity.claimed === 0 && registry.claim_totals.as_built_fidelity.limited === 0, "Recognition acceptance must not import as-built fidelity");
   invariant(equalStable(registry.recognition_metric, {
     accepted_physical_unit_ids: [...ACCEPTED_REFERENCE_UNIT_IDS].sort(),
     denominator: EXPECTED.recognition_units,
     denominator_kind: "immutable_physical_recognition_units",
-    display: "5/213",
+    display: "6/213",
     isle_house_non_numerator_source_keys: [...ISLE_HOUSE_PARTS],
     numerator: ACCEPTED_REFERENCE_UNIT_IDS.length,
     rollup_policy: "one_claim_per_physical_recognition_unit",
-  }), "Runtime physical-entity recognition metric drifted from exactly 5/213");
+  }), "Runtime physical-entity recognition metric drifted from exactly 6/213");
   invariant(registry.legacy_adapters.every((adapter) => adapter.whole_building_recognizability_imported === false && adapter.recognition_claim_effect === "none"), "Legacy adapter improperly grants recognizability");
   invariant(registry.active_runtime_adapters.every((adapter) => adapter.whole_building_recognizability_imported === false && adapter.recognition_claim_effect === "none"), "Active runtime adapter improperly grants recognizability");
   invariant(registry.units.flatMap((unit) => unit.identity_assertions).every((assertion) => assertion.frozen_value_preserved === true), "Runtime identity assertion silently overwrites frozen identity");
@@ -2008,13 +2195,16 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
   const building1Unit = registry.units.find((unit) => unit.unit_id === unitId(BUILDING_1_SOURCE));
   const towerUnit = registry.units.find((unit) => unit.unit_id === unitId(BUILDING_1_TOWER_SOURCE));
   const building3Unit = registry.units.find((unit) => unit.unit_id === unitId(BUILDING_3_SOURCE));
+  const navyChapelUnit = registry.units.find((unit) => unit.unit_id === unitId(NAVY_CHAPEL_SOURCE));
   invariant(building1Unit != null && towerUnit != null && building1Unit !== towerUnit, "Building 1 and observation tower physical units were collapsed");
   invariant(building1Unit.direct_receivers[0].runtime_content_mode === "active_building_1_hero", "Building 1 wall is not bound to the active hero adapter");
   invariant(towerUnit.direct_receivers[0].runtime_content_mode === "active_building_1_hero", "Observation tower wall is not bound to the active hero adapter");
   invariant(building1Unit.legacy_adapter_ids.length === 0 && building1Unit.active_runtime_adapter_ids.length === 1, "Building 1 unit retains obsolete or missing adapter membership");
   invariant(towerUnit.legacy_adapter_ids.length === 0 && towerUnit.active_runtime_adapter_ids.length === 1, "Observation tower unit retains obsolete or missing adapter membership");
   invariant(building3Unit?.direct_receivers[0]?.runtime_content_mode === "active_building_3_hero" && building3Unit.active_runtime_adapter_ids.length === 1 && building3Unit.legacy_adapter_ids.length === 0, "Building 3 wall is not bound exclusively to the active wall/roof hero adapter");
-  invariant(registry.active_runtime_adapters.map((adapter) => adapter.receiver_key).sort().join("|") === [BUILDING_1_WALL, BUILDING_1_TOWER_WALL, BUILDING_3_WALL, ISLE_HOUSE_LOW_WALL].sort().join("|"), "Active Building 1/Building 3/Isle House adapter receiver set drifted");
+  invariant(navyChapelUnit?.direct_receivers[0]?.runtime_content_mode === "active_navy_chapel_187_paired_replacement" && navyChapelUnit.active_runtime_adapter_ids.length === 1 && navyChapelUnit.legacy_adapter_ids.length === 0, "Navy Chapel wall is not bound exclusively to the active paired wall/roof replacement");
+  invariant(navyChapelUnit.claim_status.reference_recognizable === "accepted" && navyChapelUnit.acceptance_records.some((record) => record.review_receipt_sha256 === NAVY_CHAPEL_LIVE_REVIEW_RECEIPT_SHA256), "Navy Chapel physical unit lacks its exact independent live acceptance receipt");
+  invariant(registry.active_runtime_adapters.map((adapter) => adapter.receiver_key).sort().join("|") === [BUILDING_1_WALL, BUILDING_1_TOWER_WALL, BUILDING_3_WALL, ISLE_HOUSE_LOW_WALL, NAVY_CHAPEL_WALL].sort().join("|"), "Active Building 1/Building 3/Isle House/Navy Chapel adapter receiver set drifted");
   const building1Adapters = registry.active_runtime_adapters.filter((adapter) => [BUILDING_1_WALL, BUILDING_1_TOWER_WALL].includes(adapter.receiver_key));
   invariant(building1Adapters.every((adapter) =>
     adapter.attachment_kind === "active_building_1_hero_replacement" &&
@@ -2049,12 +2239,32 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
     equalStable(isleHouseAdapter.active_runtime_contract?.behavior_contract, isleHouseBehaviorContract()),
     "Active Isle House low receiver acceptance, dependency, or behavior parity contract drifted",
   );
+  const navyChapelAdapter = registry.active_runtime_adapters.find((adapter) => adapter.receiver_key === NAVY_CHAPEL_WALL);
+  invariant(
+    navyChapelAdapter?.attachment_kind === "active_navy_chapel_187_paired_wall_roof_replacement" &&
+    navyChapelAdapter.content_classification === "active_target_specific_paired_wall_roof_replacement" &&
+    navyChapelAdapter.state === "active_runtime_target_specific_content" &&
+    navyChapelAdapter.active_receiver_scope?.coverage === "whole_direct_wall_receiver" &&
+    navyChapelAdapter.active_runtime_contract?.adapter_sha256 === sha256File(absolute(NAVY_CHAPEL_LIVE_ADAPTER_PATH)) &&
+    navyChapelAdapter.active_runtime_contract?.config_sha256 === sha256File(absolute(NAVY_CHAPEL_CONFIG_PATH)) &&
+    navyChapelAdapter.active_runtime_contract?.dispatch_sha256 === sha256File(absolute(WORLD_CHUNK_BUILDER_PATH)) &&
+    navyChapelAdapter.active_runtime_contract?.prototype_sha256 === sha256File(absolute(NAVY_CHAPEL_PROTOTYPE_PATH)) &&
+    equalStable(navyChapelAdapter.active_runtime_contract?.behavior_contract, navyChapelBehaviorContract()),
+    "Active Navy Chapel acceptance, paired dependency, or ownership parity contract drifted",
+  );
   invariant(
     equalStable(
       building3Adapter.runtime_assets.map((asset) => asset.path).sort(),
       [BUILDING_3_MASSING_PATH, BUILDING_3_CONFIG_PATH, ...BUILDING_3_FACADE_ASSET_PATHS].map((path) => `res://${path}`).sort(),
     ) && building3Adapter.runtime_asset_projections.length === 0,
     "Active Building 3 runtime asset closure is incomplete or source-bearing",
+  );
+  invariant(
+    equalStable(
+      navyChapelAdapter.runtime_assets.map((asset) => asset.path).sort(),
+      [NAVY_CHAPEL_LIVE_ADAPTER_PATH, NAVY_CHAPEL_CONFIG_PATH, ...NAVY_CHAPEL_RUNTIME_ASSET_PATHS].map((path) => `res://${path}`).sort(),
+    ) && navyChapelAdapter.runtime_asset_projections.length === 0,
+    "Active Navy Chapel runtime asset closure is incomplete or source-bearing",
   );
   invariant(!stableJson(registry).includes("building_1_recognizable_facade") && !stableJson(registry).includes("building_1_recognizability_placements"), "Runtime registry retains obsolete Building 1 facade content");
   assertRuntimeBoundary(registry);
@@ -2111,11 +2321,12 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
       { check_id: "isle_house_composite_3_sources_2_receivers_1_unit", status: "pass" },
       { check_id: "wall_run_quad_contract_4971", status: "pass" },
       { check_id: "receiver_complete_213", status: "pass" },
-      { check_id: "legacy_adapters_10_active_runtime_adapters_4_without_automatic_recognition_transfer", status: "pass" },
+      { check_id: "legacy_adapters_9_active_runtime_adapters_5_without_automatic_recognition_transfer", status: "pass" },
       { check_id: "building_1_and_tower_exact_current_hero_dispatch", status: "pass" },
       { check_id: "building_3_exact_current_wall_roof_facade_collision_landing_spray_parity", status: "pass" },
       { check_id: "isle_house_receiver_specific_high_legacy_low_variant_c_runtime_state", status: "pass" },
-      { check_id: "reference_recognizable_physical_entity_rollup_exactly_5_of_213", status: "pass" },
+      { check_id: "navy_chapel_exact_current_paired_wall_roof_collision_landing_spray_parity", status: "pass" },
+      { check_id: "reference_recognizable_physical_entity_rollup_exactly_6_of_213", status: "pass" },
       { check_id: "isle_house_composite_parent_counted_once_part_sources_never_counted", status: "pass" },
       { check_id: "acceptance_records_bound_to_exact_independent_review_receipts", status: "pass" },
       { check_id: "catalog_json_schema_document_and_instance_validation", status: "pass" },
@@ -2147,6 +2358,10 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
       active_isle_house_variant_c_live_review_receipt_sha256: ISLE_HOUSE_LIVE_REVIEW_RECEIPT_SHA256,
       active_isle_house_variant_c_repair_factory_sha256: inputs.runtimeContracts.isleHouseRepairFactorySha256,
       active_isle_house_variant_c_reviewed_factory_sha256: inputs.runtimeContracts.isleHouseReviewedFactorySha256,
+      active_navy_chapel_187_adapter_sha256: inputs.runtimeContracts.navyChapelLiveAdapterSha256,
+      active_navy_chapel_187_config_sha256: inputs.runtimeContracts.navyChapelConfigSha256,
+      active_navy_chapel_187_live_review_receipt_sha256: NAVY_CHAPEL_LIVE_REVIEW_RECEIPT_SHA256,
+      active_navy_chapel_187_prototype_sha256: inputs.runtimeContracts.navyChapelPrototypeSha256,
       adapter_contracts_sha256: sha256Bytes(stableJson(adapterContracts)),
       facade_runtime_loader_sha256: sha256File(absolute(FACADE_RUNTIME_LOADER_PATH)),
       authoring_catalog_sha256: sha256File(absolute(PATHS.catalog)),
@@ -2158,7 +2373,7 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
     },
     legacy_adapter_receiver_keys: registry.legacy_adapters.map((adapter) => adapter.receiver_key),
     active_runtime_adapter_receiver_keys: registry.active_runtime_adapters.map((adapter) => adapter.receiver_key),
-    next_integration_seam: "Use the topology-neutral facade registry loader API to query receiver plans. Eight package-safe plans include exact-current Building 1 and Building 3 dependencies. The exact-current Isle House Variant C receiver is represented truthfully but remains loader-hard-disabled because its reviewed executable inheritance closure includes three source-token-bearing inputs; keep all six disabled plans non-executable until the 13 unique projected inputs receive independently parity-proven package-safe normalization.",
+    next_integration_seam: "Use the topology-neutral facade registry loader API to query receiver plans. Package-safe plans include exact-current Building 1, Building 3, and Navy Chapel dependencies. The exact-current Isle House Variant C receiver is represented truthfully but remains loader-hard-disabled because its reviewed executable inheritance closure includes three source-token-bearing inputs; keep every disabled plan non-executable until its projected inputs receive independently parity-proven package-safe normalization.",
     package_boundary: packageAuditSummary(packageAudit, registry),
     reference_dependencies: {
       identity_or_reference_research_required_unit_count: unresolvedUnits.length,
@@ -2170,9 +2385,10 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
     schema_version: REPORT_SCHEMA,
     scope_boundaries: [
       "This acceptance reconciliation changes no runtime integration, visual geometry, collision, navigation, spray ownership, or player-facing facade behavior.",
-      "Ten legacy receivers, two exact-current Building 1 hero receivers, one exact-current Building 3 wall/roof receiver, and one exact-current Isle House Variant C low receiver are represented without automatic recognition transfer from adapter metadata.",
+      "Nine legacy receivers, two exact-current Building 1 hero receivers, one exact-current Building 3 wall/roof receiver, one exact-current Isle House Variant C low receiver, and one exact-current Navy Chapel paired wall/roof receiver are represented without automatic recognition transfer from adapter metadata.",
       "The version-pinned loader contract authorizes parsing and resource resolution only; it does not authorize node instantiation or world-construction dispatch.",
-      "Exactly five independently reviewed physical-building parents are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.",
+      "Exactly six independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.",
+      "Navy Chapel contributes one standalone physical-building claim; its paired wall and roof behavior never creates a second receiver or numerator entry.",
       "Isle House contributes one parent physical-building claim; its high and low source receiver records never enter the numerator.",
       "The registry JSON and every emitted runtime asset dependency closure exclude discovery paths, evidence paths, reference URLs, and absolute workstation paths; contaminated current assets are represented only by hash-bound sanitized summaries.",
       "Evidence-backed identity corrections remain separate from immutable inventory identity; runtime summaries preserve both asserted and frozen values without source locators.",

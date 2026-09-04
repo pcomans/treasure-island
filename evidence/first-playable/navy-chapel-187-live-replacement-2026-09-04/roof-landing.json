@@ -1,0 +1,98 @@
+{
+  "physics_grounded": true,
+  "ordinary_player_rig": true,
+  "landing_position_m": [
+    -104.018646240234,
+    15.6597213745117,
+    644.916442871094
+  ],
+  "roof_hit_position_m": [
+    -104.018646240234,
+    15.5971565246582,
+    644.916442871094
+  ],
+  "roof_hit_normal": [
+    -0.46746838092804,
+    0.848814904689789,
+    0.24695448577404
+  ],
+  "roof_receiver": "none",
+  "roof_object_key": "building:w291189336:roof",
+  "roof_in_wall_spray_group": false,
+  "landing_physics_frames": 243,
+  "saw_airborne_before_landing": true,
+  "landing_clearance_m": 0.0625648498535156,
+  "post_landing_collider_is_same_roof_body": true,
+  "cap_hit_position_m": [
+    -101.056587219238,
+    22.3529262542725,
+    639.39111328125
+  ],
+  "cap_hit_normal": [
+    0.711052477359772,
+    0.594387412071228,
+    -0.37564343214035
+  ],
+  "recovery_delta": 0,
+  "player_transform_writes_after_descent_began": 0,
+  "camera_yaw_degrees": -110.156803031599,
+  "camera_pitch_degrees": -36.9700406605175,
+  "capture": {
+    "id": "04-stock-player-roof-landing",
+    "role": "actual_live_stock_player_physics_landing_on_non_spray_roof",
+    "lighting": "world_default",
+    "file": "images/04-stock-player-roof-landing.png",
+    "sha256": "fe3f5f7b2db6db0ce15f400f1cf256cf627efdacb8d8d02b392e20c941c83f4e",
+    "bytes": 676798,
+    "dimensions": [
+      1440,
+      900
+    ],
+    "sample_unique_colors": 267,
+    "sample_luminance_range": 0.738812543451786,
+    "debug_labels_visible": false,
+    "source_photography_in_frame": false,
+    "crop_or_postprocess": false,
+    "actual_live_node": true,
+    "preview_attachment_count": 0,
+    "visual_verdict": "pending_independent_review",
+    "physics_grounded": true,
+    "ordinary_player_rig": true,
+    "landing_position_m": [
+      -104.018646240234,
+      15.6597213745117,
+      644.916442871094
+    ],
+    "roof_hit_position_m": [
+      -104.018646240234,
+      15.5971565246582,
+      644.916442871094
+    ],
+    "roof_hit_normal": [
+      -0.46746838092804,
+      0.848814904689789,
+      0.24695448577404
+    ],
+    "roof_receiver": "none",
+    "roof_object_key": "building:w291189336:roof",
+    "roof_in_wall_spray_group": false,
+    "landing_physics_frames": 243,
+    "saw_airborne_before_landing": true,
+    "landing_clearance_m": 0.0625648498535156,
+    "post_landing_collider_is_same_roof_body": true,
+    "cap_hit_position_m": [
+      -101.056587219238,
+      22.3529262542725,
+      639.39111328125
+    ],
+    "cap_hit_normal": [
+      0.711052477359772,
+      0.594387412071228,
+      -0.37564343214035
+    ],
+    "recovery_delta": 0,
+    "player_transform_writes_after_descent_began": 0,
+    "camera_yaw_degrees": -110.156803031599,
+    "camera_pitch_degrees": -36.9700406605175
+  }
+}

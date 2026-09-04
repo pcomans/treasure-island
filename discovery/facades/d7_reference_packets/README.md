@@ -46,25 +46,27 @@ exposes enough of one side for a dated prototype. A City address, management
 exhibit, conversion-plan reference, or enforcement agenda is administrative
 evidence only.
 
-## Packet-time provenance and exact-current authority
+## Packet-time provenance and current authority
 
 | Input | Version / SHA-256 | Role |
 | --- | --- | --- |
 | `data/osm/treasure-island-2026-08-27.osm` | `3b6f6af31a1c82de3fa51fcbc02fe7e3723fdb629c948ae6523ef46c157b4549` | frozen identity, lifecycle tags, addresses, and source geometry |
 | `discovery/FACADE_RECEIVER_INVENTORY.json` | `ti.facade-receiver-inventory/1`; `0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f` | exact geometry, receiver, material, and run contract |
-| `discovery/facades/facade-recognition-catalog.json` | `ti.facade-recognition-catalog/4`; `2b457965d2e25d522d2ca3d73afb109b03a57247eaefbb6b70775bd83fb07311` | sealed 213-unit order and claim state |
+| D7 packet-time catalog snapshot receipt (historical; bytes superseded) | `ti.facade-recognition-catalog/4`; `2b457965d2e25d522d2ca3d73afb109b03a57247eaefbb6b70775bd83fb07311` | immutable packet-time provenance only; validator verifies this recorded receipt, not current file bytes |
 | D7 packet-time registry snapshot receipt (historical; bytes superseded) | `ti.facade-runtime-registry/4`; `c60e20fb625fa98809975f08357370d71c330443a7546d88fadfcd7df3584d19` | immutable packet-time provenance only; validator verifies this recorded receipt, not current file bytes |
-| `game/resources/facades/facade-runtime-registry.json` (current checkout) | `ti.facade-runtime-registry/4`; `dce268c1547e4e4620faff9d59110ee1214a9a2121c1f83b3eb1c865339360ab` | exact-current direct binding and physical-unit recognition state, validated separately from the historical receipt |
+| D7 packet-time recognition rollup | `5/213` | immutable five-unit acceptance state at the v4 authority boundary; not a claim about current compiler output |
+| `discovery/facades/facade-recognition-catalog.json` (current checkout) | `ti.facade-recognition-catalog/5`; SHA-256 emitted by validator | used only to rederive the exact 15-ID cohort and order |
+| `game/resources/facades/facade-runtime-registry.json` (current checkout) | `ti.facade-runtime-registry/5`; SHA-256 emitted by validator | used only to verify those 15 current direct bindings; global counts and recognition rollup remain compiler-owned |
 | `generated/world/manifest.json` | `ti.godot-world/2`; `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3` | generated chunk authority |
 
-The `c60e20…` value is the genuine registry receipt captured when the D7
-packet sealed. D7 does not duplicate those historical registry bytes, so the
-validator checks that exact recorded receipt and its historical label rather
-than falsely comparing it with the moving current path. It separately hashes
-the current registry as `dce268…` and verifies the unchanged catalog plus the
-derived `213` physical units, `214` direct receivers, `215` source-record
-memberships, and exact independently accepted `5/213` physical-unit rollup.
-Neither Isle House part record is allowed to become a numerator unit.
+The `2b4579…` catalog, `c60e20…` registry, and `5/213` rollup are the genuine
+D7 packet-time receipts. D7 does not duplicate those historical bytes, so the
+validator checks the exact recorded receipts and historical labels rather than
+comparing them with moving current paths. It separately loads and hashes the
+current schema-v5 catalog and registry only to rederive the exact D7 cohort
+order and verify those 15 direct bindings. Global current unit, receiver,
+source-membership, acceptance, and recognition-rollup gates belong solely to
+`tools/build_facade_recognition_registry.mjs --check`.
 
 Compass groups in each packet are exact outward-normal partitions from the
 generated wall record. A camera-to-group association identifies only an
@@ -80,11 +82,12 @@ children and exactly one direct wall plus one direct roof. The audit recomputed
 `45` hashes (chunk file, full wall record, and wall geometry), checked the
 packet contract fields against sealed inventory/registry data, reproduced all
 `60` exact facing-run partitions, resolved all `15` packet links, and
-reproduced readiness totals `13 / 2 / 0`. The four unchanged packet-time
-authority files matched their hashes; the historical registry receipt remained
-explicit and immutable; and the current catalog/registry separately matched
-`2b4579…` / `dce268…` with exact `5/213` semantics. No image or binary file
-exists in this directory.
+reproduced readiness totals `13 / 2 / 0`. The unchanged file-backed authorities
+matched their hashes; the historical catalog, registry, and `5/213` receipts
+remained explicit and immutable; and the current schema-v5 catalog/registry
+reproduced the exact 15-ID order and direct bindings. Their moving SHA-256
+values are emitted by each validator run and are not misrepresented as
+packet-time receipts. No image or binary file exists in this directory.
 All `25` distinct remote source/panorama links returned HTTP `200` or `206` in
 a bounded read-only check on 2026-09-04; that dated availability check is not a
 promise that a third-party endpoint will remain live.

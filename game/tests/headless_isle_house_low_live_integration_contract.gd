@@ -23,7 +23,7 @@ const SOURCE_HASHES := {
 	FACTORY_PATH: "4336e821e240b973f8d97e5cb46e17332b19dea03869abb1fa81b96a7e380582",
 	REVIEWED_FACTORY_PATH: "b24fd72cd12aa0c6c45a123f005fc834ea657c343e8332a872eae07fa017ace7",
 	REJECTED_PATH: "1b36a0ad92ded4607e0c1e0df5d5581d1c7afff5843cb75cd4c490790a86c413",
-	BUILDER_PATH: "28be094c674108f42be040f2b3ae6d242838d15e2060f6cf4668b0a003f1a682",
+	BUILDER_PATH: "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c",
 	CHUNK_PATH: CHUNK_SHA,
 	MANIFEST_PATH: MANIFEST_SHA,
 	"res://game/scripts/world/facades/isle_house_39_bruton_high_facade.gd": "f8243cedd3f331cbc37e6343b1b48e76a73a81644c96cc1f80e623e0c71a3113",
@@ -31,7 +31,7 @@ const SOURCE_HASHES := {
 	"res://game/resources/facades/isle_house_39_bruton_high_se_layout.json": "c5e6393e90152cef62f6478d7bd87750f3db5598d6ebc36cd307ce20acaa090d",
 }
 const OVERLAY_TOPOLOGY := {"mesh_instances": 7, "surfaces": 11, "triangles": 2242}
-const WORLD_TOPOLOGY := {"rows": 735, "meshes": 940, "surfaces": 954, "triangles": 64118, "bodies": 466, "shapes": 466}
+const WORLD_TOPOLOGY := {"rows": 735, "meshes": 944, "surfaces": 957, "triangles": 64572, "bodies": 466, "shapes": 466}
 const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 
@@ -116,7 +116,7 @@ func _run() -> void:
 	var world_result := await _full_world_matches()
 	_require(bool(world_result.get("ok", false)), str(world_result.get("message", "Whole-world Variant C live check failed.")))
 	print("ISLE_VARIANT_C_LIVE_SIGNATURE: %s" % LIVE_SIGNATURE)
-	print("ISLE_VARIANT_C_LIVE_TOPOLOGY: receiver=8/12/2268 overlay=7/11/2242 world=735/940/954/64118/466")
+	print("ISLE_VARIANT_C_LIVE_TOPOLOGY: receiver=8/12/2268 overlay=7/11/2242 world=735/944/957/64572/466")
 	if not _failed:
 		print("PASS: exact w1282547787 receives one independently accepted Variant C render-only replacement, never the rejected overlay; accepted high and sole underlying collision/spray ownership remain unchanged")
 	_finish()

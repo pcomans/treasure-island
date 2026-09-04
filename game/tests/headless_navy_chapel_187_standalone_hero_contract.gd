@@ -1,6 +1,10 @@
 extends SceneTree
 
 const PROTOTYPE := preload("res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd")
+const PROTOTYPE_PATH := "res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd"
+const LIVE_ADAPTER_PATH := "res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd"
+const CATALOG_PATH := "res://discovery/facades/facade-recognition-catalog.json"
+const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const CONFIG_PATH := "res://game/resources/facades/navy_chapel_187_standalone_hero_prototype.json"
 const SCENE_PATH := "res://game/scenes/world/facades/navy_chapel_187/navy_chapel_187_standalone_hero_prototype.tscn"
 const CHUNK_PATH := "res://generated/world/chunks/x_-1__z_2.json"
@@ -41,11 +45,10 @@ const PACKAGE_FILES := [
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres",
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres",
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres",
+	LIVE_ADAPTER_PATH,
 ]
 const LIVE_ROUTE_FILES := [
 	"res://game/scripts/world/world_chunk_builder.gd",
-	"res://game/resources/facades/facade-recognition-catalog.json",
-	"res://game/resources/facades/facade-runtime-registry.json",
 	"res://game/scripts/world/facades/facade_runtime_registry_loader.gd",
 	"res://game/scenes/main.tscn",
 ]
@@ -108,7 +111,7 @@ func _run() -> void:
 		return
 	second.queue_free()
 	print("NAVY_CHAPEL_187_STANDALONE_HERO_SIGNATURE: %s" % signature)
-	print("PASS: standalone w291189336 Chapel hero preserves the exact frozen shell/identity, limits observed treatment to SSE runs 9,10 and partial public-side runs 11..13, keeps all other runs quiet, and supplies matched world-solid collision for the inferred gable roof, belfry/cap/cross, and projecting entry without any live attachment or self-acceptance")
+	print("PASS: standalone w291189336 Chapel hero remains default-unattached and self-unaccepted while preserving its exact shell, bounded public treatment, and collision; only the explicit fail-closed live replacement adapter may consume the approved factory")
 	_finish()
 
 
@@ -393,15 +396,69 @@ func _package_boundary_is_clean() -> bool:
 		for forbidden in ["http://", "https://", "file://", "/volumes/", "/users/", ".jpg", ".jpeg", ".webp"]:
 			if forbidden in text:
 				return false
-	var tokens := ["navy_chapel_187_standalone_hero_prototype", "NavyChapel187StandaloneHeroPrototype"]
+	var adapter_text := FileAccess.get_file_as_string(LIVE_ADAPTER_PATH)
+	var exact_factory_preload := "preload(\"res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd\")"
+	if adapter_text.count(exact_factory_preload) != 1 \
+	or adapter_text.count("class_name NavyChapel187LiveReplacement") != 1:
+		return false
+	var builder_text := FileAccess.get_file_as_string("res://game/scripts/world/world_chunk_builder.gd")
+	if builder_text.count(LIVE_ADAPTER_PATH) != 1 \
+	or builder_text.count("NAVY_CHAPEL_187_LIVE_REPLACEMENT.claims_record(record)") != 1:
+		return false
+	if not _approved_registry_route_matches():
+		return false
+	var prohibited_direct_loads := [
+		"preload(\"%s\")" % PROTOTYPE_PATH,
+		"load(\"%s\")" % PROTOTYPE_PATH,
+		"preload(\"%s\")" % CONFIG_PATH,
+		"load(\"%s\")" % CONFIG_PATH,
+	]
 	for path: String in LIVE_ROUTE_FILES:
 		if not FileAccess.file_exists(path):
 			continue
 		var live_text := FileAccess.get_file_as_string(path)
-		for token: String in tokens:
-			if token in live_text:
+		for direct_load: String in prohibited_direct_loads:
+			if direct_load in live_text:
 				return false
+		if path != "res://game/scripts/world/world_chunk_builder.gd" \
+		and ("preload(\"%s\")" % LIVE_ADAPTER_PATH in live_text or "load(\"%s\")" % LIVE_ADAPTER_PATH in live_text):
+			return false
 	return true
+
+
+func _approved_registry_route_matches() -> bool:
+	var catalog_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(CATALOG_PATH))
+	var registry_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(REGISTRY_PATH))
+	if not (catalog_value is Dictionary) or not (registry_value is Dictionary):
+		return false
+	var adapter_id := "active-adapter:navy-chapel-187:building:w291189336:wall"
+	var catalog_matches: Array[Dictionary] = []
+	for value: Variant in (catalog_value as Dictionary).get("active_runtime_adapters", []):
+		var entry := value as Dictionary
+		if str(entry.get("adapter_id", "")) == adapter_id:
+			catalog_matches.append(entry)
+	if catalog_matches.size() != 1:
+		return false
+	var catalog_entry := catalog_matches[0]
+	if str(catalog_entry.get("receiver_key", "")) != WALL_KEY \
+	or str(catalog_entry.get("runtime_adapter_path", "")) != LIVE_ADAPTER_PATH.trim_prefix("res://") \
+	or str(catalog_entry.get("runtime_config_path", "")) != CONFIG_PATH.trim_prefix("res://") \
+	or not (PROTOTYPE_PATH.trim_prefix("res://") in (catalog_entry.get("runtime_asset_paths", []) as Array)):
+		return false
+	var registry_matches: Array[Dictionary] = []
+	for value: Variant in (registry_value as Dictionary).get("active_runtime_adapters", []):
+		var entry := value as Dictionary
+		if str(entry.get("adapter_id", "")) == adapter_id:
+			registry_matches.append(entry)
+	if registry_matches.size() != 1:
+		return false
+	var registry_entry := registry_matches[0]
+	var runtime_paths: Array[String] = []
+	for value: Variant in registry_entry.get("runtime_assets", []):
+		runtime_paths.append(str((value as Dictionary).get("path", "")))
+	return str(registry_entry.get("receiver_key", "")) == WALL_KEY \
+		and str(registry_entry.get("runtime_content_mode", "")) == "active_navy_chapel_187_paired_replacement" \
+		and LIVE_ADAPTER_PATH in runtime_paths and CONFIG_PATH in runtime_paths and PROTOTYPE_PATH in runtime_paths
 
 
 func _hashes_match() -> bool:

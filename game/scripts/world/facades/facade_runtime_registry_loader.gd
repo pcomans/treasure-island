@@ -4,11 +4,11 @@ extends RefCounted
 const DEFAULT_REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const DEFAULT_ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
 const DEFAULT_LOADER_PATH := "res://game/scripts/world/facades/facade_runtime_registry_loader.gd"
-const REGISTRY_SCHEMA_VERSION := "ti.facade-runtime-registry/4"
-const ADAPTER_CONTRACT_SCHEMA_VERSION := "ti.facade-runtime-adapter-contracts/3"
-const CATALOG_SCHEMA_VERSION := "ti.facade-recognition-catalog/4"
-const COMPILER_VERSION := "1.3.0"
-const LOADER_API_VERSION := "ti.facade-runtime-registry-loader/3"
+const REGISTRY_SCHEMA_VERSION := "ti.facade-runtime-registry/5"
+const ADAPTER_CONTRACT_SCHEMA_VERSION := "ti.facade-runtime-adapter-contracts/4"
+const CATALOG_SCHEMA_VERSION := "ti.facade-recognition-catalog/5"
+const COMPILER_VERSION := "1.4.0"
+const LOADER_API_VERSION := "ti.facade-runtime-registry-loader/4"
 const UNKNOWN_VERSION_POLICY := "reject"
 const EXPECTED_UNIT_COUNT := 213
 const EXPECTED_RECEIVER_COUNT := 214
@@ -18,12 +18,13 @@ const EXPECTED_READY_ADAPTER_COUNT := 8
 const EXPECTED_DISABLED_ADAPTER_COUNT := 6
 const EXPECTED_PROJECTION_DESCRIPTOR_COUNT := 13
 const EXPECTED_PROJECTION_OCCURRENCE_COUNT := 13
-const EXPECTED_REFERENCE_RECOGNIZABLE_COUNT := 5
+const EXPECTED_REFERENCE_RECOGNIZABLE_COUNT := 6
 const EXPECTED_REFERENCE_RECOGNIZABLE_UNIT_IDS := [
 	"physical-building:r16681702",
 	"physical-building:w1222720021",
 	"physical-building:w1249412093",
 	"physical-building:w1249412094",
+	"physical-building:w291189336",
 	"physical-building:w34313540",
 ]
 const EXPECTED_REVIEW_RECEIPTS := {
@@ -31,15 +32,31 @@ const EXPECTED_REVIEW_RECEIPTS := {
 	"physical-building:w1222720021": ["fb952a31151805078d1e386117ed965aa0649ffddcd17874d13493b5dd4239bb", "dbe9745f5356b2309e820c2b47987ee4463518eaf4afd77fcd37df0edc8d437a"],
 	"physical-building:w1249412093": ["9e4364eaf78412c58bfcac1bad1f4f35241f48a1b373976cdfa42638ce57b680", "e1ab8f526aed22a6234fff1d2fcc5eae5d2245df4260a25a5705cd37a158a921"],
 	"physical-building:w1249412094": ["37b6c7dbf6c8769b13628e1070a9c3b5beeb9b25bbe63f0f12f9aaa00c22dab8", "23fd6eff4ab8d9696af9d1ecc19bea50537cc824ecf3a7bebdf4fa191cd039d9"],
+	"physical-building:w291189336": ["63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9", "54d434c9283a0e2d86aa836e6a21672a8756e5a170cb5724d66066e799223930"],
 	"physical-building:w34313540": ["1aee23943b3df4f600b9a4e4fce86d839b75ce575a924de4ca8b187bd9120046", "4b92b71df3c7f8f7dfbb285bd7566b3f422a32be45f810d532328e15d008f5be"],
 }
 const BUILDING_3_RECEIVER := "building:w34313540:wall"
+const NAVY_CHAPEL_RECEIVER := "building:w291189336:wall"
 const ISLE_HOUSE_UNIT := "physical-building:w1249412094"
 const ISLE_HOUSE_HIGH_RECEIVER := "building-composite:w1249412094:w1282547786:wall"
 const ISLE_HOUSE_LOW_RECEIVER := "building-composite:w1249412094:w1282547787:wall"
 const ISLE_HOUSE_LIVE_REVIEW_RECEIPT_SHA256 := "37b6c7dbf6c8769b13628e1070a9c3b5beeb9b25bbe63f0f12f9aaa00c22dab8"
 const ISLE_HOUSE_LIVE_SIGNATURE := "09eee1517f043c6d82f0de0d2275da5b2a3f76f5842d1b9c90cba11e6e793981"
 const ISLE_HOUSE_REPAIR_SIGNATURE := "41868b77a8b51b56ee7381e5549423e97547270d2dc77d9ce5cf958b31e2cb69"
+const NAVY_CHAPEL_LIVE_REVIEW_RECEIPT_SHA256 := "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9"
+const NAVY_CHAPEL_GEOMETRY_SIGNATURE := "076e081df86e884f04cf7cb680304c35c64e6f76238de7060528c59097ae5c46"
+const NAVY_CHAPEL_OWNERSHIP_SIGNATURE := "4766c5d562933eb632f1ef3bdcec828fc40be81c996db919c53405f776fa04a7"
+const NAVY_CHAPEL_RUNTIME_ASSETS := [
+	"res://game/resources/facades/navy_chapel_187_standalone_hero_prototype.json",
+	"res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres",
+	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_inferred_cream_structure.tres",
+	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres",
+	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres",
+	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres",
+	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_protected_neutral.tres",
+	"res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd",
+	"res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd",
+]
 const BUILDING_3_RUNTIME_ASSETS := [
 	"res://game/resources/facades/building_3_600_california_ene_layout.json",
 	"res://game/resources/facades/building_3_hero_massing.json",
@@ -297,7 +314,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 	var active_adapters := registry.get("active_runtime_adapters", []) as Array
 	var adapters := legacy_adapters.duplicate()
 	adapters.append_array(active_adapters)
-	if not _require(legacy_adapters.size() == 10 and active_adapters.size() == 4 and adapters.size() == EXPECTED_ADAPTER_COUNT, "registry_count_drift", "Runtime adapter arrays do not contain 10 legacy plus four active entries."):
+	if not _require(legacy_adapters.size() == 9 and active_adapters.size() == 5 and adapters.size() == EXPECTED_ADAPTER_COUNT, "registry_count_drift", "Runtime adapter arrays do not contain nine legacy plus five active entries."):
 		return false
 	var adapter_receivers := {}
 	var registry_projection_ids := {}
@@ -326,15 +343,20 @@ func _validate_registry(registry: Dictionary) -> bool:
 			registry_projection_ids[projection_id] = true
 	var building_3_adapter := {}
 	var isle_house_adapter := {}
+	var navy_chapel_adapter := {}
 	for adapter_value: Variant in active_adapters:
 		var active_adapter := adapter_value as Dictionary
 		if str(active_adapter.get("receiver_key", "")) == BUILDING_3_RECEIVER:
 			building_3_adapter = active_adapter
 		elif str(active_adapter.get("receiver_key", "")) == ISLE_HOUSE_LOW_RECEIVER:
 			isle_house_adapter = active_adapter
+		elif str(active_adapter.get("receiver_key", "")) == NAVY_CHAPEL_RECEIVER:
+			navy_chapel_adapter = active_adapter
 	if not _validate_building_3_registry_adapter(building_3_adapter):
 		return false
 	if not _validate_isle_house_registry_adapter(isle_house_adapter):
+		return false
+	if not _validate_navy_chapel_registry_adapter(navy_chapel_adapter):
 		return false
 	if not _require(registry_projection_ids.size() == EXPECTED_PROJECTION_OCCURRENCE_COUNT, "adapter_contract_count_drift", "Runtime registry projection occurrence count is not 13."):
 		return false
@@ -372,7 +394,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 			var adapter_id_value: Variant = receiver.get("runtime_adapter_id")
 			if not _require(not receiver_key.is_empty() and not _receivers_by_key.has(receiver_key), "duplicate_receiver", "%s has a missing or duplicate direct receiver." % unit_id):
 				return false
-			if not _require(["generated_placeholder", "legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c"].has(content_mode), "unknown_content_mode", "%s has an unknown receiver content mode." % receiver_key):
+			if not _require(["generated_placeholder", "legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement"].has(content_mode), "unknown_content_mode", "%s has an unknown receiver content mode." % receiver_key):
 				return false
 			if content_mode == "generated_placeholder":
 				if not _require(adapter_id_value == null, "receiver_adapter_mismatch", "%s placeholder unexpectedly references an adapter." % receiver_key):
@@ -388,7 +410,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 	accepted_reference_unit_ids.sort()
 	var expected_accepted_ids := EXPECTED_REFERENCE_RECOGNIZABLE_UNIT_IDS.duplicate()
 	expected_accepted_ids.sort()
-	if not _require(accepted_reference_unit_ids == expected_accepted_ids, "recognition_metric_mismatch", "Reference-recognizable physical-unit set is not exactly the independently accepted five."):
+	if not _require(accepted_reference_unit_ids == expected_accepted_ids, "recognition_metric_mismatch", "Reference-recognizable physical-unit set is not exactly the independently accepted six."):
 		return false
 	if not _validate_recognition_metric(registry, accepted_reference_unit_ids):
 		return false
@@ -442,7 +464,7 @@ func _validate_recognition_metric(registry: Dictionary, accepted_unit_ids: Array
 		metric_ids == accepted_unit_ids
 		and int(metric.get("numerator", -1)) == EXPECTED_REFERENCE_RECOGNIZABLE_COUNT
 		and int(metric.get("denominator", -1)) == EXPECTED_UNIT_COUNT
-		and str(metric.get("display", "")) == "5/213"
+		and str(metric.get("display", "")) == "6/213"
 		and str(metric.get("denominator_kind", "")) == "immutable_physical_recognition_units"
 		and str(metric.get("rollup_policy", "")) == "one_claim_per_physical_recognition_unit"
 		and metric.get("isle_house_non_numerator_source_keys", []) == ["w1282547786", "w1282547787"]
@@ -455,7 +477,7 @@ func _validate_recognition_metric(registry: Dictionary, accepted_unit_ids: Array
 		and int(fidelity_totals.get("limited", -1)) == 0
 		and int(receiver_totals.get("verified", -1)) == EXPECTED_UNIT_COUNT,
 		"recognition_metric_mismatch",
-		"Runtime physical-entity recognition rollup is not exactly 5/213 with claim dimensions separated.",
+		"Runtime physical-entity recognition rollup is not exactly 6/213 with claim dimensions separated.",
 	)
 
 
@@ -578,6 +600,11 @@ func _validate_adapter_contracts(contracts: Dictionary, registry: Dictionary) ->
 			var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
 			if not _validate_isle_house_behavior_contract(plan.get("behavior_contract", {}) as Dictionary) \
 			or not _require(JSON.stringify(plan.get("behavior_contract", {})) == JSON.stringify(runtime_contract.get("behavior_contract", {})), "adapter_plan_mismatch", "%s Isle House behavior contract drifted from the registry." % adapter_id):
+				return false
+		elif str(plan.get("content_mode", "")) == "active_navy_chapel_187_paired_replacement":
+			var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+			if not _validate_navy_chapel_behavior_contract(plan.get("behavior_contract", {}) as Dictionary) \
+			or not _require(JSON.stringify(plan.get("behavior_contract", {})) == JSON.stringify(runtime_contract.get("behavior_contract", {})), "adapter_plan_mismatch", "%s Navy Chapel behavior contract drifted from the registry." % adapter_id):
 				return false
 		elif not _require(plan.get("behavior_contract") == null, "adapter_plan_mismatch", "%s unexpectedly exports a target-specific behavior contract." % adapter_id):
 			return false
@@ -772,9 +799,9 @@ func _validate_isle_house_behavior_contract(contract: Dictionary) -> bool:
 		and int(geometry.get("overlay_surfaces", -1)) == 11
 		and int(geometry.get("overlay_triangles", -1)) == 2242
 		and int(geometry.get("world_records", -1)) == 735
-		and int(geometry.get("world_mesh_instances", -1)) == 940
-		and int(geometry.get("world_surfaces", -1)) == 954
-		and int(geometry.get("world_triangles", -1)) == 64118
+		and int(geometry.get("world_mesh_instances", -1)) == 944
+		and int(geometry.get("world_surfaces", -1)) == 957
+		and int(geometry.get("world_triangles", -1)) == 64572
 		and int(geometry.get("world_static_bodies", -1)) == 466
 		and int(geometry.get("world_shapes", -1)) == 466
 		and int(ownership.get("decorative_collision_nodes", -1)) == 0
@@ -791,6 +818,100 @@ func _validate_isle_house_behavior_contract(contract: Dictionary) -> bool:
 		and truth.get("receiver_complete_inferred_from_art") == false,
 		"isle_house_parity_mismatch",
 		"Isle House exact-current receipt, signature, topology, ownership, replacement, or truth boundary drifted.",
+	)
+
+
+func _validate_navy_chapel_registry_adapter(adapter: Dictionary) -> bool:
+	if not _require(not adapter.is_empty(), "navy_chapel_parity_mismatch", "Navy Chapel exact-current paired adapter is missing."):
+		return false
+	if not _require(
+		str(adapter.get("adapter_id", "")) == "active-adapter:navy-chapel-187:building:w291189336:wall"
+		and str(adapter.get("source_key", "")) == "w291189336"
+		and str(adapter.get("attachment_kind", "")) == "active_navy_chapel_187_paired_wall_roof_replacement"
+		and str(adapter.get("content_classification", "")) == "active_target_specific_paired_wall_roof_replacement"
+		and str(adapter.get("runtime_content_mode", "")) == "active_navy_chapel_187_paired_replacement"
+		and str(adapter.get("state", "")) == "active_runtime_target_specific_content"
+		and (adapter.get("runtime_asset_projections", []) as Array).is_empty(),
+		"navy_chapel_parity_mismatch",
+		"Navy Chapel active adapter classification, source ownership, or package boundary drifted.",
+	):
+		return false
+	var actual_paths := []
+	for asset_value: Variant in adapter.get("runtime_assets", []) as Array:
+		actual_paths.append(str((asset_value as Dictionary).get("path", "")))
+	actual_paths.sort()
+	var expected_paths := NAVY_CHAPEL_RUNTIME_ASSETS.duplicate()
+	expected_paths.sort()
+	if not _require(actual_paths == expected_paths, "navy_chapel_parity_mismatch", "Navy Chapel active adapter does not contain its exact live/config/prototype/material set."):
+		return false
+	var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+	if not _require(_has_exact_keys(runtime_contract, ["adapter_sha256", "behavior_contract", "config_sha256", "config_summary", "dispatch_sha256", "prototype_sha256"]), "navy_chapel_parity_mismatch", "Navy Chapel active runtime contract fields drifted."):
+		return false
+	if not _require(
+		_runtime_asset_match(adapter.get("runtime_assets", []) as Array, "res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd", str(runtime_contract.get("adapter_sha256", "")))
+		and _runtime_asset_match(adapter.get("runtime_assets", []) as Array, "res://game/resources/facades/navy_chapel_187_standalone_hero_prototype.json", str(runtime_contract.get("config_sha256", "")))
+		and _runtime_asset_match(adapter.get("runtime_assets", []) as Array, "res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd", str(runtime_contract.get("prototype_sha256", "")))
+		and str(runtime_contract.get("adapter_sha256", "")) == "deffb5956d8e808565d1c557208647a89dff4730c15f97aa9b1085a087968cad"
+		and str(runtime_contract.get("config_sha256", "")) == "c8f2ab09f3943a5ec8abea7cb9a108f49990bff1d83003c3b3622187a269dea2"
+		and str(runtime_contract.get("prototype_sha256", "")) == "067c12e29c9fd352915ef2a501fcd7687b450081c79a4281d63bbfef1c19e7db"
+		and _is_sha256(str(runtime_contract.get("dispatch_sha256", ""))),
+		"navy_chapel_parity_mismatch",
+		"Navy Chapel live/config/prototype/dispatch pins do not bind the reviewed exact-current state.",
+	):
+		return false
+	return _validate_navy_chapel_behavior_contract(runtime_contract.get("behavior_contract", {}) as Dictionary)
+
+
+func _validate_navy_chapel_behavior_contract(contract: Dictionary) -> bool:
+	if not _require(_has_exact_keys(contract, ["acceptance_contract", "geometry_contract", "ownership_contract", "replacement_contract", "schema_version", "truth_boundary"]), "navy_chapel_parity_mismatch", "Navy Chapel behavior parity fields drifted."):
+		return false
+	var acceptance := contract.get("acceptance_contract", {}) as Dictionary
+	var geometry := contract.get("geometry_contract", {}) as Dictionary
+	var ownership := contract.get("ownership_contract", {}) as Dictionary
+	var replacement := contract.get("replacement_contract", {}) as Dictionary
+	var truth := contract.get("truth_boundary", {}) as Dictionary
+	return _require(
+		str(contract.get("schema_version", "")) == "ti.navy-chapel-187-live-parity/1"
+		and str(acceptance.get("accepted_physical_unit_id", "")) == "physical-building:w291189336"
+		and str(acceptance.get("independent_live_review_receipt_sha256", "")) == NAVY_CHAPEL_LIVE_REVIEW_RECEIPT_SHA256
+		and int(acceptance.get("numerator_effect", -1)) == 1
+		and bool(acceptance.get("reference_recognizable", false))
+		and bool(acceptance.get("wall_and_roof_are_one_physical_unit", false))
+		and str(geometry.get("canonical_wall_record_sha256", "")) == "69769fef402b480f1626fdce47e6d4ad49ecb710dab2b2e7373e5efa5acf0080"
+		and str(geometry.get("canonical_roof_record_sha256", "")) == "54bcd378997d0778bdaee432dc24ecdbb142c5dc5371166cf2d690ebb245b832"
+		and bool(geometry.get("horizontal_source_footprint_preserved", false))
+		and str(geometry.get("visual_geometry_signature", "")) == NAVY_CHAPEL_GEOMETRY_SIGNATURE
+		and int(geometry.get("visual_mesh_instances", -1)) == 6
+		and int(geometry.get("visual_surfaces", -1)) == 6
+		and int(geometry.get("visual_triangles", -1)) == 540
+		and int(geometry.get("world_records", -1)) == 735
+		and int(geometry.get("world_mesh_instances", -1)) == 944
+		and int(geometry.get("world_surfaces", -1)) == 957
+		and int(geometry.get("world_triangles", -1)) == 64572
+		and int(geometry.get("world_static_bodies", -1)) == 466
+		and int(geometry.get("world_shapes", -1)) == 466
+		and str(ownership.get("live_ownership_signature", "")) == NAVY_CHAPEL_OWNERSHIP_SIGNATURE
+		and int(ownership.get("structural_owner_count", -1)) == 2
+		and int(ownership.get("shape_count", -1)) == 2
+		and int(ownership.get("spray_owner_count", -1)) == 1
+		and int(ownership.get("navigation_owner_count", -1)) == 0
+		and int(ownership.get("wall_collision_triangles", -1)) == 94
+		and int(ownership.get("roof_collision_triangles", -1)) == 50
+		and bool(ownership.get("wall_is_sole_spray_receiver", false))
+		and ownership.get("roof_is_wall_spray_receiver") == false
+		and str(replacement.get("source_key", "")) == "w291189336"
+		and str(replacement.get("wall_object_key", "")) == NAVY_CHAPEL_RECEIVER
+		and str(replacement.get("roof_object_key", "")) == "building:w291189336:roof"
+		and bool(replacement.get("actual_supplied_chunk_pair_required", false))
+		and replacement.get("fallback_allowed") == false
+		and replacement.get("generic_stack_allowed") == false
+		and truth.get("as_built_fidelity_claimed") == false
+		and truth.get("game_distinctive_claimed") == false
+		and truth.get("receiver_complete_inferred_from_art") == false
+		and bool(truth.get("protected_runs_module_free", false))
+		and bool(truth.get("side_count_and_spacing_are_production_inference", false)),
+		"navy_chapel_parity_mismatch",
+		"Navy Chapel receipt, paired geometry, topology, ownership, replacement, or truth boundary drifted.",
 	)
 
 
@@ -920,6 +1041,8 @@ func _derive_unit_content_mode(receivers: Array) -> String:
 		return "all_receivers_active_building_3_hero"
 	if values == ["active_isle_house_variant_c"]:
 		return "all_receivers_active_isle_house_variant_c"
+	if values == ["active_navy_chapel_187_paired_replacement"]:
+		return "all_receivers_active_navy_chapel_187_paired_replacement"
 	if values == ["generated_placeholder", "legacy_adapter"]:
 		return "mixed_legacy_adapter_and_generated_placeholder"
 	if values == ["active_isle_house_variant_c", "legacy_adapter"]:

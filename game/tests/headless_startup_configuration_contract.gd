@@ -1,9 +1,9 @@
 extends SceneTree
 
 const EXPECTED_AUDIO_DRIVER := "Dummy"
-const EXPECTED_RUNTIME_MESHES := 940
-const EXPECTED_RUNTIME_SURFACES := 954
-const EXPECTED_RUNTIME_TRIANGLES := 64118
+const EXPECTED_RUNTIME_MESHES := 944
+const EXPECTED_RUNTIME_SURFACES := 957
+const EXPECTED_RUNTIME_TRIANGLES := 64572
 
 
 func _initialize() -> void:
@@ -25,9 +25,9 @@ func _initialize() -> void:
 	if GameMain.EXPECTED_MESHES != EXPECTED_RUNTIME_MESHES \
 	or GameMain.EXPECTED_SURFACES != EXPECTED_RUNTIME_SURFACES \
 	or GameMain.EXPECTED_TRIANGLES != EXPECTED_RUNTIME_TRIANGLES:
-		_fail("The packaged main-scene smoke oracle does not match current accepted Building 1/Building 3/Isle House runtime topology 940/954/64118.")
+		_fail("The packaged main-scene smoke oracle does not match current accepted Building 1/Building 3/Isle House/Navy Chapel runtime topology 944/957/64572.")
 		return
-	print("PASS: project startup selects exact Dummy audio before AudioServer initialization and packaged smoke expects current accepted Building 1/Building 3/Isle House runtime topology 940/954/64118")
+	print("PASS: project startup selects exact Dummy audio before AudioServer initialization and packaged smoke expects current accepted Building 1/Building 3/Isle House/Navy Chapel runtime topology 944/957/64572")
 	quit(0)
 
 

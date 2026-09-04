@@ -25,12 +25,12 @@
             "overlay_repair_signature": "41868b77a8b51b56ee7381e5549423e97547270d2dc77d9ce5cf958b31e2cb69",
             "overlay_surfaces": 11,
             "overlay_triangles": 2242,
-            "world_mesh_instances": 940,
+            "world_mesh_instances": 944,
             "world_records": 735,
             "world_shapes": 466,
             "world_static_bodies": 466,
-            "world_surfaces": 954,
-            "world_triangles": 64118
+            "world_surfaces": 957,
+            "world_triangles": 64572
           },
           "ownership_contract": {
             "decorative_collision_nodes": 0,
@@ -210,7 +210,7 @@
             "upper_schedule_claimed": false
           }
         },
-        "dispatch_sha256": "28be094c674108f42be040f2b3ae6d242838d15e2060f6cf4668b0a003f1a682",
+        "dispatch_sha256": "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c",
         "repair_factory_sha256": "4336e821e240b973f8d97e5cb46e17332b19dea03869abb1fa81b96a7e380582",
         "reviewed_factory_sha256": "b24fd72cd12aa0c6c45a123f005fc834ea657c343e8332a872eae07fa017ace7"
       },
@@ -450,7 +450,7 @@
             "two_story_roof_y": 14.75
           }
         },
-        "dispatch_sha256": "28be094c674108f42be040f2b3ae6d242838d15e2060f6cf4668b0a003f1a682"
+        "dispatch_sha256": "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c"
       },
       "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
       "attachment_kind": "active_building_1_hero_replacement",
@@ -705,7 +705,7 @@
             "two_story_roof_y": 14.75
           }
         },
-        "dispatch_sha256": "28be094c674108f42be040f2b3ae6d242838d15e2060f6cf4668b0a003f1a682"
+        "dispatch_sha256": "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c"
       },
       "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
       "attachment_kind": "active_building_1_hero_replacement",
@@ -759,6 +759,256 @@
       ],
       "runtime_content_mode": "active_building_1_hero",
       "source_key": "w1222720021",
+      "state": "active_runtime_target_specific_content",
+      "whole_building_recognizability_imported": false
+    },
+    {
+      "accepted_run_scopes": [],
+      "active_receiver_scope": {
+        "coverage": "whole_direct_wall_receiver",
+        "run_count": 34
+      },
+      "active_runtime_contract": {
+        "adapter_sha256": "deffb5956d8e808565d1c557208647a89dff4730c15f97aa9b1085a087968cad",
+        "behavior_contract": {
+          "acceptance_contract": {
+            "accepted_physical_unit_id": "physical-building:w291189336",
+            "independent_live_review_receipt_sha256": "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9",
+            "numerator_effect": 1,
+            "reference_recognizable": true,
+            "wall_and_roof_are_one_physical_unit": true
+          },
+          "geometry_contract": {
+            "canonical_roof_record_sha256": "54bcd378997d0778bdaee432dc24ecdbb142c5dc5371166cf2d690ebb245b832",
+            "canonical_wall_record_sha256": "69769fef402b480f1626fdce47e6d4ad49ecb710dab2b2e7373e5efa5acf0080",
+            "horizontal_source_footprint_preserved": true,
+            "visual_geometry_signature": "076e081df86e884f04cf7cb680304c35c64e6f76238de7060528c59097ae5c46",
+            "visual_mesh_instances": 6,
+            "visual_surfaces": 6,
+            "visual_triangles": 540,
+            "world_mesh_instances": 944,
+            "world_records": 735,
+            "world_shapes": 466,
+            "world_static_bodies": 466,
+            "world_surfaces": 957,
+            "world_triangles": 64572
+          },
+          "ownership_contract": {
+            "live_ownership_signature": "4766c5d562933eb632f1ef3bdcec828fc40be81c996db919c53405f776fa04a7",
+            "navigation_owner_count": 0,
+            "roof_collision_triangles": 50,
+            "roof_is_wall_spray_receiver": false,
+            "shape_count": 2,
+            "spray_owner_count": 1,
+            "structural_owner_count": 2,
+            "wall_collision_triangles": 94,
+            "wall_is_sole_spray_receiver": true
+          },
+          "replacement_contract": {
+            "actual_supplied_chunk_pair_required": true,
+            "fallback_allowed": false,
+            "generic_stack_allowed": false,
+            "roof_object_key": "building:w291189336:roof",
+            "source_key": "w291189336",
+            "wall_object_key": "building:w291189336:wall"
+          },
+          "schema_version": "ti.navy-chapel-187-live-parity/1",
+          "truth_boundary": {
+            "as_built_fidelity_claimed": false,
+            "game_distinctive_claimed": false,
+            "protected_runs_module_free": true,
+            "receiver_complete_inferred_from_art": false,
+            "side_count_and_spacing_are_production_inference": true
+          }
+        },
+        "config_sha256": "c8f2ab09f3943a5ec8abea7cb9a108f49990bff1d83003c3b3622187a269dea2",
+        "config_summary": {
+          "mapped_runs": [
+            {
+              "end_xz_m": [
+                -90.473,
+                643.41
+              ],
+              "field_material_policy": "accepted warm cream material",
+              "id": "NC-SSE-GABLE",
+              "length_m": 16.362,
+              "module_policy": "one complete gable-window-entry composition",
+              "ordered_run_indices": [
+                9,
+                10
+              ],
+              "outward_normal_xz": [
+                0.467,
+                0.884
+              ],
+              "role": "observed public gable and entrance end",
+              "start_xz_m": [
+                -104.937,
+                651.058
+              ]
+            },
+            {
+              "end_xz_m": [
+                -96,
+                632.951
+              ],
+              "field_material_policy": "quiet neutral non-claim surrogate",
+              "id": "NC-ESE-PARTIAL-PUBLIC-SIDE",
+              "length_m": 11.829,
+              "module_policy": "three complete tall narrow opening groups; count and cadence are reversible production inference",
+              "ordered_run_indices": [
+                11,
+                12,
+                13
+              ],
+              "outward_normal_xz": [
+                0.884,
+                -0.467
+              ],
+              "role": "bounded observed partial long side immediately adjacent to SSE end",
+              "start_xz_m": [
+                -90.473,
+                643.41
+              ]
+            }
+          ],
+          "material_scope": {
+            "accepted_cream": {
+              "application": "exact source wall runs 9 and 10 only; no new prototype geometry inherits accepted material status",
+              "path": "res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres"
+            },
+            "inferred_cream_structure": {
+              "application": "SSE gable closure, projecting entry, and belfry walls as a reversible source-supported palette inference; explicitly not material-accepted or color-calibrated",
+              "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_inferred_cream_structure.tres"
+            },
+            "neutral_roof": {
+              "application": "roof and cap silhouette only; color is not asserted",
+              "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres"
+            },
+            "opaque_opening": {
+              "application": "nontransparent exterior opening proxy; no interior claim",
+              "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres"
+            },
+            "pale_trim": {
+              "application": "observed public opening surrounds, divided-window bars, entry surround, and restrained cross",
+              "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres"
+            },
+            "protected_neutral": {
+              "application": "unobserved source runs and rear roof closure; diagnostic non-claim surrogate",
+              "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_protected_neutral.tres"
+            }
+          },
+          "model_id": "navy-chapel-187-standalone-hero-prototype-v1",
+          "protected_regions": [
+            {
+              "id": "NC-UNOBSERVED-RUNS",
+              "policy": "exact source wall shell only in a quiet neutral non-claim surrogate; no openings, plaques, or decorative schedule",
+              "run_indices": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7,
+                8,
+                14,
+                15,
+                16,
+                17,
+                18,
+                19,
+                20,
+                21,
+                22,
+                23,
+                24,
+                25,
+                26,
+                27,
+                28,
+                29,
+                30,
+                31,
+                32,
+                33
+              ]
+            },
+            {
+              "id": "NC-REAR-GABLE-CLOSURE",
+              "policy": "structural roof closure only in quiet neutral; no rear facade claim or ornament",
+              "run_indices": []
+            }
+          ],
+          "schema_version": "ti.navy-chapel-187-standalone-hero-prototype/1",
+          "target": {
+            "canonical_name": "Navy Chapel Building 187",
+            "roof_object_key": "building:w291189336:roof",
+            "roof_triangles": 18,
+            "source_key": "w291189336",
+            "wall_object_key": "building:w291189336:wall",
+            "wall_run_count": 34,
+            "wall_triangles": 68
+          },
+          "truth_boundary": {
+            "all_unsurveyed_dimensions_and_cadence": "reversible_production_inference",
+            "as_built_claim": false,
+            "horizontal_source_footprint_changed": false,
+            "source_identity_changed": false
+          }
+        },
+        "dispatch_sha256": "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c",
+        "prototype_sha256": "067c12e29c9fd352915ef2a501fcd7687b450081c79a4281d63bbfef1c19e7db"
+      },
+      "adapter_id": "active-adapter:navy-chapel-187:building:w291189336:wall",
+      "attachment_kind": "active_navy_chapel_187_paired_wall_roof_replacement",
+      "content_classification": "active_target_specific_paired_wall_roof_replacement",
+      "package_integration_state": "package_safe_asset_closure",
+      "receiver_key": "building:w291189336:wall",
+      "recognition_claim_effect": "none",
+      "review_status": "independent_exact_current_live_pass",
+      "runtime_asset_projections": [],
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/facades/navy_chapel_187_standalone_hero_prototype.json",
+          "sha256": "c8f2ab09f3943a5ec8abea7cb9a108f49990bff1d83003c3b3622187a269dea2"
+        },
+        {
+          "path": "res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres",
+          "sha256": "4020e4c75350929359be9c16686ad80a2a0eac46918cc32746089694017a61a5"
+        },
+        {
+          "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_inferred_cream_structure.tres",
+          "sha256": "2ee243415387c9f3d9dfd5664c0a5e13107745a83d9dcb489dd39e5aeb2ff17a"
+        },
+        {
+          "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres",
+          "sha256": "89be7fbe0feb68525c5423540d3a6f17f269567875174f23522b4e964ba737b1"
+        },
+        {
+          "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres",
+          "sha256": "253e9c2a5013f81aed446f6e55b702dea3792189658ce285726788d15376bc41"
+        },
+        {
+          "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres",
+          "sha256": "b565aa44566a0bb93d07d041b1e8331d9f35cb83ec34f6a2ec403b362311c380"
+        },
+        {
+          "path": "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_protected_neutral.tres",
+          "sha256": "91cd7ce14550bdfb6773a4013ef0db8bbb24bd5cc9d0734f6c591f23d6552206"
+        },
+        {
+          "path": "res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd",
+          "sha256": "deffb5956d8e808565d1c557208647a89dff4730c15f97aa9b1085a087968cad"
+        },
+        {
+          "path": "res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd",
+          "sha256": "067c12e29c9fd352915ef2a501fcd7687b450081c79a4281d63bbfef1c19e7db"
+        }
+      ],
+      "runtime_content_mode": "active_navy_chapel_187_paired_replacement",
+      "source_key": "w291189336",
       "state": "active_runtime_target_specific_content",
       "whole_building_recognizability_imported": false
     },
@@ -853,7 +1103,7 @@
             "visual_review_status": "pending_independent_original_detail_review"
           }
         },
-        "dispatch_sha256": "28be094c674108f42be040f2b3ae6d242838d15e2060f6cf4668b0a003f1a682"
+        "dispatch_sha256": "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c"
       },
       "adapter_id": "active-adapter:building-3-hero:building:w34313540:wall",
       "attachment_kind": "active_building_3_wall_roof_hero_replacement",
@@ -909,12 +1159,12 @@
   ],
   "adapter_contract": {
     "path": "res://game/resources/facades/facade-runtime-adapter-contracts.json",
-    "schema_version": "ti.facade-runtime-adapter-contracts/3",
-    "sha256": "f1ffc7061a8d02bd7f78a1ec4457b36c4adc5618755f730638bfedfcc9d4437d"
+    "schema_version": "ti.facade-runtime-adapter-contracts/4",
+    "sha256": "2064accb205c891cf7a7a09a7117be63360dee8d05f904cf31e99455368129d1"
   },
   "build_contract": {
-    "authoring_catalog_sha256": "2b457965d2e25d522d2ca3d73afb109b03a57247eaefbb6b70775bd83fb07311",
-    "compiler_version": "1.3.0",
+    "authoring_catalog_sha256": "56d7257fa4e3486b3299683c45d4ae1057858c6e1edb3e49f6b6241d7f1a9be7",
+    "compiler_version": "1.4.0",
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
     "inventory_sha256": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f",
@@ -936,9 +1186,9 @@
       "verified": 213
     },
     "reference_recognizable": {
-      "accepted": 5,
+      "accepted": 6,
       "blocked": 0,
-      "not_evaluated": 208,
+      "not_evaluated": 207,
       "rejected": 0
     }
   },
@@ -955,18 +1205,18 @@
     "reference_recognizable": "An ordinary gameplay view is independently matched to target-identifiable reference evidence."
   },
   "compatibility_contract": {
-    "catalog_schema_version": "ti.facade-recognition-catalog/4",
-    "compiler_version": "1.3.0",
+    "catalog_schema_version": "ti.facade-recognition-catalog/5",
+    "compiler_version": "1.4.0",
     "forward_compatible": false,
-    "loader_api_version": "ti.facade-runtime-registry-loader/3",
+    "loader_api_version": "ti.facade-runtime-registry-loader/4",
     "unknown_version_policy": "reject"
   },
   "counts": {
-    "active_runtime_adapter_receivers": 4,
+    "active_runtime_adapter_receivers": 5,
     "composite_units": 1,
     "direct_wall_receivers": 214,
     "identity_assertion_summaries": 2,
-    "legacy_adapter_receivers": 10,
+    "legacy_adapter_receivers": 9,
     "recognition_units": 213,
     "runtime_adapter_receivers": 14,
     "source_record_memberships": 215,
@@ -1031,34 +1281,6 @@
         }
       ],
       "source_key": "w1249412093",
-      "state": "existing_independently_accepted_target_specific_runtime_content",
-      "whole_building_recognizability_imported": false
-    },
-    {
-      "accepted_run_scopes": [
-        {
-          "run_indices": [
-            9,
-            10
-          ],
-          "scope_id": "legacy-accepted-runs"
-        }
-      ],
-      "adapter_id": "legacy-adapter:building:w291189336:wall",
-      "attachment_kind": "accepted_exact_run_homogeneous_material",
-      "inventory_attachment_sha256": "71fc97d306745394386ee6a314dcfe916adf9cfe26767fad4adc105c9424304d",
-      "module_placement_count": 0,
-      "package_integration_state": "package_safe_asset_closure",
-      "receiver_key": "building:w291189336:wall",
-      "recognition_claim_effect": "none",
-      "runtime_asset_projections": [],
-      "runtime_assets": [
-        {
-          "path": "res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres",
-          "sha256": "4020e4c75350929359be9c16686ad80a2a0eac46918cc32746089694017a61a5"
-        }
-      ],
-      "source_key": "w291189336",
       "state": "existing_independently_accepted_target_specific_runtime_content",
       "whole_building_recognizability_imported": false
     },
@@ -1451,20 +1673,21 @@
       "physical-building:w1222720021",
       "physical-building:w1249412093",
       "physical-building:w1249412094",
+      "physical-building:w291189336",
       "physical-building:w34313540"
     ],
     "denominator": 213,
     "denominator_kind": "immutable_physical_recognition_units",
-    "display": "5/213",
+    "display": "6/213",
     "isle_house_non_numerator_source_keys": [
       "w1282547786",
       "w1282547787"
     ],
-    "numerator": 5,
+    "numerator": 6,
     "rollup_policy": "one_claim_per_physical_recognition_unit"
   },
   "registry_id": "treasure-island-physical-building-recognition",
-  "schema_version": "ti.facade-runtime-registry/4",
+  "schema_version": "ti.facade-runtime-registry/5",
   "units": [
     {
       "acceptance_records": [],
@@ -12401,16 +12624,67 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
-      "active_runtime_adapter_ids": [],
+      "acceptance_records": [
+        {
+          "evidence_manifest_sha256": "54d434c9283a0e2d86aa836e6a21672a8756e5a170cb5724d66066e799223930",
+          "review_id": "navy-chapel-187-live-replacement-2026-09-04",
+          "review_kind": "independent_reference_recognition",
+          "review_receipt_sha256": "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9",
+          "status": "accept"
+        }
+      ],
+      "active_runtime_adapter_ids": [
+        "active-adapter:navy-chapel-187:building:w291189336:wall"
+      ],
       "capture_contract": {
-        "status": "unconfigured"
+        "alternate_pose": {
+          "aim_target_m": [
+            -100.468505859375,
+            9.01949977874756,
+            648.694946289062
+          ],
+          "camera_position_m": [
+            -30.7363471984863,
+            5.79168653488159,
+            669.576232910156
+          ],
+          "fov_degrees": 70,
+          "player_position_m": [
+            -36,
+            4.03533506393433,
+            668
+          ]
+        },
+        "ordinary_third_person_required": true,
+        "primary_pose": {
+          "aim_target_m": [
+            -100.468505859375,
+            9.01949977874756,
+            648.694946289062
+          ],
+          "camera_position_m": [
+            -47.1729583740234,
+            5.77126884460449,
+            677.619750976562
+          ],
+          "fov_degrees": 70,
+          "player_position_m": [
+            -52,
+            4.06546497344971,
+            675
+          ]
+        },
+        "required_cue_ids": [
+          "chapel-belfry-cap-cross-silhouette",
+          "chapel-public-gable-window-entry"
+        ],
+        "status": "configured"
       },
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "direct_receivers": [
         {
@@ -12425,8 +12699,8 @@
           "receiver_key": "building:w291189336:wall",
           "record_sha256": "69769fef402b480f1626fdce47e6d4ad49ecb710dab2b2e7373e5efa5acf0080",
           "run_count": 34,
-          "runtime_adapter_id": "legacy-adapter:building:w291189336:wall",
-          "runtime_content_mode": "legacy_adapter",
+          "runtime_adapter_id": "active-adapter:navy-chapel-187:building:w291189336:wall",
+          "runtime_content_mode": "active_navy_chapel_187_paired_replacement",
           "shared_wall_runs": 0,
           "source_key": "w291189336",
           "spray_receiver_expected": true,
@@ -12444,19 +12718,81 @@
         "name_evidence": true
       },
       "identity_assertions": [],
-      "legacy_adapter_ids": [
-        "legacy-adapter:building:w291189336:wall"
+      "legacy_adapter_ids": [],
+      "protected_scopes": [
+        {
+          "receiver_key": "building:w291189336:wall",
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33
+          ]
+        }
       ],
-      "protected_scopes": [],
       "recognition_contract": {
-        "authored_cue_count": 0,
-        "authored_reference_count": 0,
-        "capture_status": "unconfigured",
+        "authored_cue_count": 2,
+        "authored_reference_count": 1,
+        "capture_status": "configured",
         "game_only_cues_do_not_prove_real_world_recognition": true,
-        "reference_state": "reference_research_unassessed"
+        "reference_state": "reference_ready"
       },
-      "recognition_cues": [],
-      "runtime_content_mode": "all_receivers_legacy_adapter",
+      "recognition_cues": [
+        {
+          "complete_motif": true,
+          "cue_id": "chapel-belfry-cap-cross-silhouette",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w291189336:wall",
+          "reference_ids": [
+            "navy-chapel-nc-sv01-2025-09"
+          ],
+          "run_indices": [
+            9,
+            10
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "chapel-public-gable-window-entry",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w291189336:wall",
+          "reference_ids": [
+            "navy-chapel-nc-sv01-2025-09"
+          ],
+          "run_indices": [
+            9,
+            10
+          ]
+        }
+      ],
+      "runtime_content_mode": "all_receivers_active_navy_chapel_187_paired_replacement",
       "source_records": [
         {
           "role": "standalone_building_footprint",

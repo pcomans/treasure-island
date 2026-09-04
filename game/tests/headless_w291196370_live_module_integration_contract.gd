@@ -3,6 +3,7 @@ extends SceneTree
 const LIVE_MODULES := preload("res://game/scripts/world/facades/w291196370_live_modules.gd")
 const REVIEWED_CALIBRATION := preload("res://game/tests/support/w291196370_module_calibration.gd")
 const ACCEPTED_FIELDS := preload("res://game/scripts/world/facades/accepted_material_run_trials.gd")
+const CHAPEL_ISOLATION := preload("res://game/tests/support/navy_chapel_187_protected_receiver_test_support.gd")
 const RECEIVER_KEY := "building:w291196370:wall"
 const CHUNK_PATH := "res://generated/world/chunks/x_0__z_-3.json"
 const REGISTRY_PATH := "res://game/resources/facades/w291196370_module_calibration.json"
@@ -70,7 +71,7 @@ func _run() -> void:
 	detached_node.free()
 	await _whole_island_matches()
 	if not _failed:
-		print("PASS: exactly three independently KEEP_WITH_DOCUMENTED_LIMITATION w291196370 complete module-atlas exemplars remain unchanged at SSE runs 8/10 and ENE run 20; the distinct independently accepted w34313520 scope remains isolated, and whole-island topology is 735/940/954/64,118/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
+		print("PASS: exactly three independently KEEP_WITH_DOCUMENTED_LIMITATION w291196370 complete module-atlas exemplars remain unchanged at SSE runs 8/10 and ENE run 20; the distinct independently accepted w34313520 scope remains isolated, and whole-island topology is 735/944/957/64,572/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
 	_finish()
 
 
@@ -213,6 +214,10 @@ func _deterministic(first: Node3D, second: Node3D) -> bool:
 
 func _protected_receivers_exclude_modules(builder: WorldChunkBuilder) -> bool:
 	for receiver_key: String in PROTECTED_RECEIVERS:
+		if receiver_key == CHAPEL_ISOLATION.WALL_KEY:
+			if not CHAPEL_ISOLATION.exact_pair_excludes_module_family("W291196370LiveModules"):
+				return false
+			continue
 		var record := _record_for(receiver_key)
 		if record.is_empty():
 			return false
@@ -255,7 +260,7 @@ func _whole_island_matches() -> void:
 			receiver = candidate as Node3D
 	_require(evidence.chunks_loaded == 38 \
 		and evidence.playable_rows == 735 and evidence.context_rows == 4 \
-		and evidence.mesh_instances == 940 and evidence.surfaces == 954 and evidence.triangles == 64118 \
+		and evidence.mesh_instances == 944 and evidence.surfaces == 957 and evidence.triangles == 64572 \
 		and evidence.static_bodies == 466 and evidence.shapes == 466 \
 		and live_root_count == 1 and receiver != null \
 		and _count_type(receiver, MeshInstance3D) == 25 \

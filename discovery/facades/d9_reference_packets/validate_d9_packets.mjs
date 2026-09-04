@@ -31,14 +31,19 @@ const PACKET_FILENAMES = Object.freeze({
 });
 const COMPONENT_READY_IDS = new Set(["w96665907", "w96665910", "w96665915", "w96665920", "w96665922"]);
 const APPEARANCE_BLOCKED_IDS = new Set(["w96665923"]);
+const PACKET_TIME_CATALOG_SNAPSHOT = Object.freeze({
+  schema: "ti.facade-recognition-catalog/4",
+  sha256: "2b457965d2e25d522d2ca3d73afb109b03a57247eaefbb6b70775bd83fb07311",
+});
 const PACKET_TIME_REGISTRY_SNAPSHOT = Object.freeze({
   schema: "ti.facade-runtime-registry/4",
   sha256: "acc04aa840f287b10650d0de44db4cdfbb4949038774f1fec2f139810696a8af",
 });
+const PACKET_TIME_STATE = Object.freeze({ recognition_metric: "5/213" });
 const AUTHORITY = Object.freeze({
-  catalog: { path: "discovery/facades/facade-recognition-catalog.json", schema: "ti.facade-recognition-catalog/4", sha256: "2b457965d2e25d522d2ca3d73afb109b03a57247eaefbb6b70775bd83fb07311" },
+  catalog: { path: "discovery/facades/facade-recognition-catalog.json", schema: "ti.facade-recognition-catalog/5" },
   inventory: { path: "discovery/FACADE_RECEIVER_INVENTORY.json", schema: "ti.facade-receiver-inventory/1", sha256: "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f" },
-  registry: { path: "game/resources/facades/facade-runtime-registry.json", schema: "ti.facade-runtime-registry/4", sha256: "dce268c1547e4e4620faff9d59110ee1214a9a2121c1f83b3eb1c865339360ab" },
+  registry: { path: "game/resources/facades/facade-runtime-registry.json", schema: "ti.facade-runtime-registry/5" },
   manifest: { path: "generated/world/manifest.json", schema: "ti.godot-world/2", sha256: "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3" },
   osm: { path: "data/osm/treasure-island-2026-08-27.osm", sha256: "3b6f6af31a1c82de3fa51fcbc02fe7e3723fdb629c948ae6523ef46c157b4549" },
 });
@@ -47,11 +52,6 @@ const PRIOR_PACKET_DIRS = Object.freeze([
   "d1_reference_packets", "d2_reference_packets", "d3_reference_packets",
   "d4_reference_packets", "d5_reference_packets", "d6_reference_packets",
   "d7_reference_packets", "d8_reference_packets",
-]);
-const EXPECTED_ACCEPTED = Object.freeze([
-  "physical-building:r16681702", "physical-building:w1222720021",
-  "physical-building:w1249412093", "physical-building:w1249412094",
-  "physical-building:w34313540",
 ]);
 const CARDINAL_16 = ["N", "NNE", "NE", "ENE", "E", "ESE", "SE", "SSE", "S", "SSW", "SW", "WSW", "W", "WNW", "NW", "NNW"];
 
@@ -67,7 +67,6 @@ function sha256(value) { return createHash("sha256").update(value).digest("hex")
 function stableSha256(value) { return sha256(`${JSON.stringify(sorted(value), null, 2)}\n`); }
 function fileSha256(path) { return sha256(readFileSync(absolute(path))); }
 function occurrences(text, token) { return text.split(token).length - 1; }
-function sortedStrings(values) { return [...values].sort((a, b) => a.localeCompare(b)); }
 
 function priorPacketIds() {
   const ids = new Set();
@@ -123,35 +122,6 @@ function visiblePerimeter(record) {
   return total;
 }
 
-function validateCurrentRecognition(catalog, registry) {
-  const catalogCounts = catalog.expected_counts;
-  const registryCounts = registry.counts;
-  const catalogAccepted = sortedStrings(catalog.units.filter((unit) => unit.claim_status.reference_recognizable === "accepted").map((unit) => unit.unit_id));
-  const registryAccepted = sortedStrings(registry.units.filter((unit) => unit.claim_status.reference_recognizable === "accepted").map((unit) => unit.unit_id));
-  const expected = sortedStrings(EXPECTED_ACCEPTED);
-  const catalogReceivers = catalog.units.reduce((sum, unit) => sum + unit.receiver_keys.length, 0);
-  const catalogMemberships = catalog.units.reduce((sum, unit) => sum + unit.source_records.length, 0);
-  const receivers = registry.units.reduce((sum, unit) => sum + unit.direct_receivers.length, 0);
-  const memberships = registry.units.reduce((sum, unit) => sum + unit.source_records.length, 0);
-  invariant(catalog.units.length === 213 && registry.units.length === 213, "Current recognition-unit count is not 213");
-  invariant(catalogCounts.recognition_units === 213 && registryCounts.recognition_units === 213, "Current declared recognition-unit count drifted");
-  invariant(catalogCounts.direct_wall_receivers === 214 && registryCounts.direct_wall_receivers === 214, "Current declared direct-receiver count drifted");
-  invariant(catalogCounts.source_records === 215 && registryCounts.source_record_memberships === 215, "Current declared source-record count drifted");
-  invariant(catalogReceivers === 214 && catalogMemberships === 215, `Current catalog counts drifted: ${catalogReceivers}/${catalogMemberships}`);
-  invariant(receivers === 214 && memberships === 215, `Current registry counts drifted: ${receivers}/${memberships}`);
-  invariant(JSON.stringify(catalogAccepted) === JSON.stringify(expected), `Catalog accepted set drifted: ${catalogAccepted.join(", ")}`);
-  invariant(JSON.stringify(registryAccepted) === JSON.stringify(expected), `Registry accepted set drifted: ${registryAccepted.join(", ")}`);
-  invariant(registry.recognition_metric.numerator === 5 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "5/213", "Current recognition metric is not 5/213");
-  invariant(JSON.stringify(sortedStrings(registry.recognition_metric.accepted_physical_unit_ids)) === JSON.stringify(expected), "Metric accepted set drifted");
-  invariant(registry.claim_totals.reference_recognizable.accepted === 5 && registry.claim_totals.reference_recognizable.not_evaluated === 208, "Current recognition claim totals drifted");
-  const unitIds = new Set(registry.units.map((unit) => unit.unit_id));
-  invariant(!unitIds.has("physical-building:w1282547786") && !unitIds.has("physical-building:w1282547787"), "Isle House part became a physical unit");
-  invariant(
-    JSON.stringify(registry.recognition_metric.isle_house_non_numerator_source_keys) === JSON.stringify(["w1282547786", "w1282547787"]),
-    "Current Isle House non-numerator source boundary drifted",
-  );
-}
-
 function contracts() {
   const catalog = readJson(AUTHORITY.catalog.path);
   const inventory = readJson(AUTHORITY.inventory.path);
@@ -159,10 +129,12 @@ function contracts() {
   const logical = readJson("generated/world/logical-objects.json");
   const priorIds = priorPacketIds();
   invariant(priorIds.size === 136, `Expected 136 unique prior packet IDs, found ${priorIds.size}`);
-  const derived = catalog.units.filter((unit) => unit.unit_kind === "standalone_building" && !priorIds.has(unit.anchor_source_key)).slice(0, IDS.length).map((unit) => unit.anchor_source_key);
-  invariant(JSON.stringify(derived) === JSON.stringify(IDS), `D9 catalog cohort drifted: ${derived.join(", ")}`);
-  validateCurrentRecognition(catalog, registry);
+  const derivedCatalog = catalog.units.filter((unit) => unit.unit_kind === "standalone_building" && !priorIds.has(unit.anchor_source_key)).slice(0, IDS.length).map((unit) => unit.anchor_source_key);
+  const derivedRegistry = registry.units.filter((unit) => unit.unit_kind === "standalone_building" && !priorIds.has(unit.source_records[0]?.source_key)).slice(0, IDS.length).map((unit) => unit.source_records[0]?.source_key);
+  invariant(JSON.stringify(derivedCatalog) === JSON.stringify(IDS), `D9 current catalog cohort/order drifted: ${derivedCatalog.join(", ")}`);
+  invariant(JSON.stringify(derivedRegistry) === JSON.stringify(IDS), `D9 current registry cohort/order drifted: ${derivedRegistry.join(", ")}`);
   const bySource = new Map(inventory.objects.map((object) => [object.source.source_key, object]));
+  const catalogByUnit = new Map(catalog.units.map((unit) => [unit.unit_id, unit]));
   const byUnit = new Map(registry.units.map((unit) => [unit.unit_id, unit]));
   const byLogical = new Map(logical.objects.map((object) => [object.logical_object_key, object]));
   return IDS.map((sourceKey) => {
@@ -174,6 +146,9 @@ function contracts() {
     const roofKey = `${logicalKey}:roof`;
     invariant(JSON.stringify(object.generated_receiver.direct_wall_object_keys) === JSON.stringify([wallKey]), `${sourceKey} wall binding drifted`);
     invariant(JSON.stringify(object.generated_receiver.direct_roof_object_keys) === JSON.stringify([roofKey]), `${sourceKey} roof binding drifted`);
+    const catalogUnit = catalogByUnit.get(`physical-building:${sourceKey}`);
+    invariant(catalogUnit?.anchor_source_key === sourceKey, `${sourceKey} current catalog unit binding drifted`);
+    invariant(JSON.stringify(catalogUnit.receiver_keys) === JSON.stringify([wallKey]), `${sourceKey} current catalog receiver binding drifted`);
     const unit = byUnit.get(`physical-building:${sourceKey}`);
     invariant(unit?.direct_receivers.length === 1, `${sourceKey} must have one direct facade receiver`);
     const receiver = unit.direct_receivers[0];
@@ -195,14 +170,26 @@ function contracts() {
 
 for (const authority of Object.values(AUTHORITY)) {
   if (authority.schema) invariant(readJson(authority.path).schema_version === authority.schema, `${authority.path} schema drifted`);
-  invariant(fileSha256(authority.path) === authority.sha256, `${authority.path} SHA-256 drifted`);
+  if (authority.sha256) invariant(fileSha256(authority.path) === authority.sha256, `${authority.path} SHA-256 drifted`);
 }
-invariant(PACKET_TIME_REGISTRY_SNAPSHOT.schema === AUTHORITY.registry.schema && PACKET_TIME_REGISTRY_SNAPSHOT.sha256 !== AUTHORITY.registry.sha256, "D9 packet-time and current registry identities must remain explicitly separate");
+invariant(
+  PACKET_TIME_CATALOG_SNAPSHOT.schema === "ti.facade-recognition-catalog/4"
+    && AUTHORITY.catalog.schema === "ti.facade-recognition-catalog/5"
+    && PACKET_TIME_REGISTRY_SNAPSHOT.schema === "ti.facade-runtime-registry/4"
+    && AUTHORITY.registry.schema === "ti.facade-runtime-registry/5",
+  "D9 packet-time v4 receipts and current v5 authorities must remain explicitly separate",
+);
 const localContracts = contracts();
 const readme = readFileSync(resolve(HERE, "README.md"), "utf8");
+const packetTimeCatalogRow = `| D9 packet-time catalog snapshot receipt | \`${PACKET_TIME_CATALOG_SNAPSHOT.schema}\`; \`${PACKET_TIME_CATALOG_SNAPSHOT.sha256}\` | immutable packet-time provenance; same bytes as the then-current catalog at seal time |`;
 const packetTimeRow = `| D9 packet-time registry snapshot receipt | \`${PACKET_TIME_REGISTRY_SNAPSHOT.schema}\`; \`${PACKET_TIME_REGISTRY_SNAPSHOT.sha256}\` | immutable packet-time provenance; same bytes as the then-current registry at seal time |`;
-const currentRow = `| \`game/resources/facades/facade-runtime-registry.json\` (current checkout) | \`${AUTHORITY.registry.schema}\`; \`${AUTHORITY.registry.sha256}\` | separately hashed exact-current direct binding and \`5/213\` recognition state |`;
+const metricRow = `| D9 packet-time recognition rollup | \`${PACKET_TIME_STATE.recognition_metric}\` | immutable five-unit acceptance state at the v4 authority boundary; not a claim about current compiler output |`;
+const currentCatalogRow = `| \`${AUTHORITY.catalog.path}\` (current checkout) | \`${AUTHORITY.catalog.schema}\`; SHA-256 emitted by validator | used only to rederive the exact 15-ID cohort and order |`;
+const currentRow = `| \`${AUTHORITY.registry.path}\` (current checkout) | \`${AUTHORITY.registry.schema}\`; SHA-256 emitted by validator | used only to verify those 15 current direct bindings; global counts and recognition rollup remain compiler-owned |`;
+invariant(readme.includes(packetTimeCatalogRow), "README lost exact D9 packet-time catalog receipt");
 invariant(readme.includes(packetTimeRow), "README lost exact D9 packet-time registry receipt");
+invariant(readme.includes(metricRow), "README lost historical D9 packet-time recognition rollup");
+invariant(readme.includes(currentCatalogRow), "README lost separately labeled current catalog authority");
 invariant(readme.includes(currentRow), "README lost separately labeled current registry authority");
 
 if (process.argv.includes("--dump-contracts")) {
@@ -264,7 +251,11 @@ for (const contract of localContracts) {
 invariant(readySeen === 9 && componentSeen === 5 && blockedSeen === 1, `Readiness counts drifted: ${readySeen}/${componentSeen}/${blockedSeen}`);
 invariant(fieldChecks === 300 && facingChecks === 60 && links === 15, `Audit totals drifted: ${fieldChecks}/${facingChecks}/${links}`);
 invariant(readme.includes("Totals: **9 prototype-ready / 5 component-ready / 1 appearance-blocked**"), "README readiness totals drifted");
-for (const authority of Object.values(AUTHORITY)) invariant(readme.includes(authority.sha256), `README lacks authority SHA ${authority.sha256}`);
+for (const authority of Object.values(AUTHORITY)) {
+  if (authority.sha256) invariant(readme.includes(authority.sha256), `README lacks authority SHA ${authority.sha256}`);
+}
+invariant(readme.includes(PACKET_TIME_CATALOG_SNAPSHOT.sha256), `README lacks packet-time catalog SHA ${PACKET_TIME_CATALOG_SNAPSHOT.sha256}`);
+invariant(readme.includes(PACKET_TIME_REGISTRY_SNAPSHOT.sha256), `README lacks packet-time registry SHA ${PACKET_TIME_REGISTRY_SNAPSHOT.sha256}`);
 for (const sourceId of ["CITY-EAS", "CITY-XWALK", "NAVY-SITE12-2015", "CITY-HOUSING-2017", "GOOGLE-SV"]) invariant(readme.includes(`\`${sourceId}\``), `README lacks source ${sourceId}`);
 
-process.stdout.write(`D9 packet audit: PASS (15 IDs, 45 recomputed hashes, ${fieldChecks} exact field checks, ${facingChecks} facing partitions, ${links} packet links, readiness ${readySeen}/${componentSeen}/${blockedSeen}; packet-time registry ${PACKET_TIME_REGISTRY_SNAPSHOT.sha256}; current registry ${AUTHORITY.registry.sha256}, 5/213)\n`);
+process.stdout.write(`D9 packet audit: PASS (15 IDs/order/direct bindings, 45 recomputed hashes, ${fieldChecks} exact field checks, ${facingChecks} facing partitions, ${links} packet links, readiness ${readySeen}/${componentSeen}/${blockedSeen}; immutable packet-time catalog/registry ${PACKET_TIME_CATALOG_SNAPSHOT.sha256}/${PACKET_TIME_REGISTRY_SNAPSHOT.sha256}, ${PACKET_TIME_STATE.recognition_metric}; current v5 catalog/registry ${fileSha256(AUTHORITY.catalog.path)}/${fileSha256(AUTHORITY.registry.path)})\n`);

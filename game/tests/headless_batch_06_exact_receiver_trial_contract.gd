@@ -46,9 +46,9 @@ const SMOOTH_SHADER_PATH := "res://game/resources/materials/world/batch_06/batch
 const SIDING_SHADER_PATH := "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader"
 const EXPECTED_SMOOTH_SHADER_SHA256 := "d4a9dbb7c58443be93362699b0983b7377dab70698fd782b6710315c31be3e69"
 const EXPECTED_SIDING_SHADER_SHA256 := "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a"
-const EXPECTED_WORLD_MESHES := 940
-const EXPECTED_WORLD_SURFACES := 954
-const EXPECTED_WORLD_TRIANGLES := 64118
+const EXPECTED_WORLD_MESHES := 944
+const EXPECTED_WORLD_SURFACES := 957
+const EXPECTED_WORLD_TRIANGLES := 64572
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_BUILDING_WALL := 1 << 1
 
@@ -266,7 +266,7 @@ func _run() -> void:
 	if not _require(bool(whole.get("ok", false)), str(whole.get("message", "Whole-island accepted-material load failed."))):
 		_finish()
 		return
-	print("PASS: Batch 06 scopes remain independently accepted; historical Building 1 material/module evidence remains sealed while accepted Building 1/Building 3/Isle House runtime replacements remain exact, protected complements stay unchanged, and world topology is 735/940/954/64,118/466")
+	print("PASS: Batch 06 scopes remain independently accepted; historical Building 1 material/module evidence remains sealed while accepted Building 1/Building 3/Isle House/Navy Chapel runtime replacements remain exact, protected complements stay unchanged, and world topology is 735/944/957/64,572/466")
 	_finish()
 
 

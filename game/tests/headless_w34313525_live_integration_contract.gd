@@ -3,6 +3,7 @@ extends SceneTree
 const LIVE_MODULES := preload("res://game/scripts/world/facades/w34313525_live_modules.gd")
 const REVIEWED_CALIBRATION := preload("res://game/tests/support/w34313525_exact_receiver_calibration.gd")
 const ACCEPTED_FIELDS := preload("res://game/scripts/world/facades/accepted_material_run_trials.gd")
+const CHAPEL_ISOLATION := preload("res://game/tests/support/navy_chapel_187_protected_receiver_test_support.gd")
 const RECEIVER_KEY := "building:w34313525:wall"
 const REGISTRY_PATH := "res://game/resources/facades/w34313525_exact_receiver_calibration.json"
 const REVIEW_PATH := "res://discovery/facades/W34313525_EXACT_RECEIVER_CALIBRATION_ART_REVIEW.md"
@@ -76,7 +77,7 @@ func _run() -> void:
 	detached_root.free()
 	await _whole_island_matches()
 	if not _failed:
-		print("PASS: w34313525 is independently accepted live only on exact MAT-PALE SSE runs 8..12 and NNW runs 26..27 with two reviewed 0.88/0.31 m field surfaces, plus exactly four transform-identical backing-free module-atlas exemplars; its own pending actual-world review is zero and whole-island topology is 735/940/954/64,118/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
+		print("PASS: w34313525 is independently accepted live only on exact MAT-PALE SSE runs 8..12 and NNW runs 26..27 with two reviewed 0.88/0.31 m field surfaces, plus exactly four transform-identical backing-free module-atlas exemplars; its own pending actual-world review is zero and whole-island topology is 735/944/957/64,572/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
 	_finish()
 
 
@@ -251,6 +252,10 @@ func _deterministic(first: Node3D, second: Node3D) -> bool:
 
 func _protected_receivers_exclude_scope(builder: WorldChunkBuilder) -> bool:
 	for receiver_key: String in PROTECTED_RECEIVERS:
+		if receiver_key == CHAPEL_ISOLATION.WALL_KEY:
+			if not CHAPEL_ISOLATION.exact_pair_excludes_module_family("W34313525LiveModules"):
+				return false
+			continue
 		var record := _record_for(receiver_key)
 		if record.is_empty():
 			return false
@@ -293,7 +298,7 @@ func _whole_island_matches() -> void:
 			receiver = candidate as Node3D
 	_require(int(evidence.chunks_loaded) == 38 \
 		and int(evidence.playable_rows) == 735 and int(evidence.context_rows) == 4 \
-		and int(evidence.mesh_instances) == 940 and int(evidence.surfaces) == 954 and int(evidence.triangles) == 64118 \
+		and int(evidence.mesh_instances) == 944 and int(evidence.surfaces) == 957 and int(evidence.triangles) == 64572 \
 		and int(evidence.static_bodies) == 466 and int(evidence.shapes) == 466 \
 		and live_root_count == 1 and receiver != null \
 		and receiver.get_child_count() == 3 \

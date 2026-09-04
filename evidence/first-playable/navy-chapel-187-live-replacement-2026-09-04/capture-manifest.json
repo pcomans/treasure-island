@@ -1,0 +1,521 @@
+{
+  "schema_version": "ti.navy-chapel-187-actual-live-evidence/1",
+  "review_status": "pending_independent_exact_current_live_review_not_self_accepted",
+  "visual_verdict": "pending_independent_review",
+  "recognition_status": "pending_independent_review",
+  "believability_status": "pending_independent_review",
+  "generator": "game/tests/navy_chapel_187_live_replacement_capture.gd",
+  "generator_sha256": "cfdd474531bb47b072b1e0f8b09e84257c181501b9bc9385389b0ebffbcb926b",
+  "live_adapter_sha256": "deffb5956d8e808565d1c557208647a89dff4730c15f97aa9b1085a087968cad",
+  "world_builder_sha256": "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M2 (Apple8)",
+  "viewport": [
+    1440,
+    900
+  ],
+  "target": {
+    "canonical_name": "Navy Chapel Building 187",
+    "source_key": "w291189336",
+    "wall_object_key": "building:w291189336:wall",
+    "roof_object_key": "building:w291189336:roof"
+  },
+  "bindings": {
+    "wall_root_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_2__building_w291189336_wall/NavyChapel187LiveWallVisualAndCollisionReplacement",
+    "roof_root_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_2__building_w291189336_roof/NavyChapel187LiveRoofCollisionReplacement",
+    "wall_body_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_2__building_w291189336_wall/NavyChapel187LiveWallVisualAndCollisionReplacement/Collision",
+    "roof_body_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_2__building_w291189336_roof/NavyChapel187LiveRoofCollisionReplacement/Collision",
+    "wall_source_keys": [
+      "w291189336"
+    ],
+    "roof_source_keys": [
+      "w291189336"
+    ],
+    "geometry_signature": "076e081df86e884f04cf7cb680304c35c64e6f76238de7060528c59097ae5c46",
+    "live_ownership_signature": "4766c5d562933eb632f1ef3bdcec828fc40be81c996db919c53405f776fa04a7",
+    "canonical_wall_record_sha256": "69769fef402b480f1626fdce47e6d4ad49ecb710dab2b2e7373e5efa5acf0080",
+    "canonical_roof_record_sha256": "54bcd378997d0778bdaee432dc24ecdbb142c5dc5371166cf2d690ebb245b832",
+    "approval_receipt_sha256": "4232ad42b3600b1d7f945c5d51325bb9698c366e07eb1ddea3fd90f3f49235c6",
+    "wall_collision_triangles": 94,
+    "roof_collision_triangles": 50,
+    "structural_body_count": 2,
+    "structural_shape_count": 2,
+    "spray_owner_count": 1,
+    "navigation_owner_count": 0,
+    "generic_wall_or_roof_stack_count": 0,
+    "preview_attachment_count": 0,
+    "recognition_accepted": false,
+    "believability_accepted": false
+  },
+  "runtime_topology": {
+    "rows": 735,
+    "meshes": 944,
+    "surfaces": 957,
+    "triangles": 64572,
+    "bodies": 466,
+    "shapes": 466
+  },
+  "captures": [
+    {
+      "id": "01-whole-public-default",
+      "role": "grounded_ordinary_player_actual_live_whole_public_object",
+      "lighting": "world_default",
+      "file": "images/01-whole-public-default.png",
+      "sha256": "b464cc9ba0d237900012f64f3598a11fb49893432f61a7b6a30cec362eba27ad",
+      "bytes": 602604,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 213,
+      "sample_luminance_range": 0.717363938689232,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "actual_live_node": true,
+      "preview_attachment_count": 0,
+      "visual_verdict": "pending_independent_review",
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -52.0,
+        675.0
+      ],
+      "settle_spawn_y_m": 7.06535339355469,
+      "player_position_m": [
+        -52.0,
+        4.06546497344971,
+        675.0
+      ],
+      "ground_y_m": 4.06535339355469,
+      "ground_clearance_m": 0.000111579895019531,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999845385551453,
+      "in_boundary": true,
+      "aim_target_m": [
+        -100.468505859375,
+        9.01949977874756,
+        648.694946289062
+      ],
+      "camera_position_m": [
+        -47.1729583740234,
+        5.77126884460449,
+        677.619750976562
+      ],
+      "camera_height_above_ground_m": 1.7059154510498,
+      "camera_forward": [
+        -0.877644002437592,
+        0.053490225225687,
+        -0.476319044828415
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49999809265137,
+      "camera_yaw_degrees": 61.5102243268793,
+      "camera_pitch_degrees": 3.06622699666108,
+      "target_bounds_point_count": 48,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        601.385375976562,
+        252.038513183594
+      ],
+      "target_projected_max_px": [
+        1099.5126953125,
+        508.773895263672
+      ],
+      "target_projected_width_ratio": 0.345921749538845,
+      "target_projected_height_ratio": 0.285261535644531,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        719.999938964844,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.00006103515625,
+      "first_los_hit_receiver": "building:w291189336:wall",
+      "first_los_hit_source_keys": [
+        "w291189336"
+      ],
+      "first_los_hit_run_index": 9,
+      "expected_los_run_index": 9,
+      "first_los_hit_position_m": [
+        -100.468475341797,
+        9.01949882507324,
+        648.694946289062
+      ],
+      "first_los_hit_normal": [
+        0.467475265264511,
+        0.0,
+        0.884006202220917
+      ],
+      "first_los_hit_distance_m": 60.7256736755371,
+      "first_los_hit_target_error_m": 0.000030532475648215,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "sun_rotation_degrees": [
+        -51.9999923706055,
+        -27.9999961853027,
+        0.0
+      ]
+    },
+    {
+      "id": "02-whole-public-changed-light",
+      "role": "grounded_ordinary_player_actual_live_whole_public_object",
+      "lighting": "frozen_changed_light",
+      "file": "images/02-whole-public-changed-light.png",
+      "sha256": "0d552b96bcb74642b88cccb2a59cff2e93f4bc6758efc697ae785cd01b1aeeb3",
+      "bytes": 586958,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 193,
+      "sample_luminance_range": 0.85480784624815,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "actual_live_node": true,
+      "preview_attachment_count": 0,
+      "visual_verdict": "pending_independent_review",
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -52.0,
+        675.0
+      ],
+      "settle_spawn_y_m": 7.06535339355469,
+      "player_position_m": [
+        -52.0,
+        4.06546497344971,
+        675.0
+      ],
+      "ground_y_m": 4.06535339355469,
+      "ground_clearance_m": 0.000111579895019531,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999845385551453,
+      "in_boundary": true,
+      "aim_target_m": [
+        -100.468505859375,
+        9.01949977874756,
+        648.694946289062
+      ],
+      "camera_position_m": [
+        -47.1729583740234,
+        5.77126884460449,
+        677.619750976562
+      ],
+      "camera_height_above_ground_m": 1.7059154510498,
+      "camera_forward": [
+        -0.877644002437592,
+        0.053490225225687,
+        -0.476319044828415
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49999809265137,
+      "camera_yaw_degrees": 61.5102243268793,
+      "camera_pitch_degrees": 3.06622699666108,
+      "target_bounds_point_count": 48,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        601.385375976562,
+        252.038513183594
+      ],
+      "target_projected_max_px": [
+        1099.5126953125,
+        508.773895263672
+      ],
+      "target_projected_width_ratio": 0.345921749538845,
+      "target_projected_height_ratio": 0.285261535644531,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        719.999938964844,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.00006103515625,
+      "first_los_hit_receiver": "building:w291189336:wall",
+      "first_los_hit_source_keys": [
+        "w291189336"
+      ],
+      "first_los_hit_run_index": 9,
+      "expected_los_run_index": 9,
+      "first_los_hit_position_m": [
+        -100.468475341797,
+        9.01949882507324,
+        648.694946289062
+      ],
+      "first_los_hit_normal": [
+        0.467475265264511,
+        0.0,
+        0.884006202220917
+      ],
+      "first_los_hit_distance_m": 60.7256736755371,
+      "first_los_hit_target_error_m": 0.000030532475648215,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "sun_rotation_degrees": [
+        -31.9999980926514,
+        132.0,
+        0.0
+      ],
+      "same_pose_as": "01-whole-public-default",
+      "player_transform_exactly_reused": true,
+      "camera_transform_exactly_reused": true
+    },
+    {
+      "id": "03-public-oblique-default",
+      "role": "grounded_ordinary_player_actual_live_public_oblique",
+      "lighting": "world_default",
+      "file": "images/03-public-oblique-default.png",
+      "sha256": "8b63620d127741eb5e577ccbb7e33af85ef6097661e13389b51ff1fed0525f18",
+      "bytes": 583689,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 217,
+      "sample_luminance_range": 0.675784319639206,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "actual_live_node": true,
+      "preview_attachment_count": 0,
+      "visual_verdict": "pending_independent_review",
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -36.0,
+        668.0
+      ],
+      "settle_spawn_y_m": 7.03512573242188,
+      "player_position_m": [
+        -36.0,
+        4.03533506393433,
+        668.0
+      ],
+      "ground_y_m": 4.03512573242188,
+      "ground_clearance_m": 0.000209331512451172,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999755680561066,
+      "in_boundary": true,
+      "aim_target_m": [
+        -100.468505859375,
+        9.01949977874756,
+        648.694946289062
+      ],
+      "camera_position_m": [
+        -30.7363471984863,
+        5.79168653488159,
+        669.576232910156
+      ],
+      "camera_height_above_ground_m": 1.75656080245972,
+      "camera_forward": [
+        -0.957030832767487,
+        0.0443002581596375,
+        -0.286582320928574
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49999237060547,
+      "camera_yaw_degrees": 73.3297037799228,
+      "camera_pitch_degrees": 2.53901879706752,
+      "target_bounds_point_count": 48,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        652.796508789062,
+        287.7548828125
+      ],
+      "target_projected_max_px": [
+        1096.17150878906,
+        498.57470703125
+      ],
+      "target_projected_width_ratio": 0.307899305555556,
+      "target_projected_height_ratio": 0.234244249131944,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        720.000305175781,
+        450.000335693359
+      ],
+      "aim_target_center_error_px": 0.000453676417237148,
+      "first_los_hit_receiver": "building:w291189336:wall",
+      "first_los_hit_source_keys": [
+        "w291189336"
+      ],
+      "first_los_hit_run_index": 9,
+      "expected_los_run_index": 9,
+      "first_los_hit_position_m": [
+        -100.468490600586,
+        9.0195369720459,
+        648.695007324219
+      ],
+      "first_los_hit_normal": [
+        0.467475265264511,
+        0.0,
+        0.884006202220917
+      ],
+      "first_los_hit_distance_m": 72.8629989624023,
+      "first_los_hit_target_error_m": 0.000073085306212306,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "sun_rotation_degrees": [
+        -51.9999923706055,
+        -27.9999961853027,
+        0.0
+      ]
+    },
+    {
+      "id": "04-stock-player-roof-landing",
+      "role": "actual_live_stock_player_physics_landing_on_non_spray_roof",
+      "lighting": "world_default",
+      "file": "images/04-stock-player-roof-landing.png",
+      "sha256": "fe3f5f7b2db6db0ce15f400f1cf256cf627efdacb8d8d02b392e20c941c83f4e",
+      "bytes": 676798,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 267,
+      "sample_luminance_range": 0.738812543451786,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "actual_live_node": true,
+      "preview_attachment_count": 0,
+      "visual_verdict": "pending_independent_review",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "landing_position_m": [
+        -104.018646240234,
+        15.6597213745117,
+        644.916442871094
+      ],
+      "roof_hit_position_m": [
+        -104.018646240234,
+        15.5971565246582,
+        644.916442871094
+      ],
+      "roof_hit_normal": [
+        -0.46746838092804,
+        0.848814904689789,
+        0.24695448577404
+      ],
+      "roof_receiver": "none",
+      "roof_object_key": "building:w291189336:roof",
+      "roof_in_wall_spray_group": false,
+      "landing_physics_frames": 243,
+      "saw_airborne_before_landing": true,
+      "landing_clearance_m": 0.0625648498535156,
+      "post_landing_collider_is_same_roof_body": true,
+      "cap_hit_position_m": [
+        -101.056587219238,
+        22.3529262542725,
+        639.39111328125
+      ],
+      "cap_hit_normal": [
+        0.711052477359772,
+        0.594387412071228,
+        -0.37564343214035
+      ],
+      "recovery_delta": 0,
+      "player_transform_writes_after_descent_began": 0,
+      "camera_yaw_degrees": -110.156803031599,
+      "camera_pitch_degrees": -36.9700406605175
+    }
+  ],
+  "capture_count": 4,
+  "roof_landing": {
+    "physics_grounded": true,
+    "ordinary_player_rig": true,
+    "landing_position_m": [
+      -104.018646240234,
+      15.6597213745117,
+      644.916442871094
+    ],
+    "roof_hit_position_m": [
+      -104.018646240234,
+      15.5971565246582,
+      644.916442871094
+    ],
+    "roof_hit_normal": [
+      -0.46746838092804,
+      0.848814904689789,
+      0.24695448577404
+    ],
+    "roof_receiver": "none",
+    "roof_object_key": "building:w291189336:roof",
+    "roof_in_wall_spray_group": false,
+    "landing_physics_frames": 243,
+    "saw_airborne_before_landing": true,
+    "landing_clearance_m": 0.0625648498535156,
+    "post_landing_collider_is_same_roof_body": true,
+    "cap_hit_position_m": [
+      -101.056587219238,
+      22.3529262542725,
+      639.39111328125
+    ],
+    "cap_hit_normal": [
+      0.711052477359772,
+      0.594387412071228,
+      -0.37564343214035
+    ],
+    "recovery_delta": 0,
+    "player_transform_writes_after_descent_began": 0,
+    "camera_yaw_degrees": -110.156803031599,
+    "camera_pitch_degrees": -36.9700406605175
+  },
+  "actual_live_node_resolved": true,
+  "preview_attachment_count": 0,
+  "replacement_mode": "wall_and_roof_replaced_once_without_generic_stack_or_fallback",
+  "source_photography_shipped": false,
+  "source_urls_in_runtime": false,
+  "nonclaims": [
+    "exact dimensions or pane count",
+    "complete side schedule",
+    "rear or private-side design",
+    "interior",
+    "as-built fidelity",
+    "recognition or believability acceptance before independent review"
+  ]
+}

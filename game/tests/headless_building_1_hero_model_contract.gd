@@ -242,7 +242,7 @@ func _whole_world_contract() -> void:
 	if evidence != null:
 		print("BUILDING_1_HERO_WORLD_TOPOLOGY=%d/%d/%d/%d/%d" % [evidence.playable_rows, evidence.mesh_instances, evidence.surfaces, evidence.triangles, evidence.static_bodies])
 		_require(evidence.playable_rows == 735 and evidence.context_rows == 4 \
-			and evidence.mesh_instances == 940 and evidence.surfaces == 954 and evidence.triangles == 64118 \
+			and evidence.mesh_instances == 944 and evidence.surfaces == 957 and evidence.triangles == 64572 \
 			and evidence.static_bodies == 466 and evidence.shapes == 466, "Building 1 hero changed source coverage, measured runtime topology, or the four-body collider total.")
 		for key in KEYS:
 			_require(_record_nodes(world, key).size() == 1, "%s is not represented exactly once in the loaded world." % key)

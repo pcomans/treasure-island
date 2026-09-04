@@ -42,24 +42,29 @@ Provider labels naming neighbors are explicitly excluded. Readiness instead
 depends on an exact OSM centroid sightline plus a visually attributable target
 plane. `w96665923` does not meet that threshold.
 
-## Packet-time provenance and exact-current authority
+## Packet-time provenance and current authority
 
 | Input | Version / SHA-256 | Role |
 | --- | --- | --- |
 | `data/osm/treasure-island-2026-08-27.osm` | `3b6f6af31a1c82de3fa51fcbc02fe7e3723fdb629c948ae6523ef46c157b4549` | frozen identity, lifecycle tags, address, and source geometry |
 | `discovery/FACADE_RECEIVER_INVENTORY.json` | `ti.facade-receiver-inventory/1`; `0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f` | exact geometry, receiver, material, and run contract |
-| `discovery/facades/facade-recognition-catalog.json` | `ti.facade-recognition-catalog/4`; `2b457965d2e25d522d2ca3d73afb109b03a57247eaefbb6b70775bd83fb07311` | sealed 213-unit order and claim state |
+| D9 packet-time catalog snapshot receipt | `ti.facade-recognition-catalog/4`; `2b457965d2e25d522d2ca3d73afb109b03a57247eaefbb6b70775bd83fb07311` | immutable packet-time provenance; same bytes as the then-current catalog at seal time |
 | D9 packet-time registry snapshot receipt | `ti.facade-runtime-registry/4`; `acc04aa840f287b10650d0de44db4cdfbb4949038774f1fec2f139810696a8af` | immutable packet-time provenance; same bytes as the then-current registry at seal time |
-| `game/resources/facades/facade-runtime-registry.json` (current checkout) | `ti.facade-runtime-registry/4`; `dce268c1547e4e4620faff9d59110ee1214a9a2121c1f83b3eb1c865339360ab` | separately hashed exact-current direct binding and `5/213` recognition state |
+| D9 packet-time recognition rollup | `5/213` | immutable five-unit acceptance state at the v4 authority boundary; not a claim about current compiler output |
+| `discovery/facades/facade-recognition-catalog.json` (current checkout) | `ti.facade-recognition-catalog/5`; SHA-256 emitted by validator | used only to rederive the exact 15-ID cohort and order |
+| `game/resources/facades/facade-runtime-registry.json` (current checkout) | `ti.facade-runtime-registry/5`; SHA-256 emitted by validator | used only to verify those 15 current direct bindings; global counts and recognition rollup remain compiler-owned |
 | `generated/world/manifest.json` | `ti.godot-world/2`; `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3` | generated chunk authority |
 
-The `acc04a…` value in the receipt and sealed packet headers records the D9
-packet-time registry. It matched the separately validated current path when D9
-sealed, but remains historical now that current bytes have moved. The validator
-preserves that immutable receipt while separately hashing the current registry
-as `dce268…`. It also checks the current `213` units, `214` receivers, `215`
-source memberships, and exact independently accepted `5/213` physical-unit
-rollup.
+The `2b4579…` catalog and `acc04a…` registry values in the receipts and sealed
+packet headers record the D9 packet-time authorities. Header wording about a
+separately checked current registry describes the then-current path at seal
+time; it is not a claim about later bytes. The validator preserves those
+immutable receipts while separately loading and hashing the current schema-v5
+catalog and registry only to rederive the exact D9 cohort order and verify those
+15 direct bindings. The historical `5/213` rollup remains part of the seal-time
+receipt. Global current unit, receiver, source-membership, acceptance, and
+recognition-rollup gates belong solely to
+`tools/build_facade_recognition_registry.mjs --check`.
 
 Compass groups are exact outward-normal partitions recomputed from each wall
 record. A panorama sightline associates only a visible side family; it does not
@@ -80,9 +85,10 @@ node discovery/facades/d9_reference_packets/validate_d9_packets.mjs
 node tools/validate_godot_world.mjs
 ```
 
-The historical registry receipt remains explicit and immutable; the current
-catalog/registry separately match `2b4579…` / `dce268…` with exact `5/213`
-semantics.
+The historical catalog, registry, and `5/213` receipts remain explicit and
+immutable; the current schema-v5 catalog/registry reproduce the exact 15-ID
+order and direct bindings. Their moving SHA-256 values are emitted by each
+validator run and are not misrepresented as packet-time receipts.
 
 The generated-world validator separately passes with `38` chunks, `739`
 source rows, `729` physical objects, and generated content SHA-256

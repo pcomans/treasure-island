@@ -1,15 +1,16 @@
 extends SceneTree
 
 const ACCEPTED_MATERIAL_RUN_TRIALS := preload("res://game/scripts/world/facades/accepted_material_run_trials.gd")
+const NAVY_CHAPEL_187_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd")
 const EXPECTED_MANIFEST_HASH := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
 const EXPECTED_CHUNKS := 38
 const EXPECTED_RECORDS := 729
-const EXPECTED_GENERATED_MESHES := 725
-const EXPECTED_GENERATED_SURFACES := 735
-const EXPECTED_GENERATED_TRIANGLES := 48825
-const EXPECTED_RUNTIME_MESHES := 940
-const EXPECTED_RUNTIME_SURFACES := 954
-const EXPECTED_RUNTIME_TRIANGLES := 64118
+const EXPECTED_GENERATED_MESHES := 723
+const EXPECTED_GENERATED_SURFACES := 732
+const EXPECTED_GENERATED_TRIANGLES := 48739
+const EXPECTED_RUNTIME_MESHES := 944
+const EXPECTED_RUNTIME_SURFACES := 957
+const EXPECTED_RUNTIME_TRIANGLES := 64572
 const EXPECTED_STATIC_BODIES := 466
 const EXPECTED_VEGETATION_SEED := 1414092337
 const EXPECTED_VEGETATION_INSTANCES := 124
@@ -98,14 +99,14 @@ func _run() -> void:
 	var records := _record_nodes(main)
 	var runtime_counts := _inspect_records(records)
 	if not _require(records.size() == EXPECTED_RECORDS, "Expected 729 generated record nodes, got %d." % records.size()) \
-	or not _require(int(runtime_counts.meshes) == EXPECTED_GENERATED_MESHES and int(runtime_counts.surfaces) == EXPECTED_GENERATED_SURFACES, "Expected 725 generic record meshes / 735 surfaces plus four separately validated Building 1 hero replacements.") \
-	or not _require(_accepted_material_run_trials_match_contract(records), "The three accepted Chapel, Dormitory, and YMCA exact-run homogeneous-material partitions drifted.") \
+	or not _require(int(runtime_counts.meshes) == EXPECTED_GENERATED_MESHES and int(runtime_counts.surfaces) == EXPECTED_GENERATED_SURFACES, "Expected 723 record-root meshes / 732 surfaces after the Building 1, Building 3, Isle House, and Navy Chapel replacements.") \
+	or not _require(_accepted_material_run_trials_match_contract(records), "The superseded Chapel material trial or the retained Dormitory/YMCA exact-run homogeneous-material partitions drifted.") \
 	or not _require(_batch_06_accepted_fields_match_contract(records, runtime_counts), "The generated Batch 06 field surface delta or exact accepted/pending render-only placements drifted.") \
 	or not _require(_rejected_fire_station_placeholder_matches(records), "Rejected Fire Station 48 still has a live accepted-material surface or is not fully restored to the generated placeholder.") \
-	or not _require(int(runtime_counts.triangles) == EXPECTED_GENERATED_TRIANGLES, "Expected 48,825 runtime record triangles after the four Building 1 hero replacements and congruent Building 3 wall/roof massing, got %d." % int(runtime_counts.triangles)) \
+	or not _require(int(runtime_counts.triangles) == EXPECTED_GENERATED_TRIANGLES, "Expected 48,739 record-root triangles after the Building 1/Building 3/Navy Chapel replacements, got %d." % int(runtime_counts.triangles)) \
 	or not _require(int(runtime_counts.static_bodies) == EXPECTED_STATIC_BODIES and int(runtime_counts.shapes) == EXPECTED_STATIC_BODIES, "Expected 466 StaticBody3D/ConcavePolygonShape3D pairs.") \
 	or not _require(int(runtime_counts.sources) == EXPECTED_GEOMETRY_SOURCES, "Expected 738 direct generated-geometry source identities.") \
-	or not _require(evidence.mesh_instances == EXPECTED_RUNTIME_MESHES and evidence.surfaces == EXPECTED_RUNTIME_SURFACES and evidence.triangles == EXPECTED_RUNTIME_TRIANGLES, "RuntimeEvidence must include accepted Building 1/Building 3 heroes and the accepted Isle House Variant C replacement: 940 meshes / 954 surfaces / 64,118 triangles.") \
+	or not _require(evidence.mesh_instances == EXPECTED_RUNTIME_MESHES and evidence.surfaces == EXPECTED_RUNTIME_SURFACES and evidence.triangles == EXPECTED_RUNTIME_TRIANGLES, "RuntimeEvidence must include accepted Building 1/Building 3/Isle House/Navy Chapel replacements: 944 meshes / 957 surfaces / 64,572 triangles.") \
 	or not _require(evidence.static_bodies == EXPECTED_STATIC_BODIES and evidence.shapes == EXPECTED_STATIC_BODIES, "RuntimeEvidence collider totals differ from the live tree.") \
 	or not _require(_category_counts_match(world), "Generated category attachment counts are incomplete.") \
 	or not _require(_vegetation_runtime_matches(world), "Visual-only vegetation MultiMesh runtime contract is invalid.") \
@@ -396,6 +397,18 @@ func _accepted_material_run_trials_match_contract(records: Array) -> bool:
 			return false
 		var metadata := record.get_meta("accepted_material_run_trial", {}) as Dictionary
 		var expected_metadata := ACCEPTED_MATERIAL_RUN_TRIALS.metadata_for(receiver_key) as Dictionary
+		if receiver_key == "building:w291189336:wall":
+			var live_metadata := record.get_meta("navy_chapel_187_live_replacement", {}) as Dictionary
+			if not metadata.is_empty() \
+			or record.get_node_or_null("Mesh") != null \
+			or not NAVY_CHAPEL_187_LIVE_REPLACEMENT.material_semantics_match(record) \
+			or str(live_metadata.get("geometry_signature", "")) != NAVY_CHAPEL_187_LIVE_REPLACEMENT.EXPECTED_GEOMETRY_SIGNATURE \
+			or str(live_metadata.get("live_ownership_signature", "")) != NAVY_CHAPEL_187_LIVE_REPLACEMENT.EXPECTED_LIVE_OWNERSHIP_SIGNATURE \
+			or bool(live_metadata.get("fallback_allowed", true)) \
+			or bool(live_metadata.get("stack_allowed", true)):
+				return false
+			seen[receiver_key] = true
+			continue
 		var mesh_instance := record.get_node_or_null("Mesh") as MeshInstance3D
 		if metadata != expected_metadata \
 		or int(metadata.get("modules", -1)) != 0 \
@@ -459,7 +472,7 @@ func _batch_06_accepted_fields_match_contract(records: Array, runtime_counts: Di
 		batch_06_surface_delta += groups.size()
 		seen[receiver_key] = true
 	return seen.size() == ACCEPTED_MATERIAL_RUN_TRIALS.BATCH_06_ACCEPTED_TARGETS.size() \
-		and int(runtime_counts.surfaces) - int(runtime_counts.meshes) == ACCEPTED_MATERIAL_RUN_TRIALS.TARGETS.size() + batch_06_surface_delta
+		and int(runtime_counts.surfaces) - int(runtime_counts.meshes) == ACCEPTED_MATERIAL_RUN_TRIALS.TARGETS.size() - 1 + batch_06_surface_delta
 
 
 func _rejected_fire_station_placeholder_matches(records: Array) -> bool:

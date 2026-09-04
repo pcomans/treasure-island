@@ -21,7 +21,7 @@ Expected Godot version: `4.7.2.stable.official.ed1daf0bf`. The first editor comm
 
 ## What each test covers
 
-- `headless_startup_configuration_contract.gd` checks that `project.godot` selects the exact case-sensitive `Dummy` audio driver before `AudioServer` initialization, that Godot loads and initializes that driver in the focused process, and that the packaged main-scene smoke oracle matches the accepted-current Building 1/Building 3/Isle House `940 meshes / 954 surfaces / 64,118 triangles` runtime topology.
+- `headless_startup_configuration_contract.gd` checks that `project.godot` selects the exact case-sensitive `Dummy` audio driver before `AudioServer` initialization, that Godot loads and initializes that driver in the focused process, and that the packaged main-scene smoke oracle matches the accepted-current Building 1/Building 3/Isle House/Navy Chapel `944 meshes / 957 surfaces / 64,572 triangles` runtime topology.
 - `headless_scene_parse.gd` parses all four owned gameplay scenes and their scripts without loading the generated island.
 - `headless_gameplay_contract.gd` checks the input map including Space-bound jetpack lift; the exact `4 m/s` walk, `20 m/s` held-Shift run, `30 m/s²` acceleration, and `40 m/s²` braking defaults; unchanged jetpack defaults; absence of deferred vehicle behavior; boundary edge/hole cases; scene hierarchy; the exact SF billboard texture/hash/dimensions/transform/mesh/material/no-collision contract; physics/render layers; direct spring-arm camera child; and the 64-tag default.
 - `headless_world_material_contract.gd` checks every textured semantic material key against its exact Poly Haven diffuse/OpenGL-normal/roughness paths, retained official source dimension, approved effective visual repeat, per-family subtle normal strength, generated runtime tangents, displacement opt-out, repeat mode, anisotropic mipmap filtering, and imported mipmaps.
@@ -38,11 +38,14 @@ and manifest SHA-256
 `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`.
 The frozen generated topology remains
 `729 meshes / 739 surfaces / 48,389 triangles`. Four Building 1/tower records
-are intercepted at runtime, and the accepted congruent Building 3 replacement
-brings active record-owned nodes to `725 / 735 / 48,825`. The accepted
+are intercepted at runtime, and the accepted congruent Building 3 and paired
+Navy Chapel replacements leave active record-root nodes at `723 / 732 / 48,739`.
+The accepted
 Building 1/tower hero contributes `13 / 13 / 10,711`, and the accepted Isle
 House Variant C overlay contributes `7 / 11 / 2,242` without decorative
-collision. All `735` playable rows load as `940 meshes / 954 surfaces / 64,118
+collision. The accepted Navy Chapel descendant hero contributes `6 / 6 / 540`
+while replacing the same two structural owners. All `735` playable rows load as
+`944 meshes / 957 surfaces / 64,572
 triangles`, with `466` body/shape pairs. Exact app
 [`111725`](../../evidence/first-playable/final-verification-2026-09-03-105408/)
 retains the pre-hero `1,278 / 1,288 / 55,067` runtime and does not contain the
@@ -147,7 +150,7 @@ The direct-mount audit verifies the explicitly named PCK's hash; exported-projec
 
 ## Reproducible rendered-view capture
 
-`rendered_visual_evidence_capture.gd` is an isolated source-project capture harness. It does not change the normal main scene or gameplay path. It loads the real fail-closed world; validates the exact content/manifest/ferry transform, terrain anchors, vegetation counts, the live corrected palm-material inventory (`7` batches / `8` surfaces, all non-metallic and high-roughness with `5` two-sided foliage surfaces), active record-owned topology (`725 meshes / 735 surfaces / 48,825 triangles`), and accepted-current total runtime topology (`735 playable rows / 940 meshes / 954 surfaces / 64,118 triangles / 466 bodies and shapes`); and writes exactly twelve ordered native-renderer PNGs. The set covers ferry, north, center, southwest, east shoreline, the Building 1 hero public curve, SF horizon, YBI/bridge, an eligible-wall tag, south vegetation ground, and one time-connected jetpack ascent/released-descent pair. Regional visual targets are capture-only ordinary-play reframes; the shared traversal-anchor source remains unchanged. Every static scenario discloses its fixed reset and is marked `movement_proof: false`; it must not be cited as traversal evidence. For grounded resets the harness spawns the real player above generated terrain, clears input, runs real physics until grounded with measured clearance, and only then disables gameplay for deterministic rendering.
+`rendered_visual_evidence_capture.gd` is an isolated source-project capture harness. It does not change the normal main scene or gameplay path. It loads the real fail-closed world; validates the exact content/manifest/ferry transform, terrain anchors, vegetation counts, the live corrected palm-material inventory (`7` batches / `8` surfaces, all non-metallic and high-roughness with `5` two-sided foliage surfaces), active record-root topology (`723 meshes / 732 surfaces / 48,739 triangles`), and accepted-current total runtime topology (`735 playable rows / 944 meshes / 957 surfaces / 64,572 triangles / 466 bodies and shapes`); and writes exactly twelve ordered native-renderer PNGs. The set covers ferry, north, center, southwest, east shoreline, the Building 1 hero public curve, SF horizon, YBI/bridge, an eligible-wall tag, south vegetation ground, and one time-connected jetpack ascent/released-descent pair. Regional visual targets are capture-only ordinary-play reframes; the shared traversal-anchor source remains unchanged. Every static scenario discloses its fixed reset and is marked `movement_proof: false`; it must not be cited as traversal evidence. For grounded resets the harness spawns the real player above generated terrain, clears input, runs real physics until grounded with measured clearance, and only then disables gameplay for deterministic rendering.
 
 Only `11-jetpack-ascent` and `12-jetpack-released-descent` are movement-proof frames. After the player settles at the fixed ferry anchor, the harness establishes the camera pose, enables the real `PlayerController`, and drives the public `jetpack` action through `Input`; it performs no player transform writes after input begins. After release it waits through the real transition and capped descent until frame `12` is at least `1.0 m` lower than frame `11`, while still airborne at the configured `-1.5 m/s` cap. The manifest records pressed/released input state, time-connected positions and physics frames, measured rise/drop and vertical velocity, recovery delta, motion samples, and the zero post-input-transform-write invariant. It also refuses to save any frame while the tree or Pause HUD is paused.
 

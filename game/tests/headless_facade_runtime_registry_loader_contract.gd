@@ -3,8 +3,8 @@ extends SceneTree
 const RegistryLoader := preload("res://game/scripts/world/facades/facade_runtime_registry_loader.gd")
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
-const EXPECTED_REGISTRY_SHA256 := "dce268c1547e4e4620faff9d59110ee1214a9a2121c1f83b3eb1c865339360ab"
-const EXPECTED_ADAPTER_CONTRACT_SHA256 := "f1ffc7061a8d02bd7f78a1ec4457b36c4adc5618755f730638bfedfcc9d4437d"
+const EXPECTED_REGISTRY_SHA256 := "36eef28d1abce9d9838da6e959222ad6767e40e198b90b734496e6d2dc2cd79b"
+const EXPECTED_ADAPTER_CONTRACT_SHA256 := "2064accb205c891cf7a7a09a7117be63360dee8d05f904cf31e99455368129d1"
 const READY_RECEIVERS := [
 	"building-composite:w1249412094:w1282547786:wall",
 	"building:r16681702:wall",
@@ -56,7 +56,7 @@ func _run() -> void:
 	_require(get_node_count() == baseline_nodes, "Topology-neutral loader/resource resolution added or removed scene-tree nodes.")
 	_validate_fail_closed_mutations(registry, contracts)
 	if not _failed:
-		print("PASS: facade runtime loader is version-pinned and topology-neutral: 213 units / 214 receivers / 5/213 reference-recognizable physical units / 14 adapter plans / 8 package-safe / 6 hard-disabled receivers / 13 unique pathless disabled projection inputs across 13 occurrences; registry %s; adapter contracts %s; snapshot %s" % [EXPECTED_REGISTRY_SHA256, EXPECTED_ADAPTER_CONTRACT_SHA256, first_snapshot.sha256_text()])
+		print("PASS: facade runtime loader is version-pinned and topology-neutral: 213 units / 214 receivers / 6/213 reference-recognizable physical units / 14 adapter plans / 8 package-safe / 6 hard-disabled receivers / 13 unique pathless disabled projection inputs across 13 occurrences; registry %s; adapter contracts %s; snapshot %s" % [EXPECTED_REGISTRY_SHA256, EXPECTED_ADAPTER_CONTRACT_SHA256, first_snapshot.sha256_text()])
 	_finish()
 
 
@@ -70,12 +70,15 @@ func _validate_receiver_modes(loader: RefCounted) -> void:
 	_require(loader.get_content_mode("building:w34313540:wall") == "active_building_3_hero", "Building 3 wall receiver content mode drifted.")
 	var building_3: Dictionary = loader.get_unit("physical-building:w34313540")
 	_require(str(building_3.get("runtime_content_mode", "")) == "all_receivers_active_building_3_hero", "Building 3 unit mode does not reflect its exact active receiver.")
+	_require(loader.get_content_mode("building:w291189336:wall") == "active_navy_chapel_187_paired_replacement", "Navy Chapel wall receiver content mode drifted.")
+	var navy_chapel: Dictionary = loader.get_unit("physical-building:w291189336")
+	_require(str(navy_chapel.get("runtime_content_mode", "")) == "all_receivers_active_navy_chapel_187_paired_replacement", "Navy Chapel unit mode does not preserve paired replacement semantics.")
 	var metric: Dictionary = loader.get_reference_recognition_metric()
 	var accepted_ids := metric.get("accepted_physical_unit_ids", []) as Array
-	var expected_ids := ["physical-building:r16681702", "physical-building:w1222720021", "physical-building:w1249412093", "physical-building:w1249412094", "physical-building:w34313540"]
+	var expected_ids := ["physical-building:r16681702", "physical-building:w1222720021", "physical-building:w1249412093", "physical-building:w1249412094", "physical-building:w291189336", "physical-building:w34313540"]
 	accepted_ids.sort()
 	expected_ids.sort()
-	_require(int(metric.get("numerator", -1)) == 5 and int(metric.get("denominator", -1)) == 213 and str(metric.get("display", "")) == "5/213" and accepted_ids == expected_ids, "Loader recognition metric is not exactly the accepted 5/213 physical-unit rollup.")
+	_require(int(metric.get("numerator", -1)) == 6 and int(metric.get("denominator", -1)) == 213 and str(metric.get("display", "")) == "6/213" and accepted_ids == expected_ids, "Loader recognition metric is not exactly the accepted 6/213 physical-unit rollup.")
 	_require(metric.get("isle_house_non_numerator_source_keys", []) == ["w1282547786", "w1282547787"], "Loader promotes Isle House source parts into numerator entries.")
 
 
@@ -95,6 +98,16 @@ func _validate_adapter_resolution(loader: RefCounted) -> void:
 			_require(str(behavior.get("parity_status", "")) == "exact_current_behavior_and_dependency_set_verified", "Building 3 exact-current parity is not proven.")
 			_require(int(geometry.get("wall_triangles", 0)) == 236 and int(geometry.get("roof_triangles", 0)) == 675 and int(geometry.get("topology_delta_triangles", 0)) == 766, "Building 3 geometry parity drifted.")
 			_require(bool(collision.get("roof_landing_world_solid", false)) and str(collision.get("spray_ownership", "")) == "wall_only", "Building 3 collision/landing/spray parity drifted.")
+		if receiver_key == "building:w291189336:wall":
+			var behavior := plan.get("behavior_contract", {}) as Dictionary
+			var acceptance := behavior.get("acceptance_contract", {}) as Dictionary
+			var geometry := behavior.get("geometry_contract", {}) as Dictionary
+			var ownership := behavior.get("ownership_contract", {}) as Dictionary
+			_require(str(plan.get("content_mode", "")) == "active_navy_chapel_187_paired_replacement", "Navy Chapel plan has stale legacy content mode.")
+			_require((plan.get("runtime_assets", []) as Array).size() == 9, "Navy Chapel plan does not pin its complete adapter/config/prototype/material set.")
+			_require(str(acceptance.get("independent_live_review_receipt_sha256", "")) == "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9" and int(acceptance.get("numerator_effect", -1)) == 1 and bool(acceptance.get("wall_and_roof_are_one_physical_unit", false)), "Navy Chapel receipt or one-unit rollup drifted.")
+			_require(str(geometry.get("visual_geometry_signature", "")) == "076e081df86e884f04cf7cb680304c35c64e6f76238de7060528c59097ae5c46" and int(geometry.get("visual_triangles", -1)) == 540 and int(geometry.get("world_records", -1)) == 735 and int(geometry.get("world_mesh_instances", -1)) == 944 and int(geometry.get("world_surfaces", -1)) == 957 and int(geometry.get("world_triangles", -1)) == 64572 and int(geometry.get("world_static_bodies", -1)) == 466 and int(geometry.get("world_shapes", -1)) == 466, "Navy Chapel geometry/world parity drifted.")
+			_require(str(ownership.get("live_ownership_signature", "")) == "4766c5d562933eb632f1ef3bdcec828fc40be81c996db919c53405f776fa04a7" and int(ownership.get("wall_collision_triangles", -1)) == 94 and int(ownership.get("roof_collision_triangles", -1)) == 50 and bool(ownership.get("wall_is_sole_spray_receiver", false)) and ownership.get("roof_is_wall_spray_receiver") == false, "Navy Chapel collision/spray ownership parity drifted.")
 		var result: Dictionary = loader.resolve_executable_assets(receiver_key)
 		_require(bool(result.get("ok", false)) and result.get("instantiated") == false, "%s package-safe assets did not resolve without instantiation: %s" % [receiver_key, str(result)])
 		ready_seen.append(receiver_key)
@@ -110,7 +123,7 @@ func _validate_adapter_resolution(loader: RefCounted) -> void:
 			var ownership := behavior.get("ownership_contract", {}) as Dictionary
 			_require(str(plan.get("content_mode", "")) == "active_isle_house_variant_c" and (plan.get("runtime_assets", []) as Array).size() == 1 and (plan.get("projection_descriptor_ids", []) as Array).size() == 3, "Isle House fail-closed active plan boundary drifted.")
 			_require(str(acceptance.get("independent_live_review_receipt_sha256", "")) == "37b6c7dbf6c8769b13628e1070a9c3b5beeb9b25bbe63f0f12f9aaa00c22dab8" and int(acceptance.get("numerator_effect", -1)) == 1, "Isle House independent acceptance receipt drifted.")
-			_require(str(geometry.get("live_signature", "")) == "09eee1517f043c6d82f0de0d2275da5b2a3f76f5842d1b9c90cba11e6e793981" and int(geometry.get("world_triangles", -1)) == 64118 and int(geometry.get("world_mesh_instances", -1)) == 940 and int(geometry.get("world_surfaces", -1)) == 954, "Isle House signature/topology parity drifted.")
+			_require(str(geometry.get("live_signature", "")) == "09eee1517f043c6d82f0de0d2275da5b2a3f76f5842d1b9c90cba11e6e793981" and int(geometry.get("world_triangles", -1)) == 64572 and int(geometry.get("world_mesh_instances", -1)) == 944 and int(geometry.get("world_surfaces", -1)) == 957, "Isle House exact-current signature/topology parity drifted.")
 			_require(bool(ownership.get("low_receiver_is_sole_collision_and_spray_owner", false)) and int(ownership.get("decorative_collision_nodes", -1)) == 0 and int(ownership.get("decorative_navigation_nodes", -1)) == 0 and int(ownership.get("decorative_spray_nodes", -1)) == 0, "Isle House ownership parity drifted.")
 		var result: Dictionary = loader.resolve_executable_assets(receiver_key)
 		_require(not bool(result.get("ok", true)) and str(result.get("error_code", "")) == "adapter_hard_disabled", "%s pathless projections were executable." % receiver_key)
@@ -164,8 +177,8 @@ func _validate_fail_closed_mutations(registry: Dictionary, contracts: Dictionary
 	low["runtime_adapter_id"] = "legacy-adapter:building-composite:w1249412094:w1282547786:wall"
 	_expect_data_error(mixed_registry, contracts, "mixed_unit_mismatch", "collapsed mixed-unit receiver state")
 	var metric_registry := registry.duplicate(true)
-	(metric_registry.get("recognition_metric", {}) as Dictionary)["numerator"] = 6
-	(metric_registry.get("recognition_metric", {}) as Dictionary)["display"] = "6/213"
+	(metric_registry.get("recognition_metric", {}) as Dictionary)["numerator"] = 7
+	(metric_registry.get("recognition_metric", {}) as Dictionary)["display"] = "7/213"
 	_expect_data_error(metric_registry, contracts, "recognition_metric_mismatch", "drifted physical-unit recognition numerator")
 	var receipt_registry := registry.duplicate(true)
 	var accepted_isle := (receipt_registry.get("units", []) as Array).filter(func(unit: Variant) -> bool: return str((unit as Dictionary).get("unit_id", "")) == "physical-building:w1249412094")[0] as Dictionary
@@ -176,6 +189,10 @@ func _validate_fail_closed_mutations(registry: Dictionary, contracts: Dictionary
 	var building_3_plan := (building_3_contracts.get("plans", []) as Array).filter(func(plan: Variant) -> bool: return str((plan as Dictionary).get("receiver_key", "")) == "building:w34313540:wall")[0] as Dictionary
 	((building_3_plan.get("behavior_contract", {}) as Dictionary).get("collision_contract", {}) as Dictionary)["spray_ownership"] = "wall_and_roof"
 	_expect_data_error(registry, building_3_contracts, "building_3_parity_mismatch", "drifted Building 3 spray ownership")
+	var chapel_contracts := contracts.duplicate(true)
+	var chapel_plan := (chapel_contracts.get("plans", []) as Array).filter(func(plan: Variant) -> bool: return str((plan as Dictionary).get("receiver_key", "")) == "building:w291189336:wall")[0] as Dictionary
+	((chapel_plan.get("behavior_contract", {}) as Dictionary).get("ownership_contract", {}) as Dictionary)["roof_collision_triangles"] = 49
+	_expect_data_error(registry, chapel_contracts, "navy_chapel_parity_mismatch", "drifted Navy Chapel roof collision partition")
 
 
 func _expect_data_error(registry: Dictionary, contracts: Dictionary, expected_code: String, label: String) -> void:

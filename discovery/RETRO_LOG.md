@@ -9634,3 +9634,230 @@ No approach selected.
   capture-time receipt and keep path-addressed ledgers explicitly current.
 - Centralize exact-current builder identity behind one reusable current-state
   contract while retaining independent batch semantics and historical receipts.
+
+## 2026-09-04 — Building 1 next-pass visual bar-raiser
+
+### Building 1 bar-raiser (`/root/remote_runtime_auditor/ledger_recheck/release_inventory_audit/ignored_artifact_scan`)
+
+#### What worked well
+
+- Reviewing the accepted pixels before configs made the remaining issue
+  specific: Building 1 reads correctly as a whole, while only the three-group
+  entrance separation needs another look at grounded route distance.
+- Tracing the entry scalars through the adapter converted that visual concern
+  into a testable cause: `0.55 m` group spacing minus two `0.24 m` reveal
+  borders leaves only `0.07 m`, approximately half a pixel at the accepted
+  `~80 m` view.
+- Separating package-sanitization hash changes from geometry changes preserved
+  the connection between accepted imagery and current Building 1 semantics
+  without pretending that historical captures are byte-current runtime proof.
+
+#### What did not work well
+
+- No Building 1 walking clip exists, so current stills cannot establish whether
+  the entry grouping or fine bright facade ribs remain stable during movement.
+- Several earlier hero frames retain the now-superseded cruciform-like plaque;
+  a reviewer must deliberately use the later public-front packet for the
+  current end-field judgment.
+- Capture manifests retain executor-time pending language and historical config
+  hashes. Without reading the later independent review and sanitization receipt,
+  those fields can be mistaken for the current visual decision.
+
+#### What the team should change next time
+
+- Record the minimum projected pixel width of critical separators when sealing
+  ordinary-distance facade evidence; subpixel architectural gaps should not be
+  left for subjective discovery.
+- Pair every accepted facade still set with a short continuous stock-player
+  sweep so aliasing, shimmer, and focal hierarchy are reviewable before the
+  next polish decision.
+- Name superseding visual packets and capture-time versus current semantic
+  identities in one small index, while keeping immutable evidence manifests
+  unchanged.
+
+## 2026-09-04 — Navy Chapel 187 live wall+roof replacement
+
+### Chapel live integrator (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Preflighting both exact source rows from the supplied chunk before building
+  either one prevented missing-wall, missing-roof, duplicate, reorder, and row-
+  drift cases from borrowing data or leaving a generic/hero stack.
+- Reusing the independently approved standalone visual factory preserved its
+  exact `6/6/540` geometry signature while a construction-order collision split
+  restored the truthful wall-only spray and non-spray roof-landing ownership.
+- Reusing the accepted grounded capture poses made final actual-live pixels
+  directly comparable; a 300-sample stock-player walk and airborne roof landing
+  added motion and physics evidence without a preview attachment.
+
+#### What did not work well
+
+- The first adapter tried to verify raw `.gd` and `.tres` source-byte hashes at
+  runtime. Godot compiles/remaps those resources in a PCK, so the source build
+  passed while the first direct-mounted package correctly failed closed.
+- The first collision body combined wall, roof, belfry, cap, and cross faces,
+  which would have mislabeled every landing surface as a wall spray receiver.
+- Existing global and Isle current-state oracles necessarily fail on the new
+  candidate builder hash/topology until independent live review authorizes one
+  serialized reconciliation; they cannot simultaneously prove the old and new
+  exact-current state.
+
+#### What the team should change next time
+
+- Separate authoring-byte pins from package-stable runtime checks at the first
+  implementation: source tests should hash files, while mounted runtime should
+  verify resource closure plus exact output/material/ownership semantics.
+- Define receiver ownership partitions before adapting a combined standalone
+  collision mesh; visual equivalence does not imply interaction equivalence.
+- Add the fresh direct-mounted PCK gate before native evidence capture so a
+  remap-only defect is found before manifests bind the adapter bytes.
+
+## 2026-09-04 — D10 receiver-first reference packets
+
+### D10 reference researcher (`/root/remote_runtime_auditor/ledger_recheck/evidence_ledger_recheck`)
+
+#### What worked well
+
+- Walking the stable catalog after all `151` unique prior packet IDs produced
+  the next `15` standalone buildings mechanically; inventory and registry
+  checks then excluded part children and proved one wall/roof pair and one
+  direct facade receiver per unit.
+- First-party city address/crosswalk records plus target-centroid panorama rays
+  separated identity from appearance and kept ambiguous Gateview, Avenue D,
+  and unaddressed targets explicit instead of transferring neighbor labels.
+- A self-contained validator recomputes `45` per-target hashes, all `60` facing
+  partitions, `300` exact packet fields, current `5/213` semantics, and the
+  conservative `9 / 4 / 2` readiness split while rejecting extra pixels.
+
+#### What did not work well
+
+- The preferred browser-automation CLI was unavailable, and direct interactive
+  Maps navigation encountered a CAPTCHA; first-party metadata and transient
+  Google-hosted target thumbnails were sufficient, but less efficient.
+- An initial readiness tally said `9 / 3 / 2`, which sums to only `14`.
+  Recounting every frozen ID correctly classified `w96698634` as the fourth
+  component-only study because its lower facade is occluded.
+- A naive longitude/latitude shoelace centroid calculation suffered numeric
+  cancellation. Re-centering coordinates before area weighting produced
+  stable target rays and prevented false side attribution.
+
+#### What the team should change next time
+
+- Make the packet validator derive and assert readiness membership as well as
+  totals before any status report, so every frozen ID is visibly classified.
+- Keep a small local-coordinate centroid/sightline helper beside the research
+  workflow and fail closed when an intervening footprint or screen prevents
+  exact-target attribution.
+- Preserve packet-time registry receipts separately from moving current-path
+  checks, and defer the compiler oracle explicitly during an authorized live
+  integration instead of rewriting historical packet provenance.
+
+## 2026-09-04 — Navy Chapel live bar-raiser and checksum-seal audit
+
+### Independent visual bar-raiser (`/root/visual_bar_raiser`)
+
+#### What worked well
+
+- A read-only, pixel-first review covered all four original stills plus
+  extracted native-MJPEG frames across the full declared motion interval, then
+  checked grounded motion, changed light, roof landing, exact source scope,
+  collision/spray ownership, source and evidence contracts, and the mounted
+  package.
+- The sealed receipt is
+  `evidence/first-playable/navy-chapel-187-live-replacement-2026-09-04/INDEPENDENT_LIVE_BAR_RAISER_REVIEW.md`,
+  SHA-256 `63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9`.
+  It records **PASS** and authorizes exactly **+1 physical unit**, never separate
+  wall and roof units.
+- The final pre-reconciliation PCK
+  `a45e4533aed6d685c0c031741cf3bbc77cebb2cea9169028b71735bbd7d0e135`
+  retained the reviewed visual/runtime semantics and passed mounted Chapel and
+  sanitization checks twice. Pragmatic tileability passes and is materially
+  inapplicable because the Chapel materials are flat and procedural-free.
+
+#### What did not work well
+
+- The entry remains visually modest, quiet protected returns remain plain, and
+  the cross/mullions sit near their minimum stable screen size; motion showed
+  no identity-harming shimmer, so these remain nonblocking polish only.
+- The first verbal PASS had no file receipt because that round was explicitly
+  read-only; reconciliation correctly waited for separately authorized sealing.
+
+#### What the team should change next time
+
+- Authorize the independent reviewer to seal both the decision receipt and its
+  required RETRO entry in the original review task, before reconciliation asks
+  downstream auditors to bind a path and hash.
+
+#### Change accounting
+
+- My only prior file edit was the sealed independent review receipt above.
+  This turn edits `discovery/RETRO_LOG.md` only and changes no implementation,
+  evidence artifact, checksum ledger, catalog, registry, or package.
+
+## 2026-09-04 — D7–D10 packet-time/current-authority normalization
+
+### Authority normalizer (`/root/remote_runtime_auditor/ledger_recheck/d7_d10_authority_migration`)
+
+#### What worked well
+
+- Kept each packet cohort's v4 catalog/registry hashes and `5/213` state as
+  immutable seal-time provenance while limiting current-v5 validation to the
+  cohort's exact 15 IDs, order, and direct receiver bindings.
+- Clarified all 15 D10 packet provenance lines without changing their IDs,
+  hashes, run fields, or evidence claims; the four validators passed twice.
+
+#### What did not work well
+
+- The first D7–D9 revision duplicated current global counts and accepted IDs,
+  which would have forced unrelated historical-packet edits after every future
+  recognition promotion; the independent audit caught this before sealing.
+
+#### What the team should change next time
+
+- Treat packet validators as cohort-scoped historical audits from the start,
+  and leave all moving global topology and recognition-rollup assertions solely
+  in the canonical compiler and its current-state tests.
+
+## 2026-09-04 — Navy Chapel acceptance and current-authority reconciliation
+
+### Runtime/ledger reconciler (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Promoted the independently accepted Chapel parent exactly once while keeping
+  the wall as the sole direct facade receiver and the roof as its paired
+  generated record; the compiler remains deterministic at `213 / 214 / 215`
+  and exactly `6/213` reference-recognizable physical units.
+- Bound the current registry to the sealed external live-review receipt,
+  accepted geometry/ownership signatures, exact `735/944/957/64,572/466`
+  topology, and package-safe dependencies without rewriting capture-time
+  manifests or their intentionally pending self-grade fields.
+- Normalized D7–D10 validators to preserve packet-time v4/`5/213` receipts while
+  checking only stable cohort identities against the moving current registry.
+
+#### What did not work well
+
+- Batch02 and five legacy-module protection sweeps initially called the newly
+  paired Chapel wall through the old single-record build path. That correctly
+  failed closed, but the tests described the failure as a material/module
+  regression until their current-authority seams were made pair-aware.
+- The standalone Chapel boundary test first treated plain registry/loader
+  dependency declarations as executable preloads. It now rejects actual direct
+  loads while allowing exact declarative closure validation.
+- Injecting the source-only loader unit test into an editor-mounted export is
+  not a supported mounted test: exported scene remaps are not resolved by that
+  external-script mode. Purpose-built mounted content and facade contracts are
+  the valid package boundary.
+
+#### What the team should change next time
+
+- When a receiver becomes pair-transaction-only, inventory every protected
+  sweep that calls `_build_record` directly and migrate those current-state
+  probes in the same integration batch.
+- Keep historical capture status inside immutable manifests and bind later
+  acceptance as a separate hash-sealed receipt, with precise generated-record,
+  source-membership, and direct-receiver vocabulary.
+- Distinguish declarative asset closure from executable loading in package
+  audits, and use purpose-built outside-checkout mounted contracts for PCK
+  validation rather than repurposing source-only unit tests.

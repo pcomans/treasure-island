@@ -1,5 +1,7 @@
 extends SceneTree
 
+const NAVY_CHAPEL_187_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd")
+
 const MANIFEST_PATH := "res://generated/world/manifest.json"
 const EXPECTED_MANIFEST_SHA256 := "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
 const YMCA_REVIEW_PATH := "res://discovery/facades/BATCH_02_04_MATERIAL_CORRECTION_REVIEW.md"
@@ -14,9 +16,9 @@ const YMCA_CORRECTION_MANIFEST_SHA256 := "d02fcbe38c56eea263900f89bda13eba044a4a
 const YMCA_INVENTORY_SHA256 := "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f"
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_BUILDING_WALL := 1 << 1
-const EXPECTED_WORLD_MESHES := 940
-const EXPECTED_WORLD_SURFACES := 954
-const EXPECTED_WORLD_TRIANGLES := 64118
+const EXPECTED_WORLD_MESHES := 944
+const EXPECTED_WORLD_SURFACES := 957
+const EXPECTED_WORLD_TRIANGLES := 64572
 
 const TARGETS := [
 	{
@@ -115,6 +117,12 @@ func _run() -> void:
 		if not _require(_asset_and_chunk_hashes_match(target), "Reviewed resource or generated chunk bytes drifted for %s." % str(target.source_key)):
 			_finish()
 			return
+		# Chapel's accepted material remains an input to the accepted paired hero,
+		# but current construction intentionally rejects an unpaired wall-only build.
+		# The actual-world branch below validates that promoted material in the live
+		# replacement; the two still-generic targets retain this isolated partition test.
+		if str(target.source_key) == "w291189336":
+			continue
 		var record := _load_record(str(target.chunk), str(target.receiver_key))
 		var first_result := builder._build_record(record, false)
 		var second_result := builder._build_record(record, false)
@@ -163,7 +171,7 @@ func _run() -> void:
 	if not _require(bool(full_world.get("ok", false)), str(full_world.get("message", "Whole-island load failed."))):
 		_finish()
 		return
-	print("PASS: retained non-Building-1 homogeneous fields remain unchanged; historical Building 1 field/module provenance stays byte-stable while accepted Building 1/Building 3/Isle House runtime replacements remain exact, Fire Station and protected candidates remain unchanged, and the whole island is 735/940/954/64,118/466")
+	print("PASS: retained non-Building-1 homogeneous fields remain unchanged; historical Building 1 field/module provenance stays byte-stable while accepted Building 1/Building 3/Isle House/Navy Chapel runtime replacements remain exact, Fire Station and protected candidates remain unchanged, and the whole island is 735/944/957/64,572/466")
 	_finish()
 
 
@@ -435,7 +443,7 @@ func _whole_island_matches() -> Dictionary:
 			var target := target_value as Dictionary
 			var nodes := _nodes_for_key(world, str(target.receiver_key))
 			var record := _load_record(str(target.chunk), str(target.receiver_key))
-			if nodes.size() != 1 or not _target_receiver_matches(nodes[0] as Node3D, record, target):
+			if nodes.size() != 1 or not _current_target_receiver_matches(nodes[0] as Node3D, record, target):
 				ok = false
 				break
 	if ok:
@@ -445,6 +453,18 @@ func _whole_island_matches() -> Dictionary:
 	root.remove_child(world)
 	world.free()
 	return {"ok": ok, "message": "Whole-island load mismatch: failures=%s reports=%d surfaces=%s" % [failures, reports.size(), evidence.surfaces if evidence != null else "null"]}
+
+
+func _current_target_receiver_matches(node: Node3D, record: Dictionary, target: Dictionary) -> bool:
+	if str(target.receiver_key) != "building:w291189336:wall":
+		return _target_receiver_matches(node, record, target)
+	var metadata := node.get_meta("navy_chapel_187_live_replacement", {}) as Dictionary
+	return node.get_node_or_null("Mesh") == null \
+		and NAVY_CHAPEL_187_LIVE_REPLACEMENT.material_semantics_match(node) \
+		and str(metadata.get("geometry_signature", "")) == NAVY_CHAPEL_187_LIVE_REPLACEMENT.EXPECTED_GEOMETRY_SIGNATURE \
+		and str(metadata.get("live_ownership_signature", "")) == NAVY_CHAPEL_187_LIVE_REPLACEMENT.EXPECTED_LIVE_OWNERSHIP_SIGNATURE \
+		and not bool(metadata.get("fallback_allowed", true)) \
+		and not bool(metadata.get("stack_allowed", true))
 
 
 func _nodes_for_key(root_node: Node, key: String) -> Array[Node]:

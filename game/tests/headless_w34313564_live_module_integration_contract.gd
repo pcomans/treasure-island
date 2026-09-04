@@ -3,6 +3,7 @@ extends SceneTree
 const LIVE_MODULES := preload("res://game/scripts/world/facades/w34313564_live_modules.gd")
 const REVIEWED_CALIBRATION := preload("res://game/tests/support/w34313564_module_calibration.gd")
 const ACCEPTED_FIELDS := preload("res://game/scripts/world/facades/accepted_material_run_trials.gd")
+const CHAPEL_ISOLATION := preload("res://game/tests/support/navy_chapel_187_protected_receiver_test_support.gd")
 const RECEIVER_KEY := "building:w34313564:wall"
 const CHUNK_PATH := "res://generated/world/chunks/x_0__z_-3.json"
 const REGISTRY_PATH := "res://game/resources/facades/w34313564_module_calibration.json"
@@ -14,7 +15,7 @@ const EXPECTED_REGISTRY_SHA256 := "45a47d333c997887cef7d1c97a633d37ae050efda5971
 const EXPECTED_REVIEWED_CALIBRATION_SHA256 := "b49b8c20fbbe40f2728c0acadf8d53f0593856091e6df897a613d4f2f8680b71"
 const EXPECTED_FINAL_REVIEW_SHA256 := "a8f1396e2d126c0c38b37edf770df975c4fa95e25e34fb2c7c1e766630fd1591"
 const EXPECTED_LIVE_HELPER_SHA256 := "74a7eb9a29750baf47e59194374c2669278bba5af091f5cbe04b13f45c230b8e"
-const EXPECTED_WORLD_BUILDER_SHA256 := "28be094c674108f42be040f2b3ae6d242838d15e2060f6cf4668b0a003f1a682"
+const EXPECTED_WORLD_BUILDER_SHA256 := "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c"
 const EXPECTED_FIELD_HELPER_SHA256 := "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c"
 const EXPECTED_PLACEMENTS := {
 	"CAL-SSE-PDOOR-01": {"motif_id": "W34313564-PDOOR", "run": 7, "center_m": 47.5, "face": "SSE", "mapping_id": "B06-34313564-SSE-CENTRAL", "material": "res://game/resources/materials/world/w34313564/w34313564_door.tres", "meshes": 5},
@@ -75,7 +76,7 @@ func _run() -> void:
 	detached_node.free()
 	await _whole_island_matches()
 	if not _failed:
-		print("PASS: exactly five reviewed w34313564 live receiver modules remain unchanged at runs 7/8/12/16/17 with 34 render-only meshes / 34 surfaces / 408 triangles and zero backing/collision/navigation/spray; the separately accepted w34313515/w291196370/w34313520 scopes remain isolated, and whole-island topology is 735/940/954/64,118/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
+		print("PASS: exactly five reviewed w34313564 live receiver modules remain unchanged at runs 7/8/12/16/17 with 34 render-only meshes / 34 surfaces / 408 triangles and zero backing/collision/navigation/spray; the separately accepted w34313515/w291196370/w34313520 scopes remain isolated, and whole-island topology is 735/944/957/64,572/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
 	_finish()
 
 
@@ -205,6 +206,10 @@ func _deterministic(first: Node3D, second: Node3D) -> bool:
 
 func _protected_receivers_unchanged(builder: WorldChunkBuilder) -> bool:
 	for receiver_key: String in PROTECTED_RECEIVERS:
+		if receiver_key == CHAPEL_ISOLATION.WALL_KEY:
+			if not CHAPEL_ISOLATION.exact_pair_excludes_module_family("W34313564LiveModules"):
+				return false
+			continue
 		var record := _record_for(receiver_key)
 		if record.is_empty():
 			return false
@@ -253,7 +258,7 @@ func _whole_island_matches() -> void:
 			receiver = candidate as Node3D
 	_require(evidence.chunks_loaded == 38 \
 		and evidence.playable_rows == 735 and evidence.context_rows == 4 \
-		and evidence.mesh_instances == 940 and evidence.surfaces == 954 and evidence.triangles == 64118 \
+		and evidence.mesh_instances == 944 and evidence.surfaces == 957 and evidence.triangles == 64572 \
 		and evidence.static_bodies == 466 and evidence.shapes == 466 \
 		and live_root_count == 1 and receiver != null \
 		and _count_type(receiver, MeshInstance3D) == 35 \

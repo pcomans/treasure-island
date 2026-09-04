@@ -178,16 +178,24 @@ const acceptedUnitIds = [
   "physical-building:w1222720021",
   "physical-building:w1249412093",
   "physical-building:w1249412094",
+  "physical-building:w291189336",
   "physical-building:w34313540",
 ].sort();
-assert(registry.recognition_metric.numerator === 5 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "5/213", "runtime recognition metric is not exactly 5/213");
+assert(registry.recognition_metric.numerator === 6 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "6/213", "runtime recognition metric is not exactly 6/213");
 assert(JSON.stringify(registry.recognition_metric.accepted_physical_unit_ids) === JSON.stringify(acceptedUnitIds), "runtime accepted physical-unit set drifted");
 assert(JSON.stringify(registry.recognition_metric.isle_house_non_numerator_source_keys) === JSON.stringify(["w1282547786", "w1282547787"]), "Isle House source parts entered the physical-unit numerator");
 const islePlan = disabledPlans.find((plan) => plan.receiver_key === "building-composite:w1249412094:w1282547787:wall");
 assert(islePlan.content_mode === "active_isle_house_variant_c" && islePlan.runtime_assets.length === 1 && islePlan.projection_descriptor_ids.length === 3, "Isle House plan does not preserve its active content mode and fail-closed package boundary");
 assert(islePlan.behavior_contract.acceptance_contract.independent_live_review_receipt_sha256 === "37b6c7dbf6c8769b13628e1070a9c3b5beeb9b25bbe63f0f12f9aaa00c22dab8", "Isle House plan acceptance receipt drifted");
 assert(islePlan.behavior_contract.geometry_contract.live_signature === "09eee1517f043c6d82f0de0d2275da5b2a3f76f5842d1b9c90cba11e6e793981" && islePlan.behavior_contract.geometry_contract.overlay_repair_signature === "41868b77a8b51b56ee7381e5549423e97547270d2dc77d9ce5cf958b31e2cb69", "Isle House plan signatures drifted");
-assert(islePlan.behavior_contract.geometry_contract.world_records === 735 && islePlan.behavior_contract.geometry_contract.world_mesh_instances === 940 && islePlan.behavior_contract.geometry_contract.world_surfaces === 954 && islePlan.behavior_contract.geometry_contract.world_triangles === 64118 && islePlan.behavior_contract.geometry_contract.world_static_bodies === 466 && islePlan.behavior_contract.geometry_contract.world_shapes === 466, "Isle House accepted world topology drifted");
+assert(islePlan.behavior_contract.geometry_contract.world_records === 735 && islePlan.behavior_contract.geometry_contract.world_mesh_instances === 944 && islePlan.behavior_contract.geometry_contract.world_surfaces === 957 && islePlan.behavior_contract.geometry_contract.world_triangles === 64572 && islePlan.behavior_contract.geometry_contract.world_static_bodies === 466 && islePlan.behavior_contract.geometry_contract.world_shapes === 466, "Isle House exact-current world topology drifted");
+const navyChapelPlan = readyPlans.find((plan) => plan.receiver_key === "building:w291189336:wall");
+const navyChapelRuntimePaths = navyChapelPlan.runtime_assets.map((asset) => asset.path).sort();
+assert(navyChapelPlan.content_mode === "active_navy_chapel_187_paired_replacement", "Navy Chapel ready plan has stale legacy content mode");
+assert(navyChapelRuntimePaths.length === 9 && navyChapelRuntimePaths.includes("res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd") && navyChapelRuntimePaths.includes("res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd") && navyChapelRuntimePaths.includes("res://game/resources/facades/navy_chapel_187_standalone_hero_prototype.json"), "Navy Chapel ready plan dependency set is incomplete");
+assert(navyChapelPlan.behavior_contract.acceptance_contract.independent_live_review_receipt_sha256 === "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9" && navyChapelPlan.behavior_contract.acceptance_contract.numerator_effect === 1 && navyChapelPlan.behavior_contract.acceptance_contract.wall_and_roof_are_one_physical_unit === true, "Navy Chapel acceptance receipt or one-unit rollup drifted");
+assert(navyChapelPlan.behavior_contract.geometry_contract.visual_geometry_signature === "076e081df86e884f04cf7cb680304c35c64e6f76238de7060528c59097ae5c46" && navyChapelPlan.behavior_contract.geometry_contract.visual_triangles === 540 && navyChapelPlan.behavior_contract.geometry_contract.world_records === 735 && navyChapelPlan.behavior_contract.geometry_contract.world_mesh_instances === 944 && navyChapelPlan.behavior_contract.geometry_contract.world_surfaces === 957 && navyChapelPlan.behavior_contract.geometry_contract.world_triangles === 64572 && navyChapelPlan.behavior_contract.geometry_contract.world_static_bodies === 466 && navyChapelPlan.behavior_contract.geometry_contract.world_shapes === 466, "Navy Chapel geometry/world parity drifted");
+assert(navyChapelPlan.behavior_contract.ownership_contract.live_ownership_signature === "4766c5d562933eb632f1ef3bdcec828fc40be81c996db919c53405f776fa04a7" && navyChapelPlan.behavior_contract.ownership_contract.structural_owner_count === 2 && navyChapelPlan.behavior_contract.ownership_contract.shape_count === 2 && navyChapelPlan.behavior_contract.ownership_contract.spray_owner_count === 1 && navyChapelPlan.behavior_contract.ownership_contract.wall_collision_triangles === 94 && navyChapelPlan.behavior_contract.ownership_contract.roof_collision_triangles === 50 && navyChapelPlan.behavior_contract.ownership_contract.wall_is_sole_spray_receiver === true && navyChapelPlan.behavior_contract.ownership_contract.roof_is_wall_spray_receiver === false, "Navy Chapel collision/spray ownership parity drifted");
 
 expectFailure(() => {
   const candidate = structuredClone(catalog);
@@ -230,10 +238,10 @@ expectFailure(() => {
 }, "Isle House low receiver is not bound to its exact active Variant C adapter", "collapsed Isle House mixed receiver state");
 expectFailure(() => {
   const candidate = structuredClone(registry);
-  candidate.recognition_metric.numerator = 6;
-  candidate.recognition_metric.display = "6/213";
+  candidate.recognition_metric.numerator = 7;
+  candidate.recognition_metric.display = "7/213";
   validateRuntimeRegistry(candidate, adapterContracts);
-}, "Runtime physical-entity recognition metric drifted from exactly 5/213", "drifted recognition numerator");
+}, "Runtime physical-entity recognition metric drifted from exactly 6/213", "drifted recognition numerator");
 expectFailure(() => {
   const candidate = structuredClone(adapterContracts);
   const plan = candidate.plans.find((item) => item.receiver_key === "building-composite:w1249412094:w1282547787:wall");
@@ -246,6 +254,12 @@ expectFailure(() => {
   plan.behavior_contract.geometry_contract.roof_triangles = 674;
   validateAdapterContracts(candidate);
 }, "Building 3 behavior parity contract drifted", "drifted Building 3 wall/roof behavior parity");
+expectFailure(() => {
+  const candidate = structuredClone(adapterContracts);
+  const plan = candidate.plans.find((item) => item.receiver_key === "building:w291189336:wall");
+  plan.behavior_contract.ownership_contract.roof_collision_triangles = 49;
+  validateAdapterContracts(candidate);
+}, "Navy Chapel exact-current acceptance/parity contract drifted", "drifted Navy Chapel collision ownership parity");
 
 console.log(
   `PASS facade runtime loader contract: ${EXPECTED.recognition_units} units / ${EXPECTED.direct_wall_receivers} receivers / ${adapterContracts.plans.length} plans / ${readyPlans.length} package-safe / ${disabledPlans.length} hard-disabled receivers / ${adapterContracts.projection_descriptors.length} pathless projection inputs; registry ${sha256File(PATHS.registry)}; adapter contracts ${sha256File(PATHS.adapterContracts)}`,
