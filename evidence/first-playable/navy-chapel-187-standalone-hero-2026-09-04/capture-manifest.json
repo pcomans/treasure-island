@@ -1,0 +1,821 @@
+{
+  "schema_version": "ti.navy-chapel-187-standalone-hero-evidence/1",
+  "review_status": "technical_capture_valid_recognition_and_believability_pending_independent_bar_raiser_review",
+  "evidence_role": "Native technical before/after evidence only. The executor verifies package bytes, exact-current source identity, real world loading, physics-grounded stock-player pose, exact camera reuse within each pair, full-object framing, first-hit source binding, and nonblank PNG integrity. The executor does not grade recognition or believability.",
+  "target": {
+    "canonical_name": "Navy Chapel Building 187",
+    "source_key": "w291189336",
+    "wall_object_key": "building:w291189336:wall",
+    "roof_object_key": "building:w291189336:roof",
+    "geometry_sha256": "c62a89b238b4831fa2c16e3244c0bffdf17a80ec09498396bc8e582c5c9e696a",
+    "mapped_sse_runs": [
+      9,
+      10
+    ],
+    "mapped_partial_public_side_runs": [
+      11,
+      12,
+      13
+    ],
+    "protected_runs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33
+    ]
+  },
+  "truth_boundary": {
+    "standalone_capture_only": true,
+    "runtime_attachment": false,
+    "recognition_accepted": false,
+    "believability_accepted": false,
+    "as_built_claim": false,
+    "interior_modeled": false,
+    "vertical_dimensions_pane_count_and_side_cadence": "reversible_production_inference",
+    "source_photography_stored_or_shown": false
+  },
+  "confusion_set_source_ids_frozen_before_capture": [
+    "w291189918",
+    "w291189926",
+    "w34313521"
+  ],
+  "reference_supported_cues_frozen_before_capture": [
+    "strong SSE gable with tall vertically divided multipane window above a shallow projecting entry",
+    "square belfry above the roof with pyramidal cap and restrained visible cross",
+    "warm cream SSE field and bounded partial public-side rhythm of tall narrow opening groups"
+  ],
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/navy_chapel_187_standalone_hero_capture.gd",
+  "generator": "game/tests/navy_chapel_187_standalone_hero_capture.gd",
+  "generator_sha256": "887842e96b0a4d9fe519b94eae22941def5fd06ec6c11f7bfc81446a3e9ca2c7",
+  "pinned_inputs": {
+    "res://game/resources/facades/navy_chapel_187_standalone_hero_prototype.json": "c8f2ab09f3943a5ec8abea7cb9a108f49990bff1d83003c3b3622187a269dea2",
+    "res://generated/world/chunks/x_-1__z_2.json": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce",
+    "res://discovery/facades/p3_reference_packets/w291189336_navy_chapel_building_187.md": "7eb592503ce8e276c38ef3ecaf7f2d3dd17e1eeb32adbe45d1059c5cb4693330",
+    "res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd": "067c12e29c9fd352915ef2a501fcd7687b450081c79a4281d63bbfef1c19e7db",
+    "res://game/scenes/world/facades/navy_chapel_187/navy_chapel_187_standalone_hero_prototype.tscn": "2ab7db7ef064bf8d9d59fb3dd631dd1b7cddd9fc18eebbb67832e75df8eb8083",
+    "res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres": "4020e4c75350929359be9c16686ad80a2a0eac46918cc32746089694017a61a5",
+    "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_protected_neutral.tres": "91cd7ce14550bdfb6773a4013ef0db8bbb24bd5cc9d0734f6c591f23d6552206",
+    "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_inferred_cream_structure.tres": "2ee243415387c9f3d9dfd5664c0a5e13107745a83d9dcb489dd39e5aeb2ff17a",
+    "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres": "b565aa44566a0bb93d07d041b1e8331d9f35cb83ec34f6a2ec403b362311c380",
+    "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres": "253e9c2a5013f81aed446f6e55b702dea3792189658ce285726788d15376bc41",
+    "res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres": "89be7fbe0feb68525c5423540d3a6f17f269567875174f23522b4e964ba737b1"
+  },
+  "exact_current_context_hashes_not_prototype_dependencies": {
+    "game/scenes/main.tscn": "959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66",
+    "game/scripts/main.gd": "7ae840aa08a00bc38a3b714ebb0fe3fcd611fb643c86fc828aec44efb4d85843",
+    "game/scripts/world/world_chunk_builder.gd": "9525ead815e95d7bc0b5fa8beae389954e232a9bbf51b54ed049a84a3613b9c0",
+    "generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+  },
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M2 (Apple8)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "lighting": {
+    "changed": false,
+    "sun_rotation_degrees": [
+      -51.9999961853027,
+      -27.9999980926514,
+      0.0
+    ]
+  },
+  "world_runtime_context": {
+    "playable_rows": 735,
+    "context_rows": 4,
+    "mesh_instances": 938,
+    "surfaces": 948,
+    "triangles": 63720,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "prototype_topology": {
+    "mesh_instances": 6,
+    "surfaces": 6,
+    "visual_triangles": 540,
+    "visual_batch_triangles": {
+      "ProtectedExactWallAndRearClosure": 65,
+      "AcceptedCreamExactSSERuns_9_10": 4,
+      "InferredCreamSSEGableBelfryEntry": 25,
+      "NeutralRoofAndCap": 26,
+      "ObservedPaleTrim": 360,
+      "OpaqueExteriorOpenings": 60
+    },
+    "static_bodies": 1,
+    "shapes": 1,
+    "collision_triangles": 144,
+    "deterministic_signature": "076e081df86e884f04cf7cb680304c35c64e6f76238de7060528c59097ae5c46"
+  },
+  "camera_contract": {
+    "rig": "actual Player/CameraPivot/SpringArm3D/Camera3D",
+    "player_visible": true,
+    "fov_degrees": 70.0,
+    "configured_spring_length_m": 5.5,
+    "before_after_pair_transform_rule": "exact same live Camera3D transform and physics-settled Player transform within 0.0001"
+  },
+  "capture_pairs": [
+    {
+      "view_id": "01-whole-object",
+      "before_capture_id": "01-whole-object-before",
+      "after_capture_id": "01-whole-object-after",
+      "camera_transform_exactly_reused": true,
+      "camera_translation_error_m": 0.0,
+      "camera_basis_error": 0.000000070878485303183,
+      "player_translation_error_m": 0.0
+    },
+    {
+      "view_id": "02-oblique-approach",
+      "before_capture_id": "02-oblique-approach-before",
+      "after_capture_id": "02-oblique-approach-after",
+      "camera_transform_exactly_reused": true,
+      "camera_translation_error_m": 0.0,
+      "camera_basis_error": 0.00000010776797410017,
+      "player_translation_error_m": 0.0
+    }
+  ],
+  "captures": [
+    {
+      "id": "01-whole-object-before",
+      "stage": "before",
+      "target": "navy-chapel-187",
+      "source_identity": "w291189336",
+      "role": "whole_object_ordinary_player_view",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w291189918",
+        "w291189926",
+        "w34313521"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "strong SSE gable with tall vertically divided multipane window above a shallow projecting entry",
+        "square belfry above the roof with pyramidal cap and restrained visible cross",
+        "warm cream SSE field and bounded partial public-side rhythm of tall narrow opening groups"
+      ],
+      "file": "images/01-whole-object-before.png",
+      "sha256": "2edeaff94139639da514d049f42f94819881c7a421a4dd24f24b1b305ecd4833",
+      "bytes": 623325,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 214,
+      "sample_luminance_range": 0.707502767443657,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -52.0,
+        675.0
+      ],
+      "settle_spawn_y_m": 7.06535339355469,
+      "player_position_m": [
+        -52.0,
+        4.06546497344971,
+        675.0
+      ],
+      "ground_y_m": 4.06535339355469,
+      "ground_clearance_m": 0.000111579895019531,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999845385551453,
+      "in_boundary": true,
+      "aim_target_m": [
+        -100.468505859375,
+        9.01949977874756,
+        648.694946289062
+      ],
+      "camera_position_m": [
+        -47.1729583740234,
+        5.77126884460449,
+        677.619750976562
+      ],
+      "camera_height_above_ground_m": 1.7059154510498,
+      "camera_forward": [
+        -0.877644002437592,
+        0.053490225225687,
+        -0.476319044828415
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49999809265137,
+      "camera_yaw_degrees": 61.5102243268793,
+      "camera_pitch_degrees": 3.06622699666108,
+      "target_bounds_point_count": 16,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        601.385375976562,
+        380.275787353516
+      ],
+      "target_projected_max_px": [
+        1099.5126953125,
+        507.98046875
+      ],
+      "target_projected_width_ratio": 0.345921749538845,
+      "target_projected_height_ratio": 0.141894090440538,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        719.999938964844,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.00006103515625,
+      "first_los_hit_receiver": "building:w291189336:wall",
+      "first_los_hit_source_keys": [
+        "w291189336"
+      ],
+      "first_los_hit_run_index": 9,
+      "expected_los_run_index": 9,
+      "first_los_hit_position_m": [
+        -100.468475341797,
+        9.01949882507324,
+        648.694946289062
+      ],
+      "first_los_hit_normal": [
+        0.467475265264511,
+        0.0,
+        0.884006202220917
+      ],
+      "first_los_hit_distance_m": 60.7256736755371,
+      "first_los_hit_target_error_m": 0.000030532475648215,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "pair_camera_transform": {
+        "origin": [
+          -47.1729583740234,
+          5.77126884460449,
+          677.619750976562
+        ],
+        "basis_x": [
+          0.477001965045929,
+          0.0000000114257163730258,
+          -0.8789022564888
+        ],
+        "basis_y": [
+          0.0470126755535603,
+          0.998568415641785,
+          0.0255149528384209
+        ],
+        "basis_z": [
+          0.877644002437592,
+          -0.053490225225687,
+          0.476319044828415
+        ]
+      }
+    },
+    {
+      "id": "01-whole-object-after",
+      "stage": "after",
+      "target": "navy-chapel-187",
+      "source_identity": "w291189336",
+      "role": "whole_object_ordinary_player_view",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w291189918",
+        "w291189926",
+        "w34313521"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "strong SSE gable with tall vertically divided multipane window above a shallow projecting entry",
+        "square belfry above the roof with pyramidal cap and restrained visible cross",
+        "warm cream SSE field and bounded partial public-side rhythm of tall narrow opening groups"
+      ],
+      "file": "images/01-whole-object-after.png",
+      "sha256": "522c649d0766e2bd84999f9b21ee569e53911094e280480db31bff5a340fe0ed",
+      "bytes": 602641,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 214,
+      "sample_luminance_range": 0.717363938689232,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": true,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -52.0,
+        675.0
+      ],
+      "settle_spawn_y_m": 7.06535339355469,
+      "player_position_m": [
+        -52.0,
+        4.06546497344971,
+        675.0
+      ],
+      "ground_y_m": 4.06535339355469,
+      "ground_clearance_m": 0.000111579895019531,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999845385551453,
+      "in_boundary": true,
+      "aim_target_m": [
+        -100.468505859375,
+        9.01949977874756,
+        648.694946289062
+      ],
+      "camera_position_m": [
+        -47.1729583740234,
+        5.77126884460449,
+        677.619750976562
+      ],
+      "camera_height_above_ground_m": 1.7059154510498,
+      "camera_forward": [
+        -0.877644002437592,
+        0.053490225225687,
+        -0.476319044828415
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49999809265137,
+      "camera_yaw_degrees": 61.5102243268793,
+      "camera_pitch_degrees": 3.06622699666108,
+      "target_bounds_point_count": 48,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        601.385375976562,
+        252.038558959961
+      ],
+      "target_projected_max_px": [
+        1099.5126953125,
+        508.77392578125
+      ],
+      "target_projected_width_ratio": 0.345921749538845,
+      "target_projected_height_ratio": 0.285261501736111,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        719.999938964844,
+        450.000030517578
+      ],
+      "aim_target_center_error_px": 0.0000682393801980652,
+      "first_los_hit_receiver": "prototype:building:w291189336:wall",
+      "first_los_hit_source_keys": [
+        "w291189336"
+      ],
+      "first_los_hit_run_index": 9,
+      "expected_los_run_index": 9,
+      "first_los_hit_position_m": [
+        -100.468475341797,
+        9.01950073242188,
+        648.694946289062
+      ],
+      "first_los_hit_normal": [
+        0.467475265264511,
+        0.0,
+        0.884006202220917
+      ],
+      "first_los_hit_distance_m": 60.7256736755371,
+      "first_los_hit_target_error_m": 0.000030532475648215,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "pair_camera_transform": {
+        "origin": [
+          -47.1729583740234,
+          5.77126884460449,
+          677.619750976562
+        ],
+        "basis_x": [
+          0.477001965045929,
+          0.0000000114257163730258,
+          -0.8789022564888
+        ],
+        "basis_y": [
+          0.0470127090811729,
+          0.99856835603714,
+          0.0255149714648724
+        ],
+        "basis_z": [
+          0.877644002437592,
+          -0.0534902662038803,
+          0.476319044828415
+        ]
+      },
+      "pair_camera_translation_error_m": 0.0,
+      "pair_camera_basis_error": 0.000000070878485303183,
+      "pair_player_translation_error_m": 0.0
+    },
+    {
+      "id": "02-oblique-approach-before",
+      "stage": "before",
+      "target": "navy-chapel-187",
+      "source_identity": "w291189336",
+      "role": "oblique_ordinary_player_view",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w291189918",
+        "w291189926",
+        "w34313521"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "strong SSE gable with tall vertically divided multipane window above a shallow projecting entry",
+        "square belfry above the roof with pyramidal cap and restrained visible cross",
+        "warm cream SSE field and bounded partial public-side rhythm of tall narrow opening groups"
+      ],
+      "file": "images/02-oblique-approach-before.png",
+      "sha256": "8cff88807fa537c8360b6a314e322b84413e2af1561bf48134efd45211eb0733",
+      "bytes": 606266,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 219,
+      "sample_luminance_range": 0.593647077679634,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -36.0,
+        668.0
+      ],
+      "settle_spawn_y_m": 7.03512573242188,
+      "player_position_m": [
+        -36.0,
+        4.03533506393433,
+        668.0
+      ],
+      "ground_y_m": 4.03512573242188,
+      "ground_clearance_m": 0.000209331512451172,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999755680561066,
+      "in_boundary": true,
+      "aim_target_m": [
+        -100.468505859375,
+        9.01949977874756,
+        648.694946289062
+      ],
+      "camera_position_m": [
+        -30.7363471984863,
+        5.79168653488159,
+        669.576232910156
+      ],
+      "camera_height_above_ground_m": 1.75656080245972,
+      "camera_forward": [
+        -0.957030832767487,
+        0.0443002581596375,
+        -0.286582320928574
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49999237060547,
+      "camera_yaw_degrees": 73.3297037799228,
+      "camera_pitch_degrees": 2.53901879706752,
+      "target_bounds_point_count": 16,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        652.796508789062,
+        394.0625
+      ],
+      "target_projected_max_px": [
+        1096.17150878906,
+        497.785552978516
+      ],
+      "target_projected_width_ratio": 0.307899305555556,
+      "target_projected_height_ratio": 0.115247836642795,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        720.000305175781,
+        450.000335693359
+      ],
+      "aim_target_center_error_px": 0.000453676417237148,
+      "first_los_hit_receiver": "building:w291189336:wall",
+      "first_los_hit_source_keys": [
+        "w291189336"
+      ],
+      "first_los_hit_run_index": 9,
+      "expected_los_run_index": 9,
+      "first_los_hit_position_m": [
+        -100.468490600586,
+        9.0195369720459,
+        648.695007324219
+      ],
+      "first_los_hit_normal": [
+        0.467475265264511,
+        0.0,
+        0.884006202220917
+      ],
+      "first_los_hit_distance_m": 72.8629989624023,
+      "first_los_hit_target_error_m": 0.000073085306212306,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "pair_camera_transform": {
+        "origin": [
+          -30.7363471984863,
+          5.79168653488159,
+          669.576232910156
+        ],
+        "basis_x": [
+          0.286863952875137,
+          0.000000013956125144432,
+          -0.957971394062042
+        ],
+        "basis_y": [
+          0.0424383766949177,
+          0.999018311500549,
+          0.0127081600949168
+        ],
+        "basis_z": [
+          0.957030832767487,
+          -0.0443002581596375,
+          0.286582320928574
+        ]
+      }
+    },
+    {
+      "id": "02-oblique-approach-after",
+      "stage": "after",
+      "target": "navy-chapel-187",
+      "source_identity": "w291189336",
+      "role": "oblique_ordinary_player_view",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w291189918",
+        "w291189926",
+        "w34313521"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "strong SSE gable with tall vertically divided multipane window above a shallow projecting entry",
+        "square belfry above the roof with pyramidal cap and restrained visible cross",
+        "warm cream SSE field and bounded partial public-side rhythm of tall narrow opening groups"
+      ],
+      "file": "images/02-oblique-approach-after.png",
+      "sha256": "b635da683d31f73e3981c1bf21f25690db40640a06771b0e5b5a52425916a9e5",
+      "bytes": 583868,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 218,
+      "sample_luminance_range": 0.675784319639206,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": true,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -36.0,
+        668.0
+      ],
+      "settle_spawn_y_m": 7.03512573242188,
+      "player_position_m": [
+        -36.0,
+        4.03533506393433,
+        668.0
+      ],
+      "ground_y_m": 4.03512573242188,
+      "ground_clearance_m": 0.000209331512451172,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999755680561066,
+      "in_boundary": true,
+      "aim_target_m": [
+        -100.468505859375,
+        9.01949977874756,
+        648.694946289062
+      ],
+      "camera_position_m": [
+        -30.7363471984863,
+        5.79168653488159,
+        669.576232910156
+      ],
+      "camera_height_above_ground_m": 1.75656080245972,
+      "camera_forward": [
+        -0.957030832767487,
+        0.0443002581596375,
+        -0.286582320928574
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49999237060547,
+      "camera_yaw_degrees": 73.3297037799228,
+      "camera_pitch_degrees": 2.53901879706752,
+      "target_bounds_point_count": 48,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        652.796569824219,
+        287.7548828125
+      ],
+      "target_projected_max_px": [
+        1096.17163085938,
+        498.574676513672
+      ],
+      "target_projected_width_ratio": 0.307899347941081,
+      "target_projected_height_ratio": 0.234244215223524,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        720.000305175781,
+        450.000335693359
+      ],
+      "aim_target_center_error_px": 0.000453676417237148,
+      "first_los_hit_receiver": "prototype:building:w291189336:wall",
+      "first_los_hit_source_keys": [
+        "w291189336"
+      ],
+      "first_los_hit_run_index": 9,
+      "expected_los_run_index": 9,
+      "first_los_hit_position_m": [
+        -100.468505859375,
+        9.0195369720459,
+        648.695007324219
+      ],
+      "first_los_hit_normal": [
+        0.467475265264511,
+        0.0,
+        0.884006202220917
+      ],
+      "first_los_hit_distance_m": 72.8630142211914,
+      "first_los_hit_target_error_m": 0.0000714746929588728,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "pair_camera_transform": {
+        "origin": [
+          -30.7363471984863,
+          5.79168653488159,
+          669.576232910156
+        ],
+        "basis_x": [
+          0.28686386346817,
+          0.0000000221790426024882,
+          -0.957971334457397
+        ],
+        "basis_y": [
+          0.0424383692443371,
+          0.999018311500549,
+          0.0127081628888845
+        ],
+        "basis_z": [
+          0.957030892372131,
+          -0.0443002544343472,
+          0.286582261323929
+        ]
+      },
+      "pair_camera_translation_error_m": 0.0,
+      "pair_camera_basis_error": 0.00000010776797410017,
+      "pair_player_translation_error_m": 0.0
+    }
+  ],
+  "technical_checks": [
+    "native macOS Forward+/Metal at 1440x900",
+    "actual generated world and stock visible player rig",
+    "real character physics settlement on walkable generated collision",
+    "same camera/player transforms for each before/after pair",
+    "before first-hit exact current building:w291189336:wall; after first-hit capture-only prototype derived from the same exact source",
+    "full target bounds in frame at ordinary player distance",
+    "debug, feedback, loading, and pause panels hidden; normal reticle retained",
+    "default lighting unchanged",
+    "all PNGs nonblank with exact dimensions and recorded SHA-256"
+  ],
+  "recognition_review_prohibited_for_executor": true,
+  "reviewer_instruction": "Open both before/after pairs at original detail. Judge only whether the after prototype is top-1 Navy Chapel against the frozen Oasis, Dormitory 369, and Food Service/nearby institutional confusion set using at least two source-supported cues, and whether the hierarchy/depth is believable at the shown ordinary player distance. Do not infer acceptance from technical validity. Treat every vertical dimension, pane division, and three-window side cadence as reversible production inference, and do not infer an interior, rear/private-side design, or as-built fidelity."
+}

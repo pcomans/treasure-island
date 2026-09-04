@@ -1,0 +1,113 @@
+{
+  "schema_version": "ti.d1-current-standalone-side-prototype/1",
+  "prototype_id": "D1-B225-NNW-LONG-STANDALONE",
+  "source_key": "w95934119",
+  "receiver_key_eligibility_only": "building:w95934119:wall",
+  "roof_object_key_protected": "building:w95934119:roof",
+  "scope": "standalone render-only NNW long-side study; exact eligible run chain, not a receiver-relative layout",
+  "review_status": "pending_independent_recognition_and_bar_review_not_self_accepted",
+  "runtime_attachment": false,
+  "live_placement_count": 0,
+  "reference_pixels_stored_or_copied": false,
+  "generated_or_external_texture_assets": false,
+  "binding": {
+    "frozen_osm": {
+      "type": "way",
+      "id": "95934119",
+      "version": 5,
+      "timestamp": "2026-04-23T18:34:33Z",
+      "address": "148 12th Street",
+      "tags": {"building": "yes", "height": "5"}
+    },
+    "city_identity": "Building 225",
+    "identity_confidence": "high_for_frozen_footprint_address_and_city_crosswalk",
+    "common_name": null,
+    "identity_nonclaims": "No authoritative common name or current-business name. The Pavilion is Building 227, not this receiver; a complainant's Cityview Storage wording is not promoted to identity.",
+    "currentness": "March 2025 target-bound NNW observation",
+    "chunk_id": "x_-2__z_-1",
+    "chunk_path": "res://generated/world/chunks/x_-2__z_-1.json",
+    "chunk_sha256": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2",
+    "source_geometry_sha256": "d9804e14fbbdc7a258299a7883ffa922741fb016207ee00ddf1682834d19bb2e",
+    "source_area_m2": 1099.411,
+    "base_elevation_m": 2.507,
+    "top_elevation_m": 7.507,
+    "receiver_height_m": 5.0,
+    "receiver_run_count": 14,
+    "receiver_perimeter_m": 140.054,
+    "shared_run_count": 0
+  },
+  "authoritative_packet": {
+    "receipt_id": "D1-B225-AUTHORITY",
+    "source_provenance_receipt_sha256": "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677b3ba5ab318a19333",
+    "sha256": "ee3e0cb8a7f3bb29e4ecbc0be688d57268cccc895c33c448c64e2506b2de4fa8"
+  },
+  "observation": {
+    "id": "148-12-SV01",
+    "capture_date": "March 2025",
+    "side": "NNW long side",
+    "rights": "observation-only; no panorama pixels stored, transformed, generated from, or shipped"
+  },
+  "eligible_region": {
+    "mapping_id": "14812-NNW-LONG",
+    "source_edge_indices": [3],
+    "ordered_run_indices": [10, 11, 12, 13],
+    "ordered_run_lengths_m": [10.372629078, 6.510893794, 7.049860211, 22.328585289],
+    "exact_generated_chain_length_m": 46.261968372,
+    "canonical_rounded_chain_length_m": 46.262,
+    "chain_start_world_xz_m": [-401.020, -196.785],
+    "chain_end_world_xz_m": [-442.066, -175.445],
+    "contiguous": true,
+    "geometry_and_side_confidence": "high",
+    "preexisting_mapping_classification": "material_only_safe",
+    "prototype_authorization": "standalone_unattached_study_only"
+  },
+  "recognition_contract": {
+    "reference_observations": [
+      "aged light-gray/off-white horizontal cladding with visible directional courses",
+      "nearly continuous high clerestory with many small rectangular panes in pale frames and varied complete group widths",
+      "low one-storey near-flat-roof proportion with clerestory close to the top edge"
+    ],
+    "required_pair": [
+      "varied continuous clerestory grouping",
+      "aged horizontal cladding on a low mass"
+    ],
+    "invalid_single_cue_proofs": ["gray color", "storage sign", "repeated missing panes", "address plaque"]
+  },
+  "production_inference": {
+    "truth_class": "reversible_production_inference_not_surveyed",
+    "side_study_dimensions_m": [46.261968372, 5.0],
+    "complete_clerestory_group_count": 10,
+    "inferred_group_widths_m": [3.4, 4.1, 3.2, 5.0, 4.0, 4.4, 3.1, 5.1, 3.5, 4.2],
+    "inferred_pane_counts": [4, 5, 4, 6, 5, 5, 4, 6, 4, 5],
+    "dark_pane_damage_pattern": "none_encoded",
+    "horizontal_course_reveal_count": 14,
+    "cadence_dimensions_and_anchors_surveyed": false,
+    "placement_state": "illustrative_local_side_coordinates_only"
+  },
+  "protected_scope": {
+    "run_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    "regions": ["WSW end modules and openings", "SSE and ENE", "lower openings and entrances", "all endpoints, corners and returns", "roof equipment and generated host geometry"],
+    "material_only_context": "WSW runs 0..2 may inform the aged field in a future separate material study, but this prototype places no WSW geometry",
+    "nonclaims": ["common name", "current businesses", "cladding substrate", "exact pane dimensions or count", "damage chronology", "lower openings", "transparent interior", "roof equipment"]
+  },
+  "render_topology": {
+    "batch_count": 4,
+    "box_instance_count": 108,
+    "triangle_count": 1296,
+    "batch_instance_counts": {
+      "b225_aged_cladding": 4,
+      "shared_deep_reveal": 14,
+      "shared_dark_glass": 10,
+      "shared_pale_frame": 80
+    },
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0
+  },
+  "live_integration_seam": {
+    "status": "blocked_pending_independent_review_and_fresh_receiver_relative_layout",
+    "eligible_receiver_chain_only": "building:w95934119:wall / source edge 3 / runs 10..13",
+    "future_adapter_contract": "derive cumulative metres once across the ordered run chain; preserve varied complete clerestory groups and corner clearance; never infer from generated U or reset phase per run",
+    "forbidden": "direct factory instantiation from world_chunk_builder, catalog, compiler, registry, loader, generated chunks, collision, navigation or spray ownership"
+  }
+}

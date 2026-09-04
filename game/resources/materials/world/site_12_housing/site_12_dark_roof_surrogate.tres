@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg" id="1_roof"]
+
+[resource]
+resource_name = "site_12_dark_brown_roof_albedo_surrogate"
+albedo_color = Color(0.40, 0.28, 0.20, 1)
+albedo_texture = ExtResource("1_roof")
+metallic = 0.0
+roughness = 0.9
+texture_filter = 5
+uv1_scale = Vector3(0.2, 0.2, 1)

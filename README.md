@@ -27,11 +27,20 @@ the owner-photo-derived single-color San Francisco silhouette
 `sf_skyline_owner_silhouette_final.png` (`2212x340`, SHA-256
 `9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5`)
 on a `3900x600 m` billboard at `(-1875,264.85,4306.4)`, 250 m beyond
-the western bridge's San Francisco endpoint. Generated record-owned topology is
-`729 meshes / 739 surfaces / 48,389 triangles`; accepted visual
-attachments bring the loaded total to
-`1,278 / 1,288 / 55,067`, with `466` body/shape pairs. Movement remains
-`4/20 m/s` with `30/40 m/s²` acceleration/braking.
+the western bridge's San Francisco endpoint. The frozen generated artifacts
+remain `729 meshes / 739 surfaces / 48,389 triangles`. At load, four Building 1
+and tower placeholder records are intercepted before generic visual/collision
+construction, leaving a `725 / 735 / 48,059` placeholder-free record baseline.
+Building 3's accepted congruent arched wall/roof replacement raises the active
+record-owned triangle total to `48,825` without changing mesh, surface, or body
+counts. The accepted four-component Building 1/tower hero owns
+`13 / 13 / 10,711`; the accepted Isle House Variant C overlay owns
+`7 / 11 / 2,242` without decorative collision. With the unchanged runtime
+attachments and context, all `735` playable rows load as
+`940 meshes / 954 surfaces / 64,118 triangles`, with `466` body/shape pairs.
+These exact-current source replacements are not present in the retained
+`111725` app. Movement remains `4/20 m/s` with `30/40 m/s²`
+acceleration/braking.
 
 The sole current private handoff is
 `build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app`.
@@ -91,14 +100,19 @@ The visual-only pavement skin keeps one filled union for all `427` OSM road/path
 - Initial spawn: the frozen OSM ferry arrival at foot-level local world `[-104.364, 3.457, 786.024]`, yaw `-0.119` radians toward the island interior. The hidden startup settles on collision before the player is revealed.
 - `739` unique source rows: `735` playable and `4` non-playable context, with zero unresolved or duplicate rows.
 - Overlapping playable memberships: `1` land boundary, `22` terrain/shoreline, `427` roads/paths, `80` major areas, `213` buildings, and `2` building parts.
-- `38` generated chunks and `729` physical records. Those generated
-  records own `729` meshes, `739` surfaces, and `48,389` triangles.
-  The accepted live runtime, including facade attachments, instantiates
-  `1,278` meshes, `1,288` surfaces, `55,067` triangles, and `466`
-  nonempty static body/shape pairs. The additional `28` records are
-  visual-only pedestrian pavement skins; facade attachments and pavement skins
-  do not change physical collision. YBI, both bridges, and the SF billboard
-  remain context-only and non-colliding.
+- `38` generated chunks and `729` physical records for all `735` playable rows.
+  Their frozen serialized
+  topology remains `729 meshes / 739 surfaces / 48,389 triangles`. The runtime
+  uses `725 / 735 / 48,825` runtime record topology after intercepting the four
+  Building 1/tower records and replacing the two Building 3 records; the
+  accepted Building 1/tower replacement owns `13 / 13 / 10,711` and four
+  congruent body/shape pairs, while the accepted Isle House Variant C overlay
+  owns `7 / 11 / 2,242` and no decorative collision. The exact-current loaded
+  source project instantiates `940` meshes, `954` surfaces, `64,118` triangles,
+  and `466` nonempty static body/shape pairs. The additional `28`
+  records are visual-only pedestrian pavement skins. Other facade attachments
+  and pavement skins do not change physical collision. YBI, both bridges, and
+  the SF billboard remain context-only and non-colliding.
 - Vegetation stays outside the fixed OSM denominator/record counts: `124` logical instances, all `15` curated GLBs, `19` MultiMesh batches, `20,178` instanced source triangles, and zero added bodies/shapes. The unchanged procedural set retains minimum clearances of `4.017 m` from roads, `7.274 m` from buildings, `3.625 m` from terrain/shoreline overlays, and `25.517 m` from the shoreline edge. The fixed NAIP shrub row's minima are `0.102 m`, `1.109 m`, `14.450 m`, and `19.267 m` respectively, with all 22 points outside the actual road/building polygons and zero rejections.
 - The independent Node audit checks `206,339` road/area sample points against exact land planes and `14,904` exterior-foundation samples; maximum positive foundation gap, roof flatness error, and source-height deviation are all `0`. The runtime's first visible player clearance is `0.000 m`; walk/run stays within `-0.002..+0.001 m`, and jetpack landing/recovery clearance is `0.000 m`.
 - The standalone automated route drove the real player continuously from the ferry through Waterfront Plaza and along Trade Winds Avenue with the current movement tuning: `262.349 m` traveled across 14 terrain-aware checkpoints in about `18.1 s` wall time, with walk/run input, continuous grounding, and zero stalls, recoveries, boundary escapes, or discontinuities; see the retained [normal-route log](evidence/first-playable/final-verification-2026-09-03-105408/logs/42_normal_route_after_export_guard.log).
@@ -185,7 +199,7 @@ APP_BINARY="build/final-verification-staging-YYYY-MM-DD-HHMMSS/Treasure Island F
 
 The packaged smoke starts the exported PCK's normal main scene and fails after
 60 seconds of simulation time if its checks do not finish. It exits nonzero if
-the exact ferry spawn/yaw, approved hash, current `1,278/1,288/55,067`
+the exact ferry spawn/yaw, approved hash, source-current `940/954/64,118`
 topology, grounded player-enable gate, exact `4/20 m/s` speed and
 `30/40 m/s²` response defaults, ambient/camera defaults, live eleven-key
 Poly Haven texture identities/effective repeats/filtering/normals, Space-bound

@@ -1,0 +1,60 @@
+{
+  "schema_version": "ti.d2-1444-croaker-standalone-evidence-contract/1",
+  "status": "technical_evidence_pass_visual_review_pending",
+  "capture_environment": {
+    "fixture": "isolated neutral ground with exact frozen wall/roof baseline and standalone prototype",
+    "live_world_loaded": false,
+    "renderer": "Forward+ / Metal",
+    "device": "Apple M2 (Apple8)",
+    "stock_player_scene": "game/scenes/player/player.tscn",
+    "stock_hud_scene": "game/scenes/ui/hud.tscn"
+  },
+  "same_pose_stills": {
+    "dimensions": [1440, 900],
+    "pairs": 3,
+    "changed_light_pairs": 1,
+    "camera_translation_error_max_m": 0.0,
+    "player_translation_error_max_m": 0.0,
+    "camera_basis_error_max": 0.0000000666465211907052,
+    "files": {
+      "images/01-whole-wsw-before.png": "c14f3a488eab5e4ce462e38c52fa88514b70efeaeccc65dcdc46b3919e314fc7",
+      "images/01-whole-wsw-after.png": "aeb4f250d9a31d64cbfa658077f25c5419bd380485688aa178fba12e62a59ca3",
+      "images/02-wsw-oblique-before.png": "f057942bdd593882e1f0f79a839b6195672a7c2149203d2466e251d3ffcda48d",
+      "images/02-wsw-oblique-after.png": "3a3a21ceed524810f1cd320232d4420d108b6eae9cda76a2159d2886725b18e0",
+      "images/03-wsw-oblique-changed-light-before.png": "e664a8dc86c94f59874de8dc9d68de71f66a3a8b5c0e2935996a27430d73e693",
+      "images/03-wsw-oblique-changed-light-after.png": "d850afbba4f6b51bcfe74b7b1a9002554cbcc307cd911b44f5abeb28d2df66c9"
+    }
+  },
+  "continuous_motion": {
+    "movie": "d2-1444-croaker-wsw-stock-walk.avi",
+    "movie_sha256": "3afe7d57f60d8c2b7330f49fa3bc414d915404a23ea774778407fa58710770b4",
+    "movie_bytes": 6078080,
+    "movie_dimensions": [1280, 800],
+    "movie_frames": 191,
+    "fixed_fps": 30,
+    "review_motion_physics_samples": 240,
+    "review_motion_seconds": 4.0,
+    "input_action": "move_right",
+    "run_action_pressed": false,
+    "horizontal_displacement_m": 15.8673124313354,
+    "direction_dot_public_tangent_abs": 0.940371334552765,
+    "all_samples_grounded": true,
+    "recovery_delta": 0,
+    "player_transform_writes_after_input_began": 0,
+    "camera_orientation_changed": false,
+    "review_sheet": "images/d2-1444-croaker-wsw-motion-review-sheet.png",
+    "review_sheet_sha256": "63aada9bd3ec5f489f4930d46b80bfc41955efc4db449c8c7e7f17618661eefb",
+    "review_sheet_is_derived_non_authoritative": true
+  },
+  "manifests": {
+    "capture-manifest.json": "e802bccc45ec25bd5ecccc2aa79a06a37220ae61f6e44a67c14f9e916711ac0b",
+    "motion-capture.json": "49e861d1d154858e7f0cfbbccdc732e5948be4d32f346978affb6f423a55d61d"
+  },
+  "review_boundary": {
+    "technical_self_check_only": true,
+    "visual_self_grade_performed": false,
+    "recognition_verdict": "pending_independent_bar_raiser_review",
+    "believability_verdict": "pending_independent_bar_raiser_review",
+    "tiling_seam_repetition_and_shimmer_verdict": "pending_independent_bar_raiser_review"
+  }
+}

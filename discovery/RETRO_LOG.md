@@ -5895,3 +5895,3742 @@ No approach selected.
   sealed scope rather than trying to place its future hash inside itself.
 - Label every retained inventory by lifecycle time and serialization before
   comparing its aggregate with a regenerated live-HEAD identity.
+
+## 2026-09-04 — P1 non-Building-1 hero reference readiness
+
+### Building inventory audit (`/root/building_inventory_audit`)
+
+#### What worked well
+
+- Binding each web finding back to an exact frozen source, logical object,
+  receiver, chunk, and geometry hash prevented primary-source research from
+  silently changing the world contract.
+- Architect, owner, government, NPS, HABS, and dated Street View sources supplied
+  complementary identity, design-intent, historical-fabric, and current-appearance
+  evidence while keeping their different rights and evidentiary roles explicit.
+- Cross-checking the two historic hangars exposed the duplicated frozen
+  `ref:nrhp=08000081` error before it could be propagated into recognition labels.
+
+#### What did not work well
+
+- Earlier reference specs relied heavily on panorama observations and did not
+  consistently promote readily available architect/HABS facts that can make a
+  reversible recognizability pass less guessy.
+- Whole-building readiness was easy to overstate for the meshless Isle House
+  parent: accepted high-part work does not make the untouched low part accepted.
+- Some primary HTML surfaces apply bot controls or time out even though their
+  indexed records or direct resources remain reachable, so a single fetch method
+  is not a reliable link-validity verdict.
+
+#### What the team should change next time
+
+- Start every hero packet with the exact receiver boundary and current lifecycle,
+  then research only the cues that can change its next bounded decision.
+- Record identity corrections beside frozen provenance without mutating or
+  laundering the source snapshot.
+- Treat multi-part buildings as one recognition unit with per-part acceptance;
+  require every visible part to have either evidence-backed treatment or an
+  explicit unknown fallback before claiming whole-entity recognition.
+
+## 2026-09-04 — P2 campus/cohort reference readiness
+
+### Building inventory audit (`/root/building_inventory_audit`)
+
+#### What worked well
+
+- Cross-checking the frozen strings against federal transfer records separated
+  stable game provenance from real-world identity: it exposed the uncertain
+  “Advanced Culinary Dormitory” crosswalk, the overbroad whole-station identity
+  on Building 450, and legitimate address drift for Buildings 442 and 600.
+- Combining exact panorama IDs/dates with owner, DOL, Navy, fire-department, YMCA,
+  and TIDA records yielded four immediately actionable visual units without
+  inventing facade details for the five units hidden from public view.
+- Recording negative observations and demolition/currentness evidence as explicit
+  nonclaims kept construction fencing, site-level demolition, and historic signs
+  from being laundered into current facade facts.
+
+#### What did not work well
+
+- Public-road imagery cannot see several interior-campus elevations, and existing
+  project records did not contain authoritative side-specific sheets for Buildings
+  368, 442, 450, 487–489, or 29B.
+- Some authoritative Navy/GAO resources reject command-line validation even when
+  their indexed documents are readable, so HTTP status alone cannot serve as a
+  source-quality or availability verdict.
+- Program names, postal addresses, building-number series, and site-wide lifecycle
+  notices are easy to misread as one-to-one footprint evidence; two P2 records
+  remain deliberately unresolved rather than receiving plausible-looking art.
+
+#### What the team should change next time
+
+- Resolve exact footprint/building-number crosswalks before researching facade
+  style, especially for campus compounds or source names carrying uncertainty.
+- Preserve an explicit historic/current split whenever a recognition cue comes
+  from an older official photograph; current survival never proves that old signs,
+  entrances, or window schedules remain unchanged.
+- Advance the visually ready subset immediately, while giving each blocked unit
+  one precise autonomous records-search path and only a narrow later human request.
+
+## 2026-09-04 — Building 1 hero-shell supersession
+
+### Building 1 quality audit and implementation (`/root/building1_quality_audit`)
+
+#### What worked well
+
+- Starting from the exact frozen `r16681702` and separately keyed
+  `w1222720021` plans made it possible to replace the visibly false slab while
+  preserving every horizontal coordinate and both recognition identities.
+- Intercepting all four records before generic construction let the visible
+  hero and its collision supersede the placeholders together, while retaining
+  four body/shape owners and correct wall-only spray ownership.
+- Combining geometry by material kept the recognition grammar readable at
+  `11` meshes while a focused physics contract proved real roof-tier, tower,
+  and spray hits. Original-detail Metal captures then exposed and corrected a
+  weak first tower camera before handoff.
+
+#### What did not work well
+
+- The first tower evidence camera put a broad blank center mass in the
+  foreground; a second original-detail inspection was needed to establish a
+  useful separately reviewable tower view.
+- Several legacy integration tests treated capture-time Building 1 attachment
+  counts and lifecycle labels as immutable current runtime truth. They failed
+  correctly after supersession but initially obscured whether the new hero or
+  only stale expectations were at fault.
+- The bounded authoritative description does not establish rear/east cadence,
+  exact vertical dimensions, or literal relief geometry, so those areas remain
+  deliberately austere or abstract rather than invented.
+
+#### What the team should change next time
+
+- Establish a first-class runtime-replacement seam and result-owned body/shape
+  accounting before the first hero building, rather than teaching the generic
+  builder about one replacement after attachments already exist.
+- Label evidence contracts as historical or current explicitly; never hash a
+  mutable runtime integrator into an otherwise sealed historical evidence set.
+- Require original-detail review of ordinary, end, separate-sub-entity, rear
+  truth, and changed-light cameras before reconciling global topology pins or
+  requesting independent acceptance.
+
+## 2026-09-04 — Phase 1 facade-recognition catalog and compiler
+
+### Recognition infrastructure (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Deriving the catalog from the immutable receiver inventory and verified chunk
+  records made the 213 physical units, 214 direct receivers, 215 source records,
+  and Isle House composite semantics mechanical rather than hand-maintained.
+- Keeping receiver completeness, game distinctiveness, reference recognizability,
+  and as-built fidelity as independent claims prevented accepted legacy receiver
+  content from becoming an unsupported whole-building verdict.
+- Compile-time source/package checks, mutation tests, and a Godot-only registry
+  reader exposed stale bytes, missing assets, invalid runs, and evidence-path
+  leakage without changing runtime world behavior.
+
+#### What did not work well
+
+- The first seed did not yet model ordinary-player capture contracts or external
+  identity corrections; both had to be added before the final deterministic run.
+- Legacy acceptance metadata is heterogeneous: nine adapters expose structured
+  run scopes, while three scene-based adapters preserve only exact receiver
+  binding plus hashed layout/script/scene assets in this registry.
+- The runtime registry is intentionally unconsumed in Phase 1, so it proves a
+  package-safe integration seam but not loader or visual parity.
+
+#### What the team should change next time
+
+- Normalize the three scene-based legacy scopes from their accepted layout
+  contracts in a separately reviewed migration, without inferring whole-building
+  recognition or rewriting the original acceptance evidence.
+- Integrate one generic registry loader only after topology, transform, material,
+  collision, navigation, spray ownership, and ordinary-camera parity tests exist.
+- Advance buildings in reference-backed batches; keep unresolved identities local
+  to their units and add a narrow `HUMAN.md` dependency only after bounded
+  autonomous research genuinely cannot resolve them.
+
+## 2026-09-04 — Building 1 hero independent recognition review
+
+### Independent Building 1 review (`/root/independent_b1_review`)
+
+#### What worked well
+
+- Inspecting all rendered frames before opening the manifest or implementation
+  contract prevented metadata, declared bay counts, and source IDs from becoming
+  substitutes for visual recognition.
+- Separate verdicts for `r16681702` and `w1222720021` let the clearly recognizable
+  main building advance while keeping the tower's missing ordinary-view proof
+  honestly pending.
+- A frozen Building 2 / Building 3 / generic-block confusion set made the top-1
+  judgment depend on massing and facade families rather than color or island
+  position.
+
+#### What did not work well
+
+- The only tower-sized frame used an elevated diagnostic camera; the two distinct
+  ordinary views reduced the tower to a small silhouette and could not prove its
+  separate recognition contract.
+- The end relief proxies are too abstract to count as the documented figure and
+  airplane, and broad rear/end planes remain visually sparse even where that
+  restraint is honest.
+- Capture metadata can prove exact current bytes and camera positions, but it
+  cannot rescue a recognition cue that is illegible in the pixels.
+
+#### What the team should change next time
+
+- Design sub-entity evidence around the same ordinary-player gate as the parent
+  building: two distinct grounded views, useful projected size, and two visible
+  primary-source cues before requesting review.
+- Keep diagnostic aerial/close views for topology and defect inspection only;
+  never let them satisfy ordinary-play recognition.
+- Promote accepted main-unit and rejected sub-entity states independently in the
+  catalog/ledger so one result cannot silently absorb the other's denominator.
+
+## 2026-09-04 — Facade recognition Phase 1 independent audit
+
+### Independent infrastructure review (`/root/building_inventory_audit`)
+
+#### What worked well
+
+- Re-deriving the population from the source CSV, receiver inventory, and all 38
+  chunk files independently confirmed the exact 213-unit / 215-source /
+  214-receiver / 4,971-run contract and the Isle House and tower edge cases.
+- Running the compiler check, Node mutation suite, packaged Godot contract, and
+  full runtime integration separated correct deterministic seed behavior from
+  untested future-loader assumptions.
+- Comparing adapter metadata to live dispatch exposed stale Building 1 state that
+  file-existence and hash checks could not detect.
+
+#### What did not work well
+
+- The registry's green package-boundary check examined registry strings but not
+  the 40 referenced runtime assets; 11 of those assets still contain source-only
+  discovery paths.
+- A unit-wide legacy/placeholder mode was too coarse for Isle House, whose high
+  and low receivers have different runtime states.
+- The authored JSON Schema was hashed and lightly inspected but never executed
+  against the catalog, allowing schema drift to receive a passing report.
+
+#### What the team should change next time
+
+- Reconcile active runtime dispatch before sealing adapter metadata; existence of
+  an old accepted asset does not prove that the current world still invokes it.
+- Validate the transitive runtime dependency closure and use sanitized runtime
+  projections instead of shipping authoring/review locators through game assets.
+- Model runtime state per receiver for multipart units and execute both structural
+  schema validation and cross-file semantic validation in the standard check.
+
+## 2026-09-04 — P1 existing-live whole-building revalidation evidence
+
+### Exact-current evidence capture (`/root/building1_quality_audit`)
+
+#### What worked well
+
+- Freezing each target's packet-derived confusion set and recognition gate in the
+  harness before capture kept technical camera iteration separate from art
+  judgment and prevented the images from redefining their own acceptance test.
+- Settling the visible stock player through real CharacterBody physics, retaining
+  the default `70 degree` FOV and `5.5 m` spring arm, and requiring exact
+  viewport-center receiver/source hits produced auditable ordinary-play evidence
+  without touching any live facade or massing implementation.
+- Treating Isle House as one composite while targeting its high and untreated low
+  collision receivers separately made the known low-part gap visible and
+  mechanically reviewable instead of hiding it behind accepted high-part work.
+
+#### What did not work well
+
+- Receiver metadata is intentionally duplicated on record owners and collision
+  bodies, so the first binding query counted two nodes until record owners were
+  filtered by their `feature_kind` metadata.
+- The initial Isle whole-object pose used the stock rig but its steep upward pitch
+  lowered the actual camera to `0.166 m` above local ground. Image dimensions and
+  LOS alone were therefore insufficient to prove an ordinary player-height view.
+- JSON number arrays parse as floats in Godot, so direct equality against integer
+  viewport/dimension arrays made the first integrity-contract run fail despite
+  correct values; explicit integer normalization was required.
+
+#### What the team should change next time
+
+- Provide a shared record-owner lookup that distinguishes generated record roots
+  from metadata-mirroring collision bodies, rather than reimplementing this
+  filter in every capture harness.
+- Make minimum actual camera height, uncompressed spring length, physics clearance,
+  first-hit receiver identity, and projected whole-object bounds standard gates
+  for every ordinary-camera recognition packet.
+- Keep technical inspection and recognition review as separate signed records:
+  the executor may reject a corrupt or non-ordinary frame, but only an independent
+  reviewer may score cues against the frozen confusion set.
+
+## 2026-09-04 — Building 1 tower grounded-evidence correction
+
+### Capture-only repair (`/root/independent_b1_review`)
+
+#### What worked well
+
+- Treating the independent rejection as an evidence defect first avoided an
+  unnecessary tower geometry change; two source-run-relative ground poses expose
+  the existing tower at useful scale while preserving every reviewed runtime
+  hash and topology count.
+- Physics grounding, playable-boundary containment, exact wall LOS, projected
+  full-tower bounds, stock-camera pins, and view separation make the correction
+  auditable without letting those mechanical facts stand in for recognition.
+- Freezing the selected run/offset pairs after bounded search made subsequent
+  native Metal captures fast and byte-repeatable while retaining their derivation.
+
+#### What did not work well
+
+- The first aim-pitch sign pointed LOS into the ground, so apparently nearby
+  candidates were invalid until the camera convention was corrected.
+- A later positive-pitch candidate kept the player physics-grounded but lowered
+  the spring-arm lens to roughly `0.02 m` above terrain. An explicit camera-height
+  gate invalidated it before seal; the retained neutral-pitch lenses are `2 m`
+  above local ground.
+- Pure projected-bounds scoring ignored vegetation and player-mesh occlusion;
+  the maximum-scoring candidates were not automatically the clearest images.
+- Godot JSON numbers deserialize as floats, so direct comparisons with integer
+  viewport, dimensions, and topology literals caused false contract failures
+  until values were normalized explicitly.
+
+#### What the team should change next time
+
+- Gate candidate scoring on visible occlusion and exact first-hit identity before
+  optimizing projected size, then freeze accepted poses relative to source runs.
+- Standardize typed JSON comparison helpers in capture-integrity contracts so
+  numeric representation cannot masquerade as evidence drift.
+- Preserve the separation between builder framing checks and independent visual
+  acceptance; a technically valid correction must remain pending until another
+  reviewer scores the actual pixels.
+
+## 2026-09-04 — Phase 1 facade-recognition audit repair
+
+### Registry/schema/package-boundary repair (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Comparing the catalog to exact-current world dispatch, rather than only to the
+  frozen inventory, cleanly replaced the obsolete Building 1 adapter record with
+  separate main-building and observation-tower hero receiver contracts.
+- Modeling adapter state on each direct receiver exposed Isle House's truthful
+  mixed state: the high part remains legacy-adapted while the low part is still a
+  generated placeholder.
+- A small dependency-free JSON-Schema evaluator plus targeted mutations proved
+  nested property, enum, cardinality, and local-reference constraints without a
+  network or package-manager dependency.
+- Recursively following `res://` references turned the earlier shallow green
+  package check into an explicit partition: clean assets remain runtime paths,
+  while source-bearing closures become pathless hash-bound projections.
+
+#### What did not work well
+
+- The original Phase 1 seed treated a historical inventory attachment as live
+  Building 1 dispatch and therefore reported 12 legacy adapters instead of 11
+  legacy plus two exact-current hero receiver contracts.
+- Direct registry-string inspection missed contamination in referenced text
+  assets; the repaired closure audit currently projects 12 of 45 unique direct
+  inputs and finds 13 source-bearing assets across the wider dependency graph.
+- A unit-wide adapter label hid the untreated Isle House low receiver, and the
+  authored JSON Schema was initially only hashed and spot-inspected rather than
+  executed against the instance.
+
+#### What the team should change next time
+
+- Reconcile a registry against the live dispatch seam before sealing it, and
+  retain source inventory acceptance only as historical metadata when runtime
+  supersession is proven.
+- Make recursive dependency-closure inspection a standard gate for every
+  runtime registry and package manifest; never let a clean top-level path imply
+  a clean package transitively.
+- Keep runtime/content state at receiver granularity and derive unit summaries,
+  especially for composite footprints and separately reviewable sub-entities.
+- Require at least one fail-closed mutation for every independently reported
+  defect before requesting re-review.
+
+## 2026-09-04 — P1 existing-live independent whole-entity review
+
+### Independent P1 reviewer (`/root/independent_p1_review`)
+
+#### What worked well
+
+- Opening all six original PNGs before the packet and manifest made the review
+  reject cues that existed only in metadata, especially Building 3's nominal
+  upper band and Isle House's accepted-but-invisible high-side modules.
+- Freezing close decoys before review made Hawkins' decision depend on its own
+  stepped mass and ground-zone organization; the adjacent Isle House tower,
+  tiny sign, white color, and map position could all be explicitly excluded.
+- Running the checksum ledger and four focused contracts only after visual
+  grading separated exact-current provenance from recognizability judgment.
+
+#### What did not work well
+
+- The available browser-automation skill named an `agent-browser` executable
+  that is not installed, so official architect photography could not be
+  inspected interactively through that workflow; the sealed packets and
+  official-page text remained sufficient for this bounded decision.
+- Building 3's nominal second facade cue is too low-contrast to read in either
+  ordinary frame, even though its focused implementation contract proves that a
+  band node exists.
+- Isle House's whole view looks toward a low-information high side, while its
+  useful low-first view correctly exposes an entirely generic low receiver.
+
+#### What the team should change next time
+
+- Make each acceptance camera prove the actual cue pixels before sealing it;
+  runtime node existence and projected object size are necessary but not
+  sufficient.
+- Frame multipart buildings so at least one ordinary view shows the high/low
+  relationship and another intentionally challenges the weakest receiver.
+- Keep neighboring heroes inside natural context, but record target bounds and
+  require reviewers to state explicitly which adjacent masses were excluded
+  from the identity judgment.
+
+## 2026-09-04 — Building 1 tower grounded independent re-review
+
+### Independent tower reviewer (`/root/independent_tower_rereview`)
+
+#### What worked well
+
+- Fixing the blind description from both original-detail PNGs before opening the
+  manifest kept projected bounds, source IDs, and rooftop relationship from
+  deciding recognizability.
+- Comparing the target against same-building opaque roof masses as well as two
+  non-target landmark families made the top-1 decision depend on the combined
+  polygonal-glazing, projected-platform, balustrade, and pyramidal-cap grammar.
+- Running exact-current and 213-unit registry contracts only after the visual
+  verdict cleanly separated recognition judgment from provenance/integrity.
+
+#### What did not work well
+
+- The target occupies only about `108–121 px` in width, so exact sash/light
+  counts, literal flute/rib detail, and the NPS-described south stair cannot be
+  reviewed reliably from these ordinary views.
+- The large austere Building 1 mass partly occludes the platform and dominates
+  both compositions, increasing the care needed to avoid using rooftop context
+  as an identity shortcut.
+- Historical documentation treats the control tower as part of Building 1,
+  while the project deliberately scores the nested OSM way as a separate
+  physical unit; the review must state both truths to avoid accidental merging.
+
+#### What the team should change next time
+
+- Preserve the two current grounded angles as the minimum tower acceptance set;
+  do not substitute elevated diagnostics or farther whole-building frames.
+- For other small rooftop entities, freeze a same-building mass confusion set
+  before capture and require at least two non-location structural cues at more
+  than `100 px` projected extent.
+- Keep fine as-built details as explicit nonclaims when higher-order structural
+  families already carry identity; do not inflate inferred detail merely to
+  make it visible in evidence.
+
+## 2026-09-04 — Phase 1 facade-recognition repair re-review
+
+### Independent infrastructure reviewer (`/root/independent_tower_rereview`)
+
+#### What worked well
+
+- Re-deriving the denominator from CSV, relationship records, and all hashed
+  chunks caught any opportunity for a green report to hide a changed inventory.
+- Reconciling every source-audit occurrence to either an exact clean runtime
+  asset or a pathless projection tested the honesty of the package partition,
+  not merely the absence of forbidden strings in the registry JSON.
+- Running separate schema mutations and two standalone compiler checks made it
+  possible to distinguish actual schema execution and byte determinism from
+  test prose.
+- The full runtime and Building 1 hero contracts established that the repaired
+  metadata seam did not regress current gameplay or collapse the tower.
+
+#### What did not work well
+
+- Dirty dependency closures can be very broad: one legacy asset reached `133`
+  source-tree assets through transitive references. Unique counts and occurrence
+  counts had to be reported separately to avoid a misleading projection total.
+- The project tree contained concurrent Building 3 work during this review, so
+  global dirty-tree inspection could not assign every change to Phase 1.
+- The registry deliberately cannot execute 12 projected direct inputs yet; a
+  bare PASS without the integration qualifier would overstate readiness.
+
+#### What the team should change next time
+
+- Keep package reports split into direct occurrences, unique direct inputs,
+  complete source closure, and emitted clean closure; each answers a different
+  integrity question.
+- Require runtime integration to replace each projection with a package-safe
+  executable contract one adapter at a time, with parity tests before removing
+  the corresponding legacy path.
+- Re-run exact-current hashes and the four core checks immediately before a
+  Phase 1 commit because concurrent runtime work can invalidate dispatch pins.
+
+## 2026-09-04 — Facade registry Phase 1.5 loader preparation
+
+### Versioned topology-neutral loader (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Pinning catalog, compiler, registry, adapter-contract, and loader API versions
+  made unknown forward contracts fail before asset resolution or lookup state was
+  exposed.
+- Compiling 13 receiver plans into six package-safe and seven hard-disabled
+  entries let clean work continue without inventing executable replacements for
+  the 12 pathless source-bearing inputs.
+- Loading allowlisted scripts and packed scenes as resources without
+  instantiation proved the integration seam is useful while keeping scene-tree
+  topology unchanged.
+- A concurrent Building 3 edit caused the exact runtime-asset hash check to fail
+  immediately; regenerating only after that file settled demonstrated that the
+  boundary detects real drift rather than trusting an earlier green report.
+
+#### What did not work well
+
+- The first generic dependency walker treated allowlist directory prefixes such
+  as a game-resource root as missing files. Directory prefixes and concrete
+  resource dependencies needed distinct handling before the loader's own closure
+  could be proved clean.
+- Seven receiver plans still cannot be migrated through the loader because their
+  current executable/config pairs transitively carry source-only metadata. Their
+  clean material subsets are insufficient to prove behavior parity by
+  themselves.
+- Version and hash pins intentionally cause multiple generated hashes to change
+  together; tests must update only after concurrent runtime inputs are stable.
+
+#### What the team should change next time
+
+- Normalize one disabled adapter at a time into a purpose-built package-safe
+  executable/config pair, then independently prove semantic, transform,
+  topology, collision, navigation, spray, and visual parity before enabling its
+  receiver plan.
+- Keep resolution and instantiation as separate capabilities. A loader may parse,
+  index, hash-check, and resolve a resource without receiving authority to add it
+  to the world.
+- Treat generated version contracts as release artifacts: reject unknown fields
+  and versions, preserve deterministic hashes, and re-run the full mutation set
+  whenever their vocabulary expands.
+
+## 2026-09-04 — Isle House low-part standalone readiness prototype
+
+### Low-part prototype builder (`/root/building_inventory_audit`)
+
+#### What worked well
+
+- Binding the design to exact receiver `w1282547787` and its frozen 13-run
+  geometry before authoring motifs kept the public Avenue of the Palms and
+  Garden Walk sides distinct from the unobserved NNW side and shared high/low
+  interface.
+- Separating ten shallow warm-brick live-work fields from eight complete inset
+  entry-gallery modules made containment, endpoint clearance, and topology
+  independently testable without giving decorative geometry collision,
+  navigation, or spray ownership.
+- The official architect project, interview, and three gallery-image URLs all
+  returned HTTP 200 on 2026-09-04; source-supported cues and reversible
+  production inferences remain explicitly separate in the discovery mapping.
+- A package-safe config and fail-closed factory provide a clean future adapter
+  seam while leaving `world_chunk_builder.gd`, the live Isle House high adapter,
+  and the general recognition registry untouched.
+
+#### What did not work well
+
+- The browser-automation skill's `agent-browser` executable was unavailable, so
+  gallery observations had to rely on the official architect pages and exposed
+  image metadata rather than an interactive browser review.
+- Public references do not establish the NNW, rear/shared interface, roof, or
+  upper low-volume band; those regions correctly remain undecorated rather than
+  being filled with plausible but unsupported detail.
+- This bounded batch proves deterministic standalone geometry and contract
+  boundaries only. It does not provide an in-world capture, independent visual
+  review, or recognition acceptance for the low receiver or whole composite.
+
+#### What the team should change next time
+
+- Integrate only through `matches_target(record)` followed by `configure(record)`
+  after an owner validates the exact receiver record; do not broaden dispatch to
+  the parent composite or high receiver.
+- Capture Avenue and Garden Walk grounded views after integration and require an
+  independent reviewer to distinguish the target from generic contemporary
+  podium/live-work facades using at least two non-location cues.
+- Keep the NNW side, upper band, roof, corners, and shared interface protected
+  until new public evidence supports a bounded follow-up mapping.
+
+## 2026-09-04 — Building 3 arched-hangar recognition repair
+
+### Exact-footprint runtime massing and pending-review evidence (`/root/independent_p1_review`)
+
+#### What worked well
+
+- Treating corrected NPS NRHP `08000083` as identity/structural authority while
+  preserving frozen OSM `08000081` only as explicitly incorrect provenance
+  removed the earlier identity ambiguity without rewriting source bytes.
+- Intercepting both wall and roof before generic construction made it possible
+  to replace the flat visible geometry and collision together. Subdividing the
+  source wall runs and roof triangles in place preserved every X/Z point and
+  terrain-following wall bottom while producing congruent crown, spray, and
+  roof-landing surfaces.
+- One shared reversible profile produced a broad arched crown and four localized
+  tapered corner shoulders. Remapping the ENE field to the exact same samples
+  avoided a floating facade above lower eaves.
+- Native Metal capture exposed the upper band's initial disappearance under
+  normal frontal light before the packet was sealed. A stepped pale projection
+  plus a narrow neutral inferred occlusion groove made the cue legible in
+  grayscale without treating an invented paint color as observed fact.
+- Focused deterministic geometry/topology/collision/spray tests, the full real-
+  scene runtime integration, and a separate evidence-integrity test all pass.
+  The measured topology is `236 + 675` Building 3 triangles, an exact `+766`
+  delta with unchanged mesh/surface/body/shape counts and loaded total
+  `931 / 941 / 60,544 / 466`.
+
+#### What did not work well
+
+- Direct equality between `ArrayMesh.get_faces()` and
+  `ConcavePolygonShape3D.get_faces()` was too strict: Godot's collision roundtrip
+  changed coordinates by roughly `1e-4 m`. Ordered `Vector3.is_equal_approx`
+  comparison preserved the congruence proof without hiding material drift.
+- The first corner-profile frame averaged opposite end points; that made one
+  nominal pylon sample stop below its configured top. Computing pylon influence
+  from each exact source corner fixed all four anchors while retaining the
+  average frame only for the broad crown axis.
+- Three nearby Batch 02/03/04 contracts now progress through the updated
+  Building 3 pins but stop at their pre-existing “Museum gained content” guard
+  because concurrent Building 1 hero work intentionally changed that target.
+  This batch did not weaken or rewrite the B1 guard.
+
+#### What the team should change next time
+
+- Keep vertical landmark replacements as paired wall/roof adapters with a
+  single sampled profile and fail before generic collision; never layer a
+  recognizable roof over a hidden flat landing plane.
+- Use a separate historical-before packet and current-after packet rather than
+  mutating old imagery. When runtime work supersedes a target, update the old
+  evidence contract to check declared historical hashes rather than falsely
+  demanding that old executable bytes remain current.
+- Have a reviewer who did not build or capture this repair inspect all four
+  original-detail frames against the frozen `w24274434` / `r16681702`
+  confusion set. Only that review may change the pending recognition state.
+
+## 2026-09-04 — Building 3 hero massing independent recognition review
+
+### Blind pixel-first review (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Inspecting both new frames and both immutable before frames at original detail
+  before reading any labels or manifests made the silhouette improvement
+  independently testable instead of accepting the builder's declared intent.
+- The curved crown/flanking shoulder family plus one dominant opening survived a
+  no-color comparison and separated Building 3 from Building 2's twin-grid
+  monumental end, Building 1's stepped crescent, and the former generic slab.
+- Keeping the band as a third cue—and its dark groove explicitly as inferred
+  depth rather than observed paint—prevented one reversible art device from
+  carrying the recognition decision.
+- Focused geometry, facade, evidence, receiver/LOS, collision, spray, roof, full
+  runtime, and 213-unit registry checks bound the favorable visual judgment to
+  exact current bytes without using mechanical success as the art verdict.
+
+#### What did not work well
+
+- Both acceptance views remain on the ENE approach. Their azimuth change is
+  sufficient for the gate, but pylon taper and low pyramidal tops are subtle and
+  hidden-side facade schedules remain deliberately unproved.
+- The broader legacy suite is not exact-current: several live-runtime tests
+  retain `59,778`-triangle oracles after the world moved to `60,544`, and two
+  tests sample an asynchronous load after only two frames.
+- Batch 02/03/04 controls still require the now-active Building 1 hero receiver
+  to be a generic unattached “Museum” negative. Those checks reach and pass the
+  new Building 3 signature before failing their obsolete orthogonal guard.
+
+#### What the team should change next time
+
+- Centralize the current runtime topology oracle and wait for explicit
+  `world_ready`/`world_failed` with a bounded timeout; do not mechanically
+  rewrite historical capture topology that remains truthful for its date.
+- When one landmark supersedes a generic placeholder, update every live negative
+  control to assert the new exact owner while preserving a genuinely unchanged
+  comparator.
+- Continue pixel-first independent review and report numerator effects separately
+  from test-suite health: this unit earns exactly `+1`, while stale global gates
+  remain real release debt rather than an identity-undermining caveat.
+
+## 2026-09-04 — Phase 1.5 facade registry independent review
+
+### Versioned loader and adapter-contract reviewer (`/root/building_inventory_audit`)
+
+#### What worked well
+
+- Re-deriving units and receivers directly from the inventory and 38 hashed
+  chunks independently reproduced 213 units, 215 source records, 214 receivers
+  and 4,971 runs rather than trusting emitted count fields.
+- Running the compiler check, both Node suites and both Godot contracts twice
+  produced identical registry, adapter-contract and loader-snapshot hashes.
+  Nineteen extra compatibility/path mutations all failed closed.
+- Traversing from each of the loader, adapter-contract and registry roots
+  reached 71 packaged assets with no discovery, evidence, URL or workstation
+  dependency. The topology-neutral resource-resolution test added no nodes.
+- Comparing the declared plans with actual world-builder dispatch, rather than
+  checking only listed file hashes, exposed a current Building 3 dependency
+  omission that every green generated-artifact test shared.
+
+#### What did not work well
+
+- The compiler regenerated current Building 3 facade and world-builder hashes,
+  but the canonical inventory still described the former flat-massing-limited
+  attachment. This let an incomplete B3 asset set remain classified ready even
+  though the live wrapper now replaces both wall and roof.
+- The checked-in version tests assert all exact values but mutation-test only a
+  representative subset of compatibility fields. The omitted predicates were
+  safe in this review, but that conclusion required an ad hoc 19-case pass.
+- A passing full runtime test proved the unused loader caused no regression; it
+  could not prove that every plan described the already-running target-specific
+  dispatch. Package safety and exact-current adapter completeness remain
+  separate gates.
+
+#### What the team should change next time
+
+- Reconcile every ready plan against the actual first-match world-builder path,
+  including wrapper-owned wall/roof, collision and spray semantics, before
+  calling the plan ready for integration.
+- Treat a newly live but source-bearing wrapper/config as hard-disabled until
+  its canonical attachment and package-safe normalization are complete; do not
+  preserve a ready count by hashing only a nested legacy facade.
+- Keep the complete compatibility mutation matrix in a checked-in focused test,
+  and require a ready-plan assertion for the exact currently dispatched wrapper
+  whenever runtime routing changes.
+
+## 2026-09-04 — Visual bar-raiser review
+
+### Recognizability and believability reviewer (`/root/visual_bar_raiser`)
+
+#### What worked well
+
+- Inspecting every available ordinary-player image at original resolution before
+  relying on prior verdict prose made it possible to preserve valid recognition
+  decisions while identifying flat, diagrammatic construction that the former
+  binary gate did not catch.
+- Separating silhouette, facade depth, material/value hierarchy, visual interest,
+  and player-distance readability exposed different next actions: Building 1
+  needs an entrance/reveal hierarchy, while Building 3 needs one convincing
+  recessed hangar-door assembly rather than more general detail.
+- Treating Hawkins as a positive calibration target showed that evidence
+  restraint and visual interest are compatible when a stepped mass, coherent
+  ground zone, and material response reinforce each other.
+- Limiting generative imagery to neutral micro-surface candidates produced a
+  small testable A/B proposal instead of allowing image generation to replace
+  exact massing, facade modules, source truth, or semantic seam review.
+
+#### What did not work well
+
+- The Isle House low prototype has no rendered evidence, so its eight identical
+  assemblies could be evaluated only as a concept and repetition risk; no
+  visual acceptance or rejection is possible yet.
+- Building 1 and Hawkins retain valid target-specific evidence, but their image
+  packets predate later isolated runtime/router edits. This review can direct a
+  correction but cannot issue a new exact-current byte-bound acceptance record.
+- Existing material parameters and deterministic shaders cannot establish
+  perceived surface quality by inspection alone. Their subtlety largely
+  disappears in the ordinary captures, which reinforces the need for fixed-pose
+  changed-light and motion evidence.
+
+#### What the team should change next time
+
+- Add the believability/visual-interest checklist after strict identity and
+  provenance review but before promotion; do not let it alter an existing
+  recognition numerator unless new evidence actually undermines identity.
+- Require builders to state one focal hierarchy and the smallest high-leverage
+  depth change before adding motifs or material noise. Review the result in
+  grayscale, changed light, and a short walking sweep.
+- For generated materials, run one control-versus-candidate receiver pilot at a
+  recorded metre scale and reject baked light, semantic joins, macro grids,
+  shimmer, or weaker entrance/window contrast before creating a broader family.
+
+## 2026-09-04 — GenAI homogeneous material viability pilot
+
+### Texture pilot executor (`/root/genai_texture_pilot`)
+
+#### What worked well
+
+- Using the built-in image generator for exactly two homogeneous albedos kept
+  the experiment bounded and avoided uploading any reference imagery or
+  pretending a surface tile could encode whole-building identity.
+- The unblended `3×3` proof caught repeated macro blotches in the first stucco
+  output that were not disqualifying in the attractive isolated square; one
+  targeted edit removed the distracting pattern without broad prompt drift.
+- A meter-UV Godot lab with the current Building 1 and Isle House controls made
+  scale, color, mip filtering, direct light, and changed-light behavior visible
+  before any runtime attachment. The brick and selected stucco remained
+  readable without an ordinary-distance hard seam.
+- Explicit `.import` settings, source hashes, scalar roughness, and a no-live-
+  reference contract turned the image experiment into reproducible project
+  evidence rather than an untracked visual suggestion.
+
+#### What did not work well
+
+- Godot initially imported the PNGs without mipmaps despite their use in 3D
+  materials; relying on automatic Detect 3D was insufficient, and the focused
+  contract correctly failed before capture.
+- The first front-light pose illuminated the panels poorly, making the brick
+  comparison almost black. A brighter ambient floor and corrected sun azimuth
+  were required before the A/B image became useful.
+- The generated albedos needed reversible material tints under Godot lighting.
+  Their isolated PNG color was not an adequate predictor of ACES/linear-space
+  appearance.
+- This lab uses meter-authored UVs. Generic generated walls, exact-chain
+  overlays, hero meshes, and primitive facade modules still expose incompatible
+  UV conventions, so the pilot cannot safely be wired globally as one material.
+
+#### What the team should change next time
+
+- Treat mipmaps, repeat, anisotropic filtering, physical repeat, tint, and a
+  changed-light receiver proof as required generated-material metadata, not
+  post-generation polish.
+- Standardize facade UV units or compile an explicit receiver-convention scale
+  into each material instance before any shared-library rollout.
+- Generate a small shared material-family library and reserve geometry,
+  complete modules, signs, and masks for recognition. Do not generate 213
+  unique whole-elevation bitmaps or unrelated PBR channels.
+- Keep the one-targeted-iteration budget: if a candidate still has obvious
+  seams, lighting, objects, or macro repetition after that pass, reject it and
+  continue with another family rather than polishing indefinitely.
+
+## 2026-09-04 — GenAI material pilot independent bar-raiser review
+
+### Pixel-first material reviewer (`/root/visual_bar_raiser`)
+
+#### What worked well
+
+- Reviewing both original `1254x1254` sources before the labeled lab panels
+  exposed the candidates' real boundaries: stucco is a quiet mineral microfield,
+  while brick carries a coherent running-bond architecture-scale pattern.
+- The unblended `3x3` and fixed meter-panel A/B made it possible to honor the
+  owner's progress-over-perfect-tiling threshold. Minor discoverable edge phase
+  was separated from the distracting grid or broken-course defects that would
+  justify rejection.
+- Comparing against flat current controls showed that brick provides the larger
+  immediate believability gain, while stucco is a subtler shared-family
+  improvement and cannot repair Building 1's facade hierarchy.
+- A fresh focused contract plus repository reference search confirmed that the
+  pilot changes no live scene, receiver, collision, navigation, spray, or
+  facade assignment.
+
+#### What did not work well
+
+- Three still images cannot prove motion stability. Neither shimmer nor a
+  crawling repeat grid can be accepted until a live walking sweep exists.
+- The `6 m` lab panel shows only two horizontal source repeats. The brick's mild
+  cell cadence may become more visible across a much longer facade, especially
+  if receiver UV phase restarts on source-run boundaries.
+- The lab contains no real windows, trim, entrance, or corner, so its brighter
+  generated materials cannot yet prove that they preserve architectural value
+  hierarchy on an exact receiver.
+- Runtime isolation is not the same as package exclusion: the `all_resources`
+  export preset can include unused pilot resources in a fresh PCK.
+
+#### What the team should change next time
+
+- Unify metre-based UV phase first, then run exactly one reversible brick A/B on
+  a source-confirmed receiver with a long ordinary view, close oblique,
+  changed-light match, and short walking sweep.
+- Start brick near a `2.5 m` cell with a darker, less orange tint; keep stucco at
+  the already-proved `3.0 m` cell and defer its live trial until Building 1's
+  entrance/reveal geometry is stable.
+- Before the next final export, either deliberately promote the selected shared
+  material or exclude/move unselected pilot resources so test-only pixels do
+  not silently increase the package.
+
+## 2026-09-04 — Building 1 bounded public-front believability pass
+
+### Building 1 quality executor (`/root/building1_quality_audit`)
+
+#### What worked well
+
+- Freezing the ordinary stock-player camera and changed-light poses before any
+  runtime edit produced exact same-pose `1440x900` pairs instead of relying on
+  visually similar historical frames.
+- Separating the public front into real reveal, frame, pilaster, base, canopy,
+  and entrance depth bands made the change testable through deterministic
+  mesh topology while leaving the accepted source plan, massing, collision
+  faces, spray ownership, and reachable roof tiers unchanged.
+- A dedicated production-inference config and three scalar-only materials kept
+  the pass reversible and prevented an unrelated GenAI texture pilot from
+  entering the live Building 1 candidate before its own acceptance gate.
+- Replacing the high-contrast end bars with a quiet neutral relief-location
+  field removed the unintended cruciform read without inventing literal
+  sculpture or making an as-built claim.
+
+#### What did not work well
+
+- The first after-capture run rejected technically identical frozen view
+  definitions because direct JSON dictionary equality distinguished decoded
+  numbers from in-memory numeric variants. The images and LOS were valid, but
+  the harness needed recursive numeric-tolerance comparison before it could
+  seal the manifest.
+- The earlier hero contract correctly reported the new topology and relief
+  metadata as drift, but updating its shared/global pins would have overlapped
+  another executor's registry-repair lane. This batch therefore added isolated
+  focused contracts and had to hand exact stable measurements back for one
+  coordinated global repin.
+- Fixed stills prove deterministic depth response and technical visibility, not
+  motion quality or final architectural believability. The result must remain
+  pending independent bar-raiser review.
+
+#### What the team should change next time
+
+- Use recursive tolerant comparison for JSON-origin camera, topology, and
+  viewport numbers from the start; reserve exact byte hashes for files and
+  images rather than decoded numeric containers.
+- Freeze one executor as the owner of shared topology pins while visual lanes
+  publish component deltas and stable hashes, so concurrent quality passes do
+  not repeatedly churn the same global contracts.
+- Keep the three-depth-band geometry rule and scalar value hierarchy as the
+  first facade hardening pass; add materials or ornament only after an
+  independent ordinary-distance review identifies a remaining specific risk.
+
+## 2026-09-04 — Phase 1.5 Building 3 package-safe parity repair
+
+### Registry repair executor (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Splitting the immutable, source-bearing Building 3 capture configuration into
+  a discovery snapshot and a URL-free runtime configuration preserved the old
+  evidence hash while proving field-for-field behavior equivalence after the
+  source locator is removed.
+- Treating an active adapter as a complete dependency and behavior closure—not
+  merely a facade scene—made the wall-and-roof replacement, collision, roof
+  landing, wall-only spray ownership, deterministic geometry signatures, and
+  current facade assets explicit and fail-closed.
+- Two consecutive compiler, Node, Godot loader, Building 3 massing, and Building
+  3 evidence passes produced identical catalog, registry, and adapter-contract
+  hashes with a 75-asset runtime closure and zero source-only path or URL leaks.
+
+#### What did not work well
+
+- The first Godot loader run exposed an indentation error in the newly expanded
+  projection validation. Static parsing alone had not exercised that branch;
+  the focused headless contract caught it before the repair was frozen.
+- A concurrent, intentionally unreviewed Building 1 visual candidate changed
+  material dependencies and world topology from `735/931/941/60544/466` to
+  `735/933/943/61876/466` during this repair. Re-pinning global contracts before
+  its independent verdict would have silently accepted an unrelated candidate,
+  so the affected B1/global runs were explicitly deferred.
+- A one-off inspection script initially queried the generated adapter-contract
+  document with the wrong collection key. The checked compiler and loader
+  contracts were the reliable interface and still passed unchanged.
+
+#### What the team should change next time
+
+- Migrate target dispatch, package-safe configuration, registry plans, and
+  behavior contracts as one transaction whenever a legacy receiver becomes an
+  exact-current active adapter.
+- Preserve source URLs and evidence locators only in immutable discovery-side
+  snapshots, and require a deterministic equivalence check against the stripped
+  runtime configuration rather than copying provenance into executable assets.
+- Serialize visual-candidate acceptance before the single owner regenerates
+  dependency hashes and global topology pins; independent work can continue on
+  unaffected focused contracts without converting a candidate into accepted
+  state by accident.
+
+## 2026-09-04 — Building 1 public-front independent bar-raiser re-review
+
+### Pixel-first visual reviewer (`/root/visual_bar_raiser`)
+
+#### What worked well
+
+- Inspecting all three sealed before/after pairs at original detail before
+  reading their manifests made the result easy to judge on its actual player
+  read: the new bay rhythm and depth response were visible without relying on
+  labels, triangle counts, or implementation intent.
+- The changed-light pair separated real construction from value-only dressing.
+  Recesses, pilasters, base, and canopy kept coherent highlights and contact
+  shadows when the sun moved, so the improvement did not depend on baked light
+  or a favorable camera.
+- The entrance-focused ordinary frame showed that the central destination is
+  functionally visible while keeping honest whole-building proportions. Three
+  groups compress into one ensemble in the widest frame, but remain separable
+  enough to pass without screenshot-driven enlargement.
+- The isolated evidence and geometry contracts gave the visual gate a clean
+  handoff: all six image hashes and exact poses passed, the `+1,332` triangles
+  were localized to the wall/canopy, and collision, spray ownership, traversal,
+  footprint, and massing remained unchanged.
+
+#### What did not work well
+
+- The before and after stage manifests carry different capture-generator
+  hashes because the executor repaired numeric comparison logic between
+  stages. Exact sealed image bytes and matching camera/light fields make the
+  comparison usable, but a same-generator pair would be simpler to audit.
+- Fixed stills cannot prove temporal stability of the smallest bright fluting
+  ribs. Their current ordinary-distance still read is controlled, but shimmer
+  should be judged only if later walking evidence reveals it.
+- The HUD reticle is itself a white plus sign on the public front. Without
+  checking its identical before/after placement, a reviewer could confuse it
+  with the removed cruciform architectural proxy.
+
+#### What the team should change next time
+
+- Freeze the final capture harness before both stages whenever possible, and
+  record the reason explicitly if a harness-only repair changes its hash.
+- Keep using a wide whole view, an entrance-biased ordinary view, and a frozen
+  changed-light view as the minimum facade-depth review set; each answers a
+  different visual failure mode.
+- After independent acceptance, let one owner repin catalog, startup, and
+  integration topology together and rerun them on the same tree. Do not leave
+  both the accepted `61,876` state and stale `60,544` assertions active.
+
+## 2026-09-04 — GenAI brick Phase 2 metre-UV receiver and package proof
+
+### Texture Phase 2 executor (`/root/genai_texture_pilot`)
+
+#### What worked well
+
+- Promoting the exact approved brick bytes into a generic shared facade path
+  separated production package intent from the retained source/test pilot.
+- A small generic metre-UV adapter removed source-run resets: U now remains
+  continuous over each ordered side chain, resets deterministically at the
+  next side, and V remains stable world-Y metres over uneven foundations.
+- Same-camera front/oblique A/B and nine reproducible native motion samples
+  made the material's long-field cadence and architectural contrast visible on
+  the actual standalone receiver without touching live world construction.
+- A clean mounted-PCK check proved that explicit `all_resources` exclusions
+  remove both pilot families while the promoted brick and integration seam
+  remain loadable; the final pack is `2,610,504` bytes smaller than baseline.
+
+#### What did not work well
+
+- The prototype's batched BoxMesh piers still use normalized primitive UVs, so
+  applying the same bitmap there would make scale depend on each instance.
+  Phase 2 keeps those narrow piers scalar rather than pretending they satisfy
+  the metre-UV contract.
+- Adding test/capture scripts after the first package audit changed the PCK by
+  small amounts. The pack and capture manifest had to be regenerated after the
+  technical files were frozen to report an exact final delta.
+- JSON-decoded numeric arrays did not compare reliably against typed in-memory
+  arrays in the evidence contract. Numeric-tolerant/int-normalizing helpers
+  were required even though the rendered poses were identical.
+
+#### What the team should change next time
+
+- Freeze all package-included scripts before taking a before/after pack
+  measurement, then capture receiver evidence against that exact final PCK.
+- Reuse the generic side-chain UV adapter for facade fields; require explicit
+  ordered corners and side reset boundaries instead of restarting U per mesh
+  run or relying on undocumented normalized UVs.
+- Give scaled primitive modules metre-aware geometry or a reviewed projection
+  shader before texturing them. Keep scalar materials where physical texture
+  scale cannot yet be guaranteed.
+- Prefer cell/tint tuning or provenance-preserving edge cleanup for mild seams;
+  spend another generation only when native receiver motion genuinely rejects
+  the material.
+
+## 2026-09-04 — GenAI brick Phase 2 independent bar-raiser review
+
+### Pixel-first material and receiver reviewer (`/root/visual_bar_raiser`)
+
+#### What worked well
+
+- Viewing the four fixed A/B frames and nine walk samples before reading the
+  manifest made the improvement independently visible: masonry scale and local
+  variation replaced a flat fill without changing the module hierarchy.
+- The long WSW receiver and sampled `U=20..30 m` walk exposed the source cell
+  repeatedly enough to distinguish an acceptable discoverable cadence from a
+  distracting grid, phase pop, or large repeated stain.
+- Keeping the narrow primitive piers scalar was an honest quality decision.
+  Their current BoxMesh UVs cannot preserve metres, and a quiet scalar bridge
+  is less objectionable than visibly inconsistent brick scale.
+- Separate generic-UV, exact-receiver, evidence, source-package, and clean
+  mounted-PCK contracts made the promotion boundary unusually clear. The same
+  brick bytes are promoted once, both pilot families remain in source, unused
+  stucco is absent from the PCK, and live runtime attachment remains zero.
+
+#### What did not work well
+
+- A nine-frame path sampled every `1.25 m` is not a continuous temporal test.
+  It rules out gross spatial aliasing and popping at those poses but cannot
+  prove every intermediate frame, player speed, or head-bob free of shimmer.
+- Phase 2 has same-light front and oblique views but no rotated-light receiver
+  pair. The source had already passed a changed-light lab, yet the first live
+  attachment should still repeat that check on the actual building context.
+- The evidence is a standalone 49-degree camera stage with diagnostic labels,
+  not the ordinary player rig or full composite. It can authorize integration
+  but cannot accept the low part or whole Isle House.
+
+#### What the team should change next time
+
+- After the reversible live attachment, capture continuous ordinary-player
+  motion on both public sides, an intra-side corner, and the intentional
+  side-start reset, plus one meaningfully changed-light match.
+- Freeze `2.5 m`, `Color(0.70, 0.66, 0.62, 1)`, and roughness `0.86` for the
+  first live A/B. Tune one variable only if live evidence exposes a defect;
+  accept mild pause-and-search cadence under the owner's stated bar.
+- Reuse the generic cumulative metre-UV helper on ordered facade fields, but
+  do not extend the bitmap to scaled primitive modules until those modules
+  receive metre-authored meshes or a separately reviewed projection method.
+
+## 2026-09-04 — Phase 1.5 accepted-B1 exact-current reconciliation
+
+### Registry reconciliation executor (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Re-reading the live hashes, independent B1 promotion review, focused
+  component topology, and whole-world topology before editing prevented the
+  earlier accepted baseline from being mistaken for the newly accepted state.
+- One coordinated update advanced the B1 hero component assertions, Batch
+  controls, whole-world trials, full runtime oracle, and packaged startup oracle
+  to `735/933/943/61876/466` while retaining exact collision-face hashes and the
+  `466` body/shape total.
+- Two compiler writes were byte-identical, and two complete compiler, Node, and
+  Godot rounds kept the versioned 213-unit registry hashes unchanged while
+  independently exercising B1, B3, legacy batches, startup, and gameplay.
+
+#### What did not work well
+
+- The deliberately stale B1 hero contract had to be run once to obtain an
+  exact-current whole-world measurement; it failed at the expected old wall,
+  roof, relief, and world pins before the coordinated repair.
+- The accepted B1 evidence/configuration retains its original authoring-time
+  `pending_independent_bar_raiser_re_review` status so its sealed historical
+  semantics stay intact. Current acceptance therefore must be read from the
+  immutable independent review rather than inferred from that older field.
+- The full-runtime second pass took materially longer to load than the first
+  (`39,826 ms` versus `6,542 ms`) even though topology, gameplay, memory, and
+  cleanup results were identical; the existing bounded wait absorbed it.
+
+#### What the team should change next time
+
+- Advance shared global pins only after the independent review explicitly
+  authorizes promotion, then regenerate registry artifacts and run all dependent
+  contracts against one frozen tree before starting the next live integration.
+- Keep authoring-time review state immutable in sealed evidence, but add a
+  separate current-acceptance pointer or ledger so downstream tools do not need
+  to interpret stale-looking historical fields.
+- Continue measuring component and whole-world topology separately: focused
+  deltas explain a promotion, while the full runtime proves no hidden collision,
+  gameplay, or cleanup regression.
+
+## 2026-09-04 — P3 nine-unit reference-readiness research
+
+### P3 reference researcher (`/root/building_inventory_audit`)
+
+#### What worked well
+
+- Freezing the exact nine source/receiver/run partitions before searching kept
+  group-level Building 29 evidence from being promoted into four unsupported
+  lettered-footprint claims.
+- TIDA planning, mobilization, and completion records plus the exact DBI permit
+  produced a strong bounded lifecycle result: Building 29 was demolished as a
+  group, while 29A/C/D/E remain unresolved individually because no primary
+  letter/address/footprint crosswalk was found.
+- Current primary records materially improved the non-Education packets: SFFD
+  supplies Station 48's current address, TIDA still identifies the historic Navy
+  chapel, DOL confirms the Job Corps campus, and City business data prevents stale
+  Oasis branding from being mistaken for current truth.
+- Keeping all work in a new isolated packet directory allowed a useful readiness
+  ledger and first prototype cohort without touching concurrent runtime, catalog,
+  Building 1/3, Isle House, or evidence work.
+
+#### What did not work well
+
+- The City-hosted Building 29 slide deck has useful group imagery but no readable
+  A–E marker; photographer credit also means government hosting cannot be treated
+  as blanket reuse permission.
+- Street View completely occludes 29A and supplies no exact C/D/E views. Oasis is
+  distant and unbranded, so even genuine visible facade cues cannot yet be bound
+  safely to the frozen business identity.
+- Chapel and Dormitory already have narrow live material scopes, while Fire's
+  previous receiver trial was rejected and reverted. “Reference-ready” therefore
+  needed explicit per-unit wording so it could not be misread as nine fresh
+  prototypes or whole-building acceptance.
+
+#### What the team should change next time
+
+- Acquire the DBI `202304276597` plan set, emergency-order attachments, and TIDA/
+  NAVFAC/Eco Bay closeout exhibits as one cohort task; require an explicit A–E
+  footprint crosswalk before any Education art or lifecycle mutation.
+- Start fresh P3 production with the exact two-unit cohort: a flat 1113 Keppler
+  front-field study and a standalone phase-neutral Fire 48 correction. Preserve
+  Chapel runs `9,10` and Dormitory runs `0..5` rather than broadening them.
+- Keep current identity, dated appearance, material acceptance, and whole-object
+  recognition as separate gates. A label, address, generic cohort silhouette, or
+  hue-only repaint must never satisfy recognizability.
+
+## 2026-09-04 — D1 six-unit address-only reference-readiness research
+
+### D1 reference researcher (`/root/d1_reference_research`)
+
+#### What worked well
+
+- Re-resolving City building numbers and updated addresses before interpreting
+  imagery caught three consequential traps: B201 is not Station 48, B225 is not
+  the Pavilion/Event Space, and legacy 810 Avenue D now crosswalks to 321 9th
+  Street while still appearing in a current program directory.
+- Freezing source-edge-to-run ownership made five partial/historical observations
+  useful without pretending that occluded, opposite, or adjacent facades were
+  known. It also produced an exact 24-edge/32-run ledger for appearance-blocked
+  905F so later evidence can be placed without repeating geometry work.
+- Treating current identity, dated appearance, lifecycle, prototype safety, and
+  attachment authority as separate gates preserved progress: five units have
+  real cue pairs, while the unsupported sixth remains honestly blocked.
+
+#### What did not work well
+
+- The first interim summary over-promoted a September 2025 Street View site
+  interpretation at 449 Avenue H. A December 2025 CEQA record still describes
+  an existing building approved for future demolition, so the only defensible
+  result is a lifecycle conflict, not a clearance date.
+- Current City documents contain several address variants for B201 (`800 Avenue
+  H`, `800 Avenue M`, `800 Avenue D`, and `995 9th at Avenue I`), while SFFD uses
+  `800 Avenue I` for the separate Station 48. Address-string matching alone was
+  actively misleading.
+- The long Navy 905 Avenue B survey is strong identity evidence but did not yield
+  a target-side exterior in the bounded search. Nearby-row context cannot be
+  converted into unit-F appearance without a captioned source.
+
+#### What the team should change next time
+
+- Start address-only batches with one authoritative City building-number/
+  address crosswalk, then reconcile agency records spatially before searching
+  by the frozen address. Record conflicts instead of selecting the most recent
+  string opportunistically.
+- Require every status report to state separately: identity count, cue-backed
+  count, current-versus-historical count, prototype class, and attachment class.
+  This prevents “reference-ready” from being heard as live completion.
+- Prototype B201 and B225 first, retain B258 and the 810 bungalow as explicit
+  historical-mode candidates, keep B202 standalone/constrained, and send one
+  narrow rights-cleared exterior request for 905F without blocking the cohort.
+
+## 2026-09-04 — P3 Chapel and Dormitory exact-current technical evidence
+
+### No-change evidence executor (`/root/building_inventory_audit`)
+
+#### What worked well
+
+- Reusing the completed P3 packets as immutable identity/cue inputs kept this
+  batch narrow: current Chapel runs `9,10` and Dormitory runs `0..5` were
+  validated in place without touching any visual, runtime, generated, or
+  recognition-registry artifact.
+- The native harness combines real character physics, the stock visible-player
+  camera, full wall-plus-roof framing, accepted-scope projection, and an exact
+  receiver/source/run first-hit ray. That made four technically valid images
+  useful as evidence without granting either whole building recognition credit.
+- Centering the Dormitory whole view on protected run `12` and its oblique on
+  accepted run `2` exposed both the narrow live treatment and untreated faces.
+  The very low complete silhouette also keeps the five-reference-tier versus
+  fallback-`6 m` conflict visible instead of hiding it behind a close crop.
+
+#### What did not work well
+
+- The first Chapel ground anchor landed on an unrelated building roof; a
+  generated-collision preflight rejected it before capture. The replacement
+  land anchor was safe, but an automated read-only support probe would have
+  avoided that iteration.
+- The first Dormitory whole pose missed the frozen accepted-scope height floor
+  by `0.0021` of frame height. Moving the same approach 20 m closer cleared the
+  floor while retaining the full entity, but the fallback mass still occupies
+  only about four percent of frame height—an honest technical result and a poor
+  recognition candidate.
+- A second native pass reproduced every topology, physics, LOS, and framing
+  metric, but the grass-containing Dormitory whole PNG changed slightly before
+  sealing. The final originals are hash-sealed; byte-deterministic rendering is
+  deliberately not claimed for time-dependent surrounding vegetation.
+
+#### What the team should change next time
+
+- Add a read-only ground-support scan to capture planning so fixed ordinary
+  approaches are known to hit `land_ground` or `road_path` before a native run;
+  keep the final resolved position fixed and recorded rather than searching at
+  capture time.
+- Do not ask reviewers to rescue either building from this evidence. Implement
+  at least two packet-supported discriminators per target first: Chapel
+  entry/gable-window plus belfry/cross; Dormitory five-tier massing plus its
+  blue-gray/green/window-and-ground-bay hierarchy.
+- Preserve one full-entity protected-face view in every bounded-treatment
+  review, retain frozen close confusion sets, and keep technical capture PASS,
+  cue visibility, believability, and denominator acceptance as four separate
+  claims.
+
+## 2026-09-04 — Independent P3 Chapel and Dormitory bar-raiser review
+
+### Visual bar-raiser (`/root/visual_bar_raiser`)
+
+#### What worked well
+
+- Fixing image-only observations before opening manifests, labels, and source
+  packets prevented warm color, building names, exact receivers, and technical
+  PASS language from being mistaken for recognizable identity.
+- The full-object protected-face views did exactly what honest evidence should:
+  Chapel's missing focal end and roof silhouette stayed visible, while the
+  Dormitory's five-tier-versus-`6 m` contradiction could not be hidden by a
+  flattering crop.
+- Separating capture validity, material-scope validity, recognition, and
+  believability produced a useful result: hashes, grounding, LOS, and topology
+  all pass while the numerator correctly remains `+0`.
+
+#### What did not work well
+
+- A technical minimum near three percent of frame height is not a perceptual
+  recognition threshold. Dormitory occupies only about 34–35 pixels vertically,
+  so tier and opening cues cannot be meaningfully judged even though framing
+  contracts pass.
+- The existing material treatments can be heard as facade progress despite
+  supplying no countable identity cue. Chapel's cream and Dormitory's warm field
+  support later compositions but do not create them.
+- The close confusion cohort contains several low fallback slabs. With no
+  structural discriminator, a hue-only candidate cannot become top-1 no matter
+  how exact its receiver/run provenance is.
+
+#### What the team should change next time
+
+- Require cue legibility at ordinary-player distance in addition to a bounding-
+  box floor; do not treat a technically complete 34-pixel-tall object as
+  recognition-ready.
+- Resolve massing and one complete focal composition before adding scattered
+  modules: belfry plus gable-entry for Chapel, and five tiers plus stair/end/eave
+  hierarchy for Dormitory.
+- Keep unknown faces quiet and truthful. Concentrate supported depth and rhythm
+  where sources actually bind rather than using procedural grids or repeated
+  decals to make untreated surfaces look finished.
+
+## 2026-09-04 — Isle House low reversible live integration
+
+### Live integration executor (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Attaching only to exact wall receiver `w1282547787` preserved the accepted
+  high part and left the generated low wall as the sole collision and spray
+  owner. The bounded overlay adds exactly `5/5/1844` meshes/surfaces/triangles,
+  producing measured world topology `735/938/948/63720/466` with no body or
+  shape delta.
+- Reusing the sealed package-safe prototype kept the approved 2.5 m metre-UV,
+  tint `(0.70,0.66,0.62,1)`, roughness `0.86`, side-chain U, absolute-Y V, and
+  scalar-pier rules intact. A live-only fail-closed adapter validates exact
+  source geometry and package hashes without changing the prototype bytes.
+- Six native grounded stills cover whole-composite, public-side oblique, and
+  changed-light views. A separate 222-frame MovieWriter artifact records an
+  uninterrupted five-second, 19.883 m stock-player walk with 300 grounded
+  physics samples, zero recovery, and zero transform writes after input began.
+- Two focused Godot rounds, checksum verification, actual whole-island
+  walk/run/jetpack QA, and two mounted-PCK resource audits all passed. The
+  independent visual verdict remains explicitly pending.
+- A real non-editor macOS export now reaches `world_ready` with exact live
+  topology `735/938/948/63720/466`; its remaining smoke failure is only the
+  intentionally unpromoted global `933/943/61876` acceptance oracle.
+
+#### What did not work well
+
+- The sealed prototype's scalar module boxes had 56 tops exceeding the stated
+  10.25 m live-work stop by 0.01–0.10 m. This was an implementation defect, not
+  a test-assumption problem. The live subclass now clips only those tops at
+  creation and proves the complete overlay maximum is at most 10.2501 m.
+- MovieWriter reports a 1280×800 file while the native root texture is a
+  macOS-window-dependent 1137×711 render surface. The harness initially assumed
+  those sizes were identical; the corrected contract separately bounds the
+  render aspect/size and seals the actual AVI dimensions and bytes.
+- The first motion attempt raced `GameMain`'s asynchronous ferry-spawn settle,
+  allowing startup to overwrite the evidence pose. Waiting for
+  `was_first_reveal_grounded()` before any capture reposition removed the race.
+- The first real export exposed a source-versus-package mistake that the
+  editor-mounted resource check could not: compiled `.gd`/`.tres` remaps do not
+  expose authoring bytes to `FileAccess`. Exact byte pins remain mandatory in
+  editor runs; non-editor runs now require the complete allowlisted
+  `ResourceLoader` closure, raw config hash, material semantics, geometry,
+  topology, and deterministic output signature instead of weakening the gate.
+- The existing full-runtime acceptance oracle correctly failed at its still-
+  frozen `933/943/61876` topology pin before gameplay. It was not repinned in
+  this bounded batch; the new exact live contract and whole-island route cover
+  the current state until independent review authorizes global promotion.
+
+#### What the team should change next time
+
+- Validate actual combined `MeshInstance3D` and `MultiMeshInstance3D` bounds at
+  the live scope boundary; metadata alone is insufficient when batched boxes
+  extend beyond a declared vertical stop.
+- Capture scripts that instantiate `main.tscn` should always wait for the real
+  player startup-grounded signal/state, then record render-surface and encoded-
+  movie dimensions as separate facts.
+- After independent visual acceptance or rejection, perform one coordinated
+  global topology repin. Until then, keep this reversible receiver-local hook,
+  its exact hashes, and its pending recognition/believability status unchanged.
+
+## 2026-09-04 — D1 B201/B225 bounded standalone prototype pair
+
+### D1 prototype executor (`/root/d1_reference_research`)
+
+#### What worked well
+
+- Building each study from the exact ordered generated run lengths preserved a
+  useful future receiver seam without pretending that the standalone local
+  layout was already calibrated or authorized for attachment.
+- A small shared material vocabulary plus ten deterministic MultiMesh batches
+  kept the two languages distinct at low cost: B201 reads through green-bounded
+  broad glazing over a solid lower field, while B225 reads through varied high
+  clerestories over physical horizontal courses.
+- Native grounded, oblique, close, and changed-light views exposed actual
+  recess/projection depth and kept identity conflicts, inferred cadence, and the
+  pending independent-review state visible in every proof image.
+
+#### What did not work well
+
+- Godot JSON parsing returns numeric values as floats, so direct dictionary
+  equality against integer topology constants produced a false first failure.
+  Per-field numeric normalization is safer for machine-readable contracts.
+- Headless MultiMesh transform readback returned identity values even though
+  native rendering showed the authored transforms correctly. Exact source-run
+  reconstruction, deterministic geometry signatures, batch counts, and native
+  images were therefore stronger proof than a headless per-instance bounds
+  readback in this batch.
+- A 115.5 m one-storey elevation necessarily appears thin in a single complete
+  front view. Close and oblique coverage is essential; a full-side screenshot
+  alone would understate B201's frame, canopy, and lower-field hierarchy.
+
+#### What the team should change next time
+
+- Run the independent recognition/bar review on the close and ordinary views
+  before authoring any receiver-relative adapter; do not infer acceptance from
+  technical PASS or from the executor's capture inspection.
+- If promoted, create a fresh cumulative-metre layout over B201 source edge `0`
+  / runs `0..9` and B225 source edge `3` / runs `10..13`, with explicit corner
+  clearance and no per-run generated-U phase reset.
+- Keep B201 service/return regions and B225 lower/WSW/SSE/ENE regions quiet until
+  new target-bound evidence exists. Add only source-supported structural cues;
+  never compensate with signage, address plaques, arbitrary damage, or random
+  facade noise.
+
+## 2026-09-04 — Independent D1 B201/B225 prototype bar review
+
+### Visual bar-raiser (`/root/visual_bar_raiser`)
+
+#### What worked well
+
+- Pixel-first comparison separated the two facade languages without addresses,
+  IDs, signage, or live location. B201's canopy/open-above/solid-below hierarchy
+  justified a bounded live A/B; B225's clerestory skeleton remained promising
+  even though its material bar failed.
+- Ordinary, oblique, close, pair, and reversed-light views exposed both real
+  geometry depth and failure modes that topology metadata could not. The B201
+  canopy survived light reversal, while B225's ruled-wall effect became more
+  obvious rather than disappearing.
+- Source packets and frozen decoys made restraint actionable. Unobserved B225
+  lower openings and B201 service/return faces could stay quiet instead of being
+  filled with invented detail.
+
+#### What did not work well
+
+- Every nominal original contains a large claim-bearing header card. A reviewer
+  can ignore it, but cannot perform a literally label-free blind read. Clean
+  originals and separate annotated copies would make independence stronger and
+  give more frame area to the architecture.
+- Calling B225's flat albedo resource “aged cladding” did not make aging visible.
+  Fourteen identical full-width dark course reveals produced a barcode-like
+  diagram instead of the packet's quiet streaking and uneven repainting.
+- Standalone metre-authored geometry proves scale but not live cumulative-metre
+  mapping or UV continuity. That seam remains a future implementation gate, not
+  a conclusion reviewers can infer from exact side length.
+
+#### What the team should change next time
+
+- Capture label-free review originals first, then derive annotated technical
+  copies. Never place the claimed cue list inside the only visual evidence.
+- Keep B201's whole-side hierarchy and advance it through one reversible
+  cumulative-metre live adapter. Preserve complete bays across run boundaries
+  and judge the real island lighting before any acceptance claim.
+- Hold B225 until the course contrast is subdued and a restrained nonperiodic
+  age field crosses all four runs without a phase reset. Recheck the revision in
+  motion as well as close and changed light; do not invent lower openings.
+
+## 2026-09-04 — Navy Chapel Building 187 bounded standalone hero prototype
+
+### Chapel prototype executor (`/root/building1_quality_audit`)
+
+#### What worked well
+
+- Resolving the exact source run chain before modeling kept the prototype
+  narrow: the complete public gable/entry composition binds only to runs `9,10`,
+  the partial public-side opening rhythm binds only to adjacent runs `11..13`,
+  and every other source run stays quiet and exact.
+- Building the inferred roof, belfry/cap/cross, rear structural closure, and
+  projecting entry into the same deterministic collision bucket made the
+  visible/landing contract directly testable without touching live routing or
+  claiming spray ownership.
+- Reusing the actual world, stock physics-settled player, and the two existing
+  technically valid ordinary viewpoints gave honest fixed-camera before/after
+  pairs. Camera translation error was zero and basis error stayed below
+  `1.1e-7`, so silhouette gains are not a camera artifact.
+- Separating the exact accepted run-`9,10` ShaderMaterial batch from a new
+  explicitly unaccepted scalar cream structural batch preserved the live
+  material acceptance boundary while still allowing a reversible palette study.
+
+#### What did not work well
+
+- The first standalone collision build copied serialized triangle order directly,
+  while `WorldChunkBuilder` reverses each generated triangle to first/third/second.
+  The mismatch made the capture LOS hit the back side of run `7` about `9.13 m`
+  before the intended run-`9` point. Mirroring the live winding fixed both visual
+  exterior orientation and one-sided collision; the rerun first-hit error fell
+  below `0.00008 m` in all four frames.
+- The first material draft reused the already accepted cream resource on inferred
+  gable, entry, and belfry geometry. Even without a live attachment, that blurred
+  the distinction between an accepted exact-run field and an inferred structural
+  palette. A separate resource and sixth render batch made the boundary explicit.
+- The public observation supports a partial narrow-window rhythm but not its exact
+  count or cadence. Three groups fit the bounded `11.829 m` chain, but they remain
+  a visible production inference that independent review may reject or revise.
+
+#### What the team should change next time
+
+- Run independent original-detail recognition and believability review before
+  writing any live adapter. Technical PASS, geometry signatures, and clean LOS
+  prove evidence integrity, not visual acceptance.
+- If accepted, intercept `building:w291189336:wall` and `:roof` together before
+  generic visual/collision creation, promote the structural collision with the
+  exact source identity, and assign spray ownership deliberately. Never overlay
+  the prototype onto retained generic wall or roof collision.
+- Keep runs `0..8,14..33`, rear/private faces, exact pane count, and additional
+  long-side cadence protected until a closer rights-cleared current reference
+  set supports them. Do not compensate with plaques, signage, stained glass,
+  arbitrary accent color, or invented ornament.
+
+## 2026-09-04 — Independent Navy Chapel standalone hero bar review
+
+### Visual bar-raiser (`/root/visual_bar_raiser`)
+
+#### What worked well
+
+- Exact-pose before/after evidence made the visual result unusually clear. The
+  chapel identity came from new silhouette and focal geometry, while unchanged
+  camera/player transforms ruled out a flattering reframe.
+- One complete public-front composition and one roof-silhouette composition did
+  more recognition work than broad facade coverage. The bounded three-group
+  side rhythm supported the whole without turning unknown faces into wallpaper.
+- Separating accepted run-`9,10` cream from inferred structural cream kept a
+  strong value hierarchy without laundering prototype geometry into the prior
+  material verdict.
+- Collision-backed entry, pitched roof, and cap made the hero feel like world
+  architecture rather than a floating decorative shell, while frames/openings
+  remained appropriately noncolliding.
+
+#### What did not work well
+
+- The packet has only one lighting state and no motion sweep. The cross and thin
+  mullions pass the still-image bar but could still shimmer or disappear during
+  an ordinary walk or jetpack approach.
+- Quiet protected rear/return geometry is truthful, but its neutral surrogate
+  still reads somewhat like an attached diagnostic block. Evidence restraint
+  needs coherent base/roof-edge continuity so unknown does not mean unfinished.
+- Three side-opening groups are a defensible bounded production inference, not
+  an observed count. Their clarity must not be misreported as surveyed cadence
+  or used to justify modules beyond runs `11..13`.
+
+#### What the team should change next time
+
+- Advance this hero through a single fail-closed live wall+roof replacement;
+  never layer it over the current generic collision or attach only one half of
+  the pair.
+- Preserve the large-form and front hierarchy. Spend the next small polish on
+  entry contact and quiet rear/return continuity, not extra ornament, stained
+  glass, plaques, signage, or speculative side windows.
+- Before denominator review, capture changed light and motion plus an actual
+  player landing on the pitched roof/cap. Keep the cross/mullions as authored
+  unless that evidence reveals instability.
+
+## 2026-09-04 — B225 standalone generated-cladding bar-raiser repair
+
+### Texture/UV pilot executor (`/root/genai_texture_pilot`)
+
+#### What worked well
+
+- Forking B225 into a new standalone lineage preserved the sealed D1 pair,
+  B201, its review packet, and every old signature while allowing the rejected
+  wall treatment to remain an honest matched control.
+- Replacing four normalized-UV wall boxes with four quads in one ArrayMesh made
+  the exact `46.261968372 m` run-`10..13` chain explicit. One cumulative metre U
+  coordinate survives all three internal run joins, while the ten complete
+  clerestory groups remain chain-global and transform-identical to the control.
+- The first generated cladding candidate was rejected immediately for repeated
+  bevel-like baked lighting. One narrow edit flattened the joints without
+  inventing openings, signs, graffiti, objects, semantic damage, or mismatched
+  PBR maps. Mipmaps, anisotropic filtering, an `8.0 x 3.48 m` cell, restrained
+  tint, and scalar roughness kept it quiet at ordinary distance.
+- Clean matched front/oblique/close/changed-light captures and 25 consecutive
+  native Metal frames crossed all run boundaries without claim cards, camera
+  jumps, or per-run phase resets. An isolated same-snapshot package comparison
+  measured the complete review branch at exactly `2,104,448` added PCK bytes.
+
+#### What did not work well
+
+- Image generation interpreted “horizontal joint” as a shaded bevel on the
+  first attempt even though the prompt explicitly prohibited baked lighting.
+  Material prompts need a separate acceptance gate for directional gradients;
+  generic words such as realistic or scanned can otherwise override albedo-only
+  intent.
+- The selected edit removed that major defect but introduced fine synthetic
+  micrograin and mild broad tonal recurrence at the 8 m repeat. They are not
+  obvious blockers in the sampled ordinary-distance frames, but only the
+  independent bar-raiser can decide whether they are believable enough.
+- `all_resources` currently packages a non-live review candidate. Keeping exact
+  PCK numbers inside the packed config would create self-referential byte drift,
+  so the final included/excluded sizes and hashes live in export-excluded
+  evidence and the config points to that audit.
+
+#### What the team should change next time
+
+- Send the clean pairs and full motion sequence to the independent bar-raiser.
+  A technical PASS authorizes no live placement or recognition credit.
+- If accepted, build a fresh receiver-relative adapter for only
+  `building:w95934119:wall`, source edge `3`, ordered runs `10..13`; rederive
+  corners from the frozen receiver, preserve chain-global clerestory groups, and
+  never instantiate the standalone scene or reset U per run.
+- If rejected, keep the cumulative-metre geometry and scalar material contract.
+  Replace only the albedo with a low-pass, edge-equalized derivative or one fresh
+  age-only generation, rerun the same evidence harness, and do not restore the
+  14 dark course boxes or layer a second procedural course frequency.
+- If the repair remains non-live for a distributable build, add a narrow export
+  exclusion for this branch while preserving its source and evidence artifacts.
+
+## 2026-09-04 — Independent Isle House whole-composite live review
+
+### Independent reviewer (`/root/building_inventory_audit`)
+
+#### What worked well
+
+- Inspecting all native stills and representative frames across the complete
+  five-second MovieWriter interval before opening manifests kept stable brick UV
+  and the visually dominant repeated-module failure separate from telemetry.
+- The live seam is unusually well bounded: exact receiver/source matching,
+  protected runs and upper stop, zero decorative physics/spray ownership,
+  unchanged high hashes, deterministic signatures, and exact world topology all
+  reproduced in two fresh focused rounds.
+- The exported app reached exact non-editor `world_ready`, and direct-mounted
+  audits verified both retained PCK identities and the package boundary. That
+  proved resource loading without mistaking the intentionally stale global
+  smoke oracle for an art verdict.
+
+#### What did not work well
+
+- The two files labelled whole-composite do not both show the composite fairly:
+  the WSW view exposes a mostly blank high face, while the ENE view exposes the
+  accepted high and only a marginal low sliver. The manifest seals role strings
+  but no target-union bounds or visible fraction.
+- Eight identical inferred modules read as a barcode during the full walk.
+  Warm brick and large glazing are real progress, but Dutch/half-door entry,
+  gallery, and landscaped patio hierarchy are not perceptually distinct.
+- The honest `10.25 m` stop leaves a dominant untreated band, and the frozen
+  five-level low mass still contradicts the referenced seven-story podium.
+  Together they prevent a believable high/low silhouette and force a `FAIL`,
+  not a non-identity limitation.
+
+#### What the team should change next time
+
+- Treat Isle House as one composite design problem: review a bounded seven-story
+  podium/high-low transition proposal before adding more facade detail.
+- Replace uniform inferred module stamping with a source-supported entry/glazing/
+  patio family on mapped public sides only; keep NNW, private/rear, roof, and
+  surveyed cadence unclaimed.
+- Require two measured whole-composite views where high and low are both useful,
+  then repeat the motion/changed-light gate. Do not repin the global topology or
+  increment the catalog until that visual result independently passes.
+
+## 2026-09-04 — Independent B225 generated-cladding repair re-review
+
+### Visual bar-raiser (`/root/visual_bar_raiser`)
+
+#### What worked well
+
+- Clean matched control/candidate views exposed the exact art correction: the
+  rejected fourteen-line barcode disappeared while the preserved clerestory
+  remained the dominant structural cue.
+- A 25-frame native motion sweep crossed all three internal run joins. Reading
+  it before manifests made the absence of shimmer, moire, crawl, or phase jumps
+  an observed result rather than a metadata inference.
+- One cumulative metre UV chain plus an albedo-only scalar material solved the
+  failure with fewer triangles and no invented lower openings, PBR maps,
+  collision, navigation, decals, or spray ownership.
+- Prompt history honestly records rejection of the first baked-bevel output and
+  the bounded flattening edit; the sealed D1 inventory and B201/original B225
+  signatures remained intact.
+
+#### What did not work well
+
+- The selected bitmap still contains close-range synthetic, relief-like grain
+  and mildly discoverable broad recurrence at its 8 m repeat. Filtering keeps
+  both quiet in the rendered evidence, so they are limitations rather than a
+  reason to repeat the repair.
+- The current scalar tint moves toward warm ivory under the alternate sun. A
+  live island A/B must ensure it remains aged light gray/off-white rather than
+  becoming cream or competing with the pale clerestory frames.
+- A single `1254 x 1254` review texture costs about `2.007 MiB` in the measured
+  PCK and has an `8,386,752`-byte decoded RGBA8+mips upper estimate. That is
+  acceptable for a bounded pilot but cannot become a hundreds-of-buildings
+  default without reuse or resolution discipline.
+
+#### What the team should change next time
+
+- Proceed through a new receiver-relative adapter limited to
+  `building:w95934119:wall`, source edge `3`, runs `10..13`; never instantiate
+  the standalone scene or reset texture phase at a generated run.
+- Keep the 8 m scale, low joint contrast, mipmaps, anisotropic filtering, and
+  clerestory unchanged for the first A/B. If live light exposes warmth or
+  recurrence, adjust only tint or use a low-pass edge-equalized derivative, then
+  recapture; do not restore dark strips or add procedural grime.
+- Require fresh whole-side, changed-light, motion, and decoy evidence before
+  catalog or denominator action. If integration is postponed, narrowly exclude
+  the currently bundled non-live review branch from distributable exports.
+
+## 2026-09-04 — Isle House full-composite standalone repair v1
+
+### Executor (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Treating the failed live result as an immutable Variant A and building a new
+  detached Variant B made the comparison reversible and kept the unaccepted
+  world hook, accepted high adapter, catalog, and global topology untouched.
+- The truth split stayed executable: official architect facts authorize the
+  podium/live-work family, while every exact upper-field split, reveal depth,
+  module dimension, placement, sequence, mirror, opaque pane, and planter proxy
+  is marked reversible production inference. NNW/private/rear/roof/interface
+  schedules remain explicit stop zones.
+- Four arrangements used the same bounded entry/glazing/patio vocabulary without
+  random noise. MultiMesh batching kept the repaired overlay at six meshes,
+  eight surfaces, and 2,316 triangles with zero collision/navigation/spray
+  ownership; the output signature reproduced exactly.
+- Native same-pose A/B, changed-light frames, and a deterministic 222-frame
+  MovieWriter walk provide both full-composite scale and close ENE detail. The
+  walk remained grounded for 300 physics samples, crossed the intended source
+  corner, and used no post-input transform writes.
+- Testing the exported PCK from `/private/tmp` exposed and fixed a package-only
+  seam in the new standalone factory: raw authoring-byte hashes remain mandatory
+  when those files exist, while remapped exports rebuild the sealed failed parent
+  and prove exact output signature/topology instead. The live adapter itself was
+  not changed.
+
+#### What did not work well
+
+- Early camera guesses hit an intervening building, a roof, and a slightly
+  compressed spring arm. Reusing mapped public-side normals and already proven
+  grounded anchors was faster and more honest than repeatedly guessing positions.
+- The first projection manifest attempted to serialize `Vector2` values and the
+  first runtime-topology capture read the preview-mutated world. Converting pixel
+  bounds to arrays and carrying the pre-preview runtime object fixed both without
+  weakening the gate.
+- A long grounded ENE whole-tower view is not available: Hawkins occupies the
+  southeast sightline, while distant northeast views reduce the low realm to an
+  oblique sliver. The packet therefore uses two measured WSW whole-composite
+  views and labels the close ENE pair supplemental rather than overstating it.
+- The general `full_runtime_integration.gd` oracle still expects the independently
+  accepted B1/B3 baseline `933/943/61,876`; the current separately unaccepted
+  live Isle overlay makes runtime evidence `938/948/63,720`. This expected
+  pending-oracle failure was recorded and not repinned as a side effect of a
+  standalone visual experiment.
+
+#### What the team should change next time
+
+- Derive candidate evidence anchors from receiver normals, neighboring footprint
+  occluders, playable support, and stock-camera angular extent before implementing
+  the capture loop; store both projected part bounds and explicit view limitations.
+- Design source-byte and compiled-package validation as two declared layers from
+  the start: exact readable authoring hashes in source, then allowlisted resource
+  closure plus deterministic semantic/output parity after export remapping.
+- Have an independent bar-raiser inspect every PNG and the complete motion
+  interval before any live swap. If it passes, replace only the exact low child
+  through `detach_repair_overlay_for_preview()` and reconcile global topology and
+  catalog state together; if it fails, keep this standalone packet immutable and
+  iterate only the ranked visual defect.
+
+## 2026-09-04 — Dormitory 369 standalone five-tier hero prototype
+
+### Standalone hero executor (`/root/independent_p1_review`)
+
+#### What worked well
+
+- Keeping the prototype detached allowed the frozen `w291189926` horizontal
+  source footprint, all terrain-following wall bottoms, and the exact roof-plan
+  triangulation to remain inspectable without touching the shared world builder,
+  catalog/compiler/registry/loader, or current live art.
+- The smallest supported hierarchy did useful structural work: five real tiers,
+  a shallow blue-gray stair/end volume, a thin green eave, and five rows of
+  broad/narrow opening relief on exact mapped WSW runs `0..5`. The other 66 runs
+  stayed module-free and neutral rather than inheriting an unsupported schedule.
+- One triangle-congruent structural collider covers the lifted shell, roof
+  landing, stair/end, and eave. The focused contract proved there is no hidden
+  6 m collider and separately ray-tested walls, roof landing, stair, and eave.
+- Three native fixed-camera before/after pairs preserved the grounded stock
+  player and ordinary camera exactly; the third pair changed only the sun. A
+  separate read-only QA pass found all six 1440x900 PNGs uncorrupted and the
+  checksum ledger and dedicated evidence contract now seal every frame.
+
+#### What did not work well
+
+- The dated reference supports only the outer WSW long elevation and SSE/end
+  corner. Exact height, tier pitch, opening dimensions/count/cadence, stair
+  dimensions, opposite side, recessed wings, rear end, entrances, and interiors
+  remain unknown; the prototype therefore cannot support an as-built claim.
+- The full horizontal entity is honestly present, but 66 protected runs are
+  intentionally quiet. An independent reviewer must decide whether the bounded
+  supported face carries enough top-1 identity without mistaking neutral unknown
+  geometry for finished facade coverage.
+- The shared `full_runtime_integration.gd` oracle expects `933/943/61,876`, while
+  the exact current live runtime reports `938/948/63,720`. The complete delta is
+  the separately validated Isle House low live attachment (`+5/+5/+1,844`), not
+  this detached prototype. All other scoped global regressions passed.
+
+#### What the team should change next time
+
+- Send all six PNGs to a different reviewer for blind, pixel-first top-1 and
+  believability judgment against the frozen confusion set. Do not increment the
+  catalog or call the work accepted from the technical PASS alone.
+- If independently accepted, integrate through the fail-closed exact wall+roof
+  pair seam before generic visuals or collision are created. Remove the 6 m
+  fallback completely and recreate explicit spray ownership on validated hero
+  wall collision; never attach just one record or overlay a hidden collider.
+- Resolve the unrelated global runtime oracle by reconciling its expected totals
+  with the already-live Isle House low contract. Do not use that shared update
+  as a reason to repin or recapture the sealed Dormitory prototype package.
+
+## 2026-09-04 — Independent Dormitory 369 standalone hero review
+
+### Visual bar-raiser (`/root/visual_bar_raiser`)
+
+#### What worked well
+
+- Exact-pose before/after evidence made the five-tier correction impossible to
+  mistake for a camera trick. The target grew from a `6 m` strip into a readable
+  five-storey dormitory at the same grounded `122–152 m` player distances.
+- The combination of broad/narrow openings, broad-window eyebrows, differentiated
+  ground row, shallow stair/end stop, and thin eave survived alternate light and
+  grayscale. Identity no longer depends on warm/blue-green hue or metadata.
+- Restricting all facade modules to source edge `5`, runs `0..5`, preserved the
+  source-supported public read while the other 66 runs stayed visible, neutral,
+  and module-free.
+- Lifting the exact wall/roof shell and making collision congruent with the wall,
+  roof landing, stair, and eave resolved the prior massing contradiction without
+  leaving a hidden `6 m` collider.
+
+#### What did not work well
+
+- Eight evenly spaced inferred columns repeat at the same five row anchors. Two
+  opening families and the ground/end hierarchy prevent wallpaper, but the
+  cadence still looks economical and must not be presented as surveyed truth.
+- The packet has no motion sweep. Thin eyebrows, mullions, vents, and eave pass
+  the still-image bar but could shimmer, crawl, or disappear during approach.
+- The large neutral protected shell is the honest treatment for unknown sides,
+  yet it remains visibly prototype-like. More unsupported modules would make it
+  busier but less truthful.
+- One legacy Batch 04 test pins an older world-builder hash. Focused hero,
+  evidence, and runtime-isolation contracts pass; the stale assertion is not a
+  Dormitory attachment failure.
+
+#### What the team should change next time
+
+- Proceed through one fail-closed exact wall+roof live replacement. Remove the
+  fallback visual/collision pair together, preserve exact XZ and roof topology,
+  and deliberately recreate spray ownership on the validated live wall.
+- Keep the five-tier/end/eave/base hierarchy and the run-`0..5` scope. Do not
+  propagate the inferred grid to protected faces, add random pane variation, or
+  wallpaper unknown elevations.
+- Before catalog or denominator action, capture a short approach sweep, changed
+  light, mapped-side and whole-object views, plus real player roof landing and
+  structural collision checks. Change thin detail only if that evidence fails.
+
+## 2026-09-04 — Chinook/Croaker/Striped Bass official-source research
+
+### Official-source scout (`/root/d2_reference_research/official_source_scout`)
+
+#### What worked well
+
+- Combining the live City address API, Navy Site 12 reports, TIDA subleases,
+  MOHCD reporting lists, and exact-address permit records separated durable
+  physical cues from provider and program names that changed over time.
+- Exact-address permit and 311 records yielded rare defensible exterior cues:
+  two-story wood-frame records at 1437, 1443, 1418, and 1419; a rear patio,
+  patio-door/deck soffit, and upper balcony at 1443; and a balcony at 1419.
+
+#### What did not work well
+
+- No official target-specific exterior photograph or elevation was found. The
+  Navy's large neighborhood PDFs expose exact site plans and floor-plan survey
+  material, but their size prevented full visual inspection through the web
+  extractor; the advertised photograph appendix could not be verified as
+  useful exterior evidence.
+- Current address registration does not prove a building is standing or
+  occupied. Current exact lifecycle remains unresolved for 1419 and cannot be
+  inferred from island-wide provider totals.
+
+#### What the team should change next time
+
+- Seed each target with the exact address/coordinate and Navy plan placement,
+  then apply the documented Site 12 two-story housing cohort only as a labeled
+  cohort transfer. Do not turn provider/program names into facade signage.
+- Use plausible cohort materials and address numerals as production inference;
+  reserve exact facade claims for documented cues, and keep unresolved current
+  occupancy or demolition state out of the recognition contract.
+
+## 2026-09-04 — D2 address-only reference-readiness packet
+
+### D2 reference researcher (`/root/d2_reference_research`)
+
+#### What worked well
+
+- Reconciled all 15 frozen sources to exact direct wall/roof receivers, geometry
+  hashes, heights, elevations, wall-run partitions, and live City EAS records
+  before evaluating appearance.
+- A bounded browser pass found three July 2023 target-side observations and
+  mapped them to exact generated facing runs. Temporary third-party screenshots
+  were used only for inspection; the packet retains URLs, pano IDs, dates and
+  written observations.
+- Separated one scalable Site 12 housing grammar from per-instance recognition.
+  This produced three honest target-side prototype candidates and one exact
+  permit-led component study without copying that appearance to the remaining
+  eleven buildings.
+
+#### What did not work well
+
+- Street-view availability is sparse and contributor panoramas are isolated.
+  Sampling target centroids and named roads found only three useful viewpoints;
+  distant or occluded buildings could not be safely disambiguated.
+- The repeated 4/6/8-unit cohort makes a plausible generic row easy to build but
+  a poor recognition claim. Most targets still need a dated target-bound side
+  rather than more generic texture research.
+
+#### What the team should change next time
+
+- Prototype 1441, 1439 and 1444 together as a confusion set, using a shared
+  generated stucco/shingle material family but different exact solid/void and
+  balcony/breezeway hierarchies; review grayscale and motion before attachment.
+- Use 1443 as the next evidence-led component study, but do not attach its rear
+  patio/balcony module until one target-bound view maps “rear” to a receiver side.
+- Batch future owner evidence needs by neighborhood and exact compass side rather
+  than issuing one request per building; continue all prototype-ready work while
+  blocked rows remain explicitly uncredited.
+
+## 2026-09-04 — Isle House composite repair v1 independent bar-raiser review
+
+### Independent visual reviewer (`/root/d2_reference_research/official_source_scout`)
+
+#### What worked well
+
+- Same-pose grounded A/B and changed-light captures made the real improvement
+  unambiguous: the failed upper tile disappeared while camera, player, and exact
+  high/low projections stayed fixed.
+- Extracting all `222` Motion JPEG frames and inspecting every frame in the
+  declared `65..215` interval exposed both the stable run `2 -> 3` brick join and
+  the still-over-regular module rhythm. The brick met the owner's permissive
+  tileability bar without being treated as perfect.
+- Source, mounted-package, evidence, and checksum contracts cleanly separated
+  technical integrity from the failing whole-object art verdict.
+
+#### What did not work well
+
+- The evidence packet supplied no ready-to-view contact sheet for its AVI, and
+  this machine has no `ffmpeg`. AVFoundation also rejected Godot's Motion JPEG
+  AVI, so review required a bounded raw-JPEG extraction before the complete
+  interval could be inspected.
+- The WSW oblique view reveals a large protected return, but the packet describes
+  it mainly through scope metadata. Its distracting underlying repeat grid is a
+  major part of the proposed live appearance and should have had its own direct
+  review role.
+- Four mechanically distinct module definitions were easy to over-credit from
+  configuration. In actual motion their shared tall dark silhouette still
+  dominates the small door, canopy, mullion, and planter differences.
+
+#### What the team should change next time
+
+- Ship an ordered contact sheet or lossless review strip alongside every
+  MovieWriter artifact while retaining the movie and telemetry as authority.
+- Include every prominent protected or fallback face in whole-object visual
+  review; protection from authored motifs must not make a distracting generic
+  material invisible to the promotion decision.
+- Judge module-family diversity at the ordinary camera before increasing variant
+  counts. Strengthen only source-supported entry/gallery/patio grouping, and
+  preserve the no-invented-upper-schedule and no-literal-story-count boundaries.
+
+## 2026-09-04 — D3 next-15 receiver-first reference packets
+
+### D3 reference researcher (`/root/d3_reference_research`)
+
+#### What worked well
+
+- Freezing the first 15 unpacketized standalone units directly from the stored
+  213-unit catalog order prevented cherry-picking and excluded `building_part`
+  children and every P1/P2/P3/D1/D2 ID before research began.
+- Rechecking each source, wall, record, and chunk hash and listing every
+  outward-normal run partition produced 15 implementation-safe receiver packets
+  without touching the world builder, generated data, registry, or catalog.
+- Existing dated panorama records and later exact run ledgers turned five older
+  reference specs into honest target-side prototype handoffs. The other ten were
+  kept explicitly appearance-blocked instead of inheriting nearby buildings.
+- City EAS/address crosswalks, Navy records, SFCTA, TIDA, and SFPUC sources
+  improved lifecycle and identity boundaries: Building 264 is a strong exact
+  spatial join, Building 260 remains a deliberately noncanonicalized candidate,
+  and the shared 251 4th address does not distinguish Buildings 365–367.
+
+#### What did not work well
+
+- The browser-automation CLI documented by the available visual-research skill
+  is not installed on this host. Read-only web/API research and already validated
+  panorama records remained usable, but no new visual claim was made from an
+  uninspected or ambiguous viewpoint.
+- Ten source-key-only units have no defensible target exterior in the bounded
+  source pass. Several form tempting near-identical geometry cohorts; treating
+  those cohorts as shared facade evidence would be fast but false.
+- Official address points and historic building-number tables are often many-to-
+  one or spatially clustered. They help narrow identity but cannot substitute for
+  an explicit plan-to-footprint join or a dated target-bound elevation.
+
+#### What the team should change next time
+
+- Prototype the five ready targets as bounded confusion sets: share generated
+  material infrastructure, but preserve each unit's exact solid/void hierarchy,
+  side-color regions, and mapped run scope. Review in grayscale and motion before
+  considering any live or catalog action.
+- Treat tileability as an iteration target rather than a gate: permit minor early
+  seams, separate low-frequency wear, and forbid high-contrast repeated dirt or
+  partial openings crossing a tile edge.
+- Continue automated visual-source discovery for the ten blocked units in
+  geographic clusters. Ask the owner only for a precisely named compass-side
+  exterior after automated sources are genuinely exhausted; do not stop the five
+  ready prototypes while those references remain missing.
+
+## 2026-09-04 — 1441 Chinook exact-footprint standalone hero prototype
+
+### D2 prototype implementer (`/root/d2_reference_research`)
+
+#### What worked well
+
+- Reading the run geometry as architecture—not merely a flat receiver—resolved
+  the evidence-backed cadence cheaply and honestly: long SSE runs `10` and `15`
+  are the projecting wings, while exact perpendicular returns `11` and `14`
+  place runs `12+13` in a deep central setback. That let the prototype carry its
+  identity in the frozen footprint before adding reversible opening/rail detail.
+- A small geometry-only Site-12 kit proved sufficient for a first standalone:
+  meter-authored primitives, complete window surrounds, opaque recess/slab
+  modules, simple rails, and eaves. Keeping 1441's schedule outside the kit
+  prevents a reusable API from becoming a generic facade duplicated across the
+  cohort.
+- Reusing the sealed text-only warm-ivory micro-stucco pilot avoided another
+  image-generation loop and retained its prompt/hash/rights history. Exact
+  record signatures, mutation tests, same-pose native A/B, changed light, and a
+  four-second continuous stock-player movie made the package independently
+  reviewable without touching live routing.
+
+#### What did not work well
+
+- The first nominal whole-SSE pose looked through a narrow gap between nearby
+  buildings and technically framed the target without presenting it usefully.
+  The final whole pose moved to an unobstructed public-road oblique and binds its
+  first LOS to projecting run `10`; framing checks alone cannot detect severe
+  contextual occlusion.
+- Godot MovieWriter recorded the requested 1280×800 movie while the macOS root
+  viewport reported a scaled 1137×711 render surface. The harness now accepts a
+  bounded 16:10 native render viewport and separately pins the encoded movie
+  dimensions; assuming the CLI resolution equals the root texture was brittle.
+- The packet supports a dark shingle reading but not an exact product or repeat.
+  The prototype therefore uses a CC0 bitumen albedo as a dark roof surrogate
+  with scalar roughness. It remains a visible approximation for the independent
+  reviewer rather than a solved material claim.
+
+#### What the team should change next time
+
+- Have the independent bar raiser inspect the six original PNGs and the declared
+  motion interval against 1439, 1443, 1438, and 1440 Chinook before any live or
+  catalog action. Whole-object capture review should explicitly reject
+  contextual occlusion even when numeric target bounds pass.
+- Reuse the Site-12 kit primitives and the shared micro-surface family, but give
+  every subsequent cohort unit its own exact run-role schedule and confusion-set
+  test. Do not treat 1441's three-window wings or paired recess schedule as a
+  cohort default.
+- If the reviewer finds the roof materially weak, generate at most one neutral
+  tileable dark-brown shingle albedo with the same no-lighting/no-feature/no-PBR-
+  companion-map boundary and run a raw repeat plus moving player-distance test.
+  Do not spend that iteration unless the current surrogate is the actual blocker.
+
+## 2026-09-04 — 1441 Chinook standalone independent bar-raiser review
+
+### Independent visual reviewer (`/root/d2_1441_bar_review`)
+
+#### What worked well
+
+- Same-pose whole, oblique, changed-light, and grayscale inspection made the
+  form-led improvement clear: exact projecting wings, a real deep center, two
+  occupied levels, and broad eaves remain legible without hue or labels.
+- Extracting all Motion JPEG frames and inspecting every frame in the declared
+  `65..185` interval showed stable rails, openings, eaves, and meter-scaled
+  stucco. The faint raw repeat never became a seam, shimmer, moire, or moving
+  facade artifact at ordinary player distance.
+- Exact run-scoping and fail-closed tests cleanly separated shared Site-12
+  primitives from 1441's target-specific schedule; protected runs stayed
+  module-free and no live/catalog acceptance was smuggled into the prototype.
+
+#### What did not work well
+
+- The evidence packet did not ship a contact sheet for its AVI. The host lacks
+  `ffmpeg`, and AVFoundation rejected Godot's Motion JPEG AVI, so complete
+  interval review again required bounded raw-JPEG extraction to a temporary
+  directory.
+- Fine dark rails merge into the opaque recess fields at the widest distance,
+  making the center briefly resemble a dark glazed grid. The broad two-level
+  void/slab hierarchy survives, but circulation detail is less legible than the
+  configuration alone suggests.
+- Two semantic metadata inconsistencies escaped green focused tests: the
+  manifest pins a different confusion-set array than the authoritative packet,
+  and the config text assigns stucco to eaves even though the factory correctly
+  uses the dark roof surrogate.
+
+#### What the team should change next time
+
+- Emit an ordered contact sheet or review strip with every MovieWriter packet,
+  while retaining the original movie and motion telemetry as authority.
+- In the live pass, preserve the exact large-form cadence and change rail value,
+  thickness, or recess depth only if fresh motion proves the circulation read
+  unstable. Do not invent a focal doorway, interior, or cohort-wide schedule.
+- Add semantic assertions that reconcile confusion-set names/source IDs and
+  config material-role prose with actual factory assignments; do not treat hash
+  consistency alone as truth consistency.
+
+## 2026-09-04 — Isle House standalone composite Variant C repair
+
+### Variant C implementer (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Building Variant C as a new child of the sealed standalone A/B factory kept
+  the rejected live hook, world builder, accepted high part, and historical
+  evidence byte-exact while still producing honest same-pose B/C comparisons.
+- Confining the treatment to a quiet scalar NNW fallback, four unequal
+  schedule-free public upper bands, and four inference-labelled lower macro
+  rhythms addressed the three review blockers without inventing an upper story,
+  window, roof, or private-side schedule.
+- The requested direct NNW view and a generated lossless 4×4 motion review sheet
+  closed two reviewability gaps in the previous packet. Source and mounted-PCK
+  tests also proved that the executable closure contains no discovery/evidence
+  dependency or source URL and owns no collision, navigation, or spray state.
+
+#### What did not work well
+
+- The first native pass exposed a transform bug that static topology and
+  signature checks had not caught: shallow public cap boxes inherited the
+  frozen receiver's roughly 4.1 m base elevation twice and rendered as long
+  stray razor lines. The standalone factory now keeps their basis origin at
+  world Y zero, and the focused contract pins their absolute 10.38/18.63 m
+  levels before final recapture.
+- Four distinct module definitions can still be over-credited from metadata.
+  Their value is deliberately left for ordinary-player still and full-motion
+  independent review; this technical batch makes no recognition or
+  believability judgment.
+- The upper hierarchy is intentionally coarse because the authoritative packet
+  supports podium massing and material hierarchy, not an opening or floor
+  schedule. It is a bounded visual bridge, not an as-built facade claim.
+
+#### What the team should change next time
+
+- Keep one direct view for every prominent fallback face, and preserve a
+  lossless review strip beside Motion JPEG output so reviewers can inspect the
+  declared interval without local codec tooling.
+- Pair topology/signature gates with bounded world-space transform assertions;
+  exact primitive counts do not catch misplaced but otherwise deterministic
+  geometry.
+- If independent review passes, replace rather than stack over the rejected low
+  live child on exact receiver `w1282547787`, then reconcile topology, runtime
+  contracts, evidence, and registry state once. If it fails, continue only in a
+  new standalone variant and leave live bytes untouched.
+
+## 2026-09-04 — Isle House composite repair Variant C independent bar-raiser review
+
+### Independent visual reviewer (`/root/d2_reference_research`)
+
+#### What worked well
+
+- Exact same-pose sealed-B/C pairs, changed light, ENE detail, and a dedicated
+  direct NNW view made closure of the three earlier visual blockers decisive.
+  The review could distinguish a calmer protected return from an unsupported
+  authored facade rather than rewarding detail for its own sake.
+- Inspecting every independently extracted movie frame in the declared
+  `65..215` interval confirmed that the run `2 -> 3` brick join, upper caps, and
+  irregular lower macro rhythm remain stable without seams, shimmer, moire, or
+  distracting recurrence. The supplied lossless `4 x 4` sheet was useful for
+  orientation while the AVI remained authoritative.
+- The config, manifests, and contracts consistently separated observed family
+  cues from reversible placement/massing inference and explicitly blocked an
+  upper story/window schedule, literal seven-story correction, NNW opening
+  schedule, and private/rear facade claim.
+
+#### What did not work well
+
+- The `4 x 4` sheet samples only sixteen physics frames, so complete review still
+  required raw Motion JPEG extraction on a host without `ffmpeg`. Seven temporary
+  ordered sheets plus native-detail checkpoints were needed to cover all 151
+  process frames in the authoritative interval.
+- The broad podium body remains easy to over-credit from its four configured
+  band names. Only whole-view and changed-light inspection established that the
+  unequal value/depth hierarchy now reads as massing rather than a single mask;
+  the body itself is intentionally low information.
+- Opaque dark glazing continues to merge fine frame, half-door, canopy, and
+  planter detail at the widest distance. The candidate passes because its four
+  large-form arrangements remain distinct, not because every small component is
+  readable.
+
+#### What the team should change next time
+
+- For later MovieWriter packets, retain the compact contact sheet but also emit
+  denser ordered strips spanning the exact declared process-frame range so a
+  reviewer can confirm every frame without local codec tooling.
+- During live integration, replace the rejected low child instead of stacking,
+  preserve exact receiver/ownership boundaries, and recapture whole-object
+  evidence after integrated topology and gameplay checks pass.
+- Treat the quiet NNW plane and sparse podium body as honest evidence ceilings.
+  Add openings or higher-frequency facade structure only after a target-bound
+  public source maps those features to the exact receiver side.
+
+## 2026-09-04 — D4 next-15 receiver-first reference packets
+
+### D4 reference researcher (`/root/d4_reference_research`)
+
+#### What worked well
+
+- Freezing the next 15 standalone units directly from the stored 213-unit
+  catalog order, after mechanically excluding all 61 P1/P2/P3/D1/D2/D3 packet
+  IDs, kept the batch reproducible and prevented convenient visual references
+  from influencing selection.
+- City EAS records resolved all 15 civic addresses and exposed the important
+  distinction for `w95934102` and `w95934103`: the frozen sources contain only
+  house numbers, so Gateview Avenue remains a high-confidence spatial/number
+  crosswalk rather than a rewritten frozen fact.
+- Exact camera coordinates and headings separated nearby Google UI labels from
+  the actual viewed receiver. This recovered twelve target-side studies,
+  including four honest April 2019 frozen-snapshot studies whose March 2025
+  views show cleared pads, while preserving lifecycle truth.
+- Recomputing chunk-file, full-record, and wall-geometry hashes and checking all
+  receiver IDs/run partitions caught no packet drift. The D4-specific audit
+  passed 45 stable hashes, 225 required fields, 15 links, and all 15
+  standalone/no-part relationships without editing runtime state.
+
+#### What did not work well
+
+- The visual-research skill's browser CLI was unavailable. A bundled
+  Playwright/system-Chrome fallback could inspect direct panoramas, but rotated
+  Street View tiles for 1306 Gateview became black/uninspectable. Its default
+  view faces the opposite row, so the tempting visible siding/canopy schedule
+  had to be excluded and `w95934102` left appearance-blocked.
+- Public access exposes strong front views for much of the 475 m² housing
+  family but only rear/end views for 1411 and 1413 Flounder. Those packets are
+  component-ready, not whole-building recognition packets; similarity to the
+  adjacent rows cannot close the missing public-front evidence.
+- Administrative currentness is easy to overread. A live City address, a
+  managed-premises list, a 311 reference, and an affordable-housing project
+  name can persist independently of a standing facade. Current panoramas were
+  necessary to detect the cleared Halibut footprints.
+- The repository-wide registry clean-compile test was red while concurrent
+  runtime/catalog work was active, even though D4's exact current receiver and
+  hash checks passed. Research packets should report that external workspace
+  condition without treating it as either a D4 defect or a green global gate.
+
+#### What the team should change next time
+
+- Prototype the twelve target-side packets in bounded current-versus-historical
+  lanes, and run the two side components independently. Never let blocked 1306
+  or the two incomplete Flounder fronts stall the fourteen safe studies.
+- Share only neutral material infrastructure across the housing families.
+  Preserve entity-specific garage-bank symmetry, stair voids, gable/end-wing
+  hierarchy, brick/plinth accents, blank end planes, balcony recesses, canopy
+  depth, and roof strips; no neighbor donates an opening schedule.
+- Keep tileability as an iteration target rather than a perfection gate. Minor
+  early neutral-field seams are acceptable, while partial windows/doors at
+  seams, high-contrast repeated dirt, and baked-in address-specific features
+  are not.
+- Continue automated source discovery for the single appearance-blocked target
+  and dated front-side discovery for the two component packets. Ask the owner
+  only for a precisely scoped compass-side image after those automated routes
+  are genuinely exhausted; do not add a broad blocker to `HUMAN.md`.
+
+## 2026-09-04 — Isle House Variant C exact-current live replacement
+
+### Live replacement integrator (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- A new repair-only subclass reused the independently accepted Variant C build
+  path byte-for-byte while omitting standalone A/B teardown and preview logic.
+  The one builder preload swap therefore replaced the rejected `5/5/1844`
+  child instead of stacking or retaining a fallback.
+- Receiver-first fail-closed checks bound the attachment to exact low wall
+  `w1282547787`, the opaque independent-review digest, reviewed config/factory
+  hashes, run geometry, `7/11/2242` overlay topology, zero decorative ownership,
+  and an unchanged accepted high receiver. Measured world topology is
+  `735/940/954/64118/466/466`.
+- Two clean all-resource exports were byte-identical and both passed from
+  `/private/tmp` through direct `--main-pack` mounting. Actual-live still and
+  motion harnesses resolved the world-attached child, attached no preview, and
+  recorded the required grounded whole-composite, changed-light, public-side,
+  protected-return, and continuous stock-player evidence.
+
+#### What did not work well
+
+- Testing package-safe source hashes with `OS.has_feature("editor")` was too
+  coarse: an editor binary mounting a PCK still has that feature. Selecting raw
+  `FileAccess` hashing only when the source file exists, and otherwise using
+  the remapped `ResourceLoader` path, fixed the package case without weakening
+  source checks.
+- Literal forbidden-path strings in the runtime guard initially caused its own
+  closure scan to reject the guard. Building those diagnostic tokens from
+  harmless fragments preserved the fail-closed scan without embedding the
+  prohibited strings it was meant to detect.
+- The first MovieWriter attempt stopped after two frames because the harness
+  demanded an exact `1280x800` root viewport while the window manager supplied
+  a proportional `1138x712` viewport. The discarded attempt was replaced after
+  changing only that test assumption to an exact bounded 16:10 aspect check;
+  the final AVI contains 222 encoded frames and a declared 300-physics-sample,
+  five-second grounded review interval.
+
+#### What the team should change next time
+
+- Keep promotion adapters separate from independently reviewed construction
+  code so live metadata can change without invalidating the accepted visual
+  implementation or its historical evidence.
+- Exercise source and direct-mounted remapped-resource modes before capture;
+  this catches package-boundary mistakes before native evidence is expensive.
+- Do not repin the global runtime oracle, catalog, registry, or recognition
+  numerator until an independent reviewer accepts this exact-current live
+  packet. Until then, the old `933/943/61876` oracle mismatch is intentional and
+  the live attachment remains explicitly pending recognition/believability.
+
+## 2026-09-04 — 1444 Croaker exact-footprint standalone hero prototype
+
+### D2 1444 prototype implementer (`/root/d2_1444_prototype`)
+
+#### What worked well
+
+- Receiver-first construction preserved the exact `w95934117` wall and roof
+  pair, its 22-run footprint and source heights, and one congruent 54-triangle
+  structural collision shell. The standalone matcher fails closed on geometry,
+  topology, identity, or record-field drift and owns no navigation or spray.
+- Keeping the Site-12 kit geometry-only made the 1444 schedule visibly and
+  mechanically distinct from 1441: blank upper/undercroft runs `8/9`, sparse
+  returns `11/16`, quiet mapped runs `12/15`, far-end balcony run `17`, and no
+  modules on the other fifteen runs. Exact batch counts and deterministic
+  signature stayed stable across source and mounted construction.
+- An isolated neutral-ground harness avoided coupling this milestone to active
+  live-world work while retaining the actual stock player/camera/HUD. It sealed
+  six same-pose native stills, changed light, and a four-second/240-sample
+  grounded input-driven walk with exact source, fixture, and artifact hashes.
+
+#### What did not work well
+
+- The first capture harness waited on the shared live world and was blocked by
+  an unrelated in-progress package boundary. Replacing it with a direct frozen
+  wall/roof fixture removed that dependency and also made the evidence boundary
+  more honest: this packet proves standalone behavior, not live placement.
+- A broad text substitution while adapting the 1441 harness temporarily
+  mangled `pressed` in a motion-manifest key. A targeted vocabulary scan caught
+  it before sealing; both manifests were then regenerated from the final script.
+- The first direct-mounted private PCK correctly failed because the canonical
+  preset excludes the GenAI authoring texture directory even when the exported
+  Site-12 material depends on its warm-ivory bitmap. The final review PCK came
+  from an isolated byte-identical checkout with only that texture exclusion
+  removed; the shared preset stayed untouched, but production packaging still
+  needs an owner-level dependency-path decision before promotion.
+
+#### What the team should change next time
+
+- Run source and outside-checkout mounted resource-closure tests before native
+  capture whenever an accepted authoring texture is reused. Package-safe asset
+  location and authoring-source exclusion should be separate explicit concepts.
+- Start unaccepted facade studies in isolated exact-source fixtures when live
+  integration is out of scope. Require the actual player/camera and truthful
+  collision, but do not make standalone evidence depend on unrelated live-world
+  readiness.
+- Keep entity schedules beside their factories and preserve quiet mapped runs
+  when evidence does not justify more modules. Independent visual review—not a
+  technical PASS—must decide recognizability, believability, tiling, seam, and
+  repetition quality before any live attachment or global pin changes.
+
+## 2026-09-04 — 1444 Croaker standalone independent bar-raiser review
+
+### Independent reviewer (`/root/d3_reference_research`)
+
+#### What worked well
+
+- Pixel-first inspection of all six originals, temporary grayscale copies, and
+  every frame in the declared `64..184` movie interval separated actual
+  silhouette/value judgment from labels and technical self-claims. The
+  blank-upper/undercroft -> sparse return -> narrow far balcony sentence stayed
+  legible without color.
+- Auditing the seven mapped WSW runs and fifteen protected runs against the
+  config, entity factory, schedule-free Site-12 kit, metadata, and focused
+  source test established exact scope more strongly than the public-side stills
+  alone could.
+- A raw temporary `2 x 2` stucco repeat plus changed-light stills and continuous
+  motion made the material decision proportionate: faint cell recurrence is
+  real but non-distracting, while no hard seam, baked light, shimmer, or moire
+  justified regeneration.
+- Re-running checksums and source, evidence, source-package, and outside-project
+  mounted-PCK contracts exposed a clean distinction between a valid isolated
+  candidate and an unresolved canonical packaging path.
+
+#### What did not work well
+
+- The supplied 13-sample motion sheet was too sparse to certify the full
+  interval by itself. Read-only extraction of all 191 MJPEG frames and ordered
+  inspection of the exact 121-frame review interval was necessary.
+- The pure-dark, shallow undercroft proxies carry the strongest recognition cue
+  but can initially read as two garage doors. That is acceptable for a live
+  study, not a reason to overstate final believability.
+- Appearance-blocked or unassessed confusion peers prevent an honest universal
+  top-1 claim across the real Site-12 cohort. The review can distinguish 1444
+  from reviewed 1441 and the documented 1439 sentence while leaving unseen
+  peers explicitly uncredited.
+- The isolated review PCK succeeds only because its temporary preset includes
+  the stucco texture that the canonical preset still excludes. A mounted PASS
+  for that artifact cannot be promoted into a canonical package-closure claim.
+
+#### What the team should change next time
+
+- Resolve canonical package-safe placement/exclusion for an accepted shared
+  material before capturing a promotion candidate, then repeat the exact
+  outside-project mounted audit on the canonical export.
+- In the first live 1444 study, treat undercroft depth/read, far-rail
+  legibility, exact wall+roof replacement, spray restoration, navigation, and
+  neighboring Site-12 context as explicit gates. Keep the numerator at `+0`
+  until that exact-current packet receives independent review.
+- Preserve unknown faces as quiet protected geometry and never improve apparent
+  richness by copying 1441 or another cohort member's opening schedule.
+
+## 2026-09-04 — Isle House Variant C independent exact-current live review
+
+### Independent live bar-raiser (`/root/d4_reference_research`)
+
+#### What worked well
+
+- The live harness resolved the real world-attached Variant C child and attached
+  zero preview geometry. Exact paths, first-LOS receivers, stock camera state,
+  projected high/low coverage, and the `300` grounded physics samples made the
+  native evidence auditable without trusting its labels alone.
+- Inspecting every frame `65..215`, plus eleven original-size checkpoints,
+  confirmed that the standalone visual result survived integration. The quiet
+  NNW field, stepped upper transition, four lower macro rhythms, and continuous
+  brick all remained stable; no seam, shimmer, baked-light patch, or
+  distracting repeat emerged.
+- Independent focused, source-package, evidence, and two direct-mounted package
+  runs agreed on one C/zero rejected or fallback, `735/940/954/64118/466/466`,
+  and zero decorative ownership. Byte-identical seal PCKs reduced ambiguity at
+  the promotion boundary.
+- Separating receiver identities from the physical-building unit made the
+  counting decision explicit: high `w1282547786` plus low `w1282547787` can now
+  support one recognized Isle House, never two buildings.
+
+#### What did not work well
+
+- The live packet did not retain an ordered motion review sheet. The AVI was
+  valid, but a reviewer without a local Motion JPEG tool had to extract all 222
+  frames and construct ten temporary sheets before the complete interval could
+  be graded.
+- The exact-current catalog and compiled registry correctly remain at the
+  pre-review `not_evaluated`/placeholder state, so the visual eligibility PASS
+  and the recorded numerator are temporarily different facts. The review must
+  state that distinction plainly to avoid either self-promotion or a mistaken
+  claim that Isle House is still visually blocked.
+- The only whole-composite camera is repeated under changed light rather than a
+  second distinct oblique pose. Its measured high/low exposure is sufficient
+  for this gate, and the ENE/NNW views plus motion close the low-side questions,
+  but a second whole pose would make future audits faster.
+
+#### What the team should change next time
+
+- Emit a derived, non-authoritative ordered frame sheet alongside every live
+  MovieWriter artifact while retaining the AVI and per-frame telemetry as the
+  authority. Include every declared useful frame rather than sparse samples.
+- After a live PASS, update the catalog, compiled registry, and global topology
+  oracle in one fail-closed ledger step. Preserve the one-composite-unit rule and
+  require a new review only if the accepted visual bytes or signatures change.
+- Keep tileability calibrated to gameplay impact: reject obvious seams, baked
+  lighting, shimmer, or high-contrast recurrence; carry faint recurrence and
+  minor cap-joint variation as polish rather than blocking useful progress.
+
+## 2026-09-04 — D5 receiver-first reference packet cohort
+
+### D5 reference researcher (`/root/d5_reference_research`)
+
+#### What worked well
+
+- Mechanically walking the stable 213-unit catalog after excluding all 76
+  P1/P2/P3/D1/D2/D3/D4 packet IDs froze an unambiguous 15-building cohort
+  before visual convenience could influence selection. All fifteen resolved to
+  standalone direct footprints with no part children.
+- Exact City EAS rows, the City Treasure Island address crosswalk, TIDA's
+  managed-premises schedule, and Navy Site 12 history established useful
+  identity and lifecycle boundaries. In particular, keeping frozen 1230 beside
+  current 1394 and preserving the official Court/Avenue discrepancy avoided a
+  silent identity rewrite.
+- Target-bound dated panoramas supported ten conservative public-side studies
+  and three bounded side/rear components. Recomputing chunk, wall-record, and
+  wall-geometry hashes and deriving all run normals from the current chunks
+  produced a clean audit: 45 hashes, 255 authority fields, 60 facing
+  partitions, 15 links, and readiness `10 / 3 / 2`.
+- The evidence boundary stayed clean: only written observations, panorama IDs,
+  dates, coordinates, headings, and source links entered the repository. No
+  third-party pixels were retained or proposed as game textures.
+
+#### What did not work well
+
+- The prescribed browser skill's `agent-browser` executable was unavailable.
+  Bundled Playwright with system Chrome provided a bounded inspection fallback,
+  but it was slower and made camera/panorama provenance checks more manual.
+- Closest views for 1301, 1314, and 1316 repeatedly selected user-contributed
+  panoramas. Excluding those sources was the correct boundary, but it left 1301
+  and 1314 appearance-blocked and limited 1316 to a distant official rear-side
+  component.
+- Similar Gateview housing rows merge quickly at distance. A visible blue-gray
+  siding or canopy rhythm in the corridor was not enough to assign an exact
+  schedule, so tempting neighbor detail had to remain unused.
+- Administrative sources can look more current than they really are. Live
+  address points and management lists establish a dated civic trail, not
+  survival, occupancy, habitability, or an unchanged facade.
+
+#### What the team should change next time
+
+- Run the ten target-side studies and three component studies independently;
+  do not let the two blocked Gateview rows stall safe work. Keep 1301 and 1314
+  as narrow source-discovery lanes until a rights-clear view separates an exact
+  compass side.
+- Build two reusable neutral systems: a garage/end-wing plus central-stair kit
+  for Sturgeon/Flounder/Halibut, and a siding/canopy kit for Gateview. Reuse
+  materials and geometry primitives, never entity-specific opening cadences,
+  garage counts, repairs, or solid/void schedules.
+- Treat tileability as a progressive quality target. Minor neutral-field seams
+  may pass an early prototype, while clipped doors/windows, baked address cues,
+  and high-contrast repeating dirt remain unacceptable at every stage.
+- Keep geometry-bound unknown identities explicit. `w95934130` can advance as
+  a target-side source-key study without receiving a guessed civic label, and
+  the 1230/1394 packet should continue showing its crosswalk instead of
+  rewriting the frozen record.
+
+## 2026-09-04 — Site-12 shared stucco canonical package-safe promotion
+
+### D2 package-closure implementer (`/root/d2_1444_prototype`)
+
+#### What worked well
+
+- Promoting the already-reviewed warm-ivory PNG as an exact byte-for-byte copy
+  closed the canonical export blocker without spending another generation or
+  changing any accepted pixels. Raw SHA-256, byte count, decoded dimensions,
+  format, and the complete decoded pixel/mipmap buffer now have explicit tests.
+- Keeping the shared material files in place and changing only their texture
+  dependency preserved both entity-specific scalar tints, roughness `0.88`,
+  meter UV scale `1 / 3`, absence of fabricated companion maps, and unchanged
+  1441/1444 geometry signatures.
+- A fresh export from the untouched canonical `macOS Private` preset, followed
+  by three direct-mounted tests from a new `/tmp` directory, proved the promoted
+  imported texture loads while pilot-only texture/material resources and actual
+  discovery/evidence directories stay out of the package.
+- Treating old capture manifests as immutable historical records allowed their
+  exact generator/input/image/movie hashes to remain auditable while corrected
+  future-facing configs and tests carry the authoritative 1441 confusion set
+  and accurate dark-roof eave assignment.
+
+#### What did not work well
+
+- The first promoted import inherited Godot's default `mipmaps/generate=false`
+  rather than the reviewed pilot's `true`. Although raw PNG bytes were already
+  identical, the decoded buffer comparison correctly failed until the import
+  behavior was matched and the asset reimported.
+- A raw PNG hash assertion does not mean the same thing inside an exported PCK:
+  Godot remaps the source path to imported `.ctex` data. Mounted verification
+  therefore has to pin the loaded decoded buffer, while raw byte equality stays
+  a source-checkout assertion.
+- Package absence must distinguish actual excluded content from harmless
+  strings elsewhere in a large all-resources build. Directory/resource-loader
+  checks prove discovery, evidence, and pilot payloads are absent; direct
+  closure scans separately prevent the 1441/1444 runtime assets from retaining
+  discovery/evidence/URL/private-path references.
+
+#### What the team should change next time
+
+- When promoting an accepted texture, copy both the bitmap bytes and every
+  intentional import setting, then make raw-byte equality and decoded-buffer
+  equality the first source gate before touching consumers.
+- Give each newly accepted shared material family a package-safe runtime home
+  and provenance receipt before standalone capture, while retaining the
+  excluded pilot source only for immutable historical verification.
+- Always pair a canonical export with an outside-checkout direct-mount test for
+  every intended consumer. Do not treat an isolated preset workaround as
+  production closure, and do not recapture visual evidence when bytes and
+  material behavior are demonstrably unchanged.
+
+## 2026-09-04 — Site-12 stucco promotion independent package audit
+
+### Independent package reviewer (`/root/d5_reference_research`)
+
+#### What worked well
+
+- Comparing raw PNG bytes and the complete decoded pixel/mipmap buffers closed
+  both halves of the texture-equivalence question. Reversing only the promoted
+  texture path in each material reproduced its exact historical visual-evidence
+  hash, which made the unchanged tint, roughness, metallic, UV repeat, and
+  companion-map boundary independently auditable.
+- Mounting both the retained receipt PCK and a second fresh-current canonical
+  PCK outside the checkout gave the same Site-12 result: promoted texture
+  present, pilot resources absent, direct closures clean, and both prototype
+  signatures/topologies exact. The older 1444 review PCK also provided a useful
+  read-only historical config/package comparison.
+- Separating historical evidence hashes from current future-facing config and
+  material hashes preserved every prior visual artifact while still verifying
+  the corrected 1441 confusion IDs and dark-roof eave prose.
+
+#### What did not work well
+
+- The checksum file uses directory-relative names; invoking it once from the
+  repository root produced irrelevant missing-file errors. Running it from its
+  evidence directory verified both listed files. Audit commands should set the
+  intended working directory explicitly from the start.
+- The fresh-current whole PCK differed from the retained receipt PCK because
+  unrelated Isle House registry/config work landed in the shared checkout
+  between exports. Both artifacts passed the exact Site-12 mounts, but a single
+  whole-PCK hash is a noisy comparison in a concurrent worktree.
+- Raw strings over an all-resources PCK find unrelated URLs and provenance
+  text from other configs/tests. That is not a useful substitute for checking
+  the target's dependency closure and actual loadable package paths.
+
+#### What the team should change next time
+
+- Record a scoped exported-resource manifest alongside the whole-artifact hash
+  so an independent reviewer can distinguish target drift from concurrent,
+  unrelated package additions without reverse-engineering a strings diff.
+- Keep separate assertions for package-directory absence, resource loadability,
+  and forbidden tokens in the exact consumer closure. Do not describe that
+  bounded closure result as a global string-free guarantee for the full game.
+- Snapshot the relevant Git/worktree state or target resource hashes at export
+  time, while continuing to treat raw source equality and decoded mounted
+  equality as separate mandatory gates for promoted textures.
+
+## 2026-09-04 — Exact-current Isle recognition acceptance reconciliation
+
+### Registry/runtime reconciler (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Modeling recognition at the immutable physical-unit layer made the Isle House
+  rollup unambiguous: the composite parent contributes exactly one accepted
+  unit, while its high and low source records remain two receiver records and
+  never become numerator entries. The resulting metric is exactly `5/213`.
+- Receipt allowlisting and runtime-safe summaries bound all five accepted units
+  to independent review and evidence-manifest hashes without leaking evidence,
+  discovery paths, URLs, or source pixels into the runtime registry.
+- Recompiling twice produced byte-identical catalog-derived artifacts. The
+  exact adapter arithmetic also remained explicit: 10 legacy plus 4 active
+  adapters yield 14 plans; 6 are package-safe and 8 are hard-disabled.
+- The accepted live Isle topology measured and passed at
+  `735/940/954/64118/466/466`; focused collision, spray, gameplay, B1, B3,
+  source-package, and direct-mounted Isle checks stayed green.
+
+#### What did not work well
+
+- A first loader edit introduced an indentation parse error in the new
+  Building 3/Isle behavior branch. Running Godot's `--check-only` against the
+  loader immediately exposed it; the branch was corrected before generation
+  hashes were sealed.
+- Adapter counts and sanitized-projection counts are different dimensions.
+  There are 14 adapter plans but 15 unique projected source inputs and 17
+  projection occurrences; treating those figures as one arithmetic partition
+  would falsely imply a missing plan.
+- The generic source-checkout registry tests deliberately hash raw `.gd`,
+  `.tscn`, and `.tres` bytes. Those raw paths are remapped in an exported PCK,
+  so mounting those source-oriented tests directly reports missing raw assets.
+  The fresh target-specific mounted package contract passed, but an eventual
+  live registry-loader promotion still needs a separately designed
+  export-transformation hash contract rather than weakening source hash checks.
+
+#### What the team should change next time
+
+- Keep one explicit physical-entity metric object with the accepted unit ID
+  set, denominator policy, and composite-part exclusions; never infer the
+  recognition score from receiver or adapter counts.
+- Report plan, unique-projection, and projection-occurrence cardinalities as
+  separate named values. Every adapter should have exactly one plan even when
+  several adapters share a projected input or one adapter needs several.
+- Before wiring the generic loader into exported construction, add a bounded
+  export-aware integrity layer that pins transformed/remapped resource bytes or
+  an externally sealed PCK resource manifest. Do not replace source-byte hash
+  checks with presence-only checks.
+
+## 2026-09-04 — D6 northern-housing receiver-first reference packets
+
+### D6 reference researcher (`/root/d6_reference_research`)
+
+#### What worked well
+
+- Walking the sealed 213-unit catalog after the 91 P1/P2/P3/D1–D5 packet IDs
+  froze the next 15 standalone units mechanically. Checking both
+  `unit_kind=standalone_building` and the inventory's empty part-child set
+  prevented receiver rows or building-part children from becoming extra
+  physical entities.
+- Pairing the current City EAS point with the frozen footprint before reading
+  a panorama label kept adjacent-row labels from becoming target identities.
+  This was decisive for 1202, 1307, 1234, 1239, and 1236, where the camera-side
+  Google label names a neighbor while the heading ray reaches the exact target.
+- The Google single-image-search response remained useful with ordinary
+  first-party request headers after the interactive renderer failed. It
+  supplied pano ID, date, label, camera point, copyright, and linked coverage;
+  direct thumbnails were inspected only in a temporary directory and reduced
+  to written observations before deletion.
+- Exact four-family facing-run partitions made the handoff useful without
+  pretending that a visual cadence had exact receiver endpoints. The resulting
+  set honestly closes at 13 detached target-side studies and two bounded
+  component studies, with no need to stall those 13 on the two missing long
+  elevations.
+- A shared tileable siding/trim/roof library plus separate flat-canopy,
+  gabled-canopy, projecting-gable, and boarded-panel components captures the
+  useful reuse. Entity-specific solid/void rhythms, canopy extents, board-ups,
+  and opening schedules remain local.
+
+#### What did not work well
+
+- The configured browser helper executable was absent, while a headless Google
+  Maps/WebGL attempt produced denied/black panorama tiles. Continuing with the
+  public metadata and thumbnail endpoints avoided a block, but the endpoint
+  response shape is undocumented and should be treated as brittle.
+- Catalog and runtime-registry hashes changed during the research pass. Pinning
+  an intermediate value would have invalidated every packet, so packet sealing
+  had to wait for the registry reconciler's byte-identical double-pass.
+- A number-only frozen footprint `w95934103` had previously been associated
+  with 1307 Gateview, but the full-street-tagged `w96215657` is much closer to
+  the City point and lies on the panorama ray. Address-string matching alone
+  therefore created a real neighbor-borrow risk that D6 had to state and
+  contain explicitly.
+- The City row named 1395 Gateview Avenue is roughly 362 m from
+  `w96215667`; only the checked 1248→1395 Gateview Court crosswalk and the
+  exact-labeled historical panorama are usable. Suffix equality without a
+  spatial check would have silently joined the wrong record.
+- File patches inherit the orchestration task's working directory rather than
+  an inner shell command's `workdir`. The first packet patch landed in the
+  task checkout and had to be moved with a second patch before validation.
+
+#### What the team should change next time
+
+- Add a read-only panorama-discovery helper that records the exact query point,
+  returned camera point/date/author, target-centroid distance, heading error,
+  and source copyright, then deletes its temporary pixels. Keep its output as
+  a research receipt, not a runtime texture source.
+- Require a spatial/address disambiguation table whenever two frozen sources
+  share a number or a current-address suffix differs. A full address plus the
+  closest plausible footprint must beat a number-only match before appearance
+  evidence is assigned.
+- Make the packet audit a reusable read-only command: reproduce the next-ID
+  walk, recompute chunk/record/geometry hashes, compare 17 core fields per
+  packet, partition every run exactly once, resolve local links, and reject
+  binary payloads or unsealed authority hashes.
+- Keep tileability a progress target for neutral fields, but never let a
+  repeating texture contain clipped openings, address cues, fences, canopies,
+  boarded panels, or high-contrast dirt. Those remain complete local modules
+  even when several buildings share the same construction family.
+- Treat older prose coverage as revisable by later receiver geometry. The
+  corrected 1212 rear half-plane failure and the exact Batch 04/05 maps should
+  continue to override broader early descriptions.
+
+## 2026-09-04 — Exact-current recognition reconciliation independent audit
+
+### Independent reviewer (`/root/d6_reference_research`)
+
+#### What worked well
+
+- Recomputing source memberships, direct receivers, and physical units from
+  the frozen inventory before reading the generated totals independently
+  reproduced `215 / 214 / 213`. Applying the composite rule then reproduced
+  exactly five accepted parent-level units, including Isle House once and no
+  part children.
+- Reading all five acceptance receipts in chronology made the supersession
+  chain explicit: the later tower, Building 3, and Isle reviews replace narrow
+  earlier failures without erasing them. Exact receipt and manifest hashes
+  kept that reasoning mechanically bounded.
+- Testing the compiler twice and hashing every sealed artifact before and
+  after distinguished deterministic registry reconciliation from unrelated
+  concurrent worktree changes.
+- A fresh external PCK separated the real export-remap limitation from target
+  behavior: generic raw-source checks failed as disclosed, while the exact
+  target-mounted Isle contract passed without weakening any source hash gate.
+
+#### What did not work well
+
+- Two older Building 1 live regressions still pin the pre-public-front
+  `735/931/941/59778/466/466` world and `5/5/8026` main wall. They now fail even
+  though the newer accepted hero and full-runtime contracts pass, so the suite
+  cannot honestly be described as wholly green.
+- The Isle live-replacement checksum ledger was sealed before a later
+  strengthening of the current low-live integration test. Its single stale
+  file hash and historical README wording obscure the otherwise passing
+  current target contract.
+- One loader failure message says the projection occurrence count is not 14,
+  although both the invariant and tests correctly require 17. This is harmless
+  at runtime but makes diagnosis needlessly confusing.
+
+#### What the team should change next time
+
+- Make every acceptance-changing hero update retire or revise all older
+  focused topology oracles in the same bounded change, while preserving their
+  collision, ownership, and no-stacking assertions.
+- Label immutable capture-time checksum ledgers separately from moving
+  exact-current test manifests. If a later test strengthening is expected,
+  seal its prior version inside the evidence directory instead of hashing a
+  mutable repository path.
+- Add an export-aware transformed-resource manifest before enabling generic
+  registry-loader execution in packages. Keep exact raw-source hashes for
+  checkout validation and exact mounted behavior checks for exported builds;
+  neither should be weakened to make the other pass.
+
+## 2026-09-04 — D7 northern-housing receiver-first reference packets
+
+### D7 reference researcher (`/root/d7_reference_research`)
+
+#### What worked well
+
+- Walking the sealed 213-unit catalog after the 106 P1/P2/P3/D1–D6 packet IDs
+  froze the next 15 standalone buildings without interpretation. The inventory
+  then independently confirmed one direct wall, one direct roof, and no part
+  children for every result.
+- Exact footprint-centroid rays kept camera-side labels from becoming target
+  identity. This was especially important at frozen 1246/current 1397 Gateview
+  Court, where the official crosswalk supports the identity but the similarly
+  named City EAS point lies roughly 363 m away and was excluded from the join.
+- Written target-side observations were sufficient for 13 detached studies.
+  Treating the foliage-limited 1244 Northpoint and 1141 Ozbourn evidence as
+  component-ready preserved useful cues without copying a neighboring row's
+  opening schedule.
+- The retained validator now derives the cohort, checks five sealed authority
+  hashes, recomputes all 45 chunk/record/geometry hashes, compares 270 exact
+  packet fields, reproduces 60 facing partitions, checks all local links and
+  readiness totals, and rejects unexpected files. The full generated-world
+  validator remained green and unchanged.
+- Separating neutral tileable siding/trim/roof fields from complete canopy,
+  awning, entry, window, privacy, and wear modules found useful reuse without
+  erasing the identity-bearing differences among otherwise similar rows.
+
+#### What did not work well
+
+- The configured browser helper was unavailable and the workspace browser
+  bundle lacked its executable. Direct first-party panorama metadata and
+  thumbnail endpoints still supported bounded inspection, but that fallback is
+  undocumented and brittle.
+- Several Google camera labels name the near or adjacent row rather than the
+  footprint reached by the camera-to-centroid ray. Label-first research would
+  have mislabeled 1238, 1244, and the 1246/1397 Gateview footprint.
+- April 2019 was the best direct public-side evidence found for both Ozbourn
+  buildings. It supports a dated 1143 prototype and only a foliage-limited 1141
+  component; it cannot establish either facade's 2026 condition.
+- A large multi-file patch produced truncated tool output. The edit landed,
+  but verifying every expected file immediately was necessary before continuing
+  and smaller subsequent patches were easier to audit.
+
+#### What the team should change next time
+
+- Promote the D7 validation pattern into a generation-agnostic packet checker
+  that accepts a packet-series manifest. Exact filenames, prior-ID count,
+  authority hashes, packet fields, partitions, readiness classes, and allowed
+  file types should be data rather than copied script constants.
+- Keep a first-party discovery receipt containing query centroid, panorama ID
+  and month, camera coordinate, target distance, heading, observed receiver
+  family, and excluded camera label. Do not retain the fetched pixels.
+- Treat older coverage as an explicit readiness class instead of silently
+  mixing it with current views. Historical prototype-ready and component-ready
+  are useful progress states when their date and unknowns remain visible.
+- Share only low-frequency, tileable material fields and parametric structural
+  families. Canopy segmentation, shallow-awning extent, door color/rhythm,
+  plane steps, privacy screens, and occluded schedules must remain local until
+  target-bound evidence resolves them.
+
+## 2026-09-04 — Exact-current reconciliation discrepancy repair
+
+### Bounded repair implementer (`/root/d5_reference_research`)
+
+#### What worked well
+
+- Updating the two old Building 1 tests against the already accepted hero
+  oracle restored both focused regressions without deleting their historical
+  predecessor, identity, geometry, single-owner, collision, spray, or
+  no-stacking checks. Both passed twice before broader regression work began.
+- The loader's one-word diagnostic correction immediately tripped the existing
+  SHA chain. Regenerating adapter contracts, runtime registry, and validation
+  report with the project compiler preserved the fail-closed design while two
+  clean `--check` passes proved deterministic output and an unchanged `5/213`.
+- Updating exactly one Isle checksum line made all 21 entries pass while every
+  prior visual/evidence byte and every other pin remained unchanged. Source and
+  mounted target contracts agreed on exact Building 1 and Isle topology and
+  ownership.
+
+#### What did not work well
+
+- The checked-in Building 1 focused scripts have no mounted-package mode. When
+  invoked directly from a PCK, their historical-source and whole-world branches
+  encounter the already documented Godot export-remap seam even though direct
+  packaged hero construction is exact. A temporary external target-specific
+  auditor was needed to state the narrower packaged B1 result honestly.
+- A diagnostic-only loader edit changes three generated artifact hashes and two
+  focused test pins. That cascade is correct, but it makes the apparent edit
+  surface larger than the functional change and can invalidate concurrent
+  research packets that call a moving registry hash “sealed.”
+- One initial mounted command continued after expected B1 source-oriented
+  failures because the shell enabled pipeline failure propagation but not
+  immediate exit. Each counted mounted gate was rerun alone with an explicit
+  successful exit before sealing the receipt.
+
+#### What the team should change next time
+
+- Give target-specific runtime tests an explicit source/mounted mode when they
+  are intended to prove both boundaries. Mounted mode should test transformed
+  behavior and exclusions; source mode should keep exact raw-byte pins.
+- Treat generated SHA cascades as first-class compiler output: document the old
+  and new loader, adapter, registry, and report hashes together, then rerun both
+  deterministic compiler and consumer-pin tests before any new packet freezes
+  the registry.
+- Keep historical checksum ledgers pointed at immutable copies where possible.
+  If they intentionally follow a strengthened current test, update only that
+  named entry and re-verify the complete ledger, never the visual assets.
+
+## 2026-09-04 — 1439 Chinook exact-source standalone hero prototype
+
+### Standalone implementer (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Treating the D2 packet's eight mapped SSE runs as a region, but only runs 11,
+  19, and 23 as motif hosts, prevented tiny runs 17/18 and protected sides from
+  acquiring an invented opening schedule. Exact record signatures and a
+  nearest-run test made that boundary executable.
+- Reusing the package-approved Site-12 primitives and promoted stucco kept the
+  production surface small while the entity-specific one-end balcony, quiet
+  upper register, and opposite passage produced a distinct composition rather
+  than copying the 1441 or 1444 schedule.
+- Same-pose native A/B stills, changed light, continuous grounded stock-player
+  motion, and an outside-checkout PCK load all sealed against exact hashes. The
+  source, evidence, and mounted package suites each passed twice without live
+  attachment, registry edits, navigation, or spray ownership.
+
+#### What did not work well
+
+- The first oblique framing placed the far end too close to the viewport edge.
+  Re-centering the capture-only camera aim fixed the honest whole-object frame,
+  but required recapturing the complete still set so one generator/hash chain
+  remained authoritative.
+- The first canonical export attempt failed because its destination directory
+  did not exist. Creating the bounded build directory and repeating the same
+  unmodified preset succeeded; checking that prerequisite earlier would have
+  avoided a noisy non-product failure.
+- The raw MovieWriter result needs a derived contact sheet for quick navigation.
+  The AVI remains the authority because the sheet cannot prove continuous
+  motion, seams, or shimmer by itself.
+
+#### What the team should change next time
+
+- Validate capture bounds for every planned pose before writing any files, then
+  seal all stills in one run only after the farthest silhouette has adequate
+  margin.
+- Have standalone package scripts create or preflight their narrow export
+  destination while keeping canonical preset bytes immutable, and always test
+  the retained PCK from an outside-project working directory.
+- Keep source-supported run regions, motif-host subsets, motif-free mapped
+  continuations, and protected runs as four separate data fields. That small
+  distinction prevents reference coverage from becoming permission to stamp a
+  facade schedule across every observed edge.
+
+## 2026-09-04 — Recognition discrepancy repair independent closure recheck
+
+### Independent reviewer (`/root/d6_reference_research`)
+
+#### What worked well
+
+- Reversing only the documented B1 numeric/prose replacements in memory
+  reproduced both exact pre-repair test hashes. The same technique reproduced
+  the prior loader, adapter, registry, report, and Isle checksum-ledger hashes,
+  proving the repair surface was bounded rather than trusting its prose.
+- Serial source runs made the closure crisp: both formerly stale B1 tests, the
+  acceptance-level B1 hero test, three Isle gates, registry/loader gates, and
+  full runtime all passed at the same exact topology. Two compiler checks left
+  every input and output byte-identical.
+- Reusing the retained repair PCK by exact hash avoided a noisy new export.
+  The official Isle mounted test and an external B1 target audit both passed;
+  the latter checked four exact plans, topology, identity, deterministic
+  construction, and collision/spray ownership without editing the repository.
+- Intentionally rerunning generic source-oriented tests against that PCK kept
+  the export-remap seam visible. Their expected raw-path failures coexist with
+  passing target-mounted behavior and were not relabeled as product failures.
+
+#### What did not work well
+
+- The first external B1 audit incorrectly assumed the main wall's base Y was
+  zero. The authoritative source-plan contract only promises its exact X/Z
+  footprint there; correcting the temporary auditor to match that contract
+  produced the expected mounted pass without changing repository code.
+- D7's whole-registry hash was correct when the packet sealed but became stale
+  after the loader diagnostic cascade. Its README and live validator do not
+  clearly distinguish packet-time sealing from exact-current validation, so a
+  legitimate historical hash now looks like unexplained drift.
+- Generic source tests emit very large error streams when mounted because each
+  remapped raw asset fails independently. The result is useful but a concise
+  expected-seam probe would be easier to audit.
+
+#### What the team should change next time
+
+- For numeric-only oracle repairs, always reconstruct the exact prior file
+  hash in memory from the claimed substitutions. This cheaply proves no
+  assertion was deleted or relaxed.
+- Add explicit mounted modes to target contracts and a compact export-remap
+  sentinel. Preserve exact raw-source hash gates for checkout validation and
+  use separate transformed-resource/behavior gates for packages.
+- Version research packet authority as `packet_time_snapshot` versus
+  `current_dependency`. A moving generated registry should not invalidate
+  immutable geometry packets merely because an upstream diagnostic string
+  changed, but current validators must disclose that distinction.
+
+## 2026-09-04 — D8 receiver-first reference packets
+
+### D8 reference researcher (`/root/d8_reference_research`)
+
+#### What worked well
+
+- Walking the sealed 213-unit catalog after the 121 unique P1/P2/P3/D1–D7
+  packet IDs froze the next 15 standalone physical entities without hand-picked
+  substitutions. Receiver-inventory checks then proved one direct wall, one
+  direct roof, and zero part children for every result.
+- Separating identity, currentness, and appearance evidence kept three useful
+  but non-explicit civic bindings honest. The 33E- and 1108-candidate facades
+  remain source-key prototype-ready with caveats, while the B292 candidate is
+  appearance-blocked instead of receiving an invented warehouse schedule.
+- First-party panorama metadata plus direct centroid rays produced ten bounded
+  prototype studies and four component studies. Recomputing 45 hashes, 300
+  exact packet fields, and 60 facing partitions made the handoff independently
+  reproducible; the full generated-world validator remained unchanged.
+- A shared, pragmatically tileable Site 12 siding/trim/window kit emerged
+  without flattening address-specific canopies, gables, doors, privacy boxes,
+  boarding, vents, or opening rhythms. Ship Shape and the school wing remain
+  separate visual families.
+
+#### What did not work well
+
+- The authorized registry discrepancy repair landed while D8 was being
+  written, changing the whole-file authority SHA without changing D8 geometry.
+  The validator correctly failed rather than silently accepting the move, but
+  coordination was required before freezing the authorized `acc04a…` output.
+- The configured browser-automation executable was unavailable, so the same
+  first-party metadata/thumbnail inspection fallback used by earlier packet
+  rounds was necessary. It was sufficient for bounded written observations but
+  cannot clear tree/fence occlusion or provide exact module endpoints.
+- The direct Navy Site 12 PDF remains discoverable in the official Navy catalog
+  and web index but returns HTTP 403 to a bare automated curl check. Treating
+  the 403 as a disclosed bot-facing transport result was more accurate than
+  claiming every link returned 200.
+
+#### What the team should change next time
+
+- Freeze both packet-time and current-dependency registry hashes explicitly at
+  the start of each research round, and coordinate any generated-registry
+  rebuild before final validation rather than assuming the file is stationary.
+- Keep target-side visual readiness separate from civic-name certainty. A
+  source-keyed prototype can advance from direct target evidence while the
+  human-facing name stays provisional; a named facility with no visible facade
+  must remain blocked.
+- Preserve the two-layer housing system: neutral fields target practical
+  tileability, while all high-contrast openings, doors, canopies, gables,
+  privacy boxes, boards, and local wear remain complete modules. Imperfect
+  early neutral tiling is preferable to copying a neighbor's missing schedule.
+
+## 2026-09-04 — D7 packet-time/current registry validation clarification
+
+### Validator repair implementer (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Modeling the old registry hash as a named packet-time receipt, rather than a
+  file authority, preserved D7 provenance without pretending the superseded
+  bytes still occupy the current runtime path.
+- A separate exact-current gate now checks both whole-file identities and
+  semantics: catalog/registry unit totals, derived receiver and source-record
+  totals, the exact five accepted physical IDs, Isle part exclusions, and the
+  displayed `5/213` rollup. This caught drift without weakening any of D7's 45
+  source hashes, 270 packet fields, 60 partitions, or readiness checks.
+- D7, registry-compiler, and generated-world validators passed twice against
+  the same current `acc04a…` registry and `2b4579…` catalog.
+
+#### What did not work well
+
+- The original validator put a moving generated registry in the same generic
+  full-file hash loop as immutable packet inputs. A harmless downstream hash
+  cascade therefore made a valid historical packet look corrupt.
+- The README called the old hash a sealed runtime binding without a time
+  qualifier. The value was accurate when recorded, but the wording could not
+  tell a reviewer whether it described packet provenance or the current file.
+
+#### What the team should change next time
+
+- Give research validators explicit `packet_time_receipts` and
+  `current_authorities` collections from their first revision. Only the latter
+  should be hashed against current paths; the former should name the retained
+  artifact or state clearly that only a sealed receipt survives.
+- Validate moving generated dependencies semantically as well as by hash. For
+  recognition state, always derive unit/receiver/source counts and compare the
+  exact accepted physical-ID set so a numerically correct ratio cannot conceal
+  a changed numerator membership.
+
+## 2026-09-04 — 1439 Chinook standalone independent visual bar-raiser review
+
+### Independent reviewer (`/root/d6_reference_research`)
+
+#### What worked well
+
+- Stripping away address, location, and hue before judging the stills exposed a
+  genuinely entity-specific value/depth sequence: one offset double balcony,
+  one broad sparse upper register, and one isolated passage end. Direct 1441
+  and 1444 comparison then tested composition rather than palette.
+- Reviewing every frame in the declared motion interval through dense temporary
+  sheets, with native-size endpoint checks, was much stronger than relying on
+  the sparse contact sheet. It made the absence of seam pop, shimmer, moire,
+  rail flicker, and baked lighting independently inspectable.
+- The exact run partition and intentionally quiet continuation/protected walls
+  kept shared Site-12 material reuse from flattening the entity. Large voids and
+  slabs survive player distance; fine rails are correctly subordinate.
+- Re-running source, evidence, package, and external mounted-package contracts
+  confirmed that the visual evidence corresponds to the exact deterministic
+  factory and to a package-safe, unowned standalone shell.
+
+#### What did not work well
+
+- The supplied contact sheet samples motion sparsely and the MJPEG cannot be
+  inspected directly in the available image viewer. Temporary full-interval
+  extraction was necessary, and MJPEG compression remains weaker evidence for
+  fine texture grain than the native stills.
+- Very dark balcony and passage fields compress into nearly opaque rectangles
+  in the frontal view. Oblique depth resolves them, but ordinary live-world
+  ambient light and terrain could still flatten the intended circulation read.
+- 1437 and 1438 remain appearance-blocked, so the standalone can pass toward a
+  reversible study but cannot honestly earn an all-confusion-set top-1 or live
+  recognition verdict.
+
+#### What the team should change next time
+
+- Emit a standard dense motion review sheet from the capture pipeline, including
+  both endpoints, rather than requiring reviewers to derive one ad hoc.
+- Add a neutral-value comparator triptych for adjacent prototypes that share a
+  material family. This makes solid/void distinctiveness fast to audit and
+  prevents tint from doing accidental identity work.
+- In the future live study, test the double balcony, sparse middle, and passage
+  end first from stock-player public approaches. If context destroys those
+  large cues, fail closed; do not compensate with invented window schedules or
+  noisier textures.
+
+## 2026-09-04 — D7 snapshot-labeling independent closure recheck
+
+### Independent reviewer (`/root/d6_reference_research`)
+
+#### What worked well
+
+- Keeping the historical receipt in a separately named constant preserved the
+  real packet-time `c60e20…` provenance while an exact-current authority block
+  pinned `acc04a…`. An explicit inequality assertion prevents the two roles
+  from silently collapsing again.
+- The exact-current validation checks semantics, not just the replacement file
+  hash: derived 213/214/215 counts, the exact five accepted physical IDs,
+  `5/213`, and the two Isle part exclusions all passed.
+- The unchanged D7 output counters—45 hashes, 270 packet fields, 60 facing
+  partitions, 15 links, and readiness 13/2/0—made preservation of the old
+  packet/geometry/readiness gates easy to audit.
+- Running the D7 validator, registry compiler in `--check` mode, and world
+  validator together closed the documentation issue without rewriting any
+  registry or generated artifact.
+
+#### What did not work well
+
+- The D7 milestone directory is still untracked in the shared worktree, so Git
+  cannot show a conventional intra-file repair diff. The recheck had to compare
+  the current code and exact counters with the prior independent report's
+  description of the old behavior.
+- A mutable generated-registry hash was originally modeled as if it were an
+  immutable research input. The repair is small, but only because the prior
+  audit had retained enough exact context to distinguish real packet provenance
+  from current authority.
+
+#### What the team should change next time
+
+- From the first packet revision, store immutable `packet_time_receipts` and
+  moving `current_authorities` in visibly separate validator structures.
+- Keep exact local packet counters in validator output. They provide a concise
+  regression receipt showing that an authority-label repair did not weaken the
+  much larger geometry and readiness audit.
+- Stage or otherwise retain a reviewable patch boundary before requesting an
+  independent diff audit of new milestone directories.
+
+## 2026-09-04 — D9 receiver-first reference packet seal
+
+### Reference researcher (`/root/d8_reference_research`)
+
+#### What worked well
+
+- Mechanical catalog-order selection after 136 unique prior packet IDs froze
+  the next 15 standalone entities without hand-picking easy facades. Exact
+  receiver reconstruction then passed 45 hashes, 300 packet fields, 60 facing
+  partitions, and all 15 links.
+- Separating the D9 packet-time registry receipt from the exact-current
+  authority made their shared `acc04a…` hash unambiguous. The current gate also
+  reproduced 213/214/215 counts, the exact accepted five, and `5/213`.
+- Target centroid rays plus dated first-party panoramas yielded nine honest
+  target-side studies and five bounded component studies. Neighbor address
+  labels were excluded, and the distant fence-blocked 1120 Reeves sightline
+  remained appearance-blocked instead of receiving a borrowed facade.
+- A two-layer material plan supports pragmatic tileability: quiet repeatable
+  siding/roof fields can be shared, while doors, windows, canopies, privacy
+  boxes, boarding, annexes, and local weathering remain complete modules.
+
+#### What did not work well
+
+- Public thumbnail endpoints and direct Maps pages began returning 403/CAPTCHA
+  responses during the research pass. The same first-party panorama service's
+  image-tile route remained readable, but discovering that fallback consumed
+  avoidable time. All temporary pixels were removed after inspection.
+- Several panoramas were captured close to a corner or through mature trees,
+  parked cars, fences, and utility objects. Five packets therefore cannot
+  support a complete elevation schedule, and 1120 Reeves supports none.
+- OSM's `901/1304` value omits a street tag. It required the official City
+  crosswalk and EAS record to preserve the frozen source string while making
+  the current 901 Avenue B / Building 1304 identity usable.
+
+#### What the team should change next time
+
+- Record panorama metadata and the minimal target-bearing tile set in one
+  bounded pass, then delete pixels immediately after written observation;
+  avoid repeatedly opening interactive Maps pages once throttling appears.
+- Treat exact side visibility as a readiness gate. Advance partial evidence as
+  components, preserve occluded schedules as unknown, and reserve
+  appearance-blocked for sightlines with no confidently attributable target
+  plane.
+- Start every packet validator with separately named packet-time receipts and
+  current authorities, even when the hashes are identical at seal time.
+
+## 2026-09-04 — Pre-commit exact-current topology-oracle repair
+
+### Oracle repair implementer (`/root/d6_reference_research`)
+
+#### What worked well
+
+- Starting from the already accepted full-runtime oracle made the repair
+  mechanical: `735/940/954/64118/466/466` now appears in all five focused
+  receiver gates, and each gate also preserves its exact local ownership and
+  geometry assertions.
+- Separating `735` playable rows from `729` physical record nodes prevented a
+  global search-and-replace from corrupting the frozen generated-world model.
+  The same separation preserved the retained app's historical topology.
+- Recomputing the world-builder SHA directly before updating the one current
+  input pin turned the w34313564 failure into a precise dependency repair, not
+  a relaxed hash gate.
+- Two serialized focused rounds plus full runtime showed the new values are
+  measurements of the accepted tree, not copied constants that merely parse.
+
+#### What did not work well
+
+- Current topology had accumulated across several accepted Building 1,
+  Building 3, and Isle House increments while older focused tests and summary
+  prose stayed green only because they were not in the final gate. Nine files
+  therefore drifted together.
+- The old low-live Isle evidence contract is deliberately capture-time-bound
+  and fails against the current world-builder. Invoking it as if it were a
+  current Variant C gate creates a false red; its immutable negative boundary
+  must be named explicitly.
+- A naive numeric grep also matched values embedded in unrelated image hashes
+  and camera coordinates. Tuple-aware searches and executable checks were
+  needed to distinguish topology drift from coincidental digits.
+
+#### What the team should change next time
+
+- Add a small exact-current topology helper used by active integration and
+  capture oracles, while keeping local receiver topology and historical
+  evidence pins independent. One authoritative current tuple should fail in
+  one obvious place after accepted runtime changes.
+- Require the release gate to run all accepted-current focused receiver tests,
+  not only the newest hero tests, before the working tree is called green.
+- Label evidence contracts in filenames or headers as `capture_time` versus
+  `exact_current`; both are valuable, but they should never share an ambiguous
+  “current Isle test” label.
+
+## 2026-09-04 — Pre-commit topology-oracle independent recheck
+
+### Independent reviewer (`/root/d8_reference_research`)
+
+#### What worked well
+
+- The implementer's exact before/after hash ledger provided a usable review
+  boundary in a concurrently changing worktree. All nine current files matched
+  their declared post-repair hashes, and reconstructing the rendered harness's
+  four old numeric constants reproduced its exact declared pre-repair hash.
+- A single serialized execution of all five focused receiver gates confirmed
+  that `735/940/954/64118/466/466` is enforced alongside, not instead of, each
+  target's exact run partitions, local geometry, collision ownership, and
+  backing/navigation/spray boundaries.
+- Separating generated, record-owned, loaded-current, and historical topology
+  made the README changes auditable without weakening the retained app or old
+  evidence contracts.
+
+#### What did not work well
+
+- Concurrent authorized package sanitization changed Building 1 config bytes
+  and runtime-adapter contract counts during the bounded recheck. Those two
+  gates could not provide stable release-wide closure even though the scoped
+  topology-oracle files and their executions remained exact.
+- A broad HEAD diff contains earlier accepted dependency-pin changes next to
+  the oracle updates. Without the receipt's before/after hashes, those unrelated
+  changes would be easy to misattribute to this repair.
+
+#### What the team should change next time
+
+- Freeze or stage the exact repair patch before independent review, or attach
+  a machine-readable patch alongside the hash ledger. This reduces the need to
+  reconstruct a semantic boundary in a shared dirty worktree.
+- Serialize final package sanitization ahead of release-wide identity and
+  compiler gates, then publish the sealed package hash so independent reviewers
+  can rerun against one stable byte set.
+- Keep one shared active-current topology oracle for global counts while
+  retaining receiver-local assertions in each focused contract. The present
+  repair demonstrates that those two layers can stay strict independently.
+
+## 2026-09-04 — Evidence AVI Git LFS local implementation
+
+### Storage-policy executor (`/root/d8_reference_research`)
+
+#### What worked well
+
+- The evidence contracts already pin payload SHA-256 and byte size, and an LFS
+  pointer uses that same content SHA-256 and size. All seven clean/smudge
+  round trips therefore proved byte-preserving storage without changing a
+  manifest, checksum ledger, review, or evidence assertion.
+- Project-local installation plus `git lfs install --local` avoided `sudo`,
+  shared Homebrew ownership changes, global Git configuration, and a global
+  binary link. The exact rule affects all seven AVIs and zero existing non-AVI
+  paths.
+- Testing the clean filter without staging exposed the exact future pointer
+  bytes while leaving the shared dirty index empty and making no remote
+  request.
+
+#### What did not work well
+
+- The shared Homebrew prefix is not writable, and this host's bottle fetch also
+  hit an invalid bottle-tag error. A verified official project-local release
+  fallback was required.
+- The authenticated collaborator can write the repository but cannot inspect
+  owner-wide LFS usage/budget or enable LFS payloads in GitHub source archives.
+  Local correctness does not by itself prove first-upload quota acceptance.
+- A project-local ignored executable is deliberately not on the ordinary PATH.
+  Staging and pushing must prepend its directory, while fresh collaborators
+  should install Git LFS normally before cloning or pulling evidence.
+
+#### What the team should change next time
+
+- Choose the large-binary policy before capture packets are sealed. Adding the
+  LFS rule first makes storage behavior visible at evidence creation time and
+  avoids a late release-audit blocker.
+- Include an explicit LFS hydration prerequisite in future repository onboarding
+  once the AVIs are committed, and keep evidence tests fail closed on pointers.
+- Have the repository owner check LFS usage/budget immediately before the first
+  upload, then let an independent auditor inspect all staged pointer OIDs and
+  sizes before any push.
+
+## 2026-09-04 — Pre-commit package-source boundary sanitization
+
+### Package sanitization implementer (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- One export-excluded source receipt preserved exact pre-migration config
+  hashes, public authority URLs, repository-relative evidence locators, and
+  opaque generated-output identities while letting seven package-facing
+  configs carry only receipt IDs, receipt hashes, and package-safe resources.
+- Separating capture-time hashes from current sanitized hashes kept the D1 and
+  Building 1 tower evidence immutable. The revised contracts prove both sides
+  of the migration instead of rewriting old captures to look exact-current.
+- Two byte-identical compiler writes, two source-contract rounds, two direct
+  mounts of one fresh canonical PCK, and two runs of the exported app bound the
+  sanitized bytes to exact `5/213` registry semantics and unchanged
+  `735/940/954/64118/466` world topology.
+- The mounted cohort audit, virtual-path inventory, raw private-identity scan,
+  and actual packaged startup covered different failure classes. Together they
+  proved that source roots and pilot-only pixels are absent while the intended
+  D1 repair and promoted Site-12 assets remain loadable.
+
+#### What did not work well
+
+- A first attempt to exclude the entire `game/tests` tree exposed production
+  facade modules that still preload helpers under `game/tests/support`.
+  Include patterns do not override an enclosing Godot export exclusion, so the
+  experimental filter was reverted rather than shipping a broken world.
+- Source-mode registry tests hash raw `.gd` and `.tscn` bytes. Invoking one
+  unchanged against an exported PCK produced many false “missing” results
+  because Godot remaps those resources to compiled forms. Dedicated mounted
+  contracts and the exported binary are the truthful package gates.
+- Compiler-enforced adapter counts had moved to eight ready and six disabled,
+  but one generated-report sentence still described the older inverse split.
+  Regenerating after correcting that prose prevented a misleading green report.
+- The grounded-tower evidence contract still assumed no independent review
+  file and equated capture-time runtime hashes with current files. Later review
+  and package sanitization made both assumptions stale even though the evidence
+  itself remained valid.
+
+#### What the team should change next time
+
+- Move production calibration helpers out of `game/tests/support` into a
+  package-safe runtime namespace, then exclude non-runtime test scripts from
+  distributable exports. Until then, distinguish absent authoring roots from a
+  stronger whole-container forbidden-word claim.
+- Give every reusable contract an explicit source, mounted-PCK, or capture-time
+  mode. Raw-source hashes, compiler remaps, and historical evidence are all
+  valid gates, but they should not be invoked interchangeably.
+- Make source-provenance receipts a first-class compiler input whenever active
+  runtime configuration needs evidence-backed authority. Runtime configs should
+  carry opaque receipt IDs and hashes from their first revision rather than
+  requiring a late pre-release split.
+
+## 2026-09-04 — Evidence AVI Git LFS independent audit
+
+### Independent storage-policy reviewer (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- The pointer OID is the evidence SHA-256 and the pointer size is the evidence
+  byte count, so seven independent clean/smudge round trips could test storage
+  semantics directly without staging or changing any reviewed AVI.
+- Auditing attributes in one batch across every tracked and nonignored
+  untracked path proved the important scope boundary mechanically: exactly
+  seven AVI paths use LFS and zero non-AVI paths do.
+- The ignored project-local binary, repository-local filter keys and hook, and
+  Git-private object store provided a usable LFS environment without a global
+  install, shared Homebrew mutation, or system Git configuration.
+- An explicit seven-OID `--dry-run` verified the exact prospective upload set
+  while the empty index and empty ordinary HEAD dry run proved that no staging
+  or upload had occurred.
+
+#### What did not work well
+
+- `git lfs fsck` is green before staging, but with no tracked pointers it does
+  not by itself bind all seven private objects to the intended paths. Direct
+  object hashes plus strict pointer and round-trip checks were still required.
+- The older rejected Isle-low evidence contract stops on its immutable
+  capture-time world-builder pin before reaching its AVI assertion. Treating
+  all seven evidence scripts as exact-current gates would create a false LFS
+  failure; the motion manifest, ledger, header, bytes, and LFS round trip had
+  to be audited separately for that historical artifact.
+- A dry run cannot reveal the repository owner's remaining LFS storage or
+  billing acceptance. Local correctness and remote upload capacity remain two
+  distinct gates.
+
+#### What the team should change next time
+
+- Add a small evidence-media validator that checks each retained movie's
+  manifest/ledger/header/hash/size independently of capture-time runtime pins.
+  Historical world drift should not prevent storage-integrity verification.
+- After explicit staging, always inspect index blobs rather than trusting
+  working-tree hydration: require exactly three pointer lines and the approved
+  OID/size for every large artifact before commit.
+- Keep owner quota confirmation immediately before the first push, but do not
+  let that external uncertainty block reversible local staging or continued
+  local work.
+
+## 2026-09-04 — Pre-commit package sanitization independent audit
+
+### Independent package-boundary reviewer (`/root/d8_reference_research`)
+
+#### What worked well
+
+- The immediately pre-sanitization canonical PCK retained the exact seven old
+  JSON payloads. Extracting them in memory and comparing parsed objects against
+  the current files proved a provenance-only migration instead of trusting a
+  list of historical hashes on faith.
+- Keeping capture-time config hashes separate from current sanitized hashes
+  let the Building 1, D1, and Dormitory evidence contracts remain strict. All
+  retained image and motion identities passed without rewriting historical
+  visual meaning.
+- A fresh export reproduced the sealed PCK byte-for-byte. Direct-mounted
+  content/config/behavior gates and the exported-app smoke then bound the
+  source audit to the actual 850-entry package and exact current world.
+- Decompressing the compiled test bytecode made the remaining boundary
+  measurable: the six production-required helpers are clean, while the larger
+  test residue exposes internal locators but no private path or source pixels.
+
+#### What did not work well
+
+- The validation report still carries a hardcoded check ID describing the old
+  `6 ready / 8 disabled / 15 inputs` state even though its data and executable
+  gates correctly enforce `8 / 6 / 13`. Deterministic generation preserved a
+  stale label as deterministically as it preserves correct data.
+- `all_resources` exports every compiled test because production modules still
+  preload six helpers from `game/tests/support`. The six necessary helpers are
+  only 0.1022% of the PCK, but keeping that namespace pulls in 137 unrelated
+  tests and roughly 2.04 MB of avoidable bytecode.
+- The original “four publishable artifacts” wording double-counted the B225
+  repair config, which was also one of seven configs. Converting the request to
+  a ten-unique-file set was necessary before the scan result could be stated
+  without ambiguity.
+
+#### What the team should change next time
+
+- Derive generated check identifiers from the same expected-count constants as
+  the executable invariant, or use a count-neutral stable ID and emit current
+  values as fields.
+- Move production calibration helpers to a runtime namespace, update the eight
+  facade preloads, and only then exclude `game/tests/**`; verify both source
+  compilation and a fresh direct-mounted package after the move.
+- Publish a machine-readable before/after path and semantic-diff receipt for
+  any late package migration. Exact old hashes are useful, but a frozen prior
+  package made this independent semantic review much stronger.
+
+## 2026-09-04 — Pre-commit package validation check-ID repair
+
+### Metadata-repair implementer (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Deriving the human-readable check identifier from
+  `EXPECTED_ADAPTER_CONTRACTS` removed the second source of truth while
+  preserving every existing adapter-plan invariant.
+- The generated report changed by only one string and retained the same byte
+  length. Adapter contracts, runtime registry, catalog, loader behavior,
+  recognition metric, and package bytes all stayed exact.
+- A focused regression assertion now requires the exact current ID exactly
+  once and rejects the stale ID, so deterministic generation cannot silently
+  preserve the same misleading metadata again.
+- The fresh export reproduced the accepted PCK byte-for-byte, making the
+  no-runtime-impact claim stronger than source-only tests.
+
+#### What did not work well
+
+- The first mounted test was launched while the process working directory was
+  still the source checkout. Godot found `project.godot` alongside the supplied
+  main pack, so the mounted-only contract correctly reported source overlay.
+  The unchanged PCK passed immediately when invoked outside the checkout.
+- Whole-report deterministic equality had guaranteed repeatability but not
+  truthfulness: a stale literal in the compiler could be emitted identically
+  forever while numeric invariants were correct.
+- The prior sanitization receipt pinned the generated report hash, so even a
+  one-string metadata correction required an explicit receipt migration while
+  preserving the independent audit's historical old hash.
+
+#### What the team should change next time
+
+- Generate descriptive validation IDs from the invariant values they summarize,
+  or use count-neutral stable IDs and carry the numeric state in typed fields.
+- Run mounted-PCK tests from a guaranteed outside-checkout working directory;
+  `--main-pack` alone is not sufficient when a source `project.godot` is also
+  discoverable.
+- Keep review findings immutable when they describe a defect that was true at
+  review time. Record the repaired current hash in a follow-up receipt instead
+  of rewriting the audit trail.
+
+## 2026-09-04 — Pre-commit package validation check-ID independent recheck
+
+### Independent metadata-repair reviewer (`/root/d8_reference_research`)
+
+#### What worked well
+
+- Reversing the four claimed mutations in memory recreated every declared
+  before hash exactly. That proved the compiler/test/report/receipt boundary
+  more strongly than comparing prose descriptions of the change.
+- Two writes and a check in an isolated repository copy demonstrated generator
+  determinism without touching the shared dirty worktree. The catalog,
+  adapters, and registry stayed byte-identical while only the report retained
+  the corrected identifier.
+- A fresh byte-identical PCK plus outside-checkout mounted and packaged-app
+  gates bound the metadata-only claim to the actual distributable world and
+  exact `735/940/954/64118/466/466` topology.
+
+#### What did not work well
+
+- The first temporary-copy policy excluded image files indiscriminately and
+  thereby omitted game textures that the compiler intentionally validates as
+  runtime dependencies. It failed closed before output, but required a second
+  copy pass with the complete `game/` tree.
+- The stale check identifier encoded mutable counts in an unguarded literal.
+  The numeric invariants were correct, so ordinary deterministic generation
+  and runtime tests could not expose that misleading label on their own.
+- A full Godot export emits a large progress transcript even for a one-string
+  metadata audit; the decisive hash, mounted contract, and smoke result are
+  much smaller than the raw export log.
+
+#### What the team should change next time
+
+- Keep compiler-generated descriptive identifiers derived from the same typed
+  constants as their executable counts, and retain one positive exact-count
+  assertion plus one stale-value rejection in the generator test.
+- For isolated compiler checks, copy the complete runtime dependency roots and
+  exclude only authoring/evidence media known not to participate in closure;
+  do not filter extensions across the entire repository.
+- Preserve the finding document that observed a defect and close it with a
+  separately hash-bound recheck. This keeps both the historical truth and the
+  current source of truth mechanically auditable.
+
+## 2026-09-04 — Pre-commit historical/current seam reconciliation
+
+### Release repair implementer (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Running the complete staged contract set exposed three prototype-era Isle
+  assertions and three material-batch builder pins that focused feature tests
+  had not exercised after later reviewed promotions.
+- Separating immutable capture-time hashes from current runtime hashes kept the
+  rejected Isle evidence reproducible without pretending its builder remained
+  active. Exact old-adapter, media, and manifest bytes stayed pinned.
+- The repaired Phase 2 gate now allows only the exact promoted shared brick
+  bytes through the accepted Variant C seam and continues to reject pilot,
+  discovery, evidence, URL, local-path, and rejected-adapter dependencies.
+
+#### What did not work well
+
+- The first package-boundary revision put the rejected adapter into a runtime
+  closure scan. Its own fail-closed forbidden-token literals triggered the
+  scan, so the historical byte check had to be separated from executable
+  closure membership.
+- Earlier milestone runs selected only then-current feature contracts. That
+  allowed active-looking historical tests to retain assertions that became
+  false after reviewed replacement or promotion.
+- Builder-byte pins duplicated current authority across several batch tests;
+  semantic assertions were current while their single SHA constant was not.
+
+#### What the team should change next time
+
+- After promoting a reviewed prototype, search every test for its old adapter,
+  material path, and builder hash, then classify each occurrence explicitly as
+  immutable capture-time provenance or current authority.
+- Keep capture-time hashes in immutable manifests and validate moving runtime
+  state through a separately named current-boundary function.
+- Add a release-wide test manifest so every committed executable contract runs
+  after cross-milestone promotions, rather than relying only on feature-local
+  suites.
+
+## 2026-09-04 — D7–D9 exact-current authority migration
+
+### Authority migration implementer (`/root/remote_runtime_auditor/ledger_recheck/d7_d9_authority_fix`)
+
+#### What worked well
+
+- Preserving D7's `c60e20…` and D8/D9's `acc04a…` registry receipts as
+  packet-time provenance allowed all packet bodies and their historical hashes
+  to remain unchanged while the validators adopted current `dce268…` bytes.
+- Derived catalog and registry checks independently reproduced `213 / 214 /
+  215`, the exact five accepted physical-unit IDs, and the `5/213` metric.
+- The seven-file boundary kept the migration isolated to README/validator
+  authority semantics and a receipt; compiler and generated-world checks stayed
+  byte-stable.
+
+#### What did not work well
+
+- D8 originally treated its packet-time registry as an always-current
+  authority, so a legitimate later registry migration made the entire packet
+  validator fail before reaching local packet checks.
+- D9's initial wording relied on packet-time and current hashes being equal.
+  That was true only at seal time and obscured the need for two independent
+  identities.
+- P1–D6 have no executable packet validators, making cross-batch current
+  authority drift easier to miss until the later D7–D9 checks run together.
+
+#### What the team should change next time
+
+- Give every research packet an immutable packet-time receipt plus a separately
+  versioned current-authority input from its first revision.
+- Centralize the exact current recognition counts and accepted physical-unit
+  set in one reusable validator module while keeping packet-local hashes and
+  readiness assertions independent.
+- Run all available research validators whenever the runtime registry changes,
+  even if the registry migration is described as metadata-only.
+
+## 2026-09-04 — Combined pre-commit repair independent recheck
+
+### Independent repair reviewer (`/root/remote_runtime_auditor/ledger_recheck/combined_repair_recheck`)
+
+#### What worked well
+
+- Comparing the working tree directly with the inherited index reconstructed
+  every declared before/after hash and proved that the repairs did not touch
+  runtime, geometry, materials, catalog, registry, generated data, or media.
+- The revised Isle tests now keep rejected-parent capture bytes immutable while
+  treating accepted Variant C as a separate exact-current authority; two runs
+  of every repaired test reproduced the same results.
+- Running D7-D9 together verified historical registry receipts, all 45 packet
+  contracts and 135 recomputed hashes, plus the independently derived `5/213`
+  current state without
+  rewriting any packet body.
+
+#### What did not work well
+
+- Historical and moving-current authority had been encoded in the same test
+  constants, so legitimate later promotion made old tests appear to dispute
+  already reviewed state.
+- The initial release suite found these seams only after staging hundreds of
+  files; feature-local verification did not expose cross-milestone stale pins.
+- Several validators independently duplicate the same current recognition
+  counts and accepted-unit set, increasing the cost of each metadata migration.
+
+#### What the team should change next time
+
+- Name and pin capture-time and current-runtime authority separately from the
+  first evidence revision, including explicit historical receipt semantics.
+- Run a release-wide cross-milestone contract set before initial staging, then
+  repeat it after any promotion or registry migration.
+- Share typed current-recognition assertions across packet validators while
+  retaining independent packet-local provenance and geometry checks.
+
+## 2026-09-04 — Mutable-path evidence-ledger migration
+
+### Release ledger implementer (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- A repository-wide mechanical checksum sweep found two ledgers whose content
+  claims were still valid but whose mutable path targets had legitimately
+  changed after capture-time sealing.
+- Small immutable JSON receipts preserved the exact D1 sanitization-era hashes
+  and the P3 capture-time builder hash without copying old source bytes into
+  evidence or rewriting any historical manifest.
+- The D1 ledger now validates current package-safe bytes while its evidence
+  contract separately proves all four historical/current mappings; the P3
+  ledger validates only immutable evidence and its capture-time receipt.
+
+#### What did not work well
+
+- Earlier package sanitization updated runtime configs and their focused tests
+  but left one path-addressed evidence ledger mechanically stale.
+- The P3 checksum ledger treated a mutable world-builder path as if it were an
+  immutable capture artifact, even though the manifest correctly recorded the
+  old capture-time identity.
+- Feature-local contracts passed despite both stale ledgers because the D1
+  evidence contract expected historical entries and the P3 contract did not
+  mechanically run its sibling ledger.
+
+#### What the team should change next time
+
+- Put capture-time hashes for mutable implementation files in an immutable
+  provenance receipt at initial seal, and reserve path-addressed ledgers for
+  current bytes or immutable packet files.
+- Include every evidence checksum ledger in the release-wide mechanical sweep,
+  even when its feature contract already passes.
+- Model historical and current authority as separate named inputs so later
+  reviewed migrations cannot silently invalidate a previously green ledger.
+
+## 2026-09-04 — Evidence-ledger migration independent recheck
+
+### Independent ledger reviewer (`/root/remote_runtime_auditor/ledger_recheck/evidence_ledger_recheck`)
+
+#### What worked well
+
+- Comparing the working tree with the inherited staged index isolated the
+  migration from all sealed manifests, captures, reviews, runtime, and geometry
+  before interpreting the new hash mappings.
+- Running both ledgers twice proved all `36` D1 and `24` P3 paths, while the
+  focused Godot contracts independently rechecked historical evidence and
+  exact-current runtime authority.
+- The export filter and package-sanitization contract made the source/package
+  boundary directly auditable: provenance remains under excluded roots and
+  current configs contain no source locator, private path, or source pixels.
+
+#### What did not work well
+
+- The P3 evidence contract does not execute its sibling checksum ledger, so a
+  feature-only test run can stay green while that ledger is mechanically stale.
+- D1's original ledger mixed immutable capture-time meaning with mutable path
+  checks, requiring a later migration to explain four legitimate byte changes.
+- Exact current builder identity is intentionally duplicated across three
+  active batch contracts; all three must be found and rerun after each accepted
+  builder change.
+
+#### What the team should change next time
+
+- Make every evidence contract execute or equivalently validate its sibling
+  checksum ledger so feature and ledger health cannot diverge.
+- At initial seal, store mutable implementation identities in an immutable
+  capture-time receipt and keep path-addressed ledgers explicitly current.
+- Centralize exact-current builder identity behind one reusable current-state
+  contract while retaining independent batch semantics and historical receipts.

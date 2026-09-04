@@ -1,0 +1,56 @@
+P3 Chapel/Dormitory exact-current evidence verification
+Date: 2026-09-04 America/Los_Angeles
+Scope: technical evidence only; recognition and believability pending independent review
+
+PINNED INPUT PREFLIGHT: PASS
+- generated content: 01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164
+- generated manifest: e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3
+- builder: 9525ead815e95d7bc0b5fa8beae389954e232a9bbf51b54ed049a84a3613b9c0
+- accepted-run helper: d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c
+- main scene: 959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66
+- player scene: a37b00ecc620b4f3106a14d1dc9ec22a519f81481e5e6c68252389e13488a793
+- player controller: 8b114132d66c78dd0bfd09783c7b9a3a3a441a8b1ae14f33f7308bd9b04ed0ea
+- player camera: 90ea739b25eb6cbcf8bacff072599b117fe894fcef08683483e41527d8019636
+- Chapel chunk/map/packet/material: dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce / d076ee125168cd3dfe499bc56e94c324019d7ba70bb731b9c23c045ca6759b5f / 7eb592503ce8e276c38ef3ecaf7f2d3dd17e1eeb32adbe45d1059c5cb4693330 / 4020e4c75350929359be9c16686ad80a2a0eac46918cc32746089694017a61a5
+- Dormitory chunk/map/packet/material: a35f63a877588d198e0e905167968bf9948f4616c16e708a6799d0e6c1bde00a / 3ec81316f9bdfb6131df55faeabe822b3fdfb2b739b95bd452a50a1d97a29e42 / a43d391239c2fd3ce66b13c39dc56c534253211e7a44a12d512dbe5367b3a9f9 / fb50d3989b7aa41421753ad4db5d195366d9a2c25c15087e5e3a2b7863c69602
+
+HEADLESS PARSE/NATIVE GUARD: EXPECTED PASS OF GUARD
+Command:
+.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --headless --audio-driver Dummy --script game/tests/p3_existing_live_material_revalidation_capture.gd
+Result: script parsed; exited 1 only at the intentional "requires native macOS Forward+/Metal" guard.
+
+NATIVE CAPTURE: PASS, TWO COMPLETE FINAL PASSES
+Command:
+.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/p3_existing_live_material_revalidation_capture.gd
+Renderer: Metal 4.0 / Forward+ / Apple M2 (Apple8)
+World: 735 playable, 4 context, 938 meshes, 948 surfaces, 63,720 triangles, 466 bodies, 466 shapes
+Result: 4/4 final views PASS exact live binding, stock-player physics grounding, full target and live-scope framing, clean HUD, and receiver/source/run first-hit LOS.
+- Chapel whole: receiver building:w291189336:wall; source [w291189336]; run 9; target 0.346 x 0.142; live 0.107 x 0.132; LOS error 0.000031 m.
+- Chapel oblique: receiver building:w291189336:wall; source [w291189336]; run 9; target 0.308 x 0.115; live 0.076 x 0.111; LOS error 0.000073 m.
+- Dormitory whole: receiver building:w291189926:wall; source [w291189926]; protected run 12; target 0.324 x 0.039; live 0.093 x 0.032; LOS error 0.000401 m.
+- Dormitory oblique: receiver building:w291189926:wall; source [w291189926]; accepted run 2; target 0.347 x 0.038; live 0.119 x 0.031; LOS error 0.000087 m.
+Repeat note: all geometry/grounding/LOS/framing values repeated. Three images were byte-identical; the grass-containing Dormitory whole PNG varied before sealing. Only the second-pass original/hash is sealed; deterministic rendering is not claimed.
+
+ORIGINAL-DETAIL TECHNICAL INSPECTION: PASS
+- Opened all four second-pass PNGs at original 1440x900 detail.
+- Every image decodes, is nonblank, contains ordinary surrounding context, and has no corruption or debug/feedback/loading/pause overlay.
+- Complete target silhouettes and protected/untreated context remain visible. Dormitory's low fallback-6m silhouette is not hidden.
+- No recognition, believability, facade-fidelity, or denominator-credit judgment was made.
+
+FOCUSED EVIDENCE SEAL: PASS TWICE
+Command:
+.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --headless --audio-driver Dummy --script game/tests/headless_p3_existing_live_material_revalidation_evidence_contract.gd
+Result on each pass:
+PASS: four sealed native Metal P3 views remain exact-current and technically valid; Chapel and Dormitory whole-object recognition/believability remain pending, and Dormitory five-tier versus 6 m massing remains explicitly unresolved
+
+DIFF HYGIENE: PASS
+Command:
+git diff --check -- game/tests/p3_existing_live_material_revalidation_capture.gd game/tests/headless_p3_existing_live_material_revalidation_evidence_contract.gd evidence/first-playable/p3-existing-live-material-revalidation-2026-09-04/README.md discovery/RETRO_LOG.md
+Result: exit 0, no whitespace errors.
+
+FINAL CLAIM STATE
+- Technical capture validity: PASS.
+- Navy Chapel whole-object recognition/believability: PENDING independent review.
+- Dormitory 369 whole-object recognition/believability: PENDING independent review.
+- Dormitory reference-five-tier versus exact-current fallback-6m conflict: UNRESOLVED BLOCKER.
+- Runtime or visual changes made by this batch: NONE.

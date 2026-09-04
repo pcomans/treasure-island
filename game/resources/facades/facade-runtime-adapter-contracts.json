@@ -1,0 +1,818 @@
+{
+  "build_contract": {
+    "authoring_catalog_sha256": "2b457965d2e25d522d2ca3d73afb109b03a57247eaefbb6b70775bd83fb07311",
+    "compiler_version": "1.3.0",
+    "runtime_registry_schema_version": "ti.facade-runtime-registry/4",
+    "unknown_version_policy": "reject"
+  },
+  "contract_id": "treasure-island-facade-runtime-adapters",
+  "counts": {
+    "disabled_adapter_receivers": 6,
+    "disabled_projection_occurrences": 13,
+    "disabled_unique_projection_inputs": 13,
+    "package_safe_adapter_receivers": 8,
+    "receiver_adapter_plans": 14
+  },
+  "loader_contract": {
+    "allowed_executable_kinds": [
+      "gdscript",
+      "packed_scene"
+    ],
+    "allowed_executable_roots": [
+      "res://game/scenes/world/",
+      "res://game/scripts/world/"
+    ],
+    "api_version": "ti.facade-runtime-registry-loader/3",
+    "instantiation_authorized": false,
+    "loader_path": "res://game/scripts/world/facades/facade_runtime_registry_loader.gd",
+    "loader_sha256": "7a245be61167cf774f5f693944fe3adc6640b5dd7f7cb98fcb6425a7c82f7832",
+    "projection_execution_policy": "forbidden",
+    "unknown_version_policy": "reject"
+  },
+  "plans": [
+    {
+      "adapter_id": "legacy-adapter:building-composite:w1249412094:w1282547786:wall",
+      "behavior_contract": null,
+      "content_mode": "legacy_adapter",
+      "disabled_reason_code": null,
+      "executable_assets": [
+        {
+          "path": "res://game/scenes/world/facades/isle_house/isle_house_high_facade.tscn",
+          "resource_kind": "packed_scene",
+          "sha256": "7ff4a91c402cecea19d2686d29139d2c0f139673b06d21c67d1c14835fd31d12"
+        },
+        {
+          "path": "res://game/scripts/world/facades/isle_house_39_bruton_high_facade.gd",
+          "resource_kind": "gdscript",
+          "sha256": "f8243cedd3f331cbc37e6343b1b48e76a73a81644c96cc1f80e623e0c71a3113"
+        }
+      ],
+      "integration_state": "package_safe_ready_for_integration",
+      "projection_descriptor_ids": [],
+      "receiver_key": "building-composite:w1249412094:w1282547786:wall",
+      "resolution_policy": "resolve_only_without_instantiation",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/facades/isle_house_39_bruton_high_se_layout.json",
+          "sha256": "c5e6393e90152cef62f6478d7bd87750f3db5598d6ebc36cd307ce20acaa090d"
+        },
+        {
+          "path": "res://game/scenes/world/facades/isle_house/isle_house_high_facade.tscn",
+          "sha256": "7ff4a91c402cecea19d2686d29139d2c0f139673b06d21c67d1c14835fd31d12"
+        },
+        {
+          "path": "res://game/scripts/world/facades/isle_house_39_bruton_high_facade.gd",
+          "sha256": "f8243cedd3f331cbc37e6343b1b48e76a73a81644c96cc1f80e623e0c71a3113"
+        }
+      ],
+      "source_key": "w1282547786"
+    },
+    {
+      "adapter_id": "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall",
+      "behavior_contract": {
+        "acceptance_contract": {
+          "accepted_physical_unit_id": "physical-building:w1249412094",
+          "independent_live_review_receipt_sha256": "37b6c7dbf6c8769b13628e1070a9c3b5beeb9b25bbe63f0f12f9aaa00c22dab8",
+          "numerator_effect": 1,
+          "part_source_keys_are_not_units": [
+            "w1282547786",
+            "w1282547787"
+          ],
+          "reference_recognizable": true
+        },
+        "geometry_contract": {
+          "live_signature": "09eee1517f043c6d82f0de0d2275da5b2a3f76f5842d1b9c90cba11e6e793981",
+          "overlay_mesh_instances": 7,
+          "overlay_repair_signature": "41868b77a8b51b56ee7381e5549423e97547270d2dc77d9ce5cf958b31e2cb69",
+          "overlay_surfaces": 11,
+          "overlay_triangles": 2242,
+          "world_mesh_instances": 940,
+          "world_records": 735,
+          "world_shapes": 466,
+          "world_static_bodies": 466,
+          "world_surfaces": 954,
+          "world_triangles": 64118
+        },
+        "ownership_contract": {
+          "decorative_collision_nodes": 0,
+          "decorative_navigation_nodes": 0,
+          "decorative_spray_nodes": 0,
+          "high_receiver_unchanged": true,
+          "low_receiver_is_sole_collision_and_spray_owner": true
+        },
+        "replacement_contract": {
+          "rejected_overlay_fallback_allowed": false,
+          "stacking_allowed": false,
+          "target_receiver_key": "building-composite:w1249412094:w1282547787:wall",
+          "target_source_key": "w1282547787"
+        },
+        "schema_version": "ti.isle-house-variant-c-live-parity/1",
+        "truth_boundary": {
+          "as_built_fidelity_claimed": false,
+          "game_distinctive_claimed": false,
+          "receiver_complete_inferred_from_art": false
+        }
+      },
+      "content_mode": "active_isle_house_variant_c",
+      "disabled_reason_code": "one_or_more_source_bearing_projection_inputs_have_no_parity_proven_package_safe_executable",
+      "executable_assets": [],
+      "integration_state": "hard_disabled_source_projection",
+      "projection_descriptor_ids": [
+        "disabled-projection-input:56dc5e02ccdb12977caea351d56d391d7e8629c6e0535e98eefb0569cd2ea16e",
+        "disabled-projection-input:a85e4a7cbb4d51fa75fa4061df754cf0327e69eb12b51dc901bcbf293c8cd5ca",
+        "disabled-projection-input:e5224297377878d3421d25f64c7b3168730a8fe0150e677ef36e09e455b24a01"
+      ],
+      "receiver_key": "building-composite:w1249412094:w1282547787:wall",
+      "resolution_policy": "deny_all_executable_resolution",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/facades/isle_house_composite_repair_variant_c_standalone_v1.json",
+          "sha256": "bafdef392ee638e860ba15f140c10de61e266ae63005b12e0e310e52c176897a"
+        }
+      ],
+      "source_key": "w1282547787"
+    },
+    {
+      "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
+      "behavior_contract": null,
+      "content_mode": "active_building_1_hero",
+      "disabled_reason_code": null,
+      "executable_assets": [
+        {
+          "path": "res://game/scripts/world/facades/building_1_hero_model.gd",
+          "resource_kind": "gdscript",
+          "sha256": "e5b11fc7f971ea33bb38c84d3106f8883de0486774f58a5a8310d49d56aa55a5"
+        }
+      ],
+      "integration_state": "package_safe_ready_for_integration",
+      "projection_descriptor_ids": [],
+      "receiver_key": "building:r16681702:wall",
+      "resolution_policy": "resolve_only_without_instantiation",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/facades/building_1_hero_model.json",
+          "sha256": "f10bc92a6e74cbae41347e742e6c68c50faccddbd52ab3ecce210ac8243bc6e9"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
+          "sha256": "41c1c31d4a78da25d4abfac59e82fe919fbb539afa479ab7601d0fb51939d59f"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_bronze.tres",
+          "sha256": "7948c9fca74345f4ff5e57a44191beb59300847b66cc54ddc176c5ca1b315ca3"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_canopy_underside.tres",
+          "sha256": "661a7b8cfaef2394e47a42f9bbd04df5fdfbb2cd4be9e6733d5bf3101817cea9"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_light_trim.tres",
+          "sha256": "6e543d57ff078c267e952f633f4cee232e0743e30218d2f341dc3f31e4a4c8d9"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_projecting_base_stone.tres",
+          "sha256": "8bdd85aa10ac78c9225c59aad5ed9d26266ae517ea3f5910b8be3daf41f131ab"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_reveal_shadow.tres",
+          "sha256": "2e1f36f163c037fe060a1ecfcdcc5dd062849290a96c508970384585b176e14a"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_roof_metal.tres",
+          "sha256": "8bee442442f8b7bc3004cd3f703ce4e21eb9bc3b1f4d3d8800b02a77268329c8"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres",
+          "sha256": "12d059d9d806c629225254f1aaf945be69a00ce5878db276ce299ad0c8cdbb9a"
+        },
+        {
+          "path": "res://game/scripts/world/facades/building_1_hero_model.gd",
+          "sha256": "e5b11fc7f971ea33bb38c84d3106f8883de0486774f58a5a8310d49d56aa55a5"
+        }
+      ],
+      "source_key": "r16681702"
+    },
+    {
+      "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
+      "behavior_contract": null,
+      "content_mode": "active_building_1_hero",
+      "disabled_reason_code": null,
+      "executable_assets": [
+        {
+          "path": "res://game/scripts/world/facades/building_1_hero_model.gd",
+          "resource_kind": "gdscript",
+          "sha256": "e5b11fc7f971ea33bb38c84d3106f8883de0486774f58a5a8310d49d56aa55a5"
+        }
+      ],
+      "integration_state": "package_safe_ready_for_integration",
+      "projection_descriptor_ids": [],
+      "receiver_key": "building:w1222720021:wall",
+      "resolution_policy": "resolve_only_without_instantiation",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/facades/building_1_hero_model.json",
+          "sha256": "f10bc92a6e74cbae41347e742e6c68c50faccddbd52ab3ecce210ac8243bc6e9"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
+          "sha256": "41c1c31d4a78da25d4abfac59e82fe919fbb539afa479ab7601d0fb51939d59f"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_bronze.tres",
+          "sha256": "7948c9fca74345f4ff5e57a44191beb59300847b66cc54ddc176c5ca1b315ca3"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_canopy_underside.tres",
+          "sha256": "661a7b8cfaef2394e47a42f9bbd04df5fdfbb2cd4be9e6733d5bf3101817cea9"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_light_trim.tres",
+          "sha256": "6e543d57ff078c267e952f633f4cee232e0743e30218d2f341dc3f31e4a4c8d9"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_projecting_base_stone.tres",
+          "sha256": "8bdd85aa10ac78c9225c59aad5ed9d26266ae517ea3f5910b8be3daf41f131ab"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_reveal_shadow.tres",
+          "sha256": "2e1f36f163c037fe060a1ecfcdcc5dd062849290a96c508970384585b176e14a"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_roof_metal.tres",
+          "sha256": "8bee442442f8b7bc3004cd3f703ce4e21eb9bc3b1f4d3d8800b02a77268329c8"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres",
+          "sha256": "12d059d9d806c629225254f1aaf945be69a00ce5878db276ce299ad0c8cdbb9a"
+        },
+        {
+          "path": "res://game/scripts/world/facades/building_1_hero_model.gd",
+          "sha256": "e5b11fc7f971ea33bb38c84d3106f8883de0486774f58a5a8310d49d56aa55a5"
+        }
+      ],
+      "source_key": "w1222720021"
+    },
+    {
+      "adapter_id": "legacy-adapter:building:w1249412093:wall",
+      "behavior_contract": null,
+      "content_mode": "legacy_adapter",
+      "disabled_reason_code": null,
+      "executable_assets": [
+        {
+          "path": "res://game/scenes/world/facades/hawkins/hawkins_77_bruton_facade.tscn",
+          "resource_kind": "packed_scene",
+          "sha256": "3e79430994309ad07a3a8763004b8a4d4f20a52e5d759e707ba5e7ad6a85ba3b"
+        },
+        {
+          "path": "res://game/scripts/world/facades/hawkins_77_bruton_facade.gd",
+          "resource_kind": "gdscript",
+          "sha256": "de733e43896fdf8c0437dcb266564b07fbb0e0ad42a40ef40d480623a748dd1e"
+        },
+        {
+          "path": "res://game/scripts/world/massing/hawkins_77_bruton_massing.gd",
+          "resource_kind": "gdscript",
+          "sha256": "b572d5b75faf47e91e9283af757cdc33a0c0b4a37de87230d7e7a505442f6a4d"
+        }
+      ],
+      "integration_state": "package_safe_ready_for_integration",
+      "projection_descriptor_ids": [],
+      "receiver_key": "building:w1249412093:wall",
+      "resolution_policy": "resolve_only_without_instantiation",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/facades/hawkins_77_bruton_layout.json",
+          "sha256": "4de2239af2e18fe4121930d51dee15e081d2f81a40393da2f1f29c69464761d9"
+        },
+        {
+          "path": "res://game/scenes/world/facades/hawkins/hawkins_77_bruton_facade.tscn",
+          "sha256": "3e79430994309ad07a3a8763004b8a4d4f20a52e5d759e707ba5e7ad6a85ba3b"
+        },
+        {
+          "path": "res://game/scripts/world/facades/hawkins_77_bruton_facade.gd",
+          "sha256": "de733e43896fdf8c0437dcb266564b07fbb0e0ad42a40ef40d480623a748dd1e"
+        },
+        {
+          "path": "res://game/scripts/world/massing/hawkins_77_bruton_massing.gd",
+          "sha256": "b572d5b75faf47e91e9283af757cdc33a0c0b4a37de87230d7e7a505442f6a4d"
+        }
+      ],
+      "source_key": "w1249412093"
+    },
+    {
+      "adapter_id": "legacy-adapter:building:w291189336:wall",
+      "behavior_contract": null,
+      "content_mode": "legacy_adapter",
+      "disabled_reason_code": null,
+      "executable_assets": [],
+      "integration_state": "package_safe_ready_for_integration",
+      "projection_descriptor_ids": [],
+      "receiver_key": "building:w291189336:wall",
+      "resolution_policy": "resolve_only_without_instantiation",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres",
+          "sha256": "4020e4c75350929359be9c16686ad80a2a0eac46918cc32746089694017a61a5"
+        }
+      ],
+      "source_key": "w291189336"
+    },
+    {
+      "adapter_id": "legacy-adapter:building:w291189926:wall",
+      "behavior_contract": null,
+      "content_mode": "legacy_adapter",
+      "disabled_reason_code": null,
+      "executable_assets": [],
+      "integration_state": "package_safe_ready_for_integration",
+      "projection_descriptor_ids": [],
+      "receiver_key": "building:w291189926:wall",
+      "resolution_policy": "resolve_only_without_instantiation",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/materials/world/job_corps_dormitory_b369/dormitory_b369_warm_field.tres",
+          "sha256": "fb50d3989b7aa41421753ad4db5d195366d9a2c25c15087e5e3a2b7863c69602"
+        }
+      ],
+      "source_key": "w291189926"
+    },
+    {
+      "adapter_id": "legacy-adapter:building:w291196370:wall",
+      "behavior_contract": null,
+      "content_mode": "legacy_adapter",
+      "disabled_reason_code": "one_or_more_source_bearing_projection_inputs_have_no_parity_proven_package_safe_executable",
+      "executable_assets": [],
+      "integration_state": "hard_disabled_source_projection",
+      "projection_descriptor_ids": [
+        "disabled-projection-input:85d69c6199abecb1f21c7a40b1e1a6fd7d2742a9bc299c985a643d8951cc4ac8",
+        "disabled-projection-input:9a9806b886b09c3d860c1a73e7e5f4af22eeb236ba7ed8fd0fd9d646b1a7e061"
+      ],
+      "receiver_key": "building:w291196370:wall",
+      "resolution_policy": "deny_all_executable_resolution",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+          "sha256": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a"
+        },
+        {
+          "path": "res://game/resources/materials/world/w291196370/w291196370_siding_exact_trial.tres",
+          "sha256": "715cf02b3c006c1a492ad61def9b2535fbaf04a3b1a41c69c5f092d705fab677"
+        },
+        {
+          "path": "res://game/scripts/world/facades/accepted_material_run_trials.gd",
+          "sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c"
+        }
+      ],
+      "source_key": "w291196370"
+    },
+    {
+      "adapter_id": "legacy-adapter:building:w34313515:wall",
+      "behavior_contract": null,
+      "content_mode": "legacy_adapter",
+      "disabled_reason_code": "one_or_more_source_bearing_projection_inputs_have_no_parity_proven_package_safe_executable",
+      "executable_assets": [],
+      "integration_state": "hard_disabled_source_projection",
+      "projection_descriptor_ids": [
+        "disabled-projection-input:7e9b60a8fc23db130fbe0f77b8edaf304178d052dbc4fbcc2bc2dcaab1c8e9aa",
+        "disabled-projection-input:cebd3b8ebf1052e444bf8d8bf492bf9a8f6088c010b250b8e04f2b6fe28fa491"
+      ],
+      "receiver_key": "building:w34313515:wall",
+      "resolution_policy": "deny_all_executable_resolution",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_aperiodic_field.gdshader",
+          "sha256": "d4a9dbb7c58443be93362699b0983b7377dab70698fd782b6710315c31be3e69"
+        },
+        {
+          "path": "res://game/resources/materials/world/w34313515/w34313515_frame.tres",
+          "sha256": "716afbdf12f55975747b08c615236462d335b62ca0c46730b4cb8439b9691aa5"
+        },
+        {
+          "path": "res://game/resources/materials/world/w34313515/w34313515_glass.tres",
+          "sha256": "963160407868064dcbb66b56cf477d0901f53a27351cbb23905474b5b613a4cc"
+        },
+        {
+          "path": "res://game/resources/materials/world/w34313515/w34313515_pale_exact_trial.tres",
+          "sha256": "0b8704ccc352374adc1d6a553ff3d985ae2b70559d92b5171092450783b4395f"
+        },
+        {
+          "path": "res://game/scripts/world/facades/accepted_material_run_trials.gd",
+          "sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c"
+        }
+      ],
+      "source_key": "w34313515"
+    },
+    {
+      "adapter_id": "legacy-adapter:building:w34313520:wall",
+      "behavior_contract": null,
+      "content_mode": "legacy_adapter",
+      "disabled_reason_code": "one_or_more_source_bearing_projection_inputs_have_no_parity_proven_package_safe_executable",
+      "executable_assets": [],
+      "integration_state": "hard_disabled_source_projection",
+      "projection_descriptor_ids": [
+        "disabled-projection-input:228988cef9f20433721f5a06d70587d9f63db22ecac6297aafa379ca7f6111a5",
+        "disabled-projection-input:4258bd671ad22ead381677e759d396721f6fe0ce3afbbe4093f6c934f4d07d4a"
+      ],
+      "receiver_key": "building:w34313520:wall",
+      "resolution_policy": "deny_all_executable_resolution",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/materials/world/w34313520/w34313520_pale_exact_trial.tres",
+          "sha256": "89fbb97ed797275a86c394af7eab13f946cbf23f29cba58b89a2b2d467030ab2"
+        },
+        {
+          "path": "res://game/scripts/world/facades/accepted_material_run_trials.gd",
+          "sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c"
+        }
+      ],
+      "source_key": "w34313520"
+    },
+    {
+      "adapter_id": "legacy-adapter:building:w34313525:wall",
+      "behavior_contract": null,
+      "content_mode": "legacy_adapter",
+      "disabled_reason_code": "one_or_more_source_bearing_projection_inputs_have_no_parity_proven_package_safe_executable",
+      "executable_assets": [],
+      "integration_state": "hard_disabled_source_projection",
+      "projection_descriptor_ids": [
+        "disabled-projection-input:1d70d43c4f08a26aa7888acd5fe3385846e723541d645c17dab2110dbe70ecc8",
+        "disabled-projection-input:8b6923fa18e148ce1f0fa933155276031839a0978063798d2edca13a0257b45e"
+      ],
+      "receiver_key": "building:w34313525:wall",
+      "resolution_policy": "deny_all_executable_resolution",
+      "runtime_assets": [
+        {
+          "path": "res://game/scripts/world/facades/accepted_material_run_trials.gd",
+          "sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c"
+        }
+      ],
+      "source_key": "w34313525"
+    },
+    {
+      "adapter_id": "active-adapter:building-3-hero:building:w34313540:wall",
+      "behavior_contract": {
+        "collision_contract": {
+          "collision_matches_visible_geometry": true,
+          "roof_landing_world_solid": true,
+          "spray_ownership": "wall_only",
+          "wall_world_solid": true
+        },
+        "facade_contract": {
+          "collision_owner": "massing_wall",
+          "deterministic_signature": "e0b30339bd2ca8642a7b49b5e6153f52017ec4a840e9b0dc1e3841f5373ca5f8",
+          "render_only": true,
+          "runtime_bound_to_wall_massing": true
+        },
+        "geometry_contract": {
+          "generated_bytes_unchanged": true,
+          "horizontal_source_footprint_preserved": true,
+          "profile_signature": "f82192fe9ebeb04a6da1222bcd84afd217f163ff6ce1cceed826a5d436dd1693",
+          "roof_geometry_signature": "2dee9acf24616423230895d70827acb56c8f402a56ac1fe8e4a93d2409b34b63",
+          "roof_triangles": 675,
+          "topology_delta_triangles": 766,
+          "wall_geometry_signature": "e03f830e6a41da16107b5db14bcb8a8ff9f43b46f9df89b1f157958cc68909d4",
+          "wall_triangles": 236
+        },
+        "parity_status": "exact_current_behavior_and_dependency_set_verified",
+        "replacement_contract": {
+          "dispatch_order": "target_specific_before_generic",
+          "receiver_roles": [
+            "wall",
+            "roof"
+          ],
+          "roof_object_key": "building:w34313540:roof",
+          "source_key": "w34313540",
+          "wall_object_key": "building:w34313540:wall"
+        },
+        "schema_version": "ti.building-3-runtime-parity/1"
+      },
+      "content_mode": "active_building_3_hero",
+      "disabled_reason_code": null,
+      "executable_assets": [
+        {
+          "path": "res://game/scenes/world/facades/building_3/building_3_600_california_facade.tscn",
+          "resource_kind": "packed_scene",
+          "sha256": "20acecc80aac526c5add6feb52f2f3e86969bf756533e81c9dcf9d59297fd354"
+        },
+        {
+          "path": "res://game/scenes/world/facades/building_3/building_3_ene_modules.tscn",
+          "resource_kind": "packed_scene",
+          "sha256": "c1f031ef4eb6c4643507dd686f2c6b222f1c8bdf851d7cd63c63470b0ea76c30"
+        },
+        {
+          "path": "res://game/scripts/world/facades/building_3_600_california_facade.gd",
+          "resource_kind": "gdscript",
+          "sha256": "5fa9851a90e886bb0a75ff35bf137ed891ed5f1e0cd53d95ee840a0573c2c55a"
+        },
+        {
+          "path": "res://game/scripts/world/massing/building_3_600_california_massing.gd",
+          "resource_kind": "gdscript",
+          "sha256": "0755ab9846357207143f4bb0a50c27e710d92aa3a529903c61d4d3495bb94419"
+        }
+      ],
+      "integration_state": "package_safe_ready_for_integration",
+      "projection_descriptor_ids": [],
+      "receiver_key": "building:w34313540:wall",
+      "resolution_policy": "resolve_only_without_instantiation",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/facades/building_3_600_california_ene_layout.json",
+          "sha256": "a491a3c7916191b9ca5f6adacc6d1f2289c0103f5079516b102b94e3993dae0c"
+        },
+        {
+          "path": "res://game/resources/facades/building_3_hero_massing.json",
+          "sha256": "2a7eacee21c88046deb587e53224b2c6c189172922265ed5a63711789ee37553"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_3/building_3_shadow_recess.tres",
+          "sha256": "6f0dbe93b776bf88654bd83230e8329a21a71fc030a3883e571c0a62d6b21d73"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_3/building_3_teal_door.tres",
+          "sha256": "dfb3114e6c419e3f1519364b58aa19d7aa3f65e08cb5fc64945ffe24874a0846"
+        },
+        {
+          "path": "res://game/resources/materials/world/building_3/building_3_white_primary.tres",
+          "sha256": "5b76d33ed0f8ae940bc9761989c8fda43c1106059bc93029a994a1ebf8edc49b"
+        },
+        {
+          "path": "res://game/scenes/world/facades/building_3/building_3_600_california_facade.tscn",
+          "sha256": "20acecc80aac526c5add6feb52f2f3e86969bf756533e81c9dcf9d59297fd354"
+        },
+        {
+          "path": "res://game/scenes/world/facades/building_3/building_3_ene_modules.tscn",
+          "sha256": "c1f031ef4eb6c4643507dd686f2c6b222f1c8bdf851d7cd63c63470b0ea76c30"
+        },
+        {
+          "path": "res://game/scripts/world/facades/building_3_600_california_facade.gd",
+          "sha256": "5fa9851a90e886bb0a75ff35bf137ed891ed5f1e0cd53d95ee840a0573c2c55a"
+        },
+        {
+          "path": "res://game/scripts/world/massing/building_3_600_california_massing.gd",
+          "sha256": "0755ab9846357207143f4bb0a50c27e710d92aa3a529903c61d4d3495bb94419"
+        }
+      ],
+      "source_key": "w34313540"
+    },
+    {
+      "adapter_id": "legacy-adapter:building:w34313547:wall",
+      "behavior_contract": null,
+      "content_mode": "legacy_adapter",
+      "disabled_reason_code": null,
+      "executable_assets": [
+        {
+          "path": "res://game/scripts/world/facades/accepted_material_run_trials.gd",
+          "resource_kind": "gdscript",
+          "sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c"
+        }
+      ],
+      "integration_state": "package_safe_ready_for_integration",
+      "projection_descriptor_ids": [],
+      "receiver_key": "building:w34313547:wall",
+      "resolution_policy": "resolve_only_without_instantiation",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/materials/world/ti_ymca/ti_ymca_primary.tres",
+          "sha256": "b5e44afcf4feb6df6ffba46f4e3b60a25fa6043c07c12c33e31c483cb2bf2399"
+        },
+        {
+          "path": "res://game/resources/materials/world/ti_ymca/ti_ymca_wall_tangent_aperiodic_field.gdshader",
+          "sha256": "8943853363f5a2571ebf15a6e9711c6310b706d2e4415f3e1f314d8643d55f6c"
+        },
+        {
+          "path": "res://game/scripts/world/facades/accepted_material_run_trials.gd",
+          "sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c"
+        }
+      ],
+      "source_key": "w34313547"
+    },
+    {
+      "adapter_id": "legacy-adapter:building:w34313564:wall",
+      "behavior_contract": null,
+      "content_mode": "legacy_adapter",
+      "disabled_reason_code": "one_or_more_source_bearing_projection_inputs_have_no_parity_proven_package_safe_executable",
+      "executable_assets": [],
+      "integration_state": "hard_disabled_source_projection",
+      "projection_descriptor_ids": [
+        "disabled-projection-input:5905fc89aeb82b315a29c7f16ca79878ddfd9db4aeafc93408ae234607967b19",
+        "disabled-projection-input:8df6997955d6918d013fbcf799ad58f2e13f234a96ff8964645dc43bbf293036"
+      ],
+      "receiver_key": "building:w34313564:wall",
+      "resolution_policy": "deny_all_executable_resolution",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_aperiodic_field.gdshader",
+          "sha256": "d4a9dbb7c58443be93362699b0983b7377dab70698fd782b6710315c31be3e69"
+        },
+        {
+          "path": "res://game/resources/materials/world/w34313564/w34313564_door.tres",
+          "sha256": "88babf9bdceb46e8475f6d1acf1853ac451433c91f1264ca70c41d8c19d2aa3d"
+        },
+        {
+          "path": "res://game/resources/materials/world/w34313564/w34313564_frame.tres",
+          "sha256": "5487fa17415e4022d85b82e3f013ac9a41be1dd07d88354f1caf4b05a9ab5994"
+        },
+        {
+          "path": "res://game/resources/materials/world/w34313564/w34313564_glass.tres",
+          "sha256": "0f5b2ac833346143e777b81e85079f4502ca5a2692944228a9fbfeff28ddd669"
+        },
+        {
+          "path": "res://game/resources/materials/world/w34313564/w34313564_pale_exact_trial.tres",
+          "sha256": "c7ec2df12b0dcf41e2b5019fd98155dbe3668d16379070210fe9f97ef032a343"
+        },
+        {
+          "path": "res://game/resources/materials/world/w34313564/w34313564_tan_exact_trial.tres",
+          "sha256": "3b895743b247a20641cb7564004d2f890bacfc286feaec9044b334b5e8e170bb"
+        },
+        {
+          "path": "res://game/scripts/world/facades/accepted_material_run_trials.gd",
+          "sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c"
+        }
+      ],
+      "source_key": "w34313564"
+    }
+  ],
+  "projection_descriptors": [
+    {
+      "consumer_adapter_ids": [
+        "legacy-adapter:building:w34313525:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:1d70d43c4f08a26aa7888acd5fe3385846e723541d645c17dab2110dbe70ecc8",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:3f4471a2f5de7993fcaa000e5a97b56ebe2d620cd9451a7e67d03865a211b668"
+      ],
+      "source_asset_sha256": "308cfe8aa3e6320f122f2b81ea74976d30f7d87de91736aeed60e67a01dc121b",
+      "source_asset_type": "gd"
+    },
+    {
+      "consumer_adapter_ids": [
+        "legacy-adapter:building:w34313520:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:228988cef9f20433721f5a06d70587d9f63db22ecac6297aafa379ca7f6111a5",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:a99474d0e4f4b459aa10c015e77118f2b866391fb1e13dad41cec3dbf9d0f082"
+      ],
+      "source_asset_sha256": "28ea8b6e506d747299a920e4d456d8676031e18ec3b6d9e959cab31fa33de4f1",
+      "source_asset_type": "json"
+    },
+    {
+      "consumer_adapter_ids": [
+        "legacy-adapter:building:w34313520:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:4258bd671ad22ead381677e759d396721f6fe0ce3afbbe4093f6c934f4d07d4a",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:7a84221814a756eb116d871ff407b2fb99f8c828f30fc8e792e3d7f9ea32c88c"
+      ],
+      "source_asset_sha256": "765d8546e2fcfca68c855d1e1bcfb93bdcf1b1791c9b71ce4bcd6dcc35fe432e",
+      "source_asset_type": "gd"
+    },
+    {
+      "consumer_adapter_ids": [
+        "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:56dc5e02ccdb12977caea351d56d391d7e8629c6e0535e98eefb0569cd2ea16e",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:ed0f19fa82261ab382645c5661de7539dd379e0b9e6591da6d633bab3cfb2aed"
+      ],
+      "source_asset_sha256": "4336e821e240b973f8d97e5cb46e17332b19dea03869abb1fa81b96a7e380582",
+      "source_asset_type": "gd"
+    },
+    {
+      "consumer_adapter_ids": [
+        "legacy-adapter:building:w34313564:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:5905fc89aeb82b315a29c7f16ca79878ddfd9db4aeafc93408ae234607967b19",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:dd9c716cf490fac5d3ddb25a247deff19ba3b7e460c4709eeb6cfc9db8c1d671"
+      ],
+      "source_asset_sha256": "45a47d333c997887cef7d1c97a633d37ae050efda597186430c7af6d52116f0f",
+      "source_asset_type": "json"
+    },
+    {
+      "consumer_adapter_ids": [
+        "legacy-adapter:building:w34313515:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:7e9b60a8fc23db130fbe0f77b8edaf304178d052dbc4fbcc2bc2dcaab1c8e9aa",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:9520c246d22bb8de6e764a8a0689be280588c5980bc49734f5ff2906d63d1b9e"
+      ],
+      "source_asset_sha256": "2d378a94da4b7badd334d5c00f926a26a4ff9109782abb18e4859301df4b5c1d",
+      "source_asset_type": "json"
+    },
+    {
+      "consumer_adapter_ids": [
+        "legacy-adapter:building:w291196370:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:85d69c6199abecb1f21c7a40b1e1a6fd7d2742a9bc299c985a643d8951cc4ac8",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:1ce1121248542229732012964d0edb6e3da12b96fcc14cb32c89d3f0820dfb9e"
+      ],
+      "source_asset_sha256": "2b4da98b780af42bbc59dce911410c73964f670ce6d58624b77211b7cf981653",
+      "source_asset_type": "gd"
+    },
+    {
+      "consumer_adapter_ids": [
+        "legacy-adapter:building:w34313525:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:8b6923fa18e148ce1f0fa933155276031839a0978063798d2edca13a0257b45e",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:7f328d71840bc01bf26ecac0ae8a2fac4b07b9c4a427e60560927d65c37accf1"
+      ],
+      "source_asset_sha256": "ba22916618510f610719606c1c18f84b8965bbd76fe74eddc5430745470bbddd",
+      "source_asset_type": "json"
+    },
+    {
+      "consumer_adapter_ids": [
+        "legacy-adapter:building:w34313564:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:8df6997955d6918d013fbcf799ad58f2e13f234a96ff8964645dc43bbf293036",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:590d472f62f845758c28753211732f92cd65aa9c663168fe4e335aca52777dc6"
+      ],
+      "source_asset_sha256": "74a7eb9a29750baf47e59194374c2669278bba5af091f5cbe04b13f45c230b8e",
+      "source_asset_type": "gd"
+    },
+    {
+      "consumer_adapter_ids": [
+        "legacy-adapter:building:w291196370:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:9a9806b886b09c3d860c1a73e7e5f4af22eeb236ba7ed8fd0fd9d646b1a7e061",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:129b0a4757c40815362fe8b88bf5994750f0d9163ed7993a92e5450e40e33605"
+      ],
+      "source_asset_sha256": "b30a8f19091288cde4b8e891ec40287ab28a73776588f96ee86fc5565cfc25b8",
+      "source_asset_type": "json"
+    },
+    {
+      "consumer_adapter_ids": [
+        "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:a85e4a7cbb4d51fa75fa4061df754cf0327e69eb12b51dc901bcbf293c8cd5ca",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:b748275c8b25f475d4c11b2eb8df864ba20e2814335b2eea01a95299cd7b75a6"
+      ],
+      "source_asset_sha256": "b24fd72cd12aa0c6c45a123f005fc834ea657c343e8332a872eae07fa017ace7",
+      "source_asset_type": "gd"
+    },
+    {
+      "consumer_adapter_ids": [
+        "legacy-adapter:building:w34313515:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:cebd3b8ebf1052e444bf8d8bf492bf9a8f6088c010b250b8e04f2b6fe28fa491",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:93b02fa6413f5ed62f193f7042dc26ec7158b4d44875403b3f0c4b0b3bb22014"
+      ],
+      "source_asset_sha256": "8034932d57f8e42ee9c96a1bdd2508d8bf51b52abc0e5d7ff5f2659cbf75ddc7",
+      "source_asset_type": "gd"
+    },
+    {
+      "consumer_adapter_ids": [
+        "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall"
+      ],
+      "descriptor_id": "disabled-projection-input:e5224297377878d3421d25f64c7b3168730a8fe0150e677ef36e09e455b24a01",
+      "disabled_reason_code": "source_bearing_dependency_closure_requires_independent_package_safe_normalization",
+      "execution_policy": "never_resolve_or_execute",
+      "execution_state": "hard_disabled",
+      "occurrence_projection_ids": [
+        "runtime-projection:aaa06907680e38f8228798fde2de4926a19e21b47a695897714166b7e3fa40e4"
+      ],
+      "source_asset_sha256": "e2767b01fab68d7f16ffe2e7f8e0313c711347e2006a72e028c19aaa2195b891",
+      "source_asset_type": "gd"
+    }
+  ],
+  "schema_version": "ti.facade-runtime-adapter-contracts/3"
+}

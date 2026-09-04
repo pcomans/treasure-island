@@ -10,12 +10,12 @@ const EXPECTED_CHUNKS := 38
 const EXPECTED_PLAYABLE_ROWS := 735
 const EXPECTED_CONTEXT_ROWS := 4
 const EXPECTED_RECORDS := 729
-const EXPECTED_GENERATED_MESHES := 729
-const EXPECTED_GENERATED_SURFACES := 739
-const EXPECTED_GENERATED_TRIANGLES := 48389
-const EXPECTED_RUNTIME_MESHES := 1278
-const EXPECTED_RUNTIME_SURFACES := 1288
-const EXPECTED_RUNTIME_TRIANGLES := 55067
+const EXPECTED_GENERATED_MESHES := 725
+const EXPECTED_GENERATED_SURFACES := 735
+const EXPECTED_GENERATED_TRIANGLES := 48825
+const EXPECTED_RUNTIME_MESHES := 940
+const EXPECTED_RUNTIME_SURFACES := 954
+const EXPECTED_RUNTIME_TRIANGLES := 64118
 const EXPECTED_BODIES := 466
 const EXPECTED_VEGETATION_SEED := 1414092337
 const EXPECTED_VEGETATION_INSTANCES := 124
@@ -346,9 +346,12 @@ func _capture_view(definition: Dictionary, output_directory: String, world: Worl
 
 func _capture_building_1_public_curve(output_directory: String, world: WorldLoader, player: PlayerController) -> Dictionary:
 	var receiver := _record_node_for_key(world, BUILDING_1_RECEIVER_KEY)
-	var facade := receiver.get_node_or_null("Building1RecognizableFacade") if receiver != null else null
-	if receiver == null or facade == null or not facade.is_visible_in_tree():
-		return {"ok": false, "message": "The accepted Building 1 public-curve facade is missing from the exact-current world."}
+	if receiver == null \
+	or not receiver.is_visible_in_tree() \
+	or receiver.name != "Building1HeroWall" \
+	or not bool(receiver.get_meta("runtime_supersedes_generated_placeholder", false)) \
+	or str(receiver.get_meta("visual_review_status", "")) != "pending_independent_original_detail_review":
+		return {"ok": false, "message": "The pending-review Building 1 hero wall is missing from the exact-current world."}
 	var settlement := await _settle_player(
 		BUILDING_1_PUBLIC_CURVE_CAPTURE.requested_xz,
 		BUILDING_1_PUBLIC_CURVE_CAPTURE.id,
@@ -365,9 +368,11 @@ func _capture_building_1_public_curve(output_directory: String, world: WorldLoad
 	metadata.merge({
 		"camera_aim_target": [target.x, target.y, target.z],
 		"receiver_key": BUILDING_1_RECEIVER_KEY,
-		"accepted_facade_present": true,
+		"hero_shell_present": true,
+		"hero_shell_visual_review_status": str(receiver.get_meta("visual_review_status", "")),
+		"accepted_facade_present": false,
 		"reference_capture": BUILDING_1_PUBLIC_CURVE_CAPTURE.reference_capture,
-		"reference_pose_use": "The accepted target and horizontal camera anchor are reused; this frame uses the real third-person player camera at grounded eye height.",
+		"reference_pose_use": "The historical accepted target and horizontal camera anchor are reused for comparison; this frame uses the real third-person player camera at grounded eye height and does not self-accept the replacement hero shell.",
 	}, true)
 	return _save_current_view(BUILDING_1_PUBLIC_CURVE_CAPTURE, output_directory, player, metadata)
 

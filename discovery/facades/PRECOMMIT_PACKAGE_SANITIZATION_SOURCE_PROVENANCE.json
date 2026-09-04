@@ -1,0 +1,101 @@
+{
+  "schema_version": "ti.precommit-package-sanitization-source-provenance/1",
+  "receipt_id": "PRECOMMIT-PACKAGE-SANITIZATION-SOURCE-PROVENANCE-2026-09-04",
+  "scope": "source-only provenance excluded from the canonical game package",
+  "checked_date": "2026-09-04",
+  "publishable_path_policy": "Workstation storage locations are intentionally represented only by opaque output IDs and content hashes; repository source and evidence locators are repository-relative and never executable runtime paths.",
+  "records": {
+    "B1-HERO-AUTHORITY": {
+      "historical_runtime_config_sha256": "6c99f43550631a1e6bca1f52764ad23c6a5b8b891403f30c78ff9b9545192690",
+      "primary_nps_nomination": "https://npgallery.nps.gov/NRHP/GetAsset/NRHP/08000081_text",
+      "primary_nps_sections": "Section 7, pages 5-7",
+      "museum_building_page": "https://www.treasureislandmuseum.org/youarehere/building-the-bay-bridge-&-treasure-island",
+      "museum_sculpture_page": "https://www.treasureislandmuseum.org/sculptures-and-island",
+      "checked": "2026-09-04"
+    },
+    "B1-PUBLIC-FRONT-AUTHORITY": {
+      "historical_runtime_config_sha256": "e11710374f837e15b45adf3b6df0e762a6793b363e6c3109870e1bf2f7a0ee0e",
+      "bar_raiser_review": {
+        "repository_relative_path": "discovery/facades/VISUAL_BAR_RAISER_REVIEW_2026-09-04.md",
+        "sha256": "5cc66373e1f625599f4f7c81e338674b984d620eb105bc84702554486b1328da"
+      },
+      "hero_spec": {
+        "repository_relative_path": "discovery/facades/TREASURE_ISLAND_BUILDING_1_HERO_RECOGNIZABILITY_SPEC.md",
+        "sha256": "135ef9ae411d41892d25d1c679d10fe022193348b6406c4a8abecb55805c9720"
+      }
+    },
+    "D1-B201-AUTHORITY": {
+      "historical_runtime_config_sha256": "3d53efbb0577c9b5e52a2ada4d79a710b95e41faead0bdcdd41cd4f2d862a0fe",
+      "packet": {
+        "repository_relative_path": "discovery/facades/d1_reference_packets/w34313545_building_201.md",
+        "sha256": "c6fba23d80e95b23c4f3eb172a252baa47767b7a29757096bff329c693db9e5e"
+      }
+    },
+    "D1-B225-AUTHORITY": {
+      "historical_runtime_config_sha256": "63e4f80cc7716146dc1fef46c7678e4da856755377c84ff33f972c0cc0c1f639",
+      "packet": {
+        "repository_relative_path": "discovery/facades/d1_reference_packets/w95934119_building_225.md",
+        "sha256": "ee3e0cb8a7f3bb29e4ecbc0be688d57268cccc895c33c448c64e2506b2de4fa8"
+      }
+    },
+    "D1-PAIR-AUTHORITY": {
+      "historical_runtime_config_sha256": "c73f8c8da4d30a4e4ebe3e94cde10d63f98377bf5b636a1e12cee92c9bcaafe4",
+      "packet_index": {
+        "repository_relative_path": "discovery/facades/d1_reference_packets/README.md",
+        "sha256": "0f7a477f5168e9145de609dbbe66f4b52d09e55ef657afdf6fee5aa430e00d58"
+      },
+      "run_mapping": {
+        "repository_relative_path": "discovery/facades/BATCH_05_RUN_MAPPING.json",
+        "sha256": "54a8f651a56a03a65747d511184afc9f8271bbfc4efe5614db94f3d5232b368b"
+      },
+      "receiver_inventory": {
+        "repository_relative_path": "discovery/FACADE_RECEIVER_INVENTORY.json",
+        "sha256": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f"
+      },
+      "capture_manifest": {
+        "repository_relative_path": "evidence/first-playable/d1-current-standalone-prototype-pair-2026-09-04/capture-manifest.json",
+        "sha256": "35e60ea88ce9c932de4ecb02a1cdbb21af50e84497bd24e0738d9d5d7bb26f18"
+      }
+    },
+    "D1-B225-REPAIR-AUTHORITY": {
+      "historical_runtime_config_sha256": "89d34d33b48c93c0a6c90d46ff8120cd36c5f897ebe1fc9ea2ee2cd97a3db22c",
+      "superseded_review": {
+        "repository_relative_path": "evidence/first-playable/d1-current-standalone-prototype-pair-2026-09-04/INDEPENDENT_BAR_RAISER_REVIEW.md",
+        "sha256": "8567cd5eb9080f8f7cb563152ae83885330d366cc56ecc8513d5ebdadf491feb"
+      },
+      "package_measurement": {
+        "repository_relative_path": "evidence/first-playable/d1-b225-standalone-cladding-repair-v1-2026-09-04/package-audit.json",
+        "sha256": "cf604bc520315d8d05fdcb19ea7f176e07268ff2be8511a155d872ab1d23875b"
+      },
+      "initial_output": {
+        "opaque_output_id": "imagegen:d1-b225-cladding-v1:initial-rejected",
+        "sha256": "f4289c182ad32c63404c067311a5a9d06ab8b0dcea07893c3f7399ae10b63309"
+      },
+      "selected_output": {
+        "opaque_output_id": "imagegen:d1-b225-cladding-v1:selected-flat-joints",
+        "sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b"
+      }
+    },
+    "DORMITORY-369-AUTHORITY": {
+      "historical_runtime_config_sha256": "a6086d13a986bdd4a6c281b75ec7fb58524257ae4b8ea6b849840a324cc59dc2",
+      "packet": {
+        "repository_relative_path": "discovery/facades/p3_reference_packets/w291189926_job_corps_dormitory_369.md",
+        "sha256": "a43d391239c2fd3ce66b13c39dc56c534253211e7a44a12d512dbe5367b3a9f9"
+      }
+    },
+    "GENAI-MATERIAL-PILOT-OUTPUTS": {
+      "warm_ivory_v1_rejected": {
+        "opaque_output_id": "imagegen:warm-ivory-mineral-v1:rejected-macro-repeat",
+        "sha256": "c00ccbb2c31b8ca9ab7bec61738adfe6070b6e9580806d1fa9328323b540e3e5"
+      },
+      "warm_ivory_v2_selected": {
+        "opaque_output_id": "imagegen:warm-ivory-mineral-v2:selected",
+        "sha256": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c"
+      },
+      "muted_brown_red_brick_selected": {
+        "opaque_output_id": "imagegen:muted-brown-red-brick-v1:selected",
+        "sha256": "0abbb429066966c1cfc1e0209a2a454c41dae73743fc119ffdf7cd82ee3ef35d"
+      }
+    }
+  }
+}

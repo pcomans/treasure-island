@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "d1_b201_muted_rust_brown_post"
+albedo_color = Color(0.31, 0.145, 0.085, 1)
+metallic = 0.04
+roughness = 0.75
+

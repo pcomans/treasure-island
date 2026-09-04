@@ -13,8 +13,8 @@ const FINAL_REVIEW_PATH := "res://discovery/facades/W34313564_MODULE_CALIBRATION
 const EXPECTED_REGISTRY_SHA256 := "45a47d333c997887cef7d1c97a633d37ae050efda597186430c7af6d52116f0f"
 const EXPECTED_REVIEWED_CALIBRATION_SHA256 := "b49b8c20fbbe40f2728c0acadf8d53f0593856091e6df897a613d4f2f8680b71"
 const EXPECTED_FINAL_REVIEW_SHA256 := "a8f1396e2d126c0c38b37edf770df975c4fa95e25e34fb2c7c1e766630fd1591"
-const EXPECTED_LIVE_HELPER_SHA256 := "5d0d7816a87e13907d571aaceb2d4af3c01980fd26a043e33d87e9b07f2b71ee"
-const EXPECTED_WORLD_BUILDER_SHA256 := "e3d0ca4b6c9d39a444aa5b55592d63a32e7794bae3e12f1f3fac125243839d42"
+const EXPECTED_LIVE_HELPER_SHA256 := "74a7eb9a29750baf47e59194374c2669278bba5af091f5cbe04b13f45c230b8e"
+const EXPECTED_WORLD_BUILDER_SHA256 := "28be094c674108f42be040f2b3ae6d242838d15e2060f6cf4668b0a003f1a682"
 const EXPECTED_FIELD_HELPER_SHA256 := "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c"
 const EXPECTED_PLACEMENTS := {
 	"CAL-SSE-PDOOR-01": {"motif_id": "W34313564-PDOOR", "run": 7, "center_m": 47.5, "face": "SSE", "mapping_id": "B06-34313564-SSE-CENTRAL", "material": "res://game/resources/materials/world/w34313564/w34313564_door.tres", "meshes": 5},
@@ -75,7 +75,7 @@ func _run() -> void:
 	detached_node.free()
 	await _whole_island_matches()
 	if not _failed:
-		print("PASS: exactly five reviewed w34313564 live receiver modules remain unchanged at runs 7/8/12/16/17 with 34 render-only meshes / 34 surfaces / 408 triangles and zero backing/collision/navigation/spray; the separately accepted w34313515/w291196370/w34313520 scopes remain isolated, and whole-island topology is 729 records / 1278 meshes / 1288 surfaces / 55,067 triangles / 466 collider pairs")
+		print("PASS: exactly five reviewed w34313564 live receiver modules remain unchanged at runs 7/8/12/16/17 with 34 render-only meshes / 34 surfaces / 408 triangles and zero backing/collision/navigation/spray; the separately accepted w34313515/w291196370/w34313520 scopes remain isolated, and whole-island topology is 735/940/954/64,118/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
 	_finish()
 
 
@@ -252,7 +252,8 @@ func _whole_island_matches() -> void:
 		if str(candidate.get_meta("derived_object_key", "")) == RECEIVER_KEY and candidate.get_node_or_null("Mesh") != null:
 			receiver = candidate as Node3D
 	_require(evidence.chunks_loaded == 38 \
-		and evidence.mesh_instances == 1278 and evidence.surfaces == 1288 and evidence.triangles == 55067 \
+		and evidence.playable_rows == 735 and evidence.context_rows == 4 \
+		and evidence.mesh_instances == 940 and evidence.surfaces == 954 and evidence.triangles == 64118 \
 		and evidence.static_bodies == 466 and evidence.shapes == 466 \
 		and live_root_count == 1 and receiver != null \
 		and _count_type(receiver, MeshInstance3D) == 35 \

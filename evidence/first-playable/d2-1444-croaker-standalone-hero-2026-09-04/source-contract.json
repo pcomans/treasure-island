@@ -1,0 +1,58 @@
+{
+  "schema_version": "ti.d2-1444-croaker-standalone-source-contract/1",
+  "target": {
+    "canonical_name": "1444 Croaker Court",
+    "source_key": "w95934117",
+    "wall_object_key": "building:w95934117:wall",
+    "roof_object_key": "building:w95934117:roof",
+    "chunk": "x_-2__z_-1",
+    "source_geometry_sha256": "52c844ec3cbeae52b97e12014dac8761c8518b6b4e5ce6df5eeee64256eadcc4",
+    "wall_record_sha256": "1497487d53fc7eeb98f8399fd8fc47c159c2652e68a486ce496b860fddcfffb6",
+    "roof_record_sha256": "a4e69552758e9f2927c40a5d4021c8b4cd7dcf7c065f3b78c235219e4fe0eb7a",
+    "source_base_y_m": 2.521,
+    "source_wall_top_y_m": 8.521,
+    "source_height_m": 6.0,
+    "wall_runs": 22,
+    "footprint_area_m2": 475.473,
+    "perimeter_m": 110.832
+  },
+  "authorities": {
+    "reference_packet": {
+      "path": "discovery/facades/d2_reference_packets/w95934117_1444_croaker_court.md",
+      "sha256": "51c70c213b055572447c8a7aebaf3a3da2b8e759d4bcd48aa65949ec0530fa90"
+    },
+    "frozen_chunk": {
+      "path": "generated/world/chunks/x_-2__z_-1.json",
+      "sha256": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2"
+    }
+  },
+  "mapped_public_wsw_runs": [8, 9, 11, 12, 15, 16, 17],
+  "mapped_public_wsw_total_length_m": 32.864,
+  "protected_quiet_runs": [0, 1, 2, 3, 4, 5, 6, 7, 10, 13, 14, 18, 19, 20, 21],
+  "entity_specific_reference_supported_cues": [
+    "broad mostly blank upper end block over a deep ground-level undercroft on runs 8 and 9",
+    "adjacent WSW return with sparse paired rectangular openings rather than a continuous bay strip",
+    "narrow far-end recessed two-storey balcony stack on run 17",
+    "shallow dark roof and broad WSW eave break"
+  ],
+  "confusion_set": [
+    {"name": "1431 Halibut Court", "source_key": "w95934135"},
+    {"name": "1436 Chinook Court", "source_key": "w95934137"},
+    {"name": "1449 Croaker Court", "source_key": "w95934120"}
+  ],
+  "material_contract": {
+    "stucco": "The already approved homogeneous warm-ivory GenAI albedo is reused byte-for-byte as a neutral micro-surface, tinted to a reversible ochre-tan surrogate. One geometry UV unit is one metre and material scale 0.333333 gives an approximately 3 m repeat. No target photograph was used or shipped, no new bitmap was generated, and no normal, roughness, AO, height, or displacement bitmap is assigned.",
+    "roof": "The existing CC0 Poly Haven bitumen albedo is reused as a dark 5 m-repeat roof/eave visual surrogate. This does not claim a bitumen or shingle product; no normal or roughness bitmap is assigned."
+  },
+  "truth_boundary": {
+    "exact_horizontal_wall_and_roof_plan_preserved": true,
+    "exact_source_wall_height_preserved": true,
+    "source_identity_preserved": true,
+    "source_photography_stored_or_shown": false,
+    "all_opening_void_pier_balcony_rail_eave_and_roof_rise_dimensions_and_counts": "reversible_production_inference",
+    "interior_modeled": false,
+    "as_built_claim": false,
+    "recognition_accepted": false,
+    "believability_accepted": false
+  }
+}

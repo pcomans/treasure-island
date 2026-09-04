@@ -12,7 +12,6 @@ const RECORD_HASHES := {
 	ROOT + "/generated-data-diff.txt": "ecdde4706e92b5d57d790c064afb8575f22b1360cb8363a7282ac0f0a43e182a",
 	"res://game/resources/facades/building_1_recognizability_placements.json": "affc41797999b83610352c5945c21d5206167a67bdc1aa5134a3021dd280df05",
 	"res://game/scripts/world/facades/building_1_recognizable_facade.gd": "f39ce8b043dda6c78e1b7cabc223552b6afcceed67538ce973aa6cdc53fbd507",
-	"res://game/scripts/world/world_chunk_builder.gd": "e3d0ca4b6c9d39a444aa5b55592d63a32e7794bae3e12f1f3fac125243839d42",
 	"res://game/tests/building_1_recognizability_capture.gd": "8c2d4b4d87e70d263812c15a783576ae48b694d7ae6945cfcd3df76e74bf80e9",
 	"res://discovery/FACADE_RECEIVER_INVENTORY.json": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f",
 	"res://discovery/facades/TREASURE_ISLAND_BUILDING_1_RECOGNIZABILITY_ART_REVIEW.md": "328973362b873b80ec8255c78ad7851369db850d3d9bc3f95b31064f83bb584c",
@@ -26,7 +25,7 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	_require(_hashes_match(RECORD_HASHES), "A Building 1 recognizability evidence/current-state record drifted.")
+	_require(_hashes_match(RECORD_HASHES), "A sealed historical Building 1 recognizability evidence record drifted.")
 	var manifest := _json(ROOT + "/capture-manifest.json")
 	var isolation := _json(ROOT + "/runtime-isolation.json")
 	var verification := _json(ROOT + "/visual-verification.json")
@@ -58,7 +57,7 @@ func _run() -> void:
 		and not bool(independent.get("as_built_fidelity_claimed", true)), "Visual validity/current independent-review record is incomplete or overclaims acceptance.")
 	_require(_lifecycle_matches(inventory), "Canonical independently accepted recognizability lifecycle drifted.")
 	if not _failed:
-		print("PASS: Building 1 recognizability evidence seals 16 unchanged native Metal views, three exact before/after pairs, all six complete motif families, 63 accepted public field runs, 45 accepted production-inference placements, protected runtime, independent review 32897336, and zero pending lifecycle scope")
+		print("PASS: historical Building 1 recognizability evidence seals 16 unchanged native Metal views, three exact before/after pairs, all six complete motif families, 63 accepted public field runs, 45 accepted production-inference placements, protected capture-time runtime, and independent review 32897336; current hero-shell review is separate")
 	quit(1 if _failed else 0)
 
 

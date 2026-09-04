@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "d1_b201_saturated_green_horizontal_hierarchy"
+albedo_color = Color(0.06, 0.38, 0.19, 1)
+metallic = 0.0
+roughness = 0.69
+

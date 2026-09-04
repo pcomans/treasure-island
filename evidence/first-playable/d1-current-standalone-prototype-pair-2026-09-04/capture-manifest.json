@@ -1,0 +1,406 @@
+{
+  "blocked_claims": [
+    "address, sign or tenant recognition",
+    "exact as-built layout",
+    "unobserved lower B225 openings",
+    "B201 service ENE/SSE/NNW/returns",
+    "B225 WSW openings/SSE/ENE/returns",
+    "roof equipment",
+    "transparent interiors",
+    "live attachment or independent acceptance"
+  ],
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/d1_current_standalone_prototype_capture.gd",
+  "capture_count": 9,
+  "captures": [
+    {
+      "bytes": 107567,
+      "camera_position_m": [
+        -32.0,
+        3.09999990463257,
+        88.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-b201-grounded-complete-wsw.png",
+      "id": "01-b201-grounded-complete-wsw",
+      "label": "B201 · W34313545 · OBSERVED WSW CHAIN RUNS 0–9",
+      "sampled_luminance": {
+        "maximum": 0.94288,
+        "mean": 0.28673,
+        "minimum": 0.019057,
+        "range": 0.923823,
+        "sample_count": 4000
+      },
+      "scope_note": "115.513 m exact chain length · broad dark upper bays + green hierarchy + sparse solid lower field",
+      "sha256": "ab245665f03b2c4373a7504bb4979fb11fac9b15e8bd195c5b4c3eb837472a3c",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_grounded_complete_side"
+    },
+    {
+      "bytes": 99435,
+      "camera_position_m": [
+        -78.0,
+        2.20000004768372,
+        43.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-b201-grounded-canopy-depth.png",
+      "id": "02-b201-grounded-canopy-depth",
+      "label": "B201 · W34313545 · WSW DEPTH READ",
+      "sampled_luminance": {
+        "maximum": 0.94288,
+        "mean": 0.296171,
+        "minimum": 0.019057,
+        "range": 0.923823,
+        "sample_count": 4000
+      },
+      "scope_note": "canopy slab/fascia/posts are separate removable render geometry · dimensions and anchors inferred",
+      "sha256": "d4f25df5a2cce0aed879de8329fe16605b5beb5d74b5a65fb3a12760ac44a621",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_grounded_oblique"
+    },
+    {
+      "bytes": 142219,
+      "camera_position_m": [
+        -38.0,
+        2.15000009536743,
+        24.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-b201-register-service-close.png",
+      "id": "03-b201-register-service-close",
+      "label": "B201 · W34313545 · REGISTER / LOWER-FIELD HIERARCHY",
+      "sampled_luminance": {
+        "maximum": 0.94288,
+        "mean": 0.314314,
+        "minimum": 0.019057,
+        "range": 0.923823,
+        "sample_count": 4000
+      },
+      "scope_note": "complete broad windows and real frame/pier relief · three lower leaves are nonsemantic production inference",
+      "sha256": "7855568fdd054bb65d4c4ae120bfaca8bef1ea91260c267af16df0897b3622cb",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "view_kind": "grounded_recognition_close"
+    },
+    {
+      "bytes": 75277,
+      "camera_position_m": [
+        3.0,
+        3.59999990463257,
+        48.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "04-b201-changed-light-oblique.png",
+      "id": "04-b201-changed-light-oblique",
+      "label": "B201 · W34313545 · CHANGED LIGHT",
+      "sampled_luminance": {
+        "maximum": 0.94288,
+        "mean": 0.219634,
+        "minimum": 0.003088,
+        "range": 0.939792,
+        "sample_count": 4000
+      },
+      "scope_note": "restrained material hierarchy and relief remain readable without signage, address markers or facade imagery",
+      "sha256": "601d85f9493eda46284d89157e6ae21cc01288e65d4477f3d4aa42c309f0fd90",
+      "sun_rotation_degrees": [
+        -19.9999980926514,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_depth_check"
+    },
+    {
+      "bytes": 102896,
+      "camera_position_m": [
+        68.0,
+        2.79999995231628,
+        39.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "05-b225-grounded-complete-nnw.png",
+      "id": "05-b225-grounded-complete-nnw",
+      "label": "B225 · W95934119 · OBSERVED NNW CHAIN RUNS 10–13",
+      "sampled_luminance": {
+        "maximum": 0.94288,
+        "mean": 0.313896,
+        "minimum": 0.019057,
+        "range": 0.923823,
+        "sample_count": 4000
+      },
+      "scope_note": "46.262 m exact chain length · varied high clerestory groups + physically coursed aged field",
+      "sha256": "21b656561966ac75d6e473796728d0d9657f4019be08476b4ccf45d866934122",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_grounded_complete_side"
+    },
+    {
+      "bytes": 105376,
+      "camera_position_m": [
+        48.0,
+        2.0,
+        25.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "06-b225-grounded-clerestory-oblique.png",
+      "id": "06-b225-grounded-clerestory-oblique",
+      "label": "B225 · W95934119 · CLERESTORY DEPTH READ",
+      "sampled_luminance": {
+        "maximum": 0.94288,
+        "mean": 0.31659,
+        "minimum": 0.007009,
+        "range": 0.935871,
+        "sample_count": 4000
+      },
+      "scope_note": "ten complete varied groups, pale frames and recessed opaque panes · group widths/counts inferred",
+      "sha256": "30597aa75d628550dcee8d06a80343ec5603074dfdfd53a3fc2c85a4e0770bc8",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "view_kind": "ordinary_grounded_oblique"
+    },
+    {
+      "bytes": 144278,
+      "camera_position_m": [
+        68.0,
+        2.25,
+        15.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "07-b225-clerestory-course-close.png",
+      "id": "07-b225-clerestory-course-close",
+      "label": "B225 · W95934119 · CLERESTORY / COURSE HIERARCHY",
+      "sampled_luminance": {
+        "maximum": 0.94288,
+        "mean": 0.378047,
+        "minimum": 0.019057,
+        "range": 0.923823,
+        "sample_count": 4000
+      },
+      "scope_note": "directional course relief is deterministic and metre-authored · no repeated damage or dark-pane signature",
+      "sha256": "45299789b409017ca7b989b3bdc30f8773618f63e6f81076259e62a5af9b70b9",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "view_kind": "grounded_recognition_close"
+    },
+    {
+      "bytes": 78849,
+      "camera_position_m": [
+        85.0,
+        3.20000004768372,
+        28.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "08-b225-changed-light-oblique.png",
+      "id": "08-b225-changed-light-oblique",
+      "label": "B225 · W95934119 · CHANGED LIGHT",
+      "sampled_luminance": {
+        "maximum": 0.94288,
+        "mean": 0.215013,
+        "minimum": 0.003088,
+        "range": 0.939792,
+        "sample_count": 4000
+      },
+      "scope_note": "low mass, course direction, frame projection and pane recess remain legible without openings/signs",
+      "sha256": "2d63b8fd64a8266934b9017249ccb213fe134a217f789a991d74f1858a5a8d45",
+      "sun_rotation_degrees": [
+        -18.0,
+        117.999992370605,
+        0.0
+      ],
+      "view_kind": "changed_light_oblique_depth_check"
+    },
+    {
+      "bytes": 81830,
+      "camera_position_m": [
+        18.0,
+        8.19999980926514,
+        126.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "09-pair-grounded-overview.png",
+      "id": "09-pair-grounded-overview",
+      "label": "D1 CURRENT PAIR · DISTINCT RECOGNITION LANGUAGES",
+      "sampled_luminance": {
+        "maximum": 0.94288,
+        "mean": 0.187462,
+        "minimum": 0.019057,
+        "range": 0.923823,
+        "sample_count": 4000
+      },
+      "scope_note": "B201 green-bounded broad register versus B225 pale varied clerestory/coursed field · illustrative spacing only",
+      "sha256": "dde3401df4f4006a31a2129f90292c454060ab8a0094c78f1cf03c75178d6877",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "view_kind": "grounded_pair_overview"
+    }
+  ],
+  "display_driver": "macOS",
+  "evidence_role": "fresh native technical views of two standalone observed-side studies; not live receiver placement, calibration, gameplay-world evidence, or acceptance",
+  "exact_receiver_layout": false,
+  "factory": {
+    "path": "res://game/scripts/world/facades/d1_current_standalone_prototypes.gd",
+    "sha256": "797bbb81e7f772f3fab3989d358772be4f1b16cb7e31a05571463e0d6ec31a5e"
+  },
+  "geometry_signatures": {
+    "pair": "17c560633517963489b76430729bb6476065bb0d9a6385b3a913103a778c32ad",
+    "w34313545": "57573bc19d6c6a45b946827e76a346c592d5238a310e923a30a41b149f963511",
+    "w95934119": "179d898c4635917743e967819998256c7fe4938981da69e7d4664e1e7e13b58a"
+  },
+  "godot_version": "4.7.2-stable (official)",
+  "headless_contract": {
+    "path": "res://game/tests/headless_d1_current_standalone_prototype_contract.gd",
+    "sha256": "eafe1f8b20cf4a276ad8cda97112acc6870fca183c6d73916dd5bf306a7d099e"
+  },
+  "identity_nonclaims": [
+    "B201 frozen 800 Avenue I conflicts with City B201 addresses and is not Station 48",
+    "B225 has no authoritative common name and is not Building 227/the Pavilion"
+  ],
+  "materials": {
+    "bitmap_textures": 0,
+    "generated_images": 0,
+    "local_standard_materials": 8,
+    "random_or_noise_generators": 0
+  },
+  "observed_scope": [
+    {
+      "chain_length_m": 115.512661489,
+      "city_building": "B201",
+      "mapping_id": "800I-PUBLIC-WSW",
+      "ordered_runs": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "side": "WSW public long side",
+      "source_edge": 0,
+      "source_key": "w34313545"
+    },
+    {
+      "chain_length_m": 46.261968372,
+      "city_building": "B225",
+      "mapping_id": "14812-NNW-LONG",
+      "ordered_runs": [
+        10,
+        11,
+        12,
+        13
+      ],
+      "side": "NNW long side",
+      "source_edge": 3,
+      "source_key": "w95934119"
+    }
+  ],
+  "one_local_unit_m": 1.0,
+  "pair_config": {
+    "path": "res://game/resources/facades/d1_current/d1_current_standalone_pair.json",
+    "sha256": "c73f8c8da4d30a4e4ebe3e94cde10d63f98377bf5b636a1e12cee92c9bcaafe4"
+  },
+  "pair_id": "D1-CURRENT-B201-B225-STANDALONE-PAIR",
+  "production_inference": [
+    "all module counts",
+    "bay/group cadence",
+    "opening anchors",
+    "canopy dimensions and endpoints",
+    "window and pane dimensions"
+  ],
+  "recognition_cues": {
+    "w34313545": [
+      "green-bounded broad upper-window register",
+      "mostly solid light lower field with sparse nonsemantic openings",
+      "separate canopy depth and muted posts"
+    ],
+    "w95934119": [
+      "varied complete high clerestory groups",
+      "physically coursed aged light horizontal cladding",
+      "low near-flat-roof proportion"
+    ]
+  },
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "pending_independent_recognition_and_bar_review_not_self_accepted",
+  "runtime_attachment": false,
+  "scene": {
+    "path": "res://game/scenes/world/facades/d1_current/d1_current_standalone_prototype_pair.tscn",
+    "sha256": "0fdd5d356deb57664549db95fd04e123290c1fb9490b8024569e997616893d7f"
+  },
+  "schema_version": "ti.d1-current-standalone-native-evidence/1",
+  "topology": {
+    "batch_count": 10,
+    "box_instance_count": 290,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "triangle_count": 3480
+  },
+  "unit_configs": [
+    {
+      "path": "res://game/resources/facades/d1_current/d1_b201_public_wsw.json",
+      "sha256": "3d53efbb0577c9b5e52a2ada4d79a710b95e41faead0bdcdd41cd4f2d862a0fe"
+    },
+    {
+      "path": "res://game/resources/facades/d1_current/d1_b225_nnw_long.json",
+      "sha256": "63e4f80cc7716146dc1fef46c7678e4da856755377c84ff33f972c0cc0c1f639"
+    }
+  ],
+  "video_adapter": "Apple M2 (Apple8)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

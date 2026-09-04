@@ -1,0 +1,876 @@
+{
+  "schema_version": "ti.p1-existing-live-revalidation-evidence/1",
+  "review_status": "pending_independent_whole_building_recognition_review_not_self_accepted",
+  "recognition_verdicts": {
+    "building-3": "pending_independent_review",
+    "hawkins": "pending_independent_review",
+    "isle-house": "pending_independent_diagnostic_review"
+  },
+  "evidence_role": "Exact-current technical capture evidence only; executor checked bindings, grounded player-rig provenance, first-hit LOS, framing, and image validity but made no recognition judgment.",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/p1_existing_live_revalidation_capture.gd",
+  "generator": "game/tests/p1_existing_live_revalidation_capture.gd",
+  "generator_sha256": "4b3beb2f6b827359c069498af54c385786428bddaaa4b381bd945b0c1dbee5ec",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M2 (Apple8)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "camera_contract": {
+    "rig": "actual Player/CameraPivot/SpringArm3D/Camera3D",
+    "fov_degrees": 70.0,
+    "configured_spring_length_m": 5.5,
+    "minimum_actual_spring_length_m": 4.5,
+    "minimum_camera_height_above_ground_m": 1.0,
+    "orientation": "input_reachable_stock_PlayerCamera_yaw_plus_clamped_spring_arm_pitch",
+    "detached_camera": false,
+    "camera_tricks": false,
+    "context_hidden": false,
+    "lighting_changed": false,
+    "crop_or_postprocess": false,
+    "debug_labels_visible": false
+  },
+  "generated_world": {
+    "content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+    "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "playable_rows": 735,
+    "context_rows": 4,
+    "meshes": 931,
+    "surfaces": 941,
+    "triangles": 59778,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "targets": {
+    "building-3": {
+      "source_identity": "w34313540",
+      "candidate_status": "candidate_for_no_change_whole_building_revalidation_pending_independent_review",
+      "confusion_set_source_ids": [
+        "w24274434",
+        "r16681702"
+      ],
+      "recognition_gate": "Single central dark-teal hangar opening plus the long upper band; the documented curved-crown/shoulder massing gap remains.",
+      "reference_packet": "res://discovery/facades/p1_reference_packets/w34313540_building_3.md",
+      "reference_packet_sha256": "3701d28e19cc7811067c171eb5a85e5efe4098d554c387679f50fed6248fb961",
+      "geometry_sha256": "9ac55412ceca46cb79b5bf5bc57485f9c94f797ee3fbd43d7408cf35f4c43294",
+      "receiver": "building:w34313540:wall",
+      "receiver_source_keys": [
+        "w34313540"
+      ],
+      "bounds_receivers": [
+        "building:w34313540:wall",
+        "building:w34313540:roof"
+      ],
+      "facade_child": "Building3600CaliforniaFacade",
+      "facade_signature": "737a674d63824d574e28c76f75c86212dfe126c3204870cdb2d0452d5bcf6337",
+      "layout_path": "res://game/resources/facades/building_3_600_california_ene_layout.json",
+      "layout_sha256": "312ed89a5bca6e3eadf3034b8e97689b9a99646837aca8f5f1f7f940a11f8299",
+      "runtime_script_path": "res://game/scripts/world/facades/building_3_600_california_facade.gd",
+      "runtime_script_sha256": "5808131a175fd6b43957ddb54921d247b2c6d00a71185574616a1ed5c765231d",
+      "runtime_receiver_count": 1,
+      "runtime_receiver_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_1__z_1__building_w34313540_wall/building_w34313540_wall",
+      "runtime_facade_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_1__z_1__building_w34313540_wall/building_w34313540_wall/Building3600CaliforniaFacade",
+      "runtime_facade_signature": "737a674d63824d574e28c76f75c86212dfe126c3204870cdb2d0452d5bcf6337",
+      "layout_sha256_observed": "312ed89a5bca6e3eadf3034b8e97689b9a99646837aca8f5f1f7f940a11f8299",
+      "runtime_script_sha256_observed": "5808131a175fd6b43957ddb54921d247b2c6d00a71185574616a1ed5c765231d"
+    },
+    "hawkins": {
+      "source_identity": "w1249412093",
+      "candidate_status": "candidate_for_no_change_whole_building_revalidation_pending_independent_review",
+      "confusion_set_source_ids": [
+        "r19685981",
+        "w1212173437",
+        "w1272162518"
+      ],
+      "recognition_gate": "At least two of orientation-active fine pearlescent fluting, dark HAWKINS lobby/sign ground composition, western stoops, or the six/four-story step.",
+      "reference_packet": "res://discovery/facades/p1_reference_packets/w1249412093_hawkins.md",
+      "reference_packet_sha256": "ed2d7c0f16c605ba775edeb443085b75c6353e44d6850a4d5746cc15dad8efc4",
+      "geometry_sha256": "611ed64a5fd1f359553f14649504b553eda17707057eefe536dac61cd4168311",
+      "receiver": "building:w1249412093:wall",
+      "receiver_source_keys": [
+        "w1249412093"
+      ],
+      "bounds_receivers": [
+        "building:w1249412093:wall",
+        "building:w1249412093:roof"
+      ],
+      "facade_child": "Hawkins77BrutonFacade",
+      "facade_signature": "d311c103c9273b94fc982588f46bae6ab67ba6be54b0d0a111dd305e39c22219",
+      "massing_signature": "7c4fea5fec624ccfc3963b9fa5eb586b73ca61da0c09ae8539df3e0adb8cf291",
+      "layout_path": "res://game/resources/facades/hawkins_77_bruton_layout.json",
+      "layout_sha256": "4de2239af2e18fe4121930d51dee15e081d2f81a40393da2f1f29c69464761d9",
+      "runtime_script_path": "res://game/scripts/world/facades/hawkins_77_bruton_facade.gd",
+      "runtime_script_sha256": "de733e43896fdf8c0437dcb266564b07fbb0e0ad42a40ef40d480623a748dd1e",
+      "massing_script_path": "res://game/scripts/world/massing/hawkins_77_bruton_massing.gd",
+      "massing_script_sha256": "b572d5b75faf47e91e9283af757cdc33a0c0b4a37de87230d7e7a505442f6a4d",
+      "runtime_receiver_count": 1,
+      "runtime_receiver_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_1__building_w1249412093_wall/building_w1249412093_wall",
+      "runtime_facade_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_1__building_w1249412093_wall/building_w1249412093_wall/Hawkins77BrutonFacade",
+      "runtime_facade_signature": "d311c103c9273b94fc982588f46bae6ab67ba6be54b0d0a111dd305e39c22219",
+      "layout_sha256_observed": "4de2239af2e18fe4121930d51dee15e081d2f81a40393da2f1f29c69464761d9",
+      "runtime_script_sha256_observed": "de733e43896fdf8c0437dcb266564b07fbb0e0ad42a40ef40d480623a748dd1e"
+    },
+    "isle-house": {
+      "source_identity": "w1249412094",
+      "candidate_status": "diagnostic_only_expected_low_part_limitation_pending_independent_review",
+      "confusion_set_source_ids": [
+        "w1249412093",
+        "w1272162518"
+      ],
+      "recognition_gate": "At least two of folded white punched-opening tower, dark vertical recess, 39 active-ground address assembly, or warm handcrafted live-work low realm; the high part alone cannot excuse the generic low part.",
+      "reference_packet": "res://discovery/facades/p1_reference_packets/w1249412094_isle_house.md",
+      "reference_packet_sha256": "04f1009fd240cde4765095c49ba8174f90b80dbad54281d8036ef1df04c2874d",
+      "geometry_sha256": "467e2e31539fa2d865ffc92ee8bd57f8d9c7a3df26ef38f1bcc384156971a7d1",
+      "receiver": "building-composite:w1249412094:w1282547786:wall",
+      "receiver_source_keys": [
+        "w1282547786"
+      ],
+      "low_receiver": "building-composite:w1249412094:w1282547787:wall",
+      "low_receiver_source_keys": [
+        "w1282547787"
+      ],
+      "bounds_receivers": [
+        "building-composite:w1249412094:w1282547786:wall",
+        "building-composite:w1249412094:w1282547786:roof",
+        "building-composite:w1249412094:w1282547787:wall",
+        "building-composite:w1249412094:w1282547787:roof"
+      ],
+      "facade_child": "IsleHouse39BrutonHighFacade",
+      "facade_signature": "e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1",
+      "layout_path": "res://game/resources/facades/isle_house_39_bruton_high_se_layout.json",
+      "layout_sha256": "c5e6393e90152cef62f6478d7bd87750f3db5598d6ebc36cd307ce20acaa090d",
+      "runtime_script_path": "res://game/scripts/world/facades/isle_house_39_bruton_high_facade.gd",
+      "runtime_script_sha256": "f8243cedd3f331cbc37e6343b1b48e76a73a81644c96cc1f80e623e0c71a3113",
+      "runtime_receiver_count": 1,
+      "runtime_receiver_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_2__building-composite_w1249412094_w1282547786_wall/building-composite_w1249412094_w1282547786_wall",
+      "runtime_facade_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_2__building-composite_w1249412094_w1282547786_wall/building-composite_w1249412094_w1282547786_wall/IsleHouse39BrutonHighFacade",
+      "runtime_facade_signature": "e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1",
+      "layout_sha256_observed": "c5e6393e90152cef62f6478d7bd87750f3db5598d6ebc36cd307ce20acaa090d",
+      "runtime_script_sha256_observed": "f8243cedd3f331cbc37e6343b1b48e76a73a81644c96cc1f80e623e0c71a3113",
+      "parent_meshless": true,
+      "low_receiver_untreated": true
+    }
+  },
+  "frozen_confusion_sets_selected_before_review": true,
+  "source_photography_shipped": false,
+  "capture_count": 6,
+  "captures": [
+    {
+      "id": "01-building-3-whole-object",
+      "target": "building-3",
+      "source_identity": "w34313540",
+      "role": "whole_object_ordinary_player_view",
+      "candidate_status": "candidate_for_no_change_whole_building_revalidation_pending_independent_review",
+      "recognition_verdict": "pending_independent_review",
+      "confusion_set_source_ids_frozen_before_review": [
+        "w24274434",
+        "r16681702"
+      ],
+      "file": "images/building-3/01-building-3-whole-object.png",
+      "sha256": "e20ebd6a483234b1b55de5421113a79dbe6d3c18380ab33858ab0f4de7ded1ef",
+      "bytes": 796678,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 289,
+      "sample_luminance_range": 0.592442363500595,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        571.681701660156,
+        415.538299560547
+      ],
+      "settle_spawn_y_m": 5.66654968261719,
+      "player_position_m": [
+        571.681701660156,
+        2.66666150093079,
+        415.538299560547
+      ],
+      "ground_y_m": 2.66654968261719,
+      "ground_clearance_m": 0.000111818313598633,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_2__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999968290328979,
+      "in_boundary": true,
+      "aim_target_m": [
+        507.869384765625,
+        12.0,
+        448.884887695312
+      ],
+      "camera_position_m": [
+        576.531188964844,
+        4.1093635559082,
+        413.004150390625
+      ],
+      "camera_height_above_ground_m": 1.44281387329102,
+      "camera_forward": [
+        -0.881719946861267,
+        0.101327642798424,
+        0.460763067007065
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50000190734863,
+      "camera_yaw_degrees": 117.590349129888,
+      "camera_pitch_degrees": 5.81562711369372,
+      "target_bounds_mesh_corner_count": 24,
+      "target_bounds_corners_behind_camera": 0,
+      "target_projected_min_px": [
+        100.294273376465,
+        218.548156738281
+      ],
+      "target_projected_max_px": [
+        1133.70776367188,
+        536.475341796875
+      ],
+      "target_projected_width_ratio": 0.717648230658637,
+      "target_projected_height_ratio": 0.353252427842882,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        720.00048828125,
+        450.000030517578
+      ],
+      "aim_target_center_error_px": 0.000489233992993832,
+      "first_los_hit_receiver": "building:w34313540:wall",
+      "first_los_hit_source_keys": [
+        "w34313540"
+      ],
+      "first_los_hit_position_m": [
+        507.869323730469,
+        12.0000171661377,
+        448.885009765625
+      ],
+      "first_los_hit_normal": [
+        0.886355519294739,
+        0.0,
+        -0.463005393743515
+      ],
+      "first_los_hit_distance_m": 77.8726501464844,
+      "first_los_collision_mask": 1,
+      "receiver_first_los": true
+    },
+    {
+      "id": "02-building-3-oblique-approach",
+      "target": "building-3",
+      "source_identity": "w34313540",
+      "role": "oblique_approach_ordinary_player_view",
+      "candidate_status": "candidate_for_no_change_whole_building_revalidation_pending_independent_review",
+      "recognition_verdict": "pending_independent_review",
+      "confusion_set_source_ids_frozen_before_review": [
+        "w24274434",
+        "r16681702"
+      ],
+      "file": "images/building-3/02-building-3-oblique-approach.png",
+      "sha256": "2a3aa0dd7e4f08f37cad515d75c45240eb412043f4f69acbea208fef4848a103",
+      "bytes": 765042,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 288,
+      "sample_luminance_range": 0.670463547110558,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        525.253173828125,
+        391.463806152344
+      ],
+      "settle_spawn_y_m": 10.6378631591797,
+      "player_position_m": [
+        525.253173828125,
+        7.63963460922241,
+        391.463806152344
+      ],
+      "ground_y_m": 7.63786315917969,
+      "ground_clearance_m": 0.00177145004272461,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_2__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.995054602622986,
+      "in_boundary": true,
+      "aim_target_m": [
+        498.217987060547,
+        12.0,
+        430.414489746094
+      ],
+      "camera_position_m": [
+        528.385314941406,
+        9.36616992950439,
+        386.951080322266
+      ],
+      "camera_height_above_ground_m": 1.72830677032471,
+      "camera_forward": [
+        -0.56949257850647,
+        0.0497203394770622,
+        0.820491433143616
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49998044967651,
+      "camera_yaw_degrees": 145.235964318405,
+      "camera_pitch_degrees": 2.84996630575167,
+      "target_bounds_mesh_corner_count": 24,
+      "target_bounds_corners_behind_camera": 0,
+      "target_projected_min_px": [
+        247.118606567383,
+        -10.4365825653076
+      ],
+      "target_projected_max_px": [
+        1425.6865234375,
+        724.273986816406
+      ],
+      "target_projected_width_ratio": 0.818449910481771,
+      "target_projected_height_ratio": 0.816345079210069,
+      "target_bounds_fully_in_frame": false,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        719.999328613281,
+        449.999694824219
+      ],
+      "aim_target_center_error_px": 0.000737490598112345,
+      "first_los_hit_receiver": "building:w34313540:wall",
+      "first_los_hit_source_keys": [
+        "w34313540"
+      ],
+      "first_los_hit_position_m": [
+        498.218017578125,
+        11.9999666213989,
+        430.414337158203
+      ],
+      "first_los_hit_normal": [
+        0.886298418045044,
+        0.0,
+        -0.463114559650421
+      ],
+      "first_los_hit_distance_m": 52.9722328186035,
+      "first_los_collision_mask": 1,
+      "receiver_first_los": true
+    },
+    {
+      "id": "03-hawkins-whole-object",
+      "target": "hawkins",
+      "source_identity": "w1249412093",
+      "role": "whole_object_ordinary_player_view",
+      "candidate_status": "candidate_for_no_change_whole_building_revalidation_pending_independent_review",
+      "recognition_verdict": "pending_independent_review",
+      "confusion_set_source_ids_frozen_before_review": [
+        "r19685981",
+        "w1212173437",
+        "w1272162518"
+      ],
+      "file": "images/hawkins/03-hawkins-whole-object.png",
+      "sha256": "c903a5cea795b5bc2731f7e31701001add2ee6685d9f1708c7883c00f13ff850",
+      "bytes": 807316,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 304,
+      "sample_luminance_range": 0.72827921807766,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        2.36999988555908,
+        556.099975585938
+      ],
+      "settle_spawn_y_m": 7.2001953125,
+      "player_position_m": [
+        2.36999988555908,
+        4.20020961761475,
+        556.099975585938
+      ],
+      "ground_y_m": 4.2001953125,
+      "ground_clearance_m": 0.0000143051147460938,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_0__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999643206596375,
+      "in_boundary": true,
+      "aim_target_m": [
+        -60.6100006103516,
+        14.7740001678467,
+        503.549987792969
+      ],
+      "camera_position_m": [
+        6.57015800476074,
+        5.62842035293579,
+        559.604553222656
+      ],
+      "camera_height_above_ground_m": 1.42822504043579,
+      "camera_forward": [
+        -0.763661086559296,
+        0.103960633277893,
+        -0.637192189693451
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50003051757812,
+      "camera_yaw_degrees": 50.1586606081215,
+      "camera_pitch_degrees": 5.9673131912063,
+      "target_bounds_mesh_corner_count": 24,
+      "target_bounds_corners_behind_camera": 0,
+      "target_projected_min_px": [
+        418.357971191406,
+        305.483276367188
+      ],
+      "target_projected_max_px": [
+        1095.97143554688,
+        534.912719726562
+      ],
+      "target_projected_width_ratio": 0.470564905802409,
+      "target_projected_height_ratio": 0.254921603732639,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        720.000122070312,
+        449.999694824219
+      ],
+      "aim_target_center_error_px": 0.000328684371197596,
+      "first_los_hit_receiver": "building:w1249412093:wall",
+      "first_los_hit_source_keys": [
+        "w1249412093"
+      ],
+      "first_los_hit_position_m": [
+        -60.6088180541992,
+        14.7737979888916,
+        503.550994873047
+      ],
+      "first_los_hit_normal": [
+        0.767646789550781,
+        0.0,
+        0.640873193740845
+      ],
+      "first_los_hit_distance_m": 87.9696273803711,
+      "first_los_collision_mask": 1,
+      "receiver_first_los": true
+    },
+    {
+      "id": "04-hawkins-oblique-approach",
+      "target": "hawkins",
+      "source_identity": "w1249412093",
+      "role": "oblique_approach_ordinary_player_view",
+      "candidate_status": "candidate_for_no_change_whole_building_revalidation_pending_independent_review",
+      "recognition_verdict": "pending_independent_review",
+      "confusion_set_source_ids_frozen_before_review": [
+        "r19685981",
+        "w1212173437",
+        "w1272162518"
+      ],
+      "file": "images/hawkins/04-hawkins-oblique-approach.png",
+      "sha256": "f6a4665a29519ea9181c02b8635e75efb32f583b295d311291e2bc23c3bd696b",
+      "bytes": 320456,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 192,
+      "sample_luminance_range": 0.741098031401634,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        7.80000019073486,
+        512.099975585938
+      ],
+      "settle_spawn_y_m": 7.0057373046875,
+      "player_position_m": [
+        7.80000019073486,
+        4.00545835494995,
+        512.099975585938
+      ],
+      "ground_y_m": 4.0057373046875,
+      "ground_clearance_m": -0.000278949737548828,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_0__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999635815620422,
+      "in_boundary": true,
+      "aim_target_m": [
+        -52.7000007629395,
+        14.7740001678467,
+        494.100006103516
+      ],
+      "camera_position_m": [
+        13.0214796066284,
+        5.24868440628052,
+        513.653503417969
+      ],
+      "camera_height_above_ground_m": 1.24294710159302,
+      "camera_forward": [
+        -0.949361503124237,
+        0.137594789266586,
+        -0.28245410323143
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.5,
+      "camera_yaw_degrees": 73.4311973714418,
+      "camera_pitch_degrees": 7.90871999629084,
+      "target_bounds_mesh_corner_count": 24,
+      "target_bounds_corners_behind_camera": 0,
+      "target_projected_min_px": [
+        348.890533447266,
+        284.350646972656
+      ],
+      "target_projected_max_px": [
+        1287.46337890625,
+        555.558471679688
+      ],
+      "target_projected_width_ratio": 0.651786719428168,
+      "target_projected_height_ratio": 0.301342027452257,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        720.000366210938,
+        449.999664306641
+      ],
+      "aim_target_center_error_px": 0.000496790162287652,
+      "first_los_hit_receiver": "building:w1249412093:wall",
+      "first_los_hit_source_keys": [
+        "w1249412093"
+      ],
+      "first_los_hit_position_m": [
+        -52.7152214050293,
+        14.7761688232422,
+        494.095520019531
+      ],
+      "first_los_hit_normal": [
+        0.767666637897491,
+        0.0,
+        0.640849471092224
+      ],
+      "first_los_hit_distance_m": 69.2430648803711,
+      "first_los_collision_mask": 1,
+      "receiver_first_los": true
+    },
+    {
+      "id": "05-isle-house-whole-composite-diagnostic",
+      "target": "isle-house",
+      "source_identity": "w1249412094",
+      "role": "whole_object_ordinary_player_view",
+      "candidate_status": "diagnostic_only_expected_low_part_limitation_pending_independent_review",
+      "recognition_verdict": "pending_independent_review",
+      "confusion_set_source_ids_frozen_before_review": [
+        "w1249412093",
+        "w1272162518"
+      ],
+      "file": "images/isle-house/05-isle-house-whole-composite-diagnostic.png",
+      "sha256": "c6556aef5dcd1996be4373f6d9387f3b74da81613a444223a0b3bceb18b830cf",
+      "bytes": 307374,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 178,
+      "sample_luminance_range": 0.521484702825546,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -204.979995727539,
+        620.179992675781
+      ],
+      "settle_spawn_y_m": 6.36570739746094,
+      "player_position_m": [
+        -204.979995727539,
+        3.36581921577454,
+        620.179992675781
+      ],
+      "ground_y_m": 3.36570739746094,
+      "ground_clearance_m": 0.000111818313598633,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999942064285278,
+      "in_boundary": true,
+      "aim_target_m": [
+        -125.232902526855,
+        20.0,
+        559.855590820312
+      ],
+      "camera_position_m": [
+        -209.32014465332,
+        4.56936836242676,
+        623.463073730469
+      ],
+      "camera_height_above_ground_m": 1.20366096496582,
+      "camera_forward": [
+        0.789119243621826,
+        0.144808799028397,
+        -0.596926510334015
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49998617172241,
+      "camera_yaw_degrees": -52.8944477636578,
+      "camera_pitch_degrees": 8.32623160833832,
+      "target_bounds_mesh_corner_count": 40,
+      "target_bounds_corners_behind_camera": 0,
+      "target_projected_min_px": [
+        305.555023193359,
+        115.185562133789
+      ],
+      "target_projected_max_px": [
+        877.108642578125,
+        548.77392578125
+      ],
+      "target_projected_width_ratio": 0.396912214491102,
+      "target_projected_height_ratio": 0.481764865451389,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        720.000122070312,
+        449.999725341797
+      ],
+      "aim_target_center_error_px": 0.000300563289783895,
+      "first_los_hit_receiver": "building-composite:w1249412094:w1282547786:wall",
+      "first_los_hit_source_keys": [
+        "w1282547786"
+      ],
+      "first_los_hit_position_m": [
+        -126.91259765625,
+        19.6917190551758,
+        561.126159667969
+      ],
+      "first_los_hit_normal": [
+        -0.890666782855988,
+        0.0,
+        0.45465674996376
+      ],
+      "first_los_hit_distance_m": 104.429786682129,
+      "first_los_collision_mask": 1,
+      "receiver_first_los": true
+    },
+    {
+      "id": "06-isle-house-low-oblique-diagnostic",
+      "target": "isle-house",
+      "source_identity": "w1249412094",
+      "role": "oblique_approach_ordinary_player_view",
+      "candidate_status": "diagnostic_only_expected_low_part_limitation_pending_independent_review",
+      "recognition_verdict": "pending_independent_review",
+      "confusion_set_source_ids_frozen_before_review": [
+        "w1249412093",
+        "w1272162518"
+      ],
+      "file": "images/isle-house/06-isle-house-low-oblique-diagnostic.png",
+      "sha256": "6ea99d1321f2279e86fa6098fe87e3b47f611800421a0d75b5f6d03aaa6513db",
+      "bytes": 1039397,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 345,
+      "sample_luminance_range": 0.70881724357605,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -194.699996948242,
+        533.799987792969
+      ],
+      "settle_spawn_y_m": 8.89701843261719,
+      "player_position_m": [
+        -194.699996948242,
+        5.89934253692627,
+        533.799987792969
+      ],
+      "ground_y_m": 5.89701843261719,
+      "ground_clearance_m": 0.00232410430908203,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.993860483169556,
+      "in_boundary": true,
+      "aim_target_m": [
+        -145.130004882812,
+        10.0,
+        525.450012207031
+      ],
+      "camera_position_m": [
+        -200.118865966797,
+        7.66970205307007,
+        534.712768554688
+      ],
+      "camera_height_above_ground_m": 1.77268362045288,
+      "camera_forward": [
+        0.985247671604156,
+        0.0417520850896835,
+        -0.16596320271492
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50000381469727,
+      "camera_yaw_degrees": -80.4383913950554,
+      "camera_pitch_degrees": 2.39293392896975,
+      "target_bounds_mesh_corner_count": 40,
+      "target_bounds_corners_behind_camera": 0,
+      "target_projected_min_px": [
+        160.222808837891,
+        -177.59635925293
+      ],
+      "target_projected_max_px": [
+        1227.84887695312,
+        535.908020019531
+      ],
+      "target_projected_width_ratio": 0.741407012939453,
+      "target_projected_height_ratio": 0.792782660590278,
+      "target_bounds_fully_in_frame": false,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        720.000244140625,
+        449.999755859375
+      ],
+      "aim_target_center_error_px": 0.000345266977092251,
+      "first_los_hit_receiver": "building-composite:w1249412094:w1282547787:wall",
+      "first_los_hit_source_keys": [
+        "w1282547787"
+      ],
+      "first_los_hit_position_m": [
+        -145.128601074219,
+        10.0000381469727,
+        525.449768066406
+      ],
+      "first_los_hit_normal": [
+        -0.890593826770782,
+        0.0,
+        0.454799652099609
+      ],
+      "first_los_hit_distance_m": 55.8136444091797,
+      "first_los_collision_mask": 1,
+      "receiver_first_los": true
+    }
+  ],
+  "technical_inspection_scope": [
+    "native image decodes at original 1440x900 resolution",
+    "frame is nonblank and has usable luminance range",
+    "actual stock player rig is physics-grounded inside the boundary",
+    "debug, load, feedback, and pause panels are absent while the normal reticle remains",
+    "viewport-center physics LOS first-hits the exact intended receiver and source keys",
+    "whole-object or oblique target bounds are technically present without hidden context"
+  ],
+  "recognition_review_prohibited_for_executor": true,
+  "reviewer_instruction": "Open all six PNGs at original detail. Compare each target only with its cited P1 packet and frozen confusion set. Review Building 3 and Hawkins for possible no-change whole-building revalidation; treat Isle House as diagnostic and explicitly include its untreated low receiver. Do not infer acceptance from this technical manifest."
+}

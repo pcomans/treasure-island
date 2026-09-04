@@ -1,0 +1,42 @@
+B225 standalone cladding repair v1 verification
+Date: 2026-09-04 America/Los_Angeles
+Repository: project root (environment-independent; workstation path intentionally omitted)
+
+PASS — Godot 4.7.2 headless editor import completed with zero ERROR/SCRIPT ERROR lines.
+
+PASS — native macOS Forward+/Metal capture:
+.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/d1_b225_standalone_cladding_repair_v1_capture.gd
+Result: 8 matched clean B225 control/candidate views and 25 consecutive native motion frames across all three internal run boundaries; review remains pending.
+
+PASS — new structural/material/isolation contract:
+.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_d1_b225_standalone_cladding_repair_v1_contract.gd
+Geometry signature: 281a471f6cff9b0530aa51c98cc737d276dc0d9210996a5403d9fe44996dd2a2
+UV plan signature: 6b33f7b7146815b87fa7aec9bced760309104f4f56038e37e1820199c9b446f5
+Result: preserved ten clerestory groups; 4 cumulative-metre field quads; 90 retained boxes; 1,088 triangles; albedo plus scalar roughness only; no live reference.
+
+PASS — new evidence/package contract:
+.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_d1_b225_standalone_cladding_repair_v1_evidence_contract.gd
+Result: pinned 4 clean control/candidate pairs, 25 native motion frames, exact provenance/topology, and isolated package cost.
+
+PASS — sealed D1 standalone prototype contract:
+.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --script game/tests/headless_d1_current_standalone_prototype_contract.gd
+B201 signature: 57573bc19d6c6a45b946827e76a346c592d5238a310e923a30a41b149f963511
+Original B225 signature: 179d898c4635917743e967819998256c7fe4938981da69e7d4664e1e7e13b58a
+Pair signature: 17c560633517963489b76430729bb6476065bb0d9a6385b3a913103a778c32ad
+
+PASS — sealed D1 evidence contract: all nine old native images remain byte-pinned.
+PASS — sealed D1 asset-inventory.sha256: 35/35 entries OK.
+PASS — shared generic facade metre-UV adapter contract.
+PASS — final branch-included mounted PCK loaded B225 config, scene, factory, UV helper, scalar material, and generated texture.
+PASS — JSON parse for config, native manifest, and package audit.
+PASS — RETRO_LOG diff whitespace check.
+
+Package audit from one same-snapshot included/excluded export pair:
+- Branch excluded: 46,261,548 bytes; SHA-256 af13d9d3ce9bd44edbde9e04b71b56241184a312d67e6529b064ebaea384a724
+- Branch included: 48,365,996 bytes; SHA-256 89a47497b62822411519179fec61be5bd1dd6ab84af82faa46444824edb52bd9
+- Isolated B225 branch delta: +2,104,448 bytes (2.006958 MiB)
+- Selected source PNG: 2,140,085 bytes
+- Imported mipmapped ctex: 2,031,028 bytes
+- Estimated decoded RGBA8 plus full mip chain: 8,386,752 bytes
+
+Final status: technical evidence complete; independent bar-raiser visual re-review required. No live attachment, denominator credit, or self-acceptance is claimed.

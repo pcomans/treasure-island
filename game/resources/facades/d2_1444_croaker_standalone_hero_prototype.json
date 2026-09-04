@@ -1,0 +1,228 @@
+{
+  "schema_version": "ti.d2-1444-croaker-standalone-hero-prototype/1",
+  "model_id": "d2-1444-croaker-standalone-hero-prototype-v1",
+  "scope": "standalone exterior-only exact-footprint recognition prototype; not connected to WorldChunkBuilder, facade catalog, compiler, registry, loader, or live world",
+  "target": {
+    "canonical_name": "1444 Croaker Court",
+    "source_key": "w95934117",
+    "wall_object_key": "building:w95934117:wall",
+    "roof_object_key": "building:w95934117:roof",
+    "chunk_id": "x_-2__z_-1",
+    "chunk_path": "res://generated/world/chunks/x_-2__z_-1.json",
+    "source_geometry_sha256": "52c844ec3cbeae52b97e12014dac8761c8518b6b4e5ce6df5eeee64256eadcc4",
+    "source_height_m": 6.0,
+    "source_base_y_m": 2.521,
+    "source_wall_top_y_m": 8.521,
+    "wall_run_count": 22,
+    "wall_vertices": 88,
+    "wall_triangles": 44,
+    "roof_plan_vertices": 12,
+    "roof_triangles": 10
+  },
+  "truth_boundary": {
+    "prototype_only": true,
+    "runtime_attachment": false,
+    "technical_evidence_status": "pending_independent_bar_raiser_review",
+    "recognition_accepted": false,
+    "believability_accepted": false,
+    "as_built_claim": false,
+    "interior_modeled": false,
+    "surveyed_roof_rise": false,
+    "surveyed_opening_dimensions_or_counts": false,
+    "surveyed_void_dimensions": false,
+    "surveyed_rail_dimensions_or_counts": false,
+    "reference_pixels_stored_or_copied": false,
+    "horizontal_source_footprint_changed": false,
+    "source_wall_height_changed": false,
+    "source_identity_changed": false,
+    "all_unsurveyed_module_dimensions_and_counts": "reversible_production_inference"
+  },
+  "source_bindings": [
+    {
+      "id": "D2-w95934117-packet",
+      "truth_class": "authoritative_local_reference_packet",
+      "authority_document": "w95934117_1444_croaker_court.md",
+      "authority_sha256": "51c70c213b055572447c8a7aebaf3a3da2b8e759d4bcd48aa65949ec0530fa90",
+      "supports": [
+        "exact source identity and receiver binding",
+        "WSW target runs 8, 9, 11, 12, 15, 16, and 17",
+        "blank upper gable-end block over a deep open ground-level undercroft",
+        "sparse paired rectangular openings and a recessed two-storey balcony stack at the far end",
+        "shallow dark roof/eave and muted stucco cohort grammar"
+      ],
+      "does_not_support": [
+        "exact opening, void, pier, rail, eave, or roof-rise dimensions or counts",
+        "unseen ENE, NNW, or SSE facade schedules",
+        "interior, occupancy, substrate, product, or color sample"
+      ]
+    },
+    {
+      "id": "D2-PANO-B-2023-07",
+      "truth_class": "dated_public_reference_observation_only_no_pixels_shipped",
+      "supports": ["July 2023 public WSW appearance and documented recognition cues"]
+    }
+  ],
+  "mapped_public_region": {
+    "facing": "WSW",
+    "ordered_run_indices": [8, 9, 11, 12, 15, 16, 17],
+    "total_length_m": 32.864,
+    "run_roles": {
+      "8": "blank_upper_end_over_undercroft",
+      "9": "blank_upper_end_over_undercroft",
+      "11": "sparse_paired_opening_return",
+      "12": "quiet_short_observed_return",
+      "15": "quiet_short_far_return",
+      "16": "sparse_paired_opening_return",
+      "17": "far_end_recessed_two_storey_balcony_stack"
+    },
+    "solid_void_signature": "offset quiet upper block / broad opaque exterior undercroft proxy / sparse paired-opening return / narrow far-end two-level balcony stack"
+  },
+  "protected_region": {
+    "run_indices": [0, 1, 2, 3, 4, 5, 6, 7, 10, 13, 14, 18, 19, 20, 21],
+    "policy": "exact source wall shell in a quiet neutral non-claim surrogate only; no copied facade modules, labels, or inferred schedules"
+  },
+  "production_inference_m": {
+    "lower_row_center_y": 3.96,
+    "upper_row_center_y": 6.74,
+    "undercroft_center_y": 3.88,
+    "undercroft_height": 2.42,
+    "undercroft_side_margin": 0.18,
+    "undercroft_visual_depth": 0.56,
+    "undercroft_head_beam_height": 0.28,
+    "undercroft_head_beam_depth": 0.76,
+    "undercroft_pier_width": 0.34,
+    "undercroft_pier_height": 2.62,
+    "undercroft_pier_depth": 0.76,
+    "run_11_opening_fractions": [0.31, 0.69],
+    "run_16_opening_fractions": [0.30],
+    "opening_width": 1.30,
+    "opening_height": 1.22,
+    "opening_depth": 0.10,
+    "opening_frame_member": 0.105,
+    "opening_frame_depth": 0.14,
+    "opening_mullion_width": 0.075,
+    "balcony_side_margin": 0.24,
+    "balcony_void_height": 2.10,
+    "balcony_void_depth": 0.18,
+    "balcony_slab_height": 0.15,
+    "balcony_slab_depth": 0.66,
+    "rail_center_above_row_center": -0.17,
+    "rail_height": 0.90,
+    "rail_top_and_bottom_member": 0.065,
+    "rail_picket_width": 0.045,
+    "rail_picket_spacing": 0.42,
+    "rail_depth": 0.055,
+    "eave_height": 0.21,
+    "eave_depth": 0.74,
+    "eave_side_overhang": 0.12,
+    "roof_edge_lift": 0.08,
+    "roof_ridge_rise": 0.92,
+    "roof_repeat_m": 5.0,
+    "stucco_repeat_m": 3.0
+  },
+  "material_scope": {
+    "target_stucco": {
+      "path": "res://game/resources/materials/world/site_12_housing/site_12_ochre_tan_stucco.tres",
+      "application": "all seven mapped WSW source wall runs, undercroft frame/piers, opening frames, and balcony slabs",
+      "source": "new scalar ochre tint over the exact byte-identical package-safe promotion of the sealed text-only GenAI homogeneous warm-ivory mineral albedo v2; no new image and no target photograph used; 3 m repeat assumption; raw SHA-256 af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c"
+    },
+    "protected_neutral": {
+      "path": "res://game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
+      "application": "runs 0..7, 10, 13, 14, and 18..21 only"
+    },
+    "roof_surrogate": {
+      "path": "res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
+      "application": "exact source roof-plan gable and seven WSW eave shadow-break batches",
+      "source": "existing CC0 Poly Haven bitumen albedo tinted dark brown; shingle product is not claimed"
+    },
+    "void_opening_and_rail": {
+      "void_path": "res://game/resources/materials/world/site_12_housing/site_12_void_shadow.tres",
+      "opening_path": "res://game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
+      "rail_path": "res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
+      "application": "opaque exterior-only undercroft/balcony depth proxies, opaque paired-window proxies, and simple far-end rails on mapped WSW runs only"
+    }
+  },
+  "meter_uv_contract": {
+    "geometry_uv_units": "one UV unit equals one modeled meter",
+    "stucco_material_uv_scale": 0.333333,
+    "roof_material_uv_scale": 0.2,
+    "module_uv_policy": "each box face uses physical face width/depth/height rather than normalized primitive UVs",
+    "generated_normal_or_roughness_maps": false,
+    "tileability_gate": "obvious seam, baked lighting, or distracting repetition fails; faint recurrence and minor mismatch are acceptable in this prototype"
+  },
+  "collision_contract": {
+    "fallback_collider_retained": false,
+    "source_wall_shell": "all 22 exact source wall-run XZ edges, terrain-following bottoms, and unchanged 8.521 m wall top",
+    "roof": "all 10 source roof triangles retain exact XZ and receive a reversible shallow gable Y profile",
+    "structural_collision": "triangle-congruent with source wall shell plus shallow gable roof",
+    "facade_relief": "all eaves, opaque undercroft/depth fields, piers, windows, frames, balcony slabs, and rails are noncolliding exterior modules with source wall collision behind",
+    "spray_ownership": "none in standalone prototype; future live adapter must explicitly preserve the validated wall receiver"
+  },
+  "prototype_topology": {
+    "render_batches": 11,
+    "surfaces": 11,
+    "source_wall_triangles": 44,
+    "exact_plan_gable_roof_triangles": 10,
+    "decorative_noncolliding_triangles": 744,
+    "total_visual_triangles": 798,
+    "visual_batch_triangles": {
+      "ProtectedExactWallRuns": 30,
+      "MappedWSWExactOchreStuccoWallRuns": 14,
+      "ExactPlanShallowGableRoof": 10,
+      "MappedWSWBroadEaves": 84,
+      "BlankEndUndercroftOpaqueShadow": 24,
+      "BlankEndUndercroftOchreFrame": 60,
+      "SparseReturnOpaqueOpenings": 72,
+      "SparseReturnOchreOpeningFrames": 360,
+      "FarEndRecessedTwoLevelOpaqueVoids": 24,
+      "FarEndBalconyOchreSlabs": 24,
+      "FarEndSimpleMetalRails": 96
+    },
+    "static_bodies": 1,
+    "collision_shapes": 1,
+    "structural_collision_triangles": 54,
+    "collision_face_vertices": 162,
+    "navigation_nodes": 0,
+    "spray_owner_nodes": 0,
+    "undercroft_fields": 2,
+    "undercroft_piers": 3,
+    "sparse_grouped_openings": 6,
+    "recessed_balcony_stack_voids": 2,
+    "rail_pickets": 4,
+    "mapped_eaves": 7,
+    "deterministic_geometry_signature": "8df0202796d56c019b6b3ddb72916808b72316d2d0edee0ba7425b77efa2b127"
+  },
+  "site_12_kit_contract": {
+    "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
+    "kit_id": "site-12-housing-kit-v1",
+    "reusable_modules": [
+      "meter-authored box and quad primitives",
+      "grouped opaque opening with complete surround and mullion",
+      "opaque recessed void field with balcony slab",
+      "simple top/bottom rail and vertical picket silhouette",
+      "broad eave band"
+    ],
+    "entity_specific_schedule_location": "d2_1444_croaker_standalone_hero_prototype.gd and this file; the kit contains no generic cohort facade schedule"
+  },
+  "future_live_integration_seam": {
+    "matcher": "fail-closed exact wall+roof pair for w95934117",
+    "factory": "D21444CroakerStandaloneHeroPrototype.configure_records(wall_record, roof_record)",
+    "required_live_behavior": "intercept exact wall and roof together before generic visual or collision creation, remove fallback pair together, then recreate explicit spray ownership on the validated wall receiver",
+    "forbidden_partial_attach": "never overlay prototype visuals over retained fallback geometry and never attach only one member of the pair",
+    "registry_status": "not_registered",
+    "world_builder_status": "not_attached"
+  },
+  "confusion_set": [
+    {"name": "1431 Halibut Court", "source_key": "w95934135"},
+    {"name": "1436 Chinook Court", "source_key": "w95934137"},
+    {"name": "1449 Croaker Court", "source_key": "w95934120"}
+  ],
+  "blocked_claims": [
+    "as-built opening, undercroft, pier, balcony, rail, eave, or roof dimensions and counts",
+    "roof product or exact shingle pattern",
+    "unseen facade schedules, interior, occupancy, substrate, or alterations after July 2023",
+    "address, ochre hue, source ID, or location as sole recognition proof",
+    "recognition or believability acceptance before independent review",
+    "live attachment, catalog or registry entry, generated-data edit, or duplicated 1441 facade schedule"
+  ]
+}

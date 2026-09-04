@@ -1,0 +1,16 @@
+D1 current standalone prototype pair generated-data audit — 2026-09-04
+
+Command:
+git diff --name-only -- generated/world
+
+Result:
+(empty)
+
+Pinned generated chunks read by the contract, never edited:
+c0e1f86787410d975ad90272482e5f4971c4aedc7eb83132cd28b22acf1a3456  generated/world/chunks/x_0__z_-2.json
+6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2  generated/world/chunks/x_-2__z_-1.json
+
+The standalone factory creates render-only proof geometry. It does not mutate
+the generated 40-run B201 or 14-run B225 receivers, roofs, base/top elevations,
+collision, navigation, spray ownership, terrain, or serialized chunks.
+

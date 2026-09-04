@@ -1,0 +1,253 @@
+{
+  "schema_version": "ti.d2-1439-chinook-standalone-hero-prototype/1",
+  "model_id": "d2-1439-chinook-standalone-hero-prototype-v1",
+  "scope": "standalone exterior-only exact-footprint recognition prototype; not connected to WorldChunkBuilder, the facade catalog, compiler, registry, loader, or live world",
+  "target": {
+    "canonical_name": "1439 Chinook Court",
+    "source_key": "w95934144",
+    "wall_object_key": "building:w95934144:wall",
+    "roof_object_key": "building:w95934144:roof",
+    "chunk_id": "x_-2__z_0",
+    "chunk_path": "res://generated/world/chunks/x_-2__z_0.json",
+    "source_geometry_sha256": "a59bd2abf2020c25071a55ecb96f32b7871a810e8d1bdd95c213b512273f87f2",
+    "source_height_m": 6.0,
+    "source_base_y_m": 3.536,
+    "source_wall_top_y_m": 9.536,
+    "wall_run_count": 24,
+    "wall_vertices": 96,
+    "wall_triangles": 48,
+    "roof_plan_vertices": 12,
+    "roof_triangles": 10
+  },
+  "truth_boundary": {
+    "prototype_only": true,
+    "runtime_attachment": false,
+    "technical_evidence_status": "pending_independent_bar_raiser_review",
+    "recognition_accepted": false,
+    "believability_accepted": false,
+    "as_built_claim": false,
+    "interior_modeled": false,
+    "surveyed_roof_rise": false,
+    "surveyed_opening_dimensions_or_counts": false,
+    "surveyed_void_dimensions": false,
+    "surveyed_rail_dimensions_or_counts": false,
+    "reference_pixels_stored_or_copied": false,
+    "horizontal_source_footprint_changed": false,
+    "source_wall_height_changed": false,
+    "source_identity_changed": false,
+    "all_unsurveyed_module_dimensions_counts_anchors_and_spacing": "reversible_production_inference"
+  },
+  "source_bindings": [
+    {
+      "id": "D2-w95934144-packet",
+      "truth_class": "authoritative_local_reference_packet",
+      "authority_document": "w95934144_1439_chinook_court.md",
+      "authority_sha256": "050ceb6195bf1f7a4b1c753cde5a509c30b0911599af9233db5746605b9cfeb6",
+      "supports": [
+        "exact source identity and receiver binding",
+        "SSE target runs 11, 12, 16, 17, 18, 19, 22, and 23",
+        "one strongly recessed two-level balcony stack near one end",
+        "a broad quiet upper register with separated dark rectangular windows",
+        "a near-blank opposite end with another deep passage",
+        "continuous shallow dark gable and eave over a warm-white two-storey block"
+      ],
+      "does_not_support": [
+        "exact opening, void, passage, rail, eave, or roof-rise dimensions, counts, anchors, or spacing",
+        "a lower opening schedule behind the observed screening",
+        "unseen ENE, NNW, or WSW facade schedules",
+        "interior, occupancy, substrate, product, or color sample"
+      ]
+    },
+    {
+      "id": "D2-PANO-C-2023-07",
+      "truth_class": "dated_public_reference_observation_only_no_pixels_shipped",
+      "supports": [
+        "July 2023 public SSE appearance and the documented recognition cues"
+      ]
+    }
+  ],
+  "mapped_public_region": {
+    "facing": "SSE",
+    "ordered_run_indices": [11, 12, 16, 17, 18, 19, 22, 23],
+    "total_length_m": 32.866,
+    "run_roles": {
+      "11": "offset_end_two_level_balcony_stack_host",
+      "12": "quiet_mapped_continuation",
+      "16": "quiet_mapped_setback_fragment",
+      "17": "tiny_clipping_fragment_motif_forbidden",
+      "18": "tiny_clipping_fragment_motif_forbidden",
+      "19": "broad_quiet_upper_window_register_host",
+      "22": "quiet_mapped_end_fragment",
+      "23": "near_blank_upper_end_with_offset_ground_passage"
+    },
+    "solid_void_signature": "one offset two-level end stack / broad lower-quiet middle with three separated upper opening groups / near-blank opposite upper end over one offset passage",
+    "eave_chains": [[11, 12], [16, 17, 18, 19], [22, 23]],
+    "motif_host_runs": [11, 19, 23],
+    "mapped_motif_free_runs": [12, 16, 17, 18, 22],
+    "tiny_fragment_runs": [17, 18]
+  },
+  "protected_region": {
+    "run_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 20, 21],
+    "policy": "exact source wall shell in a quiet neutral non-claim surrogate only; no copied facade modules, labels, or inferred schedules"
+  },
+  "production_inference_m": {
+    "lower_row_center_y": 4.91,
+    "upper_row_center_y": 7.73,
+    "balcony_run": 11,
+    "balcony_anchor_fraction": 0.24,
+    "balcony_width": 3.70,
+    "balcony_void_height": 2.16,
+    "balcony_void_depth": 0.24,
+    "balcony_slab_height": 0.16,
+    "balcony_slab_depth": 0.72,
+    "rail_center_above_row_center": -0.18,
+    "rail_height": 0.92,
+    "rail_top_and_bottom_member": 0.065,
+    "rail_picket_width": 0.045,
+    "rail_picket_spacing": 0.56,
+    "rail_depth": 0.055,
+    "quiet_register_run": 19,
+    "quiet_register_opening_fractions": [0.20, 0.51, 0.81],
+    "upper_opening_width": 1.18,
+    "upper_opening_height": 1.22,
+    "upper_opening_depth": 0.10,
+    "opening_frame_member": 0.105,
+    "opening_frame_depth": 0.14,
+    "opening_mullion_width": 0.075,
+    "passage_run": 23,
+    "passage_anchor_fraction": 0.76,
+    "passage_width": 2.90,
+    "passage_center_y": 4.84,
+    "passage_height": 2.42,
+    "passage_visual_depth": 0.62,
+    "passage_head_beam_height": 0.28,
+    "passage_frame_depth": 0.76,
+    "passage_pier_width": 0.30,
+    "eave_height": 0.22,
+    "eave_depth": 0.78,
+    "eave_chain_end_overhang": 0.16,
+    "roof_edge_lift": 0.08,
+    "roof_ridge_rise": 1.00,
+    "roof_repeat_m": 5.0,
+    "stucco_repeat_m": 3.0
+  },
+  "material_scope": {
+    "target_stucco": {
+      "path": "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
+      "application": "exact source wall runs 11,12,16,17,18,19,22,23 plus pale balcony slabs, upper opening frames, and passage frame only; eaves use the dark roof surrogate",
+      "source": "exact byte-identical package-safe promotion of the independently package-approved text-only GenAI homogeneous warm-ivory mineral albedo v2; no target photograph used; 3 m meter-repeat assumption; raw SHA-256 af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c"
+    },
+    "protected_neutral": {
+      "path": "res://game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
+      "application": "runs 0..10,13,14,15,20,21 only"
+    },
+    "roof_surrogate": {
+      "path": "res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
+      "application": "exact source roof-plan gable and three continuous SSE eave chains",
+      "source": "existing CC0 Poly Haven bitumen albedo tinted dark brown; shingle product is not claimed"
+    },
+    "void_opening_and_rail": {
+      "void_path": "res://game/resources/materials/world/site_12_housing/site_12_void_shadow.tres",
+      "opening_path": "res://game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
+      "rail_path": "res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
+      "application": "opaque exterior-only balcony/passage depth proxies, three upper paired-opening proxies, and simple rails on motif host runs only"
+    }
+  },
+  "meter_uv_contract": {
+    "geometry_uv_units": "one UV unit equals one modeled meter",
+    "stucco_material_uv_scale": 0.333333,
+    "roof_material_uv_scale": 0.2,
+    "source_wall_phase_policy": "absolute local-plane projection preserves continuous meter phase across collinear mapped runs",
+    "module_uv_policy": "each box face uses physical face width, depth, and height rather than normalized primitive UVs",
+    "generated_normal_or_roughness_maps": false,
+    "tileability_gate": "obvious seam, baked lighting, or distracting repetition fails; faint recurrence and minor mismatch are acceptable in this prototype"
+  },
+  "collision_contract": {
+    "fallback_collider_retained": false,
+    "source_wall_shell": "all 24 exact source wall-run XZ edges, terrain-following bottoms, and unchanged 9.536 m wall top",
+    "roof": "all 10 source roof triangles retain exact XZ and receive a reversible shallow gable Y profile",
+    "structural_collision": "triangle-congruent with source wall shell plus shallow gable roof",
+    "facade_relief": "all eaves, opaque balcony/passage fields, frames, slabs, openings, and rails are noncolliding exterior modules with source wall collision behind",
+    "spray_ownership": "none in standalone prototype; future live adapter must explicitly preserve the validated wall receiver"
+  },
+  "prototype_topology": {
+    "render_batches": 11,
+    "surfaces": 11,
+    "source_wall_triangles": 48,
+    "exact_plan_gable_roof_triangles": 10,
+    "decorative_noncolliding_triangles": 516,
+    "total_visual_triangles": 574,
+    "visual_batch_triangles": {
+      "ProtectedExactWallRuns": 32,
+      "MappedSSEExactWarmStuccoWallRuns": 16,
+      "ExactPlanShallowGableRoof": 10,
+      "MappedSSEContinuousEaveChains": 36,
+      "OffsetEndTwoLevelBalconyVoids": 24,
+      "OffsetEndBalconySlabs": 24,
+      "OffsetEndSimpleMetalRails": 168,
+      "QuietRegisterUpperOpaqueOpenings": 36,
+      "QuietRegisterUpperPaleFrames": 180,
+      "BlankEndGroundPassageShadow": 12,
+      "BlankEndGroundPassageFrame": 36
+    },
+    "static_bodies": 1,
+    "collision_shapes": 1,
+    "structural_collision_triangles": 58,
+    "collision_face_vertices": 174,
+    "navigation_nodes": 0,
+    "spray_owner_nodes": 0,
+    "balcony_voids": 2,
+    "rail_pickets": 10,
+    "quiet_upper_opening_groups": 3,
+    "passage_voids": 1,
+    "passage_piers": 2,
+    "mapped_eave_chains": 3,
+    "deterministic_geometry_signature": "b82660eb7774ab022c417c7d417d51646f68fd288d916ad47a91d58db5bc8fb9"
+  },
+  "site_12_kit_contract": {
+    "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
+    "kit_id": "site-12-housing-kit-v1",
+    "reusable_modules": [
+      "meter-authored box and quad primitives",
+      "grouped opaque opening with complete surround and mullion",
+      "opaque recessed void field with balcony slab",
+      "simple top/bottom rail and vertical picket silhouette",
+      "broad eave band"
+    ],
+    "entity_specific_schedule_location": "d2_1439_chinook_standalone_hero_prototype.gd and this file; the kit contains no generic cohort facade schedule"
+  },
+  "future_live_integration_seam": {
+    "matcher": "fail-closed exact wall+roof pair for w95934144",
+    "factory": "D21439ChinookStandaloneHeroPrototype.configure_records(wall_record, roof_record)",
+    "required_live_behavior": "intercept exact wall and roof together before generic visual or collision creation, remove fallback wall and roof together, then recreate explicit spray ownership on the validated wall receiver",
+    "forbidden_partial_attach": "never overlay prototype visuals over retained fallback geometry and never attach only one member of the pair",
+    "registry_status": "not_registered",
+    "world_builder_status": "not_attached"
+  },
+  "authoritative_confusion_set": [
+    {"name": "1437 Chinook Court", "source_key": "w95934113", "evidence_state": "appearance_lifecycle_blocked"},
+    {"name": "1441 Chinook Court", "source_key": "w95934105", "evidence_state": "independently_reviewed_standalone_comparator"},
+    {"name": "1438 Chinook Court", "source_key": "w95934131", "evidence_state": "appearance_blocked"}
+  ],
+  "implemented_comparison_set": [
+    {
+      "name": "1441 Chinook Court",
+      "source_key": "w95934105",
+      "distinction": "balanced projecting windowed wings around a paired central recess, unlike 1439's one-end stack, upper-only quiet register, and opposite passage"
+    },
+    {
+      "name": "1444 Croaker Court",
+      "source_key": "w95934117",
+      "distinction": "two-field undercroft below a blank upper block and sparse return progression, unlike 1439's single passage and isolated upper register"
+    }
+  ],
+  "blocked_claims": [
+    "as-built opening, void, passage, balcony, rail, eave, or roof dimensions, counts, anchors, or spacing",
+    "roof product or exact shingle pattern",
+    "lower opening schedule behind the observed screening",
+    "unseen facade schedules, interior, occupancy, substrate, or alterations after July 2023",
+    "address, warm-white hue, source ID, or location as sole recognition proof",
+    "recognition or believability acceptance before independent review",
+    "live attachment, catalog or registry entry, generated-data edit, or duplicated 1441/1444 facade composition"
+  ]
+}

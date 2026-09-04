@@ -1,0 +1,72 @@
+{
+  "asset_kind": "homogeneous_material_tile_pilot",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/genai_texture_pilot_v1_capture.gd",
+  "captures": [
+    {
+      "bytes": 511086,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-generated-3x3-repeat.png",
+      "sha256": "ee954bd1e2e63a75d13d78adeda27379eaf52a1a74b25c21c81e0001396482ce",
+      "view_kind": "unblended_borderless_3x3_repeat_preview"
+    },
+    {
+      "bytes": 199672,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-real-scale-ab-front.png",
+      "sha256": "1343879ca6be4ddd81688abe19a21c1853c2a00ad038bebe4b35ccc7fb033469",
+      "view_kind": "six_by_three_point_two_metre_front_ab_at_three_metre_repeat"
+    },
+    {
+      "bytes": 186488,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-real-scale-ab-oblique.png",
+      "sha256": "cd330a5f7f2a0044a31a75917c470b4730a93bd0a065559474238ae857f6e1b7",
+      "view_kind": "changed_light_oblique_ab"
+    }
+  ],
+  "controls": {
+    "brick": "res://game/resources/materials/world/isle_house/isle_house_low_brick.tres",
+    "stucco": "res://game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres"
+  },
+  "display_driver": "macOS",
+  "generated": {
+    "brick": {
+      "material": "res://game/resources/materials/world/genai_pilot_v1/muted_brown_red_brick_albedo_pilot.tres",
+      "sha256": "0abbb429066966c1cfc1e0209a2a454c41dae73743fc119ffdf7cd82ee3ef35d",
+      "texture": "res://game/resources/textures/world/genai_pilot_v1/muted_brown_red_brick_albedo.png"
+    },
+    "stucco": {
+      "material": "res://game/resources/materials/world/genai_pilot_v1/warm_ivory_mineral_albedo_pilot.tres",
+      "sha256": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+      "texture": "res://game/resources/textures/world/genai_pilot_v1/warm_ivory_mineral_albedo_v2.png"
+    }
+  },
+  "generated_repeat_dimension_m": 3.0,
+  "godot_version": "4.7.2-stable (official)",
+  "one_local_unit_m": 1.0,
+  "panel_dimensions_m": [
+    6.0,
+    3.2,
+    0.06
+  ],
+  "pbr_scope": "albedo plus scalar roughness only; no generated, derived, or borrowed normal/roughness/AO/height maps",
+  "rendering_method": "Forward+",
+  "repeat_preview": "unblended borderless 3x3; no offset repair or edge blending",
+  "review_status": "technical_capture_complete_bar_raiser_visual_review_pending",
+  "runtime_attachment": false,
+  "schema_version": "ti.genai-texture-pilot-evidence/1",
+  "video_adapter": "Apple M2 (Apple8)",
+  "viewport": [
+    1440,
+    900
+  ]
+}

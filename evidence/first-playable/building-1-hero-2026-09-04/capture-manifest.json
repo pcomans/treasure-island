@@ -1,0 +1,328 @@
+{
+  "schema_version": "ti.building-1-hero-evidence/1",
+  "review_status": "pending_independent_original_detail_review_not_self_accepted",
+  "evidence_role": "actual-loaded-world inspection of a reversible exterior-only Building 1 hero proxy; not surveyed or as-built reconstruction",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/building_1_hero_capture.gd",
+  "generator": "game/tests/building_1_hero_capture.gd",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M2 (Apple8)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "config_path": "res://game/resources/facades/building_1_hero_model.json",
+  "config_sha256": "6c99f43550631a1e6bca1f52764ad23c6a5b8b891403f30c78ff9b9545192690",
+  "adapter_path": "res://game/scripts/world/facades/building_1_hero_model.gd",
+  "adapter_sha256": "1487ee41870a03ad79118936d0f3f563644ef617ca2722fe64778d80e85a3495",
+  "world_builder_sha256": "ab79117f85a1c266b42a62054a9a39f6822713528ae2d70cfeab0cbfd7169ccd",
+  "generated_source_bytes_unchanged": true,
+  "source_photography_shipped": false,
+  "source_keys": [
+    "r16681702",
+    "w1222720021"
+  ],
+  "object_keys": [
+    "building:r16681702:wall",
+    "building:r16681702:roof",
+    "building:w1222720021:wall",
+    "building:w1222720021:roof"
+  ],
+  "tower_separate_recognition_entity": true,
+  "runtime_topology": {
+    "records": 735,
+    "meshes": 931,
+    "surfaces": 941,
+    "triangles": 59778,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "captures": [
+    {
+      "id": "01-public-curve-same-camera-after",
+      "file": "images/01-public-curve-same-camera-after.png",
+      "view_kind": "ordinary_third_person_exact_current_camera_continuity",
+      "camera_position_m": [
+        -78.3327026367188,
+        5.62509489059448,
+        757.697631835938
+      ],
+      "target_position_m": [
+        0.940999984741211,
+        16.2810001373291,
+        749.703002929688
+      ],
+      "camera_forward": [
+        0.986172735691071,
+        0.132560521364212,
+        -0.0994540080428123
+      ],
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "player_visible": true,
+      "paired_before": "evidence/first-playable/exact-current-visual-repair-2026-09-03-104510/06-building-1-public-curve.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 652951,
+      "sha256": "23462802a3acfd115ae0a434f72f8e6cc6167b57d21282655b0c2fc315d6903b"
+    },
+    {
+      "id": "02-north-end-after",
+      "file": "images/02-north-end-after.png",
+      "view_kind": "ordinary_height_north_end_and_wing",
+      "camera_position_m": [
+        -76.4227600097656,
+        7.0,
+        648.677062988281
+      ],
+      "target_position_m": [
+        -46.7294998168945,
+        14.0,
+        688.899536132812
+      ],
+      "camera_forward": [
+        0.588182926177979,
+        0.138660445809364,
+        0.796752214431763
+      ],
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "player_visible": false,
+      "paired_before": "evidence/first-playable/treasure-island-building-1-recognizability-composition-2026-08-30/images/04-after-ordinary-north-end.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 552292,
+      "sha256": "c166594704e49594603f67f889b72cc0350cb9ab23bc19218b85da2859e862af"
+    },
+    {
+      "id": "03-front-and-tower-after",
+      "file": "images/03-front-and-tower-after.png",
+      "view_kind": "ordinary_height_front_entrance_and_tower_silhouette",
+      "camera_position_m": [
+        -135.0,
+        8.0,
+        710.0
+      ],
+      "target_position_m": [
+        0.0,
+        18.0,
+        738.0
+      ],
+      "camera_forward": [
+        0.976595640182495,
+        0.0723404213786125,
+        0.202553242444992
+      ],
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "player_visible": false,
+      "paired_before": "",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 657731,
+      "sha256": "1342d058c6b104879c409c8b2e03b5e8edca4f7060675522129fefa193aada3c"
+    },
+    {
+      "id": "04-south-end-after",
+      "file": "images/04-south-end-after.png",
+      "view_kind": "ordinary_height_south_end_and_wing",
+      "camera_position_m": [
+        -38.3947563171387,
+        7.0,
+        824.480712890625
+      ],
+      "target_position_m": [
+        -5.54850006103516,
+        14.25,
+        796.45751953125
+      ],
+      "camera_forward": [
+        0.750247299671173,
+        0.165598571300507,
+        -0.640082895755768
+      ],
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "player_visible": false,
+      "paired_before": "evidence/first-playable/treasure-island-building-1-recognizability-composition-2026-08-30/images/15-south-end-ordinary.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 552054,
+      "sha256": "eaa12f06220150cea5f0a79038466155f83756fe94c13e571ef17bf06eb5c75a"
+    },
+    {
+      "id": "05-whole-building-after",
+      "file": "images/05-whole-building-after.png",
+      "view_kind": "elevated_diagnostic_not_ordinary_acceptance",
+      "camera_position_m": [
+        -165.0,
+        72.0,
+        750.0
+      ],
+      "target_position_m": [
+        -8.0,
+        16.0,
+        737.0
+      ],
+      "camera_forward": [
+        0.939026117324829,
+        -0.334939271211624,
+        -0.0777538120746613
+      ],
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "player_visible": false,
+      "paired_before": "evidence/first-playable/treasure-island-building-1-recognizability-composition-2026-08-30/images/06-after-whole-building.png",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 881580,
+      "sha256": "7ace7b55474ec2b3666b3f17dfc4c5b8599a347f09881de2b8883676faf005da"
+    },
+    {
+      "id": "06-tower-separate-entity-after",
+      "file": "images/06-tower-separate-entity-after.png",
+      "view_kind": "separate_w1222720021_exact_plan_rooftop_tower_review",
+      "camera_position_m": [
+        -80.0,
+        34.0,
+        748.0
+      ],
+      "target_position_m": [
+        14.5900001525879,
+        30.5,
+        722.343994140625
+      ],
+      "camera_forward": [
+        0.964513957500458,
+        -0.0356887578964233,
+        -0.261608868837357
+      ],
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "player_visible": false,
+      "paired_before": "",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 351781,
+      "sha256": "2b6a630c1132a87d27502b62736c75569b1cca7f37a895d597c5d916b5ab24c4"
+    },
+    {
+      "id": "07-rear-east-after",
+      "file": "images/07-rear-east-after.png",
+      "view_kind": "rear_east_exterior_truth_view",
+      "camera_position_m": [
+        82.0,
+        9.0,
+        738.0
+      ],
+      "target_position_m": [
+        4.0,
+        18.0,
+        738.0
+      ],
+      "camera_forward": [
+        -0.993408918380737,
+        0.114624105393887,
+        0.0000000434232845236693
+      ],
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "player_visible": false,
+      "paired_before": "",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 576235,
+      "sha256": "3aa70e805b1b6442c5e45bba9f57aebc42da329cfbba8ba75397e331b9459a1c"
+    },
+    {
+      "id": "08-public-curve-changed-light-after",
+      "file": "images/08-public-curve-changed-light-after.png",
+      "view_kind": "ordinary_public_curve_changed_light",
+      "camera_position_m": [
+        -78.3327026367188,
+        5.62509489059448,
+        757.697631835938
+      ],
+      "target_position_m": [
+        0.940999984741211,
+        16.2810001373291,
+        749.703002929688
+      ],
+      "camera_forward": [
+        0.986172735691071,
+        0.132560521364212,
+        -0.0994540080428123
+      ],
+      "sun_rotation_degrees": [
+        -18.0,
+        118.0,
+        0.0
+      ],
+      "player_visible": false,
+      "paired_before": "",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 529302,
+      "sha256": "967484447f83f4295c82e33999b70285dfa3922baa2da691ede73f83193fc9e4"
+    }
+  ],
+  "capture_count": 8,
+  "representative_before_after_pairs": [
+    [
+      "evidence/first-playable/exact-current-visual-repair-2026-09-03-104510/06-building-1-public-curve.png",
+      "images/01-public-curve-same-camera-after.png"
+    ],
+    [
+      "evidence/first-playable/treasure-island-building-1-recognizability-composition-2026-08-30/images/04-after-ordinary-north-end.png",
+      "images/02-north-end-after.png"
+    ],
+    [
+      "evidence/first-playable/treasure-island-building-1-recognizability-composition-2026-08-30/images/15-south-end-ordinary.png",
+      "images/04-south-end-after.png"
+    ],
+    [
+      "evidence/first-playable/treasure-island-building-1-recognizability-composition-2026-08-30/images/06-after-whole-building.png",
+      "images/05-whole-building-after.png"
+    ]
+  ],
+  "reviewer_instruction": "Open every output and paired before at original detail. Judge ordinary-distance stepped silhouette, center/wing/end hierarchy, 11-bay read, entrance/canopy, separate octagonal tower identity, material contrast, gaps/overlaps, and changed-light behavior. Executor acceptance is prohibited."
+}

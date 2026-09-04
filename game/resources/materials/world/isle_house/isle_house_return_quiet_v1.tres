@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "isle_house_return_quiet_v1"
+albedo_color = Color(0.465, 0.45, 0.425, 1)
+metallic = 0.0
+roughness = 0.92
+

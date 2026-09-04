@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "site_12_opaque_recess_shadow"
+albedo_color = Color(0.105, 0.092, 0.078, 1)
+metallic = 0.0
+roughness = 0.83

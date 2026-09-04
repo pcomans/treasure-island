@@ -1,0 +1,216 @@
+{
+  "schema_version": "ti.building-1-tower-grounded-evidence/1",
+  "review_status": "pending_independent_tower_re_review_not_self_accepted",
+  "evidence_role": "capture-only correction for the separately keyed Building 1 observation tower; ordinary-height shipped player camera on physics-proven playable ground",
+  "supersedes_tower_view_in": "evidence/first-playable/building-1-hero-2026-09-04/INDEPENDENT_REVIEW.md",
+  "superseded_review_sha256": "b12858438d6522b7f3cf42fa06392648d16ee3e0c418eb5e807a3ee1be770c2a",
+  "superseded_rejected_manifest_sha256": "ebeef887b37c6845c6c8fa3f25e06706351fe7c1dab0e1a3b0eaf47dfb773017",
+  "correction_kind": "capture_only",
+  "runtime_changed_for_correction": false,
+  "runtime_files_changed_for_correction": [],
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/building_1_tower_grounded_capture.gd",
+  "generator": "game/tests/building_1_tower_grounded_capture.gd",
+  "generator_sha256": "51a9bf62e14c1c0bb6e982477480ffbfc0a8f9209ec73ca52bd1f52a7d30825b",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M2 (Apple8)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "shipped_player_camera": {
+    "fov_degrees": 70.0,
+    "spring_length_m": 5.5
+  },
+  "debug_overlays_visible": false,
+  "hud_visible": false,
+  "config_path": "res://game/resources/facades/building_1_hero_model.json",
+  "config_sha256": "6c99f43550631a1e6bca1f52764ad23c6a5b8b891403f30c78ff9b9545192690",
+  "adapter_path": "res://game/scripts/world/facades/building_1_hero_model.gd",
+  "adapter_sha256": "1487ee41870a03ad79118936d0f3f563644ef617ca2722fe64778d80e85a3495",
+  "world_builder_sha256": "ab79117f85a1c266b42a62054a9a39f6822713528ae2d70cfeab0cbfd7169ccd",
+  "generated_source_bytes_unchanged": true,
+  "source_photography_shipped": false,
+  "target_source_key": "w1222720021",
+  "target_object_keys": [
+    "building:w1222720021:wall",
+    "building:w1222720021:roof"
+  ],
+  "target_identity": "separately keyed observation/control tower associated with Building 1",
+  "primary_reference": "https://npgallery.nps.gov/NRHP/GetAsset/NRHP/08000081_text",
+  "reference_scope": "NPS NRHP 08000081 Section 7 pp. 6-7: octagonal plan, wider viewing platform, metal balustrade, pyramidal raised-seam roof, mixed/divided-light fenestration and rib/flute details",
+  "truth_boundary": "exact source plan and runtime identity; vertical values and platform scale remain reversible production inference; no surveyed, as-built, interior or present-condition claim",
+  "runtime_topology": {
+    "records": 735,
+    "meshes": 931,
+    "surfaces": 941,
+    "triangles": 59778,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "selection_contract": {
+    "selection_mode": "two_source_run_anchored_fixed_ground_poses_after_bounded_search",
+    "minimum_camera_height_above_ground_m": 1.0,
+    "minimum_projected_height_px": 72.0,
+    "minimum_projected_width_px": 42.0,
+    "minimum_view_separation_degrees": 24.0,
+    "actual_view_separation_degrees": 37.1650400799099,
+    "retained_pose_count": 2
+  },
+  "captures": [
+    {
+      "id": "01-grounded-tower-family",
+      "file": "images/01-grounded-tower-family.png",
+      "view_kind": "ordinary_grounded_tower_family",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 956200,
+      "sha256": "c5578ea9a5d6965a5ab64f05dca84aab32a2b89ea0552625c26f6719c4efd027",
+      "player_visible": false,
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.13046264648438,
+      "ground_feature_kind": "land_ground",
+      "ground_object": "land:w26767313:x_0__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_playable_boundary": true,
+      "player_position_m": [
+        50.4514617919922,
+        4.13046264648438,
+        686.886108398438
+      ],
+      "camera_position_m": [
+        54.2614822387695,
+        6.13046264648438,
+        682.919494628906
+      ],
+      "camera_height_above_ground_m": 2.0,
+      "camera_forward": [
+        -0.692727386951447,
+        0.0,
+        0.721199512481689
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "camera_pitch_degrees": 0.0,
+      "view_azimuth_degrees": 315.314473880503,
+      "candidate_source_run": 5,
+      "candidate_outward_distance_m": 44.0,
+      "candidate_tangent_offset_m": 16.0,
+      "aim_target_m": [
+        18.0214996337891,
+        32.25,
+        720.648986816406
+      ],
+      "exact_los_ray_kind": "direct_camera_to_in_frame_tower_point",
+      "exact_los_target_viewport_px": [
+        720.000061035156,
+        129.132537841797
+      ],
+      "exact_los_hit_object": "building:w1222720021:wall",
+      "exact_los_hit_sources": [
+        "w1222720021"
+      ],
+      "exact_los_hit_position_m": [
+        18.0214920043945,
+        32.2500076293945,
+        720.648986816406
+      ],
+      "exact_los_distance_m": 58.4729156494141,
+      "tower_projected_bounds_px": [
+        673.672241210938,
+        113.50569152832,
+        120.726196289062,
+        124.862579345703
+      ],
+      "tower_projected_width_px": 120.726196289062,
+      "tower_projected_height_px": 124.862579345703,
+      "tower_fully_inside_viewport": true,
+      "hud_visible": false,
+      "debug_overlays_visible": false
+    },
+    {
+      "id": "02-grounded-oblique-silhouette",
+      "file": "images/02-grounded-oblique-silhouette.png",
+      "view_kind": "ordinary_grounded_oblique_tower_silhouette",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 978651,
+      "sha256": "98e9f5b8142f71a5ce1eb59004afbbd13bbe6f809703143999f757f0db4d20e8",
+      "player_visible": false,
+      "physics_grounded_pose": true,
+      "ground_y_m": 4.13824462890625,
+      "ground_feature_kind": "land_ground",
+      "ground_object": "land:w26767313:x_0__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "in_playable_boundary": true,
+      "player_position_m": [
+        22.2114315032959,
+        4.13824462890625,
+        667.034423828125
+      ],
+      "camera_position_m": [
+        23.1848487854004,
+        6.13824462890625,
+        661.621276855469
+      ],
+      "camera_height_above_ground_m": 2.0,
+      "camera_forward": [
+        -0.176984921097755,
+        -0.000000000000000444089209850063,
+        0.984213590621948
+      ],
+      "camera_fov_degrees": 70.0,
+      "spring_length_m": 5.5,
+      "camera_pitch_degrees": 0.0,
+      "view_azimuth_degrees": 278.149433800593,
+      "candidate_source_run": 8,
+      "candidate_outward_distance_m": 42.0,
+      "candidate_tangent_offset_m": -32.0,
+      "aim_target_m": [
+        12.8684997558594,
+        32.25,
+        718.990478515625
+      ],
+      "exact_los_ray_kind": "direct_camera_to_in_frame_tower_point",
+      "exact_los_target_viewport_px": [
+        720.000061035156,
+        162.106201171875
+      ],
+      "exact_los_hit_object": "building:w1222720021:wall",
+      "exact_los_hit_sources": [
+        "w1222720021"
+      ],
+      "exact_los_hit_position_m": [
+        12.8684883117676,
+        32.2500305175781,
+        718.990539550781
+      ],
+      "exact_los_distance_m": 63.8708457946777,
+      "tower_projected_bounds_px": [
+        640.420104980469,
+        142.726623535156,
+        108.328308105469,
+        112.455932617188
+      ],
+      "tower_projected_width_px": 108.328308105469,
+      "tower_projected_height_px": 112.455932617188,
+      "tower_fully_inside_viewport": true,
+      "hud_visible": false,
+      "debug_overlays_visible": false
+    }
+  ],
+  "capture_count": 2,
+  "reviewer_instruction": "Open both PNGs at original detail before reading implementation metadata. Independently re-review w1222720021 only: require two distinct ordinary grounded views, a blind top-1 match, and at least two visible NPS-supported cues without relying on Building 1 location, color, IDs or this manifest. A recognition-undermining limitation is FAIL."
+}

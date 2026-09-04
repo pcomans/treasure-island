@@ -1,0 +1,195 @@
+{
+  "schema_version": "ti.d1-b225-standalone-cladding-repair/1",
+  "prototype_id": "D1-B225-NNW-LONG-CLADDING-REPAIR-V1",
+  "source_key": "w95934119",
+  "receiver_key_eligibility_only": "building:w95934119:wall",
+  "roof_object_key_protected": "building:w95934119:roof",
+  "scope": "standalone render-only superseding repair study for the observed NNW long side; not a live receiver attachment",
+  "review_status": "pending_independent_bar_raiser_re_review_not_self_accepted",
+  "runtime_attachment": false,
+  "live_placement_count": 0,
+  "exact_receiver_layout": false,
+  "reference_pixels_stored_or_copied": false,
+  "generated_or_external_texture_assets": true,
+  "supersedes_for_review_only": {
+    "config": {
+      "path": "res://game/resources/facades/d1_current/d1_b225_nnw_long.json",
+      "sha256": "dc3591df4a68af19b5fa53f402ed15d5e3f83946c4a113f024d5b7d41f2f82b8"
+    },
+    "sealed_evidence_receipt_id": "D1-CURRENT-STANDALONE-PROTOTYPE-PAIR-2026-09-04",
+    "independent_bar_raiser_review": {
+      "receipt_id": "D1-CURRENT-STANDALONE-INDEPENDENT-BAR-RAISER-REVIEW",
+      "sha256": "8567cd5eb9080f8f7cb563152ae83885330d366cc56ecc8513d5ebdadf491feb",
+      "binding_failure": "fourteen identical full-width dark course boxes read as barcode/ruler lines and suppress facade believability"
+    },
+    "sealed_b225_view_hashes": {
+      "05-b225-grounded-complete-nnw.png": "21b656561966ac75d6e473796728d0d9657f4019be08476b4ccf45d866934122",
+      "06-b225-grounded-clerestory-oblique.png": "30597aa75d628550dcee8d06a80343ec5603074dfdfd53a3fc2c85a4e0770bc8",
+      "07-b225-clerestory-course-close.png": "45299789b409017ca7b989b3bdc30f8773618f63e6f81076259e62a5af9b70b9",
+      "08-b225-changed-light-oblique.png": "2d63b8fd64a8266934b9017249ccb213fe134a217f789a991d74f1858a5a8d45"
+    }
+  },
+  "binding": {
+    "frozen_osm": {
+      "type": "way",
+      "id": "95934119",
+      "version": 5,
+      "timestamp": "2026-04-23T18:34:33Z",
+      "address": "148 12th Street",
+      "tags": {"building": "yes", "height": "5"}
+    },
+    "city_identity": "Building 225",
+    "identity_confidence": "high_for_frozen_footprint_address_and_city_crosswalk",
+    "common_name": null,
+    "currentness": "March 2025 target-bound NNW observation",
+    "chunk_id": "x_-2__z_-1",
+    "chunk_path": "res://generated/world/chunks/x_-2__z_-1.json",
+    "chunk_sha256": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2",
+    "receiver_height_m": 5.0,
+    "receiver_run_count": 14
+  },
+  "authoritative_packet": {
+    "receipt_id": "D1-B225-REPAIR-AUTHORITY",
+    "source_provenance_receipt_sha256": "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677b3ba5ab318a19333",
+    "sha256": "ee3e0cb8a7f3bb29e4ecbc0be688d57268cccc895c33c448c64e2506b2de4fa8"
+  },
+  "eligible_region": {
+    "mapping_id": "14812-NNW-LONG",
+    "source_edge_indices": [3],
+    "ordered_run_indices": [10, 11, 12, 13],
+    "ordered_run_lengths_m": [10.372629078, 6.510893794, 7.049860211, 22.328585289],
+    "cumulative_run_spans_m": [
+      {"run_index": 10, "u_start_m": 0.0, "u_end_m": 10.372629078},
+      {"run_index": 11, "u_start_m": 10.372629078, "u_end_m": 16.883522872},
+      {"run_index": 12, "u_start_m": 16.883522872, "u_end_m": 23.933383083},
+      {"run_index": 13, "u_start_m": 23.933383083, "u_end_m": 46.261968372}
+    ],
+    "exact_generated_chain_length_m": 46.261968372,
+    "u_phase_rule": "reset once at run 10 chain start, then continue one cumulative metre coordinate through runs 11, 12 and 13 without per-run reset",
+    "v_phase_rule": "standalone local facade height in metres from 0.0 to 5.0",
+    "geometry_and_side_confidence": "high",
+    "prototype_authorization": "standalone_unattached_repair_study_only"
+  },
+  "recognition_contract": {
+    "preserved": [
+      "ten varied complete high clerestory groups",
+      "inferred pane counts 4,5,4,6,5,5,4,6,4,5",
+      "pale projected frames with recessed opaque glazing",
+      "low one-storey near-flat-roof proportion"
+    ],
+    "repaired": [
+      "removed all fourteen identical full-width dark ruler-line boxes",
+      "introduced restrained aged painted horizontal-cladding albedo on one continuous metre coordinate",
+      "kept lower field free of invented doors, windows, signs and semantic damage"
+    ],
+    "required_pair": ["varied continuous clerestory grouping", "aged horizontal cladding on a low mass"]
+  },
+  "production_inference": {
+    "truth_class": "reversible_production_inference_not_surveyed",
+    "side_study_dimensions_m": [46.261968372, 5.0],
+    "complete_clerestory_group_count": 10,
+    "inferred_group_widths_m": [3.4, 4.1, 3.2, 5.0, 4.0, 4.4, 3.1, 5.1, 3.5, 4.2],
+    "inferred_pane_counts": [4, 5, 4, 6, 5, 5, 4, 6, 4, 5],
+    "horizontal_course_geometry_count": 0,
+    "texture_course_cadence_approx_m": "approximately 0.34-0.39 at the declared 3.48 m vertical cell; not surveyed",
+    "dark_pane_damage_pattern": "none_encoded",
+    "placement_state": "illustrative_local_side_coordinates_only"
+  },
+  "generated_albedo": {
+    "asset_role": "base-color/albedo only for isolated B225 cladding repair",
+    "generation_date_local": "2026-09-04 America/Los_Angeles",
+    "tool_mode": "built-in image_gen.imagegen",
+    "model_mode": "not surfaced by the built-in image generation tool; no model identity claimed",
+    "reference_images_or_source_pixels": [],
+    "initial_prompt": "Use case: photorealistic-natural\nAsset type: seamless game-ready facade albedo texture swatch for a Godot 3D environment\nPrimary request: create restrained aged light-gray to off-white painted horizontal cladding for a believable low utilitarian one-storey facade; the light painted wall must remain the dominant field and the horizontal joints must read as quiet cladding boundaries, never dark ruler lines\nScene/backdrop: only the continuous cladding surface fills the square image edge to edge\nSubject: substrate-neutral painted horizontal facade courses with subtle age; do not imply a specific wood species, metal profile, or proprietary product\nStyle/medium: realistic scanned-material appearance, base-color/albedo map only\nComposition/framing: perfectly flat orthographic straight-on square swatch; all horizontal courses precisely level; no perspective, wall edge, corner, roof, ground, horizon, trim, opening, or object\nLighting/mood: perfectly even neutral diffuse appearance; no baked directional light, cast shadow, highlight, ambient occlusion, vignette, exposure gradient, or 3D relief lighting\nColor palette: low-contrast aged off-white and light gray with restrained warm/cool paint drift; course boundaries only slightly darker than the panels and never charcoal or black\nMaterials/textures: fine matte painted grain; very quiet broad low-frequency uneven repainting and sparse soft rain-weathering drift distributed nonperiodically; subdued thin horizontal course boundaries approximately 0.22–0.28 metres apart; no unique damage token; apparent physical coverage roughly 8 metres wide by 4 metres high\nConstraints: designed to tile approximately on all four edges, with horizontal course phase continuing across left/right and top/bottom boundaries; edge-to-edge image; no alpha; no vertical panel seams, fasteners, knots, deep grooves, peeling chunks, cracks, holes, letters, numbers, text, logo, sign, graffiti, watermark, semantic stain, facade photograph, windows, doors, vents, people, plants, vehicles, or props; variation must remain quiet at ordinary player distance; albedo only, not a rendered material ball and not a PBR preview\nAvoid: barcode appearance, fourteen identical dark rules, high-contrast lines, heavy grunge, repeated blotches, obvious grid, hard-edged streaks, strong shadow, perspective, objects, scale references, border, frame, photographic scene",
+    "initial_output": {
+      "opaque_output_id": "imagegen:d1-b225-cladding-v1:initial-rejected",
+      "sha256": "f4289c182ad32c63404c067311a5a9d06ab8b0dcea07893c3f7399ae10b63309",
+      "disposition": "rejected because every joint carried a repeated bevel-like baked-light gradient"
+    },
+    "targeted_edit_prompt": "Precision edit of this game-ready facade albedo swatch. Preserve the exact restrained aged off-white/light-gray painted-cladding palette, flat straight-on orthographic framing, edge-to-edge surface, level horizontal course cadence, fine matte paint grain, and quiet low-frequency nonperiodic wear. Change only the horizontal joints: remove every bevel, highlight, ambient-occlusion band, drop-shadow gradient, raised lip, embossed relief cue, and directional-light cue. Each course boundary must read only as a very thin, subdued, flat albedo-color line or gentle paint-color transition, slightly darker than the panels but never charcoal, with no light-above/dark-below pairing. Keep illumination perfectly uniform and neutral across the whole bitmap. Aim for rough tiling on all four edges; minor edge mismatch is acceptable. Albedo/base-color only. Do not add vertical seams, fasteners, knots, cracks, peeling chunks, holes, text, logo, graffiti, watermark, windows, doors, vents, objects, wall edges, corners, roof, ground, horizon, perspective, shadows, highlights, or a rendered material preview.",
+    "selected_source_output": {
+      "opaque_output_id": "imagegen:d1-b225-cladding-v1:selected-flat-joints",
+      "sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b"
+    },
+    "project_asset": {
+      "path": "res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
+      "sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
+      "dimensions_px": [1254, 1254],
+      "channels": "RGB_8_no_alpha",
+      "source_bytes": 2140085
+    },
+    "selection_gate": "selected after one targeted flattening edit; no further generation permitted for this bounded repair",
+    "provenance_nonclaims": [
+      "not derived from or conditioned on stored Street View or other external reference pixels",
+      "not claimed to be a measured scan, exact substrate, proprietary product, perfectly seamless texture or source of identity truth",
+      "no external logo, text, sign, graffiti, trademark or photographed object is intentionally present",
+      "project use must remain within the repository's private personal-hobby scope"
+    ]
+  },
+  "material_contract": {
+    "path": "res://game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres",
+    "albedo_only": true,
+    "scalar_tint_rgba": [0.76, 0.755, 0.72, 1.0],
+    "scalar_roughness": 0.88,
+    "metallic": 0.0,
+    "texture_cell_m": [8.0, 3.48],
+    "uv1_scale": [0.125, 0.28735632, 1.0],
+    "repeat": true,
+    "mipmaps": true,
+    "filter": "linear_mipmap_anisotropic",
+    "normal_map": null,
+    "roughness_map": null,
+    "metallic_map": null,
+    "height_map": null,
+    "fabricated_pbr_maps": 0
+  },
+  "render_topology": {
+    "render_geometry_batches": 3,
+    "mesh_instances": 3,
+    "field_mesh": {"array_mesh_surfaces": 1, "run_quads": 4, "vertices": 16, "indices": 24, "triangles": 8},
+    "box_instance_count": 90,
+    "box_triangles": 1080,
+    "triangle_count": 1088,
+    "batch_instance_counts": {"b225_cladding_v1_field_quads": 4, "shared_dark_glass": 10, "shared_pale_frame": 80},
+    "delta_from_rejected_standalone": {"box_instances": -18, "triangles": -208, "full_width_dark_course_boxes": -14},
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0
+  },
+  "package_cost": {
+    "source_png_bytes": 2140085,
+    "imported_ctex_bytes": 2031028,
+    "estimated_full_rgba8_mip_chain_runtime_bytes": 8386752,
+    "isolated_pck_measurement_receipt_id": "D1-B225-STANDALONE-CLADDING-REPAIR-PACKAGE-AUDIT",
+    "isolated_pck_measurement_sha256": "cf604bc520315d8d05fdcb19ea7f176e07268ff2be8511a155d872ab1d23875b",
+    "measurement_boundary": "exact included/excluded PCK sizes live outside the packed branch to avoid self-referential package drift",
+    "bundling": "all_resources currently bundles this explicitly costed standalone review candidate; the rejected source output remains outside the project and is not bundled",
+    "future_policy_if_not_promoted": "add a narrow exclusion for this B225 repair branch before a distributable export; preserve source and evidence"
+  },
+  "sealed_b201_byte_guard": {
+    "res://game/resources/facades/d1_current/d1_b201_public_wsw.json": "30bc1f62e5fa44c60bdcfb1bfd4f6f679d391618fa213373e571080face6ec6c",
+    "res://game/resources/materials/world/d1_current/b201_green_hierarchy.tres": "5bdd67e659a0cce14abe3605f5a7fbfd85b0374d0a38be23cda326017235fe13",
+    "res://game/resources/materials/world/d1_current/b201_muted_rust_post.tres": "be97cdfd7367cd73172c4429ca212db0d1fc68bed34f4db6ce307d02a5225b94",
+    "res://game/resources/materials/world/d1_current/b201_service_leaf.tres": "de9895a808e4d64afc2c727e77ef92b590c9c718266ba118e64c489e84690cfd",
+    "res://game/resources/materials/world/d1_current/b201_warm_wall.tres": "6f5f6835790ab338454e72be58c2956deb6e470086797e209be0fab4d37ec788",
+    "res://game/scripts/world/facades/d1_current_standalone_prototypes.gd": "797bbb81e7f772f3fab3989d358772be4f1b16cb7e31a05571463e0d6ec31a5e",
+    "res://game/scenes/world/facades/d1_current/d1_current_standalone_prototype_pair.tscn": "0fdd5d356deb57664549db95fd04e123290c1fb9490b8024569e997616893d7f"
+  },
+  "technical_visual_gate": {
+    "status": "technical_capture_complete_visual_verdict_pending_independent_bar_raiser",
+    "source_image": "flat orthographic and object/text/graffiti/perspective free after one targeted edit; joints use subdued flat color instead of repeated bevel lighting",
+    "realistic_scale_tiling": "technical pass with minor limitation: the 46.261968372 m front exposes about 5.78 horizontal repeats at the declared 8 m cell; no hard edge seam dominates at ordinary distance, though mild broad tonal recurrence remains visible under a fixed front light",
+    "shimmer_moire": "technical motion sequence complete: 25 consecutive native Metal frames at 0.75 m steps and 12 m standoff cross all three internal run boundaries without a per-run UV reset or obvious sampled-frame crawling; independent temporal visual judgment remains pending",
+    "changed_light": "technical capture complete: course direction remains subordinate to the preserved clerestory under the alternate sun angle",
+    "remaining_visual_risk": "fine close-range grain can read synthetic and the 8 m broad tonal recurrence may be noticeable under unusually flat light",
+    "cleanup_path_if_rejected": "retain the four-quad cumulative-metre geometry and scalar material contract; replace only the albedo with a low-pass, edge-equalized derivative or one fresh age-only generation, then rerun the identical 8-view and 25-frame harness; do not restore dark reveal boxes or add a second procedural course frequency",
+    "acceptance": "pending independent bar-raiser review; no self-acceptance or live-integration approval"
+  },
+  "live_integration_seam": {
+    "status": "blocked_pending_independent_bar_raiser_re_review_and_fresh_receiver_relative_adapter",
+    "eligible_receiver_chain_only": "building:w95934119:wall / source edge 3 / ordered runs 10..13 / 46.261968372 m",
+    "future_adapter_contract": "derive receiver-local corners from the frozen run chain and preserve this one cumulative metre U coordinate; do not instantiate this standalone scene or reset texture phase per run",
+    "forbidden": "direct factory instantiation or resource reference from world_chunk_builder, facade catalog, recognition registry, runtime loader, generated chunks, B201, Isle House, Chapel, P3, collision, navigation or spray ownership"
+  }
+}

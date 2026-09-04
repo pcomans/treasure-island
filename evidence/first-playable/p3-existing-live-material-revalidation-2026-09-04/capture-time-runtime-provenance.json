@@ -1,0 +1,15 @@
+{
+  "schema_version": "ti.p3-existing-live-material-revalidation-capture-time-runtime-provenance/1",
+  "receipt_id": "P3-EXISTING-LIVE-MATERIAL-CAPTURE-TIME-RUNTIME-PROVENANCE-2026-09-04",
+  "scope": "Immutable capture-time runtime provenance separated from the mutable current world-builder path.",
+  "capture_manifest_sha256": "f48dc2db29228caaad418d01e15288ce7ff1e673bff8819fc70837d24aaa66e7",
+  "capture_time_world_builder": {
+    "repository_relative_path": "game/scripts/world/world_chunk_builder.gd",
+    "sha256": "9525ead815e95d7bc0b5fa8beae389954e232a9bbf51b54ed049a84a3613b9c0"
+  },
+  "current_state_boundary": "The evidence ledger validates this immutable receipt, not the mutable world-builder path. Exact-current builder bytes and topology are validated separately by active current-state contracts.",
+  "nonclaims": [
+    "This receipt does not assert that current world-builder bytes equal capture-time bytes.",
+    "This migration does not alter the capture manifest, images, visual output, review status, or historical topology."
+  ]
+}

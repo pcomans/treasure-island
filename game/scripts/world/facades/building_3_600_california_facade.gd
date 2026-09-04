@@ -11,6 +11,7 @@ const MODULE_LIBRARY := preload("res://game/scenes/world/facades/building_3/buil
 const MATERIALS := {
 	"white_primary": preload("res://game/resources/materials/world/building_3/building_3_white_primary.tres"),
 	"teal_door": preload("res://game/resources/materials/world/building_3/building_3_teal_door.tres"),
+	"shadow_recess": preload("res://game/resources/materials/world/building_3/building_3_shadow_recess.tres"),
 }
 
 var _layout: Dictionary = {}
@@ -20,6 +21,7 @@ var _module_counts: Dictionary = {}
 var _signature_parts: PackedStringArray = []
 var _module_library: Node3D
 var _side: Dictionary = {}
+var _runtime_massing: Dictionary = {}
 
 
 static func matches_target(record: Dictionary) -> bool:
@@ -34,7 +36,7 @@ static func matches_target(record: Dictionary) -> bool:
 		and str(source_keys[0]) == TARGET_SOURCE_KEY
 
 
-func configure(record: Dictionary) -> Dictionary:
+func configure(record: Dictionary, runtime_massing: Dictionary = {}) -> Dictionary:
 	if not matches_target(record):
 		return {"ok": false, "message": "Building 3 facade refused a non-target receiver."}
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(LAYOUT_PATH))
@@ -43,6 +45,7 @@ func configure(record: Dictionary) -> Dictionary:
 	_layout = parsed as Dictionary
 	_contract = _layout.render_contract as Dictionary
 	_side = _layout.observed_ene_main as Dictionary
+	_runtime_massing = runtime_massing.duplicate(true)
 	var target := _layout.target as Dictionary
 	if str(target.source_key) != TARGET_SOURCE_KEY \
 	or str(target.logical_object_key) != TARGET_LOGICAL_OBJECT_KEY \
@@ -50,8 +53,11 @@ func configure(record: Dictionary) -> Dictionary:
 	or int(target.wall_segments) != 59 \
 	or int(target.wall_triangles) != 118 \
 	or not _record_massing_matches(record, target) \
-	or not _exact_runs_match(record):
+	or not _exact_runs_match(record) \
+	or not _runtime_massing_matches():
 		return {"ok": false, "message": "Building 3 layout identity, ENE run scope, or receiver massing drifted."}
+	if not _runtime_massing.is_empty():
+		_signature_parts.append("massing:%s" % str(_runtime_massing.profile_signature))
 
 	name = "Building3600CaliforniaFacade"
 	set_meta("target_source_key", TARGET_SOURCE_KEY)
@@ -62,7 +68,14 @@ func configure(record: Dictionary) -> Dictionary:
 	set_meta("render_only", true)
 	set_meta("collision", "none")
 	set_meta("navigation", "none")
-	set_meta("spray_ray_owner", "unchanged_underlying_receiver")
+	set_meta("spray_ray_owner", "runtime_massing_receiver" if not _runtime_massing.is_empty() else "unchanged_underlying_receiver")
+	set_meta("runtime_massing_bound", not _runtime_massing.is_empty())
+	set_meta("runtime_massing_signature", str(_runtime_massing.get("profile_signature", "")))
+	set_meta("production_inference_reversible", not _runtime_massing.is_empty())
+	set_meta("corrected_nrhp_id", "08000083")
+	set_meta("frozen_osm_nrhp_ref", "08000081")
+	set_meta("frozen_osm_nrhp_ref_role", "provenance_only_incorrect_for_building_3")
+	set_meta("upper_band_shadow_recess", "reversible_neutral_depth_read_production_inference")
 	set_meta("maximum_relief_m", float(_contract.maximum_relief_m))
 	set_meta("styled_run_indices", _int_array(_side.run_indices as Array))
 	set_meta("styled_run_length_m", float(_side.length_m))
@@ -79,6 +92,8 @@ func configure(record: Dictionary) -> Dictionary:
 	var field_result := _build_field(record, target)
 	if not bool(field_result.get("ok", false)):
 		return field_result
+	if not _runtime_massing.is_empty():
+		_build_reference_pylon_relief(float(target.base_y_m), float(_runtime_massing.pylon_y_m))
 	_module_library = MODULE_LIBRARY.instantiate() as Node3D
 	for module_value: Variant in _side.modules:
 		var module := module_value as Dictionary
@@ -87,11 +102,12 @@ func configure(record: Dictionary) -> Dictionary:
 		if kind == "B3-HANGAR-DOOR":
 			_build_hangar_door(float(module.u_m), float(module.center_y_m), float(module.width_m), float(module.height_m))
 		elif kind == "B3-BAND":
-			_add_box("white_primary", float(module.u_m), float(module.center_y_m), float(module.width_m), float(module.height_m), float(_contract.field_offset_m), 0.055)
+			_build_reference_upper_band(float(module.u_m), float(module.center_y_m), float(module.width_m), float(module.height_m))
 	_module_library.free()
 	_flush_render_batches()
 	set_meta("module_counts", _module_counts.duplicate(true))
 	set_meta("field_segment_count", int(field_result.segment_count))
+	set_meta("reference_pylon_relief_count", 2 if not _runtime_massing.is_empty() else 0)
 	set_meta("deterministic_signature", "|".join(_signature_parts).sha256_text())
 	return {
 		"ok": true,
@@ -130,25 +146,49 @@ func _exact_runs_match(record: Dictionary) -> bool:
 	return true
 
 
+func _runtime_massing_matches() -> bool:
+	if _runtime_massing.is_empty():
+		return true
+	var samples: Array = _runtime_massing.get("wall_run_top_y_samples", [])
+	return str(_runtime_massing.get("schema_version", "")) == "ti.building-3-massing-runtime/1" \
+		and str(_runtime_massing.get("target_source_key", "")) == TARGET_SOURCE_KEY \
+		and str(_runtime_massing.get("target_wall_key", "")) == TARGET_RECEIVER_OBJECT_KEY \
+		and str(_runtime_massing.get("corrected_nrhp_id", "")) == "08000083" \
+		and str(_runtime_massing.get("frozen_osm_nrhp_ref_role", "")) == "provenance_only_incorrect_for_building_3" \
+		and int(_runtime_massing.get("wall_subdivisions", 0)) >= 1 \
+		and samples.size() == 59 \
+		and str(_runtime_massing.get("profile_signature", "")) != ""
+
+
 func _build_field(record: Dictionary, target: Dictionary) -> Dictionary:
 	var group := _empty_surface_group()
 	var raw_vertices: Array = record.vertices
 	var raw_normals: Array = record.normals
+	var subdivisions := int(_runtime_massing.get("wall_subdivisions", 1))
+	var runtime_samples: Array = _runtime_massing.get("wall_run_top_y_samples", [])
+	var segment_count := 0
 	for index_value: Variant in _side.run_indices:
 		var run_index := int(index_value)
 		var offset := run_index * 12
-		var start_x := float(raw_vertices[offset])
-		var start_z := float(raw_vertices[offset + 2])
-		var end_x := float(raw_vertices[offset + 3])
-		var end_z := float(raw_vertices[offset + 5])
+		var start_bottom := Vector3(float(raw_vertices[offset]), float(raw_vertices[offset + 1]), float(raw_vertices[offset + 2]))
+		var end_bottom := Vector3(float(raw_vertices[offset + 3]), float(raw_vertices[offset + 4]), float(raw_vertices[offset + 5]))
 		var normal := Vector3(float(raw_normals[offset]), 0.0, float(raw_normals[offset + 2])).normalized()
 		var outward := normal * float(_contract.field_offset_m)
-		_append_quad(group, [
-			Vector3(start_x, float(target.base_y_m), start_z) + outward,
-			Vector3(end_x, float(target.base_y_m), end_z) + outward,
-			Vector3(end_x, float(target.top_y_m), end_z) + outward,
-			Vector3(start_x, float(target.top_y_m), start_z) + outward,
-		], normal)
+		var top_samples: Array = runtime_samples[run_index] as Array if not runtime_samples.is_empty() else [float(target.top_y_m), float(target.top_y_m)]
+		if top_samples.size() != subdivisions + 1:
+			return {"ok": false, "message": "Building 3 runtime wall samples do not match facade subdivisions."}
+		for subdivision in subdivisions:
+			var first_fraction := float(subdivision) / float(subdivisions)
+			var second_fraction := float(subdivision + 1) / float(subdivisions)
+			var first_bottom := start_bottom.lerp(end_bottom, first_fraction)
+			var second_bottom := start_bottom.lerp(end_bottom, second_fraction)
+			_append_quad(group, [
+				first_bottom + outward,
+				second_bottom + outward,
+				Vector3(second_bottom.x, float(top_samples[subdivision + 1]), second_bottom.z) + outward,
+				Vector3(first_bottom.x, float(top_samples[subdivision]), first_bottom.z) + outward,
+			], normal)
+			segment_count += 1
 	var mesh := ArrayMesh.new()
 	var arrays: Array = []
 	arrays.resize(Mesh.ARRAY_MAX)
@@ -167,8 +207,8 @@ func _build_field(record: Dictionary, target: Dictionary) -> Dictionary:
 	fields.set_meta("exact_receiver_run_indices", _int_array(_side.run_indices as Array))
 	fields.set_meta("foundation_geometry_untouched", true)
 	add_child(fields)
-	_signature_parts.append("fields:27-35:9:1")
-	return {"ok": true, "segment_count": 9}
+	_signature_parts.append("fields:27-35:%d:1" % segment_count)
+	return {"ok": true, "segment_count": segment_count}
 
 
 func _build_hangar_door(u: float, y: float, width: float, height: float) -> void:
@@ -178,6 +218,38 @@ func _build_hangar_door(u: float, y: float, width: float, height: float) -> void
 	_add_box("white_primary", u + width * 0.5 - stroke * 0.5, y, stroke, height, 0.035, 0.075)
 	_add_box("white_primary", u, y - height * 0.5 + stroke * 0.5, width, stroke, 0.035, 0.075)
 	_add_box("white_primary", u, y + height * 0.5 - stroke * 0.5, width, stroke, 0.035, 0.075)
+
+
+func _build_reference_pylon_relief(base_y: float, pylon_y: float) -> void:
+	# NPS Section 7 supports four tapered corner pylons. These two shallow ENE
+	# face strips do not claim a surveyed section; the collision-bearing corner
+	# shoulders are owned by the runtime massing profile behind them.
+	var height := pylon_y - base_y
+	var slice_count := 4
+	var slice_height := height / float(slice_count)
+	var base_width := 7.3
+	var top_width := 5.5
+	for side_index in 2:
+		for slice_index in slice_count:
+			var vertical_fraction := (float(slice_index) + 0.5) / float(slice_count)
+			var width := lerpf(base_width, top_width, vertical_fraction)
+			var u := width * 0.5 if side_index == 0 else float(_side.length_m) - width * 0.5
+			var center_y := base_y + slice_height * (float(slice_index) + 0.5)
+			_add_box("white_primary", u, center_y, width, slice_height + 0.01, float(_contract.field_offset_m), 0.22)
+	_signature_parts.append("reference-pylon-relief:ene:2:tapered:%.3f:%.3f:%.3f" % [base_width, top_width, height])
+
+
+func _build_reference_upper_band(u: float, y: float, width: float, height: float) -> void:
+	# A stepped projection makes the shallow band survive ordinary frontal and
+	# oblique light as geometry; its material remains the same pale field.
+	_add_box("white_primary", u, y, width, height - 0.20, float(_contract.field_offset_m), 0.38)
+	_add_box("white_primary", u, y - height * 0.5 + 0.06, width, 0.12, float(_contract.field_offset_m), 0.52)
+	_add_box("white_primary", u, y + height * 0.5 - 0.05, width, 0.10, float(_contract.field_offset_m), 0.30)
+	# The neutral strip sits behind the projecting lower lip and reads as its
+	# occlusion groove even when hue is ignored. It is explicitly inference, not
+	# an observed paint color.
+	_add_box("shadow_recess", u, y - height * 0.5 - 0.11, width, 0.22, float(_contract.field_offset_m), 0.04)
+	_signature_parts.append("reference-upper-band:stepped-shadow-profile:neutral-inferred-groove")
 
 
 func _new_module(parent: Node3D, kind: String, u: float, y: float, width: float, height: float) -> void:

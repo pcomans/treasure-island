@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "dormitory_369_inferred_blue_gray_structure"
+albedo_color = Color(0.28, 0.34, 0.37, 1)
+roughness = 0.82
+metallic = 0.0
+cull_mode = 2

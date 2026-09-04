@@ -1,0 +1,36 @@
+D1 current standalone prototype pair dirty-scope audit — 2026-09-04
+
+Batch-owned new scope:
+game/resources/facades/d1_current/
+game/resources/materials/world/d1_current/
+game/scripts/world/facades/d1_current_standalone_prototypes.gd
+game/scripts/world/facades/d1_current_standalone_prototypes.gd.uid
+game/scenes/world/facades/d1_current/
+game/tests/d1_current_standalone_prototype_capture.gd
+game/tests/d1_current_standalone_prototype_capture.gd.uid
+game/tests/headless_d1_current_standalone_prototype_contract.gd
+game/tests/headless_d1_current_standalone_prototype_contract.gd.uid
+evidence/first-playable/d1-current-standalone-prototype-pair-2026-09-04/
+discovery/RETRO_LOG.md (append-only round entry)
+
+Protected files/directories deliberately not edited by this batch:
+game/scripts/world/world_chunk_builder.gd
+game/scripts/world/facades/accepted_material_run_trials.gd
+game/scripts/world/facades/facade_runtime_registry_loader.gd
+generated/world/
+all catalog/compiler/registry/loader files
+all P1/P2/P3, Isle, B1 and B3 implementation/evidence/review files
+all existing evidence/review packets
+HUMAN.md and discovery/HUMAN.md
+
+Read-only isolation scan:
+No occurrence of d1_current_standalone_prototype_pair or
+d1_current_standalone_prototypes exists in world_chunk_builder.gd,
+accepted_material_run_trials.gd, or facade_runtime_registry_loader.gd.
+
+Concurrent-work note:
+The shared worktree contains unrelated pre-existing/concurrent modified and
+untracked files, including protected runtime/facade work. This batch neither
+claims nor modifies those files. The focused headless contract checks that its
+new scene/factory has no live-source reference and that it owns zero collision,
+navigation, or spray nodes.

@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "site_12_protected_neutral_nonclaim"
+albedo_color = Color(0.54, 0.55, 0.53, 1)
+metallic = 0.0
+roughness = 0.91

@@ -1,0 +1,7 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "building_1_public_front_reveal_shadow_production_inference"
+albedo_color = Color(0.105, 0.12, 0.125, 1)
+metallic = 0.0
+roughness = 0.9

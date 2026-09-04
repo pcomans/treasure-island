@@ -1,0 +1,41 @@
+{
+  "schema_version": "ti.d2-1444-croaker-standalone-package-contract/1",
+  "status": "source_and_mounted_pass",
+  "artifact": {
+    "path": "build/d2-1444-croaker-standalone-hero-review/Treasure Island First Playable.pck",
+    "sha256": "4b5ecd7e333f33775355ff487c3dcfbbaedb56bc40f502f10cad448e013a9d0f",
+    "bytes": 67966108,
+    "tracked": false
+  },
+  "export_boundary": {
+    "preset_base": "macOS Private all_resources",
+    "source_checkout_export_preset_modified": false,
+    "export_workspace": "isolated byte-identical temporary checkout",
+    "temporary_override": "Removed only the genai_pilot_v1 texture-directory exclusion so the prototype's exact approved warm-ivory dependency entered this review PCK; discovery and evidence exclusions remained unchanged.",
+    "why": "The first direct mount correctly failed because the source preset excluded the required texture dependency. The final retained PCK fixes that package-only defect without modifying shared export policy or duplicating the bitmap in the repository. A later production owner must resolve the same texture dependency in the canonical export path before promotion."
+  },
+  "source_contract": {
+    "command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --script game/tests/headless_d2_1444_croaker_standalone_hero_package_contract.gd",
+    "result": "pass"
+  },
+  "mounted_contract": {
+    "working_directory": "/private/tmp",
+    "main_pack": "the exact artifact path above",
+    "external_script": "game/tests/headless_d2_1444_croaker_standalone_hero_package_contract.gd",
+    "argument": "--mounted",
+    "result": "pass"
+  },
+  "verified": {
+    "project_binary_present_and_source_project_godot_absent": true,
+    "discovery_packet_absent": true,
+    "evidence_absent": true,
+    "frozen_chunk_and_exact_record_signatures_load": true,
+    "scene_factory_and_all_material_dependencies_load": true,
+    "approved_warm_ivory_albedo_dependency_loads": true,
+    "deterministic_signature_rebuilds": true,
+    "topology_and_one_structural_shell_rebuild": true,
+    "navigation_or_spray_ownership": false,
+    "runtime_attachment_or_registry_promotion": false
+  },
+  "deterministic_geometry_signature": "8df0202796d56c019b6b3ddb72916808b72316d2d0edee0ba7425b77efa2b127"
+}

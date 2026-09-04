@@ -1,0 +1,548 @@
+{
+  "schema_version": "ti.isle-house-low-live-evidence/1",
+  "review_status": "pending_independent_review_not_self_accepted",
+  "recognition_status": "pending_independent_review",
+  "believability_status": "pending_independent_review",
+  "evidence_role": "Native grounded ordinary-player whole-composite, public-side oblique, and changed-light evidence for one reversible live integration; no executor visual grade.",
+  "generator": "game/tests/isle_house_low_live_evidence_capture.gd",
+  "generator_sha256": "47768e4b2d6288b9c3dbb4b0ad19cd870b61a8804d72673c53bf3326f8f5636a",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/isle_house_low_live_evidence_capture.gd -- --capture-mode=stills",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M2 (Apple8)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "camera_contract": {
+    "rig": "actual Player/CameraPivot/SpringArm3D/Camera3D",
+    "physics_grounded": true,
+    "input_reachable_orientation": true,
+    "fov_degrees": 70.0,
+    "configured_spring_length_m": 5.5,
+    "detached_camera": false,
+    "crop_or_postprocess": false,
+    "debug_labels_visible": false
+  },
+  "bindings": {
+    "low_receiver_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_2__building-composite_w1249412094_w1282547787_wall/building-composite_w1249412094_w1282547787_wall",
+    "low_receiver_source_keys": [
+      "w1282547787"
+    ],
+    "low_live_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_2__building-composite_w1249412094_w1282547787_wall/building-composite_w1249412094_w1282547787_wall/IsleHouse39BrutonLowLiveAttachment",
+    "low_live_signature": "5d61ab90e5b798ac4aa26c45fea37a5293f3083dada615f06999faad459112cc",
+    "high_receiver_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_2__building-composite_w1249412094_w1282547786_wall/building-composite_w1249412094_w1282547786_wall",
+    "high_receiver_source_keys": [
+      "w1282547786"
+    ],
+    "high_facade_signature": "e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1",
+    "underlying_wall_is_sole_collision_and_spray_receiver": true,
+    "recognition_accepted": false,
+    "believability_accepted": false
+  },
+  "live_adapter_path": "res://game/scripts/world/facades/isle_house_39_bruton_low_live_attachment.gd",
+  "live_adapter_sha256": "1b36a0ad92ded4607e0c1e0df5d5581d1c7afff5843cb75cd4c490790a86c413",
+  "builder_path": "res://game/scripts/world/world_chunk_builder.gd",
+  "builder_sha256": "9525ead815e95d7bc0b5fa8beae389954e232a9bbf51b54ed049a84a3613b9c0",
+  "runtime_topology": {
+    "rows": 735,
+    "meshes": 938,
+    "surfaces": 948,
+    "triangles": 63720,
+    "bodies": 466,
+    "shapes": 466
+  },
+  "captures": [
+    {
+      "id": "01-wsw-whole-composite",
+      "side": "WSW_Avenue_of_the_Palms",
+      "role": "grounded_ordinary_player_whole_high_plus_low_composite",
+      "lighting": "world_default",
+      "file": "images/01-wsw-whole-composite.png",
+      "sha256": "1fb93ad0adaeeb27304ff2933c529b33efee4c3774feb8a551fb9c6d7cbdbf21",
+      "bytes": 303456,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 179,
+      "sample_luminance_range": 0.677179619669914,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "visual_verdict": "pending_independent_review",
+      "pose_id": "01-wsw-whole-composite",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -204.979995727539,
+        620.179992675781
+      ],
+      "player_position_m": [
+        -204.979995727539,
+        3.36581921577454,
+        620.179992675781
+      ],
+      "camera_position_m": [
+        -209.32014465332,
+        4.56936836242676,
+        623.463073730469
+      ],
+      "camera_forward": [
+        0.789119184017181,
+        0.144809246063232,
+        -0.59692645072937
+      ],
+      "aim_target_m": [
+        -125.232902526855,
+        20.0,
+        559.855590820312
+      ],
+      "ground_y_m": 3.36570739746094,
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49998617172241,
+      "minimum_allowed_actual_spring_length_m": 4.5,
+      "spring_arm_compressed_by_world": false,
+      "camera_yaw_degrees": -52.8944477636578,
+      "camera_pitch_degrees": 8.32623160833832,
+      "first_los_hit_receiver": "building-composite:w1249412094:w1282547786:wall",
+      "first_los_hit_source_keys": [
+        "w1282547786"
+      ],
+      "first_los_hit_position_m": [
+        -126.91259765625,
+        19.6917667388916,
+        561.126159667969
+      ],
+      "first_los_hit_distance_m": 104.429794311523,
+      "receiver_first_los": true,
+      "sun_rotation_degrees": [
+        -51.9999923706055,
+        -27.9999961853027,
+        0.0
+      ]
+    },
+    {
+      "id": "02-wsw-low-oblique",
+      "side": "WSW_Avenue_of_the_Palms",
+      "role": "grounded_ordinary_player_low_live_work_oblique",
+      "lighting": "world_default",
+      "file": "images/02-wsw-low-oblique.png",
+      "sha256": "7c4228b97b132c33d1db994dc3fed0ea8ef70eef6316ac3e0ca8f901c699cf63",
+      "bytes": 1141794,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 404,
+      "sample_luminance_range": 0.716662690043449,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "visual_verdict": "pending_independent_review",
+      "pose_id": "02-wsw-low-oblique",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -167.550003051758,
+        529.969970703125
+      ],
+      "player_position_m": [
+        -167.550003051758,
+        4.22922229766846,
+        529.969970703125
+      ],
+      "camera_position_m": [
+        -172.899475097656,
+        5.69566583633423,
+        528.808715820312
+      ],
+      "camera_forward": [
+        0.972633421421051,
+        0.0970109701156616,
+        0.211123377084732
+      ],
+      "aim_target_m": [
+        -139.770004272461,
+        9.0,
+        536.0
+      ],
+      "ground_y_m": 4.22911071777344,
+      "ground_clearance_m": 0.000111579895019531,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50000429153442,
+      "minimum_allowed_actual_spring_length_m": 4.5,
+      "spring_arm_compressed_by_world": false,
+      "camera_yaw_degrees": -102.246849152767,
+      "camera_pitch_degrees": 5.56704674041179,
+      "first_los_hit_receiver": "building-composite:w1249412094:w1282547787:wall",
+      "first_los_hit_source_keys": [
+        "w1282547787"
+      ],
+      "first_los_hit_position_m": [
+        -139.737014770508,
+        9.0033073425293,
+        536.007080078125
+      ],
+      "first_los_hit_distance_m": 34.0955390930176,
+      "receiver_first_los": true,
+      "sun_rotation_degrees": [
+        -51.9999923706055,
+        -27.9999961853027,
+        0.0
+      ]
+    },
+    {
+      "id": "03-ene-whole-composite",
+      "side": "ENE_public_entry_approach",
+      "role": "grounded_ordinary_player_whole_high_plus_low_composite",
+      "lighting": "world_default",
+      "file": "images/03-ene-whole-composite.png",
+      "sha256": "0c519b65e40f3a0cbdfe7154adf54dec06fe4aec7d6a565ef83443db25b6752a",
+      "bytes": 461134,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 219,
+      "sample_luminance_range": 0.720719218254089,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "visual_verdict": "pending_independent_review",
+      "pose_id": "03-ene-whole-composite",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -40.1773986816406,
+        610.881225585938
+      ],
+      "player_position_m": [
+        -40.1773986816406,
+        4.29236650466919,
+        610.881225585938
+      ],
+      "camera_position_m": [
+        -36.2588691711426,
+        4.56948280334473,
+        614.334777832031
+      ],
+      "camera_forward": [
+        -0.712459087371826,
+        0.313251703977585,
+        -0.627913594245911
+      ],
+      "aim_target_m": [
+        -103.195701599121,
+        34.0,
+        555.341125488281
+      ],
+      "ground_y_m": 4.29244995117188,
+      "ground_clearance_m": -0.0000834465026855469,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.5000205039978,
+      "minimum_allowed_actual_spring_length_m": 4.5,
+      "spring_arm_compressed_by_world": false,
+      "camera_yaw_degrees": 48.6092134010917,
+      "camera_pitch_degrees": 18.2552723368654,
+      "first_los_hit_receiver": "building-composite:w1249412094:w1282547786:wall",
+      "first_los_hit_source_keys": [
+        "w1282547786"
+      ],
+      "first_los_hit_position_m": [
+        -103.195571899414,
+        33.9999923706055,
+        555.341247558594
+      ],
+      "first_los_hit_distance_m": 93.95166015625,
+      "receiver_first_los": true,
+      "sun_rotation_degrees": [
+        -51.9999923706055,
+        -27.9999961853027,
+        0.0
+      ]
+    },
+    {
+      "id": "04-ene-low-oblique",
+      "side": "ENE_Garden_Walk",
+      "role": "grounded_ordinary_player_low_live_work_oblique",
+      "lighting": "world_default",
+      "file": "images/04-ene-low-oblique.png",
+      "sha256": "aa554e5bc42e3adbc1bc1f81b90695f8182b3d50f89a7169dd66283529b03aca",
+      "bytes": 1109991,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 381,
+      "sample_luminance_range": 0.661412559449673,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "visual_verdict": "pending_independent_review",
+      "pose_id": "04-ene-low-oblique",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -95.7900009155273,
+        504.609985351562
+      ],
+      "player_position_m": [
+        -95.7900009155273,
+        4.28668689727783,
+        504.609985351562
+      ],
+      "camera_position_m": [
+        -90.8737640380859,
+        5.13971662521362,
+        504.948150634766
+      ],
+      "camera_forward": [
+        -0.971670091152191,
+        0.226693570613861,
+        -0.066837914288044
+      ],
+      "aim_target_m": [
+        -107.419998168945,
+        9.0,
+        503.809997558594
+      ],
+      "ground_y_m": 4.28657531738281,
+      "ground_clearance_m": 0.000111579895019531,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.05957317352295,
+      "minimum_allowed_actual_spring_length_m": 2.0,
+      "spring_arm_compressed_by_world": true,
+      "camera_yaw_degrees": 86.0650174360574,
+      "camera_pitch_degrees": 13.1024836402821,
+      "first_los_hit_receiver": "building-composite:w1249412094:w1282547787:wall",
+      "first_los_hit_source_keys": [
+        "w1282547787"
+      ],
+      "first_los_hit_position_m": [
+        -107.422294616699,
+        9.00053977966309,
+        503.809844970703
+      ],
+      "first_los_hit_distance_m": 17.0310173034668,
+      "receiver_first_los": true,
+      "sun_rotation_degrees": [
+        -51.9999923706055,
+        -27.9999961853027,
+        0.0
+      ]
+    },
+    {
+      "id": "05-wsw-low-changed-light",
+      "side": "WSW_Avenue_of_the_Palms",
+      "role": "grounded_ordinary_player_low_material_changed_light",
+      "lighting": "frozen_changed_light",
+      "file": "images/05-wsw-low-changed-light.png",
+      "sha256": "0441b4c79b7838ef17e7c8fdd1000fabaa33a715db4a938137656ecdb78d02d0",
+      "bytes": 1093987,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 354,
+      "sample_luminance_range": 0.792345851659775,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "visual_verdict": "pending_independent_review",
+      "pose_id": "05-wsw-low-changed-light",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -167.550003051758,
+        529.969970703125
+      ],
+      "player_position_m": [
+        -167.550003051758,
+        4.22922229766846,
+        529.969970703125
+      ],
+      "camera_position_m": [
+        -172.899475097656,
+        5.69566583633423,
+        528.808715820312
+      ],
+      "camera_forward": [
+        0.972633481025696,
+        0.0970103889703751,
+        0.211123362183571
+      ],
+      "aim_target_m": [
+        -139.770004272461,
+        9.0,
+        536.0
+      ],
+      "ground_y_m": 4.22911071777344,
+      "ground_clearance_m": 0.000111579895019531,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50000429153442,
+      "minimum_allowed_actual_spring_length_m": 4.5,
+      "spring_arm_compressed_by_world": false,
+      "camera_yaw_degrees": -102.246849152767,
+      "camera_pitch_degrees": 5.56704674041179,
+      "first_los_hit_receiver": "building-composite:w1249412094:w1282547787:wall",
+      "first_los_hit_source_keys": [
+        "w1282547787"
+      ],
+      "first_los_hit_position_m": [
+        -139.737014770508,
+        9.00328731536865,
+        536.007080078125
+      ],
+      "first_los_hit_distance_m": 34.0955352783203,
+      "receiver_first_los": true,
+      "sun_rotation_degrees": [
+        -31.9999980926514,
+        132.0,
+        0.0
+      ]
+    },
+    {
+      "id": "06-ene-low-changed-light",
+      "side": "ENE_Garden_Walk",
+      "role": "grounded_ordinary_player_low_material_changed_light",
+      "lighting": "frozen_changed_light",
+      "file": "images/06-ene-low-changed-light.png",
+      "sha256": "136b7037aa0212f807414316bf19523d6252e3ba2968f790fd300e56659bee7e",
+      "bytes": 1134139,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 395,
+      "sample_luminance_range": 0.719786666333675,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "visual_verdict": "pending_independent_review",
+      "pose_id": "06-ene-low-changed-light",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -95.7900009155273,
+        504.609985351562
+      ],
+      "player_position_m": [
+        -95.7900009155273,
+        4.28668689727783,
+        504.609985351562
+      ],
+      "camera_position_m": [
+        -90.8737640380859,
+        5.13971662521362,
+        504.948150634766
+      ],
+      "camera_forward": [
+        -0.971670091152191,
+        0.226693466305733,
+        -0.0668378993868828
+      ],
+      "aim_target_m": [
+        -107.419998168945,
+        9.0,
+        503.809997558594
+      ],
+      "ground_y_m": 4.28657531738281,
+      "ground_clearance_m": 0.000111579895019531,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.05957317352295,
+      "minimum_allowed_actual_spring_length_m": 2.0,
+      "spring_arm_compressed_by_world": true,
+      "camera_yaw_degrees": 86.0650174360574,
+      "camera_pitch_degrees": 13.1024836402821,
+      "first_los_hit_receiver": "building-composite:w1249412094:w1282547787:wall",
+      "first_los_hit_source_keys": [
+        "w1282547787"
+      ],
+      "first_los_hit_position_m": [
+        -107.422294616699,
+        9.00053787231445,
+        503.809844970703
+      ],
+      "first_los_hit_distance_m": 17.0310173034668,
+      "receiver_first_los": true,
+      "sun_rotation_degrees": [
+        -31.9999980926514,
+        132.0,
+        0.0
+      ]
+    }
+  ],
+  "capture_count": 6,
+  "source_photography_shipped": false,
+  "generated_reference_image_used": false,
+  "visual_verdict": "pending_independent_review",
+  "remaining_composite_discrepancies": [
+    "Frozen low massing still has five generated levels rather than the referenced seven-story podium condition.",
+    "Only mapped public low bands and complete reversible live-work modules are treated; low upper band, NNW return, shared interface, and roof remain intentionally untouched.",
+    "Module dimensions, cadence, glazing opacity, and exact placement remain reversible production inference rather than surveyed as-built fact."
+  ]
+}

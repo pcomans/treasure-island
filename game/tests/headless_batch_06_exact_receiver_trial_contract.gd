@@ -46,7 +46,9 @@ const SMOOTH_SHADER_PATH := "res://game/resources/materials/world/batch_06/batch
 const SIDING_SHADER_PATH := "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader"
 const EXPECTED_SMOOTH_SHADER_SHA256 := "d4a9dbb7c58443be93362699b0983b7377dab70698fd782b6710315c31be3e69"
 const EXPECTED_SIDING_SHADER_SHA256 := "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a"
-const EXPECTED_WORLD_SURFACES := 1288
+const EXPECTED_WORLD_MESHES := 940
+const EXPECTED_WORLD_SURFACES := 954
+const EXPECTED_WORLD_TRIANGLES := 64118
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_BUILDING_WALL := 1 << 1
 
@@ -264,7 +266,7 @@ func _run() -> void:
 	if not _require(bool(whole.get("ok", false)), str(whole.get("message", "Whole-island accepted-material load failed."))):
 		_finish()
 		return
-	print("PASS: eight Batch 06/Building 1 homogeneous scopes remain independently accepted on 113 runs with 62 exact live module placements across six receivers; Building 1's reversible 63-run/45-module recognizability composition is independently accepted with its production-inference limits, pending review is zero, protected complements stay unchanged, and world topology is 729/1278/1288/55,067/466")
+	print("PASS: Batch 06 scopes remain independently accepted; historical Building 1 material/module evidence remains sealed while accepted Building 1/Building 3/Isle House runtime replacements remain exact, protected complements stay unchanged, and world topology is 735/940/954/64,118/466")
 	_finish()
 
 
@@ -604,12 +606,13 @@ func _whole_island_matches() -> Dictionary:
 	world.world_failed.connect(func(code: String, message: String, source_keys: Array) -> void: failures.append({"code": code, "message": message, "source_keys": source_keys}))
 	root.add_child(world)
 	world.load_world(MANIFEST_PATH)
-	await process_frame
-	await process_frame
+	var wait_started := Time.get_ticks_msec()
+	while reports.is_empty() and failures.is_empty() and Time.get_ticks_msec() - wait_started < 30000:
+		await process_frame
 	var evidence := world.get_runtime_evidence()
 	var ok := failures.is_empty() and reports.size() == 1 and evidence != null \
-		and evidence.mesh_instances == 1278 and evidence.surfaces == EXPECTED_WORLD_SURFACES \
-		and evidence.triangles == 55067 and evidence.static_bodies == 466 and evidence.shapes == 466
+		and evidence.mesh_instances == EXPECTED_WORLD_MESHES and evidence.surfaces == EXPECTED_WORLD_SURFACES \
+		and evidence.triangles == EXPECTED_WORLD_TRIANGLES and evidence.static_bodies == 466 and evidence.shapes == 466
 	if ok:
 		for target_value: Variant in TARGETS:
 			var target := target_value as Dictionary

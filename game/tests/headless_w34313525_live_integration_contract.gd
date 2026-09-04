@@ -76,7 +76,7 @@ func _run() -> void:
 	detached_root.free()
 	await _whole_island_matches()
 	if not _failed:
-		print("PASS: w34313525 is independently accepted live only on exact MAT-PALE SSE runs 8..12 and NNW runs 26..27 with two reviewed 0.88/0.31 m field surfaces, plus exactly four transform-identical backing-free module-atlas exemplars; its own pending actual-world review is zero and loaded topology is 729 records / 1278 meshes / 1288 surfaces / 55,067 triangles / 466 collider pairs")
+		print("PASS: w34313525 is independently accepted live only on exact MAT-PALE SSE runs 8..12 and NNW runs 26..27 with two reviewed 0.88/0.31 m field surfaces, plus exactly four transform-identical backing-free module-atlas exemplars; its own pending actual-world review is zero and whole-island topology is 735/940/954/64,118/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
 	_finish()
 
 
@@ -292,7 +292,8 @@ func _whole_island_matches() -> void:
 		if str(candidate.get_meta("derived_object_key", "")) == RECEIVER_KEY and candidate.get_node_or_null("Mesh") != null:
 			receiver = candidate as Node3D
 	_require(int(evidence.chunks_loaded) == 38 \
-		and int(evidence.mesh_instances) == 1278 and int(evidence.surfaces) == 1288 and int(evidence.triangles) == 55067 \
+		and int(evidence.playable_rows) == 735 and int(evidence.context_rows) == 4 \
+		and int(evidence.mesh_instances) == 940 and int(evidence.surfaces) == 954 and int(evidence.triangles) == 64118 \
 		and int(evidence.static_bodies) == 466 and int(evidence.shapes) == 466 \
 		and live_root_count == 1 and receiver != null \
 		and receiver.get_child_count() == 3 \

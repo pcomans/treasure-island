@@ -4,12 +4,12 @@ const ACCEPTED_MATERIAL_RUN_TRIALS := preload("res://game/scripts/world/facades/
 const EXPECTED_MANIFEST_HASH := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
 const EXPECTED_CHUNKS := 38
 const EXPECTED_RECORDS := 729
-const EXPECTED_GENERATED_MESHES := 729
-const EXPECTED_GENERATED_SURFACES := 739
-const EXPECTED_GENERATED_TRIANGLES := 48389
-const EXPECTED_RUNTIME_MESHES := 1278
-const EXPECTED_RUNTIME_SURFACES := 1288
-const EXPECTED_RUNTIME_TRIANGLES := 55067
+const EXPECTED_GENERATED_MESHES := 725
+const EXPECTED_GENERATED_SURFACES := 735
+const EXPECTED_GENERATED_TRIANGLES := 48825
+const EXPECTED_RUNTIME_MESHES := 940
+const EXPECTED_RUNTIME_SURFACES := 954
+const EXPECTED_RUNTIME_TRIANGLES := 64118
 const EXPECTED_STATIC_BODIES := 466
 const EXPECTED_VEGETATION_SEED := 1414092337
 const EXPECTED_VEGETATION_INSTANCES := 124
@@ -98,14 +98,14 @@ func _run() -> void:
 	var records := _record_nodes(main)
 	var runtime_counts := _inspect_records(records)
 	if not _require(records.size() == EXPECTED_RECORDS, "Expected 729 generated record nodes, got %d." % records.size()) \
-	or not _require(int(runtime_counts.meshes) == EXPECTED_GENERATED_MESHES and int(runtime_counts.surfaces) == EXPECTED_GENERATED_SURFACES, "Expected exactly 729 generated terrain-aware meshes and 739 disjoint live material surfaces, including the two independently accepted w34313525 field partitions.") \
+	or not _require(int(runtime_counts.meshes) == EXPECTED_GENERATED_MESHES and int(runtime_counts.surfaces) == EXPECTED_GENERATED_SURFACES, "Expected 725 generic record meshes / 735 surfaces plus four separately validated Building 1 hero replacements.") \
 	or not _require(_accepted_material_run_trials_match_contract(records), "The three accepted Chapel, Dormitory, and YMCA exact-run homogeneous-material partitions drifted.") \
 	or not _require(_batch_06_accepted_fields_match_contract(records, runtime_counts), "The generated Batch 06 field surface delta or exact accepted/pending render-only placements drifted.") \
 	or not _require(_rejected_fire_station_placeholder_matches(records), "Rejected Fire Station 48 still has a live accepted-material surface or is not fully restored to the generated placeholder.") \
-	or not _require(int(runtime_counts.triangles) == EXPECTED_GENERATED_TRIANGLES, "Expected 48,389 generated triangles after Hawkins-only stepped massing, coherent surface draping and western-bridge replacement, got %d." % int(runtime_counts.triangles)) \
+	or not _require(int(runtime_counts.triangles) == EXPECTED_GENERATED_TRIANGLES, "Expected 48,825 runtime record triangles after the four Building 1 hero replacements and congruent Building 3 wall/roof massing, got %d." % int(runtime_counts.triangles)) \
 	or not _require(int(runtime_counts.static_bodies) == EXPECTED_STATIC_BODIES and int(runtime_counts.shapes) == EXPECTED_STATIC_BODIES, "Expected 466 StaticBody3D/ConcavePolygonShape3D pairs.") \
 	or not _require(int(runtime_counts.sources) == EXPECTED_GEOMETRY_SOURCES, "Expected 738 direct generated-geometry source identities.") \
-	or not _require(evidence.mesh_instances == EXPECTED_RUNTIME_MESHES and evidence.surfaces == EXPECTED_RUNTIME_SURFACES and evidence.triangles == EXPECTED_RUNTIME_TRIANGLES, "RuntimeEvidence must include the independently accepted reversible Building 1 63-run ivory field and 45-module recognizability composition: 1,278 meshes / 1,288 surfaces / 55,067 triangles.") \
+	or not _require(evidence.mesh_instances == EXPECTED_RUNTIME_MESHES and evidence.surfaces == EXPECTED_RUNTIME_SURFACES and evidence.triangles == EXPECTED_RUNTIME_TRIANGLES, "RuntimeEvidence must include accepted Building 1/Building 3 heroes and the accepted Isle House Variant C replacement: 940 meshes / 954 surfaces / 64,118 triangles.") \
 	or not _require(evidence.static_bodies == EXPECTED_STATIC_BODIES and evidence.shapes == EXPECTED_STATIC_BODIES, "RuntimeEvidence collider totals differ from the live tree.") \
 	or not _require(_category_counts_match(world), "Generated category attachment counts are incomplete.") \
 	or not _require(_vegetation_runtime_matches(world), "Visual-only vegetation MultiMesh runtime contract is invalid.") \
@@ -345,7 +345,7 @@ func _shader_material_matches_contract(record: Node3D, material: ShaderMaterial)
 			and material.shader != null \
 			and material.shader.resource_path == "res://game/resources/materials/world/hawkins/hawkins_pearl_fluted.gdshader" \
 			and material.shader.code.contains("render_mode depth_draw_opaque, cull_back;")
-	if receiver_key == "building:r16681702:wall":
+	if receiver_key in ["building:r16681702:wall", "building:r16681702:roof", "building:w1222720021:wall"]:
 		return material.resource_path == "res://game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres" \
 			and material.shader != null \
 			and material.shader.resource_path == "res://game/resources/materials/world/building_1/building_1_chain_metres_aperiodic_field.gdshader" \
@@ -512,7 +512,9 @@ func _overlay_shadow_contract(records: Array) -> bool:
 func _semantic_materials_are_distinct(records: Array) -> bool:
 	var colors := {}
 	for record: Node3D in records:
-		var mesh_instance := record.get_node("Mesh") as MeshInstance3D
+		var mesh_instance := record.get_node_or_null("Mesh") as MeshInstance3D
+		if mesh_instance == null:
+			continue
 		for surface_index in mesh_instance.mesh.get_surface_count():
 			var material := mesh_instance.mesh.surface_get_material(surface_index) as StandardMaterial3D
 			if material != null:

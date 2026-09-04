@@ -1,0 +1,60 @@
+{
+  "schema_version": "ti.d2-1444-croaker-standalone-technical-contract/1",
+  "target": "1444 Croaker Court",
+  "source_key": "w95934117",
+  "status": "technical_pass_visual_review_pending",
+  "deterministic_geometry_signature": "8df0202796d56c019b6b3ddb72916808b72316d2d0edee0ba7425b77efa2b127",
+  "topology": {
+    "mesh_instances": 11,
+    "surfaces": 11,
+    "exact_source_wall_triangles": 44,
+    "exact_plan_shallow_gable_triangles": 10,
+    "noncolliding_facade_and_eave_triangles": 744,
+    "total_visual_triangles": 798,
+    "static_bodies": 1,
+    "collision_shapes": 1,
+    "structural_collision_triangles": 54,
+    "collision_face_vertices": 162,
+    "navigation_regions": 0,
+    "spray_owner_nodes": 0
+  },
+  "visual_batch_triangles": {
+    "ProtectedExactWallRuns": 30,
+    "MappedWSWExactOchreStuccoWallRuns": 14,
+    "ExactPlanShallowGableRoof": 10,
+    "MappedWSWBroadEaves": 84,
+    "BlankEndUndercroftOpaqueShadow": 24,
+    "BlankEndUndercroftOchreFrame": 60,
+    "SparseReturnOpaqueOpenings": 72,
+    "SparseReturnOchreOpeningFrames": 360,
+    "FarEndRecessedTwoLevelOpaqueVoids": 24,
+    "FarEndBalconyOchreSlabs": 24,
+    "FarEndSimpleMetalRails": 96
+  },
+  "module_counts": {
+    "undercroft_void_fields": 2,
+    "undercroft_piers": 3,
+    "sparse_opening_groups": 6,
+    "balcony_void_fields": 2,
+    "rail_pickets": 4,
+    "mapped_eaves": 7
+  },
+  "ownership": {
+    "one_truthful_structural_shell": true,
+    "fallback_collider_retained": false,
+    "facade_relief_noncolliding": true,
+    "navigation_owned": false,
+    "spray_owned": false,
+    "runtime_attachment": false,
+    "registry_entry": false
+  },
+  "contract_results": {
+    "headless_d2_1444_croaker_standalone_hero_contract.gd": "pass",
+    "headless_d2_1444_croaker_standalone_hero_evidence_contract.gd": "pass",
+    "headless_d2_1444_croaker_standalone_hero_package_contract.gd source": "pass",
+    "headless_d2_1444_croaker_standalone_hero_package_contract.gd mounted": "pass"
+  },
+  "technical_self_check_only": true,
+  "recognition_verdict": "pending_independent_bar_raiser_review",
+  "believability_verdict": "pending_independent_bar_raiser_review"
+}

@@ -1,0 +1,70 @@
+{
+  "schema_version": "ti.building-1-hero-model/1",
+  "model_id": "TREASURE-ISLAND-BUILDING-1-HERO-01",
+  "target": {
+    "building_source_key": "r16681702",
+    "building_wall_key": "building:r16681702:wall",
+    "building_roof_key": "building:r16681702:roof",
+    "tower_source_key": "w1222720021",
+    "tower_wall_key": "building:w1222720021:wall",
+    "tower_roof_key": "building:w1222720021:roof",
+    "tower_remains_separately_reviewable": true
+  },
+  "authority": {
+    "source_provenance_receipt_id": "B1-HERO-AUTHORITY",
+    "source_provenance_receipt_sha256": "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677b3ba5ab318a19333",
+    "primary_nps_record_id": "NRHP-08000081",
+    "primary_nps_sections": "Section 7, pages 5-7",
+    "museum_reference_ids": ["TIM-BUILDING-THE-BAY-BRIDGE-AND-TREASURE-ISLAND", "TIM-SCULPTURES-AND-ISLAND"],
+    "local_horizontal_authority": "generated/world/chunks/x_-1__z_2.json and generated/world/chunks/x_0__z_2.json",
+    "checked": "2026-09-04",
+    "source_photography_shipped": false
+  },
+  "vertical_production_inference_m": {
+    "two_story_roof_y": 14.75,
+    "three_story_roof_y": 20.25,
+    "four_story_roof_y": 26.281,
+    "north_wing_inward_depth": 11.0,
+    "central_inward_depth": 25.0,
+    "south_wing_inward_depth": 11.0,
+    "tower_platform_top_y": 27.35,
+    "tower_glass_base_y": 27.35,
+    "tower_glass_top_y": 32.65,
+    "tower_roof_peak_y": 35.4,
+    "tower_platform_plan_scale": 1.28
+  },
+  "massing_chains": {
+    "north_three_story_runs": [93, 94, 95, 96, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+    "central_four_story_runs": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43],
+    "south_three_story_runs": [44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69]
+  },
+  "facade_schedule": {
+    "central_runs": [21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43],
+    "central_window_count": 11,
+    "central_lights_per_window": 18,
+    "north_wing_window_runs": [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+    "south_wing_window_runs": [44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56],
+    "upper_windows_per_wing": 8,
+    "upper_lights_per_window": 10,
+    "lower_windows_per_wing": 7,
+    "north_end_run": 93,
+    "south_end_run": 60,
+    "tall_windows_per_end": 2,
+    "lights_per_tall_end_window": 20,
+    "small_flanking_windows_per_end": 2,
+    "relief_proxies_per_end": 1,
+    "entrance_groups": 3,
+    "doors_per_entrance_group": 3
+  },
+  "truth_boundary": {
+    "role": "source_anchored_recognizability_hero_production_inference",
+    "reversible": true,
+    "horizontal_source_geometry_preserved": true,
+    "surveyed_vertical_dimensions": false,
+    "surveyed_facade_coordinates": false,
+    "surveyed_cadence": false,
+    "interior_modeled": false,
+    "as_built_fidelity_claimed": false,
+    "visual_review_status": "pending_independent_original_detail_review"
+  }
+}

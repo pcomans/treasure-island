@@ -1,0 +1,33 @@
+{
+  "schema_version": "ti.d1-current-standalone-capture-time-sanitization-provenance/1",
+  "receipt_id": "D1-CURRENT-STANDALONE-CAPTURE-TIME-SANITIZATION-2026-09-04",
+  "scope": "Immutable capture-time provenance for four path-addressed files that were later package-sanitized without visual, geometry, or review-semantic change.",
+  "capture_manifest_sha256": "35e60ea88ce9c932de4ecb02a1cdbb21af50e84497bd24e0738d9d5d7bb26f18",
+  "source_only_package_migration_receipt": {
+    "repository_relative_path": "discovery/facades/PRECOMMIT_PACKAGE_SANITIZATION_SOURCE_PROVENANCE.json",
+    "sha256": "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677b3ba5ab318a19333"
+  },
+  "migrated_files": {
+    "game/resources/facades/d1_current/d1_b201_public_wsw.json": {
+      "capture_time_sha256": "3d53efbb0577c9b5e52a2ada4d79a710b95e41faead0bdcdd41cd4f2d862a0fe",
+      "current_package_safe_sha256_at_migration": "30bc1f62e5fa44c60bdcfb1bfd4f6f679d391618fa213373e571080face6ec6c"
+    },
+    "game/resources/facades/d1_current/d1_b225_nnw_long.json": {
+      "capture_time_sha256": "63e4f80cc7716146dc1fef46c7678e4da856755377c84ff33f972c0cc0c1f639",
+      "current_package_safe_sha256_at_migration": "dc3591df4a68af19b5fa53f402ed15d5e3f83946c4a113f024d5b7d41f2f82b8"
+    },
+    "game/resources/facades/d1_current/d1_current_standalone_pair.json": {
+      "capture_time_sha256": "c73f8c8da4d30a4e4ebe3e94cde10d63f98377bf5b636a1e12cee92c9bcaafe4",
+      "current_package_safe_sha256_at_migration": "fdf00bba0562036f499a5a64e47e5e1b695d49d6cb4ada7acafd450b3dcfefb9"
+    },
+    "game/tests/headless_d1_current_standalone_prototype_contract.gd": {
+      "capture_time_sha256": "eafe1f8b20cf4a276ad8cda97112acc6870fca183c6d73916dd5bf306a7d099e",
+      "current_package_safe_sha256_at_migration": "f36d49c875a4c0000eaf6b1a21ac2273c02840baed3eab683f70f0027fb7aaed"
+    }
+  },
+  "nonclaims": [
+    "This receipt does not reproduce or replace the capture-time files.",
+    "Current path-addressed checksums validate current package-safe bytes, not historical bytes.",
+    "No image, geometry, material, topology, recognition verdict, or live-attachment status changed in this migration."
+  ]
+}

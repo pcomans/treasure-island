@@ -1,0 +1,6434 @@
+{
+  "schema_version": "ti.isle-house-composite-repair-variant-c-standalone-motion-evidence/1",
+  "review_status": "pending_independent_review_not_self_accepted",
+  "recognition_status": "pending_independent_review",
+  "believability_status": "pending_independent_review",
+  "evidence_role": "Continuous stock-player walk across Variant C WSW run 2/3 join for macro-rhythm, cap/reveal, brick recurrence, shimmer, seam, and stability review; detached standalone preview only.",
+  "generator": "game/tests/isle_house_composite_repair_variant_c_standalone_v1_capture.gd",
+  "generator_sha256": "c2a701aed2a71d76dfcb878451b45a5c5d1cd044410cbc4cd44eefb6a6d4c7fd",
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1280x800 --write-movie evidence/first-playable/isle-house-composite-repair-variant-c-standalone-v1-2026-09-04/isle-house-composite-repair-variant-c-public-corner-stock-walk.avi --fixed-fps 30 --script game/tests/isle_house_composite_repair_variant_c_standalone_v1_capture.gd -- --capture-mode=motion",
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M2 (Apple8)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "factory_path": "res://game/scripts/world/facades/isle_house_composite_repair_variant_c_standalone_v1.gd",
+  "factory_sha256": "b24fd72cd12aa0c6c45a123f005fc834ea657c343e8332a872eae07fa017ace7",
+  "config_path": "res://game/resources/facades/isle_house_composite_repair_variant_c_standalone_v1.json",
+  "config_sha256": "bafdef392ee638e860ba15f140c10de61e266ae63005b12e0e310e52c176897a",
+  "failed_live_path": "res://game/scripts/world/facades/isle_house_39_bruton_low_live_attachment.gd",
+  "failed_live_sha256": "1b36a0ad92ded4607e0c1e0df5d5581d1c7afff5843cb75cd4c490790a86c413",
+  "builder_path": "res://game/scripts/world/world_chunk_builder.gd",
+  "builder_sha256": "9525ead815e95d7bc0b5fa8beae389954e232a9bbf51b54ed049a84a3613b9c0",
+  "render_viewport": [
+    1137.0,
+    711.0
+  ],
+  "movie_dimensions": [
+    1280.0,
+    800.0
+  ],
+  "movie_file": "isle-house-composite-repair-variant-c-public-corner-stock-walk.avi",
+  "movie_sha256": "99623c498180eba8475fda0e3c99eda30fa45608a15ee747c4db62c55b614245",
+  "movie_bytes": 19017750,
+  "movie_total_frames_expected_after_close": 222.0,
+  "movie_contains_startup_before_motion": true,
+  "motion_review_contact_sheet": "variant-c-public-corner-motion-review-contact-sheet.png",
+  "motion_review_contact_sheet_sha256": "f87d0d398c2599d5c5304d42df1c3dcd5fd1c76431d5ae33be5219568bed7eba",
+  "motion_review_contact_sheet_dimensions": [
+    1280.0,
+    800.0
+  ],
+  "motion_review_sample_physics_frames": [
+    1.0,
+    21.0,
+    41.0,
+    61.0,
+    81.0,
+    101.0,
+    121.0,
+    141.0,
+    161.0,
+    181.0,
+    201.0,
+    221.0,
+    241.0,
+    261.0,
+    281.0,
+    300.0
+  ],
+  "motion_review_contact_sheet_is_derived_non_authoritative": true,
+  "review_motion_process_frame_range": [
+    65.0,
+    215.0
+  ],
+  "review_motion_physics_frame_range": [
+    131.0,
+    431.0
+  ],
+  "capture_end_process_frame_after_braking": 221.0,
+  "capture_end_physics_frame_after_braking": 443.0,
+  "fixed_fps": 30.0,
+  "physics_ticks_per_second": 60.0,
+  "input_action": "move_right",
+  "run_action_pressed": false,
+  "configured_walk_speed_mps": 4.0,
+  "motion_physics_frames": 300.0,
+  "continuous_duration_seconds": 5.0,
+  "start_position_m": [
+    -167.116455078125,
+    4.22382068634033,
+    530.765747070312
+  ],
+  "end_position_m": [
+    -158.064758300781,
+    4.21021604537964,
+    548.469421386719
+  ],
+  "horizontal_displacement_m": 19.8834915161133,
+  "start_along_from_corner_m": -7.99995613098145,
+  "end_along_from_corner_m": 11.8835220336914,
+  "direction_dot_public_tangent": 0.999999284744263,
+  "public_chain": "LOW-WSW-AVENUE-OF-THE-PALMS",
+  "crossed_source_run_corner": "run_2_to_run_3",
+  "uv_rule_under_review": "continuous U across ordered corner; V absolute world Y; 2.5 m brick cell",
+  "architecture_under_review": "four inference-labeled lower macro rhythms plus unequal schedule-free transfer, podium body, crown, and top-cap hierarchy",
+  "player_transform_writes_after_input_began": 0.0,
+  "camera_orientation_changed_during_motion": false,
+  "all_samples_grounded": true,
+  "recovery_delta": 0.0,
+  "samples": [
+    {
+      "frame": 1.0,
+      "player_position_m": [
+        -167.116455078125,
+        4.22382068634033,
+        530.765747070312
+      ],
+      "velocity_mps": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.99995613098145,
+      "outward_from_wall_chain_m": 21.9999885559082,
+      "camera_position_m": [
+        -171.924728393555,
+        5.17441558837891,
+        533.22119140625
+      ]
+    },
+    {
+      "frame": 2.0,
+      "player_position_m": [
+        -167.108123779297,
+        4.22382068634033,
+        530.774108886719
+      ],
+      "velocity_mps": [
+        0.5,
+        0.0,
+        0.5
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.98871994018555,
+      "outward_from_wall_chain_m": 21.9963703155518,
+      "camera_position_m": [
+        -171.916427612305,
+        5.17440938949585,
+        533.229553222656
+      ]
+    },
+    {
+      "frame": 3.0,
+      "player_position_m": [
+        -167.091461181641,
+        4.22382068634033,
+        530.790771484375
+      ],
+      "velocity_mps": [
+        1.0,
+        0.0,
+        1.0
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.96630239486694,
+      "outward_from_wall_chain_m": 21.9891090393066,
+      "camera_position_m": [
+        -171.899749755859,
+        5.17441558837891,
+        533.246215820312
+      ]
+    },
+    {
+      "frame": 4.0,
+      "player_position_m": [
+        -167.066467285156,
+        4.22382068634033,
+        530.815795898438
+      ],
+      "velocity_mps": [
+        1.5,
+        0.0,
+        1.5
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.93264770507812,
+      "outward_from_wall_chain_m": 21.9782295227051,
+      "camera_position_m": [
+        -171.874725341797,
+        5.17442274093628,
+        533.271301269531
+      ]
+    },
+    {
+      "frame": 5.0,
+      "player_position_m": [
+        -167.036148071289,
+        4.22245359420776,
+        530.84912109375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        2.0
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.88917922973633,
+      "outward_from_wall_chain_m": 21.9663848876953,
+      "camera_position_m": [
+        -171.844436645508,
+        5.17304801940918,
+        533.304565429688
+      ]
+    },
+    {
+      "frame": 6.0,
+      "player_position_m": [
+        -167.005828857422,
+        4.22245359420776,
+        530.890808105469
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        2.5
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.83826494216919,
+      "outward_from_wall_chain_m": 21.9583415985107,
+      "camera_position_m": [
+        -171.81413269043,
+        5.17304992675781,
+        533.346252441406
+      ]
+    },
+    {
+      "frame": 7.0,
+      "player_position_m": [
+        -166.975509643555,
+        4.22245359420776,
+        530.940795898438
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.0
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.77995681762695,
+      "outward_from_wall_chain_m": 21.9540729522705,
+      "camera_position_m": [
+        -171.783813476562,
+        5.17304229736328,
+        533.396240234375
+      ]
+    },
+    {
+      "frame": 8.0,
+      "player_position_m": [
+        -166.945190429688,
+        4.22134256362915,
+        530.999145507812
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.5
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.71420192718506,
+      "outward_from_wall_chain_m": 21.9536075592041,
+      "camera_position_m": [
+        -171.753509521484,
+        5.17193126678467,
+        533.45458984375
+      ]
+    },
+    {
+      "frame": 9.0,
+      "player_position_m": [
+        -166.91487121582,
+        4.22134256362915,
+        531.058532714844
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.64752244949341,
+      "outward_from_wall_chain_m": 21.95361328125,
+      "camera_position_m": [
+        -171.72314453125,
+        5.17193698883057,
+        533.513977050781
+      ]
+    },
+    {
+      "frame": 10.0,
+      "player_position_m": [
+        -166.884552001953,
+        4.22134256362915,
+        531.117919921875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.58084344863892,
+      "outward_from_wall_chain_m": 21.9536209106445,
+      "camera_position_m": [
+        -171.692810058594,
+        5.17193698883057,
+        533.573364257812
+      ]
+    },
+    {
+      "frame": 11.0,
+      "player_position_m": [
+        -166.854232788086,
+        4.22023153305054,
+        531.177307128906
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.51416492462158,
+      "outward_from_wall_chain_m": 21.9536266326904,
+      "camera_position_m": [
+        -171.662490844727,
+        5.17082595825195,
+        533.6328125
+      ]
+    },
+    {
+      "frame": 12.0,
+      "player_position_m": [
+        -166.823913574219,
+        4.22023153305054,
+        531.236694335938
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.44748592376709,
+      "outward_from_wall_chain_m": 21.9536361694336,
+      "camera_position_m": [
+        -171.632186889648,
+        5.17083358764648,
+        533.692138671875
+      ]
+    },
+    {
+      "frame": 13.0,
+      "player_position_m": [
+        -166.793594360352,
+        4.22023153305054,
+        531.296081542969
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.3808069229126,
+      "outward_from_wall_chain_m": 21.9536418914795,
+      "camera_position_m": [
+        -171.60188293457,
+        5.17082595825195,
+        533.751525878906
+      ]
+    },
+    {
+      "frame": 14.0,
+      "player_position_m": [
+        -166.763275146484,
+        4.21912050247192,
+        531.35546875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.31412792205811,
+      "outward_from_wall_chain_m": 21.953649520874,
+      "camera_position_m": [
+        -171.571594238281,
+        5.16971683502197,
+        533.810913085938
+      ]
+    },
+    {
+      "frame": 15.0,
+      "player_position_m": [
+        -166.732955932617,
+        4.21912050247192,
+        531.414855957031
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.24744844436646,
+      "outward_from_wall_chain_m": 21.9536552429199,
+      "camera_position_m": [
+        -171.541229248047,
+        5.16971492767334,
+        533.870300292969
+      ]
+    },
+    {
+      "frame": 16.0,
+      "player_position_m": [
+        -166.70263671875,
+        4.21912050247192,
+        531.474243164062
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.18076992034912,
+      "outward_from_wall_chain_m": 21.9536628723145,
+      "camera_position_m": [
+        -171.510971069336,
+        5.16971111297607,
+        533.929748535156
+      ]
+    },
+    {
+      "frame": 17.0,
+      "player_position_m": [
+        -166.672317504883,
+        4.21800947189331,
+        531.533630371094
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.11409091949463,
+      "outward_from_wall_chain_m": 21.9536685943604,
+      "camera_position_m": [
+        -171.480606079102,
+        5.16861152648926,
+        533.989074707031
+      ]
+    },
+    {
+      "frame": 18.0,
+      "player_position_m": [
+        -166.641998291016,
+        4.21800947189331,
+        531.593017578125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -7.04741191864014,
+      "outward_from_wall_chain_m": 21.9536762237549,
+      "camera_position_m": [
+        -171.450302124023,
+        5.16860580444336,
+        534.048461914062
+      ]
+    },
+    {
+      "frame": 19.0,
+      "player_position_m": [
+        -166.611679077148,
+        4.21800947189331,
+        531.652404785156
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.98073291778564,
+      "outward_from_wall_chain_m": 21.9536819458008,
+      "camera_position_m": [
+        -171.419998168945,
+        5.16859817504883,
+        534.107849121094
+      ]
+    },
+    {
+      "frame": 20.0,
+      "player_position_m": [
+        -166.581359863281,
+        4.21800947189331,
+        531.711791992188
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.91405344009399,
+      "outward_from_wall_chain_m": 21.9536895751953,
+      "camera_position_m": [
+        -171.389633178711,
+        5.16860389709473,
+        534.167236328125
+      ]
+    },
+    {
+      "frame": 21.0,
+      "player_position_m": [
+        -166.551040649414,
+        4.21664237976074,
+        531.771179199219
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.84737396240234,
+      "outward_from_wall_chain_m": 21.9536952972412,
+      "camera_position_m": [
+        -171.359313964844,
+        5.16722965240479,
+        534.226623535156
+      ]
+    },
+    {
+      "frame": 22.0,
+      "player_position_m": [
+        -166.520721435547,
+        4.21664237976074,
+        531.83056640625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.78069591522217,
+      "outward_from_wall_chain_m": 21.9537010192871,
+      "camera_position_m": [
+        -171.328979492188,
+        5.16723728179932,
+        534.286010742188
+      ]
+    },
+    {
+      "frame": 23.0,
+      "player_position_m": [
+        -166.49040222168,
+        4.21664237976074,
+        531.889953613281
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.71401691436768,
+      "outward_from_wall_chain_m": 21.9537086486816,
+      "camera_position_m": [
+        -171.298690795898,
+        5.16723728179932,
+        534.345397949219
+      ]
+    },
+    {
+      "frame": 24.0,
+      "player_position_m": [
+        -166.460083007812,
+        4.21553134918213,
+        531.949340820312
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.64733791351318,
+      "outward_from_wall_chain_m": 21.9537162780762,
+      "camera_position_m": [
+        -171.268356323242,
+        5.1661262512207,
+        534.40478515625
+      ]
+    },
+    {
+      "frame": 25.0,
+      "player_position_m": [
+        -166.429763793945,
+        4.21553134918213,
+        532.008728027344
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.58065843582153,
+      "outward_from_wall_chain_m": 21.9537239074707,
+      "camera_position_m": [
+        -171.238052368164,
+        5.16614103317261,
+        534.464172363281
+      ]
+    },
+    {
+      "frame": 26.0,
+      "player_position_m": [
+        -166.399444580078,
+        4.21553134918213,
+        532.068115234375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.51397895812988,
+      "outward_from_wall_chain_m": 21.9537296295166,
+      "camera_position_m": [
+        -171.207733154297,
+        5.16613340377808,
+        534.523559570312
+      ]
+    },
+    {
+      "frame": 27.0,
+      "player_position_m": [
+        -166.369125366211,
+        4.21553134918213,
+        532.127502441406
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.44730091094971,
+      "outward_from_wall_chain_m": 21.9537372589111,
+      "camera_position_m": [
+        -171.17741394043,
+        5.16613340377808,
+        534.582946777344
+      ]
+    },
+    {
+      "frame": 28.0,
+      "player_position_m": [
+        -166.338806152344,
+        4.21416425704956,
+        532.186889648438
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.38062191009521,
+      "outward_from_wall_chain_m": 21.953742980957,
+      "camera_position_m": [
+        -171.147109985352,
+        5.16475296020508,
+        534.642333984375
+      ]
+    },
+    {
+      "frame": 29.0,
+      "player_position_m": [
+        -166.308486938477,
+        4.21416425704956,
+        532.246276855469
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.31394290924072,
+      "outward_from_wall_chain_m": 21.9537506103516,
+      "camera_position_m": [
+        -171.116760253906,
+        5.16475868225098,
+        534.701721191406
+      ]
+    },
+    {
+      "frame": 30.0,
+      "player_position_m": [
+        -166.278167724609,
+        4.21416425704956,
+        532.3056640625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.24726343154907,
+      "outward_from_wall_chain_m": 21.9537563323975,
+      "camera_position_m": [
+        -171.08642578125,
+        5.16475868225098,
+        534.761108398438
+      ]
+    },
+    {
+      "frame": 31.0,
+      "player_position_m": [
+        -166.247848510742,
+        4.21305322647095,
+        532.365051269531
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.18058395385742,
+      "outward_from_wall_chain_m": 21.953763961792,
+      "camera_position_m": [
+        -171.056121826172,
+        5.16365528106689,
+        534.820495605469
+      ]
+    },
+    {
+      "frame": 32.0,
+      "player_position_m": [
+        -166.217529296875,
+        4.21305322647095,
+        532.424438476562
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.11390590667725,
+      "outward_from_wall_chain_m": 21.9537696838379,
+      "camera_position_m": [
+        -171.025802612305,
+        5.16364765167236,
+        534.8798828125
+      ]
+    },
+    {
+      "frame": 33.0,
+      "player_position_m": [
+        -166.187210083008,
+        4.21305322647095,
+        532.483825683594
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -6.04722690582275,
+      "outward_from_wall_chain_m": 21.9537773132324,
+      "camera_position_m": [
+        -170.995498657227,
+        5.16364765167236,
+        534.939270019531
+      ]
+    },
+    {
+      "frame": 34.0,
+      "player_position_m": [
+        -166.156890869141,
+        4.21305322647095,
+        532.543212890625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.98054790496826,
+      "outward_from_wall_chain_m": 21.9537830352783,
+      "camera_position_m": [
+        -170.96516418457,
+        5.16364765167236,
+        534.998657226562
+      ]
+    },
+    {
+      "frame": 35.0,
+      "player_position_m": [
+        -166.126571655273,
+        4.21168613433838,
+        532.602600097656
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.91386842727661,
+      "outward_from_wall_chain_m": 21.9537925720215,
+      "camera_position_m": [
+        -170.934844970703,
+        5.16228103637695,
+        535.058044433594
+      ]
+    },
+    {
+      "frame": 36.0,
+      "player_position_m": [
+        -166.096252441406,
+        4.21168613433838,
+        532.661987304688
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.84718942642212,
+      "outward_from_wall_chain_m": 21.9537982940674,
+      "camera_position_m": [
+        -170.904541015625,
+        5.16228103637695,
+        535.117431640625
+      ]
+    },
+    {
+      "frame": 37.0,
+      "player_position_m": [
+        -166.065933227539,
+        4.21168613433838,
+        532.721374511719
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.78051090240479,
+      "outward_from_wall_chain_m": 21.9538040161133,
+      "camera_position_m": [
+        -170.874221801758,
+        5.16228103637695,
+        535.176818847656
+      ]
+    },
+    {
+      "frame": 38.0,
+      "player_position_m": [
+        -166.035614013672,
+        4.21057510375977,
+        532.78076171875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.71383190155029,
+      "outward_from_wall_chain_m": 21.9538116455078,
+      "camera_position_m": [
+        -170.843933105469,
+        5.16116380691528,
+        535.236206054688
+      ]
+    },
+    {
+      "frame": 39.0,
+      "player_position_m": [
+        -166.005294799805,
+        4.21057510375977,
+        532.840148925781
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.6471529006958,
+      "outward_from_wall_chain_m": 21.9538173675537,
+      "camera_position_m": [
+        -170.813583374023,
+        5.16117000579834,
+        535.295593261719
+      ]
+    },
+    {
+      "frame": 40.0,
+      "player_position_m": [
+        -165.974975585938,
+        4.21057510375977,
+        532.899536132812
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.58047342300415,
+      "outward_from_wall_chain_m": 21.9538249969482,
+      "camera_position_m": [
+        -170.783248901367,
+        5.16117000579834,
+        535.35498046875
+      ]
+    },
+    {
+      "frame": 41.0,
+      "player_position_m": [
+        -165.94465637207,
+        4.20946407318115,
+        532.958923339844
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.51379442214966,
+      "outward_from_wall_chain_m": 21.9538307189941,
+      "camera_position_m": [
+        -170.752914428711,
+        5.1600661277771,
+        535.414428710938
+      ]
+    },
+    {
+      "frame": 42.0,
+      "player_position_m": [
+        -165.914337158203,
+        4.20946407318115,
+        533.018310546875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.44711494445801,
+      "outward_from_wall_chain_m": 21.9538383483887,
+      "camera_position_m": [
+        -170.722610473633,
+        5.1600661277771,
+        535.473754882812
+      ]
+    },
+    {
+      "frame": 43.0,
+      "player_position_m": [
+        -165.884017944336,
+        4.20946407318115,
+        533.077697753906
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.38043689727783,
+      "outward_from_wall_chain_m": 21.9538440704346,
+      "camera_position_m": [
+        -170.692291259766,
+        5.16005897521973,
+        535.533142089844
+      ]
+    },
+    {
+      "frame": 44.0,
+      "player_position_m": [
+        -165.853698730469,
+        4.20946407318115,
+        533.137084960938
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.31375789642334,
+      "outward_from_wall_chain_m": 21.9538516998291,
+      "camera_position_m": [
+        -170.661987304688,
+        5.16005897521973,
+        535.592529296875
+      ]
+    },
+    {
+      "frame": 45.0,
+      "player_position_m": [
+        -165.823379516602,
+        4.20809698104858,
+        533.196472167969
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.24707841873169,
+      "outward_from_wall_chain_m": 21.953857421875,
+      "camera_position_m": [
+        -170.63166809082,
+        5.15869140625,
+        535.651916503906
+      ]
+    },
+    {
+      "frame": 46.0,
+      "player_position_m": [
+        -165.793060302734,
+        4.20809698104858,
+        533.255859375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.1803994178772,
+      "outward_from_wall_chain_m": 21.9538650512695,
+      "camera_position_m": [
+        -170.601379394531,
+        5.1586856842041,
+        535.711303710938
+      ]
+    },
+    {
+      "frame": 47.0,
+      "player_position_m": [
+        -165.762741088867,
+        4.20809698104858,
+        533.315246582031
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.11372041702271,
+      "outward_from_wall_chain_m": 21.9538726806641,
+      "camera_position_m": [
+        -170.571075439453,
+        5.1586799621582,
+        535.770751953125
+      ]
+    },
+    {
+      "frame": 48.0,
+      "player_position_m": [
+        -165.732421875,
+        4.20698595046997,
+        533.374633789062
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -5.04704189300537,
+      "outward_from_wall_chain_m": 21.9538803100586,
+      "camera_position_m": [
+        -170.54069519043,
+        5.15758037567139,
+        535.830078125
+      ]
+    },
+    {
+      "frame": 49.0,
+      "player_position_m": [
+        -165.702102661133,
+        4.20698595046997,
+        533.434020996094
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.98036289215088,
+      "outward_from_wall_chain_m": 21.9538860321045,
+      "camera_position_m": [
+        -170.510391235352,
+        5.15758037567139,
+        535.889465332031
+      ]
+    },
+    {
+      "frame": 50.0,
+      "player_position_m": [
+        -165.671783447266,
+        4.20698595046997,
+        533.493408203125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.91368341445923,
+      "outward_from_wall_chain_m": 21.9538917541504,
+      "camera_position_m": [
+        -170.480056762695,
+        5.15758037567139,
+        535.948852539062
+      ]
+    },
+    {
+      "frame": 51.0,
+      "player_position_m": [
+        -165.641464233398,
+        4.20698595046997,
+        533.552795410156
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.84700441360474,
+      "outward_from_wall_chain_m": 21.9538993835449,
+      "camera_position_m": [
+        -170.449737548828,
+        5.15758037567139,
+        536.008239746094
+      ]
+    },
+    {
+      "frame": 52.0,
+      "player_position_m": [
+        -165.611145019531,
+        4.2056188583374,
+        533.612182617188
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.78032541275024,
+      "outward_from_wall_chain_m": 21.9539070129395,
+      "camera_position_m": [
+        -170.419403076172,
+        5.15621376037598,
+        536.067626953125
+      ]
+    },
+    {
+      "frame": 53.0,
+      "player_position_m": [
+        -165.580825805664,
+        4.2056188583374,
+        533.671569824219
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.71364688873291,
+      "outward_from_wall_chain_m": 21.9539127349854,
+      "camera_position_m": [
+        -170.389099121094,
+        5.15621376037598,
+        536.127014160156
+      ]
+    },
+    {
+      "frame": 54.0,
+      "player_position_m": [
+        -165.550506591797,
+        4.2056188583374,
+        533.73095703125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.64696788787842,
+      "outward_from_wall_chain_m": 21.9539184570312,
+      "camera_position_m": [
+        -170.358779907227,
+        5.15622091293335,
+        536.186401367188
+      ]
+    },
+    {
+      "frame": 55.0,
+      "player_position_m": [
+        -165.52018737793,
+        4.20450782775879,
+        533.790344238281
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.58028841018677,
+      "outward_from_wall_chain_m": 21.9539260864258,
+      "camera_position_m": [
+        -170.328506469727,
+        5.15509653091431,
+        536.245788574219
+      ]
+    },
+    {
+      "frame": 56.0,
+      "player_position_m": [
+        -165.489868164062,
+        4.20450782775879,
+        533.849731445312
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.51360940933228,
+      "outward_from_wall_chain_m": 21.9539318084717,
+      "camera_position_m": [
+        -170.298187255859,
+        5.15509653091431,
+        536.30517578125
+      ]
+    },
+    {
+      "frame": 57.0,
+      "player_position_m": [
+        -165.459548950195,
+        4.20450782775879,
+        533.909118652344
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.44693040847778,
+      "outward_from_wall_chain_m": 21.9539394378662,
+      "camera_position_m": [
+        -170.267837524414,
+        5.15510272979736,
+        536.364562988281
+      ]
+    },
+    {
+      "frame": 58.0,
+      "player_position_m": [
+        -165.429229736328,
+        4.20339679718018,
+        533.968505859375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.38025188446045,
+      "outward_from_wall_chain_m": 21.9539451599121,
+      "camera_position_m": [
+        -170.237533569336,
+        5.15398550033569,
+        536.423950195312
+      ]
+    },
+    {
+      "frame": 59.0,
+      "player_position_m": [
+        -165.398910522461,
+        4.20339679718018,
+        534.027893066406
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.31357288360596,
+      "outward_from_wall_chain_m": 21.9539546966553,
+      "camera_position_m": [
+        -170.20719909668,
+        5.15399169921875,
+        536.483337402344
+      ]
+    },
+    {
+      "frame": 60.0,
+      "player_position_m": [
+        -165.368591308594,
+        4.20339679718018,
+        534.087280273438
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.24689388275146,
+      "outward_from_wall_chain_m": 21.9539604187012,
+      "camera_position_m": [
+        -170.176879882812,
+        5.15398550033569,
+        536.542785644531
+      ]
+    },
+    {
+      "frame": 61.0,
+      "player_position_m": [
+        -165.338272094727,
+        4.20339679718018,
+        534.146667480469
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.18021440505981,
+      "outward_from_wall_chain_m": 21.9539680480957,
+      "camera_position_m": [
+        -170.146545410156,
+        5.15399169921875,
+        536.602111816406
+      ]
+    },
+    {
+      "frame": 62.0,
+      "player_position_m": [
+        -165.307952880859,
+        4.20202970504761,
+        534.2060546875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.11353540420532,
+      "outward_from_wall_chain_m": 21.9539737701416,
+      "camera_position_m": [
+        -170.116226196289,
+        5.15262413024902,
+        536.661499023438
+      ]
+    },
+    {
+      "frame": 63.0,
+      "player_position_m": [
+        -165.277633666992,
+        4.20202970504761,
+        534.265441894531
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -4.04685592651367,
+      "outward_from_wall_chain_m": 21.9539813995361,
+      "camera_position_m": [
+        -170.085922241211,
+        5.15262413024902,
+        536.720886230469
+      ]
+    },
+    {
+      "frame": 64.0,
+      "player_position_m": [
+        -165.247314453125,
+        4.20202970504761,
+        534.324829101562
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.9801778793335,
+      "outward_from_wall_chain_m": 21.953987121582,
+      "camera_position_m": [
+        -170.055633544922,
+        5.15261840820312,
+        536.7802734375
+      ]
+    },
+    {
+      "frame": 65.0,
+      "player_position_m": [
+        -165.216995239258,
+        4.20091867446899,
+        534.384216308594
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.913498878479,
+      "outward_from_wall_chain_m": 21.9539947509766,
+      "camera_position_m": [
+        -170.025283813477,
+        5.15151309967041,
+        536.839660644531
+      ]
+    },
+    {
+      "frame": 66.0,
+      "player_position_m": [
+        -165.186676025391,
+        4.20091867446899,
+        534.443603515625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.84681940078735,
+      "outward_from_wall_chain_m": 21.9540004730225,
+      "camera_position_m": [
+        -169.99494934082,
+        5.15151309967041,
+        536.899047851562
+      ]
+    },
+    {
+      "frame": 67.0,
+      "player_position_m": [
+        -165.156356811523,
+        4.20091867446899,
+        534.502990722656
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.78014039993286,
+      "outward_from_wall_chain_m": 21.9540061950684,
+      "camera_position_m": [
+        -169.964630126953,
+        5.15151309967041,
+        536.958435058594
+      ]
+    },
+    {
+      "frame": 68.0,
+      "player_position_m": [
+        -165.126037597656,
+        4.20091867446899,
+        534.562377929688
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.71346092224121,
+      "outward_from_wall_chain_m": 21.9540138244629,
+      "camera_position_m": [
+        -169.934326171875,
+        5.15151309967041,
+        537.017822265625
+      ]
+    },
+    {
+      "frame": 69.0,
+      "player_position_m": [
+        -165.095718383789,
+        4.19955158233643,
+        534.621765136719
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.64678287506104,
+      "outward_from_wall_chain_m": 21.9540195465088,
+      "camera_position_m": [
+        -169.904006958008,
+        5.150146484375,
+        537.077209472656
+      ]
+    },
+    {
+      "frame": 70.0,
+      "player_position_m": [
+        -165.065399169922,
+        4.19955158233643,
+        534.68115234375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.58010387420654,
+      "outward_from_wall_chain_m": 21.954029083252,
+      "camera_position_m": [
+        -169.873672485352,
+        5.15015363693237,
+        537.136596679688
+      ]
+    },
+    {
+      "frame": 71.0,
+      "player_position_m": [
+        -165.035079956055,
+        4.19955158233643,
+        534.740539550781
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.51342439651489,
+      "outward_from_wall_chain_m": 21.9540348052979,
+      "camera_position_m": [
+        -169.843338012695,
+        5.150146484375,
+        537.196044921875
+      ]
+    },
+    {
+      "frame": 72.0,
+      "player_position_m": [
+        -165.004760742188,
+        4.19844055175781,
+        534.799926757812
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.4467453956604,
+      "outward_from_wall_chain_m": 21.9540424346924,
+      "camera_position_m": [
+        -169.813018798828,
+        5.14903545379639,
+        537.25537109375
+      ]
+    },
+    {
+      "frame": 73.0,
+      "player_position_m": [
+        -164.97444152832,
+        4.19844055175781,
+        534.859313964844
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.38006639480591,
+      "outward_from_wall_chain_m": 21.9540481567383,
+      "camera_position_m": [
+        -169.78271484375,
+        5.14903545379639,
+        537.314758300781
+      ]
+    },
+    {
+      "frame": 74.0,
+      "player_position_m": [
+        -164.944122314453,
+        4.19844055175781,
+        534.918701171875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.31338787078857,
+      "outward_from_wall_chain_m": 21.9540557861328,
+      "camera_position_m": [
+        -169.75244140625,
+        5.14902925491333,
+        537.374145507812
+      ]
+    },
+    {
+      "frame": 75.0,
+      "player_position_m": [
+        -164.913803100586,
+        4.19844055175781,
+        534.978088378906
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.24670886993408,
+      "outward_from_wall_chain_m": 21.9540615081787,
+      "camera_position_m": [
+        -169.722091674805,
+        5.14903545379639,
+        537.433532714844
+      ]
+    },
+    {
+      "frame": 76.0,
+      "player_position_m": [
+        -164.883483886719,
+        4.19707345962524,
+        535.037475585938
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.18002939224243,
+      "outward_from_wall_chain_m": 21.9540691375732,
+      "camera_position_m": [
+        -169.691772460938,
+        5.14767551422119,
+        537.492919921875
+      ]
+    },
+    {
+      "frame": 77.0,
+      "player_position_m": [
+        -164.853164672852,
+        4.19707345962524,
+        535.096862792969
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.11335039138794,
+      "outward_from_wall_chain_m": 21.9540748596191,
+      "camera_position_m": [
+        -169.661437988281,
+        5.14767551422119,
+        537.552307128906
+      ]
+    },
+    {
+      "frame": 78.0,
+      "player_position_m": [
+        -164.822845458984,
+        4.19707345962524,
+        535.15625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -3.04667139053345,
+      "outward_from_wall_chain_m": 21.9540824890137,
+      "camera_position_m": [
+        -169.631134033203,
+        5.14767551422119,
+        537.611694335938
+      ]
+    },
+    {
+      "frame": 79.0,
+      "player_position_m": [
+        -164.792526245117,
+        4.19596242904663,
+        535.215637207031
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.9799919128418,
+      "outward_from_wall_chain_m": 21.9540882110596,
+      "camera_position_m": [
+        -169.600814819336,
+        5.14655685424805,
+        537.671081542969
+      ]
+    },
+    {
+      "frame": 80.0,
+      "player_position_m": [
+        -164.76220703125,
+        4.19596242904663,
+        535.275024414062
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.91331386566162,
+      "outward_from_wall_chain_m": 21.9540939331055,
+      "camera_position_m": [
+        -169.57048034668,
+        5.14656448364258,
+        537.73046875
+      ]
+    },
+    {
+      "frame": 81.0,
+      "player_position_m": [
+        -164.731887817383,
+        4.19596242904663,
+        535.334411621094
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.84663438796997,
+      "outward_from_wall_chain_m": 21.9541015625,
+      "camera_position_m": [
+        -169.540161132812,
+        5.14655685424805,
+        537.789855957031
+      ]
+    },
+    {
+      "frame": 82.0,
+      "player_position_m": [
+        -164.701568603516,
+        4.19596242904663,
+        535.393798828125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.77995538711548,
+      "outward_from_wall_chain_m": 21.9541091918945,
+      "camera_position_m": [
+        -169.509872436523,
+        5.14655113220215,
+        537.849243164062
+      ]
+    },
+    {
+      "frame": 83.0,
+      "player_position_m": [
+        -164.671249389648,
+        4.19459533691406,
+        535.453186035156
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.71327638626099,
+      "outward_from_wall_chain_m": 21.9541168212891,
+      "camera_position_m": [
+        -169.479553222656,
+        5.14518404006958,
+        537.908630371094
+      ]
+    },
+    {
+      "frame": 84.0,
+      "player_position_m": [
+        -164.640930175781,
+        4.19459533691406,
+        535.512573242188
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.64659690856934,
+      "outward_from_wall_chain_m": 21.954122543335,
+      "camera_position_m": [
+        -169.44921875,
+        5.14519023895264,
+        537.968017578125
+      ]
+    },
+    {
+      "frame": 85.0,
+      "player_position_m": [
+        -164.610610961914,
+        4.19459533691406,
+        535.571960449219
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.57991886138916,
+      "outward_from_wall_chain_m": 21.9541301727295,
+      "camera_position_m": [
+        -169.418884277344,
+        5.14519023895264,
+        538.027404785156
+      ]
+    },
+    {
+      "frame": 86.0,
+      "player_position_m": [
+        -164.580291748047,
+        4.19348430633545,
+        535.63134765625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.51323986053467,
+      "outward_from_wall_chain_m": 21.9541358947754,
+      "camera_position_m": [
+        -169.388595581055,
+        5.1440806388855,
+        538.086791992188
+      ]
+    },
+    {
+      "frame": 87.0,
+      "player_position_m": [
+        -164.54997253418,
+        4.19348430633545,
+        535.690734863281
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.44656038284302,
+      "outward_from_wall_chain_m": 21.9541435241699,
+      "camera_position_m": [
+        -169.358261108398,
+        5.1440863609314,
+        538.146179199219
+      ]
+    },
+    {
+      "frame": 88.0,
+      "player_position_m": [
+        -164.519653320312,
+        4.19348430633545,
+        535.750122070312
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.37988138198853,
+      "outward_from_wall_chain_m": 21.9541492462158,
+      "camera_position_m": [
+        -169.327941894531,
+        5.1440863609314,
+        538.20556640625
+      ]
+    },
+    {
+      "frame": 89.0,
+      "player_position_m": [
+        -164.489334106445,
+        4.19237327575684,
+        535.809509277344
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.31320190429688,
+      "outward_from_wall_chain_m": 21.9541568756104,
+      "camera_position_m": [
+        -169.297622680664,
+        5.14296817779541,
+        538.264953613281
+      ]
+    },
+    {
+      "frame": 90.0,
+      "player_position_m": [
+        -164.459014892578,
+        4.19237327575684,
+        535.868896484375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.2465238571167,
+      "outward_from_wall_chain_m": 21.9541625976562,
+      "camera_position_m": [
+        -169.267303466797,
+        5.14296960830688,
+        538.324401855469
+      ]
+    },
+    {
+      "frame": 91.0,
+      "player_position_m": [
+        -164.428695678711,
+        4.19237327575684,
+        535.928283691406
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.17984485626221,
+      "outward_from_wall_chain_m": 21.9541702270508,
+      "camera_position_m": [
+        -169.236953735352,
+        5.14297533035278,
+        538.3837890625
+      ]
+    },
+    {
+      "frame": 92.0,
+      "player_position_m": [
+        -164.398376464844,
+        4.19237327575684,
+        535.987670898438
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.11316537857056,
+      "outward_from_wall_chain_m": 21.9541759490967,
+      "camera_position_m": [
+        -169.206665039062,
+        5.14296197891235,
+        538.443176269531
+      ]
+    },
+    {
+      "frame": 93.0,
+      "player_position_m": [
+        -164.368057250977,
+        4.19100618362427,
+        536.047058105469
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -2.04648637771606,
+      "outward_from_wall_chain_m": 21.9541854858398,
+      "camera_position_m": [
+        -169.176345825195,
+        5.14160823822021,
+        538.502502441406
+      ]
+    },
+    {
+      "frame": 94.0,
+      "player_position_m": [
+        -164.337738037109,
+        4.19100618362427,
+        536.1064453125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.97980690002441,
+      "outward_from_wall_chain_m": 21.9541912078857,
+      "camera_position_m": [
+        -169.146026611328,
+        5.14160060882568,
+        538.561889648438
+      ]
+    },
+    {
+      "frame": 95.0,
+      "player_position_m": [
+        -164.307418823242,
+        4.19100618362427,
+        536.165832519531
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.91312885284424,
+      "outward_from_wall_chain_m": 21.9541969299316,
+      "camera_position_m": [
+        -169.115737915039,
+        5.14159488677979,
+        538.621276855469
+      ]
+    },
+    {
+      "frame": 96.0,
+      "player_position_m": [
+        -164.277099609375,
+        4.19100618362427,
+        536.225219726562
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.84644985198975,
+      "outward_from_wall_chain_m": 21.9542045593262,
+      "camera_position_m": [
+        -169.085372924805,
+        5.14160060882568,
+        538.6806640625
+      ]
+    },
+    {
+      "frame": 97.0,
+      "player_position_m": [
+        -164.246780395508,
+        4.1896390914917,
+        536.284606933594
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.7797703742981,
+      "outward_from_wall_chain_m": 21.9542102813721,
+      "camera_position_m": [
+        -169.055053710938,
+        5.14023399353027,
+        538.740051269531
+      ]
+    },
+    {
+      "frame": 98.0,
+      "player_position_m": [
+        -164.216461181641,
+        4.1896390914917,
+        536.343994140625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.7130913734436,
+      "outward_from_wall_chain_m": 21.9542179107666,
+      "camera_position_m": [
+        -169.024749755859,
+        5.14023399353027,
+        538.799438476562
+      ]
+    },
+    {
+      "frame": 99.0,
+      "player_position_m": [
+        -164.186141967773,
+        4.1896390914917,
+        536.403381347656
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.64641237258911,
+      "outward_from_wall_chain_m": 21.9542236328125,
+      "camera_position_m": [
+        -168.994415283203,
+        5.14023399353027,
+        538.858825683594
+      ]
+    },
+    {
+      "frame": 100.0,
+      "player_position_m": [
+        -164.155822753906,
+        4.18852806091309,
+        536.462768554688
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.57973289489746,
+      "outward_from_wall_chain_m": 21.954231262207,
+      "camera_position_m": [
+        -168.964096069336,
+        5.13913011550903,
+        538.918212890625
+      ]
+    },
+    {
+      "frame": 101.0,
+      "player_position_m": [
+        -164.125503540039,
+        4.18852806091309,
+        536.522155761719
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.51305484771729,
+      "outward_from_wall_chain_m": 21.9542369842529,
+      "camera_position_m": [
+        -168.933776855469,
+        5.13912296295166,
+        538.977600097656
+      ]
+    },
+    {
+      "frame": 102.0,
+      "player_position_m": [
+        -164.095184326172,
+        4.18852806091309,
+        536.58154296875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.44637537002563,
+      "outward_from_wall_chain_m": 21.9542446136475,
+      "camera_position_m": [
+        -168.90348815918,
+        5.1391167640686,
+        539.036987304688
+      ]
+    },
+    {
+      "frame": 103.0,
+      "player_position_m": [
+        -164.064865112305,
+        4.18741703033447,
+        536.640930175781
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.37969636917114,
+      "outward_from_wall_chain_m": 21.9542503356934,
+      "camera_position_m": [
+        -168.873184204102,
+        5.13801336288452,
+        539.096374511719
+      ]
+    },
+    {
+      "frame": 104.0,
+      "player_position_m": [
+        -164.034545898438,
+        4.18741703033447,
+        536.700317382812
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.31301736831665,
+      "outward_from_wall_chain_m": 21.9542579650879,
+      "camera_position_m": [
+        -168.842895507812,
+        5.13800764083862,
+        539.15576171875
+      ]
+    },
+    {
+      "frame": 105.0,
+      "player_position_m": [
+        -164.00422668457,
+        4.18741703033447,
+        536.759704589844
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.246337890625,
+      "outward_from_wall_chain_m": 21.9542655944824,
+      "camera_position_m": [
+        -168.812561035156,
+        5.13800001144409,
+        539.215209960938
+      ]
+    },
+    {
+      "frame": 106.0,
+      "player_position_m": [
+        -163.973907470703,
+        4.18630599975586,
+        536.819091796875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.17965984344482,
+      "outward_from_wall_chain_m": 21.954273223877,
+      "camera_position_m": [
+        -168.782196044922,
+        5.13690090179443,
+        539.274536132812
+      ]
+    },
+    {
+      "frame": 107.0,
+      "player_position_m": [
+        -163.943588256836,
+        4.18630599975586,
+        536.878479003906
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.11298084259033,
+      "outward_from_wall_chain_m": 21.9542789459229,
+      "camera_position_m": [
+        -168.751876831055,
+        5.13690805435181,
+        539.333923339844
+      ]
+    },
+    {
+      "frame": 108.0,
+      "player_position_m": [
+        -163.913269042969,
+        4.18630599975586,
+        536.937866210938
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -1.04630184173584,
+      "outward_from_wall_chain_m": 21.9542846679688,
+      "camera_position_m": [
+        -168.721557617188,
+        5.13690090179443,
+        539.393310546875
+      ]
+    },
+    {
+      "frame": 109.0,
+      "player_position_m": [
+        -163.882949829102,
+        4.18630599975586,
+        536.997253417969
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.979621887207031,
+      "outward_from_wall_chain_m": 21.9542922973633,
+      "camera_position_m": [
+        -168.691223144531,
+        5.13690090179443,
+        539.452697753906
+      ]
+    },
+    {
+      "frame": 110.0,
+      "player_position_m": [
+        -163.852630615234,
+        4.18493890762329,
+        537.056640625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.912942886352539,
+      "outward_from_wall_chain_m": 21.9542999267578,
+      "camera_position_m": [
+        -168.660903930664,
+        5.13553333282471,
+        539.512084960938
+      ]
+    },
+    {
+      "frame": 111.0,
+      "player_position_m": [
+        -163.822311401367,
+        4.18493890762329,
+        537.116027832031
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.846264839172363,
+      "outward_from_wall_chain_m": 21.9543056488037,
+      "camera_position_m": [
+        -168.630569458008,
+        5.13553333282471,
+        539.571533203125
+      ]
+    },
+    {
+      "frame": 112.0,
+      "player_position_m": [
+        -163.7919921875,
+        4.18493890762329,
+        537.175415039062
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.779585838317871,
+      "outward_from_wall_chain_m": 21.9543113708496,
+      "camera_position_m": [
+        -168.60026550293,
+        5.13553333282471,
+        539.630859375
+      ]
+    },
+    {
+      "frame": 113.0,
+      "player_position_m": [
+        -163.761672973633,
+        4.18382787704468,
+        537.234802246094
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.712906837463379,
+      "outward_from_wall_chain_m": 21.9543190002441,
+      "camera_position_m": [
+        -168.56999206543,
+        5.13442420959473,
+        539.690246582031
+      ]
+    },
+    {
+      "frame": 114.0,
+      "player_position_m": [
+        -163.731353759766,
+        4.18382787704468,
+        537.294189453125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.64622688293457,
+      "outward_from_wall_chain_m": 21.95432472229,
+      "camera_position_m": [
+        -168.539672851562,
+        5.13442420959473,
+        539.749633789062
+      ]
+    },
+    {
+      "frame": 115.0,
+      "player_position_m": [
+        -163.701034545898,
+        4.18382787704468,
+        537.353576660156
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.579547882080078,
+      "outward_from_wall_chain_m": 21.9543323516846,
+      "camera_position_m": [
+        -168.509338378906,
+        5.13442420959473,
+        539.809020996094
+      ]
+    },
+    {
+      "frame": 116.0,
+      "player_position_m": [
+        -163.670715332031,
+        4.18382787704468,
+        537.412963867188
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.512868881225586,
+      "outward_from_wall_chain_m": 21.9543399810791,
+      "camera_position_m": [
+        -168.478988647461,
+        5.13442230224609,
+        539.868408203125
+      ]
+    },
+    {
+      "frame": 117.0,
+      "player_position_m": [
+        -163.640396118164,
+        4.18246078491211,
+        537.472351074219
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.44619083404541,
+      "outward_from_wall_chain_m": 21.9543476104736,
+      "camera_position_m": [
+        -168.448715209961,
+        5.13304948806763,
+        539.927795410156
+      ]
+    },
+    {
+      "frame": 118.0,
+      "player_position_m": [
+        -163.610076904297,
+        4.18246078491211,
+        537.53173828125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.379511833190918,
+      "outward_from_wall_chain_m": 21.9543533325195,
+      "camera_position_m": [
+        -168.418395996094,
+        5.13304948806763,
+        539.987182617188
+      ]
+    },
+    {
+      "frame": 119.0,
+      "player_position_m": [
+        -163.57975769043,
+        4.18246078491211,
+        537.591125488281
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.312831878662109,
+      "outward_from_wall_chain_m": 21.9543609619141,
+      "camera_position_m": [
+        -168.388076782227,
+        5.13304948806763,
+        540.046569824219
+      ]
+    },
+    {
+      "frame": 120.0,
+      "player_position_m": [
+        -163.549438476562,
+        4.1813497543335,
+        537.650512695312
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.246152877807617,
+      "outward_from_wall_chain_m": 21.95436668396,
+      "camera_position_m": [
+        -168.357711791992,
+        5.13194465637207,
+        540.10595703125
+      ]
+    },
+    {
+      "frame": 121.0,
+      "player_position_m": [
+        -163.519119262695,
+        4.1813497543335,
+        537.709899902344
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.179473876953125,
+      "outward_from_wall_chain_m": 21.9543724060059,
+      "camera_position_m": [
+        -168.327392578125,
+        5.13194465637207,
+        540.165344238281
+      ]
+    },
+    {
+      "frame": 122.0,
+      "player_position_m": [
+        -163.488800048828,
+        4.1813497543335,
+        537.769287109375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.112795829772949,
+      "outward_from_wall_chain_m": 21.9543800354004,
+      "camera_position_m": [
+        -168.297058105469,
+        5.13194465637207,
+        540.224731445312
+      ]
+    },
+    {
+      "frame": 123.0,
+      "player_position_m": [
+        -163.458480834961,
+        4.18023872375488,
+        537.828674316406
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": -0.046116828918457,
+      "outward_from_wall_chain_m": 21.9543876647949,
+      "camera_position_m": [
+        -168.26676940918,
+        5.13083362579346,
+        540.284118652344
+      ]
+    },
+    {
+      "frame": 124.0,
+      "player_position_m": [
+        -163.428161621094,
+        4.18023872375488,
+        537.888061523438
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.0205631256103516,
+      "outward_from_wall_chain_m": 21.9543933868408,
+      "camera_position_m": [
+        -168.236450195312,
+        5.13084077835083,
+        540.343505859375
+      ]
+    },
+    {
+      "frame": 125.0,
+      "player_position_m": [
+        -163.397842407227,
+        4.18023872375488,
+        537.947448730469
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.0872421264648438,
+      "outward_from_wall_chain_m": 21.9543991088867,
+      "camera_position_m": [
+        -168.206130981445,
+        5.13084077835083,
+        540.402893066406
+      ]
+    },
+    {
+      "frame": 126.0,
+      "player_position_m": [
+        -163.367523193359,
+        4.18023872375488,
+        538.0068359375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.153921127319336,
+      "outward_from_wall_chain_m": 21.9544067382812,
+      "camera_position_m": [
+        -168.175811767578,
+        5.13084077835083,
+        540.462280273438
+      ]
+    },
+    {
+      "frame": 127.0,
+      "player_position_m": [
+        -163.337203979492,
+        4.17887163162231,
+        538.066223144531
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.220599174499512,
+      "outward_from_wall_chain_m": 21.9544143676758,
+      "camera_position_m": [
+        -168.145492553711,
+        5.12946605682373,
+        540.521667480469
+      ]
+    },
+    {
+      "frame": 128.0,
+      "player_position_m": [
+        -163.306884765625,
+        4.17887163162231,
+        538.125610351562
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.287278175354004,
+      "outward_from_wall_chain_m": 21.9544219970703,
+      "camera_position_m": [
+        -168.115158081055,
+        5.12946605682373,
+        540.5810546875
+      ]
+    },
+    {
+      "frame": 129.0,
+      "player_position_m": [
+        -163.276565551758,
+        4.17887163162231,
+        538.184997558594
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.353957176208496,
+      "outward_from_wall_chain_m": 21.9544277191162,
+      "camera_position_m": [
+        -168.084838867188,
+        5.12946605682373,
+        540.640441894531
+      ]
+    },
+    {
+      "frame": 130.0,
+      "player_position_m": [
+        -163.246246337891,
+        4.17887163162231,
+        538.244384765625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.420637130737305,
+      "outward_from_wall_chain_m": 21.9544353485107,
+      "camera_position_m": [
+        -168.054504394531,
+        5.12946605682373,
+        540.699829101562
+      ]
+    },
+    {
+      "frame": 131.0,
+      "player_position_m": [
+        -163.215927124023,
+        4.17750453948975,
+        538.303771972656
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.487316131591797,
+      "outward_from_wall_chain_m": 21.9544410705566,
+      "camera_position_m": [
+        -168.024230957031,
+        5.12809324264526,
+        540.759216308594
+      ]
+    },
+    {
+      "frame": 132.0,
+      "player_position_m": [
+        -163.185607910156,
+        4.17750453948975,
+        538.363159179688
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.553994178771973,
+      "outward_from_wall_chain_m": 21.9544486999512,
+      "camera_position_m": [
+        -167.993942260742,
+        5.12808036804199,
+        540.818603515625
+      ]
+    },
+    {
+      "frame": 133.0,
+      "player_position_m": [
+        -163.155288696289,
+        4.17750453948975,
+        538.422546386719
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.620673179626465,
+      "outward_from_wall_chain_m": 21.9544544219971,
+      "camera_position_m": [
+        -167.963638305664,
+        5.12808752059937,
+        540.877990722656
+      ]
+    },
+    {
+      "frame": 134.0,
+      "player_position_m": [
+        -163.124969482422,
+        4.17639350891113,
+        538.48193359375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.687352180480957,
+      "outward_from_wall_chain_m": 21.9544620513916,
+      "camera_position_m": [
+        -167.933242797852,
+        5.12698841094971,
+        540.937377929688
+      ]
+    },
+    {
+      "frame": 135.0,
+      "player_position_m": [
+        -163.094650268555,
+        4.17639350891113,
+        538.541320800781
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.754032135009766,
+      "outward_from_wall_chain_m": 21.9544677734375,
+      "camera_position_m": [
+        -167.902923583984,
+        5.12698841094971,
+        540.996765136719
+      ]
+    },
+    {
+      "frame": 136.0,
+      "player_position_m": [
+        -163.064331054688,
+        4.17639350891113,
+        538.600708007812
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.820711135864258,
+      "outward_from_wall_chain_m": 21.954475402832,
+      "camera_position_m": [
+        -167.872619628906,
+        5.12698841094971,
+        541.05615234375
+      ]
+    },
+    {
+      "frame": 137.0,
+      "player_position_m": [
+        -163.03401184082,
+        4.17528247833252,
+        538.660095214844
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.88739013671875,
+      "outward_from_wall_chain_m": 21.9544811248779,
+      "camera_position_m": [
+        -167.842300415039,
+        5.12587738037109,
+        541.115539550781
+      ]
+    },
+    {
+      "frame": 138.0,
+      "player_position_m": [
+        -163.003692626953,
+        4.17528247833252,
+        538.719482421875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 0.954068183898926,
+      "outward_from_wall_chain_m": 21.9544868469238,
+      "camera_position_m": [
+        -167.811981201172,
+        5.12587738037109,
+        541.174926757812
+      ]
+    },
+    {
+      "frame": 139.0,
+      "player_position_m": [
+        -162.973373413086,
+        4.17528247833252,
+        538.778869628906
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.02074718475342,
+      "outward_from_wall_chain_m": 21.9544944763184,
+      "camera_position_m": [
+        -167.781646728516,
+        5.12587738037109,
+        541.234313964844
+      ]
+    },
+    {
+      "frame": 140.0,
+      "player_position_m": [
+        -162.943054199219,
+        4.17528247833252,
+        538.838256835938
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.08742713928223,
+      "outward_from_wall_chain_m": 21.9545021057129,
+      "camera_position_m": [
+        -167.751327514648,
+        5.12587738037109,
+        541.293701171875
+      ]
+    },
+    {
+      "frame": 141.0,
+      "player_position_m": [
+        -162.912734985352,
+        4.17391538619995,
+        538.897644042969
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.15410614013672,
+      "outward_from_wall_chain_m": 21.9545097351074,
+      "camera_position_m": [
+        -167.72102355957,
+        5.12450408935547,
+        541.353149414062
+      ]
+    },
+    {
+      "frame": 142.0,
+      "player_position_m": [
+        -162.882415771484,
+        4.17391538619995,
+        538.95703125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.22078514099121,
+      "outward_from_wall_chain_m": 21.9545154571533,
+      "camera_position_m": [
+        -167.690719604492,
+        5.12451171875,
+        541.412475585938
+      ]
+    },
+    {
+      "frame": 143.0,
+      "player_position_m": [
+        -162.852096557617,
+        4.17391538619995,
+        539.016418457031
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.28746318817139,
+      "outward_from_wall_chain_m": 21.9545230865479,
+      "camera_position_m": [
+        -167.660385131836,
+        5.12450265884399,
+        541.471862792969
+      ]
+    },
+    {
+      "frame": 144.0,
+      "player_position_m": [
+        -162.82177734375,
+        4.17280435562134,
+        539.075805664062
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.35414218902588,
+      "outward_from_wall_chain_m": 21.9545288085938,
+      "camera_position_m": [
+        -167.630065917969,
+        5.12339878082275,
+        541.53125
+      ]
+    },
+    {
+      "frame": 145.0,
+      "player_position_m": [
+        -162.791458129883,
+        4.17280435562134,
+        539.135192871094
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.42082214355469,
+      "outward_from_wall_chain_m": 21.9545364379883,
+      "camera_position_m": [
+        -167.599731445312,
+        5.12339878082275,
+        541.590637207031
+      ]
+    },
+    {
+      "frame": 146.0,
+      "player_position_m": [
+        -162.761138916016,
+        4.17280435562134,
+        539.194580078125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.48750114440918,
+      "outward_from_wall_chain_m": 21.9545421600342,
+      "camera_position_m": [
+        -167.569427490234,
+        5.12339878082275,
+        541.650024414062
+      ]
+    },
+    {
+      "frame": 147.0,
+      "player_position_m": [
+        -162.730819702148,
+        4.17169332504272,
+        539.253967285156
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.55418014526367,
+      "outward_from_wall_chain_m": 21.9545497894287,
+      "camera_position_m": [
+        -167.539093017578,
+        5.12228775024414,
+        541.709411621094
+      ]
+    },
+    {
+      "frame": 148.0,
+      "player_position_m": [
+        -162.700500488281,
+        4.17169332504272,
+        539.313354492188
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.62085819244385,
+      "outward_from_wall_chain_m": 21.9545555114746,
+      "camera_position_m": [
+        -167.508804321289,
+        5.12228202819824,
+        541.768798828125
+      ]
+    },
+    {
+      "frame": 149.0,
+      "player_position_m": [
+        -162.670181274414,
+        4.17169332504272,
+        539.372741699219
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.68753719329834,
+      "outward_from_wall_chain_m": 21.9545631408691,
+      "camera_position_m": [
+        -167.478469848633,
+        5.12228775024414,
+        541.828186035156
+      ]
+    },
+    {
+      "frame": 150.0,
+      "player_position_m": [
+        -162.639862060547,
+        4.17169332504272,
+        539.43212890625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.75421714782715,
+      "outward_from_wall_chain_m": 21.954568862915,
+      "camera_position_m": [
+        -167.448196411133,
+        5.12227630615234,
+        541.887573242188
+      ]
+    },
+    {
+      "frame": 151.0,
+      "player_position_m": [
+        -162.60954284668,
+        4.17032623291016,
+        539.491516113281
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.82089614868164,
+      "outward_from_wall_chain_m": 21.9545783996582,
+      "camera_position_m": [
+        -167.417816162109,
+        5.12092113494873,
+        541.946960449219
+      ]
+    },
+    {
+      "frame": 152.0,
+      "player_position_m": [
+        -162.579223632812,
+        4.17032623291016,
+        539.550903320312
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.88757514953613,
+      "outward_from_wall_chain_m": 21.9545841217041,
+      "camera_position_m": [
+        -167.387481689453,
+        5.1209282875061,
+        542.006408691406
+      ]
+    },
+    {
+      "frame": 153.0,
+      "player_position_m": [
+        -162.548904418945,
+        4.17032623291016,
+        539.610290527344
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 1.95425319671631,
+      "outward_from_wall_chain_m": 21.95458984375,
+      "camera_position_m": [
+        -167.357177734375,
+        5.1209282875061,
+        542.065734863281
+      ]
+    },
+    {
+      "frame": 154.0,
+      "player_position_m": [
+        -162.518585205078,
+        4.16921520233154,
+        539.669677734375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.0209321975708,
+      "outward_from_wall_chain_m": 21.9545974731445,
+      "camera_position_m": [
+        -167.326858520508,
+        5.11981010437012,
+        542.125122070312
+      ]
+    },
+    {
+      "frame": 155.0,
+      "player_position_m": [
+        -162.488265991211,
+        4.16921520233154,
+        539.729064941406
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.08761119842529,
+      "outward_from_wall_chain_m": 21.9546051025391,
+      "camera_position_m": [
+        -167.29655456543,
+        5.11981010437012,
+        542.184509277344
+      ]
+    },
+    {
+      "frame": 156.0,
+      "player_position_m": [
+        -162.457946777344,
+        4.16921520233154,
+        539.788452148438
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.1542911529541,
+      "outward_from_wall_chain_m": 21.954610824585,
+      "camera_position_m": [
+        -167.266235351562,
+        5.11981010437012,
+        542.243896484375
+      ]
+    },
+    {
+      "frame": 157.0,
+      "player_position_m": [
+        -162.427627563477,
+        4.16921520233154,
+        539.847839355469
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.22097015380859,
+      "outward_from_wall_chain_m": 21.9546165466309,
+      "camera_position_m": [
+        -167.235916137695,
+        5.11981010437012,
+        542.303283691406
+      ]
+    },
+    {
+      "frame": 158.0,
+      "player_position_m": [
+        -162.397308349609,
+        4.16784811019897,
+        539.9072265625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.28764915466309,
+      "outward_from_wall_chain_m": 21.9546241760254,
+      "camera_position_m": [
+        -167.205581665039,
+        5.11843538284302,
+        542.362670898438
+      ]
+    },
+    {
+      "frame": 159.0,
+      "player_position_m": [
+        -162.366989135742,
+        4.16784811019897,
+        539.966613769531
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.35432720184326,
+      "outward_from_wall_chain_m": 21.9546298980713,
+      "camera_position_m": [
+        -167.17529296875,
+        5.11843681335449,
+        542.422058105469
+      ]
+    },
+    {
+      "frame": 160.0,
+      "player_position_m": [
+        -162.336669921875,
+        4.16784811019897,
+        540.026000976562
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.42100620269775,
+      "outward_from_wall_chain_m": 21.9546375274658,
+      "camera_position_m": [
+        -167.144958496094,
+        5.11843681335449,
+        542.481506347656
+      ]
+    },
+    {
+      "frame": 161.0,
+      "player_position_m": [
+        -162.306350708008,
+        4.16673707962036,
+        540.085388183594
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.48768615722656,
+      "outward_from_wall_chain_m": 21.9546432495117,
+      "camera_position_m": [
+        -167.114654541016,
+        5.11732578277588,
+        542.540832519531
+      ]
+    },
+    {
+      "frame": 162.0,
+      "player_position_m": [
+        -162.276031494141,
+        4.16673707962036,
+        540.144775390625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.55436515808105,
+      "outward_from_wall_chain_m": 21.9546508789062,
+      "camera_position_m": [
+        -167.084335327148,
+        5.11732578277588,
+        542.600219726562
+      ]
+    },
+    {
+      "frame": 163.0,
+      "player_position_m": [
+        -162.245712280273,
+        4.16673707962036,
+        540.204162597656
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.62104415893555,
+      "outward_from_wall_chain_m": 21.9546585083008,
+      "camera_position_m": [
+        -167.054000854492,
+        5.11733913421631,
+        542.659606933594
+      ]
+    },
+    {
+      "frame": 164.0,
+      "player_position_m": [
+        -162.215393066406,
+        4.16673707962036,
+        540.263549804688
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.68772220611572,
+      "outward_from_wall_chain_m": 21.9546661376953,
+      "camera_position_m": [
+        -167.023666381836,
+        5.11733913421631,
+        542.718994140625
+      ]
+    },
+    {
+      "frame": 165.0,
+      "player_position_m": [
+        -162.185073852539,
+        4.16536998748779,
+        540.322937011719
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.75440120697021,
+      "outward_from_wall_chain_m": 21.9546718597412,
+      "camera_position_m": [
+        -166.993362426758,
+        5.11597204208374,
+        542.778381347656
+      ]
+    },
+    {
+      "frame": 166.0,
+      "player_position_m": [
+        -162.154754638672,
+        4.16536998748779,
+        540.38232421875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.82108116149902,
+      "outward_from_wall_chain_m": 21.9546775817871,
+      "camera_position_m": [
+        -166.963043212891,
+        5.11597204208374,
+        542.837768554688
+      ]
+    },
+    {
+      "frame": 167.0,
+      "player_position_m": [
+        -162.124435424805,
+        4.16536998748779,
+        540.441711425781
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.88776016235352,
+      "outward_from_wall_chain_m": 21.9546852111816,
+      "camera_position_m": [
+        -166.932708740234,
+        5.11597204208374,
+        542.897155761719
+      ]
+    },
+    {
+      "frame": 168.0,
+      "player_position_m": [
+        -162.094116210938,
+        4.16425895690918,
+        540.501098632812
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 2.95443916320801,
+      "outward_from_wall_chain_m": 21.9546928405762,
+      "camera_position_m": [
+        -166.902404785156,
+        5.11485385894775,
+        542.95654296875
+      ]
+    },
+    {
+      "frame": 169.0,
+      "player_position_m": [
+        -162.06379699707,
+        4.16425895690918,
+        540.560485839844
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.02111721038818,
+      "outward_from_wall_chain_m": 21.9546985626221,
+      "camera_position_m": [
+        -166.872085571289,
+        5.11485385894775,
+        543.015930175781
+      ]
+    },
+    {
+      "frame": 170.0,
+      "player_position_m": [
+        -162.033477783203,
+        4.16425895690918,
+        540.619873046875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.08779621124268,
+      "outward_from_wall_chain_m": 21.954704284668,
+      "camera_position_m": [
+        -166.841751098633,
+        5.11485385894775,
+        543.075317382812
+      ]
+    },
+    {
+      "frame": 171.0,
+      "player_position_m": [
+        -162.003158569336,
+        4.16314792633057,
+        540.679260253906
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.15447616577148,
+      "outward_from_wall_chain_m": 21.9547119140625,
+      "camera_position_m": [
+        -166.811447143555,
+        5.11373662948608,
+        543.134765625
+      ]
+    },
+    {
+      "frame": 172.0,
+      "player_position_m": [
+        -161.972839355469,
+        4.16314792633057,
+        540.738647460938
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.22115516662598,
+      "outward_from_wall_chain_m": 21.9547176361084,
+      "camera_position_m": [
+        -166.781127929688,
+        5.11373662948608,
+        543.194152832031
+      ]
+    },
+    {
+      "frame": 173.0,
+      "player_position_m": [
+        -161.942520141602,
+        4.16314792633057,
+        540.798034667969
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.28783416748047,
+      "outward_from_wall_chain_m": 21.9547252655029,
+      "camera_position_m": [
+        -166.750793457031,
+        5.11374282836914,
+        543.253479003906
+      ]
+    },
+    {
+      "frame": 174.0,
+      "player_position_m": [
+        -161.912200927734,
+        4.16314792633057,
+        540.857421875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.35451316833496,
+      "outward_from_wall_chain_m": 21.9547328948975,
+      "camera_position_m": [
+        -166.720489501953,
+        5.11374998092651,
+        543.312866210938
+      ]
+    },
+    {
+      "frame": 175.0,
+      "player_position_m": [
+        -161.881881713867,
+        4.161780834198,
+        540.916809082031
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.42119121551514,
+      "outward_from_wall_chain_m": 21.954740524292,
+      "camera_position_m": [
+        -166.690170288086,
+        5.11238288879395,
+        543.372253417969
+      ]
+    },
+    {
+      "frame": 176.0,
+      "player_position_m": [
+        -161.8515625,
+        4.161780834198,
+        540.976196289062
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.48787117004395,
+      "outward_from_wall_chain_m": 21.9547462463379,
+      "camera_position_m": [
+        -166.659851074219,
+        5.11238288879395,
+        543.431640625
+      ]
+    },
+    {
+      "frame": 177.0,
+      "player_position_m": [
+        -161.821243286133,
+        4.161780834198,
+        541.035583496094
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.55455017089844,
+      "outward_from_wall_chain_m": 21.9547538757324,
+      "camera_position_m": [
+        -166.629516601562,
+        5.11238288879395,
+        543.491027832031
+      ]
+    },
+    {
+      "frame": 178.0,
+      "player_position_m": [
+        -161.790924072266,
+        4.16066980361938,
+        541.094970703125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.62122917175293,
+      "outward_from_wall_chain_m": 21.9547595977783,
+      "camera_position_m": [
+        -166.599197387695,
+        5.11127185821533,
+        543.550415039062
+      ]
+    },
+    {
+      "frame": 179.0,
+      "player_position_m": [
+        -161.760604858398,
+        4.16066980361938,
+        541.154357910156
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.68790817260742,
+      "outward_from_wall_chain_m": 21.9547653198242,
+      "camera_position_m": [
+        -166.568893432617,
+        5.11127185821533,
+        543.609802246094
+      ]
+    },
+    {
+      "frame": 180.0,
+      "player_position_m": [
+        -161.730285644531,
+        4.16066980361938,
+        541.213745117188
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.7545862197876,
+      "outward_from_wall_chain_m": 21.9547729492188,
+      "camera_position_m": [
+        -166.538589477539,
+        5.11125087738037,
+        543.669189453125
+      ]
+    },
+    {
+      "frame": 181.0,
+      "player_position_m": [
+        -161.699966430664,
+        4.16066980361938,
+        541.273132324219
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.82126522064209,
+      "outward_from_wall_chain_m": 21.9547805786133,
+      "camera_position_m": [
+        -166.50830078125,
+        5.111252784729,
+        543.728637695312
+      ]
+    },
+    {
+      "frame": 182.0,
+      "player_position_m": [
+        -161.669647216797,
+        4.15930271148682,
+        541.33251953125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.8879451751709,
+      "outward_from_wall_chain_m": 21.9547863006592,
+      "camera_position_m": [
+        -166.477920532227,
+        5.10989761352539,
+        543.787963867188
+      ]
+    },
+    {
+      "frame": 183.0,
+      "player_position_m": [
+        -161.63932800293,
+        4.15930271148682,
+        541.391906738281
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 3.95462417602539,
+      "outward_from_wall_chain_m": 21.9547939300537,
+      "camera_position_m": [
+        -166.447601318359,
+        5.10989761352539,
+        543.847351074219
+      ]
+    },
+    {
+      "frame": 184.0,
+      "player_position_m": [
+        -161.609008789062,
+        4.15930271148682,
+        541.451293945312
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.02130317687988,
+      "outward_from_wall_chain_m": 21.9547996520996,
+      "camera_position_m": [
+        -166.417282104492,
+        5.10989761352539,
+        543.90673828125
+      ]
+    },
+    {
+      "frame": 185.0,
+      "player_position_m": [
+        -161.578689575195,
+        4.1581916809082,
+        541.510681152344
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.08798122406006,
+      "outward_from_wall_chain_m": 21.9548072814941,
+      "camera_position_m": [
+        -166.386978149414,
+        5.10879373550415,
+        543.966125488281
+      ]
+    },
+    {
+      "frame": 186.0,
+      "player_position_m": [
+        -161.548370361328,
+        4.1581916809082,
+        541.570068359375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.15466022491455,
+      "outward_from_wall_chain_m": 21.95481300354,
+      "camera_position_m": [
+        -166.356643676758,
+        5.10879373550415,
+        544.025512695312
+      ]
+    },
+    {
+      "frame": 187.0,
+      "player_position_m": [
+        -161.518051147461,
+        4.1581916809082,
+        541.629455566406
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.22134017944336,
+      "outward_from_wall_chain_m": 21.9548206329346,
+      "camera_position_m": [
+        -166.32633972168,
+        5.10879373550415,
+        544.084899902344
+      ]
+    },
+    {
+      "frame": 188.0,
+      "player_position_m": [
+        -161.487731933594,
+        4.15708065032959,
+        541.688842773438
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.28801918029785,
+      "outward_from_wall_chain_m": 21.9548263549805,
+      "camera_position_m": [
+        -166.296020507812,
+        5.10767555236816,
+        544.144287109375
+      ]
+    },
+    {
+      "frame": 189.0,
+      "player_position_m": [
+        -161.457412719727,
+        4.15708065032959,
+        541.748229980469
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.35469770431519,
+      "outward_from_wall_chain_m": 21.954833984375,
+      "camera_position_m": [
+        -166.265731811523,
+        5.10767698287964,
+        544.203674316406
+      ]
+    },
+    {
+      "frame": 190.0,
+      "player_position_m": [
+        -161.427093505859,
+        4.15708065032959,
+        541.8076171875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.42137670516968,
+      "outward_from_wall_chain_m": 21.9548416137695,
+      "camera_position_m": [
+        -166.235382080078,
+        5.10767698287964,
+        544.263122558594
+      ]
+    },
+    {
+      "frame": 191.0,
+      "player_position_m": [
+        -161.396774291992,
+        4.15708065032959,
+        541.867004394531
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.48805570602417,
+      "outward_from_wall_chain_m": 21.9548473358154,
+      "camera_position_m": [
+        -166.205047607422,
+        5.10767555236816,
+        544.322448730469
+      ]
+    },
+    {
+      "frame": 192.0,
+      "player_position_m": [
+        -161.366455078125,
+        4.15571355819702,
+        541.926391601562
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.55473518371582,
+      "outward_from_wall_chain_m": 21.95485496521,
+      "camera_position_m": [
+        -166.174713134766,
+        5.10630798339844,
+        544.3818359375
+      ]
+    },
+    {
+      "frame": 193.0,
+      "player_position_m": [
+        -161.336135864258,
+        4.15571355819702,
+        541.985778808594
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.62141418457031,
+      "outward_from_wall_chain_m": 21.9548606872559,
+      "camera_position_m": [
+        -166.144424438477,
+        5.10630798339844,
+        544.441223144531
+      ]
+    },
+    {
+      "frame": 194.0,
+      "player_position_m": [
+        -161.305816650391,
+        4.15571355819702,
+        542.045166015625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.68809270858765,
+      "outward_from_wall_chain_m": 21.9548683166504,
+      "camera_position_m": [
+        -166.114135742188,
+        5.10630226135254,
+        544.500610351562
+      ]
+    },
+    {
+      "frame": 195.0,
+      "player_position_m": [
+        -161.275497436523,
+        4.15460252761841,
+        542.104553222656
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.75477170944214,
+      "outward_from_wall_chain_m": 21.9548759460449,
+      "camera_position_m": [
+        -166.083786010742,
+        5.10519695281982,
+        544.559997558594
+      ]
+    },
+    {
+      "frame": 196.0,
+      "player_position_m": [
+        -161.245178222656,
+        4.15460252761841,
+        542.163940429688
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.82145071029663,
+      "outward_from_wall_chain_m": 21.9548816680908,
+      "camera_position_m": [
+        -166.053451538086,
+        5.10519695281982,
+        544.619384765625
+      ]
+    },
+    {
+      "frame": 197.0,
+      "player_position_m": [
+        -161.214859008789,
+        4.15460252761841,
+        542.223327636719
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.88813018798828,
+      "outward_from_wall_chain_m": 21.9548873901367,
+      "camera_position_m": [
+        -166.023132324219,
+        5.10518980026245,
+        544.678771972656
+      ]
+    },
+    {
+      "frame": 198.0,
+      "player_position_m": [
+        -161.184539794922,
+        4.15460252761841,
+        542.28271484375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 4.95480918884277,
+      "outward_from_wall_chain_m": 21.9548950195312,
+      "camera_position_m": [
+        -165.992858886719,
+        5.10519886016846,
+        544.738159179688
+      ]
+    },
+    {
+      "frame": 199.0,
+      "player_position_m": [
+        -161.154220581055,
+        4.15323543548584,
+        542.342102050781
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.02148818969727,
+      "outward_from_wall_chain_m": 21.9549026489258,
+      "camera_position_m": [
+        -165.962539672852,
+        5.10382413864136,
+        544.797546386719
+      ]
+    },
+    {
+      "frame": 200.0,
+      "player_position_m": [
+        -161.123901367188,
+        4.15323543548584,
+        542.401489257812
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.0881667137146,
+      "outward_from_wall_chain_m": 21.9549083709717,
+      "camera_position_m": [
+        -165.932174682617,
+        5.10383033752441,
+        544.85693359375
+      ]
+    },
+    {
+      "frame": 201.0,
+      "player_position_m": [
+        -161.09358215332,
+        4.15323543548584,
+        542.460876464844
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.15484571456909,
+      "outward_from_wall_chain_m": 21.9549160003662,
+      "camera_position_m": [
+        -165.901840209961,
+        5.10383033752441,
+        544.916381835938
+      ]
+    },
+    {
+      "frame": 202.0,
+      "player_position_m": [
+        -161.063262939453,
+        4.15212440490723,
+        542.520263671875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.22152519226074,
+      "outward_from_wall_chain_m": 21.9549217224121,
+      "camera_position_m": [
+        -165.871536254883,
+        5.10272645950317,
+        544.975708007812
+      ]
+    },
+    {
+      "frame": 203.0,
+      "player_position_m": [
+        -161.032943725586,
+        4.15212440490723,
+        542.579650878906
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.28820419311523,
+      "outward_from_wall_chain_m": 21.9549293518066,
+      "camera_position_m": [
+        -165.841247558594,
+        5.10271310806274,
+        545.035095214844
+      ]
+    },
+    {
+      "frame": 204.0,
+      "player_position_m": [
+        -161.002624511719,
+        4.15212440490723,
+        542.639038085938
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.35488319396973,
+      "outward_from_wall_chain_m": 21.9549350738525,
+      "camera_position_m": [
+        -165.810913085938,
+        5.1027193069458,
+        545.094482421875
+      ]
+    },
+    {
+      "frame": 205.0,
+      "player_position_m": [
+        -160.972305297852,
+        4.15212440490723,
+        542.698425292969
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.42156171798706,
+      "outward_from_wall_chain_m": 21.9549427032471,
+      "camera_position_m": [
+        -165.78059387207,
+        5.1027193069458,
+        545.153869628906
+      ]
+    },
+    {
+      "frame": 206.0,
+      "player_position_m": [
+        -160.941986083984,
+        4.15075731277466,
+        542.7578125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.48824071884155,
+      "outward_from_wall_chain_m": 21.9549503326416,
+      "camera_position_m": [
+        -165.750274658203,
+        5.10135173797607,
+        545.213256835938
+      ]
+    },
+    {
+      "frame": 207.0,
+      "player_position_m": [
+        -160.911666870117,
+        4.15075731277466,
+        542.817199707031
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.55492067337036,
+      "outward_from_wall_chain_m": 21.9549560546875,
+      "camera_position_m": [
+        -165.719955444336,
+        5.10135173797607,
+        545.272644042969
+      ]
+    },
+    {
+      "frame": 208.0,
+      "player_position_m": [
+        -160.88134765625,
+        4.15075731277466,
+        542.876586914062
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.6215991973877,
+      "outward_from_wall_chain_m": 21.954963684082,
+      "camera_position_m": [
+        -165.689666748047,
+        5.10134601593018,
+        545.33203125
+      ]
+    },
+    {
+      "frame": 209.0,
+      "player_position_m": [
+        -160.851028442383,
+        4.14964628219604,
+        542.935974121094
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.68827819824219,
+      "outward_from_wall_chain_m": 21.9549694061279,
+      "camera_position_m": [
+        -165.659301757812,
+        5.10024070739746,
+        545.391418457031
+      ]
+    },
+    {
+      "frame": 210.0,
+      "player_position_m": [
+        -160.820709228516,
+        4.14964628219604,
+        542.995361328125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.75495672225952,
+      "outward_from_wall_chain_m": 21.9549751281738,
+      "camera_position_m": [
+        -165.628982543945,
+        5.10024070739746,
+        545.450805664062
+      ]
+    },
+    {
+      "frame": 211.0,
+      "player_position_m": [
+        -160.790390014648,
+        4.14964628219604,
+        543.054748535156
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.82163572311401,
+      "outward_from_wall_chain_m": 21.9549827575684,
+      "camera_position_m": [
+        -165.598663330078,
+        5.10024070739746,
+        545.510192871094
+      ]
+    },
+    {
+      "frame": 212.0,
+      "player_position_m": [
+        -160.760070800781,
+        4.14853525161743,
+        543.114135742188
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.88831472396851,
+      "outward_from_wall_chain_m": 21.9549903869629,
+      "camera_position_m": [
+        -165.568344116211,
+        5.09913730621338,
+        545.569580078125
+      ]
+    },
+    {
+      "frame": 213.0,
+      "player_position_m": [
+        -160.729751586914,
+        4.14853525161743,
+        543.173522949219
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 5.95499420166016,
+      "outward_from_wall_chain_m": 21.9549980163574,
+      "camera_position_m": [
+        -165.538040161133,
+        5.09913730621338,
+        545.628967285156
+      ]
+    },
+    {
+      "frame": 214.0,
+      "player_position_m": [
+        -160.699432373047,
+        4.14853525161743,
+        543.23291015625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.02167320251465,
+      "outward_from_wall_chain_m": 21.9550037384033,
+      "camera_position_m": [
+        -165.507720947266,
+        5.09912967681885,
+        545.688354492188
+      ]
+    },
+    {
+      "frame": 215.0,
+      "player_position_m": [
+        -160.66911315918,
+        4.14853525161743,
+        543.292297363281
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.08835172653198,
+      "outward_from_wall_chain_m": 21.9550094604492,
+      "camera_position_m": [
+        -165.477386474609,
+        5.09912967681885,
+        545.747741699219
+      ]
+    },
+    {
+      "frame": 216.0,
+      "player_position_m": [
+        -160.638793945312,
+        4.14716815948486,
+        543.351684570312
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.15503072738647,
+      "outward_from_wall_chain_m": 21.9550170898438,
+      "camera_position_m": [
+        -165.44709777832,
+        5.09775686264038,
+        545.80712890625
+      ]
+    },
+    {
+      "frame": 217.0,
+      "player_position_m": [
+        -160.608474731445,
+        4.14716815948486,
+        543.411071777344
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.22170972824097,
+      "outward_from_wall_chain_m": 21.9550228118896,
+      "camera_position_m": [
+        -165.416793823242,
+        5.09775686264038,
+        545.866516113281
+      ]
+    },
+    {
+      "frame": 218.0,
+      "player_position_m": [
+        -160.578155517578,
+        4.14716815948486,
+        543.470458984375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.28838920593262,
+      "outward_from_wall_chain_m": 21.9550304412842,
+      "camera_position_m": [
+        -165.386444091797,
+        5.09776306152344,
+        545.925903320312
+      ]
+    },
+    {
+      "frame": 219.0,
+      "player_position_m": [
+        -160.547836303711,
+        4.14605712890625,
+        543.529846191406
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.35506820678711,
+      "outward_from_wall_chain_m": 21.9550380706787,
+      "camera_position_m": [
+        -165.356155395508,
+        5.09664583206177,
+        545.985290527344
+      ]
+    },
+    {
+      "frame": 220.0,
+      "player_position_m": [
+        -160.517517089844,
+        4.14605712890625,
+        543.589233398438
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.4217472076416,
+      "outward_from_wall_chain_m": 21.9550437927246,
+      "camera_position_m": [
+        -165.325805664062,
+        5.09664583206177,
+        546.044738769531
+      ]
+    },
+    {
+      "frame": 221.0,
+      "player_position_m": [
+        -160.487197875977,
+        4.14605712890625,
+        543.648620605469
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.48842573165894,
+      "outward_from_wall_chain_m": 21.9550514221191,
+      "camera_position_m": [
+        -165.295471191406,
+        5.09665203094482,
+        546.104064941406
+      ]
+    },
+    {
+      "frame": 222.0,
+      "player_position_m": [
+        -160.456878662109,
+        4.14605712890625,
+        543.7080078125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.55510473251343,
+      "outward_from_wall_chain_m": 21.955057144165,
+      "camera_position_m": [
+        -165.26513671875,
+        5.09665203094482,
+        546.163452148438
+      ]
+    },
+    {
+      "frame": 223.0,
+      "player_position_m": [
+        -160.426559448242,
+        4.14469003677368,
+        543.767395019531
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.62178421020508,
+      "outward_from_wall_chain_m": 21.9550647735596,
+      "camera_position_m": [
+        -165.234848022461,
+        5.0952844619751,
+        546.222839355469
+      ]
+    },
+    {
+      "frame": 224.0,
+      "player_position_m": [
+        -160.396240234375,
+        4.14469003677368,
+        543.826782226562
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.68846321105957,
+      "outward_from_wall_chain_m": 21.9550704956055,
+      "camera_position_m": [
+        -165.204528808594,
+        5.0952844619751,
+        546.2822265625
+      ]
+    },
+    {
+      "frame": 225.0,
+      "player_position_m": [
+        -160.365921020508,
+        4.14469003677368,
+        543.886169433594
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.75514221191406,
+      "outward_from_wall_chain_m": 21.955078125,
+      "camera_position_m": [
+        -165.174240112305,
+        5.0952787399292,
+        546.341613769531
+      ]
+    },
+    {
+      "frame": 226.0,
+      "player_position_m": [
+        -160.335601806641,
+        4.14357900619507,
+        543.945556640625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.8218207359314,
+      "outward_from_wall_chain_m": 21.9550857543945,
+      "camera_position_m": [
+        -165.14387512207,
+        5.09417343139648,
+        546.401000976562
+      ]
+    },
+    {
+      "frame": 227.0,
+      "player_position_m": [
+        -160.305282592773,
+        4.14357900619507,
+        544.004943847656
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.88849973678589,
+      "outward_from_wall_chain_m": 21.9550914764404,
+      "camera_position_m": [
+        -165.113571166992,
+        5.09417343139648,
+        546.460388183594
+      ]
+    },
+    {
+      "frame": 228.0,
+      "player_position_m": [
+        -160.274963378906,
+        4.14169931411743,
+        544.064331054688
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 6.9551796913147,
+      "outward_from_wall_chain_m": 21.9550971984863,
+      "camera_position_m": [
+        -165.083236694336,
+        5.09229373931885,
+        546.519775390625
+      ]
+    },
+    {
+      "frame": 229.0,
+      "player_position_m": [
+        -160.244644165039,
+        4.13981962203979,
+        544.123718261719
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.02185821533203,
+      "outward_from_wall_chain_m": 21.9551048278809,
+      "camera_position_m": [
+        -165.052917480469,
+        5.09041404724121,
+        546.579162597656
+      ]
+    },
+    {
+      "frame": 230.0,
+      "player_position_m": [
+        -160.214324951172,
+        4.13742685317993,
+        544.18310546875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.08853721618652,
+      "outward_from_wall_chain_m": 21.9551124572754,
+      "camera_position_m": [
+        -165.022598266602,
+        5.08801412582397,
+        546.638549804688
+      ]
+    },
+    {
+      "frame": 231.0,
+      "player_position_m": [
+        -160.184005737305,
+        4.13742685317993,
+        544.242492675781
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.15521574020386,
+      "outward_from_wall_chain_m": 21.9551181793213,
+      "camera_position_m": [
+        -164.992279052734,
+        5.08802127838135,
+        546.697937011719
+      ]
+    },
+    {
+      "frame": 232.0,
+      "player_position_m": [
+        -160.153701782227,
+        4.14066553115845,
+        544.301818847656
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.22183322906494,
+      "outward_from_wall_chain_m": 21.9551105499268,
+      "camera_position_m": [
+        -164.962005615234,
+        5.09125423431396,
+        546.757263183594
+      ]
+    },
+    {
+      "frame": 233.0,
+      "player_position_m": [
+        -160.123382568359,
+        4.14174222946167,
+        544.361145019531
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.28845882415771,
+      "outward_from_wall_chain_m": 21.9550895690918,
+      "camera_position_m": [
+        -164.931655883789,
+        5.09233665466309,
+        546.816589355469
+      ]
+    },
+    {
+      "frame": 234.0,
+      "player_position_m": [
+        -160.093063354492,
+        4.14322900772095,
+        544.420532226562
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.35513782501221,
+      "outward_from_wall_chain_m": 21.9550971984863,
+      "camera_position_m": [
+        -164.901351928711,
+        5.09382343292236,
+        546.8759765625
+      ]
+    },
+    {
+      "frame": 235.0,
+      "player_position_m": [
+        -160.062744140625,
+        4.14479207992554,
+        544.479919433594
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.42181634902954,
+      "outward_from_wall_chain_m": 21.9551048278809,
+      "camera_position_m": [
+        -164.871063232422,
+        5.09538078308105,
+        546.935363769531
+      ]
+    },
+    {
+      "frame": 236.0,
+      "player_position_m": [
+        -160.032424926758,
+        4.14479207992554,
+        544.539306640625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.48849534988403,
+      "outward_from_wall_chain_m": 21.9551105499268,
+      "camera_position_m": [
+        -164.840759277344,
+        5.09537506103516,
+        546.994750976562
+      ]
+    },
+    {
+      "frame": 237.0,
+      "player_position_m": [
+        -160.002182006836,
+        4.14816236495972,
+        544.5986328125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.55508518218994,
+      "outward_from_wall_chain_m": 21.9551582336426,
+      "camera_position_m": [
+        -164.810455322266,
+        5.09876441955566,
+        547.054077148438
+      ]
+    },
+    {
+      "frame": 238.0,
+      "player_position_m": [
+        -159.971862792969,
+        4.14892196655273,
+        544.657958984375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.62170934677124,
+      "outward_from_wall_chain_m": 21.9551372528076,
+      "camera_position_m": [
+        -164.780136108398,
+        5.09951686859131,
+        547.113403320312
+      ]
+    },
+    {
+      "frame": 239.0,
+      "player_position_m": [
+        -159.941543579102,
+        4.14984846115112,
+        544.717346191406
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.68838930130005,
+      "outward_from_wall_chain_m": 21.9551429748535,
+      "camera_position_m": [
+        -164.74983215332,
+        5.10044288635254,
+        547.172790527344
+      ]
+    },
+    {
+      "frame": 240.0,
+      "player_position_m": [
+        -159.911224365234,
+        4.15079879760742,
+        544.776733398438
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.75506830215454,
+      "outward_from_wall_chain_m": 21.955150604248,
+      "camera_position_m": [
+        -164.719543457031,
+        5.10138750076294,
+        547.232177734375
+      ]
+    },
+    {
+      "frame": 241.0,
+      "player_position_m": [
+        -159.880905151367,
+        4.15174770355225,
+        544.836059570312
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.82169246673584,
+      "outward_from_wall_chain_m": 21.9551296234131,
+      "camera_position_m": [
+        -164.689178466797,
+        5.10234260559082,
+        547.29150390625
+      ]
+    },
+    {
+      "frame": 242.0,
+      "player_position_m": [
+        -159.8505859375,
+        4.15270519256592,
+        544.895446777344
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.88837146759033,
+      "outward_from_wall_chain_m": 21.955135345459,
+      "camera_position_m": [
+        -164.65885925293,
+        5.10330724716187,
+        547.350891113281
+      ]
+    },
+    {
+      "frame": 243.0,
+      "player_position_m": [
+        -159.820266723633,
+        4.15366077423096,
+        544.954833984375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 7.95505046844482,
+      "outward_from_wall_chain_m": 21.9551429748535,
+      "camera_position_m": [
+        -164.628540039062,
+        5.10425567626953,
+        547.410278320312
+      ]
+    },
+    {
+      "frame": 244.0,
+      "player_position_m": [
+        -159.789947509766,
+        4.15461492538452,
+        545.014221191406
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.02173042297363,
+      "outward_from_wall_chain_m": 21.955150604248,
+      "camera_position_m": [
+        -164.598220825195,
+        5.10520219802856,
+        547.469665527344
+      ]
+    },
+    {
+      "frame": 245.0,
+      "player_position_m": [
+        -159.759628295898,
+        4.15556955337524,
+        545.073608398438
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.08840942382812,
+      "outward_from_wall_chain_m": 21.9551563262939,
+      "camera_position_m": [
+        -164.567916870117,
+        5.10616397857666,
+        547.529052734375
+      ]
+    },
+    {
+      "frame": 246.0,
+      "player_position_m": [
+        -159.729309082031,
+        4.15652322769165,
+        545.132995605469
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.1550874710083,
+      "outward_from_wall_chain_m": 21.9551620483398,
+      "camera_position_m": [
+        -164.53759765625,
+        5.10711765289307,
+        547.588439941406
+      ]
+    },
+    {
+      "frame": 247.0,
+      "player_position_m": [
+        -159.698989868164,
+        4.15748357772827,
+        545.1923828125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.22176647186279,
+      "outward_from_wall_chain_m": 21.9551696777344,
+      "camera_position_m": [
+        -164.507278442383,
+        5.10807800292969,
+        547.647827148438
+      ]
+    },
+    {
+      "frame": 248.0,
+      "player_position_m": [
+        -159.668670654297,
+        4.15843868255615,
+        545.251770019531
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.28844547271729,
+      "outward_from_wall_chain_m": 21.9551773071289,
+      "camera_position_m": [
+        -164.476959228516,
+        5.10903358459473,
+        547.707214355469
+      ]
+    },
+    {
+      "frame": 249.0,
+      "player_position_m": [
+        -159.63835144043,
+        4.15939331054688,
+        545.311157226562
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.35512542724609,
+      "outward_from_wall_chain_m": 21.9551849365234,
+      "camera_position_m": [
+        -164.446624755859,
+        5.10999536514282,
+        547.7666015625
+      ]
+    },
+    {
+      "frame": 250.0,
+      "player_position_m": [
+        -159.608032226562,
+        4.1603479385376,
+        545.370544433594
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.42180442810059,
+      "outward_from_wall_chain_m": 21.9551906585693,
+      "camera_position_m": [
+        -164.416290283203,
+        5.11094284057617,
+        547.826049804688
+      ]
+    },
+    {
+      "frame": 251.0,
+      "player_position_m": [
+        -159.577713012695,
+        4.161301612854,
+        545.429931640625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.48848342895508,
+      "outward_from_wall_chain_m": 21.9551963806152,
+      "camera_position_m": [
+        -164.386016845703,
+        5.11189031600952,
+        547.885375976562
+      ]
+    },
+    {
+      "frame": 252.0,
+      "player_position_m": [
+        -159.547393798828,
+        4.16225671768188,
+        545.489318847656
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.55516147613525,
+      "outward_from_wall_chain_m": 21.9552040100098,
+      "camera_position_m": [
+        -164.355651855469,
+        5.1128511428833,
+        547.94482421875
+      ]
+    },
+    {
+      "frame": 253.0,
+      "player_position_m": [
+        -159.517074584961,
+        4.16321468353271,
+        545.548645019531
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.62178611755371,
+      "outward_from_wall_chain_m": 21.9551811218262,
+      "camera_position_m": [
+        -164.32536315918,
+        5.11381673812866,
+        548.004089355469
+      ]
+    },
+    {
+      "frame": 254.0,
+      "player_position_m": [
+        -159.486755371094,
+        4.16416931152344,
+        545.607971191406
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.68841171264648,
+      "outward_from_wall_chain_m": 21.9551620483398,
+      "camera_position_m": [
+        -164.295043945312,
+        5.11477136611938,
+        548.063415527344
+      ]
+    },
+    {
+      "frame": 255.0,
+      "player_position_m": [
+        -159.456436157227,
+        4.16512250900269,
+        545.667297363281
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.75503540039062,
+      "outward_from_wall_chain_m": 21.9551410675049,
+      "camera_position_m": [
+        -164.264739990234,
+        5.1157112121582,
+        548.122741699219
+      ]
+    },
+    {
+      "frame": 256.0,
+      "player_position_m": [
+        -159.426116943359,
+        4.16608142852783,
+        545.726684570312
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.82171440124512,
+      "outward_from_wall_chain_m": 21.9551467895508,
+      "camera_position_m": [
+        -164.234405517578,
+        5.11666870117188,
+        548.18212890625
+      ]
+    },
+    {
+      "frame": 257.0,
+      "player_position_m": [
+        -159.395797729492,
+        4.16702651977539,
+        545.786071777344
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.88839340209961,
+      "outward_from_wall_chain_m": 21.9551544189453,
+      "camera_position_m": [
+        -164.204086303711,
+        5.11762142181396,
+        548.241516113281
+      ]
+    },
+    {
+      "frame": 258.0,
+      "player_position_m": [
+        -159.365478515625,
+        4.1679801940918,
+        545.845458984375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 8.9550724029541,
+      "outward_from_wall_chain_m": 21.9551620483398,
+      "camera_position_m": [
+        -164.173751831055,
+        5.11858224868774,
+        548.300903320312
+      ]
+    },
+    {
+      "frame": 259.0,
+      "player_position_m": [
+        -159.335159301758,
+        4.16894340515137,
+        545.904846191406
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.02175140380859,
+      "outward_from_wall_chain_m": 21.9551677703857,
+      "camera_position_m": [
+        -164.143447875977,
+        5.11954545974731,
+        548.360290527344
+      ]
+    },
+    {
+      "frame": 260.0,
+      "player_position_m": [
+        -159.304840087891,
+        4.16989946365356,
+        545.964233398438
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.08843040466309,
+      "outward_from_wall_chain_m": 21.9551734924316,
+      "camera_position_m": [
+        -164.113128662109,
+        5.12050151824951,
+        548.419677734375
+      ]
+    },
+    {
+      "frame": 261.0,
+      "player_position_m": [
+        -159.274520874023,
+        4.17085361480713,
+        546.023620605469
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.15510940551758,
+      "outward_from_wall_chain_m": 21.9551811218262,
+      "camera_position_m": [
+        -164.082809448242,
+        5.1214485168457,
+        548.479064941406
+      ]
+    },
+    {
+      "frame": 262.0,
+      "player_position_m": [
+        -159.244201660156,
+        4.17181348800659,
+        546.0830078125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.22178840637207,
+      "outward_from_wall_chain_m": 21.9551887512207,
+      "camera_position_m": [
+        -164.052459716797,
+        5.12241554260254,
+        548.538513183594
+      ]
+    },
+    {
+      "frame": 263.0,
+      "player_position_m": [
+        -159.213882446289,
+        4.17276906967163,
+        546.142395019531
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.28846836090088,
+      "outward_from_wall_chain_m": 21.9551963806152,
+      "camera_position_m": [
+        -164.02214050293,
+        5.12336349487305,
+        548.597900390625
+      ]
+    },
+    {
+      "frame": 264.0,
+      "player_position_m": [
+        -159.183563232422,
+        4.17372274398804,
+        546.201782226562
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.35514640808105,
+      "outward_from_wall_chain_m": 21.9552001953125,
+      "camera_position_m": [
+        -163.991821289062,
+        5.12432479858398,
+        548.657287597656
+      ]
+    },
+    {
+      "frame": 265.0,
+      "player_position_m": [
+        -159.153244018555,
+        4.17467784881592,
+        546.261169433594
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.42182540893555,
+      "outward_from_wall_chain_m": 21.955207824707,
+      "camera_position_m": [
+        -163.961517333984,
+        5.12527275085449,
+        548.716613769531
+      ]
+    },
+    {
+      "frame": 266.0,
+      "player_position_m": [
+        -159.122924804688,
+        4.17563199996948,
+        546.320556640625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.48850440979004,
+      "outward_from_wall_chain_m": 21.9552154541016,
+      "camera_position_m": [
+        -163.931213378906,
+        5.1262264251709,
+        548.776000976562
+      ]
+    },
+    {
+      "frame": 267.0,
+      "player_position_m": [
+        -159.09260559082,
+        4.17659091949463,
+        546.3798828125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.55513000488281,
+      "outward_from_wall_chain_m": 21.9551944732666,
+      "camera_position_m": [
+        -163.900894165039,
+        5.1271858215332,
+        548.835327148438
+      ]
+    },
+    {
+      "frame": 268.0,
+      "player_position_m": [
+        -159.062286376953,
+        4.17754459381104,
+        546.439208984375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.62175464630127,
+      "outward_from_wall_chain_m": 21.9551734924316,
+      "camera_position_m": [
+        -163.870544433594,
+        5.12813949584961,
+        548.894653320312
+      ]
+    },
+    {
+      "frame": 269.0,
+      "player_position_m": [
+        -159.031967163086,
+        4.17849731445312,
+        546.49853515625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.68837928771973,
+      "outward_from_wall_chain_m": 21.9551525115967,
+      "camera_position_m": [
+        -163.840240478516,
+        5.1290922164917,
+        548.953979492188
+      ]
+    },
+    {
+      "frame": 270.0,
+      "player_position_m": [
+        -159.001647949219,
+        4.17945146560669,
+        546.557861328125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.75500297546387,
+      "outward_from_wall_chain_m": 21.9551315307617,
+      "camera_position_m": [
+        -163.809982299805,
+        5.13004207611084,
+        549.013366699219
+      ]
+    },
+    {
+      "frame": 271.0,
+      "player_position_m": [
+        -158.971328735352,
+        4.18040466308594,
+        546.6171875
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.82162857055664,
+      "outward_from_wall_chain_m": 21.9551086425781,
+      "camera_position_m": [
+        -163.77961730957,
+        5.13099956512451,
+        549.072631835938
+      ]
+    },
+    {
+      "frame": 272.0,
+      "player_position_m": [
+        -158.941009521484,
+        4.18136358261108,
+        546.676574707031
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.88830757141113,
+      "outward_from_wall_chain_m": 21.9551162719727,
+      "camera_position_m": [
+        -163.749282836914,
+        5.1319580078125,
+        549.132019042969
+      ]
+    },
+    {
+      "frame": 273.0,
+      "player_position_m": [
+        -158.910690307617,
+        4.18231773376465,
+        546.735961914062
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 9.95498561859131,
+      "outward_from_wall_chain_m": 21.9551239013672,
+      "camera_position_m": [
+        -163.718963623047,
+        5.1329197883606,
+        549.19140625
+      ]
+    },
+    {
+      "frame": 274.0,
+      "player_position_m": [
+        -158.88037109375,
+        4.18327283859253,
+        546.795349121094
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.0216655731201,
+      "outward_from_wall_chain_m": 21.9551315307617,
+      "camera_position_m": [
+        -163.688629150391,
+        5.13386726379395,
+        549.250854492188
+      ]
+    },
+    {
+      "frame": 275.0,
+      "player_position_m": [
+        -158.850051879883,
+        4.18422698974609,
+        546.854736328125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.088342666626,
+      "outward_from_wall_chain_m": 21.9551372528076,
+      "camera_position_m": [
+        -163.658355712891,
+        5.13482332229614,
+        549.310180664062
+      ]
+    },
+    {
+      "frame": 276.0,
+      "player_position_m": [
+        -158.819732666016,
+        4.18518686294556,
+        546.914123535156
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.1550235748291,
+      "outward_from_wall_chain_m": 21.9551429748535,
+      "camera_position_m": [
+        -163.628005981445,
+        5.13578128814697,
+        549.369567871094
+      ]
+    },
+    {
+      "frame": 277.0,
+      "player_position_m": [
+        -158.789413452148,
+        4.1861424446106,
+        546.973510742188
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.221700668335,
+      "outward_from_wall_chain_m": 21.955150604248,
+      "camera_position_m": [
+        -163.597732543945,
+        5.13673114776611,
+        549.428955078125
+      ]
+    },
+    {
+      "frame": 278.0,
+      "player_position_m": [
+        -158.759094238281,
+        4.187096118927,
+        547.032897949219
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.2883806228638,
+      "outward_from_wall_chain_m": 21.9551582336426,
+      "camera_position_m": [
+        -163.5673828125,
+        5.13769054412842,
+        549.488342285156
+      ]
+    },
+    {
+      "frame": 279.0,
+      "player_position_m": [
+        -158.728775024414,
+        4.18805122375488,
+        547.09228515625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.3550605773926,
+      "outward_from_wall_chain_m": 21.9551658630371,
+      "camera_position_m": [
+        -163.537094116211,
+        5.1386399269104,
+        549.547729492188
+      ]
+    },
+    {
+      "frame": 280.0,
+      "player_position_m": [
+        -158.698455810547,
+        4.18901062011719,
+        547.151672363281
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.4217386245728,
+      "outward_from_wall_chain_m": 21.955171585083,
+      "camera_position_m": [
+        -163.506759643555,
+        5.13959932327271,
+        549.607116699219
+      ]
+    },
+    {
+      "frame": 281.0,
+      "player_position_m": [
+        -158.66813659668,
+        4.18996572494507,
+        547.211059570312
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.4884185791016,
+      "outward_from_wall_chain_m": 21.9551773071289,
+      "camera_position_m": [
+        -163.476409912109,
+        5.14056015014648,
+        549.66650390625
+      ]
+    },
+    {
+      "frame": 282.0,
+      "player_position_m": [
+        -158.637817382812,
+        4.19091987609863,
+        547.270446777344
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.5550956726074,
+      "outward_from_wall_chain_m": 21.9551849365234,
+      "camera_position_m": [
+        -163.446075439453,
+        5.14151477813721,
+        549.725952148438
+      ]
+    },
+    {
+      "frame": 283.0,
+      "player_position_m": [
+        -158.607498168945,
+        4.19187450408936,
+        547.329833984375
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.6217756271362,
+      "outward_from_wall_chain_m": 21.955192565918,
+      "camera_position_m": [
+        -163.415771484375,
+        5.14246940612793,
+        549.785278320312
+      ]
+    },
+    {
+      "frame": 284.0,
+      "player_position_m": [
+        -158.577178955078,
+        4.19282960891724,
+        547.389221191406
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.688455581665,
+      "outward_from_wall_chain_m": 21.9552001953125,
+      "camera_position_m": [
+        -163.385452270508,
+        5.14343166351318,
+        549.844665527344
+      ]
+    },
+    {
+      "frame": 285.0,
+      "player_position_m": [
+        -158.546859741211,
+        4.19378328323364,
+        547.448608398438
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.7551336288452,
+      "outward_from_wall_chain_m": 21.9552059173584,
+      "camera_position_m": [
+        -163.35514831543,
+        5.14437770843506,
+        549.904052734375
+      ]
+    },
+    {
+      "frame": 286.0,
+      "player_position_m": [
+        -158.516540527344,
+        4.19474267959595,
+        547.507934570312
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.8217582702637,
+      "outward_from_wall_chain_m": 21.9551849365234,
+      "camera_position_m": [
+        -163.324813842773,
+        5.14533710479736,
+        549.96337890625
+      ]
+    },
+    {
+      "frame": 287.0,
+      "player_position_m": [
+        -158.486221313477,
+        4.19569635391235,
+        547.567260742188
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.8883819580078,
+      "outward_from_wall_chain_m": 21.9551620483398,
+      "camera_position_m": [
+        -163.294525146484,
+        5.1462926864624,
+        550.022705078125
+      ]
+    },
+    {
+      "frame": 288.0,
+      "player_position_m": [
+        -158.455902099609,
+        4.19664907455444,
+        547.626586914062
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 10.9550094604492,
+      "outward_from_wall_chain_m": 21.9551429748535,
+      "camera_position_m": [
+        -163.26416015625,
+        5.14724349975586,
+        550.08203125
+      ]
+    },
+    {
+      "frame": 289.0,
+      "player_position_m": [
+        -158.425582885742,
+        4.19760799407959,
+        547.685974121094
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 11.0216865539551,
+      "outward_from_wall_chain_m": 21.9551486968994,
+      "camera_position_m": [
+        -163.233871459961,
+        5.14820289611816,
+        550.141418457031
+      ]
+    },
+    {
+      "frame": 290.0,
+      "player_position_m": [
+        -158.395263671875,
+        4.19856262207031,
+        547.745361328125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 11.0883665084839,
+      "outward_from_wall_chain_m": 21.9551563262939,
+      "camera_position_m": [
+        -163.203552246094,
+        5.14915752410889,
+        550.200805664062
+      ]
+    },
+    {
+      "frame": 291.0,
+      "player_position_m": [
+        -158.364944458008,
+        4.19951963424683,
+        547.804748535156
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 11.1550445556641,
+      "outward_from_wall_chain_m": 21.9551620483398,
+      "camera_position_m": [
+        -163.173233032227,
+        5.15011405944824,
+        550.260192871094
+      ]
+    },
+    {
+      "frame": 292.0,
+      "player_position_m": [
+        -158.334625244141,
+        4.20047473907471,
+        547.864135742188
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 11.2217235565186,
+      "outward_from_wall_chain_m": 21.9551696777344,
+      "camera_position_m": [
+        -163.14289855957,
+        5.15106964111328,
+        550.319580078125
+      ]
+    },
+    {
+      "frame": 293.0,
+      "player_position_m": [
+        -158.304306030273,
+        4.20142984390259,
+        547.923522949219
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 11.2884044647217,
+      "outward_from_wall_chain_m": 21.9551773071289,
+      "camera_position_m": [
+        -163.112594604492,
+        5.152024269104,
+        550.378967285156
+      ]
+    },
+    {
+      "frame": 294.0,
+      "player_position_m": [
+        -158.273986816406,
+        4.2023868560791,
+        547.98291015625
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 11.3550815582275,
+      "outward_from_wall_chain_m": 21.9551830291748,
+      "camera_position_m": [
+        -163.082290649414,
+        5.15298318862915,
+        550.438354492188
+      ]
+    },
+    {
+      "frame": 295.0,
+      "player_position_m": [
+        -158.243667602539,
+        4.20334100723267,
+        548.042297363281
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 11.4217615127563,
+      "outward_from_wall_chain_m": 21.9551887512207,
+      "camera_position_m": [
+        -163.051940917969,
+        5.15393543243408,
+        550.497741699219
+      ]
+    },
+    {
+      "frame": 296.0,
+      "player_position_m": [
+        -158.213348388672,
+        4.20429801940918,
+        548.101684570312
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 11.4884395599365,
+      "outward_from_wall_chain_m": 21.9551963806152,
+      "camera_position_m": [
+        -163.02165222168,
+        5.1548867225647,
+        550.55712890625
+      ]
+    },
+    {
+      "frame": 297.0,
+      "player_position_m": [
+        -158.183029174805,
+        4.20525312423706,
+        548.161071777344
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 11.555118560791,
+      "outward_from_wall_chain_m": 21.9552040100098,
+      "camera_position_m": [
+        -162.991302490234,
+        5.15584754943848,
+        550.616516113281
+      ]
+    },
+    {
+      "frame": 298.0,
+      "player_position_m": [
+        -158.152709960938,
+        4.20620965957642,
+        548.220397949219
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 11.6217441558838,
+      "outward_from_wall_chain_m": 21.9551811218262,
+      "camera_position_m": [
+        -162.961029052734,
+        5.15679836273193,
+        550.675842285156
+      ]
+    },
+    {
+      "frame": 299.0,
+      "player_position_m": [
+        -158.12239074707,
+        4.20716238021851,
+        548.279724121094
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 11.6883678436279,
+      "outward_from_wall_chain_m": 21.9551620483398,
+      "camera_position_m": [
+        -162.930709838867,
+        5.15775871276855,
+        550.735168457031
+      ]
+    },
+    {
+      "frame": 300.0,
+      "player_position_m": [
+        -158.092071533203,
+        4.20811891555786,
+        548.339111328125
+      ],
+      "velocity_mps": [
+        1.81918096542358,
+        0.0,
+        3.56238412857056
+      ],
+      "is_on_floor": true,
+      "along_from_corner_m": 11.7550477981567,
+      "outward_from_wall_chain_m": 21.9551677703857,
+      "camera_position_m": [
+        -162.900344848633,
+        5.15871334075928,
+        550.794555664062
+      ]
+    }
+  ],
+  "bindings": {
+    "low_receiver_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_2__building-composite_w1249412094_w1282547787_wall/building-composite_w1249412094_w1282547787_wall",
+    "low_receiver_source_keys": [
+      "w1282547787"
+    ],
+    "high_receiver_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_2__building-composite_w1249412094_w1282547786_wall/building-composite_w1249412094_w1282547786_wall",
+    "high_receiver_source_keys": [
+      "w1282547786"
+    ],
+    "failed_live_signature": "5d61ab90e5b798ac4aa26c45fea37a5293f3083dada615f06999faad459112cc",
+    "sealed_variant_b_repair_signature": "a58d9b963b0dc19b5a9fa1cba4872294a2ea2803459a9ba455e276dc1ff5b5bf",
+    "variant_c_repair_signature": "41868b77a8b51b56ee7381e5549423e97547270d2dc77d9ce5cf958b31e2cb69",
+    "accepted_high_signature": "e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1",
+    "sealed_variant_b_topology": {
+      "mesh_instances": 6.0,
+      "surfaces": 8.0,
+      "triangles": 2316.0
+    },
+    "variant_c_topology": {
+      "mesh_instances": 7.0,
+      "surfaces": 11.0,
+      "triangles": 2242.0
+    },
+    "underlying_wall_remains_sole_collision_and_spray_receiver": true,
+    "standalone_only": true,
+    "live_replacement": false,
+    "recognition_accepted": false,
+    "believability_accepted": false
+  },
+  "visual_verdict": "pending_independent_review",
+  "movie_finalized_after_writer_close": true,
+  "finalizer_command": "Godot headless capture script finalize-motion with exact observed movie SHA-256 and byte count"
+}

@@ -8,15 +8,16 @@ const RENDER_BUILDING_WALL := 1 << 1
 const WESTERN_BRIDGE_REPLACEMENT_MAX_X_M := 500.0
 const POLYHAVEN_DEFAULT_NORMAL_STRENGTH := 0.2
 const HAWKINS_MASSING := preload("res://game/scripts/world/massing/hawkins_77_bruton_massing.gd")
-const BUILDING_3_FACADE_SCENE := preload("res://game/scenes/world/facades/building_3/building_3_600_california_facade.tscn")
+const BUILDING_3_MASSING := preload("res://game/scripts/world/massing/building_3_600_california_massing.gd")
 const ISLE_HOUSE_HIGH_FACADE_SCENE := preload("res://game/scenes/world/facades/isle_house/isle_house_high_facade.tscn")
+const ISLE_HOUSE_LOW_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd")
 const ACCEPTED_MATERIAL_RUN_TRIALS := preload("res://game/scripts/world/facades/accepted_material_run_trials.gd")
 const W34313564_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313564_live_modules.gd")
 const W34313515_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313515_live_modules.gd")
 const W291196370_LIVE_MODULES := preload("res://game/scripts/world/facades/w291196370_live_modules.gd")
 const W34313520_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313520_live_modules.gd")
 const W34313525_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313525_live_modules.gd")
-const BUILDING_1_RECOGNIZABLE_FACADE := preload("res://game/scripts/world/facades/building_1_recognizable_facade.gd")
+const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
 const POLYHAVEN_TEXTURE_SETS := {
 	"clean_asphalt": {
 		"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"),
@@ -110,9 +111,8 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		report.mesh_instances += int(record_result.get("mesh_instances", 1))
 		report.surfaces += int(record_result.get("surfaces", 1))
 		report.triangles += int(record_result.triangles)
-		if str(record.collision_kind) == "world_solid":
-			report.static_bodies += 1
-			report.shapes += 1
+		report.static_bodies += int(record_result.get("static_bodies", 1 if str(record.collision_kind) == "world_solid" else 0))
+		report.shapes += int(record_result.get("shapes", 1 if str(record.collision_kind) == "world_solid" else 0))
 		for key_value: Variant in record.source_keys:
 			report.source_keys[str(key_value)] = true
 	return report
@@ -166,8 +166,22 @@ func build_context(context: Dictionary, context_parents: Dictionary) -> Dictiona
 
 
 func _build_record(record: Dictionary, is_context: bool) -> Dictionary:
+	# Building 1's generated 20 m slab and terrain-level tower are source-valid
+	# horizontal placeholders but visually and physically wrong in the vertical
+	# dimension.  Intercept all four independently keyed records before generic
+	# mesh/collision construction so no invisible legacy surfaces survive.
+	if not is_context and BUILDING_1_HERO_MODEL.matches_record(record):
+		return BUILDING_1_HERO_MODEL.build_record(record)
 	if not is_context and HAWKINS_MASSING.matches_record(record):
 		return HAWKINS_MASSING.build_record(
+			record,
+			_material_for(str(record.material_key), str(record.feature_kind), false)
+		)
+	# Building 3's frozen horizontal receiver remains authoritative, while its
+	# flat vertical placeholder obscures the landmark hangar family. Replace
+	# wall and roof together before generic collision is ever constructed.
+	if not is_context and BUILDING_3_MASSING.matches_record(record):
+		return BUILDING_3_MASSING.build_record(
 			record,
 			_material_for(str(record.material_key), str(record.feature_kind), false)
 		)
@@ -325,30 +339,6 @@ func _build_record(record: Dictionary, is_context: bool) -> Dictionary:
 		surfaces += int(live_module_result.surfaces)
 		triangle_count += int(live_module_result.triangles)
 
-	if not is_context and BUILDING_1_RECOGNIZABLE_FACADE.matches_record(record):
-		var recognizable_result := BUILDING_1_RECOGNIZABLE_FACADE.build(record)
-		if not bool(recognizable_result.get("ok", false)):
-			root.free()
-			return recognizable_result
-		root.add_child(recognizable_result.node as Node3D)
-		root.set_meta("building_1_recognizable_facade", (recognizable_result.metadata as Dictionary).duplicate(true))
-		mesh_instances += int(recognizable_result.mesh_instances)
-		surfaces += int(recognizable_result.surfaces)
-		triangle_count += int(recognizable_result.triangles)
-
-	if not is_context and Building3600CaliforniaFacade.matches_target(record):
-		var building_3_facade := BUILDING_3_FACADE_SCENE.instantiate() as Building3600CaliforniaFacade
-		var building_3_result := building_3_facade.configure(record)
-		if not bool(building_3_result.get("ok", false)):
-			building_3_facade.free()
-			root.free()
-			return {
-				"ok": false,
-				"code": "building_3_facade_contract",
-				"message": str(building_3_result.get("message", "Could not build target-specific Building 3 facade.")),
-				"source_keys": record.source_keys,
-			}
-		root.add_child(building_3_facade)
 	if not is_context and IsleHouse39BrutonHighFacade.matches_target(record):
 		var isle_house_facade := ISLE_HOUSE_HIGH_FACADE_SCENE.instantiate() as IsleHouse39BrutonHighFacade
 		var isle_house_result := isle_house_facade.configure(record)
@@ -362,6 +352,16 @@ func _build_record(record: Dictionary, is_context: bool) -> Dictionary:
 				"source_keys": record.source_keys,
 			}
 		root.add_child(isle_house_facade)
+	if not is_context and ISLE_HOUSE_LOW_LIVE_ATTACHMENT.matches_record(record):
+		var isle_house_low_result := ISLE_HOUSE_LOW_LIVE_ATTACHMENT.build(record)
+		if not bool(isle_house_low_result.get("ok", false)):
+			root.free()
+			return isle_house_low_result
+		root.add_child(isle_house_low_result.node as Node3D)
+		root.set_meta("isle_house_low_live_attachment", (isle_house_low_result.metadata as Dictionary).duplicate(true))
+		mesh_instances += int(isle_house_low_result.mesh_instances)
+		surfaces += int(isle_house_low_result.surfaces)
+		triangle_count += int(isle_house_low_result.triangles)
 	return {
 		"ok": true,
 		"node": root,

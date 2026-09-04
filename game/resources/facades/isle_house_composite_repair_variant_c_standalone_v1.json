@@ -1,0 +1,187 @@
+{
+  "schema_version": "ti.isle-house-composite-repair-variant-c-standalone/1",
+  "scope": "isolated full high-plus-low sealed-B versus Variant-C comparison; never loaded by world construction",
+  "target": {
+    "parent_source_key": "w1249412094",
+    "chunk_id": "x_-1__z_2",
+    "chunk_sha256": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce",
+    "high_wall_key": "building-composite:w1249412094:w1282547786:wall",
+    "high_roof_key": "building-composite:w1249412094:w1282547786:roof",
+    "low_wall_key": "building-composite:w1249412094:w1282547787:wall",
+    "low_roof_key": "building-composite:w1249412094:w1282547787:roof",
+    "high_source_key": "w1282547786",
+    "low_source_key": "w1282547787",
+    "high_top_y_m": 71.103,
+    "low_top_y_m": 19.103,
+    "flat_base_y_m": 4.103
+  },
+  "sealed_variant_b": {
+    "factory_sha256": "b23d9cb3acbedacb323197fd38660f45b13e532dd11c1cca1fafe785338037d8",
+    "config_sha256": "a3e1865d18cfbb4155cf01df3b5eb265ca67e4ee80acfc07986c84d0cd7db393",
+    "repair_signature": "a58d9b963b0dc19b5a9fa1cba4872294a2ea2803459a9ba455e276dc1ff5b5bf",
+    "independent_grade": "FAIL",
+    "review_sha256": "a5dd6b61a0adc25ad8d10879fcd342870ae11c71b18f52892287685ced36cad8"
+  },
+  "truth_boundary": {
+    "standalone_only": true,
+    "runtime_attachment": false,
+    "live_replacement": false,
+    "recognition_accepted": false,
+    "believability_accepted": false,
+    "as_built_fidelity": false,
+    "source_pixels_packaged": false,
+    "upper_schedule_claimed": false,
+    "literal_seven_story_geometry_claimed": false,
+    "protected_return_opening_schedule_claimed": false,
+    "observed_family_facts": [
+      "completed building has a seventh-story podium below a folded light tower",
+      "public low realm uses warm brick and handcrafted eye-level materials",
+      "nine two-level live-work homes have private entries, Dutch doors, and patios",
+      "half of the live-work homes face Avenue of the Palms and half face the shared way"
+    ],
+    "production_inferences": [
+      "unequal transfer body crown and cap heights and shallow relief",
+      "quiet scalar value for the prominent unmapped NNW return",
+      "four lower macro arrangements and all exact dimensions",
+      "eight placements clustering offsets pauses sequence and mirroring",
+      "opaque glazing panel proportions canopy widths patio depths and planter proxies"
+    ]
+  },
+  "render_contract": {
+    "render_layer": 2,
+    "maximum_relief_m": 0.18,
+    "lower_field_offset_m": 0.014,
+    "live_work_band_top_y_m": 10.25,
+    "low_top_y_m": 19.103,
+    "minimum_module_corner_clearance_m": 1.45,
+    "collision": "none",
+    "navigation": "none",
+    "spray": "none",
+    "silhouette_change": "surface_relief_only_at_or_below_0.18m",
+    "brick_field_material": {
+      "path": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "texture_path": "res://game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png",
+      "cell_m": 2.5,
+      "tint": [0.70, 0.66, 0.62, 1.0],
+      "roughness": 0.86,
+      "u_rule": "continuous_xz_metres_within_ordered_public_side",
+      "v_rule": "absolute_world_y_metres"
+    },
+    "upper_massing_bands": [
+      {"id": "TRANSFER-PLINTH", "bottom_y_m": 10.25, "top_y_m": 11.45, "offset_m": 0.078, "material_key": "transition", "truth_class": "production_inference_massing_not_story"},
+      {"id": "PODIUM-BODY", "bottom_y_m": 11.45, "top_y_m": 17.38, "offset_m": 0.036, "material_key": "podium_mid", "truth_class": "production_inference_massing_not_story"},
+      {"id": "PODIUM-CROWN", "bottom_y_m": 17.38, "top_y_m": 18.70, "offset_m": 0.064, "material_key": "podium_light", "truth_class": "production_inference_massing_not_story"},
+      {"id": "TOP-SHADOW-CAP", "bottom_y_m": 18.70, "top_y_m": 19.103, "offset_m": 0.105, "material_key": "transition", "truth_class": "production_inference_massing_not_story"}
+    ],
+    "upper_relief_caps": [
+      {"id": "LIVEWORK-TRANSFER-CAP", "center_y_m": 10.38, "height_m": 0.26, "depth_m": 0.16, "outward_center_m": 0.088, "material_key": "transition"},
+      {"id": "PODIUM-CROWN-CAP", "center_y_m": 18.63, "height_m": 0.22, "depth_m": 0.17, "outward_center_m": 0.090, "material_key": "podium_light"}
+    ],
+    "protected_nnw_fallback": {
+      "run_indices": [10, 11, 12],
+      "bottom_y_m": 4.103,
+      "top_y_m": 19.103,
+      "offset_m": 0.022,
+      "material_key": "quiet_return",
+      "treatment": "single quiet scalar homogeneous field",
+      "opening_count": 0,
+      "schedule_claimed": false,
+      "truth_class": "source_safe_low_realm_neutral_fallback_not_as_built"
+    }
+  },
+  "public_sides": [
+    {"id": "LOW-WSW-AVENUE-OF-THE-PALMS", "ordered_run_indices": [0, 1, 2, 3, 4]},
+    {"id": "LOW-ENE-GARDEN-WALK", "ordered_run_indices": [5, 6, 7, 8, 9]}
+  ],
+  "runs": [
+    {"index": 0, "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "start_xyz_m": [-156.887, 4.027, 502.424], "end_xyz_m": [-154.702, 4.027, 506.702], "normal_xz": [-0.891, 0.455], "length_m": 4.803697},
+    {"index": 1, "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "start_xyz_m": [-154.702, 4.027, 506.702], "end_xyz_m": [-151.997, 3.983, 512.000], "normal_xz": [-0.891, 0.455], "length_m": 5.948599},
+    {"index": 2, "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "start_xyz_m": [-151.997, 3.983, 512.000], "end_xyz_m": [-143.885, 4.103, 527.885], "normal_xz": [-0.891, 0.455], "length_m": 17.836417},
+    {"index": 3, "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "start_xyz_m": [-143.885, 4.103, 527.885], "end_xyz_m": [-135.655, 3.993, 544.000], "normal_xz": [-0.891, 0.455], "length_m": 18.094920},
+    {"index": 4, "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "start_xyz_m": [-135.655, 3.993, 544.000], "end_xyz_m": [-133.374, 4.065, 548.466], "normal_xz": [-0.891, 0.455], "length_m": 5.014790},
+    {"index": 5, "side_id": "LOW-ENE-GARDEN-WALK", "start_xyz_m": [-95.775, 4.099, 526.591], "end_xyz_m": [-96.000, 4.103, 526.151], "normal_xz": [0.890, -0.455], "length_m": 0.494191},
+    {"index": 6, "side_id": "LOW-ENE-GARDEN-WALK", "start_xyz_m": [-96.000, 4.103, 526.151], "end_xyz_m": [-100.787, 4.103, 516.787], "normal_xz": [0.890, -0.455], "length_m": 10.516647},
+    {"index": 7, "side_id": "LOW-ENE-GARDEN-WALK", "start_xyz_m": [-100.787, 4.103, 516.787], "end_xyz_m": [-103.235, 4.103, 512.000], "normal_xz": [0.890, -0.455], "length_m": 5.376623},
+    {"index": 8, "side_id": "LOW-ENE-GARDEN-WALK", "start_xyz_m": [-103.235, 4.103, 512.000], "end_xyz_m": [-111.613, 4.103, 495.613], "normal_xz": [0.890, -0.455], "length_m": 18.404474},
+    {"index": 9, "side_id": "LOW-ENE-GARDEN-WALK", "start_xyz_m": [-111.613, 4.103, 495.613], "end_xyz_m": [-118.444, 4.103, 482.253], "normal_xz": [0.890, -0.455], "length_m": 15.005071},
+    {"index": 10, "side_id": "LOW-NNW-PROTECTED", "start_xyz_m": [-118.444, 4.103, 482.253], "end_xyz_m": [-128.000, 4.103, 487.267], "normal_xz": [-0.465, -0.886], "length_m": 10.791540},
+    {"index": 11, "side_id": "LOW-NNW-PROTECTED", "start_xyz_m": [-128.000, 4.103, 487.267], "end_xyz_m": [-143.289, 4.103, 495.289], "normal_xz": [-0.465, -0.886], "length_m": 17.265747},
+    {"index": 12, "side_id": "LOW-NNW-PROTECTED", "start_xyz_m": [-143.289, 4.103, 495.289], "end_xyz_m": [-156.887, 4.027, 502.424], "normal_xz": [-0.465, -0.886], "length_m": 15.356231}
+  ],
+  "module_family": {
+    "id": "IH-LOW-PUBLIC-LIVEWORK-MACRO-RHYTHM-C",
+    "observed_cues": ["warm brick", "two-level glazing", "individual Dutch or half-door entry", "private entry and patio", "landscaped threshold"],
+    "sequence_truth_class": "reversible_production_inference",
+    "exact_dimensions_truth_class": "reversible_production_inference",
+    "variants": [
+      {
+        "id": "WIDE-GALLERY-ENTRY", "width_m": 6.40, "macro_class": "broad_glazed_gallery_with_side_entry",
+        "panels": [
+          {"id": "BROAD-GALLERY", "role": "two_level_gallery", "x_m": -0.62, "y_m": 7.17, "width_m": 4.42, "height_m": 5.56, "half_door": false},
+          {"id": "SIDE-HALF-DOOR", "role": "dutch_half_door_entry", "x_m": 2.35, "y_m": 5.73, "width_m": 1.18, "height_m": 2.94, "half_door": true}
+        ],
+        "canopies": [{"x_m": 2.20, "y_m": 7.37, "width_m": 2.00, "depth_m": 0.17}],
+        "patio": {"x_m": -0.25, "width_m": 5.75, "depth_m": 0.15},
+        "planter_x_m": [-2.62]
+      },
+      {
+        "id": "OFFSET-ENTRY-PAUSE", "width_m": 3.20, "macro_class": "mostly_brick_pause_with_offset_entry_and_upper_glazing",
+        "panels": [
+          {"id": "LOW-HALF-DOOR", "role": "dutch_half_door_entry", "x_m": -0.62, "y_m": 5.70, "width_m": 1.08, "height_m": 2.88, "half_door": true},
+          {"id": "OFFSET-UPPER", "role": "two_level_upper_gallery_cue", "x_m": 0.58, "y_m": 8.62, "width_m": 1.32, "height_m": 2.18, "half_door": false}
+        ],
+        "canopies": [{"x_m": -0.52, "y_m": 7.34, "width_m": 1.65, "depth_m": 0.16}],
+        "patio": {"x_m": -0.55, "width_m": 1.95, "depth_m": 0.13},
+        "planter_x_m": [1.15]
+      },
+      {
+        "id": "LAYERED-PATIO-RECESS", "width_m": 5.55, "macro_class": "wide_lower_gallery_offset_upper_and_deep_patio",
+        "panels": [
+          {"id": "SIDE-HALF-DOOR", "role": "dutch_half_door_entry", "x_m": -2.08, "y_m": 5.72, "width_m": 1.10, "height_m": 2.92, "half_door": true},
+          {"id": "WIDE-LOWER-GALLERY", "role": "lower_gallery", "x_m": 0.62, "y_m": 5.55, "width_m": 3.62, "height_m": 2.38, "half_door": false},
+          {"id": "OFFSET-UPPER-GALLERY", "role": "upper_gallery", "x_m": 0.05, "y_m": 8.62, "width_m": 4.20, "height_m": 2.30, "half_door": false}
+        ],
+        "canopies": [{"x_m": 0.18, "y_m": 7.30, "width_m": 3.55, "depth_m": 0.18}],
+        "patio": {"x_m": 0.35, "width_m": 4.55, "depth_m": 0.18},
+        "planter_x_m": [-2.32, 2.30]
+      },
+      {
+        "id": "SPLIT-GALLERY-CLUSTER", "width_m": 6.80, "macro_class": "broad_lower_gallery_split_upper_cluster_and_side_entry",
+        "panels": [
+          {"id": "BROAD-LOWER", "role": "lower_gallery", "x_m": -0.68, "y_m": 5.55, "width_m": 4.55, "height_m": 2.36, "half_door": false},
+          {"id": "UPPER-LEFT", "role": "upper_gallery_cluster", "x_m": -1.72, "y_m": 8.62, "width_m": 1.72, "height_m": 2.30, "half_door": false},
+          {"id": "UPPER-RIGHT", "role": "upper_gallery_cluster", "x_m": 0.62, "y_m": 8.62, "width_m": 2.30, "height_m": 2.30, "half_door": false},
+          {"id": "SIDE-HALF-DOOR", "role": "dutch_half_door_entry", "x_m": 2.72, "y_m": 5.72, "width_m": 1.08, "height_m": 2.92, "half_door": true}
+        ],
+        "canopies": [{"x_m": 1.78, "y_m": 7.34, "width_m": 2.85, "depth_m": 0.17}],
+        "patio": {"x_m": -0.10, "width_m": 6.20, "depth_m": 0.16},
+        "planter_x_m": [-2.94, 2.95]
+      }
+    ]
+  },
+  "placements": [
+    {"id": "IH-C-AV-WIDE-01", "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "run_index": 2, "run_u_m": 5.05, "variant_id": "WIDE-GALLERY-ENTRY", "truth_class": "reversible_production_inference"},
+    {"id": "IH-C-AV-PAUSE-02", "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "run_index": 2, "run_u_m": 14.35, "variant_id": "OFFSET-ENTRY-PAUSE", "truth_class": "reversible_production_inference"},
+    {"id": "IH-C-AV-LAYER-03", "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "run_index": 3, "run_u_m": 4.35, "variant_id": "LAYERED-PATIO-RECESS", "truth_class": "reversible_production_inference"},
+    {"id": "IH-C-AV-SPLIT-04", "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "run_index": 3, "run_u_m": 13.20, "variant_id": "SPLIT-GALLERY-CLUSTER", "truth_class": "reversible_production_inference"},
+    {"id": "IH-C-GW-SPLIT-01", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 6, "run_u_m": 5.25, "variant_id": "SPLIT-GALLERY-CLUSTER", "truth_class": "reversible_production_inference"},
+    {"id": "IH-C-GW-PAUSE-02", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 8, "run_u_m": 3.55, "variant_id": "OFFSET-ENTRY-PAUSE", "truth_class": "reversible_production_inference"},
+    {"id": "IH-C-GW-LAYER-03", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 8, "run_u_m": 13.45, "variant_id": "LAYERED-PATIO-RECESS", "truth_class": "reversible_production_inference"},
+    {"id": "IH-C-GW-WIDE-04", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 9, "run_u_m": 5.00, "variant_id": "WIDE-GALLERY-ENTRY", "truth_class": "reversible_production_inference"}
+  ],
+  "provenance": [
+    {"id": "DBA-COMPLETED-PROJECT", "truth_class": "verified_fact_and_reference_observation", "supports": ["completed folded light tower", "seventh-story podium", "active ground and live-work gallery"]},
+    {"id": "DBA-COMPLETED-LIVEWORK", "truth_class": "reference_observation", "supports": ["warm brick piers", "two-level glazing", "individual entry", "landscaped patio edge"]},
+    {"id": "DBA-DESIGN-INTERVIEW-LIVEWORK", "truth_class": "verified_fact", "supports": ["Dutch doors", "private entries and patios", "brick and handcrafted eye-level materials", "public-side split"]},
+    {"id": "FROZEN-OSM-RECEIVER", "truth_class": "verified_fact", "supports": ["exact low footprint and run mapping only"]}
+  ],
+  "blocked_claims": [
+    "literal correction from five generated levels to seven stories",
+    "surveyed bay count dimensions placement cadence sequence product bond or color",
+    "upper-band openings story grid or structural-floor schedule",
+    "NNW private courtyard rear shared-interface roof parapet setback or interior appearance",
+    "NNW opening schedule or as-built cladding identity",
+    "transparent glazing operable doors occupiable patios or as-built fidelity",
+    "recognition believability live promotion catalog credit or denominator increment"
+  ]
+}

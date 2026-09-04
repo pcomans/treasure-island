@@ -1,0 +1,1222 @@
+{
+  "active_runtime_adapter_receiver_keys": [
+    "building-composite:w1249412094:w1282547787:wall",
+    "building:r16681702:wall",
+    "building:w1222720021:wall",
+    "building:w34313540:wall"
+  ],
+  "checks": [
+    {
+      "check_id": "immutable_source_hashes",
+      "status": "pass"
+    },
+    {
+      "check_id": "source_records_partition_215",
+      "status": "pass"
+    },
+    {
+      "check_id": "physical_recognition_units_213",
+      "status": "pass"
+    },
+    {
+      "check_id": "direct_wall_receivers_214",
+      "status": "pass"
+    },
+    {
+      "check_id": "isle_house_composite_3_sources_2_receivers_1_unit",
+      "status": "pass"
+    },
+    {
+      "check_id": "wall_run_quad_contract_4971",
+      "status": "pass"
+    },
+    {
+      "check_id": "receiver_complete_213",
+      "status": "pass"
+    },
+    {
+      "check_id": "legacy_adapters_10_active_runtime_adapters_4_without_automatic_recognition_transfer",
+      "status": "pass"
+    },
+    {
+      "check_id": "building_1_and_tower_exact_current_hero_dispatch",
+      "status": "pass"
+    },
+    {
+      "check_id": "building_3_exact_current_wall_roof_facade_collision_landing_spray_parity",
+      "status": "pass"
+    },
+    {
+      "check_id": "isle_house_receiver_specific_high_legacy_low_variant_c_runtime_state",
+      "status": "pass"
+    },
+    {
+      "check_id": "reference_recognizable_physical_entity_rollup_exactly_5_of_213",
+      "status": "pass"
+    },
+    {
+      "check_id": "isle_house_composite_parent_counted_once_part_sources_never_counted",
+      "status": "pass"
+    },
+    {
+      "check_id": "acceptance_records_bound_to_exact_independent_review_receipts",
+      "status": "pass"
+    },
+    {
+      "check_id": "catalog_json_schema_document_and_instance_validation",
+      "status": "pass"
+    },
+    {
+      "check_id": "catalog_compiler_runtime_loader_versions_reject_unknown_forward_versions",
+      "status": "pass"
+    },
+    {
+      "check_id": "adapter_contract_8_ready_6_disabled_13_unique_projection_inputs",
+      "status": "pass"
+    },
+    {
+      "check_id": "claim_dimensions_separated",
+      "status": "pass"
+    },
+    {
+      "check_id": "frozen_identity_preserved_external_assertions_separated",
+      "status": "pass"
+    },
+    {
+      "check_id": "runtime_registry_and_referenced_asset_closures_have_no_discovery_evidence_url_or_absolute_dependency",
+      "status": "pass"
+    }
+  ],
+  "claim_totals": {
+    "as_built_fidelity": {
+      "claimed": 0,
+      "limited": 0,
+      "unclaimed": 213
+    },
+    "game_distinctive": {
+      "accepted": 0,
+      "not_evaluated": 213,
+      "rejected": 0
+    },
+    "receiver_complete": {
+      "failed": 0,
+      "verified": 213
+    },
+    "reference_recognizable": {
+      "accepted": 5,
+      "blocked": 0,
+      "not_evaluated": 208,
+      "rejected": 0
+    }
+  },
+  "counts": {
+    "active_runtime_adapter_receivers": 4,
+    "composite_units": 1,
+    "direct_wall_receivers": 214,
+    "identity_assertion_summaries": 2,
+    "legacy_adapter_receivers": 10,
+    "recognition_units": 213,
+    "runtime_adapter_receivers": 14,
+    "source_record_memberships": 215,
+    "standalone_units": 212,
+    "visible_wall_runs": 4971
+  },
+  "identity_assertions": {
+    "authoring_record_count": 2,
+    "authoritative_correction_count": 2,
+    "authoritative_current_identity_count": 0,
+    "currentness_claimed_count": 0,
+    "records": [
+      {
+        "assertion_id": "identity-assertion:w24274434:ref-nrhp-08000082",
+        "checked_date": "2026-09-04",
+        "currentness_claimed": false,
+        "evidence_class": "authoritative_correction",
+        "evidenced_value": "08000082",
+        "frozen_field": "source.tags.ref:nrhp",
+        "frozen_value": "08000081",
+        "primary_source_locator": "https://npgallery.nps.gov/AssetDetail/NRIS/08000082",
+        "research_packet_path": "discovery/facades/p1_reference_packets/w24274434_building_2.md",
+        "runtime_visibility": "summary_only",
+        "unit_id": "physical-building:w24274434"
+      },
+      {
+        "assertion_id": "identity-assertion:w34313540:ref-nrhp-08000083",
+        "checked_date": "2026-09-04",
+        "currentness_claimed": false,
+        "evidence_class": "authoritative_correction",
+        "evidenced_value": "08000083",
+        "frozen_field": "source.tags.ref:nrhp",
+        "frozen_value": "08000081",
+        "primary_source_locator": "https://npgallery.nps.gov/AssetDetail/NRIS/08000083",
+        "research_packet_path": "discovery/facades/p1_reference_packets/w34313540_building_3.md",
+        "runtime_visibility": "summary_only",
+        "unit_id": "physical-building:w34313540"
+      }
+    ],
+    "runtime_summary_count": 2
+  },
+  "identity_evidence": {
+    "recognition_units": {
+      "address_evidence": 148,
+      "canonical_name_evidence": 26,
+      "name_evidence_including_inherited": 26,
+      "name_or_address_evidence": 152,
+      "neither_name_nor_address": 61,
+      "source_key_only_confidence": 75
+    },
+    "source_records": {
+      "address_evidence": 150,
+      "canonical_name_evidence": 26,
+      "name_evidence_including_inherited": 28,
+      "name_or_address_evidence": 154,
+      "neither_name_nor_address": 61,
+      "source_key_only_confidence": 75
+    }
+  },
+  "input_hashes": {
+    "active_building_1_hero_adapter_sha256": "e5b11fc7f971ea33bb38c84d3106f8883de0486774f58a5a8310d49d56aa55a5",
+    "active_building_1_hero_config_sha256": "f10bc92a6e74cbae41347e742e6c68c50faccddbd52ab3ecce210ac8243bc6e9",
+    "active_building_3_authoring_provenance_sha256": "149d9211c75e86c769243298d649b79b682c1b4873af5d86d30a5d04aa1a26bd",
+    "active_building_3_hero_adapter_sha256": "0755ab9846357207143f4bb0a50c27e710d92aa3a529903c61d4d3495bb94419",
+    "active_building_3_hero_config_sha256": "2a7eacee21c88046deb587e53224b2c6c189172922265ed5a63711789ee37553",
+    "active_isle_house_variant_c_adapter_sha256": "e2767b01fab68d7f16ffe2e7f8e0313c711347e2006a72e028c19aaa2195b891",
+    "active_isle_house_variant_c_config_sha256": "bafdef392ee638e860ba15f140c10de61e266ae63005b12e0e310e52c176897a",
+    "active_isle_house_variant_c_live_review_receipt_sha256": "37b6c7dbf6c8769b13628e1070a9c3b5beeb9b25bbe63f0f12f9aaa00c22dab8",
+    "active_isle_house_variant_c_repair_factory_sha256": "4336e821e240b973f8d97e5cb46e17332b19dea03869abb1fa81b96a7e380582",
+    "active_isle_house_variant_c_reviewed_factory_sha256": "b24fd72cd12aa0c6c45a123f005fc834ea657c343e8332a872eae07fa017ace7",
+    "adapter_contracts_sha256": "f1ffc7061a8d02bd7f78a1ec4457b36c4adc5618755f730638bfedfcc9d4437d",
+    "authoring_catalog_sha256": "2b457965d2e25d522d2ca3d73afb109b03a57247eaefbb6b70775bd83fb07311",
+    "catalog_schema_sha256": "0b7b433caed61c894cbdbdf53d112c06d6161bd0d14951fe795482b38af73e04",
+    "facade_runtime_loader_sha256": "7a245be61167cf774f5f693944fe3adc6640b5dd7f7cb98fcb6425a7c82f7832",
+    "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
+    "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "receiver_inventory_sha256": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f",
+    "world_chunk_builder_sha256": "28be094c674108f42be040f2b3ae6d242838d15e2060f6cf4668b0a003f1a682"
+  },
+  "legacy_adapter_receiver_keys": [
+    "building-composite:w1249412094:w1282547786:wall",
+    "building:w1249412093:wall",
+    "building:w291189336:wall",
+    "building:w291189926:wall",
+    "building:w291196370:wall",
+    "building:w34313515:wall",
+    "building:w34313520:wall",
+    "building:w34313525:wall",
+    "building:w34313547:wall",
+    "building:w34313564:wall"
+  ],
+  "next_integration_seam": "Use the topology-neutral facade registry loader API to query receiver plans. Eight package-safe plans include exact-current Building 1 and Building 3 dependencies. The exact-current Isle House Variant C receiver is represented truthfully but remains loader-hard-disabled because its reviewed executable inheritance closure includes three source-token-bearing inputs; keep all six disabled plans non-executable until the 13 unique projected inputs receive independently parity-proven package-safe normalization.",
+  "package_boundary": {
+    "adapter_asset_occurrence_count": 73,
+    "clean_direct_asset_count": 44,
+    "dependency_closure_asset_count": 159,
+    "dependency_closure_forbidden_asset_count": 15,
+    "direct_asset_count": 57,
+    "projected_direct_asset_count": 13,
+    "registry_json_clean": true,
+    "runtime_referenced_asset_count": 44,
+    "runtime_referenced_dependency_closure_clean": true,
+    "source_side_projection_audit": [
+      {
+        "adapter_id": "legacy-adapter:building-composite:w1249412094:w1282547786:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/isle_house_39_bruton_high_se_layout.json",
+        "direct_asset_sha256": "c5e6393e90152cef62f6478d7bd87750f3db5598d6ebc36cd307ce20acaa090d",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building-composite:w1249412094:w1282547786:wall",
+        "closure_asset_count": 11,
+        "closure_violations": [],
+        "direct_asset_path": "game/scenes/world/facades/isle_house/isle_house_high_facade.tscn",
+        "direct_asset_sha256": "7ff4a91c402cecea19d2686d29139d2c0f139673b06d21c67d1c14835fd31d12",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building-composite:w1249412094:w1282547786:wall",
+        "closure_asset_count": 10,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/isle_house_39_bruton_high_facade.gd",
+        "direct_asset_sha256": "f8243cedd3f331cbc37e6343b1b48e76a73a81644c96cc1f80e623e0c71a3113",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w1249412093:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/hawkins_77_bruton_layout.json",
+        "direct_asset_sha256": "4de2239af2e18fe4121930d51dee15e081d2f81a40393da2f1f29c69464761d9",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w1249412093:wall",
+        "closure_asset_count": 16,
+        "closure_violations": [],
+        "direct_asset_path": "game/scenes/world/facades/hawkins/hawkins_77_bruton_facade.tscn",
+        "direct_asset_sha256": "3e79430994309ad07a3a8763004b8a4d4f20a52e5d759e707ba5e7ad6a85ba3b",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w1249412093:wall",
+        "closure_asset_count": 16,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/hawkins_77_bruton_facade.gd",
+        "direct_asset_sha256": "de733e43896fdf8c0437dcb266564b07fbb0e0ad42a40ef40d480623a748dd1e",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w1249412093:wall",
+        "closure_asset_count": 16,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/massing/hawkins_77_bruton_massing.gd",
+        "direct_asset_sha256": "b572d5b75faf47e91e9283af757cdc33a0c0b4a37de87230d7e7a505442f6a4d",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w291189336:wall",
+        "closure_asset_count": 2,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres",
+        "direct_asset_sha256": "4020e4c75350929359be9c16686ad80a2a0eac46918cc32746089694017a61a5",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w291189926:wall",
+        "closure_asset_count": 2,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/job_corps_dormitory_b369/dormitory_b369_warm_field.tres",
+        "direct_asset_sha256": "fb50d3989b7aa41421753ad4db5d195366d9a2c25c15087e5e3a2b7863c69602",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w291196370:wall",
+        "closure_asset_count": 4,
+        "closure_violations": [
+          {
+            "asset_path": "game/resources/facades/w291196370_module_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/resources/facades/w291196370_module_calibration.json",
+        "direct_asset_sha256": "b30a8f19091288cde4b8e891ec40287ab28a73776588f96ee86fc5565cfc25b8",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w291196370:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+        "direct_asset_sha256": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w291196370:wall",
+        "closure_asset_count": 2,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/w291196370/w291196370_siding_exact_trial.tres",
+        "direct_asset_sha256": "715cf02b3c006c1a492ad61def9b2535fbaf04a3b1a41c69c5f092d705fab677",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w291196370:wall",
+        "closure_asset_count": 22,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/accepted_material_run_trials.gd",
+        "direct_asset_sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w291196370:wall",
+        "closure_asset_count": 10,
+        "closure_violations": [
+          {
+            "asset_path": "game/resources/facades/w291196370_module_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/w291196370_live_modules.gd",
+            "violations": [
+              "discovery_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/scripts/world/facades/w291196370_live_modules.gd",
+        "direct_asset_sha256": "2b4da98b780af42bbc59dce911410c73964f670ce6d58624b77211b7cf981653",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313515:wall",
+        "closure_asset_count": 4,
+        "closure_violations": [
+          {
+            "asset_path": "game/resources/facades/w34313515_module_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/resources/facades/w34313515_module_calibration.json",
+        "direct_asset_sha256": "2d378a94da4b7badd334d5c00f926a26a4ff9109782abb18e4859301df4b5c1d",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313515:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/batch_06/batch_06_wall_tangent_aperiodic_field.gdshader",
+        "direct_asset_sha256": "d4a9dbb7c58443be93362699b0983b7377dab70698fd782b6710315c31be3e69",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313515:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/w34313515/w34313515_frame.tres",
+        "direct_asset_sha256": "716afbdf12f55975747b08c615236462d335b62ca0c46730b4cb8439b9691aa5",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313515:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/w34313515/w34313515_glass.tres",
+        "direct_asset_sha256": "963160407868064dcbb66b56cf477d0901f53a27351cbb23905474b5b613a4cc",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313515:wall",
+        "closure_asset_count": 2,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/w34313515/w34313515_pale_exact_trial.tres",
+        "direct_asset_sha256": "0b8704ccc352374adc1d6a553ff3d985ae2b70559d92b5171092450783b4395f",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313515:wall",
+        "closure_asset_count": 22,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/accepted_material_run_trials.gd",
+        "direct_asset_sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313515:wall",
+        "closure_asset_count": 8,
+        "closure_violations": [
+          {
+            "asset_path": "game/resources/facades/w34313515_module_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/w34313515_live_modules.gd",
+            "violations": [
+              "discovery_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/scripts/world/facades/w34313515_live_modules.gd",
+        "direct_asset_sha256": "8034932d57f8e42ee9c96a1bdd2508d8bf51b52abc0e5d7ff5f2659cbf75ddc7",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313520:wall",
+        "closure_asset_count": 10,
+        "closure_violations": [
+          {
+            "asset_path": "game/resources/facades/w34313520_exact_receiver_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/resources/facades/w34313520_exact_receiver_calibration.json",
+        "direct_asset_sha256": "28ea8b6e506d747299a920e4d456d8676031e18ec3b6d9e959cab31fa33de4f1",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313520:wall",
+        "closure_asset_count": 2,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/w34313520/w34313520_pale_exact_trial.tres",
+        "direct_asset_sha256": "89fbb97ed797275a86c394af7eab13f946cbf23f29cba58b89a2b2d467030ab2",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313520:wall",
+        "closure_asset_count": 22,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/accepted_material_run_trials.gd",
+        "direct_asset_sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313520:wall",
+        "closure_asset_count": 12,
+        "closure_violations": [
+          {
+            "asset_path": "game/resources/facades/w34313520_exact_receiver_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/w34313520_live_modules.gd",
+            "violations": [
+              "discovery_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/scripts/world/facades/w34313520_live_modules.gd",
+        "direct_asset_sha256": "765d8546e2fcfca68c855d1e1bcfb93bdcf1b1791c9b71ce4bcd6dcc35fe432e",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313525:wall",
+        "closure_asset_count": 159,
+        "closure_violations": [
+          {
+            "asset_path": "game/resources/facades/batch_06_prototype_registry.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/resources/facades/w291196370_module_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/resources/facades/w34313515_module_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/resources/facades/w34313520_exact_receiver_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/resources/facades/w34313525_exact_receiver_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/resources/facades/w34313525_standalone_prototypes.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/resources/facades/w34313564_module_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_39_bruton_low_live_attachment.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path",
+              "reference_url"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_composite_repair_standalone_v1.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/w291196370_live_modules.gd",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/w34313515_live_modules.gd",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/w34313520_live_modules.gd",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/w34313525_live_modules.gd",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/tests/w34313525_standalone_prototype_capture.gd",
+            "violations": [
+              "evidence_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/resources/facades/w34313525_exact_receiver_calibration.json",
+        "direct_asset_sha256": "ba22916618510f610719606c1c18f84b8965bbd76fe74eddc5430745470bbddd",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313525:wall",
+        "closure_asset_count": 22,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/accepted_material_run_trials.gd",
+        "direct_asset_sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313525:wall",
+        "closure_asset_count": 159,
+        "closure_violations": [
+          {
+            "asset_path": "game/resources/facades/batch_06_prototype_registry.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/resources/facades/w291196370_module_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/resources/facades/w34313515_module_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/resources/facades/w34313520_exact_receiver_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/resources/facades/w34313525_exact_receiver_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/resources/facades/w34313525_standalone_prototypes.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/resources/facades/w34313564_module_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_39_bruton_low_live_attachment.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path",
+              "reference_url"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_composite_repair_standalone_v1.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/w291196370_live_modules.gd",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/w34313515_live_modules.gd",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/w34313520_live_modules.gd",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/w34313525_live_modules.gd",
+            "violations": [
+              "discovery_path"
+            ]
+          },
+          {
+            "asset_path": "game/tests/w34313525_standalone_prototype_capture.gd",
+            "violations": [
+              "evidence_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/scripts/world/facades/w34313525_live_modules.gd",
+        "direct_asset_sha256": "308cfe8aa3e6320f122f2b81ea74976d30f7d87de91736aeed60e67a01dc121b",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313547:wall",
+        "closure_asset_count": 2,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/ti_ymca/ti_ymca_primary.tres",
+        "direct_asset_sha256": "b5e44afcf4feb6df6ffba46f4e3b60a25fa6043c07c12c33e31c483cb2bf2399",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313547:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/ti_ymca/ti_ymca_wall_tangent_aperiodic_field.gdshader",
+        "direct_asset_sha256": "8943853363f5a2571ebf15a6e9711c6310b706d2e4415f3e1f314d8643d55f6c",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313547:wall",
+        "closure_asset_count": 22,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/accepted_material_run_trials.gd",
+        "direct_asset_sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313564:wall",
+        "closure_asset_count": 5,
+        "closure_violations": [
+          {
+            "asset_path": "game/resources/facades/w34313564_module_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/resources/facades/w34313564_module_calibration.json",
+        "direct_asset_sha256": "45a47d333c997887cef7d1c97a633d37ae050efda597186430c7af6d52116f0f",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313564:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/batch_06/batch_06_wall_tangent_aperiodic_field.gdshader",
+        "direct_asset_sha256": "d4a9dbb7c58443be93362699b0983b7377dab70698fd782b6710315c31be3e69",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313564:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/w34313564/w34313564_door.tres",
+        "direct_asset_sha256": "88babf9bdceb46e8475f6d1acf1853ac451433c91f1264ca70c41d8c19d2aa3d",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313564:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/w34313564/w34313564_frame.tres",
+        "direct_asset_sha256": "5487fa17415e4022d85b82e3f013ac9a41be1dd07d88354f1caf4b05a9ab5994",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313564:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/w34313564/w34313564_glass.tres",
+        "direct_asset_sha256": "0f5b2ac833346143e777b81e85079f4502ca5a2692944228a9fbfeff28ddd669",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313564:wall",
+        "closure_asset_count": 2,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/w34313564/w34313564_pale_exact_trial.tres",
+        "direct_asset_sha256": "c7ec2df12b0dcf41e2b5019fd98155dbe3668d16379070210fe9f97ef032a343",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313564:wall",
+        "closure_asset_count": 2,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/w34313564/w34313564_tan_exact_trial.tres",
+        "direct_asset_sha256": "3b895743b247a20641cb7564004d2f890bacfc286feaec9044b334b5e8e170bb",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313564:wall",
+        "closure_asset_count": 22,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/accepted_material_run_trials.gd",
+        "direct_asset_sha256": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "legacy-adapter:building:w34313564:wall",
+        "closure_asset_count": 10,
+        "closure_violations": [
+          {
+            "asset_path": "game/resources/facades/w34313564_module_calibration.json",
+            "violations": [
+              "discovery_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/scripts/world/facades/w34313564_live_modules.gd",
+        "direct_asset_sha256": "74a7eb9a29750baf47e59194374c2669278bba5af091f5cbe04b13f45c230b8e",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall",
+        "closure_asset_count": 3,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/isle_house_composite_repair_variant_c_standalone_v1.json",
+        "direct_asset_sha256": "bafdef392ee638e860ba15f140c10de61e266ae63005b12e0e310e52c176897a",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall",
+        "closure_asset_count": 32,
+        "closure_violations": [
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_39_bruton_low_live_attachment.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path",
+              "reference_url"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_composite_repair_standalone_v1.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd",
+        "direct_asset_sha256": "e2767b01fab68d7f16ffe2e7f8e0313c711347e2006a72e028c19aaa2195b891",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall",
+        "closure_asset_count": 31,
+        "closure_violations": [
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_39_bruton_low_live_attachment.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path",
+              "reference_url"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_composite_repair_standalone_v1.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/scripts/world/facades/isle_house_composite_repair_variant_c_repair_only_factory.gd",
+        "direct_asset_sha256": "4336e821e240b973f8d97e5cb46e17332b19dea03869abb1fa81b96a7e380582",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall",
+        "closure_asset_count": 30,
+        "closure_violations": [
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_39_bruton_low_live_attachment.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path",
+              "reference_url"
+            ]
+          },
+          {
+            "asset_path": "game/scripts/world/facades/isle_house_composite_repair_standalone_v1.gd",
+            "violations": [
+              "discovery_path",
+              "evidence_path"
+            ]
+          }
+        ],
+        "direct_asset_path": "game/scripts/world/facades/isle_house_composite_repair_variant_c_standalone_v1.gd",
+        "direct_asset_sha256": "b24fd72cd12aa0c6c45a123f005fc834ea657c343e8332a872eae07fa017ace7",
+        "emitted_as": "sanitized_runtime_summary"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/building_1_hero_model.json",
+        "direct_asset_sha256": "f10bc92a6e74cbae41347e742e6c68c50faccddbd52ab3ecce210ac8243bc6e9",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
+        "direct_asset_sha256": "41c1c31d4a78da25d4abfac59e82fe919fbb539afa479ab7601d0fb51939d59f",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_bronze.tres",
+        "direct_asset_sha256": "7948c9fca74345f4ff5e57a44191beb59300847b66cc54ddc176c5ca1b315ca3",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_canopy_underside.tres",
+        "direct_asset_sha256": "661a7b8cfaef2394e47a42f9bbd04df5fdfbb2cd4be9e6733d5bf3101817cea9",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_light_trim.tres",
+        "direct_asset_sha256": "6e543d57ff078c267e952f633f4cee232e0743e30218d2f341dc3f31e4a4c8d9",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_projecting_base_stone.tres",
+        "direct_asset_sha256": "8bdd85aa10ac78c9225c59aad5ed9d26266ae517ea3f5910b8be3daf41f131ab",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_reveal_shadow.tres",
+        "direct_asset_sha256": "2e1f36f163c037fe060a1ecfcdcc5dd062849290a96c508970384585b176e14a",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_roof_metal.tres",
+        "direct_asset_sha256": "8bee442442f8b7bc3004cd3f703ce4e21eb9bc3b1f4d3d8800b02a77268329c8",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
+        "closure_asset_count": 2,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres",
+        "direct_asset_sha256": "12d059d9d806c629225254f1aaf945be69a00ce5878db276ce299ad0c8cdbb9a",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
+        "closure_asset_count": 14,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/building_1_hero_model.gd",
+        "direct_asset_sha256": "e5b11fc7f971ea33bb38c84d3106f8883de0486774f58a5a8310d49d56aa55a5",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/building_1_hero_model.json",
+        "direct_asset_sha256": "f10bc92a6e74cbae41347e742e6c68c50faccddbd52ab3ecce210ac8243bc6e9",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
+        "direct_asset_sha256": "41c1c31d4a78da25d4abfac59e82fe919fbb539afa479ab7601d0fb51939d59f",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_bronze.tres",
+        "direct_asset_sha256": "7948c9fca74345f4ff5e57a44191beb59300847b66cc54ddc176c5ca1b315ca3",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_canopy_underside.tres",
+        "direct_asset_sha256": "661a7b8cfaef2394e47a42f9bbd04df5fdfbb2cd4be9e6733d5bf3101817cea9",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_light_trim.tres",
+        "direct_asset_sha256": "6e543d57ff078c267e952f633f4cee232e0743e30218d2f341dc3f31e4a4c8d9",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_projecting_base_stone.tres",
+        "direct_asset_sha256": "8bdd85aa10ac78c9225c59aad5ed9d26266ae517ea3f5910b8be3daf41f131ab",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_reveal_shadow.tres",
+        "direct_asset_sha256": "2e1f36f163c037fe060a1ecfcdcc5dd062849290a96c508970384585b176e14a",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_roof_metal.tres",
+        "direct_asset_sha256": "8bee442442f8b7bc3004cd3f703ce4e21eb9bc3b1f4d3d8800b02a77268329c8",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
+        "closure_asset_count": 2,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres",
+        "direct_asset_sha256": "12d059d9d806c629225254f1aaf945be69a00ce5878db276ce299ad0c8cdbb9a",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
+        "closure_asset_count": 14,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/building_1_hero_model.gd",
+        "direct_asset_sha256": "e5b11fc7f971ea33bb38c84d3106f8883de0486774f58a5a8310d49d56aa55a5",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-3-hero:building:w34313540:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/building_3_600_california_ene_layout.json",
+        "direct_asset_sha256": "a491a3c7916191b9ca5f6adacc6d1f2289c0103f5079516b102b94e3993dae0c",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-3-hero:building:w34313540:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/building_3_hero_massing.json",
+        "direct_asset_sha256": "2a7eacee21c88046deb587e53224b2c6c189172922265ed5a63711789ee37553",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-3-hero:building:w34313540:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_3/building_3_shadow_recess.tres",
+        "direct_asset_sha256": "6f0dbe93b776bf88654bd83230e8329a21a71fc030a3883e571c0a62d6b21d73",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-3-hero:building:w34313540:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_3/building_3_teal_door.tres",
+        "direct_asset_sha256": "dfb3114e6c419e3f1519364b58aa19d7aa3f65e08cb5fc64945ffe24874a0846",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-3-hero:building:w34313540:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/building_3/building_3_white_primary.tres",
+        "direct_asset_sha256": "5b76d33ed0f8ae940bc9761989c8fda43c1106059bc93029a994a1ebf8edc49b",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-3-hero:building:w34313540:wall",
+        "closure_asset_count": 7,
+        "closure_violations": [],
+        "direct_asset_path": "game/scenes/world/facades/building_3/building_3_600_california_facade.tscn",
+        "direct_asset_sha256": "20acecc80aac526c5add6feb52f2f3e86969bf756533e81c9dcf9d59297fd354",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-3-hero:building:w34313540:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/scenes/world/facades/building_3/building_3_ene_modules.tscn",
+        "direct_asset_sha256": "c1f031ef4eb6c4643507dd686f2c6b222f1c8bdf851d7cd63c63470b0ea76c30",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-3-hero:building:w34313540:wall",
+        "closure_asset_count": 6,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/building_3_600_california_facade.gd",
+        "direct_asset_sha256": "5fa9851a90e886bb0a75ff35bf137ed891ed5f1e0cd53d95ee840a0573c2c55a",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:building-3-hero:building:w34313540:wall",
+        "closure_asset_count": 9,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/massing/building_3_600_california_massing.gd",
+        "direct_asset_sha256": "0755ab9846357207143f4bb0a50c27e710d92aa3a529903c61d4d3495bb94419",
+        "emitted_as": "runtime_asset"
+      }
+    ]
+  },
+  "reference_dependencies": {
+    "identity_or_reference_research_required_unit_count": 60,
+    "unit_ids": [
+      "physical-building:w34313515",
+      "physical-building:w34313520",
+      "physical-building:w34313525",
+      "physical-building:w34313528",
+      "physical-building:w34313535",
+      "physical-building:w34313549",
+      "physical-building:w34313550",
+      "physical-building:w34313554",
+      "physical-building:w34313555",
+      "physical-building:w34313556",
+      "physical-building:w34313557",
+      "physical-building:w34313558",
+      "physical-building:w34313560",
+      "physical-building:w34313564",
+      "physical-building:w95934130",
+      "physical-building:w96665883",
+      "physical-building:w96665889",
+      "physical-building:w96665899",
+      "physical-building:w96665902",
+      "physical-building:w96665924",
+      "physical-building:w96698611",
+      "physical-building:w96698641",
+      "physical-building:w96698650",
+      "physical-building:w96698653",
+      "physical-building:w96698654",
+      "physical-building:w96698662",
+      "physical-building:w111322535",
+      "physical-building:w291193741",
+      "physical-building:w291193744",
+      "physical-building:w291193754",
+      "physical-building:w291193760",
+      "physical-building:w291193766",
+      "physical-building:w291193770",
+      "physical-building:w291196366",
+      "physical-building:w291196367",
+      "physical-building:w291196369",
+      "physical-building:w291196370",
+      "physical-building:w291196371",
+      "physical-building:w291196372",
+      "physical-building:w291196373",
+      "physical-building:w291196374",
+      "physical-building:w291196375",
+      "physical-building:w291196377",
+      "physical-building:w291196379",
+      "physical-building:w291196381",
+      "physical-building:w291196382",
+      "physical-building:w291196386",
+      "physical-building:w545387426",
+      "physical-building:w1001544698",
+      "physical-building:w1043836450",
+      "physical-building:w1098437841",
+      "physical-building:w1222514685",
+      "physical-building:w1222514686",
+      "physical-building:w1222514695",
+      "physical-building:w1308007112",
+      "physical-building:w1308007113",
+      "physical-building:w1308007114",
+      "physical-building:w1436064757",
+      "physical-building:w1473253276",
+      "physical-building:r133351"
+    ],
+    "workflow": "Continue reference-ready units. After bounded autonomous research, add a narrow HUMAN.md dependency only when target identity or a target-identifiable observed region genuinely requires owner evidence."
+  },
+  "reference_recognition_metric": {
+    "accepted_physical_unit_ids": [
+      "physical-building:r16681702",
+      "physical-building:w1222720021",
+      "physical-building:w1249412093",
+      "physical-building:w1249412094",
+      "physical-building:w34313540"
+    ],
+    "denominator": 213,
+    "denominator_kind": "immutable_physical_recognition_units",
+    "display": "5/213",
+    "isle_house_non_numerator_source_keys": [
+      "w1282547786",
+      "w1282547787"
+    ],
+    "numerator": 5,
+    "rollup_policy": "one_claim_per_physical_recognition_unit"
+  },
+  "runtime_registry_sha256": "dce268c1547e4e4620faff9d59110ee1214a9a2121c1f83b3eb1c865339360ab",
+  "schema_version": "ti.facade-recognition-validation-report/3",
+  "scope_boundaries": [
+    "This acceptance reconciliation changes no runtime integration, visual geometry, collision, navigation, spray ownership, or player-facing facade behavior.",
+    "Ten legacy receivers, two exact-current Building 1 hero receivers, one exact-current Building 3 wall/roof receiver, and one exact-current Isle House Variant C low receiver are represented without automatic recognition transfer from adapter metadata.",
+    "The version-pinned loader contract authorizes parsing and resource resolution only; it does not authorize node instantiation or world-construction dispatch.",
+    "Exactly five independently reviewed physical-building parents are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.",
+    "Isle House contributes one parent physical-building claim; its high and low source receiver records never enter the numerator.",
+    "The registry JSON and every emitted runtime asset dependency closure exclude discovery paths, evidence paths, reference URLs, and absolute workstation paths; contaminated current assets are represented only by hash-bound sanitized summaries.",
+    "Evidence-backed identity corrections remain separate from immutable inventory identity; runtime summaries preserve both asserted and frozen values without source locators."
+  ],
+  "status": "pass"
+}

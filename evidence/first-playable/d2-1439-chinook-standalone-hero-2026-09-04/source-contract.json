@@ -1,0 +1,65 @@
+{
+  "schema_version": "ti.d2-1439-chinook-standalone-source-contract/1",
+  "target": {
+    "canonical_name": "1439 Chinook Court",
+    "source_key": "w95934144",
+    "wall_object_key": "building:w95934144:wall",
+    "roof_object_key": "building:w95934144:roof",
+    "chunk": "x_-2__z_0",
+    "source_geometry_sha256": "a59bd2abf2020c25071a55ecb96f32b7871a810e8d1bdd95c213b512273f87f2",
+    "wall_record_sha256": "a801ff083961a7fafab455d18a80f2ea3ea87791ad5e967f91937ad3fc2b82a0",
+    "roof_record_sha256": "83ea383a9a490871fbd7891ebb5a179adfe0af5e27607e727550563a27c20e58",
+    "source_base_y_m": 3.536,
+    "source_wall_top_y_m": 9.536,
+    "source_height_m": 6.0,
+    "wall_runs": 24,
+    "wall_triangles": 48,
+    "roof_plan_triangles": 10
+  },
+  "authorities": {
+    "reference_packet": {
+      "path": "discovery/facades/d2_reference_packets/w95934144_1439_chinook_court.md",
+      "sha256": "050ceb6195bf1f7a4b1c753cde5a509c30b0911599af9233db5746605b9cfeb6"
+    },
+    "frozen_chunk": {
+      "path": "generated/world/chunks/x_-2__z_0.json",
+      "sha256": "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b"
+    }
+  },
+  "mapped_public_sse_runs": [11, 12, 16, 17, 18, 19, 22, 23],
+  "motif_host_runs": [11, 19, 23],
+  "mapped_motif_free_runs": [12, 16, 17, 18, 22],
+  "tiny_fragment_runs": [17, 18],
+  "protected_quiet_runs": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 20, 21],
+  "entity_specific_reference_supported_cues": [
+    "one strongly recessed two-level balcony stack near one end of the exact SSE chain",
+    "a broad quiet central upper register with separated dark rectangular opening groups and no inferred lower schedule",
+    "a near-blank opposite upper end over one offset deep passage, held together by a shallow dark gable and continuous SSE eaves"
+  ],
+  "authoritative_confusion_set": [
+    {"name": "1437 Chinook Court", "source_key": "w95934113", "evidence_state": "appearance_lifecycle_blocked"},
+    {"name": "1441 Chinook Court", "source_key": "w95934105", "evidence_state": "independently_reviewed_standalone_comparator"},
+    {"name": "1438 Chinook Court", "source_key": "w95934131", "evidence_state": "appearance_blocked"}
+  ],
+  "implemented_comparison_set": [
+    {"name": "1441 Chinook Court", "source_key": "w95934105"},
+    {"name": "1444 Croaker Court", "source_key": "w95934117"}
+  ],
+  "material_contract": {
+    "stucco": "The independently package-approved and promoted homogeneous warm-ivory albedo is reused byte-for-byte. One geometry UV unit is one metre and material scale 0.333333 gives an approximately 3 m repeat. No target photograph was used or shipped and no generated normal, roughness, AO, height, or displacement bitmap is assigned.",
+    "roof": "The existing CC0 Poly Haven bitumen albedo is reused as a dark 5 m-repeat roof and eave visual surrogate. This does not claim an as-built roof product."
+  },
+  "truth_boundary": {
+    "exact_horizontal_wall_and_roof_plan_preserved": true,
+    "exact_source_wall_height_preserved": true,
+    "source_identity_preserved": true,
+    "source_photography_stored_or_shown": false,
+    "all_opening_void_passage_balcony_rail_eave_and_roof_rise_dimensions_counts_anchors_and_spacing": "reversible_production_inference",
+    "lower_opening_schedule_claimed": false,
+    "unseen_facade_schedules_claimed": false,
+    "interior_modeled": false,
+    "as_built_claim": false,
+    "recognition_accepted": false,
+    "believability_accepted": false
+  }
+}

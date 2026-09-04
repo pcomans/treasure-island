@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "d1_current_shared_deep_reveal"
+albedo_color = Color(0.105, 0.115, 0.108, 1)
+metallic = 0.0
+roughness = 0.78
+

@@ -1,0 +1,13 @@
+# 1439 Chinook standalone hero — technical review packet
+
+This sealed packet is an isolated, exact-source A/B prototype for `w95934144`; it is not attached to the live world, catalog, registry, or recognition numerator. Technical checks pass, while recognition, believability, and material motion quality remain pending independent bar-raiser review.
+
+The source boundary is deliberately narrow. Only SSE runs `11,12,16,17,18,19,22,23` receive the warm-ivory public treatment. Addressable motifs exist only on runs `11`, `19`, and `23`; mapped continuation runs `12,16,17,18,22` remain motif-free, including tiny clipping fragments `17/18`. Every other run is an exact quiet neutral source wall. The three reference-supported cues are represented as an offset recessed two-level balcony stack, three separated upper-only opening groups in a broad quiet middle, and a near-blank opposite upper end over one offset passage under continuous shallow SSE eaves. All dimensions, counts, anchors, spacing, roof rise, and the lower hidden schedule are production inferences rather than as-built claims.
+
+Review the PNGs without reading manifests first. `01-whole-sse` and `02-sse-oblique` are grounded, same-pose baseline/prototype pairs; `03-sse-oblique-changed-light` repeats an oblique under changed sun. The AVI is a four-second continuous stock-player walk driven through `move_right`; all 240 physics samples are grounded, with no recovery or post-input transform writes. The review sheet is derived navigation aid, not authoritative motion evidence.
+
+The exact canonical `macOS Private` all-resources export was mounted from outside the checkout and rebuilt the same signature/topology while excluding discovery, evidence, and pilot-only texture paths. The promoted Site-12 texture is included without changing `export_presets.cfg`. The PCK is retained under `build/` and is intentionally untracked.
+
+Measured prototype: `11` meshes, `11` surfaces, `574` visual triangles (`48` exact wall + `10` exact-plan shallow-gable roof + `516` noncolliding relief), one structural body/shape with `58` collision triangles, zero navigation and zero spray ownership. Deterministic signature: `b82660eb7774ab022c417c7d417d51646f68fd288d916ad47a91d58db5bc8fb9`.
+
+Independent review should judge top-1 identity against the frozen authoritative confusion set (1437 Chinook, 1441 Chinook, 1438 Chinook) and the implemented 1441/1444 comparators without relying on address, tint, source ID, or location. It should also inspect the AVI for obvious seams, baked lighting, distracting recurrence, or shimmer. Faint recurrence and minor mismatch are permissible; this packet makes no visual verdict.

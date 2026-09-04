@@ -1,5 +1,5 @@
 {
-  "schema_version": "ti.building-3-facade-layout/1",
+  "schema_version": "ti.building-3-facade-layout/2",
   "target": {
     "source_key": "w34313540",
     "logical_object_key": "building:w34313540",
@@ -14,10 +14,10 @@
   "render_contract": {
     "render_layer": 2,
     "field_offset_m": 0.012,
-    "maximum_relief_m": 0.08,
+    "maximum_relief_m": 0.52,
     "collision": "none",
     "navigation": "none",
-    "spray_ray_owner": "unchanged_underlying_receiver"
+    "spray_ray_owner": "runtime_massing_receiver"
   },
   "observed_ene_main": {
     "run_indices": [27, 28, 29, 30, 31, 32, 33, 34, 35],
@@ -39,9 +39,8 @@
     ],
     "modules": [
       {"kind": "B3-HANGAR-DOOR", "u_m": 45.160, "width_m": 44.0, "height_m": 12.0, "center_y_m": 9.728},
-      {"kind": "B3-BAND", "u_m": 45.160, "width_m": 82.0, "height_m": 0.5, "center_y_m": 19.228}
+      {"kind": "B3-BAND", "u_m": 45.160, "width_m": 82.0, "height_m": 0.75, "center_y_m": 19.228}
     ]
   },
   "excluded_run_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58]
 }
-

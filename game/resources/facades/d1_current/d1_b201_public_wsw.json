@@ -1,0 +1,116 @@
+{
+  "schema_version": "ti.d1-current-standalone-side-prototype/1",
+  "prototype_id": "D1-B201-PUBLIC-WSW-STANDALONE",
+  "source_key": "w34313545",
+  "receiver_key_eligibility_only": "building:w34313545:wall",
+  "roof_object_key_protected": "building:w34313545:roof",
+  "scope": "standalone render-only public-WSW side study; exact eligible run chain, not a receiver-relative layout",
+  "review_status": "pending_independent_recognition_and_bar_review_not_self_accepted",
+  "runtime_attachment": false,
+  "live_placement_count": 0,
+  "reference_pixels_stored_or_copied": false,
+  "generated_or_external_texture_assets": false,
+  "binding": {
+    "frozen_osm": {
+      "type": "way",
+      "id": "34313545",
+      "version": 7,
+      "timestamp": "2022-03-25T17:56:41Z",
+      "address": "800 Avenue I, San Francisco, CA",
+      "tags": {"building": "yes", "building:levels": "1", "height": "5"}
+    },
+    "city_identity": "Building 201",
+    "identity_confidence": "high_for_footprint_binding",
+    "frozen_address_confidence": "conflicted",
+    "identity_conflict_nonclaim": "City crosswalk says B201 / 800 Avenue H; other City records use 995 9th at Avenue I and inconsistent 800 Avenue M/D variants. Separate Station 48 at 800 Avenue I is w764313741 and is never reference evidence for this receiver.",
+    "currentness": "September 2025 target-bound WSW observation",
+    "chunk_id": "x_0__z_-2",
+    "chunk_path": "res://generated/world/chunks/x_0__z_-2.json",
+    "chunk_sha256": "c0e1f86787410d975ad90272482e5f4971c4aedc7eb83132cd28b22acf1a3456",
+    "source_geometry_sha256": "2bb86d7269f9fc609ab079c0e31680e734c7b4fd0adcce42e1146c9cd81af764",
+    "source_area_m2": 8887.470,
+    "base_elevation_m": 3.402,
+    "top_elevation_m": 8.402,
+    "receiver_height_m": 5.0,
+    "receiver_run_count": 40,
+    "receiver_perimeter_m": 410.748,
+    "shared_run_count": 0
+  },
+  "authoritative_packet": {
+    "receipt_id": "D1-B201-AUTHORITY",
+    "source_provenance_receipt_sha256": "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677b3ba5ab318a19333",
+    "sha256": "c6fba23d80e95b23c4f3eb172a252baa47767b7a29757096bff329c693db9e5e"
+  },
+  "observation": {
+    "id": "800I-SV02",
+    "capture_date": "September 2025",
+    "side": "WSW public long side",
+    "rights": "observation-only; no panorama pixels stored, transformed, generated from, or shipped"
+  },
+  "eligible_region": {
+    "mapping_id": "800I-PUBLIC-WSW",
+    "source_edge_indices": [0],
+    "ordered_run_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    "ordered_run_lengths_m": [8.395309702, 10.181251102, 13.457963962, 22.843742360, 0.795472815, 1.484884507, 22.154330547, 11.867490763, 11.771724300, 12.560491431],
+    "exact_generated_chain_length_m": 115.512661489,
+    "canonical_rounded_chain_length_m": 115.513,
+    "chain_start_world_xz_m": [37.010, -304.375],
+    "chain_end_world_xz_m": [91.554, -202.551],
+    "contiguous": true,
+    "geometry_and_side_confidence": "high",
+    "preexisting_mapping_classification": "material_only_safe",
+    "prototype_authorization": "standalone_unattached_study_only"
+  },
+  "recognition_contract": {
+    "reference_observations": [
+      "nearly continuous upper register of broad dark windows in pale frames, divided by substantial light piers and bounded by saturated green horizontal bands",
+      "mostly solid light warm-gray/cream lower field with sparse doors/openings",
+      "green roof/parapet and canopy fascia with secondary muted rust-red/brown posts"
+    ],
+    "required_pair": [
+      "green-bounded broad upper-window register",
+      "sparse solid lower field across an unusually long low mass"
+    ],
+    "invalid_single_cue_proofs": ["green repaint", "business sign", "address marker", "generic warehouse grid"]
+  },
+  "production_inference": {
+    "truth_class": "reversible_production_inference_not_surveyed",
+    "side_study_dimensions_m": [115.512661489, 5.0],
+    "broad_window_bay_count": 18,
+    "mullions_per_bay": 2,
+    "service_leaf_count": 3,
+    "service_leaf_semantics": "nonsemantic_sparse_opening_proxy_not_an_entrance_claim",
+    "canopy_count": 1,
+    "canopy_post_count": 7,
+    "canopy_dimensions_and_endpoints_surveyed": false,
+    "cadence_and_anchors_surveyed": false,
+    "placement_state": "illustrative_local_side_coordinates_only"
+  },
+  "protected_scope": {
+    "run_indices": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39],
+    "regions": ["ENE service perimeter", "SSE", "north and NNW", "all short facets, corners and returns", "roof and generated host geometry"],
+    "nonclaims": ["current tenant mix", "physically displayed address", "exact window count or width", "exact canopy size or endpoints", "service-yard facade", "transparent interior", "parapet steps"]
+  },
+  "render_topology": {
+    "batch_count": 6,
+    "box_instance_count": 182,
+    "triangle_count": 2184,
+    "batch_instance_counts": {
+      "b201_warm_wall": 30,
+      "shared_dark_glass": 18,
+      "shared_pale_frame": 120,
+      "b201_green_hierarchy": 4,
+      "b201_muted_rust_post": 7,
+      "b201_service_leaf": 3
+    },
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0
+  },
+  "live_integration_seam": {
+    "status": "blocked_pending_independent_review_and_fresh_receiver_relative_layout",
+    "eligible_receiver_chain_only": "building:w34313545:wall / source edge 0 / runs 0..9",
+    "future_adapter_contract": "derive cumulative metres once across the ordered run chain; preserve complete modules and corner clearance; never infer from generated U or reset phase per run",
+    "forbidden": "direct factory instantiation from world_chunk_builder, catalog, compiler, registry, loader, generated chunks, collision, navigation or spray ownership"
+  }
+}

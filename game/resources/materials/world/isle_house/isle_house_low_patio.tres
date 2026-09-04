@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "isle_house_low_patio"
+albedo_color = Color(0.42, 0.405, 0.37, 1)
+metallic = 0.0
+roughness = 0.9
+

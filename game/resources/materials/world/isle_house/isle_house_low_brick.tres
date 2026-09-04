@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3]
+
+[resource]
+resource_name = "isle_house_low_brick"
+albedo_color = Color(0.285, 0.205, 0.155, 1)
+metallic = 0.0
+roughness = 0.86
+

@@ -1,0 +1,40 @@
+{
+  "schema_version": "ti.d1-b225-isolated-package-cost/1",
+  "measured_at_local": "2026-09-04 America/Los_Angeles",
+  "measurement_method": "two exports from one immutable temporary snapshot of the same working tree; the second export changed only temporary export-filter exclusions for the complete B225 repair branch, so concurrent repository work cannot enter the delta",
+  "export_preset": "macOS Private",
+  "export_filter": "all_resources",
+  "branch_excluded_pack": {
+    "path": "res://build/b225-standalone-review-branch-excluded.pck",
+    "bytes": 46261548,
+    "sha256": "af13d9d3ce9bd44edbde9e04b71b56241184a312d67e6529b064ebaea384a724"
+  },
+  "branch_included_pack": {
+    "path": "res://build/b225-standalone-review-branch-included.pck",
+    "bytes": 48365996,
+    "sha256": "89a47497b62822411519179fec61be5bd1dd6ab84af82faa46444824edb52bd9"
+  },
+  "isolated_branch_delta_bytes": 2104448,
+  "isolated_branch_delta_mib": 2.0069580078125,
+  "selected_source_png_bytes": 2140085,
+  "imported_ctex_bytes": 2031028,
+  "estimated_full_rgba8_mip_chain_runtime_bytes": 8386752,
+  "evidence_excluded_from_export": true,
+  "rejected_generation_outside_project": true,
+  "included_branch_scope": [
+    "selected generated B225 RGB albedo and Godot import",
+    "B225 scalar StandardMaterial3D",
+    "B225 cumulative-metre UV helper",
+    "B225-only standalone factory and scene",
+    "B225 superseding config",
+    "B225 structural, capture and evidence test scripts"
+  ],
+  "excluded_from_cost": [
+    "all PNG evidence, manifest, README and review request under evidence/",
+    "rejected first generation retained only outside the project",
+    "pre-existing sealed D1/B201/B225 assets reused read-only"
+  ],
+  "mounted_pack_check": "PASS: branch-included PCK loaded the B225 config, scene, factory, UV helper, material and texture through ResourceLoader and instantiated the albedo-bearing material",
+  "shipping_policy": "currently bundled and explicitly costed because all_resources includes this standalone review candidate; if independent review rejects or postpones integration, add a narrow B225 branch exclusion before the next distributable export; do not delete the source or evidence artifacts",
+  "nonclaim": "The isolated PCK delta is package storage, not runtime resident-memory cost, GPU upload cost, draw-call cost, or evidence size. Runtime texture memory is an explicit upper estimate for decoded RGBA8 plus a full mip chain."
+}

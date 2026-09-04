@@ -8,7 +8,7 @@ const HAWKINS_CHUNK_PATH := "res://generated/world/chunks/x_-1__z_1.json"
 const LAYOUT_PATH := "res://game/resources/facades/building_3_600_california_ene_layout.json"
 const EXPECTED_CHUNK_SHA256 := "784d89c2ac1392f5ff329b8c6c437ad9050363e9f00b4f993dd9d378851f1758"
 const EXPECTED_MANIFEST_SHA256 := "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
-const EXPECTED_LAYOUT_SHA256 := "312ed89a5bca6e3eadf3034b8e97689b9a99646837aca8f5f1f7f940a11f8299"
+const EXPECTED_LAYOUT_SHA256 := "a491a3c7916191b9ca5f6adacc6d1f2289c0103f5079516b102b94e3993dae0c"
 const EXPECTED_HAWKINS_LAYOUT_SHA256 := "4de2239af2e18fe4121930d51dee15e081d2f81a40393da2f1f29c69464761d9"
 const EXPECTED_HAWKINS_SIGNATURE := "d311c103c9273b94fc982588f46bae6ab67ba6be54b0d0a111dd305e39c22219"
 const PHYSICS_SPRAY_SURFACE := 1 << 2
@@ -59,7 +59,8 @@ func _run() -> void:
 	or not _require(roof_node.get_node_or_null("Building3600CaliforniaFacade") == null and hawkins.get_node_or_null("Building3600CaliforniaFacade") == null, "Building 3 facade spilled to a roof or Hawkins wall.") \
 	or not _require(hawkins_facade != null and str(hawkins_facade.get_meta("deterministic_signature", "")) == EXPECTED_HAWKINS_SIGNATURE, "Accepted Hawkins runtime result changed.") \
 	or not _require(str(facade.get_meta("deterministic_signature", "")) == str(second_facade.get_meta("deterministic_signature", "")), "Building 3 module/material assignment is nondeterministic.") \
-	or not _require(_receiver_matches(first), "Building 3 generated massing/foundation/collision/spray receiver drifted.") \
+	or not _require(_receiver_matches(first), "Building 3 arched wall/foundation/collision/spray receiver drifted.") \
+	or not _require(_roof_matches(roof_node), "Building 3 arched roof/landing collision drifted.") \
 	or not _require(_facade_matches(facade), "Building 3 facade scope/completeness/render-only contract drifted."):
 		_free_results([first_result, second_result, roof_result, hawkins_result])
 		_finish()
@@ -74,7 +75,7 @@ func _run() -> void:
 		return
 	root.remove_child(first)
 	_free_results([first_result, second_result, roof_result, hawkins_result])
-	print("PASS: Building 3 exact runs 27..35 retain 20 m massing, 59 runs/118 triangles, foundation and spray behavior; one complete door plus one band are deterministic <=0.08 m render-only visuals with no spillover; Hawkins remains accepted and unchanged")
+	print("PASS: Building 3 exact runs 27..35 follow the arched 236-triangle wall and exact foundation/spray receiver; its congruent 675-triangle roof is landable; one complete door plus one raised band remain deterministic render-only visuals with no spillover; Hawkins remains accepted and unchanged")
 	_finish()
 
 
@@ -82,7 +83,7 @@ func _layout_matches(layout: Dictionary) -> bool:
 	var target := layout.target as Dictionary
 	var render := layout.render_contract as Dictionary
 	var side := layout.observed_ene_main as Dictionary
-	if str(layout.schema_version) != "ti.building-3-facade-layout/1" \
+	if str(layout.schema_version) != "ti.building-3-facade-layout/2" \
 	or str(target.source_key) != TARGET_SOURCE_KEY \
 	or str(target.receiver_object_key) != TARGET_WALL_KEY \
 	or int(target.wall_segments) != 59 or int(target.wall_triangles) != 118 \
@@ -93,7 +94,8 @@ func _layout_matches(layout: Dictionary) -> bool:
 	or not is_equal_approx(float(side.length_m), 90.320) \
 	or str(side.module_policy) != "observed_complete_modules" \
 	or str(render.collision) != "none" or str(render.navigation) != "none" \
-	or float(render.maximum_relief_m) > 0.08:
+	or str(render.spray_ray_owner) != "runtime_massing_receiver" \
+	or not is_equal_approx(float(render.maximum_relief_m), 0.52):
 		return false
 	var modules: Array = side.modules
 	return modules.size() == 2 \
@@ -106,6 +108,7 @@ func _materials_match() -> bool:
 	for path: String in [
 		"res://game/resources/materials/world/building_3/building_3_white_primary.tres",
 		"res://game/resources/materials/world/building_3/building_3_teal_door.tres",
+		"res://game/resources/materials/world/building_3/building_3_shadow_recess.tres",
 	]:
 		var material := load(path) as StandardMaterial3D
 		if material == null or not is_zero_approx(material.metallic) \
@@ -126,17 +129,37 @@ func _receiver_matches(node: Node3D) -> bool:
 	for vertex: Vector3 in vertices:
 		lowest = minf(lowest, vertex.y)
 		highest = maxf(highest, vertex.y)
-	return vertices.size() == 236 and mesh.get_faces().size() == 354 and shape.get_faces().size() == 354 \
-		and is_equal_approx(lowest, 2.806) and is_equal_approx(highest, 23.478) \
+	return vertices.size() == 472 and mesh.get_faces().size() == 708 and shape.get_faces().size() == 708 \
+		and is_equal_approx(lowest, 2.806) and highest >= 27.86 and highest <= 27.863 \
 		and body.collision_layer == (1 | PHYSICS_SPRAY_SURFACE) and body.collision_mask == 0 \
 		and body.is_in_group("spray_receiver_wall") and body.get_meta("source_keys", []) == [TARGET_SOURCE_KEY] \
+		and bool(node.get_meta("building_3_massing_override", false)) \
+		and bool(node.get_meta("runtime_supersedes_generated_placeholder", false)) \
+		and (node.find_children("*", "CollisionObject3D", true, false) as Array).size() == 1
+
+
+func _roof_matches(node: Node3D) -> bool:
+	var mesh_instance := node.get_node("Mesh") as MeshInstance3D
+	var body := node.get_node("Collision") as StaticBody3D
+	var shape := (node.get_node("Collision/Shape") as CollisionShape3D).shape as ConcavePolygonShape3D
+	var mesh := mesh_instance.mesh as ArrayMesh
+	var vertices := mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX] as PackedVector3Array
+	var highest := -INF
+	for vertex: Vector3 in vertices:
+		highest = maxf(highest, vertex.y)
+	return vertices.size() == 2025 and mesh.get_faces().size() == 2025 and shape.get_faces().size() == 2025 \
+		and highest >= 27.85 and highest <= 27.86 \
+		and body.collision_layer == 1 and body.collision_mask == 0 \
+		and not body.is_in_group("spray_receiver_wall") \
+		and bool(node.get_meta("building_3_massing_override", false)) \
 		and (node.find_children("*", "CollisionObject3D", true, false) as Array).size() == 1
 
 
 func _facade_matches(facade: Building3600CaliforniaFacade) -> bool:
 	if str(facade.get_meta("layout_sha256", "")) != EXPECTED_LAYOUT_SHA256 \
 	or facade.get_meta("styled_run_indices", []) != [27, 28, 29, 30, 31, 32, 33, 34, 35] \
-	or int(facade.get_meta("field_segment_count", 0)) != 9 \
+	or int(facade.get_meta("field_segment_count", 0)) != 18 \
+	or int(facade.get_meta("reference_pylon_relief_count", 0)) != 2 \
 	or facade.get_meta("module_counts", {}) != {"B3-HANGAR-DOOR": 1, "B3-BAND": 1} \
 	or not bool(facade.get_meta("render_only", false)) \
 	or facade.is_in_group("spray_receiver_wall") \
@@ -145,7 +168,7 @@ func _facade_matches(facade: Building3600CaliforniaFacade) -> bool:
 		return false
 	var fields := facade.get_node("FacadeFields_Runs_27_35") as MeshInstance3D
 	var mesh := fields.mesh as ArrayMesh
-	if fields.layers != RENDER_BUILDING_WALL or mesh.get_surface_count() != 1 or mesh.get_faces().size() != 54:
+	if fields.layers != RENDER_BUILDING_WALL or mesh.get_surface_count() != 1 or mesh.get_faces().size() != 108:
 		return false
 	var side := facade.get_node("ENE_Main_Runs_27_35") as Node3D
 	var kinds: Array[String] = []

@@ -1,0 +1,159 @@
+{
+  "schema_version": "ti.site-12-stucco-package-promotion-receipt/1",
+  "captured_at_utc": "2026-09-04T16:25:38Z",
+  "status": "source_and_fresh_canonical_mounted_pass_pending_independent_packaging_audit",
+  "scope": "byte-identical package-safe promotion of the already-reviewed warm-ivory GenAI stucco albedo for the standalone 1441 and 1444 Site-12 prototypes",
+  "visual_evidence_policy": {
+    "new_visual_capture": false,
+    "reason": "The PNG pixels, material tints, scalar roughness, and meter-repeat behavior are unchanged; this receipt covers package closure only.",
+    "visual_self_grade": false
+  },
+  "promotion": {
+    "historical_pilot_path": "res://game/resources/textures/world/genai_pilot_v1/warm_ivory_mineral_albedo_v2.png",
+    "package_safe_path": "res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+    "raw_png_sha256_both_paths": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+    "raw_png_bytes_both_paths": 2811712,
+    "raw_png_dimensions": [1254, 1254],
+    "byte_for_byte_cmp": "pass",
+    "decoded_image_size_and_format_equal": true,
+    "decoded_pixel_and_mipmap_buffer_equal": true,
+    "decoded_pixel_and_mipmap_sha256": "1c6d6019bcfbc9700ab43b80e07f481e51323bb6ac7a12ed03e253ed95545f1a",
+    "pixels_regenerated_or_modified": false,
+    "import_behavior": {
+      "compression_mode": "lossless",
+      "mipmaps_generate": true,
+      "normal_map_mode": false,
+      "roughness_map_mode": false
+    },
+    "provenance_document": "res://game/resources/textures/world/site_12_housing/README.md",
+    "provenance_authority": "res://discovery/facades/GENAI_TEXTURE_PILOT_V1.md",
+    "generator_input_boundary": "text prompts only; no target photograph or third-party reference pixels"
+  },
+  "materials": {
+    "1441": {
+      "path": "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
+      "sha256": "81fd15832670516b2cc752e89310acda201f30705b01297639703f76f2111a64",
+      "tint": [0.96, 0.94, 0.87, 1.0],
+      "roughness": 0.88,
+      "metallic": 0.0,
+      "uv1_scale_xy": 0.333333,
+      "normal_texture": null,
+      "roughness_texture": null
+    },
+    "1444": {
+      "path": "res://game/resources/materials/world/site_12_housing/site_12_ochre_tan_stucco.tres",
+      "sha256": "9486ccf52e1f2aff9fc940f60644733d5cf9bf1cb03cebb5332bcc1d7c0aaaf6",
+      "tint": [0.78, 0.61, 0.42, 1.0],
+      "roughness": 0.88,
+      "metallic": 0.0,
+      "uv1_scale_xy": 0.333333,
+      "normal_texture": null,
+      "roughness_texture": null
+    }
+  },
+  "semantic_corrections": {
+    "1441_future_facing_config_sha256": "ebb6be74a630ad405030938dc7d27bc6fed46b2d6892a847ee653d374df57f75",
+    "1441_authoritative_confusion_set_source_ids": [
+      "w95934144",
+      "w95934143",
+      "w95934131",
+      "w95934129"
+    ],
+    "1441_eave_material": "MappedSSEBroadEaves uses the dark roof surrogate; warm-ivory stucco is limited to mapped wall runs, pale opening frames, and balcony slabs.",
+    "historical_capture_metadata_rewritten": false,
+    "historical_capture_contract_treatment": "Historical generator and input hashes remain exact frozen facts; deliberately superseded current config/material bytes are audited separately."
+  },
+  "unchanged_geometry_and_ownership": {
+    "1441": {
+      "deterministic_signature": "b91b373e3bb8238a6f73f05734ef48b3429ae5654eddce89b1981ee41ee89195",
+      "mesh_instances": 9,
+      "surfaces": 9,
+      "visual_triangles": 1578,
+      "structural_collision_bodies": 1,
+      "structural_collision_shapes": 1,
+      "collision_triangles": 42,
+      "navigation_nodes": 0,
+      "spray_owner_nodes": 0
+    },
+    "1444": {
+      "deterministic_signature": "8df0202796d56c019b6b3ddb72916808b72316d2d0edee0ba7425b77efa2b127",
+      "mesh_instances": 11,
+      "surfaces": 11,
+      "visual_triangles": 798,
+      "structural_collision_bodies": 1,
+      "structural_collision_shapes": 1,
+      "collision_triangles": 54,
+      "navigation_nodes": 0,
+      "spray_owner_nodes": 0
+    },
+    "live_attachment_changed": false,
+    "catalog_registry_or_global_pins_changed": false
+  },
+  "canonical_export": {
+    "preset": "macOS Private",
+    "export_presets_cfg_sha256": "6860fbd8409e5f74b7389da23707db9524fb843a9f3f41429556a3d5d2329294",
+    "preset_modified_by_this_promotion": false,
+    "command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --headless --path . --audio-driver Dummy --export-pack \"macOS Private\" \"build/site-12-stucco-package-promotion-review/Treasure Island First Playable.pck\"",
+    "artifact_path": "build/site-12-stucco-package-promotion-review/Treasure Island First Playable.pck",
+    "artifact_sha256": "cf5dd99349c88cb78fd9d0df39ecedf7c84536b3652ee56e0e1b689a62e75489",
+    "artifact_bytes": 65271192,
+    "fresh_source_checkout_export": true,
+    "isolated_preset_workaround": false,
+    "promoted_imported_texture_stored": true,
+    "pilot_texture_and_material_exclusions_preserved": true
+  },
+  "tests": {
+    "source": {
+      "site_12_stucco_package_promotion_contract": "pass",
+      "d2_1441_structural_contract": "pass",
+      "d2_1444_structural_contract": "pass",
+      "d2_1441_package_contract": "pass",
+      "d2_1444_package_contract": "pass",
+      "d2_1441_immutable_evidence_contract": "pass",
+      "d2_1444_immutable_evidence_contract": "pass"
+    },
+    "outside_checkout_direct_mounted": {
+      "working_directory": "/tmp/ti-site12-sealed-audit.mmxj0G",
+      "main_pack": "exact canonical artifact above",
+      "site_12_stucco_package_promotion_contract": "pass",
+      "d2_1441_package_contract": "pass",
+      "d2_1444_package_contract": "pass"
+    }
+  },
+  "package_boundary": {
+    "project_binary_present": true,
+    "source_project_godot_absent": true,
+    "discovery_directory_absent": true,
+    "evidence_directory_absent": true,
+    "historical_pilot_texture_absent": true,
+    "historical_pilot_material_absent": true,
+    "promoted_texture_loads": true,
+    "1441_and_1444_direct_runtime_closure_forbidden_tokens": [],
+    "forbidden_token_set": [
+      "res://discovery/",
+      "res://evidence/",
+      "https://",
+      "http://",
+      "file://",
+      "/volumes/",
+      "/users/"
+    ]
+  },
+  "immutable_prior_visual_evidence": {
+    "1441_capture_manifest_sha256": "8b4bbea9eb24a084058420100a7c5a1dd4305fb15668118aaf0d6bed56ce8b94",
+    "1441_motion_manifest_sha256": "f6c9053db6603ad0095312a37566a5ade14627bea077f0585c055503942f5142",
+    "1441_movie_sha256": "1f7b42f4b83c0225146044cfc9794f71575d19e06147e15ebc7f0aa46b3f7d03",
+    "1444_capture_manifest_sha256": "e802bccc45ec25bd5ecccc2aa79a06a37220ae61f6e44a67c14f9e916711ac0b",
+    "1444_motion_manifest_sha256": "49e861d1d154858e7f0cfbbccdc732e5948be4d32f346978affb6f423a55d61d",
+    "1444_movie_sha256": "3afe7d57f60d8c2b7330f49fa3bc414d915404a23ea774778407fa58710770b4",
+    "1444_motion_review_sheet_sha256": "63aada9bd3ec5f489f4930d46b80bfc41955efc4db449c8c7e7f17618661eefb",
+    "files_rewritten_or_recaptured": false
+  },
+  "eligibility": {
+    "1441_technically_eligible_for_later_exact_current_live_study": true,
+    "1444_technically_eligible_for_later_exact_current_live_study": true,
+    "live_acceptance_granted": false,
+    "recognizability_numerator_delta": 0,
+    "next_gate": "independent packaging audit, then a separately authorized fail-closed live study and independent exact-current live review"
+  }
+}

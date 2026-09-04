@@ -1,0 +1,15 @@
+2026-09-04 Navy Chapel Building 187 standalone hero prototype verification
+
+PASS — focused package/geometry/collision contract
+Command: .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --headless --script game/tests/headless_navy_chapel_187_standalone_hero_contract.gd
+Result: deterministic signature 076e081df86e884f04cf7cb680304c35c64e6f76238de7060528c59097ae5c46; exact source shell/run scope, six visual batches / 540 triangles, one structural body / 144 collision triangles, fail-closed pair seam, collision rays, package safety, and zero live/spray/navigation attachment passed.
+
+PASS — native grounded fixed-camera capture
+Command: .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/navy_chapel_187_standalone_hero_capture.gd
+Result: four 1440x900 nonblank PNGs captured on macOS / Apple M2 (Apple8), actual Player rig physics-grounded on generated land, exact camera/player pose reused per before/after pair, full bounds in frame, exact source/run-9 first LOS, clean HUD, unchanged default lighting. Recognition and believability remain pending independent review.
+
+PASS — sealed evidence contract
+Command: .tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --headless --script game/tests/headless_navy_chapel_187_standalone_hero_evidence_contract.gd
+Result: generator/manifest/image hashes, native provenance, dimensions, nonblank samples, pair transforms, framing, LOS bindings, truth boundary, confusion set, topology, and pending-review verdicts passed.
+
+Original-detail executor inspection: PASS for technical validity only (four images readable, nonblank, unclipped, correctly paired, player/reticle present, no debug panels or source photographs). No recognition or believability grade was made.

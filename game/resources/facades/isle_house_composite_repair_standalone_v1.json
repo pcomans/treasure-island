@@ -1,0 +1,180 @@
+{
+  "schema_version": "ti.isle-house-composite-repair-standalone/1",
+  "scope": "isolated full high-plus-low A/B; never loaded by world construction",
+  "target": {
+    "parent_source_key": "w1249412094",
+    "logical_object_key": "building-composite:w1249412094",
+    "chunk_id": "x_-1__z_2",
+    "chunk_sha256": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce",
+    "high_wall_key": "building-composite:w1249412094:w1282547786:wall",
+    "high_roof_key": "building-composite:w1249412094:w1282547786:roof",
+    "low_wall_key": "building-composite:w1249412094:w1282547787:wall",
+    "low_roof_key": "building-composite:w1249412094:w1282547787:roof",
+    "high_source_key": "w1282547786",
+    "low_source_key": "w1282547787",
+    "high_top_y_m": 71.103,
+    "low_top_y_m": 19.103,
+    "flat_base_y_m": 4.103,
+    "high_wall_vertices": 52,
+    "high_wall_triangles": 26,
+    "high_roof_vertices": 7,
+    "high_roof_triangles": 5,
+    "low_wall_vertices": 52,
+    "low_wall_triangles": 26,
+    "low_roof_vertices": 6,
+    "low_roof_triangles": 4
+  },
+  "sealed_parents": {
+    "failed_live_candidate": {
+      "path": "res://game/scripts/world/facades/isle_house_39_bruton_low_live_attachment.gd",
+      "sha256": "1b36a0ad92ded4607e0c1e0df5d5581d1c7afff5843cb75cd4c490790a86c413",
+      "output_signature": "5d61ab90e5b798ac4aa26c45fea37a5293f3083dada615f06999faad459112cc",
+      "independent_grade": "FAIL",
+      "denominator_delta": 0
+    },
+    "accepted_high": {
+      "script_path": "res://game/scripts/world/facades/isle_house_39_bruton_high_facade.gd",
+      "script_sha256": "f8243cedd3f331cbc37e6343b1b48e76a73a81644c96cc1f80e623e0c71a3113",
+      "scene_path": "res://game/scenes/world/facades/isle_house/isle_house_high_facade.tscn",
+      "scene_sha256": "7ff4a91c402cecea19d2686d29139d2c0f139673b06d21c67d1c14835fd31d12",
+      "layout_path": "res://game/resources/facades/isle_house_39_bruton_high_se_layout.json",
+      "layout_sha256": "c5e6393e90152cef62f6478d7bd87750f3db5598d6ebc36cd307ce20acaa090d",
+      "output_signature": "e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1"
+    }
+  },
+  "truth_boundary": {
+    "standalone_only": true,
+    "runtime_attachment": false,
+    "live_replacement": false,
+    "recognition_accepted": false,
+    "believability_accepted": false,
+    "as_built_fidelity": false,
+    "source_pixels_packaged": false,
+    "upper_schedule_claimed": false,
+    "literal_seven_story_geometry_claimed": false,
+    "observed_family_facts": [
+      "completed building has a seventh-story podium below a folded light tower",
+      "public low realm uses warm brick and handcrafted eye-level materials",
+      "nine two-level live-work homes have private entries, Dutch doors, and patios",
+      "half of the live-work homes face Avenue of the Palms and half face the shared way"
+    ],
+    "production_inferences": [
+      "candidate upper-field and transition-reveal heights within the unchanged low wall",
+      "four candidate module arrangements and their dimensions",
+      "eight run-local placements, sequence, spacing, and mirroring",
+      "opaque glazing, shallow planter proxies, and exact relief depth"
+    ]
+  },
+  "render_contract": {
+    "render_layer": 2,
+    "lower_field_offset_m": 0.012,
+    "upper_field_offset_m": 0.026,
+    "transition_reveal_offset_m": 0.055,
+    "maximum_relief_m": 0.10,
+    "live_work_band_top_y_m": 10.25,
+    "upper_podium_field_top_y_m": 18.58,
+    "low_top_y_m": 19.103,
+    "minimum_module_corner_clearance_m": 1.5,
+    "collision": "none",
+    "navigation": "none",
+    "spray": "none",
+    "silhouette_change": "none",
+    "brick_field_material": {
+      "path": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "texture_path": "res://game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png",
+      "cell_m": 2.5,
+      "tint": [0.70, 0.66, 0.62, 1.0],
+      "roughness": 0.86,
+      "u_rule": "continuous_xz_metres_within_ordered_public_side",
+      "v_rule": "absolute_world_y_metres"
+    },
+    "upper_transition": {
+      "run_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "field_material_path": "res://game/resources/materials/world/isle_house/isle_house_podium_light.tres",
+      "reveal_material_path": "res://game/resources/materials/world/isle_house/isle_house_support_grey.tres",
+      "source_support": "seventh-story podium and tower/podium hierarchy only",
+      "candidate_expression": "homogeneous public-side upper field plus one shallow top transition reveal",
+      "blocked_expression": "no openings, story grid, private/rear schedule, parapet, roof, setback, or literal story-count claim"
+    }
+  },
+  "public_sides": [
+    {
+      "id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "ordered_run_indices": [0, 1, 2, 3, 4],
+      "normal_xz": [-0.891, 0.455],
+      "mapping_status": "public_side_mapped",
+      "family_support_ids": ["DBA-COMPLETED-LIVEWORK-STREETFRONT", "DBA-DESIGN-INTERVIEW-LIVEWORK"]
+    },
+    {
+      "id": "LOW-ENE-GARDEN-WALK",
+      "ordered_run_indices": [5, 6, 7, 8, 9],
+      "normal_xz": [0.890, -0.455],
+      "mapping_status": "public_side_mapped",
+      "family_support_ids": ["DBA-COMPLETED-LIVEWORK-PEDESTRIAN", "DBA-DESIGN-INTERVIEW-LIVEWORK"]
+    }
+  ],
+  "runs": [
+    {"index": 0, "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "start_xyz_m": [-156.887, 4.027, 502.424], "end_xyz_m": [-154.702, 4.027, 506.702], "normal_xz": [-0.891, 0.455], "length_m": 4.803697},
+    {"index": 1, "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "start_xyz_m": [-154.702, 4.027, 506.702], "end_xyz_m": [-151.997, 3.983, 512.000], "normal_xz": [-0.891, 0.455], "length_m": 5.948599},
+    {"index": 2, "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "start_xyz_m": [-151.997, 3.983, 512.000], "end_xyz_m": [-143.885, 4.103, 527.885], "normal_xz": [-0.891, 0.455], "length_m": 17.836417},
+    {"index": 3, "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "start_xyz_m": [-143.885, 4.103, 527.885], "end_xyz_m": [-135.655, 3.993, 544.000], "normal_xz": [-0.891, 0.455], "length_m": 18.094920},
+    {"index": 4, "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "start_xyz_m": [-135.655, 3.993, 544.000], "end_xyz_m": [-133.374, 4.065, 548.466], "normal_xz": [-0.891, 0.455], "length_m": 5.014790},
+    {"index": 5, "side_id": "LOW-ENE-GARDEN-WALK", "start_xyz_m": [-95.775, 4.099, 526.591], "end_xyz_m": [-96.000, 4.103, 526.151], "normal_xz": [0.890, -0.455], "length_m": 0.494191},
+    {"index": 6, "side_id": "LOW-ENE-GARDEN-WALK", "start_xyz_m": [-96.000, 4.103, 526.151], "end_xyz_m": [-100.787, 4.103, 516.787], "normal_xz": [0.890, -0.455], "length_m": 10.516647},
+    {"index": 7, "side_id": "LOW-ENE-GARDEN-WALK", "start_xyz_m": [-100.787, 4.103, 516.787], "end_xyz_m": [-103.235, 4.103, 512.000], "normal_xz": [0.890, -0.455], "length_m": 5.376623},
+    {"index": 8, "side_id": "LOW-ENE-GARDEN-WALK", "start_xyz_m": [-103.235, 4.103, 512.000], "end_xyz_m": [-111.613, 4.103, 495.613], "normal_xz": [0.890, -0.455], "length_m": 18.404474},
+    {"index": 9, "side_id": "LOW-ENE-GARDEN-WALK", "start_xyz_m": [-111.613, 4.103, 495.613], "end_xyz_m": [-118.444, 4.103, 482.253], "normal_xz": [0.890, -0.455], "length_m": 15.005071},
+    {"index": 10, "side_id": "LOW-NNW-PROTECTED", "start_xyz_m": [-118.444, 4.103, 482.253], "end_xyz_m": [-128.000, 4.103, 487.267], "normal_xz": [-0.465, -0.886], "length_m": 10.791540},
+    {"index": 11, "side_id": "LOW-NNW-PROTECTED", "start_xyz_m": [-128.000, 4.103, 487.267], "end_xyz_m": [-143.289, 4.103, 495.289], "normal_xz": [-0.465, -0.886], "length_m": 17.265747},
+    {"index": 12, "side_id": "LOW-NNW-PROTECTED", "start_xyz_m": [-143.289, 4.103, 495.289], "end_xyz_m": [-156.887, 4.027, 502.424], "normal_xz": [-0.465, -0.886], "length_m": 15.356231}
+  ],
+  "module_family": {
+    "id": "IH-LOW-PUBLIC-LIVEWORK-VARIANT-FAMILY",
+    "observed_cues": ["warm brick piers", "large two-level glazing", "individual Dutch/half-door entry", "individual-entry and glazing relationship", "landscaped patio threshold"],
+    "implementation_labels": ["entry-gallery", "patio-glazing"],
+    "sequence_truth_class": "reversible_production_inference",
+    "exact_dimensions_truth_class": "reversible_production_inference",
+    "variants": [
+      {"id": "HALF-DOOR-LEFT", "width_m": 4.10, "door_side": -1, "door_width_m": 1.10, "gallery_mullions": 1, "planter_policy": "right", "canopy_width_m": 1.60},
+      {"id": "HALF-DOOR-RIGHT", "width_m": 4.35, "door_side": 1, "door_width_m": 1.05, "gallery_mullions": 1, "planter_policy": "left", "canopy_width_m": 1.45},
+      {"id": "ENTRY-GALLERY", "width_m": 4.85, "door_side": -1, "door_width_m": 1.25, "gallery_mullions": 2, "planter_policy": "both", "canopy_width_m": 2.10},
+      {"id": "PATIO-GLAZING", "width_m": 4.60, "door_side": 1, "door_width_m": 1.00, "gallery_mullions": 2, "planter_policy": "both", "canopy_width_m": 1.25}
+    ]
+  },
+  "placements": [
+    {"id": "IH-AB-AV-01", "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "run_index": 2, "run_u_m": 3.90, "variant_id": "HALF-DOOR-LEFT", "truth_class": "reversible_production_inference"},
+    {"id": "IH-AB-AV-02", "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "run_index": 2, "run_u_m": 12.55, "variant_id": "ENTRY-GALLERY", "truth_class": "reversible_production_inference"},
+    {"id": "IH-AB-AV-03", "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "run_index": 3, "run_u_m": 4.10, "variant_id": "PATIO-GLAZING", "truth_class": "reversible_production_inference"},
+    {"id": "IH-AB-AV-04", "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS", "run_index": 3, "run_u_m": 13.05, "variant_id": "HALF-DOOR-RIGHT", "truth_class": "reversible_production_inference"},
+    {"id": "IH-AB-GW-01", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 8, "run_u_m": 3.95, "variant_id": "HALF-DOOR-RIGHT", "truth_class": "reversible_production_inference"},
+    {"id": "IH-AB-GW-02", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 8, "run_u_m": 13.05, "variant_id": "PATIO-GLAZING", "truth_class": "reversible_production_inference"},
+    {"id": "IH-AB-GW-03", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 9, "run_u_m": 3.95, "variant_id": "ENTRY-GALLERY", "truth_class": "reversible_production_inference"},
+    {"id": "IH-AB-GW-04", "side_id": "LOW-ENE-GARDEN-WALK", "run_index": 9, "run_u_m": 11.05, "variant_id": "HALF-DOOR-LEFT", "truth_class": "reversible_production_inference"}
+  ],
+  "protected_regions": [
+    {"id": "LOW-NNW-RETURN", "run_indices": [10, 11, 12], "policy": "no candidate geometry"},
+    {"id": "LOW-HIGH-HIDDEN-INTERFACE", "policy": "no reconstructed wall or module"},
+    {"id": "LOW-ROOF", "policy": "no roof, parapet, or silhouette ownership"},
+    {"id": "HIGH-ALL", "policy": "accepted high adapter is duplicated byte-for-byte and receives no candidate edit"}
+  ],
+  "provenance": [
+    {"id": "DBA-COMPLETED-PROJECT", "truth_class": "verified_fact_and_reference_observation", "supports": ["completed 22-story folded light tower", "seventh-story podium", "active ground and live-work gallery"]},
+    {"id": "DBA-COMPLETED-LIVEWORK-STREETFRONT", "truth_class": "reference_observation", "supports": ["warm brick piers", "large two-level glazing", "individual entry", "landscaped street patio edge"]},
+    {"id": "DBA-COMPLETED-LIVEWORK-PEDESTRIAN", "truth_class": "reference_observation", "supports": ["half-door entry", "glazed live-work bay", "landscaped shared-way threshold"]},
+    {"id": "DBA-DESIGN-INTERVIEW-LIVEWORK", "truth_class": "verified_fact", "supports": ["Dutch doors", "private entries and patios", "brick and handcrafted eye-level materials", "public-side split"]},
+    {"id": "FROZEN-OSM-PUBLIC-EDGE-JOIN", "truth_class": "verified_fact", "supports": ["exact low footprint and public-side run mapping only"]}
+  ],
+  "blocked_claims": [
+    "literal correction from five generated levels to seven stories",
+    "surveyed bay count, dimensions, placement, cadence, sequence, product, bond, or color",
+    "upper-band openings or story grid",
+    "NNW, private, courtyard, rear, shared-interface, roof, parapet, setback, or interior appearance",
+    "transparent glazing, operable doors, occupiable patios, or as-built fidelity",
+    "recognition, believability, live promotion, catalog credit, or denominator increment"
+  ],
+  "live_replacement_seam": {
+    "state": "not_connected",
+    "candidate_method": "detach_repair_overlay_for_preview",
+    "future_owner_action": "only after independent PASS, replace the current low live child at the exact receiver and reconcile global topology/catalog in one coordinated batch"
+  }
+}

@@ -1,0 +1,12 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd" id="1_prototype"]
+
+[node name="NavyChapel187StandaloneHeroPrototype" type="Node3D"]
+script = ExtResource("1_prototype")
+metadata/prototype_only = true
+metadata/runtime_attachment = false
+metadata/technical_evidence_status = "pending_independent_bar_raiser_review"
+metadata/recognition_accepted = false
+metadata/believability_accepted = false
+metadata/as_built_claim = false

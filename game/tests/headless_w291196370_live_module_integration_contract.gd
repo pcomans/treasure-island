@@ -12,7 +12,7 @@ const EXPECTED_REGISTRY_SHA256 := "b30a8f19091288cde4b8e891ec40287ab28a73776588f
 const EXPECTED_REVIEWED_CALIBRATION_SHA256 := "ba621cffc5ee155e8b7c7338c3b5d444d1180dad6dbe11528219ada6de05dfdf"
 const EXPECTED_ART_REVIEW_SHA256 := "967ab07d109096a743be01fb0bce959280967f5eab65c82ac0652eb5dcd3023b"
 const EXPECTED_LIVE_ART_REVIEW_SHA256 := "410ffa891bdebe92d689155b4c7986f7e9a07bef1028900cd0dac00bcb8222ca"
-const EXPECTED_LIVE_ADAPTER_SHA256 := "e297d40ac9841485ee00a76b955f8ec454639b394c23759e8017e170aa84cbf8"
+const EXPECTED_LIVE_ADAPTER_SHA256 := "2b4da98b780af42bbc59dce911410c73964f670ce6d58624b77211b7cf981653"
 const EXPECTED_PLACEMENTS := {
 	"CAL-SSE-WINSTACK-01": {"motif_id": "W291196370-WINSTACK", "run": 8, "center_m": 5.5, "uncertainty_m": 2.0, "face": "SSE", "region": "observed_SSE_public_elevation", "mapping_id": "B06-291196370-SSE-PUBLIC", "mesh_count": 7},
 	"CAL-SSE-ENTRY-01": {"motif_id": "W291196370-ENTRY", "run": 10, "center_m": 32.0, "uncertainty_m": 3.0, "face": "SSE", "region": "observed_SSE_public_elevation", "mapping_id": "B06-291196370-SSE-PUBLIC", "mesh_count": 5},
@@ -70,7 +70,7 @@ func _run() -> void:
 	detached_node.free()
 	await _whole_island_matches()
 	if not _failed:
-		print("PASS: exactly three independently KEEP_WITH_DOCUMENTED_LIMITATION w291196370 complete module-atlas exemplars remain unchanged at SSE runs 8/10 and ENE run 20; the distinct independently accepted w34313520 scope remains isolated, and whole-island loaded topology is 729 records / 1278 meshes / 1288 surfaces / 55,067 triangles / 466 collider pairs")
+		print("PASS: exactly three independently KEEP_WITH_DOCUMENTED_LIMITATION w291196370 complete module-atlas exemplars remain unchanged at SSE runs 8/10 and ENE run 20; the distinct independently accepted w34313520 scope remains isolated, and whole-island topology is 735/940/954/64,118/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
 	_finish()
 
 
@@ -254,7 +254,8 @@ func _whole_island_matches() -> void:
 		if str(candidate.get_meta("derived_object_key", "")) == RECEIVER_KEY and candidate.get_node_or_null("Mesh") != null:
 			receiver = candidate as Node3D
 	_require(evidence.chunks_loaded == 38 \
-		and evidence.mesh_instances == 1278 and evidence.surfaces == 1288 and evidence.triangles == 55067 \
+		and evidence.playable_rows == 735 and evidence.context_rows == 4 \
+		and evidence.mesh_instances == 940 and evidence.surfaces == 954 and evidence.triangles == 64118 \
 		and evidence.static_bodies == 466 and evidence.shapes == 466 \
 		and live_root_count == 1 and receiver != null \
 		and _count_type(receiver, MeshInstance3D) == 25 \

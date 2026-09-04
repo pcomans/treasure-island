@@ -1,0 +1,1225 @@
+{
+  "schema_version": "ti.dormitory-369-standalone-hero-evidence/1",
+  "review_status": "technical_capture_valid_recognition_and_believability_pending_independent_bar_raiser_review",
+  "evidence_role": "Native technical before/after evidence only. The executor verifies package bytes, exact-current source identity, real world loading, physics-grounded stock-player pose, exact camera reuse within each pair, full-object framing, first-hit source binding, and nonblank PNG integrity. The executor does not grade recognition or believability.",
+  "target": {
+    "canonical_name": "US Dept of Labor Job Corps Dormitory Building 369",
+    "source_key": "w291189926",
+    "wall_object_key": "building:w291189926:wall",
+    "roof_object_key": "building:w291189926:roof",
+    "geometry_sha256": "4ad2f9d3c0e109d194965149b6e73c078e7796d19ec3efdfd8f78df6e9aee3e9",
+    "mapped_public_wsw_runs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "mapped_public_chain_length_m": 49.124,
+    "protected_runs": [
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      29,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54,
+      55,
+      56,
+      57,
+      58,
+      59,
+      60,
+      61,
+      62,
+      63,
+      64,
+      65,
+      66,
+      67,
+      68,
+      69,
+      70,
+      71
+    ],
+    "fallback_base_top_y_m": [
+      3.39,
+      9.39
+    ],
+    "prototype_nominal_base_roof_y_m": [
+      3.39,
+      18.39
+    ],
+    "prototype_tier_count": 5
+  },
+  "truth_boundary": {
+    "standalone_capture_only": true,
+    "runtime_attachment": false,
+    "recognition_accepted": false,
+    "believability_accepted": false,
+    "as_built_claim": false,
+    "interior_modeled": false,
+    "height_tier_spacing_openings_cadence_and_stair_geometry": "reversible_production_inference",
+    "source_photography_stored_or_shown": false,
+    "protected_runs_have_modules": false,
+    "accepted_warm_scope_extended": false,
+    "fallback_6m_collider_retained": false
+  },
+  "confusion_set_source_ids_frozen_before_capture": [
+    "w34313514",
+    "w34313521",
+    "w291189918"
+  ],
+  "reference_supported_cues_frozen_before_capture": [
+    "five occupied tiers with a genuine five-row alternating broad multi-lite and narrow opening hierarchy",
+    "long warm field contrasted by a shallow muted blue-gray stair or end volume and thin dark-green eave",
+    "broad-opening green eyebrows and a grounded band of glazing, blue-gray panels or doors, and base vents"
+  ],
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/dormitory_369_standalone_hero_capture.gd",
+  "generator": "game/tests/dormitory_369_standalone_hero_capture.gd",
+  "generator_sha256": "38b46b680bfae521f742e51a6b4051b51b2fb3617871d9a623168e75eb43694a",
+  "pinned_inputs": {
+    "res://game/resources/facades/dormitory_369_standalone_hero_prototype.json": "a6086d13a986bdd4a6c281b75ec7fb58524257ae4b8ea6b849840a324cc59dc2",
+    "res://generated/world/chunks/x_0__z_1.json": "a35f63a877588d198e0e905167968bf9948f4616c16e708a6799d0e6c1bde00a",
+    "res://discovery/facades/p3_reference_packets/w291189926_job_corps_dormitory_369.md": "a43d391239c2fd3ce66b13c39dc56c534253211e7a44a12d512dbe5367b3a9f9",
+    "res://discovery/facades/BATCH_04_RUN_MAPPING.json": "3ec81316f9bdfb6131df55faeabe822b3fdfb2b739b95bd452a50a1d97a29e42",
+    "res://game/scripts/world/facades/dormitory_369_standalone_hero_prototype.gd": "0416effb03f6d833baaa24bf988fa26ae716b83c98780b2ede224d6759db37a5",
+    "res://game/scenes/world/facades/job_corps_dormitory_b369/dormitory_369_standalone_hero_prototype.tscn": "e9d1fd159c1a54b48bdfd5d6274c6435f32b6fa2d4b54a9d42503a16930f2720",
+    "res://game/resources/materials/world/job_corps_dormitory_b369/dormitory_b369_warm_field.tres": "fb50d3989b7aa41421753ad4db5d195366d9a2c25c15087e5e3a2b7863c69602",
+    "res://game/resources/materials/world/job_corps_dormitory_b369/standalone_hero/dormitory_369_protected_neutral.tres": "d193d209dd3a38ab29ff0995ff8f15f4a96d4bc6bc011309d71de2be194b6c47",
+    "res://game/resources/materials/world/job_corps_dormitory_b369/standalone_hero/dormitory_369_inferred_blue_gray.tres": "77f9f1dc4e7e0ebcd45cc3725942f2edc35af46c1899c102a23037ed14e65fa6",
+    "res://game/resources/materials/world/job_corps_dormitory_b369/standalone_hero/dormitory_369_inferred_green_trim.tres": "81ccefa48d500a56cbc4aa61a202c6219496514405f0b5a5b2427ee1dafc6093",
+    "res://game/resources/materials/world/job_corps_dormitory_b369/standalone_hero/dormitory_369_opaque_opening.tres": "046a5cf8ea3b0be4e462c2797840e0701c2a7722fe87263c25b7d8a6751c9a6e",
+    "res://game/resources/materials/world/job_corps_dormitory_b369/standalone_hero/dormitory_369_opening_frame.tres": "aefab0d5fd9c1d6c94e82618708624f694a398e540aed1eb9dbe62882b414178",
+    "res://game/resources/materials/world/job_corps_dormitory_b369/standalone_hero/dormitory_369_neutral_roof.tres": "f27469e3c8a5625446535a8cb9020eb2664b8202bc4c5bab1135445cd59c629e"
+  },
+  "exact_current_context_hashes_not_prototype_dependencies": {
+    "game/scenes/main.tscn": "959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66",
+    "game/scripts/main.gd": "7ae840aa08a00bc38a3b714ebb0fe3fcd611fb643c86fc828aec44efb4d85843",
+    "game/scripts/world/world_chunk_builder.gd": "9525ead815e95d7bc0b5fa8beae389954e232a9bbf51b54ed049a84a3613b9c0",
+    "generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+  },
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M2 (Apple8)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "lighting": {
+    "default_sun_rotation_degrees": [
+      -52.0,
+      -28.0,
+      0.0
+    ],
+    "changed_sun_rotation_degrees": [
+      -24.0,
+      118.0,
+      0.0
+    ],
+    "changed_light_pair_id": "03-changed-light-oblique"
+  },
+  "world_runtime_context": {
+    "playable_rows": 735,
+    "context_rows": 4,
+    "mesh_instances": 938,
+    "surfaces": 948,
+    "triangles": 63720,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "prototype_topology": {
+    "mesh_instances": 9,
+    "surfaces": 9,
+    "visual_triangles": 3368,
+    "visual_batch_triangles": {
+      "ProtectedLiftedWallRuns_6_71": 132,
+      "AcceptedWarmLiftedWallRuns_0_5": 12,
+      "NeutralLiftedRoof": 32,
+      "BlueGrayStructuralStairEnd": 12,
+      "BlueGrayGroundPanels": 48,
+      "GreenStructuralEave": 12,
+      "GreenEyebrows": 240,
+      "OpaqueExteriorOpeningsAndVents": 480,
+      "OpeningFramesAndMultiLiteDividers": 2400
+    },
+    "static_bodies": 1,
+    "shapes": 1,
+    "collision_triangles": 200,
+    "deterministic_signature": "a84ce1e27ef0466d58e35ce57352a8eb43cb8f2d20c7530f0c9d24c0b4b1a121"
+  },
+  "camera_contract": {
+    "rig": "actual Player/CameraPivot/SpringArm3D/Camera3D",
+    "player_visible": true,
+    "fov_degrees": 70.0,
+    "configured_spring_length_m": 5.5,
+    "before_after_pair_transform_rule": "exact same live Camera3D transform and physics-settled Player transform within 0.0001"
+  },
+  "capture_pairs": [
+    {
+      "view_id": "01-whole-object",
+      "before_capture_id": "01-whole-object-before",
+      "after_capture_id": "01-whole-object-after",
+      "camera_transform_exactly_reused": true,
+      "camera_translation_error_m": 0.0,
+      "camera_basis_error": 0.0000000000976172129241171,
+      "player_translation_error_m": 0.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ]
+    },
+    {
+      "view_id": "02-oblique-approach",
+      "before_capture_id": "02-oblique-approach-before",
+      "after_capture_id": "02-oblique-approach-after",
+      "camera_transform_exactly_reused": true,
+      "camera_translation_error_m": 0.0,
+      "camera_basis_error": 0.00000000109825992744561,
+      "player_translation_error_m": 0.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ]
+    },
+    {
+      "view_id": "03-changed-light-oblique",
+      "before_capture_id": "03-changed-light-oblique-before",
+      "after_capture_id": "03-changed-light-oblique-after",
+      "camera_transform_exactly_reused": true,
+      "camera_translation_error_m": 0.0,
+      "camera_basis_error": 0.00000000107329622967001,
+      "player_translation_error_m": 0.0,
+      "sun_rotation_degrees": [
+        -24.0,
+        118.0,
+        0.0
+      ]
+    }
+  ],
+  "captures": [
+    {
+      "id": "01-whole-object-before",
+      "stage": "before",
+      "target": "dormitory-369",
+      "source_identity": "w291189926",
+      "role": "whole_object_ordinary_player_view",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w34313514",
+        "w34313521",
+        "w291189918"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "five occupied tiers with a genuine five-row alternating broad multi-lite and narrow opening hierarchy",
+        "long warm field contrasted by a shallow muted blue-gray stair or end volume and thin dark-green eave",
+        "broad-opening green eyebrows and a grounded band of glazing, blue-gray panels or doors, and base vents"
+      ],
+      "file": "images/01-whole-object-before.png",
+      "sha256": "3fd9f0d6b966b26dc06e3af447bb6c0fd70adba5b003409da37dc6edd1ae5839",
+      "bytes": 976310,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 318,
+      "sample_luminance_range": 0.680854111909866,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -25.0,
+        620.0
+      ],
+      "settle_spawn_y_m": 7.42704772949219,
+      "player_position_m": [
+        -25.0,
+        4.42715930938721,
+        620.0
+      ],
+      "ground_y_m": 4.42704772949219,
+      "ground_clearance_m": 0.000111579895019531,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999961376190186,
+      "in_boundary": true,
+      "aim_target_m": [
+        41.173999786377,
+        6.37900018692017,
+        489.093994140625
+      ],
+      "camera_position_m": [
+        -27.4812793731689,
+        6.42896461486816,
+        624.908569335938
+      ],
+      "camera_height_above_ground_m": 2.00191688537598,
+      "camera_forward": [
+        0.451141536235809,
+        -0.000328325026202947,
+        -0.892452359199524
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50007295608521,
+      "camera_yaw_degrees": -26.8169496802959,
+      "camera_pitch_degrees": -0.0188116392867266,
+      "target_bounds_point_count": 16,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        447.035186767578,
+        433.359405517578
+      ],
+      "target_projected_max_px": [
+        913.507568359375,
+        468.032196044922
+      ],
+      "target_projected_width_ratio": 0.323939153883192,
+      "target_projected_height_ratio": 0.0385253228081597,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        719.999877929688,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.0001220703125,
+      "first_los_hit_receiver": "building:w291189926:wall",
+      "first_los_hit_source_keys": [
+        "w291189926"
+      ],
+      "first_los_hit_run_index": 12,
+      "expected_los_run_index": 12,
+      "first_los_hit_position_m": [
+        41.1738739013672,
+        6.37899971008301,
+        489.094299316406
+      ],
+      "first_los_hit_normal": [
+        0.468933671712875,
+        0.0,
+        0.883233368396759
+      ],
+      "first_los_hit_distance_m": 152.180969238281,
+      "first_los_hit_target_error_m": 0.000330120470607653,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "pair_camera_transform": {
+        "origin": [
+          -27.4812793731689,
+          6.42896461486816,
+          624.908569335938
+        ],
+        "basis_x": [
+          0.892452418804169,
+          0.0000000130385151564383,
+          0.451141566038132
+        ],
+        "basis_y": [
+          0.000148109436850064,
+          1.0,
+          -0.000293020362732932
+        ],
+        "basis_z": [
+          -0.451141536235809,
+          0.000328325026202947,
+          0.892452359199524
+        ]
+      }
+    },
+    {
+      "id": "01-whole-object-after",
+      "stage": "after",
+      "target": "dormitory-369",
+      "source_identity": "w291189926",
+      "role": "whole_object_ordinary_player_view",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w34313514",
+        "w34313521",
+        "w291189918"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "five occupied tiers with a genuine five-row alternating broad multi-lite and narrow opening hierarchy",
+        "long warm field contrasted by a shallow muted blue-gray stair or end volume and thin dark-green eave",
+        "broad-opening green eyebrows and a grounded band of glazing, blue-gray panels or doors, and base vents"
+      ],
+      "file": "images/01-whole-object-after.png",
+      "sha256": "e0bdb99986f992b436d3d8dea9558d02879ad48886832ffec1e084ab297a2004",
+      "bytes": 975411,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 326,
+      "sample_luminance_range": 0.719236075878143,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": true,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -25.0,
+        620.0
+      ],
+      "settle_spawn_y_m": 7.42704772949219,
+      "player_position_m": [
+        -25.0,
+        4.42715930938721,
+        620.0
+      ],
+      "ground_y_m": 4.42704772949219,
+      "ground_clearance_m": 0.000111579895019531,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999961376190186,
+      "in_boundary": true,
+      "aim_target_m": [
+        41.173999786377,
+        6.37900018692017,
+        489.093994140625
+      ],
+      "camera_position_m": [
+        -27.4812793731689,
+        6.42896461486816,
+        624.908569335938
+      ],
+      "camera_height_above_ground_m": 2.00191688537598,
+      "camera_forward": [
+        0.451141536235809,
+        -0.000328325026202947,
+        -0.892452359199524
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50007295608521,
+      "camera_yaw_degrees": -26.8169496802959,
+      "camera_pitch_degrees": -0.0188116392867266,
+      "target_bounds_point_count": 72,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        447.031188964844,
+        383.420532226562
+      ],
+      "target_projected_max_px": [
+        913.511108398438,
+        467.810241699219
+      ],
+      "target_projected_width_ratio": 0.323944388495551,
+      "target_projected_height_ratio": 0.0937663438585069,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        719.999877929688,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.0001220703125,
+      "first_los_hit_receiver": "prototype:building:w291189926:wall",
+      "first_los_hit_source_keys": [
+        "w291189926"
+      ],
+      "first_los_hit_run_index": 12,
+      "expected_los_run_index": 12,
+      "first_los_hit_position_m": [
+        41.1738662719727,
+        6.37899971008301,
+        489.094329833984
+      ],
+      "first_los_hit_normal": [
+        0.468933701515198,
+        0.0,
+        0.883233368396759
+      ],
+      "first_los_hit_distance_m": 152.180938720703,
+      "first_los_hit_target_error_m": 0.000361270474968478,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "pair_camera_transform": {
+        "origin": [
+          -27.4812793731689,
+          6.42896461486816,
+          624.908569335938
+        ],
+        "basis_x": [
+          0.892452418804169,
+          0.0000000130385151564383,
+          0.451141566038132
+        ],
+        "basis_y": [
+          0.000148109393194318,
+          1.0,
+          -0.000293020275421441
+        ],
+        "basis_z": [
+          -0.451141536235809,
+          0.000328324938891456,
+          0.892452359199524
+        ]
+      },
+      "pair_camera_translation_error_m": 0.0,
+      "pair_camera_basis_error": 0.0000000000976172129241171,
+      "pair_player_translation_error_m": 0.0
+    },
+    {
+      "id": "02-oblique-approach-before",
+      "stage": "before",
+      "target": "dormitory-369",
+      "source_identity": "w291189926",
+      "role": "closer_wsw_oblique_ordinary_player_view",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w34313514",
+        "w34313521",
+        "w291189918"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "five occupied tiers with a genuine five-row alternating broad multi-lite and narrow opening hierarchy",
+        "long warm field contrasted by a shallow muted blue-gray stair or end volume and thin dark-green eave",
+        "broad-opening green eyebrows and a grounded band of glazing, blue-gray panels or doors, and base vents"
+      ],
+      "file": "images/02-oblique-approach-before.png",
+      "sha256": "08bae25a6b8e62619487be528c21589edcef1429cccd844b18cd3a59ed39eb24",
+      "bytes": 1008445,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 329,
+      "sample_luminance_range": 0.715314507484436,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -70.0,
+        560.0
+      ],
+      "settle_spawn_y_m": 7.50468444824219,
+      "player_position_m": [
+        -70.0,
+        4.50479602813721,
+        560.0
+      ],
+      "ground_y_m": 4.50468444824219,
+      "ground_clearance_m": 0.000111579895019531,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999884188175201,
+      "in_boundary": true,
+      "aim_target_m": [
+        -4.16949987411499,
+        6.33850002288818,
+        464.195495605469
+      ],
+      "camera_position_m": [
+        -73.1147842407227,
+        6.51266431808472,
+        564.533081054688
+      ],
+      "camera_height_above_ground_m": 2.00797986984253,
+      "camera_forward": [
+        0.566323161125183,
+        -0.00143060239497572,
+        -0.824182033538818
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.5000696182251,
+      "camera_yaw_degrees": -34.4942667573231,
+      "camera_pitch_degrees": -0.081967521633737,
+      "target_bounds_point_count": 16,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        566.129272460938,
+        427.376678466797
+      ],
+      "target_projected_max_px": [
+        1162.44860839844,
+        474.510528564453
+      ],
+      "target_projected_width_ratio": 0.414110649956597,
+      "target_projected_height_ratio": 0.0523709445529514,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        719.999816894531,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.00018310546875,
+      "first_los_hit_receiver": "building:w291189926:wall",
+      "first_los_hit_source_keys": [
+        "w291189926"
+      ],
+      "first_los_hit_run_index": 2,
+      "expected_los_run_index": 2,
+      "first_los_hit_position_m": [
+        -4.16947937011719,
+        6.33850002288818,
+        464.195526123047
+      ],
+      "first_los_hit_normal": [
+        -0.883314549922943,
+        0.0,
+        0.468780845403671
+      ],
+      "first_los_hit_distance_m": 121.741981506348,
+      "first_los_hit_target_error_m": 0.0000367659704352263,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "pair_camera_transform": {
+        "origin": [
+          -73.1147842407227,
+          6.51266431808472,
+          564.533081054688
+        ],
+        "basis_x": [
+          0.824182868003845,
+          0.0000000131393456115347,
+          0.566323757171631
+        ],
+        "basis_y": [
+          0.000810173281934112,
+          0.999998986721039,
+          -0.00117908557876945
+        ],
+        "basis_z": [
+          -0.566323161125183,
+          0.00143060239497572,
+          0.824182033538818
+        ]
+      }
+    },
+    {
+      "id": "02-oblique-approach-after",
+      "stage": "after",
+      "target": "dormitory-369",
+      "source_identity": "w291189926",
+      "role": "closer_wsw_oblique_ordinary_player_view",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w34313514",
+        "w34313521",
+        "w291189918"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "five occupied tiers with a genuine five-row alternating broad multi-lite and narrow opening hierarchy",
+        "long warm field contrasted by a shallow muted blue-gray stair or end volume and thin dark-green eave",
+        "broad-opening green eyebrows and a grounded band of glazing, blue-gray panels or doors, and base vents"
+      ],
+      "file": "images/02-oblique-approach-after.png",
+      "sha256": "244f11be2b064c293848eb2ec242c2c8c61d13a59e128b398effab099619f3d2",
+      "bytes": 1011042,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 340,
+      "sample_luminance_range": 0.735205486416817,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": true,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -70.0,
+        560.0
+      ],
+      "settle_spawn_y_m": 7.50468444824219,
+      "player_position_m": [
+        -70.0,
+        4.50479602813721,
+        560.0
+      ],
+      "ground_y_m": 4.50468444824219,
+      "ground_clearance_m": 0.000111579895019531,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999884188175201,
+      "in_boundary": true,
+      "aim_target_m": [
+        -4.16949987411499,
+        6.33850002288818,
+        464.195495605469
+      ],
+      "camera_position_m": [
+        -73.1147842407227,
+        6.51266431808472,
+        564.533081054688
+      ],
+      "camera_height_above_ground_m": 2.00797986984253,
+      "camera_forward": [
+        0.566323161125183,
+        -0.00143060239497572,
+        -0.824182033538818
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.5000696182251,
+      "camera_yaw_degrees": -34.4942667573231,
+      "camera_pitch_degrees": -0.081967521633737,
+      "target_bounds_point_count": 72,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        566.117065429688,
+        359.475769042969
+      ],
+      "target_projected_max_px": [
+        1162.48840332031,
+        474.208862304688
+      ],
+      "target_projected_width_ratio": 0.414146762424045,
+      "target_projected_height_ratio": 0.127481214735243,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        719.999816894531,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.00018310546875,
+      "first_los_hit_receiver": "prototype:building:w291189926:wall",
+      "first_los_hit_source_keys": [
+        "w291189926"
+      ],
+      "first_los_hit_run_index": 2,
+      "expected_los_run_index": 2,
+      "first_los_hit_position_m": [
+        -4.16947937011719,
+        6.33850002288818,
+        464.195526123047
+      ],
+      "first_los_hit_normal": [
+        -0.883314549922943,
+        0.0,
+        0.468780875205994
+      ],
+      "first_los_hit_distance_m": 121.741981506348,
+      "first_los_hit_target_error_m": 0.0000367659704352263,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "pair_camera_transform": {
+        "origin": [
+          -73.1147842407227,
+          6.51266431808472,
+          564.533081054688
+        ],
+        "basis_x": [
+          0.824182868003845,
+          0.0000000141870826197987,
+          0.566323757171631
+        ],
+        "basis_y": [
+          0.000810172699857503,
+          0.999998986721039,
+          -0.00117908651009202
+        ],
+        "basis_z": [
+          -0.566323161125183,
+          0.00143060286063701,
+          0.824182033538818
+        ]
+      },
+      "pair_camera_translation_error_m": 0.0,
+      "pair_camera_basis_error": 0.00000000109825992744561,
+      "pair_player_translation_error_m": 0.0
+    },
+    {
+      "id": "03-changed-light-oblique-before",
+      "stage": "before",
+      "target": "dormitory-369",
+      "source_identity": "w291189926",
+      "role": "same_ordinary_wsw_oblique_under_materially_changed_light",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w34313514",
+        "w34313521",
+        "w291189918"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "five occupied tiers with a genuine five-row alternating broad multi-lite and narrow opening hierarchy",
+        "long warm field contrasted by a shallow muted blue-gray stair or end volume and thin dark-green eave",
+        "broad-opening green eyebrows and a grounded band of glazing, blue-gray panels or doors, and base vents"
+      ],
+      "file": "images/03-changed-light-oblique-before.png",
+      "sha256": "faef68ec106fff1833fee87cb804dd9df1937e5d3a69e9c8c1474ce7e216d257",
+      "bytes": 895458,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 355,
+      "sample_luminance_range": 0.778603136539459,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": true,
+      "sun_rotation_degrees": [
+        -24.0,
+        117.999992370605,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -70.0,
+        560.0
+      ],
+      "settle_spawn_y_m": 7.50468444824219,
+      "player_position_m": [
+        -70.0,
+        4.50479602813721,
+        560.0
+      ],
+      "ground_y_m": 4.50468444824219,
+      "ground_clearance_m": 0.000111579895019531,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999884188175201,
+      "in_boundary": true,
+      "aim_target_m": [
+        -4.16949987411499,
+        6.33850002288818,
+        464.195495605469
+      ],
+      "camera_position_m": [
+        -73.1147842407227,
+        6.51266431808472,
+        564.533081054688
+      ],
+      "camera_height_above_ground_m": 2.00797986984253,
+      "camera_forward": [
+        0.566323161125183,
+        -0.00143060588743538,
+        -0.824182033538818
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.5000696182251,
+      "camera_yaw_degrees": -34.4942667573231,
+      "camera_pitch_degrees": -0.081967521633737,
+      "target_bounds_point_count": 16,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        566.129272460938,
+        427.376647949219
+      ],
+      "target_projected_max_px": [
+        1162.44860839844,
+        474.510528564453
+      ],
+      "target_projected_width_ratio": 0.414110649956597,
+      "target_projected_height_ratio": 0.0523709784613715,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        719.999816894531,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.00018310546875,
+      "first_los_hit_receiver": "building:w291189926:wall",
+      "first_los_hit_source_keys": [
+        "w291189926"
+      ],
+      "first_los_hit_run_index": 2,
+      "expected_los_run_index": 2,
+      "first_los_hit_position_m": [
+        -4.16947937011719,
+        6.33849954605103,
+        464.195526123047
+      ],
+      "first_los_hit_normal": [
+        -0.883314549922943,
+        0.0,
+        0.468780845403671
+      ],
+      "first_los_hit_distance_m": 121.741981506348,
+      "first_los_hit_target_error_m": 0.0000367690627172124,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "pair_camera_transform": {
+        "origin": [
+          -73.1147842407227,
+          6.51266431808472,
+          564.533081054688
+        ],
+        "basis_x": [
+          0.824182868003845,
+          0.0000000289718133927863,
+          0.566323757171631
+        ],
+        "basis_y": [
+          0.0008101622806862,
+          0.999998986721039,
+          -0.00117909733671695
+        ],
+        "basis_z": [
+          -0.566323161125183,
+          0.00143060588743538,
+          0.824182033538818
+        ]
+      }
+    },
+    {
+      "id": "03-changed-light-oblique-after",
+      "stage": "after",
+      "target": "dormitory-369",
+      "source_identity": "w291189926",
+      "role": "same_ordinary_wsw_oblique_under_materially_changed_light",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w34313514",
+        "w34313521",
+        "w291189918"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "five occupied tiers with a genuine five-row alternating broad multi-lite and narrow opening hierarchy",
+        "long warm field contrasted by a shallow muted blue-gray stair or end volume and thin dark-green eave",
+        "broad-opening green eyebrows and a grounded band of glazing, blue-gray panels or doors, and base vents"
+      ],
+      "file": "images/03-changed-light-oblique-after.png",
+      "sha256": "c06407d48d9ae35c01343966a98acdec031d6b949efec3ec23b33bc1ba910039",
+      "bytes": 896710,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 363,
+      "sample_luminance_range": 0.778603136539459,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": true,
+      "sun_rotation_degrees": [
+        -24.0,
+        117.999992370605,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": true,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -70.0,
+        560.0
+      ],
+      "settle_spawn_y_m": 7.50468444824219,
+      "player_position_m": [
+        -70.0,
+        4.50479602813721,
+        560.0
+      ],
+      "ground_y_m": 4.50468444824219,
+      "ground_clearance_m": 0.000111579895019531,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_normal_up_dot": 0.999884188175201,
+      "in_boundary": true,
+      "aim_target_m": [
+        -4.16949987411499,
+        6.33850002288818,
+        464.195495605469
+      ],
+      "camera_position_m": [
+        -73.1147842407227,
+        6.51266431808472,
+        564.533081054688
+      ],
+      "camera_height_above_ground_m": 2.00797986984253,
+      "camera_forward": [
+        0.566323161125183,
+        -0.00143060588743538,
+        -0.824182033538818
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.5000696182251,
+      "camera_yaw_degrees": -34.4942667573231,
+      "camera_pitch_degrees": -0.081967521633737,
+      "target_bounds_point_count": 72,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        566.117065429688,
+        359.475769042969
+      ],
+      "target_projected_max_px": [
+        1162.48840332031,
+        474.208862304688
+      ],
+      "target_projected_width_ratio": 0.414146762424045,
+      "target_projected_height_ratio": 0.127481214735243,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_screen_px": [
+        719.999816894531,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.00018310546875,
+      "first_los_hit_receiver": "prototype:building:w291189926:wall",
+      "first_los_hit_source_keys": [
+        "w291189926"
+      ],
+      "first_los_hit_run_index": 2,
+      "expected_los_run_index": 2,
+      "first_los_hit_position_m": [
+        -4.16947937011719,
+        6.33849954605103,
+        464.195526123047
+      ],
+      "first_los_hit_normal": [
+        -0.883314549922943,
+        0.0,
+        0.468780875205994
+      ],
+      "first_los_hit_distance_m": 121.741981506348,
+      "first_los_hit_target_error_m": 0.0000367690627172124,
+      "first_los_collision_mask": 1,
+      "receiver_source_run_first_los": true,
+      "pair_camera_transform": {
+        "origin": [
+          -73.1147842407227,
+          6.51266431808472,
+          564.533081054688
+        ],
+        "basis_x": [
+          0.824182868003845,
+          0.0000000300195495128719,
+          0.566323757171631
+        ],
+        "basis_y": [
+          0.000810161465778947,
+          0.999998986721039,
+          -0.00117909803520888
+        ],
+        "basis_z": [
+          -0.566323161125183,
+          0.0014306060038507,
+          0.824182033538818
+        ]
+      },
+      "pair_camera_translation_error_m": 0.0,
+      "pair_camera_basis_error": 0.00000000107329622967001,
+      "pair_player_translation_error_m": 0.0
+    }
+  ],
+  "technical_checks": [
+    "native macOS Forward+/Metal at 1440x900",
+    "actual generated world and stock visible player rig",
+    "real character physics settlement on walkable generated collision",
+    "same camera/player transforms for each before/after pair",
+    "before first-hit exact current building:w291189926:wall; after first-hit capture-only prototype derived from the same exact source",
+    "full target bounds in frame at ordinary player distance",
+    "debug, feedback, loading, and pause panels hidden; normal reticle retained",
+    "two default-light pairs plus one materially changed-light pair; lighting is identical within each before/after pair",
+    "all PNGs nonblank with exact dimensions and recorded SHA-256"
+  ],
+  "recognition_review_prohibited_for_executor": true,
+  "reviewer_instruction": "Open all three before/after pairs at original detail and inspect pixels before labels. Judge whether the after prototype is top-1 Dormitory 369 against Advanced Culinary/Dormitory w34313514, Food Service 368 w34313521, Oasis w291189918, and other long Job Corps blocks using at least two supported cues, including the five-tier facade family. Confirm stair/end/eave and five-row broad/narrow/eyebrow/base hierarchy survive the default whole and oblique views and changed light without relying on hue, address, location, or source ID. Treat height, tier spacing, opening dimensions/count/cadence, and stair geometry as reversible production inference; do not infer interiors, other-side appearance, occupancy, or as-built fidelity."
+}

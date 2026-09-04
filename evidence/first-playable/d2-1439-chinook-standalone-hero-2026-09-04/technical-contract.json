@@ -1,0 +1,60 @@
+{
+  "schema_version": "ti.d2-1439-chinook-standalone-technical-contract/1",
+  "target": "1439 Chinook Court",
+  "source_key": "w95934144",
+  "status": "technical_pass_visual_review_pending",
+  "deterministic_geometry_signature": "b82660eb7774ab022c417c7d417d51646f68fd288d916ad47a91d58db5bc8fb9",
+  "topology": {
+    "mesh_instances": 11,
+    "surfaces": 11,
+    "exact_source_wall_triangles": 48,
+    "exact_plan_shallow_gable_triangles": 10,
+    "noncolliding_facade_and_eave_triangles": 516,
+    "total_visual_triangles": 574,
+    "static_bodies": 1,
+    "collision_shapes": 1,
+    "structural_collision_triangles": 58,
+    "collision_face_vertices": 174,
+    "navigation_regions": 0,
+    "spray_owner_nodes": 0
+  },
+  "visual_batch_triangles": {
+    "ProtectedExactWallRuns": 32,
+    "MappedSSEExactWarmStuccoWallRuns": 16,
+    "ExactPlanShallowGableRoof": 10,
+    "MappedSSEContinuousEaveChains": 36,
+    "OffsetEndTwoLevelBalconyVoids": 24,
+    "OffsetEndBalconySlabs": 24,
+    "OffsetEndSimpleMetalRails": 168,
+    "QuietRegisterUpperOpaqueOpenings": 36,
+    "QuietRegisterUpperPaleFrames": 180,
+    "BlankEndGroundPassageShadow": 12,
+    "BlankEndGroundPassageFrame": 36
+  },
+  "module_counts": {
+    "balcony_void_fields": 2,
+    "rail_pickets": 10,
+    "quiet_upper_opening_groups": 3,
+    "passage_void_fields": 1,
+    "passage_piers": 2,
+    "mapped_eave_chains": 3
+  },
+  "ownership": {
+    "one_truthful_structural_shell": true,
+    "fallback_collider_retained": false,
+    "facade_relief_noncolliding": true,
+    "navigation_owned": false,
+    "spray_owned": false,
+    "runtime_attachment": false,
+    "registry_entry": false
+  },
+  "contract_results": {
+    "headless_d2_1439_chinook_standalone_hero_contract.gd": "pass_twice",
+    "headless_d2_1439_chinook_standalone_hero_evidence_contract.gd": "pass_twice",
+    "headless_d2_1439_chinook_standalone_hero_package_contract.gd source": "pass_twice",
+    "headless_d2_1439_chinook_standalone_hero_package_contract.gd mounted": "pass_twice"
+  },
+  "technical_self_check_only": true,
+  "recognition_verdict": "pending_independent_bar_raiser_review",
+  "believability_verdict": "pending_independent_bar_raiser_review"
+}

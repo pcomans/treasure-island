@@ -14,7 +14,9 @@ const YMCA_CORRECTION_MANIFEST_SHA256 := "d02fcbe38c56eea263900f89bda13eba044a4a
 const YMCA_INVENTORY_SHA256 := "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f"
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_BUILDING_WALL := 1 << 1
-const EXPECTED_WORLD_SURFACES := 1288
+const EXPECTED_WORLD_MESHES := 940
+const EXPECTED_WORLD_SURFACES := 954
+const EXPECTED_WORLD_TRIANGLES := 64118
 
 const TARGETS := [
 	{
@@ -161,7 +163,7 @@ func _run() -> void:
 	if not _require(bool(full_world.get("ok", false)), str(full_world.get("message", "Whole-island load failed."))):
 		_finish()
 		return
-	print("PASS: three retained homogeneous fields and the eight accepted Batch 06/Building 1 field scopes remain unchanged; Building 1's complete 63-run ivory field and 45-module recognizability composition are independently accepted with documented limitations, immutable integration-time metadata remains byte-stable provenance, Fire Station and protected candidates remain unchanged, and the whole island is 729/1278/1288/55,067")
+	print("PASS: retained non-Building-1 homogeneous fields remain unchanged; historical Building 1 field/module provenance stays byte-stable while accepted Building 1/Building 3/Isle House runtime replacements remain exact, Fire Station and protected candidates remain unchanged, and the whole island is 735/940/954/64,118/466")
 	_finish()
 
 
@@ -421,12 +423,13 @@ func _whole_island_matches() -> Dictionary:
 	world.world_failed.connect(func(code: String, message: String, source_keys: Array) -> void: failures.append({"code": code, "message": message, "source_keys": source_keys}))
 	root.add_child(world)
 	world.load_world(MANIFEST_PATH)
-	await process_frame
-	await process_frame
+	var wait_started := Time.get_ticks_msec()
+	while reports.is_empty() and failures.is_empty() and Time.get_ticks_msec() - wait_started < 30000:
+		await process_frame
 	var evidence := world.get_runtime_evidence()
 	var ok := failures.is_empty() and reports.size() == 1 and evidence != null \
-		and evidence.mesh_instances == 1278 and evidence.surfaces == EXPECTED_WORLD_SURFACES \
-		and evidence.triangles == 55067 and evidence.static_bodies == 466 and evidence.shapes == 466
+		and evidence.mesh_instances == EXPECTED_WORLD_MESHES and evidence.surfaces == EXPECTED_WORLD_SURFACES \
+		and evidence.triangles == EXPECTED_WORLD_TRIANGLES and evidence.static_bodies == 466 and evidence.shapes == 466
 	if ok:
 		for target_value: Variant in TARGETS:
 			var target := target_value as Dictionary

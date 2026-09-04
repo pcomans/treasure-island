@@ -1,0 +1,1122 @@
+{
+  "b201_bytes_unchanged": true,
+  "blocked_claims": [
+    "independent visual acceptance",
+    "perfectly seamless source bitmap",
+    "surveyed cladding substrate/course cadence",
+    "exact as-built layout",
+    "lower openings",
+    "unobserved sides/corners/roof equipment",
+    "live attachment",
+    "transparent interior"
+  ],
+  "candidate": {
+    "config": {
+      "path": "res://game/resources/facades/d1_current/repairs/d1_b225_nnw_long_cladding_repair_v1.json",
+      "sha256": "89d34d33b48c93c0a6c90d46ff8120cd36c5f897ebe1fc9ea2ee2cd97a3db22c"
+    },
+    "factory": {
+      "path": "res://game/scripts/world/facades/d1_b225_standalone_cladding_repair_v1.gd",
+      "sha256": "8c06afec4835441ec386251e700cc7ba91b8fea9fe070549561e401aa530d58e"
+    },
+    "geometry_signature": "281a471f6cff9b0530aa51c98cc737d276dc0d9210996a5403d9fe44996dd2a2",
+    "material": {
+      "path": "res://game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres",
+      "sha256": "7fa7f3165dee560c48f5a092f317900b87b0876f27bb6a0e937b9c406a8d4ea1"
+    },
+    "scene": {
+      "path": "res://game/scenes/world/facades/d1_current/repairs/d1_b225_standalone_cladding_repair_v1.tscn",
+      "sha256": "008669d9e0c2e04801ee8d720976e72e2041c82188c7fd14fe075ad48cb69914"
+    },
+    "texture": {
+      "path": "res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
+      "sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b"
+    },
+    "uv_helper": {
+      "path": "res://game/scripts/world/facades/d1_b225_cumulative_meter_uv_v1.gd",
+      "sha256": "20d0f597ef0a49f85a0b8062d01186c7ad13262592f99a7f630be06938cd7dc2"
+    },
+    "uv_plan_signature": "6b33f7b7146815b87fa7aec9bced760309104f4f56038e37e1820199c9b446f5"
+  },
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/d1_b225_standalone_cladding_repair_v1_capture.gd",
+  "capture_harness": {
+    "path": "res://game/tests/d1_b225_standalone_cladding_repair_v1_capture.gd",
+    "sha256": "a6b5d7997443279fa63f7418a0921646298e2d4f4e72b130c52970681c6b3ea7"
+  },
+  "clean_images": true,
+  "control": {
+    "factory": {
+      "path": "res://game/scripts/world/facades/d1_current_standalone_prototypes.gd",
+      "sha256": "797bbb81e7f772f3fab3989d358772be4f1b16cb7e31a05571463e0d6ec31a5e"
+    },
+    "role": "sealed rejected B225 rendered in-memory at local origin; B201 hidden only in the capture instance",
+    "scene": {
+      "path": "res://game/scenes/world/facades/d1_current/d1_current_standalone_prototype_pair.tscn",
+      "sha256": "0fdd5d356deb57664549db95fd04e123290c1fb9490b8024569e997616893d7f"
+    },
+    "sealed_evidence_modified": false
+  },
+  "display_driver": "macOS",
+  "evidence_role": "matched sealed-control/candidate views plus consecutive native render frames for a standalone B225 repair; not live receiver placement or acceptance",
+  "exact_receiver_layout": false,
+  "generated_albedo_provenance": {
+    "asset_role": "base-color/albedo only for isolated B225 cladding repair",
+    "generation_date_local": "2026-09-04 America/Los_Angeles",
+    "initial_output": {
+      "disposition": "rejected because every joint carried a repeated bevel-like baked-light gradient",
+      "opaque_output_id": "imagegen:d1-b225-cladding-v1:initial-rejected",
+      "sha256": "f4289c182ad32c63404c067311a5a9d06ab8b0dcea07893c3f7399ae10b63309"
+    },
+    "initial_prompt": "Use case: photorealistic-natural\nAsset type: seamless game-ready facade albedo texture swatch for a Godot 3D environment\nPrimary request: create restrained aged light-gray to off-white painted horizontal cladding for a believable low utilitarian one-storey facade; the light painted wall must remain the dominant field and the horizontal joints must read as quiet cladding boundaries, never dark ruler lines\nScene/backdrop: only the continuous cladding surface fills the square image edge to edge\nSubject: substrate-neutral painted horizontal facade courses with subtle age; do not imply a specific wood species, metal profile, or proprietary product\nStyle/medium: realistic scanned-material appearance, base-color/albedo map only\nComposition/framing: perfectly flat orthographic straight-on square swatch; all horizontal courses precisely level; no perspective, wall edge, corner, roof, ground, horizon, trim, opening, or object\nLighting/mood: perfectly even neutral diffuse appearance; no baked directional light, cast shadow, highlight, ambient occlusion, vignette, exposure gradient, or 3D relief lighting\nColor palette: low-contrast aged off-white and light gray with restrained warm/cool paint drift; course boundaries only slightly darker than the panels and never charcoal or black\nMaterials/textures: fine matte painted grain; very quiet broad low-frequency uneven repainting and sparse soft rain-weathering drift distributed nonperiodically; subdued thin horizontal course boundaries approximately 0.22–0.28 metres apart; no unique damage token; apparent physical coverage roughly 8 metres wide by 4 metres high\nConstraints: designed to tile approximately on all four edges, with horizontal course phase continuing across left/right and top/bottom boundaries; edge-to-edge image; no alpha; no vertical panel seams, fasteners, knots, deep grooves, peeling chunks, cracks, holes, letters, numbers, text, logo, sign, graffiti, watermark, semantic stain, facade photograph, windows, doors, vents, people, plants, vehicles, or props; variation must remain quiet at ordinary player distance; albedo only, not a rendered material ball and not a PBR preview\nAvoid: barcode appearance, fourteen identical dark rules, high-contrast lines, heavy grunge, repeated blotches, obvious grid, hard-edged streaks, strong shadow, perspective, objects, scale references, border, frame, photographic scene",
+    "model_mode": "not surfaced by the built-in image generation tool; no model identity claimed",
+    "project_asset": {
+      "channels": "RGB_8_no_alpha",
+      "dimensions_px": [
+        1254.0,
+        1254.0
+      ],
+      "path": "res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
+      "sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
+      "source_bytes": 2140085.0
+    },
+    "provenance_nonclaims": [
+      "not derived from or conditioned on stored Street View or other external reference pixels",
+      "not claimed to be a measured scan, exact substrate, proprietary product, perfectly seamless texture or source of identity truth",
+      "no external logo, text, sign, graffiti, trademark or photographed object is intentionally present",
+      "project use must remain within the repository's private personal-hobby scope"
+    ],
+    "reference_images_or_source_pixels": [],
+    "selected_source_output": {
+      "opaque_output_id": "imagegen:d1-b225-cladding-v1:selected-flat-joints",
+      "sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b"
+    },
+    "selection_gate": "selected after one targeted flattening edit; no further generation permitted for this bounded repair",
+    "targeted_edit_prompt": "Precision edit of this game-ready facade albedo swatch. Preserve the exact restrained aged off-white/light-gray painted-cladding palette, flat straight-on orthographic framing, edge-to-edge surface, level horizontal course cadence, fine matte paint grain, and quiet low-frequency nonperiodic wear. Change only the horizontal joints: remove every bevel, highlight, ambient-occlusion band, drop-shadow gradient, raised lip, embossed relief cue, and directional-light cue. Each course boundary must read only as a very thin, subdued, flat albedo-color line or gentle paint-color transition, slightly darker than the panels but never charcoal, with no light-above/dark-below pairing. Keep illumination perfectly uniform and neutral across the whole bitmap. Aim for rough tiling on all four edges; minor edge mismatch is acceptable. Albedo/base-color only. Do not add vertical seams, fasteners, knots, cracks, peeling chunks, holes, text, logo, graffiti, watermark, windows, doors, vents, objects, wall edges, corners, roof, ground, horizon, perspective, shadows, highlights, or a rendered material preview.",
+    "tool_mode": "built-in image_gen.imagegen"
+  },
+  "godot_version": "4.7.2-stable (official)",
+  "image_overlays_or_claim_cards": 0,
+  "material_contract": {
+    "albedo_only": true,
+    "fabricated_pbr_maps": 0.0,
+    "filter": "linear_mipmap_anisotropic",
+    "height_map": null,
+    "metallic": 0.0,
+    "metallic_map": null,
+    "mipmaps": true,
+    "normal_map": null,
+    "path": "res://game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres",
+    "repeat": true,
+    "roughness_map": null,
+    "scalar_roughness": 0.88,
+    "scalar_tint_rgba": [
+      0.76,
+      0.755,
+      0.72,
+      1.0
+    ],
+    "texture_cell_m": [
+      8.0,
+      3.48
+    ],
+    "uv1_scale": [
+      0.125,
+      0.28735632,
+      1.0
+    ]
+  },
+  "metre_uv_contract": {
+    "horizontal_repeats_across_chain": 5.7827460465,
+    "internal_boundaries_u_m": [
+      10.372629078,
+      16.883522872,
+      23.933383083
+    ],
+    "phase_resets_inside_chain": 0,
+    "texture_cell_m": [
+      8.0,
+      3.48
+    ],
+    "u_end_m": 46.261968372,
+    "u_start_m": 0.0,
+    "vertical_repeats_across_height": 1.4367816091954
+  },
+  "motion": {
+    "chain_u_end_m": 26.0,
+    "chain_u_start_m": 8.0,
+    "crosses_all_internal_run_boundaries": true,
+    "frame_count": 25,
+    "frames": [
+      {
+        "bytes": 469504,
+        "camera_chain_u_m": 8.0,
+        "camera_position_m": [
+          -15.1309843063354,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [],
+        "file": "motion/frame-00.png",
+        "frame": 0,
+        "look_target_m": [
+          -12.130984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.375046,
+          "minimum": 0.010097,
+          "range": 0.920405,
+          "sample_count": 4000
+        },
+        "sha256": "d5e0c2815a3f6ff112d4860ad22c675157b2dbf87d5b57be36d25108d88de729"
+      },
+      {
+        "bytes": 471724,
+        "camera_chain_u_m": 8.75,
+        "camera_position_m": [
+          -14.3809843063354,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [],
+        "file": "motion/frame-01.png",
+        "frame": 1,
+        "look_target_m": [
+          -11.380984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.3696,
+          "minimum": 0.014302,
+          "range": 0.9162,
+          "sample_count": 4000
+        },
+        "sha256": "4f0369ace2696c77e8994662b11d09640a5bd4cf097446d90d05a5cce797f0fd"
+      },
+      {
+        "bytes": 470754,
+        "camera_chain_u_m": 9.5,
+        "camera_position_m": [
+          -13.6309843063354,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [],
+        "file": "motion/frame-02.png",
+        "frame": 2,
+        "look_target_m": [
+          -10.630984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.369756,
+          "minimum": 0.010097,
+          "range": 0.920405,
+          "sample_count": 4000
+        },
+        "sha256": "d9b30c7ef9d3fd3bbc43ded0141329a726c48786aadd62068e4983403ac7d576"
+      },
+      {
+        "bytes": 469245,
+        "camera_chain_u_m": 10.25,
+        "camera_position_m": [
+          -12.8809843063354,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [],
+        "file": "motion/frame-03.png",
+        "frame": 3,
+        "look_target_m": [
+          -9.880984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.37006,
+          "minimum": 0.006459,
+          "range": 0.924043,
+          "sample_count": 4000
+        },
+        "sha256": "a36214d25badd9e6a7375dee10da34aeb9b7aaf20256b7d60cbc74288d46fe64"
+      },
+      {
+        "bytes": 467716,
+        "camera_chain_u_m": 11.0,
+        "camera_position_m": [
+          -12.1309843063354,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078
+        ],
+        "file": "motion/frame-04.png",
+        "frame": 4,
+        "look_target_m": [
+          -9.130984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.37016,
+          "minimum": 0.006176,
+          "range": 0.924326,
+          "sample_count": 4000
+        },
+        "sha256": "ef1fb7a80c6978a204e10a37603e206b8a77edb103703150d5bd4f21c46d0c3c"
+      },
+      {
+        "bytes": 469039,
+        "camera_chain_u_m": 11.75,
+        "camera_position_m": [
+          -11.3809843063354,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078
+        ],
+        "file": "motion/frame-05.png",
+        "frame": 5,
+        "look_target_m": [
+          -8.380984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.3696,
+          "minimum": 0.006459,
+          "range": 0.924043,
+          "sample_count": 4000
+        },
+        "sha256": "7e9fead37ac4d766fae246a06fa7f394b6e0fbbc14615c0e631b85ee104c97cd"
+      },
+      {
+        "bytes": 469648,
+        "camera_chain_u_m": 12.5,
+        "camera_position_m": [
+          -10.6309843063354,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078
+        ],
+        "file": "motion/frame-06.png",
+        "frame": 6,
+        "look_target_m": [
+          -7.630984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.369485,
+          "minimum": 0.01038,
+          "range": 0.920122,
+          "sample_count": 4000
+        },
+        "sha256": "6d7bb935834946a5a37b8a49abdadc2b7120066536c7fec44316a5d6320e5927"
+      },
+      {
+        "bytes": 469645,
+        "camera_chain_u_m": 13.25,
+        "camera_position_m": [
+          -9.88098430633545,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078
+        ],
+        "file": "motion/frame-07.png",
+        "frame": 7,
+        "look_target_m": [
+          -6.880984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.373086,
+          "minimum": 0.006176,
+          "range": 0.924326,
+          "sample_count": 4000
+        },
+        "sha256": "8caeb2c86302d9b971e0e05d2ab99b0601fb4ecabf98bea566b34017d7f65d13"
+      },
+      {
+        "bytes": 470780,
+        "camera_chain_u_m": 14.0,
+        "camera_position_m": [
+          -9.13098430633545,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078
+        ],
+        "file": "motion/frame-08.png",
+        "frame": 8,
+        "look_target_m": [
+          -6.130984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.371557,
+          "minimum": 0.003088,
+          "range": 0.927414,
+          "sample_count": 4000
+        },
+        "sha256": "9d08036a6f62b9759e664d96c50242c2365e6461d9702e1e315703a9246cabf6"
+      },
+      {
+        "bytes": 467594,
+        "camera_chain_u_m": 14.75,
+        "camera_position_m": [
+          -8.38098430633545,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078
+        ],
+        "file": "motion/frame-09.png",
+        "frame": 9,
+        "look_target_m": [
+          -5.380984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.373619,
+          "minimum": 0.006176,
+          "range": 0.924326,
+          "sample_count": 4000
+        },
+        "sha256": "20751accdb47ce43dbfcd7435b51d779347254e0795095d83720131a067c6bc0"
+      },
+      {
+        "bytes": 468482,
+        "camera_chain_u_m": 15.5,
+        "camera_position_m": [
+          -7.63098430633545,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078
+        ],
+        "file": "motion/frame-10.png",
+        "frame": 10,
+        "look_target_m": [
+          -4.630984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.370157,
+          "minimum": 0.01038,
+          "range": 0.920122,
+          "sample_count": 4000
+        },
+        "sha256": "9e6ec912af5fde5dc3fc47c2fdfb2ef38dec7992b7a75a3d2a7ef1165e81a483"
+      },
+      {
+        "bytes": 468710,
+        "camera_chain_u_m": 16.25,
+        "camera_position_m": [
+          -6.88098430633545,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078
+        ],
+        "file": "motion/frame-11.png",
+        "frame": 11,
+        "look_target_m": [
+          -3.880984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.371065,
+          "minimum": 0.017107,
+          "range": 0.913395,
+          "sample_count": 4000
+        },
+        "sha256": "acf5f061967f38bb51608a03bcc4ecf4a37aaa11b8f9c2a591870449e3b62701"
+      },
+      {
+        "bytes": 469089,
+        "camera_chain_u_m": 17.0,
+        "camera_position_m": [
+          -6.13098430633545,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872
+        ],
+        "file": "motion/frame-12.png",
+        "frame": 12,
+        "look_target_m": [
+          -3.130984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.371292,
+          "minimum": 0.010097,
+          "range": 0.920405,
+          "sample_count": 4000
+        },
+        "sha256": "47f825dd766eac26cdc0fd5aed1de174b0e193c1f031dc48110ce1ff526c2755"
+      },
+      {
+        "bytes": 471408,
+        "camera_chain_u_m": 17.75,
+        "camera_position_m": [
+          -5.38098430633545,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872
+        ],
+        "file": "motion/frame-13.png",
+        "frame": 13,
+        "look_target_m": [
+          -2.380984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.373897,
+          "minimum": 0.01038,
+          "range": 0.920122,
+          "sample_count": 4000
+        },
+        "sha256": "c198b214a4414c00737e6e64e379715e4cf4f436990b4c500cc0e0d5bb045b46"
+      },
+      {
+        "bytes": 468855,
+        "camera_chain_u_m": 18.5,
+        "camera_position_m": [
+          -4.63098430633545,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872
+        ],
+        "file": "motion/frame-14.png",
+        "frame": 14,
+        "look_target_m": [
+          -1.630984186,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.370994,
+          "minimum": 0.006459,
+          "range": 0.924043,
+          "sample_count": 4000
+        },
+        "sha256": "70275524ad351d6ceeba870c63e457cbfbc25d9e00aab1e267d86331dd1ded90"
+      },
+      {
+        "bytes": 469494,
+        "camera_chain_u_m": 19.25,
+        "camera_position_m": [
+          -3.88098406791687,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872
+        ],
+        "file": "motion/frame-15.png",
+        "frame": 15,
+        "look_target_m": [
+          -0.880984185999999,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.37217,
+          "minimum": 0.003371,
+          "range": 0.927131,
+          "sample_count": 4000
+        },
+        "sha256": "19c6e08f3009632d9b8d5bc9b2a74955c2c67cac71d184cc96cff7206309cc0c"
+      },
+      {
+        "bytes": 468610,
+        "camera_chain_u_m": 20.0,
+        "camera_position_m": [
+          -3.13098406791687,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872
+        ],
+        "file": "motion/frame-16.png",
+        "frame": 16,
+        "look_target_m": [
+          -0.130984185999999,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.368701,
+          "minimum": 0.010097,
+          "range": 0.920405,
+          "sample_count": 4000
+        },
+        "sha256": "f75aaa1297759c799fc18fc02c7c1eab2c01e2b069750802fba743d02954bfcd"
+      },
+      {
+        "bytes": 469041,
+        "camera_chain_u_m": 20.75,
+        "camera_position_m": [
+          -2.38098406791687,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872
+        ],
+        "file": "motion/frame-17.png",
+        "frame": 17,
+        "look_target_m": [
+          0.619015814000001,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.370683,
+          "minimum": 0.006459,
+          "range": 0.924043,
+          "sample_count": 4000
+        },
+        "sha256": "3f3b019dea8c4f22f38bf244f358caf5656c99f5b5dcc92eccff991f76321e16"
+      },
+      {
+        "bytes": 469499,
+        "camera_chain_u_m": 21.5,
+        "camera_position_m": [
+          -1.63098418712616,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872
+        ],
+        "file": "motion/frame-18.png",
+        "frame": 18,
+        "look_target_m": [
+          1.369015814,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.371439,
+          "minimum": 0.007293,
+          "range": 0.923209,
+          "sample_count": 4000
+        },
+        "sha256": "cd2302486cab102365f437968bbc0f8d886eeddabcf2d9a9e71c7bf4757ef0a0"
+      },
+      {
+        "bytes": 471341,
+        "camera_chain_u_m": 22.25,
+        "camera_position_m": [
+          -0.88098418712616,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872
+        ],
+        "file": "motion/frame-19.png",
+        "frame": 19,
+        "look_target_m": [
+          2.119015814,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.373945,
+          "minimum": 0.003371,
+          "range": 0.927131,
+          "sample_count": 4000
+        },
+        "sha256": "752894dd3f7c04d700e7946be8d233dd9c2a63ac30ec2581f63e4fd84964e4b0"
+      },
+      {
+        "bytes": 471327,
+        "camera_chain_u_m": 23.0,
+        "camera_position_m": [
+          -0.13098418712616,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872
+        ],
+        "file": "motion/frame-20.png",
+        "frame": 20,
+        "look_target_m": [
+          2.869015814,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.369189,
+          "minimum": 0.010097,
+          "range": 0.920405,
+          "sample_count": 4000
+        },
+        "sha256": "6f7e3c7998e0d3b0603e4b0d40a55a7396ef6633aa50ce0a5dea79b662878662"
+      },
+      {
+        "bytes": 468405,
+        "camera_chain_u_m": 23.75,
+        "camera_position_m": [
+          0.61901581287384,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872
+        ],
+        "file": "motion/frame-21.png",
+        "frame": 21,
+        "look_target_m": [
+          3.619015814,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.37105,
+          "minimum": 0.010097,
+          "range": 0.920405,
+          "sample_count": 4000
+        },
+        "sha256": "e92f4c6dd2111787fabfe3553780ce923b648b36abaaffd3947f7cdcb7f1c801"
+      },
+      {
+        "bytes": 467608,
+        "camera_chain_u_m": 24.5,
+        "camera_position_m": [
+          1.36901581287384,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872,
+          23.933383083
+        ],
+        "file": "motion/frame-22.png",
+        "frame": 22,
+        "look_target_m": [
+          4.369015814,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.374388,
+          "minimum": 0.014019,
+          "range": 0.916483,
+          "sample_count": 4000
+        },
+        "sha256": "a23da523fed11686fad907603d7bedff013963e943d219d39442d1085c30bae6"
+      },
+      {
+        "bytes": 468432,
+        "camera_chain_u_m": 25.25,
+        "camera_position_m": [
+          2.11901593208313,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872,
+          23.933383083
+        ],
+        "file": "motion/frame-23.png",
+        "frame": 23,
+        "look_target_m": [
+          5.119015814,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.371728,
+          "minimum": 0.013185,
+          "range": 0.917317,
+          "sample_count": 4000
+        },
+        "sha256": "53550e2eafe950c7d3eaa65ba279b4b24c56d73ee7d1dbf093c37c75c19f05d0"
+      },
+      {
+        "bytes": 470715,
+        "camera_chain_u_m": 26.0,
+        "camera_position_m": [
+          2.86901593208313,
+          2.25,
+          12.0
+        ],
+        "crossed_internal_boundaries_u_m": [
+          10.372629078,
+          16.883522872,
+          23.933383083
+        ],
+        "file": "motion/frame-24.png",
+        "frame": 24,
+        "look_target_m": [
+          5.869015814,
+          2.65,
+          0.18
+        ],
+        "sampled_luminance": {
+          "maximum": 0.930502,
+          "mean": 0.375817,
+          "minimum": 0.006459,
+          "range": 0.924043,
+          "sample_count": 4000
+        },
+        "sha256": "b5abf7e54a10099bd4f004d823da9cff8d4f7d5ce8c9b44d638924515b07a805"
+      }
+    ],
+    "kind": "25 consecutive native rendered frames along one continuously increasing camera path; no camera teleport or run-boundary reset between frames",
+    "ordinary_standoff_m": 12.0,
+    "step_m": 0.75
+  },
+  "observed_scope": {
+    "chain_length_m": 46.261968372,
+    "mapping_id": "14812-NNW-LONG",
+    "ordered_runs": [
+      10,
+      11,
+      12,
+      13
+    ],
+    "run_lengths_m": [
+      10.372629078,
+      6.510893794,
+      7.049860211,
+      22.328585289
+    ],
+    "side": "NNW long side",
+    "source_edge": 3,
+    "source_key": "w95934119"
+  },
+  "prototype_id": "D1-B225-NNW-LONG-CLADDING-REPAIR-V1",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "review_status": "pending_independent_bar_raiser_re_review_not_self_accepted",
+  "runtime_attachment": false,
+  "schema_version": "ti.d1-b225-standalone-cladding-repair-native-evidence/1",
+  "static_capture_count": 8,
+  "static_captures": [
+    {
+      "bytes": 61026,
+      "camera_position_m": [
+        0.0,
+        2.79999995231628,
+        39.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-front-control.png",
+      "id": "01-front",
+      "sampled_luminance": {
+        "maximum": 0.923776,
+        "mean": 0.31564,
+        "minimum": 0.044594,
+        "range": 0.879182,
+        "sample_count": 4000
+      },
+      "sha256": "4c1c083ef42257a0e9b42c3d8309b6eb8dc8ecaba2e387bf403385f1b3ffb175",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "variant": "control",
+      "view_kind": "ordinary_grounded_complete_side"
+    },
+    {
+      "bytes": 155600,
+      "camera_position_m": [
+        0.0,
+        2.79999995231628,
+        39.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-front-candidate.png",
+      "id": "01-front",
+      "sampled_luminance": {
+        "maximum": 0.923776,
+        "mean": 0.295038,
+        "minimum": 0.044594,
+        "range": 0.879182,
+        "sample_count": 4000
+      },
+      "sha256": "e7a521190bb525f685b608fe28eb530af2cc9d3a4107baf9927593eea5a2e17c",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "variant": "candidate",
+      "view_kind": "ordinary_grounded_complete_side"
+    },
+    {
+      "bytes": 62059,
+      "camera_position_m": [
+        -20.0,
+        2.0,
+        25.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-oblique-control.png",
+      "id": "02-oblique",
+      "sampled_luminance": {
+        "maximum": 0.922942,
+        "mean": 0.317044,
+        "minimum": 0.007009,
+        "range": 0.915933,
+        "sample_count": 4000
+      },
+      "sha256": "d3245d6e7fad7550f5a8e3dd8998c0aaa41088456c43a24d6a8dcb578687635f",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "variant": "control",
+      "view_kind": "ordinary_grounded_clerestory_depth"
+    },
+    {
+      "bytes": 180282,
+      "camera_position_m": [
+        -20.0,
+        2.0,
+        25.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-oblique-candidate.png",
+      "id": "02-oblique",
+      "sampled_luminance": {
+        "maximum": 0.922942,
+        "mean": 0.30255,
+        "minimum": 0.044594,
+        "range": 0.878348,
+        "sample_count": 4000
+      },
+      "sha256": "1db4e63155d1cce82fd752242ba7b9a289255bb57ca9b883813654d08d7b3518",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "variant": "candidate",
+      "view_kind": "ordinary_grounded_clerestory_depth"
+    },
+    {
+      "bytes": 89189,
+      "camera_position_m": [
+        0.0,
+        2.25,
+        15.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-close-control.png",
+      "id": "03-close",
+      "sampled_luminance": {
+        "maximum": 0.926863,
+        "mean": 0.37777,
+        "minimum": 0.044594,
+        "range": 0.88227,
+        "sample_count": 4000
+      },
+      "sha256": "4b40eb09aebc271621b1336ed014130ee41f53b47fe7a173b4d321db4be2005a",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "variant": "control",
+      "view_kind": "ordinary_clerestory_cladding_hierarchy_close"
+    },
+    {
+      "bytes": 372800,
+      "camera_position_m": [
+        0.0,
+        2.25,
+        15.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-close-candidate.png",
+      "id": "03-close",
+      "sampled_luminance": {
+        "maximum": 0.926863,
+        "mean": 0.325424,
+        "minimum": 0.044594,
+        "range": 0.88227,
+        "sample_count": 4000
+      },
+      "sha256": "9b49cb825b9220e245f23f8f1e5777bf3902c87f7c6a76b6e543f1ac3ee69595",
+      "sun_rotation_degrees": [
+        -34.9999961853027,
+        -31.9999980926514,
+        0.0
+      ],
+      "variant": "candidate",
+      "view_kind": "ordinary_clerestory_cladding_hierarchy_close"
+    },
+    {
+      "bytes": 46453,
+      "camera_position_m": [
+        17.0,
+        3.20000004768372,
+        28.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "04-changed-light-control.png",
+      "id": "04-changed-light",
+      "sampled_luminance": {
+        "maximum": 0.65835,
+        "mean": 0.213571,
+        "minimum": 0.003088,
+        "range": 0.655262,
+        "sample_count": 4000
+      },
+      "sha256": "ee3755ce550e72eb1dc5ef304e319229beeb9dc6c8d92fe55bef937fc0dbd77a",
+      "sun_rotation_degrees": [
+        -18.0,
+        117.999992370605,
+        0.0
+      ],
+      "variant": "control",
+      "view_kind": "changed_light_oblique_depth_check"
+    },
+    {
+      "bytes": 165875,
+      "camera_position_m": [
+        17.0,
+        3.20000004768372,
+        28.0
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "04-changed-light-candidate.png",
+      "id": "04-changed-light",
+      "sampled_luminance": {
+        "maximum": 0.962724,
+        "mean": 0.273688,
+        "minimum": 0.003088,
+        "range": 0.959636,
+        "sample_count": 4000
+      },
+      "sha256": "0e193f142f5e82ffb9b404ac4ae0bad772ffe0c47691b7f311c816f63d992522",
+      "sun_rotation_degrees": [
+        -18.0,
+        117.999992370605,
+        0.0
+      ],
+      "variant": "candidate",
+      "view_kind": "changed_light_oblique_depth_check"
+    }
+  ],
+  "topology": {
+    "box_instances": 90,
+    "collision_nodes": 0,
+    "delta_from_control_triangles": -208,
+    "field_quads": 4,
+    "mesh_instances": 3,
+    "navigation_nodes": 0,
+    "removed_dark_course_boxes": 14,
+    "render_geometry_batches": 3,
+    "spray_nodes": 0,
+    "triangles": 1088
+  },
+  "video_adapter": "Apple M2 (Apple8)",
+  "viewport": [
+    1440,
+    900
+  ],
+  "visual_questions_for_independent_reviewer": [
+    "does the candidate remove barcode/ruler-line dominance?",
+    "does the generated grain remain quiet at ordinary distance?",
+    "are 8 m repeat seams or 3.48 m vertical phase seams distracting?",
+    "does motion expose shimmer, moire or run-boundary phase reset?",
+    "does the preserved clerestory remain the primary recognition cue under changed light?"
+  ]
+}

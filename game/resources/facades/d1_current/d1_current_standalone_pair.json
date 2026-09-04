@@ -1,0 +1,98 @@
+{
+  "schema_version": "ti.d1-current-standalone-prototype-pair/1",
+  "pair_id": "D1-CURRENT-B201-B225-STANDALONE-PAIR",
+  "scope": "isolated package-safe deterministic render-only prototypes for two cue-backed current D1 observed-side candidates",
+  "review_status": "pending_independent_recognition_and_bar_review_not_self_accepted",
+  "runtime_attachment": false,
+  "exact_receiver_layout": false,
+  "standalone_side_length_calibrated": true,
+  "live_placement_count": 0,
+  "reference_pixels_stored_or_copied": false,
+  "generated_or_external_texture_assets": false,
+  "one_local_unit_m": 1.0,
+  "prototypes": [
+    {
+      "source_key": "w34313545",
+      "city_building": "B201",
+      "observed_mapping_id": "800I-PUBLIC-WSW",
+      "ordered_run_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      "config_path": "res://game/resources/facades/d1_current/d1_b201_public_wsw.json",
+      "config_sha256": "30bc1f62e5fa44c60bdcfb1bfd4f6f679d391618fa213373e571080face6ec6c",
+      "geometry_signature": "57573bc19d6c6a45b946827e76a346c592d5238a310e923a30a41b149f963511"
+    },
+    {
+      "source_key": "w95934119",
+      "city_building": "B225",
+      "observed_mapping_id": "14812-NNW-LONG",
+      "ordered_run_indices": [10, 11, 12, 13],
+      "config_path": "res://game/resources/facades/d1_current/d1_b225_nnw_long.json",
+      "config_sha256": "dc3591df4a68af19b5fa53f402ed15d5e3f83946c4a113f024d5b7d41f2f82b8",
+      "geometry_signature": "179d898c4635917743e967819998256c7fe4938981da69e7d4664e1e7e13b58a"
+    }
+  ],
+  "scene": {
+    "path": "res://game/scenes/world/facades/d1_current/d1_current_standalone_prototype_pair.tscn",
+    "sha256": "0fdd5d356deb57664549db95fd04e123290c1fb9490b8024569e997616893d7f",
+    "factory_path": "res://game/scripts/world/facades/d1_current_standalone_prototypes.gd",
+    "factory_sha256": "797bbb81e7f772f3fab3989d358772be4f1b16cb7e31a05571463e0d6ec31a5e",
+    "geometry_signature": "17c560633517963489b76430729bb6476065bb0d9a6385b3a913103a778c32ad"
+  },
+  "materials": [
+    {"id": "b201_green_hierarchy", "role": "B201 observed green horizontal hierarchy", "path": "res://game/resources/materials/world/d1_current/b201_green_hierarchy.tres", "sha256": "5bdd67e659a0cce14abe3605f5a7fbfd85b0374d0a38be23cda326017235fe13"},
+    {"id": "b201_muted_rust_post", "role": "B201 observed secondary muted post family", "path": "res://game/resources/materials/world/d1_current/b201_muted_rust_post.tres", "sha256": "be97cdfd7367cd73172c4429ca212db0d1fc68bed34f4db6ce307d02a5225b94"},
+    {"id": "b201_service_leaf", "role": "B201 inferred sparse nonsemantic lower opening proxies", "path": "res://game/resources/materials/world/d1_current/b201_service_leaf.tres", "sha256": "de9895a808e4d64afc2c727e77ef92b590c9c718266ba118e64c489e84690cfd"},
+    {"id": "b201_warm_wall", "role": "B201 observed light warm-gray/cream solid field and piers", "path": "res://game/resources/materials/world/d1_current/b201_warm_wall.tres", "sha256": "6f5f6835790ab338454e72be58c2956deb6e470086797e209be0fab4d37ec788"},
+    {"id": "b225_aged_cladding", "role": "B225 observed aged light-gray/off-white horizontal field", "path": "res://game/resources/materials/world/d1_current/b225_aged_horizontal_cladding.tres", "sha256": "49e2a7cb075707f1384106301583d295ffe955450d10c36a8526a7a87722f9f0"},
+    {"id": "shared_dark_glass", "role": "shared observed dark opaque glazing proxy; no interior claim", "path": "res://game/resources/materials/world/d1_current/shared_dark_glass.tres", "sha256": "ad8931db8954fd5ebc8fdd809f70afb279dd74a36e53e1d9ca907c44409f10d3"},
+    {"id": "shared_deep_reveal", "role": "B225 physical horizontal course recess; no random damage", "path": "res://game/resources/materials/world/d1_current/shared_deep_reveal.tres", "sha256": "b15a82b4e37546cffac83d1b7c4e30f5e6828c7940a8da6581b218589cd908d5"},
+    {"id": "shared_pale_frame", "role": "shared observed pale window and opening frame family", "path": "res://game/resources/materials/world/d1_current/shared_pale_frame.tres", "sha256": "9a2de298ff545cf80c5da0ed0aa37d9d4ebbf10fec8eb78810af7e4d012d1436"}
+  ],
+  "topology": {
+    "batch_count": 10,
+    "box_instance_count": 290,
+    "triangle_count": 3480,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0
+  },
+  "asset_contract": {
+    "all_resources_local_under_res": true,
+    "material_texture_count": 0,
+    "whole_facade_images": 0,
+    "random_or_noise_generators": 0,
+    "metre_authored_geometry": true,
+    "reused_materials": ["shared_dark_glass", "shared_pale_frame"],
+    "shared_deep_reveal_scope": "B225 horizontal course geometry only"
+  },
+  "safety_contract": {
+    "render_only": true,
+    "generated_world_bytes_changed": false,
+    "host_wall_and_roof_ownership_changed": false,
+    "collision_navigation_or_spray_changed": false,
+    "unobserved_or_private_region_geometry": false,
+    "signage_or_address_recognition_dependency": false
+  },
+  "authoritative_pins": {
+    "source_provenance_receipt_id": "D1-PAIR-AUTHORITY",
+    "source_provenance_receipt_sha256": "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677b3ba5ab318a19333",
+    "d1_packet_index_receipt_id": "D1-REFERENCE-PACKETS-INDEX",
+    "d1_packet_index_sha256": "0f7a477f5168e9145de609dbbe66f4b52d09e55ef657afdf6fee5aa430e00d58",
+    "batch_05_run_mapping_receipt_id": "BATCH-05-RUN-MAPPING",
+    "batch_05_run_mapping_sha256": "54a8f651a56a03a65747d511184afc9f8271bbfc4efe5614db94f3d5232b368b",
+    "receiver_inventory_receipt_id": "FACADE-RECEIVER-INVENTORY",
+    "receiver_inventory_sha256": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f"
+  },
+  "capture": {
+    "harness_path": "res://game/tests/d1_current_standalone_prototype_capture.gd",
+    "evidence_receipt_id": "D1-CURRENT-STANDALONE-PROTOTYPE-PAIR-2026-09-04",
+    "renderer_required": "native macOS Forward+/Metal",
+    "status": "native_capture_complete_pending_independent_review",
+    "manifest_sha256": "35e60ea88ce9c932de4ecb02a1cdbb21af50e84497bd24e0738d9d5d7bb26f18",
+    "evidence_role": "standalone technical views only; not live attachment, receiver calibration, gameplay-world evidence, or independent acceptance"
+  },
+  "live_integration_seams": [
+    "B201: a future reviewed adapter may map complete motifs by cumulative metres only to source edge 0 / runs 0..9",
+    "B225: a future reviewed adapter may map complete clerestory groups by cumulative metres only to source edge 3 / runs 10..13",
+    "No prototype scene or factory is referenced by the world builder, catalog, compiler, registry or loader"
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "ti.building-3-hero-massing/1",
+  "target": {
+    "source_key": "w34313540",
+    "logical_object_key": "building:w34313540",
+    "wall_object_key": "building:w34313540:wall",
+    "roof_object_key": "building:w34313540:roof",
+    "chunk_id": "x_1__z_1",
+    "source_wall_vertex_values": 708,
+    "source_wall_index_values": 354,
+    "source_roof_vertex_values": 87,
+    "source_roof_index_values": 81,
+    "source_nominal_base_y_m": 3.478,
+    "source_flat_top_y_m": 23.478
+  },
+  "authoritative_identity": {
+    "name": "Palace of Fine and Decorative Arts / Building 3",
+    "nrhp_id": "08000083",
+    "frozen_osm_nrhp_ref": "08000081",
+    "frozen_osm_nrhp_ref_role": "preserved_provenance_only_incorrect_for_building_3"
+  },
+  "reference_supported_family": {
+    "roof": "arched three-hinge steel-truss hangar roof",
+    "corners": "four tapered reinforced-concrete pylons with low pyramidal tops",
+    "ene_end": "stark hangar end with one very large sliding-door opening and surviving original opening hierarchy"
+  },
+  "reversible_production_inference": {
+    "nominal_eave_y_m": 21.278,
+    "crown_y_m": 27.862,
+    "pylon_y_m": 24.179,
+    "pylon_width_fraction": 0.13,
+    "pylon_end_fraction": 0.13,
+    "wall_subdivisions_per_source_run": 2,
+    "roof_subdivisions_per_source_triangle": 5,
+    "reason": "Historical dimensions and structural family are authoritative, but their transformed placement on the frozen contemporary footprint is not surveyed. These values are reviewable vertical production inference."
+  },
+  "truth_boundary": {
+    "horizontal_source_footprint_preserved": true,
+    "generated_bytes_unchanged": true,
+    "exterior_only": true,
+    "interior_modeled": false,
+    "as_built_fidelity_claimed": false,
+    "source_photography_shipped": false,
+    "visual_review_status": "pending_independent_original_detail_review"
+  }
+}

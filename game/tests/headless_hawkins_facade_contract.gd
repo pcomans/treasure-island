@@ -10,7 +10,7 @@ const EXPECTED_CHUNK_SHA256 := "b8696d4feb4157d39969ec039e610af572f25510d712c802
 const EXPECTED_MANIFEST_SHA256 := "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
 const EXPECTED_CONTENT_SHA256 := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
 const EXPECTED_LAYOUT_SHA256 := "4de2239af2e18fe4121930d51dee15e081d2f81a40393da2f1f29c69464761d9"
-const EXPECTED_B3_SIGNATURE := "737a674d63824d574e28c76f75c86212dfe126c3204870cdb2d0452d5bcf6337"
+const EXPECTED_B3_SIGNATURE := "e0b30339bd2ca8642a7b49b5e6153f52017ec4a840e9b0dc1e3841f5373ca5f8"
 const EXPECTED_ISLE_SIGNATURE := "e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1"
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_BUILDING_WALL := 1 << 1
@@ -419,7 +419,7 @@ func _accepted_assets_unchanged() -> bool:
 	for path_value: Variant in ACCEPTED_ASSET_HASHES:
 		var path := str(path_value)
 		if FileAccess.get_sha256(path) != str(ACCEPTED_ASSET_HASHES[path]): return false
-	return FileAccess.get_sha256("res://game/resources/facades/building_3_600_california_ene_layout.json") == "312ed89a5bca6e3eadf3034b8e97689b9a99646837aca8f5f1f7f940a11f8299" \
+	return FileAccess.get_sha256("res://game/resources/facades/building_3_600_california_ene_layout.json") == "a491a3c7916191b9ca5f6adacc6d1f2289c0103f5079516b102b94e3993dae0c" \
 		and FileAccess.get_sha256("res://game/resources/facades/isle_house_39_bruton_high_se_layout.json") == "c5e6393e90152cef62f6478d7bd87750f3db5598d6ebc36cd307ce20acaa090d"
 
 

@@ -1,0 +1,37 @@
+{
+  "schema_version": "ti.building-1-public-front-believability-evidence/1",
+  "review_status": "pending_independent_bar_raiser_re_review_not_self_accepted",
+  "recognition_status": "accepted_before_and_preserved",
+  "before_manifest": "before-capture.json",
+  "before_manifest_sha256": "7e6d1a549a678f63b3dd2bff1693bfd53f6979b44fa8f2f84e3d72754292780f",
+  "after_manifest": "after-capture.json",
+  "after_manifest_sha256": "bef28d2c1e021742a3f099a9a5b0ef0a8e7e8c258c1cac21e36797275d548e8f",
+  "pairs": [
+    {
+      "id": "01-public-front-whole-ordinary",
+      "before": "images/before/01-public-front-whole-ordinary.png",
+      "after": "images/after/01-public-front-whole-ordinary.png",
+      "camera_and_light_match": true,
+      "verdict": "pending_independent_bar_raiser_re_review"
+    },
+    {
+      "id": "02-public-front-entrances-ordinary",
+      "before": "images/before/02-public-front-entrances-ordinary.png",
+      "after": "images/after/02-public-front-entrances-ordinary.png",
+      "camera_and_light_match": true,
+      "verdict": "pending_independent_bar_raiser_re_review"
+    },
+    {
+      "id": "03-public-front-whole-changed-light",
+      "before": "images/before/03-public-front-whole-changed-light.png",
+      "after": "images/after/03-public-front-whole-changed-light.png",
+      "camera_and_light_match": true,
+      "verdict": "pending_independent_bar_raiser_re_review"
+    }
+  ],
+  "exact_fixed_camera_and_light_pairs": true,
+  "source_photography_shipped": false,
+  "generated_facade_image_used": false,
+  "genai_texture_candidate_consumed": false,
+  "reviewer_instruction": "Open each before/after pair at original 1440x900 detail. Re-review only public-front depth/value hierarchy and the removal of the misleading cruciform end treatment. Confirm 11 bays, fluted pilaster/reveal cadence, projecting base, canopy leading edge/underside, and three entrance groups read at ordinary distance. Recognition remains accepted, but believability verdict is pending independent bar-raiser review."
+}

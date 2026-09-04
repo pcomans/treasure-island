@@ -1,0 +1,957 @@
+{
+  "schema_version": "ti.d2-1441-chinook-standalone-hero-evidence/1",
+  "review_status": "technical_capture_valid_recognition_and_believability_pending_independent_bar_raiser_review",
+  "evidence_role": "Native technical same-pose baseline/prototype evidence only; executor verified source binding, grounded stock player, framing, transform reuse, changed light, and PNG integrity without grading visual quality.",
+  "target": {
+    "canonical_name": "1441 Chinook Court",
+    "source_key": "w95934105",
+    "wall_object_key": "building:w95934105:wall",
+    "roof_object_key": "building:w95934105:roof",
+    "source_geometry_sha256": "952df7a4edca5dbaec7d74cb795b564cb1fa5567ea737d1a861e222b29ddf07f",
+    "wall_record_sha256": "2f89ec3b90d7ab5999d79f92e7ebbae1265cf0b93e3931f8968e348ad91d8a5a",
+    "roof_record_sha256": "41a9b67b0c65aa26ca241183d37932e481f12bdc75b6253d928e4a1623013214",
+    "mapped_public_sse_runs": [
+      10,
+      12,
+      13,
+      15
+    ],
+    "protected_runs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      11,
+      14
+    ],
+    "source_base_wall_top_y_m": [
+      3.332,
+      9.332
+    ]
+  },
+  "truth_boundary": {
+    "standalone_capture_only": true,
+    "runtime_attachment": false,
+    "recognition_accepted": false,
+    "believability_accepted": false,
+    "as_built_claim": false,
+    "interior_modeled": false,
+    "all_module_dimensions_and_counts_and_roof_rise": "reversible_production_inference",
+    "source_photography_stored_or_shown": false,
+    "protected_runs_have_modules": false,
+    "fallback_collider_retained": false
+  },
+  "confusion_set_source_ids_frozen_before_capture": [
+    "w95934144",
+    "w95934107",
+    "w95934118",
+    "w95934120"
+  ],
+  "reference_supported_cues_frozen_before_capture": [
+    "two long projecting windowed wing faces separated by the real footprint setback to runs 12 and 13",
+    "two-level dark recessed balcony or breezeway voids with simple metal rail silhouettes",
+    "shallow dark side-gable profile and broad projecting SSE eave over a quiet warm-white field"
+  ],
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/d2_1441_chinook_standalone_hero_capture.gd -- --capture-mode=stills",
+  "generator": "game/tests/d2_1441_chinook_standalone_hero_capture.gd",
+  "generator_sha256": "17834a3d635107bf582dcf70b66fabe9eda40c3f7f0a8c276b2a0478bf17b90c",
+  "pinned_inputs": {
+    "res://game/resources/facades/d2_1441_chinook_standalone_hero_prototype.json": "e07fba5d50f9bce4d879203ad63c0db62aa6fa5efc1f1f430ef91beb42e444e0",
+    "res://generated/world/chunks/x_-1__z_-1.json": "5e3b7efb7a2c61e1092c6a42ca9c04212c7d2603890b7a3f4c5e46777005f17b",
+    "res://discovery/facades/d2_reference_packets/w95934105_1441_chinook_court.md": "8135272f4cc012e83fa19f80871651d25db29c4cbd5a50dc07e4faee7563b0bc",
+    "res://game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+    "res://game/scripts/world/facades/d2_1441_chinook_standalone_hero_prototype.gd": "df3b644c4a708d53b2fd2c7cb8862cb922da5c2033b824e88b80877da311542d",
+    "res://game/scenes/world/facades/site_12_housing/d2_1441_chinook_standalone_hero_prototype.tscn": "a551c9dfe1f1139c721999a3748ccaa91637ec38a999a8aa2300f419f673c91c",
+    "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres": "b30d0d750e70ad4b8c28ddddce65cd88ef4ae04412b38dfef580870a2fd0bb5f",
+    "res://game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres": "d97d7b4a442ffe8ad9a0b003e5c1d6466f9ef9effc7cdb2be8ef966195e66782",
+    "res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres": "389c01066767b085ef8ed8ae4c5e1b06062d9ffb135e3e6a7bfa968b963717d7",
+    "res://game/resources/materials/world/site_12_housing/site_12_void_shadow.tres": "4159f82cc5c4c17c0d8173eddbc171120326fbd99578aa68012275b1274ce02d",
+    "res://game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres": "eddc4900c351dc3a75d163bd380a8b3a39bf6a1c1c3647299e3af19634a60ead",
+    "res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres": "75c13aa30a4e3c9f49980d78abe41f40c6c7ab270be6152c201eb8a72ebe8720",
+    "res://game/resources/textures/world/genai_pilot_v1/warm_ivory_mineral_albedo_v2.png": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+    "res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808"
+  },
+  "context_hashes_not_prototype_dependencies": {
+    "game/scenes/main.tscn": "959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66",
+    "game/scripts/main.gd": "7ae840aa08a00bc38a3b714ebb0fe3fcd611fb643c86fc828aec44efb4d85843",
+    "game/scripts/world/world_chunk_builder.gd": "9525ead815e95d7bc0b5fa8beae389954e232a9bbf51b54ed049a84a3613b9c0",
+    "generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+  },
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M2 (Apple8)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "lighting": {
+    "default_sun_rotation_degrees": [
+      -52.0,
+      -28.0,
+      0.0
+    ],
+    "changed_sun_rotation_degrees": [
+      -26.0,
+      126.0,
+      0.0
+    ],
+    "changed_light_pair_id": "03-sse-oblique-changed-light"
+  },
+  "world_runtime_context": {
+    "playable_rows": 735,
+    "context_rows": 4,
+    "mesh_instances": 938,
+    "surfaces": 948,
+    "triangles": 63720,
+    "static_bodies": 466,
+    "shapes": 466
+  },
+  "prototype_topology": {
+    "mesh_instances": 9,
+    "surfaces": 9,
+    "visual_triangles": 1578,
+    "visual_batch_triangles": {
+      "ProtectedExactWallRuns": 24,
+      "MappedSSEExactStuccoWallRuns": 8,
+      "ExactPlanShallowGableRoof": 10,
+      "MappedSSEBroadEaves": 48,
+      "ProjectingWingOpaqueOpenings": 144,
+      "ProjectingWingPaleOpeningFrames": 720,
+      "RecessedTwoLevelOpaqueVoids": 48,
+      "RecessedBalconySlabs": 48,
+      "RecessedSimpleMetalRails": 528
+    },
+    "static_bodies": 1,
+    "shapes": 1,
+    "collision_triangles": 42,
+    "deterministic_signature": "b91b373e3bb8238a6f73f05734ef48b3429ae5654eddce89b1981ee41ee89195",
+    "wing_opening_count": 12,
+    "recess_void_count": 4,
+    "rail_picket_count": 36,
+    "mapped_eave_count": 4
+  },
+  "camera_contract": {
+    "rig": "actual Player/CameraPivot/SpringArm3D/Camera3D",
+    "player_visible": true,
+    "physics_grounded": true,
+    "fov_degrees": 70.0,
+    "configured_spring_length_m": 5.5,
+    "before_after_pair_transform_rule": "exact same live Camera3D and Player transforms within 0.0001"
+  },
+  "capture_pairs": [
+    {
+      "view_id": "01-whole-sse",
+      "before_capture_id": "01-whole-sse-before",
+      "after_capture_id": "01-whole-sse-after",
+      "camera_transform_exactly_reused": true,
+      "camera_translation_error_m": 0.0,
+      "camera_basis_error": 0.0,
+      "player_translation_error_m": 0.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ]
+    },
+    {
+      "view_id": "02-sse-oblique",
+      "before_capture_id": "02-sse-oblique-before",
+      "after_capture_id": "02-sse-oblique-after",
+      "camera_transform_exactly_reused": true,
+      "camera_translation_error_m": 0.0,
+      "camera_basis_error": 0.000000012495003254287,
+      "player_translation_error_m": 0.0,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ]
+    },
+    {
+      "view_id": "03-sse-oblique-changed-light",
+      "before_capture_id": "03-sse-oblique-changed-light-before",
+      "after_capture_id": "03-sse-oblique-changed-light-after",
+      "camera_transform_exactly_reused": true,
+      "camera_translation_error_m": 0.0,
+      "camera_basis_error": 0.00000000837452773794212,
+      "player_translation_error_m": 0.0,
+      "sun_rotation_degrees": [
+        -26.0,
+        126.0,
+        0.0
+      ]
+    }
+  ],
+  "captures": [
+    {
+      "id": "01-whole-sse-before",
+      "stage": "before",
+      "target": "1441-chinook-court",
+      "source_identity": "w95934105",
+      "role": "whole_object_grounded_public_sse_view",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w95934144",
+        "w95934107",
+        "w95934118",
+        "w95934120"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "two long projecting windowed wing faces separated by the real footprint setback to runs 12 and 13",
+        "two-level dark recessed balcony or breezeway voids with simple metal rail silhouettes",
+        "shallow dark side-gable profile and broad projecting SSE eave over a quiet warm-white field"
+      ],
+      "file": "images/01-whole-sse-before.png",
+      "sha256": "594d8806a38f81fabc0e69d128ce9f132a8883fb8b967fc3d2271c833b942dab",
+      "bytes": 899492,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 297,
+      "sample_luminance_range": 0.587671384215355,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -230.0,
+        -65.0
+      ],
+      "settle_spawn_y_m": 5.864013671875,
+      "player_position_m": [
+        -230.0,
+        2.86109805107117,
+        -65.0
+      ],
+      "ground_y_m": 2.864013671875,
+      "ground_clearance_m": -0.00291562080383301,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "aim_target_m": [
+        -249.514007568359,
+        6.3600001335144,
+        -26.7000007629395
+      ],
+      "camera_position_m": [
+        -227.504653930664,
+        4.66942644119263,
+        -69.897590637207
+      ],
+      "camera_forward": [
+        -0.453699737787247,
+        0.0348493903875351,
+        0.890472948551178
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49998950958252,
+      "camera_yaw_degrees": 153.000970025309,
+      "camera_pitch_degrees": 1.99712738802598,
+      "target_bounds_point_count": 16,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        509.375946044922,
+        399.544860839844
+      ],
+      "target_projected_max_px": [
+        974.322937011719,
+        496.972381591797
+      ],
+      "target_projected_width_ratio": 0.322879854838053,
+      "target_projected_height_ratio": 0.108252800835503,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.0,
+      "first_los_hit_receiver": "building:w95934105:wall",
+      "first_los_hit_source_keys": [
+        "w95934105"
+      ],
+      "first_los_hit_run_index": 10,
+      "expected_los_run_index": 10,
+      "first_los_hit_position_m": [
+        -249.514007568359,
+        6.35999965667725,
+        -26.6999969482422
+      ],
+      "first_los_hit_distance_m": 48.5108413696289,
+      "first_los_hit_target_error_m": 0.00000384438408218557,
+      "receiver_source_run_first_los": true
+    },
+    {
+      "id": "01-whole-sse-after",
+      "stage": "after",
+      "target": "1441-chinook-court",
+      "source_identity": "w95934105",
+      "role": "whole_object_grounded_public_sse_view",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w95934144",
+        "w95934107",
+        "w95934118",
+        "w95934120"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "two long projecting windowed wing faces separated by the real footprint setback to runs 12 and 13",
+        "two-level dark recessed balcony or breezeway voids with simple metal rail silhouettes",
+        "shallow dark side-gable profile and broad projecting SSE eave over a quiet warm-white field"
+      ],
+      "file": "images/01-whole-sse-after.png",
+      "sha256": "69237ce93ee7f7df32a216fa20fab5d40e2ae1cb6f3f52689b20766ffa269442",
+      "bytes": 884508,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 296,
+      "sample_luminance_range": 0.608728632330894,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": true,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -230.0,
+        -65.0
+      ],
+      "settle_spawn_y_m": 5.864013671875,
+      "player_position_m": [
+        -230.0,
+        2.86109805107117,
+        -65.0
+      ],
+      "ground_y_m": 2.864013671875,
+      "ground_clearance_m": -0.00291562080383301,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "aim_target_m": [
+        -249.514007568359,
+        6.3600001335144,
+        -26.7000007629395
+      ],
+      "camera_position_m": [
+        -227.504653930664,
+        4.66942644119263,
+        -69.897590637207
+      ],
+      "camera_forward": [
+        -0.453699737787247,
+        0.0348493903875351,
+        0.890472948551178
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49998950958252,
+      "camera_yaw_degrees": 153.000970025309,
+      "camera_pitch_degrees": 1.99712738802598,
+      "target_bounds_point_count": 72,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        509.375946044922,
+        387.462036132812
+      ],
+      "target_projected_max_px": [
+        984.665832519531,
+        496.972381591797
+      ],
+      "target_projected_width_ratio": 0.330062421162923,
+      "target_projected_height_ratio": 0.121678161621094,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.0,
+      "first_los_hit_receiver": "prototype:building:w95934105:wall",
+      "first_los_hit_source_keys": [
+        "w95934105"
+      ],
+      "first_los_hit_run_index": 10,
+      "expected_los_run_index": 10,
+      "first_los_hit_position_m": [
+        -249.514007568359,
+        6.35999965667725,
+        -26.6999969482422
+      ],
+      "first_los_hit_distance_m": 48.5108413696289,
+      "first_los_hit_target_error_m": 0.00000384438408218557,
+      "receiver_source_run_first_los": true,
+      "pair_camera_translation_error_m": 0.0,
+      "pair_camera_basis_error": 0.0,
+      "pair_player_translation_error_m": 0.0
+    },
+    {
+      "id": "02-sse-oblique-before",
+      "stage": "before",
+      "target": "1441-chinook-court",
+      "source_identity": "w95934105",
+      "role": "grounded_public_sse_oblique_approach",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w95934144",
+        "w95934107",
+        "w95934118",
+        "w95934120"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "two long projecting windowed wing faces separated by the real footprint setback to runs 12 and 13",
+        "two-level dark recessed balcony or breezeway voids with simple metal rail silhouettes",
+        "shallow dark side-gable profile and broad projecting SSE eave over a quiet warm-white field"
+      ],
+      "file": "images/02-sse-oblique-before.png",
+      "sha256": "5d19ed4c9f5ce804a77612f665fb2ce11f0122d38f14db8d1e50e7fbd7b93a16",
+      "bytes": 911415,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 319,
+      "sample_luminance_range": 0.613236874341965,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -245.0,
+        -47.0
+      ],
+      "settle_spawn_y_m": 5.92381286621094,
+      "player_position_m": [
+        -245.0,
+        2.92402219772339,
+        -47.0
+      ],
+      "ground_y_m": 2.92381286621094,
+      "ground_clearance_m": 0.000209331512451172,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "aim_target_m": [
+        -258.454986572266,
+        6.3600001335144,
+        -15.543999671936
+      ],
+      "camera_position_m": [
+        -242.838897705078,
+        4.69337940216064,
+        -52.0523719787598
+      ],
+      "camera_forward": [
+        -0.392927318811417,
+        0.0419350191950798,
+        0.918612837791443
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50000190734863,
+      "camera_yaw_degrees": 156.841672204171,
+      "camera_pitch_degrees": 2.40340394273737,
+      "target_bounds_point_count": 16,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        276.901763916016,
+        321.949249267578
+      ],
+      "target_projected_max_px": [
+        1096.12316894531,
+        530.754272460938
+      ],
+      "target_projected_width_ratio": 0.56890377468533,
+      "target_projected_height_ratio": 0.232005581325955,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.00006103515625,
+      "first_los_hit_receiver": "building:w95934105:wall",
+      "first_los_hit_source_keys": [
+        "w95934105"
+      ],
+      "first_los_hit_run_index": 13,
+      "expected_los_run_index": 13,
+      "first_los_hit_position_m": [
+        -258.454986572266,
+        6.35999965667725,
+        -15.5440101623535
+      ],
+      "first_los_hit_distance_m": 39.7429275512695,
+      "first_los_hit_target_error_m": 0.0000105012486528722,
+      "receiver_source_run_first_los": true
+    },
+    {
+      "id": "02-sse-oblique-after",
+      "stage": "after",
+      "target": "1441-chinook-court",
+      "source_identity": "w95934105",
+      "role": "grounded_public_sse_oblique_approach",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w95934144",
+        "w95934107",
+        "w95934118",
+        "w95934120"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "two long projecting windowed wing faces separated by the real footprint setback to runs 12 and 13",
+        "two-level dark recessed balcony or breezeway voids with simple metal rail silhouettes",
+        "shallow dark side-gable profile and broad projecting SSE eave over a quiet warm-white field"
+      ],
+      "file": "images/02-sse-oblique-after.png",
+      "sha256": "9e9785f7631a8ceadd56d018dcc9f945d0ee650a5aad8d4e2deaccbfe950b06a",
+      "bytes": 859601,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 305,
+      "sample_luminance_range": 0.674649428576231,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": true,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -245.0,
+        -47.0
+      ],
+      "settle_spawn_y_m": 5.92381286621094,
+      "player_position_m": [
+        -245.0,
+        2.92402219772339,
+        -47.0
+      ],
+      "ground_y_m": 2.92381286621094,
+      "ground_clearance_m": 0.000209331512451172,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "aim_target_m": [
+        -258.454986572266,
+        6.3600001335144,
+        -15.543999671936
+      ],
+      "camera_position_m": [
+        -242.838897705078,
+        4.69337940216064,
+        -52.0523719787598
+      ],
+      "camera_forward": [
+        -0.392927318811417,
+        0.0419350191950798,
+        0.918612837791443
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50000190734863,
+      "camera_yaw_degrees": 156.841672204171,
+      "camera_pitch_degrees": 2.40340394273737,
+      "target_bounds_point_count": 72,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        276.901763916016,
+        296.296020507812
+      ],
+      "target_projected_max_px": [
+        1114.47619628906,
+        530.754333496094
+      ],
+      "target_projected_width_ratio": 0.581648932562934,
+      "target_projected_height_ratio": 0.260509236653646,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.00006103515625,
+      "first_los_hit_receiver": "prototype:building:w95934105:wall",
+      "first_los_hit_source_keys": [
+        "w95934105"
+      ],
+      "first_los_hit_run_index": 13,
+      "expected_los_run_index": 13,
+      "first_los_hit_position_m": [
+        -258.454986572266,
+        6.35999965667725,
+        -15.5440101623535
+      ],
+      "first_los_hit_distance_m": 39.7429275512695,
+      "first_los_hit_target_error_m": 0.0000105012486528722,
+      "receiver_source_run_first_los": true,
+      "pair_camera_translation_error_m": 0.0,
+      "pair_camera_basis_error": 0.000000012495003254287,
+      "pair_player_translation_error_m": 0.0
+    },
+    {
+      "id": "03-sse-oblique-changed-light-before",
+      "stage": "before",
+      "target": "1441-chinook-court",
+      "source_identity": "w95934105",
+      "role": "same_grounded_public_sse_oblique_under_materially_changed_light",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w95934144",
+        "w95934107",
+        "w95934118",
+        "w95934120"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "two long projecting windowed wing faces separated by the real footprint setback to runs 12 and 13",
+        "two-level dark recessed balcony or breezeway voids with simple metal rail silhouettes",
+        "shallow dark side-gable profile and broad projecting SSE eave over a quiet warm-white field"
+      ],
+      "file": "images/03-sse-oblique-changed-light-before.png",
+      "sha256": "b484bfd8b4bdccbbb0d3f0b9d67d9b784a230b1fca2c0c86ecfb51f0c09ba71f",
+      "bytes": 956475,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 289,
+      "sample_luminance_range": 0.62959061563015,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": true,
+      "sun_rotation_degrees": [
+        -25.9999980926514,
+        125.999992370605,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": false,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -245.0,
+        -47.0
+      ],
+      "settle_spawn_y_m": 5.92381286621094,
+      "player_position_m": [
+        -245.0,
+        2.92402219772339,
+        -47.0
+      ],
+      "ground_y_m": 2.92381286621094,
+      "ground_clearance_m": 0.000209331512451172,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "aim_target_m": [
+        -258.454986572266,
+        6.3600001335144,
+        -15.543999671936
+      ],
+      "camera_position_m": [
+        -242.838897705078,
+        4.69337940216064,
+        -52.0523719787598
+      ],
+      "camera_forward": [
+        -0.392927318811417,
+        0.0419350378215313,
+        0.918612837791443
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50000190734863,
+      "camera_yaw_degrees": 156.841672204171,
+      "camera_pitch_degrees": 2.40340394273737,
+      "target_bounds_point_count": 16,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        276.901763916016,
+        321.949310302734
+      ],
+      "target_projected_max_px": [
+        1096.12316894531,
+        530.75439453125
+      ],
+      "target_projected_width_ratio": 0.56890377468533,
+      "target_projected_height_ratio": 0.232005649142795,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.00006103515625,
+      "first_los_hit_receiver": "building:w95934105:wall",
+      "first_los_hit_source_keys": [
+        "w95934105"
+      ],
+      "first_los_hit_run_index": 13,
+      "expected_los_run_index": 13,
+      "first_los_hit_position_m": [
+        -258.454986572266,
+        6.36000061035156,
+        -15.5440101623535
+      ],
+      "first_los_hit_distance_m": 39.7429275512695,
+      "first_los_hit_target_error_m": 0.0000105012486528722,
+      "receiver_source_run_first_los": true
+    },
+    {
+      "id": "03-sse-oblique-changed-light-after",
+      "stage": "after",
+      "target": "1441-chinook-court",
+      "source_identity": "w95934105",
+      "role": "same_grounded_public_sse_oblique_under_materially_changed_light",
+      "recognition_verdict": "pending_independent_bar_raiser_review",
+      "believability_verdict": "pending_independent_bar_raiser_review",
+      "confusion_set_source_ids_frozen_before_capture": [
+        "w95934144",
+        "w95934107",
+        "w95934118",
+        "w95934120"
+      ],
+      "reference_supported_cues_frozen_before_capture": [
+        "two long projecting windowed wing faces separated by the real footprint setback to runs 12 and 13",
+        "two-level dark recessed balcony or breezeway voids with simple metal rail silhouettes",
+        "shallow dark side-gable profile and broad projecting SSE eave over a quiet warm-white field"
+      ],
+      "file": "images/03-sse-oblique-changed-light-after.png",
+      "sha256": "77aa0216f48121429bbdd3425db38da31d1fcfeba47b790de8d9fd2ff4a61696",
+      "bytes": 924930,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 282,
+      "sample_luminance_range": 0.714557718485594,
+      "hud": {
+        "debug_panel_visible": false,
+        "feedback_panel_visible": false,
+        "load_panel_visible": false,
+        "pause_panel_visible": false,
+        "reticle_visible": true
+      },
+      "player_visible": true,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "lighting_changed": true,
+      "sun_rotation_degrees": [
+        -25.9999980926514,
+        125.999992370605,
+        0.0
+      ],
+      "full_entity_required_and_in_frame": true,
+      "protected_untreated_faces_intentionally_not_hidden": true,
+      "capture_only_prototype_swap": true,
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -245.0,
+        -47.0
+      ],
+      "settle_spawn_y_m": 5.92381286621094,
+      "player_position_m": [
+        -245.0,
+        2.92402219772339,
+        -47.0
+      ],
+      "ground_y_m": 2.92381286621094,
+      "ground_clearance_m": 0.000209331512451172,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 125,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "aim_target_m": [
+        -258.454986572266,
+        6.3600001335144,
+        -15.543999671936
+      ],
+      "camera_position_m": [
+        -242.838897705078,
+        4.69337940216064,
+        -52.0523719787598
+      ],
+      "camera_forward": [
+        -0.392927318811417,
+        0.0419350378215313,
+        0.918612837791443
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50000190734863,
+      "camera_yaw_degrees": 156.841672204171,
+      "camera_pitch_degrees": 2.40340394273737,
+      "target_bounds_point_count": 72,
+      "target_bounds_points_behind_camera": 0,
+      "target_projected_min_px": [
+        276.901763916016,
+        296.296081542969
+      ],
+      "target_projected_max_px": [
+        1114.47619628906,
+        530.75439453125
+      ],
+      "target_projected_width_ratio": 0.581648932562934,
+      "target_projected_height_ratio": 0.260509236653646,
+      "target_bounds_fully_in_frame": true,
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_center_error_px": 0.0000682393801980652,
+      "first_los_hit_receiver": "prototype:building:w95934105:wall",
+      "first_los_hit_source_keys": [
+        "w95934105"
+      ],
+      "first_los_hit_run_index": 13,
+      "expected_los_run_index": 13,
+      "first_los_hit_position_m": [
+        -258.454986572266,
+        6.36000061035156,
+        -15.5440101623535
+      ],
+      "first_los_hit_distance_m": 39.7429275512695,
+      "first_los_hit_target_error_m": 0.0000105012486528722,
+      "receiver_source_run_first_los": true,
+      "pair_camera_translation_error_m": 0.0,
+      "pair_camera_basis_error": 0.00000000837452773794212,
+      "pair_player_translation_error_m": 0.0
+    }
+  ],
+  "technical_self_check_only": true,
+  "visual_verdict": "pending_independent_bar_raiser_review",
+  "reviewer_instruction": "Open all six PNGs at original detail before reading labels. Against 1439, 1443, 1438 and 1440 Chinook, decide whether the after views are top-1 1441 using at least two supported cues, including the real projecting-wing / central setback / two-level void cadence. Check the shallow dark gable and broad eave in default and changed light without relying on white color, address, location, or source ID. Treat all opening, void, rail, eave and roof-rise counts/dimensions as reversible inference."
+}

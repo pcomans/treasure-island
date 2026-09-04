@@ -1,0 +1,12 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png" id="1_stucco"]
+
+[resource]
+resource_name = "site_12_warm_ivory_stucco_meter_repeat"
+albedo_color = Color(0.96, 0.94, 0.87, 1)
+albedo_texture = ExtResource("1_stucco")
+metallic = 0.0
+roughness = 0.88
+texture_filter = 5
+uv1_scale = Vector3(0.333333, 0.333333, 1)

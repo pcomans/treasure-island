@@ -1,0 +1,11 @@
+e1ab8f526aed22a6234fff1d2fcc5eae5d2245df4260a25a5705cd37a158a921  evidence/first-playable/p1-existing-live-revalidation-2026-09-04/capture-manifest.json
+e20ebd6a483234b1b55de5421113a79dbe6d3c18380ab33858ab0f4de7ded1ef  evidence/first-playable/p1-existing-live-revalidation-2026-09-04/images/building-3/01-building-3-whole-object.png
+2a3aa0dd7e4f08f37cad515d75c45240eb412043f4f69acbea208fef4848a103  evidence/first-playable/p1-existing-live-revalidation-2026-09-04/images/building-3/02-building-3-oblique-approach.png
+c903a5cea795b5bc2731f7e31701001add2ee6685d9f1708c7883c00f13ff850  evidence/first-playable/p1-existing-live-revalidation-2026-09-04/images/hawkins/03-hawkins-whole-object.png
+f6a4665a29519ea9181c02b8635e75efb32f583b295d311291e2bc23c3bd696b  evidence/first-playable/p1-existing-live-revalidation-2026-09-04/images/hawkins/04-hawkins-oblique-approach.png
+c6556aef5dcd1996be4373f6d9387f3b74da81613a444223a0b3bceb18b830cf  evidence/first-playable/p1-existing-live-revalidation-2026-09-04/images/isle-house/05-isle-house-whole-composite-diagnostic.png
+6ea99d1321f2279e86fa6098fe87e3b47f611800421a0d75b5f6d03aaa6513db  evidence/first-playable/p1-existing-live-revalidation-2026-09-04/images/isle-house/06-isle-house-low-oblique-diagnostic.png
+4b3beb2f6b827359c069498af54c385786428bddaaa4b381bd945b0c1dbee5ec  game/tests/p1_existing_live_revalidation_capture.gd
+3701d28e19cc7811067c171eb5a85e5efe4098d554c387679f50fed6248fb961  discovery/facades/p1_reference_packets/w34313540_building_3.md
+ed2d7c0f16c605ba775edeb443085b75c6353e44d6850a4d5746cc15dad8efc4  discovery/facades/p1_reference_packets/w1249412093_hawkins.md
+04f1009fd240cde4765095c49ba8174f90b80dbad54281d8036ef1df04c2874d  discovery/facades/p1_reference_packets/w1249412094_isle_house.md

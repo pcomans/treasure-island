@@ -45,6 +45,7 @@ const BANNED_PREFIXES := [
 	"res://discovery/",
 	"res://evidence/",
 	"res://node_modules/",
+	"res://source_assets/",
 	"res://third_party_staging/",
 	"res://tools/",
 	"res://.tools/",

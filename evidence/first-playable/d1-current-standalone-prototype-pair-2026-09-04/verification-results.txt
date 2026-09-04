@@ -1,0 +1,36 @@
+D1 current standalone prototype pair verification — 2026-09-04
+
+HEADLESS CONTRACT
+Command:
+.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --headless --audio-driver Dummy --script game/tests/headless_d1_current_standalone_prototype_contract.gd
+Exit: 0
+Result:
+D1_SIGNATURE_B201=57573bc19d6c6a45b946827e76a346c592d5238a310e923a30a41b149f963511
+D1_SIGNATURE_B225=179d898c4635917743e967819998256c7fe4938981da69e7d4664e1e7e13b58a
+D1_SIGNATURE_PAIR=17c560633517963489b76430729bb6476065bb0d9a6385b3a913103a778c32ad
+PASS: D1 B201 runs 0..9 and B225 runs 10..13 instantiate as a deterministic 290-box / 3480-triangle render-only standalone pair; exact receiver, identity-conflict, protected-region and no-live-attachment contracts hold
+
+NATIVE CAPTURE
+Command:
+.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/d1_current_standalone_prototype_capture.gd
+Exit: 0
+Renderer:
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)
+Result:
+PASS: captured 9 fresh native Forward+/Metal D1 standalone views for B201 runs 0..9 and B225 runs 10..13; pair remains pending independent recognition/bar review with no live attachment
+
+HEADLESS CAPTURE NEGATIVE GATE
+Command:
+.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --headless --audio-driver Dummy --script game/tests/d1_current_standalone_prototype_capture.gd
+Exit: 1 (expected)
+Result:
+PASS: harness refused non-native/headless screenshots.
+
+JSON PARSE
+Command:
+jq empty game/resources/facades/d1_current/d1_b201_public_wsw.json game/resources/facades/d1_current/d1_b225_nnw_long.json game/resources/facades/d1_current/d1_current_standalone_pair.json evidence/first-playable/d1-current-standalone-prototype-pair-2026-09-04/capture-manifest.json
+Exit: 0
+
+REVIEW STATE
+pending_independent_recognition_and_bar_review_not_self_accepted
+

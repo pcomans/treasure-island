@@ -1,0 +1,450 @@
+{
+  "schema_version": "ti.isle-house-low-genai-brick-phase2-evidence/1",
+  "review_status": "technical_capture_complete_visual_verdict_pending_bar_raiser_review",
+  "evidence_role": "native standalone exact-receiver A/B and sampled motion diagnostic; not live-world or player acceptance",
+  "runtime_attachment": false,
+  "target_receiver": "building-composite:w1249412094:w1282547787:wall",
+  "mapped_run_scope": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "fixed_pair_side": "LOW-WSW-AVENUE-OF-THE-PALMS",
+  "control_material": "res://game/resources/materials/world/isle_house/isle_house_low_brick.tres",
+  "generated_material": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+  "generated_texture": "res://game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png",
+  "generated_texture_sha256": "0abbb429066966c1cfc1e0209a2a454c41dae73743fc119ffdf7cd82ee3ef35d",
+  "uv_helper": "res://game/scripts/world/facades/facade_meter_uv_adapter.gd",
+  "uv_helper_sha256": "47e710b9ea7c5de5122430199e4105cbba5f672d22f59832f13b8004f16c5a1d",
+  "field_material": {
+    "cell_m": 2.5,
+    "tint": [
+      0.7,
+      0.66,
+      0.62,
+      1.0
+    ],
+    "scalar_roughness": 0.86,
+    "maps": [
+      "albedo"
+    ],
+    "module_piers": "existing scalar brick retained because normalized BoxMesh UVs do not preserve metre scale; geometry and batching unchanged"
+  },
+  "uv_contract": {
+    "contract_version": "ti.facade-meter-uv/1",
+    "coordinate_unit": "metre",
+    "u_phase_rule": "continuous_xz_metres_within_ordered_side_chain",
+    "corner_rule": "continue_at_ordered_intra_side_corner_reset_at_side_start",
+    "v_phase_rule": "absolute_world_y_metres"
+  },
+  "side_chain_totals_m": {
+    "LOW-WSW-AVENUE-OF-THE-PALMS": 51.6984152793884,
+    "LOW-ENE-GARDEN-WALK": 49.7970167398453
+  },
+  "motion_protocol": {
+    "kind": "native Forward+/Metal sampled camera path parallel to WSW public facade",
+    "frame_count": 9,
+    "step_m": 1.25,
+    "outward_distance_m": 16.0,
+    "purpose": [
+      "shimmer",
+      "moire",
+      "run seams",
+      "texture cadence",
+      "architectural contrast"
+    ],
+    "not_claimed": "not a physics/player traversal and not connected to the live world builder"
+  },
+  "package_audit": {
+    "export_filter": "all_resources with isolated genai_pilot_v1 texture/material directories excluded",
+    "before_bytes": 62134828,
+    "after_bytes": 59524324,
+    "delta_bytes": -2610504,
+    "before_sha256": "56f3543720030633ae6688a1baafe086765e8be4bd39186b093d7a54b07cc92a",
+    "after_sha256": "c84d8f3654d02eb17d7fc97907d66a6c26bc5e12a0a97753c84b3ff331f71263",
+    "mounted_contract": "headless_genai_texture_phase2_package_contract.gd -- --mounted"
+  },
+  "prototype_topology_unchanged": {
+    "field_segments": 10,
+    "field_triangles": 20,
+    "module_boxes": 152,
+    "module_triangles": 1824,
+    "total_visual_triangles": 1844,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0
+  },
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "video_adapter": "Apple M2 (Apple8)",
+  "rendering_method": "Forward+",
+  "rendering_driver": "Metal",
+  "viewport": [
+    1440,
+    900
+  ],
+  "capture_command": ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot --path . --display-driver macos --rendering-method forward_plus --rendering-driver metal --audio-driver Dummy --resolution 1440x900 --script game/tests/isle_house_low_genai_brick_phase2_capture.gd",
+  "fixed_captures": [
+    {
+      "file": "images/01-flat-front.png",
+      "view_kind": "flat_control_fixed_front",
+      "field_material": "res://game/resources/materials/world/isle_house/isle_house_low_brick.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 29.0,
+      "outward_distance_m": 31.0,
+      "tangent_offset_m": 0.0,
+      "camera_position_m": [
+        -171.306427001953,
+        6.5,
+        542.349914550781
+      ],
+      "target_position_m": [
+        -143.697937011719,
+        7.25,
+        528.251281738281
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 79377,
+      "sha256": "da7cd431a828e00649585fec7c1885abe2f4be26dba1335e8e554b23a57d27da",
+      "sample_unique_colors": 192,
+      "sample_luminance_range": 0.892917687539011
+    },
+    {
+      "file": "images/02-generated-front.png",
+      "view_kind": "generated_fixed_front",
+      "field_material": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 29.0,
+      "outward_distance_m": 31.0,
+      "tangent_offset_m": 0.0,
+      "camera_position_m": [
+        -171.306427001953,
+        6.5,
+        542.349914550781
+      ],
+      "target_position_m": [
+        -143.697937011719,
+        7.25,
+        528.251281738281
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 209664,
+      "sha256": "da055b79f12eeec6abcbd85c9198927a13060bcf1ef3b589c9a16cd67f64e3f0",
+      "sample_unique_colors": 239,
+      "sample_luminance_range": 0.892917687539011
+    },
+    {
+      "file": "images/03-flat-oblique.png",
+      "view_kind": "flat_control_fixed_oblique",
+      "field_material": "res://game/resources/materials/world/isle_house/isle_house_low_brick.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 29.0,
+      "outward_distance_m": 28.0,
+      "tangent_offset_m": -17.0,
+      "camera_position_m": [
+        -176.366424560547,
+        8.39999961853027,
+        525.845520019531
+      ],
+      "target_position_m": [
+        -143.697937011719,
+        7.40000009536743,
+        528.251281738281
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 55037,
+      "sha256": "ba25f1ecf14616d9e6750a33dbe7150cc22ef317394748d7ce8f71ca4e2d10f0",
+      "sample_unique_colors": 129,
+      "sample_luminance_range": 0.666253382805735
+    },
+    {
+      "file": "images/04-generated-oblique.png",
+      "view_kind": "generated_fixed_oblique",
+      "field_material": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 29.0,
+      "outward_distance_m": 28.0,
+      "tangent_offset_m": -17.0,
+      "camera_position_m": [
+        -176.366424560547,
+        8.39999961853027,
+        525.845520019531
+      ],
+      "target_position_m": [
+        -143.697937011719,
+        7.40000009536743,
+        528.251281738281
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 211684,
+      "sha256": "238efeffd143705ac413772624cad43fbba0cabe60f46562f800fb2a106e26d0",
+      "sample_unique_colors": 179,
+      "sample_luminance_range": 0.666253382805735
+    }
+  ],
+  "motion_captures": [
+    {
+      "file": "images/motion/05-generated-walk-00.png",
+      "view_kind": "generated_parallel_walk_sample",
+      "field_material": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 20.0,
+      "outward_distance_m": 16.0,
+      "tangent_offset_m": 0.0,
+      "camera_position_m": [
+        -162.040679931641,
+        6.25,
+        527.5126953125
+      ],
+      "target_position_m": [
+        -147.791137695312,
+        7.15000009536743,
+        520.235961914062
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 344463,
+      "sha256": "3b1449479f80274f0d604213f447067623021927afe76ecc8f248c6145e7a66e",
+      "sample_unique_colors": 269,
+      "sample_luminance_range": 0.904682333115488
+    },
+    {
+      "file": "images/motion/05-generated-walk-01.png",
+      "view_kind": "generated_parallel_walk_sample",
+      "field_material": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 21.25,
+      "outward_distance_m": 16.0,
+      "tangent_offset_m": 0.0,
+      "camera_position_m": [
+        -161.472183227539,
+        6.25,
+        528.625915527344
+      ],
+      "target_position_m": [
+        -147.222640991211,
+        7.15000009536743,
+        521.349182128906
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 329909,
+      "sha256": "dd2d764aaa7ea6209d859f9226af26af874c6d1e9932a3a636549fa6f018a6c2",
+      "sample_unique_colors": 267,
+      "sample_luminance_range": 0.904682333115488
+    },
+    {
+      "file": "images/motion/05-generated-walk-02.png",
+      "view_kind": "generated_parallel_walk_sample",
+      "field_material": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 22.5,
+      "outward_distance_m": 16.0,
+      "tangent_offset_m": 0.0,
+      "camera_position_m": [
+        -160.903686523438,
+        6.25,
+        529.739196777344
+      ],
+      "target_position_m": [
+        -146.654144287109,
+        7.15000009536743,
+        522.462463378906
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 312329,
+      "sha256": "e93e44881309e3c299adbda1e0d4f609d7cadf00435b5c9ec4d2816da05dc330",
+      "sample_unique_colors": 253,
+      "sample_luminance_range": 0.904682333115488
+    },
+    {
+      "file": "images/motion/05-generated-walk-03.png",
+      "view_kind": "generated_parallel_walk_sample",
+      "field_material": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 23.75,
+      "outward_distance_m": 16.0,
+      "tangent_offset_m": 0.0,
+      "camera_position_m": [
+        -160.335174560547,
+        6.25,
+        530.852416992188
+      ],
+      "target_position_m": [
+        -146.085632324219,
+        7.15000009536743,
+        523.57568359375
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 301260,
+      "sha256": "8358a9777f54f776a9e9de5e4a2db0634aa40f1a00339bac85958d04b3205b4e",
+      "sample_unique_colors": 251,
+      "sample_luminance_range": 0.904682333115488
+    },
+    {
+      "file": "images/motion/05-generated-walk-04.png",
+      "view_kind": "generated_parallel_walk_sample",
+      "field_material": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 25.0,
+      "outward_distance_m": 16.0,
+      "tangent_offset_m": 0.0,
+      "camera_position_m": [
+        -159.766677856445,
+        6.25,
+        531.965637207031
+      ],
+      "target_position_m": [
+        -145.517135620117,
+        7.15000009536743,
+        524.688903808594
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 306594,
+      "sha256": "8c55dd6c9ccd3e13906e250d1a8aec070263c1925fd72d398c4e972c4a9b9ecc",
+      "sample_unique_colors": 243,
+      "sample_luminance_range": 0.904682333115488
+    },
+    {
+      "file": "images/motion/05-generated-walk-05.png",
+      "view_kind": "generated_parallel_walk_sample",
+      "field_material": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 26.25,
+      "outward_distance_m": 16.0,
+      "tangent_offset_m": 0.0,
+      "camera_position_m": [
+        -159.198181152344,
+        6.25,
+        533.078918457031
+      ],
+      "target_position_m": [
+        -144.948638916016,
+        7.15000009536743,
+        525.802185058594
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 316933,
+      "sha256": "a57560dc614bb1b8f0709f9652b4dd2cddee22aabd6e45c6a5b0f595e0991359",
+      "sample_unique_colors": 249,
+      "sample_luminance_range": 0.894286254420877
+    },
+    {
+      "file": "images/motion/05-generated-walk-06.png",
+      "view_kind": "generated_parallel_walk_sample",
+      "field_material": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 27.5,
+      "outward_distance_m": 16.0,
+      "tangent_offset_m": 0.0,
+      "camera_position_m": [
+        -158.629684448242,
+        6.25,
+        534.192138671875
+      ],
+      "target_position_m": [
+        -144.380142211914,
+        7.15000009536743,
+        526.915405273438
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 331233,
+      "sha256": "0860b812948fc803ad62b5f912b7dd7bf9c25b52e9aca3e3b24a7b75c3155e4b",
+      "sample_unique_colors": 243,
+      "sample_luminance_range": 0.904682333115488
+    },
+    {
+      "file": "images/motion/05-generated-walk-07.png",
+      "view_kind": "generated_parallel_walk_sample",
+      "field_material": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 28.75,
+      "outward_distance_m": 16.0,
+      "tangent_offset_m": 0.0,
+      "camera_position_m": [
+        -158.061172485352,
+        6.25,
+        535.305358886719
+      ],
+      "target_position_m": [
+        -143.811630249023,
+        7.15000009536743,
+        528.028625488281
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 341007,
+      "sha256": "01e0a9b29e0e25d956784a40d99f8a469754ccc956905fbe3e92d2ead1985529",
+      "sample_unique_colors": 259,
+      "sample_luminance_range": 0.904682333115488
+    },
+    {
+      "file": "images/motion/05-generated-walk-08.png",
+      "view_kind": "generated_parallel_walk_sample",
+      "field_material": "res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+      "side_id": "LOW-WSW-AVENUE-OF-THE-PALMS",
+      "side_u_m": 30.0,
+      "outward_distance_m": 16.0,
+      "tangent_offset_m": 0.0,
+      "camera_position_m": [
+        -157.492645263672,
+        6.25,
+        536.418640136719
+      ],
+      "target_position_m": [
+        -143.243103027344,
+        7.15000009536743,
+        529.141906738281
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "bytes": 328637,
+      "sha256": "473c29cb8502e76fbf273ae8fdd95dbdea5bcb765a8b2b0c2bca5ea41bee1f47",
+      "sample_unique_colors": 247,
+      "sample_luminance_range": 0.904682333115488
+    }
+  ],
+  "reviewer_instruction": "Inspect fixed A/B pairs and all motion samples at original detail. Judge distracting seams, shimmer/moire, oversized cadence, noise, module/field contrast, and whether the brick makes the low public facade more believable. Technical capture is not self-acceptance."
+}
