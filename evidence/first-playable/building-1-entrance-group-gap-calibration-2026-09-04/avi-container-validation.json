@@ -1,0 +1,48 @@
+{
+  "schema_version": "ti.building-1-entrance-gap-avi-container-validation/1",
+  "validation_scope": "closed immutable A/B review movies; no decode, transcode, or byte rewrite",
+  "external_file_utility": {
+    "command": "file evidence/first-playable/building-1-entrance-group-gap-calibration-2026-09-04/building-1-entrance-gap-{a,b}-normal-forward-approach.avi",
+    "a_result": "RIFF (little-endian) data, AVI, 1440 x 900, 30.00 fps, video: Motion JPEG, audio:",
+    "b_result": "RIFF (little-endian) data, AVI, 1440 x 900, 30.00 fps, video: Motion JPEG, audio:",
+    "status": "pass"
+  },
+  "dependency_free_riff_parser": {
+    "implementation": "game/tests/building_1_entrance_gap_salvage_finalizer.gd",
+    "implementation_sha256": "85c2bc869787dcf466540ec40d284419d75acb9e6205ac2e86e69edd50850078",
+    "observations": {
+      "a": {
+        "codec_fourcc": "MJPG",
+        "duration_seconds_from_avih": 11.233221,
+        "frame_rate_fps": 30.000300003,
+        "height": 900,
+        "microseconds_per_frame": 33333,
+        "sha256": "cf51e56538ba640b083d67c12d3f79e9f1864b57f70cf3ba0015e76c7a66b6ff",
+        "size_bytes": 45838270,
+        "total_frames": 337,
+        "width": 1440
+      },
+      "b": {
+        "codec_fourcc": "MJPG",
+        "duration_seconds_from_avih": 11.233221,
+        "frame_rate_fps": 30.000300003,
+        "height": 900,
+        "microseconds_per_frame": 33333,
+        "sha256": "318718deb113bc9d639db6bed28cd0e8eb30459c3b7754fe39dba5728b6a1e82",
+        "size_bytes": 45825536,
+        "total_frames": 337,
+        "width": 1440
+      }
+    },
+    "status": "pass"
+  },
+  "useful_review_interval": {
+    "encoded_process_frame_range": [65, 330],
+    "physics_frame_range": [131, 660],
+    "physics_samples": 529,
+    "physics_ticks_per_second": 60,
+    "useful_duration_seconds": 8.81666666666667
+  },
+  "ffprobe_available": false,
+  "status": "pass"
+}

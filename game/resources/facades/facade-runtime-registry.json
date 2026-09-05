@@ -450,7 +450,8 @@
             "two_story_roof_y": 14.75
           }
         },
-        "dispatch_sha256": "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c"
+        "dispatch_sha256": "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c",
+        "public_front_config_sha256": "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
       },
       "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
       "attachment_kind": "active_building_1_hero_replacement",
@@ -464,6 +465,10 @@
         {
           "path": "res://game/resources/facades/building_1_hero_model.json",
           "sha256": "f10bc92a6e74cbae41347e742e6c68c50faccddbd52ab3ecce210ac8243bc6e9"
+        },
+        {
+          "path": "res://game/resources/facades/building_1_public_front_believability.json",
+          "sha256": "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
         },
         {
           "path": "res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
@@ -705,7 +710,8 @@
             "two_story_roof_y": 14.75
           }
         },
-        "dispatch_sha256": "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c"
+        "dispatch_sha256": "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c",
+        "public_front_config_sha256": "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
       },
       "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
       "attachment_kind": "active_building_1_hero_replacement",
@@ -719,6 +725,10 @@
         {
           "path": "res://game/resources/facades/building_1_hero_model.json",
           "sha256": "f10bc92a6e74cbae41347e742e6c68c50faccddbd52ab3ecce210ac8243bc6e9"
+        },
+        {
+          "path": "res://game/resources/facades/building_1_public_front_believability.json",
+          "sha256": "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
         },
         {
           "path": "res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
@@ -1159,12 +1169,12 @@
   ],
   "adapter_contract": {
     "path": "res://game/resources/facades/facade-runtime-adapter-contracts.json",
-    "schema_version": "ti.facade-runtime-adapter-contracts/4",
-    "sha256": "2064accb205c891cf7a7a09a7117be63360dee8d05f904cf31e99455368129d1"
+    "schema_version": "ti.facade-runtime-adapter-contracts/5",
+    "sha256": "503c8d02439d0846389d5d57e2b2a26d8e42ee6156ff08f489de6e9dc4325222"
   },
   "build_contract": {
-    "authoring_catalog_sha256": "56d7257fa4e3486b3299683c45d4ae1057858c6e1edb3e49f6b6241d7f1a9be7",
-    "compiler_version": "1.4.0",
+    "authoring_catalog_sha256": "ab8797e86d5985c4b64670a22577394656c6388bb463f83c157a411663fa7b57",
+    "compiler_version": "1.5.0",
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
     "inventory_sha256": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f",
@@ -1205,10 +1215,10 @@
     "reference_recognizable": "An ordinary gameplay view is independently matched to target-identifiable reference evidence."
   },
   "compatibility_contract": {
-    "catalog_schema_version": "ti.facade-recognition-catalog/5",
-    "compiler_version": "1.4.0",
+    "catalog_schema_version": "ti.facade-recognition-catalog/6",
+    "compiler_version": "1.5.0",
     "forward_compatible": false,
-    "loader_api_version": "ti.facade-runtime-registry-loader/4",
+    "loader_api_version": "ti.facade-runtime-registry-loader/5",
     "unknown_version_policy": "reject"
   },
   "counts": {
@@ -1687,7 +1697,7 @@
     "rollup_policy": "one_claim_per_physical_recognition_unit"
   },
   "registry_id": "treasure-island-physical-building-recognition",
-  "schema_version": "ti.facade-runtime-registry/5",
+  "schema_version": "ti.facade-runtime-registry/6",
   "units": [
     {
       "acceptance_records": [],

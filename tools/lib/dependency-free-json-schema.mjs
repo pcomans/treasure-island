@@ -5,12 +5,15 @@ const SUPPORTED_KEYWORDS = new Set([
   "$schema",
   "additionalProperties",
   "anyOf",
+  "contains",
   "const",
   "enum",
   "items",
   "maxItems",
+  "maxContains",
   "maximum",
   "minItems",
+  "minContains",
   "minimum",
   "minLength",
   "pattern",
@@ -92,13 +95,15 @@ export function schemaDocumentErrors(root) {
       if (Array.isArray(schema.required)) keywordType(new Set(schema.required).size === schema.required.length, errors, path, "required contains duplicates");
     }
     if (Object.hasOwn(schema, "additionalProperties")) keywordType(typeof schema.additionalProperties === "boolean", errors, path, "only boolean additionalProperties is supported");
-    for (const keyword of ["minItems", "maxItems", "minLength"]) {
+    for (const keyword of ["minItems", "maxItems", "minContains", "maxContains", "minLength"]) {
       if (Object.hasOwn(schema, keyword)) keywordType(Number.isInteger(schema[keyword]) && schema[keyword] >= 0, errors, path, `${keyword} must be a non-negative integer`);
     }
     for (const keyword of ["minimum", "maximum"]) {
       if (Object.hasOwn(schema, keyword)) keywordType(Number.isFinite(schema[keyword]), errors, path, `${keyword} must be finite`);
     }
     if (Number.isInteger(schema.minItems) && Number.isInteger(schema.maxItems)) keywordType(schema.minItems <= schema.maxItems, errors, path, "minItems exceeds maxItems");
+    if (Number.isInteger(schema.minContains) && Number.isInteger(schema.maxContains)) keywordType(schema.minContains <= schema.maxContains, errors, path, "minContains exceeds maxContains");
+    if ((Object.hasOwn(schema, "minContains") || Object.hasOwn(schema, "maxContains")) && !Object.hasOwn(schema, "contains")) errors.push(`${path}: minContains/maxContains require contains`);
     if (Object.hasOwn(schema, "uniqueItems")) keywordType(typeof schema.uniqueItems === "boolean", errors, path, "uniqueItems must be boolean");
     if (Object.hasOwn(schema, "pattern")) {
       keywordType(typeof schema.pattern === "string", errors, path, "pattern must be a string");
@@ -123,6 +128,7 @@ export function schemaDocumentErrors(root) {
       }
     }
     if (Object.hasOwn(schema, "items")) visit(schema.items, `${path}.items`);
+    if (Object.hasOwn(schema, "contains")) visit(schema.contains, `${path}.contains`);
     if (Object.hasOwn(schema, "anyOf")) {
       keywordType(Array.isArray(schema.anyOf) && schema.anyOf.length > 0, errors, path, "anyOf must be a non-empty array");
       if (Array.isArray(schema.anyOf)) schema.anyOf.forEach((child, index) => visit(child, `${path}.anyOf[${index}]`));
@@ -196,6 +202,19 @@ export function jsonSchemaErrors(instance, root) {
         }
       }
       if (isObject(schema.items)) value.forEach((child, index) => validate(child, schema.items, `${path}[${index}]`));
+      if (isObject(schema.contains)) {
+        let matchCount = 0;
+        for (let index = 0; index < value.length; index += 1) {
+          const before = errors.length;
+          validate(value[index], schema.contains, `${path}[${index}]`);
+          if (errors.length === before) matchCount += 1;
+          errors.splice(before);
+        }
+        const minimum = Number.isInteger(schema.minContains) ? schema.minContains : 1;
+        const maximum = Number.isInteger(schema.maxContains) ? schema.maxContains : Number.POSITIVE_INFINITY;
+        if (matchCount < minimum) errors.push(`${path}: contains matched ${matchCount} items; minimum is ${minimum}`);
+        if (matchCount > maximum) errors.push(`${path}: contains matched ${matchCount} items; maximum is ${maximum}`);
+      }
     }
     if (typeof value === "string") {
       if (Number.isInteger(schema.minLength) && [...value].length < schema.minLength) errors.push(`${path}: string is shorter than ${schema.minLength}`);

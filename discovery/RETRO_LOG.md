@@ -9861,3 +9861,302 @@ No approach selected.
 - Distinguish declarative asset closure from executable loading in package
   audits, and use purpose-built outside-checkout mounted contracts for PCK
   validation rather than repurposing source-only unit tests.
+
+## 2026-09-04 — Building 1 entrance-group gap visual calibration
+
+### Independent visual bar-raiser (`/root/visual_bar_raiser`)
+
+#### What worked well
+
+- The scalar-only, hash-sealed A/B held camera, trajectory, lighting, topology,
+  and every non-gap input fixed, so the visual effect could be attributed to
+  the change from `0.55` m to literal `0.90` m.
+- Pixel-first color, grayscale, changed-light, and continuous-motion inspection
+  exposed the useful perceptual threshold: A left only `0.07` m (about `0.58`
+  px) clear, while B left `0.42` m (about `3.5` px) and made exactly three
+  groups readable without breaking the one-canopy composition.
+- The bounded approach clip plus matched mild-oblique stills was sufficient for
+  the decision; requesting another sweep would not have materially reduced
+  risk. The receipt records **PASS**, no extra sweep, and the unchanged `6/213`.
+
+#### What did not work well
+
+- A nominal inter-group gap was not an adequate readability measure because
+  the adjacent reveal borders consumed most of it; clear width and projected
+  pixels were the values that explained the visual collapse.
+- The outer bronze side framing remains slightly busy and the entrance remains
+  small at the far whole-building pose, although neither issue blocks the
+  candidate or harms the established facade hierarchy.
+- One oversized multi-sheet viewing call exceeded the review context; earlier
+  original-resolution frames and dense interval samples were already
+  sufficient, but smaller sequential sheets would have been cleaner.
+
+#### What the team should change next time
+
+- Specify clear separator width after borders and its projected pixel range in
+  future spacing calibrations, not only the nominal center-to-center gap.
+- Keep one-scalar A/Bs paired to exact camera/trajectory logs, and authorize the
+  independent receipt plus required RETRO in the original review assignment so
+  downstream work can bind the verdict immediately.
+
+#### Change accounting
+
+- This round created only
+  `evidence/first-playable/building-1-entrance-group-gap-calibration-2026-09-04/INDEPENDENT_VISUAL_BAR_RAISER_REVIEW.md`
+  and appended this entry to `discovery/RETRO_LOG.md`. It changed no runtime,
+  capture, manifest, checksum ledger, catalog, registry, test, or package.
+
+## 2026-09-04 — Building 1 entrance-gap capture-harness audit
+
+### Capture-harness auditor (`/root/remote_runtime_auditor/ledger_recheck/b1_capture_harness_audit`)
+
+#### What worked well
+
+- Reused the existing grounded stock-camera helpers and current runtime closure
+  while isolating the new scalar A/B in a fresh harness, evidence root, and
+  evidence contract; the audit also excluded lateral-motion and route-QA
+  templates that violated the required input and camera-write discipline.
+- Froze the minimal proof as three exact-pose still pairs, one same-pixel
+  grayscale pair, and matched continuous `move_forward` approaches with
+  per-frame path, ground, LOS, input, and forbidden-write accounting.
+
+#### What did not work well
+
+- The first candidate-hash calculation normalized literal `0.90` to `0.9`;
+  coordination caught and corrected it before freeze, but the audit should
+  have derived the byte-exact candidate directly from the approved brief.
+- The design audit identified the historical-root overwrite hazard, but did
+  not initially require every new stage writer and combined sealer to reject
+  pre-existing targets before any bytes were written. A terminated partial A
+  attempt made that missing fail-closed rule concrete and required quarantine.
+
+#### What the team should change next time
+
+- Make capture immutability a preflight gate: use a unique attempt root, reject
+  every existing stage/movie/seal path, write through temporary files with
+  atomic promotion, and preserve interrupted attempts under explicit rejected
+  provenance rather than rerunning into them.
+- Compute and publish both semantic and literal byte-level scalar closures
+  before capture, then freeze one identical harness hash across A and B; never
+  mutate A, begin B, or seal the pair until A termination and post-close movie
+  integrity have independently passed.
+
+## 2026-09-04 — Building 1 version-ripple read-only audit
+
+### Version-ripple auditor (`/root/remote_runtime_auditor/ledger_recheck/b1_version_ripple_audit`)
+
+#### What worked well
+
+- A repository-wide version-string and reverse-hash scan separated the moving
+  catalog/runtime/adapter/loader/compiler authority from immutable packet-time
+  and capture-time receipts.
+- The read-only audit identified the exact D7–D10 validator/README migrations
+  and the Building 1 and Navy Chapel checksum/test-hash cascades without
+  authoring any D7–D10, runtime, or evidence file.
+
+#### What did not work well
+
+- The first checksum scan resolved bare `README.md` entries against the
+  repository root before the ledger directory, producing false stale-file
+  reports; reversing that resolution order removed the false positives.
+- The audit initially treated a read-only review round as exempt from the
+  retrospective rule and required a correction before this entry was added.
+
+#### What the team should change next time
+
+- For every authority-version bump, run one standard reverse-dependency sweep
+  covering literal versions, current hashes, self-referential test hashes, and
+  checksum ledgers while explicitly excluding immutable historical receipts.
+- State in every review assignment that read-only auditors must still append
+  their own retrospective entry, while keeping all implementation files under
+  the designated writer's ownership.
+
+## 2026-09-04 — Building 1 entrance-gap execution and registry-closure reconciliation
+
+### Capture/runtime reconciler (`/root/remote_runtime_auditor/ledger_recheck`)
+
+#### What worked well
+
+- Preserved the interrupted first capture as an explicitly rejected 1280×800
+  root, then captured the canonical 0.55/0.90 pair with one byte-frozen harness,
+  identical effective runtime inputs, grounded stock-controller trajectories,
+  and externally parsed 1440×900 MJPEG containers.
+- Salvaged the complete B movie without recapture or pixel rewriting after the
+  capture finalizer rejected a harmless floating-point JSON spelling change;
+  the reviewed one-shot finalizer revalidated every input and committed only
+  the pending-to-canonical rename and immutable manifests.
+- Added the already consumed public-front config as the exact eleventh B1 and
+  tower dependency, advanced the incompatible catalog/runtime/adapter/loader
+  contract line, and added omission, substitution, and receiver/source-swap
+  mutations before regenerating deterministic authority bytes.
+
+#### What did not work well
+
+- The first capture attempt trusted requested window dimensions and light state
+  instead of inspecting the written container and asserting the exact sun;
+  it stopped after two 1280×800 frames and required a rejected-attempt receipt.
+- The initial finalizer compared parsed JSON numeric containers with type-strict
+  equality, so integer/float decoding differences caused another safe but noisy
+  validation retry before the fieldwise tolerance contract was complete.
+- The registry initially exposed ten B1 assets even though the hero directly
+  consumed the public-front config. That omission and the loader's coordinated
+  substitution/source-swap gaps were found late, forcing a deliberate version
+  bump and D7–D10 current-authority wording ripple after capture was sealed.
+- A source-only loader test cannot be repurposed as a mounted-PCK test because
+  Godot exports scripts, scenes, and materials through remaps while its source
+  SHA contract addresses authoring bytes; a dedicated remap-aware mounted audit
+  was needed to prove the package closure without weakening source validation.
+- I briefly rewrote the sealed Navy Chapel live README and checksum ledger while
+  following the moving B1/v6 hash ripple. Independent review caught that
+  historical-integrity violation; both files and the Chapel evidence contract
+  were restored byte-for-byte to their committed hashes before final testing.
+
+#### What the team should change next time
+
+- Preflight capture output by parsing one actual MovieWriter container before
+  the canonical stage, and require fresh-root refusal, immutable stage seals,
+  effective-harness dependency hashes, exact light/HUD state, and container
+  dimensions/frame mapping in the harness design review.
+- Compare parsed numeric receipts fieldwise from the outset and make any
+  multi-file finalizer an exact-hash journaled state machine so a harmless
+  formatting difference or interruption cannot force a visual recapture.
+- Derive runtime dependency closure from every file the adapter opens before
+  capture, and test exact path sets plus receiver-to-source mapping in both the
+  compiler and loader before choosing schema versions or sealing evidence.
+- Keep source-byte and mounted-remap validation as explicit complementary
+  contracts: never weaken authoring hashes to make an export pass, and always
+  pair the final PCK with an outside-checkout semantic audit and app smoke.
+- Never ripple a current authority through a sealed capture, review, or packet
+  ledger. Preserve those bytes as packet-time provenance and advance moving
+  catalog/registry/compiler hashes only in an explicitly current-state contract
+  or a new current-authority receipt.
+
+## 2026-09-04 — Building 1 entrance-gap static, evidence, and package audit
+
+### Independent static/contract auditor (`/root/b1_scalar_preflight`)
+
+#### What worked well
+
+- Reconstructing the control bytes from the literal `0.90` candidate proved the
+  production config changed only `entrance_group_gap`, while fieldwise A/B
+  comparison proved identical 529-sample trajectories, LOS, camera views,
+  capture-time registry, runtime dependencies, and world topology.
+- Structural comparison against committed authority separated the exact B1 and
+  tower 10-to-11 dependency addition from unchanged units, claim totals,
+  recognition metric, legacy adapters, counts, ownership, and topology. The
+  incompatible catalog/runtime/adapter/loader/compiler version advance and its
+  omission, substitution, and receiver/source-swap negatives all failed closed.
+- Independent mounted-PCK review used the compiled auditors inside the final
+  package, verified both exact 11-asset remap closures, and paired that static
+  proof with package sanitization, signing, architecture, and executable smoke.
+  Hydrated AVI hashes also matched all three staged Git LFS pointer OIDs/sizes.
+
+#### What did not work well
+
+- The initial capture harness did not make actual MovieWriter dimensions and
+  the exact light state preflight gates, and its first output root had to be
+  quarantined. The later B finalizer also used type-strict parsed-JSON numeric
+  comparisons before a reviewed fieldwise-tolerance repair made salvage safe.
+- The first evidence contract pinned every expected payload but did not reject
+  extra canonical or rejected-root files/directories. Exact-tree checks were
+  added before freeze so a pending movie, journal, temporary, or unledgered
+  image can no longer coexist with a byte-sealed PASS.
+- The public-front config's missing runtime-registry membership was found only
+  after capture, and a subsequent ripple briefly rewrote the sealed Navy Chapel
+  README/checksum. The audit issued HOLD until those historical files were
+  restored byte-for-byte and moving v6 authority was isolated in current-state
+  contracts. A noncanonical bundle-inventory ordering was also corrected before
+  the final artifact identity was reported.
+
+#### What the team should change next time
+
+- Freeze capture preconditions before A: derive every directly opened runtime
+  dependency, parse a real trial container, require exact light/HUD state and
+  output dimensions, reject every pre-existing target, and use fieldwise JSON
+  numeric comparisons in any journaled finalizer from its first revision.
+- Treat sealed capture, review, and packet ledgers as immutable historical
+  namespaces. Version and hash ripples belong only in separately labeled
+  current-authority contracts, with an explicit repository-wide reverse-hash
+  scan before regeneration.
+- Standardize one ASCII path-sorted bundle-inventory implementation and publish
+  the approved project-local Git LFS binary path in the execution checklist so
+  final package and index audits do not rediscover either convention late.
+
+#### Change accounting
+
+- This read-only audit round issued findings and ran verification without
+  changing implementation, runtime, evidence, package, or staged media bytes.
+  Its only authorized edit is this retrospective entry after the final PASS.
+
+## 2026-09-04 — Building 1 final macOS app and mounted-PCK audit
+
+### Independent final-package auditor (`/root/b1_scalar_preflight/b1_package_audit`)
+
+#### What worked well
+
+- Holding the first export as provisional until the remap-aware Building 1
+  mounted contract existed prevented a source-only check from being promoted as
+  packaged evidence. The uniquely re-exported final PCK contained that contract,
+  and all three mounted gates ran from their compiled `res://` copies outside
+  the checkout rather than from injected source scripts.
+- Independent PCK-v4 parsing verified all `870` directory records and MD5s,
+  the literal `0.90` config, the catalog/registry/adapter/loader version matrix,
+  both exact receiver-to-source mappings, and identical remap-resolved 11-asset
+  closures for Building 1 and its tower. The same parse and project auditors
+  found no capture override, discovery/evidence root, banned package path, or
+  task-private identifier.
+- Recomputing the bundle after every gate preserved one exact final identity:
+  `7` files / `236,509,264` bytes, PCK
+  `9c1cc6edcaba2925afdc27f01fc7cf67a6db16d1c3407b36d7dd47d882ed4d20`,
+  executable
+  `f9d6350dce1654eb0987e7916ed3fa6977bac4f6b273a2e42be2aef15f2f97dc`,
+  and canonical ASCII bytewise path-sorted `path\0sha256\0bytes\n` inventory
+  `c78d6ad548aec7c684ed39883ef3e2ffa517902d66b607ca8e2e9f2909e306d5`.
+  This corrected and superseded the builder's withdrawn noncanonical
+  `258b43db…` inventory, while strict signing and both architectures remained
+  valid.
+- The fresh packaged headless smoke completed world, visual, movement, and
+  jetpack checks in about `7.3` seconds. Coordinated review of the separate
+  Metal runs also kept their lifecycle honest: the cold exact smoke reached
+  `WORLD_READY` (`load_ms=4976`), visual, and movement with no crash, GPU error,
+  or external kill before its smoke-only watchdog exited `1` after about
+  `33.35` wall seconds; the identical warm run exited `0` in `7.5008` seconds
+  with `JETPACK` and final `PASS` (`load_ms=4765`) on unchanged bytes.
+
+#### What did not work well
+
+- The general mounted-PCK auditor did not originally cover the Building 1
+  registry/adapter version line, the two exact 11-asset sets, or
+  `override.cfg`. Discovering that gap after the first export required a new
+  checked-in mounted contract and a second unique export.
+- The first reported bundle inventory used a noncanonical record order. It was
+  withdrawn before freeze, but package handoff should not require an auditor to
+  reverse-engineer which field order and path sort define the authoritative
+  digest.
+- The cold Metal command did not reach the jetpack phase before its internal
+  simulation watchdog. Because it reached world/visual/movement readiness,
+  showed no crash or GPU failure, passed identically once shader/cache state was
+  warm, and normal mode does not enable that watchdog, this is a nonblocking
+  smoke-only warmup diagnostic rather than a cold Metal PASS. First-run
+  performance on the owner's M1 remains a residual play check.
+
+#### What the team should change next time
+
+- Add a remap-aware, target-specific mounted contract before the first release
+  export whenever a runtime dependency set or compatibility version changes.
+  Execute its compiled PCK copy from outside the checkout and bind the same
+  absolute PCK path to both `--main-pack` and its explicit hash argument.
+- Standardize one checked-in bundle-inventory command that emits ASCII bytewise
+  path-sorted `path\0sha256\0bytes\n` records, rejects alternate field orders,
+  and recomputes the digest after every mounted or executable gate.
+- Report cold Metal readiness, smoke-watchdog completion, identical warm
+  completion, and ordinary launch as separate states. Keep a slow cold
+  smoke-only timeout nonblocking only when packaged headless passes, the cold
+  run reaches stable world/visual/movement readiness without engine failure,
+  unchanged bytes pass warm, and the remaining owner-target check is explicit.
+
+#### Change accounting
+
+- This auditor made no product, runtime, test, evidence, package, capture, or
+  staged-media edit. Its commands were read-only and headless; the only
+  authorized file change is this appended retrospective entry.

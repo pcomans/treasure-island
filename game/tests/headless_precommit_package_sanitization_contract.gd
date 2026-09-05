@@ -5,7 +5,7 @@ const SOURCE_RECEIPT_SHA256 := "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677
 const EXPORT_PRESET_PATH := "res://export_presets.cfg"
 const CONFIG_HASHES := {
 	"res://game/resources/facades/building_1_hero_model.json": "f10bc92a6e74cbae41347e742e6c68c50faccddbd52ab3ecce210ac8243bc6e9",
-	"res://game/resources/facades/building_1_public_front_believability.json": "fd434eb472f61d93408732841e5993881b23238af8c0518b59181ac0ea535e32",
+	"res://game/resources/facades/building_1_public_front_believability.json": "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806",
 	"res://game/resources/facades/d1_current/d1_b201_public_wsw.json": "30bc1f62e5fa44c60bdcfb1bfd4f6f679d391618fa213373e571080face6ec6c",
 	"res://game/resources/facades/d1_current/d1_b225_nnw_long.json": "dc3591df4a68af19b5fa53f402ed15d5e3f83946c4a113f024d5b7d41f2f82b8",
 	"res://game/resources/facades/d1_current/d1_current_standalone_pair.json": "fdf00bba0562036f499a5a64e47e5e1b695d49d6cb4ada7acafd450b3dcfefb9",

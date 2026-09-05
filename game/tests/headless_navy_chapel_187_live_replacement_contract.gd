@@ -19,8 +19,8 @@ const EXPECTED_HASHES := {
 	"res://evidence/first-playable/navy-chapel-187-live-replacement-2026-09-04/INDEPENDENT_LIVE_BAR_RAISER_REVIEW.md": "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9",
 	"res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd": "067c12e29c9fd352915ef2a501fcd7687b450081c79a4281d63bbfef1c19e7db",
 	"res://game/resources/facades/navy_chapel_187_standalone_hero_prototype.json": "c8f2ab09f3943a5ec8abea7cb9a108f49990bff1d83003c3b3622187a269dea2",
-	"res://discovery/facades/facade-recognition-catalog.json": "56d7257fa4e3486b3299683c45d4ae1057858c6e1edb3e49f6b6241d7f1a9be7",
-	"res://game/resources/facades/facade-runtime-registry.json": "36eef28d1abce9d9838da6e959222ad6767e40e198b90b734496e6d2dc2cd79b",
+	"res://discovery/facades/facade-recognition-catalog.json": "ab8797e86d5985c4b64670a22577394656c6388bb463f83c157a411663fa7b57",
+	"res://game/resources/facades/facade-runtime-registry.json": "65edf085437bc3fa2b22869406cc8a2c33297b6cc9d48b205e301e367efc734b",
 }
 const PACKAGE_FILES := [
 	"res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd",

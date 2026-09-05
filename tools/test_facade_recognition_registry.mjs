@@ -92,6 +92,8 @@ assert(schema.properties.units.minItems === EXPECTED.recognition_units && schema
 assert(schema.properties.capture_contracts.items.$ref === "#/$defs/capture_contract", "catalog schema lacks capture contracts");
 assert(schema.properties.identity_evidence_records.items.$ref === "#/$defs/identity_evidence_record", "catalog schema lacks separate identity evidence");
 assert(schema.properties.active_runtime_adapters.minItems === EXPECTED.active_runtime_adapter_receivers && schema.properties.active_runtime_adapters.maxItems === EXPECTED.active_runtime_adapter_receivers, "catalog schema does not pin five active runtime adapters");
+const building1AdapterSchema = schema.$defs.building_1_active_runtime_adapter.properties.runtime_asset_paths;
+assert(building1AdapterSchema.contains.const === "game/resources/facades/building_1_public_front_believability.json" && building1AdapterSchema.minContains === 1 && building1AdapterSchema.maxContains === 1, "catalog schema does not require exactly one Building 1 public-front config member");
 assert(catalog.schema_version === CATALOG_SCHEMA, "catalog schema drifted");
 assert(Array.isArray(catalog.capture_contracts) && catalog.capture_contracts.length === ACCEPTED_REFERENCE_UNIT_IDS.length, "catalog does not contain exactly six accepted ordinary-player capture contracts");
 assert(registry.schema_version === RUNTIME_SCHEMA, "runtime registry schema drifted");
@@ -243,7 +245,9 @@ for (const adapter of registry.active_runtime_adapters.filter((candidate) => ["b
   assert(adapter.attachment_kind === "active_building_1_hero_replacement" && adapter.state === "active_runtime_target_specific_content", `${adapter.adapter_id} has stale content classification`);
   assert(adapter.active_receiver_scope.coverage === "whole_direct_wall_receiver", `${adapter.adapter_id} is not scoped to its exact direct receiver`);
   assert(adapter.active_runtime_contract.config_summary.target.tower_remains_separately_reviewable === true, `${adapter.adapter_id} config summary collapses the tower`);
-  assert(adapter.runtime_assets.length >= 8 && adapter.runtime_assets.length + adapter.runtime_asset_projections.length === 10, `${adapter.adapter_id} does not account for its hero script, config, and eight exact-current materials`);
+  assert(adapter.runtime_assets.length === 11 && adapter.runtime_asset_projections.length === 0, `${adapter.adapter_id} does not account for its hero script, two configs, and eight exact-current materials`);
+  assert(adapter.runtime_assets.some((asset) => asset.path === "res://game/resources/facades/building_1_public_front_believability.json" && asset.sha256 === "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"), `${adapter.adapter_id} omits the exact current public-front runtime config`);
+  assert(adapter.active_runtime_contract.public_front_config_sha256 === "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806", `${adapter.adapter_id} public-front contract hash drifted`);
 }
 const building3Adapter = registry.active_runtime_adapters.find((adapter) => adapter.receiver_key === "building:w34313540:wall");
 const building3AssetPaths = building3Adapter.runtime_assets.map((asset) => asset.path).sort();
@@ -395,11 +399,26 @@ expectCompileFailure(
   },
   "does not match any anyOf branch",
 );
+expectCompileFailure(
+  (candidate) => {
+    const adapter = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:r16681702:wall");
+    const index = adapter.runtime_asset_paths.indexOf("game/resources/facades/building_1_public_front_believability.json");
+    adapter.runtime_asset_paths[index] = "game/resources/materials/world/building_1/substituted-public-front-config.tres";
+  },
+  "does not match any anyOf branch",
+);
 expectSchemaDocumentFailure(
   (candidate) => {
     candidate.properties.units.items.$ref = "#/$defs/missing_unit";
   },
   "unresolved $ref #/$defs/missing_unit",
+);
+expectSchemaDocumentFailure(
+  (candidate) => {
+    const paths = candidate.$defs.building_1_active_runtime_adapter.properties.runtime_asset_paths;
+    delete paths.contains;
+  },
+  "minContains/maxContains require contains",
 );
 
 const missingHeroDispatchInputs = {
@@ -452,6 +471,24 @@ expectRegistryFailure(
     adapter.active_runtime_contract.behavior_contract.ownership_contract.roof_collision_triangles = 49;
   },
   "Active Navy Chapel acceptance, paired dependency, or ownership parity contract drifted",
+);
+
+expectRegistryFailure(
+  (candidate) => {
+    const main = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:r16681702:wall");
+    const tower = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:w1222720021:wall");
+    [main.source_key, tower.source_key] = [tower.source_key, main.source_key];
+  },
+  "receiver/source mapping, or exact 11-asset closure drifted",
+);
+
+expectRegistryFailure(
+  (candidate) => {
+    const adapter = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:r16681702:wall");
+    const target = adapter.runtime_assets.findIndex((asset) => asset.path.endsWith("building_1_bronze.tres"));
+    adapter.runtime_assets[target] = structuredClone(adapter.runtime_assets.find((asset) => asset.path.endsWith("building_1_bluegrey_glass.tres")));
+  },
+  "receiver/source mapping, or exact 11-asset closure drifted",
 );
 
 expectRegistryFailure(

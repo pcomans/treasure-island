@@ -1,0 +1,54 @@
+{
+  "schema_version": "ti.building-1-entrance-group-gap-evidence/1",
+  "review_status": "pending_independent_visual_and_static_review_not_self_accepted",
+  "recognition_status": "accepted_before_and_unchanged; no_numerator_effect",
+  "base_commit": "798a4dc90b2405f8ff9f336c7bdf95403a0352a1",
+  "experiment": {
+    "field": "geometry_production_inference_m.entrance_group_gap",
+    "a_m": 0.55,
+    "b_m": 0.9,
+    "delta_m": 0.35
+  },
+  "a_stills": "a-stills.json",
+  "a_stills_sha256": "d0193298acb3068722ba63ce6858b698296d4b93a1d75a2b410dd7890b2f2a74",
+  "a_motion": "a-motion.json",
+  "a_motion_sha256": "8fe4e052bdb0a5c1c89eb5103bfdb3b7a58169a77d3d32bf6c998d92a6181ba8",
+  "b_stills": "b-stills.json",
+  "b_stills_sha256": "9468170d4f93153c2fe8ae5b282bd99d46bcbd941a4e420072a6068d5c1e0e2a",
+  "b_motion": "b-motion.json",
+  "b_motion_sha256": "5448bd69ed81588be75c0eff5b47f2185d392b132dd7403577463d63a6f390fd",
+  "b_preliminary_manifest": "b-motion-preliminary-unfinalized.json",
+  "b_preliminary_manifest_sha256": "5e541a144aee83d19a26f364454b5bed7b7659a18bdcaff96d9db0f530a26040",
+  "capture_generator_sha256": "b1565b71cbda76a8c63204b18d7cac99ad78a6882667bafcd798de5b8dbaf160",
+  "salvage_finalizer": "game/tests/building_1_entrance_gap_salvage_finalizer.gd",
+  "salvage_finalizer_sha256": "85c2bc869787dcf466540ec40d284419d75acb9e6205ac2e86e69edd50850078",
+  "salvage_scope": "manifest/container float-readback recovery only; no recapture and no pixel/movie mutation",
+  "capture_time_registry_sha256": "36eef28d1abce9d9838da6e959222ad6767e40e198b90b734496e6d2dc2cd79b",
+  "capture_time_building_1_runtime_asset_count_each": 10,
+  "post_capture_registry_closure_status": "pending separate 11th-dependency compiler reconciliation",
+  "same_pose_still_pairs": true,
+  "paired_normal_forward_stock_controller_motion": true,
+  "deterministic_entrance_grayscale_pair": true,
+  "runtime_topology_unchanged": {
+    "rows": 735,
+    "meshes": 944,
+    "surfaces": 957,
+    "triangles": 64572,
+    "bodies": 466,
+    "shapes": 466
+  },
+  "building_1_and_tower_topology_unchanged": {
+    "meshes": 13,
+    "surfaces": 13,
+    "triangles": 10711,
+    "bodies": 4,
+    "shapes": 4
+  },
+  "collision_hashes_unchanged": [
+    "21d69032bdba73c0406545b0b7d2c8efefd423fe8263815c3edc57bdc3756db5",
+    "bb2c36915cba6d9d5f5d1a8239888ef1c913b1e4396eb6ce1cd2145c1a38e337"
+  ],
+  "recognition_metric_unchanged": "6/213",
+  "reviewer_instruction": "Judge original-detail same-pose A/B color and grayscale first, then both normal-forward stock-player movies. Confirm three groups become countable without splitting the one-canopy composition or weakening mild-oblique curved-front fit; reject visible shimmer, clipping, or float. No self-grade is claimed.",
+  "visual_verdict": "pending_independent_review"
+}

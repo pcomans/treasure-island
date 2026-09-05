@@ -3,8 +3,8 @@ extends SceneTree
 const RegistryLoader := preload("res://game/scripts/world/facades/facade_runtime_registry_loader.gd")
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
-const EXPECTED_REGISTRY_SHA256 := "36eef28d1abce9d9838da6e959222ad6767e40e198b90b734496e6d2dc2cd79b"
-const EXPECTED_ADAPTER_CONTRACT_SHA256 := "2064accb205c891cf7a7a09a7117be63360dee8d05f904cf31e99455368129d1"
+const EXPECTED_REGISTRY_SHA256 := "65edf085437bc3fa2b22869406cc8a2c33297b6cc9d48b205e301e367efc734b"
+const EXPECTED_ADAPTER_CONTRACT_SHA256 := "503c8d02439d0846389d5d57e2b2a26d8e42ee6156ff08f489de6e9dc4325222"
 const READY_RECEIVERS := [
 	"building-composite:w1249412094:w1282547786:wall",
 	"building:r16681702:wall",
@@ -89,6 +89,9 @@ func _validate_adapter_resolution(loader: RefCounted) -> void:
 		var receiver_key := str(receiver_value)
 		var plan: Dictionary = loader.get_adapter_plan(receiver_key)
 		_require(str(plan.get("integration_state", "")) == "package_safe_ready_for_integration", "%s is not a package-safe integration plan." % receiver_key)
+		if receiver_key in ["building:r16681702:wall", "building:w1222720021:wall"]:
+			var b1_assets := plan.get("runtime_assets", []) as Array
+			_require(b1_assets.size() == 11 and _has_asset(b1_assets, "res://game/resources/facades/building_1_public_front_believability.json", "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"), "%s omits the exact current public-front config from its 11-asset closure." % receiver_key)
 		if receiver_key == "building:w34313540:wall":
 			var behavior := plan.get("behavior_contract", {}) as Dictionary
 			var geometry := behavior.get("geometry_contract", {}) as Dictionary
@@ -137,6 +140,14 @@ func _validate_adapter_resolution(loader: RefCounted) -> void:
 	_require(ready_seen == expected_ready and disabled_seen == expected_disabled, "Ready/disabled receiver partition drifted.")
 
 
+func _has_asset(assets: Array, path: String, sha256: String) -> bool:
+	for value: Variant in assets:
+		var asset := value as Dictionary
+		if str(asset.get("path", "")) == path and str(asset.get("sha256", "")) == sha256:
+			return true
+	return false
+
+
 func _validate_fail_closed_mutations(registry: Dictionary, contracts: Dictionary) -> void:
 	var missing_loader := RegistryLoader.new()
 	_expect_error(missing_loader.load_from_path("res://game/resources/facades/__missing_facade_registry__.json"), "registry_missing", "missing registry")
@@ -151,6 +162,46 @@ func _validate_fail_closed_mutations(registry: Dictionary, contracts: Dictionary
 	var future_registry := registry.duplicate(true)
 	(future_registry.get("compatibility_contract", {}) as Dictionary)["loader_api_version"] = "ti.facade-runtime-registry-loader/999"
 	_expect_data_error(future_registry, contracts, "unknown_registry_version", "unsupported future loader version")
+	var old_registry := registry.duplicate(true)
+	old_registry["schema_version"] = "ti.facade-runtime-registry/5"
+	(old_registry.get("build_contract", {}) as Dictionary)["compiler_version"] = "1.4.0"
+	var old_compatibility := old_registry.get("compatibility_contract", {}) as Dictionary
+	old_compatibility["catalog_schema_version"] = "ti.facade-recognition-catalog/5"
+	old_compatibility["compiler_version"] = "1.4.0"
+	old_compatibility["loader_api_version"] = "ti.facade-runtime-registry-loader/4"
+	_expect_data_error(old_registry, contracts, "unknown_registry_version", "superseded pre-hardening registry version")
+	var omitted_registry := registry.duplicate(true)
+	var omitted_contracts := contracts.duplicate(true)
+	for adapter_value: Variant in omitted_registry.get("active_runtime_adapters", []) as Array:
+		var adapter := adapter_value as Dictionary
+		if str(adapter.get("receiver_key", "")) in ["building:r16681702:wall", "building:w1222720021:wall"]:
+			_remove_runtime_asset(adapter.get("runtime_assets", []) as Array, "res://game/resources/facades/building_1_public_front_believability.json")
+			(adapter.get("active_runtime_contract", {}) as Dictionary).erase("public_front_config_sha256")
+	for plan_value: Variant in omitted_contracts.get("plans", []) as Array:
+		var plan := plan_value as Dictionary
+		if str(plan.get("receiver_key", "")) in ["building:r16681702:wall", "building:w1222720021:wall"]:
+			_remove_runtime_asset(plan.get("runtime_assets", []) as Array, "res://game/resources/facades/building_1_public_front_believability.json")
+	_expect_data_error(omitted_registry, omitted_contracts, "building_1_closure_mismatch", "coordinated Building 1 public-front omission")
+	var substituted_registry := registry.duplicate(true)
+	var substituted_adapter := (substituted_registry.get("active_runtime_adapters", []) as Array).filter(func(value: Variant) -> bool: return str((value as Dictionary).get("receiver_key", "")) == "building:r16681702:wall")[0] as Dictionary
+	var substituted_assets := substituted_adapter.get("runtime_assets", []) as Array
+	var public_index := _runtime_asset_index(substituted_assets, "res://game/resources/facades/building_1_public_front_believability.json")
+	substituted_assets[public_index] = (substituted_assets[2] as Dictionary).duplicate(true)
+	_expect_data_error(substituted_registry, contracts, "building_1_closure_mismatch", "substituted Building 1 public-front dependency")
+	var non_public_substitution := registry.duplicate(true)
+	var non_public_adapter := (non_public_substitution.get("active_runtime_adapters", []) as Array).filter(func(value: Variant) -> bool: return str((value as Dictionary).get("receiver_key", "")) == "building:r16681702:wall")[0] as Dictionary
+	var non_public_assets := non_public_adapter.get("runtime_assets", []) as Array
+	var bronze_index := _runtime_asset_index(non_public_assets, "res://game/resources/materials/world/building_1/building_1_bronze.tres")
+	var glass_index := _runtime_asset_index(non_public_assets, "res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres")
+	non_public_assets[bronze_index] = (non_public_assets[glass_index] as Dictionary).duplicate(true)
+	_expect_data_error(non_public_substitution, contracts, "building_1_closure_mismatch", "substituted Building 1 non-public dependency")
+	var swapped_sources := registry.duplicate(true)
+	var swapped_main := (swapped_sources.get("active_runtime_adapters", []) as Array).filter(func(value: Variant) -> bool: return str((value as Dictionary).get("receiver_key", "")) == "building:r16681702:wall")[0] as Dictionary
+	var swapped_tower := (swapped_sources.get("active_runtime_adapters", []) as Array).filter(func(value: Variant) -> bool: return str((value as Dictionary).get("receiver_key", "")) == "building:w1222720021:wall")[0] as Dictionary
+	var original_main_source := str(swapped_main.get("source_key", ""))
+	swapped_main["source_key"] = swapped_tower.get("source_key")
+	swapped_tower["source_key"] = original_main_source
+	_expect_data_error(swapped_sources, contracts, "building_1_closure_mismatch", "swapped Building 1/tower source mappings")
 	var hash_registry := registry.duplicate(true)
 	var hash_adapter := (hash_registry.get("legacy_adapters", []) as Array)[0] as Dictionary
 	var hash_asset := (hash_adapter.get("runtime_assets", []) as Array)[0] as Dictionary
@@ -193,6 +244,19 @@ func _validate_fail_closed_mutations(registry: Dictionary, contracts: Dictionary
 	var chapel_plan := (chapel_contracts.get("plans", []) as Array).filter(func(plan: Variant) -> bool: return str((plan as Dictionary).get("receiver_key", "")) == "building:w291189336:wall")[0] as Dictionary
 	((chapel_plan.get("behavior_contract", {}) as Dictionary).get("ownership_contract", {}) as Dictionary)["roof_collision_triangles"] = 49
 	_expect_data_error(registry, chapel_contracts, "navy_chapel_parity_mismatch", "drifted Navy Chapel roof collision partition")
+
+
+func _remove_runtime_asset(assets: Array, path: String) -> void:
+	var index := _runtime_asset_index(assets, path)
+	if index >= 0:
+		assets.remove_at(index)
+
+
+func _runtime_asset_index(assets: Array, path: String) -> int:
+	for index in assets.size():
+		if str((assets[index] as Dictionary).get("path", "")) == path:
+			return index
+	return -1
 
 
 func _expect_data_error(registry: Dictionary, contracts: Dictionary, expected_code: String, label: String) -> void:

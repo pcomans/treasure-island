@@ -58,10 +58,10 @@
       ],
       "properties": {
         "emitted_runtime_schema_version": {
-          "const": "ti.facade-runtime-registry/5"
+          "const": "ti.facade-runtime-registry/6"
         },
         "required_compiler_version": {
-          "const": "1.4.0"
+          "const": "1.5.0"
         },
         "unknown_version_policy": {
           "const": "reject"
@@ -86,7 +86,7 @@
       }
     },
     "schema_version": {
-      "const": "ti.facade-recognition-catalog/5"
+      "const": "ti.facade-recognition-catalog/6"
     },
     "source_contract": {
       "$ref": "#/$defs/source_contract"
@@ -275,10 +275,18 @@
         "runtime_adapter_path": {"const": "game/scripts/world/facades/building_1_hero_model.gd"},
         "runtime_asset_paths": {
           "type": "array",
-          "minItems": 8,
-          "maxItems": 8,
+          "minItems": 9,
+          "maxItems": 9,
           "uniqueItems": true,
-          "items": {"type": "string", "pattern": "^game/resources/materials/world/building_1/"}
+          "contains": {"const": "game/resources/facades/building_1_public_front_believability.json"},
+          "minContains": 1,
+          "maxContains": 1,
+          "items": {
+            "anyOf": [
+              {"const": "game/resources/facades/building_1_public_front_believability.json"},
+              {"type": "string", "pattern": "^game/resources/materials/world/building_1/"}
+            ]
+          }
         },
         "runtime_config_path": {"const": "game/resources/facades/building_1_hero_model.json"},
         "runtime_dispatch_path": {"const": "game/scripts/world/world_chunk_builder.gd"},

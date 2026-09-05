@@ -9,7 +9,7 @@ const MATERIAL_PATHS := [
 	"res://game/resources/materials/world/building_1/building_1_reveal_shadow.tres",
 	"res://game/resources/materials/world/building_1/building_1_canopy_underside.tres",
 ]
-const EXPECTED_CONFIG_SHA256 := "fd434eb472f61d93408732841e5993881b23238af8c0518b59181ac0ea535e32"
+const EXPECTED_CONFIG_SHA256 := "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
 const EXPECTED_ADAPTER_SHA256 := "e5b11fc7f971ea33bb38c84d3106f8883de0486774f58a5a8310d49d56aa55a5"
 const EXPECTED_MATERIAL_SHA256 := [
 	"8bdd85aa10ac78c9225c59aad5ed9d26266ae517ea3f5910b8be3daf41f131ab",
@@ -94,7 +94,7 @@ func _run() -> void:
 	roof.free()
 	roof_second.free()
 	if not _failed:
-		print("PASS: Building 1 public-front depth/value pass is deterministic, texture-free, and preserves exact source/collision/spray/traversal contracts pending independent bar-raiser re-review")
+		print("PASS: Building 1 public-front depth/value pass is deterministic, texture-free, and preserves exact source/collision/spray/traversal contracts; broader config review remains pending while the 0.90 gap decision is sealed by the separate entrance-gap evidence contract")
 	quit(1 if _failed else 0)
 
 
@@ -109,6 +109,7 @@ func _config_truth_contract(config: Dictionary) -> bool:
 		and (target.get("public_front_chain_runs", []) as Array).size() == 23 \
 		and int(geometry.get("pilaster_count", 0)) == 12 \
 		and int(geometry.get("pilaster_flutes_per_pilaster", 0)) == 2 \
+		and is_equal_approx(float(geometry.get("entrance_group_gap", -1.0)), 0.90) \
 		and is_equal_approx(float(geometry.get("projecting_base_depth", -1.0)), 0.28) \
 		and is_equal_approx(float(geometry.get("canopy_primary_depth", -1.0)), 2.25) \
 		and not bool(truth.get("surveyed_dimensions", true)) \

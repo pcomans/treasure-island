@@ -4,11 +4,11 @@ extends RefCounted
 const DEFAULT_REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const DEFAULT_ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
 const DEFAULT_LOADER_PATH := "res://game/scripts/world/facades/facade_runtime_registry_loader.gd"
-const REGISTRY_SCHEMA_VERSION := "ti.facade-runtime-registry/5"
-const ADAPTER_CONTRACT_SCHEMA_VERSION := "ti.facade-runtime-adapter-contracts/4"
-const CATALOG_SCHEMA_VERSION := "ti.facade-recognition-catalog/5"
-const COMPILER_VERSION := "1.4.0"
-const LOADER_API_VERSION := "ti.facade-runtime-registry-loader/4"
+const REGISTRY_SCHEMA_VERSION := "ti.facade-runtime-registry/6"
+const ADAPTER_CONTRACT_SCHEMA_VERSION := "ti.facade-runtime-adapter-contracts/5"
+const CATALOG_SCHEMA_VERSION := "ti.facade-recognition-catalog/6"
+const COMPILER_VERSION := "1.5.0"
+const LOADER_API_VERSION := "ti.facade-runtime-registry-loader/5"
 const UNKNOWN_VERSION_POLICY := "reject"
 const EXPECTED_UNIT_COUNT := 213
 const EXPECTED_RECEIVER_COUNT := 214
@@ -35,6 +35,26 @@ const EXPECTED_REVIEW_RECEIPTS := {
 	"physical-building:w291189336": ["63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9", "54d434c9283a0e2d86aa836e6a21672a8756e5a170cb5724d66066e799223930"],
 	"physical-building:w34313540": ["1aee23943b3df4f600b9a4e4fce86d839b75ce575a924de4ca8b187bd9120046", "4b92b71df3c7f8f7dfbb285bd7566b3f422a32be45f810d532328e15d008f5be"],
 }
+const BUILDING_1_RECEIVERS := ["building:r16681702:wall", "building:w1222720021:wall"]
+const BUILDING_1_SOURCE_BY_RECEIVER := {
+	"building:r16681702:wall": "r16681702",
+	"building:w1222720021:wall": "w1222720021",
+}
+const BUILDING_1_PUBLIC_FRONT_CONFIG_PATH := "res://game/resources/facades/building_1_public_front_believability.json"
+const BUILDING_1_PUBLIC_FRONT_CONFIG_SHA256 := "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
+const BUILDING_1_RUNTIME_ASSETS := [
+	"res://game/resources/facades/building_1_hero_model.json",
+	BUILDING_1_PUBLIC_FRONT_CONFIG_PATH,
+	"res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
+	"res://game/resources/materials/world/building_1/building_1_bronze.tres",
+	"res://game/resources/materials/world/building_1/building_1_canopy_underside.tres",
+	"res://game/resources/materials/world/building_1/building_1_light_trim.tres",
+	"res://game/resources/materials/world/building_1/building_1_projecting_base_stone.tres",
+	"res://game/resources/materials/world/building_1/building_1_reveal_shadow.tres",
+	"res://game/resources/materials/world/building_1/building_1_roof_metal.tres",
+	"res://game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres",
+	"res://game/scripts/world/facades/building_1_hero_model.gd",
+]
 const BUILDING_3_RECEIVER := "building:w34313540:wall"
 const NAVY_CHAPEL_RECEIVER := "building:w291189336:wall"
 const ISLE_HOUSE_UNIT := "physical-building:w1249412094"
@@ -352,6 +372,8 @@ func _validate_registry(registry: Dictionary) -> bool:
 			isle_house_adapter = active_adapter
 		elif str(active_adapter.get("receiver_key", "")) == NAVY_CHAPEL_RECEIVER:
 			navy_chapel_adapter = active_adapter
+	if not _validate_building_1_registry_adapters(active_adapters):
+		return false
 	if not _validate_building_3_registry_adapter(building_3_adapter):
 		return false
 	if not _validate_isle_house_registry_adapter(isle_house_adapter):
@@ -591,7 +613,10 @@ func _validate_adapter_contracts(contracts: Dictionary, registry: Dictionary) ->
 			return false
 		if not _require(_runtime_asset_arrays_match(adapter.get("runtime_assets", []) as Array, plan.get("runtime_assets", []) as Array), "adapter_plan_mismatch", "%s runtime assets drifted from the registry." % adapter_id):
 			return false
-		if str(plan.get("content_mode", "")) == "active_building_3_hero":
+		if str(plan.get("content_mode", "")) == "active_building_1_hero":
+			if not _validate_building_1_plan(plan, adapter):
+				return false
+		elif str(plan.get("content_mode", "")) == "active_building_3_hero":
 			var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
 			if not _validate_building_3_behavior_contract(plan.get("behavior_contract", {}) as Dictionary) \
 			or not _require(JSON.stringify(plan.get("behavior_contract", {})) == JSON.stringify(runtime_contract.get("behavior_contract", {})), "adapter_plan_mismatch", "%s behavior contract drifted from the registry." % adapter_id):
@@ -662,6 +687,67 @@ func _validate_adapter_contracts(contracts: Dictionary, registry: Dictionary) ->
 			if not _require(_registry_projection_occurrence_matches(str(occurrence_value), descriptor), "projection_invalid", "%s occurrence does not match any registry projection." % str(occurrence_value)):
 				return false
 	return true
+
+
+func _validate_building_1_registry_adapters(active_adapters: Array) -> bool:
+	var seen := {}
+	for adapter_value: Variant in active_adapters:
+		var adapter := adapter_value as Dictionary
+		var receiver_key := str(adapter.get("receiver_key", ""))
+		if not BUILDING_1_RECEIVERS.has(receiver_key):
+			continue
+		if not _require(not seen.has(receiver_key), "building_1_closure_mismatch", "Building 1/tower active adapter is duplicated for %s." % receiver_key):
+			return false
+		seen[receiver_key] = true
+		var assets := adapter.get("runtime_assets", []) as Array
+		var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+		var actual_paths := []
+		for asset_value: Variant in assets:
+			actual_paths.append(str((asset_value as Dictionary).get("path", "")))
+		actual_paths.sort()
+		var expected_paths := BUILDING_1_RUNTIME_ASSETS.duplicate()
+		expected_paths.sort()
+		if not _require(
+			str(adapter.get("adapter_id", "")) == "active-adapter:building-1-hero:%s" % receiver_key
+			and str(adapter.get("source_key", "")) == str(BUILDING_1_SOURCE_BY_RECEIVER.get(receiver_key, ""))
+			and str(adapter.get("attachment_kind", "")) == "active_building_1_hero_replacement"
+			and str(adapter.get("content_classification", "")) == "active_target_specific_hero_replacement"
+			and str(adapter.get("runtime_content_mode", "")) == "active_building_1_hero"
+			and str(adapter.get("state", "")) == "active_runtime_target_specific_content"
+			and (adapter.get("runtime_asset_projections", []) as Array).is_empty()
+			and assets.size() == 11
+			and actual_paths == expected_paths,
+			"building_1_closure_mismatch",
+			"%s does not expose the exact active Building 1 hero classification and 11-asset closure." % receiver_key,
+		):
+			return false
+		if not _require(_has_exact_keys(runtime_contract, ["adapter_sha256", "behavior_contract", "config_sha256", "config_summary", "dispatch_sha256", "public_front_config_sha256"]), "building_1_closure_mismatch", "%s active runtime contract fields drifted." % receiver_key):
+			return false
+		if not _require(
+			str(runtime_contract.get("public_front_config_sha256", "")) == BUILDING_1_PUBLIC_FRONT_CONFIG_SHA256
+			and _runtime_asset_match(assets, BUILDING_1_PUBLIC_FRONT_CONFIG_PATH, BUILDING_1_PUBLIC_FRONT_CONFIG_SHA256)
+			and runtime_contract.get("behavior_contract") == null,
+			"building_1_closure_mismatch",
+			"%s omits or substitutes the exact public-front config/hash contract." % receiver_key,
+		):
+			return false
+	return _require(seen.size() == BUILDING_1_RECEIVERS.size(), "building_1_closure_mismatch", "Building 1 and tower must each expose one exact active 11-asset adapter.")
+
+
+func _validate_building_1_plan(plan: Dictionary, adapter: Dictionary) -> bool:
+	var receiver_key := str(plan.get("receiver_key", ""))
+	var assets := plan.get("runtime_assets", []) as Array
+	var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+	return _require(
+		BUILDING_1_RECEIVERS.has(receiver_key)
+		and assets.size() == 11
+		and (plan.get("projection_descriptor_ids", []) as Array).is_empty()
+		and plan.get("behavior_contract") == null
+		and str(runtime_contract.get("public_front_config_sha256", "")) == BUILDING_1_PUBLIC_FRONT_CONFIG_SHA256
+		and _runtime_asset_match(assets, BUILDING_1_PUBLIC_FRONT_CONFIG_PATH, BUILDING_1_PUBLIC_FRONT_CONFIG_SHA256),
+		"building_1_closure_mismatch",
+		"%s adapter plan omits or substitutes the exact 11-asset Building 1 public-front closure." % receiver_key,
+	)
 
 
 func _validate_building_3_registry_adapter(adapter: Dictionary) -> bool:

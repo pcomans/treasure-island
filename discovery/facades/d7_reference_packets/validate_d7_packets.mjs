@@ -63,7 +63,7 @@ const PACKET_TIME_STATE = Object.freeze({ recognition_metric: "5/213" });
 const AUTHORITY = Object.freeze({
   catalog: Object.freeze({
     path: "discovery/facades/facade-recognition-catalog.json",
-    schema: "ti.facade-recognition-catalog/5",
+    schema: "ti.facade-recognition-catalog/6",
   }),
   inventory: Object.freeze({
     path: "discovery/FACADE_RECEIVER_INVENTORY.json",
@@ -72,7 +72,7 @@ const AUTHORITY = Object.freeze({
   }),
   registry: Object.freeze({
     path: "game/resources/facades/facade-runtime-registry.json",
-    schema: "ti.facade-runtime-registry/5",
+    schema: "ti.facade-runtime-registry/6",
   }),
   manifest: Object.freeze({
     path: "generated/world/manifest.json",
@@ -242,10 +242,10 @@ function validateAuthoritySplit(readme) {
   invariant(readme.includes(currentRegistryRow), "README lost the separately labeled current D7 registry authority");
   invariant(
     PACKET_TIME_CATALOG_SNAPSHOT.schema === "ti.facade-recognition-catalog/4"
-      && AUTHORITY.catalog.schema === "ti.facade-recognition-catalog/5"
+      && AUTHORITY.catalog.schema === "ti.facade-recognition-catalog/6"
       && PACKET_TIME_REGISTRY_SNAPSHOT.schema === "ti.facade-runtime-registry/4"
-      && AUTHORITY.registry.schema === "ti.facade-runtime-registry/5",
-    "D7 packet-time v4 receipts and current v5 binding authorities must remain explicitly separate",
+      && AUTHORITY.registry.schema === "ti.facade-runtime-registry/6",
+    "D7 packet-time v4 receipts and current v6 binding authorities must remain explicitly separate",
   );
 }
 
@@ -461,4 +461,4 @@ for (const sourceId of ["CITY-EAS", "CITY-XWALK", "NAVY-SITE12-2015", "TIDA-JSCO
 }
 invariant(facingPartitionChecks === 60, `Expected 60 facing partitions, found ${facingPartitionChecks}`);
 
-process.stdout.write(`D7 packet audit: PASS (${IDS.length} IDs/order/direct bindings, 45 recomputed hashes, ${packetFieldChecks} exact field checks, ${facingPartitionChecks} facing partitions, ${packetLinkChecks} packet links, readiness ${prototypeReady}/${componentReady}/${appearanceBlocked}; immutable packet-time catalog/registry ${PACKET_TIME_CATALOG_SNAPSHOT.sha256}/${PACKET_TIME_REGISTRY_SNAPSHOT.sha256}, ${PACKET_TIME_STATE.recognition_metric}; current v5 catalog/registry ${fileSha256(AUTHORITY.catalog.path)}/${fileSha256(AUTHORITY.registry.path)})\n`);
+process.stdout.write(`D7 packet audit: PASS (${IDS.length} IDs/order/direct bindings, 45 recomputed hashes, ${packetFieldChecks} exact field checks, ${facingPartitionChecks} facing partitions, ${packetLinkChecks} packet links, readiness ${prototypeReady}/${componentReady}/${appearanceBlocked}; immutable packet-time catalog/registry ${PACKET_TIME_CATALOG_SNAPSHOT.sha256}/${PACKET_TIME_REGISTRY_SNAPSHOT.sha256}, ${PACKET_TIME_STATE.recognition_metric}; current v6 catalog/registry ${fileSha256(AUTHORITY.catalog.path)}/${fileSha256(AUTHORITY.registry.path)})\n`);

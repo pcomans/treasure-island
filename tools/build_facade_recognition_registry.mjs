@@ -20,12 +20,12 @@ import {
 } from "./lib/world-contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const COMPILER_VERSION = "1.4.0";
-const CATALOG_SCHEMA = "ti.facade-recognition-catalog/5";
-const RUNTIME_SCHEMA = "ti.facade-runtime-registry/5";
+const COMPILER_VERSION = "1.5.0";
+const CATALOG_SCHEMA = "ti.facade-recognition-catalog/6";
+const RUNTIME_SCHEMA = "ti.facade-runtime-registry/6";
 const REPORT_SCHEMA = "ti.facade-recognition-validation-report/4";
-const ADAPTER_CONTRACT_SCHEMA = "ti.facade-runtime-adapter-contracts/4";
-const LOADER_API_VERSION = "ti.facade-runtime-registry-loader/4";
+const ADAPTER_CONTRACT_SCHEMA = "ti.facade-runtime-adapter-contracts/5";
+const LOADER_API_VERSION = "ti.facade-runtime-registry-loader/5";
 const UNKNOWN_VERSION_POLICY = "reject";
 const CATALOG_ID = "treasure-island-physical-building-recognition";
 const CATALOG_SCHEMA_REFERENCE = "./facade-recognition-catalog.schema.json";
@@ -51,6 +51,19 @@ const BUILDING_1_TOWER_WALL = "building:w1222720021:wall";
 const BUILDING_1_HERO_ADAPTER_PATH = "game/scripts/world/facades/building_1_hero_model.gd";
 const BUILDING_1_HERO_CONFIG_PATH = "game/resources/facades/building_1_hero_model.json";
 const BUILDING_1_PUBLIC_FRONT_CONFIG_PATH = "game/resources/facades/building_1_public_front_believability.json";
+const BUILDING_1_RUNTIME_ASSET_PATHS = Object.freeze([
+  BUILDING_1_HERO_CONFIG_PATH,
+  BUILDING_1_PUBLIC_FRONT_CONFIG_PATH,
+  "game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
+  "game/resources/materials/world/building_1/building_1_bronze.tres",
+  "game/resources/materials/world/building_1/building_1_canopy_underside.tres",
+  "game/resources/materials/world/building_1/building_1_light_trim.tres",
+  "game/resources/materials/world/building_1/building_1_projecting_base_stone.tres",
+  "game/resources/materials/world/building_1/building_1_reveal_shadow.tres",
+  "game/resources/materials/world/building_1/building_1_roof_metal.tres",
+  "game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres",
+  BUILDING_1_HERO_ADAPTER_PATH,
+]);
 const PACKAGE_SANITIZATION_SOURCE_PROVENANCE_PATH = "discovery/facades/PRECOMMIT_PACKAGE_SANITIZATION_SOURCE_PROVENANCE.json";
 const PACKAGE_SANITIZATION_SOURCE_PROVENANCE_SHA256 = "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677b3ba5ab318a19333";
 const BUILDING_3_SOURCE = "w34313540";
@@ -571,6 +584,7 @@ function validateActiveHeroDispatch(inputs) {
   invariant(authority.source_provenance_receipt_id === "B1-HERO-AUTHORITY" && authority.source_provenance_receipt_sha256 === PACKAGE_SANITIZATION_SOURCE_PROVENANCE_SHA256 && authority.primary_nps_record_id === "NRHP-08000081" && authority.primary_nps_sections === heroProvenance.primary_nps_sections, "Building 1 package-safe authority receipt drifted");
   invariant(equalStable(authority.museum_reference_ids, ["TIM-BUILDING-THE-BAY-BRIDGE-AND-TREASURE-ISLAND", "TIM-SCULPTURES-AND-ISLAND"]), "Building 1 package-safe museum authority IDs drifted");
   invariant(publicFront.schema_version === "ti.building-1-public-front-believability/1", "Building 1 public-front config schema drifted");
+  invariant(publicFront.geometry_production_inference_m?.entrance_group_gap === 0.90, "Building 1 public-front entrance-group gap is not the reviewed 0.90 m candidate");
   invariant(publicFrontProvenance.historical_runtime_config_sha256 === "e11710374f837e15b45adf3b6df0e762a6793b363e6c3109870e1bf2f7a0ee0e", "Building 1 public-front historical config receipt drifted");
   invariant(publicFrontAuthority.source_provenance_receipt_id === "B1-PUBLIC-FRONT-AUTHORITY" && publicFrontAuthority.source_provenance_receipt_sha256 === PACKAGE_SANITIZATION_SOURCE_PROVENANCE_SHA256, "Building 1 public-front source receipt drifted");
   invariant(publicFrontAuthority.bar_raiser_review_sha256 === publicFrontProvenance.bar_raiser_review?.sha256 && publicFrontAuthority.hero_spec_sha256 === publicFrontProvenance.hero_spec?.sha256, "Building 1 public-front package-safe receipt hashes drifted");
@@ -848,7 +862,7 @@ function deriveActiveRuntimeAdapterSeeds(inputs) {
     content_classification: "active_target_specific_hero_replacement",
     review_status: inputs.runtimeContracts.heroConfig.truth_boundary.visual_review_status,
     runtime_adapter_path: BUILDING_1_HERO_ADAPTER_PATH,
-    runtime_asset_paths: building1HeroMaterialPaths(inputs),
+    runtime_asset_paths: [...building1HeroMaterialPaths(inputs), BUILDING_1_PUBLIC_FRONT_CONFIG_PATH].sort(),
     runtime_config_path: BUILDING_1_HERO_CONFIG_PATH,
     runtime_dispatch_path: WORLD_CHUNK_BUILDER_PATH,
     whole_building_recognizability_imported: false,
@@ -1577,6 +1591,7 @@ function importActiveRuntimeAdapter(seed, receiver, inputs, packageAudit) {
       config_sha256: inputs.runtimeContracts.heroConfigSha256,
       config_summary: sanitizedHeroConfig(inputs.runtimeContracts.heroConfig),
       dispatch_sha256: inputs.runtimeContracts.worldBuilderSha256,
+      public_front_config_sha256: inputs.runtimeContracts.heroPublicFrontConfigSha256,
     };
   return {
     ...packaged,
@@ -2206,13 +2221,19 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
   invariant(navyChapelUnit.claim_status.reference_recognizable === "accepted" && navyChapelUnit.acceptance_records.some((record) => record.review_receipt_sha256 === NAVY_CHAPEL_LIVE_REVIEW_RECEIPT_SHA256), "Navy Chapel physical unit lacks its exact independent live acceptance receipt");
   invariant(registry.active_runtime_adapters.map((adapter) => adapter.receiver_key).sort().join("|") === [BUILDING_1_WALL, BUILDING_1_TOWER_WALL, BUILDING_3_WALL, ISLE_HOUSE_LOW_WALL, NAVY_CHAPEL_WALL].sort().join("|"), "Active Building 1/Building 3/Isle House/Navy Chapel adapter receiver set drifted");
   const building1Adapters = registry.active_runtime_adapters.filter((adapter) => [BUILDING_1_WALL, BUILDING_1_TOWER_WALL].includes(adapter.receiver_key));
+  const expectedBuilding1RuntimeAssetPaths = BUILDING_1_RUNTIME_ASSET_PATHS.map((path) => `res://${path}`).sort();
   invariant(building1Adapters.every((adapter) =>
     adapter.attachment_kind === "active_building_1_hero_replacement" &&
     adapter.content_classification === "active_target_specific_hero_replacement" &&
     adapter.state === "active_runtime_target_specific_content" &&
+    adapter.source_key === (adapter.receiver_key === BUILDING_1_WALL ? BUILDING_1_SOURCE : BUILDING_1_TOWER_SOURCE) &&
     adapter.active_receiver_scope?.coverage === "whole_direct_wall_receiver" &&
-    adapter.active_runtime_contract?.config_summary?.target?.tower_remains_separately_reviewable === true
-  ), "Active Building 1 hero adapter classification or separate-tower contract drifted");
+    adapter.active_runtime_contract?.config_summary?.target?.tower_remains_separately_reviewable === true &&
+    adapter.active_runtime_contract?.public_front_config_sha256 === sha256File(absolute(BUILDING_1_PUBLIC_FRONT_CONFIG_PATH)) &&
+    adapter.runtime_assets.length === 11 &&
+    equalStable(adapter.runtime_assets.map((asset) => asset.path).sort(), expectedBuilding1RuntimeAssetPaths) &&
+    adapter.runtime_assets.some((asset) => asset.path === `res://${BUILDING_1_PUBLIC_FRONT_CONFIG_PATH}` && asset.sha256 === sha256File(absolute(BUILDING_1_PUBLIC_FRONT_CONFIG_PATH)))
+  ), "Active Building 1 hero adapter classification, receiver/source mapping, or exact 11-asset closure drifted");
   const building3Adapter = registry.active_runtime_adapters.find((adapter) => adapter.receiver_key === BUILDING_3_WALL);
   invariant(
     building3Adapter?.attachment_kind === "active_building_3_wall_roof_hero_replacement" &&

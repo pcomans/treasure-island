@@ -23,6 +23,7 @@
       "review_status": "pending_independent_original_detail_review",
       "runtime_adapter_path": "game/scripts/world/facades/building_1_hero_model.gd",
       "runtime_asset_paths": [
+        "game/resources/facades/building_1_public_front_believability.json",
         "game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
         "game/resources/materials/world/building_1/building_1_bronze.tres",
         "game/resources/materials/world/building_1/building_1_canopy_underside.tres",
@@ -44,6 +45,7 @@
       "review_status": "pending_independent_original_detail_review",
       "runtime_adapter_path": "game/scripts/world/facades/building_1_hero_model.gd",
       "runtime_asset_paths": [
+        "game/resources/facades/building_1_public_front_believability.json",
         "game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
         "game/resources/materials/world/building_1/building_1_bronze.tres",
         "game/resources/materials/world/building_1/building_1_canopy_underside.tres",
@@ -387,8 +389,8 @@
     "reference_recognizable": "An ordinary gameplay view is independently matched to target-identifiable reference evidence."
   },
   "compiler_contract": {
-    "emitted_runtime_schema_version": "ti.facade-runtime-registry/5",
-    "required_compiler_version": "1.4.0",
+    "emitted_runtime_schema_version": "ti.facade-runtime-registry/6",
+    "required_compiler_version": "1.5.0",
     "unknown_version_policy": "reject"
   },
   "expected_counts": {
@@ -497,7 +499,7 @@
       "whole_building_recognizability_imported": false
     }
   ],
-  "schema_version": "ti.facade-recognition-catalog/5",
+  "schema_version": "ti.facade-recognition-catalog/6",
   "source_contract": {
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_schema_version": "ti.godot-world/2",

@@ -1,8 +1,8 @@
 {
   "build_contract": {
-    "authoring_catalog_sha256": "56d7257fa4e3486b3299683c45d4ae1057858c6e1edb3e49f6b6241d7f1a9be7",
-    "compiler_version": "1.4.0",
-    "runtime_registry_schema_version": "ti.facade-runtime-registry/5",
+    "authoring_catalog_sha256": "ab8797e86d5985c4b64670a22577394656c6388bb463f83c157a411663fa7b57",
+    "compiler_version": "1.5.0",
+    "runtime_registry_schema_version": "ti.facade-runtime-registry/6",
     "unknown_version_policy": "reject"
   },
   "contract_id": "treasure-island-facade-runtime-adapters",
@@ -22,10 +22,10 @@
       "res://game/scenes/world/",
       "res://game/scripts/world/"
     ],
-    "api_version": "ti.facade-runtime-registry-loader/4",
+    "api_version": "ti.facade-runtime-registry-loader/5",
     "instantiation_authorized": false,
     "loader_path": "res://game/scripts/world/facades/facade_runtime_registry_loader.gd",
-    "loader_sha256": "5975480c124cb3dd4b4f61a2099e284286d7c5c6b808f4c7ecef1cd7b5332395",
+    "loader_sha256": "4c9af1ffcf5724e8c35e4b591a85697f1667f8d120af41a74fac511bfcb4f356",
     "projection_execution_policy": "forbidden",
     "unknown_version_policy": "reject"
   },
@@ -154,6 +154,10 @@
           "sha256": "f10bc92a6e74cbae41347e742e6c68c50faccddbd52ab3ecce210ac8243bc6e9"
         },
         {
+          "path": "res://game/resources/facades/building_1_public_front_believability.json",
+          "sha256": "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
+        },
+        {
           "path": "res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
           "sha256": "41c1c31d4a78da25d4abfac59e82fe919fbb539afa479ab7601d0fb51939d59f"
         },
@@ -212,6 +216,10 @@
         {
           "path": "res://game/resources/facades/building_1_hero_model.json",
           "sha256": "f10bc92a6e74cbae41347e742e6c68c50faccddbd52ab3ecce210ac8243bc6e9"
+        },
+        {
+          "path": "res://game/resources/facades/building_1_public_front_believability.json",
+          "sha256": "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
         },
         {
           "path": "res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
@@ -907,5 +915,5 @@
       "source_asset_type": "gd"
     }
   ],
-  "schema_version": "ti.facade-runtime-adapter-contracts/4"
+  "schema_version": "ti.facade-runtime-adapter-contracts/5"
 }

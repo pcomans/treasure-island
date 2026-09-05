@@ -101,6 +101,7 @@ const compiledFirst = compile(catalog, inputs);
 const compiledSecond = compile(catalog, inputs);
 
 assert(catalog.schema_version === CATALOG_SCHEMA, "catalog schema is not Phase 1.5 version-pinned");
+assert(CATALOG_SCHEMA === "ti.facade-recognition-catalog/6" && RUNTIME_SCHEMA === "ti.facade-runtime-registry/6" && ADAPTER_CONTRACT_SCHEMA === "ti.facade-runtime-adapter-contracts/5" && LOADER_API_VERSION === "ti.facade-runtime-registry-loader/5" && COMPILER_VERSION === "1.5.0", "Building 1 closure hardening version matrix drifted");
 assert(catalog.compiler_contract.required_compiler_version === COMPILER_VERSION, "catalog compiler version pin drifted");
 assert(catalog.compiler_contract.emitted_runtime_schema_version === RUNTIME_SCHEMA, "catalog runtime version pin drifted");
 assert(catalog.compiler_contract.unknown_version_policy === "reject", "catalog does not reject unknown forward versions");
@@ -164,6 +165,12 @@ for (const plan of readyPlans) {
   }
 }
 
+for (const receiverKey of ["building:r16681702:wall", "building:w1222720021:wall"]) {
+  const plan = readyPlans.find((candidate) => candidate.receiver_key === receiverKey);
+  assert(plan.runtime_assets.length === 11, `${receiverKey} runtime closure is not exactly 11 assets`);
+  assert(plan.runtime_assets.some((asset) => asset.path === "res://game/resources/facades/building_1_public_front_believability.json" && asset.sha256 === "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"), `${receiverKey} omits the exact current public-front runtime config`);
+}
+
 const building3Plan = readyPlans.find((plan) => plan.receiver_key === "building:w34313540:wall");
 const building3RuntimePaths = building3Plan.runtime_assets.map((asset) => asset.path).sort();
 assert(building3Plan.content_mode === "active_building_3_hero", "Building 3 ready plan has stale legacy content mode");
@@ -213,6 +220,15 @@ expectFailure(() => {
   validateRuntimeRegistry(candidate, adapterContracts);
 }, "unknown or forward-incompatible", "future runtime registry version");
 expectFailure(() => {
+  const candidate = structuredClone(registry);
+  candidate.schema_version = "ti.facade-runtime-registry/5";
+  candidate.build_contract.compiler_version = "1.4.0";
+  candidate.compatibility_contract.catalog_schema_version = "ti.facade-recognition-catalog/5";
+  candidate.compatibility_contract.compiler_version = "1.4.0";
+  candidate.compatibility_contract.loader_api_version = "ti.facade-runtime-registry-loader/4";
+  validateRuntimeRegistry(candidate, adapterContracts);
+}, "unknown or forward-incompatible", "superseded pre-hardening runtime registry version");
+expectFailure(() => {
   const candidate = structuredClone(adapterContracts);
   candidate.schema_version = "ti.facade-runtime-adapter-contracts/999";
   validateAdapterContracts(candidate, registry);
@@ -242,6 +258,20 @@ expectFailure(() => {
   candidate.recognition_metric.display = "7/213";
   validateRuntimeRegistry(candidate, adapterContracts);
 }, "Runtime physical-entity recognition metric drifted from exactly 6/213", "drifted recognition numerator");
+expectFailure(() => {
+  const candidate = structuredClone(registry);
+  const main = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:r16681702:wall");
+  const tower = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:w1222720021:wall");
+  [main.source_key, tower.source_key] = [tower.source_key, main.source_key];
+  validateRuntimeRegistry(candidate, adapterContracts);
+}, "receiver/source mapping, or exact 11-asset closure drifted", "Building 1/tower source swap");
+expectFailure(() => {
+  const candidate = structuredClone(registry);
+  const adapter = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:r16681702:wall");
+  const target = adapter.runtime_assets.findIndex((asset) => asset.path.endsWith("building_1_bronze.tres"));
+  adapter.runtime_assets[target] = structuredClone(adapter.runtime_assets.find((asset) => asset.path.endsWith("building_1_bluegrey_glass.tres")));
+  validateRuntimeRegistry(candidate, adapterContracts);
+}, "receiver/source mapping, or exact 11-asset closure drifted", "Building 1 non-public asset substitution");
 expectFailure(() => {
   const candidate = structuredClone(adapterContracts);
   const plan = candidate.plans.find((item) => item.receiver_key === "building-composite:w1249412094:w1282547787:wall");

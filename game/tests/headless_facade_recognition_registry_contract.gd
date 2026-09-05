@@ -1,7 +1,7 @@
 extends SceneTree
 
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
-const EXPECTED_REGISTRY_SHA256 := "36eef28d1abce9d9838da6e959222ad6767e40e198b90b734496e6d2dc2cd79b"
+const EXPECTED_REGISTRY_SHA256 := "65edf085437bc3fa2b22869406cc8a2c33297b6cc9d48b205e301e367efc734b"
 const EXPECTED_UNITS := 213
 const EXPECTED_RECEIVERS := 214
 const EXPECTED_SOURCE_RECORDS := 215
@@ -37,7 +37,7 @@ func _run() -> void:
 		return
 	var registry := _json(REGISTRY_PATH)
 	if not _require(not registry.is_empty(), "Runtime facade registry JSON is invalid.") \
-	or not _require(str(registry.get("schema_version", "")) == "ti.facade-runtime-registry/5", "Runtime facade registry schema drifted.") \
+	or not _require(str(registry.get("schema_version", "")) == "ti.facade-runtime-registry/6", "Runtime facade registry schema drifted.") \
 	or not _require(_runtime_boundary_is_clean(registry), "Runtime facade registry leaks a source-only path or URL."):
 		_finish()
 		return
@@ -256,7 +256,10 @@ func _validate_runtime_adapters(registry: Dictionary) -> void:
 			var summary := contract.get("config_summary", {}) as Dictionary
 			var target := summary.get("target", {}) as Dictionary
 			_require(bool(target.get("tower_remains_separately_reviewable", false)), "%s collapses the tower into the main recognition unit." % receiver_key)
-			_require((adapter.get("runtime_assets", []) as Array).size() + (adapter.get("runtime_asset_projections", []) as Array).size() == 10, "%s does not account for its hero script, config, and eight exact-current materials." % receiver_key)
+			var assets := adapter.get("runtime_assets", []) as Array
+			_require(assets.size() == 11 and (adapter.get("runtime_asset_projections", []) as Array).is_empty(), "%s does not account for its hero script, two configs, and eight exact-current materials." % receiver_key)
+			_require(_has_runtime_asset(assets, "res://game/resources/facades/building_1_public_front_believability.json", "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"), "%s omits the exact current public-front runtime config." % receiver_key)
+			_require(str(contract.get("public_front_config_sha256", "")) == "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806", "%s public-front contract hash drifted." % receiver_key)
 	var registry_text := JSON.stringify(registry)
 	_require(not registry_text.contains("building_1_recognizable_facade") and not registry_text.contains("building_1_recognizability_placements"), "Runtime registry retains obsolete Building 1 facade assets.")
 
@@ -267,6 +270,14 @@ func _receiver_by_key(receivers: Array, receiver_key: String) -> Dictionary:
 		if str(receiver.get("receiver_key", "")) == receiver_key:
 			return receiver
 	return {}
+
+
+func _has_runtime_asset(assets: Array, path: String, sha256: String) -> bool:
+	for value: Variant in assets:
+		var asset := value as Dictionary
+		if str(asset.get("path", "")) == path and str(asset.get("sha256", "")) == sha256:
+			return true
+	return false
 
 
 func _runtime_asset_closure_is_clean(path: String, visited: Dictionary) -> bool:

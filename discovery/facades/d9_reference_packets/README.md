@@ -51,15 +51,15 @@ plane. `w96665923` does not meet that threshold.
 | D9 packet-time catalog snapshot receipt | `ti.facade-recognition-catalog/4`; `2b457965d2e25d522d2ca3d73afb109b03a57247eaefbb6b70775bd83fb07311` | immutable packet-time provenance; same bytes as the then-current catalog at seal time |
 | D9 packet-time registry snapshot receipt | `ti.facade-runtime-registry/4`; `acc04aa840f287b10650d0de44db4cdfbb4949038774f1fec2f139810696a8af` | immutable packet-time provenance; same bytes as the then-current registry at seal time |
 | D9 packet-time recognition rollup | `5/213` | immutable five-unit acceptance state at the v4 authority boundary; not a claim about current compiler output |
-| `discovery/facades/facade-recognition-catalog.json` (current checkout) | `ti.facade-recognition-catalog/5`; SHA-256 emitted by validator | used only to rederive the exact 15-ID cohort and order |
-| `game/resources/facades/facade-runtime-registry.json` (current checkout) | `ti.facade-runtime-registry/5`; SHA-256 emitted by validator | used only to verify those 15 current direct bindings; global counts and recognition rollup remain compiler-owned |
+| `discovery/facades/facade-recognition-catalog.json` (current checkout) | `ti.facade-recognition-catalog/6`; SHA-256 emitted by validator | used only to rederive the exact 15-ID cohort and order |
+| `game/resources/facades/facade-runtime-registry.json` (current checkout) | `ti.facade-runtime-registry/6`; SHA-256 emitted by validator | used only to verify those 15 current direct bindings; global counts and recognition rollup remain compiler-owned |
 | `generated/world/manifest.json` | `ti.godot-world/2`; `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3` | generated chunk authority |
 
 The `2b4579…` catalog and `acc04a…` registry values in the receipts and sealed
 packet headers record the D9 packet-time authorities. Header wording about a
 separately checked current registry describes the then-current path at seal
 time; it is not a claim about later bytes. The validator preserves those
-immutable receipts while separately loading and hashing the current schema-v5
+immutable receipts while separately loading and hashing the current schema-v6
 catalog and registry only to rederive the exact D9 cohort order and verify those
 15 direct bindings. The historical `5/213` rollup remains part of the seal-time
 receipt. Global current unit, receiver, source-membership, acceptance, and
@@ -86,7 +86,7 @@ node tools/validate_godot_world.mjs
 ```
 
 The historical catalog, registry, and `5/213` receipts remain explicit and
-immutable; the current schema-v5 catalog/registry reproduce the exact 15-ID
+immutable; the current schema-v6 catalog/registry reproduce the exact 15-ID
 order and direct bindings. Their moving SHA-256 values are emitted by each
 validator run and are not misrepresented as packet-time receipts.
 

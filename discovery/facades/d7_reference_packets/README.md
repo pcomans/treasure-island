@@ -55,15 +55,15 @@ evidence only.
 | D7 packet-time catalog snapshot receipt (historical; bytes superseded) | `ti.facade-recognition-catalog/4`; `2b457965d2e25d522d2ca3d73afb109b03a57247eaefbb6b70775bd83fb07311` | immutable packet-time provenance only; validator verifies this recorded receipt, not current file bytes |
 | D7 packet-time registry snapshot receipt (historical; bytes superseded) | `ti.facade-runtime-registry/4`; `c60e20fb625fa98809975f08357370d71c330443a7546d88fadfcd7df3584d19` | immutable packet-time provenance only; validator verifies this recorded receipt, not current file bytes |
 | D7 packet-time recognition rollup | `5/213` | immutable five-unit acceptance state at the v4 authority boundary; not a claim about current compiler output |
-| `discovery/facades/facade-recognition-catalog.json` (current checkout) | `ti.facade-recognition-catalog/5`; SHA-256 emitted by validator | used only to rederive the exact 15-ID cohort and order |
-| `game/resources/facades/facade-runtime-registry.json` (current checkout) | `ti.facade-runtime-registry/5`; SHA-256 emitted by validator | used only to verify those 15 current direct bindings; global counts and recognition rollup remain compiler-owned |
+| `discovery/facades/facade-recognition-catalog.json` (current checkout) | `ti.facade-recognition-catalog/6`; SHA-256 emitted by validator | used only to rederive the exact 15-ID cohort and order |
+| `game/resources/facades/facade-runtime-registry.json` (current checkout) | `ti.facade-runtime-registry/6`; SHA-256 emitted by validator | used only to verify those 15 current direct bindings; global counts and recognition rollup remain compiler-owned |
 | `generated/world/manifest.json` | `ti.godot-world/2`; `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3` | generated chunk authority |
 
 The `2b4579…` catalog, `c60e20…` registry, and `5/213` rollup are the genuine
 D7 packet-time receipts. D7 does not duplicate those historical bytes, so the
 validator checks the exact recorded receipts and historical labels rather than
 comparing them with moving current paths. It separately loads and hashes the
-current schema-v5 catalog and registry only to rederive the exact D7 cohort
+current schema-v6 catalog and registry only to rederive the exact D7 cohort
 order and verify those 15 direct bindings. Global current unit, receiver,
 source-membership, acceptance, and recognition-rollup gates belong solely to
 `tools/build_facade_recognition_registry.mjs --check`.
@@ -84,7 +84,7 @@ packet contract fields against sealed inventory/registry data, reproduced all
 `60` exact facing-run partitions, resolved all `15` packet links, and
 reproduced readiness totals `13 / 2 / 0`. The unchanged file-backed authorities
 matched their hashes; the historical catalog, registry, and `5/213` receipts
-remained explicit and immutable; and the current schema-v5 catalog/registry
+remained explicit and immutable; and the current schema-v6 catalog/registry
 reproduced the exact 15-ID order and direct bindings. Their moving SHA-256
 values are emitted by each validator run and are not misrepresented as
 packet-time receipts. No image or binary file exists in this directory.

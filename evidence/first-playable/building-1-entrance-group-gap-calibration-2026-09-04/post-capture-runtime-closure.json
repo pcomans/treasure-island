@@ -1,0 +1,65 @@
+{
+  "schema_version": "ti.building-1-entrance-gap-post-capture-runtime-closure/1",
+  "sequence": {
+    "a_capture": "0.55 m config with capture-time 10-asset registry",
+    "b_capture": "0.90 m config with the identical capture-time 10-asset registry and effective runtime dependency closure",
+    "post_capture_reconciliation": "compiler-authorized current registry adds the already-consumed public-front config as the eleventh package-safe dependency for both Building 1 and the separate tower"
+  },
+  "capture_time": {
+    "registry_sha256": "36eef28d1abce9d9838da6e959222ad6767e40e198b90b734496e6d2dc2cd79b",
+    "runtime_asset_count_each": 10
+  },
+  "current_authority": {
+    "adapter_contracts_sha256": "503c8d02439d0846389d5d57e2b2a26d8e42ee6156ff08f489de6e9dc4325222",
+    "catalog_schema_sha256": "03174de9b4a8cae13ef573c93b3a8bf4dbb9615ef3f953c1a29f90332c8c3f43",
+    "catalog_sha256": "ab8797e86d5985c4b64670a22577394656c6388bb463f83c157a411663fa7b57",
+    "compiler_path": "tools/build_facade_recognition_registry.mjs",
+    "compiler_sha256": "a05b46ad52256444873599c2ed0483c9e27d8821f0ff0b56036c3b0712f23b51",
+    "dependency_free_schema_validator_path": "tools/lib/dependency-free-json-schema.mjs",
+    "dependency_free_schema_validator_sha256": "eeee5d9a22bd81fdaf8df56bd7f680b62c88a133aebf33424ccc1336a98d84e0",
+    "loader_path": "game/scripts/world/facades/facade_runtime_registry_loader.gd",
+    "loader_sha256": "4c9af1ffcf5724e8c35e4b591a85697f1667f8d120af41a74fac511bfcb4f356",
+    "public_front_config_path": "game/resources/facades/building_1_public_front_believability.json",
+    "public_front_config_sha256": "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806",
+    "registry_sha256": "65edf085437bc3fa2b22869406cc8a2c33297b6cc9d48b205e301e367efc734b",
+    "runtime_asset_count_each": 11,
+    "validation_report_sha256": "64bcfe0607a4f7c3a4bdaa53f01573d335891e828b9f2ee518cc9f96394f90d7",
+    "version_matrix": {
+      "adapter_contract_schema": "ti.facade-runtime-adapter-contracts/5",
+      "catalog_schema": "ti.facade-recognition-catalog/6",
+      "compiler": "1.5.0",
+      "loader_api": "ti.facade-runtime-registry-loader/5",
+      "report_schema": "ti.facade-recognition-validation-report/4",
+      "runtime_registry_schema": "ti.facade-runtime-registry/6"
+    }
+  },
+  "receivers": [
+    "building:r16681702:wall",
+    "building:w1222720021:wall"
+  ],
+  "independent_visual_acceptance": {
+    "decision": "PASS",
+    "recognition_metric_unchanged": "6/213",
+    "receipt_path": "INDEPENDENT_VISUAL_BAR_RAISER_REVIEW.md",
+    "receipt_sha256": "44c0bde816efbf9acfedd45d1d45c663319cb4e421afcd2551812e6c4a1b7659"
+  },
+  "invariants": {
+    "accepted_reference_recognition_metric": "6/213",
+    "as_built_fidelity_changed": false,
+    "catalog_schema_version_changed": true,
+    "compatibility_hardening_reason": "pre-change readers could accept a coordinated omission or substitution of the Building 1 public-front dependency, so catalog/runtime/adapter/loader/compiler versions were advanced and old/new readers fail closed",
+    "collision_navigation_or_spray_changed": false,
+    "game_distinctiveness_changed": false,
+    "runtime_or_visual_geometry_changed_by_closure_reconciliation": false,
+    "tower_remains_separate_physical_unit": true,
+    "world_topology": {
+      "bodies": 466,
+      "meshes": 944,
+      "rows": 735,
+      "shapes": 466,
+      "surfaces": 957,
+      "triangles": 64572
+    }
+  },
+  "status": "pass"
+}

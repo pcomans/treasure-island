@@ -53,7 +53,7 @@
     "projecting_base_cap_center_projection": 0.34,
     "projecting_base_cap_depth": 0.18,
     "entrance_group_width": 2.85,
-    "entrance_group_gap": 0.55,
+    "entrance_group_gap": 0.90,
     "entrance_height": 3.45,
     "entrance_reveal_border": 0.24,
     "entrance_reveal_center_projection": 0.305,

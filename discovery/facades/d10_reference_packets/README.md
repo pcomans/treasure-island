@@ -55,8 +55,8 @@ occlusion prevents a trustworthy lower-facade schedule. `w96665933` and
 | D10 packet-time registry snapshot receipt | `ti.facade-runtime-registry/4`; `dce268c1547e4e4620faff9d59110ee1214a9a2121c1f83b3eb1c865339360ab` | immutable packet-time provenance; same bytes as the then-current registry at seal time |
 | D10 packet-time recognition rollup | `5/213` | immutable five-unit acceptance state at seal time; not a claim about current compiler output |
 | D10 packet-time commit | `a37c0c6e16ab7fef3e767c2367024abd3e563091` | immutable repository state at packet seal time |
-| `discovery/facades/facade-recognition-catalog.json` (current checkout) | `ti.facade-recognition-catalog/5`; SHA-256 emitted by validator | used only to rederive the exact 15-ID cohort and order |
-| `game/resources/facades/facade-runtime-registry.json` (current checkout) | `ti.facade-runtime-registry/5`; SHA-256 emitted by validator | used only to verify those 15 current direct bindings; global counts and recognition rollup remain compiler-owned |
+| `discovery/facades/facade-recognition-catalog.json` (current checkout) | `ti.facade-recognition-catalog/6`; SHA-256 emitted by validator | used only to rederive the exact 15-ID cohort and order |
+| `game/resources/facades/facade-runtime-registry.json` (current checkout) | `ti.facade-runtime-registry/6`; SHA-256 emitted by validator | used only to verify those 15 current direct bindings; global counts and recognition rollup remain compiler-owned |
 | `generated/world/manifest.json` | `ti.godot-world/2`; `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3` | generated chunk authority |
 | `generated/world/logical-objects.json` | `ti.godot-world/2`; `5a74a80a7930ef8edfbea4f7c3a15a509d38e59b64e55d17a26ea1061137ba11` | serialized footprint/perimeter authority |
 
@@ -67,7 +67,7 @@ receivers, and 215 source memberships; exactly five independently accepted
 physical units formed the numerator. Those facts remain immutable historical
 provenance, including the Isle House part-source non-numerator boundary.
 
-The current v5 files may move as accepted live replacements are integrated.
+The current v6 files may move as accepted live replacements are integrated.
 This D10 audit therefore rederives only its exact 15 IDs/order from the current
 catalog and checks their direct wall bindings against the current registry. It
 does not duplicate global current `213/214/215` or recognition-rollup gates;
@@ -86,7 +86,7 @@ mandatory before any live placement.
 unique earlier packet IDs; excludes part children; checks singular wall/roof
 bindings; recomputes source-linked wall geometry, full wall-record, and chunk
 hashes; reconstructs every facing partition; verifies immutable packet-time
-receipts, current v5 cohort order/direct bindings, fields, packet links, source
+receipts, current v6 cohort order/direct bindings, fields, packet links, source
 labels, and readiness counts; and rejects extra files or images. It reproduces
 15 IDs, 45 per-target hashes, 300 exact packet fields, 60 facing partitions,
 15 packet links, and readiness `9 / 4 / 2`. Run:
@@ -98,7 +98,7 @@ node tools/validate_godot_world.mjs
 ```
 
 The generated-world authority remains 38 chunks, 739 source rows, and 729
-physical objects. Each D10 run emits the moving current v5 catalog/registry
+physical objects. Each D10 run emits the moving current v6 catalog/registry
 hashes after confirming this cohort's exact IDs/order/direct bindings. The
 registry compiler independently owns current global topology and the recognition
 rollup. D10's v4 hashes, `5/213`, and commit receipt remain immutable historical
