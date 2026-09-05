@@ -58,13 +58,14 @@ Resume revision: **the destination `origin/main` commit containing this handoff*
 > explicitly restates them.
 
 > **Post-B225 v8 current status — 2026-09-05:** this is the controlling
-> release/handoff addendum. The sole current working-tree/local release-ready
+> release/handoff addendum. The sole current locally retained
 > private app is
 > `build/d1-b225-postpromotion-v8-2026-09-05-001/Treasure Island First Playable.app`.
-> The B225 v8 source/evidence are not yet committed or pushed, and `build/` is
-> ignored; migration must transfer this exact app separately or re-export it
-> from the eventual integrated source because cloning current `main` will not
-> restore these bytes.
+> The B225 v8 source/evidence integration is accepted on `main` at commit
+> `7448f081d510e56c598f41b68612ffd86e4afa5f`. The exact app remains ignored
+> and locally available on the verifier; migration must transfer it separately
+> or re-export it from the integrated source because cloning `main` will not
+> restore these app bytes.
 > Its canonical seven-file bundle identity SHA-256 is
 > `3f38c5dcd55b19f12cf7788e1069367075aa22f1b557c5b61288abdfdc30afe0`;
 > executable SHA-256 is
@@ -81,9 +82,13 @@ Resume revision: **the destination `origin/main` commit containing this handoff*
 > `9c909d047786d4f7feab138b4d7c597bba1bac2adcf78cc8bcdfb568de0a0ec2`
 > and independent visual receipt SHA-256
 > `881b04d696bfe842c39a220be5f4da3087f30d8ef8e9c0493c9c62067a826c99`
-> both return `PASS_FOR_RELEASE_NO_ADDITIONAL_CREDIT`. Verification occurred
-> on an Apple M2; ordinary owner recognition and mouse/keyboard play on the
-> approved Apple M1 Pro remain pending. Earlier `024605`/B201/v7 and 2026-09-03
+> both return `PASS_FOR_RELEASE_NO_ADDITIONAL_CREDIT`. After integration, the
+> exact local app was visibly launched with no app arguments through the normal
+> macOS application path on an Apple M2 verifier; its expected executable
+> remained alive in an onscreen Metal window with no crash or GPU-fault record
+> during the bounded observation. Ordinary owner recognition and
+> mouse/keyboard play on the approved Apple M1 Pro remain pending. Earlier
+> `024605`/B201/v7 and 2026-09-03
 > “current” wording is retained only as dated history and is superseded by this
 > addendum; no owner acceptance is claimed.
 

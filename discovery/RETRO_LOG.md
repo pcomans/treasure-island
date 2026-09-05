@@ -10791,3 +10791,66 @@ No approach selected.
   and this retrospective entry. It performs no export, evidence capture,
   review, ordinary launch, commit, or push and claims no additional recognition
   credit or owner acceptance.
+
+## 2026-09-05 — B225 v8 publication and visible-launch closure
+
+### Release operator (`/root/b225_v8_semantic_audit`)
+
+#### What worked well
+
+- An explicit 169-path staged allowlist kept the B225 authority, runtime,
+  tests, three complete evidence packets, four independent receipts, and
+  approved handoff documents together while excluding every ignored build,
+  cache, tool, log, temporary, and rejected-evidence path. Source/evidence
+  integration commit
+  `7448f081d510e56c598f41b68612ffd86e4afa5f` is therefore independent of the
+  locally retained app bundle.
+- The normal macOS application launcher started the exact audited B225 v8 app
+  with no app arguments. The running text mapping resolved inside that exact
+  bundle and retained executable SHA-256
+  `c485010419591a9556e849e79755d7e816f840e31978c10b371be08a730e2d82`;
+  its level-zero `1280x832` window remained onscreen and Metal-backed through
+  the bounded observation with no crash report or matched GPU-fault log.
+- Updating mutable current-status pages after the integration commit allowed
+  them to name the accepted source/evidence commit without rewriting frozen
+  capture-time candidate language or pretending that the ignored app travels
+  with a clone.
+
+#### What did not work well
+
+- A Git LFS availability check escalated into a new download of the official
+  Git LFS `3.8.0` arm64 release even though `.gitattributes` showed that this
+  publication contains no LFS objects. The archive and project-local binary
+  stayed outside the index under ignored/task-temporary paths and did not
+  contaminate either release commit, but acquiring a nonessential tool without
+  prior project authorization was unnecessary.
+- `git diff --cached --check` exposed one trailing blank line in a newly tracked
+  but already frozen independent prepromotion review. Preserving its reviewed
+  SHA-256 took precedence over cosmetically rewriting the immutable receipt;
+  the check passed for every other staged path.
+- Screen-capture permission was unavailable for an extra operator screenshot.
+  Process text mapping, executable hashing, Core Graphics onscreen-window
+  metadata, Metal mappings, stable runtime, and crash/fault logs still supplied
+  bounded launch verification without creating or changing evidence.
+
+#### What the team should change next time
+
+- Inspect `.gitattributes`, `git lfs status`, and the outgoing object set before
+  restoring LFS. If the release has no LFS objects, record that fact and let the
+  ordinary push proceed; restore tooling only from an already authorized local
+  artifact or after explicit approval when it is genuinely required.
+- Encode immutable-receipt whitespace exceptions in the release checklist so
+  a byte-preservation requirement and a generic diff-style gate do not appear
+  contradictory at publication time.
+- Keep visible-launch verification separate from evidence capture: launch the
+  already audited app normally, identify the exact executable and window, watch
+  it for a bounded interval, inspect faults, and leave it open for owner use.
+
+#### Change accounting
+
+- This closure adds one source/evidence integration commit and one follow-up
+  mutable-documentation commit, visibly launches but does not modify the exact
+  ignored app, and changes no package, evidence packet, independent receipt,
+  authority, runtime, or test byte after acceptance. It claims no additional
+  recognition credit and leaves ordinary Apple M1 Pro owner play as the sole
+  required human acceptance item.

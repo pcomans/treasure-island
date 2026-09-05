@@ -15,9 +15,13 @@ Scope: the repository and retained evidence for the approved private Treasure Is
 
 ## 2026-09-05 B225 postpromotion v8 release addendum
 
-The current working-tree/local release-ready private handoff is
+The current locally retained private handoff is
 `build/d1-b225-postpromotion-v8-2026-09-05-001/Treasure Island First Playable.app`.
-It is not yet a pushed or owner-accepted main release.
+Its source/evidence integration is accepted on `main` at commit
+`7448f081d510e56c598f41b68612ffd86e4afa5f`. The ignored app remains locally
+available on the verifier and is not transferred by cloning `main`; it must be
+transferred separately or re-exported on another machine. Owner acceptance
+remains pending.
 
 - The seven-file bundle has canonical ASCII bytewise-path-sorted
   `path\0sha256\0bytes\n` identity
@@ -46,9 +50,12 @@ It is not yet a pushed or owner-accepted main release.
 - Source, mounted-package, packaged-headless, native Apple M2 Metal, packet,
   telemetry, determinism, package-integrity, privacy, signature, and both
   independent release-review gates pass for these exact bytes. Verification
-  occurred on Apple M2; ordinary mouse/keyboard play on the approved Apple M1
-  Pro owner target remains pending. This addendum does not claim owner
-  acceptance.
+  occurred on Apple M2. After integration, the exact local app was visibly
+  launched with no app arguments through the normal macOS application path;
+  its expected executable remained alive in an onscreen Metal window with no
+  crash or GPU-fault record during the bounded observation. Ordinary
+  mouse/keyboard play on the approved Apple M1 Pro owner target remains
+  pending. This addendum does not claim owner acceptance.
 
 The B201 `024605` package and addendum immediately below remain valid historical
 evidence for their own bytes but are superseded as the current handoff.

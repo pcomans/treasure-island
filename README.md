@@ -20,10 +20,13 @@ queue narrows external gates and never pauses safe independent work.
 
 ## Current local B225 v8 release closure — 2026-09-05
 
-The sole current working-tree/local release-ready private handoff is
+The sole current locally retained private handoff is
 `build/d1-b225-postpromotion-v8-2026-09-05-001/Treasure Island First Playable.app`.
-The B225 v8 source and evidence are not yet committed or pushed, and `build/`
-is ignored; a clone of current `main` does not reproduce or transfer this app.
+The B225 v8 source and evidence integration is accepted on `main` at commit
+`7448f081d510e56c598f41b68612ffd86e4afa5f`. The exact app remains ignored and
+locally available on the verifier; cloning `main` transfers the integrated
+source and evidence but not this app, which must be transferred separately or
+re-exported on another machine.
 Its canonical seven-file bundle identity is
 `3f38c5dcd55b19f12cf7788e1069367075aa22f1b557c5b61288abdfdc30afe0`;
 its executable is
@@ -42,11 +45,15 @@ Its independent [mechanical audit](evidence/reviews/d1-b225-postpromotion-v8-202
 (`9c909d047786d4f7feab138b4d7c597bba1bac2adcf78cc8bcdfb568de0a0ec2`)
 and [full-resolution visual review](evidence/reviews/d1-b225-postpromotion-v8-2026-09-05-INDEPENDENT_VISUAL_REVIEW.md)
 (`881b04d696bfe842c39a220be5f4da3087f30d8ef8e9c0493c9c62067a826c99`)
-both return `PASS_FOR_RELEASE_NO_ADDITIONAL_CREDIT`. Technical verification
-was performed on an Apple M2; ordinary recognition and mouse/keyboard play on
-the approved Apple M1 Pro owner target remain pending and are not implied by
-either audit. Candidate `024605` and its B201/v7 measurements below are retained
-as historical package context, not as the current handoff.
+both return `PASS_FOR_RELEASE_NO_ADDITIONAL_CREDIT`. After integration, these
+exact local app bytes were also visibly launched with no app arguments through
+the normal macOS application path on an Apple M2 verifier; the expected
+executable remained alive in an onscreen Metal window with no crash or GPU-fault
+record during the bounded observation. Ordinary recognition and mouse/keyboard
+play on the approved Apple M1 Pro owner target remain pending and are not
+implied by the audits or verifier launch. Candidate `024605` and its B201/v7
+measurements below are retained as historical package context, not as the
+current handoff.
 
 The generated-data and exact-current source-runtime gates pass with USGS 3DEP
 bare-earth terrain on both islands, coherent terrain-following roads/areas,
