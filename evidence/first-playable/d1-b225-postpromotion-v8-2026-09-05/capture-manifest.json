@@ -1,0 +1,1258 @@
+{
+  "additional_recognition_credit": false,
+  "bindings": {
+    "additional_recognition_credit": false,
+    "attachment_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-1__building_w95934119_wall/building_w95934119_wall/D1B225LiveAttachment",
+    "candidate_activation_performed_by_capture_harness": false,
+    "canonical_entrypoint_reachable": true,
+    "capture_time_recognition_metric": "8/213",
+    "current_v8_acceptance_governed_by_catalog_registry": true,
+    "decorative_batches": 2,
+    "decorative_boxes": 90,
+    "decorative_triangles": 1080,
+    "eligible_cladding_triangles": 8,
+    "host_array_mesh_built_from_exact_record_with_surface_partition": true,
+    "host_triangles": 28,
+    "live_instance_ids": {
+      "all_live_object_ids_nonzero": true,
+      "attachment_instance_id": "111098727563",
+      "cross_stage_object_id_equality_claimed": false,
+      "host_array_mesh_instance_id": "-9223371926209033090",
+      "host_body_instance_id": "110847069326",
+      "host_mesh_instance_id": "110830292098",
+      "host_shape_node_instance_id": "110880623756",
+      "host_shape_resource_instance_id": "-9223371925990929267",
+      "object_id_encoding": "canonical_signed_decimal_strings_to_avoid_json_binary64_precision_loss",
+      "object_id_relation_scope": "single_production_process_live_bindings_only",
+      "roof_array_mesh_instance_id": "-9223371927702205321",
+      "roof_body_instance_id": "109202902138",
+      "roof_mesh_instance_id": "109186124921",
+      "roof_shape_node_instance_id": "109236456572",
+      "roof_shape_resource_instance_id": "-9223371927635096453"
+    },
+    "live_node_pending_labels_retained_as_frozen_capture_provenance": true,
+    "navigation_owner_count": 0,
+    "postcapture_catalog_or_registry_mutation": false,
+    "production_attachment_id": "D1-B225-W95934119-NNW-LONG-PRODUCTION-ATTACHMENT",
+    "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+    "production_topology": {
+      "bodies": 466,
+      "meshes": 952,
+      "rows": 735,
+      "shapes": 466,
+      "surfaces": 967,
+      "triangles": 67716
+    },
+    "protected_generic_triangles": 20,
+    "receiver_key": "building:w95934119:wall",
+    "roof_key": "building:w95934119:roof",
+    "roof_root_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-1__building_w95934119_roof/building_w95934119_roof",
+    "source_keys": [
+      "w95934119"
+    ],
+    "spray_owner_count": 1,
+    "structural_body_count": 1,
+    "structural_shape_count": 1,
+    "wall_body_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-1__building_w95934119_wall/building_w95934119_wall/Collision",
+    "wall_root_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-1__building_w95934119_wall/building_w95934119_wall"
+  },
+  "candidate_generator_sha256_argument": "6c709d81038ce9563181e57db364f11c1ad64d84e7c91e0c78c8ef087c052105",
+  "canonical_entrypoint_reachable": true,
+  "capture_count": 11,
+  "capture_override_sha256": "edbc0b9caa60fa0fc6b83cebb3145bce11ce0bd976403ca1d2fbe9b7142b39c3",
+  "capture_time_authority": {
+    "adapter_contracts_schema_version": "ti.facade-runtime-adapter-contracts/7",
+    "additional_recognition_credit": false,
+    "b201_pre_b225_topology": {
+      "bodies": 466.0,
+      "meshes": 950.0,
+      "rows": 735.0,
+      "shapes": 466.0,
+      "surfaces": 964.0,
+      "triangles": 66636.0
+    },
+    "b201_topology_scope": "pre_b225_integration_live_parity",
+    "b225_acceptance_capture_time_recognition_metric": "7/213",
+    "b225_acceptance_evidence_manifest_sha256": "96c76fd99960f1345a7c56f7fc6678ac284f98cc601a3ba65ed57020491f18dc",
+    "b225_acceptance_evidence_tree_sha256": "f42dbec489c6fda55b612aba20c99ee2233857cb60a1ce9c512d024b35d0dcb7",
+    "b225_acceptance_numerator_effect": 1.0,
+    "b225_acceptance_review_receipt_sha256": "87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd7cf3b6b6fcb1d95",
+    "b225_adapter_acceptance_contract_matches": true,
+    "b225_catalog_acceptance_record_count": 1,
+    "b225_catalog_active_adapter_record_count": 1,
+    "b225_catalog_reference_recognizable": "accepted",
+    "b225_current_topology": {
+      "bodies": 466.0,
+      "meshes": 952.0,
+      "rows": 735.0,
+      "shapes": 466.0,
+      "surfaces": 967.0,
+      "triangles": 67716.0
+    },
+    "b225_current_topology_scope": "current_integration_topology",
+    "b225_physical_unit_id": "physical-building:w95934119",
+    "b225_registry_acceptance_record_count": 1,
+    "b225_registry_active_adapter_record_count": 1,
+    "b225_registry_active_runtime_adapter_ids": [
+      "active-adapter:d1-b225-live:building:w95934119:wall"
+    ],
+    "b225_registry_receiver_runtime_adapter_id": "active-adapter:d1-b225-live:building:w95934119:wall",
+    "b225_registry_receiver_runtime_content_mode": "active_d1_b225_host_partition_attachment",
+    "b225_registry_reference_recognizable": "accepted",
+    "catalog_active_runtime_adapter_count": 7,
+    "catalog_and_registry_acceptance_receipts_equal": true,
+    "catalog_schema_version": "ti.facade-recognition-catalog/8",
+    "compiler_version": "1.7.0",
+    "current_topology_owner_adapter_ids": [
+      "active-adapter:d1-b225-live:building:w95934119:wall"
+    ],
+    "direct_wall_receiver_count": 214.0,
+    "disabled_adapter_plan_count": 6.0,
+    "downstream_postpromotion_hashes_bound_into_v8_authority": false,
+    "frozen_live_node_pending_labels_retained_as_capture_provenance": true,
+    "loader_api_version": "ti.facade-runtime-registry-loader/7",
+    "not_evaluated_physical_unit_count": 205.0,
+    "package_safe_adapter_plan_count": 10.0,
+    "postcapture_catalog_or_registry_mutation": false,
+    "recognition_metric_denominator": 213.0,
+    "recognition_metric_display": "8/213",
+    "recognition_metric_numerator": 8.0,
+    "recognized_physical_unit_count": 8,
+    "registry_active_runtime_adapter_count": 7,
+    "registry_unit_count": 213,
+    "runtime_registry_schema_version": "ti.facade-runtime-registry/8",
+    "schema_version": "ti.d1-b225-postpromotion-v8-authority-snapshot/1",
+    "source_record_membership_count": 215.0,
+    "total_runtime_adapter_receiver_count": 16.0,
+    "visible_wall_run_count": 4971.0
+  },
+  "capture_time_recognition_metric": "8/213",
+  "captures": [
+    {
+      "actual_spring_length_m": 5.5000057220459,
+      "aim_target_m": [
+        -421.542999267578,
+        5.30000019073486,
+        -186.115005493164
+      ],
+      "bytes": 882816,
+      "camera_forward": [
+        -0.339856058359146,
+        0.0159042701125145,
+        0.940342962741852
+      ],
+      "camera_fov_degrees": 70.0,
+      "camera_pitch_degrees": 0.911286002607887,
+      "camera_position_m": [
+        -407.133941650391,
+        4.62569618225098,
+        -225.983352661133
+      ],
+      "camera_yaw_degrees": 160.129278960145,
+      "configured_spring_length_m": 5.5,
+      "crop_or_postprocess": false,
+      "debug_labels_visible": false,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/01-whole-nnw-default.png",
+      "first_los_hit_distance_m": 42.3974800109863,
+      "first_los_hit_position_m": [
+        -421.54296875,
+        5.29999732971191,
+        -186.115173339844
+      ],
+      "first_los_hit_receiver": "building:w95934119:wall",
+      "first_los_hit_source_keys": [
+        "w95934119"
+      ],
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y_m": 2.71305847167969,
+      "id": "01-whole-nnw-default",
+      "input_reachable_camera_orientation": true,
+      "lighting": "world_default",
+      "minimum_allowed_actual_spring_length_m": 2.0,
+      "ordinary_player_rig": true,
+      "physics_grounded": true,
+      "player_position_m": [
+        -409.003112792969,
+        2.71317028999329,
+        -220.811447143555
+      ],
+      "pose_id": "01-whole-nnw-default",
+      "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+      "receiver_first_los": true,
+      "requested_xz": [
+        -409.003112792969,
+        -220.811447143555
+      ],
+      "role": "grounded_stock_player_whole_production_nnw",
+      "sample_luminance_range": 0.649647854268551,
+      "sample_unique_colors": 322,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "sha256": "af85389cf59104cfd48f727add020129f0d98e314ccfd988bb7dad3b12e2b114",
+      "source_photography_in_frame": false,
+      "spring_arm_compressed_by_world": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "visual_verdict": "pending_independent_postpromotion_review",
+      "whole_chain_projection": {
+        "complete_chain_visible": true,
+        "ok": true,
+        "projected_pixels": [
+          [
+            322.456970214844,
+            523.020263671875
+          ],
+          [
+            323.7998046875,
+            386.2958984375
+          ],
+          [
+            889.711547851562,
+            487.031036376953
+          ],
+          [
+            889.46630859375,
+            428.601745605469
+          ]
+        ]
+      }
+    },
+    {
+      "actual_spring_length_m": 5.5000057220459,
+      "aim_target_m": [
+        -421.542999267578,
+        5.30000019073486,
+        -186.115005493164
+      ],
+      "bytes": 939199,
+      "camera_forward": [
+        -0.339856058359146,
+        0.0159042701125145,
+        0.940342962741852
+      ],
+      "camera_fov_degrees": 70.0,
+      "camera_pitch_degrees": 0.911286002607887,
+      "camera_position_m": [
+        -407.133941650391,
+        4.62569618225098,
+        -225.983352661133
+      ],
+      "camera_transform_exactly_reused": true,
+      "camera_yaw_degrees": 160.129278960145,
+      "configured_spring_length_m": 5.5,
+      "crop_or_postprocess": false,
+      "debug_labels_visible": false,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/03-whole-nnw-changed-light.png",
+      "first_los_hit_distance_m": 42.3974800109863,
+      "first_los_hit_position_m": [
+        -421.54296875,
+        5.29999732971191,
+        -186.115173339844
+      ],
+      "first_los_hit_receiver": "building:w95934119:wall",
+      "first_los_hit_source_keys": [
+        "w95934119"
+      ],
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y_m": 2.71305847167969,
+      "id": "03-whole-nnw-changed-light",
+      "input_reachable_camera_orientation": true,
+      "lighting": "frozen_changed_light",
+      "minimum_allowed_actual_spring_length_m": 2.0,
+      "ordinary_player_rig": true,
+      "physics_grounded": true,
+      "player_position_m": [
+        -409.003112792969,
+        2.71317028999329,
+        -220.811447143555
+      ],
+      "player_transform_exactly_reused": true,
+      "pose_id": "01-whole-nnw-default",
+      "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+      "receiver_first_los": true,
+      "requested_xz": [
+        -409.003112792969,
+        -220.811447143555
+      ],
+      "role": "same_grounded_stock_player_pose_changed_light",
+      "same_pose_as": "01-whole-nnw-default",
+      "sample_luminance_range": 0.680236056447029,
+      "sample_unique_colors": 305,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "sha256": "6457d3f83d398b375145742d4f8929cf609edf34880f8642c2c7b1eea272695b",
+      "source_photography_in_frame": false,
+      "spring_arm_compressed_by_world": false,
+      "sun_rotation_degrees": [
+        -31.9999980926514,
+        132.0,
+        0.0
+      ],
+      "visual_verdict": "pending_independent_postpromotion_review",
+      "whole_chain_projection": {
+        "complete_chain_visible": true,
+        "ok": true,
+        "projected_pixels": [
+          [
+            322.456970214844,
+            523.020263671875
+          ],
+          [
+            323.7998046875,
+            386.2958984375
+          ],
+          [
+            889.711547851562,
+            487.031036376953
+          ],
+          [
+            889.46630859375,
+            428.601745605469
+          ]
+        ]
+      }
+    },
+    {
+      "bytes": 305889,
+      "crop_or_postprocess": false,
+      "derivation_source": "images/01-whole-nnw-default.png",
+      "derivation_source_sha256": "af85389cf59104cfd48f727add020129f0d98e314ccfd988bb7dad3b12e2b114",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/04-whole-nnw-default-grayscale.png",
+      "grayscale_only": true,
+      "id": "04-whole-nnw-default-grayscale",
+      "lighting": "derived_from_world_default",
+      "role": "lossless_grayscale_legibility_derivative",
+      "sha256": "0f72b31434b9a524da6483519499d6ea2ea6c915b818436ca26008090d1554d1",
+      "visual_verdict": "pending_independent_postpromotion_review"
+    },
+    {
+      "actual_spring_length_m": 4.51169729232788,
+      "aim_target_m": [
+        -421.426788330078,
+        5.5,
+        -186.175430297852
+      ],
+      "bytes": 868656,
+      "camera_forward": [
+        -0.180560752749443,
+        0.0216936562210321,
+        0.983324587345123
+      ],
+      "camera_fov_degrees": 70.0,
+      "camera_pitch_degrees": 1.24305425055692,
+      "camera_position_m": [
+        -414.4345703125,
+        4.65991115570068,
+        -224.254699707031
+      ],
+      "camera_yaw_degrees": 169.595104747689,
+      "configured_spring_length_m": 5.5,
+      "crop_or_postprocess": false,
+      "debug_labels_visible": false,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/02-nnw-oblique.png",
+      "first_los_hit_distance_m": 38.7248420715332,
+      "first_los_hit_position_m": [
+        -421.4267578125,
+        5.49999475479126,
+        -186.17561340332
+      ],
+      "first_los_hit_receiver": "building:w95934119:wall",
+      "first_los_hit_source_keys": [
+        "w95934119"
+      ],
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y_m": 2.75767517089844,
+      "id": "02-nnw-oblique",
+      "input_reachable_camera_orientation": true,
+      "lighting": "world_default",
+      "minimum_allowed_actual_spring_length_m": 2.0,
+      "ordinary_player_rig": true,
+      "physics_grounded": true,
+      "player_position_m": [
+        -415.249206542969,
+        2.75778698921204,
+        -219.818237304688
+      ],
+      "pose_id": "02-nnw-oblique",
+      "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+      "receiver_first_los": true,
+      "requested_xz": [
+        -415.249206542969,
+        -219.818237304688
+      ],
+      "role": "grounded_stock_player_production_nnw_oblique",
+      "sample_luminance_range": 0.650481581687927,
+      "sample_unique_colors": 307,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "sha256": "0ce8c9edc05b79e52a8d6b6445561023f12f25db98955bc2d9ae53bbd1b41722",
+      "source_photography_in_frame": false,
+      "spring_arm_compressed_by_world": true,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "visual_verdict": "pending_independent_postpromotion_review"
+    },
+    {
+      "actual_spring_length_m": 5.49999809265137,
+      "aim_target_m": [
+        -424.975799560547,
+        6.40000009536743,
+        -184.330276489258
+      ],
+      "bytes": 761912,
+      "camera_forward": [
+        0.456714451313019,
+        0.140442475676537,
+        0.878457725048065
+      ],
+      "camera_fov_degrees": 70.0,
+      "camera_pitch_degrees": 8.07345053926293,
+      "camera_position_m": [
+        -433.945770263672,
+        3.64168882369995,
+        -201.583297729492
+      ],
+      "camera_yaw_degrees": -152.529869971635,
+      "configured_spring_length_m": 5.5,
+      "crop_or_postprocess": false,
+      "debug_labels_visible": false,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/05-clerestory-cladding-close.png",
+      "first_los_hit_distance_m": 19.640022277832,
+      "first_los_hit_position_m": [
+        -424.975891113281,
+        6.39998149871826,
+        -184.330368041992
+      ],
+      "first_los_hit_receiver": "building:w95934119:wall",
+      "first_los_hit_source_keys": [
+        "w95934119"
+      ],
+      "ground_clearance_m": 0.0000140666961669922,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y_m": 2.41410827636719,
+      "id": "05-clerestory-cladding-close",
+      "input_reachable_camera_orientation": true,
+      "lighting": "world_default",
+      "minimum_allowed_actual_spring_length_m": 2.0,
+      "ordinary_player_rig": true,
+      "physics_grounded": true,
+      "player_position_m": [
+        -431.433807373047,
+        2.41412234306335,
+        -196.751800537109
+      ],
+      "pose_id": "05-clerestory-cladding-close",
+      "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+      "receiver_first_los": true,
+      "requested_xz": [
+        -431.433807373047,
+        -196.751800537109
+      ],
+      "role": "grounded_stock_player_clerestory_and_cladding_close",
+      "sample_luminance_range": 0.662246286869049,
+      "sample_unique_colors": 267,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "sha256": "0d7991fb2ffe54543cc6ed10f68771d535173a5e2bcb1f0c2f3ebba1b69b37a6",
+      "source_photography_in_frame": false,
+      "spring_arm_compressed_by_world": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "visual_verdict": "pending_independent_postpromotion_review"
+    },
+    {
+      "actual_spring_length_m": 5.50000143051147,
+      "aim_target_m": [
+        -426.750305175781,
+        4.25,
+        -183.40771484375
+      ],
+      "bytes": 1085775,
+      "camera_forward": [
+        0.461165428161621,
+        -0.0227124337106943,
+        0.887023448944092
+      ],
+      "camera_fov_degrees": 70.0,
+      "camera_pitch_degrees": -1.30144832608857,
+      "camera_position_m": [
+        -431.362487792969,
+        4.4771523475647,
+        -192.27897644043
+      ],
+      "camera_yaw_degrees": -152.530001719321,
+      "configured_spring_length_m": 5.5,
+      "crop_or_postprocess": false,
+      "debug_labels_visible": false,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/06-real-spray-eligible-host.png",
+      "first_los_hit_distance_m": 10.0010595321655,
+      "first_los_hit_position_m": [
+        -426.750335693359,
+        4.25000429153442,
+        -183.407806396484
+      ],
+      "first_los_hit_receiver": "building:w95934119:wall",
+      "first_los_hit_source_keys": [
+        "w95934119"
+      ],
+      "ground_clearance_m": 0.0000140666961669922,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y_m": 2.35221862792969,
+      "id": "06-real-spray-eligible-host",
+      "input_reachable_camera_orientation": true,
+      "lighting": "world_default",
+      "minimum_allowed_actual_spring_length_m": 1.5,
+      "ordinary_player_rig": true,
+      "physics_grounded": true,
+      "player_position_m": [
+        -428.826080322266,
+        2.35223269462585,
+        -187.400344848633
+      ],
+      "pose_id": "06-real-spray-eligible-host",
+      "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+      "receiver_first_los": true,
+      "requested_xz": [
+        -428.826080322266,
+        -187.400344848633
+      ],
+      "role": "grounded_stock_player_real_spray_on_eligible_sole_host",
+      "sample_luminance_range": 0.675127856433392,
+      "sample_unique_colors": 282,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "sha256": "e9101c5930e50e8d1933c67592a57b38ab58be9ba3924ff0892d0f8016665c6e",
+      "sole_host_collider": true,
+      "source_photography_in_frame": false,
+      "spray_first_hit_normal": [
+        -0.461291581392288,
+        0.0,
+        -0.887248635292053
+      ],
+      "spray_first_hit_object": "building:w95934119:wall",
+      "spray_first_hit_position_m": [
+        -426.750335693359,
+        4.25000429153442,
+        -183.407806396484
+      ],
+      "spray_first_hit_sources": [
+        "w95934119"
+      ],
+      "spray_result": "placed",
+      "spring_arm_compressed_by_world": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "tag_position_m": [
+        -426.757263183594,
+        4.25000429153442,
+        -183.421112060547
+      ],
+      "tag_visible_in_tree": true,
+      "visual_verdict": "pending_independent_postpromotion_review"
+    },
+    {
+      "actual_spring_length_m": 5.50003242492676,
+      "aim_target_m": [
+        -440.439025878906,
+        4.19999980926514,
+        -172.316497802734
+      ],
+      "bytes": 873989,
+      "camera_forward": [
+        0.996259927749634,
+        -0.00306924805045128,
+        0.0863530412316322
+      ],
+      "camera_fov_degrees": 70.0,
+      "camera_pitch_degrees": -0.175865045885491,
+      "camera_position_m": [
+        -463.622924804688,
+        4.27142810821533,
+        -174.326019287109
+      ],
+      "camera_yaw_degrees": -94.9538737332662,
+      "configured_spring_length_m": 5.5,
+      "crop_or_postprocess": false,
+      "debug_labels_visible": false,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/07-protected-return-run0.png",
+      "first_los_hit_distance_m": 23.2709655761719,
+      "first_los_hit_position_m": [
+        -440.438995361328,
+        4.2000036239624,
+        -172.316497802734
+      ],
+      "first_los_hit_receiver": "building:w95934119:wall",
+      "first_los_hit_source_keys": [
+        "w95934119"
+      ],
+      "ground_clearance_m": 0.0000140666961669922,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y_m": 2.25453186035156,
+      "id": "07-protected-return-run0",
+      "input_reachable_camera_orientation": true,
+      "lighting": "world_default",
+      "minimum_allowed_actual_spring_length_m": 2.0,
+      "ordinary_player_rig": true,
+      "physics_grounded": true,
+      "player_position_m": [
+        -458.143463134766,
+        2.25454592704773,
+        -173.85107421875
+      ],
+      "pose_id": "07-protected-return-run0",
+      "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+      "receiver_first_los": true,
+      "requested_xz": [
+        -458.143463134766,
+        -173.85107421875
+      ],
+      "role": "grounded_stock_player_three_quarter_protected_generic_run0_plus_selected_nnw_corner",
+      "sample_luminance_range": 0.671579599380493,
+      "sample_unique_colors": 273,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "sha256": "b993e99728338a678022f52473e4cab3ec7165436c8921e155ef375ac71888de",
+      "source_photography_in_frame": false,
+      "spring_arm_compressed_by_world": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "visual_verdict": "pending_independent_postpromotion_review"
+    },
+    {
+      "actual_spring_length_m": 5.49997997283936,
+      "aim_target_m": [
+        -421.426788330078,
+        5.69999980926514,
+        -186.175430297852
+      ],
+      "bytes": 641283,
+      "camera_forward": [
+        -0.58706659078598,
+        0.0275214016437531,
+        0.809070646762848
+      ],
+      "camera_fov_degrees": 70.0,
+      "camera_pitch_degrees": 1.57704881798571,
+      "camera_position_m": [
+        -394.560028076172,
+        4.44050598144531,
+        -223.202133178711
+      ],
+      "camera_yaw_degrees": 144.03517391593,
+      "configured_spring_length_m": 5.5,
+      "crop_or_postprocess": false,
+      "debug_labels_visible": false,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/08-b225-surrounding-context.png",
+      "first_los_hit_distance_m": 45.764217376709,
+      "first_los_hit_position_m": [
+        -421.426666259766,
+        5.70000171661377,
+        -186.175643920898
+      ],
+      "first_los_hit_receiver": "building:w95934119:wall",
+      "first_los_hit_source_keys": [
+        "w95934119"
+      ],
+      "ground_clearance_m": 0.0000140666961669922,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y_m": 2.59185791015625,
+      "id": "08-b225-surrounding-context",
+      "input_reachable_camera_orientation": true,
+      "lighting": "world_default",
+      "minimum_allowed_actual_spring_length_m": 2.0,
+      "ordinary_player_rig": true,
+      "physics_grounded": true,
+      "player_position_m": [
+        -397.788879394531,
+        2.59187197685242,
+        -218.752258300781
+      ],
+      "pose_id": "08-b225-surrounding-context",
+      "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+      "receiver_first_los": true,
+      "requested_xz": [
+        -397.788879394531,
+        -218.752258300781
+      ],
+      "role": "grounded_stock_player_wide_production_and_nearby_building_context",
+      "sample_luminance_range": 0.650764718651772,
+      "sample_unique_colors": 227,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "sha256": "8e9bc23e0a2196c2dbd8e16a7e18d8128f3c695f01db396d07afadaf48f40795",
+      "source_photography_in_frame": false,
+      "spring_arm_compressed_by_world": false,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ],
+      "visual_verdict": "pending_independent_postpromotion_review"
+    },
+    {
+      "actual_spring_length_m": 5.50000286102295,
+      "aim_target_m": [
+        64.2819976806641,
+        5.80000019073486,
+        -253.462997436523
+      ],
+      "b225_production_attachment_attached_to_decoy": false,
+      "bytes": 949329,
+      "camera_forward": [
+        0.88146710395813,
+        0.00820881500840187,
+        -0.472174048423767
+      ],
+      "camera_fov_degrees": 70.0,
+      "camera_pitch_degrees": 0.470327589923938,
+      "camera_position_m": [
+        -12.8487815856934,
+        5.08171844482422,
+        -212.146408081055
+      ],
+      "camera_yaw_degrees": -61.8234078311079,
+      "configured_spring_length_m": 5.5,
+      "crop_or_postprocess": false,
+      "debug_labels_visible": false,
+      "decoy_pose_search_candidate_index": 0,
+      "decoy_role": "exact_current_b201_confusion_set_context",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/09-decoy-b201-current.png",
+      "first_los_hit_distance_m": 87.5030364990234,
+      "first_los_hit_position_m": [
+        64.2822570800781,
+        5.80001449584961,
+        -253.463073730469
+      ],
+      "first_los_hit_receiver": "building:w34313545:wall",
+      "first_los_hit_source_keys": [
+        "w34313545"
+      ],
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y_m": 3.12675476074219,
+      "id": "09-decoy-b201-current",
+      "input_reachable_camera_orientation": true,
+      "lighting": "world_default",
+      "minimum_allowed_actual_spring_length_m": 1.5,
+      "ordinary_player_rig": true,
+      "physics_grounded": true,
+      "player_position_m": [
+        -8.00070762634277,
+        3.12686657905579,
+        -214.743362426758
+      ],
+      "pose_id": "09-decoy-b201-current",
+      "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+      "receiver_first_los": true,
+      "requested_xz": [
+        -8.00070762634277,
+        -214.743362426758
+      ],
+      "role": "exact_current_b201_confusion_set_context",
+      "sample_luminance_range": 0.476266652345657,
+      "sample_unique_colors": 302,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "sha256": "d135c8cf79dd17cbbb30ea03a62920b7b1b91005ed57b86621d9def49f0559c9",
+      "source_photography_in_frame": false,
+      "spring_arm_compressed_by_world": false,
+      "visual_verdict": "pending_independent_postpromotion_review"
+    },
+    {
+      "actual_spring_length_m": 5.49999094009399,
+      "aim_target_m": [
+        44.7290000915527,
+        5.07350015640259,
+        -370.933502197266
+      ],
+      "b225_production_attachment_attached_to_decoy": false,
+      "bytes": 965720,
+      "camera_forward": [
+        0.455990731716156,
+        -0.00139341631438583,
+        0.889983475208282
+      ],
+      "camera_fov_degrees": 70.0,
+      "camera_pitch_degrees": -0.0798434137642553,
+      "camera_position_m": [
+        24.8933601379395,
+        5.13411855697632,
+        -409.647796630859
+      ],
+      "camera_yaw_degrees": -152.87123771945,
+      "configured_spring_length_m": 5.5,
+      "crop_or_postprocess": false,
+      "debug_labels_visible": false,
+      "decoy_pose_search_candidate_index": 0,
+      "decoy_role": "exact_current_b202_confusion_set_context",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/10-decoy-b202-current.png",
+      "first_los_hit_distance_m": 43.5000190734863,
+      "first_los_hit_position_m": [
+        44.7289657592773,
+        5.07350492477417,
+        -370.933502197266
+      ],
+      "first_los_hit_receiver": "building:w34313546:wall",
+      "first_los_hit_source_keys": [
+        "w34313546"
+      ],
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_0__z_-2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y_m": 3.1263427734375,
+      "id": "10-decoy-b202-current",
+      "input_reachable_camera_orientation": true,
+      "lighting": "world_default",
+      "minimum_allowed_actual_spring_length_m": 1.5,
+      "ordinary_player_rig": true,
+      "physics_grounded": true,
+      "player_position_m": [
+        27.4013118743896,
+        3.1264545917511,
+        -404.752899169922
+      ],
+      "pose_id": "10-decoy-b202-current",
+      "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+      "receiver_first_los": true,
+      "requested_xz": [
+        27.4013118743896,
+        -404.752899169922
+      ],
+      "role": "exact_current_b202_confusion_set_context",
+      "sample_luminance_range": 0.545625910162926,
+      "sample_unique_colors": 336,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "sha256": "63f186e3c85a9ef876116d4d6074b5a8586f8b79b5b3d8f3ee6e09f24b5fe5c5",
+      "source_photography_in_frame": false,
+      "spring_arm_compressed_by_world": false,
+      "visual_verdict": "pending_independent_postpromotion_review"
+    },
+    {
+      "actual_spring_length_m": 5.50000143051147,
+      "aim_target_m": [
+        209.277008056641,
+        8.43000030517578,
+        117.188507080078
+      ],
+      "b225_production_attachment_attached_to_decoy": false,
+      "bytes": 751199,
+      "camera_forward": [
+        -0.470405995845795,
+        0.0777009725570679,
+        -0.879022598266602
+      ],
+      "camera_fov_degrees": 70.0,
+      "camera_pitch_degrees": 4.45642276125517,
+      "camera_position_m": [
+        229.793899536133,
+        5.04105854034424,
+        155.527282714844
+      ],
+      "camera_yaw_degrees": 28.1533442029133,
+      "configured_spring_length_m": 5.5,
+      "crop_or_postprocess": false,
+      "debug_labels_visible": false,
+      "decoy_pose_search_candidate_index": 0,
+      "decoy_role": "exact_current_b258_confusion_set_context",
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "images/11-decoy-b258-current.png",
+      "first_los_hit_distance_m": 43.6152496337891,
+      "first_los_hit_position_m": [
+        209.27702331543,
+        8.43000602722168,
+        117.188491821289
+      ],
+      "first_los_hit_receiver": "building:w34313512:wall",
+      "first_los_hit_source_keys": [
+        "w34313512"
+      ],
+      "ground_clearance_m": 0.0000140666961669922,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_0__z_0",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y_m": 3.46839904785156,
+      "id": "11-decoy-b258-current",
+      "input_reachable_camera_orientation": true,
+      "lighting": "world_default",
+      "minimum_allowed_actual_spring_length_m": 1.5,
+      "ordinary_player_rig": true,
+      "physics_grounded": true,
+      "player_position_m": [
+        227.206665039062,
+        3.46841311454773,
+        150.692657470703
+      ],
+      "pose_id": "11-decoy-b258-current",
+      "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+      "receiver_first_los": true,
+      "requested_xz": [
+        227.206665039062,
+        150.692657470703
+      ],
+      "role": "exact_current_b258_confusion_set_context",
+      "sample_luminance_range": 0.641957700252533,
+      "sample_unique_colors": 263,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "sha256": "19b986ac2679e66c6a8b77d57c6b5c17fa6c6e2e6b90796412c4c36626a1409e",
+      "source_photography_in_frame": false,
+      "spring_arm_compressed_by_world": false,
+      "visual_verdict": "pending_independent_postpromotion_review"
+    }
+  ],
+  "generator": "game/tests/d1_b225_postpromotion_v8_capture.gd",
+  "generator_sha256": "6c709d81038ce9563181e57db364f11c1ad64d84e7c91e0c78c8ef087c052105",
+  "grayscale_derivation": "lossless default PNG reload, Image FORMAT_L8 conversion, PNG save; no crop, relight, or geometry change",
+  "live_binding_ids_stable_across_capture": true,
+  "nonclaims": [
+    "additional recognition credit beyond the already accepted v8 numerator",
+    "perfect texture tiling",
+    "exact pane count, cadence, damage, lower openings, entries, other sides, roof equipment, interior, or as-built realism"
+  ],
+  "package_verification_receipt": {
+    "adapter_contracts_schema_version": "ti.facade-runtime-adapter-contracts/7",
+    "additional_recognition_credit": false,
+    "app_bundle_name": "Treasure Island First Playable.app",
+    "architectures": [
+      "x86_64",
+      "arm64"
+    ],
+    "bundle_file_count": 7.0,
+    "bundle_identity_algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+    "bundle_identity_sha256": "3f38c5dcd55b19f12cf7788e1069367075aa22f1b557c5b61288abdfdc30afe0",
+    "bundle_inventory": [
+      {
+        "bytes": 1885.0,
+        "path": "Contents/Info.plist",
+        "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085"
+      },
+      {
+        "bytes": 170963648.0,
+        "path": "Contents/MacOS/Treasure Island First Playable",
+        "sha256": "c485010419591a9556e849e79755d7e816f840e31978c10b371be08a730e2d82"
+      },
+      {
+        "bytes": 9.0,
+        "path": "Contents/PkgInfo",
+        "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb"
+      },
+      {
+        "bytes": 229.0,
+        "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+        "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3"
+      },
+      {
+        "bytes": 66073188.0,
+        "path": "Contents/Resources/Treasure Island First Playable.pck",
+        "sha256": "7315bba99efeeeb86be0bbf44876d391b9c1c95f1638318e0df2b7af367669bf"
+      },
+      {
+        "bytes": 67500.0,
+        "path": "Contents/Resources/icon.icns",
+        "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a"
+      },
+      {
+        "bytes": 3217.0,
+        "path": "Contents/_CodeSignature/CodeResources",
+        "sha256": "a61fcbb1627a2900698b3294fdb12eddf7236480a9e1f5148f5ec86ad3729e40"
+      }
+    ],
+    "bundle_verification_log_sha256": "b4e0d728e7ca1d95a1cc47b3eadd67517f89628978e17f4597e4f20e7c6e74c6",
+    "candidate_status": "uncommitted_v8_candidate_pending_two_independent_postpromotion_audits",
+    "capture_date": "2026-09-05",
+    "capture_time_recognition_metric": "8/213",
+    "catalog_schema_version": "ti.facade-recognition-catalog/8",
+    "codesign_deep_strict_pass": true,
+    "codesign_per_slice_pass": true,
+    "compiler_version": "1.7.0",
+    "downstream_postpromotion_hashes_bound_into_v8_authority": false,
+    "entitlements_empty_dictionary": true,
+    "executable_bytes": 170963648.0,
+    "executable_sha256": "c485010419591a9556e849e79755d7e816f840e31978c10b371be08a730e2d82",
+    "extended_attributes_absent": true,
+    "generic_mounted_pck_content_audit_log_sha256": "448a21e8287bd3199be1e7fd313cd59a63914780df18f4b1feda8f53675070d0",
+    "generic_mounted_pck_content_audit_pass": true,
+    "headless_exported_main_smoke_pass": true,
+    "headless_smoke_log_sha256": "60617b855838b2a23e45eacfdf2214044d3229ae9d4046a9643e7da16f5100ce",
+    "loader_api_version": "ti.facade-runtime-registry-loader/7",
+    "mounted_candidate_routes_absent": true,
+    "mounted_contract_log_sha256": "2dab5ffdfd675e7b46e49b90d32a81add52f6c0667a4a93561e77ddf77ba02c3",
+    "mounted_new_v8_package_contract_present_and_loadable": true,
+    "mounted_ordinary_main_present": true,
+    "mounted_override_absent": true,
+    "mounted_package_contract_pass": true,
+    "mounted_six_production_assets_present": true,
+    "native_exported_main_smoke_pass": true,
+    "native_smoke_log_sha256": "8b034953629db70df4af7073556a47271c4842f05e3c1cd624489d88c633b999",
+    "pck_bytes": 66073188.0,
+    "pck_path_stored": false,
+    "pck_sha256": "7315bba99efeeeb86be0bbf44876d391b9c1c95f1638318e0df2b7af367669bf",
+    "postcapture_catalog_or_registry_mutation": false,
+    "privacy_manifest_present": true,
+    "privacy_manifest_valid": true,
+    "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+    "quarantine_absent": true,
+    "review_status": "pending_independent_postpromotion_contract_and_visual_audits_not_self_accepted",
+    "runtime_registry_schema_version": "ti.facade-runtime-registry/8",
+    "runtime_topology": {
+      "bodies": 466.0,
+      "meshes": 952.0,
+      "rows": 735.0,
+      "shapes": 466.0,
+      "surfaces": 967.0,
+      "triangles": 67716.0
+    },
+    "schema_version": "ti.d1-b225-postpromotion-v8-package-verification/1",
+    "six_production_asset_hashes": {
+      "res://game/resources/facades/d1_current/d1_b225_live_attachment.json": "80b42c33fce84361aa7512f64305f5bff273e8fed95640ca4f9c19d49d55621d",
+      "res://game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres": "7fa7f3165dee560c48f5a092f317900b87b0876f27bb6a0e937b9c406a8d4ea1",
+      "res://game/resources/materials/world/d1_current/shared_dark_glass.tres": "ad8931db8954fd5ebc8fdd809f70afb279dd74a36e53e1d9ca907c44409f10d3",
+      "res://game/resources/materials/world/d1_current/shared_pale_frame.tres": "9a2de298ff545cf80c5da0ed0aa37d9d4ebbf10fec8eb78810af7e4d012d1436",
+      "res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
+      "res://game/scripts/world/facades/d1_b225_live_attachment.gd": "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9"
+    },
+    "source_hashes": {
+      "discovery/facades/facade-recognition-catalog.json": "d95be7bec8f0eabe97a9b5f7fefe1ce54ec7cbf940d85d28518ff6979eeb16ea",
+      "discovery/facades/facade-recognition-catalog.schema.json": "44584e92e1652fc930f47882b4a83304f5216c14173eb805bc9ce68ea9927cac",
+      "evidence/first-playable/d1-b225-production-attachment-v7-staging-2026-09-05/capture-manifest.json": "96c76fd99960f1345a7c56f7fc6678ac284f98cc601a3ba65ed57020491f18dc",
+      "evidence/first-playable/d1-b225-production-attachment-v7-staging-2026-09-05/tree_sha256": "f42dbec489c6fda55b612aba20c99ee2233857cb60a1ce9c512d024b35d0dcb7",
+      "evidence/reviews/d1-b225-production-attachment-v7-staging-2026-09-05-INDEPENDENT_VISUAL_REVIEW.md": "87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd7cf3b6b6fcb1d95",
+      "export_presets.cfg": "b9e991df5f586fc5ac038ff10815d5cf9569df5dea24b38dabeab959f0bcaee4",
+      "game/resources/facades/d1_current/d1_b225_live_attachment.json": "80b42c33fce84361aa7512f64305f5bff273e8fed95640ca4f9c19d49d55621d",
+      "game/resources/facades/facade-runtime-adapter-contracts.json": "dd2d13e3b0f6eee1f8c5f2957927c4f3caba43b31883beea925f9a91b826d65c",
+      "game/resources/facades/facade-runtime-registry.json": "109f83f40450e9c71ef6d39f1659e76eac5f1457fcfab772538b471cc74c0051",
+      "game/scripts/main.gd": "14468a67c4dc8d56394b98515c61e7425c130ef74297624bb205957f6a834140",
+      "game/scripts/world/facades/d1_b225_live_attachment.gd": "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9",
+      "game/scripts/world/facades/facade_runtime_registry_loader.gd": "12e6c64b23b0783ed240b3d6c02499c3940c2b6a14344caa29778b850db06c04",
+      "game/scripts/world/world_chunk_builder.gd": "de4a2924d275a51dfd08aae1f0ef21daac33395b1fcfe98e260fbc90737dd725",
+      "game/tests/d1_b225_postpromotion_v8_capture.gd": "6c709d81038ce9563181e57db364f11c1ad64d84e7c91e0c78c8ef087c052105",
+      "game/tests/headless_d1_b225_postpromotion_v8_contract.gd": "fd63ced9552dd9a1749de0047d2cebd1b46a1b093ebe1645dd4fcace19186353",
+      "game/tests/headless_d1_b225_postpromotion_v8_package_contract.gd": "6d2d05e28657b5de89bce0cea0c70819b791d886921f4a057c80cf548713cbcc",
+      "project.godot": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af"
+    },
+    "source_package_contract_log_sha256": "4f1abbc991708879e9a9a011abc5a9df1d30886a64edc2491b2e14feffdb7ed6",
+    "source_package_contract_pass": true
+  },
+  "package_verification_receipt_copied_into_packet": true,
+  "package_verification_receipt_sha256": "160d48acdc71687fd46ea3c14d91723e897e4930a59ffb6504b2d621d776cc1c",
+  "pending_independent_postpromotion_contract_audit": true,
+  "pending_independent_postpromotion_visual_review": true,
+  "pose_method_disclosure": "after ordinary main.tscn production startup and real player grounding, the harness performs one pre-capture player placement and input-reachable stock-camera aim per still; no pose writes occur during each saved render",
+  "postcapture_catalog_or_registry_mutation": false,
+  "postpromotion_candidate_evidence": true,
+  "pre_b225_reference_topology": {
+    "bodies": 466,
+    "meshes": 950,
+    "rows": 735,
+    "shapes": 466,
+    "surfaces": 964,
+    "triangles": 66636
+  },
+  "production_delta_from_pre_b225": {
+    "bodies": 0,
+    "meshes": 2,
+    "rows": 0,
+    "shapes": 0,
+    "surfaces": 3,
+    "triangles": 1080
+  },
+  "production_path_observation": {
+    "attachment_present_at_world_ready": true,
+    "candidate_activation_count": 0,
+    "capture_harness_loaded_or_called_adapter": false,
+    "capture_harness_loaded_or_called_candidate_seam": false,
+    "main_scene_instantiated": true,
+    "world_ready_runtime_topology": {
+      "bodies": 466,
+      "meshes": 952,
+      "rows": 735,
+      "shapes": 466,
+      "surfaces": 967,
+      "triangles": 67716
+    }
+  },
+  "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+  "recognition_status": "current_v8_accepted_no_additional_credit_pending_two_postpromotion_audits",
+  "review_status": "pending_independent_postpromotion_contract_and_visual_audits_uncommitted_candidate_not_self_accepted",
+  "runtime_environment": {
+    "display_server": "macOS",
+    "godot_version": "4.7.2-stable (official)",
+    "native_window": [
+      1440,
+      900
+    ],
+    "physics_interpolation_project_setting_effective": false,
+    "physics_interpolation_setting_key": "physics/common/physics_interpolation",
+    "physics_ticks_per_second": 60,
+    "project_godot_sha256": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af",
+    "rendering_driver": "metal",
+    "rendering_method": "forward_plus",
+    "scene_tree_physics_interpolation_enabled": false,
+    "video_adapter": "Apple M2 (Apple8)",
+    "video_adapter_api": "4.0",
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  "runtime_topology": {
+    "bodies": 466,
+    "meshes": 952,
+    "rows": 735,
+    "shapes": 466,
+    "surfaces": 967,
+    "triangles": 67716
+  },
+  "schema_version": "ti.d1-b225-postpromotion-v8-static-evidence/1",
+  "source_dependency_hashes": {
+    "res://discovery/facades/facade-recognition-catalog.json": "d95be7bec8f0eabe97a9b5f7fefe1ce54ec7cbf940d85d28518ff6979eeb16ea",
+    "res://discovery/facades/facade-recognition-catalog.schema.json": "44584e92e1652fc930f47882b4a83304f5216c14173eb805bc9ce68ea9927cac",
+    "res://evidence/first-playable/d1-b225-production-attachment-v7-staging-2026-09-05/capture-manifest.json": "96c76fd99960f1345a7c56f7fc6678ac284f98cc601a3ba65ed57020491f18dc",
+    "res://evidence/reviews/d1-b225-production-attachment-v7-staging-2026-09-05-INDEPENDENT_VISUAL_REVIEW.md": "87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd7cf3b6b6fcb1d95",
+    "res://export_presets.cfg": "b9e991df5f586fc5ac038ff10815d5cf9569df5dea24b38dabeab959f0bcaee4",
+    "res://game/resources/facades/d1_current/d1_b225_live_attachment.json": "80b42c33fce84361aa7512f64305f5bff273e8fed95640ca4f9c19d49d55621d",
+    "res://game/resources/facades/facade-runtime-adapter-contracts.json": "dd2d13e3b0f6eee1f8c5f2957927c4f3caba43b31883beea925f9a91b826d65c",
+    "res://game/resources/facades/facade-runtime-registry.json": "109f83f40450e9c71ef6d39f1659e76eac5f1457fcfab772538b471cc74c0051",
+    "res://game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres": "7fa7f3165dee560c48f5a092f317900b87b0876f27bb6a0e937b9c406a8d4ea1",
+    "res://game/resources/materials/world/d1_current/shared_dark_glass.tres": "ad8931db8954fd5ebc8fdd809f70afb279dd74a36e53e1d9ca907c44409f10d3",
+    "res://game/resources/materials/world/d1_current/shared_pale_frame.tres": "9a2de298ff545cf80c5da0ed0aa37d9d4ebbf10fec8eb78810af7e4d012d1436",
+    "res://game/resources/textures/tag/predefined_tag.svg": "9eb345572cd3298ea14bad008fc6405e46123c0243444e4582393d0aa84af885",
+    "res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
+    "res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+    "res://game/resources/textures/world/polyhaven/bitumen/bitumen_nor_gl_1k.jpg": "a584bd64cac6ce37153b48a481612bc20be5d5f1d36cac572119560f67c1c756",
+    "res://game/resources/textures/world/polyhaven/bitumen/bitumen_rough_1k.jpg": "ae78d0e22b3c771d8ae8fd392c721daf545bbc24f137aad978ddd899dd376b39",
+    "res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg": "e78df7d6e762fe767634278e14316564e0d4510031986239458994ec9fc5410d",
+    "res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_nor_gl_1k.jpg": "9d0eb5299f797c07eb841737eb7164755a2c8a2363540e175a76188a2aa5a2dc",
+    "res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg": "0d8cc6216ac3dc9dc4339cb17a08d249f7341961f432ae1451c35cdff222869b",
+    "res://game/scenes/main.tscn": "959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66",
+    "res://game/scripts/interaction/spray_controller.gd": "9897042fbffc6740ebe3eb4c19da544a0d437391ded9987318edc7238c403da4",
+    "res://game/scripts/interaction/tag_instance_pool.gd": "2460b12b9f70945dc88d2e321b72c1779dab4d867fd80f5920f4734213ce0950",
+    "res://game/scripts/main.gd": "14468a67c4dc8d56394b98515c61e7425c130ef74297624bb205957f6a834140",
+    "res://game/scripts/player/player_camera.gd": "90ea739b25eb6cbcf8bacff072599b117fe894fcef08683483e41527d8019636",
+    "res://game/scripts/player/player_controller.gd": "8b114132d66c78dd0bfd09783c7b9a3a3a441a8b1ae14f33f7308bd9b04ed0ea",
+    "res://game/scripts/world/facades/d1_b225_live_attachment.gd": "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9",
+    "res://game/scripts/world/facades/facade_runtime_registry_loader.gd": "12e6c64b23b0783ed240b3d6c02499c3940c2b6a14344caa29778b850db06c04",
+    "res://game/scripts/world/world_chunk_builder.gd": "de4a2924d275a51dfd08aae1f0ef21daac33395b1fcfe98e260fbc90737dd725",
+    "res://game/scripts/world/world_loader.gd": "0bfb5c64ede051dadd87da10e85518a2c22c63d36ff9387e8221bdd0c24287af",
+    "res://game/tests/headless_d1_b225_postpromotion_v8_contract.gd": "fd63ced9552dd9a1749de0047d2cebd1b46a1b093ebe1645dd4fcace19186353",
+    "res://game/tests/headless_d1_b225_postpromotion_v8_package_contract.gd": "6d2d05e28657b5de89bce0cea0c70819b791d886921f4a057c80cf548713cbcc",
+    "res://game/tests/headless_startup_configuration_contract.gd": "891d59f5e062fb6d8fcb71d3f84f1b472d685cabc0cc21ad70e027294766bcc8",
+    "res://game/tests/isle_house_low_live_evidence_capture.gd": "47768e4b2d6288b9c3dbb4b0ad19cd870b61a8804d72673c53bf3326f8f5636a",
+    "res://generated/world/chunks/x_-2__z_-1.json": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2",
+    "res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "res://project.godot": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af"
+  },
+  "source_photography_shipped": false,
+  "source_urls_in_runtime": false,
+  "uncommitted_candidate": true,
+  "visual_verdict": "pending_independent_postpromotion_review"
+}

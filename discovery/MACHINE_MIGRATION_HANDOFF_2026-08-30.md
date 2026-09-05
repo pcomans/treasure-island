@@ -57,6 +57,36 @@ Resume revision: **the destination `origin/main` commit containing this handoff*
 > paragraphs and resume commands below are historical unless this addendum
 > explicitly restates them.
 
+> **Post-B225 v8 current status — 2026-09-05:** this is the controlling
+> release/handoff addendum. The sole current working-tree/local release-ready
+> private app is
+> `build/d1-b225-postpromotion-v8-2026-09-05-001/Treasure Island First Playable.app`.
+> The B225 v8 source/evidence are not yet committed or pushed, and `build/` is
+> ignored; migration must transfer this exact app separately or re-export it
+> from the eventual integrated source because cloning current `main` will not
+> restore these bytes.
+> Its canonical seven-file bundle identity SHA-256 is
+> `3f38c5dcd55b19f12cf7788e1069367075aa22f1b557c5b61288abdfdc30afe0`;
+> executable SHA-256 is
+> `c485010419591a9556e849e79755d7e816f840e31978c10b371be08a730e2d82`
+> (`170,963,648` bytes), and PCK SHA-256 is
+> `7315bba99efeeeb86be0bbf44876d391b9c1c95f1638318e0df2b7af367669bf`
+> (`66,073,188` bytes). Current authority is compiler `1.7.0`,
+> catalog/runtime registry v8, adapter contracts/loader v7, and exact
+> recognition `8/213`; current loaded topology is
+> `735/952/967/67,716/466/466`. The fresh 37-file postpromotion packet has
+> canonical tree SHA-256
+> `7b0de99e6f4afe07b1767c522517ace3dc1729a3f82f4b9b95716de9483cbd84`.
+> Independent mechanical receipt SHA-256
+> `9c909d047786d4f7feab138b4d7c597bba1bac2adcf78cc8bcdfb568de0a0ec2`
+> and independent visual receipt SHA-256
+> `881b04d696bfe842c39a220be5f4da3087f30d8ef8e9c0493c9c62067a826c99`
+> both return `PASS_FOR_RELEASE_NO_ADDITIONAL_CREDIT`. Verification occurred
+> on an Apple M2; ordinary owner recognition and mouse/keyboard play on the
+> approved Apple M1 Pro remain pending. Earlier `024605`/B201/v7 and 2026-09-03
+> “current” wording is retained only as dated history and is superseded by this
+> addendum; no owner acceptance is claimed.
+
 The historical 2026-09-03 topology distinction was: `729` physical/generated records render
 `729 meshes / 739 surfaces / 48,389 triangles`; accepted visual attachments
 bring the loaded total to `1,278 / 1,288 / 55,067`, with `466`

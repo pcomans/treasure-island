@@ -1,0 +1,168 @@
+{
+  "schema_version": "ti.d1-b225-live-attachment/1",
+  "attachment_id": "D1-B225-W95934119-NNW-LONG-PRODUCTION-ATTACHMENT",
+  "source_key": "w95934119",
+  "receiver_key": "building:w95934119:wall",
+  "source_membership": {
+    "kind": "frozen_osm_way",
+    "id": "95934119",
+    "version": 5,
+    "timestamp": "2026-04-23T18:34:33Z",
+    "source_geometry_sha256": "d9804e14fbbdc7a258299a7883ffa922741fb016207ee00ddf1682834d19bb2e"
+  },
+  "supplied_record_authority": {
+    "canonical_stable_json_sha256": "7950095b20ea50b989f7f111e6e4bfd45cdc42cda85ac3e0f3c8cd044c836722",
+    "object_key": "building:w95934119:wall",
+    "feature_kind": "building_wall",
+    "material_key": "building_wall",
+    "receiver_kind": "building_wall",
+    "collision_kind": "world_solid",
+    "opaque": true,
+    "flat_base_elevation_m": 2.507,
+    "top_elevation_m": 7.507,
+    "source_height_m": 5.0,
+    "exterior_foundation_segments": 14,
+    "shared_wall_segments": 0,
+    "vertex_scalar_count": 168,
+    "normal_scalar_count": 168,
+    "uv_scalar_count": 112,
+    "index_count": 84,
+    "host_triangle_count": 28
+  },
+  "eligible_public_chain": {
+    "mapping_id": "14812-NNW-LONG",
+    "source_edge_indices": [3],
+    "ordered_run_indices": [10, 11, 12, 13],
+    "ordered_run_lengths_m": [10.372629078, 6.510893794, 7.049860211, 22.328585289],
+    "chain_length_m": 46.261968372,
+    "chain_start_world_xz_m": [-401.020, -196.785],
+    "chain_end_world_xz_m": [-442.066, -175.445],
+    "measured_maximum_chord_deviation_m": 0.00028295380557345431,
+    "runtime_float_measured_maximum_chord_deviation_m": 0.000287945355690,
+    "maximum_allowed_chord_deviation_m": 0.001,
+    "standalone_meter_plan_signature": "6b33f7b7146815b87fa7aec9bced760309104f4f56038e37e1820199c9b446f5",
+    "runtime_meter_plan_signature": "6c903f808cc5eb6d917cbb1946dda9f1fb02bfeb663bdbfe1846353238d49450",
+    "runtime_meter_plan_total_m": 46.261983394622803
+  },
+  "approved_geometry": {
+    "standalone_geometry_signature": "281a471f6cff9b0530aa51c98cc737d276dc0d9210996a5403d9fe44996dd2a2",
+    "standalone_meter_plan_signature": "6b33f7b7146815b87fa7aec9bced760309104f4f56038e37e1820199c9b446f5",
+    "batch_count": 3,
+    "field_run_quad_count": 4,
+    "box_instance_count": 90,
+    "triangle_count": 1088,
+    "batch_instance_counts": {
+      "b225_cladding_v1_field_quads": 4,
+      "shared_dark_glass": 10,
+      "shared_pale_frame": 80
+    }
+  },
+  "production_translation": {
+    "host_surface_partition": "only source edge 3 runs 10..13 use the reviewed B225 cladding material; runs 0..9 retain the exact generic material",
+    "omitted_standalone_components": ["Field_CumulativeMetreCladding_Runs10_13"],
+    "reason": "the exact host wall carries the reviewed continuous material and remains the sole spray/collision owner; a second field would duplicate or straddle the host plane",
+    "decorative_box_instance_count": 90,
+    "decorative_triangle_count": 1080,
+    "decorative_geometry_signature": "02bd8542dea7aa13041728a5244ec962fa121972db17ecf55fad03b3139fe418",
+    "decorative_batch_instance_counts": {
+      "shared_dark_glass": 10,
+      "shared_pale_frame": 80
+    },
+    "host_triangle_count_unchanged": 28,
+    "host_surface_count_delta": 1,
+    "grounding_translation": "all retained projected clerestory boxes shift 0.10 m inward relative to the removed standalone field plane so glass backs remain 0.01 m forward of the exact host and frame backs remain 0.05 m forward; no grounded lower feature is inferred"
+  },
+  "material_assets": {
+    "b225_cladding_v1": {
+      "path": "res://game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres",
+      "source_sha256": "7fa7f3165dee560c48f5a092f317900b87b0876f27bb6a0e937b9c406a8d4ea1",
+      "resource_name": "d1_b225_aged_painted_horizontal_cladding_albedo_v1",
+      "albedo": [0.76, 0.755, 0.72, 1.0],
+      "metallic": 0.0,
+      "roughness": 0.88,
+      "albedo_texture_path": "res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
+      "albedo_texture_sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
+      "uv1_scale": [0.125, 0.28735632, 1.0],
+      "repeat": true,
+      "filter": "linear_mipmap_anisotropic"
+    },
+    "shared_dark_glass": {
+      "path": "res://game/resources/materials/world/d1_current/shared_dark_glass.tres",
+      "source_sha256": "ad8931db8954fd5ebc8fdd809f70afb279dd74a36e53e1d9ca907c44409f10d3",
+      "resource_name": "d1_current_shared_dark_opaque_glazing_proxy",
+      "albedo": [0.055, 0.095, 0.105, 1.0],
+      "metallic": 0.06,
+      "roughness": 0.28
+    },
+    "shared_pale_frame": {
+      "path": "res://game/resources/materials/world/d1_current/shared_pale_frame.tres",
+      "source_sha256": "9a2de298ff545cf80c5da0ed0aa37d9d4ebbf10fec8eb78810af7e4d012d1436",
+      "resource_name": "d1_current_shared_pale_painted_frame",
+      "albedo": [0.72, 0.735, 0.70, 1.0],
+      "metallic": 0.02,
+      "roughness": 0.67
+    }
+  },
+  "source_receipts": {
+    "authoritative_packet_receipt_id": "D1-B225-AUTHORITY",
+    "authoritative_packet_receipt_sha256": "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677b3ba5ab318a19333",
+    "authoritative_packet_sha256": "ee3e0cb8a7f3bb29e4ecbc0be688d57268cccc895c33c448c64e2506b2de4fa8",
+    "current_sanitized_standalone_repair_config_sha256": "7c1c2d508f78236590c6d413604be60b3a5c48865878e69d294177d05c48d166",
+    "capture_time_standalone_repair_config_sha256": "89d34d33b48c93c0a6c90d46ff8120cd36c5f897ebe1fc9ea2ee2cd97a3db22c",
+    "standalone_repair_capture_manifest_sha256": "22cbe9edec6e33ccbfcc2c71d719c2c1bc646358fb46242be802affe371b2ec5",
+    "standalone_repair_review_receipt_id": "D1-B225-CLADDING-REPAIR-V1-INDEPENDENT-BAR-RAISER",
+    "standalone_repair_review_receipt_sha256": "b35df2e8c39e854b3553d07d369cdd72a76b1a37446ffb7bbe9a5941f8a69015",
+    "prepromotion_candidate_r3_tree_sha256": "f6afdd3e1e73202cb1e83dd3ef193898885cc1151e532d4ae1c55af4da7369d9",
+    "prepromotion_candidate_r3_static_manifest_sha256": "5aa1422ea24eba475478308b2f528bb9f3d5bc7be963669662da4c42c2bb075e",
+    "prepromotion_candidate_r3_telemetry_manifest_sha256": "afe03bbdf2696b73770b9b39c1214c1f620aace5a1733ec4a79dadc65b2cc7f1",
+    "prepromotion_candidate_r3_visual_motion_manifest_sha256": "49cefa2fd0a3bc4c8a9441a96fe74499e244f8c597b67510740725ff18ab73cc",
+    "prepromotion_candidate_r3_independent_visual_review_sha256": "14b29c113c1a4cb65dda23829a9bcfbaf67a313ec9e803825d0d8ccc0215ebde",
+    "prepromotion_candidate_r3_review_verdict": "pass_for_exact_production_promotion_only_no_recognition_credit"
+  },
+  "source_boundary": {
+    "observation_id": "148-12-SV01",
+    "capture_month": "2025-03",
+    "observed_side": "NNW public long side",
+    "reference_pixels_shipped": false,
+    "generated_albedo_shipped": true,
+    "production_inference": true,
+    "counts_cadence_dimensions_surveyed": false,
+    "nonclaims": ["common name or current business identity", "exact pane count, group width, cadence or damage", "lower openings or entrances", "WSW, SSE, ENE, corners, returns or roof equipment", "transparent interior", "perfect texture tiling"]
+  },
+  "protected_scope": {
+    "run_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    "host_mesh_preserved": true,
+    "host_mesh_instance_and_record_geometry_preserved": true,
+    "host_array_mesh_resource_replaced_for_surface_partition": false,
+    "host_array_mesh_constructed_with_surface_partition": true,
+    "host_protected_run_render_preserved": true,
+    "host_eligible_run_material_changed": true,
+    "host_collision_owner_preserved": true,
+    "host_spray_owner_preserved": true,
+    "roof_untouched": true,
+    "protected_roof_canonical_stable_json_sha256": "338afe9681244b8deca0b4f87891a8a91069002b36bc7a9c4fd8564b420778c0",
+    "protected_roof_runtime_dictionary_sha256": "fc75c1eab69de7273b8ce412c188fb9c540be01eb831b0ef2ca2878dff3b7763"
+  },
+  "runtime_contract": {
+    "integration_stage": "production_runtime_attachment",
+    "canonical_entrypoint_reachable": true,
+    "ordinary_default_runtime_mode": "exact_target_receiver_host_partition_plus_receiver_relative_render_attachment",
+    "production_activation": "canonical_world_chunk_builder_exact_target_dispatch",
+    "attachment_mode": "receiver_host_material_partition_plus_receiver_relative_render_only_details",
+    "standalone_scene_instantiation": false,
+    "mesh_instances": 2,
+    "surfaces": 2,
+    "triangles": 1080,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "host_mesh_preserved": true,
+    "host_array_mesh_constructed_with_surface_partition": true,
+    "host_protected_run_render_preserved": true,
+    "host_eligible_run_material_changed": true,
+    "host_collision_and_spray_geometry_preserved": true,
+    "recognition_status": "externally_governed_pending_authority_promotion_and_postpromotion_review",
+    "reference_recognizable": false,
+    "catalog_or_registry_promotion": false
+  }
+}

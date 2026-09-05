@@ -4,21 +4,21 @@ extends RefCounted
 const DEFAULT_REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const DEFAULT_ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
 const DEFAULT_LOADER_PATH := "res://game/scripts/world/facades/facade_runtime_registry_loader.gd"
-const REGISTRY_SCHEMA_VERSION := "ti.facade-runtime-registry/7"
-const ADAPTER_CONTRACT_SCHEMA_VERSION := "ti.facade-runtime-adapter-contracts/6"
-const CATALOG_SCHEMA_VERSION := "ti.facade-recognition-catalog/7"
-const COMPILER_VERSION := "1.6.0"
-const LOADER_API_VERSION := "ti.facade-runtime-registry-loader/6"
+const REGISTRY_SCHEMA_VERSION := "ti.facade-runtime-registry/8"
+const ADAPTER_CONTRACT_SCHEMA_VERSION := "ti.facade-runtime-adapter-contracts/7"
+const CATALOG_SCHEMA_VERSION := "ti.facade-recognition-catalog/8"
+const COMPILER_VERSION := "1.7.0"
+const LOADER_API_VERSION := "ti.facade-runtime-registry-loader/7"
 const UNKNOWN_VERSION_POLICY := "reject"
 const EXPECTED_UNIT_COUNT := 213
 const EXPECTED_RECEIVER_COUNT := 214
 const EXPECTED_SOURCE_RECORD_COUNT := 215
-const EXPECTED_ADAPTER_COUNT := 15
-const EXPECTED_READY_ADAPTER_COUNT := 9
+const EXPECTED_ADAPTER_COUNT := 16
+const EXPECTED_READY_ADAPTER_COUNT := 10
 const EXPECTED_DISABLED_ADAPTER_COUNT := 6
 const EXPECTED_PROJECTION_DESCRIPTOR_COUNT := 13
 const EXPECTED_PROJECTION_OCCURRENCE_COUNT := 13
-const EXPECTED_REFERENCE_RECOGNIZABLE_COUNT := 7
+const EXPECTED_REFERENCE_RECOGNIZABLE_COUNT := 8
 const EXPECTED_REFERENCE_RECOGNIZABLE_UNIT_IDS := [
 	"physical-building:r16681702",
 	"physical-building:w1222720021",
@@ -27,10 +27,12 @@ const EXPECTED_REFERENCE_RECOGNIZABLE_UNIT_IDS := [
 	"physical-building:w291189336",
 	"physical-building:w34313540",
 	"physical-building:w34313545",
+	"physical-building:w95934119",
 ]
 const ACTIVE_REVIEW_STATUS_SCOPE := "runtime_asset_original_detail_provenance_only_not_reference_recognition"
 const ACTIVE_RECOGNITION_ACCEPTANCE_AUTHORITY := "physical_unit_claim_and_independent_acceptance_record"
 const PRE_B201_INTEGRATION_WORLD_TOPOLOGY_SCOPE := "pre_b201_integration_live_parity"
+const PRE_B225_INTEGRATION_WORLD_TOPOLOGY_SCOPE := "pre_b225_integration_live_parity"
 const CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE := "current_integration_topology"
 const ACTIVE_UNIT_BY_RECEIVER := {
 	"building-composite:w1249412094:w1282547787:wall": "physical-building:w1249412094",
@@ -39,6 +41,7 @@ const ACTIVE_UNIT_BY_RECEIVER := {
 	"building:w291189336:wall": "physical-building:w291189336",
 	"building:w34313540:wall": "physical-building:w34313540",
 	"building:w34313545:wall": "physical-building:w34313545",
+	"building:w95934119:wall": "physical-building:w95934119",
 }
 const ACTIVE_REVIEW_STATUS_BY_RECEIVER := {
 	"building-composite:w1249412094:w1282547787:wall": "independent_exact_current_live_pass",
@@ -47,6 +50,7 @@ const ACTIVE_REVIEW_STATUS_BY_RECEIVER := {
 	"building:w291189336:wall": "independent_exact_current_live_pass",
 	"building:w34313540:wall": "pending_independent_original_detail_review",
 	"building:w34313545:wall": "independent_exact_current_live_pass",
+	"building:w95934119:wall": "independent_exact_current_live_pass",
 }
 const EXPECTED_REVIEW_RECEIPTS := {
 	"physical-building:r16681702": ["b12858438d6522b7f3cf42fa06392648d16ee3e0c418eb5e807a3ee1be770c2a", "ebeef887b37c6845c6c8fa3f25e06706351fe7c1dab0e1a3b0eaf47dfb773017"],
@@ -56,6 +60,7 @@ const EXPECTED_REVIEW_RECEIPTS := {
 	"physical-building:w291189336": ["63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9", "54d434c9283a0e2d86aa836e6a21672a8756e5a170cb5724d66066e799223930"],
 	"physical-building:w34313540": ["1aee23943b3df4f600b9a4e4fce86d839b75ce575a924de4ca8b187bd9120046", "4b92b71df3c7f8f7dfbb285bd7566b3f422a32be45f810d532328e15d008f5be"],
 	"physical-building:w34313545": ["b9ef912df2dd00fa2c456a8e7e03473001cc381cbc2dd5288e9f6ef65d8c2772", "f169085620a0a9ff0c685e4dfa98442c5c31e4e580f1decdbd80e84b09c74fe3"],
+	"physical-building:w95934119": ["87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd7cf3b6b6fcb1d95", "96c76fd99960f1345a7c56f7fc6678ac284f98cc601a3ba65ed57020491f18dc", "f42dbec489c6fda55b612aba20c99ee2233857cb60a1ce9c512d024b35d0dcb7"],
 }
 const BUILDING_1_RECEIVERS := ["building:r16681702:wall", "building:w1222720021:wall"]
 const BUILDING_1_SOURCE_BY_RECEIVER := {
@@ -112,6 +117,19 @@ const D1_B201_RUNTIME_ASSETS := [
 	"res://game/resources/materials/world/d1_current/shared_dark_glass.tres",
 	"res://game/resources/materials/world/d1_current/shared_pale_frame.tres",
 	"res://game/scripts/world/facades/d1_b201_live_attachment.gd",
+]
+const D1_B225_RECEIVER := "building:w95934119:wall"
+const D1_B225_REVIEW_RECEIPT_SHA256 := "87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd7cf3b6b6fcb1d95"
+const D1_B225_EVIDENCE_MANIFEST_SHA256 := "96c76fd99960f1345a7c56f7fc6678ac284f98cc601a3ba65ed57020491f18dc"
+const D1_B225_EVIDENCE_TREE_SHA256 := "f42dbec489c6fda55b612aba20c99ee2233857cb60a1ce9c512d024b35d0dcb7"
+const D1_B225_DECORATIVE_SIGNATURE := "02bd8542dea7aa13041728a5244ec962fa121972db17ecf55fad03b3139fe418"
+const D1_B225_RUNTIME_ASSETS := [
+	"res://game/resources/facades/d1_current/d1_b225_live_attachment.json",
+	"res://game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres",
+	"res://game/resources/materials/world/d1_current/shared_dark_glass.tres",
+	"res://game/resources/materials/world/d1_current/shared_pale_frame.tres",
+	"res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
+	"res://game/scripts/world/facades/d1_b225_live_attachment.gd",
 ]
 const BUILDING_3_RUNTIME_ASSETS := [
 	"res://game/resources/facades/building_3_600_california_ene_layout.json",
@@ -370,7 +388,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 	var active_adapters := registry.get("active_runtime_adapters", []) as Array
 	var adapters := legacy_adapters.duplicate()
 	adapters.append_array(active_adapters)
-	if not _require(legacy_adapters.size() == 9 and active_adapters.size() == 6 and adapters.size() == EXPECTED_ADAPTER_COUNT, "registry_count_drift", "Runtime adapter arrays do not contain nine legacy plus six active entries."):
+	if not _require(legacy_adapters.size() == 9 and active_adapters.size() == 7 and adapters.size() == EXPECTED_ADAPTER_COUNT, "registry_count_drift", "Runtime adapter arrays do not contain nine legacy plus seven active entries."):
 		return false
 	var adapter_receivers := {}
 	var registry_projection_ids := {}
@@ -401,6 +419,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 	var isle_house_adapter := {}
 	var navy_chapel_adapter := {}
 	var d1_b201_adapter := {}
+	var d1_b225_adapter := {}
 	for adapter_value: Variant in active_adapters:
 		var active_adapter := adapter_value as Dictionary
 		if str(active_adapter.get("receiver_key", "")) == BUILDING_3_RECEIVER:
@@ -411,6 +430,8 @@ func _validate_registry(registry: Dictionary) -> bool:
 			navy_chapel_adapter = active_adapter
 		elif str(active_adapter.get("receiver_key", "")) == D1_B201_RECEIVER:
 			d1_b201_adapter = active_adapter
+		elif str(active_adapter.get("receiver_key", "")) == D1_B225_RECEIVER:
+			d1_b225_adapter = active_adapter
 	if not _validate_building_1_registry_adapters(active_adapters):
 		return false
 	if not _validate_building_3_registry_adapter(building_3_adapter):
@@ -420,6 +441,10 @@ func _validate_registry(registry: Dictionary) -> bool:
 	if not _validate_navy_chapel_registry_adapter(navy_chapel_adapter):
 		return false
 	if not _validate_d1_b201_registry_adapter(d1_b201_adapter):
+		return false
+	if not _validate_d1_b225_registry_adapter(d1_b225_adapter):
+		return false
+	if not _validate_current_topology_authority(active_adapters):
 		return false
 	if not _require(registry_projection_ids.size() == EXPECTED_PROJECTION_OCCURRENCE_COUNT, "adapter_contract_count_drift", "Runtime registry projection occurrence count is not 13."):
 		return false
@@ -457,7 +482,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 			var adapter_id_value: Variant = receiver.get("runtime_adapter_id")
 			if not _require(not receiver_key.is_empty() and not _receivers_by_key.has(receiver_key), "duplicate_receiver", "%s has a missing or duplicate direct receiver." % unit_id):
 				return false
-			if not _require(["generated_placeholder", "legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment"].has(content_mode), "unknown_content_mode", "%s has an unknown receiver content mode." % receiver_key):
+			if not _require(["generated_placeholder", "legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment", "active_d1_b225_host_partition_attachment"].has(content_mode), "unknown_content_mode", "%s has an unknown receiver content mode." % receiver_key):
 				return false
 			if content_mode == "generated_placeholder":
 				if not _require(adapter_id_value == null, "receiver_adapter_mismatch", "%s placeholder unexpectedly references an adapter." % receiver_key):
@@ -475,7 +500,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 	accepted_reference_unit_ids.sort()
 	var expected_accepted_ids := EXPECTED_REFERENCE_RECOGNIZABLE_UNIT_IDS.duplicate()
 	expected_accepted_ids.sort()
-	if not _require(accepted_reference_unit_ids == expected_accepted_ids, "recognition_metric_mismatch", "Reference-recognizable physical-unit set is not exactly the independently accepted seven."):
+	if not _require(accepted_reference_unit_ids == expected_accepted_ids, "recognition_metric_mismatch", "Reference-recognizable physical-unit set is not exactly the independently accepted eight."):
 		return false
 	if not _validate_recognition_metric(registry, accepted_reference_unit_ids):
 		return false
@@ -499,9 +524,22 @@ func _validate_reference_acceptance_record(unit_id: String, records: Array) -> b
 	if not _require(records.size() == 1 and EXPECTED_REVIEW_RECEIPTS.has(unit_id), "recognition_receipt_mismatch", "%s must have one allowlisted independent recognition receipt." % unit_id):
 		return false
 	var record := records[0] as Dictionary
-	if not _require(_has_exact_keys(record, ["evidence_manifest_sha256", "review_id", "review_kind", "review_receipt_sha256", "status"]), "recognition_receipt_mismatch", "%s acceptance receipt fields drifted." % unit_id):
-		return false
 	var expected := EXPECTED_REVIEW_RECEIPTS[unit_id] as Array
+	if unit_id == "physical-building:w95934119":
+		if not _require(_has_exact_keys(record, ["capture_time_recognition_metric", "evidence_manifest_sha256", "evidence_tree_sha256", "numerator_effect", "review_id", "review_kind", "review_receipt_sha256", "status"]), "recognition_receipt_mismatch", "%s acceptance receipt fields drifted." % unit_id):
+			return false
+		if not _require(
+			str(record.get("capture_time_recognition_metric", "")) == "7/213"
+			and str(record.get("evidence_tree_sha256", "")) == str(expected[2])
+			and int(record.get("numerator_effect", -1)) == 1
+			and str(record.get("review_id", "")) == "d1-b225-production-attachment-v7-staging-2026-09-05"
+			and _is_sha256(str(record.get("evidence_tree_sha256", ""))),
+			"recognition_receipt_mismatch",
+			"%s frozen capture-time metric, evidence tree, or numerator effect drifted." % unit_id,
+		):
+			return false
+	elif not _require(_has_exact_keys(record, ["evidence_manifest_sha256", "review_id", "review_kind", "review_receipt_sha256", "status"]), "recognition_receipt_mismatch", "%s acceptance receipt fields drifted." % unit_id):
+		return false
 	return _require(
 		str(record.get("review_kind", "")) == "independent_reference_recognition"
 		and str(record.get("status", "")) == "accept"
@@ -581,7 +619,7 @@ func _validate_recognition_metric(registry: Dictionary, accepted_unit_ids: Array
 		metric_ids == accepted_unit_ids
 		and int(metric.get("numerator", -1)) == EXPECTED_REFERENCE_RECOGNIZABLE_COUNT
 		and int(metric.get("denominator", -1)) == EXPECTED_UNIT_COUNT
-		and str(metric.get("display", "")) == "7/213"
+		and str(metric.get("display", "")) == "8/213"
 		and str(metric.get("denominator_kind", "")) == "immutable_physical_recognition_units"
 		and str(metric.get("rollup_policy", "")) == "one_claim_per_physical_recognition_unit"
 		and metric.get("isle_house_non_numerator_source_keys", []) == ["w1282547786", "w1282547787"]
@@ -594,7 +632,7 @@ func _validate_recognition_metric(registry: Dictionary, accepted_unit_ids: Array
 		and int(fidelity_totals.get("limited", -1)) == 0
 		and int(receiver_totals.get("verified", -1)) == EXPECTED_UNIT_COUNT,
 		"recognition_metric_mismatch",
-		"Runtime physical-entity recognition rollup is not exactly 7/213 with claim dimensions separated.",
+		"Runtime physical-entity recognition rollup is not exactly 8/213 with claim dimensions separated.",
 	)
 
 
@@ -690,7 +728,7 @@ func _validate_adapter_contracts(contracts: Dictionary, registry: Dictionary) ->
 	if not _require(projection_occurrence_count == EXPECTED_PROJECTION_OCCURRENCE_COUNT, "adapter_contract_count_drift", "Runtime projection occurrence count drifted."):
 		return false
 	var plans := contracts.get("plans", []) as Array
-	if not _require(plans.size() == EXPECTED_ADAPTER_COUNT, "adapter_contract_count_drift", "Runtime adapter contract does not contain 15 plans."):
+	if not _require(plans.size() == EXPECTED_ADAPTER_COUNT, "adapter_contract_count_drift", "Runtime adapter contract does not contain 16 plans."):
 		return false
 	var ready_count := 0
 	var disabled_count := 0
@@ -730,6 +768,11 @@ func _validate_adapter_contracts(contracts: Dictionary, registry: Dictionary) ->
 			var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
 			if not _validate_d1_b201_behavior_contract(plan.get("behavior_contract", {}) as Dictionary) \
 			or not _require(JSON.stringify(plan.get("behavior_contract", {})) == JSON.stringify(runtime_contract.get("behavior_contract", {})), "adapter_plan_mismatch", "%s D1 B201 behavior contract drifted from the registry." % adapter_id):
+				return false
+		elif str(plan.get("content_mode", "")) == "active_d1_b225_host_partition_attachment":
+			var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+			if not _validate_d1_b225_behavior_contract(plan.get("behavior_contract", {}) as Dictionary) \
+			or not _require(JSON.stringify(plan.get("behavior_contract", {})) == JSON.stringify(runtime_contract.get("behavior_contract", {})), "adapter_plan_mismatch", "%s D1 B225 behavior contract drifted from the registry." % adapter_id):
 				return false
 		elif not _require(plan.get("behavior_contract") == null, "adapter_plan_mismatch", "%s unexpectedly exports a target-specific behavior contract." % adapter_id):
 			return false
@@ -1163,7 +1206,7 @@ func _validate_d1_b201_registry_adapter(adapter: Dictionary) -> bool:
 		and _runtime_asset_match(adapter.get("runtime_assets", []) as Array, "res://game/resources/facades/d1_current/d1_b201_live_attachment.json", str(runtime_contract.get("config_sha256", "")))
 		and str(runtime_contract.get("adapter_sha256", "")) == "499f6d2657b593ee5b0801cf1205a2925a993f3b1836922d3656a6d00c51cc19"
 		and str(runtime_contract.get("config_sha256", "")) == "0f3bf052688ec813b5fa58b077d74c963949574623fe4cf67c12c347e7257229"
-		and str(runtime_contract.get("dispatch_sha256", "")) == "71e391e4fa58afc83e4bcb99a9f8195e398fdf4064bb09a401fb079e9f30491c",
+		and str(runtime_contract.get("dispatch_sha256", "")) == "de4a2924d275a51dfd08aae1f0ef21daac33395b1fcfe98e260fbc90737dd725",
 		"d1_b201_parity_mismatch",
 		"D1 B201 adapter/config/dispatch pins do not bind the exact independently reviewed bytes.",
 	):
@@ -1207,7 +1250,7 @@ func _validate_d1_b201_behavior_contract(contract: Dictionary) -> bool:
 		and int(geometry.get("host_triangles", -1)) == 80
 		and int(geometry.get("eligible_host_triangles", -1)) == 20
 		and int(geometry.get("protected_host_triangles", -1)) == 60
-		and str(geometry.get("world_topology_scope", "")) == CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE
+		and str(geometry.get("world_topology_scope", "")) == PRE_B225_INTEGRATION_WORLD_TOPOLOGY_SCOPE
 		and int(geometry.get("world_records", -1)) == 735
 		and int(geometry.get("world_mesh_instances", -1)) == 950
 		and int(geometry.get("world_surfaces", -1)) == 964
@@ -1242,6 +1285,147 @@ func _validate_d1_b201_behavior_contract(contract: Dictionary) -> bool:
 		and bool(truth.get("service_and_unobserved_sides_untouched", false)),
 		"d1_b201_parity_mismatch",
 		"D1 B201 receipt, host partition, topology, ownership, replacement, or truth boundary drifted.",
+	)
+
+
+func _validate_d1_b225_registry_adapter(adapter: Dictionary) -> bool:
+	if not _require(not adapter.is_empty(), "d1_b225_parity_mismatch", "D1 B225 exact-current host-partition adapter is missing."):
+		return false
+	if not _require(
+		str(adapter.get("adapter_id", "")) == "active-adapter:d1-b225-live:building:w95934119:wall"
+		and str(adapter.get("source_key", "")) == "w95934119"
+		and str(adapter.get("attachment_kind", "")) == "active_d1_b225_receiver_host_partition_attachment"
+		and str(adapter.get("content_classification", "")) == "active_target_specific_receiver_host_partition_plus_render_only_attachment"
+		and str(adapter.get("runtime_content_mode", "")) == "active_d1_b225_host_partition_attachment"
+		and str(adapter.get("state", "")) == "active_runtime_target_specific_content"
+		and str(adapter.get("recognition_acceptance_status", "")) == "accepted"
+		and (adapter.get("runtime_asset_projections", []) as Array).is_empty(),
+		"d1_b225_parity_mismatch",
+		"D1 B225 active adapter classification, source ownership, acceptance, or package boundary drifted.",
+	):
+		return false
+	var receiver_scope := adapter.get("active_receiver_scope", {}) as Dictionary
+	if not _require(
+		_has_exact_keys(receiver_scope, ["coverage", "run_count"])
+		and str(receiver_scope.get("coverage", "")) == "whole_direct_wall_receiver"
+		and int(receiver_scope.get("run_count", -1)) == 14,
+		"d1_b225_parity_mismatch",
+		"D1 B225 active receiver scope does not cover the exact 14-run direct wall receiver.",
+	):
+		return false
+	var actual_paths := []
+	for asset_value: Variant in adapter.get("runtime_assets", []) as Array:
+		actual_paths.append(str((asset_value as Dictionary).get("path", "")))
+	actual_paths.sort()
+	var expected_paths := D1_B225_RUNTIME_ASSETS.duplicate()
+	expected_paths.sort()
+	if not _require(actual_paths == expected_paths, "d1_b225_parity_mismatch", "D1 B225 active adapter does not contain its exact config/adapter/material/texture closure."):
+		return false
+	var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+	if not _require(_has_exact_keys(runtime_contract, ["adapter_sha256", "behavior_contract", "config_sha256", "config_summary", "dispatch_sha256"]), "d1_b225_parity_mismatch", "D1 B225 active runtime contract fields drifted."):
+		return false
+	if not _require(
+		_runtime_asset_match(adapter.get("runtime_assets", []) as Array, "res://game/scripts/world/facades/d1_b225_live_attachment.gd", str(runtime_contract.get("adapter_sha256", "")))
+		and _runtime_asset_match(adapter.get("runtime_assets", []) as Array, "res://game/resources/facades/d1_current/d1_b225_live_attachment.json", str(runtime_contract.get("config_sha256", "")))
+		and str(runtime_contract.get("adapter_sha256", "")) == "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9"
+		and str(runtime_contract.get("config_sha256", "")) == "80b42c33fce84361aa7512f64305f5bff273e8fed95640ca4f9c19d49d55621d"
+		and str(runtime_contract.get("dispatch_sha256", "")) == "de4a2924d275a51dfd08aae1f0ef21daac33395b1fcfe98e260fbc90737dd725",
+		"d1_b225_parity_mismatch",
+		"D1 B225 adapter/config/dispatch pins do not bind the exact independently reviewed bytes.",
+	):
+		return false
+	return _validate_d1_b225_behavior_contract(runtime_contract.get("behavior_contract", {}) as Dictionary)
+
+
+func _validate_d1_b225_behavior_contract(contract: Dictionary) -> bool:
+	if not _require(_has_exact_keys(contract, ["acceptance_contract", "geometry_contract", "ownership_contract", "replacement_contract", "schema_version", "truth_boundary"]), "d1_b225_parity_mismatch", "D1 B225 behavior parity fields drifted."):
+		return false
+	var acceptance := contract.get("acceptance_contract", {}) as Dictionary
+	var geometry := contract.get("geometry_contract", {}) as Dictionary
+	var ownership := contract.get("ownership_contract", {}) as Dictionary
+	var replacement := contract.get("replacement_contract", {}) as Dictionary
+	var truth := contract.get("truth_boundary", {}) as Dictionary
+	if not _require(
+		_has_exact_keys(acceptance, ["accepted_physical_unit_id", "capture_time_recognition_metric", "evidence_manifest_sha256", "evidence_tree_sha256", "independent_live_review_receipt_sha256", "numerator_effect", "reference_recognizable"])
+		and _has_exact_keys(geometry, ["canonical_roof_record_sha256", "canonical_wall_record_sha256", "decorative_box_instances", "decorative_geometry_signature", "decorative_mesh_instances", "decorative_surfaces", "decorative_triangles", "eligible_host_triangles", "host_triangles", "protected_host_triangles", "world_mesh_instances", "world_records", "world_shapes", "world_static_bodies", "world_surfaces", "world_topology_scope", "world_triangles"])
+		and _has_exact_keys(ownership, ["decorative_collision_nodes", "decorative_navigation_nodes", "decorative_spray_nodes", "host_collision_owner_preserved", "host_mesh_preserved", "host_spray_owner_preserved", "navigation_owner_count", "shape_count", "spray_owner_count", "structural_owner_count"])
+		and _has_exact_keys(replacement, ["actual_supplied_chunk_pair_required", "eligible_run_indices", "fallback_allowed", "host_material_partition", "protected_run_indices", "receiver_relative_render_only_attachment", "roof_object_key", "source_key", "stacking_allowed", "wall_object_key"])
+		and _has_exact_keys(truth, ["as_built_fidelity_claimed", "counts_cadence_dimensions_are_production_inference", "game_distinctive_claimed", "lower_and_unobserved_sides_untouched", "receiver_complete_inferred_from_art", "reference_pixels_packaged"]),
+		"d1_b225_parity_mismatch",
+		"D1 B225 nested behavior parity fields drifted.",
+	):
+		return false
+	return _require(
+		str(contract.get("schema_version", "")) == "ti.d1-b225-production-live-parity/1"
+		and str(acceptance.get("accepted_physical_unit_id", "")) == "physical-building:w95934119"
+		and str(acceptance.get("capture_time_recognition_metric", "")) == "7/213"
+		and str(acceptance.get("evidence_manifest_sha256", "")) == D1_B225_EVIDENCE_MANIFEST_SHA256
+		and str(acceptance.get("evidence_tree_sha256", "")) == D1_B225_EVIDENCE_TREE_SHA256
+		and str(acceptance.get("independent_live_review_receipt_sha256", "")) == D1_B225_REVIEW_RECEIPT_SHA256
+		and int(acceptance.get("numerator_effect", -1)) == 1
+		and bool(acceptance.get("reference_recognizable", false))
+		and str(geometry.get("canonical_wall_record_sha256", "")) == "7950095b20ea50b989f7f111e6e4bfd45cdc42cda85ac3e0f3c8cd044c836722"
+		and str(geometry.get("canonical_roof_record_sha256", "")) == "338afe9681244b8deca0b4f87891a8a91069002b36bc7a9c4fd8564b420778c0"
+		and str(geometry.get("decorative_geometry_signature", "")) == D1_B225_DECORATIVE_SIGNATURE
+		and int(geometry.get("decorative_mesh_instances", -1)) == 2
+		and int(geometry.get("decorative_surfaces", -1)) == 2
+		and int(geometry.get("decorative_box_instances", -1)) == 90
+		and int(geometry.get("decorative_triangles", -1)) == 1080
+		and int(geometry.get("host_triangles", -1)) == 28
+		and int(geometry.get("eligible_host_triangles", -1)) == 8
+		and int(geometry.get("protected_host_triangles", -1)) == 20
+		and str(geometry.get("world_topology_scope", "")) == CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE
+		and int(geometry.get("world_records", -1)) == 735
+		and int(geometry.get("world_mesh_instances", -1)) == 952
+		and int(geometry.get("world_surfaces", -1)) == 967
+		and int(geometry.get("world_triangles", -1)) == 67716
+		and int(geometry.get("world_static_bodies", -1)) == 466
+		and int(geometry.get("world_shapes", -1)) == 466
+		and int(ownership.get("structural_owner_count", -1)) == 1
+		and int(ownership.get("shape_count", -1)) == 1
+		and int(ownership.get("spray_owner_count", -1)) == 1
+		and int(ownership.get("navigation_owner_count", -1)) == 0
+		and int(ownership.get("decorative_collision_nodes", -1)) == 0
+		and int(ownership.get("decorative_navigation_nodes", -1)) == 0
+		and int(ownership.get("decorative_spray_nodes", -1)) == 0
+		and bool(ownership.get("host_mesh_preserved", false))
+		and bool(ownership.get("host_collision_owner_preserved", false))
+		and bool(ownership.get("host_spray_owner_preserved", false))
+		and str(replacement.get("source_key", "")) == "w95934119"
+		and str(replacement.get("wall_object_key", "")) == D1_B225_RECEIVER
+		and str(replacement.get("roof_object_key", "")) == "building:w95934119:roof"
+		and _int_array_matches(replacement.get("eligible_run_indices", []) as Array, range(10, 14))
+		and _int_array_matches(replacement.get("protected_run_indices", []) as Array, range(0, 10))
+		and bool(replacement.get("actual_supplied_chunk_pair_required", false))
+		and bool(replacement.get("host_material_partition", false))
+		and bool(replacement.get("receiver_relative_render_only_attachment", false))
+		and replacement.get("fallback_allowed") == false
+		and replacement.get("stacking_allowed") == false
+		and truth.get("as_built_fidelity_claimed") == false
+		and truth.get("game_distinctive_claimed") == false
+		and truth.get("receiver_complete_inferred_from_art") == false
+		and bool(truth.get("counts_cadence_dimensions_are_production_inference", false))
+		and truth.get("reference_pixels_packaged") == false
+		and bool(truth.get("lower_and_unobserved_sides_untouched", false)),
+		"d1_b225_parity_mismatch",
+		"D1 B225 frozen evidence receipt, host partition, exact-current topology, ownership, replacement, or truth boundary drifted.",
+	)
+
+
+func _validate_current_topology_authority(active_adapters: Array) -> bool:
+	var current_topology_adapter_ids := []
+	for adapter_value: Variant in active_adapters:
+		var adapter := adapter_value as Dictionary
+		var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+		var behavior_contract_value: Variant = runtime_contract.get("behavior_contract", {})
+		var behavior_contract := behavior_contract_value as Dictionary if behavior_contract_value is Dictionary else {}
+		var geometry_contract := behavior_contract.get("geometry_contract", {}) as Dictionary
+		if str(geometry_contract.get("world_topology_scope", "")) == CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE:
+			current_topology_adapter_ids.append(str(adapter.get("adapter_id", "")))
+	return _require(
+		current_topology_adapter_ids == ["active-adapter:d1-b225-live:building:w95934119:wall"],
+		"current_topology_authority_mismatch",
+		"Exactly the D1 B225 adapter must own the current integration topology; prior evidence scopes must remain historical.",
 	)
 
 
@@ -1384,6 +1568,8 @@ func _derive_unit_content_mode(receivers: Array) -> String:
 		return "all_receivers_active_navy_chapel_187_paired_replacement"
 	if values == ["active_d1_b201_host_partition_attachment"]:
 		return "all_receivers_active_d1_b201_host_partition_attachment"
+	if values == ["active_d1_b225_host_partition_attachment"]:
+		return "all_receivers_active_d1_b225_host_partition_attachment"
 	if values == ["generated_placeholder", "legacy_adapter"]:
 		return "mixed_legacy_adapter_and_generated_placeholder"
 	if values == ["active_isle_house_variant_c", "legacy_adapter"]:

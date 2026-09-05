@@ -1,8 +1,8 @@
 {
   "build_contract": {
-    "authoring_catalog_sha256": "a4d9dd474acb09a211f7e0e00d66aeaf7a669927880dd011e24e2f51d13bdd7d",
-    "compiler_version": "1.6.0",
-    "runtime_registry_schema_version": "ti.facade-runtime-registry/7",
+    "authoring_catalog_sha256": "d95be7bec8f0eabe97a9b5f7fefe1ce54ec7cbf940d85d28518ff6979eeb16ea",
+    "compiler_version": "1.7.0",
+    "runtime_registry_schema_version": "ti.facade-runtime-registry/8",
     "unknown_version_policy": "reject"
   },
   "contract_id": "treasure-island-facade-runtime-adapters",
@@ -10,8 +10,8 @@
     "disabled_adapter_receivers": 6,
     "disabled_projection_occurrences": 13,
     "disabled_unique_projection_inputs": 13,
-    "package_safe_adapter_receivers": 9,
-    "receiver_adapter_plans": 15
+    "package_safe_adapter_receivers": 10,
+    "receiver_adapter_plans": 16
   },
   "loader_contract": {
     "allowed_executable_kinds": [
@@ -22,10 +22,10 @@
       "res://game/scenes/world/",
       "res://game/scripts/world/"
     ],
-    "api_version": "ti.facade-runtime-registry-loader/6",
+    "api_version": "ti.facade-runtime-registry-loader/7",
     "instantiation_authorized": false,
     "loader_path": "res://game/scripts/world/facades/facade_runtime_registry_loader.gd",
-    "loader_sha256": "a191a9c260e471825847c92873fd96763c507b51004be769cba10b9d4b47ce6f",
+    "loader_sha256": "12e6c64b23b0783ed240b3d6c02499c3940c2b6a14344caa29778b850db06c04",
     "projection_execution_policy": "forbidden",
     "unknown_version_policy": "reject"
   },
@@ -682,7 +682,7 @@
           "world_shapes": 466,
           "world_static_bodies": 466,
           "world_surfaces": 964,
-          "world_topology_scope": "current_integration_topology",
+          "world_topology_scope": "pre_b225_integration_live_parity",
           "world_triangles": 66636
         },
         "ownership_contract": {
@@ -886,6 +886,128 @@
         }
       ],
       "source_key": "w34313564"
+    },
+    {
+      "adapter_id": "active-adapter:d1-b225-live:building:w95934119:wall",
+      "behavior_contract": {
+        "acceptance_contract": {
+          "accepted_physical_unit_id": "physical-building:w95934119",
+          "capture_time_recognition_metric": "7/213",
+          "evidence_manifest_sha256": "96c76fd99960f1345a7c56f7fc6678ac284f98cc601a3ba65ed57020491f18dc",
+          "evidence_tree_sha256": "f42dbec489c6fda55b612aba20c99ee2233857cb60a1ce9c512d024b35d0dcb7",
+          "independent_live_review_receipt_sha256": "87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd7cf3b6b6fcb1d95",
+          "numerator_effect": 1,
+          "reference_recognizable": true
+        },
+        "geometry_contract": {
+          "canonical_roof_record_sha256": "338afe9681244b8deca0b4f87891a8a91069002b36bc7a9c4fd8564b420778c0",
+          "canonical_wall_record_sha256": "7950095b20ea50b989f7f111e6e4bfd45cdc42cda85ac3e0f3c8cd044c836722",
+          "decorative_box_instances": 90,
+          "decorative_geometry_signature": "02bd8542dea7aa13041728a5244ec962fa121972db17ecf55fad03b3139fe418",
+          "decorative_mesh_instances": 2,
+          "decorative_surfaces": 2,
+          "decorative_triangles": 1080,
+          "eligible_host_triangles": 8,
+          "host_triangles": 28,
+          "protected_host_triangles": 20,
+          "world_mesh_instances": 952,
+          "world_records": 735,
+          "world_shapes": 466,
+          "world_static_bodies": 466,
+          "world_surfaces": 967,
+          "world_topology_scope": "current_integration_topology",
+          "world_triangles": 67716
+        },
+        "ownership_contract": {
+          "decorative_collision_nodes": 0,
+          "decorative_navigation_nodes": 0,
+          "decorative_spray_nodes": 0,
+          "host_collision_owner_preserved": true,
+          "host_mesh_preserved": true,
+          "host_spray_owner_preserved": true,
+          "navigation_owner_count": 0,
+          "shape_count": 1,
+          "spray_owner_count": 1,
+          "structural_owner_count": 1
+        },
+        "replacement_contract": {
+          "actual_supplied_chunk_pair_required": true,
+          "eligible_run_indices": [
+            10,
+            11,
+            12,
+            13
+          ],
+          "fallback_allowed": false,
+          "host_material_partition": true,
+          "protected_run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "receiver_relative_render_only_attachment": true,
+          "roof_object_key": "building:w95934119:roof",
+          "source_key": "w95934119",
+          "stacking_allowed": false,
+          "wall_object_key": "building:w95934119:wall"
+        },
+        "schema_version": "ti.d1-b225-production-live-parity/1",
+        "truth_boundary": {
+          "as_built_fidelity_claimed": false,
+          "counts_cadence_dimensions_are_production_inference": true,
+          "game_distinctive_claimed": false,
+          "lower_and_unobserved_sides_untouched": true,
+          "receiver_complete_inferred_from_art": false,
+          "reference_pixels_packaged": false
+        }
+      },
+      "content_mode": "active_d1_b225_host_partition_attachment",
+      "disabled_reason_code": null,
+      "executable_assets": [
+        {
+          "path": "res://game/scripts/world/facades/d1_b225_live_attachment.gd",
+          "resource_kind": "gdscript",
+          "sha256": "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9"
+        }
+      ],
+      "integration_state": "package_safe_ready_for_integration",
+      "projection_descriptor_ids": [],
+      "receiver_key": "building:w95934119:wall",
+      "resolution_policy": "resolve_only_without_instantiation",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/facades/d1_current/d1_b225_live_attachment.json",
+          "sha256": "80b42c33fce84361aa7512f64305f5bff273e8fed95640ca4f9c19d49d55621d"
+        },
+        {
+          "path": "res://game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres",
+          "sha256": "7fa7f3165dee560c48f5a092f317900b87b0876f27bb6a0e937b9c406a8d4ea1"
+        },
+        {
+          "path": "res://game/resources/materials/world/d1_current/shared_dark_glass.tres",
+          "sha256": "ad8931db8954fd5ebc8fdd809f70afb279dd74a36e53e1d9ca907c44409f10d3"
+        },
+        {
+          "path": "res://game/resources/materials/world/d1_current/shared_pale_frame.tres",
+          "sha256": "9a2de298ff545cf80c5da0ed0aa37d9d4ebbf10fec8eb78810af7e4d012d1436"
+        },
+        {
+          "path": "res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
+          "sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b"
+        },
+        {
+          "path": "res://game/scripts/world/facades/d1_b225_live_attachment.gd",
+          "sha256": "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9"
+        }
+      ],
+      "source_key": "w95934119"
     }
   ],
   "projection_descriptors": [
@@ -1072,5 +1194,5 @@
       "source_asset_type": "gd"
     }
   ],
-  "schema_version": "ti.facade-runtime-adapter-contracts/6"
+  "schema_version": "ti.facade-runtime-adapter-contracts/7"
 }

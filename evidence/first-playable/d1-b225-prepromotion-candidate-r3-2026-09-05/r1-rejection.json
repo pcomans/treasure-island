@@ -1,0 +1,41 @@
+{
+  "schema_version": "ti.d1-b225-prepromotion-candidate-rejection/1",
+  "status": "rejected_non_authoritative_superseded_by_r2",
+  "date": "2026-09-05",
+  "physical_building_id": "w95934119",
+  "receiver_key": "building:w95934119:wall",
+  "recognition_metric_frozen": "7/213",
+  "recognition_credit": false,
+  "promotion_authorized": false,
+  "r1_original_path": "evidence/first-playable/d1-b225-prepromotion-candidate-2026-09-05",
+  "r1_archive_path": "build/rejected-evidence/d1-b225-prepromotion-candidate-r1-2026-09-05",
+  "r1_generator_sha256": "33f59a2363324ed2a0bd46af7ca303d5224b8ad41806f3dd9a27d52cb0dda5b9",
+  "r1_canonical_tree_inventory": {
+    "algorithm": "sha256 of the newline-terminated output of: find . -type f -print0 | LC_ALL=C sort -z | xargs -0 shasum -a 256, evaluated from the r1 tree root",
+    "file_count": 35,
+    "sha256": "21a5badf29ac760c9ab50700bb2c2f46b2c2b5928cf5c09b0b5592ccfa9bd27f"
+  },
+  "r1_manifest_sha256": {
+    "capture-manifest.json": "e8a237253b95836f5e0723c2d11772e2650c66042fc3a90d272cbc4d53b6071c",
+    "motion-capture.json": "99996a6aeb7049ad1ba78f291b01ffc00ba0a34c907939a0337efbe3bbff178d"
+  },
+  "rejection_reason": {
+    "summary": "The visual motion was real and continuous, but render awaits advanced physics while the capture coroutine was paused, so the motion receipt understated elapsed ticks and labeled several PNGs with stale pre-render frame and chain-position values.",
+    "claimed_sample_count": 360,
+    "claimed_duration_seconds": 6.0,
+    "first_sample_engine_physics_frame": 143,
+    "last_sample_engine_physics_frame": 589,
+    "actual_inclusive_engine_physics_tick_span": 447,
+    "actual_input_duration_seconds_at_60_hz": 7.45,
+    "unsampled_ticks_within_span": 87,
+    "sample_gap_count": 6,
+    "maximum_sample_frame_delta": 24,
+    "dense_frame_metadata_issue": "physics_frame and actual_u_m were passed into the render await and therefore did not necessarily describe the subsequently saved pixels"
+  },
+  "retained_findings": {
+    "static_packet_mechanical_checks": "pass",
+    "static_and_motion_pixel_review": "visual_pass_only",
+    "building_geometry_or_material_defect_found": false
+  },
+  "authority_boundary": "No r1 byte may be used to authorize production promotion, recognition credit, an accepted evidence ledger entry, or a shipped package. The entire r1 tree is retained only as an immutable rejected audit artifact."
+}

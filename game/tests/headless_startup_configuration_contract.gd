@@ -1,9 +1,13 @@
 extends SceneTree
 
 const EXPECTED_AUDIO_DRIVER := "Dummy"
-const EXPECTED_RUNTIME_MESHES := 950
-const EXPECTED_RUNTIME_SURFACES := 964
-const EXPECTED_RUNTIME_TRIANGLES := 66636
+const RUNTIME_REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
+const EXPECTED_RUNTIME_SCHEMA := "ti.facade-runtime-registry/8"
+const EXPECTED_RECOGNITION_NUMERATOR := 8
+const EXPECTED_RECOGNITION_DENOMINATOR := 213
+const EXPECTED_RUNTIME_MESHES := 952
+const EXPECTED_RUNTIME_SURFACES := 967
+const EXPECTED_RUNTIME_TRIANGLES := 67716
 
 
 func _initialize() -> void:
@@ -25,9 +29,23 @@ func _initialize() -> void:
 	if GameMain.EXPECTED_MESHES != EXPECTED_RUNTIME_MESHES \
 	or GameMain.EXPECTED_SURFACES != EXPECTED_RUNTIME_SURFACES \
 	or GameMain.EXPECTED_TRIANGLES != EXPECTED_RUNTIME_TRIANGLES:
-		_fail("The packaged main-scene smoke oracle does not match current accepted Building 1/Building 3/Isle House/Navy Chapel/B201 runtime topology 950/964/66636.")
+		_fail("The packaged main-scene smoke oracle does not match current B225-integrated runtime topology 952/967/67716.")
 		return
-	print("PASS: project startup selects exact Dummy audio before AudioServer initialization and packaged smoke expects current accepted Building 1/Building 3/Isle House/Navy Chapel/B201 runtime topology 950/964/66636")
+	var registry_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(RUNTIME_REGISTRY_PATH))
+	if not (registry_value is Dictionary):
+		_fail("The packaged facade runtime registry did not parse.")
+		return
+	var registry := registry_value as Dictionary
+	var metric := registry.get("recognition_metric", {}) as Dictionary
+	var accepted_ids := metric.get("accepted_physical_unit_ids", []) as Array
+	if str(registry.get("schema_version", "")) != EXPECTED_RUNTIME_SCHEMA \
+	or int(metric.get("numerator", -1)) != EXPECTED_RECOGNITION_NUMERATOR \
+	or int(metric.get("denominator", -1)) != EXPECTED_RECOGNITION_DENOMINATOR \
+	or str(metric.get("display", "")) != "%d/%d" % [EXPECTED_RECOGNITION_NUMERATOR, EXPECTED_RECOGNITION_DENOMINATOR] \
+	or accepted_ids.size() != EXPECTED_RECOGNITION_NUMERATOR:
+		_fail("The packaged facade authority is not exact runtime-registry v8 at 8/213.")
+		return
+	print("PASS: project startup selects exact Dummy audio before AudioServer initialization, packaged smoke expects current B225-integrated topology 952/967/67716, and packaged facade authority is exact runtime-registry v8 at 8/213")
 	quit(0)
 
 

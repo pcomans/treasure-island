@@ -2,7 +2,41 @@
 
 Checked: 2026-09-05
 
-This directory separates reproducible automated proof, native-launch proof, autonomous-review status, and owner feedback. Current source and packaged evidence are bound to generated content SHA-256 `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164` and manifest SHA-256 `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`. The active skyline is the single-color `2212x340` silhouette with SHA-256 `9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5`, on a `3900x600 m` billboard at `(-1875,264.85,4306.4)`. The sole current private handoff is `build/b201-promotion-staging-2026-09-05-024605/Treasure Island First Playable.app`; pre-final-evidence-bridge `014223` and pre-scope `002922` are withdrawn, while `111725`, `190724`, `231815`, and `224622` are historical packages.
+This directory separates reproducible automated proof, native-launch proof, autonomous-review status, and owner feedback. Current source and packaged evidence are bound to generated content SHA-256 `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164` and manifest SHA-256 `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`. The active skyline is the single-color `2212x340` silhouette with SHA-256 `9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5`, on a `3900x600 m` billboard at `(-1875,264.85,4306.4)`. The sole current private handoff is `build/d1-b225-postpromotion-v8-2026-09-05-001/Treasure Island First Playable.app`; B201 package `024605` and packages `111725`, `190724`, `231815`, and `224622` are historical, while `014223` and `002922` are withdrawn diagnostics.
+
+## B225 postpromotion v8 release closure — 2026-09-05
+
+The current app has seven-file bundle identity SHA-256
+`3f38c5dcd55b19f12cf7788e1069367075aa22f1b557c5b61288abdfdc30afe0`,
+executable SHA-256
+`c485010419591a9556e849e79755d7e816f840e31978c10b371be08a730e2d82`
+(`170,963,648` bytes), and PCK SHA-256
+`7315bba99efeeeb86be0bbf44876d391b9c1c95f1638318e0df2b7af367669bf`
+(`66,073,188` bytes). Current authority is compiler `1.7.0`,
+catalog/runtime registry v8, adapter contracts/loader v7, recognition `8/213`,
+and loaded topology `735/952/967/67,716/466/466`.
+
+The exact [37-file postpromotion packet](d1-b225-postpromotion-v8-2026-09-05/capture-manifest.json)
+has canonical tree SHA-256
+`7b0de99e6f4afe07b1767c522517ace3dc1729a3f82f4b9b95716de9483cbd84`.
+The independent [mechanical audit](../reviews/d1-b225-postpromotion-v8-2026-09-05-INDEPENDENT_CONTRACT_AUDIT.md)
+has SHA-256
+`9c909d047786d4f7feab138b4d7c597bba1bac2adcf78cc8bcdfb568de0a0ec2`;
+the independent [full-resolution visual review](../reviews/d1-b225-postpromotion-v8-2026-09-05-INDEPENDENT_VISUAL_REVIEW.md)
+has SHA-256
+`881b04d696bfe842c39a220be5f4da3087f30d8ef8e9c0493c9c62067a826c99`.
+Both return `PASS_FOR_RELEASE_NO_ADDITIONAL_CREDIT`. Verification occurred on
+an Apple M2, not the approved Apple M1 Pro owner target. Ordinary owner
+recognition and mouse/keyboard play remain pending; this closure does not claim
+owner acceptance. Older B201 bullets below retain their byte-specific history,
+but any `024605` “current” label in that history is superseded by this addendum.
+
+The mutable D1 reference-packet index now has SHA-256
+`e17d4844e696829f3c78f179410af630cda0d7acaecbfe38057b0759e73cffd3`
+after its lifecycle-only B225 v8 addendum. The frozen standalone-pair ledger
+retains its capture-time README hash
+`0f7a477f5168e9145de609dbbe66f4b52d09e55ef657afdf6fee5aa430e00d58`;
+that expected documentation drift does not alter or repin the frozen packet.
 
 ## Historical live-HEAD source binding — 2026-09-03
 
@@ -37,28 +71,28 @@ source-asset, and exact candidate-app bytes are unchanged.
 - **USGS terrain source and derivation: pass.** The accepted `1669x2048` crop has `2,492,288` valid samples from `-1.080` to `104.756 m`; five in-bounds pins, exact source hash, bounds, locked raster ID, and 18 derived surface anchors are enforced. The rejected over-limit export is not retained. See [terrain provenance](../../data/terrain/README.md).
 - **Coherent surfaces/foundations and pavement skin: pass.** Exact serialized land collision planes support every road/major-area/terrain-overlay triangle. The independent validator checked `206,339` road/area points and `14,904` exterior-foundation samples, with zero positive foundation gap, roof-flatness error, source-height deviation, or unsupported-water fallback segments. The visual-only pavement skin preserves all `208` vehicle-road sources plus `219` pedestrian sources without changing physical collision.
 - **Ferry-arrival spawn: pass in current generated/runtime world.** The exact foot-level transform is `[-104.364, 3.457, 786.024]`, yaw `-0.119`; startup settles on collision while hidden and reveals only when grounded.
-- **Audio-startup source repair: pass.** `project.godot` selects the exact case-sensitive `Dummy` driver before Godot initializes audio, which removes the affected CoreAudio startup dependency without removing any approved behavior because this milestone has no audio nodes, assets, or promise. The focused contract pins the accepted-current Building 1/Building 3/Isle House/Navy Chapel/B201 package-smoke oracle at `950/964/66,636` meshes/surfaces/triangles.
-- **Clean full-runtime headless suite: pass.** The real main scene loaded `38/38` chunks and all `735` playable rows through `729` physical records, instantiated `950` meshes, `964` surfaces, `66,636` triangles, and `466` nonempty static body/shape pairs, revealed grounded at `0.000 m` clearance, kept walk/run clearance within `-0.002..+0.001 m`, landed/recovered at `0.000 m`, exercised camera, spray, tag eviction, and fail-closed reload behavior, then exited cleanly.
+- **Audio-startup source repair: pass.** `project.godot` selects the exact case-sensitive `Dummy` driver before Godot initializes audio, which removes the affected CoreAudio startup dependency without removing any approved behavior because this milestone has no audio nodes, assets, or promise. The focused current contract pins the accepted Building 1/Building 3/Isle House/Navy Chapel/B201/B225 package-smoke oracle at `952/967/67,716` meshes/surfaces/triangles.
+- **Clean full-runtime headless suite: pass.** The real main scene loaded `38/38` chunks and all `735` playable rows through `729` physical records, instantiated `952` meshes, `967` surfaces, `67,716` triangles, and `466` nonempty static body/shape pairs, revealed grounded at `0.000 m` clearance, kept walk/run clearance within `-0.002..+0.001 m`, landed/recovered at `0.000 m`, exercised camera, spray, tag eviction, and fail-closed reload behavior, then exited cleanly.
 - **Deterministic visual-only vegetation: pass.** Seed `1414092337` produces `124` exactly grounded placements across all `15` curated Kenney GLBs in `19` MultiMesh batches, with zero added collision. The 102-placement procedural set is preserved and the 22 accepted NAIP shrub points are included with deterministic assets/transforms and no YBI placements. See [final rendered evidence](textured-world-final-rendered-2026-08-28-223242/README.md).
 - **Semantic Poly Haven material contract: pass.** All 11 semantic material keys use their approved diffuse/OpenGL-normal/roughness identities and effective repeats, backed by 18 packaged 1K texture maps with repeat, anisotropic mipmaps, subtle normals, and displacement disabled.
 - **Jetpack source runtime: pass.** Physical Space provides sustained capped ascent, walk/run steering remains active in air, release caps slow descent, a second mid-air press renews ascent, and the player lands without recovery. The strengthened source package-smoke path also exercises rise/release physics. See [jetpack evidence](jetpack/README.md).
 - **Automated continuous route: pass across the whole island.** With the current movement tuning, the real player completed the `262.349 m` grounded ferry/road route and used real run/Space input to land at southwest, center, north, and east-perimeter anchors during a `3,449.107 m` whole-island route. Both recorded zero stalls, recoveries, boundary escapes, or post-start transform writes. The retained [coherent-surface route record](coherent-surface-route-2026-08-28-1458/README.md) remains historical geometry evidence from the earlier tuning.
-- **Building 1 hero-shell source evidence: independently accepted.** The eight `1440×900` native Forward+/Metal originals cover ordinary public-curve, north/south-end, front/tower, separate tower, rear-truth, elevated diagnostic, and changed-light views for the exact-current reversible hero replacement. Independent main-building and tower reviews accepted two separately keyed physical units; both are present in current app `024605`. Legacy adapter/config pending labels describe runtime-asset provenance only; reference recognition derives from the mapped physical-unit claims and independent catalog receipts. See [the Building 1 hero record](building-1-hero-2026-09-04/README.md) and [tower correction record](building-1-tower-grounded-correction-2026-09-04/README.md).
-- **Navy Chapel Building 187 live replacement: independently accepted.** The exact paired wall/roof replacement for `w291189336` passed grounded whole-object, changed-light, continuous-motion, landing, collision/spray-ownership, source-boundary, and mounted-package review. Its sealed external receipt authorized the acceptance-time move to `6/213`; the later B201 receipt advances the current canonical rollup to `7/213` without rewriting that historical receipt. See [the accepted live Chapel evidence and receipt](navy-chapel-187-live-replacement-2026-09-04/README.md).
+- **Building 1 hero-shell source evidence: independently accepted.** The eight `1440×900` native Forward+/Metal originals cover ordinary public-curve, north/south-end, front/tower, separate tower, rear-truth, elevated diagnostic, and changed-light views for the exact-current reversible hero replacement. Independent main-building and tower reviews accepted two separately keyed physical units; both are present in current B225 app `d1-b225-postpromotion-v8-2026-09-05-001`. Legacy adapter/config pending labels describe runtime-asset provenance only; reference recognition derives from the mapped physical-unit claims and independent catalog receipts. See [the Building 1 hero record](building-1-hero-2026-09-04/README.md) and [tower correction record](building-1-tower-grounded-correction-2026-09-04/README.md).
+- **Navy Chapel Building 187 live replacement: independently accepted.** The exact paired wall/roof replacement for `w291189336` passed grounded whole-object, changed-light, continuous-motion, landing, collision/spray-ownership, source-boundary, and mounted-package review. Its sealed external receipt authorized the acceptance-time move to `6/213`, and the later B201 receipt advanced its acceptance-time canonical rollup to `7/213`, without rewriting either historical receipt. The current B225 v8 authority is `8/213`. See [the accepted live Chapel evidence and receipt](navy-chapel-187-live-replacement-2026-09-04/README.md).
 - **The `104510` exact-source visuals are historical pre-hero evidence.** That independently reviewed twelve-view set remains byte-valid for the prior Building 1 runtime, but its Building 1 frame and `1,278/1,288/55,067` topology predate the current hero replacement. See [the historical visual evidence](exact-current-visual-repair-2026-09-03-104510/README.md) and its [independent review](exact-current-visual-repair-2026-09-03-104510/INDEPENDENT_REVIEW.md).
 - **Superseded `095709` source-project visuals: historical point-in-time evidence.** Its internal README, manifest, and twelve PNG checksum entries remain byte-valid, but the ledger also pins the external capture harness as it existed before the later objective-ground-support repair. That one external entry now has expected current-tree drift; a whole-ledger check therefore reports exactly that mismatch. Do not rewrite or cite this superseded set as current—the canonical successor is `104510`.
 - **Historical August source-project visuals: retained.** The older 13-frame textured-world set preserves its byte-specific material review, but it predates the exact-current facade/capture repair. See [historical rendered evidence](textured-world-final-rendered-2026-08-28-223242/README.md).
-- **Current `024605` native export: technical pass.** The app has executable SHA-256 `23f8f5cfda04749bb6e2b00659d5f9e46086c55c8dde0cc00d1b2f8b5235146c` (`170,963,648` bytes), PCK SHA-256 `3425018ee32f645c3bf157deb9f9a548efe3c9e0bca1e40fd588318aa31f54d6` (`65,708,948` bytes), and canonical ASCII path-sorted seven-file inventory SHA-256 `ef300ab3f97d077f3db61fad53094cbc3a540175e6475e549d5cd0a3ab9e8f98` (`236,745,436` logical bytes). Export, Universal architecture, strict deep/per-architecture signing, plist/privacy/xattr checks, the general/B201/B1 outside-project mounted audits, packaged headless smoke, and the first Apple M2 Metal smoke pass. The explicit smoke watchdog measures 60 seconds of monotonic wall time. A no-argument ordinary verifier-host launch started these exact bytes; owner/target acceptance remains pending. See [the accepted B201 source/evidence closure](d1-b201-live-attachment-2026-09-04/README.md).
+- **Historical `024605` B201 native export: technical pass for its own bytes.** The app has executable SHA-256 `23f8f5cfda04749bb6e2b00659d5f9e46086c55c8dde0cc00d1b2f8b5235146c` (`170,963,648` bytes), PCK SHA-256 `3425018ee32f645c3bf157deb9f9a548efe3c9e0bca1e40fd588318aa31f54d6` (`65,708,948` bytes), and canonical ASCII path-sorted seven-file inventory SHA-256 `ef300ab3f97d077f3db61fad53094cbc3a540175e6475e549d5cd0a3ab9e8f98` (`236,745,436` logical bytes). Export, Universal architecture, strict deep/per-architecture signing, plist/privacy/xattr checks, the general/B201/B1 outside-project mounted audits, packaged headless smoke, and the first Apple M2 Metal smoke passed. The explicit smoke watchdog measured 60 seconds of monotonic wall time. A no-argument ordinary verifier-host launch started those exact bytes; this does not accept the current B225 candidate. See [the accepted B201 source/evidence closure](d1-b201-live-attachment-2026-09-04/README.md).
 - **The `190724` startup-repair app is historical.** Its static checks and ordinary verifier-host window/render-loop observation remain valid for its own bytes. A later outside-project mounted audit intentionally retains its PCK as an expected `node_modules/earcut/package.json` banned-path negative. See [historical startup-repair evidence](startup-repair-mac-run-2026-08-31-190724/README.md).
 - **The `231815` car-speed app is historical.** Its headless/capped-Metal packaged smokes and mounted-PCK audit remain valid for its own bytes, but it predates the final accepted facade attachment stack and the audio-startup repair. See [historical package evidence](car-speed-mac-run-2026-08-28-231815/README.md).
 - **The `224622` app is historical.** It contains the same approved world and final textured presentation but predates the `20 m/s` Shift-run amendment, so it must not be used to judge current movement. See [historical pre-tuning package evidence](textured-world-final-mac-run-2026-08-28-224622/README.md).
 - **The `224144` export is not current.** That earlier staging export failed only the stale, superseded flat-palette smoke assertion. It is retained only as historical diagnostic context and is not a handoff candidate.
 - **Historical pre-placement evidence remains retained.** The preceding render and app use `1950x300 m` at `(-2500,132.5,750)` and are not current. See [historical render](owner-silhouette-rendered-2026-08-28-1921/README.md) and [historical package](owner-silhouette-mac-run-2026-08-28-192220/README.md).
 - **Historical owner-outline evidence remains retained.** Its source Metal and private Mac package records remain valid only for the preceding outline and are not the current handoff. See [historical render](owner-skyline-rendered-2026-08-28-1900/README.md) and [historical package](owner-skyline-mac-run-2026-08-28-190242/README.md).
-- **Owner acceptance of this exact app: pending.** Current source/static/package/deterministic-smoke evidence was produced on an Apple M2 verifier host, not the approved Apple M1 Pro owner target. Earlier owner feedback confirmed the island, ordinary tag placement, and held-Space jetpack behavior in prior builds. Ordinary mouse/keyboard play of exact candidate `024605` is still required, especially for Treasure Island recognition and fast-run/camera/jetpack/spray feel; source-project pixels and deterministic smokes do not substitute for that verdict.
+- **Owner acceptance of this exact app: pending.** Current source/static/package/deterministic-smoke evidence was produced on an Apple M2 verifier host, not the approved Apple M1 Pro owner target. Earlier owner feedback confirmed the island, ordinary tag placement, and held-Space jetpack behavior in prior builds. Ordinary mouse/keyboard play of exact candidate `d1-b225-postpromotion-v8-2026-09-05-001` is still required, especially for Treasure Island recognition and fast-run/camera/jetpack/spray feel; source-project pixels and deterministic smokes do not substitute for that verdict.
 
-The current package's headless and bounded Metal main-scene smokes are complete
-on their first invocations. The required
+The current package's retained headless and bounded Metal main-scene smokes are
+complete. The required
 acceptance step remains the ordinary play pass in
 [`PLAYTEST.md`](../../PLAYTEST.md). Tight-gap camera polish and exhaustive
 spray rejection/isolation remain optional unless that playtest reproduces a
@@ -67,10 +101,13 @@ blocker.
 ## Evidence files
 
 - [`acceptance-audit.md`](acceptance-audit.md) — requirement-by-requirement verdict separating proven, incomplete, and owner-only acceptance items.
+- [`d1-b225-postpromotion-v8-2026-09-05/capture-manifest.json`](d1-b225-postpromotion-v8-2026-09-05/capture-manifest.json) — exact 37-file B225 v8 postpromotion packet and canonical release-candidate binding.
+- [`d1-b225-postpromotion-v8-2026-09-05-INDEPENDENT_CONTRACT_AUDIT.md`](../reviews/d1-b225-postpromotion-v8-2026-09-05-INDEPENDENT_CONTRACT_AUDIT.md) — independent mechanical release audit and `PASS_FOR_RELEASE_NO_ADDITIONAL_CREDIT` verdict.
+- [`d1-b225-postpromotion-v8-2026-09-05-INDEPENDENT_VISUAL_REVIEW.md`](../reviews/d1-b225-postpromotion-v8-2026-09-05-INDEPENDENT_VISUAL_REVIEW.md) — independent full-resolution visual release review and `PASS_FOR_RELEASE_NO_ADDITIONAL_CREDIT` verdict.
 - [`exact-current-visual-repair-2026-09-03-104510/README.md`](exact-current-visual-repair-2026-09-03-104510/README.md) — historical pre-B201 12-view exact-source Metal/Forward+ set, hashes, physics/input evidence boundary, and independent `PASS_WITH_LIMITATION`.
 - [`final-verification-2026-09-03-105408/README.md`](final-verification-2026-09-03-105408/README.md) — historical `111725` package identity, source binding, complete point-in-time source/package gates, first native timeout plus identical warm pass, and its then-remaining owner/target/distribution gates.
 - [`navy-chapel-187-live-replacement-2026-09-04/README.md`](navy-chapel-187-live-replacement-2026-09-04/README.md) — accepted actual-live Chapel wall/roof replacement, grounded default/changed-light/oblique frames, continuous stock-player motion, landing and split collision/spray ownership, exact hashes, and sealed independent `+1` review receipt.
-- [`d1-b201-live-attachment-2026-09-04/README.md`](d1-b201-live-attachment-2026-09-04/README.md) — accepted actual-live B201 host partition plus render-only WSW hierarchy, five native stills, continuous stock-player motion, retained collision/spray ownership, exact eight-asset package closure, and sealed independent `+1` review receipt advancing current recognition to `7/213`.
+- [`d1-b201-live-attachment-2026-09-04/README.md`](d1-b201-live-attachment-2026-09-04/README.md) — accepted actual-live B201 host partition plus render-only WSW hierarchy, five native stills, continuous stock-player motion, retained collision/spray ownership, exact eight-asset package closure, and sealed independent `+1` review receipt advancing acceptance-time recognition to `7/213`; current B225 v8 authority is `8/213`.
 - [`textured-world-final-rendered-2026-08-28-223242/README.md`](textured-world-final-rendered-2026-08-28-223242/README.md) — historical August 13-frame Metal/Forward+ art pass.
 - [`startup-repair-mac-run-2026-08-31-190724/README.md`](startup-repair-mac-run-2026-08-31-190724/README.md) — historical repaired package identity, source/static and ordinary verifier-host launch proof, plus its later expected-negative PCK classification.
 - [`car-speed-mac-run-2026-08-28-231815/README.md`](car-speed-mac-run-2026-08-28-231815/README.md) — historical pre-facade/pre-startup-repair package identity, mounted-PCK movement/world/privacy audit, packaged smokes, signatures, architecture, and plist facts.
@@ -122,12 +159,13 @@ blocker.
 | Generated chunks | 38 |
 | Physical records | 729 |
 | Frozen generated meshes / surfaces / triangles | 729 / 739 / 48,389 |
-| Active record-root meshes / surfaces / triangles after Building 1, Building 3, Navy Chapel, and B201 host partition | 723 / 733 / 48,739 |
+| Active record-root meshes / surfaces / triangles after Building 1, Building 3, Navy Chapel, B201, and B225 host partitions | 723 / 734 / 48,739 |
 | Accepted Building 1/tower hero meshes / surfaces / triangles | 13 / 13 / 10,711 |
 | Accepted Isle House Variant C overlay meshes / surfaces / triangles | 7 / 11 / 2,242 |
 | Accepted Navy Chapel descendant hero meshes / surfaces / triangles | 6 / 6 / 540 |
 | Accepted B201 render-only attachment meshes / surfaces / triangles | 6 / 6 / 2,064 |
-| Loaded source-project total meshes / surfaces / triangles | 950 / 964 / 66,636 |
+| Accepted B225 total loaded delta meshes / surfaces / triangles | 2 / 3 / 1,080 |
+| Loaded source-project total meshes / surfaces / triangles | 952 / 967 / 67,716 |
 | Loaded static bodies / shapes | 466 / 466 |
 | Collision-free vegetation instances / batches | 124 / 19 |
 | Unresolved / duplicate source rows | 0 / 0 |
@@ -168,13 +206,13 @@ GODOT=".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot"
 "$GODOT" --headless --path . --script game/tests/automated_route_qa.gd
 "$GODOT" --headless --path . -- --mac-export-smoke
 
-APP_BINARY="build/b201-promotion-staging-2026-09-05-024605/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
+APP_BINARY="build/d1-b225-postpromotion-v8-2026-09-05-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
 "$APP_BINARY" --headless -- --mac-export-smoke
 "$APP_BINARY" --max-fps 60 --rendering-method forward_plus --rendering-driver metal -- --mac-export-smoke
 ```
 
-The source command above passed. The exact `024605` headless package command
-and first bounded Metal invocation both passed through the jetpack phase. The
+The source command above passed. The exact B225 v8 suffix-`001` headless package
+command and bounded Metal invocation both passed through the jetpack phase. The
 watchdog uses monotonic wall time and emits explicit grounding/ascent/descent
 phase markers. Regeneration and export commands
 are kept in the root [`README.md`](../../README.md). The owner's remaining

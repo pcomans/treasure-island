@@ -4,7 +4,19 @@ Checked: **2026-08-30**
 
 Scope: frozen OSM and current generated/runtime world only; no live-currentness claim.
 
-> **2026-09-05 current-authority notice:** this Markdown body and its companion
+> **2026-09-05 B225 v8 current-authority notice:** this Markdown body and its
+> companion JSON retain the earlier receiver/lifecycle inventory boundary and
+> are not rewritten to impersonate the physical-unit recognition ledger. The
+> coordinated authority is compiler `1.7.0`, catalog/runtime registry v8, and
+> adapter contracts/loader v7: exactly `213` physical units, `214` direct wall
+> receivers, and `8/213` independently accepted reference-recognizable units.
+> Seven active adapters are fail-closed and provenance-only. B201 preserves
+> `pre_b225_integration_live_parity` at `735/950/964/66,636/466/466`; B225 alone
+> carries `current_integration_topology` at
+> `735/952/967/67,716/466/466`. The B201 notice and numeric tables below are
+> historical to their named boundaries unless a row explicitly says otherwise.
+
+> **Historical B201 authority notice:** this Markdown body and its companion
 > JSON retain the earlier receiver/lifecycle inventory boundary and are not
 > rewritten to impersonate the later physical-unit recognition ledger. The
 > current coordinated authority is

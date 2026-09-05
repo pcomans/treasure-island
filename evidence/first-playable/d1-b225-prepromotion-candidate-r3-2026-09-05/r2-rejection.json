@@ -1,0 +1,37 @@
+{
+  "schema_version": "ti.d1-b225-prepromotion-candidate-rejection/1",
+  "status": "rejected_non_authoritative_superseded_by_r3",
+  "date": "2026-09-05",
+  "physical_building_id": "w95934119",
+  "receiver_key": "building:w95934119:wall",
+  "recognition_metric_frozen": "7/213",
+  "recognition_credit": false,
+  "promotion_authorized": false,
+  "r2_original_path": "evidence/first-playable/d1-b225-prepromotion-candidate-r2-2026-09-05",
+  "r2_archive_path": "build/rejected-evidence/d1-b225-prepromotion-candidate-r2-2026-09-05",
+  "r2_generator_sha256": "ed827372285af1213db812c0cdd65fb630058bf5590402ac841df463a98ad1b3",
+  "r2_canonical_tree_inventory": {
+    "algorithm": "sha256 of the newline-terminated output of: find . -type f -print0 | LC_ALL=C sort -z | xargs -0 shasum -a 256, evaluated from the r2 tree root",
+    "file_count": 14,
+    "sha256": "8c10e4fc4541855e4e7cc5ad6812bcd93ed372c09045d78f74e33d32a601a4ca"
+  },
+  "r2_manifest_sha256": {
+    "capture-manifest.json": "0469b3e36607d8bc412e8c5a4a152ad555179c004ec27992abd4aed079ece8bb",
+    "capture-override.cfg": "edbc0b9caa60fa0fc6b83cebb3145bce11ce0bd976403ca1d2fbe9b7142b39c3"
+  },
+  "r1_rejection_receipt_sha256": "5379780f58242d028ca0c7373581d2f9182b60a558ae090df3767c924fdec817",
+  "rejection_reason": {
+    "summary": "The frozen r2 static packet was mechanically valid, but its deep staged validator compared parsed JSON topology dictionaries directly against integer-valued runtime dictionaries. Godot parses JSON numbers as floats, so the validator rejected exact integral topology receipts before telemetry and exposed that its round-trip contract had not been rehearsed end to end.",
+    "failed_stage": "static_to_telemetry_transition",
+    "telemetry_files_written": 0,
+    "visual_motion_files_written": 0,
+    "source_defect": "strict Variant dictionary equality treated JSON 735.0 as unequal to runtime integer 735",
+    "required_correction": "fieldwise finite integral numeric validation plus a complete disposable disk-roundtrip rehearsal of all three stages"
+  },
+  "retained_findings": {
+    "static_packet_mechanical_checks": "pass",
+    "static_pixel_review": "not_authoritative_due_packet_rejection",
+    "building_geometry_or_material_defect_found": false
+  },
+  "authority_boundary": "No r2 byte may be used to authorize production promotion, recognition credit, an accepted evidence ledger entry, or a shipped package. The entire r2 tree is retained only as an immutable rejected audit artifact."
+}

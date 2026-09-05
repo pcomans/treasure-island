@@ -6,6 +6,12 @@ Scope: **the next 15 previously unpacketized standalone physical-building
 entities in the stable 213-unit recognition-catalog order; bounded reference
 research and reversible art handoff only**
 
+> **Historical validator boundary — 2026-09-05:** “current checkout” and
+> “schema-v7” below mean the last validated D8 packet boundary, not current
+> global authority. Current global authority is catalog/runtime registry v8,
+> contracts/loader v7, compiler `1.7.0`, and recognition `8/213`. The coupled
+> D8 validator remains an intentionally unmigrated snapshot.
+
 This directory changes no source geometry, generated world, catalog, registry,
 runtime material, prototype, or live receiver attachment. Child
 `building_part` sources are not counted as physical entities. A ready packet

@@ -26,8 +26,8 @@
     },
     "active_runtime_adapters": {
       "type": "array",
-      "minItems": 6,
-      "maxItems": 6,
+      "minItems": 7,
+      "maxItems": 7,
       "items": {
         "$ref": "#/$defs/active_runtime_adapter"
       }
@@ -58,10 +58,10 @@
       ],
       "properties": {
         "emitted_runtime_schema_version": {
-          "const": "ti.facade-runtime-registry/7"
+          "const": "ti.facade-runtime-registry/8"
         },
         "required_compiler_version": {
-          "const": "1.6.0"
+          "const": "1.7.0"
         },
         "unknown_version_policy": {
           "const": "reject"
@@ -86,7 +86,7 @@
       }
     },
     "schema_version": {
-      "const": "ti.facade-recognition-catalog/7"
+      "const": "ti.facade-recognition-catalog/8"
     },
     "source_contract": {
       "$ref": "#/$defs/source_contract"
@@ -147,7 +147,7 @@
       ],
       "properties": {
         "active_runtime_adapter_receivers": {
-          "const": 6
+          "const": 7
         },
         "building_footprints": {
           "const": 213
@@ -168,7 +168,7 @@
           "const": 213
         },
         "runtime_adapter_receivers": {
-          "const": 15
+          "const": 16
         },
         "source_records": {
           "const": 215
@@ -263,6 +263,9 @@
         },
         {
           "$ref": "#/$defs/d1_b201_active_runtime_adapter"
+        },
+        {
+          "$ref": "#/$defs/d1_b225_active_runtime_adapter"
         }
       ]
     },
@@ -401,6 +404,32 @@
         "runtime_config_path": {"const": "game/resources/facades/d1_current/d1_b201_live_attachment.json"},
         "runtime_dispatch_path": {"const": "game/scripts/world/world_chunk_builder.gd"},
         "source_key": {"const": "w34313545"},
+        "whole_building_recognizability_imported": {"const": false}
+      }
+    },
+    "d1_b225_active_runtime_adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapter_id", "content_classification", "receiver_key", "recognition_acceptance_authority", "recognition_acceptance_status", "review_status", "review_status_scope", "runtime_adapter_path", "runtime_asset_paths", "runtime_config_path", "runtime_dispatch_path", "source_key", "whole_building_recognizability_imported"],
+      "properties": {
+        "adapter_id": {"const": "active-adapter:d1-b225-live:building:w95934119:wall"},
+        "content_classification": {"const": "active_target_specific_receiver_host_partition_plus_render_only_attachment"},
+        "receiver_key": {"const": "building:w95934119:wall"},
+        "recognition_acceptance_authority": {"const": "physical_unit_claim_and_independent_acceptance_record"},
+        "recognition_acceptance_status": {"const": "accepted"},
+        "review_status": {"const": "independent_exact_current_live_pass"},
+        "review_status_scope": {"const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"},
+        "runtime_adapter_path": {"const": "game/scripts/world/facades/d1_b225_live_attachment.gd"},
+        "runtime_asset_paths": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^game/resources/(?:materials/world/(?:d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1|d1_current/shared_(?:dark_glass|pale_frame))\\.tres|textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1\\.png)$"}
+        },
+        "runtime_config_path": {"const": "game/resources/facades/d1_current/d1_b225_live_attachment.json"},
+        "runtime_dispatch_path": {"const": "game/scripts/world/world_chunk_builder.gd"},
+        "source_key": {"const": "w95934119"},
         "whole_building_recognizability_imported": {"const": false}
       }
     },
@@ -831,6 +860,18 @@
       "properties": {
         "evidence_manifest_sha256": {
           "$ref": "#/$defs/sha256"
+        },
+        "capture_time_recognition_metric": {
+          "type": "string",
+          "pattern": "^[0-9]+/213$"
+        },
+        "evidence_tree_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "numerator_effect": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1
         },
         "review_id": {
           "type": "string",

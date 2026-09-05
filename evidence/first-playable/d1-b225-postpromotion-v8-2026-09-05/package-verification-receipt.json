@@ -1,0 +1,124 @@
+{
+  "schema_version": "ti.d1-b225-postpromotion-v8-package-verification/1",
+  "capture_date": "2026-09-05",
+  "candidate_status": "uncommitted_v8_candidate_pending_two_independent_postpromotion_audits",
+  "review_status": "pending_independent_postpromotion_contract_and_visual_audits_not_self_accepted",
+  "production_stage": "postpromotion_v8_current_authority_uncommitted_candidate",
+  "capture_time_recognition_metric": "8/213",
+  "catalog_schema_version": "ti.facade-recognition-catalog/8",
+  "runtime_registry_schema_version": "ti.facade-runtime-registry/8",
+  "adapter_contracts_schema_version": "ti.facade-runtime-adapter-contracts/7",
+  "loader_api_version": "ti.facade-runtime-registry-loader/7",
+  "compiler_version": "1.7.0",
+  "app_bundle_name": "Treasure Island First Playable.app",
+  "architectures": [
+    "x86_64",
+    "arm64"
+  ],
+  "bundle_file_count": 7,
+  "bundle_identity_algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "bundle_identity_sha256": "3f38c5dcd55b19f12cf7788e1069367075aa22f1b557c5b61288abdfdc30afe0",
+  "bundle_inventory": [
+    {
+      "path": "Contents/Info.plist",
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885
+    },
+    {
+      "path": "Contents/MacOS/Treasure Island First Playable",
+      "sha256": "c485010419591a9556e849e79755d7e816f840e31978c10b371be08a730e2d82",
+      "bytes": 170963648
+    },
+    {
+      "path": "Contents/PkgInfo",
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9
+    },
+    {
+      "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229
+    },
+    {
+      "path": "Contents/Resources/Treasure Island First Playable.pck",
+      "sha256": "7315bba99efeeeb86be0bbf44876d391b9c1c95f1638318e0df2b7af367669bf",
+      "bytes": 66073188
+    },
+    {
+      "path": "Contents/Resources/icon.icns",
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "sha256": "a61fcbb1627a2900698b3294fdb12eddf7236480a9e1f5148f5ec86ad3729e40",
+      "bytes": 3217
+    }
+  ],
+  "pck_sha256": "7315bba99efeeeb86be0bbf44876d391b9c1c95f1638318e0df2b7af367669bf",
+  "pck_bytes": 66073188,
+  "executable_sha256": "c485010419591a9556e849e79755d7e816f840e31978c10b371be08a730e2d82",
+  "executable_bytes": 170963648,
+  "runtime_topology": {
+    "rows": 735,
+    "meshes": 952,
+    "surfaces": 967,
+    "triangles": 67716,
+    "bodies": 466,
+    "shapes": 466
+  },
+  "six_production_asset_hashes": {
+    "res://game/resources/facades/d1_current/d1_b225_live_attachment.json": "80b42c33fce84361aa7512f64305f5bff273e8fed95640ca4f9c19d49d55621d",
+    "res://game/scripts/world/facades/d1_b225_live_attachment.gd": "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9",
+    "res://game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres": "7fa7f3165dee560c48f5a092f317900b87b0876f27bb6a0e937b9c406a8d4ea1",
+    "res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
+    "res://game/resources/materials/world/d1_current/shared_dark_glass.tres": "ad8931db8954fd5ebc8fdd809f70afb279dd74a36e53e1d9ca907c44409f10d3",
+    "res://game/resources/materials/world/d1_current/shared_pale_frame.tres": "9a2de298ff545cf80c5da0ed0aa37d9d4ebbf10fec8eb78810af7e4d012d1436"
+  },
+  "source_hashes": {
+    "project.godot": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af",
+    "game/scripts/main.gd": "14468a67c4dc8d56394b98515c61e7425c130ef74297624bb205957f6a834140",
+    "game/scripts/world/world_chunk_builder.gd": "de4a2924d275a51dfd08aae1f0ef21daac33395b1fcfe98e260fbc90737dd725",
+    "game/scripts/world/facades/d1_b225_live_attachment.gd": "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9",
+    "game/resources/facades/d1_current/d1_b225_live_attachment.json": "80b42c33fce84361aa7512f64305f5bff273e8fed95640ca4f9c19d49d55621d",
+    "discovery/facades/facade-recognition-catalog.json": "d95be7bec8f0eabe97a9b5f7fefe1ce54ec7cbf940d85d28518ff6979eeb16ea",
+    "discovery/facades/facade-recognition-catalog.schema.json": "44584e92e1652fc930f47882b4a83304f5216c14173eb805bc9ce68ea9927cac",
+    "game/resources/facades/facade-runtime-registry.json": "109f83f40450e9c71ef6d39f1659e76eac5f1457fcfab772538b471cc74c0051",
+    "game/resources/facades/facade-runtime-adapter-contracts.json": "dd2d13e3b0f6eee1f8c5f2957927c4f3caba43b31883beea925f9a91b826d65c",
+    "game/scripts/world/facades/facade_runtime_registry_loader.gd": "12e6c64b23b0783ed240b3d6c02499c3940c2b6a14344caa29778b850db06c04",
+    "game/tests/headless_d1_b225_postpromotion_v8_contract.gd": "fd63ced9552dd9a1749de0047d2cebd1b46a1b093ebe1645dd4fcace19186353",
+    "game/tests/headless_d1_b225_postpromotion_v8_package_contract.gd": "6d2d05e28657b5de89bce0cea0c70819b791d886921f4a057c80cf548713cbcc",
+    "game/tests/d1_b225_postpromotion_v8_capture.gd": "6c709d81038ce9563181e57db364f11c1ad64d84e7c91e0c78c8ef087c052105",
+    "export_presets.cfg": "b9e991df5f586fc5ac038ff10815d5cf9569df5dea24b38dabeab959f0bcaee4",
+    "evidence/first-playable/d1-b225-production-attachment-v7-staging-2026-09-05/capture-manifest.json": "96c76fd99960f1345a7c56f7fc6678ac284f98cc601a3ba65ed57020491f18dc",
+    "evidence/first-playable/d1-b225-production-attachment-v7-staging-2026-09-05/tree_sha256": "f42dbec489c6fda55b612aba20c99ee2233857cb60a1ce9c512d024b35d0dcb7",
+    "evidence/reviews/d1-b225-production-attachment-v7-staging-2026-09-05-INDEPENDENT_VISUAL_REVIEW.md": "87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd7cf3b6b6fcb1d95"
+  },
+  "bundle_verification_log_sha256": "b4e0d728e7ca1d95a1cc47b3eadd67517f89628978e17f4597e4f20e7c6e74c6",
+  "source_package_contract_log_sha256": "4f1abbc991708879e9a9a011abc5a9df1d30886a64edc2491b2e14feffdb7ed6",
+  "mounted_contract_log_sha256": "2dab5ffdfd675e7b46e49b90d32a81add52f6c0667a4a93561e77ddf77ba02c3",
+  "generic_mounted_pck_content_audit_log_sha256": "448a21e8287bd3199be1e7fd313cd59a63914780df18f4b1feda8f53675070d0",
+  "headless_smoke_log_sha256": "60617b855838b2a23e45eacfdf2214044d3229ae9d4046a9643e7da16f5100ce",
+  "native_smoke_log_sha256": "8b034953629db70df4af7073556a47271c4842f05e3c1cd624489d88c633b999",
+  "source_package_contract_pass": true,
+  "mounted_package_contract_pass": true,
+  "generic_mounted_pck_content_audit_pass": true,
+  "headless_exported_main_smoke_pass": true,
+  "native_exported_main_smoke_pass": true,
+  "mounted_candidate_routes_absent": true,
+  "mounted_six_production_assets_present": true,
+  "mounted_ordinary_main_present": true,
+  "mounted_override_absent": true,
+  "mounted_new_v8_package_contract_present_and_loadable": true,
+  "codesign_deep_strict_pass": true,
+  "codesign_per_slice_pass": true,
+  "entitlements_empty_dictionary": true,
+  "privacy_manifest_present": true,
+  "privacy_manifest_valid": true,
+  "extended_attributes_absent": true,
+  "quarantine_absent": true,
+  "pck_path_stored": false,
+  "downstream_postpromotion_hashes_bound_into_v8_authority": false,
+  "postcapture_catalog_or_registry_mutation": false,
+  "additional_recognition_credit": false
+}

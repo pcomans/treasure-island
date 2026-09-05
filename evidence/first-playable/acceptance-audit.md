@@ -2,17 +2,58 @@
 
 Original audit checked: 2026-08-28
 Canonical reconciliation: 2026-09-03
+Current release closure: 2026-09-05
 Original reviewer: acceptance audit agent (`/root/runtime_review_sol`)  
 Jetpack/package delivery recheck: completion audit agent (`/root/completion_audit_sol`)  
 Scope: the repository and retained evidence for the approved private Treasure Island first playable
 
 > **Historical-boundary notice:** the detailed 18-ID matrix, package rows, and
 > byte-specific measurements below are sealed point-in-time audits. They are
-> preserved rather than rewritten to describe later bytes. The 2026-09-05 B201
-> promotion addendum immediately below is the canonical current status; the
-> 2026-09-03 and older addenda are historical.
+> preserved rather than rewritten to describe later bytes. The 2026-09-05 B225
+> postpromotion v8 addendum immediately below is the canonical current status;
+> the B201, 2026-09-03, and older addenda are historical.
 
-## 2026-09-05 B201 promotion addendum
+## 2026-09-05 B225 postpromotion v8 release addendum
+
+The current working-tree/local release-ready private handoff is
+`build/d1-b225-postpromotion-v8-2026-09-05-001/Treasure Island First Playable.app`.
+It is not yet a pushed or owner-accepted main release.
+
+- The seven-file bundle has canonical ASCII bytewise-path-sorted
+  `path\0sha256\0bytes\n` identity
+  `3f38c5dcd55b19f12cf7788e1069367075aa22f1b557c5b61288abdfdc30afe0`.
+  Its executable is
+  `c485010419591a9556e849e79755d7e816f840e31978c10b371be08a730e2d82`
+  (`170,963,648` bytes), and its PCK is
+  `7315bba99efeeeb86be0bbf44876d391b9c1c95f1638318e0df2b7af367669bf`
+  (`66,073,188` bytes).
+- Current authority is compiler `1.7.0`, catalog/runtime registry v8,
+  adapter contracts/loader v7, and exactly `8/213` accepted recognizable
+  physical units. Total loaded topology is
+  `735 records / 952 meshes / 967 surfaces / 67,716 triangles / 466`
+  body/shape pairs.
+- The exact [37-file B225 postpromotion packet](d1-b225-postpromotion-v8-2026-09-05/capture-manifest.json)
+  has canonical tree SHA-256
+  `7b0de99e6f4afe07b1767c522517ace3dc1729a3f82f4b9b95716de9483cbd84`.
+  Evidence generation adds no recognition credit.
+- The independent [mechanical contract audit](../reviews/d1-b225-postpromotion-v8-2026-09-05-INDEPENDENT_CONTRACT_AUDIT.md)
+  has SHA-256
+  `9c909d047786d4f7feab138b4d7c597bba1bac2adcf78cc8bcdfb568de0a0ec2`;
+  the independent [full-resolution visual review](../reviews/d1-b225-postpromotion-v8-2026-09-05-INDEPENDENT_VISUAL_REVIEW.md)
+  has SHA-256
+  `881b04d696bfe842c39a220be5f4da3087f30d8ef8e9c0493c9c62067a826c99`.
+  Both return `PASS_FOR_RELEASE_NO_ADDITIONAL_CREDIT`.
+- Source, mounted-package, packaged-headless, native Apple M2 Metal, packet,
+  telemetry, determinism, package-integrity, privacy, signature, and both
+  independent release-review gates pass for these exact bytes. Verification
+  occurred on Apple M2; ordinary mouse/keyboard play on the approved Apple M1
+  Pro owner target remains pending. This addendum does not claim owner
+  acceptance.
+
+The B201 `024605` package and addendum immediately below remain valid historical
+evidence for their own bytes but are superseded as the current handoff.
+
+## Historical 2026-09-05 B201 promotion addendum
 
 The sole current private handoff is
 `build/b201-promotion-staging-2026-09-05-024605/Treasure Island First Playable.app`.
@@ -203,7 +244,7 @@ The original 18-ID matrix below is retained as a stricter historical audit of th
 
 ### 2026-08-28 historical visual-QA package audit
 
-- At that stage the handoff was [`build/visual-qa-staging/Treasure Island First Playable.app`](../../build/visual-qa-staging/Treasure%20Island%20First%20Playable.app). Independent recomputation matched executable SHA-256 `78ac62154990ff97ddd9340d70c1a19b10c5bb9981ea37e895d1d60ebeb3fae9`, PCK SHA-256 `0af209e03f4b511c260570969433ecd2ce7701e5c64da8dfed7ae977a9d98bb5`, and sorted seven-file inventory SHA-256 `c19ea2b1ad9e77917fdf997ec50eadb26876e5b4659eb3f10e9b73c9c1909ace` (`176,996,276` logical bytes). Both it and the later synthetic-YBI build are superseded by the USGS terrain handoff.
+- At that stage the handoff was the now non-retained historical ignored build `build/visual-qa-staging/Treasure Island First Playable.app`. Independent recomputation matched executable SHA-256 `78ac62154990ff97ddd9340d70c1a19b10c5bb9981ea37e895d1d60ebeb3fae9`, PCK SHA-256 `0af209e03f4b511c260570969433ecd2ce7701e5c64da8dfed7ae977a9d98bb5`, and sorted seven-file inventory SHA-256 `c19ea2b1ad9e77917fdf997ec50eadb26876e5b4659eb3f10e9b73c9c1909ace` (`176,996,276` logical bytes). Both it and the later synthetic-YBI build are superseded by the USGS terrain handoff.
 - An independent direct PCK mount finds exactly `95` virtual files, `44` generated-world files, `38` chunks, all eight current main/player/camera/world-palette/route/render-harness resources, physical Space, the exact manifest/content/ferry contract, and zero banned authoring paths. Strict deep and arm64 signature verification pass; the executable is Universal `x86_64 arm64`; plist identity/version/category/minimum systems match the release record. Expected Gatekeeper rejection remains appropriate for this private ad-hoc, non-notarized build.
 - Both final [headless](visual-qa/mac-run/packaged-headless.log) and [Metal/Forward+](visual-qa/mac-run/ordinary-launch.log) auto-close logs contain the exact `MAC_EXPORT_WORLD_READY`, ambient-color `MAC_EXPORT_VISUAL`, `MAC_EXPORT_JETPACK`, and `PASS` records. Machine-readable exits are both `0`, and neither retained log contains error, warning, fail, leak, crash, or debugger tokens. The non-headless run is technical renderer startup, not interactive input or owner acceptance.
 - The focus-out exception is limited to explicit `--mac-export-smoke`: [`main.gd`](../../game/scripts/main.gd) still pauses an ordinary ready, unpaused game on focus loss, while smoke mode alone bypasses that notification so the deterministic physics gate can complete.
@@ -218,7 +259,7 @@ The original 18-ID matrix below is retained as a stricter historical audit of th
 
 ### 2026-08-28 retained jetpack/package delivery addendum
 
-- **No P1 implementation or package defect was found in that delivery recheck.** The audited artifact was the isolated [`build/jetpack-staging/Treasure Island First Playable.app`](../../build/jetpack-staging/Treasure%20Island%20First%20Playable.app), not either older retained bundle. Its independently rechecked executable SHA-256 is `eb82dabcaa777956778fd40504f2c94a08300bf900ac7bb99c14472f1dd70e10`, its PCK SHA-256 is `6fe39d87544a087d2743cdcecd0033177e5657c9f779fd0ca76ebea9169f5579`, and its sorted bundle file-content inventory SHA-256 is `8a35e58e043291c096e7755a286593d59945106feb145bda7e708645f786763e`. The pre-package addendum above controls the newer frozen source state.
+- **No P1 implementation or package defect was found in that delivery recheck.** The audited artifact was the now non-retained historical ignored build `build/jetpack-staging/Treasure Island First Playable.app`, not either older retained bundle. Its independently rechecked executable SHA-256 is `eb82dabcaa777956778fd40504f2c94a08300bf900ac7bb99c14472f1dd70e10`, its PCK SHA-256 is `6fe39d87544a087d2743cdcecd0033177e5657c9f779fd0ca76ebea9169f5579`, and its sorted bundle file-content inventory SHA-256 is `8a35e58e043291c096e7755a286593d59945106feb145bda7e708645f786763e`. The pre-package addendum above controls the newer frozen source state.
 - **The earlier P2 delivery findings are closed for that retained package.** The pause panel names Space, the source and packaged runtime both require a physical Space key event, export/reproduction/cleanup instructions use the isolated `jetpack-staging` path, and current-scope charter/experience/brief/handoff documents include the jetpack amendment. See [retained package evidence](jetpack/mac-run/README.md), [machine-readable release identity](jetpack/mac-run/release-identity.json), [PCK audit](jetpack/mac-run/package-audit.log), and [packaged smoke](jetpack/mac-run/packaged-headless.log).
 - **At that retained-package stage, `MOVE-02` was incomplete only at its owner/ordinary-play evidence boundary.** The real full-world source runtime proves held ascent, camera-relative air walk/run, capped released descent, renewed mid-air ascent, landing without recovery, and cleanup. The mounted PCK proves physical Space, and the packaged main scene independently proves `2.751 m` rise at `5.000 m/s` plus `0.300 m` slow descent capped at `-1.500 m/s`. The final package audit is now complete, but no ordinary rendered owner flight/feel capture exists yet.
 - **Completion blockers are evidence gaps, not observed P1 failures.** Owner recognition, ordinary rendered interaction/feel, four-region traversal, tight-gap camera operation, and complete spray rejection/isolation remain pending. The planar ground is disclosed and satisfies the current OSM-layout contract, but remains a recognition/fidelity risk for the owner to judge.

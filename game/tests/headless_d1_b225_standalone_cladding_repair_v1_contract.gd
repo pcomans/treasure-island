@@ -7,6 +7,15 @@ const UV_HELPER_PATH := "res://game/scripts/world/facades/d1_b225_cumulative_met
 const MATERIAL_PATH := "res://game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres"
 const TEXTURE_PATH := "res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png"
 const IMPORT_PATH := TEXTURE_PATH + ".import"
+const LIVE_ADAPTER_PATH := "res://game/scripts/world/facades/d1_b225_live_attachment.gd"
+const LIVE_CONFIG_PATH := "res://game/resources/facades/d1_current/d1_b225_live_attachment.json"
+const WORLD_BUILDER_PATH := "res://game/scripts/world/world_chunk_builder.gd"
+const CANDIDATE_SEAM_PATH := "res://game/tests/support/d1_b225_" + "prepromotion_candidate_seam.gd"
+const CATALOG_PATH := "res://discovery/facades/facade-recognition-catalog.json"
+const RUNTIME_REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
+const RUNTIME_LOADER_PATH := "res://game/scripts/world/facades/facade_runtime_registry_loader.gd"
+const ACCEPTED_TRIALS_PATH := "res://game/scripts/world/facades/accepted_material_run_trials.gd"
+const LIVE_ADAPTER_ID := "active-adapter:d1-b225-live:building:w95934119:wall"
 const CONTROL_SCENE_PATH := "res://game/scenes/world/facades/d1_current/d1_current_standalone_prototype_pair.tscn"
 const EXPECTED_TEXTURE_SHA256 := "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b"
 const EXPECTED_CONFIG_SHA256 := "7c1c2d508f78236590c6d413604be60b3a5c48865878e69d294177d05c48d166"
@@ -62,7 +71,7 @@ func _run() -> void:
 	_require(_byte_contract_matches(), "B225 repair or sealed parent byte contract failed.")
 	_require(_config_contract_matches(config), "B225 repair config scope/provenance/topology contract failed.")
 	_require(_material_contract_matches(), "B225 generated-albedo scalar-material/import contract failed.")
-	_require(_source_isolation_matches(), "B225 repair source leaked to live world or reintroduced forbidden geometry/PBR/stochastic behavior.")
+	_require(_source_isolation_matches(), "B225 standalone isolation or its distinct promoted production route boundary failed.")
 
 	var packed := load(SCENE_PATH) as PackedScene
 	var control_packed := load(CONTROL_SCENE_PATH) as PackedScene
@@ -85,7 +94,7 @@ func _run() -> void:
 	instance.queue_free()
 	control.queue_free()
 	if not _failed:
-		print("PASS: isolated B225 repair preserves ten clerestory groups, replaces 14 dark rules and 4 normalized wall boxes with four cumulative-metre field quads, uses one albedo plus scalar roughness, totals 1088 triangles, and remains absent from live construction")
+		print("PASS: the historical B225 standalone repair preserves ten clerestory groups, four cumulative-metre field quads, one albedo plus scalar roughness, and 1,088 triangles; its factory, scene, config, and UV helper remain unwired, while the distinct promoted receiver-relative adapter reuses only the approved material/texture and the prepromotion candidate seam remains test-only")
 	_finish()
 
 
@@ -95,7 +104,7 @@ func _run_mounted_contract() -> void:
 	var material := load(MATERIAL_PATH) as StandardMaterial3D
 	_require(material != null and material.albedo_texture != null, "Mounted PCK B225 material/texture failed to load.")
 	if not _failed:
-		print("PASS: mounted PCK contains the explicitly costed B225 standalone review candidate and its albedo/material/scene/UV resources")
+		print("PASS: mounted PCK preserves the explicitly costed historical B225 standalone review artifact and its albedo/material/scene/UV resources")
 
 
 func _byte_contract_matches() -> bool:
@@ -242,19 +251,93 @@ func _source_isolation_matches() -> bool:
 	for forbidden: String in ["shared_deep_reveal", "HorizontalCourse", "b225_aged_horizontal_cladding.tres", "RandomNumberGenerator", "randf(", "randi(", "FastNoise", "NoiseTexture", "ShaderMaterial", "normal_texture", "roughness_texture", "CollisionShape3D.new", "StaticBody3D.new", "NavigationRegion3D.new", "Decal.new"]:
 		if forbidden in source:
 			return false
-	for live_path: String in [
-		"res://game/scripts/world/world_chunk_builder.gd",
-		"res://game/scripts/world/facades/accepted_material_run_trials.gd",
-		"res://game/scripts/world/facades/facade_runtime_registry_loader.gd",
-		"res://game/resources/facades/facade-runtime-registry.json",
-		"res://discovery/facades/facade-recognition-catalog.json",
-	]:
-		var live_source := FileAccess.get_file_as_string(live_path)
-		for token: String in ["d1_b225_standalone_cladding_repair_v1", "d1_b225_repair_v1", "b225_aged_painted_horizontal_cladding_albedo_v1"]:
-			if token in live_source:
+	var builder_source := FileAccess.get_file_as_string(WORLD_BUILDER_PATH)
+	var adapter_source := FileAccess.get_file_as_string(LIVE_ADAPTER_PATH)
+	var candidate_source := FileAccess.get_file_as_string(CANDIDATE_SEAM_PATH)
+	var catalog_source := FileAccess.get_file_as_string(CATALOG_PATH)
+	var registry_source := FileAccess.get_file_as_string(RUNTIME_REGISTRY_PATH)
+	var loader_source := FileAccess.get_file_as_string(RUNTIME_LOADER_PATH)
+	var trials_source := FileAccess.get_file_as_string(ACCEPTED_TRIALS_PATH)
+	for active_source: String in [builder_source, adapter_source, catalog_source, registry_source, loader_source, trials_source, candidate_source]:
+		for standalone_token: String in ["d1_b225_standalone_cladding_repair_v1", "d1_b225_nnw_long_cladding_repair_v1", "d1_b225_cumulative_meter_uv_v1"]:
+			if standalone_token in active_source:
 				return false
+	if builder_source.count('const D1_B225_LIVE_ATTACHMENT := preload("%s")' % LIVE_ADAPTER_PATH) != 1 \
+	or builder_source.count("D1_B225_LIVE_ATTACHMENT.validate_chunk_records(chunk)") != 1 \
+	or builder_source.count("D1_B225_LIVE_ATTACHMENT.prepare(record)") != 1 \
+	or builder_source.count("D1_B225_LIVE_ATTACHMENT.host_uvs(record, b225_prepared)") != 1 \
+	or builder_source.count("D1_B225_LIVE_ATTACHMENT.partition_host(record, indices, placeholder_material, b225_prepared)") != 1 \
+	or builder_source.count("D1_B225_LIVE_ATTACHMENT.build_prepared(record, b225_prepared)") != 1 \
+	or candidate_source.count('const ADAPTER := preload("%s")' % LIVE_ADAPTER_PATH) != 1 \
+	or LIVE_CONFIG_PATH not in adapter_source \
+	or "d1_b225_repair_v1" not in adapter_source \
+	or "b225_aged_painted_horizontal_cladding_albedo_v1" not in adapter_source:
+		return false
+	var catalog_value: Variant = JSON.parse_string(catalog_source)
+	var registry_value: Variant = JSON.parse_string(registry_source)
+	if not (catalog_value is Dictionary) or not (registry_value is Dictionary) \
+	or not _catalog_production_route_matches(catalog_value as Dictionary) \
+	or not _runtime_production_route_matches(registry_value as Dictionary):
+		return false
 	var preset := FileAccess.get_file_as_string("res://export_presets.cfg")
-	return "d1_b225_repair_v1" not in preset
+	return CANDIDATE_SEAM_PATH.trim_prefix("res://") in preset \
+		and "d1_b225_repair_v1" not in preset
+
+
+func _catalog_production_route_matches(catalog: Dictionary) -> bool:
+	var matches := (catalog.get("active_runtime_adapters", []) as Array).filter(func(value: Variant) -> bool:
+		return value is Dictionary and str((value as Dictionary).get("adapter_id", "")) == LIVE_ADAPTER_ID
+	)
+	if matches.size() != 1:
+		return false
+	var adapter := matches[0] as Dictionary
+	var actual_assets: Array[String] = []
+	for value: Variant in adapter.get("runtime_asset_paths", []) as Array:
+		actual_assets.append(str(value))
+	actual_assets.sort()
+	var expected_assets: Array[String] = [
+		MATERIAL_PATH.trim_prefix("res://"),
+		TEXTURE_PATH.trim_prefix("res://"),
+		"game/resources/materials/world/d1_current/shared_dark_glass.tres",
+		"game/resources/materials/world/d1_current/shared_pale_frame.tres",
+	]
+	expected_assets.sort()
+	return str(catalog.get("schema_version", "")) == "ti.facade-recognition-catalog/8" \
+		and str(adapter.get("runtime_adapter_path", "")) == LIVE_ADAPTER_PATH.trim_prefix("res://") \
+		and str(adapter.get("runtime_config_path", "")) == LIVE_CONFIG_PATH.trim_prefix("res://") \
+		and str(adapter.get("runtime_dispatch_path", "")) == WORLD_BUILDER_PATH.trim_prefix("res://") \
+		and str(adapter.get("recognition_acceptance_status", "")) == "accepted" \
+		and actual_assets == expected_assets
+
+
+func _runtime_production_route_matches(registry: Dictionary) -> bool:
+	var matches := (registry.get("active_runtime_adapters", []) as Array).filter(func(value: Variant) -> bool:
+		return value is Dictionary and str((value as Dictionary).get("adapter_id", "")) == LIVE_ADAPTER_ID
+	)
+	if matches.size() != 1:
+		return false
+	var adapter := matches[0] as Dictionary
+	var actual_assets: Array[String] = []
+	for value: Variant in adapter.get("runtime_assets", []) as Array:
+		if not (value is Dictionary):
+			return false
+		actual_assets.append(str((value as Dictionary).get("path", "")))
+	actual_assets.sort()
+	var expected_assets: Array[String] = [
+		LIVE_CONFIG_PATH,
+		LIVE_ADAPTER_PATH,
+		MATERIAL_PATH,
+		TEXTURE_PATH,
+		"res://game/resources/materials/world/d1_current/shared_dark_glass.tres",
+		"res://game/resources/materials/world/d1_current/shared_pale_frame.tres",
+	]
+	expected_assets.sort()
+	return str(registry.get("schema_version", "")) == "ti.facade-runtime-registry/8" \
+		and str(adapter.get("runtime_content_mode", "")) == "active_d1_b225_host_partition_attachment" \
+		and str(adapter.get("state", "")) == "active_runtime_target_specific_content" \
+		and str(adapter.get("recognition_acceptance_status", "")) == "accepted" \
+		and (adapter.get("runtime_asset_projections", []) as Array).is_empty() \
+		and actual_assets == expected_assets
 
 
 func _numeric_array_approx(actual: Array, expected: Array, tolerance: float) -> bool:

@@ -136,6 +136,26 @@
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
       "source_key": "w34313545",
       "whole_building_recognizability_imported": false
+    },
+    {
+      "adapter_id": "active-adapter:d1-b225-live:building:w95934119:wall",
+      "content_classification": "active_target_specific_receiver_host_partition_plus_render_only_attachment",
+      "receiver_key": "building:w95934119:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
+      "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
+      "runtime_adapter_path": "game/scripts/world/facades/d1_b225_live_attachment.gd",
+      "runtime_asset_paths": [
+        "game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres",
+        "game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
+        "game/resources/materials/world/d1_current/shared_dark_glass.tres",
+        "game/resources/materials/world/d1_current/shared_pale_frame.tres"
+      ],
+      "runtime_config_path": "game/resources/facades/d1_current/d1_b225_live_attachment.json",
+      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+      "source_key": "w95934119",
+      "whole_building_recognizability_imported": false
     }
   ],
   "catalog_id": "treasure-island-physical-building-recognition",
@@ -455,9 +475,55 @@
       ],
       "status": "configured",
       "unit_id": "physical-building:w34313545"
+    },
+    {
+      "alternate_pose": {
+        "aim_target_m": [
+          -421.426788330078,
+          5.5,
+          -186.175430297852
+        ],
+        "camera_position_m": [
+          -414.4345703125,
+          4.65991115570068,
+          -224.254699707031
+        ],
+        "fov_degrees": 70,
+        "player_position_m": [
+          -415.249206542969,
+          2.75778698921204,
+          -219.818237304688
+        ]
+      },
+      "ordinary_third_person_required": true,
+      "primary_pose": {
+        "aim_target_m": [
+          -421.542999267578,
+          5.30000019073486,
+          -186.115005493164
+        ],
+        "camera_position_m": [
+          -407.133941650391,
+          4.62569618225098,
+          -225.983352661133
+        ],
+        "fov_degrees": 70,
+        "player_position_m": [
+          -409.003112792969,
+          2.71317028999329,
+          -220.811447143555
+        ]
+      },
+      "required_cue_ids": [
+        "b225-aged-horizontal-cladding",
+        "b225-low-elongated-shed-mass",
+        "b225-varied-continuous-high-clerestory"
+      ],
+      "status": "configured",
+      "unit_id": "physical-building:w95934119"
     }
   ],
-  "checked_date": "2026-09-04",
+  "checked_date": "2026-09-05",
   "claim_vocabulary": {
     "as_built_fidelity": "A separate surveyed/as-built claim; unclaimed by the Phase 1 seed.",
     "game_distinctive": "Distinguishable inside the game; never evidence of real-world recognizability.",
@@ -471,19 +537,19 @@
     "reference_recognizable": "An ordinary gameplay view is independently matched to target-identifiable reference evidence."
   },
   "compiler_contract": {
-    "emitted_runtime_schema_version": "ti.facade-runtime-registry/7",
-    "required_compiler_version": "1.6.0",
+    "emitted_runtime_schema_version": "ti.facade-runtime-registry/8",
+    "required_compiler_version": "1.7.0",
     "unknown_version_policy": "reject"
   },
   "expected_counts": {
-    "active_runtime_adapter_receivers": 6,
+    "active_runtime_adapter_receivers": 7,
     "building_footprints": 213,
     "building_parts": 2,
     "composite_units": 1,
     "direct_wall_receivers": 214,
     "legacy_adapter_receivers": 9,
     "recognition_units": 213,
-    "runtime_adapter_receivers": 15,
+    "runtime_adapter_receivers": 16,
     "source_records": 215,
     "standalone_units": 212,
     "visible_wall_runs": 4971
@@ -581,7 +647,7 @@
       "whole_building_recognizability_imported": false
     }
   ],
-  "schema_version": "ti.facade-recognition-catalog/7",
+  "schema_version": "ti.facade-recognition-catalog/8",
   "source_contract": {
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_schema_version": "ti.godot-world/2",
@@ -2529,13 +2595,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "capture_time_recognition_metric": "7/213",
+          "evidence_manifest_sha256": "96c76fd99960f1345a7c56f7fc6678ac284f98cc601a3ba65ed57020491f18dc",
+          "evidence_tree_sha256": "f42dbec489c6fda55b612aba20c99ee2233857cb60a1ce9c512d024b35d0dcb7",
+          "numerator_effect": 1,
+          "review_id": "d1-b225-production-attachment-v7-staging-2026-09-05",
+          "review_kind": "independent_reference_recognition",
+          "review_receipt_sha256": "87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd7cf3b6b6fcb1d95",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w95934119",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -2548,13 +2625,93 @@
         "name_evidence": false
       },
       "legacy_adapter_ids": [],
-      "protected_scopes": [],
+      "protected_scopes": [
+        {
+          "reason": "Runs 0..9 and the roof remain outside the independently reviewed NNW production treatment; they retain exact generic/protected rendering with no invented lower or side program.",
+          "receiver_key": "building:w95934119:wall",
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        }
+      ],
       "receiver_keys": [
         "building:w95934119:wall"
       ],
-      "recognition_cues": [],
-      "reference_records": [],
-      "reference_state": "reference_research_unassessed",
+      "recognition_cues": [
+        {
+          "complete_motif": true,
+          "cue_id": "b225-aged-horizontal-cladding",
+          "cue_kind": "architectural_pattern_tile",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w95934119:wall",
+          "reference_ids": [
+            "148-12-SV01"
+          ],
+          "run_indices": [
+            10,
+            11,
+            12,
+            13
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "b225-low-elongated-shed-mass",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w95934119:wall",
+          "reference_ids": [
+            "148-12-SV01"
+          ],
+          "run_indices": [
+            10,
+            11,
+            12,
+            13
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "b225-varied-continuous-high-clerestory",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w95934119:wall",
+          "reference_ids": [
+            "148-12-SV01"
+          ],
+          "run_indices": [
+            10,
+            11,
+            12,
+            13
+          ]
+        }
+      ],
+      "reference_records": [
+        {
+          "observation_id": "148-12-SV01",
+          "observed_regions": [
+            "March 2025 NNW public long side"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=37.8256201,-122.3758225&heading=174&pitch=0&fov=75",
+          "supports": [
+            "aged pale horizontal cladding with quiet nonperiodic wear",
+            "continuous high clerestory with varied complete group widths and dark opaque panes",
+            "low elongated approximately five-metre one-storey shed mass"
+          ]
+        }
+      ],
+      "reference_state": "reference_ready",
       "source_records": [
         {
           "role": "standalone_building_footprint",

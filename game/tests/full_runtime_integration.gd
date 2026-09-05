@@ -6,12 +6,13 @@ const EXPECTED_MANIFEST_HASH := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e
 const EXPECTED_CHUNKS := 38
 const EXPECTED_RECORDS := 729
 const EXPECTED_GENERATED_MESHES := 723
-const EXPECTED_GENERATED_SURFACES := 733
+const EXPECTED_GENERATED_SURFACES := 734
 const EXPECTED_GENERATED_TRIANGLES := 48739
 const EXPECTED_B201_HOST_PARTITION_SURFACE_DELTA := 1
-const EXPECTED_RUNTIME_MESHES := 950
-const EXPECTED_RUNTIME_SURFACES := 964
-const EXPECTED_RUNTIME_TRIANGLES := 66636
+const EXPECTED_B225_HOST_PARTITION_SURFACE_DELTA := 1
+const EXPECTED_RUNTIME_MESHES := 952
+const EXPECTED_RUNTIME_SURFACES := 967
+const EXPECTED_RUNTIME_TRIANGLES := 67716
 const EXPECTED_STATIC_BODIES := 466
 const EXPECTED_VEGETATION_SEED := 1414092337
 const EXPECTED_VEGETATION_INSTANCES := 124
@@ -100,14 +101,14 @@ func _run() -> void:
 	var records := _record_nodes(main)
 	var runtime_counts := _inspect_records(records)
 	if not _require(records.size() == EXPECTED_RECORDS, "Expected 729 generated record nodes, got %d." % records.size()) \
-	or not _require(int(runtime_counts.meshes) == EXPECTED_GENERATED_MESHES and int(runtime_counts.surfaces) == EXPECTED_GENERATED_SURFACES, "Expected 723 record-root meshes / 733 surfaces after the Building 1, Building 3, Isle House, Navy Chapel, and B201 replacements.") \
+	or not _require(int(runtime_counts.meshes) == EXPECTED_GENERATED_MESHES and int(runtime_counts.surfaces) == EXPECTED_GENERATED_SURFACES, "Expected 723 record-root meshes / 734 surfaces after the Building 1, Building 3, Isle House, Navy Chapel, B201, and B225 replacements; got %d meshes / %d surfaces." % [int(runtime_counts.meshes), int(runtime_counts.surfaces)]) \
 	or not _require(_accepted_material_run_trials_match_contract(records), "The superseded Chapel material trial or the retained Dormitory/YMCA exact-run homogeneous-material partitions drifted.") \
 	or not _require(_batch_06_accepted_fields_match_contract(records, runtime_counts), "The generated Batch 06 field surface delta or exact accepted/pending render-only placements drifted.") \
 	or not _require(_rejected_fire_station_placeholder_matches(records), "Rejected Fire Station 48 still has a live accepted-material surface or is not fully restored to the generated placeholder.") \
-	or not _require(int(runtime_counts.triangles) == EXPECTED_GENERATED_TRIANGLES, "Expected 48,739 record-root triangles after the Building 1/Building 3/Navy Chapel/B201 replacements, got %d." % int(runtime_counts.triangles)) \
+	or not _require(int(runtime_counts.triangles) == EXPECTED_GENERATED_TRIANGLES, "Expected 48,739 record-root triangles after the Building 1/Building 3/Navy Chapel/B201/B225 replacements, got %d." % int(runtime_counts.triangles)) \
 	or not _require(int(runtime_counts.static_bodies) == EXPECTED_STATIC_BODIES and int(runtime_counts.shapes) == EXPECTED_STATIC_BODIES, "Expected 466 StaticBody3D/ConcavePolygonShape3D pairs.") \
 	or not _require(int(runtime_counts.sources) == EXPECTED_GEOMETRY_SOURCES, "Expected 738 direct generated-geometry source identities.") \
-	or not _require(evidence.mesh_instances == EXPECTED_RUNTIME_MESHES and evidence.surfaces == EXPECTED_RUNTIME_SURFACES and evidence.triangles == EXPECTED_RUNTIME_TRIANGLES, "RuntimeEvidence must include accepted Building 1/Building 3/Isle House/Navy Chapel/B201 replacements: 950 meshes / 964 surfaces / 66,636 triangles.") \
+	or not _require(evidence.mesh_instances == EXPECTED_RUNTIME_MESHES and evidence.surfaces == EXPECTED_RUNTIME_SURFACES and evidence.triangles == EXPECTED_RUNTIME_TRIANGLES, "RuntimeEvidence must include accepted Building 1/Building 3/Isle House/Navy Chapel/B201/B225 replacements: 952 meshes / 967 surfaces / 67,716 triangles.") \
 	or not _require(evidence.static_bodies == EXPECTED_STATIC_BODIES and evidence.shapes == EXPECTED_STATIC_BODIES, "RuntimeEvidence collider totals differ from the live tree.") \
 	or not _require(_category_counts_match(world), "Generated category attachment counts are incomplete.") \
 	or not _require(_vegetation_runtime_matches(world), "Visual-only vegetation MultiMesh runtime contract is invalid.") \
@@ -476,7 +477,7 @@ func _batch_06_accepted_fields_match_contract(records: Array, runtime_counts: Di
 		and int(runtime_counts.meshes) == EXPECTED_GENERATED_MESHES \
 		and int(runtime_counts.surfaces) == EXPECTED_GENERATED_SURFACES \
 		and int(runtime_counts.surfaces) - int(runtime_counts.meshes) \
-			== ACCEPTED_MATERIAL_RUN_TRIALS.TARGETS.size() - 1 + batch_06_surface_delta + EXPECTED_B201_HOST_PARTITION_SURFACE_DELTA
+			== ACCEPTED_MATERIAL_RUN_TRIALS.TARGETS.size() - 1 + batch_06_surface_delta + EXPECTED_B201_HOST_PARTITION_SURFACE_DELTA + EXPECTED_B225_HOST_PARTITION_SURFACE_DELTA
 
 
 func _rejected_fire_station_placeholder_matches(records: Array) -> bool:

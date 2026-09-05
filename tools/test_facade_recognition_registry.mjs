@@ -32,10 +32,12 @@ const ACCEPTED_REFERENCE_UNIT_IDS = [
   "physical-building:w291189336",
   "physical-building:w34313540",
   "physical-building:w34313545",
+  "physical-building:w95934119",
 ].sort();
 const ACTIVE_REVIEW_STATUS_SCOPE = "runtime_asset_original_detail_provenance_only_not_reference_recognition";
 const ACTIVE_RECOGNITION_ACCEPTANCE_AUTHORITY = "physical_unit_claim_and_independent_acceptance_record";
 const PRE_B201_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_b201_integration_live_parity";
+const PRE_B225_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_b225_integration_live_parity";
 const CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "current_integration_topology";
 const ACTIVE_UNIT_BY_RECEIVER = new Map([
   ["building-composite:w1249412094:w1282547787:wall", "physical-building:w1249412094"],
@@ -44,6 +46,7 @@ const ACTIVE_UNIT_BY_RECEIVER = new Map([
   ["building:w291189336:wall", "physical-building:w291189336"],
   ["building:w34313540:wall", "physical-building:w34313540"],
   ["building:w34313545:wall", "physical-building:w34313545"],
+  ["building:w95934119:wall", "physical-building:w95934119"],
 ]);
 const ACTIVE_REVIEW_STATUS_BY_RECEIVER = new Map([
   ["building-composite:w1249412094:w1282547787:wall", "independent_exact_current_live_pass"],
@@ -52,6 +55,7 @@ const ACTIVE_REVIEW_STATUS_BY_RECEIVER = new Map([
   ["building:w291189336:wall", "independent_exact_current_live_pass"],
   ["building:w34313540:wall", "pending_independent_original_detail_review"],
   ["building:w34313545:wall", "independent_exact_current_live_pass"],
+  ["building:w95934119:wall", "independent_exact_current_live_pass"],
 ]);
 
 function absolute(relativePath) {
@@ -112,7 +116,7 @@ assert(schema.properties.schema_version.const === CATALOG_SCHEMA, "catalog schem
 assert(schema.properties.units.minItems === EXPECTED.recognition_units && schema.properties.units.maxItems === EXPECTED.recognition_units, "catalog schema does not pin 213 units");
 assert(schema.properties.capture_contracts.items.$ref === "#/$defs/capture_contract", "catalog schema lacks capture contracts");
 assert(schema.properties.identity_evidence_records.items.$ref === "#/$defs/identity_evidence_record", "catalog schema lacks separate identity evidence");
-assert(schema.properties.active_runtime_adapters.minItems === EXPECTED.active_runtime_adapter_receivers && schema.properties.active_runtime_adapters.maxItems === EXPECTED.active_runtime_adapter_receivers, "catalog schema does not pin six active runtime adapters");
+assert(schema.properties.active_runtime_adapters.minItems === EXPECTED.active_runtime_adapter_receivers && schema.properties.active_runtime_adapters.maxItems === EXPECTED.active_runtime_adapter_receivers, "catalog schema does not pin seven active runtime adapters");
 const building1AdapterSchema = schema.$defs.building_1_active_runtime_adapter.properties.runtime_asset_paths;
 assert(building1AdapterSchema.contains.const === "game/resources/facades/building_1_public_front_believability.json" && building1AdapterSchema.minContains === 1 && building1AdapterSchema.maxContains === 1, "catalog schema does not require exactly one Building 1 public-front config member");
 for (const reference of schema.$defs.active_runtime_adapter.anyOf) {
@@ -124,19 +128,19 @@ for (const reference of schema.$defs.active_runtime_adapter.anyOf) {
   assert(["pending_independent_original_detail_review", "independent_exact_current_live_pass"].includes(definition.properties.review_status.const), `${reference.$ref} review status is not an exact allowed literal`);
 }
 assert(catalog.schema_version === CATALOG_SCHEMA, "catalog schema drifted");
-assert(Array.isArray(catalog.capture_contracts) && catalog.capture_contracts.length === ACCEPTED_REFERENCE_UNIT_IDS.length, "catalog does not contain exactly seven accepted ordinary-player capture contracts");
+assert(Array.isArray(catalog.capture_contracts) && catalog.capture_contracts.length === ACCEPTED_REFERENCE_UNIT_IDS.length, "catalog does not contain exactly eight accepted ordinary-player capture contracts");
 assert(registry.schema_version === RUNTIME_SCHEMA, "runtime registry schema drifted");
 assert(report.schema_version === REPORT_SCHEMA && report.status === "pass", "validation report is not passing");
 assert(stableJson(registry) === stableJson(compiled.registry), "checked-in runtime registry differs from a clean compile");
 assert(stableJson(report) === stableJson(compiled.report), "checked-in validation report differs from a clean compile");
-assert(ADAPTER_CONTRACT_CHECK_ID === "adapter_contract_9_ready_6_disabled_13_unique_projection_inputs", "adapter-contract validation check identifier is not exact-current");
+assert(ADAPTER_CONTRACT_CHECK_ID === "adapter_contract_10_ready_6_disabled_13_unique_projection_inputs", "adapter-contract validation check identifier is not exact-current");
 assert(report.checks.filter((check) => check.check_id === ADAPTER_CONTRACT_CHECK_ID && check.status === "pass").length === 1, "validation report does not contain exactly one passing exact-current adapter-contract check identifier");
 assert(!report.checks.some((check) => check.check_id === "adapter_contract_6_ready_8_disabled_15_unique_projection_inputs"), "validation report retains the stale adapter-contract check identifier");
 
 assert(registry.units.length === EXPECTED.recognition_units, "runtime registry does not contain 213 recognition units");
 assert(registry.legacy_adapters.length === EXPECTED.legacy_adapter_receivers, "runtime registry does not contain nine legacy adapters");
-assert(registry.active_runtime_adapters.length === EXPECTED.active_runtime_adapter_receivers, "runtime registry does not contain six active runtime adapters");
-assert(registry.counts.runtime_adapter_receivers === EXPECTED.runtime_adapter_receivers, "runtime registry does not contain 15 receiver adapters");
+assert(registry.active_runtime_adapters.length === EXPECTED.active_runtime_adapter_receivers, "runtime registry does not contain seven active runtime adapters");
+assert(registry.counts.runtime_adapter_receivers === EXPECTED.runtime_adapter_receivers, "runtime registry does not contain 16 receiver adapters");
 assert(registry.counts.source_record_memberships === EXPECTED.source_records, "runtime registry source membership is not 215");
 assert(registry.counts.direct_wall_receivers === EXPECTED.direct_wall_receivers, "runtime registry receiver count is not 214");
 assert(registry.counts.visible_wall_runs === EXPECTED.visible_wall_runs, "runtime registry visible wall runs are not 4,971");
@@ -182,6 +186,7 @@ const building1TowerUnit = registry.units.find((unit) => unit.unit_id === "physi
 const building3Unit = registry.units.find((unit) => unit.unit_id === "physical-building:w34313540");
 const navyChapelUnit = registry.units.find((unit) => unit.unit_id === "physical-building:w291189336");
 const d1B201Unit = registry.units.find((unit) => unit.unit_id === "physical-building:w34313545");
+const d1B225Unit = registry.units.find((unit) => unit.unit_id === "physical-building:w95934119");
 assert(building1Unit !== building1TowerUnit, "Building 1 and its observation tower were collapsed");
 assert(building1Unit.direct_receivers[0].runtime_content_mode === "active_building_1_hero", "Building 1 main wall is not bound to current hero dispatch");
 assert(building1TowerUnit.direct_receivers[0].runtime_content_mode === "active_building_1_hero", "Building 1 observation tower wall is not bound to current hero dispatch");
@@ -195,6 +200,11 @@ assert(navyChapelUnit.active_runtime_adapter_ids.length === 1 && navyChapelUnit.
 assert(d1B201Unit.direct_receivers[0].runtime_content_mode === "active_d1_b201_host_partition_attachment", "D1 B201 wall is not bound to its exact host-partition attachment");
 assert(d1B201Unit.runtime_content_mode === "all_receivers_active_d1_b201_host_partition_attachment", "D1 B201 unit content mode does not preserve host-partition semantics");
 assert(d1B201Unit.active_runtime_adapter_ids.length === 1 && d1B201Unit.legacy_adapter_ids.length === 0, "D1 B201 retains obsolete legacy membership or lacks its active adapter");
+assert(d1B225Unit.direct_receivers[0].runtime_content_mode === "active_d1_b225_host_partition_attachment", "D1 B225 wall is not bound to its exact host-partition attachment");
+assert(d1B225Unit.runtime_content_mode === "all_receivers_active_d1_b225_host_partition_attachment", "D1 B225 unit content mode does not preserve host-partition semantics");
+assert(d1B225Unit.active_runtime_adapter_ids.length === 1 && d1B225Unit.legacy_adapter_ids.length === 0, "D1 B225 retains obsolete legacy membership or lacks its active adapter");
+assert(d1B225Unit.acceptance_records.length === 1 && d1B225Unit.acceptance_records[0].capture_time_recognition_metric === "7/213" && d1B225Unit.acceptance_records[0].numerator_effect === 1, "D1 B225 authority does not preserve its capture-time 7/213 boundary and one-unit numerator effect");
+assert(d1B225Unit.acceptance_records[0].evidence_manifest_sha256 === "96c76fd99960f1345a7c56f7fc6678ac284f98cc601a3ba65ed57020491f18dc" && d1B225Unit.acceptance_records[0].evidence_tree_sha256 === "f42dbec489c6fda55b612aba20c99ee2233857cb60a1ce9c512d024b35d0dcb7" && d1B225Unit.acceptance_records[0].review_receipt_sha256 === "87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd7cf3b6b6fcb1d95", "D1 B225 authority is not bound to the frozen capture-time production evidence and independent review");
 
 for (const unit of registry.units) {
   const accepted = ACCEPTED_REFERENCE_UNIT_IDS.includes(unit.unit_id);
@@ -235,10 +245,10 @@ for (const adapter of registry.active_runtime_adapters) {
 }
 assert(registry.claim_totals.receiver_complete.verified === EXPECTED.recognition_units, "receiver-complete aggregate drifted");
 assert(registry.claim_totals.game_distinctive.accepted === 0, "game-distinctive acceptance must start at zero");
-assert(registry.claim_totals.reference_recognizable.accepted === ACCEPTED_REFERENCE_UNIT_IDS.length && registry.claim_totals.reference_recognizable.not_evaluated === EXPECTED.recognition_units - ACCEPTED_REFERENCE_UNIT_IDS.length, "reference-recognizable aggregate is not exactly 7/213");
+assert(registry.claim_totals.reference_recognizable.accepted === ACCEPTED_REFERENCE_UNIT_IDS.length && registry.claim_totals.reference_recognizable.not_evaluated === EXPECTED.recognition_units - ACCEPTED_REFERENCE_UNIT_IDS.length, "reference-recognizable aggregate is not exactly 8/213");
 assert(registry.claim_totals.as_built_fidelity.claimed === 0 && registry.claim_totals.as_built_fidelity.limited === 0, "as-built fidelity must remain wholly unclaimed");
 assert(JSON.stringify(registry.recognition_metric.accepted_physical_unit_ids) === JSON.stringify(ACCEPTED_REFERENCE_UNIT_IDS), "recognition metric accepted-unit set drifted");
-assert(registry.recognition_metric.numerator === 7 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "7/213", "recognition metric is not exactly 7/213");
+assert(registry.recognition_metric.numerator === 8 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "8/213", "recognition metric is not exactly 8/213");
 assert(JSON.stringify(registry.recognition_metric.isle_house_non_numerator_source_keys) === JSON.stringify(["w1282547786", "w1282547787"]), "Isle House source-part exclusion drifted");
 
 const expectedIdentityCorrections = new Map([
@@ -268,7 +278,7 @@ assert(report.identity_assertions.currentness_claimed_count === 0 && report.iden
 
 const allRuntimeAdapters = [...registry.legacy_adapters, ...registry.active_runtime_adapters];
 const adapterReceivers = allRuntimeAdapters.map((adapter) => adapter.receiver_key);
-assert(adapterReceivers.length === EXPECTED.runtime_adapter_receivers, "combined adapter array is not 15 receivers");
+assert(adapterReceivers.length === EXPECTED.runtime_adapter_receivers, "combined adapter array is not 16 receivers");
 assertUnique(adapterReceivers, "runtime adapter receivers");
 for (const adapter of allRuntimeAdapters) {
   assert(adapter.whole_building_recognizability_imported === false && adapter.recognition_claim_effect === "none", `${adapter.adapter_id} improperly transfers recognizability`);
@@ -292,8 +302,8 @@ for (const adapter of allRuntimeAdapters) {
 }
 assertRuntimeAssetClosures(registry);
 
-const expectedActiveReceivers = ["building-composite:w1249412094:w1282547787:wall", "building:r16681702:wall", "building:w1222720021:wall", "building:w291189336:wall", "building:w34313540:wall", "building:w34313545:wall"];
-assert(JSON.stringify(registry.active_runtime_adapters.map((adapter) => adapter.receiver_key).sort()) === JSON.stringify(expectedActiveReceivers.sort()), "active Building 1/Building 3/Isle House/Navy Chapel/D1 B201 receiver set drifted");
+const expectedActiveReceivers = ["building-composite:w1249412094:w1282547787:wall", "building:r16681702:wall", "building:w1222720021:wall", "building:w291189336:wall", "building:w34313540:wall", "building:w34313545:wall", "building:w95934119:wall"];
+assert(JSON.stringify(registry.active_runtime_adapters.map((adapter) => adapter.receiver_key).sort()) === JSON.stringify(expectedActiveReceivers.sort()), "active Building 1/Building 3/Isle House/Navy Chapel/D1 B201/D1 B225 receiver set drifted");
 for (const adapter of registry.active_runtime_adapters.filter((candidate) => ["building:r16681702:wall", "building:w1222720021:wall"].includes(candidate.receiver_key))) {
   assert(adapter.attachment_kind === "active_building_1_hero_replacement" && adapter.state === "active_runtime_target_specific_content", `${adapter.adapter_id} has stale content classification`);
   assert(adapter.active_receiver_scope.coverage === "whole_direct_wall_receiver", `${adapter.adapter_id} is not scoped to its exact direct receiver`);
@@ -358,8 +368,30 @@ assert(d1B201Adapter.active_receiver_scope.coverage === "whole_direct_wall_recei
 assert(JSON.stringify(d1B201AssetPaths) === JSON.stringify(expectedD1B201AssetPaths) && d1B201Adapter.runtime_asset_projections.length === 0, "D1 B201 exact eight-asset dependency closure is incomplete or source-bearing");
 assert(d1B201Behavior.acceptance_contract.independent_live_review_receipt_sha256 === "b9ef912df2dd00fa2c456a8e7e03473001cc381cbc2dd5288e9f6ef65d8c2772" && d1B201Behavior.acceptance_contract.evidence_manifest_sha256 === "f169085620a0a9ff0c685e4dfa98442c5c31e4e580f1decdbd80e84b09c74fe3" && d1B201Behavior.acceptance_contract.numerator_effect === 1, "D1 B201 acceptance receipt or one-unit rollup drifted");
 assert(d1B201Behavior.geometry_contract.decorative_geometry_signature === "705c5345509f77cd91359f66173fff0e1e132d41ebb9acef3f51ff2c467abb3a" && d1B201Behavior.geometry_contract.host_triangles === 80 && d1B201Behavior.geometry_contract.eligible_host_triangles === 20 && d1B201Behavior.geometry_contract.protected_host_triangles === 60 && d1B201Behavior.geometry_contract.decorative_triangles === 2064, "D1 B201 host partition or decorative geometry parity drifted");
-assert(d1B201Behavior.geometry_contract.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE && d1B201Behavior.geometry_contract.world_records === 735 && d1B201Behavior.geometry_contract.world_mesh_instances === 950 && d1B201Behavior.geometry_contract.world_surfaces === 964 && d1B201Behavior.geometry_contract.world_triangles === 66636 && d1B201Behavior.geometry_contract.world_static_bodies === 466 && d1B201Behavior.geometry_contract.world_shapes === 466, "D1 B201 current-integration world topology drifted");
+assert(d1B201Behavior.geometry_contract.world_topology_scope === PRE_B225_INTEGRATION_WORLD_TOPOLOGY_SCOPE && d1B201Behavior.geometry_contract.world_records === 735 && d1B201Behavior.geometry_contract.world_mesh_instances === 950 && d1B201Behavior.geometry_contract.world_surfaces === 964 && d1B201Behavior.geometry_contract.world_triangles === 66636 && d1B201Behavior.geometry_contract.world_static_bodies === 466 && d1B201Behavior.geometry_contract.world_shapes === 466, "D1 B201 pre-B225 integration world topology drifted");
 assert(d1B201Behavior.ownership_contract.host_collision_owner_preserved === true && d1B201Behavior.ownership_contract.host_spray_owner_preserved === true && d1B201Behavior.ownership_contract.structural_owner_count === 1 && d1B201Behavior.ownership_contract.shape_count === 1 && d1B201Behavior.ownership_contract.spray_owner_count === 1 && d1B201Behavior.ownership_contract.decorative_collision_nodes === 0 && d1B201Behavior.ownership_contract.decorative_navigation_nodes === 0 && d1B201Behavior.ownership_contract.decorative_spray_nodes === 0, "D1 B201 collision/navigation/spray ownership parity drifted");
+const d1B225Adapter = registry.active_runtime_adapters.find((adapter) => adapter.receiver_key === "building:w95934119:wall");
+const d1B225AssetPaths = d1B225Adapter.runtime_assets.map((asset) => asset.path).sort();
+const d1B225Behavior = d1B225Adapter.active_runtime_contract.behavior_contract;
+const expectedD1B225AssetPaths = [
+  "res://game/resources/facades/d1_current/d1_b225_live_attachment.json",
+  "res://game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres",
+  "res://game/resources/materials/world/d1_current/shared_dark_glass.tres",
+  "res://game/resources/materials/world/d1_current/shared_pale_frame.tres",
+  "res://game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
+  "res://game/scripts/world/facades/d1_b225_live_attachment.gd",
+].sort();
+assert(d1B225Adapter.adapter_id === "active-adapter:d1-b225-live:building:w95934119:wall" && d1B225Adapter.attachment_kind === "active_d1_b225_receiver_host_partition_attachment" && d1B225Adapter.runtime_content_mode === "active_d1_b225_host_partition_attachment" && d1B225Adapter.recognition_acceptance_status === "accepted", "D1 B225 active authority classification drifted");
+assert(d1B225Adapter.active_receiver_scope.coverage === "whole_direct_wall_receiver" && d1B225Adapter.active_receiver_scope.run_count === 14, "D1 B225 active receiver scope drifted");
+assert(JSON.stringify(d1B225AssetPaths) === JSON.stringify(expectedD1B225AssetPaths) && d1B225Adapter.runtime_asset_projections.length === 0, "D1 B225 exact six-asset dependency closure is incomplete or source-bearing");
+assert(d1B225Adapter.active_runtime_contract.adapter_sha256 === "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9" && d1B225Adapter.active_runtime_contract.config_sha256 === "80b42c33fce84361aa7512f64305f5bff273e8fed95640ca4f9c19d49d55621d" && d1B225Adapter.active_runtime_contract.dispatch_sha256 === "de4a2924d275a51dfd08aae1f0ef21daac33395b1fcfe98e260fbc90737dd725", "D1 B225 frozen config/adapter or exact-current dispatch pin drifted");
+assert(d1B225Behavior.acceptance_contract.accepted_physical_unit_id === "physical-building:w95934119" && d1B225Behavior.acceptance_contract.capture_time_recognition_metric === "7/213" && d1B225Behavior.acceptance_contract.evidence_manifest_sha256 === "96c76fd99960f1345a7c56f7fc6678ac284f98cc601a3ba65ed57020491f18dc" && d1B225Behavior.acceptance_contract.evidence_tree_sha256 === "f42dbec489c6fda55b612aba20c99ee2233857cb60a1ce9c512d024b35d0dcb7" && d1B225Behavior.acceptance_contract.independent_live_review_receipt_sha256 === "87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd7cf3b6b6fcb1d95" && d1B225Behavior.acceptance_contract.numerator_effect === 1, "D1 B225 frozen acceptance authority drifted");
+assert(d1B225Behavior.geometry_contract.decorative_geometry_signature === "02bd8542dea7aa13041728a5244ec962fa121972db17ecf55fad03b3139fe418" && d1B225Behavior.geometry_contract.host_triangles === 28 && d1B225Behavior.geometry_contract.eligible_host_triangles === 8 && d1B225Behavior.geometry_contract.protected_host_triangles === 20 && d1B225Behavior.geometry_contract.decorative_mesh_instances === 2 && d1B225Behavior.geometry_contract.decorative_surfaces === 2 && d1B225Behavior.geometry_contract.decorative_triangles === 1080, "D1 B225 host partition or decorative geometry parity drifted");
+assert(d1B225Behavior.geometry_contract.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE && d1B225Behavior.geometry_contract.world_records === 735 && d1B225Behavior.geometry_contract.world_mesh_instances === 952 && d1B225Behavior.geometry_contract.world_surfaces === 967 && d1B225Behavior.geometry_contract.world_triangles === 67716 && d1B225Behavior.geometry_contract.world_static_bodies === 466 && d1B225Behavior.geometry_contract.world_shapes === 466, "D1 B225 exact-current integration topology drifted");
+assert(d1B225Behavior.replacement_contract.eligible_run_indices.join(",") === "10,11,12,13" && d1B225Behavior.replacement_contract.protected_run_indices.join(",") === "0,1,2,3,4,5,6,7,8,9", "D1 B225 eligible/protected host partition drifted");
+assert(d1B225Behavior.ownership_contract.host_collision_owner_preserved === true && d1B225Behavior.ownership_contract.host_spray_owner_preserved === true && d1B225Behavior.ownership_contract.structural_owner_count === 1 && d1B225Behavior.ownership_contract.shape_count === 1 && d1B225Behavior.ownership_contract.spray_owner_count === 1 && d1B225Behavior.ownership_contract.decorative_collision_nodes === 0 && d1B225Behavior.ownership_contract.decorative_navigation_nodes === 0 && d1B225Behavior.ownership_contract.decorative_spray_nodes === 0, "D1 B225 collision/navigation/spray ownership parity drifted");
+const currentTopologyOwners = registry.active_runtime_adapters.filter((adapter) => adapter.active_runtime_contract?.behavior_contract?.geometry_contract?.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE).map((adapter) => adapter.adapter_id);
+assert(JSON.stringify(currentTopologyOwners) === JSON.stringify(["active-adapter:d1-b225-live:building:w95934119:wall"]), "D1 B225 is not the sole current-integration topology authority");
 assert(!inputs.runtimeContracts.worldBuilderText.includes("facade_runtime_registry_loader"), "Generic facade registry loader was wired into world construction");
 const registryText = stableJson(registry);
 assert(!registryText.includes("building_1_recognizable_facade") && !registryText.includes("building_1_recognizability_placements"), "registry retains obsolete Building 1 facade assets");
@@ -380,10 +412,11 @@ assert(report.input_hashes.active_building_1_hero_adapter_sha256 === inputs.runt
 assert(report.input_hashes.active_building_1_hero_config_sha256 === inputs.runtimeContracts.heroConfigSha256, "report active hero config hash drifted");
 assert(report.input_hashes.active_navy_chapel_187_adapter_sha256 === inputs.runtimeContracts.navyChapelLiveAdapterSha256 && report.input_hashes.active_navy_chapel_187_config_sha256 === inputs.runtimeContracts.navyChapelConfigSha256 && report.input_hashes.active_navy_chapel_187_prototype_sha256 === inputs.runtimeContracts.navyChapelPrototypeSha256 && report.input_hashes.active_navy_chapel_187_live_review_receipt_sha256 === "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9", "report Navy Chapel authority hashes drifted");
 assert(report.input_hashes.active_d1_b201_adapter_sha256 === inputs.runtimeContracts.d1B201LiveAdapterSha256 && report.input_hashes.active_d1_b201_config_sha256 === inputs.runtimeContracts.d1B201ConfigSha256 && report.input_hashes.active_d1_b201_live_review_receipt_sha256 === "b9ef912df2dd00fa2c456a8e7e03473001cc381cbc2dd5288e9f6ef65d8c2772" && report.input_hashes.active_d1_b201_evidence_manifest_sha256 === "f169085620a0a9ff0c685e4dfa98442c5c31e4e580f1decdbd80e84b09c74fe3", "report D1 B201 authority hashes drifted");
+assert(report.input_hashes.active_d1_b225_adapter_sha256 === inputs.runtimeContracts.d1B225LiveAdapterSha256 && report.input_hashes.active_d1_b225_config_sha256 === inputs.runtimeContracts.d1B225ConfigSha256 && report.input_hashes.active_d1_b225_live_review_receipt_sha256 === "87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd7cf3b6b6fcb1d95" && report.input_hashes.active_d1_b225_evidence_manifest_sha256 === "96c76fd99960f1345a7c56f7fc6678ac284f98cc601a3ba65ed57020491f18dc" && report.input_hashes.active_d1_b225_evidence_tree_sha256 === "f42dbec489c6fda55b612aba20c99ee2233857cb60a1ce9c512d024b35d0dcb7", "report D1 B225 frozen authority hashes drifted");
 assert(report.input_hashes.world_chunk_builder_sha256 === inputs.runtimeContracts.worldBuilderSha256, "report active dispatch hash drifted");
 assert(report.reference_dependencies.identity_or_reference_research_required_unit_count === 60, "reference-dependency count is not 60");
 assert(report.reference_dependencies.unit_ids.length === 60, "reference-dependency unit list is not 60");
-assert(report.reference_recognition_metric.display === "7/213" && JSON.stringify(report.reference_recognition_metric.accepted_physical_unit_ids) === JSON.stringify(ACCEPTED_REFERENCE_UNIT_IDS), "validation report recognition metric is not exactly 7/213");
+assert(report.reference_recognition_metric.display === "8/213" && JSON.stringify(report.reference_recognition_metric.accepted_physical_unit_ids) === JSON.stringify(ACCEPTED_REFERENCE_UNIT_IDS), "validation report recognition metric is not exactly 8/213");
 
 const firstSerialization = stableJson(compiled.registry);
 const secondSerialization = stableJson(compile(catalog, inputs).registry);
@@ -600,6 +633,19 @@ const missingD1B201DispatchInputs = {
 };
 expectCompileFailureWithInputs(missingD1B201DispatchInputs, "World builder D1 B201 dispatch drifted");
 
+const missingD1B225DispatchInputs = {
+  ...inputs,
+  runtimeContracts: {
+    ...inputs.runtimeContracts,
+    worldBuilderText: replaceExactlyOnce(inputs.runtimeContracts.worldBuilderText,
+      "D1_B225_LIVE_ATTACHMENT.build_prepared(record, b225_prepared)",
+      "_build_record_without_d1_b225(record, b225_prepared)",
+      "D1 B225 dispatch",
+    ),
+  },
+};
+expectCompileFailureWithInputs(missingD1B225DispatchInputs, "World builder D1 B225 dispatch drifted");
+
 expectRegistryFailure(
   (candidate) => {
     const adapter = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:w34313540:wall");
@@ -639,6 +685,22 @@ expectRegistryFailure(
     assert(geometry.world_topology_scope !== original, "D1 B201 topology-scope mutation was a no-op");
   },
   "Active D1 B201 acceptance, dependency, host-partition, or ownership parity contract drifted",
+);
+
+expectRegistryFailure(
+  (candidate) => {
+    const adapter = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:w95934119:wall");
+    adapter.active_runtime_contract.behavior_contract.geometry_contract.world_triangles = 67715;
+  },
+  "Active D1 B225 acceptance, dependency, host-partition, or ownership parity contract drifted",
+);
+
+expectRegistryFailure(
+  (candidate) => {
+    const unit = candidate.units.find((item) => item.unit_id === "physical-building:w95934119");
+    unit.acceptance_records[0].evidence_tree_sha256 = "0".repeat(64);
+  },
+  "evidence tree pin drifted",
 );
 
 expectRegistryFailure(
@@ -734,10 +796,10 @@ expectRegistryFailure(
 
 expectRegistryFailure(
   (candidate) => {
-    candidate.recognition_metric.numerator = 8;
-    candidate.recognition_metric.display = "8/213";
+    candidate.recognition_metric.numerator = 7;
+    candidate.recognition_metric.display = "7/213";
   },
-  "Runtime physical-entity recognition metric drifted from exactly 7/213",
+  "Runtime physical-entity recognition metric drifted from exactly 8/213",
 );
 
 expectRegistryFailure(
@@ -765,5 +827,5 @@ expectRegistryFailure(
 );
 
 console.log(
-  `PASS facade recognition registry: ${EXPECTED.recognition_units} physical units / ${EXPECTED.direct_wall_receivers} receivers / ${EXPECTED.source_records} source records / ${EXPECTED.visible_wall_runs} runs / 7/213 independently accepted reference-recognizable physical units / ${EXPECTED.legacy_adapter_receivers} claim-neutral legacy adapters + ${EXPECTED.active_runtime_adapter_receivers} exact-current active adapters / ${packageBoundary.projected_direct_asset_count} sanitized asset projections / 2 separated identity corrections / 60 reference dependencies; catalog ${sha256File(PATHS.catalog)}; registry ${registrySha256}`,
+  `PASS facade recognition registry: ${EXPECTED.recognition_units} physical units / ${EXPECTED.direct_wall_receivers} receivers / ${EXPECTED.source_records} source records / ${EXPECTED.visible_wall_runs} runs / 8/213 independently accepted reference-recognizable physical units / ${EXPECTED.legacy_adapter_receivers} claim-neutral legacy adapters + ${EXPECTED.active_runtime_adapter_receivers} exact-current active adapters / ${packageBoundary.projected_direct_asset_count} sanitized asset projections / 2 separated identity corrections / 60 reference dependencies; catalog ${sha256File(PATHS.catalog)}; registry ${registrySha256}`,
 );

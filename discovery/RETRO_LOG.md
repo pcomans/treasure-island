@@ -10332,3 +10332,462 @@ No approach selected.
   macOS candidate. It preserves every previously sealed capture, configuration,
   review, receipt, and historical topology byte. Final commit and push remain
   held for an explicit independent auditor PASS.
+
+## 2026-09-05 — B225 prepromotion candidate live A/B
+
+### Live builder (`/root/b225_live_builder`)
+
+#### What worked well
+
+- Kept the canonical v7 builder, registry, catalog, loader, ordinary game, and
+  7/213 recognition authority untouched while applying B225 through a direct,
+  test-only post-world candidate seam. The focused contract proved exact
+  default topology `735/950/964/66,636/466/466`, explicit candidate topology
+  `735/952/967/67,716/466/466`, atomic rejection, and unchanged collision,
+  spray, roof, and protected-run ownership.
+- Used disposable native Metal pixels and an independent bar-raiser before
+  writing evidence. Small camera-only iterations cleared an occluded whole
+  view, produced a useful protected-return corner proof, and retained a strong
+  surrounding-building context without changing accepted geometry or material.
+- Added a full no-write controller rehearsal before capture. It caught the
+  camera-relative input sign error, so the truthful traversal changed from
+  `move_left` to `move_right` and crossed all three NNW joins monotonically.
+
+#### What did not work well
+
+- The first immutable motion capture mixed physics sampling with
+  `frame_post_draw` awaits. Input remained continuously pressed, so gameplay
+  was real, but physics advanced while the capture coroutine was paused. The
+  360 stored samples spanned engine frames 143 through 589: 447 ticks at 60 Hz,
+  not the claimed 360 ticks / 6.0 seconds. Six sample gaps omitted 87 ticks, and
+  several join PNG receipts reused stale pre-render frame and chain-position
+  values.
+- That r1 packet is rejected in full despite mechanically valid stills and a
+  visual pixel pass. Its 35-file canonical tree inventory SHA is
+  `21a5badf29ac760c9ab50700bb2c2f46b2c2b5928cf5c09b0b5592ccfa9bd27f`;
+  static and motion manifest SHAs are respectively
+  `e8a237253b95836f5e0723c2d11772e2650c66042fc3a90d272cbc4d53b6071c`
+  and
+  `99996a6aeb7049ad1ba78f291b01ffc00ba0a34c907939a0337efbe3bbff178d`.
+  The exact rejection boundary is recorded in the r2 packet's
+  `r1-rejection.json`; r1 cannot authorize promotion, recognition, ledger
+  acceptance, or packaging.
+- The first r2 static packet also exposed an evidence-process defect before
+  telemetry wrote a byte. Its deep stage gate compared JSON-parsed topology
+  dictionaries directly with integer-valued runtime dictionaries; Godot
+  round-trips JSON numbers as floats, so exact `735.0` values failed strict
+  Variant equality against `735`. The 14-file r2 tree is therefore rejected in
+  full and archived with canonical inventory SHA
+  `8c10e4fc4541855e4e7cc5ad6812bcd93ed372c09045d78f74e33d32a601a4ca`;
+  its mechanically valid static manifest SHA is
+  `0469b3e36607d8bc412e8c5a4a152ad555179c004ec27992abd4aed079ece8bb`.
+  It contains no telemetry or visual-motion stage. The r3 packet records this
+  boundary in `r2-rejection.json`; no r2 pixel can authorize promotion.
+
+#### What the team should change next time
+
+- Keep continuous telemetry and visual extraction as separate controller runs.
+  The telemetry run must sample after every consecutive physics frame with no
+  render await, while each visual receipt must query its engine frame and
+  player position only after the render completes.
+- Compute elapsed motion from actual engine-frame endpoints, never from sample
+  count, and fail closed on any claimed-consecutive frame delta other than one.
+  Treat visual thresholds only as triggers; the saved image must carry its
+  post-render actual position and an explicit tolerance/bracketing result.
+- Exercise every staged validator through a complete disposable on-disk
+  rehearsal before freezing the evidence generator. Numeric JSON gates must
+  accept finite integral floats that exactly equal the expected integer while
+  rejecting fractional values, booleans, strings, and missing fields; direct
+  equality of numeric dictionaries is not a round-trip contract.
+
+#### Change accounting
+
+- No B225 promotion, recognition credit, count change, version bump, catalog
+  entry, registry adapter, generic loader path, or package change is claimed by
+  this entry. The next authority candidate is a wholly fresh r3 capture; r1 and
+  r2 are retained only in ignored rejected-evidence archives.
+
+#### Production-path staging follow-up
+
+- Promoting the already-reviewed geometry through one fail-closed canonical
+  builder route before changing registry authority kept the dependency graph
+  acyclic. Ordinary `main.tscn` now realizes the exact
+  `735/952/967/67,716/466/466` topology while every capture-time authority
+  receipt remains truthfully frozen at v7 and 7/213 with zero B225 credit.
+- A fresh exported PCK was checked both narrowly and by full mounted inventory:
+  the six production assets and ordinary app path are present, while the
+  historical candidate seam and its two callers are absent. Keeping the package
+  receipt outside the PCK let the production evidence bind the package without
+  making the export recursively depend on its own receipt.
+- The new observer harness never calls the adapter or candidate seam. A complete
+  disposable three-stage disk rehearsal caught no further contract drift, then
+  the authoritative rerender sealed 11 static PNGs, 360 consecutive
+  post-controller physics samples, and 21 post-render motion PNGs. The frozen
+  production packet has 37 files and canonical tree SHA
+  `f42dbec489c6fda55b612aba20c99ee2233857cb60a1ce9c512d024b35d0dcb7`.
+- Next time, build package exclusion and mounted-PCK reachability checks into the
+  production integration plan from the outset. Test-only code that is absent
+  from ordinary call sites can still be callable after PCK mounting, so source
+  reachability alone is not a sufficient shipping boundary.
+- This follow-up still claims no B225 recognition credit, catalog/registry
+  promotion, version bump, accepted review receipt, commit, or push. Independent
+  review of the fresh production packet must precede the coordinated v8 / 8-of-213
+  authority release.
+
+## 2026-09-05 — B225 provisional v8 authority promotion
+
+### Authority promoter (`/root/b225_v8_promoter`)
+
+#### What worked well
+
+- Treating the catalog compiler as the single authority writer kept the v8
+  catalog, runtime registry, adapter plans, loader compatibility, report, and
+  exact `8/213` rollup deterministic. Two consecutive check-mode generations
+  preserved identical output hashes.
+- A new post-promotion bridge layered current v8 assertions over the immutable
+  v7 B225 production validator. The same bridge passed headless and native
+  Metal/Forward+ execution while proving sole current topology ownership by
+  B225 and retaining B201's unchanged tuple as pre-B225 integration parity.
+
+#### What did not work well
+
+- The bridge initially transcribed the correct `fbb3b600` generator prefix but
+  the wrong digest suffix. It failed closed before world construction; checking
+  the frozen manifest exposed the test-only typo, and no evidence byte changed.
+- Aggregate record-root inventory and reported runtime topology are deliberately
+  different for B225 because its render-only attachment children are outside
+  record roots. Assuming the reported `+2/+3/+1080` delta also applied directly
+  to record-root totals would have encoded a false oracle.
+
+#### What the team should change next time
+
+- Copy full frozen digests from their authoritative manifest or receipt with a
+  mechanical check instead of transcribing abbreviated hashes into new tests.
+- Before promotion, inventory every numeric oracle by lifecycle scope and by
+  measurement boundary: acceptance-time, pre-integration, current integration,
+  and record-root-only. Keep those labels explicit in both tests and schemas.
+
+#### Change accounting
+
+- This round promotes exactly B225 (`physical-building:w95934119`) as the eighth
+  accepted physical unit and adds exactly its one active adapter projection.
+  It changes no frozen evidence, independent review, live config, live adapter,
+  capture generator, focused v7 validator, or package v7 validator; it performs
+  no capture, export, commit, push, or final-app launch.
+
+## 2026-09-05 — 1441 Chinook read-only live-integration preflight
+
+### Preflight auditor (`/root/d2_1441_preflight`)
+
+#### What worked well
+
+- Cross-checking the frozen chunk, receiver inventory, standalone factory,
+  independent visual receipt, and later Site-12 package audit established one
+  exact no-regeneration route from the reviewed 1441 art to a live pair
+  replacement. The topology delta and wall/roof ownership split are derivable
+  before touching the active B225 work.
+
+#### What did not work well
+
+- The historical standalone evidence intentionally retains superseded
+  confusion-set/material-path metadata, while its combined 42-triangle
+  collision has no live spray ownership. Those bytes remain valid eligibility
+  evidence but cannot be reused as exact-current live acceptance or attached
+  without an explicit 32-wall/10-roof ownership split.
+- Final builder, export-preset, and v8 authority hashes were unavailable while
+  B225 remained in flight, so freezing them during this preflight would have
+  created a false future baseline.
+
+#### What the team should change next time
+
+- Finish and freeze B225 first, then use an actual-supplied-chunk, fail-closed
+  paired adapter that builds the reviewed factory once, preserves two body/shape
+  owners, and captures ordinary `main.tscn` evidence at 8/213 before a single
+  acyclic v9/9-of-213 authority rewrite. Keep old standalone evidence immutable
+  and require fresh independent live and mounted-package review.
+
+## 2026-09-05 — B225 postpromotion v8 verification planning
+
+### Read-only planner (`/root/b225_postpromotion_planner`)
+
+#### What worked well
+
+- Treating the frozen v7 packet and its independent review as the only inbound promotion authority produced an explicit acyclic release graph.
+- Reusing the proven B201 separation between source, mounted PCK, packaged smoke, native Metal, and ordinary launch kept the verification plan small without weakening the release boundary.
+
+#### What did not work well
+
+- Several frozen B225 and B201 tests combine capture-time evidence with then-current authority literals, so they cannot truthfully serve as v8 current-state gates.
+- The current startup contract has the correct B225 topology but a deliberately historical `7/213` PASS sentence; using it unqualified after promotion would be misleading.
+
+#### What the team should change next time
+
+- Create postpromotion bridge contracts before the first export and keep capture-time contracts immutable.
+- Standardize package and evidence receipts so dynamic PCK, receipt, and packet hashes enter only downstream artifacts and never feed back into canonical authority.
+
+#### Change accounting
+
+- This was a read-only planning pass. It changed no source, test, evidence, package, authority, Git, process, or remote state.
+
+## 2026-09-05 — B225 v8 lifecycle-bridge repair and semantic audit
+
+### Independent semantic auditor and bounded repairer (`/root/b225_v8_semantic_audit`)
+
+#### What worked well
+
+- Classifying bytes by lifecycle before editing kept the repair acyclic. The
+  standalone capture manifest never sealed its structural test, so that active
+  test could advance while all reviewed standalone geometry/assets remained
+  byte-exact. The companion evidence contract now pins the lifecycle-aware test
+  without changing its frozen manifest, images, review, or capture-time claims.
+- The promoted route is now asserted positively instead of merely allowing a
+  new token. The test requires exactly one catalog/runtime B225 adapter, its
+  distinct live config, six-asset runtime closure, canonical builder calls, and
+  approved material/texture reuse while rejecting any live reference to the
+  standalone factory, scene, config, or UV helper. It also proves the old
+  prepromotion seam remains an explicitly excluded test-only caller.
+- Separating the last exported app from exact-current source made the test
+  instructions truthful. Current source is compiler `1.7.0`, catalog/runtime
+  v8, contracts/loader v7, `8/213`, and
+  `735/952/967/67,716/466/466`; retained app `024605` remains historical B201/v7
+  package evidence rather than being relabeled as a B225 export.
+- The focused repair gates, compiler check, Node and Godot registry/loader
+  suites, headless and native B225 v8 bridge, and full runtime all passed. The
+  native bridge used Metal/Forward+ on Apple M2 without capturing evidence or
+  launching ordinary gameplay.
+
+#### What did not work well
+
+- The provisional standalone test inverted the intended lifecycle boundary: it
+  required the production adapter to be absent from catalog, registry, loader,
+  and builder after those surfaces had deliberately promoted it. Its PASS line
+  consequently described canonical construction as unattached even though the
+  ordinary world already carried the reviewed translation.
+- The startup test had become both a capture-time dependency of the frozen v7
+  packet and the documented live canonical oracle. Advancing only its topology
+  left a current PASS sentence at `7/213`; preserving its bytes indefinitely
+  would instead have left every later canonical run stale.
+- The test README mixed exact-current source, the retained B201 package, and
+  frozen B201/B225 validators in one command path. That made known-failing
+  historical contracts look like required v8 gates and made `024605` appear to
+  contain unexported B225 source changes.
+
+#### What the team should change next time
+
+- Before freezing a capture, label each dependency as capture-only immutable,
+  lifecycle-aware current, or a bridge between the two. If a live oracle must
+  enter a source-dependency map, expect its current bytes to advance later and
+  make the frozen manifest the only authority for its capture-time hash.
+- Make standalone-to-live contracts assert both halves from the start: preserved
+  prototype assets must remain unwired, while a separately named production
+  adapter may reuse only explicitly approved material or geometry. A negative
+  token scan alone cannot express that transition.
+- Keep frozen validators out of the canonical current command list. Name their
+  exact packet/package scope beside reproduction commands, and add the
+  postpromotion bridge before the first export so current authority never
+  depends on rewriting sealed evidence.
+
+#### Change accounting
+
+- This bounded repair changes only the B225 standalone structural contract, its
+  mutable companion hash pin, the active startup contract, current test
+  instructions, and this retrospective entry. It changes no catalog, generated
+  registry, adapter plan, loader, runtime adapter/config, builder, frozen
+  evidence, review, capture generator, v7 production validator, package, export,
+  commit, push, or ordinary app process.
+
+## 2026-09-05 — B225 postpromotion v8 package and evidence execution
+
+### Package/evidence executor (`/root/b225_v8_semantic_audit`)
+
+#### What worked well
+
+- Freezing every package-influencing byte before export kept the release graph
+  acyclic: current v8 authority led to one fresh app/PCK and an external
+  non-self-hashed receipt, which then led to the fresh evidence packet. No
+  downstream receipt or packet hash was written back into v8 authority.
+- Running the source, direct-mounted generic, direct-mounted B225 v8, packaged
+  headless, and packaged Metal ordinary-main gates separately caught both
+  package-boundary and runtime failures without conflating them. The exported
+  app has exactly seven files, both required slices, valid strict signatures,
+  an empty entitlement dictionary, valid privacy metadata, and no xattrs or
+  quarantine marker.
+- A complete disposable three-stage rehearsal exercised the exact receipt and
+  capture validator before authoritative writing. Rehearsal and authoritative
+  image inventories were byte-identical: 11 static views plus 21 post-render
+  motion views, alongside exact 360-tick / 6-second controller telemetry, 12
+  braking ticks, and all three real join crossings.
+
+#### What did not work well
+
+- The first export invocation failed before writing because the new suffix
+  directory did not exist. Creating only that empty directory and repeating the
+  unchanged command safely reused suffix `001`; no package-influencing byte had
+  changed and there was no partial app to invalidate.
+- Native Metal output was block-buffered through `tee`, so the successful smoke
+  appeared silent while it ran. A process snapshot showed the bounded app PID;
+  the complete world, movement, jetpack, and PASS output arrived with exit zero.
+  Treating silence as a diagnostic rather than immediately changing bytes
+  preserved the valid package.
+
+#### What the team should change next time
+
+- Create the unused export parent directory as an explicit pre-export step and
+  retain the exact seven-file inventory procedure beside the export command.
+- Use a line-buffered native logging wrapper, or pair the bounded smoke with a
+  documented process/watchdog observation, so healthy native initialization is
+  distinguishable from a hang without rerunning or weakening the gate.
+- Keep the two independent postpromotion audits downstream of this immutable
+  37-file packet, then commit the unchanged v8 source only after both receipts
+  pass. Evidence generation itself adds no recognition credit.
+
+#### Change accounting
+
+- This execution adds only the new v8 package contract and capture harness,
+  their UID files, the fresh suffix-`001` app plus external receipt, the fresh
+  37-file postpromotion packet, and this retrospective entry. It changes no
+  frozen v7 evidence/review/generator/package contract, no current v8 authority
+  bytes, no production asset, and performs no review receipt, final owner-visible
+  launch, commit, or push.
+
+## 2026-09-05 — B225 postpromotion v8 independent full-resolution visual audit
+
+### Independent visual bar-raiser (`/root/b225_v8_promoter/canonical_test_audit/godot_contract_audit`)
+
+#### What worked well
+
+- Opening all 32 PNGs at their native `1440x900` resolution made the release
+  decision concrete rather than thumbnail-driven. The continuous varied high
+  clerestory, low elongated shed mass, and pale aged horizontal cladding stayed
+  legible in whole, oblique, close, contextual, changed-light, grayscale,
+  spray, protected-return, far/mid/near, and all three join-bracket views.
+- The exact-current B201/B202/B258 images provided a useful live confusion set:
+  B225 remained label-free top-1 without depending on signage, a building name,
+  hue, or one selected camera. Dense join frames made seam, reset, crawl,
+  shimmer, moire, float, and bleed checks directly reviewable.
+- Recomputing the 37-file tree, all image hashes, all three manifest hashes, the
+  package receipt, current source-dependency map, PCK, executable, and app
+  identity established one acyclic visual receipt over the exact pixels and
+  release closure. Keeping the mechanical audit and this receipt's future hash
+  outside that binding preserved genuine sibling independence.
+
+#### What did not work well
+
+- The aged cladding still has mild broad softness and synthetic grain at the
+  closest view. It never becomes an obvious tile boundary or motion artifact,
+  so it is nonblocking at this quality bar, but future material work can improve
+  its local detail without making recognition depend on texture.
+- The protected generic return still shows conspicuous legacy repetition, and
+  join-3 frames show a small stable stepped host/grade silhouette along the
+  lower edge. Both are correctly outside the selected decorative treatment and
+  neither behaves like a seam or float, but they can distract a reviewer unless
+  the ownership boundary and temporal stability are checked explicitly.
+
+#### What the team should change next time
+
+- Preserve this evidence mix for later buildings: changed light plus grayscale,
+  exact-current decoys, a real eligible spray, protected surfaces, wide context,
+  and actual-position brackets on every run join. Keep recognizability led by
+  massing and openings, with tileable material detail as supporting evidence.
+- Treat close-only softness and unrelated protected-surface repetition as
+  separately scoped polish work. Do not reopen or add recognition credit unless
+  a future change alters the accepted building closure and receives fresh
+  ordinary-main, motion, package, and independent review.
+
+#### Change accounting
+
+- This audit adds only the independent visual review receipt and this
+  retrospective entry. It changes no evidence packet, source, authority,
+  package, mechanical review, metric, commit, push, or running process. Its
+  decision is `PASS_FOR_RELEASE_NO_ADDITIONAL_CREDIT`; current authority remains
+  `8/213` and no numerator is created.
+
+## 2026-09-05 — B225 postpromotion v8 independent mechanical release audit
+
+### Independent contract auditor (`/root/b225_contract_audit`)
+
+#### What worked well
+
+- Recomputing the 37-file packet, seven-file app identity, executable/PCK,
+  source dependencies, frozen-v7 tree, and all three embedded receipt copies
+  before interpreting claims established an exact, acyclic release boundary.
+- Running compiler/Node/Godot source gates separately from direct-mounted PCK,
+  packaged-headless, signing, privacy, and manifest checks covered both current
+  authority and the bytes actually shipped. The exact 360-tick telemetry and
+  the non-consecutive dense visual run remained correctly distinct.
+- Keeping this receipt independent of the sibling visual review preserved two
+  genuinely separate verdicts and prevented either review from self-authorizing
+  recognition credit.
+
+#### What did not work well
+
+- Two early ad hoc audit assertions encoded reviewer assumptions rather than
+  the declared schema: object key insertion order and the meaning of the input
+  start frame. Rechecking named fields against the frozen generator contract
+  corrected both without changing product or evidence bytes.
+- Reimplementing a large persisted-manifest validator inline was slower and
+  more error-prone than invoking the repository's focused contracts, even
+  though the independent hash and mutation checks still provided useful
+  defense in depth.
+
+#### What the team should change next time
+
+- Add a repository-owned read-only `validate-existing-packet` mode that emits
+  one canonical inventory plus named schema failures without requiring capture
+  or writes. Keep baseline, first-sample, endpoint, and cross-process ObjectID
+  semantics explicit in that schema.
+- Continue separating authority, mounted-package, packaged-runtime, telemetry,
+  and visual-review receipts, and keep all downstream hashes out of authority.
+
+#### Change accounting
+
+- This audit adds only
+  `evidence/reviews/d1-b225-postpromotion-v8-2026-09-05-INDEPENDENT_CONTRACT_AUDIT.md`
+  and this retrospective entry. It changes no packet, source, authority,
+  package, other review, metric, process, commit, push, or launch state.
+
+## 2026-09-05 — B225 v8 release-documentation closure
+
+### Release-closure writer (`/root/b225_v8_semantic_audit`)
+
+#### What worked well
+
+- Treating release documentation as a current index over immutable historical
+  records allowed the exact B225 v8 app, authority, topology, packet, and two
+  independent PASS receipts to become discoverable without rewriting any
+  packet, review, authority, runtime, or package byte.
+- A direct-mounted read-only PCK probe proved that `game/tests/README.md` and
+  the mutable discovery indexes are absent from the export. The postpromotion
+  receipt and all three manifests also omit their paths and hashes, making a
+  narrow postexport documentation correction truthful without invalidating the
+  seven-file app or 37-file evidence tree.
+- Separating the current working-tree/local release-ready candidate from
+  pushed main and owner acceptance preserved the remaining Apple M1 Pro gate.
+
+#### What did not work well
+
+- Several top-level handoff and mutable evidence-index pages still called the
+  B201 `024605` package current after the B225 export and audits passed. One
+  topology summary also initially described B225's entire `2/3/1,080` loaded
+  delta as render-only, overlooking its one additional host-partition surface.
+- Moving-current language inside older cohort validator READMEs can age into a
+  contradiction even when their packet-time checks remain valid. Those files
+  require lifecycle-aware validator coordination rather than opportunistic
+  edits during release closure.
+
+#### What the team should change next time
+
+- Add one mutable release-status source consumed by the root handoff,
+  playtest, owner queue, evidence index, and migration handoff so a promoted
+  candidate has one exact app/hash/topology/owner-gate update point.
+- Word cohort packet validators against a named schema snapshot instead of
+  “current checkout,” then keep later authority changes in a separate mutable
+  supersession index.
+
+#### Change accounting
+
+- This closure changes documentation only: current release/handoff pages,
+  mutable evidence and discovery indexes, the package-excluded test README,
+  and this retrospective entry. It performs no export, evidence capture,
+  review, ordinary launch, commit, or push and claims no additional recognition
+  credit or owner acceptance.
