@@ -20,12 +20,12 @@ import {
 } from "./lib/world-contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const COMPILER_VERSION = "1.5.0";
-const CATALOG_SCHEMA = "ti.facade-recognition-catalog/6";
-const RUNTIME_SCHEMA = "ti.facade-runtime-registry/6";
+const COMPILER_VERSION = "1.6.0";
+const CATALOG_SCHEMA = "ti.facade-recognition-catalog/7";
+const RUNTIME_SCHEMA = "ti.facade-runtime-registry/7";
 const REPORT_SCHEMA = "ti.facade-recognition-validation-report/4";
-const ADAPTER_CONTRACT_SCHEMA = "ti.facade-runtime-adapter-contracts/5";
-const LOADER_API_VERSION = "ti.facade-runtime-registry-loader/5";
+const ADAPTER_CONTRACT_SCHEMA = "ti.facade-runtime-adapter-contracts/6";
+const LOADER_API_VERSION = "ti.facade-runtime-registry-loader/6";
 const UNKNOWN_VERSION_POLICY = "reject";
 const CATALOG_ID = "treasure-island-physical-building-recognition";
 const CATALOG_SCHEMA_REFERENCE = "./facade-recognition-catalog.schema.json";
@@ -102,6 +102,27 @@ const NAVY_CHAPEL_RUNTIME_ASSET_PATHS = Object.freeze([
   "game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_protected_neutral.tres",
   NAVY_CHAPEL_PROTOTYPE_PATH,
 ]);
+const D1_B201_SOURCE = "w34313545";
+const D1_B201_WALL = "building:w34313545:wall";
+const D1_B201_ROOF = "building:w34313545:roof";
+const D1_B201_CONFIG_PATH = "game/resources/facades/d1_current/d1_b201_live_attachment.json";
+const D1_B201_LIVE_ADAPTER_PATH = "game/scripts/world/facades/d1_b201_live_attachment.gd";
+const D1_B201_CONFIG_SHA256 = "0f3bf052688ec813b5fa58b077d74c963949574623fe4cf67c12c347e7257229";
+const D1_B201_LIVE_ADAPTER_SHA256 = "499f6d2657b593ee5b0801cf1205a2925a993f3b1836922d3656a6d00c51cc19";
+const D1_B201_REVIEWED_WORLD_BUILDER_SHA256 = "71e391e4fa58afc83e4bcb99a9f8195e398fdf4064bb09a401fb079e9f30491c";
+const D1_B201_LIVE_REVIEW_RECEIPT_SHA256 = "b9ef912df2dd00fa2c456a8e7e03473001cc381cbc2dd5288e9f6ef65d8c2772";
+const D1_B201_EVIDENCE_MANIFEST_SHA256 = "f169085620a0a9ff0c685e4dfa98442c5c31e4e580f1decdbd80e84b09c74fe3";
+const D1_B201_DECORATIVE_GEOMETRY_SIGNATURE = "705c5345509f77cd91359f66173fff0e1e132d41ebb9acef3f51ff2c467abb3a";
+const PRE_B201_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_b201_integration_live_parity";
+const CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "current_integration_topology";
+const D1_B201_RUNTIME_ASSET_PATHS = Object.freeze([
+  "game/resources/materials/world/d1_current/b201_green_hierarchy.tres",
+  "game/resources/materials/world/d1_current/b201_muted_rust_post.tres",
+  "game/resources/materials/world/d1_current/b201_service_leaf.tres",
+  "game/resources/materials/world/d1_current/b201_warm_wall.tres",
+  "game/resources/materials/world/d1_current/shared_dark_glass.tres",
+  "game/resources/materials/world/d1_current/shared_pale_frame.tres",
+]);
 
 const ACCEPTED_REFERENCE_UNIT_IDS = Object.freeze([
   "physical-building:r16681702",
@@ -110,6 +131,7 @@ const ACCEPTED_REFERENCE_UNIT_IDS = Object.freeze([
   "physical-building:w1249412094",
   "physical-building:w291189336",
   "physical-building:w34313540",
+  "physical-building:w34313545",
 ]);
 
 const REVIEW_RECEIPTS = Object.freeze({
@@ -155,6 +177,13 @@ const REVIEW_RECEIPTS = Object.freeze({
     review_receipt_sha256: NAVY_CHAPEL_LIVE_REVIEW_RECEIPT_SHA256,
     unit_id: "physical-building:w291189336",
   }),
+  "d1-b201-live-attachment-2026-09-04": Object.freeze({
+    evidence_manifest_path: "evidence/first-playable/d1-b201-live-attachment-2026-09-04/capture-manifest.json",
+    evidence_manifest_sha256: D1_B201_EVIDENCE_MANIFEST_SHA256,
+    review_path: "evidence/first-playable/d1-b201-live-attachment-2026-09-04/INDEPENDENT_LIVE_VISUAL_BAR_RAISER_REVIEW.md",
+    review_receipt_sha256: D1_B201_LIVE_REVIEW_RECEIPT_SHA256,
+    unit_id: "physical-building:w34313545",
+  }),
 });
 
 const PATHS = Object.freeze({
@@ -168,7 +197,7 @@ const PATHS = Object.freeze({
 });
 
 const EXPECTED = Object.freeze({
-  active_runtime_adapter_receivers: 5,
+  active_runtime_adapter_receivers: 6,
   building_footprints: 213,
   building_parts: 2,
   composite_units: 1,
@@ -177,7 +206,7 @@ const EXPECTED = Object.freeze({
   recognition_units: 213,
   source_records: 215,
   standalone_units: 212,
-  runtime_adapter_receivers: 14,
+  runtime_adapter_receivers: 15,
   visible_wall_runs: 4971,
 });
 
@@ -185,8 +214,8 @@ const EXPECTED_ADAPTER_CONTRACTS = Object.freeze({
   disabled_adapter_receivers: 6,
   disabled_projection_occurrences: 13,
   disabled_unique_projection_inputs: 13,
-  package_safe_adapter_receivers: 8,
-  receiver_adapter_plans: 14,
+  package_safe_adapter_receivers: 9,
+  receiver_adapter_plans: 15,
 });
 
 const ADAPTER_CONTRACT_CHECK_ID = `adapter_contract_${EXPECTED_ADAPTER_CONTRACTS.package_safe_adapter_receivers}_ready_${EXPECTED_ADAPTER_CONTRACTS.disabled_adapter_receivers}_disabled_${EXPECTED_ADAPTER_CONTRACTS.disabled_unique_projection_inputs}_unique_projection_inputs`;
@@ -208,6 +237,25 @@ const CLAIM_VOCABULARY = Object.freeze({
     "generated_source_key_pattern",
     "implementation_metadata",
   ],
+});
+
+const ACTIVE_REVIEW_STATUS_SCOPE = "runtime_asset_original_detail_provenance_only_not_reference_recognition";
+const ACTIVE_RECOGNITION_ACCEPTANCE_AUTHORITY = "physical_unit_claim_and_independent_acceptance_record";
+const ACTIVE_ADAPTER_UNIT_BY_RECEIVER = Object.freeze({
+  [BUILDING_1_WALL]: unitId(BUILDING_1_SOURCE),
+  [BUILDING_1_TOWER_WALL]: unitId(BUILDING_1_TOWER_SOURCE),
+  [BUILDING_3_WALL]: unitId(BUILDING_3_SOURCE),
+  [ISLE_HOUSE_LOW_WALL]: ISLE_HOUSE_UNIT_ID,
+  [NAVY_CHAPEL_WALL]: unitId(NAVY_CHAPEL_SOURCE),
+  [D1_B201_WALL]: unitId(D1_B201_SOURCE),
+});
+const ACTIVE_ADAPTER_REVIEW_STATUS_BY_RECEIVER = Object.freeze({
+  [BUILDING_1_WALL]: "pending_independent_original_detail_review",
+  [BUILDING_1_TOWER_WALL]: "pending_independent_original_detail_review",
+  [BUILDING_3_WALL]: "pending_independent_original_detail_review",
+  [ISLE_HOUSE_LOW_WALL]: "independent_exact_current_live_pass",
+  [NAVY_CHAPEL_WALL]: "independent_exact_current_live_pass",
+  [D1_B201_WALL]: "independent_exact_current_live_pass",
 });
 
 const RUNTIME_PATH_KEYS = new Set([
@@ -331,6 +379,10 @@ function navyChapelActiveAdapterId(receiverKey) {
   return `active-adapter:navy-chapel-187:${receiverKey}`;
 }
 
+function d1B201ActiveAdapterId(receiverKey) {
+  return `active-adapter:d1-b201-live:${receiverKey}`;
+}
+
 function loadInputs() {
   const inventory = readJson(PATHS.inventory);
   const manifest = readJson(PATHS.manifest);
@@ -389,6 +441,12 @@ function loadInputs() {
       navyChapelLiveAdapterSha256: sha256File(absolute(NAVY_CHAPEL_LIVE_ADAPTER_PATH)),
       navyChapelLiveAdapterText: readFileSync(absolute(NAVY_CHAPEL_LIVE_ADAPTER_PATH), "utf8"),
       navyChapelPrototypeSha256: sha256File(absolute(NAVY_CHAPEL_PROTOTYPE_PATH)),
+      d1B201Config: readJson(D1_B201_CONFIG_PATH),
+      d1B201ConfigPath: D1_B201_CONFIG_PATH,
+      d1B201ConfigSha256: sha256File(absolute(D1_B201_CONFIG_PATH)),
+      d1B201LiveAdapterPath: D1_B201_LIVE_ADAPTER_PATH,
+      d1B201LiveAdapterSha256: sha256File(absolute(D1_B201_LIVE_ADAPTER_PATH)),
+      d1B201LiveAdapterText: readFileSync(absolute(D1_B201_LIVE_ADAPTER_PATH), "utf8"),
       worldBuilderPath: WORLD_CHUNK_BUILDER_PATH,
       worldBuilderSha256: sha256File(absolute(WORLD_CHUNK_BUILDER_PATH)),
       worldBuilderText: readFileSync(absolute(WORLD_CHUNK_BUILDER_PATH), "utf8"),
@@ -719,6 +777,59 @@ function validateActiveNavyChapelDispatch(inputs) {
   }
 }
 
+function validateActiveD1B201Dispatch(inputs) {
+  const contract = inputs.runtimeContracts;
+  const config = contract.d1B201Config;
+  const sourceMembership = config.source_membership ?? {};
+  const authority = config.supplied_record_authority ?? {};
+  const chain = config.eligible_public_chain ?? {};
+  const translation = config.production_translation ?? {};
+  const protectedScope = config.protected_scope ?? {};
+  const runtime = config.runtime_contract ?? {};
+  invariant(contract.d1B201ConfigSha256 === D1_B201_CONFIG_SHA256, "D1 B201 reviewed config bytes drifted from capture-time authority");
+  invariant(contract.d1B201LiveAdapterSha256 === D1_B201_LIVE_ADAPTER_SHA256, "D1 B201 reviewed adapter bytes drifted from capture-time authority");
+  invariant(contract.worldBuilderSha256 === D1_B201_REVIEWED_WORLD_BUILDER_SHA256, "D1 B201 reviewed world-builder dispatch bytes drifted from capture-time authority");
+  invariant(config.schema_version === "ti.d1-b201-live-attachment/1", "D1 B201 live config schema drifted");
+  invariant(config.source_key === D1_B201_SOURCE && config.receiver_key === D1_B201_WALL, "D1 B201 live target identity drifted");
+  invariant(sourceMembership.source_geometry_sha256 === "2bb86d7269f9fc609ab079c0e31680e734c7b4fd0adcce42e1146c9cd81af764", "D1 B201 frozen source geometry drifted");
+  invariant(authority.canonical_stable_json_sha256 === "024b2ed0af4de1a7e8456fcd171e1abc27a212dd72d054a9d9d1d487effa98b3" && authority.host_triangle_count === 80, "D1 B201 supplied wall authority drifted");
+  invariant(equalStable(chain.source_edge_indices, [0]) && equalStable(chain.ordered_run_indices, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]), "D1 B201 public WSW run chain drifted");
+  invariant(chain.runtime_meter_plan_signature === "7d5f350c8130aee2a95e567741ec8466e5a83a4b412dcb85d2d327786ec2f650", "D1 B201 runtime meter plan drifted");
+  invariant(translation.decorative_geometry_signature === D1_B201_DECORATIVE_GEOMETRY_SIGNATURE && translation.decorative_box_instance_count === 172 && translation.decorative_triangle_count === 2064 && translation.host_triangle_count_unchanged === 80 && translation.host_surface_count_delta === 1, "D1 B201 production translation drifted");
+  invariant(equalStable(protectedScope.run_indices, Array.from({ length: 30 }, (_, index) => index + 10)) && protectedScope.host_collision_owner_preserved === true && protectedScope.host_spray_owner_preserved === true && protectedScope.roof_untouched === true, "D1 B201 protected receiver scope drifted");
+  invariant(runtime.attachment_mode === "receiver_host_material_partition_plus_receiver_relative_render_only_details" && runtime.mesh_instances === 6 && runtime.surfaces === 6 && runtime.triangles === 2064 && runtime.collision_nodes === 0 && runtime.navigation_nodes === 0 && runtime.spray_nodes === 0 && runtime.reference_recognizable === false, "D1 B201 live runtime ownership or self-acceptance boundary drifted");
+  const adapterText = contract.d1B201LiveAdapterText;
+  for (const expected of [
+    `const CONFIG_PATH := "res://${D1_B201_CONFIG_PATH}"`,
+    `const SOURCE_KEY := "${D1_B201_SOURCE}"`,
+    `const RECEIVER_KEY := "${D1_B201_WALL}"`,
+    `const ROOF_KEY := "${D1_B201_ROOF}"`,
+    'const EXPECTED_CANONICAL_RECORD_SHA256 := "024b2ed0af4de1a7e8456fcd171e1abc27a212dd72d054a9d9d1d487effa98b3"',
+    'const EXPECTED_CANONICAL_ROOF_RECORD_SHA256 := "53994e07ee99632a338d8c577427efac3ca3c584148f4d9ef92a251a49e589ff"',
+    `const EXPECTED_DECORATIVE_GEOMETRY_SIGNATURE := "${D1_B201_DECORATIVE_GEOMETRY_SIGNATURE}"`,
+    '"protected_generic_runs": range(10, 40)',
+    '"host_collision_owner_preserved": true',
+    '"host_spray_owner_preserved": true',
+    '"collision_nodes": 0',
+    '"navigation_nodes": 0',
+    '"spray_nodes": 0',
+  ]) invariant(adapterText.includes(expected), `D1 B201 live adapter contract drifted: ${expected}`);
+  const builderText = contract.worldBuilderText;
+  invariant(builderText.includes(`const D1_B201_LIVE_ATTACHMENT := preload("res://${D1_B201_LIVE_ADAPTER_PATH}")`), "World builder no longer preloads the exact D1 B201 live adapter");
+  for (const expected of [
+    "D1_B201_LIVE_ATTACHMENT.validate_chunk_records(chunk)",
+    "D1_B201_LIVE_ATTACHMENT.prepare(record)",
+    "D1_B201_LIVE_ATTACHMENT.host_uvs(record, b201_prepared)",
+    "D1_B201_LIVE_ATTACHMENT.partition_host(record, indices, placeholder_material, b201_prepared)",
+    "D1_B201_LIVE_ATTACHMENT.build_prepared(record, b201_prepared)",
+  ]) invariant(builderText.includes(expected), `World builder D1 B201 dispatch drifted: ${expected}`);
+  invariant(builderText.indexOf("D1_B201_LIVE_ATTACHMENT.prepare(record)") < builderText.indexOf("var vertices := PackedVector3Array()"), "D1 B201 full-record preparation no longer precedes generic host construction");
+  invariant(builderText.indexOf("D1_B201_LIVE_ATTACHMENT.build_prepared(record, b201_prepared)") > builderText.indexOf("var body := StaticBody3D.new()"), "D1 B201 render-only attachment no longer follows retained generic collision ownership");
+  for (const path of [D1_B201_LIVE_ADAPTER_PATH, D1_B201_CONFIG_PATH, ...D1_B201_RUNTIME_ASSET_PATHS]) {
+    invariant(existsSync(absolute(path)) && statSync(absolute(path)).isFile(), `D1 B201 current runtime asset is missing: ${path}`);
+  }
+}
+
 function building3BehaviorContract() {
   return {
     collision_contract: {
@@ -770,6 +881,7 @@ function isleHouseBehaviorContract() {
       overlay_repair_signature: ISLE_HOUSE_REPAIR_SIGNATURE,
       overlay_surfaces: 11,
       overlay_triangles: 2242,
+      world_topology_scope: PRE_B201_INTEGRATION_WORLD_TOPOLOGY_SCOPE,
       world_mesh_instances: 944,
       world_records: 735,
       world_static_bodies: 466,
@@ -816,6 +928,7 @@ function navyChapelBehaviorContract() {
       visual_mesh_instances: 6,
       visual_surfaces: 6,
       visual_triangles: 540,
+      world_topology_scope: PRE_B201_INTEGRATION_WORLD_TOPOLOGY_SCOPE,
       world_mesh_instances: 944,
       world_records: 735,
       world_shapes: 466,
@@ -853,11 +966,89 @@ function navyChapelBehaviorContract() {
   };
 }
 
-function deriveActiveRuntimeAdapterSeeds(inputs) {
+function d1B201BehaviorContract() {
+  return {
+    acceptance_contract: {
+      accepted_physical_unit_id: unitId(D1_B201_SOURCE),
+      capture_time_recognition_metric: "6/213",
+      evidence_manifest_sha256: D1_B201_EVIDENCE_MANIFEST_SHA256,
+      independent_live_review_receipt_sha256: D1_B201_LIVE_REVIEW_RECEIPT_SHA256,
+      numerator_effect: 1,
+      reference_recognizable: true,
+    },
+    geometry_contract: {
+      canonical_roof_record_sha256: "53994e07ee99632a338d8c577427efac3ca3c584148f4d9ef92a251a49e589ff",
+      canonical_wall_record_sha256: "024b2ed0af4de1a7e8456fcd171e1abc27a212dd72d054a9d9d1d487effa98b3",
+      decorative_box_instances: 172,
+      decorative_geometry_signature: D1_B201_DECORATIVE_GEOMETRY_SIGNATURE,
+      decorative_mesh_instances: 6,
+      decorative_surfaces: 6,
+      decorative_triangles: 2064,
+      eligible_host_triangles: 20,
+      host_triangles: 80,
+      protected_host_triangles: 60,
+      world_topology_scope: CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE,
+      world_mesh_instances: 950,
+      world_records: 735,
+      world_shapes: 466,
+      world_static_bodies: 466,
+      world_surfaces: 964,
+      world_triangles: 66636,
+    },
+    ownership_contract: {
+      decorative_collision_nodes: 0,
+      decorative_navigation_nodes: 0,
+      decorative_spray_nodes: 0,
+      host_collision_owner_preserved: true,
+      host_mesh_preserved: true,
+      host_spray_owner_preserved: true,
+      navigation_owner_count: 0,
+      shape_count: 1,
+      spray_owner_count: 1,
+      structural_owner_count: 1,
+    },
+    replacement_contract: {
+      actual_supplied_chunk_pair_required: true,
+      eligible_run_indices: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+      fallback_allowed: false,
+      host_material_partition: true,
+      protected_run_indices: Array.from({ length: 30 }, (_, index) => index + 10),
+      receiver_relative_render_only_attachment: true,
+      roof_object_key: D1_B201_ROOF,
+      source_key: D1_B201_SOURCE,
+      stacking_allowed: false,
+      wall_object_key: D1_B201_WALL,
+    },
+    schema_version: "ti.d1-b201-live-parity/1",
+    truth_boundary: {
+      as_built_fidelity_claimed: false,
+      counts_cadence_dimensions_are_production_inference: true,
+      game_distinctive_claimed: false,
+      reference_pixels_packaged: false,
+      receiver_complete_inferred_from_art: false,
+      service_and_unobserved_sides_untouched: true,
+    },
+  };
+}
+
+function activeRecognitionAuthority(receiverKey, units) {
+  const expectedUnitId = ACTIVE_ADAPTER_UNIT_BY_RECEIVER[receiverKey];
+  invariant(expectedUnitId != null, `Active adapter receiver has no physical-unit recognition authority mapping: ${receiverKey}`);
+  const matches = units.filter((unit) => unit.receiver_keys.includes(receiverKey));
+  invariant(matches.length === 1 && matches[0].unit_id === expectedUnitId, `Active adapter receiver does not map to its exact physical-unit recognition authority: ${receiverKey}`);
+  return {
+    recognition_acceptance_authority: ACTIVE_RECOGNITION_ACCEPTANCE_AUTHORITY,
+    recognition_acceptance_status: matches[0].claim_status.reference_recognizable,
+    review_status_scope: ACTIVE_REVIEW_STATUS_SCOPE,
+  };
+}
+
+function deriveActiveRuntimeAdapterSeeds(inputs, units) {
   validateActiveHeroDispatch(inputs);
   validateActiveBuilding3Dispatch(inputs);
   validateActiveIsleHouseDispatch(inputs);
   validateActiveNavyChapelDispatch(inputs);
+  validateActiveD1B201Dispatch(inputs);
   const shared = {
     content_classification: "active_target_specific_hero_replacement",
     review_status: inputs.runtimeContracts.heroConfig.truth_boundary.visual_review_status,
@@ -919,13 +1110,28 @@ function deriveActiveRuntimeAdapterSeeds(inputs) {
       source_key: NAVY_CHAPEL_SOURCE,
       whole_building_recognizability_imported: false,
     },
-  ].sort((left, right) => left.receiver_key.localeCompare(right.receiver_key));
+    {
+      adapter_id: d1B201ActiveAdapterId(D1_B201_WALL),
+      content_classification: "active_target_specific_receiver_host_partition_plus_render_only_attachment",
+      receiver_key: D1_B201_WALL,
+      review_status: "independent_exact_current_live_pass",
+      runtime_adapter_path: D1_B201_LIVE_ADAPTER_PATH,
+      runtime_asset_paths: [...D1_B201_RUNTIME_ASSET_PATHS],
+      runtime_config_path: D1_B201_CONFIG_PATH,
+      runtime_dispatch_path: WORLD_CHUNK_BUILDER_PATH,
+      source_key: D1_B201_SOURCE,
+      whole_building_recognizability_imported: false,
+    },
+  ].map((seed) => ({
+    ...seed,
+    ...activeRecognitionAuthority(seed.receiver_key, units),
+  })).sort((left, right) => left.receiver_key.localeCompare(right.receiver_key));
 }
 
 function buildSeedCatalog(inputs) {
   const units = deriveUnitSeeds(inputs.inventory);
   const legacyAdapters = deriveLegacyAdapterSeeds(inputs.inventory);
-  const activeRuntimeAdapters = deriveActiveRuntimeAdapterSeeds(inputs);
+  const activeRuntimeAdapters = deriveActiveRuntimeAdapterSeeds(inputs, units);
   const adapterByReceiver = new Map(legacyAdapters.map((adapter) => [adapter.receiver_key, adapter.adapter_id]));
   for (const unit of units) {
     unit.legacy_adapter_ids = unit.receiver_keys
@@ -1001,7 +1207,7 @@ function validateCatalog(catalog, inputs, derivedUnits, receiverByKey) {
   const derivedById = new Map(derivedUnits.map((unit) => [unit.unit_id, unit]));
   const inventoryByKey = inventoryObjectsByKey(inputs.inventory);
   const adapterById = new Map(catalog.legacy_adapters.map((adapter) => [adapter.adapter_id, adapter]));
-  const expectedActiveAdapters = deriveActiveRuntimeAdapterSeeds(inputs);
+  const expectedActiveAdapters = deriveActiveRuntimeAdapterSeeds(inputs, catalog.units);
   const captureByUnit = new Map(catalog.capture_contracts.map((capture) => [capture.unit_id, capture]));
   assertUnique(catalog.units.map((unit) => unit.unit_id), "Catalog unit IDs");
   assertUnique(catalog.legacy_adapters.map((adapter) => adapter.adapter_id), "Catalog adapter IDs");
@@ -1074,6 +1280,17 @@ function validateCatalog(catalog, inputs, derivedUnits, receiverByKey) {
     validateAuthoredRecognitionState(unit, receiverByKey, captureByUnit.get(unit.unit_id));
   }
 
+  for (const adapter of catalog.active_runtime_adapters) {
+    const expectedUnitId = ACTIVE_ADAPTER_UNIT_BY_RECEIVER[adapter.receiver_key];
+    const unit = catalog.units.find((candidate) => candidate.unit_id === expectedUnitId);
+    invariant(unit != null && unit.receiver_keys.includes(adapter.receiver_key), `${adapter.adapter_id} does not cross-link to its exact physical recognition unit`);
+    invariant(adapter.review_status === ACTIVE_ADAPTER_REVIEW_STATUS_BY_RECEIVER[adapter.receiver_key], `${adapter.adapter_id} review status is not an exact allowed provenance status`);
+    invariant(adapter.review_status_scope === ACTIVE_REVIEW_STATUS_SCOPE, `${adapter.adapter_id} review status scope does not isolate runtime-asset original-detail provenance`);
+    invariant(adapter.recognition_acceptance_authority === ACTIVE_RECOGNITION_ACCEPTANCE_AUTHORITY, `${adapter.adapter_id} recognition authority does not belong to the physical-unit claim and independent receipt`);
+    invariant(adapter.recognition_acceptance_status === unit.claim_status.reference_recognizable && adapter.recognition_acceptance_status === "accepted", `${adapter.adapter_id} recognition acceptance status does not equal its accepted physical-unit claim`);
+    invariant(unit.acceptance_records.some((record) => record.review_kind === "independent_reference_recognition" && record.status === "accept"), `${adapter.adapter_id} physical recognition unit lacks an independent acceptance receipt`);
+  }
+
   invariant(equalStable([...derivedById.keys()].sort(), catalog.units.map((unit) => unit.unit_id).sort()), "Catalog does not exactly cover derived recognition units");
   const sourceMembership = catalog.units.flatMap((unit) => unit.source_records.map((source) => source.source_key));
   const receiverMembership = catalog.units.flatMap((unit) => unit.receiver_keys);
@@ -1085,7 +1302,7 @@ function validateCatalog(catalog, inputs, derivedUnits, receiverByKey) {
     .filter((unit) => unit.claim_status.reference_recognizable === "accepted")
     .map((unit) => unit.unit_id)
     .sort();
-  invariant(equalStable(acceptedReferenceUnitIds, [...ACCEPTED_REFERENCE_UNIT_IDS].sort()), "Catalog reference-recognizable rollup must be exactly the six independently accepted physical units");
+  invariant(equalStable(acceptedReferenceUnitIds, [...ACCEPTED_REFERENCE_UNIT_IDS].sort()), "Catalog reference-recognizable rollup must be exactly the seven independently accepted physical units");
   invariant(!catalog.units.some((unit) => ISLE_HOUSE_PARTS.map(unitId).includes(unit.unit_id)), "Isle House receiver source records must never become recognition units");
   const isleHouseUnit = catalog.units.find((unit) => unit.unit_id === ISLE_HOUSE_UNIT_ID);
   invariant(isleHouseUnit?.unit_kind === "composite_building" && isleHouseUnit.claim_status.reference_recognizable === "accepted", "Isle House acceptance must belong to its composite physical-building parent");
@@ -1544,10 +1761,26 @@ function sanitizedNavyChapelConfig(config) {
   };
 }
 
+function sanitizedD1B201Config(config) {
+  return {
+    attachment_id: config.attachment_id,
+    eligible_public_chain: config.eligible_public_chain,
+    production_translation: config.production_translation,
+    protected_scope: config.protected_scope,
+    receiver_key: config.receiver_key,
+    runtime_contract: config.runtime_contract,
+    schema_version: config.schema_version,
+    source_boundary: config.source_boundary,
+    source_key: config.source_key,
+    supplied_record_authority: config.supplied_record_authority,
+  };
+}
+
 function activeContentMode(adapter) {
   if (adapter.receiver_key === BUILDING_3_WALL) return "active_building_3_hero";
   if (adapter.receiver_key === ISLE_HOUSE_LOW_WALL) return "active_isle_house_variant_c";
   if (adapter.receiver_key === NAVY_CHAPEL_WALL) return "active_navy_chapel_187_paired_replacement";
+  if (adapter.receiver_key === D1_B201_WALL) return "active_d1_b201_host_partition_attachment";
   return "active_building_1_hero";
 }
 
@@ -1558,6 +1791,7 @@ function importActiveRuntimeAdapter(seed, receiver, inputs, packageAudit) {
   const isBuilding3 = seed.receiver_key === BUILDING_3_WALL;
   const isIsleHouse = seed.receiver_key === ISLE_HOUSE_LOW_WALL;
   const isNavyChapel = seed.receiver_key === NAVY_CHAPEL_WALL;
+  const isD1B201 = seed.receiver_key === D1_B201_WALL;
   const activeRuntimeContract = isBuilding3
     ? {
       adapter_sha256: inputs.runtimeContracts.building3MassingSha256,
@@ -1585,6 +1819,14 @@ function importActiveRuntimeAdapter(seed, receiver, inputs, packageAudit) {
         dispatch_sha256: inputs.runtimeContracts.worldBuilderSha256,
         prototype_sha256: inputs.runtimeContracts.navyChapelPrototypeSha256,
       }
+    : isD1B201
+      ? {
+        adapter_sha256: inputs.runtimeContracts.d1B201LiveAdapterSha256,
+        behavior_contract: d1B201BehaviorContract(),
+        config_sha256: inputs.runtimeContracts.d1B201ConfigSha256,
+        config_summary: sanitizedD1B201Config(inputs.runtimeContracts.d1B201Config),
+        dispatch_sha256: inputs.runtimeContracts.worldBuilderSha256,
+      }
     : {
       adapter_sha256: inputs.runtimeContracts.heroAdapterSha256,
       behavior_contract: null,
@@ -1608,11 +1850,16 @@ function importActiveRuntimeAdapter(seed, receiver, inputs, packageAudit) {
         ? "active_isle_house_variant_c_low_part_replacement"
         : isNavyChapel
           ? "active_navy_chapel_187_paired_wall_roof_replacement"
+          : isD1B201
+            ? "active_d1_b201_receiver_host_partition_attachment"
         : "active_building_1_hero_replacement",
     content_classification: seed.content_classification,
     receiver_key: seed.receiver_key,
+    recognition_acceptance_authority: seed.recognition_acceptance_authority,
+    recognition_acceptance_status: seed.recognition_acceptance_status,
     recognition_claim_effect: "none",
     review_status: seed.review_status,
+    review_status_scope: seed.review_status_scope,
     runtime_content_mode: activeContentMode(seed),
     source_key: seed.source_key,
     state: "active_runtime_target_specific_content",
@@ -1699,6 +1946,7 @@ function unitRuntimeContentMode(directReceivers) {
     if (modes[0] === "active_building_3_hero") return "all_receivers_active_building_3_hero";
     if (modes[0] === "active_isle_house_variant_c") return "all_receivers_active_isle_house_variant_c";
     if (modes[0] === "active_navy_chapel_187_paired_replacement") return "all_receivers_active_navy_chapel_187_paired_replacement";
+    if (modes[0] === "active_d1_b201_host_partition_attachment") return "all_receivers_active_d1_b201_host_partition_attachment";
   }
   if (equalStable([...modes].sort(), ["generated_placeholder", "legacy_adapter"])) {
     return "mixed_legacy_adapter_and_generated_placeholder";
@@ -1873,13 +2121,15 @@ function validateAdapterContracts(contracts, registry = null) {
       "runtime_assets",
       "source_key",
     ], `Facade runtime adapter plan ${plan.adapter_id}`);
-    invariant(["legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement"].includes(plan.content_mode), `${plan.adapter_id} has an unknown receiver content mode`);
+    invariant(["legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment"].includes(plan.content_mode), `${plan.adapter_id} has an unknown receiver content mode`);
     if (plan.content_mode === "active_building_3_hero") {
       invariant(equalStable(plan.behavior_contract, building3BehaviorContract()), `${plan.adapter_id} Building 3 behavior parity contract drifted`);
     } else if (plan.content_mode === "active_isle_house_variant_c") {
-      invariant(equalStable(plan.behavior_contract, isleHouseBehaviorContract()), `${plan.adapter_id} Isle House exact-current acceptance/parity contract drifted`);
+      invariant(equalStable(plan.behavior_contract, isleHouseBehaviorContract()), `${plan.adapter_id} Isle House pre-B201 integration live parity contract drifted`);
     } else if (plan.content_mode === "active_navy_chapel_187_paired_replacement") {
-      invariant(equalStable(plan.behavior_contract, navyChapelBehaviorContract()), `${plan.adapter_id} Navy Chapel exact-current acceptance/parity contract drifted`);
+      invariant(equalStable(plan.behavior_contract, navyChapelBehaviorContract()), `${plan.adapter_id} Navy Chapel pre-B201 integration live parity contract drifted`);
+    } else if (plan.content_mode === "active_d1_b201_host_partition_attachment") {
+      invariant(equalStable(plan.behavior_contract, d1B201BehaviorContract()), `${plan.adapter_id} D1 B201 exact-current acceptance/parity contract drifted`);
     } else {
       invariant(plan.behavior_contract == null, `${plan.adapter_id} unexpectedly exports a target-specific behavior parity contract`);
     }
@@ -2000,7 +2250,7 @@ function buildRuntimeRegistry(catalog, inputs, receiverByKey) {
         status: record.status,
       })),
       active_runtime_adapter_ids: directReceivers
-        .filter((receiver) => ["active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement"].includes(receiver.runtime_content_mode))
+        .filter((receiver) => ["active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment"].includes(receiver.runtime_content_mode))
         .map((receiver) => receiver.runtime_adapter_id),
       capture_contract: runtimeCaptureContract(captureByUnit.get(unit.unit_id)),
       claim_status: unit.claim_status,
@@ -2181,19 +2431,51 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
     invariant(Array.isArray(unit.acceptance_records), `${unit.unit_id} runtime acceptance records are missing`);
     for (const record of unit.acceptance_records) validateAcceptanceReceipt(unit, record);
   }
+  const runtimeUnitById = new Map(registry.units.map((unit) => [unit.unit_id, unit]));
+  for (const adapter of registry.active_runtime_adapters) {
+    assertExactKeys(adapter, [
+      "accepted_run_scopes",
+      "active_receiver_scope",
+      "active_runtime_contract",
+      "adapter_id",
+      "attachment_kind",
+      "content_classification",
+      "package_integration_state",
+      "receiver_key",
+      "recognition_acceptance_authority",
+      "recognition_acceptance_status",
+      "recognition_claim_effect",
+      "review_status",
+      "review_status_scope",
+      "runtime_asset_projections",
+      "runtime_assets",
+      "runtime_content_mode",
+      "source_key",
+      "state",
+      "whole_building_recognizability_imported",
+    ], `Active runtime adapter ${adapter.adapter_id}`);
+    const expectedUnitId = ACTIVE_ADAPTER_UNIT_BY_RECEIVER[adapter.receiver_key];
+    const unit = runtimeUnitById.get(expectedUnitId);
+    invariant(unit != null && unit.direct_receivers.some((receiver) => receiver.receiver_key === adapter.receiver_key), `${adapter.adapter_id} does not cross-link to its exact physical recognition unit`);
+    invariant(adapter.review_status === ACTIVE_ADAPTER_REVIEW_STATUS_BY_RECEIVER[adapter.receiver_key], `${adapter.adapter_id} review status is not an exact allowed provenance status`);
+    invariant(adapter.review_status_scope === ACTIVE_REVIEW_STATUS_SCOPE, `${adapter.adapter_id} review status scope does not isolate runtime-asset original-detail provenance`);
+    invariant(adapter.recognition_acceptance_authority === ACTIVE_RECOGNITION_ACCEPTANCE_AUTHORITY, `${adapter.adapter_id} recognition authority does not belong to the physical-unit claim and independent receipt`);
+    invariant(adapter.recognition_acceptance_status === unit.claim_status.reference_recognizable && adapter.recognition_acceptance_status === "accepted", `${adapter.adapter_id} recognition acceptance status does not equal its accepted physical-unit claim`);
+    invariant(unit.acceptance_records.some((record) => record.review_kind === "independent_reference_recognition" && record.status === "accept"), `${adapter.adapter_id} physical recognition unit lacks an independent acceptance receipt`);
+  }
   invariant(registry.claim_totals.receiver_complete.verified === EXPECTED.recognition_units, "Not every unit is receiver-complete");
   invariant(registry.claim_totals.game_distinctive.accepted === 0, "Recognition acceptance must not import game-distinctive acceptance");
-  invariant(registry.claim_totals.reference_recognizable.accepted === ACCEPTED_REFERENCE_UNIT_IDS.length, "Runtime reference-recognizable numerator must be exactly 6/213");
+  invariant(registry.claim_totals.reference_recognizable.accepted === ACCEPTED_REFERENCE_UNIT_IDS.length, "Runtime reference-recognizable numerator must be exactly 7/213");
   invariant(registry.claim_totals.as_built_fidelity.claimed === 0 && registry.claim_totals.as_built_fidelity.limited === 0, "Recognition acceptance must not import as-built fidelity");
   invariant(equalStable(registry.recognition_metric, {
     accepted_physical_unit_ids: [...ACCEPTED_REFERENCE_UNIT_IDS].sort(),
     denominator: EXPECTED.recognition_units,
     denominator_kind: "immutable_physical_recognition_units",
-    display: "6/213",
+    display: "7/213",
     isle_house_non_numerator_source_keys: [...ISLE_HOUSE_PARTS],
     numerator: ACCEPTED_REFERENCE_UNIT_IDS.length,
     rollup_policy: "one_claim_per_physical_recognition_unit",
-  }), "Runtime physical-entity recognition metric drifted from exactly 6/213");
+  }), "Runtime physical-entity recognition metric drifted from exactly 7/213");
   invariant(registry.legacy_adapters.every((adapter) => adapter.whole_building_recognizability_imported === false && adapter.recognition_claim_effect === "none"), "Legacy adapter improperly grants recognizability");
   invariant(registry.active_runtime_adapters.every((adapter) => adapter.whole_building_recognizability_imported === false && adapter.recognition_claim_effect === "none"), "Active runtime adapter improperly grants recognizability");
   invariant(registry.units.flatMap((unit) => unit.identity_assertions).every((assertion) => assertion.frozen_value_preserved === true), "Runtime identity assertion silently overwrites frozen identity");
@@ -2211,6 +2493,7 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
   const towerUnit = registry.units.find((unit) => unit.unit_id === unitId(BUILDING_1_TOWER_SOURCE));
   const building3Unit = registry.units.find((unit) => unit.unit_id === unitId(BUILDING_3_SOURCE));
   const navyChapelUnit = registry.units.find((unit) => unit.unit_id === unitId(NAVY_CHAPEL_SOURCE));
+  const d1B201Unit = registry.units.find((unit) => unit.unit_id === unitId(D1_B201_SOURCE));
   invariant(building1Unit != null && towerUnit != null && building1Unit !== towerUnit, "Building 1 and observation tower physical units were collapsed");
   invariant(building1Unit.direct_receivers[0].runtime_content_mode === "active_building_1_hero", "Building 1 wall is not bound to the active hero adapter");
   invariant(towerUnit.direct_receivers[0].runtime_content_mode === "active_building_1_hero", "Observation tower wall is not bound to the active hero adapter");
@@ -2219,7 +2502,9 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
   invariant(building3Unit?.direct_receivers[0]?.runtime_content_mode === "active_building_3_hero" && building3Unit.active_runtime_adapter_ids.length === 1 && building3Unit.legacy_adapter_ids.length === 0, "Building 3 wall is not bound exclusively to the active wall/roof hero adapter");
   invariant(navyChapelUnit?.direct_receivers[0]?.runtime_content_mode === "active_navy_chapel_187_paired_replacement" && navyChapelUnit.active_runtime_adapter_ids.length === 1 && navyChapelUnit.legacy_adapter_ids.length === 0, "Navy Chapel wall is not bound exclusively to the active paired wall/roof replacement");
   invariant(navyChapelUnit.claim_status.reference_recognizable === "accepted" && navyChapelUnit.acceptance_records.some((record) => record.review_receipt_sha256 === NAVY_CHAPEL_LIVE_REVIEW_RECEIPT_SHA256), "Navy Chapel physical unit lacks its exact independent live acceptance receipt");
-  invariant(registry.active_runtime_adapters.map((adapter) => adapter.receiver_key).sort().join("|") === [BUILDING_1_WALL, BUILDING_1_TOWER_WALL, BUILDING_3_WALL, ISLE_HOUSE_LOW_WALL, NAVY_CHAPEL_WALL].sort().join("|"), "Active Building 1/Building 3/Isle House/Navy Chapel adapter receiver set drifted");
+  invariant(d1B201Unit?.direct_receivers[0]?.runtime_content_mode === "active_d1_b201_host_partition_attachment" && d1B201Unit.active_runtime_adapter_ids.length === 1 && d1B201Unit.legacy_adapter_ids.length === 0, "D1 B201 wall is not bound exclusively to the active host-partition attachment");
+  invariant(d1B201Unit.claim_status.reference_recognizable === "accepted" && d1B201Unit.acceptance_records.some((record) => record.review_receipt_sha256 === D1_B201_LIVE_REVIEW_RECEIPT_SHA256), "D1 B201 physical unit lacks its exact independent live acceptance receipt");
+  invariant(registry.active_runtime_adapters.map((adapter) => adapter.receiver_key).sort().join("|") === [BUILDING_1_WALL, BUILDING_1_TOWER_WALL, BUILDING_3_WALL, ISLE_HOUSE_LOW_WALL, NAVY_CHAPEL_WALL, D1_B201_WALL].sort().join("|"), "Active Building 1/Building 3/Isle House/Navy Chapel/D1 B201 adapter receiver set drifted");
   const building1Adapters = registry.active_runtime_adapters.filter((adapter) => [BUILDING_1_WALL, BUILDING_1_TOWER_WALL].includes(adapter.receiver_key));
   const expectedBuilding1RuntimeAssetPaths = BUILDING_1_RUNTIME_ASSET_PATHS.map((path) => `res://${path}`).sort();
   invariant(building1Adapters.every((adapter) =>
@@ -2273,6 +2558,19 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
     equalStable(navyChapelAdapter.active_runtime_contract?.behavior_contract, navyChapelBehaviorContract()),
     "Active Navy Chapel acceptance, paired dependency, or ownership parity contract drifted",
   );
+  const d1B201Adapter = registry.active_runtime_adapters.find((adapter) => adapter.receiver_key === D1_B201_WALL);
+  invariant(
+    d1B201Adapter?.attachment_kind === "active_d1_b201_receiver_host_partition_attachment" &&
+    d1B201Adapter.content_classification === "active_target_specific_receiver_host_partition_plus_render_only_attachment" &&
+    d1B201Adapter.state === "active_runtime_target_specific_content" &&
+    d1B201Adapter.active_receiver_scope?.coverage === "whole_direct_wall_receiver" &&
+    d1B201Adapter.active_receiver_scope?.run_count === 40 &&
+    d1B201Adapter.active_runtime_contract?.adapter_sha256 === sha256File(absolute(D1_B201_LIVE_ADAPTER_PATH)) &&
+    d1B201Adapter.active_runtime_contract?.config_sha256 === sha256File(absolute(D1_B201_CONFIG_PATH)) &&
+    d1B201Adapter.active_runtime_contract?.dispatch_sha256 === sha256File(absolute(WORLD_CHUNK_BUILDER_PATH)) &&
+    equalStable(d1B201Adapter.active_runtime_contract?.behavior_contract, d1B201BehaviorContract()),
+    "Active D1 B201 acceptance, dependency, host-partition, or ownership parity contract drifted",
+  );
   invariant(
     equalStable(
       building3Adapter.runtime_assets.map((asset) => asset.path).sort(),
@@ -2286,6 +2584,13 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
       [NAVY_CHAPEL_LIVE_ADAPTER_PATH, NAVY_CHAPEL_CONFIG_PATH, ...NAVY_CHAPEL_RUNTIME_ASSET_PATHS].map((path) => `res://${path}`).sort(),
     ) && navyChapelAdapter.runtime_asset_projections.length === 0,
     "Active Navy Chapel runtime asset closure is incomplete or source-bearing",
+  );
+  invariant(
+    equalStable(
+      d1B201Adapter.runtime_assets.map((asset) => asset.path).sort(),
+      [D1_B201_LIVE_ADAPTER_PATH, D1_B201_CONFIG_PATH, ...D1_B201_RUNTIME_ASSET_PATHS].map((path) => `res://${path}`).sort(),
+    ) && d1B201Adapter.runtime_asset_projections.length === 0,
+    "Active D1 B201 exact eight-asset runtime closure is incomplete or source-bearing",
   );
   invariant(!stableJson(registry).includes("building_1_recognizable_facade") && !stableJson(registry).includes("building_1_recognizability_placements"), "Runtime registry retains obsolete Building 1 facade content");
   assertRuntimeBoundary(registry);
@@ -2342,12 +2647,13 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
       { check_id: "isle_house_composite_3_sources_2_receivers_1_unit", status: "pass" },
       { check_id: "wall_run_quad_contract_4971", status: "pass" },
       { check_id: "receiver_complete_213", status: "pass" },
-      { check_id: "legacy_adapters_9_active_runtime_adapters_5_without_automatic_recognition_transfer", status: "pass" },
+      { check_id: "legacy_adapters_9_active_runtime_adapters_6_without_automatic_recognition_transfer", status: "pass" },
       { check_id: "building_1_and_tower_exact_current_hero_dispatch", status: "pass" },
       { check_id: "building_3_exact_current_wall_roof_facade_collision_landing_spray_parity", status: "pass" },
       { check_id: "isle_house_receiver_specific_high_legacy_low_variant_c_runtime_state", status: "pass" },
       { check_id: "navy_chapel_exact_current_paired_wall_roof_collision_landing_spray_parity", status: "pass" },
-      { check_id: "reference_recognizable_physical_entity_rollup_exactly_6_of_213", status: "pass" },
+      { check_id: "d1_b201_exact_current_host_partition_render_attachment_collision_spray_parity", status: "pass" },
+      { check_id: "reference_recognizable_physical_entity_rollup_exactly_7_of_213", status: "pass" },
       { check_id: "isle_house_composite_parent_counted_once_part_sources_never_counted", status: "pass" },
       { check_id: "acceptance_records_bound_to_exact_independent_review_receipts", status: "pass" },
       { check_id: "catalog_json_schema_document_and_instance_validation", status: "pass" },
@@ -2383,6 +2689,10 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
       active_navy_chapel_187_config_sha256: inputs.runtimeContracts.navyChapelConfigSha256,
       active_navy_chapel_187_live_review_receipt_sha256: NAVY_CHAPEL_LIVE_REVIEW_RECEIPT_SHA256,
       active_navy_chapel_187_prototype_sha256: inputs.runtimeContracts.navyChapelPrototypeSha256,
+      active_d1_b201_adapter_sha256: inputs.runtimeContracts.d1B201LiveAdapterSha256,
+      active_d1_b201_config_sha256: inputs.runtimeContracts.d1B201ConfigSha256,
+      active_d1_b201_evidence_manifest_sha256: D1_B201_EVIDENCE_MANIFEST_SHA256,
+      active_d1_b201_live_review_receipt_sha256: D1_B201_LIVE_REVIEW_RECEIPT_SHA256,
       adapter_contracts_sha256: sha256Bytes(stableJson(adapterContracts)),
       facade_runtime_loader_sha256: sha256File(absolute(FACADE_RUNTIME_LOADER_PATH)),
       authoring_catalog_sha256: sha256File(absolute(PATHS.catalog)),
@@ -2394,7 +2704,7 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
     },
     legacy_adapter_receiver_keys: registry.legacy_adapters.map((adapter) => adapter.receiver_key),
     active_runtime_adapter_receiver_keys: registry.active_runtime_adapters.map((adapter) => adapter.receiver_key),
-    next_integration_seam: "Use the topology-neutral facade registry loader API to query receiver plans. Package-safe plans include exact-current Building 1, Building 3, and Navy Chapel dependencies. The exact-current Isle House Variant C receiver is represented truthfully but remains loader-hard-disabled because its reviewed executable inheritance closure includes three source-token-bearing inputs; keep every disabled plan non-executable until its projected inputs receive independently parity-proven package-safe normalization.",
+    next_integration_seam: "Use the topology-neutral facade registry loader API to query receiver plans. Package-safe plans include exact-current Building 1, Building 3, Navy Chapel, and D1 B201 dependencies. The exact-current Isle House Variant C receiver is represented truthfully but remains loader-hard-disabled because its reviewed executable inheritance closure includes three source-token-bearing inputs; keep every disabled plan non-executable until its projected inputs receive independently parity-proven package-safe normalization.",
     package_boundary: packageAuditSummary(packageAudit, registry),
     reference_dependencies: {
       identity_or_reference_research_required_unit_count: unresolvedUnits.length,
@@ -2405,10 +2715,11 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
     reference_recognition_metric: registry.recognition_metric,
     schema_version: REPORT_SCHEMA,
     scope_boundaries: [
-      "This acceptance reconciliation changes no runtime integration, visual geometry, collision, navigation, spray ownership, or player-facing facade behavior.",
-      "Nine legacy receivers, two exact-current Building 1 hero receivers, one exact-current Building 3 wall/roof receiver, one exact-current Isle House Variant C low receiver, and one exact-current Navy Chapel paired wall/roof receiver are represented without automatic recognition transfer from adapter metadata.",
+      "The D1 B201 promotion preserves generated bytes and the sole host collider/spray receiver while adding one host-material partition and six render-only decorative batches on exact public runs 0..9.",
+      "Nine legacy receivers, two exact-current Building 1 hero receivers, one exact-current Building 3 wall/roof receiver, one exact-current Isle House Variant C low receiver, one exact-current Navy Chapel paired wall/roof receiver, and one exact-current D1 B201 host-partition attachment are represented without automatic recognition transfer from adapter metadata.",
       "The version-pinned loader contract authorizes parsing and resource resolution only; it does not authorize node instantiation or world-construction dispatch.",
-      "Exactly six independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.",
+      "Exactly seven independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.",
+      "D1 B201 contributes exactly one standalone physical-building claim; its six decorative batches, one wall receiver, and protected roof never create extra units or numerator entries.",
       "Navy Chapel contributes one standalone physical-building claim; its paired wall and roof behavior never creates a second receiver or numerator entry.",
       "Isle House contributes one parent physical-building claim; its high and low source receiver records never enter the numerator.",
       "The registry JSON and every emitted runtime asset dependency closure exclude discovery paths, evidence paths, reference URLs, and absolute workstation paths; contaminated current assets are represented only by hash-bound sanitized summaries.",

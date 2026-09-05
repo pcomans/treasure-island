@@ -1,0 +1,123 @@
+{
+  "schema_version": "ti.d1-b201-live-attachment/1",
+  "attachment_id": "D1-B201-W34313545-PUBLIC-WSW-LIVE",
+  "source_key": "w34313545",
+  "receiver_key": "building:w34313545:wall",
+  "source_membership": {
+    "kind": "frozen_osm_way",
+    "id": "34313545",
+    "version": 7,
+    "timestamp": "2022-03-25T17:56:41Z",
+    "source_geometry_sha256": "2bb86d7269f9fc609ab079c0e31680e734c7b4fd0adcce42e1146c9cd81af764"
+  },
+  "supplied_record_authority": {
+    "canonical_stable_json_sha256": "024b2ed0af4de1a7e8456fcd171e1abc27a212dd72d054a9d9d1d487effa98b3",
+    "object_key": "building:w34313545:wall",
+    "feature_kind": "building_wall",
+    "material_key": "building_wall",
+    "receiver_kind": "building_wall",
+    "collision_kind": "world_solid",
+    "opaque": true,
+    "flat_base_elevation_m": 3.402,
+    "top_elevation_m": 8.402,
+    "source_height_m": 5.0,
+    "exterior_foundation_segments": 40,
+    "shared_wall_segments": 0,
+    "vertex_scalar_count": 480,
+    "normal_scalar_count": 480,
+    "uv_scalar_count": 320,
+    "index_count": 240,
+    "host_triangle_count": 80
+  },
+  "eligible_public_chain": {
+    "mapping_id": "800I-PUBLIC-WSW",
+    "source_edge_indices": [0],
+    "ordered_run_indices": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
+    "ordered_run_lengths_m": [8.395309702, 10.181251102, 13.457963962, 22.843742360, 0.795472815, 1.484884507, 22.154330547, 11.867490763, 11.771724300, 12.560491431],
+    "chain_length_m": 115.512661489,
+    "chain_start_world_xz_m": [37.010, -304.375],
+    "chain_end_world_xz_m": [91.554, -202.551],
+    "measured_maximum_chord_deviation_m": 0.0009224962773498534,
+    "runtime_float_measured_maximum_chord_deviation_m": 0.00092573047241,
+    "maximum_allowed_chord_deviation_m": 0.001,
+    "runtime_meter_plan_signature": "7d5f350c8130aee2a95e567741ec8466e5a83a4b412dcb85d2d327786ec2f650",
+    "runtime_meter_plan_total_m": 115.512669205666
+  },
+  "approved_geometry": {
+    "standalone_geometry_signature": "57573bc19d6c6a45b946827e76a346c592d5238a310e923a30a41b149f963511",
+    "batch_count": 6,
+    "box_instance_count": 182,
+    "triangle_count": 2184,
+    "batch_instance_counts": {
+      "b201_warm_wall": 30,
+      "shared_dark_glass": 18,
+      "shared_pale_frame": 120,
+      "b201_green_hierarchy": 4,
+      "b201_muted_rust_post": 7,
+      "b201_service_leaf": 3
+    }
+  },
+  "production_translation": {
+    "host_surface_partition": "source edge 0 runs 0..9 only use b201_warm_wall; all other host runs retain the generic material",
+    "omitted_standalone_components": ["RunField00", "RunField01", "RunField02", "RunField03", "RunField04", "RunField05", "RunField06", "RunField07", "RunField08", "RunField09"],
+    "reason": "avoid coplanar or straddling duplicate wall geometry and preserve spray decal projection to the sole host collider",
+    "decorative_box_instance_count": 172,
+    "decorative_triangle_count": 2064,
+    "decorative_geometry_signature": "705c5345509f77cd91359f66173fff0e1e132d41ebb9acef3f51ff2c467abb3a",
+    "decorative_batch_instance_counts": {"b201_warm_wall": 20, "shared_dark_glass": 18, "shared_pale_frame": 120, "b201_green_hierarchy": 4, "b201_muted_rust_post": 7, "b201_service_leaf": 3},
+    "host_triangle_count_unchanged": 80,
+    "host_surface_count_delta": 1,
+    "grounding_translation": "all retained detail shifts 0.10m inward to preserve its standalone offset from the removed field front; each inferred post and service assembly samples the exact supplied sloped wall bottom at its chain coordinate, extends posts 0.06m and service leaves/vertical frames 0.04m below that sample, and lets each horizontal threshold frame extend another 0.11m without adding instances"
+  },
+  "material_assets": {
+    "b201_green_hierarchy": {"path": "res://game/resources/materials/world/d1_current/b201_green_hierarchy.tres", "source_sha256": "5bdd67e659a0cce14abe3605f5a7fbfd85b0374d0a38be23cda326017235fe13", "resource_name": "d1_b201_saturated_green_horizontal_hierarchy", "albedo": [0.06, 0.38, 0.19, 1.0], "metallic": 0.0, "roughness": 0.69},
+    "b201_muted_rust_post": {"path": "res://game/resources/materials/world/d1_current/b201_muted_rust_post.tres", "source_sha256": "be97cdfd7367cd73172c4429ca212db0d1fc68bed34f4db6ce307d02a5225b94", "resource_name": "d1_b201_muted_rust_brown_post", "albedo": [0.31, 0.145, 0.085, 1.0], "metallic": 0.04, "roughness": 0.75},
+    "b201_service_leaf": {"path": "res://game/resources/materials/world/d1_current/b201_service_leaf.tres", "source_sha256": "de9895a808e4d64afc2c727e77ef92b590c9c718266ba118e64c489e84690cfd", "resource_name": "d1_b201_nonsemantic_service_leaf", "albedo": [0.19, 0.205, 0.19, 1.0], "metallic": 0.04, "roughness": 0.72},
+    "b201_warm_wall": {"path": "res://game/resources/materials/world/d1_current/b201_warm_wall.tres", "source_sha256": "6f5f6835790ab338454e72be58c2956deb6e470086797e209be0fab4d37ec788", "resource_name": "d1_b201_light_warm_gray_cream_wall", "albedo": [0.61, 0.595, 0.535, 1.0], "metallic": 0.0, "roughness": 0.84},
+    "shared_dark_glass": {"path": "res://game/resources/materials/world/d1_current/shared_dark_glass.tres", "source_sha256": "ad8931db8954fd5ebc8fdd809f70afb279dd74a36e53e1d9ca907c44409f10d3", "resource_name": "d1_current_shared_dark_opaque_glazing_proxy", "albedo": [0.055, 0.095, 0.105, 1.0], "metallic": 0.06, "roughness": 0.28},
+    "shared_pale_frame": {"path": "res://game/resources/materials/world/d1_current/shared_pale_frame.tres", "source_sha256": "9a2de298ff545cf80c5da0ed0aa37d9d4ebbf10fec8eb78810af7e4d012d1436", "resource_name": "d1_current_shared_pale_painted_frame", "albedo": [0.72, 0.735, 0.70, 1.0], "metallic": 0.02, "roughness": 0.67}
+  },
+  "source_receipts": {
+    "authoritative_packet_receipt_id": "D1-B201-AUTHORITY",
+    "authoritative_packet_receipt_sha256": "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677b3ba5ab318a19333",
+    "authoritative_packet_sha256": "c6fba23d80e95b23c4f3eb172a252baa47767b7a29757096bff329c693db9e5e",
+    "standalone_review_receipt_id": "D1-CURRENT-STANDALONE-PAIR-BAR-RAISER",
+    "standalone_review_receipt_sha256": "8567cd5eb9080f8f7cb563152ae83885330d366cc56ecc8513d5ebdadf491feb"
+  },
+  "source_boundary": {
+    "observation_id": "800I-SV02",
+    "capture_month": "2025-09",
+    "observed_side": "WSW public long side",
+    "reference_pixels_shipped": false,
+    "production_inference": true,
+    "counts_cadence_dimensions_surveyed": false,
+    "nonclaims": ["address or tenant identity", "exact window count, width or cadence", "exact canopy dimensions or endpoints", "service ENE, SSE, NNW, short, corner or return geometry", "roof geometry", "transparent interior"]
+  },
+  "protected_scope": {
+    "run_indices": [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39],
+    "host_mesh_preserved": true,
+    "host_protected_run_render_preserved": true,
+    "host_eligible_run_material_changed": true,
+    "host_collision_owner_preserved": true,
+    "host_spray_owner_preserved": true,
+    "roof_untouched": true,
+    "protected_roof_canonical_stable_json_sha256": "53994e07ee99632a338d8c577427efac3ca3c584148f4d9ef92a251a49e589ff",
+    "protected_roof_runtime_dictionary_sha256": "bc9c996252d3c5a142e6d09b72ed89578ff92edeba989e79b58064a10922dbc2"
+  },
+  "runtime_contract": {
+    "attachment_mode": "receiver_host_material_partition_plus_receiver_relative_render_only_details",
+    "standalone_scene_instantiation": false,
+    "mesh_instances": 6,
+    "surfaces": 6,
+    "triangles": 2064,
+    "collision_nodes": 0,
+    "navigation_nodes": 0,
+    "spray_nodes": 0,
+    "host_mesh_preserved": true,
+    "host_protected_run_render_preserved": true,
+    "host_eligible_run_material_changed": true,
+    "host_collision_and_spray_geometry_preserved": true,
+    "recognition_status": "pending_independent_live_visual_static_and_package_review",
+    "reference_recognizable": false
+  }
+}

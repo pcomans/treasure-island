@@ -25,11 +25,11 @@ const EXPECTED_HASHES := {
 	"res://discovery/facades/TREASURE_ISLAND_BUILDING_1_EXACT_RECEIVER_CALIBRATION_ART_REVIEW.md": "7c1d4fed00fda41b35b8618565622712368504465c45ab4aa443e3460ab4e85b",
 	"res://evidence/first-playable/treasure-island-building-1-run-ownership-mapping-2026-08-30/checksums.sha256": "c5f3372a5f982cd37021802b833b9c3c2eabed59007dcc45cb024f25fa9e1814",
 	"res://evidence/first-playable/treasure-island-building-1-standalone-prototypes-2026-08-30/checksums.sha256": "d1e7ab8987f64d01165555fdade3b52dfa042b1ef1a9d5eb2b32ec88cb85ac65",
-	"res://game/scripts/world/world_chunk_builder.gd": "e3d0ca4b6c9d39a444aa5b55592d63a32e7794bae3e12f1f3fac125243839d42",
+	"res://game/scripts/world/world_chunk_builder.gd": "71e391e4fa58afc83e4bcb99a9f8195e398fdf4064bb09a401fb079e9f30491c",
 	"res://game/scripts/world/facades/accepted_material_run_trials.gd": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
 	"res://discovery/FACADE_RECEIVER_INVENTORY.json": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f",
-	"res://game/resources/facades/r133351_standalone_prototypes.json": "ecde7b80ba595f61d03bfd21f57407956c3b8988e381f0457f95bfe1aa580ad9",
 }
+const PAUSED_R133351_ASSET_PATH := "res://game/resources/facades/r133351_standalone_prototypes.json"
 
 var _failed := false
 
@@ -41,6 +41,7 @@ func _initialize() -> void:
 func _run() -> void:
 	for path: String in EXPECTED_HASHES:
 		_require(FileAccess.get_sha256(path) == str(EXPECTED_HASHES[path]), "Protected detached-calibration byte drifted: %s" % path)
+	_require(not FileAccess.file_exists(PAUSED_R133351_ASSET_PATH), "Paused r133351 WIP asset leaked from its dedicated branch into current main.")
 	var registry_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(REGISTRY_PATH))
 	_require(registry_value is Dictionary, "Building 1 calibration registry did not parse.")
 	if not registry_value is Dictionary:

@@ -34,30 +34,37 @@ construction, leaving a `725 / 735 / 48,059` placeholder-free record baseline.
 Building 3's accepted congruent arched wall/roof replacement raises the active
 record-owned triangle total to `48,825` without changing mesh, surface, or body
 counts. Navy Chapel's accepted paired wall/roof replacement then supersedes its
-two generic record meshes, leaving active record-root topology at
+two generic record meshes, leaving the pre-B201 active record-root topology at
 `723 / 732 / 48,739`; its descendant hero geometry owns `6 / 6 / 540` with the
 same two structural owners. The accepted four-component Building 1/tower hero owns
 `13 / 13 / 10,711`; the accepted Isle House Variant C overlay owns
-`7 / 11 / 2,242` without decorative collision. With the unchanged runtime
+`7 / 11 / 2,242` without decorative collision. B201 preserves its 80 host
+triangles while splitting its host into one additional surface and adds
+`6 / 6 / 2,064` render-only attachment geometry, leaving exact-current
+record-root topology at `723 / 733 / 48,739`. With the unchanged other runtime
 attachments and context, all `735` playable rows load as
-`944 meshes / 957 surfaces / 64,572 triangles`, with `466` body/shape pairs.
-These exact-current source replacements are not present in the retained
-`111725` app. Movement remains `4/20 m/s` with `30/40 m/s²`
-acceleration/braking.
+`950 meshes / 964 surfaces / 66,636 triangles`, with `466` body/shape pairs.
+The Isle House and Navy Chapel derived contracts preserve their shared
+pre-B201 `735/944/957/64,572/466/466` live-parity snapshot under exact scope
+`pre_b201_integration_live_parity`; B201 alone carries the exact-current
+`current_integration_topology` scope. These exact-current replacements are
+present in the `024605` private app.
+Movement remains `4/20 m/s` with `30/40 m/s²` acceleration/braking.
 
 The sole current private handoff is
-`build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app`.
-Its exact-current source suite, static package checks, outside-project
-mounted-PCK audit, and packaged headless smoke pass. The first retained Apple M2
-native invocation timed out after world/visual/movement readiness; its
-byte-identical immediate warm-state rerun passed. The canonical `104510`
-twelve-view source-project set received independent `PASS_WITH_LIMITATION`.
-Ordinary owner recognition and mouse/keyboard play on the approved Apple M1 Pro
-remain pending. The normalized final-evidence directory received independent
-post-sanitization `PASS_WITH_LIMITATIONS`, clearing its publication blocker
-without closing those owner gates. The `190724`,
-`231815`, `224622`, and August
-13-frame records are historical.
+`build/b201-promotion-staging-2026-09-05-024605/Treasure Island First Playable.app`.
+Two complete current-source matrices (35 valid fast/core gates plus four slow
+end-to-end gates per round), two 28-contract evidence sweeps, three
+outside-project mounted-PCK audits,
+strict signing/architecture/privacy checks, packaged headless smoke, and the
+first bounded Apple M2 Metal smoke all pass. The smoke watchdog now measures
+60 seconds of monotonic wall time, so accelerated headless scheduling cannot
+consume it early. A no-argument ordinary launch also started the exact current
+app on the verifier host. The packaged-test predecessors `014223` and `002922`
+are withdrawn and retained only as non-authoritative diagnostics. B201 has a separate independently accepted five-view
+and continuous-motion evidence set; the `104510`, `111725`, `190724`, `231815`,
+`224622`, and August 13-frame records are historical. Ordinary owner
+recognition and mouse/keyboard play on the approved Apple M1 Pro remain pending.
 
 ## Play from the project
 
@@ -106,14 +113,17 @@ The visual-only pavement skin keeps one filled union for all `427` OSM road/path
 - `38` generated chunks and `729` physical records for all `735` playable rows.
   Their frozen serialized
   topology remains `729 meshes / 739 surfaces / 48,389 triangles`. The runtime
-  uses `723 / 732 / 48,739` runtime record-root topology after intercepting the four
-  Building 1/tower records and replacing the Building 3 and Navy Chapel wall/roof pairs; the
+  uses `723 / 733 / 48,739` runtime record-root topology after intercepting the four
+  Building 1/tower records, replacing the Building 3 and Navy Chapel wall/roof pairs,
+  and partitioning the retained B201 host into two surfaces; the
   accepted Building 1/tower replacement owns `13 / 13 / 10,711` and four
   congruent body/shape pairs, while the accepted Isle House Variant C overlay
   owns `7 / 11 / 2,242` and no decorative collision. The accepted Navy Chapel
   hero owns `6 / 6 / 540` and replaces, rather than duplicates, two structural
-  owners. The exact-current loaded source project instantiates `944` meshes,
-  `957` surfaces, `64,572` triangles,
+  owners. The accepted B201 attachment owns `6 / 6 / 2,064` render-only
+  geometry while its retained host remains the sole collider and spray owner.
+  The exact-current loaded source project instantiates `950` meshes,
+  `964` surfaces, `66,636` triangles,
   and `466` nonempty static body/shape pairs. The additional `28`
   records are visual-only pedestrian pavement skins. Other facade attachments
   and pavement skins do not change physical collision. YBI, both bridges, and
@@ -122,13 +132,13 @@ The visual-only pavement skin keeps one filled union for all `427` OSM road/path
 - The independent Node audit checks `206,339` road/area sample points against exact land planes and `14,904` exterior-foundation samples; maximum positive foundation gap, roof flatness error, and source-height deviation are all `0`. The runtime's first visible player clearance is `0.000 m`; walk/run stays within `-0.002..+0.001 m`, and jetpack landing/recovery clearance is `0.000 m`.
 - The standalone automated route drove the real player continuously from the ferry through Waterfront Plaza and along Trade Winds Avenue with the current movement tuning: `262.349 m` traveled across 14 terrain-aware checkpoints in about `18.1 s` wall time, with walk/run input, continuous grounding, and zero stalls, recoveries, boundary escapes, or discontinuities; see the retained [normal-route log](evidence/first-playable/final-verification-2026-09-03-105408/logs/42_normal_route_after_export_guard.log).
 - Its bounded whole-island mode traveled `3,449.107 m` in about `52.2 s` wall time (`415.817 s` simulated), completed all five landings, stayed below a `0.348 m` maximum physics-tick step, and had zero stalls, recoveries, boundary escapes, or post-start transform writes; see the retained [whole-island route log](evidence/first-playable/final-verification-2026-09-03-105408/logs/43_whole_island_route_after_export_guard.log). The retained [coherent-surface route evidence](evidence/first-playable/coherent-surface-route-2026-08-28-1458/README.md) remains historical geometry evidence from the earlier movement tuning.
-- The canonical exact-current `1440×900` 12-view Forward+/Metal set covers
+- The historical pre-B201 `1440×900` 12-view Forward+/Metal set covers
   ferry, north, center, southwest, east perimeter, Building 1,
   SF/YBI/bridge context, an eligible-wall tag, south vegetation, and a
   time-connected public-input jetpack ascent/descent pair. Independent review
-  returned `PASS_WITH_LIMITATION`; it remains source-project evidence and
-  does not establish package pixels or owner recognition. Exact hashes and the
-  proof boundary are in
+  returned `PASS_WITH_LIMITATION`; it remains byte-valid source-project evidence
+  for its own prior topology and does not establish current package pixels or
+  owner recognition. Exact hashes and the proof boundary are in
   [the 104510 visual evidence](evidence/first-playable/exact-current-visual-repair-2026-09-03-104510/README.md).
   The August 13-frame textured-world set is historical for the later exact
   source.
@@ -156,26 +166,34 @@ The exact headless commands and their assertions are documented in [game/tests/R
 ## Export
 
 The sole current private handoff is
-`build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app`.
-It was exported from Git `HEAD`/origin
-`08219c9e11c8bd6ce681e48860bb906db07e82f7`, tree
-`a02b1c5b645c02d60a18d01e89f6e2f71bb7e04f`, plus the exact
-working-tree snapshot recorded in the final-verification evidence. It contains
+`build/b201-promotion-staging-2026-09-05-024605/Treasure Island First Playable.app`.
+It was exported from the B201 promotion working tree after the deterministic
+compiler and full source matrix passed. It contains
 generated content SHA-256
 `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164`,
 manifest SHA-256
 `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`,
-the generated `729/739/48,389` and loaded `1,278/1,288/55,067`
-topologies, `4/20/30/40` movement defaults, accepted facade attachments,
-and project-level `Dummy` audio selection. Its executable SHA-256 is
-`49c7518acfb5443b0cee2f22d65a45405ab62c79a2112d7e770ca1c030eca594`
+the generated `729/739/48,389`, runtime record-root `723/733/48,739`,
+and loaded `950/964/66,636` topologies, current `7/213` recognition,
+`4/20/30/40` movement defaults, all accepted facade attachments, and
+project-level `Dummy` audio selection. Its executable SHA-256 is
+`23f8f5cfda04749bb6e2b00659d5f9e46086c55c8dde0cc00d1b2f8b5235146c`
 (`170,963,648` bytes); PCK SHA-256 is
-`4d9e1d47f8777dbe2d7ca57f9a93d840a708dfcc35c18e99e54a77c36eeb266e`
-(`55,816,660` bytes); normalized seven-file inventory SHA-256 is
-`7816c944b470a7542dea1030d9b09cd28c2ec25880fe5131f69bb60460089960`
-over `226,853,148` logical bytes. Exact source pins, artifact inventory,
-verification results, and limitations are in
-[the final-verification evidence](evidence/first-playable/final-verification-2026-09-03-105408/README.md).
+`3425018ee32f645c3bf157deb9f9a548efe3c9e0bca1e40fd588318aa31f54d6`
+(`65,708,948` bytes); canonical ASCII path-sorted seven-file inventory
+SHA-256 is
+`ef300ab3f97d077f3db61fad53094cbc3a540175e6475e549d5cd0a3ab9e8f98`
+over `236,745,436` logical bytes. The persisted inventory artifacts are
+`bundle-inventory.records` (the canonical identity above) and
+`bundle-inventory.tsv` (SHA-256
+`92ecdade90c53593dd68f9d19c28e99c56909d9ee794f4ee77164543115d7d69`).
+The B201 source, capture, review, closure,
+and checksum boundary is in
+[the B201 evidence record](evidence/first-playable/d1-b201-live-attachment-2026-09-04/README.md).
+
+The `111725` final-verification app is historical pre-B201/pre-current-hero
+package evidence. Its exact hashes and limits remain valid only for its own
+bytes in [the historical final-verification record](evidence/first-playable/final-verification-2026-09-03-105408/README.md).
 
 The prior `190724` startup-repair app is historical. Its static and plain
 native-launch observations remain valid for its own bytes, while its PCK is now
@@ -203,8 +221,8 @@ APP_BINARY="build/final-verification-staging-YYYY-MM-DD-HHMMSS/Treasure Island F
 ```
 
 The packaged smoke starts the exported PCK's normal main scene and fails after
-60 seconds of simulation time if its checks do not finish. It exits nonzero if
-the exact ferry spawn/yaw, approved hash, source-current `944/957/64,572`
+60 seconds of monotonic wall time if its checks do not finish. It exits nonzero if
+the exact ferry spawn/yaw, approved hash, source-current `950/964/66,636`
 topology, grounded player-enable gate, exact `4/20 m/s` speed and
 `30/40 m/s²` response defaults, ambient/camera defaults, live eleven-key
 Poly Haven texture identities/effective repeats/filtering/normals, Space-bound
@@ -214,21 +232,31 @@ now represents the current semantic-material contract rather than the
 superseded flat-color palette. It prints separate `MAC_EXPORT_VISUAL`,
 `MAC_EXPORT_MOVEMENT`, and `MAC_EXPORT_JETPACK` lines before passing.
 Serialize resource-heavy Godot checks and use explicit `--max-fps 60` for
-non-headless Metal/Forward+ smoke. Exact candidate `111725` passed the
-headless package smoke. Its first retained capped Apple M2 Metal invocation
-reached world/visual/movement readiness but timed out before jetpack after 42
-wall seconds; the byte-identical immediate warm-state rerun reached jetpack and
-passed in 10 seconds. Do not recast that as a cold-start pass.
+non-headless Metal/Forward+ smoke. Exact candidate `024605` passed its first
+packaged headless and first Apple M2 Metal invocations through world, visual,
+movement, grounding, jetpack ascent, and capped descent. The earlier `014223`
+package predates the final evidence-contract bridge repairs and is withdrawn;
+the `002922` first-Metal timeout likewise remains a withdrawn pre-scope
+diagnostic. Neither is evidence for the current candidate.
 
-Candidate `111725` passes strict deep and per-architecture ad-hoc
+Candidate `024605` passes strict deep and per-architecture ad-hoc
 hardened-runtime signature verification and contains universal
 `x86_64 arm64` slices. Only arm64 was exercised, on an Apple M2 verifier
 host rather than the approved Apple M1 Pro target. The x86_64 slice is
 statically present and strictly signed but unexecuted. The app is neither
 Developer ID signed nor notarized, has no TeamIdentifier or entitlements,
 requests no sensitive permissions in `Info.plist`, and is only for approved
-private local use. A historical plain-window launch belongs to the `190724`
-record and is not inherited as owner play of these bytes.
+private local use. A no-argument ordinary launch started these exact bytes on
+the Apple M2 verifier host; that process observation is neither pixel review
+nor owner play on the approved Apple M1 Pro.
+
+Every active adapter's `review_status` is explicitly scoped only to original
+runtime-asset detail provenance. Reference-recognition acceptance does not
+derive from that field: it derives from the mapped physical unit's exact
+`claim_status.reference_recognizable` value and an independent acceptance
+receipt. The compiler, runtime loader, Node tests, Godot tests, and mounted B1
+and B201 consumers fail closed on missing or contradictory scope, authority,
+status, receipt, topology-scope, or exact asset-closure data.
 
 An export or packaged smoke command succeeding is not owner acceptance. Check the precise exported-app proof in [the first-playable evidence index](evidence/first-playable/README.md), then follow [PLAYTEST.md](PLAYTEST.md).
 
@@ -239,8 +267,9 @@ An export or packaged smoke command succeeding is not owner acceptance. Check th
 - [Frozen USGS terrain provenance and hashes](data/terrain/README.md)
 - [Generated manifest](generated/world/manifest.json) and [coverage summary](generated/world/coverage-summary.json)
 - [First-playable evidence](evidence/first-playable/README.md)
-- [Current exact-source 12-view evidence](evidence/first-playable/exact-current-visual-repair-2026-09-03-104510/README.md)
-- [Current final-verification Mac package evidence](evidence/first-playable/final-verification-2026-09-03-105408/README.md)
+- [Current accepted B201 live evidence](evidence/first-playable/d1-b201-live-attachment-2026-09-04/README.md)
+- [Historical pre-B201 exact-source 12-view evidence](evidence/first-playable/exact-current-visual-repair-2026-09-03-104510/README.md)
+- [Historical pre-B201 final-verification Mac package evidence](evidence/first-playable/final-verification-2026-09-03-105408/README.md)
 - [Jetpack source-runtime evidence](evidence/first-playable/jetpack/README.md)
 - [Historical coherent-surface route evidence](evidence/first-playable/coherent-surface-route-2026-08-28-1458/README.md)
 - [Historical August textured-world rendered evidence](evidence/first-playable/textured-world-final-rendered-2026-08-28-223242/README.md)

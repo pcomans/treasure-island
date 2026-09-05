@@ -71,7 +71,7 @@ func _run() -> void:
 	detached_node.free()
 	await _whole_island_matches()
 	if not _failed:
-		print("PASS: exactly four independently KEEP_WITH_DOCUMENTED_LIMITATION w34313515 BAY module-atlas exemplars remain unchanged at WSW runs 0/6 and NNW runs 44/47; the distinct independently accepted w291196370 and w34313520 scopes remain isolated, and whole-island topology is 735/944/957/64,572/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
+		print("PASS: exactly four independently KEEP_WITH_DOCUMENTED_LIMITATION w34313515 BAY module-atlas exemplars remain unchanged at WSW runs 0/6 and NNW runs 44/47; the distinct independently accepted w291196370 and w34313520 scopes remain isolated, and B201-inclusive whole-island topology is 735/950/964/66,636/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
 	_finish()
 
 
@@ -254,7 +254,7 @@ func _whole_island_matches() -> void:
 			receiver = candidate as Node3D
 	_require(evidence.chunks_loaded == 38 \
 		and evidence.playable_rows == 735 and evidence.context_rows == 4 \
-		and evidence.mesh_instances == 944 and evidence.surfaces == 957 and evidence.triangles == 64572 \
+		and evidence.mesh_instances == 950 and evidence.surfaces == 964 and evidence.triangles == 66636 \
 		and evidence.static_bodies == 466 and evidence.shapes == 466 \
 		and live_root_count == 1 and receiver != null \
 		and _count_type(receiver, MeshInstance3D) == 85 \

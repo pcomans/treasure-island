@@ -30,7 +30,34 @@ Resume revision: **the destination `origin/main` commit containing this handoff*
 > evidence are on pushed `main`, while the exact ignored candidate app remains
 > local at the path above.
 
-The current topology distinction is: `729` physical/generated records render
+> **Post-B201 current status — 2026-09-05:** the sole current private handoff
+> is
+> `build/b201-promotion-staging-2026-09-05-024605/Treasure Island First Playable.app`.
+> Its executable SHA-256 is
+> `23f8f5cfda04749bb6e2b00659d5f9e46086c55c8dde0cc00d1b2f8b5235146c`
+> (`170,963,648` bytes); PCK SHA-256 is
+> `3425018ee32f645c3bf157deb9f9a548efe3c9e0bca1e40fd588318aa31f54d6`
+> (`65,708,948` bytes); canonical seven-file inventory SHA-256 is
+> `ef300ab3f97d077f3db61fad53094cbc3a540175e6475e549d5cd0a3ab9e8f98`
+> over `236,745,436` logical bytes. Two complete current-source matrices
+> (35 valid fast/core plus four slow end-to-end gates per round) and two
+> 28-contract evidence sweeps,
+> three outside-checkout mounted audits, packaged headless smoke, first bounded
+> Metal smoke, and an ordinary no-argument launch pass on the Apple M2 verifier
+> host. Current loaded topology is
+> `735/950/964/66,636/466/466` and recognition is exact `7/213` under
+> compiler `1.6`, catalog/registry v7, and contracts/loader v6. Active-adapter
+> review status is provenance-only; reference recognition derives from the
+> mapped physical-unit claim and independent receipt. Isle House and Navy
+> Chapel retain shared pre-B201 derived parity under
+> `pre_b201_integration_live_parity`; B201 uses
+> `current_integration_topology`. Candidates `014223` and `002922` are
+> withdrawn packaged-test/pre-scope diagnostic history. Owner recognition and ordinary mouse/keyboard play on
+> the approved Apple M1 Pro remain pending. The dated 2026-09-03 app/topology
+> paragraphs and resume commands below are historical unless this addendum
+> explicitly restates them.
+
+The historical 2026-09-03 topology distinction was: `729` physical/generated records render
 `729 meshes / 739 surfaces / 48,389 triangles`; accepted visual attachments
 bring the loaded total to `1,278 / 1,288 / 55,067`, with `466`
 body/shape pairs. Verification ran on an Apple M2 arm64 host, not the approved

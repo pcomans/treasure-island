@@ -8,6 +8,7 @@ const CONFIG_PATH := "res://game/resources/facades/isle_house_composite_repair_v
 const BUILDER_PATH := "res://game/scripts/world/world_chunk_builder.gd"
 const CHUNK_PATH := "res://generated/world/chunks/x_-1__z_2.json"
 const MANIFEST_PATH := "res://generated/world/manifest.json"
+const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const REVIEW_PATH := "res://evidence/first-playable/isle-house-composite-repair-variant-c-standalone-v1-2026-09-04/INDEPENDENT_BAR_RAISER_REVIEW.md"
 const SOURCE_PACKET := "res://discovery/facades/p1_reference_packets/w1249412094_isle_house.md"
 const FRESH_EVIDENCE := "res://evidence/first-playable/isle-house-composite-repair-variant-c-live-replacement-2026-09-04/capture-manifest.json"
@@ -21,7 +22,7 @@ const SOURCE_HASHES := {
 	FACTORY_PATH: "4336e821e240b973f8d97e5cb46e17332b19dea03869abb1fa81b96a7e380582",
 	REVIEWED_FACTORY_PATH: "b24fd72cd12aa0c6c45a123f005fc834ea657c343e8332a872eae07fa017ace7",
 	CONFIG_PATH: "bafdef392ee638e860ba15f140c10de61e266ae63005b12e0e310e52c176897a",
-	BUILDER_PATH: "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c",
+	BUILDER_PATH: "71e391e4fa58afc83e4bcb99a9f8195e398fdf4064bb09a401fb079e9f30491c",
 	CHUNK_PATH: "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce",
 	MANIFEST_PATH: "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
 }
@@ -37,6 +38,7 @@ const REQUIRED_PACKAGE_RESOURCES := [
 	"res://game/resources/materials/world/isle_house/isle_house_podium_mid_warm_v1.tres",
 	"res://game/resources/materials/world/isle_house/isle_house_return_quiet_v1.tres",
 	CHUNK_PATH, MANIFEST_PATH,
+	REGISTRY_PATH,
 ]
 
 var _failed := false
@@ -56,6 +58,7 @@ func _run() -> void:
 		_require(not ResourceLoader.exists(FRESH_EVIDENCE) and not FileAccess.file_exists(FRESH_EVIDENCE), "Mounted PCK contains fresh live evidence.")
 	else:
 		_run_source_checks()
+	_require(_registry_topology_scope_matches(), "Variant C package authority does not label its preserved pre-B201 integration topology separately from current integration.")
 	var chunk_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(CHUNK_PATH))
 	_require(chunk_value is Dictionary, "Packaged exact chunk did not parse.")
 	if not (chunk_value is Dictionary):
@@ -100,6 +103,21 @@ func _run_source_checks() -> void:
 		_require(token in preset, "Export preset lost private boundary %s." % token)
 
 
+func _registry_topology_scope_matches() -> bool:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(REGISTRY_PATH))
+	if not (parsed is Dictionary):
+		return false
+	var adapters := ((parsed as Dictionary).get("active_runtime_adapters", []) as Array).filter(func(value: Variant) -> bool: return str((value as Dictionary).get("receiver_key", "")) == LOW_WALL_KEY)
+	if adapters.size() != 1:
+		return false
+	var behavior := ((adapters[0] as Dictionary).get("active_runtime_contract", {}) as Dictionary).get("behavior_contract", {}) as Dictionary
+	var geometry := behavior.get("geometry_contract", {}) as Dictionary
+	return str(geometry.get("world_topology_scope", "")) == "pre_b201_integration_live_parity" \
+		and int(geometry.get("world_records", -1)) == 735 and int(geometry.get("world_mesh_instances", -1)) == 944 \
+		and int(geometry.get("world_surfaces", -1)) == 957 and int(geometry.get("world_triangles", -1)) == 64572 \
+		and int(geometry.get("world_static_bodies", -1)) == 466 and int(geometry.get("world_shapes", -1)) == 466
+
+
 func _mounted_builder_matches(low_record: Dictionary) -> bool:
 	var builder := WorldChunkBuilder.new()
 	var result := builder._build_record(low_record, false)
@@ -134,7 +152,7 @@ func _world_matches() -> Dictionary:
 	var lows := _nodes_for_key(world, LOW_WALL_KEY)
 	var highs := _nodes_for_key(world, HIGH_WALL_KEY)
 	var e := world.get_runtime_evidence()
-	var topology_ok := e.playable_rows == 735 and e.mesh_instances == 944 and e.surfaces == 957 and e.triangles == 64572 and e.static_bodies == 466 and e.shapes == 466
+	var topology_ok := e.playable_rows == 735 and e.mesh_instances == 950 and e.surfaces == 964 and e.triangles == 66636 and e.static_bodies == 466 and e.shapes == 466
 	var ok := failures.is_empty() and reports.size() == 1 and lows.size() == 1 and highs.size() == 1 and topology_ok
 	if ok:
 		ok = _count_named(lows[0], "IsleHouseCompositeRepairVariantCLiveAttachment") == 1 \
@@ -201,5 +219,5 @@ func _finish(mounted: bool) -> void:
 		if mounted:
 			print("PASS: mounted Variant C live replacement package resolves exact 7/11/2242 output and 8/12/2268 receiver without discovery/evidence payloads, fallback stacking, or decorative ownership")
 		else:
-			print("PASS: source Variant C live replacement package resolves exact 7/11/2242 output and 735/944/957/64572/466/466 world without discovery/evidence payloads, fallback stacking, or decorative ownership")
+			print("PASS: source Variant C live replacement package resolves exact 7/11/2242 output and current 735/950/964/66636/466/466 world without discovery/evidence payloads, fallback stacking, or decorative ownership")
 	quit(1 if _failed else 0)

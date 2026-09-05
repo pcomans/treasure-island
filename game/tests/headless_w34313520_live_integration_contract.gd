@@ -106,7 +106,7 @@ func _run() -> void:
 	detached_root.free()
 	await _whole_island_matches()
 	if not _failed:
-		print("PASS: W34313520-MAT-PALE remains independently accepted live only on exact SSE runs 6..10 with exactly one complete backing-free CAL-SSE-BAY-01 at run 7 midpoint; its scope stays distinct from the independently accepted bounded w34313525 scope, and whole-island topology is 735/944/957/64,572/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
+		print("PASS: W34313520-MAT-PALE remains independently accepted live only on exact SSE runs 6..10 with exactly one complete backing-free CAL-SSE-BAY-01 at run 7 midpoint; its scope stays distinct from the independently accepted bounded w34313525 scope, and B201-inclusive whole-island topology is 735/950/964/66,636/466/466 (playable rows/meshes/surfaces/triangles/bodies/shapes)")
 	_finish()
 
 
@@ -358,7 +358,7 @@ func _whole_island_matches() -> void:
 			receiver = candidate as Node3D
 	_require(evidence.chunks_loaded == 38 \
 		and evidence.playable_rows == 735 and evidence.context_rows == 4 \
-		and evidence.mesh_instances == 944 and evidence.surfaces == 957 and evidence.triangles == 64572 \
+		and evidence.mesh_instances == 950 and evidence.surfaces == 964 and evidence.triangles == 66636 \
 		and evidence.static_bodies == 466 and evidence.shapes == 466 \
 		and live_root_count == 1 and receiver != null \
 		and receiver.get_child_count() == 3 \

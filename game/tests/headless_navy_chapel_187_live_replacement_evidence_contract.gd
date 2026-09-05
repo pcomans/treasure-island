@@ -10,6 +10,7 @@ const LEDGER := ROOT + "/CHECKSUMS.sha256"
 const HARNESS := "res://game/tests/navy_chapel_187_live_replacement_capture.gd"
 const ADAPTER := "res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd"
 const BUILDER := "res://game/scripts/world/world_chunk_builder.gd"
+const REGISTRY := "res://game/resources/facades/facade-runtime-registry.json"
 const FACTORY := "res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd"
 const CONFIG := "res://game/resources/facades/navy_chapel_187_standalone_hero_prototype.json"
 const FOCUSED_CONTRACT := "res://game/tests/headless_navy_chapel_187_live_replacement_contract.gd"
@@ -25,6 +26,16 @@ const SOURCE_KEY := "w291189336"
 const GEOMETRY_SIGNATURE := "076e081df86e884f04cf7cb680304c35c64e6f76238de7060528c59097ae5c46"
 const OWNERSHIP_SIGNATURE := "4766c5d562933eb632f1ef3bdcec828fc40be81c996db919c53405f776fa04a7"
 const REVIEW_SHA := "4232ad42b3600b1d7f945c5d51325bb9698c366e07eb1ddea3fd90f3f49235c6"
+const LEDGER_SHA := "256fa689d8042644759d4a90ec68f657475687bf0561428422f2cb185b4724f9"
+const CAPTURE_EVIDENCE_CONTRACT_SHA := "1cf02d4f4a9b03522d696eb52c560b7a67753e3ba2708fa578a1952278d7eb1d"
+const CAPTURE_ONLY_PATHS := [BUILDER, FOCUSED_CONTRACT, PACKAGE_CONTRACT, STANDALONE_CONTRACT]
+const CURRENT_HASHES := {
+	BUILDER: "71e391e4fa58afc83e4bcb99a9f8195e398fdf4064bb09a401fb079e9f30491c",
+	REGISTRY: "9c46c1a8c809aa9ded82008d35e9c1b257070e9c61f6d6e41f5650ca7b1c3f27",
+	FOCUSED_CONTRACT: "f758d77ee84eea80b7523da686787f504843b57ce263c55e1d5d760e16e49e68",
+	PACKAGE_CONTRACT: "c11fd425473bd2f9d9b46c8b228e9c6b22d3dfcddff9c1d21af66fb3df734d45",
+	STANDALONE_CONTRACT: "6ff2115ca0c80c07487d811d7d9982790c03ccfe0ef582a76e634603cfb2d0e5",
+}
 const WALL_SHA := "69769fef402b480f1626fdce47e6d4ad49ecb710dab2b2e7373e5efa5acf0080"
 const ROOF_SHA := "54bcd378997d0778bdaee432dc24ecdbb142c5dc5371166cf2d690ebb245b832"
 const WORLD := {"rows": 735, "meshes": 944, "surfaces": 957, "triangles": 64572, "bodies": 466, "shapes": 466}
@@ -68,16 +79,18 @@ func _initialize() -> void:
 
 func _run() -> void:
 	for path: String in EXPECTED_HASHES:
-		_require(FileAccess.get_sha256(path) == str(EXPECTED_HASHES[path]), "Evidence/source hash drifted: %s." % path)
+		if path not in CAPTURE_ONLY_PATHS:
+			_require(FileAccess.get_sha256(path) == str(EXPECTED_HASHES[path]), "Evidence/immutable source hash drifted: %s." % path)
 	var stills := _json(STILL_MANIFEST)
 	var motion := _json(MOTION_MANIFEST)
 	var landing := _json(LANDING_RECEIPT)
+	_require(_current_runtime_bridge_matches(), "Current Navy Chapel builder, tests, registry authority, or acceptance bridge drifted.")
 	_require(_bindings_match(stills.get("bindings", {}) as Dictionary), "Actual-live binding contract failed.")
 	_require(_stills_match(stills, landing), "Actual-live still or landing evidence contract failed.")
 	_require(_motion_matches(motion), "Actual-live continuous-motion evidence contract failed.")
 	_require(_ledger_matches(), "Evidence checksum ledger is incomplete, duplicated, unsorted, or stale.")
 	if not _failed:
-		print("PASS: three grounded actual-live Chapel public frames, one real roof landing, and one 300-sample stock-player motion interval remain exact and preview-free; immutable capture-time pending fields are reconciled by the separately sealed independent live PASS receipt")
+		print("PASS: three grounded actual-live Chapel public frames, one real roof landing, and one 300-sample stock-player motion interval remain exact at capture topology 735/944/957/64572/466/466; the sealed ledger retains capture dependencies while a separate current bridge binds builder, focused/package/standalone tests, and accepted v7 physical-unit authority")
 	quit(1 if _failed else 0)
 
 
@@ -213,7 +226,70 @@ func _world_matches(actual: Dictionary) -> bool:
 	return true
 
 
+func _current_runtime_bridge_matches() -> bool:
+	for path_value: Variant in CURRENT_HASHES:
+		var path := str(path_value)
+		if FileAccess.get_sha256(path) != str(CURRENT_HASHES[path_value]):
+			return false
+	var registry := _json(REGISTRY)
+	var metric := registry.get("recognition_metric", {}) as Dictionary
+	var compatibility := registry.get("compatibility_contract", {}) as Dictionary
+	if str(registry.get("schema_version", "")) != "ti.facade-runtime-registry/7" \
+	or str(compatibility.get("catalog_schema_version", "")) != "ti.facade-recognition-catalog/7" \
+	or str(compatibility.get("compiler_version", "")) != "1.6.0" \
+	or str(compatibility.get("loader_api_version", "")) != "ti.facade-runtime-registry-loader/6" \
+	or int(metric.get("numerator", -1)) != 7 or int(metric.get("denominator", -1)) != 213 or str(metric.get("display", "")) != "7/213":
+		return false
+	var adapter := _adapter_for(registry.get("active_runtime_adapters", []) as Array, WALL_KEY)
+	var unit := _unit_for(registry.get("units", []) as Array, "physical-building:w291189336")
+	var claim := unit.get("claim_status", {}) as Dictionary
+	var scope := adapter.get("active_receiver_scope", {}) as Dictionary
+	var active_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+	var behavior := active_contract.get("behavior_contract", {}) as Dictionary
+	var geometry := behavior.get("geometry_contract", {}) as Dictionary
+	return str(adapter.get("source_key", "")) == SOURCE_KEY \
+		and str(adapter.get("review_status", "")) == "independent_exact_current_live_pass" \
+		and str(adapter.get("review_status_scope", "")) == "runtime_asset_original_detail_provenance_only_not_reference_recognition" \
+		and str(adapter.get("recognition_acceptance_authority", "")) == "physical_unit_claim_and_independent_acceptance_record" \
+		and str(claim.get("reference_recognizable", "")) == "accepted" \
+		and str(adapter.get("recognition_acceptance_status", "")) == str(claim.get("reference_recognizable", "")) \
+		and str(scope.get("coverage", "")) == "whole_direct_wall_receiver" and int(scope.get("run_count", -1)) == 34 \
+		and str(active_contract.get("adapter_sha256", "")) == str(EXPECTED_HASHES[ADAPTER]) \
+		and str(active_contract.get("dispatch_sha256", "")) == str(CURRENT_HASHES[BUILDER]) \
+		and str(geometry.get("world_topology_scope", "")) == "pre_b201_integration_live_parity" \
+		and _has_acceptance_receipt(unit, "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9", str(EXPECTED_HASHES[STILL_MANIFEST]))
+
+
+func _adapter_for(adapters: Array, receiver_key: String) -> Dictionary:
+	for value: Variant in adapters:
+		var adapter := value as Dictionary
+		if str(adapter.get("receiver_key", "")) == receiver_key:
+			return adapter
+	return {}
+
+
+func _unit_for(units: Array, unit_id: String) -> Dictionary:
+	for value: Variant in units:
+		var unit := value as Dictionary
+		if str(unit.get("unit_id", "")) == unit_id:
+			return unit
+	return {}
+
+
+func _has_acceptance_receipt(unit: Dictionary, receipt_sha256: String, manifest_sha256: String) -> bool:
+	for value: Variant in unit.get("acceptance_records", []) as Array:
+		var record := value as Dictionary
+		if str(record.get("review_kind", "")) == "independent_reference_recognition" \
+		and str(record.get("status", "")) == "accept" \
+		and str(record.get("review_receipt_sha256", "")) == receipt_sha256 \
+		and str(record.get("evidence_manifest_sha256", "")) == manifest_sha256:
+			return true
+	return false
+
+
 func _ledger_matches() -> bool:
+	if FileAccess.get_sha256(LEDGER) != LEDGER_SHA:
+		return false
 	var lines := FileAccess.get_file_as_string(LEDGER).strip_edges().split("\n", false)
 	if lines.size() != EXPECTED_HASHES.size() + 1:
 		return false
@@ -225,8 +301,8 @@ func _ledger_matches() -> bool:
 		var hash_value := line.substr(0, 64)
 		var relative := line.substr(66)
 		var path := "res://" + relative
-		if seen.has(path) or (not previous.is_empty() and relative < previous) or not FileAccess.file_exists(path) \
-		or FileAccess.get_sha256(path) != hash_value:
+		var expected_hash := CAPTURE_EVIDENCE_CONTRACT_SHA if path == "res://game/tests/headless_navy_chapel_187_live_replacement_evidence_contract.gd" else str(EXPECTED_HASHES.get(path, ""))
+		if seen.has(path) or (not previous.is_empty() and relative < previous) or expected_hash.is_empty() or hash_value != expected_hash:
 			return false
 		seen[path] = true
 		previous = relative

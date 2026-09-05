@@ -7,6 +7,12 @@ const EXPECTED_MANIFEST_SHA256 := "f48dc2db29228caaad418d01e15288ce7ff1e673bff88
 const EXPECTED_GENERATOR_SHA256 := "ae2dc67a4437f12d3020e3ac334d3ce10738ce3a87b213bcf90b93160bb4170c"
 const EXPECTED_CONTENT_SHA256 := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
 const EXPECTED_GENERATED_MANIFEST_SHA256 := "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+const CURRENT_REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
+const CURRENT_REGISTRY_SHA256 := "9c46c1a8c809aa9ded82008d35e9c1b257070e9c61f6d6e41f5650ca7b1c3f27"
+const NAVY_CURRENT_MANIFEST_PATH := "res://evidence/first-playable/navy-chapel-187-live-replacement-2026-09-04/capture-manifest.json"
+const NAVY_CURRENT_MANIFEST_SHA256 := "54d434c9283a0e2d86aa836e6a21672a8756e5a170cb5724d66066e799223930"
+const NAVY_CURRENT_REVIEW_PATH := "res://evidence/first-playable/navy-chapel-187-live-replacement-2026-09-04/INDEPENDENT_LIVE_BAR_RAISER_REVIEW.md"
+const NAVY_CURRENT_REVIEW_SHA256 := "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9"
 const CAPTURE_SIZE := Vector2i(1440, 900)
 const DORMITORY_CONFLICT := "The reference shows five occupied tiers, while the exact current generated receiver remains fallback 6 m. This capture must expose the whole generated entity and may not imply that contradiction is resolved."
 
@@ -111,12 +117,13 @@ func _run() -> void:
 	_require(FileAccess.get_sha256(MANIFEST_PATH) == EXPECTED_MANIFEST_SHA256, "P3 evidence manifest bytes drifted.")
 	_require(FileAccess.get_sha256(GENERATOR_PATH) == EXPECTED_GENERATOR_SHA256, "P3 native capture harness bytes drifted after sealing.")
 	var manifest := _json(MANIFEST_PATH)
-	_require(_header_matches(manifest), "P3 evidence renderer, camera, pending-only claim state, or protected scope drifted.")
-	_require(_world_matches(manifest.get("generated_world", {}) as Dictionary), "P3 generated-world provenance drifted.")
-	_require(_targets_match(manifest.get("targets", {}) as Dictionary), "P3 exact target binding, run partition, source packet, material, or confusion set drifted.")
+	_require(_header_matches(manifest), "P3 capture-time renderer, camera, pending-only claim state, or protected scope drifted.")
+	_require(_world_matches(manifest.get("generated_world", {}) as Dictionary), "P3 capture-time generated-world provenance drifted.")
+	_require(_targets_match(manifest.get("targets", {}) as Dictionary), "P3 capture-time target binding, run partition, source packet, material, or confusion set drifted.")
 	_require(_captures_match(manifest.get("captures", []) as Array), "P3 image, stock-player grounding, framing, HUD, or exact first-hit LOS evidence drifted.")
+	_require(_current_recognition_bridge_matches(), "Current Navy supersession or Dormitory non-acceptance registry bridge drifted.")
 	if not _failed:
-		print("PASS: four sealed native Metal P3 views remain exact-current and technically valid; Chapel and Dormitory whole-object recognition/believability remain pending, and Dormitory five-tier versus 6 m massing remains explicitly unresolved")
+		print("PASS: four sealed native Metal P3 material-only views remain technically valid at capture topology 735/938/948/63720/466/466 with capture-time pending verdicts; the separate current v7 bridge proves Navy Chapel is accepted through its superseding live replacement while Dormitory remains not_evaluated with its exact legacy material-only adapter and unresolved five-tier versus 6 m massing conflict")
 	quit(1 if _failed else 0)
 
 
@@ -298,6 +305,88 @@ func _captures_match(captures: Array) -> bool:
 		if int(counts.whole_object_ordinary_player_view) != 1 or int(counts.oblique_ordinary_player_view) != 1:
 			return false
 	return true
+
+
+func _current_recognition_bridge_matches() -> bool:
+	if FileAccess.get_sha256(CURRENT_REGISTRY_PATH) != CURRENT_REGISTRY_SHA256 \
+		or FileAccess.get_sha256(NAVY_CURRENT_MANIFEST_PATH) != NAVY_CURRENT_MANIFEST_SHA256 \
+		or FileAccess.get_sha256(NAVY_CURRENT_REVIEW_PATH) != NAVY_CURRENT_REVIEW_SHA256:
+		return false
+	var registry := _json(CURRENT_REGISTRY_PATH)
+	var metric := registry.get("recognition_metric", {}) as Dictionary
+	if str(registry.get("schema_version", "")) != "ti.facade-runtime-registry/7" \
+		or int(metric.get("numerator", -1)) != 7 \
+		or int(metric.get("denominator", -1)) != 213 \
+		or str(metric.get("display", "")) != "7/213":
+		return false
+	var navy_unit := _unit_for(registry.get("units", []) as Array, "physical-building:w291189336")
+	var navy_adapter := _adapter_for(registry.get("active_runtime_adapters", []) as Array, "active-adapter:navy-chapel-187:building:w291189336:wall")
+	var navy_claim := navy_unit.get("claim_status", {}) as Dictionary
+	var navy_scope := navy_adapter.get("active_receiver_scope", {}) as Dictionary
+	if str(navy_claim.get("reference_recognizable", "")) != "accepted" \
+		or str(navy_adapter.get("receiver_key", "")) != "building:w291189336:wall" \
+		or str(navy_adapter.get("runtime_content_mode", "")) != "active_navy_chapel_187_paired_replacement" \
+		or str(navy_adapter.get("review_status", "")) != "independent_exact_current_live_pass" \
+		or str(navy_adapter.get("review_status_scope", "")) != "runtime_asset_original_detail_provenance_only_not_reference_recognition" \
+		or str(navy_adapter.get("recognition_acceptance_authority", "")) != "physical_unit_claim_and_independent_acceptance_record" \
+		or str(navy_adapter.get("recognition_acceptance_status", "")) != "accepted" \
+		or str(navy_scope.get("coverage", "")) != "whole_direct_wall_receiver" \
+		or int(navy_scope.get("run_count", -1)) != 34 \
+		or (navy_adapter.get("runtime_assets", []) as Array).size() != 9 \
+		or not _has_acceptance_receipt(navy_unit, "navy-chapel-187-live-replacement-2026-09-04", NAVY_CURRENT_REVIEW_SHA256, NAVY_CURRENT_MANIFEST_SHA256):
+		return false
+	var dorm_unit := _unit_for(registry.get("units", []) as Array, "physical-building:w291189926")
+	var dorm_claim := dorm_unit.get("claim_status", {}) as Dictionary
+	var dorm_legacy := _adapter_for(registry.get("legacy_adapters", []) as Array, "legacy-adapter:building:w291189926:wall")
+	var scopes := dorm_legacy.get("accepted_run_scopes", []) as Array
+	var assets := dorm_legacy.get("runtime_assets", []) as Array
+	var receivers := dorm_unit.get("direct_receivers", []) as Array
+	if str(dorm_claim.get("reference_recognizable", "")) != "not_evaluated" \
+		or not (dorm_unit.get("acceptance_records", []) as Array).is_empty() \
+		or not (dorm_unit.get("active_runtime_adapter_ids", []) as Array).is_empty() \
+		or dorm_unit.get("legacy_adapter_ids", []) != ["legacy-adapter:building:w291189926:wall"] \
+		or str(dorm_legacy.get("receiver_key", "")) != "building:w291189926:wall" \
+		or str(dorm_legacy.get("attachment_kind", "")) != "accepted_exact_run_homogeneous_material" \
+		or str(dorm_legacy.get("recognition_claim_effect", "")) != "none" \
+		or bool(dorm_legacy.get("whole_building_recognizability_imported", true)) \
+		or scopes.size() != 1 \
+		or not _int_array_matches((scopes[0] as Dictionary).get("run_indices", []) as Array, [0, 1, 2, 3, 4, 5]) \
+		or assets.size() != 1 \
+		or receivers.size() != 1 \
+		or str((receivers[0] as Dictionary).get("receiver_key", "")) != "building:w291189926:wall" \
+		or int((receivers[0] as Dictionary).get("run_count", -1)) != 72:
+		return false
+	var asset := assets[0] as Dictionary
+	return str(asset.get("path", "")) == "res://game/resources/materials/world/job_corps_dormitory_b369/dormitory_b369_warm_field.tres" \
+		and str(asset.get("sha256", "")) == "fb50d3989b7aa41421753ad4db5d195366d9a2c25c15087e5e3a2b7863c69602"
+
+
+func _adapter_for(adapters: Array, adapter_id: String) -> Dictionary:
+	for value: Variant in adapters:
+		var adapter := value as Dictionary
+		if str(adapter.get("adapter_id", "")) == adapter_id:
+			return adapter
+	return {}
+
+
+func _unit_for(units: Array, unit_id: String) -> Dictionary:
+	for value: Variant in units:
+		var unit := value as Dictionary
+		if str(unit.get("unit_id", "")) == unit_id:
+			return unit
+	return {}
+
+
+func _has_acceptance_receipt(unit: Dictionary, review_id: String, receipt_sha256: String, manifest_sha256: String) -> bool:
+	for value: Variant in unit.get("acceptance_records", []) as Array:
+		var record := value as Dictionary
+		if str(record.get("review_id", "")) == review_id \
+			and str(record.get("review_kind", "")) == "independent_reference_recognition" \
+			and str(record.get("status", "")) == "accept" \
+			and str(record.get("review_receipt_sha256", "")) == receipt_sha256 \
+			and str(record.get("evidence_manifest_sha256", "")) == manifest_sha256:
+			return true
+	return false
 
 
 func _sample_image(image: Image) -> Dictionary:

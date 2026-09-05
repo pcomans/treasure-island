@@ -17,16 +17,26 @@ const RECORD_HASHES := {
 	"res://game/resources/materials/world/building_1/building_1_chain_metres_aperiodic_field.gdshader": "a4a5df4fbb8fd4f13187ec284708879b540677ac2c827642b4c3040b4bce4c09",
 	"res://evidence/first-playable/treasure-island-building-1-exact-receiver-calibration-2026-08-30/capture-manifest.json": "9e84fb33d095546a422469dc8c5d6433eae194b7300aa1595968cc5a9d2005bb",
 }
-const PROTECTED_HASHES := {
+const CAPTURE_PROTECTED_HASHES := {
+	"generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+	"generated/world/chunks/x_-1__z_2.json": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce",
+	"game/scripts/world/world_chunk_builder.gd": "dec0811b3b6b4947c16f8f69a6a6e60d706b6d7b43a93051ea7be71ad2c203a3",
+	"game/scripts/world/facades/accepted_material_run_trials.gd": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+	"discovery/FACADE_RECEIVER_INVENTORY.json": "41d378ccee6685e5d3b9109d33c77742f73a7338cd84ba6e82c66ff22ee2d671",
+	"discovery/facades/TREASURE_ISLAND_BUILDING_1_RUN_OWNERSHIP.json": "716f90b9d7cb3267e901d438a5c583047c8eaeb912e544a459005c2dbe6a4359",
+	"game/resources/facades/building_1_standalone_prototypes.json": "2014040edb3985be4aaae437749063474aacaedc0534b6d54e69b7dfd92612cc",
+	"game/resources/facades/r133351_standalone_prototypes.json": "ecde7b80ba595f61d03bfd21f57407956c3b8988e381f0457f95bfe1aa580ad9",
+}
+const CURRENT_PROTECTED_HASHES := {
 	"res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
 	"res://generated/world/chunks/x_-1__z_2.json": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce",
-	"res://game/scripts/world/world_chunk_builder.gd": "e3d0ca4b6c9d39a444aa5b55592d63a32e7794bae3e12f1f3fac125243839d42",
+	"res://game/scripts/world/world_chunk_builder.gd": "71e391e4fa58afc83e4bcb99a9f8195e398fdf4064bb09a401fb079e9f30491c",
 	"res://game/scripts/world/facades/accepted_material_run_trials.gd": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
 	"res://discovery/FACADE_RECEIVER_INVENTORY.json": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f",
 	"res://discovery/facades/TREASURE_ISLAND_BUILDING_1_RUN_OWNERSHIP.json": "716f90b9d7cb3267e901d438a5c583047c8eaeb912e544a459005c2dbe6a4359",
 	"res://game/resources/facades/building_1_standalone_prototypes.json": "2014040edb3985be4aaae437749063474aacaedc0534b6d54e69b7dfd92612cc",
-	"res://game/resources/facades/r133351_standalone_prototypes.json": "ecde7b80ba595f61d03bfd21f57407956c3b8988e381f0457f95bfe1aa580ad9",
 }
+const PAUSED_R133351_PATH := "res://game/resources/facades/r133351_standalone_prototypes.json"
 const IMAGE_HASHES := {
 	"01-field-join-21-22.png": "67360459c022a2c643523a88de094f914742755162b9e856c35521a095c323e5",
 	"02-field-join-30-31.png": "147a38e0ed2d1fc5dba6f1295027535c246318280f56db884b177651c898d91a",
@@ -54,11 +64,14 @@ func _initialize() -> void:
 
 func _run() -> void:
 	_require(_hashes_match(RECORD_HASHES), "A correction evidence/source record drifted.")
-	_require(_hashes_match(PROTECTED_HASHES), "A protected runtime/mapping/standalone/r133351 byte drifted.")
-	_require(_images_match(), "A correction image drifted or is not a valid 1440x900 PNG.")
 	var manifest := _json(ROOT + "/capture-manifest.json")
 	var isolation := _json(ROOT + "/runtime-isolation.json")
 	var verification := _json(ROOT + "/visual-verification.json")
+	_require((isolation.get("protected_hashes", {}) as Dictionary) == CAPTURE_PROTECTED_HASHES, "Capture-time protected dependency records drifted.")
+	_require(_hashes_match(CURRENT_PROTECTED_HASHES), "A current generated/mapping/standalone input drifted.")
+	_require(not FileAccess.file_exists(PAUSED_R133351_PATH) and not ResourceLoader.exists(PAUSED_R133351_PATH), "Paused r133351 WIP leaked from its dedicated branch into current main.")
+	_require(not FileAccess.get_file_as_string("res://game/scripts/world/world_chunk_builder.gd").contains("building_1_exact_receiver_calibration"), "Detached calibration leaked into the current world builder.")
+	_require(_images_match(), "A correction image drifted or is not a valid 1440x900 PNG.")
 	var miter := manifest.get("rendered_overlay_miter_correction", {}) as Dictionary
 	var joins := manifest.get("rendered_overlay_join_records", []) as Array
 	var topology := manifest.get("topology", {}) as Dictionary
@@ -70,7 +83,7 @@ func _run() -> void:
 	_require(str(isolation.get("result", "")) == "PASS" and not bool(isolation.get("detached_runtime_attachment", true)) and isolation.get("receiver_child_count_before_and_after_overlay", []) == [2.0, 2.0], "Runtime isolation drifted.")
 	_require(str(verification.get("art_verdict", "")) == "withheld_for_independent_correction_reviewer" and bool(verification.get("all_images_opened_and_inspected", false)) and not bool(verification.get("self_acceptance", true)), "Visual inspection record is incomplete or self-accepting.")
 	if not _failed:
-		print("PASS: Building 1 shared-miter correction evidence seals 15 native views, all 30 joins at 0.0 m after-gap, unchanged 23/23/326 detached topology, unchanged module studies, and protected runtime bytes; independent correction re-review remains required")
+		print("PASS: Building 1 shared-miter correction evidence seals 15 native views, exact capture-time dependency records, all 30 joins at 0.0 m after-gap, and unchanged 23/23/326 detached topology; current main keeps the calibration unwired and paused r133351 WIP absent")
 	quit(1 if _failed else 0)
 
 

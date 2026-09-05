@@ -3,9 +3,11 @@ extends SceneTree
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const ADAPTER_CONTRACTS_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
 const PUBLIC_FRONT_CONFIG_PATH := "res://game/resources/facades/building_1_public_front_believability.json"
-const REGISTRY_SHA256 := "65edf085437bc3fa2b22869406cc8a2c33297b6cc9d48b205e301e367efc734b"
-const ADAPTER_CONTRACTS_SHA256 := "503c8d02439d0846389d5d57e2b2a26d8e42ee6156ff08f489de6e9dc4325222"
+const REGISTRY_SHA256 := "9c46c1a8c809aa9ded82008d35e9c1b257070e9c61f6d6e41f5650ca7b1c3f27"
+const ADAPTER_CONTRACTS_SHA256 := "f5c1a2fb73ac0343258d4fea35169e2b7efa98accbce0c834b3e2aab45fefafe"
 const PUBLIC_FRONT_CONFIG_SHA256 := "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
+const REVIEW_STATUS_SCOPE := "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+const RECOGNITION_ACCEPTANCE_AUTHORITY := "physical_unit_claim_and_independent_acceptance_record"
 const RECEIVER_SOURCES := {
 	"building:r16681702:wall": "r16681702",
 	"building:w1222720021:wall": "w1222720021",
@@ -45,12 +47,12 @@ func _run() -> void:
 	var registry := _json(REGISTRY_PATH)
 	var contracts := _json(ADAPTER_CONTRACTS_PATH)
 	var public_front := _json(PUBLIC_FRONT_CONFIG_PATH)
-	_require(_version_contract(registry, contracts), "Mounted registry/adapter v6/v5/1.5 compatibility matrix drifted.")
+	_require(_version_contract(registry, contracts), "Mounted registry/adapter v7/v6/1.6 compatibility matrix drifted.")
 	_require(str(public_front.get("schema_version", "")) == "ti.building-1-public-front-believability/1" and FileAccess.get_file_as_string(PUBLIC_FRONT_CONFIG_PATH).contains("\"entrance_group_gap\": 0.90"), "Mounted public-front scalar/config schema drifted.")
 	_validate_receivers(registry, contracts)
 	_validate_mounted_resources()
 	if not _failed:
-		print("PASS: mounted B1 registry closure is exact and remap-aware: registry /6 %s; adapter /5 %s; loader /5; compiler 1.5.0; two receiver/source bindings; identical 11-asset metadata sets; public config %s; source catalog/override absent" % [REGISTRY_SHA256, ADAPTER_CONTRACTS_SHA256, PUBLIC_FRONT_CONFIG_SHA256])
+		print("PASS: mounted B1 registry closure is exact and remap-aware: registry /7 %s; adapter /6 %s; loader /6; compiler 1.6.0; two receiver/source bindings; identical 11-asset metadata sets; public config %s; source catalog/override absent" % [REGISTRY_SHA256, ADAPTER_CONTRACTS_SHA256, PUBLIC_FRONT_CONFIG_SHA256])
 	quit(1 if _failed else 0)
 
 
@@ -80,17 +82,17 @@ func _version_contract(registry: Dictionary, contracts: Dictionary) -> bool:
 	var compatibility := registry.get("compatibility_contract", {}) as Dictionary
 	var build := contracts.get("build_contract", {}) as Dictionary
 	var loader := contracts.get("loader_contract", {}) as Dictionary
-	return str(registry.get("schema_version", "")) == "ti.facade-runtime-registry/6" \
-		and str(compatibility.get("catalog_schema_version", "")) == "ti.facade-recognition-catalog/6" \
-		and str(compatibility.get("compiler_version", "")) == "1.5.0" \
-		and str(compatibility.get("loader_api_version", "")) == "ti.facade-runtime-registry-loader/5" \
+	return str(registry.get("schema_version", "")) == "ti.facade-runtime-registry/7" \
+		and str(compatibility.get("catalog_schema_version", "")) == "ti.facade-recognition-catalog/7" \
+		and str(compatibility.get("compiler_version", "")) == "1.6.0" \
+		and str(compatibility.get("loader_api_version", "")) == "ti.facade-runtime-registry-loader/6" \
 		and not bool(compatibility.get("forward_compatible", true)) \
 		and str(compatibility.get("unknown_version_policy", "")) == "reject" \
-		and str(contracts.get("schema_version", "")) == "ti.facade-runtime-adapter-contracts/5" \
-		and str(build.get("authoring_catalog_sha256", "")) == "ab8797e86d5985c4b64670a22577394656c6388bb463f83c157a411663fa7b57" \
-		and str(build.get("compiler_version", "")) == "1.5.0" \
-		and str(build.get("runtime_registry_schema_version", "")) == "ti.facade-runtime-registry/6" \
-		and str(loader.get("api_version", "")) == "ti.facade-runtime-registry-loader/5" \
+		and str(contracts.get("schema_version", "")) == "ti.facade-runtime-adapter-contracts/6" \
+		and str(build.get("authoring_catalog_sha256", "")) == "a4d9dd474acb09a211f7e0e00d66aeaf7a669927880dd011e24e2f51d13bdd7d" \
+		and str(build.get("compiler_version", "")) == "1.6.0" \
+		and str(build.get("runtime_registry_schema_version", "")) == "ti.facade-runtime-registry/7" \
+		and str(loader.get("api_version", "")) == "ti.facade-runtime-registry-loader/6" \
 		and not bool(loader.get("instantiation_authorized", true)) \
 		and str(loader.get("unknown_version_policy", "")) == "reject"
 
@@ -109,10 +111,19 @@ func _validate_receivers(registry: Dictionary, contracts: Dictionary) -> void:
 		var adapter := adapter_matches[0] as Dictionary
 		var plan := plan_matches[0] as Dictionary
 		var active_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+		var physical_unit_id := "physical-building:%s" % expected_source
+		var unit := _record_for_id(registry.get("units", []) as Array, "unit_id", physical_unit_id)
+		var unit_receiver_matches := _records_for_receiver(unit.get("direct_receivers", []) as Array, receiver)
+		var claim_status := unit.get("claim_status", {}) as Dictionary
+		var receipts := unit.get("acceptance_records", []) as Array
 		var registry_assets := _asset_map(adapter.get("runtime_assets", []) as Array)
 		var plan_assets := _asset_map(plan.get("runtime_assets", []) as Array)
 		_require(str(adapter.get("source_key", "")) == expected_source and str(plan.get("source_key", "")) == expected_source, "%s source mapping drifted." % receiver)
 		_require(str(adapter.get("runtime_content_mode", "")) == "active_building_1_hero" and str(plan.get("content_mode", "")) == "active_building_1_hero", "%s content mode drifted." % receiver)
+		_require(not unit.is_empty() and unit_receiver_matches.size() == 1, "%s does not cross-link to its exact physical recognition unit." % receiver)
+		_require(str(adapter.get("review_status", "")) == "pending_independent_original_detail_review" and str(adapter.get("review_status_scope", "")) == REVIEW_STATUS_SCOPE, "%s original-detail review status is not narrowly scoped to runtime-asset provenance." % receiver)
+		_require(str(adapter.get("recognition_acceptance_authority", "")) == RECOGNITION_ACCEPTANCE_AUTHORITY and str(adapter.get("recognition_acceptance_status", "")) == "accepted" and str(adapter.get("recognition_acceptance_status", "")) == str(claim_status.get("reference_recognizable", "")), "%s recognition acceptance is not derived from its physical-unit authority." % receiver)
+		_require(receipts.size() == 1 and str((receipts[0] as Dictionary).get("review_kind", "")) == "independent_reference_recognition" and str((receipts[0] as Dictionary).get("status", "")) == "accept", "%s physical unit lacks its independent recognition acceptance receipt." % receiver)
 		_require((adapter.get("runtime_asset_projections", []) as Array).is_empty() and (plan.get("projection_descriptor_ids", []) as Array).is_empty(), "%s acquired a pathless projection." % receiver)
 		_require(str(active_contract.get("public_front_config_sha256", "")) == PUBLIC_FRONT_CONFIG_SHA256, "%s public-front contract hash drifted." % receiver)
 		_require(registry_assets == EXPECTED_RUNTIME_ASSETS and plan_assets == EXPECTED_RUNTIME_ASSETS and registry_assets == plan_assets, "%s does not carry the exact identical 11-asset metadata set." % receiver)
@@ -138,6 +149,14 @@ func _records_for_receiver(records: Array, receiver: String) -> Array:
 		if str(record.get("receiver_key", "")) == receiver:
 			matches.append(record)
 	return matches
+
+
+func _record_for_id(records: Array, key: String, expected: String) -> Dictionary:
+	for value: Variant in records:
+		var record := value as Dictionary
+		if str(record.get(key, "")) == expected:
+			return record
+	return {}
 
 
 func _asset_map(assets: Array) -> Dictionary:

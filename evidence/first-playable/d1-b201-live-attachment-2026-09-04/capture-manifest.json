@@ -1,0 +1,661 @@
+{
+  "schema_version": "ti.d1-b201-actual-live-evidence/1",
+  "review_status": "pending_independent_live_visual_static_and_package_review_not_self_accepted",
+  "recognition_status": "pending_independent_review",
+  "recognition_metric_frozen": "6/213",
+  "generator": "game/tests/d1_b201_live_attachment_capture.gd",
+  "generator_sha256": "21c465a9e7d0dc1e6d914dcb3e241702b07ce47aeb28d59715e808156229d974",
+  "frozen_generator_sha256_argument": "21c465a9e7d0dc1e6d914dcb3e241702b07ce47aeb28d59715e808156229d974",
+  "parent_harness": "game/tests/isle_house_low_live_evidence_capture.gd",
+  "parent_harness_sha256": "47768e4b2d6288b9c3dbb4b0ad19cd870b61a8804d72673c53bf3326f8f5636a",
+  "capture_override_sha256": "edbc0b9caa60fa0fc6b83cebb3145bce11ce0bd976403ca1d2fbe9b7142b39c3",
+  "engine_invocation_arguments": [
+    "--script",
+    "game/tests/d1_b201_live_attachment_capture.gd"
+  ],
+  "user_invocation_arguments": [
+    "--capture-mode=stills",
+    "--generator-sha256=21c465a9e7d0dc1e6d914dcb3e241702b07ce47aeb28d59715e808156229d974"
+  ],
+  "runtime_environment": {
+    "display_server": "macOS",
+    "rendering_method": "forward_plus",
+    "rendering_driver": "metal",
+    "video_adapter_api": "4.0",
+    "video_adapter": "Apple M2 (Apple8)",
+    "audio_driver": "Dummy",
+    "native_window": [
+      1440,
+      900
+    ],
+    "viewport": [
+      1440,
+      900
+    ]
+  },
+  "godot_version": "4.7.2-stable (official)",
+  "display_driver": "macOS",
+  "rendering_driver": "Metal",
+  "rendering_method": "Forward+",
+  "video_adapter": "Apple M2 (Apple8)",
+  "viewport": [
+    1440,
+    900
+  ],
+  "camera_fov_degrees": 70.0,
+  "configured_spring_length_m": 5.5,
+  "runtime_topology": {
+    "rows": 735,
+    "meshes": 950,
+    "surfaces": 964,
+    "triangles": 66636,
+    "bodies": 466,
+    "shapes": 466
+  },
+  "bindings": {
+    "wall_root_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_0__z_-2__building_w34313545_wall/building_w34313545_wall",
+    "roof_root_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_0__z_-2__building_w34313545_roof/building_w34313545_roof",
+    "attachment_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_0__z_-2__building_w34313545_wall/building_w34313545_wall/D1B201LiveAttachment",
+    "wall_body_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_0__z_-2__building_w34313545_wall/building_w34313545_wall/Collision",
+    "source_keys": [
+      "w34313545"
+    ],
+    "decorative_geometry_signature": "705c5345509f77cd91359f66173fff0e1e132d41ebb9acef3f51ff2c467abb3a",
+    "host_triangles": 80,
+    "eligible_warm_triangles": 20,
+    "protected_generic_triangles": 60,
+    "decorative_batches": 6,
+    "decorative_boxes": 172,
+    "decorative_triangles": 2064,
+    "structural_body_count": 1,
+    "structural_shape_count": 1,
+    "spray_owner_count": 1,
+    "navigation_owner_count": 0,
+    "preview_attachment_count": 0,
+    "recognition_accepted": false,
+    "recognition_metric": "6/213"
+  },
+  "source_dependency_hashes": {
+    "res://game/scenes/main.tscn": "959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66",
+    "res://project.godot": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af",
+    "res://game/tests/isle_house_low_live_evidence_capture.gd": "47768e4b2d6288b9c3dbb4b0ad19cd870b61a8804d72673c53bf3326f8f5636a",
+    "res://game/scripts/main.gd": "d948c8e4900ac88cfe4d40a701eedbbe2070df42c2414e39f2e9b8112d92620f",
+    "res://game/scripts/world/world_loader.gd": "0bfb5c64ede051dadd87da10e85518a2c22c63d36ff9387e8221bdd0c24287af",
+    "res://game/scripts/world/facades/facade_runtime_registry_loader.gd": "4c9af1ffcf5724e8c35e4b591a85697f1667f8d120af41a74fac511bfcb4f356",
+    "res://game/scripts/world/facades/facade_meter_uv_adapter.gd": "47e710b9ea7c5de5122430199e4105cbba5f672d22f59832f13b8004f16c5a1d",
+    "res://game/scripts/world/facades/accepted_material_run_trials.gd": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+    "res://game/scripts/world/world_chunk_builder.gd": "71e391e4fa58afc83e4bcb99a9f8195e398fdf4064bb09a401fb079e9f30491c",
+    "res://game/scripts/world/facades/d1_b201_live_attachment.gd": "499f6d2657b593ee5b0801cf1205a2925a993f3b1836922d3656a6d00c51cc19",
+    "res://game/resources/facades/d1_current/d1_b201_live_attachment.json": "0f3bf052688ec813b5fa58b077d74c963949574623fe4cf67c12c347e7257229",
+    "res://generated/world/chunks/x_0__z_-2.json": "c0e1f86787410d975ad90272482e5f4971c4aedc7eb83132cd28b22acf1a3456",
+    "res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "res://game/scripts/player/player_controller.gd": "8b114132d66c78dd0bfd09783c7b9a3a3a441a8b1ae14f33f7308bd9b04ed0ea",
+    "res://game/scripts/player/player_camera.gd": "90ea739b25eb6cbcf8bacff072599b117fe894fcef08683483e41527d8019636",
+    "res://game/scenes/player/player.tscn": "a37b00ecc620b4f3106a14d1dc9ec22a519f81481e5e6c68252389e13488a793",
+    "res://game/scripts/interaction/spray_controller.gd": "9897042fbffc6740ebe3eb4c19da544a0d437391ded9987318edc7238c403da4",
+    "res://game/scripts/interaction/tag_instance_pool.gd": "2460b12b9f70945dc88d2e321b72c1779dab4d867fd80f5920f4734213ce0950",
+    "res://game/resources/textures/tag/predefined_tag.svg": "9eb345572cd3298ea14bad008fc6405e46123c0243444e4582393d0aa84af885",
+    "res://game/resources/materials/world/d1_current/b201_warm_wall.tres": "6f5f6835790ab338454e72be58c2956deb6e470086797e209be0fab4d37ec788",
+    "res://game/resources/materials/world/d1_current/b201_green_hierarchy.tres": "5bdd67e659a0cce14abe3605f5a7fbfd85b0374d0a38be23cda326017235fe13",
+    "res://game/resources/materials/world/d1_current/b201_muted_rust_post.tres": "be97cdfd7367cd73172c4429ca212db0d1fc68bed34f4db6ce307d02a5225b94",
+    "res://game/resources/materials/world/d1_current/b201_service_leaf.tres": "de9895a808e4d64afc2c727e77ef92b590c9c718266ba118e64c489e84690cfd",
+    "res://game/resources/materials/world/d1_current/shared_dark_glass.tres": "ad8931db8954fd5ebc8fdd809f70afb279dd74a36e53e1d9ca907c44409f10d3",
+    "res://game/resources/materials/world/d1_current/shared_pale_frame.tres": "9a2de298ff545cf80c5da0ed0aa37d9d4ebbf10fec8eb78810af7e4d012d1436",
+    "res://game/resources/facades/facade-runtime-registry.json": "65edf085437bc3fa2b22869406cc8a2c33297b6cc9d48b205e301e367efc734b",
+    "res://discovery/facades/facade-recognition-catalog.json": "ab8797e86d5985c4b64670a22577394656c6388bb463f83c157a411663fa7b57",
+    "res://discovery/facades/d1_reference_packets/w34313545_building_201.md": "c6fba23d80e95b23c4f3eb172a252baa47767b7a29757096bff329c693db9e5e",
+    "res://discovery/facades/PRECOMMIT_PACKAGE_SANITIZATION_SOURCE_PROVENANCE.json": "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677b3ba5ab318a19333",
+    "res://evidence/first-playable/d1-current-standalone-prototype-pair-2026-09-04/INDEPENDENT_BAR_RAISER_REVIEW.md": "8567cd5eb9080f8f7cb563152ae83885330d366cc56ecc8513d5ebdadf491feb"
+  },
+  "captures": [
+    {
+      "id": "01-whole-wsw-default",
+      "role": "grounded_stock_player_actual_live_whole_wsw_default",
+      "lighting": "world_default",
+      "file": "images/01-whole-wsw-default.png",
+      "sha256": "f64d38211a814502d21da17b277814fbb3f50d47fc0e0f9703ec3727be7f2048",
+      "bytes": 949378,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 302,
+      "sample_luminance_range": 0.476266652345657,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "ordinary_stock_player_rig": true,
+      "visual_verdict": "pending_independent_review",
+      "pose_setup_disclosure": "one harness placement plus stock-rig yaw/pitch before physics-settled capture; zero harness transform writes while saving this still",
+      "pose_id": "01-whole-wsw-default",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -8.00070762634277,
+        -214.743362426758
+      ],
+      "player_position_m": [
+        -8.00070762634277,
+        3.12686657905579,
+        -214.743362426758
+      ],
+      "camera_position_m": [
+        -12.8487815856934,
+        5.08171844482422,
+        -212.146408081055
+      ],
+      "camera_forward": [
+        0.881466805934906,
+        0.00820867251604795,
+        -0.472174793481827
+      ],
+      "aim_target_m": [
+        64.2819976806641,
+        5.80000019073486,
+        -253.462997436523
+      ],
+      "ground_y_m": 3.12675476074219,
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50000286102295,
+      "minimum_allowed_actual_spring_length_m": 4.5,
+      "spring_arm_compressed_by_world": false,
+      "camera_yaw_degrees": -61.8234078311079,
+      "camera_pitch_degrees": 0.470327589923938,
+      "first_los_hit_receiver": "building:w34313545:wall",
+      "first_los_hit_source_keys": [
+        "w34313545"
+      ],
+      "first_los_hit_position_m": [
+        64.2822265625,
+        5.8000020980835,
+        -253.463134765625
+      ],
+      "first_los_hit_distance_m": 87.5030364990234,
+      "receiver_first_los": true,
+      "whole_wsw_projection": {
+        "ok": true,
+        "eligible_vertex_count": 40,
+        "visible_vertex_count": 40,
+        "complete_chain_in_frame": true,
+        "minimum_pixel": [
+          295.70703125,
+          430.894836425781
+        ],
+        "maximum_pixel": [
+          1144.29052734375,
+          469.114410400391
+        ],
+        "width_pixels": 848.58349609375,
+        "height_pixels": 38.2195739746094,
+        "viewport": [
+          1440.0,
+          900.0
+        ]
+      },
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ]
+    },
+    {
+      "id": "02-whole-wsw-changed-light",
+      "role": "same_grounded_stock_player_pose_changed_light",
+      "lighting": "frozen_changed_light",
+      "file": "images/02-whole-wsw-changed-light.png",
+      "sha256": "6224dd7d36c97c2c71f2698417df05bea7e05bb31ce3cf475805d37e19ba85e6",
+      "bytes": 845534,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 313,
+      "sample_luminance_range": 0.762083128094673,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "ordinary_stock_player_rig": true,
+      "visual_verdict": "pending_independent_review",
+      "pose_setup_disclosure": "one harness placement plus stock-rig yaw/pitch before physics-settled capture; zero harness transform writes while saving this still",
+      "pose_id": "01-whole-wsw-default",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -8.00070762634277,
+        -214.743362426758
+      ],
+      "player_position_m": [
+        -8.00070762634277,
+        3.12686657905579,
+        -214.743362426758
+      ],
+      "camera_position_m": [
+        -12.8487815856934,
+        5.08171844482422,
+        -212.146408081055
+      ],
+      "camera_forward": [
+        0.881466805934906,
+        0.00820867251604795,
+        -0.472174793481827
+      ],
+      "aim_target_m": [
+        64.2819976806641,
+        5.80000019073486,
+        -253.462997436523
+      ],
+      "ground_y_m": 3.12675476074219,
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50000286102295,
+      "minimum_allowed_actual_spring_length_m": 4.5,
+      "spring_arm_compressed_by_world": false,
+      "camera_yaw_degrees": -61.8234078311079,
+      "camera_pitch_degrees": 0.470327589923938,
+      "first_los_hit_receiver": "building:w34313545:wall",
+      "first_los_hit_source_keys": [
+        "w34313545"
+      ],
+      "first_los_hit_position_m": [
+        64.2822265625,
+        5.8000020980835,
+        -253.463134765625
+      ],
+      "first_los_hit_distance_m": 87.5030364990234,
+      "receiver_first_los": true,
+      "whole_wsw_projection": {
+        "ok": true,
+        "eligible_vertex_count": 40,
+        "visible_vertex_count": 40,
+        "complete_chain_in_frame": true,
+        "minimum_pixel": [
+          295.70703125,
+          430.894836425781
+        ],
+        "maximum_pixel": [
+          1144.29052734375,
+          469.114410400391
+        ],
+        "width_pixels": 848.58349609375,
+        "height_pixels": 38.2195739746094,
+        "viewport": [
+          1440.0,
+          900.0
+        ]
+      },
+      "sun_rotation_degrees": [
+        -31.9999980926514,
+        132.0,
+        0.0
+      ],
+      "same_pose_as": "01-whole-wsw-default",
+      "player_transform_exactly_reused": true,
+      "camera_transform_exactly_reused": true
+    },
+    {
+      "id": "03-whole-wsw-default-grayscale",
+      "role": "deterministic_grayscale_of_grounded_whole_wsw_default",
+      "lighting": "world_default_derived_luminance",
+      "file": "images/03-whole-wsw-default-grayscale.png",
+      "sha256": "42ef340a3dc5e6b8d00284534ee70b47516abcda0c9b5e791d0a4452119e5e98",
+      "bytes": 323233,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "image_format": "L8",
+      "derived_from": "images/01-whole-wsw-default.png",
+      "derived_from_sha256": "f64d38211a814502d21da17b277814fbb3f50d47fc0e0f9703ec3727be7f2048",
+      "derivation": "Godot Image FORMAT_L8 conversion from exact lossless default PNG",
+      "crop_or_relight": false,
+      "visual_verdict": "pending_independent_review"
+    },
+    {
+      "id": "04-wsw-hierarchy-oblique",
+      "role": "grounded_stock_player_actual_live_wsw_hierarchy_oblique",
+      "lighting": "world_default",
+      "file": "images/04-wsw-hierarchy-oblique.png",
+      "sha256": "bcf3c167612038dc924d9f453d6fc808707a799067db0e588e26ce261fb71ae3",
+      "bytes": 751493,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 226,
+      "sample_luminance_range": 0.583390578627586,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "ordinary_stock_player_rig": true,
+      "visual_verdict": "pending_independent_review",
+      "pose_setup_disclosure": "one harness placement plus stock-rig yaw/pitch before physics-settled capture; zero harness transform writes while saving this still",
+      "pose_id": "04-wsw-hierarchy-oblique",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        11.5819759368896,
+        -250.190765380859
+      ],
+      "player_position_m": [
+        11.5819759368896,
+        3.16719555854797,
+        -250.190765380859
+      ],
+      "camera_position_m": [
+        6.73416757583618,
+        5.09469270706177,
+        -247.593948364258
+      ],
+      "camera_forward": [
+        0.881419718265533,
+        0.0131822479888797,
+        -0.472149848937988
+      ],
+      "aim_target_m": [
+        53.8938064575195,
+        5.80000019073486,
+        -272.855926513672
+      ],
+      "ground_y_m": 3.16708374023438,
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_0__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49999666213989,
+      "minimum_allowed_actual_spring_length_m": 3.5,
+      "spring_arm_compressed_by_world": false,
+      "camera_yaw_degrees": -61.8233984328063,
+      "camera_pitch_degrees": 0.755311357327616,
+      "first_los_hit_receiver": "building:w34313545:wall",
+      "first_los_hit_source_keys": [
+        "w34313545"
+      ],
+      "first_los_hit_position_m": [
+        53.8942985534668,
+        5.8000054359436,
+        -272.856201171875
+      ],
+      "first_los_hit_distance_m": 53.5047378540039,
+      "receiver_first_los": true,
+      "sun_rotation_degrees": [
+        -51.9999961853027,
+        -27.9999980926514,
+        0.0
+      ]
+    },
+    {
+      "id": "05-close-sprayed-host",
+      "role": "grounded_stock_player_real_spray_on_retained_eligible_host",
+      "lighting": "world_default",
+      "file": "images/05-close-sprayed-host.png",
+      "sha256": "a0193992eb3067741917355fc0e7a590c4bf3b0de05b1d6d7881cb0c39a106c8",
+      "bytes": 680943,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "sample_unique_colors": 171,
+      "sample_luminance_range": 0.714244715869427,
+      "debug_labels_visible": false,
+      "source_photography_in_frame": false,
+      "crop_or_postprocess": false,
+      "ordinary_stock_player_rig": true,
+      "visual_verdict": "pending_independent_review",
+      "pose_setup_disclosure": "one harness placement plus stock-rig yaw/pitch before physics-settled capture; zero harness transform writes while saving this still",
+      "pose_id": "05-close-sprayed-host",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        67.3981246948242,
+        -238.115692138672
+      ],
+      "player_position_m": [
+        67.3981246948242,
+        3.28034853935242,
+        -238.115692138672
+      ],
+      "camera_position_m": [
+        62.553783416748,
+        5.50059795379639,
+        -235.520721435547
+      ],
+      "camera_forward": [
+        0.880789041519165,
+        -0.0400454215705395,
+        -0.471812516450882
+      ],
+      "aim_target_m": [
+        71.364860534668,
+        5.09999990463257,
+        -240.24055480957
+      ],
+      "ground_y_m": 3.28033447265625,
+      "ground_clearance_m": 0.0000140666961669922,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_0__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.50000238418579,
+      "minimum_allowed_actual_spring_length_m": 2.5,
+      "spring_arm_compressed_by_world": false,
+      "camera_yaw_degrees": -61.8233670855579,
+      "camera_pitch_degrees": -2.29504298037454,
+      "spray_result": "placed",
+      "spray_first_hit_object": "building:w34313545:wall",
+      "spray_first_hit_sources": [
+        "w34313545"
+      ],
+      "spray_first_hit_position_m": [
+        71.3650436401367,
+        5.0999903678894,
+        -240.240646362305
+      ],
+      "spray_first_hit_normal": [
+        -0.881498217582703,
+        0.0,
+        0.472187429666519
+      ],
+      "tag_position_m": [
+        71.3518218994141,
+        5.0999903678894,
+        -240.23356628418
+      ],
+      "tag_local_to_attachment_m": [
+        15.0000152587891,
+        1.69799041748047,
+        0.0147857666015625
+      ],
+      "tag_projected_pixel": [
+        720.000183105469,
+        450.038635253906
+      ],
+      "tag_visible_in_tree": true,
+      "tag_clear_of_decorative_bounds": true,
+      "tag_cull_mask": 2,
+      "tag_player_distance_m": 4.85417079925537,
+      "tag_texture_path": "res://game/resources/textures/tag/predefined_tag.svg",
+      "tag_texture_source_sha256": "9eb345572cd3298ea14bad008fc6405e46123c0243444e4582393d0aa84af885",
+      "pre_spray_render_png_buffer_sha256": "88123a6f2d301fd60b2e96850c98a4fd7ae726c297d6cd9d2a8fc7196996c40a",
+      "post_spray_render_png_buffer_sha256": "a0193992eb3067741917355fc0e7a590c4bf3b0de05b1d6d7881cb0c39a106c8",
+      "rendered_tag_pixel_delta": {
+        "ok": true,
+        "patch_minimum_pixel": [
+          624,
+          386
+        ],
+        "patch_maximum_pixel": [
+          817,
+          515
+        ],
+        "sample_count": 25220,
+        "changed_pixels_at_or_above_0_03": 811,
+        "maximum_rgb_channel_delta": 0.407843139022589,
+        "mean_max_rgb_channel_delta": 0.00891527106718092
+      },
+      "sole_host_collider": true,
+      "sun_rotation_degrees": [
+        -52.0,
+        -28.0,
+        0.0
+      ]
+    }
+  ],
+  "capture_count": 5,
+  "actual_live_node_resolved": true,
+  "preview_or_standalone_attachment_count": 0,
+  "pose_method_disclosure": "after real startup grounding, the harness performs one pre-capture player transform placement and input-reachable PlayerCamera yaw/pitch rotation per distinct pose, then physics-settles; it performs no pose transform writes while saving a still",
+  "grayscale_derivation": "lossless default PNG reload, Image FORMAT_L8 conversion, PNG save; no crop, relight, or geometry change",
+  "visible_spray": {
+    "pose_id": "05-close-sprayed-host",
+    "physics_grounded": true,
+    "ordinary_player_rig": true,
+    "input_reachable_camera_orientation": true,
+    "requested_xz": [
+      67.3981246948242,
+      -238.115692138672
+    ],
+    "player_position_m": [
+      67.3981246948242,
+      3.28034853935242,
+      -238.115692138672
+    ],
+    "camera_position_m": [
+      62.553783416748,
+      5.50059795379639,
+      -235.520721435547
+    ],
+    "camera_forward": [
+      0.880789041519165,
+      -0.0400454215705395,
+      -0.471812516450882
+    ],
+    "aim_target_m": [
+      71.364860534668,
+      5.09999990463257,
+      -240.24055480957
+    ],
+    "ground_y_m": 3.28033447265625,
+    "ground_clearance_m": 0.0000140666961669922,
+    "ground_feature": "land_ground",
+    "ground_object": "land:w26767313:x_0__z_-1",
+    "ground_sources": [
+      "w26767313",
+      "w29399800"
+    ],
+    "settle_physics_frames": 126,
+    "settle_recovery_delta": 0,
+    "camera_fov_degrees": 70.0,
+    "configured_spring_length_m": 5.5,
+    "actual_spring_length_m": 5.50000238418579,
+    "minimum_allowed_actual_spring_length_m": 2.5,
+    "spring_arm_compressed_by_world": false,
+    "camera_yaw_degrees": -61.8233670855579,
+    "camera_pitch_degrees": -2.29504298037454,
+    "spray_result": "placed",
+    "spray_first_hit_object": "building:w34313545:wall",
+    "spray_first_hit_sources": [
+      "w34313545"
+    ],
+    "spray_first_hit_position_m": [
+      71.3650436401367,
+      5.0999903678894,
+      -240.240646362305
+    ],
+    "spray_first_hit_normal": [
+      -0.881498217582703,
+      0.0,
+      0.472187429666519
+    ],
+    "tag_position_m": [
+      71.3518218994141,
+      5.0999903678894,
+      -240.23356628418
+    ],
+    "tag_local_to_attachment_m": [
+      15.0000152587891,
+      1.69799041748047,
+      0.0147857666015625
+    ],
+    "tag_projected_pixel": [
+      720.000183105469,
+      450.038635253906
+    ],
+    "tag_visible_in_tree": true,
+    "tag_clear_of_decorative_bounds": true,
+    "tag_cull_mask": 2,
+    "tag_player_distance_m": 4.85417079925537,
+    "tag_texture_path": "res://game/resources/textures/tag/predefined_tag.svg",
+    "tag_texture_source_sha256": "9eb345572cd3298ea14bad008fc6405e46123c0243444e4582393d0aa84af885",
+    "pre_spray_render_png_buffer_sha256": "88123a6f2d301fd60b2e96850c98a4fd7ae726c297d6cd9d2a8fc7196996c40a",
+    "post_spray_render_png_buffer_sha256": "a0193992eb3067741917355fc0e7a590c4bf3b0de05b1d6d7881cb0c39a106c8",
+    "rendered_tag_pixel_delta": {
+      "ok": true,
+      "patch_minimum_pixel": [
+        624,
+        386
+      ],
+      "patch_maximum_pixel": [
+        817,
+        515
+      ],
+      "sample_count": 25220,
+      "changed_pixels_at_or_above_0_03": 811,
+      "maximum_rgb_channel_delta": 0.407843139022589,
+      "mean_max_rgb_channel_delta": 0.00891527106718092
+    },
+    "sole_host_collider": true,
+    "sun_rotation_degrees": [
+      -52.0,
+      -28.0,
+      0.0
+    ]
+  },
+  "source_photography_shipped": false,
+  "source_urls_in_runtime": false,
+  "visual_verdict": "pending_independent_review",
+  "nonclaims": [
+    "exact opening count, width, cadence or glazing transparency",
+    "exact canopy dimensions or endpoints",
+    "service ENE/SSE/NNW/short/corner/return geometry",
+    "roof geometry",
+    "interior",
+    "as-built fidelity",
+    "recognition credit before independent live review"
+  ]
+}

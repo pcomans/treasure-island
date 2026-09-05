@@ -16,9 +16,9 @@ const YMCA_CORRECTION_MANIFEST_SHA256 := "d02fcbe38c56eea263900f89bda13eba044a4a
 const YMCA_INVENTORY_SHA256 := "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f"
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_BUILDING_WALL := 1 << 1
-const EXPECTED_WORLD_MESHES := 944
-const EXPECTED_WORLD_SURFACES := 957
-const EXPECTED_WORLD_TRIANGLES := 64572
+const EXPECTED_WORLD_MESHES := 950
+const EXPECTED_WORLD_SURFACES := 964
+const EXPECTED_WORLD_TRIANGLES := 66636
 
 const TARGETS := [
 	{
@@ -171,7 +171,7 @@ func _run() -> void:
 	if not _require(bool(full_world.get("ok", false)), str(full_world.get("message", "Whole-island load failed."))):
 		_finish()
 		return
-	print("PASS: retained non-Building-1 homogeneous fields remain unchanged; historical Building 1 field/module provenance stays byte-stable while accepted Building 1/Building 3/Isle House/Navy Chapel runtime replacements remain exact, Fire Station and protected candidates remain unchanged, and the whole island is 735/944/957/64,572/466")
+	print("PASS: retained non-Building-1 homogeneous fields remain unchanged; historical Building 1 field/module provenance stays byte-stable while accepted Building 1/Building 3/Isle House/Navy Chapel/B201 runtime replacements remain exact, Fire Station and protected candidates remain unchanged, and the whole island is 735/950/964/66,636/466")
 	_finish()
 
 

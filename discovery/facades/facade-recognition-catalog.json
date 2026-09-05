@@ -5,7 +5,10 @@
       "adapter_id": "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall",
       "content_classification": "active_target_specific_composite_part_replacement",
       "receiver_key": "building-composite:w1249412094:w1282547787:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
       "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
       "runtime_adapter_path": "game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd",
       "runtime_asset_paths": [
         "game/scripts/world/facades/isle_house_composite_repair_variant_c_repair_only_factory.gd",
@@ -20,7 +23,10 @@
       "adapter_id": "active-adapter:building-1-hero:building:r16681702:wall",
       "content_classification": "active_target_specific_hero_replacement",
       "receiver_key": "building:r16681702:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
       "review_status": "pending_independent_original_detail_review",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
       "runtime_adapter_path": "game/scripts/world/facades/building_1_hero_model.gd",
       "runtime_asset_paths": [
         "game/resources/facades/building_1_public_front_believability.json",
@@ -42,7 +48,10 @@
       "adapter_id": "active-adapter:building-1-hero:building:w1222720021:wall",
       "content_classification": "active_target_specific_hero_replacement",
       "receiver_key": "building:w1222720021:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
       "review_status": "pending_independent_original_detail_review",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
       "runtime_adapter_path": "game/scripts/world/facades/building_1_hero_model.gd",
       "runtime_asset_paths": [
         "game/resources/facades/building_1_public_front_believability.json",
@@ -64,7 +73,10 @@
       "adapter_id": "active-adapter:navy-chapel-187:building:w291189336:wall",
       "content_classification": "active_target_specific_paired_wall_roof_replacement",
       "receiver_key": "building:w291189336:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
       "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
       "runtime_adapter_path": "game/scripts/world/facades/navy_chapel_187_live_replacement.gd",
       "runtime_asset_paths": [
         "game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres",
@@ -84,7 +96,10 @@
       "adapter_id": "active-adapter:building-3-hero:building:w34313540:wall",
       "content_classification": "active_target_specific_hero_replacement",
       "receiver_key": "building:w34313540:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
       "review_status": "pending_independent_original_detail_review",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
       "runtime_adapter_path": "game/scripts/world/massing/building_3_600_california_massing.gd",
       "runtime_asset_paths": [
         "game/resources/facades/building_3_600_california_ene_layout.json",
@@ -98,6 +113,28 @@
       "runtime_config_path": "game/resources/facades/building_3_hero_massing.json",
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
       "source_key": "w34313540",
+      "whole_building_recognizability_imported": false
+    },
+    {
+      "adapter_id": "active-adapter:d1-b201-live:building:w34313545:wall",
+      "content_classification": "active_target_specific_receiver_host_partition_plus_render_only_attachment",
+      "receiver_key": "building:w34313545:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
+      "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
+      "runtime_adapter_path": "game/scripts/world/facades/d1_b201_live_attachment.gd",
+      "runtime_asset_paths": [
+        "game/resources/materials/world/d1_current/b201_green_hierarchy.tres",
+        "game/resources/materials/world/d1_current/b201_muted_rust_post.tres",
+        "game/resources/materials/world/d1_current/b201_service_leaf.tres",
+        "game/resources/materials/world/d1_current/b201_warm_wall.tres",
+        "game/resources/materials/world/d1_current/shared_dark_glass.tres",
+        "game/resources/materials/world/d1_current/shared_pale_frame.tres"
+      ],
+      "runtime_config_path": "game/resources/facades/d1_current/d1_b201_live_attachment.json",
+      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+      "source_key": "w34313545",
       "whole_building_recognizability_imported": false
     }
   ],
@@ -373,6 +410,51 @@
       ],
       "status": "configured",
       "unit_id": "physical-building:w34313540"
+    },
+    {
+      "alternate_pose": {
+        "aim_target_m": [
+          53.8938064575195,
+          5.80000019073486,
+          -272.855926513672
+        ],
+        "camera_position_m": [
+          6.73416757583618,
+          5.09469270706177,
+          -247.593948364258
+        ],
+        "fov_degrees": 70,
+        "player_position_m": [
+          11.5819759368896,
+          3.16719555854797,
+          -250.190765380859
+        ]
+      },
+      "ordinary_third_person_required": true,
+      "primary_pose": {
+        "aim_target_m": [
+          64.2819976806641,
+          5.80000019073486,
+          -253.462997436523
+        ],
+        "camera_position_m": [
+          -12.8487815856934,
+          5.08171844482422,
+          -212.146408081055
+        ],
+        "fov_degrees": 70,
+        "player_position_m": [
+          -8.00070762634277,
+          3.12686657905579,
+          -214.743362426758
+        ]
+      },
+      "required_cue_ids": [
+        "b201-green-bounded-upper-register",
+        "b201-sparse-solid-lower-field"
+      ],
+      "status": "configured",
+      "unit_id": "physical-building:w34313545"
     }
   ],
   "checked_date": "2026-09-04",
@@ -389,19 +471,19 @@
     "reference_recognizable": "An ordinary gameplay view is independently matched to target-identifiable reference evidence."
   },
   "compiler_contract": {
-    "emitted_runtime_schema_version": "ti.facade-runtime-registry/6",
-    "required_compiler_version": "1.5.0",
+    "emitted_runtime_schema_version": "ti.facade-runtime-registry/7",
+    "required_compiler_version": "1.6.0",
     "unknown_version_policy": "reject"
   },
   "expected_counts": {
-    "active_runtime_adapter_receivers": 5,
+    "active_runtime_adapter_receivers": 6,
     "building_footprints": 213,
     "building_parts": 2,
     "composite_units": 1,
     "direct_wall_receivers": 214,
     "legacy_adapter_receivers": 9,
     "recognition_units": 213,
-    "runtime_adapter_receivers": 14,
+    "runtime_adapter_receivers": 15,
     "source_records": 215,
     "standalone_units": 212,
     "visible_wall_runs": 4971
@@ -499,7 +581,7 @@
       "whole_building_recognizability_imported": false
     }
   ],
-  "schema_version": "ti.facade-recognition-catalog/6",
+  "schema_version": "ti.facade-recognition-catalog/7",
   "source_contract": {
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_schema_version": "ti.godot-world/2",
@@ -1044,13 +1126,21 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "evidence_manifest_sha256": "f169085620a0a9ff0c685e4dfa98442c5c31e4e580f1decdbd80e84b09c74fe3",
+          "review_id": "d1-b201-live-attachment-2026-09-04",
+          "review_kind": "independent_reference_recognition",
+          "review_receipt_sha256": "b9ef912df2dd00fa2c456a8e7e03473001cc381cbc2dd5288e9f6ef65d8c2772",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w34313545",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -1063,13 +1153,108 @@
         "name_evidence": false
       },
       "legacy_adapter_ids": [],
-      "protected_scopes": [],
+      "protected_scopes": [
+        {
+          "reason": "Runs 10..39 and the roof are outside the independently reviewed WSW public chain; they retain generic/protected rendering with no invented module schedule.",
+          "receiver_key": "building:w34313545:wall",
+          "run_indices": [
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39
+          ]
+        }
+      ],
       "receiver_keys": [
         "building:w34313545:wall"
       ],
-      "recognition_cues": [],
-      "reference_records": [],
-      "reference_state": "reference_research_unassessed",
+      "recognition_cues": [
+        {
+          "complete_motif": true,
+          "cue_id": "b201-green-bounded-upper-register",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w34313545:wall",
+          "reference_ids": [
+            "800I-SV02"
+          ],
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "b201-sparse-solid-lower-field",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w34313545:wall",
+          "reference_ids": [
+            "800I-SV02"
+          ],
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9
+          ]
+        }
+      ],
+      "reference_records": [
+        {
+          "observation_id": "800I-SV02",
+          "observed_regions": [
+            "September 2025 WSW public long side"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=37.825489,-122.3701307&heading=27&pitch=0&fov=75",
+          "supports": [
+            "green-bounded broad dark upper-window register with pale frames",
+            "mostly solid light warm-gray lower field with sparse openings across the unusually long low mass"
+          ]
+        }
+      ],
+      "reference_state": "reference_ready",
       "source_records": [
         {
           "role": "standalone_building_footprint",

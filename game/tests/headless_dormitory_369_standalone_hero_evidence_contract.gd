@@ -3,6 +3,9 @@ extends SceneTree
 const OUTPUT := "res://evidence/first-playable/dormitory-369-standalone-hero-2026-09-04"
 const MANIFEST_PATH := OUTPUT + "/capture-manifest.json"
 const CONFIG_PATH := "res://game/resources/facades/dormitory_369_standalone_hero_prototype.json"
+const INDEPENDENT_REVIEW_PATH := OUTPUT + "/INDEPENDENT_BAR_RAISER_REVIEW.md"
+const CURRENT_REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
+const CURRENT_REGISTRY_SHA256 := "9c46c1a8c809aa9ded82008d35e9c1b257070e9c61f6d6e41f5650ca7b1c3f27"
 const SOURCE_RECEIPT_PATH := "res://discovery/facades/PRECOMMIT_PACKAGE_SANITIZATION_SOURCE_PROVENANCE.json"
 const SOURCE_RECEIPT_SHA256 := "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677b3ba5ab318a19333"
 const HISTORICAL_CONFIG_SHA256 := "a6086d13a986bdd4a6c281b75ec7fb58524257ae4b8ea6b849840a324cc59dc2"
@@ -15,6 +18,7 @@ const CAPTURE_TIME_CONTEXT := {
 }
 const EXPECTED_HASHES := {
 	"res://game/tests/dormitory_369_standalone_hero_capture.gd": "38b46b680bfae521f742e51a6b4051b51b2fb3617871d9a623168e75eb43694a",
+	INDEPENDENT_REVIEW_PATH: "0e2292aa35748bd71b869ff2a735a4bcf23050f0b80c6c0a4319f556ca98d5bb",
 	MANIFEST_PATH: "4834dbed96cdffd93983151332104ae3b8d7c6d5f5c1121b474b405f80fd2d17",
 	OUTPUT + "/checksums.sha256": "1d83a211aa194a86985d094fa20d3a6e5f195d968467ecf4c2eade15a61f4198",
 	OUTPUT + "/images/01-whole-object-before.png": "3fd9f0d6b966b26dc06e3af447bb6c0fd70adba5b003409da37dc6edd1ae5839",
@@ -64,11 +68,12 @@ func _run() -> void:
 	var manifest := parsed as Dictionary
 	if not _require(_manifest_truth_matches(manifest), "The Dormitory 369 evidence truth, native provenance, exact binding, inference boundary, or topology drifted.") \
 		or not _require(_pinned_inputs_match(manifest), "A source, package, or exact-current runtime input pinned by the Dormitory 369 capture drifted.") \
-		or not _require(_captures_match(manifest.get("captures", []) as Array), "A Dormitory 369 evidence frame lost image integrity, grounded provenance, ordinary-player framing, exact LOS binding, or pending-review status.") \
-		or not _require(_pairs_match(manifest.get("capture_pairs", []) as Array, manifest.get("captures", []) as Array), "A Dormitory 369 before/after pair no longer uses the same grounded camera/player transform and lighting."):
+		or not _require(_captures_match(manifest.get("captures", []) as Array), "A Dormitory 369 evidence frame lost image integrity, grounded provenance, ordinary-player framing, exact LOS binding, or capture-time pending-review status.") \
+		or not _require(_pairs_match(manifest.get("capture_pairs", []) as Array, manifest.get("captures", []) as Array), "A Dormitory 369 before/after pair no longer uses the same grounded camera/player transform and lighting.") \
+		or not _require(_current_status_matches(), "Current Dormitory recognition/not-evaluated legacy-adapter boundary drifted."):
 		_finish()
 		return
-	print("PASS: six sealed native Dormitory 369 PNGs remain technically valid grounded fixed-camera before/after evidence, including materially changed light; all recognition, believability, and as-built verdicts remain pending independent bar-raiser review")
+	print("PASS: six sealed native Dormitory 369 PNGs remain technically valid grounded fixed-camera before/after evidence, including materially changed light; the manifest retains its capture-time pending verdicts, the exact independent standalone review subsequently passed with limitation, and the current v7 authority correctly keeps whole-building reference recognition not_evaluated with only runs 0..5 on the legacy material adapter")
 	_finish()
 
 
@@ -284,6 +289,47 @@ func _hashes_match() -> bool:
 			push_error("Dormitory 369 evidence hash drift: %s expected=%s actual=%s" % [path, str(EXPECTED_HASHES[path]), actual])
 			return false
 	return true
+
+
+func _current_status_matches() -> bool:
+	if FileAccess.get_sha256(CURRENT_REGISTRY_PATH) != CURRENT_REGISTRY_SHA256:
+		return false
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(CURRENT_REGISTRY_PATH))
+	if not parsed is Dictionary:
+		return false
+	var registry := parsed as Dictionary
+	var metric := registry.get("recognition_metric", {}) as Dictionary
+	if str(registry.get("schema_version", "")) != "ti.facade-runtime-registry/7" \
+		or int(metric.get("numerator", -1)) != 7 or int(metric.get("denominator", -1)) != 213:
+		return false
+	var unit := _find_by_id(registry.get("units", []) as Array, "unit_id", "physical-building:w291189926")
+	var adapter := _find_by_id(registry.get("legacy_adapters", []) as Array, "adapter_id", "legacy-adapter:building:w291189926:wall")
+	var claim := unit.get("claim_status", {}) as Dictionary
+	var scopes := adapter.get("accepted_run_scopes", []) as Array
+	var assets := adapter.get("runtime_assets", []) as Array
+	var receivers := unit.get("direct_receivers", []) as Array
+	if str(claim.get("reference_recognizable", "")) != "not_evaluated" \
+		or not (unit.get("acceptance_records", []) as Array).is_empty() \
+		or not (unit.get("active_runtime_adapter_ids", []) as Array).is_empty() \
+		or unit.get("legacy_adapter_ids", []) != ["legacy-adapter:building:w291189926:wall"] \
+		or str(adapter.get("receiver_key", "")) != "building:w291189926:wall" \
+		or str(adapter.get("attachment_kind", "")) != "accepted_exact_run_homogeneous_material" \
+		or str(adapter.get("recognition_claim_effect", "")) != "none" \
+		or bool(adapter.get("whole_building_recognizability_imported", true)) \
+		or scopes.size() != 1 or _int_array((scopes[0] as Dictionary).get("run_indices", []) as Array) != MAPPED_RUNS \
+		or assets.size() != 1 \
+		or str((assets[0] as Dictionary).get("sha256", "")) != "fb50d3989b7aa41421753ad4db5d195366d9a2c25c15087e5e3a2b7863c69602" \
+		or receivers.size() != 1 or int((receivers[0] as Dictionary).get("run_count", -1)) != 72:
+		return false
+	return true
+
+
+func _find_by_id(values: Array, key: String, expected: String) -> Dictionary:
+	for value: Variant in values:
+		var item := value as Dictionary
+		if str(item.get(key, "")) == expected:
+			return item
+	return {}
 
 
 func _float_array_approx(actual: Array, expected: Array, tolerance: float) -> bool:

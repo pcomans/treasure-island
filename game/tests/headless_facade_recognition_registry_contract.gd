@@ -1,14 +1,14 @@
 extends SceneTree
 
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
-const EXPECTED_REGISTRY_SHA256 := "65edf085437bc3fa2b22869406cc8a2c33297b6cc9d48b205e301e367efc734b"
+const EXPECTED_REGISTRY_SHA256 := "9c46c1a8c809aa9ded82008d35e9c1b257070e9c61f6d6e41f5650ca7b1c3f27"
 const EXPECTED_UNITS := 213
 const EXPECTED_RECEIVERS := 214
 const EXPECTED_SOURCE_RECORDS := 215
 const EXPECTED_RUNS := 4971
 const EXPECTED_LEGACY_ADAPTERS := 9
-const EXPECTED_ACTIVE_ADAPTERS := 5
-const EXPECTED_RUNTIME_ADAPTERS := 14
+const EXPECTED_ACTIVE_ADAPTERS := 6
+const EXPECTED_RUNTIME_ADAPTERS := 15
 const EXPECTED_IDENTITY_ASSERTIONS := 2
 const ACCEPTED_REFERENCE_UNITS := {
 	"physical-building:r16681702": true,
@@ -17,10 +17,31 @@ const ACCEPTED_REFERENCE_UNITS := {
 	"physical-building:w1249412094": true,
 	"physical-building:w291189336": true,
 	"physical-building:w34313540": true,
+	"physical-building:w34313545": true,
 }
 const EXPECTED_IDENTITY_CORRECTIONS := {
 	"physical-building:w24274434": "08000082",
 	"physical-building:w34313540": "08000083",
+}
+const ACTIVE_REVIEW_STATUS_SCOPE := "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+const ACTIVE_RECOGNITION_ACCEPTANCE_AUTHORITY := "physical_unit_claim_and_independent_acceptance_record"
+const PRE_B201_INTEGRATION_WORLD_TOPOLOGY_SCOPE := "pre_b201_integration_live_parity"
+const CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE := "current_integration_topology"
+const ACTIVE_UNIT_BY_RECEIVER := {
+	"building-composite:w1249412094:w1282547787:wall": "physical-building:w1249412094",
+	"building:r16681702:wall": "physical-building:r16681702",
+	"building:w1222720021:wall": "physical-building:w1222720021",
+	"building:w291189336:wall": "physical-building:w291189336",
+	"building:w34313540:wall": "physical-building:w34313540",
+	"building:w34313545:wall": "physical-building:w34313545",
+}
+const ACTIVE_REVIEW_STATUS_BY_RECEIVER := {
+	"building-composite:w1249412094:w1282547787:wall": "independent_exact_current_live_pass",
+	"building:r16681702:wall": "pending_independent_original_detail_review",
+	"building:w1222720021:wall": "pending_independent_original_detail_review",
+	"building:w291189336:wall": "independent_exact_current_live_pass",
+	"building:w34313540:wall": "pending_independent_original_detail_review",
+	"building:w34313545:wall": "independent_exact_current_live_pass",
 }
 
 var _failed := false
@@ -37,7 +58,7 @@ func _run() -> void:
 		return
 	var registry := _json(REGISTRY_PATH)
 	if not _require(not registry.is_empty(), "Runtime facade registry JSON is invalid.") \
-	or not _require(str(registry.get("schema_version", "")) == "ti.facade-runtime-registry/6", "Runtime facade registry schema drifted.") \
+	or not _require(str(registry.get("schema_version", "")) == "ti.facade-runtime-registry/7", "Runtime facade registry schema drifted.") \
 	or not _require(_runtime_boundary_is_clean(registry), "Runtime facade registry leaks a source-only path or URL."):
 		_finish()
 		return
@@ -45,7 +66,7 @@ func _run() -> void:
 	_validate_units(registry)
 	_validate_runtime_adapters(registry)
 	if not _failed:
-		print("PASS: facade recognition registry is package-safe and fail-closed: 213 physical units / 214 direct wall receivers / 215 source records / 4,971 wall runs / 6/213 independently accepted reference-recognizable units / 9 claim-neutral legacy adapters + 5 exact-current active adapters / 2 separated identity corrections; SHA-256 %s" % EXPECTED_REGISTRY_SHA256)
+		print("PASS: facade recognition registry is package-safe and fail-closed: 213 physical units / 214 direct wall receivers / 215 source records / 4,971 wall runs / 7/213 independently accepted reference-recognizable units / 9 claim-neutral legacy adapters + 6 exact-current active adapters / 2 separated identity corrections; SHA-256 %s" % EXPECTED_REGISTRY_SHA256)
 	_finish()
 
 
@@ -62,19 +83,19 @@ func _validate_counts(registry: Dictionary) -> void:
 	_require(int(counts.get("source_record_memberships", -1)) == EXPECTED_SOURCE_RECORDS, "Source-record membership count is not 215.")
 	_require(int(counts.get("visible_wall_runs", -1)) == EXPECTED_RUNS, "Visible wall-run count is not 4,971.")
 	_require(int(counts.get("legacy_adapter_receivers", -1)) == EXPECTED_LEGACY_ADAPTERS, "Legacy-adapter count is not 9.")
-	_require(int(counts.get("active_runtime_adapter_receivers", -1)) == EXPECTED_ACTIVE_ADAPTERS, "Active runtime-adapter count is not 5.")
-	_require(int(counts.get("runtime_adapter_receivers", -1)) == EXPECTED_RUNTIME_ADAPTERS, "Combined runtime-adapter count is not 14.")
+	_require(int(counts.get("active_runtime_adapter_receivers", -1)) == EXPECTED_ACTIVE_ADAPTERS, "Active runtime-adapter count is not 6.")
+	_require(int(counts.get("runtime_adapter_receivers", -1)) == EXPECTED_RUNTIME_ADAPTERS, "Combined runtime-adapter count is not 15.")
 	_require(int(counts.get("identity_assertion_summaries", -1)) == EXPECTED_IDENTITY_ASSERTIONS, "Identity-assertion summary count is not 2.")
 	_require(int(receiver_claims.get("verified", -1)) == EXPECTED_UNITS and int(receiver_claims.get("failed", -1)) == 0, "Receiver-complete claim aggregate drifted.")
 	_require(int(game_claims.get("accepted", -1)) == 0 and int(game_claims.get("not_evaluated", -1)) == EXPECTED_UNITS, "Game-distinctive claims were imported or omitted.")
-	_require(int(reference_claims.get("accepted", -1)) == 6 and int(reference_claims.get("not_evaluated", -1)) == EXPECTED_UNITS - 6, "Reference-recognition aggregate is not exactly 6/213.")
+	_require(int(reference_claims.get("accepted", -1)) == 7 and int(reference_claims.get("not_evaluated", -1)) == EXPECTED_UNITS - 7, "Reference-recognition aggregate is not exactly 7/213.")
 	_require(int(as_built_claims.get("claimed", -1)) == 0 and int(as_built_claims.get("limited", -1)) == 0 and int(as_built_claims.get("unclaimed", -1)) == EXPECTED_UNITS, "As-built claims were imported or omitted.")
 	var metric := registry.get("recognition_metric", {}) as Dictionary
 	var accepted_ids := metric.get("accepted_physical_unit_ids", []) as Array
 	var expected_ids := ACCEPTED_REFERENCE_UNITS.keys()
 	accepted_ids.sort()
 	expected_ids.sort()
-	_require(int(metric.get("numerator", -1)) == 6 and int(metric.get("denominator", -1)) == EXPECTED_UNITS and str(metric.get("display", "")) == "6/213", "Physical-unit recognition metric is not exactly 6/213.")
+	_require(int(metric.get("numerator", -1)) == 7 and int(metric.get("denominator", -1)) == EXPECTED_UNITS and str(metric.get("display", "")) == "7/213", "Physical-unit recognition metric is not exactly 7/213.")
 	_require(accepted_ids == expected_ids, "Accepted physical-unit set drifted.")
 	_require(metric.get("isle_house_non_numerator_source_keys", []) == ["w1282547786", "w1282547787"], "Isle House source parts entered the numerator.")
 
@@ -92,6 +113,7 @@ func _validate_units(registry: Dictionary) -> void:
 	var building_1_tower_seen := false
 	var building_3_seen := false
 	var navy_chapel_seen := false
+	var d1_b201_seen := false
 	_require(units.size() == EXPECTED_UNITS, "Runtime unit array is not 213 entries.")
 	for unit_value: Variant in units:
 		var unit := unit_value as Dictionary
@@ -162,6 +184,12 @@ func _validate_units(registry: Dictionary) -> void:
 			_require(str((unit_receivers[0] as Dictionary).get("runtime_content_mode", "")) == "active_navy_chapel_187_paired_replacement", "Navy Chapel wall is not bound to the paired wall/roof replacement.")
 			_require(str(unit.get("runtime_content_mode", "")) == "all_receivers_active_navy_chapel_187_paired_replacement", "Navy Chapel unit mode no longer preserves paired replacement semantics.")
 			_require((unit.get("legacy_adapter_ids", []) as Array).is_empty() and (unit.get("active_runtime_adapter_ids", []) as Array).size() == 1, "Navy Chapel retains obsolete legacy or missing active adapter membership.")
+		if unit_id == "physical-building:w34313545":
+			d1_b201_seen = true
+			_require(unit_receivers.size() == 1 and str((unit_receivers[0] as Dictionary).get("receiver_key", "")) == "building:w34313545:wall", "D1 B201 no longer owns its exact wall receiver.")
+			_require(str((unit_receivers[0] as Dictionary).get("runtime_content_mode", "")) == "active_d1_b201_host_partition_attachment", "D1 B201 wall is not bound to the current host-partition attachment.")
+			_require(str(unit.get("runtime_content_mode", "")) == "all_receivers_active_d1_b201_host_partition_attachment", "D1 B201 unit mode no longer preserves host-partition semantics.")
+			_require((unit.get("legacy_adapter_ids", []) as Array).is_empty() and (unit.get("active_runtime_adapter_ids", []) as Array).size() == 1, "D1 B201 retains obsolete legacy or missing active adapter membership.")
 		for source_value: Variant in unit_sources:
 			var source_key := str((source_value as Dictionary).get("source_key", ""))
 			_require(not source_key.is_empty() and not source_keys.has(source_key), "%s has a missing or duplicate source record %s." % [unit_id, source_key])
@@ -184,7 +212,7 @@ func _validate_units(registry: Dictionary) -> void:
 	_require(receiver_count == EXPECTED_RECEIVERS and receiver_keys.size() == EXPECTED_RECEIVERS, "Runtime units do not partition 214 unique receivers.")
 	_require(run_count == EXPECTED_RUNS, "Runtime unit receivers do not total 4,971 runs.")
 	_require(identity_assertion_count == EXPECTED_IDENTITY_ASSERTIONS, "Runtime units do not contain exactly two identity corrections.")
-	_require(building_1_main_seen and building_1_tower_seen and building_3_seen and navy_chapel_seen, "Building 1 main/tower, Building 3, or Navy Chapel is not separately represented.")
+	_require(building_1_main_seen and building_1_tower_seen and building_3_seen and navy_chapel_seen and d1_b201_seen, "Building 1 main/tower, Building 3, Navy Chapel, or D1 B201 is not separately represented.")
 
 
 func _validate_runtime_adapters(registry: Dictionary) -> void:
@@ -194,8 +222,8 @@ func _validate_runtime_adapters(registry: Dictionary) -> void:
 	adapters.append_array(active_adapters)
 	var receiver_keys := {}
 	_require(legacy_adapters.size() == EXPECTED_LEGACY_ADAPTERS, "Runtime legacy adapter array is not nine entries.")
-	_require(active_adapters.size() == EXPECTED_ACTIVE_ADAPTERS, "Runtime active adapter array is not five entries.")
-	_require(adapters.size() == EXPECTED_RUNTIME_ADAPTERS, "Combined runtime adapter arrays are not 14 entries.")
+	_require(active_adapters.size() == EXPECTED_ACTIVE_ADAPTERS, "Runtime active adapter array is not six entries.")
+	_require(adapters.size() == EXPECTED_RUNTIME_ADAPTERS, "Combined runtime adapter arrays are not 15 entries.")
 	for adapter_value: Variant in adapters:
 		var adapter := adapter_value as Dictionary
 		var adapter_id := str(adapter.get("adapter_id", ""))
@@ -219,8 +247,22 @@ func _validate_runtime_adapters(registry: Dictionary) -> void:
 	for adapter_value: Variant in active_adapters:
 		var adapter := adapter_value as Dictionary
 		var receiver_key := str(adapter.get("receiver_key", ""))
-		_require(receiver_key in ["building-composite:w1249412094:w1282547787:wall", "building:r16681702:wall", "building:w1222720021:wall", "building:w291189336:wall", "building:w34313540:wall"], "Active adapter targets an unexpected receiver: %s." % receiver_key)
+		_require(receiver_key in ["building-composite:w1249412094:w1282547787:wall", "building:r16681702:wall", "building:w1222720021:wall", "building:w291189336:wall", "building:w34313540:wall", "building:w34313545:wall"], "Active adapter targets an unexpected receiver: %s." % receiver_key)
 		_require(str(adapter.get("state", "")) == "active_runtime_target_specific_content", "%s is not classified as active runtime content." % receiver_key)
+		var unit_id := str(ACTIVE_UNIT_BY_RECEIVER.get(receiver_key, ""))
+		var unit := _unit_by_id(registry.get("units", []) as Array, unit_id)
+		var direct_receiver := _receiver_by_key(unit.get("direct_receivers", []) as Array, receiver_key)
+		var claim_status := unit.get("claim_status", {}) as Dictionary
+		var receipts := unit.get("acceptance_records", []) as Array
+		var accepted_receipt := receipts.size() == 1 \
+			and str((receipts[0] as Dictionary).get("review_kind", "")) == "independent_reference_recognition" \
+			and str((receipts[0] as Dictionary).get("status", "")) == "accept"
+		_require(not unit.is_empty() and not direct_receiver.is_empty(), "%s does not cross-link to its exact physical recognition unit." % receiver_key)
+		_require(str(adapter.get("review_status", "")) == str(ACTIVE_REVIEW_STATUS_BY_RECEIVER.get(receiver_key, "")), "%s review status is not an exact allowed provenance literal." % receiver_key)
+		_require(str(adapter.get("review_status_scope", "")) == ACTIVE_REVIEW_STATUS_SCOPE, "%s review-status scope is ambiguous." % receiver_key)
+		_require(str(adapter.get("recognition_acceptance_authority", "")) == ACTIVE_RECOGNITION_ACCEPTANCE_AUTHORITY, "%s recognition authority drifted." % receiver_key)
+		_require(str(adapter.get("recognition_acceptance_status", "")) == "accepted" and str(adapter.get("recognition_acceptance_status", "")) == str(claim_status.get("reference_recognizable", "")), "%s recognition acceptance is not derived from its accepted physical unit." % receiver_key)
+		_require(accepted_receipt, "%s physical recognition unit lacks one independent acceptance receipt." % receiver_key)
 		var contract := adapter.get("active_runtime_contract", {}) as Dictionary
 		if receiver_key == "building:w34313540:wall":
 			var behavior := contract.get("behavior_contract", {}) as Dictionary
@@ -239,7 +281,7 @@ func _validate_runtime_adapters(registry: Dictionary) -> void:
 			_require((adapter.get("runtime_assets", []) as Array).size() == 1 and (adapter.get("runtime_asset_projections", []) as Array).size() == 3, "Isle House source/package boundary drifted.")
 			_require(str(acceptance.get("independent_live_review_receipt_sha256", "")) == "37b6c7dbf6c8769b13628e1070a9c3b5beeb9b25bbe63f0f12f9aaa00c22dab8" and int(acceptance.get("numerator_effect", -1)) == 1, "Isle House receipt or numerator effect drifted.")
 			_require(str(geometry.get("live_signature", "")) == "09eee1517f043c6d82f0de0d2275da5b2a3f76f5842d1b9c90cba11e6e793981" and str(geometry.get("overlay_repair_signature", "")) == "41868b77a8b51b56ee7381e5549423e97547270d2dc77d9ce5cf958b31e2cb69", "Isle House signatures drifted.")
-			_require(int(geometry.get("world_records", -1)) == 735 and int(geometry.get("world_mesh_instances", -1)) == 944 and int(geometry.get("world_surfaces", -1)) == 957 and int(geometry.get("world_triangles", -1)) == 64572 and int(geometry.get("world_static_bodies", -1)) == 466 and int(geometry.get("world_shapes", -1)) == 466, "Isle House exact-current world topology drifted.")
+			_require(str(geometry.get("world_topology_scope", "")) == PRE_B201_INTEGRATION_WORLD_TOPOLOGY_SCOPE and int(geometry.get("world_records", -1)) == 735 and int(geometry.get("world_mesh_instances", -1)) == 944 and int(geometry.get("world_surfaces", -1)) == 957 and int(geometry.get("world_triangles", -1)) == 64572 and int(geometry.get("world_static_bodies", -1)) == 466 and int(geometry.get("world_shapes", -1)) == 466, "Isle House pre-B201 integration world topology parity drifted.")
 			_require(bool(ownership.get("low_receiver_is_sole_collision_and_spray_owner", false)) and int(ownership.get("decorative_collision_nodes", -1)) == 0 and int(ownership.get("decorative_navigation_nodes", -1)) == 0 and int(ownership.get("decorative_spray_nodes", -1)) == 0, "Isle House ownership boundary drifted.")
 		elif receiver_key == "building:w291189336:wall":
 			var behavior := contract.get("behavior_contract", {}) as Dictionary
@@ -249,8 +291,36 @@ func _validate_runtime_adapters(registry: Dictionary) -> void:
 			_require(str(adapter.get("attachment_kind", "")) == "active_navy_chapel_187_paired_wall_roof_replacement" and str(adapter.get("runtime_content_mode", "")) == "active_navy_chapel_187_paired_replacement", "Navy Chapel has stale active-content classification.")
 			_require((adapter.get("runtime_assets", []) as Array).size() == 9 and (adapter.get("runtime_asset_projections", []) as Array).is_empty(), "Navy Chapel does not account for its package-safe adapter/config/prototype/material set.")
 			_require(str(acceptance.get("independent_live_review_receipt_sha256", "")) == "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9" and int(acceptance.get("numerator_effect", -1)) == 1 and bool(acceptance.get("wall_and_roof_are_one_physical_unit", false)), "Navy Chapel receipt or one-unit rollup drifted.")
-			_require(str(geometry.get("visual_geometry_signature", "")) == "076e081df86e884f04cf7cb680304c35c64e6f76238de7060528c59097ae5c46" and int(geometry.get("visual_triangles", -1)) == 540 and int(geometry.get("world_records", -1)) == 735 and int(geometry.get("world_mesh_instances", -1)) == 944 and int(geometry.get("world_surfaces", -1)) == 957 and int(geometry.get("world_triangles", -1)) == 64572 and int(geometry.get("world_static_bodies", -1)) == 466 and int(geometry.get("world_shapes", -1)) == 466, "Navy Chapel geometry/world parity drifted.")
+			_require(str(geometry.get("world_topology_scope", "")) == PRE_B201_INTEGRATION_WORLD_TOPOLOGY_SCOPE and str(geometry.get("visual_geometry_signature", "")) == "076e081df86e884f04cf7cb680304c35c64e6f76238de7060528c59097ae5c46" and int(geometry.get("visual_triangles", -1)) == 540 and int(geometry.get("world_records", -1)) == 735 and int(geometry.get("world_mesh_instances", -1)) == 944 and int(geometry.get("world_surfaces", -1)) == 957 and int(geometry.get("world_triangles", -1)) == 64572 and int(geometry.get("world_static_bodies", -1)) == 466 and int(geometry.get("world_shapes", -1)) == 466, "Navy Chapel pre-B201 integration geometry/world parity drifted.")
 			_require(str(ownership.get("live_ownership_signature", "")) == "4766c5d562933eb632f1ef3bdcec828fc40be81c996db919c53405f776fa04a7" and int(ownership.get("structural_owner_count", -1)) == 2 and int(ownership.get("shape_count", -1)) == 2 and int(ownership.get("spray_owner_count", -1)) == 1 and int(ownership.get("wall_collision_triangles", -1)) == 94 and int(ownership.get("roof_collision_triangles", -1)) == 50 and bool(ownership.get("wall_is_sole_spray_receiver", false)) and ownership.get("roof_is_wall_spray_receiver") == false, "Navy Chapel collision/spray ownership parity drifted.")
+		elif receiver_key == "building:w34313545:wall":
+			var behavior := contract.get("behavior_contract", {}) as Dictionary
+			var acceptance := behavior.get("acceptance_contract", {}) as Dictionary
+			var geometry := behavior.get("geometry_contract", {}) as Dictionary
+			var ownership := behavior.get("ownership_contract", {}) as Dictionary
+			var scope := adapter.get("active_receiver_scope", {}) as Dictionary
+			var actual_paths := []
+			for asset_value: Variant in adapter.get("runtime_assets", []) as Array:
+				actual_paths.append(str((asset_value as Dictionary).get("path", "")))
+			actual_paths.sort()
+			var expected_paths := [
+				"res://game/resources/facades/d1_current/d1_b201_live_attachment.json",
+				"res://game/resources/materials/world/d1_current/b201_green_hierarchy.tres",
+				"res://game/resources/materials/world/d1_current/b201_muted_rust_post.tres",
+				"res://game/resources/materials/world/d1_current/b201_service_leaf.tres",
+				"res://game/resources/materials/world/d1_current/b201_warm_wall.tres",
+				"res://game/resources/materials/world/d1_current/shared_dark_glass.tres",
+				"res://game/resources/materials/world/d1_current/shared_pale_frame.tres",
+				"res://game/scripts/world/facades/d1_b201_live_attachment.gd",
+			]
+			expected_paths.sort()
+			_require(str(adapter.get("attachment_kind", "")) == "active_d1_b201_receiver_host_partition_attachment" and str(adapter.get("runtime_content_mode", "")) == "active_d1_b201_host_partition_attachment", "D1 B201 has stale active-content classification.")
+			_require(str(scope.get("coverage", "")) == "whole_direct_wall_receiver" and int(scope.get("run_count", -1)) == 40, "D1 B201 active receiver scope drifted.")
+			_require(actual_paths == expected_paths and (adapter.get("runtime_assets", []) as Array).size() == 8 and (adapter.get("runtime_asset_projections", []) as Array).is_empty(), "D1 B201 exact eight-asset package-safe closure drifted.")
+			_require(str(acceptance.get("independent_live_review_receipt_sha256", "")) == "b9ef912df2dd00fa2c456a8e7e03473001cc381cbc2dd5288e9f6ef65d8c2772" and str(acceptance.get("evidence_manifest_sha256", "")) == "f169085620a0a9ff0c685e4dfa98442c5c31e4e580f1decdbd80e84b09c74fe3" and int(acceptance.get("numerator_effect", -1)) == 1, "D1 B201 receipt or one-unit rollup drifted.")
+			_require(str(geometry.get("decorative_geometry_signature", "")) == "705c5345509f77cd91359f66173fff0e1e132d41ebb9acef3f51ff2c467abb3a" and int(geometry.get("host_triangles", -1)) == 80 and int(geometry.get("eligible_host_triangles", -1)) == 20 and int(geometry.get("protected_host_triangles", -1)) == 60 and int(geometry.get("decorative_triangles", -1)) == 2064, "D1 B201 host partition or decorative geometry parity drifted.")
+			_require(str(geometry.get("world_topology_scope", "")) == CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE and int(geometry.get("world_records", -1)) == 735 and int(geometry.get("world_mesh_instances", -1)) == 950 and int(geometry.get("world_surfaces", -1)) == 964 and int(geometry.get("world_triangles", -1)) == 66636 and int(geometry.get("world_static_bodies", -1)) == 466 and int(geometry.get("world_shapes", -1)) == 466, "D1 B201 current-integration world topology drifted.")
+			_require(bool(ownership.get("host_collision_owner_preserved", false)) and bool(ownership.get("host_spray_owner_preserved", false)) and int(ownership.get("structural_owner_count", -1)) == 1 and int(ownership.get("shape_count", -1)) == 1 and int(ownership.get("spray_owner_count", -1)) == 1 and int(ownership.get("decorative_collision_nodes", -1)) == 0 and int(ownership.get("decorative_navigation_nodes", -1)) == 0 and int(ownership.get("decorative_spray_nodes", -1)) == 0, "D1 B201 collision/navigation/spray ownership parity drifted.")
 		else:
 			_require(str(adapter.get("attachment_kind", "")) == "active_building_1_hero_replacement" and str(adapter.get("content_classification", "")) == "active_target_specific_hero_replacement", "%s has stale active-content classification." % receiver_key)
 			var summary := contract.get("config_summary", {}) as Dictionary
@@ -262,6 +332,8 @@ func _validate_runtime_adapters(registry: Dictionary) -> void:
 			_require(str(contract.get("public_front_config_sha256", "")) == "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806", "%s public-front contract hash drifted." % receiver_key)
 	var registry_text := JSON.stringify(registry)
 	_require(not registry_text.contains("building_1_recognizable_facade") and not registry_text.contains("building_1_recognizability_placements"), "Runtime registry retains obsolete Building 1 facade assets.")
+	var world_builder_text := FileAccess.get_file_as_string("res://game/scripts/world/world_chunk_builder.gd")
+	_require(not world_builder_text.contains("facade_runtime_registry_loader"), "Generic facade registry loader was wired into world construction.")
 
 
 func _receiver_by_key(receivers: Array, receiver_key: String) -> Dictionary:
@@ -269,6 +341,14 @@ func _receiver_by_key(receivers: Array, receiver_key: String) -> Dictionary:
 		var receiver := receiver_value as Dictionary
 		if str(receiver.get("receiver_key", "")) == receiver_key:
 			return receiver
+	return {}
+
+
+func _unit_by_id(units: Array, unit_id: String) -> Dictionary:
+	for unit_value: Variant in units:
+		var unit := unit_value as Dictionary
+		if str(unit.get("unit_id", "")) == unit_id:
+			return unit
 	return {}
 
 

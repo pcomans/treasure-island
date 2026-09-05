@@ -2,8 +2,16 @@ extends SceneTree
 
 const OUTPUT := "res://evidence/first-playable/navy-chapel-187-standalone-hero-2026-09-04"
 const MANIFEST_PATH := OUTPUT + "/capture-manifest.json"
+const CURRENT_REGISTRY := "res://game/resources/facades/facade-runtime-registry.json"
+const CURRENT_REGISTRY_SHA256 := "9c46c1a8c809aa9ded82008d35e9c1b257070e9c61f6d6e41f5650ca7b1c3f27"
+const CURRENT_LIVE_MANIFEST := "res://evidence/first-playable/navy-chapel-187-live-replacement-2026-09-04/capture-manifest.json"
+const CURRENT_LIVE_MANIFEST_SHA256 := "54d434c9283a0e2d86aa836e6a21672a8756e5a170cb5724d66066e799223930"
+const CURRENT_LIVE_REVIEW := "res://evidence/first-playable/navy-chapel-187-live-replacement-2026-09-04/INDEPENDENT_LIVE_BAR_RAISER_REVIEW.md"
+const CURRENT_LIVE_REVIEW_SHA256 := "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9"
+const STANDALONE_REVIEW := OUTPUT + "/INDEPENDENT_BAR_RAISER_REVIEW.md"
 const EXPECTED_HASHES := {
 	"res://game/tests/navy_chapel_187_standalone_hero_capture.gd": "887842e96b0a4d9fe519b94eae22941def5fd06ec6c11f7bfc81446a3e9ca2c7",
+	STANDALONE_REVIEW: "4232ad42b3600b1d7f945c5d51325bb9698c366e07eb1ddea3fd90f3f49235c6",
 	MANIFEST_PATH: "a7e551d1bbadaef3ff61f6fbb27e5ac93af3ba997103ddc1dd00041c8229cd28",
 	OUTPUT + "/images/01-whole-object-before.png": "2edeaff94139639da514d049f42f94819881c7a421a4dd24f24b1b305ecd4833",
 	OUTPUT + "/images/01-whole-object-after.png": "522c649d0766e2bd84999f9b21ee569e53911094e280480db31bff5a340fe0ed",
@@ -31,11 +39,12 @@ func _run() -> void:
 		return
 	var manifest := JSON.parse_string(FileAccess.get_file_as_string(MANIFEST_PATH)) as Dictionary
 	if not _require(_manifest_truth_matches(manifest), "The Chapel evidence truth/review boundary, source binding, native provenance, or topology drifted.") \
-		or not _require(_captures_match(manifest.get("captures", []) as Array), "A Chapel evidence frame lost native image integrity, grounded provenance, framing, LOS binding, or pending-review status.") \
-		or not _require(_pairs_match(manifest.get("capture_pairs", []) as Array, manifest.get("captures", []) as Array), "A Chapel before/after pair no longer uses the exact same grounded camera/player transform."):
+		or not _require(_captures_match(manifest.get("captures", []) as Array), "A Chapel evidence frame lost native image integrity, grounded provenance, framing, LOS binding, or capture-time pending-review status.") \
+		or not _require(_pairs_match(manifest.get("capture_pairs", []) as Array, manifest.get("captures", []) as Array), "A Chapel before/after pair no longer uses the exact same grounded camera/player transform.") \
+		or not _require(_current_navy_supersession_matches(), "Current accepted Navy live supersession authority drifted."):
 		_finish()
 		return
-	print("PASS: four sealed native Chapel PNGs remain technically valid fixed-camera grounded before/after evidence; all recognition and believability verdicts remain pending independent bar-raiser review")
+	print("PASS: four sealed native Chapel PNGs remain technically valid fixed-camera grounded before/after evidence with capture-time standalone verdicts pending; the exact independent standalone review subsequently passed with limitation, and the separate current v7 bridge proves Navy Chapel is accepted through the paired live replacement")
 	_finish()
 
 
@@ -171,6 +180,54 @@ func _hashes_match() -> bool:
 			push_error("Chapel evidence hash drift: %s expected=%s actual=%s" % [path, str(EXPECTED_HASHES[path]), FileAccess.get_sha256(path)])
 			return false
 	return true
+
+
+func _current_navy_supersession_matches() -> bool:
+	if FileAccess.get_sha256(CURRENT_REGISTRY) != CURRENT_REGISTRY_SHA256 \
+		or FileAccess.get_sha256(CURRENT_LIVE_MANIFEST) != CURRENT_LIVE_MANIFEST_SHA256 \
+		or FileAccess.get_sha256(CURRENT_LIVE_REVIEW) != CURRENT_LIVE_REVIEW_SHA256:
+		return false
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(CURRENT_REGISTRY))
+	if not parsed is Dictionary:
+		return false
+	var registry := parsed as Dictionary
+	var metric := registry.get("recognition_metric", {}) as Dictionary
+	if str(registry.get("schema_version", "")) != "ti.facade-runtime-registry/7" \
+		or int(metric.get("numerator", -1)) != 7 or int(metric.get("denominator", -1)) != 213:
+		return false
+	var unit := _find_by_id(registry.get("units", []) as Array, "unit_id", "physical-building:w291189336")
+	var adapter := _find_by_id(registry.get("active_runtime_adapters", []) as Array, "adapter_id", "active-adapter:navy-chapel-187:building:w291189336:wall")
+	var claim := unit.get("claim_status", {}) as Dictionary
+	var scope := adapter.get("active_receiver_scope", {}) as Dictionary
+	if str(claim.get("reference_recognizable", "")) != "accepted" \
+		or unit.get("active_runtime_adapter_ids", []) != ["active-adapter:navy-chapel-187:building:w291189336:wall"] \
+		or not (unit.get("legacy_adapter_ids", []) as Array).is_empty() \
+		or str(adapter.get("receiver_key", "")) != "building:w291189336:wall" \
+		or str(adapter.get("runtime_content_mode", "")) != "active_navy_chapel_187_paired_replacement" \
+		or str(adapter.get("review_status", "")) != "independent_exact_current_live_pass" \
+		or str(adapter.get("review_status_scope", "")) != "runtime_asset_original_detail_provenance_only_not_reference_recognition" \
+		or str(adapter.get("recognition_acceptance_authority", "")) != "physical_unit_claim_and_independent_acceptance_record" \
+		or str(adapter.get("recognition_acceptance_status", "")) != "accepted" \
+		or str(scope.get("coverage", "")) != "whole_direct_wall_receiver" or int(scope.get("run_count", -1)) != 34 \
+		or (adapter.get("runtime_assets", []) as Array).size() != 9:
+		return false
+	for value: Variant in unit.get("acceptance_records", []) as Array:
+		var record := value as Dictionary
+		if str(record.get("review_id", "")) == "navy-chapel-187-live-replacement-2026-09-04" \
+			and str(record.get("review_kind", "")) == "independent_reference_recognition" \
+			and str(record.get("status", "")) == "accept" \
+			and str(record.get("review_receipt_sha256", "")) == CURRENT_LIVE_REVIEW_SHA256 \
+			and str(record.get("evidence_manifest_sha256", "")) == CURRENT_LIVE_MANIFEST_SHA256:
+			return true
+	return false
+
+
+func _find_by_id(values: Array, key: String, expected: String) -> Dictionary:
+	for value: Variant in values:
+		var item := value as Dictionary
+		if str(item.get(key, "")) == expected:
+			return item
+	return {}
 
 
 func _float_array_approx(actual: Array, expected: Array, tolerance: float) -> bool:

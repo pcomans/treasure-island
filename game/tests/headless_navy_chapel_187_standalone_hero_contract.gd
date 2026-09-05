@@ -12,6 +12,9 @@ const PACKET_PATH := "res://discovery/facades/p3_reference_packets/w291189336_na
 const WALL_KEY := "building:w291189336:wall"
 const ROOF_KEY := "building:w291189336:roof"
 const SOURCE_KEY := "w291189336"
+const PHYSICAL_UNIT_ID := "physical-building:w291189336"
+const REVIEW_STATUS_SCOPE := "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+const RECOGNITION_ACCEPTANCE_AUTHORITY := "physical_unit_claim_and_independent_acceptance_record"
 const OBSERVED_SSE_RUNS := [9, 10]
 const OBSERVED_PARTIAL_SIDE_RUNS := [11, 12, 13]
 const PROTECTED_RUNS := [0, 1, 2, 3, 4, 5, 6, 7, 8, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33]
@@ -440,10 +443,26 @@ func _approved_registry_route_matches() -> bool:
 	if catalog_matches.size() != 1:
 		return false
 	var catalog_entry := catalog_matches[0]
+	var catalog_units: Array[Dictionary] = []
+	for value: Variant in (catalog_value as Dictionary).get("units", []):
+		var entry := value as Dictionary
+		if str(entry.get("unit_id", "")) == PHYSICAL_UNIT_ID:
+			catalog_units.append(entry)
+	if catalog_units.size() != 1:
+		return false
+	var catalog_unit := catalog_units[0]
+	var catalog_claim := catalog_unit.get("claim_status", {}) as Dictionary
+	var catalog_receipts := catalog_unit.get("acceptance_records", []) as Array
 	if str(catalog_entry.get("receiver_key", "")) != WALL_KEY \
 	or str(catalog_entry.get("runtime_adapter_path", "")) != LIVE_ADAPTER_PATH.trim_prefix("res://") \
 	or str(catalog_entry.get("runtime_config_path", "")) != CONFIG_PATH.trim_prefix("res://") \
-	or not (PROTOTYPE_PATH.trim_prefix("res://") in (catalog_entry.get("runtime_asset_paths", []) as Array)):
+	or not (PROTOTYPE_PATH.trim_prefix("res://") in (catalog_entry.get("runtime_asset_paths", []) as Array)) \
+	or str(catalog_entry.get("review_status", "")) != "independent_exact_current_live_pass" \
+	or str(catalog_entry.get("review_status_scope", "")) != REVIEW_STATUS_SCOPE \
+	or str(catalog_entry.get("recognition_acceptance_authority", "")) != RECOGNITION_ACCEPTANCE_AUTHORITY \
+	or str(catalog_entry.get("recognition_acceptance_status", "")) != "accepted" \
+	or str(catalog_entry.get("recognition_acceptance_status", "")) != str(catalog_claim.get("reference_recognizable", "")) \
+	or not _has_reference_acceptance(catalog_receipts):
 		return false
 	var registry_matches: Array[Dictionary] = []
 	for value: Variant in (registry_value as Dictionary).get("active_runtime_adapters", []):
@@ -453,12 +472,40 @@ func _approved_registry_route_matches() -> bool:
 	if registry_matches.size() != 1:
 		return false
 	var registry_entry := registry_matches[0]
+	var registry_units: Array[Dictionary] = []
+	for value: Variant in (registry_value as Dictionary).get("units", []):
+		var entry := value as Dictionary
+		if str(entry.get("unit_id", "")) == PHYSICAL_UNIT_ID:
+			registry_units.append(entry)
+	if registry_units.size() != 1:
+		return false
+	var registry_unit := registry_units[0]
+	var registry_claim := registry_unit.get("claim_status", {}) as Dictionary
+	var registry_receipts := registry_unit.get("acceptance_records", []) as Array
+	var registry_behavior := (registry_entry.get("active_runtime_contract", {}) as Dictionary).get("behavior_contract", {}) as Dictionary
+	var registry_geometry := registry_behavior.get("geometry_contract", {}) as Dictionary
 	var runtime_paths: Array[String] = []
 	for value: Variant in registry_entry.get("runtime_assets", []):
 		runtime_paths.append(str((value as Dictionary).get("path", "")))
 	return str(registry_entry.get("receiver_key", "")) == WALL_KEY \
 		and str(registry_entry.get("runtime_content_mode", "")) == "active_navy_chapel_187_paired_replacement" \
+		and str(registry_entry.get("review_status", "")) == "independent_exact_current_live_pass" \
+		and str(registry_entry.get("review_status_scope", "")) == REVIEW_STATUS_SCOPE \
+		and str(registry_entry.get("recognition_acceptance_authority", "")) == RECOGNITION_ACCEPTANCE_AUTHORITY \
+		and str(registry_entry.get("recognition_acceptance_status", "")) == "accepted" \
+		and str(registry_entry.get("recognition_acceptance_status", "")) == str(registry_claim.get("reference_recognizable", "")) \
+		and _has_reference_acceptance(registry_receipts) \
+		and str(registry_geometry.get("world_topology_scope", "")) == "pre_b201_integration_live_parity" \
+		and int(registry_geometry.get("world_records", -1)) == 735 and int(registry_geometry.get("world_mesh_instances", -1)) == 944 \
+		and int(registry_geometry.get("world_surfaces", -1)) == 957 and int(registry_geometry.get("world_triangles", -1)) == 64572 \
+		and int(registry_geometry.get("world_static_bodies", -1)) == 466 and int(registry_geometry.get("world_shapes", -1)) == 466 \
 		and LIVE_ADAPTER_PATH in runtime_paths and CONFIG_PATH in runtime_paths and PROTOTYPE_PATH in runtime_paths
+
+
+func _has_reference_acceptance(receipts: Array) -> bool:
+	return receipts.size() == 1 \
+		and str((receipts[0] as Dictionary).get("review_kind", "")) == "independent_reference_recognition" \
+		and str((receipts[0] as Dictionary).get("status", "")) == "accept"
 
 
 func _hashes_match() -> bool:

@@ -7,9 +7,9 @@ const EXPECTED_MANIFEST_HASH := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e
 const EXPECTED_CHUNKS := 38
 const EXPECTED_PLAYABLE_ROWS := 735
 const EXPECTED_CONTEXT_ROWS := 4
-const EXPECTED_MESHES := 944
-const EXPECTED_SURFACES := 957
-const EXPECTED_TRIANGLES := 64572
+const EXPECTED_MESHES := 950
+const EXPECTED_SURFACES := 964
+const EXPECTED_TRIANGLES := 66636
 const EXPECTED_STATIC_BODIES := 466
 const EXPECTED_VEGETATION_SEED := 1414092337
 const EXPECTED_VEGETATION_INSTANCES := 124
@@ -44,13 +44,14 @@ const MAC_EXPORT_EXPECTED_MATERIALS := {
 var _world_ready := false
 var _mac_export_smoke := false
 var _mac_export_smoke_finished := false
+var _mac_export_smoke_deadline_msec := -1
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	_mac_export_smoke = OS.get_cmdline_user_args().has(MAC_EXPORT_SMOKE_ARG)
 	if _mac_export_smoke:
-		get_tree().create_timer(MAC_EXPORT_SMOKE_TIMEOUT_SECONDS, true, true, true).timeout.connect(_on_mac_export_smoke_timeout)
+		_mac_export_smoke_deadline_msec = Time.get_ticks_msec() + int(MAC_EXPORT_SMOKE_TIMEOUT_SECONDS * 1000.0)
 	get_tree().paused = false
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	player.hide()
@@ -63,6 +64,14 @@ func _ready() -> void:
 	hud.resume_requested.connect(_resume_game)
 	hud.exit_requested.connect(_exit_game)
 	world_root.call_deferred("load_world")
+
+
+func _process(_delta: float) -> void:
+	if _mac_export_smoke \
+	and not _mac_export_smoke_finished \
+	and _mac_export_smoke_deadline_msec >= 0 \
+	and Time.get_ticks_msec() >= _mac_export_smoke_deadline_msec:
+		_on_mac_export_smoke_timeout()
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -199,12 +208,14 @@ func _finish_mac_export_smoke(report: Dictionary) -> void:
 		get_tree().quit(1)
 		return
 
+	print("MAC_EXPORT_JETPACK_PHASE: grounding_start")
 	var grounded := false
 	for _frame in 120:
 		await get_tree().physics_frame
 		if player.is_on_floor():
 			grounded = true
 			break
+	print("MAC_EXPORT_JETPACK_PHASE: grounding_complete grounded=%s" % grounded)
 	if not grounded or not _action_has_physical_key("jetpack", KEY_SPACE):
 		_release_mac_export_smoke_input()
 		push_error("MAC_EXPORT_SMOKE_FAIL: packaged player did not ground or jetpack is not bound to physical Space")
@@ -213,18 +224,21 @@ func _finish_mac_export_smoke(report: Dictionary) -> void:
 		return
 
 	var start_y := player.global_position.y
+	print("MAC_EXPORT_JETPACK_PHASE: ascent_start y=%.3f" % start_y)
 	Input.action_press("jetpack")
 	for _frame in 45:
 		await get_tree().physics_frame
 	Input.action_release("jetpack")
 	var rise := player.global_position.y - start_y
 	var ascent_velocity := player.velocity.y
+	print("MAC_EXPORT_JETPACK_PHASE: ascent_complete rise=%.3f velocity=%.3f" % [rise, ascent_velocity])
 	var reached_slow_descent := false
 	for _frame in 90:
 		await get_tree().physics_frame
 		if player.velocity.y <= -player.jetpack_descent_speed_mps + 0.05:
 			reached_slow_descent = true
 			break
+	print("MAC_EXPORT_JETPACK_PHASE: descent_threshold reached=%s velocity=%.3f" % [reached_slow_descent, player.velocity.y])
 	var descent_start_y := player.global_position.y
 	var minimum_velocity_y := player.velocity.y
 	if reached_slow_descent:
@@ -259,7 +273,7 @@ func _finish_mac_export_smoke(report: Dictionary) -> void:
 func _on_mac_export_smoke_timeout() -> void:
 	if _mac_export_smoke and not _mac_export_smoke_finished:
 		_release_mac_export_smoke_input()
-		push_error("MAC_EXPORT_SMOKE_TIMEOUT: packaged main scene did not finish world/jetpack checks within %.0f seconds" % MAC_EXPORT_SMOKE_TIMEOUT_SECONDS)
+		push_error("MAC_EXPORT_SMOKE_TIMEOUT: packaged main scene did not finish world/jetpack checks within %.0f seconds of monotonic wall time" % MAC_EXPORT_SMOKE_TIMEOUT_SECONDS)
 		_mac_export_smoke_finished = true
 		get_tree().quit(1)
 

@@ -1,6 +1,6 @@
 # D1 address-only reference-readiness packets
 
-Checked: **2026-09-04**
+Checked: **2026-09-05**
 
 Scope: **six frozen address-only units; research and bounded handoff only**
 
@@ -19,21 +19,30 @@ not facade appearance. Google panoramas are observation-only: the repository
 stores URLs, panorama identifiers, dates, and written observations, never
 pixels. A public view is not an asset licence and may not ship in the game.
 
+Current lifecycle note: B201 `w34313545` has since passed standalone and
+actual-live independent review and is accepted as exactly one
+reference-recognizable physical unit in the coordinated `7/213` catalog and
+runtime registry. Its exact whole-wall receiver uses a 40-run host partition
+plus render-only detail from an eight-asset package closure, with generic
+registry dispatch unwired. The frozen packet remains its bounded source input;
+this lifecycle update does not rewrite the packet or expand its truth boundary.
+
 ## Readiness ledger
 
 | Unit | Exact identity / lifecycle | Observed facade state | Readiness | Safe next prototype | Blocking boundary |
 | --- | --- | --- | --- | --- | --- |
 | `w34313512` | High footprint binding to City B258 / 449 Avenue H; current survival conflicts across sources | May 2011 ENE long side; later site-state record conflicts with the Dec 2025 official demolition baseline | **Historical-mode prototype-ready** | two-register bay, siding, and intermediate ledge on runs `10..16` | no current attachment; resolve whether/when demolition occurred |
-| `w34313545` | High footprint binding to City B201; frozen `800 Avenue I` conflicts with current `800 Avenue H` / `995 9th at Avenue I`; not Station 48 | Sep 2025 WSW public side plus occluded ENE service context | **Current prototype-ready** | light field, green upper register, broad dark upper bays, sparse solid lower field on runs `0..9` | signs/canopy and all other runs remain outside scope |
+| `w34313545` | High footprint binding to City B201; frozen `800 Avenue I` conflicts with current `800 Avenue H` / `995 9th at Avenue I`; not Station 48 | Sep 2025 WSW public side plus occluded ENE service context | **Independently accepted live; one physical unit** | accepted WSW light field, green hierarchy, broad dark upper bays, sparse solid lower field; exact whole receiver preserves protected host runs | signage, tenant, interiors, hidden sides, exact dimensions/cadence, and as-built fidelity remain outside scope |
 | `w34313546` | High address/footprint binding to City B202 / 850 Avenue H; public wall ownership remains medium | Sep 2025 partial east end; rest occluded | **Constrained study-ready** | one reversible paired-high-window/door/teal-edge end study on runs `12,13` | no propagation or attachment until a target-identifiable side is secured |
 | `w95934116` | High binding to City B1302 / 905 Avenue B, six units A-F; exact F exterior not observed | no target-identifiable public elevation | **Appearance-blocked** | none beyond the shared placeholder | needs one dated, rights-cleared row/unit-F exterior with position and side |
 | `w95934119` | High binding to City B225 / 148 12th Street; no authoritative common name | Mar 2025 NNW long side and WSW end | **Current prototype-ready** | aged horizontal field plus complete varied clerestory groups on runs `10..13`; material only on `0..2` | lower facade and SSE/ENE sides remain occluded/unobserved |
 | `w96698660` | High frozen-footprint binding; old 810 Avenue D remapped to 321 9th Street while a current program still uses the legacy address | May 2011 front; Mar 2025 enclosure hides the site | **Historical-mode prototype-ready** | symmetrical two-window/central-double-door front on run `0` | current survival/exterior and other sides unknown |
 
-Counts: **6/6** exact source/receiver and identity packets; **5/6** have at
+Frozen research-readiness counts: **6/6** exact source/receiver and identity packets; **5/6** have at
 least two observed visual cues; **3/6** have current dated target-side cues;
 **2/6** are historical-only; **1/6** has no facade evidence. These counts are
-research readiness, not live-world completion.
+research readiness at packet freeze, not the current live-world completion
+rollup. B201's later accepted state is recorded separately above.
 
 ## Shared recognition gate
 

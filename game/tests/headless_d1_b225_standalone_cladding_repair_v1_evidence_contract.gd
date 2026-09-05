@@ -6,6 +6,8 @@ const PACKAGE_AUDIT_PATH := EVIDENCE_ROOT + "/package-audit.json"
 const CONFIG_PATH := "res://game/resources/facades/d1_current/repairs/d1_b225_nnw_long_cladding_repair_v1.json"
 const CAPTURE_PATH := "res://game/tests/d1_b225_standalone_cladding_repair_v1_capture.gd"
 const STRUCTURAL_CONTRACT_PATH := "res://game/tests/headless_d1_b225_standalone_cladding_repair_v1_contract.gd"
+const INDEPENDENT_REVIEW_PATH := EVIDENCE_ROOT + "/INDEPENDENT_BAR_RAISER_REVIEW.md"
+const EXPECTED_INDEPENDENT_REVIEW_SHA256 := "b35df2e8c39e854b3553d07d369cdd72a76b1a37446ffb7bbe9a5941f8a69015"
 const SOURCE_RECEIPT_PATH := "res://discovery/facades/PRECOMMIT_PACKAGE_SANITIZATION_SOURCE_PROVENANCE.json"
 const SOURCE_RECEIPT_SHA256 := "269558b49e21c6c4f46c7133c3aa6012ca35bc122739c677b3ba5ab318a19333"
 const EXPECTED_MANIFEST_SHA256 := "22cbe9edec6e33ccbfcc2c71d719c2c1bc646358fb46242be802affe371b2ec5"
@@ -33,13 +35,14 @@ func _run() -> void:
 	_require(FileAccess.get_sha256(CONFIG_PATH) == EXPECTED_CURRENT_CONFIG_SHA256, "B225 current package-safe repair config drifted.")
 	_require(FileAccess.get_sha256(CAPTURE_PATH) == EXPECTED_CAPTURE_SHA256, "B225 native capture harness drifted.")
 	_require(FileAccess.get_sha256(STRUCTURAL_CONTRACT_PATH) == EXPECTED_STRUCTURAL_CONTRACT_SHA256, "B225 structural contract drifted.")
+	_require(FileAccess.get_sha256(INDEPENDENT_REVIEW_PATH) == EXPECTED_INDEPENDENT_REVIEW_SHA256, "B225 independent bar-raiser review receipt drifted.")
 	_require(_manifest_contract_matches(manifest), "B225 native evidence manifest scope/renderer/topology contract failed.")
 	_require(_source_receipt_matches(), "B225 capture-time config hash is not reconciled through the sealed source-only provenance receipt.")
 	_require(_static_pairs_match(manifest), "B225 matched control/candidate clean views drifted.")
 	_require(_motion_matches(manifest), "B225 consecutive motion/run-boundary contract failed.")
 	_require(_package_audit_matches(package_audit), "B225 isolated package-cost audit failed.")
 	if not _failed:
-		print("PASS: B225 evidence pins four clean control/candidate pairs, 25 consecutive native Metal frames crossing all run joins, exact generated provenance/topology, and isolated package cost while reserving visual judgment for the bar-raiser")
+		print("PASS: B225 evidence pins four clean control/candidate pairs, 25 consecutive native Metal frames crossing all run joins, exact generated provenance/topology, and isolated package cost; the manifest's capture-time pending label is preserved, and the exact independent review subsequently passed with limitation for a future reversible live promotion while this repair remains unattached")
 	_finish()
 
 

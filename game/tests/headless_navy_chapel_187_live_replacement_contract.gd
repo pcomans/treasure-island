@@ -8,7 +8,7 @@ const SOURCE_KEY := "w291189336"
 const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const EXPECTED_WORLD_TOPOLOGY := {
-	"rows": 735, "meshes": 944, "surfaces": 957, "triangles": 64572,
+	"rows": 735, "meshes": 950, "surfaces": 964, "triangles": 66636,
 	"bodies": 466, "shapes": 466,
 }
 const EXPECTED_HASHES := {
@@ -19,8 +19,8 @@ const EXPECTED_HASHES := {
 	"res://evidence/first-playable/navy-chapel-187-live-replacement-2026-09-04/INDEPENDENT_LIVE_BAR_RAISER_REVIEW.md": "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9",
 	"res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd": "067c12e29c9fd352915ef2a501fcd7687b450081c79a4281d63bbfef1c19e7db",
 	"res://game/resources/facades/navy_chapel_187_standalone_hero_prototype.json": "c8f2ab09f3943a5ec8abea7cb9a108f49990bff1d83003c3b3622187a269dea2",
-	"res://discovery/facades/facade-recognition-catalog.json": "ab8797e86d5985c4b64670a22577394656c6388bb463f83c157a411663fa7b57",
-	"res://game/resources/facades/facade-runtime-registry.json": "65edf085437bc3fa2b22869406cc8a2c33297b6cc9d48b205e301e367efc734b",
+	"res://discovery/facades/facade-recognition-catalog.json": "a4d9dd474acb09a211f7e0e00d66aeaf7a669927880dd011e24e2f51d13bdd7d",
+	"res://game/resources/facades/facade-runtime-registry.json": "9c46c1a8c809aa9ded82008d35e9c1b257070e9c61f6d6e41f5650ca7b1c3f27",
 }
 const PACKAGE_FILES := [
 	"res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd",
@@ -42,7 +42,8 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	if not _require(_hashes_match(), "A frozen Chapel source, approval receipt, independent live receipt, or current 6/213 registry authority drifted.") \
+	if not _require(_hashes_match(), "A frozen Chapel source/receipt or current 7/213 registry authority drifted.") \
+	or not _require(_current_metric_matches(), "The Chapel one-unit acceptance is not preserved within exact-current 7/213 authority.") \
 	or not _require(ADAPTER.source_dependency_hashes_match(), "An approved Chapel source dependency byte drifted.") \
 	or not _require(_package_boundary_is_clean(), "The executable Chapel closure contains a URL, private/source path, or source-pixel reference."):
 		_finish(null)
@@ -82,7 +83,7 @@ func _run() -> void:
 		return
 	await physics_frame
 	await physics_frame
-	if not _require(_live_topology_matches(world), "The measured candidate world is not 735/944/957/64,572/466/466.") \
+	if not _require(_live_topology_matches(world), "The measured current world is not 735/950/964/66,636/466/466.") \
 	or not _require(_live_node_contract_matches(live.wall as Node3D, live.roof as Node3D), "The actual live visual/replacement/collision ownership contract drifted.") \
 	or not _require(_collision_and_spray_rays_match(live.wall as Node3D, live.roof as Node3D, wall), "Entry/roof/cap collision or wall-vs-roof spray-ray behavior drifted."):
 		_finish(main)
@@ -98,7 +99,7 @@ func _run() -> void:
 		evidence.playable_rows, evidence.mesh_instances, evidence.surfaces, evidence.triangles,
 		evidence.static_bodies, evidence.shapes,
 	])
-	print("PASS: actual supplied Chapel wall+roof rows are consumed once without generic stack/fallback; approved visuals remain byte-pinned; collision is split into 94 wall-spray + 50 non-wall roof/cap/cross triangles; the external independent receipt binds exactly +1 physical unit in the canonical 6/213 registry while capture-time node metadata remains immutable")
+	print("PASS: actual supplied Chapel wall+roof rows are consumed once without generic stack/fallback; approved visuals remain byte-pinned; collision is split into 94 wall-spray + 50 non-wall roof/cap/cross triangles; its external receipt remains one accepted unit inside current 7/213 while capture-time node metadata remains immutable")
 	_finish(main)
 
 
@@ -328,6 +329,36 @@ func _hashes_match() -> bool:
 			push_error("Chapel authority hash drift: %s expected=%s actual=%s" % [path, EXPECTED_HASHES[path], FileAccess.get_sha256(path)])
 			return false
 	return true
+
+
+func _current_metric_matches() -> bool:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://game/resources/facades/facade-runtime-registry.json"))
+	if not (parsed is Dictionary):
+		return false
+	var registry := parsed as Dictionary
+	var metric := registry.get("recognition_metric", {}) as Dictionary
+	var adapters := (registry.get("active_runtime_adapters", []) as Array).filter(func(value: Variant) -> bool: return str((value as Dictionary).get("receiver_key", "")) == WALL_KEY)
+	var units := (registry.get("units", []) as Array).filter(func(value: Variant) -> bool: return str((value as Dictionary).get("unit_id", "")) == "physical-building:w291189336")
+	if adapters.size() != 1 or units.size() != 1:
+		return false
+	var adapter := adapters[0] as Dictionary
+	var unit := units[0] as Dictionary
+	var receipts := unit.get("acceptance_records", []) as Array
+	var behavior := (adapter.get("active_runtime_contract", {}) as Dictionary).get("behavior_contract", {}) as Dictionary
+	var geometry := behavior.get("geometry_contract", {}) as Dictionary
+	return str(registry.get("schema_version", "")) == "ti.facade-runtime-registry/7" \
+		and int(metric.get("numerator", -1)) == 7 and int(metric.get("denominator", -1)) == 213 \
+		and str(metric.get("display", "")) == "7/213" \
+		and "physical-building:w291189336" in (metric.get("accepted_physical_unit_ids", []) as Array) \
+		and str(adapter.get("review_status_scope", "")) == "runtime_asset_original_detail_provenance_only_not_reference_recognition" \
+		and str(adapter.get("recognition_acceptance_authority", "")) == "physical_unit_claim_and_independent_acceptance_record" \
+		and str(adapter.get("recognition_acceptance_status", "")) == "accepted" \
+		and str(adapter.get("recognition_acceptance_status", "")) == str((unit.get("claim_status", {}) as Dictionary).get("reference_recognizable", "")) \
+		and str(geometry.get("world_topology_scope", "")) == "pre_b201_integration_live_parity" \
+		and int(geometry.get("world_records", -1)) == 735 and int(geometry.get("world_mesh_instances", -1)) == 944 \
+		and int(geometry.get("world_surfaces", -1)) == 957 and int(geometry.get("world_triangles", -1)) == 64572 \
+		and int(geometry.get("world_static_bodies", -1)) == 466 and int(geometry.get("world_shapes", -1)) == 466 \
+		and receipts.size() == 1 and str((receipts[0] as Dictionary).get("review_kind", "")) == "independent_reference_recognition" and str((receipts[0] as Dictionary).get("status", "")) == "accept"
 
 
 func _record_roots(root_node: Node, key: String) -> Array[Node3D]:

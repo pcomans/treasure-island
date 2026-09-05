@@ -11,6 +11,13 @@ const SCENE := "res://game/scenes/world/facades/isle_house/isle_house_composite_
 const MID_MATERIAL := "res://game/resources/materials/world/isle_house/isle_house_podium_mid_warm_v1.tres"
 const QUIET_MATERIAL := "res://game/resources/materials/world/isle_house/isle_house_return_quiet_v1.tres"
 const CAPTURE_HARNESS := "res://game/tests/isle_house_composite_repair_variant_c_standalone_v1_capture.gd"
+const STANDALONE_REVIEW := OUTPUT + "/INDEPENDENT_BAR_RAISER_REVIEW.md"
+const CURRENT_REGISTRY := "res://game/resources/facades/facade-runtime-registry.json"
+const CURRENT_REGISTRY_SHA256 := "9c46c1a8c809aa9ded82008d35e9c1b257070e9c61f6d6e41f5650ca7b1c3f27"
+const CURRENT_LIVE_MANIFEST := "res://evidence/first-playable/isle-house-composite-repair-variant-c-live-replacement-2026-09-04/capture-manifest.json"
+const CURRENT_LIVE_MANIFEST_SHA256 := "23fd6eff4ab8d9696af9d1ecc19bea50537cc824ecf3a7bebdf4fa191cd039d9"
+const CURRENT_LIVE_REVIEW := "res://evidence/first-playable/isle-house-composite-repair-variant-c-live-replacement-2026-09-04/INDEPENDENT_LIVE_BAR_RAISER_REVIEW.md"
+const CURRENT_LIVE_REVIEW_SHA256 := "37b6c7dbf6c8769b13628e1070a9c3b5beeb9b25bbe63f0f12f9aaa00c22dab8"
 const HIGH_WALL_KEY := "building-composite:w1249412094:w1282547786:wall"
 const LOW_WALL_KEY := "building-composite:w1249412094:w1282547787:wall"
 const FAILED_LIVE_SIGNATURE := "5d61ab90e5b798ac4aa26c45fea37a5293f3083dada615f06999faad459112cc"
@@ -24,6 +31,7 @@ const EXPECTED_HASHES := {
 	MID_MATERIAL: "a9c7230ff52d37327e6d98e0f14953eee2bd3eec7426dc993c0b7cf90e0ec037",
 	QUIET_MATERIAL: "15d4848127a5153724d873dceea9d46121c0d65e5b53be61abed6e70a2f964c1",
 	CAPTURE_HARNESS: "c2a701aed2a71d76dfcb878451b45a5c5d1cd044410cbc4cd44eefb6a6d4c7fd",
+	STANDALONE_REVIEW: "b9877edb51eb9cc09bfd08f33d2664d7d3de08736daa2b96dc6e36c60d0fb5e5",
 	CAPTURE_MANIFEST: "015569b668958e6ae07f6cad6187a1cdc246f183331459315e264bf233bfc0dd",
 	MOTION_MANIFEST: "b128e2a1888dc543bc2cba0cc27922a86f19d339a8efe7c7665e49d4c1161809",
 	MOVIE: "99623c498180eba8475fda0e3c99eda30fa45608a15ee747c4db62c55b614245",
@@ -64,10 +72,11 @@ func _run() -> void:
 	var capture := _json(CAPTURE_MANIFEST)
 	var motion := _json(MOTION_MANIFEST)
 	_require(_capture_manifest_matches(capture), "Variant C still manifest lost its native, truth-bound, or B/C pairing contract.")
-	_require(_captures_match(capture.get("captures", []) as Array), "A Variant C still lost exact pixels, grounded provenance, same-pose pairing, LOS, framing, or pending-review state.")
-	_require(_motion_matches(motion), "Variant C motion evidence lost its exact movie/review-sheet, grounded stock-player, or pending-review contract.")
+	_require(_captures_match(capture.get("captures", []) as Array), "A Variant C still lost exact pixels, grounded provenance, same-pose pairing, LOS, framing, or capture-time pending-review state.")
+	_require(_motion_matches(motion), "Variant C motion evidence lost its exact movie/review-sheet, grounded stock-player, or capture-time pending-review contract.")
+	_require(_current_isle_supersession_matches(), "Current accepted Variant-C live supersession authority drifted.")
 	if not _failed:
-		print("PASS: sixteen sealed native Variant C B/C default/changed-light PNGs, one direct NNW pair, and one 222-frame grounded stock-player movie plus review sheet remain technically valid; visual grade and live promotion remain pending independent review")
+		print("PASS: sixteen sealed native Variant C B/C default/changed-light PNGs, one direct NNW pair, and one 222-frame grounded stock-player movie plus review sheet remain technically valid with capture-time standalone verdicts pending; the exact independent standalone review subsequently passed Variant C, and the separate current v7 bridge proves the Isle physical unit is accepted through its live supersession")
 	quit(1 if _failed else 0)
 
 
@@ -255,6 +264,52 @@ func _hashes_match() -> bool:
 			push_error("Variant C evidence hash drift: %s expected=%s actual=%s" % [path, str(EXPECTED_HASHES[path]), FileAccess.get_sha256(path)])
 			return false
 	return true
+
+
+func _current_isle_supersession_matches() -> bool:
+	if FileAccess.get_sha256(CURRENT_REGISTRY) != CURRENT_REGISTRY_SHA256 \
+		or FileAccess.get_sha256(CURRENT_LIVE_MANIFEST) != CURRENT_LIVE_MANIFEST_SHA256 \
+		or FileAccess.get_sha256(CURRENT_LIVE_REVIEW) != CURRENT_LIVE_REVIEW_SHA256:
+		return false
+	var registry := _json(CURRENT_REGISTRY)
+	var metric := registry.get("recognition_metric", {}) as Dictionary
+	if str(registry.get("schema_version", "")) != "ti.facade-runtime-registry/7" \
+		or int(metric.get("numerator", -1)) != 7 or int(metric.get("denominator", -1)) != 213:
+		return false
+	var unit := _find_by_id(registry.get("units", []) as Array, "unit_id", "physical-building:w1249412094")
+	var adapter := _find_by_id(registry.get("active_runtime_adapters", []) as Array, "adapter_id", "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall")
+	var claim := unit.get("claim_status", {}) as Dictionary
+	var scope := adapter.get("active_receiver_scope", {}) as Dictionary
+	return str(claim.get("reference_recognizable", "")) == "accepted" \
+		and unit.get("active_runtime_adapter_ids", []) == ["active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall"] \
+		and unit.get("legacy_adapter_ids", []) == ["legacy-adapter:building-composite:w1249412094:w1282547786:wall"] \
+		and str(adapter.get("receiver_key", "")) == LOW_WALL_KEY \
+		and str(adapter.get("review_status", "")) == "independent_exact_current_live_pass" \
+		and str(adapter.get("review_status_scope", "")) == "runtime_asset_original_detail_provenance_only_not_reference_recognition" \
+		and str(adapter.get("recognition_acceptance_authority", "")) == "physical_unit_claim_and_independent_acceptance_record" \
+		and str(adapter.get("recognition_acceptance_status", "")) == "accepted" \
+		and str(scope.get("coverage", "")) == "whole_direct_wall_receiver" and int(scope.get("run_count", -1)) == 13 \
+		and _has_receipt(unit, "isle-house-variant-c-live-replacement-2026-09-04", CURRENT_LIVE_REVIEW_SHA256, CURRENT_LIVE_MANIFEST_SHA256)
+
+
+func _find_by_id(values: Array, key: String, expected: String) -> Dictionary:
+	for value: Variant in values:
+		var item := value as Dictionary
+		if str(item.get(key, "")) == expected:
+			return item
+	return {}
+
+
+func _has_receipt(unit: Dictionary, review_id: String, receipt: String, manifest: String) -> bool:
+	for value: Variant in unit.get("acceptance_records", []) as Array:
+		var record := value as Dictionary
+		if str(record.get("review_id", "")) == review_id \
+			and str(record.get("review_kind", "")) == "independent_reference_recognition" \
+			and str(record.get("status", "")) == "accept" \
+			and str(record.get("review_receipt_sha256", "")) == receipt \
+			and str(record.get("evidence_manifest_sha256", "")) == manifest:
+			return true
+	return false
 
 
 func _json(path: String) -> Dictionary:

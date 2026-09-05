@@ -9,16 +9,17 @@ source keeps walking at `4 m/s` and raises the same held-Shift run from
 `7 m/s` to `20 m/s` (about 45 mph), with a short acceleration/braking
 ramp. That change still needs ordinary-play feedback in the exact current
 package. The historical `190724` package's plain native window proves the
-startup repair on the verifier Mac, while candidate `111725` has current
-deterministic package evidence; neither establishes ordinary owner recognition,
-input, or acceptance on the Apple M1 Pro target.
+startup repair on the verifier Mac, while candidate `024605` has current
+deterministic package evidence and an ordinary verifier-host launch; neither
+establishes ordinary owner recognition, input, or acceptance on the Apple M1
+Pro target.
 
 ## Start
 
 First quit any older game window (`Esc`, then `Q` while paused); macOS
 may otherwise focus an already-running historical copy. Open the sole current
 handoff at
-`build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app`.
+`build/b201-promotion-staging-2026-09-05-024605/Treasure Island First Playable.app`.
 Do not add an `--audio-driver` launch argument: the repaired project already
 selects the exact case-sensitive `Dummy` driver before Godot initializes
 audio. The `190724` startup-repair, `231815` car-speed, and `224622`
@@ -26,21 +27,19 @@ textured-world apps are historical and must not be used to judge the current
 result.
 
 The current app's executable SHA-256 is
-`49c7518acfb5443b0cee2f22d65a45405ab62c79a2112d7e770ca1c030eca594`
+`23f8f5cfda04749bb6e2b00659d5f9e46086c55c8dde0cc00d1b2f8b5235146c`
 (`170,963,648` bytes), its PCK SHA-256 is
-`4d9e1d47f8777dbe2d7ca57f9a93d840a708dfcc35c18e99e54a77c36eeb266e`
-(`55,816,660` bytes), and its seven-file inventory SHA-256 is
-`7816c944b470a7542dea1030d9b09cd28c2ec25880fe5131f69bb60460089960`.
+`3425018ee32f645c3bf157deb9f9a548efe3c9e0bca1e40fd588318aa31f54d6`
+(`65,708,948` bytes), and its canonical seven-file inventory SHA-256 is
+`ef300ab3f97d077f3db61fad53094cbc3a540175e6475e549d5cd0a3ab9e8f98`.
 Source contracts and full runtime pass the exact generated
-`729/739/48,389` and loaded `1,278/1,288/55,067`
+`729/739/48,389`, record-root `723/733/48,739`, and loaded `950/964/66,636`
 mesh/surface/triangle totals plus `4/20/30/40` movement values. Static
-integrity, outside-project mounted-PCK audit, and packaged headless smoke pass.
-The first retained native Apple M2 invocation timed out after
-world/visual/movement readiness; its identical warm-state rerun passed. The
-current `104510` source-project visual set also received independent
-`PASS_WITH_LIMITATION`. None of those technical checks are ordinary owner
-play. Exact evidence and limits are in
-[the final-verification record](evidence/first-playable/final-verification-2026-09-03-105408/README.md).
+integrity, general/B201/B1 outside-project mounted-PCK audits, packaged
+headless smoke, and the first native Apple M2 Metal smoke pass. The smoke
+watchdog uses a bounded 60-second monotonic wall-time deadline. B201's separate actual-live review is accepted and current recognition
+is `7/213`. None of those technical checks are ordinary owner play. Exact
+evidence and limits are in [the B201 record](evidence/first-playable/d1-b201-live-attachment-2026-09-04/README.md).
 
 Wait for the full-world loading panel to disappear. A center reticle means the validated world is ready. If `WORLD LOAD BLOCKED` appears, record the code and message; do not treat the partial session as playable. The current load-failure panel has no in-app Exit control, a known workflow gap; quit the application through macOS.
 
@@ -65,7 +64,7 @@ Wait for the full-world loading panel to disappear. A center reticle means the v
 6. Spray an exterior building wall from close range. A source capture already proves one visible, upright, identity-matched eligible tag; confirm it in ordinary play and check that it does not bleed onto an adjacent surface. Try ground, roof, water/context, too-far, and empty-sky targets; each should reject without stopping movement. Pause/resume, toggle `F3`, and exit from the pause panel; relaunch once to confirm tags are session-only.
 
 Record a simple result against
-`final-verification-staging-2026-09-03-111725`: `accepted`, or `blocked`
+`b201-promotion-staging-2026-09-05-024605`: `accepted`, or `blocked`
 with location, action, expected result, observed result, and (if useful) a
 screenshot. Acceptance requires both recognizable Treasure Island and a
 playable walk/run/jetpack/spray experience; a successful automated suite,
@@ -76,7 +75,13 @@ alone is not enough.
 
 Close the app first. Exported apps are disposable only at their exact staging
 paths under `build/`, including current
-`build/final-verification-staging-2026-09-03-111725/` and historical
+`build/b201-promotion-staging-2026-09-05-024605/` and historical
+`build/b201-promotion-staging-2026-09-05-014223/` (withdrawn pre-final-evidence-bridge diagnostic),
+`build/final-verification-staging-2026-09-03-111725/`,
+`build/b201-promotion-staging-2026-09-05-002922/` (withdrawn pre-scope
+diagnostic),
+`build/b201-promotion-staging-2026-09-05-002336/` (withdrawn package-test
+diagnostic),
 `build/startup-repair-staging-2026-08-31-190724/`,
 `build/car-speed-staging-2026-08-28-231815/`, and
 `build/textured-world-final-staging-2026-08-28-224622/`; generated

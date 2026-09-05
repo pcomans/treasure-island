@@ -5,12 +5,13 @@ const ADAPTER_PATH := "res://game/scripts/world/facades/navy_chapel_187_live_rep
 const BUILDER_PATH := "res://game/scripts/world/world_chunk_builder.gd"
 const CHUNK_PATH := "res://generated/world/chunks/x_-1__z_2.json"
 const MANIFEST_PATH := "res://generated/world/manifest.json"
+const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const WALL_KEY := "building:w291189336:wall"
 const ROOF_KEY := "building:w291189336:roof"
 const PRIVATE_REVIEW := "res://evidence/first-playable/navy-chapel-187-standalone-hero-2026-09-04/INDEPENDENT_BAR_RAISER_REVIEW.md"
 const PRIVATE_PACKET := "res://discovery/facades/p3_reference_packets/w291189336_navy_chapel_building_187.md"
 const FRESH_EVIDENCE := "res://evidence/first-playable/navy-chapel-187-live-replacement-2026-09-04/capture-manifest.json"
-const EXPECTED_TOPOLOGY := {"rows": 735, "meshes": 944, "surfaces": 957, "triangles": 64572, "bodies": 466, "shapes": 466}
+const EXPECTED_TOPOLOGY := {"rows": 735, "meshes": 950, "surfaces": 964, "triangles": 66636, "bodies": 466, "shapes": 466}
 const REQUIRED_PACKAGE_RESOURCES := [
 	ADAPTER_PATH,
 	"res://game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd",
@@ -22,6 +23,7 @@ const REQUIRED_PACKAGE_RESOURCES := [
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres",
 	"res://game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres",
 	BUILDER_PATH, CHUNK_PATH, MANIFEST_PATH,
+	REGISTRY_PATH,
 ]
 
 var _failed := false
@@ -41,6 +43,7 @@ func _run() -> void:
 		_require(not ResourceLoader.exists(FRESH_EVIDENCE) and not FileAccess.file_exists(FRESH_EVIDENCE), "Mounted package contains live review evidence.")
 	else:
 		_source_boundary_checks()
+	_require(_registry_topology_scope_matches(), "Navy Chapel authority does not distinguish its pre-B201 integration parity snapshot from current integration topology.")
 	var chunk_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(CHUNK_PATH))
 	if not _require(chunk_value is Dictionary, "Packaged Chapel source chunk did not parse."):
 		_finish(mounted)
@@ -83,6 +86,21 @@ func _source_boundary_checks() -> void:
 	var preset := FileAccess.get_file_as_string("res://export_presets.cfg")
 	for boundary: String in ["discovery/*", "discovery/**/*", "evidence/*", "evidence/**/*"]:
 		_require(boundary in preset, "Export preset lost private boundary %s." % boundary)
+
+
+func _registry_topology_scope_matches() -> bool:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(REGISTRY_PATH))
+	if not (parsed is Dictionary):
+		return false
+	var adapters := ((parsed as Dictionary).get("active_runtime_adapters", []) as Array).filter(func(value: Variant) -> bool: return str((value as Dictionary).get("receiver_key", "")) == WALL_KEY)
+	if adapters.size() != 1:
+		return false
+	var behavior := ((adapters[0] as Dictionary).get("active_runtime_contract", {}) as Dictionary).get("behavior_contract", {}) as Dictionary
+	var geometry := behavior.get("geometry_contract", {}) as Dictionary
+	return str(geometry.get("world_topology_scope", "")) == "pre_b201_integration_live_parity" \
+		and int(geometry.get("world_records", -1)) == 735 and int(geometry.get("world_mesh_instances", -1)) == 944 \
+		and int(geometry.get("world_surfaces", -1)) == 957 and int(geometry.get("world_triangles", -1)) == 64572 \
+		and int(geometry.get("world_static_bodies", -1)) == 466 and int(geometry.get("world_shapes", -1)) == 466
 
 
 func _pair_matches(wall: Node, roof: Node) -> bool:

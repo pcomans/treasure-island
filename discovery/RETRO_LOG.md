@@ -10160,3 +10160,175 @@ No approach selected.
 - This auditor made no product, runtime, test, evidence, package, capture, or
   staged-media edit. Its commands were read-only and headless; the only
   authorized file change is this appended retrospective entry.
+
+## 2026-09-04 — B201 live visual acceptance
+
+### Independent visual bar-raiser (`/root/visual_bar_raiser`)
+
+#### What worked well
+
+- Clean, label-free native stills supported a genuinely pixel-first review,
+  while whole, oblique, grayscale, changed-light, and spray views each tested a
+  different failure mode without inflating the evidence set.
+- Dense frame extraction across the complete declared motion interval, followed
+  by adjacent original-resolution checks, showed that the broad register and
+  major pier/post hierarchy remain stable as the stock player closes from `52`
+  m to `28.121` m.
+- The source packet's recognition pair survived live context and grayscale:
+  broad upper glazing over a sparse solid lower field across a `115.513` m low
+  mass. That supported a top-1 decision without hue, address, tenant, or map
+  location.
+- The close spray view coupled visible pixels to the sole retained host wall,
+  while the log and attachment boundary ruled out a hidden decorative collider
+  or metadata-only placement.
+
+#### What did not work well
+
+- The AVI contains setup imagery before process frame `65` and closing imagery
+  after `245`; the explicit useful interval is therefore necessary for review
+  and makes an unassisted linear scrub less direct.
+- The finest clerestory mullions approach subpixel width at the far end, and the
+  shadowed lower infill has mild close-range screen-space stipple. Neither is
+  distracting or identity-harming in the current motion.
+- A metadata-helper delegation could not start because the shared agent limit
+  was full, so the reviewer performed both pixel and post-visual contract checks
+  serially. This affected latency, not independence or evidence quality.
+
+#### What the team should change next time
+
+- Keep authoritative AVIs complete, but include the exact useful frame range in
+  every review request and provide a non-authoritative contact index so startup
+  and closure frames cannot be mistaken for the player-motion claim.
+- Preserve a whole-side view even when the elevation is only a few dozen pixels
+  tall, then pair it with one closer oblique; the first proves the complete
+  sentence and the second proves depth, grounding, and secondary hierarchy.
+- Authorize the independent receipt and required RETRO in the initial final-
+  review assignment so acceptance reconciliation can bind one path and hash
+  without a second write round.
+
+#### Change accounting
+
+- This round created only
+  `evidence/first-playable/d1-b201-live-attachment-2026-09-04/INDEPENDENT_LIVE_VISUAL_BAR_RAISER_REVIEW.md`
+  and appended this entry to `discovery/RETRO_LOG.md`. It changed no checksum
+  ledger, runtime, registry, catalog, test, source packet, capture, or package.
+
+## 2026-09-05 — B201 promotion, authority reconciliation, and final macOS candidate
+
+### Promotion orchestrator (`/root/b201_finish`)
+
+#### What worked well
+
+- Keeping recognition acceptance at the physical-unit layer resolved a late
+  ambiguity without rewriting any sealed adapter config or evidence byte. Every
+  active adapter now says that its pending original-detail review is provenance
+  only, links to the exact accepted physical unit and independent receipt, and
+  derives `recognition_acceptance_status=reference_recognizable` from that
+  authority instead of treating free-form review text as recognition truth.
+- Exact nested-key validation, same-version mutation rejection, and explicit
+  non-vacuity controls made the compiler, Node, Godot, source, and mounted-PCK
+  surfaces agree. The resulting unreleased coordinated line remains compiler
+  `1.6`, catalog/registry `7`, adapter contracts `6`, and loader API `6`; it
+  closes exactly `7/213` accepted physical units while B201 owns an exact
+  eight-asset package and the generic loader remains unwired.
+- Separating topology lifecycle scope preserved historical truth while making
+  current authority unambiguous. The original Isle receipt measured
+  `735/940/954/64,118/466/466`; the Navy promotion intentionally brought Isle
+  and Navy to the shared `pre_b201_integration_live_parity` snapshot
+  `735/944/957/64,572/466/466`; B201 alone carries
+  `current_integration_topology` at `735/950/964/66,636/466/466`.
+- The final current-source matrix passed twice with `35/35` valid fast/core
+  gates plus `4/4` slow end-to-end gates per round, including compiler, Node,
+  Godot registry/loader, gameplay, material, live/package, route,
+  whole-island, full-runtime, and source smoke gates. A separate exhaustive
+  evidence sweep passed all `28/28` contracts twice. The B201 evidence
+  ledger contains `39` ASCII-sorted records over an exact `14`-file tree, and
+  all records verify; the new AVI is a canonical Git LFS `3.8.0` pointer rather
+  than a raw index blob.
+- Replacing the explicit smoke mode's accelerated simulation-time timeout with
+  a bounded monotonic wall-time deadline made the diagnostic describe the
+  resource it actually limits. Uncapped headless, capped headless, and capped
+  native Metal source smokes all reached the exact world, visual, movement,
+  jetpack, and descent assertions without weakening any production or oracle
+  path.
+- An exhaustive historical/current semantic sweep separated immutable capture
+  and post-capture claims from current registry bridges in the affected B1,
+  Isle House, Navy Chapel, P1, P3, Dormitory, B225, and `w34313525` evidence
+  contracts. Exact capture manifests, media, ledgers, reviews, and topology
+  snapshots stayed byte-identical; current recognition now comes only from the
+  canonical v7 physical-unit claims and dereferenced independent receipts.
+- The uniquely exported candidate
+  `build/b201-promotion-staging-2026-09-05-024605/Treasure Island First Playable.app`
+  passed signing, universal-architecture, privacy, entitlement, xattr,
+  mounted-general, mounted-B1, mounted-B201, packaged-headless, and native-Metal
+  checks. Its PCK is
+  `3425018ee32f645c3bf157deb9f9a548efe3c9e0bca1e40fd588318aa31f54d6`
+  (`65,708,948` bytes), its executable is
+  `23f8f5cfda04749bb6e2b00659d5f9e46086c55c8dde0cc00d1b2f8b5235146c`
+  (`170,963,648` bytes), and its canonical seven-record bundle identity is
+  `ef300ab3f97d077f3db61fad53094cbc3a540175e6475e549d5cd0a3ab9e8f98`
+  over `236,745,436` logical bytes; its persisted summary TSV is
+  `92ecdade90c53593dd68f9d19c28e99c56909d9ee794f4ee77164543115d7d69`.
+  An ordinary no-argument launch also remained alive with no matching crash,
+  fault, or GPU log.
+
+#### What did not work well
+
+- Several aggregate and live-package tests still described the pre-B201 world
+  as current. Finding them piecemeal expanded the migration matrix; the repair
+  required classifying each `944/957/64,572` occurrence as either an immutable
+  acceptance-time snapshot or a current-world oracle before changing it.
+- Early mutation helpers could catch their own failure sentinel, and one B201
+  mutation targeted source text that did not exist. Those tests appeared green
+  without proving rejection until callbacks, replacement counts, and explicit
+  no-op negative controls were separated and audited.
+- The first mounted B201 invocation used editor Godot with `--main-pack`, which
+  still advertises the editor feature and therefore entered legitimate
+  source-only raw-resource checks. The mounted contract had to distinguish
+  static remap/exclusion closure from source construction, while the packaged
+  executable remained the authoritative current-world topology smoke.
+- Motion evidence initially conflated the 360th useful-input sample at
+  `28.2470646 m` outward with the post-release endpoint at `28.1209736 m` after
+  `12` braking physics frames. A separate independently approved clarification
+  and recomputing evidence gate fixed the wording boundary without altering the
+  immutable motion log, review receipt, video, images, or seals.
+- Candidate `002922` was exported before the final authority and topology-scope
+  semantics were complete. Candidate `014223` was exported before the final
+  exhaustive evidence-contract historical/current bridge repair. Both were
+  withdrawn because their packaged test bytes were no longer current.
+  Repeating regeneration, ledger repinning, matrices, mounted audits, and
+  export was correct but expensive; only `024605` is authoritative.
+
+#### What the team should change next time
+
+- Write lifecycle scopes and authority provenance into the schema before the
+  first promotion capture. Treat a numeric topology tuple as incomplete unless
+  it names whether it is receipt-time, pre-promotion integration, or current
+  integration authority.
+- Make mutation harnesses prove that each edit changed exactly the intended
+  bytes and retain a passing no-op control whose result cannot satisfy the
+  expected-error predicate. Apply the same exact-key policy to nested objects
+  in JavaScript and GDScript from the start.
+- Run a repository-wide current-versus-historical oracle inventory before the
+  first export, then freeze documentation, evidence ledgers, and package-test
+  hashes as one dependency graph. Export only after that graph and two complete
+  source matrices are green.
+- Keep source-editor construction, editor-mounted remap inspection, packaged
+  headless smoke, native Metal smoke, and ordinary launch as distinct gates.
+  Use monotonic wall time for external-duration watchdogs and report phase
+  markers so resource contention cannot masquerade as a gameplay failure.
+- Install Git LFS locally and verify the staged pointer before capture media is
+  treated as frozen. Standardize the persisted inventory format and publish
+  both the record digest and summary-file digest so streamed and on-disk forms
+  cannot be confused.
+
+#### Change accounting
+
+- This promotion adds the B201 runtime attachment, exact package/registry
+  authority, fail-closed compiler and loader validation, focused and aggregate
+  regression coverage, the sealed B201 evidence tree and supplemental boundary
+  clarification, historical/current evidence bridges, current documentation,
+  and the uniquely exported `024605`
+  macOS candidate. It preserves every previously sealed capture, configuration,
+  review, receipt, and historical topology byte. Final commit and push remain
+  held for an explicit independent auditor PASS.

@@ -7,6 +7,15 @@ const EXPECTED_MANIFEST_SHA256 := "e1ab8f526aed22a6234fff1d2fcc5eae5d2245df4260a
 const EXPECTED_GENERATOR_SHA256 := "4b3beb2f6b827359c069498af54c385786428bddaaa4b381bd945b0c1dbee5ec"
 const EXPECTED_CONTENT_SHA256 := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
 const EXPECTED_GENERATED_MANIFEST_SHA256 := "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+const CURRENT_REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
+const CURRENT_AUTHORITY_HASHES := {
+	CURRENT_REGISTRY_PATH: "9c46c1a8c809aa9ded82008d35e9c1b257070e9c61f6d6e41f5650ca7b1c3f27",
+	"res://evidence/first-playable/building-3-hero-massing-2026-09-04/capture-manifest.json": "4b92b71df3c7f8f7dfbb285bd7566b3f422a32be45f810d532328e15d008f5be",
+	"res://evidence/first-playable/building-3-hero-massing-2026-09-04/INDEPENDENT_REVIEW.md": "1aee23943b3df4f600b9a4e4fce86d839b75ce575a924de4ca8b187bd9120046",
+	ROOT + "/INDEPENDENT_REVIEW.md": "9e4364eaf78412c58bfcac1bad1f4f35241f48a1b373976cdfa42638ce57b680",
+	"res://evidence/first-playable/isle-house-composite-repair-variant-c-live-replacement-2026-09-04/capture-manifest.json": "23fd6eff4ab8d9696af9d1ecc19bea50537cc824ecf3a7bebdf4fa191cd039d9",
+	"res://evidence/first-playable/isle-house-composite-repair-variant-c-live-replacement-2026-09-04/INDEPENDENT_LIVE_BAR_RAISER_REVIEW.md": "37b6c7dbf6c8769b13628e1070a9c3b5beeb9b25bbe63f0f12f9aaa00c22dab8",
+}
 const EXPECTED_CAPTURES := [
 	{
 		"id": "01-building-3-whole-object",
@@ -81,12 +90,13 @@ func _run() -> void:
 	_require(FileAccess.get_sha256(MANIFEST_PATH) == EXPECTED_MANIFEST_SHA256, "P1 evidence manifest bytes drifted.")
 	_require(FileAccess.get_sha256(GENERATOR_PATH) == EXPECTED_GENERATOR_SHA256, "P1 capture harness bytes drifted after evidence generation.")
 	var manifest := _json(MANIFEST_PATH)
-	_require(_header_matches(manifest), "P1 evidence renderer, review-state, or camera provenance drifted.")
-	_require(_world_matches(manifest.get("generated_world", {}) as Dictionary), "P1 evidence generated-world pins drifted.")
-	_require(_targets_match(manifest.get("targets", {}) as Dictionary), "P1 target binding, packet, confusion-set, or candidate status drifted.")
+	_require(_header_matches(manifest), "P1 capture-time renderer, pending review-state, or camera provenance drifted.")
+	_require(_world_matches(manifest.get("generated_world", {}) as Dictionary), "P1 capture-time generated-world pins drifted.")
+	_require(_targets_match(manifest.get("targets", {}) as Dictionary), "P1 capture-time target binding, packet, confusion-set, or candidate status drifted.")
 	_require(_captures_match(manifest.get("captures", []) as Array), "P1 image, grounding, HUD, framing, or exact receiver-first LOS evidence drifted.")
+	_require(_current_recognition_bridge_matches(), "Current B3, Hawkins, or Isle recognition authority bridge drifted.")
 	if not _failed:
-		print("PASS: six sealed native Metal P1 views retain captured-topology provenance, two physics-grounded stock-player perspectives per target, frozen confusion sets, clean exact-first-hit LOS, and pending-only verdicts; Building 3 is explicitly historical before evidence superseded by its hero-massing packet")
+		print("PASS: six sealed native Metal P1 views retain capture-time topology, two physics-grounded stock-player perspectives per target, frozen confusion sets, clean exact-first-hit LOS, and historically pending manifest verdicts; the separate current v7 bridge proves B3, Hawkins, and Isle are each accepted through exact independent receipt-derived authority and their current active/legacy adapter paths")
 	quit(1 if _failed else 0)
 
 
@@ -253,6 +263,96 @@ func _captures_match(captures: Array) -> bool:
 		if int(roles.whole_object_ordinary_player_view) != 1 or int(roles.oblique_approach_ordinary_player_view) != 1:
 			return false
 	return true
+
+
+func _current_recognition_bridge_matches() -> bool:
+	for path_value: Variant in CURRENT_AUTHORITY_HASHES:
+		var path := str(path_value)
+		if FileAccess.get_sha256(path) != str(CURRENT_AUTHORITY_HASHES[path_value]):
+			return false
+	var registry := _json(CURRENT_REGISTRY_PATH)
+	var metric := registry.get("recognition_metric", {}) as Dictionary
+	if str(registry.get("schema_version", "")) != "ti.facade-runtime-registry/7" \
+		or int(metric.get("numerator", -1)) != 7 \
+		or int(metric.get("denominator", -1)) != 213 \
+		or str(metric.get("display", "")) != "7/213":
+		return false
+	var units := registry.get("units", []) as Array
+	var active := registry.get("active_runtime_adapters", []) as Array
+	var legacy := registry.get("legacy_adapters", []) as Array
+	var b3 := _unit_for(units, "physical-building:w34313540")
+	var hawkins := _unit_for(units, "physical-building:w1249412093")
+	var isle := _unit_for(units, "physical-building:w1249412094")
+	if not _accepted_unit_matches(b3, "building-3-hero-massing-2026-09-04", "1aee23943b3df4f600b9a4e4fce86d839b75ce575a924de4ca8b187bd9120046", "4b92b71df3c7f8f7dfbb285bd7566b3f422a32be45f810d532328e15d008f5be") \
+		or b3.get("active_runtime_adapter_ids", []) != ["active-adapter:building-3-hero:building:w34313540:wall"] \
+		or not (b3.get("legacy_adapter_ids", []) as Array).is_empty() \
+		or not _active_adapter_matches(_adapter_for(active, "active-adapter:building-3-hero:building:w34313540:wall"), "building:w34313540:wall", "active_building_3_hero", "pending_independent_original_detail_review", 59, 9):
+		return false
+	if not _accepted_unit_matches(hawkins, "p1-existing-live-revalidation-2026-09-04:hawkins", "9e4364eaf78412c58bfcac1bad1f4f35241f48a1b373976cdfa42638ce57b680", EXPECTED_MANIFEST_SHA256) \
+		or not (hawkins.get("active_runtime_adapter_ids", []) as Array).is_empty() \
+		or hawkins.get("legacy_adapter_ids", []) != ["legacy-adapter:building:w1249412093:wall"] \
+		or not _legacy_adapter_matches(_adapter_for(legacy, "legacy-adapter:building:w1249412093:wall"), "building:w1249412093:wall", 4):
+		return false
+	if not _accepted_unit_matches(isle, "isle-house-variant-c-live-replacement-2026-09-04", "37b6c7dbf6c8769b13628e1070a9c3b5beeb9b25bbe63f0f12f9aaa00c22dab8", "23fd6eff4ab8d9696af9d1ecc19bea50537cc824ecf3a7bebdf4fa191cd039d9") \
+		or isle.get("active_runtime_adapter_ids", []) != ["active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall"] \
+		or isle.get("legacy_adapter_ids", []) != ["legacy-adapter:building-composite:w1249412094:w1282547786:wall"] \
+		or not _active_adapter_matches(_adapter_for(active, "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall"), "building-composite:w1249412094:w1282547787:wall", "active_isle_house_variant_c", "independent_exact_current_live_pass", 13, 1) \
+		or not _legacy_adapter_matches(_adapter_for(legacy, "legacy-adapter:building-composite:w1249412094:w1282547786:wall"), "building-composite:w1249412094:w1282547786:wall", 3):
+		return false
+	return true
+
+
+func _accepted_unit_matches(unit: Dictionary, review_id: String, receipt_sha256: String, manifest_sha256: String) -> bool:
+	var claim := unit.get("claim_status", {}) as Dictionary
+	if str(claim.get("reference_recognizable", "")) != "accepted":
+		return false
+	for value: Variant in unit.get("acceptance_records", []) as Array:
+		var record := value as Dictionary
+		if str(record.get("review_id", "")) == review_id \
+			and str(record.get("review_kind", "")) == "independent_reference_recognition" \
+			and str(record.get("status", "")) == "accept" \
+			and str(record.get("review_receipt_sha256", "")) == receipt_sha256 \
+			and str(record.get("evidence_manifest_sha256", "")) == manifest_sha256:
+			return true
+	return false
+
+
+func _active_adapter_matches(adapter: Dictionary, receiver: String, mode: String, review_status: String, run_count: int, asset_count: int) -> bool:
+	var scope := adapter.get("active_receiver_scope", {}) as Dictionary
+	return str(adapter.get("receiver_key", "")) == receiver \
+		and str(adapter.get("runtime_content_mode", "")) == mode \
+		and str(adapter.get("review_status", "")) == review_status \
+		and str(adapter.get("review_status_scope", "")) == "runtime_asset_original_detail_provenance_only_not_reference_recognition" \
+		and str(adapter.get("recognition_acceptance_authority", "")) == "physical_unit_claim_and_independent_acceptance_record" \
+		and str(adapter.get("recognition_acceptance_status", "")) == "accepted" \
+		and str(scope.get("coverage", "")) == "whole_direct_wall_receiver" \
+		and int(scope.get("run_count", -1)) == run_count \
+		and (adapter.get("runtime_assets", []) as Array).size() == asset_count
+
+
+func _legacy_adapter_matches(adapter: Dictionary, receiver: String, asset_count: int) -> bool:
+	return str(adapter.get("receiver_key", "")) == receiver \
+		and str(adapter.get("attachment_kind", "")) == "legacy_facade_scene" \
+		and str(adapter.get("recognition_claim_effect", "")) == "none" \
+		and not bool(adapter.get("whole_building_recognizability_imported", true)) \
+		and (adapter.get("accepted_run_scopes", []) as Array).is_empty() \
+		and (adapter.get("runtime_assets", []) as Array).size() == asset_count
+
+
+func _adapter_for(adapters: Array, adapter_id: String) -> Dictionary:
+	for value: Variant in adapters:
+		var adapter := value as Dictionary
+		if str(adapter.get("adapter_id", "")) == adapter_id:
+			return adapter
+	return {}
+
+
+func _unit_for(units: Array, unit_id: String) -> Dictionary:
+	for value: Variant in units:
+		var unit := value as Dictionary
+		if str(unit.get("unit_id", "")) == unit_id:
+			return unit
+	return {}
 
 
 func _json(path: String) -> Dictionary:

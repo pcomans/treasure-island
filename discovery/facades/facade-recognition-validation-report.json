@@ -4,7 +4,8 @@
     "building:r16681702:wall",
     "building:w1222720021:wall",
     "building:w291189336:wall",
-    "building:w34313540:wall"
+    "building:w34313540:wall",
+    "building:w34313545:wall"
   ],
   "checks": [
     {
@@ -36,7 +37,7 @@
       "status": "pass"
     },
     {
-      "check_id": "legacy_adapters_9_active_runtime_adapters_5_without_automatic_recognition_transfer",
+      "check_id": "legacy_adapters_9_active_runtime_adapters_6_without_automatic_recognition_transfer",
       "status": "pass"
     },
     {
@@ -56,7 +57,11 @@
       "status": "pass"
     },
     {
-      "check_id": "reference_recognizable_physical_entity_rollup_exactly_6_of_213",
+      "check_id": "d1_b201_exact_current_host_partition_render_attachment_collision_spray_parity",
+      "status": "pass"
+    },
+    {
+      "check_id": "reference_recognizable_physical_entity_rollup_exactly_7_of_213",
       "status": "pass"
     },
     {
@@ -76,7 +81,7 @@
       "status": "pass"
     },
     {
-      "check_id": "adapter_contract_8_ready_6_disabled_13_unique_projection_inputs",
+      "check_id": "adapter_contract_9_ready_6_disabled_13_unique_projection_inputs",
       "status": "pass"
     },
     {
@@ -108,20 +113,20 @@
       "verified": 213
     },
     "reference_recognizable": {
-      "accepted": 6,
+      "accepted": 7,
       "blocked": 0,
-      "not_evaluated": 207,
+      "not_evaluated": 206,
       "rejected": 0
     }
   },
   "counts": {
-    "active_runtime_adapter_receivers": 5,
+    "active_runtime_adapter_receivers": 6,
     "composite_units": 1,
     "direct_wall_receivers": 214,
     "identity_assertion_summaries": 2,
     "legacy_adapter_receivers": 9,
     "recognition_units": 213,
-    "runtime_adapter_receivers": 14,
+    "runtime_adapter_receivers": 15,
     "source_record_memberships": 215,
     "standalone_units": 212,
     "visible_wall_runs": 4971
@@ -185,6 +190,10 @@
     "active_building_3_authoring_provenance_sha256": "149d9211c75e86c769243298d649b79b682c1b4873af5d86d30a5d04aa1a26bd",
     "active_building_3_hero_adapter_sha256": "0755ab9846357207143f4bb0a50c27e710d92aa3a529903c61d4d3495bb94419",
     "active_building_3_hero_config_sha256": "2a7eacee21c88046deb587e53224b2c6c189172922265ed5a63711789ee37553",
+    "active_d1_b201_adapter_sha256": "499f6d2657b593ee5b0801cf1205a2925a993f3b1836922d3656a6d00c51cc19",
+    "active_d1_b201_config_sha256": "0f3bf052688ec813b5fa58b077d74c963949574623fe4cf67c12c347e7257229",
+    "active_d1_b201_evidence_manifest_sha256": "f169085620a0a9ff0c685e4dfa98442c5c31e4e580f1decdbd80e84b09c74fe3",
+    "active_d1_b201_live_review_receipt_sha256": "b9ef912df2dd00fa2c456a8e7e03473001cc381cbc2dd5288e9f6ef65d8c2772",
     "active_isle_house_variant_c_adapter_sha256": "e2767b01fab68d7f16ffe2e7f8e0313c711347e2006a72e028c19aaa2195b891",
     "active_isle_house_variant_c_config_sha256": "bafdef392ee638e860ba15f140c10de61e266ae63005b12e0e310e52c176897a",
     "active_isle_house_variant_c_live_review_receipt_sha256": "37b6c7dbf6c8769b13628e1070a9c3b5beeb9b25bbe63f0f12f9aaa00c22dab8",
@@ -194,14 +203,14 @@
     "active_navy_chapel_187_config_sha256": "c8f2ab09f3943a5ec8abea7cb9a108f49990bff1d83003c3b3622187a269dea2",
     "active_navy_chapel_187_live_review_receipt_sha256": "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9",
     "active_navy_chapel_187_prototype_sha256": "067c12e29c9fd352915ef2a501fcd7687b450081c79a4281d63bbfef1c19e7db",
-    "adapter_contracts_sha256": "503c8d02439d0846389d5d57e2b2a26d8e42ee6156ff08f489de6e9dc4325222",
-    "authoring_catalog_sha256": "ab8797e86d5985c4b64670a22577394656c6388bb463f83c157a411663fa7b57",
-    "catalog_schema_sha256": "03174de9b4a8cae13ef573c93b3a8bf4dbb9615ef3f953c1a29f90332c8c3f43",
-    "facade_runtime_loader_sha256": "4c9af1ffcf5724e8c35e4b591a85697f1667f8d120af41a74fac511bfcb4f356",
+    "adapter_contracts_sha256": "f5c1a2fb73ac0343258d4fea35169e2b7efa98accbce0c834b3e2aab45fefafe",
+    "authoring_catalog_sha256": "a4d9dd474acb09a211f7e0e00d66aeaf7a669927880dd011e24e2f51d13bdd7d",
+    "catalog_schema_sha256": "07a4b17cbeba4603a2e08b99787dd00fe934eeda83aa6da2e850c327ac77e2c5",
+    "facade_runtime_loader_sha256": "a191a9c260e471825847c92873fd96763c507b51004be769cba10b9d4b47ce6f",
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
     "receiver_inventory_sha256": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f",
-    "world_chunk_builder_sha256": "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c"
+    "world_chunk_builder_sha256": "71e391e4fa58afc83e4bcb99a9f8195e398fdf4064bb09a401fb079e9f30491c"
   },
   "legacy_adapter_receiver_keys": [
     "building-composite:w1249412094:w1282547786:wall",
@@ -214,16 +223,16 @@
     "building:w34313547:wall",
     "building:w34313564:wall"
   ],
-  "next_integration_seam": "Use the topology-neutral facade registry loader API to query receiver plans. Package-safe plans include exact-current Building 1, Building 3, and Navy Chapel dependencies. The exact-current Isle House Variant C receiver is represented truthfully but remains loader-hard-disabled because its reviewed executable inheritance closure includes three source-token-bearing inputs; keep every disabled plan non-executable until its projected inputs receive independently parity-proven package-safe normalization.",
+  "next_integration_seam": "Use the topology-neutral facade registry loader API to query receiver plans. Package-safe plans include exact-current Building 1, Building 3, Navy Chapel, and D1 B201 dependencies. The exact-current Isle House Variant C receiver is represented truthfully but remains loader-hard-disabled because its reviewed executable inheritance closure includes three source-token-bearing inputs; keep every disabled plan non-executable until its projected inputs receive independently parity-proven package-safe normalization.",
   "package_boundary": {
-    "adapter_asset_occurrence_count": 83,
-    "clean_direct_asset_count": 53,
-    "dependency_closure_asset_count": 167,
+    "adapter_asset_occurrence_count": 91,
+    "clean_direct_asset_count": 61,
+    "dependency_closure_asset_count": 175,
     "dependency_closure_forbidden_asset_count": 15,
-    "direct_asset_count": 66,
+    "direct_asset_count": 74,
     "projected_direct_asset_count": 13,
     "registry_json_clean": true,
-    "runtime_referenced_asset_count": 53,
+    "runtime_referenced_asset_count": 61,
     "runtime_referenced_dependency_closure_clean": true,
     "source_side_projection_audit": [
       {
@@ -480,7 +489,7 @@
       },
       {
         "adapter_id": "legacy-adapter:building:w34313525:wall",
-        "closure_asset_count": 167,
+        "closure_asset_count": 175,
         "closure_violations": [
           {
             "asset_path": "game/resources/facades/batch_06_prototype_registry.json",
@@ -591,7 +600,7 @@
       },
       {
         "adapter_id": "legacy-adapter:building:w34313525:wall",
-        "closure_asset_count": 167,
+        "closure_asset_count": 175,
         "closure_violations": [
           {
             "asset_path": "game/resources/facades/batch_06_prototype_registry.json",
@@ -1208,6 +1217,70 @@
         "direct_asset_path": "game/scripts/world/massing/building_3_600_california_massing.gd",
         "direct_asset_sha256": "0755ab9846357207143f4bb0a50c27e710d92aa3a529903c61d4d3495bb94419",
         "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:d1-b201-live:building:w34313545:wall",
+        "closure_asset_count": 7,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/d1_current/d1_b201_live_attachment.json",
+        "direct_asset_sha256": "0f3bf052688ec813b5fa58b077d74c963949574623fe4cf67c12c347e7257229",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:d1-b201-live:building:w34313545:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/d1_current/b201_green_hierarchy.tres",
+        "direct_asset_sha256": "5bdd67e659a0cce14abe3605f5a7fbfd85b0374d0a38be23cda326017235fe13",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:d1-b201-live:building:w34313545:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/d1_current/b201_muted_rust_post.tres",
+        "direct_asset_sha256": "be97cdfd7367cd73172c4429ca212db0d1fc68bed34f4db6ce307d02a5225b94",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:d1-b201-live:building:w34313545:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/d1_current/b201_service_leaf.tres",
+        "direct_asset_sha256": "de9895a808e4d64afc2c727e77ef92b590c9c718266ba118e64c489e84690cfd",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:d1-b201-live:building:w34313545:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/d1_current/b201_warm_wall.tres",
+        "direct_asset_sha256": "6f5f6835790ab338454e72be58c2956deb6e470086797e209be0fab4d37ec788",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:d1-b201-live:building:w34313545:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/d1_current/shared_dark_glass.tres",
+        "direct_asset_sha256": "ad8931db8954fd5ebc8fdd809f70afb279dd74a36e53e1d9ca907c44409f10d3",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:d1-b201-live:building:w34313545:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/d1_current/shared_pale_frame.tres",
+        "direct_asset_sha256": "9a2de298ff545cf80c5da0ed0aa37d9d4ebbf10fec8eb78810af7e4d012d1436",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:d1-b201-live:building:w34313545:wall",
+        "closure_asset_count": 12,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/d1_b201_live_attachment.gd",
+        "direct_asset_sha256": "499f6d2657b593ee5b0801cf1205a2925a993f3b1836922d3656a6d00c51cc19",
+        "emitted_as": "runtime_asset"
       }
     ]
   },
@@ -1284,25 +1357,27 @@
       "physical-building:w1249412093",
       "physical-building:w1249412094",
       "physical-building:w291189336",
-      "physical-building:w34313540"
+      "physical-building:w34313540",
+      "physical-building:w34313545"
     ],
     "denominator": 213,
     "denominator_kind": "immutable_physical_recognition_units",
-    "display": "6/213",
+    "display": "7/213",
     "isle_house_non_numerator_source_keys": [
       "w1282547786",
       "w1282547787"
     ],
-    "numerator": 6,
+    "numerator": 7,
     "rollup_policy": "one_claim_per_physical_recognition_unit"
   },
-  "runtime_registry_sha256": "65edf085437bc3fa2b22869406cc8a2c33297b6cc9d48b205e301e367efc734b",
+  "runtime_registry_sha256": "9c46c1a8c809aa9ded82008d35e9c1b257070e9c61f6d6e41f5650ca7b1c3f27",
   "schema_version": "ti.facade-recognition-validation-report/4",
   "scope_boundaries": [
-    "This acceptance reconciliation changes no runtime integration, visual geometry, collision, navigation, spray ownership, or player-facing facade behavior.",
-    "Nine legacy receivers, two exact-current Building 1 hero receivers, one exact-current Building 3 wall/roof receiver, one exact-current Isle House Variant C low receiver, and one exact-current Navy Chapel paired wall/roof receiver are represented without automatic recognition transfer from adapter metadata.",
+    "The D1 B201 promotion preserves generated bytes and the sole host collider/spray receiver while adding one host-material partition and six render-only decorative batches on exact public runs 0..9.",
+    "Nine legacy receivers, two exact-current Building 1 hero receivers, one exact-current Building 3 wall/roof receiver, one exact-current Isle House Variant C low receiver, one exact-current Navy Chapel paired wall/roof receiver, and one exact-current D1 B201 host-partition attachment are represented without automatic recognition transfer from adapter metadata.",
     "The version-pinned loader contract authorizes parsing and resource resolution only; it does not authorize node instantiation or world-construction dispatch.",
-    "Exactly six independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.",
+    "Exactly seven independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.",
+    "D1 B201 contributes exactly one standalone physical-building claim; its six decorative batches, one wall receiver, and protected roof never create extra units or numerator entries.",
     "Navy Chapel contributes one standalone physical-building claim; its paired wall and roof behavior never creates a second receiver or numerator entry.",
     "Isle House contributes one parent physical-building claim; its high and low source receiver records never enter the numerator.",
     "The registry JSON and every emitted runtime asset dependency closure exclude discovery paths, evidence paths, reference URLs, and absolute workstation paths; contaminated current assets are represented only by hash-bound sanitized summaries.",

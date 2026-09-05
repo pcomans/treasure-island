@@ -14,16 +14,30 @@ const EXPECTED_RECORD_HASHES := {
 	"res://game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres": "12d059d9d806c629225254f1aaf945be69a00ce5878db276ce299ad0c8cdbb9a",
 	"res://game/resources/materials/world/building_1/building_1_chain_metres_aperiodic_field.gdshader": "a4a5df4fbb8fd4f13187ec284708879b540677ac2c827642b4c3040b4bce4c09",
 }
-const EXPECTED_PROTECTED_HASHES := {
+const CAPTURE_ONLY_RECORD_PATHS := [
+	"res://game/tests/support/building_1_exact_receiver_calibration.gd",
+	"res://game/tests/building_1_exact_receiver_calibration_capture.gd",
+]
+const CAPTURE_PROTECTED_HASHES := {
+	"generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+	"generated/world/chunks/x_-1__z_2.json": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce",
+	"game/scripts/world/world_chunk_builder.gd": "dec0811b3b6b4947c16f8f69a6a6e60d706b6d7b43a93051ea7be71ad2c203a3",
+	"game/scripts/world/facades/accepted_material_run_trials.gd": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+	"discovery/FACADE_RECEIVER_INVENTORY.json": "41d378ccee6685e5d3b9109d33c77742f73a7338cd84ba6e82c66ff22ee2d671",
+	"discovery/facades/TREASURE_ISLAND_BUILDING_1_RUN_OWNERSHIP.json": "716f90b9d7cb3267e901d438a5c583047c8eaeb912e544a459005c2dbe6a4359",
+	"game/resources/facades/building_1_standalone_prototypes.json": "2014040edb3985be4aaae437749063474aacaedc0534b6d54e69b7dfd92612cc",
+	"game/resources/facades/r133351_standalone_prototypes.json": "ecde7b80ba595f61d03bfd21f57407956c3b8988e381f0457f95bfe1aa580ad9",
+}
+const CURRENT_PROTECTED_HASHES := {
 	"res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
 	"res://generated/world/chunks/x_-1__z_2.json": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce",
-	"res://game/scripts/world/world_chunk_builder.gd": "e3d0ca4b6c9d39a444aa5b55592d63a32e7794bae3e12f1f3fac125243839d42",
+	"res://game/scripts/world/world_chunk_builder.gd": "71e391e4fa58afc83e4bcb99a9f8195e398fdf4064bb09a401fb079e9f30491c",
 	"res://game/scripts/world/facades/accepted_material_run_trials.gd": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
 	"res://discovery/FACADE_RECEIVER_INVENTORY.json": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f",
 	"res://discovery/facades/TREASURE_ISLAND_BUILDING_1_RUN_OWNERSHIP.json": "716f90b9d7cb3267e901d438a5c583047c8eaeb912e544a459005c2dbe6a4359",
 	"res://game/resources/facades/building_1_standalone_prototypes.json": "2014040edb3985be4aaae437749063474aacaedc0534b6d54e69b7dfd92612cc",
-	"res://game/resources/facades/r133351_standalone_prototypes.json": "ecde7b80ba595f61d03bfd21f57407956c3b8988e381f0457f95bfe1aa580ad9",
 }
+const PAUSED_R133351_PATH := "res://game/resources/facades/r133351_standalone_prototypes.json"
 const EXPECTED_IMAGES := {
 	"01-field-join-21-22.png": "dac664de10f7d85e16f4cd9d7542bf457f66a5c901bff728f4ecc87245a21229",
 	"02-field-join-30-31.png": "c5882a75f47061a58b88929d8b6d56186e5a94d35a632d60721806bcf10c5e42",
@@ -50,17 +64,20 @@ func _initialize() -> void:
 
 
 func _run() -> void:
-	_require(_hashes_match(EXPECTED_RECORD_HASHES), "A sealed Building 1 calibration evidence/source record drifted.")
-	_require(_hashes_match(EXPECTED_PROTECTED_HASHES), "A protected runtime/mapping/standalone/r133351 input drifted.")
-	_require(_images_match(), "A Building 1 calibration PNG drifted or failed native image checks.")
 	var manifest := _json(ROOT.path_join("capture-manifest.json"))
 	var isolation := _json(ROOT.path_join("runtime-isolation.json"))
 	var verification := _json(ROOT.path_join("visual-verification.json"))
+	_require(_hashes_match_except(EXPECTED_RECORD_HASHES, CAPTURE_ONLY_RECORD_PATHS), "A sealed Building 1 calibration evidence or immutable source record drifted.")
+	_require(_capture_dependency_hashes_match(manifest, isolation), "A capture-time Building 1 dependency record drifted.")
+	_require(_hashes_match(CURRENT_PROTECTED_HASHES), "A current generated/mapping/standalone input drifted.")
+	_require(not FileAccess.file_exists(PAUSED_R133351_PATH) and not ResourceLoader.exists(PAUSED_R133351_PATH), "Paused r133351 WIP leaked from its dedicated branch into current main.")
+	_require(not FileAccess.get_file_as_string("res://game/scripts/world/world_chunk_builder.gd").contains("building_1_exact_receiver_calibration"), "Detached calibration leaked into the current world builder.")
+	_require(_images_match(), "A Building 1 calibration PNG drifted or failed native image checks.")
 	_require(_manifest_matches(manifest), "Calibration manifest lost exact scope, renderer, topology, coverage, or truth boundaries.")
 	_require(_isolation_matches(isolation), "Calibration runtime-isolation assertions drifted.")
 	_require(_verification_matches(verification), "Calibration visual verification is incomplete or self-accepting.")
 	if not _failed:
-		print("PASS: Building 1 detached calibration evidence seals 15 native 1440x900 Forward+/Metal views, exact MAT-IVORY runs 21..51 at 85.939934 m / 1740.731069 m2 with 30 zero-delta joins, CENTRAL/PAV fit studies on runs 36/6, 23/23/326 topology, and unchanged receiver/runtime/protected bytes; no self-acceptance or live placement claim")
+		print("PASS: Building 1 detached calibration evidence seals 15 native 1440x900 Forward+/Metal views and exact capture-time dependency records; current main keeps the calibration unwired and paused r133351 WIP absent; exact MAT-IVORY runs 21..51, CENTRAL/PAV studies, and 23/23/326 detached topology make no live placement claim")
 	quit(1 if _failed else 0)
 
 
@@ -172,6 +189,24 @@ func _hashes_match(expected: Dictionary) -> bool:
 		if FileAccess.get_sha256(path) != str(expected[path_value]):
 			return false
 	return true
+
+
+func _hashes_match_except(expected: Dictionary, capture_only_paths: Array) -> bool:
+	for path_value: Variant in expected:
+		var path := str(path_value)
+		if path in capture_only_paths:
+			continue
+		if FileAccess.get_sha256(path) != str(expected[path_value]):
+			return false
+	return true
+
+
+func _capture_dependency_hashes_match(manifest: Dictionary, isolation: Dictionary) -> bool:
+	var ledger := FileAccess.get_file_as_string(ROOT.path_join("checksums.sha256"))
+	return str(manifest.get("helper_sha256", "")) == str(EXPECTED_RECORD_HASHES[CAPTURE_ONLY_RECORD_PATHS[0]]) \
+		and str(manifest.get("registry_sha256", "")) == str(EXPECTED_RECORD_HASHES["res://game/resources/facades/building_1_exact_receiver_calibration.json"]) \
+		and (isolation.get("protected_hashes", {}) as Dictionary) == CAPTURE_PROTECTED_HASHES \
+		and ledger.contains("%s  ../../../game/tests/building_1_exact_receiver_calibration_capture.gd" % str(EXPECTED_RECORD_HASHES[CAPTURE_ONLY_RECORD_PATHS[1]]))
 
 
 func _json(path: String) -> Dictionary:

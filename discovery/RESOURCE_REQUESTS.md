@@ -16,13 +16,13 @@ No image generation, asset-store access, paid plugin, paid data, account connect
 - Status: `available`
 - Need: The owner briefly tries an actual playable and reports whether the island is recognizable and the walk/run/jetpack/spray loop is playable.
 - Concrete task enabled: Checks the two approved success outcomes using the game itself rather than a separate questionnaire or lab protocol.
-- Needed: Now against the exact current handoff, `build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app`. The 2026-08-28 result and the `190724` startup-repair launch apply to earlier packages, not these exact bytes.
+- Needed: Now against the exact current handoff, `build/b201-promotion-staging-2026-09-05-024605/Treasure Island First Playable.app`. The 2026-08-28 result and the `190724`, `111725`, withdrawn pre-final-evidence-bridge `014223`, and withdrawn pre-scope `002922` launches apply to earlier packages, not these exact bytes.
 - Cheapest acceptable option: Ordinary play on the owner's Mac with short blocker notes.
 - One-time cost: $0; owner time only.
 - Recurring cost: $0.
-- User action or approval required: Pending for the exact current app on the approved Apple M1 Pro target. The owner previously confirmed held-Space jetpack behavior, normal tag placement, and that “the island itself is good” in an earlier build; that historical feedback remains useful but does not accept candidate `111725` or its `20 m/s` fast-run feel.
-- Autonomous-review status: The current `104510` twelve-view source-project set received independent `PASS_WITH_LIMITATION`, and candidate `111725` passes exact source gates, static package checks, outside-project mounted-PCK audit, packaged headless semantic smoke, and an identical-command warm-state native Metal smoke on an Apple M2 verifier host. The first retained native invocation timed out after world/visual/movement readiness. Neither deterministic smoke nor source-project pixels substitute for ordinary owner recognition and mouse/keyboard control judgment on the Apple M1 Pro target.
-- Fallback if unavailable: Keep exact candidate `111725` provisional, retain its technical and independently reviewed source-visual evidence, and fix only objective blockers without claiming owner acceptance.
+- User action or approval required: Pending for the exact current app on the approved Apple M1 Pro target. The owner previously confirmed held-Space jetpack behavior, normal tag placement, and that “the island itself is good” in an earlier build; that historical feedback remains useful but does not accept candidate `024605` or its `20 m/s` fast-run feel.
+- Autonomous-review status: Building 201 `w34313545` is independently accepted in current source at `7/213`, with exact visual, motion, receiver, package-closure, and evidence-ledger gates. Candidate `024605` passes two complete source matrices, two 28-contract evidence sweeps, static bundle/privacy/signing checks, outside-checkout general, Building 1, and B201 mounted-PCK audits, packaged headless semantic smoke, and its first bounded native Metal smoke on the verifier host. Its smoke watchdog uses 60 seconds of monotonic wall time. The ordinary no-argument app is visibly launched for owner verification. Neither deterministic smoke nor independent source pixels substitute for ordinary owner recognition and mouse/keyboard control judgment on the Apple M1 Pro target.
+- Fallback if unavailable: Keep exact candidate `024605` provisional, retain its technical and independently reviewed B201 evidence, and fix only objective blockers without claiming owner acceptance.
 
 ### NEED-005 — Island bare-earth elevation crop
 
@@ -56,7 +56,7 @@ No image generation, asset-store access, paid plugin, paid data, account connect
 - Status: `available`
 - Need: Replace the flat placeholder colors with a small, coherent texture family for roads, paths, parking, ground, exterior walls, and flat roofs.
 - Concrete task enabled: Makes the complete OSM/USGS world read as one grounded place while retaining the existing material hierarchy, low-poly massing, collision, and generated geometry.
-- Needed: Integrated in current source and candidate `111725`.
+- Needed: Integrated in current source and exact candidate `024605`; candidates `014223`, `002922`, and `111725` are historical/withdrawn.
 - Cheapest acceptable option: Six account-free 1K Poly Haven CC0 materials, using only JPG diffuse, OpenGL-normal, and roughness maps: Clean Asphalt, Concrete Pavement, Concrete Floor 03, Sparse Grass, Plaster Grey 04, and Bitumen. No executable, add-on, account, purchase, displacement map, or live service.
 - One-time cost: $0; approximately 13.34 MiB of project image assets.
 - Recurring cost: $0.
@@ -82,11 +82,11 @@ No image generation, asset-store access, paid plugin, paid data, account connect
 - Status: `available`
 - Need: The owner's MacBook Pro (Apple M1 Pro, 10-core CPU, 32 GB memory), mouse, and keyboard for later runtime and control tests.
 - Concrete task enabled: Validates launch, performance, input behavior, fatigue, and packaging on the device that matters.
-- Needed: Now for the remaining ordinary-play acceptance of exact candidate `111725`. Technical arm64 verification was performed on an Apple M2 host; that does not establish input, performance, or recognition on the approved Apple M1 Pro target.
+- Needed: Now for the remaining ordinary-play acceptance of exact candidate `024605`. Technical arm64 verification does not establish input, performance, or recognition on the approved Apple M1 Pro target.
 - Cheapest acceptable option: The owner's existing Mac, mouse, and keyboard.
 - One-time cost: $0; bounded owner/test time only.
 - Recurring cost: $0.
-- User action or approval required: Device/input choice is already approved; perform the short `PLAYTEST.md` pass with exact candidate `111725` when ready.
+- User action or approval required: Device/input choice is already approved; perform the short `PLAYTEST.md` pass with exact candidate `024605` when ready.
 - Fallback if temporarily unavailable: Retain the Apple M2 verifier results as technical evidence only until the owner can test the exact bytes on the Apple M1 Pro Mac.
 
 ### APPROACH-001 — Godot editor and macOS export templates

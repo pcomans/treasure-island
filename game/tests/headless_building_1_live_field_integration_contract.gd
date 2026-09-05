@@ -32,7 +32,7 @@ func _run() -> void:
 	current_root.free()
 	await _whole_island_matches()
 	if not _failed:
-		print("PASS: Building 1's reviewed runs21..51 ivory field remains byte/topology bounded as historical evidence while the current 6-mesh hero wall supersedes it without duplicate render or collision ownership; world 735/944/957/64,572/466")
+		print("PASS: Building 1's reviewed runs21..51 ivory field remains byte/topology bounded as historical evidence while the current 6-mesh hero wall supersedes it without duplicate render or collision ownership; B201-inclusive world 735/950/964/66,636/466")
 	_finish()
 
 
@@ -83,8 +83,8 @@ func _whole_island_matches() -> void:
 	_require(
 		failures.is_empty() and reports.size() == 1 and evidence != null \
 		and evidence.playable_rows == 735 and evidence.context_rows == 4 \
-		and evidence.mesh_instances == 944 and evidence.surfaces == 957 \
-		and evidence.triangles == 64572 and evidence.static_bodies == 466 and evidence.shapes == 466,
+		and evidence.mesh_instances == 950 and evidence.surfaces == 964 \
+		and evidence.triangles == 66636 and evidence.static_bodies == 466 and evidence.shapes == 466,
 		"Whole-island topology or load failed after Building 1 field supersession.",
 	)
 	var nodes := _nodes_for_key(world, RECEIVER_KEY)

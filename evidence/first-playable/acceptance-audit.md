@@ -7,11 +7,75 @@ Jetpack/package delivery recheck: completion audit agent (`/root/completion_audi
 Scope: the repository and retained evidence for the approved private Treasure Island first playable
 
 > **Historical-boundary notice:** the detailed 18-ID matrix, package rows, and
-> byte-specific measurements below are a sealed 2026-08-28 point-in-time audit.
-> They are preserved rather than rewritten to describe later bytes. The
-> 2026-09-03 addendum immediately below is the canonical current status.
+> byte-specific measurements below are sealed point-in-time audits. They are
+> preserved rather than rewritten to describe later bytes. The 2026-09-05 B201
+> promotion addendum immediately below is the canonical current status; the
+> 2026-09-03 and older addenda are historical.
 
-## 2026-09-03 exact-current addendum
+## 2026-09-05 B201 promotion addendum
+
+The sole current private handoff is
+`build/b201-promotion-staging-2026-09-05-024605/Treasure Island First Playable.app`.
+It was exported from the exact reviewed B201 promotion working tree after the
+source, regression, evidence, and LFS gates passed.
+
+- Executable SHA-256:
+  `23f8f5cfda04749bb6e2b00659d5f9e46086c55c8dde0cc00d1b2f8b5235146c`
+  (`170,963,648` bytes).
+- PCK SHA-256:
+  `3425018ee32f645c3bf157deb9f9a548efe3c9e0bca1e40fd588318aa31f54d6`
+  (`65,708,948` bytes).
+- Seven-file bundle: `236,745,436` logical bytes; canonical ASCII
+  bytewise-path-sorted `path\0sha256\0bytes\n` inventory SHA-256
+  `ef300ab3f97d077f3db61fad53094cbc3a540175e6475e549d5cd0a3ab9e8f98`.
+- The coordinated current authority is catalog/runtime registry v7, adapter
+  contracts/loader v6, and compiler API `1.6`. It accepts exactly `7/213`
+  reference-recognizable units. B201 `w34313545` is the seventh: one exact
+  receiver, one exact 40-run whole-receiver scope, and one exact eight-asset
+  live closure; the generic loader remains unwired.
+- Every active adapter's review status has exact scope
+  `runtime_asset_original_detail_provenance_only_not_reference_recognition`.
+  Its recognition status is derived instead from the mapped physical unit's
+  accepted claim and independent reference-recognition receipt. Isle House and
+  Navy Chapel preserve shared `735/944/957/64572/466/466` derived parity only
+  under `pre_b201_integration_live_parity`; B201's current topology carries
+  `current_integration_topology`.
+- Current generated record-owned topology is
+  `723 meshes / 733 surfaces / 48,739 triangles`; total loaded topology is
+  `735 records / 950 meshes / 964 surfaces / 66,636 triangles / 466`
+  body/shape pairs. B201 adds exactly `6 meshes / 7 surfaces / 2,064`
+  triangles and no physics, navigation, or spray ownership.
+- The exact [B201 live evidence](d1-b201-live-attachment-2026-09-04/README.md)
+  has a 14-file exact tree and 39-record checksum ledger. Its independent
+  visual review accepts the broad upper glazing, green hierarchy, and sparse
+  solid lower field as a coherent recognition pair. The supplemental motion
+  clarification keeps the 360-sample input interval distinct from the
+  12-physics-frame post-release braking endpoint without altering any sealed
+  capture or review byte.
+- Compiler write/check, two complete current-source matrices (35 valid
+  fast/core gates plus four slow end-to-end gates per round), two complete
+  28-contract evidence sweeps, focused Node and Godot registry/loader tests, current
+  live/package suites, full runtime, ordinary and whole-island routes, source
+  export smoke, static bundle/privacy/signature checks, and outside-checkout
+  general, Building 1, and B201 mounted-PCK audits pass. Packaged headless smoke
+  exits `0` with the exact current topology and jetpack behavior.
+- The first packaged headless and first retained native Metal smokes both
+  completed exact world, visual, movement, grounding, jetpack rise, and capped
+  descent checks. The smoke-only watchdog is an exact 60-second monotonic
+  wall-time deadline. The ordinary no-argument app is launched for owner
+  verification. Pre-final-evidence-bridge candidate `014223` and pre-scope
+  candidate `002922` are withdrawn; the latter's first-Metal timeout remains
+  non-authoritative diagnostic history.
+
+The executable is Universal `x86_64 arm64`, strictly ad-hoc signed with
+hardened runtime, and has no TeamIdentifier, entitlements, sensitive
+`Info.plist` permission keys, or privacy tracking declaration. Developer ID
+signing, notarization, and Gatekeeper distribution acceptance remain outside
+the private-local scope. Ordinary owner mouse/keyboard play on exact candidate
+`024605`—including island recognition and walk/run/camera/jetpack/spray feel—
+remains the completion gate.
+
+## Historical 2026-09-03 exact-current addendum
 
 The sole current private handoff is
 `build/final-verification-staging-2026-09-03-111725/Treasure Island First Playable.app`.

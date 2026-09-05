@@ -15,18 +15,39 @@ const GENERATOR_PATH := "res://game/tests/building_1_entrance_gap_calibration_ca
 const FINALIZER_PATH := "res://game/tests/building_1_entrance_gap_salvage_finalizer.gd"
 const CAPTURE_REGISTRY_SHA256 := "36eef28d1abce9d9838da6e959222ad6767e40e198b90b734496e6d2dc2cd79b"
 const CURRENT_CONFIG_SHA256 := "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
-const CURRENT_CATALOG_SHA256 := "ab8797e86d5985c4b64670a22577394656c6388bb463f83c157a411663fa7b57"
-const CURRENT_SCHEMA_SHA256 := "03174de9b4a8cae13ef573c93b3a8bf4dbb9615ef3f953c1a29f90332c8c3f43"
-const CURRENT_REGISTRY_SHA256 := "65edf085437bc3fa2b22869406cc8a2c33297b6cc9d48b205e301e367efc734b"
-const CURRENT_ADAPTER_CONTRACTS_SHA256 := "503c8d02439d0846389d5d57e2b2a26d8e42ee6156ff08f489de6e9dc4325222"
-const CURRENT_REPORT_SHA256 := "64bcfe0607a4f7c3a4bdaa53f01573d335891e828b9f2ee518cc9f96394f90d7"
-const CURRENT_COMPILER_SHA256 := "a05b46ad52256444873599c2ed0483c9e27d8821f0ff0b56036c3b0712f23b51"
+const POST_CAPTURE_CATALOG_SHA256 := "ab8797e86d5985c4b64670a22577394656c6388bb463f83c157a411663fa7b57"
+const POST_CAPTURE_SCHEMA_SHA256 := "03174de9b4a8cae13ef573c93b3a8bf4dbb9615ef3f953c1a29f90332c8c3f43"
+const POST_CAPTURE_REGISTRY_SHA256 := "65edf085437bc3fa2b22869406cc8a2c33297b6cc9d48b205e301e367efc734b"
+const POST_CAPTURE_ADAPTER_CONTRACTS_SHA256 := "503c8d02439d0846389d5d57e2b2a26d8e42ee6156ff08f489de6e9dc4325222"
+const POST_CAPTURE_REPORT_SHA256 := "64bcfe0607a4f7c3a4bdaa53f01573d335891e828b9f2ee518cc9f96394f90d7"
+const POST_CAPTURE_COMPILER_SHA256 := "a05b46ad52256444873599c2ed0483c9e27d8821f0ff0b56036c3b0712f23b51"
 const CURRENT_SCHEMA_VALIDATOR_SHA256 := "eeee5d9a22bd81fdaf8df56bd7f680b62c88a133aebf33424ccc1336a98d84e0"
-const CURRENT_LOADER_SHA256 := "4c9af1ffcf5724e8c35e4b591a85697f1667f8d120af41a74fac511bfcb4f356"
+const POST_CAPTURE_LOADER_SHA256 := "4c9af1ffcf5724e8c35e4b591a85697f1667f8d120af41a74fac511bfcb4f356"
+const CURRENT_CATALOG_SHA256 := "a4d9dd474acb09a211f7e0e00d66aeaf7a669927880dd011e24e2f51d13bdd7d"
+const CURRENT_SCHEMA_SHA256 := "07a4b17cbeba4603a2e08b99787dd00fe934eeda83aa6da2e850c327ac77e2c5"
+const CURRENT_REGISTRY_SHA256 := "9c46c1a8c809aa9ded82008d35e9c1b257070e9c61f6d6e41f5650ca7b1c3f27"
+const CURRENT_ADAPTER_CONTRACTS_SHA256 := "f5c1a2fb73ac0343258d4fea35169e2b7efa98accbce0c834b3e2aab45fefafe"
+const CURRENT_REPORT_SHA256 := "4caabace118ebf545c581e0be2c59e680726be3cc7fe658cf35dddfd56b78d26"
+const CURRENT_COMPILER_SHA256 := "371289a4d73235165a1aeeba0a3651129dc4ba2655aa18ee52622374a62ac917"
+const CURRENT_LOADER_SHA256 := "a191a9c260e471825847c92873fd96763c507b51004be769cba10b9d4b47ce6f"
+const CURRENT_RECOGNITION_RECEIPTS := {
+	"building:r16681702:wall": {
+		"unit_id": "physical-building:r16681702",
+		"run_count": 110,
+		"review_receipt_sha256": "b12858438d6522b7f3cf42fa06392648d16ee3e0c418eb5e807a3ee1be770c2a",
+		"evidence_manifest_sha256": "ebeef887b37c6845c6c8fa3f25e06706351fe7c1dab0e1a3b0eaf47dfb773017",
+	},
+	"building:w1222720021:wall": {
+		"unit_id": "physical-building:w1222720021",
+		"run_count": 10,
+		"review_receipt_sha256": "fb952a31151805078d1e386117ed965aa0649ffddcd17874d13493b5dd4239bb",
+		"evidence_manifest_sha256": "dbe9745f5356b2309e820c2b47987ee4463518eaf4afd77fcd37df0edc8d437a",
+	},
+}
 const GENERATOR_SHA256 := "b1565b71cbda76a8c63204b18d7cac99ad78a6882667bafcd798de5b8dbaf160"
 const FINALIZER_SHA256 := "85c2bc869787dcf466540ec40d284419d75acb9e6205ac2e86e69edd50850078"
 const INDEPENDENT_REVIEW_SHA256 := "44c0bde816efbf9acfedd45d1d45c663319cb4e421afcd2551812e6c4a1b7659"
-const EXPECTED_TOPOLOGY := {"rows": 735, "meshes": 944, "surfaces": 957, "triangles": 64572, "bodies": 466, "shapes": 466}
+const CAPTURE_TOPOLOGY := {"rows": 735, "meshes": 944, "surfaces": 957, "triangles": 64572, "bodies": 466, "shapes": 466}
 const EXPECTED_FILES := {
 	"INDEPENDENT_VISUAL_BAR_RAISER_REVIEW.md": INDEPENDENT_REVIEW_SHA256,
 	"README.md": "90c2daf6e9738d64106d4c5947b61f9cbde2bcc1fb26f5dc1a45e6c460c823fe",
@@ -78,9 +99,10 @@ func _run() -> void:
 	_require(_rejected_attempt_matches(), "Rejected 1280x800 attempt provenance is incomplete, mutable, or misrepresented as evidence.")
 	_require(_capture_pair_matches(), "Building 1 A/B capture pairing, motion, or topology contract drifted.")
 	_require(_media_matches(), "Building 1 A/B image or AVI technical evidence drifted.")
-	_require(_current_runtime_closure_matches(), "Post-capture current 11-asset runtime closure drifted.")
+	_require(_sealed_post_capture_runtime_closure_matches(), "Sealed post-capture v6/v5 11-asset runtime closure drifted.")
+	_require(_current_runtime_bridge_matches(), "Current v7/v6 11-asset runtime bridge drifted.")
 	if not _failed:
-		print("PASS: Building 1 entrance-gap A/B is byte-sealed and matched; 0.55->0.90 m only; 1440x900 stills + 529-tick stock motion; current 11-asset B1/tower closure; topology 735/944/957/64572/466/466; recognition 6/213 unchanged")
+		print("PASS: Building 1 entrance-gap A/B is byte-sealed and matched; 0.55->0.90 m only; 1440x900 stills + 529-tick stock motion; capture topology 735/944/957/64572/466/466 and recognition 6/213 remain historical; current v7/v6 11-asset B1/tower closure derives accepted recognition from physical-unit receipts at 7/213")
 	quit(1 if _failed else 0)
 
 
@@ -219,7 +241,7 @@ func _capture_pair_matches() -> bool:
 		var counts := bindings.get("runtime_asset_counts", {}) as Dictionary
 		if str(manifest.get("generator_sha256", "")) != GENERATOR_SHA256 \
 		or str(manifest.get("registry_sha256", "")) != CAPTURE_REGISTRY_SHA256 \
-		or not _numeric_structure_equal(manifest.get("runtime_topology", {}), EXPECTED_TOPOLOGY, 0.0) \
+		or not _numeric_structure_equal(manifest.get("runtime_topology", {}), CAPTURE_TOPOLOGY, 0.0) \
 		or int(counts.get("building:r16681702:wall", -1)) != 10 \
 		or int(counts.get("building:w1222720021:wall", -1)) != 10 \
 		or str(bindings.get("recognition_metric", "")) != "6/213":
@@ -281,56 +303,28 @@ func _media_matches() -> bool:
 		and _avi_receipt_matches(b, observations.get("b", {}) as Dictionary, 45825536)
 
 
-func _current_runtime_closure_matches() -> bool:
-	if FileAccess.get_sha256(CONFIG_PATH) != CURRENT_CONFIG_SHA256 \
-	or FileAccess.get_sha256(CATALOG_PATH) != CURRENT_CATALOG_SHA256 \
-	or FileAccess.get_sha256(SCHEMA_PATH) != CURRENT_SCHEMA_SHA256 \
-	or FileAccess.get_sha256(REGISTRY_PATH) != CURRENT_REGISTRY_SHA256 \
-	or FileAccess.get_sha256(ADAPTER_CONTRACTS_PATH) != CURRENT_ADAPTER_CONTRACTS_SHA256 \
-	or FileAccess.get_sha256(REPORT_PATH) != CURRENT_REPORT_SHA256 \
-	or FileAccess.get_sha256(COMPILER_PATH) != CURRENT_COMPILER_SHA256 \
-	or FileAccess.get_sha256(SCHEMA_VALIDATOR_PATH) != CURRENT_SCHEMA_VALIDATOR_SHA256 \
-	or FileAccess.get_sha256(LOADER_PATH) != CURRENT_LOADER_SHA256:
-		return false
-	var config_text := FileAccess.get_file_as_string(CONFIG_PATH)
-	if not config_text.contains("\"entrance_group_gap\": 0.90"):
-		return false
-	var registry := _json(REGISTRY_PATH)
-	var metric := registry.get("recognition_metric", {}) as Dictionary
-	var compatibility := registry.get("compatibility_contract", {}) as Dictionary
-	if str(registry.get("schema_version", "")) != "ti.facade-runtime-registry/6" \
-	or str(compatibility.get("catalog_schema_version", "")) != "ti.facade-recognition-catalog/6" \
-	or str(compatibility.get("compiler_version", "")) != "1.5.0" \
-	or str(compatibility.get("loader_api_version", "")) != "ti.facade-runtime-registry-loader/5" \
-	or int(metric.get("numerator", -1)) != 6 or int(metric.get("denominator", -1)) != 213 or str(metric.get("display", "")) != "6/213":
-		return false
-	for receiver_key: String in ["building:r16681702:wall", "building:w1222720021:wall"]:
-		var adapter := _adapter_for(registry.get("active_runtime_adapters", []) as Array, receiver_key)
-		var assets := adapter.get("runtime_assets", []) as Array
-		var contract := adapter.get("active_runtime_contract", {}) as Dictionary
-		if assets.size() != 11 or not (adapter.get("runtime_asset_projections", []) as Array).is_empty() \
-		or str(contract.get("public_front_config_sha256", "")) != CURRENT_CONFIG_SHA256 \
-		or not _has_asset(assets, CONFIG_PATH, CURRENT_CONFIG_SHA256):
-			return false
+func _sealed_post_capture_runtime_closure_matches() -> bool:
 	var closure := _json(ROOT.path_join("post-capture-runtime-closure.json"))
-	var current := closure.get("current_authority", {}) as Dictionary
+	# This sealed file used "current_authority" when it was written. It is now
+	# immutable post-capture history, not a claim about the live project files.
+	var post_capture := closure.get("current_authority", {}) as Dictionary
 	var invariants := closure.get("invariants", {}) as Dictionary
 	var review := closure.get("independent_visual_acceptance", {}) as Dictionary
-	var versions := current.get("version_matrix", {}) as Dictionary
+	var versions := post_capture.get("version_matrix", {}) as Dictionary
 	return str(closure.get("status", "")) == "pass" \
-		and str(current.get("catalog_sha256", "")) == CURRENT_CATALOG_SHA256 \
-		and str(current.get("catalog_schema_sha256", "")) == CURRENT_SCHEMA_SHA256 \
-		and str(current.get("registry_sha256", "")) == CURRENT_REGISTRY_SHA256 \
-		and str(current.get("adapter_contracts_sha256", "")) == CURRENT_ADAPTER_CONTRACTS_SHA256 \
-		and str(current.get("validation_report_sha256", "")) == CURRENT_REPORT_SHA256 \
-		and str(current.get("compiler_path", "")) == COMPILER_PATH.trim_prefix("res://") \
-		and str(current.get("compiler_sha256", "")) == CURRENT_COMPILER_SHA256 \
-		and str(current.get("dependency_free_schema_validator_path", "")) == SCHEMA_VALIDATOR_PATH.trim_prefix("res://") \
-		and str(current.get("dependency_free_schema_validator_sha256", "")) == CURRENT_SCHEMA_VALIDATOR_SHA256 \
-		and str(current.get("loader_path", "")) == LOADER_PATH.trim_prefix("res://") \
-		and str(current.get("loader_sha256", "")) == CURRENT_LOADER_SHA256 \
-		and str(current.get("public_front_config_sha256", "")) == CURRENT_CONFIG_SHA256 \
-		and int(current.get("runtime_asset_count_each", -1)) == 11 \
+		and str(post_capture.get("catalog_sha256", "")) == POST_CAPTURE_CATALOG_SHA256 \
+		and str(post_capture.get("catalog_schema_sha256", "")) == POST_CAPTURE_SCHEMA_SHA256 \
+		and str(post_capture.get("registry_sha256", "")) == POST_CAPTURE_REGISTRY_SHA256 \
+		and str(post_capture.get("adapter_contracts_sha256", "")) == POST_CAPTURE_ADAPTER_CONTRACTS_SHA256 \
+		and str(post_capture.get("validation_report_sha256", "")) == POST_CAPTURE_REPORT_SHA256 \
+		and str(post_capture.get("compiler_path", "")) == COMPILER_PATH.trim_prefix("res://") \
+		and str(post_capture.get("compiler_sha256", "")) == POST_CAPTURE_COMPILER_SHA256 \
+		and str(post_capture.get("dependency_free_schema_validator_path", "")) == SCHEMA_VALIDATOR_PATH.trim_prefix("res://") \
+		and str(post_capture.get("dependency_free_schema_validator_sha256", "")) == CURRENT_SCHEMA_VALIDATOR_SHA256 \
+		and str(post_capture.get("loader_path", "")) == LOADER_PATH.trim_prefix("res://") \
+		and str(post_capture.get("loader_sha256", "")) == POST_CAPTURE_LOADER_SHA256 \
+		and str(post_capture.get("public_front_config_sha256", "")) == CURRENT_CONFIG_SHA256 \
+		and int(post_capture.get("runtime_asset_count_each", -1)) == 11 \
 		and str(versions.get("catalog_schema", "")) == "ti.facade-recognition-catalog/6" \
 		and str(versions.get("runtime_registry_schema", "")) == "ti.facade-runtime-registry/6" \
 		and str(versions.get("adapter_contract_schema", "")) == "ti.facade-runtime-adapter-contracts/5" \
@@ -343,7 +337,63 @@ func _current_runtime_closure_matches() -> bool:
 		and str(review.get("recognition_metric_unchanged", "")) == "6/213" \
 		and str(invariants.get("accepted_reference_recognition_metric", "")) == "6/213" \
 		and bool(invariants.get("catalog_schema_version_changed", false)) \
-		and _numeric_structure_equal(invariants.get("world_topology", {}), EXPECTED_TOPOLOGY, 0.0)
+		and _numeric_structure_equal(invariants.get("world_topology", {}), CAPTURE_TOPOLOGY, 0.0)
+
+
+func _current_runtime_bridge_matches() -> bool:
+	if FileAccess.get_sha256(CONFIG_PATH) != CURRENT_CONFIG_SHA256 \
+	or FileAccess.get_sha256(CATALOG_PATH) != CURRENT_CATALOG_SHA256 \
+	or FileAccess.get_sha256(SCHEMA_PATH) != CURRENT_SCHEMA_SHA256 \
+	or FileAccess.get_sha256(REGISTRY_PATH) != CURRENT_REGISTRY_SHA256 \
+	or FileAccess.get_sha256(ADAPTER_CONTRACTS_PATH) != CURRENT_ADAPTER_CONTRACTS_SHA256 \
+	or FileAccess.get_sha256(REPORT_PATH) != CURRENT_REPORT_SHA256 \
+	or FileAccess.get_sha256(COMPILER_PATH) != CURRENT_COMPILER_SHA256 \
+	or FileAccess.get_sha256(SCHEMA_VALIDATOR_PATH) != CURRENT_SCHEMA_VALIDATOR_SHA256 \
+	or FileAccess.get_sha256(LOADER_PATH) != CURRENT_LOADER_SHA256:
+		return false
+	if not FileAccess.get_file_as_string(CONFIG_PATH).contains("\"entrance_group_gap\": 0.90"):
+		return false
+	var registry := _json(REGISTRY_PATH)
+	var adapter_contracts := _json(ADAPTER_CONTRACTS_PATH)
+	var metric := registry.get("recognition_metric", {}) as Dictionary
+	var compatibility := registry.get("compatibility_contract", {}) as Dictionary
+	var loader_contract := adapter_contracts.get("loader_contract", {}) as Dictionary
+	if str(registry.get("schema_version", "")) != "ti.facade-runtime-registry/7" \
+	or str(compatibility.get("catalog_schema_version", "")) != "ti.facade-recognition-catalog/7" \
+	or str(compatibility.get("compiler_version", "")) != "1.6.0" \
+	or str(compatibility.get("loader_api_version", "")) != "ti.facade-runtime-registry-loader/6" \
+	or str(adapter_contracts.get("schema_version", "")) != "ti.facade-runtime-adapter-contracts/6" \
+	or str(loader_contract.get("api_version", "")) != "ti.facade-runtime-registry-loader/6" \
+	or str(loader_contract.get("loader_sha256", "")) != CURRENT_LOADER_SHA256 \
+	or int(metric.get("numerator", -1)) != 7 or int(metric.get("denominator", -1)) != 213 or str(metric.get("display", "")) != "7/213":
+		return false
+	var accepted_unit_ids := metric.get("accepted_physical_unit_ids", []) as Array
+	if accepted_unit_ids.size() != 7:
+		return false
+	for receiver_value: Variant in CURRENT_RECOGNITION_RECEIPTS:
+		var receiver_key := str(receiver_value)
+		var expected := CURRENT_RECOGNITION_RECEIPTS[receiver_value] as Dictionary
+		var unit_id := str(expected.get("unit_id", ""))
+		var adapter := _adapter_for(registry.get("active_runtime_adapters", []) as Array, receiver_key)
+		var assets := adapter.get("runtime_assets", []) as Array
+		var contract := adapter.get("active_runtime_contract", {}) as Dictionary
+		var scope := adapter.get("active_receiver_scope", {}) as Dictionary
+		var unit := _unit_for(registry.get("units", []) as Array, unit_id)
+		var claim := unit.get("claim_status", {}) as Dictionary
+		if assets.size() != 11 or not (adapter.get("runtime_asset_projections", []) as Array).is_empty() \
+		or str(contract.get("public_front_config_sha256", "")) != CURRENT_CONFIG_SHA256 \
+		or not _has_asset(assets, CONFIG_PATH, CURRENT_CONFIG_SHA256) \
+		or str(scope.get("coverage", "")) != "whole_direct_wall_receiver" \
+		or int(scope.get("run_count", -1)) != int(expected.get("run_count", -1)) \
+		or str(adapter.get("review_status", "")) != "pending_independent_original_detail_review" \
+		or str(adapter.get("review_status_scope", "")) != "runtime_asset_original_detail_provenance_only_not_reference_recognition" \
+		or str(adapter.get("recognition_acceptance_authority", "")) != "physical_unit_claim_and_independent_acceptance_record" \
+		or str(claim.get("reference_recognizable", "")) != "accepted" \
+		or str(adapter.get("recognition_acceptance_status", "")) != str(claim.get("reference_recognizable", "")) \
+		or unit_id not in accepted_unit_ids \
+		or not _has_acceptance_receipt(unit, str(expected.get("review_receipt_sha256", "")), str(expected.get("evidence_manifest_sha256", ""))):
+			return false
+	return true
 
 
 func _adapter_for(adapters: Array, receiver_key: String) -> Dictionary:
@@ -352,6 +402,25 @@ func _adapter_for(adapters: Array, receiver_key: String) -> Dictionary:
 		if str(adapter.get("receiver_key", "")) == receiver_key:
 			return adapter
 	return {}
+
+
+func _unit_for(units: Array, unit_id: String) -> Dictionary:
+	for value: Variant in units:
+		var unit := value as Dictionary
+		if str(unit.get("unit_id", "")) == unit_id:
+			return unit
+	return {}
+
+
+func _has_acceptance_receipt(unit: Dictionary, receipt_sha256: String, manifest_sha256: String) -> bool:
+	for value: Variant in unit.get("acceptance_records", []) as Array:
+		var record := value as Dictionary
+		if str(record.get("review_kind", "")) == "independent_reference_recognition" \
+		and str(record.get("status", "")) == "accept" \
+		and str(record.get("review_receipt_sha256", "")) == receipt_sha256 \
+		and str(record.get("evidence_manifest_sha256", "")) == manifest_sha256:
+			return true
+	return false
 
 
 func _has_asset(assets: Array, path: String, sha256: String) -> bool:

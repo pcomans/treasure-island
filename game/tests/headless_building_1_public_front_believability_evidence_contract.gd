@@ -4,6 +4,8 @@ const OUTPUT := "res://evidence/first-playable/building-1-public-front-believabi
 const MANIFEST_PATH := OUTPUT + "/capture-manifest.json"
 const BEFORE_PATH := OUTPUT + "/before-capture.json"
 const AFTER_PATH := OUTPUT + "/after-capture.json"
+const INDEPENDENT_REVIEW_PATH := OUTPUT + "/INDEPENDENT_BAR_RAISER_REVIEW.md"
+const EXPECTED_INDEPENDENT_REVIEW_SHA256 := "a52c3a6f532f09d799b364f8dc5d0c1578af4d0c829cb9573318102201448d9a"
 const EXPECTED_MANIFEST_SHA256 := "2b813cd8487e3591c456635a1e352a64d614ddf69f506dcd72623172d867754f"
 const EXPECTED_BEFORE_SHA256 := "7e6d1a549a678f63b3dd2bff1693bfd53f6979b44fa8f2f84e3d72754292780f"
 const EXPECTED_AFTER_SHA256 := "bef28d2c1e021742a3f099a9a5b0ef0a8e7e8c258c1cac21e36797275d548e8f"
@@ -31,6 +33,7 @@ func _run() -> void:
 	_require(FileAccess.get_sha256(MANIFEST_PATH) == EXPECTED_MANIFEST_SHA256, "Building 1 public-front combined evidence manifest bytes drifted.")
 	_require(FileAccess.get_sha256(BEFORE_PATH) == EXPECTED_BEFORE_SHA256, "Building 1 public-front before manifest bytes drifted.")
 	_require(FileAccess.get_sha256(AFTER_PATH) == EXPECTED_AFTER_SHA256, "Building 1 public-front after manifest bytes drifted.")
+	_require(FileAccess.get_sha256(INDEPENDENT_REVIEW_PATH) == EXPECTED_INDEPENDENT_REVIEW_SHA256, "Building 1 public-front independent review receipt bytes drifted.")
 	var manifest := _json(MANIFEST_PATH)
 	var before := _json(BEFORE_PATH)
 	var after := _json(AFTER_PATH)
@@ -46,7 +49,7 @@ func _run() -> void:
 			_require(FileAccess.file_exists(image_path), "%s %s PNG is absent." % [stage, str(capture.id)])
 			_require(FileAccess.get_sha256(image_path) == str((EXPECTED_IMAGES[stage] as Dictionary).get(str(capture.id), "")), "%s %s PNG bytes drifted." % [stage, str(capture.id)])
 	if not _failed:
-		print("PASS: Building 1 public-front evidence preserves three exact fixed-camera native Metal before/after pairs, including changed light, pending independent bar-raiser re-review")
+		print("PASS: Building 1 public-front evidence preserves three exact fixed-camera native Metal before/after pairs, including changed light; the sealed manifests retain their capture-time pending labels, while the exact independent review subsequently passed with limitation and promoted the after candidate as the current public-front baseline without broadening the narrower original-detail provenance review")
 	quit(1 if _failed else 0)
 
 

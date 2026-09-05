@@ -4,6 +4,22 @@ Checked: **2026-08-30**
 
 Scope: frozen OSM and current generated/runtime world only; no live-currentness claim.
 
+> **2026-09-05 current-authority notice:** this Markdown body and its companion
+> JSON retain the earlier receiver/lifecycle inventory boundary and are not
+> rewritten to impersonate the later physical-unit recognition ledger. The
+> current coordinated authority is
+> `discovery/facades/facade-recognition-catalog.json` plus
+> `game/resources/facades/facade-runtime-registry.json`: exactly `213`
+> physical units, `214` direct wall receivers, and `7/213` independently
+> accepted reference-recognizable units. Six active adapters are fail-closed
+> and their review status is explicitly provenance-only; recognition derives
+> from mapped physical-unit claims and independent receipts. Isle House and
+> Navy Chapel preserve shared pre-B201 derived topology under
+> `pre_b201_integration_live_parity`, while B201 alone carries
+> `current_integration_topology` at exact current world
+> `735/950/964/66,636/466/466`. Numeric tables below remain historical to this
+> inventory's checked date unless a row explicitly says otherwise.
+
 ## Reconciliation
 
 - **215 source entities**: 213 building footprints plus 2 building parts.

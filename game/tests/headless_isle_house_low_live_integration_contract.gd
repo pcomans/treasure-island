@@ -9,6 +9,7 @@ const REJECTED_PATH := "res://game/scripts/world/facades/isle_house_39_bruton_lo
 const BUILDER_PATH := "res://game/scripts/world/world_chunk_builder.gd"
 const CHUNK_PATH := "res://generated/world/chunks/x_-1__z_2.json"
 const MANIFEST_PATH := "res://generated/world/manifest.json"
+const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const LOW_WALL_KEY := "building-composite:w1249412094:w1282547787:wall"
 const HIGH_WALL_KEY := "building-composite:w1249412094:w1282547786:wall"
 const LOW_ROOF_KEY := "building-composite:w1249412094:w1282547787:roof"
@@ -23,7 +24,7 @@ const SOURCE_HASHES := {
 	FACTORY_PATH: "4336e821e240b973f8d97e5cb46e17332b19dea03869abb1fa81b96a7e380582",
 	REVIEWED_FACTORY_PATH: "b24fd72cd12aa0c6c45a123f005fc834ea657c343e8332a872eae07fa017ace7",
 	REJECTED_PATH: "1b36a0ad92ded4607e0c1e0df5d5581d1c7afff5843cb75cd4c490790a86c413",
-	BUILDER_PATH: "d3d3dc1ba3aace541dc07ce437d242787ce2e4efe66877368ac2907e3facf17c",
+	BUILDER_PATH: "71e391e4fa58afc83e4bcb99a9f8195e398fdf4064bb09a401fb079e9f30491c",
 	CHUNK_PATH: CHUNK_SHA,
 	MANIFEST_PATH: MANIFEST_SHA,
 	"res://game/scripts/world/facades/isle_house_39_bruton_high_facade.gd": "f8243cedd3f331cbc37e6343b1b48e76a73a81644c96cc1f80e623e0c71a3113",
@@ -31,7 +32,7 @@ const SOURCE_HASHES := {
 	"res://game/resources/facades/isle_house_39_bruton_high_se_layout.json": "c5e6393e90152cef62f6478d7bd87750f3db5598d6ebc36cd307ce20acaa090d",
 }
 const OVERLAY_TOPOLOGY := {"mesh_instances": 7, "surfaces": 11, "triangles": 2242}
-const WORLD_TOPOLOGY := {"rows": 735, "meshes": 944, "surfaces": 957, "triangles": 64572, "bodies": 466, "shapes": 466}
+const WORLD_TOPOLOGY := {"rows": 735, "meshes": 950, "surfaces": 964, "triangles": 66636, "bodies": 466, "shapes": 466}
 const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 
@@ -47,6 +48,7 @@ func _run() -> void:
 	_require(FileAccess.get_sha256(REVIEW_PATH) == REVIEW_SHA, "Independent Variant C PASS review drifted.")
 	_require(_builder_seam_matches(), "World builder lost its one-path replace-not-stack seam.")
 	_require(_runtime_boundary_is_clean(), "Variant C executable seam contains a source/evidence path or URL.")
+	_require(_registry_topology_scope_matches(), "Variant C authority does not label its preserved pre-B201 integration topology separately from the current world.")
 	if _failed:
 		_finish()
 		return
@@ -116,7 +118,7 @@ func _run() -> void:
 	var world_result := await _full_world_matches()
 	_require(bool(world_result.get("ok", false)), str(world_result.get("message", "Whole-world Variant C live check failed.")))
 	print("ISLE_VARIANT_C_LIVE_SIGNATURE: %s" % LIVE_SIGNATURE)
-	print("ISLE_VARIANT_C_LIVE_TOPOLOGY: receiver=8/12/2268 overlay=7/11/2242 world=735/944/957/64572/466")
+	print("ISLE_VARIANT_C_LIVE_TOPOLOGY: receiver=8/12/2268 overlay=7/11/2242 world=735/950/964/66636/466")
 	if not _failed:
 		print("PASS: exact w1282547787 receives one independently accepted Variant C render-only replacement, never the rejected overlay; accepted high and sole underlying collision/spray ownership remain unchanged")
 	_finish()
@@ -235,6 +237,21 @@ func _runtime_boundary_is_clean() -> bool:
 			if token in source:
 				return false
 	return true
+
+
+func _registry_topology_scope_matches() -> bool:
+	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(REGISTRY_PATH))
+	if not (parsed is Dictionary):
+		return false
+	var adapters := ((parsed as Dictionary).get("active_runtime_adapters", []) as Array).filter(func(value: Variant) -> bool: return str((value as Dictionary).get("receiver_key", "")) == LOW_WALL_KEY)
+	if adapters.size() != 1:
+		return false
+	var behavior := ((adapters[0] as Dictionary).get("active_runtime_contract", {}) as Dictionary).get("behavior_contract", {}) as Dictionary
+	var geometry := behavior.get("geometry_contract", {}) as Dictionary
+	return str(geometry.get("world_topology_scope", "")) == "pre_b201_integration_live_parity" \
+		and int(geometry.get("world_records", -1)) == 735 and int(geometry.get("world_mesh_instances", -1)) == 944 \
+		and int(geometry.get("world_surfaces", -1)) == 957 and int(geometry.get("world_triangles", -1)) == 64572 \
+		and int(geometry.get("world_static_bodies", -1)) == 466 and int(geometry.get("world_shapes", -1)) == 466
 
 
 func _forbidden_tokens() -> Array[String]:

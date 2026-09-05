@@ -50,9 +50,9 @@ const PACKET_TIME_REGISTRY_SNAPSHOT = Object.freeze({
 const PACKET_TIME_STATE = Object.freeze({ recognition_metric: "5/213" });
 
 const AUTHORITY = Object.freeze({
-  catalog: { path: "discovery/facades/facade-recognition-catalog.json", schema: "ti.facade-recognition-catalog/6" },
+  catalog: { path: "discovery/facades/facade-recognition-catalog.json", schema: "ti.facade-recognition-catalog/7" },
   inventory: { path: "discovery/FACADE_RECEIVER_INVENTORY.json", schema: "ti.facade-receiver-inventory/1", sha256: "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f" },
-  registry: { path: "game/resources/facades/facade-runtime-registry.json", schema: "ti.facade-runtime-registry/6" },
+  registry: { path: "game/resources/facades/facade-runtime-registry.json", schema: "ti.facade-runtime-registry/7" },
   manifest: { path: "generated/world/manifest.json", schema: "ti.godot-world/2", sha256: "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3" },
   osm: { path: "data/osm/treasure-island-2026-08-27.osm", sha256: "3b6f6af31a1c82de3fa51fcbc02fe7e3723fdb629c948ae6523ef46c157b4549" },
 });
@@ -151,10 +151,10 @@ function validateAuthoritySplit(readme) {
   invariant(readme.includes(currentRegistryRow), "README lost the separately labeled current D8 registry authority");
   invariant(
     PACKET_TIME_CATALOG_SNAPSHOT.schema === "ti.facade-recognition-catalog/4"
-      && AUTHORITY.catalog.schema === "ti.facade-recognition-catalog/6"
+      && AUTHORITY.catalog.schema === "ti.facade-recognition-catalog/7"
       && PACKET_TIME_REGISTRY_SNAPSHOT.schema === "ti.facade-runtime-registry/4"
-      && AUTHORITY.registry.schema === "ti.facade-runtime-registry/6",
-    "D8 packet-time v4 receipts and current v6 binding authorities must remain explicitly separate",
+      && AUTHORITY.registry.schema === "ti.facade-runtime-registry/7",
+    "D8 packet-time v4 receipts and current v7 binding authorities must remain explicitly separate",
   );
 }
 
@@ -280,4 +280,4 @@ invariant(readme.includes(PACKET_TIME_REGISTRY_SNAPSHOT.sha256), `README lacks h
 for (const sourceId of ["CITY-EAS", "CITY-XWALK", "NAVY-SITE12-2015", "TIDA-JSCO-2026", "GOOGLE-SV"]) invariant(readme.includes(`\`${sourceId}\``), `README lacks shared source ${sourceId}`);
 invariant(facingChecks === localContracts.reduce((sum, contract) => sum + contract.partition.length, 0), "Facing partition count drifted");
 
-process.stdout.write(`D8 packet audit: PASS (15 IDs/order/direct bindings, 45 recomputed hashes, ${fieldChecks} exact field checks, ${facingChecks} facing partitions, 15 packet links, readiness 10/4/1; immutable packet-time catalog/registry ${PACKET_TIME_CATALOG_SNAPSHOT.sha256}/${PACKET_TIME_REGISTRY_SNAPSHOT.sha256}, ${PACKET_TIME_STATE.recognition_metric}; current v6 catalog/registry ${fileSha256(AUTHORITY.catalog.path)}/${fileSha256(AUTHORITY.registry.path)})\n`);
+process.stdout.write(`D8 packet audit: PASS (15 IDs/order/direct bindings, 45 recomputed hashes, ${fieldChecks} exact field checks, ${facingChecks} facing partitions, 15 packet links, readiness 10/4/1; immutable packet-time catalog/registry ${PACKET_TIME_CATALOG_SNAPSHOT.sha256}/${PACKET_TIME_REGISTRY_SNAPSHOT.sha256}, ${PACKET_TIME_STATE.recognition_metric}; current v7 catalog/registry ${fileSha256(AUTHORITY.catalog.path)}/${fileSha256(AUTHORITY.registry.path)})\n`);
