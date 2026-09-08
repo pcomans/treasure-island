@@ -12,6 +12,8 @@ const TOWER_SOURCE_KEY := "w1222720021"
 const TOWER_WALL_KEY := "building:w1222720021:wall"
 const TOWER_ROOF_KEY := "building:w1222720021:roof"
 const TARGET_KEYS := [BUILDING_WALL_KEY, BUILDING_ROOF_KEY, TOWER_WALL_KEY, TOWER_ROOF_KEY]
+const NORTH_WING_WINDOW_RUNS := [9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+const SOUTH_WING_WINDOW_RUNS := [44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56]
 const PHYSICS_WORLD_SOLID := 1 << 0
 const PHYSICS_SPRAY_SURFACE := 1 << 2
 const RENDER_WORLD_VISIBLE := 1 << 0
@@ -82,8 +84,8 @@ static func _build_building_wall(record: Dictionary, config: Dictionary, bar_con
 	var north_window_runs := _int_array(schedule.north_wing_window_runs)
 	var south_window_runs := _int_array(schedule.south_wing_window_runs)
 	for wing_runs: Array[int] in [north_window_runs, south_window_runs]:
-		_append_window_schedule(glass, trim, record, wing_runs, int(schedule.upper_windows_per_wing), 2.2, 2.35, 2.8, 2, 5, 0.13, 16.9)
-		_append_window_schedule(glass, trim, record, wing_runs, int(schedule.lower_windows_per_wing), 2.5, 2.05, 2.45, 2, 3, 0.23, 10.35)
+		_append_wing_window_schedule(glass, reveal, trim, record, wing_runs, int(schedule.upper_windows_per_wing), 2.2, 2.35, 2.8, 2, 5, 0.13, 16.9, front)
+		_append_wing_window_schedule(glass, reveal, trim, record, wing_runs, int(schedule.lower_windows_per_wing), 2.5, 2.05, 2.45, 2, 3, 0.23, 10.35, front)
 		_append_chain_band(trim, record, wing_runs, 19.55, 0.22, 0.16)
 
 	_append_end_composition(glass, trim, record, int(schedule.north_end_run), front)
@@ -492,6 +494,30 @@ static func _append_window_schedule(glass: Dictionary, trim: Dictionary, record:
 		var chain_m := margin_m if count == 1 else lerpf(margin_m, length - margin_m, float(index) / float(count - 1))
 		var frame := _chain_frame(record, runs, chain_m)
 		_append_window(glass, trim, frame, center_y, width, height, columns, rows, projection)
+
+
+static func _append_wing_window_schedule(glass: Dictionary, reveal: Dictionary, trim: Dictionary, record: Dictionary, runs: Array[int], count: int, margin_m: float, width: float, height: float, columns: int, rows: int, projection: float, center_y: float, front: Dictionary) -> void:
+	var length := _chain_length(record, runs)
+	for index in count:
+		var chain_m := margin_m if count == 1 else lerpf(margin_m, length - margin_m, float(index) / float(count - 1))
+		var frame := _chain_frame(record, runs, chain_m)
+		_append_wing_window(glass, reveal, trim, frame, center_y, width, height, columns, rows, projection, front)
+
+
+static func _append_wing_window(glass: Dictionary, reveal: Dictionary, trim: Dictionary, frame: Dictionary, center_y: float, width: float, height: float, columns: int, rows: int, projection: float, front: Dictionary) -> void:
+	var anchor := frame.wall_anchor as Vector3
+	var tangent := frame.tangent as Vector3
+	var normal := frame.normal as Vector3
+	var border := float(front.wing_window_reveal_border)
+	var glass_center := maxf(0.035, projection - 0.10)
+	var glass_front := glass_center + 0.07 * 0.5
+	var reveal_front := glass_front - float(front.wing_window_reveal_front_lag)
+	var reveal_rear := -float(front.wing_window_reveal_rear_overlap)
+	var reveal_depth := reveal_front - reveal_rear
+	var reveal_center := (reveal_front + reveal_rear) * 0.5
+	anchor.y = center_y
+	_append_box(reveal, anchor + normal * reveal_center, tangent, normal, width + border * 2.0, height + border * 2.0, reveal_depth)
+	_append_window(glass, trim, frame, center_y, width, height, columns, rows, projection)
 
 
 static func _append_window(glass: Dictionary, trim: Dictionary, frame: Dictionary, center_y: float, width: float, height: float, columns: int, rows: int, projection: float) -> void:
@@ -953,6 +979,10 @@ static func _config_valid(config: Dictionary) -> bool:
 		and int(schedule.get("upper_windows_per_wing", 0)) == 8 \
 		and int(schedule.get("upper_lights_per_window", 0)) == 10 \
 		and int(schedule.get("lower_windows_per_wing", 0)) == 7 \
+		and _int_array(schedule.get("north_wing_window_runs", []) as Array) == NORTH_WING_WINDOW_RUNS \
+		and _int_array(schedule.get("south_wing_window_runs", []) as Array) == SOUTH_WING_WINDOW_RUNS \
+		and int(schedule.get("north_end_run", -1)) == 93 \
+		and int(schedule.get("south_end_run", -1)) == 60 \
 		and int(schedule.get("tall_windows_per_end", 0)) == 2 \
 		and int(schedule.get("lights_per_tall_end_window", 0)) == 20 \
 		and int(schedule.get("entrance_groups", 0)) == 3 \
@@ -968,13 +998,16 @@ static func _bar_config_valid(config: Dictionary) -> bool:
 	var expected_runs: Array[int] = []
 	for run_index in range(21, 44):
 		expected_runs.append(run_index)
-	return str(config.get("schema_version", "")) == "ti.building-1-public-front-believability/1" \
+	return str(config.get("schema_version", "")) == "ti.building-1-public-front-believability/2" \
 		and str(target.get("building_source_key", "")) == BUILDING_SOURCE_KEY \
 		and str(target.get("wall_object_key", "")) == BUILDING_WALL_KEY \
 		and str(target.get("roof_object_key", "")) == BUILDING_ROOF_KEY \
 		and _int_array(target.get("public_front_chain_runs", []) as Array) == expected_runs \
 		and int(geometry.get("pilaster_count", 0)) == 12 \
 		and int(geometry.get("pilaster_flutes_per_pilaster", 0)) == 2 \
+		and is_equal_approx(float(geometry.get("wing_window_reveal_border", -1.0)), 0.16) \
+		and is_equal_approx(float(geometry.get("wing_window_reveal_front_lag", -1.0)), 0.04) \
+		and is_equal_approx(float(geometry.get("wing_window_reveal_rear_overlap", -1.0)), 0.01) \
 		and float(geometry.get("window_reveal_center_projection", -1.0)) + float(geometry.get("window_reveal_depth", 0.0)) * 0.5 \
 			< float(geometry.get("window_frame_center_projection", -1.0)) + float(geometry.get("window_frame_depth", 0.0)) * 0.5 \
 		and float(geometry.get("window_frame_center_projection", -1.0)) + float(geometry.get("window_frame_depth", 0.0)) * 0.5 \

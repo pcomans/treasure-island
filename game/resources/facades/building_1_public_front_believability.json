@@ -1,5 +1,5 @@
 {
-  "schema_version": "ti.building-1-public-front-believability/1",
+  "schema_version": "ti.building-1-public-front-believability/2",
   "pass_id": "building-1-public-front-believability-2026-09-04",
   "target": {
     "building_source_key": "r16681702",
@@ -36,6 +36,9 @@
     "window_frame_depth": 0.30,
     "window_outer_frame_width": 0.23,
     "window_internal_frame_width": 0.13,
+    "wing_window_reveal_border": 0.16,
+    "wing_window_reveal_front_lag": 0.04,
+    "wing_window_reveal_rear_overlap": 0.01,
     "pilaster_count": 12,
     "pilaster_center_y": 19.55,
     "pilaster_height": 10.3,

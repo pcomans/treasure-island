@@ -11567,3 +11567,137 @@ No approach selected.
 - Treat an authenticated non-interactive Git push as the authoritative publish
   check and report the credential mechanism separately from optional `gh`
   availability.
+
+## 2026-09-08 — Building 1 wing-window reveal candidate
+
+### Candidate implementation agent (`/root/b1_reveal_candidate`)
+
+#### What worked well
+
+- Enforcing the commit/push/clean-tree handoff gate before the first edit kept the
+  completed D2 v9 release transaction separate from this unreleased Building 1
+  visual candidate.
+- Routing only the two wing schedules through a dedicated helper added the exact
+  30 reveal boxes while preserving the earlier 14 reveal boxes byte-for-byte and
+  leaving end windows, roof, tower, collision, ownership, and every other mesh
+  batch unchanged.
+- A candidate-scoped whole-world assertion preserved D2 1441's mapped/protected
+  run split, nine batch triangle counts, materials, collision, and spray/roof
+  ownership while tolerating only the isolated 360-triangle Building 1 delta.
+
+#### What did not work well
+
+- Directly comparing JSON numeric arrays to integer literals failed because Godot
+  parsed the otherwise integral run indices as floats; explicit integer
+  normalization was needed for the read-only D2 preservation assertion.
+- Frozen D2 capture-time and postpromotion package bridges correctly retain the
+  69,252-triangle released topology, so they cannot also serve as current-source
+  gates for this deliberate 69,612-triangle candidate without corrupting their
+  historical boundary.
+
+#### What the team should change next time
+
+- Keep a small candidate-current preservation test beside topology-changing work
+  and reserve frozen package validators for their sealed phase; this makes the
+  tolerated delta explicit without weakening older evidence.
+- Normalize JSON numeric arrays before semantic comparisons, while separately
+  pinning the source hash so coercion cannot hide a changed authoritative file.
+
+## 2026-09-08 — Building 1 wing-window reveal independent source audit
+
+### Mechanical/bar-raiser source auditor (`/root/b1_reveal_audit`)
+
+#### What worked well
+
+- Waiting for an explicit stable handoff before reading the candidate kept the
+  review independent of partial implementations; the supplied hashes then
+  matched all four final candidate inputs exactly.
+- Combining release-object hashes, a line-by-line source diff, exact mesh-array
+  hashes, the preserved 14-box prefix, mutation gates, and independent real
+  traversal reruns made the isolated `+360`-triangle claim directly testable.
+
+#### What did not work well
+
+- The release tests did not retain a general per-mesh array-hash inventory, so
+  proving prior non-reveal byte identity required correlating the unchanged
+  release code paths with candidate hash diagnostics instead of comparing two
+  already sealed machine-readable inventories.
+- My first catalog inspection queried guessed top-level count keys and returned
+  nulls; reading the actual schema keys before extracting nested counts would
+  have avoided that uninformative pass.
+
+#### What the team should change next time
+
+- Seal a compact per-component mesh/collision hash snapshot with every accepted
+  hero release. A later quality candidate can then prove an exact one-bucket
+  delta without reconstructing the baseline from code and topology records.
+- Inspect JSON keys before writing focused projections, and keep phase-aware
+  candidate gates separate from frozen package validators whenever a deliberate
+  uncredited topology delta is under review.
+
+## 2026-09-08 — Building 1 rejected reveal rehearsal closure
+
+### Rejected-lineage auditor (`/root/b1_rejected_lineage_audit`)
+
+#### What worked well
+
+- Reproducing the existing receipt in verify mode and independently rebuilding
+  its path/hash/byte tree closed all 98 original inputs without touching the
+  disposable rehearsal or creating a misleading receipt-inclusive tree.
+- Running the package contract as an external script from `/private/tmp` against
+  one directly mounted candidate PCK kept source-render provenance separate from
+  packaged runtime semantics while rechecking v9 `9/213`, Building 1 topology,
+  and the accepted D2 pair.
+- Preserving the interrupted visual review as a receipt-bound HOLD made the
+  rejected candidate's specific visual failure durable without treating a
+  mechanics pass as art acceptance.
+
+#### What did not work well
+
+- The first direct-mounted attempt addressed the capture-only contract through a
+  `res://` path even though the test was deliberately excluded from the export;
+  Godot printed a file-not-found error but returned exit code `0`, so the console
+  text had to be treated as authoritative and the invocation corrected.
+- The visual hold initially existed only as a transmitted agent result. An
+  interruption could therefore have left a technically complete rehearsal with
+  no durable disposition record.
+
+#### What the team should change next time
+
+- Use the reviewed external-script/direct-mounted-PCK command template for
+  capture-only package tests, and require both exit status and an exact expected
+  PASS line before accepting a run.
+- Write the independent visual disposition immediately after review, before
+  launching the next revision, and bind it only to the acyclic input tree plus
+  its separately hashed receipt.
+
+## 2026-09-08 — Next-agent handoff and rejected-lineage checkpoint
+
+### Handoff author and checkpoint owner (`/root/b1_revision_owner`)
+
+#### What worked well
+
+- Reading main and both isolated worktrees as separate ledgers made it possible
+  to preserve authoritative v9, rejected Building 1 v1, source-only 1439, and
+  documentation-only provenance states without blending their evidence or
+  authority.
+- Freezing the mechanical and visual review hashes before writing the handoff
+  kept the v1 mechanics PASS subordinate to its P0 visual HOLD and made the
+  smallest v2 jamb-return remedy explicit without editing the rejected lineage.
+
+#### What did not work well
+
+- The historical release PID was no longer live, so describing it without a
+  fresh process check could have made a completed launch receipt sound like a
+  current controllable process.
+- The handoff initially depended on a still-running 1439 audit, which left a
+  temporary placeholder until the isolated reviewer froze the exact path,
+  verdict, hashes, topology, and mandatory post-Building-1 re-audit boundary.
+
+#### What the team should change next time
+
+- Record process facts as historical or currently observed, including executable
+  path and observation time; never use a PID alone as an ongoing-state claim.
+- Maintain one status ledger per dirty worktree and require each independent
+  review to return a durable path, hash, raw verdict, and next gate before a
+  cross-worktree handoff is finalized or any integration begins.
