@@ -8,6 +8,14 @@ The primary `/root` agent must never author or edit code, assets, tests, documen
 
 The primary `/root` agent may use coordination tools and the minimum read-only inspection needed solely to review or verify subagent output. Reuse a small number of appropriately bounded agents; do not over-delegate or over-analyze. This rule is persistent and takes precedence over any older wording that assigns direct editing or execution to the project lead or `/root`. It does not relax or replace any approval, external-service, decision-boundary, provenance, or data-contract rule below.
 
+## Periodic team-efficiency review
+
+At meaningful work checkpoints, ordinarily after a few substantial work rounds and earlier when repeated churn appears, `/root` assigns a named independent subagent to evaluate other subagents' efficiency. Sample relevant task/tool activity and `discovery/RETRO_LOG.md`; distinguish necessary evidence and acceptance checks from repeated low-value cycles, duplicated work, or avoidable waits. Keep the review bounded and its findings concise and evidence-backed. Do not create continuous monitoring, a recurring timer, idle audits, or a separate reporting framework.
+
+When useful, recommend one small, reversible process experiment at a time with a simple observable measure, such as fewer redundant reruns or less avoidable waiting. `/root` reviews the findings and may approve routine process changes within existing authorization, delegates execution, and has the responsible subagent record a before/after comparison in existing retrospective notes at a later meaningful checkpoint. Retain useful changes and revise or undo ineffective ones.
+
+Efficiency work must preserve mandatory independent source, mechanical, visual/bar-raiser, and release gates and all project invariants. Changes to approved player-facing behavior, workflow, scope, data contracts, or core invariants retain the existing owner-approval requirements; efficiency review does not grant an exception or make `/root` an executor.
+
 ## Current phase
 
 Implementation authorized for named executing subagents. On 2026-08-27 the owner explicitly approved the exact Godot bundle in `discovery/APPROACH_PROPOSAL.md`, including its vetted, logged downloads. Build and verify the first playable while preserving the approved product brief and the source-ID coverage contract; this authorization never makes the primary `/root` agent an executor.
@@ -32,6 +40,8 @@ Implementation authorized for named executing subagents. On 2026-08-27 the owner
 ## Facade recognizability policy
 
 For building-specific facade art, recognizability in ordinary third-person gameplay takes priority over survey-level placement precision. Once the target, observed side or region, motif family, and generated host geometry are adequately identified, executing subagents may choose reversible module scale, count, cadence, and anchors as `production_inference`. They must not present those choices as measured or as-built. Missing surveyed coordinates, counts, cadence, or dimensions are not by themselves blockers.
+
+Existing assets created by older GPT models, including previously accepted work, establish a **quality floor, not a ceiling**. The earlier simple-massing allowance is a first-playable coverage baseline, not the acceptance bar for current building-recognition quality work. Implementing subagents must aim for higher quality, and the independent visual bar-raiser must assess substantive improvement through truthful exterior references and ordinary gameplay comparisons: recognizability, coherent composition, believable detail, and clean geometry and motion. Parity with older assets alone is insufficient; added complexity or decoration is not improvement by itself. Preserve protected scope, truthful source evidence, performance, playability, and existing review gates. This higher quality requirement does not itself revoke existing recognition credit or authorize invented hidden detail or scope expansion.
 
 Keep exact generated receiver identity, protected-region ownership, complete-motif and seam semantics, physical plausibility, and geometry/collision/navigation/spray integrity mandatory. Survey precision improves confidence and becomes mandatory only when safety or geometry integrity depends on it. Validate the combined result against the reference observations in ordinary gameplay views, with independent art review. Keep as-built fidelity and game-art acceptance as separate claims.
 

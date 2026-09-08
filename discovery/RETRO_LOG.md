@@ -11701,3 +11701,59 @@ No approach selected.
 - Maintain one status ledger per dirty worktree and require each independent
   review to return a durable path, hash, raw verdict, and next gate before a
   cross-worktree handoff is finalized or any integration begins.
+
+## 2026-09-08 — Team-efficiency review and higher-quality asset policies
+
+### Process documentation owner (`/root/handoff_state_review`)
+
+#### What worked well
+
+- Added the owner's periodic efficiency-review preference to `AGENTS.md` with
+  bounded independent sampling, one reversible experiment at a time, and a
+  simple before/after comparison in existing retrospective notes.
+- Preserved the orchestrator-only boundary and mandatory acceptance gates;
+  the change needs no new reporting system or scheduled monitoring.
+- Made older assets an explicit quality floor and separated the initial massing
+  coverage allowance from the current recognition-quality bar. Independent
+  reviewers must assess substantive improvement in ordinary gameplay views.
+
+#### What did not work well
+
+- A broad search across the long retrospective log included every historical
+  heading and truncated the output without helping this small policy edit.
+
+#### What the team should change next time
+
+- Start with the current policy and a small recent log sample, then expand only
+  to answer a concrete process question; measure any proposed improvement in
+  the next relevant work round rather than repeatedly auditing unchanged work.
+- Judge future asset work against truthful references and a visible improvement
+  over the existing baseline, while preserving performance and protected scope.
+
+## 2026-09-08 — Resume verification and local policy checkpoint
+
+### Resume/integration owner (`/root/handoff_state_review`)
+
+#### What worked well
+
+- Verified that `f377dcac` already preserves the rejected B1 experiment; local
+  `origin/main` and read-only live network main both remain `b4ab093`. The eight
+  frozen B1 input hashes, three B1 audit hashes/verdicts, isolated 1439 audit,
+  handoff checkpoint blob, and current recognition-authority hashes match.
+- Kept the policy checkpoint limited to `AGENTS.md` and this log. No source,
+  evidence, app, or authority changed, and no already-completed v1 gameplay or
+  rehearsal gate was repeated. Current process inspection found no game or
+  Godot process, including the historical release PID.
+
+#### What did not work well
+
+- The handoff's pre-checkpoint HEAD and uncommitted-state wording cannot serve
+  as current Git instructions without reconciliation. The older migration
+  document likewise contains completed resume actions beneath newer addenda.
+
+#### What the team should change next time
+
+- Reconcile historical resume instructions against current refs and immutable
+  receipts, then proceed from the preserved checkpoint instead of recreating
+  finished gates. Use new B1 v2 identities while keeping rejected v1 evidence
+  immutable and serialize heavyweight Godot verification.
