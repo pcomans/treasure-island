@@ -5,6 +5,16 @@ Checked: **2026-09-04**
 Scope: **15 frozen address-only residential units; research and bounded art
 handoff only**
 
+> **2026-09-07 authority addendum:** the packet body below remains the frozen
+> research boundary. A later independently reviewed production transaction
+> accepts exactly 1441 Chinook Court (`w95934105`) as the ninth recognizable
+> physical unit. Current source authority is compiler `1.8.0`, catalog/runtime
+> registry v9, adapter contracts/loader API v8, and `9/213`; the other fourteen
+> D2 research units remain unaccepted. The accepted 1441 record binds the
+> immutable `-009` production packet and both independent reviews through a
+> distinct catalog transaction, without rewriting this research history or
+> importing panorama pixels.
+
 This directory records a receiver-first pass for exactly ten Chinook Court,
 three Striped Bass Street, and two Croaker Court buildings. It does not change
 the recognition catalog, runtime registry, generated world, prototypes, or live

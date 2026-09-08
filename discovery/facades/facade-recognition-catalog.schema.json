@@ -26,8 +26,8 @@
     },
     "active_runtime_adapters": {
       "type": "array",
-      "minItems": 7,
-      "maxItems": 7,
+      "minItems": 8,
+      "maxItems": 8,
       "items": {
         "$ref": "#/$defs/active_runtime_adapter"
       }
@@ -58,10 +58,10 @@
       ],
       "properties": {
         "emitted_runtime_schema_version": {
-          "const": "ti.facade-runtime-registry/8"
+          "const": "ti.facade-runtime-registry/9"
         },
         "required_compiler_version": {
-          "const": "1.7.0"
+          "const": "1.8.0"
         },
         "unknown_version_policy": {
           "const": "reject"
@@ -86,7 +86,7 @@
       }
     },
     "schema_version": {
-      "const": "ti.facade-recognition-catalog/8"
+      "const": "ti.facade-recognition-catalog/9"
     },
     "source_contract": {
       "$ref": "#/$defs/source_contract"
@@ -147,7 +147,7 @@
       ],
       "properties": {
         "active_runtime_adapter_receivers": {
-          "const": 7
+          "const": 8
         },
         "building_footprints": {
           "const": 213
@@ -168,7 +168,7 @@
           "const": 213
         },
         "runtime_adapter_receivers": {
-          "const": 16
+          "const": 17
         },
         "source_records": {
           "const": 215
@@ -266,6 +266,9 @@
         },
         {
           "$ref": "#/$defs/d1_b225_active_runtime_adapter"
+        },
+        {
+          "$ref": "#/$defs/d2_1441_active_runtime_adapter"
         }
       ]
     },
@@ -430,6 +433,46 @@
         "runtime_config_path": {"const": "game/resources/facades/d1_current/d1_b225_live_attachment.json"},
         "runtime_dispatch_path": {"const": "game/scripts/world/world_chunk_builder.gd"},
         "source_key": {"const": "w95934119"},
+        "whole_building_recognizability_imported": {"const": false}
+      }
+    },
+    "d2_1441_active_runtime_adapter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapter_id", "content_classification", "receiver_key", "recognition_acceptance_authority", "recognition_acceptance_status", "review_status", "review_status_scope", "runtime_adapter_path", "runtime_asset_paths", "runtime_config_path", "runtime_dispatch_path", "source_key", "whole_building_recognizability_imported"],
+      "properties": {
+        "adapter_id": {"const": "active-adapter:d2-1441-live:building:w95934105:wall"},
+        "content_classification": {"const": "active_target_specific_paired_wall_roof_replacement"},
+        "receiver_key": {"const": "building:w95934105:wall"},
+        "recognition_acceptance_authority": {"const": "physical_unit_claim_and_independent_acceptance_record"},
+        "recognition_acceptance_status": {"const": "accepted"},
+        "review_status": {"const": "independent_exact_current_live_pass"},
+        "review_status_scope": {"const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"},
+        "runtime_adapter_path": {"const": "game/scripts/world/facades/d2_1441_chinook_live_replacement.gd"},
+        "runtime_asset_paths": {
+          "type": "array",
+          "minItems": 11,
+          "maxItems": 11,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "game/scripts/world/facades/d2_1441_chinook_standalone_hero_prototype.gd",
+              "game/resources/facades/d2_1441_chinook_standalone_hero_prototype.json",
+              "game/scripts/world/facades/site_12_housing_kit.gd",
+              "game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
+              "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
+              "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
+              "game/resources/materials/world/site_12_housing/site_12_void_shadow.tres",
+              "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
+              "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
+              "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+              "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"
+            ]
+          }
+        },
+        "runtime_config_path": {"const": "game/resources/facades/d2_1441_chinook_live_replacement.json"},
+        "runtime_dispatch_path": {"const": "game/scripts/world/world_chunk_builder.gd"},
+        "source_key": {"const": "w95934105"},
         "whole_building_recognizability_imported": {"const": false}
       }
     },
@@ -868,10 +911,19 @@
         "evidence_tree_sha256": {
           "$ref": "#/$defs/sha256"
         },
+        "mechanical_review_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "motion_telemetry_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
         "numerator_effect": {
           "type": "integer",
           "minimum": 0,
           "maximum": 1
+        },
+        "package_verification_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
         },
         "review_id": {
           "type": "string",
@@ -893,6 +945,9 @@
             "accept",
             "reject"
           ]
+        },
+        "visual_motion_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
         }
       }
     },

@@ -23,16 +23,17 @@ const MAIN_SCENE_PATH := "res://game/scenes/main.tscn"
 const WALL_KEY := "building:w95934119:wall"
 const ROOF_KEY := "building:w95934119:roof"
 const SOURCE_KEY := "w95934119"
-const EXPECTED_WORLD := {"rows": 735, "meshes": 952, "surfaces": 967, "triangles": 67716, "bodies": 466, "shapes": 466}
+const ACCEPTED_B225_WORLD := {"rows": 735, "meshes": 952, "surfaces": 967, "triangles": 67716, "bodies": 466, "shapes": 466}
+const CURRENT_LIVE_WORLD := {"rows": 735, "meshes": 959, "surfaces": 974, "triangles": 69252, "bodies": 466, "shapes": 466}
 const REGISTRY_SHA256 := "109f83f40450e9c71ef6d39f1659e76eac5f1457fcfab772538b471cc74c0051"
 const CONTRACTS_SHA256 := "dd2d13e3b0f6eee1f8c5f2957927c4f3caba43b31883beea925f9a91b826d65c"
 const CATALOG_SHA256 := "d95be7bec8f0eabe97a9b5f7fefe1ce54ec7cbf940d85d28518ff6979eeb16ea"
 const SCHEMA_SHA256 := "44584e92e1652fc930f47882b4a83304f5216c14173eb805bc9ce68ea9927cac"
 const LOADER_SHA256 := "12e6c64b23b0783ed240b3d6c02499c3940c2b6a14344caa29778b850db06c04"
-const FOCUSED_V8_CONTRACT_SHA256 := "fd63ced9552dd9a1749de0047d2cebd1b46a1b093ebe1645dd4fcace19186353"
+const FOCUSED_V8_CONTRACT_SHA256 := "68458d5923134f2cc8b050315a455698cf48863f066eda3479da00e0b1e596c9"
 const CONFIG_SHA256 := "80b42c33fce84361aa7512f64305f5bff273e8fed95640ca4f9c19d49d55621d"
 const ADAPTER_SHA256 := "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9"
-const BUILDER_SHA256 := "de4a2924d275a51dfd08aae1f0ef21daac33395b1fcfe98e260fbc90737dd725"
+const ACCEPTED_B225_BUILDER_SHA256 := "de4a2924d275a51dfd08aae1f0ef21daac33395b1fcfe98e260fbc90737dd725"
 const B225_UNIT_ID := "physical-building:w95934119"
 const B225_ADAPTER_ID := "active-adapter:d1-b225-live:building:w95934119:wall"
 const B201_RECEIVER_KEY := "building:w34313545:wall"
@@ -107,7 +108,7 @@ func _run() -> void:
 		if mounted:
 			print("PASS: mounted B225 postpromotion v8 PCK is exact at 8/213: explicit PCK identity, exact six-asset closure, new v8 package contract and ordinary main present, candidate/private/override routes absent, and no downstream receipt feeds back into authority")
 		else:
-			print("PASS: source B225 postpromotion v8 package contract is exact at 8/213: canonical 735/952/967/67716/466/466 construction, exact six-asset closure, narrow exclusions declared, override absent, and no additional recognition credit")
+			print("PASS: source B225 postpromotion v8 package contract preserves accepted 735/952/967/67716/466/466 provenance at 8/213 while the semantic direct B225 route remains live in current 735/959/974/69252/466/466 construction with uncredited 1441")
 	quit(1 if _failed else 0)
 
 
@@ -161,21 +162,61 @@ func _mounted_candidate_route_paths() -> Array[String]:
 func _source_boundary_checks() -> void:
 	_require(FileAccess.get_sha256(CONFIG_PATH) == CONFIG_SHA256, "B225 production config bytes drifted.")
 	_require(FileAccess.get_sha256(ADAPTER_PATH) == ADAPTER_SHA256, "B225 production adapter bytes drifted.")
-	_require(FileAccess.get_sha256(BUILDER_PATH) == BUILDER_SHA256, "B225 production builder bytes drifted.")
+	_require(_current_b225_builder_route_matches(), "Current builder no longer preserves the exact direct B225 route semantics.")
 	var direct_runtime_source := FileAccess.get_file_as_string(CONFIG_PATH) + "\n" + FileAccess.get_file_as_string(ADAPTER_PATH)
 	for token: String in ["res://discovery/", "res://evidence/", "http://", "https://", "file://", "/Volumes/", "/Users/", "source_assets"]:
 		_require(token not in direct_runtime_source, "B225 direct runtime closure contains forbidden token %s." % token)
-	var builder_source := FileAccess.get_file_as_string(BUILDER_PATH)
-	_require(builder_source.count('preload("%s")' % ADAPTER_PATH) == 1, "Canonical builder does not preload the B225 adapter exactly once.")
-	_require(builder_source.count("D1_B225_LIVE_ATTACHMENT.validate_chunk_records(chunk)") == 1, "Canonical builder does not validate B225 chunk membership exactly once.")
-	_require(builder_source.count("D1_B225_LIVE_ATTACHMENT.build_prepared(record, b225_prepared)") == 1, "Canonical builder does not attach B225 exactly once.")
 	for token: String in ["ProjectSettings", "OS.get_environment", "OS.get_cmdline", "get_cmdline_user_args", "--d1-b225", "--b225"]:
-		_require(token not in FileAccess.get_file_as_string(ADAPTER_PATH) and token not in FileAccess.get_file_as_string(CONFIG_PATH) and token not in builder_source, "B225 production route acquired override token %s." % token)
+		_require(token not in FileAccess.get_file_as_string(ADAPTER_PATH) and token not in FileAccess.get_file_as_string(CONFIG_PATH), "B225 production route acquired override token %s." % token)
 	var preset := FileAccess.get_file_as_string("res://export_presets.cfg")
 	for boundary: String in ["discovery/*", "discovery/**/*", "evidence/*", "evidence/**/*"]:
 		_require(boundary in preset, "Export preset lost private boundary %s." % boundary)
 	for path: String in HISTORICAL_CANDIDATE_ROUTES:
 		_require(path.trim_prefix("res://") in preset, "Export preset does not narrowly exclude historical candidate path %s." % path)
+
+
+func _current_b225_builder_route_matches() -> bool:
+	var builder_source := FileAccess.get_file_as_string(BUILDER_PATH)
+	var markers: Array[String] = [
+		'const D1_B225_LIVE_ATTACHMENT := preload("%s")' % ADAPTER_PATH,
+		"D1_B225_LIVE_ATTACHMENT.validate_chunk_records(chunk)",
+		"if not is_context and D1_B225_LIVE_ATTACHMENT.claims_record(record):",
+		"D1_B225_LIVE_ATTACHMENT.prepare(record)",
+		"D1_B225_LIVE_ATTACHMENT.host_uvs(record, b225_prepared)",
+		"D1_B225_LIVE_ATTACHMENT.partition_host(record, indices, placeholder_material, b225_prepared)",
+		"D1_B225_LIVE_ATTACHMENT.build_prepared(record, b225_prepared)",
+		"var vertices := PackedVector3Array()",
+		"var body := StaticBody3D.new()",
+	]
+	for marker: String in markers:
+		if builder_source.count(marker) != 1:
+			return false
+	var claim_at := builder_source.find(markers[2])
+	var prepare_at := builder_source.find(markers[3])
+	var vertices_at := builder_source.find(markers[7])
+	var host_uv_at := builder_source.find(markers[4])
+	var partition_at := builder_source.find(markers[5])
+	var body_at := builder_source.find(markers[8])
+	var build_at := builder_source.find(markers[6])
+	if claim_at >= prepare_at or prepare_at >= vertices_at:
+		return false
+	if vertices_at >= host_uv_at or host_uv_at >= partition_at:
+		return false
+	if partition_at >= body_at or body_at >= build_at:
+		return false
+	for token: String in [
+		"facade_runtime_registry_loader",
+		"ResourceLoader.load(",
+		"ProjectSettings",
+		"OS.get_environment",
+		"OS.get_cmdline",
+		"feature_flag",
+		"fallback_dispatch",
+		"alternate_dispatch",
+	]:
+		if token in builder_source:
+			return false
+	return true
 
 
 func _authority_matches(mounted: bool) -> bool:
@@ -206,7 +247,8 @@ func _authority_matches(mounted: bool) -> bool:
 		return false
 	var receipt := receipts[0] as Dictionary
 	var b225_adapter := b225_adapters[0] as Dictionary
-	var b225_behavior := ((b225_adapter.get("active_runtime_contract", {}) as Dictionary).get("behavior_contract", {}) as Dictionary)
+	var b225_contract := b225_adapter.get("active_runtime_contract", {}) as Dictionary
+	var b225_behavior := (b225_contract.get("behavior_contract", {}) as Dictionary)
 	var b225_acceptance := b225_behavior.get("acceptance_contract", {}) as Dictionary
 	var b225_geometry := b225_behavior.get("geometry_contract", {}) as Dictionary
 	var b201_geometry := (((b201_adapters[0] as Dictionary).get("active_runtime_contract", {}) as Dictionary).get("behavior_contract", {}) as Dictionary).get("geometry_contract", {}) as Dictionary
@@ -243,6 +285,7 @@ func _authority_matches(mounted: bool) -> bool:
 		and not receiver.is_empty() and str(receiver.get("runtime_adapter_id", "")) == B225_ADAPTER_ID \
 		and str(receiver.get("runtime_content_mode", "")) == "active_d1_b225_host_partition_attachment" \
 		and str(b225_adapter.get("adapter_id", "")) == B225_ADAPTER_ID \
+		and str(b225_contract.get("dispatch_sha256", "")) == ACCEPTED_B225_BUILDER_SHA256 \
 		and str(receipt.get("capture_time_recognition_metric", "")) == "7/213" \
 		and str(receipt.get("evidence_manifest_sha256", "")) == FROZEN_CAPTURE_MANIFEST_SHA256 \
 		and str(receipt.get("evidence_tree_sha256", "")) == FROZEN_EVIDENCE_TREE_SHA256 \
@@ -250,7 +293,7 @@ func _authority_matches(mounted: bool) -> bool:
 		and int(receipt.get("numerator_effect", -1)) == 1 \
 		and str(b225_acceptance.get("accepted_physical_unit_id", "")) == B225_UNIT_ID \
 		and int(b225_acceptance.get("numerator_effect", -1)) == 1 \
-		and _topology_matches(b225_geometry, "current_integration_topology", EXPECTED_WORLD) \
+		and _topology_matches(b225_geometry, "current_integration_topology", ACCEPTED_B225_WORLD) \
 		and _topology_matches(b201_geometry, "pre_b225_integration_live_parity", {"rows": 735, "meshes": 950, "surfaces": 964, "triangles": 66636, "bodies": 466, "shapes": 466}) \
 		and current_topology_owners == [B225_ADAPTER_ID]
 
@@ -325,7 +368,7 @@ func _whole_world_matches() -> Dictionary:
 			attachments += 1
 	var walls := _nodes_for_key(world, WALL_KEY)
 	var roofs := _nodes_for_key(world, ROOF_KEY)
-	var ok := failures.is_empty() and reports.size() == 1 and actual == EXPECTED_WORLD \
+	var ok := failures.is_empty() and reports.size() == 1 and actual == CURRENT_LIVE_WORLD \
 		and attachments == 1 and walls.size() == 1 and roofs.size() == 1 \
 		and _staged_chunk_matches(_common_ancestor(walls[0], roofs[0]))
 	var message := "B225 package world drift: failures=%s reports=%d wall/roof=%d/%d attachments=%d topology=%s" % [failures, reports.size(), walls.size(), roofs.size(), attachments, actual]

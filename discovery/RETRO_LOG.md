@@ -10854,3 +10854,716 @@ No approach selected.
   authority, runtime, or test byte after acceptance. It claims no additional
   recognition credit and leaves ordinary Apple M1 Pro owner play as the sole
   required human acceptance item.
+
+## 2026-09-05 — 1441 Chinook uncredited live-integration seam
+
+### Live-integration implementer (`/root/d2_1441_preflight`)
+
+#### What worked well
+
+- Reusing the reviewed standalone factory through one directly preloaded,
+  fail-closed atomic-pair adapter preserved every reviewed art byte while
+  replacing the generic `2/2/42/2/2` pair with the intended
+  `9/9/1,578/2/2` live result. The measured whole world is exactly
+  `735/959/974/69,252/466/466`.
+- The building-texture skill kept ownership and depth explicit: 1,536 relief
+  triangles remain render-only, the exact 32 wall faces own the sole wall
+  spray receiver, and the exact 10 shallow-gable faces form a separate solid,
+  spray-blocking, truthfully landable roof. Focused physics rays exposed the
+  prototype roof's one-sided mathematical winding, which the adapter corrected
+  without changing its reviewed face geometry.
+- Parser/import, focused headless and native Metal, package, startup,
+  full-runtime, gameplay, material, world-validation, normal-route, and
+  whole-island-route gates passed. The accepted registry remains v8 at
+  `8/213`; this seam is deliberately live but uncredited.
+
+#### What did not work well
+
+- The optional determinism wrapper depends on `osmium`, which is absent from
+  PATH, while the current account cannot write the shared Homebrew prefix. A
+  project-local exact-bottle experiment then exposed an unresolved Boost ABI
+  mismatch, so no system ownership or source state was changed to force it.
+- Historical coherent-surface coverage evidence correctly rejects the current
+  generated-world hashes. Rewriting that frozen evidence would be misleading,
+  and fresh capture is outside this implementation stage.
+
+#### What the team should change next time
+
+- Keep reviewed factories immutable and put live attachment, exact membership,
+  collision partitioning, receiver ownership, and topology assertions in one
+  package-safe adapter. Exercise top-down and underside physics rays before
+  broad runtime gates so winding mistakes fail locally.
+- Next capture fresh ordinary player-height live evidence, obtain independent
+  technical and bar-raiser reviews, and only then consider catalog/registry v9
+  promotion. Run package/export audits after promotion; do not infer credit
+  from successful live integration alone.
+
+#### Change accounting
+
+- This stage adds only the 1441 live config, adapter, focused/package tests,
+  current runtime oracle updates, and this retrospective. It performs no
+  evidence capture, export, independent review, authority promotion, commit,
+  push, or final application launch and changes no B225 or reviewed 1441
+  standalone source/evidence byte.
+
+## 2026-09-05 — 1441 compiler and B225 lifecycle HOLD closure
+
+### HOLD-repair implementer (`/root/d2_1441_preflight`)
+
+#### What worked well
+
+- Separating the accepted B225 builder SHA and frozen package dependency closure
+  from the actual current builder text/hash preserved every generated v8
+  authority byte while allowing the compiler to validate later direct,
+  uncredited seams semantically.
+- Exact-count and ordering checks now cover all six accepted dispatch classes,
+  including pair preparation/consumption, chunk validation, host UV partitioning,
+  retained generic construction, and fail-closed build completion. Mutation
+  controls exercise missing, duplicate, reordered, dynamically loaded,
+  flag-controlled, and fallback/alternate dispatch failures.
+- The mutable B225 v8 bridges now distinguish accepted capture-time topology
+  `735/952/967/67,716/466/466` from the ordinary current D2-live topology
+  `735/959/974/69,252/466/466`; neither distinction changes recognition credit.
+
+#### What did not work well
+
+- Pinning the entire mutable `WorldChunkBuilder` byte as both accepted provenance
+  and current-route proof made any later direct seam look like B225 authority
+  drift. The D2 package also initially retained the pre-repair compiler pin,
+  which correctly kept the independent review on HOLD until lifecycle migration.
+- Optional local tooling experiments left ignored directories after their files
+  were removed. The task-created Osmium tree was moved recoverably to Trash, and
+  the empty task-created `.tools/git-lfs/` parent was removed without touching
+  the existing Godot, GitHub CLI, npm-cache, or repository LFS temporary state.
+
+#### What the team should change next time
+
+- Treat reviewed dispatch provenance and live source validation as two explicit
+  contracts: emit authority from the reviewed accepted SHA, then validate the
+  actual current builder with exact semantic lifecycle markers and mutations.
+- Migrate every mutable current bridge and downstream hash pin in the same
+  bounded repair, while leaving frozen capture harnesses, receipts, evidence,
+  and generated authority untouched.
+
+#### Change accounting
+
+- This HOLD repair changes only the current compiler/mutation tests, mutable B225
+  v8 bridges and wording, the D2 package gate, and this retrospective. It does
+  not capture, export, promote, commit, push, launch the app, or change the
+  generated v8 catalog, registry, adapter contracts, validation report, frozen
+  B225 v7 production contracts, packet, manifest, receipts, or reviews.
+
+## 2026-09-05 — 1441 Chinook prepromotion production v8 package and evidence
+
+### Evidence/package executor (`/root/b225_v8_semantic_audit`)
+
+#### What worked well
+
+- Reusing the ordinary-main B225 capture superclass while adding a narrow D2
+  harness kept the proof input-driven and construction-free. The final packet
+  records 14 static views, exactly 360 post-player ticks over 6.0 seconds, 12
+  braking ticks, three signature joins, and 21 post-draw motion frames with no
+  player/camera transform writes or recovery.
+- Freezing package-influencing bytes before suffix `-004` produced an acyclic
+  seven-file universal app whose direct-mounted generic and D2 contracts,
+  packaged headless main, and native Apple M2 Metal main all pass. The external
+  receipt binds the app/PCK/source identities without storing its own hash or an
+  absolute path, and no downstream hash was fed into v8 authority.
+- A full rehearsal before authoritative capture exposed no remaining route,
+  landing, line-of-sight, cadence, or packet-shape fault. Immediate override
+  removal plus a headless disk round-trip left the exact 40-file packet ready
+  for independent contract and visual audits while retaining zero promotion or
+  recognition credit.
+
+#### What did not work well
+
+- Three export suffixes were invalidated before the final no-edits boundary:
+  `-001` exposed a mounted-contract lifecycle flaw, `-002` inherited unsuitable
+  standalone view coordinates, and `-003` exposed world/local camera-yaw and
+  stage-lifecycle bugs in the first motion rehearsal. Each failure was safe but
+  made the capture round substantially longer than necessary.
+- Static capture iteration initially relied too heavily on inherited viewpoint
+  assumptions. Direct line-of-sight and collision probes should have preceded
+  the first export, especially for the protected return, neighboring roofs, and
+  comparator occlusion.
+
+#### What the team should change next time
+
+- Before exporting, run one target-specific coordinate table through wall/roof
+  ray checks, player grounding, and a complete disposable static + telemetry +
+  visual-motion rehearsal. Treat world-to-camera-basis conversion and nested
+  packet-stage file sets as reusable tested helpers rather than per-target code.
+- Keep the lifecycle order explicit: frozen prior evidence -> unchanged current
+  authority -> fresh package receipt -> fresh packet -> independent reviews.
+  Reject a suffix after any package-influencing edit and never back-propagate
+  package or packet hashes into accepted authority.
+
+#### Change accounting
+
+- This round adds the three D2 production proof scripts and UIDs, one ignored
+  local `-004` app plus its external receipt, the exact 40-file uncommitted
+  candidate packet, and this retrospective. It performs no authority promotion,
+  independent review, commit, push, or final visible launch and claims no
+  additional recognition credit.
+
+## 2026-09-05 — 1441 Chinook `-004` independent mechanical HOLD
+
+### Independent contract auditor (`/root/b225_contract_audit`)
+
+#### What worked well
+
+- Independent canonical-tree, manifest, image, telemetry, app, mounted-PCK,
+  signing, and runtime checks reduced a large closure to one exact identity
+  defect. The 40-file packet, 35 PNGs, ordinary-main topology, 360-plus-12
+  motion record, three joins, collision/receiver ownership, and package privacy
+  boundary otherwise reconciled.
+- Preserving the `-004` packet and app byte-for-byte made the failure auditable
+  and kept the current v8 `8/213` authority free of downstream package or
+  evidence feedback.
+
+#### What did not work well
+
+- The copied package receipt asserted geometry signature `b91b373edbb41d...`
+  while the live adapter/configuration, reviewed standalone source, capture
+  generator, and all three manifest bindings asserted `b91b373e3bb823...`.
+  The static manifest therefore contained both identities.
+- The persisted evidence validator checked the receipt hash, schema, topology,
+  authority state, and acyclicity but did not cross-bind the receipt target
+  signature to the live/capture binding. This allowed an otherwise strong
+  rehearsal and authoritative write to preserve a fatal receipt typo.
+
+#### What the team should change next time
+
+- Generate package receipts deterministically from the canonical live target
+  constants, then require source, mounted-package, and persisted packet gates to
+  compare every target identity field against the same authoritative binding.
+  Include an exact-signature mutation that substitutes the observed typo.
+- Treat any receipt identity mismatch as suffix-fatal: preserve the bad suffix
+  as rejected history and create a fresh app, receipt, rehearsal, packet, and
+  independent review rather than repairing immutable evidence in place.
+
+#### Change accounting
+
+- This audit adds only the independent `-004` HOLD review and this retrospective
+  entry. It changes no packet, app, source, authority, package, visual review,
+  recognition credit, commit, push, or running application state.
+
+## 2026-09-07 — D2 1441 receipt, roof-face, and motion-capture remediation
+
+### Remediation executor (`/root/d2_1441_remediate`)
+
+#### What worked well
+
+- Deriving the receipt target from the authoritative config, adapter, and capture
+  bytes, then round-tripping it through JSON and mutating the historical typo,
+  repaired the geometry-signature boundary without feeding package evidence back
+  into v8 authority. Elementwise numeric comparison also handled JSON's parsed
+  integral floats without weakening ordered run-array checks.
+- Preserving every failed suffix made two deeper defects diagnosable: Godot's
+  clockwise front-face convention exposed the upward-CCW roof render winding,
+  and the `-008` motion failure isolated six catch-up ticks caused by live-loop
+  PNG encoding. Correct render winding plus fixed-FPS, in-memory post-draw image
+  staging produced the complete immutable `-009` packet with exact collision,
+  input, topology, privacy, and no-credit invariants intact.
+
+#### What did not work well
+
+- The initial receipt validator compared typed integer arrays directly with
+  JSON-parsed numeric arrays, so a valid receipt failed closed only during native
+  capture. Ordered numeric mutation coverage should have existed before export.
+- Vertex-set face congruence masked opposite render/collision winding, while
+  telemetry made a roof landing appear mechanically valid even though the roof
+  was invisible from above. The first visual-motion loop also declared fixed FPS
+  without requiring its invocation receipt and encoded PNGs while input was held.
+
+#### What the team should change next time
+
+- Before the first production suffix, test receipt payloads after JSON round-trip,
+  bind ordered face orientation separately from order-insensitive geometry
+  signatures, and visually scout collision-supported surfaces from their real
+  gameplay side under the production cull mode.
+- Keep live controller loops free of file encoding: snapshot pixels and exact
+  post-draw sampler state in memory, stop only after the specified input and
+  braking ticks, then persist. Continue treating any source-affecting repair or
+  failed partial packet as suffix-fatal rather than editing frozen evidence.
+
+## 2026-09-07 — D2 1441 final production visual bar-raiser
+
+### Visual bar-raiser (`/root/d2_1441_bar_raiser`)
+
+#### What worked well
+
+- Native-resolution pre-seal inspection caught two evidence frames that were
+  mechanically plausible but visually inadequate: the spray result was not
+  initially legible, and the supported roof landing initially resembled open
+  ground. Requiring readable pixels led to an honest spray frame and exposed the
+  roof-face winding defect before the final packet was sealed.
+- Ranking stable architectural cues against the four immediate comparators,
+  then repeating that ranking in changed light, grayscale, context, and motion,
+  kept the decision focused on massing and depth rather than color or signage.
+- Five-frame brackets on both sides of each join made subtle crawl, seam, pop,
+  and repeat failures much easier to reject than isolated beauty shots would.
+
+#### What did not work well
+
+- Several disposable or failed suffixes were needed before interaction pixels
+  and motion timing were simultaneously reviewable. Coordinate-valid support
+  and collision facts alone did not guarantee that the intended proof was
+  legible to a human viewer.
+- Encoding images during live input perturbed frame timing enough to invalidate
+  a motion packet. That failure arrived late because capture mechanics and
+  presentation quality had initially been rehearsed as separate concerns.
+
+#### What the team should change next time
+
+- Put native-resolution human-readability gates for every interaction claim
+  before authoritative capture: the claimed result, receiver, support plane,
+  and surrounding context should all be plainly visible in ordinary gameplay
+  framing even when the metadata is ignored.
+- Rehearse static truth, dense join motion, and comparator/grayscale separation
+  against the same frozen app and receipt. Keep live traversal free of PNG
+  encoding, stage post-draw pixels in memory, and persist only after input and
+  braking have completed.
+- Treat coarse or recurring materials as acceptable only after far/mid/near
+  motion proves that recurrence stays subordinate to architectural cues and
+  does not become crawl, shimmer, moire, or a visible tile boundary.
+
+#### Change accounting
+
+- This lane adds only the candidate-specific production visual review and this
+  retrospective entry. It changes no production source, asset, app, evidence
+  packet, authority, recognition credit, commit, push, or launched process.
+
+## 2026-09-07 — D2 1441 `-009` independent mechanical promotion audit
+
+### Independent contract auditor (`/root/state_reconcile`)
+
+#### What worked well
+
+- Recomputing the packet, app, executable, PCK, receipt, source, authority, and
+  retained-log identities directly from bytes kept the audit independent of the
+  implementer's reported hashes. A separate semantic validator then joined those
+  identities to the exact topology, ownership, interaction, motion, and no-credit
+  claims without changing the sealed candidate.
+- Auditing roof render winding, lighting normals, ordered collision congruence,
+  historical-winding rejection, and the top-hit result as separate facts closed
+  the gap that had allowed mechanically valid support over an invisible roof.
+- Treating the 360 controller ticks, 12 braking ticks, 21 post-draw snapshots,
+  three five-frame join brackets, and deferred PNG writes as one causal motion
+  contract confirmed that the fixed-FPS repair solved timing without weakening
+  tolerance or writing transforms.
+
+#### What did not work well
+
+- The packet-tree hash algorithm initially required explicit reconciliation with
+  the different app-bundle tree algorithm. These two canonicalizations are both
+  valid but easy to confuse when their recipes are not named alongside hashes.
+- The optional clean-world two-build wrapper could not start because `osmium` is
+  absent from this host's PATH. Existing compiler check-mode, generated-world,
+  direct-mounted, package, and source/runtime checks still supplied the required
+  deterministic evidence, so this remained a nonblocking environment note.
+- The persisted visual payload records the `"60"` user receipt honestly, while
+  the actual engine-side `--fixed-fps 60` invocation remains corroborated by the
+  capture invocation rather than an engine-observed field in the packet.
+
+#### What the team should change next time
+
+- Name and check in the exact canonical tree recipe used by each artifact class,
+  and preflight optional geospatial tools before reserving a clean-world audit
+  lane. Where practical, persist a sanitized engine-argument observation beside
+  the fixed-FPS user receipt.
+- Retain the ordered roof-winding mutation tests and the in-memory post-draw image
+  staging pattern. Both catch failure modes that unordered geometry comparison
+  and nominal fixed-FPS declarations cannot detect.
+
+#### Change accounting
+
+- This independent lane adds only the `-009` mechanical contract review and this
+  retrospective entry. It changes no production source, asset, app, evidence
+  packet, authority, recognition credit, visual review, commit, push, toolchain,
+  override, or running process.
+
+## 2026-09-07 — D2 1441 v9 final world/privacy revalidation
+
+### Independent non-capture validator (`/root/d2_1441_remediate/v9_world_privacy`)
+
+#### What worked well
+
+- Running the generated-world and Building 1 ownership validators independently,
+  then recomputing the sealed packet, review, app-bundle, PCK, executable, and
+  per-file identities directly from bytes, kept the final recheck separate from
+  compiler and Godot implementation work.
+- Static deep and per-architecture signing checks, plist validation, entitlement,
+  xattr, quarantine, export-filter, root-override, and process checks covered the
+  private Mac package boundary without exporting, launching, or recapturing.
+
+#### What did not work well
+
+- `override.cfg` is intentionally enforced by source-root and mounted-package
+  absence checks rather than appearing as a literal export-filter token. A quick
+  filter-only inspection can therefore understate the actual privacy gate.
+- A read-only static pass cannot independently enumerate mounted virtual PCK paths;
+  that proof remains in the frozen mounted audit and receipt bound to the exact PCK.
+
+#### What the team should change next time
+
+- Report directory filter tokens, root override absence, mounted-path absence, and
+  raw private-needle scans as separate claims. Preserve a deterministic read-only
+  PCK inventory artifact when sealing so later static revalidation does not need to
+  execute Godot merely to repeat virtual-path enumeration.
+
+#### Change accounting
+
+- This lane adds only this retrospective entry. It changes no implementation,
+  generated world, export preset, app, sealed evidence/review bytes, authority,
+  recognition credit, commit, push, capture, launch, override, or running process.
+
+## 2026-09-07 — D2 1441 v9 authority promotion implementation
+
+### Promotion executor (`/root/d2_1441_remediate`)
+
+#### What worked well
+
+- Rehashing the complete `-009` packet, both independent reviews, and every app
+  file before promotion kept the v9 graph rooted in immutable prepromotion bytes.
+  Two-pass compiler generation and independent Node/Godot mutation suites then
+  converged on one exact 9/213 authority with a single wall-indexed 1441 plan.
+- Layering new v9 focused/package bridges over the frozen v8 validators preserved
+  capture-time 8/213 truth without creating a downstream evidence cycle. The
+  current bridge could also retain B225's topology as historical provenance while
+  assigning current topology to 1441 alone.
+
+#### What did not work well
+
+- Loader test-driving exposed two derivation assumptions only after generation:
+  current dispatch identity still referred to a pre-D2 builder, and the unit-mode
+  reducer did not recognize a D2-only active replacement. Regenerating before the
+  loader was fully stable created avoidable stale hash-pin cycles.
+- Two older source tests still carried pre-1441 whole-world assumptions. One was a
+  mutable current Building 1 integration oracle and needed the new total; the B225
+  standalone validator was immutable historical evidence and had to remain v8
+  rather than being casually repinned.
+
+#### What the team should change next time
+
+- Stabilize loader derivation and run its full mutation matrix in memory before the
+  first final generation, then perform exactly one generated-hash and bridge-pin
+  cycle. Classify every legacy test up front as mutable current integration or
+  immutable historical evidence so only the former receives new authority totals.
+- Keep source promotion separate from app/evidence production. Verify historical
+  packages through exact mounted fixtures and reserve a fresh downstream suffix for
+  any future postpromotion app, capture, or independent release review.
+
+## 2026-09-07 — D2 1441 v9 compiler and schema contract lane
+
+### Compiler/schema validator (`/root/d2_1441_remediate/v9_compiler_map`)
+
+#### What worked well
+
+- Extending the established B225 promotion pattern made the version, count,
+  topology-scope, adapter-plan, and single-record authority changes explicit.
+  Rehashing every frozen 1441 input and exercising forged path, hash, receipt,
+  review, route, credit, topology, and dispatch-order mutations kept the runtime
+  output limited to hashes while proving the full acceptance closure.
+
+#### What did not work well
+
+- Compiler and loader work proceeded concurrently, so early strict tests stopped
+  at expected stale generated hashes until the loader stabilized. One initial D2
+  fully-consumed reorder mutation also violated the shared Navy Chapel ordering
+  first and had to be reshaped to isolate the intended D2 invariant.
+
+#### What the team should change next time
+
+- Freeze the compiler/loader version-and-count matrix before the first generation,
+  run both mutation suites against the same in-memory candidate, and generate only
+  after both lanes declare their source inputs stable. Design reordered seam tests
+  to preserve neighboring shared-plan invariants so each failure proves one gate.
+
+## 2026-09-07 — D2 1441 v9 Godot loader and bridge lane
+
+### Godot validator (`/root/d2_1441_remediate/v9_godot_map`)
+
+#### What worked well
+
+- Reusing the frozen D2 production validators let the v9 bridges preserve exact
+  capture-time no-credit truth while independently proving current 9/213 authority.
+  An in-memory loader convergence run exercised the full mutation matrix without
+  changing generated artifacts.
+
+#### What did not work well
+
+- Initial generation preceded deep loader execution, which exposed stale B201/B225
+  dispatch pins and a missing D2-only unit-mode reduction afterward. The first
+  focused bridge run also revealed an unsafe cast for adapters with null behavior.
+
+#### What the team should change next time
+
+- Run the loader against an in-memory candidate and exercise null-bearing adapter
+  scans before final generation, then freeze the loader, generate once, and pin the
+  focused bridge into the package bridge only after its source test passes.
+
+## 2026-09-07 — D2 1441 v9 runtime-route verification lane
+
+### Runtime-route validator (`/root/d2_1441_remediate/v9_runtime_routes`)
+
+#### What worked well
+
+- Running the full-runtime, default-route, and whole-island-route gates sequentially
+  produced unambiguous exit codes and timings while confirming the promoted
+  `959/974/69,252` topology remained fully playable.
+
+#### What did not work well
+
+- The mandatory retrospective was initially missed because the lane was scoped as
+  read-only, requiring a separate closeout pass after all runtime checks finished.
+
+#### What the team should change next time
+
+- State explicitly that the required retrospective is the sole permitted write in
+  otherwise read-only validation lanes, and reserve that closeout before reporting
+  the lane complete.
+
+## 2026-09-07 — D2 1441 v9 authority byte/data-graph audit
+
+### Authority-byte auditor (`/root/v9_semantic_audit/authority_bytes`)
+
+#### What worked well
+
+- Independent canonical tree and bundle-identity recomputation, followed by a
+  compiler `--check`, reconciled the frozen `-009` packet/app with every v9
+  catalog, registry, contract, report, loader, compiler, and bridge hash.
+- Comparing the committed v8 catalog to v9 made the promotion boundary explicit:
+  1441 is the sole added accepted unit, with one `8/213` capture-time record, one
+  `+1` effect, one wall-indexed adapter, and no roof-indexed adapter.
+
+#### What did not work well
+
+- A naive current-file rehash of the three frozen manifests initially reports six
+  expected mismatches because their captured v8 authority files have correctly
+  advanced to v9. Those historical pins need classification before bulk checks.
+
+#### What the team should change next time
+
+- Emit a small machine-readable promotion graph that labels each hash as frozen,
+  current, or downstream-only. This would make acyclicity and intentional
+  postpromotion authority deltas directly auditable without reconstructing the
+  classification from manifests, reviews, and bridge constants.
+
+## 2026-09-07 — D2 1441 v9 independent semantic gate
+
+### Semantic/authority auditor (`/root/v9_semantic_audit`)
+
+#### What worked well
+
+- Separating byte/data-graph inspection from runtime execution gave the promotion
+  two independent views: exact one-credit authority and real current-world behavior.
+- Repeating compiler writes before Node mutation tests, then running source,
+  native-Metal, traversal, mounted-PCK, privacy, and signing gates, closed the
+  evidence-to-runtime chain without exporting or recapturing.
+
+#### What did not work well
+
+- Three retired standalone/pre-live source validators were easy to mistake for
+  current gates; their intentional isolation and old factory pins reject the
+  postpromotion lifecycle even though the current bridges and frozen mounted
+  fixtures pass.
+- The optional clean-world wrapper depends on an uninstalled `osmium`; its
+  nonblocking status had to be reasoned from the transaction's no-world-change
+  scope and the stronger exact-current world/mounted validators.
+
+#### What the team should change next time
+
+- Keep a machine-readable test lifecycle index that marks each validator as
+  current-source, frozen-mounted, or retired, with the successor gate named.
+- Continue making each promotion review downstream-only and publish a small
+  acyclic dependency graph alongside the generated authority.
+
+## 2026-09-07 — D2 1441 v9 postpromotion export and evidence
+
+### Postpromotion executor (`/root/v9_postpromotion_executor`)
+
+#### What worked well
+
+- Treating the semantic audit's raw final line and exact SHA-256 as a hard export
+  gate prevented a Markdown-formatted near-match from authorizing downstream
+  evidence. The corrected audit then anchored a fresh app, acyclic package
+  receipt, and exact-current packet without feeding any downstream hash back into
+  v9 authority.
+- Completing all three capture modes first in the rehearsal directory exposed the
+  full ordinary-controller route before authoritative writes. The resulting
+  `-001` packet closed at 14 stills, 360 input samples plus 12 braking samples, and
+  21 deferred-I/O post-draw frames across all three signature joins.
+
+#### What did not work well
+
+- The first mounted-package and generic-PCK invocations ran from the repository
+  directory, so Godot selected the source `project.godot` instead of treating the
+  exported PCK as the mounted project. Both invocations were retained as failed
+  diagnostics and rerun successfully from a projectless directory.
+- The first postcapture validator invocation omitted the required external receipt
+  path and receipt hash. It failed closed as designed, but duplicating a long
+  argument list manually created avoidable operator error.
+
+#### What the team should change next time
+
+- Run every direct-mounted PCK audit from a freshly created projectless directory
+  by default and assert that `res://project.binary` exists while
+  `res://project.godot` does not before interpreting results.
+- Generate capture and validation commands from one checked argument manifest so
+  generator, receipt, fixed-FPS, and output identities cannot be accidentally
+  omitted between rehearsal, authoritative capture, and final validation.
+
+## 2026-09-07 — D2 1441 v9 postpromotion final packet rehash
+
+### Final packet rehash (`/root/v9_postpromotion_executor/final_packet_rehash`)
+
+#### What worked well
+
+- Recomputing the canonical packet tree from NUL-delimited, bytewise-sorted
+  `./relative` paths reproduced a stable 40-file identity before and after the
+  remaining read-only checks.
+- Independently reconciling app inventory records, copied and embedded receipts,
+  PNG headers, manifest bindings, privacy plists, review references, and process
+  state provided a compact final byte-level closure without launching the game.
+
+#### What did not work well
+
+- The first combined privacy-scan shell command had a quoting error because its
+  regular expression mixed shell quote forms; it performed no check and had to be
+  rerun with separate, safely quoted `rg -e` patterns.
+- The initially read-only lane omitted its mandatory retrospective, requiring a
+  separate closeout turn to satisfy the project working agreement.
+
+#### What the team should change next time
+
+- Keep privacy patterns as individually quoted `rg -e` arguments and use the same
+  reviewed command template for every final packet rehash.
+- Explicitly reserve the retrospective as the sole permitted write when assigning
+  an otherwise read-only validation lane.
+
+## 2026-09-07 — D2 1441 v9 independent release visual gate
+
+### Bar-raiser visual auditor (`/root/v9_release_visual`)
+
+#### What worked well
+
+- Opening all 35 sealed PNGs individually at native resolution, then checking the
+  target against all four comparators, made the top-1 decision independent of
+  manifest labels. The grayscale, changed-light, protected-return, spray, roof,
+  and three dense join brackets exposed the important failure modes directly.
+- Rehashing the full packet/app/source closure and comparing the postpromotion
+  images to `-009` separated authority changes from visuals: all 21 motion frames
+  are byte-identical, and direct inspection found no regression in the 14 fresh
+  still recaptures.
+
+#### What did not work well
+
+- Fresh input-only still capture converged within centimeters rather than to exact
+  transforms, so all 14 still PNG byte hashes changed even though their content
+  did not. That initially made the postpromotion comparison look broader than the
+  actual visual delta.
+- The subtle side-gable and thin rail detail need close inspection; at wide range
+  they contribute less than the projecting-wing and paired-recess cues.
+
+#### What the team should change next time
+
+- Seal a small cross-packet comparison record with per-pose transform deltas and
+  an explicit same-frame hash comparison. This will make no-regression review
+  faster without weakening input-only capture truth.
+- Keep demanding at least two strong depth/cadence cues in ordinary whole views;
+  treat roof and thin-detail cues as supporting evidence unless they survive the
+  widest capture unaided.
+
+## 2026-09-07 — D2 1441 v9 independent mechanical release gate
+
+### Mechanical release auditor (`/root/v9_release_mechanical`)
+
+#### What worked well
+
+- Splitting app forensics from source/runtime execution gave the release an
+  independent seven-file signing/privacy audit while the main lane exercised the
+  compiler, authority, mounted package, real runtime, both traversal routes, and
+  packet semantics.
+- Recomputing every PNG header/hash, all 360+12 samples, all 21 post-draw frame
+  triggers, and both pre- and postpromotion trees made the no-regression and
+  acyclic boundaries directly checkable rather than relying on producer labels.
+
+#### What did not work well
+
+- A broad test loop accidentally included the retired prepromotion D2 source
+  validator. It correctly rejected current v9 authority, but the unnecessary run
+  obscured the clean current-gate output until its successor was run separately.
+- A first embedded-receipt comparison used property-order-sensitive JSON text and
+  falsely reported inequality even though a recursive key-independent comparison
+  found no value difference; Godot also represents integral embedded values as
+  exact floating JSON numbers.
+
+#### What the team should change next time
+
+- Maintain a machine-readable validator lifecycle map and generate audit commands
+  only from entries marked current-source or frozen-mounted for the target phase.
+- Use canonical key-sorted, numeric-normalized JSON comparison for embedded receipt
+  objects, and keep byte identity claims only for actual copied files.
+
+## 2026-09-07 — D2 1441 v9 release transaction
+
+### Release manager (`/root/v9_release_manager`)
+
+#### What worked well
+
+- Rehashing the receipt's complete 47-source inventory, both review verdicts,
+  the canonical packet tree, and the seven-file app before editing release
+  documentation kept the immutable evidence boundary separate from downstream
+  status prose.
+- Running the real main scene, both traversal routes, current direct-mounted PCK,
+  generic privacy/content audit, native Metal gates, and the frozen B225 package
+  gate closed the current release while preserving historical authority.
+
+#### What did not work well
+
+- The dirty tree mixed a formal rejected `-004` packet, accepted `-009` evidence,
+  current v9 evidence, and a partial `-008` rehearsal without a machine-readable
+  disposition index; classification required reconstructing suffix history from
+  reviews, receipts, and retrospective entries.
+- Two retired B225 v8 source validators were invoked against v9 before their
+  lifecycle status was applied. They rejected correctly, but added noise to the
+  final matrix; the frozen direct-mounted B225 successor was the applicable gate.
+
+#### What the team should change next time
+
+- Persist a small release-candidate ledger with suffix, phase, status, packet/app
+  identity, successor, and retention disposition so abandoned rehearsals can be
+  quarantined without inference.
+- Generate final test commands from the validator lifecycle map and run only
+  current-source or explicitly frozen-mounted entries for the release phase.
+
+## 2026-09-08 — D2 1441 v9 interrupted release resume
+
+### Release transaction resumer (`/root/v9_release_resume`)
+
+#### What worked well
+
+- Reconciling `HEAD`, upstream, the remote ref, index, worktree, process state,
+  and root override before acting proved that the interrupted turn had staged
+  exactly 183 intended paths but had not committed, pushed, or launched them.
+- Independent rehashes reproduced the seven-file app identity, executable and
+  PCK hashes, 40-file packet tree, three review receipts, and exact `9/213`
+  authority before the transaction was sealed.
+
+#### What did not work well
+
+- My first packet-validation invocation omitted the required external receipt
+  hash, so the validator correctly failed closed at complete-packet validation;
+  the complete invocation then passed without any artifact change.
+- The GitHub CLI is not present in this shell even though Git has an existing
+  macOS Keychain credential path, so CLI-auth status is not a reliable release
+  prerequisite on this host.
+
+#### What the team should change next time
+
+- Store the complete postcapture validation invocation beside its receipt so the
+  generator and receipt hashes are supplied together after an interrupted turn.
+- Treat an authenticated non-interactive Git push as the authoritative publish
+  check and report the credential mechanism separately from optional `gh`
+  availability.

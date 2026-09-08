@@ -335,8 +335,12 @@ func _append_meter_triangle(bucket: Dictionary, a: Vector3, b: Vector3, c: Vecto
 		b = c
 		c = swap
 		normal = -normal
+	# Godot rasterizes clockwise triangles as front faces. Keep the explicitly
+	# authored lighting normal upward, but emit the roof vertices in the reverse
+	# raster order so its exact top is visible with ordinary back-face culling.
+	# The same order is also the top-facing ConcavePolygon order.
 	var base := (bucket.vertices as Array).size()
-	for point: Vector3 in [a, b, c]:
+	for point: Vector3 in [a, c, b]:
 		(bucket.vertices as Array).append(point)
 		(bucket.normals as Array).append(normal)
 		(bucket.uvs as Array).append(Vector2(point.dot(tangent), point.dot(roof_cross_axis)))

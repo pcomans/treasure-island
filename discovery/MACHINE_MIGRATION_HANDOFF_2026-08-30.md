@@ -57,8 +57,45 @@ Resume revision: **the destination `origin/main` commit containing this handoff*
 > paragraphs and resume commands below are historical unless this addendum
 > explicitly restates them.
 
-> **Post-B225 v8 current status — 2026-09-05:** this is the controlling
-> release/handoff addendum. The sole current locally retained
+> **D2 1441 v9 current release status — 2026-09-07:** this is the controlling
+> source/package addendum. Compiler `1.8.0`, catalog/runtime registry v9,
+> adapter contracts/loader API v8, and exact recognition `9/213` are current.
+> The current world topology is `735/959/974/69,252/466/466`; B225 retains
+> `735/952/967/67,716/466/466` as
+> `pre_d2_1441_integration_live_parity`, while 1441 alone owns
+> `current_integration_topology`. This promotion binds the immutable D2 1441
+> `-009` 40-file prepromotion packet tree
+> `e52d66e479f268a9e75372da111d9c93cc1972dd1fddca9a6cb29bb6e41a4a43`,
+> package receipt
+> `cbcda89ec1e013c3406cf919d7c7e3bcefe0df7f005be1ea0e250bfbdada1061`,
+> and both independent promotion reviews. Its seven-file v8 evidence app has
+> identity
+> `81ae851ff3dffd90202e903939f1d6cda7eeb3cfff7e2c752492fa7ed0e1e129`.
+> That app is a frozen prepromotion input, not the current v9 handoff. The
+> current locally retained private handoff is
+> `build/d2-1441-postpromotion-v9-2026-09-07-001/Treasure Island First Playable.app`:
+> seven-file bundle identity
+> `f83ddd5678086099d66fc433c0851fc2788c42e702d8bffac4eee4d7a7d595cb`,
+> executable
+> `cf0bd6e789e9317248b1aeb2eb626cfd76b837fef362eca449336644cff77941`
+> (`170,963,648` bytes), and PCK
+> `0945ac7b08ebd2fc5389ffa05a919b7324ecb298dac46032c8fdc30d8c47404a`
+> (`66,300,344` bytes). Its 40-file packet tree is
+> `60f9c875d3429347047525beab75310073e971af78e6445b551b6586a79cb45e`;
+> independent mechanical and visual reviews
+> `08d08ddc4a7e9cb773e5cacf8c175040f8dd7583d16268533b62899c56175055`
+> and
+> `67e459baa98b34ef246136b898ac3ab2a4dba91c65979b7b3007747d8fa3aade`
+> both return `PASS_FOR_D2_1441_V9_RELEASE`. The package proves the corrected
+> roof winding, visible wall spray and input-only roof landing, fixed-FPS
+> deferred-I/O motion record, privacy/signing, mounted content, and current
+> runtime/traversal regressions. Migration must transfer the ignored app
+> separately or re-export it from committed source. Exactly 204 recognition
+> units and the requested further Building 1 quality pass remain; ordinary
+> Apple M1 Pro owner play is pending and does not pause safe work.
+
+> **Historical post-B225 v8 status — 2026-09-05:** this was the controlling
+> release/handoff addendum. The historical locally retained
 > private app is
 > `build/d1-b225-postpromotion-v8-2026-09-05-001/Treasure Island First Playable.app`.
 > The B225 v8 source/evidence integration is accepted on `main` at commit
@@ -72,7 +109,7 @@ Resume revision: **the destination `origin/main` commit containing this handoff*
 > `c485010419591a9556e849e79755d7e816f840e31978c10b371be08a730e2d82`
 > (`170,963,648` bytes), and PCK SHA-256 is
 > `7315bba99efeeeb86be0bbf44876d391b9c1c95f1638318e0df2b7af367669bf`
-> (`66,073,188` bytes). Current authority is compiler `1.7.0`,
+> (`66,073,188` bytes). At that closure, authority was compiler `1.7.0`,
 > catalog/runtime registry v8, adapter contracts/loader v7, and exact
 > recognition `8/213`; current loaded topology is
 > `735/952/967/67,716/466/466`. The fresh 37-file postpromotion packet has

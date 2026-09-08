@@ -8,8 +8,8 @@ research and reversible art handoff only**
 
 > **Historical validator boundary — 2026-09-05:** “current checkout” and
 > “schema-v7” below mean the last validated D8 packet boundary, not current
-> global authority. Current global authority is catalog/runtime registry v8,
-> contracts/loader v7, compiler `1.7.0`, and recognition `8/213`. The coupled
+> global authority. Current global authority is catalog/runtime registry v9,
+> contracts/loader API v8, compiler `1.8.0`, and recognition `9/213`. The coupled
 > D8 validator remains an intentionally unmigrated snapshot.
 
 This directory changes no source geometry, generated world, catalog, registry,

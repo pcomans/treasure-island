@@ -16,13 +16,13 @@ No image generation, asset-store access, paid plugin, paid data, account connect
 - Status: `available`
 - Need: The owner briefly tries an actual playable and reports whether the island is recognizable and the walk/run/jetpack/spray loop is playable.
 - Concrete task enabled: Checks the two approved success outcomes using the game itself rather than a separate questionnaire or lab protocol.
-- Needed: Now against the exact current handoff, `build/d1-b225-postpromotion-v8-2026-09-05-001/Treasure Island First Playable.app`. The 2026-08-28 result and the `024605`, `190724`, `111725`, withdrawn pre-final-evidence-bridge `014223`, and withdrawn pre-scope `002922` launches apply to earlier packages, not these exact bytes.
+- Needed: Now against exact current handoff `build/d2-1441-postpromotion-v9-2026-09-07-001/Treasure Island First Playable.app`, bundle identity `f83ddd5678086099d66fc433c0851fc2788c42e702d8bffac4eee4d7a7d595cb`. The frozen D2 `-009` v8 app is the prepromotion evidence input; the B225 app and all earlier launches apply to historical authority.
 - Cheapest acceptable option: Ordinary play on the owner's Mac with short blocker notes.
 - One-time cost: $0; owner time only.
 - Recurring cost: $0.
-- User action or approval required: Pending for the exact current app on the approved Apple M1 Pro target. The owner previously confirmed held-Space jetpack behavior, normal tag placement, and that “the island itself is good” in an earlier build; that historical feedback remains useful but does not accept candidate `d1-b225-postpromotion-v8-2026-09-05-001` or its `20 m/s` fast-run feel.
-- Autonomous-review status: Current authority is compiler `1.7.0`, catalog/runtime registry v8, adapter contracts/loader v7, and exact recognition `8/213`. Candidate `d1-b225-postpromotion-v8-2026-09-05-001` passes exact package, 37-file evidence, mechanical, and full-resolution visual review with no additional recognition credit; its bundle identity is `3f38c5dcd55b19f12cf7788e1069367075aa22f1b557c5b61288abdfdc30afe0`. Technical execution was on the Apple M2 verifier. Neither deterministic smoke nor independent pixels substitute for ordinary owner recognition and mouse/keyboard control judgment on the Apple M1 Pro target.
-- Fallback if unavailable: Keep exact candidate `d1-b225-postpromotion-v8-2026-09-05-001` technically release-ready but owner-unaccepted, retain its reviewed B225 v8 closure and historical B201 evidence, and fix only objective blockers without claiming owner acceptance.
+- User action or approval required: Play the exact current app on the approved Apple M1 Pro target when convenient. The owner previously confirmed held-Space jetpack behavior, normal tag placement, and that “the island itself is good” in an earlier build; that historical feedback remains useful but does not accept these exact bytes.
+- Autonomous-review status: Current authority is compiler `1.8.0`, catalog/runtime registry v9, adapter contracts/loader API v8, exact recognition `9/213`, and current topology `735/959/974/69,252/466/466`. The distinct v9 app/40-file postpromotion packet passed independent mechanical and full-resolution visual release review. Neither deterministic smoke nor independent pixels substitute for ordinary owner recognition and mouse/keyboard control judgment on the Apple M1 Pro target.
+- Fallback if unavailable: Keep the exact reviewed v9 source/package/evidence closure, continue safe facade work, and defer only owner acceptance without claiming it.
 
 ### NEED-005 — Island bare-earth elevation crop
 
@@ -56,7 +56,7 @@ No image generation, asset-store access, paid plugin, paid data, account connect
 - Status: `available`
 - Need: Replace the flat placeholder colors with a small, coherent texture family for roads, paths, parking, ground, exterior walls, and flat roofs.
 - Concrete task enabled: Makes the complete OSM/USGS world read as one grounded place while retaining the existing material hierarchy, low-poly massing, collision, and generated geometry.
-- Needed: Integrated in current source and exact candidate `d1-b225-postpromotion-v8-2026-09-05-001`; candidates `024605`, `014223`, `002922`, and `111725` are historical/withdrawn.
+- Needed: Integrated in current source and exact D2 v9 candidate `d2-1441-postpromotion-v9-2026-09-07-001`; B225, `024605`, `014223`, `002922`, and `111725` are historical/withdrawn.
 - Cheapest acceptable option: Six account-free 1K Poly Haven CC0 materials, using only JPG diffuse, OpenGL-normal, and roughness maps: Clean Asphalt, Concrete Pavement, Concrete Floor 03, Sparse Grass, Plaster Grey 04, and Bitumen. No executable, add-on, account, purchase, displacement map, or live service.
 - One-time cost: $0; approximately 13.34 MiB of project image assets.
 - Recurring cost: $0.
@@ -82,11 +82,11 @@ No image generation, asset-store access, paid plugin, paid data, account connect
 - Status: `available`
 - Need: The owner's MacBook Pro (Apple M1 Pro, 10-core CPU, 32 GB memory), mouse, and keyboard for later runtime and control tests.
 - Concrete task enabled: Validates launch, performance, input behavior, fatigue, and packaging on the device that matters.
-- Needed: Now for the remaining ordinary-play acceptance of exact candidate `d1-b225-postpromotion-v8-2026-09-05-001`. Technical arm64 verification does not establish input, performance, or recognition on the approved Apple M1 Pro target.
+- Needed: Now for the remaining ordinary-play acceptance of exact candidate `d2-1441-postpromotion-v9-2026-09-07-001`. Technical arm64 verification does not establish input, performance, or recognition on the approved Apple M1 Pro target.
 - Cheapest acceptable option: The owner's existing Mac, mouse, and keyboard.
 - One-time cost: $0; bounded owner/test time only.
 - Recurring cost: $0.
-- User action or approval required: Device/input choice is already approved; perform the short `PLAYTEST.md` pass with exact candidate `d1-b225-postpromotion-v8-2026-09-05-001` when ready.
+- User action or approval required: Device/input choice is already approved; perform the short `PLAYTEST.md` pass with exact candidate `d2-1441-postpromotion-v9-2026-09-07-001` when ready.
 - Fallback if temporarily unavailable: Retain the Apple M2 verifier results as technical evidence only until the owner can test the exact bytes on the Apple M1 Pro Mac.
 
 ### APPROACH-001 — Godot editor and macOS export templates

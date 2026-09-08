@@ -4,10 +4,22 @@ Checked: **2026-08-30**
 
 Scope: frozen OSM and current generated/runtime world only; no live-currentness claim.
 
-> **2026-09-05 B225 v8 current-authority notice:** this Markdown body and its
+> **2026-09-07 D2 1441 v9 current-authority notice:** the coordinated source
+> authority is compiler `1.8.0`, catalog/runtime registry v9, and adapter
+> contracts/loader API v8: exactly `213` physical units, `215` source records,
+> `214` direct wall receivers, `214` direct roof receivers, `4,971` visible wall
+> runs, and `9/213` independently accepted reference-recognizable units. Eight
+> active wall-indexed adapters are fail-closed. B225 now preserves
+> `pre_d2_1441_integration_live_parity` at
+> `735/952/967/67,716/466/466`; 1441 alone carries
+> `current_integration_topology` at `735/959/974/69,252/466/466`. The reviewed
+> v9 `-001` release packet is downstream-only and grants no further credit;
+> 204 units and the requested further Building 1 quality pass remain.
+
+> **Historical 2026-09-05 B225 v8 authority notice:** this Markdown body and its
 > companion JSON retain the earlier receiver/lifecycle inventory boundary and
 > are not rewritten to impersonate the physical-unit recognition ledger. The
-> coordinated authority is compiler `1.7.0`, catalog/runtime registry v8, and
+> coordinated authority at that boundary was compiler `1.7.0`, catalog/runtime registry v8, and
 > adapter contracts/loader v7: exactly `213` physical units, `214` direct wall
 > receivers, and `8/213` independently accepted reference-recognizable units.
 > Seven active adapters are fail-closed and provenance-only. B201 preserves

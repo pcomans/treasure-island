@@ -26,7 +26,9 @@ const FROZEN_REVIEW_SHA256 := "87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd
 const FROZEN_FOCUSED_CONTRACT_SHA256 := "6a1e6019c3a5bb58b9a5adc009e3e54c619a0a1ef70dbe9f605241942c39a85b"
 const FROZEN_PACKAGE_CONTRACT_SHA256 := "80f56708fcaacd81468939c0818cb37af5212666009280304e8f71c620e322d1"
 const FROZEN_CAPTURE_GENERATOR_SHA256 := "fbb3b600d8456c4e15a124f5c13bdf6bcf427ebe8c11b00b1cda4a712dec6856"
-const V8_EXPECTED_WORLD := {"rows": 735, "meshes": 952, "surfaces": 967, "triangles": 67716, "bodies": 466, "shapes": 466}
+const ACCEPTED_B225_BUILDER_SHA256 := "de4a2924d275a51dfd08aae1f0ef21daac33395b1fcfe98e260fbc90737dd725"
+const ACCEPTED_B225_WORLD := {"rows": 735, "meshes": 952, "surfaces": 967, "triangles": 67716, "bodies": 466, "shapes": 466}
+const CURRENT_LIVE_WORLD := {"rows": 735, "meshes": 959, "surfaces": 974, "triangles": 69252, "bodies": 466, "shapes": 466}
 const B225_UNIT_ID := "physical-building:w95934119"
 const B201_RECEIVER_KEY := "building:w34313545:wall"
 const B225_ADAPTER_ID := "active-adapter:d1-b225-live:building:w95934119:wall"
@@ -35,7 +37,8 @@ const B225_ADAPTER_ID := "active-adapter:d1-b225-live:building:w95934119:wall"
 func _run() -> void:
 	_require(FileAccess.get_sha256(CONFIG_PATH) == EXPECTED_CONFIG_SHA256, "Frozen B225 live config bytes drifted.")
 	_require(FileAccess.get_sha256(ADAPTER_PATH) == EXPECTED_ADAPTER_SHA256, "Frozen B225 live adapter bytes drifted.")
-	_require(FileAccess.get_sha256(BUILDER_PATH) == EXPECTED_BUILDER_SHA256, "Reviewed B225 canonical dispatch bytes drifted.")
+	_require(EXPECTED_BUILDER_SHA256 == ACCEPTED_B225_BUILDER_SHA256, "Frozen B225 validator no longer names the reviewed capture-time builder.")
+	_require(_current_b225_builder_route_matches(), "Current builder no longer preserves the exact direct B225 route semantics.")
 	_require(_frozen_inputs_match(), "Frozen v7 B225 production evidence/review/validator bytes drifted.")
 	_require(_postpromotion_authority_matches(), "B225 provisional v8 authority, exact +1 receipt, adapter projection, or topology ownership drifted.")
 	var chunk := _load_json(CHUNK_PATH)
@@ -68,7 +71,7 @@ func _run() -> void:
 	await process_frame
 	_require(await _postpromotion_world_matches(record, roof, authored), "B225 v8 whole-world topology, roof parity, or sole ownership contract drifted.")
 	if not _failed:
-		print("PASS: D1 B225 post-promotion v8 authority is exactly 8/213 with one +1 physical-unit receipt bound to frozen v7 evidence; unchanged config/adapter geometry yields sole current 735/952/967/67,716/466/466 topology while B201 remains pre-B225 at 735/950/964/66,636/466/466")
+		print("PASS: D1 B225 post-promotion v8 authority remains exactly 8/213 with one +1 physical-unit receipt and accepted 735/952/967/67,716/466/466 B225 provenance; the current direct B225 route remains semantic while uncredited 1441 yields ordinary live 735/959/974/69,252/466/466 topology")
 	_finish()
 
 
@@ -78,6 +81,50 @@ func _frozen_inputs_match() -> bool:
 		and FileAccess.get_sha256(FROZEN_FOCUSED_CONTRACT_PATH) == FROZEN_FOCUSED_CONTRACT_SHA256 \
 		and FileAccess.get_sha256(FROZEN_PACKAGE_CONTRACT_PATH) == FROZEN_PACKAGE_CONTRACT_SHA256 \
 		and FileAccess.get_sha256(FROZEN_CAPTURE_GENERATOR_PATH) == FROZEN_CAPTURE_GENERATOR_SHA256
+
+
+func _current_b225_builder_route_matches() -> bool:
+	var builder_source := FileAccess.get_file_as_string(BUILDER_PATH)
+	var markers: Array[String] = [
+		'const D1_B225_LIVE_ATTACHMENT := preload("%s")' % ADAPTER_PATH,
+		"D1_B225_LIVE_ATTACHMENT.validate_chunk_records(chunk)",
+		"if not is_context and D1_B225_LIVE_ATTACHMENT.claims_record(record):",
+		"D1_B225_LIVE_ATTACHMENT.prepare(record)",
+		"D1_B225_LIVE_ATTACHMENT.host_uvs(record, b225_prepared)",
+		"D1_B225_LIVE_ATTACHMENT.partition_host(record, indices, placeholder_material, b225_prepared)",
+		"D1_B225_LIVE_ATTACHMENT.build_prepared(record, b225_prepared)",
+		"var vertices := PackedVector3Array()",
+		"var body := StaticBody3D.new()",
+	]
+	for marker: String in markers:
+		if builder_source.count(marker) != 1:
+			return false
+	var claim_at := builder_source.find(markers[2])
+	var prepare_at := builder_source.find(markers[3])
+	var vertices_at := builder_source.find(markers[7])
+	var host_uv_at := builder_source.find(markers[4])
+	var partition_at := builder_source.find(markers[5])
+	var body_at := builder_source.find(markers[8])
+	var build_at := builder_source.find(markers[6])
+	if claim_at >= prepare_at or prepare_at >= vertices_at:
+		return false
+	if vertices_at >= host_uv_at or host_uv_at >= partition_at:
+		return false
+	if partition_at >= body_at or body_at >= build_at:
+		return false
+	for token: String in [
+		"facade_runtime_registry_loader",
+		"ResourceLoader.load(",
+		"ProjectSettings",
+		"OS.get_environment",
+		"OS.get_cmdline",
+		"feature_flag",
+		"fallback_dispatch",
+		"alternate_dispatch",
+	]:
+		if token in builder_source:
+			return false
+	return true
 
 
 func _postpromotion_authority_matches() -> bool:
@@ -144,7 +191,7 @@ func _postpromotion_authority_matches() -> bool:
 	or str(b225_adapter.get("runtime_content_mode", "")) != "active_d1_b225_host_partition_attachment" \
 	or str(b225_contract.get("adapter_sha256", "")) != EXPECTED_ADAPTER_SHA256 \
 	or str(b225_contract.get("config_sha256", "")) != EXPECTED_CONFIG_SHA256 \
-	or str(b225_contract.get("dispatch_sha256", "")) != EXPECTED_BUILDER_SHA256 \
+	or str(b225_contract.get("dispatch_sha256", "")) != ACCEPTED_B225_BUILDER_SHA256 \
 	or asset_paths != expected_paths \
 	or JSON.stringify(b225_plan.get("behavior_contract", {})) != JSON.stringify(b225_behavior) \
 	or (b225_plan.get("executable_assets", []) as Array).size() != 1:
@@ -154,7 +201,7 @@ func _postpromotion_authority_matches() -> bool:
 	or str(b225_acceptance.get("evidence_tree_sha256", "")) != FROZEN_EVIDENCE_TREE_SHA256 \
 	or str(b225_acceptance.get("independent_live_review_receipt_sha256", "")) != FROZEN_REVIEW_SHA256 \
 	or int(b225_acceptance.get("numerator_effect", -1)) != 1 \
-	or not _topology_matches(b225_geometry, "current_integration_topology", V8_EXPECTED_WORLD) \
+	or not _topology_matches(b225_geometry, "current_integration_topology", ACCEPTED_B225_WORLD) \
 	or not _topology_matches(b201_geometry, "pre_b225_integration_live_parity", {"rows": 735, "meshes": 950, "surfaces": 964, "triangles": 66636, "bodies": 466, "shapes": 466}):
 		return false
 	var current_topology_ids := []
@@ -206,7 +253,7 @@ func _postpromotion_world_matches(record: Dictionary, roof_record: Dictionary, a
 	var walls := _record_roots(world, ADAPTER.RECEIVER_KEY)
 	var roofs := _record_roots(world, ADAPTER.ROOF_KEY)
 	var topology := _evidence_topology(world.get_runtime_evidence())
-	var ok := failures.is_empty() and ready.size() == 1 and topology == V8_EXPECTED_WORLD \
+	var ok := failures.is_empty() and ready.size() == 1 and topology == CURRENT_LIVE_WORLD \
 		and walls.size() == 1 and roofs.size() == 1 \
 		and _production_world_has_no_candidate_route(world) \
 		and _host_and_attachment_match({"node": walls[0], "mesh_instances": 3, "surfaces": 4, "triangles": 1108}, record, authored, DisplayServer.get_name() != "headless") \
@@ -217,7 +264,7 @@ func _postpromotion_world_matches(record: Dictionary, roof_record: Dictionary, a
 		await physics_frame
 		ok = _spray_ray_matches(walls[0] as Node3D, record) \
 			and identities_before == _production_identity_snapshot(walls[0] as Node3D, roofs[0] as Node3D) \
-			and _evidence_topology(world.get_runtime_evidence()) == V8_EXPECTED_WORLD
+			and _evidence_topology(world.get_runtime_evidence()) == CURRENT_LIVE_WORLD
 	if not ok:
 		print("B225_V8_DIAGNOSTIC failures=", failures, " ready=", ready.size(), " topology=", topology, " walls=", walls.size(), " roofs=", roofs.size())
 	main.queue_free()

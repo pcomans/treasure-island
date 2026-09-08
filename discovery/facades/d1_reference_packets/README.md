@@ -19,10 +19,11 @@ not facade appearance. Google panoramas are observation-only: the repository
 stores URLs, panorama identifiers, dates, and written observations, never
 pixels. A public view is not an asset licence and may not ship in the game.
 
-Current B225 v8 lifecycle note: B225 `w95934119` has since passed standalone,
+Current v9 lifecycle note: B225 `w95934119` has since passed standalone,
 production, postpromotion package, motion, and independent visual review. It is
 accepted as exactly one reference-recognizable physical unit in the coordinated
-`8/213` catalog/runtime registry. Its physical host preserves collision, roof,
+`9/213` v9 catalog/runtime registry; its own acceptance-time increment remains
+the historical `7/213 -> 8/213` transition. Its physical host preserves collision, roof,
 and spray ownership while the distinct live adapter supplies only reviewed
 render detail. The frozen B225 packet and readiness-ledger row below remain its
 bounded research input and prepromotion state; this lifecycle update does not

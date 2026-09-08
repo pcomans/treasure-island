@@ -8,7 +8,7 @@
   "ybi_annotations": 0,
   "road_or_building_intersections": 0,
   "rejected_surface_intersections_preserved": 30,
-  "serialized_surface_triangles_checked": 18544,
+  "serialized_surface_triangles_checked": 26099,
   "canonical_order": "source pixel y ascending, x ascending, id ascending",
   "type_counts": {
     "palm": 0,

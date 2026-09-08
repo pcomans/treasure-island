@@ -2,20 +2,88 @@
 
 Original audit checked: 2026-08-28
 Canonical reconciliation: 2026-09-03
-Current release closure: 2026-09-05
+Current release closure: 2026-09-07
 Original reviewer: acceptance audit agent (`/root/runtime_review_sol`)  
 Jetpack/package delivery recheck: completion audit agent (`/root/completion_audit_sol`)  
 Scope: the repository and retained evidence for the approved private Treasure Island first playable
 
 > **Historical-boundary notice:** the detailed 18-ID matrix, package rows, and
 > byte-specific measurements below are sealed point-in-time audits. They are
-> preserved rather than rewritten to describe later bytes. The 2026-09-05 B225
-> postpromotion v8 addendum immediately below is the canonical current status;
-> the B201, 2026-09-03, and older addenda are historical.
+> preserved rather than rewritten to describe later bytes. The 2026-09-07 D2
+> 1441 v9 addendum immediately below is the canonical current release status;
+> the B225, B201, 2026-09-03, and older addenda are historical.
 
-## 2026-09-05 B225 postpromotion v8 release addendum
+## 2026-09-07 D2 1441 v9 release addendum
 
-The current locally retained private handoff is
+The deterministic source authority is compiler `1.8.0`, catalog/runtime
+registry v9, adapter contracts/loader API v8, and exactly `9/213` accepted
+recognizable physical units. It has eight active adapters, seventeen total
+plans, eleven package-safe plans, six disabled plans, and unchanged source
+inventory `213/215/214/4,971`. The 1441 promotion adds exactly one accepted
+physical-unit record and one wall-indexed active adapter for `w95934105`.
+Its paired roof and decorative relief do not create extra receivers or credit.
+
+The exact prepromotion authority inputs are the immutable D2 1441 `-009`
+40-file packet tree
+`e52d66e479f268a9e75372da111d9c93cc1972dd1fddca9a6cb29bb6e41a4a43`,
+static manifest `3c11ba6412da6a062d89142594c7b785bf546b5c1905dc32bdd7ce7806fd6885`,
+telemetry manifest `21e2b60a8fee1bcfeb984ece6124684c15ae5b1be7fb8a813f18bc0c3b240fcd`,
+visual-motion manifest `c885f6450d3eaac4814bde83beff1bbdccea3ae992e07a62c1e9dd8fc1259cad`,
+package receipt `cbcda89ec1e013c3406cf919d7c7e3bcefe0df7f005be1ea0e250bfbdada1061`,
+mechanical review `c39800b1632d1e8b5e05720d02d9499e2788aaf9ef2cf0f1bb1f2b20353b7884`,
+and visual review `075dfb63e4e015cdcc2201e627da5542566d21f9d1163268f790681729ae7144`.
+The seven-file v8 evidence app identity is
+`81ae851ff3dffd90202e903939f1d6cda7eeb3cfff7e2c752492fa7ed0e1e129`.
+All are prepromotion inputs; neither the catalog nor either review references
+the downstream postpromotion app or packet.
+
+The exact postpromotion source/package topology is
+`735/959/974/69,252/466/466`. B225 retains its accepted
+`735/952/967/67,716/466/466` snapshot as
+`pre_d2_1441_integration_live_parity`; 1441 is the sole owner of
+`current_integration_topology`.
+
+The current locally retained private app is
+`build/d2-1441-postpromotion-v9-2026-09-07-001/Treasure Island First Playable.app`.
+Its seven-file identity is
+`f83ddd5678086099d66fc433c0851fc2788c42e702d8bffac4eee4d7a7d595cb`;
+its executable is
+`cf0bd6e789e9317248b1aeb2eb626cfd76b837fef362eca449336644cff77941`
+(`170,963,648` bytes), and its PCK is
+`0945ac7b08ebd2fc5389ffa05a919b7324ecb298dac46032c8fdc30d8c47404a`
+(`66,300,344` bytes). The exact 40-file postpromotion packet has tree
+`60f9c875d3429347047525beab75310073e971af78e6445b551b6586a79cb45e`,
+static manifest
+`50ab60b3f509ac30b26dbb98ea03bf8f8cc4b1b4c4054f87204e8af6f16797d1`,
+motion telemetry
+`dbbe6f53bd6f176cf4760faa6684d306265327635fe6b53d8917bfa78ac2f171`,
+visual-motion manifest
+`5392cb8e2942fdeda033482c2658fd5a842c6d28abedf1ddfe7c7488664790ea`,
+and receipt
+`61b63b0ad7aac01039e4f1e2125268c5e1900e047b3077e785c00893a85a6a59`.
+The independent postpromotion semantic audit is
+`3388576780493b6116c126684072426ad22279b9a3508127a0ffc8bcb77f9700`
+and returns `PASS_FOR_V9_POSTPROMOTION_EXPORT`.
+
+Independent mechanical and full-resolution visual release reviews are
+`08d08ddc4a7e9cb773e5cacf8c175040f8dd7583d16268533b62899c56175055`
+and `67e459baa98b34ef246136b898ac3ab2a4dba91c65979b7b3007747d8fa3aade`;
+both return `PASS_FOR_D2_1441_V9_RELEASE` and grant no additional recognition
+credit. They verify the corrected visible roof winding and top-facing collision,
+real predefined spray on the exact wall, real input-only roof landing,
+six-second fixed-60-FPS-disclosed/deferred-I/O motion, immutable evidence,
+Universal signing/privacy, mounted PCK, current full runtime and routes, and
+unchanged Building 1/B225 behavior. The authority remains exactly `9/213`, so
+204 units plus the requested further Building 1 quality pass remain. Ordinary
+Apple M1 Pro owner play is not claimed and remains the only owner action.
+
+The unsuffixed 40-file packet and its `-004` app remain formal immutable
+`HOLD_NO_PROMOTION_NO_CREDIT` history. The partial unreviewed `-008` rehearsal
+was moved recoverably to local Trash and does not enter release evidence.
+
+## Historical 2026-09-05 B225 postpromotion v8 release addendum
+
+The historical locally retained private handoff is
 `build/d1-b225-postpromotion-v8-2026-09-05-001/Treasure Island First Playable.app`.
 Its source/evidence integration is accepted on `main` at commit
 `7448f081d510e56c598f41b68612ffd86e4afa5f`. The ignored app remains locally
@@ -31,7 +99,7 @@ remains pending.
   (`170,963,648` bytes), and its PCK is
   `7315bba99efeeeb86be0bbf44876d391b9c1c95f1638318e0df2b7af367669bf`
   (`66,073,188` bytes).
-- Current authority is compiler `1.7.0`, catalog/runtime registry v8,
+- Authority at this historical closure was compiler `1.7.0`, catalog/runtime registry v8,
   adapter contracts/loader v7, and exactly `8/213` accepted recognizable
   physical units. Total loaded topology is
   `735 records / 952 meshes / 967 surfaces / 67,716 triangles / 466`

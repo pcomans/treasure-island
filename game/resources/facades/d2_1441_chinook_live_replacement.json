@@ -1,0 +1,128 @@
+{
+  "schema_version": "ti.d2-1441-chinook-live-replacement/1",
+  "model_id": "d2-1441-chinook-live-replacement-v1",
+  "target": {
+    "canonical_name": "1441 Chinook Court",
+    "source_key": "w95934105",
+    "wall_object_key": "building:w95934105:wall",
+    "roof_object_key": "building:w95934105:roof",
+    "chunk_id": "x_-1__z_-1",
+    "chunk_sha256": "5e3b7efb7a2c61e1092c6a42ca9c04212c7d2603890b7a3f4c5e46777005f17b",
+    "source_geometry_sha256": "952df7a4edca5dbaec7d74cb795b564cb1fa5567ea737d1a861e222b29ddf07f",
+    "canonical_wall_record_sha256": "00f3cd8b90e7ae93f802842b59bb10274f1fc388433e5b5c6cae1f3e23f4393c",
+    "canonical_roof_record_sha256": "e7da0179f012e928f575ac32440e176a0f3b9651fc325a594de80ce7e3fc9d55",
+    "prototype_wall_projection_sha256": "2f89ec3b90d7ab5999d79f92e7ebbae1265cf0b93e3931f8968e348ad91d8a5a",
+    "prototype_roof_projection_sha256": "41a9b67b0c65aa26ca241183d37932e481f12bdc75b6253d928e4a1623013214"
+  },
+  "reviewed_art": {
+    "factory_geometry_signature": "b91b373e3bb8238a6f73f05734ef48b3429ae5654eddce89b1981ee41ee89195",
+    "standalone_bar_raiser_receipt_id": "d2-1441-chinook-standalone-hero-independent-pass-2026-09-04",
+    "standalone_bar_raiser_receipt_sha256": "8b259934a3771642efb5902c1fcbba590613e8f1f80e4b7d00a1b4a391862c55",
+    "site_12_package_audit_id": "site-12-stucco-independent-package-audit-2026-09-04",
+    "site_12_package_audit_sha256": "285ad681634bfa4ec800be0a935bb17b3e850e384581300357ce1e56b1ff09b1",
+    "site_12_promotion_receipt_id": "site-12-stucco-package-promotion-2026-09-04",
+    "site_12_promotion_receipt_sha256": "74052c247c5d2dbd6828301aca29eed2e842cb90d5a1c3aa9db5c1b743aeadfb",
+    "mapped_public_sse_runs": [10, 12, 13, 15],
+    "protected_runs": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 11, 14]
+  },
+  "live_pair_contract": {
+    "pair_members": 2,
+    "factory_calls": 1,
+    "fallback_allowed": false,
+    "partial_pair_allowed": false,
+    "stack_allowed": false,
+    "wall": {
+      "mesh_instances": 8,
+      "surfaces": 8,
+      "visual_triangles": 1568,
+      "static_bodies": 1,
+      "shapes": 1,
+      "collision_triangles": 32,
+      "receiver_kind": "building_wall",
+      "spray_receiver_wall_owners": 1
+    },
+    "roof": {
+      "mesh_instances": 1,
+      "surfaces": 1,
+      "visual_triangles": 10,
+      "static_bodies": 1,
+      "shapes": 1,
+      "collision_triangles": 10,
+      "receiver_kind": "none",
+      "spray_receiver_wall_owners": 0,
+      "spray_ray_blocking": true,
+      "truthful_world_solid_landing": true
+    },
+    "decorative_relief": {
+      "visual_triangles": 1536,
+      "collision_triangles": 0,
+      "navigation_nodes": 0
+    },
+    "combined": {
+      "mesh_instances": 9,
+      "surfaces": 9,
+      "visual_triangles": 1578,
+      "static_bodies": 2,
+      "shapes": 2,
+      "collision_triangles": 42
+    }
+  },
+  "topology_transition": {
+    "accepted_b225_v8_baseline": {
+      "playable_rows": 735,
+      "mesh_instances": 952,
+      "surfaces": 967,
+      "triangles": 67716,
+      "static_bodies": 466,
+      "shapes": 466
+    },
+    "generic_pair_replaced": {
+      "mesh_instances": 2,
+      "surfaces": 2,
+      "triangles": 42,
+      "static_bodies": 2,
+      "shapes": 2
+    },
+    "live_uncredited_candidate": {
+      "playable_rows": 735,
+      "mesh_instances": 959,
+      "surfaces": 974,
+      "triangles": 69252,
+      "static_bodies": 466,
+      "shapes": 466
+    },
+    "delta": {
+      "playable_rows": 0,
+      "mesh_instances": 7,
+      "surfaces": 7,
+      "triangles": 1536,
+      "static_bodies": 0,
+      "shapes": 0
+    }
+  },
+  "truth_boundary": {
+    "runtime_attachment": true,
+    "candidate_is_uncredited": true,
+    "accepted_authority_schema": "ti.facade-runtime-registry/8",
+    "accepted_recognition_metric": "8/213",
+    "catalog_or_registry_promoted": false,
+    "live_technical_evidence_status": "pending",
+    "independent_live_review_status": "pending",
+    "recognition_accepted": false,
+    "believability_accepted": false,
+    "as_built_fidelity_claimed": false,
+    "interior_modeled": false,
+    "horizontal_source_footprint_changed": false,
+    "source_wall_height_changed": false,
+    "source_photography_shipped": false,
+    "unsurveyed_opening_roof_void_rail_dimensions_and_counts": "reversible_production_inference"
+  },
+  "package_boundary": {
+    "standalone_scene_instantiated": false,
+    "generic_registry_loader_used": false,
+    "flag_or_environment_toggle": false,
+    "missing_pair_member_loaded_from_disk": false,
+    "source_or_evidence_paths_shipped": false,
+    "reference_pixels_shipped": false
+  }
+}

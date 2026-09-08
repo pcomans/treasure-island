@@ -31,6 +31,7 @@ const READY_RECEIVERS = [
   "building:w34313540:wall",
   "building:w34313545:wall",
   "building:w34313547:wall",
+  "building:w95934105:wall",
   "building:w95934119:wall",
 ].sort();
 const DISABLED_RECEIVERS = [
@@ -45,6 +46,7 @@ const ACTIVE_REVIEW_STATUS_SCOPE = "runtime_asset_original_detail_provenance_onl
 const ACTIVE_RECOGNITION_ACCEPTANCE_AUTHORITY = "physical_unit_claim_and_independent_acceptance_record";
 const PRE_B201_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_b201_integration_live_parity";
 const PRE_B225_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_b225_integration_live_parity";
+const PRE_D2_1441_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_d2_1441_integration_live_parity";
 const CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "current_integration_topology";
 const ACTIVE_UNIT_BY_RECEIVER = new Map([
   ["building-composite:w1249412094:w1282547787:wall", "physical-building:w1249412094"],
@@ -53,6 +55,7 @@ const ACTIVE_UNIT_BY_RECEIVER = new Map([
   ["building:w291189336:wall", "physical-building:w291189336"],
   ["building:w34313540:wall", "physical-building:w34313540"],
   ["building:w34313545:wall", "physical-building:w34313545"],
+  ["building:w95934105:wall", "physical-building:w95934105"],
   ["building:w95934119:wall", "physical-building:w95934119"],
 ]);
 const ACTIVE_REVIEW_STATUS_BY_RECEIVER = new Map([
@@ -62,6 +65,7 @@ const ACTIVE_REVIEW_STATUS_BY_RECEIVER = new Map([
   ["building:w291189336:wall", "independent_exact_current_live_pass"],
   ["building:w34313540:wall", "pending_independent_original_detail_review"],
   ["building:w34313545:wall", "independent_exact_current_live_pass"],
+  ["building:w95934105:wall", "independent_exact_current_live_pass"],
   ["building:w95934119:wall", "independent_exact_current_live_pass"],
 ]);
 
@@ -128,7 +132,7 @@ const compiledFirst = compile(catalog, inputs);
 const compiledSecond = compile(catalog, inputs);
 
 assert(catalog.schema_version === CATALOG_SCHEMA, "catalog schema is not exact-current version-pinned");
-assert(CATALOG_SCHEMA === "ti.facade-recognition-catalog/8" && RUNTIME_SCHEMA === "ti.facade-runtime-registry/8" && ADAPTER_CONTRACT_SCHEMA === "ti.facade-runtime-adapter-contracts/7" && LOADER_API_VERSION === "ti.facade-runtime-registry-loader/7" && COMPILER_VERSION === "1.7.0", "D1 B225 promotion version matrix drifted");
+assert(CATALOG_SCHEMA === "ti.facade-recognition-catalog/9" && RUNTIME_SCHEMA === "ti.facade-runtime-registry/9" && ADAPTER_CONTRACT_SCHEMA === "ti.facade-runtime-adapter-contracts/8" && LOADER_API_VERSION === "ti.facade-runtime-registry-loader/8" && COMPILER_VERSION === "1.8.0", "D2 1441 promotion version matrix drifted");
 assert(catalog.compiler_contract.required_compiler_version === COMPILER_VERSION, "catalog compiler version pin drifted");
 assert(catalog.compiler_contract.emitted_runtime_schema_version === RUNTIME_SCHEMA, "catalog runtime version pin drifted");
 assert(catalog.compiler_contract.unknown_version_policy === "reject", "catalog does not reject unknown forward versions");
@@ -165,7 +169,7 @@ for (const adapter of registry.active_runtime_adapters) {
 }
 
 assert(JSON.stringify(adapterContracts.counts) === JSON.stringify(EXPECTED_ADAPTER_CONTRACTS), "adapter contract counts drifted");
-assert(adapterContracts.plans.length === EXPECTED.runtime_adapter_receivers, "adapter contract does not cover 16 receiver plans");
+assert(adapterContracts.plans.length === EXPECTED.runtime_adapter_receivers, "adapter contract does not cover 17 receiver plans");
 const readyPlans = adapterContracts.plans.filter((plan) => plan.integration_state === "package_safe_ready_for_integration");
 const disabledPlans = adapterContracts.plans.filter((plan) => plan.integration_state === "hard_disabled_source_projection");
 assert(JSON.stringify(readyPlans.map((plan) => plan.receiver_key).sort()) === JSON.stringify(READY_RECEIVERS), "package-safe receiver set drifted");
@@ -234,9 +238,10 @@ const acceptedUnitIds = [
   "physical-building:w291189336",
   "physical-building:w34313540",
   "physical-building:w34313545",
+  "physical-building:w95934105",
   "physical-building:w95934119",
 ].sort();
-assert(registry.recognition_metric.numerator === 8 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "8/213", "runtime recognition metric is not exactly 8/213");
+assert(registry.recognition_metric.numerator === 9 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "9/213", "runtime recognition metric is not exactly 9/213");
 assert(JSON.stringify(registry.recognition_metric.accepted_physical_unit_ids) === JSON.stringify(acceptedUnitIds), "runtime accepted physical-unit set drifted");
 assert(JSON.stringify(registry.recognition_metric.isle_house_non_numerator_source_keys) === JSON.stringify(["w1282547786", "w1282547787"]), "Isle House source parts entered the physical-unit numerator");
 const islePlan = disabledPlans.find((plan) => plan.receiver_key === "building-composite:w1249412094:w1282547787:wall");
@@ -285,11 +290,52 @@ assert(JSON.stringify(d1B225RuntimePaths) === JSON.stringify(expectedD1B225Runti
 assert(d1B225Plan.executable_assets.length === 1 && d1B225Plan.executable_assets[0].path === "res://game/scripts/world/facades/d1_b225_live_attachment.gd" && d1B225Plan.executable_assets[0].sha256 === "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9", "D1 B225 executable subset drifted");
 assert(d1B225Plan.behavior_contract.acceptance_contract.accepted_physical_unit_id === "physical-building:w95934119" && d1B225Plan.behavior_contract.acceptance_contract.capture_time_recognition_metric === "7/213" && d1B225Plan.behavior_contract.acceptance_contract.evidence_manifest_sha256 === "96c76fd99960f1345a7c56f7fc6678ac284f98cc601a3ba65ed57020491f18dc" && d1B225Plan.behavior_contract.acceptance_contract.evidence_tree_sha256 === "f42dbec489c6fda55b612aba20c99ee2233857cb60a1ce9c512d024b35d0dcb7" && d1B225Plan.behavior_contract.acceptance_contract.independent_live_review_receipt_sha256 === "87dc2b9febf7110ccd5c1eabed1a290fea5900508561298dd7cf3b6b6fcb1d95" && d1B225Plan.behavior_contract.acceptance_contract.numerator_effect === 1, "D1 B225 frozen receipt authority or one-unit rollup drifted");
 assert(d1B225Plan.behavior_contract.geometry_contract.decorative_geometry_signature === "02bd8542dea7aa13041728a5244ec962fa121972db17ecf55fad03b3139fe418" && d1B225Plan.behavior_contract.geometry_contract.host_triangles === 28 && d1B225Plan.behavior_contract.geometry_contract.eligible_host_triangles === 8 && d1B225Plan.behavior_contract.geometry_contract.protected_host_triangles === 20 && d1B225Plan.behavior_contract.geometry_contract.decorative_mesh_instances === 2 && d1B225Plan.behavior_contract.geometry_contract.decorative_surfaces === 2 && d1B225Plan.behavior_contract.geometry_contract.decorative_triangles === 1080, "D1 B225 host partition or decorative geometry parity drifted");
-assert(d1B225Plan.behavior_contract.geometry_contract.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE && d1B225Plan.behavior_contract.geometry_contract.world_records === 735 && d1B225Plan.behavior_contract.geometry_contract.world_mesh_instances === 952 && d1B225Plan.behavior_contract.geometry_contract.world_surfaces === 967 && d1B225Plan.behavior_contract.geometry_contract.world_triangles === 67716 && d1B225Plan.behavior_contract.geometry_contract.world_static_bodies === 466 && d1B225Plan.behavior_contract.geometry_contract.world_shapes === 466, "D1 B225 current-integration world topology drifted");
+assert(d1B225Plan.behavior_contract.geometry_contract.world_topology_scope === PRE_D2_1441_INTEGRATION_WORLD_TOPOLOGY_SCOPE && d1B225Plan.behavior_contract.geometry_contract.world_records === 735 && d1B225Plan.behavior_contract.geometry_contract.world_mesh_instances === 952 && d1B225Plan.behavior_contract.geometry_contract.world_surfaces === 967 && d1B225Plan.behavior_contract.geometry_contract.world_triangles === 67716 && d1B225Plan.behavior_contract.geometry_contract.world_static_bodies === 466 && d1B225Plan.behavior_contract.geometry_contract.world_shapes === 466, "D1 B225 pre-D2-1441 integration world topology drifted");
 assert(d1B225Plan.behavior_contract.replacement_contract.eligible_run_indices.join(",") === "10,11,12,13" && d1B225Plan.behavior_contract.replacement_contract.protected_run_indices.join(",") === "0,1,2,3,4,5,6,7,8,9", "D1 B225 eligible/protected run partition drifted");
 assert(d1B225Plan.behavior_contract.ownership_contract.host_collision_owner_preserved === true && d1B225Plan.behavior_contract.ownership_contract.host_spray_owner_preserved === true && d1B225Plan.behavior_contract.ownership_contract.structural_owner_count === 1 && d1B225Plan.behavior_contract.ownership_contract.shape_count === 1 && d1B225Plan.behavior_contract.ownership_contract.spray_owner_count === 1 && d1B225Plan.behavior_contract.ownership_contract.decorative_collision_nodes === 0 && d1B225Plan.behavior_contract.ownership_contract.decorative_navigation_nodes === 0 && d1B225Plan.behavior_contract.ownership_contract.decorative_spray_nodes === 0, "D1 B225 collision/navigation/spray ownership parity drifted");
+
+const d21441Plan = readyPlans.find((plan) => plan.receiver_key === "building:w95934105:wall");
+const d21441Adapter = registry.active_runtime_adapters.find((adapter) => adapter.receiver_key === "building:w95934105:wall");
+const d21441Unit = registry.units.find((unit) => unit.unit_id === "physical-building:w95934105");
+const expectedD21441RuntimePaths = [
+  "res://game/resources/facades/d2_1441_chinook_live_replacement.json",
+  "res://game/resources/facades/d2_1441_chinook_standalone_hero_prototype.json",
+  "res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
+  "res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
+  "res://game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
+  "res://game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
+  "res://game/resources/materials/world/site_12_housing/site_12_void_shadow.tres",
+  "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
+  "res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
+  "res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+  "res://game/scripts/world/facades/d2_1441_chinook_live_replacement.gd",
+  "res://game/scripts/world/facades/d2_1441_chinook_standalone_hero_prototype.gd",
+  "res://game/scripts/world/facades/site_12_housing_kit.gd",
+].sort();
+const expectedD21441ExecutablePaths = [
+  "res://game/scripts/world/facades/d2_1441_chinook_live_replacement.gd",
+  "res://game/scripts/world/facades/d2_1441_chinook_standalone_hero_prototype.gd",
+  "res://game/scripts/world/facades/site_12_housing_kit.gd",
+].sort();
+assert(d21441Plan != null && d21441Adapter != null && d21441Unit != null, "D2 1441 generated authority record is missing");
+assert(d21441Plan.adapter_id === "active-adapter:d2-1441-live:building:w95934105:wall" && d21441Plan.content_mode === "active_d2_1441_paired_replacement", "D2 1441 plan identity/content mode drifted");
+assert(JSON.stringify(d21441Plan.runtime_assets.map((asset) => asset.path).sort()) === JSON.stringify(expectedD21441RuntimePaths), "D2 1441 exact 13-asset runtime closure drifted");
+assert(JSON.stringify(d21441Plan.executable_assets.map((asset) => asset.path).sort()) === JSON.stringify(expectedD21441ExecutablePaths) && d21441Plan.executable_assets.every((asset) => asset.resource_kind === "gdscript"), "D2 1441 exact three-script executable closure drifted");
+assert(stableJson(d21441Plan.behavior_contract) === stableJson(d21441Adapter.active_runtime_contract.behavior_contract), "D2 1441 registry/plan behavior contract diverged");
+const d21441Acceptance = d21441Plan.behavior_contract.acceptance_contract;
+assert(d21441Acceptance.accepted_physical_unit_id === "physical-building:w95934105" && d21441Acceptance.capture_time_recognition_metric === "8/213" && d21441Acceptance.numerator_effect === 1 && d21441Acceptance.reference_recognizable === true && d21441Acceptance.wall_and_roof_are_one_physical_unit === true, "D2 1441 single-credit acceptance boundary drifted");
+assert(d21441Acceptance.evidence_manifest_sha256 === "3c11ba6412da6a062d89142594c7b785bf546b5c1905dc32bdd7ce7806fd6885" && d21441Acceptance.motion_telemetry_manifest_sha256 === "21e2b60a8fee1bcfeb984ece6124684c15ae5b1be7fb8a813f18bc0c3b240fcd" && d21441Acceptance.visual_motion_manifest_sha256 === "c885f6450d3eaac4814bde83beff1bbdccea3ae992e07a62c1e9dd8fc1259cad" && d21441Acceptance.evidence_tree_sha256 === "e52d66e479f268a9e75372da111d9c93cc1972dd1fddca9a6cb29bb6e41a4a43" && d21441Acceptance.package_verification_receipt_sha256 === "cbcda89ec1e013c3406cf919d7c7e3bcefe0df7f005be1ea0e250bfbdada1061" && d21441Acceptance.mechanical_review_receipt_sha256 === "c39800b1632d1e8b5e05720d02d9499e2788aaf9ef2cf0f1bb1f2b20353b7884" && d21441Acceptance.independent_live_review_receipt_sha256 === "075dfb63e4e015cdcc2201e627da5542566d21f9d1163268f790681729ae7144", "D2 1441 seven-artifact acceptance closure drifted");
+assert(d21441Unit.acceptance_records.length === 1 && d21441Unit.active_runtime_adapter_ids.length === 1 && d21441Unit.active_runtime_adapter_ids[0] === d21441Plan.adapter_id && d21441Unit.direct_receivers.length === 1 && d21441Unit.direct_receivers[0].receiver_key === "building:w95934105:wall", "D2 1441 gained duplicate credit, adapter, or receiver ownership");
+const d21441Geometry = d21441Plan.behavior_contract.geometry_contract;
+assert(d21441Geometry.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE && d21441Geometry.world_records === 735 && d21441Geometry.world_mesh_instances === 959 && d21441Geometry.world_surfaces === 974 && d21441Geometry.world_triangles === 69252 && d21441Geometry.world_static_bodies === 466 && d21441Geometry.world_shapes === 466, "D2 1441 current-integration world topology drifted");
+assert(d21441Geometry.visual_geometry_signature === "b91b373e3bb8238a6f73f05734ef48b3429ae5654eddce89b1981ee41ee89195" && d21441Geometry.canonical_wall_record_sha256 === "00f3cd8b90e7ae93f802842b59bb10274f1fc388433e5b5c6cae1f3e23f4393c" && d21441Geometry.canonical_roof_record_sha256 === "e7da0179f012e928f575ac32440e176a0f3b9651fc325a594de80ce7e3fc9d55" && d21441Geometry.horizontal_source_footprint_preserved === true && d21441Geometry.visual_mesh_instances === 9 && d21441Geometry.visual_surfaces === 9 && d21441Geometry.visual_triangles === 1578, "D2 1441 geometry identity or topology drifted");
+const d21441Ownership = d21441Plan.behavior_contract.ownership_contract;
+assert(d21441Ownership.live_ownership_signature === "fcad9968be3d0c9094adef5dcc9c7fabfb7cf1754f780897188a4ec362187e4d" && d21441Ownership.structural_owner_count === 2 && d21441Ownership.shape_count === 2 && d21441Ownership.spray_owner_count === 1 && d21441Ownership.wall_collision_triangles === 32 && d21441Ownership.roof_collision_triangles === 10 && d21441Ownership.decorative_relief_triangles === 1536 && d21441Ownership.decorative_collision_triangles === 0 && d21441Ownership.decorative_navigation_nodes === 0 && d21441Ownership.wall_is_sole_spray_receiver === true && d21441Ownership.roof_is_wall_spray_receiver === false && d21441Ownership.roof_world_solid_landing === true, "D2 1441 collision/navigation/spray ownership parity drifted");
+const d21441Replacement = d21441Plan.behavior_contract.replacement_contract;
+assert(d21441Replacement.source_key === "w95934105" && d21441Replacement.wall_object_key === "building:w95934105:wall" && d21441Replacement.roof_object_key === "building:w95934105:roof" && d21441Replacement.actual_supplied_chunk_pair_required === true && d21441Replacement.partial_pair_allowed === false && d21441Replacement.fallback_allowed === false && d21441Replacement.generic_stack_allowed === false && d21441Replacement.mapped_public_run_indices.join(",") === "10,12,13,15" && d21441Replacement.protected_run_indices.join(",") === "0,1,2,3,4,5,6,7,8,9,11,14", "D2 1441 paired replacement/run partition drifted");
+assert(d21441Plan.behavior_contract.truth_boundary.capture_time_candidate_promoted === false && d21441Plan.behavior_contract.truth_boundary.capture_time_recognition_credit === false && d21441Plan.behavior_contract.truth_boundary.reference_pixels_packaged === false && d21441Plan.behavior_contract.truth_boundary.as_built_fidelity_claimed === false, "D2 1441 capture-time truth boundary was rewritten by promotion");
 const currentTopologyPlans = adapterContracts.plans.filter((plan) => plan.behavior_contract?.geometry_contract?.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE).map((plan) => plan.adapter_id);
-assert(JSON.stringify(currentTopologyPlans) === JSON.stringify(["active-adapter:d1-b225-live:building:w95934119:wall"]), "D1 B225 is not the sole current-integration topology plan authority");
+assert(JSON.stringify(currentTopologyPlans) === JSON.stringify(["active-adapter:d2-1441-live:building:w95934105:wall"]), "D2 1441 is not the sole current-integration topology plan authority");
 
 expectFailure(() => {
   const candidate = structuredClone(catalog);
@@ -308,13 +354,13 @@ expectFailure(() => {
 }, "unknown or forward-incompatible", "future runtime registry version");
 expectFailure(() => {
   const candidate = structuredClone(registry);
-  candidate.schema_version = "ti.facade-runtime-registry/7";
-  candidate.build_contract.compiler_version = "1.6.0";
-  candidate.compatibility_contract.catalog_schema_version = "ti.facade-recognition-catalog/7";
-  candidate.compatibility_contract.compiler_version = "1.6.0";
-  candidate.compatibility_contract.loader_api_version = "ti.facade-runtime-registry-loader/6";
+  candidate.schema_version = "ti.facade-runtime-registry/8";
+  candidate.build_contract.compiler_version = "1.7.0";
+  candidate.compatibility_contract.catalog_schema_version = "ti.facade-recognition-catalog/8";
+  candidate.compatibility_contract.compiler_version = "1.7.0";
+  candidate.compatibility_contract.loader_api_version = "ti.facade-runtime-registry-loader/7";
   validateRuntimeRegistry(candidate, adapterContracts);
-}, "unknown or forward-incompatible", "newly superseded runtime registry version 7");
+}, "unknown or forward-incompatible", "newly superseded runtime registry version 8");
 expectFailure(() => {
   const candidate = structuredClone(adapterContracts);
   candidate.schema_version = "ti.facade-runtime-adapter-contracts/999";
@@ -322,12 +368,12 @@ expectFailure(() => {
 }, "unknown or forward-incompatible", "future adapter-contract version");
 expectFailure(() => {
   const candidate = structuredClone(adapterContracts);
-  candidate.schema_version = "ti.facade-runtime-adapter-contracts/6";
-  candidate.build_contract.compiler_version = "1.6.0";
-  candidate.build_contract.runtime_registry_schema_version = "ti.facade-runtime-registry/7";
-  candidate.loader_contract.api_version = "ti.facade-runtime-registry-loader/6";
+  candidate.schema_version = "ti.facade-runtime-adapter-contracts/7";
+  candidate.build_contract.compiler_version = "1.7.0";
+  candidate.build_contract.runtime_registry_schema_version = "ti.facade-runtime-registry/8";
+  candidate.loader_contract.api_version = "ti.facade-runtime-registry-loader/7";
   validateAdapterContracts(candidate, registry);
-}, "unknown or forward-incompatible", "newly superseded adapter-contract version 6");
+}, "unknown or forward-incompatible", "newly superseded adapter-contract version 7");
 expectFailure(() => {
   const candidate = structuredClone(adapterContracts);
   candidate.projection_descriptors[0].path = "res://game/resources/facades/source-bearing.json";
@@ -349,10 +395,10 @@ expectFailure(() => {
 }, "Isle House low receiver is not bound to its exact active Variant C adapter", "collapsed Isle House mixed receiver state");
 expectFailure(() => {
   const candidate = structuredClone(registry);
-  candidate.recognition_metric.numerator = 7;
-  candidate.recognition_metric.display = "7/213";
+  candidate.recognition_metric.numerator = 8;
+  candidate.recognition_metric.display = "8/213";
   validateRuntimeRegistry(candidate, adapterContracts);
-}, "Runtime physical-entity recognition metric drifted from exactly 8/213", "drifted recognition numerator");
+}, "Runtime physical-entity recognition metric drifted from exactly 9/213", "drifted recognition numerator");
 expectFailure(() => {
   const candidate = structuredClone(registry);
   const adapter = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:r16681702:wall");
@@ -472,7 +518,7 @@ expectFailure(() => {
   const plan = candidate.plans.find((item) => item.receiver_key === "building:w95934119:wall");
   plan.behavior_contract.geometry_contract.world_triangles = 67715;
   validateAdapterContracts(candidate);
-}, "D1 B225 exact-current acceptance/parity contract drifted", "same-version D1 B225 plan topology mutation");
+}, "D1 B225 pre-D2 acceptance/parity contract drifted", "same-version D1 B225 plan topology mutation");
 expectFailure(() => {
   const candidate = structuredClone(adapterContracts);
   const plan = candidate.plans.find((item) => item.receiver_key === "building:w95934119:wall");
@@ -511,6 +557,79 @@ expectFailure(() => {
   plan.behavior_contract.ownership_contract.roof_collision_triangles = 49;
   validateAdapterContracts(candidate);
 }, "Navy Chapel pre-B201 integration live parity contract drifted", "drifted Navy Chapel collision ownership parity");
+
+expectFailure(() => {
+  const candidate = structuredClone(registry);
+  const unit = candidate.units.find((item) => item.unit_id === "physical-building:w95934105");
+  unit.acceptance_records[0].package_verification_receipt_sha256 = "0".repeat(64);
+  validateRuntimeRegistry(candidate, adapterContracts);
+}, "D2 1441 seven-artifact acceptance closure drifted", "D2 1441 package-receipt mutation");
+expectFailure(() => {
+  const candidate = structuredClone(registry);
+  const unit = candidate.units.find((item) => item.unit_id === "physical-building:w95934105");
+  unit.acceptance_records.push(structuredClone(unit.acceptance_records[0]));
+  validateRuntimeRegistry(candidate, adapterContracts);
+}, "D2 1441 physical unit lacks its exact seven-artifact frozen production/review/+1 acceptance authority", "D2 1441 duplicate acceptance mutation");
+expectFailure(() => {
+  const candidate = structuredClone(registry);
+  const adapter = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:w95934105:wall");
+  adapter.adapter_id = "active-adapter:d2-1441-live:building:w95934105:roof";
+  validateRuntimeRegistry(candidate, adapterContracts);
+}, "Active D2 1441 acceptance, paired dependency, topology, or ownership parity contract drifted", "D2 1441 forged roof adapter mutation");
+expectFailure(() => {
+  const candidate = structuredClone(registry);
+  const adapter = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:w95934105:wall");
+  adapter.runtime_assets.pop();
+  validateRuntimeRegistry(candidate, adapterContracts);
+}, "Active D2 1441 exact thirteen-asset runtime closure is incomplete or source-bearing", "D2 1441 missing runtime asset mutation");
+expectFailure(() => {
+  const candidate = structuredClone(registry);
+  const adapter = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:w95934105:wall");
+  adapter.active_runtime_contract.behavior_contract.geometry_contract.world_topology_scope = PRE_D2_1441_INTEGRATION_WORLD_TOPOLOGY_SCOPE;
+  validateRuntimeRegistry(candidate, adapterContracts);
+}, "Active D2 1441 acceptance, paired dependency, topology, or ownership parity contract drifted", "D2 1441 lost current-topology scope mutation");
+expectFailure(() => {
+  const candidate = structuredClone(registry);
+  const adapter = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:w95934119:wall");
+  adapter.active_runtime_contract.behavior_contract.geometry_contract.world_topology_scope = CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE;
+  validateRuntimeRegistry(candidate, adapterContracts);
+}, "Active D1 B225 acceptance, dependency, host-partition, or ownership parity contract drifted", "D1 B225 forged current-topology scope mutation");
+expectFailure(() => {
+  const candidate = structuredClone(adapterContracts);
+  const plan = candidate.plans.find((item) => item.receiver_key === "building:w95934105:wall");
+  plan.behavior_contract.acceptance_contract.mechanical_review_receipt_sha256 = "0".repeat(64);
+  validateAdapterContracts(candidate);
+}, "D2 1441 exact-current acceptance/parity contract drifted", "D2 1441 mechanical-review hash mutation");
+expectFailure(() => {
+  const candidate = structuredClone(adapterContracts);
+  const plan = candidate.plans.find((item) => item.receiver_key === "building:w95934105:wall");
+  plan.behavior_contract.geometry_contract.visual_geometry_signature = "0".repeat(64);
+  validateAdapterContracts(candidate);
+}, "D2 1441 exact-current acceptance/parity contract drifted", "D2 1441 geometry-signature mutation");
+expectFailure(() => {
+  const candidate = structuredClone(adapterContracts);
+  const plan = candidate.plans.find((item) => item.receiver_key === "building:w95934105:wall");
+  plan.behavior_contract.replacement_contract.mapped_public_run_indices.reverse();
+  validateAdapterContracts(candidate);
+}, "D2 1441 exact-current acceptance/parity contract drifted", "D2 1441 mapped-run reorder mutation");
+expectFailure(() => {
+  const candidate = structuredClone(adapterContracts);
+  const plan = candidate.plans.find((item) => item.receiver_key === "building:w95934105:wall");
+  plan.behavior_contract.ownership_contract.roof_is_wall_spray_receiver = true;
+  validateAdapterContracts(candidate);
+}, "D2 1441 exact-current acceptance/parity contract drifted", "D2 1441 roof spray-credit mutation");
+expectFailure(() => {
+  const candidate = structuredClone(adapterContracts);
+  const plan = candidate.plans.find((item) => item.receiver_key === "building:w95934105:wall");
+  plan.runtime_assets.pop();
+  validateAdapterContracts(candidate);
+}, "executable asset is not an exact runtime-asset subset", "D2 1441 runtime/executable closure mutation");
+expectFailure(() => {
+  const candidate = structuredClone(adapterContracts);
+  const plan = candidate.plans.find((item) => item.receiver_key === "building:w95934105:wall");
+  candidate.plans.push(structuredClone(plan));
+  validateAdapterContracts(candidate);
+}, "Facade runtime adapter plans do not cover 17 receivers", "D2 1441 duplicate plan mutation");
 
 console.log(
   `PASS facade runtime loader contract: ${EXPECTED.recognition_units} units / ${EXPECTED.direct_wall_receivers} receivers / ${adapterContracts.plans.length} plans / ${readyPlans.length} package-safe / ${disabledPlans.length} hard-disabled receivers / ${adapterContracts.projection_descriptors.length} pathless projection inputs; registry ${sha256File(PATHS.registry)}; adapter contracts ${sha256File(PATHS.adapterContracts)}`,

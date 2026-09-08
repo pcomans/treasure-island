@@ -17,9 +17,8 @@ node tools/test_facade_runtime_loader_contract.mjs
 "$GODOT" --headless --path . --script game/tests/headless_building_1_hero_model_contract.gd
 "$GODOT" --headless --path . --script game/tests/headless_facade_recognition_registry_contract.gd
 "$GODOT" --headless --path . --script game/tests/headless_facade_runtime_registry_loader_contract.gd
-"$GODOT" --headless --path . --script game/tests/headless_d1_b225_standalone_cladding_repair_v1_contract.gd
-"$GODOT" --headless --path . --script game/tests/headless_d1_b225_standalone_cladding_repair_v1_evidence_contract.gd
-"$GODOT" --headless --path . --script game/tests/headless_d1_b225_postpromotion_v8_contract.gd
+"$GODOT" --headless --path . --script game/tests/headless_d2_1441_postpromotion_v9_contract.gd
+"$GODOT" --headless --path . --script game/tests/headless_d2_1441_postpromotion_v9_package_contract.gd
 "$GODOT" --headless --path . --script game/tests/full_runtime_integration.gd
 "$GODOT" --headless --path . --script game/tests/automated_route_qa.gd
 "$GODOT" --headless --path . --script game/tests/automated_route_qa.gd -- --whole-island-route
@@ -27,33 +26,33 @@ node tools/test_facade_runtime_loader_contract.mjs
 
 Expected Godot version: `4.7.2.stable.official.ed1daf0bf`. The first editor command refreshes the project-local import cache; it is not a gameplay or export test.
 
-The same no-write B225 v8 bridge also has a native rendering gate. It opens only
+The no-write D2 v9 bridge also has a native rendering gate. It opens only
 the bounded contract process and self-terminates; it does not capture evidence or
 launch ordinary gameplay:
 
 ```sh
 "$GODOT" --path . --display-driver macos --rendering-method forward_plus \
   --rendering-driver metal --audio-driver Dummy \
-  --script game/tests/headless_d1_b225_postpromotion_v8_contract.gd
+  --script game/tests/headless_d2_1441_postpromotion_v9_contract.gd
 ```
 
 ## What each test covers
 
-- `headless_startup_configuration_contract.gd` checks that `project.godot` selects the exact case-sensitive `Dummy` audio driver before `AudioServer` initialization, that Godot loads and initializes that driver in the focused process, that the packaged main-scene smoke oracle matches current B225-integrated `952 meshes / 967 surfaces / 67,716 triangles` runtime topology, and that the packaged facade registry is exact v8 at `8/213`.
+- `headless_startup_configuration_contract.gd` checks that `project.godot` selects the exact case-sensitive `Dummy` audio driver before `AudioServer` initialization, that Godot loads and initializes that driver in the focused process, that the packaged main-scene smoke oracle matches accepted-through-1441 `959 meshes / 974 surfaces / 69,252 triangles` runtime topology, and that the packaged facade registry remains exact v9 at `9/213` with exactly one 1441 credit.
 - `headless_scene_parse.gd` parses all four owned gameplay scenes and their scripts without loading the generated island.
 - `headless_gameplay_contract.gd` checks the input map including Space-bound jetpack lift; the exact `4 m/s` walk, `20 m/s` held-Shift run, `30 m/s²` acceleration, and `40 m/s²` braking defaults; unchanged jetpack defaults; absence of deferred vehicle behavior; boundary edge/hole cases; scene hierarchy; the exact SF billboard texture/hash/dimensions/transform/mesh/material/no-collision contract; physics/render layers; direct spring-arm camera child; and the 64-tag default.
 - `headless_world_material_contract.gd` checks every textured semantic material key against its exact Poly Haven diffuse/OpenGL-normal/roughness paths, retained official source dimension, approved effective visual repeat, per-family subtle normal strength, generated runtime tangents, displacement opt-out, repeat mode, anisotropic mipmap filtering, and imported mipmaps.
 - `validate_generated_world.gd` proves `FileAccess` can read through the intentional `generated/.gdignore` boundary, then enforces the fail-closed handoff: frozen OSM, USGS, and accepted NAIP input hashes, exact terrain dimensions/bounds/sample range/pins, artifact-index hash, exact `735 playable + 4 context` coverage, coherent-surface/foundation summaries, feature semantics, source references, boundary geometry, terrain-aware anchors, spawn containment, and the pinned `124`-placement vegetation seed/assets/order/counts/terrain support/no-YBI/overlay clearance. The independent Node validator additionally proves the `427`-source filled pavement base, exact OSM visual classification, pedestrian-within-base geometry, vehicle precedence, non-collision, `0.019–0.081 m` conformance envelope, unchanged collision hash, and all 17 paved parking sources; it also reconstructs every plant's serialized support triangle and checks each curated GLB.
 - `headless_building_1_hero_model_contract.gd` proves that all four `r16681702`/`w1222720021` wall and roof records retain separate identity and exact source-plan geometry while their generic vertical placeholders are superseded. It pins `11` hero meshes, `9,379` triangles, four congruent collider owners, wall-only spray ownership, deterministic rebuilds, and physical ray hits on the exposed `2/3/4`-story and tower-platform surfaces. Independent receipts now accept the main building and tower as two catalog units; legacy adapter/config pending labels remain capture-time provenance.
-- `headless_facade_recognition_registry_contract.gd` and `headless_facade_runtime_registry_loader_contract.gd` enforce the coordinated catalog/runtime v8, contracts/loader v7, compiler `1.7.0`, exact seven-active/sixteen-total/ten-ready adapter inventory, physical-unit rollup, package closure, mutation rejection, and B225-only current-topology ownership.
-- `headless_d1_b225_standalone_cladding_repair_v1_contract.gd` keeps the reviewed standalone geometry and evidence assets byte-exact while proving that its factory, scene, config, and UV helper remain unwired. The production path is a distinct receiver-relative adapter that reuses only the approved material/texture; the old candidate seam remains test-only. Its companion evidence contract keeps the frozen capture/review claims separate from that current lifecycle bridge.
-- `headless_d1_b225_postpromotion_v8_contract.gd` layers current v8 authority over immutable B225 v7 production evidence. It proves the exact one-unit `7/213 -> 8/213` transition, frozen manifest/tree/review hashes, unchanged reviewed config/adapter/geometry, fail-closed ordinary construction, current `735/952/967/67,716/466/466` topology, and B201's relabeled pre-B225 parity.
+- `headless_facade_recognition_registry_contract.gd` and `headless_facade_runtime_registry_loader_contract.gd` enforce the coordinated catalog/runtime v9, contracts/loader API v8, compiler `1.8.0`, exact eight-active/seventeen-total/eleven-ready accepted-adapter inventory, physical-unit rollup, package closure, mutation rejection, and 1441-only ownership of the accepted `current_integration_topology` provenance snapshot. The compiler separately validates every current builder route semantically and verifies the seven-artifact D2 acceptance closure from immutable prepromotion bytes.
+- The B225 standalone, evidence, and postpromotion-v8 contracts remain immutable historical validators. They retain their capture-time schema pins and are therefore not run directly against the later v9 source authority. The v9 compiler and D2 bridge instead verify their unchanged one-unit `7/213 -> 8/213` transition, frozen bindings, accepted B225 baseline `735/952/967/67,716/466/466`, and relabeled `pre_d2_1441_integration_live_parity` scope. The frozen B225 v8 PCK remains executable through its direct-mounted package contract below.
+- `headless_d2_1441_postpromotion_v9_contract.gd` and its package companion layer current v9 authority over immutable D2 1441 `-009` production evidence. They prove the exact one-unit `8/213 -> 9/213` transition, all seven packet/review hashes, unchanged reviewed config/adapter/builder/geometry identities, one wall-indexed accepted route for `w95934105`, no roof/relief/composite extra credit, and the sole current topology `735/959/974/69,252/466/466`. The package companion is the acyclic source-side bridge; the distinct v9 app is additionally covered by the direct-mounted contract and postpromotion receipt below, without mislabeling the frozen v8 evidence app as v9.
 - `full_runtime_integration.gd` instantiates the real `game/scenes/main.tscn`, waits for `world_ready`, proves the player is grounded before its first visible frame, validates the pinned vehicle/pedestrian/paved tints plus all eleven live Poly Haven texture identities, official source dimensions, approved effective repeats, per-family subtle normals, and finite tangent arrays, validates `124` logical plants across `15` assets and `19` collision-free MultiMesh batches, checks foot clearance at first reveal and throughout walk/run, inspects every live generated mesh/collider/source identity and overlay shadow mode, exercises sustained jetpack rise, air control, capped slow descent/landing, camera clamping, spring-arm compression, manual/boundary recovery, spray placement/rejection, tag eviction, continued movement, and a failed reload that removes the world and disables the player.
 - `automated_route_qa.gd` starts the real player at the exact ferry spawn and steers actual camera-relative inputs without changing the player transform after startup. Its default fast gate walks/runs the terrain-aware 14-checkpoint Waterfront Plaza, Treasure Island Road, and Trade Winds Avenue route. The optional `--whole-island-route` mode continues with real run/jetpack input, lands on generated terrain at the same southwest, center, north, and east-perimeter anchors used by rendered QA, and fails on boundary escape, recovery, stalled progress, implausible per-frame movement, missed landings, or excess duration.
 
 The exact-current source round exits `0` for compiler, Node and Godot
-registry/loader, startup, scene, input, material, generated, standalone lifecycle,
-B225 v8 bridge, real full-runtime integration, both route modes, and source
+registry/loader, startup, scene, input, material, generated, the D2 v9 focused
+and package bridges, real full-runtime integration, both route modes, and source
 main-scene smoke gates. It remains bound to content SHA-256
 `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164`
 and manifest SHA-256
@@ -68,11 +67,28 @@ collision. The accepted Navy Chapel descendant hero contributes `6 / 6 / 540`
 while replacing the same two structural owners. The B201 host partition adds
 one record-root surface and its render-only attachment contributes
 `6 / 6 / 2,064`. B225 adds one further host-partition surface plus two
-render-only meshes/surfaces and `1,080` triangles. Exact-current record-root
-topology is therefore `723 / 734 / 48,739`, while all `735` playable rows load
-as `952 meshes / 967 surfaces / 67,716 triangles`, with `466` body/shape pairs.
+render-only meshes/surfaces and `1,080` triangles, producing its accepted
+`735/952/967/67,716/466/466` authority baseline. The accepted 1441 atomic
+pair replaces generic `2/2/42/2/2` with reviewed `9/9/1,578/2/2`, a live
+delta of `+7 meshes / +7 surfaces / +1,536 triangles / +0 bodies / +0 shapes`.
+All `735` playable rows therefore currently load as
+`959 meshes / 974 surfaces / 69,252 triangles`, with `466` body/shape pairs.
 
 The current postexport private handoff is
+`build/d2-1441-postpromotion-v9-2026-09-07-001/Treasure Island First Playable.app`.
+Its seven-file bundle identity is
+`f83ddd5678086099d66fc433c0851fc2788c42e702d8bffac4eee4d7a7d595cb`,
+its PCK SHA-256 is
+`0945ac7b08ebd2fc5389ffa05a919b7324ecb298dac46032c8fdc30d8c47404a`,
+and its executable SHA-256 is
+`cf0bd6e789e9317248b1aeb2eb626cfd76b837fef362eca449336644cff77941`.
+The exact 40-file release packet and two independent release reviews return
+`PASS_FOR_D2_1441_V9_RELEASE`. Source, direct-mounted package, generic content
+and privacy, packaged headless, and native Apple M2 Metal gates pass for these
+exact bytes. Ordinary Apple M1 Pro owner play remains pending.
+
+The retained accepted B225 v8 postexport package, which predates the
+1441 source seam and current v9 authority, is
 `build/d1-b225-postpromotion-v8-2026-09-05-001/Treasure Island First Playable.app`.
 Its seven-file bundle identity is
 `3f38c5dcd55b19f12cf7788e1069367075aa22f1b557c5b61288abdfdc30afe0`;
@@ -90,31 +106,35 @@ runtime and has PCK SHA-256
 `3425018ee32f645c3bf157deb9f9a548efe3c9e0bca1e40fd588318aa31f54d6`.
 The `111725`, `231815`, and `224622` packages are also historical.
 
-The current facade authority is compiler `1.7.0`, catalog/runtime registry v8,
-and contracts/loader v7. It contains seven active adapters, sixteen total plans,
-ten package-safe ready plans, and exact recognition `8/213`. Every active
+The current facade authority is compiler `1.8.0`, catalog/runtime registry v9,
+and contracts/loader API v8. It contains eight active adapters, seventeen total plans,
+eleven package-safe ready plans, and exact recognition `9/213`. Every active
 adapter's review status is scoped only to runtime-asset original-detail
 provenance; recognition acceptance derives from
 the mapped physical unit's accepted claim plus an independent receipt. Isle
 House and Navy Chapel preserve their shared `735/944/957/64,572/466/466`
 snapshot under `pre_b201_integration_live_parity`; B201 preserves
-`735/950/964/66,636/466/466` under `pre_b225_integration_live_parity`; only
-B225's `735/952/967/67,716/466/466` contract uses
-`current_integration_topology`. Node and Godot mutation suites reject missing,
-wrong, extra, or multiply owned current-topology scope data on both generated
-registry and plan surfaces.
+`735/950/964/66,636/466/466` under `pre_b225_integration_live_parity`; B225
+preserves `735/952/967/67,716/466/466` under
+`pre_d2_1441_integration_live_parity`; only 1441's
+`735/959/974/69,252/466/466` contract uses `current_integration_topology`.
+Node and Godot mutation suites reject missing, wrong, extra, or multiply
+owned accepted-topology scope data while separately checking current dispatch.
 
 The three `headless_d1_b201_live_attachment_*` validators are immutable B201
 v7 evidence/package validators recorded in the B201 checksum ledger; their
 then-current `7/213` and topology language is historical and they are not
-current-source v8 gates. Likewise,
+current-source v9 gates. Likewise,
 `headless_d1_b225_live_attachment_contract.gd` is the frozen prepromotion
 candidate validator, while `headless_d1_b225_production_attachment_contract.gd`,
 `headless_d1_b225_production_attachment_package_contract.gd`, and
 `d1_b225_production_attachment_capture.gd` are frozen production-staging v7
-validators/generator. Do not rewrite, repin, or rerun them as current authority;
-use `headless_d1_b225_postpromotion_v8_contract.gd` for the acyclic current
-bridge.
+validators/generator. The D2 1441 live/production/package/capture scripts are
+likewise frozen prepromotion evidence generators and validators. Do not
+rewrite or repin any of them as current authority; use the distinct
+`headless_d2_1441_postpromotion_v9_contract.gd` bridge for the acyclic current
+source closure. The retained B225 v8 bridge remains a historical input checked
+through v9, not the current topology owner.
 
 These automated checks do not establish ground-level visual quality, owner recognition of Treasure Island, or owner acceptance of the exported app. Those checks belong to [`PLAYTEST.md`](../../PLAYTEST.md).
 
@@ -167,7 +187,7 @@ metrics and fails if all checks do not finish within 60 seconds of monotonic
 wall time. The `semantic_palette` metric name is retained for log compatibility,
 but it now reports the semantic-material contract rather than the superseded
 flat-color palette. Use explicit `--max-fps 60` for deterministic
-non-headless Metal/Forward+ smoke. On exact current B225 v8 candidate suffix
+non-headless Metal/Forward+ smoke. On the historical B225 v8 candidate suffix
 `001`, both the packaged headless run and bounded Apple M2 Metal run reached jetpack rise
 `2.751 m`, descent `0.300 m`, and final `PASS`. The withdrawn pre-scope
 candidate `002922` first-Metal timeout remains a non-authoritative diagnostic.
@@ -194,7 +214,46 @@ AUDITOR="$ROOT/game/tests/mounted_pck_content_audit.gd"
 )
 ```
 
-For the current B225 v8 package, the target-specific mounted contract also runs
+The current v9 package is checked directly outside the source checkout with
+its independently recorded PCK hash:
+
+```sh
+ROOT="$PWD"
+GODOT="$ROOT/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot"
+PCK="$ROOT/build/d2-1441-postpromotion-v9-2026-09-07-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck"
+PCK_SHA256="0945ac7b08ebd2fc5389ffa05a919b7324ecb298dac46032c8fdc30d8c47404a"
+(
+  cd /private/tmp
+  "$GODOT" --headless --main-pack "$PCK" \
+    --script res://game/tests/headless_d2_1441_postpromotion_v9_package_contract.gd -- \
+    --mounted-d2-1441-postpromotion-v9-pck="$PCK" \
+    --mounted-d2-1441-postpromotion-v9-pck-sha256="$PCK_SHA256"
+)
+```
+
+Its immutable D2 1441 `-009` prepromotion input separately remains a positive
+direct-mounted v8 fixture and is checked outside the source checkout:
+
+```sh
+ROOT="$PWD"
+GODOT="$ROOT/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot"
+PCK="$ROOT/build/d2-1441-production-v8-staging-2026-09-05-009/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck"
+PCK_SHA256="c7660d21680649d137af52e2057a23aaa7efab9292c4e427c3e2ef79d1ea80c3"
+(
+  cd /private/tmp
+  "$GODOT" --headless --main-pack "$PCK" \
+    --script res://game/tests/headless_d2_1441_production_attachment_package_contract.gd -- \
+    --mounted-d2-1441-production-pck="$PCK" \
+    --mounted-d2-1441-production-pck-sha256="$PCK_SHA256"
+)
+```
+
+This historical mounted gate must remain v8/`8/213`: it verifies capture-time
+bytes and does not apply the later `+1`. The distinct v9 source and mounted
+bridges bind that fixture and its two independent promotion reviews without
+mutating it.
+
+For the historical B225 v8 package, the target-specific mounted contract also runs
 outside the source checkout and binds the same exact PCK operand and hash:
 
 ```sh
@@ -243,7 +302,7 @@ The outside-project working directory is mandatory: it prevents the source check
 The retained `startup-repair-staging-2026-08-31-190724` PCK is an expected negative fixture: from the mandatory outside-project working directory it fails with `PCK_AUDIT_FAIL [banned_path]` at `res://node_modules/earcut/package.json`. That result proves the reusable auditor catches the historical package leak; it is not an auditor implementation failure. A replacement export must exclude that path and pass against its own independently recorded hashes.
 
 Retained B201/v7 candidate `024605` is the historical positive package fixture;
-it is not current B225 v8 source authority. Its PCK SHA-256 is
+it is not current v9 source authority. Its PCK SHA-256 is
 `3425018ee32f645c3bf157deb9f9a548efe3c9e0bca1e40fd588318aa31f54d6`;
 the outside-project invocation passes it as the single retained `$PCK` value
 to both operands and exits `0`. The full command and output are retained in

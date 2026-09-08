@@ -1,0 +1,409 @@
+import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
+import {
+  existsSync,
+  lstatSync,
+  mkdirSync,
+  readFileSync,
+  readdirSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
+import { dirname, relative, resolve, sep } from "node:path";
+import { fileURLToPath } from "node:url";
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const EXPECTED_APP = "build/d2-1441-production-v8-staging-2026-09-05-009/Treasure Island First Playable.app";
+const EXPECTED_RECEIPT = "build/d2-1441-production-v8-staging-2026-09-05-009/package-verification-receipt.json";
+const EXPECTED_GEOMETRY_SIGNATURE = "b91b373e3bb8238a6f73f05734ef48b3429ae5654eddce89b1981ee41ee89195";
+const EXPECTED_OWNERSHIP_SIGNATURE = "fcad9968be3d0c9094adef5dcc9c7fabfb7cf1754f780897188a4ec362187e4d";
+const EXPECTED_WALL_HASH = "00f3cd8b90e7ae93f802842b59bb10274f1fc388433e5b5c6cae1f3e23f4393c";
+const EXPECTED_ROOF_HASH = "e7da0179f012e928f575ac32440e176a0f3b9651fc325a594de80ce7e3fc9d55";
+const EXPECTED_MANIFEST_HASH = "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3";
+const EXPECTED_CONTENT_HASH = "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164";
+const RECEIPT_SCHEMA = "ti.d2-1441-production-v8-package-verification/1";
+const BUNDLE_IDENTITY_ALGORITHM = "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c";
+
+const REQUIRED_BUNDLE_FILES = Object.freeze([
+  "Contents/Info.plist",
+  "Contents/MacOS/Treasure Island First Playable",
+  "Contents/PkgInfo",
+  "Contents/Resources/PrivacyInfo.xcprivacy",
+  "Contents/Resources/Treasure Island First Playable.pck",
+  "Contents/Resources/icon.icns",
+  "Contents/_CodeSignature/CodeResources",
+]);
+
+const SOURCE_PATHS = Object.freeze([
+  "project.godot",
+  "game/scripts/main.gd",
+  "game/scripts/world/world_chunk_builder.gd",
+  "game/resources/facades/d2_1441_chinook_live_replacement.json",
+  "game/scripts/world/facades/d2_1441_chinook_live_replacement.gd",
+  "game/scripts/world/facades/d2_1441_chinook_standalone_hero_prototype.gd",
+  "game/resources/facades/d2_1441_chinook_standalone_hero_prototype.json",
+  "game/scripts/world/facades/site_12_housing_kit.gd",
+  "game/tests/headless_d2_1441_chinook_live_replacement_contract.gd",
+  "game/tests/headless_d2_1441_chinook_live_replacement_package_contract.gd",
+  "game/tests/headless_d2_1441_production_attachment_contract.gd",
+  "game/tests/headless_d2_1441_production_attachment_package_contract.gd",
+  "game/tests/d2_1441_production_attachment_capture.gd",
+  "export_presets.cfg",
+  "generated/world/chunks/x_-1__z_-1.json",
+  "generated/world/manifest.json",
+  "game/scenes/main.tscn",
+  "game/scenes/world/world_root.tscn",
+  "evidence/first-playable/d2-1441-chinook-standalone-hero-2026-09-04/INDEPENDENT_BAR_RAISER_REVIEW.md",
+  "tools/build_d2_1441_package_verification_receipt.mjs",
+]);
+
+const LOG_SPECS = Object.freeze({
+  source_package_contract: "PASS: source D2 1441 production package boundary is exact and export-ready",
+  mounted_package_contract: "PASS: mounted D2 1441 production PCK identity and closure are exact",
+  generic_mounted_pck_content_audit: "PASS: direct-mounted PCK matches the explicit package/world identities",
+  headless_exported_main_smoke: "PASS: packaged main scene reached full world_ready",
+  native_exported_main_smoke: "PASS: packaged main scene reached full world_ready",
+});
+
+function invariant(condition, message) {
+  if (!condition) throw new Error(message);
+}
+
+function asciiCompare(left, right) {
+  return left < right ? -1 : left > right ? 1 : 0;
+}
+
+function sha256Bytes(value) {
+  return createHash("sha256").update(value).digest("hex");
+}
+
+function sha256File(path) {
+  return sha256Bytes(readFileSync(path));
+}
+
+function absolute(relativePath) {
+  return resolve(ROOT, relativePath);
+}
+
+function normalizeRelative(path) {
+  return relative(ROOT, resolve(path)).split(sep).join("/");
+}
+
+function parseArguments(argv) {
+  const parsed = {};
+  for (const argument of argv) {
+    const equals = argument.indexOf("=");
+    invariant(argument.startsWith("--") && equals > 2, `Unknown argument: ${argument}`);
+    const key = argument.slice(2, equals);
+    invariant(!Object.hasOwn(parsed, key), `Duplicate argument: --${key}`);
+    parsed[key] = argument.slice(equals + 1);
+  }
+  const expectedKeys = ["app", "bundle-log", "headless-log", "mounted-log", "native-log", "output", "pck-audit-log", "source-log"];
+  invariant(JSON.stringify(Object.keys(parsed).sort(asciiCompare)) === JSON.stringify(expectedKeys), `Expected exactly ${expectedKeys.map((key) => `--${key}=...`).join(", ")}`);
+  invariant(normalizeRelative(parsed.app) === EXPECTED_APP, `App must be fresh suffix 009: ${EXPECTED_APP}`);
+  invariant(normalizeRelative(parsed.output) === EXPECTED_RECEIPT, `Receipt must be fresh suffix 009: ${EXPECTED_RECEIPT}`);
+  return parsed;
+}
+
+function collectBundleFiles(root) {
+  const output = [];
+  function visit(directory) {
+    for (const name of readdirSync(directory).sort(asciiCompare)) {
+      const path = resolve(directory, name);
+      const status = lstatSync(path);
+      invariant(!status.isSymbolicLink(), `Bundle contains a symbolic link: ${relative(root, path)}`);
+      if (status.isDirectory()) visit(path);
+      else if (status.isFile()) output.push(path);
+      else invariant(false, `Bundle contains an unsupported entry: ${relative(root, path)}`);
+    }
+  }
+  visit(root);
+  return output.sort((left, right) => asciiCompare(relative(root, left), relative(root, right)));
+}
+
+function inspectBundle(appPath, bundleLogPath) {
+  invariant(existsSync(appPath) && statSync(appPath).isDirectory(), `Missing app bundle: ${appPath}`);
+  const files = collectBundleFiles(appPath);
+  const inventory = files.map((path) => ({
+    path: relative(appPath, path).split(sep).join("/"),
+    sha256: sha256File(path),
+    bytes: statSync(path).size,
+  }));
+  invariant(JSON.stringify(inventory.map((item) => item.path)) === JSON.stringify(REQUIRED_BUNDLE_FILES), "App bundle is not the exact seven-file production boundary");
+  const canonical = Buffer.concat(inventory.map((item) => Buffer.from(`${item.path}\0${item.sha256}\0${item.bytes}\n`, "utf8")));
+  const bundleIdentity = sha256Bytes(canonical);
+  const executablePath = resolve(appPath, "Contents/MacOS/Treasure Island First Playable");
+  const pckPath = resolve(appPath, "Contents/Resources/Treasure Island First Playable.pck");
+  const privacyPath = resolve(appPath, "Contents/Resources/PrivacyInfo.xcprivacy");
+  const plistPath = resolve(appPath, "Contents/Info.plist");
+
+  const architectures = execFileSync("/usr/bin/lipo", ["-archs", executablePath], { encoding: "utf8" }).trim().split(/\s+/u);
+  invariant(JSON.stringify(architectures) === JSON.stringify(["x86_64", "arm64"]), `Unexpected architectures: ${architectures.join(" ")}`);
+  execFileSync("/usr/bin/plutil", ["-lint", plistPath], { stdio: "pipe" });
+  execFileSync("/usr/bin/plutil", ["-lint", privacyPath], { stdio: "pipe" });
+  execFileSync("/usr/bin/codesign", ["--verify", "--deep", "--strict", appPath], { stdio: "pipe" });
+  for (const architecture of architectures) execFileSync("/usr/bin/codesign", ["--verify", "--strict", "--arch", architecture, appPath], { stdio: "pipe" });
+  const entitlements = execFileSync("/usr/bin/codesign", ["-d", "--entitlements", ":-", appPath], { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] });
+  invariant(/<dict>\s*<\/dict>/u.test(entitlements), "App entitlements are not an empty dictionary");
+  const privacy = execFileSync("/usr/bin/plutil", ["-p", privacyPath], { encoding: "utf8" });
+  invariant(/"NSPrivacyTracking" => false/u.test(privacy), "Privacy manifest does not disable tracking");
+  const xattrs = execFileSync("/usr/bin/xattr", ["-lr", appPath], { encoding: "utf8" }).trim();
+  invariant(xattrs.length === 0, "App bundle has extended attributes");
+
+  const log = [
+    "D2 1441 PRODUCTION V8 -009 BUNDLE VERIFICATION",
+    `app_relative_path=${EXPECTED_APP}`,
+    `file_count=${inventory.length}`,
+    `bundle_identity_algorithm=${BUNDLE_IDENTITY_ALGORITHM}`,
+    `bundle_identity_sha256=${bundleIdentity}`,
+    `pck_sha256=${sha256File(pckPath)}`,
+    `pck_bytes=${statSync(pckPath).size}`,
+    `executable_sha256=${sha256File(executablePath)}`,
+    `executable_bytes=${statSync(executablePath).size}`,
+    `architectures=${architectures.join(",")}`,
+    "info_plist_valid=true",
+    "privacy_manifest_valid=true",
+    "codesign_deep_strict_pass=true",
+    "codesign_per_slice_pass=true",
+    "entitlements_empty_dictionary=true",
+    "extended_attributes_absent=true",
+    "quarantine_absent=true",
+    "RESULT=PASS",
+    "",
+  ].join("\n");
+  invariant(!existsSync(bundleLogPath), `Refusing to overwrite bundle log: ${bundleLogPath}`);
+  mkdirSync(dirname(bundleLogPath), { recursive: true });
+  writeFileSync(bundleLogPath, log, { encoding: "utf8", flag: "wx" });
+  return {
+    architectures,
+    bundleIdentity,
+    bundleInventory: inventory,
+    executableBytes: statSync(executablePath).size,
+    executableSha256: sha256File(executablePath),
+    pckBytes: statSync(pckPath).size,
+    pckSha256: sha256File(pckPath),
+  };
+}
+
+function validateLog(path, expectedMarker, label) {
+  invariant(existsSync(path) && statSync(path).isFile(), `Missing ${label} log: ${path}`);
+  const text = readFileSync(path, "utf8");
+  invariant(text.includes(expectedMarker), `${label} log lacks its PASS marker`);
+  invariant(!/(?:SCRIPT ERROR|D2_1441_PRODUCTION_PACKAGE_FAIL|PCK_AUDIT_FAIL|RESULT=FAIL)/u.test(text), `${label} log contains a failure marker`);
+  return sha256File(path);
+}
+
+function exactConstant(source, name) {
+  const matches = [...source.matchAll(new RegExp(`const\\s+${name}\\s*:=\\s*"([0-9a-f]{64})"`, "gu"))];
+  invariant(matches.length === 1, `${name} must occur exactly once`);
+  return matches[0][1];
+}
+
+function authoritativeTarget() {
+  const configPath = "game/resources/facades/d2_1441_chinook_live_replacement.json";
+  const adapterPath = "game/scripts/world/facades/d2_1441_chinook_live_replacement.gd";
+  const capturePath = "game/tests/d2_1441_production_attachment_capture.gd";
+  const config = JSON.parse(readFileSync(absolute(configPath), "utf8"));
+  const adapter = readFileSync(absolute(adapterPath), "utf8");
+  const capture = readFileSync(absolute(capturePath), "utf8");
+  const configGeometry = config.reviewed_art?.factory_geometry_signature;
+  const adapterGeometry = exactConstant(adapter, "EXPECTED_GEOMETRY_SIGNATURE");
+  const captureGeometry = exactConstant(capture, "D2_FROZEN_GEOMETRY_SIGNATURE");
+  const adapterOwnership = exactConstant(adapter, "EXPECTED_LIVE_OWNERSHIP_SIGNATURE");
+  const captureOwnership = exactConstant(capture, "D2_FROZEN_OWNERSHIP_SIGNATURE");
+  invariant(configGeometry === EXPECTED_GEOMETRY_SIGNATURE && adapterGeometry === EXPECTED_GEOMETRY_SIGNATURE && captureGeometry === EXPECTED_GEOMETRY_SIGNATURE, "Config, adapter, and capture geometry signatures are not the same authoritative value");
+  invariant(adapterOwnership === EXPECTED_OWNERSHIP_SIGNATURE && captureOwnership === EXPECTED_OWNERSHIP_SIGNATURE, "Adapter and capture ownership signatures drifted");
+  invariant(config.target?.canonical_wall_record_sha256 === EXPECTED_WALL_HASH && config.target?.canonical_roof_record_sha256 === EXPECTED_ROOF_HASH, "Config canonical wall/roof hashes drifted");
+  return {
+    canonical_name: config.target.canonical_name,
+    source_key: config.target.source_key,
+    wall_object_key: config.target.wall_object_key,
+    roof_object_key: config.target.roof_object_key,
+    physical_unit_id: "physical-building:w95934105",
+    mapped_public_sse_runs: config.reviewed_art.mapped_public_sse_runs,
+    protected_runs: config.reviewed_art.protected_runs,
+    confusion_set: ["w95934144", "w95934143", "w95934131", "w95934129"],
+    geometry_signature: configGeometry,
+    live_ownership_signature: adapterOwnership,
+    wall_canonical_hash: config.target.canonical_wall_record_sha256,
+    roof_canonical_hash: config.target.canonical_roof_record_sha256,
+  };
+}
+
+function validateTarget(target) {
+  invariant(target.geometry_signature === EXPECTED_GEOMETRY_SIGNATURE, "Receipt D2 geometry signature differs from authoritative config/adapter/capture value");
+  invariant(target.live_ownership_signature === EXPECTED_OWNERSHIP_SIGNATURE, "Receipt D2 ownership signature drifted");
+  invariant(target.wall_canonical_hash === EXPECTED_WALL_HASH && target.roof_canonical_hash === EXPECTED_ROOF_HASH, "Receipt D2 canonical wall/roof hashes drifted");
+}
+
+function sourceHashes() {
+  return Object.fromEntries(SOURCE_PATHS.map((path) => {
+    invariant(existsSync(absolute(path)) && statSync(absolute(path)).isFile(), `Missing source dependency: ${path}`);
+    return [path, sha256File(absolute(path))];
+  }));
+}
+
+function authorityHashes(sources) {
+  const paths = [
+    "discovery/facades/facade-recognition-catalog.json",
+    "discovery/facades/facade-recognition-catalog.schema.json",
+    "game/resources/facades/facade-runtime-registry.json",
+    "game/resources/facades/facade-runtime-adapter-contracts.json",
+    "game/scripts/world/facades/facade_runtime_registry_loader.gd",
+    "tools/build_facade_recognition_registry.mjs",
+  ];
+  const result = {};
+  for (const path of paths) result[path] = sources[path] ?? sha256File(absolute(path));
+  invariant(result["discovery/facades/facade-recognition-catalog.json"] === "d95be7bec8f0eabe97a9b5f7fefe1ce54ec7cbf940d85d28518ff6979eeb16ea", "Catalog v8 bytes drifted");
+  invariant(result["game/resources/facades/facade-runtime-registry.json"] === "109f83f40450e9c71ef6d39f1659e76eac5f1457fcfab772538b471cc74c0051", "Runtime registry v8 bytes drifted");
+  invariant(result["game/resources/facades/facade-runtime-adapter-contracts.json"] === "dd2d13e3b0f6eee1f8c5f2957927c4f3caba43b31883beea925f9a91b826d65c", "Adapter contract bytes drifted");
+  return result;
+}
+
+function validateAuthority() {
+  const registry = JSON.parse(readFileSync(absolute("game/resources/facades/facade-runtime-registry.json"), "utf8"));
+  const unit = registry.units.find((candidate) => candidate.unit_id === "physical-building:w95934105");
+  invariant(registry.schema_version === "ti.facade-runtime-registry/8", "Runtime registry schema is not v8");
+  invariant(registry.recognition_metric?.display === "8/213" && registry.recognition_metric?.numerator === 8 && registry.recognition_metric?.denominator === 213, "Recognition metric is not exactly 8/213");
+  invariant(!registry.recognition_metric.accepted_physical_unit_ids.includes("physical-building:w95934105"), "1441 unexpectedly has recognition credit");
+  invariant(unit?.claim_status?.reference_recognizable === "not_evaluated" && unit?.acceptance_records?.length === 0 && unit?.active_runtime_adapter_ids?.length === 0, "1441 authority is not uncredited/not-evaluated");
+}
+
+function buildReceipt(args, bundle) {
+  validateAuthority();
+  const target = authoritativeTarget();
+  validateTarget(target);
+  const sources = sourceHashes();
+  const logPaths = {
+    bundle_verification: args["bundle-log"],
+    source_package_contract: args["source-log"],
+    mounted_package_contract: args["mounted-log"],
+    generic_mounted_pck_content_audit: args["pck-audit-log"],
+    headless_exported_main_smoke: args["headless-log"],
+    native_exported_main_smoke: args["native-log"],
+  };
+  const verificationLogHashes = {
+    bundle_verification: validateLog(logPaths.bundle_verification, "RESULT=PASS", "bundle verification"),
+  };
+  for (const [label, marker] of Object.entries(LOG_SPECS)) verificationLogHashes[label] = validateLog(logPaths[label], marker, label.replaceAll("_", " "));
+  return {
+    schema_version: RECEIPT_SCHEMA,
+    capture_date: "2026-09-05",
+    candidate_status: "uncommitted_production_candidate_pending_two_independent_audits",
+    review_status: "pending_independent_production_contract_and_visual_audits_not_self_accepted",
+    production_stage: "d2_1441_prepromotion_production_v8_uncommitted_candidate",
+    capture_time_recognition_metric: "8/213",
+    catalog_schema_version: "ti.facade-recognition-catalog/8",
+    runtime_registry_schema_version: "ti.facade-runtime-registry/8",
+    adapter_contracts_schema_version: "ti.facade-runtime-adapter-contracts/7",
+    loader_api_version: "ti.facade-runtime-registry-loader/7",
+    compiler_version: "1.7.0",
+    recognition_credit: false,
+    additional_recognition_credit: false,
+    promotion: false,
+    app_bundle_relative_path: EXPECTED_APP,
+    app_bundle_name: "Treasure Island First Playable.app",
+    architectures: bundle.architectures,
+    bundle_file_count: bundle.bundleInventory.length,
+    bundle_identity_algorithm: BUNDLE_IDENTITY_ALGORITHM,
+    bundle_identity_sha256: bundle.bundleIdentity,
+    bundle_inventory: bundle.bundleInventory,
+    pck_sha256: bundle.pckSha256,
+    pck_bytes: bundle.pckBytes,
+    executable_sha256: bundle.executableSha256,
+    executable_bytes: bundle.executableBytes,
+    runtime_topology: { rows: 735, meshes: 959, surfaces: 974, triangles: 69252, bodies: 466, shapes: 466 },
+    accepted_b225_baseline_topology: { rows: 735, meshes: 952, surfaces: 967, triangles: 67716, bodies: 466, shapes: 466 },
+    generic_pair_replaced: { meshes: 2, surfaces: 2, triangles: 42, bodies: 2, shapes: 2 },
+    d2_live_pair: {
+      meshes: 9,
+      surfaces: 9,
+      triangles: 1578,
+      bodies: 2,
+      shapes: 2,
+      collision_triangles: 42,
+      wall_meshes: 8,
+      wall_surfaces: 8,
+      wall_triangles: 1568,
+      wall_collision_triangles: 32,
+      roof_meshes: 1,
+      roof_surfaces: 1,
+      roof_triangles: 10,
+      roof_collision_triangles: 10,
+      decorative_relief_triangles: 1536,
+      decorative_relief_collision_triangles: 0,
+    },
+    d2_target: target,
+    geometry_signature_binding: {
+      adapter_path: "game/scripts/world/facades/d2_1441_chinook_live_replacement.gd",
+      capture_path: "game/tests/d2_1441_production_attachment_capture.gd",
+      config_path: "game/resources/facades/d2_1441_chinook_live_replacement.json",
+      reconciled: true,
+      value: EXPECTED_GEOMETRY_SIGNATURE,
+    },
+    current_v8_authority_hashes: authorityHashes(sources),
+    source_hashes: sources,
+    receipt_generator: {
+      path: "tools/build_d2_1441_package_verification_receipt.mjs",
+      sha256: sources["tools/build_d2_1441_package_verification_receipt.mjs"],
+      source: "fresh_authoritative_inputs_and_verified_009_app_not_prior_receipt",
+    },
+    verification_log_hashes: verificationLogHashes,
+    source_package_contract_pass: true,
+    mounted_package_contract_pass: true,
+    generic_mounted_pck_content_audit_pass: true,
+    headless_exported_main_smoke_pass: true,
+    native_exported_main_smoke_pass: true,
+    mounted_standalone_activation_routes_absent: true,
+    mounted_d2_runtime_closure_present: true,
+    mounted_ordinary_main_present: true,
+    mounted_override_absent: true,
+    codesign_deep_strict_pass: true,
+    codesign_per_slice_pass: true,
+    entitlements_empty_dictionary: true,
+    privacy_manifest_present: true,
+    privacy_manifest_valid: true,
+    extended_attributes_absent: true,
+    quarantine_absent: true,
+    pck_path_stored: false,
+    receipt_self_hash_stored: false,
+    downstream_evidence_hashes_bound_into_v8_authority: false,
+    postcapture_catalog_or_registry_mutation: false,
+  };
+}
+
+function mutationSelfTest() {
+  const target = authoritativeTarget();
+  validateTarget(target);
+  const mutated = structuredClone(target);
+  mutated.geometry_signature = "b91b373edbb41d5bf8ec67517b2150a519022a25466f66d9b6ca609834689195";
+  let rejected = false;
+  try {
+    validateTarget(mutated);
+  } catch (error) {
+    rejected = String(error.message).includes("differs from authoritative");
+  }
+  invariant(rejected, "Historical geometry-signature typo mutation was not rejected");
+}
+
+function main() {
+  const args = parseArguments(process.argv.slice(2));
+  invariant(!existsSync(resolve(args.output)), `Refusing to overwrite receipt: ${args.output}`);
+  invariant(!existsSync(resolve(args["bundle-log"])), `Refusing to overwrite bundle log: ${args["bundle-log"]}`);
+  mutationSelfTest();
+  const bundle = inspectBundle(resolve(args.app), resolve(args["bundle-log"]));
+  const receipt = buildReceipt(args, bundle);
+  invariant(receipt.d2_target.geometry_signature === receipt.geometry_signature_binding.value, "Receipt target and explicit geometry binding differ");
+  mkdirSync(dirname(resolve(args.output)), { recursive: true });
+  writeFileSync(resolve(args.output), `${JSON.stringify(receipt, null, 2)}\n`, { encoding: "utf8", flag: "wx" });
+  process.stdout.write(`${JSON.stringify({
+    app_bundle_relative_path: EXPECTED_APP,
+    bundle_identity_sha256: receipt.bundle_identity_sha256,
+    geometry_signature: receipt.d2_target.geometry_signature,
+    output: EXPECTED_RECEIPT,
+    receipt_sha256: sha256File(resolve(args.output)),
+    status: "pass",
+  }, null, 2)}\n`);
+}
+
+main();

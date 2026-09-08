@@ -1,0 +1,1566 @@
+{
+  "actual_signature_join_brackets": [
+    {
+      "actual_offsets_m": [
+        -0.183022315979004,
+        -0.0496700363159182,
+        0.0170051498413084,
+        0.0836831970214842,
+        0.217038337707519
+      ],
+      "after_count": 2,
+      "before_count": 2,
+      "join_index": 1,
+      "join_u_m": 10.583
+    },
+    {
+      "actual_offsets_m": [
+        -0.155672500610352,
+        -0.0223173599243172,
+        0.0443606872558586,
+        0.111037780761718,
+        0.244392921447753
+      ],
+      "after_count": 3,
+      "before_count": 2,
+      "join_index": 2,
+      "join_u_m": 15.223
+    },
+    {
+      "actual_offsets_m": [
+        -0.178527145385743,
+        -0.0451767730712902,
+        0.0215003204345692,
+        0.0881755065917957,
+        0.221529693603514
+      ],
+      "after_count": 3,
+      "before_count": 2,
+      "join_index": 3,
+      "join_u_m": 20.78
+    }
+  ],
+  "additional_recognition_credit": false,
+  "all_frame_hashes_and_engine_frames_unique": true,
+  "all_frames_queried_after_frame_post_draw": true,
+  "all_frames_state_matches_latest_post_player_sampler": true,
+  "all_images_copied_in_memory_before_next_physics_await": true,
+  "all_three_signature_joins_bracketed": true,
+  "authoritative_candidate_packet": true,
+  "bindings": {
+    "additional_recognition_credit": false,
+    "combined_factory_topology": {
+      "bodies": 2,
+      "meshes": 9,
+      "shapes": 2,
+      "surfaces": 9,
+      "triangles": 1578
+    },
+    "decorative_relief_collision_triangles": 0,
+    "decorative_relief_triangles": 1536,
+    "geometry_signature": "b91b373e3bb8238a6f73f05734ef48b3429ae5654eddce89b1981ee41ee89195",
+    "live_instance_ids": {
+      "roof_body": "133143990356",
+      "roof_root": "133160767573",
+      "roof_shape": "-9223371903744339886",
+      "wall_body": "133093658703",
+      "wall_root": "132640673852",
+      "wall_shape": "-9223371903794671535"
+    },
+    "live_ownership_signature": "fcad9968be3d0c9094adef5dcc9c7fabfb7cf1754f780897188a4ec362187e4d",
+    "mapped_public_sse_runs": [
+      10,
+      12,
+      13,
+      15
+    ],
+    "mesh_names": [
+      "MappedSSEBroadEaves",
+      "MappedSSEExactStuccoWallRuns",
+      "ProjectingWingOpaqueOpenings",
+      "ProjectingWingPaleOpeningFrames",
+      "ProtectedExactWallRuns",
+      "RecessedBalconySlabs",
+      "RecessedSimpleMetalRails",
+      "RecessedTwoLevelOpaqueVoids"
+    ],
+    "ordinary_main_already_integrated": true,
+    "promotion": false,
+    "protected_runs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      11,
+      14
+    ],
+    "recognition_credit": false,
+    "roof_collision_triangles": 10,
+    "roof_key": "building:w95934105:roof",
+    "roof_topology": {
+      "bodies": 1,
+      "meshes": 1,
+      "shapes": 1,
+      "surfaces": 1,
+      "triangles": 10
+    },
+    "source_key": "w95934105",
+    "wall_collision_triangles": 32,
+    "wall_key": "building:w95934105:wall",
+    "wall_topology": {
+      "bodies": 1,
+      "meshes": 8,
+      "shapes": 1,
+      "surfaces": 8,
+      "triangles": 1568
+    }
+  },
+  "braking_sample_count": 12,
+  "braking_samples": [
+    {
+      "camera_basis_unchanged": true,
+      "center_spray_ray_receiver": "building:w95934105:wall",
+      "center_spray_ray_sources": [
+        "w95934105"
+      ],
+      "chain_u_m": 23.9202785491943,
+      "engine_physics_frame": 3648,
+      "grounded": true,
+      "in_boundary": true,
+      "input_action_pressed": false,
+      "jetpack_action_pressed": false,
+      "player_position_m": [
+        -273.903350830078,
+        3.08945512771606,
+        -32.0711669921875
+      ],
+      "recovery_action_pressed": false,
+      "recovery_delta": 0,
+      "run_action_pressed": false,
+      "sampler_sequence_index": 362,
+      "velocity_mps": [
+        -2.86848449707031,
+        0.0,
+        1.20488524436951
+      ]
+    },
+    {
+      "camera_basis_unchanged": true,
+      "center_spray_ray_receiver": "building:w95934105:wall",
+      "center_spray_ray_sources": [
+        "w95934105"
+      ],
+      "chain_u_m": 23.956916809082,
+      "engine_physics_frame": 3649,
+      "grounded": true,
+      "in_boundary": true,
+      "input_action_pressed": false,
+      "jetpack_action_pressed": false,
+      "player_position_m": [
+        -273.940063476562,
+        3.08945512771606,
+        -32.0621948242188
+      ],
+      "recovery_action_pressed": false,
+      "recovery_delta": 0,
+      "run_action_pressed": false,
+      "sampler_sequence_index": 363,
+      "velocity_mps": [
+        -2.20181775093079,
+        0.0,
+        0.538218557834625
+      ]
+    },
+    {
+      "camera_basis_unchanged": true,
+      "center_spray_ray_receiver": "building:w95934105:wall",
+      "center_spray_ray_sources": [
+        "w95934105"
+      ],
+      "chain_u_m": 23.9795150756836,
+      "engine_physics_frame": 3650,
+      "grounded": true,
+      "in_boundary": true,
+      "input_action_pressed": false,
+      "jetpack_action_pressed": false,
+      "player_position_m": [
+        -273.965637207031,
+        3.08945512771606,
+        -32.0621948242188
+      ],
+      "recovery_action_pressed": false,
+      "recovery_delta": 0,
+      "run_action_pressed": false,
+      "sampler_sequence_index": 364,
+      "velocity_mps": [
+        -1.53515112400055,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "camera_basis_unchanged": true,
+      "center_spray_ray_receiver": "building:w95934105:wall",
+      "center_spray_ray_sources": [
+        "w95934105"
+      ],
+      "chain_u_m": 23.9922943115234,
+      "engine_physics_frame": 3651,
+      "grounded": true,
+      "in_boundary": true,
+      "input_action_pressed": false,
+      "jetpack_action_pressed": false,
+      "player_position_m": [
+        -273.980102539062,
+        3.08945512771606,
+        -32.0621948242188
+      ],
+      "recovery_action_pressed": false,
+      "recovery_delta": 0,
+      "run_action_pressed": false,
+      "sampler_sequence_index": 365,
+      "velocity_mps": [
+        -0.868484437465668,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "camera_basis_unchanged": true,
+      "center_spray_ray_receiver": "building:w95934105:wall",
+      "center_spray_ray_sources": [
+        "w95934105"
+      ],
+      "chain_u_m": 23.9952621459961,
+      "engine_physics_frame": 3652,
+      "grounded": true,
+      "in_boundary": true,
+      "input_action_pressed": false,
+      "jetpack_action_pressed": false,
+      "player_position_m": [
+        -273.983459472656,
+        3.08945512771606,
+        -32.0621948242188
+      ],
+      "recovery_action_pressed": false,
+      "recovery_delta": 0,
+      "run_action_pressed": false,
+      "sampler_sequence_index": 366,
+      "velocity_mps": [
+        -0.201817765831947,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "camera_basis_unchanged": true,
+      "center_spray_ray_receiver": "building:w95934105:wall",
+      "center_spray_ray_sources": [
+        "w95934105"
+      ],
+      "chain_u_m": 23.9952621459961,
+      "engine_physics_frame": 3653,
+      "grounded": true,
+      "in_boundary": true,
+      "input_action_pressed": false,
+      "jetpack_action_pressed": false,
+      "player_position_m": [
+        -273.983459472656,
+        3.08945512771606,
+        -32.0621948242188
+      ],
+      "recovery_action_pressed": false,
+      "recovery_delta": 0,
+      "run_action_pressed": false,
+      "sampler_sequence_index": 367,
+      "velocity_mps": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "camera_basis_unchanged": true,
+      "center_spray_ray_receiver": "building:w95934105:wall",
+      "center_spray_ray_sources": [
+        "w95934105"
+      ],
+      "chain_u_m": 23.9952621459961,
+      "engine_physics_frame": 3654,
+      "grounded": true,
+      "in_boundary": true,
+      "input_action_pressed": false,
+      "jetpack_action_pressed": false,
+      "player_position_m": [
+        -273.983459472656,
+        3.08945512771606,
+        -32.0621948242188
+      ],
+      "recovery_action_pressed": false,
+      "recovery_delta": 0,
+      "run_action_pressed": false,
+      "sampler_sequence_index": 368,
+      "velocity_mps": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "camera_basis_unchanged": true,
+      "center_spray_ray_receiver": "building:w95934105:wall",
+      "center_spray_ray_sources": [
+        "w95934105"
+      ],
+      "chain_u_m": 23.9952621459961,
+      "engine_physics_frame": 3655,
+      "grounded": true,
+      "in_boundary": true,
+      "input_action_pressed": false,
+      "jetpack_action_pressed": false,
+      "player_position_m": [
+        -273.983459472656,
+        3.08945512771606,
+        -32.0621948242188
+      ],
+      "recovery_action_pressed": false,
+      "recovery_delta": 0,
+      "run_action_pressed": false,
+      "sampler_sequence_index": 369,
+      "velocity_mps": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "camera_basis_unchanged": true,
+      "center_spray_ray_receiver": "building:w95934105:wall",
+      "center_spray_ray_sources": [
+        "w95934105"
+      ],
+      "chain_u_m": 23.9952621459961,
+      "engine_physics_frame": 3656,
+      "grounded": true,
+      "in_boundary": true,
+      "input_action_pressed": false,
+      "jetpack_action_pressed": false,
+      "player_position_m": [
+        -273.983459472656,
+        3.08945512771606,
+        -32.0621948242188
+      ],
+      "recovery_action_pressed": false,
+      "recovery_delta": 0,
+      "run_action_pressed": false,
+      "sampler_sequence_index": 370,
+      "velocity_mps": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "camera_basis_unchanged": true,
+      "center_spray_ray_receiver": "building:w95934105:wall",
+      "center_spray_ray_sources": [
+        "w95934105"
+      ],
+      "chain_u_m": 23.9952621459961,
+      "engine_physics_frame": 3657,
+      "grounded": true,
+      "in_boundary": true,
+      "input_action_pressed": false,
+      "jetpack_action_pressed": false,
+      "player_position_m": [
+        -273.983459472656,
+        3.08945512771606,
+        -32.0621948242188
+      ],
+      "recovery_action_pressed": false,
+      "recovery_delta": 0,
+      "run_action_pressed": false,
+      "sampler_sequence_index": 371,
+      "velocity_mps": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "camera_basis_unchanged": true,
+      "center_spray_ray_receiver": "building:w95934105:wall",
+      "center_spray_ray_sources": [
+        "w95934105"
+      ],
+      "chain_u_m": 23.9952621459961,
+      "engine_physics_frame": 3658,
+      "grounded": true,
+      "in_boundary": true,
+      "input_action_pressed": false,
+      "jetpack_action_pressed": false,
+      "player_position_m": [
+        -273.983459472656,
+        3.08945512771606,
+        -32.0621948242188
+      ],
+      "recovery_action_pressed": false,
+      "recovery_delta": 0,
+      "run_action_pressed": false,
+      "sampler_sequence_index": 372,
+      "velocity_mps": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "camera_basis_unchanged": true,
+      "center_spray_ray_receiver": "building:w95934105:wall",
+      "center_spray_ray_sources": [
+        "w95934105"
+      ],
+      "chain_u_m": 23.9952621459961,
+      "engine_physics_frame": 3659,
+      "grounded": true,
+      "in_boundary": true,
+      "input_action_pressed": false,
+      "jetpack_action_pressed": false,
+      "player_position_m": [
+        -273.983459472656,
+        3.08945512771606,
+        -32.0621948242188
+      ],
+      "recovery_action_pressed": false,
+      "recovery_delta": 0,
+      "run_action_pressed": false,
+      "sampler_sequence_index": 373,
+      "velocity_mps": [
+        0.0,
+        0.0,
+        0.0
+      ]
+    }
+  ],
+  "braking_samples_recorded_separately": true,
+  "camera_transform_writes": 0,
+  "candidate_status": "uncommitted_production_candidate_pending_two_independent_audits",
+  "capture_date": "2026-09-05",
+  "capture_time_recognition_metric": "8/213",
+  "dense_frame_thresholds": [
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 1,
+      "intended_join_offset_m": 0.0,
+      "join_index": 0,
+      "join_u_m": 0.0,
+      "role": "far_mid_near",
+      "trigger_u_m": 1.0
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 2,
+      "intended_join_offset_m": 0.0,
+      "join_index": 0,
+      "join_u_m": 0.0,
+      "role": "far_mid_near",
+      "trigger_u_m": 4.0
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 3,
+      "intended_join_offset_m": 0.0,
+      "join_index": 0,
+      "join_u_m": 0.0,
+      "role": "far_mid_near",
+      "trigger_u_m": 7.0
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 4,
+      "intended_join_offset_m": -0.2,
+      "join_index": 1,
+      "join_u_m": 10.583,
+      "role": "signature_join_1_adjacent",
+      "trigger_u_m": 10.383
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 5,
+      "intended_join_offset_m": -0.07,
+      "join_index": 1,
+      "join_u_m": 10.583,
+      "role": "signature_join_1_adjacent",
+      "trigger_u_m": 10.513
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 6,
+      "intended_join_offset_m": 0.0,
+      "join_index": 1,
+      "join_u_m": 10.583,
+      "role": "signature_join_1_adjacent",
+      "trigger_u_m": 10.583
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 7,
+      "intended_join_offset_m": 0.07,
+      "join_index": 1,
+      "join_u_m": 10.583,
+      "role": "signature_join_1_adjacent",
+      "trigger_u_m": 10.653
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 8,
+      "intended_join_offset_m": 0.2,
+      "join_index": 1,
+      "join_u_m": 10.583,
+      "role": "signature_join_1_adjacent",
+      "trigger_u_m": 10.783
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 9,
+      "intended_join_offset_m": -0.2,
+      "join_index": 2,
+      "join_u_m": 15.223,
+      "role": "signature_join_2_adjacent",
+      "trigger_u_m": 15.023
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 10,
+      "intended_join_offset_m": -0.07,
+      "join_index": 2,
+      "join_u_m": 15.223,
+      "role": "signature_join_2_adjacent",
+      "trigger_u_m": 15.153
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 11,
+      "intended_join_offset_m": 0.0,
+      "join_index": 2,
+      "join_u_m": 15.223,
+      "role": "signature_join_2_adjacent",
+      "trigger_u_m": 15.223
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 12,
+      "intended_join_offset_m": 0.07,
+      "join_index": 2,
+      "join_u_m": 15.223,
+      "role": "signature_join_2_adjacent",
+      "trigger_u_m": 15.293
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 13,
+      "intended_join_offset_m": 0.2,
+      "join_index": 2,
+      "join_u_m": 15.223,
+      "role": "signature_join_2_adjacent",
+      "trigger_u_m": 15.423
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 14,
+      "intended_join_offset_m": -0.2,
+      "join_index": 3,
+      "join_u_m": 20.78,
+      "role": "signature_join_3_adjacent",
+      "trigger_u_m": 20.58
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 15,
+      "intended_join_offset_m": -0.07,
+      "join_index": 3,
+      "join_u_m": 20.78,
+      "role": "signature_join_3_adjacent",
+      "trigger_u_m": 20.71
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 16,
+      "intended_join_offset_m": 0.0,
+      "join_index": 3,
+      "join_u_m": 20.78,
+      "role": "signature_join_3_adjacent",
+      "trigger_u_m": 20.78
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 17,
+      "intended_join_offset_m": 0.07,
+      "join_index": 3,
+      "join_u_m": 20.78,
+      "role": "signature_join_3_adjacent",
+      "trigger_u_m": 20.85
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 18,
+      "intended_join_offset_m": 0.2,
+      "join_index": 3,
+      "join_u_m": 20.78,
+      "role": "signature_join_3_adjacent",
+      "trigger_u_m": 20.98
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 19,
+      "intended_join_offset_m": 0.0,
+      "join_index": 0,
+      "join_u_m": 0.0,
+      "role": "far_mid_near",
+      "trigger_u_m": 21.5
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 20,
+      "intended_join_offset_m": 0.0,
+      "join_index": 0,
+      "join_u_m": 0.0,
+      "role": "far_mid_near",
+      "trigger_u_m": 22.4
+    },
+    {
+      "actual_trigger_tolerance_m": 0.22,
+      "index": 21,
+      "intended_join_offset_m": 0.0,
+      "join_index": 0,
+      "join_u_m": 0.0,
+      "role": "far_mid_near",
+      "trigger_u_m": 23.1
+    }
+  ],
+  "dense_visual_frame_count": 21,
+  "dense_visual_frames": [
+    {
+      "actual_engine_physics_frame": 3305,
+      "actual_join_offset_m": 1.06598353385925,
+      "actual_minus_trigger_u_m": 0.0659835338592529,
+      "actual_player_position_m": [
+        -253.702774047852,
+        3.06931185722351,
+        -42.7602119445801
+      ],
+      "actual_sampler_sequence_index": 19,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 1.06598353385925,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 955948,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/01-far_mid_near-u01.00.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 1,
+      "intended_join_offset_m": 0.0,
+      "join_index": 0,
+      "join_u_m": 0.0,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "far_mid_near",
+      "sha256": "8bc69151cd813466c186a4fd25b3ae884baca8214818c14f68e2b784e5c9e4ea",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 1.0,
+      "trigger_engine_physics_frame": 3305,
+      "trigger_observed_u_m": 1.06598353385925,
+      "trigger_sampler_sequence_index": 19
+    },
+    {
+      "actual_engine_physics_frame": 3350,
+      "actual_join_offset_m": 4.06571245193481,
+      "actual_minus_trigger_u_m": 0.0657124519348145,
+      "actual_player_position_m": [
+        -256.353485107422,
+        3.10470080375671,
+        -41.3558959960938
+      ],
+      "actual_sampler_sequence_index": 64,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 4.06571245193481,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 951455,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/02-far_mid_near-u04.00.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 2,
+      "intended_join_offset_m": 0.0,
+      "join_index": 0,
+      "join_u_m": 0.0,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "far_mid_near",
+      "sha256": "5f042058320a232a5ac678e2bb135673e606478ffbcac466ffbdcc6a810ddf36",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 4.0,
+      "trigger_engine_physics_frame": 3350,
+      "trigger_observed_u_m": 4.06571245193481,
+      "trigger_sampler_sequence_index": 64
+    },
+    {
+      "actual_engine_physics_frame": 3395,
+      "actual_join_offset_m": 7.06615543365479,
+      "actual_minus_trigger_u_m": 0.0661554336547852,
+      "actual_player_position_m": [
+        -259.005310058594,
+        3.10256743431091,
+        -39.9521560668945
+      ],
+      "actual_sampler_sequence_index": 109,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 7.06615543365479,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 947751,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/03-far_mid_near-u07.00.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 3,
+      "intended_join_offset_m": 0.0,
+      "join_index": 0,
+      "join_u_m": 0.0,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "far_mid_near",
+      "sha256": "ecf35196f8c54383c96be9022b3cc39ee293b8c3a3254a3765fde8c79bf0b1e7",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 7.0,
+      "trigger_engine_physics_frame": 3395,
+      "trigger_observed_u_m": 7.06615543365479,
+      "trigger_sampler_sequence_index": 109
+    },
+    {
+      "actual_engine_physics_frame": 3445,
+      "actual_join_offset_m": -0.183022315979004,
+      "actual_minus_trigger_u_m": 0.0169776840209952,
+      "actual_player_position_m": [
+        -261.951782226562,
+        3.10043740272522,
+        -38.3924522399902
+      ],
+      "actual_sampler_sequence_index": 159,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 10.399977684021,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 955378,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/04-signature_join_1_adjacent-u10.38.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 4,
+      "intended_join_offset_m": -0.2,
+      "join_index": 1,
+      "join_u_m": 10.583,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_1_adjacent",
+      "sha256": "f84aa15ca0f8a676bc466d81714e12c0004522507c2e5a8a6b2606eebe5eea20",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 10.383,
+      "trigger_engine_physics_frame": 3445,
+      "trigger_observed_u_m": 10.399977684021,
+      "trigger_sampler_sequence_index": 159
+    },
+    {
+      "actual_engine_physics_frame": 3447,
+      "actual_join_offset_m": -0.0496700363159182,
+      "actual_minus_trigger_u_m": 0.0203299636840821,
+      "actual_player_position_m": [
+        -262.069641113281,
+        3.10043740272522,
+        -38.3300666809082
+      ],
+      "actual_sampler_sequence_index": 161,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 10.5333299636841,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 955193,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/05-signature_join_1_adjacent-u10.51.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 5,
+      "intended_join_offset_m": -0.07,
+      "join_index": 1,
+      "join_u_m": 10.583,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_1_adjacent",
+      "sha256": "6aec9016a56d880ac155fce00e721d3438b7cbe8fc0091b816dfc33883a3e761",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 10.513,
+      "trigger_engine_physics_frame": 3447,
+      "trigger_observed_u_m": 10.5333299636841,
+      "trigger_sampler_sequence_index": 161
+    },
+    {
+      "actual_engine_physics_frame": 3448,
+      "actual_join_offset_m": 0.0170051498413084,
+      "actual_minus_trigger_u_m": 0.0170051498413084,
+      "actual_player_position_m": [
+        -262.128570556641,
+        3.09938025474548,
+        -38.2988739013672
+      ],
+      "actual_sampler_sequence_index": 162,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 10.6000051498413,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 956151,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/06-signature_join_1_adjacent-u10.58.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 6,
+      "intended_join_offset_m": 0.0,
+      "join_index": 1,
+      "join_u_m": 10.583,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_1_adjacent",
+      "sha256": "7955f176f44b426bb4dbe0a0f2e28142dbb085c892e8c17aa4a1a3422a4ffbdc",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 10.583,
+      "trigger_engine_physics_frame": 3448,
+      "trigger_observed_u_m": 10.6000051498413,
+      "trigger_sampler_sequence_index": 162
+    },
+    {
+      "actual_engine_physics_frame": 3449,
+      "actual_join_offset_m": 0.0836831970214842,
+      "actual_minus_trigger_u_m": 0.0136831970214839,
+      "actual_player_position_m": [
+        -262.1875,
+        3.09938025474548,
+        -38.2676773071289
+      ],
+      "actual_sampler_sequence_index": 163,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 10.6666831970215,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 955319,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/07-signature_join_1_adjacent-u10.65.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 7,
+      "intended_join_offset_m": 0.07,
+      "join_index": 1,
+      "join_u_m": 10.583,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_1_adjacent",
+      "sha256": "2d86f1ab907fba5a97acda19719abd8596d03e14cddf733aa2c1cbde8349a826",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 10.653,
+      "trigger_engine_physics_frame": 3449,
+      "trigger_observed_u_m": 10.6666831970215,
+      "trigger_sampler_sequence_index": 163
+    },
+    {
+      "actual_engine_physics_frame": 3451,
+      "actual_join_offset_m": 0.217038337707519,
+      "actual_minus_trigger_u_m": 0.0170383377075201,
+      "actual_player_position_m": [
+        -262.305358886719,
+        3.09938025474548,
+        -38.2052841186523
+      ],
+      "actual_sampler_sequence_index": 165,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 10.8000383377075,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 956572,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/08-signature_join_1_adjacent-u10.78.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 8,
+      "intended_join_offset_m": 0.2,
+      "join_index": 1,
+      "join_u_m": 10.583,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_1_adjacent",
+      "sha256": "fa1826d519e22026951e419c5785df95a2792f83e9bbef15b67bafff241e99d4",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 10.783,
+      "trigger_engine_physics_frame": 3451,
+      "trigger_observed_u_m": 10.8000383377075,
+      "trigger_sampler_sequence_index": 165
+    },
+    {
+      "actual_engine_physics_frame": 3515,
+      "actual_join_offset_m": -0.155672500610352,
+      "actual_minus_trigger_u_m": 0.044327499389647,
+      "actual_player_position_m": [
+        -266.076843261719,
+        3.09604787826538,
+        -36.208869934082
+      ],
+      "actual_sampler_sequence_index": 229,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 15.0673274993896,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 954158,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/09-signature_join_2_adjacent-u15.02.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 9,
+      "intended_join_offset_m": -0.2,
+      "join_index": 2,
+      "join_u_m": 15.223,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_2_adjacent",
+      "sha256": "f88130799d85debba0cfa117c1cd75b0b0ad383ebafcbb6c9f3c360062bc9eec",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 15.023,
+      "trigger_engine_physics_frame": 3515,
+      "trigger_observed_u_m": 15.0673274993896,
+      "trigger_sampler_sequence_index": 229
+    },
+    {
+      "actual_engine_physics_frame": 3517,
+      "actual_join_offset_m": -0.0223173599243172,
+      "actual_minus_trigger_u_m": 0.0476826400756831,
+      "actual_player_position_m": [
+        -266.194702148438,
+        3.09604787826538,
+        -36.1464767456055
+      ],
+      "actual_sampler_sequence_index": 231,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 15.2006826400757,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 953818,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/10-signature_join_2_adjacent-u15.15.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 10,
+      "intended_join_offset_m": -0.07,
+      "join_index": 2,
+      "join_u_m": 15.223,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_2_adjacent",
+      "sha256": "f2f603fe1f8ec58f16fc1f893efade98534ab37db472fcfaef2f0f6700a6aa57",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 15.153,
+      "trigger_engine_physics_frame": 3517,
+      "trigger_observed_u_m": 15.2006826400757,
+      "trigger_sampler_sequence_index": 231
+    },
+    {
+      "actual_engine_physics_frame": 3518,
+      "actual_join_offset_m": 0.0443606872558586,
+      "actual_minus_trigger_u_m": 0.0443606872558586,
+      "actual_player_position_m": [
+        -266.253631591797,
+        3.09604787826538,
+        -36.1152801513672
+      ],
+      "actual_sampler_sequence_index": 232,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 15.2673606872559,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 954092,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/11-signature_join_2_adjacent-u15.22.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 11,
+      "intended_join_offset_m": 0.0,
+      "join_index": 2,
+      "join_u_m": 15.223,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_2_adjacent",
+      "sha256": "e6daa78d9f0ff7cbf658f4c3e595947ad2747ee3e937ac652b9a37dbaabacab0",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 15.223,
+      "trigger_engine_physics_frame": 3518,
+      "trigger_observed_u_m": 15.2673606872559,
+      "trigger_sampler_sequence_index": 232
+    },
+    {
+      "actual_engine_physics_frame": 3519,
+      "actual_join_offset_m": 0.111037780761718,
+      "actual_minus_trigger_u_m": 0.0410377807617177,
+      "actual_player_position_m": [
+        -266.312561035156,
+        3.09604787826538,
+        -36.0840835571289
+      ],
+      "actual_sampler_sequence_index": 233,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 15.3340377807617,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 953342,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/12-signature_join_2_adjacent-u15.29.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 12,
+      "intended_join_offset_m": 0.07,
+      "join_index": 2,
+      "join_u_m": 15.223,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_2_adjacent",
+      "sha256": "aef7a3e70b3628a65cf394aaa3eeebe24f3388544dc49f60e8c03c9e139c8a7d",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 15.293,
+      "trigger_engine_physics_frame": 3519,
+      "trigger_observed_u_m": 15.3340377807617,
+      "trigger_sampler_sequence_index": 233
+    },
+    {
+      "actual_engine_physics_frame": 3521,
+      "actual_join_offset_m": 0.244392921447753,
+      "actual_minus_trigger_u_m": 0.0443929214477539,
+      "actual_player_position_m": [
+        -266.430419921875,
+        3.09604787826538,
+        -36.0216903686523
+      ],
+      "actual_sampler_sequence_index": 235,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 15.4673929214478,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 953840,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/13-signature_join_2_adjacent-u15.42.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 13,
+      "intended_join_offset_m": 0.2,
+      "join_index": 2,
+      "join_u_m": 15.223,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_2_adjacent",
+      "sha256": "f86371d7a0e27f058147c30b587fae5a54a3c72f9ecf45bfeae7d34e7ed1c703",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 15.423,
+      "trigger_engine_physics_frame": 3521,
+      "trigger_observed_u_m": 15.4673929214478,
+      "trigger_sampler_sequence_index": 235
+    },
+    {
+      "actual_engine_physics_frame": 3598,
+      "actual_join_offset_m": -0.178527145385743,
+      "actual_minus_trigger_u_m": 0.021472854614256,
+      "actual_player_position_m": [
+        -270.967987060547,
+        3.09271550178528,
+        -33.6197624206543
+      ],
+      "actual_sampler_sequence_index": 312,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 20.6014728546143,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 954124,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/14-signature_join_3_adjacent-u20.58.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 14,
+      "intended_join_offset_m": -0.2,
+      "join_index": 3,
+      "join_u_m": 20.78,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_3_adjacent",
+      "sha256": "0db7245392c1f8d21590209044b72cd68042acf50f78e903c557ba6f5e451951",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 20.58,
+      "trigger_engine_physics_frame": 3598,
+      "trigger_observed_u_m": 20.6014728546143,
+      "trigger_sampler_sequence_index": 312
+    },
+    {
+      "actual_engine_physics_frame": 3600,
+      "actual_join_offset_m": -0.0451767730712902,
+      "actual_minus_trigger_u_m": 0.0248232269287101,
+      "actual_player_position_m": [
+        -271.085845947266,
+        3.09271550178528,
+        -33.5573768615723
+      ],
+      "actual_sampler_sequence_index": 314,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 20.7348232269287,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 953808,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/15-signature_join_3_adjacent-u20.71.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 15,
+      "intended_join_offset_m": -0.07,
+      "join_index": 3,
+      "join_u_m": 20.78,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_3_adjacent",
+      "sha256": "9cd5e4c91de39265bc8069dfde5b572c65496a7af1d03d17679205e6bae44f91",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 20.71,
+      "trigger_engine_physics_frame": 3600,
+      "trigger_observed_u_m": 20.7348232269287,
+      "trigger_sampler_sequence_index": 314
+    },
+    {
+      "actual_engine_physics_frame": 3601,
+      "actual_join_offset_m": 0.0215003204345692,
+      "actual_minus_trigger_u_m": 0.0215003204345692,
+      "actual_player_position_m": [
+        -271.144775390625,
+        3.09271550178528,
+        -33.5261840820312
+      ],
+      "actual_sampler_sequence_index": 315,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 20.8015003204346,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 954730,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/16-signature_join_3_adjacent-u20.78.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 16,
+      "intended_join_offset_m": 0.0,
+      "join_index": 3,
+      "join_u_m": 20.78,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_3_adjacent",
+      "sha256": "91a9f6ff9819fd0aee3afb574e1c092aca59cad1c4369cef7b66381af9e32f06",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 20.78,
+      "trigger_engine_physics_frame": 3601,
+      "trigger_observed_u_m": 20.8015003204346,
+      "trigger_sampler_sequence_index": 315
+    },
+    {
+      "actual_engine_physics_frame": 3602,
+      "actual_join_offset_m": 0.0881755065917957,
+      "actual_minus_trigger_u_m": 0.0181755065917955,
+      "actual_player_position_m": [
+        -271.203704833984,
+        3.09271550178528,
+        -33.4949913024902
+      ],
+      "actual_sampler_sequence_index": 316,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 20.8681755065918,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 954769,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/17-signature_join_3_adjacent-u20.85.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 17,
+      "intended_join_offset_m": 0.07,
+      "join_index": 3,
+      "join_u_m": 20.78,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_3_adjacent",
+      "sha256": "74a9dc1de66440c76c1e6715b639f42cd4e651cba09e48ab6f060f1ac03f23ba",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 20.85,
+      "trigger_engine_physics_frame": 3602,
+      "trigger_observed_u_m": 20.8681755065918,
+      "trigger_sampler_sequence_index": 316
+    },
+    {
+      "actual_engine_physics_frame": 3604,
+      "actual_join_offset_m": 0.221529693603514,
+      "actual_minus_trigger_u_m": 0.0215296936035152,
+      "actual_player_position_m": [
+        -271.321563720703,
+        3.09160470962524,
+        -33.4326019287109
+      ],
+      "actual_sampler_sequence_index": 318,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 21.0015296936035,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 955167,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/18-signature_join_3_adjacent-u20.98.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 18,
+      "intended_join_offset_m": 0.2,
+      "join_index": 3,
+      "join_u_m": 20.78,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "signature_join_3_adjacent",
+      "sha256": "71d3e8966488f69cbf57e4005f72c9a870015b48c597494e7dd76acacbe9dba0",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 20.98,
+      "trigger_engine_physics_frame": 3604,
+      "trigger_observed_u_m": 21.0015296936035,
+      "trigger_sampler_sequence_index": 318
+    },
+    {
+      "actual_engine_physics_frame": 3612,
+      "actual_join_offset_m": 21.5349464416504,
+      "actual_minus_trigger_u_m": 0.0349464416503906,
+      "actual_player_position_m": [
+        -271.792999267578,
+        3.09160470962524,
+        -33.1830368041992
+      ],
+      "actual_sampler_sequence_index": 326,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 21.5349464416504,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 955996,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/19-far_mid_near-u21.50.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 19,
+      "intended_join_offset_m": 0.0,
+      "join_index": 0,
+      "join_u_m": 0.0,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "far_mid_near",
+      "sha256": "1987a63307faac1432855740d04c454d83eec0dc3ba619dce73bc79bd1132cca",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 21.5,
+      "trigger_engine_physics_frame": 3612,
+      "trigger_observed_u_m": 21.5349464416504,
+      "trigger_sampler_sequence_index": 326
+    },
+    {
+      "actual_engine_physics_frame": 3625,
+      "actual_join_offset_m": 22.4017333984375,
+      "actual_minus_trigger_u_m": 0.00173339843750142,
+      "actual_player_position_m": [
+        -272.55908203125,
+        3.09049391746521,
+        -32.777530670166
+      ],
+      "actual_sampler_sequence_index": 339,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 22.4017333984375,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 957746,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/20-far_mid_near-u22.40.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 20,
+      "intended_join_offset_m": 0.0,
+      "join_index": 0,
+      "join_u_m": 0.0,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "far_mid_near",
+      "sha256": "4f4d818f8e30453630920d10ab9f6454f577d6a7d0b37fb1f94f6aa81ec558d3",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 22.4,
+      "trigger_engine_physics_frame": 3625,
+      "trigger_observed_u_m": 22.4017333984375,
+      "trigger_sampler_sequence_index": 339
+    },
+    {
+      "actual_engine_physics_frame": 3636,
+      "actual_join_offset_m": 23.1351795196533,
+      "actual_minus_trigger_u_m": 0.0351795196533189,
+      "actual_player_position_m": [
+        -273.207305908203,
+        3.09049391746521,
+        -32.434383392334
+      ],
+      "actual_sampler_sequence_index": 350,
+      "actual_state_matches_latest_post_player_sampler": true,
+      "actual_u_m": 23.1351795196533,
+      "actual_within_declared_trigger_tolerance": true,
+      "bytes": 957486,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "visual-motion-frames/21-far_mid_near-u23.10.png",
+      "image_copied_in_memory_before_next_physics_await": true,
+      "index": 21,
+      "intended_join_offset_m": 0.0,
+      "join_index": 0,
+      "join_u_m": 0.0,
+      "png_encoded_after_input_release_and_braking": true,
+      "role": "far_mid_near",
+      "sha256": "9dee9c35cfc92aefb2c70b9ad853146cac355c42e5f8dc6a7094d31ba51fcc7c",
+      "state_queried_after_frame_post_draw": true,
+      "threshold_trigger_u_m": 23.1,
+      "trigger_engine_physics_frame": 3636,
+      "trigger_observed_u_m": 23.1351795196533,
+      "trigger_sampler_sequence_index": 350
+    }
+  ],
+  "far_mid_near_frames_present": true,
+  "fixed_fps_receipt_argument": "60",
+  "fixed_fps_receipt_is_operator_invocation_disclosure_not_engine_observation": true,
+  "generator": "game/tests/d2_1441_production_attachment_capture.gd",
+  "generator_sha256": "921acef14ef5503569f8d07bcafdb03f6bccf78570742a8a835962e845a858cf",
+  "input_action": "move_right",
+  "input_baseline_engine_physics_frame": 3287,
+  "input_baseline_sampler_sequence_index": 1,
+  "input_duration_seconds": 6.0,
+  "input_elapsed_physics_ticks": 360,
+  "input_end_chain_u_m": 23.8686180114746,
+  "input_end_position_m": [
+    -273.855529785156,
+    3.08945512771606,
+    -32.091251373291
+  ],
+  "input_horizontal_displacement_m": 23.8238639831543,
+  "input_release_sampler_sequence_index": 361,
+  "last_observed_engine_physics_frame": 3659,
+  "motion_pose": {
+    "actual_spring_length_m": 5.49998474121094,
+    "aim_target_m": [
+      -242.550765991211,
+      6.3600001335144,
+      -23.9734268188477
+    ],
+    "camera_forward": [
+      0.46886271238327,
+      0.059513870626688,
+      0.881263852119446
+    ],
+    "camera_fov_degrees": 70.0,
+    "camera_pitch_degrees": 3.41190936897562,
+    "camera_planar_right_dot_public_tangent": 0.99999988079071,
+    "camera_position_m": [
+      -255.400329589844,
+      4.72896909713745,
+      -48.1252746582031
+    ],
+    "camera_transform_writes": 0,
+    "camera_yaw_degrees": -145.167351638212,
+    "configured_spring_length_m": 5.5,
+    "descent_physics_ticks": 632,
+    "first_los_hit_distance_m": 21.6957054138184,
+    "first_los_hit_normal": [
+      -0.468548119068146,
+      0.0,
+      -0.883437991142273
+    ],
+    "first_los_hit_position_m": [
+      -245.243804931641,
+      5.05629444122314,
+      -28.9647731781006
+    ],
+    "first_los_hit_receiver": "building:w95934105:wall",
+    "first_los_hit_source_keys": [
+      "w95934105"
+    ],
+    "horizontal_error_m": 0.140278726816177,
+    "in_boundary_entire_route": true,
+    "input_actions": [
+      "move_forward",
+      "run",
+      "jetpack"
+    ],
+    "input_aim_route": "Input.parse_input_event_to_PlayerCamera_unhandled_input",
+    "input_only_route": true,
+    "jetpack_pressed_ticks": 725,
+    "motion_chain_start_m": [
+      -252.844299316406,
+      6.3600001335144,
+      -43.4167594909668
+    ],
+    "motion_tangent_aim_target_m": [
+      -234.106094360352,
+      3.05629444122314,
+      -7.92681121826172
+    ],
+    "motion_tangent_input_aim": {
+      "input_route": "Input.parse_input_event_to_PlayerCamera_unhandled_input",
+      "ok": true,
+      "pitch_degrees": 0.0000000563490603472719,
+      "pitch_error_degrees": 0.0000000563490603472719,
+      "yaw_degrees": -145.284516703234,
+      "yaw_error_degrees": 0.00000584167694790163
+    },
+    "motion_wall_start_m": [
+      -242.550765991211,
+      6.3600001335144,
+      -23.9734268188477
+    ],
+    "physics_grounded": true,
+    "player_position_m": [
+      -252.82160949707,
+      3.05629444122314,
+      -43.2783279418945
+    ],
+    "player_transform_writes": 0,
+    "pose_id": "d2-1441-signature-motion-start",
+    "reached_safe_transit_altitude": true,
+    "receiver_first_los": true,
+    "recovery_delta": 0,
+    "requested_xz": [
+      -252.844299316406,
+      -43.4167594909668
+    ],
+    "start_player_position_m": [
+      -104.363998413086,
+      3.45700001716614,
+      786.023986816406
+    ],
+    "support": {
+      "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-1__land_w26767313_x_-1__z_-1/land_w26767313_x_-1__z_-1/Collision",
+      "feature_kind": "land_ground",
+      "hit_normal": [
+        0.02567458152771,
+        0.999497056007385,
+        0.0186156313866377
+      ],
+      "hit_position_m": [
+        -252.82160949707,
+        3.05541396141052,
+        -43.2783279418945
+      ],
+      "object_key": "land:w26767313:x_-1__z_-1",
+      "ok": true,
+      "source_keys": [
+        "w26767313",
+        "w29399800"
+      ]
+    },
+    "transit_physics_ticks": 3244
+  },
+  "package_verification_receipt_sha256": "cbcda89ec1e013c3406cf919d7c7e3bcefe0df7f005be1ea0e250bfbdada1061",
+  "pending_independent_contract_audit": true,
+  "pending_independent_visual_review": true,
+  "player_transform_writes": 0,
+  "png_encoding_deferred_until_after_input_release_and_braking": true,
+  "png_encoding_or_file_write_during_live_input_loop": false,
+  "postcapture_catalog_or_registry_mutation": false,
+  "production_path_observation": {
+    "attachment_present_at_world_ready": true,
+    "capture_harness_adapter_or_factory_activation_count": 0,
+    "capture_harness_standalone_scene_activation_count": 0,
+    "ordinary_main_already_integrated": true,
+    "world_ready_activation_count": 0,
+    "world_ready_runtime_topology": {
+      "bodies": 466,
+      "meshes": 959,
+      "rows": 735,
+      "shapes": 466,
+      "surfaces": 974,
+      "triangles": 69252
+    }
+  },
+  "production_stage": "d2_1441_prepromotion_production_v8_uncommitted_candidate",
+  "promotion": false,
+  "proof_role": "post_draw_real_controller_far_mid_near_and_three_signature_join_visual_evidence",
+  "recognition_credit": false,
+  "recognition_status": "uncredited_prepromotion_candidate_authority_remains_v8_8_of_213",
+  "recovery_delta": 0,
+  "review_status": "pending_independent_production_contract_and_visual_audits_not_self_accepted",
+  "runtime_topology": {
+    "bodies": 466,
+    "meshes": 959,
+    "rows": 735,
+    "shapes": 466,
+    "surfaces": 974,
+    "triangles": 69252
+  },
+  "sampler_phase": "dedicated_node_physics_callback_strictly_after_PlayerController",
+  "sampler_priority_strictly_after_player": true,
+  "schema_version": "ti.d2-1441-production-v8-visual-motion/1",
+  "source_dependency_hashes": {
+    "res://discovery/facades/facade-recognition-catalog.json": "d95be7bec8f0eabe97a9b5f7fefe1ce54ec7cbf940d85d28518ff6979eeb16ea",
+    "res://discovery/facades/facade-recognition-catalog.schema.json": "44584e92e1652fc930f47882b4a83304f5216c14173eb805bc9ce68ea9927cac",
+    "res://evidence/first-playable/d2-1441-chinook-standalone-hero-2026-09-04/INDEPENDENT_BAR_RAISER_REVIEW.md": "8b259934a3771642efb5902c1fcbba590613e8f1f80e4b7d00a1b4a391862c55",
+    "res://export_presets.cfg": "e54969d6127ee55691113217e5129a7c5e9b3e841168a6b91f3fc74ba278456f",
+    "res://game/resources/facades/d2_1441_chinook_live_replacement.json": "aef5717332cda1cf2ba1457ce9e9e92aaaceae46345595a979813b9369ad8111",
+    "res://game/resources/facades/d2_1441_chinook_standalone_hero_prototype.json": "ebb6be74a630ad405030938dc7d27bc6fed46b2d6892a847ee653d374df57f75",
+    "res://game/resources/facades/facade-runtime-adapter-contracts.json": "dd2d13e3b0f6eee1f8c5f2957927c4f3caba43b31883beea925f9a91b826d65c",
+    "res://game/resources/facades/facade-runtime-registry.json": "109f83f40450e9c71ef6d39f1659e76eac5f1457fcfab772538b471cc74c0051",
+    "res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres": "75c13aa30a4e3c9f49980d78abe41f40c6c7ab270be6152c201eb8a72ebe8720",
+    "res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres": "389c01066767b085ef8ed8ae4c5e1b06062d9ffb135e3e6a7bfa968b963717d7",
+    "res://game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres": "eddc4900c351dc3a75d163bd380a8b3a39bf6a1c1c3647299e3af19634a60ead",
+    "res://game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres": "d97d7b4a442ffe8ad9a0b003e5c1d6466f9ef9effc7cdb2be8ef966195e66782",
+    "res://game/resources/materials/world/site_12_housing/site_12_void_shadow.tres": "4159f82cc5c4c17c0d8173eddbc171120326fbd99578aa68012275b1274ce02d",
+    "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres": "81fd15832670516b2cc752e89310acda201f30705b01297639703f76f2111a64",
+    "res://game/resources/textures/tag/predefined_tag.svg": "9eb345572cd3298ea14bad008fc6405e46123c0243444e4582393d0aa84af885",
+    "res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+    "res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+    "res://game/scenes/main.tscn": "959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66",
+    "res://game/scenes/world/world_root.tscn": "ed6dfaa1933cedf2a70ca6afd677a645d588dbf6c823fb04402aaaea4b709ab8",
+    "res://game/scripts/interaction/spray_controller.gd": "9897042fbffc6740ebe3eb4c19da544a0d437391ded9987318edc7238c403da4",
+    "res://game/scripts/interaction/tag_instance_pool.gd": "2460b12b9f70945dc88d2e321b72c1779dab4d867fd80f5920f4734213ce0950",
+    "res://game/scripts/main.gd": "1c284eb4d8ee5954500fe36c3ab6845bc7233728da26f5f6848dd8de9a627232",
+    "res://game/scripts/player/player_camera.gd": "90ea739b25eb6cbcf8bacff072599b117fe894fcef08683483e41527d8019636",
+    "res://game/scripts/player/player_controller.gd": "8b114132d66c78dd0bfd09783c7b9a3a3a441a8b1ae14f33f7308bd9b04ed0ea",
+    "res://game/scripts/world/facades/d2_1441_chinook_live_replacement.gd": "bf51562a211126c0ea7b631321dfb021171ad68bffd6dd07667ad504d770b9a1",
+    "res://game/scripts/world/facades/d2_1441_chinook_standalone_hero_prototype.gd": "6c0bf201bbb38a424453f753471cb7cb8060d0323e2386a9fda3bad84acd5933",
+    "res://game/scripts/world/facades/facade_runtime_registry_loader.gd": "12e6c64b23b0783ed240b3d6c02499c3940c2b6a14344caa29778b850db06c04",
+    "res://game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+    "res://game/scripts/world/world_chunk_builder.gd": "7107dc0789e8ca8ee13d53510293a39b3f64e9a92e0ee81bef7317d90a08a87a",
+    "res://game/tests/headless_d2_1441_chinook_live_replacement_contract.gd": "5a7e5f7e47e1168490b3a7ef37f9488499cd99540156b2009d9006f9fd559149",
+    "res://game/tests/headless_d2_1441_chinook_live_replacement_package_contract.gd": "73a7c945e1a6d2b425a2c829a60803010c6bd8dc374c7e45df592cbde5f5eefe",
+    "res://game/tests/headless_d2_1441_production_attachment_contract.gd": "6014498a52676ec93c955ccc672db3d6845c90a0b5e7dbfd1f05df3cf1792986",
+    "res://game/tests/headless_d2_1441_production_attachment_package_contract.gd": "cc2942797cda2c1cb2bef97bd2ef757fc993a6dfce223bbbd96d91e89230e580",
+    "res://game/tests/isle_house_low_live_evidence_capture.gd": "47768e4b2d6288b9c3dbb4b0ad19cd870b61a8804d72673c53bf3326f8f5636a",
+    "res://generated/world/chunks/x_-1__z_-1.json": "5e3b7efb7a2c61e1092c6a42ca9c04212c7d2603890b7a3f4c5e46777005f17b",
+    "res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "res://project.godot": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af",
+    "res://tools/build_facade_recognition_registry.mjs": "eee17772b1beb71b3d6bd87800035a0c1c47a7c80473014c578bb055a5ddf0c9"
+  },
+  "start_chain_u_m": 0.0447796806693077,
+  "start_position_m": [
+    -252.82160949707,
+    3.05629444122314,
+    -43.2783279418945
+  ],
+  "thresholds_are_triggers_not_claimed_positions": true,
+  "uncommitted_candidate": true,
+  "visual_fixed_fps_operator_request": 60,
+  "visual_verdict": "pending_independent_production_visual_review"
+}
