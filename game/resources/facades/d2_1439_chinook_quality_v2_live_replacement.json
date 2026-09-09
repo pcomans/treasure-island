@@ -1,0 +1,148 @@
+{
+  "schema_version": "ti.d2-1439-chinook-live-replacement/1",
+  "model_id": "d2-1439-chinook-quality-v2-live-replacement",
+  "adapter_id": "active-adapter:d2-1439-live:building:w95934144:wall",
+  "target": {
+    "canonical_name": "1439 Chinook Court",
+    "source_key": "w95934144",
+    "wall_object_key": "building:w95934144:wall",
+    "roof_object_key": "building:w95934144:roof",
+    "chunk_id": "x_-2__z_0",
+    "chunk_sha256": "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b",
+    "source_geometry_sha256": "a59bd2abf2020c25071a55ecb96f32b7871a810e8d1bdd95c213b512273f87f2",
+    "canonical_wall_record_sha256": "0a0b5d7c002a3364714343704404e3e37fa1e55461c3bfae6ae0766d59bb8b11",
+    "canonical_roof_record_sha256": "ab98ae1442174841c0d9ae3aeb344991e73c2b85bf07252d2dc12d834ac0f8c0",
+    "prototype_wall_projection_sha256": "a801ff083961a7fafab455d18a80f2ea3ea87791ad5e967f91937ad3fc2b82a0",
+    "prototype_roof_projection_sha256": "83ea383a9a490871fbd7891ebb5a179adfe0af5e27607e727550563a27c20e58"
+  },
+  "reviewed_art": {
+    "factory_geometry_signature": "81a05d20b03e16253675a36692c9856cf4d53509e008aacbb69bbe4eea7683e5",
+    "standalone_bar_raiser_receipt_id": "d2-1439-quality-v2-isolated-art-pass-2026-09-09",
+    "standalone_bar_raiser_receipt_sha256": "c12dc4f71468634f2994feff55e19aeed62edb578a5931ae313b86bc7b5582ee",
+    "site_12_package_audit_id": "site-12-stucco-independent-package-audit-2026-09-04",
+    "site_12_package_audit_sha256": "285ad681634bfa4ec800be0a935bb17b3e850e384581300357ce1e56b1ff09b1",
+    "site_12_promotion_receipt_id": "site-12-stucco-package-promotion-2026-09-04",
+    "site_12_promotion_receipt_sha256": "74052c247c5d2dbd6828301aca29eed2e842cb90d5a1c3aa9db5c1b743aeadfb",
+    "mapped_public_sse_runs": [
+      11,
+      12,
+      16,
+      17,
+      18,
+      19,
+      22,
+      23
+    ],
+    "motif_host_runs": [
+      11,
+      19,
+      23
+    ],
+    "mapped_motif_free_runs": [
+      12,
+      16,
+      17,
+      18,
+      22
+    ],
+    "tiny_fragment_runs": [
+      17,
+      18
+    ],
+    "protected_runs": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      13,
+      14,
+      15,
+      20,
+      21
+    ],
+    "receipt_scope": "isolated_facade_art_only; historical site-12 receipts apply only to the unchanged shared stucco texture",
+    "required_camera_sha256": "1d53f11cc3d9de00d4bb580aa6322c6f53b0080e5b9e1e3b18baeefd52125cc3"
+  },
+  "live_pair_contract": {
+    "pair_members": 2,
+    "factory_calls": 1,
+    "fallback_allowed": false,
+    "partial_pair_allowed": false,
+    "stack_allowed": false,
+    "wall": {
+      "mesh_instances": 10,
+      "surfaces": 10,
+      "visual_triangles": 512,
+      "static_bodies": 1,
+      "shapes": 2,
+      "collision_triangles": 92,
+      "receiver_kind": "building_wall",
+      "spray_receiver_wall_owners": 1,
+      "eligible_exterior_triangles": 62,
+      "noneligible_closed_recess_triangles": 30,
+      "shape_order": [
+        "eligible_exterior",
+        "noneligible_closed_recess"
+      ]
+    },
+    "roof": {
+      "mesh_instances": 1,
+      "surfaces": 1,
+      "visual_triangles": 10,
+      "static_bodies": 1,
+      "shapes": 1,
+      "collision_triangles": 10,
+      "receiver_kind": "none",
+      "spray_receiver_wall_owners": 0,
+      "spray_ray_blocking": true,
+      "truthful_world_solid_landing": true,
+      "live_winding_normalized_from_pinned_factory": true
+    },
+    "decorative_relief": {
+      "visual_triangles": 420,
+      "collision_triangles": 0,
+      "navigation_nodes": 0
+    },
+    "combined": {
+      "mesh_instances": 11,
+      "surfaces": 11,
+      "visual_triangles": 522,
+      "static_bodies": 2,
+      "shapes": 3,
+      "collision_triangles": 102
+    }
+  },
+  "truth_boundary": {
+    "runtime_attachment": true,
+    "candidate_is_uncredited": true,
+    "accepted_authority_schema": "ti.facade-runtime-registry/9",
+    "accepted_recognition_metric": "9/213",
+    "catalog_or_registry_promoted": false,
+    "live_technical_evidence_status": "pending",
+    "independent_live_review_status": "pending",
+    "recognition_accepted": false,
+    "believability_accepted": false,
+    "as_built_fidelity_claimed": false,
+    "interior_modeled": false,
+    "horizontal_source_footprint_changed": false,
+    "source_wall_height_changed": false,
+    "source_photography_shipped": false,
+    "unsurveyed_opening_roof_void_rail_dimensions_and_counts": "reversible_production_inference",
+    "run_17_18_policy": "tiny_clipping_fragments_no_addressable_motifs"
+  },
+  "package_boundary": {
+    "standalone_scene_instantiated": false,
+    "generic_registry_loader_used": false,
+    "flag_or_environment_toggle": false,
+    "missing_pair_member_loaded_from_disk": false,
+    "source_or_evidence_paths_shipped": false,
+    "reference_pixels_shipped": false
+  }
+}

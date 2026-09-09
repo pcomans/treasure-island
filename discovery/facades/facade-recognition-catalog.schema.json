@@ -1,251 +1,65 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://treasure-island.local/schemas/facade-recognition-catalog.schema.json",
-  "title": "Treasure Island physical-building facade recognition catalog",
-  "type": "object",
-  "additionalProperties": false,
-  "required": [
-    "$schema",
-    "active_runtime_adapters",
-    "catalog_id",
-    "capture_contracts",
-    "checked_date",
-    "claim_vocabulary",
-    "compiler_contract",
-    "expected_counts",
-    "identity_evidence_records",
-    "legacy_adapters",
-    "schema_version",
-    "source_contract",
-    "unit_seed",
-    "units"
-  ],
-  "properties": {
-    "$schema": {
-      "const": "./facade-recognition-catalog.schema.json"
-    },
-    "active_runtime_adapters": {
-      "type": "array",
-      "minItems": 8,
-      "maxItems": 8,
-      "items": {
-        "$ref": "#/$defs/active_runtime_adapter"
-      }
-    },
-    "catalog_id": {
-      "const": "treasure-island-physical-building-recognition"
-    },
-    "capture_contracts": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/capture_contract"
-      }
-    },
-    "checked_date": {
-      "type": "string",
-      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
-    },
-    "claim_vocabulary": {
-      "$ref": "#/$defs/claim_vocabulary"
-    },
-    "compiler_contract": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "emitted_runtime_schema_version",
-        "required_compiler_version",
-        "unknown_version_policy"
-      ],
-      "properties": {
-        "emitted_runtime_schema_version": {
-          "const": "ti.facade-runtime-registry/9"
-        },
-        "required_compiler_version": {
-          "const": "1.8.1"
-        },
-        "unknown_version_policy": {
-          "const": "reject"
-        }
-      }
-    },
-    "expected_counts": {
-      "$ref": "#/$defs/expected_counts"
-    },
-    "identity_evidence_records": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/identity_evidence_record"
-      }
-    },
-    "legacy_adapters": {
-      "type": "array",
-      "minItems": 9,
-      "maxItems": 9,
-      "items": {
-        "$ref": "#/$defs/legacy_adapter"
-      }
-    },
-    "schema_version": {
-      "const": "ti.facade-recognition-catalog/9"
-    },
-    "source_contract": {
-      "$ref": "#/$defs/source_contract"
-    },
-    "unit_seed": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "immutable_input",
-        "strategy"
-      ],
-      "properties": {
-        "immutable_input": {
-          "const": true
-        },
-        "strategy": {
-          "const": "immutable_receiver_inventory_physical_units_v1"
-        }
-      }
-    },
-    "units": {
-      "type": "array",
-      "minItems": 213,
-      "maxItems": 213,
-      "items": {
-        "$ref": "#/$defs/unit"
-      }
-    }
-  },
   "$defs": {
-    "sha256": {
-      "type": "string",
-      "pattern": "^[0-9a-f]{64}$"
-    },
-    "source_key": {
-      "type": "string",
-      "pattern": "^[nwr][0-9]+$"
-    },
-    "receiver_key": {
-      "type": "string",
-      "pattern": "^building(?:-composite)?:.+:wall$"
-    },
-    "expected_counts": {
-      "type": "object",
+    "acceptance_record": {
       "additionalProperties": false,
-      "required": [
-        "active_runtime_adapter_receivers",
-        "building_footprints",
-        "building_parts",
-        "composite_units",
-        "direct_wall_receivers",
-        "legacy_adapter_receivers",
-        "recognition_units",
-        "runtime_adapter_receivers",
-        "source_records",
-        "standalone_units",
-        "visible_wall_runs"
-      ],
       "properties": {
-        "active_runtime_adapter_receivers": {
-          "const": 8
+        "capture_time_recognition_metric": {
+          "pattern": "^[0-9]+/213$",
+          "type": "string"
         },
-        "building_footprints": {
-          "const": 213
-        },
-        "building_parts": {
-          "const": 2
-        },
-        "composite_units": {
-          "const": 1
-        },
-        "direct_wall_receivers": {
-          "const": 214
-        },
-        "legacy_adapter_receivers": {
-          "const": 9
-        },
-        "recognition_units": {
-          "const": 213
-        },
-        "runtime_adapter_receivers": {
-          "const": 17
-        },
-        "source_records": {
-          "const": 215
-        },
-        "standalone_units": {
-          "const": 212
-        },
-        "visible_wall_runs": {
-          "const": 4971
-        }
-      }
-    },
-    "claim_vocabulary": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "as_built_fidelity",
-        "game_distinctive",
-        "real_world_recognition_exclusions",
-        "receiver_complete",
-        "reference_recognizable"
-      ],
-      "properties": {
-        "as_built_fidelity": {
-          "type": "string",
-          "minLength": 1
-        },
-        "game_distinctive": {
-          "type": "string",
-          "minLength": 1
-        },
-        "real_world_recognition_exclusions": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "minLength": 1
-          }
-        },
-        "receiver_complete": {
-          "type": "string",
-          "minLength": 1
-        },
-        "reference_recognizable": {
-          "type": "string",
-          "minLength": 1
-        }
-      }
-    },
-    "source_contract": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "generated_content_sha256",
-        "generated_manifest_schema_version",
-        "generated_manifest_sha256",
-        "inventory_schema_version",
-        "inventory_sha256"
-      ],
-      "properties": {
-        "generated_content_sha256": {
+        "evidence_manifest_sha256": {
           "$ref": "#/$defs/sha256"
         },
-        "generated_manifest_schema_version": {
-          "const": "ti.godot-world/2"
-        },
-        "generated_manifest_sha256": {
+        "evidence_tree_sha256": {
           "$ref": "#/$defs/sha256"
         },
-        "inventory_schema_version": {
-          "const": "ti.facade-receiver-inventory/1"
+        "mechanical_review_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
         },
-        "inventory_sha256": {
+        "motion_telemetry_manifest_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "numerator_effect": {
+          "maximum": 1,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "package_verification_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "review_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "review_kind": {
+          "enum": [
+            "as_built_fidelity",
+            "independent_game_art",
+            "independent_reference_recognition",
+            "mechanical_receiver"
+          ]
+        },
+        "review_receipt_sha256": {
+          "$ref": "#/$defs/sha256"
+        },
+        "status": {
+          "enum": [
+            "accept",
+            "reject"
+          ]
+        },
+        "visual_motion_manifest_sha256": {
           "$ref": "#/$defs/sha256"
         }
-      }
+      },
+      "required": [
+        "evidence_manifest_sha256",
+        "review_id",
+        "review_kind",
+        "review_receipt_sha256",
+        "status"
+      ],
+      "type": "object"
     },
     "active_runtime_adapter": {
       "anyOf": [
@@ -269,414 +83,167 @@
         },
         {
           "$ref": "#/$defs/d2_1441_active_runtime_adapter"
+        },
+        {
+          "$ref": "#/$defs/d2_1439_active_runtime_adapter"
         }
       ]
     },
     "building_1_active_runtime_adapter": {
-      "type": "object",
       "additionalProperties": false,
-      "required": ["adapter_id", "content_classification", "receiver_key", "recognition_acceptance_authority", "recognition_acceptance_status", "review_status", "review_status_scope", "runtime_adapter_path", "runtime_asset_paths", "runtime_config_path", "runtime_dispatch_path", "source_key", "whole_building_recognizability_imported"],
-      "properties": {
-        "adapter_id": {"type": "string", "pattern": "^active-adapter:building-1-hero:"},
-        "content_classification": {"const": "active_target_specific_hero_replacement"},
-        "receiver_key": {"enum": ["building:r16681702:wall", "building:w1222720021:wall"]},
-        "recognition_acceptance_authority": {"const": "physical_unit_claim_and_independent_acceptance_record"},
-        "recognition_acceptance_status": {"const": "accepted"},
-        "review_status": {"const": "pending_independent_original_detail_review"},
-        "review_status_scope": {"const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"},
-        "runtime_adapter_path": {"const": "game/scripts/world/facades/building_1_hero_model.gd"},
-        "runtime_asset_paths": {
-          "type": "array",
-          "minItems": 9,
-          "maxItems": 9,
-          "uniqueItems": true,
-          "contains": {"const": "game/resources/facades/building_1_public_front_believability.json"},
-          "minContains": 1,
-          "maxContains": 1,
-          "items": {
-            "anyOf": [
-              {"const": "game/resources/facades/building_1_public_front_believability.json"},
-              {"type": "string", "pattern": "^game/resources/materials/world/building_1/"}
-            ]
-          }
-        },
-        "runtime_config_path": {"const": "game/resources/facades/building_1_hero_model.json"},
-        "runtime_dispatch_path": {"const": "game/scripts/world/world_chunk_builder.gd"},
-        "source_key": {"enum": ["r16681702", "w1222720021"]},
-        "whole_building_recognizability_imported": {"const": false}
-      }
-    },
-    "building_3_active_runtime_adapter": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["adapter_id", "content_classification", "receiver_key", "recognition_acceptance_authority", "recognition_acceptance_status", "review_status", "review_status_scope", "runtime_adapter_path", "runtime_asset_paths", "runtime_config_path", "runtime_dispatch_path", "source_key", "whole_building_recognizability_imported"],
-      "properties": {
-        "adapter_id": {"const": "active-adapter:building-3-hero:building:w34313540:wall"},
-        "content_classification": {"const": "active_target_specific_hero_replacement"},
-        "receiver_key": {"const": "building:w34313540:wall"},
-        "recognition_acceptance_authority": {"const": "physical_unit_claim_and_independent_acceptance_record"},
-        "recognition_acceptance_status": {"const": "accepted"},
-        "review_status": {"const": "pending_independent_original_detail_review"},
-        "review_status_scope": {"const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"},
-        "runtime_adapter_path": {"const": "game/scripts/world/massing/building_3_600_california_massing.gd"},
-        "runtime_asset_paths": {
-          "type": "array",
-          "minItems": 7,
-          "maxItems": 7,
-          "uniqueItems": true,
-          "items": {"type": "string", "pattern": "^game/(?:resources/facades|resources/materials/world/building_3|scenes/world/facades/building_3|scripts/world/facades)/"}
-        },
-        "runtime_config_path": {"const": "game/resources/facades/building_3_hero_massing.json"},
-        "runtime_dispatch_path": {"const": "game/scripts/world/world_chunk_builder.gd"},
-        "source_key": {"const": "w34313540"},
-        "whole_building_recognizability_imported": {"const": false}
-      }
-    },
-    "isle_house_active_runtime_adapter": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["adapter_id", "content_classification", "receiver_key", "recognition_acceptance_authority", "recognition_acceptance_status", "review_status", "review_status_scope", "runtime_adapter_path", "runtime_asset_paths", "runtime_config_path", "runtime_dispatch_path", "source_key", "whole_building_recognizability_imported"],
-      "properties": {
-        "adapter_id": {"const": "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall"},
-        "content_classification": {"const": "active_target_specific_composite_part_replacement"},
-        "receiver_key": {"const": "building-composite:w1249412094:w1282547787:wall"},
-        "recognition_acceptance_authority": {"const": "physical_unit_claim_and_independent_acceptance_record"},
-        "recognition_acceptance_status": {"const": "accepted"},
-        "review_status": {"const": "independent_exact_current_live_pass"},
-        "review_status_scope": {"const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"},
-        "runtime_adapter_path": {"const": "game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd"},
-        "runtime_asset_paths": {
-          "type": "array",
-          "minItems": 2,
-          "maxItems": 2,
-          "uniqueItems": true,
-          "items": {"type": "string", "pattern": "^game/scripts/world/facades/isle_house_composite_repair_variant_c_(?:repair_only_factory|standalone_v1)\\.gd$"}
-        },
-        "runtime_config_path": {"const": "game/resources/facades/isle_house_composite_repair_variant_c_standalone_v1.json"},
-        "runtime_dispatch_path": {"const": "game/scripts/world/world_chunk_builder.gd"},
-        "source_key": {"const": "w1282547787"},
-        "whole_building_recognizability_imported": {"const": false}
-      }
-    },
-    "navy_chapel_active_runtime_adapter": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["adapter_id", "content_classification", "receiver_key", "recognition_acceptance_authority", "recognition_acceptance_status", "review_status", "review_status_scope", "runtime_adapter_path", "runtime_asset_paths", "runtime_config_path", "runtime_dispatch_path", "source_key", "whole_building_recognizability_imported"],
-      "properties": {
-        "adapter_id": {"const": "active-adapter:navy-chapel-187:building:w291189336:wall"},
-        "content_classification": {"const": "active_target_specific_paired_wall_roof_replacement"},
-        "receiver_key": {"const": "building:w291189336:wall"},
-        "recognition_acceptance_authority": {"const": "physical_unit_claim_and_independent_acceptance_record"},
-        "recognition_acceptance_status": {"const": "accepted"},
-        "review_status": {"const": "independent_exact_current_live_pass"},
-        "review_status_scope": {"const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"},
-        "runtime_adapter_path": {"const": "game/scripts/world/facades/navy_chapel_187_live_replacement.gd"},
-        "runtime_asset_paths": {
-          "type": "array",
-          "minItems": 7,
-          "maxItems": 7,
-          "uniqueItems": true,
-          "items": {"type": "string", "pattern": "^game/(?:resources/materials/world/navy_chapel_187|scripts/world/facades/navy_chapel_187_standalone_hero_prototype\\.gd)"}
-        },
-        "runtime_config_path": {"const": "game/resources/facades/navy_chapel_187_standalone_hero_prototype.json"},
-        "runtime_dispatch_path": {"const": "game/scripts/world/world_chunk_builder.gd"},
-        "source_key": {"const": "w291189336"},
-        "whole_building_recognizability_imported": {"const": false}
-      }
-    },
-    "d1_b201_active_runtime_adapter": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["adapter_id", "content_classification", "receiver_key", "recognition_acceptance_authority", "recognition_acceptance_status", "review_status", "review_status_scope", "runtime_adapter_path", "runtime_asset_paths", "runtime_config_path", "runtime_dispatch_path", "source_key", "whole_building_recognizability_imported"],
-      "properties": {
-        "adapter_id": {"const": "active-adapter:d1-b201-live:building:w34313545:wall"},
-        "content_classification": {"const": "active_target_specific_receiver_host_partition_plus_render_only_attachment"},
-        "receiver_key": {"const": "building:w34313545:wall"},
-        "recognition_acceptance_authority": {"const": "physical_unit_claim_and_independent_acceptance_record"},
-        "recognition_acceptance_status": {"const": "accepted"},
-        "review_status": {"const": "independent_exact_current_live_pass"},
-        "review_status_scope": {"const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"},
-        "runtime_adapter_path": {"const": "game/scripts/world/facades/d1_b201_live_attachment.gd"},
-        "runtime_asset_paths": {
-          "type": "array",
-          "minItems": 6,
-          "maxItems": 6,
-          "uniqueItems": true,
-          "items": {"type": "string", "pattern": "^game/resources/materials/world/d1_current/(?:b201_(?:green_hierarchy|muted_rust_post|service_leaf|warm_wall)|shared_(?:dark_glass|pale_frame))\\.tres$"}
-        },
-        "runtime_config_path": {"const": "game/resources/facades/d1_current/d1_b201_live_attachment.json"},
-        "runtime_dispatch_path": {"const": "game/scripts/world/world_chunk_builder.gd"},
-        "source_key": {"const": "w34313545"},
-        "whole_building_recognizability_imported": {"const": false}
-      }
-    },
-    "d1_b225_active_runtime_adapter": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["adapter_id", "content_classification", "receiver_key", "recognition_acceptance_authority", "recognition_acceptance_status", "review_status", "review_status_scope", "runtime_adapter_path", "runtime_asset_paths", "runtime_config_path", "runtime_dispatch_path", "source_key", "whole_building_recognizability_imported"],
-      "properties": {
-        "adapter_id": {"const": "active-adapter:d1-b225-live:building:w95934119:wall"},
-        "content_classification": {"const": "active_target_specific_receiver_host_partition_plus_render_only_attachment"},
-        "receiver_key": {"const": "building:w95934119:wall"},
-        "recognition_acceptance_authority": {"const": "physical_unit_claim_and_independent_acceptance_record"},
-        "recognition_acceptance_status": {"const": "accepted"},
-        "review_status": {"const": "independent_exact_current_live_pass"},
-        "review_status_scope": {"const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"},
-        "runtime_adapter_path": {"const": "game/scripts/world/facades/d1_b225_live_attachment.gd"},
-        "runtime_asset_paths": {
-          "type": "array",
-          "minItems": 4,
-          "maxItems": 4,
-          "uniqueItems": true,
-          "items": {"type": "string", "pattern": "^game/resources/(?:materials/world/(?:d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1|d1_current/shared_(?:dark_glass|pale_frame))\\.tres|textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1\\.png)$"}
-        },
-        "runtime_config_path": {"const": "game/resources/facades/d1_current/d1_b225_live_attachment.json"},
-        "runtime_dispatch_path": {"const": "game/scripts/world/world_chunk_builder.gd"},
-        "source_key": {"const": "w95934119"},
-        "whole_building_recognizability_imported": {"const": false}
-      }
-    },
-    "d2_1441_active_runtime_adapter": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": ["adapter_id", "content_classification", "receiver_key", "recognition_acceptance_authority", "recognition_acceptance_status", "review_status", "review_status_scope", "runtime_adapter_path", "runtime_asset_paths", "runtime_config_path", "runtime_dispatch_path", "source_key", "whole_building_recognizability_imported"],
-      "properties": {
-        "adapter_id": {"const": "active-adapter:d2-1441-live:building:w95934105:wall"},
-        "content_classification": {"const": "active_target_specific_paired_wall_roof_replacement"},
-        "receiver_key": {"const": "building:w95934105:wall"},
-        "recognition_acceptance_authority": {"const": "physical_unit_claim_and_independent_acceptance_record"},
-        "recognition_acceptance_status": {"const": "accepted"},
-        "review_status": {"const": "independent_exact_current_live_pass"},
-        "review_status_scope": {"const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"},
-        "runtime_adapter_path": {"const": "game/scripts/world/facades/d2_1441_chinook_live_replacement.gd"},
-        "runtime_asset_paths": {
-          "type": "array",
-          "minItems": 11,
-          "maxItems": 11,
-          "uniqueItems": true,
-          "items": {
-            "enum": [
-              "game/scripts/world/facades/d2_1441_chinook_standalone_hero_prototype.gd",
-              "game/resources/facades/d2_1441_chinook_standalone_hero_prototype.json",
-              "game/scripts/world/facades/site_12_housing_kit.gd",
-              "game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
-              "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
-              "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
-              "game/resources/materials/world/site_12_housing/site_12_void_shadow.tres",
-              "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
-              "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
-              "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
-              "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"
-            ]
-          }
-        },
-        "runtime_config_path": {"const": "game/resources/facades/d2_1441_chinook_live_replacement.json"},
-        "runtime_dispatch_path": {"const": "game/scripts/world/world_chunk_builder.gd"},
-        "source_key": {"const": "w95934105"},
-        "whole_building_recognizability_imported": {"const": false}
-      }
-    },
-    "legacy_adapter": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "adapter_id",
-        "import_basis",
-        "receiver_key",
-        "source_key",
-        "whole_building_recognizability_imported"
-      ],
       "properties": {
         "adapter_id": {
-          "type": "string",
-          "pattern": "^legacy-adapter:"
+          "pattern": "^active-adapter:building-1-hero:",
+          "type": "string"
         },
-        "import_basis": {
-          "const": "inventory_accepted_target_specific_runtime_attachment"
+        "content_classification": {
+          "const": "active_target_specific_hero_replacement"
         },
         "receiver_key": {
-          "$ref": "#/$defs/receiver_key"
+          "enum": [
+            "building:r16681702:wall",
+            "building:w1222720021:wall"
+          ]
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "pending_independent_original_detail_review"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/building_1_hero_model.gd"
+        },
+        "runtime_asset_paths": {
+          "contains": {
+            "const": "game/resources/facades/building_1_public_front_believability.json"
+          },
+          "items": {
+            "anyOf": [
+              {
+                "const": "game/resources/facades/building_1_public_front_believability.json"
+              },
+              {
+                "pattern": "^game/resources/materials/world/building_1/",
+                "type": "string"
+              }
+            ]
+          },
+          "maxContains": 1,
+          "maxItems": 9,
+          "minContains": 1,
+          "minItems": 9,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/building_1_hero_model.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
         },
         "source_key": {
-          "$ref": "#/$defs/source_key"
+          "enum": [
+            "r16681702",
+            "w1222720021"
+          ]
         },
         "whole_building_recognizability_imported": {
           "const": false
         }
-      }
-    },
-    "source_record": {
-      "type": "object",
-      "additionalProperties": false,
+      },
       "required": [
-        "role",
-        "source_key"
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
       ],
+      "type": "object"
+    },
+    "building_3_active_runtime_adapter": {
+      "additionalProperties": false,
       "properties": {
-        "role": {
-          "enum": [
-            "building_part_within_parent_footprint",
-            "composite_parent_footprint",
-            "standalone_building_footprint"
-          ]
+        "adapter_id": {
+          "const": "active-adapter:building-3-hero:building:w34313540:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_hero_replacement"
+        },
+        "receiver_key": {
+          "const": "building:w34313540:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "pending_independent_original_detail_review"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/massing/building_3_600_california_massing.gd"
+        },
+        "runtime_asset_paths": {
+          "items": {
+            "pattern": "^game/(?:resources/facades|resources/materials/world/building_3|scenes/world/facades/building_3|scripts/world/facades)/",
+            "type": "string"
+          },
+          "maxItems": 7,
+          "minItems": 7,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/building_3_hero_massing.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
         },
         "source_key": {
-          "$ref": "#/$defs/source_key"
-        }
-      }
-    },
-    "identity": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "address_completeness",
-        "address_evidence",
-        "canonical_name",
-        "currentness_claimed",
-        "formatted_address",
-        "identity_confidence",
-        "name_evidence"
-      ],
-      "properties": {
-        "address_completeness": {
-          "type": [
-            "string",
-            "null"
-          ]
+          "const": "w34313540"
         },
-        "address_evidence": {
-          "type": "boolean"
-        },
-        "canonical_name": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "currentness_claimed": {
+        "whole_building_recognizability_imported": {
           "const": false
-        },
-        "formatted_address": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "identity_confidence": {
-          "type": "string",
-          "minLength": 1
-        },
-        "name_evidence": {
-          "type": "boolean"
         }
-      }
-    },
-    "identity_evidence_record": {
-      "type": "object",
-      "additionalProperties": false,
+      },
       "required": [
-        "assertion_id",
-        "checked_date",
-        "currentness_claimed",
-        "evidence_class",
-        "evidenced_value",
-        "frozen_field",
-        "frozen_value",
-        "primary_source_locator",
-        "research_packet_path",
-        "runtime_visibility",
-        "unit_id"
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
       ],
-      "properties": {
-        "assertion_id": {
-          "type": "string",
-          "pattern": "^identity-assertion:"
-        },
-        "checked_date": {
-          "type": "string",
-          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
-        },
-        "currentness_claimed": {
-          "type": "boolean"
-        },
-        "evidence_class": {
-          "enum": [
-            "authoritative_correction",
-            "authoritative_current_identity",
-            "reference_identity_context"
-          ]
-        },
-        "evidenced_value": {
-          "type": "string",
-          "minLength": 1
-        },
-        "frozen_field": {
-          "type": "string",
-          "minLength": 1
-        },
-        "frozen_value": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "primary_source_locator": {
-          "type": "string",
-          "pattern": "^https://"
-        },
-        "research_packet_path": {
-          "type": "string",
-          "pattern": "^discovery/facades/"
-        },
-        "runtime_visibility": {
-          "enum": [
-            "source_only",
-            "summary_only"
-          ]
-        },
-        "unit_id": {
-          "type": "string",
-          "pattern": "^physical-building:[nwr][0-9]+$"
-        }
-      }
-    },
-    "capture_pose": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "aim_target_m",
-        "camera_position_m",
-        "fov_degrees",
-        "player_position_m"
-      ],
-      "properties": {
-        "aim_target_m": {
-          "$ref": "#/$defs/vector3"
-        },
-        "camera_position_m": {
-          "$ref": "#/$defs/vector3"
-        },
-        "fov_degrees": {
-          "type": "number",
-          "minimum": 35,
-          "maximum": 90
-        },
-        "player_position_m": {
-          "$ref": "#/$defs/vector3"
-        }
-      }
+      "type": "object"
     },
     "capture_contract": {
-      "type": "object",
       "additionalProperties": false,
-      "required": [
-        "alternate_pose",
-        "ordinary_third_person_required",
-        "primary_pose",
-        "required_cue_ids",
-        "status",
-        "unit_id"
-      ],
       "properties": {
         "alternate_pose": {
           "anyOf": [
@@ -702,12 +269,12 @@
           ]
         },
         "required_cue_ids": {
-          "type": "array",
-          "uniqueItems": true,
           "items": {
-            "type": "string",
-            "minLength": 1
-          }
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
         },
         "status": {
           "enum": [
@@ -716,28 +283,48 @@
           ]
         },
         "unit_id": {
-          "type": "string",
-          "pattern": "^physical-building:[nwr][0-9]+$"
+          "pattern": "^physical-building:[nwr][0-9]+$",
+          "type": "string"
         }
-      }
+      },
+      "required": [
+        "alternate_pose",
+        "ordinary_third_person_required",
+        "primary_pose",
+        "required_cue_ids",
+        "status",
+        "unit_id"
+      ],
+      "type": "object"
     },
-    "vector3": {
-      "type": "array",
-      "minItems": 3,
-      "maxItems": 3,
-      "items": {
-        "type": "number"
-      }
+    "capture_pose": {
+      "additionalProperties": false,
+      "properties": {
+        "aim_target_m": {
+          "$ref": "#/$defs/vector3"
+        },
+        "camera_position_m": {
+          "$ref": "#/$defs/vector3"
+        },
+        "fov_degrees": {
+          "maximum": 90,
+          "minimum": 35,
+          "type": "number"
+        },
+        "player_position_m": {
+          "$ref": "#/$defs/vector3"
+        }
+      },
+      "required": [
+        "aim_target_m",
+        "camera_position_m",
+        "fov_degrees",
+        "player_position_m"
+      ],
+      "type": "object"
     },
     "claim_status": {
-      "type": "object",
       "additionalProperties": false,
-      "required": [
-        "as_built_fidelity",
-        "game_distinctive",
-        "receiver_complete",
-        "reference_recognizable"
-      ],
       "properties": {
         "as_built_fidelity": {
           "enum": [
@@ -764,67 +351,713 @@
             "blocked"
           ]
         }
-      }
-    },
-    "reference_record": {
-      "type": "object",
-      "additionalProperties": false,
+      },
       "required": [
-        "observation_id",
-        "observed_regions",
-        "pixels_packaged",
-        "source_locator",
-        "supports"
+        "as_built_fidelity",
+        "game_distinctive",
+        "receiver_complete",
+        "reference_recognizable"
       ],
+      "type": "object"
+    },
+    "claim_vocabulary": {
+      "additionalProperties": false,
       "properties": {
-        "observation_id": {
-          "type": "string",
-          "minLength": 1
+        "as_built_fidelity": {
+          "minLength": 1,
+          "type": "string"
         },
-        "observed_regions": {
-          "type": "array",
-          "minItems": 1,
+        "game_distinctive": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "real_world_recognition_exclusions": {
           "items": {
-            "type": "string",
-            "minLength": 1
-          }
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
         },
-        "pixels_packaged": {
+        "receiver_complete": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "reference_recognizable": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "as_built_fidelity",
+        "game_distinctive",
+        "real_world_recognition_exclusions",
+        "receiver_complete",
+        "reference_recognizable"
+      ],
+      "type": "object"
+    },
+    "d1_b201_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:d1-b201-live:building:w34313545:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_receiver_host_partition_plus_render_only_attachment"
+        },
+        "receiver_key": {
+          "const": "building:w34313545:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/d1_b201_live_attachment.gd"
+        },
+        "runtime_asset_paths": {
+          "items": {
+            "pattern": "^game/resources/materials/world/d1_current/(?:b201_(?:green_hierarchy|muted_rust_post|service_leaf|warm_wall)|shared_(?:dark_glass|pale_frame))\\.tres$",
+            "type": "string"
+          },
+          "maxItems": 6,
+          "minItems": 6,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/d1_current/d1_b201_live_attachment.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w34313545"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
+    },
+    "d1_b225_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:d1-b225-live:building:w95934119:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_receiver_host_partition_plus_render_only_attachment"
+        },
+        "receiver_key": {
+          "const": "building:w95934119:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/d1_b225_live_attachment.gd"
+        },
+        "runtime_asset_paths": {
+          "items": {
+            "pattern": "^game/resources/(?:materials/world/(?:d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1|d1_current/shared_(?:dark_glass|pale_frame))\\.tres|textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1\\.png)$",
+            "type": "string"
+          },
+          "maxItems": 4,
+          "minItems": 4,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/d1_current/d1_b225_live_attachment.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w95934119"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
+    },
+    "d2_1439_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:d2-1439-live:building:w95934144:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_paired_wall_roof_replacement"
+        },
+        "receiver_key": {
+          "const": "building:w95934144:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd"
+        },
+        "runtime_asset_paths": {
+          "items": {
+            "enum": [
+              "game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd",
+              "game/resources/facades/d2_1439_chinook_quality_v2_prototype.json",
+              "game/scripts/world/facades/site_12_housing_kit.gd",
+              "game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
+              "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
+              "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
+              "game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres",
+              "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
+              "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
+              "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+              "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"
+            ]
+          },
+          "maxItems": 11,
+          "minItems": 11,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w95934144"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
+    },
+    "d2_1441_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:d2-1441-live:building:w95934105:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_paired_wall_roof_replacement"
+        },
+        "receiver_key": {
+          "const": "building:w95934105:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/d2_1441_chinook_live_replacement.gd"
+        },
+        "runtime_asset_paths": {
+          "items": {
+            "enum": [
+              "game/scripts/world/facades/d2_1441_chinook_standalone_hero_prototype.gd",
+              "game/resources/facades/d2_1441_chinook_standalone_hero_prototype.json",
+              "game/scripts/world/facades/site_12_housing_kit.gd",
+              "game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
+              "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
+              "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
+              "game/resources/materials/world/site_12_housing/site_12_void_shadow.tres",
+              "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
+              "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
+              "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+              "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"
+            ]
+          },
+          "maxItems": 11,
+          "minItems": 11,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/d2_1441_chinook_live_replacement.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w95934105"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
+    },
+    "expected_counts": {
+      "additionalProperties": false,
+      "properties": {
+        "active_runtime_adapter_receivers": {
+          "const": 9
+        },
+        "building_footprints": {
+          "const": 213
+        },
+        "building_parts": {
+          "const": 2
+        },
+        "composite_units": {
+          "const": 1
+        },
+        "direct_wall_receivers": {
+          "const": 214
+        },
+        "legacy_adapter_receivers": {
+          "const": 9
+        },
+        "recognition_units": {
+          "const": 213
+        },
+        "runtime_adapter_receivers": {
+          "const": 18
+        },
+        "source_records": {
+          "const": 215
+        },
+        "standalone_units": {
+          "const": 212
+        },
+        "visible_wall_runs": {
+          "const": 4971
+        }
+      },
+      "required": [
+        "active_runtime_adapter_receivers",
+        "building_footprints",
+        "building_parts",
+        "composite_units",
+        "direct_wall_receivers",
+        "legacy_adapter_receivers",
+        "recognition_units",
+        "runtime_adapter_receivers",
+        "source_records",
+        "standalone_units",
+        "visible_wall_runs"
+      ],
+      "type": "object"
+    },
+    "identity": {
+      "additionalProperties": false,
+      "properties": {
+        "address_completeness": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "address_evidence": {
+          "type": "boolean"
+        },
+        "canonical_name": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "currentness_claimed": {
           "const": false
         },
-        "source_locator": {
-          "type": "string",
-          "minLength": 1
+        "formatted_address": {
+          "type": [
+            "string",
+            "null"
+          ]
         },
-        "supports": {
-          "type": "array",
-          "minItems": 1,
-          "items": {
-            "type": "string",
-            "minLength": 1
-          }
+        "identity_confidence": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "name_evidence": {
+          "type": "boolean"
         }
-      }
-    },
-    "recognition_cue": {
-      "type": "object",
-      "additionalProperties": false,
+      },
       "required": [
-        "complete_motif",
-        "cue_id",
-        "cue_kind",
+        "address_completeness",
+        "address_evidence",
+        "canonical_name",
+        "currentness_claimed",
+        "formatted_address",
+        "identity_confidence",
+        "name_evidence"
+      ],
+      "type": "object"
+    },
+    "identity_evidence_record": {
+      "additionalProperties": false,
+      "properties": {
+        "assertion_id": {
+          "pattern": "^identity-assertion:",
+          "type": "string"
+        },
+        "checked_date": {
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+          "type": "string"
+        },
+        "currentness_claimed": {
+          "type": "boolean"
+        },
+        "evidence_class": {
+          "enum": [
+            "authoritative_correction",
+            "authoritative_current_identity",
+            "reference_identity_context"
+          ]
+        },
+        "evidenced_value": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "frozen_field": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "frozen_value": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "primary_source_locator": {
+          "pattern": "^https://",
+          "type": "string"
+        },
+        "research_packet_path": {
+          "pattern": "^discovery/facades/",
+          "type": "string"
+        },
+        "runtime_visibility": {
+          "enum": [
+            "source_only",
+            "summary_only"
+          ]
+        },
+        "unit_id": {
+          "pattern": "^physical-building:[nwr][0-9]+$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "assertion_id",
+        "checked_date",
+        "currentness_claimed",
         "evidence_class",
+        "evidenced_value",
+        "frozen_field",
+        "frozen_value",
+        "primary_source_locator",
+        "research_packet_path",
+        "runtime_visibility",
+        "unit_id"
+      ],
+      "type": "object"
+    },
+    "isle_house_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:isle-house-variant-c:building-composite:w1249412094:w1282547787:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_composite_part_replacement"
+        },
+        "receiver_key": {
+          "const": "building-composite:w1249412094:w1282547787:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd"
+        },
+        "runtime_asset_paths": {
+          "items": {
+            "pattern": "^game/scripts/world/facades/isle_house_composite_repair_variant_c_(?:repair_only_factory|standalone_v1)\\.gd$",
+            "type": "string"
+          },
+          "maxItems": 2,
+          "minItems": 2,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/isle_house_composite_repair_variant_c_standalone_v1.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w1282547787"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
         "receiver_key",
-        "reference_ids",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
+    },
+    "legacy_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "pattern": "^legacy-adapter:",
+          "type": "string"
+        },
+        "import_basis": {
+          "const": "inventory_accepted_target_specific_runtime_attachment"
+        },
+        "receiver_key": {
+          "$ref": "#/$defs/receiver_key"
+        },
+        "source_key": {
+          "$ref": "#/$defs/source_key"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "import_basis",
+        "receiver_key",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
+    },
+    "navy_chapel_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:navy-chapel-187:building:w291189336:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_paired_wall_roof_replacement"
+        },
+        "receiver_key": {
+          "const": "building:w291189336:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/navy_chapel_187_live_replacement.gd"
+        },
+        "runtime_asset_paths": {
+          "items": {
+            "pattern": "^game/(?:resources/materials/world/navy_chapel_187|scripts/world/facades/navy_chapel_187_standalone_hero_prototype\\.gd)",
+            "type": "string"
+          },
+          "maxItems": 7,
+          "minItems": 7,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/navy_chapel_187_standalone_hero_prototype.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w291189336"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
+    },
+    "protected_scope": {
+      "additionalProperties": false,
+      "properties": {
+        "reason": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "receiver_key": {
+          "$ref": "#/$defs/receiver_key"
+        },
+        "run_indices": {
+          "items": {
+            "minimum": 0,
+            "type": "integer"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "reason",
+        "receiver_key",
         "run_indices"
       ],
+      "type": "object"
+    },
+    "receiver_key": {
+      "pattern": "^building(?:-composite)?:.+:wall$",
+      "type": "string"
+    },
+    "recognition_cue": {
+      "additionalProperties": false,
       "properties": {
         "complete_motif": {
           "type": "boolean"
         },
         "cue_id": {
-          "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "type": "string"
         },
         "cue_kind": {
           "enum": [
@@ -845,115 +1078,218 @@
           "$ref": "#/$defs/receiver_key"
         },
         "reference_ids": {
-          "type": "array",
-          "uniqueItems": true,
           "items": {
-            "type": "string",
-            "minLength": 1
-          }
+            "minLength": 1,
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
         },
         "run_indices": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
           "items": {
-            "type": "integer",
-            "minimum": 0
-          }
+            "minimum": 0,
+            "type": "integer"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
         }
-      }
-    },
-    "protected_scope": {
-      "type": "object",
-      "additionalProperties": false,
+      },
       "required": [
-        "reason",
+        "complete_motif",
+        "cue_id",
+        "cue_kind",
+        "evidence_class",
         "receiver_key",
+        "reference_ids",
         "run_indices"
       ],
-      "properties": {
-        "reason": {
-          "type": "string",
-          "minLength": 1
-        },
-        "receiver_key": {
-          "$ref": "#/$defs/receiver_key"
-        },
-        "run_indices": {
-          "type": "array",
-          "minItems": 1,
-          "uniqueItems": true,
-          "items": {
-            "type": "integer",
-            "minimum": 0
-          }
-        }
-      }
+      "type": "object"
     },
-    "acceptance_record": {
-      "type": "object",
+    "reference_record": {
       "additionalProperties": false,
-      "required": [
-        "evidence_manifest_sha256",
-        "review_id",
-        "review_kind",
-        "review_receipt_sha256",
-        "status"
-      ],
       "properties": {
-        "evidence_manifest_sha256": {
+        "observation_id": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "observed_regions": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        },
+        "pixels_packaged": {
+          "const": false
+        },
+        "source_locator": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "supports": {
+          "items": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array"
+        }
+      },
+      "required": [
+        "observation_id",
+        "observed_regions",
+        "pixels_packaged",
+        "source_locator",
+        "supports"
+      ],
+      "type": "object"
+    },
+    "sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "source_contract": {
+      "additionalProperties": false,
+      "properties": {
+        "generated_content_sha256": {
           "$ref": "#/$defs/sha256"
         },
-        "capture_time_recognition_metric": {
-          "type": "string",
-          "pattern": "^[0-9]+/213$"
+        "generated_manifest_schema_version": {
+          "const": "ti.godot-world/2"
         },
-        "evidence_tree_sha256": {
+        "generated_manifest_sha256": {
           "$ref": "#/$defs/sha256"
         },
-        "mechanical_review_receipt_sha256": {
-          "$ref": "#/$defs/sha256"
+        "inventory_schema_version": {
+          "const": "ti.facade-receiver-inventory/1"
         },
-        "motion_telemetry_manifest_sha256": {
-          "$ref": "#/$defs/sha256"
-        },
-        "numerator_effect": {
-          "type": "integer",
-          "minimum": 0,
-          "maximum": 1
-        },
-        "package_verification_receipt_sha256": {
-          "$ref": "#/$defs/sha256"
-        },
-        "review_id": {
-          "type": "string",
-          "minLength": 1
-        },
-        "review_kind": {
-          "enum": [
-            "as_built_fidelity",
-            "independent_game_art",
-            "independent_reference_recognition",
-            "mechanical_receiver"
-          ]
-        },
-        "review_receipt_sha256": {
-          "$ref": "#/$defs/sha256"
-        },
-        "status": {
-          "enum": [
-            "accept",
-            "reject"
-          ]
-        },
-        "visual_motion_manifest_sha256": {
+        "inventory_sha256": {
           "$ref": "#/$defs/sha256"
         }
-      }
+      },
+      "required": [
+        "generated_content_sha256",
+        "generated_manifest_schema_version",
+        "generated_manifest_sha256",
+        "inventory_schema_version",
+        "inventory_sha256"
+      ],
+      "type": "object"
+    },
+    "source_key": {
+      "pattern": "^[nwr][0-9]+$",
+      "type": "string"
+    },
+    "source_record": {
+      "additionalProperties": false,
+      "properties": {
+        "role": {
+          "enum": [
+            "building_part_within_parent_footprint",
+            "composite_parent_footprint",
+            "standalone_building_footprint"
+          ]
+        },
+        "source_key": {
+          "$ref": "#/$defs/source_key"
+        }
+      },
+      "required": [
+        "role",
+        "source_key"
+      ],
+      "type": "object"
     },
     "unit": {
-      "type": "object",
       "additionalProperties": false,
+      "properties": {
+        "acceptance_records": {
+          "items": {
+            "$ref": "#/$defs/acceptance_record"
+          },
+          "type": "array"
+        },
+        "anchor_source_key": {
+          "$ref": "#/$defs/source_key"
+        },
+        "claim_status": {
+          "$ref": "#/$defs/claim_status"
+        },
+        "human_dependency_ids": {
+          "items": {
+            "pattern": "^HUMAN-[0-9]+$",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "identity": {
+          "$ref": "#/$defs/identity"
+        },
+        "legacy_adapter_ids": {
+          "items": {
+            "pattern": "^legacy-adapter:",
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "protected_scopes": {
+          "items": {
+            "$ref": "#/$defs/protected_scope"
+          },
+          "type": "array"
+        },
+        "receiver_keys": {
+          "items": {
+            "$ref": "#/$defs/receiver_key"
+          },
+          "maxItems": 2,
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "recognition_cues": {
+          "items": {
+            "$ref": "#/$defs/recognition_cue"
+          },
+          "type": "array"
+        },
+        "reference_records": {
+          "items": {
+            "$ref": "#/$defs/reference_record"
+          },
+          "type": "array"
+        },
+        "reference_state": {
+          "enum": [
+            "identity_or_reference_research_required",
+            "reference_research_unassessed",
+            "reference_ready",
+            "reference_blocked"
+          ]
+        },
+        "source_records": {
+          "items": {
+            "$ref": "#/$defs/source_record"
+          },
+          "maxItems": 3,
+          "minItems": 1,
+          "type": "array"
+        },
+        "unit_id": {
+          "pattern": "^physical-building:[nwr][0-9]+$",
+          "type": "string"
+        },
+        "unit_kind": {
+          "enum": [
+            "standalone_building",
+            "composite_building"
+          ]
+        }
+      },
       "required": [
         "acceptance_records",
         "anchor_source_key",
@@ -970,92 +1306,132 @@
         "unit_id",
         "unit_kind"
       ],
-      "properties": {
-        "acceptance_records": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/acceptance_record"
-          }
-        },
-        "anchor_source_key": {
-          "$ref": "#/$defs/source_key"
-        },
-        "claim_status": {
-          "$ref": "#/$defs/claim_status"
-        },
-        "human_dependency_ids": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "pattern": "^HUMAN-[0-9]+$"
-          }
-        },
-        "identity": {
-          "$ref": "#/$defs/identity"
-        },
-        "legacy_adapter_ids": {
-          "type": "array",
-          "uniqueItems": true,
-          "items": {
-            "type": "string",
-            "pattern": "^legacy-adapter:"
-          }
-        },
-        "protected_scopes": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/protected_scope"
-          }
-        },
-        "receiver_keys": {
-          "type": "array",
-          "minItems": 1,
-          "maxItems": 2,
-          "uniqueItems": true,
-          "items": {
-            "$ref": "#/$defs/receiver_key"
-          }
-        },
-        "recognition_cues": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/recognition_cue"
-          }
-        },
-        "reference_records": {
-          "type": "array",
-          "items": {
-            "$ref": "#/$defs/reference_record"
-          }
-        },
-        "reference_state": {
-          "enum": [
-            "identity_or_reference_research_required",
-            "reference_research_unassessed",
-            "reference_ready",
-            "reference_blocked"
-          ]
-        },
-        "source_records": {
-          "type": "array",
-          "minItems": 1,
-          "maxItems": 3,
-          "items": {
-            "$ref": "#/$defs/source_record"
-          }
-        },
-        "unit_id": {
-          "type": "string",
-          "pattern": "^physical-building:[nwr][0-9]+$"
-        },
-        "unit_kind": {
-          "enum": [
-            "standalone_building",
-            "composite_building"
-          ]
-        }
-      }
+      "type": "object"
+    },
+    "vector3": {
+      "items": {
+        "type": "number"
+      },
+      "maxItems": 3,
+      "minItems": 3,
+      "type": "array"
     }
-  }
+  },
+  "$id": "https://treasure-island.local/schemas/facade-recognition-catalog.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "const": "./facade-recognition-catalog.schema.json"
+    },
+    "active_runtime_adapters": {
+      "items": {
+        "$ref": "#/$defs/active_runtime_adapter"
+      },
+      "maxItems": 9,
+      "minItems": 9,
+      "type": "array"
+    },
+    "capture_contracts": {
+      "items": {
+        "$ref": "#/$defs/capture_contract"
+      },
+      "type": "array"
+    },
+    "catalog_id": {
+      "const": "treasure-island-physical-building-recognition"
+    },
+    "checked_date": {
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "type": "string"
+    },
+    "claim_vocabulary": {
+      "$ref": "#/$defs/claim_vocabulary"
+    },
+    "compiler_contract": {
+      "additionalProperties": false,
+      "properties": {
+        "emitted_runtime_schema_version": {
+          "const": "ti.facade-runtime-registry/10"
+        },
+        "required_compiler_version": {
+          "const": "1.9.0"
+        },
+        "unknown_version_policy": {
+          "const": "reject"
+        }
+      },
+      "required": [
+        "emitted_runtime_schema_version",
+        "required_compiler_version",
+        "unknown_version_policy"
+      ],
+      "type": "object"
+    },
+    "expected_counts": {
+      "$ref": "#/$defs/expected_counts"
+    },
+    "identity_evidence_records": {
+      "items": {
+        "$ref": "#/$defs/identity_evidence_record"
+      },
+      "type": "array"
+    },
+    "legacy_adapters": {
+      "items": {
+        "$ref": "#/$defs/legacy_adapter"
+      },
+      "maxItems": 9,
+      "minItems": 9,
+      "type": "array"
+    },
+    "schema_version": {
+      "const": "ti.facade-recognition-catalog/10"
+    },
+    "source_contract": {
+      "$ref": "#/$defs/source_contract"
+    },
+    "unit_seed": {
+      "additionalProperties": false,
+      "properties": {
+        "immutable_input": {
+          "const": true
+        },
+        "strategy": {
+          "const": "immutable_receiver_inventory_physical_units_v1"
+        }
+      },
+      "required": [
+        "immutable_input",
+        "strategy"
+      ],
+      "type": "object"
+    },
+    "units": {
+      "items": {
+        "$ref": "#/$defs/unit"
+      },
+      "maxItems": 213,
+      "minItems": 213,
+      "type": "array"
+    }
+  },
+  "required": [
+    "$schema",
+    "active_runtime_adapters",
+    "catalog_id",
+    "capture_contracts",
+    "checked_date",
+    "claim_vocabulary",
+    "compiler_contract",
+    "expected_counts",
+    "identity_evidence_records",
+    "legacy_adapters",
+    "schema_version",
+    "source_contract",
+    "unit_seed",
+    "units"
+  ],
+  "title": "Treasure Island physical-building facade recognition catalog",
+  "type": "object"
 }

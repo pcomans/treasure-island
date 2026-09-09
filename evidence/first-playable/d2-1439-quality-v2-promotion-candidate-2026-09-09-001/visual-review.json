@@ -1,0 +1,56 @@
+{
+  "schema_version": "ti.d2-1439-quality-v2-derived-evidence/1",
+  "derived_normalized_summary": true,
+  "not_a_captured_original": true,
+  "raw_originals_rewritten": false,
+  "source_role": "historical reviewer tool-chat report relayed verbatim by root, with separate copy provenance",
+  "raw_origin": {
+    "raw_original_sha256": "5a1e1bb18661a934c739021a8d112012a146789baa05ae7e9db87377dda1e631",
+    "raw_original_bytes": 2075,
+    "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/owner-session/INDEPENDENT_LIVE_VISUAL_PASS_001.md"
+  },
+  "normalization": "Only absolute machine-path prefixes become declared placeholders; original arrays, numeric values, hashes and capture-time pending fields are retained. Selected frame paths may point to exact archived originals as labeled.",
+  "truth_boundary": {
+    "recognition_metric": "9/213",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "source_render_images_are_package_pixels": false,
+    "as_built_fidelity_claimed": false,
+    "inventory_physical_units": 213
+  },
+  "data": {
+    "decision": "INDEPENDENT_LIVE_VISUAL_REFERENCE_RECOGNITION_PASS",
+    "reviewer": "/root/recess_static_review",
+    "observed_physical_unit": "physical-building:w95934144",
+    "seven_live_stills_reviewed": true,
+    "original_avi_frame_indices": [
+      128,
+      143,
+      158,
+      173,
+      188,
+      203,
+      218,
+      233,
+      248,
+      263,
+      278,
+      293,
+      308,
+      323,
+      338,
+      353,
+      368
+    ],
+    "all_seven_motion_pngs_reviewed": true,
+    "continuous_playback": false,
+    "limits": "Sampled temporal review cannot exclude brief intervening flicker or certify smooth continuous playback. Movie-frame indices are not asserted to align exactly with process counters. AVI1280x800 and PNG1440x900 are separate native outputs.",
+    "copied_report_text": "**Independent live visual/reference-recognition PASS for `physical-building:w95934144`. No further art revision is warranted by this evidence.**\n\nThe seven live stills, earlier old/new comparisons, and sampled walk preserve the approved recognition pattern: a two-level balcony stack, broad quiet upper-window field, and blank opposite end with passage. Near views establish inward depth in both motifs under default and changed lighting. This remains a substantive improvement over the older exterior panels, without adding unsupported detail to quiet or protected regions.\n\nI inspected **17 original AVI frames**, indices 128–368 at 15-frame intervals, and **all seven original motion PNGs**. Across those samples, rails remain attached, openings retain their shape, and perspective changes consistently. The balcony leaves the viewport through ordinary lateral movement; I found no sampled geometry pop, depth reversal, or camera jump. Recorded telemetry contains 240 grounded samples, 15.705 m active displacement, zero recoveries, and zero transform writes during input.\n\nThis is **sampled temporal review, without continuous playback**. It cannot exclude brief intervening flicker or certify playback smoothness. Encoded-frame indices are not asserted to align exactly with process counters; the 1280×800 AVI and 1440×900 PNGs are separate native outputs.\n\nReviewed evidence bindings:\n\n- [Stills manifest]({NATIVE_CAPTURE}/stills-capture.json): `b004312bf850cdbf085c9e69eed5fb7a66207b5ba27005daa0e9325685e642bf`\n- [Motion manifest]({NATIVE_CAPTURE}/visual-motion-manifest.json): `c7953e44b414678a06a27c9d6535b81d479ecd9d71171679e91f14df1ac1be41`\n- Original AVI: `7d8f73863e66719a473e76e8342c79731f91cf858727040669fc202e97457316`\n\nViewed image hashes and extracted JPEG payloads matched their recorded identities. This PASS supports the observed facade’s visual/reference-recognition gate; it grants **no as-built claim, package acceptance, authority promotion, or recognition credit**. **9/213 remains unchanged.**\n",
+    "copy_provenance": {
+      "raw_original_sha256": "7dab4f43c187ff5c8e2d4365c74a56301c02671bb9e1b2c39e3ccae7fd407569",
+      "raw_original_bytes": 619,
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/owner-session/INDEPENDENT_LIVE_VISUAL_PASS_001_COPY_PROVENANCE.md"
+    }
+  }
+}

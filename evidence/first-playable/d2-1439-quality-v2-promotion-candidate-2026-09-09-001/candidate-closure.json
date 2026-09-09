@@ -1,0 +1,78 @@
+{
+  "schema_version": "ti.d2-1439-quality-v2-promotion-candidate-closure/1",
+  "status": "PACKAGE_PASS_AND_EXACT_ARCHIVE_READY_FOR_INDEPENDENT_PACKET_PROMOTION_REVIEW",
+  "created_at": "2026-09-09T17:10:29.754800+00:00",
+  "truth_boundary": {
+    "recognition_metric": "9/213",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "source_render_images_are_package_pixels": false,
+    "as_built_fidelity_claimed": false,
+    "inventory_physical_units": 213
+  },
+  "physical_unit_id": "physical-building:w95934144",
+  "wall_object_key": "building:w95934144:wall",
+  "roof_object_key": "building:w95934144:roof",
+  "paired_wall_and_roof_are_one_physical_unit": true,
+  "package_independent_decision": "PASS_FOR_1439_CANDIDATE_PACKAGE_AND_PROMOTION_REVIEW_NO_CREDIT",
+  "package_review_raw_sha256": "cf2b758f2280c5a873beef4a63250b8d585c5c4bdefc4c8e2da908ec13dfdd5b",
+  "artifacts": [
+    {
+      "path": "capture-manifest.json",
+      "sha256": "32454a02699ebce9e29e8313e70fe93894c52bd3a4ddb46c08ffeaee54891a6a",
+      "bytes": 32640
+    },
+    {
+      "path": "motion-telemetry.json",
+      "sha256": "af5f7501b08cd36629123ad14b169da764d0c375f53a6167fee80843d7a1c863",
+      "bytes": 115069
+    },
+    {
+      "path": "visual-motion.json",
+      "sha256": "262183b9dd5424df20527ad097bc2a07921c1f24c2ce5d359a6d7aa096052683",
+      "bytes": 12384
+    },
+    {
+      "path": "package-verification-receipt.json",
+      "sha256": "56b93dc9a3e4300d6c64261618add170488002e8c305d34889d30fd55ad41af1",
+      "bytes": 21541
+    },
+    {
+      "path": "evidence-tree.json",
+      "sha256": "a624794065ed89ccbc67f6f9caf77b02729a6e9c0b08eef8e495e63156bd9dde",
+      "bytes": 5977
+    },
+    {
+      "path": "mechanical-review.json",
+      "sha256": "f55d7a4df3fea5a1cf936d75ff0b8690b9c94f005992e5cc26da793304402119",
+      "bytes": 8878
+    },
+    {
+      "path": "visual-review.json",
+      "sha256": "dff9dee70a52e74444122e10ab06cc3108bb1c41f4b5d5f2f3bce69d2a2bfc57",
+      "bytes": 4300
+    },
+    {
+      "path": "source-reconciliation.json",
+      "sha256": "2918e62e5c1e6b293f8fc524242c2672c165ff2713ad31265e179c681023c521",
+      "bytes": 3378
+    },
+    {
+      "path": "copy-inventory.json",
+      "sha256": "369fef677b39ac142dbe74c3d8c2cf35aa2337dc6874dccdb15ab44da32732f4",
+      "bytes": 12121
+    },
+    {
+      "path": "private-provenance-retention.json",
+      "sha256": "196a80165534e9ceeccc0e089ce8bae580592fd90e31bdc0f119398ca3bcb912",
+      "bytes": 341924
+    }
+  ],
+  "original_native_images": 31,
+  "private_raw_copies": 736,
+  "no_new_engine_or_export_or_capture": true,
+  "no_authority_or_catalog_or_registry_edit": true,
+  "no_main_publication": true,
+  "dependency_direction": "Frozen source/capture/app/raw reviews -> exact copies and explicitly derived summaries -> this candidate closure; future authority acceptance is separate. No artifact binds its own hash."
+}

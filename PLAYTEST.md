@@ -8,44 +8,29 @@ behaves correctly as a continuous jetpack. The exact movement change in current
 source keeps walking at `4 m/s` and raises the same held-Shift run from
 `7 m/s` to `20 m/s` (about 45 mph), with a short acceleration/braking
 ramp. That change still needs ordinary-play feedback in the exact current
-package. Current authority is compiler `1.8.1`, catalog/runtime v9, and
-`9/213` with `+0` credit for the accepted Building 1 local window-depth upgrade.
-The exact current package passed independent mechanical review and complete
-headless/native internal smoke. Fresh current source evidence also passed its
-independent mechanics and scoped visual review. Primary commit `c82a1b6e7208d2b9c7a6d34c23d98545be6238ae`
-was pushed to `origin/main`; the exact no-argument app then had a visible owned
-window and clean startup log. This scoped observation does not establish
-manual input or native gameplay pixels. All earlier D2/B225/B201 apps are historical. No automated or
-independent-review result establishes ordinary owner recognition, input, or
-acceptance on the Apple M1 Pro target.
+package. Current authority is compiler `1.9.0`, catalog/registry v10 and
+contracts/loader v9, with **10/213** recognized physical buildings. 1439 Chinook
+Court adds one accepted unit; all previous credits remain unchanged.
+Owner and independent current-package checks passed. Publication-readiness review, Git publication, and ordinary visible launch are pending.
+The native evidence is retained at its 9/213 capture-time identity and uses
+sampled motion review. No technical result establishes ordinary owner acceptance
+on the approved Apple M1 Pro.
 
 ## Start
 
 First quit any older game window (`Esc`, then `Q` while paused); macOS may
-otherwise focus a historical copy. Open the exact current handoff at
-`build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app`.
-Do not add launch arguments for owner play. The project already selects the
-exact case-sensitive `Dummy` driver before Godot initializes audio. Do not use the frozen D2 `-009` v8 app
-or the B225, `024605`, `190724`, `231815`, or `224622` historical apps to judge
-current authority.
+otherwise focus a historical copy. The current app is
+`build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app`.
+Use no launch arguments for owner play. The project selects the case-sensitive
+`Dummy` audio driver itself. The historical B1, D2 candidate and earlier apps
+have separate identities and do not represent this current authority.
 
-The current app's executable SHA-256 is
-`ac0aa612c576e039b04b743c2da5783fd0736a7312be4c88e31210b672845031` (`170,963,648` bytes),
-PCK SHA-256 `454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403`
-(`66,600,060` bytes), and seven-file bundle identity
-`fd91b1c5598dc2fe436a756eb5fb7561c96989fe18734c59580de92b13fa4171`.
-The [independent current package review](evidence/reviews/building-1-wing-returns-v2-current-package-2026-09-08-INDEPENDENT_MECHANICAL_AUDIT.md)
-has SHA-256 `c6f4c47a998619143f5f8b56b91c4441d9cda5500ee643911dbdeba8be575ee7`
-and returns `PASS_FOR_B1_RETURNS_V2_CURRENT_PACKAGE_MECHANICS_ONLY`.
-The [fresh current evidence mechanics review](evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_EVIDENCE_MECHANICAL_AUDIT.md)
-(SHA `98ab5b0d5990bc9665a3ac335863d95ee34440b4cfd168558e573ec84d3243ae`) and
-[scoped visual review](evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_VISUAL_AUDIT.md)
-(SHA `8f9123170532ca60f0ecd693e6675fdf0bc15008af68f3b2982bfff100767fed`) passed.
-The [durable closure](evidence/first-playable/building-1-wing-returns-v2-current-release-2026-09-08-001/release-closure.json) retains exact raw evidence and clearly
-labeled derived provenance summaries. Source renders and separately verified
-package semantics remain distinct. The [publication and ordinary-launch receipt](evidence/first-playable/building-1-wing-returns-v2-current-release-2026-09-08-001-PUBLICATION.json)
-records the actual primary commit/push and visible owned-window observation.
-Owner feedback remains pending against these exact app bytes.
+Executable SHA-256 `569e9350ba9d3fb629dde0efdf047a0faf1d1a7ab640c96b46ded5a867204689` (`170,963,648` bytes),
+PCK SHA-256 `d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac` (`66,659,644` bytes),
+seven-file bundle identity `64d53753266959fe49119f8363e786c4a53f999232b0299329037094d2f8a986`.
+The [current release closure](evidence/first-playable/d2-1439-quality-v2-current-release-2026-09-09-001/release-closure.json) records the actual technical gates
+and pending publication/ordinary-launch state. Owner feedback stays pending
+against these exact bytes.
 
 ### Historical B225 package identity (not current playtest bytes)
 
@@ -61,7 +46,7 @@ mesh/surface/triangle totals, plus loaded
 `735/952/967/67,716/466/466`
 rows/meshes/surfaces/triangles/bodies/shapes and `4/20/30/40` movement values. Static
 integrity, mounted-PCK audits, packaged headless smoke, and native Apple M2
-Metal smoke passed. Current source authority is compiler `1.8.0`, catalog/runtime
+Metal smoke passed. The later historical D2 authority was compiler `1.8.0`, catalog/runtime
 registry v9, adapter contracts/loader API v8, and exact recognition `9/213`.
 The exact 37-file packet tree is
 `7b0de99e6f4afe07b1767c522517ace3dc1729a3f82f4b9b95716de9483cbd84`;
@@ -98,7 +83,7 @@ Wait for the full-world loading panel to disappear. A center reticle means the v
 6. Spray an exterior building wall from close range. A source capture already proves one visible, upright, identity-matched eligible tag; confirm it in ordinary play and check that it does not bleed onto an adjacent surface. Try ground, roof, water/context, too-far, and empty-sky targets; each should reject without stopping movement. Pause/resume, toggle `F3`, and exit from the pause panel; relaunch once to confirm tags are session-only.
 
 Record a simple result against bundle identity
-`fd91b1c5598dc2fe436a756eb5fb7561c96989fe18734c59580de92b13fa4171`:
+`64d53753266959fe49119f8363e786c4a53f999232b0299329037094d2f8a986`:
 `accepted`, or `blocked`
 with location, action, expected result, observed result, and (if useful) a
 screenshot. Acceptance requires both recognizable Treasure Island and a
@@ -110,8 +95,9 @@ alone is not enough.
 
 Close the app first. Exported apps are disposable only at their exact staging
 paths under `build/`, including the current
-`build/building-1-wing-returns-v2-current-2026-09-08-001/`,
+`build/d2-1439-quality-v2-current-release-2026-09-09-001/`,
 the historical
+`build/building-1-wing-returns-v2-current-2026-09-08-001/`,
 `build/d2-1441-postpromotion-v9-2026-09-07-001/`,
 `build/d2-1441-production-v8-staging-2026-09-05-009/`,
 `build/d1-b225-postpromotion-v8-2026-09-05-001/` and earlier

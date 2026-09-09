@@ -1,0 +1,166 @@
+{
+  "schema_version": "ti.d2-1439-quality-v2-derived-evidence/1",
+  "derived_normalized_summary": true,
+  "not_a_captured_original": true,
+  "raw_originals_rewritten": false,
+  "source_role": "independent actual-main mechanical decision",
+  "raw_origin": {
+    "raw_original_sha256": "58e9250b67c6849f21f175b9edb5df2ccf7a891e3f875b1d5b6f1a4d3d0100b7",
+    "raw_original_bytes": 9870,
+    "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/independent-mechanics/live-recheck-005/LIVE_REVIEW.json"
+  },
+  "normalization": "Only absolute machine-path prefixes become declared placeholders; original arrays, numeric values, hashes and capture-time pending fields are retained. Selected frame paths may point to exact archived originals as labeled.",
+  "truth_boundary": {
+    "recognition_metric": "9/213",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "source_render_images_are_package_pixels": false,
+    "as_built_fidelity_claimed": false,
+    "inventory_physical_units": 213
+  },
+  "data": {
+    "decision": "BOUNDED_LIVE_MECHANICAL_PASS",
+    "reviewer": "recess_behavior_review",
+    "engine_slot": "RELEASED; both owned PIDs terminal and absent",
+    "source_pins": {
+      "{SOURCE_REPO}/game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd": "d5a4458be7a5c2fb6989f9d8a343d497d2f144eb19c445de6016888e7b3cce5e",
+      "{SOURCE_REPO}/game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json": "58ba0093d002a3acad06b76876b7333077bb5152827f4a59b0c9b6da132b68d9",
+      "{SOURCE_REPO}/game/scripts/world/world_chunk_builder.gd": "417e4f7269292ed0c5185e85f6b5d12759cdc516ca6be069898145aaab56ab50",
+      "{SOURCE_REPO}/game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd": "797dfb3075dacdf24a32b4ee0fa4959c296b35ae2d51f2d3c4dbba407fead3b7",
+      "{SOURCE_REPO}/game/resources/facades/d2_1439_chinook_quality_v2_prototype.json": "1217ae0a101f0f1951a3c12303d11af3aace225745922a09aed276b1958553be",
+      "{SOURCE_REPO}/game/scripts/player/player_camera.gd": "1d53f11cc3d9de00d4bb580aa6322c6f53b0080e5b9e1e3b18baeefd52125cc3",
+      "{SOURCE_REPO}/game/tests/headless_d2_1439_chinook_quality_v2_live_replacement_contract.gd": "35bd2a2754b7914de3b4c259831b2ea84405979cf38f7a725a5bb734bbf2e3a4",
+      "{SOURCE_REPO}/game/tests/headless_d2_1439_chinook_quality_v2_live_replacement_source_contract.gd": "ef105bf61fa3c8737502e5c4787f00aae757b4c79e277a83d573c900e98fa2d4",
+      "{SOURCE_REPO}/game/tests/full_runtime_d2_1439_quality_v2_integration.gd": "a4c54fddb6f3dda519eee77a6c71d1c8ba1b167a801dfeb608e994a15b483193"
+    },
+    "source_pins_unchanged_before_after": true,
+    "actual_world": {
+      "bodies": 466,
+      "meshes": 968,
+      "roof_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_0__building_w95934144_roof/D21439ChinookLiveRoofReplacement",
+      "rows": 735,
+      "shapes": 467,
+      "startup_grounded": true,
+      "surfaces": 983,
+      "triangles": 71156,
+      "viewport": [
+        1440,
+        900
+      ],
+      "wall_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_0__building_w95934144_wall/D21439ChinookLiveWallReplacement"
+    },
+    "independent_live_checks": {
+      "movement_phases": 18,
+      "mouths": 3,
+      "motion_camera_samples": 1956,
+      "clearance_failures": [],
+      "local_manual_recoveries": 3,
+      "closure_spray_rejections": 3,
+      "adjacent_exterior_tags": 3,
+      "tag_source": "w95934144",
+      "tag_key": "building:w95934144:wall",
+      "tag_cull_mask": 2,
+      "roof_landing": {
+        "feet": [
+          -301.012664794922,
+          9.85591316223145,
+          2.48799991607666
+        ],
+        "grounded": true,
+        "landed": true,
+        "ray_point": [
+          -301.012664794922,
+          9.85341548919678,
+          2.48799991607666
+        ],
+        "ray_shape": 0
+      },
+      "failures": []
+    },
+    "independent_route": {
+      "mode": "--whole-island-route",
+      "script_sha256": "38ee8deff49730d8d59af857ff21e3f661dbe4792538e367a320f2877ad22229",
+      "matches_owner_normal_route_source_pin": true,
+      "regions": 5,
+      "planned_m": 3422.086,
+      "traveled_m": 3449.107,
+      "physics_frames": 24949,
+      "final_error_m": 0.141,
+      "recoveries": 0,
+      "stalls": 0,
+      "landings": 5,
+      "max_step_m": 0.348,
+      "continuous": true,
+      "no_teleport": true
+    },
+    "execution_receipts": {
+      "live-001": {
+        "path": "{TASK_ROOT}/work/1439-quality-v2-independent-mechanics-003/live-recheck-005/live-001-execution.json",
+        "pid": 50279,
+        "session": 80218,
+        "engine_exit": 0,
+        "terminal_exit": 0,
+        "absent": true,
+        "argv": [
+          "{PUBLISHED_MAIN_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "--headless",
+          "--fixed-fps",
+          "60",
+          "--path",
+          "{SOURCE_REPO}",
+          "--script",
+          "{TASK_ROOT}/work/1439-quality-v2-independent-mechanics-003/live-recheck-005/independent_live_probe.gd",
+          "--",
+          "--output={TASK_ROOT}/work/1439-quality-v2-independent-mechanics-003/live-recheck-005/live-001-result.json"
+        ]
+      },
+      "whole-island-001": {
+        "path": "{TASK_ROOT}/work/1439-quality-v2-independent-mechanics-003/live-recheck-005/whole-island-001-execution.json",
+        "pid": 50330,
+        "session": 28271,
+        "engine_exit": 0,
+        "terminal_exit": 0,
+        "absent": true,
+        "argv": [
+          "{PUBLISHED_MAIN_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "--headless",
+          "--fixed-fps",
+          "60",
+          "--path",
+          "{SOURCE_REPO}",
+          "--script",
+          "res://game/tests/automated_route_qa.gd",
+          "--",
+          "--whole-island-route"
+        ]
+      }
+    },
+    "owner_evidence_reviewed": [
+      "{TASK_ROOT}/work/1439-quality-v2-001/live-source-003-execution.json",
+      "{TASK_ROOT}/work/1439-quality-v2-001/live-contract-001-execution.json",
+      "{TASK_ROOT}/work/1439-quality-v2-001/live-full-runtime-003-execution.json",
+      "{TASK_ROOT}/work/1439-quality-v2-001/live-route-001-execution.json"
+    ],
+    "limitations": [
+      "Independent fixture repositions the real stock player for each published shallow mouth; it does not assert an authored entry route to upper balconies.",
+      "Spray cases use controlled aiming with player physics paused, while retaining actual configured Player/SprayController/Camera/SpringArm; rendered decal appearance and ordinary approach are separate visual evidence.",
+      "Live camera samples check these mouth transitions at authored1440x900 only; broad accepted isolated aspect/free-space controls were not repeated.",
+      "Target roof spray ownership verified by actual physics ray and resolved noneligible body, plus stock capsule landing; roof attempt_spray was not independently executed.",
+      "Whole-island mode uses its existing 480Hz/8x time scale and tests the existing route, not a new facade route.",
+      "No native art, package, authority, credit or full acceptance claim."
+    ],
+    "artifact_sha256": {
+      "{TASK_ROOT}/work/1439-quality-v2-independent-mechanics-003/live-recheck-005/independent_live_probe.gd": "e387991bc42e70135ce60db94a3ac43cdcec91985c6d7a535ea3cdb2719bfc5f",
+      "{TASK_ROOT}/work/1439-quality-v2-independent-mechanics-003/live-recheck-005/run_probe.py": "5cac73c50d8ceba95956ff2a8ef0359e73a63ac8608e45882e7dcf0531550a13",
+      "{TASK_ROOT}/work/1439-quality-v2-independent-mechanics-003/camera-recheck-004/owner_camera_controls-pinned.gd": "c3b809b197583c2c9ea3ee4eb7a48c41f545a2911683395b0a5ed4a5f1950add",
+      "{TASK_ROOT}/work/1439-quality-v2-independent-mechanics-003/live-recheck-005/live-001-result.json": "a1561989d25b9e856777097de9c89dd8a6f6b652a486a3b88658dd74812c3442",
+      "{TASK_ROOT}/work/1439-quality-v2-independent-mechanics-003/live-recheck-005/live-001-execution.json": "7bc4d96e99afb8ffeeaf9e01795544abbdcf579754fd8ec9896b20e5d87fcfb8",
+      "{TASK_ROOT}/work/1439-quality-v2-independent-mechanics-003/live-recheck-005/live-001.log": "7a1a55edafefd012a2f8bc69755da5b0d060552e1eb5a61aa1e46b27d92c9448",
+      "{TASK_ROOT}/work/1439-quality-v2-independent-mechanics-003/live-recheck-005/whole-island-001-execution.json": "698ea837ec907e5c1a83f29a37a3f640b7aa283b617bc4a3d88e3d615b853d05",
+      "{TASK_ROOT}/work/1439-quality-v2-independent-mechanics-003/live-recheck-005/whole-island-001.log": "bf69b85cf0de6d0e2a306b5d136f194bb9791146c41d3c4646571dea522a18dc",
+      "{SOURCE_REPO}/game/tests/automated_route_qa.gd": "38ee8deff49730d8d59af857ff21e3f661dbe4792538e367a320f2877ad22229",
+      "{SOURCE_REPO}/game/tests/regional_qa_anchors.gd": "6b338fcdef47d0c83d72333fc85484ad4b0992986f93edea1011170b16cb171e"
+    }
+  }
+}

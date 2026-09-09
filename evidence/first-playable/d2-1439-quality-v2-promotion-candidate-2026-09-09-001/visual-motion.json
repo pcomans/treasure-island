@@ -1,0 +1,349 @@
+{
+  "schema_version": "ti.d2-1439-quality-v2-derived-evidence/1",
+  "derived_normalized_summary": true,
+  "not_a_captured_original": true,
+  "raw_originals_rewritten": false,
+  "source_role": "post-capture original-MJPEG extraction/temporal-review manifest; public projection retains only the 17 independently viewed samples",
+  "raw_origin": {
+    "raw_original_sha256": "c7953e44b414678a06a27c9d6535b81d479ecd9d71171679e91f14df1ac1be41",
+    "raw_original_bytes": 149534,
+    "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/native-live/visual-motion-manifest.json"
+  },
+  "normalization": "Only absolute machine-path prefixes become declared placeholders; original arrays, numeric values, hashes and capture-time pending fields are retained. Selected frame paths may point to exact archived originals as labeled.",
+  "truth_boundary": {
+    "recognition_metric": "9/213",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "source_render_images_are_package_pixels": false,
+    "as_built_fidelity_claimed": false,
+    "inventory_physical_units": 213
+  },
+  "data": {
+    "schema_version": 1,
+    "created_at": "2026-09-09T09:48:08.523288+00:00",
+    "evidence_role": "Original continuous native AVI and byte-extracted original MJPEG payloads; no re-render, resize, re-encoding or image modification. Independent visual-motion review pending.",
+    "recognition": "9/213 unchanged, +0",
+    "movie": {
+      "path": "{NATIVE_CAPTURE}/d2-1439-live-stock-walk.avi",
+      "sha256": "7d8f73863e66719a473e76e8342c79731f91cf858727040669fc202e97457316",
+      "bytes": 25662552,
+      "codec": "MJPG",
+      "dimensions": [
+        1280,
+        800
+      ],
+      "frame_count": 381,
+      "fps": 60,
+      "duration_seconds": 6.35,
+      "contains_startup_before_motion": true,
+      "requested_window_dimensions": [
+        1440,
+        900
+      ],
+      "resolution_note": "MovieWriter records project-native 1280x800; in-run viewport PNG snapshots are 1440x900. AVI and all embedded JPEG headers agree."
+    },
+    "raw_motion_manifest": {
+      "path": "{TASK_ROOT}/work/1439-quality-v2-001/revisions/motion-capture-writer-open-001.json",
+      "sha256": "45954b43d923364137224baef43121d35921691ab928d3737c6e28ee038c9eb5"
+    },
+    "binding": {
+      "path": "{TASK_ROOT}/work/1439-quality-v2-001/live-capture-001-005-binding.json",
+      "sha256": "0b4379eb010a4f0e6603e05a35dbdb06e190a11aa58c8f1728b47bc8ccb55e50"
+    },
+    "execution_receipt": {
+      "path": "{TASK_ROOT}/work/1439-quality-v2-001/live-native-motion-001-execution.json",
+      "sha256": "31fa2fb4eb636b17f384b13ffc20e703a1491db25fc31f7173f2962e38515127"
+    },
+    "telemetry": {
+      "physics_samples": 240,
+      "all_grounded": true,
+      "recovery_delta": 0,
+      "transform_writes_during_input": 0,
+      "process_frame_range": [
+        128,
+        368
+      ],
+      "physics_frame_range": [
+        129,
+        369
+      ],
+      "active_input_duration_seconds": 4.0,
+      "active_input_displacement_m": 15.705393558178557,
+      "reported_displacement_after_12_post_input_settle_frames_m": 15.8683261871338,
+      "maximum_adjacent_player_sample_step_m": 0.11000010140927367,
+      "maximum_adjacent_camera_sample_step_m": 0.11001836283506107
+    },
+    "temporal_review": {
+      "suggested_zero_based_movie_frames": [
+        128,
+        143,
+        158,
+        173,
+        188,
+        203,
+        218,
+        233,
+        248,
+        263,
+        278,
+        293,
+        308,
+        323,
+        338,
+        353,
+        368
+      ],
+      "all_original_movie_frames_available": true,
+      "coverage_note": "All 381 original frames retained. Suggested samples are 0.25 seconds apart, frame 128 through 368. Process counters and container indices are recorded separately; exact counter-to-encoded-frame synchronization is not asserted. The saved in-run PNGs can reflect the previously rendered frame because their read occurs at a physics signal.",
+      "sampling_limit": "Selected static frames cannot certify every intervening frame, smooth playback, or absence of brief flicker. Telemetry proves bounded sampled mechanics; independent visual-motion acceptance remains separate."
+    },
+    "in_run_png_snapshots": [
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-001.png",
+        "physics_frame": 130,
+        "sha256": "8d1390ae35da2ab1d42b1ef0f3fa8439560bfc7953c8707038103254c1505e6e"
+      },
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-041.png",
+        "physics_frame": 170,
+        "sha256": "84fc1c47793446592aded0caf96343309867bc9f6435edc053b95dbdf8e7421b"
+      },
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-081.png",
+        "physics_frame": 210,
+        "sha256": "07ba07ceaf36ece005208825a67a43a7844e170fd9acf7623f93b2de853f6aa9"
+      },
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-121.png",
+        "physics_frame": 250,
+        "sha256": "9ccf9a494dae02a1f7b2f93cc6b3f66d60f78bba0a5c99eb2551d8053192dc4d"
+      },
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-161.png",
+        "physics_frame": 290,
+        "sha256": "ea6b312787abae7204af197af5d987175aebd2877d8d4a393b1692246522ffef"
+      },
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-201.png",
+        "physics_frame": 330,
+        "sha256": "737f3f4e7cb5614a6a2df3b682118087fc9fb359f08163527112c60c906716ad"
+      },
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-240.png",
+        "physics_frame": 369,
+        "sha256": "5b1dd38eb55de0b70a2b43a84ad50ba605853545aa427b1bf82c2bfafd2e5167"
+      }
+    ],
+    "frames": [
+      {
+        "zero_based_movie_frame": 128,
+        "time_seconds": 2.1333333333333333,
+        "path": "reviewed-motion-frames/frame-000128.jpg",
+        "sha256": "30cdc736d06bda40409c1b215f461b8cbe7889ad4ca038af3ec2948cd3655b0f",
+        "bytes": 65349,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 9548004
+      },
+      {
+        "zero_based_movie_frame": 143,
+        "time_seconds": 2.3833333333333333,
+        "path": "reviewed-motion-frames/frame-000143.jpg",
+        "sha256": "718d78ac6333eab279993b98889be4d920232bc8062dbd3aa69656fd3f868c88",
+        "bytes": 64940,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 10576030
+      },
+      {
+        "zero_based_movie_frame": 158,
+        "time_seconds": 2.6333333333333333,
+        "path": "reviewed-motion-frames/frame-000158.jpg",
+        "sha256": "8cabeb9c5d2e0ebbc60a379a5c4e583105f16223c20d8722f854994b5078c764",
+        "bytes": 64533,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 11596434
+      },
+      {
+        "zero_based_movie_frame": 173,
+        "time_seconds": 2.8833333333333333,
+        "path": "reviewed-motion-frames/frame-000173.jpg",
+        "sha256": "8a3619c6ea26e988413bd3d165552609f664a466d517ffe8cb67a7e4ef6d9b0a",
+        "bytes": 63921,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 12608028
+      },
+      {
+        "zero_based_movie_frame": 188,
+        "time_seconds": 3.1333333333333333,
+        "path": "reviewed-motion-frames/frame-000188.jpg",
+        "sha256": "1a5d1bbd9f443cde9c28ae9e37e9a4a9ce288844a29a8fb433c3ba4c102c1838",
+        "bytes": 63366,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 13612260
+      },
+      {
+        "zero_based_movie_frame": 203,
+        "time_seconds": 3.3833333333333333,
+        "path": "reviewed-motion-frames/frame-000203.jpg",
+        "sha256": "bc1762924d674a9153e9355e7658f4acc10f68d5af2e11f695a52c892c45bffa",
+        "bytes": 63696,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 14613162
+      },
+      {
+        "zero_based_movie_frame": 218,
+        "time_seconds": 3.6333333333333333,
+        "path": "reviewed-motion-frames/frame-000218.jpg",
+        "sha256": "c39fe8b0f78c25d099a67841b1ff4d045c793f226f5764dbe82271e4ef5fcee3",
+        "bytes": 64347,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 15622704
+      },
+      {
+        "zero_based_movie_frame": 233,
+        "time_seconds": 3.8833333333333333,
+        "path": "reviewed-motion-frames/frame-000233.jpg",
+        "sha256": "b4e2d24ae41b1bb6fd917c204da86dbebf3e7142f31464704c1f7a25faee5000",
+        "bytes": 64106,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 16635392
+      },
+      {
+        "zero_based_movie_frame": 248,
+        "time_seconds": 4.133333333333334,
+        "path": "reviewed-motion-frames/frame-000248.jpg",
+        "sha256": "53bda6cab376fe31b854dc05e2731eef15970e9c4686d2c048a1a6c0608c7555",
+        "bytes": 63636,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 17642700
+      },
+      {
+        "zero_based_movie_frame": 263,
+        "time_seconds": 4.383333333333334,
+        "path": "reviewed-motion-frames/frame-000263.jpg",
+        "sha256": "07a177a65ac4eb14f167913ae0614c0f295e64e859221337ede77600e0b0f796",
+        "bytes": 62978,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 18639652
+      },
+      {
+        "zero_based_movie_frame": 278,
+        "time_seconds": 4.633333333333334,
+        "path": "reviewed-motion-frames/frame-000278.jpg",
+        "sha256": "4ad16d8d5e44f1a76673384a01afae44c60e91f83f27a0eb12519cf2ba014e0b",
+        "bytes": 62396,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 19628426
+      },
+      {
+        "zero_based_movie_frame": 293,
+        "time_seconds": 4.883333333333334,
+        "path": "reviewed-motion-frames/frame-000293.jpg",
+        "sha256": "1b8fb4539732fd19b0d33d8a9124ab9fc6e3175aab710c57047619437fe58b1f",
+        "bytes": 60978,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 20602736
+      },
+      {
+        "zero_based_movie_frame": 308,
+        "time_seconds": 5.133333333333334,
+        "path": "reviewed-motion-frames/frame-000308.jpg",
+        "sha256": "f02b596b020fa61e5666f0fa77cf6bcf09ed75bb47959d330d8a1340a9c35c9e",
+        "bytes": 59120,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 21552746
+      },
+      {
+        "zero_based_movie_frame": 323,
+        "time_seconds": 5.383333333333334,
+        "path": "reviewed-motion-frames/frame-000323.jpg",
+        "sha256": "f7550d9eca5e569009bac1b516c65952185fe8753d547c1a89e6095f45c935d8",
+        "bytes": 56367,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 22467700
+      },
+      {
+        "zero_based_movie_frame": 338,
+        "time_seconds": 5.633333333333334,
+        "path": "reviewed-motion-frames/frame-000338.jpg",
+        "sha256": "ac4171ae9bd497febf31e07a16dbe6ce1a3b2fd90e7cf6f30fff5bf06a49a4b8",
+        "bytes": 53667,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 23341664
+      },
+      {
+        "zero_based_movie_frame": 353,
+        "time_seconds": 5.883333333333334,
+        "path": "reviewed-motion-frames/frame-000353.jpg",
+        "sha256": "c2134402599eb173043eca6df6e3bae2e4d5ea8e0ad45403f0f12580fc68b463",
+        "bytes": 51843,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 24180992
+      },
+      {
+        "zero_based_movie_frame": 368,
+        "time_seconds": 6.133333333333334,
+        "path": "reviewed-motion-frames/frame-000368.jpg",
+        "sha256": "35b96120731dfa568cc5f6cb46c62a7fcc850aad3241f9b8e59a4a1aef756848",
+        "bytes": 50133,
+        "dimensions": [
+          1280,
+          800
+        ],
+        "avi_payload_offset_bytes": 24993134
+      }
+    ],
+    "archived_sample_count": 17,
+    "all381_original_frames_retained_privately": true,
+    "continuous_playback_claimed": false,
+    "selected_frame_path_semantics": "Paths name byte-identical JPEG files under reviewed-motion-frames; they are not rerenders or transcodes."
+  }
+}

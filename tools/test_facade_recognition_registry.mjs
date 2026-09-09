@@ -35,12 +35,14 @@ const ACCEPTED_REFERENCE_UNIT_IDS = [
   "physical-building:w34313545",
   "physical-building:w95934105",
   "physical-building:w95934119",
+  "physical-building:w95934144",
 ].sort();
 const ACTIVE_REVIEW_STATUS_SCOPE = "runtime_asset_original_detail_provenance_only_not_reference_recognition";
 const ACTIVE_RECOGNITION_ACCEPTANCE_AUTHORITY = "physical_unit_claim_and_independent_acceptance_record";
 const PRE_B201_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_b201_integration_live_parity";
 const PRE_B225_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_b225_integration_live_parity";
 const PRE_D2_1441_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_d2_1441_integration_live_parity";
+const PRE_D2_1439_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_d2_1439_integration_live_parity";
 const CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "current_integration_topology";
 const D2_1441_ACCEPTANCE_RECORD = Object.freeze({
   capture_time_recognition_metric: "8/213",
@@ -65,6 +67,7 @@ const ACTIVE_UNIT_BY_RECEIVER = new Map([
   ["building:w34313545:wall", "physical-building:w34313545"],
   ["building:w95934105:wall", "physical-building:w95934105"],
   ["building:w95934119:wall", "physical-building:w95934119"],
+  ["building:w95934144:wall", "physical-building:w95934144"],
 ]);
 const ACTIVE_REVIEW_STATUS_BY_RECEIVER = new Map([
   ["building-composite:w1249412094:w1282547787:wall", "independent_exact_current_live_pass"],
@@ -75,6 +78,7 @@ const ACTIVE_REVIEW_STATUS_BY_RECEIVER = new Map([
   ["building:w34313545:wall", "independent_exact_current_live_pass"],
   ["building:w95934105:wall", "independent_exact_current_live_pass"],
   ["building:w95934119:wall", "independent_exact_current_live_pass"],
+  ["building:w95934144:wall", "independent_exact_current_live_pass"],
 ]);
 
 function absolute(relativePath) {
@@ -140,7 +144,7 @@ for (const expectation of [
   { count: 1, marker: "D2_1441_CHINOOK_LIVE_REPLACEMENT.claims_record(record)" },
   { count: 1, marker: "D2_1441_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1441_plan)" },
   { count: 1, marker: "D2_1441_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1441_plan)" },
-  { count: 3, marker: "D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)" },
+  { count: 4, marker: "D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)" },
 ]) assert(inputs.runtimeContracts.worldBuilderText.split(expectation.marker).length - 1 === expectation.count, `positive current D2 direct seam marker is not exact: ${expectation.marker}`);
 assert(inputs.runtimeContracts.d21441EvidenceTree.file_count === 40 && inputs.runtimeContracts.d21441EvidenceTree.sha256 === D2_1441_ACCEPTANCE_RECORD.evidence_tree_sha256, "D2 1441 exact canonical packet tree is not bound");
 assert(inputs.runtimeContracts.d21441EvidenceManifestSha256 === D2_1441_ACCEPTANCE_RECORD.evidence_manifest_sha256 && inputs.runtimeContracts.d21441MotionTelemetryManifestSha256 === D2_1441_ACCEPTANCE_RECORD.motion_telemetry_manifest_sha256 && inputs.runtimeContracts.d21441VisualMotionManifestSha256 === D2_1441_ACCEPTANCE_RECORD.visual_motion_manifest_sha256 && inputs.runtimeContracts.d21441PackageVerificationReceiptSha256 === D2_1441_ACCEPTANCE_RECORD.package_verification_receipt_sha256, "D2 1441 packet manifests/receipt are not rehashed to the acceptance record");
@@ -154,7 +158,7 @@ assert(schema.properties.schema_version.const === CATALOG_SCHEMA, "catalog schem
 assert(schema.properties.units.minItems === EXPECTED.recognition_units && schema.properties.units.maxItems === EXPECTED.recognition_units, "catalog schema does not pin 213 units");
 assert(schema.properties.capture_contracts.items.$ref === "#/$defs/capture_contract", "catalog schema lacks capture contracts");
 assert(schema.properties.identity_evidence_records.items.$ref === "#/$defs/identity_evidence_record", "catalog schema lacks separate identity evidence");
-assert(schema.properties.active_runtime_adapters.minItems === EXPECTED.active_runtime_adapter_receivers && schema.properties.active_runtime_adapters.maxItems === EXPECTED.active_runtime_adapter_receivers, "catalog schema does not pin eight active runtime adapters");
+assert(schema.properties.active_runtime_adapters.minItems === EXPECTED.active_runtime_adapter_receivers && schema.properties.active_runtime_adapters.maxItems === EXPECTED.active_runtime_adapter_receivers, "catalog schema does not pin nine active runtime adapters");
 const building1AdapterSchema = schema.$defs.building_1_active_runtime_adapter.properties.runtime_asset_paths;
 assert(building1AdapterSchema.contains.const === "game/resources/facades/building_1_public_front_believability.json" && building1AdapterSchema.minContains === 1 && building1AdapterSchema.maxContains === 1, "catalog schema does not require exactly one Building 1 public-front config member");
 const d21441AdapterSchema = schema.$defs.d2_1441_active_runtime_adapter;
@@ -172,19 +176,19 @@ for (const reference of schema.$defs.active_runtime_adapter.anyOf) {
   assert(["pending_independent_original_detail_review", "independent_exact_current_live_pass"].includes(definition.properties.review_status.const), `${reference.$ref} review status is not an exact allowed literal`);
 }
 assert(catalog.schema_version === CATALOG_SCHEMA, "catalog schema drifted");
-assert(Array.isArray(catalog.capture_contracts) && catalog.capture_contracts.length === ACCEPTED_REFERENCE_UNIT_IDS.length, "catalog does not contain exactly nine accepted ordinary-player capture contracts");
+assert(Array.isArray(catalog.capture_contracts) && catalog.capture_contracts.length === ACCEPTED_REFERENCE_UNIT_IDS.length, "catalog does not contain exactly ten accepted ordinary-player capture contracts");
 assert(registry.schema_version === RUNTIME_SCHEMA, "runtime registry schema drifted");
 assert(report.schema_version === REPORT_SCHEMA && report.status === "pass", "validation report is not passing");
 assert(stableJson(registry) === stableJson(compiled.registry), "checked-in runtime registry differs from a clean compile");
 assert(stableJson(report) === stableJson(compiled.report), "checked-in validation report differs from a clean compile");
-assert(ADAPTER_CONTRACT_CHECK_ID === "adapter_contract_11_ready_6_disabled_13_unique_projection_inputs", "adapter-contract validation check identifier is not exact-current");
+assert(ADAPTER_CONTRACT_CHECK_ID === "adapter_contract_12_ready_6_disabled_13_unique_projection_inputs", "adapter-contract validation check identifier is not exact-current");
 assert(report.checks.filter((check) => check.check_id === ADAPTER_CONTRACT_CHECK_ID && check.status === "pass").length === 1, "validation report does not contain exactly one passing exact-current adapter-contract check identifier");
 assert(!report.checks.some((check) => check.check_id === "adapter_contract_6_ready_8_disabled_15_unique_projection_inputs"), "validation report retains the stale adapter-contract check identifier");
 
 assert(registry.units.length === EXPECTED.recognition_units, "runtime registry does not contain 213 recognition units");
 assert(registry.legacy_adapters.length === EXPECTED.legacy_adapter_receivers, "runtime registry does not contain nine legacy adapters");
-assert(registry.active_runtime_adapters.length === EXPECTED.active_runtime_adapter_receivers, "runtime registry does not contain eight active runtime adapters");
-assert(registry.counts.runtime_adapter_receivers === EXPECTED.runtime_adapter_receivers, "runtime registry does not contain 17 receiver adapters");
+assert(registry.active_runtime_adapters.length === EXPECTED.active_runtime_adapter_receivers, "runtime registry does not contain nine active runtime adapters");
+assert(registry.counts.runtime_adapter_receivers === EXPECTED.runtime_adapter_receivers, "runtime registry does not contain 18 receiver adapters");
 assert(registry.counts.source_record_memberships === EXPECTED.source_records, "runtime registry source membership is not 215");
 assert(registry.counts.direct_wall_receivers === EXPECTED.direct_wall_receivers, "runtime registry receiver count is not 214");
 assert(registry.counts.visible_wall_runs === EXPECTED.visible_wall_runs, "runtime registry visible wall runs are not 4,971");
@@ -293,10 +297,10 @@ for (const adapter of registry.active_runtime_adapters) {
 }
 assert(registry.claim_totals.receiver_complete.verified === EXPECTED.recognition_units, "receiver-complete aggregate drifted");
 assert(registry.claim_totals.game_distinctive.accepted === 0, "game-distinctive acceptance must start at zero");
-assert(registry.claim_totals.reference_recognizable.accepted === ACCEPTED_REFERENCE_UNIT_IDS.length && registry.claim_totals.reference_recognizable.not_evaluated === EXPECTED.recognition_units - ACCEPTED_REFERENCE_UNIT_IDS.length, "reference-recognizable aggregate is not exactly 9/213");
+assert(registry.claim_totals.reference_recognizable.accepted === ACCEPTED_REFERENCE_UNIT_IDS.length && registry.claim_totals.reference_recognizable.not_evaluated === EXPECTED.recognition_units - ACCEPTED_REFERENCE_UNIT_IDS.length, "reference-recognizable aggregate is not exactly 10/213");
 assert(registry.claim_totals.as_built_fidelity.claimed === 0 && registry.claim_totals.as_built_fidelity.limited === 0, "as-built fidelity must remain wholly unclaimed");
 assert(JSON.stringify(registry.recognition_metric.accepted_physical_unit_ids) === JSON.stringify(ACCEPTED_REFERENCE_UNIT_IDS), "recognition metric accepted-unit set drifted");
-assert(registry.recognition_metric.numerator === 9 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "9/213", "recognition metric is not exactly 9/213");
+assert(registry.recognition_metric.numerator === 10 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "10/213", "recognition metric is not exactly 10/213");
 assert(JSON.stringify(registry.recognition_metric.isle_house_non_numerator_source_keys) === JSON.stringify(["w1282547786", "w1282547787"]), "Isle House source-part exclusion drifted");
 
 const expectedIdentityCorrections = new Map([
@@ -326,7 +330,7 @@ assert(report.identity_assertions.currentness_claimed_count === 0 && report.iden
 
 const allRuntimeAdapters = [...registry.legacy_adapters, ...registry.active_runtime_adapters];
 const adapterReceivers = allRuntimeAdapters.map((adapter) => adapter.receiver_key);
-assert(adapterReceivers.length === EXPECTED.runtime_adapter_receivers, "combined adapter array is not 17 receivers");
+assert(adapterReceivers.length === EXPECTED.runtime_adapter_receivers, "combined adapter array is not 18 receivers");
 assertUnique(adapterReceivers, "runtime adapter receivers");
 for (const adapter of allRuntimeAdapters) {
   assert(adapter.whole_building_recognizability_imported === false && adapter.recognition_claim_effect === "none", `${adapter.adapter_id} improperly transfers recognizability`);
@@ -350,7 +354,7 @@ for (const adapter of allRuntimeAdapters) {
 }
 assertRuntimeAssetClosures(registry);
 
-const expectedActiveReceivers = ["building-composite:w1249412094:w1282547787:wall", "building:r16681702:wall", "building:w1222720021:wall", "building:w291189336:wall", "building:w34313540:wall", "building:w34313545:wall", "building:w95934105:wall", "building:w95934119:wall"];
+const expectedActiveReceivers = ["building-composite:w1249412094:w1282547787:wall", "building:r16681702:wall", "building:w1222720021:wall", "building:w291189336:wall", "building:w34313540:wall", "building:w34313545:wall", "building:w95934105:wall", "building:w95934119:wall", "building:w95934144:wall"];
 assert(JSON.stringify(registry.active_runtime_adapters.map((adapter) => adapter.receiver_key).sort()) === JSON.stringify(expectedActiveReceivers.sort()), "active Building 1/Building 3/Isle House/Navy Chapel/D1 B201/D1 B225/D2 1441 receiver set drifted");
 for (const adapter of registry.active_runtime_adapters.filter((candidate) => ["building:r16681702:wall", "building:w1222720021:wall"].includes(candidate.receiver_key))) {
   assert(adapter.attachment_kind === "active_building_1_hero_replacement" && adapter.state === "active_runtime_target_specific_content", `${adapter.adapter_id} has stale content classification`);
@@ -473,12 +477,12 @@ assert(stableJson(d21441Behavior.acceptance_contract) === stableJson({
   visual_motion_manifest_sha256: D2_1441_ACCEPTANCE_RECORD.visual_motion_manifest_sha256,
   wall_and_roof_are_one_physical_unit: true,
 }), "D2 1441 behavior acceptance closure drifted");
-assert(d21441Behavior.geometry_contract.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE && d21441Behavior.geometry_contract.world_records === 735 && d21441Behavior.geometry_contract.world_mesh_instances === 959 && d21441Behavior.geometry_contract.world_surfaces === 974 && d21441Behavior.geometry_contract.world_triangles === 70692 && d21441Behavior.geometry_contract.world_static_bodies === 466 && d21441Behavior.geometry_contract.world_shapes === 466, "D2 1441 exact-current integration topology drifted");
+assert(d21441Behavior.geometry_contract.world_topology_scope === PRE_D2_1439_INTEGRATION_WORLD_TOPOLOGY_SCOPE && d21441Behavior.geometry_contract.world_records === 735 && d21441Behavior.geometry_contract.world_mesh_instances === 959 && d21441Behavior.geometry_contract.world_surfaces === 974 && d21441Behavior.geometry_contract.world_triangles === 70692 && d21441Behavior.geometry_contract.world_static_bodies === 466 && d21441Behavior.geometry_contract.world_shapes === 466, "D2 1441 exact-current integration topology drifted");
 assert(d21441Behavior.geometry_contract.visual_geometry_signature === "b91b373e3bb8238a6f73f05734ef48b3429ae5654eddce89b1981ee41ee89195" && d21441Behavior.geometry_contract.visual_mesh_instances === 9 && d21441Behavior.geometry_contract.visual_surfaces === 9 && d21441Behavior.geometry_contract.visual_triangles === 1578 && d21441Behavior.geometry_contract.topology_delta_triangles === 1536, "D2 1441 visual/delta geometry drifted");
 assert(d21441Behavior.replacement_contract.mapped_public_run_indices.join(",") === "10,12,13,15" && d21441Behavior.replacement_contract.protected_run_indices.join(",") === "0,1,2,3,4,5,6,7,8,9,11,14" && d21441Behavior.replacement_contract.partial_pair_allowed === false && d21441Behavior.replacement_contract.fallback_allowed === false && d21441Behavior.replacement_contract.generic_stack_allowed === false, "D2 1441 mapped/protected or paired fail-closed contract drifted");
 assert(d21441Behavior.ownership_contract.live_ownership_signature === "fcad9968be3d0c9094adef5dcc9c7fabfb7cf1754f780897188a4ec362187e4d" && d21441Behavior.ownership_contract.wall_collision_triangles === 32 && d21441Behavior.ownership_contract.roof_collision_triangles === 10 && d21441Behavior.ownership_contract.wall_is_sole_spray_receiver === true && d21441Behavior.ownership_contract.roof_is_wall_spray_receiver === false && d21441Behavior.ownership_contract.roof_world_solid_landing === true && d21441Behavior.ownership_contract.decorative_collision_triangles === 0 && d21441Behavior.ownership_contract.decorative_navigation_nodes === 0, "D2 1441 collision/navigation/spray/landing ownership drifted");
 const currentTopologyOwners = registry.active_runtime_adapters.filter((adapter) => adapter.active_runtime_contract?.behavior_contract?.geometry_contract?.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE).map((adapter) => adapter.adapter_id);
-assert(JSON.stringify(currentTopologyOwners) === JSON.stringify(["active-adapter:d2-1441-live:building:w95934105:wall"]), "D2 1441 is not the sole current-integration topology authority");
+assert(JSON.stringify(currentTopologyOwners) === JSON.stringify(["active-adapter:d2-1439-live:building:w95934144:wall"]), "D2 1439 is not the sole current-integration topology authority");
 assert(!inputs.runtimeContracts.worldBuilderText.includes("facade_runtime_registry_loader"), "Generic facade registry loader was wired into world construction");
 const registryText = stableJson(registry);
 assert(!registryText.includes("building_1_recognizable_facade") && !registryText.includes("building_1_recognizability_placements"), "registry retains obsolete Building 1 facade assets");
@@ -504,7 +508,7 @@ assert(report.input_hashes.active_d2_1441_adapter_sha256 === "bf51562a211126c0ea
 assert(report.input_hashes.world_chunk_builder_sha256 === inputs.runtimeContracts.acceptedWorldBuilderSha256, "report accepted dispatch provenance hash drifted");
 assert(report.reference_dependencies.identity_or_reference_research_required_unit_count === 60, "reference-dependency count is not 60");
 assert(report.reference_dependencies.unit_ids.length === 60, "reference-dependency unit list is not 60");
-assert(report.reference_recognition_metric.display === "9/213" && JSON.stringify(report.reference_recognition_metric.accepted_physical_unit_ids) === JSON.stringify(ACCEPTED_REFERENCE_UNIT_IDS), "validation report recognition metric is not exactly 9/213");
+assert(report.reference_recognition_metric.display === "10/213" && JSON.stringify(report.reference_recognition_metric.accepted_physical_unit_ids) === JSON.stringify(ACCEPTED_REFERENCE_UNIT_IDS), "validation report recognition metric is not exactly 10/213");
 
 const firstSerialization = stableJson(compiled.registry);
 const secondSerialization = stableJson(compile(catalog, inputs).registry);
@@ -704,7 +708,7 @@ for (const [field, expectedText] of [
 expectCompileFailure(
   (candidate) => {
     const unit = candidate.units.find((item) => item.unit_id === "physical-building:w95934105");
-    unit.acceptance_records[0].capture_time_recognition_metric = "9/213";
+    unit.acceptance_records[0].capture_time_recognition_metric = "10/213";
   },
   "D2 1441 seven-artifact acceptance closure drifted",
 );
@@ -854,7 +858,7 @@ expectCompileFailureWithInputs(withWorldBuilderText(swapExactlyOnce(
 
 expectCompileFailureWithInputs(withWorldBuilderText(swapExactlyOnce(
   inputs.runtimeContracts.worldBuilderText,
-  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan)",
+  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan)",
   "NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)",
   "Navy Chapel dispatch fully consumed order",
 )), "Navy Chapel per-record consumption dispatch must precede the fully-consumed assertion");
@@ -882,14 +886,14 @@ let reorderedD21441ConsumedInputs = replaceExactlyOnce(
 );
 reorderedD21441ConsumedInputs = replaceExactlyOnce(
   reorderedD21441ConsumedInputs,
-  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan)",
+  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan)",
   "var d2_1441_consumed := D2_1441_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1441_plan)",
   "D2 1441 consumed order record",
 );
 reorderedD21441ConsumedInputs = replaceExactlyOnce(
   reorderedD21441ConsumedInputs,
   "var chapel_consumed := NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)",
-  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan)",
+  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan)",
   "D2 1441 consumed order chapel",
 );
 reorderedD21441ConsumedInputs = replaceExactlyOnce(
@@ -901,8 +905,8 @@ reorderedD21441ConsumedInputs = replaceExactlyOnce(
 expectCompileFailureWithInputs(withWorldBuilderText(reorderedD21441ConsumedInputs), "D2 1441 per-record consumption dispatch must precede the fully-consumed assertion");
 
 const d21441CleanupMarker = "D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)";
-expectCompileFailureWithInputs(withWorldBuilderText(inputs.runtimeContracts.worldBuilderText.replace(d21441CleanupMarker, "")), "D2 1441 cleanup marker must occur exactly three times");
-expectCompileFailureWithInputs(withWorldBuilderText(`${inputs.runtimeContracts.worldBuilderText}\n${d21441CleanupMarker}\n`), "D2 1441 cleanup marker must occur exactly three times");
+expectCompileFailureWithInputs(withWorldBuilderText(inputs.runtimeContracts.worldBuilderText.replace(d21441CleanupMarker, "")), "D2 1441 cleanup marker must occur exactly four times");
+expectCompileFailureWithInputs(withWorldBuilderText(`${inputs.runtimeContracts.worldBuilderText}\n${d21441CleanupMarker}\n`), "D2 1441 cleanup marker must occur exactly four times");
 
 expectCompileFailureWithInputs(withWorldBuilderText(swapExactlyOnce(
   inputs.runtimeContracts.worldBuilderText,
@@ -1333,7 +1337,7 @@ expectRegistryFailure(
     candidate.recognition_metric.numerator = 7;
     candidate.recognition_metric.display = "7/213";
   },
-  "Runtime physical-entity recognition metric drifted from exactly 9/213",
+  "Runtime physical-entity recognition metric drifted from exactly 10/213",
 );
 
 expectRegistryFailure(
@@ -1367,7 +1371,7 @@ assert(report.input_hashes.active_building_1_returns_v2_acceptance_receipt_sha25
 for (const mutate of [
   (contract) => { contract.heroReturnsAcceptanceSha256 = "0".repeat(64); },
   (contract) => { contract.heroReturnsAcceptance.recognition_credit_delta = 1; },
-  (contract) => { contract.heroReturnsAcceptance.recognition_metric = "10/213"; },
+  (contract) => { contract.heroReturnsAcceptance.recognition_metric = "8/213"; },
   (contract) => { contract.heroReturnsAcceptance.reviews[2].token = "HOLD"; },
   (contract) => { contract.heroReturnsAcceptance.source_inputs[0].sha256 = "0".repeat(64); },
   (contract) => { contract.heroReturnsAcceptance.candidate_verification.input_inventory.pop(); },
@@ -1389,6 +1393,41 @@ for (const mutate of [
   expectThrown(() => validateActiveHeroDispatch(candidateInputs), "accepted executable source drifted", "B1 returns executable source");
 }
 
+// D2 1439 promotion binds one physical unit to the accepted seven artifacts.
+const d21439Unit = registry.units.find((unit) => unit.unit_id === "physical-building:w95934144");
+const d21439Adapter = registry.active_runtime_adapters.find((adapter) => adapter.receiver_key === "building:w95934144:wall");
+const d21439Acceptance = d21439Unit.acceptance_records[0];
+const expectedD21439Bindings = {
+  "evidence_manifest_sha256": "32454a02699ebce9e29e8313e70fe93894c52bd3a4ddb46c08ffeaee54891a6a",
+  "motion_telemetry_manifest_sha256": "af5f7501b08cd36629123ad14b169da764d0c375f53a6167fee80843d7a1c863",
+  "visual_motion_manifest_sha256": "262183b9dd5424df20527ad097bc2a07921c1f24c2ce5d359a6d7aa096052683",
+  "package_verification_receipt_sha256": "56b93dc9a3e4300d6c64261618add170488002e8c305d34889d30fd55ad41af1",
+  "mechanical_review_receipt_sha256": "f55d7a4df3fea5a1cf936d75ff0b8690b9c94f005992e5cc26da793304402119",
+  "evidence_tree_sha256": "bd5c009e49545f5ef84b8f0c2032c1f59dd2054d4afe0aa1f9145f74a03e2426",
+  "review_receipt_sha256": "cf1723b330fbd208fe92e27f5593c5f203b8f8cb99ff383ec8b389005fcc745c"
+};
+assert(d21439Unit.acceptance_records.length === 1 && d21439Unit.direct_receivers.length === 1 && d21439Unit.active_runtime_adapter_ids.length === 1 && d21439Acceptance.capture_time_recognition_metric === "9/213" && d21439Acceptance.numerator_effect === 1, "D2 1439 single wall-indexed unit/credit drifted");
+for (const [field, hash] of Object.entries(expectedD21439Bindings)) {
+  assert(d21439Acceptance[field] === hash, `D2 1439 ${field} binding drifted`);
+  expectCompileFailure((candidate) => { candidate.units.find((unit) => unit.unit_id === d21439Unit.unit_id).acceptance_records[0][field] = "0".repeat(64); }, field === "review_receipt_sha256" ? "review receipt pin drifted" : field === "evidence_manifest_sha256" ? "evidence manifest pin drifted" : "seven-artifact acceptance closure drifted");
+}
+expectCompileFailure((candidate) => { const unit = candidate.units.find((unit) => unit.unit_id === d21439Unit.unit_id); unit.acceptance_records.push(structuredClone(unit.acceptance_records[0])); }, "duplicate");
+expectCompileFailure((candidate) => { candidate.units.find((unit) => unit.unit_id === d21439Unit.unit_id).acceptance_records[0].numerator_effect = 2; }, "number exceeds maximum 1");
+expectCompileFailure((candidate) => { candidate.units.find((unit) => unit.unit_id === d21439Unit.unit_id).receiver_keys.push("building:w95934144:roof"); }, "string does not match");
+for (const field of ["evidence_manifest_sha256", "motion_telemetry_manifest_sha256", "visual_motion_manifest_sha256", "package_verification_receipt_sha256", "mechanical_review_receipt_sha256", "evidence_tree_sha256", "review_receipt_sha256"]) {
+  expectCompileFailure((candidate) => { delete candidate.units.find((unit) => unit.unit_id === d21439Unit.unit_id).acceptance_records[0][field]; }, field === "evidence_manifest_sha256" || field === "review_receipt_sha256" ? "required property" : "seven-artifact acceptance closure drifted");
+}
+const d21439Geometry = d21439Adapter.active_runtime_contract.behavior_contract.geometry_contract;
+assert(d21439Geometry.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE && d21439Geometry.world_records === 735 && d21439Geometry.world_mesh_instances === 968 && d21439Geometry.world_surfaces === 983 && d21439Geometry.world_triangles === 71156 && d21439Geometry.world_static_bodies === 466 && d21439Geometry.world_shapes === 467, "D2 1439 measured current topology drifted");
+const d21439Ownership = d21439Adapter.active_runtime_contract.behavior_contract.ownership_contract;
+assert(d21439Ownership.eligible_exterior_collision_triangles === 62 && d21439Ownership.noneligible_closed_recess_collision_triangles === 30 && d21439Ownership.shape_count === 3 && d21439Ownership.roof_is_wall_spray_receiver === false && JSON.stringify(d21439Ownership.wall_shape_order) === JSON.stringify(["eligible_exterior", "noneligible_closed_recess"]), "D2 1439 closed-recess ownership drifted");
+for (const mutate of [
+  (b) => { b.geometry_contract.world_topology_scope = PRE_D2_1439_INTEGRATION_WORLD_TOPOLOGY_SCOPE; },
+  (b) => { b.geometry_contract.world_shapes = 466; },
+  (b) => { b.ownership_contract.roof_is_wall_spray_receiver = true; },
+  (b) => { b.ownership_contract.wall_shape_order.reverse(); },
+]) expectRegistryFailure((candidate) => { mutate(candidate.active_runtime_adapters.find((adapter) => adapter.receiver_key === "building:w95934144:wall").active_runtime_contract.behavior_contract); }, "Active D2 1439 acceptance, paired dependency, topology, or ownership parity contract drifted");
+
 console.log(
-  `PASS facade recognition registry: ${EXPECTED.recognition_units} physical units / ${EXPECTED.direct_wall_receivers} receivers / ${EXPECTED.source_records} source records / ${EXPECTED.visible_wall_runs} runs / 9/213 independently accepted reference-recognizable physical units / ${EXPECTED.legacy_adapter_receivers} claim-neutral legacy adapters + ${EXPECTED.active_runtime_adapter_receivers} exact-current active adapters / ${packageBoundary.projected_direct_asset_count} sanitized asset projections / 2 separated identity corrections / 60 reference dependencies; catalog ${sha256File(PATHS.catalog)}; registry ${registrySha256}`,
+  `PASS facade recognition registry: ${EXPECTED.recognition_units} physical units / ${EXPECTED.direct_wall_receivers} receivers / ${EXPECTED.source_records} source records / ${EXPECTED.visible_wall_runs} runs / 10/213 independently accepted reference-recognizable physical units / ${EXPECTED.legacy_adapter_receivers} claim-neutral legacy adapters + ${EXPECTED.active_runtime_adapter_receivers} exact-current active adapters / ${packageBoundary.projected_direct_asset_count} sanitized asset projections / 2 separated identity corrections / 60 reference dependencies; catalog ${sha256File(PATHS.catalog)}; registry ${registrySha256}`,
 );

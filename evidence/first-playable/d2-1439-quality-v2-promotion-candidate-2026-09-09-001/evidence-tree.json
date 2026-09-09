@@ -1,0 +1,172 @@
+{
+  "schema_version": "ti.d2-1439-quality-v2-native-image-tree/1",
+  "tree_scope": "Exactly31 byte-identical archived native image files; excludes manifests/reviews/receipts and this tree document.",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "bd5c009e49545f5ef84b8f0c2032c1f59dd2054d4afe0aa1f9145f74a03e2426",
+  "files": [
+    {
+      "path": "images/01-whole-sse-default.png",
+      "sha256": "682ea7ee61e055ef7f91ad2a553d33216cdb8530a816366899fc2f769993c516",
+      "bytes": 894904
+    },
+    {
+      "path": "images/02-oblique-default.png",
+      "sha256": "ab1964d7e520ef572db0f1b689d9dc5a703774db587cadba5dd2a5285183e283",
+      "bytes": 1132358
+    },
+    {
+      "path": "images/03-balcony-approach-default.png",
+      "sha256": "7f5351c16506078876696b2205b08afbe4a3ff9c20bae215c18b248d7753a1a9",
+      "bytes": 930098
+    },
+    {
+      "path": "images/04-passage-approach-default.png",
+      "sha256": "3c71a2b0adbb80c924b6e6e79d8a12e2ffdd147198249f0c0e7ed5706d1a3fb6",
+      "bytes": 1039519
+    },
+    {
+      "path": "images/05-oblique-changed-light.png",
+      "sha256": "cdd26762217318ba13bda2f5116d36efb75ee892efc4f08b708b912423b10a3b",
+      "bytes": 1077048
+    },
+    {
+      "path": "images/06-balcony-approach-changed-light.png",
+      "sha256": "47d663183bd49f1464993bce41650dc3f621dd2149bc90685070d35ecf985cca",
+      "bytes": 946688
+    },
+    {
+      "path": "images/07-passage-approach-changed-light.png",
+      "sha256": "675639c859604f6c7af3e7fee3b9d2d81135ade4fa3e1276d97df8ed39a351a1",
+      "bytes": 1015402
+    },
+    {
+      "path": "images/motion-001.png",
+      "sha256": "8d1390ae35da2ab1d42b1ef0f3fa8439560bfc7953c8707038103254c1505e6e",
+      "bytes": 897295
+    },
+    {
+      "path": "images/motion-041.png",
+      "sha256": "84fc1c47793446592aded0caf96343309867bc9f6435edc053b95dbdf8e7421b",
+      "bytes": 910682
+    },
+    {
+      "path": "images/motion-081.png",
+      "sha256": "07ba07ceaf36ece005208825a67a43a7844e170fd9acf7623f93b2de853f6aa9",
+      "bytes": 920247
+    },
+    {
+      "path": "images/motion-121.png",
+      "sha256": "9ccf9a494dae02a1f7b2f93cc6b3f66d60f78bba0a5c99eb2551d8053192dc4d",
+      "bytes": 912143
+    },
+    {
+      "path": "images/motion-161.png",
+      "sha256": "ea6b312787abae7204af197af5d987175aebd2877d8d4a393b1692246522ffef",
+      "bytes": 900487
+    },
+    {
+      "path": "images/motion-201.png",
+      "sha256": "737f3f4e7cb5614a6a2df3b682118087fc9fb359f08163527112c60c906716ad",
+      "bytes": 845589
+    },
+    {
+      "path": "images/motion-240.png",
+      "sha256": "5b1dd38eb55de0b70a2b43a84ad50ba605853545aa427b1bf82c2bfafd2e5167",
+      "bytes": 790141
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000128.jpg",
+      "sha256": "30cdc736d06bda40409c1b215f461b8cbe7889ad4ca038af3ec2948cd3655b0f",
+      "bytes": 65349
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000143.jpg",
+      "sha256": "718d78ac6333eab279993b98889be4d920232bc8062dbd3aa69656fd3f868c88",
+      "bytes": 64940
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000158.jpg",
+      "sha256": "8cabeb9c5d2e0ebbc60a379a5c4e583105f16223c20d8722f854994b5078c764",
+      "bytes": 64533
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000173.jpg",
+      "sha256": "8a3619c6ea26e988413bd3d165552609f664a466d517ffe8cb67a7e4ef6d9b0a",
+      "bytes": 63921
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000188.jpg",
+      "sha256": "1a5d1bbd9f443cde9c28ae9e37e9a4a9ce288844a29a8fb433c3ba4c102c1838",
+      "bytes": 63366
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000203.jpg",
+      "sha256": "bc1762924d674a9153e9355e7658f4acc10f68d5af2e11f695a52c892c45bffa",
+      "bytes": 63696
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000218.jpg",
+      "sha256": "c39fe8b0f78c25d099a67841b1ff4d045c793f226f5764dbe82271e4ef5fcee3",
+      "bytes": 64347
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000233.jpg",
+      "sha256": "b4e2d24ae41b1bb6fd917c204da86dbebf3e7142f31464704c1f7a25faee5000",
+      "bytes": 64106
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000248.jpg",
+      "sha256": "53bda6cab376fe31b854dc05e2731eef15970e9c4686d2c048a1a6c0608c7555",
+      "bytes": 63636
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000263.jpg",
+      "sha256": "07a177a65ac4eb14f167913ae0614c0f295e64e859221337ede77600e0b0f796",
+      "bytes": 62978
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000278.jpg",
+      "sha256": "4ad16d8d5e44f1a76673384a01afae44c60e91f83f27a0eb12519cf2ba014e0b",
+      "bytes": 62396
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000293.jpg",
+      "sha256": "1b8fb4539732fd19b0d33d8a9124ab9fc6e3175aab710c57047619437fe58b1f",
+      "bytes": 60978
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000308.jpg",
+      "sha256": "f02b596b020fa61e5666f0fa77cf6bcf09ed75bb47959d330d8a1340a9c35c9e",
+      "bytes": 59120
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000323.jpg",
+      "sha256": "f7550d9eca5e569009bac1b516c65952185fe8753d547c1a89e6095f45c935d8",
+      "bytes": 56367
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000338.jpg",
+      "sha256": "ac4171ae9bd497febf31e07a16dbe6ce1a3b2fd90e7cf6f30fff5bf06a49a4b8",
+      "bytes": 53667
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000353.jpg",
+      "sha256": "c2134402599eb173043eca6df6e3bae2e4d5ea8e0ad45403f0f12580fc68b463",
+      "bytes": 51843
+    },
+    {
+      "path": "reviewed-motion-frames/frame-000368.jpg",
+      "sha256": "35b96120731dfa568cc5f6cb46c62a7fcc850aad3241f9b8e59a4a1aef756848",
+      "bytes": 50133
+    }
+  ],
+  "truth_boundary": {
+    "recognition_metric": "9/213",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "source_render_images_are_package_pixels": false,
+    "as_built_fidelity_claimed": false,
+    "inventory_physical_units": 213
+  }
+}

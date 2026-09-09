@@ -1,0 +1,347 @@
+{
+  "derived_normalized_summary": true,
+  "not_raw_execution_evidence": true,
+  "raw_original_rewritten": false,
+  "decision": "PASS_EXACT_CURRENT_1439_RELEASE",
+  "raw_json": {
+    "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/CURRENT_RELEASE_REVIEW.json",
+    "sha256": "891520a24f013025776fcd07acc49e34d722a10055ad4e7be02361ea3d506d6f",
+    "bytes": 16661,
+    "byte_identical": true
+  },
+  "raw_text": {
+    "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/CURRENT_RELEASE_REVIEW.md",
+    "sha256": "e1c196bb0e49a6db432ab7cbabb9db0eff613fde2488a51147501b98ab7d89a9",
+    "bytes": 3743,
+    "byte_identical": true
+  },
+  "data": {
+    "status": "PASS_EXACT_CURRENT_1439_RELEASE",
+    "reviewer": "review_1439_package",
+    "at_utc": "2026-09-09T18:30:25.918554+00:00",
+    "app": "{MAIN_REPO}/build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app",
+    "bundle_identity_sha256": "64d53753266959fe49119f8363e786c4a53f999232b0299329037094d2f8a986",
+    "pck_sha256": "d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac",
+    "executable_sha256": "569e9350ba9d3fb629dde0efdf047a0faf1d1a7ab640c96b46ded5a867204689",
+    "bundle_file_count": 7,
+    "owner_handoff": {
+      "path": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/CURRENT_PACKAGE_HANDOFF.json",
+      "sha256": "a682a13619bfcb75a8960523b176748da9226f17fa91ffaba16ca063b06035a3"
+    },
+    "authority_review": {
+      "path": "{MAIN_REPO}/evidence/reviews/d2-1439-quality-v2-current-authority-2026-09-09-001-REVIEW.md",
+      "sha256": "6e48e3f264cc458ed7e7c3b0b74e091ea8400c998ca6cd8d772fc524f8488ed8"
+    },
+    "static_pre_execution": {
+      "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/static-pre-execution.json",
+      "sha256": "22647ff4fed7b448a37211ef54624afccb083f33785c5cb6be79bc008e4a977e"
+    },
+    "final_post_execution": {
+      "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/final-post-execution.json",
+      "sha256": "1a9442588ea3686077a5def219762b023f3310b856434cfa6b5f2ff0fe485a56"
+    },
+    "external_fixture": {
+      "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/package-contract.gd",
+      "sha256": "d25b0f965f74019eb7f9a60d9a09958e2141567ba8a68df1aa1bee6b3c85019d"
+    },
+    "runner": {
+      "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/run-stage.py",
+      "sha256": "66534007df930e44ef8b1a39e250817b2ec934ec29c78a53920483c097c68ce9"
+    },
+    "run_plan": {
+      "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/run-plan.json",
+      "sha256": "c995eec11dcec15f4f2e90de249e1e32dfbe996caf9dfad959f7826765ed8321"
+    },
+    "independent_runs": [
+      {
+        "stage": "mounted-component-001",
+        "receipt": {
+          "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/mounted-component-001-execution.json",
+          "sha256": "9efcc1a8672ff05f53d04a989f7dd37490516f82a3c09d1a0c45efcea657ffd6"
+        },
+        "log": {
+          "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/mounted-component-001.log",
+          "sha256": "12ffa2863cdcb4acf9fed52df659193bf808459866f88883215d89604675bd21"
+        },
+        "engine_log": null,
+        "pid": 550,
+        "status": "terminal",
+        "exit_code": 0,
+        "elapsed_seconds": 2.3060026669409126,
+        "pins_before_after_exact": true,
+        "clean_log": true,
+        "argv": [
+          "{MAIN_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "--headless",
+          "--fixed-fps",
+          "60",
+          "--path",
+          "{TASK_ROOT}/work/1439-exact-current-release-independent-001/runtime-001",
+          "--main-pack",
+          "{MAIN_REPO}/build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+          "--script",
+          "{TASK_ROOT}/work/1439-exact-current-release-independent-001/package-contract.gd",
+          "--",
+          "--pck={MAIN_REPO}/build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+          "--pck-sha256=d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac"
+        ],
+        "cwd": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/runtime-001"
+      },
+      {
+        "stage": "mounted-privacy-001",
+        "receipt": {
+          "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/mounted-privacy-001-execution.json",
+          "sha256": "6f7f6c454cccaf2e1e074da4bedc13366eed25ed396bdd7e361198b77dc6274f"
+        },
+        "log": {
+          "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/mounted-privacy-001.log",
+          "sha256": "6573ee595efa375554ea89a4b5b2e3c3de0af6388d90ebed02b94e986992183f"
+        },
+        "engine_log": null,
+        "pid": 691,
+        "status": "terminal",
+        "exit_code": 0,
+        "elapsed_seconds": 2.3857772080227733,
+        "pins_before_after_exact": true,
+        "clean_log": true,
+        "argv": [
+          "{MAIN_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "--headless",
+          "--fixed-fps",
+          "60",
+          "--path",
+          "{TASK_ROOT}/work/1439-exact-current-release-independent-001/runtime-001",
+          "--main-pack",
+          "{MAIN_REPO}/build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+          "--script",
+          "res://game/tests/mounted_pck_content_audit.gd",
+          "--",
+          "--pck-audit-pck={MAIN_REPO}/build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+          "--pck-audit-pck-sha256=d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac",
+          "--pck-audit-manifest-sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+          "--pck-audit-content-sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
+        ],
+        "cwd": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/runtime-001"
+      },
+      {
+        "stage": "release-headless-smoke-001",
+        "receipt": {
+          "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/release-headless-smoke-001-execution.json",
+          "sha256": "2e2e6f36dd0a8f01c02cd0328fde0324400aebb0ef8a80e0fbe3701a15a939cd"
+        },
+        "log": {
+          "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/release-headless-smoke-001.log",
+          "sha256": "eb53f899e11759ac216d43f3b67d4fac1e1a6f35a144518793c950d0cd4dda5b"
+        },
+        "engine_log": {
+          "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/runtime-001/release-headless-smoke-001-engine.log",
+          "sha256": "eb53f899e11759ac216d43f3b67d4fac1e1a6f35a144518793c950d0cd4dda5b"
+        },
+        "pid": 720,
+        "status": "terminal",
+        "exit_code": 0,
+        "elapsed_seconds": 7.162158959079534,
+        "pins_before_after_exact": true,
+        "clean_log": true,
+        "argv": [
+          "{MAIN_REPO}/build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+          "--headless",
+          "--fixed-fps",
+          "60",
+          "--log-file",
+          "{TASK_ROOT}/work/1439-exact-current-release-independent-001/runtime-001/release-headless-smoke-001-engine.log",
+          "--",
+          "--mac-export-smoke"
+        ],
+        "cwd": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/runtime-001"
+      },
+      {
+        "stage": "release-native-smoke-001",
+        "receipt": {
+          "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/release-native-smoke-001-execution.json",
+          "sha256": "c715b4ebede62cef9aa7f5d705ed3c0d372f1bbf9c88c77074ddf23b19b461d9"
+        },
+        "log": {
+          "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/release-native-smoke-001.log",
+          "sha256": "4957838a3c09a3a475fda87c1617b6290a5d5f1886875c93c5b1584bf94cd476"
+        },
+        "engine_log": {
+          "path": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/runtime-001/release-native-smoke-001-engine.log",
+          "sha256": "4957838a3c09a3a475fda87c1617b6290a5d5f1886875c93c5b1584bf94cd476"
+        },
+        "pid": 760,
+        "status": "terminal",
+        "exit_code": 0,
+        "elapsed_seconds": 8.05780545878224,
+        "pins_before_after_exact": true,
+        "clean_log": true,
+        "argv": [
+          "{MAIN_REPO}/build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+          "--fixed-fps",
+          "60",
+          "--display-driver",
+          "macos",
+          "--rendering-method",
+          "forward_plus",
+          "--rendering-driver",
+          "metal",
+          "--audio-driver",
+          "Dummy",
+          "--log-file",
+          "{TASK_ROOT}/work/1439-exact-current-release-independent-001/runtime-001/release-native-smoke-001-engine.log",
+          "--",
+          "--mac-export-smoke"
+        ],
+        "cwd": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/runtime-001"
+      }
+    ],
+    "owner_runs_verified": [
+      {
+        "stage": "export-001",
+        "receipt": {
+          "path": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/export-001-execution.json",
+          "sha256": "321813cdd3ad13824d2280c37f3272279628e2f6675693fb622520649c14bbad"
+        },
+        "log": {
+          "path": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/export-001.log",
+          "sha256": "aeb9f4bfac9436b0f837fc61ba680df08f873c803be4c724a48d4767b8dc3676"
+        },
+        "pid": 97097,
+        "terminal_clean_pass": true
+      },
+      {
+        "stage": "mounted-component-001",
+        "receipt": {
+          "path": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/mounted-component-001-execution.json",
+          "sha256": "a1c9bae4697247f8fc780bd47e32d7717b9c12f6dd19a223d5987627799eeb64"
+        },
+        "log": {
+          "path": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/mounted-component-001.log",
+          "sha256": "12ffa2863cdcb4acf9fed52df659193bf808459866f88883215d89604675bd21"
+        },
+        "pid": 97918,
+        "terminal_clean_pass": true
+      },
+      {
+        "stage": "mounted-privacy-001",
+        "receipt": {
+          "path": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/mounted-privacy-001-execution.json",
+          "sha256": "10517a5dbb5edb5b19d6a0ead72596a3ce691e68b0aa2eb6b8ef02ca9051116f"
+        },
+        "log": {
+          "path": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/mounted-privacy-001.log",
+          "sha256": "6573ee595efa375554ea89a4b5b2e3c3de0af6388d90ebed02b94e986992183f"
+        },
+        "pid": 98038,
+        "terminal_clean_pass": true
+      },
+      {
+        "stage": "release-headless-smoke-001",
+        "receipt": {
+          "path": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/release-headless-smoke-001-execution.json",
+          "sha256": "7b7bd68a973a67fb1e2a7d02d140068dc30186245f162db7123801b242d161b9"
+        },
+        "log": {
+          "path": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/release-headless-smoke-001.log",
+          "sha256": "18e87a39335d7f0efaf222c51578d14cc3af58e1c5ec0151da869c736cfd7239"
+        },
+        "pid": 98129,
+        "terminal_clean_pass": true
+      },
+      {
+        "stage": "release-native-smoke-001",
+        "receipt": {
+          "path": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/release-native-smoke-001-execution.json",
+          "sha256": "0dc5d05d7e8c25abd771d168d896b867b72f4a2f01fa73b2b43b917689052d4f"
+        },
+        "log": {
+          "path": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/release-native-smoke-001.log",
+          "sha256": "ecb2deae78dad1298aadb41462d9ccef5b1a336817a4f5f3d77b0d55733ef337"
+        },
+        "pid": 98286,
+        "terminal_clean_pass": true
+      }
+    ],
+    "authority": {
+      "current_metric": "10/213",
+      "frozen_adapter_capture_metric": "9/213",
+      "frozen_adapter_capture_credit": 0,
+      "this_check_grants_credit": false,
+      "source_pins_count": 31,
+      "unchanged_candidate_pins": 25,
+      "accepted_authority_pin_changes": 6
+    },
+    "capture_lineage": {
+      "original_main_sha256": "a5cedea1c9861aca393787f7d1a26bfcee3a8a17b08ec4a8bd889fb79a2c7057",
+      "package_and_current_main_sha256": "8ece8ee2e9ac39b4e0ea0adfddf6c9f6eddc93f72da34cdfbc4666d25bc1587c",
+      "difference": "independently reviewed smoke-only counts and actual attachment verification, no rendering/gameplay change",
+      "candidate_app_remains_historical_9_213": true,
+      "live_adapter_metadata_remains_capture_time_9_213_credit0": true,
+      "current_registry_holds_accepted_10_213": true
+    },
+    "verified": {
+      "ordinary_main_world": [
+        735,
+        968,
+        983,
+        71156,
+        466,
+        467
+      ],
+      "actual_wall": [
+        10,
+        10,
+        512,
+        1,
+        2
+      ],
+      "actual_roof": [
+        1,
+        1,
+        10,
+        1,
+        1
+      ],
+      "collision_partitions": [
+        62,
+        30,
+        10
+      ],
+      "mounted_virtual_files": 925,
+      "generated_world_files": 47,
+      "generated_chunks": 38,
+      "rows_source_render_aux": [
+        739,
+        735,
+        4
+      ],
+      "private_paths_raw_banned": [
+        0,
+        0,
+        0
+      ],
+      "deep_strict_signature": true,
+      "signed_architectures": [
+        "arm64",
+        "x86_64"
+      ],
+      "entitlements": {},
+      "privacy_tracking": false,
+      "xattrs": [],
+      "symlinks": [],
+      "no_activation_overrides": true,
+      "native_backend": "Metal 4.0 / Forward+ / Apple M2 (Apple8)"
+    },
+    "limits": [
+      "No new rendered capture or art/route re-review; prior accepted frozen evidence remains historical.",
+      "Supported opt-in ordinary-main smoke verified; no manual ordinary launch, publication or credit action performed.",
+      "Current authority source and mounted package are 10/213; actual adapter reports its preserved capture-time 9/213 credit0 metadata."
+    ],
+    "engine_slot": "released_all_independent_and_owner_pids_terminal_and_absent",
+    "product_authority_preset_app_edits": false,
+    "new_export": false,
+    "missing_items": []
+  },
+  "review_text_normalized": "# Independent exact-current 1439 release review — PASS\n\nReviewer: `review_1439_package`, 2026-09-09. The frozen current Mac app passes the independent package gate. No missing items remain. This review changes no product, preset, authority, app bytes, or credit and performs no export or publication.\n\nApp: `{MAIN_REPO}/build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app`.\n\nThe seven-file app matches both the owner freeze and independent pre-run inventory after all four checks. Its tree SHA-256 is `64d53753266959fe49119f8363e786c4a53f999232b0299329037094d2f8a986`; PCK `d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac`; executable `569e9350ba9d3fb629dde0efdf047a0faf1d1a7ab640c96b46ded5a867204689`. Deep/strict signing, arm64 and x86_64 signatures, empty entitlements, tracking=false, and absence of xattrs/symlinks passed using native tools.\n\n| Independent check | PID | Seconds | Result |\n|---|---:|---:|---|\n| Editor mounted component | 550 | 2.306 | PASS |\n| Editor mounted privacy | 691 | 2.386 | PASS |\n| Signed release ordinary-main headless smoke | 720 | 7.162 | PASS |\n| Signed release ordinary-main native smoke | 760 | 8.058 | PASS |\n\nEvery receipt is terminal exit 0 with clean actual logs and all 31 source pins unchanged before/after. Native execution reports Metal 4 / Forward+ / Apple M2 (Apple8). Both exported-main runs used the supported `--mac-export-smoke` path, with no script/path/main-pack or activation override. They reached the ordinary full world (735 rows, 968 meshes, 983 surfaces, 71,156 triangles, 466 bodies, 467 shapes), verified actual 1439 wall/roof attachment (10/10/512/1/2 and 1/1/10/1/1), movement defaults, and jetpack ascent/descent. Mounted component checks retain exact material/metadata, roof winding and collision partitions 62+30+10. The mounted audit found 925 virtual files, 47 generated world files, 38 chunks, 739/735/4 source/render/auxiliary rows, and zero private paths, private raw files or banned content.\n\nCurrent authority is **10/213**. The adapter's logged **9/213, credit 0** is deliberately preserved capture-time metadata. The 31-pin current source map contains 25 unchanged candidate pins and exactly six accepted authority changes. The external fixture changes only current authority predicates/result wording and binds the actual current source pins; its original geometry, ordinary-main/component and capture-metadata helpers remain intact. Bound fixture SHA-256: `d25b0f965f74019eb7f9a60d9a09958e2141567ba8a68df1aa1bee6b3c85019d`.\n\nThe accepted authority review remains `6e48e3f264cc458ed7e7c3b0b74e091ea8400c998ca6cd8d772fc524f8488ed8`. Captured main `a5cedea1c9861aca393787f7d1a26bfcee3a8a17b08ec4a8bd889fb79a2c7057` and current packaged main `8ece8ee2e9ac39b4e0ea0adfddf6c9f6eddc93f72da34cdfbc4666d25bc1587c` retain their accepted smoke-only reconciliation. This run creates no new rendered evidence, continuous-playback claim, or art/route re-review.\n\nAll five owner receipt/log bindings were checked against frozen handoff `a682a13619bfcb75a8960523b176748da9226f17fa91ffaba16ca063b06035a3`. Fresh final `ps` found all four independent and five owner PIDs absent. The heavy engine slot is released. Manual ordinary launch and publication remain separate root-controlled actions.\n\nRaw decision: `CURRENT_RELEASE_REVIEW.json`, SHA-256 `891520a24f013025776fcd07acc49e34d722a10055ad4e7be02361ea3d506d6f`. Final byte/source/PID receipt: `final-post-execution.json`, SHA-256 `1a9442588ea3686077a5def219762b023f3310b856434cfa6b5f2ff0fe485a56`. These bind the independent static record, four original execution receipts and logs, source inventory, and exact app bytes.\n",
+  "normalization": "Absolute path prefixes in string leaves become declared labels. All original identities, numerical values and reviewer statements are otherwise retained; exact originals remain privately resolvable."
+}

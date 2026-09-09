@@ -1,8 +1,8 @@
 {
   "build_contract": {
-    "authoring_catalog_sha256": "6987ab1db4d58096ae9189803a48b8015dca8154a23b55470ab166af76a2d50c",
-    "compiler_version": "1.8.1",
-    "runtime_registry_schema_version": "ti.facade-runtime-registry/9",
+    "authoring_catalog_sha256": "63f9925350bff01ca7a82184d7064a1afeead4f668673069beacb978b4df3f03",
+    "compiler_version": "1.9.0",
+    "runtime_registry_schema_version": "ti.facade-runtime-registry/10",
     "unknown_version_policy": "reject"
   },
   "contract_id": "treasure-island-facade-runtime-adapters",
@@ -10,8 +10,8 @@
     "disabled_adapter_receivers": 6,
     "disabled_projection_occurrences": 13,
     "disabled_unique_projection_inputs": 13,
-    "package_safe_adapter_receivers": 11,
-    "receiver_adapter_plans": 17
+    "package_safe_adapter_receivers": 12,
+    "receiver_adapter_plans": 18
   },
   "loader_contract": {
     "allowed_executable_kinds": [
@@ -22,10 +22,10 @@
       "res://game/scenes/world/",
       "res://game/scripts/world/"
     ],
-    "api_version": "ti.facade-runtime-registry-loader/8",
+    "api_version": "ti.facade-runtime-registry-loader/9",
     "instantiation_authorized": false,
     "loader_path": "res://game/scripts/world/facades/facade_runtime_registry_loader.gd",
-    "loader_sha256": "6571e85914e604e16a8294cc8835dba033454907a3bc1da8bb9d9fd36e35789f",
+    "loader_sha256": "8829611faea2a584ba548aa176037934b5dfd3f02e38009d69b8d6eb88ec7442",
     "projection_execution_policy": "forbidden",
     "unknown_version_policy": "reject"
   },
@@ -923,7 +923,7 @@
           "world_shapes": 466,
           "world_static_bodies": 466,
           "world_surfaces": 974,
-          "world_topology_scope": "current_integration_topology",
+          "world_topology_scope": "pre_d2_1439_integration_live_parity",
           "world_triangles": 70692
         },
         "ownership_contract": {
@@ -1182,6 +1182,196 @@
         }
       ],
       "source_key": "w95934119"
+    },
+    {
+      "adapter_id": "active-adapter:d2-1439-live:building:w95934144:wall",
+      "behavior_contract": {
+        "acceptance_contract": {
+          "accepted_physical_unit_id": "physical-building:w95934144",
+          "capture_time_recognition_metric": "9/213",
+          "evidence_manifest_sha256": "32454a02699ebce9e29e8313e70fe93894c52bd3a4ddb46c08ffeaee54891a6a",
+          "evidence_tree_sha256": "bd5c009e49545f5ef84b8f0c2032c1f59dd2054d4afe0aa1f9145f74a03e2426",
+          "independent_live_review_receipt_sha256": "cf1723b330fbd208fe92e27f5593c5f203b8f8cb99ff383ec8b389005fcc745c",
+          "mechanical_review_receipt_sha256": "f55d7a4df3fea5a1cf936d75ff0b8690b9c94f005992e5cc26da793304402119",
+          "motion_telemetry_manifest_sha256": "af5f7501b08cd36629123ad14b169da764d0c375f53a6167fee80843d7a1c863",
+          "numerator_effect": 1,
+          "package_verification_receipt_sha256": "56b93dc9a3e4300d6c64261618add170488002e8c305d34889d30fd55ad41af1",
+          "reference_recognizable": true,
+          "visual_motion_manifest_sha256": "262183b9dd5424df20527ad097bc2a07921c1f24c2ce5d359a6d7aa096052683",
+          "wall_and_roof_are_one_physical_unit": true
+        },
+        "geometry_contract": {
+          "canonical_roof_record_sha256": "ab98ae1442174841c0d9ae3aeb344991e73c2b85bf07252d2dc12d834ac0f8c0",
+          "canonical_wall_record_sha256": "0a0b5d7c002a3364714343704404e3e37fa1e55461c3bfae6ae0766d59bb8b11",
+          "horizontal_source_footprint_preserved": true,
+          "topology_delta_mesh_instances": 9,
+          "topology_delta_records": 0,
+          "topology_delta_shapes": 1,
+          "topology_delta_static_bodies": 0,
+          "topology_delta_surfaces": 9,
+          "topology_delta_triangles": 464,
+          "visual_geometry_signature": "81a05d20b03e16253675a36692c9856cf4d53509e008aacbb69bbe4eea7683e5",
+          "visual_mesh_instances": 11,
+          "visual_surfaces": 11,
+          "visual_triangles": 522,
+          "world_mesh_instances": 968,
+          "world_records": 735,
+          "world_shapes": 467,
+          "world_static_bodies": 466,
+          "world_surfaces": 983,
+          "world_topology_scope": "current_integration_topology",
+          "world_triangles": 71156
+        },
+        "ownership_contract": {
+          "closed_recess_render_layer": 1,
+          "decorative_collision_triangles": 0,
+          "decorative_navigation_nodes": 0,
+          "decorative_relief_triangles": 420,
+          "eligible_exterior_collision_triangles": 62,
+          "live_ownership_signature": "82e1fdfae492aa1942bbbb5cfb65b51d4da4c980cf85a4231c2093aaf3edc27a",
+          "navigation_owner_count": 0,
+          "noneligible_closed_recess_collision_triangles": 30,
+          "roof_collision_triangles": 10,
+          "roof_is_wall_spray_receiver": false,
+          "roof_world_solid_landing": true,
+          "shape_count": 3,
+          "spray_owner_count": 1,
+          "structural_owner_count": 2,
+          "wall_collision_triangles": 92,
+          "wall_decal_cull_mask": 2,
+          "wall_is_sole_spray_receiver": true,
+          "wall_shape_order": [
+            "eligible_exterior",
+            "noneligible_closed_recess"
+          ]
+        },
+        "replacement_contract": {
+          "actual_supplied_chunk_pair_required": true,
+          "fallback_allowed": false,
+          "generic_stack_allowed": false,
+          "mapped_public_run_indices": [
+            11,
+            12,
+            16,
+            17,
+            18,
+            19,
+            22,
+            23
+          ],
+          "partial_pair_allowed": false,
+          "protected_run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            13,
+            14,
+            15,
+            20,
+            21
+          ],
+          "roof_object_key": "building:w95934144:roof",
+          "source_key": "w95934144",
+          "wall_object_key": "building:w95934144:wall"
+        },
+        "schema_version": "ti.d2-1439-production-live-parity/1",
+        "truth_boundary": {
+          "as_built_fidelity_claimed": false,
+          "capture_time_candidate_promoted": false,
+          "capture_time_recognition_credit": false,
+          "game_distinctive_claimed": false,
+          "receiver_complete_inferred_from_art": false,
+          "reference_pixels_packaged": false,
+          "unobserved_sides_protected": true,
+          "unsurveyed_opening_roof_void_rail_dimensions_and_counts_are_production_inference": true
+        }
+      },
+      "content_mode": "active_d2_1439_paired_replacement",
+      "disabled_reason_code": null,
+      "executable_assets": [
+        {
+          "path": "res://game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd",
+          "resource_kind": "gdscript",
+          "sha256": "d5a4458be7a5c2fb6989f9d8a343d497d2f144eb19c445de6016888e7b3cce5e"
+        },
+        {
+          "path": "res://game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd",
+          "resource_kind": "gdscript",
+          "sha256": "797dfb3075dacdf24a32b4ee0fa4959c296b35ae2d51f2d3c4dbba407fead3b7"
+        },
+        {
+          "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
+          "resource_kind": "gdscript",
+          "sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+        }
+      ],
+      "integration_state": "package_safe_ready_for_integration",
+      "projection_descriptor_ids": [],
+      "receiver_key": "building:w95934144:wall",
+      "resolution_policy": "resolve_only_without_instantiation",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json",
+          "sha256": "58ba0093d002a3acad06b76876b7333077bb5152827f4a59b0c9b6da132b68d9"
+        },
+        {
+          "path": "res://game/resources/facades/d2_1439_chinook_quality_v2_prototype.json",
+          "sha256": "1217ae0a101f0f1951a3c12303d11af3aace225745922a09aed276b1958553be"
+        },
+        {
+          "path": "res://game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres",
+          "sha256": "09928b8617c7ac90e421aa0e61acab916e391c3bac84c486a2e3beda995139fe"
+        },
+        {
+          "path": "res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
+          "sha256": "75c13aa30a4e3c9f49980d78abe41f40c6c7ab270be6152c201eb8a72ebe8720"
+        },
+        {
+          "path": "res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
+          "sha256": "389c01066767b085ef8ed8ae4c5e1b06062d9ffb135e3e6a7bfa968b963717d7"
+        },
+        {
+          "path": "res://game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
+          "sha256": "eddc4900c351dc3a75d163bd380a8b3a39bf6a1c1c3647299e3af19634a60ead"
+        },
+        {
+          "path": "res://game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
+          "sha256": "d97d7b4a442ffe8ad9a0b003e5c1d6466f9ef9effc7cdb2be8ef966195e66782"
+        },
+        {
+          "path": "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
+          "sha256": "81fd15832670516b2cc752e89310acda201f30705b01297639703f76f2111a64"
+        },
+        {
+          "path": "res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
+          "sha256": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808"
+        },
+        {
+          "path": "res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+          "sha256": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c"
+        },
+        {
+          "path": "res://game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd",
+          "sha256": "d5a4458be7a5c2fb6989f9d8a343d497d2f144eb19c445de6016888e7b3cce5e"
+        },
+        {
+          "path": "res://game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd",
+          "sha256": "797dfb3075dacdf24a32b4ee0fa4959c296b35ae2d51f2d3c4dbba407fead3b7"
+        },
+        {
+          "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
+          "sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+        }
+      ],
+      "source_key": "w95934144"
     }
   ],
   "projection_descriptors": [
@@ -1368,5 +1558,5 @@
       "source_asset_type": "gd"
     }
   ],
-  "schema_version": "ti.facade-runtime-adapter-contracts/8"
+  "schema_version": "ti.facade-runtime-adapter-contracts/9"
 }

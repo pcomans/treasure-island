@@ -11,6 +11,7 @@ const HAWKINS_MASSING := preload("res://game/scripts/world/massing/hawkins_77_br
 const BUILDING_3_MASSING := preload("res://game/scripts/world/massing/building_3_600_california_massing.gd")
 const NAVY_CHAPEL_187_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd")
 const D2_1441_CHINOOK_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d2_1441_chinook_live_replacement.gd")
+const D2_1439_CHINOOK_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd")
 const ISLE_HOUSE_HIGH_FACADE_SCENE := preload("res://game/scenes/world/facades/isle_house/isle_house_high_facade.tscn")
 const ISLE_HOUSE_LOW_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd")
 const D1_B201_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/d1_b201_live_attachment.gd")
@@ -114,6 +115,12 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	if not bool(d2_1441_pair.get("ok", false)):
 		chunk_root.free()
 		return d2_1441_pair
+	# 1439 Chinook uses the same atomic source-pair seam. Its exact target chunk
+	# must contain one wall and one roof or fail before any generic node exists.
+	var d2_1439_pair := D2_1439_CHINOOK_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(d2_1439_pair.get("ok", false)):
+		chunk_root.free()
+		return d2_1439_pair
 	var chapel_plan := NAVY_CHAPEL_187_LIVE_REPLACEMENT.build_chunk_plan(chapel_pair)
 	if not bool(chapel_plan.get("ok", false)):
 		chunk_root.free()
@@ -123,6 +130,12 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
 		chunk_root.free()
 		return d2_1441_plan
+	var d2_1439_plan := D2_1439_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1439_pair)
+	if not bool(d2_1439_plan.get("ok", false)):
+		NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
+		D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
+		chunk_root.free()
+		return d2_1439_plan
 	var report := {
 		"ok": true,
 		"node": chunk_root,
@@ -139,12 +152,14 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		if not category_parents.has(parent_key):
 			NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
 			D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
+			D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)
 			chunk_root.free()
 			return {"ok": false, "code": "builder_parent", "message": "Missing world category parent %s." % parent_key, "source_keys": record.source_keys}
-		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan)
+		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan)
 		if not record_result.ok:
 			NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
 			D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
+			D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)
 			chunk_root.free()
 			return record_result
 		var record_node: Node3D = record_result.node
@@ -162,13 +177,17 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			report.source_keys[str(key_value)] = true
 	var chapel_consumed := NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)
 	var d2_1441_consumed := D2_1441_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1441_plan)
-	if not chapel_consumed or not d2_1441_consumed:
+	var d2_1439_consumed := D2_1439_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1439_plan)
+	if not chapel_consumed or not d2_1441_consumed or not d2_1439_consumed:
 		NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
 		D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
+		D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)
 		chunk_root.free()
 		if not chapel_consumed:
 			return {"ok": false, "code": "navy_chapel_187_live_unconsumed_pair", "message": "The supplied Chapel pair was not consumed exactly once.", "source_keys": ["w291189336"]}
-		return {"ok": false, "code": "d2_1441_live_unconsumed_pair", "message": "The supplied 1441 Chinook pair was not consumed exactly once.", "source_keys": ["w95934105"]}
+		if not d2_1441_consumed:
+			return {"ok": false, "code": "d2_1441_live_unconsumed_pair", "message": "The supplied 1441 Chinook pair was not consumed exactly once.", "source_keys": ["w95934105"]}
+		return {"ok": false, "code": "d2_1439_live_unconsumed_pair", "message": "The supplied 1439 Chinook pair was not consumed exactly once.", "source_keys": ["w95934144"]}
 	return report
 
 
@@ -219,7 +238,7 @@ func build_context(context: Dictionary, context_parents: Dictionary) -> Dictiona
 	return report
 
 
-func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}) -> Dictionary:
+func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}, d2_1439_plan: Dictionary = {}) -> Dictionary:
 	# Building 1's generated 20 m slab and terrain-level tower are source-valid
 	# horizontal placeholders but visually and physically wrong in the vertical
 	# dimension.  Intercept all four independently keyed records before generic
@@ -249,6 +268,11 @@ func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary
 	# construction, so there is no overlay, partial replacement, or fallback.
 	if not is_context and D2_1441_CHINOOK_LIVE_REPLACEMENT.claims_record(record):
 		return D2_1441_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1441_plan)
+	# 1439's exact wall and roof are likewise consumed from one prebuilt plan.
+	# This replaces, rather than overlays, both generic rows and keeps the sole
+	# spray receiver on the exact wall owner.
+	if not is_context and D2_1439_CHINOOK_LIVE_REPLACEMENT.claims_record(record):
+		return D2_1439_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1439_plan)
 	var b201_prepared: Dictionary = {}
 	if not is_context and D1_B201_LIVE_ATTACHMENT.claims_record(record):
 		b201_prepared = D1_B201_LIVE_ATTACHMENT.prepare(record)

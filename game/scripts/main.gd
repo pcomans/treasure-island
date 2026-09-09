@@ -7,10 +7,11 @@ const EXPECTED_MANIFEST_HASH := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e
 const EXPECTED_CHUNKS := 38
 const EXPECTED_PLAYABLE_ROWS := 735
 const EXPECTED_CONTEXT_ROWS := 4
-const EXPECTED_MESHES := 959
-const EXPECTED_SURFACES := 974
-const EXPECTED_TRIANGLES := 70692
+const EXPECTED_MESHES := 968
+const EXPECTED_SURFACES := 983
+const EXPECTED_TRIANGLES := 71156
 const EXPECTED_STATIC_BODIES := 466
+const EXPECTED_SHAPES := 467
 const EXPECTED_VEGETATION_SEED := 1414092337
 const EXPECTED_VEGETATION_INSTANCES := 124
 const EXPECTED_VEGETATION_ASSETS := 15
@@ -132,11 +133,13 @@ func _on_world_failed(code: String, message: String, source_keys: Array) -> void
 
 func _finish_mac_export_smoke(report: Dictionary) -> void:
 	var evidence := world_root.get_runtime_evidence()
+	var d2_1439_attachment_valid := _mac_export_1439_attachment_valid()
 	var spawn := world_root.get_spawn_transform()
 	var visual_defaults_valid := _visual_defaults_valid()
 	var semantic_materials_valid := _semantic_materials_valid()
 	var movement_defaults_valid := _movement_defaults_valid()
 	var valid := world_root.is_world_validated() \
+		and d2_1439_attachment_valid \
 		and str(report.get("content_sha256", "")) == EXPECTED_MANIFEST_HASH \
 		and spawn.origin.is_equal_approx(EXPECTED_FERRY_SPAWN_ORIGIN) \
 		and spawn.basis.is_equal_approx(Basis(Vector3.UP, EXPECTED_FERRY_SPAWN_YAW)) \
@@ -148,7 +151,7 @@ func _finish_mac_export_smoke(report: Dictionary) -> void:
 		and evidence.surfaces == EXPECTED_SURFACES \
 		and evidence.triangles == EXPECTED_TRIANGLES \
 		and evidence.static_bodies == EXPECTED_STATIC_BODIES \
-		and evidence.shapes == EXPECTED_STATIC_BODIES \
+		and evidence.shapes == EXPECTED_SHAPES \
 		and evidence.vegetation_seed == EXPECTED_VEGETATION_SEED \
 		and evidence.vegetation_instances == EXPECTED_VEGETATION_INSTANCES \
 		and evidence.vegetation_assets == EXPECTED_VEGETATION_ASSETS \
@@ -357,3 +360,50 @@ func _resume_game() -> void:
 
 func _exit_game() -> void:
 	get_tree().quit()
+
+
+func _mac_export_1439_attachment_valid() -> bool:
+	var walls: Array[Node3D] = []
+	var roofs: Array[Node3D] = []
+	for node: Node in world_root.find_children("*", "Node3D", true, false):
+		if not node.has_meta("feature_kind"):
+			continue
+		var key := str(node.get_meta("derived_object_key", ""))
+		if key == "building:w95934144:wall":
+			walls.append(node as Node3D)
+		elif key == "building:w95934144:roof":
+			roofs.append(node as Node3D)
+	if walls.size() != 1 or roofs.size() != 1:
+		print("MAC_EXPORT_D2_1439_ATTACHMENT: invalid pair count wall=%d roof=%d" % [walls.size(), roofs.size()])
+		return false
+	var wall := walls[0]
+	var roof := roofs[0]
+	var wall_measure := _mac_export_attachment_measure(wall)
+	var roof_measure := _mac_export_attachment_measure(roof)
+	var metadata := wall.get_meta("d2_1439_chinook_live_replacement", {}) as Dictionary
+	var valid := wall.name == "D21439ChinookLiveWallReplacement" and roof.name == "D21439ChinookLiveRoofReplacement" \
+		and wall_measure == {"meshes": 10, "surfaces": 10, "triangles": 512, "bodies": 1, "shapes": 2} \
+		and roof_measure == {"meshes": 1, "surfaces": 1, "triangles": 10, "bodies": 1, "shapes": 1} \
+		and metadata == (roof.get_meta("d2_1439_chinook_live_replacement", {}) as Dictionary) \
+		and str(metadata.get("geometry_signature", "")) == "81a05d20b03e16253675a36692c9856cf4d53509e008aacbb69bbe4eea7683e5" \
+		and str(metadata.get("live_ownership_signature", "")) == "82e1fdfae492aa1942bbbb5cfb65b51d4da4c980cf85a4231c2093aaf3edc27a" \
+		and str(metadata.get("accepted_recognition_metric", "")) == "9/213" \
+		and int(metadata.get("candidate_recognition_credit", -1)) == 0 \
+		and not bool(metadata.get("recognition_accepted", true))
+	print("MAC_EXPORT_D2_1439_ATTACHMENT: valid=%s wall=%s roof=%s wall_counts=%s roof_counts=%s geometry=%s ownership=%s recognition=9/213 credit=0" % [valid, wall.get_path(), roof.get_path(), wall_measure, roof_measure, metadata.get("geometry_signature", ""), metadata.get("live_ownership_signature", "")])
+	return valid
+
+
+func _mac_export_attachment_measure(attachment: Node3D) -> Dictionary:
+	var result := {"meshes": 0, "surfaces": 0, "triangles": 0, "bodies": 0, "shapes": 0}
+	for node: Node in attachment.find_children("*", "", true, false):
+		if node is MeshInstance3D:
+			var mesh := (node as MeshInstance3D).mesh
+			result.meshes += 1
+			result.surfaces += mesh.get_surface_count()
+			result.triangles += int(mesh.get_faces().size() / 3)
+		elif node is StaticBody3D:
+			result.bodies += 1
+		elif node is CollisionShape3D:
+			result.shapes += 1
+	return result

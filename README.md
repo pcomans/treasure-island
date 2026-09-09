@@ -18,7 +18,40 @@ Before restoring tools or opening Godot, read [AGENTS.md](AGENTS.md) and the [ma
 Human-only follow-ups are kept in the [owner action queue](HUMAN.md); that
 queue narrows external gates and never pauses safe independent work.
 
-## Current Building 1 wing returns v2 — scoped release evidence accepted
+## Current 1439 Chinook Court — tenth recognized building
+
+Independent source, live mechanics, visual/reference-recognition, candidate-package,
+packet and authority reviews accepted `physical-building:w95934144`. Recognition
+is **10/213**, with one new physical unit and **203** still not evaluated. Compiler
+`1.9.0`, catalog/registry v10 and contracts/loader v9 agree on nine active adapters,
+eighteen plans and twelve package-safe plans. The paired roof adds no extra credit.
+Current loaded topology is `735/968/983/71,156/466/467`
+rows/meshes/surfaces/triangles/bodies/shapes. Earlier B1/1441 topology and all nine
+previous acceptance records remain historical and unchanged.
+
+The current private app is `build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app`.
+Its seven-file identity is `64d53753266959fe49119f8363e786c4a53f999232b0299329037094d2f8a986`,
+PCK `d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac`, and executable
+`569e9350ba9d3fb629dde0efdf047a0faf1d1a7ab640c96b46ded5a867204689`.
+Owner and independent current-package checks passed. Publication-readiness review, Git publication, and ordinary visible launch are pending.
+The [current release closure](evidence/first-playable/d2-1439-quality-v2-current-release-2026-09-09-001/release-closure.json) binds the actual app, source pins and technical receipts.
+
+The [unchanged native evidence](evidence/first-playable/d2-1439-quality-v2-promotion-candidate-2026-09-09-001/candidate-closure.json) contains seven live stills,
+seven motion PNGs and seventeen reviewed original AVI frame payloads. It remains
+a source capture at **9/213**, with sampled temporal review and no continuous
+playback claim. Rendering source stayed unchanged through the reviewed smoke-only
+main correction and authority promotion; these images are not current exported-app
+pixels. The accepted facade has inward balcony and passage depth, a quiet upper
+window field, and a blank opposite end. No as-built fidelity is claimed.
+
+`HUMAN-001` remains pending for ordinary owner recognition and mouse/keyboard
+acceptance on the approved Apple M1 Pro. Technical checks on the Apple M2 verifier
+do not replace that owner play and do not block continued autonomous work.
+
+## Historical Building 1 wing returns v2 release — 2026-09-08
+
+This section records the preceding 9/213 release and its own exact app, evidence,
+publication and launch outcomes. Its uses of “current” are historical.
 
 The accepted Building 1 upgrade adds attached pale jamb and sill depth to the
 30 supported wing openings. Independent source, mechanical, and visual quality
@@ -326,9 +359,12 @@ The visual-only pavement skin keeps one filled union for all `427` OSM road/path
   pair replaces generic `2 / 2 / 42` wall/roof geometry with reviewed
   `9 / 9 / 1,578` geometry. The accepted B1 v2 returns add `1,440`
   render-only triangles, bringing the B1/tower replacement to `13 / 13 / 12,151`.
-  Exact-current source and the separately proved current package instantiate
-  `959` meshes, `974` surfaces, `70,692` triangles, and `466` nonempty static
-  body/shape pairs. The additional `28`
+  That preceding B1 release instantiated `959` meshes, `974` surfaces,
+  `70,692` triangles, and `466` body/shape pairs. The accepted 1439 pair replaces
+  generic `2 / 2 / 58` wall/roof geometry with `11 / 11 / 522`, adding one
+  noneligible closed-recess collision shape. The exact current package therefore
+  instantiates `968` meshes, `983` surfaces, `71,156` triangles, `466` nonempty
+  static bodies and `467` shapes. The additional `28`
   records are visual-only pedestrian pavement skins. Other facade attachments
   and pavement skins do not change physical collision. YBI, both bridges, and
   the SF billboard remain context-only and non-colliding.
@@ -369,17 +405,14 @@ The exact headless commands and their assertions are documented in [game/tests/R
 
 ## Export
 
-The exact current private package under final release review is
-`build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app`.
-Its verified bundle identity is `fd91b1c5598dc2fe436a756eb5fb7561c96989fe18734c59580de92b13fa4171`;
-executable SHA-256 `ac0aa612c576e039b04b743c2da5783fd0736a7312be4c88e31210b672845031` (`170,963,648` bytes);
-PCK SHA-256 `454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403` (`66,600,060` bytes).
-The [independent current package audit](evidence/reviews/building-1-wing-returns-v2-current-package-2026-09-08-INDEPENDENT_MECHANICAL_AUDIT.md)
-proves package mechanics and complete headless/native internal smoke. Fresh
-current evidence and its separate [mechanical](evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_EVIDENCE_MECHANICAL_AUDIT.md) and
-[visual](evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_VISUAL_AUDIT.md) reviews passed their scoped gates. Final Git publication
-and the ordinary visible launch remain pending as listed above. Technical Apple M2
-verification does not replace owner play on the approved Apple M1 Pro.
+The exact current private package is
+`build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app`.
+Bundle identity `64d53753266959fe49119f8363e786c4a53f999232b0299329037094d2f8a986`;
+PCK `d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac` (`66,659,644` bytes);
+executable `569e9350ba9d3fb629dde0efdf047a0faf1d1a7ab640c96b46ded5a867204689` (`170,963,648` bytes).
+Owner and independent current-package checks passed. Publication-readiness review, Git publication, and ordinary visible launch are pending.
+See the [current release closure](evidence/first-playable/d2-1439-quality-v2-current-release-2026-09-09-001/release-closure.json). The previous B1 and D2 packages
+remain unchanged historical artifacts.
 
 ### Historical B201 package
 
@@ -442,7 +475,7 @@ APP_BINARY="build/final-verification-staging-YYYY-MM-DD-HHMMSS/Treasure Island F
 
 The packaged smoke starts the exported PCK's normal main scene and fails after
 60 seconds of monotonic wall time if its checks do not finish. It exits nonzero if
-the exact ferry spawn/yaw, approved hash, source-current `959/974/70,692`
+the exact ferry spawn/yaw, approved hash, source-current `968/983/71,156`
 topology, grounded player-enable gate, exact `4/20 m/s` speed and
 `30/40 m/s²` response defaults, ambient/camera defaults, live eleven-key
 Poly Haven texture identities/effective repeats/filtering/normals, Space-bound

@@ -1,0 +1,882 @@
+{
+  "schema_version": "ti.d2-1439-quality-v2-derived-evidence/1",
+  "derived_normalized_summary": true,
+  "not_a_captured_original": true,
+  "raw_originals_rewritten": false,
+  "source_role": "native capture-time seven-still manifest",
+  "raw_origin": {
+    "raw_original_sha256": "b004312bf850cdbf085c9e69eed5fb7a66207b5ba27005daa0e9325685e642bf",
+    "raw_original_bytes": 30197,
+    "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/native-live/stills-capture.json"
+  },
+  "normalization": "Only absolute machine-path prefixes become declared placeholders; original arrays, numeric values, hashes and capture-time pending fields are retained. Selected frame paths may point to exact archived originals as labeled.",
+  "truth_boundary": {
+    "recognition_metric": "9/213",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "source_render_images_are_package_pixels": false,
+    "as_built_fidelity_claimed": false,
+    "inventory_physical_units": 213
+  },
+  "data": {
+    "ok": true,
+    "evidence_role": "Native ordinary-main live context; no architecture swaps or standalone factory activation by the capture driver.",
+    "recognition": "9/213 unchanged; independent live review pending",
+    "capture_time_recognition_metric": "9/213",
+    "capture_grants_recognition_credit": false,
+    "source_pins": {
+      "res://game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd": "797dfb3075dacdf24a32b4ee0fa4959c296b35ae2d51f2d3c4dbba407fead3b7",
+      "res://game/resources/facades/d2_1439_chinook_quality_v2_prototype.json": "1217ae0a101f0f1951a3c12303d11af3aace225745922a09aed276b1958553be",
+      "res://game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+      "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres": "81fd15832670516b2cc752e89310acda201f30705b01297639703f76f2111a64",
+      "res://game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres": "d97d7b4a442ffe8ad9a0b003e5c1d6466f9ef9effc7cdb2be8ef966195e66782",
+      "res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres": "389c01066767b085ef8ed8ae4c5e1b06062d9ffb135e3e6a7bfa968b963717d7",
+      "res://game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres": "09928b8617c7ac90e421aa0e61acab916e391c3bac84c486a2e3beda995139fe",
+      "res://game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres": "eddc4900c351dc3a75d163bd380a8b3a39bf6a1c1c3647299e3af19634a60ead",
+      "res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres": "75c13aa30a4e3c9f49980d78abe41f40c6c7ab270be6152c201eb8a72ebe8720",
+      "res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+      "res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+      "res://game/scripts/player/player_camera.gd": "1d53f11cc3d9de00d4bb580aa6322c6f53b0080e5b9e1e3b18baeefd52125cc3",
+      "res://game/scenes/player/player.tscn": "a37b00ecc620b4f3106a14d1dc9ec22a519f81481e5e6c68252389e13488a793",
+      "res://game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd": "d5a4458be7a5c2fb6989f9d8a343d497d2f144eb19c445de6016888e7b3cce5e",
+      "res://game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json": "58ba0093d002a3acad06b76876b7333077bb5152827f4a59b0c9b6da132b68d9",
+      "res://game/scripts/world/world_chunk_builder.gd": "417e4f7269292ed0c5185e85f6b5d12759cdc516ca6be069898145aaab56ab50",
+      "res://game/scripts/player/player_controller.gd": "8b114132d66c78dd0bfd09783c7b9a3a3a441a8b1ae14f33f7308bd9b04ed0ea",
+      "res://game/scripts/main.gd": "a5cedea1c9861aca393787f7d1a26bfcee3a8a17b08ec4a8bd889fb79a2c7057",
+      "res://game/scripts/interaction/spray_controller.gd": "9897042fbffc6740ebe3eb4c19da544a0d437391ded9987318edc7238c403da4",
+      "res://game/scenes/main.tscn": "959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66",
+      "res://game/scenes/world/world_root.tscn": "ed6dfaa1933cedf2a70ca6afd677a645d588dbf6c823fb04402aaaea4b709ab8",
+      "res://project.godot": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af",
+      "res://generated/world/chunks/x_-2__z_0.json": "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b",
+      "{TASK_ROOT}/work/1439-quality-v2-001/d2_1439_quality_v2_live_001_005_capture.gd": "4b869f911485ef262e7b13897528122eaabfcbae15c68c78f8565acdab524719"
+    },
+    "measured_world": {
+      "rows": 735,
+      "meshes": 968,
+      "surfaces": 983,
+      "triangles": 71156,
+      "bodies": 466,
+      "shapes": 467
+    },
+    "generator": "{TASK_ROOT}/work/1439-quality-v2-001/d2_1439_quality_v2_live_001_005_capture.gd",
+    "generator_sha256": "4b869f911485ef262e7b13897528122eaabfcbae15c68c78f8565acdab524719",
+    "display": "macOS",
+    "renderer": "forward_plus",
+    "captures": [
+      {
+        "id": "01-whole-sse-default",
+        "path": "{NATIVE_CAPTURE}/images/01-whole-sse-default.png",
+        "sha256": "682ea7ee61e055ef7f91ad2a553d33216cdb8530a816366899fc2f769993c516",
+        "dimensions": [
+          1440,
+          900
+        ],
+        "whole_entity_required": true,
+        "sun_rotation_degrees": [
+          -51.9999961853027,
+          -27.9999980926514,
+          0.0
+        ],
+        "camera_repeat_position_error_m": 0.0,
+        "camera_repeat_basis_error": 0.0,
+        "pose": {
+          "scenario_reset": "fixed_xz_then_real_character_physics_settle_on_generated_live_ground",
+          "physics_grounded": true,
+          "ordinary_player_rig": true,
+          "input_reachable_camera_orientation": true,
+          "requested_xz": [
+            -302.0,
+            -20.0
+          ],
+          "settle_spawn_y_m": 6.05107116699219,
+          "player_position_m": [
+            -302.0,
+            3.05128049850464,
+            -20.0
+          ],
+          "ground_y_m": 3.05107116699219,
+          "ground_clearance_m": 0.000209331512451172,
+          "settle_horizontal_drift_m": 0.0,
+          "settle_physics_frames": 126,
+          "settle_recovery_delta": 0,
+          "ground_feature": "land_ground",
+          "ground_object": "land:w26767313:x_-2__z_-1",
+          "ground_sources": [
+            "w26767313",
+            "w29399800"
+          ],
+          "aim_target_m": [
+            -292.059997558594,
+            6.15000009536743,
+            2.01799988746643
+          ],
+          "camera_position_m": [
+            -304.260681152344,
+            4.80139303207397,
+            -25.007682800293
+          ],
+          "camera_forward": [
+            0.411037653684616,
+            0.0454341061413288,
+            0.910485506057739
+          ],
+          "camera_fov_degrees": 70.0,
+          "configured_spring_length_m": 5.5,
+          "actual_spring_length_m": 5.50000095367432,
+          "camera_yaw_degrees": -155.703254517381,
+          "camera_pitch_degrees": 2.60407924488735
+        },
+        "framing": {
+          "ok": true,
+          "metadata": {
+            "target_bounds_point_count": 88,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              157.700500488281,
+              170.115600585938
+            ],
+            "target_projected_max_px": [
+              1324.63916015625,
+              573.200500488281
+            ],
+            "target_projected_width_ratio": 0.810374111599392,
+            "target_projected_height_ratio": 0.447872111002604,
+            "target_bounds_fully_in_frame": true
+          }
+        },
+        "los": {
+          "viewport_center_px": [
+            720.0,
+            450.0
+          ],
+          "aim_target_center_error_px": 0.0006103515625,
+          "first_los_hit_receiver": "building:w95934144:wall",
+          "first_los_hit_source_keys": [
+            "w95934144"
+          ],
+          "first_los_hit_run_index": 19,
+          "expected_los_run_index": 19,
+          "first_los_hit_position_m": [
+            -292.06005859375,
+            6.14999008178711,
+            2.01778984069824
+          ],
+          "first_los_hit_distance_m": 29.682487487793,
+          "first_los_hit_target_error_m": 0.000218963934457861,
+          "receiver_source_run_first_los": true
+        },
+        "hud": {
+          "debug_panel_visible": false,
+          "feedback_panel_visible": false,
+          "load_panel_visible": false,
+          "pause_panel_visible": false,
+          "reticle_visible": true
+        },
+        "player_visible": true
+      },
+      {
+        "id": "02-oblique-default",
+        "path": "{NATIVE_CAPTURE}/images/02-oblique-default.png",
+        "sha256": "ab1964d7e520ef572db0f1b689d9dc5a703774db587cadba5dd2a5285183e283",
+        "dimensions": [
+          1440,
+          900
+        ],
+        "whole_entity_required": true,
+        "sun_rotation_degrees": [
+          -51.9999961853027,
+          -27.9999980926514,
+          0.0
+        ],
+        "camera_repeat_position_error_m": 0.0,
+        "camera_repeat_basis_error": 0.0,
+        "pose": {
+          "scenario_reset": "fixed_xz_then_real_character_physics_settle_on_generated_live_ground",
+          "physics_grounded": true,
+          "ordinary_player_rig": true,
+          "input_reachable_camera_orientation": true,
+          "requested_xz": [
+            -308.0,
+            -26.0
+          ],
+          "settle_spawn_y_m": 5.90106201171875,
+          "player_position_m": [
+            -308.0,
+            2.90117383003235,
+            -26.0
+          ],
+          "ground_y_m": 2.90106201171875,
+          "ground_clearance_m": 0.000111818313598633,
+          "settle_horizontal_drift_m": 0.0,
+          "settle_physics_frames": 126,
+          "settle_recovery_delta": 0,
+          "ground_feature": "land_ground",
+          "ground_object": "land:w26767313:x_-2__z_-1",
+          "ground_sources": [
+            "w26767313",
+            "w29399800"
+          ],
+          "aim_target_m": [
+            -292.059997558594,
+            6.15000009536743,
+            2.01799988746643
+          ],
+          "camera_position_m": [
+            -310.717712402344,
+            4.68825626373291,
+            -30.7769088745117
+          ],
+          "camera_forward": [
+            0.494123786687851,
+            0.0387123450636864,
+            0.868529260158539
+          ],
+          "camera_fov_degrees": 70.0,
+          "configured_spring_length_m": 5.5,
+          "actual_spring_length_m": 5.50001382827759,
+          "camera_yaw_degrees": -150.363583296943,
+          "camera_pitch_degrees": 2.21860807509095
+        },
+        "framing": {
+          "ok": true,
+          "metadata": {
+            "target_bounds_point_count": 88,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              313.111602783203,
+              281.785705566406
+            ],
+            "target_projected_max_px": [
+              1048.49731445312,
+              527.661071777344
+            ],
+            "target_projected_width_ratio": 0.510684543185764,
+            "target_projected_height_ratio": 0.273194851345486,
+            "target_bounds_fully_in_frame": true
+          }
+        },
+        "los": {
+          "viewport_center_px": [
+            720.0,
+            450.0
+          ],
+          "aim_target_center_error_px": 0.000428334606112912,
+          "first_los_hit_receiver": "building:w95934144:wall",
+          "first_los_hit_source_keys": [
+            "w95934144"
+          ],
+          "first_los_hit_run_index": 19,
+          "expected_los_run_index": 19,
+          "first_los_hit_position_m": [
+            -292.060119628906,
+            6.14999294281006,
+            2.017822265625
+          ],
+          "first_los_hit_distance_m": 37.7589302062988,
+          "first_los_hit_target_error_m": 0.000215642852708697,
+          "receiver_source_run_first_los": true
+        },
+        "hud": {
+          "debug_panel_visible": false,
+          "feedback_panel_visible": false,
+          "load_panel_visible": false,
+          "pause_panel_visible": false,
+          "reticle_visible": true
+        },
+        "player_visible": true
+      },
+      {
+        "id": "03-balcony-approach-default",
+        "path": "{NATIVE_CAPTURE}/images/03-balcony-approach-default.png",
+        "sha256": "7f5351c16506078876696b2205b08afbe4a3ff9c20bae215c18b248d7753a1a9",
+        "dimensions": [
+          1440,
+          900
+        ],
+        "whole_entity_required": false,
+        "sun_rotation_degrees": [
+          -51.9999961853027,
+          -27.9999980926514,
+          0.0
+        ],
+        "camera_repeat_position_error_m": 0.0,
+        "camera_repeat_basis_error": 0.0,
+        "pose": {
+          "scenario_reset": "fixed_xz_then_real_character_physics_settle_on_generated_live_ground",
+          "physics_grounded": true,
+          "ordinary_player_rig": true,
+          "input_reachable_camera_orientation": true,
+          "requested_xz": [
+            -288.961883544922,
+            -14.6755781173706
+          ],
+          "settle_spawn_y_m": 6.37600708007812,
+          "player_position_m": [
+            -288.961883544922,
+            3.37602114677429,
+            -14.6755781173706
+          ],
+          "ground_y_m": 3.37600708007812,
+          "ground_clearance_m": 1.40666961669922e-05,
+          "settle_horizontal_drift_m": 0.0,
+          "settle_physics_frames": 126,
+          "settle_recovery_delta": 0,
+          "ground_feature": "land_ground",
+          "ground_object": "land:w26767313:x_-2__z_-1",
+          "ground_sources": [
+            "w26767313",
+            "w29399800"
+          ],
+          "aim_target_m": [
+            -281.412322998047,
+            6.40000009536743,
+            -9.77620029449463
+          ],
+          "camera_position_m": [
+            -293.545928955078,
+            4.75426721572876,
+            -17.6504535675049
+          ],
+          "camera_forward": [
+            0.833464086055756,
+            0.113046258687973,
+            0.540886521339417
+          ],
+          "camera_fov_degrees": 70.0,
+          "configured_spring_length_m": 5.5,
+          "actual_spring_length_m": 5.49999380111694,
+          "camera_yaw_degrees": -122.982038448944,
+          "camera_pitch_degrees": 6.49094776676635
+        },
+        "framing": {
+          "ok": true,
+          "metadata": {
+            "framing_subject": "bounded motif plus surrounding wall, not whole building",
+            "mouth_center_m": [
+              -281.412322998047,
+              6.40000009536743,
+              -9.77620029449463
+            ],
+            "mouth_camera_horizontal_distance_m": 14.4647245407104,
+            "mouth_camera_normal_distance_m": 12.5268278121948,
+            "camera_off_facade_normal_degrees": 29.9999294834174,
+            "target_bounds_point_count": 8,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              607.797302246094,
+              293.137939453125
+            ],
+            "target_projected_max_px": [
+              826.935180664062,
+              590.39697265625
+            ],
+            "target_projected_width_ratio": 0.152179082234701,
+            "target_projected_height_ratio": 0.330287814670139,
+            "target_bounds_fully_in_frame": true
+          }
+        },
+        "los": {
+          "viewport_center_px": [
+            720.0,
+            450.0
+          ],
+          "aim_target_center_error_px": 0.00018310546875,
+          "first_los_hit_receiver": "building:w95934144:wall",
+          "first_los_hit_source_keys": [
+            "w95934144"
+          ],
+          "first_los_hit_run_index": 11,
+          "expected_los_run_index": 11,
+          "first_los_hit_position_m": [
+            -281.412322998047,
+            6.39999961853027,
+            -9.77620220184326
+          ],
+          "first_los_hit_distance_m": 14.5580444335938,
+          "first_los_hit_target_error_m": 1.96604992197535e-06,
+          "receiver_source_run_first_los": true
+        },
+        "hud": {
+          "debug_panel_visible": false,
+          "feedback_panel_visible": false,
+          "load_panel_visible": false,
+          "pause_panel_visible": false,
+          "reticle_visible": true
+        },
+        "player_visible": true
+      },
+      {
+        "id": "04-passage-approach-default",
+        "path": "{NATIVE_CAPTURE}/images/04-passage-approach-default.png",
+        "sha256": "3c71a2b0adbb80c924b6e6e79d8a12e2ffdd147198249f0c0e7ed5706d1a3fb6",
+        "dimensions": [
+          1440,
+          900
+        ],
+        "whole_entity_required": false,
+        "sun_rotation_degrees": [
+          -51.9999961853027,
+          -27.9999980926514,
+          0.0
+        ],
+        "camera_repeat_position_error_m": 0.0,
+        "camera_repeat_basis_error": 2.08250061639603e-09,
+        "pose": {
+          "scenario_reset": "fixed_xz_then_real_character_physics_settle_on_generated_live_ground",
+          "physics_grounded": true,
+          "ordinary_player_rig": true,
+          "input_reachable_camera_orientation": true,
+          "requested_xz": [
+            -314.058166503906,
+            -1.65352272987366
+          ],
+          "settle_spawn_y_m": 5.98139953613281,
+          "player_position_m": [
+            -314.058166503906,
+            2.98151135444641,
+            -1.65352272987366
+          ],
+          "ground_y_m": 2.98139953613281,
+          "ground_clearance_m": 0.000111818313598633,
+          "settle_horizontal_drift_m": 0.0,
+          "settle_physics_frames": 126,
+          "settle_recovery_delta": 0,
+          "ground_feature": "land_ground",
+          "ground_object": "land:w26767313:x_-2__z_-1",
+          "ground_sources": [
+            "w26767313",
+            "w29399800"
+          ],
+          "aim_target_m": [
+            -304.993347167969,
+            4.84000015258789,
+            2.47189617156982
+          ],
+          "camera_position_m": [
+            -319.063629150391,
+            5.05965185165405,
+            -3.93151831626892
+          ],
+          "camera_forward": [
+            0.910083651542664,
+            -0.0142073053866625,
+            0.414181083440781
+          ],
+          "camera_fov_degrees": 70.0,
+          "configured_spring_length_m": 5.5,
+          "actual_spring_length_m": 5.50000238418579,
+          "camera_yaw_degrees": -114.470383285135,
+          "camera_pitch_degrees": -0.814047002678296
+        },
+        "framing": {
+          "ok": true,
+          "metadata": {
+            "framing_subject": "bounded motif plus surrounding wall, not whole building",
+            "mouth_center_m": [
+              -306.507690429688,
+              4.84000015258789,
+              3.24444007873535
+            ],
+            "mouth_camera_horizontal_distance_m": 14.4618806838989,
+            "mouth_camera_normal_distance_m": 12.0980882644653,
+            "camera_off_facade_normal_degrees": 33.2224042690132,
+            "target_bounds_point_count": 8,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              678.351257324219,
+              362.616394042969
+            ],
+            "target_projected_max_px": [
+              876.66064453125,
+              541.786071777344
+            ],
+            "target_projected_width_ratio": 0.137714852227105,
+            "target_projected_height_ratio": 0.199077419704861,
+            "target_bounds_fully_in_frame": true
+          }
+        },
+        "los": {
+          "viewport_center_px": [
+            720.0,
+            450.0
+          ],
+          "aim_target_center_error_px": 6.82393801980652e-05,
+          "first_los_hit_receiver": "building:w95934144:wall",
+          "first_los_hit_source_keys": [
+            "w95934144"
+          ],
+          "first_los_hit_run_index": 23,
+          "expected_los_run_index": 23,
+          "first_los_hit_position_m": [
+            -304.993347167969,
+            4.84000110626221,
+            2.47189784049988
+          ],
+          "first_los_hit_distance_m": 15.4604272842407,
+          "first_los_hit_target_error_m": 1.92219204109279e-06,
+          "receiver_source_run_first_los": true
+        },
+        "hud": {
+          "debug_panel_visible": false,
+          "feedback_panel_visible": false,
+          "load_panel_visible": false,
+          "pause_panel_visible": false,
+          "reticle_visible": true
+        },
+        "player_visible": true
+      },
+      {
+        "id": "05-oblique-changed-light",
+        "path": "{NATIVE_CAPTURE}/images/05-oblique-changed-light.png",
+        "sha256": "cdd26762217318ba13bda2f5116d36efb75ee892efc4f08b708b912423b10a3b",
+        "dimensions": [
+          1440,
+          900
+        ],
+        "whole_entity_required": true,
+        "sun_rotation_degrees": [
+          -25.9999980926514,
+          125.999992370605,
+          0.0
+        ],
+        "camera_repeat_position_error_m": 0.0,
+        "camera_repeat_basis_error": 0.0,
+        "pose": {
+          "scenario_reset": "fixed_xz_then_real_character_physics_settle_on_generated_live_ground",
+          "physics_grounded": true,
+          "ordinary_player_rig": true,
+          "input_reachable_camera_orientation": true,
+          "requested_xz": [
+            -308.0,
+            -26.0
+          ],
+          "settle_spawn_y_m": 5.90106201171875,
+          "player_position_m": [
+            -308.0,
+            2.90117383003235,
+            -26.0
+          ],
+          "ground_y_m": 2.90106201171875,
+          "ground_clearance_m": 0.000111818313598633,
+          "settle_horizontal_drift_m": 0.0,
+          "settle_physics_frames": 126,
+          "settle_recovery_delta": 0,
+          "ground_feature": "land_ground",
+          "ground_object": "land:w26767313:x_-2__z_-1",
+          "ground_sources": [
+            "w26767313",
+            "w29399800"
+          ],
+          "aim_target_m": [
+            -292.059997558594,
+            6.15000009536743,
+            2.01799988746643
+          ],
+          "camera_position_m": [
+            -310.717712402344,
+            4.68825626373291,
+            -30.7769088745117
+          ],
+          "camera_forward": [
+            0.494123786687851,
+            0.0387123450636864,
+            0.868529260158539
+          ],
+          "camera_fov_degrees": 70.0,
+          "configured_spring_length_m": 5.5,
+          "actual_spring_length_m": 5.50001382827759,
+          "camera_yaw_degrees": -150.363583296943,
+          "camera_pitch_degrees": 2.21860807509095
+        },
+        "framing": {
+          "ok": true,
+          "metadata": {
+            "target_bounds_point_count": 88,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              313.111602783203,
+              281.785705566406
+            ],
+            "target_projected_max_px": [
+              1048.49731445312,
+              527.661071777344
+            ],
+            "target_projected_width_ratio": 0.510684543185764,
+            "target_projected_height_ratio": 0.273194851345486,
+            "target_bounds_fully_in_frame": true
+          }
+        },
+        "los": {
+          "viewport_center_px": [
+            720.0,
+            450.0
+          ],
+          "aim_target_center_error_px": 0.000428334606112912,
+          "first_los_hit_receiver": "building:w95934144:wall",
+          "first_los_hit_source_keys": [
+            "w95934144"
+          ],
+          "first_los_hit_run_index": 19,
+          "expected_los_run_index": 19,
+          "first_los_hit_position_m": [
+            -292.060119628906,
+            6.14999294281006,
+            2.017822265625
+          ],
+          "first_los_hit_distance_m": 37.7589302062988,
+          "first_los_hit_target_error_m": 0.000215642852708697,
+          "receiver_source_run_first_los": true
+        },
+        "hud": {
+          "debug_panel_visible": false,
+          "feedback_panel_visible": false,
+          "load_panel_visible": false,
+          "pause_panel_visible": false,
+          "reticle_visible": true
+        },
+        "player_visible": true
+      },
+      {
+        "id": "06-balcony-approach-changed-light",
+        "path": "{NATIVE_CAPTURE}/images/06-balcony-approach-changed-light.png",
+        "sha256": "47d663183bd49f1464993bce41650dc3f621dd2149bc90685070d35ecf985cca",
+        "dimensions": [
+          1440,
+          900
+        ],
+        "whole_entity_required": false,
+        "sun_rotation_degrees": [
+          -25.9999980926514,
+          125.999992370605,
+          0.0
+        ],
+        "camera_repeat_position_error_m": 0.0,
+        "camera_repeat_basis_error": 8.46223286998793e-08,
+        "pose": {
+          "scenario_reset": "fixed_xz_then_real_character_physics_settle_on_generated_live_ground",
+          "physics_grounded": true,
+          "ordinary_player_rig": true,
+          "input_reachable_camera_orientation": true,
+          "requested_xz": [
+            -288.961883544922,
+            -14.6755781173706
+          ],
+          "settle_spawn_y_m": 6.37600708007812,
+          "player_position_m": [
+            -288.961883544922,
+            3.37602114677429,
+            -14.6755781173706
+          ],
+          "ground_y_m": 3.37600708007812,
+          "ground_clearance_m": 1.40666961669922e-05,
+          "settle_horizontal_drift_m": 0.0,
+          "settle_physics_frames": 126,
+          "settle_recovery_delta": 0,
+          "ground_feature": "land_ground",
+          "ground_object": "land:w26767313:x_-2__z_-1",
+          "ground_sources": [
+            "w26767313",
+            "w29399800"
+          ],
+          "aim_target_m": [
+            -281.412322998047,
+            6.40000009536743,
+            -9.77620029449463
+          ],
+          "camera_position_m": [
+            -293.545928955078,
+            4.75426721572876,
+            -17.6504535675049
+          ],
+          "camera_forward": [
+            0.833464086055756,
+            0.113046258687973,
+            0.540886521339417
+          ],
+          "camera_fov_degrees": 70.0,
+          "configured_spring_length_m": 5.5,
+          "actual_spring_length_m": 5.49999380111694,
+          "camera_yaw_degrees": -122.982038448944,
+          "camera_pitch_degrees": 6.49094776676635
+        },
+        "framing": {
+          "ok": true,
+          "metadata": {
+            "framing_subject": "bounded motif plus surrounding wall, not whole building",
+            "mouth_center_m": [
+              -281.412322998047,
+              6.40000009536743,
+              -9.77620029449463
+            ],
+            "mouth_camera_horizontal_distance_m": 14.4647245407104,
+            "mouth_camera_normal_distance_m": 12.5268278121948,
+            "camera_off_facade_normal_degrees": 29.9999294834174,
+            "target_bounds_point_count": 8,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              607.797302246094,
+              293.137939453125
+            ],
+            "target_projected_max_px": [
+              826.935180664062,
+              590.39697265625
+            ],
+            "target_projected_width_ratio": 0.152179082234701,
+            "target_projected_height_ratio": 0.330287814670139,
+            "target_bounds_fully_in_frame": true
+          }
+        },
+        "los": {
+          "viewport_center_px": [
+            720.0,
+            450.0
+          ],
+          "aim_target_center_error_px": 0.00018310546875,
+          "first_los_hit_receiver": "building:w95934144:wall",
+          "first_los_hit_source_keys": [
+            "w95934144"
+          ],
+          "first_los_hit_run_index": 11,
+          "expected_los_run_index": 11,
+          "first_los_hit_position_m": [
+            -281.412322998047,
+            6.39999961853027,
+            -9.77620220184326
+          ],
+          "first_los_hit_distance_m": 14.5580444335938,
+          "first_los_hit_target_error_m": 1.96604992197535e-06,
+          "receiver_source_run_first_los": true
+        },
+        "hud": {
+          "debug_panel_visible": false,
+          "feedback_panel_visible": false,
+          "load_panel_visible": false,
+          "pause_panel_visible": false,
+          "reticle_visible": true
+        },
+        "player_visible": true
+      },
+      {
+        "id": "07-passage-approach-changed-light",
+        "path": "{NATIVE_CAPTURE}/images/07-passage-approach-changed-light.png",
+        "sha256": "675639c859604f6c7af3e7fee3b9d2d81135ade4fa3e1276d97df8ed39a351a1",
+        "dimensions": [
+          1440,
+          900
+        ],
+        "whole_entity_required": false,
+        "sun_rotation_degrees": [
+          -25.9999980926514,
+          125.999992370605,
+          0.0
+        ],
+        "camera_repeat_position_error_m": 0.0,
+        "camera_repeat_basis_error": 3.12375081357175e-09,
+        "pose": {
+          "scenario_reset": "fixed_xz_then_real_character_physics_settle_on_generated_live_ground",
+          "physics_grounded": true,
+          "ordinary_player_rig": true,
+          "input_reachable_camera_orientation": true,
+          "requested_xz": [
+            -314.058166503906,
+            -1.65352272987366
+          ],
+          "settle_spawn_y_m": 5.98139953613281,
+          "player_position_m": [
+            -314.058166503906,
+            2.98151135444641,
+            -1.65352272987366
+          ],
+          "ground_y_m": 2.98139953613281,
+          "ground_clearance_m": 0.000111818313598633,
+          "settle_horizontal_drift_m": 0.0,
+          "settle_physics_frames": 126,
+          "settle_recovery_delta": 0,
+          "ground_feature": "land_ground",
+          "ground_object": "land:w26767313:x_-2__z_-1",
+          "ground_sources": [
+            "w26767313",
+            "w29399800"
+          ],
+          "aim_target_m": [
+            -304.993347167969,
+            4.84000015258789,
+            2.47189617156982
+          ],
+          "camera_position_m": [
+            -319.063629150391,
+            5.05965185165405,
+            -3.93151831626892
+          ],
+          "camera_forward": [
+            0.910083651542664,
+            -0.0142073053866625,
+            0.414181083440781
+          ],
+          "camera_fov_degrees": 70.0,
+          "configured_spring_length_m": 5.5,
+          "actual_spring_length_m": 5.50000238418579,
+          "camera_yaw_degrees": -114.470383285135,
+          "camera_pitch_degrees": -0.814047002678296
+        },
+        "framing": {
+          "ok": true,
+          "metadata": {
+            "framing_subject": "bounded motif plus surrounding wall, not whole building",
+            "mouth_center_m": [
+              -306.507690429688,
+              4.84000015258789,
+              3.24444007873535
+            ],
+            "mouth_camera_horizontal_distance_m": 14.4618806838989,
+            "mouth_camera_normal_distance_m": 12.0980882644653,
+            "camera_off_facade_normal_degrees": 33.2224042690132,
+            "target_bounds_point_count": 8,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              678.351257324219,
+              362.616394042969
+            ],
+            "target_projected_max_px": [
+              876.66064453125,
+              541.786071777344
+            ],
+            "target_projected_width_ratio": 0.137714852227105,
+            "target_projected_height_ratio": 0.199077419704861,
+            "target_bounds_fully_in_frame": true
+          }
+        },
+        "los": {
+          "viewport_center_px": [
+            720.0,
+            450.0
+          ],
+          "aim_target_center_error_px": 6.82393801980652e-05,
+          "first_los_hit_receiver": "building:w95934144:wall",
+          "first_los_hit_source_keys": [
+            "w95934144"
+          ],
+          "first_los_hit_run_index": 23,
+          "expected_los_run_index": 23,
+          "first_los_hit_position_m": [
+            -304.993347167969,
+            4.84000110626221,
+            2.47189784049988
+          ],
+          "first_los_hit_distance_m": 15.4604272842407,
+          "first_los_hit_target_error_m": 1.92219204109279e-06,
+          "receiver_source_run_first_los": true
+        },
+        "hud": {
+          "debug_panel_visible": false,
+          "feedback_panel_visible": false,
+          "load_panel_visible": false,
+          "pause_panel_visible": false,
+          "reticle_visible": true
+        },
+        "player_visible": true
+      }
+    ]
+  }
+}

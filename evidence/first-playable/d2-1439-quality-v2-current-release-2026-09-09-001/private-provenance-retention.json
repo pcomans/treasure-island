@@ -1,0 +1,1590 @@
+{
+  "derived_copy_inventory": true,
+  "raw_originals_rewritten": false,
+  "placeholder_roles": {
+    "{TASK_ROOT}": "original executing task root; corresponding work hierarchy retained below the current private root",
+    "{MAIN_REPO}": "main repository containing this release record",
+    "{CANDIDATE_REPO}": "unchanged historical 1439 candidate worktree; referenced raw files and candidate002 app are also retained under main",
+    "{PRIVATE_TMP}": "original temporary source locator only; retained raw originals are indexed explicitly"
+  },
+  "private_root": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001",
+  "current_copies": [
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/discovery/facades/facade-recognition-catalog.json",
+      "original_locator": "{MAIN_REPO}/discovery/facades/facade-recognition-catalog.json",
+      "source_role": "accepted_current_source_original",
+      "sha256": "63f9925350bff01ca7a82184d7064a1afeead4f668673069beacb978b4df3f03",
+      "bytes": 303190,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/discovery/facades/facade-recognition-catalog.schema.json",
+      "original_locator": "{MAIN_REPO}/discovery/facades/facade-recognition-catalog.schema.json",
+      "source_role": "accepted_current_source_original",
+      "sha256": "46fc7d8ec9d3bd44915bad8ad4ad9ef67d2eeb11590f7a3bdbd46f8bf0e7c8ce",
+      "bytes": 40602,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/export_presets.cfg",
+      "original_locator": "{MAIN_REPO}/export_presets.cfg",
+      "source_role": "accepted_current_source_original",
+      "sha256": "a9bbac740c5df451a94f48fab047c113b7d45933ec05614eb43ed3b5a2f0e878",
+      "bytes": 4597,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json",
+      "original_locator": "{MAIN_REPO}/game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json",
+      "source_role": "accepted_current_source_original",
+      "sha256": "58ba0093d002a3acad06b76876b7333077bb5152827f4a59b0c9b6da132b68d9",
+      "bytes": 4858,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/resources/facades/d2_1439_chinook_quality_v2_prototype.json",
+      "original_locator": "{MAIN_REPO}/game/resources/facades/d2_1439_chinook_quality_v2_prototype.json",
+      "source_role": "accepted_current_source_original",
+      "sha256": "1217ae0a101f0f1951a3c12303d11af3aace225745922a09aed276b1958553be",
+      "bytes": 15010,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/resources/facades/facade-runtime-adapter-contracts.json",
+      "original_locator": "{MAIN_REPO}/game/resources/facades/facade-runtime-adapter-contracts.json",
+      "source_role": "accepted_current_source_original",
+      "sha256": "15690d957af001e068d23864e1a88abed01c1c7ce0788b034a96969cc2256f60",
+      "bytes": 70329,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/resources/facades/facade-runtime-registry.json",
+      "original_locator": "{MAIN_REPO}/game/resources/facades/facade-runtime-registry.json",
+      "source_role": "accepted_current_source_original",
+      "sha256": "10470755262cddebbf55da8ed863fe55d2491b5322c4f9f3147649a4ac553539",
+      "bytes": 653711,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres",
+      "original_locator": "{MAIN_REPO}/game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres",
+      "source_role": "accepted_current_source_original",
+      "sha256": "09928b8617c7ac90e421aa0e61acab916e391c3bac84c486a2e3beda995139fe",
+      "bytes": 204,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
+      "original_locator": "{MAIN_REPO}/game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
+      "source_role": "accepted_current_source_original",
+      "sha256": "75c13aa30a4e3c9f49980d78abe41f40c6c7ab270be6152c201eb8a72ebe8720",
+      "bytes": 182,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
+      "original_locator": "{MAIN_REPO}/game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
+      "source_role": "accepted_current_source_original",
+      "sha256": "389c01066767b085ef8ed8ae4c5e1b06062d9ffb135e3e6a7bfa968b963717d7",
+      "bytes": 423,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
+      "original_locator": "{MAIN_REPO}/game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
+      "source_role": "accepted_current_source_original",
+      "sha256": "eddc4900c351dc3a75d163bd380a8b3a39bf6a1c1c3647299e3af19634a60ead",
+      "bytes": 188,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
+      "original_locator": "{MAIN_REPO}/game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
+      "source_role": "accepted_current_source_original",
+      "sha256": "d97d7b4a442ffe8ad9a0b003e5c1d6466f9ef9effc7cdb2be8ef966195e66782",
+      "bytes": 188,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
+      "original_locator": "{MAIN_REPO}/game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
+      "source_role": "accepted_current_source_original",
+      "sha256": "81fd15832670516b2cc752e89310acda201f30705b01297639703f76f2111a64",
+      "bytes": 447,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
+      "original_locator": "{MAIN_REPO}/game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
+      "source_role": "accepted_current_source_original",
+      "sha256": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+      "bytes": 451335,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+      "original_locator": "{MAIN_REPO}/game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+      "source_role": "accepted_current_source_original",
+      "sha256": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+      "bytes": 2811712,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/scenes/main.tscn",
+      "original_locator": "{MAIN_REPO}/game/scenes/main.tscn",
+      "source_role": "accepted_current_source_original",
+      "sha256": "959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66",
+      "bytes": 1401,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/scenes/player/player.tscn",
+      "original_locator": "{MAIN_REPO}/game/scenes/player/player.tscn",
+      "source_role": "accepted_current_source_original",
+      "sha256": "a37b00ecc620b4f3106a14d1dc9ec22a519f81481e5e6c68252389e13488a793",
+      "bytes": 1994,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/scenes/world/world_root.tscn",
+      "original_locator": "{MAIN_REPO}/game/scenes/world/world_root.tscn",
+      "source_role": "accepted_current_source_original",
+      "sha256": "ed6dfaa1933cedf2a70ca6afd677a645d588dbf6c823fb04402aaaea4b709ab8",
+      "bytes": 2738,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/scripts/interaction/spray_controller.gd",
+      "original_locator": "{MAIN_REPO}/game/scripts/interaction/spray_controller.gd",
+      "source_role": "accepted_current_source_original",
+      "sha256": "9897042fbffc6740ebe3eb4c19da544a0d437391ded9987318edc7238c403da4",
+      "bytes": 5168,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/scripts/main.gd",
+      "original_locator": "{MAIN_REPO}/game/scripts/main.gd",
+      "source_role": "accepted_current_source_original",
+      "sha256": "8ece8ee2e9ac39b4e0ea0adfddf6c9f6eddc93f72da34cdfbc4666d25bc1587c",
+      "bytes": 18694,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/scripts/player/player_camera.gd",
+      "original_locator": "{MAIN_REPO}/game/scripts/player/player_camera.gd",
+      "source_role": "accepted_current_source_original",
+      "sha256": "1d53f11cc3d9de00d4bb580aa6322c6f53b0080e5b9e1e3b18baeefd52125cc3",
+      "bytes": 3622,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/scripts/player/player_controller.gd",
+      "original_locator": "{MAIN_REPO}/game/scripts/player/player_controller.gd",
+      "source_role": "accepted_current_source_original",
+      "sha256": "8b114132d66c78dd0bfd09783c7b9a3a3a441a8b1ae14f33f7308bd9b04ed0ea",
+      "bytes": 5164,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd",
+      "original_locator": "{MAIN_REPO}/game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd",
+      "source_role": "accepted_current_source_original",
+      "sha256": "d5a4458be7a5c2fb6989f9d8a343d497d2f144eb19c445de6016888e7b3cce5e",
+      "bytes": 49172,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd",
+      "original_locator": "{MAIN_REPO}/game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd",
+      "source_role": "accepted_current_source_original",
+      "sha256": "797dfb3075dacdf24a32b4ee0fa4959c296b35ae2d51f2d3c4dbba407fead3b7",
+      "bytes": 30961,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/scripts/world/facades/facade_runtime_registry_loader.gd",
+      "original_locator": "{MAIN_REPO}/game/scripts/world/facades/facade_runtime_registry_loader.gd",
+      "source_role": "accepted_current_source_original",
+      "sha256": "8829611faea2a584ba548aa176037934b5dfd3f02e38009d69b8d6eb88ec7442",
+      "bytes": 142374,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/scripts/world/facades/site_12_housing_kit.gd",
+      "original_locator": "{MAIN_REPO}/game/scripts/world/facades/site_12_housing_kit.gd",
+      "source_role": "accepted_current_source_original",
+      "sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+      "bytes": 8809,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/game/scripts/world/world_chunk_builder.gd",
+      "original_locator": "{MAIN_REPO}/game/scripts/world/world_chunk_builder.gd",
+      "source_role": "accepted_current_source_original",
+      "sha256": "417e4f7269292ed0c5185e85f6b5d12759cdc516ca6be069898145aaab56ab50",
+      "bytes": 33109,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/generated/world/chunks/x_-2__z_0.json",
+      "original_locator": "{MAIN_REPO}/generated/world/chunks/x_-2__z_0.json",
+      "source_role": "accepted_current_source_original",
+      "sha256": "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b",
+      "bytes": 592643,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/generated/world/manifest.json",
+      "original_locator": "{MAIN_REPO}/generated/world/manifest.json",
+      "source_role": "accepted_current_source_original",
+      "sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+      "bytes": 27087,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/project.godot",
+      "original_locator": "{MAIN_REPO}/project.godot",
+      "source_role": "accepted_current_source_original",
+      "sha256": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af",
+      "bytes": 4962,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/current-source/tools/build_facade_recognition_registry.mjs",
+      "original_locator": "{MAIN_REPO}/tools/build_facade_recognition_registry.mjs",
+      "source_role": "accepted_current_source_original",
+      "sha256": "2e1598e65937a680c2eb355bc343ac87e7fbdf3da52ff1ab6ab9c9320c880ae8",
+      "bytes": 265592,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/CURRENT_RELEASE_REVIEW.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/CURRENT_RELEASE_REVIEW.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "891520a24f013025776fcd07acc49e34d722a10055ad4e7be02361ea3d506d6f",
+      "bytes": 16661,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/CURRENT_RELEASE_REVIEW.md",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/CURRENT_RELEASE_REVIEW.md",
+      "source_role": "independent_current_package_original",
+      "sha256": "e1c196bb0e49a6db432ab7cbabb9db0eff613fde2488a51147501b98ab7d89a9",
+      "bytes": 3743,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/PREPARATION.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/PREPARATION.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "672d98c13a9e1532838b4d5472797b06600237001006ec55372ff5fd153b02c1",
+      "bytes": 1184,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/READY_PLAN.md",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/READY_PLAN.md",
+      "source_role": "independent_current_package_original",
+      "sha256": "dd1709f9c9b3aafa6ac4518e93839907d777c2e29b616d5b80c37e61964720d2",
+      "bytes": 4342,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/bundle-check-plan.pending.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/bundle-check-plan.pending.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "98b8444025e41adf8fd9c4b0b1c8398d58af1c299ec410eb15a701a02143ede6",
+      "bytes": 2356,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/close_current_review.py",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/close_current_review.py",
+      "source_role": "independent_current_package_original",
+      "sha256": "0ac0ae93dbe31111974aaca57ccd7695871cc00978f9f2784afe30d719e21336",
+      "bytes": 7744,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/final-post-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/final-post-execution.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "1a9442588ea3686077a5def219762b023f3310b856434cfa6b5f2ff0fe485a56",
+      "bytes": 6041,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/frozen-inputs.pending.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/frozen-inputs.pending.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "f127febe00d9d42e14b410d3348034a2e205e10831232b7004b7975606f45369",
+      "bytes": 2574,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/mounted-component-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/mounted-component-001-execution.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "9efcc1a8672ff05f53d04a989f7dd37490516f82a3c09d1a0c45efcea657ffd6",
+      "bytes": 9894,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/mounted-component-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/mounted-component-001.log",
+      "source_role": "independent_current_package_original",
+      "sha256": "12ffa2863cdcb4acf9fed52df659193bf808459866f88883215d89604675bd21",
+      "bytes": 615,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/mounted-privacy-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/mounted-privacy-001-execution.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "6f7f6c454cccaf2e1e074da4bedc13366eed25ed396bdd7e361198b77dc6274f",
+      "bytes": 10010,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/mounted-privacy-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/mounted-privacy-001.log",
+      "source_role": "independent_current_package_original",
+      "sha256": "6573ee595efa375554ea89a4b5b2e3c3de0af6388d90ebed02b94e986992183f",
+      "bytes": 769,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/package-contract-template.diff",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/package-contract-template.diff",
+      "source_role": "independent_current_package_original",
+      "sha256": "443135b9444777ea1ea1f21cece57bacbf88c543048d737b9d4a80edb48d5022",
+      "bytes": 11099,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/package-contract.gd",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/package-contract.gd",
+      "source_role": "independent_current_package_original",
+      "sha256": "d25b0f965f74019eb7f9a60d9a09958e2141567ba8a68df1aa1bee6b3c85019d",
+      "bytes": 21715,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/package-contract.gd.template",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/package-contract.gd.template",
+      "source_role": "independent_current_package_original",
+      "sha256": "3a01c573fcad4da2c995eb5c9ecd6267b0acb9c4f75f502402fca14b6eeee5cd",
+      "bytes": 20599,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/package-source-pins.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/package-source-pins.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "52c36aa5e6a76e469e650736d6f91e165f86bf7c794c9b04864ed797f2dc99bf",
+      "bytes": 4094,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/release-headless-smoke-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/release-headless-smoke-001-execution.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "2e2e6f36dd0a8f01c02cd0328fde0324400aebb0ef8a80e0fbe3701a15a939cd",
+      "bytes": 9342,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/release-headless-smoke-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/release-headless-smoke-001.log",
+      "source_role": "independent_current_package_original",
+      "sha256": "eb53f899e11759ac216d43f3b67d4fac1e1a6f35a144518793c950d0cd4dda5b",
+      "bytes": 1803,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/release-native-smoke-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/release-native-smoke-001-execution.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "c715b4ebede62cef9aa7f5d705ed3c0d372f1bbf9c88c77074ddf23b19b461d9",
+      "bytes": 9478,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/release-native-smoke-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/release-native-smoke-001.log",
+      "source_role": "independent_current_package_original",
+      "sha256": "4957838a3c09a3a475fda87c1617b6290a5d5f1886875c93c5b1584bf94cd476",
+      "bytes": 1869,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/run-plan.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/run-plan.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "c995eec11dcec15f4f2e90de249e1e32dfbe996caf9dfad959f7826765ed8321",
+      "bytes": 4262,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/run-plan.pending.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/run-plan.pending.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "91eb2b5f431bc6c18f2f3b2d17cb999d2ca4cc4673cde11264e34ba08a092087",
+      "bytes": 3476,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/run-stage.py",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/run-stage.py",
+      "source_role": "independent_current_package_original",
+      "sha256": "66534007df930e44ef8b1a39e250817b2ec934ec29c78a53920483c097c68ce9",
+      "bytes": 1658,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/runtime-001/release-headless-smoke-001-engine.log",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/runtime-001/release-headless-smoke-001-engine.log",
+      "source_role": "independent_current_package_original",
+      "sha256": "eb53f899e11759ac216d43f3b67d4fac1e1a6f35a144518793c950d0cd4dda5b",
+      "bytes": 1803,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/runtime-001/release-native-smoke-001-engine.log",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/runtime-001/release-native-smoke-001-engine.log",
+      "source_role": "independent_current_package_original",
+      "sha256": "4957838a3c09a3a475fda87c1617b6290a5d5f1886875c93c5b1584bf94cd476",
+      "bytes": 1869,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/static-pre-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/static-pre-execution.json",
+      "source_role": "independent_current_package_original",
+      "sha256": "22647ff4fed7b448a37211ef54624afccb083f33785c5cb6be79bc008e4a977e",
+      "bytes": 14867,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-exact-current-release-independent-001/static_current_check.py",
+      "original_locator": "{TASK_ROOT}/work/1439-exact-current-release-independent-001/static_current_check.py",
+      "source_role": "independent_current_package_original",
+      "sha256": "64c1161fb0e80120fe8c8a744fa433555480cb0d73ee82518bdd45bcc6b34345",
+      "bytes": 6411,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/CURRENT_PACKAGE_HANDOFF.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/CURRENT_PACKAGE_HANDOFF.json",
+      "source_role": "raw_original",
+      "sha256": "a682a13619bfcb75a8960523b176748da9226f17fa91ffaba16ca063b06035a3",
+      "bytes": 16652,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/bundle-native-checks-001.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/bundle-native-checks-001.json",
+      "source_role": "raw_original",
+      "sha256": "9b7cb51b2edfe9a81c12c228c1a3d5eb0b4940260b9f372352547db8d2961114",
+      "bytes": 4712,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/bundle-preflight-001-failure.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/bundle-preflight-001-failure.json",
+      "source_role": "raw_original",
+      "sha256": "a131e1ff5181ab7aa9869619d2d2fd72338a524d31d2e52de57f491db5b5e0f6",
+      "bytes": 717,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/bundle-preflight-002-failure.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/bundle-preflight-002-failure.json",
+      "source_role": "raw_original",
+      "sha256": "d091f9ce67aadd73604c4ae5d913624e4e902b7d9bfa99e36a6960bd594448c2",
+      "bytes": 224,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/bundle-preflight-reconciliation.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/bundle-preflight-reconciliation.json",
+      "source_role": "raw_original",
+      "sha256": "263cb1810f1acefcbe0ac82ed0ab0b9f38d9d70ffda22c04102b79ba620366ef",
+      "bytes": 654,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/current-package-inventory.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/current-package-inventory.json",
+      "source_role": "raw_original",
+      "sha256": "fa2d7ef8929bda6e772fcb65f4e93d1d2dafac642227fe13819722c87a626800",
+      "bytes": 8056,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/export-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/export-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "321813cdd3ad13824d2280c37f3272279628e2f6675693fb622520649c14bbad",
+      "bytes": 9191,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/export-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/export-001.log",
+      "source_role": "raw_original",
+      "sha256": "aeb9f4bfac9436b0f837fc61ba680df08f873c803be4c724a48d4767b8dc3676",
+      "bytes": 126016,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/mounted-component-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/mounted-component-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "a1c9bae4697247f8fc780bd47e32d7717b9c12f6dd19a223d5987627799eeb64",
+      "bytes": 9887,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/mounted-component-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/mounted-component-001.log",
+      "source_role": "raw_original",
+      "sha256": "12ffa2863cdcb4acf9fed52df659193bf808459866f88883215d89604675bd21",
+      "bytes": 615,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/mounted-privacy-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/mounted-privacy-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "10517a5dbb5edb5b19d6a0ead72596a3ce691e68b0aa2eb6b8ef02ca9051116f",
+      "bytes": 10005,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/mounted-privacy-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/mounted-privacy-001.log",
+      "source_role": "raw_original",
+      "sha256": "6573ee595efa375554ea89a4b5b2e3c3de0af6388d90ebed02b94e986992183f",
+      "bytes": 769,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/package-contract.gd",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/package-contract.gd",
+      "source_role": "raw_original",
+      "sha256": "d25b0f965f74019eb7f9a60d9a09958e2141567ba8a68df1aa1bee6b3c85019d",
+      "bytes": 21715,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/package-source-pins.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/package-source-pins.json",
+      "source_role": "raw_original",
+      "sha256": "52c36aa5e6a76e469e650736d6f91e165f86bf7c794c9b04864ed797f2dc99bf",
+      "bytes": 4094,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/post-run-preservation.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/post-run-preservation.json",
+      "source_role": "raw_original",
+      "sha256": "caf8b35922f80c06fbb2f0e8632d6ccffdb7c50f4b4ef3db99cd8feca199e34f",
+      "bytes": 1561,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/release-headless-smoke-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/release-headless-smoke-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "7b7bd68a973a67fb1e2a7d02d140068dc30186245f162db7123801b242d161b9",
+      "bytes": 9338,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/release-headless-smoke-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/release-headless-smoke-001.log",
+      "source_role": "raw_original",
+      "sha256": "18e87a39335d7f0efaf222c51578d14cc3af58e1c5ec0151da869c736cfd7239",
+      "bytes": 1803,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/release-native-smoke-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/release-native-smoke-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "0dc5d05d7e8c25abd771d168d896b867b72f4a2f01fa73b2b43b917689052d4f",
+      "bytes": 9475,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/release-native-smoke-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/release-native-smoke-001.log",
+      "source_role": "raw_original",
+      "sha256": "ecb2deae78dad1298aadb41462d9ccef5b1a336817a4f5f3d77b0d55733ef337",
+      "bytes": 1869,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/run-plan.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/run-plan.json",
+      "source_role": "raw_original",
+      "sha256": "1b568b6d0333df8a7fd14aabbb4680e4af8707fd4c921a2b1293e8f17a6c441b",
+      "bytes": 4784,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/run-stage.py",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/run-stage.py",
+      "source_role": "raw_original",
+      "sha256": "66534007df930e44ef8b1a39e250817b2ec934ec29c78a53920483c097c68ce9",
+      "bytes": 1658,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/runtime-001/release-headless-smoke-001-engine.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/runtime-001/release-headless-smoke-001-engine.log",
+      "source_role": "raw_original",
+      "sha256": "18e87a39335d7f0efaf222c51578d14cc3af58e1c5ec0151da869c736cfd7239",
+      "bytes": 1803,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/runtime-001/release-native-smoke-001-engine.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/runtime-001/release-native-smoke-001-engine.log",
+      "source_role": "raw_original",
+      "sha256": "ecb2deae78dad1298aadb41462d9ccef5b1a336817a4f5f3d77b0d55733ef337",
+      "bytes": 1869,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/current-release-001/source-readiness.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/current-release-001/source-readiness.json",
+      "source_role": "raw_original",
+      "sha256": "3096c3f31764787d4b2c289ad5cc191367d55f396855e7a670778a20c9d4fabe",
+      "bytes": 1381,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/1439-reference-config-inspect.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/1439-reference-config-inspect.json",
+      "source_role": "raw_original",
+      "sha256": "6c51d4b26ba63aef197daa09eae8a2b1406b1a256171c8e20b36e19649706a58",
+      "bytes": 12785,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/INTEGRATION_HANDOFF.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/INTEGRATION_HANDOFF.json",
+      "source_role": "raw_original",
+      "sha256": "db62d172cbd5b4ca34e10cfc3c3533a5cbac763242bfa8d3311fb5a45f2a042a",
+      "bytes": 9118,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/INTEGRATION_HANDOFF.md",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/INTEGRATION_HANDOFF.md",
+      "source_role": "raw_original",
+      "sha256": "96c8848617f1cfea822afdc48311a5c9fb76f5e7cb9c0234ac7736a0bc144270",
+      "bytes": 1569,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/PROSE_RECONCILIATION.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/PROSE_RECONCILIATION.json",
+      "source_role": "raw_original",
+      "sha256": "af4699649313c2d7bc042514dee6401c252de52268fcfacd74c734c7469deb37",
+      "bytes": 2362,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/discovery/RETRO_LOG.md",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/discovery/RETRO_LOG.md",
+      "source_role": "raw_original",
+      "sha256": "3018aa5b31efc958314f536fb3d1b48b117a50945bb9d86b4ceb1245cc41eb64",
+      "bytes": 899006,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/discovery/facades/facade-recognition-catalog.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/discovery/facades/facade-recognition-catalog.json",
+      "source_role": "raw_original",
+      "sha256": "6987ab1db4d58096ae9189803a48b8015dca8154a23b55470ab166af76a2d50c",
+      "bytes": 293761,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/discovery/facades/facade-recognition-catalog.schema.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/discovery/facades/facade-recognition-catalog.schema.json",
+      "source_role": "raw_original",
+      "sha256": "2835742a7f54d4d70e7bc90ff739ce33350954cf9daa69eb01eb1e20588c4687",
+      "bytes": 34599,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/export_presets.cfg",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/export_presets.cfg",
+      "source_role": "raw_original",
+      "sha256": "e54969d6127ee55691113217e5129a7c5e9b3e841168a6b91f3fc74ba278456f",
+      "bytes": 3966,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/game/resources/facades/facade-runtime-adapter-contracts.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/game/resources/facades/facade-runtime-adapter-contracts.json",
+      "source_role": "raw_original",
+      "sha256": "24efc72b3315540f31dc112949ac108509cdc0e4eb9f5e20ef0d4b45ce41ac49",
+      "bytes": 61876,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/game/resources/facades/facade-runtime-registry.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/game/resources/facades/facade-runtime-registry.json",
+      "source_role": "raw_original",
+      "sha256": "c6780895e339919f7ebe0900814afaa46fd15f31958946ec81b4391091a1d46f",
+      "bytes": 634669,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/game/scripts/main.gd",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/game/scripts/main.gd",
+      "source_role": "raw_original",
+      "sha256": "a5cedea1c9861aca393787f7d1a26bfcee3a8a17b08ec4a8bd889fb79a2c7057",
+      "bytes": 16002,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/game/scripts/player/player_camera.gd",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/game/scripts/player/player_camera.gd",
+      "source_role": "raw_original",
+      "sha256": "90ea739b25eb6cbcf8bacff072599b117fe894fcef08683483e41527d8019636",
+      "bytes": 1481,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/game/scripts/world/facades/facade_runtime_registry_loader.gd",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/game/scripts/world/facades/facade_runtime_registry_loader.gd",
+      "source_role": "raw_original",
+      "sha256": "6571e85914e604e16a8294cc8835dba033454907a3bc1da8bb9d9fd36e35789f",
+      "bytes": 124856,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/game/scripts/world/world_chunk_builder.gd",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/game/scripts/world/world_chunk_builder.gd",
+      "source_role": "raw_original",
+      "sha256": "7107dc0789e8ca8ee13d53510293a39b3f64e9a92e0ee81bef7317d90a08a87a",
+      "bytes": 31436,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/game/tests/headless_facade_recognition_registry_contract.gd",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/game/tests/headless_facade_recognition_registry_contract.gd",
+      "source_role": "raw_original",
+      "sha256": "83b0d1ddd4ef1faa75c00b41caa6c03b5fe3ac0f2914add7313454219284911f",
+      "bytes": 58001,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/game/tests/headless_facade_runtime_registry_loader_contract.gd",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/game/tests/headless_facade_runtime_registry_loader_contract.gd",
+      "source_role": "raw_original",
+      "sha256": "079a8bd2986dd58d76ba47ccec124c29095e2438b837feb48a09ba43922339ed",
+      "bytes": 78182,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/tools/build_facade_recognition_registry.mjs",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/tools/build_facade_recognition_registry.mjs",
+      "source_role": "raw_original",
+      "sha256": "9b6ee97d19e069a0cfc0dc0e043e856e8618c407361b508527ce764b9a71be37",
+      "bytes": 242275,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/tools/test_facade_recognition_registry.mjs",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/tools/test_facade_recognition_registry.mjs",
+      "source_role": "raw_original",
+      "sha256": "1765d01fe56bfbdf51682aabbf7d6d5d9e4cb497de3000b1b13cdeb02ace6ccf",
+      "bytes": 103429,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/before/tools/test_facade_runtime_loader_contract.mjs",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/before/tools/test_facade_runtime_loader_contract.mjs",
+      "source_role": "raw_original",
+      "sha256": "aab19a319f0991e6ec5c7db20ef54a5a268da7be26edbc9afed9eff88c175873",
+      "bytes": 58135,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/candidate-copy-inventory.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/candidate-copy-inventory.json",
+      "source_role": "raw_original",
+      "sha256": "548e64513c49819e7c19425cce670b60f8f01aab29ba2fdf54fae734fdaa0b4b",
+      "bytes": 18634,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/changed-file-hashes-final.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/changed-file-hashes-final.json",
+      "source_role": "raw_original",
+      "sha256": "3c67a19fb7efc82868a3b4dc527e74dd7088497abbdb4596e897ba8e98459bfa",
+      "bytes": 14464,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/changed-file-hashes.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/changed-file-hashes.json",
+      "source_role": "raw_original",
+      "sha256": "1088dc35f9a6d4b4f1e099c2b4ed393707210772004d4e1c479b394e19b0fb02",
+      "bytes": 14464,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-check-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-check-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "f8d56a6a003fc6fadf404044c3ebd9320287e271672ca85a98c21d24f23b0f97",
+      "bytes": 320,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-check-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-check-001.log",
+      "source_role": "raw_original",
+      "sha256": "41455cfecddc2cbac8bf66f8cbd25ac8d7475ba658b31f5c1333e8e144d832ac",
+      "bytes": 814,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-check-002-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-check-002-execution.json",
+      "source_role": "raw_original",
+      "sha256": "239c483f3d3d04eb83b45893661d64de4542e33095552da9944d4f68b245f638",
+      "bytes": 320,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-check-002.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-check-002.log",
+      "source_role": "raw_original",
+      "sha256": "b943f3e67041ef346f0e3bdf938914dd75e2018c9dc4db257506d6abcf4ef80e",
+      "bytes": 814,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-check-003-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-check-003-execution.json",
+      "source_role": "raw_original",
+      "sha256": "77b0cdca4899b8efecfbb04089cd5254236131fbc0ef697807d0392c6fb4c7e3",
+      "bytes": 341,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-check-003.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-check-003.log",
+      "source_role": "raw_original",
+      "sha256": "f23b184b33fd75fd3c440c2323ff565546af45a20e19bb5ec05bb398fbb391ea",
+      "bytes": 814,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-write-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-write-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "018f62c2e035f0dd53038a2683eca6de713a71a9d7770b5f45a26d35d01e6a79",
+      "bytes": 321,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-write-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-write-001.log",
+      "source_role": "raw_original",
+      "sha256": "f4a4625f15f8ef06e4629daf194569621458db2a659235a0c22064d143fff8ad",
+      "bytes": 1551,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-write-002-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-write-002-execution.json",
+      "source_role": "raw_original",
+      "sha256": "e259ebcb68eae682e0e3f96b57d2f15a7a9402af80fc351f5f92d3e50bb23310",
+      "bytes": 320,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-write-002.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-write-002.log",
+      "source_role": "raw_original",
+      "sha256": "af24f4538103003f39a52ee5ac49fba839c5ae97c7b1de6b3edcfe19b29e4ef7",
+      "bytes": 1521,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-write-003-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-write-003-execution.json",
+      "source_role": "raw_original",
+      "sha256": "9b33915f0443a74cb097e9777d58d2d94cc430839d4fc287433937c4a0a433ed",
+      "bytes": 321,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-write-003.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-write-003.log",
+      "source_role": "raw_original",
+      "sha256": "6503af778bc614885b619f33aa188490be20692437658d194fadf2c58b3842cb",
+      "bytes": 1233,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-write-004-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-write-004-execution.json",
+      "source_role": "raw_original",
+      "sha256": "2a189a4d8be7bacdb4124747914754bc975659ae81fe79c1849a40b3046a9387",
+      "bytes": 320,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-write-004.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-write-004.log",
+      "source_role": "raw_original",
+      "sha256": "f80bee65c4c0721c37c0bc98426b01a126abdddb2272a2096595b4da49bedc2b",
+      "bytes": 814,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-write-005-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-write-005-execution.json",
+      "source_role": "raw_original",
+      "sha256": "066b669d14a16446009cc742c68cf2b01ee748b6b2cf62b30b5abba26268fd9a",
+      "bytes": 320,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-write-005.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-write-005.log",
+      "source_role": "raw_original",
+      "sha256": "39b814fa7c6c88681ca6c924c9bea791cb93ca506c3c3d4a1aed28791397193d",
+      "bytes": 814,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-write-006-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-write-006-execution.json",
+      "source_role": "raw_original",
+      "sha256": "8e23bacd676b84b69d3cfe15d93bd87e2396662a7a4157ef3010be961ce6e8ee",
+      "bytes": 368,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/compiler-write-006.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/compiler-write-006.log",
+      "source_role": "raw_original",
+      "sha256": "a6dca2008e777d30eda338a8e586cc56fefd703bccd1f1e3b4d820f6f343fb4e",
+      "bytes": 814,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/edit-authority.py",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/edit-authority.py",
+      "source_role": "raw_original",
+      "sha256": "271e09bcdde1fb9a0a75e89eb56618b6312ce75594c9410a25ceacf46b96930d",
+      "bytes": 23159,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/edit-loader.py",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/edit-loader.py",
+      "source_role": "raw_original",
+      "sha256": "4c96d14e72a76648f889aa0943d7ae6d0b8ea1b882f8ea7d337a38719c048642",
+      "bytes": 9081,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/edit-tests.py",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/edit-tests.py",
+      "source_role": "raw_original",
+      "sha256": "1f0effc65b7f57b6ea42264c6fd9e070ac143e9f821314e057a81925b567b3e3",
+      "bytes": 8534,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/frozen-main-before.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/frozen-main-before.json",
+      "source_role": "raw_original",
+      "sha256": "00235db351f1e0badad628bcf94cdc34909d758ef2dfe204343f91fbc9a5780d",
+      "bytes": 84072,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/headless-loader-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/headless-loader-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "8ce1364ae6408bb2729cb44a6ea1dd74ccb6e5a97cfbbb180fc44ecf00d50e42",
+      "bytes": 657,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/headless-loader-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/headless-loader-001.log",
+      "source_role": "raw_original",
+      "sha256": "221fe8ed839cedc66be8004eb1738c51a34a74b484e3a6b01b94c1133f2e8764",
+      "bytes": 2965,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/headless-loader-002-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/headless-loader-002-execution.json",
+      "source_role": "raw_original",
+      "sha256": "c7f4549669853b814ec68afa755453bc9d4456450794b1a56275d6b907aedf8a",
+      "bytes": 597,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/headless-loader-002.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/headless-loader-002.log",
+      "source_role": "raw_original",
+      "sha256": "683ba7af59e4e5f1079d219b52a498eccfce7b0e1ad1db49bdf473c8f50b9537",
+      "bytes": 2328,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/headless-loader-003-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/headless-loader-003-execution.json",
+      "source_role": "raw_original",
+      "sha256": "5d72d49d0aa503576e7a7b6f5190a5a449ace26bf3b144aa22585858fb0059d6",
+      "bytes": 706,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/headless-loader-003.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/headless-loader-003.log",
+      "source_role": "raw_original",
+      "sha256": "74464cfff8bd0be69c19c7b265e8e05c81958a76de8d2579c0ef39145f324f66",
+      "bytes": 583,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/headless-registry-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/headless-registry-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "cfc44a44ebc5e9c39fcd3168e5f4c1e4d44af54de8f7d94fafc4d1ba043a36b5",
+      "bytes": 654,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/headless-registry-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/headless-registry-001.log",
+      "source_role": "raw_original",
+      "sha256": "419252f2426ddcb52d85b34ebcf7734152bc3708cb43dd5a8813f0e705773b22",
+      "bytes": 464,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/headless-registry-002-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/headless-registry-002-execution.json",
+      "source_role": "raw_original",
+      "sha256": "e4b3879af42e0b106bef9cc6587819d07ec2dbdb0178dcfab8c10e7cc9660872",
+      "bytes": 703,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/headless-registry-002.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/headless-registry-002.log",
+      "source_role": "raw_original",
+      "sha256": "fe0593584f4922dcdf9f265eca9b6c04a3569f1724ce7666a542b15b7b222dd2",
+      "bytes": 464,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/import-created-uids.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/import-created-uids.json",
+      "source_role": "raw_original",
+      "sha256": "71d0224b17c06b027b65629b6fb295f0aec0bdbb8e4c6ca51bbc1854f13e43c0",
+      "bytes": 1651,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/import-created-uids/building_1_wing_window_reveal_candidate_capture.gd.uid",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/import-created-uids/building_1_wing_window_reveal_candidate_capture.gd.uid",
+      "source_role": "raw_original",
+      "sha256": "0ff69b6df4a8f8d89c9027d7f8ce64ecde3ecc9927a3a1f6ee626784e81a9aff",
+      "bytes": 19,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/import-created-uids/headless_building_1_wing_returns_v2_current_package_contract.gd.uid",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/import-created-uids/headless_building_1_wing_returns_v2_current_package_contract.gd.uid",
+      "source_role": "raw_original",
+      "sha256": "a81972840fb1218b9d3e0ebcbb55550ed5dcf2b0174efa2eeae152c0110a457e",
+      "bytes": 20,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/import-created-uids/headless_building_1_wing_window_reveal_candidate_evidence_contract.gd.uid",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/import-created-uids/headless_building_1_wing_window_reveal_candidate_evidence_contract.gd.uid",
+      "source_role": "raw_original",
+      "sha256": "c2f7c99de5c6aae195369e905a61cbe52028232c04f48180cda3dabfacf796da",
+      "bytes": 20,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/import-created-uids/headless_building_1_wing_window_reveal_candidate_package_contract.gd.uid",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/import-created-uids/headless_building_1_wing_window_reveal_candidate_package_contract.gd.uid",
+      "source_role": "raw_original",
+      "sha256": "20be180ae447b1faddd59d96ebd2134e9b929a9c9e94cfae51af4ec995a8fad8",
+      "bytes": 20,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/integration-final.diff",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/integration-final.diff",
+      "source_role": "raw_original",
+      "sha256": "96dbae39c37407b2ec522896b74299d1539b0c0fd01a58217a67e8a405fd5e08",
+      "bytes": 325138,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/integration.diff",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/integration.diff",
+      "source_role": "raw_original",
+      "sha256": "f5d69dc277c67b35e473964bd4a5a09e78a85254e1140a46eedef152c8ad9492",
+      "bytes": 324067,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/loader-node-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/loader-node-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "b167c5ba0006676b5467e862b610e66322c7f297f7bffbaa2f0bb5aaf29984c6",
+      "bytes": 307,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/loader-node-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/loader-node-001.log",
+      "source_role": "raw_original",
+      "sha256": "e20c4d91240fc6421baf36da44f7da518385de2f242b08df2af54b3ed05ff442",
+      "bytes": 966,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/loader-node-002-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/loader-node-002-execution.json",
+      "source_role": "raw_original",
+      "sha256": "b4cbcc4ea163666a972cc795cbd2d49965dec338730421775d355232b68ad7bb",
+      "bytes": 307,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/loader-node-002.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/loader-node-002.log",
+      "source_role": "raw_original",
+      "sha256": "4cd8af3b708bc151b276c3a880b9c289ee8b28ee49219a48984efb457e1815d3",
+      "bytes": 747,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/loader-node-003-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/loader-node-003-execution.json",
+      "source_role": "raw_original",
+      "sha256": "6f9f7410165662723e33afcdf3d6dea350b7d048d80306ccc4da480ad7aad39a",
+      "bytes": 307,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/loader-node-003.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/loader-node-003.log",
+      "source_role": "raw_original",
+      "sha256": "1a2f174b2fcd1732a7fad321edf1414b4a43b88edb10750aa6b4651a0cd80d9d",
+      "bytes": 311,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/loader-node-004-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/loader-node-004-execution.json",
+      "source_role": "raw_original",
+      "sha256": "5650aa007528f06b6b3a73e0caa06fcf257778fc4dcfc3cc4e4b0c2022c15cb7",
+      "bytes": 329,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/loader-node-004.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/loader-node-004.log",
+      "source_role": "raw_original",
+      "sha256": "b285630745a91e036c48d254d14497b0943827fe6d81e2a601a40c59a1224793",
+      "bytes": 311,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/loader-parse-diagnostic-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/loader-parse-diagnostic-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "8c211666873830f2802c77d650e1313e5ff76582baa02a6d8b9a9aa5e44c9f53",
+      "bytes": 519,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/loader-parse-diagnostic-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/loader-parse-diagnostic-001.log",
+      "source_role": "raw_original",
+      "sha256": "1f8ad191c5e61850aa1930709691dd8f66fa48ff8de1801749c3fa695b625dd4",
+      "bytes": 466,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/loader-parse-diagnostic-002-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/loader-parse-diagnostic-002-execution.json",
+      "source_role": "raw_original",
+      "sha256": "f71a51340d5e9201d5b68172764373df5abbe0f29c1ce23652c28ef19882ab8d",
+      "bytes": 517,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/loader-parse-diagnostic-002.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/loader-parse-diagnostic-002.log",
+      "source_role": "raw_original",
+      "sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+      "bytes": 73,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/main-import-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/main-import-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "bb3cf2469ce95b4bdb7837156b96172aca8a5379c00142f8a7849ab5bbf13ff3",
+      "bytes": 537,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/main-import-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/main-import-001.log",
+      "source_role": "raw_original",
+      "sha256": "dde059f674578a448ac7ac100f97f81f7f28d3c703efef73bc40fcf5a16a9151",
+      "bytes": 2884,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/preservation-check.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/preservation-check.json",
+      "source_role": "raw_original",
+      "sha256": "bb7ff1b5c7a0c67c79f4fe312b49ced331cc43446f59b5df1bb7036381becddc",
+      "bytes": 84,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-before/discovery/RETRO_LOG.md",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-before/discovery/RETRO_LOG.md",
+      "source_role": "raw_original",
+      "sha256": "bf3cb5f13884e338f81ff3674b08c02e5f7aac7c911bb2aa56f9e3a556dba351",
+      "bytes": 900071,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-before/discovery/facades/facade-recognition-validation-report.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-before/discovery/facades/facade-recognition-validation-report.json",
+      "source_role": "raw_original",
+      "sha256": "1240553c44651e670e0126f2ffca4552f7f1e0fdba4e45095c081e1e7e52ccea",
+      "bytes": 78388,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-before/game/resources/facades/facade-runtime-adapter-contracts.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-before/game/resources/facades/facade-runtime-adapter-contracts.json",
+      "source_role": "raw_original",
+      "sha256": "7989ea3138e85a138aa4f00f35e483290a541bdfa18feba8517ca9f8fcc2d4f0",
+      "bytes": 70329,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-before/game/resources/facades/facade-runtime-registry.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-before/game/resources/facades/facade-runtime-registry.json",
+      "source_role": "raw_original",
+      "sha256": "a07d9213218f99df153a197fadc242d93c18e9d82ee27148325c57c57c0f3d5a",
+      "bytes": 653711,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-before/game/scripts/world/facades/facade_runtime_registry_loader.gd",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-before/game/scripts/world/facades/facade_runtime_registry_loader.gd",
+      "source_role": "raw_original",
+      "sha256": "b178b80ee3ebc29c97d1693d979b4ccd06593ba25509f93df709fd02e136feb6",
+      "bytes": 142375,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-before/game/tests/headless_facade_recognition_registry_contract.gd",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-before/game/tests/headless_facade_recognition_registry_contract.gd",
+      "source_role": "raw_original",
+      "sha256": "f68e6d8817983f1b402cc4c36b704cd586a91ab9a298ce5fe3268c9b40af9eff",
+      "bytes": 60636,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-before/game/tests/headless_facade_runtime_registry_loader_contract.gd",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-before/game/tests/headless_facade_runtime_registry_loader_contract.gd",
+      "source_role": "raw_original",
+      "sha256": "b443731e7521f2205f22700f4b219f798ad312a2cf6b3711e59f3b7a35bbad97",
+      "bytes": 87423,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-before/tools/build_facade_recognition_registry.mjs",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-before/tools/build_facade_recognition_registry.mjs",
+      "source_role": "raw_original",
+      "sha256": "067676cfbd801be66ace669f4890325bd88f254e1aa94b6a2973f005dfda5668",
+      "bytes": 265810,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-compiler-check-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-compiler-check-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "a8abd68e1274b9c663edeac277935457d48f8db097dda81c334abef60377352f",
+      "bytes": 342,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-compiler-check-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-compiler-check-001.log",
+      "source_role": "raw_original",
+      "sha256": "82274d72e639ba7983d250522148da887eab23bdea1490a0319638f2894403e7",
+      "bytes": 814,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-compiler-write-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-compiler-write-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "f6d3c57c07a412431d34830552d6fa796e0fe44bfb0f2118e44fc654f44bfe33",
+      "bytes": 342,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-compiler-write-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-compiler-write-001.log",
+      "source_role": "raw_original",
+      "sha256": "4e994964acdd900ee7fac719ac1a1b7e4a3ce1f627aebac520a7ffe8b5a4235a",
+      "bytes": 814,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-correction-pins.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-correction-pins.json",
+      "source_role": "raw_original",
+      "sha256": "5903fba81f103485f7a3da798e09bf58eded0a05c4c60c14b792fff396ed7d2a",
+      "bytes": 2191,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-correction.diff",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-correction.diff",
+      "source_role": "raw_original",
+      "sha256": "dc6623e139f562842db5b5e4b23fdbc6743cdda290d2366af14c1cf189b8cc80",
+      "bytes": 12991,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/prose-json-delta.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/prose-json-delta.json",
+      "source_role": "raw_original",
+      "sha256": "3c8d2b0c8abc8c5343690b2f95ead36ad69576eaf2dfbd47b8004faa9db4b777",
+      "bytes": 2271,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-001-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-001-execution.json",
+      "source_role": "raw_original",
+      "sha256": "06e10f8e15c8d0cf3db5ab9619f08d4d4d6b8c772b5980374318829080a40fdb",
+      "bytes": 304,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-001.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-001.log",
+      "source_role": "raw_original",
+      "sha256": "c3db2a9c5627322b6f5c53d269176b780f6c0a99346194a8685536f001935115",
+      "bytes": 819,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-002-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-002-execution.json",
+      "source_role": "raw_original",
+      "sha256": "bb8d689a565c8a7597ea788f2a58da334de6fe8e28074eb13842e0f3b28c880e",
+      "bytes": 304,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-002.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-002.log",
+      "source_role": "raw_original",
+      "sha256": "eb69ec069e3aa26111ef11d6db7e659dab37162fb09d2477ccedf1df13a96765",
+      "bytes": 760,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-003-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-003-execution.json",
+      "source_role": "raw_original",
+      "sha256": "44de5d95998b0c013a362b817b303d6170fb11dd7f8fcb54755a9c18323ffdf4",
+      "bytes": 303,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-003.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-003.log",
+      "source_role": "raw_original",
+      "sha256": "94529b37d2bcb102671a52d0fee1be8c68ce8fec13acba360a96e8241f0faf90",
+      "bytes": 769,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-004-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-004-execution.json",
+      "source_role": "raw_original",
+      "sha256": "3eeb0c6f3b10d7ec2636ab1ac0a1b152bed3269665eb9695033438c5344605cd",
+      "bytes": 303,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-004.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-004.log",
+      "source_role": "raw_original",
+      "sha256": "b45ecc3d798870f9efc9156c4670357e50da670c06af705391b3e078988a8f38",
+      "bytes": 1192,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-005-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-005-execution.json",
+      "source_role": "raw_original",
+      "sha256": "a75b4e9d70f98f3c92abd042c51185af34f240734a449cd8c73eb1f20d46e3b7",
+      "bytes": 303,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-005.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-005.log",
+      "source_role": "raw_original",
+      "sha256": "5c41886a23661001c6cdddd53b5548541c06ed17e3e1e163ff34b27d44a73164",
+      "bytes": 1201,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-006-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-006-execution.json",
+      "source_role": "raw_original",
+      "sha256": "3654a21a4edb36ff1eb4b709cc79037506258dd6471d52aed3b62278ef1c3e37",
+      "bytes": 303,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-006.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-006.log",
+      "source_role": "raw_original",
+      "sha256": "39e903ad09a02867742126c4d5cee14856881e4aad038626f07b2338d11cb5aa",
+      "bytes": 485,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-007-execution.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-007-execution.json",
+      "source_role": "raw_original",
+      "sha256": "d5ef0f8e9f3a15c407ebbfbea5a739244fc23ebd4c74a79033490d22eb63959c",
+      "bytes": 326,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/registry-node-007.log",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/registry-node-007.log",
+      "source_role": "raw_original",
+      "sha256": "1a2e984eb9f40732a71d6c27b32e03b4e3221939cc581425ed7526de613b83eb",
+      "bytes": 485,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-001/integration-001/unit-preservation.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-001/integration-001/unit-preservation.json",
+      "source_role": "raw_original",
+      "sha256": "c352ca577af2f467a8be5cad942eeef5c204a4118cdf6b6083a363093ea2f9af",
+      "bytes": 449,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-independent-authority-001/REVIEW.md",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-independent-authority-001/REVIEW.md",
+      "source_role": "raw_original",
+      "sha256": "6e48e3f264cc458ed7e7c3b0b74e091ea8400c998ca6cd8d772fc524f8488ed8",
+      "bytes": 9723,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-independent-authority-001/baseline-and-packet.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-independent-authority-001/baseline-and-packet.json",
+      "source_role": "raw_original",
+      "sha256": "94f7fe89cbc50fc3de4fc3c71cd59a36b8ebbc0e26913454d90d54439c44b35e",
+      "bytes": 16069,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-independent-authority-001/frozen-review-check.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-independent-authority-001/frozen-review-check.json",
+      "source_role": "raw_original",
+      "sha256": "3117c9e9f27c4107c687a78026d928f74a3326fbf843f6b8d03ac5bf9d27d57e",
+      "bytes": 7580,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-independent-authority-001/preserved-main-browser-retro.txt",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-independent-authority-001/preserved-main-browser-retro.txt",
+      "source_role": "raw_original",
+      "sha256": "84a0c0eae0225401505093f3f711cfc579cc61b5ed7bfa4f0a111e8bfd88b553",
+      "bytes": 890,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "build/d2-1439-quality-v2-current-release-provenance-2026-09-09-001/task-work/1439-quality-v2-independent-authority-001/prose-reconciliation-check.json",
+      "original_locator": "{TASK_ROOT}/work/1439-quality-v2-independent-authority-001/prose-reconciliation-check.json",
+      "source_role": "raw_original",
+      "sha256": "b25f4e25929d8b2191906030d8647b17bce068aef7c500b0152dd90dd979032b",
+      "bytes": 1711,
+      "byte_identical": true
+    }
+  ],
+  "frozen_candidate_replication": {
+    "manifest": "evidence/first-playable/d2-1439-quality-v2-promotion-candidate-2026-09-09-001/private-provenance-retention.json",
+    "manifest_sha256": "196a80165534e9ceeccc0e089ce8bae580592fd90e31bdc0f119398ca3bcb912",
+    "copied_files": 736,
+    "copied_bytes": 61959443,
+    "all_copied_byte_identically_to_same_main_repo_relative_paths": true,
+    "candidate_originals_preserved": true
+  },
+  "historical_candidate_app_replication": {
+    "app_relative_path": "build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app",
+    "files": 7,
+    "bundle_identity_sha256": "b6964dc19b132c31476280acad5a09227cc9f603d1759bcf244bee10b2aa9922",
+    "all_bytes_copied_identically": true,
+    "candidate_original_preserved": true
+  },
+  "referenced_isolated_review_copies": [
+    {
+      "retained_repo_relative_path": "evidence/first-playable/d2-1439-quality-v2-isolated-art-2026-09-09/INDEPENDENT_VISUAL_APPROACH_PASS_001.md",
+      "original_locator": "{CANDIDATE_REPO}/evidence/first-playable/d2-1439-quality-v2-isolated-art-2026-09-09/INDEPENDENT_VISUAL_APPROACH_PASS_001.md",
+      "source_role": "referenced_historical_isolated_review",
+      "sha256": "c12dc4f71468634f2994feff55e19aeed62edb578a5931ae313b86bc7b5582ee",
+      "bytes": 2850,
+      "byte_identical": true
+    },
+    {
+      "retained_repo_relative_path": "evidence/first-playable/d2-1439-quality-v2-isolated-art-2026-09-09/INDEPENDENT_VISUAL_APPROACH_PASS_001_COPY_PROVENANCE.md",
+      "original_locator": "{CANDIDATE_REPO}/evidence/first-playable/d2-1439-quality-v2-isolated-art-2026-09-09/INDEPENDENT_VISUAL_APPROACH_PASS_001_COPY_PROVENANCE.md",
+      "source_role": "referenced_historical_isolated_review",
+      "sha256": "517c6e21bd3991abeb938ef9292db6065899884a4f9b0466889a429f3df84630",
+      "bytes": 505,
+      "byte_identical": true
+    }
+  ]
+}

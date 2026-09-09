@@ -1,0 +1,65 @@
+{
+  "status": "CURRENT_PACKAGE_PASS_PUBLICATION_REVIEW_COMMIT_PUSH_AND_ORDINARY_LAUNCH_PENDING",
+  "derived_downstream_release_summary": true,
+  "recognition_metric": "10/213",
+  "recognition_credit_delta_from_prior_current": 1,
+  "sole_added_physical_unit": "physical-building:w95934144",
+  "package": {
+    "bundle_identity_sha256": "64d53753266959fe49119f8363e786c4a53f999232b0299329037094d2f8a986",
+    "bundle_file_count": 7,
+    "pck_sha256": "d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac",
+    "executable_sha256": "569e9350ba9d3fb629dde0efdf047a0faf1d1a7ab640c96b46ded5a867204689"
+  },
+  "app_relative_path": "build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app",
+  "independent_package_decision": "PASS_EXACT_CURRENT_1439_RELEASE",
+  "independent_package_original_json_sha256": "891520a24f013025776fcd07acc49e34d722a10055ad4e7be02361ea3d506d6f",
+  "independent_package_original_review_sha256": "e1c196bb0e49a6db432ab7cbabb9db0eff613fde2488a51147501b98ab7d89a9",
+  "authority_original_review_sha256": "6e48e3f264cc458ed7e7c3b0b74e091ea8400c998ca6cd8d772fc524f8488ed8",
+  "current_world": [
+    735,
+    968,
+    983,
+    71156,
+    466,
+    467
+  ],
+  "capture_time_9_213_preserved": true,
+  "new_render_or_visual_review_performed": false,
+  "artifacts": [
+    {
+      "path": "owner-package-verification.json",
+      "sha256": "0e5eb6fa79467c3586aac2caa1ecef7a0ce9a440f9c281c3c733384803404896",
+      "bytes": 15531
+    },
+    {
+      "path": "independent-package-review.json",
+      "sha256": "d018a2cbc0485ce093a89a9938d7f7f858d4c58dc10fde38177389c9a4ee42e5",
+      "bytes": 18939
+    },
+    {
+      "path": "private-provenance-retention.json",
+      "sha256": "7889a5a1e17c500437eebdb95247d54e050e316b322d42546868728f6cd28a30",
+      "bytes": 97279
+    },
+    {
+      "path": "source-and-visual-lineage.json",
+      "sha256": "847d45574d031d49a97353f8d43494ea0369cebd462256618f89f030161ac851",
+      "bytes": 6429
+    },
+    {
+      "path": "README.md",
+      "sha256": "40a53c4b68dcc7df4da7819ca94721ccdf0c58ee74b744fde51f702bef846549",
+      "bytes": 1762
+    }
+  ],
+  "exact_current_private_original_count": 193,
+  "prior_candidate_private_originals_resolved_on_main": 736,
+  "prior_candidate_app_resolved_on_main": true,
+  "publication_review": "pending",
+  "final_git_commit": null,
+  "push_result": null,
+  "ordinary_visible_launch": null,
+  "owner_acceptance": "HUMAN-001 pending, scope unchanged",
+  "dependency_direction": "Frozen native evidence and historical candidate package -> accepted authority -> one current export and owner/independent package proofs -> exact private retention and labeled derived summaries -> this release closure. Later publication outcomes are separate; no artifact binds its own hash.",
+  "referenced_historical_isolated_review_notes_copied": 2
+}

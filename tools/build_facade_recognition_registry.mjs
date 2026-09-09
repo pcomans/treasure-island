@@ -22,17 +22,17 @@ import {
 } from "./lib/world-contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const COMPILER_VERSION = "1.8.1";
-const CATALOG_SCHEMA = "ti.facade-recognition-catalog/9";
-const RUNTIME_SCHEMA = "ti.facade-runtime-registry/9";
+const COMPILER_VERSION = "1.9.0";
+const CATALOG_SCHEMA = "ti.facade-recognition-catalog/10";
+const RUNTIME_SCHEMA = "ti.facade-runtime-registry/10";
 const REPORT_SCHEMA = "ti.facade-recognition-validation-report/4";
-const ADAPTER_CONTRACT_SCHEMA = "ti.facade-runtime-adapter-contracts/8";
-const LOADER_API_VERSION = "ti.facade-runtime-registry-loader/8";
+const ADAPTER_CONTRACT_SCHEMA = "ti.facade-runtime-adapter-contracts/9";
+const LOADER_API_VERSION = "ti.facade-runtime-registry-loader/9";
 const UNKNOWN_VERSION_POLICY = "reject";
 const CATALOG_ID = "treasure-island-physical-building-recognition";
 const CATALOG_SCHEMA_REFERENCE = "./facade-recognition-catalog.schema.json";
 const SEED_STRATEGY = "immutable_receiver_inventory_physical_units_v1";
-const CHECKED_DATE = "2026-09-08";
+const CHECKED_DATE = "2026-09-09";
 // A source-only quality acceptance. Original B1 recognition and every capture-time authority remain unchanged.
 const B1_RETURNS_ACCEPTANCE_ROOT = "evidence/first-playable/building-1-wing-returns-v2-accepted-2026-09-08-001";
 const B1_RETURNS_ACCEPTANCE_PATH = `${B1_RETURNS_ACCEPTANCE_ROOT}/acceptance-receipt.json`;
@@ -229,6 +229,52 @@ const D2_1441_RUNTIME_ASSET_PATHS = Object.freeze([
   D2_1441_SITE_KIT_PATH,
 ]);
 
+const D2_1439_SOURCE = "w95934144";
+const D2_1439_WALL = "building:w95934144:wall";
+const D2_1439_ROOF = "building:w95934144:roof";
+const D2_1439_CONFIG_PATH = "game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json";
+const D2_1439_LIVE_ADAPTER_PATH = "game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd";
+const D2_1439_PROTOTYPE_PATH = "game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd";
+const D2_1439_PROTOTYPE_CONFIG_PATH = "game/resources/facades/d2_1439_chinook_quality_v2_prototype.json";
+const D2_1439_SITE_KIT_PATH = "game/scripts/world/facades/site_12_housing_kit.gd";
+const D2_1439_CONFIG_SHA256 = "58ba0093d002a3acad06b76876b7333077bb5152827f4a59b0c9b6da132b68d9";
+const D2_1439_LIVE_ADAPTER_SHA256 = "d5a4458be7a5c2fb6989f9d8a343d497d2f144eb19c445de6016888e7b3cce5e";
+const D2_1439_REVIEWED_WORLD_BUILDER_SHA256 = "417e4f7269292ed0c5185e85f6b5d12759cdc516ca6be069898145aaab56ab50";
+const D2_1439_GEOMETRY_SIGNATURE = "81a05d20b03e16253675a36692c9856cf4d53509e008aacbb69bbe4eea7683e5";
+const D2_1439_OWNERSHIP_SIGNATURE = "82e1fdfae492aa1942bbbb5cfb65b51d4da4c980cf85a4231c2093aaf3edc27a";
+const D2_1439_EVIDENCE_ROOT = "evidence/first-playable/d2-1439-quality-v2-promotion-candidate-2026-09-09-001";
+const D2_1439_EVIDENCE_MANIFEST_PATH = `${D2_1439_EVIDENCE_ROOT}/capture-manifest.json`;
+const D2_1439_MOTION_TELEMETRY_MANIFEST_PATH = `${D2_1439_EVIDENCE_ROOT}/motion-telemetry.json`;
+const D2_1439_VISUAL_MOTION_MANIFEST_PATH = `${D2_1439_EVIDENCE_ROOT}/visual-motion.json`;
+const D2_1439_PACKAGE_VERIFICATION_RECEIPT_PATH = `${D2_1439_EVIDENCE_ROOT}/package-verification-receipt.json`;
+const D2_1439_MECHANICAL_REVIEW_PATH = "evidence/first-playable/d2-1439-quality-v2-promotion-candidate-2026-09-09-001/mechanical-review.json";
+const D2_1439_VISUAL_REVIEW_PATH = "evidence/reviews/d2-1439-quality-v2-promotion-candidate-2026-09-09-001-INDEPENDENT_PACKET_REVIEW.md";
+const D2_1439_EVIDENCE_MANIFEST_SHA256 = "32454a02699ebce9e29e8313e70fe93894c52bd3a4ddb46c08ffeaee54891a6a";
+const D2_1439_MOTION_TELEMETRY_MANIFEST_SHA256 = "af5f7501b08cd36629123ad14b169da764d0c375f53a6167fee80843d7a1c863";
+const D2_1439_VISUAL_MOTION_MANIFEST_SHA256 = "262183b9dd5424df20527ad097bc2a07921c1f24c2ce5d359a6d7aa096052683";
+const D2_1439_EVIDENCE_TREE_SHA256 = "bd5c009e49545f5ef84b8f0c2032c1f59dd2054d4afe0aa1f9145f74a03e2426";
+const D2_1439_PACKAGE_VERIFICATION_RECEIPT_SHA256 = "56b93dc9a3e4300d6c64261618add170488002e8c305d34889d30fd55ad41af1";
+const D2_1439_MECHANICAL_REVIEW_RECEIPT_SHA256 = "f55d7a4df3fea5a1cf936d75ff0b8690b9c94f005992e5cc26da793304402119";
+const D2_1439_VISUAL_REVIEW_RECEIPT_SHA256 = "cf1723b330fbd208fe92e27f5593c5f203b8f8cb99ff383ec8b389005fcc745c";
+const D2_1439_REVIEW_ID = "d2-1439-quality-v2-promotion-candidate-2026-09-09-001";
+const D2_1439_MAPPED_RUNS = Object.freeze([11, 12, 16, 17, 18, 19, 22, 23]);
+const D2_1439_PROTECTED_RUNS = Object.freeze([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 13, 14, 15, 20, 21]);
+const D2_1439_RUNTIME_ASSET_PATHS = Object.freeze([
+  D2_1439_PROTOTYPE_CONFIG_PATH,
+  "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
+  "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
+  "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
+  "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
+  "game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres",
+  "game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres",
+  "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
+  "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+  D2_1439_PROTOTYPE_PATH,
+  D2_1439_SITE_KIT_PATH,
+]);
+
+const PRE_D2_1439_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_d2_1439_integration_live_parity";
+
 const ACCEPTED_REFERENCE_UNIT_IDS = Object.freeze([
   "physical-building:r16681702",
   "physical-building:w1222720021",
@@ -239,6 +285,7 @@ const ACCEPTED_REFERENCE_UNIT_IDS = Object.freeze([
   "physical-building:w34313545",
   "physical-building:w95934105",
   "physical-building:w95934119",
+  "physical-building:w95934144",
 ]);
 
 const REVIEW_RECEIPTS = Object.freeze({
@@ -319,6 +366,24 @@ const REVIEW_RECEIPTS = Object.freeze({
     visual_motion_manifest_path: D2_1441_VISUAL_MOTION_MANIFEST_PATH,
     visual_motion_manifest_sha256: D2_1441_VISUAL_MOTION_MANIFEST_SHA256,
   }),
+  [D2_1439_REVIEW_ID]: Object.freeze({
+    capture_time_recognition_metric: "9/213",
+    evidence_manifest_path: D2_1439_EVIDENCE_MANIFEST_PATH,
+    evidence_manifest_sha256: D2_1439_EVIDENCE_MANIFEST_SHA256,
+    evidence_tree_sha256: D2_1439_EVIDENCE_TREE_SHA256,
+    mechanical_review_path: D2_1439_MECHANICAL_REVIEW_PATH,
+    mechanical_review_receipt_sha256: D2_1439_MECHANICAL_REVIEW_RECEIPT_SHA256,
+    motion_telemetry_manifest_path: D2_1439_MOTION_TELEMETRY_MANIFEST_PATH,
+    motion_telemetry_manifest_sha256: D2_1439_MOTION_TELEMETRY_MANIFEST_SHA256,
+    numerator_effect: 1,
+    package_verification_receipt_path: D2_1439_PACKAGE_VERIFICATION_RECEIPT_PATH,
+    package_verification_receipt_sha256: D2_1439_PACKAGE_VERIFICATION_RECEIPT_SHA256,
+    review_path: D2_1439_VISUAL_REVIEW_PATH,
+    review_receipt_sha256: D2_1439_VISUAL_REVIEW_RECEIPT_SHA256,
+    unit_id: "physical-building:w95934144",
+    visual_motion_manifest_path: D2_1439_VISUAL_MOTION_MANIFEST_PATH,
+    visual_motion_manifest_sha256: D2_1439_VISUAL_MOTION_MANIFEST_SHA256,
+  }),
 });
 
 const PATHS = Object.freeze({
@@ -332,7 +397,7 @@ const PATHS = Object.freeze({
 });
 
 const EXPECTED = Object.freeze({
-  active_runtime_adapter_receivers: 8,
+  active_runtime_adapter_receivers: 9,
   building_footprints: 213,
   building_parts: 2,
   composite_units: 1,
@@ -341,7 +406,7 @@ const EXPECTED = Object.freeze({
   recognition_units: 213,
   source_records: 215,
   standalone_units: 212,
-  runtime_adapter_receivers: 17,
+  runtime_adapter_receivers: 18,
   visible_wall_runs: 4971,
 });
 
@@ -349,8 +414,8 @@ const EXPECTED_ADAPTER_CONTRACTS = Object.freeze({
   disabled_adapter_receivers: 6,
   disabled_projection_occurrences: 13,
   disabled_unique_projection_inputs: 13,
-  package_safe_adapter_receivers: 11,
-  receiver_adapter_plans: 17,
+  package_safe_adapter_receivers: 12,
+  receiver_adapter_plans: 18,
 });
 
 const ADAPTER_CONTRACT_CHECK_ID = `adapter_contract_${EXPECTED_ADAPTER_CONTRACTS.package_safe_adapter_receivers}_ready_${EXPECTED_ADAPTER_CONTRACTS.disabled_adapter_receivers}_disabled_${EXPECTED_ADAPTER_CONTRACTS.disabled_unique_projection_inputs}_unique_projection_inputs`;
@@ -385,6 +450,7 @@ const ACTIVE_ADAPTER_UNIT_BY_RECEIVER = Object.freeze({
   [D1_B201_WALL]: unitId(D1_B201_SOURCE),
   [D1_B225_WALL]: unitId(D1_B225_SOURCE),
   [D2_1441_WALL]: unitId(D2_1441_SOURCE),
+  [D2_1439_WALL]: unitId(D2_1439_SOURCE),
 });
 const ACTIVE_ADAPTER_REVIEW_STATUS_BY_RECEIVER = Object.freeze({
   [BUILDING_1_WALL]: "pending_independent_original_detail_review",
@@ -395,6 +461,7 @@ const ACTIVE_ADAPTER_REVIEW_STATUS_BY_RECEIVER = Object.freeze({
   [D1_B201_WALL]: "independent_exact_current_live_pass",
   [D1_B225_WALL]: "independent_exact_current_live_pass",
   [D2_1441_WALL]: "independent_exact_current_live_pass",
+  [D2_1439_WALL]: "independent_exact_current_live_pass",
 });
 
 const RUNTIME_PATH_KEYS = new Set([
@@ -556,6 +623,10 @@ function d21441ActiveAdapterId(receiverKey) {
   return `active-adapter:d2-1441-live:${receiverKey}`;
 }
 
+function d21439ActiveAdapterId(receiverKey) {
+  return `active-adapter:d2-1439-live:${receiverKey}`;
+}
+
 function loadInputs() {
   const inventory = readJson(PATHS.inventory);
   const manifest = readJson(PATHS.manifest);
@@ -637,6 +708,15 @@ function loadInputs() {
       d21441PrototypeSha256: sha256File(absolute(D2_1441_PROTOTYPE_PATH)),
       d21441PrototypeConfigSha256: sha256File(absolute(D2_1441_PROTOTYPE_CONFIG_PATH)),
       d21441SiteKitSha256: sha256File(absolute(D2_1441_SITE_KIT_PATH)),
+      d21439Config: readJson(D2_1439_CONFIG_PATH),
+      d21439ConfigPath: D2_1439_CONFIG_PATH,
+      d21439ConfigSha256: sha256File(absolute(D2_1439_CONFIG_PATH)),
+      d21439LiveAdapterPath: D2_1439_LIVE_ADAPTER_PATH,
+      d21439LiveAdapterSha256: sha256File(absolute(D2_1439_LIVE_ADAPTER_PATH)),
+      d21439LiveAdapterText: readFileSync(absolute(D2_1439_LIVE_ADAPTER_PATH), "utf8"),
+      d21439PrototypeSha256: sha256File(absolute(D2_1439_PROTOTYPE_PATH)),
+      d21439PrototypeConfigSha256: sha256File(absolute(D2_1439_PROTOTYPE_CONFIG_PATH)),
+      d21439SiteKitSha256: sha256File(absolute(D2_1439_SITE_KIT_PATH)),
       d21441EvidenceManifest: readJson(D2_1441_EVIDENCE_MANIFEST_PATH),
       d21441EvidenceManifestPath: D2_1441_EVIDENCE_MANIFEST_PATH,
       d21441EvidenceManifestSha256: sha256File(absolute(D2_1441_EVIDENCE_MANIFEST_PATH)),
@@ -900,17 +980,24 @@ function validateCurrentWorldBuilderDispatch(inputs) {
     navy_chapel_preload: `const NAVY_CHAPEL_187_LIVE_REPLACEMENT := preload("res://${NAVY_CHAPEL_LIVE_ADAPTER_PATH}")`,
     navy_chapel_prepare: "NAVY_CHAPEL_187_LIVE_REPLACEMENT.prepare_chunk_records(chunk.records as Array)",
     navy_chapel_plan: "NAVY_CHAPEL_187_LIVE_REPLACEMENT.build_chunk_plan(chapel_pair)",
-    navy_chapel_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan)",
+    navy_chapel_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan)",
     navy_chapel_claim: "if not is_context and NAVY_CHAPEL_187_LIVE_REPLACEMENT.claims_record(record):",
     navy_chapel_consume: "return NAVY_CHAPEL_187_LIVE_REPLACEMENT.consume_record(record, chapel_plan)",
     navy_chapel_consumed: "NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)",
     d2_1441_preload: `const D2_1441_CHINOOK_LIVE_REPLACEMENT := preload("res://${D2_1441_LIVE_ADAPTER_PATH}")`,
     d2_1441_prepare: "D2_1441_CHINOOK_LIVE_REPLACEMENT.prepare_chunk_records(chunk)",
     d2_1441_plan: "D2_1441_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1441_pair)",
-    d2_1441_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan)",
+    d2_1441_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan)",
     d2_1441_claim: "if not is_context and D2_1441_CHINOOK_LIVE_REPLACEMENT.claims_record(record):",
     d2_1441_consume: "return D2_1441_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1441_plan)",
     d2_1441_consumed: "D2_1441_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1441_plan)",
+    d2_1439_preload: `const D2_1439_CHINOOK_LIVE_REPLACEMENT := preload("res://${D2_1439_LIVE_ADAPTER_PATH}")`,
+    d2_1439_prepare: "D2_1439_CHINOOK_LIVE_REPLACEMENT.prepare_chunk_records(chunk)",
+    d2_1439_plan: "D2_1439_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1439_pair)",
+    d2_1439_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan)",
+    d2_1439_claim: "if not is_context and D2_1439_CHINOOK_LIVE_REPLACEMENT.claims_record(record):",
+    d2_1439_consume: "return D2_1439_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1439_plan)",
+    d2_1439_consumed: "D2_1439_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1439_plan)",
     d1_b201_preload: `const D1_B201_LIVE_ATTACHMENT := preload("res://${D1_B201_LIVE_ADAPTER_PATH}")`,
     d1_b201_validate: "D1_B201_LIVE_ATTACHMENT.validate_chunk_records(chunk)",
     d1_b201_claim: "if not is_context and D1_B201_LIVE_ATTACHMENT.claims_record(record):",
@@ -945,10 +1032,15 @@ function validateCurrentWorldBuilderDispatch(inputs) {
   // cannot express that nested call before the post-loop consumed assertion.
   before("navy_chapel_record_dispatch", "navy_chapel_consumed", "Navy Chapel per-record consumption dispatch must precede the fully-consumed assertion");
   before("d2_1441_prepare", "d2_1441_plan", "D2 1441 pair preparation must precede plan construction");
+  before("d2_1439_prepare", "d2_1439_plan", "D2 1439 pair preparation must precede plan construction");
   before("d2_1441_plan", "d2_1441_claim", "D2 1441 plan construction must precede per-record dispatch");
+  before("d2_1439_plan", "d2_1439_claim", "D2 1439 plan construction must precede per-record dispatch");
   before("d2_1441_claim", "d2_1441_consume", "D2 1441 paired claim must precede paired consumption");
+  before("d2_1439_claim", "d2_1439_consume", "D2 1439 paired claim must precede paired consumption");
   before("d2_1441_consume", "generic_vertices", "D2 1441 paired consumption must precede generic construction");
+  before("d2_1439_consume", "generic_vertices", "D2 1439 paired consumption must precede generic construction");
   before("d2_1441_record_dispatch", "d2_1441_consumed", "D2 1441 per-record consumption dispatch must precede the fully-consumed assertion");
+  before("d2_1439_record_dispatch", "d2_1439_consumed", "D2 1439 per-record consumption dispatch must precede the fully-consumed assertion");
   before("d1_b201_validate", "d1_b201_claim", "D1 B201 chunk validation must precede its per-record claim");
   before("d1_b201_claim", "d1_b201_prepare", "D1 B201 claim must precede preparation");
   before("d1_b201_prepare", "generic_vertices", "D1 B201 preparation must precede generic construction");
@@ -966,8 +1058,10 @@ function validateCurrentWorldBuilderDispatch(inputs) {
   before("generic_body", "isle_house_claim", "Isle House low attachment must follow retained generic body construction");
   before("isle_house_claim", "isle_house_build", "Isle House low claim must precede its attachment build");
 
+  invariant(sha256File(absolute(WORLD_CHUNK_BUILDER_PATH)) === D2_1439_REVIEWED_WORLD_BUILDER_SHA256, "Current 1439 dispatch bytes drifted");
+  invariant(occurrenceCount(builderText, "D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)") === 3, "Current 1439 cleanup lifecycle drifted");
   const currentDependencies = runtimeDependencies(builderText);
-  invariant(occurrenceCount(builderText, "D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)") === 3, "Current world-builder D2 1441 cleanup marker must occur exactly three times");
+  invariant(occurrenceCount(builderText, "D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)") === 4, "Current world-builder D2 1441 cleanup marker must occur exactly four times");
   for (const dependency of D2_1441_REVIEWED_WORLD_BUILDER_DEPENDENCY_PATHS) {
     invariant(currentDependencies.includes(dependency), `Current world builder lost accepted D2 1441 package dependency ${dependency}`);
   }
@@ -1389,6 +1483,59 @@ function validateActiveD21441Dispatch(inputs) {
   validateD21441PromotionAuthority(inputs);
 }
 
+function validateD21439PromotionAuthority() {
+  const receipt = REVIEW_RECEIPTS[D2_1439_REVIEW_ID];
+  const fileFields = [
+    ["evidence_manifest_path", "evidence_manifest_sha256"],
+    ["motion_telemetry_manifest_path", "motion_telemetry_manifest_sha256"],
+    ["visual_motion_manifest_path", "visual_motion_manifest_sha256"],
+    ["package_verification_receipt_path", "package_verification_receipt_sha256"],
+    ["mechanical_review_path", "mechanical_review_receipt_sha256"],
+    ["review_path", "review_receipt_sha256"],
+  ];
+  for (const [pathField, hashField] of fileFields) invariant(sha256File(absolute(receipt[pathField])) === receipt[hashField], `D2 1439 ${hashField} artifact drifted`);
+  const review = readFileSync(absolute(receipt.review_path), "utf8");
+  invariant(review.includes("PASS_FOR_1439_SERIALIZED_PROMOTION_NO_CREDIT") && review.includes("9/213"), "D2 1439 independent packet attestation or capture metric drifted");
+  for (const key of ["evidence_manifest_sha256", "motion_telemetry_manifest_sha256", "visual_motion_manifest_sha256", "package_verification_receipt_sha256", "mechanical_review_receipt_sha256", "evidence_tree_sha256"]) invariant(review.includes(receipt[key]), `D2 1439 packet review lost ${key}`);
+  // The seventh binding is the independent packet attestation of the historical
+  // visual decision. The evidence-tree binding is the image tree digest, not
+  // the JSON document hash; both identities remain explicit.
+  const treePath = `${D2_1439_EVIDENCE_ROOT}/evidence-tree.json`;
+  invariant(sha256File(absolute(treePath)) === "a624794065ed89ccbc67f6f9caf77b02729a6e9c0b08eef8e495e63156bd9dde", "D2 1439 image-tree document drifted");
+  const tree = readJson(treePath);
+  invariant(tree.files.length === 31 && tree.tree_sha256 === D2_1439_EVIDENCE_TREE_SHA256, "D2 1439 native image count/tree binding drifted");
+  const rows = tree.files.map((entry) => {
+    invariant(/^(?:images|reviewed-motion-frames)\/[A-Za-z0-9_./-]+\.(png|jpg)$/u.test(entry.path) && !entry.path.includes(".."), "D2 1439 image path escapes packet");
+    const path = absolute(`${D2_1439_EVIDENCE_ROOT}/${entry.path}`);
+    invariant(statSync(path).size === entry.bytes && sha256File(path) === entry.sha256, `D2 1439 original image drifted: ${entry.path}`);
+    return `${entry.path}\0${entry.sha256}\0${entry.bytes}\n`;
+  }).sort();
+  assertUnique(tree.files.map((entry) => entry.path), "D2 1439 native images");
+  invariant(sha256Bytes(rows.join("")) === D2_1439_EVIDENCE_TREE_SHA256, "D2 1439 native image tree digest drifted");
+  for (const path of [receipt.evidence_manifest_path, receipt.motion_telemetry_manifest_path, receipt.visual_motion_manifest_path, receipt.mechanical_review_path]) {
+    const document = readJson(path);
+    invariant(document.derived_normalized_summary === true && document.not_a_captured_original === true && document.raw_originals_rewritten === false, "D2 1439 derived/original provenance drifted");
+    invariant(document.truth_boundary.recognition_metric === "9/213" && document.truth_boundary.recognition_credit === false && document.truth_boundary.promotion === false, "D2 1439 historical evidence self-grants credit");
+  }
+  const pkg = readJson(receipt.package_verification_receipt_path);
+  invariant(pkg.decision === "PASS_FOR_1439_CANDIDATE_PACKAGE_AND_PROMOTION_REVIEW_NO_CREDIT" && pkg.recognition_metric === "9/213" && pkg.recognition_credit === false && pkg.promotion === false, "D2 1439 candidate package decision/truth drifted");
+  invariant(equalStable(pkg.actual_world, {rows:735, meshes:968, surfaces:983, triangles:71156, bodies:466, shapes:467}), "D2 1439 package measured topology drifted");
+  for (const key of ["all_before_after_app_bytes_exact", "mounted_override_absent", "mounted_standalone_activation_routes_absent", "mounted_package_component_contract_pass", "generic_mounted_pck_content_audit_pass", "headless_exported_main_smoke_pass", "native_exported_main_smoke_pass"]) invariant(pkg[key] === true, `D2 1439 package ${key} not passing`);
+}
+
+function validateActiveD21439Dispatch(inputs) {
+  const c = inputs.runtimeContracts;
+  invariant(c.d21439LiveAdapterSha256 === D2_1439_LIVE_ADAPTER_SHA256 && c.d21439ConfigSha256 === D2_1439_CONFIG_SHA256, "D2 1439 reviewed adapter/config bytes drifted");
+  invariant(c.d21439PrototypeSha256 === "797dfb3075dacdf24a32b4ee0fa4959c296b35ae2d51f2d3c4dbba407fead3b7" && c.d21439PrototypeConfigSha256 === "1217ae0a101f0f1951a3c12303d11af3aace225745922a09aed276b1958553be" && c.d21439SiteKitSha256 === "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd", "D2 1439 reviewed factory closure drifted");
+  invariant(sha256File(absolute("game/scripts/player/player_camera.gd")) === "1d53f11cc3d9de00d4bb580aa6322c6f53b0080e5b9e1e3b18baeefd52125cc3", "D2 1439 accepted safe camera drifted");
+  const config = c.d21439Config;
+  invariant(config.target.source_key === D2_1439_SOURCE && config.target.wall_object_key === D2_1439_WALL && config.target.roof_object_key === D2_1439_ROOF, "D2 1439 pair identity drifted");
+  invariant(config.live_pair_contract.wall.shapes === 2 && config.live_pair_contract.wall.eligible_exterior_triangles === 62 && config.live_pair_contract.wall.noneligible_closed_recess_triangles === 30 && equalStable(config.live_pair_contract.wall.shape_order, ["eligible_exterior", "noneligible_closed_recess"]), "D2 1439 exterior/recess ownership drifted");
+  invariant(config.truth_boundary.accepted_recognition_metric === "9/213" && config.truth_boundary.candidate_is_uncredited === true, "D2 1439 capture-time adapter truth drifted");
+  for (const path of [D2_1439_LIVE_ADAPTER_PATH, D2_1439_CONFIG_PATH, ...D2_1439_RUNTIME_ASSET_PATHS]) invariant(existsSync(absolute(path)) && statSync(absolute(path)).isFile(), `D2 1439 runtime asset missing: ${path}`);
+  validateD21439PromotionAuthority();
+}
+
 function building3BehaviorContract() {
   return {
     collision_contract: {
@@ -1691,8 +1838,8 @@ function d21441BehaviorContract() {
       world_shapes: 466,
       world_static_bodies: 466,
       world_surfaces: 974,
-      world_topology_scope: CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE,
-      // Current whole-world integration includes accepted B1 returns; D2 capture/component identities stay frozen.
+      world_topology_scope: PRE_D2_1439_INTEGRATION_WORLD_TOPOLOGY_SCOPE,
+      // Historical pre-1439 whole-world integration includes accepted B1 returns; D2 capture/component identities stay frozen.
       world_triangles: 70692,
     },
     ownership_contract: {
@@ -1735,6 +1882,90 @@ function d21441BehaviorContract() {
   };
 }
 
+function d21439BehaviorContract() {
+  return {
+    acceptance_contract: {
+      accepted_physical_unit_id: unitId(D2_1439_SOURCE),
+      capture_time_recognition_metric: "9/213",
+      evidence_manifest_sha256: D2_1439_EVIDENCE_MANIFEST_SHA256,
+      evidence_tree_sha256: D2_1439_EVIDENCE_TREE_SHA256,
+      independent_live_review_receipt_sha256: D2_1439_VISUAL_REVIEW_RECEIPT_SHA256,
+      mechanical_review_receipt_sha256: D2_1439_MECHANICAL_REVIEW_RECEIPT_SHA256,
+      motion_telemetry_manifest_sha256: D2_1439_MOTION_TELEMETRY_MANIFEST_SHA256,
+      numerator_effect: 1,
+      package_verification_receipt_sha256: D2_1439_PACKAGE_VERIFICATION_RECEIPT_SHA256,
+      reference_recognizable: true,
+      visual_motion_manifest_sha256: D2_1439_VISUAL_MOTION_MANIFEST_SHA256,
+      wall_and_roof_are_one_physical_unit: true,
+    },
+    geometry_contract: {
+      canonical_roof_record_sha256: "ab98ae1442174841c0d9ae3aeb344991e73c2b85bf07252d2dc12d834ac0f8c0",
+      canonical_wall_record_sha256: "0a0b5d7c002a3364714343704404e3e37fa1e55461c3bfae6ae0766d59bb8b11",
+      horizontal_source_footprint_preserved: true,
+      topology_delta_mesh_instances: 9,
+      topology_delta_records: 0,
+      topology_delta_shapes: 1,
+      topology_delta_static_bodies: 0,
+      topology_delta_surfaces: 9,
+      topology_delta_triangles: 464,
+      visual_geometry_signature: D2_1439_GEOMETRY_SIGNATURE,
+      visual_mesh_instances: 11,
+      visual_surfaces: 11,
+      visual_triangles: 522,
+      world_mesh_instances: 968,
+      world_records: 735,
+      world_shapes: 467,
+      world_static_bodies: 466,
+      world_surfaces: 983,
+      world_topology_scope: CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE,
+      // Current whole-world integration includes accepted B1 returns; D2 capture/component identities stay frozen.
+      world_triangles: 71156,
+    },
+    ownership_contract: {
+      decorative_collision_triangles: 0,
+      decorative_navigation_nodes: 0,
+      decorative_relief_triangles: 420,
+      live_ownership_signature: D2_1439_OWNERSHIP_SIGNATURE,
+      navigation_owner_count: 0,
+      roof_collision_triangles: 10,
+      roof_is_wall_spray_receiver: false,
+      roof_world_solid_landing: true,
+      shape_count: 3,
+      spray_owner_count: 1,
+      structural_owner_count: 2,
+      wall_collision_triangles: 92,
+      eligible_exterior_collision_triangles: 62,
+      noneligible_closed_recess_collision_triangles: 30,
+      wall_shape_order: ["eligible_exterior", "noneligible_closed_recess"],
+      closed_recess_render_layer: 1,
+      wall_decal_cull_mask: 2,
+      wall_is_sole_spray_receiver: true,
+    },
+    replacement_contract: {
+      actual_supplied_chunk_pair_required: true,
+      fallback_allowed: false,
+      generic_stack_allowed: false,
+      mapped_public_run_indices: [...D2_1439_MAPPED_RUNS],
+      partial_pair_allowed: false,
+      protected_run_indices: [...D2_1439_PROTECTED_RUNS],
+      roof_object_key: D2_1439_ROOF,
+      source_key: D2_1439_SOURCE,
+      wall_object_key: D2_1439_WALL,
+    },
+    schema_version: "ti.d2-1439-production-live-parity/1",
+    truth_boundary: {
+      as_built_fidelity_claimed: false,
+      capture_time_candidate_promoted: false,
+      capture_time_recognition_credit: false,
+      game_distinctive_claimed: false,
+      reference_pixels_packaged: false,
+      receiver_complete_inferred_from_art: false,
+      unsurveyed_opening_roof_void_rail_dimensions_and_counts_are_production_inference: true,
+      unobserved_sides_protected: true,
+    },
+  };
+}
+
 function activeRecognitionAuthority(receiverKey, units) {
   const expectedUnitId = ACTIVE_ADAPTER_UNIT_BY_RECEIVER[receiverKey];
   invariant(expectedUnitId != null, `Active adapter receiver has no physical-unit recognition authority mapping: ${receiverKey}`);
@@ -1756,6 +1987,7 @@ function deriveActiveRuntimeAdapterSeeds(inputs, units) {
   validateActiveD1B201Dispatch(inputs);
   validateActiveD1B225Dispatch(inputs);
   validateActiveD21441Dispatch(inputs);
+  validateActiveD21439Dispatch(inputs);
   const shared = {
     content_classification: "active_target_specific_hero_replacement",
     review_status: inputs.runtimeContracts.heroConfig.truth_boundary.visual_review_status,
@@ -1851,6 +2083,18 @@ function deriveActiveRuntimeAdapterSeeds(inputs, units) {
       runtime_config_path: D2_1441_CONFIG_PATH,
       runtime_dispatch_path: WORLD_CHUNK_BUILDER_PATH,
       source_key: D2_1441_SOURCE,
+      whole_building_recognizability_imported: false,
+    },
+    {
+      adapter_id: d21439ActiveAdapterId(D2_1439_WALL),
+      content_classification: "active_target_specific_paired_wall_roof_replacement",
+      receiver_key: D2_1439_WALL,
+      review_status: "independent_exact_current_live_pass",
+      runtime_adapter_path: D2_1439_LIVE_ADAPTER_PATH,
+      runtime_asset_paths: [...D2_1439_RUNTIME_ASSET_PATHS],
+      runtime_config_path: D2_1439_CONFIG_PATH,
+      runtime_dispatch_path: WORLD_CHUNK_BUILDER_PATH,
+      source_key: D2_1439_SOURCE,
       whole_building_recognizability_imported: false,
     },
   ].map((seed) => ({
@@ -2033,7 +2277,7 @@ function validateCatalog(catalog, inputs, derivedUnits, receiverByKey) {
     .filter((unit) => unit.claim_status.reference_recognizable === "accepted")
     .map((unit) => unit.unit_id)
     .sort();
-  invariant(equalStable(acceptedReferenceUnitIds, [...ACCEPTED_REFERENCE_UNIT_IDS].sort()), "Catalog reference-recognizable rollup must be exactly the nine independently accepted physical units");
+  invariant(equalStable(acceptedReferenceUnitIds, [...ACCEPTED_REFERENCE_UNIT_IDS].sort()), "Catalog reference-recognizable rollup must be exactly the ten independently accepted physical units");
   invariant(!catalog.units.some((unit) => ISLE_HOUSE_PARTS.map(unitId).includes(unit.unit_id)), "Isle House receiver source records must never become recognition units");
   const isleHouseUnit = catalog.units.find((unit) => unit.unit_id === ISLE_HOUSE_UNIT_ID);
   invariant(isleHouseUnit?.unit_kind === "composite_building" && isleHouseUnit.claim_status.reference_recognizable === "accepted", "Isle House acceptance must belong to its composite physical-building parent");
@@ -2045,6 +2289,9 @@ function validateCatalog(catalog, inputs, derivedUnits, receiverByKey) {
   const d21441Unit = catalog.units.find((unit) => unit.unit_id === unitId(D2_1441_SOURCE));
   invariant(d21441Unit?.unit_kind === "standalone_building" && d21441Unit.claim_status.reference_recognizable === "accepted" && d21441Unit.receiver_keys.length === 1, "D2 1441 acceptance must roll up to one standalone physical-building unit");
   invariant(d21441Unit.acceptance_records.length === 1 && equalStable(d21441Unit.acceptance_records[0], d21441AcceptanceRecord()), "D2 1441 physical-unit acceptance must be exactly one seven-artifact-bound +1 record");
+  const d21439Unit = catalog.units.find((unit) => unit.unit_id === unitId(D2_1439_SOURCE));
+  invariant(d21439Unit?.unit_kind === "standalone_building" && d21439Unit.claim_status.reference_recognizable === "accepted" && d21439Unit.receiver_keys.length === 1, "D2 1439 acceptance must roll up to one standalone physical-building unit");
+  invariant(d21439Unit.acceptance_records.length === 1 && equalStable(d21439Unit.acceptance_records[0], d21439AcceptanceRecord()), "D2 1439 physical-unit acceptance must be exactly one seven-artifact-bound +1 record");
 }
 
 function frozenIdentityValue(object, frozenField) {
@@ -2147,6 +2394,23 @@ function d21441AcceptanceRecord() {
   };
 }
 
+function d21439AcceptanceRecord() {
+  return {
+    capture_time_recognition_metric: "9/213",
+    evidence_manifest_sha256: D2_1439_EVIDENCE_MANIFEST_SHA256,
+    evidence_tree_sha256: D2_1439_EVIDENCE_TREE_SHA256,
+    mechanical_review_receipt_sha256: D2_1439_MECHANICAL_REVIEW_RECEIPT_SHA256,
+    motion_telemetry_manifest_sha256: D2_1439_MOTION_TELEMETRY_MANIFEST_SHA256,
+    numerator_effect: 1,
+    package_verification_receipt_sha256: D2_1439_PACKAGE_VERIFICATION_RECEIPT_SHA256,
+    review_id: D2_1439_REVIEW_ID,
+    review_kind: "independent_reference_recognition",
+    review_receipt_sha256: D2_1439_VISUAL_REVIEW_RECEIPT_SHA256,
+    status: "accept",
+    visual_motion_manifest_sha256: D2_1439_VISUAL_MOTION_MANIFEST_SHA256,
+  };
+}
+
 function validateAcceptanceReceipt(unit, record) {
   const expectedKeys = ["evidence_manifest_sha256", "review_id", "review_kind", "review_receipt_sha256", "status"];
   for (const optionalKey of [
@@ -2170,8 +2434,8 @@ function validateAcceptanceReceipt(unit, record) {
   invariant(receipt.unit_id === unit.unit_id, `${unit.unit_id}/${record.review_id} review receipt belongs to another physical unit`);
   invariant(record.review_receipt_sha256 === receipt.review_receipt_sha256, `${unit.unit_id}/${record.review_id} review receipt pin drifted`);
   invariant(record.evidence_manifest_sha256 === receipt.evidence_manifest_sha256, `${unit.unit_id}/${record.review_id} evidence manifest pin drifted`);
-  if (record.review_id === D2_1441_REVIEW_ID) {
-    invariant(equalStable(record, d21441AcceptanceRecord()), `${unit.unit_id}/${record.review_id} D2 1441 seven-artifact acceptance closure drifted`);
+  if ([D2_1441_REVIEW_ID, D2_1439_REVIEW_ID].includes(record.review_id)) {
+    invariant(equalStable(record, record.review_id === D2_1439_REVIEW_ID ? d21439AcceptanceRecord() : d21441AcceptanceRecord()), `${unit.unit_id}/${record.review_id} D2 1441 seven-artifact acceptance closure drifted`);
     for (const field of [
       "evidence_tree_sha256",
       "mechanical_review_receipt_sha256",
@@ -2601,6 +2865,18 @@ function sanitizedD21441Config(config) {
   };
 }
 
+function sanitizedD21439Config(config) {
+  return {
+    live_pair_contract: config.live_pair_contract,
+    model_id: config.model_id,
+    package_boundary: config.package_boundary,
+    reviewed_art: config.reviewed_art,
+    schema_version: config.schema_version,
+    target: config.target,
+    truth_boundary: config.truth_boundary,
+  };
+}
+
 function activeContentMode(adapter) {
   if (adapter.receiver_key === BUILDING_3_WALL) return "active_building_3_hero";
   if (adapter.receiver_key === ISLE_HOUSE_LOW_WALL) return "active_isle_house_variant_c";
@@ -2608,6 +2884,7 @@ function activeContentMode(adapter) {
   if (adapter.receiver_key === D1_B201_WALL) return "active_d1_b201_host_partition_attachment";
   if (adapter.receiver_key === D1_B225_WALL) return "active_d1_b225_host_partition_attachment";
   if (adapter.receiver_key === D2_1441_WALL) return "active_d2_1441_paired_replacement";
+  if (adapter.receiver_key === D2_1439_WALL) return "active_d2_1439_paired_replacement";
   return "active_building_1_hero";
 }
 
@@ -2621,6 +2898,7 @@ function importActiveRuntimeAdapter(seed, receiver, inputs, packageAudit) {
   const isD1B201 = seed.receiver_key === D1_B201_WALL;
   const isD1B225 = seed.receiver_key === D1_B225_WALL;
   const isD21441 = seed.receiver_key === D2_1441_WALL;
+  const isD21439 = seed.receiver_key === D2_1439_WALL;
   const activeRuntimeContract = isBuilding3
     ? {
       adapter_sha256: inputs.runtimeContracts.building3MassingSha256,
@@ -2658,6 +2936,17 @@ function importActiveRuntimeAdapter(seed, receiver, inputs, packageAudit) {
         prototype_config_sha256: inputs.runtimeContracts.d21441PrototypeConfigSha256,
         prototype_sha256: inputs.runtimeContracts.d21441PrototypeSha256,
         site_kit_sha256: inputs.runtimeContracts.d21441SiteKitSha256,
+      }
+    : isD21439
+      ? {
+        adapter_sha256: inputs.runtimeContracts.d21439LiveAdapterSha256,
+        behavior_contract: d21439BehaviorContract(),
+        config_sha256: inputs.runtimeContracts.d21439ConfigSha256,
+        config_summary: sanitizedD21439Config(inputs.runtimeContracts.d21439Config),
+        dispatch_sha256: D2_1439_REVIEWED_WORLD_BUILDER_SHA256,
+        prototype_config_sha256: inputs.runtimeContracts.d21439PrototypeConfigSha256,
+        prototype_sha256: inputs.runtimeContracts.d21439PrototypeSha256,
+        site_kit_sha256: inputs.runtimeContracts.d21439SiteKitSha256,
       }
     : isD1B201
       ? {
@@ -2700,6 +2989,8 @@ function importActiveRuntimeAdapter(seed, receiver, inputs, packageAudit) {
           ? "active_navy_chapel_187_paired_wall_roof_replacement"
         : isD21441
           ? "active_d2_1441_paired_wall_roof_replacement"
+        : isD21439
+          ? "active_d2_1439_paired_wall_roof_replacement"
           : isD1B201
             ? "active_d1_b201_receiver_host_partition_attachment"
           : isD1B225
@@ -2823,6 +3114,7 @@ function unitRuntimeContentMode(directReceivers) {
     if (modes[0] === "active_d1_b201_host_partition_attachment") return "all_receivers_active_d1_b201_host_partition_attachment";
     if (modes[0] === "active_d1_b225_host_partition_attachment") return "all_receivers_active_d1_b225_host_partition_attachment";
     if (modes[0] === "active_d2_1441_paired_replacement") return "all_receivers_active_d2_1441_paired_replacement";
+    if (modes[0] === "active_d2_1439_paired_replacement") return "all_receivers_active_d2_1439_paired_replacement";
   }
   if (equalStable([...modes].sort(), ["generated_placeholder", "legacy_adapter"])) {
     return "mixed_legacy_adapter_and_generated_placeholder";
@@ -2997,7 +3289,7 @@ function validateAdapterContracts(contracts, registry = null) {
       "runtime_assets",
       "source_key",
     ], `Facade runtime adapter plan ${plan.adapter_id}`);
-    invariant(["legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment", "active_d1_b225_host_partition_attachment", "active_d2_1441_paired_replacement"].includes(plan.content_mode), `${plan.adapter_id} has an unknown receiver content mode`);
+    invariant(["legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment", "active_d1_b225_host_partition_attachment", "active_d2_1441_paired_replacement", "active_d2_1439_paired_replacement"].includes(plan.content_mode), `${plan.adapter_id} has an unknown receiver content mode`);
     if (plan.content_mode === "active_building_3_hero") {
       invariant(equalStable(plan.behavior_contract, building3BehaviorContract()), `${plan.adapter_id} Building 3 behavior parity contract drifted`);
     } else if (plan.content_mode === "active_isle_house_variant_c") {
@@ -3010,6 +3302,8 @@ function validateAdapterContracts(contracts, registry = null) {
       invariant(equalStable(plan.behavior_contract, d1B225BehaviorContract()), `${plan.adapter_id} D1 B225 pre-D2 acceptance/parity contract drifted`);
     } else if (plan.content_mode === "active_d2_1441_paired_replacement") {
       invariant(equalStable(plan.behavior_contract, d21441BehaviorContract()), `${plan.adapter_id} D2 1441 exact-current acceptance/parity contract drifted`);
+    } else if (plan.content_mode === "active_d2_1439_paired_replacement") {
+      invariant(equalStable(plan.behavior_contract, d21439BehaviorContract()), `${plan.adapter_id} D2 1439 exact-current acceptance/parity contract drifted`);
     } else {
       invariant(plan.behavior_contract == null, `${plan.adapter_id} unexpectedly exports a target-specific behavior parity contract`);
     }
@@ -3124,7 +3418,7 @@ function buildRuntimeRegistry(catalog, inputs, receiverByKey) {
     return {
       acceptance_records: unit.acceptance_records.map(runtimeAcceptanceRecord),
       active_runtime_adapter_ids: directReceivers
-        .filter((receiver) => ["active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment", "active_d1_b225_host_partition_attachment", "active_d2_1441_paired_replacement"].includes(receiver.runtime_content_mode))
+        .filter((receiver) => ["active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment", "active_d1_b225_host_partition_attachment", "active_d2_1441_paired_replacement", "active_d2_1439_paired_replacement"].includes(receiver.runtime_content_mode))
         .map((receiver) => receiver.runtime_adapter_id),
       capture_contract: runtimeCaptureContract(captureByUnit.get(unit.unit_id)),
       claim_status: unit.claim_status,
@@ -3339,17 +3633,17 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
   }
   invariant(registry.claim_totals.receiver_complete.verified === EXPECTED.recognition_units, "Not every unit is receiver-complete");
   invariant(registry.claim_totals.game_distinctive.accepted === 0, "Recognition acceptance must not import game-distinctive acceptance");
-  invariant(registry.claim_totals.reference_recognizable.accepted === ACCEPTED_REFERENCE_UNIT_IDS.length, "Runtime reference-recognizable numerator must be exactly 9/213");
+  invariant(registry.claim_totals.reference_recognizable.accepted === ACCEPTED_REFERENCE_UNIT_IDS.length, "Runtime reference-recognizable numerator must be exactly 10/213");
   invariant(registry.claim_totals.as_built_fidelity.claimed === 0 && registry.claim_totals.as_built_fidelity.limited === 0, "Recognition acceptance must not import as-built fidelity");
   invariant(equalStable(registry.recognition_metric, {
     accepted_physical_unit_ids: [...ACCEPTED_REFERENCE_UNIT_IDS].sort(),
     denominator: EXPECTED.recognition_units,
     denominator_kind: "immutable_physical_recognition_units",
-    display: "9/213",
+    display: "10/213",
     isle_house_non_numerator_source_keys: [...ISLE_HOUSE_PARTS],
     numerator: ACCEPTED_REFERENCE_UNIT_IDS.length,
     rollup_policy: "one_claim_per_physical_recognition_unit",
-  }), "Runtime physical-entity recognition metric drifted from exactly 9/213");
+  }), "Runtime physical-entity recognition metric drifted from exactly 10/213");
   invariant(registry.legacy_adapters.every((adapter) => adapter.whole_building_recognizability_imported === false && adapter.recognition_claim_effect === "none"), "Legacy adapter improperly grants recognizability");
   invariant(registry.active_runtime_adapters.every((adapter) => adapter.whole_building_recognizability_imported === false && adapter.recognition_claim_effect === "none"), "Active runtime adapter improperly grants recognizability");
   invariant(registry.units.flatMap((unit) => unit.identity_assertions).every((assertion) => assertion.frozen_value_preserved === true), "Runtime identity assertion silently overwrites frozen identity");
@@ -3370,6 +3664,7 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
   const d1B201Unit = registry.units.find((unit) => unit.unit_id === unitId(D1_B201_SOURCE));
   const d1B225Unit = registry.units.find((unit) => unit.unit_id === unitId(D1_B225_SOURCE));
   const d21441Unit = registry.units.find((unit) => unit.unit_id === unitId(D2_1441_SOURCE));
+  const d21439Unit = registry.units.find((unit) => unit.unit_id === unitId(D2_1439_SOURCE));
   invariant(building1Unit != null && towerUnit != null && building1Unit !== towerUnit, "Building 1 and observation tower physical units were collapsed");
   invariant(building1Unit.direct_receivers[0].runtime_content_mode === "active_building_1_hero", "Building 1 wall is not bound to the active hero adapter");
   invariant(towerUnit.direct_receivers[0].runtime_content_mode === "active_building_1_hero", "Observation tower wall is not bound to the active hero adapter");
@@ -3383,8 +3678,10 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
   invariant(d1B225Unit?.direct_receivers[0]?.runtime_content_mode === "active_d1_b225_host_partition_attachment" && d1B225Unit.active_runtime_adapter_ids.length === 1 && d1B225Unit.legacy_adapter_ids.length === 0, "D1 B225 wall is not bound exclusively to the active host-partition attachment");
   invariant(d1B225Unit.claim_status.reference_recognizable === "accepted" && d1B225Unit.acceptance_records.some((record) => record.review_receipt_sha256 === D1_B225_LIVE_REVIEW_RECEIPT_SHA256 && record.evidence_manifest_sha256 === D1_B225_EVIDENCE_MANIFEST_SHA256 && record.evidence_tree_sha256 === D1_B225_EVIDENCE_TREE_SHA256 && record.capture_time_recognition_metric === "7/213" && record.numerator_effect === 1), "D1 B225 physical unit lacks its exact frozen production/review/+1 acceptance authority");
   invariant(d21441Unit?.direct_receivers[0]?.runtime_content_mode === "active_d2_1441_paired_replacement" && d21441Unit.runtime_content_mode === "all_receivers_active_d2_1441_paired_replacement" && d21441Unit.active_runtime_adapter_ids.length === 1 && d21441Unit.legacy_adapter_ids.length === 0, "D2 1441 wall is not bound exclusively to the active paired wall/roof replacement");
+  invariant(d21439Unit?.direct_receivers[0]?.runtime_content_mode === "active_d2_1439_paired_replacement" && d21439Unit.runtime_content_mode === "all_receivers_active_d2_1439_paired_replacement" && d21439Unit.active_runtime_adapter_ids.length === 1 && d21439Unit.legacy_adapter_ids.length === 0, "D2 1439 wall is not bound exclusively to the active paired wall/roof replacement");
   invariant(d21441Unit.claim_status.reference_recognizable === "accepted" && d21441Unit.acceptance_records.length === 1 && equalStable(d21441Unit.acceptance_records[0], d21441AcceptanceRecord()), "D2 1441 physical unit lacks its exact seven-artifact frozen production/review/+1 acceptance authority");
-  invariant(registry.active_runtime_adapters.map((adapter) => adapter.receiver_key).sort().join("|") === [BUILDING_1_WALL, BUILDING_1_TOWER_WALL, BUILDING_3_WALL, ISLE_HOUSE_LOW_WALL, NAVY_CHAPEL_WALL, D1_B201_WALL, D1_B225_WALL, D2_1441_WALL].sort().join("|"), "Active Building 1/Building 3/Isle House/Navy Chapel/D1 B201/D1 B225/D2 1441 adapter receiver set drifted");
+  invariant(d21439Unit.claim_status.reference_recognizable === "accepted" && d21439Unit.acceptance_records.length === 1 && equalStable(d21439Unit.acceptance_records[0], d21439AcceptanceRecord()), "D2 1439 physical unit lacks its exact seven-artifact frozen production/review/+1 acceptance authority");
+  invariant(registry.active_runtime_adapters.map((adapter) => adapter.receiver_key).sort().join("|") === [BUILDING_1_WALL, BUILDING_1_TOWER_WALL, BUILDING_3_WALL, ISLE_HOUSE_LOW_WALL, NAVY_CHAPEL_WALL, D1_B201_WALL, D1_B225_WALL, D2_1441_WALL, D2_1439_WALL].sort().join("|"), "Active Building 1/Building 3/Isle House/Navy Chapel/D1 B201/D1 B225/D2 1441 adapter receiver set drifted");
   const building1Adapters = registry.active_runtime_adapters.filter((adapter) => [BUILDING_1_WALL, BUILDING_1_TOWER_WALL].includes(adapter.receiver_key));
   const expectedBuilding1RuntimeAssetPaths = BUILDING_1_RUNTIME_ASSET_PATHS.map((path) => `res://${path}`).sort();
   invariant(building1Adapters.every((adapter) =>
@@ -3482,8 +3779,27 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
     equalStable(d21441Adapter.active_runtime_contract?.behavior_contract, d21441BehaviorContract()),
     "Active D2 1441 acceptance, paired dependency, topology, or ownership parity contract drifted",
   );
+
+  const d21439Adapter = registry.active_runtime_adapters.find((adapter) => adapter.receiver_key === D2_1439_WALL);
+  invariant(
+    d21439Adapter?.adapter_id === d21439ActiveAdapterId(D2_1439_WALL) &&
+    d21439Adapter.attachment_kind === "active_d2_1439_paired_wall_roof_replacement" &&
+    d21439Adapter.content_classification === "active_target_specific_paired_wall_roof_replacement" &&
+    d21439Adapter.runtime_content_mode === "active_d2_1439_paired_replacement" &&
+    d21439Adapter.state === "active_runtime_target_specific_content" &&
+    d21439Adapter.active_receiver_scope?.coverage === "whole_direct_wall_receiver" &&
+    d21439Adapter.active_receiver_scope?.run_count === 24 &&
+    d21439Adapter.active_runtime_contract?.adapter_sha256 === D2_1439_LIVE_ADAPTER_SHA256 &&
+    d21439Adapter.active_runtime_contract?.config_sha256 === D2_1439_CONFIG_SHA256 &&
+    d21439Adapter.active_runtime_contract?.dispatch_sha256 === D2_1439_REVIEWED_WORLD_BUILDER_SHA256 &&
+    d21439Adapter.active_runtime_contract?.prototype_sha256 === sha256File(absolute(D2_1439_PROTOTYPE_PATH)) &&
+    d21439Adapter.active_runtime_contract?.prototype_config_sha256 === sha256File(absolute(D2_1439_PROTOTYPE_CONFIG_PATH)) &&
+    d21439Adapter.active_runtime_contract?.site_kit_sha256 === sha256File(absolute(D2_1439_SITE_KIT_PATH)) &&
+    equalStable(d21439Adapter.active_runtime_contract?.behavior_contract, d21439BehaviorContract()),
+    "Active D2 1439 acceptance, paired dependency, topology, or ownership parity contract drifted",
+  );
   const currentTopologyOwners = registry.active_runtime_adapters.filter((adapter) => adapter.active_runtime_contract?.behavior_contract?.geometry_contract?.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE);
-  invariant(currentTopologyOwners.length === 1 && currentTopologyOwners[0].adapter_id === d21441ActiveAdapterId(D2_1441_WALL), "D2 1441 must be the sole current-integration topology authority");
+  invariant(currentTopologyOwners.length === 1 && currentTopologyOwners[0].adapter_id === d21439ActiveAdapterId(D2_1439_WALL), "D2 1439 must be the sole current-integration topology authority");
   invariant(
     equalStable(
       building3Adapter.runtime_assets.map((asset) => asset.path).sort(),
@@ -3518,6 +3834,13 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
       [D2_1441_LIVE_ADAPTER_PATH, D2_1441_CONFIG_PATH, ...D2_1441_RUNTIME_ASSET_PATHS].map((path) => `res://${path}`).sort(),
     ) && d21441Adapter.runtime_asset_projections.length === 0,
     "Active D2 1441 exact thirteen-asset runtime closure is incomplete or source-bearing",
+  );
+  invariant(
+    equalStable(
+      d21439Adapter.runtime_assets.map((asset) => asset.path).sort(),
+      [D2_1439_LIVE_ADAPTER_PATH, D2_1439_CONFIG_PATH, ...D2_1439_RUNTIME_ASSET_PATHS].map((path) => `res://${path}`).sort(),
+    ) && d21439Adapter.runtime_asset_projections.length === 0,
+    "Active D2 1439 exact thirteen-asset runtime closure is incomplete or source-bearing",
   );
   invariant(!stableJson(registry).includes("building_1_recognizable_facade") && !stableJson(registry).includes("building_1_recognizability_placements"), "Runtime registry retains obsolete Building 1 facade content");
   assertRuntimeBoundary(registry);
@@ -3574,15 +3897,16 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
       { check_id: "isle_house_composite_3_sources_2_receivers_1_unit", status: "pass" },
       { check_id: "wall_run_quad_contract_4971", status: "pass" },
       { check_id: "receiver_complete_213", status: "pass" },
-      { check_id: "legacy_adapters_9_active_runtime_adapters_8_without_automatic_recognition_transfer", status: "pass" },
+      { check_id: "legacy_adapters_9_active_runtime_adapters_9_without_automatic_recognition_transfer", status: "pass" },
       { check_id: "building_1_and_tower_exact_current_hero_dispatch", status: "pass" },
       { check_id: "building_3_exact_current_wall_roof_facade_collision_landing_spray_parity", status: "pass" },
       { check_id: "isle_house_receiver_specific_high_legacy_low_variant_c_runtime_state", status: "pass" },
       { check_id: "navy_chapel_exact_current_paired_wall_roof_collision_landing_spray_parity", status: "pass" },
       { check_id: "d1_b201_pre_b225_host_partition_render_attachment_collision_spray_parity", status: "pass" },
       { check_id: "d1_b225_pre_d2_host_partition_render_attachment_collision_spray_parity", status: "pass" },
-      { check_id: "d2_1441_exact_current_paired_wall_roof_evidence_topology_collision_landing_spray_parity", status: "pass" },
-      { check_id: "reference_recognizable_physical_entity_rollup_exactly_9_of_213", status: "pass" },
+      { check_id: "d2_1441_historical_paired_wall_roof_evidence_topology_collision_landing_spray_parity", status: "pass" },
+      { check_id: "d2_1439_exact_current_paired_closed_recess_evidence_topology_collision_spray_parity", status: "pass" },
+      { check_id: "reference_recognizable_physical_entity_rollup_exactly_10_of_213", status: "pass" },
       { check_id: "isle_house_composite_parent_counted_once_part_sources_never_counted", status: "pass" },
       { check_id: "acceptance_records_bound_to_exact_independent_review_receipts", status: "pass" },
       { check_id: "catalog_json_schema_document_and_instance_validation", status: "pass" },
@@ -3630,6 +3954,10 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
       active_d1_b225_evidence_tree_sha256: D1_B225_EVIDENCE_TREE_SHA256,
       active_d1_b225_live_review_receipt_sha256: D1_B225_LIVE_REVIEW_RECEIPT_SHA256,
       active_d2_1441_adapter_sha256: inputs.runtimeContracts.d21441LiveAdapterSha256,
+      active_d2_1439_adapter_sha256: D2_1439_LIVE_ADAPTER_SHA256,
+      active_d2_1439_config_sha256: D2_1439_CONFIG_SHA256,
+      active_d2_1439_evidence_tree_sha256: D2_1439_EVIDENCE_TREE_SHA256,
+      active_d2_1439_review_receipt_sha256: D2_1439_VISUAL_REVIEW_RECEIPT_SHA256,
       active_d2_1441_config_sha256: inputs.runtimeContracts.d21441ConfigSha256,
       active_d2_1441_evidence_manifest_sha256: inputs.runtimeContracts.d21441EvidenceManifestSha256,
       active_d2_1441_evidence_tree_sha256: inputs.runtimeContracts.d21441EvidenceTree.sha256,
@@ -3664,10 +3992,10 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
     schema_version: REPORT_SCHEMA,
     scope_boundaries: [
       "The D2 1441 promotion preserves generated bytes while atomically replacing the supplied wall+roof pair with nine visual surfaces, two structural owners, one wall spray owner, and zero decorative collision or navigation owners.",
-      "The unchanged D1 B201 attachment retains its pre-B225 735/950/964/66,636/466/466 parity receipt and D1 B225 retains its pre-D2 735/952/967/67,716/466/466 receipt, while D2 1441 alone owns current 735/959/974/69,252/466/466 integration topology.",
-      "Nine legacy receivers, two exact-current Building 1 hero receivers, one exact-current Building 3 wall/roof receiver, one exact-current Isle House Variant C low receiver, one exact-current Navy Chapel paired wall/roof receiver, one exact-current D1 B201 host-partition attachment, one exact-current D1 B225 host-partition attachment, and one exact-current D2 1441 paired wall/roof replacement are represented without automatic recognition transfer from adapter metadata.",
+      "The unchanged D1 B201 attachment retains its pre-B225 735/950/964/66,636/466/466 parity receipt and D1 B225 retains its pre-D2 735/952/967/67,716/466/466 receipt, while D2 1441 retains historical post-B1 735/959/974/70,692/466/466 and D2 1439 alone owns current 735/968/983/71,156/466/467 integration topology.",
+      `${registry.legacy_adapters.length} legacy receivers and ${registry.active_runtime_adapters.length} exact-current active receiver adapters are represented without automatic recognition transfer from adapter metadata.`,
       "The version-pinned loader contract authorizes parsing and resource resolution only; it does not authorize node instantiation or world-construction dispatch.",
-      "Exactly nine independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.",
+      `Exactly ${registry.recognition_metric.numerator} independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.`,
       "D2 1441 contributes exactly one standalone physical-building claim bound to the frozen capture-time v8 static, telemetry, visual-motion, package, tree, mechanical-review, and visual-review hashes; its paired wall and roof never create a second receiver or numerator entry.",
       "D1 B225 contributes exactly one standalone physical-building claim bound to the frozen capture-time v7 production evidence tree, static manifest, and independent review receipt; its two decorative batches, one wall receiver, and protected roof never create extra units or numerator entries.",
       "D1 B201 contributes exactly one standalone physical-building claim; its six decorative batches, one wall receiver, and protected roof never create extra units or numerator entries.",

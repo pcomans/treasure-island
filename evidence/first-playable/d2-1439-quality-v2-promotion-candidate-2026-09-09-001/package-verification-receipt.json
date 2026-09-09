@@ -1,0 +1,425 @@
+{
+  "recognition_metric": "9/213",
+  "recognition_credit": false,
+  "additional_recognition_credit": false,
+  "promotion": false,
+  "source_render_images_are_package_pixels": false,
+  "as_built_fidelity_claimed": false,
+  "inventory_physical_units": 213,
+  "schema_version": "ti.d2-1439-quality-v2-package-verification/1",
+  "derived_normalized_summary": true,
+  "not_raw_execution_evidence": true,
+  "decision": "PASS_FOR_1439_CANDIDATE_PACKAGE_AND_PROMOTION_REVIEW_NO_CREDIT",
+  "independent_package_review": {
+    "raw_original_sha256": "cf2b758f2280c5a873beef4a63250b8d585c5c4bdefc4c8e2da908ec13dfdd5b",
+    "raw_original_bytes": 9947,
+    "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/independent-package/PACKAGE_REVIEW.json"
+  },
+  "independent_package_review_text": {
+    "raw_original_sha256": "bf2514d3f24fb9dde419a6c7323f55bb0fcb1ccbd9da8be962c4ad92d2b7cc7c",
+    "raw_original_bytes": 5607,
+    "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/independent-package/PACKAGE_REVIEW.md"
+  },
+  "app_bundle_relative_path": "build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app",
+  "bundle_inventory": [
+    {
+      "path": "Contents/Info.plist",
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885
+    },
+    {
+      "path": "Contents/MacOS/Treasure Island First Playable",
+      "sha256": "d4edf2a50daae7373f29bd8011112259891cf4f2747e154abc42541edd6add1d",
+      "bytes": 170963648
+    },
+    {
+      "path": "Contents/PkgInfo",
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9
+    },
+    {
+      "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229
+    },
+    {
+      "path": "Contents/Resources/Treasure Island First Playable.pck",
+      "sha256": "04ecb3e89034372ca973bd320cbbd66a7567aec0c9b3d1231851cba20c7a7d95",
+      "bytes": 66738140
+    },
+    {
+      "path": "Contents/Resources/icon.icns",
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "sha256": "f7cbd306bb4958c0c79a92f8f0b1af41b3d426a27b5dbe9b798fdb989484e2e4",
+      "bytes": 3217
+    }
+  ],
+  "bundle_identity_sha256": "b6964dc19b132c31476280acad5a09227cc9f603d1759bcf244bee10b2aa9922",
+  "bundle_identity_algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "pck_sha256": "04ecb3e89034372ca973bd320cbbd66a7567aec0c9b3d1231851cba20c7a7d95",
+  "executable_sha256": "d4edf2a50daae7373f29bd8011112259891cf4f2747e154abc42541edd6add1d",
+  "final_byte_gate": "Independent reviewer verified all seven app files before and after owner/independent runs; archive executor did not rerun the app-byte check.",
+  "all_before_after_app_bytes_exact": true,
+  "all31_package_source_pins_unchanged": true,
+  "all77_frozen_B1_authority_pins_match": true,
+  "mounted_override_absent": true,
+  "mounted_standalone_activation_routes_absent": true,
+  "mounted_package_component_contract_pass": true,
+  "generic_mounted_pck_content_audit_pass": true,
+  "headless_exported_main_smoke_pass": true,
+  "native_exported_main_smoke_pass": true,
+  "actual_world": {
+    "rows": 735,
+    "meshes": 968,
+    "surfaces": 983,
+    "triangles": 71156,
+    "bodies": 466,
+    "shapes": 467
+  },
+  "actual_pair": {
+    "wall": {
+      "meshes": 10,
+      "surfaces": 10,
+      "triangles": 512,
+      "bodies": 1,
+      "shapes": 2
+    },
+    "roof": {
+      "meshes": 1,
+      "surfaces": 1,
+      "triangles": 10,
+      "bodies": 1,
+      "shapes": 1
+    },
+    "eligible_wall_collision_triangles": 62,
+    "noneligible_closed_recess_triangles": 30,
+    "separate_roof_collision_triangles": 10
+  },
+  "supported_verification_boundary": "Editor --main-pack checks mounted closure/privacy and normal builder target-chunk geometry/collision/materials; signed release starts ordinary main with supported --mac-export-smoke and reports actual pair plus full-world/player/jetpack. Release template does not support script/path/main-pack overrides.",
+  "source_pins": {
+    "res://game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd": "797dfb3075dacdf24a32b4ee0fa4959c296b35ae2d51f2d3c4dbba407fead3b7",
+    "res://game/resources/facades/d2_1439_chinook_quality_v2_prototype.json": "1217ae0a101f0f1951a3c12303d11af3aace225745922a09aed276b1958553be",
+    "res://game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+    "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres": "81fd15832670516b2cc752e89310acda201f30705b01297639703f76f2111a64",
+    "res://game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres": "d97d7b4a442ffe8ad9a0b003e5c1d6466f9ef9effc7cdb2be8ef966195e66782",
+    "res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres": "389c01066767b085ef8ed8ae4c5e1b06062d9ffb135e3e6a7bfa968b963717d7",
+    "res://game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres": "09928b8617c7ac90e421aa0e61acab916e391c3bac84c486a2e3beda995139fe",
+    "res://game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres": "eddc4900c351dc3a75d163bd380a8b3a39bf6a1c1c3647299e3af19634a60ead",
+    "res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres": "75c13aa30a4e3c9f49980d78abe41f40c6c7ab270be6152c201eb8a72ebe8720",
+    "res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+    "res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+    "res://game/scripts/player/player_camera.gd": "1d53f11cc3d9de00d4bb580aa6322c6f53b0080e5b9e1e3b18baeefd52125cc3",
+    "res://game/scenes/player/player.tscn": "a37b00ecc620b4f3106a14d1dc9ec22a519f81481e5e6c68252389e13488a793",
+    "res://game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd": "d5a4458be7a5c2fb6989f9d8a343d497d2f144eb19c445de6016888e7b3cce5e",
+    "res://game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json": "58ba0093d002a3acad06b76876b7333077bb5152827f4a59b0c9b6da132b68d9",
+    "res://game/scripts/world/world_chunk_builder.gd": "417e4f7269292ed0c5185e85f6b5d12759cdc516ca6be069898145aaab56ab50",
+    "res://game/scripts/player/player_controller.gd": "8b114132d66c78dd0bfd09783c7b9a3a3a441a8b1ae14f33f7308bd9b04ed0ea",
+    "res://game/scripts/main.gd": "8ece8ee2e9ac39b4e0ea0adfddf6c9f6eddc93f72da34cdfbc4666d25bc1587c",
+    "res://game/scripts/interaction/spray_controller.gd": "9897042fbffc6740ebe3eb4c19da544a0d437391ded9987318edc7238c403da4",
+    "res://game/scenes/main.tscn": "959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66",
+    "res://game/scenes/world/world_root.tscn": "ed6dfaa1933cedf2a70ca6afd677a645d588dbf6c823fb04402aaaea4b709ab8",
+    "res://project.godot": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af",
+    "res://generated/world/chunks/x_-2__z_0.json": "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b",
+    "res://export_presets.cfg": "a9bbac740c5df451a94f48fab047c113b7d45933ec05614eb43ed3b5a2f0e878",
+    "res://discovery/facades/facade-recognition-catalog.json": "6987ab1db4d58096ae9189803a48b8015dca8154a23b55470ab166af76a2d50c",
+    "res://discovery/facades/facade-recognition-catalog.schema.json": "2835742a7f54d4d70e7bc90ff739ce33350954cf9daa69eb01eb1e20588c4687",
+    "res://game/resources/facades/facade-runtime-registry.json": "c6780895e339919f7ebe0900814afaa46fd15f31958946ec81b4391091a1d46f",
+    "res://game/resources/facades/facade-runtime-adapter-contracts.json": "24efc72b3315540f31dc112949ac108509cdc0e4eb9f5e20ef0d4b45ce41ac49",
+    "res://game/scripts/world/facades/facade_runtime_registry_loader.gd": "6571e85914e604e16a8294cc8835dba033454907a3bc1da8bb9d9fd36e35789f",
+    "res://tools/build_facade_recognition_registry.mjs": "9b6ee97d19e069a0cfc0dc0e043e856e8618c407361b508527ce764b9a71be37",
+    "res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+  },
+  "owner_completion_receipts": {
+    "source-main-smoke-001": {
+      "argv": [
+        "{PUBLISHED_MAIN_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+        "--headless",
+        "--fixed-fps",
+        "60",
+        "--path",
+        "{SOURCE_REPO}",
+        "--",
+        "--mac-export-smoke"
+      ],
+      "cwd": "{SOURCE_REPO}",
+      "pid": 76694,
+      "status": "terminal",
+      "exit_code": 0,
+      "elapsed_seconds": 8.684927958063781,
+      "pins_unchanged": true,
+      "log_errors": [],
+      "log_sha256": "6e62064aa299defac523ace73fbd17b03fd1a84665cd0550f3361a18d69c78e5",
+      "path": "{TASK_ROOT}/work/1439-quality-v2-001/package-001/source-main-smoke-001-execution.json"
+    },
+    "source-package-002": {
+      "argv": [
+        "{PUBLISHED_MAIN_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+        "--headless",
+        "--fixed-fps",
+        "60",
+        "--path",
+        "{SOURCE_REPO}",
+        "--script",
+        "res://game/tests/headless_d2_1439_quality_v2_package_contract.gd"
+      ],
+      "cwd": "{SOURCE_REPO}",
+      "pid": 77007,
+      "status": "terminal",
+      "exit_code": 0,
+      "elapsed_seconds": 8.511802708962932,
+      "pins_unchanged": true,
+      "log_errors": [],
+      "log_sha256": "e86abd4e14e9e404d2266de88348590fd8f37f23dd430819cd15f8570320d505",
+      "path": "{TASK_ROOT}/work/1439-quality-v2-001/package-001/source-package-002-execution.json"
+    },
+    "export-002": {
+      "argv": [
+        "{PUBLISHED_MAIN_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+        "--headless",
+        "--path",
+        "{SOURCE_REPO}",
+        "--export-release",
+        "macOS Private",
+        "{SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app"
+      ],
+      "cwd": "{SOURCE_REPO}",
+      "pid": 77330,
+      "status": "terminal",
+      "exit_code": 0,
+      "elapsed_seconds": 8.167663792148232,
+      "pins_unchanged": true,
+      "log_errors": [],
+      "log_sha256": "96e86c81156e9013db9c846067c57b9a92b191b1a1691a03778a80bb5309b09b",
+      "path": "{TASK_ROOT}/work/1439-quality-v2-001/package-001/export-002-execution.json"
+    },
+    "mounted-package-003": {
+      "argv": [
+        "{PUBLISHED_MAIN_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+        "--headless",
+        "--fixed-fps",
+        "60",
+        "--path",
+        "{PRIVATE_TMP}/d2-1439-quality-v2-package-001-sourcefree",
+        "--main-pack",
+        "{SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+        "--script",
+        "res://game/tests/headless_d2_1439_quality_v2_package_contract.gd",
+        "--",
+        "--pck={SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+        "--pck-sha256=04ecb3e89034372ca973bd320cbbd66a7567aec0c9b3d1231851cba20c7a7d95"
+      ],
+      "cwd": "{PRIVATE_TMP}/d2-1439-quality-v2-package-001-sourcefree",
+      "pid": 78032,
+      "status": "terminal",
+      "exit_code": 0,
+      "elapsed_seconds": 2.1001906250603497,
+      "pins_unchanged": true,
+      "log_errors": [],
+      "log_sha256": "32131025999320142cc0503c443fb56de8310c05662735f4f082e8f472576fac",
+      "path": "{TASK_ROOT}/work/1439-quality-v2-001/package-001/mounted-package-003-execution.json"
+    },
+    "mounted-privacy-002": {
+      "argv": [
+        "{PUBLISHED_MAIN_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+        "--headless",
+        "--fixed-fps",
+        "60",
+        "--path",
+        "{PRIVATE_TMP}/d2-1439-quality-v2-package-001-sourcefree",
+        "--main-pack",
+        "{SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+        "--script",
+        "res://game/tests/mounted_pck_content_audit.gd",
+        "--",
+        "--pck-audit-pck={SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+        "--pck-audit-pck-sha256=04ecb3e89034372ca973bd320cbbd66a7567aec0c9b3d1231851cba20c7a7d95",
+        "--pck-audit-manifest-sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+        "--pck-audit-content-sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
+      ],
+      "cwd": "{PRIVATE_TMP}/d2-1439-quality-v2-package-001-sourcefree",
+      "pid": 78111,
+      "status": "terminal",
+      "exit_code": 0,
+      "elapsed_seconds": 2.0126873748376966,
+      "pins_unchanged": true,
+      "log_errors": [],
+      "log_sha256": "469b9da27a37d426230581b24d9f393e03f14b3162943ac10a3b3909fb0c4254",
+      "path": "{TASK_ROOT}/work/1439-quality-v2-001/package-001/mounted-privacy-002-execution.json"
+    },
+    "exported-headless-smoke-002": {
+      "argv": [
+        "{SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+        "--headless",
+        "--fixed-fps",
+        "60",
+        "--log-file",
+        "{TASK_ROOT}/work/1439-quality-v2-001/package-001/exported-headless-smoke-002-engine.log",
+        "--",
+        "--mac-export-smoke"
+      ],
+      "cwd": "{PRIVATE_TMP}/d2-1439-quality-v2-package-001-sourcefree",
+      "pid": 78309,
+      "status": "terminal",
+      "exit_code": 0,
+      "elapsed_seconds": 5.99570441711694,
+      "pins_unchanged": true,
+      "log_errors": [],
+      "log_sha256": "e92d5fc7138c6c2cb6c3b34388f62dafda34463b6a5c0e12d2b8c2156cf3e114",
+      "path": "{TASK_ROOT}/work/1439-quality-v2-001/package-001/exported-headless-smoke-002-execution.json"
+    },
+    "exported-native-smoke-002": {
+      "argv": [
+        "{SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+        "--fixed-fps",
+        "60",
+        "--display-driver",
+        "macos",
+        "--rendering-method",
+        "forward_plus",
+        "--rendering-driver",
+        "metal",
+        "--audio-driver",
+        "Dummy",
+        "--log-file",
+        "{TASK_ROOT}/work/1439-quality-v2-001/package-001/exported-native-smoke-002-engine.log",
+        "--",
+        "--mac-export-smoke"
+      ],
+      "cwd": "{PRIVATE_TMP}/d2-1439-quality-v2-package-001-sourcefree",
+      "pid": 78489,
+      "status": "terminal",
+      "exit_code": 0,
+      "elapsed_seconds": 42.40184983401559,
+      "pins_unchanged": true,
+      "log_errors": [],
+      "log_sha256": "18c7e0246adc12825e96f789f9539c2cc1f6c1964ed76be58d6368113fd5c86f",
+      "path": "{TASK_ROOT}/work/1439-quality-v2-001/package-001/exported-native-smoke-002-execution.json"
+    }
+  },
+  "independent_completion_receipts": [
+    {
+      "name": "mounted-package-003",
+      "argv": [
+        "{PUBLISHED_MAIN_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+        "--headless",
+        "--fixed-fps",
+        "60",
+        "--path",
+        "{TASK_ROOT}/work/1439-quality-v2-001/review-package-continuation-001/independent-runtime-001",
+        "--main-pack",
+        "{SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+        "--script",
+        "res://game/tests/headless_d2_1439_quality_v2_package_contract.gd",
+        "--",
+        "--pck={SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+        "--pck-sha256=04ecb3e89034372ca973bd320cbbd66a7567aec0c9b3d1231851cba20c7a7d95"
+      ],
+      "cwd": "{TASK_ROOT}/work/1439-quality-v2-001/review-package-continuation-001/independent-runtime-001",
+      "started_at": "2026-09-09T17:03:21.753874+00:00",
+      "pid": 87207,
+      "exit_code": 0,
+      "elapsed_seconds": 2.418456125073135,
+      "ended_at": "2026-09-09T17:03:24.172387+00:00",
+      "log": "{TASK_ROOT}/work/1439-quality-v2-001/review-package-continuation-001/independent-runtime-001/mounted-package-003.log",
+      "log_sha256": "32131025999320142cc0503c443fb56de8310c05662735f4f082e8f472576fac",
+      "pid_absent": true
+    },
+    {
+      "name": "mounted-privacy-002",
+      "argv": [
+        "{PUBLISHED_MAIN_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+        "--headless",
+        "--fixed-fps",
+        "60",
+        "--path",
+        "{TASK_ROOT}/work/1439-quality-v2-001/review-package-continuation-001/independent-runtime-001",
+        "--main-pack",
+        "{SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+        "--script",
+        "res://game/tests/mounted_pck_content_audit.gd",
+        "--",
+        "--pck-audit-pck={SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+        "--pck-audit-pck-sha256=04ecb3e89034372ca973bd320cbbd66a7567aec0c9b3d1231851cba20c7a7d95",
+        "--pck-audit-manifest-sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+        "--pck-audit-content-sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
+      ],
+      "cwd": "{TASK_ROOT}/work/1439-quality-v2-001/review-package-continuation-001/independent-runtime-001",
+      "started_at": "2026-09-09T17:03:24.178005+00:00",
+      "pid": 87230,
+      "exit_code": 0,
+      "elapsed_seconds": 2.4580914170946926,
+      "ended_at": "2026-09-09T17:03:26.636143+00:00",
+      "log": "{TASK_ROOT}/work/1439-quality-v2-001/review-package-continuation-001/independent-runtime-001/mounted-privacy-002.log",
+      "log_sha256": "469b9da27a37d426230581b24d9f393e03f14b3162943ac10a3b3909fb0c4254",
+      "pid_absent": true
+    },
+    {
+      "name": "exported-headless-smoke-002",
+      "argv": [
+        "{SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+        "--headless",
+        "--fixed-fps",
+        "60",
+        "--log-file",
+        "{TASK_ROOT}/work/1439-quality-v2-001/review-package-continuation-001/independent-runtime-001/exported-headless-smoke-002-engine.log",
+        "--",
+        "--mac-export-smoke"
+      ],
+      "cwd": "{TASK_ROOT}/work/1439-quality-v2-001/review-package-continuation-001/independent-runtime-001",
+      "started_at": "2026-09-09T17:03:26.641359+00:00",
+      "pid": 87272,
+      "exit_code": 0,
+      "elapsed_seconds": 6.962169083068147,
+      "ended_at": "2026-09-09T17:03:33.603629+00:00",
+      "log": "{TASK_ROOT}/work/1439-quality-v2-001/review-package-continuation-001/independent-runtime-001/exported-headless-smoke-002.log",
+      "log_sha256": "e254f72a0819a9c1aa403718004ce0ef75102e301175aea952a70bbda4586645",
+      "pid_absent": true,
+      "engine_log_sha256": "e254f72a0819a9c1aa403718004ce0ef75102e301175aea952a70bbda4586645"
+    },
+    {
+      "name": "exported-native-smoke-002",
+      "argv": [
+        "{SOURCE_REPO}/build/d2-1439-quality-v2-candidate-2026-09-09-002/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+        "--fixed-fps",
+        "60",
+        "--display-driver",
+        "macos",
+        "--rendering-method",
+        "forward_plus",
+        "--rendering-driver",
+        "metal",
+        "--audio-driver",
+        "Dummy",
+        "--log-file",
+        "{TASK_ROOT}/work/1439-quality-v2-001/review-package-continuation-001/independent-runtime-001/exported-native-smoke-002-engine.log",
+        "--",
+        "--mac-export-smoke"
+      ],
+      "cwd": "{TASK_ROOT}/work/1439-quality-v2-001/review-package-continuation-001/independent-runtime-001",
+      "started_at": "2026-09-09T17:03:33.608711+00:00",
+      "pid": 87452,
+      "exit_code": 0,
+      "elapsed_seconds": 7.8820335830096155,
+      "ended_at": "2026-09-09T17:03:41.490834+00:00",
+      "log": "{TASK_ROOT}/work/1439-quality-v2-001/review-package-continuation-001/independent-runtime-001/exported-native-smoke-002.log",
+      "log_sha256": "165d396973d29eac5ac46a4eb61faa7c075a34a17c29f7fe5af3208a12ec6c78",
+      "pid_absent": true,
+      "engine_log_sha256": "165d396973d29eac5ac46a4eb61faa7c075a34a17c29f7fe5af3208a12ec6c78"
+    }
+  ],
+  "preserved_failed_attempts": [
+    {
+      "receipt": "{TASK_ROOT}/work/1439-quality-v2-001/package-001/mounted-package-001-execution.json",
+      "outcome": "exit1: editor-feature private raw-OSM validation; package correctly excludes private inputs."
+    },
+    {
+      "receipt": "{TASK_ROOT}/work/1439-quality-v2-001/package-001/mounted-package-002-execution.json",
+      "outcome": "exit-15: actual owned process terminated after CLI-help proved unsupported script dispatch. No PASS or timeout restart claimed.",
+      "stop_record": "{TASK_ROOT}/work/1439-quality-v2-001/package-001/mounted-package-002-stop.json"
+    }
+  ]
+}

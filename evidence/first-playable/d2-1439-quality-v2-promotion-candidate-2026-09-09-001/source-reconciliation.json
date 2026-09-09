@@ -1,0 +1,58 @@
+{
+  "captured_main_sha256": "a5cedea1c9861aca393787f7d1a26bfcee3a8a17b08ec4a8bd889fb79a2c7057",
+  "package_main_sha256": "8ece8ee2e9ac39b4e0ea0adfddf6c9f6eddc93f72da34cdfbc4666d25bc1587c",
+  "captured_export_presets_sha256": "e54969d6127ee55691113217e5129a7c5e9b3e841168a6b91f3fc74ba278456f",
+  "package_export_presets_sha256": "a9bbac740c5df451a94f48fab047c113b7d45933ec05614eb43ed3b5a2f0e878",
+  "old_capture_hash_binds_changed_main": false,
+  "changed_main_scope": "Existing opt-in --mac-export-smoke expectations plus read-only actual1439 attachment assertions/report; ordinary rendering, physics, controls, facade/camera/world-builder bytes retained.",
+  "preset_scope": "Exactly nine analogous historical1439 standalone scene/capture/test activation paths excluded; all existing exclusions retained.",
+  "source_pin_reuse_scope": "Every other captured source pin remains exact. The independent source reports establish non-rendering equivalence; original source screenshots retain old main identity and are not asserted to be package pixels.",
+  "independent_source_reviews": [
+    {
+      "raw_origin": {
+        "raw_original_sha256": "1e959e79e20319521c2708c863a6ba7acff683221d7fc4f68d323e5bc3a28b95",
+        "raw_original_bytes": 18238,
+        "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/independent-package/source-delta-review.json"
+      },
+      "decision": "PASS_SMOKE_ONLY_SOURCE_RECONCILIATION_NO_PACKAGE_OR_AUTHORITY_CREDIT"
+    },
+    {
+      "raw_origin": {
+        "raw_original_sha256": "4b9c2eae01cc274b2fcea67997c331c2ce49139bcbcb59e3b240026742e64b65",
+        "raw_original_bytes": 1389,
+        "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/independent-package/attachment-source-delta-review.json"
+      },
+      "decision": "PASS_ADDITIONAL_SMOKE_ATTACHMENT_DELTA_NO_PACKAGE_CREDIT"
+    }
+  ],
+  "captured_main_original": {
+    "raw_original_sha256": "a5cedea1c9861aca393787f7d1a26bfcee3a8a17b08ec4a8bd889fb79a2c7057",
+    "raw_original_bytes": 16002,
+    "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/package-owner/captured-main.gd"
+  },
+  "intermediate_count_only_main_original": {
+    "raw_original_sha256": "ecdc815d2c28693473cb7f52160eab837f2242c6bf7d80510d41d1f3b0c98766",
+    "raw_original_bytes": 16024,
+    "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/package-owner/count-only-main.gd"
+  },
+  "package_main_original": {
+    "raw_original_sha256": "8ece8ee2e9ac39b4e0ea0adfddf6c9f6eddc93f72da34cdfbc4666d25bc1587c",
+    "raw_original_bytes": 18694,
+    "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/package-runtime-sources/game/scripts/main.gd"
+  },
+  "preset_diff_original": {
+    "raw_original_sha256": "c7be8cbbffecaf07e299a050e88c936cf93f2f80bcfd99b2862d3a127dc77de5",
+    "raw_original_bytes": 3956,
+    "retained_repo_relative_path": "build/d2-1439-quality-v2-provenance-2026-09-09-001/package-owner/export-boundary.diff"
+  },
+  "truth_boundary": {
+    "recognition_metric": "9/213",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "source_render_images_are_package_pixels": false,
+    "as_built_fidelity_claimed": false,
+    "inventory_physical_units": 213
+  },
+  "derived_summary": true
+}
