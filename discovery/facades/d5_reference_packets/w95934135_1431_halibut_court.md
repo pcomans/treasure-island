@@ -1,11 +1,12 @@
 # D5 source packet — 1431 Halibut Court (`w95934135`)
 
-Checked: **2026-09-04**  
+Checked: **2026-09-08**
 Readiness: **target-side prototype-ready; detached study only**
 
 Catalog provenance: `ti.facade-recognition-catalog/3`, checked 2026-09-04,
 SHA-256 `0ce8182fe199add5a34650f09e6fdfffce57ea5fc95ea610658e30530b5eafc0`.
-Frozen source: OSM way `w95934135`, v4, `2020-07-09T13:50:42Z`, from
+Physical building `physical-building:w95934135` is sourced directly by frozen
+OSM way `w95934135`, v4, `2020-07-09T13:50:42Z`, from
 `treasure-island-2026-08-27.osm` SHA-256
 `3b6f6af31a1c82de3fa51fcbc02fe7e3723fdb629c948ae6523ef46c157b4549`;
 tags `addr:housenumber=1431`, `addr:street=Halibut Court`, `building=yes`,
@@ -27,17 +28,46 @@ tags `addr:housenumber=1431`, `addr:street=Halibut Court`, `building=yes`,
 The wall is the sole spray receiver and an opaque `world_solid`; the roof is an
 opaque, colliding, non-spray receiver.
 
-## Identity, lifecycle, and appearance evidence
+## Identity and lifecycle evidence
 
-`CITY-EAS` record `483562` is `1431 HALIBUT CT`, parcel `1939001`, point
-`37.8245298866,-122.3753657621`, current in that dataset on 2026-09-03.
-`TIDA-JSCO-2026` includes 1431 Halibut as of 2025-07-01. These do not prove
-occupancy or an exact facade schedule.
+- `verified_fact`: the [exact live City EAS row](https://data.sfgov.org/resource/3mea-di5p.json?address=1431%20HALIBUT%20CT),
+  checked 2026-09-08 with `data_as_of=2026-09-07T18:00:50`, is
+  `1431 HALIBUT CT`, parcel `1939001`, point
+  `37.8245298866,-122.3753657621`, direct source `SF DBI`. Its exact schema
+  fields are `eas_baseid=483562` and `eas_address_id=725353`; the earlier packet
+  wording incorrectly used the base ID as an undifferentiated EAS record ID.
+- `verified_fact`: [TIDA-JSCO-2026](https://media.api.sf.gov/documents/011426_6j_JSCO.pdf)
+  includes 1431 Halibut as of 2025-07-01. Managed-list inclusion proves neither
+  occupancy nor an unchanged exterior.
+- `verified_fact`: a [Five Keys Home Free page](https://www.fivekeyshomefree.org/new-home-for-dinner)
+  carrying a 2022 event date identifies the exact `1431 Halibut Court` address
+  and states that CityBuild and partners began converting and renovating it
+  into a six-plex before the COVID-19 pandemic, with demolition work, painting,
+  upgrades, and 12 new trees. The text does not say the whole building was
+  demolished and supplies no measured exterior schedule.
+- `verified_fact`: an [SFOEWD-hosted program record](https://vimeo.com/449846503)
+  independently identifies 1431 Halibut as six attached two-bedroom units and
+  describes cleanup/renovation for the Home Free program. It is identity and
+  lifecycle corroboration only unless individual frames are separately bound.
 
-- [March 2025 pano `hTHzoF_k9oHgamBhDjOfLA`](https://www.google.com/maps/@?api=1&map_action=pano&pano=hTHzoF_k9oHgamBhDjOfLA&heading=130&pitch=0&fov=75), camera `37.8246290,-122.3753714`, heading `130°`: direct NNW/WSW public corner association at about 22 m. Written observation: two garage/gabled end wings, two exterior stairs serving the central upper entry, salmon garage doors, pale wall fields, a white horizontal-sided upper band on the right, and a dark muted shallow roof. Vehicles and planting obscure part of the center.
+## Target-side appearance evidence
 
-Unknown: exact obscured garage/opening count, stair dimensions, hidden SSE/ENE
-schedules, repairs, and occupancy. No panorama pixels are retained.
+- `reference_observation`: [March 2025 panorama
+  `hTHzoF_k9oHgamBhDjOfLA`](https://www.google.com/maps/@?api=1&map_action=pano&pano=hTHzoF_k9oHgamBhDjOfLA&heading=130&pitch=0&fov=75),
+  camera `37.8246290,-122.3753714`, heading `130°`, provides a direct NNW/WSW
+  public-corner view. Written observation: paired garage/gabled end wings; two
+  exterior stairs serving the central upper entry; salmon garage doors; pale
+  wall fields; an asymmetric white horizontal-sided upper band on the right;
+  and a dark muted shallow roof. Vehicles and planting obscure part of the
+  center.
+- `production_inference`: the NNW/WSW association comes from the recorded
+  camera position and frozen receiver orientation, not a surveyed elevation.
+  Exact module dimensions, count behind occlusion, stair dimensions, cadence,
+  and anchors remain reversible game-art choices and must not be represented as
+  measured or as-built.
+- `unknown`: exact obscured garage/opening count, hidden SSE/ENE schedules,
+  repairs after March 2025, current occupancy, and whether any later exterior
+  work occurred. No panorama or program-page pixels are retained.
 
 ## Recognition boundary and handoff
 
@@ -47,5 +77,9 @@ the right-side white upper siding band**. Close confusion: 1430, 1432, 1433,
 siding, trim, and roof materials are allowed; this asymmetric siding cue and
 observed solid/void pattern may not be normalized into a generic neighbor.
 Prototype blocker: **none for the observed NNW/WSW corner study**.
+
+Safe next action: build only a detached NNW/WSW hero study, preserve the hidden
+faces as neutral/unknown, and require independent art review. This packet does
+not authorize live attachment, whole-building completion, or acceptance.
 
 Shared sources, lifecycle caveats, and rights boundary: [D5 index](README.md).

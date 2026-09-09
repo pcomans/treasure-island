@@ -1,12 +1,20 @@
 # D2 address-only reference-readiness packets
 
-Checked: **2026-09-04**
+Checked: **2026-09-08**
 
 Scope: **15 frozen address-only residential units; research and bounded art
 handoff only**
 
-> **2026-09-07 authority addendum:** the packet body below remains the frozen
-> research boundary. A later independently reviewed production transaction
+> **2026-09-08 five-target provenance refresh:** this documentation-only pass
+> rechecked 1437, 1438, and 1436 Chinook Court, 1449 Croaker Court, and the
+> cross-cohort D5 packet for 1431 Halibut Court. It changes no source geometry,
+> product, recognition authority, evidence package, runtime receiver, or
+> acceptance claim. A directly attributed 2016 target-front photo moves only
+> 1436 to detached target-front component/prototype readiness. 1431 remains
+> detached target-side prototype-ready; 1437, 1438, and 1449 remain blocked.
+
+> **2026-09-07 authority addendum:** the original D2 cohort and production
+> authority boundary remain frozen. A later independently reviewed transaction
 > accepts exactly 1441 Chinook Court (`w95934105`) as the ninth recognizable
 > physical unit. Current source authority is compiler `1.8.0`, catalog/runtime
 > registry v9, adapter contracts/loader API v8, and `9/213`; the other fourteen
@@ -28,30 +36,56 @@ reversible `production_inference`, and `unknown`.
 | `w95934105` | 1441 Chinook Court | City EAS `725381`; Navy/Swords; paired 2025 project name | Jul 2023 SSE public side | **target-side prototype-ready** |
 | `w95934107` | 1420 Striped Bass Street | City EAS `725272`; Navy/Villages; 2025 managed list | none | **appearance-blocked** |
 | `w95934112` | 1418 Striped Bass Street | City EAS `725270`; Navy/Villages; 2025 managed list | none | **appearance-blocked** |
-| `w95934113` | 1437 Chinook Court | City EAS `725379`; removed from managed premises 2026-02-01 | none | **appearance/lifecycle-blocked** |
+| `w95934113` | 1437 Chinook Court | City EAS `725379`; removed from managed premises 2026-02-01 | none | **appearance-blocked** |
 | `w95934117` | 1444 Croaker Court | City EAS `725327`; Navy/Villages; 2025 managed list | Jul 2023 WSW public side | **target-side prototype-ready** |
 | `w95934118` | 1419 Striped Bass Street | City EAS `725271`; Navy/Catholic; 2022 balcony report | no target-identifiable view | **appearance-blocked** |
-| `w95934120` | 1449 Croaker Court | City EAS `725328`; removed from managed premises 2026-02-01 | none | **appearance/lifecycle-blocked** |
+| `w95934120` | 1449 Croaker Court | City EAS `725328`; removed from managed premises 2026-02-01 | none | **appearance-blocked** |
 | `w95934121` | 1445 Chinook Court | City EAS `725383`; HR360 sublease through 2027, terminable early | none | **appearance-blocked** |
 | `w95934129` | 1440 Chinook Court | City EAS `725386`; HR360 sublease through 2027, terminable early | none | **appearance-blocked** |
 | `w95934131` | 1438 Chinook Court | City EAS `725385`; Navy/Villages; 2025 managed list | none | **appearance-blocked** |
-| `w95934137` | 1436 Chinook Court | City EAS `725378`; Navy/Villages; 2025 managed list | none | **appearance-blocked** |
+| `w95934137` | 1436 Chinook Court | City EAS `725378`; Navy/Villages; 2025 managed list | attributed 2016 target front | **target-front component/prototype-ready; detached study only** |
 | `w95934143` | 1443 Chinook Court | City EAS `725382`; paired 2025 project name; exact permit components | rear component records, no mapped view | **target-component study-ready** |
 | `w95934144` | 1439 Chinook Court | City EAS `725380`; Navy/Villages; 2025 managed list | Jul 2023 SSE public side | **target-side prototype-ready** |
 | `w96665886` | 1447 Chinook Court | City EAS `725384`; HR360 sublease through 2027, terminable early | none | **appearance-blocked** |
 | `w96665900` | 1442 Chinook Court | City EAS `725387`; HR360 sublease through 2027, terminable early | none | **appearance-blocked** |
 
 Counts: **15/15** exact frozen-source/direct-receiver packets; **15/15** exact
-live City address records; **3/15** target-identifiable dated public-side
-observations; **1/15** additional target-specific component study; **11/15**
+live City address records; **4/15** target-identifiable dated public-side/front
+observations; **1/15** additional target-specific component study; **10/15**
 have no safe target appearance prototype. None is accepted or attached by this
 research batch.
 
+## 2026-09-08 five-target provenance ledger
+
+This bounded ledger includes 1431 Halibut only as an owner-priority cross-link
+to its existing D5 packet; it does not add 1431 to the 15-building D2 cohort or
+alter either cohort's authority counts.
+
+| Physical / source ID | Exact City binding checked 2026-09-08 | Target-side evidence | Research readiness and boundary |
+| --- | --- | --- | --- |
+| `physical-building:w95934113` / `w95934113` | 1437 Chinook; `eas_baseid=483588`; `eas_address_id=725379`; [exact EAS row](https://data.sfgov.org/resource/3mea-di5p.json?address=1437%20CHINOOK%20CT) | Jul 2023 distant mass in `D2-PANO-C` remains merged with 1439; zero target cues | **appearance-blocked**; management removal is not demolition |
+| `physical-building:w95934131` / `w95934131` | 1438 Chinook; `eas_baseid=483594`; `eas_address_id=725385`; [exact EAS row](https://data.sfgov.org/resource/3mea-di5p.json?address=1438%20CHINOOK%20CT) | Jul 2023 B/C sightlines remain foreground-occluded/confusable; zero target cues | **appearance-blocked**; no neighbor transfer |
+| `physical-building:w95934135` / `w95934135` | 1431 Halibut; `eas_baseid=483562`; `eas_address_id=725353`; [exact EAS row](https://data.sfgov.org/resource/3mea-di5p.json?address=1431%20HALIBUT%20CT) | Mar 2025 NNW/WSW public corner: paired gabled garage wings, two-stair center, salmon doors, asymmetric right upper siding band | **target-side prototype-ready; detached study only**; [D5 packet](../d5_reference_packets/w95934135_1431_halibut_court.md) |
+| `physical-building:w95934137` / `w95934137` | 1436 Chinook; `eas_baseid=483587`; `eas_address_id=725378`; [exact EAS row](https://data.sfgov.org/resource/3mea-di5p.json?address=1436%20CHINOOK%20CT) | Attributed 2016 front: paired two-storey bays/siding aprons, bracketing open-riser stairs, image-right picket-railed landing over recessed door | **target-front component/prototype-ready; detached study only**; front-to-ENE mapping is an inference |
+| `physical-building:w95934120` / `w95934120` | 1449 Croaker; `eas_baseid=483538`; `eas_address_id=725328`; [exact EAS row](https://data.sfgov.org/resource/3mea-di5p.json?address=1449%20CROAKER%20CT) | Jul 2023 `D2-PANO-B` remains occluded behind/among 1444; zero target cues | **appearance-blocked**; management removal is not demolition and 1444 must not transfer |
+
+All five EAS rows report parcel `1939001`, direct source `SF DBI`, and
+`data_as_of=2026-09-07T18:00:50`. An address row establishes civic identity,
+not building survival, occupancy, or exterior condition.
+
 ## Authoritative corrections and lifecycle boundary
+
+For 1437 and 1449, missing target appearance evidence is the project blocker.
+Lifecycle records remain historical context and do not change the frozen
+213-unit inventory. Do not require a separate present-day survival reconciliation
+or a post-removal exterior record. Dated target-specific appearance evidence and
+side attribution are still required; neither target gains facade cues or readiness.
 
 - The live San Francisco Enterprise Addressing System (EAS) has one exact
   record for every D2 address, all on parcel `1939001`. An active address point
   proves civic identity, not that its building survives or is occupied.
+- EAS identifiers must retain their field semantics. In particular, 1431
+  Halibut's `483562` is `eas_baseid`; its `eas_address_id` is `725353`.
 - The Navy's 2015 Site 12 table binds all 15 addresses and then-current housing
   providers. Its Figure 5 binds unit positions and garages. It contains no
   verified exterior elevation usable as facade evidence.
@@ -67,6 +101,10 @@ research batch.
   are lifecycle facts, not exterior observations.
 - Provider/program groupings changed over time. They must not become invented
   signs or color schemes.
+- The current City building-footprint catalog is not a current lifecycle
+  source: its metadata says the geometry was collapsed from 2010 Pictometry
+  data and subsequently refined. Footprint presence cannot prove 2026 survival
+  or appearance.
 
 ## Shared primary-source index
 
@@ -80,15 +118,24 @@ research batch.
 | `MOHCD-AMR-2025` | [MOHCD-financed-project deadlines](https://media.api.sf.gov/documents/2025_AMR_Deadlines_for_MOHCD-Financed_Projects.pdf) | 1441+1443 project label and current administrative grouping | a visible building sign or facade |
 | `SF-PERMITS` | [SF Building Permits dataset](https://data.sfgov.org/d/i98e-djp9) | exact permit descriptions, including 1443 rear patio/balcony work | a surveyed elevation or unchanged current state |
 | `TIDA-UTIL-2026` | [March 2026 Director's Report](https://media.api.sf.gov/documents/031126_Directors_Report.pdf) | residential service remained on Chinook/Croaker streets | exact unit survival/appearance |
+| `SF-PERMIT-1437` | [Exact 1437 Chinook permit query](https://data.sfgov.org/resource/i98e-djp9.json?street_number=1437&street_name=Chinook) | 2014 reroof permit; recorded two-storey wood-frame classification | roof form/color, facade, survival, current condition |
+| `SF-BAYVIEW-1436` | [2019 article with Carol Harvey's captioned 2016 Photo 35](https://sfbayview.com/2019/12/navy-removes-an-estimated-163-new-radiation-deposits-from-two-toxic-dumps-and-dangerously-radioactive-soil-from-under-occupied-treasure-island-home/) | directly attributed target/front-yard binding and bounded visible front cues | photo EXIF, surveyed dimensions, hidden faces, post-2016 condition, reuse of pixels |
+| `GOOGLE-1431-2025` | [March 2025 target panorama](https://www.google.com/maps/@?api=1&map_action=pano&pano=hTHzoF_k9oHgamBhDjOfLA&heading=130&pitch=0&fov=75) | direct NNW/WSW public-corner written observations for 1431 | hidden sides, exact obscured counts, reuse of pixels |
+| `FIVEKEYS-1431` | [Five Keys Home Free page](https://www.fivekeyshomefree.org/new-home-for-dinner) | exact address and pre-COVID/2020-era six-plex conversion/renovation context | measured facade or claim that the whole building was demolished |
+| `SFOEWD-1431` | [SFOEWD-hosted program record](https://vimeo.com/449846503) | exact address, six attached two-bedroom units, cleanup/renovation program | facade measurement without a separately reviewed frame |
+| `CITY-FOOTPRINTS` | [SF Open Data building-footprint catalog](https://data.sfgov.org/d/ynuv-fyni) | historic footprint context and source-method metadata | current survival, occupancy, facade |
 
 The 2014 City rentable-unit packet is useful corroboration for the Villages
 subset: [Board packet](https://sfgov.legistar.com/View.ashx?GUID=24073A24-1CB2-4921-AE64-3318CB899E6B&ID=3246246&M=F).
 
-Link check: the City EAS/API, permit dataset, TIDA JSCo/HR360/Director's Report,
-and Legistar endpoints returned HTTP 200 after redirects on 2026-09-04. The two
-Navy PDFs and MOHCD PDF returned HTTP 403 to a generic HEAD client but were
-indexed/read through the web research path; that client distinction is retained
-instead of misreporting the sources as broken or independently downloadable.
+Link check: the exact five City EAS queries, exact 1437 permit query, TIDA JSCo
+agreement, 1436 source article, 1431 panorama/program pages, City footprint
+catalog were rechecked through the research path on 2026-09-08. The earlier
+shared-source checks remain dated 2026-09-04. The Navy/MOHCD access distinction
+below remains: those PDFs may
+return HTTP 403 to a generic HEAD client while remaining indexed/readable
+through the web research path. That distinction is retained instead of
+misreporting them as broken or independently downloadable.
 
 ## Dated public observations
 
@@ -103,6 +150,22 @@ Google-hosted contributor panoramas by `TyFlow io`, all dated **July 2023**:
 
 The repository retains only URLs, IDs, dates and written observations. No
 panorama pixels may be copied, embedded, trained into, or shipped as textures.
+
+Target-line projection and transient visual recheck on 2026-09-08 establish
+only the following negative boundaries: 1437 lies about `54.6 m` from
+`D2-PANO-C` at bearing `271.2°` but remains merged with 1439; 1438 lies about
+`87.3 m` from `D2-PANO-B` at `94.1°` and `61.5 m` from `D2-PANO-C` at `344.1°`
+but is obstructed in both; and 1449 lies about `60.1 m` from `D2-PANO-B` at
+`56.8°`, behind/among nearer 1444. Bearings locate search regions only and do
+not assign facade pixels or cues.
+
+Two additional target-bound references were recorded without retaining pixels:
+
+- 1436 Chinook: [Photo 35 on the 2019 source page](https://sfbayview.com/2019/12/navy-removes-an-estimated-163-new-radiation-deposits-from-two-toxic-dumps-and-dangerously-radioactive-soil-from-under-occupied-treasure-island-home/)
+  is credited to Carol Harvey, dated 2016 in its caption, and explicitly bound
+  to the front yard. The written cues and limitations are in the [1436 packet](w95934137_1436_chinook_court.md).
+- Cross-cohort 1431 Halibut: the [March 2025 panorama](https://www.google.com/maps/@?api=1&map_action=pano&pano=hTHzoF_k9oHgamBhDjOfLA&heading=130&pitch=0&fov=75)
+  supports only the observed NNW/WSW public corner described in the [D5 packet](../d5_reference_packets/w95934135_1431_halibut_court.md).
 
 ## Cohort grammar and recognition gate
 

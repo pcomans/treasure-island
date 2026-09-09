@@ -1,0 +1,9 @@
+{
+  "catalog_acceptance_status": "unchanged/unaccepted",
+  "d2_packet_count": 15,
+  "ledger_target_count": 5,
+  "local_links": "pass",
+  "no_pixel_boundary": "pass",
+  "status": "pass",
+  "target_packet_count": 5
+}
