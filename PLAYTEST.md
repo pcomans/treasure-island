@@ -12,8 +12,10 @@ package. Current authority is compiler `1.8.1`, catalog/runtime v9, and
 `9/213` with `+0` credit for the accepted Building 1 local window-depth upgrade.
 The exact current package passed independent mechanical review and complete
 headless/native internal smoke. Fresh current source evidence also passed its
-independent mechanics and scoped visual review. Final Git publication and the
-ordinary visible launch remain pending. All earlier D2/B225/B201 apps are historical. No automated or
+independent mechanics and scoped visual review. Primary commit `c82a1b6e7208d2b9c7a6d34c23d98545be6238ae`
+was pushed to `origin/main`; the exact no-argument app then had a visible owned
+window and clean startup log. This scoped observation does not establish
+manual input or native gameplay pixels. All earlier D2/B225/B201 apps are historical. No automated or
 independent-review result establishes ordinary owner recognition, input, or
 acceptance on the Apple M1 Pro target.
 
@@ -41,8 +43,9 @@ The [fresh current evidence mechanics review](evidence/reviews/building-1-wing-r
 (SHA `8f9123170532ca60f0ecd693e6675fdf0bc15008af68f3b2982bfff100767fed`) passed.
 The [durable closure](evidence/first-playable/building-1-wing-returns-v2-current-release-2026-09-08-001/release-closure.json) retains exact raw evidence and clearly
 labeled derived provenance summaries. Source renders and separately verified
-package semantics remain distinct. Git publication and ordinary visible
-launch are pending; record owner feedback against these exact app bytes.
+package semantics remain distinct. The [publication and ordinary-launch receipt](evidence/first-playable/building-1-wing-returns-v2-current-release-2026-09-08-001-PUBLICATION.json)
+records the actual primary commit/push and visible owned-window observation.
+Owner feedback remains pending against these exact app bytes.
 
 ### Historical B225 package identity (not current playtest bytes)
 

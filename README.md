@@ -69,8 +69,15 @@ commands, logs, and failure records remain byte-identical in private storage.
 Raw capture-time pending/status fields are preserved as history, and the
 downstream audits establish the later scoped result.
 
-**Still pending:** final Git commit/push and exact ordinary visible launch.
-`HUMAN-001` also remains pending for owner recognition and mouse/keyboard
+Primary release commit `c82a1b6e7208d2b9c7a6d34c23d98545be6238ae` was committed and
+pushed normally to `origin/main`. The exact reviewed app was then launched
+with no arguments; its owned PID `24426` had a visible `1280 × 832` window
+and an empty startup log at observation. All seven app files remained exact.
+The [publication and ordinary-launch receipt](evidence/first-playable/building-1-wing-returns-v2-current-release-2026-09-08-001-PUBLICATION.json)
+(SHA-256 `08132b658720dabe57dbb6849f5b1c27274c3785dc1aa977512555c6913202bb`) records these actual outcomes
+separately from the immutable closure snapshot above. This observation does
+not establish native gameplay pixels or manual input.
+`HUMAN-001` remains pending for owner recognition and mouse/keyboard
 acceptance on the Apple M1 Pro; it does not block autonomous work. No export,
 source screenshot, technical review, or smoke result substitutes for owner play.
 

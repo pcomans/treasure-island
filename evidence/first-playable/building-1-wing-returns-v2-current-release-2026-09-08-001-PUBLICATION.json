@@ -1,0 +1,218 @@
+{
+  "schema_version": 1,
+  "status": "PRIMARY_RELEASE_PUBLISHED_AND_ORDINARY_WINDOW_OBSERVED",
+  "scope": "Actual primary release publication and scoped ordinary launch observation; this downstream receipt does not assert its own publication or owner acceptance.",
+  "recognition": {
+    "completed": 9,
+    "total": 213,
+    "credit_delta": 0
+  },
+  "accepted_release_packet": {
+    "path": "evidence/first-playable/building-1-wing-returns-v2-current-release-2026-09-08-001",
+    "files": 57,
+    "tree_sha256": "6c7b388ff06acabc181637debf573af1ae2ff9b4ae132f4a0b9fcefcb4dc721e",
+    "immutable_pending_fields_are_historical": true
+  },
+  "publication_readiness_review": {
+    "path": "evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_PUBLICATION_READINESS_AUDIT.md",
+    "sha256": "d42505dc3dd2236f50d226f26ef88b58c76c7b4552dff6ddbfafa8d4941f9e95",
+    "bytes": 5920
+  },
+  "primary_publication": {
+    "commit": "c82a1b6e7208d2b9c7a6d34c23d98545be6238ae",
+    "remote": "origin",
+    "branch": "main",
+    "observed_remote_before": "b4ab09356c8a15843fa295af024434f97027e1fe",
+    "observed_remote_after": "c82a1b6e7208d2b9c7a6d34c23d98545be6238ae",
+    "commit_exit_code": 0,
+    "push_exit_code": 0,
+    "normal_fast_forward_push": true,
+    "force_push": false,
+    "staged_paths": 207,
+    "no_staged_or_outgoing_avi_or_lfs_pointers": true,
+    "command_local_hook_override": "core.hooksPath=/dev/null",
+    "override_reason": "git-lfs unavailable; applicable changes were confirmed to contain no AVI, LFS pointer, or filter=lfs path before the authorized command-local override.",
+    "global_and_local_config_and_hooks_unchanged": true,
+    "working_tree_clean_after_primary_push": true,
+    "git_processes_terminal": true
+  },
+  "reviewed_app": {
+    "path": "build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app",
+    "bundle_tree_sha256": "fd91b1c5598dc2fe436a756eb5fb7561c96989fe18734c59580de92b13fa4171",
+    "files": [
+      {
+        "bytes": 1885,
+        "path": "Contents/Info.plist",
+        "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085"
+      },
+      {
+        "bytes": 170963648,
+        "path": "Contents/MacOS/Treasure Island First Playable",
+        "sha256": "ac0aa612c576e039b04b743c2da5783fd0736a7312be4c88e31210b672845031"
+      },
+      {
+        "bytes": 9,
+        "path": "Contents/PkgInfo",
+        "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb"
+      },
+      {
+        "bytes": 229,
+        "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+        "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3"
+      },
+      {
+        "bytes": 66600060,
+        "path": "Contents/Resources/Treasure Island First Playable.pck",
+        "sha256": "454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403"
+      },
+      {
+        "bytes": 67500,
+        "path": "Contents/Resources/icon.icns",
+        "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a"
+      },
+      {
+        "bytes": 3217,
+        "path": "Contents/_CodeSignature/CodeResources",
+        "sha256": "864a2b44c7ef7a2dc739cfada1056edad99f06cd69e4c215abf3feae44496449"
+      }
+    ],
+    "all_seven_files_unchanged_before_and_after_launch": true
+  },
+  "ordinary_launch_derived_summary": {
+    "provenance_kind": "DERIVED_FROM_PRIVATE_RAW_OBSERVATION",
+    "argv": [
+      "build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
+    ],
+    "argv_path_representation": "Repository-relative executable locator replaces the raw absolute path; argument count and empty argument list are unchanged.",
+    "source_free_cwd_locator": "{private-tmp}/b1-returns-v2-primary-ordinary-launch-001",
+    "started_utc": "2026-09-09T00:56:41.627969+00:00",
+    "observed_utc": "2026-09-09T00:56:58.764461+00:00",
+    "pid": 24426,
+    "driver_session_at_observation": 3580,
+    "exact_executable_path_verified_by_proc_pidpath": true,
+    "live_at_observation": true,
+    "process_retained_live_after_observation": true,
+    "visible_owned_windows": [
+      {
+        "kCGWindowAlpha": 1,
+        "kCGWindowBounds": {
+          "Height": 832,
+          "Width": 1280,
+          "X": 320,
+          "Y": 97
+        },
+        "kCGWindowIsOnscreen": true,
+        "kCGWindowLayer": 0,
+        "kCGWindowMemoryUsage": 2368,
+        "kCGWindowNumber": 34455,
+        "kCGWindowOwnerName": "Treasure Island First Playable",
+        "kCGWindowOwnerPID": 24426,
+        "kCGWindowSharingState": 0,
+        "kCGWindowStoreType": 1
+      }
+    ],
+    "window_observer_exit_code": 0,
+    "startup_log_sha256_at_observation": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "startup_log_bytes_at_observation": 0,
+    "startup_log_has_no_errors": true,
+    "native_gameplay_pixels_captured": false,
+    "manual_gameplay_input_exercised": false,
+    "source_render_images_are_package_pixels": false,
+    "verification_host": "Apple M2",
+    "owner_target": "Apple M1 Pro",
+    "scope": "Actual no-argument signed executable, owned live PID and visible window/bounds plus clean startup log. No app-player pixel or owner-interaction claim."
+  },
+  "private_originals": {
+    "provenance_kind": "BYTE_IDENTICAL_RAW_RECORDS_RETAINED_IN_IGNORED_PRIVATE_STORAGE",
+    "entries": [
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/primary-publication-execution.json",
+        "sha256": "4b30b04c1d88b205e713055113e40c5f62be75208a0d0819afc3290c2ec734e6",
+        "bytes": 2246
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/primary-publication-stage-proof.json",
+        "sha256": "6f7190388b423204c3ba60e25932ae76b11eeb60101494ddfe4cdc36fff03f69",
+        "bytes": 83188
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/primary-publication-preflight.json",
+        "sha256": "f03e8ea519383301a8877d3f8f36a04b14a9dbb557c9afd11ed19d717d1fc6b8",
+        "bytes": 793
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/generated-exclusions-retention.json",
+        "sha256": "4f29cf9af678b050fff0fefb08364b973a587f85d2777cdefc0d59971a63933b",
+        "bytes": 1588
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/primary-commit-message.txt",
+        "sha256": "9d2e9473b48dea76c16eacb8a4f3c539ce2fc0c95d28294f09245fbe8b37df1d",
+        "bytes": 631
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/primary-commit.log",
+        "sha256": "fcb5e768b9be8ac465c2f01a2f555517f71770d2a7d18052611b3b5eb76dc8af",
+        "bytes": 25522
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/primary-push.log",
+        "sha256": "f1ed3aaa5433bc2c3762b079145a8034b5886a7b1f2164cc905a6d6cf75d9595",
+        "bytes": 84
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/publish-primary.py",
+        "sha256": "fcfa1df709146e6c91c8262196d68795c2d30a9a1f6d88b2a9dd5e909e8b6ca3",
+        "bytes": 3268
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/ordinary-launch-start.json",
+        "sha256": "6facc329b21974ca0487460a853be8600f0010dcd71d8fa8e4e63452b37559cc",
+        "bytes": 2061
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/ordinary-launch-observation.json",
+        "sha256": "5feedbece43b7c83af1238d4548d280c6754f38a27fdb054b242865fe093cd00",
+        "bytes": 5006
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/ordinary-current-app.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/ordinary-current-app-window.json",
+        "sha256": "c6e789f5275a88b262482c6e491acbc2f5ecc20d5920fd391865af128aabc44b",
+        "bytes": 429
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/ordinary-current-app-window-stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/launch-reviewed-current-app.py",
+        "sha256": "0f8b688cb6fed56759ceddecc54dfff515638f7167cd63b2983c9cec58d709b6",
+        "bytes": 4787
+      },
+      {
+        "path": "build/building-1-wing-returns-v2-publication-2026-09-08-001/outcome-provenance/owned-window.swift",
+        "sha256": "1ec55968918a2466076486d13d894f67af8c04cbee52408c15852155b85555cb",
+        "bytes": 632
+      }
+    ],
+    "public_summary_is_not_raw_execution_evidence": true,
+    "original_paths_remain_in_private_records_only": true
+  },
+  "unchanged_upstream": {
+    "audited_source_authority_inputs": 51,
+    "parent_programs": 3,
+    "app_files": 7,
+    "packet_files": 57
+  },
+  "owner_acceptance": {
+    "id": "HUMAN-001",
+    "status": "pending",
+    "scope": "Owner recognition and ordinary mouse/keyboard play on the Apple M1 Pro."
+  }
+}
