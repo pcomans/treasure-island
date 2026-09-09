@@ -596,7 +596,7 @@
       "unit_id": "physical-building:w95934119"
     }
   ],
-  "checked_date": "2026-09-07",
+  "checked_date": "2026-09-08",
   "claim_vocabulary": {
     "as_built_fidelity": "A separate surveyed/as-built claim; unclaimed by the Phase 1 seed.",
     "game_distinctive": "Distinguishable inside the game; never evidence of real-world recognizability.",
@@ -611,7 +611,7 @@
   },
   "compiler_contract": {
     "emitted_runtime_schema_version": "ti.facade-runtime-registry/9",
-    "required_compiler_version": "1.8.0",
+    "required_compiler_version": "1.8.1",
     "unknown_version_policy": "reject"
   },
   "expected_counts": {

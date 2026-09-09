@@ -1,0 +1,830 @@
+{
+  "schema_version": "ti.building-1-wing-returns-v2-current-release-verification/1",
+  "packet_id": "building-1-wing-returns-v2-current-release-2026-09-08-001",
+  "status": "PASS_FOR_INDEPENDENT_CURRENT_RELEASE_EVIDENCE_REVIEW",
+  "recognition_metric": "9/213",
+  "recognition_credit_delta": 0,
+  "independent_release_visual_review_pending": true,
+  "source_renders_are_package_pixels": false,
+  "release_binding_sha256": "a9fb95a17c1cbe3b7d9e1d29465a5df3f08ac364d83b80aa58f8f0ea09993cdc",
+  "release_provenance": {
+    "all_capture_modes_fixed_fps_operator_request": 60.0,
+    "authority_audit_sha256": "14b3e5e8b432b4feca522dd18b48d4a4bfbcd95f44e881ae381de39689f69469",
+    "bundle_identity_sha256": "fd91b1c5598dc2fe436a756eb5fb7561c96989fe18734c59580de92b13fa4171",
+    "capture_schema_stage_label": "candidate",
+    "complete_headless_and_native_internal_smokes_passed": true,
+    "executable_sha256": "ac0aa612c576e039b04b743c2da5783fd0736a7312be4c88e31210b672845031",
+    "fixed_fps_enforcement": "Exact owned invocation with --fixed-fps 60 immediately after the executable and before every path; canonical capture or no-render probe argument order, actual project/script paths and actual user arguments. No flag searching in flattened path text.",
+    "independent_current_release_visual_review_pending": true,
+    "independent_package_audit_sha256": "c6f4c47a998619143f5f8b56b91c4441d9cda5500ee643911dbdeba8be575ee7",
+    "independent_package_audit_token": "PASS_FOR_B1_RETURNS_V2_CURRENT_PACKAGE_MECHANICS_ONLY",
+    "independent_package_receipt_sha256": "7099f83ca19c6560ee9cb7b8b653d97739afa12e65295f2bd9c1d5ae0989957d",
+    "quality_acceptance_receipt_sha256": "257f16bc314151054b120c2b87e6f8cb20577f5e4a7201478b58272a65dc23a4",
+    "recognition_credit_delta": 0.0,
+    "scope": "fresh_current_source_render_evidence_with_separate_exact_signed_package_proof",
+    "stage_label_is_legacy_wire_schema_not_unaccepted_quality_claim": true,
+    "binding_sha256": "a9fb95a17c1cbe3b7d9e1d29465a5df3f08ac364d83b80aa58f8f0ea09993cdc"
+  },
+  "capture_generator": "building_1_wing_returns_v2_current_release_capture.gd",
+  "capture_generator_sha256": "e93d3899ff05f1ce8f15b0bfb79a96fab06cab97b81a4073c30cc291d205c632",
+  "evidence_verifier": "headless_building_1_wing_returns_v2_current_release_evidence_contract_004.gd",
+  "evidence_verifier_sha256": "9a4b8c2110d429159a72c8dd970e5c22032b7e90023998f27d1c783d5198f6c8",
+  "counts": {
+    "fresh_pngs": 46,
+    "fresh_manifests": 3,
+    "fresh_inputs": 49,
+    "accepted_reference_pngs": 46,
+    "accepted_reference_manifests": 3
+  },
+  "accepted_reference": {
+    "acceptance_receipt_path": "acceptance-receipt.json",
+    "acceptance_receipt_sha256": "257f16bc314151054b120c2b87e6f8cb20577f5e4a7201478b58272a65dc23a4",
+    "inputs": [
+      {
+        "bytes": 729262.0,
+        "path": "stages/candidate/images/01-whole-front-changed.png",
+        "sha256": "8bd8f2e9230a52be562bffe9d3c6ea8bed25be90dd46719148538b944254e640"
+      },
+      {
+        "bytes": 834888.0,
+        "path": "stages/candidate/images/01-whole-front-default.png",
+        "sha256": "2ffc50f8af3c5777bf7250f05f67fe405c0e1f48678541968f32b86aab2f131e"
+      },
+      {
+        "bytes": 294977.0,
+        "path": "stages/candidate/images/01-whole-front-grayscale.png",
+        "sha256": "1675e48bea3f26e97f1eb66d75fe5e2adab425997a2a2abe330f0f234d2b685c"
+      },
+      {
+        "bytes": 765220.0,
+        "path": "stages/candidate/images/02-north-wing-far-changed.png",
+        "sha256": "dbeb6d7095c5aeed0955e0d5d5659f3f1234dbe06830d2c334b9e0f61c3e8cff"
+      },
+      {
+        "bytes": 890873.0,
+        "path": "stages/candidate/images/02-north-wing-far-default.png",
+        "sha256": "4e1484102e1fdcc69bbff6714a1b138b1ef2bfe2102dd2991e518148dd6e5178"
+      },
+      {
+        "bytes": 313218.0,
+        "path": "stages/candidate/images/02-north-wing-far-grayscale.png",
+        "sha256": "bca0d54ee97ed949c96b1de27cd79a2be5f078b2e68d2d214ec32f661f497eef"
+      },
+      {
+        "bytes": 489864.0,
+        "path": "stages/candidate/images/03-north-wing-near-changed.png",
+        "sha256": "05ebad04213e23e2d99362d2b44ee6c5c5327474c26b0255e34f3c2d75e02b2a"
+      },
+      {
+        "bytes": 717216.0,
+        "path": "stages/candidate/images/03-north-wing-near-default.png",
+        "sha256": "34e005f7353e6e2427ea55c40bb50d97c8b2f6473e808140d2929a6478b07d19"
+      },
+      {
+        "bytes": 269977.0,
+        "path": "stages/candidate/images/03-north-wing-near-grayscale.png",
+        "sha256": "e7dca16c5a57572089992de56ff38e85b801ba24ef9938f7504c8107f0118053"
+      },
+      {
+        "bytes": 657354.0,
+        "path": "stages/candidate/images/04-south-wing-far-changed.png",
+        "sha256": "c073b3b99aa3b773f5e5cc928f999c75e5a73a400051c3f9c1b6e3b13364068b"
+      },
+      {
+        "bytes": 741458.0,
+        "path": "stages/candidate/images/04-south-wing-far-default.png",
+        "sha256": "453800a0bb521f92e7273b30c8e519e3a5ef868761557bc87e726e06e410da0f"
+      },
+      {
+        "bytes": 272593.0,
+        "path": "stages/candidate/images/04-south-wing-far-grayscale.png",
+        "sha256": "0bdb2b2504eaf512c1f5eed12194943d1debe226d877a4c0d04884f23ed9ba52"
+      },
+      {
+        "bytes": 584828.0,
+        "path": "stages/candidate/images/05-south-wing-near-changed.png",
+        "sha256": "997329bec0bb576d6e9ba8d99860340cb4510f0103daea0194364f402dc49ebf"
+      },
+      {
+        "bytes": 789448.0,
+        "path": "stages/candidate/images/05-south-wing-near-default.png",
+        "sha256": "99b9e004ed4e1aa80d3b7a58c21aab1c2875828e2a1eebf1fe4692a3b26d4106"
+      },
+      {
+        "bytes": 281538.0,
+        "path": "stages/candidate/images/05-south-wing-near-grayscale.png",
+        "sha256": "283770469b0daad371b9c91523a87aafa68a11580e1752acafec0205a11f16dc"
+      },
+      {
+        "bytes": 757675.0,
+        "path": "stages/candidate/images/06-protected-rear-east.png",
+        "sha256": "065794cd34e9e6aa4eef6dbdf5c44490005944226e5d0ec2fd8501eccd7ae9ae"
+      },
+      {
+        "bytes": 954144.0,
+        "path": "stages/candidate/images/07-tower-accepted-pose-one.png",
+        "sha256": "bd21f8e86445365fdc8b0a091146789676dba177468f79def1dbc64cc6de1543"
+      },
+      {
+        "bytes": 976007.0,
+        "path": "stages/candidate/images/08-tower-accepted-pose-two.png",
+        "sha256": "c597cf4404a0e7ab9d648f735e09f7c761500292b92cda9d6f4655111662bed6"
+      },
+      {
+        "bytes": 824846.0,
+        "path": "stages/candidate/images/09-real-spray-blank-wing-pier.png",
+        "sha256": "9ab3441629bfff5719327dd7864c98f1600fe0510b8a9657d84490f2ffd1f3db"
+      },
+      {
+        "bytes": 129652.0,
+        "path": "stages/candidate/images/10-real-player-main-roof-landing.png",
+        "sha256": "bffa0d4fb6ca61662167494ebf10d817eb2817ca272a8d576cd75a3a1ec55404"
+      },
+      {
+        "bytes": 847915.0,
+        "path": "stages/candidate/images/11-whole-context.png",
+        "sha256": "ec07e45bedc5c90b2a6385cf028a83f8521a1e20d4eebb61fa3ff2cb66f956de"
+      },
+      {
+        "bytes": 369787.0,
+        "path": "stages/candidate/images/12-elevated-overview-diagnostic-only.png",
+        "sha256": "e045ccb4caba24fed99fbb3c4a0895bac10b631b6cbf639bb2bc34f1f3998a0e"
+      },
+      {
+        "bytes": 204240.0,
+        "path": "stages/candidate/motion-north.json",
+        "sha256": "a87a806225eb36a11d7a18a1284ab5821c926dcdd9657fd074347e1d590a82e0"
+      },
+      {
+        "bytes": 204013.0,
+        "path": "stages/candidate/motion-south.json",
+        "sha256": "ca99ece9f6ea4b7d8f7c155f29b24a4b513d99b280ee613424e39319ea3f33be"
+      },
+      {
+        "bytes": 852017.0,
+        "path": "stages/candidate/motion/north/25m-0.png",
+        "sha256": "150c2ca4d2111aa20b3120834edea3c6c2fc477d8482b29a0ebfe31f95bb8b04"
+      },
+      {
+        "bytes": 852627.0,
+        "path": "stages/candidate/motion/north/25m-1.png",
+        "sha256": "138152c69aebf3d1ae4647839bfbb5cfc69f67e3778a90b569951a173383c926"
+      },
+      {
+        "bytes": 852372.0,
+        "path": "stages/candidate/motion/north/25m-2.png",
+        "sha256": "f04e9d3f9c824e456292b0d0acf51086c3eddc9e7397c796509a8cb175023601"
+      },
+      {
+        "bytes": 891055.0,
+        "path": "stages/candidate/motion/north/30m-0.png",
+        "sha256": "234d55d7c66b1a68b92c8f341db9f3b637f1f72fc9d78406eb68ea856c765af8"
+      },
+      {
+        "bytes": 890014.0,
+        "path": "stages/candidate/motion/north/30m-1.png",
+        "sha256": "85d75a70900ac3ec9c96bfa4b3a0cb3f2bffca3b86c54c40a5d9b4585c97e9c5"
+      },
+      {
+        "bytes": 890822.0,
+        "path": "stages/candidate/motion/north/30m-2.png",
+        "sha256": "26758b04a63e38b61323530a1d22fdb603c2d57b23d4a1d8944e228ecb75ec3e"
+      },
+      {
+        "bytes": 932207.0,
+        "path": "stages/candidate/motion/north/45m-0.png",
+        "sha256": "a72689c15c9258be0747f877de03970d0a68de9311ca9cc58c71d20f7ca44215"
+      },
+      {
+        "bytes": 931314.0,
+        "path": "stages/candidate/motion/north/45m-1.png",
+        "sha256": "400868e22df3370879a02120adc0117b38407597310182edf07aff58cd40aa1b"
+      },
+      {
+        "bytes": 931414.0,
+        "path": "stages/candidate/motion/north/45m-2.png",
+        "sha256": "d07b7d3e75e7eee75b05100ab2d904e5687f266711f324c9ff87e4df64ce7564"
+      },
+      {
+        "bytes": 890748.0,
+        "path": "stages/candidate/motion/north/60m-0.png",
+        "sha256": "3d68f5b456f6e53bb63ff5c055074298382ae0105f89272d2e772e546990a751"
+      },
+      {
+        "bytes": 891296.0,
+        "path": "stages/candidate/motion/north/60m-1.png",
+        "sha256": "0a533f655ce75baff22f624bb99b8b1fe74a0bfd28fd2e6c3af7f8898207b866"
+      },
+      {
+        "bytes": 891225.0,
+        "path": "stages/candidate/motion/north/60m-2.png",
+        "sha256": "d67051bdbcb3a25c55b33f9f51c850b84c926d8b7973760ccb38a194246d1ace"
+      },
+      {
+        "bytes": 929359.0,
+        "path": "stages/candidate/motion/south/25m-0.png",
+        "sha256": "b3c614c3975beffe8355364e2ff9167f5b26486004a7ebadee4b96467e96924f"
+      },
+      {
+        "bytes": 928691.0,
+        "path": "stages/candidate/motion/south/25m-1.png",
+        "sha256": "664225cc6a6426e1a00fa417c90e0a6a65cf35beee20913b55fafcedd09a898b"
+      },
+      {
+        "bytes": 928466.0,
+        "path": "stages/candidate/motion/south/25m-2.png",
+        "sha256": "8d7f06a6c0b50b3db327bfd65cc187f7f87d395912ff1e180197298bad1037f4"
+      },
+      {
+        "bytes": 875633.0,
+        "path": "stages/candidate/motion/south/30m-0.png",
+        "sha256": "64fc31d58b2e3790d49781c8ca40740c3ac292c877da571d6f656b22ba1d7d53"
+      },
+      {
+        "bytes": 876351.0,
+        "path": "stages/candidate/motion/south/30m-1.png",
+        "sha256": "d396f8b2f0d879c1aa02af7d785aa003cd706ea4b07e315c66bf169f2ccefb0e"
+      },
+      {
+        "bytes": 878094.0,
+        "path": "stages/candidate/motion/south/30m-2.png",
+        "sha256": "33a3af56188a5def59c6a5f98e4cda747b41cc186aba3e0372cc24ebbd57095b"
+      },
+      {
+        "bytes": 923779.0,
+        "path": "stages/candidate/motion/south/45m-0.png",
+        "sha256": "9b1807c4b94f6cb6be6583e5d419847a2130109bd3a45922e21e2b04bcf14528"
+      },
+      {
+        "bytes": 924159.0,
+        "path": "stages/candidate/motion/south/45m-1.png",
+        "sha256": "b867a29126c582621649449c627bcce9419cbd5bdbbcb6ec2a04de0a358705f3"
+      },
+      {
+        "bytes": 923681.0,
+        "path": "stages/candidate/motion/south/45m-2.png",
+        "sha256": "28351fc77c65247eb5b7217c85538dfe6c8b9ea009aeecd67376c96ce1e63fa3"
+      },
+      {
+        "bytes": 741405.0,
+        "path": "stages/candidate/motion/south/60m-0.png",
+        "sha256": "cac869ba0fbb808c478ba01d1451579ca03e41fcaa2836eee72256f6c59024d7"
+      },
+      {
+        "bytes": 741086.0,
+        "path": "stages/candidate/motion/south/60m-1.png",
+        "sha256": "46b3fc3e1124125ad440d31740317bb39f19e81561de5c0f900c5216041d7baf"
+      },
+      {
+        "bytes": 740716.0,
+        "path": "stages/candidate/motion/south/60m-2.png",
+        "sha256": "ba220ee3856bf5f5bce5ad499219702ab475c93db37e369b7936d8dd84ada9b1"
+      },
+      {
+        "bytes": 57592.0,
+        "path": "stages/candidate/stills.json",
+        "sha256": "fccf856e23fb6ff29bac7018d3bcedf09352587c3b10e00ddeb9b77ea34be375"
+      }
+    ],
+    "original_rehearsal_receipt_sha256": "cae3db47439fa0e4e70fdbb12a37daa7c431cd7bed6574433a701da740073bb0",
+    "root_relative_path": "evidence/first-playable/building-1-wing-returns-v2-accepted-2026-09-08-001"
+  },
+  "reference_files_recaptured": false,
+  "reference_manifests_rewritten": false,
+  "metadata_projection": "Only already-validated current provenance fields are projected in memory to their immutable reference values so inherited capture-mechanics predicates remain unchanged; no file is rewritten.",
+  "pairing": {
+    "static_tolerance": 0.00005,
+    "motion_pose_tolerance_m": 0.22,
+    "observed_max_motion_pose_delta_m": 0.0,
+    "lights_views_and_controller_ticks_match_inherited_contract": true
+  },
+  "pixel_hash_comparison": [
+    {
+      "path": "stages/candidate/images/01-whole-front-changed.png",
+      "accepted_sha256": "8bd8f2e9230a52be562bffe9d3c6ea8bed25be90dd46719148538b944254e640",
+      "current_sha256": "8bd8f2e9230a52be562bffe9d3c6ea8bed25be90dd46719148538b944254e640",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/01-whole-front-default.png",
+      "accepted_sha256": "2ffc50f8af3c5777bf7250f05f67fe405c0e1f48678541968f32b86aab2f131e",
+      "current_sha256": "2ffc50f8af3c5777bf7250f05f67fe405c0e1f48678541968f32b86aab2f131e",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/01-whole-front-grayscale.png",
+      "accepted_sha256": "1675e48bea3f26e97f1eb66d75fe5e2adab425997a2a2abe330f0f234d2b685c",
+      "current_sha256": "1675e48bea3f26e97f1eb66d75fe5e2adab425997a2a2abe330f0f234d2b685c",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/02-north-wing-far-changed.png",
+      "accepted_sha256": "dbeb6d7095c5aeed0955e0d5d5659f3f1234dbe06830d2c334b9e0f61c3e8cff",
+      "current_sha256": "dbeb6d7095c5aeed0955e0d5d5659f3f1234dbe06830d2c334b9e0f61c3e8cff",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/02-north-wing-far-default.png",
+      "accepted_sha256": "4e1484102e1fdcc69bbff6714a1b138b1ef2bfe2102dd2991e518148dd6e5178",
+      "current_sha256": "4e1484102e1fdcc69bbff6714a1b138b1ef2bfe2102dd2991e518148dd6e5178",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/02-north-wing-far-grayscale.png",
+      "accepted_sha256": "bca0d54ee97ed949c96b1de27cd79a2be5f078b2e68d2d214ec32f661f497eef",
+      "current_sha256": "bca0d54ee97ed949c96b1de27cd79a2be5f078b2e68d2d214ec32f661f497eef",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/03-north-wing-near-changed.png",
+      "accepted_sha256": "05ebad04213e23e2d99362d2b44ee6c5c5327474c26b0255e34f3c2d75e02b2a",
+      "current_sha256": "05ebad04213e23e2d99362d2b44ee6c5c5327474c26b0255e34f3c2d75e02b2a",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/03-north-wing-near-default.png",
+      "accepted_sha256": "34e005f7353e6e2427ea55c40bb50d97c8b2f6473e808140d2929a6478b07d19",
+      "current_sha256": "34e005f7353e6e2427ea55c40bb50d97c8b2f6473e808140d2929a6478b07d19",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/03-north-wing-near-grayscale.png",
+      "accepted_sha256": "e7dca16c5a57572089992de56ff38e85b801ba24ef9938f7504c8107f0118053",
+      "current_sha256": "e7dca16c5a57572089992de56ff38e85b801ba24ef9938f7504c8107f0118053",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/04-south-wing-far-changed.png",
+      "accepted_sha256": "c073b3b99aa3b773f5e5cc928f999c75e5a73a400051c3f9c1b6e3b13364068b",
+      "current_sha256": "c073b3b99aa3b773f5e5cc928f999c75e5a73a400051c3f9c1b6e3b13364068b",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/04-south-wing-far-default.png",
+      "accepted_sha256": "453800a0bb521f92e7273b30c8e519e3a5ef868761557bc87e726e06e410da0f",
+      "current_sha256": "453800a0bb521f92e7273b30c8e519e3a5ef868761557bc87e726e06e410da0f",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/04-south-wing-far-grayscale.png",
+      "accepted_sha256": "0bdb2b2504eaf512c1f5eed12194943d1debe226d877a4c0d04884f23ed9ba52",
+      "current_sha256": "0bdb2b2504eaf512c1f5eed12194943d1debe226d877a4c0d04884f23ed9ba52",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/05-south-wing-near-changed.png",
+      "accepted_sha256": "997329bec0bb576d6e9ba8d99860340cb4510f0103daea0194364f402dc49ebf",
+      "current_sha256": "997329bec0bb576d6e9ba8d99860340cb4510f0103daea0194364f402dc49ebf",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/05-south-wing-near-default.png",
+      "accepted_sha256": "99b9e004ed4e1aa80d3b7a58c21aab1c2875828e2a1eebf1fe4692a3b26d4106",
+      "current_sha256": "99b9e004ed4e1aa80d3b7a58c21aab1c2875828e2a1eebf1fe4692a3b26d4106",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/05-south-wing-near-grayscale.png",
+      "accepted_sha256": "283770469b0daad371b9c91523a87aafa68a11580e1752acafec0205a11f16dc",
+      "current_sha256": "283770469b0daad371b9c91523a87aafa68a11580e1752acafec0205a11f16dc",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/06-protected-rear-east.png",
+      "accepted_sha256": "065794cd34e9e6aa4eef6dbdf5c44490005944226e5d0ec2fd8501eccd7ae9ae",
+      "current_sha256": "065794cd34e9e6aa4eef6dbdf5c44490005944226e5d0ec2fd8501eccd7ae9ae",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/07-tower-accepted-pose-one.png",
+      "accepted_sha256": "bd21f8e86445365fdc8b0a091146789676dba177468f79def1dbc64cc6de1543",
+      "current_sha256": "bd21f8e86445365fdc8b0a091146789676dba177468f79def1dbc64cc6de1543",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/08-tower-accepted-pose-two.png",
+      "accepted_sha256": "c597cf4404a0e7ab9d648f735e09f7c761500292b92cda9d6f4655111662bed6",
+      "current_sha256": "c597cf4404a0e7ab9d648f735e09f7c761500292b92cda9d6f4655111662bed6",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/09-real-spray-blank-wing-pier.png",
+      "accepted_sha256": "9ab3441629bfff5719327dd7864c98f1600fe0510b8a9657d84490f2ffd1f3db",
+      "current_sha256": "9ab3441629bfff5719327dd7864c98f1600fe0510b8a9657d84490f2ffd1f3db",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/10-real-player-main-roof-landing.png",
+      "accepted_sha256": "bffa0d4fb6ca61662167494ebf10d817eb2817ca272a8d576cd75a3a1ec55404",
+      "current_sha256": "bffa0d4fb6ca61662167494ebf10d817eb2817ca272a8d576cd75a3a1ec55404",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/11-whole-context.png",
+      "accepted_sha256": "ec07e45bedc5c90b2a6385cf028a83f8521a1e20d4eebb61fa3ff2cb66f956de",
+      "current_sha256": "ec07e45bedc5c90b2a6385cf028a83f8521a1e20d4eebb61fa3ff2cb66f956de",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/images/12-elevated-overview-diagnostic-only.png",
+      "accepted_sha256": "e045ccb4caba24fed99fbb3c4a0895bac10b631b6cbf639bb2bc34f1f3998a0e",
+      "current_sha256": "e045ccb4caba24fed99fbb3c4a0895bac10b631b6cbf639bb2bc34f1f3998a0e",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/north/25m-0.png",
+      "accepted_sha256": "150c2ca4d2111aa20b3120834edea3c6c2fc477d8482b29a0ebfe31f95bb8b04",
+      "current_sha256": "150c2ca4d2111aa20b3120834edea3c6c2fc477d8482b29a0ebfe31f95bb8b04",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/north/25m-1.png",
+      "accepted_sha256": "138152c69aebf3d1ae4647839bfbb5cfc69f67e3778a90b569951a173383c926",
+      "current_sha256": "138152c69aebf3d1ae4647839bfbb5cfc69f67e3778a90b569951a173383c926",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/north/25m-2.png",
+      "accepted_sha256": "f04e9d3f9c824e456292b0d0acf51086c3eddc9e7397c796509a8cb175023601",
+      "current_sha256": "f04e9d3f9c824e456292b0d0acf51086c3eddc9e7397c796509a8cb175023601",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/north/30m-0.png",
+      "accepted_sha256": "234d55d7c66b1a68b92c8f341db9f3b637f1f72fc9d78406eb68ea856c765af8",
+      "current_sha256": "234d55d7c66b1a68b92c8f341db9f3b637f1f72fc9d78406eb68ea856c765af8",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/north/30m-1.png",
+      "accepted_sha256": "85d75a70900ac3ec9c96bfa4b3a0cb3f2bffca3b86c54c40a5d9b4585c97e9c5",
+      "current_sha256": "85d75a70900ac3ec9c96bfa4b3a0cb3f2bffca3b86c54c40a5d9b4585c97e9c5",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/north/30m-2.png",
+      "accepted_sha256": "26758b04a63e38b61323530a1d22fdb603c2d57b23d4a1d8944e228ecb75ec3e",
+      "current_sha256": "26758b04a63e38b61323530a1d22fdb603c2d57b23d4a1d8944e228ecb75ec3e",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/north/45m-0.png",
+      "accepted_sha256": "a72689c15c9258be0747f877de03970d0a68de9311ca9cc58c71d20f7ca44215",
+      "current_sha256": "a72689c15c9258be0747f877de03970d0a68de9311ca9cc58c71d20f7ca44215",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/north/45m-1.png",
+      "accepted_sha256": "400868e22df3370879a02120adc0117b38407597310182edf07aff58cd40aa1b",
+      "current_sha256": "400868e22df3370879a02120adc0117b38407597310182edf07aff58cd40aa1b",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/north/45m-2.png",
+      "accepted_sha256": "d07b7d3e75e7eee75b05100ab2d904e5687f266711f324c9ff87e4df64ce7564",
+      "current_sha256": "d07b7d3e75e7eee75b05100ab2d904e5687f266711f324c9ff87e4df64ce7564",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/north/60m-0.png",
+      "accepted_sha256": "3d68f5b456f6e53bb63ff5c055074298382ae0105f89272d2e772e546990a751",
+      "current_sha256": "3d68f5b456f6e53bb63ff5c055074298382ae0105f89272d2e772e546990a751",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/north/60m-1.png",
+      "accepted_sha256": "0a533f655ce75baff22f624bb99b8b1fe74a0bfd28fd2e6c3af7f8898207b866",
+      "current_sha256": "0a533f655ce75baff22f624bb99b8b1fe74a0bfd28fd2e6c3af7f8898207b866",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/north/60m-2.png",
+      "accepted_sha256": "d67051bdbcb3a25c55b33f9f51c850b84c926d8b7973760ccb38a194246d1ace",
+      "current_sha256": "d67051bdbcb3a25c55b33f9f51c850b84c926d8b7973760ccb38a194246d1ace",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/south/25m-0.png",
+      "accepted_sha256": "b3c614c3975beffe8355364e2ff9167f5b26486004a7ebadee4b96467e96924f",
+      "current_sha256": "b3c614c3975beffe8355364e2ff9167f5b26486004a7ebadee4b96467e96924f",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/south/25m-1.png",
+      "accepted_sha256": "664225cc6a6426e1a00fa417c90e0a6a65cf35beee20913b55fafcedd09a898b",
+      "current_sha256": "664225cc6a6426e1a00fa417c90e0a6a65cf35beee20913b55fafcedd09a898b",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/south/25m-2.png",
+      "accepted_sha256": "8d7f06a6c0b50b3db327bfd65cc187f7f87d395912ff1e180197298bad1037f4",
+      "current_sha256": "8d7f06a6c0b50b3db327bfd65cc187f7f87d395912ff1e180197298bad1037f4",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/south/30m-0.png",
+      "accepted_sha256": "64fc31d58b2e3790d49781c8ca40740c3ac292c877da571d6f656b22ba1d7d53",
+      "current_sha256": "64fc31d58b2e3790d49781c8ca40740c3ac292c877da571d6f656b22ba1d7d53",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/south/30m-1.png",
+      "accepted_sha256": "d396f8b2f0d879c1aa02af7d785aa003cd706ea4b07e315c66bf169f2ccefb0e",
+      "current_sha256": "d396f8b2f0d879c1aa02af7d785aa003cd706ea4b07e315c66bf169f2ccefb0e",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/south/30m-2.png",
+      "accepted_sha256": "33a3af56188a5def59c6a5f98e4cda747b41cc186aba3e0372cc24ebbd57095b",
+      "current_sha256": "33a3af56188a5def59c6a5f98e4cda747b41cc186aba3e0372cc24ebbd57095b",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/south/45m-0.png",
+      "accepted_sha256": "9b1807c4b94f6cb6be6583e5d419847a2130109bd3a45922e21e2b04bcf14528",
+      "current_sha256": "9b1807c4b94f6cb6be6583e5d419847a2130109bd3a45922e21e2b04bcf14528",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/south/45m-1.png",
+      "accepted_sha256": "b867a29126c582621649449c627bcce9419cbd5bdbbcb6ec2a04de0a358705f3",
+      "current_sha256": "b867a29126c582621649449c627bcce9419cbd5bdbbcb6ec2a04de0a358705f3",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/south/45m-2.png",
+      "accepted_sha256": "28351fc77c65247eb5b7217c85538dfe6c8b9ea009aeecd67376c96ce1e63fa3",
+      "current_sha256": "28351fc77c65247eb5b7217c85538dfe6c8b9ea009aeecd67376c96ce1e63fa3",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/south/60m-0.png",
+      "accepted_sha256": "cac869ba0fbb808c478ba01d1451579ca03e41fcaa2836eee72256f6c59024d7",
+      "current_sha256": "cac869ba0fbb808c478ba01d1451579ca03e41fcaa2836eee72256f6c59024d7",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/south/60m-1.png",
+      "accepted_sha256": "46b3fc3e1124125ad440d31740317bb39f19e81561de5c0f900c5216041d7baf",
+      "current_sha256": "46b3fc3e1124125ad440d31740317bb39f19e81561de5c0f900c5216041d7baf",
+      "byte_identical": true
+    },
+    {
+      "path": "stages/candidate/motion/south/60m-2.png",
+      "accepted_sha256": "ba220ee3856bf5f5bce5ad499219702ab475c93db37e369b7936d8dd84ada9b1",
+      "current_sha256": "ba220ee3856bf5f5bce5ad499219702ab475c93db37e369b7936d8dd84ada9b1",
+      "byte_identical": true
+    }
+  ],
+  "byte_identical_png_pairs": 46,
+  "pixel_hash_equality_is_not_a_visual_acceptance_gate": true,
+  "current_input_inventory": [
+    {
+      "path": "stages/candidate/images/01-whole-front-changed.png",
+      "sha256": "8bd8f2e9230a52be562bffe9d3c6ea8bed25be90dd46719148538b944254e640",
+      "bytes": 729262
+    },
+    {
+      "path": "stages/candidate/images/01-whole-front-default.png",
+      "sha256": "2ffc50f8af3c5777bf7250f05f67fe405c0e1f48678541968f32b86aab2f131e",
+      "bytes": 834888
+    },
+    {
+      "path": "stages/candidate/images/01-whole-front-grayscale.png",
+      "sha256": "1675e48bea3f26e97f1eb66d75fe5e2adab425997a2a2abe330f0f234d2b685c",
+      "bytes": 294977
+    },
+    {
+      "path": "stages/candidate/images/02-north-wing-far-changed.png",
+      "sha256": "dbeb6d7095c5aeed0955e0d5d5659f3f1234dbe06830d2c334b9e0f61c3e8cff",
+      "bytes": 765220
+    },
+    {
+      "path": "stages/candidate/images/02-north-wing-far-default.png",
+      "sha256": "4e1484102e1fdcc69bbff6714a1b138b1ef2bfe2102dd2991e518148dd6e5178",
+      "bytes": 890873
+    },
+    {
+      "path": "stages/candidate/images/02-north-wing-far-grayscale.png",
+      "sha256": "bca0d54ee97ed949c96b1de27cd79a2be5f078b2e68d2d214ec32f661f497eef",
+      "bytes": 313218
+    },
+    {
+      "path": "stages/candidate/images/03-north-wing-near-changed.png",
+      "sha256": "05ebad04213e23e2d99362d2b44ee6c5c5327474c26b0255e34f3c2d75e02b2a",
+      "bytes": 489864
+    },
+    {
+      "path": "stages/candidate/images/03-north-wing-near-default.png",
+      "sha256": "34e005f7353e6e2427ea55c40bb50d97c8b2f6473e808140d2929a6478b07d19",
+      "bytes": 717216
+    },
+    {
+      "path": "stages/candidate/images/03-north-wing-near-grayscale.png",
+      "sha256": "e7dca16c5a57572089992de56ff38e85b801ba24ef9938f7504c8107f0118053",
+      "bytes": 269977
+    },
+    {
+      "path": "stages/candidate/images/04-south-wing-far-changed.png",
+      "sha256": "c073b3b99aa3b773f5e5cc928f999c75e5a73a400051c3f9c1b6e3b13364068b",
+      "bytes": 657354
+    },
+    {
+      "path": "stages/candidate/images/04-south-wing-far-default.png",
+      "sha256": "453800a0bb521f92e7273b30c8e519e3a5ef868761557bc87e726e06e410da0f",
+      "bytes": 741458
+    },
+    {
+      "path": "stages/candidate/images/04-south-wing-far-grayscale.png",
+      "sha256": "0bdb2b2504eaf512c1f5eed12194943d1debe226d877a4c0d04884f23ed9ba52",
+      "bytes": 272593
+    },
+    {
+      "path": "stages/candidate/images/05-south-wing-near-changed.png",
+      "sha256": "997329bec0bb576d6e9ba8d99860340cb4510f0103daea0194364f402dc49ebf",
+      "bytes": 584828
+    },
+    {
+      "path": "stages/candidate/images/05-south-wing-near-default.png",
+      "sha256": "99b9e004ed4e1aa80d3b7a58c21aab1c2875828e2a1eebf1fe4692a3b26d4106",
+      "bytes": 789448
+    },
+    {
+      "path": "stages/candidate/images/05-south-wing-near-grayscale.png",
+      "sha256": "283770469b0daad371b9c91523a87aafa68a11580e1752acafec0205a11f16dc",
+      "bytes": 281538
+    },
+    {
+      "path": "stages/candidate/images/06-protected-rear-east.png",
+      "sha256": "065794cd34e9e6aa4eef6dbdf5c44490005944226e5d0ec2fd8501eccd7ae9ae",
+      "bytes": 757675
+    },
+    {
+      "path": "stages/candidate/images/07-tower-accepted-pose-one.png",
+      "sha256": "bd21f8e86445365fdc8b0a091146789676dba177468f79def1dbc64cc6de1543",
+      "bytes": 954144
+    },
+    {
+      "path": "stages/candidate/images/08-tower-accepted-pose-two.png",
+      "sha256": "c597cf4404a0e7ab9d648f735e09f7c761500292b92cda9d6f4655111662bed6",
+      "bytes": 976007
+    },
+    {
+      "path": "stages/candidate/images/09-real-spray-blank-wing-pier.png",
+      "sha256": "9ab3441629bfff5719327dd7864c98f1600fe0510b8a9657d84490f2ffd1f3db",
+      "bytes": 824846
+    },
+    {
+      "path": "stages/candidate/images/10-real-player-main-roof-landing.png",
+      "sha256": "bffa0d4fb6ca61662167494ebf10d817eb2817ca272a8d576cd75a3a1ec55404",
+      "bytes": 129652
+    },
+    {
+      "path": "stages/candidate/images/11-whole-context.png",
+      "sha256": "ec07e45bedc5c90b2a6385cf028a83f8521a1e20d4eebb61fa3ff2cb66f956de",
+      "bytes": 847915
+    },
+    {
+      "path": "stages/candidate/images/12-elevated-overview-diagnostic-only.png",
+      "sha256": "e045ccb4caba24fed99fbb3c4a0895bac10b631b6cbf639bb2bc34f1f3998a0e",
+      "bytes": 369787
+    },
+    {
+      "path": "stages/candidate/motion-north.json",
+      "sha256": "e462e6fc85dc4070ebcb4314955d421d43851e008682d2c225b6a085f9aa6758",
+      "bytes": 205746
+    },
+    {
+      "path": "stages/candidate/motion-south.json",
+      "sha256": "851779314cd1805764751fbcfdb5acdde39eb4cfcf62b16a31d5ca3bb8556a16",
+      "bytes": 205519
+    },
+    {
+      "path": "stages/candidate/motion/north/25m-0.png",
+      "sha256": "150c2ca4d2111aa20b3120834edea3c6c2fc477d8482b29a0ebfe31f95bb8b04",
+      "bytes": 852017
+    },
+    {
+      "path": "stages/candidate/motion/north/25m-1.png",
+      "sha256": "138152c69aebf3d1ae4647839bfbb5cfc69f67e3778a90b569951a173383c926",
+      "bytes": 852627
+    },
+    {
+      "path": "stages/candidate/motion/north/25m-2.png",
+      "sha256": "f04e9d3f9c824e456292b0d0acf51086c3eddc9e7397c796509a8cb175023601",
+      "bytes": 852372
+    },
+    {
+      "path": "stages/candidate/motion/north/30m-0.png",
+      "sha256": "234d55d7c66b1a68b92c8f341db9f3b637f1f72fc9d78406eb68ea856c765af8",
+      "bytes": 891055
+    },
+    {
+      "path": "stages/candidate/motion/north/30m-1.png",
+      "sha256": "85d75a70900ac3ec9c96bfa4b3a0cb3f2bffca3b86c54c40a5d9b4585c97e9c5",
+      "bytes": 890014
+    },
+    {
+      "path": "stages/candidate/motion/north/30m-2.png",
+      "sha256": "26758b04a63e38b61323530a1d22fdb603c2d57b23d4a1d8944e228ecb75ec3e",
+      "bytes": 890822
+    },
+    {
+      "path": "stages/candidate/motion/north/45m-0.png",
+      "sha256": "a72689c15c9258be0747f877de03970d0a68de9311ca9cc58c71d20f7ca44215",
+      "bytes": 932207
+    },
+    {
+      "path": "stages/candidate/motion/north/45m-1.png",
+      "sha256": "400868e22df3370879a02120adc0117b38407597310182edf07aff58cd40aa1b",
+      "bytes": 931314
+    },
+    {
+      "path": "stages/candidate/motion/north/45m-2.png",
+      "sha256": "d07b7d3e75e7eee75b05100ab2d904e5687f266711f324c9ff87e4df64ce7564",
+      "bytes": 931414
+    },
+    {
+      "path": "stages/candidate/motion/north/60m-0.png",
+      "sha256": "3d68f5b456f6e53bb63ff5c055074298382ae0105f89272d2e772e546990a751",
+      "bytes": 890748
+    },
+    {
+      "path": "stages/candidate/motion/north/60m-1.png",
+      "sha256": "0a533f655ce75baff22f624bb99b8b1fe74a0bfd28fd2e6c3af7f8898207b866",
+      "bytes": 891296
+    },
+    {
+      "path": "stages/candidate/motion/north/60m-2.png",
+      "sha256": "d67051bdbcb3a25c55b33f9f51c850b84c926d8b7973760ccb38a194246d1ace",
+      "bytes": 891225
+    },
+    {
+      "path": "stages/candidate/motion/south/25m-0.png",
+      "sha256": "b3c614c3975beffe8355364e2ff9167f5b26486004a7ebadee4b96467e96924f",
+      "bytes": 929359
+    },
+    {
+      "path": "stages/candidate/motion/south/25m-1.png",
+      "sha256": "664225cc6a6426e1a00fa417c90e0a6a65cf35beee20913b55fafcedd09a898b",
+      "bytes": 928691
+    },
+    {
+      "path": "stages/candidate/motion/south/25m-2.png",
+      "sha256": "8d7f06a6c0b50b3db327bfd65cc187f7f87d395912ff1e180197298bad1037f4",
+      "bytes": 928466
+    },
+    {
+      "path": "stages/candidate/motion/south/30m-0.png",
+      "sha256": "64fc31d58b2e3790d49781c8ca40740c3ac292c877da571d6f656b22ba1d7d53",
+      "bytes": 875633
+    },
+    {
+      "path": "stages/candidate/motion/south/30m-1.png",
+      "sha256": "d396f8b2f0d879c1aa02af7d785aa003cd706ea4b07e315c66bf169f2ccefb0e",
+      "bytes": 876351
+    },
+    {
+      "path": "stages/candidate/motion/south/30m-2.png",
+      "sha256": "33a3af56188a5def59c6a5f98e4cda747b41cc186aba3e0372cc24ebbd57095b",
+      "bytes": 878094
+    },
+    {
+      "path": "stages/candidate/motion/south/45m-0.png",
+      "sha256": "9b1807c4b94f6cb6be6583e5d419847a2130109bd3a45922e21e2b04bcf14528",
+      "bytes": 923779
+    },
+    {
+      "path": "stages/candidate/motion/south/45m-1.png",
+      "sha256": "b867a29126c582621649449c627bcce9419cbd5bdbbcb6ec2a04de0a358705f3",
+      "bytes": 924159
+    },
+    {
+      "path": "stages/candidate/motion/south/45m-2.png",
+      "sha256": "28351fc77c65247eb5b7217c85538dfe6c8b9ea009aeecd67376c96ce1e63fa3",
+      "bytes": 923681
+    },
+    {
+      "path": "stages/candidate/motion/south/60m-0.png",
+      "sha256": "cac869ba0fbb808c478ba01d1451579ca03e41fcaa2836eee72256f6c59024d7",
+      "bytes": 741405
+    },
+    {
+      "path": "stages/candidate/motion/south/60m-1.png",
+      "sha256": "46b3fc3e1124125ad440d31740317bb39f19e81561de5c0f900c5216041d7baf",
+      "bytes": 741086
+    },
+    {
+      "path": "stages/candidate/motion/south/60m-2.png",
+      "sha256": "ba220ee3856bf5f5bce5ad499219702ab475c93db37e369b7936d8dd84ada9b1",
+      "bytes": 740716
+    },
+    {
+      "path": "stages/candidate/stills.json",
+      "sha256": "9906ed1a9162ff868430d09167e1b2607723fa899b9370818b5683e4754f203f",
+      "bytes": 59098
+    }
+  ],
+  "current_input_total_bytes": 35071634,
+  "current_input_tree_sha256": "341b6545fc22b103813fcd5a65f5487388bdce521ab43b89d0c42b214b7a0272"
+}

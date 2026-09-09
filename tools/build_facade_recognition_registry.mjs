@@ -22,7 +22,7 @@ import {
 } from "./lib/world-contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const COMPILER_VERSION = "1.8.0";
+const COMPILER_VERSION = "1.8.1";
 const CATALOG_SCHEMA = "ti.facade-recognition-catalog/9";
 const RUNTIME_SCHEMA = "ti.facade-runtime-registry/9";
 const REPORT_SCHEMA = "ti.facade-recognition-validation-report/4";
@@ -32,7 +32,12 @@ const UNKNOWN_VERSION_POLICY = "reject";
 const CATALOG_ID = "treasure-island-physical-building-recognition";
 const CATALOG_SCHEMA_REFERENCE = "./facade-recognition-catalog.schema.json";
 const SEED_STRATEGY = "immutable_receiver_inventory_physical_units_v1";
-const CHECKED_DATE = "2026-09-07";
+const CHECKED_DATE = "2026-09-08";
+// A source-only quality acceptance. Original B1 recognition and every capture-time authority remain unchanged.
+const B1_RETURNS_ACCEPTANCE_ROOT = "evidence/first-playable/building-1-wing-returns-v2-accepted-2026-09-08-001";
+const B1_RETURNS_ACCEPTANCE_PATH = `${B1_RETURNS_ACCEPTANCE_ROOT}/acceptance-receipt.json`;
+const B1_RETURNS_ACCEPTANCE_SHA256 = "257f16bc314151054b120c2b87e6f8cb20577f5e4a7201478b58272a65dc23a4";
+const B1_RETURNS_ACCEPTANCE_CANONICAL_SHA256 = "327e4e44f0ffcad7e679e40cbc5f555156c37107cfb485ea588a07b26a61c72e";
 const ISLE_HOUSE_PARENT = "w1249412094";
 const ISLE_HOUSE_PARTS = ["w1282547786", "w1282547787"];
 const ISLE_HOUSE_UNIT_ID = `physical-building:${ISLE_HOUSE_PARENT}`;
@@ -584,6 +589,8 @@ function loadInputs() {
       heroConfigSha256: sha256File(absolute(BUILDING_1_HERO_CONFIG_PATH)),
       heroPublicFrontConfig: readJson(BUILDING_1_PUBLIC_FRONT_CONFIG_PATH),
       heroPublicFrontConfigSha256: sha256File(absolute(BUILDING_1_PUBLIC_FRONT_CONFIG_PATH)),
+      heroReturnsAcceptance: readJson(B1_RETURNS_ACCEPTANCE_PATH),
+      heroReturnsAcceptanceSha256: sha256File(absolute(B1_RETURNS_ACCEPTANCE_PATH)),
       packageSanitizationSourceProvenance: readJson(PACKAGE_SANITIZATION_SOURCE_PROVENANCE_PATH),
       packageSanitizationSourceProvenanceSha256: sha256File(absolute(PACKAGE_SANITIZATION_SOURCE_PROVENANCE_PATH)),
       building3Config: readJson(BUILDING_3_CONFIG_PATH),
@@ -985,6 +992,47 @@ function validateCurrentWorldBuilderDispatch(inputs) {
   }
 }
 
+function validateBuilding1ReturnsAcceptance(contract) {
+  const receipt = contract.heroReturnsAcceptance;
+  invariant(contract.heroReturnsAcceptanceSha256 === B1_RETURNS_ACCEPTANCE_SHA256 &&
+    sha256Bytes(stableJson(receipt)) === B1_RETURNS_ACCEPTANCE_CANONICAL_SHA256,
+  "Building 1 returns v2 exact source-only acceptance receipt drifted");
+  invariant(receipt.schema_version === "ti.building-1-wing-returns-v2-acceptance/1" &&
+    receipt.recognition_credit_delta === 0 && receipt.recognition_metric === "9/213" &&
+    receipt.proof_boundaries.full_current_release_pass === false &&
+    receipt.proof_boundaries.source_renders_are_package_pixels === false,
+  "Building 1 returns v2 quality/recognition/release boundary drifted");
+  invariant(contract.heroPublicFrontConfigSha256 === "99117e1af118592db1d1cfa932b44014862cb8be4f47d0b3ea519e24f9e591fb" &&
+    sha256Bytes(stableJson(contract.heroPublicFrontConfig)) === "d89280e1f12052ccb6318cc5ccaa7609ed02677facdbd37b12b2b2febe9e42cc" &&
+    contract.heroAdapterSha256 === "ce2f21dab02163b5f45d9d7e457f5d0ce96089bc55cca6e65aa9924c9f199c5a" &&
+    sha256Bytes(contract.heroAdapterText) === contract.heroAdapterSha256,
+  "Building 1 returns v2 accepted executable source drifted");
+  for (const file of receipt.source_inputs) {
+    invariant(sha256File(absolute(file.path)) === file.sha256 && statSync(absolute(file.path)).size === file.bytes,
+      `Building 1 returns v2 frozen source input drifted: ${file.path}`);
+  }
+  for (const review of receipt.reviews) {
+    invariant(sha256File(absolute(review.path)) === review.sha256 &&
+      readFileSync(absolute(review.path), "utf8").includes(review.token),
+    `Building 1 returns v2 independent ${review.role} review drifted`);
+  }
+  const evidence = receipt.candidate_verification;
+  const files = evidence.input_inventory;
+  invariant(files.length === 98 && evidence.original_pngs === 92 && evidence.manifests === 6,
+    "Building 1 returns v2 accepted evidence count drifted");
+  assertUnique(files.map((file) => file.path), "Building 1 returns v2 evidence paths");
+  for (const file of [...files, { path: evidence.path, sha256: evidence.sha256 }]) {
+    invariant(!file.path.includes("..") && !file.path.startsWith("/"), "Building 1 returns v2 evidence path escapes packet");
+    const path = absolute(`${B1_RETURNS_ACCEPTANCE_ROOT}/${file.path}`);
+    invariant(sha256File(path) === file.sha256 && (file.bytes == null || statSync(path).size === file.bytes),
+      `Building 1 returns v2 accepted evidence bytes drifted: ${file.path}`);
+  }
+  const ordered = [...files].sort((a, b) => a.path < b.path ? -1 : a.path > b.path ? 1 : 0);
+  invariant(sha256Bytes(ordered.map((file) => `${file.path}|${file.sha256}|${file.bytes}\n`).join("")) === evidence.input_tree_sha256 &&
+    files.reduce((total, file) => total + file.bytes, 0) === evidence.input_total_bytes,
+  "Building 1 returns v2 evidence tree identity drifted");
+}
+
 function validateActiveHeroDispatch(inputs) {
   const contract = inputs.runtimeContracts;
   const config = contract.heroConfig;
@@ -1007,7 +1055,8 @@ function validateActiveHeroDispatch(inputs) {
   invariant(heroProvenance.primary_nps_nomination === "https://npgallery.nps.gov/NRHP/GetAsset/NRHP/08000081_text" && heroProvenance.museum_building_page.startsWith("https://www.treasureislandmuseum.org/") && heroProvenance.museum_sculpture_page.startsWith("https://www.treasureislandmuseum.org/"), "Building 1 source-only authority locators drifted");
   invariant(authority.source_provenance_receipt_id === "B1-HERO-AUTHORITY" && authority.source_provenance_receipt_sha256 === PACKAGE_SANITIZATION_SOURCE_PROVENANCE_SHA256 && authority.primary_nps_record_id === "NRHP-08000081" && authority.primary_nps_sections === heroProvenance.primary_nps_sections, "Building 1 package-safe authority receipt drifted");
   invariant(equalStable(authority.museum_reference_ids, ["TIM-BUILDING-THE-BAY-BRIDGE-AND-TREASURE-ISLAND", "TIM-SCULPTURES-AND-ISLAND"]), "Building 1 package-safe museum authority IDs drifted");
-  invariant(publicFront.schema_version === "ti.building-1-public-front-believability/1", "Building 1 public-front config schema drifted");
+  invariant(publicFront.schema_version === "ti.building-1-public-front-believability/3", "Building 1 public-front config schema drifted");
+  validateBuilding1ReturnsAcceptance(contract);
   invariant(publicFront.geometry_production_inference_m?.entrance_group_gap === 0.90, "Building 1 public-front entrance-group gap is not the reviewed 0.90 m candidate");
   invariant(publicFrontProvenance.historical_runtime_config_sha256 === "e11710374f837e15b45adf3b6df0e762a6793b363e6c3109870e1bf2f7a0ee0e", "Building 1 public-front historical config receipt drifted");
   invariant(publicFrontAuthority.source_provenance_receipt_id === "B1-PUBLIC-FRONT-AUTHORITY" && publicFrontAuthority.source_provenance_receipt_sha256 === PACKAGE_SANITIZATION_SOURCE_PROVENANCE_SHA256, "Building 1 public-front source receipt drifted");
@@ -1643,7 +1692,8 @@ function d21441BehaviorContract() {
       world_static_bodies: 466,
       world_surfaces: 974,
       world_topology_scope: CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE,
-      world_triangles: 69252,
+      // Current whole-world integration includes accepted B1 returns; D2 capture/component identities stay frozen.
+      world_triangles: 70692,
     },
     ownership_contract: {
       decorative_collision_triangles: 0,
@@ -3556,6 +3606,8 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
     input_hashes: {
       active_building_1_hero_adapter_sha256: inputs.runtimeContracts.heroAdapterSha256,
       active_building_1_hero_config_sha256: inputs.runtimeContracts.heroConfigSha256,
+      active_building_1_public_front_config_sha256: inputs.runtimeContracts.heroPublicFrontConfigSha256,
+      active_building_1_returns_v2_acceptance_receipt_sha256: inputs.runtimeContracts.heroReturnsAcceptanceSha256,
       active_building_3_hero_adapter_sha256: inputs.runtimeContracts.building3MassingSha256,
       active_building_3_authoring_provenance_sha256: inputs.runtimeContracts.building3AuthoringProvenanceSha256,
       active_building_3_hero_config_sha256: inputs.runtimeContracts.building3ConfigSha256,

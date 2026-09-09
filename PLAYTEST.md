@@ -8,35 +8,41 @@ behaves correctly as a continuous jetpack. The exact movement change in current
 source keeps walking at `4 m/s` and raises the same held-Shift run from
 `7 m/s` to `20 m/s` (about 45 mph), with a short acceleration/braking
 ramp. That change still needs ordinary-play feedback in the exact current
-package. Current authority and the reviewed package are v9 at `9/213`. The D2
-1441 `-009` v8 package is the frozen prepromotion input; B225, B201 `024605`,
-and `190724` are historical package evidence. None of the automated or
-independent-review results establishes ordinary owner recognition, input, or
+package. Current authority is compiler `1.8.1`, catalog/runtime v9, and
+`9/213` with `+0` credit for the accepted Building 1 local window-depth upgrade.
+The exact current package passed independent mechanical review and complete
+headless/native internal smoke. Fresh current source evidence also passed its
+independent mechanics and scoped visual review. Final Git publication and the
+ordinary visible launch remain pending. All earlier D2/B225/B201 apps are historical. No automated or
+independent-review result establishes ordinary owner recognition, input, or
 acceptance on the Apple M1 Pro target.
 
 ## Start
 
 First quit any older game window (`Esc`, then `Q` while paused); macOS may
 otherwise focus a historical copy. Open the exact current handoff at
-`build/d2-1441-postpromotion-v9-2026-09-07-001/Treasure Island First Playable.app`.
-Do not add launch arguments: the app is reviewed in its ordinary configuration,
-and the repaired project already selects the exact case-sensitive `Dummy`
-driver before Godot initializes audio. Do not use the frozen D2 `-009` v8 app
+`build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app`.
+Do not add launch arguments for owner play. The project already selects the
+exact case-sensitive `Dummy` driver before Godot initializes audio. Do not use the frozen D2 `-009` v8 app
 or the B225, `024605`, `190724`, `231815`, or `224622` historical apps to judge
 current authority.
 
 The current app's executable SHA-256 is
-`cf0bd6e789e9317248b1aeb2eb626cfd76b837fef362eca449336644cff77941`
-(`170,963,648` bytes), its PCK SHA-256 is
-`0945ac7b08ebd2fc5389ffa05a919b7324ecb298dac46032c8fdc30d8c47404a`
-(`66,300,344` bytes), and its canonical seven-file bundle identity is
-`f83ddd5678086099d66fc433c0851fc2788c42e702d8bffac4eee4d7a7d595cb`.
-The exact 40-file postpromotion packet tree is
-`60f9c875d3429347047525beab75310073e971af78e6445b551b6586a79cb45e`;
-its independent mechanical and visual reviews have SHA-256 values
-`08d08ddc4a7e9cb773e5cacf8c175040f8dd7583d16268533b62899c56175055`
-and `67e459baa98b34ef246136b898ac3ab2a4dba91c65979b7b3007747d8fa3aade`.
-Both return `PASS_FOR_D2_1441_V9_RELEASE` without adding recognition credit.
+`ac0aa612c576e039b04b743c2da5783fd0736a7312be4c88e31210b672845031` (`170,963,648` bytes),
+PCK SHA-256 `454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403`
+(`66,600,060` bytes), and seven-file bundle identity
+`fd91b1c5598dc2fe436a756eb5fb7561c96989fe18734c59580de92b13fa4171`.
+The [independent current package review](evidence/reviews/building-1-wing-returns-v2-current-package-2026-09-08-INDEPENDENT_MECHANICAL_AUDIT.md)
+has SHA-256 `c6f4c47a998619143f5f8b56b91c4441d9cda5500ee643911dbdeba8be575ee7`
+and returns `PASS_FOR_B1_RETURNS_V2_CURRENT_PACKAGE_MECHANICS_ONLY`.
+The [fresh current evidence mechanics review](evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_EVIDENCE_MECHANICAL_AUDIT.md)
+(SHA `98ab5b0d5990bc9665a3ac335863d95ee34440b4cfd168558e573ec84d3243ae`) and
+[scoped visual review](evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_VISUAL_AUDIT.md)
+(SHA `8f9123170532ca60f0ecd693e6675fdf0bc15008af68f3b2982bfff100767fed`) passed.
+The [durable closure](evidence/first-playable/building-1-wing-returns-v2-current-release-2026-09-08-001/release-closure.json) retains exact raw evidence and clearly
+labeled derived provenance summaries. Source renders and separately verified
+package semantics remain distinct. Git publication and ordinary visible
+launch are pending; record owner feedback against these exact app bytes.
 
 ### Historical B225 package identity (not current playtest bytes)
 
@@ -82,14 +88,14 @@ Wait for the full-world loading panel to disappear. A center reticle means the v
 ## Ten-minute acceptance pass
 
 1. From the ferry-arrival spawn, confirm the cyan pill is fully above the surface immediately—there should be no visible one-meter settling fall or buried lower half. Walk across nearby road/area seams, then hold Shift long enough to reach the fast-run cap. Confirm the ramp feels responsive but controllable, releasing Shift returns smoothly toward walking speed, and releasing movement stops without an abrupt velocity cut. The player should remain surface-aligned.
-2. The retained [normal-route log](evidence/first-playable/final-verification-2026-09-03-105408/logs/42_normal_route_after_export_guard.log) records current-source automation walking/running `262.349 m` continuously from the terrain-aware ferry through Waterfront Plaza to Trade Winds Avenue in about `18.1 s` wall time; the retained [whole-island route log](evidence/first-playable/final-verification-2026-09-03-105408/logs/43_whole_island_route_after_export_guard.log) records `3,449.107 m` of bounded traversal with real jetpack steering and generated-terrain landings at southwest, center, north, and east-perimeter anchors with no stall or recovery. Rise to the elevated angles that exposed the earlier defect: roads and public-space polygons should remain continuous without long triangular spikes, tears, or holes. Release to land, press `R`, and confirm the pill returns cleanly to the surface.
+2. The retained [normal-route log](evidence/first-playable/final-verification-2026-09-03-105408/logs/42_normal_route_after_export_guard.log) records historical source automation walking/running `262.349 m` continuously from the terrain-aware ferry through Waterfront Plaza to Trade Winds Avenue in about `18.1 s` wall time; the retained [whole-island route log](evidence/first-playable/final-verification-2026-09-03-105408/logs/43_whole_island_route_after_export_guard.log) records `3,449.107 m` of bounded traversal with real jetpack steering and generated-terrain landings at southwest, center, north, and east-perimeter anchors with no stall or recovery. Rise to the elevated angles that exposed the earlier defect: roads and public-space polygons should remain continuous without long triangular spikes, tears, or holes. Release to land, press `R`, and confirm the pill returns cleanly to the surface.
 3. Inspect buildings on sloped ground. Roofs and top edges should stay level, while exterior wall/foundation bottoms reach the terrain without a bright floating gap. Then decide whether the island still reads as Treasure Island at ground level.
 4. Inspect vegetation around the south, legacy grid, center, and north/west lawns. The south should have readable palm rows with a limited ornamental layer; broadleaf trees should be sparse, central conifers compact, and Waterfront Plaza, the ferry arrival, industrial lots, cyan terrain/shoreline overlays, shoreline sightlines, and large lawns mostly open. Plants are visual-only and should not alter movement or spray behavior.
 5. Look toward Yerba Buena Island, the Bay Bridge, and San Francisco. Confirm that YBI reads as an irregular ridged island rather than a round mound, that its OSM shoreline meets the water, and that the coarse eastern bridge is readable light concrete rather than black. All three remain non-colliding context.
 6. Spray an exterior building wall from close range. A source capture already proves one visible, upright, identity-matched eligible tag; confirm it in ordinary play and check that it does not bleed onto an adjacent surface. Try ground, roof, water/context, too-far, and empty-sky targets; each should reject without stopping movement. Pause/resume, toggle `F3`, and exit from the pause panel; relaunch once to confirm tags are session-only.
 
 Record a simple result against bundle identity
-`f83ddd5678086099d66fc433c0851fc2788c42e702d8bffac4eee4d7a7d595cb`:
+`fd91b1c5598dc2fe436a756eb5fb7561c96989fe18734c59580de92b13fa4171`:
 `accepted`, or `blocked`
 with location, action, expected result, observed result, and (if useful) a
 screenshot. Acceptance requires both recognizable Treasure Island and a
@@ -101,8 +107,9 @@ alone is not enough.
 
 Close the app first. Exported apps are disposable only at their exact staging
 paths under `build/`, including the current
-`build/d2-1441-postpromotion-v9-2026-09-07-001/`,
+`build/building-1-wing-returns-v2-current-2026-09-08-001/`,
 the historical
+`build/d2-1441-postpromotion-v9-2026-09-07-001/`,
 `build/d2-1441-production-v8-staging-2026-09-05-009/`,
 `build/d1-b225-postpromotion-v8-2026-09-05-001/` and earlier
 `build/b201-promotion-staging-2026-09-05-024605/`,

@@ -1,0 +1,936 @@
+{
+  "status": "DERIVED_SANITIZED_PROVENANCE_SUMMARY_NOT_RAW_EXECUTION_EVIDENCE",
+  "derived_summary": true,
+  "raw_originals_rewritten": false,
+  "raw_originals_retained_privately": true,
+  "placeholder_roles": {
+    "{SOURCE_REPO}": "original exact source checkout; capture source pins are retained in raw execution receipts and upstream authority audit",
+    "{CAPTURE_SCRATCH}": "original projectless external capture/program execution directory",
+    "{CAPTURE_OUTPUT}": "original private current source-render output directory",
+    "{PACKAGE_OWNER}": "original owner source-free package proof directory",
+    "{PACKAGE_INDEPENDENT}": "original independent source-free package proof directory",
+    "{EVIDENCE_INDEPENDENT}": "original independent no-render evidence verification directory"
+  },
+  "argv_arrays_preserve_original_argument_boundaries_and_non_path_values": true,
+  "machine_absolute_path_prefixes_replaced_only_in_derived_summary": true,
+  "execution_summaries": [
+    {
+      "source_original_sha256": "3500427970b481396908911e9c304d215c3ae7821bc9778169d8fa8edea43999",
+      "source_original_bytes": 72814,
+      "source_retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/current-capture-execution.json",
+      "status": "STOPPED_ON_CAPTURE_FAILURE",
+      "all_owned_processes_terminal": true,
+      "before_after_pins_match": true,
+      "jobs": [
+        {
+          "mode": "stills",
+          "argv": [
+            "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+            "--fixed-fps",
+            "60",
+            "--path",
+            "{SOURCE_REPO}",
+            "--display-driver",
+            "macos",
+            "--rendering-method",
+            "forward_plus",
+            "--rendering-driver",
+            "metal",
+            "--audio-driver",
+            "Dummy",
+            "--resolution",
+            "1440x900",
+            "--script",
+            "{CAPTURE_SCRATCH}/building_1_wing_returns_v2_current_release_capture.gd",
+            "--",
+            "--stage=candidate",
+            "--capture-mode=stills",
+            "--output-root={CAPTURE_OUTPUT}",
+            "--release-binding={CAPTURE_SCRATCH}/current-release-binding.json",
+            "--generator={CAPTURE_SCRATCH}/building_1_wing_returns_v2_current_release_capture.gd",
+            "--generator-sha256=e93d3899ff05f1ce8f15b0bfb79a96fab06cab97b81a4073c30cc291d205c632"
+          ],
+          "cwd": "{SOURCE_REPO}",
+          "log_path": "{CAPTURE_SCRATCH}/capture-stills.log",
+          "started_utc": "2026-09-08T23:53:48.031215+00:00",
+          "status": "terminal",
+          "executable_path": "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "pid": 4441,
+          "exit_code": 0,
+          "elapsed_seconds": 23.906,
+          "log_sha256": "3e0fda2d25b2c9d7a4b2b5551674d08da08ebbd0dfe9d2564ba1947855a02ae2",
+          "ended_utc": "2026-09-08T23:54:11.937777+00:00",
+          "diagnostic_error_present": false
+        },
+        {
+          "mode": "motion-north",
+          "argv": [
+            "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+            "--fixed-fps",
+            "60",
+            "--path",
+            "{SOURCE_REPO}",
+            "--display-driver",
+            "macos",
+            "--rendering-method",
+            "forward_plus",
+            "--rendering-driver",
+            "metal",
+            "--audio-driver",
+            "Dummy",
+            "--resolution",
+            "1440x900",
+            "--script",
+            "{CAPTURE_SCRATCH}/building_1_wing_returns_v2_current_release_capture.gd",
+            "--",
+            "--stage=candidate",
+            "--capture-mode=motion-north",
+            "--output-root={CAPTURE_OUTPUT}",
+            "--release-binding={CAPTURE_SCRATCH}/current-release-binding.json",
+            "--generator={CAPTURE_SCRATCH}/building_1_wing_returns_v2_current_release_capture.gd",
+            "--generator-sha256=e93d3899ff05f1ce8f15b0bfb79a96fab06cab97b81a4073c30cc291d205c632"
+          ],
+          "cwd": "{SOURCE_REPO}",
+          "log_path": "{CAPTURE_SCRATCH}/capture-motion-north.log",
+          "started_utc": "2026-09-08T23:54:11.940447+00:00",
+          "status": "terminal",
+          "executable_path": "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "pid": 4619,
+          "exit_code": 1,
+          "elapsed_seconds": 10.927,
+          "log_sha256": "bb02a8382a1dfebe334ea8c9e1722672bc7b08f98dbe0fa15cde8445cdbc0b31",
+          "ended_utc": "2026-09-08T23:54:22.867194+00:00",
+          "diagnostic_error_present": true
+        }
+      ]
+    },
+    {
+      "source_original_sha256": "caeebecb78459aa35d6148877fb6816494cdc166c6c4018d32b2030096b6f421",
+      "source_original_bytes": 77704,
+      "source_retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/current-motion-completion-execution.json",
+      "status": "CAPTURE_JOBS_TERMINAL_PENDING_EVIDENCE_VERIFICATION",
+      "all_owned_processes_terminal": true,
+      "before_after_pins_match": true,
+      "jobs": [
+        {
+          "mode": "motion-north",
+          "argv": [
+            "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+            "--fixed-fps",
+            "60",
+            "--path",
+            "{SOURCE_REPO}",
+            "--display-driver",
+            "macos",
+            "--rendering-method",
+            "forward_plus",
+            "--rendering-driver",
+            "metal",
+            "--audio-driver",
+            "Dummy",
+            "--resolution",
+            "1440x900",
+            "--script",
+            "{CAPTURE_SCRATCH}/building_1_wing_returns_v2_current_release_capture.gd",
+            "--",
+            "--stage=candidate",
+            "--fixed-fps-receipt=60",
+            "--capture-mode=motion-north",
+            "--output-root={CAPTURE_OUTPUT}",
+            "--release-binding={CAPTURE_SCRATCH}/current-release-binding.json",
+            "--generator={CAPTURE_SCRATCH}/building_1_wing_returns_v2_current_release_capture.gd",
+            "--generator-sha256=e93d3899ff05f1ce8f15b0bfb79a96fab06cab97b81a4073c30cc291d205c632"
+          ],
+          "cwd": "{SOURCE_REPO}",
+          "log_path": "{CAPTURE_SCRATCH}/capture-completion-motion-north.log",
+          "started_utc": "2026-09-08T23:56:03.286059+00:00",
+          "status": "terminal",
+          "executable_path": "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "pid": 5130,
+          "exit_code": 0,
+          "elapsed_seconds": 15.864,
+          "log_sha256": "80e5294dec860a886aca10cd3c04223f4bce04922eb3535dba5f1a75309c16b6",
+          "ended_utc": "2026-09-08T23:56:19.150730+00:00",
+          "diagnostic_error_present": false
+        },
+        {
+          "mode": "motion-south",
+          "argv": [
+            "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+            "--fixed-fps",
+            "60",
+            "--path",
+            "{SOURCE_REPO}",
+            "--display-driver",
+            "macos",
+            "--rendering-method",
+            "forward_plus",
+            "--rendering-driver",
+            "metal",
+            "--audio-driver",
+            "Dummy",
+            "--resolution",
+            "1440x900",
+            "--script",
+            "{CAPTURE_SCRATCH}/building_1_wing_returns_v2_current_release_capture.gd",
+            "--",
+            "--stage=candidate",
+            "--fixed-fps-receipt=60",
+            "--capture-mode=motion-south",
+            "--output-root={CAPTURE_OUTPUT}",
+            "--release-binding={CAPTURE_SCRATCH}/current-release-binding.json",
+            "--generator={CAPTURE_SCRATCH}/building_1_wing_returns_v2_current_release_capture.gd",
+            "--generator-sha256=e93d3899ff05f1ce8f15b0bfb79a96fab06cab97b81a4073c30cc291d205c632"
+          ],
+          "cwd": "{SOURCE_REPO}",
+          "log_path": "{CAPTURE_SCRATCH}/capture-completion-motion-south.log",
+          "started_utc": "2026-09-08T23:56:19.153401+00:00",
+          "status": "terminal",
+          "executable_path": "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "pid": 5275,
+          "exit_code": 0,
+          "elapsed_seconds": 15.26,
+          "log_sha256": "5488819fdbc97a07e5bd919d8da50bbfe7d416c553c815093181fb4f81564570",
+          "ended_utc": "2026-09-08T23:56:34.414184+00:00",
+          "diagnostic_error_present": false
+        }
+      ],
+      "retained_current_stills": [
+        {
+          "path": "stages/candidate/images/01-whole-front-changed.png",
+          "sha256": "8bd8f2e9230a52be562bffe9d3c6ea8bed25be90dd46719148538b944254e640",
+          "bytes": 729262
+        },
+        {
+          "path": "stages/candidate/images/01-whole-front-default.png",
+          "sha256": "2ffc50f8af3c5777bf7250f05f67fe405c0e1f48678541968f32b86aab2f131e",
+          "bytes": 834888
+        },
+        {
+          "path": "stages/candidate/images/01-whole-front-grayscale.png",
+          "sha256": "1675e48bea3f26e97f1eb66d75fe5e2adab425997a2a2abe330f0f234d2b685c",
+          "bytes": 294977
+        },
+        {
+          "path": "stages/candidate/images/02-north-wing-far-changed.png",
+          "sha256": "dbeb6d7095c5aeed0955e0d5d5659f3f1234dbe06830d2c334b9e0f61c3e8cff",
+          "bytes": 765220
+        },
+        {
+          "path": "stages/candidate/images/02-north-wing-far-default.png",
+          "sha256": "4e1484102e1fdcc69bbff6714a1b138b1ef2bfe2102dd2991e518148dd6e5178",
+          "bytes": 890873
+        },
+        {
+          "path": "stages/candidate/images/02-north-wing-far-grayscale.png",
+          "sha256": "bca0d54ee97ed949c96b1de27cd79a2be5f078b2e68d2d214ec32f661f497eef",
+          "bytes": 313218
+        },
+        {
+          "path": "stages/candidate/images/03-north-wing-near-changed.png",
+          "sha256": "05ebad04213e23e2d99362d2b44ee6c5c5327474c26b0255e34f3c2d75e02b2a",
+          "bytes": 489864
+        },
+        {
+          "path": "stages/candidate/images/03-north-wing-near-default.png",
+          "sha256": "34e005f7353e6e2427ea55c40bb50d97c8b2f6473e808140d2929a6478b07d19",
+          "bytes": 717216
+        },
+        {
+          "path": "stages/candidate/images/03-north-wing-near-grayscale.png",
+          "sha256": "e7dca16c5a57572089992de56ff38e85b801ba24ef9938f7504c8107f0118053",
+          "bytes": 269977
+        },
+        {
+          "path": "stages/candidate/images/04-south-wing-far-changed.png",
+          "sha256": "c073b3b99aa3b773f5e5cc928f999c75e5a73a400051c3f9c1b6e3b13364068b",
+          "bytes": 657354
+        },
+        {
+          "path": "stages/candidate/images/04-south-wing-far-default.png",
+          "sha256": "453800a0bb521f92e7273b30c8e519e3a5ef868761557bc87e726e06e410da0f",
+          "bytes": 741458
+        },
+        {
+          "path": "stages/candidate/images/04-south-wing-far-grayscale.png",
+          "sha256": "0bdb2b2504eaf512c1f5eed12194943d1debe226d877a4c0d04884f23ed9ba52",
+          "bytes": 272593
+        },
+        {
+          "path": "stages/candidate/images/05-south-wing-near-changed.png",
+          "sha256": "997329bec0bb576d6e9ba8d99860340cb4510f0103daea0194364f402dc49ebf",
+          "bytes": 584828
+        },
+        {
+          "path": "stages/candidate/images/05-south-wing-near-default.png",
+          "sha256": "99b9e004ed4e1aa80d3b7a58c21aab1c2875828e2a1eebf1fe4692a3b26d4106",
+          "bytes": 789448
+        },
+        {
+          "path": "stages/candidate/images/05-south-wing-near-grayscale.png",
+          "sha256": "283770469b0daad371b9c91523a87aafa68a11580e1752acafec0205a11f16dc",
+          "bytes": 281538
+        },
+        {
+          "path": "stages/candidate/images/06-protected-rear-east.png",
+          "sha256": "065794cd34e9e6aa4eef6dbdf5c44490005944226e5d0ec2fd8501eccd7ae9ae",
+          "bytes": 757675
+        },
+        {
+          "path": "stages/candidate/images/07-tower-accepted-pose-one.png",
+          "sha256": "bd21f8e86445365fdc8b0a091146789676dba177468f79def1dbc64cc6de1543",
+          "bytes": 954144
+        },
+        {
+          "path": "stages/candidate/images/08-tower-accepted-pose-two.png",
+          "sha256": "c597cf4404a0e7ab9d648f735e09f7c761500292b92cda9d6f4655111662bed6",
+          "bytes": 976007
+        },
+        {
+          "path": "stages/candidate/images/09-real-spray-blank-wing-pier.png",
+          "sha256": "9ab3441629bfff5719327dd7864c98f1600fe0510b8a9657d84490f2ffd1f3db",
+          "bytes": 824846
+        },
+        {
+          "path": "stages/candidate/images/10-real-player-main-roof-landing.png",
+          "sha256": "bffa0d4fb6ca61662167494ebf10d817eb2817ca272a8d576cd75a3a1ec55404",
+          "bytes": 129652
+        },
+        {
+          "path": "stages/candidate/images/11-whole-context.png",
+          "sha256": "ec07e45bedc5c90b2a6385cf028a83f8521a1e20d4eebb61fa3ff2cb66f956de",
+          "bytes": 847915
+        },
+        {
+          "path": "stages/candidate/images/12-elevated-overview-diagnostic-only.png",
+          "sha256": "e045ccb4caba24fed99fbb3c4a0895bac10b631b6cbf639bb2bc34f1f3998a0e",
+          "bytes": 369787
+        },
+        {
+          "path": "stages/candidate/stills.json",
+          "sha256": "9906ed1a9162ff868430d09167e1b2607723fa899b9370818b5683e4754f203f",
+          "bytes": 59098
+        }
+      ]
+    },
+    {
+      "source_original_sha256": "9becc1ebda95084d1ebfefcd5025dac05d146779e0cd08a4df8188915ffcb313",
+      "source_original_bytes": 69480,
+      "source_retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/current-evidence-contract-execution.json",
+      "status": "FAILED_CURRENT_EVIDENCE_CONTRACT",
+      "all_owned_processes_terminal": true,
+      "before_after_pins_match": true,
+      "argv": [
+        "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+        "--headless",
+        "--path",
+        "{SOURCE_REPO}",
+        "--script",
+        "{CAPTURE_SCRATCH}/headless_building_1_wing_returns_v2_current_release_evidence_contract.gd",
+        "--",
+        "--capture-root={CAPTURE_OUTPUT}",
+        "--receipt-mode=create",
+        "--release-binding={CAPTURE_SCRATCH}/current-release-binding.json",
+        "--capture-program={CAPTURE_SCRATCH}/building_1_wing_returns_v2_current_release_capture.gd"
+      ],
+      "cwd": "{SOURCE_REPO}",
+      "pid": 5578,
+      "exit_code": 1,
+      "elapsed_seconds": 2.046,
+      "log_path": "{CAPTURE_SCRATCH}/current-evidence-contract-create.log",
+      "log_sha256": "d2d8bfb1324885025165e17214f41dd30a99826d0a3ad868e14876a23494c282"
+    },
+    {
+      "source_original_sha256": "f20f64d812be3adaa8c2c8899486e0fdf0cae5aa64912f50b18d3a5ca578a77c",
+      "source_original_bytes": 69903,
+      "source_retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/current-evidence-contract-execution-004.json",
+      "status": "PASS_CURRENT_EVIDENCE_CONTRACT",
+      "all_owned_processes_terminal": true,
+      "before_after_pins_match": true,
+      "argv": [
+        "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+        "--headless",
+        "--path",
+        "{SOURCE_REPO}",
+        "--script",
+        "{CAPTURE_SCRATCH}/headless_building_1_wing_returns_v2_current_release_evidence_contract_004.gd",
+        "--",
+        "--capture-root={CAPTURE_OUTPUT}",
+        "--receipt-mode=create",
+        "--release-binding={CAPTURE_SCRATCH}/current-release-binding.json",
+        "--capture-program={CAPTURE_SCRATCH}/building_1_wing_returns_v2_current_release_capture.gd"
+      ],
+      "cwd": "{SOURCE_REPO}",
+      "pid": 8204,
+      "exit_code": 0,
+      "elapsed_seconds": 4.037,
+      "log_path": "{CAPTURE_SCRATCH}/current-evidence-contract-create-004.log",
+      "log_sha256": "32ce193fff50c55a6cf6efe9c1a7462b15e2e59c0ed55ce942c513c092ba0f43",
+      "verifier_revision_sha256": "9a4b8c2110d429159a72c8dd970e5c22032b7e90023998f27d1c783d5198f6c8"
+    }
+  ],
+  "package_summaries": [
+    {
+      "role": "package-owner",
+      "source_original_sha256": "d4397c9db8da2c183d21f727f7554f6b3fa9cdb1b6de84d414737b109801d8e9",
+      "source_original_bytes": 43644,
+      "source_retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-owner/current-package-proof-receipt.json",
+      "status": "PASS_FOR_B1_RETURNS_V2_CURRENT_PACKAGE_REVIEW",
+      "all_owned_processes_terminal": true,
+      "before_after_pins_match": true,
+      "checks": {
+        "architectures": {
+          "command": [
+            "/usr/bin/lipo",
+            "-archs",
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
+          ],
+          "cwd": "{PACKAGE_OWNER}",
+          "elapsed_seconds": 0.035,
+          "executable": "/usr/bin/lipo",
+          "exit_code": 0,
+          "log": "{PACKAGE_OWNER}/architectures.log",
+          "log_sha256": "9cb483fd3739db2602d4c5bf672f4af954dc6dad82b36e8642b034af58f11c11",
+          "observed_executable": "/usr/bin/lipo",
+          "output": "x86_64 arm64\n",
+          "pid": 15705,
+          "terminal": true
+        },
+        "headless_smoke": {
+          "command": [
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+            "--headless",
+            "--log-file",
+            "{PACKAGE_OWNER}/headless-smoke-engine.log",
+            "--",
+            "--mac-export-smoke"
+          ],
+          "cwd": "{PACKAGE_OWNER}",
+          "elapsed_seconds": 8.262,
+          "engine_log": "{PACKAGE_OWNER}/headless-smoke-engine.log",
+          "engine_log_sha256": "bca604ad0d5191eac85aa5fc956cb1bc4f68fe8787da3a099adcb6922700aeab",
+          "executable": "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+          "exit_code": 0,
+          "log": "{PACKAGE_OWNER}/headless-smoke-process.log",
+          "log_sha256": "bca604ad0d5191eac85aa5fc956cb1bc4f68fe8787da3a099adcb6922700aeab",
+          "observed_executable": "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+          "output": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nMAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=959 surfaces=974 triangles=70692 bodies=466 shapes=466 vegetation=124 seed=1414092337 batches=19 load_ms=5776\nMAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass\nMAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass\nMAC_EXPORT_JETPACK_PHASE: grounding_start\nMAC_EXPORT_JETPACK_PHASE: grounding_complete grounded=true\nMAC_EXPORT_JETPACK_PHASE: ascent_start y=3.457\nMAC_EXPORT_JETPACK_PHASE: ascent_complete rise=2.751 velocity=5.000\nMAC_EXPORT_JETPACK_PHASE: descent_threshold reached=true velocity=-1.500\nMAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps\nPASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent\n",
+          "pid": 15754,
+          "terminal": true
+        },
+        "mounted_current_graph": {
+          "command": [
+            "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+            "--headless",
+            "--main-pack",
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+            "--script",
+            "{SOURCE_REPO}/game/tests/headless_building_1_wing_returns_v2_current_package_contract.gd",
+            "--",
+            "--current-pck={SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+            "--current-pck-sha256=454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403"
+          ],
+          "cwd": "{PACKAGE_OWNER}",
+          "elapsed_seconds": 2.114,
+          "executable": "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "exit_code": 0,
+          "log": "{PACKAGE_OWNER}/mounted-current-graph.log",
+          "log_sha256": "0a93557a17b7d938dc44f417338766d5a9ce193cb7f332e02fcee3074aeb79ba",
+          "observed_executable": "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "output": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nPASS: mounted Building 1 wing-return v2 current PCK is exact at v9 9/213; remap-loaded PCK builders produce B1 13/13/12151 with 168 accepted center reveal triangles and 8244 trim triangles while D2 ownership/collision remains intact, complete headless/native release smoke is checked separately by the companion package verifier\n",
+          "pid": 15711,
+          "terminal": true
+        },
+        "mounted_privacy": {
+          "command": [
+            "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+            "--headless",
+            "--main-pack",
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+            "--script",
+            "{SOURCE_REPO}/game/tests/mounted_pck_content_audit.gd",
+            "--",
+            "--pck-audit-pck={SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+            "--pck-audit-pck-sha256=454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403",
+            "--pck-audit-manifest-sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+            "--pck-audit-content-sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
+          ],
+          "cwd": "{PACKAGE_OWNER}",
+          "elapsed_seconds": 2.311,
+          "executable": "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "exit_code": 0,
+          "log": "{PACKAGE_OWNER}/mounted-privacy.log",
+          "log_sha256": "39b986e180005d7b114b9200ed5e53436f6363f36e676cd00e92b239977c05e8",
+          "observed_executable": "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "output": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nPCK_CONTENT_AUDIT: pck_sha256=454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403 pck_bytes=66600060 virtual_files=925 generated_world=47 chunks=38 manifest_sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3 content_sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 rows=739/735/4 polyhaven_maps=18 vegetation_assets=15 vegetation_placements=124 naip_shrubs=22 pavement=427/208/219 movement=4/20/30/40 physical_space=true private_paths=0 private_raw=0 banned=0\nPASS: direct-mounted PCK matches the explicit package/world identities, complete generated artifact index, current resource graph, movement/input defaults, and exclusion boundary\n",
+          "pid": 15744,
+          "terminal": true
+        },
+        "native_smoke": {
+          "command": [
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+            "--log-file",
+            "{PACKAGE_OWNER}/native-smoke-engine.log",
+            "--",
+            "--mac-export-smoke"
+          ],
+          "cwd": "{PACKAGE_OWNER}",
+          "elapsed_seconds": 45.365,
+          "engine_log": "{PACKAGE_OWNER}/native-smoke-engine.log",
+          "engine_log_sha256": "b3c70aef8bff1c380f3b7149750a7065085dd274cdc8a08ca2734dc64a966075",
+          "executable": "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+          "exit_code": 0,
+          "log": "{PACKAGE_OWNER}/native-smoke-process.log",
+          "log_sha256": "b3c70aef8bff1c380f3b7149750a7065085dd274cdc8a08ca2734dc64a966075",
+          "observed_executable": "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+          "output": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\nMetal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)\n\nMAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=959 surfaces=974 triangles=70692 bodies=466 shapes=466 vegetation=124 seed=1414092337 batches=19 load_ms=5240\nMAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass\nMAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass\nMAC_EXPORT_JETPACK_PHASE: grounding_start\nMAC_EXPORT_JETPACK_PHASE: grounding_complete grounded=true\nMAC_EXPORT_JETPACK_PHASE: ascent_start y=3.457\nMAC_EXPORT_JETPACK_PHASE: ascent_complete rise=2.751 velocity=5.000\nMAC_EXPORT_JETPACK_PHASE: descent_threshold reached=true velocity=-1.500\nMAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps\nPASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent\n",
+          "pid": 15867,
+          "terminal": true
+        },
+        "plist_info": {
+          "command": [
+            "/usr/bin/plutil",
+            "-convert",
+            "json",
+            "-o",
+            "-",
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/Info.plist"
+          ],
+          "cwd": "{PACKAGE_OWNER}",
+          "elapsed_seconds": 0.014,
+          "executable": "/usr/bin/plutil",
+          "exit_code": 0,
+          "log": "{PACKAGE_OWNER}/plist-info.log",
+          "log_sha256": "d03754ffd35a64863b112e0cbd85ee5855a1a70eb2f9760599891a0ca661ce8a",
+          "observed_executable": "/usr/bin/plutil",
+          "output": "{\"LSMinimumSystemVersionByArchitecture\":{\"arm64\":\"13.00\",\"x86_64\":\"11.00\"},\"CFBundleName\":\"Treasure Island First Playable\",\"NSHumanReadableCopyright\":\"Private hobby project\",\"DTXcode\":\"1420\",\"DTSDKName\":\"macosx13.1\",\"DTSDKBuild\":\"22C55\",\"CFBundleDevelopmentRegion\":\"English\",\"CFBundleVersion\":\"0.1.0\",\"LSArchitecturePriority\":[\"arm64\",\"x86_64\"],\"NSPrincipalClass\":\"NSApplication\",\"DTPlatformName\":\"macosx\",\"CFBundlePackageType\":\"APPL\",\"CFBundleIconFile\":\"icon.icns\",\"CFBundleSupportedPlatforms\":[\"MacOSX\"],\"CFBundleShortVersionString\":\"0.1.0\",\"NSHighResolutionCapable\":true,\"CFBundleInfoDictionaryVersion\":\"6.0\",\"CFBundleExecutable\":\"Treasure Island First Playable\",\"CFBundleIdentifier\":\"local.treasure-island.first-playable\",\"LSApplicationCategoryType\":\"public.app-category.games\",\"DTPlatformVersion\":\"13.1\",\"DTXcodeBuild\":\"14C18\",\"CFBundleDisplayName\":\"Treasure Island First Playable\",\"CFBundleSignature\":\"TreasureIsland\",\"DTPlatformBuild\":\"14C18\"}",
+          "pid": 15707,
+          "terminal": true
+        },
+        "plist_privacy": {
+          "command": [
+            "/usr/bin/plutil",
+            "-convert",
+            "json",
+            "-o",
+            "-",
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy"
+          ],
+          "cwd": "{PACKAGE_OWNER}",
+          "elapsed_seconds": 0.009,
+          "executable": "/usr/bin/plutil",
+          "exit_code": 0,
+          "log": "{PACKAGE_OWNER}/plist-privacy.log",
+          "log_sha256": "69843538f97f7c593274c5c4087d53c28f166ed146fb5328af2ba5e8cb666e4f",
+          "observed_executable": "/usr/bin/plutil",
+          "output": "{\"NSPrivacyTracking\":false}",
+          "pid": 15709,
+          "terminal": true
+        },
+        "signature": {
+          "command": [
+            "/usr/bin/codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "--verbose=4",
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app"
+          ],
+          "cwd": "{PACKAGE_OWNER}",
+          "elapsed_seconds": 0.303,
+          "executable": "/usr/bin/codesign",
+          "exit_code": 0,
+          "log": "{PACKAGE_OWNER}/signature.log",
+          "log_sha256": "7f5a372122280be13abf57e44f41bffabd643cb991f91343c568e5b303b93d79",
+          "observed_executable": "/usr/bin/codesign",
+          "output": "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app: valid on disk\n{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app: satisfies its Designated Requirement\n",
+          "pid": 15699,
+          "terminal": true
+        }
+      },
+      "complete_internal_smokes": {
+        "headless": {
+          "full_internal_smoke_pass": true,
+          "jetpack_ascent_velocity_mps": 5.0,
+          "jetpack_minimum_velocity_mps": -1.5,
+          "jetpack_rise_m": 2.751,
+          "jetpack_slow_descent_m": 0.3,
+          "negative_controls_rejected": 17,
+          "player_grounded": true,
+          "telemetry": [
+            "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=959 surfaces=974 triangles=70692 bodies=466 shapes=466 vegetation=124 seed=1414092337 batches=19 load_ms=5776",
+            "MAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass",
+            "MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass",
+            "MAC_EXPORT_JETPACK_PHASE: grounding_start",
+            "MAC_EXPORT_JETPACK_PHASE: grounding_complete grounded=true",
+            "MAC_EXPORT_JETPACK_PHASE: ascent_start y=3.457",
+            "MAC_EXPORT_JETPACK_PHASE: ascent_complete rise=2.751 velocity=5.000",
+            "MAC_EXPORT_JETPACK_PHASE: descent_threshold reached=true velocity=-1.500",
+            "MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps",
+            "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent"
+          ],
+          "world": {
+            "bodies": 466,
+            "context_records": 4,
+            "meshes": 959,
+            "records": 735,
+            "shapes": 466,
+            "surfaces": 974,
+            "triangles": 70692
+          },
+          "world_load_ms": 5776
+        },
+        "native": {
+          "full_internal_smoke_pass": true,
+          "jetpack_ascent_velocity_mps": 5.0,
+          "jetpack_minimum_velocity_mps": -1.5,
+          "jetpack_rise_m": 2.751,
+          "jetpack_slow_descent_m": 0.3,
+          "negative_controls_rejected": 17,
+          "player_grounded": true,
+          "telemetry": [
+            "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=959 surfaces=974 triangles=70692 bodies=466 shapes=466 vegetation=124 seed=1414092337 batches=19 load_ms=5240",
+            "MAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass",
+            "MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass",
+            "MAC_EXPORT_JETPACK_PHASE: grounding_start",
+            "MAC_EXPORT_JETPACK_PHASE: grounding_complete grounded=true",
+            "MAC_EXPORT_JETPACK_PHASE: ascent_start y=3.457",
+            "MAC_EXPORT_JETPACK_PHASE: ascent_complete rise=2.751 velocity=5.000",
+            "MAC_EXPORT_JETPACK_PHASE: descent_threshold reached=true velocity=-1.500",
+            "MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps",
+            "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent"
+          ],
+          "world": {
+            "bodies": 466,
+            "context_records": 4,
+            "meshes": 959,
+            "records": 735,
+            "shapes": 466,
+            "surfaces": 974,
+            "triangles": 70692
+          },
+          "world_load_ms": 5240
+        }
+      },
+      "source_images_are_package_pixels": false
+    },
+    {
+      "role": "package-independent",
+      "source_original_sha256": "7099f83ca19c6560ee9cb7b8b653d97739afa12e65295f2bd9c1d5ae0989957d",
+      "source_original_bytes": 43894,
+      "source_retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-independent/current-package-proof-receipt.json",
+      "status": "PASS_FOR_B1_RETURNS_V2_CURRENT_PACKAGE_REVIEW",
+      "all_owned_processes_terminal": true,
+      "before_after_pins_match": true,
+      "checks": {
+        "architectures": {
+          "command": [
+            "/usr/bin/lipo",
+            "-archs",
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
+          ],
+          "cwd": "{PACKAGE_INDEPENDENT}",
+          "elapsed_seconds": 0.023,
+          "executable": "/usr/bin/lipo",
+          "exit_code": 0,
+          "log": "{PACKAGE_INDEPENDENT}/architectures.log",
+          "log_sha256": "9cb483fd3739db2602d4c5bf672f4af954dc6dad82b36e8642b034af58f11c11",
+          "observed_executable": "/usr/bin/lipo",
+          "output": "x86_64 arm64\n",
+          "pid": 18191,
+          "terminal": true
+        },
+        "headless_smoke": {
+          "command": [
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+            "--headless",
+            "--log-file",
+            "{PACKAGE_INDEPENDENT}/headless-smoke-engine.log",
+            "--",
+            "--mac-export-smoke"
+          ],
+          "cwd": "{PACKAGE_INDEPENDENT}",
+          "elapsed_seconds": 8.412,
+          "engine_log": "{PACKAGE_INDEPENDENT}/headless-smoke-engine.log",
+          "engine_log_sha256": "827b11b331e9be909d70aa716985fca2d55c1dbfd721f2f82f29200fc245b769",
+          "executable": "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+          "exit_code": 0,
+          "log": "{PACKAGE_INDEPENDENT}/headless-smoke-process.log",
+          "log_sha256": "827b11b331e9be909d70aa716985fca2d55c1dbfd721f2f82f29200fc245b769",
+          "observed_executable": "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+          "output": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nMAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=959 surfaces=974 triangles=70692 bodies=466 shapes=466 vegetation=124 seed=1414092337 batches=19 load_ms=5861\nMAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass\nMAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass\nMAC_EXPORT_JETPACK_PHASE: grounding_start\nMAC_EXPORT_JETPACK_PHASE: grounding_complete grounded=true\nMAC_EXPORT_JETPACK_PHASE: ascent_start y=3.457\nMAC_EXPORT_JETPACK_PHASE: ascent_complete rise=2.751 velocity=5.000\nMAC_EXPORT_JETPACK_PHASE: descent_threshold reached=true velocity=-1.500\nMAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps\nPASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent\n",
+          "pid": 18208,
+          "terminal": true
+        },
+        "mounted_current_graph": {
+          "command": [
+            "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+            "--headless",
+            "--main-pack",
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+            "--script",
+            "{SOURCE_REPO}/game/tests/headless_building_1_wing_returns_v2_current_package_contract.gd",
+            "--",
+            "--current-pck={SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+            "--current-pck-sha256=454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403"
+          ],
+          "cwd": "{PACKAGE_INDEPENDENT}",
+          "elapsed_seconds": 1.956,
+          "executable": "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "exit_code": 0,
+          "log": "{PACKAGE_INDEPENDENT}/mounted-current-graph.log",
+          "log_sha256": "0a93557a17b7d938dc44f417338766d5a9ce193cb7f332e02fcee3074aeb79ba",
+          "observed_executable": "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "output": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nPASS: mounted Building 1 wing-return v2 current PCK is exact at v9 9/213; remap-loaded PCK builders produce B1 13/13/12151 with 168 accepted center reveal triangles and 8244 trim triangles while D2 ownership/collision remains intact, complete headless/native release smoke is checked separately by the companion package verifier\n",
+          "pid": 18197,
+          "terminal": true
+        },
+        "mounted_privacy": {
+          "command": [
+            "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+            "--headless",
+            "--main-pack",
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+            "--script",
+            "{SOURCE_REPO}/game/tests/mounted_pck_content_audit.gd",
+            "--",
+            "--pck-audit-pck={SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+            "--pck-audit-pck-sha256=454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403",
+            "--pck-audit-manifest-sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+            "--pck-audit-content-sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
+          ],
+          "cwd": "{PACKAGE_INDEPENDENT}",
+          "elapsed_seconds": 2.275,
+          "executable": "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "exit_code": 0,
+          "log": "{PACKAGE_INDEPENDENT}/mounted-privacy.log",
+          "log_sha256": "39b986e180005d7b114b9200ed5e53436f6363f36e676cd00e92b239977c05e8",
+          "observed_executable": "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "output": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\n\nPCK_CONTENT_AUDIT: pck_sha256=454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403 pck_bytes=66600060 virtual_files=925 generated_world=47 chunks=38 manifest_sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3 content_sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 rows=739/735/4 polyhaven_maps=18 vegetation_assets=15 vegetation_placements=124 naip_shrubs=22 pavement=427/208/219 movement=4/20/30/40 physical_space=true private_paths=0 private_raw=0 banned=0\nPASS: direct-mounted PCK matches the explicit package/world identities, complete generated artifact index, current resource graph, movement/input defaults, and exclusion boundary\n",
+          "pid": 18206,
+          "terminal": true
+        },
+        "native_smoke": {
+          "command": [
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+            "--log-file",
+            "{PACKAGE_INDEPENDENT}/native-smoke-engine.log",
+            "--",
+            "--mac-export-smoke"
+          ],
+          "cwd": "{PACKAGE_INDEPENDENT}",
+          "elapsed_seconds": 8.979,
+          "engine_log": "{PACKAGE_INDEPENDENT}/native-smoke-engine.log",
+          "engine_log_sha256": "8e66cc9347f1b7a6383ed2517762fc58947fb2652ca083f8d9a325057f067c9d",
+          "executable": "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+          "exit_code": 0,
+          "log": "{PACKAGE_INDEPENDENT}/native-smoke-process.log",
+          "log_sha256": "8e66cc9347f1b7a6383ed2517762fc58947fb2652ca083f8d9a325057f067c9d",
+          "observed_executable": "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+          "output": "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org\nMetal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)\n\nMAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=959 surfaces=974 triangles=70692 bodies=466 shapes=466 vegetation=124 seed=1414092337 batches=19 load_ms=5695\nMAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass\nMAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass\nMAC_EXPORT_JETPACK_PHASE: grounding_start\nMAC_EXPORT_JETPACK_PHASE: grounding_complete grounded=true\nMAC_EXPORT_JETPACK_PHASE: ascent_start y=3.457\nMAC_EXPORT_JETPACK_PHASE: ascent_complete rise=2.751 velocity=5.000\nMAC_EXPORT_JETPACK_PHASE: descent_threshold reached=true velocity=-1.500\nMAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps\nPASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent\n",
+          "pid": 18225,
+          "terminal": true
+        },
+        "plist_info": {
+          "command": [
+            "/usr/bin/plutil",
+            "-convert",
+            "json",
+            "-o",
+            "-",
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/Info.plist"
+          ],
+          "cwd": "{PACKAGE_INDEPENDENT}",
+          "elapsed_seconds": 0.01,
+          "executable": "/usr/bin/plutil",
+          "exit_code": 0,
+          "log": "{PACKAGE_INDEPENDENT}/plist-info.log",
+          "log_sha256": "d03754ffd35a64863b112e0cbd85ee5855a1a70eb2f9760599891a0ca661ce8a",
+          "observed_executable": "/usr/bin/plutil",
+          "output": "{\"LSMinimumSystemVersionByArchitecture\":{\"arm64\":\"13.00\",\"x86_64\":\"11.00\"},\"CFBundleName\":\"Treasure Island First Playable\",\"NSHumanReadableCopyright\":\"Private hobby project\",\"DTXcode\":\"1420\",\"DTSDKName\":\"macosx13.1\",\"DTSDKBuild\":\"22C55\",\"CFBundleDevelopmentRegion\":\"English\",\"CFBundleVersion\":\"0.1.0\",\"LSArchitecturePriority\":[\"arm64\",\"x86_64\"],\"NSPrincipalClass\":\"NSApplication\",\"DTPlatformName\":\"macosx\",\"CFBundlePackageType\":\"APPL\",\"CFBundleIconFile\":\"icon.icns\",\"CFBundleSupportedPlatforms\":[\"MacOSX\"],\"CFBundleShortVersionString\":\"0.1.0\",\"NSHighResolutionCapable\":true,\"CFBundleInfoDictionaryVersion\":\"6.0\",\"CFBundleExecutable\":\"Treasure Island First Playable\",\"CFBundleIdentifier\":\"local.treasure-island.first-playable\",\"LSApplicationCategoryType\":\"public.app-category.games\",\"DTPlatformVersion\":\"13.1\",\"DTXcodeBuild\":\"14C18\",\"CFBundleDisplayName\":\"Treasure Island First Playable\",\"CFBundleSignature\":\"TreasureIsland\",\"DTPlatformBuild\":\"14C18\"}",
+          "pid": 18193,
+          "terminal": true
+        },
+        "plist_privacy": {
+          "command": [
+            "/usr/bin/plutil",
+            "-convert",
+            "json",
+            "-o",
+            "-",
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy"
+          ],
+          "cwd": "{PACKAGE_INDEPENDENT}",
+          "elapsed_seconds": 0.006,
+          "executable": "/usr/bin/plutil",
+          "exit_code": 0,
+          "log": "{PACKAGE_INDEPENDENT}/plist-privacy.log",
+          "log_sha256": "69843538f97f7c593274c5c4087d53c28f166ed146fb5328af2ba5e8cb666e4f",
+          "observed_executable": "/usr/bin/plutil",
+          "output": "{\"NSPrivacyTracking\":false}",
+          "pid": 18195,
+          "terminal": true
+        },
+        "signature": {
+          "command": [
+            "/usr/bin/codesign",
+            "--verify",
+            "--deep",
+            "--strict",
+            "--verbose=4",
+            "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app"
+          ],
+          "cwd": "{PACKAGE_INDEPENDENT}",
+          "elapsed_seconds": 0.252,
+          "executable": "/usr/bin/codesign",
+          "exit_code": 0,
+          "log": "{PACKAGE_INDEPENDENT}/signature.log",
+          "log_sha256": "7f5a372122280be13abf57e44f41bffabd643cb991f91343c568e5b303b93d79",
+          "observed_executable": "/usr/bin/codesign",
+          "output": "{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app: valid on disk\n{SOURCE_REPO}/build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app: satisfies its Designated Requirement\n",
+          "pid": 18188,
+          "terminal": true
+        }
+      },
+      "complete_internal_smokes": {
+        "headless": {
+          "full_internal_smoke_pass": true,
+          "jetpack_ascent_velocity_mps": 5.0,
+          "jetpack_minimum_velocity_mps": -1.5,
+          "jetpack_rise_m": 2.751,
+          "jetpack_slow_descent_m": 0.3,
+          "negative_controls_rejected": 17,
+          "player_grounded": true,
+          "telemetry": [
+            "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=959 surfaces=974 triangles=70692 bodies=466 shapes=466 vegetation=124 seed=1414092337 batches=19 load_ms=5861",
+            "MAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass",
+            "MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass",
+            "MAC_EXPORT_JETPACK_PHASE: grounding_start",
+            "MAC_EXPORT_JETPACK_PHASE: grounding_complete grounded=true",
+            "MAC_EXPORT_JETPACK_PHASE: ascent_start y=3.457",
+            "MAC_EXPORT_JETPACK_PHASE: ascent_complete rise=2.751 velocity=5.000",
+            "MAC_EXPORT_JETPACK_PHASE: descent_threshold reached=true velocity=-1.500",
+            "MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps",
+            "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent"
+          ],
+          "world": {
+            "bodies": 466,
+            "context_records": 4,
+            "meshes": 959,
+            "records": 735,
+            "shapes": 466,
+            "surfaces": 974,
+            "triangles": 70692
+          },
+          "world_load_ms": 5861
+        },
+        "native": {
+          "full_internal_smoke_pass": true,
+          "jetpack_ascent_velocity_mps": 5.0,
+          "jetpack_minimum_velocity_mps": -1.5,
+          "jetpack_rise_m": 2.751,
+          "jetpack_slow_descent_m": 0.3,
+          "negative_controls_rejected": 17,
+          "player_grounded": true,
+          "telemetry": [
+            "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=959 surfaces=974 triangles=70692 bodies=466 shapes=466 vegetation=124 seed=1414092337 batches=19 load_ms=5695",
+            "MAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass",
+            "MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass",
+            "MAC_EXPORT_JETPACK_PHASE: grounding_start",
+            "MAC_EXPORT_JETPACK_PHASE: grounding_complete grounded=true",
+            "MAC_EXPORT_JETPACK_PHASE: ascent_start y=3.457",
+            "MAC_EXPORT_JETPACK_PHASE: ascent_complete rise=2.751 velocity=5.000",
+            "MAC_EXPORT_JETPACK_PHASE: descent_threshold reached=true velocity=-1.500",
+            "MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps",
+            "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent"
+          ],
+          "world": {
+            "bodies": 466,
+            "context_records": 4,
+            "meshes": 959,
+            "records": 735,
+            "shapes": 466,
+            "surfaces": 974,
+            "triangles": 70692
+          },
+          "world_load_ms": 5695
+        }
+      },
+      "source_images_are_package_pixels": false
+    }
+  ],
+  "failure_and_sorting_corrections": {
+    "initial_motion_failure": {
+      "pid": 4619,
+      "exit_code": 1,
+      "zero_motion_frames_written": true,
+      "reason": "Inherited motion requires --fixed-fps-receipt=60 user receipt; first driver omitted it although actual engine fixed60 was present.",
+      "recovery": "Run only two missing motion modes with that required user argument plus the same actual engine flag first; keep successful stills."
+    },
+    "initial_evidence_failure": {
+      "pid": 5578,
+      "exit_code": 1,
+      "no_receipt_written": true,
+      "reason": "Godot JSON FLOAT byte counts and observed INT byte counts made raw nested container equality false despite all49 exact path/hash/byte values.",
+      "recovery": "New downstream verifier004 uses exact ordered/schema/path/hash comparison and validated nonnegative integral counts; two positives and17 negatives passed; old003 preserved."
+    },
+    "corrected_manual_handoff_error": {
+      "earlier_tree": "6fc06fd8ce8372cdd7175c1ddbd371e6eaddc7a1f2b044064a9930c55f77095e",
+      "earlier_identical_png_count": 22,
+      "reason": "pathlib component ordering zipped against string-ordered references mispaired motion entries.",
+      "correction": "Use explicit relative-path string sort for trees and exact path-keyed image comparison; actual all46 images unchanged and byte-identical.",
+      "reviewers_notified": true
+    }
+  },
+  "raw_retention_inventory": "private-provenance-retention.json",
+  "independent_evidence_replay_derived": {
+    "source_original_sha256": "d52068a27e2c5b0983f98b05ef8b749c768366e73d18f09a4b6c003592133e00",
+    "source_original_bytes": 2373,
+    "source_retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/evidence-independent/execution-receipts.json",
+    "jobs": [
+      {
+        "name": "inventory004-controls",
+        "command": [
+          "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "--headless",
+          "--path",
+          "{SOURCE_REPO}",
+          "--script",
+          "{EVIDENCE_INDEPENDENT}/inventory004-probe.gd"
+        ],
+        "cwd": "{SOURCE_REPO}",
+        "pid": 9363,
+        "exit_code": 0,
+        "terminal": true,
+        "elapsed_seconds": 0.912,
+        "log": "{EVIDENCE_INDEPENDENT}/inventory004-controls.log",
+        "log_sha256": "ec21c10aa5465f5f038c280c5397561eaf7f7ea6fc31f5ab7403ad0b0db40daa"
+      },
+      {
+        "name": "sealed-evidence-verify",
+        "command": [
+          "{SOURCE_REPO}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+          "--headless",
+          "--path",
+          "{SOURCE_REPO}",
+          "--script",
+          "{CAPTURE_SCRATCH}/headless_building_1_wing_returns_v2_current_release_evidence_contract_004.gd",
+          "--",
+          "--capture-root={CAPTURE_OUTPUT}",
+          "--receipt-mode=verify",
+          "--release-binding={CAPTURE_SCRATCH}/current-release-binding.json",
+          "--capture-program={CAPTURE_SCRATCH}/building_1_wing_returns_v2_current_release_capture.gd",
+          "--receipt-sha256=b75d7943dee504ddc984d5a6c8fd954d11442e7b60f21637183dc9b2d77f42c3"
+        ],
+        "cwd": "{SOURCE_REPO}",
+        "pid": 9364,
+        "exit_code": 0,
+        "terminal": true,
+        "elapsed_seconds": 3.789,
+        "log": "{EVIDENCE_INDEPENDENT}/sealed-evidence-verify.log",
+        "log_sha256": "32ce193fff50c55a6cf6efe9c1a7462b15e2e59c0ed55ce942c513c092ba0f43"
+      }
+    ],
+    "summary_is_not_raw_execution_evidence": true
+  }
+}

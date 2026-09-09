@@ -7,7 +7,7 @@ const DEFAULT_LOADER_PATH := "res://game/scripts/world/facades/facade_runtime_re
 const REGISTRY_SCHEMA_VERSION := "ti.facade-runtime-registry/9"
 const ADAPTER_CONTRACT_SCHEMA_VERSION := "ti.facade-runtime-adapter-contracts/8"
 const CATALOG_SCHEMA_VERSION := "ti.facade-recognition-catalog/9"
-const COMPILER_VERSION := "1.8.0"
+const COMPILER_VERSION := "1.8.1"
 const LOADER_API_VERSION := "ti.facade-runtime-registry-loader/8"
 const UNKNOWN_VERSION_POLICY := "reject"
 const EXPECTED_UNIT_COUNT := 213
@@ -73,7 +73,7 @@ const BUILDING_1_SOURCE_BY_RECEIVER := {
 	"building:w1222720021:wall": "w1222720021",
 }
 const BUILDING_1_PUBLIC_FRONT_CONFIG_PATH := "res://game/resources/facades/building_1_public_front_believability.json"
-const BUILDING_1_PUBLIC_FRONT_CONFIG_SHA256 := "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
+const BUILDING_1_PUBLIC_FRONT_CONFIG_SHA256 := "99117e1af118592db1d1cfa932b44014862cb8be4f47d0b3ea519e24f9e591fb"
 const BUILDING_1_RUNTIME_ASSETS := [
 	"res://game/resources/facades/building_1_hero_model.json",
 	BUILDING_1_PUBLIC_FRONT_CONFIG_PATH,
@@ -1599,7 +1599,7 @@ func _validate_d2_1441_behavior_contract(contract: Dictionary) -> bool:
 		and int(geometry.get("world_records", -1)) == 735
 		and int(geometry.get("world_mesh_instances", -1)) == 959
 		and int(geometry.get("world_surfaces", -1)) == 974
-		and int(geometry.get("world_triangles", -1)) == 69252
+		and int(geometry.get("world_triangles", -1)) == 70692
 		and int(geometry.get("world_static_bodies", -1)) == 466
 		and int(geometry.get("world_shapes", -1)) == 466
 		and str(ownership.get("live_ownership_signature", "")) == D2_1441_OWNERSHIP_SIGNATURE

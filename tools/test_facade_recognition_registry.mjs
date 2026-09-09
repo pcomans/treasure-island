@@ -357,8 +357,8 @@ for (const adapter of registry.active_runtime_adapters.filter((candidate) => ["b
   assert(adapter.active_receiver_scope.coverage === "whole_direct_wall_receiver", `${adapter.adapter_id} is not scoped to its exact direct receiver`);
   assert(adapter.active_runtime_contract.config_summary.target.tower_remains_separately_reviewable === true, `${adapter.adapter_id} config summary collapses the tower`);
   assert(adapter.runtime_assets.length === 11 && adapter.runtime_asset_projections.length === 0, `${adapter.adapter_id} does not account for its hero script, two configs, and eight exact-current materials`);
-  assert(adapter.runtime_assets.some((asset) => asset.path === "res://game/resources/facades/building_1_public_front_believability.json" && asset.sha256 === "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"), `${adapter.adapter_id} omits the exact current public-front runtime config`);
-  assert(adapter.active_runtime_contract.public_front_config_sha256 === "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806", `${adapter.adapter_id} public-front contract hash drifted`);
+  assert(adapter.runtime_assets.some((asset) => asset.path === "res://game/resources/facades/building_1_public_front_believability.json" && asset.sha256 === "99117e1af118592db1d1cfa932b44014862cb8be4f47d0b3ea519e24f9e591fb"), `${adapter.adapter_id} omits the exact current public-front runtime config`);
+  assert(adapter.active_runtime_contract.public_front_config_sha256 === "99117e1af118592db1d1cfa932b44014862cb8be4f47d0b3ea519e24f9e591fb", `${adapter.adapter_id} public-front contract hash drifted`);
 }
 const building3Adapter = registry.active_runtime_adapters.find((adapter) => adapter.receiver_key === "building:w34313540:wall");
 const building3AssetPaths = building3Adapter.runtime_assets.map((asset) => asset.path).sort();
@@ -473,7 +473,7 @@ assert(stableJson(d21441Behavior.acceptance_contract) === stableJson({
   visual_motion_manifest_sha256: D2_1441_ACCEPTANCE_RECORD.visual_motion_manifest_sha256,
   wall_and_roof_are_one_physical_unit: true,
 }), "D2 1441 behavior acceptance closure drifted");
-assert(d21441Behavior.geometry_contract.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE && d21441Behavior.geometry_contract.world_records === 735 && d21441Behavior.geometry_contract.world_mesh_instances === 959 && d21441Behavior.geometry_contract.world_surfaces === 974 && d21441Behavior.geometry_contract.world_triangles === 69252 && d21441Behavior.geometry_contract.world_static_bodies === 466 && d21441Behavior.geometry_contract.world_shapes === 466, "D2 1441 exact-current integration topology drifted");
+assert(d21441Behavior.geometry_contract.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE && d21441Behavior.geometry_contract.world_records === 735 && d21441Behavior.geometry_contract.world_mesh_instances === 959 && d21441Behavior.geometry_contract.world_surfaces === 974 && d21441Behavior.geometry_contract.world_triangles === 70692 && d21441Behavior.geometry_contract.world_static_bodies === 466 && d21441Behavior.geometry_contract.world_shapes === 466, "D2 1441 exact-current integration topology drifted");
 assert(d21441Behavior.geometry_contract.visual_geometry_signature === "b91b373e3bb8238a6f73f05734ef48b3429ae5654eddce89b1981ee41ee89195" && d21441Behavior.geometry_contract.visual_mesh_instances === 9 && d21441Behavior.geometry_contract.visual_surfaces === 9 && d21441Behavior.geometry_contract.visual_triangles === 1578 && d21441Behavior.geometry_contract.topology_delta_triangles === 1536, "D2 1441 visual/delta geometry drifted");
 assert(d21441Behavior.replacement_contract.mapped_public_run_indices.join(",") === "10,12,13,15" && d21441Behavior.replacement_contract.protected_run_indices.join(",") === "0,1,2,3,4,5,6,7,8,9,11,14" && d21441Behavior.replacement_contract.partial_pair_allowed === false && d21441Behavior.replacement_contract.fallback_allowed === false && d21441Behavior.replacement_contract.generic_stack_allowed === false, "D2 1441 mapped/protected or paired fail-closed contract drifted");
 assert(d21441Behavior.ownership_contract.live_ownership_signature === "fcad9968be3d0c9094adef5dcc9c7fabfb7cf1754f780897188a4ec362187e4d" && d21441Behavior.ownership_contract.wall_collision_triangles === 32 && d21441Behavior.ownership_contract.roof_collision_triangles === 10 && d21441Behavior.ownership_contract.wall_is_sole_spray_receiver === true && d21441Behavior.ownership_contract.roof_is_wall_spray_receiver === false && d21441Behavior.ownership_contract.roof_world_solid_landing === true && d21441Behavior.ownership_contract.decorative_collision_triangles === 0 && d21441Behavior.ownership_contract.decorative_navigation_nodes === 0, "D2 1441 collision/navigation/spray/landing ownership drifted");
@@ -1359,6 +1359,35 @@ expectRegistryFailure(
   },
   "review receipt pin drifted",
 );
+
+// The accepted quality packet is upstream of authority; it grants no new recognition or release claim.
+assert(report.input_hashes.active_building_1_returns_v2_acceptance_receipt_sha256 === inputs.runtimeContracts.heroReturnsAcceptanceSha256 &&
+  report.input_hashes.active_building_1_public_front_config_sha256 === inputs.runtimeContracts.heroPublicFrontConfigSha256,
+"source-only current report does not expose the accepted B1 returns receipt and config bindings");
+for (const mutate of [
+  (contract) => { contract.heroReturnsAcceptanceSha256 = "0".repeat(64); },
+  (contract) => { contract.heroReturnsAcceptance.recognition_credit_delta = 1; },
+  (contract) => { contract.heroReturnsAcceptance.recognition_metric = "10/213"; },
+  (contract) => { contract.heroReturnsAcceptance.reviews[2].token = "HOLD"; },
+  (contract) => { contract.heroReturnsAcceptance.source_inputs[0].sha256 = "0".repeat(64); },
+  (contract) => { contract.heroReturnsAcceptance.candidate_verification.input_inventory.pop(); },
+  (contract) => { contract.heroReturnsAcceptance.candidate_verification.input_inventory[0].sha256 = "0".repeat(64); },
+  (contract) => { contract.heroReturnsAcceptance.motion_reuse.copied_byte_identically = false; },
+  (contract) => { contract.heroReturnsAcceptance.proof_boundaries.full_current_release_pass = true; },
+  (contract) => { contract.heroReturnsAcceptance.proof_boundaries.source_renders_are_package_pixels = true; },
+]) {
+  const candidateInputs = { ...inputs, runtimeContracts: structuredClone(inputs.runtimeContracts) };
+  mutate(candidateInputs.runtimeContracts);
+  expectThrown(() => validateActiveHeroDispatch(candidateInputs), "exact source-only acceptance receipt drifted", "B1 returns quality acceptance");
+}
+for (const mutate of [
+  (contract) => { contract.heroPublicFrontConfig.geometry_production_inference_m.wing_window_jamb_frame_overlap = 0.02; },
+  (contract) => { contract.heroAdapterText += "\n# changed accepted source\n"; },
+]) {
+  const candidateInputs = { ...inputs, runtimeContracts: structuredClone(inputs.runtimeContracts) };
+  mutate(candidateInputs.runtimeContracts);
+  expectThrown(() => validateActiveHeroDispatch(candidateInputs), "accepted executable source drifted", "B1 returns executable source");
+}
 
 console.log(
   `PASS facade recognition registry: ${EXPECTED.recognition_units} physical units / ${EXPECTED.direct_wall_receivers} receivers / ${EXPECTED.source_records} source records / ${EXPECTED.visible_wall_runs} runs / 9/213 independently accepted reference-recognizable physical units / ${EXPECTED.legacy_adapter_receivers} claim-neutral legacy adapters + ${EXPECTED.active_runtime_adapter_receivers} exact-current active adapters / ${packageBoundary.projected_direct_asset_count} sanitized asset projections / 2 separated identity corrections / 60 reference dependencies; catalog ${sha256File(PATHS.catalog)}; registry ${registrySha256}`,

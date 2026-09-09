@@ -1,7 +1,7 @@
 {
   "build_contract": {
-    "authoring_catalog_sha256": "dc6d121d48621f98a203f2fea458316a46446a11e5f2a77d4064694322b2baa2",
-    "compiler_version": "1.8.0",
+    "authoring_catalog_sha256": "6987ab1db4d58096ae9189803a48b8015dca8154a23b55470ab166af76a2d50c",
+    "compiler_version": "1.8.1",
     "runtime_registry_schema_version": "ti.facade-runtime-registry/9",
     "unknown_version_policy": "reject"
   },
@@ -25,7 +25,7 @@
     "api_version": "ti.facade-runtime-registry-loader/8",
     "instantiation_authorized": false,
     "loader_path": "res://game/scripts/world/facades/facade_runtime_registry_loader.gd",
-    "loader_sha256": "32e63c8774c0589856f15ac2ca0e7458e1cdce1403380e50a6ba99bd5185bd26",
+    "loader_sha256": "6571e85914e604e16a8294cc8835dba033454907a3bc1da8bb9d9fd36e35789f",
     "projection_execution_policy": "forbidden",
     "unknown_version_policy": "reject"
   },
@@ -142,7 +142,7 @@
         {
           "path": "res://game/scripts/world/facades/building_1_hero_model.gd",
           "resource_kind": "gdscript",
-          "sha256": "e5b11fc7f971ea33bb38c84d3106f8883de0486774f58a5a8310d49d56aa55a5"
+          "sha256": "ce2f21dab02163b5f45d9d7e457f5d0ce96089bc55cca6e65aa9924c9f199c5a"
         }
       ],
       "integration_state": "package_safe_ready_for_integration",
@@ -156,7 +156,7 @@
         },
         {
           "path": "res://game/resources/facades/building_1_public_front_believability.json",
-          "sha256": "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
+          "sha256": "99117e1af118592db1d1cfa932b44014862cb8be4f47d0b3ea519e24f9e591fb"
         },
         {
           "path": "res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
@@ -192,7 +192,7 @@
         },
         {
           "path": "res://game/scripts/world/facades/building_1_hero_model.gd",
-          "sha256": "e5b11fc7f971ea33bb38c84d3106f8883de0486774f58a5a8310d49d56aa55a5"
+          "sha256": "ce2f21dab02163b5f45d9d7e457f5d0ce96089bc55cca6e65aa9924c9f199c5a"
         }
       ],
       "source_key": "r16681702"
@@ -206,7 +206,7 @@
         {
           "path": "res://game/scripts/world/facades/building_1_hero_model.gd",
           "resource_kind": "gdscript",
-          "sha256": "e5b11fc7f971ea33bb38c84d3106f8883de0486774f58a5a8310d49d56aa55a5"
+          "sha256": "ce2f21dab02163b5f45d9d7e457f5d0ce96089bc55cca6e65aa9924c9f199c5a"
         }
       ],
       "integration_state": "package_safe_ready_for_integration",
@@ -220,7 +220,7 @@
         },
         {
           "path": "res://game/resources/facades/building_1_public_front_believability.json",
-          "sha256": "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"
+          "sha256": "99117e1af118592db1d1cfa932b44014862cb8be4f47d0b3ea519e24f9e591fb"
         },
         {
           "path": "res://game/resources/materials/world/building_1/building_1_bluegrey_glass.tres",
@@ -256,7 +256,7 @@
         },
         {
           "path": "res://game/scripts/world/facades/building_1_hero_model.gd",
-          "sha256": "e5b11fc7f971ea33bb38c84d3106f8883de0486774f58a5a8310d49d56aa55a5"
+          "sha256": "ce2f21dab02163b5f45d9d7e457f5d0ce96089bc55cca6e65aa9924c9f199c5a"
         }
       ],
       "source_key": "w1222720021"
@@ -924,7 +924,7 @@
           "world_static_bodies": 466,
           "world_surfaces": 974,
           "world_topology_scope": "current_integration_topology",
-          "world_triangles": 69252
+          "world_triangles": 70692
         },
         "ownership_contract": {
           "decorative_collision_triangles": 0,

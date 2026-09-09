@@ -11757,3 +11757,576 @@ No approach selected.
   receipts, then proceed from the preserved checkpoint instead of recreating
   finished gates. Use new B1 v2 identities while keeping rejected v1 evidence
   immutable and serialize heavyweight Godot verification.
+
+## 2026-09-08 — Bounded independent preparation-efficiency audit
+
+### Efficiency reviewer (`/root/handoff_state_review`)
+
+#### What worked well
+
+- Reviewed only the other agents' current preparation: root's B1/1444
+  coordination summaries, `next_building_prep`'s factual tool-sequence report,
+  and its exact final retrospective section in the isolated provenance tree.
+  Direct collaboration transcripts were unavailable; B1 had no current RETRO
+  entry yet. This sample does not establish tool timings or B1 rerun counts.
+- The preparation agent followed the exact 1444 material dependency to its
+  later package audit and checked retained hashes, avoiding a repair for an
+  already-cleared blocker. Its rerun after documentation edits and B1's wait
+  for the clean checkpoint are justified checks/dependencies, not waste.
+  Independent source/mechanical/visual acceptance gates remain necessary.
+
+#### What did not work well
+
+- The preparation agent reports one overbroad discovery search that produced
+  excessive truncated history; its RETRO confirms exact consumer paths and
+  the named later audit resolved the question. No other repeated low-value
+  cycle is established by this bounded sample.
+- Root reported a heavy-test reservation before confirming actual test activity
+  while 1444's import request queued. This is a scheduling uncertainty, not
+  measured idle time or proof that an active test was unnecessary.
+
+#### What the team should change next time
+
+- Try one reversible search-order change for the next dependency question:
+  inspect the exact consumer and latest named audit before expanding the
+  search. Compare the one reported overbroad/truncated read in this round with
+  the next round's count, aiming for zero while still resolving the dependency.
+  Record the result in the existing RETRO; add no monitoring or reporting tool.
+
+
+## 2026-09-08 — Building 1 wing-return v2 implementation
+
+### Implementation owner (`/root/b1_v2_artist`)
+
+#### What worked well
+
+- Native north/default and south/changed-light v1-versus-baseline images exposed
+  the repeated black exterior bracket directly. Replacing the 30 black backings
+  with four light strips beneath each unchanged perimeter frame keeps the
+  existing glazing and the complete 567-box accepted trim prefix exact. The
+  geometry measures +1,440 render-only triangles versus accepted v9, with the
+  same draw batches and byte-identical wall/roof collision.
+- New v2 source/hero/global contracts preserve the frozen v1 programs and audits.
+  Final focused, hero, gameplay, full-runtime, 14-checkpoint/262.349 m ordinary,
+  and 3,449.107 m whole-island gates passed. Root's provisional reviewer caught
+  the light/dark material-semantic gap before freeze; exact material hashes,
+  loaded scalar semantics, and recolor/roughness/swap controls now cover it.
+- No export, capture, Git transaction, or authority promotion was performed.
+  Candidate pixels and independent bar-raiser improvement judgment remain due.
+
+#### What did not work well
+
+- Early broad B1 search and concatenated reference reads truncated output and
+  required smaller rereads. A contract-authoring batch also aborted on a guessed
+  loader filename before writing; an exact file search resolved it.
+- The first measurement exposed one test-only untyped-array argument; a typed
+  conversion fixed it. A placeholder trim hash was deliberately awaiting that
+  measurement. No product iteration or repeated heavy route run was needed.
+- Root temporarily reserved the heavy-test slot during editing. Explicitly
+  reporting that no Godot process was live allowed 1444 import/setup to proceed.
+
+#### What the team should change next time
+
+- Inspect exact consumers and the latest named audit first. During the later
+  material-gate question, two exact material reads and focused contract edits
+  resolved it with zero truncated broad reads; retain this search-order trial.
+- Preserve source-test validity across test-only fixes: rerun the changed
+  focused contract, keeping completed unchanged-product gameplay/runtime/route
+  results. Reserve heavy Godot slots at actual start and release on terminal
+  handles. Keep independent source, mechanical, visual and release gates.
+
+## 2026-09-08 — Independent Building 1 v2 source/mechanical gate
+
+### Independent source/mechanical reviewer (`/root/handoff_state_review`)
+
+#### What worked well
+
+- Inspected actual return/glazing arrays, accepted-prefix hashes, and loaded
+  material checks before freeze. The path-only trim/glass gap was closed with
+  scalar/hash checks and material-copy mutations before independent execution.
+- Reverified the five frozen candidate files and 34 dependency pins before and
+  after six sequential independent gates. Focused, hero, gameplay, full runtime,
+  ordinary route, and whole-island route all passed without a repair or rerun.
+- Bound the durable source verdict to completed source/log inputs only; future
+  package/capture programs can consume it without a cyclic audit dependency.
+
+#### What did not work well
+
+- My first combined contract read exceeded the output budget and truncated;
+  comparing suffix files to their exact existing oracles and reading the new
+  geometry functions in bounded sections recovered the relevant scope.
+
+#### What the team should change next time
+
+- Begin suffix-contract review with the source diff and changed function bodies.
+  Check loaded material values as well as resource names before freezing tests.
+- Retain the exact-input freeze and release the heavy slot as soon as the last
+  process reaches a verified terminal state; documentation can then finish
+  independently. Keep this mechanical PASS separate from visual improvement.
+
+
+## 2026-09-08 — Building 1 v2 proof-program preparation
+
+### Proof preparation (`/root/b1_v2_artist`)
+
+- What worked well: new v2 capture/package/evidence programs preserve every
+  frozen v1 file; static comparison proved 21 capture functions byte-exact,
+  two capture bodies changed only schema/log labels, and every view/light/
+  fixed-60 trajectory constant exact. Explicit unsealed pins prevent premature
+  use. Mounted semantics additionally cover all B1 mesh bytes and actual light/
+  dark scalar materials.
+- What did not work well: no downstream program has executable validation yet;
+  source-only preparation is not package proof. Its own RETRO append was
+  deferred while the independent reviewer owned the shared-file slot.
+- What to change next time: retain the acyclic source audit -> observed package
+  -> sealed capture/package programs -> evidence receipt sequence; finish
+  deferred shared-file logging immediately on slot release.
+
+
+## 2026-09-08 — Periodic Building 1 efficiency audit
+
+### Independent efficiency reviewer (`/root/next_building_prep`)
+
+- What worked well: the named artist/reviewer RETRO entries, candidate and
+  proof-preparation snapshots, and six independent logs were sufficient for a
+  bounded audit. Required independent tests and package/receipt freeze checks
+  advanced distinct gates. No duplicate heavy route or unjustified hash loop
+  was evidenced; focused reruns followed actual fixes or the material gap.
+- What did not work well: both lanes reported one truncated combined read and
+  recovery through smaller reads. An editing-only heavy-slot reservation was
+  corrected by releasing the slot; the records do not establish wasted time or
+  unnecessary readiness turns. While persisting this entry, I guessed RETRO.md
+  once before resolving the actual path with an exact filename search.
+- What to change next time: root accepted one bounded experiment: begin the next
+  suffix-contract review with the exact diff and changed functions/constants,
+  expanding unchanged oracle sections only as needed. Target zero truncated
+  contract reads against this round's two reported instances while preserving
+  every independent gate. The reviewer will record the actual outcome in its
+  existing RETRO entry. Use discovery/RETRO_LOG.md directly for future appends.
+  No product, test, Git, Godot or visual-acceptance work was part of this audit.
+
+
+## 2026-09-08 — Building 1 v2 private package and deterministic evidence
+
+### Package/capture owner (`/root/b1_v2_artist`)
+
+- What worked well: all five source-gated inputs and the independent source
+  audit stayed exact. The unique ignored v2 app has seven files, strict valid
+  ad-hoc signing, x86_64/arm64 architecture, tracking false, and bundle identity
+  `742f325cd7634d01474105f7c2e01b6f254d72385a78341768148b9b87fc2897`.
+  PCK `59b37cf856dd1ece6aaadeee5c6278327997394339bb8450253193cbd89728da`
+  passed exact mounted B1/D2 geometry, materials, collision and privacy checks:
+  923 virtual files, 47 generated artifacts, 38 chunks, and zero private/banned
+  paths or raw content. Native signed-release world-ready telemetry measures
+  735/959/974/70692/466/466 with expected printed visual/movement defaults.
+- The approved composite package receipt is
+  `/private/tmp/b1-returns-v2-package-proof-001/package-proof-receipt.json`, SHA
+  `20a54f0a274d1f750aa4d2c5d48cb6cde34c7b95357426b0766c4d1e7a0e0b04`.
+  The new external verifier binds exact app/source/program identities before
+  and after, actual commands/processes/logs/exits, mounted component/privacy
+  checks, and native release-world telemetry. Seventeen negative controls reject
+  changed counts/defaults, missing/duplicate records, unrelated errors, exits and
+  time bounds. The historical combined release smoke rejects with exit 1 and is
+  retained as failure; the log does not prove the triangle count was its sole
+  failed predicate, unprinted predicates, or the subsequent jetpack smoke. A
+  future postpromotion app still requires the complete current release smoke.
+- What did not work well: the editor's full-world package load correctly failed
+  its editor-only raw-input check. Installed release/debug templates do not
+  support external script/path overrides, so they could not replace that harness.
+  The separate mounted-component plus native-world proof resolves applicability
+  without changing shipped bytes or loading source runtime code. One diagnostic
+  relative-path edit failed and the following old command ran once unchanged;
+  use absolute paths and verify edits before launching dependent commands. The
+  first baseline source archive also omitted seven reviewed markdown inputs.
+  Its startup failed before any pixels existed; a single bounded dependency scan
+  restored all seven exact accepted files, supplementing six raw audit inputs.
+- Bounded timing experiment: all six first capture jobs passed individually, but
+  rehearsal001 failed exact paired still-camera comparison by 0.06–0.13 mm
+  against the unchanged 0.05 mm tolerance. Both motion pairs already passed with
+  zero pose delta and matching ticks. Only the two still sets were rerun at
+  fixed 60 FPS, preserving camera, light, trajectory, product and program bytes.
+  Rehearsal001 remains intact. Rehearsal002 contains the new 44 still PNGs/two
+  manifests and 48 original motion PNGs/four manifests copied byte-identically
+  from001; `motion-reuse-001-to-002.json` in the owner's scratch directory records
+  their original provenance. No valid motion, gameplay, or route was rerun.
+- Result: `/private/tmp/b1-returns-v2-rehearsal-002` passes full receipt creation
+  and replay: 92 original PNGs plus six manifests, 98 inputs/70,133,929 bytes,
+  exact static pairing and zero motion pose delta. Receipt SHA
+  `cae3db47439fa0e4e70fdbb12a37daa7c431cd7bed6574433a701da740073bb0`;
+  ordered input tree SHA
+  `5046e9bb1aaec4b79ecc0649087a33e54c6b87de291d1376ed3ad76bce7d6dff`.
+  Native Metal views, both lights, byte-derived grayscale, stock-controller
+  motion, spray, roof landing, tower, rear and context remain unchanged. These
+  are source-checkout pixels with separate exact package proof, not PCK renders.
+  Composite receipt pins must pass before any capture mode; 50 invalid pin
+  substitutions fail closed. No tolerance was loosened and no candidate was
+  self-graded. The three frozen v1 programs and rehearsal004 remain untouched.
+- Ordinary startup limit: the exact signed app ran with no arguments as owned
+  PID89838, with an OS-observed visible layer-zero 1280x832 window and no logged
+  errors. Scoped window capture failed, so no native player-pixel or interaction
+  claim follows. The process path was reverified and only owned89838 received
+  SIGTERM; its session is terminal. The observation receipt is in
+  `/private/tmp/b1-returns-v2-ordinary-startup-001`. All owned Godot jobs are
+  terminal. The complete source/app/program/log/reuse/evidence handoff is
+  `work/b1-v2-001/candidate-package-capture-handoff.json` under the task scratch.
+- What to change next time: prepare the full editor-only audit dependency closure
+  before baseline startup, use fixed 60 FPS for paired stills as well as motion,
+  and preserve the explicit source-render/native-package boundary. Next is an
+  independent receipt/mechanics audit followed by a separate pixel-first bar
+  raiser. No Git transaction, authority change, promotion or recognition credit
+  occurred; previous assets remain the quality floor.
+
+## 2026-09-08 — Independent Building 1 v2 package/rehearsal mechanics
+
+### Mechanical reviewer (`/root/handoff_state_review`)
+
+- What worked well: one fresh composite package run and one sealed evidence
+  replay passed; the heavy slot was released immediately at the last terminal.
+  Exact source graph, 52 reused motion files, 23 unchanged capture methods and
+  frozen rejected004 bytes closed independently. Both native log streams were
+  checked while retaining the historical smoke rejection and source-pixel boundary.
+- What did not work well: an earlier provisional search used a guessed review
+  filename and returned truncated text. Final scratch inventory checks initially
+  used component-wise `Path` ordering and assumed a baseline-local generator;
+  the contract requires bytewise relative-path strings and the existing runner
+  uses one external sealed generator. These were review-script assumptions, not
+  candidate failures; no runtime test or capture was repeated to resolve them.
+- What to change next time: read the exact retained runner before constructing
+  scratch checks, and use the receipt's explicit serialization from the outset.
+  Narrow file/function reads resolved these issues. The durable mechanical audit
+  passes with +0 credit; independent visual review and later full release gates
+  remain mandatory. No product, proof, authority or original evidence was edited.
+
+
+## 2026-09-08 — Conditional Building 1 v2 promotion preparation
+
+### Read-only preparation owner (`/root/b1_v2_artist`)
+
+- What worked well: the existing B1 compiler/loader consumers and latest D2 v9
+  semantic/release audits identified the conditional transaction without any
+  product, authority, Git, export, launch or test execution. Existing v9/v8
+  schemas suffice for a scoped B1 quality refresh at unchanged 9/213. Existing
+  B1/tower recognition records, D2 component behavior and frozen capture-time
+  bridges remain intact; only exact-current runtime hashes/topology expectations
+  and their checked consumers advance if visual acceptance is earned. A new
+  durable acceptance receipt must bind unchanged accepted source pixels, motion
+  reuse provenance and independent reviews without rewriting candidate labels
+  or importing private absolute-path metadata into the durable packet.
+- What did not work well: three oversized output batches truncated nested
+  catalog/contract content; guessed validator filenames also caused avoidable
+  missing-path reads. Exact field/function excerpts and resolved filenames
+  recovered the required context. No failed test, repeated readiness scan or
+  frozen-gate rerun was performed during this preparation. The earlier advisory
+  zero-truncation experiment was not met.
+- What to change next time: enforce the revised read budget before execution:
+  resolve exact filenames, select explicit JSON fields or exact changed
+  functions, and cap each displayed section to roughly 120 lines/6,000
+  characters. Page explicitly when needed; never dump whole nested adapter
+  objects or concatenate full contracts. Preserve completeness through scoped
+  follow-up reads and report any truncation.
+- Result and boundary: root received the conditional file set and ordered
+  authority, semantic audit, export, full current smoke/regression, independent
+  release reviews, clean commit/push and visible-launch sequence. The candidate
+  mechanical receipt audit has since passed; the bar raiser is still evaluating
+  pixels. This entry grants no visual acceptance or promotion. The RETRO slot
+  is released after this append; stand by for the visual verdict without new
+  readiness scans or gate execution.
+
+
+## 2026-09-08 — Independent Building 1 v2 visual bar-raiser review
+
+### Independent visual reviewer (`/root/next_building_prep`)
+
+- What worked well: after the separate mechanical receipt PASS, I inspected all
+  92 current native originals, including both ordered approach sequences, and
+  reopened four rejected-v1 originals. The verdict is PASS for the bounded
+  wing-return improvement: attached pale jamb/sill thickness is clearer in
+  ordinary near-oblique and spray views without v1's external dark brackets.
+  Center, tower, rear, roof and context hierarchy remain intact. Exact reviewed
+  image hashes and the limits are durable in
+  evidence/reviews/building-1-wing-returns-v2-rehearsal-002-INDEPENDENT_VISUAL_AUDIT.md
+  (SHA-256 98911852167577c750b6b75cb868e228a16f04c1d81e3827e43d5abc23a5c082).
+- What did not work well: whole-front gain is modest, changed light flattens the
+  local depth cue, and supplied motion covers sampled groups rather than every
+  intervening frame. One helper intended to list capture order also printed the
+  telemetry array and truncated; selecting only the captures key recovered the
+  24 required labels immediately. No gate or new runtime run followed that read.
+- What to change next time: query only the exact manifest key needed and retain
+  original-image batch inspection. Preserve this modest but visible local gain
+  without inventing stronger dark borders or enlarging quiet wing details for
+  presentation. Keep source-render pixels separate from package semantics and
+  ordinary-window observation; full release remains a separate gate. This
+  review grants +0 recognition and performs no authority or product change.
+
+## 2026-09-08 — Bounded B1 capture and visual-review efficiency sample
+
+### Independent efficiency reviewer (`/root/handoff_state_review`)
+
+- Scope: other agents' completed package/capture/preparation and visual-review
+  rounds only; my own execution is excluded. Evidence is the existing artist
+  runner/process/receipt logs, exact RETRO entries and the visual reviewer's
+  compact activity report. Full reasoning/transcripts, cost and unobserved
+  elapsed time are unavailable and are not inferred.
+- What worked well: artist scratch `work/b1-v2-001/23-rehearsal-receipt-create.log`
+  records failed still pairing; `24-rehearsal-002-receipt-create.log` and
+  `25-rehearsal-002-receipt-verify.log` record the matching successful receipt.
+  `run-fixed-stills.py` restricts the retry to fixed 60 FPS stills;
+  `motion-reuse-001-to-002.json` binds all 52 reused files (48 motion PNGs and
+  four manifests). No valid motion was recaptured. Receipt replay, negative
+  controls and independent quality gates were necessary validation, not waste.
+  The visual reviewer viewed 92 current originals plus four rejected originals
+  and reused the mechanical audit without new mechanics/Godot runs.
+- What did not work well: the artist RETRO records one unchanged command after
+  a failed relative-path edit. Package runner applicability probes were bounded
+  diagnosis; the composite receipt's deliberately retained native exit 1 is not
+  another failed release attempt. Exact-field selection helped recover from
+  oversized reads but did not consistently prevent them: the visual reviewer's
+  manifest helper printed nested telemetry and truncated once, then a captures-
+  only read immediately recovered 24 required labels. This is recorded in the
+  adjacent independent visual-review RETRO, not inferred from timing.
+- One reversible next-round change, accepted by `/root`: before executing a
+  document/JSON inspection, choose named fields or an explicit character page
+  and cap aggregate tool-call output near 6000 characters, including all batched
+  reads rather than each page alone. Preserve all mandatory gates and useful
+  image inspection. Measure the next substantive inspection round by zero tool
+  truncations and zero recovery reads caused solely by lost output; revise the
+  page allocation if it creates more navigation without that improvement.
+
+## 2026-09-08 — B1 returns v2 accepted authority integration (+0), awaiting independent semantic audit
+
+Author: `/root/b1_v2_artist`; packet assembly: `/root/b1_v2_artist/b1_acceptance_packet`.
+
+- **Authorization and scope:** Root accepted the durable independent source, mechanical and visual audits (source `beced0b7…7958`, mechanics `63a3ca33…f13b`, visual `98911852…c082`). The accepted gain is local pale jamb/sill depth; whole-front gain remains modest. Source-render, sampled-motion, reused-motion and candidate package proof limits remain explicit. Recognition stays **9/213 (+0)**; no complete release PASS is claimed.
+- **Completed:** Copied 98 reviewed inputs byte-identically into `evidence/first-playable/building-1-wing-returns-v2-accepted-2026-09-08-001`, preserving the original rehearsal receipt and adding a sanitized downstream acceptance receipt (`257f16bc314151054b120c2b87e6f8cb20577f5e4a7201478b58272a65dc23a4`). The packet contains 100 files / 70,195,021 bytes; original input tree remains `5046e9bb1aaec4b79ecc0649087a33e54c6b87de291d1376ed3ad76bce7d6dff`. Its independent standard-library builder/replay passed six tamper controls.
+- **Authority:** Compiler patch 1.8.1 retains catalog/runtime v9 and contracts/loader v8. Current B1 source/config closure pins now name the accepted source; the source-only report binds the acceptance receipt. Both B1 behavior contracts remain null and all 213 physical-unit records are unchanged. The existing sole D2-owned current whole-world topology field changes 69,252 to 70,692 triangles; D2 component geometry, ownership, recognition acceptance and frozen capture identities are unchanged. Five source-gated inputs, old v1 rejection lineage and D2 v9 capture-time programs remain byte-identical. A new current B1 focused bridge changes only current authority pins and adds accepted upstream receipts; frozen geometry/material/collision mutations remain intact.
+- **Validation:** Deterministic compiler write/check, registry and loader mutation suites, and exact B1 run ownership passed. Twelve new compiler negatives reject changed quality credit, receipt/review/input/reuse/boundary facts and changed accepted executable source. Ten serial Godot checks passed: current focused geometry, unchanged v2 hero, registry, loader, sanitization, startup, gameplay, unchanged v2 full runtime, ordinary 14-checkpoint route and whole-island route. Only affected Node and focused bridge checks were repeated after adding explicit source-report receipt/config bindings; valid runtime/routes were retained. All owned test processes are terminal and the heavy slot is released.
+- **Worked:** Disjoint packet preparation let implementation proceed without a proof dependency cycle. Semantic JSON comparison constrained runtime changes to two B1 closures, the single current whole-world triangle field and derived metadata. Current test documentation labels historical bridges rather than rewriting them.
+- **Did not work well:** Two early inspection batches still exceeded the display budget. Later commands selected exact fields and asserted the total character count before printing; no required validation was dropped. The source report receipt/config bindings should have been included before the first test round. Packet audit reading required multiple bounded pages; agreeing its receipt field names at dispatch would have avoided coordination overhead.
+- **Next:** Continue the zero-truncation experiment using named fields or a pre-capped <=6,000-character page across the entire tool batch. Independent authority review must pass before fresh exact-current export and complete release smoke, then separate release reviews. This round performed no export, launch, Git transaction or push.
+- **Exact handoff:** task scratch `work/b1-v2-001/authority-integration-handoff.json`, SHA-256 `9640dcb90d197dd469f053ff5f02603d23787564a60c4c1844ae19a9b55ae939`; it records all 17 current file hashes, five frozen inputs, preserved lineage and 19 successful check receipts.
+
+## 2026-09-08 — Independent B1 current authority semantics
+
+### Authority reviewer (`/root/handoff_state_review`)
+
+- What worked well: exact field comparison preserved all 213 unit records and
+  isolated only the intended B1 source closures/D2 current-world count. The
+  current bridge's 34 methods and executable body remain exact. All 10 independent
+  packet/compiler/Node/current-Godot checks passed, with full logs on disk and
+  the heavy slot released at the final terminal. Earlier unchanged routes and
+  candidate captures were reused without new runtime or rendering work.
+- What did not work well: the initial handoff overview listed verbose absolute
+  log paths; the complete text diff is about 60 KB and would have obscured the
+  semantic changes. Later reads selected exact fields or explicit character
+  pages, and stored the full diff locally; no truncated follow-up output or
+  recovery read was needed in those paged inspections.
+- What to change next time: start with compact names and semantic field deltas,
+  then page only changed executable functions within the aggregate output budget.
+  Preserve the acyclic acceptance-to-authority boundary and use a fresh current
+  release proof after export. This audit permits export preparation only, keeps
+  9/213 and +0 credit, and does not claim full release or ordinary-player pixels.
+
+## 2026-09-08 — B1 returns v2 exact-current package and complete smoke, awaiting independent package review
+
+Author: `/root/b1_v2_artist`.
+
+- **Authorization:** Root read the complete independent authority audit `building-1-wing-returns-v2-2026-09-08-INDEPENDENT_AUTHORITY_AUDIT.md`, SHA-256 `14b3e5e8b432b4feca522dd18b48d4a4bfbcd95f44e881ae381de39689f69469`, with raw `PASS_FOR_B1_RETURNS_V2_AUTHORITY_EXPORT`. All 51 audited authority/source/lineage inputs were verified before export and remained exact before/after package checks. Recognition remains **9/213 (+0)**.
+- **Fresh app:** Exported `build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app` once, exit 0 in 8.641 s. The strict signed universal app has seven files, bundle identity `fd91b1c5598dc2fe436a756eb5fb7561c96989fe18734c59580de92b13fa4171`. Current PCK is 66,600,060 bytes, SHA-256 `454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403`; executable SHA-256 `ac0aa612c576e039b04b743c2da5783fd0736a7312be4c88e31210b672845031`. Historical apps/programs/receipts were retained.
+- **Package proof:** New external current bridge preserves every existing candidate B1/D2 mesh, material, collision and ownership method byte-identically; only its run preflight changes and a current registry/plan graph check is added. Mounted JSON identities, remap-resolvable dependencies, null B1 behaviors, sole current D2 world scope, actual B1/D2 arrays, materials and ownership pass. Executable source SHA fields are provenance; no comparison mislabels exported GDC bytes as source text. Generic PCK privacy passes 925 virtual files, 47 generated files, 38 chunks, 739/735/4 rows and zero private paths/raw/banned resources. Strict signature, x86_64/arm64 inventory and NSPrivacyTracking=false checks pass.
+- **Complete release smoke:** The exact signed executable ran from source-free `/private/tmp/b1-returns-v2-current-package-proof-001` with its normal internal `--mac-export-smoke`, first headless then native Forward+/Metal. Both exited 0 and reached the complete terminal PASS, including player grounding, jetpack rise 2.751 m at 5 m/s, slow descent 0.300 m and minimum velocity −1.5 m/s. Headless took 8.262 s, native 45.365 s; world loads were 5,776 ms and 5,240 ms. Seventeen parser mutations per mode reject missing/duplicate/changed phase data, invalid player measurements, errors/timeouts and wrong exit status. Historical candidate exit 1 remains frozen and is not substituted for these full passes.
+- **Processes and next gate:** Every actual export/check process is terminal; the heavy slot is released. Commands, observed executable paths, logs/exits and before/after identities are bound in `/private/tmp/b1-returns-v2-current-package-proof-001/current-package-proof-receipt.json`, SHA-256 `d4397c9db8da2c183d21f727f7554f6b3fa9cdb1b6de84d414737b109801d8e9`. No fresh release pixels, external player screenshot, Git transaction or push occurred. Independent current package review precedes fresh release evidence and separate visual review.
+- **Small progress deliverable:** Copied only four accepted source-render originals (baseline/candidate whole front and north near) byte-identically into the task outputs `building-1-wing-returns-v2`, with a concise README preserving scoped visual/mechanical PASS, local jamb/sill gain, modest whole-front change, +0 and pending exact-current release limits. These are source renders, not packaged-app screenshots; no pixels were edited or newly captured. Exact copy facts are in task scratch `work/b1-v2-001/progress-deliverable-copies.json`.
+- **Worked:** Sequential current component/privacy checks and the real complete internal smoke replaced the historical candidate applicability bridge without changing source or templates. Native runtime 45.365 s was allowed to finish; no observation timeout triggered a restart.
+- **Did not work well:** The first verifier invocation failed at import, before any package subprocess, because host Python 3.14 plistlib/pyexpat expects a missing system libexpat symbol. The failed startup log is retained; using the established native plutil conversion resolved the harness dependency without re-exporting or repeating source regressions. A pre-execution display guard caught an oversized inspection page, which was explicitly paged; no tool output was truncated in this round.
+- **Next time:** Prepare new proof code in projectless scratch and preflight its imports before export, then seal observed app identities afterward. Keep inspection batches below 6,000 characters, and reserve heavy capacity around actual live processes.
+- **Exact handoff:** Task scratch `work/b1-v2-release-001/current-package-stage-handoff.json`, SHA-256 `7a58071b1a36093348064f3bc4c650fc18db91770ee283705027e5efda17ea03`. Main source/authority remains frozen for independent review.
+
+## 2026-09-08 — Independent current B1 package mechanical review
+
+### handoff_state_review — exact signed current release
+
+- What worked well: one sealed verifier run in a fresh source-free directory
+  passed all eight checks. Both headless and native release smokes completed
+  grounding/ascent/slow descent, with matching engine and merged stdout/stderr
+  logs and 17 rejected mutations each. The 51 authority/source/lineage inputs,
+  nine proof pins and seven app files stayed exact. Changed-function comparison
+  preserved all executable geometry/material/collision logic and identified one
+  trailing separator difference without rewriting frozen proofs. The audit is
+  `building-1-wing-returns-v2-current-package-2026-09-08-INDEPENDENT_MECHANICAL_AUDIT.md`;
+  fresh receipt SHA-256 is
+  `7099f83ca19c6560ee9cb7b8b653d97739afa12e65295f2bd9c1d5ae0989957d`.
+- What did not work well: two early inventory extracts exceeded the intended
+  aggregate output budget and truncated; explicit character pages then kept
+  later inspection bounded. Exact method equality also needed trailing
+  separator whitespace distinguished from executable-body equality.
+- Next time: limit the assembled output before printing, including constant
+  arrays, instead of relying on per-field caps or the tool's token truncation.
+  Preserve complete log receipts and compare only changed functions. No
+  unchanged source routes or captures were rerun. All owned processes ended;
+  fresh release pixels and independent visual acceptance remain the next gate.
+
+## 2026-09-08 — Independent current-release wrapper preflight HOLD
+
+### handoff_state_review — bounded pre-capture guard review
+
+- What worked well: exact binding checks and scratch subclasses with inherited
+  capture initialization disabled found the fixed60 guard failure before any
+  world load or evidence rendering. Godot consumes the real `--fixed-fps 60`
+  option before `OS.get_cmdline_args()` exposes arguments; the otherwise
+  identical preflight without that guard passes. Preserved the failed positive
+  probe and successful argument observation and returned a precise HOLD.
+  The durable note is
+  `building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_PREFLIGHT_HOLD.md`
+  (SHA-256 `815831abeb0ef32d9e1dc8234ffdc901d69f66dbdaf7b454e8f5957221dd6790`).
+- What did not work well: a short method lookup first assumed the parent entry
+  point was `_run`; its exact method index showed `_b1_run`. The intended
+  projection/invalid-input checks were skipped behind the failed positive
+  capture guard and are explicitly still pending.
+- Next time: validate how the engine exposes launch flags before making them a
+  mandatory guard, then test the positive path before downstream capture. Keep
+  the pre-execution aggregate output guard: this round had no truncated output.
+  Recheck only the narrow resealed fix and deferred controls; leave accepted
+  originals and unchanged render/controller/pairing methods intact.
+
+### 2026-09-08 — B1 current release capture fixed-60 preflight correction
+
+Owner: `b1_v2_artist`. Scope: downstream scratch wrappers only; no capture, source/product/authority/app/proof mutation, export, or Git action. Independent preflight HOLD `815831abeb0ef32d9e1dc8234ffdc901d69f66dbdaf7b454e8f5957221dd6790` caught that Godot consumes `--fixed-fps 60` before exposing `OS.get_cmdline_args()`. The initial wrapper could therefore never accept a valid launch. All five prior preparation files remain byte-identical under projectless scratch `work/b1-v2-release-capture-001/revisions/001-held-fixed-args`.
+
+A local no-render API probe found no exposed Engine fixed-FPS getter. The narrow replacement uses supported `OS.get_process_id()`, `OS.get_executable_path()`, and `OS.execute()` to observe `/bin/ps -ww -p <owned PID> -o command=`. It requires the actual executable prefix and exactly one engine-side `--fixed-fps 60` before the user-argument delimiter; a user marker cannot satisfy it. Existing capture/evidence override methods are unchanged. Only the shared preflight guard and two observation helpers changed, plus one explanatory binding metadata field.
+
+Validation: actual fixed-60 helper invocation passed and eight malformed/missing/duplicate/user-only/wrong-executable controls rejected. The isolated probe first failed to parse because its scaffold mixed spaces and tabs; its failure log is retained, the scaffold was corrected, and the terminal probe exited 0 in 0.67 seconds without loading the world or rendering. All 51 audited files, three parent programs, two audit pins, seven app files, two package receipts, and 49 accepted reference files still matched. No processes remain live. Independent complete-wrapper preflight/projection review remains pending; this entry claims neither capture success nor release visual acceptance.
+
+Sealed scratch revisions: binding `798953e00735f0456e75ee2643e2b82f75634a60ed09e3f9049ba074bc79fd32`; capture `10c9fd0aa81ae411e8c0abc731d3cd5d30c1f31243a159b801223b6b42828372`; verifier `b6e3649c8063d8763560b82741f4f7376a3ec7d22ea0608e90f2e5f2b1967134`; `preflight-behavior-diff-002.json` `95c520ba0c08eff48c831172061c6a4235b095c26b202662eb47de565aa81a8c`.
+
+Efficiency lesson: verify engine-consumed launch options through an observed local API before sealing a guard. This correction stayed within one mechanism and affected checks; no geometry, route, export, or pixel reruns were needed. Inspection output was bounded before display throughout this round.
+
+## 2026-09-08 — Independent current-release wrapper preflight HOLD 002
+
+### handoff_state_review — owned-launch boundary and projection controls
+
+- What worked well: a real argv-controlled launch exposed the flat-ps parser's
+  false acceptance of fixed60 text inside one spaced script pathname. Missing,
+  30, duplicate and user-only options correctly reject. The canonical fixed60
+  positive path and deferred observed topology/camera/receiver/viewport checks
+  run without rendering; projection leaves both input dictionaries unchanged.
+  Wrong-typed raw metadata rejects but emits interpreter diagnostics. The new
+  HOLD note preserves exact revisions, commands and logs, while the original
+  HOLD and all sealed product/evidence inputs remain intact.
+- What did not work well: the first probe used a relative executable spelling,
+  which the new path guard rejects. The canonical absolute path then reached
+  the intended controls. Process text loses argv boundaries, so a whitespace
+  split cannot establish that flag-looking words are engine options.
+- Next time: launch the exact absolute executable from the start, retain argv
+  receipts, and include path-contained markers in process-parser controls.
+  Use explicit type checks for invalid metadata; keep accepted observations
+  outside projection. All initial and later outputs respected the aggregate
+  guard. All owned processes are terminal; no render or source suite ran.
+
+Audit SHA-256: `105550cc14e6ae925157238adc09c4f606546eb7528ba282a852f561f4d08a9a`.
+
+
+## 2026-09-08 — next_building_prep / bounded B1 package-to-wrapper efficiency sample
+
+**Worked:** Six existing representative records show necessary independent guard work: the first HOLD found that Godot consumes `--fixed-fps 60` before exposing command-line arguments; the second found false acceptance of flag-looking text inside one spaced pathname in flattened process text. Both were caught before world load/render. The package export occurred once; the plistlib startup failure launched zero package subprocesses and was fixed with established plutil without re-export. The native smoke was allowed to finish once. Failed controls and historical proofs remain intact; no duplicate heavy rendering or non-live slot reservation is established by this sample.
+
+**Didn't:** Unverified launch-observation assumptions caused avoidable fix/reseal/review transitions. Minor probe scaffolding errors (mixed indentation, assumed parent method name, relative executable spelling) added corrections without advancing evidence. Root's extra coordination transitions are visible, but their duration/cost is not. The available receipts/logs and RETRO statements do not provide full reasoning transcripts, aggregate token costs or complete elapsed/cognitive-time measurements; no such costs are inferred.
+
+**Change next round — one reversible experiment:** Before sealing another launch wrapper, use the one known canonical absolute-executable/script/argument form and exercise that actual no-render invocation plus a path-contained flag-marker negative. Prefer that bounded launch requirement to generalized process-text parsing. Retain strict fixed60 evidence, all malformed-input controls and independent source/mechanical/visual/release gates.
+
+**Sample scope:** Existing current-package stage handoff, fixed60 correction draft, behavior-diff002 receipt, independent preflight RETRO, owned-launch helper probe, and latest relevant main RETRO entries. No extra test/capture/import/research ran, no own Dorm/visual work was assessed, and no new audit framework/report was created. Root accepted the single experiment before this append.
+
+### 2026-09-08 — B1 current release preflight canonical invocation correction
+
+Owner: `b1_v2_artist`. Independent review reproduced an actual no-fixed-FPS launch whose single script pathname contained `--fixed-fps 60`; `/bin/ps` flattens argument boundaries, so the previous flag-search guard accepted it. Reviewer receipt SHA `7db64a6627ec4ff41f3caebe6c1cfbbaf7cbedd79fe63e4677b864996105be64` and both held revisions remain intact.
+
+The bounded correction requires the exact owned invocation with `--fixed-fps 60` immediately after the executable, before every pathname or user argument. It compares the canonical capture or no-render probe command using actual project/script paths and user arguments; no shell parser was introduced. Evidence metadata now checks raw value types before equality so malformed String-versus-Dictionary input rejects cleanly. Capture methods, camera/controller/light/grayscale behavior, tolerances, all 51 source/authority/lineage pins, app/proof bytes, and 49 accepted reference inputs remain unchanged.
+
+Local actual canonical fixed60 and actual pathname-marker-without-flag probes passed their respective acceptance/rejection checks; owned PIDs 883/888 and driver session 35954 are terminal. No world load or rendering occurred. Revision 003 is sealed for independent affected controls and remaining preflight/projection checks: binding `a9fb95a17c1cbe3b7d9e1d29465a5df3f08ac364d83b80aa58f8f0ea09993cdc`, capture `e93d3899ff05f1ce8f15b0bfb79a96fab06cab97b81a4073c30cc291d205c632`, verifier `fb1f3b946367565ebaa16866b204d6c5247add17ca7029fed329f520cecc6c15`, report `cfc5265d01e8e9a83b757120153c0deebbaf1af9e67cfe0900fb7fcd29bf199f`.
+
+Accepted efficiency experiment: before sealing future launch wrappers, probe the exact absolute command and an actual path-contained flag marker once. Both were executed for this revision. Prior narrower negative controls did not cover pathname boundaries; this was a real preventable gap. No unrelated source, route, export, or capture reruns were added. Inspection output remained bounded before display. Capture remains gated on independent PASS.
+
+## 2026-09-08 — Independent current-release wrapper preflight PASS 003
+
+### handoff_state_review — canonical launch and metadata type guards
+
+- What worked well: the actual executing no-render subclass exercised the new
+  script-identity-bound guard. All seven owned launches exited zero: canonical
+  fixed60 and a valid user delimiter each pass 23 controls; absent, 30,
+  duplicate, user-only and pathname-contained markers reject. Eleven wrongly
+  typed metadata fields now reject without script diagnostics, and projection
+  leaves both in-memory inputs unchanged. Existing render/observation methods,
+  binding pins and both prior HOLD notes remain intact.
+- What did not work well: the earlier multi-instance probe shape could not be a
+  valid positive context for a guard bound to the actual --script path. The
+  affected probe had to execute as the capture subclass itself; inherited
+  initialization remained disabled to prevent rendering.
+- Next time: make the owned script/executable/argv context explicit at the start
+  of process-identity tests. Reuse unchanged mechanics and observed-field
+  findings; cap assembled output before every read. This round had no
+  truncation, failed process or unexpected diagnostic. All processes and the
+  heavy slot are released; root still coordinates actual capture.
+
+Audit SHA-256: `2dedc90f55b20820e35354f80b83a1a45faa68b4c15070c185a0a6e57c105f9a`.
+
+### 2026-09-08 — B1 exact-current release source capture and owner evidence gate
+
+Owner: `b1_v2_artist`. Authorized scope: three fresh fixed-60 native source-render jobs using independently approved revision003, then the sealed evidence contract; no historical baseline recapture, product/app/source/authority edits, canonical documentation writes, Git action, or ordinary launch. Independent final mechanical and visual release reviews remain pending. Recognition stays `9/213`, `+0`.
+
+Actual result: 46 fresh PNGs and three manifests under `/private/tmp/b1-returns-v2-current-release-001`; all 46 PNGs are byte-identical to their accepted v2 counterparts. The unchanged inherited static tolerance is 0.00005 m and motion tolerance 0.22 m; observed maximum motion pose delta is 0.0 m. Camera/controller/light/grayscale/spray/roof-landing/tower/rear/context behavior was inherited unchanged. These are source renders with separate exact signed-app proof, not package screenshots. Successful native stills/north/south jobs exited 0 in 23.906/15.864/15.260 seconds (PIDs 4441/5130/5275).
+
+Two bounded failures are retained. First, north PID 4619 exited 1 before motion output because the driver omitted the inherited `--fixed-fps-receipt=60` user argument, although the actual engine fixed60 flag was present and enforced. The successful 22 stills plus manifest were hash-bound and retained; only the two missing motion jobs ran after checking the exact inherited user-argument consumers. Second, verifier 003 PID 5578 exited 1 before receipt creation: JSON FLOAT byte counts and observed INT counts made nested inventory equality false despite all 49 exact path/hash/byte values. Original 003 is preserved. New downstream verifier 004 changes only that comparison/helper and its own receipt basename; it requires exact order, 49 entries, three exact fields, path/hash identities, and validated nonnegative integral byte counts. Two positives and 17 malformed inventory controls passed cleanly, then independent delta inspection authorized the affected evidence run. No pixels/manifests were rewritten or recaptured for this correction.
+
+Verifier 004 PID 8204 / session 19565 exited 0 in 4.037 seconds with `PASS_FOR_INDEPENDENT_CURRENT_RELEASE_EVIDENCE_REVIEW`. Receipt SHA `b75d7943dee504ddc984d5a6c8fd954d11442e7b60f21637183dc9b2d77f42c3`; canonical 49-input tree `341b6545fc22b103813fcd5a65f5487388bdce521ab43b89d0c42b214b7a0272`, 35,071,634 bytes. Final 50-file tree including receipt is `422076e3f9f41042feab1e68c7e7f0be540a0bbb54a57dddd698824a74c7160c`, 35,107,294 bytes. Exact argv, PIDs, exits, logs, preserved failure receipts, still-retention proof, all program hashes, and before/after pins are in projectless scratch `work/b1-v2-release-capture-001/current-release-evidence-handoff.json`, SHA `77c9ce5a21f595151e85020dbe2869f9384179adf74e7ff53421034e413a9e96`.
+
+Correction to the earlier manual handoff: tree `6fc06fd8ce8372cdd7175c1ddbd371e6eaddc7a1f2b044064a9930c55f77095e` and the claim that only 22 PNGs matched are superseded. Python pathlib component ordering was zipped with the binding's string-ordered list, mispairing motion files. Explicit relative-path string sorting and path-keyed comparisons establish the canonical tree above and all 46 equal PNGs. Root and both independent reviewers were informed; no source renders changed or reseeded.
+
+All 51 audited files, three parents, audit pins, seven app files, package receipts, capture 003 / binding 003 / verifier 003, and accepted 49 originals remain exact. All owned processes are terminal and the heavy slot is released. Efficiency lessons are specific: check the inherited required argument list before launch; cover JSON byte-number representation at the inventory boundary; compare image identities by exact relative path, and sort tree rows by that string rather than Path objects. Existing successful work was retained, and no source/package/export rerun was added. Inspection caps prevented oversized output before display.
+
+## 2026-09-08 — Independent current B1 release evidence mechanics
+
+### handoff_state_review — immutable fresh set and comparator004
+
+- What worked well: the narrow comparator review and 23 independent controls
+  preserve exact path/hash/order/schema while accepting equal integral JSON
+  byte counts. Sealed evidence replay passes without altering its receipt.
+  Exact relative-path byte comparison confirms all 46 image pairs equal; all
+  nonmetadata manifest values also match. Actual capture drivers/argv/logs and
+  118-entry before/after snapshots establish fresh generation and preservation
+  of the 23 successful current still files through the motion retry.
+- What did not work well: two initial extraction assumptions treated input
+  lists like small dictionaries; the aggregate guard stopped both large
+  outputs before printing. Type/length inspection then selected only the
+  needed fields. The owner's former zipped traversal comparison mixed path
+  ordering schemes; its correction is retrospective, not a new raw artifact.
+- Next time: inspect JSON container type before key extraction, compare files
+  by exact relative path, and keep string-sorted tree serialization explicit.
+  Preserve typed numeric equality without coercing malformed inventory values.
+  Reuse unchanged source/package/render gates. No capture or broad suite ran
+  here; all owned processes and the heavy slot are released.
+
+Audit SHA-256: `98ab5b0d5990bc9665a3ac335863d95ee34440b4cfd168558e573ec84d3243ae`.
+
+
+## 2026-09-08 — next_building_prep — independent B1 fresh-release visual review
+
+- **Worked:** Exact-relative-path SHA/length matching linked all 46 fresh PNGs to accepted originals and my previously recorded direct review; reused the complete ordered motion/still judgment without reopening identical files. Four still pairs had already been freshly opened. Final independent evidence mechanics passed before the durable visual verdict; substantive local jamb/sill improvement survives, whole-front gain remains modest, and source-render/package boundaries remain explicit. Scoped visual PASS, recognition 9/213, +0.
+- **Didn't work:** The artist's manual zipped-sort summary reported 24 changed motion files and an incorrect tree; my initial expected-count assertion therefore failed. The bounded diagnostic found all 46 exact-path pairs equal, with historical review hashes and supplied manifest hashes intact. This was a corrected handoff summary error, not a new visual defect or pixel mutation. No motion reinspection, test/capture rerun or product edit followed that false difference. The append initially used an incorrect assumed RETRO basename and stopped before any RETRO write; one exact filename query resolved it.
+- **Change:** For image reuse decisions, compare by exact relative-path keys and the sealed canonical tree before scheduling new pixel review; preserve the direct prior-review identity and state fresh versus reused opens explicitly. No additional audit framework or reduced visual coverage. Waiting held no heavy job or RETRO reservation.
+
+### 2026-09-08 — B1 durable current evidence closure and publication-review preparation
+
+Owner: `b1_v2_artist`. Root accepted the exact independent current evidence mechanical audit `98ab5b0d5990bc9665a3ac335863d95ee34440b4cfd168558e573ec84d3243ae` and visual audit `8f9123170532ca60f0ecd693e6675fdf0bc15008af68f3b2982bfff100767fed`, authorizing downstream archive/documentation work only. The scoped local pale jamb/sill improvement remains accepted with modest whole-front gain, recognition `9/213`, and `+0` credit.
+
+The new durable packet is `evidence/first-playable/building-1-wing-returns-v2-current-release-2026-09-08-001`: exact 50 raw capture files (49 inputs plus owner receipt), three unchanged external programs, and four small downstream copy/provenance/closure records. Every original capture/program byte is unchanged; accepted reference PNGs were not duplicated. The raw 50-file tree remains `422076e3f9f41042feab1e68c7e7f0be540a0bbb54a57dddd698824a74c7160c`. Original capture-time pending/status fields remain immutable; the downstream mechanical/visual notes establish the later result.
+
+Existing sanitization practice was followed with root's explicit agreement: 53 raw binding, driver, execution, failure-log, independent replay, and package-proof artifacts are copied byte-identically into ignored `build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001`. The durable retention inventory binds original hashes/byte sizes and repository-relative private locations. Derived summaries are labeled as sanitized summaries, preserve argument-array boundaries and non-path values, and are not presented as raw execution evidence. No raw machine-path exception or generalized builder was introduced. The closure SHA is `1459483fb45acb336f902d7bdbeae25b1d61a7ecd3a66564ffbf99c2c3b22d8a`.
+
+Applied the previously reviewed root README, PLAYTEST, and HUMAN drafts with the actual current app, evidence, and separate scoped PASS identities. They keep Git commit/push and exact ordinary visible launch pending. `HUMAN-001` remains pending with the same Apple M1 Pro owner recognition/input scope; Apple M2 technical verification does not substitute for owner acceptance. The task output comparison README now reports current evidence/visual PASS while preserving its four original PNGs exactly. All 51 frozen inputs, original handoff, historical audit/receipt bytes, and exact app/source/proof pins remain unchanged.
+
+The next gate is independent packet/documentation/publication-readiness review. The explicit pre-review Git inventory includes only B1/current-authority/proof/documentation changes and excludes the three generated historical v1 UID sidecars, Python bytecode cache, AVI/private build outputs, and unrelated lanes. No files were staged, no Git transaction or ordinary launch occurred, and no export/runtime suite was repeated. After readiness, root's permitted sequence is a reviewed primary commit/push, exact ordinary visible launch, then a small downstream status/receipt commit/push using actual observed identities; no guessed or self-referential commit hash is inserted now.
+
+## 2026-09-08 — handoff_state_review — independent B1 publication readiness
+
+- Reviewed the frozen 57-file downstream archive, 53 exact ignored private originals, derived provenance, complete canonical document diff/output README and explicit 206-in/4-out staging plan. Exact copies/trees, unchanged 51 upstream pins/app/reviews, HUMAN-001 scope and pending Git/ordinary-launch status pass. No source/runtime/capture gate was repeated; no Godot job or Git mutation occurred.
+- Issued `PASS_FOR_B1_RETURNS_V2_CURRENT_RELEASE_PUBLICATION_READINESS` in `evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_PUBLICATION_READINESS_AUDIT.md`. The four excluded UID/pyc artifacts may be byte-preserved into ignored retention by the Git owner. Keep the 57-file snapshot frozen and place actual later publication/launch outcomes in a new sibling receipt.
+- Efficiency: pre-execution aggregate guards prevented oversized output; several selected JSON combinations exceeded the budget and were reduced before printing. One list/dict shape assumption failed locally; explicit shape handling fixed it. The first independent path-substitution checker normalized the short alias before the longer alias, yielding false comparison failures; longest-prefix-first correction passed without touching frozen inputs. Next round, select one exact schema/field group up front and normalize longest aliases first. Full static receipts stay in existing task scratch; no new framework or runtime suite.

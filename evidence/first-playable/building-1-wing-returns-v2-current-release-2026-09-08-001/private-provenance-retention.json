@@ -1,0 +1,373 @@
+[
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/building_1_wing_returns_v2_current_release_capture.gd",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/building_1_wing_returns_v2_current_release_capture.gd",
+    "original_sha256": "e93d3899ff05f1ce8f15b0bfb79a96fab06cab97b81a4073c30cc291d205c632",
+    "original_bytes": 8238,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/capture-completion-motion-north.log",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/capture-completion-motion-north.log",
+    "original_sha256": "80e5294dec860a886aca10cd3c04223f4bce04922eb3535dba5f1a75309c16b6",
+    "original_bytes": 308,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/capture-completion-motion-south.log",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/capture-completion-motion-south.log",
+    "original_sha256": "5488819fdbc97a07e5bd919d8da50bbfe7d416c553c815093181fb4f81564570",
+    "original_bytes": 308,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/capture-motion-north.log",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/capture-motion-north.log",
+    "original_sha256": "bb02a8382a1dfebe334ea8c9e1722672bc7b08f98dbe0fa15cde8445cdbc0b31",
+    "original_bytes": 791,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/capture-stills.log",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/capture-stills.log",
+    "original_sha256": "3e0fda2d25b2c9d7a4b2b5551674d08da08ebbd0dfe9d2564ba1947855a02ae2",
+    "original_bytes": 2407,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/current-capture-execution.json",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/current-capture-execution.json",
+    "original_sha256": "3500427970b481396908911e9c304d215c3ae7821bc9778169d8fa8edea43999",
+    "original_bytes": 72814,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/current-evidence-contract-create-004.log",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/current-evidence-contract-create-004.log",
+    "original_sha256": "32ce193fff50c55a6cf6efe9c1a7462b15e2e59c0ed55ce942c513c092ba0f43",
+    "original_bytes": 314,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/current-evidence-contract-create.log",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/current-evidence-contract-create.log",
+    "original_sha256": "d2d8bfb1324885025165e17214f41dd30a99826d0a3ad868e14876a23494c282",
+    "original_bytes": 600,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/current-evidence-contract-execution-004.json",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/current-evidence-contract-execution-004.json",
+    "original_sha256": "f20f64d812be3adaa8c2c8899486e0fdf0cae5aa64912f50b18d3a5ca578a77c",
+    "original_bytes": 69903,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/current-evidence-contract-execution.json",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/current-evidence-contract-execution.json",
+    "original_sha256": "9becc1ebda95084d1ebfefcd5025dac05d146779e0cd08a4df8188915ffcb313",
+    "original_bytes": 69480,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/current-motion-completion-execution.json",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/current-motion-completion-execution.json",
+    "original_sha256": "caeebecb78459aa35d6148877fb6816494cdc166c6c4018d32b2030096b6f421",
+    "original_bytes": 77704,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/current-release-binding.json",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/current-release-binding.json",
+    "original_sha256": "a9fb95a17c1cbe3b7d9e1d29465a5df3f08ac364d83b80aa58f8f0ea09993cdc",
+    "original_bytes": 25208,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/current-release-evidence-handoff.json",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/current-release-evidence-handoff.json",
+    "original_sha256": "77c9ce5a21f595151e85020dbe2869f9384179adf74e7ff53421034e413a9e96",
+    "original_bytes": 11913,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/diagnose-reference-inventory.log",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/diagnose-reference-inventory.log",
+    "original_sha256": "c865f407ade0943ad3826a76a8289af9fe254b288e8ef8d7218fd17bc79fe86e",
+    "original_bytes": 621,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/headless_building_1_wing_returns_v2_current_release_evidence_contract.gd",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/headless_building_1_wing_returns_v2_current_release_evidence_contract.gd",
+    "original_sha256": "fb1f3b946367565ebaa16866b204d6c5247add17ca7029fed329f520cecc6c15",
+    "original_bytes": 15833,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/headless_building_1_wing_returns_v2_current_release_evidence_contract_004.gd",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/headless_building_1_wing_returns_v2_current_release_evidence_contract_004.gd",
+    "original_sha256": "9a4b8c2110d429159a72c8dd970e5c22032b7e90023998f27d1c783d5198f6c8",
+    "original_bytes": 17067,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/preflight-behavior-diff-003.json",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/preflight-behavior-diff-003.json",
+    "original_sha256": "cfc5265d01e8e9a83b757120153c0deebbaf1af9e67cfe0900fb7fcd29bf199f",
+    "original_bytes": 2521,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/reference-inventory-004-probe.gd",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/reference-inventory-004-probe.gd",
+    "original_sha256": "7830d2c6e72110e08e5cc3b8d808838443ce44da5e9806d4d76984b0c237cf6e",
+    "original_bytes": 2943,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/reference-inventory-004-probe.log",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/reference-inventory-004-probe.log",
+    "original_sha256": "aa287b47a250d90aee70f07e2dc27d8ecfcb1f5881c78a224a8aa7dd4f871044",
+    "original_bytes": 546,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/run-current-capture.py",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/run-current-capture.py",
+    "original_sha256": "05da2168ffbf553b1674cc101ed84c7d792acb7806677dfd066133b0e9f78e62",
+    "original_bytes": 4843,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/run-current-evidence-contract-004.py",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/run-current-evidence-contract-004.py",
+    "original_sha256": "325cf7f9122eb249e343e28e0974b17093f62a732baeaf2729277ec7ca49013c",
+    "original_bytes": 3119,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/run-current-evidence-contract.py",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/run-current-evidence-contract.py",
+    "original_sha256": "7ba218b6e0520709b4142ed7c5f1558b8b094f6e594ee43bd6603ab93d91ebc4",
+    "original_bytes": 2831,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/run-current-motion-completion.py",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/run-current-motion-completion.py",
+    "original_sha256": "7b23eddabddda28e0fac85c0a094225c976c0a38900ca33eeaef09b9d137dd65",
+    "original_bytes": 5402,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/capture-session/verifier-inventory-delta-004.json",
+    "original_locator_derived": "{CAPTURE_SCRATCH}/verifier-inventory-delta-004.json",
+    "original_sha256": "7d67832a1400e89220137ec7b04afbdbb8f4827cf06ac9099bce44c4ee986883",
+    "original_bytes": 1012,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/evidence-independent/execution-receipts.json",
+    "original_locator_derived": "{EVIDENCE_INDEPENDENT}/execution-receipts.json",
+    "original_sha256": "d52068a27e2c5b0983f98b05ef8b749c768366e73d18f09a4b6c003592133e00",
+    "original_bytes": 2373,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/evidence-independent/inventory004-controls.log",
+    "original_locator_derived": "{EVIDENCE_INDEPENDENT}/inventory004-controls.log",
+    "original_sha256": "ec21c10aa5465f5f038c280c5397561eaf7f7ea6fc31f5ab7403ad0b0db40daa",
+    "original_bytes": 150,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/evidence-independent/inventory004-probe.gd",
+    "original_locator_derived": "{EVIDENCE_INDEPENDENT}/inventory004-probe.gd",
+    "original_sha256": "afa526941a8f396893f5d3a03781f8d25e81c66c6ef5cd4168534c4043ff3982",
+    "original_bytes": 3757,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/evidence-independent/lineage-and-path-keyed-checks.json",
+    "original_locator_derived": "{EVIDENCE_INDEPENDENT}/lineage-and-path-keyed-checks.json",
+    "original_sha256": "34a18aab7debfd966fd457f7528ecb9e93adf914fdcc51be9f3914e91fdcf8e2",
+    "original_bytes": 988,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/evidence-independent/sealed-evidence-verify.log",
+    "original_locator_derived": "{EVIDENCE_INDEPENDENT}/sealed-evidence-verify.log",
+    "original_sha256": "32ce193fff50c55a6cf6efe9c1a7462b15e2e59c0ed55ce942c513c092ba0f43",
+    "original_bytes": 314,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-independent/architectures.log",
+    "original_locator_derived": "{PACKAGE_INDEPENDENT}/architectures.log",
+    "original_sha256": "9cb483fd3739db2602d4c5bf672f4af954dc6dad82b36e8642b034af58f11c11",
+    "original_bytes": 13,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-independent/current-package-proof-receipt.json",
+    "original_locator_derived": "{PACKAGE_INDEPENDENT}/current-package-proof-receipt.json",
+    "original_sha256": "7099f83ca19c6560ee9cb7b8b653d97739afa12e65295f2bd9c1d5ae0989957d",
+    "original_bytes": 43894,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-independent/headless-smoke-engine.log",
+    "original_locator_derived": "{PACKAGE_INDEPENDENT}/headless-smoke-engine.log",
+    "original_sha256": "827b11b331e9be909d70aa716985fca2d55c1dbfd721f2f82f29200fc245b769",
+    "original_bytes": 1174,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-independent/headless-smoke-process.log",
+    "original_locator_derived": "{PACKAGE_INDEPENDENT}/headless-smoke-process.log",
+    "original_sha256": "827b11b331e9be909d70aa716985fca2d55c1dbfd721f2f82f29200fc245b769",
+    "original_bytes": 1174,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-independent/mounted-current-graph.log",
+    "original_locator_derived": "{PACKAGE_INDEPENDENT}/mounted-current-graph.log",
+    "original_sha256": "0a93557a17b7d938dc44f417338766d5a9ce193cb7f332e02fcee3074aeb79ba",
+    "original_bytes": 402,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-independent/mounted-privacy.log",
+    "original_locator_derived": "{PACKAGE_INDEPENDENT}/mounted-privacy.log",
+    "original_sha256": "39b986e180005d7b114b9200ed5e53436f6363f36e676cd00e92b239977c05e8",
+    "original_bytes": 769,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-independent/native-smoke-engine.log",
+    "original_locator_derived": "{PACKAGE_INDEPENDENT}/native-smoke-engine.log",
+    "original_sha256": "8e66cc9347f1b7a6383ed2517762fc58947fb2652ca083f8d9a325057f067c9d",
+    "original_bytes": 1240,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-independent/native-smoke-process.log",
+    "original_locator_derived": "{PACKAGE_INDEPENDENT}/native-smoke-process.log",
+    "original_sha256": "8e66cc9347f1b7a6383ed2517762fc58947fb2652ca083f8d9a325057f067c9d",
+    "original_bytes": 1240,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-independent/plist-info.log",
+    "original_locator_derived": "{PACKAGE_INDEPENDENT}/plist-info.log",
+    "original_sha256": "d03754ffd35a64863b112e0cbd85ee5855a1a70eb2f9760599891a0ca661ce8a",
+    "original_bytes": 950,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-independent/plist-privacy.log",
+    "original_locator_derived": "{PACKAGE_INDEPENDENT}/plist-privacy.log",
+    "original_sha256": "69843538f97f7c593274c5c4087d53c28f166ed146fb5328af2ba5e8cb666e4f",
+    "original_bytes": 27,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-independent/signature.log",
+    "original_locator_derived": "{PACKAGE_INDEPENDENT}/signature.log",
+    "original_sha256": "7f5a372122280be13abf57e44f41bffabd643cb991f91343c568e5b303b93d79",
+    "original_bytes": 355,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-owner/architectures.log",
+    "original_locator_derived": "{PACKAGE_OWNER}/architectures.log",
+    "original_sha256": "9cb483fd3739db2602d4c5bf672f4af954dc6dad82b36e8642b034af58f11c11",
+    "original_bytes": 13,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-owner/current-package-proof-receipt.json",
+    "original_locator_derived": "{PACKAGE_OWNER}/current-package-proof-receipt.json",
+    "original_sha256": "d4397c9db8da2c183d21f727f7554f6b3fa9cdb1b6de84d414737b109801d8e9",
+    "original_bytes": 43644,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-owner/headless-smoke-engine.log",
+    "original_locator_derived": "{PACKAGE_OWNER}/headless-smoke-engine.log",
+    "original_sha256": "bca604ad0d5191eac85aa5fc956cb1bc4f68fe8787da3a099adcb6922700aeab",
+    "original_bytes": 1174,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-owner/headless-smoke-process.log",
+    "original_locator_derived": "{PACKAGE_OWNER}/headless-smoke-process.log",
+    "original_sha256": "bca604ad0d5191eac85aa5fc956cb1bc4f68fe8787da3a099adcb6922700aeab",
+    "original_bytes": 1174,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-owner/mounted-current-graph.log",
+    "original_locator_derived": "{PACKAGE_OWNER}/mounted-current-graph.log",
+    "original_sha256": "0a93557a17b7d938dc44f417338766d5a9ce193cb7f332e02fcee3074aeb79ba",
+    "original_bytes": 402,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-owner/mounted-privacy.log",
+    "original_locator_derived": "{PACKAGE_OWNER}/mounted-privacy.log",
+    "original_sha256": "39b986e180005d7b114b9200ed5e53436f6363f36e676cd00e92b239977c05e8",
+    "original_bytes": 769,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-owner/native-smoke-engine.log",
+    "original_locator_derived": "{PACKAGE_OWNER}/native-smoke-engine.log",
+    "original_sha256": "b3c70aef8bff1c380f3b7149750a7065085dd274cdc8a08ca2734dc64a966075",
+    "original_bytes": 1240,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-owner/native-smoke-process.log",
+    "original_locator_derived": "{PACKAGE_OWNER}/native-smoke-process.log",
+    "original_sha256": "b3c70aef8bff1c380f3b7149750a7065085dd274cdc8a08ca2734dc64a966075",
+    "original_bytes": 1240,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-owner/plist-info.log",
+    "original_locator_derived": "{PACKAGE_OWNER}/plist-info.log",
+    "original_sha256": "d03754ffd35a64863b112e0cbd85ee5855a1a70eb2f9760599891a0ca661ce8a",
+    "original_bytes": 950,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-owner/plist-privacy.log",
+    "original_locator_derived": "{PACKAGE_OWNER}/plist-privacy.log",
+    "original_sha256": "69843538f97f7c593274c5c4087d53c28f166ed146fb5328af2ba5e8cb666e4f",
+    "original_bytes": 27,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-owner/signature.log",
+    "original_locator_derived": "{PACKAGE_OWNER}/signature.log",
+    "original_sha256": "7f5a372122280be13abf57e44f41bffabd643cb991f91343c568e5b303b93d79",
+    "original_bytes": 355,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-programs/headless_building_1_wing_returns_v2_current_package_contract.gd",
+    "original_locator_derived": "{SOURCE_REPO}/game/tests/headless_building_1_wing_returns_v2_current_package_contract.gd",
+    "original_sha256": "3fefb93de5bb6b5ac40f1e2ee82aba95c1426fe5a54d9aca3788b8f89dc5149c",
+    "original_bytes": 20736,
+    "copy_is_byte_identical_raw_original": true
+  },
+  {
+    "retained_repo_relative_path": "build/building-1-wing-returns-v2-current-release-provenance-2026-09-08-001/package-programs/verify_building_1_wing_returns_v2_current_package.py",
+    "original_locator_derived": "{SOURCE_REPO}/tools/verify_building_1_wing_returns_v2_current_package.py",
+    "original_sha256": "8976887e525780512a4fd8a7efb7cddbd22737c1fa5df5a7a6d5ca423178f692",
+    "original_bytes": 24251,
+    "copy_is_byte_identical_raw_original": true
+  }
+]

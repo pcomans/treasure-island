@@ -1,7 +1,7 @@
 extends SceneTree
 
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
-const EXPECTED_REGISTRY_SHA256 := "26dcf64a34cf92aa7766c60940933190cdb5f9bc595dc23dc2f16fa01752e16c"
+const EXPECTED_REGISTRY_SHA256 := "c6780895e339919f7ebe0900814afaa46fd15f31958946ec81b4391091a1d46f"
 const EXPECTED_UNITS := 213
 const EXPECTED_RECEIVERS := 214
 const EXPECTED_SOURCE_RECORDS := 215
@@ -397,8 +397,8 @@ func _validate_runtime_adapters(registry: Dictionary) -> void:
 			_require(bool(target.get("tower_remains_separately_reviewable", false)), "%s collapses the tower into the main recognition unit." % receiver_key)
 			var assets := adapter.get("runtime_assets", []) as Array
 			_require(assets.size() == 11 and (adapter.get("runtime_asset_projections", []) as Array).is_empty(), "%s does not account for its hero script, two configs, and eight exact-current materials." % receiver_key)
-			_require(_has_runtime_asset(assets, "res://game/resources/facades/building_1_public_front_believability.json", "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"), "%s omits the exact current public-front runtime config." % receiver_key)
-			_require(str(contract.get("public_front_config_sha256", "")) == "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806", "%s public-front contract hash drifted." % receiver_key)
+			_require(_has_runtime_asset(assets, "res://game/resources/facades/building_1_public_front_believability.json", "99117e1af118592db1d1cfa932b44014862cb8be4f47d0b3ea519e24f9e591fb"), "%s omits the exact current public-front runtime config." % receiver_key)
+			_require(str(contract.get("public_front_config_sha256", "")) == "99117e1af118592db1d1cfa932b44014862cb8be4f47d0b3ea519e24f9e591fb", "%s public-front contract hash drifted." % receiver_key)
 	_require(current_topology_adapter_ids == ["active-adapter:d2-1441-live:building:w95934105:wall"], "D2 1441 is not the sole current-integration topology authority.")
 	var registry_text := JSON.stringify(registry)
 	_require(not registry_text.contains("building_1_recognizable_facade") and not registry_text.contains("building_1_recognizability_placements"), "Runtime registry retains obsolete Building 1 facade assets.")
@@ -500,7 +500,7 @@ func _validate_d2_1441_runtime_adapter(adapter: Dictionary, runtime_contract: Di
 		and int(geometry.get("world_records", -1)) == 735
 		and int(geometry.get("world_mesh_instances", -1)) == 959
 		and int(geometry.get("world_surfaces", -1)) == 974
-		and int(geometry.get("world_triangles", -1)) == 69252
+		and int(geometry.get("world_triangles", -1)) == 70692
 		and int(geometry.get("world_static_bodies", -1)) == 466
 		and int(geometry.get("world_shapes", -1)) == 466,
 		"D2 1441 paired visual/delta/current-world topology drifted.",

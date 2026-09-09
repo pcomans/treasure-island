@@ -1,0 +1,93 @@
+{
+  "status": "ACCEPTED_SCOPED_CURRENT_EVIDENCE_PUBLICATION_AND_ORDINARY_LAUNCH_PENDING",
+  "recognition_metric": "9/213",
+  "recognition_credit_delta": 0,
+  "raw_capture_receipt": {
+    "path": "current-release-verification-receipt.json",
+    "sha256": "b75d7943dee504ddc984d5a6c8fd954d11442e7b60f21637183dc9b2d77f42c3",
+    "raw_pending_fields_preserved": true
+  },
+  "copy_inventory": "copy-inventory.json",
+  "derived_provenance_summary": "derived-provenance-summary.json",
+  "private_retention_inventory": "private-provenance-retention.json",
+  "package": {
+    "app_relative_path": "build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app",
+    "bundle_identity_sha256": "fd91b1c5598dc2fe436a756eb5fb7561c96989fe18734c59580de92b13fa4171",
+    "pck_sha256": "454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403",
+    "executable_sha256": "ac0aa612c576e039b04b743c2da5783fd0736a7312be4c88e31210b672845031",
+    "source_images_are_package_pixels": false,
+    "separate_current_package_audit_sha256": "c6f4c47a998619143f5f8b56b91c4441d9cda5500ee643911dbdeba8be575ee7"
+  },
+  "independent_current_evidence_mechanical_note": {
+    "path": "evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_EVIDENCE_MECHANICAL_AUDIT.md",
+    "sha256": "98ab5b0d5990bc9665a3ac335863d95ee34440b4cfd168558e573ec84d3243ae",
+    "verdict": "PASS_FOR_B1_RETURNS_V2_CURRENT_RELEASE_EVIDENCE_MECHANICS_ONLY"
+  },
+  "independent_current_release_visual_note": {
+    "path": "evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_VISUAL_AUDIT.md",
+    "sha256": "8f9123170532ca60f0ecd693e6675fdf0bc15008af68f3b2982bfff100767fed",
+    "verdict": "PASS_FOR_B1_RETURNS_V2_CURRENT_RELEASE_VISUAL_ONLY",
+    "scope": "Local attached pale jamb/sill depth preserved; whole-front gain modest. All46 images byte-identical to accepted originals; complete prior direct visual judgment reused after exact identity check, with four current still pairs freshly reopened. Sampled motion is not continuous play."
+  },
+  "canonical_documents_written": true,
+  "final_git_commit": null,
+  "push_result": null,
+  "ordinary_visible_launch": null,
+  "owner_acceptance": "HUMAN-001 remains pending; scope unchanged",
+  "dependency_direction": "unchanged source/app/proof inputs -> raw capture/owner receipt -> independent notes -> downstream final closure; upstream bytes never rewritten",
+  "raw50_copy_check": {
+    "files": 50,
+    "tree_sha256": "422076e3f9f41042feab1e68c7e7f0be540a0bbb54a57dddd698824a74c7160c",
+    "bytes": 35107294,
+    "all_source_bytes_preserved": true
+  },
+  "current49_input_tree_sha256": "341b6545fc22b103813fcd5a65f5487388bdce521ab43b89d0c42b214b7a0272",
+  "canonical_document_paths": [
+    "README.md",
+    "PLAYTEST.md",
+    "HUMAN.md"
+  ],
+  "publication_and_launch_status": "pending until separately performed; this closure does not claim either outcome",
+  "derived_records": [
+    {
+      "path": "copy-inventory.json",
+      "sha256": "0add7ee2394eb180729954edc77bf69034eb1b05dfd0af3092a905f026e8a816",
+      "bytes": 17386
+    },
+    {
+      "path": "derived-provenance-summary.json",
+      "sha256": "22730b2aa6c41b0afc6d56220c09f822f09735752af677dba3b619833cdcf6a6",
+      "bytes": 55099
+    },
+    {
+      "path": "private-provenance-retention.json",
+      "sha256": "3df6ba6b7649c11ad16e9b3c43ed4baf9e199bb9101f0b8e270153a978dfb247",
+      "bytes": 22394
+    }
+  ],
+  "archived_programs": [
+    {
+      "path": "programs/building_1_wing_returns_v2_current_release_capture.gd",
+      "source_role": "unchanged_external_source_program",
+      "source_relative_path": "building_1_wing_returns_v2_current_release_capture.gd",
+      "sha256": "e93d3899ff05f1ce8f15b0bfb79a96fab06cab97b81a4073c30cc291d205c632",
+      "bytes": 8238
+    },
+    {
+      "path": "programs/headless_building_1_wing_returns_v2_current_release_evidence_contract.gd",
+      "source_role": "unchanged_external_source_program",
+      "source_relative_path": "headless_building_1_wing_returns_v2_current_release_evidence_contract.gd",
+      "sha256": "fb1f3b946367565ebaa16866b204d6c5247add17ca7029fed329f520cecc6c15",
+      "bytes": 15833
+    },
+    {
+      "path": "programs/headless_building_1_wing_returns_v2_current_release_evidence_contract_004.gd",
+      "source_role": "unchanged_external_source_program",
+      "source_relative_path": "headless_building_1_wing_returns_v2_current_release_evidence_contract_004.gd",
+      "sha256": "9a4b8c2110d429159a72c8dd970e5c22032b7e90023998f27d1c783d5198f6c8",
+      "bytes": 17067
+    }
+  ],
+  "private_raw_artifact_count": 53,
+  "upstream_raw_pending_fields_are_capture_time_history_and_remain_unchanged": true
+}

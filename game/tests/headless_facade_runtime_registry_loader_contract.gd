@@ -3,8 +3,8 @@ extends SceneTree
 const RegistryLoader := preload("res://game/scripts/world/facades/facade_runtime_registry_loader.gd")
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
-const EXPECTED_REGISTRY_SHA256 := "26dcf64a34cf92aa7766c60940933190cdb5f9bc595dc23dc2f16fa01752e16c"
-const EXPECTED_ADAPTER_CONTRACT_SHA256 := "8c61ea5601ab94852ac593b8658963b52cb5253aae22a2ff109f2e46771caa93"
+const EXPECTED_REGISTRY_SHA256 := "c6780895e339919f7ebe0900814afaa46fd15f31958946ec81b4391091a1d46f"
+const EXPECTED_ADAPTER_CONTRACT_SHA256 := "24efc72b3315540f31dc112949ac108509cdc0e4eb9f5e20ef0d4b45ce41ac49"
 const READY_RECEIVERS := [
 	"building-composite:w1249412094:w1282547786:wall",
 	"building:r16681702:wall",
@@ -170,7 +170,7 @@ func _validate_adapter_resolution(loader: RefCounted) -> void:
 		_require(str(plan.get("integration_state", "")) == "package_safe_ready_for_integration", "%s is not a package-safe integration plan." % receiver_key)
 		if receiver_key in ["building:r16681702:wall", "building:w1222720021:wall"]:
 			var b1_assets := plan.get("runtime_assets", []) as Array
-			_require(b1_assets.size() == 11 and _has_asset(b1_assets, "res://game/resources/facades/building_1_public_front_believability.json", "7b53847c627d6f0a0d4ebefcc790e8fd3bcaeee6fbdebbf5c6a85f2aeb4a5806"), "%s omits the exact current public-front config from its 11-asset closure." % receiver_key)
+			_require(b1_assets.size() == 11 and _has_asset(b1_assets, "res://game/resources/facades/building_1_public_front_believability.json", "99117e1af118592db1d1cfa932b44014862cb8be4f47d0b3ea519e24f9e591fb"), "%s omits the exact current public-front config from its 11-asset closure." % receiver_key)
 		if receiver_key == "building:w34313540:wall":
 			var behavior := plan.get("behavior_contract", {}) as Dictionary
 			var geometry := behavior.get("geometry_contract", {}) as Dictionary
@@ -365,7 +365,7 @@ func _validate_d2_1441_plan(plan: Dictionary) -> void:
 		and int(geometry.get("world_records", -1)) == 735
 		and int(geometry.get("world_mesh_instances", -1)) == 959
 		and int(geometry.get("world_surfaces", -1)) == 974
-		and int(geometry.get("world_triangles", -1)) == 69252
+		and int(geometry.get("world_triangles", -1)) == 70692
 		and int(geometry.get("world_static_bodies", -1)) == 466
 		and int(geometry.get("world_shapes", -1)) == 466,
 		"D2 1441 plan visual/delta/current-world topology drifted.",

@@ -18,7 +18,67 @@ Before restoring tools or opening Godot, read [AGENTS.md](AGENTS.md) and the [ma
 Human-only follow-ups are kept in the [owner action queue](HUMAN.md); that
 queue narrows external gates and never pauses safe independent work.
 
-## Current D2 1441 v9 release closure — 2026-09-07
+## Current Building 1 wing returns v2 — scoped release evidence accepted
+
+The accepted Building 1 upgrade adds attached pale jamb and sill depth to the
+30 supported wing openings. Independent source, mechanical, and visual quality
+reviews accepted this local improvement; the whole-front change is modest.
+Recognition remains `9/213`, with `+0` credit and `204` physical buildings still
+not evaluated. Compiler `1.8.1` retains catalog/runtime v9 and adapter/loader v8.
+Current loaded topology is `735/959/974/70,692/466/466`
+rows/meshes/surfaces/triangles/bodies/shapes. The additional `1,440` triangles
+are render-only; collision, navigation, spray ownership, and D2 component and
+capture-time identities are unchanged. B1 `behavior_contract` remains null.
+
+The accepted [100-file quality packet](evidence/first-playable/building-1-wing-returns-v2-accepted-2026-09-08-001/acceptance-receipt.json) binds the original
+source-render A/B evidence and separate candidate-package proof. Source
+renders are not screenshots of the exported app. The quality receipt SHA-256
+is `257f16bc314151054b120c2b87e6f8cb20577f5e4a7201478b58272a65dc23a4`.
+
+A fresh exact-current private app is retained at
+`build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app`.
+Its seven-file bundle identity is `fd91b1c5598dc2fe436a756eb5fb7561c96989fe18734c59580de92b13fa4171`,
+executable SHA-256 `ac0aa612c576e039b04b743c2da5783fd0736a7312be4c88e31210b672845031`
+(`170,963,648` bytes), and PCK SHA-256 `454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403`
+(`66,600,060` bytes). Strict signing, universal inventory, privacy, mounted
+current B1/D2 graph checks, and complete headless and native internal smoke
+passed, including grounded player, jetpack rise, and capped descent. The
+[independent package audit](evidence/reviews/building-1-wing-returns-v2-current-package-2026-09-08-INDEPENDENT_MECHANICAL_AUDIT.md)
+SHA-256 is `c6f4c47a998619143f5f8b56b91c4441d9cda5500ee643911dbdeba8be575ee7` and returns
+`PASS_FOR_B1_RETURNS_V2_CURRENT_PACKAGE_MECHANICS_ONLY`. Native execution was
+on the Apple M2 verifier host; owner acceptance on the Apple M1 Pro is pending.
+
+The [durable current release packet](evidence/first-playable/building-1-wing-returns-v2-current-release-2026-09-08-001/release-closure.json) preserves all 50 raw capture
+files (46 PNGs, three manifests, and the owner receipt) plus unchanged programs.
+Its owner receipt is `b75d7943dee504ddc984d5a6c8fd954d11442e7b60f21637183dc9b2d77f42c3`;
+the canonical 49-input tree is
+`341b6545fc22b103813fcd5a65f5487388bdce521ab43b89d0c42b214b7a0272`.
+All 46 fresh PNGs match their accepted v2 counterparts byte-for-byte, with
+zero motion pose delta. The [independent evidence mechanics audit](evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_EVIDENCE_MECHANICAL_AUDIT.md)
+(`98ab5b0d5990bc9665a3ac335863d95ee34440b4cfd168558e573ec84d3243ae`)
+and [independent visual audit](evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_VISUAL_AUDIT.md)
+(`8f9123170532ca60f0ecd693e6675fdf0bc15008af68f3b2982bfff100767fed`)
+pass their separate scoped gates. The visual audit reuses the complete prior
+review after exact image identity checks and freshly reopens four still pairs;
+it does not claim a new motion inspection or continuous interactive play.
+
+The downstream closure SHA-256 is
+`1459483fb45acb336f902d7bdbeae25b1d61a7ecd3a66564ffbf99c2c3b22d8a`.
+Its sanitized provenance summaries are explicitly derived; original binding,
+commands, logs, and failure records remain byte-identical in private storage.
+Raw capture-time pending/status fields are preserved as history, and the
+downstream audits establish the later scoped result.
+
+**Still pending:** final Git commit/push and exact ordinary visible launch.
+`HUMAN-001` also remains pending for owner recognition and mouse/keyboard
+acceptance on the Apple M1 Pro; it does not block autonomous work. No export,
+source screenshot, technical review, or smoke result substitutes for owner play.
+
+## Historical D2 1441 v9 release closure — 2026-09-07
+
+This section preserves the accepted D2 release and its capture-time identities.
+Its then-current counts, app, and pending Building 1 status are historical.
+
 
 The deterministic recognition authority is compiler `1.8.0`, catalog/runtime
 registry v9, adapter contracts/loader API v8, and exact recognition `9/213`.
@@ -246,7 +306,7 @@ The visual-only pavement skin keeps one filled union for all `427` OSM road/path
   runtime used `723 / 733 / 48,739` record-root topology after intercepting the four
   Building 1/tower records, replacing the Building 3 and Navy Chapel wall/roof pairs,
   and partitioning the retained B201 host into two surfaces; the
-  accepted Building 1/tower replacement owns `13 / 13 / 10,711` and four
+  B201-stage Building 1/tower replacement owns `13 / 13 / 10,711` and four
   congruent body/shape pairs, while the accepted Isle House Variant C overlay
   owns `7 / 11 / 2,242` and no decorative collision. The accepted Navy Chapel
   hero owns `6 / 6 / 540` and replaces, rather than duplicates, two structural
@@ -257,8 +317,10 @@ The visual-only pavement skin keeps one filled union for all `427` OSM road/path
   At the accepted B225 stage the loaded source project instantiated `952`
   meshes, `967` surfaces, and `67,716` triangles. The accepted 1441 atomic
   pair replaces generic `2 / 2 / 42` wall/roof geometry with reviewed
-  `9 / 9 / 1,578` geometry, so the exact-current source instantiates `959`
-  meshes, `974` surfaces, `69,252` triangles, and `466` nonempty static
+  `9 / 9 / 1,578` geometry. The accepted B1 v2 returns add `1,440`
+  render-only triangles, bringing the B1/tower replacement to `13 / 13 / 12,151`.
+  Exact-current source and the separately proved current package instantiate
+  `959` meshes, `974` surfaces, `70,692` triangles, and `466` nonempty static
   body/shape pairs. The additional `28`
   records are visual-only pedestrian pavement skins. Other facade attachments
   and pavement skins do not change physical collision. YBI, both bridges, and
@@ -300,20 +362,17 @@ The exact headless commands and their assertions are documented in [game/tests/R
 
 ## Export
 
-The sole current private handoff is
-`build/d2-1441-postpromotion-v9-2026-09-07-001/Treasure Island First Playable.app`.
-It is the exact seven-file D2 1441 v9 bundle identified by SHA-256
-`f83ddd5678086099d66fc433c0851fc2788c42e702d8bffac4eee4d7a7d595cb`.
-Its executable is
-`cf0bd6e789e9317248b1aeb2eb626cfd76b837fef362eca449336644cff77941`
-(`170,963,648` bytes), and its PCK is
-`0945ac7b08ebd2fc5389ffa05a919b7324ecb298dac46032c8fdc30d8c47404a`
-(`66,300,344` bytes). The exact package, evidence, current authority, and two
-independent no-additional-credit release receipts are bound in the
-[mechanical audit](evidence/reviews/d2-1441-postpromotion-v9-2026-09-07-001-INDEPENDENT_CONTRACT_AUDIT.md)
-and [visual review](evidence/reviews/d2-1441-postpromotion-v9-2026-09-07-001-INDEPENDENT_VISUAL_REVIEW.md).
-This remains a private verifier-host technical release: Apple M2 verification
-does not replace pending ordinary owner play on the approved Apple M1 Pro.
+The exact current private package under final release review is
+`build/building-1-wing-returns-v2-current-2026-09-08-001/Treasure Island First Playable.app`.
+Its verified bundle identity is `fd91b1c5598dc2fe436a756eb5fb7561c96989fe18734c59580de92b13fa4171`;
+executable SHA-256 `ac0aa612c576e039b04b743c2da5783fd0736a7312be4c88e31210b672845031` (`170,963,648` bytes);
+PCK SHA-256 `454b913537742c8b605f41db8730c860de3ab37d08c4a3bfab5e15dc40f69403` (`66,600,060` bytes).
+The [independent current package audit](evidence/reviews/building-1-wing-returns-v2-current-package-2026-09-08-INDEPENDENT_MECHANICAL_AUDIT.md)
+proves package mechanics and complete headless/native internal smoke. Fresh
+current evidence and its separate [mechanical](evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_EVIDENCE_MECHANICAL_AUDIT.md) and
+[visual](evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_VISUAL_AUDIT.md) reviews passed their scoped gates. Final Git publication
+and the ordinary visible launch remain pending as listed above. Technical Apple M2
+verification does not replace owner play on the approved Apple M1 Pro.
 
 ### Historical B201 package
 
@@ -376,7 +435,7 @@ APP_BINARY="build/final-verification-staging-YYYY-MM-DD-HHMMSS/Treasure Island F
 
 The packaged smoke starts the exported PCK's normal main scene and fails after
 60 seconds of monotonic wall time if its checks do not finish. It exits nonzero if
-the exact ferry spawn/yaw, approved hash, source-current `959/974/69,252`
+the exact ferry spawn/yaw, approved hash, source-current `959/974/70,692`
 topology, grounded player-enable gate, exact `4/20 m/s` speed and
 `30/40 m/s²` response defaults, ambient/camera defaults, live eleven-key
 Poly Haven texture identities/effective repeats/filtering/normals, Space-bound
@@ -392,7 +451,7 @@ packaged headless and first Apple M2 Metal invocations through world, visual,
 movement, grounding, jetpack ascent, and capped descent. The earlier `014223`
 package predates the final evidence-contract bridge repairs and is withdrawn;
 the `002922` first-Metal timeout likewise remains a withdrawn pre-scope
-diagnostic. Neither is evidence for the current D2 1441 v9 candidate.
+diagnostic. Neither is evidence for the current B1 v2 package.
 
 Historical candidate `024605` passes strict deep and per-architecture ad-hoc
 hardened-runtime signature verification and contains universal
@@ -422,9 +481,12 @@ An export or packaged smoke command succeeding is not owner acceptance. Check th
 - [Frozen USGS terrain provenance and hashes](data/terrain/README.md)
 - [Generated manifest](generated/world/manifest.json) and [coverage summary](generated/world/coverage-summary.json)
 - [First-playable evidence](evidence/first-playable/README.md)
-- [Current D2 1441 v9 postpromotion evidence](evidence/first-playable/d2-1441-postpromotion-v9-2026-09-07-001/capture-manifest.json)
-- [Current D2 1441 v9 independent mechanical audit](evidence/reviews/d2-1441-postpromotion-v9-2026-09-07-001-INDEPENDENT_CONTRACT_AUDIT.md)
-- [Current D2 1441 v9 independent visual review](evidence/reviews/d2-1441-postpromotion-v9-2026-09-07-001-INDEPENDENT_VISUAL_REVIEW.md)
+- [Current B1 v2 release closure](evidence/first-playable/building-1-wing-returns-v2-current-release-2026-09-08-001/release-closure.json)
+- [Current B1 v2 evidence mechanics](evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_EVIDENCE_MECHANICAL_AUDIT.md)
+- [Current B1 v2 visual review](evidence/reviews/building-1-wing-returns-v2-current-release-2026-09-08-INDEPENDENT_VISUAL_AUDIT.md)
+- [Historical D2 1441 v9 postpromotion evidence](evidence/first-playable/d2-1441-postpromotion-v9-2026-09-07-001/capture-manifest.json)
+- [Historical D2 1441 v9 independent mechanical audit](evidence/reviews/d2-1441-postpromotion-v9-2026-09-07-001-INDEPENDENT_CONTRACT_AUDIT.md)
+- [Historical D2 1441 v9 independent visual review](evidence/reviews/d2-1441-postpromotion-v9-2026-09-07-001-INDEPENDENT_VISUAL_REVIEW.md)
 - [Historical B225 postpromotion evidence](evidence/first-playable/d1-b225-postpromotion-v8-2026-09-05/capture-manifest.json)
 - [Historical accepted B201 live evidence](evidence/first-playable/d1-b201-live-attachment-2026-09-04/README.md)
 - [Historical pre-B201 exact-source 12-view evidence](evidence/first-playable/exact-current-visual-repair-2026-09-03-104510/README.md)
