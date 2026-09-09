@@ -11,7 +11,7 @@ ramp. That change still needs ordinary-play feedback in the exact current
 package. Current authority is compiler `1.9.0`, catalog/registry v10 and
 contracts/loader v9, with **10/213** recognized physical buildings. 1439 Chinook
 Court adds one accepted unit; all previous credits remain unchanged.
-Owner and independent current-package checks passed. Publication-readiness review, Git publication, and ordinary visible launch are pending.
+Owner, independent current-package and publication-readiness checks passed. The primary release commit `2c51de357e54283ad2aeaea9829b9a1eb4cac09d` is published on private `origin/main`. The exact no-argument app opened a visible native window, then was stopped to release the engine slot. Native screenshot attempts failed; no current gameplay pixels or manual-input acceptance is claimed. See the [observed publication and launch outcome](evidence/first-playable/d2-1439-quality-v2-current-release-2026-09-09-001-PUBLICATION.json).
 The native evidence is retained at its 9/213 capture-time identity and uses
 sampled motion review. No technical result establishes ordinary owner acceptance
 on the approved Apple M1 Pro.
@@ -29,8 +29,8 @@ Executable SHA-256 `569e9350ba9d3fb629dde0efdf047a0faf1d1a7ab640c96b46ded5a86720
 PCK SHA-256 `d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac` (`66,659,644` bytes),
 seven-file bundle identity `64d53753266959fe49119f8363e786c4a53f999232b0299329037094d2f8a986`.
 The [current release closure](evidence/first-playable/d2-1439-quality-v2-current-release-2026-09-09-001/release-closure.json) records the actual technical gates
-and pending publication/ordinary-launch state. Owner feedback stays pending
-against these exact bytes.
+and its historical pre-publication snapshot. The downstream outcome linked above
+records actual publication and launch; owner feedback stays pending against these exact bytes.
 
 ### Historical B225 package identity (not current playtest bytes)
 

@@ -1,0 +1,271 @@
+{
+  "schema_version": 1,
+  "status": "PRIMARY_RELEASE_PUBLISHED_AND_ORDINARY_WINDOW_OBSERVED",
+  "scope": "Observed primary publication and ordinary app-window outcome. This downstream receipt does not claim its own publication or owner acceptance.",
+  "recognition": {
+    "completed": 10,
+    "total": 213,
+    "primary_acceptance_delta": 1,
+    "new_physical_unit": "physical-building:w95934144",
+    "this_document_credit_delta": 0,
+    "historical_capture_metric": "9/213"
+  },
+  "accepted_release_packet": {
+    "path": "evidence/first-playable/d2-1439-quality-v2-current-release-2026-09-09-001",
+    "release_closure_sha256": "514e46fc525f4ad1f4e7f7d405f2f77be4a662338fc7c32759e979b940d60a00",
+    "files": 6,
+    "immutable_pending_fields_are_historical": true
+  },
+  "publication_readiness_review": {
+    "path": "evidence/reviews/d2-1439-quality-v2-current-release-2026-09-09-001-PUBLICATION_READINESS_REVIEW.md",
+    "sha256": "90817871002fa15c96fe0664e0b44722d40608232c2059d1833c130cfd8abff1"
+  },
+  "primary_publication": {
+    "commit": "2c51de357e54283ad2aeaea9829b9a1eb4cac09d",
+    "remote": "origin",
+    "branch": "main",
+    "observed_remote_before": "a25050e42a9047cf606512edd5ca7efe3f385553",
+    "observed_remote_after": "2c51de357e54283ad2aeaea9829b9a1eb4cac09d",
+    "commit_exit_code": 0,
+    "push_exit_code": 0,
+    "normal_fast_forward_push": true,
+    "force_push": false,
+    "staged_paths": 80,
+    "later_additions": "Exact publication review copy plus attributed RETRO append were enumerated after the frozen79-path preparation.",
+    "command_local_hook_override": "core.hooksPath=/dev/null: git-lfs unavailable and all staged files verified non-LFS",
+    "config_and_hooks_unchanged": true,
+    "only_four_excluded_incidental_uids_remain": true,
+    "git_processes_terminal": true
+  },
+  "reviewed_app": {
+    "path": "build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app",
+    "bundle_tree_sha256": "64d53753266959fe49119f8363e786c4a53f999232b0299329037094d2f8a986",
+    "files": [
+      {
+        "path": "Contents/Info.plist",
+        "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+        "bytes": 1885
+      },
+      {
+        "path": "Contents/MacOS/Treasure Island First Playable",
+        "sha256": "569e9350ba9d3fb629dde0efdf047a0faf1d1a7ab640c96b46ded5a867204689",
+        "bytes": 170963648
+      },
+      {
+        "path": "Contents/PkgInfo",
+        "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+        "bytes": 9
+      },
+      {
+        "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+        "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+        "bytes": 229
+      },
+      {
+        "path": "Contents/Resources/Treasure Island First Playable.pck",
+        "sha256": "d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac",
+        "bytes": 66659644
+      },
+      {
+        "path": "Contents/Resources/icon.icns",
+        "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+        "bytes": 67500
+      },
+      {
+        "path": "Contents/_CodeSignature/CodeResources",
+        "sha256": "ab11529bfbfa4b5d2f2e96eafd962dbf39d782ddc1dee22d5e6a43f039e3e496",
+        "bytes": 3217
+      }
+    ],
+    "all_seven_files_unchanged_through_launch_and_termination": true
+  },
+  "ordinary_launch_derived_summary": {
+    "provenance_kind": "DERIVED_FROM_EXACT_PRIVATE_RAW_RECORDS",
+    "argv": [
+      "build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
+    ],
+    "argv_normalization": "Executable locator is repository-relative; actual argument list is empty. Original absolute argv remains private.",
+    "source_free_cwd_locator": "{PRIVATE_TMP}/d2-1439-current-primary-ordinary-launch-001",
+    "started_utc": "2026-09-09T18:55:30.833420+00:00",
+    "observed_utc": "2026-09-09T18:55:48.234205+00:00",
+    "pid": 12281,
+    "driver_session": 22940,
+    "exact_executable_verified_by_proc_pidpath": true,
+    "live_at_observation": true,
+    "visible_owned_windows": [
+      {
+        "kCGWindowAlpha": 1,
+        "kCGWindowBounds": {
+          "Height": 832,
+          "Width": 1280,
+          "X": 320,
+          "Y": 97
+        },
+        "kCGWindowIsOnscreen": true,
+        "kCGWindowLayer": 0,
+        "kCGWindowMemoryUsage": 2368,
+        "kCGWindowNumber": 35687,
+        "kCGWindowOwnerName": "Treasure Island First Playable",
+        "kCGWindowOwnerPID": 12281,
+        "kCGWindowSharingState": 0,
+        "kCGWindowStoreType": 1
+      }
+    ],
+    "window_observer_exit_code": 0,
+    "startup_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "startup_log_bytes": 0,
+    "startup_log_has_no_errors": true,
+    "native_gameplay_pixels_captured": false,
+    "manual_gameplay_input_exercised": false,
+    "source_images_are_current_package_pixels": false,
+    "termination": {
+      "intentional_SIGTERM_after_owned_identity_revalidation": true,
+      "actual_app_exit_code": -15,
+      "ended_utc": "2026-09-09T18:57:23.995059+00:00",
+      "pid_absent": true,
+      "engine_slot_released": true
+    },
+    "screenshot_attempts": [
+      {
+        "method": "native exact-window capture",
+        "exit_code": 1,
+        "stderr": "could not create image from window",
+        "png_created": false
+      },
+      {
+        "method": "native exact-window desktop rectangle after activation",
+        "exit_code": 1,
+        "stderr": "could not create image from rect",
+        "png_created": false
+      }
+    ],
+    "scope": "Actual no-argument signed app, owned visible window and unchanged bytes; no gameplay pixels or manual-input acceptance."
+  },
+  "private_originals": {
+    "kind": "BYTE_IDENTICAL_RAW_RECORDS_IN_IGNORED_MAIN_STORAGE",
+    "entries": [
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/primary-stage-inventory.json",
+        "sha256": "f3829e705638084bc898c2d7c2653dd18ea605b1757aa82976034af13d2855c7",
+        "bytes": 19885
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/primary-publication-stage-proof.json",
+        "sha256": "a24d0e4f860ca3ebc87de77de4cf31aba257ec6bc2f94e8d6cef5a750c2ee4a8",
+        "bytes": 19159
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/primary-publication-execution.json",
+        "sha256": "37aed173aa016f51a35f92e0cb91c728b62bfa0ed14957b7e416983e9f83cfff",
+        "bytes": 15985
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/primary-stage.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/primary-stage-check.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/primary-commit-message.txt",
+        "sha256": "ef45e439732897dddacb5df99695295751ae7d15642f84da65fb57a1d1b02a1b",
+        "bytes": 404
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/primary-commit.log",
+        "sha256": "f81603a768bca2e43d5f7011cc8f3ab1223fc129e19f015918250af1cd296bc1",
+        "bytes": 7707
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/primary-push.log",
+        "sha256": "2314e7e3d58ed49693d034c4b4e908576393a7066fbc0ed7339cfb2fe461cbac",
+        "bytes": 84
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/publish-primary.py",
+        "sha256": "44a2c8286f4fcaade106f04b1d7d2398eb596126dcbe69cd766b1f94ceb410b5",
+        "bytes": 4892
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/launch-reviewed-current-app.py",
+        "sha256": "1b9474897f8a2f9b79d10f50ee67f97f2209eb1a29057888c3ace09efbdf1ae8",
+        "bytes": 5285
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/ordinary-launch-start.json",
+        "sha256": "d27b75d3848ad491e9c2e4d49084874ebb6fdd42d456229413e34402810d5eae",
+        "bytes": 2073
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/ordinary-launch-observation.json",
+        "sha256": "5cbf968d8811b212d4693ebc145ba9802f706db6967b7989bdd30b216d5cd3c2",
+        "bytes": 4997
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/ordinary-current-app.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/ordinary-current-app-window.json",
+        "sha256": "2e125338b6f4d1453609a60e533e402241ab6a1ec411631b514c18e16c70bf13",
+        "bytes": 429
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/ordinary-current-app-window-stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/ordinary-window-capture.json",
+        "sha256": "a0b9078322418ad1b924e648de25d2ef42574417aa2352d9597e8cb3e9be066f",
+        "bytes": 998
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/ordinary-window-capture-activation.json",
+        "sha256": "2e125338b6f4d1453609a60e533e402241ab6a1ec411631b514c18e16c70bf13",
+        "bytes": 429
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/ordinary-window-region-capture.json",
+        "sha256": "fd9352e32e03526a921fb9ad76a19fdd07fca96038f7e15c317c537ab5e0ea3a",
+        "bytes": 1136
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/ordinary-launch-stop-request.json",
+        "sha256": "7bc78efef94573385b0a0ef0e70086f939daa4afbfd15b539e42903d3b566666",
+        "bytes": 949
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/ordinary-launch-termination.json",
+        "sha256": "be8152becfe7001ef9d7538ede5f4cabd614070965e657fa8f4c0c4db9ec4898",
+        "bytes": 235
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/final-unchanged-source.json",
+        "sha256": "2bb47fac9e05bde73d109c622bb9db2a8f64b3948f112fb7c31a28262b3605f7",
+        "bytes": 4285
+      },
+      {
+        "path": "build/d2-1439-quality-v2-publication-provenance-2026-09-09-001/outcome-provenance/owned-window.swift",
+        "sha256": "1ec55968918a2466076486d13d894f67af8c04cbee52408c15852155b85555cb",
+        "bytes": 632
+      }
+    ],
+    "public_summary_is_not_raw_evidence": true
+  },
+  "unchanged_upstream": {
+    "source_pins": 31,
+    "app_files": 7,
+    "current_release_packet_files": 6,
+    "historical_candidate_and_B1_evidence_preserved": true
+  },
+  "owner_acceptance": {
+    "id": "HUMAN-001",
+    "status": "pending",
+    "scope": "Owner recognition and ordinary mouse/keyboard play on approved Apple M1 Pro"
+  }
+}

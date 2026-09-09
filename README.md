@@ -33,7 +33,7 @@ The current private app is `build/d2-1439-quality-v2-current-release-2026-09-09-
 Its seven-file identity is `64d53753266959fe49119f8363e786c4a53f999232b0299329037094d2f8a986`,
 PCK `d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac`, and executable
 `569e9350ba9d3fb629dde0efdf047a0faf1d1a7ab640c96b46ded5a867204689`.
-Owner and independent current-package checks passed. Publication-readiness review, Git publication, and ordinary visible launch are pending.
+Owner, independent current-package and publication-readiness checks passed. The primary release commit `2c51de357e54283ad2aeaea9829b9a1eb4cac09d` is published on private `origin/main`. The exact no-argument app opened a visible native window, then was stopped to release the engine slot. Native screenshot attempts failed; no current gameplay pixels or manual-input acceptance is claimed. See the [observed publication and launch outcome](evidence/first-playable/d2-1439-quality-v2-current-release-2026-09-09-001-PUBLICATION.json).
 The [current release closure](evidence/first-playable/d2-1439-quality-v2-current-release-2026-09-09-001/release-closure.json) binds the actual app, source pins and technical receipts.
 
 The [unchanged native evidence](evidence/first-playable/d2-1439-quality-v2-promotion-candidate-2026-09-09-001/candidate-closure.json) contains seven live stills,
@@ -410,7 +410,7 @@ The exact current private package is
 Bundle identity `64d53753266959fe49119f8363e786c4a53f999232b0299329037094d2f8a986`;
 PCK `d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac` (`66,659,644` bytes);
 executable `569e9350ba9d3fb629dde0efdf047a0faf1d1a7ab640c96b46ded5a867204689` (`170,963,648` bytes).
-Owner and independent current-package checks passed. Publication-readiness review, Git publication, and ordinary visible launch are pending.
+Owner, independent current-package and publication-readiness checks passed. The primary release commit `2c51de357e54283ad2aeaea9829b9a1eb4cac09d` is published on private `origin/main`. The exact no-argument app opened a visible native window, then was stopped to release the engine slot. Native screenshot attempts failed; no current gameplay pixels or manual-input acceptance is claimed. See the [observed publication and launch outcome](evidence/first-playable/d2-1439-quality-v2-current-release-2026-09-09-001-PUBLICATION.json).
 See the [current release closure](evidence/first-playable/d2-1439-quality-v2-current-release-2026-09-09-001/release-closure.json). The previous B1 and D2 packages
 remain unchanged historical artifacts.
 

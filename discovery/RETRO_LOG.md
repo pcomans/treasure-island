@@ -12379,3 +12379,8 @@ Worked: the existing immutable native packet and B1 downstream publication patte
 Transmitted verbatim by the named reviewer and serialized by package_1439_continuation.
 
 review_1439_package — 1439 publication readiness: The frozen six-file release closure and 79-path intended Git inventory passed file-only review. Exact retained owner/independent records, 193 current and 736 historical private files, two historical review notes and 31 shared public images preserve current 10/213 versus capture 9/213 lineage. Git and ordinary launch remain future observed outcomes; HUMAN-001 and B1 scope remain intact. A scratch-only comparison needed longest-prefix-first normalization before matching the unchanged author summaries; no package or archive correction was required. Keep the accepted immutable-packet followed by observed downstream-outcome pattern and explicitly enumerate the later review/RETRO additions at staging.
+
+
+### package_1439_continuation — primary publication and ordinary launch (2026-09-09)
+
+Worked: exact 80-path staging preserved the frozen packet while enumerating the later independent review and attributed RETRO; normal commit/push and the reused source-free no-argument app/window observer completed with unchanged app bytes. Did not: native exact-window and rectangle screenshot APIs both failed, so their raw receipts remain and no current pixel claim was made. Next time retain the proven publication/window boundary and check native screenshot availability before promising an image; do not relaunch or recapture accepted evidence solely to replace an unavailable optional screenshot. The observed app was revalidated and stopped to release the shared engine slot.
