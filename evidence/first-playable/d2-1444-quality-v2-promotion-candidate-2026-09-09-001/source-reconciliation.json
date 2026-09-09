@@ -1,0 +1,113 @@
+{
+  "historical_capture_metric": "9/213",
+  "historical_capture_main_sha256": "a5cedea1c9861aca393787f7d1a26bfcee3a8a17b08ec4a8bd889fb79a2c7057",
+  "combined_main_before_package_sha256": "8ece8ee2e9ac39b4e0ea0adfddf6c9f6eddc93f72da34cdfbc4666d25bc1587c",
+  "package_main_sha256": "4b7c2f7e07c001f891393c81892614bc514f4558ff941b3e137f454beab2d795",
+  "package_preset_sha256": "6e8aa4b407c8691e3c8e07b1fc29c24de2653f860def8a358c55df72d8809392",
+  "difference": "Only independently reviewed opt-in smoke counts/1444 attachment and nine standalone exclusions. Factory, camera, adapter, combined builder and current authority unchanged; original capture and combined receipts bind their own historical bytes.",
+  "adapter_metadata": "Both live attachments retain historical capture-time9/213 credit0; current registry separately remains10/213.",
+  "visual_claim": "No fresh rendering or continuous playback claim; accepted historical sampled visuals and combined context remain separate.",
+  "mechanics_claim": "Original combined probe exit1 remains FAIL; accepted scoped mechanical PASS and terrain-consistent inference remain separate, without collider-key or direct terrain-covered floor claim.",
+  "derived_normalized_summary": true,
+  "truth_boundary": {
+    "recognition_metric": "10/213",
+    "capture_time_recognition_metric": "9/213",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "source_render_images_are_package_pixels": false,
+    "as_built_fidelity_claimed": false,
+    "inventory_physical_units": 213
+  },
+  "old_capture_hash_binds_changed_main_or_builder": false,
+  "historical_capture_world": {
+    "bodies": 466,
+    "meshes": 968,
+    "rows": 735,
+    "shapes": 467,
+    "surfaces": 983,
+    "triangles": 71364
+  },
+  "combined_and_package_world": {
+    "bodies": 466,
+    "meshes": 977,
+    "rows": 735,
+    "shapes": 468,
+    "surfaces": 992,
+    "triangles": 71828
+  },
+  "historical_builder_sha256": "20e745df0c9bb5b27b71dc1acdf17302c8f37755aa747466231d7bca04dd4ecf",
+  "combined_builder_sha256": "cbc3f6d90e5200ea81f1daaccd10442a98b0531c5c6e5358fe825bebef89fcbb",
+  "capture_to_combined_scope": "Accepted 1439 authority/runtime dependency closure and combined builder preserve 1444 factory/adapter/camera. Independent source/mechanics/context reviews bind the combination; no full-frame, new-motion or package-pixel equivalence is asserted.",
+  "combined_to_package_scope": "Only opt-in smoke world counts and read-only actual1444 attachment assertion, plus nine standalone preset exclusions. Other combined source stays unchanged.",
+  "captured_main_original": {
+    "raw_original_sha256": "a5cedea1c9861aca393787f7d1a26bfcee3a8a17b08ec4a8bd889fb79a2c7057",
+    "raw_original_bytes": 16002,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/combined-owner/historical-before/game/scripts/main.gd"
+  },
+  "captured_builder_original": {
+    "raw_original_sha256": "20e745df0c9bb5b27b71dc1acdf17302c8f37755aa747466231d7bca04dd4ecf",
+    "raw_original_bytes": 33109,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/combined-owner/historical-before/game/scripts/world/world_chunk_builder.gd"
+  },
+  "combined_main_original": {
+    "raw_original_sha256": "8ece8ee2e9ac39b4e0ea0adfddf6c9f6eddc93f72da34cdfbc4666d25bc1587c",
+    "raw_original_bytes": 18694,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/package-owner/before/main.gd"
+  },
+  "package_main_original": {
+    "raw_original_sha256": "4b7c2f7e07c001f891393c81892614bc514f4558ff941b3e137f454beab2d795",
+    "raw_original_bytes": 20818,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/package-runtime-sources/game/scripts/main.gd"
+  },
+  "combined_copy_lineage": {
+    "raw_original_sha256": "91c69ed73c5c7a50ea8259d148653331f8a2b971f4976b2ac3ed502bd8db72f2",
+    "raw_original_bytes": 23752,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/combined-owner/copy-provenance.json"
+  },
+  "combined_builder_diff": {
+    "raw_original_sha256": "ffda35c7d0a7dc33ac75a46f2d33b610dc96e90f7a985246aafc3d7a4aaeb336",
+    "raw_original_bytes": 6031,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/combined-owner/combined-builder.diff"
+  },
+  "smoke_diff": {
+    "raw_original_sha256": "99803319e7395e78f4ca93bbc19722c235cf2d53604e8e2303ca2e1eb2163172",
+    "raw_original_bytes": 3767,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/package-owner/main.gd.diff"
+  },
+  "preset_diff": {
+    "raw_original_sha256": "11b49e6fc5c349e6f6d584c3df496e44b7f711f1a04c63ee7e0f96404bea6e9a",
+    "raw_original_bytes": 5403,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/package-owner/export_presets.cfg.diff"
+  },
+  "independent_source_delta_review": {
+    "raw_original_sha256": "91b9e79edb1dfbed4ba546a95f2eb4a641a32e887a3c652823174d6acb4e5334",
+    "raw_original_bytes": 2613,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/independent-package/SOURCE_DELTA_REVIEW.md"
+  },
+  "independent_mounted_boundary_review": {
+    "raw_original_sha256": "289d0276f58c596b4c84e3eeca74a8e617e088895985858234b60bda040a28e5",
+    "raw_original_bytes": 2380,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/independent-package/MOUNTED_BOUNDARY_REVIEW.md"
+  },
+  "combined_visual_context_review": {
+    "raw_original_sha256": "3ec7e8d52f9164f09eb5a9f347cffe408ecbb527bcb42910aa51380bcfddc9bd",
+    "raw_original_bytes": 2873,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/independent-combined-visual-context/REVIEW.md"
+  },
+  "four_import_uid_warnings": {
+    "raw_original_sha256": "061577a42f70be931439d49fea5d5e4d30b2db0e677023db465a64a2e7f5cea8",
+    "raw_original_bytes": 1939,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/combined-owner/import-001-warning-reconciliation.json"
+  },
+  "motion_start_stationary_framing_limit": {
+    "raw_original_sha256": "8b1dfa3a10c866c6ffb3ec0140704a76c8549974e1353485f6bbabd8659494db",
+    "raw_original_bytes": 12785,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/combined-owner/context-reconciliation.json"
+  },
+  "diagnostic_labels_only_source_reconciliation": {
+    "raw_original_sha256": "73a445b8f8fdb3692f57a0bb73a18078c9ab1c2eb1c8376fe3fa4e9869a4d081",
+    "raw_original_bytes": 682,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/combined-owner/live-diagnostic-reconciliation.json"
+  }
+}

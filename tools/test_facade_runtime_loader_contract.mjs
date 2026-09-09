@@ -32,6 +32,7 @@ const READY_RECEIVERS = [
   "building:w34313545:wall",
   "building:w34313547:wall",
   "building:w95934105:wall",
+  "building:w95934117:wall",
   "building:w95934119:wall",
   "building:w95934144:wall",
 ].sort();
@@ -49,6 +50,7 @@ const PRE_B201_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_b201_integration_live_par
 const PRE_B225_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_b225_integration_live_parity";
 const PRE_D2_1441_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_d2_1441_integration_live_parity";
 const PRE_D2_1439_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_d2_1439_integration_live_parity";
+const PRE_D2_1444_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_d2_1444_integration_live_parity";
 const CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "current_integration_topology";
 const ACTIVE_UNIT_BY_RECEIVER = new Map([
   ["building-composite:w1249412094:w1282547787:wall", "physical-building:w1249412094"],
@@ -60,6 +62,7 @@ const ACTIVE_UNIT_BY_RECEIVER = new Map([
   ["building:w95934105:wall", "physical-building:w95934105"],
   ["building:w95934119:wall", "physical-building:w95934119"],
   ["building:w95934144:wall", "physical-building:w95934144"],
+  ["building:w95934117:wall", "physical-building:w95934117"],
 ]);
 const ACTIVE_REVIEW_STATUS_BY_RECEIVER = new Map([
   ["building-composite:w1249412094:w1282547787:wall", "independent_exact_current_live_pass"],
@@ -71,6 +74,7 @@ const ACTIVE_REVIEW_STATUS_BY_RECEIVER = new Map([
   ["building:w95934105:wall", "independent_exact_current_live_pass"],
   ["building:w95934119:wall", "independent_exact_current_live_pass"],
   ["building:w95934144:wall", "independent_exact_current_live_pass"],
+  ["building:w95934117:wall", "independent_exact_current_live_pass"],
 ]);
 
 function absolute(relativePath) {
@@ -136,7 +140,7 @@ const compiledFirst = compile(catalog, inputs);
 const compiledSecond = compile(catalog, inputs);
 
 assert(catalog.schema_version === CATALOG_SCHEMA, "catalog schema is not exact-current version-pinned");
-assert(CATALOG_SCHEMA === "ti.facade-recognition-catalog/10" && RUNTIME_SCHEMA === "ti.facade-runtime-registry/10" && ADAPTER_CONTRACT_SCHEMA === "ti.facade-runtime-adapter-contracts/9" && LOADER_API_VERSION === "ti.facade-runtime-registry-loader/9" && COMPILER_VERSION === "1.9.0", "D2 1441 promotion version matrix drifted");
+assert(CATALOG_SCHEMA === "ti.facade-recognition-catalog/11" && RUNTIME_SCHEMA === "ti.facade-runtime-registry/11" && ADAPTER_CONTRACT_SCHEMA === "ti.facade-runtime-adapter-contracts/10" && LOADER_API_VERSION === "ti.facade-runtime-registry-loader/10" && COMPILER_VERSION === "1.10.0", "D2 1441 promotion version matrix drifted");
 assert(catalog.compiler_contract.required_compiler_version === COMPILER_VERSION, "catalog compiler version pin drifted");
 assert(catalog.compiler_contract.emitted_runtime_schema_version === RUNTIME_SCHEMA, "catalog runtime version pin drifted");
 assert(catalog.compiler_contract.unknown_version_policy === "reject", "catalog does not reject unknown forward versions");
@@ -173,7 +177,7 @@ for (const adapter of registry.active_runtime_adapters) {
 }
 
 assert(JSON.stringify(adapterContracts.counts) === JSON.stringify(EXPECTED_ADAPTER_CONTRACTS), "adapter contract counts drifted");
-assert(adapterContracts.plans.length === EXPECTED.runtime_adapter_receivers, "adapter contract does not cover 18 receiver plans");
+assert(adapterContracts.plans.length === EXPECTED.runtime_adapter_receivers, "adapter contract does not cover 19 receiver plans");
 const readyPlans = adapterContracts.plans.filter((plan) => plan.integration_state === "package_safe_ready_for_integration");
 const disabledPlans = adapterContracts.plans.filter((plan) => plan.integration_state === "hard_disabled_source_projection");
 assert(JSON.stringify(readyPlans.map((plan) => plan.receiver_key).sort()) === JSON.stringify(READY_RECEIVERS), "package-safe receiver set drifted");
@@ -243,10 +247,11 @@ const acceptedUnitIds = [
   "physical-building:w34313540",
   "physical-building:w34313545",
   "physical-building:w95934105",
+  "physical-building:w95934117",
   "physical-building:w95934119",
   "physical-building:w95934144",
 ].sort();
-assert(registry.recognition_metric.numerator === 10 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "10/213", "runtime recognition metric is not exactly 10/213");
+assert(registry.recognition_metric.numerator === 11 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "11/213", "runtime recognition metric is not exactly 11/213");
 assert(JSON.stringify(registry.recognition_metric.accepted_physical_unit_ids) === JSON.stringify(acceptedUnitIds), "runtime accepted physical-unit set drifted");
 assert(JSON.stringify(registry.recognition_metric.isle_house_non_numerator_source_keys) === JSON.stringify(["w1282547786", "w1282547787"]), "Isle House source parts entered the physical-unit numerator");
 const islePlan = disabledPlans.find((plan) => plan.receiver_key === "building-composite:w1249412094:w1282547787:wall");
@@ -339,8 +344,119 @@ assert(d21441Ownership.live_ownership_signature === "fcad9968be3d0c9094adef5dcc9
 const d21441Replacement = d21441Plan.behavior_contract.replacement_contract;
 assert(d21441Replacement.source_key === "w95934105" && d21441Replacement.wall_object_key === "building:w95934105:wall" && d21441Replacement.roof_object_key === "building:w95934105:roof" && d21441Replacement.actual_supplied_chunk_pair_required === true && d21441Replacement.partial_pair_allowed === false && d21441Replacement.fallback_allowed === false && d21441Replacement.generic_stack_allowed === false && d21441Replacement.mapped_public_run_indices.join(",") === "10,12,13,15" && d21441Replacement.protected_run_indices.join(",") === "0,1,2,3,4,5,6,7,8,9,11,14", "D2 1441 paired replacement/run partition drifted");
 assert(d21441Plan.behavior_contract.truth_boundary.capture_time_candidate_promoted === false && d21441Plan.behavior_contract.truth_boundary.capture_time_recognition_credit === false && d21441Plan.behavior_contract.truth_boundary.reference_pixels_packaged === false && d21441Plan.behavior_contract.truth_boundary.as_built_fidelity_claimed === false, "D2 1441 capture-time truth boundary was rewritten by promotion");
+const d21444Plan = readyPlans.find((plan) => plan.receiver_key === "building:w95934117:wall");
+const expectedD21444Behavior = {
+  "acceptance_contract": {
+    "accepted_physical_unit_id": "physical-building:w95934117",
+    "capture_time_recognition_metric": "9/213",
+    "evidence_manifest_sha256": "9f1101abb3e4d6ac54f27a8a6db7d72ccd098721d0f59e8a6f72a6aa4c1293ef",
+    "evidence_tree_sha256": "6872fe9f286370de3ab11ce27124583689a7fa0c4992bb4de4f2b9e8e1073003",
+    "independent_live_review_receipt_sha256": "89c301ccdf5d02b71c5f4d79eacfee55521440edfbe2c6d780cd7c1d059d72c7",
+    "mechanical_review_receipt_sha256": "7e62e914074646e438bc7c88a1f15fbc71eb40bfa00a0b04acf20e22e319c205",
+    "motion_telemetry_manifest_sha256": "b569a5dc8b72c99c873a85c4fbc49b701ba72647a0299a4f8e7b0ff06b7309bc",
+    "numerator_effect": 1,
+    "package_verification_receipt_sha256": "b738e35d58ef6e75d0c4d98ae32d6157532703984fd48730281629211fe355a4",
+    "reference_recognizable": true,
+    "visual_motion_manifest_sha256": "327d9980de0798d7412ea691bd656f278a5e04da383c24fdb1cb272305b29e38",
+    "wall_and_roof_are_one_physical_unit": true
+  },
+  "geometry_contract": {
+    "canonical_roof_record_sha256": "0119a96ef2f8baf3e7a66a3db952cfd34930490b86dd25bf3693472728dadae1",
+    "canonical_wall_record_sha256": "5a872a7e700aec63a2c276bb28c341e3f501ac8122f51267b05fb8a620d15950",
+    "horizontal_source_footprint_preserved": true,
+    "topology_delta_mesh_instances": 9,
+    "topology_delta_records": 0,
+    "topology_delta_shapes": 1,
+    "topology_delta_static_bodies": 0,
+    "topology_delta_surfaces": 9,
+    "topology_delta_triangles": 672,
+    "visual_geometry_signature": "1dba8f84003a0818c2ddb91504f41c3437a63fe0856ade70d1c194ca1be8d141",
+    "visual_mesh_instances": 11,
+    "visual_surfaces": 11,
+    "visual_triangles": 726,
+    "world_mesh_instances": 977,
+    "world_records": 735,
+    "world_shapes": 468,
+    "world_static_bodies": 466,
+    "world_surfaces": 992,
+    "world_topology_scope": "current_integration_topology",
+    "world_triangles": 71828
+  },
+  "ownership_contract": {
+    "closed_recess_render_layer": 1,
+    "decorative_collision_triangles": 0,
+    "decorative_navigation_nodes": 0,
+    "decorative_relief_triangles": 612,
+    "eligible_exterior_collision_triangles": 64,
+    "live_ownership_signature": "979910c4d53486b86db04cdf04528789f668a01c41dc27114e481c843b91b92d",
+    "navigation_owner_count": 0,
+    "noneligible_closed_recess_collision_triangles": 40,
+    "roof_collision_triangles": 10,
+    "roof_is_wall_spray_receiver": false,
+    "roof_world_solid_landing": true,
+    "shape_count": 3,
+    "spray_owner_count": 1,
+    "structural_owner_count": 2,
+    "wall_collision_triangles": 104,
+    "wall_decal_cull_mask": 2,
+    "wall_is_sole_spray_receiver": true,
+    "wall_shape_order": [
+      "eligible_exterior",
+      "noneligible_closed_recess"
+    ]
+  },
+  "replacement_contract": {
+    "actual_supplied_chunk_pair_required": true,
+    "fallback_allowed": false,
+    "generic_stack_allowed": false,
+    "mapped_public_run_indices": [
+      8,
+      9,
+      11,
+      12,
+      15,
+      16,
+      17
+    ],
+    "partial_pair_allowed": false,
+    "protected_run_indices": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      10,
+      13,
+      14,
+      18,
+      19,
+      20,
+      21
+    ],
+    "roof_object_key": "building:w95934117:roof",
+    "source_key": "w95934117",
+    "wall_object_key": "building:w95934117:wall"
+  },
+  "schema_version": "ti.d2-1444-production-live-parity/1",
+  "truth_boundary": {
+    "as_built_fidelity_claimed": false,
+    "capture_time_candidate_promoted": false,
+    "capture_time_recognition_credit": false,
+    "game_distinctive_claimed": false,
+    "receiver_complete_inferred_from_art": false,
+    "reference_pixels_packaged": false,
+    "unobserved_sides_protected": true,
+    "unsurveyed_opening_roof_void_rail_dimensions_and_counts_are_production_inference": true
+  }
+};
+assert(d21444Plan && stableJson(d21444Plan.behavior_contract) === stableJson(expectedD21444Behavior), "D2 1444 literal seven-binding and ownership/topology plan drifted");
+assert(d21444Plan.executable_assets.length === 3 && d21444Plan.runtime_assets.length === 13, "D2 1444 exact runtime/executable closure drifted");
+
 const currentTopologyPlans = adapterContracts.plans.filter((plan) => plan.behavior_contract?.geometry_contract?.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE).map((plan) => plan.adapter_id);
-assert(JSON.stringify(currentTopologyPlans) === JSON.stringify(["active-adapter:d2-1439-live:building:w95934144:wall"]), "D2 1439 is not the sole current-integration topology plan authority");
+assert(JSON.stringify(currentTopologyPlans) === JSON.stringify(["active-adapter:d2-1444-live:building:w95934117:wall"]), "D2 1444 is not the sole current-integration topology plan authority");
 
 expectFailure(() => {
   const candidate = structuredClone(catalog);
@@ -403,7 +519,7 @@ expectFailure(() => {
   candidate.recognition_metric.numerator = 8;
   candidate.recognition_metric.display = "8/213";
   validateRuntimeRegistry(candidate, adapterContracts);
-}, "Runtime physical-entity recognition metric drifted from exactly 10/213", "drifted recognition numerator");
+}, "Runtime physical-entity recognition metric drifted from the accepted-unit rollup", "drifted recognition numerator");
 expectFailure(() => {
   const candidate = structuredClone(registry);
   const adapter = candidate.active_runtime_adapters.find((item) => item.receiver_key === "building:r16681702:wall");
@@ -634,7 +750,7 @@ expectFailure(() => {
   const plan = candidate.plans.find((item) => item.receiver_key === "building:w95934105:wall");
   candidate.plans.push(structuredClone(plan));
   validateAdapterContracts(candidate);
-}, "Facade runtime adapter plans do not cover 18 receivers", "D2 1441 duplicate plan mutation");
+}, "Facade runtime adapter plans do not cover 19 receivers", "D2 1441 duplicate plan mutation");
 
 console.log(
   `PASS facade runtime loader contract: ${EXPECTED.recognition_units} units / ${EXPECTED.direct_wall_receivers} receivers / ${adapterContracts.plans.length} plans / ${readyPlans.length} package-safe / ${disabledPlans.length} hard-disabled receivers / ${adapterContracts.projection_descriptors.length} pathless projection inputs; registry ${sha256File(PATHS.registry)}; adapter contracts ${sha256File(PATHS.adapterContracts)}`,

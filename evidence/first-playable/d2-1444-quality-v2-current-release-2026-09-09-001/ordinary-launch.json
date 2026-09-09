@@ -1,0 +1,117 @@
+{
+  "derived_normalized_summary": true,
+  "not_raw_execution_evidence": true,
+  "raw_originals_rewritten": false,
+  "normalization": "Longest-prefix-first substitutions only in string leaves and path keys. Original arrays, scalar values, historical pending fields and hashes remain intact; exact originals are privately retained.",
+  "raw_origin": {
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-current-release-provenance-2026-09-09-001/task-work/1444-quality-v2-001/publication-001/ORDINARY_LAUNCH_HANDOFF.json",
+    "sha256": "1434fc9cb28159f2fb59b60a13faad3cf93e04c2a6e1bfd9feab9e8a1c5f030c",
+    "bytes": 3888,
+    "byte_identical": true
+  },
+  "data": {
+    "status": "EXACT_NO_ARGUMENT_APP_VISIBLE_OWNED_WINDOW_OBSERVED_AND_STOPPED_PIXELS_UNAVAILABLE",
+    "app": "{MAIN_REPO}/build/d2-1444-quality-v2-current-2026-09-09-001/Treasure Island First Playable.app",
+    "metric": "11/213",
+    "argv": [
+      "{MAIN_REPO}/build/d2-1444-quality-v2-current-2026-09-09-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
+    ],
+    "cwd": "{PRIVATE_TMP}/d2-1444-current-ordinary-launch-001",
+    "source_free_empty_cwd": true,
+    "pid": 75791,
+    "visible_owned_windows": [
+      {
+        "kCGWindowAlpha": 1,
+        "kCGWindowBounds": {
+          "Height": 832,
+          "Width": 1280,
+          "X": 320,
+          "Y": 97
+        },
+        "kCGWindowIsOnscreen": true,
+        "kCGWindowLayer": 0,
+        "kCGWindowMemoryUsage": 2368,
+        "kCGWindowNumber": 36142,
+        "kCGWindowOwnerName": "Treasure Island First Playable",
+        "kCGWindowOwnerPID": 75791,
+        "kCGWindowSharingState": 0,
+        "kCGWindowStoreType": 1
+      }
+    ],
+    "ordinary_no_argument_launch_observed": true,
+    "native_gameplay_pixels_captured": false,
+    "computer_use_node_route": "@oai/sky import succeeded; get_app_state returned Trusted RPC service is not configured: sky",
+    "computer_use_direct_fallback": "Same-plugin read-only get_app_state terminal response reported Accessibility and Screen Recording permissions still pending. No retry/settings changes.",
+    "no_gameplay_input_or_camera_pose_injection": true,
+    "ordinary_gameplay_or_owner_acceptance_claimed": false,
+    "HUMAN_001": "pending, scope unchanged",
+    "stop": {
+      "signal": "SIGTERM",
+      "intentional_owned_only": true,
+      "actual_exit_code": -15,
+      "pid_absent": true,
+      "fresh_ps_stdout": ""
+    },
+    "all7appfiles_and38sourcepins_unchanged": true,
+    "source_of_byte_checks": "ordinary-launch-start.json plus ordinary-launch-termination.json; same exact independent-reviewed current app",
+    "raw_evidence": [
+      {
+        "path": "launch-reviewed-current-app.py",
+        "sha256": "81ce6fd3234735b6594e44d33e7fee40235c592ecaa61e6d2417a222cd5f4d28",
+        "bytes": 3405
+      },
+      {
+        "path": "ordinary-launch-start.json",
+        "sha256": "fb1f08d4c5f2e2c38126d8b8daad18d809f4558da3098c22e4eab2499ea29c47",
+        "bytes": 7398
+      },
+      {
+        "path": "ordinary-launch-pre-ui.json",
+        "sha256": "afe7e8a8889f049271210207d402f35941c4096b8d76c73186cf5d992db96ac5",
+        "bytes": 316
+      },
+      {
+        "path": "ordinary-owned-window.json",
+        "sha256": "0f541a9e139caefe28324f7bb87c93d7bdee9ec099279268d684b8a95a0ee668",
+        "bytes": 429
+      },
+      {
+        "path": "ordinary-owned-window-execution.json",
+        "sha256": "6dd9f7568ab2a7af17f4745dcd5d09ed7e4072c44f0fee7efddbe4dd84466519",
+        "bytes": 406
+      },
+      {
+        "path": "ordinary-owned-window-stderr.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      },
+      {
+        "path": "computer-use-sky-failure.json",
+        "sha256": "65698a25797808e5e18be26dc5067183cb6478b919dd81e8a2563dc17aa7c3f5",
+        "bytes": 472
+      },
+      {
+        "path": "computer-use-direct-result.json",
+        "sha256": "3a6f442476bf0ebfb48a5c0eaa2bf9d4accf2d27bbd6d88c9c2baabb9a1b8ba6",
+        "bytes": 852
+      },
+      {
+        "path": "ordinary-launch-stop-request.json",
+        "sha256": "1af6b52577f7315c0e24b3500536c571bef96175197d5b218927cf9894d8e02f",
+        "bytes": 855
+      },
+      {
+        "path": "ordinary-launch-termination.json",
+        "sha256": "a4020755dc706220ad728b813da58db260a9cc6e3eef3b68ff37402ebb458d3a",
+        "bytes": 5534
+      },
+      {
+        "path": "ordinary-current-app.log",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "bytes": 0
+      }
+    ],
+    "engine_slot_released": true,
+    "publication_commit_push": "not performed"
+  }
+}

@@ -1,10 +1,18 @@
 # First-playable evidence index
 
-Checked: 2026-09-07
+Checked: 2026-09-09
 
-This directory separates reproducible automated proof, native-launch proof, autonomous-review status, and owner feedback. Current source and packaged evidence are bound to generated content SHA-256 `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164` and manifest SHA-256 `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`. The active skyline is the single-color `2212x340` silhouette with SHA-256 `9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5`, on a `3900x600 m` billboard at `(-1875,264.85,4306.4)`. The current reviewed handoff is the D2 1441 postpromotion v9 `-001` app. The frozen D2 1441 `-009` v8 app is its prepromotion evidence input; the B225, B201 `024605`, `111725`, `190724`, `231815`, and `224622` packages are historical, while `014223` and `002922` are withdrawn diagnostics.
+This directory separates reproducible automated proof, native-launch proof, autonomous-review status, and owner feedback. Current source and packaged evidence are bound to generated content SHA-256 `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164` and manifest SHA-256 `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`. The active skyline is the single-color `2212x340` silhouette with SHA-256 `9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5`, on a `3900x600 m` billboard at `(-1875,264.85,4306.4)`. The current reviewed handoff is the 1444 exact-current11/213 app linked below; the D2 1441 postpromotion v9 `-001` app is historical. The frozen D2 1441 `-009` v8 app is its prepromotion evidence input; the B225, B201 `024605`, `111725`, `190724`, `231815`, and `224622` packages are historical, while `014223` and `002922` are withdrawn diagnostics.
 
-## D2 1441 v9 release closure — 2026-09-07
+## Current 1444 exact-current release — 2026-09-09
+
+The [release closure](d2-1444-quality-v2-current-release-2026-09-09-001/release-closure.json) binds **11/213**, world `735/977/992/71,828/466/468`, and the independently verified seven-file app. The [ordinary launch](d2-1444-quality-v2-current-release-2026-09-09-001/ordinary-launch.json) observed the owned visible window; Computer Use permissions left pixels unavailable. The app is stopped. Publication review/commit/push and HUMAN-001 owner feedback remain pending.
+
+The [immutable 1444 candidate packet](d2-1444-quality-v2-promotion-candidate-2026-09-09-001/candidate-closure.json) retains33 native images, capture9/candidate10, sampled motion and original failures. Its separate [independent packet attestation](../reviews/d2-1444-quality-v2-promotion-candidate-2026-09-09-001-INDEPENDENT_PACKET_REVIEW.md) closes the candidate packet without rewriting historical records. Current authority/release reviews and exact private originals are indexed by the current closure. Previous B1/1439 evidence and all prior credits remain unchanged.
+
+## Historical D2 1441 v9 release closure — 2026-09-07
+
+The following section records its own historical authority, topology and app; its uses of “current” refer to that release.
 
 Current source authority is compiler `1.8.0`, catalog/runtime registry v9,
 adapter contracts/loader API v8, exact recognition `9/213`, and loaded topology

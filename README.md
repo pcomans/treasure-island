@@ -18,7 +18,20 @@ Before restoring tools or opening Godot, read [AGENTS.md](AGENTS.md) and the [ma
 Human-only follow-ups are kept in the [owner action queue](HUMAN.md); that
 queue narrows external gates and never pauses safe independent work.
 
-## Current 1439 Chinook Court — tenth recognized building
+## Current 1444 Croaker Court — eleventh recognized building
+
+Independent source, live mechanics, visual/reference, candidate-package, packet and authority reviews accepted `physical-building:w95934117`. Recognition is **11/213**, adding one physical unit while preserving the previous ten acceptances and all 213 units; **202** remain not evaluated. Compiler `1.10.0`, catalog/registry v11 and contracts/loader v10 agree on ten active adapters, nineteen plans and thirteen package-ready plans. The paired roof adds no credit.
+
+Current loaded topology is `735/977/992/71,828/466/468` rows/meshes/surfaces/triangles/bodies/shapes. 1444 alone carries current topology; prior B1, 1441 and 1439 measurements remain historical. The current private app is `build/d2-1444-quality-v2-current-2026-09-09-001/Treasure Island First Playable.app`. Its seven-file identity is `07fe27f678be4c7d71de77b42a79c6b8c46491034eb6c80a2b3e00eed097b4e6`, PCK `c010390dcfe213134445a352facd0720283818edd279e72851f17af83bcc426c`, and executable `a5a85e48fbd890e661d04a1e191bfe1280141c01c0212cc6fb4fd10591a90c4f`.
+
+Owner and independent current-package checks passed. The exact no-argument app created an owned visible native window, then was intentionally stopped; all app/source bytes remained exact. Computer Use reported an unconfigured node bridge and pending Accessibility/Screen Recording permissions, so no gameplay pixels or manual-input acceptance is claimed. [Ordinary launch evidence](evidence/first-playable/d2-1444-quality-v2-current-release-2026-09-09-001/ordinary-launch.json). Publication review, commit and push remain pending.
+The [current release closure](evidence/first-playable/d2-1444-quality-v2-current-release-2026-09-09-001/release-closure.json) binds actual app/source identities and retained original records. The [immutable unit packet](evidence/first-playable/d2-1444-quality-v2-promotion-candidate-2026-09-09-001/candidate-closure.json) and later independent attestation retain captured **9/213**, candidate-package **10/213**, 33 native originals and sampled temporal review. Its original mechanical and mounted failures remain visible with accepted scoped reconciliations. No as-built claim, continuous-playback claim or current package-pixel equivalence is made.
+
+`HUMAN-001` stays pending only for ordinary owner recognition and mouse/keyboard acceptance on the approved Apple M1 Pro. Technical Apple M2 checks do not replace that feedback or block autonomous work.
+
+## Historical 1439 Chinook Court — tenth recognized building
+
+This section preserves the preceding 10/213 release and its own app/outcomes. Its uses of “current” are historical.
 
 Independent source, live mechanics, visual/reference-recognition, candidate-package,
 packet and authority reviews accepted `physical-building:w95934144`. Recognition
@@ -362,9 +375,11 @@ The visual-only pavement skin keeps one filled union for all `427` OSM road/path
   That preceding B1 release instantiated `959` meshes, `974` surfaces,
   `70,692` triangles, and `466` body/shape pairs. The accepted 1439 pair replaces
   generic `2 / 2 / 58` wall/roof geometry with `11 / 11 / 522`, adding one
-  noneligible closed-recess collision shape. The exact current package therefore
-  instantiates `968` meshes, `983` surfaces, `71,156` triangles, `466` nonempty
-  static bodies and `467` shapes. The additional `28`
+  noneligible closed-recess collision shape. That historical 1439 package
+  instantiated `968` meshes, `983` surfaces, `71,156` triangles, `466` bodies
+  and `467` shapes. The accepted 1444 pair adds nine meshes/surfaces, 672
+  triangles and one closure shape: the current package has `977` meshes,
+  `992` surfaces, `71,828` triangles, `466` bodies and `468` shapes. The additional `28`
   records are visual-only pedestrian pavement skins. Other facade attachments
   and pavement skins do not change physical collision. YBI, both bridges, and
   the SF billboard remain context-only and non-colliding.
@@ -405,14 +420,11 @@ The exact headless commands and their assertions are documented in [game/tests/R
 
 ## Export
 
-The exact current private package is
-`build/d2-1439-quality-v2-current-release-2026-09-09-001/Treasure Island First Playable.app`.
-Bundle identity `64d53753266959fe49119f8363e786c4a53f999232b0299329037094d2f8a986`;
-PCK `d4dd89349359ed40e9d1338f2d567a4dfecac899dcc1509aa701989c142befac` (`66,659,644` bytes);
-executable `569e9350ba9d3fb629dde0efdf047a0faf1d1a7ab640c96b46ded5a867204689` (`170,963,648` bytes).
-Owner, independent current-package and publication-readiness checks passed. The primary release commit `2c51de357e54283ad2aeaea9829b9a1eb4cac09d` is published on private `origin/main`. The exact no-argument app opened a visible native window, then was stopped to release the engine slot. Native screenshot attempts failed; no current gameplay pixels or manual-input acceptance is claimed. See the [observed publication and launch outcome](evidence/first-playable/d2-1439-quality-v2-current-release-2026-09-09-001-PUBLICATION.json).
-See the [current release closure](evidence/first-playable/d2-1439-quality-v2-current-release-2026-09-09-001/release-closure.json). The previous B1 and D2 packages
-remain unchanged historical artifacts.
+The exact current private package is `build/d2-1444-quality-v2-current-2026-09-09-001/Treasure Island First Playable.app`.
+Bundle identity `07fe27f678be4c7d71de77b42a79c6b8c46491034eb6c80a2b3e00eed097b4e6`; PCK `c010390dcfe213134445a352facd0720283818edd279e72851f17af83bcc426c` (`66,708,800` bytes); executable `a5a85e48fbd890e661d04a1e191bfe1280141c01c0212cc6fb4fd10591a90c4f` (`170,963,648` bytes).
+
+Owner and independent current-package checks passed. The exact no-argument app created an owned visible native window, then was intentionally stopped; all app/source bytes remained exact. Computer Use reported an unconfigured node bridge and pending Accessibility/Screen Recording permissions, so no gameplay pixels or manual-input acceptance is claimed. [Ordinary launch evidence](evidence/first-playable/d2-1444-quality-v2-current-release-2026-09-09-001/ordinary-launch.json). Publication review, commit and push remain pending.
+See the [current release closure](evidence/first-playable/d2-1444-quality-v2-current-release-2026-09-09-001/release-closure.json). All prior B1 and D2 apps remain retained historical artifacts.
 
 ### Historical B201 package
 
@@ -475,7 +487,7 @@ APP_BINARY="build/final-verification-staging-YYYY-MM-DD-HHMMSS/Treasure Island F
 
 The packaged smoke starts the exported PCK's normal main scene and fails after
 60 seconds of monotonic wall time if its checks do not finish. It exits nonzero if
-the exact ferry spawn/yaw, approved hash, source-current `968/983/71,156`
+the exact ferry spawn/yaw, approved hash, source-current `977/992/71,828`
 topology, grounded player-enable gate, exact `4/20 m/s` speed and
 `30/40 m/s²` response defaults, ambient/camera defaults, live eleven-key
 Poly Haven texture identities/effective repeats/filtering/normals, Space-bound

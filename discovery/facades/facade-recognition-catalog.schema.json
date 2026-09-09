@@ -86,6 +86,9 @@
         },
         {
           "$ref": "#/$defs/d2_1439_active_runtime_adapter"
+        },
+        {
+          "$ref": "#/$defs/d2_1444_active_runtime_adapter"
         }
       ]
     },
@@ -688,11 +691,89 @@
       ],
       "type": "object"
     },
+    "d2_1444_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:d2-1444-live:building:w95934117:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_paired_wall_roof_replacement"
+        },
+        "receiver_key": {
+          "const": "building:w95934117:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd"
+        },
+        "runtime_asset_paths": {
+          "items": {
+            "enum": [
+              "game/scripts/world/facades/d2_1444_croaker_quality_v2_prototype.gd",
+              "game/resources/facades/d2_1444_croaker_quality_v2_prototype.json",
+              "game/scripts/world/facades/site_12_housing_kit.gd",
+              "game/resources/materials/world/site_12_housing/site_12_ochre_tan_stucco.tres",
+              "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
+              "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
+              "game/resources/materials/world/site_12_housing/d2_1444_quality_v2_recess_backing.tres",
+              "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
+              "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
+              "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+              "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"
+            ]
+          },
+          "maxItems": 11,
+          "minItems": 11,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/d2_1444_croaker_quality_v2_live_replacement.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w95934117"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
+    },
     "expected_counts": {
       "additionalProperties": false,
       "properties": {
         "active_runtime_adapter_receivers": {
-          "const": 9
+          "const": 10
         },
         "building_footprints": {
           "const": 213
@@ -713,7 +794,7 @@
           "const": 213
         },
         "runtime_adapter_receivers": {
-          "const": 18
+          "const": 19
         },
         "source_records": {
           "const": 215
@@ -1328,8 +1409,8 @@
       "items": {
         "$ref": "#/$defs/active_runtime_adapter"
       },
-      "maxItems": 9,
-      "minItems": 9,
+      "maxItems": 10,
+      "minItems": 10,
       "type": "array"
     },
     "capture_contracts": {
@@ -1352,10 +1433,10 @@
       "additionalProperties": false,
       "properties": {
         "emitted_runtime_schema_version": {
-          "const": "ti.facade-runtime-registry/10"
+          "const": "ti.facade-runtime-registry/11"
         },
         "required_compiler_version": {
-          "const": "1.9.0"
+          "const": "1.10.0"
         },
         "unknown_version_policy": {
           "const": "reject"
@@ -1386,7 +1467,7 @@
       "type": "array"
     },
     "schema_version": {
-      "const": "ti.facade-recognition-catalog/10"
+      "const": "ti.facade-recognition-catalog/11"
     },
     "source_contract": {
       "$ref": "#/$defs/source_contract"

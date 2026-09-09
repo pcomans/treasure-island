@@ -45,6 +45,34 @@ Existing assets created by older GPT models, including previously accepted work,
 
 Keep exact generated receiver identity, protected-region ownership, complete-motif and seam semantics, physical plausibility, and geometry/collision/navigation/spray integrity mandatory. Survey precision improves confidence and becomes mandatory only when safety or geometry integrity depends on it. Validate the combined result against the reference observations in ordinary gameplay views, with independent art review. Keep as-built fidelity and game-art acceptance as separate claims.
 
+## Authoring and batch delivery
+
+The ordinary iteration loop is **edit assets/code -> run or reload the source project -> capture and inspect the actual render early**. Use the approved gameplay camera and matched reference/baseline views where applicable. Bring the first coherent study to the independent visual reviewer before extended refinement or package paperwork. Run focused source and mechanical checks for the change; visible stairs require actual stock-player walking attempts up and down each flight, with contact, grounding and destination evidence. Jetpack access or static floor contact alone does not establish stair walkability. Preserve the approved walk/run/jetpack/camera/spray controls.
+
+Exports, signing, mounted-package audits and release documentation belong at a **batch delivery checkpoint**, after the ready units have passed their individual quality gates. They must not block unrelated authorized authoring, source runs or early visual inspection. Reuse frozen source and visual evidence when its inputs remain applicable; review an actual changed seam instead of replaying unrelated gates. Independent source and mechanical decisions remain required, and the visual bar-raiser remains separate from implementation and those technical decisions.
+
+Ready units may share one candidate app and its owner/independent package runs. Keep a separate unit-bound acceptance packet and verdict for every building: static evidence, motion telemetry, visual-motion evidence, image-tree digest, mechanical review, package-verification receipt and independent packet/visual attestation. Per-unit package summaries may bind the same exact app and raw runs only when those runs verify each target's real attachment and required predicates. Preserve original images, source/capture pins, failed receipts, sampled-motion limits and private retention; derived summaries must identify themselves. The image-tree digest and the tree document's hash are different bindings.
+
+Candidate package PASS remains a prerequisite to recognition credit under the existing acceptance contracts. Then serialize the ready units' authority entries and validate the exact accepted-unit list/counts once for the batch, followed by one fresh **exact-current batch export** and its required independent release/privacy checks. Thus the established order has a candidate export and a final current export per batch, not per art iteration or per unit. Never reuse a PCK as proof of two different authority states. Preserve the 213-unit inventory, previous accepted credit, protected scope, B1/HUMAN boundaries and reference privacy; capture-time metrics never become current metrics by relabeling. Study readiness alone grants no live attachment, promotion or recognition credit.
+
+## Bounded subagent execution
+
+Use a small number of named agents with concrete targets, output locations, stop conditions and ownership. The reusable role prompts are in `.claude/agents/`: `ti-implementation`, `ti-source-mechanics-review`, `ti-visual-review` and `ti-release-review`. Other harnesses may use the same role boundaries without changing their tool configuration. An agent must not independently accept its own implementation or exported package; package or technical PASS does not supply the separate visual decision. Return compact handoffs with exact relevant bindings instead of duplicating large manifests or adding reporting frameworks.
+
+Reuse the complete successful capture/check driver and current supported invocation, adapting target paths, pins and measured expectations together before running it. Preserve source versus mounted-component versus signed-release coverage boundaries. Root serializes heavy render/engine work; the next owner starts only after explicit slot release and actual terminal/PID evidence. A tool-observation timeout or an old output file is not evidence of process completion.
+
+For the first checkout when Git LFS is unavailable on this machine, include the established command-local filter settings in the assignment and the checkout itself:
+
+```sh
+git -c filter.lfs.process= -c filter.lfs.smudge= -c filter.lfs.clean= -c filter.lfs.required=false worktree add <new-worktree> <approved-ref>
+```
+
+Keep the requested branch/starting state. Verify whether checkout populated the intended files even if the existing post-checkout hook returns nonzero; record filter and hook outcomes separately. Do not change global Git configuration/hooks, repeat an already successful checkout, or hydrate/download LFS assets without authorization. An LFS pointer is not a usable runtime asset.
+
+## Timing claims
+
+For a requested full workflow comparison, time from before the actual source edit through run/reload, saved screenshot, delivery to the reviewing model and its explicit visual verdict. Include tool transport, failures/retries and waiting within that boundary. Report separately measured setup, run order, cache state and interruptions; label uninstrumented intervals unknown rather than inventing total tool/model costs. A local process timer or runtime property-change/readback/PNG cycle is a narrower measurement and must be labeled as such. Do not infer full development or migration speed from those narrower timings. In the approved GDScript workflow the engine is prebuilt; script loading/parsing/compilation and applicable asset/shader preparation still occur, while app export is a separate delivery operation.
+
 ## Approved implementation approach
 
 - Godot 4.7.2 standard edition, GDScript, and Forward+.

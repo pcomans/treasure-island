@@ -62,4 +62,17 @@ Capture these applicable views under reproducible settings:
 4. Enough receiver area to reveal several repeats on each tileable axis.
 5. Whole-object reference view for a named building, with texture and geometry verdicts reported separately.
 
+## Source-run preparation and release boundary
+
+Use source-project runs/reloads for ordinary iteration and inspect an early actual render. Preserve the complete working driver, including startup, output saves, terminal receipts and current invocation; change only the needed target bindings and measured expectations. Before invoking it:
+
+- Canonicalize filesystem roots once before matching/replacing paths, then inspect the actual selected helper and argv. `/Users/...` and `/Volumes/Macintosh_HD/Users/...` may refer to the same file.
+- Ensure the execution plan and output parents exist. Compare JSON numeric arrays by their complete numeric values; for integer-indexed contracts require finite integral values before normalization, never silent truncation.
+- Keep source, editor-mounted component and actual signed-release coverage explicit. A source-only dependency check cannot be claimed as a mounted-package result. Use the proven supported release invocation; do not rediscover disabled script/path overrides.
+- At the delivery checkpoint, parse native entitlement output using the proven `plutil` path. Empty stdout is not proof of empty entitlements, and an unavailable Python plist dependency is not a reason to alter or re-export the app.
+
+For Treasure Island, before a normal Godot import after private build/provenance artifacts exist, verify that parent `build/.gdignore` excludes archived scripts and images from resource and class scans. Keep this exclusion outside every frozen app, packet and provenance tree; preserve archive bytes and runtime inputs, and retain `evidence/.gdignore`. Judge import readiness from the actual terminal result and complete log: exit zero does not pass compilation errors or duplicate class registrations.
+
+Do not repeat unchanged validation merely to make a receipt green. Retain failures and explain any bounded correction. Package/privacy work waits for the batch checkpoint described in [AGENTS.md](../../../../AGENTS.md#authoring-and-batch-delivery); it does not hold up authorized source/render iteration. Report process or property-change timers separately from a full source-edit-through-model-verdict measurement.
+
 Reject baked light, inverted or implausible relief, false metallic response, implausible or mislabeled physical scale, UV stretching or phase resets, blur/pixelation, aliasing, conspicuous macro repetition, unsafe or wrong-region placement, or a receiver that makes the intended result false. Absence of surveyed real-world placement is not itself a rejection when the inference is bounded, reversible, and physically plausible. Do not change geometry, integrate, export, launch, or commit unless those actions are separately authorized.

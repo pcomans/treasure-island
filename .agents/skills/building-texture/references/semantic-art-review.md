@@ -57,6 +57,8 @@ Judge against the researched target and the intended gameplay view:
 
 A gray placeholder may be shown at the same pose as a diagnostic baseline, but “better than gray,” “more detailed,” a green automated test, or a single attractive isolated tile is never acceptance evidence. Grade game-art recognizability separately from as-built fidelity; the former may pass while the latter remains explicitly unclaimed.
 
+Review the first coherent native source-project result early; export is not a prerequisite for this art decision. Earlier accepted assets are a floor, so require substantive target recognition, coherent composition and believable geometry at ordinary play distance. Inspect actual originals, not only manifests. Describe sampled motion as sampled, and do not imply continuous playback, current-package imagery or a changed source binding from historical captures. Keep each target's verdict separate when package runs are later shared across a batch. For a timed edit-to-verdict task, deliver an explicit visual decision within the recorded task boundary; a save/readback receipt alone is not that decision.
+
 ## Evidence record
 
 For each candidate, record source/prompt, tool mode, dimensions, hash, physical-span status, placement basis/confidence, correction count, applicable proof paths, numeric values, annotated semantic findings, exact-game-receiver captures, game-art and as-built verdicts, and rejection reasons. One small initial batch and at most one diagnosed correction round are allowed. If none passes, revise the classification or research brief instead of generating indefinitely.

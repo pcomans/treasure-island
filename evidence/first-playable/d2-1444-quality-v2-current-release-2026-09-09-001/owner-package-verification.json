@@ -1,0 +1,149 @@
+{
+  "derived_normalized_summary": true,
+  "not_raw_execution_evidence": true,
+  "raw_originals_rewritten": false,
+  "normalization": "Longest-prefix-first substitutions only in string leaves and path keys. Original arrays, scalar values, historical pending fields and hashes remain intact; exact originals are privately retained.",
+  "raw_origin": {
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-current-release-provenance-2026-09-09-001/task-work/1444-exact-current-release-owner-001/OWNER_PACKAGE_HANDOFF.json",
+    "sha256": "f06b78f19a17a3fccd29d7bdab2815ce78fef84cc9ce26074bbf7dbe04d9c8e2",
+    "bytes": 5648,
+    "byte_identical": true
+  },
+  "data": {
+    "status": "OWNER_EXACT_CURRENT_PACKAGE_PASS_PENDING_INDEPENDENT_RELEASE_REVIEW",
+    "checked_at": "2026-09-09T21:58:09.238207+00:00",
+    "app": "{MAIN_REPO}/build/d2-1444-quality-v2-current-2026-09-09-001/Treasure Island First Playable.app",
+    "bundle_inventory": [
+      {
+        "path": "Contents/Info.plist",
+        "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+        "bytes": 1885
+      },
+      {
+        "path": "Contents/MacOS/Treasure Island First Playable",
+        "sha256": "a5a85e48fbd890e661d04a1e191bfe1280141c01c0212cc6fb4fd10591a90c4f",
+        "bytes": 170963648
+      },
+      {
+        "path": "Contents/PkgInfo",
+        "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+        "bytes": 9
+      },
+      {
+        "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+        "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+        "bytes": 229
+      },
+      {
+        "path": "Contents/Resources/Treasure Island First Playable.pck",
+        "sha256": "c010390dcfe213134445a352facd0720283818edd279e72851f17af83bcc426c",
+        "bytes": 66708800
+      },
+      {
+        "path": "Contents/Resources/icon.icns",
+        "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+        "bytes": 67500
+      },
+      {
+        "path": "Contents/_CodeSignature/CodeResources",
+        "sha256": "53eac066ae97be72f08282d9fcfc6c99051b3ccd83c852411a370670d1ac6ddc",
+        "bytes": 3217
+      }
+    ],
+    "bundle_identity_sha256": "07fe27f678be4c7d71de77b42a79c6b8c46491034eb6c80a2b3e00eed097b4e6",
+    "all_seven_files_exact_after_runs": true,
+    "all38packagepins_exact": true,
+    "all65integrationpaths_exact": true,
+    "executions": [
+      {
+        "stage": "source-package-contract-001",
+        "receipt_sha256": "53c22738d28908a8ad59afcd40adf18ae8221377df74ad337b592f6d693dfa2d",
+        "log_sha256": "9a883f7befb835a0758ee64e675cf27da99b0743771c5a10a872a81ea9310d9a",
+        "pid": 68751,
+        "exit_code": 0,
+        "elapsed_seconds": 9.989303458016366,
+        "pins_unchanged": true,
+        "pid_absent_now": true
+      },
+      {
+        "stage": "export-001",
+        "receipt_sha256": "9be6d99593b73484434babff37c61fe24c4b0d64c9ae29838e7598e6199e8456",
+        "log_sha256": "b341d253d47f97af0a7cfdffa1b2bbbe2c872a484c4115562188647b721b1a1f",
+        "pid": 68927,
+        "exit_code": 0,
+        "elapsed_seconds": 8.669251833111048,
+        "pins_unchanged": true,
+        "pid_absent_now": true
+      },
+      {
+        "stage": "mounted-component-001",
+        "receipt_sha256": "86a7d77778c5e9c2f3c0b9ee239318e1f46fbea7b08fe45550e6c43c3b075d62",
+        "log_sha256": "7fb80153cc4e024788adf871a265d119986d501c798cd72744a17aec58129b2d",
+        "pid": 69505,
+        "exit_code": 0,
+        "elapsed_seconds": 2.3066270409617573,
+        "pins_unchanged": true,
+        "pid_absent_now": true
+      },
+      {
+        "stage": "mounted-privacy-001",
+        "receipt_sha256": "d3c37b33697439741e1dfcb0b805fa912f3c41bcb67d854f9a35bd259d53389e",
+        "log_sha256": "0fdaddbba6d710101e11149e5a54a4909bae4496c853f3448d12a60fff2941ad",
+        "pid": 69688,
+        "exit_code": 0,
+        "elapsed_seconds": 2.5958707919344306,
+        "pins_unchanged": true,
+        "pid_absent_now": true
+      },
+      {
+        "stage": "release-headless-smoke-001",
+        "receipt_sha256": "a2336a277f08d4557a444d35d1599892a19de779d1790a8e11f2d169d5a0de5c",
+        "log_sha256": "d2e0e62cc844cb2c69759517ce85a681f148c9ea9138b6eb3cd6c68bd7c736bf",
+        "pid": 69710,
+        "exit_code": 0,
+        "elapsed_seconds": 6.052524250000715,
+        "pins_unchanged": true,
+        "pid_absent_now": true
+      },
+      {
+        "stage": "release-native-smoke-001",
+        "receipt_sha256": "d1549c0fa33cc0194fb88ae6a34b000a80eddd5715f26e5e7bb0748ae14ab254",
+        "log_sha256": "542dcfc3127612d2fbac89124800b0a849c93b12163ca524bcb44be1682cbcfa",
+        "pid": 69918,
+        "exit_code": 0,
+        "elapsed_seconds": 41.08820370794274,
+        "pins_unchanged": true,
+        "pid_absent_now": true
+      }
+    ],
+    "engine_logs": [
+      {
+        "path": "runtime-001/release-headless-smoke-001-engine.log",
+        "sha256": "d2e0e62cc844cb2c69759517ce85a681f148c9ea9138b6eb3cd6c68bd7c736bf"
+      },
+      {
+        "path": "runtime-001/release-native-smoke-001-engine.log",
+        "sha256": "542dcfc3127612d2fbac89124800b0a849c93b12163ca524bcb44be1682cbcfa"
+      }
+    ],
+    "engine_slot_released": true,
+    "source_changes_in_round": false,
+    "historical_capture_metric": "9/213",
+    "historical_candidate_package_metric": "10/213",
+    "current_authority_metric": "11/213",
+    "current_authority_review_sha256": "9c04487cf17e9a2d2b963a7c2f78ec3963a68cba586f2e4f7ac2c5421942b71b",
+    "ordinary_no_argument_launch": "not_performed",
+    "commit_push": "not_performed",
+    "inventory_path": "current-package-inventory.json",
+    "inventory_sha256": "10e9d625dce71bb561ff2647685096e1155f721eb9ba0f0b66d00e937dd5f085",
+    "source_pins_path": "package-source-pins.json",
+    "source_pins_sha256": "9610960aad92b33587f4e180f729c836f9ee475ad752ed049aa0d5beda977755",
+    "external_contract_path": "package-contract.gd",
+    "external_contract_sha256": "b867de3c75ccaa027c0217f24633655bcc750d25d5d6b7132ae0ff4f66ed66ce",
+    "run_plan_sha256": "c80554a035e682aacd9be0ce979e3c96fcfe83dc6f4111cd4fb30d008010f258",
+    "runner_sha256": "6f2f176358a9a8918e8bddea73da5d7ca2b8f621397d155194240e606c9e7257",
+    "post_run_preservation_sha256": "18f78f21184096a1f4ce4104ddc0a14d54f8aa7b5a445f7610b4a72ea4752de6",
+    "handoff_md_sha256": "a04e9a47f52765bcc9c280856e13f95d3f64618f0e6daa1fd89c52a753110458",
+    "retro_append_sha256": "de42ec18d6672f7971ef91ca479dea678af3132cbfa0ea6b223d805931b05bc8"
+  }
+}

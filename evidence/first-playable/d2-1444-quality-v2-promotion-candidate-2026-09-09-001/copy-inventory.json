@@ -1,0 +1,284 @@
+{
+  "schema_version": "ti.d2-1444-quality-v2-exact-copy-inventory/1",
+  "original_native_image_count": 33,
+  "image_selection": "Nine live stills, seven motion PNGs and seventeen independently reviewed native AVI payloads.",
+  "all_public_images_byte_identical": true,
+  "copies": [
+    {
+      "path": "images/01-whole-wsw-default.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/01-whole-wsw-default.png",
+      "source_role": "native_historical_live_still",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "bd115f6940f260e3d043d528866f5559032aa32f5b73f53ed62dcb85a4250207",
+      "bytes": 924470
+    },
+    {
+      "path": "images/02-oblique-default.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/02-oblique-default.png",
+      "source_role": "native_historical_live_still",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "74ca5a8ce63a12a6f7048fb790fbdcc86646ee8da0ecaa19fb6cc0720db92f33",
+      "bytes": 909808
+    },
+    {
+      "path": "images/03-lower-balcony-oblique-default.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/03-lower-balcony-oblique-default.png",
+      "source_role": "native_historical_live_still",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "d6dbc8967ea6be8a0217cd6fd96e52bf2f2da417d7e89f7211ca631d1ae2c96b",
+      "bytes": 1248605
+    },
+    {
+      "path": "images/04-undercroft-oblique-default.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/04-undercroft-oblique-default.png",
+      "source_role": "native_historical_live_still",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "853a52c99a8ff14b003686ccffcf1eb08b9381389b7aa08eac6667a1c005fa93",
+      "bytes": 1174632
+    },
+    {
+      "path": "images/05-oblique-changed-light.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/05-oblique-changed-light.png",
+      "source_role": "native_historical_live_still",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "88079e0201b320b35ae0dcddd91fb1398b16186e7a39f0cf2033c89cc6a8d6fb",
+      "bytes": 912003
+    },
+    {
+      "path": "images/06-lower-balcony-oblique-changed-light.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/06-lower-balcony-oblique-changed-light.png",
+      "source_role": "native_historical_live_still",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "2ff42cc52a95e2bb0206fb85a2187544d8a1478e18e52e161a423b6a5370eff4",
+      "bytes": 1320533
+    },
+    {
+      "path": "images/07-undercroft-oblique-changed-light.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/07-undercroft-oblique-changed-light.png",
+      "source_role": "native_historical_live_still",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "dece22d537821355daeb9412016d784c3a2f409a2154d26e531e316b7bcaeabb",
+      "bytes": 1196450
+    },
+    {
+      "path": "images/08-lower-balcony-floor-clear-default.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/08-lower-balcony-floor-clear-default.png",
+      "source_role": "native_historical_live_still",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "30cdb03ffad741b9a87b29f81dee81882b9e2322ad7e2c312ddb7fa068ca0e06",
+      "bytes": 1451358
+    },
+    {
+      "path": "images/09-lower-balcony-floor-clear-changed-light.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/09-lower-balcony-floor-clear-changed-light.png",
+      "source_role": "native_historical_live_still",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "204e604a797c601ef031b1de71dd5398fe620a81a587e095aa2918982b888431",
+      "bytes": 1530789
+    },
+    {
+      "path": "images/motion-001.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/motion-001.png",
+      "source_role": "native_historical_motion_png",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "0895564c2d1f3ef132f68add358502f5a162faf7d11efabdafe78264734412e2",
+      "bytes": 1320173
+    },
+    {
+      "path": "images/motion-041.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/motion-041.png",
+      "source_role": "native_historical_motion_png",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "cece4b93360cfb518897f41c171befc2fb0e8cac6ff09338605202cdc7148bf8",
+      "bytes": 1317898
+    },
+    {
+      "path": "images/motion-081.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/motion-081.png",
+      "source_role": "native_historical_motion_png",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "56c511c39d430aa6fca57b702cb7a5cee3f06cd9ee6594542ff37bd833629d9d",
+      "bytes": 1316976
+    },
+    {
+      "path": "images/motion-121.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/motion-121.png",
+      "source_role": "native_historical_motion_png",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "956306951add36423b468267a60d2d69c58419f03c8062816cb1a2283904bf20",
+      "bytes": 1329395
+    },
+    {
+      "path": "images/motion-161.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/motion-161.png",
+      "source_role": "native_historical_motion_png",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "38e775f31f05dd72931ff485b3ffc32059aba727f0bfe9fcbd7c5c76caf6cdca",
+      "bytes": 1358915
+    },
+    {
+      "path": "images/motion-201.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/motion-201.png",
+      "source_role": "native_historical_motion_png",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "43b6ef4f106625f5a4fdae351bdc081b1a858b95218a5a8f37a8ba84ac4f883c",
+      "bytes": 1398456
+    },
+    {
+      "path": "images/motion-240.png",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/images/motion-240.png",
+      "source_role": "native_historical_motion_png",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "86751a2b81e98c1eccc7a48c609d9985986261b70da37dc8043f78c001820bd5",
+      "bytes": 1421834
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0128.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0128.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "f8903c41ced902664e0572d68c1dc1d68d2dd4894d4b6bf639c8e5f84f974bbf",
+      "bytes": 83152
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0143.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0143.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "ab0fb21b5fbdb3c394a2d490a4b6db13c486de6db1eaa28f798e4004c9fae238",
+      "bytes": 83023
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0158.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0158.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "e6c4b081744a7292bd97e6200aa0dc647e0e7327b8a77210824a85059175ae67",
+      "bytes": 82724
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0173.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0173.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "64360a7323434c97910028debf50ccd1895a99e48fab9b7902eeba00f79b15f9",
+      "bytes": 82537
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0188.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0188.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "455b8189c1cfe1c10f857beaa5067d103dae9db8819c3463185ecd22ffaaf226",
+      "bytes": 82974
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0203.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0203.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "2eb3b20a2164a5ae8c34f30a658a503e60beb6cab15c97a972c3ee27819890b7",
+      "bytes": 82813
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0218.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0218.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "c12b6e7307aa9c1137439be389cbdc6d26847f463929a32dec4e5ea4baeaa12b",
+      "bytes": 82438
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0233.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0233.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "2407f5cebef4fb5d1d3e376f23be0193f9e6bf103214c7f7a9cecee9ec7d9a42",
+      "bytes": 81727
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0248.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0248.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "249816f5be87829b127c9cfaf6e3898c02b181a7fcf6ba3a52697a8bf5d8898e",
+      "bytes": 81266
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0263.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0263.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "b1332b11c1de063d4944bd97b4825d61268660416d9beabe61bee9ec4946919b",
+      "bytes": 81301
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0278.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0278.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "ad20adc7ec9808a7426f91b3941edad7942127edf0df140327994e41f4a309ee",
+      "bytes": 82828
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0293.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0293.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "a825d81772bb01b3e0fc52cfcf5164e3bf4954bff768dc0ba47ea1b36a2f04ee",
+      "bytes": 83952
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0308.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0308.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "1e6d84245124008e1ed7e9631fbf05ca503d4056171359a9962f33eec6ab487b",
+      "bytes": 86038
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0323.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0323.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "cafa2d27db16ce58b413efc35eb8a3a3cd8a9080ab7b0af0f4a6da60e70e3dd1",
+      "bytes": 87882
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0338.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0338.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "01ee4a1962e33945060e43675baae590b6a55bab1aba6a0f49046dab7266cbb3",
+      "bytes": 89672
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0353.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0353.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "be0723c317b15dd154a2a0b9fc08c98c6e6dcba13520c116df63e522b1e72af9",
+      "bytes": 90781
+    },
+    {
+      "path": "reviewed-motion-frames/avi-index-0368.jpg",
+      "source_locator_normalized": "{NATIVE_CAPTURE}/avi-frame-samples/avi-index-0368.jpg",
+      "source_role": "independently_reviewed_original_mjpeg_payload",
+      "copy_is_byte_identical_native_original": true,
+      "sha256": "e619f6b00a7b211e1b1173a634259e5158448898d0b1b492bec92c7fc0857480",
+      "bytes": 91265
+    }
+  ],
+  "private_file_count": 743,
+  "private_retention_inventory": "private-provenance-retention.json",
+  "truth_boundary": {
+    "recognition_metric": "10/213",
+    "capture_time_recognition_metric": "9/213",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "source_render_images_are_package_pixels": false,
+    "as_built_fidelity_claimed": false,
+    "inventory_physical_units": 213
+  }
+}

@@ -1,0 +1,225 @@
+{
+  "schema_version": "ti.d2-1444-quality-v2-derived-evidence/1",
+  "derived_normalized_summary": true,
+  "not_a_captured_original": true,
+  "raw_originals_rewritten": false,
+  "source_role": "Historical sampled temporal evidence and exact native payload projection",
+  "raw_origin": {
+    "raw_original_sha256": "f473e928b78ce946d42d9d8a7558fe76dd6509b8c798b908583600ae2bd209dc",
+    "raw_original_bytes": 8787,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/owner-session/live-motion-finalization-001.json"
+  },
+  "normalization": "Absolute machine-path prefixes become declared placeholders at string leaves. Raw numeric values, arrays, hashes and historical pending statements remain as recorded. Explicit image projections point to exact archived originals.",
+  "truth_boundary": {
+    "recognition_metric": "10/213",
+    "capture_time_recognition_metric": "9/213",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "source_render_images_are_package_pixels": false,
+    "as_built_fidelity_claimed": false,
+    "inventory_physical_units": 213
+  },
+  "data": {
+    "movie": {
+      "path": "{NATIVE_CAPTURE}/d2-1444-live-stock-walk.avi",
+      "sha256": "57e6c339f31709f26dd4606f7b5ba0a7998bbcc237382b4acfee09e2742c7dc2",
+      "bytes": 31902858,
+      "microseconds_per_frame": 16666,
+      "total_frames": 381,
+      "width": 1280,
+      "height": 800,
+      "fps_from_engine_log": 60,
+      "duration_seconds_at_60fps": 6.35
+    },
+    "original_motion_manifest": {
+      "path": "{NATIVE_CAPTURE}/motion-capture.json",
+      "sha256": "e222d5a90d46e4c80e55448fa158764b05a7f8c9868cb9469e2847ef7c77b992"
+    },
+    "terminal_execution_receipt": {
+      "path": "{TASK_ROOT}/work/1444-quality-v2-001/motion-001-execution.json",
+      "sha256": "d08a1bd5610582dab02e8a0257b61e2214dbdd574adeaacd249749a5c99bb964"
+    },
+    "input_motion": {
+      "physics_frame_count": 240,
+      "active_input_planar_displacement_m": 15.70616234803271,
+      "measurement": "Distance between settled pre-input pose and final sample taken during the240-frame input loop",
+      "post_input_settle_frames": 12,
+      "including_post_input_settle_planar_displacement_m": 15.8664894104004,
+      "extra_displacement_during_post_input_settle_m": 0.16032706236769023,
+      "recoveries": 0,
+      "transform_writes_during_input": 0
+    },
+    "counter_alignment_limits": {
+      "manifest_process_range": [
+        128,
+        368
+      ],
+      "manifest_physics_range": [
+        129,
+        369
+      ],
+      "avi_index_range": [
+        0,
+        380
+      ],
+      "native_png_sample_physics_frames": [
+        130,
+        170,
+        210,
+        250,
+        290,
+        330,
+        369
+      ],
+      "claim": "AVI chunk indices, engine process counters and physics counters are distinct. Sampled AVI indices128..368 bracket the advertised input segment; exact1:1 counter-to-encoded-frame mapping is not asserted. PNGs are saved after physics waits without a paired post-draw signal, so their physics labels are not exact rendered-frame timestamps.",
+      "review_scope": "Native continuous AVI exists; extracted17frames and7native PNGs are sampled motion evidence, not proof of every intervening rendered frame."
+    },
+    "extracted_frames": [
+      {
+        "zero_based_avi_frame_index": 128,
+        "seconds_at_60fps": 2.1333333333333333,
+        "path": "reviewed-motion-frames/avi-index-0128.jpg",
+        "sha256": "f8903c41ced902664e0572d68c1dc1d68d2dd4894d4b6bf639c8e5f84f974bbf",
+        "bytes": 83152,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 143,
+        "seconds_at_60fps": 2.3833333333333333,
+        "path": "reviewed-motion-frames/avi-index-0143.jpg",
+        "sha256": "ab0fb21b5fbdb3c394a2d490a4b6db13c486de6db1eaa28f798e4004c9fae238",
+        "bytes": 83023,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 158,
+        "seconds_at_60fps": 2.6333333333333333,
+        "path": "reviewed-motion-frames/avi-index-0158.jpg",
+        "sha256": "e6c4b081744a7292bd97e6200aa0dc647e0e7327b8a77210824a85059175ae67",
+        "bytes": 82724,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 173,
+        "seconds_at_60fps": 2.8833333333333333,
+        "path": "reviewed-motion-frames/avi-index-0173.jpg",
+        "sha256": "64360a7323434c97910028debf50ccd1895a99e48fab9b7902eeba00f79b15f9",
+        "bytes": 82537,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 188,
+        "seconds_at_60fps": 3.1333333333333333,
+        "path": "reviewed-motion-frames/avi-index-0188.jpg",
+        "sha256": "455b8189c1cfe1c10f857beaa5067d103dae9db8819c3463185ecd22ffaaf226",
+        "bytes": 82974,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 203,
+        "seconds_at_60fps": 3.3833333333333333,
+        "path": "reviewed-motion-frames/avi-index-0203.jpg",
+        "sha256": "2eb3b20a2164a5ae8c34f30a658a503e60beb6cab15c97a972c3ee27819890b7",
+        "bytes": 82813,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 218,
+        "seconds_at_60fps": 3.6333333333333333,
+        "path": "reviewed-motion-frames/avi-index-0218.jpg",
+        "sha256": "c12b6e7307aa9c1137439be389cbdc6d26847f463929a32dec4e5ea4baeaa12b",
+        "bytes": 82438,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 233,
+        "seconds_at_60fps": 3.8833333333333333,
+        "path": "reviewed-motion-frames/avi-index-0233.jpg",
+        "sha256": "2407f5cebef4fb5d1d3e376f23be0193f9e6bf103214c7f7a9cecee9ec7d9a42",
+        "bytes": 81727,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 248,
+        "seconds_at_60fps": 4.133333333333334,
+        "path": "reviewed-motion-frames/avi-index-0248.jpg",
+        "sha256": "249816f5be87829b127c9cfaf6e3898c02b181a7fcf6ba3a52697a8bf5d8898e",
+        "bytes": 81266,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 263,
+        "seconds_at_60fps": 4.383333333333334,
+        "path": "reviewed-motion-frames/avi-index-0263.jpg",
+        "sha256": "b1332b11c1de063d4944bd97b4825d61268660416d9beabe61bee9ec4946919b",
+        "bytes": 81301,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 278,
+        "seconds_at_60fps": 4.633333333333334,
+        "path": "reviewed-motion-frames/avi-index-0278.jpg",
+        "sha256": "ad20adc7ec9808a7426f91b3941edad7942127edf0df140327994e41f4a309ee",
+        "bytes": 82828,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 293,
+        "seconds_at_60fps": 4.883333333333334,
+        "path": "reviewed-motion-frames/avi-index-0293.jpg",
+        "sha256": "a825d81772bb01b3e0fc52cfcf5164e3bf4954bff768dc0ba47ea1b36a2f04ee",
+        "bytes": 83952,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 308,
+        "seconds_at_60fps": 5.133333333333334,
+        "path": "reviewed-motion-frames/avi-index-0308.jpg",
+        "sha256": "1e6d84245124008e1ed7e9631fbf05ca503d4056171359a9962f33eec6ab487b",
+        "bytes": 86038,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 323,
+        "seconds_at_60fps": 5.383333333333334,
+        "path": "reviewed-motion-frames/avi-index-0323.jpg",
+        "sha256": "cafa2d27db16ce58b413efc35eb8a3a3cd8a9080ab7b0af0f4a6da60e70e3dd1",
+        "bytes": 87882,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 338,
+        "seconds_at_60fps": 5.633333333333334,
+        "path": "reviewed-motion-frames/avi-index-0338.jpg",
+        "sha256": "01ee4a1962e33945060e43675baae590b6a55bab1aba6a0f49046dab7266cbb3",
+        "bytes": 89672,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 353,
+        "seconds_at_60fps": 5.883333333333334,
+        "path": "reviewed-motion-frames/avi-index-0353.jpg",
+        "sha256": "be0723c317b15dd154a2a0b9fc08c98c6e6dcba13520c116df63e522b1e72af9",
+        "bytes": 90781,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      },
+      {
+        "zero_based_avi_frame_index": 368,
+        "seconds_at_60fps": 6.133333333333334,
+        "path": "reviewed-motion-frames/avi-index-0368.jpg",
+        "sha256": "e619f6b00a7b211e1b1173a634259e5158448898d0b1b492bec92c7fc0857480",
+        "bytes": 91265,
+        "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+      }
+    ],
+    "continuous_playback_claimed": false,
+    "selected_image_count": 17,
+    "all381_native_payloads_retained_privately": true,
+    "riff_declared_end": 31902788,
+    "physical_file_bytes": 31902858,
+    "trailing_riff_length_discrepancy_bytes": 70,
+    "container_limit": "All native image chunks precede the trailing index discrepancy; no general-player playback-validity claim.",
+    "image_path_projection": "Selected frame paths name byte-identical originals in reviewed-motion-frames; no new render or transcode."
+  }
+}

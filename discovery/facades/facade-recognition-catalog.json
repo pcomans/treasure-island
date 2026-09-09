@@ -165,6 +165,33 @@
       "whole_building_recognizability_imported": false
     },
     {
+      "adapter_id": "active-adapter:d2-1444-live:building:w95934117:wall",
+      "content_classification": "active_target_specific_paired_wall_roof_replacement",
+      "receiver_key": "building:w95934117:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
+      "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
+      "runtime_adapter_path": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
+      "runtime_asset_paths": [
+        "game/resources/facades/d2_1444_croaker_quality_v2_prototype.json",
+        "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres",
+        "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres",
+        "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres",
+        "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres",
+        "game/resources/materials/world/site_12_housing/d2_1444_quality_v2_recess_backing.tres",
+        "game/resources/materials/world/site_12_housing/site_12_ochre_tan_stucco.tres",
+        "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
+        "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+        "game/scripts/world/facades/d2_1444_croaker_quality_v2_prototype.gd",
+        "game/scripts/world/facades/site_12_housing_kit.gd"
+      ],
+      "runtime_config_path": "game/resources/facades/d2_1444_croaker_quality_v2_live_replacement.json",
+      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+      "source_key": "w95934117",
+      "whole_building_recognizability_imported": false
+    },
+    {
       "adapter_id": "active-adapter:d1-b225-live:building:w95934119:wall",
       "content_classification": "active_target_specific_receiver_host_partition_plus_render_only_attachment",
       "receiver_key": "building:w95934119:wall",
@@ -666,6 +693,52 @@
       ],
       "status": "configured",
       "unit_id": "physical-building:w95934144"
+    },
+    {
+      "alternate_pose": {
+        "aim_target_m": [
+          -353.370513916016,
+          5.34999990463257,
+          -43.8199996948242
+        ],
+        "camera_position_m": [
+          -326.414733886719,
+          4.62810325622559,
+          -75.1697387695312
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -330.0,
+          2.7241199016571,
+          -71.0
+        ]
+      },
+      "ordinary_third_person_required": true,
+      "primary_pose": {
+        "aim_target_m": [
+          -353.370513916016,
+          5.34999990463257,
+          -43.8199996948242
+        ],
+        "camera_position_m": [
+          -323.482360839844,
+          4.6881742477417,
+          -71.7550964355469
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -327.5,
+          2.77713823318481,
+          -68.0
+        ]
+      },
+      "required_cue_ids": [
+        "d2-1444-blank-end-undercroft",
+        "d2-1444-sparse-window-return",
+        "d2-1444-two-level-recessed-balcony"
+      ],
+      "status": "configured",
+      "unit_id": "physical-building:w95934117"
     }
   ],
   "catalog_id": "treasure-island-physical-building-recognition",
@@ -683,19 +756,19 @@
     "reference_recognizable": "An ordinary gameplay view is independently matched to target-identifiable reference evidence."
   },
   "compiler_contract": {
-    "emitted_runtime_schema_version": "ti.facade-runtime-registry/10",
-    "required_compiler_version": "1.9.0",
+    "emitted_runtime_schema_version": "ti.facade-runtime-registry/11",
+    "required_compiler_version": "1.10.0",
     "unknown_version_policy": "reject"
   },
   "expected_counts": {
-    "active_runtime_adapter_receivers": 9,
+    "active_runtime_adapter_receivers": 10,
     "building_footprints": 213,
     "building_parts": 2,
     "composite_units": 1,
     "direct_wall_receivers": 214,
     "legacy_adapter_receivers": 9,
     "recognition_units": 213,
-    "runtime_adapter_receivers": 18,
+    "runtime_adapter_receivers": 19,
     "source_records": 215,
     "standalone_units": 212,
     "visible_wall_runs": 4971
@@ -793,7 +866,7 @@
       "whole_building_recognizability_imported": false
     }
   ],
-  "schema_version": "ti.facade-recognition-catalog/10",
+  "schema_version": "ti.facade-recognition-catalog/11",
   "source_contract": {
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_schema_version": "ti.godot-world/2",
@@ -2830,13 +2903,28 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "capture_time_recognition_metric": "9/213",
+          "evidence_manifest_sha256": "9f1101abb3e4d6ac54f27a8a6db7d72ccd098721d0f59e8a6f72a6aa4c1293ef",
+          "evidence_tree_sha256": "6872fe9f286370de3ab11ce27124583689a7fa0c4992bb4de4f2b9e8e1073003",
+          "mechanical_review_receipt_sha256": "7e62e914074646e438bc7c88a1f15fbc71eb40bfa00a0b04acf20e22e319c205",
+          "motion_telemetry_manifest_sha256": "b569a5dc8b72c99c873a85c4fbc49b701ba72647a0299a4f8e7b0ff06b7309bc",
+          "numerator_effect": 1,
+          "package_verification_receipt_sha256": "b738e35d58ef6e75d0c4d98ae32d6157532703984fd48730281629211fe355a4",
+          "review_id": "d2-1444-quality-v2-promotion-candidate-2026-09-09-001",
+          "review_kind": "independent_reference_recognition",
+          "review_receipt_sha256": "89c301ccdf5d02b71c5f4d79eacfee55521440edfbe2c6d780cd7c1d059d72c7",
+          "status": "accept",
+          "visual_motion_manifest_sha256": "327d9980de0798d7412ea691bd656f278a5e04da383c24fdb1cb272305b29e38"
+        }
+      ],
       "anchor_source_key": "w95934117",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -2849,13 +2937,91 @@
         "name_evidence": false
       },
       "legacy_adapter_ids": [],
-      "protected_scopes": [],
+      "protected_scopes": [
+        {
+          "reason": "Fifteen unobserved runs remain quiet and exact; mapped12/15 stay quiet. The actual closed opaque exterior recesses reproduce depth without apartment/interior geometry. Paired roof has separate behavior ownership with no second receiver or credit.",
+          "receiver_key": "building:w95934117:wall",
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            10,
+            13,
+            14,
+            18,
+            19,
+            20,
+            21
+          ]
+        }
+      ],
       "receiver_keys": [
         "building:w95934117:wall"
       ],
-      "recognition_cues": [],
-      "reference_records": [],
-      "reference_state": "reference_research_unassessed",
+      "recognition_cues": [
+        {
+          "complete_motif": true,
+          "cue_id": "d2-1444-blank-end-undercroft",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w95934117:wall",
+          "reference_ids": [
+            "D2-PANO-B"
+          ],
+          "run_indices": [
+            8,
+            9
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "d2-1444-sparse-window-return",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w95934117:wall",
+          "reference_ids": [
+            "D2-PANO-B"
+          ],
+          "run_indices": [
+            11,
+            16
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "d2-1444-two-level-recessed-balcony",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w95934117:wall",
+          "reference_ids": [
+            "D2-PANO-B"
+          ],
+          "run_indices": [
+            17
+          ]
+        }
+      ],
+      "reference_records": [
+        {
+          "observation_id": "D2-PANO-B",
+          "observed_regions": [
+            "Reviewed July2023 public WSW blank end and sparse long return"
+          ],
+          "pixels_packaged": false,
+          "source_locator": "discovery/facades/d2_reference_packets/w95934117_1444_croaker_court.md#D2-PANO-B",
+          "supports": [
+            "blank ochre-tan upper end over deep undercroft",
+            "offset sparse rectangular window return",
+            "far recessed two-storey balcony stack"
+          ]
+        }
+      ],
+      "reference_state": "reference_ready",
       "source_records": [
         {
           "role": "standalone_building_footprint",

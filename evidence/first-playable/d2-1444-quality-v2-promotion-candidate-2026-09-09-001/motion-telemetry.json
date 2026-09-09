@@ -1,0 +1,5008 @@
+{
+  "schema_version": "ti.d2-1444-quality-v2-derived-evidence/1",
+  "derived_normalized_summary": true,
+  "not_a_captured_original": true,
+  "raw_originals_rewritten": false,
+  "source_role": "Original 240-input-sample motion metadata, retained with its capture-time claims",
+  "raw_origin": {
+    "raw_original_sha256": "e222d5a90d46e4c80e55448fa158764b05a7f8c9868cb9469e2847ef7c77b992",
+    "raw_original_bytes": 103919,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/native-live/motion-capture.json"
+  },
+  "normalization": "Absolute machine-path prefixes become declared placeholders at string leaves. Raw numeric values, arrays, hashes and historical pending statements remain as recorded. Explicit image projections point to exact archived originals.",
+  "truth_boundary": {
+    "recognition_metric": "10/213",
+    "capture_time_recognition_metric": "9/213",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "source_render_images_are_package_pixels": false,
+    "as_built_fidelity_claimed": false,
+    "inventory_physical_units": 213
+  },
+  "data": {
+    "ok": true,
+    "evidence_role": "Continuous stock move_right in ordinary main at 60Hz on generated ground. Scenario reset only before input; no player/camera transform writes during motion.",
+    "recognition": "9/213 unchanged; independent live motion review pending",
+    "capture_time_recognition_metric": "9/213",
+    "capture_grants_recognition_credit": false,
+    "source_pins": {
+      "res://game/scripts/world/facades/d2_1444_croaker_quality_v2_prototype.gd": "afe74e5254af720cd855fb8dbadcb71a283d0c8b2d0f79c9565dd2e62b6e9d42",
+      "res://game/resources/facades/d2_1444_croaker_quality_v2_prototype.json": "22efb2fa24ea1db245f8fe204e3f029312da59a7a67644d2f1464f02661046ef",
+      "res://game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+      "res://game/resources/materials/world/site_12_housing/site_12_ochre_tan_stucco.tres": "9486ccf52e1f2aff9fc940f60644733d5cf9bf1cb03cebb5332bcc1d7c0aaaf6",
+      "res://game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres": "d97d7b4a442ffe8ad9a0b003e5c1d6466f9ef9effc7cdb2be8ef966195e66782",
+      "res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres": "389c01066767b085ef8ed8ae4c5e1b06062d9ffb135e3e6a7bfa968b963717d7",
+      "res://game/resources/materials/world/site_12_housing/d2_1444_quality_v2_recess_backing.tres": "796b27c2821e62f554232d2b355adb566d96aa3cd5ed8ef7fb765317f190721a",
+      "res://game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres": "eddc4900c351dc3a75d163bd380a8b3a39bf6a1c1c3647299e3af19634a60ead",
+      "res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres": "75c13aa30a4e3c9f49980d78abe41f40c6c7ab270be6152c201eb8a72ebe8720",
+      "res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+      "res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+      "res://game/scripts/player/player_camera.gd": "1d53f11cc3d9de00d4bb580aa6322c6f53b0080e5b9e1e3b18baeefd52125cc3",
+      "res://game/scenes/player/player.tscn": "a37b00ecc620b4f3106a14d1dc9ec22a519f81481e5e6c68252389e13488a793",
+      "res://game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd": "178cc9df2c7add966a95427099b3a9900fde459e5bfc4825211e06c119cc2e32",
+      "res://game/resources/facades/d2_1444_croaker_quality_v2_live_replacement.json": "472f82f5a3d98b0778aca758ae8277f8b8ba9b4a39875ff54f67781280965135",
+      "res://game/scripts/world/world_chunk_builder.gd": "20e745df0c9bb5b27b71dc1acdf17302c8f37755aa747466231d7bca04dd4ecf",
+      "res://game/scripts/player/player_controller.gd": "8b114132d66c78dd0bfd09783c7b9a3a3a441a8b1ae14f33f7308bd9b04ed0ea",
+      "res://game/scripts/main.gd": "a5cedea1c9861aca393787f7d1a26bfcee3a8a17b08ec4a8bd889fb79a2c7057",
+      "res://game/scripts/interaction/spray_controller.gd": "9897042fbffc6740ebe3eb4c19da544a0d437391ded9987318edc7238c403da4",
+      "res://game/scenes/main.tscn": "959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66",
+      "res://game/scenes/world/world_root.tscn": "ed6dfaa1933cedf2a70ca6afd677a645d588dbf6c823fb04402aaaea4b709ab8",
+      "res://project.godot": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af",
+      "res://generated/world/chunks/x_-2__z_-1.json": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2",
+      "{TASK_ROOT}/work/1444-quality-v2-001/d2_1444_quality_v2_live_001_004_capture.gd": "f018eda3928117021893792e8063b8a8e0d6550f714732d2caed03fb61c53d72"
+    },
+    "measured_world": {
+      "rows": 735,
+      "meshes": 968,
+      "surfaces": 983,
+      "triangles": 71364,
+      "bodies": 466,
+      "shapes": 467
+    },
+    "generator": "{TASK_ROOT}/work/1444-quality-v2-001/d2_1444_quality_v2_live_001_004_capture.gd",
+    "generator_sha256": "f018eda3928117021893792e8063b8a8e0d6550f714732d2caed03fb61c53d72",
+    "movie_file": "d2-1444-live-stock-walk.avi",
+    "movie_contains_startup_before_motion": true,
+    "movie_sha256": "pending_after_writer_close",
+    "review_process_frame_range": [
+      128,
+      368
+    ],
+    "review_physics_frame_range": [
+      129,
+      369
+    ],
+    "fixed_fps": 60,
+    "physics_ticks_per_second": 60,
+    "motion_physics_frames": 240,
+    "duration_seconds": 4.0,
+    "displacement_m": 15.8664894104004,
+    "recovery_delta": 0,
+    "transform_writes_during_input": 0,
+    "frames": [
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-001.png",
+        "physics_frame": 130,
+        "sha256": "0895564c2d1f3ef132f68add358502f5a162faf7d11efabdafe78264734412e2"
+      },
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-041.png",
+        "physics_frame": 170,
+        "sha256": "cece4b93360cfb518897f41c171befc2fb0e8cac6ff09338605202cdc7148bf8"
+      },
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-081.png",
+        "physics_frame": 210,
+        "sha256": "56c511c39d430aa6fca57b702cb7a5cee3f06cd9ee6594542ff37bd833629d9d"
+      },
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-121.png",
+        "physics_frame": 250,
+        "sha256": "956306951add36423b468267a60d2d69c58419f03c8062816cb1a2283904bf20"
+      },
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-161.png",
+        "physics_frame": 290,
+        "sha256": "38e775f31f05dd72931ff485b3ffc32059aba727f0bfe9fcbd7c5c76caf6cdca"
+      },
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-201.png",
+        "physics_frame": 330,
+        "sha256": "43b6ef4f106625f5a4fdae351bdc081b1a858b95218a5a8f37a8ba84ac4f883c"
+      },
+      {
+        "path": "{NATIVE_CAPTURE}/images/motion-240.png",
+        "physics_frame": 369,
+        "sha256": "86751a2b81e98c1eccc7a48c609d9985986261b70da37dc8043f78c001820bd5"
+      }
+    ],
+    "samples": [
+      {
+        "physics_frame": 130,
+        "process_frame": 129,
+        "position": [
+          -353.978698730469,
+          2.34085893630981,
+          -63.0187225341797
+        ],
+        "velocity": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "camera": [
+          -348.550567626953,
+          4.50121402740479,
+          -62.1472091674805
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 131,
+        "process_frame": 130,
+        "position": [
+          -353.970367431641,
+          2.34085893630981,
+          -63.0270538330078
+        ],
+        "velocity": [
+          0.5,
+          0.0,
+          -0.5
+        ],
+        "camera": [
+          -348.542266845703,
+          4.50121307373047,
+          -62.1555404663086
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 132,
+        "process_frame": 131,
+        "position": [
+          -353.959808349609,
+          2.34085893630981,
+          -63.0437164306641
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -1.0
+        ],
+        "camera": [
+          -348.531677246094,
+          4.5012149810791,
+          -62.1722030639648
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 133,
+        "process_frame": 132,
+        "position": [
+          -353.949249267578,
+          2.34085893630981,
+          -63.0687103271484
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -1.5
+        ],
+        "camera": [
+          -348.521148681641,
+          4.50121307373047,
+          -62.1972007751465
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 134,
+        "process_frame": 133,
+        "position": [
+          -353.938690185547,
+          2.34085893630981,
+          -63.1020355224609
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -2.0
+        ],
+        "camera": [
+          -348.510559082031,
+          4.5012149810791,
+          -62.2305183410645
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 135,
+        "process_frame": 134,
+        "position": [
+          -353.928131103516,
+          2.34085893630981,
+          -63.1436958312988
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -2.5
+        ],
+        "camera": [
+          -348.500030517578,
+          4.50121402740479,
+          -62.2721862792969
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 136,
+        "process_frame": 135,
+        "position": [
+          -353.917572021484,
+          2.34230899810791,
+          -63.1936798095703
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.0
+        ],
+        "camera": [
+          -348.489410400391,
+          4.50266695022583,
+          -62.3221588134766
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 137,
+        "process_frame": 136,
+        "position": [
+          -353.907012939453,
+          2.34230899810791,
+          -63.2520141601562
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.5
+        ],
+        "camera": [
+          -348.478881835938,
+          4.5026650428772,
+          -62.380500793457
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 138,
+        "process_frame": 137,
+        "position": [
+          -353.896453857422,
+          2.34230899810791,
+          -63.3178329467773
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.46826171875,
+          4.50266647338867,
+          -62.4463081359863
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 139,
+        "process_frame": 138,
+        "position": [
+          -353.885894775391,
+          2.34230899810791,
+          -63.3836479187012
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.457763671875,
+          4.5026650428772,
+          -62.512134552002
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 140,
+        "process_frame": 139,
+        "position": [
+          -353.875335693359,
+          2.34395742416382,
+          -63.4494552612305
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.447235107422,
+          4.50431251525879,
+          -62.5779418945312
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 141,
+        "process_frame": 140,
+        "position": [
+          -353.864776611328,
+          2.34395742416382,
+          -63.5152778625488
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.436676025391,
+          4.50431156158447,
+          -62.6437683105469
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 142,
+        "process_frame": 141,
+        "position": [
+          -353.854217529297,
+          2.34395742416382,
+          -63.5810966491699
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.426086425781,
+          4.50431251525879,
+          -62.7095794677734
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 143,
+        "process_frame": 142,
+        "position": [
+          -353.843658447266,
+          2.34395742416382,
+          -63.6469116210938
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.415557861328,
+          4.50431156158447,
+          -62.7754020690918
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 144,
+        "process_frame": 143,
+        "position": [
+          -353.833099365234,
+          2.34569334983826,
+          -63.712718963623
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.404998779297,
+          4.50604772567749,
+          -62.8412094116211
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 145,
+        "process_frame": 144,
+        "position": [
+          -353.822540283203,
+          2.34569334983826,
+          -63.7785415649414
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.394439697266,
+          4.50604772567749,
+          -62.9070281982422
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 146,
+        "process_frame": 145,
+        "position": [
+          -353.811981201172,
+          2.34569334983826,
+          -63.8443603515625
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.383850097656,
+          4.50604867935181,
+          -62.9728469848633
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 147,
+        "process_frame": 146,
+        "position": [
+          -353.801422119141,
+          2.34569334983826,
+          -63.9101753234863
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.373321533203,
+          4.50604867935181,
+          -63.0386657714844
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 148,
+        "process_frame": 147,
+        "position": [
+          -353.790832519531,
+          2.34753489494324,
+          -63.975944519043
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.362701416016,
+          4.50789022445679,
+          -63.1044311523438
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 149,
+        "process_frame": 148,
+        "position": [
+          -353.7802734375,
+          2.34753489494324,
+          -64.0417709350586
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.352111816406,
+          4.5078911781311,
+          -63.1702499389648
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 150,
+        "process_frame": 149,
+        "position": [
+          -353.769714355469,
+          2.34753489494324,
+          -64.1075897216797
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.341583251953,
+          4.50789022445679,
+          -63.2360763549805
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 151,
+        "process_frame": 150,
+        "position": [
+          -353.759155273438,
+          2.34963321685791,
+          -64.1733856201172
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.331024169922,
+          4.50998830795288,
+          -63.301872253418
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 152,
+        "process_frame": 151,
+        "position": [
+          -353.748596191406,
+          2.34963321685791,
+          -64.2392120361328
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.320465087891,
+          4.50998830795288,
+          -63.3676948547363
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 153,
+        "process_frame": 152,
+        "position": [
+          -353.738037109375,
+          2.34963321685791,
+          -64.3050308227539
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.309844970703,
+          4.50998973846436,
+          -63.4335060119629
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 154,
+        "process_frame": 153,
+        "position": [
+          -353.727447509766,
+          2.35187077522278,
+          -64.3708267211914
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.299346923828,
+          4.51222562789917,
+          -63.4993171691895
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 155,
+        "process_frame": 154,
+        "position": [
+          -353.716888427734,
+          2.35187077522278,
+          -64.436653137207
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.288757324219,
+          4.51222562789917,
+          -63.5651359558105
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 156,
+        "process_frame": 155,
+        "position": [
+          -353.706329345703,
+          2.35360193252563,
+          -64.5024566650391
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.278198242188,
+          4.51395797729492,
+          -63.6309432983398
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 157,
+        "process_frame": 156,
+        "position": [
+          -353.695770263672,
+          2.35360193252563,
+          -64.5682830810547
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.267639160156,
+          4.51395893096924,
+          -63.6967697143555
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 158,
+        "process_frame": 157,
+        "position": [
+          -353.685211181641,
+          2.35360193252563,
+          -64.6341018676758
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.257110595703,
+          4.51395702362061,
+          -63.7625885009766
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 159,
+        "process_frame": 158,
+        "position": [
+          -353.674621582031,
+          2.35586977005005,
+          -64.6998977661133
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.246459960938,
+          4.51622676849365,
+          -63.8283767700195
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 160,
+        "process_frame": 159,
+        "position": [
+          -353.6640625,
+          2.35586977005005,
+          -64.7657241821289
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.235900878906,
+          4.51622676849365,
+          -63.8942070007324
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 161,
+        "process_frame": 160,
+        "position": [
+          -353.653503417969,
+          2.35586977005005,
+          -64.83154296875
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.225341796875,
+          4.51622676849365,
+          -63.9600257873535
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 162,
+        "process_frame": 161,
+        "position": [
+          -353.642913818359,
+          2.35820746421814,
+          -64.8973388671875
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.214813232422,
+          4.51856184005737,
+          -64.0258331298828
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 163,
+        "process_frame": 162,
+        "position": [
+          -353.632354736328,
+          2.35820746421814,
+          -64.9631652832031
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.204254150391,
+          4.51856279373169,
+          -64.0916595458984
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 164,
+        "process_frame": 163,
+        "position": [
+          -353.621795654297,
+          2.35820746421814,
+          -65.0289840698242
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.193664550781,
+          4.51856470108032,
+          -64.157470703125
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 165,
+        "process_frame": 164,
+        "position": [
+          -353.611206054688,
+          2.36055421829224,
+          -65.0947799682617
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.18310546875,
+          4.52090835571289,
+          -64.223274230957
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 166,
+        "process_frame": 165,
+        "position": [
+          -353.600646972656,
+          2.36055421829224,
+          -65.1606063842773
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.172546386719,
+          4.52090835571289,
+          -64.2891006469727
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 167,
+        "process_frame": 166,
+        "position": [
+          -353.590087890625,
+          2.36222052574158,
+          -65.2264022827148
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.161956787109,
+          4.52257680892944,
+          -64.3548812866211
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 168,
+        "process_frame": 167,
+        "position": [
+          -353.579528808594,
+          2.36222052574158,
+          -65.2922286987305
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.151428222656,
+          4.52257490158081,
+          -64.4207153320312
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 169,
+        "process_frame": 168,
+        "position": [
+          -353.568969726562,
+          2.36222052574158,
+          -65.3580474853516
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.140869140625,
+          4.52257490158081,
+          -64.4865341186523
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 170,
+        "process_frame": 169,
+        "position": [
+          -353.558380126953,
+          2.36448192596436,
+          -65.4238433837891
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.130279541016,
+          4.52483606338501,
+          -64.5523300170898
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 171,
+        "process_frame": 170,
+        "position": [
+          -353.547821044922,
+          2.36448192596436,
+          -65.4896697998047
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.119689941406,
+          4.52483797073364,
+          -64.6181488037109
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 172,
+        "process_frame": 171,
+        "position": [
+          -353.537231445312,
+          2.3660900592804,
+          -65.5554733276367
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.109130859375,
+          4.52644395828247,
+          -64.683967590332
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 173,
+        "process_frame": 172,
+        "position": [
+          -353.526672363281,
+          2.3660900592804,
+          -65.6212997436523
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.098571777344,
+          4.52644395828247,
+          -64.7497940063477
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 174,
+        "process_frame": 173,
+        "position": [
+          -353.51611328125,
+          2.3660900592804,
+          -65.6871185302734
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.087982177734,
+          4.5264458656311,
+          -64.8155975341797
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 175,
+        "process_frame": 174,
+        "position": [
+          -353.505493164062,
+          2.36838793754578,
+          -65.7529144287109
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.077362060547,
+          4.52874326705933,
+          -64.8814010620117
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 176,
+        "process_frame": 175,
+        "position": [
+          -353.494934082031,
+          2.36838793754578,
+          -65.8187408447266
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.066772460938,
+          4.52874422073364,
+          -64.9472274780273
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 177,
+        "process_frame": 176,
+        "position": [
+          -353.484375,
+          2.36838793754578,
+          -65.8845596313477
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.056243896484,
+          4.52874422073364,
+          -65.0130386352539
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 178,
+        "process_frame": 177,
+        "position": [
+          -353.473785400391,
+          2.37073040008545,
+          -65.9503555297852
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.045623779297,
+          4.53108739852905,
+          -65.0788269042969
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 179,
+        "process_frame": 178,
+        "position": [
+          -353.463226318359,
+          2.37073040008545,
+          -66.0161819458008
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.035125732422,
+          4.53108549118042,
+          -65.1446685791016
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 180,
+        "process_frame": 179,
+        "position": [
+          -353.452667236328,
+          2.37073040008545,
+          -66.0820007324219
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.024536132812,
+          4.53108644485474,
+          -65.2104797363281
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 181,
+        "process_frame": 180,
+        "position": [
+          -353.442077636719,
+          2.3730776309967,
+          -66.1477966308594
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.013977050781,
+          4.5334324836731,
+          -65.2762832641602
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 182,
+        "process_frame": 181,
+        "position": [
+          -353.431518554688,
+          2.3730776309967,
+          -66.213623046875
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -348.003387451172,
+          4.53343343734741,
+          -65.3421020507812
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 183,
+        "process_frame": 182,
+        "position": [
+          -353.420959472656,
+          2.3730776309967,
+          -66.2794418334961
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.992858886719,
+          4.5334324836731,
+          -65.4079284667969
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 184,
+        "process_frame": 183,
+        "position": [
+          -353.410369873047,
+          2.37542581558228,
+          -66.3452377319336
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.982269287109,
+          4.53578090667725,
+          -65.4737243652344
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 185,
+        "process_frame": 184,
+        "position": [
+          -353.399810791016,
+          2.37542581558228,
+          -66.4110641479492
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.971710205078,
+          4.53578090667725,
+          -65.5395584106445
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 186,
+        "process_frame": 185,
+        "position": [
+          -353.389251708984,
+          2.37542581558228,
+          -66.4768829345703
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.961151123047,
+          4.53578090667725,
+          -65.6053771972656
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 187,
+        "process_frame": 186,
+        "position": [
+          -353.378662109375,
+          2.37777352333069,
+          -66.5426788330078
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.950531005859,
+          4.5381293296814,
+          -65.6711654663086
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 188,
+        "process_frame": 187,
+        "position": [
+          -353.368103027344,
+          2.37777352333069,
+          -66.6085052490234
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.939971923828,
+          4.53812837600708,
+          -65.7369918823242
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 189,
+        "process_frame": 188,
+        "position": [
+          -353.357543945312,
+          2.37777352333069,
+          -66.6743240356445
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.929382324219,
+          4.5381293296814,
+          -65.8028106689453
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 190,
+        "process_frame": 189,
+        "position": [
+          -353.346954345703,
+          2.38012170791626,
+          -66.740119934082
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.918853759766,
+          4.54047584533691,
+          -65.8686065673828
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 191,
+        "process_frame": 190,
+        "position": [
+          -353.336395263672,
+          2.38012170791626,
+          -66.8059463500977
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.908294677734,
+          4.54047584533691,
+          -65.9344329833984
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 192,
+        "process_frame": 191,
+        "position": [
+          -353.325805664062,
+          2.38176822662354,
+          -66.8717422485352
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.897705078125,
+          4.54212236404419,
+          -66.0002288818359
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 193,
+        "process_frame": 192,
+        "position": [
+          -353.315246582031,
+          2.38176822662354,
+          -66.9375686645508
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.887115478516,
+          4.54212331771851,
+          -66.066047668457
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 194,
+        "process_frame": 193,
+        "position": [
+          -353.3046875,
+          2.38176822662354,
+          -67.0033874511719
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.876586914062,
+          4.54212331771851,
+          -66.1318740844727
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 195,
+        "process_frame": 194,
+        "position": [
+          -353.294097900391,
+          2.38404512405396,
+          -67.0691833496094
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.865936279297,
+          4.54440116882324,
+          -66.1976623535156
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 196,
+        "process_frame": 195,
+        "position": [
+          -353.283538818359,
+          2.38404512405396,
+          -67.135009765625
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.855407714844,
+          4.54440021514893,
+          -66.2634887695312
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 197,
+        "process_frame": 196,
+        "position": [
+          -353.272979736328,
+          2.38404512405396,
+          -67.2008285522461
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.844818115234,
+          4.54440307617188,
+          -66.3293151855469
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 198,
+        "process_frame": 197,
+        "position": [
+          -353.262390136719,
+          2.38638424873352,
+          -67.2666244506836
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.834289550781,
+          4.5467381477356,
+          -66.3951187133789
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 199,
+        "process_frame": 198,
+        "position": [
+          -353.251831054688,
+          2.38638424873352,
+          -67.3324508666992
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.823699951172,
+          4.54673910140991,
+          -66.4609375
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 200,
+        "process_frame": 199,
+        "position": [
+          -353.241271972656,
+          2.38638424873352,
+          -67.3982696533203
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.813140869141,
+          4.54673910140991,
+          -66.5267562866211
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 201,
+        "process_frame": 200,
+        "position": [
+          -353.230682373047,
+          2.3887312412262,
+          -67.4640655517578
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.802581787109,
+          4.54908609390259,
+          -66.5925598144531
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 202,
+        "process_frame": 201,
+        "position": [
+          -353.220123291016,
+          2.3887312412262,
+          -67.5298919677734
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.792022705078,
+          4.54908609390259,
+          -66.6583862304688
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 203,
+        "process_frame": 202,
+        "position": [
+          -353.209564208984,
+          2.3887312412262,
+          -67.5957107543945
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.781463623047,
+          4.54908609390259,
+          -66.7241973876953
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 204,
+        "process_frame": 203,
+        "position": [
+          -353.198974609375,
+          2.39107418060303,
+          -67.661506652832
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.770874023438,
+          4.551429271698,
+          -66.7899932861328
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 205,
+        "process_frame": 204,
+        "position": [
+          -353.188415527344,
+          2.39107418060303,
+          -67.7273330688477
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.760314941406,
+          4.551429271698,
+          -66.8558197021484
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 206,
+        "process_frame": 205,
+        "position": [
+          -353.177856445312,
+          2.39274263381958,
+          -67.7931289672852
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.749755859375,
+          4.55309772491455,
+          -66.9216156005859
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 207,
+        "process_frame": 206,
+        "position": [
+          -353.167297363281,
+          2.39274263381958,
+          -67.8589553833008
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.739166259766,
+          4.5531005859375,
+          -66.987434387207
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 208,
+        "process_frame": 207,
+        "position": [
+          -353.15673828125,
+          2.39274263381958,
+          -67.9247741699219
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.728637695312,
+          4.55309772491455,
+          -67.0532608032227
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 209,
+        "process_frame": 208,
+        "position": [
+          -353.146148681641,
+          2.39500617980957,
+          -67.9905700683594
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.718048095703,
+          4.55536031723022,
+          -67.1190567016602
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 210,
+        "process_frame": 209,
+        "position": [
+          -353.135589599609,
+          2.39500617980957,
+          -68.056396484375
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.707489013672,
+          4.55536031723022,
+          -67.1848907470703
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 211,
+        "process_frame": 210,
+        "position": [
+          -353.125030517578,
+          2.39500617980957,
+          -68.1222152709961
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.696899414062,
+          4.55536222457886,
+          -67.2507019042969
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 212,
+        "process_frame": 211,
+        "position": [
+          -353.114440917969,
+          2.39734292030334,
+          -68.1880111694336
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.686340332031,
+          4.55769681930542,
+          -67.3165054321289
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 213,
+        "process_frame": 212,
+        "position": [
+          -353.103881835938,
+          2.39734292030334,
+          -68.2538375854492
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.67578125,
+          4.55769681930542,
+          -67.3823318481445
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 214,
+        "process_frame": 213,
+        "position": [
+          -353.093322753906,
+          2.39734292030334,
+          -68.3196563720703
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.665191650391,
+          4.55769872665405,
+          -67.4481430053711
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 215,
+        "process_frame": 214,
+        "position": [
+          -353.082733154297,
+          2.3996901512146,
+          -68.3854522705078
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.654602050781,
+          4.56004524230957,
+          -67.5139389038086
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 216,
+        "process_frame": 215,
+        "position": [
+          -353.072174072266,
+          2.3996901512146,
+          -68.4512786865234
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.644012451172,
+          4.56004619598389,
+          -67.5797576904297
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 217,
+        "process_frame": 216,
+        "position": [
+          -353.061614990234,
+          2.3996901512146,
+          -68.5170974731445
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.633483886719,
+          4.56004524230957,
+          -67.6455764770508
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 218,
+        "process_frame": 217,
+        "position": [
+          -353.051025390625,
+          2.40203785896301,
+          -68.582893371582
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.622863769531,
+          4.56239366531372,
+          -67.7113723754883
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 219,
+        "process_frame": 218,
+        "position": [
+          -353.040466308594,
+          2.40203785896301,
+          -68.6487197875977
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.612365722656,
+          4.56239175796509,
+          -67.7772064208984
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 220,
+        "process_frame": 219,
+        "position": [
+          -353.029907226562,
+          2.40203785896301,
+          -68.7145385742188
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.601776123047,
+          4.5623927116394,
+          -67.843017578125
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 221,
+        "process_frame": 220,
+        "position": [
+          -353.019287109375,
+          2.40437293052673,
+          -68.7803344726562
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.591186523438,
+          4.56472730636597,
+          -67.908821105957
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 222,
+        "process_frame": 221,
+        "position": [
+          -353.008728027344,
+          2.40437293052673,
+          -68.8461608886719
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.580596923828,
+          4.56472826004028,
+          -67.9746475219727
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 223,
+        "process_frame": 222,
+        "position": [
+          -352.998168945312,
+          2.40437293052673,
+          -68.911979675293
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.570068359375,
+          4.56472730636597,
+          -68.0404739379883
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 224,
+        "process_frame": 223,
+        "position": [
+          -352.987579345703,
+          2.40673184394836,
+          -68.9777755737305
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.559478759766,
+          4.56708669662476,
+          -68.1062698364258
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 225,
+        "process_frame": 224,
+        "position": [
+          -352.977020263672,
+          2.40673184394836,
+          -69.0436019897461
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.548919677734,
+          4.56708669662476,
+          -68.1720962524414
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 226,
+        "process_frame": 225,
+        "position": [
+          -352.966461181641,
+          2.40673184394836,
+          -69.1094207763672
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.538360595703,
+          4.56708669662476,
+          -68.2379150390625
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 227,
+        "process_frame": 226,
+        "position": [
+          -352.955871582031,
+          2.40907788276672,
+          -69.1752090454102
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.527770996094,
+          4.56943368911743,
+          -68.3037033081055
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 228,
+        "process_frame": 227,
+        "position": [
+          -352.9453125,
+          2.40907788276672,
+          -69.2410354614258
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.517211914062,
+          4.56943273544312,
+          -68.3695220947266
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 229,
+        "process_frame": 228,
+        "position": [
+          -352.934753417969,
+          2.40907788276672,
+          -69.3068542480469
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.506622314453,
+          4.56943368911743,
+          -68.4353332519531
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 230,
+        "process_frame": 229,
+        "position": [
+          -352.924163818359,
+          2.41142892837524,
+          -69.3726501464844
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.496063232422,
+          4.5717830657959,
+          -68.5011367797852
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 231,
+        "process_frame": 230,
+        "position": [
+          -352.913604736328,
+          2.41142892837524,
+          -69.4384765625
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.485504150391,
+          4.5717830657959,
+          -68.5669631958008
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 232,
+        "process_frame": 231,
+        "position": [
+          -352.903015136719,
+          2.41304993629456,
+          -69.504280090332
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.474884033203,
+          4.57340478897095,
+          -68.6327590942383
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 233,
+        "process_frame": 232,
+        "position": [
+          -352.892456054688,
+          2.41304993629456,
+          -69.5701065063477
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.46435546875,
+          4.57340383529663,
+          -68.6985931396484
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 234,
+        "process_frame": 233,
+        "position": [
+          -352.881896972656,
+          2.41304993629456,
+          -69.6359252929688
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.453796386719,
+          4.57340478897095,
+          -68.7644119262695
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 235,
+        "process_frame": 234,
+        "position": [
+          -352.871307373047,
+          2.41535043716431,
+          -69.7017135620117
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.443176269531,
+          4.57570552825928,
+          -68.8302001953125
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 236,
+        "process_frame": 235,
+        "position": [
+          -352.860748291016,
+          2.41535043716431,
+          -69.7675399780273
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.4326171875,
+          4.57570552825928,
+          -68.8960266113281
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 237,
+        "process_frame": 236,
+        "position": [
+          -352.850189208984,
+          2.41535043716431,
+          -69.8333587646484
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.422058105469,
+          4.57570743560791,
+          -68.9618453979492
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 238,
+        "process_frame": 237,
+        "position": [
+          -352.839599609375,
+          2.41769027709961,
+          -69.8991546630859
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.411499023438,
+          4.57804441452026,
+          -69.0276489257812
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 239,
+        "process_frame": 238,
+        "position": [
+          -352.829040527344,
+          2.41769027709961,
+          -69.9649810791016
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.400909423828,
+          4.57804536819458,
+          -69.0934677124023
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 240,
+        "process_frame": 239,
+        "position": [
+          -352.818481445312,
+          2.419358253479,
+          -70.0307846069336
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.390380859375,
+          4.57971239089966,
+          -69.1592788696289
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 241,
+        "process_frame": 240,
+        "position": [
+          -352.807922363281,
+          2.419358253479,
+          -70.0966110229492
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.379791259766,
+          4.57971334457397,
+          -69.2250900268555
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 242,
+        "process_frame": 241,
+        "position": [
+          -352.79736328125,
+          2.42093729972839,
+          -70.1624145507812
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.369262695312,
+          4.58129167556763,
+          -69.290901184082
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 243,
+        "process_frame": 242,
+        "position": [
+          -352.786804199219,
+          2.42093729972839,
+          -70.2282409667969
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.358703613281,
+          4.58129167556763,
+          -69.3567276000977
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 244,
+        "process_frame": 243,
+        "position": [
+          -352.776245117188,
+          2.42093729972839,
+          -70.294059753418
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.34814453125,
+          4.58129358291626,
+          -69.4225463867188
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 245,
+        "process_frame": 244,
+        "position": [
+          -352.765655517578,
+          2.4231858253479,
+          -70.3598556518555
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.337554931641,
+          4.58353996276855,
+          -69.4883422851562
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 246,
+        "process_frame": 245,
+        "position": [
+          -352.755096435547,
+          2.4231858253479,
+          -70.4256820678711
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.326995849609,
+          4.58353996276855,
+          -69.5541687011719
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 247,
+        "process_frame": 246,
+        "position": [
+          -352.744537353516,
+          2.4231858253479,
+          -70.4915008544922
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.31640625,
+          4.58354091644287,
+          -69.619987487793
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 248,
+        "process_frame": 247,
+        "position": [
+          -352.733947753906,
+          2.42552089691162,
+          -70.5572967529297
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.305847167969,
+          4.58587598800659,
+          -69.685791015625
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 249,
+        "process_frame": 248,
+        "position": [
+          -352.723388671875,
+          2.42552089691162,
+          -70.6231231689453
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.295288085938,
+          4.58587598800659,
+          -69.7516174316406
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 250,
+        "process_frame": 249,
+        "position": [
+          -352.712829589844,
+          2.42552089691162,
+          -70.6889419555664
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.284729003906,
+          4.58587598800659,
+          -69.8174362182617
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 251,
+        "process_frame": 250,
+        "position": [
+          -352.702239990234,
+          2.42786765098572,
+          -70.7547378540039
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.274139404297,
+          4.58822298049927,
+          -69.8832321166992
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 252,
+        "process_frame": 251,
+        "position": [
+          -352.691680908203,
+          2.42786765098572,
+          -70.8205642700195
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.263580322266,
+          4.58822298049927,
+          -69.9490585327148
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 253,
+        "process_frame": 252,
+        "position": [
+          -352.681121826172,
+          2.42786765098572,
+          -70.8863830566406
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.253021240234,
+          4.58822298049927,
+          -70.0148696899414
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 254,
+        "process_frame": 253,
+        "position": [
+          -352.670532226562,
+          2.43021249771118,
+          -70.9521789550781
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.242340087891,
+          4.59056997299194,
+          -70.0806503295898
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 255,
+        "process_frame": 254,
+        "position": [
+          -352.659973144531,
+          2.43021249771118,
+          -71.0180053710938
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.231842041016,
+          4.59056758880615,
+          -70.146484375
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 256,
+        "process_frame": 255,
+        "position": [
+          -352.6494140625,
+          2.43188190460205,
+          -71.0838088989258
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.221282958984,
+          4.59223699569702,
+          -70.212287902832
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 257,
+        "process_frame": 256,
+        "position": [
+          -352.638854980469,
+          2.43188190460205,
+          -71.1496353149414
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.210754394531,
+          4.59223604202271,
+          -70.2781219482422
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 258,
+        "process_frame": 257,
+        "position": [
+          -352.628295898438,
+          2.43188190460205,
+          -71.2154541015625
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.200134277344,
+          4.59223794937134,
+          -70.3439331054688
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 259,
+        "process_frame": 258,
+        "position": [
+          -352.617706298828,
+          2.43414187431335,
+          -71.28125
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.189605712891,
+          4.59449625015259,
+          -70.4097366333008
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 260,
+        "process_frame": 259,
+        "position": [
+          -352.607147216797,
+          2.43414187431335,
+          -71.3470764160156
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.179016113281,
+          4.5944972038269,
+          -70.4755630493164
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 261,
+        "process_frame": 260,
+        "position": [
+          -352.596588134766,
+          2.43414187431335,
+          -71.4128952026367
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.168487548828,
+          4.5944972038269,
+          -70.541389465332
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 262,
+        "process_frame": 261,
+        "position": [
+          -352.585998535156,
+          2.43647909164429,
+          -71.4786911010742
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.157836914062,
+          4.59683513641357,
+          -70.607177734375
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 263,
+        "process_frame": 262,
+        "position": [
+          -352.575439453125,
+          2.43647909164429,
+          -71.5445175170898
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.147308349609,
+          4.59683418273926,
+          -70.6730041503906
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 264,
+        "process_frame": 263,
+        "position": [
+          -352.564880371094,
+          2.43647909164429,
+          -71.6103363037109
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.136749267578,
+          4.59683418273926,
+          -70.7388229370117
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 265,
+        "process_frame": 264,
+        "position": [
+          -352.554290771484,
+          2.43882608413696,
+          -71.6761322021484
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.126159667969,
+          4.59918117523193,
+          -70.8046188354492
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 266,
+        "process_frame": 265,
+        "position": [
+          -352.543731689453,
+          2.43882608413696,
+          -71.7419586181641
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.115631103516,
+          4.59918022155762,
+          -70.8704452514648
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 267,
+        "process_frame": 266,
+        "position": [
+          -352.533172607422,
+          2.43882608413696,
+          -71.8077774047852
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.105072021484,
+          4.59918022155762,
+          -70.9362640380859
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 268,
+        "process_frame": 267,
+        "position": [
+          -352.522583007812,
+          2.4411735534668,
+          -71.8735733032227
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.094482421875,
+          4.60152769088745,
+          -71.0020599365234
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 269,
+        "process_frame": 268,
+        "position": [
+          -352.512023925781,
+          2.4411735534668,
+          -71.9393997192383
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.083892822266,
+          4.60152864456177,
+          -71.0678787231445
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 270,
+        "process_frame": 269,
+        "position": [
+          -352.50146484375,
+          2.4411735534668,
+          -72.0052185058594
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.073364257812,
+          4.60152769088745,
+          -71.1337051391602
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 271,
+        "process_frame": 270,
+        "position": [
+          -352.490875244141,
+          2.44352173805237,
+          -72.0710144042969
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.062774658203,
+          4.60387659072876,
+          -71.1995010375977
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 272,
+        "process_frame": 271,
+        "position": [
+          -352.480316162109,
+          2.44352173805237,
+          -72.1368408203125
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.052215576172,
+          4.60387659072876,
+          -71.2653274536133
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 273,
+        "process_frame": 272,
+        "position": [
+          -352.469757080078,
+          2.44352173805237,
+          -72.2026596069336
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.041625976562,
+          4.60387754440308,
+          -71.3311462402344
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 274,
+        "process_frame": 273,
+        "position": [
+          -352.459167480469,
+          2.44586968421936,
+          -72.2684555053711
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.031036376953,
+          4.60622549057007,
+          -71.3969421386719
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 275,
+        "process_frame": 274,
+        "position": [
+          -352.448608398438,
+          2.44586968421936,
+          -72.3342819213867
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.020446777344,
+          4.60622644424438,
+          -71.4627685546875
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 276,
+        "process_frame": 275,
+        "position": [
+          -352.438049316406,
+          2.44586968421936,
+          -72.4001007080078
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -347.009918212891,
+          4.60622549057007,
+          -71.5285873413086
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 277,
+        "process_frame": 276,
+        "position": [
+          -352.427459716797,
+          2.44821834564209,
+          -72.4658966064453
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.999328613281,
+          4.60857343673706,
+          -71.5943832397461
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 278,
+        "process_frame": 277,
+        "position": [
+          -352.416900634766,
+          2.44821834564209,
+          -72.5317230224609
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.988800048828,
+          4.60857248306274,
+          -71.6602096557617
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 279,
+        "process_frame": 278,
+        "position": [
+          -352.406341552734,
+          2.44821834564209,
+          -72.597541809082
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.978210449219,
+          4.60857343673706,
+          -71.7260208129883
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 280,
+        "process_frame": 279,
+        "position": [
+          -352.395751953125,
+          2.4505660533905,
+          -72.6633377075195
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.967620849609,
+          4.61092138290405,
+          -71.7918167114258
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 281,
+        "process_frame": 280,
+        "position": [
+          -352.385192871094,
+          2.4505660533905,
+          -72.7291641235352
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.957061767578,
+          4.61092138290405,
+          -71.8576431274414
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 282,
+        "process_frame": 281,
+        "position": [
+          -352.374633789062,
+          2.4505660533905,
+          -72.7949829101562
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.946533203125,
+          4.61092042922974,
+          -71.923469543457
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 283,
+        "process_frame": 282,
+        "position": [
+          -352.364044189453,
+          2.45291423797607,
+          -72.8607788085938
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.935943603516,
+          4.61326837539673,
+          -71.9892654418945
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 284,
+        "process_frame": 283,
+        "position": [
+          -352.353485107422,
+          2.45291423797607,
+          -72.9266052246094
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.925354003906,
+          4.61326932907104,
+          -72.0550842285156
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 285,
+        "process_frame": 284,
+        "position": [
+          -352.342926025391,
+          2.45291423797607,
+          -72.9924240112305
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.914825439453,
+          4.61326837539673,
+          -72.1209182739258
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 286,
+        "process_frame": 285,
+        "position": [
+          -352.332336425781,
+          2.45526242256165,
+          -73.058219909668
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.904205322266,
+          4.61561727523804,
+          -72.1867065429688
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 287,
+        "process_frame": 286,
+        "position": [
+          -352.32177734375,
+          2.45526242256165,
+          -73.1240463256836
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.893646240234,
+          4.61561727523804,
+          -72.2525329589844
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 288,
+        "process_frame": 287,
+        "position": [
+          -352.311218261719,
+          2.45526242256165,
+          -73.1898651123047
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.883087158203,
+          4.61561918258667,
+          -72.3183517456055
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 289,
+        "process_frame": 288,
+        "position": [
+          -352.300628662109,
+          2.45761036872864,
+          -73.2556610107422
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.872528076172,
+          4.61796426773071,
+          -72.3841552734375
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 290,
+        "process_frame": 289,
+        "position": [
+          -352.290069580078,
+          2.45761036872864,
+          -73.3214874267578
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.861968994141,
+          4.61796426773071,
+          -72.4499816894531
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 291,
+        "process_frame": 290,
+        "position": [
+          -352.279510498047,
+          2.45761036872864,
+          -73.3873062133789
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.851379394531,
+          4.61796712875366,
+          -72.5157852172852
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 292,
+        "process_frame": 291,
+        "position": [
+          -352.268920898438,
+          2.45995855331421,
+          -73.4531021118164
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.8408203125,
+          4.62031269073486,
+          -72.5815887451172
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 293,
+        "process_frame": 292,
+        "position": [
+          -352.258361816406,
+          2.45995855331421,
+          -73.518928527832
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.830261230469,
+          4.62031269073486,
+          -72.6474151611328
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 294,
+        "process_frame": 293,
+        "position": [
+          -352.247802734375,
+          2.45995855331421,
+          -73.5847473144531
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.819702148438,
+          4.62031269073486,
+          -72.7132339477539
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 295,
+        "process_frame": 294,
+        "position": [
+          -352.237213134766,
+          2.46230697631836,
+          -73.6505432128906
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.809112548828,
+          4.62266206741333,
+          -72.7790298461914
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 296,
+        "process_frame": 295,
+        "position": [
+          -352.226654052734,
+          2.46230697631836,
+          -73.7163696289062
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.798522949219,
+          4.62266302108765,
+          -72.8448486328125
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 297,
+        "process_frame": 296,
+        "position": [
+          -352.216094970703,
+          2.46230697631836,
+          -73.7821884155273
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.787994384766,
+          4.62266206741333,
+          -72.9106750488281
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 298,
+        "process_frame": 297,
+        "position": [
+          -352.205505371094,
+          2.4646520614624,
+          -73.8479766845703
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.777313232422,
+          4.62500953674316,
+          -72.9764556884766
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 299,
+        "process_frame": 298,
+        "position": [
+          -352.194946289062,
+          2.4646520614624,
+          -73.9138031005859
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.766815185547,
+          4.62500810623169,
+          -73.0422897338867
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 300,
+        "process_frame": 299,
+        "position": [
+          -352.184387207031,
+          2.4646520614624,
+          -73.979621887207
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.756225585938,
+          4.62500905990601,
+          -73.1081085205078
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 301,
+        "process_frame": 300,
+        "position": [
+          -352.173797607422,
+          2.46700263023376,
+          -74.0454177856445
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.745697021484,
+          4.62735795974731,
+          -73.1739120483398
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 302,
+        "process_frame": 301,
+        "position": [
+          -352.163238525391,
+          2.46700263023376,
+          -74.1112442016602
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.735076904297,
+          4.62735891342163,
+          -73.2397308349609
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 303,
+        "process_frame": 302,
+        "position": [
+          -352.152679443359,
+          2.46700263023376,
+          -74.1770629882812
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.724578857422,
+          4.627357006073,
+          -73.305549621582
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 304,
+        "process_frame": 303,
+        "position": [
+          -352.14208984375,
+          2.46935105323792,
+          -74.2428588867188
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.713989257812,
+          4.62970590591431,
+          -73.3713455200195
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 305,
+        "process_frame": 304,
+        "position": [
+          -352.131530761719,
+          2.46935105323792,
+          -74.3086853027344
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.703430175781,
+          4.62970495223999,
+          -73.4371719360352
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 306,
+        "process_frame": 305,
+        "position": [
+          -352.120971679688,
+          2.46935105323792,
+          -74.3745040893555
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.69287109375,
+          4.62970495223999,
+          -73.5029907226562
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 307,
+        "process_frame": 306,
+        "position": [
+          -352.110382080078,
+          2.47169947624207,
+          -74.440299987793
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.682281494141,
+          4.6320538520813,
+          -73.5687866210938
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 308,
+        "process_frame": 307,
+        "position": [
+          -352.099822998047,
+          2.47169947624207,
+          -74.5061264038086
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.671722412109,
+          4.63205480575562,
+          -73.6346130371094
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 309,
+        "process_frame": 308,
+        "position": [
+          -352.089263916016,
+          2.47169947624207,
+          -74.5719451904297
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.6611328125,
+          4.63205480575562,
+          -73.7004241943359
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 310,
+        "process_frame": 309,
+        "position": [
+          -352.078674316406,
+          2.47404742240906,
+          -74.6377410888672
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.650543212891,
+          4.63440275192261,
+          -73.7662200927734
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 311,
+        "process_frame": 310,
+        "position": [
+          -352.068115234375,
+          2.47404742240906,
+          -74.7035675048828
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.639984130859,
+          4.63440370559692,
+          -73.8320541381836
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 312,
+        "process_frame": 311,
+        "position": [
+          -352.057556152344,
+          2.47404742240906,
+          -74.7693862915039
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.629425048828,
+          4.63440275192261,
+          -73.8978729248047
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 313,
+        "process_frame": 312,
+        "position": [
+          -352.046966552734,
+          2.47639536857605,
+          -74.8351821899414
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.618865966797,
+          4.63674974441528,
+          -73.9636764526367
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 314,
+        "process_frame": 313,
+        "position": [
+          -352.036407470703,
+          2.47639536857605,
+          -74.901008605957
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.608306884766,
+          4.63674974441528,
+          -74.0295028686523
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 315,
+        "process_frame": 314,
+        "position": [
+          -352.025848388672,
+          2.47639536857605,
+          -74.9668273925781
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.597747802734,
+          4.63674974441528,
+          -74.0953216552734
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 316,
+        "process_frame": 315,
+        "position": [
+          -352.015289306641,
+          2.47883605957031,
+          -75.0326232910156
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.587158203125,
+          4.6391921043396,
+          -74.1611022949219
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 317,
+        "process_frame": 316,
+        "position": [
+          -352.004730224609,
+          2.47883605957031,
+          -75.0984497070312
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.576599121094,
+          4.6391921043396,
+          -74.2269287109375
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 318,
+        "process_frame": 317,
+        "position": [
+          -351.994140625,
+          2.48061728477478,
+          -75.1642456054688
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.566040039062,
+          4.64097356796265,
+          -74.2927322387695
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 319,
+        "process_frame": 318,
+        "position": [
+          -351.983581542969,
+          2.48149681091309,
+          -75.2300643920898
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.555419921875,
+          4.64185380935669,
+          -74.3585433959961
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 320,
+        "process_frame": 319,
+        "position": [
+          -351.973022460938,
+          2.4824366569519,
+          -75.2958831787109
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.544860839844,
+          4.64279460906982,
+          -74.4243621826172
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 321,
+        "process_frame": 320,
+        "position": [
+          -351.962463378906,
+          2.48342275619507,
+          -75.3616943359375
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.534301757812,
+          4.64377975463867,
+          -74.4901657104492
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 322,
+        "process_frame": 321,
+        "position": [
+          -351.951904296875,
+          2.48441982269287,
+          -75.4275131225586
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.523803710938,
+          4.64477491378784,
+          -74.5559997558594
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 323,
+        "process_frame": 322,
+        "position": [
+          -351.941345214844,
+          2.48542356491089,
+          -75.4933319091797
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.513214111328,
+          4.64577865600586,
+          -74.6218185424805
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 324,
+        "process_frame": 323,
+        "position": [
+          -351.930786132812,
+          2.48642826080322,
+          -75.5591506958008
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.502655029297,
+          4.64678430557251,
+          -74.6876373291016
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 325,
+        "process_frame": 324,
+        "position": [
+          -351.920227050781,
+          2.48743295669556,
+          -75.6249694824219
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.492126464844,
+          4.64778709411621,
+          -74.7534637451172
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 326,
+        "process_frame": 325,
+        "position": [
+          -351.90966796875,
+          2.48843765258789,
+          -75.690788269043
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.481567382812,
+          4.64879179000854,
+          -74.8192825317383
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 327,
+        "process_frame": 326,
+        "position": [
+          -351.899108886719,
+          2.4894425868988,
+          -75.7566070556641
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.471008300781,
+          4.64979696273804,
+          -74.8851013183594
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 328,
+        "process_frame": 327,
+        "position": [
+          -351.888549804688,
+          2.49044704437256,
+          -75.8224258422852
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.460418701172,
+          4.65080213546753,
+          -74.9509048461914
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 329,
+        "process_frame": 328,
+        "position": [
+          -351.877990722656,
+          2.49145197868347,
+          -75.8882446289062
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.449890136719,
+          4.65180730819702,
+          -75.016731262207
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 330,
+        "process_frame": 329,
+        "position": [
+          -351.867431640625,
+          2.49245667457581,
+          -75.9540634155273
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.439331054688,
+          4.65281057357788,
+          -75.0825500488281
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 331,
+        "process_frame": 330,
+        "position": [
+          -351.856872558594,
+          2.49346137046814,
+          -76.0198822021484
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.428771972656,
+          4.65381574630737,
+          -75.1483688354492
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 332,
+        "process_frame": 331,
+        "position": [
+          -351.846313476562,
+          2.49446630477905,
+          -76.0857009887695
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.418182373047,
+          4.65482139587402,
+          -75.2141799926758
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 333,
+        "process_frame": 332,
+        "position": [
+          -351.835754394531,
+          2.49547076225281,
+          -76.1515197753906
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.407653808594,
+          4.65582513809204,
+          -75.2800064086914
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 334,
+        "process_frame": 333,
+        "position": [
+          -351.8251953125,
+          2.49647569656372,
+          -76.2173385620117
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.397094726562,
+          4.65682983398438,
+          -75.3458251953125
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 335,
+        "process_frame": 334,
+        "position": [
+          -351.814636230469,
+          2.49748039245605,
+          -76.2831573486328
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.386535644531,
+          4.65783452987671,
+          -75.4116516113281
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 336,
+        "process_frame": 335,
+        "position": [
+          -351.804077148438,
+          2.49848484992981,
+          -76.3489761352539
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.375946044922,
+          4.65884065628052,
+          -75.4774627685547
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 337,
+        "process_frame": 336,
+        "position": [
+          -351.793518066406,
+          2.49948954582214,
+          -76.414794921875
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.365417480469,
+          4.65984392166138,
+          -75.5432891845703
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 338,
+        "process_frame": 337,
+        "position": [
+          -351.782958984375,
+          2.50049424171448,
+          -76.4806137084961
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.354858398438,
+          4.66084814071655,
+          -75.6091079711914
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 339,
+        "process_frame": 338,
+        "position": [
+          -351.772399902344,
+          2.50149893760681,
+          -76.5464324951172
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.344299316406,
+          4.66185426712036,
+          -75.6749267578125
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 340,
+        "process_frame": 339,
+        "position": [
+          -351.761840820312,
+          2.50250363349915,
+          -76.6122512817383
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.333679199219,
+          4.66286134719849,
+          -75.74072265625
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 341,
+        "process_frame": 340,
+        "position": [
+          -351.751281738281,
+          2.50350832939148,
+          -76.6780700683594
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.323150634766,
+          4.66386365890503,
+          -75.8065490722656
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 342,
+        "process_frame": 341,
+        "position": [
+          -351.74072265625,
+          2.50451302528381,
+          -76.7438888549805
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.312561035156,
+          4.66486883163452,
+          -75.8723678588867
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 343,
+        "process_frame": 342,
+        "position": [
+          -351.730163574219,
+          2.50551795959473,
+          -76.8097076416016
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.302032470703,
+          4.6658730506897,
+          -75.9381866455078
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 344,
+        "process_frame": 343,
+        "position": [
+          -351.719604492188,
+          2.50652241706848,
+          -76.8755264282227
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.291412353516,
+          4.66687870025635,
+          -76.0039978027344
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 345,
+        "process_frame": 344,
+        "position": [
+          -351.709045410156,
+          2.50752735137939,
+          -76.9413452148438
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.280914306641,
+          4.66788244247437,
+          -76.06982421875
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 346,
+        "process_frame": 345,
+        "position": [
+          -351.698486328125,
+          2.50853228569031,
+          -77.0071640014648
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.270355224609,
+          4.66888761520386,
+          -76.1356506347656
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 347,
+        "process_frame": 346,
+        "position": [
+          -351.687927246094,
+          2.50953674316406,
+          -77.0729827880859
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.259826660156,
+          4.66989183425903,
+          -76.2014770507812
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 348,
+        "process_frame": 347,
+        "position": [
+          -351.677368164062,
+          2.5105414390564,
+          -77.138801574707
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.249206542969,
+          4.67089748382568,
+          -76.2672882080078
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 349,
+        "process_frame": 348,
+        "position": [
+          -351.666809082031,
+          2.51154565811157,
+          -77.2046203613281
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.238708496094,
+          4.67189979553223,
+          -76.3331146240234
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 350,
+        "process_frame": 349,
+        "position": [
+          -351.65625,
+          2.51255083084106,
+          -77.2704391479492
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.228149414062,
+          4.67290496826172,
+          -76.3989334106445
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 351,
+        "process_frame": 350,
+        "position": [
+          -351.645690917969,
+          2.5135555267334,
+          -77.3362579345703
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.217590332031,
+          4.67391157150269,
+          -76.4647445678711
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 352,
+        "process_frame": 351,
+        "position": [
+          -351.635131835938,
+          2.51456022262573,
+          -77.4020767211914
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.207000732422,
+          4.6749153137207,
+          -76.5305557250977
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 353,
+        "process_frame": 352,
+        "position": [
+          -351.624572753906,
+          2.51556491851807,
+          -77.4678955078125
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.196472167969,
+          4.67591905593872,
+          -76.5963821411133
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 354,
+        "process_frame": 353,
+        "position": [
+          -351.614013671875,
+          2.51656985282898,
+          -77.5337142944336
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.185913085938,
+          4.67692422866821,
+          -76.6622009277344
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 355,
+        "process_frame": 354,
+        "position": [
+          -351.603454589844,
+          2.51757454872131,
+          -77.5995330810547
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.175354003906,
+          4.67792844772339,
+          -76.7280197143555
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 356,
+        "process_frame": 355,
+        "position": [
+          -351.592895507812,
+          2.51857924461365,
+          -77.6653518676758
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.164764404297,
+          4.6789345741272,
+          -76.793830871582
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 357,
+        "process_frame": 356,
+        "position": [
+          -351.582336425781,
+          2.51958417892456,
+          -77.7311706542969
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.154235839844,
+          4.67993831634521,
+          -76.8596649169922
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 358,
+        "process_frame": 357,
+        "position": [
+          -351.57177734375,
+          2.52059364318848,
+          -77.7969818115234
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.143676757812,
+          4.68095064163208,
+          -76.9254760742188
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 359,
+        "process_frame": 358,
+        "position": [
+          -351.561218261719,
+          2.52159905433655,
+          -77.86279296875
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.133117675781,
+          4.68195390701294,
+          -76.9912872314453
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 360,
+        "process_frame": 359,
+        "position": [
+          -351.550659179688,
+          2.5226035118103,
+          -77.9286041259766
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.122528076172,
+          4.68295955657959,
+          -77.0570907592773
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 361,
+        "process_frame": 360,
+        "position": [
+          -351.540100097656,
+          2.52360820770264,
+          -77.9944152832031
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.111999511719,
+          4.68396329879761,
+          -77.1229095458984
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 362,
+        "process_frame": 361,
+        "position": [
+          -351.529541015625,
+          2.52461290359497,
+          -78.0602264404297
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.101440429688,
+          4.68496894836426,
+          -77.188720703125
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 363,
+        "process_frame": 362,
+        "position": [
+          -351.518981933594,
+          2.52561712265015,
+          -78.1260375976562
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.090850830078,
+          4.68597316741943,
+          -77.2545166015625
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 364,
+        "process_frame": 363,
+        "position": [
+          -351.508422851562,
+          2.52662181854248,
+          -78.1918487548828
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.080322265625,
+          4.68697595596313,
+          -77.3203353881836
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 365,
+        "process_frame": 364,
+        "position": [
+          -351.497863769531,
+          2.52762675285339,
+          -78.2576599121094
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.069732666016,
+          4.68798208236694,
+          -77.3861389160156
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 366,
+        "process_frame": 365,
+        "position": [
+          -351.4873046875,
+          2.52863121032715,
+          -78.3234710693359
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.059173583984,
+          4.68898630142212,
+          -77.4519500732422
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 367,
+        "process_frame": 366,
+        "position": [
+          -351.476745605469,
+          2.52963590621948,
+          -78.3892822265625
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.048553466797,
+          4.68999242782593,
+          -77.5177536010742
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 368,
+        "process_frame": 367,
+        "position": [
+          -351.466186523438,
+          2.53064036369324,
+          -78.4550933837891
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.038055419922,
+          4.69099569320679,
+          -77.5835723876953
+        ],
+        "grounded": true
+      },
+      {
+        "physics_frame": 369,
+        "process_frame": 368,
+        "position": [
+          -351.455627441406,
+          2.53164505958557,
+          -78.5209045410156
+        ],
+        "velocity": [
+          0.634098052978516,
+          0.0,
+          -3.94942021369934
+        ],
+        "camera": [
+          -346.027465820312,
+          4.69200086593628,
+          -77.6493835449219
+        ],
+        "grounded": true
+      }
+    ],
+    "pose": {
+      "scenario_reset": "fixed_xz_then_real_character_physics_settle_on_generated_live_ground",
+      "physics_grounded": true,
+      "ordinary_player_rig": true,
+      "input_reachable_camera_orientation": true,
+      "requested_xz": [
+        -353.978698730469,
+        -63.0187225341797
+      ],
+      "settle_spawn_y_m": 5.3409423828125,
+      "player_position_m": [
+        -353.978698730469,
+        2.34085893630981,
+        -63.0187225341797
+      ],
+      "ground_y_m": 2.3409423828125,
+      "ground_clearance_m": -8.34465026855469e-05,
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "aim_target_m": [
+        -364.332275390625,
+        4.03499984741211,
+        -64.681037902832
+      ],
+      "camera_position_m": [
+        -348.550567626953,
+        4.50121402740479,
+        -62.1472091674805
+      ],
+      "camera_forward": [
+        -0.986935317516327,
+        -0.029155446216464,
+        -0.15845713019371
+      ],
+      "camera_fov_degrees": 70.0,
+      "configured_spring_length_m": 5.5,
+      "actual_spring_length_m": 5.49998664855957,
+      "camera_yaw_degrees": 80.8787372443766,
+      "camera_pitch_degrees": -1.67072073748544
+    },
+    "los": {
+      "viewport_center_px": [
+        720.0,
+        450.0
+      ],
+      "aim_target_center_error_px": 6.82393801980652e-05,
+      "first_los_hit_receiver": "building:w95934117:wall",
+      "first_los_hit_source_keys": [
+        "w95934117"
+      ],
+      "first_los_hit_run_index": 17,
+      "expected_los_run_index": 17,
+      "first_los_hit_position_m": [
+        -364.332305908203,
+        4.03499984741211,
+        -64.681037902832
+      ],
+      "first_los_hit_distance_m": 15.9906511306763,
+      "first_los_hit_target_error_m": 3.0517578125e-05,
+      "receiver_source_run_first_los": true
+    }
+  },
+  "later_completed_motion_analysis": {
+    "raw_origin": {
+      "raw_original_sha256": "f473e928b78ce946d42d9d8a7558fe76dd6509b8c798b908583600ae2bd209dc",
+      "raw_original_bytes": 8787,
+      "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/owner-session/live-motion-finalization-001.json"
+    },
+    "data": {
+      "physics_frame_count": 240,
+      "active_input_planar_displacement_m": 15.70616234803271,
+      "measurement": "Distance between settled pre-input pose and final sample taken during the240-frame input loop",
+      "post_input_settle_frames": 12,
+      "including_post_input_settle_planar_displacement_m": 15.8664894104004,
+      "extra_displacement_during_post_input_settle_m": 0.16032706236769023,
+      "recoveries": 0,
+      "transform_writes_during_input": 0
+    }
+  }
+}

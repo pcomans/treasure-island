@@ -12384,3 +12384,65 @@ review_1439_package — 1439 publication readiness: The frozen six-file release 
 ### package_1439_continuation — primary publication and ordinary launch (2026-09-09)
 
 Worked: exact 80-path staging preserved the frozen packet while enumerating the later independent review and attributed RETRO; normal commit/push and the reused source-free no-argument app/window observer completed with unchanged app bytes. Did not: native exact-window and rectangle screenshot APIs both failed, so their raw receipts remain and no current pixel claim was made. Next time retain the proven publication/window boundary and check native screenshot availability before promising an image; do not relaunch or recapture accepted evidence solely to replace an unavailable optional screenshot. The observed app was revalidated and stopped to release the shared engine slot.
+
+### review_1439_package — project harness iteration and batch delivery (2026-09-09)
+
+Worked: updated the existing project agreement and canonical facade skill, added a thin Claude import and four bounded role prompts, and preserved per-unit independent quality/packet gates while moving export work to batch checkpoints. A separate reader exercised ordinary edits, batch acceptance and full edit-to-verdict timing from the instructions; its one role-routing ambiguity was corrected so integration reports technical findings and the separate visual reviewer owns art acceptance. Did not: the bundled skill validator could not import PyYAML in either available Python runtime; no dependency was installed. Existing Ruby YAML parsing, frontmatter/reference checks and diff review supplied the bounded fallback, with the validator limitation retained. Next time reuse these project-local instructions and complete execution drivers, check actual canonical argv before launch, and keep package paperwork off the early source/render path. All 31 current main product/authority pins, skill invocation metadata and proof code stayed exact; four unrelated UID files were preserved. No engine, export, app or authority operation occurred.
+
+
+### package_1439_continuation — 1444 authority integration (2026-09-09)
+
+Worked: eight accepted product copies, 46 immutable packet files and 743 private originals supported a single 10→11/213 transition; all other 212 full unit records and the prior ten acceptances remain exact. The existing compiler/registry/loader suites exercised the seven bindings, sole current topology and coherent fractional-run rejection. Did not: scattered current test lists/counts needed corrections; the first loader lacked a registered new class, and normal import then discovered duplicate classes in retained source copies. Independent review also caught stale report labels and integer truncation. Every failed receipt remains. Next time: review explicit current lists/counts together and establish normal class-cache readiness with the private build parent excluded before contract execution; retain the complete successful harness, original archive bytes and strict full-log rejection.
+
+
+### review_1439_package — independent 1444 authority review (2026-09-09)
+
+Transcribed by package_1439_continuation from the independent reviewer’s sealed REVIEW.json.
+
+review_1439_package — independent 1444 authority review: PASS on the actual final 19 source/test/generated pins and 65 frozen integration paths. Only w95934117 adds one recognition unit (11/213); the other 212 full records, prior ten acceptances, protected source/B1 scope, harness files and original UID pins remain preserved, with the existing RETRO prefix exact. Review caught stale current/historical labels and fractional run-index truncation; the narrow integral guard and a coherent 8→8.5 real-loader mutation now pass the final checks. Preserve write005’s actual 16 pre-output inputs separately from the later five checks on all 19 final pins; raw failed/cache attempts remain evidence, including exit-zero logs that failed. No reviewer engine, authority edit, export or publication action was performed; exact-current 11/213 release remains a later delivery gate.
+
+
+### package_1439_continuation — 1444 exact-current release owner checks (2026-09-09)
+
+Worked: the complete successful candidate helper and six source/export/package commands passed on their first attempts after rebinding only current11/213 authority and38 source pins. Native bundle tools and a final byte comparison retained the exact seven app files and all65 integration paths. Did not: no new failure occurred this round; the earlier archive-class import failures remain preserved in the authority receipts. Next time: keep the ignored build parent outside the editor scan and check class-cache readiness once before export; reuse target-record mounted checks plus signed-release ordinary-main coverage without another art or route run.
+
+
+### review_1439_package — Godot archive cache lesson (2026-09-09)
+
+Transcribed by package_1439_continuation from the sealed harness-cache-boundary handoff.
+
+review_1439_package — project Godot import cache lesson: Added one paragraph to the existing material-contract reference, based on duplicate archived class failure57689 and clean normal-import recovery60974. Before import when private build artifacts exist, verify the parent build/.gdignore excludes archived sources/images outside frozen trees; retain evidence/.gdignore, runtime inputs and archive bytes, and judge the terminal log rather than nominal exit zero. No import, engine, runtime/product or package change. The prior reference content is exact apart from the paragraph; git diff --check passes. The bundled skill validator remains limited by the unavailable PyYAML dependency; no dependency installation was performed.
+
+
+### review_1439_package — independent exact-current1444 release (2026-09-09)
+
+Transcribed verbatim by package_1439_continuation from the reviewer’s sealed report.
+
+review_1439_package — independent exact-current 1444 release: PASS after reusing the accepted four-stage helper and supported invocations on the fresh 11/213 app. Editor-mounted target dispatch/privacy and signed-release ordinary-main headless/native all passed on first attempts; the single final seven-file/38-input comparison stayed exact and all four reviewer plus six owner PIDs were absent. Historical candidate10/capture9 remain separate. Actual923 packaged files differ from candidate929 only by three candidate-only validation scripts and remaps; no stale count was silently accepted. No export, product/authority edit, ordinary no-argument launch or publication was performed by this reviewer. The owner export log was initially printed too broadly and truncated; full non-file lines and complete packed-path sets were then inspected without rerunning anything.
+
+
+### review_1439_package — final harness consistency (2026-09-09)
+
+Transcribed verbatim by package_1439_continuation from the sealed CONSISTENCY_REVIEW.json.
+
+review_1439_package — final project harness consistency read: PASS across the nine current instruction files. Early native source iteration, full edit-through-model-verdict timing, batch candidate/final exports, distinct independent implementation/source-mechanics/visual/release actors, bounded periodic efficiency sampling and older assets as a floor remain coherent. The cache paragraph is the sole change since the previously validated nine-file set; existing parser/link/scenario results remain applicable. No material instruction gap found. Claude runtime discovery remains untested and the known PyYAML validator limitation was retained without rerunning it. No instruction, runtime, Git or engine change was made.
+
+### package_1439_continuation — 1444 ordinary launch and publication preparation (2026-09-09)
+
+package_1439_continuation — 1444 ordinary launch and publication preparation: Exact app/source preflight, no-argument owned process, native window metadata and final byte checks closed the ordinary launch scope. The node_repl sky bridge was unconfigured; the authorized same-plugin fallback waited for missing Accessibility/Screen Recording permissions, so no pixels were claimed and the exact owned app was stopped with SIGTERM. Current release records reuse33 historical native images and resolve raw private records without rewriting candidate evidence. The UI wait kept rendering longer than useful; next time check the available Computer Use bridge/permission state before allocating the ordinary game observation slot. Publication remains a separate reviewed list and future observed Git outcome.
+
+### review_1439_package — publication readiness (2026-09-09)
+
+Transcribed by package_1439_continuation from the independent reviewer’s exact supplied JSON note.
+
+review_1439_package — Independent 1444 publication-readiness review: PASS on the frozen 88-file list at HEAD151c51aff, with 92 dirty paths accounted for and nothing staged. All65 accepted integration files, nine approved instructions plus named RETRO, two explicitly included target UIDs, seven current-release summaries and four status documents match. The four old incidental UIDs and private app/archive/AVI/cache remain excluded. All288 new retained originals match source and destination; all743 historical locators resolve; the newly copied seven-file historical app matches its frozen identity. Derived owner/independent/ordinary records and review text preserve exact values after path normalization. Current11/213, capture9/candidate10, sampled motion and original scoped failure limits remain distinct; ordinary launch proves the owned window only, with no pixels or manual-input acceptance. HUMAN-001/B1 scope remains intact. No engine, export, Git mutation or unchanged quality-suite replay occurred. Future reviewer/RETRO additions require an explicit downstream inventory; actual commit/push outcomes remain pending and must be recorded afterward.
+
+### review_1439_package — efficiency checkpoint 004 (2026-09-09)
+
+Transcribed by package_1439_continuation from the independent reviewer’s exact supplied JSON note.
+
+review_1439_package — Independent team-efficiency checkpoint 004. B reused the complete exact-current package workflow: six first-attempt clean stages, one export, 70.702 s summed process time in a 244.043 s first-start→last-terminal window; terminal→owner handoff was 65.614 s. A's 1394 revision002 reused the complete three-stage study driver: zero invalid launches/retries, 19.625 s process time in 36.551 s; terminal→owner handoff was 181.863 s. The actual lower-family correction, eight contact approaches, early native images and bounded baseline-pixel reconciliation were necessary quality/provenance work. Raw images and terminal release were supplied before optional collation. These receipt windows do not instrument author/model/transport time or establish idle time; no duplicate runtime suite is evidenced.
+
+B's ordinary app remained open for the recorded 481.634 s through owned-window observation, two retained UI access failures and explicit stop. This is app residency, not load or rendering time. The window was observed, no pixels were obtained, and permission-dependent follow-up stopped; individual UI/coordination durations were not recorded. Separate raw receipts and normalized publication summaries have distinct provenance purposes; this sample does not establish redundant report assembly. Root's extra slot-state reconciliation shows a handoff opportunity, but no quantified time saving is supported.
+
+One reversible experiment for the next two unit studies: put the complete owner source/contact/native sequence and conditional successor slot release in the initial assignment, then send one compact final-PID/terminal/raw-manifest message before prose collation. Use existing receipts to observe terminal→successor first-start interval and whether another GO round trip occurred, targeting zero additional GO round trips and zero assembly-invalid launches. Keep separate source/mechanical/visual decisions and the batch release gates; do not infer acceptance from slot release. Retain complete-driver reuse. This is one bounded checkpoint, not ongoing monitoring; unavailable intervals remain unknown.

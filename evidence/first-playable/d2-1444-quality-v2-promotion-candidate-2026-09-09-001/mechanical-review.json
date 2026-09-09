@@ -1,0 +1,172 @@
+{
+  "schema_version": "ti.d2-1444-quality-v2-derived-evidence/1",
+  "derived_normalized_summary": true,
+  "not_a_captured_original": true,
+  "raw_originals_rewritten": false,
+  "source_role": "Accepted scoped combined actual-main mechanics; original probe FAIL remains FAIL",
+  "raw_origin": {
+    "raw_original_sha256": "199bb7d5784afaf323210704de22a1dad97de52802f2cd5df90c1b301a83074e",
+    "raw_original_bytes": 7733,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/independent-combined-mechanics/REVIEW.json"
+  },
+  "normalization": "Absolute machine-path prefixes become declared placeholders at string leaves. Raw numeric values, arrays, hashes and historical pending statements remain as recorded. Explicit image projections point to exact archived originals.",
+  "truth_boundary": {
+    "recognition_metric": "10/213",
+    "capture_time_recognition_metric": "9/213",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "source_render_images_are_package_pixels": false,
+    "as_built_fidelity_claimed": false,
+    "inventory_physical_units": 213
+  },
+  "data": {
+    "status": "PASS_COMBINED_MECHANICAL_GATE_WITH_RETAINED_PROBE_FAILURE",
+    "raw_probe_status": "FAIL",
+    "raw_engine_exit": 1,
+    "accepted_scope": [
+      "Four real 1444 closed-back/side-return/soffit contacts with stock walk/run/jetpack, exit and local safe recovery",
+      "3188 every-motion camera segment and near-plane clearance checks with zero failures",
+      "Four closed shape1 receiver rejections and four adjacent shape0 placements through the stock player spray controller; exact wall identity and decal mask2",
+      "Separate noneligible spray-blocking roof and grounded stock capsule landing",
+      "Both actual 1439/1444 pairs measured exactly once and world735/977/992/71828/466/468 with current10/213, 1444 zero credit"
+    ],
+    "terrain_interpretation": "The two external shape0 upward contacts match exact generated terrain heights/normals at recorded safe poses. Terrain lies above the authored floor. This explains why direct closure-floor support was not observed; no escape/stall/camera defect appeared. Original trace lacks external collider key/RID; analytic attribution is explicitly an inference.",
+    "owner_handoff_sha256": "364a692c39fbf88482231fe4ffa76c0269570ce923888a289cb2f61ff727170b",
+    "owner_binding_sha256": "69a8f096e5b9c330a60e8cf3bd12485dd613fd2239da0930da87ac452381d750",
+    "accepted_source_review_sha256": "94506a6932e5b5f869facf169e95e53b74eef964f38a9283a9129aa18a9b9aad",
+    "files": {
+      "pre-execution.json": "77d714211f55f48f9803cd24bf47f0e86817d8364313089ac6e556c679a14741",
+      "independent_combined_probe.gd": "7dac8f87d9178c5be5ee33b03fe39ac182e86beb1f8ee78fdfbd2edf0293210a",
+      "stock_1444_recess_contact-pinned.gd": "ea359a12b0b554c903349eda709029f3065688340b711daf0aac71bf77344172",
+      "run_probe.py": "ea3a3d0bb91d0dba6e9d76a7922441a1f2fc6f09b5cea1f99735d480b4e2fee0",
+      "probe-from-1439.diff": "4d4b13398d926f8881e27dbe560b65c97e46784aa5de34b2ccea55a65e96dcb8",
+      "live-001-execution.json": "cf498236dfe603fccce4e7767e0b833c6f9cc24e9b48844bb674382c800fe3b2",
+      "live-001.log": "18f05025ae57591ce842acb6a7c604050bd64c36b2d0651e42ce76fe106ad5ea",
+      "live-001-result.json": "f995a0f9cb732b2d574c9149880ddbca2e3498be92c04349be254e8e10b3a5e2",
+      "terrain-contact-reconciliation.json": "0029519916de5a058861ccac70c2f5e65ebd8a158f2ec5d67c4fd5606b064091",
+      "final-state.json": "05bd8ac96926f24a418829ea80debef9251d62e50de3f5adf13a8c5649ee40cd"
+    },
+    "owner_receipts_reviewed": [
+      {
+        "name": "import-001",
+        "exit_code": 0,
+        "log_warnings": [
+          "WARNING: Missing .uid file for path \"res://game/tests/building_1_wing_window_reveal_candidate_capture.gd\". The file was re-created from cache.",
+          "WARNING: Missing .uid file for path \"res://game/tests/headless_building_1_wing_returns_v2_current_package_contract.gd\". The file was re-created from cache.",
+          "WARNING: Missing .uid file for path \"res://game/tests/headless_building_1_wing_window_reveal_candidate_evidence_contract.gd\". The file was re-created from cache.",
+          "WARNING: Missing .uid file for path \"res://game/tests/headless_building_1_wing_window_reveal_candidate_package_contract.gd\". The file was re-created from cache."
+        ],
+        "log_error_lines": [],
+        "receipt_sha256": "9d628b54d886637882dbf8c290407b62cc494a5980aa1c98b8d6b018fa28efe3",
+        "log_sha256": "44b8e392da8b67be31332aed07e3b683edcc2e3e5c815b7a28906f7e1838de45"
+      },
+      {
+        "name": "source-001",
+        "exit_code": 0,
+        "log_warnings": [],
+        "log_error_lines": [],
+        "receipt_sha256": "16dfd410ab51f47208bd67b823325e0e85995e50f7c389cce71331c5e32cf1d3",
+        "log_sha256": "8d85bf7368e872ce48a57e32bf1f5f1b8577b6972c50f7acaa94b2f1aeeffbb4"
+      },
+      {
+        "name": "measurement-001",
+        "exit_code": 0,
+        "log_warnings": [],
+        "log_error_lines": [],
+        "receipt_sha256": "01919ca156334f88c9c6ad55e559a717450c96732a639e778897ae330fc94c28",
+        "log_sha256": "b1971b2948b2b6a044ecb4bb9c65722296bd79eb95af9ebc4269dfddf00e8637"
+      },
+      {
+        "name": "live-001",
+        "exit_code": 0,
+        "log_warnings": [],
+        "log_error_lines": [],
+        "receipt_sha256": "c26a02a2d18ce982e932cb157f0b25c8e7cc16852aa65d29d2929dc06960154f",
+        "log_sha256": "897793b693873f3acec90f885e40546dcbdae790112bcb1ff21037efe657f792"
+      },
+      {
+        "name": "full-runtime-001",
+        "exit_code": 0,
+        "log_warnings": [],
+        "log_error_lines": [],
+        "receipt_sha256": "0aff00ab13dd726a5d6b2c318cbb1a5321bb1ed989ed8d697acc962b5e36ffb5",
+        "log_sha256": "5ec8631cbe25e8ad671566577914e34b4b9af082e646d1ee211cc360f8ad92ed"
+      },
+      {
+        "name": "gameplay-001",
+        "exit_code": 0,
+        "log_warnings": [],
+        "log_error_lines": [],
+        "receipt_sha256": "574119bbece48f0c0b780ca8459966885df05987af7b3e92f8550bccda8b6cc0",
+        "log_sha256": "6d2e1c9cabc284ada09f4f241c6116168e5819b2a6ed9d4994967b19de0d713b"
+      },
+      {
+        "name": "route-default-001",
+        "exit_code": 0,
+        "log_warnings": [],
+        "log_error_lines": [],
+        "receipt_sha256": "a68d98f7208f064c27ff49cf1b90e8d175f8b12581ca879db26d2840205d100a",
+        "log_sha256": "995410aaa1f9cea95af52057c90bdaee1d6b08d0d9e8c4c94bb3768a5382ba01"
+      },
+      {
+        "name": "route-whole-island-001",
+        "exit_code": 0,
+        "log_warnings": [],
+        "log_error_lines": [],
+        "receipt_sha256": "f41a55564f5b7a10f8109b8b7049c2125c4f65d23b71f8ccb1b6098ddb49f70f",
+        "log_sha256": "3f16ea13f7c0c95d24239181b937e11db53822ebfed6acfb714e34a228630d11"
+      },
+      {
+        "name": "context-preflight-001",
+        "exit_code": 0,
+        "log_warnings": [],
+        "log_error_lines": [],
+        "receipt_sha256": "340a05eccbb44aaf2f026af87336117d49738a9c8dd5e977411039b9d43ed308",
+        "log_sha256": "75cb8f8c641ea0feb0b981694410eaf2e942e84ef30b3dac7224381a87af1888"
+      }
+    ],
+    "remaining_limits": [
+      "No direct live closure-floor-contact claim for undercrofts8/9",
+      "No fresh native pixels, full-frame/background equality, package acceptance or promotion",
+      "No broad camera matrix, factory suite, route replay or package replay"
+    ],
+    "recognition_metric": "10/213",
+    "1444_recognition_credit": 0,
+    "product_edits": false,
+    "engine_slot_released": true,
+    "mechanical_gate_decision": "PASS: frozen source/adapter correspondence and existing isolated stock contacts establish all four closed floors; independent combined-world stock movement and solid contacts establish safe actual playability, with terrain support at the two covered floors. No material mechanical requirement remains unproven within this gate. The unavailable direct live closure-floor contact remains an excluded stronger claim, not a hidden success or proof the floor is absent.",
+    "unaccepted_stronger_claim": "All four live recess closure floors directly support/contact the player. This stronger inherited isolated assertion failed at undercrofts8/9 and is not accepted or relabeled as passing.",
+    "isolated_contact_evidence": {
+      "result": "{TASK_ROOT}/work/1444-quality-v2-001/contact-002-result.json",
+      "result_sha256": "30e9cfa2ef89af405cdf303bee8711d12113ca7705974c9a44d295cefe43f7c0",
+      "execution": "{TASK_ROOT}/work/1444-quality-v2-001/contact-002-execution.json",
+      "execution_sha256": "ba1b26178ce80b59d548bc368d7f895c0d691a1f387ed227259912f5fa065ac1",
+      "log_sha256": "d7743eb00686a74fab324960d39270208f81fffe5e3b095b440a0aee39d39ee5",
+      "actual_helper_sha256": "ea359a12b0b554c903349eda709029f3065688340b711daf0aac71bf77344172",
+      "exit_code": 0,
+      "all_four_direct_floor_contact": true,
+      "failures": []
+    }
+  },
+  "source_review": {
+    "raw_original_sha256": "94506a6932e5b5f869facf169e95e53b74eef964f38a9283a9129aa18a9b9aad",
+    "raw_original_bytes": 8194,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/independent-source/SOURCE_REVIEW.md"
+  },
+  "raw_probe_failure": {
+    "raw_original_sha256": "f995a0f9cb732b2d574c9149880ddbca2e3498be92c04349be254e8e10b3a5e2",
+    "raw_original_bytes": 91610,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/independent-combined-mechanics/live-001-result.json"
+  },
+  "terrain_reconciliation": {
+    "raw_original_sha256": "0029519916de5a058861ccac70c2f5e65ebd8a158f2ec5d67c4fd5606b064091",
+    "raw_original_bytes": 3689,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/independent-combined-mechanics/terrain-contact-reconciliation.json"
+  },
+  "isolated_floor_contacts": {
+    "raw_original_sha256": "30e9cfa2ef89af405cdf303bee8711d12113ca7705974c9a44d295cefe43f7c0",
+    "raw_original_bytes": 180969,
+    "retained_repo_relative_path": "build/d2-1444-quality-v2-provenance-2026-09-09-001/owner-session/contact-002-result.json"
+  }
+}
