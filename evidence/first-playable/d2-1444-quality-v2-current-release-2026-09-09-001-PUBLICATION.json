@@ -1,0 +1,75 @@
+{
+  "status": "PRIMARY_PUBLICATION_CONFIRMED_ORDINARY_WINDOW_OBSERVED_APP_STOPPED",
+  "derived_observed_outcome": true,
+  "primary_commit": "b85462571105209496c266781f94f37b4c5f0a69",
+  "origin_main_after_primary_push": "b85462571105209496c266781f94f37b4c5f0a69",
+  "normal_fast_forward_push": true,
+  "original_reviewed88_inventory_sha256": "ed5851530514c3ccf84f81c4b9060ff15ad98858d38792b91538724e70283ae1",
+  "stage_paths": 89,
+  "original_independent_publication_review_sha256": "43e8b62c5402bbfe7ce876e1bdb74fc05b8dcc145afc14efa4906496b0dbee4e",
+  "independent_publication_review": "evidence/reviews/d2-1444-quality-v2-current-release-2026-09-09-001-PUBLICATION_READINESS_REVIEW.md",
+  "retained_primary_records": [
+    {
+      "path": "build/d2-1444-quality-v2-current-release-provenance-2026-09-09-001/publication-downstream/task-work/1444-quality-v2-001/publication-001/primary-publication-execution.json",
+      "sha256": "a69f9ac25e95ca439977c3e5c033326991b74f958a5d6b39cc5bbb669616b69d",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d2-1444-quality-v2-current-release-provenance-2026-09-09-001/publication-downstream/task-work/1444-quality-v2-001/publication-001/primary-stage-inventory.json",
+      "sha256": "68096466e9af0f54401574f34ac99a9d1bf357e6278100924d75f7e8aff39f34",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d2-1444-quality-v2-current-release-provenance-2026-09-09-001/publication-downstream/task-work/1444-quality-v2-001/publication-001/primary-publication-stage-proof.json",
+      "sha256": "6d9d901108e452ac89cf9f98dced840fe73ab05f66100412161557306bb4b2bc",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d2-1444-quality-v2-current-release-provenance-2026-09-09-001/publication-downstream/task-work/1444-quality-v2-001/publication-001/primary-stage.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d2-1444-quality-v2-current-release-provenance-2026-09-09-001/publication-downstream/task-work/1444-quality-v2-001/publication-001/primary-stage-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d2-1444-quality-v2-current-release-provenance-2026-09-09-001/publication-downstream/task-work/1444-quality-v2-001/publication-001/primary-commit.log",
+      "sha256": "848bf30b6847c796e1591287de2dbb94c1b38c3213ea9a9473ca4cb248a77553",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d2-1444-quality-v2-current-release-provenance-2026-09-09-001/publication-downstream/task-work/1444-quality-v2-001/publication-001/primary-push.log",
+      "sha256": "f0722955ef04caa99210892de10fa2b743b2412ee11a31cdd6b51c41f8be587c",
+      "byte_identical": true
+    }
+  ],
+  "current_metric": "11/213",
+  "historical_capture_metric": "9/213",
+  "historical_candidate_package_metric": "10/213",
+  "current_release_closure": "evidence/first-playable/d2-1444-quality-v2-current-release-2026-09-09-001/release-closure.json",
+  "current_release_closure_sha256": "38780b3a298ffe2030acb5a6a0e5271932daf3915cd86ff3936f28239432ee3f",
+  "ordinary_launch": {
+    "evidence": "evidence/first-playable/d2-1444-quality-v2-current-release-2026-09-09-001/ordinary-launch.json",
+    "raw_handoff_sha256": "1434fc9cb28159f2fb59b60a13faad3cf93e04c2a6e1bfd9feab9e8a1c5f030c",
+    "no_argument_source_free_cwd": true,
+    "owned_pid": 75791,
+    "observed_owned_window_id": 36142,
+    "pixels_available": false,
+    "pixel_limitation": "Unconfigured sky node RPC; direct same-plugin fallback returned pending Accessibility/Screen Recording permissions. Both original results retained; no API cycling or pixel fabrication.",
+    "intentional_stop": "owned SIGTERM, actual exit -15",
+    "fresh_pid_absent": true,
+    "manual_input_or_owner_acceptance": false
+  },
+  "app_relative_path": "build/d2-1444-quality-v2-current-2026-09-09-001/Treasure Island First Playable.app",
+  "bundle_identity_sha256": "07fe27f678be4c7d71de77b42a79c6b8c46491034eb6c80a2b3e00eed097b4e6",
+  "pck_sha256": "c010390dcfe213134445a352facd0720283818edd279e72851f17af83bcc426c",
+  "executable_sha256": "a5a85e48fbd890e661d04a1e191bfe1280141c01c0212cc6fb4fd10591a90c4f",
+  "all7appfiles_and38sourcepins_unchanged_after_primary_publication": true,
+  "only_four_original_incidental_UIDs_remain": true,
+  "private_app_archive_AVI_cache_not_published": true,
+  "HUMAN_001": "Pending ordinary owner recognition and mouse/keyboard acceptance on approved Apple M1 Pro only; does not block autonomous work or delivery.",
+  "B1_and_previous10_credit_preserved": true,
+  "completion_record_own_commit": "Not self-bound; later completion commit/push is recorded in the external publication handoff."
+}
