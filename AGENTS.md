@@ -1,5 +1,7 @@
 # Treasure Island Game — Agent Working Agreement
 
+At task start, read the relevant lessons in [LEARNINGS.md](LEARNINGS.md). When a repeated or generalizable mistake is exposed, add or refine a concise lesson there with observed evidence, known cause or uncertainty, and a practical prevention check; keep routine round history in RETRO.
+
 ## Mandatory orchestration boundary
 
 The primary `/root` agent is an **ORCHESTRATOR ONLY**, never an executor, for all work in this project. It may decompose and assign work, monitor and coordinate named subagents, review their evidence, accept or reject results, update plans and goals, and communicate with the owner.
