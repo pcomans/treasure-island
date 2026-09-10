@@ -1,0 +1,128 @@
+{
+  "schema_version": "ti.d5-fidelity-candidate-closure/1",
+  "status": "INDEPENDENT_UNIT_ATTESTATION_SERIALIZED_QUALITY_AUTHORITY_PREPARATION",
+  "physical_unit_id": "physical-building:w96215646",
+  "candidate_authority": "13/213",
+  "recognition_credit_granted": false,
+  "prospective_numerator_effect_after_separate_acceptance": 0,
+  "seven_acceptance_bindings_prepared": {
+    "evidence_manifest_sha256": "ec327adb9239a902f40fd7e2ede7afedcd19bf1869b392e9646544721eaec316",
+    "motion_telemetry_manifest_sha256": "0ad7ff068f42b8230ba724d9143c9c563130de3c9d40c37837f1ed21f95ecc60",
+    "visual_motion_manifest_sha256": "6a057c2b0236e90d11861499c299b723b35da37ee3590a0a154d0c3390f0b2cb",
+    "package_verification_receipt_sha256": "9be91b038dc142ac84d3947ed68733c2346aa5756e4ccbb433bf0a173b8ca364",
+    "evidence_tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+    "mechanical_review_receipt_sha256": "c2c4ee90347b458e44fda87d900a4a2031b2cf4883c16a0db1ceac0ffeec02cd",
+    "review_receipt_sha256": "c7b5079a3a59847b80e201ef8107928381f9370dd74001f2675f0c68de82dbc8"
+  },
+  "independent_package_decision_pending": false,
+  "seventh_attestation_pending": false,
+  "seventh_requirement": "Separate reviewer must bind this exact unit, six artifact values and actual image-tree digest with its individual visual scope; previous reviews do not attest the new tree.",
+  "image_tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+  "evidence_tree_document_sha256": "4811d4fa41523ee524b4360b9373d4a9f5daf6450e427887df3547a23570abdd",
+  "artifacts": [
+    {
+      "path": "capture-manifest.json",
+      "sha256": "ec327adb9239a902f40fd7e2ede7afedcd19bf1869b392e9646544721eaec316",
+      "bytes": 28988
+    },
+    {
+      "path": "motion-telemetry.json",
+      "sha256": "0ad7ff068f42b8230ba724d9143c9c563130de3c9d40c37837f1ed21f95ecc60",
+      "bytes": 285428
+    },
+    {
+      "path": "visual-motion.json",
+      "sha256": "6a057c2b0236e90d11861499c299b723b35da37ee3590a0a154d0c3390f0b2cb",
+      "bytes": 33214
+    },
+    {
+      "path": "package-verification-receipt.json",
+      "sha256": "9be91b038dc142ac84d3947ed68733c2346aa5756e4ccbb433bf0a173b8ca364",
+      "bytes": 37007
+    },
+    {
+      "path": "evidence-tree.json",
+      "sha256": "4811d4fa41523ee524b4360b9373d4a9f5daf6450e427887df3547a23570abdd",
+      "bytes": 3189
+    },
+    {
+      "path": "mechanical-review.json",
+      "sha256": "c2c4ee90347b458e44fda87d900a4a2031b2cf4883c16a0db1ceac0ffeec02cd",
+      "bytes": 21079
+    },
+    {
+      "path": "visual-review.json",
+      "sha256": "29e76f6762c62f9a44ba1d7efaafc9520d72cfef2119919dbb6926367c89ba95",
+      "bytes": 25673
+    },
+    {
+      "path": "source-reconciliation.json",
+      "sha256": "826389d5ed9317b144f6e9f93a37b09404b7cdfa48fc3dd520868db86f6cdd5d",
+      "bytes": 523061
+    },
+    {
+      "path": "copy-inventory.json",
+      "sha256": "a6f964d927eab8142ba00cedf335fdd4c1b65e671bfdd85e1b15a10314462e7d",
+      "bytes": 19327
+    },
+    {
+      "path": "private-provenance-retention.json",
+      "sha256": "db93dcfdff73383e5cd34446f724eee596ed1c4874fd88ef02f2add3eba0b006",
+      "bytes": 327201
+    },
+    {
+      "path": "unit-visual-attestation.json",
+      "sha256": "c7b5079a3a59847b80e201ef8107928381f9370dd74001f2675f0c68de82dbc8",
+      "bytes": 17602
+    }
+  ],
+  "limits": [
+    "Palette004 has static native evidence. Geometry003 mechanics/motion reused through bounded material addendum; five-decimal oriented collision signatures are not raw byte hashes.",
+    "Original003 ground-view wall-only predicate FAIL preserved; no palette motion replay.",
+    "Individual source-world captures are not combined-world or app pixels; actual batch source and owner package runs separately establish exact selected implementations and attachments.",
+    "Independent static and sampled-motion reviews retain their written scope. No continuous playback, hidden-roof schedule, manual-play or AVI/physics-index equivalence claim.",
+    "Original AVI files retain their70-byte declared/physical extent discrepancy. Exact payload copies do not establish generic-player conformance.",
+    "Independent same-app candidate package PASS is bound; the accepted seventh unit/packet/visual attestation is now serialized against the six unchanged fields and image tree.",
+    "Three palette004 stills only. Two motion PNGs and nine AVI payloads depict geometry003 and its older palette. The preservation addendum compares16 native arrays and four five-decimal oriented collision signatures, not raw collision-byte hashes. Original003 wall-only intended-land predicate FAIL remains."
+  ],
+  "source_photo_boundary": "No third-party source pixels in packet, ignored archive or game. References remain individually dated in the preserved reviews.",
+  "independent_package_decision": "PASS",
+  "independent_package_review": {
+    "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/665648ccc7fdc0524184/REVIEW.json",
+    "sha256": "665648ccc7fdc05241841e8201ec495809133f9c2acb522e9adef56bd6287773",
+    "bytes": 25333,
+    "original_locator": "{TASK_ROOT}/work/1308-1394-quality-candidate-package-independent-001/REVIEW.json",
+    "role": "independent_package_raw_original",
+    "byte_identical": true
+  },
+  "preparation_status_note": "Unchanged individual evidence documents retain assembly-time pending annotations. This closure serializes the later independently accepted unit/visual attestation and prior package PASS. No final exact-current export or additional recognition credit is claimed.",
+  "independent_unit_visual_attestation": {
+    "path": "unit-visual-attestation.json",
+    "sha256": "c7b5079a3a59847b80e201ef8107928381f9370dd74001f2675f0c68de82dbc8",
+    "bytes": 17602
+  },
+  "reviewed_original_closure": {
+    "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/310cd80bd5621997e6a9/candidate-closure.json",
+    "sha256": "310cd80bd5621997e6a97cac65d992b59977cada4a8f556e68a2e05211498fb7",
+    "bytes": 5317,
+    "original_locator": "{BATCH_REPO}/evidence/first-playable/d5-1394-fidelity-quality-candidate-2026-09-10-001/candidate-closure.json",
+    "role": "independent_unit_attestation_raw_original",
+    "byte_identical": true
+  },
+  "independent_binding_check": {
+    "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/0f2e730b6c9e1c4bd93f/BINDING_CHECK.json",
+    "sha256": "0f2e730b6c9e1c4bd93f933227a14a7865a0e84d9b6a05076d8faadecb564396",
+    "bytes": 58333,
+    "original_locator": "{TASK_ROOT}/work/1308-1394-quality-candidate-unit-attestations-001/BINDING_CHECK.json",
+    "role": "independent_unit_attestation_raw_original",
+    "byte_identical": true
+  },
+  "independent_binding_checker": {
+    "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/017c886331ba25df18fb/check_packet_bindings.py",
+    "sha256": "017c886331ba25df18fb51ed8e507754c6ab7237620e0d170785d3d9ac3a18e1",
+    "bytes": 8277,
+    "original_locator": "{TASK_ROOT}/work/1308-1394-quality-candidate-unit-attestations-001/check_packet_bindings.py",
+    "role": "independent_unit_attestation_raw_original",
+    "byte_identical": true
+  }
+}

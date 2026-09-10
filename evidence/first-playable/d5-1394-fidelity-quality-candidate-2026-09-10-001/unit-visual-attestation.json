@@ -1,0 +1,277 @@
+{
+  "reviewer": "review_1303_source",
+  "reviewed_at": "2026-09-10T16:14:23.180940+00:00",
+  "decision": "PASS",
+  "attestation_kind": "Independent per-unit candidate packet and visual attestation (seventh artifact)",
+  "physical_unit_id": "physical-building:w96215646",
+  "scope": "Current selected quality revision, assembled unit evidence and public-front static/sampled-visual quality, with retained independent technical and same-app candidate proof. This is a genuine attestation of this exact six-binding/image-tree combination; its receipt SHA is computed externally when serialized.",
+  "independence": "Reviewer did not implement the current selected revisions or assemble these packets. Technical and package results are retained at their original reviewed scope, not claimed as new tests in this visual attestation.",
+  "packet": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-d5-1308-1394-quality-batch-v1/evidence/first-playable/d5-1394-fidelity-quality-candidate-2026-09-10-001",
+  "candidate_closure_sha256": "310cd80bd5621997e6a97cac65d992b59977cada4a8f556e68a2e05211498fb7",
+  "acceptance_bindings": {
+    "evidence_manifest_sha256": "ec327adb9239a902f40fd7e2ede7afedcd19bf1869b392e9646544721eaec316",
+    "motion_telemetry_manifest_sha256": "0ad7ff068f42b8230ba724d9143c9c563130de3c9d40c37837f1ed21f95ecc60",
+    "visual_motion_manifest_sha256": "6a057c2b0236e90d11861499c299b723b35da37ee3590a0a154d0c3390f0b2cb",
+    "package_verification_receipt_sha256": "9be91b038dc142ac84d3947ed68733c2346aa5756e4ccbb433bf0a173b8ca364",
+    "evidence_tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+    "mechanical_review_receipt_sha256": "c2c4ee90347b458e44fda87d900a4a2031b2cf4883c16a0db1ceac0ffeec02cd"
+  },
+  "evidence_tree_document_sha256": "4811d4fa41523ee524b4360b9373d4a9f5daf6450e427887df3547a23570abdd",
+  "binding_check": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1308-1394-quality-candidate-unit-attestations-001/BINDING_CHECK.json",
+    "sha256": "0f2e730b6c9e1c4bd93f933227a14a7865a0e84d9b6a05076d8faadecb564396",
+    "script_sha256": "017c886331ba25df18fb51ed8e507754c6ab7237620e0d170785d3d9ac3a18e1",
+    "all_image_tree_files_and_six_bindings_exact": true,
+    "all_images_private_copy_original_and_raw_capture_or_payload_exact": true,
+    "packet_image_and_selected_product_inputs_unchanged_at_seal": true,
+    "checker_scope_note": "Initial local binding script assumed each PNG counter had a nested manifest. The held endpoint carries the raw observation directly; the checker was corrected to resolve its already-bound motion-result origin. This was a read-only checker schema assumption, not an evidence/product defect or engine attempt."
+  },
+  "reference": {
+    "path": "/private/tmp/1308-1394-streetview-comparison-b2l4EG/1394-streetview-march-2025.png",
+    "sha256": "a382481493b6cf5f0643f44c6366561e5dbc8693a39b9af57f17aa1c4b440534"
+  },
+  "current_rule_hashes": {
+    "AGENTS.md": "2edfaa36f3e3994f9484d5e2998ba7b421ebeadb7c883578c36f3f703d3df9d6",
+    "LEARNINGS.md": "71986e5ac68ae9a907f2b05b14ca9d40b1aeb3aec57b6f9e2bfb313ef8a988b3",
+    ".claude/agents/ti-visual-review.md": "950f601984d8488cf71cfebf2ba5ac047b4f138d73d47dcab5c9aff4ab3ca981",
+    ".agents/skills/building-texture/references/semantic-art-review.md": "e363e3519d628001d8db422e05f927e917db9df278bc93f8e215f3059de5844a"
+  },
+  "inspected_image_count": 14,
+  "inspected_images": [
+    {
+      "path": "images/current004-stills/03-screen-walk-default.png",
+      "sha256": "420298964fd2438d3ddc83bfeb31d9bb588530f69097da40de8032795f91f693",
+      "bytes": 479470,
+      "role": "current004_static_native",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    },
+    {
+      "path": "images/current004-stills/04-screen-walk-changed.png",
+      "sha256": "0b2f81e4cbdfe679166d5d803d3f25fce0c01b6acf4daa9b48fc81cdb72bb4ec",
+      "bytes": 365360,
+      "role": "current004_static_native",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    },
+    {
+      "path": "images/current004-stills/05-parking-walk-lawn-default.png",
+      "sha256": "287450969a8ce6f4e8efdcb8a79c9d12ed930588bc496c1e15b37fb6962e19f8",
+      "bytes": 1079868,
+      "role": "current004_static_native",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0038.jpg",
+      "sha256": "91041f14917470b771bdec3174ab7276e305e1116e061de032ea1e31a319d7fd",
+      "bytes": 41876,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 38,
+      "offset": 1901916
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0053.jpg",
+      "sha256": "d11c866ed6aa5e2809db20897f691fcb7b4a3a312701545f7c33cc5659bf8e1f",
+      "bytes": 41512,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 53,
+      "offset": 2583924
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0068.jpg",
+      "sha256": "589019dfdf66d678af9ea6f235f65ed98eee099507c3d32586593b79a0959c0e",
+      "bytes": 43209,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 68,
+      "offset": 3275190
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0083.jpg",
+      "sha256": "317278d02fab3adf8f1ab6cc43704f7fd9356f8f7f251dff08df1e059e27e4b9",
+      "bytes": 42377,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 83,
+      "offset": 3999954
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0098.jpg",
+      "sha256": "5b9331e92693efd6a91e69c12d13868dc48bf7c459fc823c64537523cdaefcf4",
+      "bytes": 41021,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 98,
+      "offset": 4671920
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0113.jpg",
+      "sha256": "f5dc407fbc7b68fc2c73f7a016934ec07647eb04d28b5470030d6b7d58e03d67",
+      "bytes": 41147,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 113,
+      "offset": 5332378
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0128.jpg",
+      "sha256": "6891dbcbbc6d3945242418bec63cd38b9cdaf104ceaaf9c03263ee019b580f0d",
+      "bytes": 44390,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 128,
+      "offset": 5987370
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0143.jpg",
+      "sha256": "7bdd898fcdc76214a1b0a3ab9a8fe9a25c41d1a69c7253a221a985ca4b4ef960",
+      "bytes": 44598,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 143,
+      "offset": 6694422
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0158.jpg",
+      "sha256": "44a394bd8bbfc396f18669fbcdb8ba90f04f39ada088b03428cfd27829c2d686",
+      "bytes": 42384,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 158,
+      "offset": 7377874
+    },
+    {
+      "path": "images/geometry003-motion/motion-final-world-retained.png",
+      "sha256": "604d2b697b34c4cc74803924a484243350f2b0248c15b249868aa896ae3de23d",
+      "bytes": 376778,
+      "role": "historical_geometry003_motion_not_palette004",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    },
+    {
+      "path": "images/geometry003-motion/motion-start-screen-walk.png",
+      "sha256": "fdb9e6f7bce0f5f170c1b6cd8097bc5505aee5cd31454759971e1ac89affc696",
+      "bytes": 376886,
+      "role": "historical_geometry003_motion_not_palette004",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    }
+  ],
+  "whole_visible_result_findings": [
+    "I compared the actual March2025 reference with all three current palette004 stills and the eleven retained geometry003 motion images/payloads. The broader005 view supplies the full long, stepped two-storey frontage that the close canopy views partly occlude. Blue-gray horizontal siding, pale openings, the continuous flat canopy on slender posts, projecting slatted screens, a continuous lighter walk and perpendicular door approaches form a coherent recognition-level interpretation of the observed public side.",
+    "The current default and changed-light close views and the broader overview show a restrained green band between wall and walk, distinct from dark parking and from the brown island ground outside the bounded frontage. The reference has weathering, vegetation and household detail absent here, while screen schedules and paving joints remain inferred and simplified. I found no further visible silhouette, material-spill or frontage-connection blocker in the current scope; the source flat-roof/canopy family remains appropriate.",
+    "The two motion PNGs and nine AVI samples visibly retain the older brown lawn. Their slat gaps, doors and walk boundaries remain readable where posts/avatar do not occlude them; camera shortening at AVI128/143 changes scale. No additional obvious geometry jump, missing screen or broad streak appears in these samples. They are accepted only as historical retained-geometry observations; current green-palette temporal behavior was not captured or certified."
+  ],
+  "current_implementation": [
+    {
+      "path": "game/scripts/world/facades/d5_1394_gateview_live_factory.gd",
+      "sha256": "25284afdd779f6b491da47218fc6fdd169dad3bb3c56da70d76680cc91781fcb",
+      "exact_to_accepted_unit_and_batch_map": true
+    },
+    {
+      "path": "game/resources/facades/d5_1394_gateview_live_factory.json",
+      "sha256": "2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86",
+      "exact_to_accepted_unit_and_batch_map": true
+    },
+    {
+      "path": "game/scripts/world/facades/d5_1394_gateview_live_replacement.gd",
+      "sha256": "42e0233cdbe1be7bdcbb63603c1bb2cae4c247dde87a51f9518cc1afafc82076",
+      "exact_to_accepted_unit_and_batch_map": true
+    },
+    {
+      "path": "game/resources/facades/d5_1394_gateview_live_replacement.json",
+      "sha256": "3d74e15f0a438dd4a45f2c778c415879888ef1b7a3cef75ebe7a9682db4de203",
+      "exact_to_accepted_unit_and_batch_map": true
+    },
+    {
+      "path": "game/resources/facades/d5_1394_lawn_tone.gdshader",
+      "sha256": "d60b1db292234046d2e8fd1a451e0f3f52a69b12afe401e871bedef6067ca7af",
+      "exact_to_accepted_unit_and_batch_map": true
+    }
+  ],
+  "retained_source_mechanics": "Reuse D\u2019s sealed003 mechanical PASS and independent material004 preservation addendum (3a9c2753\u2026/d4fe8c2e\u2026): 39.757942m frontage walk, six screen and six door approach/return cases, twelve member/gap spray outcomes. All1458 contact input frames grounded with827 direct upward land-contact frames; motion120/120 grounded,66 direct contacts,6.731008m path versus0.231873m net. Empty contacts and rays remain distinct. Material004 preserved16 mesh arrays and four oriented five-decimal collision signatures plus source land/area state; those signatures are not raw byte hashes. Therefore geometry003 mechanics remains applicable to the current selected material revision without relabeling it as a new motion run.",
+  "retained_source_mechanics_raw_origins": [
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/3a9c2753c1a59b496a90/REVIEW.md",
+      "sha256": "3a9c2753c1a59b496a9003b0767428f961c0ef57e7e46997cea00f3afadbbf5c",
+      "bytes": 7897,
+      "original_locator": "{TASK_ROOT}/work/1394-fidelity-independent-mechanics-003/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/d4fe8c2ee47b7ef4dd76/material004-ADDENDUM.md",
+      "sha256": "d4fe8c2ee47b7ef4dd76347c57560541c2eebcd65ee8f40bd962964480d1354a",
+      "bytes": 4930,
+      "original_locator": "{TASK_ROOT}/work/1394-fidelity-independent-mechanics-003/material004-ADDENDUM.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "retained_visual_raw_origins": [
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/3674a1068b48fcb723b3/REVIEW.json",
+      "sha256": "3674a1068b48fcb723b3c04f96f634e6726e4b3bd6a76b46067d12afacb42a60",
+      "bytes": 9981,
+      "original_locator": "{TASK_ROOT}/work/1394-fidelity-independent-visual-004/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/c8e71cf72c86a263f8ca/REVIEW.json",
+      "sha256": "c8e71cf72c86a263f8ca26566294fb417251cf9d37a4f9c3496f594f1031d09b",
+      "bytes": 14338,
+      "original_locator": "{TASK_ROOT}/work/1394-fidelity-independent-visual-003/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "shared_candidate_package": {
+    "independent_review_sha256": "665648ccc7fdc05241841e8201ec495809133f9c2acb522e9adef56bd6287773",
+    "app": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-d5-1308-1394-quality-batch-v1/build/d5-1308-1394-quality-candidate-001/Treasure Island First Playable.app",
+    "pck_sha256": "9fef305dc9ac1f5d3866742143842ce5f691d1bc369dc41b775142fbf243ed86",
+    "executable_sha256": "f29815cae1511ac62d893a17cc7afb9b401a9131489faec68fba9f9ae2012b03",
+    "actual_app_binding_sha256": "8103ac4a7962f23bca2f3c78eda13d139d1ab7f3696610d53189ce770893143e",
+    "unit_partition": {
+      "wall": [
+        15,
+        15,
+        3352,
+        1,
+        3
+      ],
+      "roof": [
+        1,
+        1,
+        16,
+        1,
+        1
+      ]
+    },
+    "scope": "Retain independently passed four same-app stages and exact before/after source/app bindings. Mounted checks prove target component dispatch/material/collision/receiver partitions; signed headless/native ordinary main separately proves full735/1006/1021/79913/466/474 world, both targets and prior1439/1444, controls and privacy. Unit captures are individual source-world images, not combined-app screenshots. No package run or app/source-tree rehash in this attestation."
+  },
+  "limits": [
+    "March2025 pano j3ugQSzJZtl9lpbb5i58bQ, heading90: UI1230 Gateview Ct uses the recorded1230-to-1394/w96215646 crosswalk. Different cameras/light and public W-side coverage limit dimensions, color matching and hidden-face claims.",
+    "Three current palette004 stills; eleven geometry003 motion images retain the old brown palette. No new palette motion or temporal-stability claim follows from the material-only geometry preservation.",
+    "Nine encoded AVI samples only, with canopy/post/avatar occlusion and camera shortening.161-frame1280x800 AVI retains70 trailing bytes beyond its declared RIFF extent; no continuous/generic-player playback or encoded/physics index equivalence.",
+    "Original003 brown-lawn visual HOLD and native05 intended-land/wall-only-predicate FAIL remain unchanged.004 closes the current static lawn issue through separate new stills and corrected exact-owner assertion, not by rewriting003.",
+    "Floor flags and unfiltered land rays are separate from direct slide contacts. Existing empty contact arrays remain; there is no continuous-support or general penetration guarantee.",
+    "Simplified material/weathering/vegetation and protected regions are not represented as complete photo fidelity. No new recognition count, publication/current-release, manual M1 play, invisible-interior or global mechanics claim.",
+    "Historical assembly-time pending annotations remain in immutable derived documents; the bound current closure/package receipt supersedes only their package-pending state. This new attestation is separate from later serialized packet binding."
+  ],
+  "next_action": "C may serialize this exact seventh artifact with the existing six values, preserving all packet images and historical records. No additional render or runtime replay is requested by this review.",
+  "authority": "13/213 unchanged; both existing units are quality revisions, zero numerator effect; packets remain unmodified pending serialized binding.",
+  "retro_exact": "review_1303_source \u2014 Independent1394 quality-candidate unit/visual attestation: Compared the dated March2025 reference with all14 exact assembled images. Current004 stills show coherent flat-canopy/frontage form, projecting screens, connected walks and restrained green lawn; eleven003 motion images remain explicitly older brown-palette evidence. Verified the six exact bindings and image tree, current implementation, material-preservation addendum and independent same-app proof; scoped candidate unit/visual PASS. Reused003 mechanics at its original contact/ray and sampled-motion limits, preserving the original lawn HOLD/native predicate FAIL and AVI extent limit. No new palette motion, engine, packet/source/app/authority edit or credit; root delivers this note once."
+}

@@ -1,0 +1,153 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Independent unit source/traversal and applicable material preservation",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/3a9c2753c1a59b496a90/REVIEW.md",
+      "sha256": "3a9c2753c1a59b496a9003b0767428f961c0ef57e7e46997cea00f3afadbbf5c",
+      "bytes": 7897,
+      "original_locator": "{TASK_ROOT}/work/1394-fidelity-independent-mechanics-003/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/d4fe8c2ee47b7ef4dd76/material004-ADDENDUM.md",
+      "sha256": "d4fe8c2ee47b7ef4dd76347c57560541c2eebcd65ee8f40bd962964480d1354a",
+      "bytes": 4930,
+      "original_locator": "{TASK_ROOT}/work/1394-fidelity-independent-mechanics-003/material004-ADDENDUM.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "review_texts": [
+      "1394 fidelity003 — independent scoped mechanical PASS.\n\nReviewer: `/root/review_1303_source`. This closes the affected ground travel, six screen/door interactions and bounded motion scope for the frozen003 products. It reuses the accepted [source/readiness review]({TASK_ROOT}/work/1394-fidelity-independent-source-readiness-003/REVIEW.md); it does not accept the lawn appearance or revision004. No engine, replay, product, authority or shared RETRO edit occurred.\n\nI read the actual contact/motion records, selected driver control flow, terminal receipts and C’s [visual review]({TASK_ROOT}/work/1394-fidelity-independent-visual-003/REVIEW.md). I compared recorded contacts and rays with triangles in the focused emission dump, using the original003 screen configuration. All four archived003 products match their original267 binding. The earlier full source comparison stands; this follow-up did not rehash the entire source tree. Owner contact PID49798 and motion PID68663 ended0, with clean logs and identical267 before/after maps; the recorded five-PID release remains bound.\n\nThe 600-frame frontage walk advances39.757942m along the configured walk. Reprojection places its center at inward distance3.95794–3.97071m, inside the3.40–4.55m visual walk strip. Its actual support observations reference `land:w26767313:x_-2__z_-3`, not a new paving collider. Source land/area state is identical before/after.\n\n| Recorded phase | Input frames / grounded | Frames with direct upward land contact | Frames with no slide contact | Foot minus unfiltered land-ray height | Largest adjacent clearance change |\n| --- | ---: | ---: | ---: | ---: | ---: |\n| Frontage walk | 600 /600 | 423 | 177 | −1.534 to+1.192mm | 2.505mm |\n| Entire contact set, including walk | 1458 /1458 | 827 | 389 | −1.913 to+1.192mm | 2.809mm |\n| Motion | 120 /120 | 66 | 54 | −1.438 to+1.110mm | 2.039mm |\n\nEvery listed frame’s unfiltered support ray hits the same actual land. These rays and floor flags do not establish direct contact on the remaining frames: the long-walk final contact array is empty, and door3’s41-frame return has no slide contacts. The helper’s2mm/4mm diagnostics did not fire; they remain external diagnostic values, not newly adopted project cutoffs. No recovery occurred. The observations support completed bounded travel without claiming continuous support ownership, a general penetration guarantee or a physics cause.\n\nEach screen approach runs40 stock-input frames and stops grounded at about0.8814m outward depth. Independently, all186 recorded screen shape2 contact points (31 per screen) lie on the intended screen’s front-rail mesh surfaces, with maximum numerical point-to-triangle residual0.0142mm. This confirms specific visible members beyond the shared shape2 identifier. Each of the six70-frame door approaches contacts its corresponding closed door or handle geometry (maximum residual0.0438mm); returns43/42/42/41/15/15 frames reach within0.1144/0.1246/0.1128/0.1236/0.1394/0.1208m of their settled starts. Tiny residuals describe agreement between rounded evidence values, not acceptance tolerances.\n\nAll twelve spray cases use separately staged, settled stock-camera poses, with the parent-basis conversion present and pitches−37.124° to−29.209°. The helper invokes the existing spray controller directly after aiming; this is not a claim of a continuous keyboard/mouse interaction. Six member rays reach the intended center front slat on nonreceiver wall shape2 and return `receiver_rejection` without adding tags. Six gap rays clear all102 screen boxes’ emitted triangles before the actual eligible wall shape0 hit, return `placed`, and add one tag each. Actual camera ranges are3.005–3.826m and player-to-hit ranges1.725–2.188m. Shape ownership, range and actual outcomes agree; a25mm ray gap is not a player passage.\n\nMotion uses right30/left60/right30 input frames. Independent recomputation from the start capture and actual positions gives6.731008241m planar path and0.231872561m net displacement (owner native-precision values6.731007974m and0.231872559m). `_drive` only applies/releases actions and observes state; placement/aim writes occur before phases, with no input-phase transform writes. C inspected nine retained AVI payloads and found no additional visible blocker where the frontage appears, retaining camera shortening/occlusion and the lawn HOLD. I make no continuous playback, generic-player or encoded/process/physics index-equivalence claim.\n\nThe native05 raw exit1 remains: the inherited wall-only predicate rejected its intended land ray. Contact/motion PASS does not relabel that native result. Original AVI161 frames and70 trailing RIFF bytes, prior warnings and all raw records remain intact. Material004 may retain this mechanical evidence only with its own exact geometry/collision preservation binding; the remaining lawn pixel judgment is separate. No additional contact or motion replay is justified by this003 review.\n\nExact bindings below use `P = {TASK_ROOT}/work/1394-fidelity-revision-003` unless otherwise stated; SHA256 values were read from the actual files for this review. The original four product hashes remain in the267 map; their relocated bytes were checked through the archive map.\n\n| Artifact | SHA256 |\n| --- | --- |\n| OWNER_HANDOFF.md | `83e80a2df51bc9276f1537f2f51e722f8dd3888c8ed61d3f4855bef7d8ace17d` |\n| OWNER_HANDOFF.json | `7595f304bc0efb3dfd5d79eac7e22dc4a6f058f17cfbb6f678925757ffdd3d92` |\n| source-pins.json (267) | `7718890e97c7c4e81b8601dc4d0c4a5e82c6af202a4273d8abf113a5cb19ac17` |\n| focused-001-result.json | `4eb935dd0d62929c03aa687e7e18528c6849579091201e5b9af549233bd63aa4` |\n| contact-001-result.json | `c9a5b62670223c907bc44c984214fa05b3e734ded788c0f8c5a995778afbd742` |\n| contact-001-execution.json | `de682d384105748daa1c221640221499983946afa4de693db14edae14686e297` |\n| motion-001-result.json | `126207caed4fd585525c39f194655b42e618e545e7ee4008175b6fa9fff3837f` |\n| motion-001-execution.json | `9b855b94774a6e9cf020c1c5731b05fc4b42ccadc285234832c1361326bbf3aa` |\n| live_driver.gd | `56f4528ba60deaf4e532919f3454ae1254d24754e82ae803a15a5633ba21e7dd` |\n| native-001-result.json (raw FAIL) | `eb3527483bcafbaba2cf5a1faa9728f3103416a620e2c403627dedaaa643f415` |\n| slot-release.json | `5d8e243067f3876657a5c7983ec7a2a532fe66455f6cd6121d167cd7e334db6c` |\n| motion-finalization.json | `33cec8f77a7ce9d3b6a0d152b60cfd488d5784221b1dd8425b53d2fcacf05948` |\n| Prior independent source/readiness | `ed1e63856318d60827bdc52069c0f7cc3cf0bfb36ff57c748a24119011183a8d` |\n| C independent visual | `aa3c92bd196f0908b876b0fe7d9b58041674f496c9d6adf0dac5e427dc11ebe7` |\n| 1394-fidelity-revision-004/historical-003/ARCHIVE_MAP.json | `7b6f82c835a0ae2cc1f5b5e21877b51a945a5b7e3b5f110fc2fa5a92a7c36618` |\n\nRETRO: review_1303_source — independent1394 fidelity003 mechanics: Reused the sealed source review and inspected frozen contact/motion without an engine replay. All1458 contact and120 motion input frames were grounded, with827 and66 frames respectively providing direct upward land contacts; empty contacts and separate ray evidence remain explicit. Mapped all six screen approaches to actual front rails, all six door approaches to doors/handles, and all twelve spray outcomes to member or unobstructed gap geometry. Scoped mechanical PASS preserves native05’s raw predicate failure and C’s lawn-only visual HOLD. Motion is6.731008m path versus0.231873m net, with no continuous-playback claim. Bound archived003 products before material004; no geometry change or additional mechanics replay follows from this review.\n",
+      "1394 material004 — independent preservation PASS; the scoped003 mechanics remain applicable.\n\nD (`/root/review_1303_source`) reviewed the actual five-product delta, native helper/result and terminal receipt without engine, movement/spray/motion replay or product edits. This addendum preserves [the003 mechanical seal]({TASK_ROOT}/work/1394-fidelity-independent-mechanics-003/REVIEW.md) and every limitation in it. Palette/fidelity belongs separately to C.\n\nAll five current product hashes match their selected pins. Independently regenerating the complete diff against the archived003 products exactly reproduces `material-only.diff`. The only functional product change assigns a fresh shader material to the existing LocalLawn mesh; config additions specify its inferred colors and dependency hashes. No vertex-stage displacement, geometry construction, collision generation, receiver ownership, controls or terrain code changes. The existing grass texture bytes,2m UV repeat and roughness source remain; only the local mesh’s hue/luminance mapping changes. Other material paths and source-ground materials remain unchanged.\n\nThe selected native helper compares every vertex, normal, UV and oriented index for all16 actual live meshes against the bound003 dump before capture. It also compares four ordered-corner triangle signatures against003 geometry. Those signatures sort triangles and round coordinates to five decimals: they are not raw collision-face byte hashes. Combined with unchanged geometry inputs/construction and exact mesh-array checks, this supports the existing collision/mechanics lineage without another movement test. It does not create a new motion observation.\n\nI compared actual source-land/area snapshots with003, excluding newly allocated instance/RID identifiers: transforms, array hashes, visibility, land collision layer/shape and face hash all match; within004 the before/after snapshots are identical. Owner native PID79288 ended0 with clean logs,279 equal before/after pins and recorded fresh absence. This bounded follow-up checks the five changed products and frozen evidence bindings; it does not repeat a full279-file filesystem audit.\n\nThe revised05 assertion requires the exact declared `land:w26767313:x_-2__z_-3` owner and shape0, and its actual ray passes. This is a new native result correcting an external expected-owner predicate; the original003 wall-only rawFAIL remains retained. The three captures provide no new continuous-motion or support claim. The prior six screen/door contacts, twelve spray outcomes and bounded walking/motion remain accepted through preserved geometry, with their original empty-contact, ray and sampled-video limits. No authority/credit/export decision follows from this addendum.\n\nExact SHA256 bindings, under `{TASK_ROOT}/work/1394-fidelity-revision-004` unless otherwise named:\n\n| Artifact | SHA256 |\n| --- | --- |\n| OWNER_HANDOFF.md | `20f7929ec8a2f09383a3557f250624440c1f5dde2e5750ad2e019670728f5c68` |\n| OWNER_HANDOFF.json | `e82e310ced142eff6d4ae45be772c0d67c0e14bf3386b8f0f2210f04fb2d4834` |\n| product-pins.json (five selected products) | `e7265a6b2e35b692ed2e180188fc538d4f8d2c19e08017a5905bbc06f846913e` |\n| source-pins.json (279) | `2235dbf699b67aa4b73aa3748a2215559737977b31a571c62f531c4981d7c21e` |\n| material-only.diff | `acd147cce78a75e7b65399cd6c07a7e1870dcb6c597ac8a776bf8c51b7199908` |\n| native_driver.gd | `b7e637edd90a6fe486aca4a977031910876db6d2a14aa269a641401def00245b` |\n| native-004-result.json | `10b1ff655d6315124a74cc0e1931f104347e2ee9aa39fcfc154c82a0df6b576f` |\n| native-004-execution.json | `349448470e2ad075fed1f1e28737f1e8fe7d08e9b9eb8ba121514dc80de30b48` |\n| SLOT_RELEASE.json | `ec26e6352cb49619d9802b3e5f403fb5fbff89efd70e87e4f607770dc1f72ccf` |\n| historical-003/ARCHIVE_MAP.json | `7b6f82c835a0ae2cc1f5b5e21877b51a945a5b7e3b5f110fc2fa5a92a7c36618` |\n| Prior003 independent mechanics | `3a9c2753c1a59b496a9003b0767428f961c0ef57e7e46997cea00f3afadbbf5c` |\n\nRETRO for B’s later serialized append — review_1303_source, independent1394 material004 preservation: Regenerated the exact five-product diff against archived003 and reviewed the single native stage’s16 exact mesh-array comparisons, four five-decimal oriented collision signatures and unchanged source-land/area snapshots. Only the private LocalLawn shader/config and dependency bindings change, so the accepted003 scoped mechanics remain applicable without walking, spray or motion replay. Kept collision-signature precision explicit, preserved003 native05 rawFAIL and verified004’s exact LANDshape0 correction. Palette remains C’s separate decision. No engine, source/authority mutation or continuous-support claim; route this note through root for one owner append.\n"
+    ],
+    "combined_source": {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/b68170e1acab05322be5/focused-002-result.json",
+      "sha256": "b68170e1acab05322be5c20be6511307fa052ea37692ab8214b159b7f811803b",
+      "bytes": 3345,
+      "original_locator": "{TASK_ROOT}/work/1308-1394-quality-batch-001/focused-002-result.json",
+      "role": "bound_text_input_original",
+      "byte_identical": true
+    },
+    "raw_failures_preserved": [
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/b2b1cd7738d2ec75f5dd/native-001-result.json",
+        "sha256": "b2b1cd7738d2ec75f5dd3c824777df58c687431d566205ad3da51a11854ae905",
+        "bytes": 30585,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-001/native-001-result.json",
+        "role": "bound_text_input_original",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/1bb1993ebfb3efa6244e/native-001-execution.json",
+        "sha256": "1bb1993ebfb3efa6244ee6ebdde2ed1159a6e3ab87940ce02172d26e2855faf9",
+        "bytes": 125597,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-001/native-001-execution.json",
+        "role": "bound_text_input_original",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/d8202991873c807a1576/native-001.log",
+        "sha256": "d8202991873c807a1576ce6e0b16a42770900b383cbeec2567c873f669139828",
+        "bytes": 601,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-001/native-001.log",
+        "role": "historical_raw_failure_retained_without_reclassification",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6f6ba1d0691cc0fad5d4/contact-001-result.json",
+        "sha256": "6f6ba1d0691cc0fad5d4db65071bab3948943fd81765cf141034fcaf11cb603e",
+        "bytes": 3351613,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-001/contact-001-result.json",
+        "role": "bound_text_input_original",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/669e8c200d949ab94969/contact-001-execution.json",
+        "sha256": "669e8c200d949ab9496932655e6534a8fecfc9dfb46ad8acdd6de9c918cc52a1",
+        "bytes": 125453,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-001/contact-001-execution.json",
+        "role": "bound_text_input_original",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/1e718ba1f7d05bdefd86/contact-001.log",
+        "sha256": "1e718ba1f7d05bdefd86cda2e3c7c7d3fe698a32f7211ea0bbe350717d166425",
+        "bytes": 204,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-001/contact-001.log",
+        "role": "historical_raw_failure_retained_without_reclassification",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/a7e4ecf4e9ee7aecc61f/contact-001-result.json",
+        "sha256": "a7e4ecf4e9ee7aecc61f1195cb6bb932c257f8454413f042712ae9009353f650",
+        "bytes": 713402,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-002/contact-001-result.json",
+        "role": "bound_text_input_original",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/50ad66be01b24c067e12/contact-001-execution.json",
+        "sha256": "50ad66be01b24c067e12ab467e1efcba58a5535cd880d9a4841c6154deb0160a",
+        "bytes": 134362,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-002/contact-001-execution.json",
+        "role": "bound_text_input_original",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/d900225f46618f22e217/contact-001.log",
+        "sha256": "d900225f46618f22e2174ba48495b0374848f757df9cf48ead9584b06908a226",
+        "bytes": 167,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-002/contact-001.log",
+        "role": "historical_raw_failure_retained_without_reclassification",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/eb3527483bcafbaba2cf/native-001-result.json",
+        "sha256": "eb3527483bcafbaba2cf5a1faa9728f3103416a620e2c403627dedaaa643f415",
+        "bytes": 43214,
+        "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-003/native-001-result.json",
+        "role": "historical_raw_failure_retained_without_reclassification",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/b9bc057975d11cc0d959/native-001-execution.json",
+        "sha256": "b9bc057975d11cc0d959d3556f2e981f1cd3d11996ad9b1878cecf49f0679275",
+        "bytes": 117989,
+        "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-003/native-001-execution.json",
+        "role": "historical_raw_failure_retained_without_reclassification",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6486149e9fc3ffee80b7/native-001.log",
+        "sha256": "6486149e9fc3ffee80b7dc007b5aaf89408359f2b11c74d919ec144957df7b86",
+        "bytes": 724,
+        "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-003/native-001.log",
+        "role": "historical_raw_failure_retained_without_reclassification",
+        "byte_identical": true
+      }
+    ],
+    "limits": [
+      "Palette004 has static native evidence. Geometry003 mechanics/motion reused through bounded material addendum; five-decimal oriented collision signatures are not raw byte hashes.",
+      "Original003 ground-view wall-only predicate FAIL preserved; no palette motion replay.",
+      "Individual source-world captures are not combined-world or app pixels; actual batch source and owner package runs separately establish exact selected implementations and attachments.",
+      "Independent static and sampled-motion reviews retain their written scope. No continuous playback, hidden-roof schedule, manual-play or AVI/physics-index equivalence claim.",
+      "Original AVI files retain their70-byte declared/physical extent discrepancy. Exact payload copies do not establish generic-player conformance.",
+      "Independent app decision and seventh unit/packet/visual attestation are pending; historical reviews do not attest this newly assembled image tree.",
+      "Three palette004 stills only. Two motion PNGs and nine AVI payloads depict geometry003 and its older palette. The preservation addendum compares16 native arrays and four five-decimal oriented collision signatures, not raw collision-byte hashes. Original003 wall-only intended-land predicate FAIL remains."
+    ]
+  },
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "inventory_physical_units": 213,
+    "credit_granted": false,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_exact_app_and_packet_attestation_pending": true
+  }
+}

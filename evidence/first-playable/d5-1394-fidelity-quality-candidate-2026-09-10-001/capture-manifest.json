@@ -1,0 +1,724 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Current004 3-still manifest with original camera, light and source scope",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/10b1ff655d6315124a74/native-004-result.json",
+      "sha256": "10b1ff655d6315124a74cc0e1931f104347e2ee9aa39fcfc154c82a0df6b576f",
+      "bytes": 29650,
+      "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-004/native-004-result.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/3674a1068b48fcb723b3/REVIEW.json",
+      "sha256": "3674a1068b48fcb723b3c04f96f634e6726e4b3bd6a76b46067d12afacb42a60",
+      "bytes": 9981,
+      "original_locator": "{TASK_ROOT}/work/1394-fidelity-independent-visual-004/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "captures": [
+      {
+        "id": "03-screen-walk-default",
+        "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-004/images/03-screen-walk-default.png",
+        "sha256": "420298964fd2438d3ddc83bfeb31d9bb588530f69097da40de8032795f91f693",
+        "dimensions": [
+          1440,
+          900
+        ],
+        "runs": [
+          20,
+          21,
+          22,
+          23
+        ],
+        "kind": "screen",
+        "station_m": 12.7972263185767,
+        "group_fraction": 0.75,
+        "player": {
+          "position": [
+            -282.214630126953,
+            2.94361567497253,
+            -647.544494628906
+          ],
+          "depth_m": 2.40000772476196,
+          "station_m": 14.0972280502319,
+          "on_floor": true,
+          "slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-2__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -282.212982177734,
+                2.94343256950378,
+                -647.543273925781
+              ],
+              "normal": [
+                -0.00468742474913597,
+                0.999983310699463,
+                -0.00340619217604399
+              ]
+            }
+          ],
+          "upward_slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-2__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -282.212982177734,
+                2.94343256950378,
+                -647.543273925781
+              ],
+              "normal": [
+                -0.00468742474913597,
+                0.999983310699463,
+                -0.00340619217604399
+              ]
+            }
+          ],
+          "unfiltered_world_solid_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-2__z_-3",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision/Shape",
+            "structural_role": "",
+            "hit": true,
+            "position": [
+              -282.214630126953,
+              2.94342041015625,
+              -647.544494628906
+            ],
+            "normal": [
+              -0.00468742428347468,
+              0.999983191490173,
+              -0.0034061917103827
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true
+          }
+        },
+        "camera_position": [
+          -287.697662353516,
+          4.94361591339111,
+          -647.97607421875
+        ],
+        "camera_forward": [
+          0.996917605400085,
+          0.0,
+          0.0784554108977318
+        ],
+        "camera_fov": 70.0,
+        "aim_target": [
+          -279.822021484375,
+          4.94361591339111,
+          -647.356201171875
+        ],
+        "assembly_target": [
+          -280.218475341797,
+          3.62253999710083,
+          -648.691467285156
+        ],
+        "assembly_projected_px": [
+          607.101745605469,
+          564.731140136719
+        ],
+        "target_in_frame": true,
+        "stock_aim": {
+          "ok": true,
+          "yaw_degrees": -87.6815898713291,
+          "pitch_degrees": 0.0,
+          "world_delta": [
+            2.39260864257812,
+            0.0,
+            0.18829345703125
+          ],
+          "parent_local_delta": [
+            2.39804196357727,
+            0.0,
+            -0.097087100148201
+          ],
+          "parent_world_rotation_degrees": [
+            0.0,
+            -6.81819772720337,
+            0.0
+          ]
+        },
+        "lower_assembly_first_solid_los": {
+          "collider_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-3__building_w96215646_wall/D51394GateviewLiveWallReplacement/Collision",
+          "exact_structure_body": true,
+          "shape_index": 2,
+          "derived_object_key": "building:w96215646:wall",
+          "feature_kind": "building_wall",
+          "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-3__building_w96215646_wall/D51394GateviewLiveWallReplacement/Collision/OpaqueClosedGroundModuleAssemblies",
+          "structural_role": "OpaqueClosedGroundModuleAssemblies",
+          "hit": true,
+          "position": [
+            -280.231109619141,
+            3.62476968765259,
+            -648.690246582031
+          ],
+          "normal": [
+            -0.996900975704193,
+            0.0,
+            -0.078667014837265
+          ],
+          "excludes_only_player": true,
+          "not_a_stock_contact_claim": true
+        },
+        "ground_first_solid_los": {
+          "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision",
+          "exact_structure_body": false,
+          "shape_index": 0,
+          "derived_object_key": "land:w26767313:x_-2__z_-3",
+          "feature_kind": "land_ground",
+          "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision/Shape",
+          "structural_role": "",
+          "hit": true,
+          "position": [
+            -280.439636230469,
+            2.9478178024292,
+            -648.696166992188
+          ],
+          "normal": [
+            -0.00468742428347468,
+            0.999983191490173,
+            -0.0034061917103827
+          ],
+          "excludes_only_player": true,
+          "not_a_stock_contact_claim": true
+        },
+        "lower_assembly_visible_by_solid_ray": true,
+        "ground_visible_by_solid_ray": true,
+        "rays_do_not_replace_pixel_verdict": true,
+        "sun_rotation_degrees": [
+          -51.9999961853027,
+          -27.9999980926514,
+          0.0
+        ],
+        "hud": {
+          "debug_panel_visible": false,
+          "feedback_panel_visible": false,
+          "load_panel_visible": false,
+          "pause_panel_visible": false,
+          "reticle_visible": true
+        },
+        "visual_verdict": "pending_independent_review",
+        "source_world_land_and_area_intact": true
+      },
+      {
+        "id": "04-screen-walk-changed",
+        "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-004/images/04-screen-walk-changed.png",
+        "sha256": "0b2f81e4cbdfe679166d5d803d3f25fce0c01b6acf4daa9b48fc81cdb72bb4ec",
+        "dimensions": [
+          1440,
+          900
+        ],
+        "runs": [
+          20,
+          21,
+          22,
+          23
+        ],
+        "kind": "screen",
+        "station_m": 12.7972263185767,
+        "group_fraction": 0.75,
+        "player": {
+          "position": [
+            -282.214630126953,
+            2.94361567497253,
+            -647.544494628906
+          ],
+          "depth_m": 2.40000772476196,
+          "station_m": 14.0972280502319,
+          "on_floor": true,
+          "slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-2__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -282.212982177734,
+                2.94343256950378,
+                -647.543273925781
+              ],
+              "normal": [
+                -0.00468742474913597,
+                0.999983310699463,
+                -0.00340619217604399
+              ]
+            }
+          ],
+          "upward_slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-2__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -282.212982177734,
+                2.94343256950378,
+                -647.543273925781
+              ],
+              "normal": [
+                -0.00468742474913597,
+                0.999983310699463,
+                -0.00340619217604399
+              ]
+            }
+          ],
+          "unfiltered_world_solid_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-2__z_-3",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision/Shape",
+            "structural_role": "",
+            "hit": true,
+            "position": [
+              -282.214630126953,
+              2.94342041015625,
+              -647.544494628906
+            ],
+            "normal": [
+              -0.00468742428347468,
+              0.999983191490173,
+              -0.0034061917103827
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true
+          }
+        },
+        "camera_position": [
+          -287.697662353516,
+          4.94361591339111,
+          -647.97607421875
+        ],
+        "camera_forward": [
+          0.996917605400085,
+          0.0,
+          0.0784554108977318
+        ],
+        "camera_fov": 70.0,
+        "aim_target": [
+          -279.822021484375,
+          4.94361591339111,
+          -647.356201171875
+        ],
+        "assembly_target": [
+          -280.218475341797,
+          3.62253999710083,
+          -648.691467285156
+        ],
+        "assembly_projected_px": [
+          607.101745605469,
+          564.731140136719
+        ],
+        "target_in_frame": true,
+        "stock_aim": {
+          "ok": true,
+          "yaw_degrees": -87.6815898713291,
+          "pitch_degrees": 0.0,
+          "world_delta": [
+            2.39260864257812,
+            0.0,
+            0.18829345703125
+          ],
+          "parent_local_delta": [
+            2.39804196357727,
+            0.0,
+            -0.097087100148201
+          ],
+          "parent_world_rotation_degrees": [
+            0.0,
+            -6.81819772720337,
+            0.0
+          ]
+        },
+        "lower_assembly_first_solid_los": {
+          "collider_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-3__building_w96215646_wall/D51394GateviewLiveWallReplacement/Collision",
+          "exact_structure_body": true,
+          "shape_index": 2,
+          "derived_object_key": "building:w96215646:wall",
+          "feature_kind": "building_wall",
+          "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-3__building_w96215646_wall/D51394GateviewLiveWallReplacement/Collision/OpaqueClosedGroundModuleAssemblies",
+          "structural_role": "OpaqueClosedGroundModuleAssemblies",
+          "hit": true,
+          "position": [
+            -280.231109619141,
+            3.62476968765259,
+            -648.690246582031
+          ],
+          "normal": [
+            -0.996900975704193,
+            0.0,
+            -0.078667014837265
+          ],
+          "excludes_only_player": true,
+          "not_a_stock_contact_claim": true
+        },
+        "ground_first_solid_los": {
+          "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision",
+          "exact_structure_body": false,
+          "shape_index": 0,
+          "derived_object_key": "land:w26767313:x_-2__z_-3",
+          "feature_kind": "land_ground",
+          "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision/Shape",
+          "structural_role": "",
+          "hit": true,
+          "position": [
+            -280.439636230469,
+            2.9478178024292,
+            -648.696166992188
+          ],
+          "normal": [
+            -0.00468742428347468,
+            0.999983191490173,
+            -0.0034061917103827
+          ],
+          "excludes_only_player": true,
+          "not_a_stock_contact_claim": true
+        },
+        "lower_assembly_visible_by_solid_ray": true,
+        "ground_visible_by_solid_ray": true,
+        "rays_do_not_replace_pixel_verdict": true,
+        "sun_rotation_degrees": [
+          -25.9999980926514,
+          125.999992370605,
+          0.0
+        ],
+        "hud": {
+          "debug_panel_visible": false,
+          "feedback_panel_visible": false,
+          "load_panel_visible": false,
+          "pause_panel_visible": false,
+          "reticle_visible": true
+        },
+        "visual_verdict": "pending_independent_review",
+        "source_world_land_and_area_intact": true
+      },
+      {
+        "expected_los_key": "land:w26767313:x_-2__z_-3",
+        "target_visible_by_solid_ray": true,
+        "stock_aim": {
+          "ok": true,
+          "yaw_degrees": -106.380393016179,
+          "pitch_degrees": -14.5697525678867,
+          "world_delta": [
+            7.0,
+            -1.97946763038635,
+            3.0
+          ],
+          "parent_local_delta": [
+            7.30665302276611,
+            -1.97946763038635,
+            2.14774823188782
+          ],
+          "parent_world_rotation_degrees": [
+            0.0,
+            -6.81819772720337,
+            0.0
+          ]
+        },
+        "id": "05-parking-walk-lawn-default",
+        "requested_xz": [
+          -288.713928222656,
+          -662.00537109375
+        ],
+        "aim_target": [
+          -281.713928222656,
+          2.89031481742859,
+          -659.00537109375
+        ],
+        "sun": [
+          -51.9999961853027,
+          -27.9999980926514,
+          0.0
+        ],
+        "player": {
+          "position": [
+            -288.713928222656,
+            2.86978268623352,
+            -662.00537109375
+          ],
+          "depth_m": 10.0139207839966,
+          "station_m": 0.185419678688049,
+          "on_floor": true,
+          "slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-2__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -288.715179443359,
+                2.86959600448608,
+                -662.004150390625
+              ],
+              "normal": [
+                0.00356245972216129,
+                0.999987959861755,
+                -0.00340620800852776
+              ]
+            }
+          ],
+          "upward_slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-2__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -288.715179443359,
+                2.86959600448608,
+                -662.004150390625
+              ],
+              "normal": [
+                0.00356245972216129,
+                0.999987959861755,
+                -0.00340620800852776
+              ]
+            }
+          ],
+          "unfiltered_world_solid_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-2__z_-3",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision/Shape",
+            "structural_role": "",
+            "hit": true,
+            "position": [
+              -288.713928222656,
+              2.86958742141724,
+              -662.00537109375
+            ],
+            "normal": [
+              0.00356245925650001,
+              0.999987840652466,
+              -0.00340620754286647
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true
+          }
+        },
+        "camera": [
+          -293.606658935547,
+          6.2533540725708,
+          -664.102233886719
+        ],
+        "camera_forward": [
+          0.88958728313446,
+          -0.251558482646942,
+          0.381251722574234
+        ],
+        "camera_fov": 70.0,
+        "framing": {
+          "ok": true,
+          "metadata": {
+            "target_bounds_point_count": 128,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              -3518.3232421875,
+              32.2768173217773
+            ],
+            "target_projected_max_px": [
+              1625.42028808594,
+              1222.40673828125
+            ],
+            "target_projected_width_ratio": 3.57204420301649,
+            "target_projected_height_ratio": 1.32236653645833,
+            "target_bounds_fully_in_frame": false
+          }
+        },
+        "first_world_solid_los": {
+          "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision",
+          "exact_structure_body": false,
+          "shape_index": 0,
+          "derived_object_key": "land:w26767313:x_-2__z_-3",
+          "feature_kind": "land_ground",
+          "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-2__z_-3__land_w26767313_x_-2__z_-3/land_w26767313_x_-2__z_-3/Collision/Shape",
+          "structural_role": "",
+          "hit": true,
+          "position": [
+            -281.770751953125,
+            2.90637969970703,
+            -659.029724121094
+          ],
+          "normal": [
+            -0.00468742428347468,
+            0.999983191490173,
+            -0.0034061917103827
+          ],
+          "excludes_only_player": true,
+          "not_a_stock_contact_claim": true
+        },
+        "source_world_land_and_area_intact": true,
+        "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-004/images/05-parking-walk-lawn-default.png",
+        "sha256": "287450969a8ce6f4e8efdcb8a79c9d12ed930588bc496c1e15b37fb6962e19f8",
+        "sample": {
+          "unique_colors": 350,
+          "luminance_range": 0.703884646296501
+        }
+      }
+    ],
+    "capture_world": {
+      "current_authority_metric": "13/213",
+      "historical_source_world_metric": "10/213",
+      "production_adapter": true,
+      "temporary_swap": false,
+      "recognition_credit": 0,
+      "measured_world": {
+        "rows": 735,
+        "meshes": 997,
+        "surfaces": 1012,
+        "triangles": 77604,
+        "bodies": 466,
+        "shapes": 472
+      },
+      "measurement_receipt_sha256": "4eb935dd0d62929c03aa687e7e18528c6849579091201e5b9af549233bd63aa4",
+      "wall_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-3__building_w96215646_wall/D51394GateviewLiveWallReplacement",
+      "roof_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-3__building_w96215646_roof/D51394GateviewLiveRoofReplacement",
+      "geometry_reference": "{TASK_ROOT}/work/1394-fidelity-revision-003/focused-001-result.json",
+      "geometry_reference_sha256": "4eb935dd0d62929c03aa687e7e18528c6849579091201e5b9af549233bd63aa4",
+      "all16_meshes_and4_shape_faces_checked": true,
+      "movement_and_spray_replayed": false
+    },
+    "source_input_map": {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/2235dbf699b67aa4b73a/source-pins.json",
+      "sha256": "2235dbf699b67aa4b73aa3748a2215559737977b31a571c62f531c4981d7c21e",
+      "bytes": 60509,
+      "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-004/source-pins.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "selected_stills": [
+      {
+        "path": "images/current004-stills/03-screen-walk-default.png",
+        "sha256": "420298964fd2438d3ddc83bfeb31d9bb588530f69097da40de8032795f91f693",
+        "bytes": 479470,
+        "role": "current004_static_native",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/420298964fd2438d3ddc/03-screen-walk-default.png",
+          "sha256": "420298964fd2438d3ddc83bfeb31d9bb588530f69097da40de8032795f91f693",
+          "bytes": 479470,
+          "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-004/images/03-screen-walk-default.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "native_manifest": {
+            "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/10b1ff655d6315124a74/native-004-result.json",
+            "sha256": "10b1ff655d6315124a74cc0e1931f104347e2ee9aa39fcfc154c82a0df6b576f",
+            "bytes": 29650,
+            "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-004/native-004-result.json",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "id": "03-screen-walk-default"
+        }
+      },
+      {
+        "path": "images/current004-stills/04-screen-walk-changed.png",
+        "sha256": "0b2f81e4cbdfe679166d5d803d3f25fce0c01b6acf4daa9b48fc81cdb72bb4ec",
+        "bytes": 365360,
+        "role": "current004_static_native",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/0b2f81e4cbdfe679166d/04-screen-walk-changed.png",
+          "sha256": "0b2f81e4cbdfe679166d5d803d3f25fce0c01b6acf4daa9b48fc81cdb72bb4ec",
+          "bytes": 365360,
+          "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-004/images/04-screen-walk-changed.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "native_manifest": {
+            "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/10b1ff655d6315124a74/native-004-result.json",
+            "sha256": "10b1ff655d6315124a74cc0e1931f104347e2ee9aa39fcfc154c82a0df6b576f",
+            "bytes": 29650,
+            "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-004/native-004-result.json",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "id": "04-screen-walk-changed"
+        }
+      },
+      {
+        "path": "images/current004-stills/05-parking-walk-lawn-default.png",
+        "sha256": "287450969a8ce6f4e8efdcb8a79c9d12ed930588bc496c1e15b37fb6962e19f8",
+        "bytes": 1079868,
+        "role": "current004_static_native",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/287450969a8ce6f4e8ef/05-parking-walk-lawn-default.png",
+          "sha256": "287450969a8ce6f4e8efdcb8a79c9d12ed930588bc496c1e15b37fb6962e19f8",
+          "bytes": 1079868,
+          "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-004/images/05-parking-walk-lawn-default.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "native_manifest": {
+            "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/10b1ff655d6315124a74/native-004-result.json",
+            "sha256": "10b1ff655d6315124a74cc0e1931f104347e2ee9aa39fcfc154c82a0df6b576f",
+            "bytes": 29650,
+            "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-004/native-004-result.json",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "id": "05-parking-walk-lawn-default"
+        }
+      }
+    ],
+    "limits": [
+      "Palette004 has static native evidence. Geometry003 mechanics/motion reused through bounded material addendum; five-decimal oriented collision signatures are not raw byte hashes.",
+      "Original003 ground-view wall-only predicate FAIL preserved; no palette motion replay.",
+      "Individual source-world captures are not combined-world or app pixels; actual batch source and owner package runs separately establish exact selected implementations and attachments.",
+      "Independent static and sampled-motion reviews retain their written scope. No continuous playback, hidden-roof schedule, manual-play or AVI/physics-index equivalence claim.",
+      "Original AVI files retain their70-byte declared/physical extent discrepancy. Exact payload copies do not establish generic-player conformance.",
+      "Independent app decision and seventh unit/packet/visual attestation are pending; historical reviews do not attest this newly assembled image tree.",
+      "Three palette004 stills only. Two motion PNGs and nine AVI payloads depict geometry003 and its older palette. The preservation addendum compares16 native arrays and four five-decimal oriented collision signatures, not raw collision-byte hashes. Original003 wall-only intended-land predicate FAIL remains."
+    ]
+  },
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "inventory_physical_units": 213,
+    "credit_granted": false,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_exact_app_and_packet_attestation_pending": true
+  }
+}

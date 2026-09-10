@@ -16,12 +16,12 @@ const TARGET_CHUNK_ID := "x_-2__z_-3"
 const WALL_MESHES := ["ProtectedExactNeutralWallRuns", "ObservedWHorizontalSidingFields"]
 const ROOF_MESH := "ExactSourceNeutralRoof"
 const STRUCTURE_MESHES := ["ContinuousFlatCanopyRoof", "ContinuousFlatCanopyFasciaAndSoffit", "RealCanopyFrontSupports"]
-const GROUND_MESHES := ["GroundClosedDoorsAndPrivacyPanels", "GroundOpaqueWindowGlass", "GroundModuleFrames", "GroundDoorHandles"]
-const EXPECTED_BATCH_TRIANGLES := {"ContinuousFlatCanopyFasciaAndSoffit": 21, "ContinuousFlatCanopyRoof": 15, "ExactSourceNeutralRoof": 16, "GroundClosedDoorsAndPrivacyPanels": 144, "GroundDoorHandles": 72, "GroundModuleFrames": 576, "GroundOpaqueWindowGlass": 72, "ObservedWHorizontalSidingFields": 24, "ProtectedExactNeutralWallRuns": 24, "RealCanopyFrontSupports": 168, "RepeatedOpaqueUpperSliders": 144, "RestrainedRealWindowAndCanopyTrim": 864}
-const EXPECTED_CONFIG_SHA256 := "0d3909c266b5da07927051e92667300fca4c8ab0b919a63459e9a3608fbe1782"
-const EXPECTED_FACTORY_CONFIG_SHA256 := "4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b"
+const GROUND_MESHES := ["GroundClosedDoors", "GroundOpaqueWindowGlass", "GroundModuleFrames", "GroundDoorHandles", "ProjectedSlattedPrivacyScreens"]
+const EXPECTED_BATCH_TRIANGLES := {"ContinuousFlatCanopyFasciaAndSoffit": 21, "ContinuousFlatCanopyRoof": 15, "ExactSourceNeutralRoof": 16, "GroundClosedDoors": 72, "ProjectedSlattedPrivacyScreens": 1224, "LocalParkingAsphalt": 14, "LocalWalkAndDoorApproaches": 26, "LocalLawn": 36, "GroundDoorHandles": 72, "GroundModuleFrames": 576, "GroundOpaqueWindowGlass": 72, "ObservedWHorizontalSidingFields": 24, "ProtectedExactNeutralWallRuns": 24, "RealCanopyFrontSupports": 168, "RepeatedOpaqueUpperSliders": 144, "RestrainedRealWindowAndCanopyTrim": 864}
+const EXPECTED_CONFIG_SHA256 := "3d74e15f0a438dd4a45f2c778c415879888ef1b7a3cef75ebe7a9682db4de203"
+const EXPECTED_FACTORY_CONFIG_SHA256 := "2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86"
 const RECORD_HASHES := FACTORY.RECORD_HASHES
-const SOURCE_DEPENDENCY_HASHES := {"res://game/resources/facades/d5_1394_gateview_live_factory.json": "4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b", "res://game/resources/facades/d5_1394_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e", "res://game/scripts/world/facades/d5_1394_gateview_live_factory.gd": "6f5f257a9869780202b98aeacef233c3604ebd9c4ad348fae91f9b2021358b2a", "res://game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"}
+const SOURCE_DEPENDENCY_HASHES := {"res://game/resources/facades/d5_1394_gateview_live_factory.json": "2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86", "res://game/resources/facades/d5_1394_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e", "res://game/scripts/world/facades/d5_1394_gateview_live_factory.gd": "25284afdd779f6b491da47218fc6fdd169dad3bb3c56da70d76680cc91781fcb", "res://game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd", "res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg": "ddf9224e9cfa3eb2998d9097e4cd34bd3630c85e0e6798e5a0a000415a684083", "res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_rough_1k.jpg": "2280be133c104eb04370b625ebcc7f6709d2173b43ae2cd15a0074c26f492bf9", "res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg": "70d3ff969a7421c7ae057b5d16386d11f5e59c6740db643352e1039413f419c4", "res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg": "99f81099af07b009134b6a81bf0f95ab16da09c57156cc2ed534975664a68533", "res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg": "ae94f2b34597b9108eefd88217f55eccaec6d6b382e858a478ee92df90e66617", "res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg": "9ebe6d03a9551c17d1802835c92c1442acb8f5d38d4874ee8c37770f11c4bed1", "res://game/resources/facades/d5_1394_lawn_tone.gdshader": "d60b1db292234046d2e8fd1a451e0f3f52a69b12afe401e871bedef6067ca7af"}
 
 static func claims_record(record: Dictionary) -> bool:
 	return str(record.get("object_key", "")) in [WALL_KEY, ROOF_KEY]
@@ -102,12 +102,12 @@ static func _build_pair(records: Dictionary, neutral_wall: StandardMaterial3D, n
 		_configure_shape(shape_node, WALL_KEY, "building_wall" if index==0 else "none")
 	_configure_shape(source_roof_shape, ROOF_KEY, "none")
 	_apply_metadata(wall_root, roof_root)
-	var meta := {"adapter_id":ADAPTER_ID,"factory_calls":1,"candidate_recognition_credit":0,"accepted_recognition_metric":"11/213","historical_source_world_metric":"10/213","recognition_accepted":false,"production_review":"pending","partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.TARGET_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate(),"source_geometry_sha256":FACTORY.SOURCE_GEOMETRY_SHA256}
+	var meta := {"adapter_id":ADAPTER_ID,"factory_calls":1,"candidate_recognition_credit":0,"accepted_recognition_metric":"13/213","historical_live_candidate_metric":"11/213","historical_source_world_metric":"10/213","recognition_accepted":false,"production_review":"bounded_fidelity_revision_pending","partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.TARGET_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate(),"source_geometry_sha256":FACTORY.SOURCE_GEOMETRY_SHA256}
 	for root:Node3D in [wall_root,roof_root]:root.set_meta("d5_1394_gateview_live_replacement",meta.duplicate(true))
-	return {"ok":true,"wall_result":{"ok":true,"node":wall_root,"metadata":meta,"mesh_instances":11,"surfaces":11,"triangles":2124,"static_bodies":1,"shapes":3},"roof_result":{"ok":true,"node":roof_root,"metadata":meta,"mesh_instances":1,"surfaces":1,"triangles":16,"static_bodies":1,"shapes":1}}
+	return {"ok":true,"wall_result":{"ok":true,"node":wall_root,"metadata":meta,"mesh_instances":15,"surfaces":15,"triangles":3352,"static_bodies":1,"shapes":3},"roof_result":{"ok":true,"node":roof_root,"metadata":meta,"mesh_instances":1,"surfaces":1,"triangles":16,"static_bodies":1,"shapes":1}}
 
 static func _factory_contract_matches(root: Node3D, result: Dictionary) -> bool:
-	if int(result.get("mesh_instances",-1))!=12 or int(result.get("surfaces",-1))!=12 or int(result.get("visual_triangles",-1))!=2140 or int(result.get("static_bodies",-1))!=1 or int(result.get("shapes",-1))!=4 or int(result.get("collision_triangles",-1))!=1132: return false
+	if int(result.get("mesh_instances",-1))!=16 or int(result.get("surfaces",-1))!=16 or int(result.get("visual_triangles",-1))!=3368 or int(result.get("static_bodies",-1))!=1 or int(result.get("shapes",-1))!=4 or int(result.get("collision_triangles",-1))!=2284: return false
 	var seen := {}
 	for child:Node in root.get_children():
 		if child is MeshInstance3D:
@@ -115,9 +115,9 @@ static func _factory_contract_matches(root: Node3D, result: Dictionary) -> bool:
 			if not EXPECTED_BATCH_TRIANGLES.has(str(child.name)) or mesh==null or mesh.get_surface_count()!=1 or mesh.surface_get_array_index_len(0)/3!=int(EXPECTED_BATCH_TRIANGLES[str(child.name)]): return false
 			seen[str(child.name)] = true
 	var body := root.get_node_or_null("ExactFootprintStructuralCollision_NoSprayOwnership") as StaticBody3D
-	if seen.size()!=12 or body==null or body.get_child_count()!=4 or body.collision_layer!=1: return false
+	if seen.size()!=16 or body==null or body.get_child_count()!=4 or body.collision_layer!=1: return false
 	var labels := ["ExactClosedSourceWalls","ExactSourceNeutralRoof","ContinuousFlatCanopyAndPosts","OpaqueClosedGroundModuleAssemblies"]
-	var counts := [48,16,204,864]
+	var counts := [48,16,204,2016]
 	var mesh_groups := [WALL_MESHES,[ROOF_MESH],STRUCTURE_MESHES,GROUND_MESHES]
 	for index in 4:
 		var node := body.get_child(index) as CollisionShape3D

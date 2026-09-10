@@ -1487,32 +1487,32 @@ const expectedD5Batch = [
     "roof": "building:w95934123:roof",
     "adapter_id": "active-adapter:d5-1308-live:building:w95934123:wall",
     "acceptance": {
-      "evidence_manifest_sha256": "f776a306714ebbbb96266933abaa0aa602d27babeeaa133dd00d95e36b2a58ba",
-      "motion_telemetry_manifest_sha256": "8a636cc7b9a6874f038cc4a0eac4c273e86de6b7a48fdf50e519abf299c9de6b",
-      "visual_motion_manifest_sha256": "2d9911060b6259b5331b1d90055c2794cf39d0b6be3f907b4daf0af5e269a967",
-      "package_verification_receipt_sha256": "8058b74a5e11640a51c0156ce8a284509b33ea1d5a76961022e232fa3d3e0ebf",
-      "evidence_tree_sha256": "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1",
-      "mechanical_review_receipt_sha256": "2f8c4f42e44de69bbe5e06642b4149ba5ccebe2f3d44efee889677459f1629c5",
-      "review_receipt_sha256": "7b29686da76c68ffe6527c3c9da10034de942fade519ec5798e5bf7943eda00c",
-      "capture_time_recognition_metric": "11/213",
-      "numerator_effect": 1,
-      "review_id": "d5-1308-live-promotion-candidate-2026-09-10-001",
+      "evidence_manifest_sha256": "7c01ff32b1da4276ec330aee0d034dce4f0cbe8caa510f96d99504084cb314b5",
+      "motion_telemetry_manifest_sha256": "f139576c7b45eb76774315745504992f6bd726cd698faab6b88e79f491197960",
+      "visual_motion_manifest_sha256": "f0d21bb4dc14d8a12aba1fc37614e3cced7ff331521dda06a802bfc6fbd69dc9",
+      "package_verification_receipt_sha256": "c892d30b9c06f280077712c2bbad710eefac67f9fa1dd4b1f92c8f07c0b329dc",
+      "evidence_tree_sha256": "e17f311ea69445d8da9b4029e9d4d93fba19ea2cd2901efa2e2ec1d7dd90556a",
+      "mechanical_review_receipt_sha256": "9c094ed7a52506404a6763298504b71706b75ade1f44e4cfe2ad3fb6ea81380f",
+      "review_receipt_sha256": "87a2af8c5ab11082337265f53ca5fcd3aa9f0dbfdd22f97e7a8968653ad71a06",
+      "capture_time_recognition_metric": "13/213",
+      "numerator_effect": 0,
+      "review_id": "d5-1308-fidelity-quality-candidate-2026-09-10-001",
       "review_kind": "independent_reference_recognition",
       "status": "accept"
     },
     "behavior": {
       "schema_version": "ti.d5-1308-production-live-parity/1",
       "acceptance_contract": {
-        "evidence_manifest_sha256": "f776a306714ebbbb96266933abaa0aa602d27babeeaa133dd00d95e36b2a58ba",
-        "motion_telemetry_manifest_sha256": "8a636cc7b9a6874f038cc4a0eac4c273e86de6b7a48fdf50e519abf299c9de6b",
-        "visual_motion_manifest_sha256": "2d9911060b6259b5331b1d90055c2794cf39d0b6be3f907b4daf0af5e269a967",
-        "package_verification_receipt_sha256": "8058b74a5e11640a51c0156ce8a284509b33ea1d5a76961022e232fa3d3e0ebf",
-        "evidence_tree_sha256": "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1",
-        "mechanical_review_receipt_sha256": "2f8c4f42e44de69bbe5e06642b4149ba5ccebe2f3d44efee889677459f1629c5",
-        "review_receipt_sha256": "7b29686da76c68ffe6527c3c9da10034de942fade519ec5798e5bf7943eda00c",
+        "evidence_manifest_sha256": "7c01ff32b1da4276ec330aee0d034dce4f0cbe8caa510f96d99504084cb314b5",
+        "motion_telemetry_manifest_sha256": "f139576c7b45eb76774315745504992f6bd726cd698faab6b88e79f491197960",
+        "visual_motion_manifest_sha256": "f0d21bb4dc14d8a12aba1fc37614e3cced7ff331521dda06a802bfc6fbd69dc9",
+        "package_verification_receipt_sha256": "c892d30b9c06f280077712c2bbad710eefac67f9fa1dd4b1f92c8f07c0b329dc",
+        "evidence_tree_sha256": "e17f311ea69445d8da9b4029e9d4d93fba19ea2cd2901efa2e2ec1d7dd90556a",
+        "mechanical_review_receipt_sha256": "9c094ed7a52506404a6763298504b71706b75ade1f44e4cfe2ad3fb6ea81380f",
+        "review_receipt_sha256": "87a2af8c5ab11082337265f53ca5fcd3aa9f0dbfdd22f97e7a8968653ad71a06",
         "accepted_physical_unit_id": "physical-building:w95934123",
-        "capture_time_recognition_metric": "11/213",
-        "numerator_effect": 1,
+        "capture_time_recognition_metric": "13/213",
+        "numerator_effect": 0,
         "reference_recognizable": true,
         "wall_and_roof_are_one_physical_unit": true
       },
@@ -1574,24 +1574,24 @@ const expectedD5Batch = [
           "land:w26767313:x_-2__z_-1": "5508f75d3cc82559353123a3af167a0bb5b375eea73b84537d38a82b595579f7"
         },
         "horizontal_source_footprint_preserved": true,
-        "visual_mesh_instances": 8,
-        "visual_surfaces": 8,
-        "visual_triangles": 2562,
+        "visual_mesh_instances": 17,
+        "visual_surfaces": 17,
+        "visual_triangles": 4871,
         "world_records": 735,
-        "world_mesh_instances": 993,
-        "world_surfaces": 1008,
-        "world_triangles": 76376,
+        "world_mesh_instances": 1006,
+        "world_surfaces": 1021,
+        "world_triangles": 79913,
         "world_static_bodies": 466,
-        "world_shapes": 472,
-        "world_topology_scope": "pre_d5_1394_authority_transition_combined_topology",
-        "capture_isolated_world_mesh_instances": 983,
-        "capture_isolated_world_surfaces": 998,
-        "capture_isolated_world_triangles": 74300,
-        "capture_isolated_world_shapes": 470
+        "world_shapes": 474,
+        "world_topology_scope": "same_batch_combined_topology_reference",
+        "capture_isolated_world_mesh_instances": 1002,
+        "capture_isolated_world_surfaces": 1017,
+        "capture_isolated_world_triangles": 78685,
+        "capture_isolated_world_shapes": 474
       },
       "ownership_contract": {
         "structural_owner_count": 2,
-        "shape_count": 4,
+        "shape_count": 6,
         "spray_owner_count": 1,
         "navigation_owner_count": 0,
         "wall_is_sole_spray_receiver": true,
@@ -1599,18 +1599,28 @@ const expectedD5Batch = [
         "wall_shape_order": [
           "eligible_exterior",
           "noneligible_canopy_posts",
-          "noneligible_grade_pads"
+          "noneligible_grade_pads",
+          "noneligible_closed_lower"
         ],
         "eligible_exterior_collision_triangles": 68,
         "noneligible_canopy_post_collision_triangles": 240,
         "noneligible_ground_collision_triangles": 96,
-        "wall_collision_triangles": 404,
-        "roof_collision_triangles": 22,
+        "wall_collision_triangles": 1196,
+        "roof_collision_triangles": 1402,
         "roof_is_wall_spray_receiver": false,
         "roof_world_solid_landing": true,
         "eligible_render_layer": 2,
         "noneligible_render_layer": 1,
-        "terrain_geometry_and_ownership_unchanged": true
+        "terrain_geometry_and_ownership_unchanged": true,
+        "noneligible_closed_lower_collision_triangles": 792,
+        "roof_shape_order": [
+          "exact_source_roof",
+          "added_public_roof"
+        ],
+        "roof_shape_collision_triangles": [
+          22,
+          1380
+        ]
       },
       "truth_boundary": {
         "as_built_fidelity_claimed": false,
@@ -1633,32 +1643,32 @@ const expectedD5Batch = [
     "roof": "building:w96215646:roof",
     "adapter_id": "active-adapter:d5-1394-live:building:w96215646:wall",
     "acceptance": {
-      "evidence_manifest_sha256": "f7105c935499a455007d73e77bca38fc9e4cb249155312d2397445f4b4ff7e29",
-      "motion_telemetry_manifest_sha256": "d4f8a57b8e456641707b000ad997a96162399b6c5322f0fb0bdf56f49a60ff07",
-      "visual_motion_manifest_sha256": "c468c4f930e09a063e3018aa2b5c44ce70248f83db6f920a3033de8961e37a86",
-      "package_verification_receipt_sha256": "6d83381a3cf12ff706f1d47be276781581be77edeb9a2f910e8f23a155f5a5f6",
-      "evidence_tree_sha256": "f809a431e5d4bf53d94608a99900d4a17734bca79b28280150fd88ce5f51b934",
-      "mechanical_review_receipt_sha256": "606f8e066e3a07124e50c6f23b69d04f02b1efeb8dfb85381e23de58b07f3214",
-      "review_receipt_sha256": "0275e3c256ed1c6c3ff66c63399593e628d61b724803af83f2809ad683323207",
-      "capture_time_recognition_metric": "11/213",
-      "numerator_effect": 1,
-      "review_id": "d5-1394-live-promotion-candidate-2026-09-10-001",
+      "evidence_manifest_sha256": "ec327adb9239a902f40fd7e2ede7afedcd19bf1869b392e9646544721eaec316",
+      "motion_telemetry_manifest_sha256": "0ad7ff068f42b8230ba724d9143c9c563130de3c9d40c37837f1ed21f95ecc60",
+      "visual_motion_manifest_sha256": "6a057c2b0236e90d11861499c299b723b35da37ee3590a0a154d0c3390f0b2cb",
+      "package_verification_receipt_sha256": "9be91b038dc142ac84d3947ed68733c2346aa5756e4ccbb433bf0a173b8ca364",
+      "evidence_tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+      "mechanical_review_receipt_sha256": "c2c4ee90347b458e44fda87d900a4a2031b2cf4883c16a0db1ceac0ffeec02cd",
+      "review_receipt_sha256": "c7b5079a3a59847b80e201ef8107928381f9370dd74001f2675f0c68de82dbc8",
+      "capture_time_recognition_metric": "13/213",
+      "numerator_effect": 0,
+      "review_id": "d5-1394-fidelity-quality-candidate-2026-09-10-001",
       "review_kind": "independent_reference_recognition",
       "status": "accept"
     },
     "behavior": {
       "schema_version": "ti.d5-1394-production-live-parity/1",
       "acceptance_contract": {
-        "evidence_manifest_sha256": "f7105c935499a455007d73e77bca38fc9e4cb249155312d2397445f4b4ff7e29",
-        "motion_telemetry_manifest_sha256": "d4f8a57b8e456641707b000ad997a96162399b6c5322f0fb0bdf56f49a60ff07",
-        "visual_motion_manifest_sha256": "c468c4f930e09a063e3018aa2b5c44ce70248f83db6f920a3033de8961e37a86",
-        "package_verification_receipt_sha256": "6d83381a3cf12ff706f1d47be276781581be77edeb9a2f910e8f23a155f5a5f6",
-        "evidence_tree_sha256": "f809a431e5d4bf53d94608a99900d4a17734bca79b28280150fd88ce5f51b934",
-        "mechanical_review_receipt_sha256": "606f8e066e3a07124e50c6f23b69d04f02b1efeb8dfb85381e23de58b07f3214",
-        "review_receipt_sha256": "0275e3c256ed1c6c3ff66c63399593e628d61b724803af83f2809ad683323207",
+        "evidence_manifest_sha256": "ec327adb9239a902f40fd7e2ede7afedcd19bf1869b392e9646544721eaec316",
+        "motion_telemetry_manifest_sha256": "0ad7ff068f42b8230ba724d9143c9c563130de3c9d40c37837f1ed21f95ecc60",
+        "visual_motion_manifest_sha256": "6a057c2b0236e90d11861499c299b723b35da37ee3590a0a154d0c3390f0b2cb",
+        "package_verification_receipt_sha256": "9be91b038dc142ac84d3947ed68733c2346aa5756e4ccbb433bf0a173b8ca364",
+        "evidence_tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+        "mechanical_review_receipt_sha256": "c2c4ee90347b458e44fda87d900a4a2031b2cf4883c16a0db1ceac0ffeec02cd",
+        "review_receipt_sha256": "c7b5079a3a59847b80e201ef8107928381f9370dd74001f2675f0c68de82dbc8",
         "accepted_physical_unit_id": "physical-building:w96215646",
-        "capture_time_recognition_metric": "11/213",
-        "numerator_effect": 1,
+        "capture_time_recognition_metric": "13/213",
+        "numerator_effect": 0,
         "reference_recognizable": true,
         "wall_and_roof_are_one_physical_unit": true
       },
@@ -1710,20 +1720,20 @@ const expectedD5Batch = [
           "land:w26767313:x_-2__z_-3": "17c60f0f623bf919bd05c0ebc4ae93c06cce0c33a5603725175f3c4754572c02"
         },
         "horizontal_source_footprint_preserved": true,
-        "visual_mesh_instances": 12,
-        "visual_surfaces": 12,
-        "visual_triangles": 2140,
+        "visual_mesh_instances": 16,
+        "visual_surfaces": 16,
+        "visual_triangles": 3368,
         "world_records": 735,
-        "world_mesh_instances": 993,
-        "world_surfaces": 1008,
-        "world_triangles": 76376,
+        "world_mesh_instances": 1006,
+        "world_surfaces": 1021,
+        "world_triangles": 79913,
         "world_static_bodies": 466,
-        "world_shapes": 472,
+        "world_shapes": 474,
         "world_topology_scope": "current_integration_topology",
-        "capture_isolated_world_mesh_instances": 987,
-        "capture_isolated_world_surfaces": 1002,
-        "capture_isolated_world_triangles": 73904,
-        "capture_isolated_world_shapes": 470
+        "capture_isolated_world_mesh_instances": 997,
+        "capture_isolated_world_surfaces": 1012,
+        "capture_isolated_world_triangles": 77604,
+        "capture_isolated_world_shapes": 472
       },
       "ownership_contract": {
         "structural_owner_count": 2,
@@ -1739,8 +1749,8 @@ const expectedD5Batch = [
         ],
         "eligible_exterior_collision_triangles": 48,
         "noneligible_canopy_post_collision_triangles": 204,
-        "noneligible_ground_collision_triangles": 864,
-        "wall_collision_triangles": 1116,
+        "noneligible_ground_collision_triangles": 2016,
+        "wall_collision_triangles": 2268,
         "roof_collision_triangles": 16,
         "roof_is_wall_spray_receiver": false,
         "roof_world_solid_landing": true,
@@ -1768,7 +1778,7 @@ for (const d of expectedD5Batch) {
   const unit = registry.units.find((u) => u.unit_id === d.unit_id);
   const adapter = registry.active_runtime_adapters.find((a) => a.receiver_key === d.wall);
   assert(unit.acceptance_records.length === 1 && unit.direct_receivers.length === 1 && unit.active_runtime_adapter_ids.length === 1 && stableJson(unit.acceptance_records[0]) === stableJson(d.acceptance), `${d.unit_id} exact single-unit seven-artifact authority drifted`);
-  assert(adapter.runtime_assets.length === 6 && adapter.runtime_asset_projections.length === 0 && stableJson(adapter.active_runtime_contract.behavior_contract) === stableJson(d.behavior), `${d.unit_id} live pair/terrain/ownership boundary drifted`);
+  assert(adapter.runtime_assets.length === 7 && adapter.runtime_asset_projections.length === 0 && stableJson(adapter.active_runtime_contract.behavior_contract) === stableJson(d.behavior), `${d.unit_id} live pair/terrain/ownership boundary drifted`);
 }
 for (const d of expectedD5Batch) {
   for (const field of ["evidence_manifest_sha256","motion_telemetry_manifest_sha256","visual_motion_manifest_sha256","package_verification_receipt_sha256","mechanical_review_receipt_sha256","evidence_tree_sha256","review_receipt_sha256"]) {
@@ -1777,8 +1787,9 @@ for (const d of expectedD5Batch) {
   }
   expectCompileFailure((candidate) => { const u = candidate.units.find((u) => u.unit_id === d.unit_id); u.acceptance_records.push(structuredClone(u.acceptance_records[0])); }, "duplicate");
   expectCompileFailure((candidate) => { candidate.units.find((u) => u.unit_id === d.unit_id).acceptance_records[0].numerator_effect = 2; }, "number exceeds maximum 1");
+  expectCompileFailure((candidate) => { candidate.units.find((u) => u.unit_id === d.unit_id).acceptance_records[0].numerator_effect = 1; }, "seven-artifact acceptance closure drifted");
   expectCompileFailure((candidate) => { candidate.units.find((u) => u.unit_id === d.unit_id).receiver_keys.push(d.roof); }, "string does not match");
-  expectCompileFailure((candidate) => { candidate.units.find((u) => u.unit_id === d.unit_id).acceptance_records[0].capture_time_recognition_metric = "13/213"; }, "seven-artifact acceptance closure drifted");
+  expectCompileFailure((candidate) => { candidate.units.find((u) => u.unit_id === d.unit_id).acceptance_records[0].capture_time_recognition_metric = "11/213"; }, "seven-artifact acceptance closure drifted");
   for (const mutate of [
     (b) => { b.replacement_contract.mapped_public_run_indices[0] += 0.5; },
     (b) => { b.replacement_contract.protected_run_indices[0] += 0.5; },

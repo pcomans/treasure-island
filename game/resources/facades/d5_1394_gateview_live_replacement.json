@@ -11,7 +11,7 @@
     "building:w96215646:wall": "222fc29f2d1526d983f4653dc8ae157aa98575dbbfb16c89898827a26dc26019",
     "land:w26767313:x_-2__z_-3": "17c60f0f623bf919bd05c0ebc4ae93c06cce0c33a5603725175f3c4754572c02"
   },
-  "factory_config_sha256": "4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b",
+  "factory_config_sha256": "2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86",
   "reviewed_factory_source_sha256": "aa112014ce0b56b153233934e8b3930b64bc576987bd882e22e26c42b80a7abd",
   "reviewed_factory_config_sha256": "f20133c69e87f8fd573e215ec5b4c6adf3e308f51ec5c6fccbcee6550f251f30",
   "accepted_source_world_mechanics_receipt_sha256": "0a049b0af97211a50e9365f6ec3acdc3c7a33060b4f3c8e9c3bf2d1d3a827d05",
@@ -50,16 +50,16 @@
     "street_suffix": "Court/Avenue discrepancy retained; frozen source has no street tag"
   },
   "pair_contract": {
-    "meshes": 12,
-    "surfaces": 12,
-    "triangles": 2140,
+    "meshes": 16,
+    "surfaces": 16,
+    "triangles": 3368,
     "bodies": 2,
     "shapes": 4,
-    "collision_triangles": 1132,
-    "wall_collision_triangles": 1116,
+    "collision_triangles": 2284,
+    "wall_collision_triangles": 2268,
     "eligible_wall_triangles": 48,
     "noneligible_canopy_post_triangles": 204,
-    "noneligible_closed_module_triangles": 864,
+    "noneligible_closed_module_triangles": 2016,
     "roof_triangles": 16,
     "factory_calls": 1,
     "partial_pair_allowed": false,
@@ -68,21 +68,35 @@
   },
   "truth_boundary": {
     "historical_source_world_metric": "10/213",
-    "candidate_authority_metric": "11/213",
-    "candidate_authority_schema": "ti.facade-runtime-registry/11",
+    "candidate_authority_metric": "13/213",
+    "candidate_authority_schema": "ti.facade-runtime-registry/13",
     "candidate_credit": 0,
     "runtime_attachment": true,
-    "production_attachment_review": "pending",
+    "production_attachment_review": "prior live accepted; bounded fidelity revision source/contact/pixel review pending",
     "actual_grade_walking": "independent_scoped_PASS; original lowexit empty finalcontact FAIL preserved; no continuous support identity claim",
     "as_built_claim": false,
     "interior_modeled": false,
     "hidden_schedule_invented": false,
-    "recognition_accepted": false
+    "recognition_accepted": false,
+    "historical_live_candidate_authority_metric": "11/213",
+    "historical_live_candidate_authority_schema": "ti.facade-runtime-registry/11"
   },
   "package_boundary": {
     "source_photography": false,
     "discovery_dependency": false,
     "activation_flag": false,
     "missing_pair_loaded_from_disk": false
+  },
+  "fidelity_refinement": {
+    "scope": "Current13 correction study; historical accepted receipts above retained at their original source scope",
+    "visual_only_ground_triangles": 76,
+    "screen_triangles": 1224,
+    "screens": 6,
+    "member_boxes": 102,
+    "source_ground_collision_unchanged": true,
+    "new_acceptance_claim": false,
+    "raw_polygon_fan_triangles": 82,
+    "zero_area_fans_skipped_by_existing_guard": 6,
+    "material_only_004": "Private LocalLawn hue/luminance mapping; geometry, UV arrays, collision and other materials remain003 exact"
   }
 }

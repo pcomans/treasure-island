@@ -1,0 +1,101 @@
+{
+  "schema_version": "ti.d5-native-image-tree/1",
+  "tree_scope": "Only selected exact image files; excludes this document and every manifest/receipt/review",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "e17f311ea69445d8da9b4029e9d4d93fba19ea2cd2901efa2e2ec1d7dd90556a",
+  "files": [
+    {
+      "path": "images/current004-avi/avi-index-0431.jpg",
+      "sha256": "659c1d57ee6ada4a747c2f36c7d98308b5fa4219ab552080892842a543aa5a05",
+      "bytes": 67744
+    },
+    {
+      "path": "images/current004-avi/avi-index-0446.jpg",
+      "sha256": "e5f72c4b0d8f5ba4dbf83a92dd5e479f2790e94ed131b0b0ef0e6a1fcf9e9940",
+      "bytes": 67006
+    },
+    {
+      "path": "images/current004-avi/avi-index-0461.jpg",
+      "sha256": "46ce72baeda0730a161551c34e9083a3b08d260ea5545905c9bec4ea94a7bbbc",
+      "bytes": 66917
+    },
+    {
+      "path": "images/current004-avi/avi-index-0476.jpg",
+      "sha256": "a20cf41e195d048b4ec730b6686473fb070d5cb6f2e737c6950d4778ef7d9cd0",
+      "bytes": 68792
+    },
+    {
+      "path": "images/current004-avi/avi-index-0491.jpg",
+      "sha256": "776e554c05aeda0f70bee4f074dfc4a37114e7e8f0ec4ee5c58b5ce07c75ab93",
+      "bytes": 69172
+    },
+    {
+      "path": "images/current004-avi/avi-index-0506.jpg",
+      "sha256": "f39d15c78893e8c150746963057688d640b4b02db6cd0fa85f5ebd32f2354177",
+      "bytes": 69306
+    },
+    {
+      "path": "images/current004-avi/avi-index-0521.jpg",
+      "sha256": "4d914ad43535ad25ba41b8cd10dd74323bcac0cad04dafdf56e80b4b03635209",
+      "bytes": 69173
+    },
+    {
+      "path": "images/current004-avi/avi-index-0536.jpg",
+      "sha256": "4bb9426e437c7fe7dc05113cf0bbdc7123a2bc3473d478d7d2dddd4339601cb0",
+      "bytes": 67283
+    },
+    {
+      "path": "images/current004-avi/avi-index-0551.jpg",
+      "sha256": "b21f8e3772541ed3c5ea9a24df62c6c356379eb8456f5cd6368dff103e8a009b",
+      "bytes": 67162
+    },
+    {
+      "path": "images/current004-ground-motion/motion-endpoint.png",
+      "sha256": "dea40835fdd10ec83ded37c14cd79360dfbeb1d6606fdb93d22c6801f70444b2",
+      "bytes": 798374
+    },
+    {
+      "path": "images/current004-roof-motion/01-added-roof-landed.png",
+      "sha256": "cd29880d7633eb9c2e78c83990676b85be4ce91ccd77a9a25ad09e0deba48f28",
+      "bytes": 391519
+    },
+    {
+      "path": "images/current004-roof-motion/02-added-to-source-seam.png",
+      "sha256": "055d6f83163e8445e598ae2126712c81bff2710ea42179e6399a1481149e9f43",
+      "bytes": 289890
+    },
+    {
+      "path": "images/current004-roof-motion/03-source-turnaround-settled.png",
+      "sha256": "9c04a0ea6bb6e1fe488cdcba2a7230e5b6cdba6334ebda6d9b3a43ccf2f818b3",
+      "bytes": 323478
+    },
+    {
+      "path": "images/current004-roof-motion/04-source-to-added-seam.png",
+      "sha256": "36b4c10dc6cf29d96eb8f93e02e8d28ab5d9f57ad1ae0d760e140cb4e7e142b0",
+      "bytes": 284585
+    },
+    {
+      "path": "images/current004-roof-motion/05-added-return-settled.png",
+      "sha256": "106f201a7cd51c075309cff409cc0799374b9ca3ade8346b230d823907750e22",
+      "bytes": 412104
+    },
+    {
+      "path": "images/current004-stills/03-canopy-void-near-default-current.png",
+      "sha256": "f980755b7aa53a648665ed533dac010988bb7b1de6b4d8a2035cc32ceb089938",
+      "bytes": 803328
+    },
+    {
+      "path": "images/current004-stills/06-visible-front-default.png",
+      "sha256": "a2925d37c5988eeb64b487846361e118c91ee85ce53c514f23cd64ce1e403ff7",
+      "bytes": 990339
+    }
+  ],
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "inventory_physical_units": 213,
+    "credit_granted": false,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_exact_app_and_packet_attestation_pending": true
+  }
+}

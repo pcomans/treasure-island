@@ -351,15 +351,17 @@ const D5_BATCH_ACCEPTED = Object.freeze([
       "factory": "game/scripts/world/facades/d5_1308_gateview_live_factory.gd",
       "factory_config": "game/resources/facades/d5_1308_gateview_live_factory.json",
       "shader": "game/resources/facades/d5_1308_siding_marks.gdshader",
-      "site_kit": "game/scripts/world/facades/site_12_housing_kit.gd"
+      "site_kit": "game/scripts/world/facades/site_12_housing_kit.gd",
+      "lawn_shader": "game/resources/facades/d5_1308_lawn_tone.gdshader"
     },
     "hashes": {
-      "adapter": "1871a9038d62a3c6fc8b3e0a13f3fea90bc0312988cfb9d254ecfeae89e7cc26",
-      "config": "d4110a1621bcdbf5fcfa93720daf2ead7f0cc08ad268e2c6f5d26d6e6df9031e",
-      "factory": "6e2f0e99e23dc180aba4955be8c5184c6e094057f4a21c2e9e47978dc18b3787",
-      "factory_config": "6adbfa189fd52c444ab028ef92098f7cce6143aed440824c02fe5a79f1e7757f",
+      "adapter": "3faca37243c2ee51ff1d2834b3d581d4b7d4552a45179224371a2570b7f08ad5",
+      "config": "c35951faebaa921d41bf0230bf511b3a3fde9b9b1f533272030a5dfb8d8dfe8a",
+      "factory": "6950aab112f73fdf78c1cad2f3deca72ac7e46b2a07faffe04f82987a1e07498",
+      "factory_config": "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a",
       "shader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
-      "site_kit": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+      "site_kit": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+      "lawn_shader": "d60b1db292234046d2e8fd1a451e0f3f52a69b12afe401e871bedef6067ca7af"
     },
     "config": {
       "schema_version": "ti.d5-1308-gateview-live-replacement/1",
@@ -374,7 +376,7 @@ const D5_BATCH_ACCEPTED = Object.freeze([
         "building:w95934123:wall": "5bf75fcc75fdbc83d45a97a6a4168a439e8c31bcbc473105147f831a09458abd",
         "land:w26767313:x_-2__z_-1": "5508f75d3cc82559353123a3af167a0bb5b375eea73b84537d38a82b595579f7"
       },
-      "factory_config_sha256": "6adbfa189fd52c444ab028ef92098f7cce6143aed440824c02fe5a79f1e7757f",
+      "factory_config_sha256": "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a",
       "reviewed_factory_source_sha256": "059c891e8ed3ee8ad25af7d30f9cd7ba0d32724e242ec4730e18389911c15619",
       "reviewed_factory_config_sha256": "dad5478b497336c5f0e0cae98852ac0e17556b5ba41cc3e0dc4b54c61a9a402d",
       "accepted_source_world_mechanics_receipt_sha256": "3cce21ec2d08bdcc18aa0d91993d94edb2c7e68115067c6e69418df7af451a1d",
@@ -418,21 +420,25 @@ const D5_BATCH_ACCEPTED = Object.freeze([
         33
       ],
       "pair_contract": {
-        "meshes": 8,
-        "surfaces": 8,
-        "triangles": 2562,
+        "meshes": 17,
+        "surfaces": 17,
+        "triangles": 4871,
         "bodies": 2,
-        "shapes": 4,
-        "collision_triangles": 426,
-        "wall_collision_triangles": 404,
+        "shapes": 6,
+        "collision_triangles": 2598,
+        "wall_collision_triangles": 1196,
         "eligible_wall_triangles": 68,
         "noneligible_canopy_post_triangles": 240,
         "noneligible_pad_triangles": 96,
-        "roof_triangles": 22,
+        "roof_triangles": 1402,
         "factory_calls": 1,
         "partial_pair_allowed": false,
         "fallback_allowed": false,
-        "stack_allowed": false
+        "stack_allowed": false,
+        "wall_shapes": 4,
+        "roof_shapes": 2,
+        "wall_triangles": 3469,
+        "noneligible_lower_triangles": 792
       },
       "truth_boundary": {
         "historical_source_world_metric": "10/213",
@@ -452,21 +458,49 @@ const D5_BATCH_ACCEPTED = Object.freeze([
         "discovery_dependency": false,
         "activation_flag": false,
         "missing_pair_loaded_from_disk": false
+      },
+      "fidelity_revision_001": {
+        "scope": "revision004: straight planar public corner tapers restore prior0.9m roof omissions within existing5.1m bands; gray internal end closures;003 canopy/lower/lawn/apron geometry and current13 unchanged; no inward connectors",
+        "render_counts": {
+          "DeepRepeatedGableCanopyRoofs": 54,
+          "PaleSidedCanopyGableFronts": 18,
+          "ExactSourceNeutralRoof": 22,
+          "GroundFlushCanopySupportSlabs": 96,
+          "ObservedWSWSSEHorizontalSidingFields": 40,
+          "ProtectedExactNeutralWallRuns": 28,
+          "RealCanopyFrontSupports": 144,
+          "RepeatedOpaqueUpperSliders": 264,
+          "RestrainedRealWindowAndCanopyTrim": 1872,
+          "ClosedLowerDoors": 72,
+          "ClosedLowerWindows": 72,
+          "LowerOpeningFramesAndHandles": 648,
+          "PublicPitchedRoofSlopes": 678,
+          "PublicPaleRoofFasciaAndSoffit": 702,
+          "ConnectedConcreteAprons": 39,
+          "LocalFrontageLawn": 98,
+          "ReadableCanopyRoofTops": 24
+        },
+        "old_collision426_exact_subset": true,
+        "new_nonreceiver_closed_lower_triangles": 792,
+        "new_roof_owned_triangles": 1380,
+        "new_ground_visual_only_triangles": 137,
+        "new_ground_collider": false,
+        "protected_and_original22roof_exact": true
       }
     },
     "behavior": {
       "schema_version": "ti.d5-1308-production-live-parity/1",
       "acceptance_contract": {
-        "evidence_manifest_sha256": "f776a306714ebbbb96266933abaa0aa602d27babeeaa133dd00d95e36b2a58ba",
-        "motion_telemetry_manifest_sha256": "8a636cc7b9a6874f038cc4a0eac4c273e86de6b7a48fdf50e519abf299c9de6b",
-        "visual_motion_manifest_sha256": "2d9911060b6259b5331b1d90055c2794cf39d0b6be3f907b4daf0af5e269a967",
-        "package_verification_receipt_sha256": "8058b74a5e11640a51c0156ce8a284509b33ea1d5a76961022e232fa3d3e0ebf",
-        "evidence_tree_sha256": "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1",
-        "mechanical_review_receipt_sha256": "2f8c4f42e44de69bbe5e06642b4149ba5ccebe2f3d44efee889677459f1629c5",
-        "review_receipt_sha256": "7b29686da76c68ffe6527c3c9da10034de942fade519ec5798e5bf7943eda00c",
+        "evidence_manifest_sha256": "7c01ff32b1da4276ec330aee0d034dce4f0cbe8caa510f96d99504084cb314b5",
+        "motion_telemetry_manifest_sha256": "f139576c7b45eb76774315745504992f6bd726cd698faab6b88e79f491197960",
+        "visual_motion_manifest_sha256": "f0d21bb4dc14d8a12aba1fc37614e3cced7ff331521dda06a802bfc6fbd69dc9",
+        "package_verification_receipt_sha256": "c892d30b9c06f280077712c2bbad710eefac67f9fa1dd4b1f92c8f07c0b329dc",
+        "evidence_tree_sha256": "e17f311ea69445d8da9b4029e9d4d93fba19ea2cd2901efa2e2ec1d7dd90556a",
+        "mechanical_review_receipt_sha256": "9c094ed7a52506404a6763298504b71706b75ade1f44e4cfe2ad3fb6ea81380f",
+        "review_receipt_sha256": "87a2af8c5ab11082337265f53ca5fcd3aa9f0dbfdd22f97e7a8968653ad71a06",
         "accepted_physical_unit_id": "physical-building:w95934123",
-        "capture_time_recognition_metric": "11/213",
-        "numerator_effect": 1,
+        "capture_time_recognition_metric": "13/213",
+        "numerator_effect": 0,
         "reference_recognizable": true,
         "wall_and_roof_are_one_physical_unit": true
       },
@@ -528,24 +562,24 @@ const D5_BATCH_ACCEPTED = Object.freeze([
           "land:w26767313:x_-2__z_-1": "5508f75d3cc82559353123a3af167a0bb5b375eea73b84537d38a82b595579f7"
         },
         "horizontal_source_footprint_preserved": true,
-        "visual_mesh_instances": 8,
-        "visual_surfaces": 8,
-        "visual_triangles": 2562,
+        "visual_mesh_instances": 17,
+        "visual_surfaces": 17,
+        "visual_triangles": 4871,
         "world_records": 735,
-        "world_mesh_instances": 993,
-        "world_surfaces": 1008,
-        "world_triangles": 76376,
+        "world_mesh_instances": 1006,
+        "world_surfaces": 1021,
+        "world_triangles": 79913,
         "world_static_bodies": 466,
-        "world_shapes": 472,
-        "world_topology_scope": "pre_d5_1394_authority_transition_combined_topology",
-        "capture_isolated_world_mesh_instances": 983,
-        "capture_isolated_world_surfaces": 998,
-        "capture_isolated_world_triangles": 74300,
-        "capture_isolated_world_shapes": 470
+        "world_shapes": 474,
+        "world_topology_scope": "same_batch_combined_topology_reference",
+        "capture_isolated_world_mesh_instances": 1002,
+        "capture_isolated_world_surfaces": 1017,
+        "capture_isolated_world_triangles": 78685,
+        "capture_isolated_world_shapes": 474
       },
       "ownership_contract": {
         "structural_owner_count": 2,
-        "shape_count": 4,
+        "shape_count": 6,
         "spray_owner_count": 1,
         "navigation_owner_count": 0,
         "wall_is_sole_spray_receiver": true,
@@ -553,18 +587,28 @@ const D5_BATCH_ACCEPTED = Object.freeze([
         "wall_shape_order": [
           "eligible_exterior",
           "noneligible_canopy_posts",
-          "noneligible_grade_pads"
+          "noneligible_grade_pads",
+          "noneligible_closed_lower"
         ],
         "eligible_exterior_collision_triangles": 68,
         "noneligible_canopy_post_collision_triangles": 240,
         "noneligible_ground_collision_triangles": 96,
-        "wall_collision_triangles": 404,
-        "roof_collision_triangles": 22,
+        "wall_collision_triangles": 1196,
+        "roof_collision_triangles": 1402,
         "roof_is_wall_spray_receiver": false,
         "roof_world_solid_landing": true,
         "eligible_render_layer": 2,
         "noneligible_render_layer": 1,
-        "terrain_geometry_and_ownership_unchanged": true
+        "terrain_geometry_and_ownership_unchanged": true,
+        "noneligible_closed_lower_collision_triangles": 792,
+        "roof_shape_order": [
+          "exact_source_roof",
+          "added_public_roof"
+        ],
+        "roof_shape_collision_triangles": [
+          22,
+          1380
+        ]
       },
       "truth_boundary": {
         "as_built_fidelity_claimed": false,
@@ -581,40 +625,40 @@ const D5_BATCH_ACCEPTED = Object.freeze([
       }
     },
     "acceptance": {
-      "evidence_manifest_sha256": "f776a306714ebbbb96266933abaa0aa602d27babeeaa133dd00d95e36b2a58ba",
-      "motion_telemetry_manifest_sha256": "8a636cc7b9a6874f038cc4a0eac4c273e86de6b7a48fdf50e519abf299c9de6b",
-      "visual_motion_manifest_sha256": "2d9911060b6259b5331b1d90055c2794cf39d0b6be3f907b4daf0af5e269a967",
-      "package_verification_receipt_sha256": "8058b74a5e11640a51c0156ce8a284509b33ea1d5a76961022e232fa3d3e0ebf",
-      "evidence_tree_sha256": "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1",
-      "mechanical_review_receipt_sha256": "2f8c4f42e44de69bbe5e06642b4149ba5ccebe2f3d44efee889677459f1629c5",
-      "review_receipt_sha256": "7b29686da76c68ffe6527c3c9da10034de942fade519ec5798e5bf7943eda00c",
-      "capture_time_recognition_metric": "11/213",
-      "numerator_effect": 1,
-      "review_id": "d5-1308-live-promotion-candidate-2026-09-10-001",
+      "evidence_manifest_sha256": "7c01ff32b1da4276ec330aee0d034dce4f0cbe8caa510f96d99504084cb314b5",
+      "motion_telemetry_manifest_sha256": "f139576c7b45eb76774315745504992f6bd726cd698faab6b88e79f491197960",
+      "visual_motion_manifest_sha256": "f0d21bb4dc14d8a12aba1fc37614e3cced7ff331521dda06a802bfc6fbd69dc9",
+      "package_verification_receipt_sha256": "c892d30b9c06f280077712c2bbad710eefac67f9fa1dd4b1f92c8f07c0b329dc",
+      "evidence_tree_sha256": "e17f311ea69445d8da9b4029e9d4d93fba19ea2cd2901efa2e2ec1d7dd90556a",
+      "mechanical_review_receipt_sha256": "9c094ed7a52506404a6763298504b71706b75ade1f44e4cfe2ad3fb6ea81380f",
+      "review_receipt_sha256": "87a2af8c5ab11082337265f53ca5fcd3aa9f0dbfdd22f97e7a8968653ad71a06",
+      "capture_time_recognition_metric": "13/213",
+      "numerator_effect": 0,
+      "review_id": "d5-1308-fidelity-quality-candidate-2026-09-10-001",
       "review_kind": "independent_reference_recognition",
       "status": "accept"
     },
     "receipt": {
-      "evidence_manifest_sha256": "f776a306714ebbbb96266933abaa0aa602d27babeeaa133dd00d95e36b2a58ba",
-      "motion_telemetry_manifest_sha256": "8a636cc7b9a6874f038cc4a0eac4c273e86de6b7a48fdf50e519abf299c9de6b",
-      "visual_motion_manifest_sha256": "2d9911060b6259b5331b1d90055c2794cf39d0b6be3f907b4daf0af5e269a967",
-      "package_verification_receipt_sha256": "8058b74a5e11640a51c0156ce8a284509b33ea1d5a76961022e232fa3d3e0ebf",
-      "evidence_tree_sha256": "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1",
-      "mechanical_review_receipt_sha256": "2f8c4f42e44de69bbe5e06642b4149ba5ccebe2f3d44efee889677459f1629c5",
-      "review_receipt_sha256": "7b29686da76c68ffe6527c3c9da10034de942fade519ec5798e5bf7943eda00c",
-      "capture_time_recognition_metric": "11/213",
-      "numerator_effect": 1,
+      "evidence_manifest_sha256": "7c01ff32b1da4276ec330aee0d034dce4f0cbe8caa510f96d99504084cb314b5",
+      "motion_telemetry_manifest_sha256": "f139576c7b45eb76774315745504992f6bd726cd698faab6b88e79f491197960",
+      "visual_motion_manifest_sha256": "f0d21bb4dc14d8a12aba1fc37614e3cced7ff331521dda06a802bfc6fbd69dc9",
+      "package_verification_receipt_sha256": "c892d30b9c06f280077712c2bbad710eefac67f9fa1dd4b1f92c8f07c0b329dc",
+      "evidence_tree_sha256": "e17f311ea69445d8da9b4029e9d4d93fba19ea2cd2901efa2e2ec1d7dd90556a",
+      "mechanical_review_receipt_sha256": "9c094ed7a52506404a6763298504b71706b75ade1f44e4cfe2ad3fb6ea81380f",
+      "review_receipt_sha256": "87a2af8c5ab11082337265f53ca5fcd3aa9f0dbfdd22f97e7a8968653ad71a06",
+      "capture_time_recognition_metric": "13/213",
+      "numerator_effect": 0,
       "unit_id": "physical-building:w95934123",
-      "evidence_manifest_path": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001/capture-manifest.json",
-      "motion_telemetry_manifest_path": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001/motion-telemetry.json",
-      "visual_motion_manifest_path": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001/visual-motion.json",
-      "package_verification_receipt_path": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001/package-verification-receipt.json",
-      "evidence_tree_path": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001/evidence-tree.json",
-      "mechanical_review_receipt_path": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001/mechanical-review.json",
-      "review_path": "evidence/reviews/d5-1308-live-promotion-candidate-2026-09-10-001-INDEPENDENT_PACKET_REVIEW.md"
+      "evidence_manifest_path": "evidence/first-playable/d5-1308-fidelity-quality-candidate-2026-09-10-001/capture-manifest.json",
+      "motion_telemetry_manifest_path": "evidence/first-playable/d5-1308-fidelity-quality-candidate-2026-09-10-001/motion-telemetry.json",
+      "visual_motion_manifest_path": "evidence/first-playable/d5-1308-fidelity-quality-candidate-2026-09-10-001/visual-motion.json",
+      "package_verification_receipt_path": "evidence/first-playable/d5-1308-fidelity-quality-candidate-2026-09-10-001/package-verification-receipt.json",
+      "evidence_tree_path": "evidence/first-playable/d5-1308-fidelity-quality-candidate-2026-09-10-001/evidence-tree.json",
+      "mechanical_review_receipt_path": "evidence/first-playable/d5-1308-fidelity-quality-candidate-2026-09-10-001/mechanical-review.json",
+      "review_path": "evidence/first-playable/d5-1308-fidelity-quality-candidate-2026-09-10-001/unit-visual-attestation.json"
     },
-    "tree_document_sha256": "0713066473f0df723926cb197f2dd13efb47f8445a3498471ce44f94c1d5834e",
-    "image_count": 14
+    "tree_document_sha256": "6f14bbea0a9b483b1ff6fb43c907253f1e353e49f4a8cc31b73a9dac20671bfe",
+    "image_count": 17
   },
   {
     "number": "1394",
@@ -630,15 +674,17 @@ const D5_BATCH_ACCEPTED = Object.freeze([
       "factory": "game/scripts/world/facades/d5_1394_gateview_live_factory.gd",
       "factory_config": "game/resources/facades/d5_1394_gateview_live_factory.json",
       "shader": "game/resources/facades/d5_1394_siding_marks.gdshader",
-      "site_kit": "game/scripts/world/facades/site_12_housing_kit.gd"
+      "site_kit": "game/scripts/world/facades/site_12_housing_kit.gd",
+      "lawn_shader": "game/resources/facades/d5_1394_lawn_tone.gdshader"
     },
     "hashes": {
-      "adapter": "99f78bd3e3a2215ca8dd48372ecb004489249b069d3e3944f8f283a0422b0f13",
-      "config": "0d3909c266b5da07927051e92667300fca4c8ab0b919a63459e9a3608fbe1782",
-      "factory": "6f5f257a9869780202b98aeacef233c3604ebd9c4ad348fae91f9b2021358b2a",
-      "factory_config": "4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b",
+      "adapter": "42e0233cdbe1be7bdcbb63603c1bb2cae4c247dde87a51f9518cc1afafc82076",
+      "config": "3d74e15f0a438dd4a45f2c778c415879888ef1b7a3cef75ebe7a9682db4de203",
+      "factory": "25284afdd779f6b491da47218fc6fdd169dad3bb3c56da70d76680cc91781fcb",
+      "factory_config": "2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86",
       "shader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
-      "site_kit": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+      "site_kit": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+      "lawn_shader": "d60b1db292234046d2e8fd1a451e0f3f52a69b12afe401e871bedef6067ca7af"
     },
     "config": {
       "schema_version": "ti.d5-1394-gateview-live-replacement/1",
@@ -653,7 +699,7 @@ const D5_BATCH_ACCEPTED = Object.freeze([
         "building:w96215646:wall": "222fc29f2d1526d983f4653dc8ae157aa98575dbbfb16c89898827a26dc26019",
         "land:w26767313:x_-2__z_-3": "17c60f0f623bf919bd05c0ebc4ae93c06cce0c33a5603725175f3c4754572c02"
       },
-      "factory_config_sha256": "4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b",
+      "factory_config_sha256": "2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86",
       "reviewed_factory_source_sha256": "aa112014ce0b56b153233934e8b3930b64bc576987bd882e22e26c42b80a7abd",
       "reviewed_factory_config_sha256": "f20133c69e87f8fd573e215ec5b4c6adf3e308f51ec5c6fccbcee6550f251f30",
       "accepted_source_world_mechanics_receipt_sha256": "0a049b0af97211a50e9365f6ec3acdc3c7a33060b4f3c8e9c3bf2d1d3a827d05",
@@ -692,16 +738,16 @@ const D5_BATCH_ACCEPTED = Object.freeze([
         "street_suffix": "Court/Avenue discrepancy retained; frozen source has no street tag"
       },
       "pair_contract": {
-        "meshes": 12,
-        "surfaces": 12,
-        "triangles": 2140,
+        "meshes": 16,
+        "surfaces": 16,
+        "triangles": 3368,
         "bodies": 2,
         "shapes": 4,
-        "collision_triangles": 1132,
-        "wall_collision_triangles": 1116,
+        "collision_triangles": 2284,
+        "wall_collision_triangles": 2268,
         "eligible_wall_triangles": 48,
         "noneligible_canopy_post_triangles": 204,
-        "noneligible_closed_module_triangles": 864,
+        "noneligible_closed_module_triangles": 2016,
         "roof_triangles": 16,
         "factory_calls": 1,
         "partial_pair_allowed": false,
@@ -710,37 +756,51 @@ const D5_BATCH_ACCEPTED = Object.freeze([
       },
       "truth_boundary": {
         "historical_source_world_metric": "10/213",
-        "candidate_authority_metric": "11/213",
-        "candidate_authority_schema": "ti.facade-runtime-registry/11",
+        "candidate_authority_metric": "13/213",
+        "candidate_authority_schema": "ti.facade-runtime-registry/13",
         "candidate_credit": 0,
         "runtime_attachment": true,
-        "production_attachment_review": "pending",
+        "production_attachment_review": "prior live accepted; bounded fidelity revision source/contact/pixel review pending",
         "actual_grade_walking": "independent_scoped_PASS; original lowexit empty finalcontact FAIL preserved; no continuous support identity claim",
         "as_built_claim": false,
         "interior_modeled": false,
         "hidden_schedule_invented": false,
-        "recognition_accepted": false
+        "recognition_accepted": false,
+        "historical_live_candidate_authority_metric": "11/213",
+        "historical_live_candidate_authority_schema": "ti.facade-runtime-registry/11"
       },
       "package_boundary": {
         "source_photography": false,
         "discovery_dependency": false,
         "activation_flag": false,
         "missing_pair_loaded_from_disk": false
+      },
+      "fidelity_refinement": {
+        "scope": "Current13 correction study; historical accepted receipts above retained at their original source scope",
+        "visual_only_ground_triangles": 76,
+        "screen_triangles": 1224,
+        "screens": 6,
+        "member_boxes": 102,
+        "source_ground_collision_unchanged": true,
+        "new_acceptance_claim": false,
+        "raw_polygon_fan_triangles": 82,
+        "zero_area_fans_skipped_by_existing_guard": 6,
+        "material_only_004": "Private LocalLawn hue/luminance mapping; geometry, UV arrays, collision and other materials remain003 exact"
       }
     },
     "behavior": {
       "schema_version": "ti.d5-1394-production-live-parity/1",
       "acceptance_contract": {
-        "evidence_manifest_sha256": "f7105c935499a455007d73e77bca38fc9e4cb249155312d2397445f4b4ff7e29",
-        "motion_telemetry_manifest_sha256": "d4f8a57b8e456641707b000ad997a96162399b6c5322f0fb0bdf56f49a60ff07",
-        "visual_motion_manifest_sha256": "c468c4f930e09a063e3018aa2b5c44ce70248f83db6f920a3033de8961e37a86",
-        "package_verification_receipt_sha256": "6d83381a3cf12ff706f1d47be276781581be77edeb9a2f910e8f23a155f5a5f6",
-        "evidence_tree_sha256": "f809a431e5d4bf53d94608a99900d4a17734bca79b28280150fd88ce5f51b934",
-        "mechanical_review_receipt_sha256": "606f8e066e3a07124e50c6f23b69d04f02b1efeb8dfb85381e23de58b07f3214",
-        "review_receipt_sha256": "0275e3c256ed1c6c3ff66c63399593e628d61b724803af83f2809ad683323207",
+        "evidence_manifest_sha256": "ec327adb9239a902f40fd7e2ede7afedcd19bf1869b392e9646544721eaec316",
+        "motion_telemetry_manifest_sha256": "0ad7ff068f42b8230ba724d9143c9c563130de3c9d40c37837f1ed21f95ecc60",
+        "visual_motion_manifest_sha256": "6a057c2b0236e90d11861499c299b723b35da37ee3590a0a154d0c3390f0b2cb",
+        "package_verification_receipt_sha256": "9be91b038dc142ac84d3947ed68733c2346aa5756e4ccbb433bf0a173b8ca364",
+        "evidence_tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+        "mechanical_review_receipt_sha256": "c2c4ee90347b458e44fda87d900a4a2031b2cf4883c16a0db1ceac0ffeec02cd",
+        "review_receipt_sha256": "c7b5079a3a59847b80e201ef8107928381f9370dd74001f2675f0c68de82dbc8",
         "accepted_physical_unit_id": "physical-building:w96215646",
-        "capture_time_recognition_metric": "11/213",
-        "numerator_effect": 1,
+        "capture_time_recognition_metric": "13/213",
+        "numerator_effect": 0,
         "reference_recognizable": true,
         "wall_and_roof_are_one_physical_unit": true
       },
@@ -792,20 +852,20 @@ const D5_BATCH_ACCEPTED = Object.freeze([
           "land:w26767313:x_-2__z_-3": "17c60f0f623bf919bd05c0ebc4ae93c06cce0c33a5603725175f3c4754572c02"
         },
         "horizontal_source_footprint_preserved": true,
-        "visual_mesh_instances": 12,
-        "visual_surfaces": 12,
-        "visual_triangles": 2140,
+        "visual_mesh_instances": 16,
+        "visual_surfaces": 16,
+        "visual_triangles": 3368,
         "world_records": 735,
-        "world_mesh_instances": 993,
-        "world_surfaces": 1008,
-        "world_triangles": 76376,
+        "world_mesh_instances": 1006,
+        "world_surfaces": 1021,
+        "world_triangles": 79913,
         "world_static_bodies": 466,
-        "world_shapes": 472,
+        "world_shapes": 474,
         "world_topology_scope": "current_integration_topology",
-        "capture_isolated_world_mesh_instances": 987,
-        "capture_isolated_world_surfaces": 1002,
-        "capture_isolated_world_triangles": 73904,
-        "capture_isolated_world_shapes": 470
+        "capture_isolated_world_mesh_instances": 997,
+        "capture_isolated_world_surfaces": 1012,
+        "capture_isolated_world_triangles": 77604,
+        "capture_isolated_world_shapes": 472
       },
       "ownership_contract": {
         "structural_owner_count": 2,
@@ -821,8 +881,8 @@ const D5_BATCH_ACCEPTED = Object.freeze([
         ],
         "eligible_exterior_collision_triangles": 48,
         "noneligible_canopy_post_collision_triangles": 204,
-        "noneligible_ground_collision_triangles": 864,
-        "wall_collision_triangles": 1116,
+        "noneligible_ground_collision_triangles": 2016,
+        "wall_collision_triangles": 2268,
         "roof_collision_triangles": 16,
         "roof_is_wall_spray_receiver": false,
         "roof_world_solid_landing": true,
@@ -845,40 +905,40 @@ const D5_BATCH_ACCEPTED = Object.freeze([
       }
     },
     "acceptance": {
-      "evidence_manifest_sha256": "f7105c935499a455007d73e77bca38fc9e4cb249155312d2397445f4b4ff7e29",
-      "motion_telemetry_manifest_sha256": "d4f8a57b8e456641707b000ad997a96162399b6c5322f0fb0bdf56f49a60ff07",
-      "visual_motion_manifest_sha256": "c468c4f930e09a063e3018aa2b5c44ce70248f83db6f920a3033de8961e37a86",
-      "package_verification_receipt_sha256": "6d83381a3cf12ff706f1d47be276781581be77edeb9a2f910e8f23a155f5a5f6",
-      "evidence_tree_sha256": "f809a431e5d4bf53d94608a99900d4a17734bca79b28280150fd88ce5f51b934",
-      "mechanical_review_receipt_sha256": "606f8e066e3a07124e50c6f23b69d04f02b1efeb8dfb85381e23de58b07f3214",
-      "review_receipt_sha256": "0275e3c256ed1c6c3ff66c63399593e628d61b724803af83f2809ad683323207",
-      "capture_time_recognition_metric": "11/213",
-      "numerator_effect": 1,
-      "review_id": "d5-1394-live-promotion-candidate-2026-09-10-001",
+      "evidence_manifest_sha256": "ec327adb9239a902f40fd7e2ede7afedcd19bf1869b392e9646544721eaec316",
+      "motion_telemetry_manifest_sha256": "0ad7ff068f42b8230ba724d9143c9c563130de3c9d40c37837f1ed21f95ecc60",
+      "visual_motion_manifest_sha256": "6a057c2b0236e90d11861499c299b723b35da37ee3590a0a154d0c3390f0b2cb",
+      "package_verification_receipt_sha256": "9be91b038dc142ac84d3947ed68733c2346aa5756e4ccbb433bf0a173b8ca364",
+      "evidence_tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+      "mechanical_review_receipt_sha256": "c2c4ee90347b458e44fda87d900a4a2031b2cf4883c16a0db1ceac0ffeec02cd",
+      "review_receipt_sha256": "c7b5079a3a59847b80e201ef8107928381f9370dd74001f2675f0c68de82dbc8",
+      "capture_time_recognition_metric": "13/213",
+      "numerator_effect": 0,
+      "review_id": "d5-1394-fidelity-quality-candidate-2026-09-10-001",
       "review_kind": "independent_reference_recognition",
       "status": "accept"
     },
     "receipt": {
-      "evidence_manifest_sha256": "f7105c935499a455007d73e77bca38fc9e4cb249155312d2397445f4b4ff7e29",
-      "motion_telemetry_manifest_sha256": "d4f8a57b8e456641707b000ad997a96162399b6c5322f0fb0bdf56f49a60ff07",
-      "visual_motion_manifest_sha256": "c468c4f930e09a063e3018aa2b5c44ce70248f83db6f920a3033de8961e37a86",
-      "package_verification_receipt_sha256": "6d83381a3cf12ff706f1d47be276781581be77edeb9a2f910e8f23a155f5a5f6",
-      "evidence_tree_sha256": "f809a431e5d4bf53d94608a99900d4a17734bca79b28280150fd88ce5f51b934",
-      "mechanical_review_receipt_sha256": "606f8e066e3a07124e50c6f23b69d04f02b1efeb8dfb85381e23de58b07f3214",
-      "review_receipt_sha256": "0275e3c256ed1c6c3ff66c63399593e628d61b724803af83f2809ad683323207",
-      "capture_time_recognition_metric": "11/213",
-      "numerator_effect": 1,
+      "evidence_manifest_sha256": "ec327adb9239a902f40fd7e2ede7afedcd19bf1869b392e9646544721eaec316",
+      "motion_telemetry_manifest_sha256": "0ad7ff068f42b8230ba724d9143c9c563130de3c9d40c37837f1ed21f95ecc60",
+      "visual_motion_manifest_sha256": "6a057c2b0236e90d11861499c299b723b35da37ee3590a0a154d0c3390f0b2cb",
+      "package_verification_receipt_sha256": "9be91b038dc142ac84d3947ed68733c2346aa5756e4ccbb433bf0a173b8ca364",
+      "evidence_tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+      "mechanical_review_receipt_sha256": "c2c4ee90347b458e44fda87d900a4a2031b2cf4883c16a0db1ceac0ffeec02cd",
+      "review_receipt_sha256": "c7b5079a3a59847b80e201ef8107928381f9370dd74001f2675f0c68de82dbc8",
+      "capture_time_recognition_metric": "13/213",
+      "numerator_effect": 0,
       "unit_id": "physical-building:w96215646",
-      "evidence_manifest_path": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001/capture-manifest.json",
-      "motion_telemetry_manifest_path": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001/motion-telemetry.json",
-      "visual_motion_manifest_path": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001/visual-motion.json",
-      "package_verification_receipt_path": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001/package-verification-receipt.json",
-      "evidence_tree_path": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001/evidence-tree.json",
-      "mechanical_review_receipt_path": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001/mechanical-review.json",
-      "review_path": "evidence/reviews/d5-1394-live-promotion-candidate-2026-09-10-001-INDEPENDENT_PACKET_REVIEW.md"
+      "evidence_manifest_path": "evidence/first-playable/d5-1394-fidelity-quality-candidate-2026-09-10-001/capture-manifest.json",
+      "motion_telemetry_manifest_path": "evidence/first-playable/d5-1394-fidelity-quality-candidate-2026-09-10-001/motion-telemetry.json",
+      "visual_motion_manifest_path": "evidence/first-playable/d5-1394-fidelity-quality-candidate-2026-09-10-001/visual-motion.json",
+      "package_verification_receipt_path": "evidence/first-playable/d5-1394-fidelity-quality-candidate-2026-09-10-001/package-verification-receipt.json",
+      "evidence_tree_path": "evidence/first-playable/d5-1394-fidelity-quality-candidate-2026-09-10-001/evidence-tree.json",
+      "mechanical_review_receipt_path": "evidence/first-playable/d5-1394-fidelity-quality-candidate-2026-09-10-001/mechanical-review.json",
+      "review_path": "evidence/first-playable/d5-1394-fidelity-quality-candidate-2026-09-10-001/unit-visual-attestation.json"
     },
-    "tree_document_sha256": "82860fc782b420010698684502bfff36625d60f74fd8a56843ef70131d824729",
-    "image_count": 22
+    "tree_document_sha256": "4811d4fa41523ee524b4360b9373d4a9f5daf6450e427887df3547a23570abdd",
+    "image_count": 14
   }
 ]);
 const D5_BATCH_BUILDER_SHA256 = "552cc81c7146793e272621ca99667997943e8a01c48aa62e80bd7a14a4f1ccf7";
@@ -2957,7 +3017,8 @@ function deriveActiveRuntimeAdapterSeeds(inputs, units) {
     "game/resources/facades/d5_1308_gateview_live_factory.json",
     "game/resources/facades/d5_1308_siding_marks.gdshader",
     "game/scripts/world/facades/d5_1308_gateview_live_factory.gd",
-    "game/scripts/world/facades/site_12_housing_kit.gd"
+    "game/scripts/world/facades/site_12_housing_kit.gd",
+    "game/resources/facades/d5_1308_lawn_tone.gdshader"
   ],
   "runtime_config_path": "game/resources/facades/d5_1308_gateview_live_replacement.json",
   "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
@@ -2974,7 +3035,8 @@ function deriveActiveRuntimeAdapterSeeds(inputs, units) {
     "game/resources/facades/d5_1394_gateview_live_factory.json",
     "game/resources/facades/d5_1394_siding_marks.gdshader",
     "game/scripts/world/facades/d5_1394_gateview_live_factory.gd",
-    "game/scripts/world/facades/site_12_housing_kit.gd"
+    "game/scripts/world/facades/site_12_housing_kit.gd",
+    "game/resources/facades/d5_1394_lawn_tone.gdshader"
   ],
   "runtime_config_path": "game/resources/facades/d5_1394_gateview_live_replacement.json",
   "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
@@ -3311,12 +3373,13 @@ function validateD5BatchAuthority(inputs) {
     const tree = readJson(receipt.evidence_tree_path);
     invariant(tree.tree_sha256 === receipt.evidence_tree_sha256 && tree.files.length === d.image_count, `${label} image-tree digest/count drifted`);
     for (const file of tree.files) invariant(sha256File(absolute(`${dirname(receipt.evidence_tree_path)}/${file.path}`)) === file.sha256, `${label} native image bytes drifted: ${file.path}`);
-    const review = readFileSync(absolute(receipt.review_path), "utf8");
-    invariant(review.includes(receipt.evidence_tree_sha256) && review.includes(d.unit_id), `${label} independent seventh attestation binding drifted`);
+    const review = readJson(receipt.review_path);
+    const six = Object.fromEntries(Object.entries(d.acceptance).filter(([key]) => key.endsWith("_sha256") && key !== "review_receipt_sha256"));
+    invariant(review.decision === "PASS" && review.physical_unit_id === d.unit_id && equalStable(review.acceptance_bindings, six) && review.evidence_tree_document_sha256 === d.tree_document_sha256, `${label} independent seventh attestation binding drifted`);
     const pkg = readJson(receipt.package_verification_receipt_path);
-    invariant(pkg.decision === "PASS" && pkg.physical_unit_id === d.unit_id && pkg.recognition_metric === "11/213" && pkg.recognition_credit === false && pkg.promotion === false, `${label} historical candidate package truth drifted`);
-    invariant(pkg.independent_package_review.sha256 === "71982937a1da9c5d5f4b72c9df48008fb6a4a10cab0d7d11dd5a035aac684172" && pkg.final_byte_pid_gate.sha256 === "cc680333b8226fb7c2f2e75371c283fc3cc70bfecfe825eebabc3b3b7dd19f77", `${label} shared independent package/byte gate drifted`);
-    invariant(pkg.bundle_identity_sha256 === "01f7c05c4fec1895ceb07645328ad523595c10e17d8de65adfdf1cd9e8e0d290" && pkg.pck_sha256 === "de0cfb36bb6421f6ca55727e36a0c0300ef441859eddb9dc9e019d36c8f30fe1", `${label} shared candidate app drifted`);
+    invariant(pkg.owner_decision === "PASS" && pkg.independent_exact_app_decision === "PASS" && pkg.independent_exact_app_review_pending === false && pkg.physical_unit_id === d.unit_id && pkg.candidate_authority === "13/213" && pkg.truth_boundary.credit_granted === false && pkg.truth_boundary.authority_mutated === false, `${label} historical candidate package truth drifted`);
+    invariant(pkg.independent_package_review.sha256 === "665648ccc7fdc05241841e8201ec495809133f9c2acb522e9adef56bd6287773" && pkg.independent_terminal_slot_release.sha256 === "1a5d644aaa59fbdb46feffba65f43f263ca755b3cfb40f062608a3e2546cce27", `${label} shared independent package/byte gate drifted`);
+    invariant(pkg.signature_privacy_binding.sha256 === "8103ac4a7962f23bca2f3c78eda13d139d1ab7f3696610d53189ce770893143e" && pkg.pck_sha256 === "9fef305dc9ac1f5d3866742143842ce5f691d1bc369dc41b775142fbf243ed86", `${label} shared candidate app drifted`);
   }
 }
 
@@ -5001,7 +5064,7 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
     schema_version: REPORT_SCHEMA,
     scope_boundaries: [
       "The D2 1441 promotion preserves generated bytes while atomically replacing the supplied wall+roof pair with nine visual surfaces, two structural owners, one wall spray owner, and zero decorative collision or navigation owners.",
-      "The unchanged D1 B201 attachment retains its pre-B225 735/950/964/66,636/466/466 parity receipt and D1 B225 retains its pre-D2 735/952/967/67,716/466/466 receipt, while D2 1441 retains historical post-B1 735/959/974/70,692/466/466 and D2 1439 retains historical 735/968/983/71,156/466/467; D2 1444 retains historical 735/977/992/71,828/466/468; D5 1394 owns the measured combined 735/993/1008/76,376/466/472 topology. Capture-time 11/213 remains historical.",
+      "The unchanged D1 B201 attachment retains its pre-B225 735/950/964/66,636/466/466 parity receipt and D1 B225 retains its pre-D2 735/952/967/67,716/466/466 receipt, while D2 1441 retains historical post-B1 735/959/974/70,692/466/466 and D2 1439 retains historical 735/968/983/71,156/466/467; D2 1444 retains historical 735/977/992/71,828/466/468; D5 1394 owns the measured quality-batch 735/1006/1021/79,913/466/474 topology; 1308 references that same batch. Prior 11/213 promotion evidence remains historical. These two existing-unit quality revisions were captured at 13/213 and add zero credit.",
       `${registry.legacy_adapters.length} legacy receivers and ${registry.active_runtime_adapters.length} exact-current active receiver adapters are represented without automatic recognition transfer from adapter metadata.`,
       "The version-pinned loader contract authorizes parsing and resource resolution only; it does not authorize node instantiation or world-construction dispatch.",
       `Exactly ${registry.recognition_metric.numerator} independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.`,

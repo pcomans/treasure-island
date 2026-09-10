@@ -1,0 +1,86 @@
+{
+  "schema_version": "ti.d5-native-image-tree/1",
+  "tree_scope": "Only selected exact image files; excludes this document and every manifest/receipt/review",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+  "files": [
+    {
+      "path": "images/current004-stills/03-screen-walk-default.png",
+      "sha256": "420298964fd2438d3ddc83bfeb31d9bb588530f69097da40de8032795f91f693",
+      "bytes": 479470
+    },
+    {
+      "path": "images/current004-stills/04-screen-walk-changed.png",
+      "sha256": "0b2f81e4cbdfe679166d5d803d3f25fce0c01b6acf4daa9b48fc81cdb72bb4ec",
+      "bytes": 365360
+    },
+    {
+      "path": "images/current004-stills/05-parking-walk-lawn-default.png",
+      "sha256": "287450969a8ce6f4e8efdcb8a79c9d12ed930588bc496c1e15b37fb6962e19f8",
+      "bytes": 1079868
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0038.jpg",
+      "sha256": "91041f14917470b771bdec3174ab7276e305e1116e061de032ea1e31a319d7fd",
+      "bytes": 41876
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0053.jpg",
+      "sha256": "d11c866ed6aa5e2809db20897f691fcb7b4a3a312701545f7c33cc5659bf8e1f",
+      "bytes": 41512
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0068.jpg",
+      "sha256": "589019dfdf66d678af9ea6f235f65ed98eee099507c3d32586593b79a0959c0e",
+      "bytes": 43209
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0083.jpg",
+      "sha256": "317278d02fab3adf8f1ab6cc43704f7fd9356f8f7f251dff08df1e059e27e4b9",
+      "bytes": 42377
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0098.jpg",
+      "sha256": "5b9331e92693efd6a91e69c12d13868dc48bf7c459fc823c64537523cdaefcf4",
+      "bytes": 41021
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0113.jpg",
+      "sha256": "f5dc407fbc7b68fc2c73f7a016934ec07647eb04d28b5470030d6b7d58e03d67",
+      "bytes": 41147
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0128.jpg",
+      "sha256": "6891dbcbbc6d3945242418bec63cd38b9cdaf104ceaaf9c03263ee019b580f0d",
+      "bytes": 44390
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0143.jpg",
+      "sha256": "7bdd898fcdc76214a1b0a3ab9a8fe9a25c41d1a69c7253a221a985ca4b4ef960",
+      "bytes": 44598
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0158.jpg",
+      "sha256": "44a394bd8bbfc396f18669fbcdb8ba90f04f39ada088b03428cfd27829c2d686",
+      "bytes": 42384
+    },
+    {
+      "path": "images/geometry003-motion/motion-final-world-retained.png",
+      "sha256": "604d2b697b34c4cc74803924a484243350f2b0248c15b249868aa896ae3de23d",
+      "bytes": 376778
+    },
+    {
+      "path": "images/geometry003-motion/motion-start-screen-walk.png",
+      "sha256": "fdb9e6f7bce0f5f170c1b6cd8097bc5505aee5cd31454759971e1ac89affc696",
+      "bytes": 376886
+    }
+  ],
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "inventory_physical_units": 213,
+    "credit_granted": false,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_exact_app_and_packet_attestation_pending": true
+  }
+}

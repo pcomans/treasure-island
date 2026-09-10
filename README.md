@@ -18,7 +18,17 @@ Before restoring tools or opening Godot, read [AGENTS.md](AGENTS.md) and the [ma
 Human-only follow-ups are kept in the [owner action queue](HUMAN.md); that
 queue narrows external gates and never pauses safe independent work.
 
-## Current 1308 and 1394 Gateview — thirteen recognized buildings
+## Current 1308 and 1394 quality revisions — thirteen recognized buildings
+
+Independent source/mechanics, visual, separate unit-packet and package gates accepted the fidelity004 quality revisions of `physical-building:w95934123` and `physical-building:w96215646`. Recognition remains **13/213**, with **zero new credit**, all 213 unit identities preserved and 200 not evaluated. Compiler `1.12.0`, catalog/registry v13 and contracts/loader v12 retain twelve active adapters, twenty-one plans and fifteen package-ready plans.
+
+The owner and independent signed runs measured `735/1006/1021/79,913/466/474` rows/meshes/surfaces/triangles/bodies/shapes. 1394 owns current combined topology; 1308 carries the same-batch combined reference. The reviewed private app is `build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app`. Seven-file identity `d6239ccdb089b01b6ce6839bf393de3ecf8c63f40167a26b79b68c6f73f91e27`, PCK `06f7e4778f791adbf512a16cd6e6900f288ea7d8c41ad53edafc85ad2a8c2be7`, executable `996db8709cbad9bbbe085d54fa828574c03332e94e2cdeecd433482098d1be80`. [Quality release closure](evidence/first-playable/d5-1308-1394-quality-current-release-2026-09-10-001/release-closure.json).
+
+The two immutable unit packets preserve 17 and 14 source images and their original camera/reference/contact and sampled-motion limits. 1308 uses its actual004 roof mechanics; 1394 has three current palette004 stills and unchanged003 motion. The separately tested final app supplies full-world, movement/jetpack, mounted component and privacy proof on Apple M2. Current exported-app pixels, ordinary owner input and Apple M1 Pro acceptance remain unclaimed. Publication and no-argument launch for these bytes are pending; older outcomes below do not establish them. `HUMAN-001` retains its owner-only scope.
+
+## Historical 1308 and 1394 initial recognition release — thirteen buildings
+
+This section preserves the earlier 76,376-triangle app, its original two-credit acceptance and publication/launch outcomes. Its uses of “current” are historical.
 
 Independent per-unit quality/packet gates and the shared candidate package accepted `physical-building:w95934123` and `physical-building:w96215646`. Serialized authority is **13/213**, preserving the prior eleven units and all 213 identities; **200** remain not evaluated. Compiler `1.12.0`, catalog/registry v13 and contracts/loader v12 agree on twelve active adapters, twenty-one plans and fifteen package-ready plans. Roofs add no credit.
 

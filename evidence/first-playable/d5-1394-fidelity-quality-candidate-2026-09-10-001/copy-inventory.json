@@ -1,0 +1,399 @@
+{
+  "images": [
+    {
+      "path": "images/current004-stills/03-screen-walk-default.png",
+      "sha256": "420298964fd2438d3ddc83bfeb31d9bb588530f69097da40de8032795f91f693",
+      "bytes": 479470,
+      "role": "current004_static_native",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/420298964fd2438d3ddc/03-screen-walk-default.png",
+        "sha256": "420298964fd2438d3ddc83bfeb31d9bb588530f69097da40de8032795f91f693",
+        "bytes": 479470,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-004/images/03-screen-walk-default.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "native_manifest": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/10b1ff655d6315124a74/native-004-result.json",
+          "sha256": "10b1ff655d6315124a74cc0e1931f104347e2ee9aa39fcfc154c82a0df6b576f",
+          "bytes": 29650,
+          "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-004/native-004-result.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "id": "03-screen-walk-default"
+      }
+    },
+    {
+      "path": "images/current004-stills/04-screen-walk-changed.png",
+      "sha256": "0b2f81e4cbdfe679166d5d803d3f25fce0c01b6acf4daa9b48fc81cdb72bb4ec",
+      "bytes": 365360,
+      "role": "current004_static_native",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/0b2f81e4cbdfe679166d/04-screen-walk-changed.png",
+        "sha256": "0b2f81e4cbdfe679166d5d803d3f25fce0c01b6acf4daa9b48fc81cdb72bb4ec",
+        "bytes": 365360,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-004/images/04-screen-walk-changed.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "native_manifest": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/10b1ff655d6315124a74/native-004-result.json",
+          "sha256": "10b1ff655d6315124a74cc0e1931f104347e2ee9aa39fcfc154c82a0df6b576f",
+          "bytes": 29650,
+          "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-004/native-004-result.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "id": "04-screen-walk-changed"
+      }
+    },
+    {
+      "path": "images/current004-stills/05-parking-walk-lawn-default.png",
+      "sha256": "287450969a8ce6f4e8efdcb8a79c9d12ed930588bc496c1e15b37fb6962e19f8",
+      "bytes": 1079868,
+      "role": "current004_static_native",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/287450969a8ce6f4e8ef/05-parking-walk-lawn-default.png",
+        "sha256": "287450969a8ce6f4e8efdcb8a79c9d12ed930588bc496c1e15b37fb6962e19f8",
+        "bytes": 1079868,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-004/images/05-parking-walk-lawn-default.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "native_manifest": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/10b1ff655d6315124a74/native-004-result.json",
+          "sha256": "10b1ff655d6315124a74cc0e1931f104347e2ee9aa39fcfc154c82a0df6b576f",
+          "bytes": 29650,
+          "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-004/native-004-result.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "id": "05-parking-walk-lawn-default"
+      }
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0038.jpg",
+      "sha256": "91041f14917470b771bdec3174ab7276e305e1116e061de032ea1e31a319d7fd",
+      "bytes": 41876,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/91041f14917470b771bd/avi-index-0038.jpg",
+        "sha256": "91041f14917470b771bdec3174ab7276e305e1116e061de032ea1e31a319d7fd",
+        "bytes": 41876,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0038.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/42fef0f6dd5fc4320aef/1394-fidelity-stock-sweep.avi",
+          "sha256": "42fef0f6dd5fc4320aefe7d19e15a2d99552cce4eaf0bd5e9610f64e69fde33b",
+          "bytes": 7519826,
+          "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/1394-fidelity-stock-sweep.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 38,
+        "original_payload_offset": 1901916,
+        "bytes": 41876,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0053.jpg",
+      "sha256": "d11c866ed6aa5e2809db20897f691fcb7b4a3a312701545f7c33cc5659bf8e1f",
+      "bytes": 41512,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/d11c866ed6aa5e2809db/avi-index-0053.jpg",
+        "sha256": "d11c866ed6aa5e2809db20897f691fcb7b4a3a312701545f7c33cc5659bf8e1f",
+        "bytes": 41512,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0053.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/42fef0f6dd5fc4320aef/1394-fidelity-stock-sweep.avi",
+          "sha256": "42fef0f6dd5fc4320aefe7d19e15a2d99552cce4eaf0bd5e9610f64e69fde33b",
+          "bytes": 7519826,
+          "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/1394-fidelity-stock-sweep.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 53,
+        "original_payload_offset": 2583924,
+        "bytes": 41512,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0068.jpg",
+      "sha256": "589019dfdf66d678af9ea6f235f65ed98eee099507c3d32586593b79a0959c0e",
+      "bytes": 43209,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/589019dfdf66d678af9e/avi-index-0068.jpg",
+        "sha256": "589019dfdf66d678af9ea6f235f65ed98eee099507c3d32586593b79a0959c0e",
+        "bytes": 43209,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0068.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/42fef0f6dd5fc4320aef/1394-fidelity-stock-sweep.avi",
+          "sha256": "42fef0f6dd5fc4320aefe7d19e15a2d99552cce4eaf0bd5e9610f64e69fde33b",
+          "bytes": 7519826,
+          "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/1394-fidelity-stock-sweep.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 68,
+        "original_payload_offset": 3275190,
+        "bytes": 43209,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0083.jpg",
+      "sha256": "317278d02fab3adf8f1ab6cc43704f7fd9356f8f7f251dff08df1e059e27e4b9",
+      "bytes": 42377,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/317278d02fab3adf8f1a/avi-index-0083.jpg",
+        "sha256": "317278d02fab3adf8f1ab6cc43704f7fd9356f8f7f251dff08df1e059e27e4b9",
+        "bytes": 42377,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0083.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/42fef0f6dd5fc4320aef/1394-fidelity-stock-sweep.avi",
+          "sha256": "42fef0f6dd5fc4320aefe7d19e15a2d99552cce4eaf0bd5e9610f64e69fde33b",
+          "bytes": 7519826,
+          "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/1394-fidelity-stock-sweep.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 83,
+        "original_payload_offset": 3999954,
+        "bytes": 42377,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0098.jpg",
+      "sha256": "5b9331e92693efd6a91e69c12d13868dc48bf7c459fc823c64537523cdaefcf4",
+      "bytes": 41021,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/5b9331e92693efd6a91e/avi-index-0098.jpg",
+        "sha256": "5b9331e92693efd6a91e69c12d13868dc48bf7c459fc823c64537523cdaefcf4",
+        "bytes": 41021,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0098.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/42fef0f6dd5fc4320aef/1394-fidelity-stock-sweep.avi",
+          "sha256": "42fef0f6dd5fc4320aefe7d19e15a2d99552cce4eaf0bd5e9610f64e69fde33b",
+          "bytes": 7519826,
+          "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/1394-fidelity-stock-sweep.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 98,
+        "original_payload_offset": 4671920,
+        "bytes": 41021,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0113.jpg",
+      "sha256": "f5dc407fbc7b68fc2c73f7a016934ec07647eb04d28b5470030d6b7d58e03d67",
+      "bytes": 41147,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/f5dc407fbc7b68fc2c73/avi-index-0113.jpg",
+        "sha256": "f5dc407fbc7b68fc2c73f7a016934ec07647eb04d28b5470030d6b7d58e03d67",
+        "bytes": 41147,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0113.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/42fef0f6dd5fc4320aef/1394-fidelity-stock-sweep.avi",
+          "sha256": "42fef0f6dd5fc4320aefe7d19e15a2d99552cce4eaf0bd5e9610f64e69fde33b",
+          "bytes": 7519826,
+          "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/1394-fidelity-stock-sweep.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 113,
+        "original_payload_offset": 5332378,
+        "bytes": 41147,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0128.jpg",
+      "sha256": "6891dbcbbc6d3945242418bec63cd38b9cdaf104ceaaf9c03263ee019b580f0d",
+      "bytes": 44390,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6891dbcbbc6d39452424/avi-index-0128.jpg",
+        "sha256": "6891dbcbbc6d3945242418bec63cd38b9cdaf104ceaaf9c03263ee019b580f0d",
+        "bytes": 44390,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0128.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/42fef0f6dd5fc4320aef/1394-fidelity-stock-sweep.avi",
+          "sha256": "42fef0f6dd5fc4320aefe7d19e15a2d99552cce4eaf0bd5e9610f64e69fde33b",
+          "bytes": 7519826,
+          "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/1394-fidelity-stock-sweep.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 128,
+        "original_payload_offset": 5987370,
+        "bytes": 44390,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0143.jpg",
+      "sha256": "7bdd898fcdc76214a1b0a3ab9a8fe9a25c41d1a69c7253a221a985ca4b4ef960",
+      "bytes": 44598,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/7bdd898fcdc76214a1b0/avi-index-0143.jpg",
+        "sha256": "7bdd898fcdc76214a1b0a3ab9a8fe9a25c41d1a69c7253a221a985ca4b4ef960",
+        "bytes": 44598,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0143.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/42fef0f6dd5fc4320aef/1394-fidelity-stock-sweep.avi",
+          "sha256": "42fef0f6dd5fc4320aefe7d19e15a2d99552cce4eaf0bd5e9610f64e69fde33b",
+          "bytes": 7519826,
+          "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/1394-fidelity-stock-sweep.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 143,
+        "original_payload_offset": 6694422,
+        "bytes": 44598,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/geometry003-avi/avi-index-0158.jpg",
+      "sha256": "44a394bd8bbfc396f18669fbcdb8ba90f04f39ada088b03428cfd27829c2d686",
+      "bytes": 42384,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/44a394bd8bbfc396f186/avi-index-0158.jpg",
+        "sha256": "44a394bd8bbfc396f18669fbcdb8ba90f04f39ada088b03428cfd27829c2d686",
+        "bytes": 42384,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0158.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/42fef0f6dd5fc4320aef/1394-fidelity-stock-sweep.avi",
+          "sha256": "42fef0f6dd5fc4320aefe7d19e15a2d99552cce4eaf0bd5e9610f64e69fde33b",
+          "bytes": 7519826,
+          "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/1394-fidelity-stock-sweep.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 158,
+        "original_payload_offset": 7377874,
+        "bytes": 42384,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/geometry003-motion/motion-final-world-retained.png",
+      "sha256": "604d2b697b34c4cc74803924a484243350f2b0248c15b249868aa896ae3de23d",
+      "bytes": 376778,
+      "role": "historical_geometry003_motion_not_palette004",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/604d2b697b34c4cc7480/motion-final-world-retained.png",
+        "sha256": "604d2b697b34c4cc74803924a484243350f2b0248c15b249868aa896ae3de23d",
+        "bytes": 376778,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/images/motion-final-world-retained.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "manifest": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/126207caed4fd585525c/motion-001-result.json",
+          "sha256": "126207caed4fd585525c39f194655b42e618e545e7ee4008175b6fa9fff3837f",
+          "bytes": 279078,
+          "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-003/motion-001-result.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "scope": "Geometry movement reuse only; palette004 not recorded in this image."
+      }
+    },
+    {
+      "path": "images/geometry003-motion/motion-start-screen-walk.png",
+      "sha256": "fdb9e6f7bce0f5f170c1b6cd8097bc5505aee5cd31454759971e1ac89affc696",
+      "bytes": 376886,
+      "role": "historical_geometry003_motion_not_palette004",
+      "original": {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/fdb9e6f7bce0f5f170c1/motion-start-screen-walk.png",
+        "sha256": "fdb9e6f7bce0f5f170c1b6cd8097bc5505aee5cd31454759971e1ac89affc696",
+        "bytes": 376886,
+        "original_locator": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/images/motion-start-screen-walk.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "manifest": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/126207caed4fd585525c/motion-001-result.json",
+          "sha256": "126207caed4fd585525c39f194655b42e618e545e7ee4008175b6fa9fff3837f",
+          "bytes": 279078,
+          "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-003/motion-001-result.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "scope": "Geometry movement reuse only; palette004 not recorded in this image."
+      }
+    }
+  ],
+  "public_image_count": 14,
+  "all_byte_identical": true,
+  "no_third_party_reference_pixels_copied": true,
+  "private_inventory": "private-provenance-retention.json"
+}

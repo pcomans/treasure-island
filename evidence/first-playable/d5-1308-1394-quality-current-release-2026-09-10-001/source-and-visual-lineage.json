@@ -1,0 +1,116 @@
+{
+  "derived_summary": true,
+  "recognition_metric": "13/213",
+  "numerator_effect": 0,
+  "quality_revisions_only": [
+    "1308",
+    "1394"
+  ],
+  "excluded_units": [
+    "1303",
+    "1317"
+  ],
+  "authority": {
+    "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/authority/HANDOFF.json",
+    "sha256": "a8823b9e077a1e2ac0d56e208dc56231c8a66fcfa0a7e5f2613e683bbfc9a527",
+    "bytes": 15708
+  },
+  "authority_pins": {
+    "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/authority/authority-source-pins.json",
+    "sha256": "a269618dfc351a0881f4f8f4635ba883d22930b98eea63e0ae345db65450deae",
+    "bytes": 1403
+  },
+  "owner_source_binding": {
+    "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/source-pins.json",
+    "sha256": "c4dd2fc710fc7eaeee2f42a6bda6759ae4c1691fb83d4aaf70a83e24e5582aed",
+    "bytes": 71621
+  },
+  "package_source_binding": {
+    "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/package-source-pins.json",
+    "sha256": "ea21614861cdbc218e2c7663737ead924de3619d736b50bf69d95ef75911744b",
+    "bytes": 7970
+  },
+  "units": [
+    {
+      "unit": "1308",
+      "physical_unit_id": "physical-building:w95934123",
+      "packet_path": "evidence/first-playable/d5-1308-fidelity-quality-candidate-2026-09-10-001",
+      "closure": {
+        "path": "evidence/first-playable/d5-1308-fidelity-quality-candidate-2026-09-10-001/candidate-closure.json",
+        "sha256": "29fdafa540213776b975c26b6caf1ea3afd60e60ce3ee14b71251b4e691ac475",
+        "bytes": 7935
+      },
+      "seven_acceptance_bindings": {
+        "evidence_manifest_sha256": "7c01ff32b1da4276ec330aee0d034dce4f0cbe8caa510f96d99504084cb314b5",
+        "motion_telemetry_manifest_sha256": "f139576c7b45eb76774315745504992f6bd726cd698faab6b88e79f491197960",
+        "visual_motion_manifest_sha256": "f0d21bb4dc14d8a12aba1fc37614e3cced7ff331521dda06a802bfc6fbd69dc9",
+        "package_verification_receipt_sha256": "c892d30b9c06f280077712c2bbad710eefac67f9fa1dd4b1f92c8f07c0b329dc",
+        "evidence_tree_sha256": "e17f311ea69445d8da9b4029e9d4d93fba19ea2cd2901efa2e2ec1d7dd90556a",
+        "mechanical_review_receipt_sha256": "9c094ed7a52506404a6763298504b71706b75ade1f44e4cfe2ad3fb6ea81380f",
+        "review_receipt_sha256": "87a2af8c5ab11082337265f53ca5fcd3aa9f0dbfdd22f97e7a8968653ad71a06"
+      },
+      "image_tree_sha256": "e17f311ea69445d8da9b4029e9d4d93fba19ea2cd2901efa2e2ec1d7dd90556a",
+      "evidence_tree_document_sha256": "6f14bbea0a9b483b1ff6fb43c907253f1e353e49f4a8cc31b73a9dac20671bfe",
+      "images": 17,
+      "current_static_images": 2,
+      "limits": [
+        "1308 fidelity004 has two current static defaults, five affected-roof phase PNGs, nine exact original AVI payload samples and a held ground endpoint. Sampled visual PASS is not continuous playback or generic-player conformance.",
+        "150 no-input landing frames precede 222 travel/brake frames. All 222 are grounded; 70 lack upward slide contact. Settled source0 and added1 contacts are actual; the pre-braking return remains contact-empty. Rays are separate from contacts.",
+        "The 556-frame 1280x800 AVI retains 70 trailing bytes beyond its declared extent. PNG draw/physics counters differ by one; AVI indices are not mapped to physics counters. Ground motion follows separate placement, not a continuous roof-to-street route.",
+        "Original failures and prior scoped lower/apron evidence remain preserved; topology and mechanics reuse is grounded in the independent source report, not a relabeled earlier roof run.",
+        "Individual source-world captures are not combined-world or app pixels; actual batch source and owner package runs separately establish exact selected implementations and attachments.",
+        "Independent static and sampled-motion reviews retain their written scope. No continuous playback, hidden-roof schedule, manual-play or AVI/physics-index equivalence claim.",
+        "Original AVI files retain their70-byte declared/physical extent discrepancy. Exact payload copies do not establish generic-player conformance.",
+        "Independent same-app candidate package PASS is bound; the accepted seventh unit/packet/visual attestation is now serialized against the six unchanged fields and image tree.",
+        "Two current static PNGs, five roof-phase PNGs, one held ground endpoint and nine original AVI payloads. All222 travel/braking frames grounded but70 lack upward slide contact. Settled source0/added1 contacts are actual; the pre-braking return diagnostic remains false. Draw/physics counters differ by one; ground motion follows separate placement."
+      ]
+    },
+    {
+      "unit": "1394",
+      "physical_unit_id": "physical-building:w96215646",
+      "packet_path": "evidence/first-playable/d5-1394-fidelity-quality-candidate-2026-09-10-001",
+      "closure": {
+        "path": "evidence/first-playable/d5-1394-fidelity-quality-candidate-2026-09-10-001/candidate-closure.json",
+        "sha256": "0854feee5326553916ae772168dc8a2576077802fb65949d14885b69de571102",
+        "bytes": 7241
+      },
+      "seven_acceptance_bindings": {
+        "evidence_manifest_sha256": "ec327adb9239a902f40fd7e2ede7afedcd19bf1869b392e9646544721eaec316",
+        "motion_telemetry_manifest_sha256": "0ad7ff068f42b8230ba724d9143c9c563130de3c9d40c37837f1ed21f95ecc60",
+        "visual_motion_manifest_sha256": "6a057c2b0236e90d11861499c299b723b35da37ee3590a0a154d0c3390f0b2cb",
+        "package_verification_receipt_sha256": "9be91b038dc142ac84d3947ed68733c2346aa5756e4ccbb433bf0a173b8ca364",
+        "evidence_tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+        "mechanical_review_receipt_sha256": "c2c4ee90347b458e44fda87d900a4a2031b2cf4883c16a0db1ceac0ffeec02cd",
+        "review_receipt_sha256": "c7b5079a3a59847b80e201ef8107928381f9370dd74001f2675f0c68de82dbc8"
+      },
+      "image_tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+      "evidence_tree_document_sha256": "4811d4fa41523ee524b4360b9373d4a9f5daf6450e427887df3547a23570abdd",
+      "images": 14,
+      "current_static_images": 3,
+      "limits": [
+        "Palette004 has static native evidence. Geometry003 mechanics/motion reused through bounded material addendum; five-decimal oriented collision signatures are not raw byte hashes.",
+        "Original003 ground-view wall-only predicate FAIL preserved; no palette motion replay.",
+        "Individual source-world captures are not combined-world or app pixels; actual batch source and owner package runs separately establish exact selected implementations and attachments.",
+        "Independent static and sampled-motion reviews retain their written scope. No continuous playback, hidden-roof schedule, manual-play or AVI/physics-index equivalence claim.",
+        "Original AVI files retain their70-byte declared/physical extent discrepancy. Exact payload copies do not establish generic-player conformance.",
+        "Independent same-app candidate package PASS is bound; the accepted seventh unit/packet/visual attestation is now serialized against the six unchanged fields and image tree.",
+        "Three palette004 stills only. Two motion PNGs and nine AVI payloads depict geometry003 and its older palette. The preservation addendum compares16 native arrays and four five-decimal oriented collision signatures, not raw collision-byte hashes. Original003 wall-only intended-land predicate FAIL remains."
+      ]
+    }
+  ],
+  "current_loaded_topology": [
+    735,
+    1006,
+    1021,
+    79913,
+    466,
+    474
+  ],
+  "candidate_pck_sha256": "9fef305dc9ac1f5d3866742143842ce5f691d1bc369dc41b775142fbf243ed86",
+  "current_pck_sha256": "06f7e4778f791adbf512a16cd6e6900f288ea7d8c41ad53edafc85ad2a8c2be7",
+  "limits": [
+    "Unit packets retain their accepted candidate-app and original source-render/static/mechanics/motion evidence; final package verification supplies no new pixels.",
+    "1308 uses actual fidelity004 roof mechanics and accepted sampled motion. 1394 has three current palette004 PNGs; unchanged003 motion retains its older palette and scope.",
+    "Only 1394 owns current combined topology; 1308 has same-batch combined reference scope. Historical single-unit counts and contact/AVI limits remain unchanged."
+  ]
+}

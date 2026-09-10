@@ -2,9 +2,9 @@ class_name D51308GateviewLiveReplacement
 extends RefCounted
 
 ## One supplied wall/roof pair with its frozen local grade, translated once.
-## Accepted revision003 geometry/materials are retained except the reviewed
-## 5mm outward front-gable trim projection. Ownership, decal layers and the
-## factory input boundary are bound separately in this live candidate.
+## Public fidelity addition retains original source/protected faces and426 collision faces.
+## Additional roof and closed lower modules are separately nonreceiver; local ground
+## meshes preserve source terrain and other units' shared material fields.
 const FACTORY := preload("res://game/scripts/world/facades/d5_1308_gateview_live_factory.gd")
 const CONFIG_PATH := "res://game/resources/facades/d5_1308_gateview_live_replacement.json"
 const ADAPTER_ID := "active-adapter:d5-1308-live:building:w95934123:wall"
@@ -16,13 +16,15 @@ const AREA_KEY := "area:r17241151:x_-2__z_-1"
 const TARGET_CHUNK_ID := "x_-2__z_-1"
 const WALL_MESHES := ["ProtectedExactNeutralWallRuns", "ObservedWSWSSEHorizontalSidingFields"]
 const ROOF_MESH := "ExactSourceNeutralRoof"
-const STRUCTURE_MESHES := ["DeepRepeatedGableCanopyRoofs", "RealCanopyFrontSupports"]
+const STRUCTURE_MESHES := ["DeepRepeatedGableCanopyRoofs", "PaleSidedCanopyGableFronts", "ReadableCanopyRoofTops", "RealCanopyFrontSupports"]
+const LOWER_MESHES := ["ClosedLowerDoors", "ClosedLowerWindows", "LowerOpeningFramesAndHandles"]
+const ADDED_ROOF_MESHES := ["PublicPitchedRoofSlopes", "PublicPaleRoofFasciaAndSoffit"]
 const PAD_MESHES := ["GroundFlushCanopySupportSlabs"]
-const EXPECTED_BATCH_TRIANGLES := {"DeepRepeatedGableCanopyRoofs":96,"ExactSourceNeutralRoof":22,"GroundFlushCanopySupportSlabs":96,"ObservedWSWSSEHorizontalSidingFields":40,"ProtectedExactNeutralWallRuns":28,"RealCanopyFrontSupports":144,"RepeatedOpaqueUpperSliders":264,"RestrainedRealWindowAndCanopyTrim":1872}
-const EXPECTED_CONFIG_SHA256 := "d4110a1621bcdbf5fcfa93720daf2ead7f0cc08ad268e2c6f5d26d6e6df9031e"
-const EXPECTED_FACTORY_CONFIG_SHA256 := "6adbfa189fd52c444ab028ef92098f7cce6143aed440824c02fe5a79f1e7757f"
+const EXPECTED_BATCH_TRIANGLES := {"DeepRepeatedGableCanopyRoofs": 54, "PaleSidedCanopyGableFronts": 18, "ExactSourceNeutralRoof": 22, "GroundFlushCanopySupportSlabs": 96, "ObservedWSWSSEHorizontalSidingFields": 40, "ProtectedExactNeutralWallRuns": 28, "RealCanopyFrontSupports": 144, "RepeatedOpaqueUpperSliders": 264, "RestrainedRealWindowAndCanopyTrim": 1872, "ClosedLowerDoors": 72, "ClosedLowerWindows": 72, "LowerOpeningFramesAndHandles": 648, "PublicPitchedRoofSlopes": 678, "PublicPaleRoofFasciaAndSoffit": 702, "ConnectedConcreteAprons": 39, "LocalFrontageLawn": 98, "ReadableCanopyRoofTops": 24}
+const EXPECTED_CONFIG_SHA256 := "c35951faebaa921d41bf0230bf511b3a3fde9b9b1f533272030a5dfb8d8dfe8a"
+const EXPECTED_FACTORY_CONFIG_SHA256 := "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a"
 const RECORD_HASHES := {"area:r17241151:x_-2__z_-1": "0c1ca3e7d64c4fe9c5d561a00832651fa634b7a0c3bfae9f8434fa9526c58e53", "building:w95934123:roof": "34d0a95387fc6f17a889aac602ce5e630a67b4d0d9f8b5fb6264291d674b7b00", "building:w95934123:wall": "5bf75fcc75fdbc83d45a97a6a4168a439e8c31bcbc473105147f831a09458abd", "land:w26767313:x_-2__z_-1": "5508f75d3cc82559353123a3af167a0bb5b375eea73b84537d38a82b595579f7"}
-const SOURCE_DEPENDENCY_HASHES := {"res://game/resources/facades/d5_1308_gateview_live_factory.json": "6adbfa189fd52c444ab028ef92098f7cce6143aed440824c02fe5a79f1e7757f", "res://game/resources/facades/d5_1308_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e", "res://game/scripts/world/facades/d5_1308_gateview_live_factory.gd": "6e2f0e99e23dc180aba4955be8c5184c6e094057f4a21c2e9e47978dc18b3787", "res://game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"}
+const SOURCE_DEPENDENCY_HASHES := {"res://game/resources/facades/d5_1308_gateview_live_factory.json": "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a", "res://game/resources/facades/d5_1308_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e", "res://game/scripts/world/facades/d5_1308_gateview_live_factory.gd": "6950aab112f73fdf78c1cad2f3deca72ac7e46b2a07faffe04f82987a1e07498", "res://game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd", "res://game/resources/facades/d5_1308_lawn_tone.gdshader": "d60b1db292234046d2e8fd1a451e0f3f52a69b12afe401e871bedef6067ca7af", "res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg": "70d3ff969a7421c7ae057b5d16386d11f5e59c6740db643352e1039413f419c4", "res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg": "99f81099af07b009134b6a81bf0f95ab16da09c57156cc2ed534975664a68533", "res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg": "ae94f2b34597b9108eefd88217f55eccaec6d6b382e858a478ee92df90e66617", "res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg": "9ebe6d03a9551c17d1802835c92c1442acb8f5d38d4874ee8c37770f11c4bed1"}
 
 static func claims_record(record: Dictionary) -> bool:
 	return str(record.get("object_key", "")) in [WALL_KEY, ROOF_KEY]
@@ -91,7 +93,12 @@ static func _build_pair(wall: Dictionary, roof: Dictionary, neutral_wall: Standa
 	var roof_mesh := wall_root.get_node(ROOF_MESH) as MeshInstance3D
 	wall_root.remove_child(roof_mesh); roof_root.add_child(roof_mesh)
 	var roof_body := StaticBody3D.new(); roof_body.name="Collision"
-	roof_body.add_child(source_roof_shape); roof_root.add_child(roof_body)
+	roof_body.add_child(source_roof_shape)
+	var added_roof_shape:=original.get_node("PublicPitchedRoofSolid") as CollisionShape3D
+	original.remove_child(added_roof_shape);roof_body.add_child(added_roof_shape)
+	for mesh_name:String in ADDED_ROOF_MESHES:
+		var added:=wall_root.get_node(NodePath(mesh_name)) as MeshInstance3D;wall_root.remove_child(added);roof_root.add_child(added)
+	roof_root.add_child(roof_body)
 	# Source1308 already has accepted clockwise roof order: no winding edit here.
 	original.name="Collision"
 	_configure_body(original, WALL_KEY, true)
@@ -99,14 +106,14 @@ static func _build_pair(wall: Dictionary, roof: Dictionary, neutral_wall: Standa
 	for index in original.get_child_count():
 		var shape_node := original.get_child(index) as CollisionShape3D
 		_configure_shape(shape_node, WALL_KEY, "building_wall" if index==0 else "none")
-	_configure_shape(source_roof_shape, ROOF_KEY, "none")
+	for child:Node in roof_body.get_children():_configure_shape(child as CollisionShape3D, ROOF_KEY, "none")
 	_apply_metadata(wall_root, roof_root)
-	var meta := {"adapter_id":ADAPTER_ID,"factory_calls":1,"candidate_recognition_credit":0,"accepted_recognition_metric":"11/213","historical_source_world_metric":"10/213","recognition_accepted":false,"production_review":"pending","partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.TARGET_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate(),"source_geometry_sha256":FACTORY.SOURCE_GEOMETRY_SHA256}
+	var meta := {"adapter_id":ADAPTER_ID,"factory_calls":1,"candidate_recognition_credit":0,"accepted_recognition_metric":"13/213","historical_live_capture_metric":"11/213","historical_source_world_metric":"10/213","recognition_accepted":false,"production_review":"pending","partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.TARGET_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate(),"source_geometry_sha256":FACTORY.SOURCE_GEOMETRY_SHA256}
 	for root:Node3D in [wall_root,roof_root]:root.set_meta("d5_1308_gateview_live_replacement",meta.duplicate(true))
-	return {"ok":true,"wall_result":{"ok":true,"node":wall_root,"metadata":meta,"mesh_instances":7,"surfaces":7,"triangles":2540,"static_bodies":1,"shapes":3},"roof_result":{"ok":true,"node":roof_root,"metadata":meta,"mesh_instances":1,"surfaces":1,"triangles":22,"static_bodies":1,"shapes":1}}
+	return {"ok":true,"wall_result":{"ok":true,"node":wall_root,"metadata":meta,"mesh_instances":14,"surfaces":14,"triangles":3469,"static_bodies":1,"shapes":4},"roof_result":{"ok":true,"node":roof_root,"metadata":meta,"mesh_instances":3,"surfaces":3,"triangles":1402,"static_bodies":1,"shapes":2}}
 
 static func _factory_contract_matches(root: Node3D, result: Dictionary) -> bool:
-	if int(result.get("mesh_instances",-1))!=8 or int(result.get("surfaces",-1))!=8 or int(result.get("visual_triangles",-1))!=2562 or int(result.get("static_bodies",-1))!=1 or int(result.get("shapes",-1))!=4 or int(result.get("collision_triangles",-1))!=426: return false
+	if int(result.get("mesh_instances",-1))!=17 or int(result.get("surfaces",-1))!=17 or int(result.get("visual_triangles",-1))!=4871 or int(result.get("static_bodies",-1))!=1 or int(result.get("shapes",-1))!=6 or int(result.get("collision_triangles",-1))!=2598: return false
 	var seen := {}
 	for child:Node in root.get_children():
 		if child is MeshInstance3D:
@@ -114,11 +121,11 @@ static func _factory_contract_matches(root: Node3D, result: Dictionary) -> bool:
 			if not EXPECTED_BATCH_TRIANGLES.has(str(child.name)) or mesh==null or mesh.get_surface_count()!=1 or mesh.surface_get_array_index_len(0)/3!=int(EXPECTED_BATCH_TRIANGLES[str(child.name)]): return false
 			seen[str(child.name)] = true
 	var body := root.get_node_or_null("ExactFootprintStructuralCollision_NoSprayOwnership") as StaticBody3D
-	if seen.size()!=8 or body==null or body.get_child_count()!=4 or body.collision_layer!=1: return false
-	var labels := ["ExactClosedSourceWalls","ExactSourceNeutralRoof","RealGableCanopiesAndPosts","GroundFlushSupportSlabs"]
-	var counts := [68,22,240,96]
-	var mesh_groups := [WALL_MESHES,[ROOF_MESH],STRUCTURE_MESHES,PAD_MESHES]
-	for index in 4:
+	if seen.size()!=17 or body==null or body.get_child_count()!=6 or body.collision_layer!=1: return false
+	var labels := ["ExactClosedSourceWalls","ExactSourceNeutralRoof","RealGableCanopiesAndPosts","GroundFlushSupportSlabs","ClosedLowerModules","PublicPitchedRoofSolid"]
+	var counts := [68,22,240,96,792,1380]
+	var mesh_groups := [WALL_MESHES,[ROOF_MESH],STRUCTURE_MESHES,PAD_MESHES,LOWER_MESHES,ADDED_ROOF_MESHES]
+	for index in 6:
 		var node := body.get_child(index) as CollisionShape3D
 		if node==null or str(node.name)!=str(labels[index]) or not (node.shape is ConcavePolygonShape3D): return false
 		var faces := (node.shape as ConcavePolygonShape3D).get_faces()

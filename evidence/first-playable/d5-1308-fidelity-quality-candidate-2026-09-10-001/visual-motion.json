@@ -1,0 +1,818 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Sampled original native pixels with exact AVI payload offsets",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/ced3b63612b1d9b7e25b/motion-finalization.json",
+      "sha256": "ced3b63612b1d9b7e25b12f54da146dcb6e3eab2c33bd40d2346fb7654454cc0",
+      "bytes": 310789,
+      "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-004/roof-mechanics-motion-001/motion-finalization.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/abd32c5b9e7b1f768719/REVIEW.json",
+      "sha256": "abd32c5b9e7b1f768719c168030d0ab40868fc7632507bda75a18ee7183d7460",
+      "bytes": 21712,
+      "original_locator": "{TASK_ROOT}/work/1308-fidelity-independent-visual-004/motion-001/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "movie": {
+      "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/1308-roof-and-context-motion.avi",
+      "sha256": "6b604d691ebb0d14edf4edccbfaeaa6b9eda66a731c2509e9035197c33cccc6c",
+      "physical_bytes": 32770758,
+      "riff_declared_end": 32770688,
+      "microseconds_per_frame": 16666,
+      "total_frames": 556,
+      "width": 1280,
+      "height": 800
+    },
+    "selection": "Nine evenly spread encoded indices selected from the recorded ground-motion draw interval; original payload content must be inspected, especially reversals and held endpoint. Native process/physics/draw/AVI indices remain distinct; no equality or continuous-playback claim. Roof motion has five separate original phase PNGs and the full native AVI.",
+    "images": [
+      {
+        "path": "images/current004-roof-motion/01-added-roof-landed.png",
+        "sha256": "cd29880d7633eb9c2e78c83990676b85be4ce91ccd77a9a25ad09e0deba48f28",
+        "bytes": 391519,
+        "role": "current004_roof_phase_native",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/cd29880d7633eb9c2e78/01-added-roof-landed.png",
+          "sha256": "cd29880d7633eb9c2e78c83990676b85be4ce91ccd77a9a25ad09e0deba48f28",
+          "bytes": 391519,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/01-added-roof-landed.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "id": "01-added-roof-landed",
+          "process_counter": 155,
+          "physics_counter": 156,
+          "drawn_counter": 155,
+          "camera": [
+            -501.271423339844,
+            10.9319715499878,
+            -75.8667373657227
+          ],
+          "camera_forward": [
+            0.891311705112457,
+            -4.44089209850063e-16,
+            -0.453391045331955
+          ],
+          "pixel_scope": "Latest completed framebuffer near this actual phase marker; separate draw/physics indices, no same-frame equivalence or continuous-playback claim."
+        }
+      },
+      {
+        "path": "images/current004-roof-motion/02-added-to-source-seam.png",
+        "sha256": "055d6f83163e8445e598ae2126712c81bff2710ea42179e6399a1481149e9f43",
+        "bytes": 289890,
+        "role": "current004_roof_phase_native",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/055d6f83163e8445e598/02-added-to-source-seam.png",
+          "sha256": "055d6f83163e8445e598ae2126712c81bff2710ea42179e6399a1481149e9f43",
+          "bytes": 289890,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/02-added-to-source-seam.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "id": "02-added-to-source-seam",
+          "process_counter": 225,
+          "physics_counter": 226,
+          "drawn_counter": 225,
+          "camera": [
+            -497.477172851562,
+            10.2514753341675,
+            -77.8416519165039
+          ],
+          "camera_forward": [
+            0.891311705112457,
+            -4.44089209850063e-16,
+            -0.453391045331955
+          ],
+          "pixel_scope": "Latest completed framebuffer near this actual phase marker; separate draw/physics indices, no same-frame equivalence or continuous-playback claim."
+        }
+      },
+      {
+        "path": "images/current004-roof-motion/03-source-turnaround-settled.png",
+        "sha256": "9c04a0ea6bb6e1fe488cdcba2a7230e5b6cdba6334ebda6d9b3a43ccf2f818b3",
+        "bytes": 323478,
+        "role": "current004_roof_phase_native",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/9c04a0ea6bb6e1fe488c/03-source-turnaround-settled.png",
+          "sha256": "9c04a0ea6bb6e1fe488cdcba2a7230e5b6cdba6334ebda6d9b3a43ccf2f818b3",
+          "bytes": 323478,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/03-source-turnaround-settled.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "id": "03-source-turnaround-settled",
+          "process_counter": 263,
+          "physics_counter": 264,
+          "drawn_counter": 263,
+          "camera": [
+            -496.871337890625,
+            10.2514753341675,
+            -78.1105651855469
+          ],
+          "camera_forward": [
+            0.891311705112457,
+            -4.44089209850063e-16,
+            -0.453391045331955
+          ],
+          "pixel_scope": "Latest completed framebuffer near this actual phase marker; separate draw/physics indices, no same-frame equivalence or continuous-playback claim."
+        }
+      },
+      {
+        "path": "images/current004-roof-motion/04-source-to-added-seam.png",
+        "sha256": "36b4c10dc6cf29d96eb8f93e02e8d28ab5d9f57ad1ae0d760e140cb4e7e142b0",
+        "bytes": 284585,
+        "role": "current004_roof_phase_native",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/36b4c10dc6cf29d96eb8/04-source-to-added-seam.png",
+          "sha256": "36b4c10dc6cf29d96eb8f93e02e8d28ab5d9f57ad1ae0d760e140cb4e7e142b0",
+          "bytes": 284585,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/04-source-to-added-seam.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "id": "04-source-to-added-seam",
+          "process_counter": 278,
+          "physics_counter": 279,
+          "drawn_counter": 278,
+          "camera": [
+            -497.574768066406,
+            10.2667474746704,
+            -77.7004928588867
+          ],
+          "camera_forward": [
+            0.891311705112457,
+            -4.44089209850063e-16,
+            -0.453391045331955
+          ],
+          "pixel_scope": "Latest completed framebuffer near this actual phase marker; separate draw/physics indices, no same-frame equivalence or continuous-playback claim."
+        }
+      },
+      {
+        "path": "images/current004-roof-motion/05-added-return-settled.png",
+        "sha256": "106f201a7cd51c075309cff409cc0799374b9ca3ade8346b230d823907750e22",
+        "bytes": 412104,
+        "role": "current004_roof_phase_native",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/106f201a7cd51c075309/05-added-return-settled.png",
+          "sha256": "106f201a7cd51c075309cff409cc0799374b9ca3ade8346b230d823907750e22",
+          "bytes": 412104,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/05-added-return-settled.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "id": "05-added-return-settled",
+          "process_counter": 377,
+          "physics_counter": 378,
+          "drawn_counter": 377,
+          "camera": [
+            -501.420013427734,
+            10.8537149429321,
+            -75.7842407226562
+          ],
+          "camera_forward": [
+            0.891311705112457,
+            -4.44089209850063e-16,
+            -0.453391045331955
+          ],
+          "pixel_scope": "Latest completed framebuffer near this actual phase marker; separate draw/physics indices, no same-frame equivalence or continuous-playback claim."
+        }
+      },
+      {
+        "path": "images/current004-ground-motion/motion-endpoint.png",
+        "sha256": "dea40835fdd10ec83ded37c14cd79360dfbeb1d6606fdb93d22c6801f70444b2",
+        "bytes": 798374,
+        "role": "current004_ground_endpoint_after_input",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/dea40835fdd10ec83ded/motion-endpoint.png",
+          "sha256": "dea40835fdd10ec83ded37c14cd79360dfbeb1d6606fdb93d22c6801f70444b2",
+          "bytes": 798374,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/motion-endpoint.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "frames": [
+            {
+              "process_counter": 552,
+              "physics_counter": 553,
+              "drawn_counter": 552,
+              "position": [
+                -503.035949707031,
+                2.02961874008179,
+                -56.1881446838379
+              ]
+            },
+            {
+              "process_counter": 553,
+              "physics_counter": 554,
+              "drawn_counter": 553,
+              "position": [
+                -503.035949707031,
+                2.02961874008179,
+                -56.1881446838379
+              ]
+            },
+            {
+              "process_counter": 554,
+              "physics_counter": 555,
+              "drawn_counter": 554,
+              "position": [
+                -503.035949707031,
+                2.02961874008179,
+                -56.1881446838379
+              ]
+            }
+          ],
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/motion-endpoint.png",
+          "sha256": "dea40835fdd10ec83ded37c14cd79360dfbeb1d6606fdb93d22c6801f70444b2",
+          "controller_disabled_after_input": true,
+          "transform_writes": 0,
+          "world_present_before_teardown": true
+        }
+      },
+      {
+        "path": "images/current004-avi/avi-index-0431.jpg",
+        "sha256": "659c1d57ee6ada4a747c2f36c7d98308b5fa4219ab552080892842a543aa5a05",
+        "bytes": 67744,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/659c1d57ee6ada4a747c/avi-index-0431.jpg",
+          "sha256": "659c1d57ee6ada4a747c2f36c7d98308b5fa4219ab552080892842a543aa5a05",
+          "bytes": 67744,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0431.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6b604d691ebb0d14edf4/1308-roof-and-context-motion.avi",
+            "sha256": "6b604d691ebb0d14edf4edccbfaeaa6b9eda66a731c2509e9035197c33cccc6c",
+            "bytes": 32770758,
+            "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/1308-roof-and-context-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 431,
+          "original_payload_offset": 23887182,
+          "bytes": 67744,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/current004-avi/avi-index-0446.jpg",
+        "sha256": "e5f72c4b0d8f5ba4dbf83a92dd5e479f2790e94ed131b0b0ef0e6a1fcf9e9940",
+        "bytes": 67006,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/e5f72c4b0d8f5ba4dbf8/avi-index-0446.jpg",
+          "sha256": "e5f72c4b0d8f5ba4dbf83a92dd5e479f2790e94ed131b0b0ef0e6a1fcf9e9940",
+          "bytes": 67006,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0446.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6b604d691ebb0d14edf4/1308-roof-and-context-motion.avi",
+            "sha256": "6b604d691ebb0d14edf4edccbfaeaa6b9eda66a731c2509e9035197c33cccc6c",
+            "bytes": 32770758,
+            "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/1308-roof-and-context-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 446,
+          "original_payload_offset": 24942908,
+          "bytes": 67006,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/current004-avi/avi-index-0461.jpg",
+        "sha256": "46ce72baeda0730a161551c34e9083a3b08d260ea5545905c9bec4ea94a7bbbc",
+        "bytes": 66917,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/46ce72baeda0730a1615/avi-index-0461.jpg",
+          "sha256": "46ce72baeda0730a161551c34e9083a3b08d260ea5545905c9bec4ea94a7bbbc",
+          "bytes": 66917,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0461.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6b604d691ebb0d14edf4/1308-roof-and-context-motion.avi",
+            "sha256": "6b604d691ebb0d14edf4edccbfaeaa6b9eda66a731c2509e9035197c33cccc6c",
+            "bytes": 32770758,
+            "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/1308-roof-and-context-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 461,
+          "original_payload_offset": 25998200,
+          "bytes": 66917,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/current004-avi/avi-index-0476.jpg",
+        "sha256": "a20cf41e195d048b4ec730b6686473fb070d5cb6f2e737c6950d4778ef7d9cd0",
+        "bytes": 68792,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/a20cf41e195d048b4ec7/avi-index-0476.jpg",
+          "sha256": "a20cf41e195d048b4ec730b6686473fb070d5cb6f2e737c6950d4778ef7d9cd0",
+          "bytes": 68792,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0476.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6b604d691ebb0d14edf4/1308-roof-and-context-motion.avi",
+            "sha256": "6b604d691ebb0d14edf4edccbfaeaa6b9eda66a731c2509e9035197c33cccc6c",
+            "bytes": 32770758,
+            "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/1308-roof-and-context-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 476,
+          "original_payload_offset": 27066704,
+          "bytes": 68792,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/current004-avi/avi-index-0491.jpg",
+        "sha256": "776e554c05aeda0f70bee4f074dfc4a37114e7e8f0ec4ee5c58b5ce07c75ab93",
+        "bytes": 69172,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/776e554c05aeda0f70be/avi-index-0491.jpg",
+          "sha256": "776e554c05aeda0f70bee4f074dfc4a37114e7e8f0ec4ee5c58b5ce07c75ab93",
+          "bytes": 69172,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0491.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6b604d691ebb0d14edf4/1308-roof-and-context-motion.avi",
+            "sha256": "6b604d691ebb0d14edf4edccbfaeaa6b9eda66a731c2509e9035197c33cccc6c",
+            "bytes": 32770758,
+            "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/1308-roof-and-context-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 491,
+          "original_payload_offset": 28149980,
+          "bytes": 69172,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/current004-avi/avi-index-0506.jpg",
+        "sha256": "f39d15c78893e8c150746963057688d640b4b02db6cd0fa85f5ebd32f2354177",
+        "bytes": 69306,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/f39d15c78893e8c15074/avi-index-0506.jpg",
+          "sha256": "f39d15c78893e8c150746963057688d640b4b02db6cd0fa85f5ebd32f2354177",
+          "bytes": 69306,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0506.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6b604d691ebb0d14edf4/1308-roof-and-context-motion.avi",
+            "sha256": "6b604d691ebb0d14edf4edccbfaeaa6b9eda66a731c2509e9035197c33cccc6c",
+            "bytes": 32770758,
+            "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/1308-roof-and-context-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 506,
+          "original_payload_offset": 29237334,
+          "bytes": 69306,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/current004-avi/avi-index-0521.jpg",
+        "sha256": "4d914ad43535ad25ba41b8cd10dd74323bcac0cad04dafdf56e80b4b03635209",
+        "bytes": 69173,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/4d914ad43535ad25ba41/avi-index-0521.jpg",
+          "sha256": "4d914ad43535ad25ba41b8cd10dd74323bcac0cad04dafdf56e80b4b03635209",
+          "bytes": 69173,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0521.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6b604d691ebb0d14edf4/1308-roof-and-context-motion.avi",
+            "sha256": "6b604d691ebb0d14edf4edccbfaeaa6b9eda66a731c2509e9035197c33cccc6c",
+            "bytes": 32770758,
+            "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/1308-roof-and-context-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 521,
+          "original_payload_offset": 30323896,
+          "bytes": 69173,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/current004-avi/avi-index-0536.jpg",
+        "sha256": "4bb9426e437c7fe7dc05113cf0bbdc7123a2bc3473d478d7d2dddd4339601cb0",
+        "bytes": 67283,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/4bb9426e437c7fe7dc05/avi-index-0536.jpg",
+          "sha256": "4bb9426e437c7fe7dc05113cf0bbdc7123a2bc3473d478d7d2dddd4339601cb0",
+          "bytes": 67283,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0536.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6b604d691ebb0d14edf4/1308-roof-and-context-motion.avi",
+            "sha256": "6b604d691ebb0d14edf4edccbfaeaa6b9eda66a731c2509e9035197c33cccc6c",
+            "bytes": 32770758,
+            "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/1308-roof-and-context-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 536,
+          "original_payload_offset": 31397004,
+          "bytes": 67283,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/current004-avi/avi-index-0551.jpg",
+        "sha256": "b21f8e3772541ed3c5ea9a24df62c6c356379eb8456f5cd6368dff103e8a009b",
+        "bytes": 67162,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/b21f8e3772541ed3c5ea/avi-index-0551.jpg",
+          "sha256": "b21f8e3772541ed3c5ea9a24df62c6c356379eb8456f5cd6368dff103e8a009b",
+          "bytes": 67162,
+          "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0551.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6b604d691ebb0d14edf4/1308-roof-and-context-motion.avi",
+            "sha256": "6b604d691ebb0d14edf4edccbfaeaa6b9eda66a731c2509e9035197c33cccc6c",
+            "bytes": 32770758,
+            "original_locator": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/1308-roof-and-context-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 551,
+          "original_payload_offset": 32451610,
+          "bytes": 67162,
+          "physics_index_mapping_claimed": false
+        }
+      }
+    ],
+    "independent_visual_review": {
+      "reviewer": "review_1439_package",
+      "reviewed_utc": "2026-09-10T13:55:34.848226+00:00",
+      "decision": "PASS",
+      "decision_scope": "1308 fidelity004 sampled roof-phase and ground-strafe visual observations only",
+      "whole_unit_acceptance": false,
+      "independent_mechanics_verdict": null,
+      "smallest_action": "No additional visual correction or capture is warranted by this bounded sample. Retain the stated occlusion, reference and temporal limits and use the separate technical verdict for support/collision.",
+      "findings": [
+        {
+          "scope": "Five roof phase PNGs",
+          "finding": "Visible added gray planes and retained dark source surface remain present, with straight material boundaries and no obvious open hole or collapsed plane. The steep foreground lip hides the capsule base in02-added-to-source-seam and04-source-to-added-seam; stills do not establish contact or penetration. Settled01/03/05 show the capsule body clearly. The abrupt dark/textured retained-source versus light-gray added-roof appearance is disclosed, not recast as newly referenced hidden-roof fidelity."
+        },
+        {
+          "scope": "Nine ground-strafe AVI payloads and held endpoint",
+          "finding": "The public roof bands, straight eaves, pale canopy fronts, gray tops, lower openings, connected paving and green lawn fields persist as the camera moves laterally. No recurring broad split/streak in the fascia, disappearing surface or conspicuous player fall is visible in the inspected samples. Thin diagonal edges show ordinary pixel stepping; these sparse samples do not establish absence of flicker between them. The endpoint retains the world."
+        },
+        {
+          "scope": "Reference and inherited static result",
+          "finding": "The accepted004 static public-form judgment remains applicable within its stated limits. The reference is March2025 pano zO-a_ZQWv5tAHydoH3VsFQ heading19, with nearby1307 UI label and recorded1308/w95934123 WSW/SSE association; cameras differ. The roof-travel view exposes retained/protected surfaces not established by those reference pixels. No new hidden-roof schedule, exact dimensions, material-complete hidden roof or whole-unit fidelity is inferred."
+        }
+      ],
+      "limits": [
+        "Five roof PNGs are latest completed framebuffer images near phase markers, with separate drawn/process/physics counters; no exact same-frame contact-to-pixel claim.",
+        "AVI includes startup and roof motion, then a separately placed/aimed ground phase. It is not proof of one uninterrupted stock route from roof to street.",
+        "Ground telemetry records120 input frames,7.05004367232323m planar path and0.191548436880112m net displacement; these are owner telemetry, not pixel-derived or an exact-return claim.",
+        "Nine selected encoded indices are not asserted equal to input/process/physics/drawn indices. Review is sampled, not continuous playback or a claim of frame-perfect stability.",
+        "AVI is556 frames1280x800 with16666 microseconds/frame metadata; physical EOF exceeds declared RIFF end by70 bytes. No generic-player compatibility or conforming-container claim.",
+        "Current invocation exit0 does not erase historical rawFAILs, including the earlier roof contact failure and current pre-braking return empty slide-contact array. Source, contact, collision and movement acceptance belong to the separate technical reviewer.",
+        "No new changed-light motion, release app, authority update or whole-unit acceptance; current13/213 remains unchanged."
+      ],
+      "bindings": {
+        "{TASK_ROOT}/work/1308-fidelity-revision-004/roof-mechanics-motion-001/OWNER_HANDOFF.md": "f8aea91be1ddba22d20f08285ad50b8dfb4cc86fabbe07f78f9c0bd5c44c0be5",
+        "{TASK_ROOT}/work/1308-fidelity-revision-004/roof-mechanics-motion-001/OWNER_HANDOFF.json": "7aadb39fb8293cb2626d81cb0922dcf493dfed6fe44ab27e01a538e8237bce2b",
+        "{TASK_ROOT}/work/1308-fidelity-revision-004/roof-mechanics-motion-001/motion-finalization.json": "ced3b63612b1d9b7e25b12f54da146dcb6e3eab2c33bd40d2346fb7654454cc0",
+        "{TASK_ROOT}/work/1308-fidelity-revision-004/roof-mechanics-motion-001/copy-inventory.json": "2cb8dab134ef28de3847b49250d75e1e9db9bb210694e99508ec5527abc3ec33",
+        "{TASK_ROOT}/work/1308-fidelity-revision-004/roof-mechanics-motion-001/SLOT_RELEASE.json": "34cf82ccb4cd61e7e34225c0dcaa001437a873ee30183a2a1cdb993a0c0e8236",
+        "{TASK_ROOT}/work/1308-fidelity-revision-004/roof-mechanics-motion-001/roof-motion-001-result.json": "5bd2b608b71231d38d2877a4d6ef128cfbe4653f7a62a90cf2912cb4539aed3c",
+        "{TASK_ROOT}/work/1308-fidelity-revision-004/roof-mechanics-motion-001/roof-motion-001-execution.json": "cbf2d09a9df0d3108108baeb6bc43757c24d0d6ba25fb85b1e991eb509631502",
+        "{TASK_ROOT}/work/1308-fidelity-revision-004/roof-mechanics-motion-001/source-pins.json": "f0108156c2f5fab426fcb7fe9799b2c74488eca6a4f1a8c85f550e6d0e63b7d9",
+        "{TASK_ROOT}/work/1308-fidelity-independent-visual-004/REVIEW.md": "b96a504f0c1faf2e282690cb8392e44235b477e845a45beef09b05aaaf589fb1",
+        "{TASK_ROOT}/work/1308-fidelity-independent-visual-004/REVIEW.json": "2a216f7320b50f409c30403e8a6a4ce8f7e548d4d290a17d3f3993de0231a668",
+        "{PRIVATE_TMP}/1308-1394-streetview-comparison-b2l4EG/1308-streetview-march-2025.png": "20524a65db7cd5c74545a74d628df6053b2c41988c31fa1ab394b250ae3659fd",
+        "{CODE_ROOT}/treasure-island/LEARNINGS.md": "324a03b41206ffe7d438b0fd1e192dfbcf8399468f8f23ce664984ba59ae0693",
+        "{TASK_ROOT}/outputs/1308-fidelity-revision-004/03-canopy-void-near-default-current.png": "f980755b7aa53a648665ed533dac010988bb7b1de6b4d8a2035cc32ceb089938"
+      },
+      "source_binding": {
+        "entries": 429,
+        "status": "Owner terminal receipt reports exact; map hash bound here. No repeated full source audit."
+      },
+      "inspected_roof_PNGs": [
+        {
+          "id": "01-added-roof-landed",
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/01-added-roof-landed.png",
+          "sha256": "cd29880d7633eb9c2e78c83990676b85be4ce91ccd77a9a25ad09e0deba48f28",
+          "process_counter": 155,
+          "physics_counter": 156,
+          "drawn_counter": 155,
+          "pixel_scope": "Latest completed framebuffer near this actual phase marker; separate draw/physics indices, no same-frame equivalence or continuous-playback claim."
+        },
+        {
+          "id": "02-added-to-source-seam",
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/02-added-to-source-seam.png",
+          "sha256": "055d6f83163e8445e598ae2126712c81bff2710ea42179e6399a1481149e9f43",
+          "process_counter": 225,
+          "physics_counter": 226,
+          "drawn_counter": 225,
+          "pixel_scope": "Latest completed framebuffer near this actual phase marker; separate draw/physics indices, no same-frame equivalence or continuous-playback claim."
+        },
+        {
+          "id": "03-source-turnaround-settled",
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/03-source-turnaround-settled.png",
+          "sha256": "9c04a0ea6bb6e1fe488cdcba2a7230e5b6cdba6334ebda6d9b3a43ccf2f818b3",
+          "process_counter": 263,
+          "physics_counter": 264,
+          "drawn_counter": 263,
+          "pixel_scope": "Latest completed framebuffer near this actual phase marker; separate draw/physics indices, no same-frame equivalence or continuous-playback claim."
+        },
+        {
+          "id": "04-source-to-added-seam",
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/04-source-to-added-seam.png",
+          "sha256": "36b4c10dc6cf29d96eb8f93e02e8d28ab5d9f57ad1ae0d760e140cb4e7e142b0",
+          "process_counter": 278,
+          "physics_counter": 279,
+          "drawn_counter": 278,
+          "pixel_scope": "Latest completed framebuffer near this actual phase marker; separate draw/physics indices, no same-frame equivalence or continuous-playback claim."
+        },
+        {
+          "id": "05-added-return-settled",
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/05-added-return-settled.png",
+          "sha256": "106f201a7cd51c075309cff409cc0799374b9ca3ade8346b230d823907750e22",
+          "process_counter": 377,
+          "physics_counter": 378,
+          "drawn_counter": 377,
+          "pixel_scope": "Latest completed framebuffer near this actual phase marker; separate draw/physics indices, no same-frame equivalence or continuous-playback claim."
+        }
+      ],
+      "inspected_original_AVI_payloads": [
+        {
+          "zero_based_avi_index": 431,
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0431.jpg",
+          "sha256": "659c1d57ee6ada4a747c2f36c7d98308b5fa4219ab552080892842a543aa5a05",
+          "byte_offset": 23887182,
+          "bytes": 67744,
+          "kind": "Exact original native MJPEG payload; no decode/re-encode"
+        },
+        {
+          "zero_based_avi_index": 446,
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0446.jpg",
+          "sha256": "e5f72c4b0d8f5ba4dbf83a92dd5e479f2790e94ed131b0b0ef0e6a1fcf9e9940",
+          "byte_offset": 24942908,
+          "bytes": 67006,
+          "kind": "Exact original native MJPEG payload; no decode/re-encode"
+        },
+        {
+          "zero_based_avi_index": 461,
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0461.jpg",
+          "sha256": "46ce72baeda0730a161551c34e9083a3b08d260ea5545905c9bec4ea94a7bbbc",
+          "byte_offset": 25998200,
+          "bytes": 66917,
+          "kind": "Exact original native MJPEG payload; no decode/re-encode"
+        },
+        {
+          "zero_based_avi_index": 476,
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0476.jpg",
+          "sha256": "a20cf41e195d048b4ec730b6686473fb070d5cb6f2e737c6950d4778ef7d9cd0",
+          "byte_offset": 27066704,
+          "bytes": 68792,
+          "kind": "Exact original native MJPEG payload; no decode/re-encode"
+        },
+        {
+          "zero_based_avi_index": 491,
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0491.jpg",
+          "sha256": "776e554c05aeda0f70bee4f074dfc4a37114e7e8f0ec4ee5c58b5ce07c75ab93",
+          "byte_offset": 28149980,
+          "bytes": 69172,
+          "kind": "Exact original native MJPEG payload; no decode/re-encode"
+        },
+        {
+          "zero_based_avi_index": 506,
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0506.jpg",
+          "sha256": "f39d15c78893e8c150746963057688d640b4b02db6cd0fa85f5ebd32f2354177",
+          "byte_offset": 29237334,
+          "bytes": 69306,
+          "kind": "Exact original native MJPEG payload; no decode/re-encode"
+        },
+        {
+          "zero_based_avi_index": 521,
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0521.jpg",
+          "sha256": "4d914ad43535ad25ba41b8cd10dd74323bcac0cad04dafdf56e80b4b03635209",
+          "byte_offset": 30323896,
+          "bytes": 69173,
+          "kind": "Exact original native MJPEG payload; no decode/re-encode"
+        },
+        {
+          "zero_based_avi_index": 536,
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0536.jpg",
+          "sha256": "4bb9426e437c7fe7dc05113cf0bbdc7123a2bc3473d478d7d2dddd4339601cb0",
+          "byte_offset": 31397004,
+          "bytes": 67283,
+          "kind": "Exact original native MJPEG payload; no decode/re-encode"
+        },
+        {
+          "zero_based_avi_index": 551,
+          "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0551.jpg",
+          "sha256": "b21f8e3772541ed3c5ea9a24df62c6c356379eb8456f5cd6368dff103e8a009b",
+          "byte_offset": 32451610,
+          "bytes": 67162,
+          "kind": "Exact original native MJPEG payload; no decode/re-encode"
+        }
+      ],
+      "inspected_held_endpoint": {
+        "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/motion-endpoint.png",
+        "sha256": "dea40835fdd10ec83ded37c14cd79360dfbeb1d6606fdb93d22c6801f70444b2",
+        "world_present_before_teardown": true
+      },
+      "movie": {
+        "path": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/1308-roof-and-context-motion.avi",
+        "sha256": "6b604d691ebb0d14edf4edccbfaeaa6b9eda66a731c2509e9035197c33cccc6c",
+        "physical_bytes": 32770758,
+        "riff_declared_end": 32770688,
+        "microseconds_per_frame": 16666,
+        "total_frames": 556,
+        "width": 1280,
+        "height": 800
+      },
+      "durable_media": [
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/1308-roof-and-context-motion.avi",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/1308-roof-and-context-motion.avi",
+          "sha256": "6b604d691ebb0d14edf4edccbfaeaa6b9eda66a731c2509e9035197c33cccc6c"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/motion-endpoint.png",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/motion-endpoint.png",
+          "sha256": "dea40835fdd10ec83ded37c14cd79360dfbeb1d6606fdb93d22c6801f70444b2"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/01-added-roof-landed.png",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/roof-keyframes/01-added-roof-landed.png",
+          "sha256": "cd29880d7633eb9c2e78c83990676b85be4ce91ccd77a9a25ad09e0deba48f28"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/02-added-to-source-seam.png",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/roof-keyframes/02-added-to-source-seam.png",
+          "sha256": "055d6f83163e8445e598ae2126712c81bff2710ea42179e6399a1481149e9f43"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/03-source-turnaround-settled.png",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/roof-keyframes/03-source-turnaround-settled.png",
+          "sha256": "9c04a0ea6bb6e1fe488cdcba2a7230e5b6cdba6334ebda6d9b3a43ccf2f818b3"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/04-source-to-added-seam.png",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/roof-keyframes/04-source-to-added-seam.png",
+          "sha256": "36b4c10dc6cf29d96eb8f93e02e8d28ab5d9f57ad1ae0d760e140cb4e7e142b0"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/roof-keyframes/05-added-return-settled.png",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/roof-keyframes/05-added-return-settled.png",
+          "sha256": "106f201a7cd51c075309cff409cc0799374b9ca3ade8346b230d823907750e22"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0431.jpg",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/avi-frame-samples/avi-index-0431.jpg",
+          "sha256": "659c1d57ee6ada4a747c2f36c7d98308b5fa4219ab552080892842a543aa5a05"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0446.jpg",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/avi-frame-samples/avi-index-0446.jpg",
+          "sha256": "e5f72c4b0d8f5ba4dbf83a92dd5e479f2790e94ed131b0b0ef0e6a1fcf9e9940"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0461.jpg",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/avi-frame-samples/avi-index-0461.jpg",
+          "sha256": "46ce72baeda0730a161551c34e9083a3b08d260ea5545905c9bec4ea94a7bbbc"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0476.jpg",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/avi-frame-samples/avi-index-0476.jpg",
+          "sha256": "a20cf41e195d048b4ec730b6686473fb070d5cb6f2e737c6950d4778ef7d9cd0"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0491.jpg",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/avi-frame-samples/avi-index-0491.jpg",
+          "sha256": "776e554c05aeda0f70bee4f074dfc4a37114e7e8f0ec4ee5c58b5ce07c75ab93"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0506.jpg",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/avi-frame-samples/avi-index-0506.jpg",
+          "sha256": "f39d15c78893e8c150746963057688d640b4b02db6cd0fa85f5ebd32f2354177"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0521.jpg",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/avi-frame-samples/avi-index-0521.jpg",
+          "sha256": "4d914ad43535ad25ba41b8cd10dd74323bcac0cad04dafdf56e80b4b03635209"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0536.jpg",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/avi-frame-samples/avi-index-0536.jpg",
+          "sha256": "4bb9426e437c7fe7dc05113cf0bbdc7123a2bc3473d478d7d2dddd4339601cb0"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1308-fidelity004-roof-motion-001/avi-frame-samples/avi-index-0551.jpg",
+          "durable": "{TASK_ROOT}/outputs/1308-fidelity-revision-004/roof-mechanics-motion-001/avi-frame-samples/avi-index-0551.jpg",
+          "sha256": "b21f8e3772541ed3c5ea9a24df62c6c356379eb8456f5cd6368dff103e8a009b"
+        }
+      ],
+      "independent_binding_checks": {
+        "all16_original_durable_bytes_exact": true,
+        "all9_JPEGs_equal_recorded_AVI_byte_slices": true,
+        "five_roof_and_endpoint_hashes_exact": true,
+        "physical_minus_declared_AVI_bytes": 70,
+        "no_pixel_reencoding": true,
+        "no_source_or_engine_mutation": true
+      },
+      "owner_terminal_receipt": {
+        "pid": 47228,
+        "exit_code": 0,
+        "elapsed_seconds": 25.923409708999998,
+        "fresh_absence_record": "{TASK_ROOT}/work/1308-fidelity-revision-004/roof-mechanics-motion-001/SLOT_RELEASE.json",
+        "independent_process_rerun": false
+      },
+      "retro": "review_1439_package — 1308 fidelity004 independent visual-motion review: Scoped sampled-motion PASS after direct inspection of five original roof phase PNGs, nine original AVI payloads431/446/461/476/491/506/521/536/551 and the held ground endpoint, alongside the accepted004 still and dated reference. No new visible surface collapse, fascia split/streak or obvious player fall was observed. Foreground roof occlusion hides the avatar base in seam02/04; those pixels establish neither penetration nor support. Retained dark source roof versus light-gray additions stays an explicit material boundary. Sixteen durable media copies and nine exact AVI slices match; raw historical failures and the70-byte container discrepancy remain. Roof markers use the latest completed framebuffer, and roof travel precedes separate ground placement/aim and120-input strafe; no exact counter mapping, continuous playback, independent mechanics or whole-unit credit is claimed. No new capture, product change or shared-log edit."
+    },
+    "limits": [
+      "1308 fidelity004 has two current static defaults, five affected-roof phase PNGs, nine exact original AVI payload samples and a held ground endpoint. Sampled visual PASS is not continuous playback or generic-player conformance.",
+      "150 no-input landing frames precede 222 travel/brake frames. All 222 are grounded; 70 lack upward slide contact. Settled source0 and added1 contacts are actual; the pre-braking return remains contact-empty. Rays are separate from contacts.",
+      "The 556-frame 1280x800 AVI retains 70 trailing bytes beyond its declared extent. PNG draw/physics counters differ by one; AVI indices are not mapped to physics counters. Ground motion follows separate placement, not a continuous roof-to-street route.",
+      "Original failures and prior scoped lower/apron evidence remain preserved; topology and mechanics reuse is grounded in the independent source report, not a relabeled earlier roof run.",
+      "Individual source-world captures are not combined-world or app pixels; actual batch source and owner package runs separately establish exact selected implementations and attachments.",
+      "Independent static and sampled-motion reviews retain their written scope. No continuous playback, hidden-roof schedule, manual-play or AVI/physics-index equivalence claim.",
+      "Original AVI files retain their70-byte declared/physical extent discrepancy. Exact payload copies do not establish generic-player conformance.",
+      "Independent app decision and seventh unit/packet/visual attestation are pending; historical reviews do not attest this newly assembled image tree.",
+      "Two current static PNGs, five roof-phase PNGs, one held ground endpoint and nine original AVI payloads. All222 travel/braking frames grounded but70 lack upward slide contact. Settled source0/added1 contacts are actual; the pre-braking return diagnostic remains false. Draw/physics counters differ by one; ground motion follows separate placement."
+    ]
+  },
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "inventory_physical_units": 213,
+    "credit_granted": false,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_exact_app_and_packet_attestation_pending": true
+  }
+}

@@ -8,19 +8,18 @@ behaves correctly as a continuous jetpack. The exact movement change in current
 source keeps walking at `4 m/s` and raises the same held-Shift run from
 `7 m/s` to `20 m/s` (about 45 mph), with a short acceleration/braking
 ramp. That change still needs ordinary-play feedback in the exact current
-package. Current authority is compiler `1.12.0`, catalog/registry v13 and contracts/loader v12, with **13/213** recognized physical buildings. 1308 and 1394 add one unit each; the prior eleven remain unchanged.
-Owner and independent current-package checks passed on the same app; its bytes and source were copied to main. [Current release closure](evidence/first-playable/d5-1308-1394-current-release-2026-09-10-001/release-closure.json). Publication readiness passed. Primary commit `001ab0acdd3f8e049060b409b3857f36d7b889f3` was pushed to private `origin/main` with remote equality verified. The exact no-argument app produced an owned onscreen native window and was then intentionally stopped; app/source bytes remained exact. Computer Use RPC failed and the direct observation was cancelled without a result, so pixels and current permission status are unavailable. No manual-input or M1 acceptance is claimed. [Observed publication and launch outcome](evidence/first-playable/d5-1308-1394-current-release-2026-09-10-001-PUBLICATION.json). The immutable upstream closure retains its earlier pending state. Both unit packets retain capture/candidate 11 and sampled motion. No technical result establishes owner acceptance on Apple M1 Pro.
+package. Current authority remains compiler `1.12.0`, catalog/registry v13 and contracts/loader v12, with **13/213** recognized physical buildings. The accepted 1308/1394 fidelity004 revisions add zero credit. Owner and independent package checks passed on the same exact app, measuring `735/1006/1021/79,913/466/474`. [Quality release closure](evidence/first-playable/d5-1308-1394-quality-current-release-2026-09-10-001/release-closure.json). Publication and an ordinary no-argument launch for these bytes are pending; earlier release outcomes remain historical. Source images retain their original sampled-motion limits. No technical result establishes owner acceptance on Apple M1 Pro.
 
 ## Start
 
-First quit any older game window (`Esc`, then `Q` while paused); macOS may otherwise focus a historical copy. The current app is
-`build/d5-1308-1394-exact-current-001/Treasure Island First Playable.app`.
-Use no launch arguments for owner play. The project selects the case-sensitive `Dummy` audio driver itself. Historical B1, D2 and candidate11 apps have separate identities.
+First quit any older game window (`Esc`, then `Q` while paused); macOS may otherwise focus a historical copy. The reviewed app is
+`build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app`.
+Use no launch arguments for owner play. The project selects the case-sensitive `Dummy` audio driver itself. Historical and candidate apps have separate identities.
 
-Executable SHA-256 `2dd0e797cf26365109293196c4a9f7e217b80c872832042bfdb63db3e4d7aad5` (`170,963,648` bytes),
-PCK SHA-256 `e3c5c529efc54be1af383cafba678a0130fbd2157524e4d8cf1e3217217de85f` (`66,881,616` bytes),
-seven-file bundle identity `2d61652aedcc14f4ddd4fdda0a458037758b5ae103cecf59aaa8b7a998159e6c`.
-The [current release closure](evidence/first-playable/d5-1308-1394-current-release-2026-09-10-001/release-closure.json) binds technical gates; the downstream outcome confirms primary publication and the owned ordinary window, with no pixels or manual input. Owner feedback stays pending against these bytes.
+Executable SHA-256 `996db8709cbad9bbbe085d54fa828574c03332e94e2cdeecd433482098d1be80` (`170,963,648` bytes),
+PCK SHA-256 `06f7e4778f791adbf512a16cd6e6900f288ea7d8c41ad53edafc85ad2a8c2be7` (`67,820,808` bytes),
+seven-file bundle identity `d6239ccdb089b01b6ce6839bf393de3ecf8c63f40167a26b79b68c6f73f91e27`.
+The [release closure](evidence/first-playable/d5-1308-1394-quality-current-release-2026-09-10-001/release-closure.json) binds the actual technical gates. Current app screenshots/manual input are not supplied by the smoke runs; owner feedback remains pending.
 
 ### Historical B225 package identity (not current playtest bytes)
 
@@ -73,7 +72,7 @@ Wait for the full-world loading panel to disappear. A center reticle means the v
 6. Spray an exterior building wall from close range. A source capture already proves one visible, upright, identity-matched eligible tag; confirm it in ordinary play and check that it does not bleed onto an adjacent surface. Try ground, roof, water/context, too-far, and empty-sky targets; each should reject without stopping movement. Pause/resume, toggle `F3`, and exit from the pause panel; relaunch once to confirm tags are session-only.
 
 Record a simple result against bundle identity
-`07fe27f678be4c7d71de77b42a79c6b8c46491034eb6c80a2b3e00eed097b4e6`:
+`d6239ccdb089b01b6ce6839bf393de3ecf8c63f40167a26b79b68c6f73f91e27`:
 `accepted`, or `blocked`
 with location, action, expected result, observed result, and (if useful) a
 screenshot. Acceptance requires both recognizable Treasure Island and a
@@ -85,8 +84,10 @@ alone is not enough.
 
 Close the app first. Exported apps are disposable only at their exact staging
 paths under `build/`, including the current
-`build/d2-1444-quality-v2-current-2026-09-09-001/`,
+`build/d5-1308-1394-quality-exact-current-001/`,
 the historical
+`build/d5-1308-1394-exact-current-001/`,
+`build/d2-1444-quality-v2-current-2026-09-09-001/`,
 `build/d2-1439-quality-v2-current-release-2026-09-09-001/`,
 `build/building-1-wing-returns-v2-current-2026-09-08-001/`,
 `build/d2-1441-postpromotion-v9-2026-09-07-001/`,

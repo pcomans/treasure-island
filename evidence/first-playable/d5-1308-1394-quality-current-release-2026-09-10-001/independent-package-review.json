@@ -1,0 +1,204 @@
+{
+  "derived_summary": true,
+  "original": {
+    "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/REVIEW.json",
+    "sha256": "69276ae13f001f0f9dcebf337e587997192d5b0b1367620cd32f2dc3158e4354",
+    "bytes": 23429
+  },
+  "original_md": {
+    "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/REVIEW.md",
+    "sha256": "94f327a22acac1c1e239b43d6ef4d7c12d147e9c9a4fb5a3c0c7f2368cd603bb",
+    "bytes": 4489
+  },
+  "record": {
+    "decision": "PASS",
+    "status": "INDEPENDENT_EXACT_CURRENT_QUALITY_PACKAGE_PASS",
+    "reviewer": "D / review_1303_source",
+    "sealed_at": "2026-09-10T16:59:00.055655+00:00",
+    "authority": "13/213",
+    "recognition_credit": 0,
+    "publication_performed": false,
+    "app": "{QUALITY_CHECKOUT}/build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app",
+    "app_pins": {
+      "{QUALITY_CHECKOUT}/build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app/Contents/Info.plist": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "{QUALITY_CHECKOUT}/build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable": "996db8709cbad9bbbe085d54fa828574c03332e94e2cdeecd433482098d1be80",
+      "{QUALITY_CHECKOUT}/build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "{QUALITY_CHECKOUT}/build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "{QUALITY_CHECKOUT}/build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck": "06f7e4778f791adbf512a16cd6e6900f288ea7d8c41ad53edafc85ad2a8c2be7",
+      "{QUALITY_CHECKOUT}/build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "{QUALITY_CHECKOUT}/build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources": "a187dad490d5b9e3f5aa9bf0eef39ef782436f10ceb2db94c900396878c00841"
+    },
+    "pck_sha256": "06f7e4778f791adbf512a16cd6e6900f288ea7d8c41ad53edafc85ad2a8c2be7",
+    "exe_sha256": "996db8709cbad9bbbe085d54fa828574c03332e94e2cdeecd433482098d1be80",
+    "stages": {
+      "mounted-component-001": {
+        "pid": 21515,
+        "started_at": "2026-09-10T16:55:56.276803+00:00",
+        "ended_at": "2026-09-10T16:55:58.855186+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 2.5774625419999997,
+        "status": "terminal",
+        "pid_absent": true,
+        "pins_unchanged": true,
+        "app_unchanged": true,
+        "log_errors": [],
+        "warnings": [],
+        "markers": {
+          "PASS: 1308+1394 mounted package contract": true
+        },
+        "ok": true,
+        "receipt_path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/mounted-component-001-execution.json",
+        "receipt_sha256": "44619051d023d288a2bf084593c77c1210a37e5d68eb5f01cb5aa3cf975d000b"
+      },
+      "mounted-privacy-001": {
+        "pid": 21648,
+        "started_at": "2026-09-10T16:56:05.541662+00:00",
+        "ended_at": "2026-09-10T16:56:07.584220+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 2.0415736250000003,
+        "status": "terminal",
+        "pid_absent": true,
+        "pins_unchanged": true,
+        "app_unchanged": true,
+        "log_errors": [],
+        "warnings": [],
+        "markers": {
+          "PASS: direct-mounted PCK matches the explicit package/world identities": true
+        },
+        "ok": true,
+        "receipt_path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/mounted-privacy-001-execution.json",
+        "receipt_sha256": "a8185d0eb8e005346fcebfa473ee888fcbcda0fd0cdd687d6d90072ed7572a28"
+      },
+      "release-headless-smoke-001": {
+        "pid": 21667,
+        "started_at": "2026-09-10T16:56:15.651402+00:00",
+        "ended_at": "2026-09-10T16:56:21.514588+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 5.862214917,
+        "status": "terminal",
+        "pid_absent": true,
+        "pins_unchanged": true,
+        "app_unchanged": true,
+        "log_errors": [],
+        "warnings": [],
+        "markers": {
+          "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent": true
+        },
+        "ok": true,
+        "receipt_path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/release-headless-smoke-001-execution.json",
+        "receipt_sha256": "208492f17479a89f77c340fa509223fc42e077a198c54fca5591ebe848d54ce9"
+      },
+      "release-native-smoke-001": {
+        "pid": 21691,
+        "started_at": "2026-09-10T16:56:27.082759+00:00",
+        "ended_at": "2026-09-10T16:56:34.032892+00:00",
+        "exit_code": 0,
+        "elapsed_seconds": 6.949250166000001,
+        "status": "terminal",
+        "pid_absent": true,
+        "pins_unchanged": true,
+        "app_unchanged": true,
+        "log_errors": [],
+        "warnings": [],
+        "markers": {
+          "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent": true
+        },
+        "ok": true,
+        "receipt_path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/release-native-smoke-001-execution.json",
+        "receipt_sha256": "9a280db718a0146c4580c11dee65c655ba97dc66881d947f7601f18c6baac93b"
+      }
+    },
+    "observed_lines": {
+      "mounted-component-001": [
+        "D2_1444_MOUNTED_COMPONENT: wall={ \"meshes\": 10, \"surfaces\": 10, \"triangles\": 716, \"bodies\": 1, \"shapes\": 2 } roof={ \"meshes\": 1, \"surfaces\": 1, \"triangles\": 10, \"bodies\": 1, \"shapes\": 1 } collision_triangles=64+40+10, material/metadata/roof-winding exact; actual builder target-record dispatch after supplied-chunk pair preflight; full exported main verified separately by supported --mac-export-smoke",
+        "D5_BATCH_PACKAGE_ATTACHMENT: unit=1308 wall=detached:D51308GateviewLiveWallReplacement roof=detached:D51308GateviewLiveRoofReplacement wall_counts={ \"meshes\": 14, \"surfaces\": 14, \"triangles\": 3469, \"bodies\": 1, \"shapes\": 4 } roof_counts={ \"meshes\": 3, \"surfaces\": 3, \"triangles\": 1402, \"bodies\": 1, \"shapes\": 2 } source_geometry=6028c89be31ebfd095777b86f6d5d4a9094002b7b5fd73efb2fc940f9a9f3917",
+        "D5_BATCH_PACKAGE_ATTACHMENT: unit=1394 wall=detached:D51394GateviewLiveWallReplacement roof=detached:D51394GateviewLiveRoofReplacement wall_counts={ \"meshes\": 15, \"surfaces\": 15, \"triangles\": 3352, \"bodies\": 1, \"shapes\": 3 } roof_counts={ \"meshes\": 1, \"surfaces\": 1, \"triangles\": 16, \"bodies\": 1, \"shapes\": 1 } source_geometry=b0e6c7426ac41c995f96a647ff5102b4d85963d2b7a45f21ad1b81455e451220"
+      ],
+      "mounted-privacy-001": [
+        "PCK_CONTENT_AUDIT: pck_sha256=06f7e4778f791adbf512a16cd6e6900f288ea7d8c41ad53edafc85ad2a8c2be7 pck_bytes=67820808 virtual_files=939 generated_world=47 chunks=38 manifest_sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3 content_sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 rows=739/735/4 polyhaven_maps=18 vegetation_assets=15 vegetation_placements=124 naip_shrubs=22 pavement=427/208/219 movement=4/20/30/40 physical_space=true private_paths=0 private_raw=0 banned=0"
+      ],
+      "release-headless-smoke-001": [
+        "MAC_EXPORT_D2_1439_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_0__building_w95934144_wall/D21439ChinookLiveWallReplacement roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_0__building_w95934144_roof/D21439ChinookLiveRoofReplacement wall_counts={ \"meshes\": 10, \"surfaces\": 10, \"triangles\": 512, \"bodies\": 1, \"shapes\": 2 } roof_counts={ \"meshes\": 1, \"surfaces\": 1, \"triangles\": 10, \"bodies\": 1, \"shapes\": 1 } geometry=81a05d20b03e16253675a36692c9856cf4d53509e008aacbb69bbe4eea7683e5 ownership=82e1fdfae492aa1942bbbb5cfb65b51d4da4c980cf85a4231c2093aaf3edc27a recognition=9/213 credit=0",
+        "MAC_EXPORT_D2_1444_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-1__building_w95934117_wall/D21444CroakerLiveWallReplacement roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-1__building_w95934117_roof/D21444CroakerLiveRoofReplacement wall_counts={ \"meshes\": 10, \"surfaces\": 10, \"triangles\": 716, \"bodies\": 1, \"shapes\": 2 } roof_counts={ \"meshes\": 1, \"surfaces\": 1, \"triangles\": 10, \"bodies\": 1, \"shapes\": 1 } geometry=1dba8f84003a0818c2ddb91504f41c3437a63fe0856ade70d1c194ca1be8d141 ownership=979910c4d53486b86db04cdf04528789f668a01c41dc27114e481c843b91b92d recognition=9/213 credit=0",
+        "MAC_EXPORT_D5_1308_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-1__building_w95934123_wall/D51308GateviewLiveWallReplacement roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-1__building_w95934123_roof/D51308GateviewLiveRoofReplacement wall_counts={ \"meshes\": 14, \"surfaces\": 14, \"triangles\": 3469, \"bodies\": 1, \"shapes\": 4 } roof_counts={ \"meshes\": 3, \"surfaces\": 3, \"triangles\": 1402, \"bodies\": 1, \"shapes\": 2 } source_geometry=6028c89be31ebfd095777b86f6d5d4a9094002b7b5fd73efb2fc940f9a9f3917 captured_authority=13/213 credit=0",
+        "MAC_EXPORT_D5_1394_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-3__building_w96215646_wall/D51394GateviewLiveWallReplacement roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-3__building_w96215646_roof/D51394GateviewLiveRoofReplacement wall_counts={ \"meshes\": 15, \"surfaces\": 15, \"triangles\": 3352, \"bodies\": 1, \"shapes\": 3 } roof_counts={ \"meshes\": 1, \"surfaces\": 1, \"triangles\": 16, \"bodies\": 1, \"shapes\": 1 } source_geometry=b0e6c7426ac41c995f96a647ff5102b4d85963d2b7a45f21ad1b81455e451220 captured_authority=13/213 credit=0",
+        "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=1006 surfaces=1021 triangles=79913 bodies=466 shapes=474 vegetation=124 seed=1414092337 batches=19 load_ms=4655",
+        "MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass",
+        "MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps"
+      ],
+      "release-native-smoke-001": [
+        "Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)",
+        "MAC_EXPORT_D2_1439_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_0__building_w95934144_wall/D21439ChinookLiveWallReplacement roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_0__building_w95934144_roof/D21439ChinookLiveRoofReplacement wall_counts={ \"meshes\": 10, \"surfaces\": 10, \"triangles\": 512, \"bodies\": 1, \"shapes\": 2 } roof_counts={ \"meshes\": 1, \"surfaces\": 1, \"triangles\": 10, \"bodies\": 1, \"shapes\": 1 } geometry=81a05d20b03e16253675a36692c9856cf4d53509e008aacbb69bbe4eea7683e5 ownership=82e1fdfae492aa1942bbbb5cfb65b51d4da4c980cf85a4231c2093aaf3edc27a recognition=9/213 credit=0",
+        "MAC_EXPORT_D2_1444_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-1__building_w95934117_wall/D21444CroakerLiveWallReplacement roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-1__building_w95934117_roof/D21444CroakerLiveRoofReplacement wall_counts={ \"meshes\": 10, \"surfaces\": 10, \"triangles\": 716, \"bodies\": 1, \"shapes\": 2 } roof_counts={ \"meshes\": 1, \"surfaces\": 1, \"triangles\": 10, \"bodies\": 1, \"shapes\": 1 } geometry=1dba8f84003a0818c2ddb91504f41c3437a63fe0856ade70d1c194ca1be8d141 ownership=979910c4d53486b86db04cdf04528789f668a01c41dc27114e481c843b91b92d recognition=9/213 credit=0",
+        "MAC_EXPORT_D5_1308_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-1__building_w95934123_wall/D51308GateviewLiveWallReplacement roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-1__building_w95934123_roof/D51308GateviewLiveRoofReplacement wall_counts={ \"meshes\": 14, \"surfaces\": 14, \"triangles\": 3469, \"bodies\": 1, \"shapes\": 4 } roof_counts={ \"meshes\": 3, \"surfaces\": 3, \"triangles\": 1402, \"bodies\": 1, \"shapes\": 2 } source_geometry=6028c89be31ebfd095777b86f6d5d4a9094002b7b5fd73efb2fc940f9a9f3917 captured_authority=13/213 credit=0",
+        "MAC_EXPORT_D5_1394_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-3__building_w96215646_wall/D51394GateviewLiveWallReplacement roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-3__building_w96215646_roof/D51394GateviewLiveRoofReplacement wall_counts={ \"meshes\": 15, \"surfaces\": 15, \"triangles\": 3352, \"bodies\": 1, \"shapes\": 3 } roof_counts={ \"meshes\": 1, \"surfaces\": 1, \"triangles\": 16, \"bodies\": 1, \"shapes\": 1 } source_geometry=b0e6c7426ac41c995f96a647ff5102b4d85963d2b7a45f21ad1b81455e451220 captured_authority=13/213 credit=0",
+        "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=1006 surfaces=1021 triangles=79913 bodies=466 shapes=474 vegetation=124 seed=1414092337 batches=19 load_ms=4917",
+        "MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass",
+        "MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps"
+      ]
+    },
+    "whole_world": {
+      "rows": 735,
+      "meshes": 1006,
+      "surfaces": 1021,
+      "triangles": 79913,
+      "bodies": 466,
+      "shapes": 474
+    },
+    "independent_execution_inputs": 373,
+    "owner_source_inputs": 320,
+    "owner_execution_inputs": 344,
+    "package_source_inputs": 58,
+    "all_inputs_and_app_exact_before_after": true,
+    "engine_slot_released": true,
+    "scope_limits": [
+      "Mounted components are detached target dispatch, not whole-world proof",
+      "Signed ordinary-main headless/native establish current complete-world smoke separately",
+      "Native actual M2 Metal Forward+ execution; no OS pixels, M1/manual/Intel-runtime/universal-compatibility claim",
+      "Prior candidate/unit source-mechanical-visual and sampled-motion evidence reused within original limits",
+      "No new per-unit route, spray, continuous support or full gameplay acceptance",
+      "No publication, authority mutation or credit promotion"
+    ],
+    "retained_engine_log_copies": [
+      {
+        "original": "{EXTERNAL_RUNTIME}/d5-1308-1394-quality-current-independent-qyfmzwf8/release-headless-smoke-001-engine.log",
+        "durable": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/release-headless-smoke-001-engine.log",
+        "sha256": "0540d740bf6aa2f11f6d2dd9a7f2e40166214e168c54c2153288c81e9846eccf"
+      },
+      {
+        "original": "{EXTERNAL_RUNTIME}/d5-1308-1394-quality-current-independent-qyfmzwf8/release-native-smoke-001-engine.log",
+        "durable": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/release-native-smoke-001-engine.log",
+        "sha256": "6643294b1134c56131b66bddaef039a2bd2b4aa63cfb921c473e708dc1f01d20"
+      }
+    ],
+    "bindings": {
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/FILE_READY.md": "72083117607e0243b19ff6b782186616e59d51b5c0701b3aa144a0407072a967",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/FILE_READY.json": "2bc3088bfb6848435ff0c2e8b988aa4fb88d4c58fa15d4800536ff2ee5aa4802",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/run-plan.json": "aab486ca8119f14807e3f2add79f205e551bfb95d36b4fe550f118f32c1e891d",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/execution-settings.json": "77c548257d381be0f60b923c38b1fa230cdc3699792a371163ebca57752d8136",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/run-stage.py": "62b61968762febdf7ad1579ca703dea1b3e3cd94d02ec244ad17053a9c5bb573",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/execution-input-pins.json": "0143e2abbe0002c2b68d5a6066012bf89bd3a595f06ddb8da659c042bfee7ba2",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/actual-app-binding.json": "b004d54c0e3306424155c5dceed21384e6aa15be0ced5f3c0f8438fc9dfacf69",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/bundle-native-checks.json": "067dc44bae82c42af604b5d626ffb94b570ec919d20bb470921091285ab5b092",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/INPUT_COMPARISON.json": "ea00c1ddff54980b31e7cd456c8b35b1485bd174c0602b77365e0b0f40e2f3b6",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/ENGINE_GO.json": "644be91e68870805410be907048149db61d64c35f351aee68011602f7f12587a",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/SLOT_RELEASE.json": "96c79fae49273351347a4cc6e7e082edd58baa0a1ec8daf4da827f9e47249d20",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/OWNER_HANDOFF.json": "a02371a9b94d126928bfe62c5caa86dd13dc253ee7c894e47252ad4626f39102",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/SLOT_RELEASE.json": "29570a3a15e2a688d7913ff7f292ed2ff6a9498876a4d7393f9640d91f707124",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/mounted-component-001-execution.json": "44619051d023d288a2bf084593c77c1210a37e5d68eb5f01cb5aa3cf975d000b",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/mounted-component-001.log": "63a81134f8ef45740502b0a52bb492042846f14faeb2bd5753ab0ea9c9f16662",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/mounted-privacy-001-execution.json": "a8185d0eb8e005346fcebfa473ee888fcbcda0fd0cdd687d6d90072ed7572a28",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/mounted-privacy-001.log": "0790558426a85104c630ae5726114180d83f888e0d6568f013b457724fa70ca9",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/release-headless-smoke-001-execution.json": "208492f17479a89f77c340fa509223fc42e077a198c54fca5591ebe848d54ce9",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/release-headless-smoke-001.log": "0540d740bf6aa2f11f6d2dd9a7f2e40166214e168c54c2153288c81e9846eccf",
+      "{EXTERNAL_RUNTIME}/d5-1308-1394-quality-current-independent-qyfmzwf8/release-headless-smoke-001-engine.log": "0540d740bf6aa2f11f6d2dd9a7f2e40166214e168c54c2153288c81e9846eccf",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/release-headless-smoke-001-engine.log": "0540d740bf6aa2f11f6d2dd9a7f2e40166214e168c54c2153288c81e9846eccf",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/release-native-smoke-001-execution.json": "9a280db718a0146c4580c11dee65c655ba97dc66881d947f7601f18c6baac93b",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/release-native-smoke-001.log": "6643294b1134c56131b66bddaef039a2bd2b4aa63cfb921c473e708dc1f01d20",
+      "{EXTERNAL_RUNTIME}/d5-1308-1394-quality-current-independent-qyfmzwf8/release-native-smoke-001-engine.log": "6643294b1134c56131b66bddaef039a2bd2b4aa63cfb921c473e708dc1f01d20",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/independent-current-release/release-native-smoke-001-engine.log": "6643294b1134c56131b66bddaef039a2bd2b4aa63cfb921c473e708dc1f01d20"
+    },
+    "review_md_sha256": "94f327a22acac1c1e239b43d6ef4d7c12d147e9c9a4fb5a3c0c7f2368cd603bb",
+    "retro_exact": "D / review_1303_source — Independent exact-current 1308/1394 quality package PASS: after root accepted the owner gate and transferred the slot, ran exactly four sealed stages once in a fresh empty external runtime. Mounted components verified both units’ actual split mesh/material/collision/receiver partitions; mounted privacy found939 virtual files,47 generated artifacts,38 chunks and zero private paths/raw/banned content. Supported signed headless and macOS Metal/Forward+ runs both reached the full735/1006/1021/79913/466/474 world, passed both current unit plus1439/1444 predicates and stock movement/jetpack checks. All373 inputs and seven new app files remained exact; PIDs21515/21648/21667/21691 were freshly absent and the slot was released before prose. No failure, retry, export, successful source/visual replay or credit change. Earlier candidate/owner raw failures remain historical. Native evidence is actual M2 execution, not OS pixels, M1/manual play or universal compatibility;13/213 stays unchanged."
+  }
+}

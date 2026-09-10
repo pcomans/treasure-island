@@ -2,18 +2,24 @@
 
 Original audit checked: 2026-08-28
 Canonical reconciliation: 2026-09-03
-Current release closure: 2026-09-07
+Current release closure: 2026-09-10
 Original reviewer: acceptance audit agent (`/root/runtime_review_sol`)  
 Jetpack/package delivery recheck: completion audit agent (`/root/completion_audit_sol`)  
 Scope: the repository and retained evidence for the approved private Treasure Island first playable
 
 > **Historical-boundary notice:** the detailed 18-ID matrix, package rows, and
 > byte-specific measurements below are sealed point-in-time audits. They are
-> preserved rather than rewritten to describe later bytes. The 2026-09-07 D2
-> 1441 v9 addendum immediately below is the canonical current release status;
-> the B225, B201, 2026-09-03, and older addenda are historical.
+> preserved rather than rewritten to describe later bytes. The 2026-09-10 quality
+> addendum immediately below records current technical release status; all
+> earlier addenda retain their original scope and bytes.
 
-## 2026-09-07 D2 1441 v9 release addendum
+## 2026-09-10 1308/1394 quality release addendum
+
+Recognition remains **13/213**, with zero additional credit and the frozen 213-unit inventory unchanged. Separate source/mechanics, direct-reference visual and seven-artifact unit gates accepted both existing-unit fidelity004 revisions. The [exact quality release closure](d5-1308-1394-quality-current-release-2026-09-10-001/release-closure.json) binds independent owner/package PASS and the seven-file app `d6239ccdb089b01b6ce6839bf393de3ecf8c63f40167a26b79b68c6f73f91e27` (PCK `06f7e4778f791adbf512a16cd6e6900f288ea7d8c41ad53edafc85ad2a8c2be7`). Actual signed headless and Apple M2 Metal/Forward+ runs measured `735/1006/1021/79,913/466/474`, preserving stock movement and jetpack behavior; mounted components and privacy passed separately.
+
+This updates technical release completion, not owner acceptance. The 17/14 retained source images and sampled motion keep their original limits, including three current1394 palette stills and unchanged003 motion. Current app screenshots, no-argument launch, publication and Apple M1 Pro mouse/keyboard acceptance remain pending. The 200 unevaluated buildings and ongoing quality work remain outside this two-unit batch; held1303 and unintegrated1317 are excluded.
+
+## Historical 2026-09-07 D2 1441 v9 release addendum
 
 The deterministic source authority is compiler `1.8.0`, catalog/runtime
 registry v9, adapter contracts/loader API v8, and exactly `9/213` accepted

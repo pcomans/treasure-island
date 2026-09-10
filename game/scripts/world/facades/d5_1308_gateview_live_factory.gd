@@ -3,6 +3,11 @@ extends Node3D
 
 const MARKS := preload("res://game/resources/facades/d5_1308_siding_marks.gdshader")
 const KIT := preload("res://game/scripts/world/facades/site_12_housing_kit.gd")
+const LAWN_TONE := preload("res://game/resources/facades/d5_1308_lawn_tone.gdshader")
+const CONCRETE_ALBEDO := preload("res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg")
+const CONCRETE_ROUGHNESS := preload("res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg")
+const LAWN_ALBEDO := preload("res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg")
+const LAWN_ROUGHNESS := preload("res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg")
 const CONFIG_PATH := "res://game/resources/facades/d5_1308_gateview_live_factory.json"
 const SOURCE_KEY := "w95934123"
 const WALL_KEY := "building:w95934123:wall"
@@ -33,7 +38,7 @@ static func build_for_records(wall: Dictionary, roof: Dictionary, neutral_wall: 
 func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: StandardMaterial3D, neutral_roof: StandardMaterial3D, baseline: bool = false) -> Dictionary:
 	if not _last_result.is_empty():return {"ok":false,"message":"Duplicate detached study configuration."}
 	var config:=_json(CONFIG_PATH)
-	if FileAccess.get_sha256(CONFIG_PATH)!="6adbfa189fd52c444ab028ef92098f7cce6143aed440824c02fe5a79f1e7757f" or str(wall.get("object_key",""))!=WALL_KEY or str(roof.get("object_key",""))!=ROOF_KEY or neutral_wall==null or neutral_roof==null:return {"ok":false,"message":"Validated factory inputs changed."}
+	if FileAccess.get_sha256(CONFIG_PATH)!="5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a" or str(wall.get("object_key",""))!=WALL_KEY or str(roof.get("object_key",""))!=ROOF_KEY or neutral_wall==null or neutral_roof==null:return {"ok":false,"message":"Validated factory inputs changed."}
 	if not _same_numeric_runs(config.get("mapped_runs",[]),TARGET_RUNS) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS) or str(config.get("schema_version",""))!="ti.d5-1308-gateview-live-factory/1":return {"ok":false,"message":"1308 scope changed."}
 	var truth:Dictionary=config.truth_boundary
 	if not bool(truth.prototype_only) or bool(truth.runtime_attachment) or bool(truth.recognition_accepted) or bool(truth.interior_modeled) or bool(truth.as_built_claim):return {"ok":false,"message":"Detached truth boundary changed."}
@@ -45,7 +50,7 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 	var walls:=KIT.new_bucket();_merge(walls,protected);_merge(walls,mapped)
 	var roof_bucket:=KIT.new_bucket();_append_source_roof(roof_bucket,roof)
 	_add_mesh("ExactSourceNeutralRoof",roof_bucket,neutral_roof)
-	var structure:=KIT.new_bucket();var slabs:=KIT.new_bucket()
+	var structure:=KIT.new_bucket();var slabs:=KIT.new_bucket();var new_roof:=KIT.new_bucket();var lower_collision:=KIT.new_bucket()
 	if not baseline:
 		var glazing:=KIT.new_bucket();var trim:=KIT.new_bucket();var canopy_roofs:=KIT.new_bucket();var posts:=KIT.new_bucket()
 		var pale:=_material("inferred_restrained_cream_trim",Color(.87,.86,.79),.87)
@@ -80,14 +85,34 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 			_grade_pad(slabs,pad,float(config.grade_pads.vertical_thickness_m))
 		_add_mesh("RepeatedOpaqueUpperSliders",glazing,dark)
 		_add_mesh("RestrainedRealWindowAndCanopyTrim",trim,pale)
-		_add_mesh("DeepRepeatedGableCanopyRoofs",canopy_roofs,DARK_ROOF)
+		var canopy_parts:=_partition_canopy_fronts(canopy_roofs)
+		_add_mesh("DeepRepeatedGableCanopyRoofs",canopy_parts[0],DARK_ROOF)
+		_add_mesh("PaleSidedCanopyGableFronts",canopy_parts[1],_siding_material(inf))
+		_add_mesh("ReadableCanopyRoofTops",canopy_parts[2],_public_roof_material())
 		_add_mesh("RealCanopyFrontSupports",posts,pale)
-		_add_mesh("GroundFlushCanopySupportSlabs",slabs,_material("quiet_concrete_under_canopy",Color(.47,.48,.44),.95))
+		_add_mesh("GroundFlushCanopySupportSlabs",slabs,_ground_material("connected_concrete_pad_and_apron",CONCRETE_ALBEDO,CONCRETE_ROUGHNESS,Color("d8d6cf"),.92,1.8))
 		_merge(structure,canopy_roofs);_merge(structure,posts)
+		var refinement:Dictionary=config.fidelity_revision_001
+		var pitched:=KIT.new_bucket();var fascia:=KIT.new_bucket();var apron:=KIT.new_bucket();var lawn:=KIT.new_bucket()
+		_authored_triangles(pitched,refinement.surfaces.PublicPitchedRoofSlopes)
+		_authored_triangles(fascia,refinement.surfaces.PublicPaleRoofFasciaAndSoffit)
+		_authored_triangles(apron,refinement.surfaces.ConnectedConcreteAprons)
+		_authored_triangles(lawn,refinement.surfaces.LocalFrontageLawn)
+		_add_mesh("PublicPitchedRoofSlopes",pitched,_public_roof_material())
+		_add_mesh("PublicPaleRoofFasciaAndSoffit",fascia,pale)
+		_add_mesh("ConnectedConcreteAprons",apron,_ground_material("connected_concrete_pad_and_apron",CONCRETE_ALBEDO,CONCRETE_ROUGHNESS,Color("d8d6cf"),.92,1.8))
+		_add_mesh("LocalFrontageLawn",lawn,_lawn_material())
+		_merge(new_roof,pitched);_merge(new_roof,fascia)
+		var doors:=KIT.new_bucket();var windows:=KIT.new_bucket();var frames:=KIT.new_bucket()
+		_lower_modules(doors,windows,frames,wall,refinement.groups)
+		_add_mesh("ClosedLowerDoors",doors,pale)
+		_add_mesh("ClosedLowerWindows",windows,dark)
+		_add_mesh("LowerOpeningFramesAndHandles",frames,pale)
+		for part:Dictionary in [doors,windows,frames]:_merge(lower_collision,part)
 	var body:=StaticBody3D.new();body.name="ExactFootprintStructuralCollision_NoSprayOwnership";body.collision_layer=1;body.collision_mask=0
 	body.set_meta("receiver_kind","none");body.set_meta("opaque",true);body.set_meta("derived_object_key",WALL_KEY if baseline else "prototype:"+WALL_KEY);body.set_meta("source_keys",[SOURCE_KEY]);body.set_meta("prototype_only",true)
 	var collisions:Dictionary={"ExactClosedSourceWalls":walls,"ExactSourceNeutralRoof":roof_bucket}
-	if not baseline:collisions.merge({"RealGableCanopiesAndPosts":structure,"GroundFlushSupportSlabs":slabs})
+	if not baseline:collisions.merge({"RealGableCanopiesAndPosts":structure,"GroundFlushSupportSlabs":slabs,"ClosedLowerModules":lower_collision,"PublicPitchedRoofSolid":new_roof})
 	var collision_triangles:=0
 	for label:String in collisions:
 		var bucket:Dictionary=collisions[label];var faces:=PackedVector3Array()
@@ -99,7 +124,7 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 	for child:Node in get_children():
 		if child is MeshInstance3D:
 			var count:int=child.mesh.surface_get_array_index_len(0)/3;batches[str(child.name)]=count;total+=count
-	var metadata:Dictionary={"model_id":"d5-1308-gateview-detached-observed-side-study-v1","baseline_exact_source":baseline,"prototype_only":true,"runtime_attachment":false,"recognition_accepted":false,"as_built_claim":false,"interior_modeled":false,"source_key":SOURCE_KEY,"mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":collisions.size(),"collision_triangles":collision_triangles,"protected_runs_have_facade_modules":false,"roof_geometry_material_unchanged":true,"ground_voids_open_with_real_roof_posts_and_closed_source_backs":not baseline,"stairs_added":false,"module_dimensions_and_counts":"production_inference","deterministic_signature":JSON.stringify(batches).sha256_text()}
+	var metadata:Dictionary={"model_id":"d5-1308-gateview-detached-observed-side-study-v1","baseline_exact_source":baseline,"prototype_only":true,"runtime_attachment":false,"recognition_accepted":false,"as_built_claim":false,"interior_modeled":false,"source_key":SOURCE_KEY,"mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":collisions.size(),"collision_triangles":collision_triangles,"protected_runs_have_facade_modules":false,"original22_roof_triangles_retained":true,"roof_geometry_material_unchanged":baseline,"closed_lower_modules_at_six_existing_canopy_backs":not baseline,"stairs_added":false,"module_dimensions_and_counts":"production_inference","deterministic_signature":JSON.stringify(batches).sha256_text()}
 	metadata["pad_surface_mode"]="absent" if baseline else "frozen_visible_area_plus_5mm"
 	metadata["pad_top_y_ranges_m"]=[] if baseline else config.grade_pads.pads.map(func(p:Dictionary)->Array:return p.actual_top_y_range_m)
 	metadata["pad_vertical_thickness_m"]=0.0 if baseline else float(config.grade_pads.vertical_thickness_m)
@@ -108,6 +133,55 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 	for key:String in metadata:set_meta(key,metadata[key])
 	_last_result={"ok":true,"node":self,"metadata":metadata,"mesh_instances":batches.size(),"surfaces":batches.size(),"visual_triangles":total,"static_bodies":1,"shapes":collisions.size(),"collision_triangles":collision_triangles}
 	return _last_result
+
+static func _partition_canopy_fronts(source:Dictionary) -> Array:
+	var roof:=KIT.new_bucket();var front:=KIT.new_bucket();var tops:=KIT.new_bucket()
+	for bucket:Dictionary in [roof,front,tops]:
+		for key:String in ["vertices","normals","uvs"]:bucket[key]=source[key].duplicate()
+	for tri in int(source.indices.size()/3):
+		var bucket:Dictionary=tops if tri%16 in [0,1,2,3] else (front if tri%16 in [10,11,12] else roof)
+		bucket.indices.append_array(source.indices.slice(tri*3,tri*3+3))
+	return [roof,front,tops]
+
+static func _authored_triangles(bucket:Dictionary,triangles:Array) -> void:
+	for tri:Array in triangles:
+		var a:=_v(tri[0]);var b:=_v(tri[1]);var c:=_v(tri[2])
+		_triangle(bucket,a,b,c,(b-a).cross(c-a).normalized())
+
+static func _lower_modules(doors:Dictionary,windows:Dictionary,frames:Dictionary,wall:Dictionary,groups:Array) -> void:
+	for group:Dictionary in groups:
+		var f:=_joined_frame(wall,int(group.runs[0]),int(group.runs[-1]))
+		for module:Dictionary in group.local_modules:
+			var station:float=module.station_m;var low:float=module.bottom_y;var width:float=module.width_m;var height:float=module.height_m;var fw:float=module.frame_width_m
+			var bucket:Dictionary=doors if str(module.kind)=="closed_entry" else windows
+			KIT.append_box(bucket,_point(f,station,low+height*.5,.05),f.tangent,f.normal,width,height,.10)
+			for side:float in [-1.0,1.0]:
+				KIT.append_box(frames,_point(f,station+side*(width*.5+fw*.5),low+height*.5,.07),f.tangent,f.normal,fw,height+2.0*fw,.14)
+				KIT.append_box(frames,_point(f,station,low+height*.5+side*(height*.5+fw*.5),.07),f.tangent,f.normal,width,fw,.14)
+			if str(module.kind)=="closed_entry":KIT.append_box(frames,_point(f,station+width*.32,low+1.0,.15),f.tangent,f.normal,.11,.04,.08)
+
+static func _ground_material(label:String,albedo:Texture2D,rough:Texture2D,tint:Color,roughness:float,repeat_m:float) -> StandardMaterial3D:
+	var material:=_material(label,tint,roughness)
+	material.albedo_texture=albedo;material.roughness_texture=rough
+	material.uv1_scale=Vector3(1.0/repeat_m,1.0/repeat_m,1.0)
+	material.texture_filter=BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	material.set_flag(BaseMaterial3D.FLAG_USE_TEXTURE_REPEAT,true)
+	return material
+
+static func _public_roof_material() -> StandardMaterial3D:
+	# Private neutral matte study: the source bitumen texture has broad dark bands.
+	# Suppress that albedo only on this duplicate; preserve cached resource/undersides.
+	var material:=DARK_ROOF.duplicate() as StandardMaterial3D
+	material.resource_name="private_matte_gray_planar_roof"
+	material.albedo_texture=null
+	material.albedo_color=Color(.44,.47,.48,1.0)
+	return material
+
+static func _lawn_material() -> ShaderMaterial:
+	var material:=ShaderMaterial.new();material.shader=LAWN_TONE;material.resource_name="private_restrained_green_frontage_lawn"
+	material.set_shader_parameter("lawn_albedo",LAWN_ALBEDO);material.set_shader_parameter("lawn_roughness",LAWN_ROUGHNESS)
+	material.set_shader_parameter("dark_color",Color("4d663d"));material.set_shader_parameter("light_color",Color("819a57"));material.set_shader_parameter("luminance_gain",5.0)
+	return material
 
 static func _grade_pad(bucket:Dictionary,pad:Dictionary,thickness:float) -> void:
 	for tri:Array in pad.top_triangles:
@@ -137,13 +211,14 @@ static func _canopy(bucket:Dictionary,trim:Dictionary,f:Dictionary,station:float
 	_quad(bucket,bl1,br1,r1,l1,f.normal);_triangle(bucket,l1,r1,p1,f.normal)
 	_quad(bucket,br0,bl0,l0,r0,-(f.normal as Vector3));_triangle(bucket,r0,l0,p0,-(f.normal as Vector3))
 	# Side beams retain their existing extent; front gable faces project 5mm beyond the roof end.
-	var inset:=float(inf.trim_width)*.5
+	var edge_width:=.04
+	var inset:=edge_width*.5
 	var a:=_point(f,station-half+inset,eave,depth-inset);var b:=_point(f,station,ridge-inset,depth-inset);var c:=_point(f,station+half-inset,eave,depth-inset)
 	var front_start:int=trim.vertices.size()
-	_beam(trim,a,b,float(inf.trim_width));_beam(trim,b,c,float(inf.trim_width))
+	_beam(trim,a,b,edge_width);_beam(trim,b,c,edge_width)
 	for index in range(front_start,trim.vertices.size()):
 		trim.vertices[index]+=(f.normal as Vector3)*.005
-	for side:float in [-1.0,1.0]:_beam(trim,_point(f,station+side*(half-inset),eave,0),_point(f,station+side*(half-inset),eave,depth-inset),float(inf.trim_width))
+	for side:float in [-1.0,1.0]:_beam(trim,_point(f,station+side*(half-inset),eave,0),_point(f,station+side*(half-inset),eave,depth-inset),edge_width)
 
 static func _panel(bucket:Dictionary,frame:Dictionary,left:float,right:float,low:float,high:float,depth:float,normal:Vector3) -> void:
 	_quad(bucket,_point(frame,left,low,depth),_point(frame,right,low,depth),_point(frame,right,high,depth),_point(frame,left,high,depth),normal)

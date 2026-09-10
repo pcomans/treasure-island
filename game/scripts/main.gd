@@ -7,11 +7,11 @@ const EXPECTED_MANIFEST_HASH := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e
 const EXPECTED_CHUNKS := 38
 const EXPECTED_PLAYABLE_ROWS := 735
 const EXPECTED_CONTEXT_ROWS := 4
-const EXPECTED_MESHES := 993
-const EXPECTED_SURFACES := 1008
-const EXPECTED_TRIANGLES := 76376
+const EXPECTED_MESHES := 1006
+const EXPECTED_SURFACES := 1021
+const EXPECTED_TRIANGLES := 79913
 const EXPECTED_STATIC_BODIES := 466
-const EXPECTED_SHAPES := 472
+const EXPECTED_SHAPES := 474
 const EXPECTED_VEGETATION_SEED := 1414092337
 const EXPECTED_VEGETATION_INSTANCES := 124
 const EXPECTED_VEGETATION_ASSETS := 15
@@ -467,13 +467,13 @@ func _mac_export_1308_attachment_valid() -> bool:
 	var roof_measure := _mac_export_attachment_measure(roof)
 	var metadata := wall.get_meta("d5_1308_gateview_live_replacement", {}) as Dictionary
 	var valid := wall.name == "D51308GateviewLiveWallReplacement" and roof.name == "D51308GateviewLiveRoofReplacement" \
-		and wall_measure == {"meshes": 7, "surfaces": 7, "triangles": 2540, "bodies": 1, "shapes": 3} \
-		and roof_measure == {"meshes": 1, "surfaces": 1, "triangles": 22, "bodies": 1, "shapes": 1} \
+		and wall_measure == {"meshes": 14, "surfaces": 14, "triangles": 3469, "bodies": 1, "shapes": 4} \
+		and roof_measure == {"meshes": 3, "surfaces": 3, "triangles": 1402, "bodies": 1, "shapes": 2} \
 		and metadata == (roof.get_meta("d5_1308_gateview_live_replacement", {}) as Dictionary) \
 		and str(metadata.get("adapter_id", "")) == "active-adapter:d5-1308-live:building:w95934123:wall" \
 		and str(metadata.get("source_geometry_sha256", "")) == "6028c89be31ebfd095777b86f6d5d4a9094002b7b5fd73efb2fc940f9a9f3917" \
 		and int(metadata.get("factory_calls", -1)) == 1 \
-		and str(metadata.get("accepted_recognition_metric", "")) == "11/213" \
+		and str(metadata.get("accepted_recognition_metric", "")) == "13/213" \
 		and int(metadata.get("candidate_recognition_credit", -1)) == 0 \
 		and not bool(metadata.get("recognition_accepted", true)) \
 		and not bool(metadata.get("partial_pair_allowed", true)) \
@@ -481,7 +481,7 @@ func _mac_export_1308_attachment_valid() -> bool:
 		and not bool(metadata.get("stack_allowed", true)) \
 		and bool(wall.get_meta("runtime_attachment", false)) and bool(roof.get_meta("runtime_attachment", false)) \
 		and not bool(wall.get_meta("prototype_only", true)) and not bool(roof.get_meta("prototype_only", true))
-	print("MAC_EXPORT_D5_1308_ATTACHMENT: valid=%s wall=%s roof=%s wall_counts=%s roof_counts=%s source_geometry=%s captured_authority=11/213 credit=0" % [valid, wall.get_path(), roof.get_path(), wall_measure, roof_measure, metadata.get("source_geometry_sha256", "")])
+	print("MAC_EXPORT_D5_1308_ATTACHMENT: valid=%s wall=%s roof=%s wall_counts=%s roof_counts=%s source_geometry=%s captured_authority=13/213 credit=0" % [valid, wall.get_path(), roof.get_path(), wall_measure, roof_measure, metadata.get("source_geometry_sha256", "")])
 	return valid
 
 
@@ -505,13 +505,13 @@ func _mac_export_1394_attachment_valid() -> bool:
 	var roof_measure := _mac_export_attachment_measure(roof)
 	var metadata := wall.get_meta("d5_1394_gateview_live_replacement", {}) as Dictionary
 	var valid := wall.name == "D51394GateviewLiveWallReplacement" and roof.name == "D51394GateviewLiveRoofReplacement" \
-		and wall_measure == {"meshes": 11, "surfaces": 11, "triangles": 2124, "bodies": 1, "shapes": 3} \
+		and wall_measure == {"meshes": 15, "surfaces": 15, "triangles": 3352, "bodies": 1, "shapes": 3} \
 		and roof_measure == {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1} \
 		and metadata == (roof.get_meta("d5_1394_gateview_live_replacement", {}) as Dictionary) \
 		and str(metadata.get("adapter_id", "")) == "active-adapter:d5-1394-live:building:w96215646:wall" \
 		and str(metadata.get("source_geometry_sha256", "")) == "b0e6c7426ac41c995f96a647ff5102b4d85963d2b7a45f21ad1b81455e451220" \
 		and int(metadata.get("factory_calls", -1)) == 1 \
-		and str(metadata.get("accepted_recognition_metric", "")) == "11/213" \
+		and str(metadata.get("accepted_recognition_metric", "")) == "13/213" \
 		and int(metadata.get("candidate_recognition_credit", -1)) == 0 \
 		and not bool(metadata.get("recognition_accepted", true)) \
 		and not bool(metadata.get("partial_pair_allowed", true)) \
@@ -519,5 +519,5 @@ func _mac_export_1394_attachment_valid() -> bool:
 		and not bool(metadata.get("stack_allowed", true)) \
 		and bool(wall.get_meta("runtime_attachment", false)) and bool(roof.get_meta("runtime_attachment", false)) \
 		and not bool(wall.get_meta("prototype_only", true)) and not bool(roof.get_meta("prototype_only", true))
-	print("MAC_EXPORT_D5_1394_ATTACHMENT: valid=%s wall=%s roof=%s wall_counts=%s roof_counts=%s source_geometry=%s captured_authority=11/213 credit=0" % [valid, wall.get_path(), roof.get_path(), wall_measure, roof_measure, metadata.get("source_geometry_sha256", "")])
+	print("MAC_EXPORT_D5_1394_ATTACHMENT: valid=%s wall=%s roof=%s wall_counts=%s roof_counts=%s source_geometry=%s captured_authority=13/213 credit=0" % [valid, wall.get_path(), roof.get_path(), wall_measure, roof_measure, metadata.get("source_geometry_sha256", "")])
 	return valid

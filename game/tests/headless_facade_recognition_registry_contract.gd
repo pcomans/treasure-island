@@ -1,7 +1,7 @@
 extends SceneTree
 
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
-const EXPECTED_REGISTRY_SHA256 := "270a6176c6a97f93918a24acc7dc86126dc5fac466e80320b0b0b2a86dbcf313"
+const EXPECTED_REGISTRY_SHA256 := "be237e4afd7cb93953371963f036579ab470dad1ca7b1686b28f752757774f2c"
 const EXPECTED_UNITS := 213
 const EXPECTED_RECEIVERS := 214
 const EXPECTED_SOURCE_RECORDS := 215
@@ -712,21 +712,21 @@ func _validate_d5_1308_runtime_adapter(adapter: Dictionary, contract: Dictionary
 	var geometry := behavior.get("geometry_contract", {}) as Dictionary
 	var ownership := behavior.get("ownership_contract", {}) as Dictionary
 	var acceptance := behavior.get("acceptance_contract", {}) as Dictionary
-	_require(str(adapter.get("adapter_id", "")) == "active-adapter:d5-1308-live:building:w95934123:wall" and (adapter.get("runtime_assets", []) as Array).size() == 6 and (adapter.get("runtime_asset_projections", []) as Array).is_empty(), "D5 1308 exact wall-indexed runtime assets drifted.")
-	_require(str(acceptance.get("accepted_physical_unit_id", "")) == "physical-building:w95934123" and str(acceptance.get("capture_time_recognition_metric", "")) == "11/213" and int(acceptance.get("numerator_effect", -1)) == 1, "D5 1308 single-unit/capture11 authority drifted.")
-	_require(str(acceptance.get("evidence_manifest_sha256", "")) == "f776a306714ebbbb96266933abaa0aa602d27babeeaa133dd00d95e36b2a58ba", "D5 1308 seven-artifact evidence_manifest_sha256 drifted.")
-	_require(str(acceptance.get("motion_telemetry_manifest_sha256", "")) == "8a636cc7b9a6874f038cc4a0eac4c273e86de6b7a48fdf50e519abf299c9de6b", "D5 1308 seven-artifact motion_telemetry_manifest_sha256 drifted.")
-	_require(str(acceptance.get("visual_motion_manifest_sha256", "")) == "2d9911060b6259b5331b1d90055c2794cf39d0b6be3f907b4daf0af5e269a967", "D5 1308 seven-artifact visual_motion_manifest_sha256 drifted.")
-	_require(str(acceptance.get("package_verification_receipt_sha256", "")) == "8058b74a5e11640a51c0156ce8a284509b33ea1d5a76961022e232fa3d3e0ebf", "D5 1308 seven-artifact package_verification_receipt_sha256 drifted.")
-	_require(str(acceptance.get("evidence_tree_sha256", "")) == "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1", "D5 1308 seven-artifact evidence_tree_sha256 drifted.")
-	_require(str(acceptance.get("mechanical_review_receipt_sha256", "")) == "2f8c4f42e44de69bbe5e06642b4149ba5ccebe2f3d44efee889677459f1629c5", "D5 1308 seven-artifact mechanical_review_receipt_sha256 drifted.")
-	_require(str(acceptance.get("review_receipt_sha256", "")) == "7b29686da76c68ffe6527c3c9da10034de942fade519ec5798e5bf7943eda00c", "D5 1308 seven-artifact review_receipt_sha256 drifted.")
-	_require(str(geometry.get("world_topology_scope", "")) == "pre_d5_1394_authority_transition_combined_topology" and [int(geometry.get("world_records", -1)), int(geometry.get("world_mesh_instances", -1)), int(geometry.get("world_surfaces", -1)), int(geometry.get("world_triangles", -1)), int(geometry.get("world_static_bodies", -1)), int(geometry.get("world_shapes", -1))] == [735,993,1008,76376,466,472], "D5 1308 measured combined topology scope drifted.")
-	_require(int(ownership.get("shape_count", -1)) == 4 and not bool(ownership.get("roof_is_wall_spray_receiver", true)) and ownership.get("wall_shape_order", []) == ["eligible_exterior", "noneligible_canopy_posts", "noneligible_grade_pads"], "D5 1308 shape/render ownership drifted.")
+	_require(str(adapter.get("adapter_id", "")) == "active-adapter:d5-1308-live:building:w95934123:wall" and (adapter.get("runtime_assets", []) as Array).size() == 7 and (adapter.get("runtime_asset_projections", []) as Array).is_empty(), "D5 1308 exact wall-indexed runtime assets drifted.")
+	_require(str(acceptance.get("accepted_physical_unit_id", "")) == "physical-building:w95934123" and str(acceptance.get("capture_time_recognition_metric", "")) == "13/213" and int(acceptance.get("numerator_effect", -1)) == 0, "D5 1308 existing-unit quality/capture13 authority drifted.")
+	_require(str(acceptance.get("evidence_manifest_sha256", "")) == "7c01ff32b1da4276ec330aee0d034dce4f0cbe8caa510f96d99504084cb314b5", "D5 1308 seven-artifact evidence_manifest_sha256 drifted.")
+	_require(str(acceptance.get("motion_telemetry_manifest_sha256", "")) == "f139576c7b45eb76774315745504992f6bd726cd698faab6b88e79f491197960", "D5 1308 seven-artifact motion_telemetry_manifest_sha256 drifted.")
+	_require(str(acceptance.get("visual_motion_manifest_sha256", "")) == "f0d21bb4dc14d8a12aba1fc37614e3cced7ff331521dda06a802bfc6fbd69dc9", "D5 1308 seven-artifact visual_motion_manifest_sha256 drifted.")
+	_require(str(acceptance.get("package_verification_receipt_sha256", "")) == "c892d30b9c06f280077712c2bbad710eefac67f9fa1dd4b1f92c8f07c0b329dc", "D5 1308 seven-artifact package_verification_receipt_sha256 drifted.")
+	_require(str(acceptance.get("evidence_tree_sha256", "")) == "e17f311ea69445d8da9b4029e9d4d93fba19ea2cd2901efa2e2ec1d7dd90556a", "D5 1308 seven-artifact evidence_tree_sha256 drifted.")
+	_require(str(acceptance.get("mechanical_review_receipt_sha256", "")) == "9c094ed7a52506404a6763298504b71706b75ade1f44e4cfe2ad3fb6ea81380f", "D5 1308 seven-artifact mechanical_review_receipt_sha256 drifted.")
+	_require(str(acceptance.get("review_receipt_sha256", "")) == "87a2af8c5ab11082337265f53ca5fcd3aa9f0dbfdd22f97e7a8968653ad71a06", "D5 1308 seven-artifact review_receipt_sha256 drifted.")
+	_require(str(geometry.get("world_topology_scope", "")) == "same_batch_combined_topology_reference" and [int(geometry.get("world_records", -1)), int(geometry.get("world_mesh_instances", -1)), int(geometry.get("world_surfaces", -1)), int(geometry.get("world_triangles", -1)), int(geometry.get("world_static_bodies", -1)), int(geometry.get("world_shapes", -1))] == [735,1006,1021,79913,466,474], "D5 1308 measured combined topology scope drifted.")
+	_require(int(ownership.get("shape_count", -1)) == 6 and not bool(ownership.get("roof_is_wall_spray_receiver", true)) and ownership.get("wall_shape_order", []) == ["eligible_exterior", "noneligible_canopy_posts", "noneligible_grade_pads", "noneligible_closed_lower"], "D5 1308 shape/render ownership drifted.")
 	_require(int(ownership.get("eligible_exterior_collision_triangles", -1)) == 68, "D5 1308 eligible_exterior_collision_triangles drifted.")
 	_require(int(ownership.get("noneligible_canopy_post_collision_triangles", -1)) == 240, "D5 1308 noneligible_canopy_post_collision_triangles drifted.")
 	_require(int(ownership.get("noneligible_ground_collision_triangles", -1)) == 96, "D5 1308 noneligible_ground_collision_triangles drifted.")
-	_require(int(ownership.get("roof_collision_triangles", -1)) == 22, "D5 1308 roof_collision_triangles drifted.")
+	_require(int(ownership.get("roof_collision_triangles", -1)) == 1402, "D5 1308 roof_collision_triangles drifted.")
 
 
 func _validate_d5_1394_runtime_adapter(adapter: Dictionary, contract: Dictionary) -> void:
@@ -734,18 +734,18 @@ func _validate_d5_1394_runtime_adapter(adapter: Dictionary, contract: Dictionary
 	var geometry := behavior.get("geometry_contract", {}) as Dictionary
 	var ownership := behavior.get("ownership_contract", {}) as Dictionary
 	var acceptance := behavior.get("acceptance_contract", {}) as Dictionary
-	_require(str(adapter.get("adapter_id", "")) == "active-adapter:d5-1394-live:building:w96215646:wall" and (adapter.get("runtime_assets", []) as Array).size() == 6 and (adapter.get("runtime_asset_projections", []) as Array).is_empty(), "D5 1394 exact wall-indexed runtime assets drifted.")
-	_require(str(acceptance.get("accepted_physical_unit_id", "")) == "physical-building:w96215646" and str(acceptance.get("capture_time_recognition_metric", "")) == "11/213" and int(acceptance.get("numerator_effect", -1)) == 1, "D5 1394 single-unit/capture11 authority drifted.")
-	_require(str(acceptance.get("evidence_manifest_sha256", "")) == "f7105c935499a455007d73e77bca38fc9e4cb249155312d2397445f4b4ff7e29", "D5 1394 seven-artifact evidence_manifest_sha256 drifted.")
-	_require(str(acceptance.get("motion_telemetry_manifest_sha256", "")) == "d4f8a57b8e456641707b000ad997a96162399b6c5322f0fb0bdf56f49a60ff07", "D5 1394 seven-artifact motion_telemetry_manifest_sha256 drifted.")
-	_require(str(acceptance.get("visual_motion_manifest_sha256", "")) == "c468c4f930e09a063e3018aa2b5c44ce70248f83db6f920a3033de8961e37a86", "D5 1394 seven-artifact visual_motion_manifest_sha256 drifted.")
-	_require(str(acceptance.get("package_verification_receipt_sha256", "")) == "6d83381a3cf12ff706f1d47be276781581be77edeb9a2f910e8f23a155f5a5f6", "D5 1394 seven-artifact package_verification_receipt_sha256 drifted.")
-	_require(str(acceptance.get("evidence_tree_sha256", "")) == "f809a431e5d4bf53d94608a99900d4a17734bca79b28280150fd88ce5f51b934", "D5 1394 seven-artifact evidence_tree_sha256 drifted.")
-	_require(str(acceptance.get("mechanical_review_receipt_sha256", "")) == "606f8e066e3a07124e50c6f23b69d04f02b1efeb8dfb85381e23de58b07f3214", "D5 1394 seven-artifact mechanical_review_receipt_sha256 drifted.")
-	_require(str(acceptance.get("review_receipt_sha256", "")) == "0275e3c256ed1c6c3ff66c63399593e628d61b724803af83f2809ad683323207", "D5 1394 seven-artifact review_receipt_sha256 drifted.")
-	_require(str(geometry.get("world_topology_scope", "")) == "current_integration_topology" and [int(geometry.get("world_records", -1)), int(geometry.get("world_mesh_instances", -1)), int(geometry.get("world_surfaces", -1)), int(geometry.get("world_triangles", -1)), int(geometry.get("world_static_bodies", -1)), int(geometry.get("world_shapes", -1))] == [735,993,1008,76376,466,472], "D5 1394 measured combined topology scope drifted.")
+	_require(str(adapter.get("adapter_id", "")) == "active-adapter:d5-1394-live:building:w96215646:wall" and (adapter.get("runtime_assets", []) as Array).size() == 7 and (adapter.get("runtime_asset_projections", []) as Array).is_empty(), "D5 1394 exact wall-indexed runtime assets drifted.")
+	_require(str(acceptance.get("accepted_physical_unit_id", "")) == "physical-building:w96215646" and str(acceptance.get("capture_time_recognition_metric", "")) == "13/213" and int(acceptance.get("numerator_effect", -1)) == 0, "D5 1394 existing-unit quality/capture13 authority drifted.")
+	_require(str(acceptance.get("evidence_manifest_sha256", "")) == "ec327adb9239a902f40fd7e2ede7afedcd19bf1869b392e9646544721eaec316", "D5 1394 seven-artifact evidence_manifest_sha256 drifted.")
+	_require(str(acceptance.get("motion_telemetry_manifest_sha256", "")) == "0ad7ff068f42b8230ba724d9143c9c563130de3c9d40c37837f1ed21f95ecc60", "D5 1394 seven-artifact motion_telemetry_manifest_sha256 drifted.")
+	_require(str(acceptance.get("visual_motion_manifest_sha256", "")) == "6a057c2b0236e90d11861499c299b723b35da37ee3590a0a154d0c3390f0b2cb", "D5 1394 seven-artifact visual_motion_manifest_sha256 drifted.")
+	_require(str(acceptance.get("package_verification_receipt_sha256", "")) == "9be91b038dc142ac84d3947ed68733c2346aa5756e4ccbb433bf0a173b8ca364", "D5 1394 seven-artifact package_verification_receipt_sha256 drifted.")
+	_require(str(acceptance.get("evidence_tree_sha256", "")) == "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689", "D5 1394 seven-artifact evidence_tree_sha256 drifted.")
+	_require(str(acceptance.get("mechanical_review_receipt_sha256", "")) == "c2c4ee90347b458e44fda87d900a4a2031b2cf4883c16a0db1ceac0ffeec02cd", "D5 1394 seven-artifact mechanical_review_receipt_sha256 drifted.")
+	_require(str(acceptance.get("review_receipt_sha256", "")) == "c7b5079a3a59847b80e201ef8107928381f9370dd74001f2675f0c68de82dbc8", "D5 1394 seven-artifact review_receipt_sha256 drifted.")
+	_require(str(geometry.get("world_topology_scope", "")) == "current_integration_topology" and [int(geometry.get("world_records", -1)), int(geometry.get("world_mesh_instances", -1)), int(geometry.get("world_surfaces", -1)), int(geometry.get("world_triangles", -1)), int(geometry.get("world_static_bodies", -1)), int(geometry.get("world_shapes", -1))] == [735,1006,1021,79913,466,474], "D5 1394 measured combined topology scope drifted.")
 	_require(int(ownership.get("shape_count", -1)) == 4 and not bool(ownership.get("roof_is_wall_spray_receiver", true)) and ownership.get("wall_shape_order", []) == ["eligible_exterior", "noneligible_canopy_posts", "noneligible_closed_modules"], "D5 1394 shape/render ownership drifted.")
 	_require(int(ownership.get("eligible_exterior_collision_triangles", -1)) == 48, "D5 1394 eligible_exterior_collision_triangles drifted.")
 	_require(int(ownership.get("noneligible_canopy_post_collision_triangles", -1)) == 204, "D5 1394 noneligible_canopy_post_collision_triangles drifted.")
-	_require(int(ownership.get("noneligible_ground_collision_triangles", -1)) == 864, "D5 1394 noneligible_ground_collision_triangles drifted.")
+	_require(int(ownership.get("noneligible_ground_collision_triangles", -1)) == 2016, "D5 1394 noneligible_ground_collision_triangles drifted.")
 	_require(int(ownership.get("roof_collision_triangles", -1)) == 16, "D5 1394 roof_collision_triangles drifted.")

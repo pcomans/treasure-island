@@ -1,0 +1,183 @@
+{
+  "derived_summary": true,
+  "original": {
+    "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/OWNER_HANDOFF.json",
+    "sha256": "a02371a9b94d126928bfe62c5caa86dd13dc253ee7c894e47252ad4626f39102",
+    "bytes": 15618
+  },
+  "record": {
+    "status": "OWNER_EXACT_CURRENT_PACKAGE_PASS_INDEPENDENT_FINAL_REVIEW_PENDING",
+    "repo": "{QUALITY_CHECKOUT}",
+    "authority": "13/213",
+    "quality_units": [
+      "1308",
+      "1394"
+    ],
+    "new_credit": 0,
+    "actual_app": "{QUALITY_CHECKOUT}/build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app",
+    "pck_sha256": "06f7e4778f791adbf512a16cd6e6900f288ea7d8c41ad53edafc85ad2a8c2be7",
+    "app_file_count": 7,
+    "stages": {
+      "mounted-component-001": {
+        "pid": 16162,
+        "exit_code": 0,
+        "elapsed_seconds": 2.352562707848847,
+        "fresh_pid_absent": true,
+        "receipt": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/mounted-component-001-execution.json",
+        "receipt_sha256": "0351b8e81b65e438a99aad9c2fe09ce742c4920a516cd02604e122a3a8fe7d22",
+        "log_sha256": "63a81134f8ef45740502b0a52bb492042846f14faeb2bd5753ab0ea9c9f16662"
+      },
+      "mounted-privacy-001": {
+        "pid": 16301,
+        "exit_code": 0,
+        "elapsed_seconds": 3.0932767500635237,
+        "fresh_pid_absent": true,
+        "receipt": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/mounted-privacy-001-execution.json",
+        "receipt_sha256": "2f3a27d550bccb535383b11cc888ef6be32961c8a5f5b7055b52a8d39c18f607",
+        "log_sha256": "0790558426a85104c630ae5726114180d83f888e0d6568f013b457724fa70ca9"
+      },
+      "release-headless-smoke-001": {
+        "pid": 16340,
+        "exit_code": 0,
+        "elapsed_seconds": 6.04130299994722,
+        "fresh_pid_absent": true,
+        "receipt": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/release-headless-smoke-001-execution.json",
+        "receipt_sha256": "330c3be6ba7a59bb423ec79a463917c89c10c1efa24a1e1198dcc4d69de00ee4",
+        "log_sha256": "21a09ae7ff43a4322d973a93df43276aad07cdb98b3c2aa5a058b0c028b9e641"
+      },
+      "release-native-smoke-001": {
+        "pid": 16367,
+        "exit_code": 0,
+        "elapsed_seconds": 44.45424800016917,
+        "fresh_pid_absent": true,
+        "receipt": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/release-native-smoke-001-execution.json",
+        "receipt_sha256": "f123a0c0415dff6ac69649d8952b86f09702992353525faf06283950e83f475e",
+        "log_sha256": "3489b3dd72a33d6a5b69d21c728470ec1b53716f70318bba3ce1dd439672aa18"
+      }
+    },
+    "source_and_app_exact_at_terminal_release": {
+      "inputs": 344,
+      "app_files": 7,
+      "slot_release": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/SLOT_RELEASE.json",
+      "slot_release_sha256": "29570a3a15e2a688d7913ff7f292ed2ff6a9498876a4d7393f9640d91f707124"
+    },
+    "actual_current_signed_runtime": {
+      "world": {
+        "rows": 735,
+        "meshes": 1006,
+        "surfaces": 1021,
+        "triangles": 79913,
+        "bodies": 466,
+        "shapes": 474
+      },
+      "both_target_and_prior_1439_1444_predicates_pass": true,
+      "stock_movement": [
+        4,
+        20,
+        30,
+        40
+      ],
+      "jetpack": {
+        "rise_m": 2.751,
+        "ascent_velocity_mps": 5,
+        "minimum_descent_velocity_mps": -1.5
+      },
+      "native_header": [
+        "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org",
+        "Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)",
+        "",
+        "MAC_EXPORT_D2_1439_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_0__building_w95934144_wall/D21439ChinookLiveWallReplacement roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_0__building_w95934144_roof/D21439ChinookLiveRoofReplacement wall_counts={ \"meshes\": 10, \"surfaces\": 10, \"triangles\": 512, \"bodies\": 1, \"shapes\": 2 } roof_counts={ \"meshes\": 1, \"surfaces\": 1, \"triangles\": 10, \"bodies\": 1, \"shapes\": 1 } geometry=81a05d20b03e16253675a36692c9856cf4d53509e008aacbb69bbe4eea7683e5 ownership=82e1fdfae492aa1942bbbb5cfb65b51d4da4c980cf85a4231c2093aaf3edc27a recognition=9/213 credit=0"
+      ],
+      "headless_load_ms": 4835,
+      "native_load_ms": 5311,
+      "scope": "Observed in this exact PCK by actual supported signed headless/native ordinary-main runs. The immutable binder retains its earlier reused source-world measurement note; these raw runs now establish current app runtime observations separately."
+    },
+    "mounted_component_scope": {
+      "1308": {
+        "wall": [
+          14,
+          14,
+          3469,
+          1,
+          4
+        ],
+        "roof": [
+          3,
+          3,
+          1402,
+          1,
+          2
+        ]
+      },
+      "1394": {
+        "wall": [
+          15,
+          15,
+          3352,
+          1,
+          3
+        ],
+        "roof": [
+          1,
+          1,
+          16,
+          1,
+          1
+        ]
+      },
+      "counts_order": [
+        "meshes",
+        "surfaces",
+        "triangles",
+        "bodies",
+        "shapes"
+      ],
+      "limit": "Real target-record builder dispatch after full supplied-chunk preflight, native mesh/material/collision/receiver partitions; no whole-world instantiation in mounted component stage. Signed runs establish full world separately."
+    },
+    "privacy_actual_line": "PCK_CONTENT_AUDIT: pck_sha256=06f7e4778f791adbf512a16cd6e6900f288ea7d8c41ad53edafc85ad2a8c2be7 pck_bytes=67820808 virtual_files=939 generated_world=47 chunks=38 manifest_sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3 content_sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 rows=739/735/4 polyhaven_maps=18 vegetation_assets=15 vegetation_placements=124 naip_shrubs=22 pavement=427/208/219 movement=4/20/30/40 physical_space=true private_paths=0 private_raw=0 banned=0",
+    "bindings": {
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/SLOT_RELEASE.json": "29570a3a15e2a688d7913ff7f292ed2ff6a9498876a4d7393f9640d91f707124",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/actual-app-binding.json": "fab7f7baa6d67bc8e39da265c57a8ad12bd3b76eee0e2143b4065c27b190890b",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/bundle-native-checks-001.json": "695b03aa1e803c19e15d8acb1ee0361cfa31054589079e0e7f408fc471eece33",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/run-plan.bound-app.json": "b3600be0764a6d8863ddfc18f88e6fcc257aa1f7ec8c2930f9fa7099f528fdde",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/run-stage.py": "d35866ceffff065ade652527fb0f7efe7c4f188e586b3186744fbec0fea1d3d2",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/package-contract.gd": "62c98a614e142361c9e1392d0aa654a4a4222eb722bda4f07878d5518220ab53",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/package-source-pins.json": "ea21614861cdbc218e2c7663737ead924de3619d736b50bf69d95ef75911744b",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/source-pins.json": "c4dd2fc710fc7eaeee2f42a6bda6759ae4c1691fb83d4aaf70a83e24e5582aed",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/execution-input-pins.json": "94f34a2778f503ac10790bc2bdc7edabf810c583d86109b895a14e91895623ed",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/FILE_READY.json": "232579453b0c883fac7e0972902c655ca569fc188cf2aef163b83dae8351ea76",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/preparation.diff": "646a2ff635aa9da983ec2a9e3f9aa270453b6be706ee4242826427ec430ca8a5",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/preparation-comparison.json": "e0b7e0c87dc35913315bb194bdc96316ef5112f9b8a7eb49ee488e0531a3acaf",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/authority/HANDOFF.json": "a8823b9e077a1e2ac0d56e208dc56231c8a66fcfa0a7e5f2613e683bbfc9a527",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/authority/SLOT_RELEASE.json": "2f832eb1fa52fe295da92d1d80a34ba1f9d120f79a00d87df0bcf12b9d04adc4",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/mounted-component-001-execution.json": "0351b8e81b65e438a99aad9c2fe09ce742c4920a516cd02604e122a3a8fe7d22",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/mounted-component-001.log": "63a81134f8ef45740502b0a52bb492042846f14faeb2bd5753ab0ea9c9f16662",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/mounted-privacy-001-execution.json": "2f3a27d550bccb535383b11cc888ef6be32961c8a5f5b7055b52a8d39c18f607",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/mounted-privacy-001.log": "0790558426a85104c630ae5726114180d83f888e0d6568f013b457724fa70ca9",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/release-headless-smoke-001-execution.json": "330c3be6ba7a59bb423ec79a463917c89c10c1efa24a1e1198dcc4d69de00ee4",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/release-headless-smoke-001.log": "21a09ae7ff43a4322d973a93df43276aad07cdb98b3c2aa5a058b0c028b9e641",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/runtime-001/release-headless-smoke-001-engine.log": "21a09ae7ff43a4322d973a93df43276aad07cdb98b3c2aa5a058b0c028b9e641",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/release-native-smoke-001-execution.json": "f123a0c0415dff6ac69649d8952b86f09702992353525faf06283950e83f475e",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/release-native-smoke-001.log": "3489b3dd72a33d6a5b69d21c728470ec1b53716f70318bba3ce1dd439672aa18",
+      "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/runtime-001/release-native-smoke-001-engine.log": "3489b3dd72a33d6a5b69d21c728470ec1b53716f70318bba3ce1dd439672aa18"
+    },
+    "next_reviewer_request": "Independently verify the unchanged current app seven-file/PCK binding and four supported package stages at original coverage boundaries. Retain candidate package and accepted separate unit packets; no source/export/signing replay or authority change is needed for that independent review. Root assigns the next engine slot.",
+    "limits": [
+      "No manual M1 Pro play or OS screenshot/visual verdict is supplied by these runtime checks. Native engine reports Apple M2; hardware acceptance remains separately scoped.",
+      "Unit source/still/motion evidence remains unchanged with original camera/light and sampled-AVI/contact limits; this package proof supplies no new unit walking or visual pixels.",
+      "Per-process stage times and world-load milliseconds do not measure full development workflow or explain unallocated startup time.",
+      "Original candidate PCK9fef305d and current PCK06f7e477 are distinct, immutable proof states. MAIN integration and independent final review remain pending."
+    ],
+    "failures_preserved": {
+      "binder_import": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/owner-current-release/binder-import-failure-001/attempt.json",
+      "prior_compiler": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/authority/compiler-write-001-execution.json",
+      "prior_candidate_setup_receipts": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/candidate-boundary/OWNER_HANDOFF-package-pass.json"
+    },
+    "engine_slot_released": true,
+    "main_modified": false,
+    "git_mutated": false,
+    "retro_exact": "release_1308_1394_batch — Exact-current owner package PASS: mounted components2.352563s, privacy3.093277s, signed headless6.041303s and signed native44.454248s each passed once with clean logs. Both signed runs measured the actual current735/1006/1021/79913/466/474 world, exact1308/1394 attachments plus retained1439/1444, stock4/20/30/40 controls and2.751m jetpack ascent with−1.5mps slow descent. Privacy939virtual/47generated/38chunks found no private paths/raw/banned assets. All344 inputs and seven app files stayed exact; four PIDs were freshly absent before immediate slot release. Native process time44.454s and world-load5.311s are separate intervals; remaining startup/tool costs are not attributed. Kept original binder import and earlier setup failures, with no source/check/export/binder replay. Separate independent final release review remains next; no MAIN/Git action or new credit. Continue using the complete native-parser and invocation/environment comparison before the next launch.",
+    "retro_path": "{QUALITY_CHECKOUT}/discovery/RETRO_LOG.md",
+    "retro_sha256": "8711593244aa87866adf9a150106db2b047c15127bf2666e59019c5ecba1002c"
+  }
+}

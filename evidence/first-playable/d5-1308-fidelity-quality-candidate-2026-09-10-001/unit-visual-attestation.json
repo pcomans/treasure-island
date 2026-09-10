@@ -1,0 +1,301 @@
+{
+  "reviewer": "review_1303_source",
+  "reviewed_at": "2026-09-10T16:14:23.171247+00:00",
+  "decision": "PASS",
+  "attestation_kind": "Independent per-unit candidate packet and visual attestation (seventh artifact)",
+  "physical_unit_id": "physical-building:w95934123",
+  "scope": "Current selected quality revision, assembled unit evidence and public-front static/sampled-visual quality, with retained independent technical and same-app candidate proof. This is a genuine attestation of this exact six-binding/image-tree combination; its receipt SHA is computed externally when serialized.",
+  "independence": "Reviewer did not implement the current selected revisions or assemble these packets. Technical and package results are retained at their original reviewed scope, not claimed as new tests in this visual attestation.",
+  "packet": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-d5-1308-1394-quality-batch-v1/evidence/first-playable/d5-1308-fidelity-quality-candidate-2026-09-10-001",
+  "candidate_closure_sha256": "1dfbdb53c770a780856a6b100ca96d29c75c5745478fcab7a9906718879273bc",
+  "acceptance_bindings": {
+    "evidence_manifest_sha256": "7c01ff32b1da4276ec330aee0d034dce4f0cbe8caa510f96d99504084cb314b5",
+    "motion_telemetry_manifest_sha256": "f139576c7b45eb76774315745504992f6bd726cd698faab6b88e79f491197960",
+    "visual_motion_manifest_sha256": "f0d21bb4dc14d8a12aba1fc37614e3cced7ff331521dda06a802bfc6fbd69dc9",
+    "package_verification_receipt_sha256": "c892d30b9c06f280077712c2bbad710eefac67f9fa1dd4b1f92c8f07c0b329dc",
+    "evidence_tree_sha256": "e17f311ea69445d8da9b4029e9d4d93fba19ea2cd2901efa2e2ec1d7dd90556a",
+    "mechanical_review_receipt_sha256": "9c094ed7a52506404a6763298504b71706b75ade1f44e4cfe2ad3fb6ea81380f"
+  },
+  "evidence_tree_document_sha256": "6f14bbea0a9b483b1ff6fb43c907253f1e353e49f4a8cc31b73a9dac20671bfe",
+  "binding_check": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1308-1394-quality-candidate-unit-attestations-001/BINDING_CHECK.json",
+    "sha256": "0f2e730b6c9e1c4bd93f933227a14a7865a0e84d9b6a05076d8faadecb564396",
+    "script_sha256": "017c886331ba25df18fb51ed8e507754c6ab7237620e0d170785d3d9ac3a18e1",
+    "all_image_tree_files_and_six_bindings_exact": true,
+    "all_images_private_copy_original_and_raw_capture_or_payload_exact": true,
+    "packet_image_and_selected_product_inputs_unchanged_at_seal": true,
+    "checker_scope_note": "Initial local binding script assumed each PNG counter had a nested manifest. The held endpoint carries the raw observation directly; the checker was corrected to resolve its already-bound motion-result origin. This was a read-only checker schema assumption, not an evidence/product defect or engine attempt."
+  },
+  "reference": {
+    "path": "/private/tmp/1308-1394-streetview-comparison-b2l4EG/1308-streetview-march-2025.png",
+    "sha256": "20524a65db7cd5c74545a74d628df6053b2c41988c31fa1ab394b250ae3659fd"
+  },
+  "current_rule_hashes": {
+    "AGENTS.md": "2edfaa36f3e3994f9484d5e2998ba7b421ebeadb7c883578c36f3f703d3df9d6",
+    "LEARNINGS.md": "71986e5ac68ae9a907f2b05b14ca9d40b1aeb3aec57b6f9e2bfb313ef8a988b3",
+    ".claude/agents/ti-visual-review.md": "950f601984d8488cf71cfebf2ba5ac047b4f138d73d47dcab5c9aff4ab3ca981",
+    ".agents/skills/building-texture/references/semantic-art-review.md": "e363e3519d628001d8db422e05f927e917db9df278bc93f8e215f3059de5844a"
+  },
+  "inspected_image_count": 17,
+  "inspected_images": [
+    {
+      "path": "images/current004-avi/avi-index-0431.jpg",
+      "sha256": "659c1d57ee6ada4a747c2f36c7d98308b5fa4219ab552080892842a543aa5a05",
+      "bytes": 67744,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 431,
+      "offset": 23887182
+    },
+    {
+      "path": "images/current004-avi/avi-index-0446.jpg",
+      "sha256": "e5f72c4b0d8f5ba4dbf83a92dd5e479f2790e94ed131b0b0ef0e6a1fcf9e9940",
+      "bytes": 67006,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 446,
+      "offset": 24942908
+    },
+    {
+      "path": "images/current004-avi/avi-index-0461.jpg",
+      "sha256": "46ce72baeda0730a161551c34e9083a3b08d260ea5545905c9bec4ea94a7bbbc",
+      "bytes": 66917,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 461,
+      "offset": 25998200
+    },
+    {
+      "path": "images/current004-avi/avi-index-0476.jpg",
+      "sha256": "a20cf41e195d048b4ec730b6686473fb070d5cb6f2e737c6950d4778ef7d9cd0",
+      "bytes": 68792,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 476,
+      "offset": 27066704
+    },
+    {
+      "path": "images/current004-avi/avi-index-0491.jpg",
+      "sha256": "776e554c05aeda0f70bee4f074dfc4a37114e7e8f0ec4ee5c58b5ce07c75ab93",
+      "bytes": 69172,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 491,
+      "offset": 28149980
+    },
+    {
+      "path": "images/current004-avi/avi-index-0506.jpg",
+      "sha256": "f39d15c78893e8c150746963057688d640b4b02db6cd0fa85f5ebd32f2354177",
+      "bytes": 69306,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 506,
+      "offset": 29237334
+    },
+    {
+      "path": "images/current004-avi/avi-index-0521.jpg",
+      "sha256": "4d914ad43535ad25ba41b8cd10dd74323bcac0cad04dafdf56e80b4b03635209",
+      "bytes": 69173,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 521,
+      "offset": 30323896
+    },
+    {
+      "path": "images/current004-avi/avi-index-0536.jpg",
+      "sha256": "4bb9426e437c7fe7dc05113cf0bbdc7123a2bc3473d478d7d2dddd4339601cb0",
+      "bytes": 67283,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 536,
+      "offset": 31397004
+    },
+    {
+      "path": "images/current004-avi/avi-index-0551.jpg",
+      "sha256": "b21f8e3772541ed3c5ea9a24df62c6c356379eb8456f5cd6368dff103e8a009b",
+      "bytes": 67162,
+      "role": "exact_original_mjpeg_payload",
+      "private_and_original_exact": true,
+      "avi_payload_exact": true,
+      "avi_index": 551,
+      "offset": 32451610
+    },
+    {
+      "path": "images/current004-ground-motion/motion-endpoint.png",
+      "sha256": "dea40835fdd10ec83ded37c14cd79360dfbeb1d6606fdb93d22c6801f70444b2",
+      "bytes": 798374,
+      "role": "current004_ground_endpoint_after_input",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    },
+    {
+      "path": "images/current004-roof-motion/01-added-roof-landed.png",
+      "sha256": "cd29880d7633eb9c2e78c83990676b85be4ce91ccd77a9a25ad09e0deba48f28",
+      "bytes": 391519,
+      "role": "current004_roof_phase_native",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    },
+    {
+      "path": "images/current004-roof-motion/02-added-to-source-seam.png",
+      "sha256": "055d6f83163e8445e598ae2126712c81bff2710ea42179e6399a1481149e9f43",
+      "bytes": 289890,
+      "role": "current004_roof_phase_native",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    },
+    {
+      "path": "images/current004-roof-motion/03-source-turnaround-settled.png",
+      "sha256": "9c04a0ea6bb6e1fe488cdcba2a7230e5b6cdba6334ebda6d9b3a43ccf2f818b3",
+      "bytes": 323478,
+      "role": "current004_roof_phase_native",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    },
+    {
+      "path": "images/current004-roof-motion/04-source-to-added-seam.png",
+      "sha256": "36b4c10dc6cf29d96eb8f93e02e8d28ab5d9f57ad1ae0d760e140cb4e7e142b0",
+      "bytes": 284585,
+      "role": "current004_roof_phase_native",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    },
+    {
+      "path": "images/current004-roof-motion/05-added-return-settled.png",
+      "sha256": "106f201a7cd51c075309cff409cc0799374b9ca3ade8346b230d823907750e22",
+      "bytes": 412104,
+      "role": "current004_roof_phase_native",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    },
+    {
+      "path": "images/current004-stills/03-canopy-void-near-default-current.png",
+      "sha256": "f980755b7aa53a648665ed533dac010988bb7b1de6b4d8a2035cc32ceb089938",
+      "bytes": 803328,
+      "role": "current004_static_native",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    },
+    {
+      "path": "images/current004-stills/06-visible-front-default.png",
+      "sha256": "a2925d37c5988eeb64b487846361e118c91ee85ce53c514f23cd64ce1e403ff7",
+      "bytes": 990339,
+      "role": "current004_static_native",
+      "private_and_original_exact": true,
+      "original_manifest_image_hash_exact": true
+    }
+  ],
+  "whole_visible_result_findings": [
+    "I compared the actual March2025 reference with both current004 street views, all five roof-phase PNGs, the held ground endpoint and all nine original AVI payload images. The broader street view supplies the visible roof context that the low near view foreshortens: shallow gray planes meet straight pale eaves and stepped public ends, without the prior dominating humps, isolated shoulders or heavy rim. The two-storey siding/window cadence, pale front gables on deep canopies, slender posts and lower openings read together as a coherent public-front interpretation.",
+    "Connected paved approaches and bounded green lawn fields provide the reference frontage relationship. The roof and wall materials are flatter and more uniform than the photographed shingles/siding, opaque glass and the tiled paving pattern remain simplified, and gray protected side walls are conspicuous. These are disclosed rendering/source-scope limits; I found no additional current public-front form or finish blocker in the inspected images. The reference camera and source footprint differ, so this does not certify an exact photographed roof schedule or dimensions.",
+    "The roof-phase images keep the added gray planes and retained dark source roof visible. Their abrupt material boundary remains apparent; the foreground crest hides the capsule base at the two seam images. These images do not prove contact or absence of penetration. The sampled lateral street views and endpoint retain the roof/canopy/ground arrangement without a new obvious disappearing panel, broad fascia streak or conspicuous fall in those samples. I do not infer intervening-frame stability."
+  ],
+  "current_implementation": [
+    {
+      "path": "game/scripts/world/facades/d5_1308_gateview_live_factory.gd",
+      "sha256": "6950aab112f73fdf78c1cad2f3deca72ac7e46b2a07faffe04f82987a1e07498",
+      "exact_to_accepted_unit_and_batch_map": true
+    },
+    {
+      "path": "game/resources/facades/d5_1308_gateview_live_factory.json",
+      "sha256": "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a",
+      "exact_to_accepted_unit_and_batch_map": true
+    },
+    {
+      "path": "game/scripts/world/facades/d5_1308_gateview_live_replacement.gd",
+      "sha256": "3faca37243c2ee51ff1d2834b3d581d4b7d4552a45179224371a2570b7f08ad5",
+      "exact_to_accepted_unit_and_batch_map": true
+    },
+    {
+      "path": "game/resources/facades/d5_1308_gateview_live_replacement.json",
+      "sha256": "c35951faebaa921d41bf0230bf511b3a3fde9b9b1f533272030a5dfb8d8dfe8a",
+      "exact_to_accepted_unit_and_batch_map": true
+    },
+    {
+      "path": "game/resources/facades/d5_1308_lawn_tone.gdshader",
+      "sha256": "d60b1db292234046d2e8fd1a451e0f3f52a69b12afe401e871bedef6067ca7af",
+      "exact_to_accepted_unit_and_batch_map": true
+    }
+  ],
+  "retained_source_mechanics": "Reuse A\u2019s independent current004 source/affected-mechanics PASS (e528105c\u2026): exact1380 added-roof runtime faces and preserved15 prior meshes, original426 ordered collision faces and unchanged792 lower collision faces. New contained route records added1\u2192source0\u2192added1 support and settled destinations; all222 travel/braking frames grounded,70 without direct upward slide contact. The pre-braking return diagnostic remains false, and roofshape1 spray was rejected without a tag. Ground motion is120 input frames,7.050044m path versus0.191548m net after separate placement; it is not roof-to-street continuity. This packet review binds the accepted result and raw origins; it does not rerun or newly certify those tests.",
+  "retained_source_mechanics_raw_origins": [
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/e528105c83fef22dabb8/REVIEW.md",
+      "sha256": "e528105c83fef22dabb8741b0f64385793f4ab66f2b48c5a15221a39d6b99423",
+      "bytes": 6496,
+      "original_locator": "{TASK_ROOT}/work/1308-fidelity004-independent-source/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "retained_visual_raw_origins": [
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/2a216f7320b50f409c30/REVIEW.json",
+      "sha256": "2a216f7320b50f409c30403e8a6a4ce8f7e548d4d290a17d3f3993de0231a668",
+      "bytes": 9427,
+      "original_locator": "{TASK_ROOT}/work/1308-fidelity-independent-visual-004/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/abd32c5b9e7b1f768719/REVIEW.json",
+      "sha256": "abd32c5b9e7b1f768719c168030d0ab40868fc7632507bda75a18ee7183d7460",
+      "bytes": 21712,
+      "original_locator": "{TASK_ROOT}/work/1308-fidelity-independent-visual-004/motion-001/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "shared_candidate_package": {
+    "independent_review_sha256": "665648ccc7fdc05241841e8201ec495809133f9c2acb522e9adef56bd6287773",
+    "app": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-d5-1308-1394-quality-batch-v1/build/d5-1308-1394-quality-candidate-001/Treasure Island First Playable.app",
+    "pck_sha256": "9fef305dc9ac1f5d3866742143842ce5f691d1bc369dc41b775142fbf243ed86",
+    "executable_sha256": "f29815cae1511ac62d893a17cc7afb9b401a9131489faec68fba9f9ae2012b03",
+    "actual_app_binding_sha256": "8103ac4a7962f23bca2f3c78eda13d139d1ab7f3696610d53189ce770893143e",
+    "unit_partition": {
+      "wall": [
+        14,
+        14,
+        3469,
+        1,
+        4
+      ],
+      "roof": [
+        3,
+        3,
+        1402,
+        1,
+        2
+      ],
+      "counts_order": [
+        "meshes",
+        "surfaces",
+        "triangles",
+        "bodies",
+        "shapes"
+      ]
+    },
+    "scope": "Retain independently passed four same-app stages and exact before/after source/app bindings. Mounted checks prove target component dispatch/material/collision/receiver partitions; signed headless/native ordinary main separately proves full735/1006/1021/79913/466/474 world, both targets and prior1439/1444, controls and privacy. Unit captures are individual source-world images, not combined-app screenshots. No package run or app/source-tree rehash in this attestation."
+  },
+  "limits": [
+    "March2025 pano zO-a_ZQWv5tAHydoH3VsFQ, heading19: nearby1307 UI label uses the recorded1308/w95934123 WSW/SSE association; labels/cameras do not establish exact dimensions or hidden schedules.",
+    "Protected side walls, retained source roof and intentional stagger gaps retain their source scope; this is not a complete hidden-roof/material redesign or surveyed building reconstruction.",
+    "Only two current default-light street stills; roof phase PNGs and ground AVI samples supplement them. No new changed-light004 motion or continuous playback claim.",
+    "Roof PNG draw/physics counters differ by one; AVI encoded indices are not mapped to physics indices.556-frame1280x800 AVI has70 bytes beyond declared RIFF extent; no generic-player conformance claim.",
+    "150 no-input landing frames precede222 travel/braking frames; floor flags/rays do not establish continuous direct contacts. Ground segment is separately placed and its held endpoint disables control only after input.",
+    "All older raw failures/HOLDs remain historical, including older roof/contact failures and the current unbraked return empty-contact diagnostic.",
+    "Simplified material/weathering/vegetation and protected regions are not represented as complete photo fidelity. No new recognition count, publication/current-release, manual M1 play, invisible-interior or global mechanics claim.",
+    "Historical assembly-time pending annotations remain in immutable derived documents; the bound current closure/package receipt supersedes only their package-pending state. This new attestation is separate from later serialized packet binding."
+  ],
+  "next_action": "C may serialize this exact seventh artifact with the existing six values, preserving all packet images and historical records. No additional render or runtime replay is requested by this review.",
+  "authority": "13/213 unchanged; both existing units are quality revisions, zero numerator effect; packets remain unmodified pending serialized binding.",
+  "retro_exact": "review_1303_source \u2014 Independent1308 quality-candidate unit/visual attestation: Compared the dated March2025 reference with all17 exact assembled images, including current004 roof phases and nine original AVI payloads. The whole visible public-front roof, canopy, lower openings and connected ground read coherently; protected/source materials, camera limits and sparse temporal coverage remain explicit. Verified the six exact bindings and image tree, selected current implementation and retained source/mechanics plus independent same-app proof; scoped candidate unit/visual PASS. Preserved70 empty roof-travel contact frames, the false unbraked-return diagnostic, old failures and AVI/counter limits. No engine, packet/source/app/authority edit or new credit; root delivers this note once."
+}

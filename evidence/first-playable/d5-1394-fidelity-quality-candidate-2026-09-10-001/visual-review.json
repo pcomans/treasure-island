@@ -1,0 +1,428 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Independent current static/palette review and separately scoped sampled motion",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/3674a1068b48fcb723b3/REVIEW.json",
+      "sha256": "3674a1068b48fcb723b3c04f96f634e6726e4b3bd6a76b46067d12afacb42a60",
+      "bytes": 9981,
+      "original_locator": "{TASK_ROOT}/work/1394-fidelity-independent-visual-004/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/c8e71cf72c86a263f8ca/REVIEW.json",
+      "sha256": "c8e71cf72c86a263f8ca26566294fb417251cf9d37a4f9c3496f594f1031d09b",
+      "bytes": 14338,
+      "original_locator": "{TASK_ROOT}/work/1394-fidelity-independent-visual-003/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "static_review": {
+      "reviewer": "review_1439_package",
+      "decision": "PASS",
+      "scope": "Static palette follow-up closing the1394 fidelity003 brown-lawn HOLD; prior unchanged screens/paving and geometry-only sampled-motion findings retained at their historical scope.",
+      "created_utc": "2026-09-10T09:01:33.684270+00:00",
+      "reference": {
+        "path": "{PRIVATE_TMP}/1308-1394-streetview-comparison-b2l4EG/1394-streetview-march-2025.png",
+        "sha256": "a382481493b6cf5f0643f44c6366561e5dbc8693a39b9af57f17aa1c4b440534",
+        "date": "March2025",
+        "pano": "j3ugQSzJZtl9lpbb5i58bQ",
+        "heading_degrees": 90,
+        "identity_limit": "UI1230 Gateview Ct follows recorded1230-to-1394/w96215646 crosswalk. Different cameras and light prevent calibrated color or exact dimensional claims; inspected public W-side only.",
+        "copied_into_game_or_report_archive": false
+      },
+      "inspected_native_originals": [
+        {
+          "original": "{PRIVATE_TMP}/d5-1394-fidelity-revision-004/images/03-screen-walk-default.png",
+          "durable": "{TASK_ROOT}/outputs/1394-fidelity-revision-004/03-screen-walk-default.png",
+          "sha256": "420298964fd2438d3ddc83bfeb31d9bb588530f69097da40de8032795f91f693",
+          "bytes": 479470
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1394-fidelity-revision-004/images/04-screen-walk-changed.png",
+          "durable": "{TASK_ROOT}/outputs/1394-fidelity-revision-004/04-screen-walk-changed.png",
+          "sha256": "0b2f81e4cbdfe679166d5d803d3f25fce0c01b6acf4daa9b48fc81cdb72bb4ec",
+          "bytes": 365360
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1394-fidelity-revision-004/images/05-parking-walk-lawn-default.png",
+          "durable": "{TASK_ROOT}/outputs/1394-fidelity-revision-004/05-parking-walk-lawn-default.png",
+          "sha256": "287450969a8ce6f4e8efdcb8a79c9d12ed930588bc496c1e15b37fb6962e19f8",
+          "bytes": 1079868
+        }
+      ],
+      "bindings": [
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-004/OWNER_HANDOFF.md",
+          "sha256": "20f7929ec8a2f09383a3557f250624440c1f5dde2e5750ad2e019670728f5c68"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-004/OWNER_HANDOFF.json",
+          "sha256": "e82e310ced142eff6d4ae45be772c0d67c0e14bf3386b8f0f2210f04fb2d4834"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-004/source-pins.json",
+          "sha256": "2235dbf699b67aa4b73aa3748a2215559737977b31a571c62f531c4981d7c21e"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-004/material-only.diff",
+          "sha256": "acd147cce78a75e7b65399cd6c07a7e1870dcb6c597ac8a776bf8c51b7199908"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-004/FILE_CHECK.json",
+          "sha256": "6d7144731e2d9a566b73b638acea238fd9be24acfe0e51b67331d6db4f4ff8df"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-004/native_driver.gd",
+          "sha256": "b7e637edd90a6fe486aca4a977031910876db6d2a14aa269a641401def00245b"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-004/native-004-result.json",
+          "sha256": "10b1ff655d6315124a74cc0e1931f104347e2ee9aa39fcfc154c82a0df6b576f"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-004/native-004-execution.json",
+          "sha256": "349448470e2ad075fed1f1e28737f1e8fe7d08e9b9eb8ba121514dc80de30b48"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-004/copy-inventory.json",
+          "sha256": "e039248ff98f506d3b5a8b4d11d50b52386428d99912db70e2e2ce63a4578fe3"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/focused-001-result.json",
+          "sha256": "4eb935dd0d62929c03aa687e7e18528c6849579091201e5b9af549233bd63aa4"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-independent-visual-003/REVIEW.md",
+          "sha256": "aa3c92bd196f0908b876b0fe7d9b58041674f496c9d6adf0dac5e427dc11ebe7"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-independent-visual-003/REVIEW.json",
+          "sha256": "c8e71cf72c86a263f8ca26566294fb417251cf9d37a4f9c3496f594f1031d09b"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/motion-finalization.json",
+          "sha256": "33cec8f77a7ce9d3b6a0d152b60cfd488d5784221b1dd8425b53d2fcacf05948"
+        },
+        {
+          "path": "{TASK_ROOT}/work/1394-fidelity-independent-mechanics-003/REVIEW.md",
+          "sha256": "3a9c2753c1a59b496a9003b0767428f961c0ef57e7e46997cea00f3afadbbf5c"
+        }
+      ],
+      "pose_comparison": [
+        {
+          "id": "03-screen-walk-default",
+          "recorded_camera_position_exact": true,
+          "recorded_sun_exact": true,
+          "maximum_forward_component_residual": 6.43929438985886e-15
+        },
+        {
+          "id": "04-screen-walk-changed",
+          "recorded_camera_position_exact": true,
+          "recorded_sun_exact": true,
+          "maximum_forward_component_residual": 4.44087462844609e-16
+        },
+        {
+          "id": "05-parking-walk-lawn-default",
+          "recorded_camera_position_exact": true,
+          "recorded_sun_exact": true,
+          "maximum_forward_component_residual": 0.0
+        }
+      ],
+      "observation": "03/04 show a muted green lawn band under both established lights, visibly separate from the concrete walk/door approaches and dark asphalt.05 confirms the same frontage organization in the overview. This is closer to the reference public green-lawn family and resolves the prior brown/orange presentation. The outside brown island ground remains visibly distinct; the correction does not visually wash the entire scene green.",
+      "retained_visual_scope": "Projecting slatted privacy screens, paving connections, blue-gray siding/upper windows and supported continuous flat canopy remain coherent. No new static edge, material seam or bright color-spill blocker appears in the three images. No roof/screen redesign is requested.",
+      "source_boundary": "Read the material delta and actual native comparison helper. Its LocalLawn call/new tone shader and dependency hashes are the material change; existing geometry comparison checks all16 mesh positions/normals/UVs/indices and four oriented collision signatures before captures. The terminal result is clean and binds the exact003 geometry receipt. This is reuse evidence, not a new independent mechanical certification.",
+      "reuse_and_limits": {
+        "prior_review_sha256": "c8e71cf72c86a263f8ca26566294fb417251cf9d37a4f9c3496f594f1031d09b",
+        "prior_sample_indices": [
+          38,
+          53,
+          68,
+          83,
+          98,
+          113,
+          128,
+          143,
+          158
+        ],
+        "retained": "Prior003 static screen/paving findings and nine original AVI sampled observations remain applicable to retained geometry. Their camera shortening/occlusion and70-byte native RIFF limitations remain exactly historical.",
+        "not_claimed": "The004 lawn shader was not motion-captured; no new palette temporal-stability, continuous/generic-player playback or whole-building/current-app claim. Three static images only, same requested views with tiny recorded forward residuals.",
+        "historical_failures": "Prior003 lawn HOLD and native05 wall-only predicate FAIL remain untouched.004 correctly checks declared LANDshape0 for05; D mechanics stays separate."
+      },
+      "bounded_checks": {
+        "current_pin_count": 279,
+        "all_current_pins_exact": true,
+        "original_durable_pairs_exact": 3,
+        "owner_bound_records_exact": true,
+        "native_geometry_reference_exact": true,
+        "camera_positions_and_suns_exact_to003": true,
+        "max_camera_forward_residual": 6.43929438985886e-15
+      },
+      "next_visual_correction": "None required for the remaining palette blocker within the inspected scope.",
+      "authority": "13/213 unchanged; no source/main/authority/runtime mutation by reviewer.",
+      "retro": "review_1439_package — Independent 1394 material004 visual follow-up: All three actual same-view originals now show a restrained green frontage lawn distinct from the walk and dark parking, resolving the003 brown-lawn HOLD against the dated March2025 reference. Screens, paving and flat-canopy composition retain their accepted visible gains; brown island ground outside the frontage remains visibly separate. Verified279 current inputs and three original/durable pairs once, with the terminal native geometry comparison bound to003. Earlier nine-sample motion findings apply to retained geometry only; the new palette has static evidence and no motion replay claim. Original003 HOLD/nativeFAIL and separate mechanics remain historical. No additional palette correction, pose matrix, engine, reference ingestion or authority change was required."
+    },
+    "motion_review": {
+      "reviewer": "review_1439_package",
+      "decision": "HOLD",
+      "scope": "Independent direct-reference fidelity and bounded sampled visual motion for 1394 revision003 on current13/213. No mechanics, release or authority decision.",
+      "created_utc": "2026-09-10T08:42:18.378523+00:00",
+      "reference": {
+        "path": "{PRIVATE_TMP}/1308-1394-streetview-comparison-b2l4EG/1394-streetview-march-2025.png",
+        "sha256": "a382481493b6cf5f0643f44c6366561e5dbc8693a39b9af57f17aa1c4b440534",
+        "date": "March 2025",
+        "pano": "j3ugQSzJZtl9lpbb5i58bQ",
+        "heading_degrees": 90,
+        "identity_limit": "UI1230 Gateview Ct uses recorded1230-to-1394/w96215646 crosswalk. W-side family association, different camera positions; no exact dimensions or hidden-face schedule inferred.",
+        "pixels_copied_into_review_or_game": false
+      },
+      "bindings": {
+        "OWNER_HANDOFF.md": {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/OWNER_HANDOFF.md",
+          "sha256": "83e80a2df51bc9276f1537f2f51e722f8dd3888c8ed61d3f4855bef7d8ace17d"
+        },
+        "OWNER_HANDOFF.json": {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/OWNER_HANDOFF.json",
+          "sha256": "7595f304bc0efb3dfd5d79eac7e22dc4a6f058f17cfbb6f678925757ffdd3d92"
+        },
+        "source-pins.json": {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/source-pins.json",
+          "sha256": "7718890e97c7c4e81b8601dc4d0c4a5e82c6af202a4273d8abf113a5cb19ac17"
+        },
+        "product-pins.json": {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/product-pins.json",
+          "sha256": "5554302187c6e9a922655e9559f19890f01a5c37387dda85e6038ad939cb130d"
+        },
+        "native-001-result.json": {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/native-001-result.json",
+          "sha256": "eb3527483bcafbaba2cf5a1faa9728f3103416a620e2c403627dedaaa643f415"
+        },
+        "native-001-execution.json": {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/native-001-execution.json",
+          "sha256": "b9bc057975d11cc0d959d3556f2e981f1cd3d11996ad9b1878cecf49f0679275"
+        },
+        "native-copy-inventory.json": {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/native-copy-inventory.json",
+          "sha256": "e8bdd7066933fa988a244cfb490f17ad58df3be0b24cc347d30678a39a0bb6bd"
+        },
+        "motion-001-result.json": {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/motion-001-result.json",
+          "sha256": "126207caed4fd585525c39f194655b42e618e545e7ee4008175b6fa9fff3837f"
+        },
+        "motion-001-execution.json": {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/motion-001-execution.json",
+          "sha256": "9b855b94774a6e9cf020c1c5731b05fc4b42ccadc285234832c1361326bbf3aa"
+        },
+        "motion-finalization.json": {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/motion-finalization.json",
+          "sha256": "33cec8f77a7ce9d3b6a0d152b60cfd488d5784221b1dd8425b53d2fcacf05948"
+        },
+        "copy-inventory.json": {
+          "path": "{TASK_ROOT}/work/1394-fidelity-revision-003/copy-inventory.json",
+          "sha256": "83e483d9af95dd2110ab8179a48ccb92f31b101c1dab5774926d712257698f4b"
+        }
+      },
+      "inspected_native_stills": [
+        {
+          "original": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/images/01-whole-default.png",
+          "durable": "{TASK_ROOT}/outputs/1394-fidelity-revision-003/01-whole-default.png",
+          "sha256": "033807102e294f4f671eef48fbf566cd5e8c1aeba0bd683429c51fe9e0b2e481"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/images/02-whole-changed.png",
+          "durable": "{TASK_ROOT}/outputs/1394-fidelity-revision-003/02-whole-changed.png",
+          "sha256": "69b95d64a7b552eee4a4aad226aef6b0b4adf1c2117f6f8886e9b2cc63a4f321"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/images/03-screen-walk-default.png",
+          "durable": "{TASK_ROOT}/outputs/1394-fidelity-revision-003/03-screen-walk-default.png",
+          "sha256": "3df6d4dd1577c526151f8d60ca60dd62452b0e55f1c2a1f2dfda7b5ff0af7420"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/images/04-screen-walk-changed.png",
+          "durable": "{TASK_ROOT}/outputs/1394-fidelity-revision-003/04-screen-walk-changed.png",
+          "sha256": "b878ec98942e849acd2ab3ac1b042f2f504d401b78738a130117da26e4b3f13c"
+        },
+        {
+          "original": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/images/05-parking-walk-lawn-default.png",
+          "durable": "{TASK_ROOT}/outputs/1394-fidelity-revision-003/05-parking-walk-lawn-default.png",
+          "sha256": "56afc019b42f0a2a418453894c17b19f0aeab4fd8ac0041c654c5073617318ad"
+        }
+      ],
+      "inspected_original_avi_payloads": [
+        {
+          "zero_based_avi_index": 38,
+          "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0038.jpg",
+          "sha256": "91041f14917470b771bdec3174ab7276e305e1116e061de032ea1e31a319d7fd",
+          "byte_offset": 1901916,
+          "bytes": 41876,
+          "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+        },
+        {
+          "zero_based_avi_index": 53,
+          "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0053.jpg",
+          "sha256": "d11c866ed6aa5e2809db20897f691fcb7b4a3a312701545f7c33cc5659bf8e1f",
+          "byte_offset": 2583924,
+          "bytes": 41512,
+          "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+        },
+        {
+          "zero_based_avi_index": 68,
+          "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0068.jpg",
+          "sha256": "589019dfdf66d678af9ea6f235f65ed98eee099507c3d32586593b79a0959c0e",
+          "byte_offset": 3275190,
+          "bytes": 43209,
+          "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+        },
+        {
+          "zero_based_avi_index": 83,
+          "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0083.jpg",
+          "sha256": "317278d02fab3adf8f1ab6cc43704f7fd9356f8f7f251dff08df1e059e27e4b9",
+          "byte_offset": 3999954,
+          "bytes": 42377,
+          "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+        },
+        {
+          "zero_based_avi_index": 98,
+          "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0098.jpg",
+          "sha256": "5b9331e92693efd6a91e69c12d13868dc48bf7c459fc823c64537523cdaefcf4",
+          "byte_offset": 4671920,
+          "bytes": 41021,
+          "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+        },
+        {
+          "zero_based_avi_index": 113,
+          "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0113.jpg",
+          "sha256": "f5dc407fbc7b68fc2c73f7a016934ec07647eb04d28b5470030d6b7d58e03d67",
+          "byte_offset": 5332378,
+          "bytes": 41147,
+          "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+        },
+        {
+          "zero_based_avi_index": 128,
+          "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0128.jpg",
+          "sha256": "6891dbcbbc6d3945242418bec63cd38b9cdaf104ceaaf9c03263ee019b580f0d",
+          "byte_offset": 5987370,
+          "bytes": 44390,
+          "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+        },
+        {
+          "zero_based_avi_index": 143,
+          "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0143.jpg",
+          "sha256": "7bdd898fcdc76214a1b0a3ab9a8fe9a25c41d1a69c7253a221a985ca4b4ef960",
+          "byte_offset": 6694422,
+          "bytes": 44598,
+          "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+        },
+        {
+          "zero_based_avi_index": 158,
+          "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/avi-frame-samples/avi-index-0158.jpg",
+          "sha256": "44a394bd8bbfc396f18669fbcdb8ba90f04f39ada088b03428cfd27829c2d686",
+          "byte_offset": 7377874,
+          "bytes": 42384,
+          "payload_extraction": "Exact native MJPEG payload, no decode/re-encode/rescale"
+        }
+      ],
+      "findings": [
+        {
+          "decision": "PASS_FOR_CHANGED_VISIBLE_MOTIF",
+          "subject": "Screens",
+          "observed": "03/04/05 show projecting white slatted assemblies with legible vertical gaps and side-plane depth. Their family is closer to the dated front than the earlier plain flush panels. Keep this improvement; exact slat counts/household layout are inferred."
+        },
+        {
+          "decision": "PASS_FOR_CHANGED_VISIBLE_ORGANIZATION",
+          "subject": "Parking and walks",
+          "observed": "Dark parking, lighter continuous frontage walk and perpendicular closed-door approaches are distinct in03/04/05. The supported continuous flat canopy and shallow main-roof family remain; no pitched-gable revision is indicated."
+        },
+        {
+          "decision": "HOLD",
+          "subject": "Lawn presentation",
+          "observed": "The frontage strips between the walk/approaches and wall remain dark brown or orange mottled ground in03/04 and the lit05 overview, while the dated corresponding public frontage has a distinct green lawn/planting band. The sampled sequence retains this brown presentation. Canopy shadow alone does not explain the lighted overview.",
+          "smallest_next_correction": "Diagnose the actual rendered lawn material and mask coverage, then correct the bounded lawn presentation on intact source grade. Preserve the successful screen, parking/walk geometry, flat-roof family and protected/source terrain. This review identifies appearance, not a proven shader or coverage cause."
+        }
+      ],
+      "framing": "01/02 provide distant target context in two lights;03/04 supply near screen/ground material evidence and05 supplies the parking/walk/lawn overview. Different cameras limit exact dimensional comparison; unseen/protected faces are outside this decision.",
+      "sampled_motion": {
+        "judgment": "No additional split/streak, missing-panel or obvious surface-jump blocker observed in nine sampled world images. Slatted gaps and walk boundaries remain readable where not naturally occluded. Camera shortening changes view scale near128/143; this is observed and not a mechanics conclusion.",
+        "indices": [
+          38,
+          53,
+          68,
+          83,
+          98,
+          113,
+          128,
+          143,
+          158
+        ],
+        "movie": {
+          "path": "{PRIVATE_TMP}/d5-1394-fidelity-revision-003/1394-fidelity-stock-sweep.avi",
+          "sha256": "42fef0f6dd5fc4320aefe7d19e15a2d99552cce4eaf0bd5e9610f64e69fde33b",
+          "bytes": 7519826,
+          "riff_declared_end": 7519756,
+          "physical_file_end": 7519826,
+          "microseconds_per_frame": 16666,
+          "total_frames": 161,
+          "width": 1280,
+          "height": 800
+        },
+        "owner_trace_only": {
+          "input_frames": 120,
+          "path_m": 6.73100797366351,
+          "net_m": 0.23187255859375,
+          "reported_grounded_frames": 120,
+          "process_range": [
+            38,
+            158
+          ],
+          "physics_range": [
+            39,
+            159
+          ],
+          "drawn_range": [
+            38,
+            158
+          ]
+        },
+        "limits": "Nine encoded samples only; no continuous/generic-player playback, encoded-to-process/physics equality, intervening-frame quality guarantee, collision acceptance or full current-app verification. Final held PNG is byte-bound but not used as an independently inspected extra view. Native RIFF declares end7519756 versus physical7519826, a70-byte trailing-index discrepancy; original AVI remains unchanged."
+      },
+      "raw_failure_preserved": {
+        "native_failures": [
+          "05-parking-walk-lawn-default actual first solid LOS reaches intended1394wall body."
+        ],
+        "meaning": "Native PID11510 exited1. View05 visibly shows intended ground organization and its ray hits exact land:w26767313:x_-2__z_-3 shape0, while the inherited predicate demands wall. Pixels remain reviewable; the raw failure is not rewritten or promoted to overall technical PASS. Other source/contact claims remain owner/D scope."
+      },
+      "bounded_verification": {
+        "source_pins_current_exact": 267,
+        "original_and_durable_files_exact": 17,
+        "sampled_payloads_exact_to_native_avi": 9,
+        "reference_hash_exact": true
+      },
+      "unchanged_authority": "13/213; quality HOLD does not automatically revoke credit. No product, terrain, controller, main, app or authority mutation performed.",
+      "retro": "review_1439_package — independent 1394 fidelity003 visual review: Compared all five native stills and nine original AVI payloads with the actual March2025 reference, retaining the 1230-to-1394 crosswalk and different-camera limits. Projecting slatted screens and parking/walk/entry separation improve the facade; the visible lawn remains brown in both lights and the lit overview, so fidelity stays HOLD on that material/mask presentation alone. Early pixel feedback identified a bounded next correction while preserving flat-roof geometry, raw native05 predicate failure and separate mechanics. Verified the 267 frozen inputs and original payload/copy bindings once; no engine, photo ingestion, authority change or continuous-playback claim."
+    },
+    "limits": [
+      "Palette004 has static native evidence. Geometry003 mechanics/motion reused through bounded material addendum; five-decimal oriented collision signatures are not raw byte hashes.",
+      "Original003 ground-view wall-only predicate FAIL preserved; no palette motion replay.",
+      "Individual source-world captures are not combined-world or app pixels; actual batch source and owner package runs separately establish exact selected implementations and attachments.",
+      "Independent static and sampled-motion reviews retain their written scope. No continuous playback, hidden-roof schedule, manual-play or AVI/physics-index equivalence claim.",
+      "Original AVI files retain their70-byte declared/physical extent discrepancy. Exact payload copies do not establish generic-player conformance.",
+      "Independent app decision and seventh unit/packet/visual attestation are pending; historical reviews do not attest this newly assembled image tree.",
+      "Three palette004 stills only. Two motion PNGs and nine AVI payloads depict geometry003 and its older palette. The preservation addendum compares16 native arrays and four five-decimal oriented collision signatures, not raw collision-byte hashes. Original003 wall-only intended-land predicate FAIL remains."
+    ],
+    "not_an_attestation_of_this_new_packet_tree": true
+  },
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "inventory_physical_units": 213,
+    "credit_granted": false,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_exact_app_and_packet_attestation_pending": true
+  }
+}

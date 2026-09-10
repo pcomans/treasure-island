@@ -1439,7 +1439,8 @@
             "game/resources/facades/d5_1308_gateview_live_factory.json",
             "game/resources/facades/d5_1308_siding_marks.gdshader",
             "game/scripts/world/facades/d5_1308_gateview_live_factory.gd",
-            "game/scripts/world/facades/site_12_housing_kit.gd"
+            "game/scripts/world/facades/site_12_housing_kit.gd",
+            "game/resources/facades/d5_1308_lawn_tone.gdshader"
           ]
         },
         "runtime_config_path": {
@@ -1508,7 +1509,8 @@
             "game/resources/facades/d5_1394_gateview_live_factory.json",
             "game/resources/facades/d5_1394_siding_marks.gdshader",
             "game/scripts/world/facades/d5_1394_gateview_live_factory.gd",
-            "game/scripts/world/facades/site_12_housing_kit.gd"
+            "game/scripts/world/facades/site_12_housing_kit.gd",
+            "game/resources/facades/d5_1394_lawn_tone.gdshader"
           ]
         },
         "runtime_config_path": {

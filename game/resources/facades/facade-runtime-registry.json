@@ -2470,20 +2470,20 @@
         "run_count": 34
       },
       "active_runtime_contract": {
-        "adapter_sha256": "1871a9038d62a3c6fc8b3e0a13f3fea90bc0312988cfb9d254ecfeae89e7cc26",
+        "adapter_sha256": "3faca37243c2ee51ff1d2834b3d581d4b7d4552a45179224371a2570b7f08ad5",
         "behavior_contract": {
           "acceptance_contract": {
             "accepted_physical_unit_id": "physical-building:w95934123",
-            "capture_time_recognition_metric": "11/213",
-            "evidence_manifest_sha256": "f776a306714ebbbb96266933abaa0aa602d27babeeaa133dd00d95e36b2a58ba",
-            "evidence_tree_sha256": "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1",
-            "mechanical_review_receipt_sha256": "2f8c4f42e44de69bbe5e06642b4149ba5ccebe2f3d44efee889677459f1629c5",
-            "motion_telemetry_manifest_sha256": "8a636cc7b9a6874f038cc4a0eac4c273e86de6b7a48fdf50e519abf299c9de6b",
-            "numerator_effect": 1,
-            "package_verification_receipt_sha256": "8058b74a5e11640a51c0156ce8a284509b33ea1d5a76961022e232fa3d3e0ebf",
+            "capture_time_recognition_metric": "13/213",
+            "evidence_manifest_sha256": "7c01ff32b1da4276ec330aee0d034dce4f0cbe8caa510f96d99504084cb314b5",
+            "evidence_tree_sha256": "e17f311ea69445d8da9b4029e9d4d93fba19ea2cd2901efa2e2ec1d7dd90556a",
+            "mechanical_review_receipt_sha256": "9c094ed7a52506404a6763298504b71706b75ade1f44e4cfe2ad3fb6ea81380f",
+            "motion_telemetry_manifest_sha256": "f139576c7b45eb76774315745504992f6bd726cd698faab6b88e79f491197960",
+            "numerator_effect": 0,
+            "package_verification_receipt_sha256": "c892d30b9c06f280077712c2bbad710eefac67f9fa1dd4b1f92c8f07c0b329dc",
             "reference_recognizable": true,
-            "review_receipt_sha256": "7b29686da76c68ffe6527c3c9da10034de942fade519ec5798e5bf7943eda00c",
-            "visual_motion_manifest_sha256": "2d9911060b6259b5331b1d90055c2794cf39d0b6be3f907b4daf0af5e269a967",
+            "review_receipt_sha256": "87a2af8c5ab11082337265f53ca5fcd3aa9f0dbfdd22f97e7a8968653ad71a06",
+            "visual_motion_manifest_sha256": "f0d21bb4dc14d8a12aba1fc37614e3cced7ff331521dda06a802bfc6fbd69dc9",
             "wall_and_roof_are_one_physical_unit": true
           },
           "geometry_contract": {
@@ -2493,44 +2493,54 @@
               "land:w26767313:x_-2__z_-1": "5508f75d3cc82559353123a3af167a0bb5b375eea73b84537d38a82b595579f7"
             },
             "canonical_wall_record_sha256": "5bf75fcc75fdbc83d45a97a6a4168a439e8c31bcbc473105147f831a09458abd",
-            "capture_isolated_world_mesh_instances": 983,
-            "capture_isolated_world_shapes": 470,
-            "capture_isolated_world_surfaces": 998,
-            "capture_isolated_world_triangles": 74300,
+            "capture_isolated_world_mesh_instances": 1002,
+            "capture_isolated_world_shapes": 474,
+            "capture_isolated_world_surfaces": 1017,
+            "capture_isolated_world_triangles": 78685,
             "horizontal_source_footprint_preserved": true,
             "source_geometry_sha256": "6028c89be31ebfd095777b86f6d5d4a9094002b7b5fd73efb2fc940f9a9f3917",
-            "visual_mesh_instances": 8,
-            "visual_surfaces": 8,
-            "visual_triangles": 2562,
-            "world_mesh_instances": 993,
+            "visual_mesh_instances": 17,
+            "visual_surfaces": 17,
+            "visual_triangles": 4871,
+            "world_mesh_instances": 1006,
             "world_records": 735,
-            "world_shapes": 472,
+            "world_shapes": 474,
             "world_static_bodies": 466,
-            "world_surfaces": 1008,
-            "world_topology_scope": "pre_d5_1394_authority_transition_combined_topology",
-            "world_triangles": 76376
+            "world_surfaces": 1021,
+            "world_topology_scope": "same_batch_combined_topology_reference",
+            "world_triangles": 79913
           },
           "ownership_contract": {
             "eligible_exterior_collision_triangles": 68,
             "eligible_render_layer": 2,
             "navigation_owner_count": 0,
             "noneligible_canopy_post_collision_triangles": 240,
+            "noneligible_closed_lower_collision_triangles": 792,
             "noneligible_ground_collision_triangles": 96,
             "noneligible_render_layer": 1,
-            "roof_collision_triangles": 22,
+            "roof_collision_triangles": 1402,
             "roof_is_wall_spray_receiver": false,
+            "roof_shape_collision_triangles": [
+              22,
+              1380
+            ],
+            "roof_shape_order": [
+              "exact_source_roof",
+              "added_public_roof"
+            ],
             "roof_world_solid_landing": true,
-            "shape_count": 4,
+            "shape_count": 6,
             "spray_owner_count": 1,
             "structural_owner_count": 2,
             "terrain_geometry_and_ownership_unchanged": true,
-            "wall_collision_triangles": 404,
+            "wall_collision_triangles": 1196,
             "wall_decal_cull_mask": 2,
             "wall_is_sole_spray_receiver": true,
             "wall_shape_order": [
               "eligible_exterior",
               "noneligible_canopy_posts",
-              "noneligible_grade_pads"
+              "noneligible_grade_pads",
+              "noneligible_closed_lower"
             ]
           },
           "replacement_contract": {
@@ -2597,7 +2607,7 @@
             "unsurveyed_dimensions_and_counts_are_production_inference": true
           }
         },
-        "config_sha256": "d4110a1621bcdbf5fcfa93720daf2ead7f0cc08ad268e2c6f5d26d6e6df9031e",
+        "config_sha256": "c35951faebaa921d41bf0230bf511b3a3fde9b9b1f533272030a5dfb8d8dfe8a",
         "config_summary": {
           "accepted_source_world_mechanics_receipt_sha256": "3cce21ec2d08bdcc18aa0d91993d94edb2c7e68115067c6e69418df7af451a1d",
           "accepted_source_world_visual_receipt_sha256": "2d9c610aec2be26857a9d3102ec7668a8241de6341be7dbd20c3084d56289927",
@@ -2610,7 +2620,35 @@
           },
           "chunk_id": "x_-2__z_-1",
           "chunk_sha256": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2",
-          "factory_config_sha256": "6adbfa189fd52c444ab028ef92098f7cce6143aed440824c02fe5a79f1e7757f",
+          "factory_config_sha256": "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a",
+          "fidelity_revision_001": {
+            "new_ground_collider": false,
+            "new_ground_visual_only_triangles": 137,
+            "new_nonreceiver_closed_lower_triangles": 792,
+            "new_roof_owned_triangles": 1380,
+            "old_collision426_exact_subset": true,
+            "protected_and_original22roof_exact": true,
+            "render_counts": {
+              "ClosedLowerDoors": 72,
+              "ClosedLowerWindows": 72,
+              "ConnectedConcreteAprons": 39,
+              "DeepRepeatedGableCanopyRoofs": 54,
+              "ExactSourceNeutralRoof": 22,
+              "GroundFlushCanopySupportSlabs": 96,
+              "LocalFrontageLawn": 98,
+              "LowerOpeningFramesAndHandles": 648,
+              "ObservedWSWSSEHorizontalSidingFields": 40,
+              "PaleSidedCanopyGableFronts": 18,
+              "ProtectedExactNeutralWallRuns": 28,
+              "PublicPaleRoofFasciaAndSoffit": 702,
+              "PublicPitchedRoofSlopes": 678,
+              "ReadableCanopyRoofTops": 24,
+              "RealCanopyFrontSupports": 144,
+              "RepeatedOpaqueUpperSliders": 264,
+              "RestrainedRealWindowAndCanopyTrim": 1872
+            },
+            "scope": "revision004: straight planar public corner tapers restore prior0.9m roof omissions within existing5.1m bands; gray internal end closures;003 canopy/lower/lawn/apron geometry and current13 unchanged; no inward connectors"
+          },
           "mapped_runs": [
             0,
             1,
@@ -2641,20 +2679,24 @@
           },
           "pair_contract": {
             "bodies": 2,
-            "collision_triangles": 426,
+            "collision_triangles": 2598,
             "eligible_wall_triangles": 68,
             "factory_calls": 1,
             "fallback_allowed": false,
-            "meshes": 8,
+            "meshes": 17,
             "noneligible_canopy_post_triangles": 240,
+            "noneligible_lower_triangles": 792,
             "noneligible_pad_triangles": 96,
             "partial_pair_allowed": false,
-            "roof_triangles": 22,
-            "shapes": 4,
+            "roof_shapes": 2,
+            "roof_triangles": 1402,
+            "shapes": 6,
             "stack_allowed": false,
-            "surfaces": 8,
-            "triangles": 2562,
-            "wall_collision_triangles": 404
+            "surfaces": 17,
+            "triangles": 4871,
+            "wall_collision_triangles": 1196,
+            "wall_shapes": 4,
+            "wall_triangles": 3469
           },
           "protected_runs": [
             4,
@@ -2692,8 +2734,8 @@
           }
         },
         "dispatch_sha256": "552cc81c7146793e272621ca99667997943e8a01c48aa62e80bd7a14a4f1ccf7",
-        "prototype_config_sha256": "6adbfa189fd52c444ab028ef92098f7cce6143aed440824c02fe5a79f1e7757f",
-        "prototype_sha256": "6e2f0e99e23dc180aba4955be8c5184c6e094057f4a21c2e9e47978dc18b3787",
+        "prototype_config_sha256": "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a",
+        "prototype_sha256": "6950aab112f73fdf78c1cad2f3deca72ac7e46b2a07faffe04f82987a1e07498",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
       },
       "adapter_id": "active-adapter:d5-1308-live:building:w95934123:wall",
@@ -2710,11 +2752,15 @@
       "runtime_assets": [
         {
           "path": "res://game/resources/facades/d5_1308_gateview_live_factory.json",
-          "sha256": "6adbfa189fd52c444ab028ef92098f7cce6143aed440824c02fe5a79f1e7757f"
+          "sha256": "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a"
         },
         {
           "path": "res://game/resources/facades/d5_1308_gateview_live_replacement.json",
-          "sha256": "d4110a1621bcdbf5fcfa93720daf2ead7f0cc08ad268e2c6f5d26d6e6df9031e"
+          "sha256": "c35951faebaa921d41bf0230bf511b3a3fde9b9b1f533272030a5dfb8d8dfe8a"
+        },
+        {
+          "path": "res://game/resources/facades/d5_1308_lawn_tone.gdshader",
+          "sha256": "d60b1db292234046d2e8fd1a451e0f3f52a69b12afe401e871bedef6067ca7af"
         },
         {
           "path": "res://game/resources/facades/d5_1308_siding_marks.gdshader",
@@ -2722,11 +2768,11 @@
         },
         {
           "path": "res://game/scripts/world/facades/d5_1308_gateview_live_factory.gd",
-          "sha256": "6e2f0e99e23dc180aba4955be8c5184c6e094057f4a21c2e9e47978dc18b3787"
+          "sha256": "6950aab112f73fdf78c1cad2f3deca72ac7e46b2a07faffe04f82987a1e07498"
         },
         {
           "path": "res://game/scripts/world/facades/d5_1308_gateview_live_replacement.gd",
-          "sha256": "1871a9038d62a3c6fc8b3e0a13f3fea90bc0312988cfb9d254ecfeae89e7cc26"
+          "sha256": "3faca37243c2ee51ff1d2834b3d581d4b7d4552a45179224371a2570b7f08ad5"
         },
         {
           "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
@@ -3085,20 +3131,20 @@
         "run_count": 24
       },
       "active_runtime_contract": {
-        "adapter_sha256": "99f78bd3e3a2215ca8dd48372ecb004489249b069d3e3944f8f283a0422b0f13",
+        "adapter_sha256": "42e0233cdbe1be7bdcbb63603c1bb2cae4c247dde87a51f9518cc1afafc82076",
         "behavior_contract": {
           "acceptance_contract": {
             "accepted_physical_unit_id": "physical-building:w96215646",
-            "capture_time_recognition_metric": "11/213",
-            "evidence_manifest_sha256": "f7105c935499a455007d73e77bca38fc9e4cb249155312d2397445f4b4ff7e29",
-            "evidence_tree_sha256": "f809a431e5d4bf53d94608a99900d4a17734bca79b28280150fd88ce5f51b934",
-            "mechanical_review_receipt_sha256": "606f8e066e3a07124e50c6f23b69d04f02b1efeb8dfb85381e23de58b07f3214",
-            "motion_telemetry_manifest_sha256": "d4f8a57b8e456641707b000ad997a96162399b6c5322f0fb0bdf56f49a60ff07",
-            "numerator_effect": 1,
-            "package_verification_receipt_sha256": "6d83381a3cf12ff706f1d47be276781581be77edeb9a2f910e8f23a155f5a5f6",
+            "capture_time_recognition_metric": "13/213",
+            "evidence_manifest_sha256": "ec327adb9239a902f40fd7e2ede7afedcd19bf1869b392e9646544721eaec316",
+            "evidence_tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+            "mechanical_review_receipt_sha256": "c2c4ee90347b458e44fda87d900a4a2031b2cf4883c16a0db1ceac0ffeec02cd",
+            "motion_telemetry_manifest_sha256": "0ad7ff068f42b8230ba724d9143c9c563130de3c9d40c37837f1ed21f95ecc60",
+            "numerator_effect": 0,
+            "package_verification_receipt_sha256": "9be91b038dc142ac84d3947ed68733c2346aa5756e4ccbb433bf0a173b8ca364",
             "reference_recognizable": true,
-            "review_receipt_sha256": "0275e3c256ed1c6c3ff66c63399593e628d61b724803af83f2809ad683323207",
-            "visual_motion_manifest_sha256": "c468c4f930e09a063e3018aa2b5c44ce70248f83db6f920a3033de8961e37a86",
+            "review_receipt_sha256": "c7b5079a3a59847b80e201ef8107928381f9370dd74001f2675f0c68de82dbc8",
+            "visual_motion_manifest_sha256": "6a057c2b0236e90d11861499c299b723b35da37ee3590a0a154d0c3390f0b2cb",
             "wall_and_roof_are_one_physical_unit": true
           },
           "geometry_contract": {
@@ -3108,29 +3154,29 @@
               "land:w26767313:x_-2__z_-3": "17c60f0f623bf919bd05c0ebc4ae93c06cce0c33a5603725175f3c4754572c02"
             },
             "canonical_wall_record_sha256": "222fc29f2d1526d983f4653dc8ae157aa98575dbbfb16c89898827a26dc26019",
-            "capture_isolated_world_mesh_instances": 987,
-            "capture_isolated_world_shapes": 470,
-            "capture_isolated_world_surfaces": 1002,
-            "capture_isolated_world_triangles": 73904,
+            "capture_isolated_world_mesh_instances": 997,
+            "capture_isolated_world_shapes": 472,
+            "capture_isolated_world_surfaces": 1012,
+            "capture_isolated_world_triangles": 77604,
             "horizontal_source_footprint_preserved": true,
             "source_geometry_sha256": "b0e6c7426ac41c995f96a647ff5102b4d85963d2b7a45f21ad1b81455e451220",
-            "visual_mesh_instances": 12,
-            "visual_surfaces": 12,
-            "visual_triangles": 2140,
-            "world_mesh_instances": 993,
+            "visual_mesh_instances": 16,
+            "visual_surfaces": 16,
+            "visual_triangles": 3368,
+            "world_mesh_instances": 1006,
             "world_records": 735,
-            "world_shapes": 472,
+            "world_shapes": 474,
             "world_static_bodies": 466,
-            "world_surfaces": 1008,
+            "world_surfaces": 1021,
             "world_topology_scope": "current_integration_topology",
-            "world_triangles": 76376
+            "world_triangles": 79913
           },
           "ownership_contract": {
             "eligible_exterior_collision_triangles": 48,
             "eligible_render_layer": 2,
             "navigation_owner_count": 0,
             "noneligible_canopy_post_collision_triangles": 204,
-            "noneligible_ground_collision_triangles": 864,
+            "noneligible_ground_collision_triangles": 2016,
             "noneligible_render_layer": 1,
             "roof_collision_triangles": 16,
             "roof_is_wall_spray_receiver": false,
@@ -3139,7 +3185,7 @@
             "spray_owner_count": 1,
             "structural_owner_count": 2,
             "terrain_geometry_and_ownership_unchanged": true,
-            "wall_collision_triangles": 1116,
+            "wall_collision_triangles": 2268,
             "wall_decal_cull_mask": 2,
             "wall_is_sole_spray_receiver": true,
             "wall_shape_order": [
@@ -3202,7 +3248,7 @@
             "unsurveyed_dimensions_and_counts_are_production_inference": true
           }
         },
-        "config_sha256": "0d3909c266b5da07927051e92667300fca4c8ab0b919a63459e9a3608fbe1782",
+        "config_sha256": "3d74e15f0a438dd4a45f2c778c415879888ef1b7a3cef75ebe7a9682db4de203",
         "config_summary": {
           "accepted_source_world_mechanics_receipt_sha256": "0a049b0af97211a50e9365f6ec3acdc3c7a33060b4f3c8e9c3bf2d1d3a827d05",
           "accepted_source_world_visual_receipt_sha256": "6be84c50a594ed25050419af477d9e1e98f577bcecf117a02b27909593b7fb0a",
@@ -3220,7 +3266,19 @@
           },
           "chunk_id": "x_-2__z_-3",
           "chunk_sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
-          "factory_config_sha256": "4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b",
+          "factory_config_sha256": "2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86",
+          "fidelity_refinement": {
+            "material_only_004": "Private LocalLawn hue/luminance mapping; geometry, UV arrays, collision and other materials remain003 exact",
+            "member_boxes": 102,
+            "new_acceptance_claim": false,
+            "raw_polygon_fan_triangles": 82,
+            "scope": "Current13 correction study; historical accepted receipts above retained at their original source scope",
+            "screen_triangles": 1224,
+            "screens": 6,
+            "source_ground_collision_unchanged": true,
+            "visual_only_ground_triangles": 76,
+            "zero_area_fans_skipped_by_existing_guard": 6
+          },
           "mapped_runs": [
             1,
             2,
@@ -3243,20 +3301,20 @@
           },
           "pair_contract": {
             "bodies": 2,
-            "collision_triangles": 1132,
+            "collision_triangles": 2284,
             "eligible_wall_triangles": 48,
             "factory_calls": 1,
             "fallback_allowed": false,
-            "meshes": 12,
+            "meshes": 16,
             "noneligible_canopy_post_triangles": 204,
-            "noneligible_closed_module_triangles": 864,
+            "noneligible_closed_module_triangles": 2016,
             "partial_pair_allowed": false,
             "roof_triangles": 16,
             "shapes": 4,
             "stack_allowed": false,
-            "surfaces": 12,
-            "triangles": 2140,
-            "wall_collision_triangles": 1116
+            "surfaces": 16,
+            "triangles": 3368,
+            "wall_collision_triangles": 2268
           },
           "protected_runs": [
             0,
@@ -3280,20 +3338,22 @@
           "truth_boundary": {
             "actual_grade_walking": "independent_scoped_PASS; original lowexit empty finalcontact FAIL preserved; no continuous support identity claim",
             "as_built_claim": false,
-            "candidate_authority_metric": "11/213",
-            "candidate_authority_schema": "ti.facade-runtime-registry/11",
+            "candidate_authority_metric": "13/213",
+            "candidate_authority_schema": "ti.facade-runtime-registry/13",
             "candidate_credit": 0,
             "hidden_schedule_invented": false,
+            "historical_live_candidate_authority_metric": "11/213",
+            "historical_live_candidate_authority_schema": "ti.facade-runtime-registry/11",
             "historical_source_world_metric": "10/213",
             "interior_modeled": false,
-            "production_attachment_review": "pending",
+            "production_attachment_review": "prior live accepted; bounded fidelity revision source/contact/pixel review pending",
             "recognition_accepted": false,
             "runtime_attachment": true
           }
         },
         "dispatch_sha256": "552cc81c7146793e272621ca99667997943e8a01c48aa62e80bd7a14a4f1ccf7",
-        "prototype_config_sha256": "4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b",
-        "prototype_sha256": "6f5f257a9869780202b98aeacef233c3604ebd9c4ad348fae91f9b2021358b2a",
+        "prototype_config_sha256": "2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86",
+        "prototype_sha256": "25284afdd779f6b491da47218fc6fdd169dad3bb3c56da70d76680cc91781fcb",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
       },
       "adapter_id": "active-adapter:d5-1394-live:building:w96215646:wall",
@@ -3310,11 +3370,15 @@
       "runtime_assets": [
         {
           "path": "res://game/resources/facades/d5_1394_gateview_live_factory.json",
-          "sha256": "4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b"
+          "sha256": "2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86"
         },
         {
           "path": "res://game/resources/facades/d5_1394_gateview_live_replacement.json",
-          "sha256": "0d3909c266b5da07927051e92667300fca4c8ab0b919a63459e9a3608fbe1782"
+          "sha256": "3d74e15f0a438dd4a45f2c778c415879888ef1b7a3cef75ebe7a9682db4de203"
+        },
+        {
+          "path": "res://game/resources/facades/d5_1394_lawn_tone.gdshader",
+          "sha256": "d60b1db292234046d2e8fd1a451e0f3f52a69b12afe401e871bedef6067ca7af"
         },
         {
           "path": "res://game/resources/facades/d5_1394_siding_marks.gdshader",
@@ -3322,11 +3386,11 @@
         },
         {
           "path": "res://game/scripts/world/facades/d5_1394_gateview_live_factory.gd",
-          "sha256": "6f5f257a9869780202b98aeacef233c3604ebd9c4ad348fae91f9b2021358b2a"
+          "sha256": "25284afdd779f6b491da47218fc6fdd169dad3bb3c56da70d76680cc91781fcb"
         },
         {
           "path": "res://game/scripts/world/facades/d5_1394_gateview_live_replacement.gd",
-          "sha256": "99f78bd3e3a2215ca8dd48372ecb004489249b069d3e3944f8f283a0422b0f13"
+          "sha256": "42e0233cdbe1be7bdcbb63603c1bb2cae4c247dde87a51f9518cc1afafc82076"
         },
         {
           "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
@@ -3342,10 +3406,10 @@
   "adapter_contract": {
     "path": "res://game/resources/facades/facade-runtime-adapter-contracts.json",
     "schema_version": "ti.facade-runtime-adapter-contracts/12",
-    "sha256": "130f6ff4b6c36771768b90ed859a23db197786d063624063a0382bdba93535eb"
+    "sha256": "2592c8fc849d42ee84ff93651bfe9d482120cc955f4d9b9fa7841cc83474e4b7"
   },
   "build_contract": {
-    "authoring_catalog_sha256": "584d915ea409dae0395c635fd415e1b8a319e3d0e661f83249f3c192308efc6c",
+    "authoring_catalog_sha256": "38ed1e2285ef15355520cfe810711b434156f06fd0b1199b6f0c62bc6923d8fb",
     "compiler_version": "1.12.0",
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
@@ -7955,18 +8019,18 @@
     {
       "acceptance_records": [
         {
-          "capture_time_recognition_metric": "11/213",
-          "evidence_manifest_sha256": "f776a306714ebbbb96266933abaa0aa602d27babeeaa133dd00d95e36b2a58ba",
-          "evidence_tree_sha256": "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1",
-          "mechanical_review_receipt_sha256": "2f8c4f42e44de69bbe5e06642b4149ba5ccebe2f3d44efee889677459f1629c5",
-          "motion_telemetry_manifest_sha256": "8a636cc7b9a6874f038cc4a0eac4c273e86de6b7a48fdf50e519abf299c9de6b",
-          "numerator_effect": 1,
-          "package_verification_receipt_sha256": "8058b74a5e11640a51c0156ce8a284509b33ea1d5a76961022e232fa3d3e0ebf",
-          "review_id": "d5-1308-live-promotion-candidate-2026-09-10-001",
+          "capture_time_recognition_metric": "13/213",
+          "evidence_manifest_sha256": "7c01ff32b1da4276ec330aee0d034dce4f0cbe8caa510f96d99504084cb314b5",
+          "evidence_tree_sha256": "e17f311ea69445d8da9b4029e9d4d93fba19ea2cd2901efa2e2ec1d7dd90556a",
+          "mechanical_review_receipt_sha256": "9c094ed7a52506404a6763298504b71706b75ade1f44e4cfe2ad3fb6ea81380f",
+          "motion_telemetry_manifest_sha256": "f139576c7b45eb76774315745504992f6bd726cd698faab6b88e79f491197960",
+          "numerator_effect": 0,
+          "package_verification_receipt_sha256": "c892d30b9c06f280077712c2bbad710eefac67f9fa1dd4b1f92c8f07c0b329dc",
+          "review_id": "d5-1308-fidelity-quality-candidate-2026-09-10-001",
           "review_kind": "independent_reference_recognition",
-          "review_receipt_sha256": "7b29686da76c68ffe6527c3c9da10034de942fade519ec5798e5bf7943eda00c",
+          "review_receipt_sha256": "87a2af8c5ab11082337265f53ca5fcd3aa9f0dbfdd22f97e7a8968653ad71a06",
           "status": "accept",
-          "visual_motion_manifest_sha256": "2d9911060b6259b5331b1d90055c2794cf39d0b6be3f907b4daf0af5e269a967"
+          "visual_motion_manifest_sha256": "f0d21bb4dc14d8a12aba1fc37614e3cced7ff331521dda06a802bfc6fbd69dc9"
         }
       ],
       "active_runtime_adapter_ids": [
@@ -9371,18 +9435,18 @@
     {
       "acceptance_records": [
         {
-          "capture_time_recognition_metric": "11/213",
-          "evidence_manifest_sha256": "f7105c935499a455007d73e77bca38fc9e4cb249155312d2397445f4b4ff7e29",
-          "evidence_tree_sha256": "f809a431e5d4bf53d94608a99900d4a17734bca79b28280150fd88ce5f51b934",
-          "mechanical_review_receipt_sha256": "606f8e066e3a07124e50c6f23b69d04f02b1efeb8dfb85381e23de58b07f3214",
-          "motion_telemetry_manifest_sha256": "d4f8a57b8e456641707b000ad997a96162399b6c5322f0fb0bdf56f49a60ff07",
-          "numerator_effect": 1,
-          "package_verification_receipt_sha256": "6d83381a3cf12ff706f1d47be276781581be77edeb9a2f910e8f23a155f5a5f6",
-          "review_id": "d5-1394-live-promotion-candidate-2026-09-10-001",
+          "capture_time_recognition_metric": "13/213",
+          "evidence_manifest_sha256": "ec327adb9239a902f40fd7e2ede7afedcd19bf1869b392e9646544721eaec316",
+          "evidence_tree_sha256": "464224831dfadcc4657fdb3575fc47501190ad41c44163a7dd05885284772689",
+          "mechanical_review_receipt_sha256": "c2c4ee90347b458e44fda87d900a4a2031b2cf4883c16a0db1ceac0ffeec02cd",
+          "motion_telemetry_manifest_sha256": "0ad7ff068f42b8230ba724d9143c9c563130de3c9d40c37837f1ed21f95ecc60",
+          "numerator_effect": 0,
+          "package_verification_receipt_sha256": "9be91b038dc142ac84d3947ed68733c2346aa5756e4ccbb433bf0a173b8ca364",
+          "review_id": "d5-1394-fidelity-quality-candidate-2026-09-10-001",
           "review_kind": "independent_reference_recognition",
-          "review_receipt_sha256": "0275e3c256ed1c6c3ff66c63399593e628d61b724803af83f2809ad683323207",
+          "review_receipt_sha256": "c7b5079a3a59847b80e201ef8107928381f9370dd74001f2675f0c68de82dbc8",
           "status": "accept",
-          "visual_motion_manifest_sha256": "c468c4f930e09a063e3018aa2b5c44ce70248f83db6f920a3033de8961e37a86"
+          "visual_motion_manifest_sha256": "6a057c2b0236e90d11861499c299b723b35da37ee3590a0a154d0c3390f0b2cb"
         }
       ],
       "active_runtime_adapter_ids": [

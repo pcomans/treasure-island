@@ -1,0 +1,146 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Independent unit source/traversal and applicable material preservation",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/e528105c83fef22dabb8/REVIEW.md",
+      "sha256": "e528105c83fef22dabb8741b0f64385793f4ab66f2b48c5a15221a39d6b99423",
+      "bytes": 6496,
+      "original_locator": "{TASK_ROOT}/work/1308-fidelity004-independent-source/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "review_texts": [
+      "1308 fidelity004 passes this independent source/preservation review and the bounded current roof traversal/spray review. Static and sampled-motion quality remain C's separate decisions; no package or credit is granted.\n\nAll410 source pins and429 motion pins (including the exact410 subset) match. The candidate is the actual code/treasure-island-d5-1308-fidelity-v1 checkout at5c851dfa. The actual owner handoff2099bd63… binds source/native; exact products, helpers, raw results and receipts are listed in REVIEW.json. I reviewed the changed factory/config/adapter and complete focused/affected-motion logic; no engine or product edit ran here.\n\nSource and emitted geometry: the actual678 slope/end and702 fascia/soffit runtime faces match all1380 authored triangles in order and winding. Independent calculations find572 tops with no positive pairwise overlap, no duplicate faces, no final Float32 ring crossing/touch, and2,070 exact edges each with two opposite incidences. The nine connected closed solids have consistent clockwise native winding. Minimum triangle cross-product length is3.170279e-6m². This checks emitted coverage and closure beyond the owner's labels or mesh/collision self-comparison.\n\nNative union versus converted-domain residues are not literally zero: per-section missing/outside area reaches8.22395e-5/8.89680e-5m², and differing polygon vertices lie within16.968µm of the converted domain boundary. Native top spill beyond the pre-conversion approved public domain is8.179285e-5m², distinct from the owner's2.194520e-7m² pre-conversion figure. These are quantified conversion residues, not a new project tolerance. The roof remains within the declared nine-band/taper family; intentional0.2mm station seams and stagger gaps are not claimed as one continuous hidden roof.\n\nPreservation and ownership: all15 retained003 runtime meshes match POSITION/NORMAL/UV/INDEX, material class/name and layers at native precision. All other top-level config fields and closed lower groups/apron/lawn data remain exact; the factory GDScript differs only in its config hash literal. Published5c source chunk, authority and stock player/camera/recovery bytes are exact. The reviewed focused code actually compares original426 raw ordered faces (68wall+22roof+240canopy/post+96pad) and validates the17-mesh/6-shape split. The unchanged three lower buckets retain792 matching collision faces. Raw shape arrays are not separately duplicated in the result JSON; their exact runtime assertions are retained, not relabeled as my own engine run. One supplied guarded pair and one factory call remain; wallshape0 alone is eligible, roofshape0/source and1/addition are blocking nonreceivers. Private matte top-material construction and cached resources are unchanged.\n\nGround/lower reuse is justified by exact config, runtime arrays and actual source terrain bindings; unchanged source-grade/lower/apron checks were not replayed. This does not upgrade old001/002 raw contact failures or transfer an earlier roof route to changed geometry. Actual pair17meshes/4,871render/2,598collision; world735rows/1002meshes/1017surfaces/78,685render/466bodies/474shapes. Focused39667 and native39781 ended0 clean in10.498665s/13.392s; source maps remained exact.\n\nAffected mechanics: the new native47228 ended0 clean in25.923s. One initial placement precedes150 no-input landing frames;42 are airborne, then108 have direct added-roofshape1 support. Natural input continues78frames inward,30braking,84reverse,30braking, with consecutive physics counters and no intermediate transform/controller changes. All222 travel/braking frames are on_floor. Direct source0 contact appears inward and added1 contact on reverse;70/222 frames have no upward slide contact, so continuous direct-contact support is not claimed. Center support-ray clearance stays positive0.475–36.978mm through travel/braking; rays remain distinct from actual contacts.\n\nThe source turnaround settles at depth−5.939147m with directshape0 contact and zero velocity. Return settles at−0.830108m with directshape1 and zero velocity. Actual braking displacement is0.133251m/0.133520m. Exact segment-distance analysis of every route position gives minimum source-edge distance0.829889m, beyond the0.35m capsule, and maximum lateral deviation0.041603m. Thus the route crosses the real join and stays inside the footprint. The pre-braking return still has no direct contact; this false diagnostic and old002 FAIL remain preserved rather than erased by settling. The changed roof spray actually reaches roofshape1, returns receiver_rejection and leaves tags0→0.\n\nThe separate broader-anchor30right/60left/30right segment has120grounded input frames,7.050044m path and0.191548m net displacement;57frames lack upward slide contact. Each segment's net direction agrees with the unchanged stock basis/action convention, while reversal braking stays in the trace. Its final3render frames disable gameplay after input and are visual retention, not natural braking proof. Five original roof PNGs and nine exact original AVI payloads are hash-verified. Roof draw/physics counters differ by one; AVI indices are not inferred equal to telemetry. The556-frame1280×800 AVI retains its70-byte declared/physical discrepancy; no continuous-playback or generic-player conformance claim. C owns pixel interpretation.\n\nbrowser_validation_assessment — Independent1308 fidelity004 source and affected mechanics review: Checked the actual1380roof faces against native arrays, final converted rings, top-union coverage and directed closure edges. Nine closed solids have no duplicate faces or positive top overlap; all15 retained meshes, original426 and lower792 ownership/source evidence remain applicable, with small native boundary residues disclosed instead of calling pre-conversion bounds exact. The new contained stock route records real roofshape1-to-source0-to-roofshape1 contacts and stationary settled destinations without transform writes; all222 travel/braking frames are grounded, but70 lack direct upward contact and the unbraked return diagnostic remains false. The changed roof spray is actually rejected with no tag. Preserve old002 FAIL and reuse unchanged lower/apron evidence narrowly; new static/sampled-motion visuals belong to the separate reviewer. Five roof PNGs and nine original AVI payloads retain separate counters and the70-byte RIFF limit. No engine, product edit, shared log write or credit performed by this reviewer.\n"
+    ],
+    "combined_source": {
+      "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/b68170e1acab05322be5/focused-002-result.json",
+      "sha256": "b68170e1acab05322be5c20be6511307fa052ea37692ab8214b159b7f811803b",
+      "bytes": 3345,
+      "original_locator": "{TASK_ROOT}/work/1308-1394-quality-batch-001/focused-002-result.json",
+      "role": "bound_text_input_original",
+      "byte_identical": true
+    },
+    "raw_failures_preserved": [
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/b2b1cd7738d2ec75f5dd/native-001-result.json",
+        "sha256": "b2b1cd7738d2ec75f5dd3c824777df58c687431d566205ad3da51a11854ae905",
+        "bytes": 30585,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-001/native-001-result.json",
+        "role": "bound_text_input_original",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/1bb1993ebfb3efa6244e/native-001-execution.json",
+        "sha256": "1bb1993ebfb3efa6244ee6ebdde2ed1159a6e3ab87940ce02172d26e2855faf9",
+        "bytes": 125597,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-001/native-001-execution.json",
+        "role": "bound_text_input_original",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/d8202991873c807a1576/native-001.log",
+        "sha256": "d8202991873c807a1576ce6e0b16a42770900b383cbeec2567c873f669139828",
+        "bytes": 601,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-001/native-001.log",
+        "role": "historical_raw_failure_retained_without_reclassification",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6f6ba1d0691cc0fad5d4/contact-001-result.json",
+        "sha256": "6f6ba1d0691cc0fad5d4db65071bab3948943fd81765cf141034fcaf11cb603e",
+        "bytes": 3351613,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-001/contact-001-result.json",
+        "role": "bound_text_input_original",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/669e8c200d949ab94969/contact-001-execution.json",
+        "sha256": "669e8c200d949ab9496932655e6534a8fecfc9dfb46ad8acdd6de9c918cc52a1",
+        "bytes": 125453,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-001/contact-001-execution.json",
+        "role": "bound_text_input_original",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/1e718ba1f7d05bdefd86/contact-001.log",
+        "sha256": "1e718ba1f7d05bdefd86cda2e3c7c7d3fe698a32f7211ea0bbe350717d166425",
+        "bytes": 204,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-001/contact-001.log",
+        "role": "historical_raw_failure_retained_without_reclassification",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/a7e4ecf4e9ee7aecc61f/contact-001-result.json",
+        "sha256": "a7e4ecf4e9ee7aecc61f1195cb6bb932c257f8454413f042712ae9009353f650",
+        "bytes": 713402,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-002/contact-001-result.json",
+        "role": "bound_text_input_original",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/50ad66be01b24c067e12/contact-001-execution.json",
+        "sha256": "50ad66be01b24c067e12ab467e1efcba58a5535cd880d9a4841c6154deb0160a",
+        "bytes": 134362,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-002/contact-001-execution.json",
+        "role": "bound_text_input_original",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/d900225f46618f22e217/contact-001.log",
+        "sha256": "d900225f46618f22e2174ba48495b0374848f757df9cf48ead9584b06908a226",
+        "bytes": 167,
+        "original_locator": "{TASK_ROOT}/work/1308-fidelity-revision-002/contact-001.log",
+        "role": "historical_raw_failure_retained_without_reclassification",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/eb3527483bcafbaba2cf/native-001-result.json",
+        "sha256": "eb3527483bcafbaba2cf5a1faa9728f3103416a620e2c403627dedaaa643f415",
+        "bytes": 43214,
+        "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-003/native-001-result.json",
+        "role": "historical_raw_failure_retained_without_reclassification",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/b9bc057975d11cc0d959/native-001-execution.json",
+        "sha256": "b9bc057975d11cc0d959d3556f2e981f1cd3d11996ad9b1878cecf49f0679275",
+        "bytes": 117989,
+        "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-003/native-001-execution.json",
+        "role": "historical_raw_failure_retained_without_reclassification",
+        "byte_identical": true
+      },
+      {
+        "path": "build/d5-1308-1394-quality-candidate-provenance-2026-09-10-001/originals/6486149e9fc3ffee80b7/native-001.log",
+        "sha256": "6486149e9fc3ffee80b7dc007b5aaf89408359f2b11c74d919ec144957df7b86",
+        "bytes": 724,
+        "original_locator": "{TASK_ROOT}/work/1394-fidelity-revision-003/native-001.log",
+        "role": "historical_raw_failure_retained_without_reclassification",
+        "byte_identical": true
+      }
+    ],
+    "limits": [
+      "1308 fidelity004 has two current static defaults, five affected-roof phase PNGs, nine exact original AVI payload samples and a held ground endpoint. Sampled visual PASS is not continuous playback or generic-player conformance.",
+      "150 no-input landing frames precede 222 travel/brake frames. All 222 are grounded; 70 lack upward slide contact. Settled source0 and added1 contacts are actual; the pre-braking return remains contact-empty. Rays are separate from contacts.",
+      "The 556-frame 1280x800 AVI retains 70 trailing bytes beyond its declared extent. PNG draw/physics counters differ by one; AVI indices are not mapped to physics counters. Ground motion follows separate placement, not a continuous roof-to-street route.",
+      "Original failures and prior scoped lower/apron evidence remain preserved; topology and mechanics reuse is grounded in the independent source report, not a relabeled earlier roof run.",
+      "Individual source-world captures are not combined-world or app pixels; actual batch source and owner package runs separately establish exact selected implementations and attachments.",
+      "Independent static and sampled-motion reviews retain their written scope. No continuous playback, hidden-roof schedule, manual-play or AVI/physics-index equivalence claim.",
+      "Original AVI files retain their70-byte declared/physical extent discrepancy. Exact payload copies do not establish generic-player conformance.",
+      "Independent app decision and seventh unit/packet/visual attestation are pending; historical reviews do not attest this newly assembled image tree.",
+      "Two current static PNGs, five roof-phase PNGs, one held ground endpoint and nine original AVI payloads. All222 travel/braking frames grounded but70 lack upward slide contact. Settled source0/added1 contacts are actual; the pre-braking return diagnostic remains false. Draw/physics counters differ by one; ground motion follows separate placement."
+    ]
+  },
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "inventory_physical_units": 213,
+    "credit_granted": false,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_exact_app_and_packet_attestation_pending": true
+  }
+}

@@ -1,8 +1,15 @@
 class_name D51394GateviewLiveFactory
 extends Node3D
 
+const LAWN_TONE := preload("res://game/resources/facades/d5_1394_lawn_tone.gdshader")
 const MARKS := preload("res://game/resources/facades/d5_1394_siding_marks.gdshader")
 const KIT := preload("res://game/scripts/world/facades/site_12_housing_kit.gd")
+const ASPHALT_ALBEDO := preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg")
+const ASPHALT_ROUGHNESS := preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_rough_1k.jpg")
+const CONCRETE_ALBEDO := preload("res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg")
+const CONCRETE_ROUGHNESS := preload("res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg")
+const LAWN_ALBEDO := preload("res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg")
+const LAWN_ROUGHNESS := preload("res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg")
 const CONFIG_PATH := "res://game/resources/facades/d5_1394_gateview_live_factory.json"
 const SOURCE_KEY := "w96215646"
 const WALL_KEY := "building:w96215646:wall"
@@ -34,7 +41,7 @@ static func build_for_records(wall: Dictionary, roof: Dictionary, neutral_wall: 
 func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: StandardMaterial3D, neutral_roof: StandardMaterial3D, supplied_records: Dictionary, baseline: bool = false) -> Dictionary:
 	if not _last_result.is_empty():return {"ok":false,"message":"Duplicate detached study configuration."}
 	var config:=_json(CONFIG_PATH)
-	if FileAccess.get_sha256(CONFIG_PATH)!="4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b" or not supplied_records_match(supplied_records) or wall!=supplied_records.get(WALL_KEY,{}) or roof!=supplied_records.get(ROOF_KEY,{}) or neutral_wall==null or neutral_roof==null:return {"ok":false,"message":"Exact supplied pair/grade/config/material boundary changed."}
+	if FileAccess.get_sha256(CONFIG_PATH)!="2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86" or not supplied_records_match(supplied_records) or wall!=supplied_records.get(WALL_KEY,{}) or roof!=supplied_records.get(ROOF_KEY,{}) or neutral_wall==null or neutral_roof==null:return {"ok":false,"message":"Exact supplied pair/grade/config/material boundary changed."}
 	if not _same_numeric_runs(config.get("mapped_runs",[]),TARGET_RUNS) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS) or str(config.get("schema_version",""))!="ti.d5-1394-gateview-live-factory/1":return {"ok":false,"message":"1394 scope changed."}
 	var truth:Dictionary=config.truth_boundary
 	if not bool(truth.prototype_only) or bool(truth.runtime_attachment) or bool(truth.recognition_accepted) or bool(truth.interior_modeled) or bool(truth.as_built_claim):return {"ok":false,"message":"Detached truth boundary changed."}
@@ -71,11 +78,20 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 		var ground_fields:=KIT.new_bucket();var ground_glass:=KIT.new_bucket();var ground_frames:=KIT.new_bucket();var ground_handles:=KIT.new_bucket()
 		_ground_modules(ground_fields,ground_glass,ground_frames,ground_handles,wall,inf)
 		_apply_ground_grade(ground_fields,ground_glass,ground_frames,ground_handles,config.ground_grade)
-		_add_mesh("GroundClosedDoorsAndPrivacyPanels",ground_fields,_material("quiet_white_closed_ground_fields",Color(.84,.85,.81),.9))
+		_add_mesh("GroundClosedDoors",ground_fields,_material("quiet_white_closed_ground_fields",Color(.84,.85,.81),.9))
 		_add_mesh("GroundOpaqueWindowGlass",ground_glass,dark)
 		_add_mesh("GroundModuleFrames",ground_frames,pale)
 		_add_mesh("GroundDoorHandles",ground_handles,_material("restrained_dark_door_handles",Color(.23,.25,.24),.66))
-		for bucket:Dictionary in [ground_fields,ground_glass,ground_frames,ground_handles]:_merge(ground_collision,bucket)
+		var screens:=KIT.new_bucket()
+		_privacy_screens(screens,inf.fidelity_refinement)
+		_add_mesh("ProjectedSlattedPrivacyScreens",screens,pale)
+		for bucket:Dictionary in [ground_fields,ground_glass,ground_frames,ground_handles,screens]:_merge(ground_collision,bucket)
+		# Grade-following material overlays never enter the support/receiver collision buckets.
+		var parking:=KIT.new_bucket();var walk:=KIT.new_bucket();var lawn:=KIT.new_bucket()
+		_ground_surface_treatment(parking,walk,lawn,inf.fidelity_refinement)
+		_add_mesh("LocalParkingAsphalt",parking,_ground_material("existing_clean_asphalt",ASPHALT_ALBEDO,ASPHALT_ROUGHNESS,Color("b0b4b8"),1.0,2.1))
+		_add_mesh("LocalWalkAndDoorApproaches",walk,_ground_material("existing_concrete_pavement",CONCRETE_ALBEDO,CONCRETE_ROUGHNESS,Color("d8d6cf"),.92,1.8))
+		_add_mesh("LocalLawn",lawn,_lawn_material(inf.fidelity_refinement.ground_treatment.materials.lawn.private_tone_mapping))
 
 	var body:=StaticBody3D.new();body.name="ExactFootprintStructuralCollision_NoSprayOwnership";body.collision_layer=1;body.collision_mask=0
 	body.set_meta("receiver_kind","none");body.set_meta("opaque",true);body.set_meta("derived_object_key",WALL_KEY if baseline else "prototype:"+WALL_KEY);body.set_meta("source_keys",[SOURCE_KEY]);body.set_meta("prototype_only",true)
@@ -94,6 +110,7 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 			var count:int=child.mesh.surface_get_array_index_len(0)/3;batches[str(child.name)]=count;total+=count
 	var metadata:Dictionary={"model_id":"d5-1394-gateview-detached-observed-side-study-v1","baseline_exact_source":baseline,"prototype_only":true,"runtime_attachment":false,"recognition_accepted":false,"as_built_claim":false,"interior_modeled":false,"source_key":SOURCE_KEY,"mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":collisions.size(),"collision_triangles":collision_triangles,"protected_runs_have_facade_modules":false,"roof_geometry_material_unchanged":true,"ground_voids_open_with_real_roof_posts_and_closed_source_backs":not baseline,"stairs_added":false,"ground_module_groups":0 if baseline else 6,"ground_module_schedule":"production_inference_closed_static_no_interior","module_dimensions_and_counts":"production_inference","deterministic_signature":JSON.stringify(batches).sha256_text()}
 	metadata["ground_mounting"]="absent" if baseline else "actual_visible_datum_with_closed_bases_20mm_into_land"
+	metadata["fidelity_refinement"]="grade-following visual-only paving/lawn; six matching-collision open slatted screens; no new credit"
 	metadata["historical_flat_study_datum_y"]=float(config.ground_grade.historical_flat_study_datum_y)
 	metadata["actual_ground_group_datums"]=[]
 	metadata["actual_post_bottoms"]=[]
@@ -126,7 +143,41 @@ static func _ground_modules(fields:Dictionary,glazing:Dictionary,frames:Dictiona
 			KIT.append_box(handles,_point(f,station+float(g.door_offset_m)+.28,2.949+1.02,float(g.base_depth_m)+float(g.field_depth_m)+.015),f.tangent,f.normal,.14,.035,.03)
 			var window_center:=_point(f,station+float(g.window_offset_m),2.949+float(g.window_bottom_above_base_m)+float(g.window_height_m)*.5,float(g.base_depth_m))
 			KIT.append_grouped_opening(glazing,frames,window_center,f.tangent,f.normal,float(g.window_width_m),float(g.window_height_m),float(g.field_depth_m),float(g.frame_width_m),float(g.frame_depth_m),.045)
-			KIT.append_box(fields,_point(f,station+float(g.privacy_panel_offset_m),2.949+float(g.privacy_panel_height_m)*.5,float(g.base_depth_m)+float(g.field_depth_m)*.5),f.tangent,f.normal,float(g.privacy_panel_width_m),float(g.privacy_panel_height_m),float(g.field_depth_m))
+
+static func _privacy_screens(bucket:Dictionary,refinement:Dictionary) -> void:
+	for screen:Dictionary in refinement.screens:
+		for box:Dictionary in screen.boxes:
+			var low:float=box.bottom_y;var high:float=box.top_y
+			var center:=Vector3(float(box.center_xz[0]),(low+high)*.5,float(box.center_xz[1]))
+			var tangent:=Vector3(float(box.axis_xz[0]),0,float(box.axis_xz[1]))
+			var normal:=Vector3(float(box.normal_xz[0]),0,float(box.normal_xz[1]))
+			KIT.append_box(bucket,center,tangent,normal,float(box.width_m),high-low,float(box.thickness_m))
+
+static func _ground_surface_treatment(parking:Dictionary,walk:Dictionary,lawn:Dictionary,refinement:Dictionary) -> void:
+	for patch:Dictionary in refinement.ground_patches:
+		var bucket:Dictionary=parking if str(patch.kind)=="parking" else (lawn if str(patch.kind)=="lawn" else walk)
+		for polygon:Array in patch.top_polygons:
+			# Each convex polygon is clipped to one unchanged source-area triangle.
+			for i in range(1,polygon.size()-1):_triangle(bucket,_v(polygon[0]),_v(polygon[i]),_v(polygon[i+1]),Vector3.UP)
+
+static func _ground_material(label:String,albedo:Texture2D,rough:Texture2D,tint:Color,roughness:float,repeat_m:float) -> StandardMaterial3D:
+	var material:=_material(label,tint,roughness)
+	material.albedo_texture=albedo;material.roughness_texture=rough
+	# Ground UVs are world metres, unlike the builder's 0.1-scaled source UVs.
+	material.uv1_scale=Vector3(1.0/repeat_m,1.0/repeat_m,1.0)
+	material.texture_filter=BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	material.set_flag(BaseMaterial3D.FLAG_USE_TEXTURE_REPEAT,true)
+	return material
+
+static func _lawn_material(spec:Dictionary) -> ShaderMaterial:
+	var material:=ShaderMaterial.new();material.shader=LAWN_TONE
+	material.resource_name="private_restrained_green_frontage_lawn"
+	material.set_shader_parameter("lawn_albedo",LAWN_ALBEDO)
+	material.set_shader_parameter("lawn_roughness",LAWN_ROUGHNESS)
+	material.set_shader_parameter("dark_color",Color(str(spec.dark_srgb)))
+	material.set_shader_parameter("light_color",Color(str(spec.light_srgb)))
+	material.set_shader_parameter("luminance_gain",float(spec.source_linear_luminance_gain))
+	return material
 
 static func _flat_canopy(top:Dictionary,edges:Dictionary,posts:Dictionary,inf:Dictionary) -> void:
 	var outline:=PackedVector2Array()
@@ -256,8 +307,8 @@ static func _apply_post_grade(posts:Dictionary,grade:Dictionary) -> void:
 			if absf(p.y-float(spec.old_bottom_y))<.000001:p.y=float(spec.bottom_y);posts.vertices[j]=p
 
 static func _apply_ground_grade(fields:Dictionary,glazing:Dictionary,frames:Dictionary,handles:Dictionary,grade:Dictionary) -> void:
-	var buckets:Dictionary={"GroundClosedDoorsAndPrivacyPanels":fields,"GroundOpaqueWindowGlass":glazing,"GroundModuleFrames":frames,"GroundDoorHandles":handles}
-	var group_vertex_counts:Dictionary={"GroundClosedDoorsAndPrivacyPanels":48,"GroundOpaqueWindowGlass":24,"GroundModuleFrames":192,"GroundDoorHandles":24}
+	var buckets:Dictionary={"GroundClosedDoors":fields,"GroundOpaqueWindowGlass":glazing,"GroundModuleFrames":frames,"GroundDoorHandles":handles}
+	var group_vertex_counts:Dictionary={"GroundClosedDoors":24,"GroundOpaqueWindowGlass":24,"GroundModuleFrames":192,"GroundDoorHandles":24}
 	for group_index in grade.groups.size():
 		var group:Dictionary=grade.groups[group_index];var delta:float=group.translation_y_m
 		for name:String in buckets:
