@@ -1,0 +1,105 @@
+{
+  "status": "CURRENT13_OWNER_AND_INDEPENDENT_PACKAGE_PASS_MAIN_BYTES_COPIED_ORDINARY_AND_PUBLICATION_PENDING",
+  "derived_downstream_release_summary": true,
+  "recognition_metric": "13/213",
+  "added_physical_units": [
+    "physical-building:w95934123",
+    "physical-building:w96215646"
+  ],
+  "numerator_effect": 2,
+  "app_relative_path": "build/d5-1308-1394-exact-current-001/Treasure Island First Playable.app",
+  "package": [
+    {
+      "path": "Contents/Info.plist",
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885
+    },
+    {
+      "path": "Contents/MacOS/Treasure Island First Playable",
+      "sha256": "2dd0e797cf26365109293196c4a9f7e217b80c872832042bfdb63db3e4d7aad5",
+      "bytes": 170963648
+    },
+    {
+      "path": "Contents/PkgInfo",
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9
+    },
+    {
+      "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229
+    },
+    {
+      "path": "Contents/Resources/Treasure Island First Playable.pck",
+      "sha256": "e3c5c529efc54be1af383cafba678a0130fbd2157524e4d8cf1e3217217de85f",
+      "bytes": 66881616
+    },
+    {
+      "path": "Contents/Resources/icon.icns",
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "sha256": "2ef91f7c6e16c29305a68201fbe27d163903835bccf11ab8ebca1d4ca26c289e",
+      "bytes": 3217
+    }
+  ],
+  "bundle_file_count": 7,
+  "bundle_identity_sha256": "2d61652aedcc14f4ddd4fdda0a458037758b5ae103cecf59aaa8b7a998159e6c",
+  "pck_sha256": "e3c5c529efc54be1af383cafba678a0130fbd2157524e4d8cf1e3217217de85f",
+  "executable_sha256": "2dd0e797cf26365109293196c4a9f7e217b80c872832042bfdb63db3e4d7aad5",
+  "current_world": [
+    735,
+    993,
+    1008,
+    76376,
+    466,
+    472
+  ],
+  "owner_package": "PASS",
+  "independent_package": "PASS",
+  "independent_package_review_sha256": "7cee347cb353ad45d61a5e7ddefc0dab21008aaef95982197d7a2d6385ca990f",
+  "authority_readiness_review_sha256": "3dd7cba6093f688231daf6496191b1b0bf96301a6bfb6495267638f2fdf371a1",
+  "ordinary_launch": "not run; pending root GO",
+  "publication_review": "pending",
+  "commit": null,
+  "push": null,
+  "HUMAN_001": "pending; unchanged owner-only scope",
+  "current_and_historical_private_copies": 2169,
+  "historical_candidate_archive_count": 1758,
+  "selected_public_images_reused": 36,
+  "artifacts": [
+    {
+      "path": "README.md",
+      "sha256": "8481a1da70f3abc2a4cf4c685c0fc79d8b54f369f783e0a03c61623304852fa9",
+      "bytes": 1340
+    },
+    {
+      "path": "independent-package-review.json",
+      "sha256": "ee98d1947aa828109732ba24ae147b132bdb8fcb4e5b6741fbfcda5797729437",
+      "bytes": 15812
+    },
+    {
+      "path": "ordinary-launch.json",
+      "sha256": "46fc77a7050d3362b7ab78d2feeae976dcdb14b80aff3dd4e3526af594540af5",
+      "bytes": 535
+    },
+    {
+      "path": "owner-package-verification.json",
+      "sha256": "d668d347aa052cf1f8ef90b0ee32c8e89520fc3b5fa9f3f44cf421cb20f1d54b",
+      "bytes": 22590
+    },
+    {
+      "path": "private-provenance-retention.json",
+      "sha256": "9eea8957d24b6be6903da8ba5d440c4f6d213a36630a710197249a6ac7b3150e",
+      "bytes": 1247328
+    },
+    {
+      "path": "source-and-visual-lineage.json",
+      "sha256": "184fe7c52c52103a07352ea981bc374af7b0afd171d0b08449a875ecac6fc758",
+      "bytes": 11891
+    }
+  ],
+  "dependency_direction": "Immutable per-unit packet -> accepted isolated serialized authority -> fresh exact-current export/review -> byte-identical main transfer -> derived closure. Future publication/ordinary outcomes recorded downstream; no own-hash binding."
+}

@@ -1,0 +1,153 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "derived_normalized_summary": true,
+  "not_a_captured_original": true,
+  "raw_originals_rewritten": false,
+  "source_role": "Accepted scoped source/mechanics decision, preserving original failures and direct-contact limits",
+  "raw_origin": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/1308/work/1308-trim-independent-preservation-002/REVIEW.json",
+    "sha256": "d29c00fd2ad285391510c2156cf093e16273899daa3f201260d5f248038e1cce",
+    "bytes": 10056
+  },
+  "normalization": "Longest-prefix leaf-only machine-path normalization. Raw originals remain exact privately; original numbers/arrays/hashes and historical outcomes remain as recorded. Public selected-image projection is separate.",
+  "truth_boundary": {
+    "recognition_metric": "11/213",
+    "capture_time_recognition_metric": "11/213 for selected live originals; older study metrics stay historical",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "inventory_physical_units": 213,
+    "source_render_images_are_package_pixels": false
+  },
+  "data": {
+    "verdict": "PASS_SCOPED_TRIM_DELTA_AND_MECHANICAL_PRESERVATION",
+    "scope": "Independent read-only reconciliation of authorized render-only1308trim revision002 against original232-pin mechanical seal. No engine, replay, product/authority/controller/old-review edit, or visual judgment.",
+    "reviewer": "/root/review_1303_source",
+    "sealed_at_utc": "2026-09-10T00:23:38.126194+00:00",
+    "candidate": "{CODE_ROOT}/treasure-island-d5-1308-live-v1",
+    "authority": "11/213",
+    "recognition_credit": 0,
+    "changed_product_pins": [
+      {
+        "path": "{CODE_ROOT}/treasure-island-d5-1308-live-v1/game/scripts/world/facades/d5_1308_gateview_live_factory.gd",
+        "sha256": "6e2f0e99e23dc180aba4955be8c5184c6e094057f4a21c2e9e47978dc18b3787"
+      },
+      {
+        "path": "{CODE_ROOT}/treasure-island-d5-1308-live-v1/game/scripts/world/facades/d5_1308_gateview_live_replacement.gd",
+        "sha256": "1871a9038d62a3c6fc8b3e0a13f3fea90bc0312988cfb9d254ecfeae89e7cc26"
+      }
+    ],
+    "current_pin_count": 243,
+    "current_pin_sha": "60232293cf73f771cef8c9d7877b6120ee38e4bee6466448d1b58c1d25a2cb1a",
+    "all243_match_at_seal": true,
+    "bindings": {
+      "OWNER_HANDOFF.json": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/OWNER_HANDOFF.json",
+        "sha256": "7e6e4cbce5654f9d8a976ad9d9474785488490258556c205cfaca5a485e7fc82"
+      },
+      "OWNER_HANDOFF.md": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/OWNER_HANDOFF.md",
+        "sha256": "2fe3172a08f1d4579b4518c78001cf7db81c8ae19a37b314744c313dd158c563"
+      },
+      "source-pins.json": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/source-pins.json",
+        "sha256": "60232293cf73f771cef8c9d7877b6120ee38e4bee6466448d1b58c1d25a2cb1a"
+      },
+      "FILE_READY.json": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/FILE_READY.json",
+        "sha256": "7e69eb19902bb48320403dca18506e98e78f0497673cd680596d14c99317bd8e"
+      },
+      "old-source-copy-inventory.json": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/old-source-copy-inventory.json",
+        "sha256": "b64e294577d856608a3f9731b5f248d9be2359a635a69f8601219d1ae77eccbf"
+      },
+      "focused-001-result.json": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/focused-001-result.json",
+        "sha256": "5caf62577606a889f26a47ab99c14a19beccce6c3dfade5b835afc61f98681a3"
+      },
+      "focused_trim_contract.gd": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/focused_trim_contract.gd",
+        "sha256": "383c91ff9b79995ded9597bc361c5babcea5eebe135aff1c38a26787d361cb5a"
+      },
+      "factory.diff": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/factory.diff",
+        "sha256": "9ea4fcf1bef35e6ca730f16f942cc0c792228a5eb903ae031692a8f461d72575"
+      },
+      "adapter.diff": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/adapter.diff",
+        "sha256": "b6db3e315f6d6e8959153316844cbf852de48742ce6d4102fd12ab0a44b0650c"
+      },
+      "native-001-inputs/source-pins.json": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/native-001-inputs/source-pins.json",
+        "sha256": "3cd22ecdb383027c504d4ac28d7e15e87066454bbb7651f4b5031a72464efbff"
+      },
+      "native-001-inputs/live_driver.gd": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/native-001-inputs/live_driver.gd",
+        "sha256": "07d8ac84f147b9816b795d2158ce895b6c9f83a4f0b8058d900d513b276e910e"
+      },
+      "live_driver.gd": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/live_driver.gd",
+        "sha256": "dde8f2ebe20e0dca98d5cbd76e66d17c776f6d8d678f85cad77469cdd8232178"
+      },
+      "native-002-result.json": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/native-002-result.json",
+        "sha256": "4683e97e0914eefafd8930f73a211c933c75ed8a118bfdbf14f533b4ee1ef4cb"
+      },
+      "motion-001-result.json": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/motion-001-result.json",
+        "sha256": "2a9a8048f2470ef1a2f3139cd4740c47c1cc523980e1c7bf4f5a0e73c6dcc788"
+      },
+      "motion-finalization.json": {
+        "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/motion-finalization.json",
+        "sha256": "c77c20c513ffc55665c11f451e2215a004e27fdadca1492d3f716997068a888b"
+      }
+    },
+    "original_mechanical_seal": {
+      "path": "{TASK_ROOT}/work/1308-live-independent-mechanics-001/REVIEW.json",
+      "sha256": "e9da1d14283d28b22aa23028e7d2e23acd1b584dea105c5a4f53c13f21c01604"
+    },
+    "analysis": {
+      "path": "{TASK_ROOT}/work/1308-trim-independent-preservation-002/ANALYSIS.json",
+      "sha256": "ab080899b005681ef67d988514696b75c30c15aa76f0d57d52023ff2920b1c87"
+    },
+    "analysis_script": {
+      "path": "{TASK_ROOT}/work/1308-trim-independent-preservation-002/analyze.py",
+      "sha256": "ace5a6e520f1fd41e6c77a452f85c9a547b975d1dcf83b216da8c63f6a18223b"
+    },
+    "findings": {
+      "source_delta": "Only factory and adapter differ among original232pins. Factory translates exactly12front gable beams/288vertex entries; adapter executable delta only updates factoryhash. Original sixproducts/owner/focused/map/plan archives match their sealed hashes. The other230original pins are unchanged.",
+      "emission": "All288changed positions match an independently reconstructed source-frame normal times0.005 with float32 operations. Other3456trim vertices and seven other meshes exact. Indices,normals,UVs,material class/name and renderlayers exact. No material definition or parameter emission changed in source. Independent actual front-face gap4.944609–5.022255mm agrees with owner float output.",
+      "collision_and_ownership": "Four exact indexed face reconstructions remain68sourcewall+22roof+240canopy/posts+96pad=426tri. Completed focused16268checks additionally verify actual ConcavePolygonShape3D faces against original data and retain paired split/layer/material checks. Noncolliding trim remains excluded from all collision buckets. Body/shape ownership, spray eligibility, controllers and terrain unchanged.",
+      "world": "Actual measured735rows983meshes998surfaces74300tri466bodies470shapes equal original live world.",
+      "motion": "New120/120grounded samples match original positions,velocities,actions,on_floor and planar_forward exactly. Path7.102034437m remains distinct from net0.162413299m; no transform writes and unchangedland/area. Actual input behavior therefore remains identical for this sampled sequence.",
+      "failure_preservation": "Focused52188 first-runPASS. Native00164902 exit1 parse failure retained with original243map/helper; only acosf→acos changes before native00294137 exit0. Motion8786 exit0. All four logs/receipt hashes and unchanged pre/postpins match; PIDs recorded terminal/absent. No unchanged focused or walking/spray replay was performed by reviewer."
+    },
+    "mechanical_reconciliation": "Carry forward prior scoped walking/structural/spray verdict through this new preservation binding. Six strict empty exit-contact assertions and unproven continuous outgoingland ownership remain. The old review still binds its original products and is not retroactively changed.",
+    "remaining_gates": [
+      "C independently judges the changed three stills and sampled motion; physical separation alone is not visual PASS.",
+      "No package/export/promotion/recognition acceptance here.",
+      "No1303diagnostic action by this reviewer."
+    ],
+    "retro_for_serialized_append": "RETRO — 1308 trim revision independent preservation: Verified all 243 current pins and all archived original inputs. Exactly 288 front-beam vertices match the authorized float32 5 mm translation; the other 3,456 trim vertices, seven other meshes, all indices/normals/UVs/material/layer semantics and all 426 collision triangles remain exact. The new 120-frame motion positions, velocities, actions, grounded flags and headings equal the original trace. This new binding preserves the prior scoped mechanical verdict and its outgoing-contact limits without walking/spray replay; it does not rewrite the historical seal or decide C’s changed visual gate. Retain the external acosf compile failure and one-token repair as separate evidence."
+  },
+  "review_text": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/1308/work/1308-trim-independent-preservation-002/REVIEW.md",
+    "sha256": "dc7b2b64728e139605da960d08adb8b5669c35c3ef104afaa1559c8494119eb9",
+    "bytes": 3697
+  },
+  "original_mechanical_seal": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/1308/work/1308-live-independent-mechanics-001/REVIEW.json",
+    "sha256": "e9da1d14283d28b22aa23028e7d2e23acd1b584dea105c5a4f53c13f21c01604",
+    "bytes": 16439
+  },
+  "combined_source_result": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/combined-source/focused-001-result.json",
+    "sha256": "b6af47542c9da4b6c50bb68b8ea8fa5c4e99f28e9702357753b484e06009ab12",
+    "bytes": 1581
+  },
+  "combined_readiness_review": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/independent-readiness/REVIEW.md",
+    "sha256": "df14bafd20e313e7fe123c3c65fde5ca4f7ddd188295b0bf923f3e26f9d634d5",
+    "bytes": 6163
+  }
+}

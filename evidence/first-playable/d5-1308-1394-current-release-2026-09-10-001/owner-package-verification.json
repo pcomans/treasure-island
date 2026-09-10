@@ -1,0 +1,421 @@
+{
+  "derived_summary": true,
+  "original": {
+    "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/OWNER_HANDOFF.json",
+    "sha256": "7c371ea83f36d4586012d9ba17a5362623db02e1ada6be5cba2d469125a14ca1",
+    "bytes": 26612
+  },
+  "original_md": {
+    "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/OWNER_HANDOFF.md",
+    "sha256": "f413ac00f081f6fc7596e4ef4e46662e73606fad1db9ee4359168c220fea0315",
+    "bytes": 3350
+  },
+  "record": {
+    "status": "OWNER PASS; independent same-app verification pending",
+    "scope": "Isolated exact-current13 private Mac release. Main remains published11; candidate11 app and unit capture11 metadata remain historical. No main integration, Git publication or ordinary no-argument launch performed.",
+    "authority_readiness": {
+      "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/authority-transitions/HANDOFF.json",
+      "sha256": "0d06cfee07eff937f74b0d4a878ebecd046d7d07067be007a6789ce33c06b23f"
+    },
+    "independent_authority_readiness": {
+      "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-authority-readiness/REVIEW.json",
+      "sha256": "5af06526dd9f52238677a88ace12fef0ebccdef638cd2e7433be1d2a3613e862"
+    },
+    "app": "./build/d5-1308-1394-exact-current-001/Treasure Island First Playable.app",
+    "tree_sha256": "2d61652aedcc14f4ddd4fdda0a458037758b5ae103cecf59aaa8b7a998159e6c",
+    "pck_sha256": "e3c5c529efc54be1af383cafba678a0130fbd2157524e4d8cf1e3217217de85f",
+    "executable_sha256": "2dd0e797cf26365109293196c4a9f7e217b80c872832042bfdb63db3e4d7aad5",
+    "source_binding": {
+      "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/source-pins.json",
+      "sha256": "a885dc5f4d39715f15e814238ee3bafcf8ebebe4d3fecc2f7058429e666a9e35"
+    },
+    "package_binding": {
+      "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/package-source-pins.json",
+      "sha256": "935e5585ab84fe02117ec8ab77ba9c84a8e6d9c64f56e00838fe2f445847055b"
+    },
+    "source_count": 247,
+    "package_count": 49,
+    "single_export": true,
+    "stages": [
+      {
+        "stage": "headless-registry-001",
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-001-execution.json",
+        "sha256": "1e46e1a6d38b43420672ac19e1c1c43fc1c35797324f5a45c6251a2a90b9d09f",
+        "pid": 69881,
+        "exit_code": 1,
+        "ended_at": "2026-09-10T02:16:11.782120+00:00",
+        "elapsed_seconds": 0.6738640000112355,
+        "log_sha256": "cd47cd9279a619e9409017bff621e9c3637877ecf0e32b6166b1198f0917c37f",
+        "log_errors": [
+          "ERROR: FAIL [facade_recognition_registry]: Runtime facade registry schema drifted."
+        ],
+        "session_id": 31397
+      },
+      {
+        "stage": "headless-registry-002",
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-002-execution.json",
+        "sha256": "69adafd493c4ffa6070df1a1bd13e4820690fcf548887d6adeb1d6c5c91496e4",
+        "pid": 70222,
+        "exit_code": 1,
+        "ended_at": "2026-09-10T02:17:15.063479+00:00",
+        "elapsed_seconds": 0.8259269581176341,
+        "log_sha256": "02ef492538179e8ddc4bfcf36f4783203bbc7ce844a97aeb3c7b5e6cd948dd3a",
+        "log_errors": [
+          "ERROR: FAIL [facade_recognition_registry]: Active adapter targets an unexpected receiver: building:w95934123:wall.",
+          "ERROR: FAIL [facade_recognition_registry]: Active adapter targets an unexpected receiver: building:w96215646:wall."
+        ],
+        "session_id": 74943
+      },
+      {
+        "stage": "headless-registry-003",
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-003-execution.json",
+        "sha256": "1c6cd7c5e8aa42d9f5725f1cac06147e4154becc9c35de1a69c686761337c508",
+        "pid": 70678,
+        "exit_code": 0,
+        "ended_at": "2026-09-10T02:18:23.666165+00:00",
+        "elapsed_seconds": 0.8104606659617275,
+        "log_sha256": "87a4f3abc9cc99efd7e9b4613de6c3ee99d90440653b58894d0bb6ab9b268bfb",
+        "log_errors": [],
+        "session_id": 81354
+      },
+      {
+        "stage": "headless-loader-001",
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-loader-001-execution.json",
+        "sha256": "ffb650539bf2d5a5ce6068f04c3fbbfac36f5b0247548b1871c03833cf312a8f",
+        "pid": 70834,
+        "exit_code": 0,
+        "ended_at": "2026-09-10T02:19:48.266459+00:00",
+        "elapsed_seconds": 62.660728875081986,
+        "log_sha256": "8762b608d772ac395fa0360f12abfc843fa72b6c404bbe63de61ea1489bc4eec",
+        "log_errors": [],
+        "session_id": 20632
+      },
+      {
+        "stage": "source-package-contract-001",
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/source-package-contract-001-execution.json",
+        "sha256": "100dbadd8e5d34f53e32ba3d23256f1066e40b1c0821c72f7fdfe4a068550b75",
+        "pid": 71417,
+        "exit_code": 0,
+        "ended_at": "2026-09-10T02:20:35.331007+00:00",
+        "elapsed_seconds": 10.695886750007048,
+        "log_sha256": "7af15c0f928d642e6e7857107ff9971a1cb29d92ed3e4bb960129e796c324506",
+        "log_errors": [],
+        "session_id": 50895
+      },
+      {
+        "stage": "export-001",
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/export-001-execution.json",
+        "sha256": "caa170bd9df79b9686ec2d6677af0af4bd19332661b7fdcc53ede0041993a51e",
+        "pid": 71591,
+        "exit_code": 0,
+        "ended_at": "2026-09-10T02:21:02.474956+00:00",
+        "elapsed_seconds": 9.50690129189752,
+        "log_sha256": "be10025b6eea24c902d4c5305d694b8ed5bd957258e44b23bd6040433fd098d8",
+        "log_errors": [],
+        "session_id": 9233
+      },
+      {
+        "stage": "mounted-component-001",
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/mounted-component-001-execution.json",
+        "sha256": "f9f86242e7d60d42d272165ec7f5e54bd31be57d6888847b817900360f5aaec9",
+        "pid": 72591,
+        "exit_code": 0,
+        "ended_at": "2026-09-10T02:22:23.054625+00:00",
+        "elapsed_seconds": 4.809575292048976,
+        "log_sha256": "7ededc2eda795ee21c51381e124c470ea8eef4f113d8ce65dfeda2afabe5a584",
+        "log_errors": [],
+        "session_id": 40557
+      },
+      {
+        "stage": "mounted-privacy-001",
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/mounted-privacy-001-execution.json",
+        "sha256": "390871429ab1f69aa8e5dc7204c3f92a01ed3ca3ed43853ed79f524c61b18aa1",
+        "pid": 73164,
+        "exit_code": 0,
+        "ended_at": "2026-09-10T02:23:00.991331+00:00",
+        "elapsed_seconds": 3.976058708038181,
+        "log_sha256": "8e25041e14de1d8ddc2b1cd812720f33eb94af7c1b402b1c5aecb450ff9c8490",
+        "log_errors": [],
+        "session_id": 26174
+      },
+      {
+        "stage": "release-headless-smoke-001",
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/release-headless-smoke-001-execution.json",
+        "sha256": "9596dac1cee73fee23b6829fd577f1589d30e94ea5863cbc3caf6a54bb640c47",
+        "pid": 76455,
+        "exit_code": 0,
+        "ended_at": "2026-09-10T02:26:49.171014+00:00",
+        "elapsed_seconds": 7.1322896250057966,
+        "log_sha256": "8eff9673a679692387301485aee961f41b74348e45384c3fe7c1aea4faf8ab9d",
+        "log_errors": [],
+        "session_id": 35915
+      },
+      {
+        "stage": "release-native-smoke-001",
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/release-native-smoke-001-execution.json",
+        "sha256": "53f70e32af68e22381e53d05e8a8e9c4c1265c1e7360f90b62eac604cd83c81f",
+        "pid": 76820,
+        "exit_code": 0,
+        "ended_at": "2026-09-10T02:27:51.913964+00:00",
+        "elapsed_seconds": 44.46783641609363,
+        "log_sha256": "f3deb208aa4c97a87e85370fe4db82fd0260f3f9cef5caa93b8cb3a5e1159b1f",
+        "log_errors": [],
+        "session_id": 89861
+      }
+    ],
+    "current_world": {
+      "building_rows": 735,
+      "context_rows": 4,
+      "meshes": 993,
+      "surfaces": 1008,
+      "triangles": 76376,
+      "bodies": 466,
+      "shapes": 472
+    },
+    "authority": {
+      "accepted": 13,
+      "denominator": 213,
+      "active": 12,
+      "plans": 21,
+      "package_ready": 15,
+      "disabled": 6,
+      "legacy": 9
+    },
+    "privacy": {
+      "virtual_files": 937,
+      "private_paths": 0,
+      "private_raw": 0,
+      "banned": 0
+    },
+    "coverage": "Mounted component validates real target-record dispatch and geometry/material/collision predicates; source package and supported signed ordinary-main stages prove both D5 real wall/roof pairs plus prior1439/1444 and whole-world readiness, default movement, jetpack. Native execution used actual Apple M2; no M1/manual-play/ordinary no-argument or new visual acceptance claim.",
+    "fixture_delta": {
+      "only_changed_path_since_readiness": "game/tests/headless_facade_recognition_registry_contract.gd",
+      "before_sha256": "044f3f9dfbeb1e018aa0685dd25c345a0a3947fd76f9f04e1d023bf2e80c8db7",
+      "final_sha256": "686f7f7007a160bc18a5caf6508db0e2880f618631a189f8bc10cf2a78b180a2",
+      "changes": [
+        "Registry schema assertion11→13; no canonical schema constant existed.",
+        "Duplicated ten-receiver allowlist replaced with existing twelve-entry ACTIVE_UNIT_BY_RECEIVER map."
+      ],
+      "bounded_read": "Same fixture current schema/count/receiver expectations examined; explicitly historical capture11 values preserved. No broader audit or extra engine preflight.",
+      "packaged49_unchanged": true,
+      "historical_readiness_pins_not_rewritten": true
+    },
+    "failures_and_warnings": [
+      "Registry001 and002 terminal1, retained raw logs/old fixtures/maps. Registry003 passed after bounded fixture repairs.",
+      "Native codesign display retained its colon-path deprecation warning; Godot successful logs clean.",
+      "Earlier authority and historical candidate/source/contact/capture failures remain at their original paths and scopes."
+    ],
+    "final_comparison": {
+      "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/final-post-execution.json",
+      "sha256": "cc3583cde95aa19fcfa867bea454dc1d0318daace77a922f64a6674799adfd5a"
+    },
+    "slot_release": {
+      "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/slot-release.json",
+      "sha256": "2ac56a333a09d3f10b12df3b0c0449784599de9145e1312ed7d06f2e1cd81cc0"
+    },
+    "retro_append": {
+      "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/RETRO_APPEND.json",
+      "sha256": "2e1ae98b3e4f75c3cd7e3503645e1af6e2107a33c533ae91b224ce1b47a7dd6b"
+    },
+    "retained_originals": [
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/execution-preflight.json",
+        "sha256": "cdc9624a987f22a5b648805aa064653f7953f7da0c9e333f4a4edee597101bf3"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/source-pins.json",
+        "sha256": "a885dc5f4d39715f15e814238ee3bafcf8ebebe4d3fecc2f7058429e666a9e35"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/package-source-pins.json",
+        "sha256": "935e5585ab84fe02117ec8ab77ba9c84a8e6d9c64f56e00838fe2f445847055b"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/run-plan.pending-app.json",
+        "sha256": "50e230c4666bf2b60e79d72c256852f3528a5731f367cd7904ba54807169e1d6"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/run-plan.before-app-binding.json",
+        "sha256": "c463f0ec45190e9e92a88098bfb33950428c4772b2f6b58a3987bc926eb3f36b"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/run-plan.json",
+        "sha256": "2560ce0c3b9c8ca574100cb2e3879d89cb9f2ed96c6e784c2902e14e1a38f5f9"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/package-contract.gd",
+        "sha256": "c601b4ca24c61672d3dc1d5755a34d08996559d06bc05a4694332a30581a7597"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/package-contract.diff",
+        "sha256": "fe3c08fc1a9920cab46db7eeb380115b9c8bedf2b1d433329bd2aaac3806e5b8"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/run-stage.py",
+        "sha256": "ddde828adb86211803fd83410c9884947f245c15287b12af94de2668556b52fc"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/actual-app-binding.json",
+        "sha256": "58e195f7b794ea6f0042eb610c7cff30f7cf8ae84045f94576c18c7b5b98004c"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/current-package-inventory.json",
+        "sha256": "8e4d5ed9926d1d9034b72467ac6f3be44255e4309eea0246cbb656b26d8b7a38"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/bundle-native-checks-001.json",
+        "sha256": "912a221c31a776cafd09adeae4621f4f03e756caa5beec678b2ebbcf1f1d27bb"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/entitlements-native-json-check.json",
+        "sha256": "f8f6097ad433ebf7cfffbe1cfd14be0361f85a8c2d898c00253e46e62d0b801e"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/bundle-entitlements.xml",
+        "sha256": "00491886daae07a5296c8bad50f116bf006b0004d7bf7338ad46669fbd903a4a"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-002-binding.json",
+        "sha256": "cbe03d9a36b024ff80c0eb0271c3e4644e1ff12c577f7114134f4fd2b5539026"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-002-schema.diff",
+        "sha256": "6e7813fdd651e04242245028a6ef811c815d11ff6cad0a00176bd578a22d0db3"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-003-binding.json",
+        "sha256": "f52f414277f89a26f9723974a353754d3a40b99440eaa12f7f35b6b26523d9f7"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-003-receiver.diff",
+        "sha256": "fc9648a2d66285b4ed86121134449684fca91608763fcabc8205b57ecfaf9bc6"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/final-post-execution.json",
+        "sha256": "cc3583cde95aa19fcfa867bea454dc1d0318daace77a922f64a6674799adfd5a"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/slot-release.json",
+        "sha256": "2ac56a333a09d3f10b12df3b0c0449784599de9145e1312ed7d06f2e1cd81cc0"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/RETRO_APPEND.json",
+        "sha256": "2e1ae98b3e4f75c3cd7e3503645e1af6e2107a33c533ae91b224ce1b47a7dd6b"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-001-execution.json",
+        "sha256": "1e46e1a6d38b43420672ac19e1c1c43fc1c35797324f5a45c6251a2a90b9d09f"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-001.log",
+        "sha256": "cd47cd9279a619e9409017bff621e9c3637877ecf0e32b6166b1198f0917c37f"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-002-execution.json",
+        "sha256": "69adafd493c4ffa6070df1a1bd13e4820690fcf548887d6adeb1d6c5c91496e4"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-002.log",
+        "sha256": "02ef492538179e8ddc4bfcf36f4783203bbc7ce844a97aeb3c7b5e6cd948dd3a"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-003-execution.json",
+        "sha256": "1c6cd7c5e8aa42d9f5725f1cac06147e4154becc9c35de1a69c686761337c508"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-003.log",
+        "sha256": "87a4f3abc9cc99efd7e9b4613de6c3ee99d90440653b58894d0bb6ab9b268bfb"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-loader-001-execution.json",
+        "sha256": "ffb650539bf2d5a5ce6068f04c3fbbfac36f5b0247548b1871c03833cf312a8f"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-loader-001.log",
+        "sha256": "8762b608d772ac395fa0360f12abfc843fa72b6c404bbe63de61ea1489bc4eec"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/source-package-contract-001-execution.json",
+        "sha256": "100dbadd8e5d34f53e32ba3d23256f1066e40b1c0821c72f7fdfe4a068550b75"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/source-package-contract-001.log",
+        "sha256": "7af15c0f928d642e6e7857107ff9971a1cb29d92ed3e4bb960129e796c324506"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/export-001-execution.json",
+        "sha256": "caa170bd9df79b9686ec2d6677af0af4bd19332661b7fdcc53ede0041993a51e"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/export-001.log",
+        "sha256": "be10025b6eea24c902d4c5305d694b8ed5bd957258e44b23bd6040433fd098d8"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/mounted-component-001-execution.json",
+        "sha256": "f9f86242e7d60d42d272165ec7f5e54bd31be57d6888847b817900360f5aaec9"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/mounted-component-001.log",
+        "sha256": "7ededc2eda795ee21c51381e124c470ea8eef4f113d8ce65dfeda2afabe5a584"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/mounted-privacy-001-execution.json",
+        "sha256": "390871429ab1f69aa8e5dc7204c3f92a01ed3ca3ed43853ed79f524c61b18aa1"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/mounted-privacy-001.log",
+        "sha256": "8e25041e14de1d8ddc2b1cd812720f33eb94af7c1b402b1c5aecb450ff9c8490"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/release-headless-smoke-001-execution.json",
+        "sha256": "9596dac1cee73fee23b6829fd577f1589d30e94ea5863cbc3caf6a54bb640c47"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/release-headless-smoke-001.log",
+        "sha256": "8eff9673a679692387301485aee961f41b74348e45384c3fe7c1aea4faf8ab9d"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/release-native-smoke-001-execution.json",
+        "sha256": "53f70e32af68e22381e53d05e8a8e9c4c1265c1e7360f90b62eac604cd83c81f"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/release-native-smoke-001.log",
+        "sha256": "f3deb208aa4c97a87e85370fe4db82fd0260f3f9cef5caa93b8cb3a5e1159b1f"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/runtime-001/release-headless-smoke-001-engine.log",
+        "sha256": "8eff9673a679692387301485aee961f41b74348e45384c3fe7c1aea4faf8ab9d"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/runtime-001/release-native-smoke-001-engine.log",
+        "sha256": "f3deb208aa4c97a87e85370fe4db82fd0260f3f9cef5caa93b8cb3a5e1159b1f"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-001-inputs/headless_facade_recognition_registry_contract.gd",
+        "sha256": "044f3f9dfbeb1e018aa0685dd25c345a0a3947fd76f9f04e1d023bf2e80c8db7"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-001-inputs/run-plan.json",
+        "sha256": "50e230c4666bf2b60e79d72c256852f3528a5731f367cd7904ba54807169e1d6"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-001-inputs/source-pins.json",
+        "sha256": "06727fed0779127c5a5540fc0bada79d39c0dd0985f2f0f78da207cb68b42384"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-002-inputs/headless_facade_recognition_registry_contract.gd",
+        "sha256": "281a27a5e40c00eb9d872345a35b7308dc1b2325d4b893d1d9cbef0f219fbd9b"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-002-inputs/run-plan.json",
+        "sha256": "60bde2be504a67a61533803e9cc7bc5ee3e118b4c025d4ecc79a005cac09c98b"
+      },
+      {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-002-inputs/source-pins.json",
+        "sha256": "ead2fd12db0a69d084f33d481267cc784ec5557b05a76616f636f7f41dcf3db1"
+      }
+    ],
+    "next_gate": "Root-coordinated independent verification of this exact same app. Main integration/publication and ordinary no-argument launch remain gated.",
+    "all_inputs_and_app_frozen": true
+  }
+}

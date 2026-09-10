@@ -1,0 +1,572 @@
+{
+  "schema_version": "ti.d5-1394-gateview-live-factory/1",
+  "model_id": "d5-1394-gateview-reviewed-geometry-live-factory-v1",
+  "target": {
+    "source_key": "w96215646",
+    "wall_object_key": "building:w96215646:wall",
+    "roof_object_key": "building:w96215646:roof",
+    "source_geometry_sha256": "b0e6c7426ac41c995f96a647ff5102b4d85963d2b7a45f21ad1b81455e451220",
+    "flat_base_y": 2.949,
+    "source_top_y": 8.949,
+    "wall_run_count": 24,
+    "address_crosswalk": {
+      "frozen_house_number": "1230",
+      "current_house_number": "1394",
+      "street_suffix": "Court/Avenue discrepancy retained; frozen source has no street tag"
+    }
+  },
+  "reference": {
+    "packet_sha256": "88db8274ddd0eb609e4be631b3a2b0aa76f9855814d36dfe11247504e5ae9a53",
+    "observation": "Written March2025 W-side pano: long cool-gray horizontal-sided two-storey row, upper sliders, continuous very deep flat carport canopy on slender weathered posts; no retained pano pixels.",
+    "appearance_source_not_reobserved_this_round": true,
+    "individual_ground_entry_schedule": "Observed white ground-door/window/privacy-panel family; this revision proposes six quiet closed groups on mapped W chains only. Counts/placements/dimensions are production inference, not an as-built schedule.",
+    "private_evidence_not_runtime_dependency": true
+  },
+  "truth_boundary": {
+    "prototype_only": true,
+    "runtime_attachment": false,
+    "recognition_accepted": false,
+    "interior_modeled": false,
+    "as_built_claim": false,
+    "main_roof_geometry_or_material_changed": false,
+    "new_stairs": false,
+    "neighbor_schedule_copied": false
+  },
+  "mapped_runs": [
+    1,
+    2,
+    3,
+    4,
+    15,
+    16,
+    17,
+    18,
+    20,
+    21,
+    22,
+    23
+  ],
+  "protected_runs": [
+    0,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    19
+  ],
+  "inference": {
+    "role": "All module counts, dimensions, cadence, tints and canopy outer/post line are reversible production inference, not survey/as-built data.",
+    "upper_window_groups": [
+      [
+        1,
+        2,
+        3,
+        4
+      ],
+      [
+        15,
+        16,
+        17,
+        18
+      ],
+      [
+        20,
+        21,
+        22,
+        23
+      ]
+    ],
+    "upper_window_bottom": 6.67,
+    "upper_window_height": 1.4,
+    "slider_pitch_m": 3.0,
+    "slider_width_m": 2.02,
+    "siding_course_m": 0.22,
+    "siding_phase_y": 2.949,
+    "canopy_groups": [
+      [
+        1,
+        2,
+        3,
+        4
+      ],
+      [
+        15,
+        16,
+        17,
+        18
+      ],
+      [
+        20,
+        21,
+        22,
+        23
+      ]
+    ],
+    "canopy_kind": "one continuous flat roof, not three separate canopies",
+    "canopy_top_y": 6.02,
+    "canopy_soffit_y": 5.78,
+    "front_clear_depth_beyond_outermost_wall_m": 5.2,
+    "post_width": 0.12,
+    "post_pitch_max_m": 3.65,
+    "trim_width": 0.08,
+    "canopy_outline_xz": [
+      [
+        -275.911,
+        -675.57
+      ],
+      [
+        -276.192,
+        -672
+      ],
+      [
+        -276.254,
+        -671.218
+      ],
+      [
+        -276.79,
+        -664.438
+      ],
+      [
+        -277.037,
+        -661.277
+      ],
+      [
+        -278.716,
+        -661.41
+      ],
+      [
+        -279.077,
+        -656.791
+      ],
+      [
+        -279.666,
+        -649.31
+      ],
+      [
+        -279.75,
+        -648.25
+      ],
+      [
+        -279.903,
+        -646.327
+      ],
+      [
+        -278.021,
+        -646.182
+      ],
+      [
+        -278.355,
+        -641.885
+      ],
+      [
+        -278.505,
+        -640
+      ],
+      [
+        -278.857,
+        -635.562
+      ],
+      [
+        -279.156,
+        -631.766
+      ],
+      [
+        -286.1575044757408,
+        -632.2846714004149
+      ],
+      [
+        -282.9125044757408,
+        -676.088671400415
+      ]
+    ],
+    "canopy_rear_point_count": 15,
+    "canopy_front_start_xz": [
+      -282.9125044757408,
+      -676.088671400415
+    ],
+    "canopy_front_end_xz": [
+      -286.1575044757408,
+      -632.2846714004149
+    ],
+    "canopy_length_m": 43.924030336479916,
+    "canopy_source_chain": [
+      15,
+      16,
+      17,
+      18,
+      19,
+      20,
+      21,
+      22,
+      23,
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "contact_anchors": [
+      {
+        "runs": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "station_m": 6.0135921104937085,
+        "reason": "aligned to actual front-post bay midpoint; stock body should traverse an open bay, not a post"
+      },
+      {
+        "runs": [
+          15,
+          16,
+          17,
+          18
+        ],
+        "station_m": 8.447021120504058,
+        "reason": "aligned to actual front-post bay midpoint; stock body should traverse an open bay, not a post"
+      },
+      {
+        "runs": [
+          20,
+          21,
+          22,
+          23
+        ],
+        "station_m": 7.633563828801542,
+        "reason": "aligned to actual front-post bay midpoint; stock body should traverse an open bay, not a post"
+      }
+    ],
+    "ground_modules": {
+      "status": "production_inference; packet supports motif family but not exact count, schedule or dimensions",
+      "groups_per_observed_w_chain": 2,
+      "center_fractions": [
+        0.25,
+        0.75
+      ],
+      "door_offset_m": -1.15,
+      "door_width_m": 0.9,
+      "door_height_m": 2.05,
+      "window_offset_m": 0.25,
+      "window_width_m": 1.15,
+      "window_height_m": 1.1,
+      "window_bottom_above_base_m": 0.85,
+      "privacy_panel_offset_m": 1.45,
+      "privacy_panel_width_m": 0.9,
+      "privacy_panel_height_m": 1.55,
+      "field_depth_m": 0.05,
+      "base_depth_m": 0.025,
+      "frame_width_m": 0.065,
+      "frame_depth_m": 0.06,
+      "privacy_panel_role": "plain opaque white rear-wall panel motif; no freestanding enclosure or inferred private/interior layout",
+      "door_state": "closed static opaque leaf; no entrance or occupancy claim",
+      "window_state": "opaque dark closed pane with white frame; no room or interior geometry"
+    }
+  },
+  "baseline": "Exact frozen neutral24-run source wall and roof; no detailed target asset copied.",
+  "ground_grade": {
+    "status": "production_inference_actual_source_grade; no live acceptance",
+    "historical_flat_study_datum_y": 2.949,
+    "minimum_embed_below_land_m": 0.02,
+    "source_chunks": [
+      {
+        "path": "res://generated/world/chunks/x_-2__z_-3.json",
+        "sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5"
+      }
+    ],
+    "posts": [
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.823176090240478
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.833093805313111
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.84335234642029
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.853659921646118
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.8639671459198004
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.874274721145628
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.8845820884704607
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.8948895206451435
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.9051968879699714
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.9155044631958007
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.9231279697418255
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.9029473009109505
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.881096402168274
+      },
+      {
+        "old_bottom_y": 2.94899988174438,
+        "bottom_y": 2.8596328592300453
+      }
+    ],
+    "groups": [
+      {
+        "runs": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "fraction": 0.25,
+        "local_visible_datum_y": 2.937678801536561,
+        "translation_y_m": -0.011321198463438709,
+        "closed_components": [
+          {
+            "mesh": "GroundClosedDoorsAndPrivacyPanels",
+            "box": 0,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.894969370841981
+          },
+          {
+            "mesh": "GroundModuleFrames",
+            "box": 1,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.900388232231141
+          },
+          {
+            "mesh": "GroundModuleFrames",
+            "box": 2,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.8948626489639255
+          },
+          {
+            "mesh": "GroundClosedDoorsAndPrivacyPanels",
+            "box": 1,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.880081962585449
+          }
+        ]
+      },
+      {
+        "runs": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "fraction": 0.75,
+        "local_visible_datum_y": 2.8937775888443014,
+        "translation_y_m": -0.05522241115569848,
+        "closed_components": [
+          {
+            "mesh": "GroundClosedDoorsAndPrivacyPanels",
+            "box": 2,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.8507443170547524
+          },
+          {
+            "mesh": "GroundModuleFrames",
+            "box": 9,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.8568108606338534
+          },
+          {
+            "mesh": "GroundModuleFrames",
+            "box": 10,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.8505938138961784
+          },
+          {
+            "mesh": "GroundClosedDoorsAndPrivacyPanels",
+            "box": 3,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.8339939231872586
+          }
+        ]
+      },
+      {
+        "runs": [
+          15,
+          16,
+          17,
+          18
+        ],
+        "fraction": 0.25,
+        "local_visible_datum_y": 2.9047017211914063,
+        "translation_y_m": -0.044298278808593494,
+        "closed_components": [
+          {
+            "mesh": "GroundClosedDoorsAndPrivacyPanels",
+            "box": 4,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.863243936538697
+          },
+          {
+            "mesh": "GroundModuleFrames",
+            "box": 17,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.8627549304962163
+          },
+          {
+            "mesh": "GroundModuleFrames",
+            "box": 18,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.8656163997650146
+          },
+          {
+            "mesh": "GroundClosedDoorsAndPrivacyPanels",
+            "box": 5,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.8710160026550318
+          }
+        ]
+      },
+      {
+        "runs": [
+          15,
+          16,
+          17,
+          18
+        ],
+        "fraction": 0.75,
+        "local_visible_datum_y": 2.9263337326049803,
+        "translation_y_m": -0.022666267395019535,
+        "closed_components": [
+          {
+            "mesh": "GroundClosedDoorsAndPrivacyPanels",
+            "box": 6,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.8848477878570566
+          },
+          {
+            "mesh": "GroundModuleFrames",
+            "box": 25,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.8843544330596926
+          },
+          {
+            "mesh": "GroundModuleFrames",
+            "box": 26,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.887276029586792
+          },
+          {
+            "mesh": "GroundClosedDoorsAndPrivacyPanels",
+            "box": 7,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.892719707489016
+          }
+        ]
+      },
+      {
+        "runs": [
+          20,
+          21,
+          22,
+          23
+        ],
+        "fraction": 0.25,
+        "local_visible_datum_y": 2.9403148460388184,
+        "translation_y_m": -0.008685153961181413,
+        "closed_components": [
+          {
+            "mesh": "GroundClosedDoorsAndPrivacyPanels",
+            "box": 8,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.898828758239747
+          },
+          {
+            "mesh": "GroundModuleFrames",
+            "box": 33,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.898335260391237
+          },
+          {
+            "mesh": "GroundModuleFrames",
+            "box": 34,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.901257429122928
+          },
+          {
+            "mesh": "GroundClosedDoorsAndPrivacyPanels",
+            "box": 9,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.9067015361785886
+          }
+        ]
+      },
+      {
+        "runs": [
+          20,
+          21,
+          22,
+          23
+        ],
+        "fraction": 0.75,
+        "local_visible_datum_y": 2.963221035003662,
+        "translation_y_m": 0.01422103500366223,
+        "closed_components": [
+          {
+            "mesh": "GroundClosedDoorsAndPrivacyPanels",
+            "box": 10,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.921734947204591
+          },
+          {
+            "mesh": "GroundModuleFrames",
+            "box": 41,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.921241449356076
+          },
+          {
+            "mesh": "GroundModuleFrames",
+            "box": 42,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.9241636180877673
+          },
+          {
+            "mesh": "GroundClosedDoorsAndPrivacyPanels",
+            "box": 11,
+            "old_bottom_y": 2.94899988174438,
+            "bottom_y": 2.9296077251434323
+          }
+        ]
+      }
+    ]
+  },
+  "runtime_interface": {
+    "supplied_exact_wall_roof_land_area": true,
+    "injected_current_neutral_materials": true,
+    "emission_is_unowned_until_adapter": true,
+    "reviewed_geometry_config_sha256": "f20133c69e87f8fd573e215ec5b4c6adf3e308f51ec5c6fccbcee6550f251f30"
+  }
+}

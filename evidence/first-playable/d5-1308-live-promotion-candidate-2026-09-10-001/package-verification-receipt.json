@@ -1,0 +1,444 @@
+{
+  "recognition_metric": "11/213",
+  "capture_time_recognition_metric": "11/213 for selected live originals; older study metrics stay historical",
+  "recognition_credit": false,
+  "additional_recognition_credit": false,
+  "promotion": false,
+  "inventory_physical_units": 213,
+  "source_render_images_are_package_pixels": false,
+  "schema_version": "ti.d5-batch-package-verification/1",
+  "physical_unit_id": "physical-building:w95934123",
+  "derived_normalized_summary": true,
+  "not_raw_execution_evidence": true,
+  "decision": "PASS",
+  "independent_package_review": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/independent-package/REVIEW.json",
+    "sha256": "71982937a1da9c5d5f4b72c9df48008fb6a4a10cab0d7d11dd5a035aac684172",
+    "bytes": 15448
+  },
+  "independent_package_review_text": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/independent-package/REVIEW.md",
+    "sha256": "70c4b04cd7da07a05c5126a1a6d06cc647c773fa674e1d0996d8a169b49f7737",
+    "bytes": 4898
+  },
+  "final_byte_pid_gate": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/independent-package/FINAL_COMPARISON.json",
+    "sha256": "cc680333b8226fb7c2f2e75371c283fc3cc70bfecfe825eebabc3b3b7dd19f77",
+    "bytes": 5290
+  },
+  "owner_completion_handoff": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/package-owner/OWNER_HANDOFF.json",
+    "sha256": "3d2d6e3d50827b389dc15a507e944ce9e7ebe02bfb378bddd6b431475fd04f6e",
+    "bytes": 14069
+  },
+  "app_bundle_relative_path": "build/d5-1308-1394-candidate-001/Treasure Island First Playable.app",
+  "bundle_inventory": [
+    {
+      "path": "Contents/Info.plist",
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885
+    },
+    {
+      "path": "Contents/MacOS/Treasure Island First Playable",
+      "sha256": "c993816c0e497e974bde09334e7516ca35d28453b488e4361a2322a24eb73a6e",
+      "bytes": 170963648
+    },
+    {
+      "path": "Contents/PkgInfo",
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9
+    },
+    {
+      "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229
+    },
+    {
+      "path": "Contents/Resources/Treasure Island First Playable.pck",
+      "sha256": "de0cfb36bb6421f6ca55727e36a0c0300ef441859eddb9dc9e019d36c8f30fe1",
+      "bytes": 66819280
+    },
+    {
+      "path": "Contents/Resources/icon.icns",
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "sha256": "0a104d62f41e4683f87801600db0453da51e808f0314a7e497d1e4feb9b2df5f",
+      "bytes": 3217
+    }
+  ],
+  "bundle_identity_algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "bundle_identity_sha256": "01f7c05c4fec1895ceb07645328ad523595c10e17d8de65adfdf1cd9e8e0d290",
+  "pck_sha256": "de0cfb36bb6421f6ca55727e36a0c0300ef441859eddb9dc9e019d36c8f30fe1",
+  "executable_sha256": "c993816c0e497e974bde09334e7516ca35d28453b488e4361a2322a24eb73a6e",
+  "source_pins": {
+    "res://game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd": "797dfb3075dacdf24a32b4ee0fa4959c296b35ae2d51f2d3c4dbba407fead3b7",
+    "res://game/resources/facades/d2_1439_chinook_quality_v2_prototype.json": "1217ae0a101f0f1951a3c12303d11af3aace225745922a09aed276b1958553be",
+    "res://game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+    "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres": "81fd15832670516b2cc752e89310acda201f30705b01297639703f76f2111a64",
+    "res://game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres": "d97d7b4a442ffe8ad9a0b003e5c1d6466f9ef9effc7cdb2be8ef966195e66782",
+    "res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres": "389c01066767b085ef8ed8ae4c5e1b06062d9ffb135e3e6a7bfa968b963717d7",
+    "res://game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres": "09928b8617c7ac90e421aa0e61acab916e391c3bac84c486a2e3beda995139fe",
+    "res://game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres": "eddc4900c351dc3a75d163bd380a8b3a39bf6a1c1c3647299e3af19634a60ead",
+    "res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres": "75c13aa30a4e3c9f49980d78abe41f40c6c7ab270be6152c201eb8a72ebe8720",
+    "res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+    "res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+    "res://game/scripts/player/player_camera.gd": "1d53f11cc3d9de00d4bb580aa6322c6f53b0080e5b9e1e3b18baeefd52125cc3",
+    "res://game/scenes/player/player.tscn": "a37b00ecc620b4f3106a14d1dc9ec22a519f81481e5e6c68252389e13488a793",
+    "res://game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd": "d5a4458be7a5c2fb6989f9d8a343d497d2f144eb19c445de6016888e7b3cce5e",
+    "res://game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json": "58ba0093d002a3acad06b76876b7333077bb5152827f4a59b0c9b6da132b68d9",
+    "res://game/scripts/world/world_chunk_builder.gd": "552cc81c7146793e272621ca99667997943e8a01c48aa62e80bd7a14a4f1ccf7",
+    "res://game/scripts/player/player_controller.gd": "8b114132d66c78dd0bfd09783c7b9a3a3a441a8b1ae14f33f7308bd9b04ed0ea",
+    "res://game/scripts/main.gd": "94fba496a85d8b2b56d27dbe91121841fcf60466204f6cdf4912cebf7285739c",
+    "res://game/scripts/interaction/spray_controller.gd": "9897042fbffc6740ebe3eb4c19da544a0d437391ded9987318edc7238c403da4",
+    "res://game/scenes/main.tscn": "959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66",
+    "res://game/scenes/world/world_root.tscn": "ed6dfaa1933cedf2a70ca6afd677a645d588dbf6c823fb04402aaaea4b709ab8",
+    "res://project.godot": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af",
+    "res://generated/world/chunks/x_-2__z_0.json": "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b",
+    "res://export_presets.cfg": "6e8aa4b407c8691e3c8e07b1fc29c24de2653f860def8a358c55df72d8809392",
+    "res://discovery/facades/facade-recognition-catalog.json": "edb133eb25f187ee112df041e3f408a2bdd62c0f676b94c36019c6bc4b0b9d72",
+    "res://discovery/facades/facade-recognition-catalog.schema.json": "3abbe81b3b19db02a0e6ce3b3a0bdbc4b49f9c836f73fa0071b3658dde4ba894",
+    "res://game/resources/facades/facade-runtime-registry.json": "f91616726b75ab097b347f5c7cac861572e7516b0da586b219040e0a99062455",
+    "res://game/resources/facades/facade-runtime-adapter-contracts.json": "fdea3892fe563785bcd2cd372343f456fae3172b85e508fd250c37b090164a40",
+    "res://game/scripts/world/facades/facade_runtime_registry_loader.gd": "9518c0f969e74a94c2fa0e064cf5c05725638797df9316238fa912443ea6ae9c",
+    "res://tools/build_facade_recognition_registry.mjs": "0a9c219589a01c4de030f2a92c05d9acf37b2ba41872381a305fcdb271dac18d",
+    "res://generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "res://game/scripts/world/facades/d2_1444_croaker_quality_v2_prototype.gd": "afe74e5254af720cd855fb8dbadcb71a283d0c8b2d0f79c9565dd2e62b6e9d42",
+    "res://game/resources/facades/d2_1444_croaker_quality_v2_prototype.json": "22efb2fa24ea1db245f8fe204e3f029312da59a7a67644d2f1464f02661046ef",
+    "res://game/resources/materials/world/site_12_housing/site_12_ochre_tan_stucco.tres": "9486ccf52e1f2aff9fc940f60644733d5cf9bf1cb03cebb5332bcc1d7c0aaaf6",
+    "res://game/resources/materials/world/site_12_housing/d2_1444_quality_v2_recess_backing.tres": "796b27c2821e62f554232d2b355adb566d96aa3cd5ed8ef7fb765317f190721a",
+    "res://game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd": "178cc9df2c7add966a95427099b3a9900fde459e5bfc4825211e06c119cc2e32",
+    "res://game/resources/facades/d2_1444_croaker_quality_v2_live_replacement.json": "472f82f5a3d98b0778aca758ae8277f8b8ba9b4a39875ff54f67781280965135",
+    "res://generated/world/chunks/x_-2__z_-1.json": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2",
+    "res://game/scripts/world/facades/d5_1308_gateview_live_factory.gd": "6e2f0e99e23dc180aba4955be8c5184c6e094057f4a21c2e9e47978dc18b3787",
+    "res://game/scripts/world/facades/d5_1308_gateview_live_replacement.gd": "1871a9038d62a3c6fc8b3e0a13f3fea90bc0312988cfb9d254ecfeae89e7cc26",
+    "res://game/resources/facades/d5_1308_gateview_live_factory.json": "6adbfa189fd52c444ab028ef92098f7cce6143aed440824c02fe5a79f1e7757f",
+    "res://game/resources/facades/d5_1308_gateview_live_replacement.json": "d4110a1621bcdbf5fcfa93720daf2ead7f0cc08ad268e2c6f5d26d6e6df9031e",
+    "res://game/resources/facades/d5_1308_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
+    "res://game/scripts/world/facades/d5_1394_gateview_live_factory.gd": "6f5f257a9869780202b98aeacef233c3604ebd9c4ad348fae91f9b2021358b2a",
+    "res://game/scripts/world/facades/d5_1394_gateview_live_replacement.gd": "99f78bd3e3a2215ca8dd48372ecb004489249b069d3e3944f8f283a0422b0f13",
+    "res://game/resources/facades/d5_1394_gateview_live_factory.json": "4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b",
+    "res://game/resources/facades/d5_1394_gateview_live_replacement.json": "0d3909c266b5da07927051e92667300fca4c8ab0b919a63459e9a3608fbe1782",
+    "res://game/resources/facades/d5_1394_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
+    "res://generated/world/chunks/x_-2__z_-3.json": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5"
+  },
+  "actual_unit": {
+    "wall_key": "building:w95934123:wall",
+    "roof_key": "building:w95934123:roof",
+    "source_geometry_sha256": "6028c89be31ebfd095777b86f6d5d4a9094002b7b5fd73efb2fc940f9a9f3917",
+    "wall_counts": {
+      "meshes": 7,
+      "surfaces": 7,
+      "triangles": 2540,
+      "bodies": 1,
+      "shapes": 3
+    },
+    "roof_counts": {
+      "meshes": 1,
+      "surfaces": 1,
+      "triangles": 22,
+      "bodies": 1,
+      "shapes": 1
+    },
+    "collision_triangles": [
+      68,
+      240,
+      96,
+      22
+    ],
+    "mounted_actual_component": "PASS",
+    "signed_headless_actual_attachment": "PASS",
+    "signed_native_actual_attachment": "PASS",
+    "candidate_package": "PASS",
+    "recognition_credit": 0
+  },
+  "actual_combined_world": {
+    "rows": 735,
+    "context_rows": 4,
+    "meshes": 993,
+    "surfaces": 1008,
+    "triangles": 76376,
+    "bodies": 466,
+    "shapes": 472
+  },
+  "complete_independent_report": {
+    "reviewer": "D / review_1303_source",
+    "verdict": "PASS — independent same-app candidate package for both 1308 and 1394",
+    "app": "{BATCH_REPO}/build/d5-1308-1394-candidate-001/Treasure Island First Playable.app",
+    "app_tree_sha256": "01f7c05c4fec1895ceb07645328ad523595c10e17d8de65adfdf1cd9e8e0d290",
+    "app_file_count": 7,
+    "pck_sha256": "de0cfb36bb6421f6ca55727e36a0c0300ef441859eddb9dc9e019d36c8f30fe1",
+    "executable_sha256": "c993816c0e497e974bde09334e7516ca35d28453b488e4361a2322a24eb73a6e",
+    "source_binding_sha256": "b01b34731082bbd3137d0e799d23fa691dd6112fa70d18d837cc78561ca8540d",
+    "source_pin_count": 245,
+    "package_binding_sha256": "8148669aa2af77c410a5bf97baefee02a4ee5b1095dd5d59c59c7d6a489afaf9",
+    "package_pin_count": 49,
+    "all_input_app_source_before_after_exact": true,
+    "owner_handoff_sha256": "3d2d6e3d50827b389dc15a507e944ce9e7ebe02bfb378bddd6b431475fd04f6e",
+    "helper_sha256": "ccca5864e29494fceea28973714d539dbd955cc21e2365b83474854dbedecfe8",
+    "helper_change_scope": "Reporting-only get_path guard; detached nodes print detached:name; assertions unchanged",
+    "bindings": {
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/REVIEW.md": "70c4b04cd7da07a05c5126a1a6d06cc647c773fa674e1d0996d8a169b49f7737",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/PRECHECK.json": "c3218701c3c6fc9cb9b31608e9ecf02af5df68f8a0c098085dbdc12efb799345",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/FINAL_COMPARISON.json": "cc680333b8226fb7c2f2e75371c283fc3cc70bfecfe825eebabc3b3b7dd19f77",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/bundle-native-checks.json": "c92b3dec621449f0869e9910cd900e835f3956d05d025c5f2a26886cb728af02",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/bundle-entitlements.xml": "00491886daae07a5296c8bad50f116bf006b0004d7bf7338ad46669fbd903a4a",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/run-plan.json": "1433d08fed40b440c68ca6f014b92a5d8560243be7b7b1799c21fc52f96e5576",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/run-stage.py": "ddde828adb86211803fd83410c9884947f245c15287b12af94de2668556b52fc",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/package-source-pins.json": "8148669aa2af77c410a5bf97baefee02a4ee5b1095dd5d59c59c7d6a489afaf9",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/independent-inputs.json": "ff155aaaceb98b3a1ebeca1d191874c356cf326e16ffb6edca9fdb105bfdc5e0",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/setup-failure-001.json": "ffc261f362a86426dbbb50cf2770d78325cb5c4c40739fef3169c88368b08c19",
+      "{TASK_ROOT}/work/1308-1394-batch-001/package-preparation-001/OWNER_HANDOFF.md": "ed89cd39a4f8ce20b50f6ffdeb8167745e9788a339ec4516326b41f23fb03f10",
+      "{TASK_ROOT}/work/1308-1394-batch-001/package-preparation-001/OWNER_HANDOFF.json": "3d2d6e3d50827b389dc15a507e944ce9e7ebe02bfb378bddd6b431475fd04f6e",
+      "{TASK_ROOT}/work/1308-1394-batch-001/package-preparation-001/final-post-execution.json": "1d7e73fa9a30ee933535b8d832a95564e8f9444331de97ec39694d005bf701f1",
+      "{TASK_ROOT}/work/1308-1394-batch-001/package-preparation-001/candidate-package-inventory.json": "c2b4c75024888a316ffdd03624d9ac41f3848e50904b4cb34cb77fdc1015a6d4",
+      "{TASK_ROOT}/work/1308-1394-batch-001/package-preparation-001/package-contract.gd": "ccca5864e29494fceea28973714d539dbd955cc21e2365b83474854dbedecfe8",
+      "{TASK_ROOT}/work/1308-1394-batch-001/package-preparation-001/source-pins.json": "b01b34731082bbd3137d0e799d23fa691dd6112fa70d18d837cc78561ca8540d",
+      "{TASK_ROOT}/work/1308-1394-batch-001/package-preparation-001/package-source-pins.json": "8148669aa2af77c410a5bf97baefee02a4ee5b1095dd5d59c59c7d6a489afaf9",
+      "{TASK_ROOT}/work/1308-1394-independent-readiness-001/REVIEW.md": "df14bafd20e313e7fe123c3c65fde5ca4f7ddd188295b0bf923f3e26f9d634d5",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/mounted-component-001-execution.json": "4b0331d533d8679495102957b098304ac57e0904d28e289b9a0e7a4316c1edd6",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/mounted-component-001.log": "5d199d80caaf5fccb4f8bc79047851d2eba0e2986c4431e26ca8313047482914",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/mounted-privacy-001-execution.json": "4f48c23394df3fb62924d30266f5b7bb7390fc6aa229945eb1ed72d081454cd1",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/mounted-privacy-001.log": "d3bb147b061a9151f3265cc32187bcf04590c58e01e81f47c2ea64b959096777",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/release-headless-smoke-001-execution.json": "a26664faf3bc2e6fe3d1e1d9bb2609b7040535b66b648a28d5dad2016a5ff735",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/release-headless-smoke-001.log": "e4d52f0b976281ebb03d0abc732f17ba7d6ef887fd7338abb4331c3c1beecd39",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/runtime-001/release-headless-smoke-001-engine.log": "e4d52f0b976281ebb03d0abc732f17ba7d6ef887fd7338abb4331c3c1beecd39",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/release-native-smoke-001-execution.json": "5627e49550feb0b4df4bfaaf8eeedef6c7d95106ac2bb18faedaf576d0f52c58",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/release-native-smoke-001.log": "a0ffea3f5c3c6a3f9273c52e61a61e15964ec5fc75f63e04e7bb69fe6212607f",
+      "{TASK_ROOT}/work/1308-1394-independent-package-001/runtime-001/release-native-smoke-001-engine.log": "a0ffea3f5c3c6a3f9273c52e61a61e15964ec5fc75f63e04e7bb69fe6212607f"
+    },
+    "runs": [
+      {
+        "stage": "mounted-component-001",
+        "pid": 39518,
+        "status": "terminal",
+        "exit_code": 0,
+        "elapsed_seconds": 2.3426500831265002,
+        "receipt_path": "{TASK_ROOT}/work/1308-1394-independent-package-001/mounted-component-001-execution.json",
+        "receipt_sha256": "4b0331d533d8679495102957b098304ac57e0904d28e289b9a0e7a4316c1edd6",
+        "stdout_log_sha256": "5d199d80caaf5fccb4f8bc79047851d2eba0e2986c4431e26ca8313047482914",
+        "engine_log_sha256": null,
+        "required_messages_pass": true,
+        "errors": [],
+        "pins_before_after_exact": true
+      },
+      {
+        "stage": "mounted-privacy-001",
+        "pid": 39546,
+        "status": "terminal",
+        "exit_code": 0,
+        "elapsed_seconds": 2.4545928339939564,
+        "receipt_path": "{TASK_ROOT}/work/1308-1394-independent-package-001/mounted-privacy-001-execution.json",
+        "receipt_sha256": "4f48c23394df3fb62924d30266f5b7bb7390fc6aa229945eb1ed72d081454cd1",
+        "stdout_log_sha256": "d3bb147b061a9151f3265cc32187bcf04590c58e01e81f47c2ea64b959096777",
+        "engine_log_sha256": null,
+        "required_messages_pass": true,
+        "errors": [],
+        "pins_before_after_exact": true
+      },
+      {
+        "stage": "release-headless-smoke-001",
+        "pid": 39683,
+        "status": "terminal",
+        "exit_code": 0,
+        "elapsed_seconds": 6.950716084102169,
+        "receipt_path": "{TASK_ROOT}/work/1308-1394-independent-package-001/release-headless-smoke-001-execution.json",
+        "receipt_sha256": "a26664faf3bc2e6fe3d1e1d9bb2609b7040535b66b648a28d5dad2016a5ff735",
+        "stdout_log_sha256": "e4d52f0b976281ebb03d0abc732f17ba7d6ef887fd7338abb4331c3c1beecd39",
+        "engine_log_sha256": "e4d52f0b976281ebb03d0abc732f17ba7d6ef887fd7338abb4331c3c1beecd39",
+        "required_messages_pass": true,
+        "errors": [],
+        "pins_before_after_exact": true
+      },
+      {
+        "stage": "release-native-smoke-001",
+        "pid": 39707,
+        "status": "terminal",
+        "exit_code": 0,
+        "elapsed_seconds": 7.755593749927357,
+        "receipt_path": "{TASK_ROOT}/work/1308-1394-independent-package-001/release-native-smoke-001-execution.json",
+        "receipt_sha256": "5627e49550feb0b4df4bfaaf8eeedef6c7d95106ac2bb18faedaf576d0f52c58",
+        "stdout_log_sha256": "a0ffea3f5c3c6a3f9273c52e61a61e15964ec5fc75f63e04e7bb69fe6212607f",
+        "engine_log_sha256": "a0ffea3f5c3c6a3f9273c52e61a61e15964ec5fc75f63e04e7bb69fe6212607f",
+        "required_messages_pass": true,
+        "errors": [],
+        "pins_before_after_exact": true
+      }
+    ],
+    "fresh_pid_release": {
+      "argv": [
+        "ps",
+        "-p",
+        "39518,39546,39683,39707",
+        "-o",
+        "pid=,stat=,etime=,command="
+      ],
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "engine_slot_released": true,
+    "units": {
+      "1308": {
+        "wall_key": "building:w95934123:wall",
+        "roof_key": "building:w95934123:roof",
+        "source_geometry_sha256": "6028c89be31ebfd095777b86f6d5d4a9094002b7b5fd73efb2fc940f9a9f3917",
+        "wall_counts": {
+          "meshes": 7,
+          "surfaces": 7,
+          "triangles": 2540,
+          "bodies": 1,
+          "shapes": 3
+        },
+        "roof_counts": {
+          "meshes": 1,
+          "surfaces": 1,
+          "triangles": 22,
+          "bodies": 1,
+          "shapes": 1
+        },
+        "collision_triangles": [
+          68,
+          240,
+          96,
+          22
+        ],
+        "mounted_actual_component": "PASS",
+        "signed_headless_actual_attachment": "PASS",
+        "signed_native_actual_attachment": "PASS",
+        "candidate_package": "PASS",
+        "recognition_credit": 0
+      },
+      "1394": {
+        "wall_key": "building:w96215646:wall",
+        "roof_key": "building:w96215646:roof",
+        "source_geometry_sha256": "b0e6c7426ac41c995f96a647ff5102b4d85963d2b7a45f21ad1b81455e451220",
+        "wall_counts": {
+          "meshes": 11,
+          "surfaces": 11,
+          "triangles": 2124,
+          "bodies": 1,
+          "shapes": 3
+        },
+        "roof_counts": {
+          "meshes": 1,
+          "surfaces": 1,
+          "triangles": 16,
+          "bodies": 1,
+          "shapes": 1
+        },
+        "collision_triangles": [
+          48,
+          204,
+          864,
+          16
+        ],
+        "mounted_actual_component": "PASS",
+        "signed_headless_actual_attachment": "PASS",
+        "signed_native_actual_attachment": "PASS",
+        "candidate_package": "PASS",
+        "recognition_credit": 0
+      }
+    },
+    "world": {
+      "rows": 735,
+      "context_rows": 4,
+      "meshes": 993,
+      "surfaces": 1008,
+      "triangles": 76376,
+      "bodies": 466,
+      "shapes": 472
+    },
+    "native_bundle": {
+      "strict_signature": true,
+      "arm64_signature": true,
+      "x86_64_signature": true,
+      "architectures": [
+        "arm64",
+        "x86_64"
+      ],
+      "entitlements": {},
+      "privacy_tracking": false,
+      "symlinks": [],
+      "xattrs_empty": true
+    },
+    "mounted_privacy": {
+      "virtual_files": 937,
+      "generated_artifacts": 47,
+      "chunks": 38,
+      "private_paths": 0,
+      "private_raw": 0,
+      "banned": 0
+    },
+    "native_renderer": [
+      "Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)"
+    ],
+    "raw_failures_preserved": [
+      "Owner source focused-001 external type parse failure, engine exit 0; successful focused-002 retains focused-001-result.json filename.",
+      "Owner mounted-component-001 detached get_path errors, engine exit 0; mounted-component-002 clean after reporting-only repair.",
+      "Independent setup-failure-001: file-only Python plistlib/pyexpat ImportError before any engine or file creation; repaired with existing native plutil entitlement parser."
+    ],
+    "independent_engine_attempts": 4,
+    "independent_engine_retries": 0,
+    "independent_extra_stage_go_roundtrips": 0,
+    "scope_limits": [
+      "Mounted checks establish target components/resource/privacy closure; actual signed headless/native ordinary main establishes full world attachment.",
+      "No independent source-world replay, walking/spray/capture replay, reexport, product edit, authority edit, commit or push.",
+      "No M1 validation, manual play or continuous-movie/AVI acceptance.",
+      "Separate unit source/mechanics/visual limits and packet attestations remain; candidate package PASS grants no recognition credit.",
+      "Any later authority state requires a fresh exact-current export; do not reuse this PCK as proof of another authority state."
+    ],
+    "authority": "11/213",
+    "named_retro": "RETRO D — Independent 1308 + 1394 candidate package: Reused the reviewed complete helper and successful four-stage command plan against one frozen app, with separate source-free runtime/log paths. Both target components and both signed ordinary-main predicates passed without an engine retry; source, app and helper bindings remained exact. Preserve the owner’s detached-node reporting failure and independent file-only plistlib setup failure; native plutil is the proven entitlement parser. Release terminal/PID evidence before prose, retain mounted-component versus whole-main boundaries, and keep later unit acceptance and authority-state export separate."
+  },
+  "owner_receipts": [
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/package-owner/source-package-contract-001-execution.json",
+      "sha256": "ff397858eeffa58365bf0e11f061296ac9c4b5adc33eb4a414607e1769386e47",
+      "bytes": 14420
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/package-owner/export-001-execution.json",
+      "sha256": "5fa21edaf2c283a2a4b7cdf35d02b9abe63a205236677c634a76b62491be4807",
+      "bytes": 14399
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/package-owner/mounted-component-001-execution.json",
+      "sha256": "44944bdffd66407e5364f7d4e89eef7b3c41fd20995b627ad369cbcd91abee48",
+      "bytes": 15397
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/package-owner/mounted-privacy-001-execution.json",
+      "sha256": "d27c8323b520b39fe706af109fe3e7e35777628088904db80437f9334a54d5e9",
+      "bytes": 15218
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/package-owner/mounted-component-002-execution.json",
+      "sha256": "fd2763c28fd63ed137c47d12a9145c0b6e7f2329eca099b879004d0e4f466f3b",
+      "bytes": 15124
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/package-owner/release-headless-smoke-001-execution.json",
+      "sha256": "6136b10a9c1b3ce394d40d626ff70541d2ec181b77ab0225883b0e687e5e268c",
+      "bytes": 14551
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/package-owner/release-native-smoke-001-execution.json",
+      "sha256": "ee764b0b5a689281d2ee4ccc727b4433f7f256a78148736704bb401b821252eb",
+      "bytes": 14688
+    }
+  ],
+  "coverage_split": {
+    "editor_mounted": "Supplied-chunk pair preflight and real builder target-record dispatch; detached staging roots, accepted emitted arrays/materials/collision/ownership predicates. Does not prove whole-world attachment.",
+    "signed_release": "Supported executable --mac-export-smoke from source-free cwd proves both real main-tree pairs, prior1439/1444, whole-world counts and stock movement/jetpack defaults; headless and native Metal Forward+ both pass.",
+    "bundle": "One fresh export, seven files, native signing/architecture/empty-entitlement/privacy checks; direct PCK content audit937virtualfiles and zero private/banned paths.",
+    "lineage": "Ten per-unit product files remain exact. Combined builder and opt-in smoke main have new bindings; isolated capture metrics remain historical, not combined render measurements."
+  },
+  "failures_preserved": {
+    "focused_source": "focused001 RuntimeEvidence-as-Dictionary parse FAIL; inference-only helper repair focused002 PASS with historical focused-001-result.json filename.",
+    "mounted_component": "mounted001 engine0 with4get_pathERRORs is FAIL. Old helper/map/plan in mounted-001-inputs. Only reporting line guarded for in-tree paths; mounted002 cleanPASS. App/product/assertions unchanged; source/export not replayed."
+  },
+  "archive_byte_gate_scope": "The accepted independent final comparison supplies app/source/PID closure; this archiver does not rerun or rehash app contents."
+}

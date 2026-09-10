@@ -3,8 +3,8 @@ extends SceneTree
 const RegistryLoader := preload("res://game/scripts/world/facades/facade_runtime_registry_loader.gd")
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
-const EXPECTED_REGISTRY_SHA256 := "f91616726b75ab097b347f5c7cac861572e7516b0da586b219040e0a99062455"
-const EXPECTED_ADAPTER_CONTRACT_SHA256 := "fdea3892fe563785bcd2cd372343f456fae3172b85e508fd250c37b090164a40"
+const EXPECTED_REGISTRY_SHA256 := "270a6176c6a97f93918a24acc7dc86126dc5fac466e80320b0b0b2a86dbcf313"
+const EXPECTED_ADAPTER_CONTRACT_SHA256 := "130f6ff4b6c36771768b90ed859a23db197786d063624063a0382bdba93535eb"
 const READY_RECEIVERS := [
 	"building-composite:w1249412094:w1282547786:wall",
 	"building:r16681702:wall",
@@ -19,6 +19,8 @@ const READY_RECEIVERS := [
 	"building:w95934117:wall",
 	"building:w95934119:wall",
 	"building:w95934144:wall",
+	"building:w96215646:wall",
+	"building:w95934123:wall",
 ]
 const DISABLED_RECEIVERS := [
 	"building-composite:w1249412094:w1282547787:wall",
@@ -47,6 +49,8 @@ const ACTIVE_UNIT_BY_RECEIVER := {
 	"building:w95934119:wall": "physical-building:w95934119",
 	"building:w95934144:wall": "physical-building:w95934144",
 	"building:w95934117:wall": "physical-building:w95934117",
+	"building:w96215646:wall": "physical-building:w96215646",
+	"building:w95934123:wall": "physical-building:w95934123",
 }
 const ACTIVE_REVIEW_STATUS_BY_RECEIVER := {
 	"building-composite:w1249412094:w1282547787:wall": "independent_exact_current_live_pass",
@@ -59,6 +63,8 @@ const ACTIVE_REVIEW_STATUS_BY_RECEIVER := {
 	"building:w95934119:wall": "independent_exact_current_live_pass",
 	"building:w95934144:wall": "independent_exact_current_live_pass",
 	"building:w95934117:wall": "independent_exact_current_live_pass",
+	"building:w96215646:wall": "independent_exact_current_live_pass",
+	"building:w95934123:wall": "independent_exact_current_live_pass",
 }
 
 var _failed := false
@@ -94,8 +100,9 @@ func _run() -> void:
 	_require(first_snapshot == second_snapshot, "Two clean loader runs produced different lookup snapshots.")
 	_require(get_node_count() == baseline_nodes, "Topology-neutral loader/resource resolution added or removed scene-tree nodes.")
 	_validate_fail_closed_mutations(registry, contracts)
+	_validate_d5_batch_mutations(registry, contracts)
 	if not _failed:
-		print("PASS: facade runtime loader is version-pinned and topology-neutral: 213 units / 214 receivers / 11/213 reference-recognizable physical units / 19 adapter plans / 13 package-safe / 6 hard-disabled receivers / 13 unique pathless disabled projection inputs across 13 occurrences; registry %s; adapter contracts %s; snapshot %s" % [EXPECTED_REGISTRY_SHA256, EXPECTED_ADAPTER_CONTRACT_SHA256, first_snapshot.sha256_text()])
+		print("PASS: facade runtime loader is version-pinned and topology-neutral: 213 units / 214 receivers / 13/213 reference-recognizable physical units / 21 adapter plans / 15 package-safe / 6 hard-disabled receivers / 13 unique pathless disabled projection inputs across 13 occurrences; registry %s; adapter contracts %s; snapshot %s" % [EXPECTED_REGISTRY_SHA256, EXPECTED_ADAPTER_CONTRACT_SHA256, first_snapshot.sha256_text()])
 	_finish()
 
 
@@ -125,10 +132,10 @@ func _validate_receiver_modes(loader: RefCounted) -> void:
 	_require(loader.get_content_mode("building:w95934117:wall") == "active_d2_1444_paired_replacement" and str((loader.get_unit("physical-building:w95934117") as Dictionary).get("runtime_content_mode", "")) == "all_receivers_active_d2_1444_paired_replacement", "D2 1444 one wall-indexed paired unit mode drifted.")
 	var metric: Dictionary = loader.get_reference_recognition_metric()
 	var accepted_ids := metric.get("accepted_physical_unit_ids", []) as Array
-	var expected_ids := ["physical-building:r16681702", "physical-building:w1222720021", "physical-building:w1249412093", "physical-building:w1249412094", "physical-building:w291189336", "physical-building:w34313540", "physical-building:w34313545", "physical-building:w95934105", "physical-building:w95934117", "physical-building:w95934119", "physical-building:w95934144"]
+	var expected_ids := ["physical-building:r16681702", "physical-building:w1222720021", "physical-building:w1249412093", "physical-building:w1249412094", "physical-building:w291189336", "physical-building:w34313540", "physical-building:w34313545", "physical-building:w95934105", "physical-building:w95934117", "physical-building:w95934119", "physical-building:w95934144", "physical-building:w95934123", "physical-building:w96215646"]
 	accepted_ids.sort()
 	expected_ids.sort()
-	_require(int(metric.get("numerator", -1)) == 11 and int(metric.get("denominator", -1)) == 213 and str(metric.get("display", "")) == "11/213" and accepted_ids == expected_ids, "Loader recognition metric is not exactly the accepted 11/213 physical-unit rollup.")
+	_require(int(metric.get("numerator", -1)) == 13 and int(metric.get("denominator", -1)) == 213 and str(metric.get("display", "")) == "13/213" and accepted_ids == expected_ids, "Loader recognition metric is not exactly the accepted 13/213 physical-unit rollup.")
 	_require(metric.get("isle_house_non_numerator_source_keys", []) == ["w1282547786", "w1282547787"], "Loader promotes Isle House source parts into numerator entries.")
 
 
@@ -290,7 +297,7 @@ func _validate_adapter_resolution(loader: RefCounted) -> void:
 	expected_ready.sort()
 	expected_disabled.sort()
 	_require(ready_seen == expected_ready and disabled_seen == expected_disabled, "Ready/disabled receiver partition drifted.")
-	_require(current_topology_plan_ids == ["active-adapter:d2-1444-live:building:w95934117:wall"], "D2 1444 is not the sole current-integration topology plan authority.")
+	_require(current_topology_plan_ids == ["active-adapter:d5-1394-live:building:w96215646:wall"], "D2 1444 is not the sole current-integration topology plan authority.")
 
 
 func _validate_d2_1441_plan(plan: Dictionary) -> void:
@@ -1014,3 +1021,42 @@ func _require(condition: bool, message: String) -> bool:
 
 func _finish() -> void:
 	quit(1 if _failed else 0)
+
+
+func _validate_d5_batch_mutations(registry: Dictionary, contracts: Dictionary) -> void:
+	for target: Dictionary in [{"unit_id": "physical-building:w95934123", "wall": "building:w95934123:wall", "number": "1308"}, {"unit_id": "physical-building:w96215646", "wall": "building:w96215646:wall", "number": "1394"}]:
+		var receiver := str(target.wall)
+		var unit_id := str(target.unit_id)
+		var code := "d5_%s_parity_mismatch" % str(target.number)
+		var duplicate_registry := registry.duplicate(true)
+		var records := _unit_by_id(duplicate_registry.get("units", []) as Array, unit_id).get("acceptance_records", []) as Array
+		records.append((records[0] as Dictionary).duplicate(true))
+		_expect_data_error(duplicate_registry, contracts, "recognition_receipt_mismatch", "D5 duplicate physical-unit credit")
+		for field: String in ["evidence_manifest_sha256", "motion_telemetry_manifest_sha256", "visual_motion_manifest_sha256", "package_verification_receipt_sha256", "mechanical_review_receipt_sha256", "evidence_tree_sha256", "review_receipt_sha256"]:
+			var missing_registry := registry.duplicate(true)
+			var missing_records := _unit_by_id(missing_registry.get("units", []) as Array, unit_id).get("acceptance_records", []) as Array
+			(missing_records[0] as Dictionary).erase(field)
+			_expect_data_error(missing_registry, contracts, "recognition_receipt_mismatch", "D5 omitted literal artifact " + field)
+		# Mutate both copies coherently, so the exact run guard must reject it.
+		for field: String in ["mapped_public_run_indices", "protected_run_indices"]:
+			for invalid: Variant in [0.5, "0", true, INF, NAN]:
+				var fractional_registry := registry.duplicate(true)
+				var fractional_contracts := contracts.duplicate(true)
+				var adapter := _active_adapter_by_receiver(fractional_registry, receiver)
+				var behavior := (adapter.get("active_runtime_contract", {}) as Dictionary).get("behavior_contract", {}) as Dictionary
+				var replacement := behavior.get("replacement_contract", {}) as Dictionary
+				var values := replacement.get(field, []) as Array
+				values[0] = float(values[0]) + invalid if typeof(invalid) == TYPE_FLOAT else invalid
+				var plan := _plan_by_receiver(fractional_contracts, receiver)
+				plan["behavior_contract"] = behavior.duplicate(true)
+				_expect_data_error(fractional_registry, fractional_contracts, code, "D5 coherent invalid exact-run number")
+		for mutation: Dictionary in [
+			{"section":"ownership_contract", "field":"roof_is_wall_spray_receiver", "value":true},
+			{"section":"geometry_contract", "field":"world_shapes", "value":470},
+			{"section":"replacement_contract", "field":"actual_land_and_area_records_required", "value":false},
+		]:
+			var invalid_registry := registry.duplicate(true)
+			var invalid_adapter := _active_adapter_by_receiver(invalid_registry, receiver)
+			var invalid_behavior := (invalid_adapter.get("active_runtime_contract", {}) as Dictionary).get("behavior_contract", {}) as Dictionary
+			(invalid_behavior.get(str(mutation.section), {}) as Dictionary)[str(mutation.field)] = mutation.value
+			_expect_data_error(invalid_registry, contracts, code, "D5 topology/roof/terrain ownership drift")

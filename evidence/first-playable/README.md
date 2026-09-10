@@ -1,10 +1,18 @@
 # First-playable evidence index
 
-Checked: 2026-09-09
+Checked: 2026-09-10
 
-This directory separates reproducible automated proof, native-launch proof, autonomous-review status, and owner feedback. Current source and packaged evidence are bound to generated content SHA-256 `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164` and manifest SHA-256 `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`. The active skyline is the single-color `2212x340` silhouette with SHA-256 `9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5`, on a `3900x600 m` billboard at `(-1875,264.85,4306.4)`. The current reviewed handoff is the 1444 exact-current11/213 app linked below; the D2 1441 postpromotion v9 `-001` app is historical. The frozen D2 1441 `-009` v8 app is its prepromotion evidence input; the B225, B201 `024605`, `111725`, `190724`, `231815`, and `224622` packages are historical, while `014223` and `002922` are withdrawn diagnostics.
+This directory separates reproducible automated proof, native-launch proof, autonomous-review status, and owner feedback. Current source and packaged evidence are bound to generated content SHA-256 `01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164` and manifest SHA-256 `e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3`. The active skyline is the single-color `2212x340` silhouette with SHA-256 `9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5`, on a `3900x600 m` billboard at `(-1875,264.85,4306.4)`. The current reviewed technical handoff is the 1308+1394 exact-current13/213 app linked below; the 1444 exact-current11 app is historical; the D2 1441 postpromotion v9 `-001` app is historical. The frozen D2 1441 `-009` v8 app is its prepromotion evidence input; the B225, B201 `024605`, `111725`, `190724`, `231815`, and `224622` packages are historical, while `014223` and `002922` are withdrawn diagnostics.
 
-## Current 1444 exact-current release — 2026-09-09
+## Current 1308+1394 exact-current release — 2026-09-10
+
+The [release closure](d5-1308-1394-current-release-2026-09-10-001/release-closure.json) binds **13/213**, world `735/993/1008/76,376/466/472` and the owner/independently verified seven-file app copied exactly into main. Ordinary launch, publication readiness and Git outcomes remain pending; HUMAN-001 owner feedback remains pending.
+
+Separate [1308](d5-1308-live-promotion-candidate-2026-09-10-001/candidate-closure.json) and [1394](d5-1394-live-promotion-candidate-2026-09-10-001/candidate-closure.json) packets and their seventh attestations preserve capture/candidate 11,36 selected native images, original failures and sampled motion. No new exported-app pixels or unchanged full-frame equality is claimed.
+
+## Historical 1444 exact-current release — 2026-09-09
+
+The following entry retains its historical 11/213 app and observed outcomes.
 
 The [release closure](d2-1444-quality-v2-current-release-2026-09-09-001/release-closure.json) binds **11/213**, world `735/977/992/71,828/466/468`, and the independently verified seven-file app. The [ordinary launch](d2-1444-quality-v2-current-release-2026-09-09-001/ordinary-launch.json) observed the owned visible window; Computer Use permissions left pixels unavailable. The app is stopped. Publication readiness passed and primary commit `b85462571105209496c266781f94f37b4c5f0a69` was pushed with verified remote equality. [Actual publication outcome](d2-1444-quality-v2-current-release-2026-09-09-001-PUBLICATION.json). HUMAN-001 owner feedback remains pending.
 

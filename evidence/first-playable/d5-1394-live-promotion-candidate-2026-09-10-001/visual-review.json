@@ -1,0 +1,266 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "derived_normalized_summary": true,
+  "not_a_captured_original": true,
+  "raw_originals_rewritten": false,
+  "source_role": "Accepted independent unit visual decision; historical pixel and orientation limits remain explicit",
+  "raw_origin": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/1394/work/1394-live-independent-visual-001/REVIEW.json",
+    "sha256": "b4d15870409861eaa3ab4edfc963ffdd17748c42dfe33afc51a469d52d9b7b0d",
+    "bytes": 13482
+  },
+  "normalization": "Longest-prefix leaf-only machine-path normalization. Raw originals remain exact privately; original numbers/arrays/hashes and historical outcomes remain as recorded. Public selected-image projection is separate.",
+  "truth_boundary": {
+    "recognition_metric": "11/213",
+    "capture_time_recognition_metric": "11/213 for selected live originals; older study metrics stay historical",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "inventory_physical_units": 213,
+    "source_render_images_are_package_pixels": false
+  },
+  "data": {
+    "reviewer": "/root/review_1439_package",
+    "created_at": "2026-09-10T00:22:25.696056+00:00",
+    "decision": "PASS",
+    "scope": "1394 actual current11/213 live attachment: whole-facade context in two lights, selected ground junctions and sampled visual finish; recognition credit remains0.",
+    "whole_facade": "Both open-end oblique originals contain the target facade, including its long blue-gray upper/lower window rhythm and continuous flat canopy on slender posts. The building is modest in screen size; this establishes composition/context rather than fine-detail inspection of every distant module or unknown face.",
+    "ground_junctions": "Low-run post feet and both run20 closed door/panel bases are exposed and meet visible ground plausibly. Framed windows, quiet siding and closed white lower modules preserve the accepted family and proportions. Foreground posts/avatar obscure portions of neighboring modules, not the selected bases.",
+    "sampled_motion": "All17 specified payloads inspected. Frame0 shows startup HUD;16 samples show the intended target. Frame160 retains the world. Siding, white frames, post edges and lower bases show no new split/streak finish defect in these samples. Frames70/80 and130/140 show closer framing, while later samples return wider; no continuous smooth-camera claim follows.",
+    "needed_correction": null,
+    "stills": [
+      {
+        "id": "01-whole-default",
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/images/01-whole-default.png",
+        "sha256": "b68aa6e29f490f53fe1e2563fe54144ef35605089f9e981dfbac3b09ccf569cb"
+      },
+      {
+        "id": "02-whole-changed",
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/images/02-whole-changed.png",
+        "sha256": "6bd0225fca6eceb4f1f710fafb7fcbe26abce13a130c45b75782923a49103799"
+      },
+      {
+        "id": "run-15-station-8.447-ground-junction",
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/images/run-15-station-8.447-ground-junction.png",
+        "sha256": "4524506b48e099ca4ce8dc711504fed8420dc7da32bf81c6580d7f67b0ce4d90"
+      },
+      {
+        "id": "run20-door-grounded-under-canopy",
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/images/run20-door-grounded-under-canopy.png",
+        "sha256": "a09849368239822b9a8cd9fc318953b932184938bc19902778ec69298bc9b666"
+      },
+      {
+        "id": "run20-privacy_panel-grounded-under-canopy",
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/images/run20-privacy_panel-grounded-under-canopy.png",
+        "sha256": "fc97023d857a88fc8d4c89eecd5b8160aeee112340fd40ba2b618316cfee193e"
+      }
+    ],
+    "avi_samples": [
+      {
+        "zero_based_avi_index": 0,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0000.jpg",
+        "sha256": "1bc173ccfef2116f385b1421fb2a96fbdd026d293986bc7b94412c85976f05eb",
+        "byte_offset": 340,
+        "bytes": 59576
+      },
+      {
+        "zero_based_avi_index": 20,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0020.jpg",
+        "sha256": "9033cebd2253b819e24ea9b81e6a5c1298d9d246d0180f852b1e3253fa2fbd27",
+        "byte_offset": 1426972,
+        "bytes": 63403
+      },
+      {
+        "zero_based_avi_index": 30,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0030.jpg",
+        "sha256": "9033cebd2253b819e24ea9b81e6a5c1298d9d246d0180f852b1e3253fa2fbd27",
+        "byte_offset": 2093172,
+        "bytes": 63403
+      },
+      {
+        "zero_based_avi_index": 40,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0040.jpg",
+        "sha256": "f92af1064418700ab259c9b165909e5e1f8be311ebc7288d4adb9e0d733c7f60",
+        "byte_offset": 2758694,
+        "bytes": 61295
+      },
+      {
+        "zero_based_avi_index": 50,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0050.jpg",
+        "sha256": "6aaee4edb22a4926692e129f947b30265c53a45de4070428581210dc84d64321",
+        "byte_offset": 3409442,
+        "bytes": 62567
+      },
+      {
+        "zero_based_avi_index": 60,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0060.jpg",
+        "sha256": "7bcfba17317e79a697004404d647f8e6ba20b7e72f5e20601106b0cd1d929f94",
+        "byte_offset": 4065410,
+        "bytes": 62298
+      },
+      {
+        "zero_based_avi_index": 70,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0070.jpg",
+        "sha256": "4827c2900b91a4842d0d964fd3f22bd6f9964ce551f8cc2eb5a5b57a915288b2",
+        "byte_offset": 4717382,
+        "bytes": 50037
+      },
+      {
+        "zero_based_avi_index": 80,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0080.jpg",
+        "sha256": "85a7c0045a005232a15d2d0dc1a40836c5592700abca4fa2b5af7d6de703288f",
+        "byte_offset": 5253002,
+        "bytes": 50551
+      },
+      {
+        "zero_based_avi_index": 90,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0090.jpg",
+        "sha256": "41377d7e18b6e97d32d690fc6fc76ce0024962b7bcaf0ea990072bd19ae23021",
+        "byte_offset": 5878668,
+        "bytes": 59597
+      },
+      {
+        "zero_based_avi_index": 100,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0100.jpg",
+        "sha256": "6b3abda0908c29f3a70d4206b90a1d639838efd5bc6c6e341c5d06f31ae1fa14",
+        "byte_offset": 6517612,
+        "bytes": 60849
+      },
+      {
+        "zero_based_avi_index": 110,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0110.jpg",
+        "sha256": "53262309486c38f1db5ef6ac7d896ee54e1e66a2f7838f5fecec0407c83548ed",
+        "byte_offset": 7165978,
+        "bytes": 62549
+      },
+      {
+        "zero_based_avi_index": 120,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0120.jpg",
+        "sha256": "d70af8028a8f8bb1d50510fa68d0e8850ee133aed3a3092db4492ea97ded3769",
+        "byte_offset": 7820808,
+        "bytes": 61859
+      },
+      {
+        "zero_based_avi_index": 130,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0130.jpg",
+        "sha256": "e61cf6d02a9d672368a05e6090f0f6a2390bc9e0ffb048a9e6a7ffa63b401cda",
+        "byte_offset": 8442072,
+        "bytes": 51514
+      },
+      {
+        "zero_based_avi_index": 140,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0140.jpg",
+        "sha256": "549638280ca956b90f1fa59fe7a01befa7d1dbc1c39ff38a79fa4d75233cd8c4",
+        "byte_offset": 8993400,
+        "bytes": 51799
+      },
+      {
+        "zero_based_avi_index": 150,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0150.jpg",
+        "sha256": "babd58ebbe9e48ca97023c706dce24c89cd19afbe67b262a0c3e79fb1c5cdf8e",
+        "byte_offset": 9593358,
+        "bytes": 61645
+      },
+      {
+        "zero_based_avi_index": 158,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0158.jpg",
+        "sha256": "36b461cbe2b7f4e0d4d8e72c70a702c9104946b597d91f3af3c3236ab743cf35",
+        "byte_offset": 10116356,
+        "bytes": 62180
+      },
+      {
+        "zero_based_avi_index": 160,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0160.jpg",
+        "sha256": "36b461cbe2b7f4e0d4d8e72c70a702c9104946b597d91f3af3c3236ab743cf35",
+        "byte_offset": 10247148,
+        "bytes": 62180
+      }
+    ],
+    "bindings": {
+      "owner": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/OWNER_HANDOFF.json",
+        "sha256": "12e454a71a38dd12d549294c6d38ca77e8a254249630494b4c05c6fc28936961"
+      },
+      "native": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/native-001-result.json",
+        "sha256": "e105d3a3063330e4c5aaf4909ede5f2eb0e0a4e94f9cb51cbf97dfcca67277e5",
+        "stills": 5
+      },
+      "motion": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/motion-001-result.json",
+        "sha256": "389356beba552e21f5c5f56d683fadadf78fa0ebe199bc43976e46e29a532915"
+      },
+      "finalization": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/motion-finalization.json",
+        "sha256": "045d4f37fe77356837be49979dc97edf61791dcd6a41469d1755f6910a7b8547"
+      },
+      "source262": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/source-pins.json",
+        "sha256": "40121b4598b91344c1378bcbfb11b6f290db347e3faf7f6a3c4cfd5a1ddc05c5",
+        "pins": 262,
+        "all_exact": true
+      },
+      "original251": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/source-pins.json",
+        "sha256": "2db15579db09c95c3bd6eb6854237462debd568bc6ac24ec0b7aed4f2012993b"
+      },
+      "prior_ground_visibility": {
+        "path": "{TASK_ROOT}/work/1394-grade-independent-visual-003/pose-correction-002/REVIEW.md",
+        "sha256": "6be84c50a594ed25050419af477d9e1e98f577bcecf117a02b27909593b7fb0a"
+      },
+      "prior_detached_family": {
+        "path": "{TASK_ROOT}/work/1394-quality-study-independent-visual-002/REVIEW.md",
+        "sha256": "39030d0333deb3c2ab62a276be91c6dc9a9f1abc4ad627d4e5428fb0879b166c"
+      }
+    },
+    "product_pins": {
+      "{CODE_ROOT}/treasure-island-d5-1394-live-v1/game/scripts/world/facades/d5_1394_gateview_live_factory.gd": "6f5f257a9869780202b98aeacef233c3604ebd9c4ad348fae91f9b2021358b2a",
+      "{CODE_ROOT}/treasure-island-d5-1394-live-v1/game/resources/facades/d5_1394_gateview_live_factory.json": "4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b",
+      "{CODE_ROOT}/treasure-island-d5-1394-live-v1/game/resources/facades/d5_1394_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
+      "{CODE_ROOT}/treasure-island-d5-1394-live-v1/game/scripts/world/facades/d5_1394_gateview_live_replacement.gd": "99f78bd3e3a2215ca8dd48372ecb004489249b069d3e3944f8f283a0422b0f13",
+      "{CODE_ROOT}/treasure-island-d5-1394-live-v1/game/resources/facades/d5_1394_gateview_live_replacement.json": "0d3909c266b5da07927051e92667300fca4c8ab0b919a63459e9a3608fbe1782",
+      "{CODE_ROOT}/treasure-island-d5-1394-live-v1/game/scripts/world/world_chunk_builder.gd": "16880b6ef7512b770873beb509c273abcdb56491cdc99e54c9cd4395313e6f33"
+    },
+    "verification": {
+      "all262_current_inputs_exact": true,
+      "original251_subset_exact": true,
+      "native_motion_pre_post_bindings_exact": true,
+      "bound_logs_clean_terminal0": true,
+      "durable_copies_verified": 25,
+      "original161_complete_mjpeg_chunks_verified": true,
+      "all17_samples_match_exact_payloads": true,
+      "png_size": [
+        1440,
+        900
+      ],
+      "avi_size": [
+        1280,
+        800
+      ],
+      "owner_pid_absence_recorded": true,
+      "independent_engine_runs": 0
+    },
+    "movie": {
+      "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/1394-current-stock-sweep.avi",
+      "sha256": "6458ae7a6614f90bb12e261906980139bbfe5c227ca87c8d85fe97578d94c404",
+      "physical_bytes": 10317696,
+      "declared_riff_end": 10317626,
+      "trailing_index_bytes": 70,
+      "input_trace_owner_only": {
+        "input_frames": 120,
+        "grounded_frames": 120,
+        "path_m": 6.7310117771849,
+        "net_m": 0.23187255859375
+      },
+      "limit": "AVI indices0..160 are distinct from process38..158, physics39..159 and drawn38..158 input ranges. No exact encoded-to-physics mapping or continuous playback verdict asserted. Samples include startup and final encoded frame; no frames removed."
+    },
+    "retained_limits": [
+      "Raw contact exit1, missing direct outgoing contact identity and airborne-clearance diagnostic remain separate technical evidence; this report grants no independent mechanical verdict.",
+      "Five stills and17 sampled payloads only; no continuous playback, generic-player compatibility or absence of intervening flicker claim. Exact native AVI retained with70-byte trailing-index discrepancy.",
+      "Historical detached/grade evidence retains its historical scope. Current live visual PASS does not grant unit recognition, combination, package or release acceptance."
+    ],
+    "retro_for_serialized_append": "review_1439_package — 1394 current live visual review: Five actual native stills show the long flat-canopy facade in both lights and readable post, door and privacy-panel bases; all 17 original AVI samples were inspected, including startup and the retained final world frame. Scoped visual PASS; no new finish defect was observed. Preserve close framing changes near posts, the 70-byte RIFF index limitation, raw contact failures and the separation of sampled appearance from mechanics or continuous playback. All 262 pins, original 251 inputs and durable copies match. No engine or product edits were made."
+  },
+  "original_report_text": "1394 current live visual review — PASS\n\nThe five native stills provide usable, separate coverage: both open-end views show the long blue-gray facade, upper/lower window rhythm and continuous flat canopy in the approved lights; the three near views expose the low post feet and closed door/privacy-panel bases. Ground fit and proportions look plausible. Whole views establish composition and current surroundings, not fine detail in every distant module or unknown face. No new visual correction is required.\n\nAll 17 original AVI payloads were inspected. Frame 0 retains startup HUD; the other 16 show the intended facade, including final frame 160. Siding, frames, posts and lower bases remain coherent in these samples. Closer framing appears at 70/80 and 130/140 before wider views return; this is not a continuous smooth-camera verdict. Owner trace separately records 120 grounded input frames, 6.731012 m path and 0.231873 m net displacement.\n\nVerified all 262 current pins, the unchanged original 251-input subset, native/motion pre/post bindings, 25 exact durable copies and all 17 sampled payloads against the native AVI. The 161-frame 1280×800 file is 10,317,696 bytes; its RIFF declaration ends at 10,317,626, leaving 70 trailing index bytes outside the declaration. Complete native JPEG chunks remain intact. No repair, generic-player or continuous-playback claim is made.\n\nAuthority stays 11/213 and this unit remains uncredited. Raw contact FAIL and direct-contact/airborne diagnostic limits remain separate from this visual decision. Historical detached and grade reviews retain their original scope. No engine or product edit was performed. Exact image, source, receipt and RETRO bindings are in [REVIEW.json](REVIEW.json).\n",
+  "historical_reports_do_not_attest_future_tree": true
+}

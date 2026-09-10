@@ -1,0 +1,11 @@
+{
+  "status": "NOT_RUN_PENDING_ROOT_GO",
+  "scope": "No ordinary no-argument current13 launch performed. Signed headless/native smoke uses --mac-export-smoke and is not ordinary launch.",
+  "app_relative_path": "build/d5-1308-1394-exact-current-001/Treasure Island First Playable.app",
+  "bundle_identity_sha256": "2d61652aedcc14f4ddd4fdda0a458037758b5ae103cecf59aaa8b7a998159e6c",
+  "observed_pid": null,
+  "window_observation": null,
+  "pixels": null,
+  "manual_input_acceptance": "not performed",
+  "publication": "not performed"
+}

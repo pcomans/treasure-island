@@ -1,0 +1,437 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "derived_normalized_summary": true,
+  "not_a_captured_original": true,
+  "raw_originals_rewritten": false,
+  "source_role": "Accepted scoped source/mechanics decision, preserving original failures and direct-contact limits",
+  "raw_origin": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/1394/work/1394-live-independent-mechanics-001/REVIEW.json",
+    "sha256": "48d23aadfe02b115d8d3f4aaabb71a4ebca9c4bc4b29a2894814cb165ce9149c",
+    "bytes": 18851
+  },
+  "normalization": "Longest-prefix leaf-only machine-path normalization. Raw originals remain exact privately; original numbers/arrays/hashes and historical outcomes remain as recorded. Public selected-image projection is separate.",
+  "truth_boundary": {
+    "recognition_metric": "11/213",
+    "capture_time_recognition_metric": "11/213 for selected live originals; older study metrics stay historical",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "inventory_physical_units": 213,
+    "source_render_images_are_package_pixels": false
+  },
+  "data": {
+    "source_verdict": "PASS_SCOPED_SOURCE",
+    "mechanical_verdict": "PASS_SCOPED_GROUND_TRAVEL_STRUCTURAL_CONTACT_AND_SPRAY",
+    "scope": "Independent read-only1394 live adapter/source and actual recorded stock mechanics; no engine/retry/product/controller/authority edits. C owns all pixel/temporal art judgment. No package/credit claim.",
+    "reviewer": "/root/review_1303_source",
+    "sealed_at_utc": "2026-09-10T00:19:35.392612+00:00",
+    "candidate": "{CODE_ROOT}/treasure-island-d5-1394-live-v1",
+    "base_commit": "0466587425f8618d1f30ddab5957b090812cd0d9",
+    "authority": "11/213",
+    "recognition_credit": 0,
+    "product_pins": {
+      "{CODE_ROOT}/treasure-island-d5-1394-live-v1/game/scripts/world/facades/d5_1394_gateview_live_factory.gd": "6f5f257a9869780202b98aeacef233c3604ebd9c4ad348fae91f9b2021358b2a",
+      "{CODE_ROOT}/treasure-island-d5-1394-live-v1/game/resources/facades/d5_1394_gateview_live_factory.json": "4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b",
+      "{CODE_ROOT}/treasure-island-d5-1394-live-v1/game/resources/facades/d5_1394_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
+      "{CODE_ROOT}/treasure-island-d5-1394-live-v1/game/scripts/world/facades/d5_1394_gateview_live_replacement.gd": "99f78bd3e3a2215ca8dd48372ecb004489249b069d3e3944f8f283a0422b0f13",
+      "{CODE_ROOT}/treasure-island-d5-1394-live-v1/game/resources/facades/d5_1394_gateview_live_replacement.json": "0d3909c266b5da07927051e92667300fca4c8ab0b919a63459e9a3608fbe1782",
+      "{CODE_ROOT}/treasure-island-d5-1394-live-v1/game/scripts/world/world_chunk_builder.gd": "16880b6ef7512b770873beb509c273abcdb56491cdc99e54c9cd4395313e6f33"
+    },
+    "bindings": {
+      "OWNER_HANDOFF.json": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/OWNER_HANDOFF.json",
+        "sha256": "12e454a71a38dd12d549294c6d38ca77e8a254249630494b4c05c6fc28936961"
+      },
+      "OWNER_HANDOFF.md": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/OWNER_HANDOFF.md",
+        "sha256": "4bb1773bd880a0eb56c2c21fd9ac006a7a7e91a29e90ea054394fbd5a0078974"
+      },
+      "source-pins.json": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/source-pins.json",
+        "sha256": "40121b4598b91344c1378bcbfb11b6f290db347e3faf7f6a3c4cfd5a1ddc05c5"
+      },
+      "focused-001-result.json": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/focused-001-result.json",
+        "sha256": "940bfb7937fea868c79d0c4b7162a2b2c403e30f2911c79555a7bc8edbec849f"
+      },
+      "contact-001-result.json": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/contact-001-result.json",
+        "sha256": "499af10af1737d2fedc42ad6cef4d7a56c6f71de4f764fb008a2344e8127e649"
+      },
+      "motion-001-result.json": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/motion-001-result.json",
+        "sha256": "389356beba552e21f5c5f56d683fadadf78fa0ebe199bc43976e46e29a532915"
+      },
+      "native-001-result.json": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/native-001-result.json",
+        "sha256": "e105d3a3063330e4c5aaf4909ede5f2eb0e0a4e94f9cb51cbf97dfcca67277e5"
+      },
+      "live_driver.gd": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/live_driver.gd",
+        "sha256": "735098f8307a92688d3ab166435d488d4a8979e2a307310056ead2ffd863e787"
+      },
+      "focused_live_contract.gd": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/focused_live_contract.gd",
+        "sha256": "6461f3e7b5539cc37d260ddec1d2697b5b7a00d0ace3582fe9ef618a5d34025d"
+      },
+      "motion-finalization.json": {
+        "path": "{TASK_ROOT}/work/1394-live-integration-001/execution-002/motion-finalization.json",
+        "sha256": "045d4f37fe77356837be49979dc97edf61791dcd6a41469d1755f6910a7b8547"
+      }
+    },
+    "source_and_trace_analysis": {
+      "path": "{TASK_ROOT}/work/1394-live-independent-mechanics-001/ANALYSIS.json",
+      "sha256": "d9e3390fb4684b8f9ec31b1b2a6926593b860ff9435d9a1b9b8a3345bbabf8c2"
+    },
+    "analysis_script": {
+      "path": "{TASK_ROOT}/work/1394-live-independent-mechanics-001/analyze.py",
+      "sha256": "bc4ac1bbe5b1755b9cacdafb0674c7e3b5cc596cddfd15629b1a8293ab41d87e"
+    },
+    "accepted_grade_review": {
+      "path": "{TASK_ROOT}/work/1394-grade-independent-mechanics-003/REVIEW.md",
+      "sha256": "0a049b0af97211a50e9365f6ec3acdc3c7a33060b4f3c8e9c3bf2d1d3a827d05"
+    },
+    "findings": {
+      "source": "262current/251original pins exact. All12actual focused vertices/indices match accepted grade003; factory emission/helpers byte exact, new canonical supplied-record helper appended. Config changes only interface/provenance labels; shader and builder material functions exact. Of218pinned base files only intended builder differs, preserving terrain/controller/camera/registry/catalog/accepted adapters.",
+      "pair_validation": "Exact targetchunk and four canonical source records required in preflight and directly byfactory; prepared set/consumed rows revalidated. Missing/duplicate/drift/alias records fail closed. One factory call, sealed two-row consume, cleanup every later failure, no disk-loaded mate/fallback/stack.",
+      "ownership": "12meshes12surfaces2140rendertri; wall1116collisiontri inshape0original48eligible,shape1canopy/posts204noneligible,shape2closedassemblies864noneligible; separate roofshape0has16tri. Both bodies layer5,mask0; onlywall spraygroup, shape overrides reject structures. Onlytwooriginal-wallbatches decal layer2, tenotherbatches layer1. Focused4672checks verify arrays/materials/faces and realordinarymain counts735rows987meshes1002surfaces73904tri466bodies470shapes.",
+      "ground": {
+        "frames": 684,
+        "grounded": 684,
+        "ray_clearance_range_m": [
+          -0.00192523002624512,
+          0.00119137763977051
+        ],
+        "max_adjacent_clearance_m": 0.00281977653503418,
+        "analytic_land_range_m": [
+          -0.0019251630346786008,
+          0.0011914329211362151
+        ],
+        "max_ray_analytic_land_difference_m": 2.2166545754487288e-07,
+        "destinations": "Both42frameentries and120framecontinuousreturns/separateexits complete, every travelendpoint4m/s. Entry land contacts42/42frames each. Low15separateexit120frames has last direct upward landcontact atframe1; finalarrayempty, so strictFAIL retained. Other outgoingendpoints haveactual upwardlandcontact; no continuoussupportclaim.",
+        "closed_modules": "Two40framedoorapproaches and one40frameprivacypanel approach all contact exactshape2 and retain depth~0.426m. Doorsfinalvelocityzero; panelfinal0.275307m/s lateral, so forwardblockage rather than full immobility.",
+        "terrain_and_provenance": "Land/area state exact acrosscontact/native/motion, no recovery. Driver places only before attempts, uses corrected world-to-parent camera setup, then stockInputactions with no posewrites duringphases. Individualphasecounters advance onephysicstick; aggregation crosses explicitsettles."
+      },
+      "vertical_flags": {
+        "raw_records": 102,
+        "ascent": [
+          22,
+          0
+        ],
+        "descent": [
+          40,
+          1
+        ],
+        "roof_landing": [
+          40,
+          1
+        ],
+        "columns": [
+          "flagged_records",
+          "flagged_on_floor_records"
+        ],
+        "interpretation": "Generic adjacent-clearance rule also evaluates intentional flight. Flags remain raw;100areairborne, twoare touchdown ends withactualupwardland/roofcontacts,clearance+0.174284/+0.062943mm,zeroverticalvelocity. This does not establish grounded oscillation or justify erasingrawFAIL."
+      },
+      "structural": "Canopyshape1downwardcontactsframes25–45 arreststockjetpack atundersideY5.78000021; releasedplayer lands onlandframe46 andremainsgrounded. Separatestockrun30frames/post45frames allgrounded without2mm/4mmflags. Postshape1sidecontact31frames deflectsbody; residual lateral motion is notfullstop. Separateroofshape0upwardcontactsframes105–210 settleatY8.9490633,surface8.94900036,zerovelocity. Camera segmentqueries show nofailures within40mmendpoint allowance.",
+      "spray": [
+        {
+          "label": "roof",
+          "aim": {
+            "ok": true,
+            "yaw_degrees": -87.6818915911056,
+            "pitch_degrees": -45.0008742504568,
+            "world_delta": [
+              1.99383544921875,
+              -2.00006198883057,
+              0.15692138671875
+            ],
+            "parent_local_delta": [
+              1.99836432933807,
+              -2.00006198883057,
+              -0.0808952152729034
+            ],
+            "parent_world_rotation_degrees": [
+              0.0,
+              -6.81819772720337,
+              0.0
+            ]
+          },
+          "actual_key": "building:w96215646:roof",
+          "actual_shape": 0,
+          "actual_player_hit_distance_m": 2.00000095367432,
+          "distance_recomputed_m": 2.000001031033186,
+          "actual_camera_hit_distance_m": 8.32847499847412,
+          "tag_delta": 0,
+          "result": [
+            "receiver_rejection"
+          ],
+          "ok": true
+        },
+        {
+          "label": "eligible_original_wall",
+          "aim": {
+            "ok": true,
+            "yaw_degrees": -87.6815898713291,
+            "pitch_degrees": -2.95867888947353,
+            "world_delta": [
+              2.39260864257812,
+              -0.124043464660645,
+              0.18829345703125
+            ],
+            "parent_local_delta": [
+              2.39804196357727,
+              -0.124043464660645,
+              -0.097087100148201
+            ],
+            "parent_world_rotation_degrees": [
+              0.0,
+              -6.81819772720337,
+              0.0
+            ]
+          },
+          "actual_key": "building:w96215646:wall",
+          "actual_shape": 0,
+          "actual_player_hit_distance_m": 3.0480170249939,
+          "distance_recomputed_m": 3.0480171083694,
+          "actual_camera_hit_distance_m": 7.90563440322876,
+          "tag_delta": 1,
+          "result": [
+            "placed"
+          ],
+          "ok": true
+        },
+        {
+          "label": "closed_door",
+          "aim": {
+            "ok": true,
+            "yaw_degrees": -87.6815898713291,
+            "pitch_degrees": -2.59800857470723,
+            "world_delta": [
+              2.39260864257812,
+              -0.10890007019043,
+              0.18829345703125
+            ],
+            "parent_local_delta": [
+              2.39804196357727,
+              -0.10890007019043,
+              -0.097087100148201
+            ],
+            "parent_world_rotation_degrees": [
+              0.0,
+              -6.81819772720337,
+              0.0
+            ]
+          },
+          "actual_key": "building:w96215646:wall",
+          "actual_shape": 2,
+          "actual_player_hit_distance_m": 2.9991307258606,
+          "distance_recomputed_m": 2.99913072687296,
+          "actual_camera_hit_distance_m": 4.90552234649658,
+          "tag_delta": 0,
+          "result": [
+            "receiver_rejection"
+          ],
+          "ok": true
+        },
+        {
+          "label": "closed_privacy_panel",
+          "aim": {
+            "ok": true,
+            "yaw_degrees": -87.1735962017888,
+            "pitch_degrees": -6.35921286909571,
+            "world_delta": [
+              4.73269653320312,
+              -0.528728485107422,
+              0.33026123046875
+            ],
+            "parent_local_delta": [
+              4.73843479156494,
+              -0.528728485107422,
+              -0.23393702507019
+            ],
+            "parent_world_rotation_degrees": [
+              0.0,
+              -6.81819772720337,
+              0.0
+            ]
+          },
+          "actual_key": "building:w96215646:wall",
+          "actual_shape": 2,
+          "actual_player_hit_distance_m": 4.89803171157837,
+          "distance_recomputed_m": 4.89803203640989,
+          "actual_camera_hit_distance_m": 4.89679622650146,
+          "tag_delta": 0,
+          "result": [
+            "receiver_rejection"
+          ],
+          "ok": true
+        },
+        {
+          "label": "post",
+          "aim": {
+            "ok": true,
+            "yaw_degrees": -87.6864512989552,
+            "pitch_degrees": -3.03805704430545,
+            "world_delta": [
+              2.49227905273438,
+              -0.132684707641602,
+              0.19635009765625
+            ],
+            "parent_local_delta": [
+              2.49796390533447,
+              -0.132684707641602,
+              -0.100920245051384
+            ],
+            "parent_world_rotation_degrees": [
+              0.0,
+              -6.81819772720337,
+              0.0
+            ]
+          },
+          "actual_key": "building:w96215646:wall",
+          "actual_shape": 1,
+          "actual_player_hit_distance_m": 3.07449698448181,
+          "distance_recomputed_m": 3.0744970407644527,
+          "actual_camera_hit_distance_m": 7.94347238540649,
+          "tag_delta": 0,
+          "result": [
+            "receiver_rejection"
+          ],
+          "ok": true
+        },
+        {
+          "label": "canopy_fascia",
+          "aim": {
+            "ok": true,
+            "yaw_degrees": -87.6864512989552,
+            "pitch_degrees": 22.6607330225505,
+            "world_delta": [
+              2.49227905273438,
+              1.04376077651978,
+              0.19635009765625
+            ],
+            "parent_local_delta": [
+              2.49796390533447,
+              1.04376077651978,
+              -0.100920245051384
+            ],
+            "parent_world_rotation_degrees": [
+              0.0,
+              -6.81819772720337,
+              0.0
+            ]
+          },
+          "actual_key": "building:w96215646:wall",
+          "actual_shape": 1,
+          "actual_player_hit_distance_m": 3.97651839256287,
+          "distance_recomputed_m": 3.9765182677337787,
+          "actual_camera_hit_distance_m": 7.55349731445312,
+          "tag_delta": 0,
+          "result": [
+            "receiver_rejection"
+          ],
+          "ok": true
+        }
+      ],
+      "motion": {
+        "input_frames": 120,
+        "grounded": 120,
+        "independent_planar_path_m": 6.731012042859144,
+        "independent_net_displacement_m": 0.23187255859397737,
+        "ray_clearance_range_m": [
+          -0.00146365165710449,
+          0.00101780891418457
+        ],
+        "max_adjacent_clearance_m": 0.00190448760986328,
+        "direct_upward_contact_frames": 65,
+        "post_input_displacement_m": 0.0,
+        "limits": "Path and net are distinct. Final render retainsworldaftergameplaydisabled.161encodedframes include startup; process/physics/drawn/movieindices are distinct, noexactalignment orcontinuousplayback/containercompatibilityclaim. Cownsactualsampledart."
+      }
+    },
+    "raw_failures": [
+      "canopy_15 actual stock walk exits from separately settled interior onto real world support.",
+      "production_canopy_underside adjacent clearance transition exceeds4mm; retain raw diagnostic.",
+      "separate_no_input_slow_descent adjacent clearance transition exceeds4mm; retain raw diagnostic.",
+      "source_roof_landing adjacent clearance transition exceeds4mm; retain raw diagnostic."
+    ],
+    "receipts": [
+      {
+        "stage": "import-001",
+        "sha_match": true,
+        "pid": 33070,
+        "exit_code": 0,
+        "status": "terminal",
+        "pins_equal": true,
+        "pid_absent_recorded": true,
+        "log_errors": [],
+        "log_sha_match": true
+      },
+      {
+        "stage": "focused-001",
+        "sha_match": true,
+        "pid": 33122,
+        "exit_code": 0,
+        "status": "terminal",
+        "pins_equal": true,
+        "pid_absent_recorded": true,
+        "log_errors": [],
+        "log_sha_match": true
+      },
+      {
+        "stage": "contact-001",
+        "sha_match": true,
+        "pid": 33262,
+        "exit_code": 1,
+        "status": "terminal",
+        "pins_equal": true,
+        "pid_absent_recorded": true,
+        "log_errors": [],
+        "log_sha_match": true
+      },
+      {
+        "stage": "native-001",
+        "sha_match": true,
+        "pid": 33433,
+        "exit_code": 0,
+        "status": "terminal",
+        "pins_equal": true,
+        "pid_absent_recorded": true,
+        "log_errors": [],
+        "log_sha_match": true
+      },
+      {
+        "stage": "motion-001",
+        "sha_match": true,
+        "pid": 33606,
+        "exit_code": 0,
+        "status": "terminal",
+        "pins_equal": true,
+        "pid_absent_recorded": true,
+        "log_errors": [],
+        "log_sha_match": true
+      }
+    ],
+    "limitations": [
+      "Low15outgoingcontinuouslandownership remains unproven despite completed traversal; rays/analyticland/on_floor are notdirectstockcontactclaims.",
+      "Analyticheightcorroboration usesactualXZ/float32landtriangles, notexhaustivecapsule/allcolliderpenetrationproof. No1303-scale below-surfaceevent is observed inthisrecordedground/motionscope.",
+      "Visual/temporal judgment, export/package and authority gates remain separate.",
+      "No1303diagnosticexecutionqueued bythisreview."
+    ],
+    "retro_for_serialized_append": "RETRO — 1394 independent live source/mechanics: Reused accepted grade003 and completed owner receipts without engine replay. All262current/251original pins and twelve emitted vertex/index batches match; one supplied wall/roof/land/area plan preserves geometry while splitting collision ownership. Ground travel and closed approaches are684/684grounded with−1.925…+1.191mm ray clearance and2.820mm maximum adjacent change. Retain raw contactFAIL: low15exit has only frame1direct upward support, and102generic4mm flags belong to intentional ascent/descent/roof landing, including two supported landing ends. Do not call the privacy-panel lateral slide a full stop or equate motion path6.731012m with net0.231873m. Source and bounded mechanicsPASS remain separate from Cvisual/package/authority gates; no rerun or tolerance waiver was needed."
+  },
+  "review_text": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/1394/work/1394-live-independent-mechanics-001/REVIEW.md",
+    "sha256": "721f3686ed1f7ec0afdea5ef10946f613cbf4cdbac635356bbfb2d7fc22e96fa",
+    "bytes": 5508
+  },
+  "combined_source_result": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/combined-source/focused-001-result.json",
+    "sha256": "b6af47542c9da4b6c50bb68b8ea8fa5c4e99f28e9702357753b484e06009ab12",
+    "bytes": 1581
+  },
+  "combined_readiness_review": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/shared/independent-readiness/REVIEW.md",
+    "sha256": "df14bafd20e313e7fe123c3c65fde5ca4f7ddd188295b0bf923f3e26f9d634d5",
+    "bytes": 6163
+  }
+}

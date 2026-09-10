@@ -212,6 +212,26 @@
       "whole_building_recognizability_imported": false
     },
     {
+      "adapter_id": "active-adapter:d5-1308-live:building:w95934123:wall",
+      "content_classification": "active_target_specific_paired_wall_roof_replacement",
+      "receiver_key": "building:w95934123:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
+      "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
+      "runtime_adapter_path": "game/scripts/world/facades/d5_1308_gateview_live_replacement.gd",
+      "runtime_asset_paths": [
+        "game/resources/facades/d5_1308_gateview_live_factory.json",
+        "game/resources/facades/d5_1308_siding_marks.gdshader",
+        "game/scripts/world/facades/d5_1308_gateview_live_factory.gd",
+        "game/scripts/world/facades/site_12_housing_kit.gd"
+      ],
+      "runtime_config_path": "game/resources/facades/d5_1308_gateview_live_replacement.json",
+      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+      "source_key": "w95934123",
+      "whole_building_recognizability_imported": false
+    },
+    {
       "adapter_id": "active-adapter:d2-1439-live:building:w95934144:wall",
       "content_classification": "active_target_specific_paired_wall_roof_replacement",
       "receiver_key": "building:w95934144:wall",
@@ -236,6 +256,26 @@
       "runtime_config_path": "game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json",
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
       "source_key": "w95934144",
+      "whole_building_recognizability_imported": false
+    },
+    {
+      "adapter_id": "active-adapter:d5-1394-live:building:w96215646:wall",
+      "content_classification": "active_target_specific_paired_wall_roof_replacement",
+      "receiver_key": "building:w96215646:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
+      "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
+      "runtime_adapter_path": "game/scripts/world/facades/d5_1394_gateview_live_replacement.gd",
+      "runtime_asset_paths": [
+        "game/resources/facades/d5_1394_gateview_live_factory.json",
+        "game/resources/facades/d5_1394_siding_marks.gdshader",
+        "game/scripts/world/facades/d5_1394_gateview_live_factory.gd",
+        "game/scripts/world/facades/site_12_housing_kit.gd"
+      ],
+      "runtime_config_path": "game/resources/facades/d5_1394_gateview_live_replacement.json",
+      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+      "source_key": "w96215646",
       "whole_building_recognizability_imported": false
     }
   ],
@@ -739,6 +779,96 @@
       ],
       "status": "configured",
       "unit_id": "physical-building:w95934117"
+    },
+    {
+      "alternate_pose": {
+        "aim_target_m": [
+          -485.707946777344,
+          2.3510000705719,
+          -48.6374168395996
+        ],
+        "camera_position_m": [
+          -490.742004394531,
+          7.65937042236328,
+          -44.3971328735352
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -487.353485107422,
+          2.2099597454071,
+          -47.0181083679199
+        ]
+      },
+      "ordinary_third_person_required": true,
+      "primary_pose": {
+        "aim_target_m": [
+          -497.260498046875,
+          4,
+          -77.9069976806641
+        ],
+        "camera_position_m": [
+          -506.006317138672,
+          4.0570764541626,
+          -71.8337326049805
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -501.488800048828,
+          2.02759480476379,
+          -74.9707870483398
+        ]
+      },
+      "required_cue_ids": [
+        "d5-1308-pale-sided-upper-row",
+        "d5-1308-deep-gable-canopies"
+      ],
+      "status": "configured",
+      "unit_id": "physical-building:w95934123"
+    },
+    {
+      "alternate_pose": {
+        "aim_target_m": [
+          -279.371490478516,
+          4.5,
+          -653.050476074219
+        ],
+        "camera_position_m": [
+          -297.836242675781,
+          4.75297737121582,
+          -705.184326171875
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -296,
+          2.72782039642334,
+          -700
+        ]
+      },
+      "ordinary_third_person_required": true,
+      "primary_pose": {
+        "aim_target_m": [
+          -279.371490478516,
+          4.5,
+          -653.050476074219
+        ],
+        "camera_position_m": [
+          -297.836242675781,
+          4.75297737121582,
+          -705.184326171875
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -296,
+          2.72782039642334,
+          -700
+        ]
+      },
+      "required_cue_ids": [
+        "d5-1394-cool-gray-slider-row",
+        "d5-1394-continuous-flat-canopy"
+      ],
+      "status": "configured",
+      "unit_id": "physical-building:w96215646"
     }
   ],
   "catalog_id": "treasure-island-physical-building-recognition",
@@ -756,19 +886,19 @@
     "reference_recognizable": "An ordinary gameplay view is independently matched to target-identifiable reference evidence."
   },
   "compiler_contract": {
-    "emitted_runtime_schema_version": "ti.facade-runtime-registry/11",
-    "required_compiler_version": "1.10.0",
+    "emitted_runtime_schema_version": "ti.facade-runtime-registry/13",
+    "required_compiler_version": "1.12.0",
     "unknown_version_policy": "reject"
   },
   "expected_counts": {
-    "active_runtime_adapter_receivers": 10,
+    "active_runtime_adapter_receivers": 12,
     "building_footprints": 213,
     "building_parts": 2,
     "composite_units": 1,
     "direct_wall_receivers": 214,
     "legacy_adapter_receivers": 9,
     "recognition_units": 213,
-    "runtime_adapter_receivers": 19,
+    "runtime_adapter_receivers": 21,
     "source_records": 215,
     "standalone_units": 212,
     "visible_wall_runs": 4971
@@ -866,7 +996,7 @@
       "whole_building_recognizability_imported": false
     }
   ],
-  "schema_version": "ti.facade-recognition-catalog/11",
+  "schema_version": "ti.facade-recognition-catalog/13",
   "source_contract": {
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_schema_version": "ti.godot-world/2",
@@ -3303,13 +3433,28 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "evidence_manifest_sha256": "f776a306714ebbbb96266933abaa0aa602d27babeeaa133dd00d95e36b2a58ba",
+          "motion_telemetry_manifest_sha256": "8a636cc7b9a6874f038cc4a0eac4c273e86de6b7a48fdf50e519abf299c9de6b",
+          "visual_motion_manifest_sha256": "2d9911060b6259b5331b1d90055c2794cf39d0b6be3f907b4daf0af5e269a967",
+          "package_verification_receipt_sha256": "8058b74a5e11640a51c0156ce8a284509b33ea1d5a76961022e232fa3d3e0ebf",
+          "evidence_tree_sha256": "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1",
+          "mechanical_review_receipt_sha256": "2f8c4f42e44de69bbe5e06642b4149ba5ccebe2f3d44efee889677459f1629c5",
+          "review_receipt_sha256": "7b29686da76c68ffe6527c3c9da10034de942fade519ec5798e5bf7943eda00c",
+          "capture_time_recognition_metric": "11/213",
+          "numerator_effect": 1,
+          "review_id": "d5-1308-live-promotion-candidate-2026-09-10-001",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w95934123",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -3322,13 +3467,112 @@
         "name_evidence": false
       },
       "legacy_adapter_ids": [],
-      "protected_scopes": [],
+      "protected_scopes": [
+        {
+          "receiver_key": "building:w95934123:wall",
+          "run_indices": [
+            4,
+            6,
+            15,
+            16,
+            22,
+            23,
+            24,
+            25,
+            26,
+            28,
+            29,
+            30,
+            31,
+            33
+          ],
+          "reason": "Unobserved runs, source roof and terrain remain exact. Survey-free details are production inference; no interior or hidden schedule claim. Roof and wall are one physical unit with separate collision ownership."
+        }
+      ],
       "receiver_keys": [
         "building:w95934123:wall"
       ],
-      "recognition_cues": [],
-      "reference_records": [],
-      "reference_state": "reference_research_unassessed",
+      "recognition_cues": [
+        {
+          "complete_motif": true,
+          "cue_id": "d5-1308-pale-sided-upper-row",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w95934123:wall",
+          "reference_ids": [
+            "D5-1308-PANO"
+          ],
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            17,
+            18,
+            19,
+            20,
+            21,
+            27,
+            32
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "d5-1308-deep-gable-canopies",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w95934123:wall",
+          "reference_ids": [
+            "D5-1308-PANO"
+          ],
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            17,
+            18,
+            19,
+            20,
+            21,
+            27,
+            32
+          ]
+        }
+      ],
+      "reference_records": [
+        {
+          "observation_id": "D5-1308-PANO",
+          "observed_regions": [
+            "Historical March 2025 mapped public elevations; frozen source identity is unchanged. Current Gateview Avenue cross-reference does not invent a frozen street tag."
+          ],
+          "pixels_packaged": false,
+          "source_locator": "discovery/facades/d5_reference_packets/w95934123_1308_gateview_avenue.md",
+          "supports": [
+            "long pale cream two-storey horizontal row with upper sliders",
+            "repeated deep gable canopies over open lower voids"
+          ]
+        }
+      ],
+      "reference_state": "reference_ready",
       "source_records": [
         {
           "role": "standalone_building_footprint",
@@ -4043,13 +4287,28 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "evidence_manifest_sha256": "f7105c935499a455007d73e77bca38fc9e4cb249155312d2397445f4b4ff7e29",
+          "motion_telemetry_manifest_sha256": "d4f8a57b8e456641707b000ad997a96162399b6c5322f0fb0bdf56f49a60ff07",
+          "visual_motion_manifest_sha256": "c468c4f930e09a063e3018aa2b5c44ce70248f83db6f920a3033de8961e37a86",
+          "package_verification_receipt_sha256": "6d83381a3cf12ff706f1d47be276781581be77edeb9a2f910e8f23a155f5a5f6",
+          "evidence_tree_sha256": "f809a431e5d4bf53d94608a99900d4a17734bca79b28280150fd88ce5f51b934",
+          "mechanical_review_receipt_sha256": "606f8e066e3a07124e50c6f23b69d04f02b1efeb8dfb85381e23de58b07f3214",
+          "review_receipt_sha256": "0275e3c256ed1c6c3ff66c63399593e628d61b724803af83f2809ad683323207",
+          "capture_time_recognition_metric": "11/213",
+          "numerator_effect": 1,
+          "review_id": "d5-1394-live-promotion-candidate-2026-09-10-001",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w96215646",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -4062,13 +4321,94 @@
         "name_evidence": false
       },
       "legacy_adapter_ids": [],
-      "protected_scopes": [],
+      "protected_scopes": [
+        {
+          "receiver_key": "building:w96215646:wall",
+          "run_indices": [
+            0,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            19
+          ],
+          "reason": "Unobserved runs, source roof and terrain remain exact. Survey-free details are production inference; no interior or hidden schedule claim. Roof and wall are one physical unit with separate collision ownership."
+        }
+      ],
       "receiver_keys": [
         "building:w96215646:wall"
       ],
-      "recognition_cues": [],
-      "reference_records": [],
-      "reference_state": "reference_research_unassessed",
+      "recognition_cues": [
+        {
+          "complete_motif": true,
+          "cue_id": "d5-1394-cool-gray-slider-row",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w96215646:wall",
+          "reference_ids": [
+            "D5-1394-PANO"
+          ],
+          "run_indices": [
+            1,
+            2,
+            3,
+            4,
+            15,
+            16,
+            17,
+            18,
+            20,
+            21,
+            22,
+            23
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "d5-1394-continuous-flat-canopy",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w96215646:wall",
+          "reference_ids": [
+            "D5-1394-PANO"
+          ],
+          "run_indices": [
+            1,
+            2,
+            3,
+            4,
+            15,
+            16,
+            17,
+            18,
+            20,
+            21,
+            22,
+            23
+          ]
+        }
+      ],
+      "reference_records": [
+        {
+          "observation_id": "D5-1394-PANO",
+          "observed_regions": [
+            "Historical March 2025 mapped public elevations; frozen source identity is unchanged. Frozen house 1230 and current 1394 crosswalk retain the Court/Avenue discrepancy."
+          ],
+          "pixels_packaged": false,
+          "source_locator": "discovery/facades/d5_reference_packets/w96215646_1230_1394_gateview.md",
+          "supports": [
+            "cool gray two-storey slider row with white lower door/window groups",
+            "continuous deep flat canopy and slender posts"
+          ]
+        }
+      ],
+      "reference_state": "reference_ready",
       "source_records": [
         {
           "role": "standalone_building_footprint",

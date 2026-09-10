@@ -1,0 +1,88 @@
+{
+  "schema_version": "ti.d5-1394-gateview-live-replacement/1",
+  "adapter_id": "active-adapter:d5-1394-live:building:w96215646:wall",
+  "source_key": "w96215646",
+  "source_geometry_sha256": "b0e6c7426ac41c995f96a647ff5102b4d85963d2b7a45f21ad1b81455e451220",
+  "chunk_id": "x_-2__z_-3",
+  "chunk_sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+  "canonical_records": {
+    "area:r17241151:x_-2__z_-3": "462c4532716ddaa63c66d0c11300771ee7eb1089c27565037fb2e148b85c5d7c",
+    "building:w96215646:roof": "299f27cd69cc90668bdd31cb076d083ee1bf98e28b0031cdbe4e38bfd0c2cc51",
+    "building:w96215646:wall": "222fc29f2d1526d983f4653dc8ae157aa98575dbbfb16c89898827a26dc26019",
+    "land:w26767313:x_-2__z_-3": "17c60f0f623bf919bd05c0ebc4ae93c06cce0c33a5603725175f3c4754572c02"
+  },
+  "factory_config_sha256": "4f025e33c79465a936e64aef7e8f72af1fca44c1165b031df9c13b2652a55d8b",
+  "reviewed_factory_source_sha256": "aa112014ce0b56b153233934e8b3930b64bc576987bd882e22e26c42b80a7abd",
+  "reviewed_factory_config_sha256": "f20133c69e87f8fd573e215ec5b4c6adf3e308f51ec5c6fccbcee6550f251f30",
+  "accepted_source_world_mechanics_receipt_sha256": "0a049b0af97211a50e9365f6ec3acdc3c7a33060b4f3c8e9c3bf2d1d3a827d05",
+  "accepted_source_world_visual_receipt_sha256": "6be84c50a594ed25050419af477d9e1e98f577bcecf117a02b27909593b7fb0a",
+  "mapped_runs": [
+    1,
+    2,
+    3,
+    4,
+    15,
+    16,
+    17,
+    18,
+    20,
+    21,
+    22,
+    23
+  ],
+  "protected_runs": [
+    0,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    19
+  ],
+  "address_crosswalk": {
+    "frozen_house_number": "1230",
+    "current_house_number": "1394",
+    "street_suffix": "Court/Avenue discrepancy retained; frozen source has no street tag"
+  },
+  "pair_contract": {
+    "meshes": 12,
+    "surfaces": 12,
+    "triangles": 2140,
+    "bodies": 2,
+    "shapes": 4,
+    "collision_triangles": 1132,
+    "wall_collision_triangles": 1116,
+    "eligible_wall_triangles": 48,
+    "noneligible_canopy_post_triangles": 204,
+    "noneligible_closed_module_triangles": 864,
+    "roof_triangles": 16,
+    "factory_calls": 1,
+    "partial_pair_allowed": false,
+    "fallback_allowed": false,
+    "stack_allowed": false
+  },
+  "truth_boundary": {
+    "historical_source_world_metric": "10/213",
+    "candidate_authority_metric": "11/213",
+    "candidate_authority_schema": "ti.facade-runtime-registry/11",
+    "candidate_credit": 0,
+    "runtime_attachment": true,
+    "production_attachment_review": "pending",
+    "actual_grade_walking": "independent_scoped_PASS; original lowexit empty finalcontact FAIL preserved; no continuous support identity claim",
+    "as_built_claim": false,
+    "interior_modeled": false,
+    "hidden_schedule_invented": false,
+    "recognition_accepted": false
+  },
+  "package_boundary": {
+    "source_photography": false,
+    "discovery_dependency": false,
+    "activation_flag": false,
+    "missing_pair_loaded_from_disk": false
+  }
+}

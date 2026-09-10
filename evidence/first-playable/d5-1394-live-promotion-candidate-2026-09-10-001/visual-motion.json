@@ -1,0 +1,329 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "derived_normalized_summary": true,
+  "not_a_captured_original": true,
+  "raw_originals_rewritten": false,
+  "source_role": "Sampled native temporal evidence; full original AVI and every original payload retained privately",
+  "raw_origin": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/1394/work/1394-live-integration-001/execution-002/motion-finalization.json",
+    "sha256": "045d4f37fe77356837be49979dc97edf61791dcd6a41469d1755f6910a7b8547",
+    "bytes": 6915
+  },
+  "normalization": "Longest-prefix leaf-only machine-path normalization. Raw originals remain exact privately; original numbers/arrays/hashes and historical outcomes remain as recorded. Public selected-image projection is separate.",
+  "truth_boundary": {
+    "recognition_metric": "11/213",
+    "capture_time_recognition_metric": "11/213 for selected live originals; older study metrics stay historical",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "inventory_physical_units": 213,
+    "source_render_images_are_package_pixels": false
+  },
+  "data": {
+    "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/1394-current-stock-sweep.avi",
+    "sha256": "6458ae7a6614f90bb12e261906980139bbfe5c227ca87c8d85fe97578d94c404",
+    "bytes": 10317696,
+    "riff_declared_end": 10317626,
+    "physical_file_end": 10317696,
+    "microseconds_per_frame": 16666,
+    "total_frames": 161,
+    "width": 1280,
+    "height": 800,
+    "extraction": "Original MJPEG payload bytes, no re-encode; physical file bounds.",
+    "samples": [
+      {
+        "zero_based_avi_index": 0,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0000.jpg",
+        "sha256": "1bc173ccfef2116f385b1421fb2a96fbdd026d293986bc7b94412c85976f05eb",
+        "byte_offset": 340,
+        "bytes": 59576
+      },
+      {
+        "zero_based_avi_index": 20,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0020.jpg",
+        "sha256": "9033cebd2253b819e24ea9b81e6a5c1298d9d246d0180f852b1e3253fa2fbd27",
+        "byte_offset": 1426972,
+        "bytes": 63403
+      },
+      {
+        "zero_based_avi_index": 30,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0030.jpg",
+        "sha256": "9033cebd2253b819e24ea9b81e6a5c1298d9d246d0180f852b1e3253fa2fbd27",
+        "byte_offset": 2093172,
+        "bytes": 63403
+      },
+      {
+        "zero_based_avi_index": 40,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0040.jpg",
+        "sha256": "f92af1064418700ab259c9b165909e5e1f8be311ebc7288d4adb9e0d733c7f60",
+        "byte_offset": 2758694,
+        "bytes": 61295
+      },
+      {
+        "zero_based_avi_index": 50,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0050.jpg",
+        "sha256": "6aaee4edb22a4926692e129f947b30265c53a45de4070428581210dc84d64321",
+        "byte_offset": 3409442,
+        "bytes": 62567
+      },
+      {
+        "zero_based_avi_index": 60,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0060.jpg",
+        "sha256": "7bcfba17317e79a697004404d647f8e6ba20b7e72f5e20601106b0cd1d929f94",
+        "byte_offset": 4065410,
+        "bytes": 62298
+      },
+      {
+        "zero_based_avi_index": 70,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0070.jpg",
+        "sha256": "4827c2900b91a4842d0d964fd3f22bd6f9964ce551f8cc2eb5a5b57a915288b2",
+        "byte_offset": 4717382,
+        "bytes": 50037
+      },
+      {
+        "zero_based_avi_index": 80,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0080.jpg",
+        "sha256": "85a7c0045a005232a15d2d0dc1a40836c5592700abca4fa2b5af7d6de703288f",
+        "byte_offset": 5253002,
+        "bytes": 50551
+      },
+      {
+        "zero_based_avi_index": 90,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0090.jpg",
+        "sha256": "41377d7e18b6e97d32d690fc6fc76ce0024962b7bcaf0ea990072bd19ae23021",
+        "byte_offset": 5878668,
+        "bytes": 59597
+      },
+      {
+        "zero_based_avi_index": 100,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0100.jpg",
+        "sha256": "6b3abda0908c29f3a70d4206b90a1d639838efd5bc6c6e341c5d06f31ae1fa14",
+        "byte_offset": 6517612,
+        "bytes": 60849
+      },
+      {
+        "zero_based_avi_index": 110,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0110.jpg",
+        "sha256": "53262309486c38f1db5ef6ac7d896ee54e1e66a2f7838f5fecec0407c83548ed",
+        "byte_offset": 7165978,
+        "bytes": 62549
+      },
+      {
+        "zero_based_avi_index": 120,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0120.jpg",
+        "sha256": "d70af8028a8f8bb1d50510fa68d0e8850ee133aed3a3092db4492ea97ded3769",
+        "byte_offset": 7820808,
+        "bytes": 61859
+      },
+      {
+        "zero_based_avi_index": 130,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0130.jpg",
+        "sha256": "e61cf6d02a9d672368a05e6090f0f6a2390bc9e0ffb048a9e6a7ffa63b401cda",
+        "byte_offset": 8442072,
+        "bytes": 51514
+      },
+      {
+        "zero_based_avi_index": 140,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0140.jpg",
+        "sha256": "549638280ca956b90f1fa59fe7a01befa7d1dbc1c39ff38a79fa4d75233cd8c4",
+        "byte_offset": 8993400,
+        "bytes": 51799
+      },
+      {
+        "zero_based_avi_index": 150,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0150.jpg",
+        "sha256": "babd58ebbe9e48ca97023c706dce24c89cd19afbe67b262a0c3e79fb1c5cdf8e",
+        "byte_offset": 9593358,
+        "bytes": 61645
+      },
+      {
+        "zero_based_avi_index": 158,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0158.jpg",
+        "sha256": "36b461cbe2b7f4e0d4d8e72c70a702c9104946b597d91f3af3c3236ab743cf35",
+        "byte_offset": 10116356,
+        "bytes": 62180
+      },
+      {
+        "zero_based_avi_index": 160,
+        "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0160.jpg",
+        "sha256": "36b461cbe2b7f4e0d4d8e72c70a702c9104946b597d91f3af3c3236ab743cf35",
+        "byte_offset": 10247148,
+        "bytes": 62180
+      }
+    ],
+    "counter_limit": "AVI indices0..160 are distinct from process38..158, physics39..159 and drawn38..158 input ranges. No exact encoded-to-physics mapping or continuous playback verdict asserted. Samples include startup and final encoded frame; no frames removed.",
+    "input": {
+      "input_sequence": [
+        [
+          "move_right",
+          30
+        ],
+        [
+          "move_left",
+          60
+        ],
+        [
+          "move_right",
+          30
+        ]
+      ],
+      "sun_rotation_degrees": [
+        -25.9999980926514,
+        125.999992370605,
+        0.0
+      ],
+      "actual_input_planar_path_length_m": 6.7310117771849,
+      "actual_input_net_planar_displacement_m": 0.23187255859375,
+      "review_process_range": [
+        38,
+        158
+      ],
+      "review_physics_range": [
+        39,
+        159
+      ],
+      "review_drawn_range": [
+        38,
+        158
+      ],
+      "transform_writes_during_input": 0,
+      "movie_contains_startup": true,
+      "encoded_indices_not_assumed_equal_process_indices": true,
+      "movie_path": "{PRIVATE_TMP}/d5-1394-live-integration-002/1394-current-stock-sweep.avi",
+      "movie_hash_status": "bind_after_writer_terminal",
+      "temporal_review": "pending independent original AVI samples; no continuous playback claim"
+    },
+    "final_intended_render": {
+      "world_retained": true,
+      "process_counter": 159,
+      "physics_counter": 160,
+      "drawn_counter": 159,
+      "position": [
+        -281.417144775391,
+        2.91108083724976,
+        -657.909851074219
+      ],
+      "post_input_displacement_m": 0.0,
+      "encoded_frame_index_not_inferred": true,
+      "path": "{PRIVATE_TMP}/d5-1394-live-integration-002/images/motion-final-world-retained.png",
+      "sha256": "daf79c85dd0b0fcb367c3311d8770a77334a0bc83174d50390d692561783c9e3"
+    }
+  },
+  "selected_frame_projection": [
+    {
+      "path": "images/motion-samples/avi-index-0000.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0000.jpg",
+      "sha256": "1bc173ccfef2116f385b1421fb2a96fbdd026d293986bc7b94412c85976f05eb",
+      "bytes": 59576
+    },
+    {
+      "path": "images/motion-samples/avi-index-0020.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0020.jpg",
+      "sha256": "9033cebd2253b819e24ea9b81e6a5c1298d9d246d0180f852b1e3253fa2fbd27",
+      "bytes": 63403
+    },
+    {
+      "path": "images/motion-samples/avi-index-0030.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0030.jpg",
+      "sha256": "9033cebd2253b819e24ea9b81e6a5c1298d9d246d0180f852b1e3253fa2fbd27",
+      "bytes": 63403
+    },
+    {
+      "path": "images/motion-samples/avi-index-0040.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0040.jpg",
+      "sha256": "f92af1064418700ab259c9b165909e5e1f8be311ebc7288d4adb9e0d733c7f60",
+      "bytes": 61295
+    },
+    {
+      "path": "images/motion-samples/avi-index-0050.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0050.jpg",
+      "sha256": "6aaee4edb22a4926692e129f947b30265c53a45de4070428581210dc84d64321",
+      "bytes": 62567
+    },
+    {
+      "path": "images/motion-samples/avi-index-0060.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0060.jpg",
+      "sha256": "7bcfba17317e79a697004404d647f8e6ba20b7e72f5e20601106b0cd1d929f94",
+      "bytes": 62298
+    },
+    {
+      "path": "images/motion-samples/avi-index-0070.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0070.jpg",
+      "sha256": "4827c2900b91a4842d0d964fd3f22bd6f9964ce551f8cc2eb5a5b57a915288b2",
+      "bytes": 50037
+    },
+    {
+      "path": "images/motion-samples/avi-index-0080.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0080.jpg",
+      "sha256": "85a7c0045a005232a15d2d0dc1a40836c5592700abca4fa2b5af7d6de703288f",
+      "bytes": 50551
+    },
+    {
+      "path": "images/motion-samples/avi-index-0090.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0090.jpg",
+      "sha256": "41377d7e18b6e97d32d690fc6fc76ce0024962b7bcaf0ea990072bd19ae23021",
+      "bytes": 59597
+    },
+    {
+      "path": "images/motion-samples/avi-index-0100.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0100.jpg",
+      "sha256": "6b3abda0908c29f3a70d4206b90a1d639838efd5bc6c6e341c5d06f31ae1fa14",
+      "bytes": 60849
+    },
+    {
+      "path": "images/motion-samples/avi-index-0110.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0110.jpg",
+      "sha256": "53262309486c38f1db5ef6ac7d896ee54e1e66a2f7838f5fecec0407c83548ed",
+      "bytes": 62549
+    },
+    {
+      "path": "images/motion-samples/avi-index-0120.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0120.jpg",
+      "sha256": "d70af8028a8f8bb1d50510fa68d0e8850ee133aed3a3092db4492ea97ded3769",
+      "bytes": 61859
+    },
+    {
+      "path": "images/motion-samples/avi-index-0130.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0130.jpg",
+      "sha256": "e61cf6d02a9d672368a05e6090f0f6a2390bc9e0ffb048a9e6a7ffa63b401cda",
+      "bytes": 51514
+    },
+    {
+      "path": "images/motion-samples/avi-index-0140.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0140.jpg",
+      "sha256": "549638280ca956b90f1fa59fe7a01befa7d1dbc1c39ff38a79fa4d75233cd8c4",
+      "bytes": 51799
+    },
+    {
+      "path": "images/motion-samples/avi-index-0150.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0150.jpg",
+      "sha256": "babd58ebbe9e48ca97023c706dce24c89cd19afbe67b262a0c3e79fb1c5cdf8e",
+      "bytes": 61645
+    },
+    {
+      "path": "images/motion-samples/avi-index-0158.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0158.jpg",
+      "sha256": "36b461cbe2b7f4e0d4d8e72c70a702c9104946b597d91f3af3c3236ab743cf35",
+      "bytes": 62180
+    },
+    {
+      "path": "images/motion-samples/avi-index-0160.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1394-live-integration-002/avi-frame-samples/avi-index-0160.jpg",
+      "sha256": "36b461cbe2b7f4e0d4d8e72c70a702c9104946b597d91f3af3c3236ab743cf35",
+      "bytes": 62180
+    }
+  ],
+  "independent_visual_review": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/1394/work/1394-live-independent-visual-001/REVIEW.json",
+    "sha256": "b4d15870409861eaa3ab4edfc963ffdd17748c42dfe33afc51a469d52d9b7b0d",
+    "bytes": 13482
+  },
+  "sampled_temporal_only": true,
+  "container_and_endpoint_limits": [
+    "Five originalstills cover whole-facade context and selected bases, not unknown interiors/faces.",
+    "17AVIsamples include startupHUD0 and16targetviews;161frameAVI has70trailingbytes.",
+    "RawcontactFAIL includes low15exit empty finalupward array and vertical-phase diagnostics; scoped mechanics does not establish continuous outgoing landbody ownership.",
+    "Privacy-panel sliding is not a fullstop claim.",
+    "Sampled temporal review only; no continuous movie playback or equivalence of input/process/physics/AVI indices."
+  ]
+}

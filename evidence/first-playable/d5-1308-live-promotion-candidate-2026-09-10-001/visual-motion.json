@@ -1,0 +1,327 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "derived_normalized_summary": true,
+  "not_a_captured_original": true,
+  "raw_originals_rewritten": false,
+  "source_role": "Sampled native temporal evidence; full original AVI and every original payload retained privately",
+  "raw_origin": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/1308/work/1308-live-integration-001/trim-revision-002/motion-finalization.json",
+    "sha256": "c77c20c513ffc55665c11f451e2215a004e27fdadca1492d3f716997068a888b",
+    "bytes": 12357
+  },
+  "normalization": "Longest-prefix leaf-only machine-path normalization. Raw originals remain exact privately; original numbers/arrays/hashes and historical outcomes remain as recorded. Public selected-image projection is separate.",
+  "truth_boundary": {
+    "recognition_metric": "11/213",
+    "capture_time_recognition_metric": "11/213 for selected live originals; older study metrics stay historical",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "inventory_physical_units": 213,
+    "source_render_images_are_package_pixels": false
+  },
+  "data": {
+    "movie": {
+      "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/1308-current-stock-sweep.avi",
+      "sha256": "fbac5d8e9253c4f266b39dbb0e4e0128dbc0c50ee14883058518f1dc208a332e",
+      "bytes": 15811474,
+      "declared_riff_end": 15811404,
+      "physical_minus_declared_bytes": 70,
+      "extracted_frame_count": 163,
+      "microseconds_per_frame": 16666,
+      "total_frames": 163,
+      "width": 1280,
+      "height": 800,
+      "retained_original_copy": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/private-capture-source/1308-current-stock-sweep.avi"
+    },
+    "extracted_frames": [
+      {
+        "zero_based_avi_frame_index": 38,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0038.jpg",
+        "sha256": "c235f9026d26661ed50a8669a8e3af3da93b56d02c45e422d09df08abda10ee7",
+        "bytes": 100139,
+        "payload_offset": 3010794,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "nine temporal samples",
+        "retained_copy": "{TASK_ROOT}/taskoutputs/1308-live-progress/trim-revision-002/avi-frame-samples/avi-index-0038.jpg"
+      },
+      {
+        "zero_based_avi_frame_index": 53,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0053.jpg",
+        "sha256": "46473dff2ce37af3c17b4e2d92d4187b683cfe3b8dd70f8821e868b1550036cb",
+        "bytes": 99808,
+        "payload_offset": 4561062,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "nine temporal samples",
+        "retained_copy": "{TASK_ROOT}/taskoutputs/1308-live-progress/trim-revision-002/avi-frame-samples/avi-index-0053.jpg"
+      },
+      {
+        "zero_based_avi_frame_index": 68,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0068.jpg",
+        "sha256": "5fab06388deca6527bb54cc868194aff5d196c1bc5d73fcc16903984057a4115",
+        "bytes": 99655,
+        "payload_offset": 6102782,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "nine temporal samples",
+        "retained_copy": "{TASK_ROOT}/taskoutputs/1308-live-progress/trim-revision-002/avi-frame-samples/avi-index-0068.jpg"
+      },
+      {
+        "zero_based_avi_frame_index": 83,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0083.jpg",
+        "sha256": "98b0040dca8f21c9878d0de2bd0ea95316a37cc7d74d5e22c91d7ebf94e3e0f1",
+        "bytes": 99404,
+        "payload_offset": 7646406,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "nine temporal samples",
+        "retained_copy": "{TASK_ROOT}/taskoutputs/1308-live-progress/trim-revision-002/avi-frame-samples/avi-index-0083.jpg"
+      },
+      {
+        "zero_based_avi_frame_index": 98,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0098.jpg",
+        "sha256": "6ad0055473fce76e9853b9c4aad2cdd0c83ba58158ddd0406a0a76aa729079ed",
+        "bytes": 100143,
+        "payload_offset": 9188784,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "nine temporal samples",
+        "retained_copy": "{TASK_ROOT}/taskoutputs/1308-live-progress/trim-revision-002/avi-frame-samples/avi-index-0098.jpg"
+      },
+      {
+        "zero_based_avi_frame_index": 113,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0113.jpg",
+        "sha256": "4486971af16529d158c1968c51101fcbd6cb6df3b3d49622c253de8819c50835",
+        "bytes": 99897,
+        "payload_offset": 10739860,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "nine temporal samples",
+        "retained_copy": "{TASK_ROOT}/taskoutputs/1308-live-progress/trim-revision-002/avi-frame-samples/avi-index-0113.jpg"
+      },
+      {
+        "zero_based_avi_frame_index": 128,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0128.jpg",
+        "sha256": "09861257dc3858db3a96b9cd8c4e32574730f0823602a0e5e6534f90ecabd096",
+        "bytes": 99388,
+        "payload_offset": 12282922,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "nine temporal samples",
+        "retained_copy": "{TASK_ROOT}/taskoutputs/1308-live-progress/trim-revision-002/avi-frame-samples/avi-index-0128.jpg"
+      },
+      {
+        "zero_based_avi_frame_index": 143,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0143.jpg",
+        "sha256": "90117fc750d32f23fb30b67169c482b02994d4fed0e0a9e2cb105737ef528729",
+        "bytes": 99599,
+        "payload_offset": 13824994,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "nine temporal samples",
+        "retained_copy": "{TASK_ROOT}/taskoutputs/1308-live-progress/trim-revision-002/avi-frame-samples/avi-index-0143.jpg"
+      },
+      {
+        "zero_based_avi_frame_index": 158,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0158.jpg",
+        "sha256": "1c3ec58d0fa7bc35b796deea584e02d37bae3a55173f4d40e26529e98cafa295",
+        "bytes": 100376,
+        "payload_offset": 15372046,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "nine temporal samples",
+        "retained_copy": "{TASK_ROOT}/taskoutputs/1308-live-progress/trim-revision-002/avi-frame-samples/avi-index-0158.jpg"
+      },
+      {
+        "zero_based_avi_frame_index": 159,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/endpoint-diagnostics/avi-index-0159.jpg",
+        "sha256": "1c3ec58d0fa7bc35b796deea584e02d37bae3a55173f4d40e26529e98cafa295",
+        "bytes": 100376,
+        "payload_offset": 15475638,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "teardown endpoint diagnostic",
+        "retained_copy": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/private-capture-source/endpoint-diagnostics/avi-index-0159.jpg"
+      },
+      {
+        "zero_based_avi_frame_index": 160,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/endpoint-diagnostics/avi-index-0160.jpg",
+        "sha256": "1c3ec58d0fa7bc35b796deea584e02d37bae3a55173f4d40e26529e98cafa295",
+        "bytes": 100376,
+        "payload_offset": 15579230,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "teardown endpoint diagnostic",
+        "retained_copy": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/private-capture-source/endpoint-diagnostics/avi-index-0160.jpg"
+      },
+      {
+        "zero_based_avi_frame_index": 161,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/endpoint-diagnostics/avi-index-0161.jpg",
+        "sha256": "1c3ec58d0fa7bc35b796deea584e02d37bae3a55173f4d40e26529e98cafa295",
+        "bytes": 100376,
+        "payload_offset": 15682822,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "teardown endpoint diagnostic",
+        "retained_copy": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/private-capture-source/endpoint-diagnostics/avi-index-0161.jpg"
+      },
+      {
+        "zero_based_avi_frame_index": 162,
+        "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/endpoint-diagnostics/avi-index-0162.jpg",
+        "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+        "bytes": 16628,
+        "payload_offset": 15786414,
+        "payload_extraction": "Exact native MJPEG payload; no decode/re-encode/rescale",
+        "scope": "teardown endpoint diagnostic",
+        "retained_copy": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/private-capture-source/endpoint-diagnostics/avi-index-0162.jpg"
+      }
+    ],
+    "kind": "Derived post-terminal motion binding; original result and native AVI remain unchanged",
+    "source_motion_manifest": {
+      "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/motion-001-result.json",
+      "sha256": "2a9a8048f2470ef1a2f3139cd4740c47c1cc523980e1c7bf4f5a0e73c6dcc788"
+    },
+    "native_manifest": {
+      "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/native-002-result.json",
+      "sha256": "4683e97e0914eefafd8930f73a211c933c75ed8a118bfdbf14f533b4ee1ef4cb"
+    },
+    "terminal_receipt": {
+      "path": "{TASK_ROOT}/work/1308-live-integration-001/trim-revision-002/motion-001-execution.json",
+      "sha256": "f61833f5757626cf6d65d23e24e12b15bd63bdd7d2b39fc33e94dbdab3e9fa3d"
+    },
+    "process_range": [
+      38,
+      158
+    ],
+    "physics_range": [
+      39,
+      159
+    ],
+    "drawn_range": [
+      38,
+      158
+    ],
+    "input_sequence": [
+      [
+        "move_right",
+        30
+      ],
+      [
+        "move_left",
+        60
+      ],
+      [
+        "move_right",
+        30
+      ]
+    ],
+    "input_frames": 120,
+    "all_input_frames_grounded": true,
+    "actual_planar_path_length_m": 7.10203443653882,
+    "actual_net_planar_displacement_m": 0.16241329908371,
+    "transform_writes_during_input": 0,
+    "recoveries": [],
+    "endpoint_hold": {
+      "frames": [
+        {
+          "process_counter": 159,
+          "physics_counter": 160,
+          "drawn_counter": 159,
+          "position": [
+            -487.433380126953,
+            2.2089262008667,
+            -47.1595115661621
+          ]
+        },
+        {
+          "process_counter": 160,
+          "physics_counter": 161,
+          "drawn_counter": 160,
+          "position": [
+            -487.433380126953,
+            2.2089262008667,
+            -47.1595115661621
+          ]
+        },
+        {
+          "process_counter": 161,
+          "physics_counter": 162,
+          "drawn_counter": 161,
+          "position": [
+            -487.433380126953,
+            2.2089262008667,
+            -47.1595115661621
+          ]
+        }
+      ],
+      "path": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/motion-endpoint.png",
+      "sha256": "dc7a33ea5dc583b5d24216d906cdbdfb641d06b4cca5fa50a14cd1dd85be1e34",
+      "controller_disabled_after_input": true,
+      "transform_writes": 0,
+      "world_present_before_teardown": true
+    },
+    "endpoint_observation": "Author viewed original158 and heldPNG: world visible. Original159/160/161 JPEG payloads equal158 exactly. Original162 is blue after teardown and remains retained; no facade claim for it.",
+    "counter_alignment_limits": "Nine original encoded samples38,53,68,83,98,113,128,143,158 span the recorded movement and direction changes, with158 a visually confirmed rendered endpoint. Process38..158 and physics39..159 remain separate counters; exact equality to encoded indices is not asserted. Sampled temporal review only, no continuous playback or exclusion of intervening flicker.",
+    "container_limit": "Native RIFF declared end is70bytes short of physical bytes. Exact file retained; no generic-player or container-conformance claim.",
+    "independent_visual_verdict": "pending"
+  },
+  "selected_frame_projection": [
+    {
+      "path": "images/motion-samples/avi-index-0038.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0038.jpg",
+      "sha256": "c235f9026d26661ed50a8669a8e3af3da93b56d02c45e422d09df08abda10ee7",
+      "bytes": 100139
+    },
+    {
+      "path": "images/motion-samples/avi-index-0053.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0053.jpg",
+      "sha256": "46473dff2ce37af3c17b4e2d92d4187b683cfe3b8dd70f8821e868b1550036cb",
+      "bytes": 99808
+    },
+    {
+      "path": "images/motion-samples/avi-index-0068.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0068.jpg",
+      "sha256": "5fab06388deca6527bb54cc868194aff5d196c1bc5d73fcc16903984057a4115",
+      "bytes": 99655
+    },
+    {
+      "path": "images/motion-samples/avi-index-0083.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0083.jpg",
+      "sha256": "98b0040dca8f21c9878d0de2bd0ea95316a37cc7d74d5e22c91d7ebf94e3e0f1",
+      "bytes": 99404
+    },
+    {
+      "path": "images/motion-samples/avi-index-0098.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0098.jpg",
+      "sha256": "6ad0055473fce76e9853b9c4aad2cdd0c83ba58158ddd0406a0a76aa729079ed",
+      "bytes": 100143
+    },
+    {
+      "path": "images/motion-samples/avi-index-0113.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0113.jpg",
+      "sha256": "4486971af16529d158c1968c51101fcbd6cb6df3b3d49622c253de8819c50835",
+      "bytes": 99897
+    },
+    {
+      "path": "images/motion-samples/avi-index-0128.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0128.jpg",
+      "sha256": "09861257dc3858db3a96b9cd8c4e32574730f0823602a0e5e6534f90ecabd096",
+      "bytes": 99388
+    },
+    {
+      "path": "images/motion-samples/avi-index-0143.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0143.jpg",
+      "sha256": "90117fc750d32f23fb30b67169c482b02994d4fed0e0a9e2cb105737ef528729",
+      "bytes": 99599
+    },
+    {
+      "path": "images/motion-samples/avi-index-0158.jpg",
+      "original_locator_normalized": "{PRIVATE_TMP}/d5-1308-live-trim-revision-002/avi-frame-samples/avi-index-0158.jpg",
+      "sha256": "1c3ec58d0fa7bc35b796deea584e02d37bae3a55173f4d40e26529e98cafa295",
+      "bytes": 100376
+    }
+  ],
+  "independent_visual_review": {
+    "retained_repo_relative_path": "build/d5-1308-1394-candidate-provenance-2026-09-10-001/1308/work/1308-live-independent-visual-001/trim-revision-002/REVIEW.json",
+    "sha256": "52b84ea8709717be3f1bfb53e5fa421306b2720e1c88a7f88123662611a2f756",
+    "bytes": 20615
+  },
+  "sampled_temporal_only": true,
+  "container_and_endpoint_limits": [
+    "Corrected trim evidence:3newstills03/04/06 and9samples. Historical05spray/07changed-front are before-trim, applicable only to unchanged features.",
+    "06position/light exact, forwardY residual1.9371509552e-7; orientation is tolerance-level.03/04forwards exact.",
+    "Old01/02whole views occluded/unusable; detached whole-facade review remains historical.",
+    "NewAVI163frames,70trailingbytes;158visible,159–161held,162blue. HistoricalAVI158/159blue and usable157 remain retained.",
+    "Original strict6exitFAILs, failedsprayposes and capturefailure remain raw. Accepted scoped mechanics does not prove continuous direct outgoing landownership.",
+    "Sampled temporal review only; no continuous movie playback or equivalence of input/process/physics/AVI indices."
+  ]
+}

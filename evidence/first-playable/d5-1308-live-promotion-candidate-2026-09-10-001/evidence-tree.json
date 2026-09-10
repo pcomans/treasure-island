@@ -1,0 +1,87 @@
+{
+  "schema_version": "ti.d5-native-image-tree/1",
+  "tree_scope": "Exactly14 selected exact native-image copies; no manifests/reviews/receipts or this document.",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1",
+  "files": [
+    {
+      "path": "images/current-stills/03-canopy14-junction.png",
+      "sha256": "84d2de0a0b69cd171e019c62b85b7af958010d34a36b92b745a6bdfa93a7952f",
+      "bytes": 1035945
+    },
+    {
+      "path": "images/current-stills/04-canopy17-junction.png",
+      "sha256": "78d94f0c45532c97d14f58823758931daf85965d0f7f8150566ed94d77fdfe09",
+      "bytes": 1478976
+    },
+    {
+      "path": "images/current-stills/06-visible-front-default.png",
+      "sha256": "d028fdc06a98d9c7416770681855813f748621eff487205ef15915811162968e",
+      "bytes": 1120511
+    },
+    {
+      "path": "images/historical-feature-stills/05-canopy00-spray.png",
+      "sha256": "1f958b29168b2e9a04c99d01e01763c08fd4c565d58506a853e856ac472406f5",
+      "bytes": 1233188
+    },
+    {
+      "path": "images/historical-feature-stills/07-visible-front-changed.png",
+      "sha256": "d84d538a60cdfac3f85d92c96cc7ea021e5a15a1f6f146d3fcc77c4705c88bc3",
+      "bytes": 970125
+    },
+    {
+      "path": "images/motion-samples/avi-index-0038.jpg",
+      "sha256": "c235f9026d26661ed50a8669a8e3af3da93b56d02c45e422d09df08abda10ee7",
+      "bytes": 100139
+    },
+    {
+      "path": "images/motion-samples/avi-index-0053.jpg",
+      "sha256": "46473dff2ce37af3c17b4e2d92d4187b683cfe3b8dd70f8821e868b1550036cb",
+      "bytes": 99808
+    },
+    {
+      "path": "images/motion-samples/avi-index-0068.jpg",
+      "sha256": "5fab06388deca6527bb54cc868194aff5d196c1bc5d73fcc16903984057a4115",
+      "bytes": 99655
+    },
+    {
+      "path": "images/motion-samples/avi-index-0083.jpg",
+      "sha256": "98b0040dca8f21c9878d0de2bd0ea95316a37cc7d74d5e22c91d7ebf94e3e0f1",
+      "bytes": 99404
+    },
+    {
+      "path": "images/motion-samples/avi-index-0098.jpg",
+      "sha256": "6ad0055473fce76e9853b9c4aad2cdd0c83ba58158ddd0406a0a76aa729079ed",
+      "bytes": 100143
+    },
+    {
+      "path": "images/motion-samples/avi-index-0113.jpg",
+      "sha256": "4486971af16529d158c1968c51101fcbd6cb6df3b3d49622c253de8819c50835",
+      "bytes": 99897
+    },
+    {
+      "path": "images/motion-samples/avi-index-0128.jpg",
+      "sha256": "09861257dc3858db3a96b9cd8c4e32574730f0823602a0e5e6534f90ecabd096",
+      "bytes": 99388
+    },
+    {
+      "path": "images/motion-samples/avi-index-0143.jpg",
+      "sha256": "90117fc750d32f23fb30b67169c482b02994d4fed0e0a9e2cb105737ef528729",
+      "bytes": 99599
+    },
+    {
+      "path": "images/motion-samples/avi-index-0158.jpg",
+      "sha256": "1c3ec58d0fa7bc35b796deea584e02d37bae3a55173f4d40e26529e98cafa295",
+      "bytes": 100376
+    }
+  ],
+  "truth_boundary": {
+    "recognition_metric": "11/213",
+    "capture_time_recognition_metric": "11/213 for selected live originals; older study metrics stay historical",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "inventory_physical_units": 213,
+    "source_render_images_are_package_pixels": false
+  }
+}

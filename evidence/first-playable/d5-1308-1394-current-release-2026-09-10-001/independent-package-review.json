@@ -1,0 +1,238 @@
+{
+  "derived_summary": true,
+  "original": {
+    "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/REVIEW.json",
+    "sha256": "e426fafa85cb1e9408968f4b87c1627c7bfd05f23107b37db7b2dd20ffbb2bc4",
+    "bytes": 16650
+  },
+  "original_md": {
+    "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/REVIEW.md",
+    "sha256": "7cee347cb353ad45d61a5e7ddefc0dab21008aaef95982197d7a2d6385ca990f",
+    "bytes": 5523
+  },
+  "record": {
+    "reviewer": "/root/review_1303_source",
+    "decision": "PASS_INDEPENDENT_EXACT_CURRENT13_SAME_APP_PACKAGE",
+    "scope": "Single isolated current13 private Mac app; no main integration/publication/ordinary no-argument launch performed.",
+    "app": "./build/d5-1308-1394-exact-current-001/Treasure Island First Playable.app",
+    "tree_sha256": "2d61652aedcc14f4ddd4fdda0a458037758b5ae103cecf59aaa8b7a998159e6c",
+    "pck_sha256": "e3c5c529efc54be1af383cafba678a0130fbd2157524e4d8cf1e3217217de85f",
+    "executable_sha256": "2dd0e797cf26365109293196c4a9f7e217b80c872832042bfdb63db3e4d7aad5",
+    "binding_algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+    "authority": {
+      "metric": "13/213",
+      "active_receivers": 12,
+      "plans": 21,
+      "ready_plans": 15,
+      "disabled_plans": 6,
+      "legacy_adapters": 9,
+      "proof": "Exact current registry/contracts JSON and accepted-unit list checked by mounted helper on the same measured PCK. Signed main verifies actual scene/world behavior; its per-target capture11/capture9 metadata remains historical."
+    },
+    "checks": {
+      "native_bundle": "PASS: deep/strict signature; arm64 and x86_64 verification; architectures; empty parsed entitlements; privacy tracking false; no xattrs/symlinks. Native plutil used.",
+      "mounted_components": "PASS: real target-record paired construction for both1308/1394 and prior1444; exact geometry/material/collision/source-ownership assertions; target component staging is not full-world proof.",
+      "mounted_privacy": "PASS: 937 virtual files, 47 generated world artifacts, 38 chunks; 739/735/4 total/playable/context rows; private_paths=0, private_raw=0, banned=0.",
+      "signed_whole_main": "PASS in supported signed headless and native modes: actual1308/1394 plus1439/1444 pairs, full world735+4 rows/993 meshes/1008 surfaces/76376 triangles/466 bodies/472 shapes, ferry spawn, approved visual/movement defaults, grounding and stock jetpack rise/slow descent.",
+      "final_integrity": "PASS: exact same seven app files/PCK/executable,247 sources,49 package inputs and frozen review inputs before/after; fresh PID absence."
+    },
+    "actual_signed_observations": {
+      "release-headless-smoke-001": {
+        "all_four_real_pairs_valid": true,
+        "world_line": "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=993 surfaces=1008 triangles=76376 bodies=466 shapes=472 vegetation=124 seed=1414092337 batches=19 load_ms=5539",
+        "visual_defaults_line": "MAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass",
+        "movement_line": "MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass",
+        "jetpack_line": "MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps",
+        "grounded": true,
+        "pass_line": "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent"
+      },
+      "release-native-smoke-001": {
+        "all_four_real_pairs_valid": true,
+        "world_line": "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=993 surfaces=1008 triangles=76376 bodies=466 shapes=472 vegetation=124 seed=1414092337 batches=19 load_ms=5657",
+        "visual_defaults_line": "MAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass",
+        "movement_line": "MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass",
+        "jetpack_line": "MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps",
+        "grounded": true,
+        "pass_line": "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent"
+      }
+    },
+    "independent_stages": [
+      {
+        "stage": "mounted-component-001",
+        "receipt": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/mounted-component-001-execution.json",
+        "receipt_sha256": "c9ec71fa64928696ab0fb4e6e984f1c362050a20dc038aabddcac7d75748ca20",
+        "log": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/mounted-component-001.log",
+        "log_sha256": "7ededc2eda795ee21c51381e124c470ea8eef4f113d8ce65dfeda2afabe5a584",
+        "recorded_log_hash_exact": true,
+        "pid": 79165,
+        "wrapper_session": 52483,
+        "exit_code": 0,
+        "status": "terminal",
+        "started_at": "2026-09-10T02:30:19.009644+00:00",
+        "ended_at": "2026-09-10T02:30:21.656255+00:00",
+        "elapsed_seconds": 2.646483500022441,
+        "pins_before_after_exact": true,
+        "log_errors": [],
+        "pid_absent_at_end": true
+      },
+      {
+        "stage": "mounted-privacy-001",
+        "receipt": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/mounted-privacy-001-execution.json",
+        "receipt_sha256": "41625222fe904251a33f2e659db06dee7d553b42f62f5b0618b29451649324e4",
+        "log": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/mounted-privacy-001.log",
+        "log_sha256": "8e25041e14de1d8ddc2b1cd812720f33eb94af7c1b402b1c5aecb450ff9c8490",
+        "recorded_log_hash_exact": true,
+        "pid": 79448,
+        "wrapper_session": 90590,
+        "exit_code": 0,
+        "status": "terminal",
+        "started_at": "2026-09-10T02:30:39.280043+00:00",
+        "ended_at": "2026-09-10T02:30:41.635694+00:00",
+        "elapsed_seconds": 2.355546750128269,
+        "pins_before_after_exact": true,
+        "log_errors": [],
+        "pid_absent_at_end": true
+      },
+      {
+        "stage": "release-headless-smoke-001",
+        "receipt": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/release-headless-smoke-001-execution.json",
+        "receipt_sha256": "c8b6b4625255c73da188abfb39e1d183d8d233cb76024dc8913985b8513922c7",
+        "log": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/release-headless-smoke-001.log",
+        "log_sha256": "a6c1fd3d14e6ffb54df448461bb719f45a3234927685ec894d92eb6789fd86e7",
+        "recorded_log_hash_exact": true,
+        "pid": 79520,
+        "wrapper_session": 1637,
+        "exit_code": 0,
+        "status": "terminal",
+        "started_at": "2026-09-10T02:30:51.879817+00:00",
+        "ended_at": "2026-09-10T02:30:58.775126+00:00",
+        "elapsed_seconds": 6.895159082952887,
+        "pins_before_after_exact": true,
+        "log_errors": [],
+        "pid_absent_at_end": true
+      },
+      {
+        "stage": "release-native-smoke-001",
+        "receipt": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/release-native-smoke-001-execution.json",
+        "receipt_sha256": "3b4f9f2f64fae82d9106683339448d4566d7876ccdd1c85c4ba6a6d4a220c831",
+        "log": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/release-native-smoke-001.log",
+        "log_sha256": "ea14ba64f911a0701996495dd64653a172736e46812c66eb5555101158eb62ea",
+        "recorded_log_hash_exact": true,
+        "pid": 79722,
+        "wrapper_session": 59026,
+        "exit_code": 0,
+        "status": "terminal",
+        "started_at": "2026-09-10T02:31:03.357718+00:00",
+        "ended_at": "2026-09-10T02:31:11.021772+00:00",
+        "elapsed_seconds": 7.663927749963477,
+        "pins_before_after_exact": true,
+        "log_errors": [],
+        "pid_absent_at_end": true
+      }
+    ],
+    "native_runtime_device": "Apple M2 (Apple8), Metal4.0 Forward+",
+    "known_warning": "Executable=./build/d5-1308-1394-exact-current-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable\nwarning: Specifying ':' in the path is deprecated and will not work in a future release",
+    "fixture_lineage": {
+      "retained_failed_pids": [
+        69881,
+        70222
+      ],
+      "failure_scope": [
+        "stale schema11 fixture assertion",
+        "duplicated ten-receiver allowlist omitted the two new target walls"
+      ],
+      "repairs": [
+        "schema literal13",
+        "ACTIVE_UNIT_BY_RECEIVER.has(receiver_key) uses existing exact12 map"
+      ],
+      "only_changed_source_path": "game/tests/headless_facade_recognition_registry_contract.gd",
+      "final_fixture_sha256": "686f7f7007a160bc18a5caf6508db0e2880f618631a189f8bc10cf2a78b180a2",
+      "map_chain": [
+        "06727fed0779127c5a5540fc0bada79d39c0dd0985f2f0f78da207cb68b42384",
+        "ead2fd12db0a69d084f33d481267cc784ec5557b05a76616f636f7f41dcf3db1",
+        "a885dc5f4d39715f15e814238ee3bafcf8ebebe4d3fecc2f7058429e666a9e35"
+      ],
+      "packaged49_unchanged": true,
+      "successful_owner_registry003_loader001_source_contract001_and_export001_reviewed": true,
+      "prior_static_review_scope": "Missed those duplicate expectation sites; actual headless gate was explicitly pending. Original readiness and failures stay immutable."
+    },
+    "bindings": {
+      "owner_handoff_md": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/OWNER_HANDOFF.md",
+        "sha256": "f413ac00f081f6fc7596e4ef4e46662e73606fad1db9ee4359168c220fea0315"
+      },
+      "owner_handoff_json": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/OWNER_HANDOFF.json",
+        "sha256": "7c371ea83f36d4586012d9ba17a5362623db02e1ada6be5cba2d469125a14ca1"
+      },
+      "owner_final_byte_gate": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/final-post-execution.json",
+        "sha256": "cc3583cde95aa19fcfa867bea454dc1d0318daace77a922f64a6674799adfd5a"
+      },
+      "owner_actual_app_binding": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/actual-app-binding.json",
+        "sha256": "58e195f7b794ea6f0042eb610c7cff30f7cf8ae84045f94576c18c7b5b98004c"
+      },
+      "owner_inventory": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/current-package-inventory.json",
+        "sha256": "8e4d5ed9926d1d9034b72467ac6f3be44255e4309eea0246cbb656b26d8b7a38"
+      },
+      "source247": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/source-pins.json",
+        "sha256": "a885dc5f4d39715f15e814238ee3bafcf8ebebe4d3fecc2f7058429e666a9e35"
+      },
+      "package49": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/package-source-pins.json",
+        "sha256": "935e5585ab84fe02117ec8ab77ba9c84a8e6d9c64f56e00838fe2f445847055b"
+      },
+      "helper": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/package-contract.gd",
+        "sha256": "c601b4ca24c61672d3dc1d5755a34d08996559d06bc05a4694332a30581a7597"
+      },
+      "independent_run_plan": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/run-plan.json",
+        "sha256": "425636a8c03be03e8b3c12f9ebc0d57978c5fba406fc7c5a030a6f2869321cf7"
+      },
+      "independent_frozen_inputs": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/independent-inputs.json",
+        "sha256": "2d554f4618721e59ec58fdfe197f314813911f40736719c6ab0bde8193ac16ae"
+      },
+      "precheck": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/PRECHECK.json",
+        "sha256": "e594f814caaa55e6e58fb4f187913ffb7fbb72238cafc62b334a32d37d852937"
+      },
+      "run_start": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/RUN_START.json",
+        "sha256": "5224b5d75318809ee4d3125f88d7611e5857a5ee2e00394545c7fd97f482e680"
+      },
+      "native_bundle": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/bundle-native-checks.json",
+        "sha256": "2d836d0c1afadeb35cece87cbb1dcbf2686a3ee9cdf03359d4e9b41535b1e6fb"
+      },
+      "fixture_lineage": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/FIXTURE_LINEAGE.json",
+        "sha256": "625adb789af12f550265b255e840cd593e31d5b16144561c8d4a6cdc6b3a4f36"
+      },
+      "final_comparison": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-current-release/FINAL_COMPARISON.json",
+        "sha256": "156d72c44b02dba6102b6bc14f8d7451d8701f65e686a87ce1d8c174c0939845"
+      }
+    },
+    "preserved_limits": [
+      "Historical candidate11 app and original capture11/capture9 evidence are not relabeled; this is a fresh distinct current13 PCK.",
+      "No manual-play, M1 performance, new art, continuous support/locomotion, generic AVI playback or unsampled motion conclusion.",
+      "Underlying unit contact/capture/helper failures and scoped visual/mechanical limitations remain disclosed in accepted unit packets; package PASS does not erase them.",
+      "No source/headless-contract/visual replay or export by this independent reviewer; owner source outcomes reused with exact repaired fixture lineage.",
+      "Main integration, commit/push, ordinary launch and HUMAN-001 remain outside this gate."
+    ],
+    "blocking_findings": [],
+    "engine_slot_released": true,
+    "fresh_absent_pids": [
+      79165,
+      79448,
+      79520,
+      79722
+    ],
+    "extra_stage_go_count": 0,
+    "retro_for_B_once": "review_1303_source — Independent exact-current13 same-app package: Passed all four prepared checks on the single frozen current13 app after root released the owner slot: mounted target components, mounted privacy, signed headless main and signed native main. Seven app files, PCK/executable, all 247 source pins and 49 package pins remained exact; all four PIDs were terminal and freshly absent before prose. Current13 authority is checked from the mounted JSON on that PCK, while signed whole-main checks independently prove both new pairs, prior1439/1444, full world and default movement/jetpack. Native execution was M2, without new art/manual/M1 acceptance. Preserved both owner registry-fixture failures and exact two-line repair/map lineage; my earlier static readiness review missed those duplicate expectation sites and is not rewritten as engine proof. Next transition, derive receiver assertions from the existing exact map and examine the complete affected fixture for stale current literals before the first run. The four-stage standing GO needed no extra stage roundtrip, and no export, product/main edit or successful source/visual replay occurred."
+  }
+}

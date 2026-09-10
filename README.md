@@ -18,7 +18,19 @@ Before restoring tools or opening Godot, read [AGENTS.md](AGENTS.md) and the [ma
 Human-only follow-ups are kept in the [owner action queue](HUMAN.md); that
 queue narrows external gates and never pauses safe independent work.
 
-## Current 1444 Croaker Court — eleventh recognized building
+## Current 1308 and 1394 Gateview — thirteen recognized buildings
+
+Independent per-unit quality/packet gates and the shared candidate package accepted `physical-building:w95934123` and `physical-building:w96215646`. Serialized authority is **13/213**, preserving the prior eleven units and all 213 identities; **200** remain not evaluated. Compiler `1.12.0`, catalog/registry v13 and contracts/loader v12 agree on twelve active adapters, twenty-one plans and fifteen package-ready plans. Roofs add no credit.
+
+Current topology is `735/993/1008/76,376/466/472` rows/meshes/surfaces/triangles/bodies/shapes. 1394 alone owns current combined topology; 1308’s intermediate combined scope and prior D2/B1 counts stay historical. The current private app is `build/d5-1308-1394-exact-current-001/Treasure Island First Playable.app`. Seven-file identity `2d61652aedcc14f4ddd4fdda0a458037758b5ae103cecf59aaa8b7a998159e6c`, PCK `e3c5c529efc54be1af383cafba678a0130fbd2157524e4d8cf1e3217217de85f`, executable `2dd0e797cf26365109293196c4a9f7e217b80c872832042bfdb63db3e4d7aad5`.
+
+Owner and independent exact-current package checks passed; main source and app are byte-identical copies. [Current release closure](evidence/first-playable/d5-1308-1394-current-release-2026-09-10-001/release-closure.json). Ordinary no-argument launch, publication readiness and Git publication are pending. Signed-app technical smoke is not ordinary owner play; no new exported-app pixels or manual-input acceptance is claimed.
+
+Both immutable packets retain capture/candidate **11/213**, 36 selected native images and sampled-motion review. The 1308 trim correction,06 orientation tolerance and original contact/pose/helper failures remain explicit; no continuous-playback/as-built claim is made. `HUMAN-001` stays pending only for owner recognition and mouse/keyboard acceptance on Apple M1 Pro.
+
+## Historical 1444 Croaker Court — eleventh recognized building
+
+This section preserves its 11/213 release, app and outcomes; “current” refers to that historical release.
 
 Independent source, live mechanics, visual/reference, candidate-package, packet and authority reviews accepted `physical-building:w95934117`. Recognition is **11/213**, adding one physical unit while preserving the previous ten acceptances and all 213 units; **202** remain not evaluated. Compiler `1.10.0`, catalog/registry v11 and contracts/loader v10 agree on ten active adapters, nineteen plans and thirteen package-ready plans. The paired roof adds no credit.
 

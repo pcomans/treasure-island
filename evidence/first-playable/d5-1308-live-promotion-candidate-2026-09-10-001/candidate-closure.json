@@ -1,0 +1,94 @@
+{
+  "schema_version": "ti.d5-live-candidate-closure/1",
+  "status": "EXACT_ARCHIVE_AND_PACKAGE_PASS_READY_FOR_INDEPENDENT_UNIT_PACKET_ATTESTATION",
+  "truth_boundary": {
+    "recognition_metric": "11/213",
+    "capture_time_recognition_metric": "11/213 for selected live originals; older study metrics stay historical",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "inventory_physical_units": 213,
+    "source_render_images_are_package_pixels": false
+  },
+  "physical_unit_id": "physical-building:w95934123",
+  "wall_object_key": "building:w95934123:wall",
+  "roof_object_key": "building:w95934123:roof",
+  "paired_wall_and_roof_are_one_physical_unit": true,
+  "literal_map_source": {
+    "path": "{TASK_ROOT}/work/1444-packet-independent-001/PROMOTION_PACKET_REVIEW.json",
+    "sha256": "54cf505efe0bdd5cace75b8acb1152320a8913ccfcd5612cfc9877739d2ee7da"
+  },
+  "post_assembly_field_renames": 0,
+  "seven_acceptance_bindings_prepared": {
+    "evidence_manifest_sha256": "f776a306714ebbbb96266933abaa0aa602d27babeeaa133dd00d95e36b2a58ba",
+    "motion_telemetry_manifest_sha256": "8a636cc7b9a6874f038cc4a0eac4c273e86de6b7a48fdf50e519abf299c9de6b",
+    "visual_motion_manifest_sha256": "2d9911060b6259b5331b1d90055c2794cf39d0b6be3f907b4daf0af5e269a967",
+    "package_verification_receipt_sha256": "8058b74a5e11640a51c0156ce8a284509b33ea1d5a76961022e232fa3d3e0ebf",
+    "evidence_tree_sha256": "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1",
+    "mechanical_review_receipt_sha256": "2f8c4f42e44de69bbe5e06642b4149ba5ccebe2f3d44efee889677459f1629c5",
+    "review_receipt_sha256": null
+  },
+  "artifacts": [
+    {
+      "path": "capture-manifest.json",
+      "sha256": "f776a306714ebbbb96266933abaa0aa602d27babeeaa133dd00d95e36b2a58ba",
+      "bytes": 107298
+    },
+    {
+      "path": "motion-telemetry.json",
+      "sha256": "8a636cc7b9a6874f038cc4a0eac4c273e86de6b7a48fdf50e519abf299c9de6b",
+      "bytes": 161500
+    },
+    {
+      "path": "visual-motion.json",
+      "sha256": "2d9911060b6259b5331b1d90055c2794cf39d0b6be3f907b4daf0af5e269a967",
+      "bytes": 16382
+    },
+    {
+      "path": "package-verification-receipt.json",
+      "sha256": "8058b74a5e11640a51c0156ce8a284509b33ea1d5a76961022e232fa3d3e0ebf",
+      "bytes": 27360
+    },
+    {
+      "path": "evidence-tree.json",
+      "sha256": "0713066473f0df723926cb197f2dd13efb47f8445a3498471ce44f94c1d5834e",
+      "bytes": 3246
+    },
+    {
+      "path": "mechanical-review.json",
+      "sha256": "2f8c4f42e44de69bbe5e06642b4149ba5ccebe2f3d44efee889677459f1629c5",
+      "bytes": 10833
+    },
+    {
+      "path": "visual-review.json",
+      "sha256": "cf4ab114a5a70f0d37b253d1180696c6ed245a2ac3178a49b96710f05952c788",
+      "bytes": 21960
+    },
+    {
+      "path": "source-reconciliation.json",
+      "sha256": "07a3cf3fb813a4f9791405aeb9241059d20a11cf3d3d511174200250286121d2",
+      "bytes": 319349
+    },
+    {
+      "path": "copy-inventory.json",
+      "sha256": "afbfd062c864be2e300b9e12507a934ed80a20c6b5f339b5507e8ffe9fa39ffd",
+      "bytes": 8060
+    },
+    {
+      "path": "private-provenance-retention.json",
+      "sha256": "008a81cff53a90ab2349cddfd886ec63e3d7e1a1c0efb2e440de2d9497cc7249",
+      "bytes": 1066701
+    },
+    {
+      "path": "README.md",
+      "sha256": "8e21f26498bb4da1f8797faa34f6c1f3fcde4de9e2c47e1680a50034dee98e74",
+      "bytes": 3038
+    }
+  ],
+  "evidence_tree_document_sha256": "0713066473f0df723926cb197f2dd13efb47f8445a3498471ce44f94c1d5834e",
+  "seventh_independent_attestation_pending": true,
+  "seventh_binding_requirement": "Independent reviewer must attest six artifact values, the exact image-tree digest and unit-specific historical visual/mechanical scope; selected review text must contain the image-tree digest.",
+  "original_native_images": 14,
+  "shared_private_retained_files": 1758,
+  "no_new_engine_export_capture_or_authority_edit": true
+}

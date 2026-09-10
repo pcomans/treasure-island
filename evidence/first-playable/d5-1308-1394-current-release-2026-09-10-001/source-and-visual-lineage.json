@@ -1,0 +1,153 @@
+{
+  "derived_summary": true,
+  "main_authority": 13,
+  "historical_capture_and_candidate_authority": 11,
+  "denominator": 213,
+  "serialized_transitions": [
+    {
+      "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/authority-transitions/stage-12/TRANSITION.json",
+      "sha256": "3ff7ab64077c17515147cd6778432a1786cee2c68425053b16d5d4543daf5ea5",
+      "bytes": 2374
+    },
+    {
+      "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/authority-transitions/stage-13/TRANSITION.json",
+      "sha256": "f2e974f58f8f732a570caf4d003e8c459558c8a7b5d98141840afad1d200298a",
+      "bytes": 5599
+    }
+  ],
+  "owner_source_binding": {
+    "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/source-pins.json",
+    "sha256": "a885dc5f4d39715f15e814238ee3bafcf8ebebe4d3fecc2f7058429e666a9e35",
+    "bytes": 54535
+  },
+  "package_source_binding": {
+    "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/package-source-pins.json",
+    "sha256": "935e5585ab84fe02117ec8ab77ba9c84a8e6d9c64f56e00838fe2f445847055b",
+    "bytes": 6629
+  },
+  "final_headless_fixture_sha256": "686f7f7007a160bc18a5caf6508db0e2880f618631a189f8bc10cf2a78b180a2",
+  "fixture_repairs": [
+    {
+      "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-002-binding.json",
+      "sha256": "cbe03d9a36b024ff80c0eb0271c3e4644e1ff12c577f7114134f4fd2b5539026",
+      "bytes": 595
+    },
+    {
+      "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/owner-current-release/headless-registry-003-binding.json",
+      "sha256": "f52f414277f89a26f9723974a353754d3a40b99440eaa12f7f35b6b26523d9f7",
+      "bytes": 643
+    }
+  ],
+  "units": [
+    {
+      "unit": "1308",
+      "packet_path": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001",
+      "accepted_map_original": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-packet-maps/1308-PROMOTION_PACKET_REVIEW.json",
+        "sha256": "55226e4e10b14d7a362da5209c3d7943f070ab5d348f383cd046fa62f9035993",
+        "bytes": 3618
+      },
+      "literal_map": {
+        "reviewer": "/root/review_1439_package",
+        "decision": "PASS_FOR_1308_SERIALIZED_ACCEPTANCE_READINESS_NO_CREDIT",
+        "unit_id": "physical-building:w95934123",
+        "review_path": "evidence/reviews/d5-1308-live-promotion-candidate-2026-09-10-001-INDEPENDENT_PACKET_REVIEW.md",
+        "review_sha256": "7b29686da76c68ffe6527c3c9da10034de942fade519ec5798e5bf7943eda00c",
+        "seven_artifact_acceptance_bindings": {
+          "evidence_manifest_sha256": "f776a306714ebbbb96266933abaa0aa602d27babeeaa133dd00d95e36b2a58ba",
+          "motion_telemetry_manifest_sha256": "8a636cc7b9a6874f038cc4a0eac4c273e86de6b7a48fdf50e519abf299c9de6b",
+          "visual_motion_manifest_sha256": "2d9911060b6259b5331b1d90055c2794cf39d0b6be3f907b4daf0af5e269a967",
+          "package_verification_receipt_sha256": "8058b74a5e11640a51c0156ce8a284509b33ea1d5a76961022e232fa3d3e0ebf",
+          "evidence_tree_sha256": "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1",
+          "mechanical_review_receipt_sha256": "2f8c4f42e44de69bbe5e06642b4149ba5ccebe2f3d44efee889677459f1629c5",
+          "review_receipt_sha256": "7b29686da76c68ffe6527c3c9da10034de942fade519ec5798e5bf7943eda00c"
+        },
+        "acceptance_paths": {
+          "evidence_manifest_sha256": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001/capture-manifest.json",
+          "motion_telemetry_manifest_sha256": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001/motion-telemetry.json",
+          "visual_motion_manifest_sha256": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001/visual-motion.json",
+          "package_verification_receipt_sha256": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001/package-verification-receipt.json",
+          "mechanical_review_receipt_sha256": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001/mechanical-review.json",
+          "evidence_tree_sha256": "evidence/first-playable/d5-1308-live-promotion-candidate-2026-09-10-001/evidence-tree.json#tree_sha256",
+          "review_receipt_sha256": "evidence/reviews/d5-1308-live-promotion-candidate-2026-09-10-001-INDEPENDENT_PACKET_REVIEW.md"
+        },
+        "image_tree_document_sha256": "0713066473f0df723926cb197f2dd13efb47f8445a3498471ce44f94c1d5834e",
+        "candidate_closure_sha256": "dca25d993cc429e6ade321eea8adaf3895e9f56fd3655790e1f85b80244ca20c",
+        "assembly_handoff_sha256": "9ce5cd4dbf1e7de7b747f3303f4be53c947e4c95662d5611d85898f824a98beb",
+        "final_packet_check_sha256": "3bcc828944d02b9ac79cbd049474b774dacd29b4099040f22bfedd82675d6333",
+        "current_recognition": "11/213",
+        "capture_time_recognition_metric": "11/213 for selected live originals; older study scope historical",
+        "credit_granted": false,
+        "promotion_performed": false,
+        "missing_items": [],
+        "retro": "review_1439_package — Independent 1308 and 1394 final packets: Verified separate literal seven-field maps, 14 and 22 exact native image copies, 1,758 shared private retained files and all 484 original MJPEG payload slices. Reused the accepted same-app package and per-unit source/mechanics/visual decisions; mounted target components remain distinct from signed whole-main coverage. Preserve 1308 pre-trim feature-only views, its 06 orientation residual, both units’ raw contact failures and sampled/RIFF limits. New unit-specific seventh attestations bind the actual image trees without rewriting historical reviews or granting credit. The initial generic capture-envelope comparison was inapplicable to the declared selected-image index; exact nested manifests and projections resolved it without packet edits. No engine, app, source or authority changes performed."
+      },
+      "image_tree_document_sha256": "0713066473f0df723926cb197f2dd13efb47f8445a3498471ce44f94c1d5834e",
+      "image_tree_digest": "1e1171014a28b4bedc02438aba849b20cd1b63991a3c9a7b438d64af084e19f1",
+      "selected_public_images": 14
+    },
+    {
+      "unit": "1394",
+      "packet_path": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001",
+      "accepted_map_original": {
+        "path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/independent-packet-maps/1394-PROMOTION_PACKET_REVIEW.json",
+        "sha256": "06fafd082e2398a96cca25adbb080eb306ce96411a6e3715bc317008590c928a",
+        "bytes": 3618
+      },
+      "literal_map": {
+        "reviewer": "/root/review_1439_package",
+        "decision": "PASS_FOR_1394_SERIALIZED_ACCEPTANCE_READINESS_NO_CREDIT",
+        "unit_id": "physical-building:w96215646",
+        "review_path": "evidence/reviews/d5-1394-live-promotion-candidate-2026-09-10-001-INDEPENDENT_PACKET_REVIEW.md",
+        "review_sha256": "0275e3c256ed1c6c3ff66c63399593e628d61b724803af83f2809ad683323207",
+        "seven_artifact_acceptance_bindings": {
+          "evidence_manifest_sha256": "f7105c935499a455007d73e77bca38fc9e4cb249155312d2397445f4b4ff7e29",
+          "motion_telemetry_manifest_sha256": "d4f8a57b8e456641707b000ad997a96162399b6c5322f0fb0bdf56f49a60ff07",
+          "visual_motion_manifest_sha256": "c468c4f930e09a063e3018aa2b5c44ce70248f83db6f920a3033de8961e37a86",
+          "package_verification_receipt_sha256": "6d83381a3cf12ff706f1d47be276781581be77edeb9a2f910e8f23a155f5a5f6",
+          "evidence_tree_sha256": "f809a431e5d4bf53d94608a99900d4a17734bca79b28280150fd88ce5f51b934",
+          "mechanical_review_receipt_sha256": "606f8e066e3a07124e50c6f23b69d04f02b1efeb8dfb85381e23de58b07f3214",
+          "review_receipt_sha256": "0275e3c256ed1c6c3ff66c63399593e628d61b724803af83f2809ad683323207"
+        },
+        "acceptance_paths": {
+          "evidence_manifest_sha256": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001/capture-manifest.json",
+          "motion_telemetry_manifest_sha256": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001/motion-telemetry.json",
+          "visual_motion_manifest_sha256": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001/visual-motion.json",
+          "package_verification_receipt_sha256": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001/package-verification-receipt.json",
+          "mechanical_review_receipt_sha256": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001/mechanical-review.json",
+          "evidence_tree_sha256": "evidence/first-playable/d5-1394-live-promotion-candidate-2026-09-10-001/evidence-tree.json#tree_sha256",
+          "review_receipt_sha256": "evidence/reviews/d5-1394-live-promotion-candidate-2026-09-10-001-INDEPENDENT_PACKET_REVIEW.md"
+        },
+        "image_tree_document_sha256": "82860fc782b420010698684502bfff36625d60f74fd8a56843ef70131d824729",
+        "candidate_closure_sha256": "f5a54f67703c948ae27df3d7176ae1f2078178e7a5d2a7a1d93bbf4aede7a7a6",
+        "assembly_handoff_sha256": "9ce5cd4dbf1e7de7b747f3303f4be53c947e4c95662d5611d85898f824a98beb",
+        "final_packet_check_sha256": "3bcc828944d02b9ac79cbd049474b774dacd29b4099040f22bfedd82675d6333",
+        "current_recognition": "11/213",
+        "capture_time_recognition_metric": "11/213 for selected live originals; older study scope historical",
+        "credit_granted": false,
+        "promotion_performed": false,
+        "missing_items": [],
+        "retro": "review_1439_package — Independent 1308 and 1394 final packets: Verified separate literal seven-field maps, 14 and 22 exact native image copies, 1,758 shared private retained files and all 484 original MJPEG payload slices. Reused the accepted same-app package and per-unit source/mechanics/visual decisions; mounted target components remain distinct from signed whole-main coverage. Preserve 1308 pre-trim feature-only views, its 06 orientation residual, both units’ raw contact failures and sampled/RIFF limits. New unit-specific seventh attestations bind the actual image trees without rewriting historical reviews or granting credit. The initial generic capture-envelope comparison was inapplicable to the declared selected-image index; exact nested manifests and projections resolved it without packet edits. No engine, app, source or authority changes performed."
+      },
+      "image_tree_document_sha256": "82860fc782b420010698684502bfff36625d60f74fd8a56843ef70131d824729",
+      "image_tree_digest": "f809a431e5d4bf53d94608a99900d4a17734bca79b28280150fd88ce5f51b934",
+      "selected_public_images": 22
+    }
+  ],
+  "current_loaded_topology": [
+    735,
+    993,
+    1008,
+    76376,
+    466,
+    472
+  ],
+  "source_rendering_lineage": "Accepted unit factory/material arrays are retained through the combined builder and current-authority transfer. The combined source contract verified both emitted attachments; current package uses exactly those products. Per-unit isolated totals stay historical, not relabeled as combined measurements.",
+  "limits": [
+    "No new current-app gameplay pixels, continuous video playback, M1 or manual-input acceptance.",
+    "1308 retains feature-only pre-trim context, corrected3still/nine-sample trim evidence and06forwardY residual1.9371509552e-7; no literal exact-forward claim for06.",
+    "Original contact/aim/capture/helper/registry failures, blue shutdown frames, native AVI trailing-index discrepancy and scoped support-ownership limits remain.",
+    "1394 retains its scoped ground-module/current-world and sampled visual evidence.",
+    "Prior11 accepted records, B1 extra pass and all213 identity/source/receiver/order invariants are retained by exact two-transition checks; no other unpromoted unit gains credit."
+  ]
+}

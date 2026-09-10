@@ -8,24 +8,19 @@ behaves correctly as a continuous jetpack. The exact movement change in current
 source keeps walking at `4 m/s` and raises the same held-Shift run from
 `7 m/s` to `20 m/s` (about 45 mph), with a short acceleration/braking
 ramp. That change still needs ordinary-play feedback in the exact current
-package. Current authority is compiler `1.10.0`, catalog/registry v11 and contracts/loader v10, with **11/213** recognized physical buildings. 1444 Croaker Court adds one unit; the previous ten credits remain unchanged.
-Owner and independent current-package checks passed. The exact no-argument app created an owned visible native window, then was intentionally stopped; all app/source bytes remained exact. Computer Use reported an unconfigured node bridge and pending Accessibility/Screen Recording permissions, so no gameplay pixels or manual-input acceptance is claimed. [Ordinary launch evidence](evidence/first-playable/d2-1444-quality-v2-current-release-2026-09-09-001/ordinary-launch.json). Publication readiness passed, and primary commit [b854625](evidence/first-playable/d2-1444-quality-v2-current-release-2026-09-09-001-PUBLICATION.json) was pushed to private `origin/main`; remote equality was verified. The immutable release closure above retains its earlier pending state; this downstream record supplies the observed outcome.
-The unit's native evidence remains at captured9/213, its candidate app at10/213, and motion review is sampled. No technical result establishes ordinary owner acceptance on the approved Apple M1 Pro.
+package. Current authority is compiler `1.12.0`, catalog/registry v13 and contracts/loader v12, with **13/213** recognized physical buildings. 1308 and 1394 add one unit each; the prior eleven remain unchanged.
+Owner and independent current-package checks passed on the same app; its bytes and source were copied to main. [Current release closure](evidence/first-playable/d5-1308-1394-current-release-2026-09-10-001/release-closure.json). Ordinary no-argument launch, publication review and Git publication are pending; signed technical smoke is not ordinary owner input. Both unit packets retain capture/candidate 11 and sampled motion. No technical result establishes owner acceptance on Apple M1 Pro.
 
 ## Start
 
-First quit any older game window (`Esc`, then `Q` while paused); macOS may
-otherwise focus a historical copy. The current app is
-`build/d2-1444-quality-v2-current-2026-09-09-001/Treasure Island First Playable.app`.
-Use no launch arguments for owner play. The project selects the case-sensitive
-`Dummy` audio driver itself. The historical B1, D2 candidate and earlier apps
-have separate identities and do not represent this current authority.
+First quit any older game window (`Esc`, then `Q` while paused); macOS may otherwise focus a historical copy. The current app is
+`build/d5-1308-1394-exact-current-001/Treasure Island First Playable.app`.
+Use no launch arguments for owner play. The project selects the case-sensitive `Dummy` audio driver itself. Historical B1, D2 and candidate11 apps have separate identities.
 
-Executable SHA-256 `a5a85e48fbd890e661d04a1e191bfe1280141c01c0212cc6fb4fd10591a90c4f` (`170,963,648` bytes),
-PCK SHA-256 `c010390dcfe213134445a352facd0720283818edd279e72851f17af83bcc426c` (`66,708,800` bytes),
-seven-file bundle identity `07fe27f678be4c7d71de77b42a79c6b8c46491034eb6c80a2b3e00eed097b4e6`.
-The [current release closure](evidence/first-playable/d2-1444-quality-v2-current-release-2026-09-09-001/release-closure.json) records the actual technical gates
-and the actual ordinary-window observation. Primary publication is confirmed in the downstream outcome; owner feedback stays pending against these exact bytes.
+Executable SHA-256 `2dd0e797cf26365109293196c4a9f7e217b80c872832042bfdb63db3e4d7aad5` (`170,963,648` bytes),
+PCK SHA-256 `e3c5c529efc54be1af383cafba678a0130fbd2157524e4d8cf1e3217217de85f` (`66,881,616` bytes),
+seven-file bundle identity `2d61652aedcc14f4ddd4fdda0a458037758b5ae103cecf59aaa8b7a998159e6c`.
+The [current release closure](evidence/first-playable/d5-1308-1394-current-release-2026-09-10-001/release-closure.json) binds technical gates; ordinary launch and publication remain pending, and owner feedback stays pending against these bytes.
 
 ### Historical B225 package identity (not current playtest bytes)
 

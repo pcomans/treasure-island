@@ -1,0 +1,127 @@
+{
+  "schema_version": "ti.d5-native-image-tree/1",
+  "tree_scope": "Exactly22 selected exact native-image copies; no manifests/reviews/receipts or this document.",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "f809a431e5d4bf53d94608a99900d4a17734bca79b28280150fd88ce5f51b934",
+  "files": [
+    {
+      "path": "images/current-stills/01-whole-default.png",
+      "sha256": "b68aa6e29f490f53fe1e2563fe54144ef35605089f9e981dfbac3b09ccf569cb",
+      "bytes": 970119
+    },
+    {
+      "path": "images/current-stills/02-whole-changed.png",
+      "sha256": "6bd0225fca6eceb4f1f710fafb7fcbe26abce13a130c45b75782923a49103799",
+      "bytes": 975036
+    },
+    {
+      "path": "images/current-stills/run-15-station-8.447-ground-junction.png",
+      "sha256": "4524506b48e099ca4ce8dc711504fed8420dc7da32bf81c6580d7f67b0ce4d90",
+      "bytes": 1574530
+    },
+    {
+      "path": "images/current-stills/run20-door-grounded-under-canopy.png",
+      "sha256": "a09849368239822b9a8cd9fc318953b932184938bc19902778ec69298bc9b666",
+      "bytes": 610115
+    },
+    {
+      "path": "images/current-stills/run20-privacy_panel-grounded-under-canopy.png",
+      "sha256": "fc97023d857a88fc8d4c89eecd5b8160aeee112340fd40ba2b618316cfee193e",
+      "bytes": 615489
+    },
+    {
+      "path": "images/motion-samples/avi-index-0000.jpg",
+      "sha256": "1bc173ccfef2116f385b1421fb2a96fbdd026d293986bc7b94412c85976f05eb",
+      "bytes": 59576
+    },
+    {
+      "path": "images/motion-samples/avi-index-0020.jpg",
+      "sha256": "9033cebd2253b819e24ea9b81e6a5c1298d9d246d0180f852b1e3253fa2fbd27",
+      "bytes": 63403
+    },
+    {
+      "path": "images/motion-samples/avi-index-0030.jpg",
+      "sha256": "9033cebd2253b819e24ea9b81e6a5c1298d9d246d0180f852b1e3253fa2fbd27",
+      "bytes": 63403
+    },
+    {
+      "path": "images/motion-samples/avi-index-0040.jpg",
+      "sha256": "f92af1064418700ab259c9b165909e5e1f8be311ebc7288d4adb9e0d733c7f60",
+      "bytes": 61295
+    },
+    {
+      "path": "images/motion-samples/avi-index-0050.jpg",
+      "sha256": "6aaee4edb22a4926692e129f947b30265c53a45de4070428581210dc84d64321",
+      "bytes": 62567
+    },
+    {
+      "path": "images/motion-samples/avi-index-0060.jpg",
+      "sha256": "7bcfba17317e79a697004404d647f8e6ba20b7e72f5e20601106b0cd1d929f94",
+      "bytes": 62298
+    },
+    {
+      "path": "images/motion-samples/avi-index-0070.jpg",
+      "sha256": "4827c2900b91a4842d0d964fd3f22bd6f9964ce551f8cc2eb5a5b57a915288b2",
+      "bytes": 50037
+    },
+    {
+      "path": "images/motion-samples/avi-index-0080.jpg",
+      "sha256": "85a7c0045a005232a15d2d0dc1a40836c5592700abca4fa2b5af7d6de703288f",
+      "bytes": 50551
+    },
+    {
+      "path": "images/motion-samples/avi-index-0090.jpg",
+      "sha256": "41377d7e18b6e97d32d690fc6fc76ce0024962b7bcaf0ea990072bd19ae23021",
+      "bytes": 59597
+    },
+    {
+      "path": "images/motion-samples/avi-index-0100.jpg",
+      "sha256": "6b3abda0908c29f3a70d4206b90a1d639838efd5bc6c6e341c5d06f31ae1fa14",
+      "bytes": 60849
+    },
+    {
+      "path": "images/motion-samples/avi-index-0110.jpg",
+      "sha256": "53262309486c38f1db5ef6ac7d896ee54e1e66a2f7838f5fecec0407c83548ed",
+      "bytes": 62549
+    },
+    {
+      "path": "images/motion-samples/avi-index-0120.jpg",
+      "sha256": "d70af8028a8f8bb1d50510fa68d0e8850ee133aed3a3092db4492ea97ded3769",
+      "bytes": 61859
+    },
+    {
+      "path": "images/motion-samples/avi-index-0130.jpg",
+      "sha256": "e61cf6d02a9d672368a05e6090f0f6a2390bc9e0ffb048a9e6a7ffa63b401cda",
+      "bytes": 51514
+    },
+    {
+      "path": "images/motion-samples/avi-index-0140.jpg",
+      "sha256": "549638280ca956b90f1fa59fe7a01befa7d1dbc1c39ff38a79fa4d75233cd8c4",
+      "bytes": 51799
+    },
+    {
+      "path": "images/motion-samples/avi-index-0150.jpg",
+      "sha256": "babd58ebbe9e48ca97023c706dce24c89cd19afbe67b262a0c3e79fb1c5cdf8e",
+      "bytes": 61645
+    },
+    {
+      "path": "images/motion-samples/avi-index-0158.jpg",
+      "sha256": "36b461cbe2b7f4e0d4d8e72c70a702c9104946b597d91f3af3c3236ab743cf35",
+      "bytes": 62180
+    },
+    {
+      "path": "images/motion-samples/avi-index-0160.jpg",
+      "sha256": "36b461cbe2b7f4e0d4d8e72c70a702c9104946b597d91f3af3c3236ab743cf35",
+      "bytes": 62180
+    }
+  ],
+  "truth_boundary": {
+    "recognition_metric": "11/213",
+    "capture_time_recognition_metric": "11/213 for selected live originals; older study metrics stay historical",
+    "recognition_credit": false,
+    "additional_recognition_credit": false,
+    "promotion": false,
+    "inventory_physical_units": 213,
+    "source_render_images_are_package_pixels": false
+  }
+}
