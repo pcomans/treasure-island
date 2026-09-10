@@ -44,6 +44,8 @@ In the rejected Hawkins experiment, two partial edge fragments joined into a nar
 
 ## Absolute art gate
 
+For a named building's recognition/fidelity decision, inspect actual dated exterior-reference images (such as Street View) alongside the native gameplay captures. Confirm target identity and comparable visible side/angle scope; record the source URL, image date and meaningful viewpoint or historical limits. Written observations supplement this direct comparison. If reference pixels cannot be inspected, leave the affected recognition/fidelity claim unresolved rather than passing from notes alone. Identical cameras and exhaustive views of protected or unobserved faces are unnecessary; do not invent hidden detail. Follow existing source access and retention rules: direct inspection does not require or authorize storing third-party imagery in the repository or using it as game assets.
+
 Judge against the researched target and the intended gameplay view:
 
 - Does the candidate read as the declared material, coating, finish, relief scale, and weathering state?
@@ -55,7 +57,7 @@ Judge against the researched target and the intended gameplay view:
 - If count, cadence, dimensions, or anchors are inferred, are they plausible, reversible, clearly labeled, within the identified region, and not contradicted by the reference observations? Missing survey data alone is not an art failure.
 - For a named building, does the combined view read recognizably and remain honest about its evidence status? Report geometry/massing mismatches separately and route them out instead of painting around them.
 
-A gray placeholder may be shown at the same pose as a diagnostic baseline, but “better than gray,” “more detailed,” a green automated test, or a single attractive isolated tile is never acceptance evidence. Grade game-art recognizability separately from as-built fidelity; the former may pass while the latter remains explicitly unclaimed.
+A gray placeholder may be shown at the same pose as a diagnostic baseline, but “better than gray,” “more detailed,” a green automated test, or a single attractive isolated tile is never acceptance evidence. Report visible reference matches and substantive gaps separately from finish and mechanical results. Unresolved substantive fidelity gaps keep whole-unit acceptance open; a scoped finish PASS does not clear them. Game-art acceptance need not claim survey-level as-built precision, but production inference cannot excuse a visible contradiction of the reference.
 
 Review the first coherent native source-project result early; export is not a prerequisite for this art decision. Earlier accepted assets are a floor, so require substantive target recognition, coherent composition and believable geometry at ordinary play distance. Inspect actual originals, not only manifests. Describe sampled motion as sampled, and do not imply continuous playback, current-package imagery or a changed source binding from historical captures. Keep each target's verdict separate when package runs are later shared across a batch. For a timed edit-to-verdict task, deliver an explicit visual decision within the recorded task boundary; a save/readback receipt alone is not that decision.
 
