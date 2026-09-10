@@ -6,7 +6,7 @@ This directory separates reproducible automated proof, native-launch proof, auto
 
 ## Current 1308+1394 fidelity004 quality release — 2026-09-10
 
-The [quality release closure](d5-1308-1394-quality-current-release-2026-09-10-001/release-closure.json) binds **13/213**, zero new credit, actual signed world `735/1006/1021/79,913/466/474` and the owner/independently verified seven-file app. The separate immutable unit packets retain 17/14 original images, actual1308 roof motion and three current1394 palette stills with unchanged003 motion. These are source images, with their original sampled/contact limits; package smoke supplies no new pixels. Publication and ordinary no-argument launch for these bytes are pending. HUMAN-001 owner/M1 feedback remains pending.
+The [quality release closure](d5-1308-1394-quality-current-release-2026-09-10-001/release-closure.json) binds **13/213**, zero new credit, actual signed world `735/1006/1021/79,913/466/474` and the owner/independently verified seven-file app. The separate immutable unit packets retain 17/14 original images, actual1308 roof motion and three current1394 palette stills with unchanged003 motion. These are source images, with their original sampled/contact limits; package smoke supplies no new pixels. Primary commit `cb28dc4d4e873bb7f000c6976a87bb3c2e4ffc5d` was pushed to private `origin/main` with remote equality verified. [Publication outcome](d5-1308-1394-quality-current-release-2026-09-10-001-PUBLICATION.json). Ordinary no-argument launch for these bytes remains pending. HUMAN-001 owner/M1 feedback remains pending.
 
 ## Historical 1308+1394 initial recognition release — 2026-09-10
 

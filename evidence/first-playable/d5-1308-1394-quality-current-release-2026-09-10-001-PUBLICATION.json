@@ -1,0 +1,153 @@
+{
+  "derived_downstream_publication_outcome": true,
+  "status": "PRIMARY_COMMITTED_AND_PUSHED_REMOTE_EQUAL_ORDINARY_LAUNCH_NOT_RUN",
+  "primary_commit": "cb28dc4d4e873bb7f000c6976a87bb3c2e4ffc5d",
+  "parent_commit": "87fbb93fec11892e5f325a66f601af0bd925792f",
+  "subject": "Improve Gateview roof fidelity and preserve review learnings",
+  "copy_files": 806,
+  "committed_files": 94,
+  "all94_committed_blobs_match_accepted_index": true,
+  "copy": {
+    "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/COPY_RESULT.json",
+    "sha256": "6b5692ef7653d763c19cdb7bad27013b621d71bcea1a039b8d1bffd902d4e2e1",
+    "bytes": 529
+  },
+  "staging": {
+    "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/STAGE_RESULT.json",
+    "sha256": "8fc9e79ea8a474dc312fff3fc3054012513be819629bddc7d2fb8d53867f4719",
+    "bytes": 9879
+  },
+  "primary_commit_receipt": {
+    "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/PRIMARY_COMMIT.json",
+    "sha256": "b47ca20388fe166dbb2b3244ea7f74698e45a7d0df2fe2c7aa14439ab5af5c88",
+    "bytes": 9530
+  },
+  "primary_push_receipt": {
+    "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/PRIMARY_PUSH.json",
+    "sha256": "74edab07613c3b040ddb1fc18945360f330aad830babf5c551a41013a252c623",
+    "bytes": 585
+  },
+  "remote_equality_receipt": {
+    "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/REMOTE_EQUALITY.json",
+    "sha256": "fd35d980ac05e3253e98b998b1a717e92627282af27e5bd6cb722261acd95afb",
+    "bytes": 899
+  },
+  "private_remote": "origin/main",
+  "remote_head_observed": "cb28dc4d4e873bb7f000c6976a87bb3c2e4ffc5d",
+  "main_index_empty_after_primary": true,
+  "private_and_incidental_paths_not_committed": true,
+  "original_dirty_retro_preserved_unstaged": true,
+  "config_hooks_unchanged": true,
+  "command_local_route": "git -c core.hooksPath=/dev/null commit/push; no persisted config or hook changes, no amend or force",
+  "upstream_closure": {
+    "path": "evidence/first-playable/d5-1308-1394-quality-current-release-2026-09-10-001/release-closure.json",
+    "sha256": "f7bb7fa7725b3590eb6d487df7621ff75d1cd2bca282f121cffcb98925a25566",
+    "pending_snapshot_preserved": true
+  },
+  "app_relative_path": "build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app",
+  "bundle_identity_sha256": "d6239ccdb089b01b6ce6839bf393de3ecf8c63f40167a26b79b68c6f73f91e27",
+  "pck_sha256": "06f7e4778f791adbf512a16cd6e6900f288ea7d8c41ad53edafc85ad2a8c2be7",
+  "app7_exact_after_publication": true,
+  "current_world": [
+    735,
+    1006,
+    1021,
+    79913,
+    466,
+    474
+  ],
+  "recognition_metric": "13/213",
+  "numerator_effect": 0,
+  "ordinary_launch": "not run for these bytes; no engine assigned or launched during publication",
+  "current_app_pixels": "not supplied by this publication or package smoke",
+  "HUMAN_001": "pending; ordinary owner recognition/manual input on Apple M1 Pro remains unchanged",
+  "raw_originals": [
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/CONFIG_HOOKS_BEFORE.json",
+      "sha256": "a7664faca56428425802c9c62c134e269f467e92eb42c8ed1d02be40d107cef6",
+      "bytes": 3370
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/primary-commit-message.txt",
+      "sha256": "8d54a3d68de1d2fd2fafae0a0f31667f3dd4fc1ff49dc1b035f302c1c7ddb9cd",
+      "bytes": 61
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/PRIMARY_COMMIT.json",
+      "sha256": "b47ca20388fe166dbb2b3244ea7f74698e45a7d0df2fe2c7aa14439ab5af5c88",
+      "bytes": 9530
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/primary-commit.stdout",
+      "sha256": "3bf6d04e07095ce8871f330a21ac47bee42b4ef71e3826ba16509c2e84545102",
+      "bytes": 8603
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/primary-commit.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/PRIMARY_PUSH.json",
+      "sha256": "74edab07613c3b040ddb1fc18945360f330aad830babf5c551a41013a252c623",
+      "bytes": 585
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/primary-push.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/primary-push.stderr",
+      "sha256": "0aba69c14dc899ba9745983c4aa9bc2ed57e5b116220019a690d22c4cd1dd69c",
+      "bytes": 84
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/REMOTE_EQUALITY.json",
+      "sha256": "fd35d980ac05e3253e98b998b1a717e92627282af27e5bd6cb722261acd95afb",
+      "bytes": 899
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/remote-head.stdout",
+      "sha256": "fb808c253033cb5a0bde37edb0d9ac9e2787fe5e52a5a4f94f43394bea5daf25",
+      "bytes": 57
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/remote-head.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/COPY_RESULT.json",
+      "sha256": "6b5692ef7653d763c19cdb7bad27013b621d71bcea1a039b8d1bffd902d4e2e1",
+      "bytes": 529
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/STAGE_RESULT.json",
+      "sha256": "8fc9e79ea8a474dc312fff3fc3054012513be819629bddc7d2fb8d53867f4719",
+      "bytes": 9879
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/STAGED_HANDOFF.json",
+      "sha256": "0697b8791ae9c6e0b04a525d230a0c7226449adf21204375fa8d46898d459022",
+      "bytes": 31979
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/copy-plan.json",
+      "sha256": "a800bf2a2371d7788da4aff9e67e0c1ccf83e13ddd66b8a76b1656656f1b7072",
+      "bytes": 479272
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/copy-and-stage.py",
+      "sha256": "67bb04be7a431a8c9e0d2ecb070ed0b183bfc6cbcf5efd8c7f4fd9c98baefc1f",
+      "bytes": 4249
+    },
+    {
+      "path": "build/d5-1308-1394-quality-current-provenance-2026-09-10-001/publication-outcomes/stage-paths.nul",
+      "sha256": "85422b17923859006f73049873e0440a3d1b491dad5ecb82be03d755e540be8b",
+      "bytes": 8357
+    }
+  ],
+  "failures": "No new commit/push failure. Existing compiler, binder and candidate setup failures remain in their immutable upstream archives.",
+  "scope": "This downstream record supplies actual primary copy/commit/push outcomes. It does not claim its own later documentation commit or an ordinary launch."
+}

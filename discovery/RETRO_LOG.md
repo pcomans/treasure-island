@@ -12623,3 +12623,8 @@ D / review_1303_source — Independent exact-current 1308/1394 quality package P
 ### release_1308_1394_batch — Final MAIN integration preparation
 
 release_1308_1394_batch — Prepared the exact reviewed two-unit quality products, generated authority, separate immutable packets and private app/provenance copy allowlist for MAIN. Current documentation now targets the independently accepted 79,913-triangle app while retaining13/213 and original release history. The staged RETRO keeps MAIN’s existing dirty prefix and appends original candidate notes plus D’s exact final preparation/release notes once. LEARNINGS records the repeated incomplete parser/helper reuse with original failure evidence. Preparation uses only file comparison/copy planning; no source/app mutation, engine replay, MAIN/Git action or publication claim. Next step is root’s concrete diff/plan review, then exact byte transfer and explicit staging.
+
+
+### release_1308_1394_batch — Primary quality publication
+
+release_1308_1394_batch — Published the exact reviewed 94-file quality batch as cb28dc4d4e873bb7f000c6976a87bb3c2e4ffc5d to private origin/main. Copy806, explicit staging94 and cached diff-check passed; all committed blobs match the accepted index, app7 remains exact and fresh ls-remote confirms equality. The established command-local hook override completed commit/push once without failure, retries or persisted config/hook changes. Preserved the unrelated dirty RETRO and four incidental UIDs, with all private originals/apps excluded. Retained copy/publication receipts separately from the unchanged upstream pending closure. No engine, ordinary launch or successful validation replay. Keep downstream outcome updates concise and stage only this new documentation append.
