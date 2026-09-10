@@ -13,3 +13,11 @@ Keep this a short, living guide to mistakes worth preventing. Update an applicab
 ## Inspect the early coherent render before extended proof work
 
 Bring the first coherent actual source render to the separate visual reviewer before extended refinement, proof collation or release packaging. Resolve visible form and composition problems while the change is small. Keep required independent gates and batch delivery checks; reuse unchanged evidence with its original scope.
+
+**Adopted future experiment, still unmeasured:** after identity, construction and world readiness pass, existing planned stills may continue despite explicitly nonfatal post-load diagnostics. Keep the complete diagnostic, `ok:false`, exit1 and HOLD; fatal boundaries remain unchanged. For the next eligible invocation, observe whether planned PNGs survive in that same failed run and whether a later launch is needed solely to recover pixels. The 006 retry does not establish that this experiment worked.
+
+## Validate the representation actually consumed
+
+1303 roof005 passed emission, edge and collision-congruence checks despite self-crossing rings and overlapping near-coplanar triangles. Validate final rings after cleanup/grid conversion, then check coverage, overlaps and intended bounds in actual emitted native coordinates. Matching authored triangles or closed edges alone does not establish a valid surface. Distinguish a deliberate height transition with closure from duplicate surface coverage; keep checks focused on the affected geometry and preserve original failures.
+
+1303 material006's first aggregate array FAIL did not identify a channel. Later evidence isolated NORMAL as the raw/runtime difference; POSITION, NORMAL, UV and INDEX all matched when compared in the same runtime representation. For preservation checks, compare like-for-like representations and record each channel's result before attributing drift. Retain the original FAIL and its uncertainty; later diagnosis must not rewrite it or certify unrelated topology. Routine receipts and timings stay in RETRO.
