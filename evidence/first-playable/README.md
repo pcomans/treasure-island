@@ -6,7 +6,7 @@ This directory separates reproducible automated proof, native-launch proof, auto
 
 ## Current 1308+1394 exact-current release — 2026-09-10
 
-The [release closure](d5-1308-1394-current-release-2026-09-10-001/release-closure.json) binds **13/213**, world `735/993/1008/76,376/466/472` and the owner/independently verified seven-file app copied exactly into main. Ordinary launch, publication readiness and Git outcomes remain pending; HUMAN-001 owner feedback remains pending.
+The [release closure](d5-1308-1394-current-release-2026-09-10-001/release-closure.json) binds **13/213**, world `735/993/1008/76,376/466/472` and the owner/independently verified seven-file app copied exactly into main. Publication readiness passed, primary `001ab0a` was pushed with remote equality, and the exact no-argument app showed an owned onscreen window before its intentional stop. Computer Use returned no pixels; current permissions were not determined. [Observed outcome](d5-1308-1394-current-release-2026-09-10-001-PUBLICATION.json). HUMAN-001 owner feedback remains pending.
 
 Separate [1308](d5-1308-live-promotion-candidate-2026-09-10-001/candidate-closure.json) and [1394](d5-1394-live-promotion-candidate-2026-09-10-001/candidate-closure.json) packets and their seventh attestations preserve capture/candidate 11,36 selected native images, original failures and sampled motion. No new exported-app pixels or unchanged full-frame equality is claimed.
 

@@ -9,7 +9,7 @@ source keeps walking at `4 m/s` and raises the same held-Shift run from
 `7 m/s` to `20 m/s` (about 45 mph), with a short acceleration/braking
 ramp. That change still needs ordinary-play feedback in the exact current
 package. Current authority is compiler `1.12.0`, catalog/registry v13 and contracts/loader v12, with **13/213** recognized physical buildings. 1308 and 1394 add one unit each; the prior eleven remain unchanged.
-Owner and independent current-package checks passed on the same app; its bytes and source were copied to main. [Current release closure](evidence/first-playable/d5-1308-1394-current-release-2026-09-10-001/release-closure.json). Ordinary no-argument launch, publication review and Git publication are pending; signed technical smoke is not ordinary owner input. Both unit packets retain capture/candidate 11 and sampled motion. No technical result establishes owner acceptance on Apple M1 Pro.
+Owner and independent current-package checks passed on the same app; its bytes and source were copied to main. [Current release closure](evidence/first-playable/d5-1308-1394-current-release-2026-09-10-001/release-closure.json). Publication readiness passed. Primary commit `001ab0acdd3f8e049060b409b3857f36d7b889f3` was pushed to private `origin/main` with remote equality verified. The exact no-argument app produced an owned onscreen native window and was then intentionally stopped; app/source bytes remained exact. Computer Use RPC failed and the direct observation was cancelled without a result, so pixels and current permission status are unavailable. No manual-input or M1 acceptance is claimed. [Observed publication and launch outcome](evidence/first-playable/d5-1308-1394-current-release-2026-09-10-001-PUBLICATION.json). The immutable upstream closure retains its earlier pending state. Both unit packets retain capture/candidate 11 and sampled motion. No technical result establishes owner acceptance on Apple M1 Pro.
 
 ## Start
 
@@ -20,7 +20,7 @@ Use no launch arguments for owner play. The project selects the case-sensitive `
 Executable SHA-256 `2dd0e797cf26365109293196c4a9f7e217b80c872832042bfdb63db3e4d7aad5` (`170,963,648` bytes),
 PCK SHA-256 `e3c5c529efc54be1af383cafba678a0130fbd2157524e4d8cf1e3217217de85f` (`66,881,616` bytes),
 seven-file bundle identity `2d61652aedcc14f4ddd4fdda0a458037758b5ae103cecf59aaa8b7a998159e6c`.
-The [current release closure](evidence/first-playable/d5-1308-1394-current-release-2026-09-10-001/release-closure.json) binds technical gates; ordinary launch and publication remain pending, and owner feedback stays pending against these bytes.
+The [current release closure](evidence/first-playable/d5-1308-1394-current-release-2026-09-10-001/release-closure.json) binds technical gates; the downstream outcome confirms primary publication and the owned ordinary window, with no pixels or manual input. Owner feedback stays pending against these bytes.
 
 ### Historical B225 package identity (not current playtest bytes)
 

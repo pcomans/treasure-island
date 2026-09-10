@@ -1,0 +1,230 @@
+{
+  "status": "PRIMARY_CURRENT13_PUBLISHED_ORDINARY_OWNED_WINDOW_OBSERVED_PIXELS_UNAVAILABLE_APP_STOPPED",
+  "derived_downstream_observed_outcomes": true,
+  "upstream_release_closure": {
+    "path": "evidence/first-playable/d5-1308-1394-current-release-2026-09-10-001/release-closure.json",
+    "sha256": "90add4edd129b5ff5f6f274a2879e568851509f52c005f5d568e0f43b9a0698c",
+    "state_note": "The immutable upstream closure and ordinary-launch placeholder retain their pre-publication pending state. This separate observed-outcome record updates the user-facing status."
+  },
+  "recognition_metric": "13/213",
+  "primary_commit": "001ab0acdd3f8e049060b409b3857f36d7b889f3",
+  "primary_push": "PASS, private origin/main, normal fast-forward/no force",
+  "primary_remote_equality_at": "2026-09-10T03:03:57.641093+00:00",
+  "primary_index_files": 106,
+  "index_bytes": "All106 match exact reviewed105 plus separately enumerated review summary and RETRO append.",
+  "staged_whitespace_diagnostics": "Three pre-existing blank lines at EOF in accepted new source files retained; cached diff-check exit2 was explicitly accepted by root. Earlier unstaged diff-check did not cover these new files. Do not call the staged whitespace check clean.",
+  "git_hook_scope": "Primary commit succeeded with existing missing-git-lfs post-commit warning. Normal push reused the established command-local hooksPath=/dev/null override after every outgoing path was verified non-LFS; all config/hooks remained byte-exact.",
+  "publication_review": {
+    "status": "PASS",
+    "raw_review_sha256": "738a927e7227d083b13c60c82f9ed795d450dffd9e7551618c152c8bae55887d",
+    "raw_json_sha256": "1f6e1e2f56b8d16efcefb9dc04274e18010862ce369b3d637d6ebd9abcbb5d7e",
+    "scope": "Original105 file-only freeze; later summary/RETRO explicitly enumerated."
+  },
+  "ordinary_launch": {
+    "status": "owned onscreen window observed; pixels unavailable; intentionally stopped",
+    "app_relative_path": "build/d5-1308-1394-exact-current-001/Treasure Island First Playable.app",
+    "argv": [
+      "build/d5-1308-1394-exact-current-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
+    ],
+    "argument_count": 0,
+    "cwd": "{PRIVATE_TMP}/d5-1308-1394-current13-ordinary-launch-001",
+    "cwd_was_empty": true,
+    "owned_pid": 93987,
+    "session_id": 91762,
+    "actual_executable_verified": true,
+    "started_utc": "2026-09-10T03:05:26.574780+00:00",
+    "ended_utc": "2026-09-10T03:07:59.306828+00:00",
+    "elapsed_seconds": 152.741,
+    "window": [
+      {
+        "kCGWindowAlpha": 1,
+        "kCGWindowBounds": {
+          "Height": 832,
+          "Width": 1280,
+          "X": 320,
+          "Y": 97
+        },
+        "kCGWindowIsOnscreen": true,
+        "kCGWindowLayer": 0,
+        "kCGWindowMemoryUsage": 2368,
+        "kCGWindowNumber": 36508,
+        "kCGWindowOwnerName": "Treasure Island First Playable",
+        "kCGWindowOwnerPID": 93987,
+        "kCGWindowSharingState": 0,
+        "kCGWindowStoreType": 1
+      }
+    ],
+    "user_gameplay_input_injected": false,
+    "computer_use_route": "node_repl + @oai/sky module import succeeded, get_app_state failed: Trusted RPC service is not configured: sky. One same-plugin direct read returned no result and was explicitly cancelled before close.",
+    "permission_scope": "No current permission result returned; silence is not a permission diagnosis. No OS settings changes or other screenshot API used.",
+    "pixels": null,
+    "pixel_claim": false,
+    "stop": "Owned SIGTERM only, actual process exit−15; fresh ps absent.",
+    "log": "Empty stdout log; not used as proof of scene visuals.",
+    "app7_and_source247_package49_exact": true
+  },
+  "app_identity": {
+    "tree_sha256": "2d61652aedcc14f4ddd4fdda0a458037758b5ae103cecf59aaa8b7a998159e6c",
+    "pck_sha256": "e3c5c529efc54be1af383cafba678a0130fbd2157524e4d8cf1e3217217de85f",
+    "executable_sha256": "2dd0e797cf26365109293196c4a9f7e217b80c872832042bfdb63db3e4d7aad5"
+  },
+  "private_originals": [
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/DOWNSTREAM_ADDITIONS.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/DOWNSTREAM_ADDITIONS.json",
+      "sha256": "56a22b72d33ead5cba506c5e608f3d112bde05101681380d76706609b762b836",
+      "bytes": 4518
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/ORDINARY_SLOT_RELEASE.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/ORDINARY_SLOT_RELEASE.json",
+      "sha256": "d6b013bf0d2382d3948ab8636b7e981887144ac6200c2df252f0f4f7cc3d1371",
+      "bytes": 921
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/PRIMARY_COMMIT.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/PRIMARY_COMMIT.json",
+      "sha256": "ad7da8d1beb58495b77ef76152fbbc4b78d9e963f1dd7b49307f3ba5cf03faf7",
+      "bytes": 11159
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/PRIMARY_GIT_FILES.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/PRIMARY_GIT_FILES.json",
+      "sha256": "e07b9c9450da0f5daf24797da547eef05605c980ddb0d5fc11e9a261354f8925",
+      "bytes": 24567
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/PRIMARY_INDEX_CHECK.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/PRIMARY_INDEX_CHECK.json",
+      "sha256": "8fe7b157354c58501c801d25c93bf22d8a5cf86b9852e54ae71859767c1eb5f4",
+      "bytes": 66897
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/PRIMARY_PUSH.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/PRIMARY_PUSH.json",
+      "sha256": "e83bd79b13321b14540897808836473526d9fb1f1cf60a13bfedf9b9adb86eae",
+      "bytes": 6807
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/PRIMARY_REMOTE_EQUALITY.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/PRIMARY_REMOTE_EQUALITY.json",
+      "sha256": "52c64210be52fbde7fc8217039d5169ec60c98b7b8950adbfb57d06d1a5d15c5",
+      "bytes": 415
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/computer-use-direct-cancel.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/computer-use-direct-cancel.json",
+      "sha256": "62228b2b1627a2499c2c7e99954fbb27e481165e4dac00023539a4b451e627f3",
+      "bytes": 626
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/computer-use-node-failure.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/computer-use-node-failure.json",
+      "sha256": "8e6588b238262f3fb2f40f10b1b912e1ea4012e8a5b079740aea4f03d64abcea",
+      "bytes": 412
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/launch-reviewed-current-app.py",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/launch-reviewed-current-app.py",
+      "sha256": "f01ba5faf56bcda7f86b1c01928fd9bb796dd0da5df12278bbc7019ac6b40f45",
+      "bytes": 4047
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/ordinary-current-app.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/ordinary-current-app.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/ordinary-launch-pre-ui.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/ordinary-launch-pre-ui.json",
+      "sha256": "fa9bee5800321552e66ee37c790c3e3419f1b6c08a8414c4d2e80eead3bd518a",
+      "bytes": 305
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/ordinary-launch-start.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/ordinary-launch-start.json",
+      "sha256": "0725f040a7dc79c9d7b82275969b914d34ddb12db80381919003a980eec70081",
+      "bytes": 58738
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/ordinary-launch-stop-request.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/ordinary-launch-stop-request.json",
+      "sha256": "40bde6203d43b36106245c7986011f0c279e7dd11b9f06f894ee0bb8e7451d14",
+      "bytes": 515
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/ordinary-launch-termination.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/ordinary-launch-termination.json",
+      "sha256": "779532c70a01a4a580a90a0a5637354391953a8e6d76df25a4c8d149310cb335",
+      "bytes": 56919
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/ordinary-owned-window-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/ordinary-owned-window-execution.json",
+      "sha256": "f8986c1096b915936d7bc87a7f574d32f23d358d28544242436fc26a304bbfdd",
+      "bytes": 623
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/ordinary-owned-window-stderr.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/ordinary-owned-window-stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/ordinary-owned-window.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/ordinary-owned-window.json",
+      "sha256": "d458883c55cb75cdade0efb0c3055fbd0c8690a3e8a209791ae1e1b325a532c4",
+      "bytes": 429
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/primary-commit-message.txt",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/primary-commit-message.txt",
+      "sha256": "eb18733e0fbc823ab755221a2a29d9dff984731615978b1097310e027752eed0",
+      "bytes": 305
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/primary-index-check-001-failure.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-batch-001/publication-001/primary-index-check-001-failure.json",
+      "sha256": "d007f4874de9b69773f42ace4d937e7921240006a8c12d924fcd7f06414de4e1",
+      "bytes": 1057
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-outcomes/owned-window.swift",
+      "original_locator_normalized": "{TASK_ROOT}/work/b1-v2-001/owned-window.swift",
+      "sha256": "1ec55968918a2466076486d13d894f67af8c04cbee52408c15852155b85555cb",
+      "bytes": 632
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-readiness/CHECK.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-main-publication-independent-001/CHECK.json",
+      "sha256": "d1fecd21bb0456dd6cf2232a4ae74beb0930efdec18974deabf50bd929b334f1",
+      "bytes": 2967
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-readiness/FINAL_CHECK.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-main-publication-independent-001/FINAL_CHECK.json",
+      "sha256": "21b976ad5d20c13df19895373a1d92a3a2b59e72bc8bd7442c5a0529e1bd9777",
+      "bytes": 3444
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-readiness/REVIEW.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-main-publication-independent-001/REVIEW.json",
+      "sha256": "1f6e1e2f56b8d16efcefb9dc04274e18010862ce369b3d637d6ebd9abcbb5d7e",
+      "bytes": 2350
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1308-1394-current13-provenance-2026-09-10-001/publication-readiness/REVIEW.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1308-1394-main-publication-independent-001/REVIEW.md",
+      "sha256": "738a927e7227d083b13c60c82f9ed795d450dffd9e7551618c152c8bae55887d",
+      "bytes": 5194
+    }
+  ],
+  "HUMAN_001": "Pending only owner recognition/manual input on Apple M1 Pro; unchanged scope. Technical M2 and observed window do not replace it.",
+  "unchanged_scope": [
+    "Prior11/B1/213 source identities; accepted unit packets and old failures; capture/candidate11 versus current13.",
+    "No export, compiler, engine-suite/signing/capture replay, app mutation, gameplay input or public distribution.",
+    "Four original incidental UIDs remain unstaged/excluded."
+  ],
+  "completion_publication": "This record does not bind its own future commit; final completion commit/push retained downstream in private handoff."
+}
