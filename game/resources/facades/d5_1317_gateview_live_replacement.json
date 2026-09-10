@@ -1,0 +1,61 @@
+{
+  "schema_version": "ti.d5-1317-gateview-live-replacement/1",
+  "adapter_id": "active-adapter:d5-1317-live:building:w95934125:wall",
+  "source_key": "w95934125",
+  "chunk_id": "x_-3__z_-2",
+  "chunk_sha256": "35bf23d64e860d39c5b79a98be7830f4f477143f7e9490c6739dec0627062d11",
+  "canonical_records": {
+    "building:w95934125:wall": "3537997ae045f8022bbe4c6449cec82655797411e417397d15ace85fedc3a6ef",
+    "building:w95934125:roof": "ae444960fc7ae2d8cae3a7fa28637ecd06b9c17d691d3c69c146564d5c6874ef",
+    "area:r17241151:x_-3__z_-2": "336bb7c5d763d853c19184da045cf4a114f25493ecf02a367ca1e0523d8bebd1",
+    "area:r17241152:x_-3__z_-2": "104faf44f5234729b0411e75595abeec1888f867d0efa6a3d765aaa4f93d991e",
+    "land:w26767313:x_-3__z_-2": "9ff2ddf4241136939a8dbe377679ef9f30e4c17e229b91ffbafc117c03d47c04"
+  },
+  "accepted_art002_files": {
+    "game/scripts/world/facades/d5_1317_gateview_quality_study.gd": "d43dd7045297c9c91bfac81006a189165f11b9a46de8ff537996f86e1d86dd68",
+    "game/resources/facades/d5_1317_gateview_quality_study.json": "33b54fb72cf829e933a0e386e984f6ffe9d9a7c9d335ecb034e779c12bf89a26",
+    "game/resources/facades/d5_1317_quality_study_geometry.json": "48ba2658a74b4e51ab43fb07b3940a737ffa351350081063c45908e878a5bcf9",
+    "game/resources/facades/d5_1317_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
+    "game/resources/facades/d5_1317_surface_tone.gdshader": "2388fbee5821352c30ec5925f4ff159439090c8cb1f4973344a947c65b4e4da0"
+  },
+  "accepted_static_review_sha256": "6eda0c3025624b6affeeafa686df46a8f4a26cef9a8d99d39bd921794026e94c",
+  "accepted_source_review_sha256": "ea189ed889128cb979d7e2a59511cb9d3c930471c527a2e7079311adba4ff787",
+  "pair_contract": {
+    "meshes": 14,
+    "surfaces": 14,
+    "triangles": 1938,
+    "bodies": 2,
+    "shapes": 5,
+    "collision_triangles": 1038,
+    "wall_shapes": [
+      68,
+      192,
+      648
+    ],
+    "roof_shapes": [
+      22,
+      108
+    ],
+    "eligible_source_wall_triangles": 68,
+    "ground_visual_only_triangles": 36,
+    "factory_calls": 1,
+    "partial_pair_allowed": false,
+    "fallback_allowed": false,
+    "stack_allowed": false
+  },
+  "truth_boundary": {
+    "captured_authority_metric": "13/213",
+    "candidate_credit": 0,
+    "runtime_attachment": true,
+    "production_attachment_review": "pending",
+    "recognition_accepted": false,
+    "as_built_claim": false,
+    "interior_modeled": false
+  },
+  "package_boundary": {
+    "source_photography": false,
+    "discovery_dependency": false,
+    "activation_flag": false,
+    "missing_pair_loaded_from_disk": false
+  }
+}

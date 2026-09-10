@@ -9,11 +9,17 @@ Scope: the repository and retained evidence for the approved private Treasure Is
 
 > **Historical-boundary notice:** the detailed 18-ID matrix, package rows, and
 > byte-specific measurements below are sealed point-in-time audits. They are
-> preserved rather than rewritten to describe later bytes. The 2026-09-10 quality
+> preserved rather than rewritten to describe later bytes. The 2026-09-10 1317
 > addendum immediately below records current technical release status; all
 > earlier addenda retain their original scope and bytes.
 
-## 2026-09-10 1308/1394 quality release addendum
+## 2026-09-10 1317 new-unit release addendum
+
+Recognition is **14/213**, with 199 not evaluated. The separately accepted physical unit `physical-building:w95934125` adds exactly one credit; all prior 13 acceptance records, latest 1308/1394 quality bindings and 213 identities are preserved. The [current 14 release closure](d5-1317-current-release-2026-09-10-001/release-closure.json) binds root-accepted owner/independent exact-current package PASS, bundle `c62ae8d2878135ace2206755bbb7ee91fee47f68ec8cac4b334be233b710de26` and PCK `9ab4e78f98b10cbc381d4cbd6a4f5e4367ec06766f6b5415cb070174c7ad9adf`. Both signed runs measured `735/1018/1033/81,761/466/477` with five attachments and unchanged stock movement/jetpack; mounted material/collision/receiver and zero-private-content checks passed separately.
+
+The immutable 1317 seven-field packet retains 8 PNGs + 9 AVI payload samples and its original capture/candidate 13 context. Original contact001 FAIL, scoped reuse and isolated spray002 PASS remain distinct. Sparse evidence supplies no continuous-play/M1/manual/OS-pixel claim. MAIN transfer and publication remain pending in this preparation snapshot. The earlier 13 technical release and publication below remain historical; HUMAN-001 scope is unchanged.
+
+## Historical 2026-09-10 1308/1394 quality release addendum
 
 Recognition remains **13/213**, with zero additional credit and the frozen 213-unit inventory unchanged. Separate source/mechanics, direct-reference visual and seven-artifact unit gates accepted both existing-unit fidelity004 revisions. The [exact quality release closure](d5-1308-1394-quality-current-release-2026-09-10-001/release-closure.json) binds independent owner/package PASS and the seven-file app `d6239ccdb089b01b6ce6839bf393de3ecf8c63f40167a26b79b68c6f73f91e27` (PCK `06f7e4778f791adbf512a16cd6e6900f288ea7d8c41ad53edafc85ad2a8c2be7`). Actual signed headless and Apple M2 Metal/Forward+ runs measured `735/1006/1021/79,913/466/474`, preserving stock movement and jetpack behavior; mounted components and privacy passed separately.
 

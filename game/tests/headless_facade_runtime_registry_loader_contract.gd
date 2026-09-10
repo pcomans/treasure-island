@@ -3,8 +3,8 @@ extends SceneTree
 const RegistryLoader := preload("res://game/scripts/world/facades/facade_runtime_registry_loader.gd")
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
-const EXPECTED_REGISTRY_SHA256 := "be237e4afd7cb93953371963f036579ab470dad1ca7b1686b28f752757774f2c"
-const EXPECTED_ADAPTER_CONTRACT_SHA256 := "2592c8fc849d42ee84ff93651bfe9d482120cc955f4d9b9fa7841cc83474e4b7"
+const EXPECTED_REGISTRY_SHA256 := "a4e9d189d289085d59d84bec683d70fb3687c7ff8539b93a3260f41885852971"
+const EXPECTED_ADAPTER_CONTRACT_SHA256 := "c00ae73bfc0e74c6055deec9a57faf76ebd839373807eeb0d5f224724511af0c"
 const READY_RECEIVERS := [
 	"building-composite:w1249412094:w1282547786:wall",
 	"building:r16681702:wall",
@@ -20,6 +20,7 @@ const READY_RECEIVERS := [
 	"building:w95934119:wall",
 	"building:w95934144:wall",
 	"building:w96215646:wall",
+	"building:w95934125:wall",
 	"building:w95934123:wall",
 ]
 const DISABLED_RECEIVERS := [
@@ -50,6 +51,7 @@ const ACTIVE_UNIT_BY_RECEIVER := {
 	"building:w95934144:wall": "physical-building:w95934144",
 	"building:w95934117:wall": "physical-building:w95934117",
 	"building:w96215646:wall": "physical-building:w96215646",
+	"building:w95934125:wall": "physical-building:w95934125",
 	"building:w95934123:wall": "physical-building:w95934123",
 }
 const ACTIVE_REVIEW_STATUS_BY_RECEIVER := {
@@ -64,6 +66,7 @@ const ACTIVE_REVIEW_STATUS_BY_RECEIVER := {
 	"building:w95934144:wall": "independent_exact_current_live_pass",
 	"building:w95934117:wall": "independent_exact_current_live_pass",
 	"building:w96215646:wall": "independent_exact_current_live_pass",
+	"building:w95934125:wall": "independent_exact_current_live_pass",
 	"building:w95934123:wall": "independent_exact_current_live_pass",
 }
 
@@ -102,7 +105,7 @@ func _run() -> void:
 	_validate_fail_closed_mutations(registry, contracts)
 	_validate_d5_batch_mutations(registry, contracts)
 	if not _failed:
-		print("PASS: facade runtime loader is version-pinned and topology-neutral: 213 units / 214 receivers / 13/213 reference-recognizable physical units / 21 adapter plans / 15 package-safe / 6 hard-disabled receivers / 13 unique pathless disabled projection inputs across 13 occurrences; registry %s; adapter contracts %s; snapshot %s" % [EXPECTED_REGISTRY_SHA256, EXPECTED_ADAPTER_CONTRACT_SHA256, first_snapshot.sha256_text()])
+		print("PASS: facade runtime loader is version-pinned and topology-neutral: 213 units / 214 receivers / 14/213 reference-recognizable physical units / 22 adapter plans / 16 package-safe / 6 hard-disabled receivers / 13 unique pathless disabled projection inputs across 13 occurrences; registry %s; adapter contracts %s; snapshot %s" % [EXPECTED_REGISTRY_SHA256, EXPECTED_ADAPTER_CONTRACT_SHA256, first_snapshot.sha256_text()])
 	_finish()
 
 
@@ -132,10 +135,10 @@ func _validate_receiver_modes(loader: RefCounted) -> void:
 	_require(loader.get_content_mode("building:w95934117:wall") == "active_d2_1444_paired_replacement" and str((loader.get_unit("physical-building:w95934117") as Dictionary).get("runtime_content_mode", "")) == "all_receivers_active_d2_1444_paired_replacement", "D2 1444 one wall-indexed paired unit mode drifted.")
 	var metric: Dictionary = loader.get_reference_recognition_metric()
 	var accepted_ids := metric.get("accepted_physical_unit_ids", []) as Array
-	var expected_ids := ["physical-building:r16681702", "physical-building:w1222720021", "physical-building:w1249412093", "physical-building:w1249412094", "physical-building:w291189336", "physical-building:w34313540", "physical-building:w34313545", "physical-building:w95934105", "physical-building:w95934117", "physical-building:w95934119", "physical-building:w95934144", "physical-building:w95934123", "physical-building:w96215646"]
+	var expected_ids := ["physical-building:r16681702", "physical-building:w1222720021", "physical-building:w1249412093", "physical-building:w1249412094", "physical-building:w291189336", "physical-building:w34313540", "physical-building:w34313545", "physical-building:w95934105", "physical-building:w95934117", "physical-building:w95934119", "physical-building:w95934144", "physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125"]
 	accepted_ids.sort()
 	expected_ids.sort()
-	_require(int(metric.get("numerator", -1)) == 13 and int(metric.get("denominator", -1)) == 213 and str(metric.get("display", "")) == "13/213" and accepted_ids == expected_ids, "Loader recognition metric is not exactly the accepted 13/213 physical-unit rollup.")
+	_require(int(metric.get("numerator", -1)) == 14 and int(metric.get("denominator", -1)) == 213 and str(metric.get("display", "")) == "14/213" and accepted_ids == expected_ids, "Loader recognition metric is not exactly the accepted 14/213 physical-unit rollup.")
 	_require(metric.get("isle_house_non_numerator_source_keys", []) == ["w1282547786", "w1282547787"], "Loader promotes Isle House source parts into numerator entries.")
 
 
@@ -297,7 +300,7 @@ func _validate_adapter_resolution(loader: RefCounted) -> void:
 	expected_ready.sort()
 	expected_disabled.sort()
 	_require(ready_seen == expected_ready and disabled_seen == expected_disabled, "Ready/disabled receiver partition drifted.")
-	_require(current_topology_plan_ids == ["active-adapter:d5-1394-live:building:w96215646:wall"], "D2 1444 is not the sole current-integration topology plan authority.")
+	_require(current_topology_plan_ids == ["active-adapter:d5-1317-live:building:w95934125:wall"], "D5 1317 is not the sole current-integration topology plan authority.")
 
 
 func _validate_d2_1441_plan(plan: Dictionary) -> void:
@@ -1024,7 +1027,7 @@ func _finish() -> void:
 
 
 func _validate_d5_batch_mutations(registry: Dictionary, contracts: Dictionary) -> void:
-	for target: Dictionary in [{"unit_id": "physical-building:w95934123", "wall": "building:w95934123:wall", "number": "1308"}, {"unit_id": "physical-building:w96215646", "wall": "building:w96215646:wall", "number": "1394"}]:
+	for target: Dictionary in [{"unit_id": "physical-building:w95934123", "wall": "building:w95934123:wall", "number": "1308"}, {"unit_id": "physical-building:w96215646", "wall": "building:w96215646:wall", "number": "1394"}, {"unit_id": "physical-building:w95934125", "wall": "building:w95934125:wall", "number": "1317"}]:
 		var receiver := str(target.wall)
 		var unit_id := str(target.unit_id)
 		var code := "d5_%s_parity_mismatch" % str(target.number)

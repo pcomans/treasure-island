@@ -1,0 +1,732 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Bounded stock roof and ground motion; raw per-frame data retained exactly without duplicate raw manifest",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/native-001-result.json",
+      "sha256": "51d4b91f3e63c043a95bebc3b4d126cf50d3353b7e7e48856cfdac6792902caa",
+      "bytes": 1675410,
+      "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/native-001-result.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/contact-001-result.json",
+      "sha256": "1eb8ec3ba53e1756a0076c6d3bf831ee96d7316d7653624537934c872229e257",
+      "bytes": 6699459,
+      "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/contact-001-result.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/canopy-spray-002-result.json",
+      "sha256": "832a6aab37e072001382bfc4f398b5ba719ad95296f97e96e0615dae9619c606",
+      "bytes": 10681,
+      "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/canopy-spray-002-result.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/independent-source/REVIEW.json",
+      "sha256": "133ccc8c2dbb70c52a6d0ed57bb7089e3522bf3e3dbafca73c8c4678860b740a",
+      "bytes": 9816,
+      "original_locator": "{TASK_ROOT}/work/1317-live-independent-source-001/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "original_native_telemetry": {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/native-001-result.json",
+      "sha256": "51d4b91f3e63c043a95bebc3b4d126cf50d3353b7e7e48856cfdac6792902caa",
+      "bytes": 1675410,
+      "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/native-001-result.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "raw_native_ok": true,
+    "raw_native_failures": [],
+    "roof_route": {
+      "kind": "added_source_roof_continuous_return",
+      "runs": [
+        22
+      ],
+      "station_m": 3.78604173660278,
+      "phases": {
+        "landing": {
+          "frames": 150,
+          "grounded_frames": 107,
+          "empty_slide_contact_frames": 43,
+          "first_frame": {
+            "position": [
+              -583.608947753906,
+              9.5889835357666,
+              -298.683166503906
+            ],
+            "velocity": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "physics_counter": 106,
+            "process_counter": 105,
+            "drawn_counter": 105
+          },
+          "last_frame": {
+            "position": [
+              -583.608947753906,
+              8.60425662994385,
+              -298.683166503906
+            ],
+            "velocity": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "physics_counter": 255,
+            "process_counter": 254,
+            "drawn_counter": 254
+          }
+        },
+        "inward": {
+          "frames": 91,
+          "grounded_frames": 91,
+          "empty_slide_contact_frames": 63,
+          "first_frame": {
+            "position": [
+              -583.616333007812,
+              8.60801982879639,
+              -298.675506591797
+            ],
+            "velocity": [
+              -0.5,
+              0.0,
+              0.5
+            ],
+            "physics_counter": 256,
+            "process_counter": 255,
+            "drawn_counter": 255
+          },
+          "last_frame": {
+            "position": [
+              -588.752990722656,
+              8.20735549926758,
+              -295.969909667969
+            ],
+            "velocity": [
+              -3.55199551582336,
+              0.0,
+              1.83938276767731
+            ],
+            "physics_counter": 346,
+            "process_counter": 345,
+            "drawn_counter": 345
+          }
+        },
+        "in_brake": {
+          "frames": 30,
+          "grounded_frames": 30,
+          "empty_slide_contact_frames": 0,
+          "first_frame": {
+            "position": [
+              -588.801086425781,
+              8.20735549926758,
+              -295.950378417969
+            ],
+            "velocity": [
+              -2.88532876968384,
+              0.0,
+              1.17271614074707
+            ],
+            "physics_counter": 347,
+            "process_counter": 346,
+            "drawn_counter": 346
+          },
+          "last_frame": {
+            "position": [
+              -588.882385253906,
+              8.20735549926758,
+              -295.941955566406
+            ],
+            "velocity": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "physics_counter": 376,
+            "process_counter": 375,
+            "drawn_counter": 375
+          }
+        },
+        "outward": {
+          "frames": 91,
+          "grounded_frames": 91,
+          "empty_slide_contact_frames": 11,
+          "first_frame": {
+            "position": [
+              -588.8740234375,
+              8.20735549926758,
+              -295.950286865234
+            ],
+            "velocity": [
+              0.5,
+              0.0,
+              -0.5
+            ],
+            "physics_counter": 377,
+            "process_counter": 376,
+            "drawn_counter": 376
+          },
+          "last_frame": {
+            "position": [
+              -583.762084960938,
+              8.65050983428955,
+              -298.644714355469
+            ],
+            "velocity": [
+              3.55199551582336,
+              0.0,
+              -1.83938276767731
+            ],
+            "physics_counter": 467,
+            "process_counter": 466,
+            "drawn_counter": 466
+          }
+        },
+        "out_brake": {
+          "frames": 30,
+          "grounded_frames": 30,
+          "empty_slide_contact_frames": 5,
+          "first_frame": {
+            "position": [
+              -583.713928222656,
+              8.63478755950928,
+              -298.664276123047
+            ],
+            "velocity": [
+              2.88532876968384,
+              0.0,
+              -1.17271614074707
+            ],
+            "physics_counter": 468,
+            "process_counter": 467,
+            "drawn_counter": 467
+          },
+          "last_frame": {
+            "position": [
+              -583.632446289062,
+              8.61188697814941,
+              -298.672729492188
+            ],
+            "velocity": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "physics_counter": 497,
+            "process_counter": 496,
+            "drawn_counter": 496
+          }
+        }
+      },
+      "source_endpoint": {
+        "position": [
+          -588.882385253906,
+          8.20735549926758,
+          -295.941955566406
+        ],
+        "depth_m": -6.94331169128418,
+        "station_m": 3.77681493759155,
+        "on_floor": true,
+        "slide_contacts": [
+          {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "building:w95934125:roof",
+            "feature_kind": "building_roof",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision/ExactSourceNeutralRoof",
+            "structural_role": "ExactSourceNeutralRoof",
+            "position": [
+              -588.882385253906,
+              8.20699977874756,
+              -295.941955566406
+            ],
+            "normal": [
+              0.0,
+              1.0,
+              0.0
+            ]
+          }
+        ],
+        "upward_slide_contacts": [
+          {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "building:w95934125:roof",
+            "feature_kind": "building_roof",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision/ExactSourceNeutralRoof",
+            "structural_role": "ExactSourceNeutralRoof",
+            "position": [
+              -588.882385253906,
+              8.20699977874756,
+              -295.941955566406
+            ],
+            "normal": [
+              0.0,
+              1.0,
+              0.0
+            ]
+          }
+        ],
+        "unfiltered_world_solid_ray": {
+          "collider_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision",
+          "exact_structure_body": false,
+          "shape_index": 0,
+          "derived_object_key": "building:w95934125:roof",
+          "feature_kind": "building_roof",
+          "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision/ExactSourceNeutralRoof",
+          "structural_role": "ExactSourceNeutralRoof",
+          "hit": true,
+          "position": [
+            -588.882385253906,
+            8.20699977874756,
+            -295.941955566406
+          ],
+          "normal": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "excludes_only_player": true,
+          "not_a_stock_contact_claim": true
+        }
+      },
+      "return_endpoint": {
+        "position": [
+          -583.632446289062,
+          8.61188697814941,
+          -298.672729492188
+        ],
+        "depth_m": -1.02563726902008,
+        "station_m": 3.78757286071777,
+        "on_floor": true,
+        "slide_contacts": [
+          {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision",
+            "exact_structure_body": false,
+            "shape_index": 1,
+            "derived_object_key": "building:w95934125:roof",
+            "feature_kind": "building_roof",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision/PublicShallowMainRoof",
+            "structural_role": "PublicShallowMainRoof",
+            "position": [
+              -583.721130371094,
+              8.62635898590088,
+              -298.626800537109
+            ],
+            "normal": [
+              0.253430902957916,
+              0.95840984582901,
+              -0.131237506866455
+            ]
+          }
+        ],
+        "upward_slide_contacts": [
+          {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision",
+            "exact_structure_body": false,
+            "shape_index": 1,
+            "derived_object_key": "building:w95934125:roof",
+            "feature_kind": "building_roof",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision/PublicShallowMainRoof",
+            "structural_role": "PublicShallowMainRoof",
+            "position": [
+              -583.721130371094,
+              8.62635898590088,
+              -298.626800537109
+            ],
+            "normal": [
+              0.253430902957916,
+              0.95840984582901,
+              -0.131237506866455
+            ]
+          }
+        ],
+        "unfiltered_world_solid_ray": {
+          "collider_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision",
+          "exact_structure_body": false,
+          "shape_index": 1,
+          "derived_object_key": "building:w95934125:roof",
+          "feature_kind": "building_roof",
+          "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision/PublicShallowMainRoof",
+          "structural_role": "PublicShallowMainRoof",
+          "hit": true,
+          "position": [
+            -583.632446289062,
+            8.59662532806396,
+            -298.672729492188
+          ],
+          "normal": [
+            0.253430932760239,
+            0.958409905433655,
+            -0.131237521767616
+          ],
+          "excludes_only_player": true,
+          "not_a_stock_contact_claim": true
+        }
+      },
+      "transform_writes_during_input": 0
+    },
+    "ground_motion": {
+      "input_sequence": [
+        [
+          "move_right",
+          30
+        ],
+        [
+          "move_left",
+          60
+        ],
+        [
+          "move_right",
+          30
+        ],
+        [
+          "no_input",
+          30
+        ]
+      ],
+      "actual_planar_path_length_m": 7.0960709694773,
+      "actual_net_planar_displacement_m": 0.0463045798242092,
+      "process_range": [
+        550,
+        700
+      ],
+      "physics_range": [
+        551,
+        701
+      ],
+      "drawn_range": [
+        550,
+        700
+      ],
+      "transform_writes_during_input": 0,
+      "movie_path": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+      "movie_hash_status": "bind_after_writer_terminal",
+      "encoded_indices_not_assumed_equal_process_indices": true,
+      "review_scope": "Three roof phase images plus nine exact original AVI samples around ordinary ground movement, separately reviewed.",
+      "endpoint": {
+        "path": "{PRIVATE_TMP}/d5-1317-live-integration-001/motion-endpoint.png",
+        "sha256": "d99f950e29322e6bee7a7b262f3aaad3c4773a11e8d840524b886ca08fd210ac",
+        "saved": true,
+        "position": [
+          -585.130615234375,
+          2.13351035118103,
+          -316.467010498047
+        ],
+        "velocity": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "controller_disabled_only_after_natural_brake": true
+      }
+    },
+    "ground_phases": {
+      "frames": {
+        "frames": 120,
+        "grounded_frames": 120,
+        "empty_slide_contact_frames": 59,
+        "first_frame": {
+          "position": [
+            -585.168273925781,
+            2.13532018661499,
+            -316.511199951172
+          ],
+          "velocity": [
+            -0.5,
+            0.0,
+            -0.5
+          ],
+          "physics_counter": 552,
+          "process_counter": 551,
+          "drawn_counter": 551
+        },
+        "last_frame": {
+          "position": [
+            -585.06396484375,
+            2.13204908370972,
+            -316.379364013672
+          ],
+          "velocity": [
+            -2.66729211807251,
+            0.0,
+            -2.98086476325989
+          ],
+          "physics_counter": 671,
+          "process_counter": 670,
+          "drawn_counter": 670
+        }
+      },
+      "brake": {
+        "frames": 30,
+        "grounded_frames": 30,
+        "empty_slide_contact_frames": 0,
+        "first_frame": {
+          "position": [
+            -585.097290039062,
+            2.13351035118103,
+            -316.417938232422
+          ],
+          "velocity": [
+            -2.00062537193298,
+            0.0,
+            -2.31419801712036
+          ],
+          "physics_counter": 672,
+          "process_counter": 671,
+          "drawn_counter": 671
+        },
+        "last_frame": {
+          "position": [
+            -585.130615234375,
+            2.13351035118103,
+            -316.467010498047
+          ],
+          "velocity": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "physics_counter": 701,
+          "process_counter": 700,
+          "drawn_counter": 700
+        }
+      }
+    },
+    "original_contact001_raw_ok": false,
+    "original_contact001_failures": [
+      "canopy_underside stock aim within limits.",
+      "canopy_underside camera spray ray reaches expected real shape: {\"collider_path\":\"/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_wall/D51317GateviewLiveWallReplacement/Collision\",\"derived_object_key\":\"building:w95934125:wall\",\"exact_structure_body\":true,\"feature_kind\":\"building_wall\",\"shape_index\":0,\"shape_node_path\":\"/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_wall/D51317GateviewLiveWallReplacement/Collision/ExactClosedSourceWalls\",\"structural_role\":\"ExactClosedSourceWalls\"}",
+      "canopy_underside actual spray controller result [\"placed\"]"
+    ],
+    "accepted_contact001_scope": {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/canopy-spray002-preparation/SCOPED_CONTACT_REUSE.json",
+      "sha256": "3b8fbc75fcc3b8d9998213433d1f7dae1a15756cdd89e66afe72ddc2ef22a61a",
+      "bytes": 2901,
+      "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/canopy-spray002-preparation/SCOPED_CONTACT_REUSE.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "isolated_canopy002": {
+      "raw_origin": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/canopy-spray-002-result.json",
+        "sha256": "832a6aab37e072001382bfc4f398b5ba719ad95296f97e96e0615dae9619c606",
+        "bytes": 10681,
+        "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/canopy-spray-002-result.json",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "raw_ok": true,
+      "actual_spray_attempt": {
+        "label": "canopy_underside",
+        "aim": {
+          "ok": true,
+          "yaw_degrees": 124.235631451257,
+          "pitch_degrees": 18.8714910217065,
+          "world_delta": [
+            -1.77532958984375,
+            0.683633327484131,
+            0.920928955078125
+          ],
+          "parent_local_delta": [
+            -1.65344214439392,
+            0.683633327484131,
+            1.12518191337585
+          ],
+          "parent_world_rotation_degrees": [
+            0.0,
+            -6.81819772720337,
+            0.0
+          ]
+        },
+        "target": [
+          -574.941650390625,
+          4.98000001907349,
+          -285.378326416016
+        ],
+        "player": [
+          -573.166320800781,
+          2.29636693000793,
+          -286.299255371094
+        ],
+        "camera": [
+          -568.546569824219,
+          2.51742005348206,
+          -288.695678710938
+        ],
+        "actual_ray": {
+          "collider_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_wall/D51317GateviewLiveWallReplacement/Collision",
+          "exact_structure_body": true,
+          "shape_index": 1,
+          "derived_object_key": "building:w95934125:wall",
+          "feature_kind": "building_wall",
+          "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_wall/D51317GateviewLiveWallReplacement/Collision/CanopiesPostsBraces",
+          "structural_role": "CanopiesPostsBraces"
+        },
+        "actual_ray_origin": [
+          -568.546569824219,
+          2.51742005348206,
+          -288.695678710938
+        ],
+        "actual_ray_direction": [
+          -0.839959561824799,
+          0.323446661233902,
+          0.435718029737473
+        ],
+        "actual_hit_position": [
+          -574.941650390625,
+          4.97999954223633,
+          -285.378326416016
+        ],
+        "actual_hit_normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "attempted": true,
+        "actual_ray_distance_m": 7.61355209350586,
+        "actual_player_hit_distance_m": 3.34690737724304,
+        "target_hit_error_m": 4.76837158203125e-07,
+        "stock_player_grounded": true,
+        "expected_key": "building:w95934125:wall",
+        "expected_shape": 1,
+        "result": [
+          "receiver_rejection"
+        ],
+        "tags_before": 0,
+        "tags_after": 0,
+        "expected_result": "receiver_rejection",
+        "ok": true,
+        "underside_identity_ok": true,
+        "player_depth_m": 3.8,
+        "target_depth_m": 1.8
+      }
+    },
+    "roof_spray_attempt": {
+      "label": "added_roof",
+      "aim": {
+        "ok": true,
+        "yaw_degrees": 124.242705391037,
+        "pitch_degrees": -45.5682136626304,
+        "world_delta": [
+          -1.6636962890625,
+          -1.91188716888428,
+          0.86328125
+        ],
+        "parent_local_delta": [
+          -1.54944217205048,
+          -1.91188716888428,
+          1.05468893051147
+        ],
+        "parent_world_rotation_degrees": [
+          0.0,
+          -6.81819772720337,
+          0.0
+        ]
+      },
+      "target": [
+        -585.296142578125,
+        8.69999980926514,
+        -297.809448242188
+      ],
+      "player": [
+        -583.632446289062,
+        8.61188697814941,
+        -298.672729492188
+      ],
+      "camera": [
+        -580.21484375,
+        14.5393409729004,
+        -300.446105957031
+      ],
+      "actual_ray": {
+        "collider_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision",
+        "exact_structure_body": false,
+        "shape_index": 1,
+        "derived_object_key": "building:w95934125:roof",
+        "feature_kind": "building_roof",
+        "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement/Collision/PublicShallowMainRoof",
+        "structural_role": "PublicShallowMainRoof"
+      },
+      "actual_ray_origin": [
+        -580.21484375,
+        14.5393409729004,
+        -300.446105957031
+      ],
+      "actual_ray_direction": [
+        -0.62138557434082,
+        -0.714084565639496,
+        0.322433352470398
+      ],
+      "actual_hit_position": [
+        -585.297729492188,
+        8.6981897354126,
+        -297.808624267578
+      ],
+      "actual_hit_normal": [
+        -0.139043495059013,
+        0.987665176391602,
+        0.0720027536153793
+      ],
+      "attempted": true,
+      "actual_ray_distance_m": 8.1799201965332,
+      "actual_player_hit_distance_m": 1.87810921669006,
+      "target_hit_error_m": 0.00254432647489011,
+      "stock_player_grounded": true,
+      "expected_key": "building:w95934125:roof",
+      "expected_shape": 1,
+      "result": [
+        "receiver_rejection"
+      ],
+      "tags_before": 0,
+      "tags_after": 0,
+      "expected_result": "receiver_rejection",
+      "ok": true
+    },
+    "full_per_frame_telemetry_is_in_exact_private_raw_original": true,
+    "limits": [
+      "1317 source-world captures retain their original735/1005/1020/78224/466/475 measurement and are not new combined/package pixels.",
+      "contact001 raw FAIL is retained; only its expressly accepted successful traces are reused alongside isolated canopy002 PASS.",
+      "Native8 PNGs are1440x900;705-frame original AVI and9 exact payload samples are1280x800, with70 trailing bytes retained. Samples are not continuous playback.",
+      "242 roof travel/braking frames were grounded and include empty upward slide-contact samples; ground120-input frames include59 empty contact samples. Actual settled source/added-roof contacts remain separate from grounding flags.",
+      "Current authority13/213 is unchanged;1317 receives no credit at this preparation.",
+      "Actual direct contacts, floor flags, rays and draw-frame observations remain distinct.",
+      "Roof route is one bounded run22 corridor after setup placement; no jetpack roof-access or arbitrary continuous-support claim.",
+      "Source dependency code/shader hashes were checked in focused source verification; runtime builder checks config/geometry hashes and dependency existence, not a general immutable-source security boundary.",
+      "This review gives no visual, continuous-video, package, authority or release acceptance.",
+      "Independent live static/sampled visual PASS retains May2019 observed-face/reference-angle and protected/hidden-roof limits. No source photographs were copied.",
+      "Four individual live001 stills, three roof-phase PNGs and one ground endpoint are1440x900. Nine AVI payload images and the full705-frame movie are1280x800; the70-byte declared/physical extent discrepancy is preserved.",
+      "AVI indices550/569/588/606/625/644/662/681/700 are encoded-frame selections.681 and700 are separate bound payloads with identical bytes. Sparse samples and three roof phase PNGs do not establish continuous playback or arbitrary support.",
+      "Individual native capture world735/1005/1020/78224/466/475 remains historical source evidence. The combined source and both owner/independent signed-app runs separately measured735/1018/1033/81761/466/477.",
+      "Independent exact candidate package PASS is bound. The seventh exact unit/packet/image-tree attestation remains pending/null; no past reviewer attests this new tree by implication.",
+      "1317 is an uncredited new unit. Prospective numerator effect is+1 only after separate unit acceptance and later authority/current-release work; this assembly grants0 credit and changes no authority."
+    ]
+  },
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "capture_time_authority": "13/213",
+    "inventory_physical_units": 213,
+    "new_unit_candidate": true,
+    "credit_granted": false,
+    "prospective_numerator_effect_after_separate_acceptance": 1,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_candidate_package_decision": "PASS",
+    "independent_unit_packet_visual_attestation_pending": true
+  }
+}

@@ -1,0 +1,130 @@
+{
+  "schema_version": "ti.d5-fidelity-candidate-closure/1",
+  "status": "SEVENTH_ATTESTATION_SERIALIZED_NEW_UNIT_AUTHORITY_PREPARATION",
+  "physical_unit_id": "physical-building:w95934125",
+  "candidate_authority": "13/213",
+  "capture_time_authority": "13/213",
+  "new_unit_candidate": true,
+  "recognition_credit_granted": false,
+  "prospective_numerator_effect_after_separate_acceptance": 1,
+  "seven_acceptance_bindings_prepared": {
+    "evidence_manifest_sha256": "4fcdd7f900dfadb12187f558bf0e545038d8386134ed1e7f9830810be763ddb5",
+    "motion_telemetry_manifest_sha256": "a1e3d98ebacaf73c5fb985a2fa2ee4597fe4c2b334cc102c3d3ea460bf361214",
+    "visual_motion_manifest_sha256": "088c0a0df84440cf2ddb35996aabc5d1b1aa5e1fcafe47217cd92dbbca08fc15",
+    "package_verification_receipt_sha256": "d6041941c9ec59d6a6d8fac4cbb79964fe842cdc135baf5c7a36df3a65a2c98e",
+    "evidence_tree_sha256": "18da75ad3394e86f3129449bbf113efd14d2e845acd767acba995545b3e5f6ee",
+    "mechanical_review_receipt_sha256": "7cd3ef79e13c19bbb34b601338f86533b9de429d274d35e55e8e6f8fbd8afdce",
+    "review_receipt_sha256": "19edda17a50fd957ec09bd9a2ea310b7f82524e717c63467d5198e2e3f9500df"
+  },
+  "independent_package_decision_pending": false,
+  "independent_package_decision": "PASS",
+  "independent_package_review": {
+    "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/fb4f28ce1a9b3ca43300/REVIEW.json",
+    "sha256": "fb4f28ce1a9b3ca433001174052d48cb68b9162042f07e6e764feeb14a6734fa",
+    "bytes": 29853,
+    "original_locator": "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/REVIEW.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "seventh_attestation_pending": false,
+  "seventh_requirement": "Separate reviewer must bind this exact1317 unit, six artifact values and actual17-image tree digest with accepted static and sampled visual scope; previous reviews do not attest the new tree.",
+  "image_tree_sha256": "18da75ad3394e86f3129449bbf113efd14d2e845acd767acba995545b3e5f6ee",
+  "evidence_tree_document_sha256": "5ede3855f36303854396ee62c7cdd91ab561e3492a24d2c15db0d4aeab40359d",
+  "artifacts": [
+    {
+      "path": "capture-manifest.json",
+      "sha256": "4fcdd7f900dfadb12187f558bf0e545038d8386134ed1e7f9830810be763ddb5",
+      "bytes": 30273
+    },
+    {
+      "path": "motion-telemetry.json",
+      "sha256": "a1e3d98ebacaf73c5fb985a2fa2ee4597fe4c2b334cc102c3d3ea460bf361214",
+      "bytes": 26203
+    },
+    {
+      "path": "visual-motion.json",
+      "sha256": "088c0a0df84440cf2ddb35996aabc5d1b1aa5e1fcafe47217cd92dbbca08fc15",
+      "bytes": 24119
+    },
+    {
+      "path": "package-verification-receipt.json",
+      "sha256": "d6041941c9ec59d6a6d8fac4cbb79964fe842cdc135baf5c7a36df3a65a2c98e",
+      "bytes": 15511
+    },
+    {
+      "path": "evidence-tree.json",
+      "sha256": "5ede3855f36303854396ee62c7cdd91ab561e3492a24d2c15db0d4aeab40359d",
+      "bytes": 3895
+    },
+    {
+      "path": "mechanical-review.json",
+      "sha256": "7cd3ef79e13c19bbb34b601338f86533b9de429d274d35e55e8e6f8fbd8afdce",
+      "bytes": 8148
+    },
+    {
+      "path": "visual-review.json",
+      "sha256": "89c0e7369482d9e6714dacc44b4928009e98e33d1f8e83c1979c26466291e247",
+      "bytes": 5040
+    },
+    {
+      "path": "source-reconciliation.json",
+      "sha256": "9b1fcd943f4cd1db2a0c001823e543f3464dc2be3f3f4cc349e3fe6071645000",
+      "bytes": 94094
+    },
+    {
+      "path": "copy-inventory.json",
+      "sha256": "f7e6b7b9e68d2bb64c76a75aca288efb8f588fcfe35ca9c52ba49b0ed972c561",
+      "bytes": 23194
+    },
+    {
+      "path": "private-provenance-retention.json",
+      "sha256": "b83ddb3b58a7b91adb8a813cbc13e33cc117c77aa85ca5bb11493b66874b6221",
+      "bytes": 290812
+    },
+    {
+      "path": "unit-visual-attestation.json",
+      "sha256": "19edda17a50fd957ec09bd9a2ea310b7f82524e717c63467d5198e2e3f9500df",
+      "bytes": 17842
+    }
+  ],
+  "limits": [
+    "1317 source-world captures retain their original735/1005/1020/78224/466/475 measurement and are not new combined/package pixels.",
+    "contact001 raw FAIL is retained; only its expressly accepted successful traces are reused alongside isolated canopy002 PASS.",
+    "Native8 PNGs are1440x900;705-frame original AVI and9 exact payload samples are1280x800, with70 trailing bytes retained. Samples are not continuous playback.",
+    "242 roof travel/braking frames were grounded and include empty upward slide-contact samples; ground120-input frames include59 empty contact samples. Actual settled source/added-roof contacts remain separate from grounding flags.",
+    "Current authority13/213 is unchanged;1317 receives no credit at this preparation.",
+    "Actual direct contacts, floor flags, rays and draw-frame observations remain distinct.",
+    "Roof route is one bounded run22 corridor after setup placement; no jetpack roof-access or arbitrary continuous-support claim.",
+    "Source dependency code/shader hashes were checked in focused source verification; runtime builder checks config/geometry hashes and dependency existence, not a general immutable-source security boundary.",
+    "This review gives no visual, continuous-video, package, authority or release acceptance.",
+    "Independent live static/sampled visual PASS retains May2019 observed-face/reference-angle and protected/hidden-roof limits. No source photographs were copied.",
+    "Four individual live001 stills, three roof-phase PNGs and one ground endpoint are1440x900. Nine AVI payload images and the full705-frame movie are1280x800; the70-byte declared/physical extent discrepancy is preserved.",
+    "AVI indices550/569/588/606/625/644/662/681/700 are encoded-frame selections.681 and700 are separate bound payloads with identical bytes. Sparse samples and three roof phase PNGs do not establish continuous playback or arbitrary support.",
+    "Individual native capture world735/1005/1020/78224/466/475 remains historical source evidence. The combined source and both owner/independent signed-app runs separately measured735/1018/1033/81761/466/477.",
+    "Independent exact candidate package PASS is bound. The seventh exact unit/packet/image-tree attestation remains pending/null; no past reviewer attests this new tree by implication.",
+    "1317 is an uncredited new unit. Prospective numerator effect is+1 only after separate unit acceptance and later authority/current-release work; this assembly grants0 credit and changes no authority."
+  ],
+  "source_photo_boundary": "No source photographs in packet, ignored archive or game; dated reference metadata remains in preserved review originals.",
+  "independent_unit_visual_attestation": {
+    "path": "unit-visual-attestation.json",
+    "sha256": "19edda17a50fd957ec09bd9a2ea310b7f82524e717c63467d5198e2e3f9500df",
+    "bytes": 17842
+  },
+  "reviewed_original_closure": {
+    "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/c146c15278759b7e5432/candidate-closure.json",
+    "sha256": "c146c15278759b7e543248ff08663b4b65e623f29ff9bef63fed3134446fdd1a",
+    "bytes": 6397,
+    "original_locator": "{BATCH_REPO}/evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001/candidate-closure.json",
+    "role": "reviewed_original_candidate_closure",
+    "byte_identical": true
+  },
+  "independent_binding_check": {
+    "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/7c4dcbee9ad53bdad639/BINDING_CHECK.json",
+    "sha256": "7c4dcbee9ad53bdad6392b348cba98229feffaa80c4b3f4c77db0f444aa8f424",
+    "bytes": 3767,
+    "original_locator": "{TASK_ROOT}/work/1317-quality-unit-independent-attestation-001/BINDING_CHECK.json",
+    "role": "independent_unit_attestation_original",
+    "byte_identical": true
+  },
+  "preparation_status_note": "Root accepted separate seventh unit/visual attestation, now serialized against the unchanged six values and image tree. Earlier pending annotations are historical. This is a new unit with prospective +1 after authority validation, not an existing-unit zero-credit quality revision. Current release remains 13/213; exact-current14 export is pending."
+}

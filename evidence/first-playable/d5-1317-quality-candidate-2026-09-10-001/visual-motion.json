@@ -1,0 +1,461 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Exact original native phase images and sparse original AVI payloads",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/motion-finalization.json",
+      "sha256": "37feaad3efed05992216f55c0d045d1042f274eecab28f30489f34f5f9a6c9e0",
+      "bytes": 409842,
+      "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/motion-finalization.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/independent-visual/REVIEW.json",
+      "sha256": "dde56b0a8692a46d24aaa94186ffb63771dcfa19af51920f3fc9803e9981f402",
+      "bytes": 15744,
+      "original_locator": "{TASK_ROOT}/work/1317-live-independent-visual-001/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "movie": {
+      "path": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+      "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+      "physical_bytes": 39897786,
+      "riff_declared_end": 39897716,
+      "microseconds_per_frame": 16666,
+      "total_frames": 705,
+      "width": 1280,
+      "height": 800
+    },
+    "physical_minus_declared_bytes": 70,
+    "selection": "Nine evenly spread encoded indices selected from the recorded ground-motion draw interval; original payload content must be inspected, especially reversals and held endpoint. Native process/physics/draw/AVI indices remain distinct; no equality or continuous-playback claim. Roof motion has three separate original phase PNGs and the full native AVI.",
+    "images": [
+      {
+        "path": "images/live001-roof-phases/01-added-roof-landed.png",
+        "sha256": "14b24a618289ba0d9c6aafd5ff243b05cc7a9918d5114d8e09be4e25bd84ec7e",
+        "bytes": 380567,
+        "role": "individual_live001_roof_phase",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/14b24a618289ba0d9c6a/01-added-roof-landed.png",
+          "sha256": "14b24a618289ba0d9c6aafd5ff243b05cc7a9918d5114d8e09be4e25bd84ec7e",
+          "bytes": 380567,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/roof-keyframes/01-added-roof-landed.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "manifest": {
+            "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/native-001-result.json",
+            "sha256": "51d4b91f3e63c043a95bebc3b4d126cf50d3353b7e7e48856cfdac6792902caa",
+            "bytes": 1675410,
+            "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/native-001-result.json",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "label": "01-added-roof-landed",
+          "process_counter": 254,
+          "physics_counter": 255,
+          "drawn_counter": 254,
+          "pixel_scope": "Latest completed framebuffer near this phase marker; not asserted to match a physics frame."
+        }
+      },
+      {
+        "path": "images/live001-roof-phases/02-retained-source-roof.png",
+        "sha256": "06a231c0d1dc59254e19a4ce6edbcbbfe7f68c1ba5d9d6355961741cbad53477",
+        "bytes": 322096,
+        "role": "individual_live001_roof_phase",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/06a231c0d1dc59254e19/02-retained-source-roof.png",
+          "sha256": "06a231c0d1dc59254e19a4ce6edbcbbfe7f68c1ba5d9d6355961741cbad53477",
+          "bytes": 322096,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/roof-keyframes/02-retained-source-roof.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "manifest": {
+            "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/native-001-result.json",
+            "sha256": "51d4b91f3e63c043a95bebc3b4d126cf50d3353b7e7e48856cfdac6792902caa",
+            "bytes": 1675410,
+            "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/native-001-result.json",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "label": "02-retained-source-roof",
+          "process_counter": 375,
+          "physics_counter": 376,
+          "drawn_counter": 375,
+          "pixel_scope": "Latest completed framebuffer near this phase marker; not asserted to match a physics frame."
+        }
+      },
+      {
+        "path": "images/live001-roof-phases/03-returned-added-roof.png",
+        "sha256": "5fac95fe6be27732d3e07c8ea1e6e0c4ceac5165f598b9f8d69c52ce4bf01bbf",
+        "bytes": 382135,
+        "role": "individual_live001_roof_phase",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/5fac95fe6be27732d3e0/03-returned-added-roof.png",
+          "sha256": "5fac95fe6be27732d3e07c8ea1e6e0c4ceac5165f598b9f8d69c52ce4bf01bbf",
+          "bytes": 382135,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/roof-keyframes/03-returned-added-roof.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "manifest": {
+            "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/native-001-result.json",
+            "sha256": "51d4b91f3e63c043a95bebc3b4d126cf50d3353b7e7e48856cfdac6792902caa",
+            "bytes": 1675410,
+            "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/native-001-result.json",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "label": "03-returned-added-roof",
+          "process_counter": 496,
+          "physics_counter": 497,
+          "drawn_counter": 496,
+          "pixel_scope": "Latest completed framebuffer near this phase marker; not asserted to match a physics frame."
+        }
+      },
+      {
+        "path": "images/live001-ground/motion-endpoint.png",
+        "sha256": "d99f950e29322e6bee7a7b262f3aaad3c4773a11e8d840524b886ca08fd210ac",
+        "bytes": 639371,
+        "role": "individual_live001_ground_endpoint_after_natural_brake",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/d99f950e29322e6bee7a/motion-endpoint.png",
+          "sha256": "d99f950e29322e6bee7a7b262f3aaad3c4773a11e8d840524b886ca08fd210ac",
+          "bytes": 639371,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/motion-endpoint.png",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "path": "{PRIVATE_TMP}/d5-1317-live-integration-001/motion-endpoint.png",
+          "sha256": "d99f950e29322e6bee7a7b262f3aaad3c4773a11e8d840524b886ca08fd210ac",
+          "saved": true,
+          "position": [
+            -585.130615234375,
+            2.13351035118103,
+            -316.467010498047
+          ],
+          "velocity": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "controller_disabled_only_after_natural_brake": true
+        }
+      },
+      {
+        "path": "images/live001-avi/avi-index-0550.jpg",
+        "sha256": "9374aaf068b34613dd70e2882953fdec9a3c6d29f3c6de0dee1e8822a4f5e179",
+        "bytes": 66401,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/9374aaf068b34613dd70/avi-index-0550.jpg",
+          "sha256": "9374aaf068b34613dd70e2882953fdec9a3c6d29f3c6de0dee1e8822a4f5e179",
+          "bytes": 66401,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0550.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+            "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+            "bytes": 39897786,
+            "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 550,
+          "original_payload_offset": 29204174,
+          "bytes": 66401,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/live001-avi/avi-index-0569.jpg",
+        "sha256": "2a64b6e143511fcf5c37a42437a571594a86f500a486ee7d055d35c081c83137",
+        "bytes": 63980,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/2a64b6e143511fcf5c37/avi-index-0569.jpg",
+          "sha256": "2a64b6e143511fcf5c37a42437a571594a86f500a486ee7d055d35c081c83137",
+          "bytes": 63980,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0569.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+            "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+            "bytes": 39897786,
+            "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 569,
+          "original_payload_offset": 30505422,
+          "bytes": 63980,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/live001-avi/avi-index-0588.jpg",
+        "sha256": "8da508ce23abe0519d0d206d53e4bebd398dae9ac92e63052dc427152cf2c65c",
+        "bytes": 62555,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/8da508ce23abe0519d0d/avi-index-0588.jpg",
+          "sha256": "8da508ce23abe0519d0d206d53e4bebd398dae9ac92e63052dc427152cf2c65c",
+          "bytes": 62555,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0588.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+            "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+            "bytes": 39897786,
+            "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 588,
+          "original_payload_offset": 31765326,
+          "bytes": 62555,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/live001-avi/avi-index-0606.jpg",
+        "sha256": "1dd3fa8f436b480d420d854c7ef5c99d34c94ef8c8d7b05b55ad9c4b85326d48",
+        "bytes": 64609,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/1dd3fa8f436b480d420d/avi-index-0606.jpg",
+          "sha256": "1dd3fa8f436b480d420d854c7ef5c99d34c94ef8c8d7b05b55ad9c4b85326d48",
+          "bytes": 64609,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0606.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+            "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+            "bytes": 39897786,
+            "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 606,
+          "original_payload_offset": 32966844,
+          "bytes": 64609,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/live001-avi/avi-index-0625.jpg",
+        "sha256": "776fb72911eac0c67fe5b7252ee6cd3f623bf33128e48168126943619ded796e",
+        "bytes": 67049,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/776fb72911eac0c67fe5/avi-index-0625.jpg",
+          "sha256": "776fb72911eac0c67fe5b7252ee6cd3f623bf33128e48168126943619ded796e",
+          "bytes": 67049,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0625.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+            "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+            "bytes": 39897786,
+            "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 625,
+          "original_payload_offset": 34282298,
+          "bytes": 67049,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/live001-avi/avi-index-0644.jpg",
+        "sha256": "91b4af1047ddf5b86f300267bf716177c3cd85064acf7cc8f8c825ad86e60a11",
+        "bytes": 68412,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/91b4af1047ddf5b86f30/avi-index-0644.jpg",
+          "sha256": "91b4af1047ddf5b86f300267bf716177c3cd85064acf7cc8f8c825ad86e60a11",
+          "bytes": 68412,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0644.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+            "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+            "bytes": 39897786,
+            "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 644,
+          "original_payload_offset": 35634246,
+          "bytes": 68412,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/live001-avi/avi-index-0662.jpg",
+        "sha256": "964d3752e218e040bed322e1d5b721180df228803a0686cc38d7efe6b20a966a",
+        "bytes": 67284,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/964d3752e218e040bed3/avi-index-0662.jpg",
+          "sha256": "964d3752e218e040bed322e1d5b721180df228803a0686cc38d7efe6b20a966a",
+          "bytes": 67284,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0662.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+            "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+            "bytes": 39897786,
+            "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 662,
+          "original_payload_offset": 36918574,
+          "bytes": 67284,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/live001-avi/avi-index-0681.jpg",
+        "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+        "bytes": 66633,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/4a3433a6d62bdd7a866d/avi-index-0681.jpg",
+          "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+          "bytes": 66633,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0681.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+            "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+            "bytes": 39897786,
+            "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 681,
+          "original_payload_offset": 38248832,
+          "bytes": 66633,
+          "physics_index_mapping_claimed": false
+        }
+      },
+      {
+        "path": "images/live001-avi/avi-index-0700.jpg",
+        "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+        "bytes": 66633,
+        "role": "exact_original_mjpeg_payload",
+        "original": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/4a3433a6d62bdd7a866d/avi-index-0700.jpg",
+          "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+          "bytes": 66633,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0700.jpg",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "copy_is_byte_identical": true,
+        "raw_counter_binding": {
+          "avi": {
+            "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+            "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+            "bytes": 39897786,
+            "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+            "role": "byte_identical_raw_original",
+            "byte_identical": true
+          },
+          "zero_based_avi_index": 700,
+          "original_payload_offset": 39575982,
+          "bytes": 66633,
+          "physics_index_mapping_claimed": false
+        }
+      }
+    ],
+    "independent_visual_review": {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/independent-visual/REVIEW.json",
+      "sha256": "dde56b0a8692a46d24aaa94186ffb63771dcfa19af51920f3fc9803e9981f402",
+      "bytes": 15744,
+      "original_locator": "{TASK_ROOT}/work/1317-live-independent-visual-001/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "independent_visual_status": "PASS",
+    "independent_visual_scope": "Actual-live static and sampled visual quality only",
+    "limits": [
+      "1317 source-world captures retain their original735/1005/1020/78224/466/475 measurement and are not new combined/package pixels.",
+      "contact001 raw FAIL is retained; only its expressly accepted successful traces are reused alongside isolated canopy002 PASS.",
+      "Native8 PNGs are1440x900;705-frame original AVI and9 exact payload samples are1280x800, with70 trailing bytes retained. Samples are not continuous playback.",
+      "242 roof travel/braking frames were grounded and include empty upward slide-contact samples; ground120-input frames include59 empty contact samples. Actual settled source/added-roof contacts remain separate from grounding flags.",
+      "Current authority13/213 is unchanged;1317 receives no credit at this preparation.",
+      "Actual direct contacts, floor flags, rays and draw-frame observations remain distinct.",
+      "Roof route is one bounded run22 corridor after setup placement; no jetpack roof-access or arbitrary continuous-support claim.",
+      "Source dependency code/shader hashes were checked in focused source verification; runtime builder checks config/geometry hashes and dependency existence, not a general immutable-source security boundary.",
+      "This review gives no visual, continuous-video, package, authority or release acceptance.",
+      "Independent live static/sampled visual PASS retains May2019 observed-face/reference-angle and protected/hidden-roof limits. No source photographs were copied.",
+      "Four individual live001 stills, three roof-phase PNGs and one ground endpoint are1440x900. Nine AVI payload images and the full705-frame movie are1280x800; the70-byte declared/physical extent discrepancy is preserved.",
+      "AVI indices550/569/588/606/625/644/662/681/700 are encoded-frame selections.681 and700 are separate bound payloads with identical bytes. Sparse samples and three roof phase PNGs do not establish continuous playback or arbitrary support.",
+      "Individual native capture world735/1005/1020/78224/466/475 remains historical source evidence. The combined source and both owner/independent signed-app runs separately measured735/1018/1033/81761/466/477.",
+      "Independent exact candidate package PASS is bound. The seventh exact unit/packet/image-tree attestation remains pending/null; no past reviewer attests this new tree by implication.",
+      "1317 is an uncredited new unit. Prospective numerator effect is+1 only after separate unit acceptance and later authority/current-release work; this assembly grants0 credit and changes no authority."
+    ]
+  },
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "capture_time_authority": "13/213",
+    "inventory_physical_units": 213,
+    "new_unit_candidate": true,
+    "credit_granted": false,
+    "prospective_numerator_effect_after_separate_acceptance": 1,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_candidate_package_decision": "PASS",
+    "independent_unit_packet_visual_attestation_pending": true
+  }
+}

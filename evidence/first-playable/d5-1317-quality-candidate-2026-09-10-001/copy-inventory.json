@@ -1,0 +1,496 @@
+{
+  "images": [
+    {
+      "path": "images/live001-avi/avi-index-0550.jpg",
+      "sha256": "9374aaf068b34613dd70e2882953fdec9a3c6d29f3c6de0dee1e8822a4f5e179",
+      "bytes": 66401,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/9374aaf068b34613dd70/avi-index-0550.jpg",
+        "sha256": "9374aaf068b34613dd70e2882953fdec9a3c6d29f3c6de0dee1e8822a4f5e179",
+        "bytes": 66401,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0550.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+          "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+          "bytes": 39897786,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 550,
+        "original_payload_offset": 29204174,
+        "bytes": 66401,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/live001-avi/avi-index-0569.jpg",
+      "sha256": "2a64b6e143511fcf5c37a42437a571594a86f500a486ee7d055d35c081c83137",
+      "bytes": 63980,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/2a64b6e143511fcf5c37/avi-index-0569.jpg",
+        "sha256": "2a64b6e143511fcf5c37a42437a571594a86f500a486ee7d055d35c081c83137",
+        "bytes": 63980,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0569.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+          "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+          "bytes": 39897786,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 569,
+        "original_payload_offset": 30505422,
+        "bytes": 63980,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/live001-avi/avi-index-0588.jpg",
+      "sha256": "8da508ce23abe0519d0d206d53e4bebd398dae9ac92e63052dc427152cf2c65c",
+      "bytes": 62555,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/8da508ce23abe0519d0d/avi-index-0588.jpg",
+        "sha256": "8da508ce23abe0519d0d206d53e4bebd398dae9ac92e63052dc427152cf2c65c",
+        "bytes": 62555,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0588.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+          "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+          "bytes": 39897786,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 588,
+        "original_payload_offset": 31765326,
+        "bytes": 62555,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/live001-avi/avi-index-0606.jpg",
+      "sha256": "1dd3fa8f436b480d420d854c7ef5c99d34c94ef8c8d7b05b55ad9c4b85326d48",
+      "bytes": 64609,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/1dd3fa8f436b480d420d/avi-index-0606.jpg",
+        "sha256": "1dd3fa8f436b480d420d854c7ef5c99d34c94ef8c8d7b05b55ad9c4b85326d48",
+        "bytes": 64609,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0606.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+          "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+          "bytes": 39897786,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 606,
+        "original_payload_offset": 32966844,
+        "bytes": 64609,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/live001-avi/avi-index-0625.jpg",
+      "sha256": "776fb72911eac0c67fe5b7252ee6cd3f623bf33128e48168126943619ded796e",
+      "bytes": 67049,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/776fb72911eac0c67fe5/avi-index-0625.jpg",
+        "sha256": "776fb72911eac0c67fe5b7252ee6cd3f623bf33128e48168126943619ded796e",
+        "bytes": 67049,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0625.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+          "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+          "bytes": 39897786,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 625,
+        "original_payload_offset": 34282298,
+        "bytes": 67049,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/live001-avi/avi-index-0644.jpg",
+      "sha256": "91b4af1047ddf5b86f300267bf716177c3cd85064acf7cc8f8c825ad86e60a11",
+      "bytes": 68412,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/91b4af1047ddf5b86f30/avi-index-0644.jpg",
+        "sha256": "91b4af1047ddf5b86f300267bf716177c3cd85064acf7cc8f8c825ad86e60a11",
+        "bytes": 68412,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0644.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+          "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+          "bytes": 39897786,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 644,
+        "original_payload_offset": 35634246,
+        "bytes": 68412,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/live001-avi/avi-index-0662.jpg",
+      "sha256": "964d3752e218e040bed322e1d5b721180df228803a0686cc38d7efe6b20a966a",
+      "bytes": 67284,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/964d3752e218e040bed3/avi-index-0662.jpg",
+        "sha256": "964d3752e218e040bed322e1d5b721180df228803a0686cc38d7efe6b20a966a",
+        "bytes": 67284,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0662.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+          "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+          "bytes": 39897786,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 662,
+        "original_payload_offset": 36918574,
+        "bytes": 67284,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/live001-avi/avi-index-0681.jpg",
+      "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+      "bytes": 66633,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/4a3433a6d62bdd7a866d/avi-index-0681.jpg",
+        "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+        "bytes": 66633,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0681.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+          "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+          "bytes": 39897786,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 681,
+        "original_payload_offset": 38248832,
+        "bytes": 66633,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/live001-avi/avi-index-0700.jpg",
+      "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+      "bytes": 66633,
+      "role": "exact_original_mjpeg_payload",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/4a3433a6d62bdd7a866d/avi-index-0700.jpg",
+        "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+        "bytes": 66633,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/avi-frame-samples/avi-index-0700.jpg",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "avi": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0a4d8a513a9e17936111/1317-live-motion.avi",
+          "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+          "bytes": 39897786,
+          "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/1317-live-motion.avi",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "zero_based_avi_index": 700,
+        "original_payload_offset": 39575982,
+        "bytes": 66633,
+        "physics_index_mapping_claimed": false
+      }
+    },
+    {
+      "path": "images/live001-ground/motion-endpoint.png",
+      "sha256": "d99f950e29322e6bee7a7b262f3aaad3c4773a11e8d840524b886ca08fd210ac",
+      "bytes": 639371,
+      "role": "individual_live001_ground_endpoint_after_natural_brake",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/d99f950e29322e6bee7a/motion-endpoint.png",
+        "sha256": "d99f950e29322e6bee7a7b262f3aaad3c4773a11e8d840524b886ca08fd210ac",
+        "bytes": 639371,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/motion-endpoint.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "path": "{PRIVATE_TMP}/d5-1317-live-integration-001/motion-endpoint.png",
+        "sha256": "d99f950e29322e6bee7a7b262f3aaad3c4773a11e8d840524b886ca08fd210ac",
+        "saved": true,
+        "position": [
+          -585.130615234375,
+          2.13351035118103,
+          -316.467010498047
+        ],
+        "velocity": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "controller_disabled_only_after_natural_brake": true
+      }
+    },
+    {
+      "path": "images/live001-roof-phases/01-added-roof-landed.png",
+      "sha256": "14b24a618289ba0d9c6aafd5ff243b05cc7a9918d5114d8e09be4e25bd84ec7e",
+      "bytes": 380567,
+      "role": "individual_live001_roof_phase",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/14b24a618289ba0d9c6a/01-added-roof-landed.png",
+        "sha256": "14b24a618289ba0d9c6aafd5ff243b05cc7a9918d5114d8e09be4e25bd84ec7e",
+        "bytes": 380567,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/roof-keyframes/01-added-roof-landed.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "manifest": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/native-001-result.json",
+          "sha256": "51d4b91f3e63c043a95bebc3b4d126cf50d3353b7e7e48856cfdac6792902caa",
+          "bytes": 1675410,
+          "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/native-001-result.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "label": "01-added-roof-landed",
+        "process_counter": 254,
+        "physics_counter": 255,
+        "drawn_counter": 254,
+        "pixel_scope": "Latest completed framebuffer near this phase marker; not asserted to match a physics frame."
+      }
+    },
+    {
+      "path": "images/live001-roof-phases/02-retained-source-roof.png",
+      "sha256": "06a231c0d1dc59254e19a4ce6edbcbbfe7f68c1ba5d9d6355961741cbad53477",
+      "bytes": 322096,
+      "role": "individual_live001_roof_phase",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/06a231c0d1dc59254e19/02-retained-source-roof.png",
+        "sha256": "06a231c0d1dc59254e19a4ce6edbcbbfe7f68c1ba5d9d6355961741cbad53477",
+        "bytes": 322096,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/roof-keyframes/02-retained-source-roof.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "manifest": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/native-001-result.json",
+          "sha256": "51d4b91f3e63c043a95bebc3b4d126cf50d3353b7e7e48856cfdac6792902caa",
+          "bytes": 1675410,
+          "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/native-001-result.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "label": "02-retained-source-roof",
+        "process_counter": 375,
+        "physics_counter": 376,
+        "drawn_counter": 375,
+        "pixel_scope": "Latest completed framebuffer near this phase marker; not asserted to match a physics frame."
+      }
+    },
+    {
+      "path": "images/live001-roof-phases/03-returned-added-roof.png",
+      "sha256": "5fac95fe6be27732d3e07c8ea1e6e0c4ceac5165f598b9f8d69c52ce4bf01bbf",
+      "bytes": 382135,
+      "role": "individual_live001_roof_phase",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/5fac95fe6be27732d3e0/03-returned-added-roof.png",
+        "sha256": "5fac95fe6be27732d3e07c8ea1e6e0c4ceac5165f598b9f8d69c52ce4bf01bbf",
+        "bytes": 382135,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/roof-keyframes/03-returned-added-roof.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "manifest": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/native-001-result.json",
+          "sha256": "51d4b91f3e63c043a95bebc3b4d126cf50d3353b7e7e48856cfdac6792902caa",
+          "bytes": 1675410,
+          "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/native-001-result.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "label": "03-returned-added-roof",
+        "process_counter": 496,
+        "physics_counter": 497,
+        "drawn_counter": 496,
+        "pixel_scope": "Latest completed framebuffer near this phase marker; not asserted to match a physics frame."
+      }
+    },
+    {
+      "path": "images/live001-stills/02-whole-live-default.png",
+      "sha256": "f6b1e607f466536855f5808741998d0e070b088b3aac05f665bb1b2c9d74e781",
+      "bytes": 1059795,
+      "role": "individual_live001_native_still",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/f6b1e607f466536855f5/02-whole-live-default.png",
+        "sha256": "f6b1e607f466536855f5808741998d0e070b088b3aac05f665bb1b2c9d74e781",
+        "bytes": 1059795,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/images/02-whole-live-default.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "manifest": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/native-001-result.json",
+          "sha256": "51d4b91f3e63c043a95bebc3b4d126cf50d3353b7e7e48856cfdac6792902caa",
+          "bytes": 1675410,
+          "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/native-001-result.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "id": "02-whole-live-default"
+      }
+    },
+    {
+      "path": "images/live001-stills/03-near-gable-live-default.png",
+      "sha256": "211670bfd1f9ad0395d7492e7f01e138c9f244e8ef36a45df7e17b6d8132e506",
+      "bytes": 640132,
+      "role": "individual_live001_native_still",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/211670bfd1f9ad0395d7/03-near-gable-live-default.png",
+        "sha256": "211670bfd1f9ad0395d7492e7f01e138c9f244e8ef36a45df7e17b6d8132e506",
+        "bytes": 640132,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/images/03-near-gable-live-default.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "manifest": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/native-001-result.json",
+          "sha256": "51d4b91f3e63c043a95bebc3b4d126cf50d3353b7e7e48856cfdac6792902caa",
+          "bytes": 1675410,
+          "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/native-001-result.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "id": "03-near-gable-live-default"
+      }
+    },
+    {
+      "path": "images/live001-stills/04-near-gable-live-changed.png",
+      "sha256": "5c320489d01a707ff591f236cb2af7dfedb353cb5f277edd70395515be0487c3",
+      "bytes": 712529,
+      "role": "individual_live001_native_still",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/5c320489d01a707ff591/04-near-gable-live-changed.png",
+        "sha256": "5c320489d01a707ff591f236cb2af7dfedb353cb5f277edd70395515be0487c3",
+        "bytes": 712529,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/images/04-near-gable-live-changed.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "manifest": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/native-001-result.json",
+          "sha256": "51d4b91f3e63c043a95bebc3b4d126cf50d3353b7e7e48856cfdac6792902caa",
+          "bytes": 1675410,
+          "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/native-001-result.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "id": "04-near-gable-live-changed"
+      }
+    },
+    {
+      "path": "images/live001-stills/05-motion-start-default.png",
+      "sha256": "46e706d7bded855d8ca24b506e1fbd1d42cb656f3b1851e828e09440e0c15582",
+      "bytes": 640409,
+      "role": "individual_live001_native_still",
+      "original": {
+        "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/46e706d7bded855d8ca2/05-motion-start-default.png",
+        "sha256": "46e706d7bded855d8ca24b506e1fbd1d42cb656f3b1851e828e09440e0c15582",
+        "bytes": 640409,
+        "original_locator": "{PRIVATE_TMP}/d5-1317-live-integration-001/images/05-motion-start-default.png",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "copy_is_byte_identical": true,
+      "raw_counter_binding": {
+        "manifest": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/native-001-result.json",
+          "sha256": "51d4b91f3e63c043a95bebc3b4d126cf50d3353b7e7e48856cfdac6792902caa",
+          "bytes": 1675410,
+          "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/native-001-result.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "id": "05-motion-start-default"
+      }
+    }
+  ],
+  "public_image_count": 17,
+  "native_png_count": 8,
+  "avi_payload_image_count": 9,
+  "all_byte_identical": true,
+  "no_third_party_reference_pixels_copied": true,
+  "private_inventory": "private-provenance-retention.json"
+}

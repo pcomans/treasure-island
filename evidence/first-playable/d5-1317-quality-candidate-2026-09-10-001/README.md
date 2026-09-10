@@ -1,0 +1,3 @@
+1317 new-unit candidate packet: owner and independent candidate package PASS and separate unit/visual attestation accepted by root and serialized. The current release and original capture authority remain 13/213. Prospective authority adds exactly one unit (14/213), pending generation, validation and exact-current release.
+
+All 17 images, six accepted values and tree document remain exact. The seventh artifact is a byte-identical independent receipt; its original reviewed closure is preserved privately. Original sparse-motion, source-photo, historical-failure and capture-scope limits remain unchanged. No existing-unit zero-credit semantics apply to 1317.

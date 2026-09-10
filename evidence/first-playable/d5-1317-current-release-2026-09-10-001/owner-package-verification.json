@@ -1,0 +1,133 @@
+{
+  "derived_summary": true,
+  "original": {
+    "path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/OWNER_HANDOFF-package001.json",
+    "sha256": "27a992bd1f57e5aa2e33c2050efa7281fecb257a321f57d6318b608133ce283c",
+    "bytes": 6974
+  },
+  "decision": "PASS",
+  "authority": "14/213",
+  "pck_sha256": "9ab4e78f98b10cbc381d4cbd6a4f5e4367ec06766f6b5415cb070174c7ad9adf",
+  "input_count": 377,
+  "app_files": 7,
+  "stages": {
+    "mounted-component-001": {
+      "pid": 45837,
+      "exit_code": 0,
+      "elapsed_seconds": 2.584086458198726,
+      "pins_unchanged": true,
+      "app_unchanged": true,
+      "warnings": [],
+      "log_errors": [],
+      "markers": {
+        "PASS: 1308+1394+1317 mounted package contract": true
+      },
+      "pid_absent": true,
+      "ok": true,
+      "receipt_sha256": "957a2f685b18f23c10bd213f834d9e723a1eb9fe7ae6cab4612524d7d2eb98ea",
+      "log_sha256": "073122ed53305eeb4c9a1146912163f8ba3e1e89da1a65508687100b4dfbd866"
+    },
+    "mounted-privacy-001": {
+      "pid": 45954,
+      "exit_code": 0,
+      "elapsed_seconds": 2.089913458097726,
+      "pins_unchanged": true,
+      "app_unchanged": true,
+      "warnings": [],
+      "log_errors": [],
+      "markers": {
+        "PASS: direct-mounted PCK matches the explicit package/world identities": true
+      },
+      "pid_absent": true,
+      "ok": true,
+      "receipt_sha256": "af5ee2ec8977a96157a20cefcb228c684ef5c91d90aca3f526decebc5b37ddfb",
+      "log_sha256": "b185a90c759ad89eb6bd7874fef5a0c56b0fac8185951bb7bee5167339dbb771"
+    },
+    "release-headless-smoke-001": {
+      "pid": 45975,
+      "exit_code": 0,
+      "elapsed_seconds": 5.911626124987379,
+      "pins_unchanged": true,
+      "app_unchanged": true,
+      "warnings": [],
+      "log_errors": [],
+      "markers": {
+        "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent": true
+      },
+      "pid_absent": true,
+      "ok": true,
+      "receipt_sha256": "baaf1aee4b4d93164421ffa617393f5b13312214a78e21d506c287c0eb99297b",
+      "log_sha256": "a74efac2728be4592fe87cbbbf6fa057e72d79a6b249be1553392443c0badc1b"
+    },
+    "release-native-smoke-001": {
+      "pid": 45999,
+      "exit_code": 0,
+      "elapsed_seconds": 48.898601833032444,
+      "pins_unchanged": true,
+      "app_unchanged": true,
+      "warnings": [],
+      "log_errors": [],
+      "markers": {
+        "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent": true
+      },
+      "pid_absent": true,
+      "ok": true,
+      "receipt_sha256": "5bc1ee20028a68f1fe8b9af88f021678dca3d923b60c83682fb245967acdb748",
+      "log_sha256": "ee7cb0423df32682e09daa301912345a703168cb9ce75560782f2c759f155ab0"
+    }
+  },
+  "actual_signed_worlds": {
+    "release-headless-smoke-001": {
+      "world": {
+        "playable_rows": 735,
+        "context_rows": 4,
+        "meshes": 1018,
+        "surfaces": 1033,
+        "triangles": 81761,
+        "bodies": 466,
+        "shapes": 477,
+        "load_ms": 4695
+      },
+      "five_attachment_predicates_pass": true,
+      "world_original_line": "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=1018 surfaces=1033 triangles=81761 bodies=466 shapes=477 vegetation=124 seed=1414092337 batches=19 load_ms=4695",
+      "movement_original_line": "MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass",
+      "jetpack_original_line": "MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps"
+    },
+    "release-native-smoke-001": {
+      "world": {
+        "playable_rows": 735,
+        "context_rows": 4,
+        "meshes": 1018,
+        "surfaces": 1033,
+        "triangles": 81761,
+        "bodies": 466,
+        "shapes": 477,
+        "load_ms": 5287
+      },
+      "five_attachment_predicates_pass": true,
+      "world_original_line": "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=1018 surfaces=1033 triangles=81761 bodies=466 shapes=477 vegetation=124 seed=1414092337 batches=19 load_ms=5287",
+      "movement_original_line": "MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass",
+      "jetpack_original_line": "MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps"
+    }
+  },
+  "mounted_scope": "Actual target-record builder dispatch and factory material/ordered collision equality; detached components are distinct from full signed ordinary-main attachment.",
+  "privacy_counts": {
+    "virtual_files": 948,
+    "generated_world_files": 47,
+    "chunks": 38,
+    "private_paths": 0,
+    "private_raw": 0,
+    "banned": 0
+  },
+  "slot_release": {
+    "path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/SLOT_RELEASE-package001.json",
+    "sha256": "da83fcfe7787466f51c5d7a0a89614d4710e1b78431232ae06c9b87a89055ce9",
+    "bytes": 2648
+  },
+  "limits": [
+    "Owner PASS does not replace independent exact-current review or root publication acceptance.",
+    "Current app14 authority is separate from immutable original13 capture/adapter metadata and candidate app.",
+    "No new screenshot, continuous motion, manual play or M1 runtime claim.",
+    "No source geometry, camera/controls, MAIN, commit/push, import/source/capture/export replay."
+  ]
+}

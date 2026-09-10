@@ -22,12 +22,12 @@ import {
 } from "./lib/world-contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const COMPILER_VERSION = "1.12.0";
-const CATALOG_SCHEMA = "ti.facade-recognition-catalog/13";
-const RUNTIME_SCHEMA = "ti.facade-runtime-registry/13";
+const COMPILER_VERSION = "1.13.0";
+const CATALOG_SCHEMA = "ti.facade-recognition-catalog/14";
+const RUNTIME_SCHEMA = "ti.facade-runtime-registry/14";
 const REPORT_SCHEMA = "ti.facade-recognition-validation-report/4";
-const ADAPTER_CONTRACT_SCHEMA = "ti.facade-runtime-adapter-contracts/12";
-const LOADER_API_VERSION = "ti.facade-runtime-registry-loader/12";
+const ADAPTER_CONTRACT_SCHEMA = "ti.facade-runtime-adapter-contracts/13";
+const LOADER_API_VERSION = "ti.facade-runtime-registry-loader/13";
 const UNKNOWN_VERSION_POLICY = "reject";
 const CATALOG_ID = "treasure-island-physical-building-recognition";
 const CATALOG_SCHEMA_REFERENCE = "./facade-recognition-catalog.schema.json";
@@ -334,6 +334,7 @@ const ACCEPTED_REFERENCE_UNIT_IDS = Object.freeze([
   "physical-building:w95934144",
   "physical-building:w95934123",
   "physical-building:w96215646",
+  "physical-building:w95934125",
 ]);
 
 const D5_BATCH_ACCEPTED = Object.freeze([
@@ -861,7 +862,7 @@ const D5_BATCH_ACCEPTED = Object.freeze([
         "world_triangles": 79913,
         "world_static_bodies": 466,
         "world_shapes": 474,
-        "world_topology_scope": "current_integration_topology",
+        "world_topology_scope": "pre_d5_1317_integration_quality_batch_topology",
         "capture_isolated_world_mesh_instances": 997,
         "capture_isolated_world_surfaces": 1012,
         "capture_isolated_world_triangles": 77604,
@@ -939,9 +940,277 @@ const D5_BATCH_ACCEPTED = Object.freeze([
     },
     "tree_document_sha256": "4811d4fa41523ee524b4360b9373d4a9f5daf6450e427887df3547a23570abdd",
     "image_count": 14
+  },
+  {
+    "number": "1317",
+    "source": "w95934125",
+    "wall": "building:w95934125:wall",
+    "roof": "building:w95934125:roof",
+    "unit_id": "physical-building:w95934125",
+    "adapter_id": "active-adapter:d5-1317-live:building:w95934125:wall",
+    "mode": "active_d5_1317_paired_replacement",
+    "files": {
+      "adapter": "game/scripts/world/facades/d5_1317_gateview_live_replacement.gd",
+      "config": "game/resources/facades/d5_1317_gateview_live_replacement.json",
+      "factory": "game/scripts/world/facades/d5_1317_gateview_live_factory.gd",
+      "factory_config": "game/resources/facades/d5_1317_gateview_quality_study.json",
+      "shader": "game/resources/facades/d5_1317_siding_marks.gdshader",
+      "site_kit": "game/scripts/world/facades/site_12_housing_kit.gd",
+      "geometry": "game/resources/facades/d5_1317_quality_study_geometry.json",
+      "surface_shader": "game/resources/facades/d5_1317_surface_tone.gdshader"
+    },
+    "hashes": {
+      "adapter": "283a020492c03fde62c591ea9ebcb1e5c5403a55aca514f0998908b440d9e819",
+      "config": "d15f6ea9e14ca9723dfd3f5794718fab6ad6d0cbf24091ce0e81fd34821e554f",
+      "factory": "80930edee46371825bfb7b337b94bdbb4e3b7fc064aa2ba3061b6a86886af884",
+      "factory_config": "33b54fb72cf829e933a0e386e984f6ffe9d9a7c9d335ecb034e779c12bf89a26",
+      "shader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
+      "site_kit": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+      "geometry": "48ba2658a74b4e51ab43fb07b3940a737ffa351350081063c45908e878a5bcf9",
+      "surface_shader": "2388fbee5821352c30ec5925f4ff159439090c8cb1f4973344a947c65b4e4da0"
+    },
+    "config": {
+      "schema_version": "ti.d5-1317-gateview-live-replacement/1",
+      "adapter_id": "active-adapter:d5-1317-live:building:w95934125:wall",
+      "source_key": "w95934125",
+      "chunk_id": "x_-3__z_-2",
+      "chunk_sha256": "35bf23d64e860d39c5b79a98be7830f4f477143f7e9490c6739dec0627062d11",
+      "canonical_records": {
+        "building:w95934125:wall": "3537997ae045f8022bbe4c6449cec82655797411e417397d15ace85fedc3a6ef",
+        "building:w95934125:roof": "ae444960fc7ae2d8cae3a7fa28637ecd06b9c17d691d3c69c146564d5c6874ef",
+        "area:r17241151:x_-3__z_-2": "336bb7c5d763d853c19184da045cf4a114f25493ecf02a367ca1e0523d8bebd1",
+        "area:r17241152:x_-3__z_-2": "104faf44f5234729b0411e75595abeec1888f867d0efa6a3d765aaa4f93d991e",
+        "land:w26767313:x_-3__z_-2": "9ff2ddf4241136939a8dbe377679ef9f30e4c17e229b91ffbafc117c03d47c04"
+      },
+      "accepted_art002_files": {
+        "game/scripts/world/facades/d5_1317_gateview_quality_study.gd": "d43dd7045297c9c91bfac81006a189165f11b9a46de8ff537996f86e1d86dd68",
+        "game/resources/facades/d5_1317_gateview_quality_study.json": "33b54fb72cf829e933a0e386e984f6ffe9d9a7c9d335ecb034e779c12bf89a26",
+        "game/resources/facades/d5_1317_quality_study_geometry.json": "48ba2658a74b4e51ab43fb07b3940a737ffa351350081063c45908e878a5bcf9",
+        "game/resources/facades/d5_1317_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
+        "game/resources/facades/d5_1317_surface_tone.gdshader": "2388fbee5821352c30ec5925f4ff159439090c8cb1f4973344a947c65b4e4da0"
+      },
+      "accepted_static_review_sha256": "6eda0c3025624b6affeeafa686df46a8f4a26cef9a8d99d39bd921794026e94c",
+      "accepted_source_review_sha256": "ea189ed889128cb979d7e2a59511cb9d3c930471c527a2e7079311adba4ff787",
+      "pair_contract": {
+        "meshes": 14,
+        "surfaces": 14,
+        "triangles": 1938,
+        "bodies": 2,
+        "shapes": 5,
+        "collision_triangles": 1038,
+        "wall_shapes": [
+          68,
+          192,
+          648
+        ],
+        "roof_shapes": [
+          22,
+          108
+        ],
+        "eligible_source_wall_triangles": 68,
+        "ground_visual_only_triangles": 36,
+        "factory_calls": 1,
+        "partial_pair_allowed": false,
+        "fallback_allowed": false,
+        "stack_allowed": false
+      },
+      "truth_boundary": {
+        "captured_authority_metric": "13/213",
+        "candidate_credit": 0,
+        "runtime_attachment": true,
+        "production_attachment_review": "pending",
+        "recognition_accepted": false,
+        "as_built_claim": false,
+        "interior_modeled": false
+      },
+      "package_boundary": {
+        "source_photography": false,
+        "discovery_dependency": false,
+        "activation_flag": false,
+        "missing_pair_loaded_from_disk": false
+      }
+    },
+    "behavior": {
+      "schema_version": "ti.d5-1317-production-live-parity/1",
+      "acceptance_contract": {
+        "evidence_manifest_sha256": "4fcdd7f900dfadb12187f558bf0e545038d8386134ed1e7f9830810be763ddb5",
+        "motion_telemetry_manifest_sha256": "a1e3d98ebacaf73c5fb985a2fa2ee4597fe4c2b334cc102c3d3ea460bf361214",
+        "visual_motion_manifest_sha256": "088c0a0df84440cf2ddb35996aabc5d1b1aa5e1fcafe47217cd92dbbca08fc15",
+        "package_verification_receipt_sha256": "d6041941c9ec59d6a6d8fac4cbb79964fe842cdc135baf5c7a36df3a65a2c98e",
+        "evidence_tree_sha256": "18da75ad3394e86f3129449bbf113efd14d2e845acd767acba995545b3e5f6ee",
+        "mechanical_review_receipt_sha256": "7cd3ef79e13c19bbb34b601338f86533b9de429d274d35e55e8e6f8fbd8afdce",
+        "review_receipt_sha256": "19edda17a50fd957ec09bd9a2ea310b7f82524e717c63467d5198e2e3f9500df",
+        "accepted_physical_unit_id": "physical-building:w95934125",
+        "capture_time_recognition_metric": "13/213",
+        "numerator_effect": 1,
+        "reference_recognizable": true,
+        "wall_and_roof_are_one_physical_unit": true
+      },
+      "replacement_contract": {
+        "source_key": "w95934125",
+        "wall_object_key": "building:w95934125:wall",
+        "roof_object_key": "building:w95934125:roof",
+        "actual_supplied_chunk_pair_required": true,
+        "actual_land_and_area_records_required": true,
+        "mapped_public_run_indices": [
+          10,
+          13,
+          14,
+          15,
+          17,
+          20,
+          22,
+          24,
+          26,
+          27,
+          29,
+          31
+        ],
+        "protected_run_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          11,
+          12,
+          16,
+          18,
+          19,
+          21,
+          23,
+          25,
+          28,
+          30,
+          32,
+          33
+        ],
+        "partial_pair_allowed": false,
+        "fallback_allowed": false,
+        "generic_stack_allowed": false,
+        "factory_calls": 1
+      },
+      "geometry_contract": {
+        "source_geometry_sha256": "48ba2658a74b4e51ab43fb07b3940a737ffa351350081063c45908e878a5bcf9",
+        "canonical_wall_record_sha256": "3537997ae045f8022bbe4c6449cec82655797411e417397d15ace85fedc3a6ef",
+        "canonical_roof_record_sha256": "ae444960fc7ae2d8cae3a7fa28637ecd06b9c17d691d3c69c146564d5c6874ef",
+        "canonical_terrain_records": {
+          "area:r17241151:x_-3__z_-2": "336bb7c5d763d853c19184da045cf4a114f25493ecf02a367ca1e0523d8bebd1",
+          "area:r17241152:x_-3__z_-2": "104faf44f5234729b0411e75595abeec1888f867d0efa6a3d765aaa4f93d991e",
+          "land:w26767313:x_-3__z_-2": "9ff2ddf4241136939a8dbe377679ef9f30e4c17e229b91ffbafc117c03d47c04"
+        },
+        "horizontal_source_footprint_preserved": true,
+        "visual_mesh_instances": 14,
+        "visual_surfaces": 14,
+        "visual_triangles": 1938,
+        "world_records": 735,
+        "world_mesh_instances": 1018,
+        "world_surfaces": 1033,
+        "world_triangles": 81761,
+        "world_static_bodies": 466,
+        "world_shapes": 477,
+        "world_topology_scope": "current_integration_topology",
+        "capture_isolated_world_mesh_instances": 1005,
+        "capture_isolated_world_surfaces": 1020,
+        "capture_isolated_world_triangles": 78224,
+        "capture_isolated_world_shapes": 475
+      },
+      "ownership_contract": {
+        "structural_owner_count": 2,
+        "shape_count": 5,
+        "spray_owner_count": 1,
+        "navigation_owner_count": 0,
+        "wall_is_sole_spray_receiver": true,
+        "wall_decal_cull_mask": 2,
+        "wall_shape_order": [
+          "eligible_source_wall",
+          "noneligible_canopies_posts_braces",
+          "noneligible_closed_lower_modules"
+        ],
+        "wall_shape_collision_triangles": [
+          68,
+          192,
+          648
+        ],
+        "roof_shape_order": [
+          "exact_source_roof",
+          "added_public_roof"
+        ],
+        "roof_shape_collision_triangles": [
+          22,
+          108
+        ],
+        "eligible_exterior_collision_triangles": 68,
+        "noneligible_canopy_post_collision_triangles": 192,
+        "noneligible_closed_lower_collision_triangles": 648,
+        "wall_collision_triangles": 908,
+        "roof_collision_triangles": 130,
+        "visual_ground_triangles": 36,
+        "added_ground_collision_triangles": 0,
+        "roof_is_wall_spray_receiver": false,
+        "roof_world_solid_landing": true,
+        "eligible_render_layer": 2,
+        "noneligible_render_layer": 1,
+        "terrain_geometry_and_ownership_unchanged": true
+      },
+      "truth_boundary": {
+        "as_built_fidelity_claimed": false,
+        "interior_modeled": false,
+        "hidden_schedule_invented": false,
+        "capture_time_recognition_credit": false,
+        "capture_time_candidate_promoted": false,
+        "reference_pixels_packaged": false,
+        "receiver_complete_inferred_from_art": false,
+        "game_distinctive_claimed": false,
+        "unobserved_sides_protected": true,
+        "unsurveyed_dimensions_and_counts_are_production_inference": true,
+        "direct_continuous_outgoing_land_contact_ownership_claimed": false,
+        "continuous_motion_review_claimed": false
+      }
+    },
+    "acceptance": {
+      "evidence_manifest_sha256": "4fcdd7f900dfadb12187f558bf0e545038d8386134ed1e7f9830810be763ddb5",
+      "motion_telemetry_manifest_sha256": "a1e3d98ebacaf73c5fb985a2fa2ee4597fe4c2b334cc102c3d3ea460bf361214",
+      "visual_motion_manifest_sha256": "088c0a0df84440cf2ddb35996aabc5d1b1aa5e1fcafe47217cd92dbbca08fc15",
+      "package_verification_receipt_sha256": "d6041941c9ec59d6a6d8fac4cbb79964fe842cdc135baf5c7a36df3a65a2c98e",
+      "evidence_tree_sha256": "18da75ad3394e86f3129449bbf113efd14d2e845acd767acba995545b3e5f6ee",
+      "mechanical_review_receipt_sha256": "7cd3ef79e13c19bbb34b601338f86533b9de429d274d35e55e8e6f8fbd8afdce",
+      "review_receipt_sha256": "19edda17a50fd957ec09bd9a2ea310b7f82524e717c63467d5198e2e3f9500df",
+      "capture_time_recognition_metric": "13/213",
+      "numerator_effect": 1,
+      "review_id": "d5-1317-quality-candidate-2026-09-10-001",
+      "review_kind": "independent_reference_recognition",
+      "status": "accept"
+    },
+    "receipt": {
+      "evidence_manifest_sha256": "4fcdd7f900dfadb12187f558bf0e545038d8386134ed1e7f9830810be763ddb5",
+      "motion_telemetry_manifest_sha256": "a1e3d98ebacaf73c5fb985a2fa2ee4597fe4c2b334cc102c3d3ea460bf361214",
+      "visual_motion_manifest_sha256": "088c0a0df84440cf2ddb35996aabc5d1b1aa5e1fcafe47217cd92dbbca08fc15",
+      "package_verification_receipt_sha256": "d6041941c9ec59d6a6d8fac4cbb79964fe842cdc135baf5c7a36df3a65a2c98e",
+      "evidence_tree_sha256": "18da75ad3394e86f3129449bbf113efd14d2e845acd767acba995545b3e5f6ee",
+      "mechanical_review_receipt_sha256": "7cd3ef79e13c19bbb34b601338f86533b9de429d274d35e55e8e6f8fbd8afdce",
+      "review_receipt_sha256": "19edda17a50fd957ec09bd9a2ea310b7f82524e717c63467d5198e2e3f9500df",
+      "capture_time_recognition_metric": "13/213",
+      "numerator_effect": 1,
+      "unit_id": "physical-building:w95934125",
+      "evidence_manifest_path": "evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001/capture-manifest.json",
+      "motion_telemetry_manifest_path": "evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001/motion-telemetry.json",
+      "visual_motion_manifest_path": "evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001/visual-motion.json",
+      "package_verification_receipt_path": "evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001/package-verification-receipt.json",
+      "evidence_tree_path": "evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001/evidence-tree.json",
+      "mechanical_review_receipt_path": "evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001/mechanical-review.json",
+      "review_path": "evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001/unit-visual-attestation.json"
+    },
+    "tree_document_sha256": "5ede3855f36303854396ee62c7cdd91ab561e3492a24d2c15db0d4aeab40359d",
+    "image_count": 17
   }
 ]);
-const D5_BATCH_BUILDER_SHA256 = "552cc81c7146793e272621ca99667997943e8a01c48aa62e80bd7a14a4f1ccf7";
+const D5_BATCH_BUILDER_SHA256 = "de65c20e96d4fc2515d0a6f7c238a95335fcc8da9022bf58343efd3063b7fd6d";
 
 const REVIEW_RECEIPTS = Object.freeze({
   ...Object.fromEntries(D5_BATCH_ACCEPTED.map((d) => [d.acceptance.review_id, Object.freeze(d.receipt)])),
@@ -1071,7 +1340,7 @@ const PATHS = Object.freeze({
 });
 
 const EXPECTED = Object.freeze({
-  active_runtime_adapter_receivers: 12,
+  active_runtime_adapter_receivers: 13,
   building_footprints: 213,
   building_parts: 2,
   composite_units: 1,
@@ -1080,7 +1349,7 @@ const EXPECTED = Object.freeze({
   recognition_units: 213,
   source_records: 215,
   standalone_units: 212,
-  runtime_adapter_receivers: 21,
+  runtime_adapter_receivers: 22,
   visible_wall_runs: 4971,
 });
 
@@ -1088,8 +1357,8 @@ const EXPECTED_ADAPTER_CONTRACTS = Object.freeze({
   disabled_adapter_receivers: 6,
   disabled_projection_occurrences: 13,
   disabled_unique_projection_inputs: 13,
-  package_safe_adapter_receivers: 15,
-  receiver_adapter_plans: 21,
+  package_safe_adapter_receivers: 16,
+  receiver_adapter_plans: 22,
 });
 
 const ADAPTER_CONTRACT_CHECK_ID = `adapter_contract_${EXPECTED_ADAPTER_CONTRACTS.package_safe_adapter_receivers}_ready_${EXPECTED_ADAPTER_CONTRACTS.disabled_adapter_receivers}_disabled_${EXPECTED_ADAPTER_CONTRACTS.disabled_unique_projection_inputs}_unique_projection_inputs`;
@@ -1126,6 +1395,7 @@ const ACTIVE_ADAPTER_UNIT_BY_RECEIVER = Object.freeze({
   [D2_1441_WALL]: unitId(D2_1441_SOURCE),
   [D2_1439_WALL]: unitId(D2_1439_SOURCE),
   [D2_1444_WALL]: unitId(D2_1444_SOURCE),
+  "building:w95934125:wall": "physical-building:w95934125",
   "building:w96215646:wall": "physical-building:w96215646",
   "building:w95934123:wall": "physical-building:w95934123",
 });
@@ -1140,6 +1410,7 @@ const ACTIVE_ADAPTER_REVIEW_STATUS_BY_RECEIVER = Object.freeze({
   [D2_1441_WALL]: "independent_exact_current_live_pass",
   [D2_1439_WALL]: "independent_exact_current_live_pass",
   [D2_1444_WALL]: "independent_exact_current_live_pass",
+  "building:w95934125:wall": "independent_exact_current_live_pass",
   "building:w96215646:wall": "independent_exact_current_live_pass",
   "building:w95934123:wall": "independent_exact_current_live_pass",
 });
@@ -1673,28 +1944,28 @@ function validateCurrentWorldBuilderDispatch(inputs) {
     navy_chapel_preload: `const NAVY_CHAPEL_187_LIVE_REPLACEMENT := preload("res://${NAVY_CHAPEL_LIVE_ADAPTER_PATH}")`,
     navy_chapel_prepare: "NAVY_CHAPEL_187_LIVE_REPLACEMENT.prepare_chunk_records(chunk.records as Array)",
     navy_chapel_plan: "NAVY_CHAPEL_187_LIVE_REPLACEMENT.build_chunk_plan(chapel_pair)",
-    navy_chapel_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan)",
+    navy_chapel_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan)",
     navy_chapel_claim: "if not is_context and NAVY_CHAPEL_187_LIVE_REPLACEMENT.claims_record(record):",
     navy_chapel_consume: "return NAVY_CHAPEL_187_LIVE_REPLACEMENT.consume_record(record, chapel_plan)",
     navy_chapel_consumed: "NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)",
     d2_1441_preload: `const D2_1441_CHINOOK_LIVE_REPLACEMENT := preload("res://${D2_1441_LIVE_ADAPTER_PATH}")`,
     d2_1441_prepare: "D2_1441_CHINOOK_LIVE_REPLACEMENT.prepare_chunk_records(chunk)",
     d2_1441_plan: "D2_1441_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1441_pair)",
-    d2_1441_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan)",
+    d2_1441_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan)",
     d2_1441_claim: "if not is_context and D2_1441_CHINOOK_LIVE_REPLACEMENT.claims_record(record):",
     d2_1441_consume: "return D2_1441_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1441_plan)",
     d2_1441_consumed: "D2_1441_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1441_plan)",
     d2_1439_preload: `const D2_1439_CHINOOK_LIVE_REPLACEMENT := preload("res://${D2_1439_LIVE_ADAPTER_PATH}")`,
     d2_1439_prepare: "D2_1439_CHINOOK_LIVE_REPLACEMENT.prepare_chunk_records(chunk)",
     d2_1439_plan: "D2_1439_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1439_pair)",
-    d2_1439_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan)",
+    d2_1439_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan)",
     d2_1439_claim: "if not is_context and D2_1439_CHINOOK_LIVE_REPLACEMENT.claims_record(record):",
     d2_1439_consume: "return D2_1439_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1439_plan)",
     d2_1439_consumed: "D2_1439_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1439_plan)",
     d2_1444_preload: `const D2_1444_CROAKER_LIVE_REPLACEMENT := preload("res://${D2_1444_LIVE_ADAPTER_PATH}")`,
     d2_1444_prepare: "D2_1444_CROAKER_LIVE_REPLACEMENT.prepare_chunk_records(chunk)",
     d2_1444_plan: "D2_1444_CROAKER_LIVE_REPLACEMENT.build_chunk_plan(d2_1444_pair)",
-    d2_1444_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan)",
+    d2_1444_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan)",
     d2_1444_claim: "if not is_context and D2_1444_CROAKER_LIVE_REPLACEMENT.claims_record(record):",
     d2_1444_consume: "return D2_1444_CROAKER_LIVE_REPLACEMENT.consume_record(record, d2_1444_plan)",
     d2_1444_consumed: "D2_1444_CROAKER_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1444_plan)",
@@ -1719,10 +1990,15 @@ function validateCurrentWorldBuilderDispatch(inputs) {
   markers.d5_1308_consume = "return D5_1308_GATEVIEW_LIVE_REPLACEMENT.consume_record(record, d5_1308_plan)";
   markers.d5_1308_consumed = "D5_1308_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1308_plan)";
   markers.d5_1394_prepare = "D5_1394_GATEVIEW_LIVE_REPLACEMENT.prepare_chunk_records(chunk)";
+  markers.d5_1317_prepare = "D5_1317_GATEVIEW_LIVE_REPLACEMENT.prepare_chunk_records(chunk)";
   markers.d5_1394_plan = "D5_1394_GATEVIEW_LIVE_REPLACEMENT.build_chunk_plan(d5_1394_pair,";
+  markers.d5_1317_plan = "D5_1317_GATEVIEW_LIVE_REPLACEMENT.build_chunk_plan(d5_1317_pair,";
   markers.d5_1394_claim = "if not is_context and D5_1394_GATEVIEW_LIVE_REPLACEMENT.claims_record(record):";
+  markers.d5_1317_claim = "if not is_context and D5_1317_GATEVIEW_LIVE_REPLACEMENT.claims_record(record):";
   markers.d5_1394_consume = "return D5_1394_GATEVIEW_LIVE_REPLACEMENT.consume_record(record, d5_1394_plan)";
+  markers.d5_1317_consume = "return D5_1317_GATEVIEW_LIVE_REPLACEMENT.consume_record(record, d5_1317_plan)";
   markers.d5_1394_consumed = "D5_1394_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1394_plan)";
+  markers.d5_1317_consumed = "D5_1317_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1317_plan)";
   const positions = {};
   for (const [label, marker] of Object.entries(markers)) {
     positions[label] = exactWorldBuilderMarkerIndex(builderText, marker, label.replaceAll("_", " "));
@@ -1761,13 +2037,19 @@ function validateCurrentWorldBuilderDispatch(inputs) {
   before("d5_1308_claim", "d5_1308_consume", "D5 1308 atomic lifecycle order drifted");
   before("d5_1308_consume", "generic_vertices", "D5 1308 must consume before generic construction");
   before("d2_1444_record_dispatch", "d5_1308_consumed", "D5 1308 consumption must precede its sealed-plan assertion");
-  invariant(occurrenceCount(builderText, "D5_1308_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1308_plan)") === 4, "D5 1308 rollback lifecycle drifted");
+  invariant(occurrenceCount(builderText, "D5_1308_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1308_plan)") === 5, "D5 1308 rollback lifecycle drifted");
   before("d5_1394_prepare", "d5_1394_plan", "D5 1394 atomic lifecycle order drifted");
+  before("d5_1317_prepare", "d5_1317_plan", "D5 1317 atomic lifecycle order drifted");
   before("d5_1394_plan", "d5_1394_claim", "D5 1394 atomic lifecycle order drifted");
+  before("d5_1317_plan", "d5_1317_claim", "D5 1317 atomic lifecycle order drifted");
   before("d5_1394_claim", "d5_1394_consume", "D5 1394 atomic lifecycle order drifted");
+  before("d5_1317_claim", "d5_1317_consume", "D5 1317 atomic lifecycle order drifted");
   before("d5_1394_consume", "generic_vertices", "D5 1394 must consume before generic construction");
+  before("d5_1317_consume", "generic_vertices", "D5 1317 must consume before generic construction");
   before("d2_1444_record_dispatch", "d5_1394_consumed", "D5 1394 consumption must precede its sealed-plan assertion");
-  invariant(occurrenceCount(builderText, "D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)") === 3, "D5 1394 rollback lifecycle drifted");
+  before("d2_1444_record_dispatch", "d5_1317_consumed", "D5 1317 consumption must precede its sealed-plan assertion");
+  invariant(occurrenceCount(builderText, "D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)") === 4, "D5 1394 rollback lifecycle drifted");
+  invariant(occurrenceCount(builderText, "D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)") === 3, "D5 1317 rollback lifecycle drifted");
   before("d1_b201_validate", "d1_b201_claim", "D1 B201 chunk validation must precede its per-record claim");
   before("d1_b201_claim", "d1_b201_prepare", "D1 B201 claim must precede preparation");
   before("d1_b201_prepare", "generic_vertices", "D1 B201 preparation must precede generic construction");
@@ -1786,10 +2068,10 @@ function validateCurrentWorldBuilderDispatch(inputs) {
   before("isle_house_claim", "isle_house_build", "Isle House low claim must precede its attachment build");
 
   invariant(sha256File(absolute(WORLD_CHUNK_BUILDER_PATH)) === D5_BATCH_BUILDER_SHA256, "Current batch dispatch bytes drifted");
-  invariant(occurrenceCount(builderText, "D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)") === 6, "Current 1439 cleanup lifecycle drifted");
-  invariant(occurrenceCount(builderText, "D2_1444_CROAKER_LIVE_REPLACEMENT.free_unconsumed(d2_1444_plan)") === 5, "Current 1444 cleanup lifecycle drifted");
+  invariant(occurrenceCount(builderText, "D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)") === 7, "Current 1439 cleanup lifecycle drifted");
+  invariant(occurrenceCount(builderText, "D2_1444_CROAKER_LIVE_REPLACEMENT.free_unconsumed(d2_1444_plan)") === 6, "Current 1444 cleanup lifecycle drifted");
   const currentDependencies = runtimeDependencies(builderText);
-  invariant(occurrenceCount(builderText, "D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)") === 7, "Current world-builder D2 1441 cleanup marker must occur exactly five times");
+  invariant(occurrenceCount(builderText, "D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)") === 8, "Current world-builder D2 1441 cleanup marker must occur exactly five times");
   for (const dependency of D2_1441_REVIEWED_WORLD_BUILDER_DEPENDENCY_PATHS) {
     invariant(currentDependencies.includes(dependency), `Current world builder lost accepted D2 1441 package dependency ${dependency}`);
   }
@@ -3043,6 +3325,25 @@ function deriveActiveRuntimeAdapterSeeds(inputs, units) {
   "source_key": "w96215646",
   "whole_building_recognizability_imported": false
 },
+    {
+  "adapter_id": "active-adapter:d5-1317-live:building:w95934125:wall",
+  "content_classification": "active_target_specific_paired_wall_roof_replacement",
+  "receiver_key": "building:w95934125:wall",
+  "review_status": "independent_exact_current_live_pass",
+  "runtime_adapter_path": "game/scripts/world/facades/d5_1317_gateview_live_replacement.gd",
+  "runtime_asset_paths": [
+    "game/resources/facades/d5_1317_gateview_quality_study.json",
+    "game/resources/facades/d5_1317_siding_marks.gdshader",
+    "game/scripts/world/facades/d5_1317_gateview_live_factory.gd",
+    "game/scripts/world/facades/site_12_housing_kit.gd",
+    "game/resources/facades/d5_1317_quality_study_geometry.json",
+    "game/resources/facades/d5_1317_surface_tone.gdshader"
+  ],
+  "runtime_config_path": "game/resources/facades/d5_1317_gateview_live_replacement.json",
+  "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+  "source_key": "w95934125",
+  "whole_building_recognizability_imported": false
+},
   ].map((seed) => ({
     ...seed,
     ...activeRecognitionAuthority(seed.receiver_key, units),
@@ -3378,8 +3679,13 @@ function validateD5BatchAuthority(inputs) {
     invariant(review.decision === "PASS" && review.physical_unit_id === d.unit_id && equalStable(review.acceptance_bindings, six) && review.evidence_tree_document_sha256 === d.tree_document_sha256, `${label} independent seventh attestation binding drifted`);
     const pkg = readJson(receipt.package_verification_receipt_path);
     invariant(pkg.owner_decision === "PASS" && pkg.independent_exact_app_decision === "PASS" && pkg.independent_exact_app_review_pending === false && pkg.physical_unit_id === d.unit_id && pkg.candidate_authority === "13/213" && pkg.truth_boundary.credit_granted === false && pkg.truth_boundary.authority_mutated === false, `${label} historical candidate package truth drifted`);
+    if (d.number === "1317") {
+      invariant(pkg.truth_boundary.new_unit_candidate === true && pkg.truth_boundary.prospective_numerator_effect_after_separate_acceptance === 1 && pkg.independent_review.sha256 === "fb4f28ce1a9b3ca433001174052d48cb68b9162042f07e6e764feeb14a6734fa" && pkg.terminal_slot_releases.some((r) => r.sha256 === "b474345fdca131d2dce3edba134ae9db81a8bf5dbd26a814d35dbe24a5eb1b85"), `${label} new-unit independent package/terminal gate drifted`);
+      invariant(pkg.signature_privacy_binding.sha256 === "fb5ab13d2793c87229238456dc52dddbe4fe35090e727ca6eec765073352b83b" && pkg.pck_sha256 === "eecb13831c625a3d09871a2f37f322316cdbc0df0c0f5e512a0bf08d54831691", `${label} accepted candidate app drifted`);
+    } else {
     invariant(pkg.independent_package_review.sha256 === "665648ccc7fdc05241841e8201ec495809133f9c2acb522e9adef56bd6287773" && pkg.independent_terminal_slot_release.sha256 === "1a5d644aaa59fbdb46feffba65f43f263ca755b3cfb40f062608a3e2546cce27", `${label} shared independent package/byte gate drifted`);
     invariant(pkg.signature_privacy_binding.sha256 === "8103ac4a7962f23bca2f3c78eda13d139d1ab7f3696610d53189ce770893143e" && pkg.pck_sha256 === "9fef305dc9ac1f5d3866742143842ce5f691d1bc369dc41b775142fbf243ed86", `${label} shared candidate app drifted`);
+    }
   }
 }
 
@@ -4854,7 +5160,7 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
     const adapter = registry.active_runtime_adapters.find((a) => a.receiver_key === d.wall);
     const contract = adapter?.active_runtime_contract;
     invariant(adapter?.adapter_id === d.adapter_id && adapter.source_key === d.source && adapter.runtime_content_mode === d.mode && adapter.attachment_kind === `active_d5_${d.number}_paired_wall_roof_replacement`, `D5 ${d.number} active identity drifted`);
-    invariant(adapter.active_receiver_scope.run_count === d.config.mapped_runs.length + d.config.protected_runs.length && adapter.active_receiver_scope.coverage === "whole_direct_wall_receiver" && adapter.accepted_run_scopes.length === 0 && adapter.runtime_asset_projections.length === 0, `D5 ${d.number} exact receiver/projection scope drifted`);
+    invariant(adapter.active_receiver_scope.run_count === d.behavior.replacement_contract.mapped_public_run_indices.length + d.behavior.replacement_contract.protected_run_indices.length && adapter.active_receiver_scope.coverage === "whole_direct_wall_receiver" && adapter.accepted_run_scopes.length === 0 && adapter.runtime_asset_projections.length === 0, `D5 ${d.number} exact receiver/projection scope drifted`);
     invariant(contract && equalStable(contract.behavior_contract, d.behavior) && equalStable(contract.config_summary, d.config) && contract.adapter_sha256 === d.hashes.adapter && contract.config_sha256 === d.hashes.config && contract.dispatch_sha256 === D5_BATCH_BUILDER_SHA256 && contract.prototype_sha256 === d.hashes.factory && contract.prototype_config_sha256 === d.hashes.factory_config && contract.site_kit_sha256 === d.hashes.site_kit, `D5 ${d.number} acceptance, source, terrain, topology or ownership parity drifted`);
     invariant(equalStable(adapter.runtime_assets.map((a) => [a.path,a.sha256]).sort(), Object.entries(d.files).map(([key,path]) => [`res://${path}`, d.hashes[key]]).sort()), `D5 ${d.number} runtime dependency closure drifted`);
   }
@@ -5064,7 +5370,7 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
     schema_version: REPORT_SCHEMA,
     scope_boundaries: [
       "The D2 1441 promotion preserves generated bytes while atomically replacing the supplied wall+roof pair with nine visual surfaces, two structural owners, one wall spray owner, and zero decorative collision or navigation owners.",
-      "The unchanged D1 B201 attachment retains its pre-B225 735/950/964/66,636/466/466 parity receipt and D1 B225 retains its pre-D2 735/952/967/67,716/466/466 receipt, while D2 1441 retains historical post-B1 735/959/974/70,692/466/466 and D2 1439 retains historical 735/968/983/71,156/466/467; D2 1444 retains historical 735/977/992/71,828/466/468; D5 1394 owns the measured quality-batch 735/1006/1021/79,913/466/474 topology; 1308 references that same batch. Prior 11/213 promotion evidence remains historical. These two existing-unit quality revisions were captured at 13/213 and add zero credit.",
+      "The unchanged D1 B201 attachment retains its pre-B225 735/950/964/66,636/466/466 parity receipt and D1 B225 retains its pre-D2 735/952/967/67,716/466/466 receipt, while D2 1441 retains historical post-B1 735/959/974/70,692/466/466 and D2 1439 retains historical 735/968/983/71,156/466/467; D2 1444 retains historical 735/977/992/71,828/466/468; D5 1317 owns current 735/1018/1033/81,761/466/477 topology; 1308/1394 retain their measured quality-batch 735/1006/1021/79,913/466/474 scope. Prior 11/213 promotion evidence remains historical. These two existing-unit quality revisions were captured at 13/213 and add zero credit.",
       `${registry.legacy_adapters.length} legacy receivers and ${registry.active_runtime_adapters.length} exact-current active receiver adapters are represented without automatic recognition transfer from adapter metadata.`,
       "The version-pinned loader contract authorizes parsing and resource resolution only; it does not authorize node instantiation or world-construction dispatch.",
       `Exactly ${registry.recognition_metric.numerator} independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.`,

@@ -1,0 +1,93 @@
+{
+  "derived_summary": true,
+  "recognition_metric": "14/213",
+  "recognized_physical_units": 14,
+  "not_evaluated_physical_units": 199,
+  "added_physical_unit": "physical-building:w95934125",
+  "numerator_effect": 1,
+  "prior13_accepted_records_preserved": true,
+  "all213_physical_identity_source_receiver_joins_preserved": true,
+  "prior_quality_packets_preserved": [
+    {
+      "path": "evidence/first-playable/d5-1308-fidelity-quality-candidate-2026-09-10-001/candidate-closure.json",
+      "sha256": "29fdafa540213776b975c26b6caf1ea3afd60e60ce3ee14b71251b4e691ac475",
+      "bytes": 7935
+    },
+    {
+      "path": "evidence/first-playable/d5-1394-fidelity-quality-candidate-2026-09-10-001/candidate-closure.json",
+      "sha256": "0854feee5326553916ae772168dc8a2576077802fb65949d14885b69de571102",
+      "bytes": 7241
+    }
+  ],
+  "unit_packet": {
+    "closure": {
+      "path": "evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001/candidate-closure.json",
+      "sha256": "7036be128cd31a7b02ac69ab95cdec26de4ac4d2b3912ea3ca0b6a93e1bd95f6",
+      "bytes": 8114
+    },
+    "seven_acceptance_bindings": {
+      "evidence_manifest_sha256": "4fcdd7f900dfadb12187f558bf0e545038d8386134ed1e7f9830810be763ddb5",
+      "motion_telemetry_manifest_sha256": "a1e3d98ebacaf73c5fb985a2fa2ee4597fe4c2b334cc102c3d3ea460bf361214",
+      "visual_motion_manifest_sha256": "088c0a0df84440cf2ddb35996aabc5d1b1aa5e1fcafe47217cd92dbbca08fc15",
+      "package_verification_receipt_sha256": "d6041941c9ec59d6a6d8fac4cbb79964fe842cdc135baf5c7a36df3a65a2c98e",
+      "evidence_tree_sha256": "18da75ad3394e86f3129449bbf113efd14d2e845acd767acba995545b3e5f6ee",
+      "mechanical_review_receipt_sha256": "7cd3ef79e13c19bbb34b601338f86533b9de429d274d35e55e8e6f8fbd8afdce",
+      "review_receipt_sha256": "19edda17a50fd957ec09bd9a2ea310b7f82524e717c63467d5198e2e3f9500df"
+    },
+    "image_count": 17,
+    "image_tree_sha256": "18da75ad3394e86f3129449bbf113efd14d2e845acd767acba995545b3e5f6ee",
+    "tree_document": {
+      "path": "evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001/evidence-tree.json",
+      "sha256": "5ede3855f36303854396ee62c7cdd91ab561e3492a24d2c15db0d4aeab40359d",
+      "bytes": 3895
+    },
+    "image_scope": "8 original 1440x900 PNGs and 9 original 1280x800 AVI payload JPGs; original 705-frame AVI has 70 trailing bytes and sparse selected coverage.",
+    "capture_authority": "13/213",
+    "candidate_pck_sha256": "eecb13831c625a3d09871a2f37f322316cdbc0df0c0f5e512a0bf08d54831691"
+  },
+  "current_loaded_world": [
+    735,
+    1018,
+    1033,
+    81761,
+    466,
+    477
+  ],
+  "original1317_individual_capture_world": [
+    735,
+    1005,
+    1020,
+    78224,
+    466,
+    475
+  ],
+  "current_topology_owner": "physical-building:w95934125",
+  "prior1394_quality_topology": "historical 735/1006/1021/79913/466/474; 1308 retains same-batch reference",
+  "current_pck_sha256": "9ab4e78f98b10cbc381d4cbd6a4f5e4367ec06766f6b5415cb070174c7ad9adf",
+  "authority_source_review": {
+    "path": "build/d5-1317-current-provenance-2026-09-10-001/independent-authority-source/REVIEW.json",
+    "sha256": "b0c5a807730c27eb41a2f02133d390f59c61559b20090763ee117cd0864e16a8",
+    "bytes": 8751
+  },
+  "authority_input_binding": {
+    "path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/authority-source-pins.json",
+    "sha256": "84b77100fffe8fe2f36b308278d6665592bb434e3e4dd111d1b31f909f721d60",
+    "bytes": 1497
+  },
+  "current_owner_input_binding": {
+    "path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/execution-input-pins.json",
+    "sha256": "12728cdb38cd8db27ee20a2fe4587f67a19bfc6a460f4b4e53a24b3f4ab778dd",
+    "bytes": 85290
+  },
+  "current_independent_input_binding": {
+    "path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/execution-input-pins.json",
+    "sha256": "8cd3f5fc51008b2b2767b50a16991e6b9cabac47aa5324da3f44ca3c946e79ae",
+    "bytes": 101609
+  },
+  "limits": [
+    "Separate accepted source/mechanics/direct-reference static/sparse motion/seventh-unit gates remain scoped; package PASS supplies no new render pixels.",
+    "Original contact001 FAIL and isolated canopy spray002 PASS stay separate; unchanged selected successful contact scope is not a global relabeling.",
+    "Protected source geometry, source roof, local land and controls remain unchanged. No source photograph is copied into repository/app.",
+    "New-unit credit is +1; 1308/1394 existing-unit quality zero-credit semantics do not apply to 1317."
+  ]
+}

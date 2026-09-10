@@ -1,0 +1,1095 @@
+{
+  "derived_index": true,
+  "raw_originals_rewritten": false,
+  "candidate_originals_index": {
+    "path": "evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001/private-provenance-retention.json",
+    "sha256": "b83ddb3b58a7b91adb8a813cbc13e33cc117c77aa85ca5bb11493b66874b6221",
+    "bytes": 290812
+  },
+  "candidate_originals_reused_without_duplicate_manifest": 572,
+  "new_exact_current_originals": [
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/AUTHORING_DECISIONS.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/AUTHORING_DECISIONS.json",
+      "sha256": "68a59f1f85764a20cb62160e8067ebf8771f5b71a0c158d7fb3ef737eb63956f",
+      "bytes": 1913,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/AUTHORING_INTEGRITY.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/AUTHORING_INTEGRITY.json",
+      "sha256": "113df3522c1f7297e110d7d37b1505aaa5df4faa39917151d269cb517f0edd0e",
+      "bytes": 2259,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/FILE_READY.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/FILE_READY.json",
+      "sha256": "826a6dd2f81aa3a2f2f5d86fde22205a2d7475e53a6309f4857b192cf38ff827",
+      "bytes": 5845,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/FILE_READY.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/FILE_READY.md",
+      "sha256": "8755638d9571d1063e02e623602b46d06b4c6f439b9c4e1901bd0439c6c9e158",
+      "bytes": 5984,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/OWNER_HANDOFF-validation001.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/OWNER_HANDOFF-validation001.json",
+      "sha256": "060d5503ab9c69286b3be8126522f86254d31f09503532afe26f3de07f61f2b2",
+      "bytes": 2252,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/OWNER_HANDOFF-validation001.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/OWNER_HANDOFF-validation001.md",
+      "sha256": "cb2e8ddef9dd9395ddea818044a9e54754b539e818e78c44003366863b8e6cff",
+      "bytes": 1045,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/SEVENTH_BINDING.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/SEVENTH_BINDING.json",
+      "sha256": "fc53fee1f0c25e62084eb5c5611a5ad4410039a29c8051b7106f07a14ad145bd",
+      "bytes": 1543,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/SLOT_RELEASE-validation001.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/SLOT_RELEASE-validation001.json",
+      "sha256": "4cca7a1fe2601025cccdacf570df651d4b1576a6237607aa48a2b288ed7093d4",
+      "bytes": 1960,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/accepted-definitions.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/accepted-definitions.json",
+      "sha256": "37c863aa3b1e65a7f3fafe7d48dd6d35ba2586c20a42dc6b14ac18d2db79b6f6",
+      "bytes": 40401,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/authority-source-pins.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/authority-source-pins.json",
+      "sha256": "39b55c06b259fd8c38027e75a5e6723739b2ebc9c17c993d65291c21176c381f",
+      "bytes": 1497,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/authority.diff",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/authority.diff",
+      "sha256": "cc2b97278de625490e2cf35fc885fdaf730cbc7c3d9a798c3609cbef77f9a6f2",
+      "bytes": 202227,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before/discovery/facades/facade-recognition-catalog.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before/discovery/facades/facade-recognition-catalog.json",
+      "sha256": "38ed1e2285ef15355520cfe810711b434156f06fd0b1199b6f0c62bc6923d8fb",
+      "bytes": 321086,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before/discovery/facades/facade-recognition-catalog.schema.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before/discovery/facades/facade-recognition-catalog.schema.json",
+      "sha256": "31bb8ccc2da2fd63a6b1408e97b7429465c6160f9258ca64016a9fb6ec174e30",
+      "bytes": 48690,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before/discovery/facades/facade-recognition-validation-report.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before/discovery/facades/facade-recognition-validation-report.json",
+      "sha256": "fd9aa1ac032b3a84d390d8b6d8f8d6ff4563c56a2e4e104cf98075482ffa3d47",
+      "bytes": 89808,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before/game/resources/facades/facade-runtime-adapter-contracts.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before/game/resources/facades/facade-runtime-adapter-contracts.json",
+      "sha256": "2592c8fc849d42ee84ff93651bfe9d482120cc955f4d9b9fa7841cc83474e4b7",
+      "bytes": 94154,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before/game/resources/facades/facade-runtime-registry.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before/game/resources/facades/facade-runtime-registry.json",
+      "sha256": "be237e4afd7cb93953371963f036579ab470dad1ca7b1686b28f752757774f2c",
+      "bytes": 707202,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before/game/scripts/main.gd",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before/game/scripts/main.gd",
+      "sha256": "35c6131b1060381c3ab175ea7619118e51e0940158a81aeb6332773ed5844298",
+      "bytes": 28366,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before/game/scripts/world/facades/facade_runtime_registry_loader.gd",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before/game/scripts/world/facades/facade_runtime_registry_loader.gd",
+      "sha256": "8dc2f2a8ead36b604241c9bd7a41a90f92c764641a303659d87952e4e6787ff8",
+      "bytes": 223487,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before/game/tests/headless_facade_recognition_registry_contract.gd",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before/game/tests/headless_facade_recognition_registry_contract.gd",
+      "sha256": "435ac10926cc62a0458f5bae8c9386e1c43fcb82ceedfb680af6bac212913001",
+      "bytes": 70795,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before/game/tests/headless_facade_runtime_registry_loader_contract.gd",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before/game/tests/headless_facade_runtime_registry_loader_contract.gd",
+      "sha256": "65bb0513d37d62f89c2c0137accdc79f6c2ef98920fbf1b76c917687fe0f3775",
+      "bytes": 101194,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before/tools/build_facade_recognition_registry.mjs",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before/tools/build_facade_recognition_registry.mjs",
+      "sha256": "7f3a5e066f736c0d466c35e95e398f97c44bc30f57eb5b2ec2d42ee4a95cd5b1",
+      "bytes": 329694,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before/tools/test_facade_recognition_registry.mjs",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before/tools/test_facade_recognition_registry.mjs",
+      "sha256": "22a9520cef78496c4510bf4fac7fac2bdff000e2f5ac3ac8954c40fe1774968a",
+      "bytes": 130062,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before/tools/test_facade_runtime_loader_contract.mjs",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before/tools/test_facade_runtime_loader_contract.mjs",
+      "sha256": "b464e5b9431d885949a0524f6b8337155d2a4e51f0a9d105260176150ae2d277",
+      "bytes": 76441,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-pins.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-pins.json",
+      "sha256": "18a506a5a23300615c577139a1d1a10a763123d9de99240f34aa2ace13794252",
+      "bytes": 1497,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-seventh/README.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-seventh/README.md",
+      "sha256": "399be585eb2332ea3755f5928973de8970ea944cb2f69f1d63bc5d35c5d7d8f5",
+      "bytes": 1117,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-seventh/candidate-closure.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-seventh/candidate-closure.json",
+      "sha256": "c146c15278759b7e543248ff08663b4b65e623f29ff9bef63fed3134446fdd1a",
+      "bytes": 6397,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-seventh/capture-manifest.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-seventh/capture-manifest.json",
+      "sha256": "4fcdd7f900dfadb12187f558bf0e545038d8386134ed1e7f9830810be763ddb5",
+      "bytes": 30273,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-seventh/copy-inventory.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-seventh/copy-inventory.json",
+      "sha256": "f7e6b7b9e68d2bb64c76a75aca288efb8f588fcfe35ca9c52ba49b0ed972c561",
+      "bytes": 23194,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-seventh/evidence-tree.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-seventh/evidence-tree.json",
+      "sha256": "5ede3855f36303854396ee62c7cdd91ab561e3492a24d2c15db0d4aeab40359d",
+      "bytes": 3895,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-seventh/mechanical-review.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-seventh/mechanical-review.json",
+      "sha256": "7cd3ef79e13c19bbb34b601338f86533b9de429d274d35e55e8e6f8fbd8afdce",
+      "bytes": 8148,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-seventh/motion-telemetry.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-seventh/motion-telemetry.json",
+      "sha256": "a1e3d98ebacaf73c5fb985a2fa2ee4597fe4c2b334cc102c3d3ea460bf361214",
+      "bytes": 26203,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-seventh/package-verification-receipt.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-seventh/package-verification-receipt.json",
+      "sha256": "d6041941c9ec59d6a6d8fac4cbb79964fe842cdc135baf5c7a36df3a65a2c98e",
+      "bytes": 15511,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-seventh/private-provenance-retention.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-seventh/private-provenance-retention.json",
+      "sha256": "31e2122a0ed45e6b7737bfbc75e7c393775c5f18cb6569829ec97a7006fd0be3",
+      "bytes": 289446,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-seventh/source-reconciliation.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-seventh/source-reconciliation.json",
+      "sha256": "9b1fcd943f4cd1db2a0c001823e543f3464dc2be3f3f4cc349e3fe6071645000",
+      "bytes": 94094,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-seventh/visual-motion.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-seventh/visual-motion.json",
+      "sha256": "088c0a0df84440cf2ddb35996aabc5d1b1aa5e1fcafe47217cd92dbbca08fc15",
+      "bytes": 24119,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/before-seventh/visual-review.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/before-seventh/visual-review.json",
+      "sha256": "89c0e7369482d9e6714dacc44b4928009e98e33d1f8e83c1979c26466291e247",
+      "bytes": 5040,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/bind-export.py",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/bind-export.py",
+      "sha256": "aab0028bc2209259c7ecedf0aacd19181fcc37b7cc88cd4e6f5c7c272be12b03",
+      "bytes": 4853,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/bind-seventh-failed001.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/bind-seventh-failed001.json",
+      "sha256": "559b54682aa2d163bde20a67d92d4bac9e5bcab14b4db226a8c9458e9815fb28",
+      "bytes": 288,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/bind-seventh-failed001.py",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/bind-seventh-failed001.py",
+      "sha256": "6f6880a11b87bbdea941544b5d7dc736677e37018369066d0c8d0ff57f84b251",
+      "bytes": 5551,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/bind-seventh.py",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/bind-seventh.py",
+      "sha256": "7418d2cc988613c1098e573bb5798c4eea8376775ecb3f5a84400295df362a9c",
+      "bytes": 5551,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/compiler-check-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/compiler-check-001-execution.json",
+      "sha256": "4b37d96d5bee5d14f4f64983e1a3e9f8351983dbd4a036d03496192babc69b9d",
+      "bytes": 171952,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/compiler-check-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/compiler-check-001.log",
+      "sha256": "32bc880d2fcfd0426ac3131cfa04066ae6d2498235c6a4e7becd44f182a9bac7",
+      "bytes": 815,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/compiler-write-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/compiler-write-001-execution.json",
+      "sha256": "151e9410c0cf512c4fbc1b0a2e41ea9257f7b63832c304d99b4536973ce280f3",
+      "bytes": 694,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/compiler-write-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/compiler-write-001.log",
+      "sha256": "8c16f7ec0d259c0a983c0a9072f6efb1fef324480a608efa0aa4775b9f78bccb",
+      "bytes": 1681,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/compiler-write-002-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/compiler-write-002-execution.json",
+      "sha256": "e8b0e4b31d82f8354b44b6db1ff2544a76c34cb7ce32dabbf9c1fe91c431f052",
+      "bytes": 694,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/compiler-write-002.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/compiler-write-002.log",
+      "sha256": "6f2b5f00ab1f181cfb9cd80e329aec2bedcc50055b11c8994d8ac7523cc4743c",
+      "bytes": 815,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/diff-sections.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/diff-sections.json",
+      "sha256": "8b31e6a16daecf5210ab45442044c20732435d1aeb20f9b2d3bde2e403c7c127",
+      "bytes": 3395,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/documentation-transfer/LEARNINGS.diff",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/documentation-transfer/LEARNINGS.diff",
+      "sha256": "fe9b2cc2bcbef009ce198a01ba0e22a3b0f20022a46c255ecb5e5df474c79a6b",
+      "bytes": 1941,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/documentation-transfer/LEARNINGS.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/documentation-transfer/LEARNINGS.md",
+      "sha256": "5ed7ec0cd765b6efe87a6ca9caba4da826ecf62243ef4461350a431efae0dce1",
+      "bytes": 6438,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/execution-input-pins.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/execution-input-pins.json",
+      "sha256": "b87fd8614a21e752493b3284494d177470c190dd7d2df5ccfde00dd579926ba0",
+      "bytes": 84857,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/execution-settings.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/execution-settings.json",
+      "sha256": "ee528aba5c973907d39e52af7eb773396e82ee7a2be57e9621c2fb17152b9278",
+      "bytes": 1246,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/helper.diff",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/helper.diff",
+      "sha256": "377518f02b1bbb203d26a66e4597778b04b63b0cd432f10b10bfc32d8cc644f6",
+      "bytes": 10459,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/node-registry-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/node-registry-001-execution.json",
+      "sha256": "76f4d24dc6881488f52091317f33bd4cea5017578af0eeeb650b0f47f337eb1f",
+      "bytes": 172015,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/node-registry-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/node-registry-001.log",
+      "sha256": "89350dee530ae8bfee60a27aeed3b75cb4307ff17039201c24c49f02c899854c",
+      "bytes": 823,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/package-contract.gd",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/package-contract.gd",
+      "sha256": "8be6e97c42dbe3bbcc3527ebac1b3f724f81ebb2f4418f21494a18dc7a277ab0",
+      "bytes": 38430,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/package-source-pins.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/package-source-pins.json",
+      "sha256": "b8f8a88ef6ce84e7e9a07de51a9f28456aff47f4477c3f26c2901db301abc169",
+      "bytes": 9051,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/preparation-comparison.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/preparation-comparison.json",
+      "sha256": "2022149383593ed2ee4817e82a2f138e0695e0af1d9708c9cba21748434e08e0",
+      "bytes": 1753,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/prepare-authority-before-write002.py",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/prepare-authority-before-write002.py",
+      "sha256": "a6699b12dee817da31623dd3d5a7509ba0785d0439a075aef52e2afd138b9a77",
+      "bytes": 27335,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/prepare-authority.py",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/prepare-authority.py",
+      "sha256": "ec3a1903d45dd666cae0bf39c2d519af5968af774eb1bebf6f3840b37f05e16d",
+      "bytes": 27345,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/OWNER_HANDOFF-export001.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/OWNER_HANDOFF-export001.json",
+      "sha256": "893e2026f9abbd1b5b7cc75618d64f0ce33f076ab7af4e805698921b959d7998",
+      "bytes": 8450,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/OWNER_HANDOFF-export001.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/OWNER_HANDOFF-export001.md",
+      "sha256": "7921f826ba23df0ff7ba36134a84eba0e7fba009bb41a2515ca500dbe26cd049",
+      "bytes": 2865,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/OWNER_HANDOFF-package001.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/OWNER_HANDOFF-package001.json",
+      "sha256": "27a992bd1f57e5aa2e33c2050efa7281fecb257a321f57d6318b608133ce283c",
+      "bytes": 6974,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/OWNER_HANDOFF-package001.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/OWNER_HANDOFF-package001.md",
+      "sha256": "29cb8faf090346f9991304d9888e06fc6e58a8111257e36538aeb98e597de00d",
+      "bytes": 1697,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/SLOT_RELEASE-export001.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/SLOT_RELEASE-export001.json",
+      "sha256": "a9fe889a4532b9d81e5bfc5df34d250d069be5d957825b9331aab12213b3841c",
+      "bytes": 3263,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/SLOT_RELEASE-package001.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/SLOT_RELEASE-package001.json",
+      "sha256": "da83fcfe7787466f51c5d7a0a89614d4710e1b78431232ae06c9b87a89055ce9",
+      "bytes": 2648,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/START_CHECKPOINT.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/START_CHECKPOINT.json",
+      "sha256": "6cacb88713bfcbd0e5bdafbef6610ae1b50cdbd9a1ba61eae3f18925f380b4c6",
+      "bytes": 1417,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/START_CHECKPOINT.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/START_CHECKPOINT.md",
+      "sha256": "06a97ca03d152ef15d5dd4596460666c8ac2afad1a440d312eeb2f8b170c21d2",
+      "bytes": 858,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/actual-app-binding.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/actual-app-binding.json",
+      "sha256": "e5e8d86f078fe6034372ba11e9003aef33e9807879493ec8a99fee9b8f8d474c",
+      "bytes": 3094,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/authority-source-pins.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/authority-source-pins.json",
+      "sha256": "84b77100fffe8fe2f36b308278d6665592bb434e3e4dd111d1b31f909f721d60",
+      "bytes": 1497,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/before/game/tests/headless_facade_recognition_registry_contract.gd",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/before/game/tests/headless_facade_recognition_registry_contract.gd",
+      "sha256": "36dfd17501b7c2bffe9ea845a44b919e426a3b3ec0702477e98e90f54d4753af",
+      "bytes": 74725,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/before/game/tests/headless_facade_runtime_registry_loader_contract.gd",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/before/game/tests/headless_facade_runtime_registry_loader_contract.gd",
+      "sha256": "4ef8bf7aac1fb65ae00ce9ca251265b38895dede26434b7cd6f14c8877347f3d",
+      "bytes": 101476,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/before/tools/test_facade_recognition_registry.mjs",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/before/tools/test_facade_recognition_registry.mjs",
+      "sha256": "7d1662c5cf678b48774136998dc6186db974065fc27fb9a83cca362e994a670a",
+      "bytes": 137005,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/bind-export.py",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/bind-export.py",
+      "sha256": "916d4a2bc33b68ce5d9d53a21fec266580a775e56f226f325e357d41122d4f9f",
+      "bytes": 4853,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/bundle-native-checks-001.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/bundle-native-checks-001.json",
+      "sha256": "a683581621b939cdab9a53b2bb83d537c44fdf28f5a83c7758b3a22fd2a96649",
+      "bytes": 5028,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/compiler-check-002-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/compiler-check-002-execution.json",
+      "sha256": "9b9a45a86a51ad211566f7bc74fe3d03750115db2c43ee976aef385c9ac07e0d",
+      "bytes": 172822,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/compiler-check-002.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/compiler-check-002.log",
+      "sha256": "32bc880d2fcfd0426ac3131cfa04066ae6d2498235c6a4e7becd44f182a9bac7",
+      "bytes": 815,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/documentation-transfer/LEARNINGS.diff",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/documentation-transfer/LEARNINGS.diff",
+      "sha256": "89e0e096acec0d8537a269830c276474aeed94ebaa853c61d0c5731cd60cde6c",
+      "bytes": 2112,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/documentation-transfer/LEARNINGS.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/documentation-transfer/LEARNINGS.md",
+      "sha256": "857819cd8419713839cb5c96d4c52a2364b4f5503ea8a5c5455170d47c1089d9",
+      "bytes": 6610,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/documentation-transfer/before-spacing/LEARNINGS.diff",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/documentation-transfer/before-spacing/LEARNINGS.diff",
+      "sha256": "0f5bc953976f912e9f315f8fb05db0881d0fc1d610e581d03b5caafa4c5abaed",
+      "bytes": 2106,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/documentation-transfer/before-spacing/LEARNINGS.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/documentation-transfer/before-spacing/LEARNINGS.md",
+      "sha256": "15668b2d8fae4f3de30d9ad6a29323f5625122ae6329677b2e5b356dce4e99c6",
+      "bytes": 6604,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/execution-input-pins.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/execution-input-pins.json",
+      "sha256": "12728cdb38cd8db27ee20a2fe4587f67a19bfc6a460f4b4e53a24b3f4ab778dd",
+      "bytes": 85290,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/execution-settings.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/execution-settings.json",
+      "sha256": "7483d21cf9e08fb13da1e9b1b1790a121d4aa124b3fa57a7f176c6f35a6605bd",
+      "bytes": 1267,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/export-exact-current-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/export-exact-current-001-execution.json",
+      "sha256": "d973c2db7125facf7fd94abe3e9768bda48fdbe2a135e697b41a026bc4fbc67b",
+      "bytes": 173205,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/export-exact-current-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/export-exact-current-001.log",
+      "sha256": "66330b5874e75b921c578ae9b3ad900ef6bab3e8622b772a4c6976000d472bd2",
+      "bytes": 127979,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/headless-loader-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/headless-loader-001-execution.json",
+      "sha256": "23864f48947a03dd802b367f79af851dbfb69e8e12ddd56aa82f5163049460ad",
+      "bytes": 173175,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/headless-loader-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/headless-loader-001.log",
+      "sha256": "f515db4bb1d65ea013e4ac5fb37410dc69653a8d9280a9f8ebd4b3f5d1f59710",
+      "bytes": 583,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/headless-registry-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/headless-registry-001-execution.json",
+      "sha256": "589db3dcf22ef16b1c7361ab8d1c8587fbf6e865b71c36eccda921beba280f0c",
+      "bytes": 173166,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/headless-registry-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/headless-registry-001.log",
+      "sha256": "1907b5ad7aef71622e2b32550ae95cd92d427f73ca905d200e4d9629047381b4",
+      "bytes": 465,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/mounted-component-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/mounted-component-001-execution.json",
+      "sha256": "957a2f685b18f23c10bd213f834d9e723a1eb9fe7ae6cab4612524d7d2eb98ea",
+      "bytes": 174076,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/mounted-component-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/mounted-component-001.log",
+      "sha256": "073122ed53305eeb4c9a1146912163f8ba3e1e89da1a65508687100b4dfbd866",
+      "bytes": 1877,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/mounted-privacy-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/mounted-privacy-001-execution.json",
+      "sha256": "af5ee2ec8977a96157a20cefcb228c684ef5c91d90aca3f526decebc5b37ddfb",
+      "bytes": 174163,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/mounted-privacy-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/mounted-privacy-001.log",
+      "sha256": "b185a90c759ad89eb6bd7874fef5a0c56b0fac8185951bb7bee5167339dbb771",
+      "bytes": 769,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/node-loader-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/node-loader-001-execution.json",
+      "sha256": "31464c5dadb3c8864e31d4a248025cb6dbae41cb06bf75bfa8ba9b46fd158849",
+      "bytes": 172888,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/node-loader-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/node-loader-001.log",
+      "sha256": "cf7dcf489e342d28887922abd62fa5a9cf308fdd2eddbae3c5761b4239d211c6",
+      "bytes": 311,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/node-registry-002-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/node-registry-002-execution.json",
+      "sha256": "499702f8df2eff8e048e92b6c8a952d29789c8a909c998ebb91a67ff244889e0",
+      "bytes": 172883,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/node-registry-002.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/node-registry-002.log",
+      "sha256": "3689eb4352e78225d8dc01111de92239aa120aa0b27331c400e7bb99c4c705db",
+      "bytes": 486,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/package-contract.gd",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/package-contract.gd",
+      "sha256": "8be6e97c42dbe3bbcc3527ebac1b3f724f81ebb2f4418f21494a18dc7a277ab0",
+      "bytes": 38430,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/package-source-pins.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/package-source-pins.json",
+      "sha256": "b8f8a88ef6ce84e7e9a07de51a9f28456aff47f4477c3f26c2901db301abc169",
+      "bytes": 9051,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/release-headless-smoke-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/release-headless-smoke-001-execution.json",
+      "sha256": "baaf1aee4b4d93164421ffa617393f5b13312214a78e21d506c287c0eb99297b",
+      "bytes": 173559,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/release-headless-smoke-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/release-headless-smoke-001.log",
+      "sha256": "a74efac2728be4592fe87cbbbf6fa057e72d79a6b249be1553392443c0badc1b",
+      "bytes": 4161,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/release-native-smoke-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/release-native-smoke-001-execution.json",
+      "sha256": "5bc1ee20028a68f1fe8b9af88f021678dca3d923b60c83682fb245967acdb748",
+      "bytes": 173704,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/release-native-smoke-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/release-native-smoke-001.log",
+      "sha256": "ee7cb0423df32682e09daa301912345a703168cb9ce75560782f2c759f155ab0",
+      "bytes": 4227,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/repair.diff",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/repair.diff",
+      "sha256": "5f63ee1cb4ec8255a22a727de44b1994a0d1988b525fbc8336c92b64493e81f3",
+      "bytes": 3457,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/run-plan.bound-app.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/run-plan.bound-app.json",
+      "sha256": "9daae7a9e5b22d2f65e63f82d8f0a45bb0ede7a1181b5afa509cefc51840d458",
+      "bytes": 8577,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/run-plan.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/run-plan.json",
+      "sha256": "70820648cb49fb2c405938ac3ab52ed302b62050df4b64eaed0646fd3a1b9df0",
+      "bytes": 8505,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/run-stage.py",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/run-stage.py",
+      "sha256": "1ccf15a3b6305e6e638a8bbd255b332704366251bd6924c1a96330106b9905d4",
+      "bytes": 3576,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/runtime-001/release-headless-smoke-001-engine.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/runtime-001/release-headless-smoke-001-engine.log",
+      "sha256": "a74efac2728be4592fe87cbbbf6fa057e72d79a6b249be1553392443c0badc1b",
+      "bytes": 4161,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/runtime-001/release-native-smoke-001-engine.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/runtime-001/release-native-smoke-001-engine.log",
+      "sha256": "ee7cb0423df32682e09daa301912345a703168cb9ce75560782f2c759f155ab0",
+      "bytes": 4227,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/readiness-repair-001/source-pins.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/readiness-repair-001/source-pins.json",
+      "sha256": "7904da14aa80237e4a08f57a33e1af91006da3785cebbd4c4ffa8c1beede6645",
+      "bytes": 81425,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/run-plan.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/run-plan.json",
+      "sha256": "5a411716b17aa00d8da7ae17839d7dd32a7767119530db99dada101a1b853bed",
+      "bytes": 8316,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/run-stage.py",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/run-stage.py",
+      "sha256": "1ccf15a3b6305e6e638a8bbd255b332704366251bd6924c1a96330106b9905d4",
+      "bytes": 3576,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/seal-preparation.py",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/seal-preparation.py",
+      "sha256": "b13cebb858332e509c710fb19c98c8f4b46348f6e16800fb3a88cf9d45828d8b",
+      "bytes": 9298,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/source-pins.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/source-pins.json",
+      "sha256": "e33d2cf40a3692714e3cad5ac486cec0a737f46b2f847f37f0ba490dde09dcd5",
+      "bytes": 81425,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/authority-owner-release/write-authority.py",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/authority-integration-001/write-authority.py",
+      "sha256": "cc23b034acda1c6c304f368ed6a1b88f322826e1f58bfbf68341048883e0f88a",
+      "bytes": 950,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/FILE_READY.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/FILE_READY.json",
+      "sha256": "c5b32fba11aa39e4360a4e150bfad627fb76a1b3392d2f40dcdd09a2029aa474",
+      "bytes": 6911,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/FILE_READY.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/FILE_READY.md",
+      "sha256": "40ae96b8396b3261b41f366927c1f46b60dbb0b71d5ea0eaf8ddfe968a261a0d",
+      "bytes": 5825,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/PRECHECK.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/PRECHECK.json",
+      "sha256": "60a4dc6316e5c8e0cd219c6a8c1881a89ed55491c444bd43816eb0b3402aded0",
+      "bytes": 7988,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/PRE_EXECUTION.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/PRE_EXECUTION.json",
+      "sha256": "e702264c9685f4f295e2969e6d4b75687188d6075d9860950c6997f7c5cac6aa",
+      "bytes": 394,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/REVIEW.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/REVIEW.json",
+      "sha256": "d8134f3d9ece9b2b37646c92e1f91db83804d0af80f266a854ea9bca79ec6293",
+      "bytes": 24200,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/REVIEW.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/REVIEW.md",
+      "sha256": "9173404b2607ac60d82a82172d13d7df9cd1029d64ade30bd44ff58850d6e73e",
+      "bytes": 4906,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/SLOT_RELEASE.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/SLOT_RELEASE.json",
+      "sha256": "62b296bb678ae328993bb302ba6196847f63abf46dd82efe55c881af60870a80",
+      "bytes": 5529,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/actual-app-binding.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/actual-app-binding.json",
+      "sha256": "207967abb6871a5ba55a206b81b500af54a77ba2f4599c2d1544718a0adf3137",
+      "bytes": 3632,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/bundle-native-checks.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/bundle-native-checks.json",
+      "sha256": "119826b36e5b2233ddf5f12708db3281319e1236b9f005463053f6c3044b0fe6",
+      "bytes": 5019,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/execution-input-pins.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/execution-input-pins.json",
+      "sha256": "8cd3f5fc51008b2b2767b50a16991e6b9cabac47aa5324da3f44ca3c946e79ae",
+      "bytes": 101609,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/execution-settings.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/execution-settings.json",
+      "sha256": "92703e973d958804a32b3a7dd809778042024eed0b33b3b39f26a98bf9a26c16",
+      "bytes": 1106,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/independent-invocation.diff",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/independent-invocation.diff",
+      "sha256": "401db6756babb23ae6b27fe43ee3688fa8d0e4f37ee349e64bbb8f0977e63d7c",
+      "bytes": 4635,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/mounted-component-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/mounted-component-001-execution.json",
+      "sha256": "03b713ed33b0075fea11ecde16e99071cff132ca947255f8af7b89f213fa8df8",
+      "bytes": 207699,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/mounted-component-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/mounted-component-001.log",
+      "sha256": "073122ed53305eeb4c9a1146912163f8ba3e1e89da1a65508687100b4dfbd866",
+      "bytes": 1877,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/mounted-privacy-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/mounted-privacy-001-execution.json",
+      "sha256": "3b948461e0e7c41d9827b0d47ead44618293a001105d89b2261da2f0ef97fc55",
+      "bytes": 207015,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/mounted-privacy-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/mounted-privacy-001.log",
+      "sha256": "b185a90c759ad89eb6bd7874fef5a0c56b0fac8185951bb7bee5167339dbb771",
+      "bytes": 769,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/package-contract.gd",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/package-contract.gd",
+      "sha256": "8be6e97c42dbe3bbcc3527ebac1b3f724f81ebb2f4418f21494a18dc7a277ab0",
+      "bytes": 38430,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/package-functional.diff",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/package-functional.diff",
+      "sha256": "123e2f3cf426ac994e2076a218b12a47c0c08f362aef26d2b9a5406d119f7b4f",
+      "bytes": 7266,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/preparation-path-repair.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/preparation-path-repair.json",
+      "sha256": "9ed9789a4afe11cb675e256598d83b35b5fc94b4b4fa6e28d4e29618b82a3e4b",
+      "bytes": 1017,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/release-headless-smoke-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/release-headless-smoke-001-execution.json",
+      "sha256": "13f258e0c6763b878c79cfc2dd9012249003866bdb16320d938712319ee093a1",
+      "bytes": 206465,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/release-headless-smoke-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/release-headless-smoke-001.log",
+      "sha256": "c0672deb0a0970023aac91d5a7806081c44ec75d366d2bc6d12bebabcaa1a8a6",
+      "bytes": 4161,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/release-native-smoke-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/release-native-smoke-001-execution.json",
+      "sha256": "7fcabeee0b9814253348b69bc2797c0daadde4d257015c5be387e3cfd4d884cc",
+      "bytes": 206616,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/release-native-smoke-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/release-native-smoke-001.log",
+      "sha256": "dce14b5d4fafa60fc8f113fd70d02f5c840f3815cfa75114786eec2313fb36b6",
+      "bytes": 4227,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/run-plan.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/run-plan.json",
+      "sha256": "08335544c37d249fbeb60ebb59d0d13793bc5b69abb3e21cbc6abef7968661ed",
+      "bytes": 4372,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-current-release/run-stage.py",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-exact-current-independent-001/run-stage.py",
+      "sha256": "62b61968762febdf7ad1579ca703dea1b3e3cd94d02ec244ad17053a9c5bb573",
+      "bytes": 4335,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-authority-source/REVIEW.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-authority-independent-source-001/REVIEW.json",
+      "sha256": "b0c5a807730c27eb41a2f02133d390f59c61559b20090763ee117cd0864e16a8",
+      "bytes": 8751,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-authority-source/REVIEW.md",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-authority-independent-source-001/REVIEW.md",
+      "sha256": "0c881e408d83e7c1423b734799626e11604ff7ccda7ac8341a2e0bfe44d1efd1",
+      "bytes": 5586,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/independent-authority-source/comparison-results.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-authority-independent-source-001/comparison-results.json",
+      "sha256": "7eb4599c56f5a63f963cf4655787869b6ffdc7d5bad01d4e2f7309297331490d",
+      "bytes": 15239,
+      "role": "immutable_authority_or_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/candidate-boundary/source-pins.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/source-pins.json",
+      "sha256": "01e6c12ceffef64aae1e11564b6937200b8ec80b7ea412ddbba687d6c5f0b644",
+      "bytes": 73595,
+      "role": "candidate_boundary_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/candidate-boundary/execution-input-pins.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/execution-input-pins.json",
+      "sha256": "8cf0f52c413d34b888d3419d23b4ae6d641cc67081e0176442c2d41e63daf5c9",
+      "bytes": 96618,
+      "role": "candidate_boundary_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/candidate-boundary/focused-001-result.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/focused-001-result.json",
+      "sha256": "a78f5d6e4afd467ed14b53df91c8ba68e8b0b4028246385ac07ad79fd8c3ec19",
+      "bytes": 2609,
+      "role": "candidate_boundary_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/candidate-boundary/focused-001-execution.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/focused-001-execution.json",
+      "sha256": "86b15e2733187d4645d668d96f64400ad97efa8959f42b5f0fa735be75fd5d26",
+      "bytes": 196108,
+      "role": "candidate_boundary_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/candidate-boundary/focused-001.log",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/focused-001.log",
+      "sha256": "e83e55cbdf54a36d6f6c38d69f7a90961e9c46099d5223d93a3fabb8c0267d41",
+      "bytes": 1837,
+      "role": "candidate_boundary_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/candidate-boundary/OWNER_HANDOFF-package001.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/OWNER_HANDOFF-package001.json",
+      "sha256": "874deccd5ecd8d22160386d2222d4a5309b22dce689ff1b291134037688207d8",
+      "bytes": 12500,
+      "role": "candidate_boundary_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/candidate-boundary/SLOT_RELEASE-package001.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/SLOT_RELEASE-package001.json",
+      "sha256": "0e9761e99f0890a8c6c65da16e41d02370f61770c416f84a40a4d1a43a5a794e",
+      "bytes": 3386,
+      "role": "candidate_boundary_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/candidate-boundary/actual-app-binding.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/actual-app-binding.json",
+      "sha256": "fb5ab13d2793c87229238456dc52dddbe4fe35090e727ca6eec765073352b83b",
+      "bytes": 3057,
+      "role": "candidate_boundary_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/candidate-boundary/unit-evidence-selection.json",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/unit-evidence-selection.json",
+      "sha256": "6e3ad4ec58f3ec6dd6ed97cc87a7a774a29375f7859c55e9aad32364bacfc0a3",
+      "bytes": 3563,
+      "role": "candidate_boundary_original"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/.gdignore",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/main-integration-001/staged-root/build/d5-1317-current-provenance-2026-09-10-001/.gdignore",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "role": "private_archive_guard"
+    },
+    {
+      "retained_repo_relative_path": "build/d5-1317-current-provenance-2026-09-10-001/.gitignore",
+      "original_locator_normalized": "{TASK_ROOT}/work/1317-quality-delivery-001/main-integration-001/staged-root/build/d5-1317-current-provenance-2026-09-10-001/.gitignore",
+      "sha256": "cdbcae15105d6b781e620813c79c7e868740d4e9cc53ce6f5fcbbc12387adf4b",
+      "bytes": 2,
+      "role": "private_archive_guard"
+    }
+  ],
+  "new_archive_files": 153,
+  "candidate_app": {
+    "path": "build/d5-1317-quality-candidate-001/Treasure Island First Playable.app",
+    "pck_sha256": "eecb13831c625a3d09871a2f37f322316cdbc0df0c0f5e512a0bf08d54831691",
+    "files": 7
+  },
+  "current_app": {
+    "path": "build/d5-1317-exact-current-001/Treasure Island First Playable.app",
+    "pck_sha256": "9ab4e78f98b10cbc381d4cbd6a4f5e4367ec06766f6b5415cb070174c7ad9adf",
+    "files": 7
+  },
+  "note": "Exact proposed MAIN copy inventory. Actual transfer remains pending in this immutable preparation snapshot. Candidate index retains earlier raw proofs/failures. No Street View images are copied. Private archives and both apps remain ignored."
+}

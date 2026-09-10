@@ -1,0 +1,3593 @@
+{
+  "schema_version": "ti.d5-1317-quality-study/1",
+  "status": "detached actual-source-world art revision002; no production adapter or credit",
+  "target": "physical-building:w95934125",
+  "source_pair": [
+    "building:w95934125:wall",
+    "building:w95934125:roof"
+  ],
+  "source_chunk": "res://generated/world/chunks/x_-3__z_-2.json",
+  "source_chunk_sha256": "35bf23d64e860d39c5b79a98be7830f4f477143f7e9490c6739dec0627062d11",
+  "source_wall_record_sha256": "ff4ee21aa90d1bc9429640e0f9cb57759500a3c46a950c044e059ae7fb43a363",
+  "source_roof_record_sha256": "d1fbf6f815d60657000172195aa4230f05ba7de2f38cf19dd53fe68bfac07fb2",
+  "source_surface_records": [
+    {
+      "object_key": "area:r17241151:x_-3__z_-2",
+      "collision_kind": "none",
+      "sha256": "76b753d62a5985dcc0af8a629947a05f94d5879cd6938e324f2cc47ceda0cfd3"
+    },
+    {
+      "object_key": "area:r17241152:x_-3__z_-2",
+      "collision_kind": "none",
+      "sha256": "d5cd05ac7f5194557623d8805d96b42b6d9f00a6999c89f18ae05d5d7ca92910"
+    },
+    {
+      "object_key": "land:w26767313:x_-3__z_-2",
+      "collision_kind": "world_solid",
+      "sha256": "aeea0abab8f6de19b246f0ce912a164776c7dbcd461e42b8f4f3002a194a62d9"
+    }
+  ],
+  "mapped_runs": [
+    10,
+    13,
+    14,
+    15,
+    17,
+    20,
+    22,
+    24,
+    26,
+    27,
+    29,
+    31
+  ],
+  "protected_runs": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    11,
+    12,
+    16,
+    18,
+    19,
+    21,
+    23,
+    25,
+    28,
+    30,
+    32,
+    33
+  ],
+  "source_roof_exact": true,
+  "frames": [
+    {
+      "runs": [
+        10
+      ],
+      "origin": [
+        -579.696,
+        2.207,
+        -273.351
+      ],
+      "tangent_xz": [
+        -0.45975157983253506,
+        -0.8880475690195251
+      ],
+      "normal_xz": [
+        0.8880475690195251,
+        -0.45975157983253506
+      ],
+      "length_m": 4.800418523420617
+    },
+    {
+      "runs": [
+        13,
+        14,
+        15
+      ],
+      "origin": [
+        -574.842,
+        2.207,
+        -281.277
+      ],
+      "tangent_xz": [
+        -0.4604557189419101,
+        -0.8876826746612151
+      ],
+      "normal_xz": [
+        0.8876826746612151,
+        -0.4604557189419101
+      ],
+      "length_m": 7.373130271465444
+    },
+    {
+      "runs": [
+        17
+      ],
+      "origin": [
+        -585.28,
+        2.207,
+        -284.16
+      ],
+      "tangent_xz": [
+        -0.4613798223297214,
+        -0.887202716151723
+      ],
+      "normal_xz": [
+        0.887202716151723,
+        -0.4613798223297214
+      ],
+      "length_m": 3.4873653379019647
+    },
+    {
+      "runs": [
+        20
+      ],
+      "origin": [
+        -585.271,
+        2.207,
+        -288.089
+      ],
+      "tangent_xz": [
+        -0.460353253613261,
+        -0.8877358176212586
+      ],
+      "normal_xz": [
+        0.8877358176212586,
+        -0.460353253613261
+      ],
+      "length_m": 4.852795070884418
+    },
+    {
+      "runs": [
+        22
+      ],
+      "origin": [
+        -580.98,
+        2.189,
+        -295.781
+      ],
+      "tangent_xz": [
+        -0.45984680929140437,
+        -0.8879982612508398
+      ],
+      "normal_xz": [
+        0.8879982612508398,
+        -0.45984680929140437
+      ],
+      "length_m": 7.5720868986032945
+    },
+    {
+      "runs": [
+        24
+      ],
+      "origin": [
+        -590.925,
+        2.138,
+        -299.154
+      ],
+      "tangent_xz": [
+        -0.4612979952007938,
+        -0.8872452646386614
+      ],
+      "normal_xz": [
+        0.8872452646386614,
+        -0.4612979952007938
+      ],
+      "length_m": 3.451131408683301
+    },
+    {
+      "runs": [
+        26,
+        27
+      ],
+      "origin": [
+        -594.17,
+        2.111,
+        -301.359
+      ],
+      "tangent_xz": [
+        -0.45989721449548865,
+        -0.8879721572770684
+      ],
+      "normal_xz": [
+        0.8879721572770684,
+        -0.45989721449548865
+      ],
+      "length_m": 4.587981691332274
+    },
+    {
+      "runs": [
+        29
+      ],
+      "origin": [
+        -589.202,
+        2.101,
+        -309.095
+      ],
+      "tangent_xz": [
+        -0.4606316493529655,
+        -0.8875913945134701
+      ],
+      "normal_xz": [
+        0.8875913945134701,
+        -0.4606316493529655
+      ],
+      "length_m": 7.42458753063087
+    },
+    {
+      "runs": [
+        31
+      ],
+      "origin": [
+        -599.683,
+        2.207,
+        -312.034
+      ],
+      "tangent_xz": [
+        -0.4595858623908689,
+        -0.8881333430799911
+      ],
+      "normal_xz": [
+        0.8881333430799911,
+        -0.4595858623908689
+      ],
+      "length_m": 3.672871900842713
+    }
+  ],
+  "source_wall_bottom_range": [
+    2.101,
+    2.207
+  ],
+  "all_module_counts_dimensions_placements_status": "production_inference; not as-built or a hidden opening schedule",
+  "canopies": [
+    {
+      "runs": [
+        13,
+        14,
+        15
+      ],
+      "station_m": 3.686565135732722,
+      "width_m": 6.1,
+      "depth_m": 3.1,
+      "eave_y": 5.15,
+      "soffit_y": 4.98,
+      "ridge_y": 5.82,
+      "front_trim_width_m": 0.16,
+      "front_trim_outward_offset_m": 0.005,
+      "maximum_outward_extent_m": 3.105
+    },
+    {
+      "runs": [
+        22
+      ],
+      "station_m": 3.7860434493016473,
+      "width_m": 6.1,
+      "depth_m": 3.1,
+      "eave_y": 5.15,
+      "soffit_y": 4.98,
+      "ridge_y": 5.82,
+      "front_trim_width_m": 0.16,
+      "front_trim_outward_offset_m": 0.005,
+      "maximum_outward_extent_m": 3.105
+    },
+    {
+      "runs": [
+        29
+      ],
+      "station_m": 3.712293765315435,
+      "width_m": 6.1,
+      "depth_m": 3.1,
+      "eave_y": 5.15,
+      "soffit_y": 4.98,
+      "ridge_y": 5.82,
+      "front_trim_width_m": 0.16,
+      "front_trim_outward_offset_m": 0.005,
+      "maximum_outward_extent_m": 3.105
+    }
+  ],
+  "posts": [
+    {
+      "runs": [
+        13,
+        14,
+        15
+      ],
+      "side": -1,
+      "station_m": 0.8565651357327222,
+      "depth_m": 2.95,
+      "width_m": 0.14,
+      "bottom_y": 2.272851030704754,
+      "top_y": 4.98,
+      "grade": {
+        "footprint_xz": [
+          [
+            -572.6469225308641,
+            -283.29992486818287
+          ],
+          [
+            -572.711386331516,
+            -283.4242004426355
+          ],
+          [
+            -572.5870752815895,
+            -283.4885958063362
+          ],
+          [
+            -572.5226114809376,
+            -283.3643202318836
+          ]
+        ],
+        "surfaces": [
+          {
+            "object_key": "area:r17241151:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              76
+            ],
+            "y_min": 2.312851030704754,
+            "y_max": 2.31342062199771
+          },
+          {
+            "object_key": "area:r17241152:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              88,
+              89
+            ],
+            "y_min": 2.3129682451885194,
+            "y_max": 2.3135367805385045
+          },
+          {
+            "object_key": "land:w26767313:x_-3__z_-2",
+            "collision_kind": "world_solid",
+            "triangle_ids": [
+              72
+            ],
+            "y_min": 2.292851030704754,
+            "y_max": 2.2934206219977096
+          }
+        ],
+        "land_range": [
+          2.292851030704754,
+          2.2934206219977096
+        ],
+        "visible_range": [
+          2.312851030704754,
+          2.3135367805385045
+        ]
+      }
+    },
+    {
+      "runs": [
+        13,
+        14,
+        15
+      ],
+      "side": 1,
+      "station_m": 6.516565135732721,
+      "depth_m": 2.95,
+      "width_m": 0.14,
+      "bottom_y": 2.2734439729181912,
+      "top_y": 4.98,
+      "grade": {
+        "footprint_xz": [
+          [
+            -575.2531019000753,
+            -288.32420880676534
+          ],
+          [
+            -575.3175657007272,
+            -288.44848438121795
+          ],
+          [
+            -575.1932546508007,
+            -288.5128797449187
+          ],
+          [
+            -575.1287908501488,
+            -288.38860417046607
+          ]
+        ],
+        "surfaces": [
+          {
+            "object_key": "area:r17241151:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              79
+            ],
+            "y_min": 2.3134439729181913,
+            "y_max": 2.3146948689035756
+          },
+          {
+            "object_key": "area:r17241152:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              91
+            ],
+            "y_min": 2.313467157339134,
+            "y_max": 2.3146986239086984
+          },
+          {
+            "object_key": "land:w26767313:x_-3__z_-2",
+            "collision_kind": "world_solid",
+            "triangle_ids": [
+              75
+            ],
+            "y_min": 2.2934439729181912,
+            "y_max": 2.2946948689035755
+          }
+        ],
+        "land_range": [
+          2.2934439729181912,
+          2.2946948689035755
+        ],
+        "visible_range": [
+          2.3134439729181913,
+          2.3146986239086984
+        ]
+      }
+    },
+    {
+      "runs": [
+        22
+      ],
+      "side": -1,
+      "station_m": 0.9560434493016476,
+      "depth_m": 2.95,
+      "width_m": 0.14,
+      "bottom_y": 2.173012259734592,
+      "top_y": 4.98,
+      "grade": {
+        "footprint_xz": [
+          [
+            -578.8301883688506,
+            -297.892509667073
+          ],
+          [
+            -578.8945669221514,
+            -298.0168294236481
+          ],
+          [
+            -578.7702558722249,
+            -298.08122478734884
+          ],
+          [
+            -578.7058773189241,
+            -297.9569050307737
+          ]
+        ],
+        "surfaces": [
+          {
+            "object_key": "area:r17241151:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              63
+            ],
+            "y_min": 2.213012259734592,
+            "y_max": 2.214571544566728
+          },
+          {
+            "object_key": "area:r17241152:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              65
+            ],
+            "y_min": 2.2133900153028048,
+            "y_max": 2.214948195687124
+          },
+          {
+            "object_key": "land:w26767313:x_-3__z_-2",
+            "collision_kind": "world_solid",
+            "triangle_ids": [
+              59
+            ],
+            "y_min": 2.193012259734592,
+            "y_max": 2.1945715445667275
+          }
+        ],
+        "land_range": [
+          2.193012259734592,
+          2.1945715445667275
+        ],
+        "visible_range": [
+          2.213012259734592,
+          2.214948195687124
+        ]
+      }
+    },
+    {
+      "runs": [
+        22
+      ],
+      "side": 1,
+      "station_m": 6.616043449301647,
+      "depth_m": 2.95,
+      "width_m": 0.14,
+      "bottom_y": 2.1225609501926397,
+      "top_y": 4.98,
+      "grade": {
+        "footprint_xz": [
+          [
+            -581.43292130944,
+            -302.9185798257527
+          ],
+          [
+            -581.4972998627408,
+            -303.04289958232783
+          ],
+          [
+            -581.3729888128142,
+            -303.10729494602856
+          ],
+          [
+            -581.3086102595134,
+            -302.98297518945344
+          ]
+        ],
+        "surfaces": [
+          {
+            "object_key": "area:r17241151:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              63
+            ],
+            "y_min": 2.1625609501926397,
+            "y_max": 2.1641202350247752
+          },
+          {
+            "object_key": "area:r17241152:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              65
+            ],
+            "y_min": 2.162916698206503,
+            "y_max": 2.164474878590822
+          },
+          {
+            "object_key": "land:w26767313:x_-3__z_-2",
+            "collision_kind": "world_solid",
+            "triangle_ids": [
+              59
+            ],
+            "y_min": 2.1425609501926397,
+            "y_max": 2.1441202350247752
+          }
+        ],
+        "land_range": [
+          2.1425609501926397,
+          2.1441202350247752
+        ],
+        "visible_range": [
+          2.1625609501926397,
+          2.164474878590822
+        ]
+      }
+    },
+    {
+      "runs": [
+        29
+      ],
+      "side": -1,
+      "station_m": 0.8822937653154352,
+      "depth_m": 2.95,
+      "width_m": 0.14,
+      "bottom_y": 2.0831247494079603,
+      "top_y": 4.98,
+      "grade": {
+        "footprint_xz": [
+          [
+            -587.0200889668737,
+            -311.1429585305182
+          ],
+          [
+            -587.0845773977832,
+            -311.2672213257501
+          ],
+          [
+            -586.9603235453525,
+            -311.33172698562686
+          ],
+          [
+            -586.895835114443,
+            -311.20746419039494
+          ]
+        ],
+        "surfaces": [
+          {
+            "object_key": "area:r17241151:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              62
+            ],
+            "y_min": 2.1231247494079604,
+            "y_max": 2.127470205305901
+          },
+          {
+            "object_key": "area:r17241152:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              64
+            ],
+            "y_min": 2.1233011145494047,
+            "y_max": 2.1276292949241236
+          },
+          {
+            "object_key": "land:w26767313:x_-3__z_-2",
+            "collision_kind": "world_solid",
+            "triangle_ids": [
+              58
+            ],
+            "y_min": 2.1031247494079603,
+            "y_max": 2.1074702053059013
+          }
+        ],
+        "land_range": [
+          2.1031247494079603,
+          2.1074702053059013
+        ],
+        "visible_range": [
+          2.1231247494079604,
+          2.1276292949241236
+        ]
+      }
+    },
+    {
+      "runs": [
+        29
+      ],
+      "side": 1,
+      "station_m": 6.542293765315435,
+      "depth_m": 2.95,
+      "width_m": 0.14,
+      "bottom_y": 2.1948421086656964,
+      "top_y": 4.98,
+      "grade": {
+        "footprint_xz": [
+          [
+            -589.6272641022115,
+            -316.1667258234644
+          ],
+          [
+            -589.691752533121,
+            -316.2909886186963
+          ],
+          [
+            -589.5674986806903,
+            -316.3554942785731
+          ],
+          [
+            -589.5030102497808,
+            -316.23123148334116
+          ]
+        ],
+        "surfaces": [
+          {
+            "object_key": "area:r17241151:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              62
+            ],
+            "y_min": 2.234842108665696,
+            "y_max": 2.2391875645636365
+          },
+          {
+            "object_key": "area:r17241152:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              63,
+              64
+            ],
+            "y_min": 2.2345332866857817,
+            "y_max": 2.2388639105192016
+          },
+          {
+            "object_key": "land:w26767313:x_-3__z_-2",
+            "collision_kind": "world_solid",
+            "triangle_ids": [
+              58
+            ],
+            "y_min": 2.2148421086656964,
+            "y_max": 2.2191875645636365
+          }
+        ],
+        "land_range": [
+          2.2148421086656964,
+          2.2191875645636365
+        ],
+        "visible_range": [
+          2.2345332866857817,
+          2.2391875645636365
+        ]
+      }
+    }
+  ],
+  "short_diagonal_braces": {
+    "count": 6,
+    "per_canopy": 2,
+    "width_m": 0.1,
+    "front_plane_depth_m": 2.95,
+    "post_end_y": 4.4,
+    "beam_end_y": 4.98,
+    "inward_span_m": 0.42,
+    "render_collision_congruent": true
+  },
+  "upper_modules": [
+    {
+      "runs": [
+        10
+      ],
+      "station_m": 2.4002092617103084,
+      "width_m": 1.25,
+      "height_m": 1.05,
+      "bottom_y": 6.35,
+      "frame_width_m": 0.07,
+      "outward_extent_m": 0.12,
+      "finish": "boarded_warm_brown"
+    },
+    {
+      "runs": [
+        13,
+        14,
+        15
+      ],
+      "station_m": 1.843282567866361,
+      "width_m": 1.25,
+      "height_m": 1.05,
+      "bottom_y": 6.35,
+      "frame_width_m": 0.07,
+      "outward_extent_m": 0.12,
+      "finish": "boarded_warm_brown"
+    },
+    {
+      "runs": [
+        13,
+        14,
+        15
+      ],
+      "station_m": 5.529847703599083,
+      "width_m": 1.25,
+      "height_m": 1.05,
+      "bottom_y": 6.35,
+      "frame_width_m": 0.07,
+      "outward_extent_m": 0.12,
+      "finish": "boarded_warm_brown"
+    },
+    {
+      "runs": [
+        17
+      ],
+      "station_m": 1.7436826689509823,
+      "width_m": 1.25,
+      "height_m": 1.05,
+      "bottom_y": 6.35,
+      "frame_width_m": 0.07,
+      "outward_extent_m": 0.12,
+      "finish": "dark_opaque_closed"
+    },
+    {
+      "runs": [
+        20
+      ],
+      "station_m": 2.426397535442209,
+      "width_m": 1.25,
+      "height_m": 1.05,
+      "bottom_y": 6.35,
+      "frame_width_m": 0.07,
+      "outward_extent_m": 0.12,
+      "finish": "dark_opaque_closed"
+    },
+    {
+      "runs": [
+        22
+      ],
+      "station_m": 1.8930217246508236,
+      "width_m": 1.25,
+      "height_m": 1.05,
+      "bottom_y": 6.35,
+      "frame_width_m": 0.07,
+      "outward_extent_m": 0.12,
+      "finish": "boarded_warm_brown"
+    },
+    {
+      "runs": [
+        22
+      ],
+      "station_m": 5.679065173952471,
+      "width_m": 1.25,
+      "height_m": 1.05,
+      "bottom_y": 6.35,
+      "frame_width_m": 0.07,
+      "outward_extent_m": 0.12,
+      "finish": "boarded_warm_brown"
+    },
+    {
+      "runs": [
+        24
+      ],
+      "station_m": 1.7255657043416506,
+      "width_m": 1.25,
+      "height_m": 1.05,
+      "bottom_y": 6.35,
+      "frame_width_m": 0.07,
+      "outward_extent_m": 0.12,
+      "finish": "dark_opaque_closed"
+    },
+    {
+      "runs": [
+        26,
+        27
+      ],
+      "station_m": 2.293990845666137,
+      "width_m": 1.25,
+      "height_m": 1.05,
+      "bottom_y": 6.35,
+      "frame_width_m": 0.07,
+      "outward_extent_m": 0.12,
+      "finish": "dark_opaque_closed"
+    },
+    {
+      "runs": [
+        29
+      ],
+      "station_m": 1.8561468826577174,
+      "width_m": 1.25,
+      "height_m": 1.05,
+      "bottom_y": 6.35,
+      "frame_width_m": 0.07,
+      "outward_extent_m": 0.12,
+      "finish": "boarded_warm_brown"
+    },
+    {
+      "runs": [
+        29
+      ],
+      "station_m": 5.568440647973152,
+      "width_m": 1.25,
+      "height_m": 1.05,
+      "bottom_y": 6.35,
+      "frame_width_m": 0.07,
+      "outward_extent_m": 0.12,
+      "finish": "boarded_warm_brown"
+    },
+    {
+      "runs": [
+        31
+      ],
+      "station_m": 1.8364359504213565,
+      "width_m": 1.25,
+      "height_m": 1.05,
+      "bottom_y": 6.35,
+      "frame_width_m": 0.07,
+      "outward_extent_m": 0.12,
+      "finish": "boarded_warm_brown"
+    }
+  ],
+  "ground_groups": [
+    {
+      "runs": [
+        13,
+        14,
+        15
+      ],
+      "center_fraction": 0.25,
+      "station_m": 1.843282567866361,
+      "local_visible_datum_y": 2.3031464830292547,
+      "grade": {
+        "footprint_xz": [
+          [
+            -575.2690972664045,
+            -281.9266321874264
+          ],
+          [
+            -576.2544725049402,
+            -283.8262731112014
+          ],
+          [
+            -576.0413678479231,
+            -283.93666516325976
+          ],
+          [
+            -575.0559926093874,
+            -282.03702423948477
+          ]
+        ],
+        "surfaces": [
+          {
+            "object_key": "area:r17241151:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              61,
+              76
+            ],
+            "y_min": 2.300983220790899,
+            "y_max": 2.3031464830292547
+          },
+          {
+            "object_key": "area:r17241152:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              61,
+              88
+            ],
+            "y_min": 2.3008082558201,
+            "y_max": 2.3029977657526497
+          },
+          {
+            "object_key": "land:w26767313:x_-3__z_-2",
+            "collision_kind": "world_solid",
+            "triangle_ids": [
+              57,
+              72
+            ],
+            "y_min": 2.280983220790899,
+            "y_max": 2.2831464830292547
+          }
+        ],
+        "land_range": [
+          2.280983220790899,
+          2.2831464830292547
+        ],
+        "visible_range": [
+          2.3008082558201,
+          2.3031464830292547
+        ]
+      },
+      "closed_ground_components": [
+        {
+          "role": "door",
+          "station_m": 1.323282567866361,
+          "width_m": 0.9,
+          "depth_m": 0.06,
+          "center_depth_m": 0.025,
+          "bottom_y": 2.2613471091839474,
+          "top_y": 4.333146483029255,
+          "grade": {
+            "footprint_xz": [
+              [
+                -575.2485476329808,
+                -282.0498979711607
+              ],
+              [
+                -575.6629577800286,
+                -282.84881237835583
+              ],
+              [
+                -575.6096816157743,
+                -282.8764103913704
+              ],
+              [
+                -575.1952714687266,
+                -282.0774959841753
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  76
+                ],
+                "y_min": 2.301347109183947,
+                "y_max": 2.301687541615463
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  88
+                ],
+                "y_min": 2.301183485160013,
+                "y_max": 2.3015360641876574
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  72
+                ],
+                "y_min": 2.2813471091839475,
+                "y_max": 2.281687541615463
+              }
+            ],
+            "land_range": [
+              2.2813471091839475,
+              2.281687541615463
+            ],
+            "visible_range": [
+              2.301183485160013,
+              2.301687541615463
+            ]
+          }
+        },
+        {
+          "role": "left_jamb",
+          "station_m": 0.838282567866361,
+          "width_m": 0.07,
+          "depth_m": 0.1,
+          "center_depth_m": 0.085,
+          "bottom_y": 2.261608464808788,
+          "top_y": 4.333146483029255,
+          "grade": {
+            "footprint_xz": [
+              [
+                -575.1807982898187,
+                -282.0061588592775
+              ],
+              [
+                -575.2130301901447,
+                -282.06829664650377
+              ],
+              [
+                -575.1242365830543,
+                -282.11429333486143
+              ],
+              [
+                -575.0920046827283,
+                -282.05215554763515
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  76
+                ],
+                "y_min": 2.3016084648087882,
+                "y_max": 2.3020118756652783
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  88
+                ],
+                "y_min": 2.301455082441576,
+                "y_max": 2.3018685182444916
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  72
+                ],
+                "y_min": 2.281608464808788,
+                "y_max": 2.2820118756652783
+              }
+            ],
+            "land_range": [
+              2.281608464808788,
+              2.2820118756652783
+            ],
+            "visible_range": [
+              2.301455082441576,
+              2.3020118756652783
+            ]
+          }
+        },
+        {
+          "role": "right_jamb",
+          "station_m": 1.8082825678663608,
+          "width_m": 0.07,
+          "depth_m": 0.1,
+          "center_depth_m": 0.085,
+          "bottom_y": 2.2614972359741814,
+          "top_y": 4.333146483029255,
+          "grade": {
+            "footprint_xz": [
+              [
+                -575.6274403371924,
+                -282.8672110536989
+              ],
+              [
+                -575.6596722375183,
+                -282.9293488409252
+              ],
+              [
+                -575.570878630428,
+                -282.97534552928283
+              ],
+              [
+                -575.5386467301021,
+                -282.91320774205656
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  76
+                ],
+                "y_min": 2.3014972359741814,
+                "y_max": 2.3019006468306715
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  88
+                ],
+                "y_min": 2.3013369215796673,
+                "y_max": 2.301750357382583
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  72
+                ],
+                "y_min": 2.2814972359741814,
+                "y_max": 2.2819006468306715
+              }
+            ],
+            "land_range": [
+              2.2814972359741814,
+              2.2819006468306715
+            ],
+            "visible_range": [
+              2.3013369215796673,
+              2.3019006468306715
+            ]
+          }
+        }
+      ],
+      "door_offset_m": -0.52,
+      "door_width_m": 0.9,
+      "door_height_above_datum_m": 2.03,
+      "window_offset_m": 0.55,
+      "window_width_m": 0.9,
+      "window_height_m": 1.1,
+      "window_sill_above_datum_m": 0.82,
+      "frame_width_m": 0.07,
+      "field_depth_m": 0.06,
+      "maximum_outward_extent_m": 0.145
+    },
+    {
+      "runs": [
+        13,
+        14,
+        15
+      ],
+      "center_fraction": 0.75,
+      "station_m": 5.529847703599083,
+      "local_visible_datum_y": 2.31452603468274,
+      "grade": {
+        "footprint_xz": [
+          [
+            -576.9665972664045,
+            -285.19913218742636
+          ],
+          [
+            -577.9519725049402,
+            -287.09877311120135
+          ],
+          [
+            -577.7388678479231,
+            -287.20916516325974
+          ],
+          [
+            -576.7534926093874,
+            -285.30952423948474
+          ]
+        ],
+        "surfaces": [
+          {
+            "object_key": "area:r17241151:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              60,
+              61
+            ],
+            "y_min": 2.308284487697812,
+            "y_max": 2.3145260346827397
+          },
+          {
+            "object_key": "area:r17241152:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              59,
+              61,
+              62
+            ],
+            "y_min": 2.3082067939207467,
+            "y_max": 2.31452603468274
+          },
+          {
+            "object_key": "land:w26767313:x_-3__z_-2",
+            "collision_kind": "world_solid",
+            "triangle_ids": [
+              56,
+              57
+            ],
+            "y_min": 2.288284487697812,
+            "y_max": 2.29452603468274
+          }
+        ],
+        "land_range": [
+          2.288284487697812,
+          2.29452603468274
+        ],
+        "visible_range": [
+          2.3082067939207467,
+          2.31452603468274
+        ]
+      },
+      "closed_ground_components": [
+        {
+          "role": "door",
+          "station_m": 5.009847703599084,
+          "width_m": 0.9,
+          "depth_m": 0.06,
+          "center_depth_m": 0.025,
+          "bottom_y": 2.26907655759182,
+          "top_y": 4.34452603468274,
+          "grade": {
+            "footprint_xz": [
+              [
+                -576.9460476329808,
+                -285.32239797116074
+              ],
+              [
+                -577.3604577800286,
+                -286.1213123783558
+              ],
+              [
+                -577.3071816157743,
+                -286.1489103913704
+              ],
+              [
+                -576.8927714687266,
+                -285.34999598417534
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  61
+                ],
+                "y_min": 2.3090765575918204,
+                "y_max": 2.3128283803841976
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  61
+                ],
+                "y_min": 2.30900467588111,
+                "y_max": 2.3127998504575835
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  57
+                ],
+                "y_min": 2.28907655759182,
+                "y_max": 2.2928283803841976
+              }
+            ],
+            "land_range": [
+              2.28907655759182,
+              2.2928283803841976
+            ],
+            "visible_range": [
+              2.30900467588111,
+              2.3128283803841976
+            ]
+          }
+        },
+        {
+          "role": "left_jamb",
+          "station_m": 4.524847703599083,
+          "width_m": 0.07,
+          "depth_m": 0.1,
+          "center_depth_m": 0.085,
+          "bottom_y": 2.268497307264151,
+          "top_y": 4.34452603468274,
+          "grade": {
+            "footprint_xz": [
+              [
+                -576.8782982898186,
+                -285.2786588592775
+              ],
+              [
+                -576.9105301901446,
+                -285.3407966465038
+              ],
+              [
+                -576.8217365830543,
+                -285.38679333486147
+              ],
+              [
+                -576.7895046827283,
+                -285.3246555476352
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  61
+                ],
+                "y_min": 2.308497307264151,
+                "y_max": 2.309152869597554
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  61
+                ],
+                "y_min": 2.3084212913224897,
+                "y_max": 2.3090811903006982
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  57
+                ],
+                "y_min": 2.288497307264151,
+                "y_max": 2.2891528695975536
+              }
+            ],
+            "land_range": [
+              2.288497307264151,
+              2.2891528695975536
+            ],
+            "visible_range": [
+              2.3084212913224897,
+              2.309152869597554
+            ]
+          }
+        },
+        {
+          "role": "right_jamb",
+          "station_m": 5.494847703599083,
+          "width_m": 0.07,
+          "depth_m": 0.1,
+          "center_depth_m": 0.085,
+          "bottom_y": 2.272294196344064,
+          "top_y": 4.34452603468274,
+          "grade": {
+            "footprint_xz": [
+              [
+                -577.3249403371924,
+                -286.1397110536989
+              ],
+              [
+                -577.3571722375183,
+                -286.20184884092515
+              ],
+              [
+                -577.268378630428,
+                -286.2478455292828
+              ],
+              [
+                -577.2361467301021,
+                -286.18570774205654
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  61
+                ],
+                "y_min": 2.312294196344064,
+                "y_max": 2.3129497586774663
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  61
+                ],
+                "y_min": 2.312264249520464,
+                "y_max": 2.3129241484986722
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  57
+                ],
+                "y_min": 2.292294196344064,
+                "y_max": 2.2929497586774663
+              }
+            ],
+            "land_range": [
+              2.292294196344064,
+              2.2929497586774663
+            ],
+            "visible_range": [
+              2.312264249520464,
+              2.3129497586774663
+            ]
+          }
+        }
+      ],
+      "door_offset_m": -0.52,
+      "door_width_m": 0.9,
+      "door_height_above_datum_m": 2.03,
+      "window_offset_m": 0.55,
+      "window_width_m": 0.9,
+      "window_height_m": 1.1,
+      "window_sill_above_datum_m": 0.82,
+      "frame_width_m": 0.07,
+      "field_depth_m": 0.06,
+      "maximum_outward_extent_m": 0.145
+    },
+    {
+      "runs": [
+        22
+      ],
+      "center_fraction": 0.25,
+      "station_m": 1.8930217246508236,
+      "local_visible_datum_y": 2.222058640476288,
+      "grade": {
+        "footprint_xz": [
+          [
+            -581.4294987997306,
+            -296.4750445097755
+          ],
+          [
+            -582.4135709716141,
+            -298.3753607888523
+          ],
+          [
+            -582.2004663145971,
+            -298.48575284091066
+          ],
+          [
+            -581.2163941427135,
+            -296.5854365618339
+          ]
+        ],
+        "surfaces": [
+          {
+            "object_key": "area:r17241151:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              63
+            ],
+            "y_min": 2.2021075930658425,
+            "y_max": 2.2217166047444543
+          },
+          {
+            "object_key": "area:r17241152:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              65
+            ],
+            "y_min": 2.2024441344418673,
+            "y_max": 2.222058640476288
+          },
+          {
+            "object_key": "land:w26767313:x_-3__z_-2",
+            "collision_kind": "world_solid",
+            "triangle_ids": [
+              59
+            ],
+            "y_min": 2.1821075930658425,
+            "y_max": 2.201716604744454
+          }
+        ],
+        "land_range": [
+          2.1821075930658425,
+          2.201716604744454
+        ],
+        "visible_range": [
+          2.2021075930658425,
+          2.222058640476288
+        ]
+      },
+      "closed_ground_components": [
+        {
+          "role": "door",
+          "station_m": 1.3730217246508236,
+          "width_m": 0.9,
+          "depth_m": 0.06,
+          "center_depth_m": 0.025,
+          "bottom_y": 2.1725026936821563,
+          "top_y": 4.252058640476288,
+          "grade": {
+            "footprint_xz": [
+              [
+                -581.4088882753418,
+                -296.5983418521688
+              ],
+              [
+                -581.8227504037042,
+                -297.39754028729453
+              ],
+              [
+                -581.7694742394499,
+                -297.42513830030913
+              ],
+              [
+                -581.3556121110876,
+                -296.6259398651834
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  63
+                ],
+                "y_min": 2.2125026936821564,
+                "y_max": 2.22065843211114
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  65
+                ],
+                "y_min": 2.212842431071922,
+                "y_max": 2.221000962304935
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  59
+                ],
+                "y_min": 2.1925026936821563,
+                "y_max": 2.2006584321111404
+              }
+            ],
+            "land_range": [
+              2.1925026936821563,
+              2.2006584321111404
+            ],
+            "visible_range": [
+              2.2125026936821564,
+              2.221000962304935
+            ]
+          }
+        },
+        {
+          "role": "left_jamb",
+          "station_m": 0.8880217246508237,
+          "width_m": 0.07,
+          "depth_m": 0.1,
+          "center_depth_m": 0.085,
+          "bottom_y": 2.1803470595291587,
+          "top_y": 4.252058640476288,
+          "grade": {
+            "footprint_xz": [
+              [
+                -581.3411815558553,
+                -296.5545806492243
+              ],
+              [
+                -581.3733708325057,
+                -296.61674052751187
+              ],
+              [
+                -581.2845772254153,
+                -296.6627372158695
+              ],
+              [
+                -581.252387948765,
+                -296.60057733758197
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  63
+                ],
+                "y_min": 2.220347059529159,
+                "y_max": 2.221193424641365
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  65
+                ],
+                "y_min": 2.220691238527238,
+                "y_max": 2.2215366981003326
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  59
+                ],
+                "y_min": 2.2003470595291588,
+                "y_max": 2.2011934246413656
+              }
+            ],
+            "land_range": [
+              2.2003470595291588,
+              2.2011934246413656
+            ],
+            "visible_range": [
+              2.220347059529159,
+              2.2215366981003326
+            ]
+          }
+        },
+        {
+          "role": "right_jamb",
+          "station_m": 1.8580217246508237,
+          "width_m": 0.07,
+          "depth_m": 0.1,
+          "center_depth_m": 0.085,
+          "bottom_y": 2.1717008103673754,
+          "top_y": 4.252058640476288,
+          "grade": {
+            "footprint_xz": [
+              [
+                -581.787232960868,
+                -297.4159389626376
+              ],
+              [
+                -581.8194222375183,
+                -297.47809884092516
+              ],
+              [
+                -581.730628630428,
+                -297.5240955292828
+              ],
+              [
+                -581.6984393537776,
+                -297.46193565099526
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  63
+                ],
+                "y_min": 2.2117008103673754,
+                "y_max": 2.2125471754795822
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  65
+                ],
+                "y_min": 2.2120412177527835,
+                "y_max": 2.212886677325878
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  59
+                ],
+                "y_min": 2.1917008103673754,
+                "y_max": 2.1925471754795822
+              }
+            ],
+            "land_range": [
+              2.1917008103673754,
+              2.1925471754795822
+            ],
+            "visible_range": [
+              2.2117008103673754,
+              2.212886677325878
+            ]
+          }
+        }
+      ],
+      "door_offset_m": -0.52,
+      "door_width_m": 0.9,
+      "door_height_above_datum_m": 2.03,
+      "window_offset_m": 0.55,
+      "window_width_m": 0.9,
+      "window_height_m": 1.1,
+      "window_sill_above_datum_m": 0.82,
+      "frame_width_m": 0.07,
+      "field_depth_m": 0.06,
+      "maximum_outward_extent_m": 0.145
+    },
+    {
+      "runs": [
+        22
+      ],
+      "center_fraction": 0.75,
+      "station_m": 5.679065173952471,
+      "local_visible_datum_y": 2.188296419353147,
+      "grade": {
+        "footprint_xz": [
+          [
+            -583.1704987997306,
+            -299.83704450977547
+          ],
+          [
+            -584.1545709716141,
+            -301.73736078885224
+          ],
+          [
+            -583.941466314597,
+            -301.84775284091063
+          ],
+          [
+            -582.9573941427135,
+            -299.94743656183385
+          ]
+        ],
+        "surfaces": [
+          {
+            "object_key": "area:r17241151:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              63
+            ],
+            "y_min": 2.1683600930658424,
+            "y_max": 2.1879691047444547
+          },
+          {
+            "object_key": "area:r17241152:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              65
+            ],
+            "y_min": 2.1686819133187263,
+            "y_max": 2.188296419353147
+          },
+          {
+            "object_key": "land:w26767313:x_-3__z_-2",
+            "collision_kind": "world_solid",
+            "triangle_ids": [
+              59
+            ],
+            "y_min": 2.148360093065843,
+            "y_max": 2.1679691047444543
+          }
+        ],
+        "land_range": [
+          2.148360093065843,
+          2.1679691047444543
+        ],
+        "visible_range": [
+          2.1683600930658424,
+          2.188296419353147
+        ]
+      },
+      "closed_ground_components": [
+        {
+          "role": "door",
+          "station_m": 5.15906517395247,
+          "width_m": 0.9,
+          "depth_m": 0.06,
+          "center_depth_m": 0.025,
+          "bottom_y": 2.138755193682156,
+          "top_y": 4.2182964193531465,
+          "grade": {
+            "footprint_xz": [
+              [
+                -583.1498882753418,
+                -299.96034185216877
+              ],
+              [
+                -583.5637504037041,
+                -300.75954028729456
+              ],
+              [
+                -583.5104742394499,
+                -300.78713830030915
+              ],
+              [
+                -583.0966121110876,
+                -299.98793986518336
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  63
+                ],
+                "y_min": 2.1787551936821563,
+                "y_max": 2.1869109321111404
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  65
+                ],
+                "y_min": 2.17908020994878,
+                "y_max": 2.187238741181794
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  59
+                ],
+                "y_min": 2.158755193682156,
+                "y_max": 2.1669109321111404
+              }
+            ],
+            "land_range": [
+              2.158755193682156,
+              2.1669109321111404
+            ],
+            "visible_range": [
+              2.1787551936821563,
+              2.187238741181794
+            ]
+          }
+        },
+        {
+          "role": "left_jamb",
+          "station_m": 4.674065173952471,
+          "width_m": 0.07,
+          "depth_m": 0.1,
+          "center_depth_m": 0.085,
+          "bottom_y": 2.1465995595291587,
+          "top_y": 4.2182964193531465,
+          "grade": {
+            "footprint_xz": [
+              [
+                -583.0821815558553,
+                -299.9165806492243
+              ],
+              [
+                -583.1143708325056,
+                -299.97874052751183
+              ],
+              [
+                -583.0255772254153,
+                -300.0247372158695
+              ],
+              [
+                -582.993387948765,
+                -299.96257733758193
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  63
+                ],
+                "y_min": 2.186599559529159,
+                "y_max": 2.1874459246413656
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  65
+                ],
+                "y_min": 2.186929017404097,
+                "y_max": 2.1877744769771916
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  59
+                ],
+                "y_min": 2.1665995595291587,
+                "y_max": 2.167445924641366
+              }
+            ],
+            "land_range": [
+              2.1665995595291587,
+              2.167445924641366
+            ],
+            "visible_range": [
+              2.186599559529159,
+              2.1877744769771916
+            ]
+          }
+        },
+        {
+          "role": "right_jamb",
+          "station_m": 5.6440651739524705,
+          "width_m": 0.07,
+          "depth_m": 0.1,
+          "center_depth_m": 0.085,
+          "bottom_y": 2.1379533103673753,
+          "top_y": 4.2182964193531465,
+          "grade": {
+            "footprint_xz": [
+              [
+                -583.528232960868,
+                -300.7779389626376
+              ],
+              [
+                -583.5604222375183,
+                -300.8400988409252
+              ],
+              [
+                -583.471628630428,
+                -300.88609552928284
+              ],
+              [
+                -583.4394393537776,
+                -300.8239356509953
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  63
+                ],
+                "y_min": 2.1779533103673754,
+                "y_max": 2.178799675479582
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  65
+                ],
+                "y_min": 2.1782789966296425,
+                "y_max": 2.179124456202737
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  59
+                ],
+                "y_min": 2.1579533103673754,
+                "y_max": 2.1587996754795817
+              }
+            ],
+            "land_range": [
+              2.1579533103673754,
+              2.1587996754795817
+            ],
+            "visible_range": [
+              2.1779533103673754,
+              2.179124456202737
+            ]
+          }
+        }
+      ],
+      "door_offset_m": -0.52,
+      "door_width_m": 0.9,
+      "door_height_above_datum_m": 2.03,
+      "window_offset_m": 0.55,
+      "window_width_m": 0.9,
+      "window_height_m": 1.1,
+      "window_sill_above_datum_m": 0.82,
+      "frame_width_m": 0.07,
+      "field_depth_m": 0.06,
+      "maximum_outward_extent_m": 0.145
+    },
+    {
+      "runs": [
+        29
+      ],
+      "center_fraction": 0.25,
+      "station_m": 1.8561468826577174,
+      "local_visible_datum_y": 2.1998809427514,
+      "grade": {
+        "footprint_xz": [
+          [
+            -589.6351263365813,
+            -309.7559168307982
+          ],
+          [
+            -590.6208780661966,
+            -311.655362415057
+          ],
+          [
+            -590.4078714620297,
+            -311.7659435462743
+          ],
+          [
+            -589.4221197324143,
+            -309.86649796201544
+          ]
+        ],
+        "surfaces": [
+          {
+            "object_key": "area:r17241151:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              62
+            ],
+            "y_min": 2.1549292960397395,
+            "y_max": 2.1998809427514
+          },
+          {
+            "object_key": "area:r17241152:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              64
+            ],
+            "y_min": 2.155000153510797,
+            "y_max": 2.199759313037922
+          },
+          {
+            "object_key": "land:w26767313:x_-3__z_-2",
+            "collision_kind": "world_solid",
+            "triangle_ids": [
+              58
+            ],
+            "y_min": 2.1349292960397395,
+            "y_max": 2.1798809427514
+          }
+        ],
+        "land_range": [
+          2.1349292960397395,
+          2.1798809427514
+        ],
+        "visible_range": [
+          2.1549292960397395,
+          2.1998809427514
+        ]
+      },
+      "closed_ground_components": [
+        {
+          "role": "door",
+          "station_m": 1.3361468826577174,
+          "width_m": 0.9,
+          "depth_m": 0.06,
+          "center_depth_m": 0.025,
+          "bottom_y": 2.1180896977165,
+          "top_y": 4.2298809427514,
+          "grade": {
+            "footprint_xz": [
+              [
+                -589.6146249377143,
+                -309.87923257375496
+              ],
+              [
+                -590.029193422132,
+                -310.67806482881707
+              ],
+              [
+                -589.9759417710903,
+                -310.7057101116214
+              ],
+              [
+                -589.5613732866726,
+                -309.9068778565593
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  62
+                ],
+                "y_min": 2.1580896977165,
+                "y_max": 2.1765319974030852
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  64
+                ],
+                "y_min": 2.158148027155673,
+                "y_max": 2.1765109164773437
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  58
+                ],
+                "y_min": 2.1380896977165,
+                "y_max": 2.1565319974030857
+              }
+            ],
+            "land_range": [
+              2.1380896977165,
+              2.1565319974030857
+            ],
+            "visible_range": [
+              2.1580896977165,
+              2.1765319974030852
+            ]
+          }
+        },
+        {
+          "role": "left_jamb",
+          "station_m": 0.8511468826577175,
+          "width_m": 0.07,
+          "depth_m": 0.1,
+          "center_depth_m": 0.085,
+          "bottom_y": 2.115803960553924,
+          "top_y": 4.2298809427514,
+          "grade": {
+            "footprint_xz": [
+              [
+                -589.5468796215653,
+                -309.8355313646752
+              ],
+              [
+                -589.5791238370199,
+                -309.89766276229113
+              ],
+              [
+                -589.4903710852836,
+                -309.9437382336317
+              ],
+              [
+                -589.458126869829,
+                -309.88160683601575
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  62
+                ],
+                "y_min": 2.155803960553924,
+                "y_max": 2.158315716143715
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  64
+                ],
+                "y_min": 2.1558713044995894,
+                "y_max": 2.158373292093124
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  58
+                ],
+                "y_min": 2.135803960553924,
+                "y_max": 2.138315716143715
+              }
+            ],
+            "land_range": [
+              2.135803960553924,
+              2.138315716143715
+            ],
+            "visible_range": [
+              2.155803960553924,
+              2.158373292093124
+            ]
+          }
+        },
+        {
+          "role": "right_jamb",
+          "station_m": 1.8211468826577173,
+          "width_m": 0.07,
+          "depth_m": 0.1,
+          "center_depth_m": 0.085,
+          "bottom_y": 2.1349498684125807,
+          "top_y": 4.2298809427514,
+          "grade": {
+            "footprint_xz": [
+              [
+                -589.9936923214376,
+                -310.69649501735324
+              ],
+              [
+                -590.0259365368923,
+                -310.75862641496917
+              ],
+              [
+                -589.9371837851561,
+                -310.8047018863097
+              ],
+              [
+                -589.9049395697014,
+                -310.7425704886938
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  62
+                ],
+                "y_min": 2.1749498684125808,
+                "y_max": 2.177461624002374
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  64
+                ],
+                "y_min": 2.1749340619151867,
+                "y_max": 2.177436049508723
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  58
+                ],
+                "y_min": 2.1549498684125807,
+                "y_max": 2.1574616240023743
+              }
+            ],
+            "land_range": [
+              2.1549498684125807,
+              2.1574616240023743
+            ],
+            "visible_range": [
+              2.1749340619151867,
+              2.177461624002374
+            ]
+          }
+        }
+      ],
+      "door_offset_m": -0.52,
+      "door_width_m": 0.9,
+      "door_height_above_datum_m": 2.03,
+      "window_offset_m": 0.55,
+      "window_width_m": 0.9,
+      "window_height_m": 1.1,
+      "window_sill_above_datum_m": 0.82,
+      "frame_width_m": 0.07,
+      "field_depth_m": 0.06,
+      "maximum_outward_extent_m": 0.145
+    },
+    {
+      "runs": [
+        29
+      ],
+      "center_fraction": 0.75,
+      "station_m": 5.568440647973152,
+      "local_visible_datum_y": 2.2731543802514005,
+      "grade": {
+        "footprint_xz": [
+          [
+            -591.3451263365813,
+            -313.0509168307982
+          ],
+          [
+            -592.3308780661966,
+            -314.95036241505704
+          ],
+          [
+            -592.1178714620297,
+            -315.0609435462743
+          ],
+          [
+            -591.1321197324144,
+            -313.16149796201546
+          ]
+        ],
+        "surfaces": [
+          {
+            "object_key": "area:r17241151:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              62
+            ],
+            "y_min": 2.2282027335397405,
+            "y_max": 2.2731543802514005
+          },
+          {
+            "object_key": "area:r17241152:x_-3__z_-2",
+            "collision_kind": "none",
+            "triangle_ids": [
+              63,
+              64
+            ],
+            "y_min": 2.2279553653702275,
+            "y_max": 2.272877380790049
+          },
+          {
+            "object_key": "land:w26767313:x_-3__z_-2",
+            "collision_kind": "world_solid",
+            "triangle_ids": [
+              58
+            ],
+            "y_min": 2.20820273353974,
+            "y_max": 2.253154380251401
+          }
+        ],
+        "land_range": [
+          2.20820273353974,
+          2.253154380251401
+        ],
+        "visible_range": [
+          2.2279553653702275,
+          2.2731543802514005
+        ]
+      },
+      "closed_ground_components": [
+        {
+          "role": "door",
+          "station_m": 5.048440647973152,
+          "width_m": 0.9,
+          "depth_m": 0.06,
+          "center_depth_m": 0.025,
+          "bottom_y": 2.1913631352165006,
+          "top_y": 4.3031543802514,
+          "grade": {
+            "footprint_xz": [
+              [
+                -591.3246249377144,
+                -313.1742325737549
+              ],
+              [
+                -591.7391934221321,
+                -313.97306482881703
+              ],
+              [
+                -591.6859417710904,
+                -314.00071011162134
+              ],
+              [
+                -591.2713732866727,
+                -313.20187785655924
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  62
+                ],
+                "y_min": 2.2313631352165,
+                "y_max": 2.249805434903086
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  63,
+                  64
+                ],
+                "y_min": 2.231103239015102,
+                "y_max": 2.2495179756132644
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  58
+                ],
+                "y_min": 2.2113631352165006,
+                "y_max": 2.229805434903086
+              }
+            ],
+            "land_range": [
+              2.2113631352165006,
+              2.229805434903086
+            ],
+            "visible_range": [
+              2.231103239015102,
+              2.249805434903086
+            ]
+          }
+        },
+        {
+          "role": "left_jamb",
+          "station_m": 4.563440647973152,
+          "width_m": 0.07,
+          "depth_m": 0.1,
+          "center_depth_m": 0.085,
+          "bottom_y": 2.189077398053922,
+          "top_y": 4.3031543802514,
+          "grade": {
+            "footprint_xz": [
+              [
+                -591.2568796215652,
+                -313.13053136467516
+              ],
+              [
+                -591.2891238370199,
+                -313.1926627622911
+              ],
+              [
+                -591.2003710852837,
+                -313.23873823363164
+              ],
+              [
+                -591.1681268698289,
+                -313.1766068360157
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  62
+                ],
+                "y_min": 2.229077398053922,
+                "y_max": 2.231589153643715
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  64
+                ],
+                "y_min": 2.2288265163590166,
+                "y_max": 2.231328503952553
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  58
+                ],
+                "y_min": 2.209077398053922,
+                "y_max": 2.211589153643715
+              }
+            ],
+            "land_range": [
+              2.209077398053922,
+              2.211589153643715
+            ],
+            "visible_range": [
+              2.2288265163590166,
+              2.231589153643715
+            ]
+          }
+        },
+        {
+          "role": "right_jamb",
+          "station_m": 5.533440647973152,
+          "width_m": 0.07,
+          "depth_m": 0.1,
+          "center_depth_m": 0.085,
+          "bottom_y": 2.2082233059125813,
+          "top_y": 4.3031543802514,
+          "grade": {
+            "footprint_xz": [
+              [
+                -591.7036923214376,
+                -313.9914950173532
+              ],
+              [
+                -591.7359365368923,
+                -314.0536264149692
+              ],
+              [
+                -591.647183785156,
+                -314.09970188630973
+              ],
+              [
+                -591.6149395697014,
+                -314.03757048869375
+              ]
+            ],
+            "surfaces": [
+              {
+                "object_key": "area:r17241151:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  62
+                ],
+                "y_min": 2.248223305912581,
+                "y_max": 2.2507350615023727
+              },
+              {
+                "object_key": "area:r17241152:x_-3__z_-2",
+                "collision_kind": "none",
+                "triangle_ids": [
+                  63
+                ],
+                "y_min": 2.247933650057417,
+                "y_max": 2.2504475446371837
+              },
+              {
+                "object_key": "land:w26767313:x_-3__z_-2",
+                "collision_kind": "world_solid",
+                "triangle_ids": [
+                  58
+                ],
+                "y_min": 2.2282233059125813,
+                "y_max": 2.230735061502373
+              }
+            ],
+            "land_range": [
+              2.2282233059125813,
+              2.230735061502373
+            ],
+            "visible_range": [
+              2.247933650057417,
+              2.2507350615023727
+            ]
+          }
+        }
+      ],
+      "door_offset_m": -0.52,
+      "door_width_m": 0.9,
+      "door_height_above_datum_m": 2.03,
+      "window_offset_m": 0.55,
+      "window_width_m": 0.9,
+      "window_height_m": 1.1,
+      "window_sill_above_datum_m": 0.82,
+      "frame_width_m": 0.07,
+      "field_depth_m": 0.06,
+      "maximum_outward_extent_m": 0.145
+    }
+  ],
+  "materials": {
+    "asset_kind": "unique_elevation with complete opaque modules and a homogeneous procedural siding field",
+    "siding": {
+      "base_rgb": [
+        0.78,
+        0.77,
+        0.7
+      ],
+      "seam_rgb": [
+        0.65,
+        0.64,
+        0.58
+      ],
+      "course_height_m": 0.18,
+      "phase_y": 2.207,
+      "roughness": 0.91,
+      "relief_strength": 0.015,
+      "color_variation": 0.008,
+      "shader_lineage": "exact accepted d5_1303_siding_marks.gdshader; no facade-scale motif baked into field"
+    },
+    "pale_trim_rgb": [
+      0.87,
+      0.86,
+      0.79
+    ],
+    "gable_siding_rgb": [
+      0.82,
+      0.81,
+      0.74
+    ],
+    "boarding_rgb_variants": [
+      [
+        0.48,
+        0.37,
+        0.23
+      ],
+      [
+        0.52,
+        0.42,
+        0.29
+      ]
+    ],
+    "boarding_roughness": 0.93,
+    "dark_opaque_rgb": [
+      0.14,
+      0.15,
+      0.13
+    ],
+    "canopy_roof_rgb": [
+      0.28,
+      0.23,
+      0.18
+    ],
+    "metallic": 0,
+    "image_generation_or_download": false,
+    "private_roof_tint_rgb": [
+      0.84,
+      0.64,
+      0.44
+    ],
+    "private_roof_material": "Local clone of existing bitumen surrogate; raw texture unchanged. Tint is not claimed final measured albedo.",
+    "main_roof_tone": {
+      "low_rgb": [
+        0.24,
+        0.15,
+        0.085
+      ],
+      "high_rgb": [
+        0.48,
+        0.35,
+        0.22
+      ],
+      "source": "existing cached bitumen albedo, private tone shader; unchanged canopy material"
+    },
+    "boarding_tone": {
+      "low_rgb": [
+        0.405,
+        0.3,
+        0.18
+      ],
+      "high_rgb": [
+        0.53,
+        0.415,
+        0.275
+      ],
+      "source": "subtle procedural grain in existing world-aligned UVs; no panel geometry or opening change"
+    },
+    "concrete": "existing cached concrete pavement albedo/roughness; private material only"
+  },
+  "capture": {
+    "poses": [
+      {
+        "id": "whole_ene",
+        "runs": [
+          22
+        ],
+        "station_m": 8.786043449301648,
+        "depth_m": 23,
+        "player_xz": [
+          -564.5977044156591,
+          -314.1622296285144
+        ],
+        "grade": {
+          "footprint_xz": [
+            [
+              -564.661917804901,
+              -313.96003485679034
+            ],
+            [
+              -564.7998718476885,
+              -314.22643433516555
+            ],
+            [
+              -564.5334910264172,
+              -314.3644244002385
+            ],
+            [
+              -564.3955369836298,
+              -314.09802492186327
+            ]
+          ],
+          "surfaces": [
+            {
+              "object_key": "area:r17241151:x_-3__z_-2",
+              "collision_kind": "none",
+              "triangle_ids": [
+                78
+              ],
+              "y_min": 2.2762035498710658,
+              "y_max": 2.2846292365555114
+            },
+            {
+              "object_key": "land:w26767313:x_-3__z_-2",
+              "collision_kind": "world_solid",
+              "triangle_ids": [
+                74
+              ],
+              "y_min": 2.256203549871066,
+              "y_max": 2.2646292365555114
+            }
+          ],
+          "land_range": [
+            2.256203549871066,
+            2.2646292365555114
+          ],
+          "visible_range": [
+            2.2762035498710658,
+            2.2846292365555114
+          ]
+        },
+        "purpose": "whole wall/roof pair and all three canopies",
+        "pose_status": "proposed; ground support, actual camera range/framing and first-solid target LOS must be checked before capture"
+      },
+      {
+        "id": "near_gable",
+        "runs": [
+          29
+        ],
+        "station_m": 4.712293765315435,
+        "depth_m": 7,
+        "player_xz": [
+          -585.1599390278187,
+          -316.5028743883505
+        ],
+        "grade": {
+          "footprint_xz": [
+            [
+              -585.2239734080201,
+              -316.30062247216273
+            ],
+            [
+              -585.3621629028261,
+              -316.56689989051677
+            ],
+            [
+              -585.0959046476174,
+              -316.70512630453834
+            ],
+            [
+              -584.9577151528115,
+              -316.4388488861843
+            ]
+          ],
+          "surfaces": [
+            {
+              "object_key": "area:r17241151:x_-3__z_-2",
+              "collision_kind": "none",
+              "triangle_ids": [
+                62
+              ],
+              "y_min": 2.150469629208664,
+              "y_max": 2.1597813204185363
+            },
+            {
+              "object_key": "land:w26767313:x_-3__z_-2",
+              "collision_kind": "world_solid",
+              "triangle_ids": [
+                58
+              ],
+              "y_min": 2.130469629208664,
+              "y_max": 2.1397813204185363
+            }
+          ],
+          "land_range": [
+            2.130469629208664,
+            2.1397813204185363
+          ],
+          "visible_range": [
+            2.150469629208664,
+            2.1597813204185363
+          ]
+        },
+        "purpose": "numbered-entry-inspired framing, gable face/trim, boarded upper and ground fields",
+        "pose_status": "proposed; ground support, actual camera range/framing and first-solid target LOS must be checked before capture"
+      },
+      {
+        "id": "level_ground",
+        "runs": [
+          22
+        ],
+        "station_m": 5.036043449301648,
+        "depth_m": 2.4,
+        "player_xz": [
+          -581.164761941444,
+          -301.35691834714726
+        ],
+        "grade": {
+          "footprint_xz": [
+            [
+              -581.228975330686,
+              -301.1547235754231
+            ],
+            [
+              -581.3669293734735,
+              -301.42112305379834
+            ],
+            [
+              -581.1005485522021,
+              -301.5591131188713
+            ],
+            [
+              -580.9625945094147,
+              -301.29271364049606
+            ]
+          ],
+          "surfaces": [
+            {
+              "object_key": "area:r17241151:x_-3__z_-2",
+              "collision_kind": "none",
+              "triangle_ids": [
+                63
+              ],
+              "y_min": 2.1769767608266584,
+              "y_max": 2.180318085466949
+            },
+            {
+              "object_key": "area:r17241152:x_-3__z_-2",
+              "collision_kind": "none",
+              "triangle_ids": [
+                65
+              ],
+              "y_min": 2.1773328059597237,
+              "y_max": 2.1806717639261213
+            },
+            {
+              "object_key": "land:w26767313:x_-3__z_-2",
+              "collision_kind": "world_solid",
+              "triangle_ids": [
+                59
+              ],
+              "y_min": 2.1569767608266583,
+              "y_max": 2.1603180854669484
+            }
+          ],
+          "land_range": [
+            2.1569767608266583,
+            2.1603180854669484
+          ],
+          "visible_range": [
+            2.1769767608266584,
+            2.1806717639261213
+          ]
+        },
+        "purpose": "closed door/window base, post base and unchanged actual ground",
+        "pose_status": "proposed; ground support, actual camera range/framing and first-solid target LOS must be checked before capture"
+      }
+    ],
+    "lights": [
+      {
+        "id": "default",
+        "sun_rotation_degrees": [
+          -52,
+          -28,
+          0
+        ]
+      },
+      {
+        "id": "changed",
+        "sun_rotation_degrees": [
+          -26,
+          126,
+          0
+        ]
+      }
+    ],
+    "variants": [
+      "untouched_source_pair",
+      "candidate_whole_pair"
+    ],
+    "count": 4,
+    "png_size": [
+      1440,
+      900
+    ],
+    "camera": "unchanged approved stock camera, FOV70 and spring length5.5; parent-basis-correct yaw/pitch",
+    "full_pair_not_component_deliverable": true,
+    "sequence": [
+      "whole_ene baseline default",
+      "whole_ene candidate default",
+      "near_gable candidate default",
+      "near_gable candidate changed"
+    ],
+    "first_preview_staging": "Only existing poses0/1 used. Proposal level_ground pose2 is retained as deferred context, not part of first run."
+  },
+  "base_policy": "resolve and pin freshly published 13-unit release commit and runtime closure before any new worktree; no provisional 10/11-unit checkout",
+  "excluded": [
+    "source geometry edit",
+    "protected-face motifs",
+    "fence or private-access barrier",
+    "invented hidden opening schedule",
+    "interiors",
+    "slabs",
+    "stairs",
+    "terrain hiding or cuts",
+    "controller/camera changes",
+    "recognition credit",
+    "changes to the original22 source roof triangles; new shallow public roof is additive"
+  ],
+  "address_mark": {
+    "observed_text": "1317",
+    "suffix": "not transcribed or invented",
+    "proposed_host_runs": [
+      29
+    ],
+    "proposed_host_fraction": 0.75,
+    "width_m": 0.26,
+    "height_m": 0.08,
+    "height_above_group_datum_m": 2.12,
+    "placement_and_dimensions_status": "production_inference",
+    "render": "small fixed-facing shaded Label3D using existing default font, depth tested; no billboard, no image download",
+    "role": "secondary entry identifier; cannot substitute for whole-unit shape/material recognition"
+  },
+  "base_commit": "e7f2284b5a2e69c94b4e2f7280bcd12cf5ae0241",
+  "truth_boundary": {
+    "prototype_only": true,
+    "runtime_attachment": false,
+    "recognition_accepted": false,
+    "interior_modeled": false,
+    "as_built_claim": false
+  },
+  "main_roof": {
+    "eave_y": 8.187,
+    "crest_y": 8.857,
+    "source_y": 8.207,
+    "crest_inward_m": 1.9,
+    "return_inward_m": 6.0,
+    "public_overhang_m": 0.35,
+    "end_inset_m": 0.025,
+    "scope": "Nine existing public-chain bands; same8.857m crest and6m rear limit. Front pitch16.6degrees with modest35cm eave; no height inflation, hidden connector or protected return treatment. All dimensions production_inference.",
+    "same_brown_material_as_canopy": false,
+    "sections": [
+      {
+        "runs": [
+          10
+        ],
+        "station_range": [
+          0.025,
+          4.775418523420616
+        ],
+        "profile_inward_y": [
+          [
+            -0.35,
+            8.117
+          ],
+          [
+            -0.35,
+            8.187
+          ],
+          [
+            1.9,
+            8.857
+          ],
+          [
+            6.0,
+            8.207
+          ]
+        ],
+        "closed_triangles": 12,
+        "plan_xz": [
+          [
+            -579.3966771403391,
+            -273.5341142421669
+          ],
+          [
+            -581.5806895613474,
+            -277.7527118637159
+          ],
+          [
+            -587.2197916246214,
+            -274.83328933177927
+          ],
+          [
+            -585.0357792036131,
+            -270.61469171023026
+          ]
+        ]
+      },
+      {
+        "runs": [
+          13,
+          14,
+          15
+        ],
+        "station_range": [
+          0.025,
+          7.348130271465443
+        ],
+        "profile_inward_y": [
+          [
+            -0.35,
+            8.117
+          ],
+          [
+            -0.35,
+            8.187
+          ],
+          [
+            1.9,
+            8.857
+          ],
+          [
+            6.0,
+            8.207
+          ]
+        ],
+        "closed_triangles": 12,
+        "plan_xz": [
+          [
+            -574.5428224568421,
+            -281.46035156849615
+          ],
+          [
+            -577.9147996708949,
+            -287.9609674347631
+          ],
+          [
+            -583.5515846549937,
+            -285.03707361948204
+          ],
+          [
+            -580.1796074409409,
+            -278.5364577532151
+          ]
+        ]
+      },
+      {
+        "runs": [
+          17
+        ],
+        "station_range": [
+          0.025,
+          3.4623653379019648
+        ],
+        "profile_inward_y": [
+          [
+            -0.35,
+            8.117
+          ],
+          [
+            -0.35,
+            8.187
+          ],
+          [
+            1.9,
+            8.857
+          ],
+          [
+            6.0,
+            8.207
+          ]
+        ],
+        "closed_triangles": 12,
+        "plan_xz": [
+          [
+            -584.9810135449052,
+            -284.3436630057192
+          ],
+          [
+            -586.5669445537886,
+            -287.3933028699116
+          ],
+          [
+            -592.2006818013521,
+            -284.46354099811794
+          ],
+          [
+            -590.6147507924686,
+            -281.4139011339255
+          ]
+        ]
+      },
+      {
+        "runs": [
+          20
+        ],
+        "station_range": [
+          0.025,
+          4.8277950708844175
+        ],
+        "profile_inward_y": [
+          [
+            -0.35,
+            8.117
+          ],
+          [
+            -0.35,
+            8.187
+          ],
+          [
+            1.9,
+            8.857
+          ],
+          [
+            6.0,
+            8.207
+          ]
+        ],
+        "closed_triangles": 12,
+        "plan_xz": [
+          [
+            -584.9718012951728,
+            -288.2723170342052
+          ],
+          [
+            -587.1827836324923,
+            -292.5359302433241
+          ],
+          [
+            -592.8199060743873,
+            -289.6126870828799
+          ],
+          [
+            -590.6089237370678,
+            -285.349073873761
+          ]
+        ]
+      },
+      {
+        "runs": [
+          22
+        ],
+        "station_range": [
+          0.025,
+          7.547086898603294
+        ],
+        "profile_inward_y": [
+          [
+            -0.35,
+            8.117
+          ],
+          [
+            -0.35,
+            8.187
+          ],
+          [
+            1.9,
+            8.857
+          ],
+          [
+            6.0,
+            8.207
+          ]
+        ],
+        "closed_triangles": 12,
+        "plan_xz": [
+          [
+            -580.6806967787945,
+            -295.96414633978327
+          ],
+          [
+            -584.13970443833,
+            -302.6437464267207
+          ],
+          [
+            -589.7784933972728,
+            -299.7237191877203
+          ],
+          [
+            -586.3194857377373,
+            -293.04411910078284
+          ]
+        ]
+      },
+      {
+        "runs": [
+          24
+        ],
+        "station_range": [
+          0.025,
+          3.4261314086833012
+        ],
+        "profile_inward_y": [
+          [
+            -0.35,
+            8.117
+          ],
+          [
+            -0.35,
+            8.187
+          ],
+          [
+            1.9,
+            8.857
+          ],
+          [
+            6.0,
+            8.207
+          ]
+        ],
+        "closed_triangles": 12,
+        "plan_xz": [
+          [
+            -590.6259966072565,
+            -299.33763542993626
+          ],
+          [
+            -592.1949317074965,
+            -302.3552731667043
+          ],
+          [
+            -597.8289391379519,
+            -299.42603089717926
+          ],
+          [
+            -596.260004037712,
+            -296.4083931604112
+          ]
+        ]
+      },
+      {
+        "runs": [
+          26,
+          27
+        ],
+        "station_range": [
+          0.025,
+          4.562981691332274
+        ],
+        "profile_inward_y": [
+          [
+            -0.35,
+            8.117
+          ],
+          [
+            -0.35,
+            8.187
+          ],
+          [
+            1.9,
+            8.857
+          ],
+          [
+            6.0,
+            8.207
+          ]
+        ],
+        "closed_triangles": 12,
+        "plan_xz": [
+          [
+            -593.8707071753154,
+            -301.54216332900535
+          ],
+          [
+            -595.9577123145906,
+            -305.5717647211415
+          ],
+          [
+            -601.5963355133,
+            -302.65141740909513
+          ],
+          [
+            -599.5093303740248,
+            -298.621816016959
+          ]
+        ]
+      },
+      {
+        "runs": [
+          29
+        ],
+        "station_range": [
+          0.025,
+          7.399587530630869
+        ],
+        "profile_inward_y": [
+          [
+            -0.35,
+            8.117
+          ],
+          [
+            -0.35,
+            8.187
+          ],
+          [
+            1.9,
+            8.857
+          ],
+          [
+            6.0,
+            8.207
+          ]
+        ],
+        "closed_triangles": 12,
+        "plan_xz": [
+          [
+            -588.9028588031541,
+            -309.2784108621364
+          ],
+          [
+            -592.2998272206864,
+            -315.82403129241067
+          ],
+          [
+            -597.936032575847,
+            -312.89902031901937
+          ],
+          [
+            -594.5390641583147,
+            -306.3533998887451
+          ]
+        ]
+      },
+      {
+        "runs": [
+          31
+        ],
+        "station_range": [
+          0.025,
+          3.647871900842713
+        ],
+        "profile_inward_y": [
+          [
+            -0.35,
+            8.117
+          ],
+          [
+            -0.35,
+            8.187
+          ],
+          [
+            1.9,
+            8.857
+          ],
+          [
+            6.0,
+            8.207
+          ]
+        ],
+        "closed_triangles": 12,
+        "plan_xz": [
+          [
+            -599.3836429764817,
+            -312.2170583854138
+          ],
+          [
+            -601.0486636833622,
+            -315.4346517182598
+          ],
+          [
+            -606.6883104119202,
+            -312.5162814920778
+          ],
+          [
+            -605.0232897050397,
+            -309.2986881592318
+          ]
+        ]
+      }
+    ],
+    "eave_bottom_y": 8.117
+  },
+  "source_reference": "May2019 pano41oK-opOSuzljFvf41TCCQ; actual frontage235/FOV75 and number247/FOV40;1317 only, suffix unknown. Temporary external images are review-only, never runtime inputs.",
+  "geometry_path": "res://game/resources/facades/d5_1317_quality_study_geometry.json",
+  "batches": {
+    "UpperWarmBoardedFields": 96,
+    "UpperDarkOpaqueFields": 48,
+    "PaleUpperFrames": 576,
+    "PaleGroundFrames": 504,
+    "ClosedGroundBoardedFields": 144,
+    "BrownCanopyTopsAndSides": 39,
+    "PaleCanopyFrontGables": 9,
+    "SlimCanopyTrim": 144,
+    "GroundFittedPostsAndBraces": 144,
+    "PublicShallowBrownMainRoof": 108,
+    "LocalConcretePorchesAndApproaches": 36
+  },
+  "collision_groups": {
+    "ExactClosedSourceWalls": [
+      "source_walls"
+    ],
+    "ExactSourceNeutralRoof": [
+      "source_roof"
+    ],
+    "CanopiesPostsBraces": [
+      "BrownCanopyTopsAndSides",
+      "PaleCanopyFrontGables",
+      "GroundFittedPostsAndBraces"
+    ],
+    "ClosedLowerModules": [
+      "ClosedGroundBoardedFields",
+      "PaleGroundFrames"
+    ],
+    "PublicShallowMainRoof": [
+      "PublicShallowBrownMainRoof"
+    ]
+  },
+  "expected": {
+    "meshes": 14,
+    "render_triangles": 1938,
+    "bodies": 1,
+    "shapes": 5,
+    "collision_triangles": 1038
+  },
+  "frame_collision_scope": "Ground framing is matching visible solid non-spray geometry. Upper fields/frames and canopy trim remain render decoration against the exact closed source/structure.",
+  "geometry_sha256": "48ba2658a74b4e51ab43fb07b3940a737ffa351350081063c45908e878a5bcf9",
+  "porch_approaches": {
+    "groups": [
+      {
+        "triangulation": [
+          7,
+          8,
+          0,
+          0,
+          1,
+          2,
+          2,
+          3,
+          4,
+          2,
+          4,
+          5,
+          2,
+          5,
+          6,
+          2,
+          6,
+          7,
+          2,
+          7,
+          0
+        ],
+        "runs": [
+          13,
+          14,
+          15
+        ],
+        "porch_width_m": 6.3,
+        "porch_depth_m": 3.335,
+        "path_width_m": 1.6,
+        "near_sidewalk_depth_m": 8.337438664103555,
+        "footprint": [
+          [
+            -577.9766235351562,
+            -287.35260009765625
+          ],
+          [
+            -575.0161743164062,
+            -288.8882141113281
+          ],
+          [
+            -573.9341430664062,
+            -286.80218505859375
+          ],
+          [
+            -569.5068359375,
+            -289.0986633300781
+          ],
+          [
+            -568.9310302734375,
+            -288
+          ],
+          [
+            -568.7639770507812,
+            -287.6815490722656
+          ],
+          [
+            -573.1973876953125,
+            -285.3818664550781
+          ],
+          [
+            -572.1153564453125,
+            -283.29583740234375
+          ],
+          [
+            -575.0757446289062,
+            -281.76019287109375
+          ]
+        ],
+        "area_m2": 28.99588261450117,
+        "walk_source_key": "roads-pedestrian:x_-3__z_-2",
+        "road_source_key": "roads:x_-3__z_-2"
+      },
+      {
+        "triangulation": [
+          6,
+          7,
+          0,
+          0,
+          1,
+          2,
+          2,
+          3,
+          4,
+          2,
+          4,
+          5,
+          5,
+          6,
+          0,
+          5,
+          0,
+          2
+        ],
+        "runs": [
+          22
+        ],
+        "porch_width_m": 6.3,
+        "porch_depth_m": 3.335,
+        "path_width_m": 1.6,
+        "near_sidewalk_depth_m": 7.033937482439537,
+        "footprint": [
+          [
+            -584.1561889648438,
+            -301.94708251953125
+          ],
+          [
+            -581.1947021484375,
+            -303.4806823730469
+          ],
+          [
+            -580.1140747070312,
+            -301.3938903808594
+          ],
+          [
+            -576.8427734375,
+            -303.0879211425781
+          ],
+          [
+            -576.099609375,
+            -301.67095947265625
+          ],
+          [
+            -579.3783569335938,
+            -299.97308349609375
+          ],
+          [
+            -578.2976684570312,
+            -297.88629150390625
+          ],
+          [
+            -581.2591552734375,
+            -296.3526916503906
+          ]
+        ],
+        "area_m2": 26.911445616948185,
+        "walk_source_key": "roads-pedestrian:x_-3__z_-2",
+        "road_source_key": "roads:x_-3__z_-2"
+      },
+      {
+        "triangulation": [
+          6,
+          7,
+          0,
+          0,
+          1,
+          2,
+          2,
+          3,
+          4,
+          2,
+          4,
+          5,
+          5,
+          6,
+          0,
+          5,
+          0,
+          2
+        ],
+        "runs": [
+          29
+        ],
+        "porch_width_m": 6.3,
+        "porch_depth_m": 3.335,
+        "path_width_m": 1.6,
+        "near_sidewalk_depth_m": 8.136548020856019,
+        "footprint": [
+          [
+            -592.3496704101562,
+            -315.19281005859375
+          ],
+          [
+            -589.3895874023438,
+            -316.7290344238281
+          ],
+          [
+            -588.3070678710938,
+            -314.6431884765625
+          ],
+          [
+            -584.05859375,
+            -316.8480224609375
+          ],
+          [
+            -583.315673828125,
+            -315.4309387207031
+          ],
+          [
+            -587.570068359375,
+            -313.2230529785156
+          ],
+          [
+            -586.487548828125,
+            -311.13720703125
+          ],
+          [
+            -589.4476928710938,
+            -309.6009826660156
+          ]
+        ],
+        "area_m2": 28.67429214286676,
+        "walk_source_key": "roads-pedestrian:x_-3__z_-2",
+        "road_source_key": "roads:x_-3__z_-2"
+      }
+    ],
+    "source_area_key": "area:r17241151:x_-3__z_-2",
+    "surface_offset_m": 0.006,
+    "source_surface_keys": [
+      "land:w26767313:x_-3__z_-2",
+      "area:r17241151:x_-3__z_-2",
+      "area:r17241152:x_-3__z_-2"
+    ],
+    "collision": "none; unchanged colliding source land provides support",
+    "scope": "Three restrained local porch/approach material surfaces ending at exact existing sidewalk. Original areas, roads, wall bottoms and land untouched. Existing sidewalk sits above these area surfaces; edge height is reported, not a new traversal PASS."
+  }
+}

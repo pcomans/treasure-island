@@ -8,18 +8,18 @@ behaves correctly as a continuous jetpack. The exact movement change in current
 source keeps walking at `4 m/s` and raises the same held-Shift run from
 `7 m/s` to `20 m/s` (about 45 mph), with a short acceleration/braking
 ramp. That change still needs ordinary-play feedback in the exact current
-package. Current authority remains compiler `1.12.0`, catalog/registry v13 and contracts/loader v12, with **13/213** recognized physical buildings. The accepted 1308/1394 fidelity004 revisions add zero credit. Owner and independent package checks passed on the same exact app, measuring `735/1006/1021/79,913/466/474`. [Quality release closure](evidence/first-playable/d5-1308-1394-quality-current-release-2026-09-10-001/release-closure.json). Primary commit `cb28dc4d4e873bb7f000c6976a87bb3c2e4ffc5d` was pushed to private `origin/main` with remote equality verified. [Publication outcome](evidence/first-playable/d5-1308-1394-quality-current-release-2026-09-10-001-PUBLICATION.json). An ordinary no-argument launch for these bytes remains pending; earlier release outcomes remain historical. Source images retain their original sampled-motion limits. No technical result establishes owner acceptance on Apple M1 Pro.
+package. Current technical authority is compiler `1.13.0`, catalog/registry v14 and contracts/loader v13: **14/213** recognized physical buildings, with 199 not evaluated. Newly accepted 1317 adds one credit while preserving the latest 1308/1394 quality revisions. Owner and independent package checks passed on the same app, measuring `735/1018/1033/81,761/466/477`. [1317 release closure](evidence/first-playable/d5-1317-current-release-2026-09-10-001/release-closure.json). MAIN transfer, publication and ordinary no-argument launch remain pending in this snapshot. Earlier outcomes and source images retain their original scope. Technical proof does not establish owner acceptance on Apple M1 Pro.
 
 ## Start
 
-First quit any older game window (`Esc`, then `Q` while paused); macOS may otherwise focus a historical copy. The reviewed app is
-`build/d5-1308-1394-quality-exact-current-001/Treasure Island First Playable.app`.
+First quit any older game window (`Esc`, then `Q` while paused); macOS may otherwise focus a historical copy. After its reviewed MAIN transfer, the app is
+`build/d5-1317-exact-current-001/Treasure Island First Playable.app`.
 Use no launch arguments for owner play. The project selects the case-sensitive `Dummy` audio driver itself. Historical and candidate apps have separate identities.
 
-Executable SHA-256 `996db8709cbad9bbbe085d54fa828574c03332e94e2cdeecd433482098d1be80` (`170,963,648` bytes),
-PCK SHA-256 `06f7e4778f791adbf512a16cd6e6900f288ea7d8c41ad53edafc85ad2a8c2be7` (`67,820,808` bytes),
-seven-file bundle identity `d6239ccdb089b01b6ce6839bf393de3ecf8c63f40167a26b79b68c6f73f91e27`.
-The [release closure](evidence/first-playable/d5-1308-1394-quality-current-release-2026-09-10-001/release-closure.json) binds the actual technical gates. Current app screenshots/manual input are not supplied by the smoke runs; owner feedback remains pending.
+Executable SHA-256 `bd004c7d772a1f06be6363c53a2d88be4ca335edd54ba6eea4172cb2122aed7b` (`170,963,648` bytes),
+PCK SHA-256 `9ab4e78f98b10cbc381d4cbd6a4f5e4367ec06766f6b5415cb070174c7ad9adf` (`68,678,168` bytes),
+seven-file bundle identity `c62ae8d2878135ace2206755bbb7ee91fee47f68ec8cac4b334be233b710de26`.
+The [release closure](evidence/first-playable/d5-1317-current-release-2026-09-10-001/release-closure.json) binds actual technical gates. Smoke runs supply no current app screenshots/manual input; owner feedback remains pending. [Previous 13 quality release publication](evidence/first-playable/d5-1308-1394-quality-current-release-2026-09-10-001-PUBLICATION.json) remains historical.
 
 ### Historical B225 package identity (not current playtest bytes)
 
@@ -72,7 +72,7 @@ Wait for the full-world loading panel to disappear. A center reticle means the v
 6. Spray an exterior building wall from close range. A source capture already proves one visible, upright, identity-matched eligible tag; confirm it in ordinary play and check that it does not bleed onto an adjacent surface. Try ground, roof, water/context, too-far, and empty-sky targets; each should reject without stopping movement. Pause/resume, toggle `F3`, and exit from the pause panel; relaunch once to confirm tags are session-only.
 
 Record a simple result against bundle identity
-`d6239ccdb089b01b6ce6839bf393de3ecf8c63f40167a26b79b68c6f73f91e27`:
+`c62ae8d2878135ace2206755bbb7ee91fee47f68ec8cac4b334be233b710de26`:
 `accepted`, or `blocked`
 with location, action, expected result, observed result, and (if useful) a
 screenshot. Acceptance requires both recognizable Treasure Island and a
@@ -84,7 +84,8 @@ alone is not enough.
 
 Close the app first. Exported apps are disposable only at their exact staging
 paths under `build/`, including the current
-`build/d5-1308-1394-quality-exact-current-001/`,
+`build/d5-1317-exact-current-001/`,
+and historical `build/d5-1308-1394-quality-exact-current-001/`,
 the historical
 `build/d5-1308-1394-exact-current-001/`,
 `build/d2-1444-quality-v2-current-2026-09-09-001/`,

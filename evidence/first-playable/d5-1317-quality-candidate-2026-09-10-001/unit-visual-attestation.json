@@ -1,0 +1,238 @@
+{
+  "reviewer": "review_1303_source",
+  "reviewed_at": "2026-09-10T17:40:12.110111+00:00",
+  "decision": "PASS",
+  "attestation_kind": "Independent per-unit candidate packet and visual attestation (seventh artifact)",
+  "physical_unit_id": "physical-building:w95934125",
+  "scope": "Exact assembled1317 six-binding/17-image-tree combination, whole visible public-front game-art fidelity, finish and sparse motion sampling, with retained independent source/mechanics and exact candidate-app proof. Receipt hash is computed externally when the owner serializes the seventh field.",
+  "independence": "Reviewer did not author1317 implementation or assemble this packet. Earlier source/mechanics was independently reviewed by E; the earlier live visual and package decisions are reused at their actual scope. This is a new independent attestation of the assembled unit/tree, not a relabeling of those reviews.",
+  "packet": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-d5-1317-quality-delivery-v1/evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001",
+  "candidate_closure_sha256": "c146c15278759b7e543248ff08663b4b65e623f29ff9bef63fed3134446fdd1a",
+  "acceptance_bindings": {
+    "evidence_manifest_sha256": "4fcdd7f900dfadb12187f558bf0e545038d8386134ed1e7f9830810be763ddb5",
+    "motion_telemetry_manifest_sha256": "a1e3d98ebacaf73c5fb985a2fa2ee4597fe4c2b334cc102c3d3ea460bf361214",
+    "visual_motion_manifest_sha256": "088c0a0df84440cf2ddb35996aabc5d1b1aa5e1fcafe47217cd92dbbca08fc15",
+    "package_verification_receipt_sha256": "d6041941c9ec59d6a6d8fac4cbb79964fe842cdc135baf5c7a36df3a65a2c98e",
+    "evidence_tree_sha256": "18da75ad3394e86f3129449bbf113efd14d2e845acd767acba995545b3e5f6ee",
+    "mechanical_review_receipt_sha256": "7cd3ef79e13c19bbb34b601338f86533b9de429d274d35e55e8e6f8fbd8afdce"
+  },
+  "evidence_tree_document_sha256": "5ede3855f36303854396ee62c7cdd91ab561e3492a24d2c15db0d4aeab40359d",
+  "binding_check": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1317-quality-unit-independent-attestation-001/BINDING_CHECK.json",
+    "sha256": "7c4dcbee9ad53bdad6392b348cba98229feffaa80c4b3f4c77db0f444aa8f424"
+  },
+  "reference": {
+    "pano": "41oK-opOSuzljFvf41TCCQ",
+    "url": "https://www.google.com/maps/@?api=1&map_action=pano&pano=41oK-opOSuzljFvf41TCCQ&heading=235&pitch=0&fov=75",
+    "frontage_heading": 235,
+    "frontage_fov": 75,
+    "detail_heading": 247,
+    "detail_fov": 40,
+    "images": [
+      {
+        "path": "/private/tmp/1317-reference-comparison-RNI3Vd/1317-frontage-may-2019.png",
+        "sha256": "c3e8e9402c3d3268f647fadd99705ebbdb522ff3691f20099ef52c674b75800e",
+        "date": "May 2019",
+        "inspected": true,
+        "retained_outside_repo_and_app": true
+      },
+      {
+        "path": "/private/tmp/1317-reference-comparison-RNI3Vd/1317-number-detail-may-2019.png",
+        "sha256": "72d7456f590c1e7c602a174cc898562dce6f3786c8a469d0550a3cd37a4a80ba",
+        "date": "May 2019",
+        "inspected": true,
+        "retained_outside_repo_and_app": true
+      }
+    ],
+    "identity_observation": "Displayed1317GateviewAve and May2019 date; number1317 readable in detail, suffix not asserted. Frozen targetw95934125 identity remains the source association.",
+    "historical_packet_limit": "The September4 packet recorded missing dated front pixels. The subsequently captured actualMay2019 frontage resolves the present observed-front visual comparison; its fenced lower regions, alternate camera and hidden faces still limit as-built claims. No March2025 or2026 occupancy/layout assertion is made."
+  },
+  "current_rule_hashes": {
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/AGENTS.md": "2edfaa36f3e3994f9484d5e2998ba7b421ebeadb7c883578c36f3f703d3df9d6",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/LEARNINGS.md": "90f1ccde0a1c6845d829154d5582f5d76807af7b36ef18e4b7aadbe5a34c43ec",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.claude/agents/ti-visual-review.md": "950f601984d8488cf71cfebf2ba5ac047b4f138d73d47dcab5c9aff4ab3ca981",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.agents/skills/building-texture/references/semantic-art-review.md": "e363e3519d628001d8db422e05f927e917db9df278bc93f8e215f3059de5844a",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/discovery/facades/d5_reference_packets/w95934125_1317_gateview_avenue.md": "370f15a9bd173ac58956da4e92062933dba7a850e28d3914bdcb9ba060a5ac55"
+  },
+  "inspected_image_count": 17,
+  "inspected_images": [
+    "images/live001-avi/avi-index-0550.jpg",
+    "images/live001-avi/avi-index-0569.jpg",
+    "images/live001-avi/avi-index-0588.jpg",
+    "images/live001-avi/avi-index-0606.jpg",
+    "images/live001-avi/avi-index-0625.jpg",
+    "images/live001-avi/avi-index-0644.jpg",
+    "images/live001-avi/avi-index-0662.jpg",
+    "images/live001-avi/avi-index-0681.jpg",
+    "images/live001-avi/avi-index-0700.jpg",
+    "images/live001-ground/motion-endpoint.png",
+    "images/live001-roof-phases/01-added-roof-landed.png",
+    "images/live001-roof-phases/02-retained-source-roof.png",
+    "images/live001-roof-phases/03-returned-added-roof.png",
+    "images/live001-stills/02-whole-live-default.png",
+    "images/live001-stills/03-near-gable-live-default.png",
+    "images/live001-stills/04-near-gable-live-changed.png",
+    "images/live001-stills/05-motion-start-default.png"
+  ],
+  "whole_visible_result_findings": {
+    "fidelity": {
+      "decision": "PASS",
+      "reference_observations": "Two-storey cream horizontal siding, shallow brown main roof/eaves, pale broad gable canopy with dark underside and slender supports, boarded/dark rectangular openings, approach through the forecourt.",
+      "actual_gameplay_findings": "Whole and near views retain a low straight brown roof/eave reading above the pale walls, with the canopy gable subordinate to the two-storey main wall. Posts/braces, boarded openings and the connected pale approach establish the target frontage as a coherent composition. No renewed rounded roof bulk, dominant heavy cap or invented upper triangular form appears. This supports recognizable improvement beyond the former neutral massing at the existing gameplay distances.",
+      "limits": "Fixed footprint segmentation and protected gray returns make the modeled block more stepped than the single visible reference frontage. Counts, lower-door/window cadence, exact dimensions and ground width are production inference; the fence obscures the photo lower edge, and the avatar occludes part of the game entry. No hidden side/interior reconstruction or surveyed architecture is accepted."
+    },
+    "finish": {
+      "decision": "PASS",
+      "findings": "Cream siding has legible horizontal courses, restrained pale gable/edge trim and dark brown canopy depth. Default and changed-light images keep the material hierarchy readable; boarded panels are simplified, comparatively clean tan surfaces rather than photo-matched plywood weathering. Paving remains visually connected to the walk and subordinate to the frontage. No conspicuous new split, floating trim or material contradiction is visible in the supplied stills.",
+      "limits": "Roof-phase images show the brown added roof against the retained dark source roof; the contrast is disclosed and not claimed as observed hidden-roof construction. The nine sampled JPEGs cannot prove absence of between-sample shimmer."
+    },
+    "sampled_motion": {
+      "decision": "PASS_SCOPED_SAMPLES",
+      "findings": "All nine original payload images and the three roof-phase PNGs were inspected. Lateral samples and endpoint retain a readable canopy, openings, approach and silhouette without an additional conspicuous visual blocker.",
+      "limits": "These are sparse encoded AVI indices550/569/588/606/625/644/662/681/700, not continuous playback or physics-frame equality.681 and700 have equal bytes at distinct offsets. Roof phases are separate snapshots; walking/contact conclusions come only from the retained mechanical review."
+    },
+    "substantive_visible_gap_remaining": null,
+    "as_built_fidelity": "UNREVIEWED beyond the dated observed-face matches and production-inference limits; game-art PASS is not a surveyed reconstruction."
+  },
+  "current_implementation": {
+    "selected_products": [
+      {
+        "relative": "game/scripts/world/facades/d5_1317_gateview_live_factory.gd",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/scripts/world/facades/d5_1317_gateview_live_factory.gd",
+        "sha256": "80930edee46371825bfb7b337b94bdbb4e3b7fc064aa2ba3061b6a86886af884",
+        "baseline_sha256": null
+      },
+      {
+        "relative": "game/scripts/world/facades/d5_1317_gateview_live_replacement.gd",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/scripts/world/facades/d5_1317_gateview_live_replacement.gd",
+        "sha256": "283a020492c03fde62c591ea9ebcb1e5c5403a55aca514f0998908b440d9e819",
+        "baseline_sha256": null
+      },
+      {
+        "relative": "game/resources/facades/d5_1317_gateview_live_replacement.json",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/facades/d5_1317_gateview_live_replacement.json",
+        "sha256": "d15f6ea9e14ca9723dfd3f5794718fab6ad6d0cbf24091ce0e81fd34821e554f",
+        "baseline_sha256": null
+      },
+      {
+        "relative": "game/scripts/world/world_chunk_builder.gd",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/scripts/world/world_chunk_builder.gd",
+        "sha256": "de65c20e96d4fc2515d0a6f7c238a95335fcc8da9022bf58343efd3063b7fd6d",
+        "baseline_sha256": "552cc81c7146793e272621ca99667997943e8a01c48aa62e80bd7a14a4f1ccf7"
+      },
+      {
+        "relative": "game/resources/facades/d5_1317_gateview_quality_study.json",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/facades/d5_1317_gateview_quality_study.json",
+        "sha256": "33b54fb72cf829e933a0e386e984f6ffe9d9a7c9d335ecb034e779c12bf89a26",
+        "baseline_sha256": null
+      },
+      {
+        "relative": "game/resources/facades/d5_1317_quality_study_geometry.json",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/facades/d5_1317_quality_study_geometry.json",
+        "sha256": "48ba2658a74b4e51ab43fb07b3940a737ffa351350081063c45908e878a5bcf9",
+        "baseline_sha256": null
+      },
+      {
+        "relative": "game/resources/facades/d5_1317_siding_marks.gdshader",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/facades/d5_1317_siding_marks.gdshader",
+        "sha256": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
+        "baseline_sha256": null
+      },
+      {
+        "relative": "game/resources/facades/d5_1317_surface_tone.gdshader",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/facades/d5_1317_surface_tone.gdshader",
+        "sha256": "2388fbee5821352c30ec5925f4ff159439090c8cb1f4973344a947c65b4e4da0",
+        "baseline_sha256": null
+      }
+    ],
+    "selected_current_bytes_match_accepted_original441_entries": true,
+    "combined_source_world": [
+      735,
+      1018,
+      1033,
+      81761,
+      466,
+      477
+    ],
+    "captured_individual_source_world": [
+      735,
+      1005,
+      1020,
+      78224,
+      466,
+      475
+    ],
+    "images_are_current_combined_or_package_captures": false
+  },
+  "retained_source_mechanics": {
+    "decision": "PASS_SCOPED_PRODUCTION_SOURCE_OWNERSHIP_AND_AFFECTED_MECHANICS",
+    "independent_review": {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/independent-source/REVIEW.json",
+      "sha256": "133ccc8c2dbb70c52a6d0ed57bb7089e3522bf3e3dbafca73c8c4678860b740a",
+      "bytes": 9816,
+      "original_locator": "{TASK_ROOT}/work/1317-live-independent-source-001/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "scope": "Preserved source/protected geometry and same-runtime emission, one paired attachment/receiver partition; accepted actual approaches/closed-door/post/ceiling contacts and explicit sprays; one bounded roof corridor and ground motion. No technical replay or broader support claim.",
+    "contact001_raw_ok": false,
+    "excluded_contact001_scope": "Entire final singular canopy_underside spray, including eligible shape0 hit, tag placement and all three failures; replaced only by isolated canopy002.",
+    "motion_limits": "242roof travel/braking frames grounded with empty slide-contact records retained;120ground input frames include59 empty contact samples. Ground input path7.096071m differs from final net0.046305m. Direct contacts, floor flags, rays and draw timing remain separate; roof route starts from setup placement, not proof of jetpack roof access."
+  },
+  "retained_visual_raw_origin": {
+    "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/independent-visual/REVIEW.md",
+    "sha256": "ac727c0a15e5f627a88efa8b5608d723279db8a54a1c29226aafcefb3ae9bcd2",
+    "bytes": 3485,
+    "original_locator": "{TASK_ROOT}/work/1317-live-independent-visual-001/REVIEW.md",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "shared_candidate_package": {
+    "decision": "PASS",
+    "review": {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/fb4f28ce1a9b3ca43300/REVIEW.json",
+      "sha256": "fb4f28ce1a9b3ca433001174052d48cb68b9162042f07e6e764feeb14a6734fa",
+      "bytes": 29853,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "package_verification_receipt_sha256": "d6041941c9ec59d6a6d8fac4cbb79964fe842cdc135baf5c7a36df3a65a2c98e",
+    "pck_sha256": "eecb13831c625a3d09871a2f37f322316cdbc0df0c0f5e512a0bf08d54831691",
+    "actual_unit_attachment": {
+      "accepted_individual_reference": "{TASK_ROOT}/work/1317-live-integration-001/focused-002-result.json",
+      "collision_triangles": [
+        68,
+        192,
+        648,
+        22,
+        108
+      ],
+      "reference_sha256": "270f137c314d5cf57478a25ec54f36fdddde3787db4ef64822e436561074aea3",
+      "roof_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement",
+      "scope": "Individual negative, source, mechanics and visual gates reused; same-runtime factory-to-live attachment compared here.",
+      "wall_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_wall/D51317GateviewLiveWallReplacement"
+    },
+    "scope": "Four original independent first-attempt stages: mounted actual components/privacy and original signed-headless/native ordinary main. Both signed runs verify the combined world and all five attachment predicates. No new package run or current-release claim in this attestation.",
+    "app7_exact_at_attestation": true
+  },
+  "limits": [
+    "All8 PNGs are1440x900; original AVI705frames and9 payloads are1280x800. Physical39,897,786 versus declared39,897,716 bytes retains70-byte tail.",
+    "Source photos were inspected only in external temporary storage and were not copied into the packet/app.",
+    "The entire raw contact001 failure remains preserved; isolated canopy002 closes only the excluded underside-spray case.",
+    "No continuous playback/gameplay, arbitrary roof access/support, M1/manual play or OS-pixel claim.",
+    "Original individual source captures are not relabeled as combined candidate package captures.",
+    "Packet remains immutable with seventh field null until the owner binds this new external attestation."
+  ],
+  "next_action": "Owner may serialize this exact seventh receipt with the six bound values, then perform the separately required authority and exact-current release work. No additional engine or image view is needed for this unit/visual gate.",
+  "authority": {
+    "current": "13/213",
+    "capture_time": "13/213",
+    "new_unit_candidate": true,
+    "recognition_credit_granted_by_this_artifact": false,
+    "prospective_numerator_effect_after_separate_acceptance": 1,
+    "inventory_denominator": 213,
+    "authority_mutated": false
+  },
+  "retro_exact": "review_1303_source \u2014 Independent 1317 seventh unit/visual attestation: directly compared the two actual May 2019 reference images with all seventeen exact packet images (eight native PNGs and nine original AVI payloads). The full public-front composition retains coherent shallow brown roof edges, pale horizontal siding/gables, slender canopy posts/braces, closed boarded openings and an approach joining the walk; finish remains readable under the retained changed light. The dark retained source-roof area is explicit in the roof-phase images and remains outside surveyed hidden-layout fidelity. Recomputed image tree18da75ad separately from document5ede3855; verified all seventeen archive/original copies, nine AVI byte offsets, fifty-eight referenced raw archive files, eight current selected products and seven app files. Reused E\u2019s scoped technical PASS and the exact independent candidate package PASS without another engine or recapture. A reviewer locator check initially treated {BATCH_REPO} literally; it was corrected only for the remaining app checks, with completed image checks not replayed. Raw contact001FAIL, isolated002 scope,705 AVI frames/70-byte tail and sparse-sample limits remain. This genuine unit-bound PASS supplies the seventh artifact for an uncredited new unit; prospective+1 awaits owner serialization and later exact-current release. Current13/213 is unchanged."
+}

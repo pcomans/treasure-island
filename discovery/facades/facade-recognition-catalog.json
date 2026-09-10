@@ -233,6 +233,28 @@
       "whole_building_recognizability_imported": false
     },
     {
+      "adapter_id": "active-adapter:d5-1317-live:building:w95934125:wall",
+      "content_classification": "active_target_specific_paired_wall_roof_replacement",
+      "receiver_key": "building:w95934125:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
+      "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
+      "runtime_adapter_path": "game/scripts/world/facades/d5_1317_gateview_live_replacement.gd",
+      "runtime_asset_paths": [
+        "game/resources/facades/d5_1317_gateview_quality_study.json",
+        "game/resources/facades/d5_1317_siding_marks.gdshader",
+        "game/scripts/world/facades/d5_1317_gateview_live_factory.gd",
+        "game/scripts/world/facades/site_12_housing_kit.gd",
+        "game/resources/facades/d5_1317_quality_study_geometry.json",
+        "game/resources/facades/d5_1317_surface_tone.gdshader"
+      ],
+      "runtime_config_path": "game/resources/facades/d5_1317_gateview_live_replacement.json",
+      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+      "source_key": "w95934125",
+      "whole_building_recognizability_imported": false
+    },
+    {
       "adapter_id": "active-adapter:d2-1439-live:building:w95934144:wall",
       "content_classification": "active_target_specific_paired_wall_roof_replacement",
       "receiver_key": "building:w95934144:wall",
@@ -871,10 +893,55 @@
       ],
       "status": "configured",
       "unit_id": "physical-building:w96215646"
+    },
+    {
+      "alternate_pose": {
+        "aim_target_m": [
+          -588.160461425781,
+          5.09999990463257,
+          -313.817962646484
+        ],
+        "camera_position_m": [
+          -581.174011230469,
+          2.85386848449707,
+          -320.069458007812
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -585.159912109375,
+          2.13532018661499,
+          -316.502868652344
+        ]
+      },
+      "ordinary_third_person_required": true,
+      "primary_pose": {
+        "aim_target_m": [
+          -584.496948242188,
+          5.09999990463257,
+          -298.223327636719
+        ],
+        "camera_position_m": [
+          -560.307312011719,
+          4.07963371276855,
+          -317.598754882812
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -564.597717285156,
+          2.26061129570007,
+          -314.162231445312
+        ]
+      },
+      "required_cue_ids": [
+        "d5-1317-cream-two-storey-sided-row",
+        "d5-1317-shallow-brown-roof-pale-gable-canopies"
+      ],
+      "status": "configured",
+      "unit_id": "physical-building:w95934125"
     }
   ],
   "catalog_id": "treasure-island-physical-building-recognition",
-  "checked_date": "2026-09-09",
+  "checked_date": "2026-09-10",
   "claim_vocabulary": {
     "as_built_fidelity": "A separate surveyed/as-built claim; unclaimed by the Phase 1 seed.",
     "game_distinctive": "Distinguishable inside the game; never evidence of real-world recognizability.",
@@ -888,19 +955,19 @@
     "reference_recognizable": "An ordinary gameplay view is independently matched to target-identifiable reference evidence."
   },
   "compiler_contract": {
-    "emitted_runtime_schema_version": "ti.facade-runtime-registry/13",
-    "required_compiler_version": "1.12.0",
+    "emitted_runtime_schema_version": "ti.facade-runtime-registry/14",
+    "required_compiler_version": "1.13.0",
     "unknown_version_policy": "reject"
   },
   "expected_counts": {
-    "active_runtime_adapter_receivers": 12,
+    "active_runtime_adapter_receivers": 13,
     "building_footprints": 213,
     "building_parts": 2,
     "composite_units": 1,
     "direct_wall_receivers": 214,
     "legacy_adapter_receivers": 9,
     "recognition_units": 213,
-    "runtime_adapter_receivers": 21,
+    "runtime_adapter_receivers": 22,
     "source_records": 215,
     "standalone_units": 212,
     "visible_wall_runs": 4971
@@ -998,7 +1065,7 @@
       "whole_building_recognizability_imported": false
     }
   ],
-  "schema_version": "ti.facade-recognition-catalog/13",
+  "schema_version": "ti.facade-recognition-catalog/14",
   "source_contract": {
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_schema_version": "ti.godot-world/2",
@@ -3621,13 +3688,28 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "evidence_manifest_sha256": "4fcdd7f900dfadb12187f558bf0e545038d8386134ed1e7f9830810be763ddb5",
+          "motion_telemetry_manifest_sha256": "a1e3d98ebacaf73c5fb985a2fa2ee4597fe4c2b334cc102c3d3ea460bf361214",
+          "visual_motion_manifest_sha256": "088c0a0df84440cf2ddb35996aabc5d1b1aa5e1fcafe47217cd92dbbca08fc15",
+          "package_verification_receipt_sha256": "d6041941c9ec59d6a6d8fac4cbb79964fe842cdc135baf5c7a36df3a65a2c98e",
+          "evidence_tree_sha256": "18da75ad3394e86f3129449bbf113efd14d2e845acd767acba995545b3e5f6ee",
+          "mechanical_review_receipt_sha256": "7cd3ef79e13c19bbb34b601338f86533b9de429d274d35e55e8e6f8fbd8afdce",
+          "review_receipt_sha256": "19edda17a50fd957ec09bd9a2ea310b7f82524e717c63467d5198e2e3f9500df",
+          "capture_time_recognition_metric": "13/213",
+          "numerator_effect": 1,
+          "review_id": "d5-1317-quality-candidate-2026-09-10-001",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w95934125",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -3640,13 +3722,104 @@
         "name_evidence": false
       },
       "legacy_adapter_ids": [],
-      "protected_scopes": [],
+      "protected_scopes": [
+        {
+          "receiver_key": "building:w95934125:wall",
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            11,
+            12,
+            16,
+            18,
+            19,
+            21,
+            23,
+            25,
+            28,
+            30,
+            32,
+            33
+          ],
+          "reason": "Unobserved return runs and original source roof remain exact; dimensions, hidden layout, count/cadence and ground width are production inference. Separate wall/roof ownership remains one physical unit."
+        }
+      ],
       "receiver_keys": [
         "building:w95934125:wall"
       ],
-      "recognition_cues": [],
-      "reference_records": [],
-      "reference_state": "reference_research_unassessed",
+      "recognition_cues": [
+        {
+          "complete_motif": true,
+          "cue_id": "d5-1317-cream-two-storey-sided-row",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w95934125:wall",
+          "reference_ids": [
+            "D5-1317-MAY2019-PANO"
+          ],
+          "run_indices": [
+            10,
+            13,
+            14,
+            15,
+            17,
+            20,
+            22,
+            24,
+            26,
+            27,
+            29,
+            31
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "d5-1317-shallow-brown-roof-pale-gable-canopies",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w95934125:wall",
+          "reference_ids": [
+            "D5-1317-MAY2019-PANO"
+          ],
+          "run_indices": [
+            10,
+            13,
+            14,
+            15,
+            17,
+            20,
+            22,
+            24,
+            26,
+            27,
+            29,
+            31
+          ]
+        }
+      ],
+      "reference_records": [
+        {
+          "observation_id": "D5-1317-MAY2019-PANO",
+          "observed_regions": [
+            "May 2019 mapped public ENE/front elevations and near gable; panorama 41oK-opOSuzljFvf41TCCQ, 37.8266387,-122.3776121; front heading235/FOV75, detail heading247/FOV40. Historical reference, no current-condition claim."
+          ],
+          "pixels_packaged": false,
+          "source_locator": "evidence/first-playable/d5-1317-quality-candidate-2026-09-10-001/unit-visual-attestation.json",
+          "supports": [
+            "Cream two-storey horizontal siding row with shallow brown roof edges.",
+            "Pale gables, slender posts/braces, boarded openings and connected approach; no surveyed dimensions or hidden schedule claim."
+          ]
+        }
+      ],
+      "reference_state": "reference_ready",
       "source_records": [
         {
           "role": "standalone_building_footprint",

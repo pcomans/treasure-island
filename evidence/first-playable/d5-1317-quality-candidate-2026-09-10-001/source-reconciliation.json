@@ -1,0 +1,1384 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Exact reviewed1317 addition preserving accepted1308/1394 quality source; new-unit acceptance pending",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/98132be1e271d8523a75/selected-1317-products.json",
+      "sha256": "98132be1e271d8523a7581093812cbba8fcf3fe058664eccee2b30816af7377d",
+      "bytes": 2865,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/selected-1317-products.json",
+      "role": "bound_text_input_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/507abf96fd9613dfea92/integration.diff",
+      "sha256": "507abf96fd9613dfea92f2675adc85b612e1419a227e1774bb279a18a6aa069f",
+      "bytes": 11729,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/integration.diff",
+      "role": "bound_text_input_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/01e6c12ceffef64aae1e/source-pins.json",
+      "sha256": "01e6c12ceffef64aae1e11564b6937200b8ec80b7ea412ddbba687d6c5f0b644",
+      "bytes": 73595,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/source-pins.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/source-pins.json",
+      "sha256": "323ee6dc2c10fc33cd70aebcbaf28e54f9eb3a2021062d5e18f662152cfbf452",
+      "bytes": 98113,
+      "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/source-pins.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "selected_products": [
+      {
+        "relative": "game/scripts/world/facades/d5_1317_gateview_live_factory.gd",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/scripts/world/facades/d5_1317_gateview_live_factory.gd",
+        "sha256": "80930edee46371825bfb7b337b94bdbb4e3b7fc064aa2ba3061b6a86886af884",
+        "baseline_sha256": null
+      },
+      {
+        "relative": "game/scripts/world/facades/d5_1317_gateview_live_replacement.gd",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/scripts/world/facades/d5_1317_gateview_live_replacement.gd",
+        "sha256": "283a020492c03fde62c591ea9ebcb1e5c5403a55aca514f0998908b440d9e819",
+        "baseline_sha256": null
+      },
+      {
+        "relative": "game/resources/facades/d5_1317_gateview_live_replacement.json",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/facades/d5_1317_gateview_live_replacement.json",
+        "sha256": "d15f6ea9e14ca9723dfd3f5794718fab6ad6d0cbf24091ce0e81fd34821e554f",
+        "baseline_sha256": null
+      },
+      {
+        "relative": "game/scripts/world/world_chunk_builder.gd",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/scripts/world/world_chunk_builder.gd",
+        "sha256": "de65c20e96d4fc2515d0a6f7c238a95335fcc8da9022bf58343efd3063b7fd6d",
+        "baseline_sha256": "552cc81c7146793e272621ca99667997943e8a01c48aa62e80bd7a14a4f1ccf7"
+      },
+      {
+        "relative": "game/resources/facades/d5_1317_gateview_quality_study.json",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/facades/d5_1317_gateview_quality_study.json",
+        "sha256": "33b54fb72cf829e933a0e386e984f6ffe9d9a7c9d335ecb034e779c12bf89a26",
+        "baseline_sha256": null
+      },
+      {
+        "relative": "game/resources/facades/d5_1317_quality_study_geometry.json",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/facades/d5_1317_quality_study_geometry.json",
+        "sha256": "48ba2658a74b4e51ab43fb07b3940a737ffa351350081063c45908e878a5bcf9",
+        "baseline_sha256": null
+      },
+      {
+        "relative": "game/resources/facades/d5_1317_siding_marks.gdshader",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/facades/d5_1317_siding_marks.gdshader",
+        "sha256": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
+        "baseline_sha256": null
+      },
+      {
+        "relative": "game/resources/facades/d5_1317_surface_tone.gdshader",
+        "source": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/facades/d5_1317_surface_tone.gdshader",
+        "sha256": "2388fbee5821352c30ec5925f4ff159439090c8cb1f4973344a947c65b4e4da0",
+        "baseline_sha256": null
+      }
+    ],
+    "combined_source_result": {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/a78f5d6e4afd467ed14b/focused-001-result.json",
+      "sha256": "a78f5d6e4afd467ed14b53df91c8ba68e8b0b4028246385ac07ad79fd8c3ec19",
+      "bytes": 2609,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/focused-001-result.json",
+      "role": "bound_text_input_original",
+      "byte_identical": true
+    },
+    "input_retention": [
+      {
+        "input_map": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/owner-live/source-pins.json",
+          "sha256": "323ee6dc2c10fc33cd70aebcbaf28e54f9eb3a2021062d5e18f662152cfbf452",
+          "bytes": 98113,
+          "original_locator": "{TASK_ROOT}/work/1317-live-integration-001/source-pins.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "input_count": 441,
+        "unique_text_copies": 379,
+        "binary_dependencies": [
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/facades/d5_1308_siding_marks.gdshader.uid",
+            "sha256": "7dfcdcdc2b11520545502947707323810c3fbe29e518587eabb56335ba2847c6",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/facades/d5_1394_siding_marks.gdshader.uid",
+            "sha256": "f125279d02ccb25244f8afc92fb997257478223386fd42b6f47615ec47269dfc",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/context/baybridge-western-span.glb",
+            "sha256": "bd358ffeca95c07fc724ef775ebe51bf00117bad0d1c82ced75ee211de64ade8",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/grass.glb",
+            "sha256": "260e41d3e5f2472492ed7b475c5b92a30b13ce2bad408535b5ff50574d4575e7",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/grass_large.glb",
+            "sha256": "af49a595624abca7249824eeefb944d4baf974abeeb5b16110d175da3563d6cd",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+            "sha256": "a68b9b3d9639afaeb4ace840d5a8e3f21ffc4e8afc1eab15566500fbb2bee3e3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+            "sha256": "2e0487020d68ccf664435db9d829c78ae00e6d2785ee3ec10b9f89cc70a10406",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+            "sha256": "10e1d9fbf29d96d1d1a56fb2ce25ae66537505101759229afe01ae22c6c45e02",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+            "sha256": "a9620a7d1fb165ae68d323676f80dbb2a9e3aafb21110d18d18d90b07026b91d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb",
+            "sha256": "c041daf2f0fb1d49e4325227cbcd58667adbe51e9b55e8c1f0a94b74cc521b3b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+            "sha256": "d7fd8773674928c50c11b66d12c636d49bdcc15a8b1c7fbb98e6f63a3439a3f3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb",
+            "sha256": "8af9dae16ce3c03183f9457996ebdd135167199514e8f4f944ee2bd82828d5c9",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb",
+            "sha256": "bc1013aaacca3bdd116ad1cded4f9499f008fe3056e760f3238be05aa21ff9f2",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb",
+            "sha256": "2cbea0f9621cde884c63a7b4ad787bda1d051fa27ef3c66b9f2b65328dc53683",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+            "sha256": "9ba6337460e718b8baf165b23c02f39455e3d5757b1911505410c46bc88a86b5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+            "sha256": "a26b4434e1592ec1a83f364a54688bb34c48d9521bfccbe63f0cc37b381c4696",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb",
+            "sha256": "7f19e347ff28703dd9e5fcce89b920156e291fbdb19331a57cb31a95c73e1322",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb",
+            "sha256": "f0f1f6861fe0446963d3be216cc628324f538bb0841bc9a8e14140313f64e2f3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/context/sf_skyline_owner_silhouette_final.png",
+            "sha256": "9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/tag/predefined_tag.svg",
+            "sha256": "9eb345572cd3298ea14bad008fc6405e46123c0243444e4582393d0aa84af885",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
+            "sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png",
+            "sha256": "0abbb429066966c1cfc1e0209a2a454c41dae73743fc119ffdf7cd82ee3ef35d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
+            "sha256": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/bitumen/bitumen_nor_gl_1k.jpg",
+            "sha256": "a584bd64cac6ce37153b48a481612bc20be5d5f1d36cac572119560f67c1c756",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/bitumen/bitumen_rough_1k.jpg",
+            "sha256": "ae78d0e22b3c771d8ae8fd392c721daf545bbc24f137aad978ddd899dd376b39",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg",
+            "sha256": "ddf9224e9cfa3eb2998d9097e4cd34bd3630c85e0e6798e5a0a000415a684083",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_nor_gl_1k.jpg",
+            "sha256": "99cdf6b6f0b8a319d206e1d561bf2a5d9933d8d33e1d685f8e25388101d21310",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_rough_1k.jpg",
+            "sha256": "2280be133c104eb04370b625ebcc7f6709d2173b43ae2cd15a0074c26f492bf9",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg",
+            "sha256": "6403524d194100d80e3040435b953ddf44e90069bd404cfb116204dec3c35df7",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_nor_gl_1k.jpg",
+            "sha256": "f9f18d02c1e4e655aa321ddeaf2c696a87a9c4782fea7119c65310c510367f5a",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_rough_1k.jpg",
+            "sha256": "13bf9548e801ada85c2445782544ad6ffba17c9ec08e39aa35c6f6ad2bc83961",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg",
+            "sha256": "70d3ff969a7421c7ae057b5d16386d11f5e59c6740db643352e1039413f419c4",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_nor_gl_1k.jpg",
+            "sha256": "a5009e409ff0f7b2d19e1316fe5e2b2b4f28e4a6b79990a664be69d4e8a0e690",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg",
+            "sha256": "99f81099af07b009134b6a81bf0f95ab16da09c57156cc2ed534975664a68533",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg",
+            "sha256": "e78df7d6e762fe767634278e14316564e0d4510031986239458994ec9fc5410d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_nor_gl_1k.jpg",
+            "sha256": "9d0eb5299f797c07eb841737eb7164755a2c8a2363540e175a76188a2aa5a2dc",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg",
+            "sha256": "0d8cc6216ac3dc9dc4339cb17a08d249f7341961f432ae1451c35cdff222869b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg",
+            "sha256": "ae94f2b34597b9108eefd88217f55eccaec6d6b382e858a478ee92df90e66617",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_nor_gl_1k.jpg",
+            "sha256": "1c840a24807346ddaaf94a5057aee4078fcec3a4cd84bfe45da7d3b480ef460b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg",
+            "sha256": "9ebe6d03a9551c17d1802835c92c1442acb8f5d38d4874ee8c37770f11c4bed1",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+            "sha256": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/scripts/world/facades/d5_1308_gateview_live_factory.gd.uid",
+            "sha256": "8852163123f4a231186f1768939e8a585908547a8628486bce62d452e5e24ff5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/scripts/world/facades/d5_1308_gateview_live_replacement.gd.uid",
+            "sha256": "db1b98628a31ab71a16600170b6af37416f77666843129676521265a9fde24b0",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/scripts/world/facades/d5_1394_gateview_live_factory.gd.uid",
+            "sha256": "8619c58b42621d3f8f8ad8e39c6fe1d59de23439453ee84a149f5036c7a8c2d2",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{CODE_ROOT}/treasure-island-d5-1317-quality-study/game/scripts/world/facades/d5_1394_gateview_live_replacement.gd.uid",
+            "sha256": "a9eb52a8930d7ed99844bc09ed3b532dc6f87d7ba614cdf4abd058cdab6e3d06",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{PRIVATE_TMP}/1317-reference-comparison-RNI3Vd/1317-frontage-may-2019.png",
+            "sha256": "c3e8e9402c3d3268f647fadd99705ebbdb522ff3691f20099ef52c674b75800e",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{PRIVATE_TMP}/1317-reference-comparison-RNI3Vd/1317-number-detail-may-2019.png",
+            "sha256": "72d7456f590c1e7c602a174cc898562dce6f3786c8a469d0550a3cd37a4a80ba",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{PRIVATE_TMP}/d5-1317-quality-study-native-002/images/01-whole-baseline-default.png",
+            "sha256": "90f97165665269cc68e36ecfbda6e7784daa36b08917d0c4d385ef8507e579e5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          }
+        ]
+      },
+      {
+        "input_map": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/01e6c12ceffef64aae1e/source-pins.json",
+          "sha256": "01e6c12ceffef64aae1e11564b6937200b8ec80b7ea412ddbba687d6c5f0b644",
+          "bytes": 73595,
+          "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/source-pins.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "input_count": 332,
+        "unique_text_copies": 283,
+        "binary_dependencies": [
+          {
+            "original_locator": "{BATCH_REPO}/build/.gdignore",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/evidence/.gdignore",
+            "sha256": "11f739cfa43e5a7dad849153372bb739520b28521eee727961598e850336fd76",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/facades/d5_1308_siding_marks.gdshader.uid",
+            "sha256": "7dfcdcdc2b11520545502947707323810c3fbe29e518587eabb56335ba2847c6",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/facades/d5_1394_siding_marks.gdshader.uid",
+            "sha256": "f125279d02ccb25244f8afc92fb997257478223386fd42b6f47615ec47269dfc",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/context/baybridge-western-span.glb",
+            "sha256": "bd358ffeca95c07fc724ef775ebe51bf00117bad0d1c82ced75ee211de64ade8",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/grass.glb",
+            "sha256": "260e41d3e5f2472492ed7b475c5b92a30b13ce2bad408535b5ff50574d4575e7",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/grass_large.glb",
+            "sha256": "af49a595624abca7249824eeefb944d4baf974abeeb5b16110d175da3563d6cd",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+            "sha256": "a68b9b3d9639afaeb4ace840d5a8e3f21ffc4e8afc1eab15566500fbb2bee3e3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+            "sha256": "2e0487020d68ccf664435db9d829c78ae00e6d2785ee3ec10b9f89cc70a10406",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+            "sha256": "10e1d9fbf29d96d1d1a56fb2ce25ae66537505101759229afe01ae22c6c45e02",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+            "sha256": "a9620a7d1fb165ae68d323676f80dbb2a9e3aafb21110d18d18d90b07026b91d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb",
+            "sha256": "c041daf2f0fb1d49e4325227cbcd58667adbe51e9b55e8c1f0a94b74cc521b3b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+            "sha256": "d7fd8773674928c50c11b66d12c636d49bdcc15a8b1c7fbb98e6f63a3439a3f3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb",
+            "sha256": "8af9dae16ce3c03183f9457996ebdd135167199514e8f4f944ee2bd82828d5c9",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb",
+            "sha256": "bc1013aaacca3bdd116ad1cded4f9499f008fe3056e760f3238be05aa21ff9f2",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb",
+            "sha256": "2cbea0f9621cde884c63a7b4ad787bda1d051fa27ef3c66b9f2b65328dc53683",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+            "sha256": "9ba6337460e718b8baf165b23c02f39455e3d5757b1911505410c46bc88a86b5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+            "sha256": "a26b4434e1592ec1a83f364a54688bb34c48d9521bfccbe63f0cc37b381c4696",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb",
+            "sha256": "7f19e347ff28703dd9e5fcce89b920156e291fbdb19331a57cb31a95c73e1322",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb",
+            "sha256": "f0f1f6861fe0446963d3be216cc628324f538bb0841bc9a8e14140313f64e2f3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/context/sf_skyline_owner_silhouette_final.png",
+            "sha256": "9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/tag/predefined_tag.svg",
+            "sha256": "9eb345572cd3298ea14bad008fc6405e46123c0243444e4582393d0aa84af885",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
+            "sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png",
+            "sha256": "0abbb429066966c1cfc1e0209a2a454c41dae73743fc119ffdf7cd82ee3ef35d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
+            "sha256": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/bitumen/bitumen_nor_gl_1k.jpg",
+            "sha256": "a584bd64cac6ce37153b48a481612bc20be5d5f1d36cac572119560f67c1c756",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/bitumen/bitumen_rough_1k.jpg",
+            "sha256": "ae78d0e22b3c771d8ae8fd392c721daf545bbc24f137aad978ddd899dd376b39",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg",
+            "sha256": "ddf9224e9cfa3eb2998d9097e4cd34bd3630c85e0e6798e5a0a000415a684083",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_nor_gl_1k.jpg",
+            "sha256": "99cdf6b6f0b8a319d206e1d561bf2a5d9933d8d33e1d685f8e25388101d21310",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_rough_1k.jpg",
+            "sha256": "2280be133c104eb04370b625ebcc7f6709d2173b43ae2cd15a0074c26f492bf9",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg",
+            "sha256": "6403524d194100d80e3040435b953ddf44e90069bd404cfb116204dec3c35df7",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_nor_gl_1k.jpg",
+            "sha256": "f9f18d02c1e4e655aa321ddeaf2c696a87a9c4782fea7119c65310c510367f5a",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_rough_1k.jpg",
+            "sha256": "13bf9548e801ada85c2445782544ad6ffba17c9ec08e39aa35c6f6ad2bc83961",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg",
+            "sha256": "70d3ff969a7421c7ae057b5d16386d11f5e59c6740db643352e1039413f419c4",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_nor_gl_1k.jpg",
+            "sha256": "a5009e409ff0f7b2d19e1316fe5e2b2b4f28e4a6b79990a664be69d4e8a0e690",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg",
+            "sha256": "99f81099af07b009134b6a81bf0f95ab16da09c57156cc2ed534975664a68533",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg",
+            "sha256": "e78df7d6e762fe767634278e14316564e0d4510031986239458994ec9fc5410d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_nor_gl_1k.jpg",
+            "sha256": "9d0eb5299f797c07eb841737eb7164755a2c8a2363540e175a76188a2aa5a2dc",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg",
+            "sha256": "0d8cc6216ac3dc9dc4339cb17a08d249f7341961f432ae1451c35cdff222869b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg",
+            "sha256": "ae94f2b34597b9108eefd88217f55eccaec6d6b382e858a478ee92df90e66617",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_nor_gl_1k.jpg",
+            "sha256": "1c840a24807346ddaaf94a5057aee4078fcec3a4cd84bfe45da7d3b480ef460b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg",
+            "sha256": "9ebe6d03a9551c17d1802835c92c1442acb8f5d38d4874ee8c37770f11c4bed1",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+            "sha256": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/scripts/world/facades/d5_1308_gateview_live_factory.gd.uid",
+            "sha256": "8852163123f4a231186f1768939e8a585908547a8628486bce62d452e5e24ff5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/scripts/world/facades/d5_1308_gateview_live_replacement.gd.uid",
+            "sha256": "db1b98628a31ab71a16600170b6af37416f77666843129676521265a9fde24b0",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/scripts/world/facades/d5_1394_gateview_live_factory.gd.uid",
+            "sha256": "8619c58b42621d3f8f8ad8e39c6fe1d59de23439453ee84a149f5036c7a8c2d2",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/scripts/world/facades/d5_1394_gateview_live_replacement.gd.uid",
+            "sha256": "a9eb52a8930d7ed99844bc09ed3b532dc6f87d7ba614cdf4abd058cdab6e3d06",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/generated/.gdignore",
+            "sha256": "1ee408b984c8af4c8c2439ef81a5965f9a5628627ef04fe6be4a8928ad1d5aa7",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/generated/world/coverage-ledger.csv",
+            "sha256": "3b4652e0f333d89c5994dd644873b75dd05c1068334f87235cd958177658bb2a",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          }
+        ]
+      },
+      {
+        "input_map": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/8cf0f52c413d34b888d3/execution-input-pins.json",
+          "sha256": "8cf0f52c413d34b888d3419d23b4ae6d641cc67081e0176442c2d41e63daf5c9",
+          "bytes": 96618,
+          "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/execution-input-pins.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "input_count": 425,
+        "unique_text_copies": 354,
+        "binary_dependencies": [
+          {
+            "original_locator": "{BATCH_REPO}/build/.gdignore",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/evidence/.gdignore",
+            "sha256": "11f739cfa43e5a7dad849153372bb739520b28521eee727961598e850336fd76",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/facades/d5_1308_siding_marks.gdshader.uid",
+            "sha256": "7dfcdcdc2b11520545502947707323810c3fbe29e518587eabb56335ba2847c6",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/facades/d5_1394_siding_marks.gdshader.uid",
+            "sha256": "f125279d02ccb25244f8afc92fb997257478223386fd42b6f47615ec47269dfc",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/context/baybridge-western-span.glb",
+            "sha256": "bd358ffeca95c07fc724ef775ebe51bf00117bad0d1c82ced75ee211de64ade8",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/grass.glb",
+            "sha256": "260e41d3e5f2472492ed7b475c5b92a30b13ce2bad408535b5ff50574d4575e7",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/grass_large.glb",
+            "sha256": "af49a595624abca7249824eeefb944d4baf974abeeb5b16110d175da3563d6cd",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+            "sha256": "a68b9b3d9639afaeb4ace840d5a8e3f21ffc4e8afc1eab15566500fbb2bee3e3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+            "sha256": "2e0487020d68ccf664435db9d829c78ae00e6d2785ee3ec10b9f89cc70a10406",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+            "sha256": "10e1d9fbf29d96d1d1a56fb2ce25ae66537505101759229afe01ae22c6c45e02",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+            "sha256": "a9620a7d1fb165ae68d323676f80dbb2a9e3aafb21110d18d18d90b07026b91d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb",
+            "sha256": "c041daf2f0fb1d49e4325227cbcd58667adbe51e9b55e8c1f0a94b74cc521b3b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+            "sha256": "d7fd8773674928c50c11b66d12c636d49bdcc15a8b1c7fbb98e6f63a3439a3f3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb",
+            "sha256": "8af9dae16ce3c03183f9457996ebdd135167199514e8f4f944ee2bd82828d5c9",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb",
+            "sha256": "bc1013aaacca3bdd116ad1cded4f9499f008fe3056e760f3238be05aa21ff9f2",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb",
+            "sha256": "2cbea0f9621cde884c63a7b4ad787bda1d051fa27ef3c66b9f2b65328dc53683",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+            "sha256": "9ba6337460e718b8baf165b23c02f39455e3d5757b1911505410c46bc88a86b5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+            "sha256": "a26b4434e1592ec1a83f364a54688bb34c48d9521bfccbe63f0cc37b381c4696",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb",
+            "sha256": "7f19e347ff28703dd9e5fcce89b920156e291fbdb19331a57cb31a95c73e1322",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb",
+            "sha256": "f0f1f6861fe0446963d3be216cc628324f538bb0841bc9a8e14140313f64e2f3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/context/sf_skyline_owner_silhouette_final.png",
+            "sha256": "9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/tag/predefined_tag.svg",
+            "sha256": "9eb345572cd3298ea14bad008fc6405e46123c0243444e4582393d0aa84af885",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
+            "sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png",
+            "sha256": "0abbb429066966c1cfc1e0209a2a454c41dae73743fc119ffdf7cd82ee3ef35d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
+            "sha256": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/bitumen/bitumen_nor_gl_1k.jpg",
+            "sha256": "a584bd64cac6ce37153b48a481612bc20be5d5f1d36cac572119560f67c1c756",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/bitumen/bitumen_rough_1k.jpg",
+            "sha256": "ae78d0e22b3c771d8ae8fd392c721daf545bbc24f137aad978ddd899dd376b39",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg",
+            "sha256": "ddf9224e9cfa3eb2998d9097e4cd34bd3630c85e0e6798e5a0a000415a684083",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_nor_gl_1k.jpg",
+            "sha256": "99cdf6b6f0b8a319d206e1d561bf2a5d9933d8d33e1d685f8e25388101d21310",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_rough_1k.jpg",
+            "sha256": "2280be133c104eb04370b625ebcc7f6709d2173b43ae2cd15a0074c26f492bf9",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg",
+            "sha256": "6403524d194100d80e3040435b953ddf44e90069bd404cfb116204dec3c35df7",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_nor_gl_1k.jpg",
+            "sha256": "f9f18d02c1e4e655aa321ddeaf2c696a87a9c4782fea7119c65310c510367f5a",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_rough_1k.jpg",
+            "sha256": "13bf9548e801ada85c2445782544ad6ffba17c9ec08e39aa35c6f6ad2bc83961",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg",
+            "sha256": "70d3ff969a7421c7ae057b5d16386d11f5e59c6740db643352e1039413f419c4",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_nor_gl_1k.jpg",
+            "sha256": "a5009e409ff0f7b2d19e1316fe5e2b2b4f28e4a6b79990a664be69d4e8a0e690",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg",
+            "sha256": "99f81099af07b009134b6a81bf0f95ab16da09c57156cc2ed534975664a68533",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg",
+            "sha256": "e78df7d6e762fe767634278e14316564e0d4510031986239458994ec9fc5410d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_nor_gl_1k.jpg",
+            "sha256": "9d0eb5299f797c07eb841737eb7164755a2c8a2363540e175a76188a2aa5a2dc",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg",
+            "sha256": "0d8cc6216ac3dc9dc4339cb17a08d249f7341961f432ae1451c35cdff222869b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg",
+            "sha256": "ae94f2b34597b9108eefd88217f55eccaec6d6b382e858a478ee92df90e66617",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_nor_gl_1k.jpg",
+            "sha256": "1c840a24807346ddaaf94a5057aee4078fcec3a4cd84bfe45da7d3b480ef460b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg",
+            "sha256": "9ebe6d03a9551c17d1802835c92c1442acb8f5d38d4874ee8c37770f11c4bed1",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+            "sha256": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/scripts/world/facades/d5_1308_gateview_live_factory.gd.uid",
+            "sha256": "8852163123f4a231186f1768939e8a585908547a8628486bce62d452e5e24ff5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/scripts/world/facades/d5_1308_gateview_live_replacement.gd.uid",
+            "sha256": "db1b98628a31ab71a16600170b6af37416f77666843129676521265a9fde24b0",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/scripts/world/facades/d5_1394_gateview_live_factory.gd.uid",
+            "sha256": "8619c58b42621d3f8f8ad8e39c6fe1d59de23439453ee84a149f5036c7a8c2d2",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/scripts/world/facades/d5_1394_gateview_live_replacement.gd.uid",
+            "sha256": "a9eb52a8930d7ed99844bc09ed3b532dc6f87d7ba614cdf4abd058cdab6e3d06",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/generated/.gdignore",
+            "sha256": "1ee408b984c8af4c8c2439ef81a5965f9a5628627ef04fe6be4a8928ad1d5aa7",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/generated/world/coverage-ledger.csv",
+            "sha256": "3b4652e0f333d89c5994dd644873b75dd05c1068334f87235cd958177658bb2a",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/1317-live-motion.avi",
+            "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/motion-endpoint.png",
+            "sha256": "d99f950e29322e6bee7a7b262f3aaad3c4773a11e8d840524b886ca08fd210ac",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/images/02-whole-live-default.png",
+            "sha256": "f6b1e607f466536855f5808741998d0e070b088b3aac05f665bb1b2c9d74e781",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/images/03-near-gable-live-default.png",
+            "sha256": "211670bfd1f9ad0395d7492e7f01e138c9f244e8ef36a45df7e17b6d8132e506",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/images/04-near-gable-live-changed.png",
+            "sha256": "5c320489d01a707ff591f236cb2af7dfedb353cb5f277edd70395515be0487c3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/images/05-motion-start-default.png",
+            "sha256": "46e706d7bded855d8ca24b506e1fbd1d42cb656f3b1851e828e09440e0c15582",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/roof-keyframes/01-added-roof-landed.png",
+            "sha256": "14b24a618289ba0d9c6aafd5ff243b05cc7a9918d5114d8e09be4e25bd84ec7e",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/roof-keyframes/02-retained-source-roof.png",
+            "sha256": "06a231c0d1dc59254e19a4ce6edbcbbfe7f68c1ba5d9d6355961741cbad53477",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/roof-keyframes/03-returned-added-roof.png",
+            "sha256": "5fac95fe6be27732d3e07c8ea1e6e0c4ceac5165f598b9f8d69c52ce4bf01bbf",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0550.jpg",
+            "sha256": "9374aaf068b34613dd70e2882953fdec9a3c6d29f3c6de0dee1e8822a4f5e179",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0569.jpg",
+            "sha256": "2a64b6e143511fcf5c37a42437a571594a86f500a486ee7d055d35c081c83137",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0588.jpg",
+            "sha256": "8da508ce23abe0519d0d206d53e4bebd398dae9ac92e63052dc427152cf2c65c",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0606.jpg",
+            "sha256": "1dd3fa8f436b480d420d854c7ef5c99d34c94ef8c8d7b05b55ad9c4b85326d48",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0625.jpg",
+            "sha256": "776fb72911eac0c67fe5b7252ee6cd3f623bf33128e48168126943619ded796e",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0644.jpg",
+            "sha256": "91b4af1047ddf5b86f300267bf716177c3cd85064acf7cc8f8c825ad86e60a11",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0662.jpg",
+            "sha256": "964d3752e218e040bed322e1d5b721180df228803a0686cc38d7efe6b20a966a",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0681.jpg",
+            "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0700.jpg",
+            "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          }
+        ]
+      },
+      {
+        "input_map": {
+          "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/a6887f79173d1faaf595/execution-input-pins.json",
+          "sha256": "a6887f79173d1faaf595aae81aef58cbad256393550b6e82f52eca5f1a618eb3",
+          "bytes": 105893,
+          "original_locator": "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/execution-input-pins.json",
+          "role": "byte_identical_raw_original",
+          "byte_identical": true
+        },
+        "input_count": 463,
+        "unique_text_copies": 385,
+        "binary_dependencies": [
+          {
+            "original_locator": "{BATCH_REPO}/build/.gdignore",
+            "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/evidence/.gdignore",
+            "sha256": "11f739cfa43e5a7dad849153372bb739520b28521eee727961598e850336fd76",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/facades/d5_1308_siding_marks.gdshader.uid",
+            "sha256": "7dfcdcdc2b11520545502947707323810c3fbe29e518587eabb56335ba2847c6",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/facades/d5_1394_siding_marks.gdshader.uid",
+            "sha256": "f125279d02ccb25244f8afc92fb997257478223386fd42b6f47615ec47269dfc",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/context/baybridge-western-span.glb",
+            "sha256": "bd358ffeca95c07fc724ef775ebe51bf00117bad0d1c82ced75ee211de64ade8",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/grass.glb",
+            "sha256": "260e41d3e5f2472492ed7b475c5b92a30b13ce2bad408535b5ff50574d4575e7",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/grass_large.glb",
+            "sha256": "af49a595624abca7249824eeefb944d4baf974abeeb5b16110d175da3563d6cd",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb",
+            "sha256": "a68b9b3d9639afaeb4ace840d5a8e3f21ffc4e8afc1eab15566500fbb2bee3e3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb",
+            "sha256": "2e0487020d68ccf664435db9d829c78ae00e6d2785ee3ec10b9f89cc70a10406",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb",
+            "sha256": "10e1d9fbf29d96d1d1a56fb2ce25ae66537505101759229afe01ae22c6c45e02",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb",
+            "sha256": "a9620a7d1fb165ae68d323676f80dbb2a9e3aafb21110d18d18d90b07026b91d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb",
+            "sha256": "c041daf2f0fb1d49e4325227cbcd58667adbe51e9b55e8c1f0a94b74cc521b3b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb",
+            "sha256": "d7fd8773674928c50c11b66d12c636d49bdcc15a8b1c7fbb98e6f63a3439a3f3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb",
+            "sha256": "8af9dae16ce3c03183f9457996ebdd135167199514e8f4f944ee2bd82828d5c9",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb",
+            "sha256": "bc1013aaacca3bdd116ad1cded4f9499f008fe3056e760f3238be05aa21ff9f2",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb",
+            "sha256": "2cbea0f9621cde884c63a7b4ad787bda1d051fa27ef3c66b9f2b65328dc53683",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb",
+            "sha256": "9ba6337460e718b8baf165b23c02f39455e3d5757b1911505410c46bc88a86b5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb",
+            "sha256": "a26b4434e1592ec1a83f364a54688bb34c48d9521bfccbe63f0cc37b381c4696",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb",
+            "sha256": "7f19e347ff28703dd9e5fcce89b920156e291fbdb19331a57cb31a95c73e1322",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb",
+            "sha256": "f0f1f6861fe0446963d3be216cc628324f538bb0841bc9a8e14140313f64e2f3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/context/sf_skyline_owner_silhouette_final.png",
+            "sha256": "9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/tag/predefined_tag.svg",
+            "sha256": "9eb345572cd3298ea14bad008fc6405e46123c0243444e4582393d0aa84af885",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png",
+            "sha256": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png",
+            "sha256": "0abbb429066966c1cfc1e0209a2a454c41dae73743fc119ffdf7cd82ee3ef35d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg",
+            "sha256": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/bitumen/bitumen_nor_gl_1k.jpg",
+            "sha256": "a584bd64cac6ce37153b48a481612bc20be5d5f1d36cac572119560f67c1c756",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/bitumen/bitumen_rough_1k.jpg",
+            "sha256": "ae78d0e22b3c771d8ae8fd392c721daf545bbc24f137aad978ddd899dd376b39",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg",
+            "sha256": "ddf9224e9cfa3eb2998d9097e4cd34bd3630c85e0e6798e5a0a000415a684083",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_nor_gl_1k.jpg",
+            "sha256": "99cdf6b6f0b8a319d206e1d561bf2a5d9933d8d33e1d685f8e25388101d21310",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_rough_1k.jpg",
+            "sha256": "2280be133c104eb04370b625ebcc7f6709d2173b43ae2cd15a0074c26f492bf9",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg",
+            "sha256": "6403524d194100d80e3040435b953ddf44e90069bd404cfb116204dec3c35df7",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_nor_gl_1k.jpg",
+            "sha256": "f9f18d02c1e4e655aa321ddeaf2c696a87a9c4782fea7119c65310c510367f5a",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_rough_1k.jpg",
+            "sha256": "13bf9548e801ada85c2445782544ad6ffba17c9ec08e39aa35c6f6ad2bc83961",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg",
+            "sha256": "70d3ff969a7421c7ae057b5d16386d11f5e59c6740db643352e1039413f419c4",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_nor_gl_1k.jpg",
+            "sha256": "a5009e409ff0f7b2d19e1316fe5e2b2b4f28e4a6b79990a664be69d4e8a0e690",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg",
+            "sha256": "99f81099af07b009134b6a81bf0f95ab16da09c57156cc2ed534975664a68533",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg",
+            "sha256": "e78df7d6e762fe767634278e14316564e0d4510031986239458994ec9fc5410d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_nor_gl_1k.jpg",
+            "sha256": "9d0eb5299f797c07eb841737eb7164755a2c8a2363540e175a76188a2aa5a2dc",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg",
+            "sha256": "0d8cc6216ac3dc9dc4339cb17a08d249f7341961f432ae1451c35cdff222869b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg",
+            "sha256": "ae94f2b34597b9108eefd88217f55eccaec6d6b382e858a478ee92df90e66617",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_nor_gl_1k.jpg",
+            "sha256": "1c840a24807346ddaaf94a5057aee4078fcec3a4cd84bfe45da7d3b480ef460b",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg",
+            "sha256": "9ebe6d03a9551c17d1802835c92c1442acb8f5d38d4874ee8c37770f11c4bed1",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png",
+            "sha256": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/scripts/world/facades/d5_1308_gateview_live_factory.gd.uid",
+            "sha256": "8852163123f4a231186f1768939e8a585908547a8628486bce62d452e5e24ff5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/scripts/world/facades/d5_1308_gateview_live_replacement.gd.uid",
+            "sha256": "db1b98628a31ab71a16600170b6af37416f77666843129676521265a9fde24b0",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/scripts/world/facades/d5_1394_gateview_live_factory.gd.uid",
+            "sha256": "8619c58b42621d3f8f8ad8e39c6fe1d59de23439453ee84a149f5036c7a8c2d2",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/game/scripts/world/facades/d5_1394_gateview_live_replacement.gd.uid",
+            "sha256": "a9eb52a8930d7ed99844bc09ed3b532dc6f87d7ba614cdf4abd058cdab6e3d06",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/generated/.gdignore",
+            "sha256": "1ee408b984c8af4c8c2439ef81a5965f9a5628627ef04fe6be4a8928ad1d5aa7",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/generated/world/coverage-ledger.csv",
+            "sha256": "3b4652e0f333d89c5994dd644873b75dd05c1068334f87235cd958177658bb2a",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/1317-live-motion.avi",
+            "sha256": "0a4d8a513a9e1793611154baee614ec9d6eb652a9ffc6de688c3a8ee0b9e12bd",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/motion-endpoint.png",
+            "sha256": "d99f950e29322e6bee7a7b262f3aaad3c4773a11e8d840524b886ca08fd210ac",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/images/02-whole-live-default.png",
+            "sha256": "f6b1e607f466536855f5808741998d0e070b088b3aac05f665bb1b2c9d74e781",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/images/03-near-gable-live-default.png",
+            "sha256": "211670bfd1f9ad0395d7492e7f01e138c9f244e8ef36a45df7e17b6d8132e506",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/images/04-near-gable-live-changed.png",
+            "sha256": "5c320489d01a707ff591f236cb2af7dfedb353cb5f277edd70395515be0487c3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/images/05-motion-start-default.png",
+            "sha256": "46e706d7bded855d8ca24b506e1fbd1d42cb656f3b1851e828e09440e0c15582",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/roof-keyframes/01-added-roof-landed.png",
+            "sha256": "14b24a618289ba0d9c6aafd5ff243b05cc7a9918d5114d8e09be4e25bd84ec7e",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/roof-keyframes/02-retained-source-roof.png",
+            "sha256": "06a231c0d1dc59254e19a4ce6edbcbbfe7f68c1ba5d9d6355961741cbad53477",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/roof-keyframes/03-returned-added-roof.png",
+            "sha256": "5fac95fe6be27732d3e07c8ea1e6e0c4ceac5165f598b9f8d69c52ce4bf01bbf",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0550.jpg",
+            "sha256": "9374aaf068b34613dd70e2882953fdec9a3c6d29f3c6de0dee1e8822a4f5e179",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0569.jpg",
+            "sha256": "2a64b6e143511fcf5c37a42437a571594a86f500a486ee7d055d35c081c83137",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0588.jpg",
+            "sha256": "8da508ce23abe0519d0d206d53e4bebd398dae9ac92e63052dc427152cf2c65c",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0606.jpg",
+            "sha256": "1dd3fa8f436b480d420d854c7ef5c99d34c94ef8c8d7b05b55ad9c4b85326d48",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0625.jpg",
+            "sha256": "776fb72911eac0c67fe5b7252ee6cd3f623bf33128e48168126943619ded796e",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0644.jpg",
+            "sha256": "91b4af1047ddf5b86f300267bf716177c3cd85064acf7cc8f8c825ad86e60a11",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0662.jpg",
+            "sha256": "964d3752e218e040bed322e1d5b721180df228803a0686cc38d7efe6b20a966a",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0681.jpg",
+            "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-provenance-2026-09-10-001/media/avi-frame-samples/avi-index-0700.jpg",
+            "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/Info.plist",
+            "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+            "sha256": "48e35d9dd81fbd05624aeae303f8ff67a8f267a498ebc786de7d941fbd54dee5",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/PkgInfo",
+            "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy",
+            "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+            "sha256": "eecb13831c625a3d09871a2f37f322316cdbc0df0c0f5e512a0bf08d54831691",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/Resources/icon.icns",
+            "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          },
+          {
+            "original_locator": "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources",
+            "sha256": "1eaa997d7f11c63a5aaeb0438f80011eb3ccc57c297a78f85497077985d5709c",
+            "role": "Binary/tool dependency not duplicated; selected native media retained separately"
+          }
+        ]
+      }
+    ],
+    "current_source_input_count": 332,
+    "current_owner_input_count": 425,
+    "independent_package_input_count": 463,
+    "original_individual_input_count": 441,
+    "new_unit_candidate": true,
+    "prospective_numerator_effect_after_separate_acceptance": 1,
+    "current_authority": "13/213",
+    "limits": [
+      "1317 source-world captures retain their original735/1005/1020/78224/466/475 measurement and are not new combined/package pixels.",
+      "contact001 raw FAIL is retained; only its expressly accepted successful traces are reused alongside isolated canopy002 PASS.",
+      "Native8 PNGs are1440x900;705-frame original AVI and9 exact payload samples are1280x800, with70 trailing bytes retained. Samples are not continuous playback.",
+      "242 roof travel/braking frames were grounded and include empty upward slide-contact samples; ground120-input frames include59 empty contact samples. Actual settled source/added-roof contacts remain separate from grounding flags.",
+      "Current authority13/213 is unchanged;1317 receives no credit at this preparation.",
+      "Actual direct contacts, floor flags, rays and draw-frame observations remain distinct.",
+      "Roof route is one bounded run22 corridor after setup placement; no jetpack roof-access or arbitrary continuous-support claim.",
+      "Source dependency code/shader hashes were checked in focused source verification; runtime builder checks config/geometry hashes and dependency existence, not a general immutable-source security boundary.",
+      "This review gives no visual, continuous-video, package, authority or release acceptance.",
+      "Independent live static/sampled visual PASS retains May2019 observed-face/reference-angle and protected/hidden-roof limits. No source photographs were copied.",
+      "Four individual live001 stills, three roof-phase PNGs and one ground endpoint are1440x900. Nine AVI payload images and the full705-frame movie are1280x800; the70-byte declared/physical extent discrepancy is preserved.",
+      "AVI indices550/569/588/606/625/644/662/681/700 are encoded-frame selections.681 and700 are separate bound payloads with identical bytes. Sparse samples and three roof phase PNGs do not establish continuous playback or arbitrary support.",
+      "Individual native capture world735/1005/1020/78224/466/475 remains historical source evidence. The combined source and both owner/independent signed-app runs separately measured735/1018/1033/81761/466/477.",
+      "Independent exact candidate package PASS is bound. The seventh exact unit/packet/image-tree attestation remains pending/null; no past reviewer attests this new tree by implication.",
+      "1317 is an uncredited new unit. Prospective numerator effect is+1 only after separate unit acceptance and later authority/current-release work; this assembly grants0 credit and changes no authority."
+    ]
+  },
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "capture_time_authority": "13/213",
+    "inventory_physical_units": 213,
+    "new_unit_candidate": true,
+    "credit_granted": false,
+    "prospective_numerator_effect_after_separate_acceptance": 1,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_candidate_package_decision": "PASS",
+    "independent_unit_packet_visual_attestation_pending": true
+  }
+}

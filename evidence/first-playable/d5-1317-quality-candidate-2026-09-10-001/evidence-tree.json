@@ -1,0 +1,105 @@
+{
+  "schema_version": "ti.d5-native-image-tree/1",
+  "tree_scope": "Only17 exact selected image files; excludes this document, full AVI and all manifests/receipts/reviews",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "18da75ad3394e86f3129449bbf113efd14d2e845acd767acba995545b3e5f6ee",
+  "files": [
+    {
+      "path": "images/live001-avi/avi-index-0550.jpg",
+      "sha256": "9374aaf068b34613dd70e2882953fdec9a3c6d29f3c6de0dee1e8822a4f5e179",
+      "bytes": 66401
+    },
+    {
+      "path": "images/live001-avi/avi-index-0569.jpg",
+      "sha256": "2a64b6e143511fcf5c37a42437a571594a86f500a486ee7d055d35c081c83137",
+      "bytes": 63980
+    },
+    {
+      "path": "images/live001-avi/avi-index-0588.jpg",
+      "sha256": "8da508ce23abe0519d0d206d53e4bebd398dae9ac92e63052dc427152cf2c65c",
+      "bytes": 62555
+    },
+    {
+      "path": "images/live001-avi/avi-index-0606.jpg",
+      "sha256": "1dd3fa8f436b480d420d854c7ef5c99d34c94ef8c8d7b05b55ad9c4b85326d48",
+      "bytes": 64609
+    },
+    {
+      "path": "images/live001-avi/avi-index-0625.jpg",
+      "sha256": "776fb72911eac0c67fe5b7252ee6cd3f623bf33128e48168126943619ded796e",
+      "bytes": 67049
+    },
+    {
+      "path": "images/live001-avi/avi-index-0644.jpg",
+      "sha256": "91b4af1047ddf5b86f300267bf716177c3cd85064acf7cc8f8c825ad86e60a11",
+      "bytes": 68412
+    },
+    {
+      "path": "images/live001-avi/avi-index-0662.jpg",
+      "sha256": "964d3752e218e040bed322e1d5b721180df228803a0686cc38d7efe6b20a966a",
+      "bytes": 67284
+    },
+    {
+      "path": "images/live001-avi/avi-index-0681.jpg",
+      "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+      "bytes": 66633
+    },
+    {
+      "path": "images/live001-avi/avi-index-0700.jpg",
+      "sha256": "4a3433a6d62bdd7a866d3100d810fe709b25a29a9d11de91f499b2f3dca12c8d",
+      "bytes": 66633
+    },
+    {
+      "path": "images/live001-ground/motion-endpoint.png",
+      "sha256": "d99f950e29322e6bee7a7b262f3aaad3c4773a11e8d840524b886ca08fd210ac",
+      "bytes": 639371
+    },
+    {
+      "path": "images/live001-roof-phases/01-added-roof-landed.png",
+      "sha256": "14b24a618289ba0d9c6aafd5ff243b05cc7a9918d5114d8e09be4e25bd84ec7e",
+      "bytes": 380567
+    },
+    {
+      "path": "images/live001-roof-phases/02-retained-source-roof.png",
+      "sha256": "06a231c0d1dc59254e19a4ce6edbcbbfe7f68c1ba5d9d6355961741cbad53477",
+      "bytes": 322096
+    },
+    {
+      "path": "images/live001-roof-phases/03-returned-added-roof.png",
+      "sha256": "5fac95fe6be27732d3e07c8ea1e6e0c4ceac5165f598b9f8d69c52ce4bf01bbf",
+      "bytes": 382135
+    },
+    {
+      "path": "images/live001-stills/02-whole-live-default.png",
+      "sha256": "f6b1e607f466536855f5808741998d0e070b088b3aac05f665bb1b2c9d74e781",
+      "bytes": 1059795
+    },
+    {
+      "path": "images/live001-stills/03-near-gable-live-default.png",
+      "sha256": "211670bfd1f9ad0395d7492e7f01e138c9f244e8ef36a45df7e17b6d8132e506",
+      "bytes": 640132
+    },
+    {
+      "path": "images/live001-stills/04-near-gable-live-changed.png",
+      "sha256": "5c320489d01a707ff591f236cb2af7dfedb353cb5f277edd70395515be0487c3",
+      "bytes": 712529
+    },
+    {
+      "path": "images/live001-stills/05-motion-start-default.png",
+      "sha256": "46e706d7bded855d8ca24b506e1fbd1d42cb656f3b1851e828e09440e0c15582",
+      "bytes": 640409
+    }
+  ],
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "capture_time_authority": "13/213",
+    "inventory_physical_units": 213,
+    "new_unit_candidate": true,
+    "credit_granted": false,
+    "prospective_numerator_effect_after_separate_acceptance": 1,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_candidate_package_decision": "PASS",
+    "independent_unit_packet_visual_attestation_pending": true
+  }
+}

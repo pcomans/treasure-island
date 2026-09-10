@@ -1,0 +1,307 @@
+{
+  "schema_version": "ti.d5-batch-owner-package-verification/1",
+  "physical_unit_id": "physical-building:w95934125",
+  "owner_decision": "PASS",
+  "independent_exact_app_review_pending": false,
+  "independent_exact_app_decision": "PASS",
+  "independent_review": {
+    "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/fb4f28ce1a9b3ca43300/REVIEW.json",
+    "sha256": "fb4f28ce1a9b3ca433001174052d48cb68b9162042f07e6e764feeb14a6734fa",
+    "bytes": 29853,
+    "original_locator": "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/REVIEW.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "candidate_authority": "13/213",
+  "candidate_app_relative_path": "build/d5-1317-quality-candidate-001/Treasure Island First Playable.app",
+  "pck_sha256": "eecb13831c625a3d09871a2f37f322316cdbc0df0c0f5e512a0bf08d54831691",
+  "app_file_pins": {
+    "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/Info.plist": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+    "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable": "48e35d9dd81fbd05624aeae303f8ff67a8f267a498ebc786de7d941fbd54dee5",
+    "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+    "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+    "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck": "eecb13831c625a3d09871a2f37f322316cdbc0df0c0f5e512a0bf08d54831691",
+    "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+    "{BATCH_REPO}/build/d5-1317-quality-candidate-001/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources": "1eaa997d7f11c63a5aaeb0438f80011eb3ccc57c297a78f85497077985d5709c"
+  },
+  "source_world": {
+    "bodies": 466,
+    "meshes": 1018,
+    "rows": 735,
+    "shapes": 477,
+    "surfaces": 1033,
+    "triangles": 81761
+  },
+  "owner_actual_signed_worlds": {
+    "release-headless-smoke-001": {
+      "playable_rows": 735,
+      "context_rows": 4,
+      "meshes": 1018,
+      "surfaces": 1033,
+      "triangles": 81761,
+      "bodies": 466,
+      "shapes": 477,
+      "load_ms": 4913
+    },
+    "release-native-smoke-001": {
+      "playable_rows": 735,
+      "context_rows": 4,
+      "meshes": 1018,
+      "surfaces": 1033,
+      "triangles": 81761,
+      "bodies": 466,
+      "shapes": 477,
+      "load_ms": 5410
+    }
+  },
+  "independent_actual_signed_worlds": {
+    "release-headless-smoke-001": {
+      "playable_rows": 735,
+      "context_rows": 4,
+      "meshes": 1018,
+      "surfaces": 1033,
+      "triangles": 81761,
+      "bodies": 466,
+      "shapes": 477,
+      "load_ms": 5748
+    },
+    "release-native-smoke-001": {
+      "playable_rows": 735,
+      "context_rows": 4,
+      "meshes": 1018,
+      "surfaces": 1033,
+      "triangles": 81761,
+      "bodies": 466,
+      "shapes": 477,
+      "load_ms": 5362
+    }
+  },
+  "unit_actual_attachment": {
+    "accepted_individual_reference": "{TASK_ROOT}/work/1317-live-integration-001/focused-002-result.json",
+    "collision_triangles": [
+      68,
+      192,
+      648,
+      22,
+      108
+    ],
+    "reference_sha256": "270f137c314d5cf57478a25ec54f36fdddde3787db4ef64822e436561074aea3",
+    "roof_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_roof/D51317GateviewLiveRoofReplacement",
+    "scope": "Individual negative, source, mechanics and visual gates reused; same-runtime factory-to-live attachment compared here.",
+    "wall_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-3__z_-2__building_w95934125_wall/D51317GateviewLiveWallReplacement"
+  },
+  "signature_privacy_binding": {
+    "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/fb5ab13d2793c8722923/actual-app-binding.json",
+    "sha256": "fb5ab13d2793c87229238456dc52dddbe4fe35090e727ca6eec765073352b83b",
+    "bytes": 3057,
+    "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/actual-app-binding.json",
+    "role": "bound_text_input_original",
+    "byte_identical": true
+  },
+  "owner_bundle_checks": {
+    "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/a296ca30d62808092eeb/bundle-native-checks-001.json",
+    "sha256": "a296ca30d62808092eeb9ddcd4cbd74fb8e6cec82e3dafd287cee61aff7fe784",
+    "bytes": 5072,
+    "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/bundle-native-checks-001.json",
+    "role": "bound_text_input_original",
+    "byte_identical": true
+  },
+  "independent_bundle_checks": {
+    "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/db8d69cf9c9e612c6b42/bundle-native-checks.json",
+    "sha256": "db8d69cf9c9e612c6b422cc8d5dbff4f70529af48d0a3a20a5939ee9ec099312",
+    "bytes": 5053,
+    "original_locator": "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/bundle-native-checks.json",
+    "role": "bound_text_input_original",
+    "byte_identical": true
+  },
+  "terminal_slot_releases": [
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/0e9761e99f0890a8c6c6/SLOT_RELEASE-package001.json",
+      "sha256": "0e9761e99f0890a8c6c65da16e41d02370f61770c416f84a40a4d1a43a5a794e",
+      "bytes": 3386,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/SLOT_RELEASE-package001.json",
+      "role": "bound_text_input_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/b474345fdca131d2dce3/SLOT_RELEASE.json",
+      "sha256": "b474345fdca131d2dce3edba134ae9db81a8bf5dbd26a814d35dbe24a5eb1b85",
+      "bytes": 3540,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/SLOT_RELEASE.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "owner_receipts": [
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/1f40c6972997b21d1de6/mounted-component-001-execution.json",
+      "sha256": "1f40c6972997b21d1de63eb7e4815e820106ab9937941ce6e0a9981626ac425e",
+      "bytes": 196778,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/mounted-component-001-execution.json",
+      "role": "bound_text_input_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/ac772e1af58ad3b5611d/mounted-privacy-001-execution.json",
+      "sha256": "ac772e1af58ad3b5611d9c6f147ec4c0cfe70b7a48bae4e7c5b1030a525ed7c9",
+      "bytes": 196925,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/mounted-privacy-001-execution.json",
+      "role": "bound_text_input_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/9d81b5dd155cd94c0e1b/release-headless-smoke-001-execution.json",
+      "sha256": "9d81b5dd155cd94c0e1bc19688fc829f360f820779667d84fb10df209c9e7f8f",
+      "bytes": 196317,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/release-headless-smoke-001-execution.json",
+      "role": "bound_text_input_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/cc804cbf86d1ac6feaf1/release-native-smoke-001-execution.json",
+      "sha256": "cc804cbf86d1ac6feaf1ae6b3c9f4e9e8184dfbd16c547f0e1fc3f20d294a0a5",
+      "bytes": 196461,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/release-native-smoke-001-execution.json",
+      "role": "bound_text_input_original",
+      "byte_identical": true
+    }
+  ],
+  "owner_logs": [
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/ada50a56311b172cdedd/mounted-component-001.log",
+      "sha256": "ada50a56311b172cdedd7d8debd1cca3c12222f0ac8f5c6245a08450e53c1929",
+      "bytes": 1877,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/mounted-component-001.log",
+      "role": "bound_text_input_original",
+      "byte_identical": true,
+      "additional_original_locators": [
+        "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/mounted-component-001.log"
+      ]
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/03c37cf6f7ca07d6afb8/mounted-privacy-001.log",
+      "sha256": "03c37cf6f7ca07d6afb8d900243938eae2d763a40b10eded5ae4e55b5baccee0",
+      "bytes": 769,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/mounted-privacy-001.log",
+      "role": "bound_text_input_original",
+      "byte_identical": true,
+      "additional_original_locators": [
+        "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/mounted-privacy-001.log"
+      ]
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/e75ec49145720878bca2/release-headless-smoke-001.log",
+      "sha256": "e75ec49145720878bca2676223d157735616585cb2cb9da8f1499d7ff2b14715",
+      "bytes": 4161,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/release-headless-smoke-001.log",
+      "role": "bound_text_input_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/d349412a696de575a7ea/release-native-smoke-001.log",
+      "sha256": "d349412a696de575a7ea33dfd1ce829e07788940c279bb42d1f8a58d27224f35",
+      "bytes": 4227,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/release-native-smoke-001.log",
+      "role": "bound_text_input_original",
+      "byte_identical": true
+    }
+  ],
+  "independent_receipts": [
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/cf7dfa8bee4d18ee527f/mounted-component-001-execution.json",
+      "sha256": "cf7dfa8bee4d18ee527f2777b9e5e5a193bc039cb999b5a80af6d70a2d013f7c",
+      "bytes": 216070,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/mounted-component-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/7f9d64bf1ccfe2161ba3/mounted-privacy-001-execution.json",
+      "sha256": "7f9d64bf1ccfe2161ba3354b0d791ae4d175b84ad7c60faf9bdefaa52dacdd8d",
+      "bytes": 215651,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/mounted-privacy-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/a77f39e22bc973618d52/release-headless-smoke-001-execution.json",
+      "sha256": "a77f39e22bc973618d5275241af73d51f08bc8e9e125e492ec31bbc6e25e4392",
+      "bytes": 215105,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/release-headless-smoke-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/a873538f39c6843c3592/release-native-smoke-001-execution.json",
+      "sha256": "a873538f39c6843c35929089f7151be9d53ef1c6af54f4253497b4b8e2d368d2",
+      "bytes": 215255,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/release-native-smoke-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "independent_logs": [
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/ada50a56311b172cdedd/mounted-component-001.log",
+      "sha256": "ada50a56311b172cdedd7d8debd1cca3c12222f0ac8f5c6245a08450e53c1929",
+      "bytes": 1877,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/mounted-component-001.log",
+      "role": "bound_text_input_original",
+      "byte_identical": true,
+      "additional_original_locators": [
+        "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/mounted-component-001.log"
+      ]
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/03c37cf6f7ca07d6afb8/mounted-privacy-001.log",
+      "sha256": "03c37cf6f7ca07d6afb8d900243938eae2d763a40b10eded5ae4e55b5baccee0",
+      "bytes": 769,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-delivery-001/mounted-privacy-001.log",
+      "role": "bound_text_input_original",
+      "byte_identical": true,
+      "additional_original_locators": [
+        "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/mounted-privacy-001.log"
+      ]
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/2636e742a8f6cddd724f/release-headless-smoke-001.log",
+      "sha256": "2636e742a8f6cddd724fbb0e258c6cc5de5efe54a765446d1ef0c184de5a4cce",
+      "bytes": 4161,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/release-headless-smoke-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/originals/34162535368e2a5ad4b3/release-native-smoke-001.log",
+      "sha256": "34162535368e2a5ad4b3c1514849c39e45f285500f4e6e05046ab1a9759ede4d",
+      "bytes": 4227,
+      "original_locator": "{TASK_ROOT}/work/1317-quality-candidate-independent-package-001/release-native-smoke-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "coverage_split": [
+    "Source focused: all three actual ordinary-main pairs and exact same-runtime arrays/material/ordered collision partitions",
+    "Mounted PCK: target-record builder dispatch/component comparison and privacy audit, separate from full world execution",
+    "Original signed executable headless/native: full ordinary-main world, all five attachment predicates, defaults and jetpack smoke"
+  ],
+  "limits": [
+    "Candidate package acceptance does not grant unit or recognition acceptance.",
+    "No new static/motion visual verdict or continuous gameplay claim.",
+    "No M1/manual play, OS pixel, universal-runtime compatibility or publication claim.",
+    "Both bundle slices verified at file preparation; only actual current host execution observed.",
+    "No environment-equality or complete workflow performance claim from process timings."
+  ],
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "capture_time_authority": "13/213",
+    "inventory_physical_units": 213,
+    "new_unit_candidate": true,
+    "credit_granted": false,
+    "prospective_numerator_effect_after_separate_acceptance": 1,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_candidate_package_decision": "PASS",
+    "independent_unit_packet_visual_attestation_pending": true
+  }
+}

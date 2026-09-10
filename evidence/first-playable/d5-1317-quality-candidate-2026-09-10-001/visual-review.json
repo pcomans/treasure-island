@@ -1,0 +1,70 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Accepted independent live static and sampled-motion decision; new tree attestation pending",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/independent-visual/REVIEW.json",
+      "sha256": "dde56b0a8692a46d24aaa94186ffb63771dcfa19af51920f3fc9803e9981f402",
+      "bytes": 15744,
+      "original_locator": "{TASK_ROOT}/work/1317-live-independent-visual-001/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/independent-visual/REVIEW.md",
+      "sha256": "ac727c0a15e5f627a88efa8b5608d723279db8a54a1c29226aafcefb3ae9bcd2",
+      "bytes": 3485,
+      "original_locator": "{TASK_ROOT}/work/1317-live-independent-visual-001/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "independent_status": "PASS",
+    "independent_scope": "Actual-live static and sampled visual quality only",
+    "actual_reference_metadata": {
+      "{PRIVATE_TMP}/1317-reference-comparison-RNI3Vd/1317-frontage-may-2019.png": "c3e8e9402c3d3268f647fadd99705ebbdb522ff3691f20099ef52c674b75800e",
+      "{PRIVATE_TMP}/1317-reference-comparison-RNI3Vd/1317-number-detail-may-2019.png": "72d7456f590c1e7c602a174cc898562dce6f3786c8a469d0550a3cd37a4a80ba"
+    },
+    "review_text": {
+      "path": "build/d5-1317-quality-candidate-provenance-2026-09-10-001/independent-visual/REVIEW.md",
+      "sha256": "ac727c0a15e5f627a88efa8b5608d723279db8a54a1c29226aafcefb3ae9bcd2",
+      "bytes": 3485,
+      "original_locator": "{TASK_ROOT}/work/1317-live-independent-visual-001/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "not_an_attestation_of_this_new_packet_tree": true,
+    "limits": [
+      "1317 source-world captures retain their original735/1005/1020/78224/466/475 measurement and are not new combined/package pixels.",
+      "contact001 raw FAIL is retained; only its expressly accepted successful traces are reused alongside isolated canopy002 PASS.",
+      "Native8 PNGs are1440x900;705-frame original AVI and9 exact payload samples are1280x800, with70 trailing bytes retained. Samples are not continuous playback.",
+      "242 roof travel/braking frames were grounded and include empty upward slide-contact samples; ground120-input frames include59 empty contact samples. Actual settled source/added-roof contacts remain separate from grounding flags.",
+      "Current authority13/213 is unchanged;1317 receives no credit at this preparation.",
+      "Actual direct contacts, floor flags, rays and draw-frame observations remain distinct.",
+      "Roof route is one bounded run22 corridor after setup placement; no jetpack roof-access or arbitrary continuous-support claim.",
+      "Source dependency code/shader hashes were checked in focused source verification; runtime builder checks config/geometry hashes and dependency existence, not a general immutable-source security boundary.",
+      "This review gives no visual, continuous-video, package, authority or release acceptance.",
+      "Independent live static/sampled visual PASS retains May2019 observed-face/reference-angle and protected/hidden-roof limits. No source photographs were copied.",
+      "Four individual live001 stills, three roof-phase PNGs and one ground endpoint are1440x900. Nine AVI payload images and the full705-frame movie are1280x800; the70-byte declared/physical extent discrepancy is preserved.",
+      "AVI indices550/569/588/606/625/644/662/681/700 are encoded-frame selections.681 and700 are separate bound payloads with identical bytes. Sparse samples and three roof phase PNGs do not establish continuous playback or arbitrary support.",
+      "Individual native capture world735/1005/1020/78224/466/475 remains historical source evidence. The combined source and both owner/independent signed-app runs separately measured735/1018/1033/81761/466/477.",
+      "Independent exact candidate package PASS is bound. The seventh exact unit/packet/image-tree attestation remains pending/null; no past reviewer attests this new tree by implication.",
+      "1317 is an uncredited new unit. Prospective numerator effect is+1 only after separate unit acceptance and later authority/current-release work; this assembly grants0 credit and changes no authority."
+    ]
+  },
+  "truth_boundary": {
+    "candidate_authority": "13/213",
+    "capture_time_authority": "13/213",
+    "inventory_physical_units": 213,
+    "new_unit_candidate": true,
+    "credit_granted": false,
+    "prospective_numerator_effect_after_separate_acceptance": 1,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_candidate_package_decision": "PASS",
+    "independent_unit_packet_visual_attestation_pending": true
+  }
+}

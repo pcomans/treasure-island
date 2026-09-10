@@ -18,7 +18,17 @@ Before restoring tools or opening Godot, read [AGENTS.md](AGENTS.md) and the [ma
 Human-only follow-ups are kept in the [owner action queue](HUMAN.md); that
 queue narrows external gates and never pauses safe independent work.
 
-## Current 1308 and 1394 quality revisions — thirteen recognized buildings
+## Current 1317 Gateview release — fourteen recognized buildings
+
+The separate unit/reference/visual/mechanics and package gates accepted `physical-building:w95934125` as a new unit. Recognition is **14/213**, with **199 not evaluated**, one new credit, all prior 13 acceptance records and 213 identities preserved. Latest 1308/1394 quality improvements remain intact. Compiler `1.13.0`, catalog/registry v14 and contracts/loader v13 bind 13 active adapters, 22 plans and 16 package-ready plans.
+
+Owner and independent exact-current signed runs measured `735/1018/1033/81,761/466/477` rows/meshes/surfaces/triangles/bodies/shapes. The 1317 acceptance record binds the current combined topology; original 1308/1394 quality-batch measurements retain their earlier scope. The reviewed app is `build/d5-1317-exact-current-001/Treasure Island First Playable.app`. Seven-file identity `c62ae8d2878135ace2206755bbb7ee91fee47f68ec8cac4b334be233b710de26`, PCK `9ab4e78f98b10cbc381d4cbd6a4f5e4367ec06766f6b5415cb070174c7ad9adf`, executable `bd004c7d772a1f06be6363c53a2d88be4ca335edd54ba6eea4172cb2122aed7b`. [1317 release closure](evidence/first-playable/d5-1317-current-release-2026-09-10-001/release-closure.json).
+
+The immutable 1317 packet retains 8 PNGs and 9 AVI payload samples, its 17-image tree, capture/candidate 13 app, original failed receipts and sparse-motion/contact limits. The new current 14 app supplies full-world, stock movement/jetpack, mounted component and privacy proof on Apple M2; it supplies no new gameplay pixels or manual/M1 owner acceptance. MAIN transfer, publication and ordinary no-argument launch remain separate pending outcomes in this preparation snapshot. `HUMAN-001` retains its owner-only scope.
+
+## Historical 1308 and 1394 quality revisions — thirteen recognized buildings
+
+The following paragraphs retain the accepted prior 13 quality release and its actual publication outcome; their uses of “current” refer to that earlier app.
 
 Independent source/mechanics, visual, separate unit-packet and package gates accepted the fidelity004 quality revisions of `physical-building:w95934123` and `physical-building:w96215646`. Recognition remains **13/213**, with **zero new credit**, all 213 unit identities preserved and 200 not evaluated. Compiler `1.12.0`, catalog/registry v13 and contracts/loader v12 retain twelve active adapters, twenty-one plans and fifteen package-ready plans.
 
