@@ -12547,6 +12547,18 @@ Transcribed verbatim by package_1439_continuation from the sealed completion REV
 
 review_1439_package — Independent current13 publication completion: Matched all106 primary and six completion Git blobs to the explicit inventories, verified the parent chain and fresh private-origin equality atcc8a022, and checked the37 new retained originals plus current app7/source247/package49. Exact primary/completion RETRO prefixes and attributed notes occur once; four incidental UIDs remain excluded and19 config/hook files are unchanged. The no-argument owned window36508/PID93987 is supported by raw metadata and termination, with fresh absence; unavailable pixels, unknown permission state and pending manual/M1 acceptance remain explicit. Preserved the staged blank-EOF exit2, missing-LFS warning and both UI failure/cancellation records. Existing archive/source/quality gates were reused without engine/export/test replay. Keep downstream outcome records separate from their immutable upstream pending snapshots; no further publication layer is needed solely for this review.
 
+### package_1439_continuation — direct1308/1394 reference acquisition (2026-09-10)
+
+package_1439_continuation — Direct1308/1394 reference acquisition: Reopened only the exact packet panoramas and inspected actual March2025 pixels with Google attribution. Kept1308’s nearby1307 label distinct from target association and1394’s1230/current1394 crosswalk explicit. Paired unchanged accepted game originals by path; camera differences and unobserved faces remain limits, with no fidelity verdict supplied by acquisition. Temporary third-party screenshots stayed outside the repository; closed the isolated browser and verified all ten PIDs absent. Continue the independent direct-pixel comparison before interpreting prior scoped finish PASS as fidelity.
+
+### review_1439_package — living roof-form lessons (2026-09-10)
+
+review_1439_package — Roof-form review and living lessons: Actual reference comparison exposed rounded/uneven roofs beyond the previous1308/1303 visibility checklist; my earlier scoped findings were too narrow. Added concise LEARNINGS.md and one AGENTS task-start/update link, preserving useful facade, paving and lawn gains and separate technical evidence. Visibility metrics must not drive exaggerated architecture. Next time inspect the whole ordinary-view result early, including planes, ridge/eaves, proportions and material readability, before extended proof work. The exact two-file diff, links and whitespace passed; prior RETRO bytes and four incidental UIDs are preserved. No product, authority or engine change; this documentation note stays outside the two-file commit.
+
+### review_1439_package — LEARNINGS representation maintenance (2026-09-10)
+
+review_1439_package — LEARNINGS representation maintenance: Read D’s accepted roof-topology findings, the bounded churn note and006 channel-level result. Added focused lessons for final converted-ring validity/emitted coverage and like-for-like runtime channel comparisons, preserving original aggregate-only uncertainty and FAILs. Recorded the adopted nonfatal diagnostic-capture experiment as future and unmeasured, with fatal boundaries, exit1/HOLD and independent acceptance intact. Existing learning text and AGENTS remain unchanged; only LEARNINGS grew by the three concise paragraphs. Diff/whitespace/status checks passed and dirty RETRO/four incidental UID bytes remain exact. No engine, product, authority, staging or publication action; carry this note once in the next normal owner checkpoint.
+
 
 ### release_1308_1394_batch — 1308/1394 quality candidate preparation
 
@@ -12693,3 +12705,772 @@ D / review_1303_source — Independent exact-current1317 package PASS on PCK9ab4
 ### B — 1317 current14 MAIN transfer preparation
 
 integrate_1317 — Prepared the current14/199-pending release packet and exact MAIN allowlist against current1a93707, reusing the root-accepted separate1317 seven-field gate and exact owner/independent app proof. Selected20 source/authority files plus4 required UIDs; preserved prior13 quality source and all213 identities, original candidate13 app/proofs, failed receipts and sparse-motion limits. Current documentation is based on latest MAIN, includes only the approved readable learning append, and preserves unrelated RETRO/four UIDs/index. Kept upstream preparation immutable and planned downstream publication outcome separately, with command-local LFS/hooks settings and no documentation-only release chain. No engine/source/test/export replay or MAIN/Git write occurred; next step is concrete copy/stage review.
+
+
+### integrate_1317 — Primary 1317 publication (exact transcription)
+
+integrate_1317 — Published the reviewed 67-path 1317 new-unit release as d6ff28133b88cf0c4536e138865a94a6e4040e71 to origin/main, with fresh remote equality. All 806 copy hashes, committed modes/blobs, app7 and unrelated RETRO/four UIDs/config/hooks were preserved. The original cached whitespace check stopped on exactly two already frozen EOF blank lines; retained exit2 and bytes, then the root-approved command-local blank-at-eof exception passed while keeping other whitespace rules. Commit and normal push each passed once without source edits, restaging, force, retries or persistent Git changes. Actual outcomes remain downstream from immutable pending-at-preparation snapshots; no engine, proof/export replay, ordinary launch or documentation-only publication chain.
+
+
+### review_1303_source — Finite 1317 efficiency checkpoint (exact transcription)
+
+D / review_1303_source — Finite1317/1303/1410 efficiency sample:1317 retained a1.017s stale-receiver Node failure and a0.805s successful compiler-check repeat after the three-line fixture repair; later current authority/export/package stages passed once. The observed first-authority-check→owner-native-end window was1256.030s, with172.562s in12 recorded processes and1083.468s unallocated, not idle/model cost. MAIN copy completed before staged checking stopped on two frozen1317 EOF blank lines; the15.630s between result timestamps is not isolated copy/check cost.1303’s17.304s instrumented diagnostic and1410’s7.379s import/14.457s early render produced necessary new evidence, not setup retries. Compact-first reading has a supported latest root observation but not universal zero truncation: owner notes retain a wrong filename and a recovered oversized read, with unknown effort. One next-release experiment: apply the existing whitespace check to the complete selected source patch, including added files, before freeze/export; retain the final staged check and count late whitespace holds and source/export replays. No extra report/approval layer, engine, source edit or acceptance relaxation.
+
+### integrate_1317 — 1410 evidence preservation and reporting experiment
+
+integrate_1317 — Added the observed original-live-builder tangent value/handedness lesson and the preseed-and-merge trace-loss lesson to LEARNINGS, then linked the root-adopted completed-record experiment from AGENTS. The next already justified driver revision reuses the parent final-record pattern; existing diff/result review checks emitted counts/outcomes. Baseline is four empty traces/467 reported samples and zero logging-only reruns; effectiveness remains unmeasured. Broader preparation/review/coordination intervals remain unallocated, not idle/model time. The active 1410 source003 and 1412 revision002 maps bind isolated candidate documents, not these MAIN paths; both authors confirmed this before writing. Preserved preexisting AGENTS additions, the entire dirty RETRO prefix, four unrelated UIDs and Git index/config/hooks. MAIN remains14/213; no engine, acceptance, stage, commit or push. One initial bundled guidance read truncated already-read AGENTS text; the new source review and efficiency note were read completely, without recovering unrelated arrays.
+
+Exact independent and efficiency retrospective text remains pending and byte-exact in the existing artifacts: [1410 source/mechanics REVIEW](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1410-first-coherent-study-001/independent-source-mechanics-001/REVIEW.md) (`ed078ffb…`) and [bounded efficiency NOTE](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/team-efficiency-1412-1410-001/NOTE.md) (`773eab29…`). This checkpoint references those notes without transcribing or granting their acceptance.
+
+
+### capture_1410_revision002 — 1410 source004 preparation
+
+What worked: preserved003 before-images, reused complete raw source channels and the successful capture/import path, and authored shared Float32 boundaries that close the file roof/slabs without changing dimensions, materials, stairs or controls. What failed: earlier omitted tangents and independent face rounding had drifted; the new1412 packing finding required the complete raw wall stream before tangent-component selection. Change next time: preserve original pre-packing channel construction and shared boundary realization from the first coherent draft. Full selected-patch whitespace passed; native/mechanics/art acceptance remained pending. [Supplied source004 retrospective](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1410-first-coherent-study-001/source-study-004/FILE_READY.md).
+
+### capture_1410_revision002 — 1410 native004 execution
+
+What worked: one15.390914-second native process reused the six-view driver/import with396 unchanged pins, saved all six originals and released the engine before byte-identical durable copying. What remained unresolved: a clean capture driver does not establish original tangent equality, roof topology or stair walkability; no independent acceptance was claimed. Change next time: carry native streams and completed walking records into the existing separate review without capture retries. No import/contact/export/source or control change. [Actual handoff and supplied retrospective](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1410-first-coherent-study-001/source-study-004/OWNER_HANDOFF.md).
+
+### review_1303_source — 1412 source002 repaired execution
+
+What worked: complete original pre-packing wall inputs yielded exact original tangent values in focused and actual-world comparisons; both approved stages ran once with430 stable pins. What failed: the framing predicate included enlarged-court synthetic AABB corners, and independent visual review still held the dark roof reading. Change next time: keep explicit wall/roof framing scope and report ground bounds separately; diagnose upper-face/lower-plane material and orientation before roof dimensions. The capture-survival experiment retained5/5 originals during one nonfatal failed native run with zero capture retries. This is no whole-workflow speed claim; raw FAIL and visual HOLD remain. [Actual handoff and supplied retrospective](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1412-first-coherent-study-002/OWNER_HANDOFF.md).
+
+### capture_1410_revision002 — Independent1412 visual002
+
+What worked: compared five new and two useful old originals with the correctly associated March2025 reference, distinguishing improved apexes/paved-road connection from the unresolved whole-roof reading. What failed: the near-black cap still lacked the visible reference's upper-face/lower-roof separation; an oversized association read and guessed READY path added avoidable noise. Change next time: judge face identity, planar separation and material response together, retaining paving/stair gains and existing views. Verdict HOLD; no engine, source edit, hidden-layout inference or technical/recognition acceptance. [Independent review and exact retrospective](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1412-first-coherent-study-002/independent-visual-002/REVIEW.md).
+
+### review_1303_recovery_result — 1404 source preparation
+
+What worked: selected unaccepted1404 by stable D4 order, excluding accepted/active units; independently checked the recorded SSW camera's source hits and five local land/visual-area samples. What did not work: guessed index paths, a broad temporary listing and historical1317 preparation added noise before current authority excluded that accepted unit. Change next time: filter the current accepted set first and use named retained-reference receipts. Existing1410/1412 images exclude1404, so this round supplied one exact dated-view recommendation, not pixel readiness. No source/helper/RETRO change, engine, checkout or credit. [Supplied preparation retrospective](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-next-study-preparation-001/READY.md).
+
+### capture_1410_revision002 — 1404 dated-reference observation
+
+What worked: one existing Playwright/Chrome navigation recovered the exact March2025 panorama/location/heading, saved one original outside repo/app, then closed the browser with all nine owned PIDs absent. Pixels established target-specific gabled wings, two stairs, brick accents and central lawn between concrete drives. What failed: Maps clamped requested115° to90°; networkidle timed out despite a sharp resolved panorama, and an old-profile/process listing was unnecessarily broad. Change next time: use the bundled dependency locator and compact receipt fields directly, verify actual URL pose, and preserve the limited observation without another acquisition cycle. No modeling, engine, installation or source-image asset reuse. [Actual observation and supplied retrospective](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-next-study-preparation-001/REFERENCE_OBSERVATION.md).
+
+### review_1303_recovery_result — 1410 mechanics002 independent review
+
+What worked: one23.008812-second engine run retained all four stair failures, roof aim/spray failures and native arrays; the engine was released before collation. The completed-record experiment saved467/467 samples versus prior0/467, with counts/outcomes matching logs and zero logging-only reruns. Separate exact native/frozen-asset stream identity supports scoped original-channel/geometry PASS. What failed: all four walks still HOLD; roof support passed but targeted aim/spray held. Whole-config JSON deepEqual stopped the single native file checker on two5.684e−14 numeric shortening differences; triangle-index aiming moved after subdivision. Change next time: retain the raw checker FAIL and independent evidence chain separately, use frozen config identity, and choose a stable authored roof target within stock camera limits. No controller/riser/source/terrain changes or hidden ramps. Root accepted this scoped technical finding, not whole-unit acceptance. [Independent review and supplied retrospective](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1410-first-coherent-study-001/independent-source-mechanics-002/REVIEW.md).
+
+### capture_1410_revision002 — MAIN documentation checkpoint002
+
+What worked: confirmed both selected MAIN documents are absent from active1410/1412 freeze maps, preserved their dirty before-images, and appended only completed named rounds. Refined the existing capture-survival lesson with measured5/5 retention/zero retries and the same-representation lesson with retained JSON-shortening/string-membership false positives. What changed before sealing: root accepted the completed mechanics002 scoped channel/geometry review, so its named retrospective and measured467/467 trace retention were included. The native-checker FAIL, all four walking HOLDs and roof aim/spray HOLD remain explicit; no whole-unit acceptance follows. Change next time: keep evidence diagnosis separate from acceptance, reference compact actual handoffs, and preserve earlier dirty history. No AGENTS/skills/source edits, stage, commit or push.
+
+
+Preparation entries below retain their recorded stage-time scope; subsequent execution entries record the later outcome.
+
+### review_1303_source — 1412 source003 preparation (exact transcription)
+
+retro_exact — review_1303_source,1412 source003 preparation: What worked well: diagnosed consumed outward front geometry and the shared dark texture before changing material; preserved all002 geometry/source-channel constructors, court/lawn and five camera poses, then reused the existing preflight/import path. What did not work well:002 increased the apex silhouette but both upper face and lower roof inherited a near-black multiplicative texture; the aggregate framing helper also included ground AABB corners. Change next time: keep the two existing planes distinct under ordinary lighting and make framing scope explicit, while judging the whole actual next render against the dated pixels. Source003 remains unrun; no geometry inflation, unshaded/emission shortcut, physical-support claim or recognition credit. Append once at the next normal designated owner checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1412-first-coherent-study-003/FILE_READY.md).
+
+### review_1303_source — 1412 source003 execution (exact transcription)
+
+retro_exact — review_1303_source,1412 source003 execution: What worked well: both approved stages passed once with461 stable inputs, exact original source-channel and previous native geometry/collision comparisons, clean logs and all five same-pose originals preserved. Explicit facade bounds passed while ground bounds remained diagnostic. What did not work well: the prior002 visual/material HOLD and aggregate-ground framing failure required this bounded material/helper correction; their raw records remain intact. Change next time: inspect the whole actual lit upper-face/lower-roof composition against the dated reference before any extended mechanics/release work, keeping the unchanged geometry and court gains. No source edits/retries/additional captures during execution; zero stair attempts means no walking acceptance. Deliver once through the normal designated RETRO owner.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1412-first-coherent-study-003/OWNER_HANDOFF.md).
+
+### capture_1410_revision002 — Independent1412 visual003 (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, independent1412 visual003: What worked well: directly inspected all five new originals, the prior002 near view and the actual March2025 reference; the gray upper faces, tan lower roof/eave bands and larger concrete slabs now support a coherent target-specific paired-wing/stair composition under both captured lights. Checked whole silhouette, proportions, openings, stairs, frontage and material separation beyond the previous dark-cap defect. What did not work well: the earlier multiplicative roof palette hid existing architectural separation; generic dark glazing and light rails under changed sun remain modest finish limits, while the reference right edge/vehicles and near avatar limit detail comparison. Change next time: retain this scoped visible-form result and pass the unchanged geometry to the mandatory separate mechanics work, rather than adding decoration or another capture matrix to justify acceptance. Scoped public-front visual PASS only; no walking, motion, protected-channel, live-receiver, package, as-built or recognition credit. No engine, research, source/MAIN/frozen-log edit or image alteration occurred. Append once at the next normal serialized checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1412-first-coherent-study-003/independent-visual-003/retro_exact.txt).
+
+### review_1303_source — Independent1410 visual004 (exact transcription)
+
+retro_exact — review_1303_source, independent1410 visual004: What worked well: directly inspected all six current originals, both correctly associated March2025 reference pixels and matched00305/06; judged the whole visible garage/stair/connector/loggia/roof/approach composition rather than relying on the small technical delta or prior PASS. What did not work well: default shadow reduces garage-panel relief, and the reference-distance target remains small/partly hidden by1412 at70FOV versus30; these limits do not justify enlarging the roof or inventing hidden detail. Change next time: retain the scoped static PASS while carrying the separate four walking HOLDs forward; no new art/capture matrix is needed from this evidence. Current six original/durable hashes matched. No engine, source/photo/log edit, geometry/mechanics/receiver/release/credit acceptance or continuous-motion claim occurred. Append this exact note once at the next normal designated checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1410-first-coherent-study-001/independent-visual-004/REVIEW.md).
+
+### review_1303_recovery_result — 1410 roof-contact001 (exact transcription)
+
+RETRO exact: “E / review_1303_recovery_result,1410 roof-contact001: one13.067684s approved roof-only run, terminal/fresh-absence release before collation, no import/stair/geometry/capture replay. Stable authored-face weights repaired subdivision-sensitive aiming:30/30 owned grounded support, actual−42.069741° stock aim and exact roof solid-ray hit. Stock range_rejection/no added tag is scoped nonplacement, not receiver-eligibility proof; all four walking HOLDs persist. File collation incurred one avoidable KeyError by assuming walking-row fields in the inherited roof trace, then an oversized full-row print; corrected using the actual input_frame/contacts schema and compact counts/ownership identity. Next read one actual row schema first and project only requested fields. No engine or helper retry, source edit, acceptance or authority change.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1410-first-coherent-study-001/independent-roof-contact-001/REVIEW.md).
+
+### capture_1410_revision002 — Finite efficiency checkpoint002 (exact transcription)
+
+retro_exact — capture_1410_revision002, finite D/E efficiency checkpoint002: What worked: sampled actual stage receipts, raw logs, compact handoffs, result counts and the narrow roof-helper delta; measured 5/5 still retention and 467/467 walking samples with zero capture-only or logging-only reruns. Necessary tangent/material/movement evidence remained separate from acceptance. What did not work: repeated cross-serializer assumptions caused a false file-check failure; triangle-index targeting required a bounded repair, and oversized output caused avoidable file-reading work, including my own bundled audit read. E's later readback corrections were checked against the completed compact roof RETRO, without expanding this audit into another mechanics verdict. Change next time: retain the already adopted final-record, capture-survival, consumed-representation and compact-reading practices; no additional experiment is justified by this slice. Larger preparation/review/coordination intervals remain unallocated, not idle/model costs. No engine, product/harness/source/MAIN edit or resource acquisition occurred; only this note was written. Append once at the normal serialized RETRO checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/team-efficiency-1410-1412-002/NOTE.md).
+
+### capture_1410_revision002 — MAIN documentation checkpoint003
+
+What worked: directly checked the three latest relevant frozen maps and received both active authors' confirmation that upcoming maps exclude MAIN documents, preserved the complete dirty RETRO prefix and copied six requested completed retrospective paragraphs exactly once. What remained unchanged: AGENTS, LEARNINGS, the empty staged index, config/hooks, four unrelated UIDs and every candidate file received no edits; existing lessons already cover the observed prevention steps, so no lesson or experiment was added. Change next time: keep stage-time claims historical, append only completed named rounds, and retain the independent walking/receiver/package limits. Current1404 authoring and1412 mechanics preparation remain open and excluded. No engine, source edit, resource acquisition, stage, commit or push.
+
+
+Preparation/observation entries below retain their recorded stage-time scope; later execution and review entries record subsequent outcomes.
+
+### review_1303_source — 1404 source001 preparation (exact transcription)
+
+retro_exact: D / review_1303_source —1404 first coherent preparation: What worked well: inspected the actual March2025 SSW pixels and frozen source association before authoring six visible garages, target-specific windows/brick, both complete stairs, two-part gables/louvers and a substantial central lawn with separate source-fitted approaches. Reused successful original pre-packing source-channel construction and the complete1412 import/focused/native path. What did not work well: the first file preflight exposed four small projected top overlaps from independently rounded apex/shoulder-edge XZ; the failed payload and result were retained, then shared native endpoints supplied the apex coordinates and the affected roof check passed. The populated checkout's known LFS post-hook exit2 was also retained without retry. Change next time: keep roof subdivisions on their canonical consumed edge from first authoring and retain complete invocation comparisons before the first launch; bring this one coherent draft to independent whole-result review before extended proof. No engine, image, walking, live attachment, authority or recognition acceptance is claimed; source/protected geometry, terrain, controls and frozen RETRO are unchanged. Append once at the next normal designated documentation checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-first-coherent-study-001/FILE_READY.md).
+
+### review_1303_source — 1404 source001 execution (exact transcription)
+
+retro_exact: D / review_1303_source —1404 first coherent execution: What worked well: the complete prepared import/focused/native path ran once per stage with391 inputs stable;75,360 focused checks included original live-builder tangent values/handedness, and the first native run retained all five planned originals with unchanged durable copies. Fresh engine release preceded image collation and independent visual review. What did not work well: the inherited western-bridge import workflow warning remains; no execution or capture failure occurred in this run, so failed-diagnostic capture survival is unmeasured here. Change next time: retain the same complete invocation and original-channel comparison while using the separate whole-result visual review before refinement. Convex grade checks and matched emitted collision do not certify ground union topology or stair walking; no source/visual self-acceptance, live adapter, export or recognition credit. Append once at the next normal designated documentation checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-first-coherent-study-001/OWNER_HANDOFF.md).
+
+### capture_1410_revision002 — Independent1404 visual001 (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, independent1404 visual001: What worked well: directly compared all five actual originals and the exact March2025 reference, including the same-pose generic baseline and changed light; confirmed substantive gains in paired wings/gables/louvers, six garage openings, both open stairs, brick accents and central lawn between separate drives. What did not work well: the two broad courtyard returns retain mottled gray source material against the clearly pale reference returns, breaking the whole facade composition; near garage relief also reads as horizontal roll-ups rather than the reference's center-divided leaves, and lower roof bands remain thin rather than richly legible planes. Change next time: resolve the exact physical return-face association before any protected material-scope change, preserve source/control/geometry boundaries, and judge the complete next visible result without inflating roof dimensions or adding a capture matrix. Scoped visual HOLD despite native PASS; no walking, channel, receiver, package, as-built or recognition acceptance. All original/durable pairs match, and reference remains outside repository/app. No engine, capture, image/source/MAIN edit, new resource or broader proof work occurred. Append once at the next normal serialized checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-first-coherent-study-001/independent-visual-001/REVIEW.md).
+
+### review_1303_recovery_result — 1404 return-face association (exact transcription)
+
+Pending RETRO exact: “E / review_1303_recovery_result,1404 return association: inspected the existing dated reference and actual whole/near images, then tied the two mismatched returns to exact runs1/4 through source adjacency, first-hit plan rays and saved-camera projections. Kept run1's grazing0.0476-degree reference visibility and concealed extent explicit; recommend only pale material continuation as production inference, not geometry or hidden-detail scope. One readback included an unnecessary nested player contact object and truncated; subsequent projection output selected only actual camera fields. No acquisition, engine, resource, source/scope/authority edit or art acceptance. Preserve1412 preparation until its actual repair is ready.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-return-source-association-001/ASSOCIATION.md).
+
+### review_1303_recovery_result — 1404 retained001 ground review (exact transcription)
+
+RETRO exact: “E / review_1303_recovery_result,1404 retained001 ground: existing native arrays and exact grid/Fraction clipping located four real visual-only overlaps, with three existing endpoint insertions as a bounded repair proposal; reported promptly to D/root without delaying unrelated art or using an engine. Zero native coverage gaps and separate analytic quantization residuals were retained without general cleanup. Two avoidable file-helper failures came from translating the existing cross-Y winding convention into the opposite XZ sign, then missing its zero-projection branch; both original helpers and failure note remain. Read the exact emitter first and preserve its zero-area branch when adapting the known checker. No candidate/source/terrain/control/authority change or acceptance; future repaired inputs need only the affected exact check and already necessary native mechanics run. Append once through the designated owner.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-independent-ground-001/REVIEW.md).
+
+### review_1303_source — 1404 source002 preparation (exact transcription)
+
+retro_exact: D / review_1303_source —1404 source002 preparation: What worked well: E’s exact return association and C’s actual whole-result review bounded a pale-material continuation to runs1/4; all source geometry/channels and every added roof/stair/ground array stay unchanged. Replaced repeated horizontal garage courses with center divisions and broad leaf panels using the existing six door stations, and checked stable wing/door assignment on all216 actual001 native door vertices. What did not work well: the original lower roof bands read mainly as edging; actual saved-camera/plane calculations show the connector top and near wing tops face away, so a restrained lit palette adjustment cannot guarantee visible roof area. Change next time: inspect material-family continuity and complete garage motifs in the first coherent draft, while retaining camera/culling limits rather than inflating roof geometry. Reused the complete successful import/focused/native path and all five poses; complete selected-patch whitespace passed without touching the real index or RETRO. No engine, new image, mechanical, visual, live-attachment or recognition acceptance is claimed. Append once at the next normal designated checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-first-coherent-study-002/FILE_READY.md).
+
+### review_1303_source — 1404 source002 execution (exact transcription)
+
+retro_exact: D / review_1303_source —1404 source002 execution: What worked well: both approved stages passed once, focused75,417 checks and native5/5 unchanged original stills, with421 frozen inputs exact and clean logs; actual original-builder source channels and prior001 added arrays/all710 collision faces remained exact. Complete working invocation reused the original import, and actual terminal/fresh PID/global absence released the slot before copy/collation. What did not work well: no runtime setup failure occurred; E’s independent retained001 ground review established four tiny positive visual overlaps that this material round does not close. Lower-roof back-facing-plane limitation remains for independent art judgment. Change next time: preserve the full result and early images while correcting only the measured three canonical ground junctions separately; no extra capture matrix or mechanical acceptance from these stills. Planned-pixel survival5/5 in a clean run, so this is not a new nonfatal-failure experiment sample. Original/durable image hashes match. Append once at the normal designated checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-first-coherent-study-002/OWNER_HANDOFF.md).
+
+### capture_1410_revision002 — Independent1404 visual002 (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, independent1404 visual002: What worked well: directly compared all five new originals, four prior candidate originals and the exact March2025 reference; the now-associated pale returns restore coherent wall continuity and center-divided garage leaves resolve the earlier horizontal-rollup mismatch. Whole silhouette, louvers, brick/window groups, both stairs and central lawn/separate drives remain recognizable under both lights. What did not work well: lower roof bands still read mainly as narrow edges from these ground poses, while the connector top is not available for a comparable surface judgment; flat glazing, uniform lawn and foreground brown joins remain finish limits. Change next time: retain this scoped static PASS with its actual pose/occlusion limits, preserve the original001 HOLD and separate microscopic ground/walking gates, and inspect only the changed seam after the bounded ground repair instead of demanding roof inflation or replaying unaffected art captures. No engine, capture, source/MAIN edit, new resource or overall recognition acceptance. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-first-coherent-study-002/independent-visual-002/REVIEW.md).
+
+### review_1303_source — 1412 source004 ground preparation (exact transcription)
+
+retro_exact: D / review_1303_source —1412 source004 ground preparation: What worked well: preserved all461 owner003 and485 independent-preparation inputs through two changed-file aliases, then shared six already-existing nativeXYZ junctions across the complete16-pair overlap set. Exact constrained-cell coverage and rational intersections now show zero overlaps, with all117 other ground cell streams and all non-ground geometry/material/source channels unchanged. What did not work well: the first before/after union equality check also exposed2.3601576686e-5m² of previously uncovered internal seam area; that diagnostic FAIL is retained. Each addition is now proven inside the six repaired internal wedges with exact opposite neighboring edges, not a new outer extent. Change next time: share canonical incident boundaries before fan emission, and distinguish old native gaps from intended domain preservation. This is file-only construction evidence; original raw003 failures/static evidence and independent runtime/stair gates remain scoped. No engine/import/new stills/controls/terrain/authority or shared RETRO edit. Append once at the next normal designated checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1412-first-coherent-study-004/FILE_READY.md).
+
+### review_1303_source — 1412 source004 focused execution (exact transcription)
+
+retro_exact: D / review_1303_source —1412 source004 focused execution: What worked well: the scoped shared-ground repair passed its one authorized focused run with60,876 checks and479 pins unchanged; original source channels, every unaffected native array and all718 collision triangles remained exact. Fresh terminal/PID/global release preceded collation and E received the result promptly. What did not work well: no execution failure occurred, so no retry/capture-survival improvement is measured here; the old internal-seam/union diagnostic distinction remains disclosed. Change next time: retain canonical shared endpoints from construction and reuse unchanged evidence at its actual scope. No import/stills/mechanics/export or source edit during execution; independent walking and final source acceptance remain separate. Append once at the next normal documentation checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1412-first-coherent-study-004/OWNER_HANDOFF.md).
+
+### review_1303_recovery_result — 1412 source004 independent rebind (exact transcription)
+
+Pending RETRO exact: “E / review_1303_recovery_result,1412 source004 independent rebind: complete old485 bindings resolve through explicit aliases; independently verified zero exact ground overlap, unchanged native vertex set/non-ground arrays/117 cell streams and2.3601576686e-5m² of internal crack closure with zero outer expansion or lost coverage. Rebound only source/count/recipe/consumed-index/prerequisite seams in the already reviewed helper; no fan assumption on repaired cells. D's actual focused result passed while preparation continued; no avoidable wait, engine retry or broad proof replay. Original003 overlaps and first union-equality FAIL stay intact. Next run the first four stock walking attempts once after ROOT GO, retaining complete records and separating roof nonplacement from untested receiver eligibility. No source/control/terrain/authority or shared RETRO edit; append once through the normal designated owner.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1412-first-coherent-study-004/independent-source-mechanics-002/FILE_READY.md).
+
+### review_1303_recovery_result — 1412 source004 independent mechanics (exact transcription)
+
+RETRO exact: “E / review_1303_recovery_result,1412 source004 independent mechanics: one22.433190s engine run, terminal/fresh-absence release before one0.166266s native checker, no retries/import/stills. Original channels, all actual collision sequences and repaired native ground pass;498/498 complete walking records preserve four HOLDs: left side bypass, right first-step stall, both descents airborne. Stable authored roof aim/support and scoped range-rejection nonplacement pass, receiver eligibility remains untested. Keep source geometry, grounded flags, destination ownership and spray masks distinct; no unchanged stair replay while the owner decision is pending. Final collation repeated two avoidable oversized reads of nested pin/material receipts after context recovery; use known leaf fields and existing verified summaries instead of printing nested records. Raw evidence and prior FAILs preserved; no source, controller, acceptance, authority or shared RETRO edit. Append once through the designated owner.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1412-first-coherent-study-004/independent-source-mechanics-002/REVIEW.md).
+
+### capture_1410_revision002 — YMCA next-unit queue preparation (exact transcription)
+
+retro_exact — capture_1410_revision002, next-unit YMCA queue preparation: What worked: checked current213-unit authority first, excluded the14 accepted units and active residential studies, then sampled three distinct existing packets and selected only YMCA for its observed aggregate/entrance composition. Current registry and named local files separate completed live material from zero authored modules; existing work-name inspection found no duplicate YMCA draft. What did not work: dated public-reference originals and local portal/grade preparation are still missing, and the old packet geometry hash is historical; one overly broad matched-spec read truncated output and was narrowed to the needed current registry/material-path facts. Change next time: start from the current exact unit/receiver binding and retained September2025 SSE locator, recover actual reference pixels only under a separate observation assignment, and author one complete entry composition before extending to uncertain service/mural regions. No browser, acquisition, engine, checkout, source/authority/MAIN edit or implementation occurred; only this READY note was written. Keep all213 units, existing credit, protected scope and independent gates. Append once at the next normal serialized checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-next-study-preparation-001/READY.md).
+
+### capture_1410_revision002 — YMCA SSE dated-reference observation (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, bounded YMCA SSE reference observation: What worked well: reused installed Playwright/Chrome with one isolated profile and one retained-panorama navigation; actual URL and UI confirm the September2025 camera/pose,78-degree FOV and target-specific aggregate/portal/glazing/approach pixels. First-building-wall checks at the actual camera independently hit YMCA runs4/5, supporting physical identity beyond the749-address label. One original screenshot remains outside repository/app; awaited close and fresh process evidence show all9 owned browser PIDs absent. What did not work well: networkidle timed out despite the resolved visible panorama, and an initial source-record lookup assumed key/source_key instead of observed object_key/source_keys, causing one file-only StopIteration. Change next time: reuse exact installed paths and actual record schemas, inspect resolved date/pose and scoped visible identity, then preserve the one useful view without navigation/capture retries. No new resources/accounts, browser retry, engine, source/MAIN/authority edit, implementation or recognition credit. Append once at the next normal serialized checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-next-study-preparation-001/REFERENCE_OBSERVATION.md).
+
+### capture_1410_revision002 — YMCA source001 preparation (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA first-study001 preparation: What worked well: created exactly one populated current14 worktree with the command-local LFS bypass, retained the known hook failure, associated the portal across actual runs4/5 and fitted the visible walk to actual land/pedestrian grade. The original live aggregate host remains intact, avoiding decoded/repacked source tangent drift or a misleading neutral baseline. Reused complete camera/capture/check utilities, selected four useful views, and passed the focused final-Float32/path/source-byte and complete whitespace preflight. What did not work well: one authoring grade-summary call failed after emission when a loop shadowed the vector used by path_y; the correction used explicit normal components and the next file emission succeeded. Two early combined reads exceeded the output budget before switching to compact selected reads. Change next time: keep small geometry helpers independent of mutable module-level loop names, retain the real current baseline and both original surface streams, and obtain the coherent actual render/independent verdict before extended proof. Work paused at a safe file boundary for the independent1404 visual002 review, then resumed. No engine/import/capture/export/new resource or acceptance occurred. Append once at the next normal serialized checkpoint; prior YMCA queue/reference and1404 visual002 retrospectives remain separately pending.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-001/FILE_READY.md).
+
+### capture_1410_revision002 — YMCA source001 execution (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA source/capture001 execution: What worked well: one approved import/focused/native sequence produced all four originals, with9614 focused checks and exact preservation of both original aggregate wall surfaces, roof, local source surfaces and all389 frozen inputs; all images were copied unchanged and the slot was released from terminal/fresh-PID/global absence before collation. What did not work well: the preparation said the visible mesh blended over1.8m, but it only sampled that formula at unsplit cell vertices/centers; actual native centerline interpolation spreads the offset transition over about4.0292m. Change next time: distinguish sampled height formulas from the actual emitted planar surface and split at a required breakpoint only when that behavior is intended; keep the raw geometry and original preparation claim intact while recording the correction, and leave path contact/whole art acceptance to independent review. The known inherited import warning retained its scope. No retries, new poses, mechanics, source edit, export, integration, credit or resource acquisition. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-001/OWNER_HANDOFF.md).
+
+### review_1303_source — IndependentYMCA visual001 (exact transcription)
+
+retro_exact: D / review_1303_source —independent YMCA first-study001 visual: What worked well: directly compared all four actual1440×900 originals, their exact durable copies and the dated September2025 SSE reference, retaining the real aggregate host as baseline. The pale portal, blue-gray canopy, grouped glazing and straight approach produce a substantive entrance-recognition gain. What did not work well: the whole candidate still reads as a nearly black unarticulated host with a tall/narrow entrance; near pale faces show stippled/striped shading and the glazing lacks the reference’s lower broader grouped reading. Existing material acceptance and green runtime checks cannot close whole-unit fidelity. Change next time: adjust the coherent portal proportions/material response at these same useful whole/near poses, and separately review the host’s current daylight/panel reading within its authorized scope rather than replacing it silently. No tree, lettering, survey precision, new camera matrix or engine is required by this verdict. Whole-result visual HOLD; no source/mechanics/receiver, continuous movement, package or credit acceptance. Append once at the normal designated checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-001/independent-visual-001/REVIEW.md).
+
+### capture_1410_revision002 — Finite D/E/root1404 efficiency003 (exact transcription)
+
+retro_exact — capture_1410_revision002, finite D/E/root1404 efficiency003: What worked: exact native overlap localization, unchanged face guards and independent exterior-tail classification separated real integrity requirements from inferred visual contours; source002 captured all five views once and no ground-repair engine replay occurred. What did not work: root overconstrained an inferred outer union and repeated oversized reads; E repeated emitter winding/zero-projection assumptions, while D incurred wrong-cwd, missing-namespace and dependent-after-failure file work. These costs have no measured full-workflow duration. Change next time: one bounded experiment states contour correction permission and true protected invariants in the initial repair assignment, measuring any further contour-preservation-only branch/failed expectation; keep existing compact reads, complete helper reuse, exact zero-overlap, source/mechanical/art gates and original failures. This finite review excludes my YMCA work and adds no engine, reporting framework, timer, source/MAIN edit or resource. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/team-efficiency-1404-003/NOTE.md).
+
+### capture_1410_revision002 — MAIN documentation checkpoint004
+
+What worked: checked actual389/460/519 maps and both active authors' confirmation that MAIN docs are excluded, preserved the existing dirty prefix/state, and appended18 supplied completed retrospectives exactly once. Historical preparation claims remain distinct from later outcomes, including YMCA's corrected emitted grade and whole-result visual HOLD;1412's four walking HOLDs and receiver limit persist. What changed: added one paragraph to the existing consumed-geometry lesson explaining why a sampled1.8m height formula produced a roughly4.0292m native centerline transition. Root accepted efficiency003's single initial-assignment contour-scope experiment; its future event count is unmeasured, with no extra gate or run. Change next time: retain truthful bounded contour corrections and measured emitted-surface descriptions without turning previous inferred outlines/formulas into unintended product invariants. Active1404 source003/mechanics remain open and excluded. No AGENTS/skills/source/candidate change, engine, acquisition, real-index stage, commit or push.
+
+## Completed rounds — normal checkpoint005
+
+### review_1303_source — 1404 source003 preparation (exact transcription)
+
+retro_exact: D / review_1303_source —1404 source003 ground preparation: What worked well: E’s exact native overlap localization bounded three existing-point insertions; after a same-land/material137+169 divider merge, all four positive overlaps were removed without changing source terrain, materials, stairs, roof, controls or collision. E independently classified the9.631410877e-8m² removed area as exterior-tail trim with no new hole/component and root accepted it as production outline correction. What did not work well: the initial parent-cwd invocation found no helper, greedy and full constrained169 ear probes failed the retained guard, one local diagnostic omitted __file__, a dependent coverage invocation followed a failed payload, and an overly strict old-union criterion delayed the scope decision. All failed probes remain. E then caught61/69 zero-XZ winding labels in the new recipe; deriving every sequence from actual unchanged indexed triangles corrected metadata only. Change next time: bound intended outline invariants before requiring equality to a flawed inferred union, validate the complete final ear remainder, invoke dependent file checks only after success, and derive metadata from actual emission including zero-projection branches. All source002 renders remain applicable only at their accepted static scope. No engine, import, still, walking, export or credit occurred in003 preparation; complete selected whitespace passed. Append once at the normal designated checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-first-coherent-study-003/FILE_READY.md).
+
+### review_1303_source — 1404 source003 execution (exact transcription)
+
+retro_exact: D / review_1303_source —1404 source003 focused execution: What worked well: the sole approved focused stage passed on its first launch,75,506 checks in2.496875125s; all460 frozen inputs, actual original-builder source channels,16 unchanged added mesh streams and all710 ordered collision faces remained exact. Repaired court channels matched the final authored payload in native representation; actual4439render triangles were measured. Actual terminal/fresh PID/global absence released the engine before handoff collation. What did not work well: no runtime setup failure occurred; the earlier file-only ear, union and recipe failures remain in their preparation records, and focused PASS does not provide walking/roof or independent final geometry acceptance. Change next time: reuse this completed source result as E’s existing independent mechanics prerequisite without import, still or source replay; retain the explicit tiny exterior-tail contour correction rather than relabeling it unchanged union/internal closure. No extra engine/query/retry, capture, export, source/MAIN/RETRO or authority mutation occurred during execution. Append once at the normal designated checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-first-coherent-study-003/OWNER_HANDOFF.md).
+
+### review_1303_recovery_result — 1404 source003 independent mechanics (exact transcription)
+
+RETRO exact: “E / review_1303_recovery_result,1404 source003 independent contact001: one22.118192s approved engine run, actual terminal/fresh-absence release before one0.196066s native checker. Native geometry/original channels/collision and isolated roof support/aim pass;500/500 saved traces preserve four walking HOLDs with exact logged outcomes: left land bypass, right first-step/source-wall stall, both descents airborne. Complete-record reuse needed no logging-only rerun. Two compact collation reads avoided nested pin/material dumps; no execution, checker or collation failure/retry. Scoped mask4 range-rejection nonplacement remains distinct from the mask1 roof hit and untested receiver eligibility. Retain old geometric/metadata failures and the bounded outer-trim interpretation, and do not replay unchanged stairs while the owner decision is pending. No source/control/terrain/authority, acceptance or shared RETRO edit; append once through the designated owner.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1404-first-coherent-study-003/independent-source-mechanics-001/REVIEW.md).
+
+### review_1303_recovery_result — YMCA retained001 path review (exact transcription)
+
+RETRO exact: “E / review_1303_recovery_result, YMCA001 independent path: retained actual native arrays established closed congruent collision, exact four-cell coverage/zero top overlap and full actual land support without an engine or asset change. Reproduced the corrected4.0292m interpolation rather than imposing the old1.8m prose. Reading actual pedestrian collision state revealed the meaningful81.3mm land-to-path transition hidden by the1mm visual join, so proposed only one stock approach/return before deciding on repair. One source-state read unnecessarily expanded the pedestrian material block; project known body/shape fields next time. No checker retry, art duplication, general audit, source/control/terrain/authority or shared RETRO edit. Path retained for independent art work; actual contact and whole-unit acceptance remain open. Append once through the designated owner.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-independent-path-001/REVIEW.md).
+
+### capture_1410_revision002 — YMCA002 diagnosis/proposal (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA002 bounded diagnosis/proposal: What worked well: actual native material bindings and camera-facing source runs explained the old dark host without inventing a fallback; bounded native face comparisons exposed coincident/shared pale geometry, and concrete low/broad proportions plus a private observed-side shader delta keep one coherent next render. What did not work well: the saved evidence does not isolate the full white stipple/shadow cause, and a resumed temporary-directory file listing included browser-profile files and exceeded output budget before narrowing to exact receipts. Change next time: read named receipts directly, distinguish measured geometry from artifact hypotheses, and judge the plausible bounded fix in the already-required same four views rather than extending file-only diagnosis or adding a capture matrix. Candidate001 and389 pins remain exact; no engine, new resources, MAIN edit or revised PASS. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/DIAGNOSIS_PROPOSAL.md).
+
+### capture_1410_revision002 — YMCA002 implementation/preparation (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA002 implementation/preparation: What worked well: preserved all001 source/evidence through explicit before-images, emitted a canonical single pale/canopy exterior boundary, retained the independently reviewed path exactly, and reused complete successful capture/focused/runner helpers with a narrow actual-native material-mask guard. What did not work well: the first whitespace collector mistakenly required exit0 even though all10 no-index comparisons returned1 with empty diagnostics; corrected its interpretation and retained the condition in WHITESPACE_PREFLIGHT, without product changes or engine retries. An initial combined helper/rules read exceeded the aggregate output budget; only missing driver/runner spans were recovered. The previous diagnosis described source-normal mask values too strongly as native values; this handoff corrects the distinction and leaves actual indexed packing verification pending. Change next time: reuse the complete known whitespace-return convention as well as its command, keep projected reads within the total output budget, and separate source-normal inference from executed native mask evidence. Same four-view coherent render is next; white-artifact clearance, visual acceptance and stock path contact remain unproved. No new resources, engine, MAIN edit or credit. Append once at the next normal checkpoint, alongside the already-pending002 diagnosis retrospective.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/FILE_READY.md).
+
+### capture_1410_revision002 — YMCA002 failed focused execution (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA002 failed focused execution: What worked well: strict native index validation failed early, preserved all418 inputs and prevented native capture under an incorrect expectation; actual terminal/PID/global absence released the slot promptly. What did not work well: I compared the accepted native draw order to raw source indices despite the ordinary builder's established per-triangle winding conversion. Change next time: derive expected consumed indices from that original builder convention before writing strict checks; preserve equality and the exact3–7 normal guard rather than weakening either. Root authorized only the smallest file-only guard correction; no retry, image, revised visual/mechanical PASS or credit occurred. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/OWNER_HANDOFF.md).
+
+### capture_1410_revision002 — YMCA002 index-guard repair preparation (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA002 index-guard repair preparation: What worked well: read the actual original builder conversion and accepted-run partition, corrected only the expected winding permutation, preserved every strict native equality/mask predicate and all failed evidence, and rebound complete working helpers to new attempts. What did not work well: the original guard duplicated the source-order assumption instead of matching the already-established consumed convention. Change next time: use the ordinary original-stream transformation explicitly in both owner and independent guards; E was informed before its independent freeze. No geometry/shader/pose change, new engine execution, visual/mechanical PASS or credit. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/source-index-repair-001/FILE_READY.md).
+
+### capture_1410_revision002 — YMCA002 repaired execution (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA002 repaired source/native execution: What worked well: the one expected-order correction passed the strict all54 native index/normal guard and retained all10 fallback parameters; complete reused helpers saved4/4 original views under the existing lighting/cameras, original host/ground identity remained exact, and actual terminal/global absence released the slot before byte-identical image collation. What did not work well: the earlier focused-002 guard error cost one3.912911916s failed engine invocation before this approved correction; that raw failure stays separate and is not recast as success. Change next time: preserve the exact ordinary builder consumed-index convention when adding owner or independent source checks; keep the next visual and stock-contact verdicts independent rather than infer them from19,517 focused checks. This repaired pair ran once, with no extra import/capture/matrix/resource or MAIN/authority edit. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/source-index-repair-001/OWNER_HANDOFF.md).
+
+### review_1303_source — YMCA002 independent visual (exact transcription)
+
+retro_exact: D / review_1303_source — independent YMCA source002 visual: What worked well: directly compared all four actual originals and exact durable copies with the dated September2025 SSE reference and retained001 whole/near images; the revised broad low portal, grouped glazing and olive-gray panelled host now form a coherent source-supported composition. What did not work well: default-light whole02 and near04 retain conspicuous under-canopy stippling and short vertical marks on the pale faces; the calmer changed-light03 does not clear that finish failure. Pixels do not establish its rendering cause. Change next time: diagnose this bounded material/light/geometry response before another cosmetic change, retaining current proportions, host gains and these same useful poses. Scoped fidelity gain accepted, overall visual HOLD for pale-face finish; no technical, contact, continuous-motion, package or credit claim. Append once at the normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/independent-visual-002/REVIEW.md).
+
+### review_1303_recovery_result — YMCA002 independent source/path contact (exact transcription)
+
+RETRO exact — E / review_1303_recovery_result, YMCA002 independent source/path contact: What worked well: complete repaired world/camera helpers, strict original native index mapping, actual candidate activation and completed-record pattern yielded one continuous real approach/return with710/710 movement/brake rows,30 setup rows and matching saved/logged outcomes; both owned destinations passed without reset or controller change. Released actual terminal/PID/global absence before independent collation. What did not work well: preparation repeated the author's raw/native index-order assumption and had one oversized combined read plus one guessed helper filename; direct builder/partition and current parent API inspection corrected these before the only mechanics run. Two early5s process polls added no information; use one appropriately bounded wait once the actual PID is known. Change next time: establish consumed conventions/stage names before guard drafting, budget aggregate reads, and continue distinguishing persistent grounding from newly emitted slide contacts. No logging-only replay, geometry/control/route edit or new resources; raw failed002 and initial helper preserved. Broader entrance geometry, pale shading and whole-unit acceptance remain separate. Append once through designated RETRO owner.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/independent-source-mechanics-001/REVIEW.md).
+
+### review_1303_recovery_result — YMCA002 remaining entrance geometry (exact transcription)
+
+RETRO exact — E / review_1303_recovery_result, YMCA002 independent remaining entrance geometry: What worked well: used the actual repaired native dump, classified consumed pale/canopy faces against occupied authored cells, reused the existing exact Fraction clip for the native grid, and separately verified closed glazing/trim plus visible/collision ownership without another engine or path replay. All700 union faces and30 boxes were accounted for; preserved source/control/path evidence stayed bound to the prior independent contact run. What did not work well: no checker or input failure in this bounded round; box-face and footing classification were short supplemental collation passes after the main0.185s local script, not additional runtime proof. Change next time: keep such final affected-face/source-fit interpretation within the same compact geometry review and distinguish intentionally noncolliding applied trim from the colliding union. No asset/general cleanup, controller/terrain/MAIN edit, new framework/resource, art judgment or recognition credit. Pale shading remains independent. Append once through the designated RETRO owner.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-independent-entrance-geometry-001/REVIEW.md).
+
+### capture_1410_revision002 — YMCA002 pale-finish diagnosis (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA002 pale-finish read-only diagnosis: What worked well: used the actual unchanged native white materials/normals, current light configuration and D's whole-result judgment to stop unsupported geometry churn; directly acknowledged that the unified-boundary hypothesis did not resolve the pixels. What did not work well: the prior native helper did not retain actual bias/filter settings, so the renderer cause cannot be isolated from the saved receipt. Change next time: include a small actual light-setting readback in the next already-required relevant capture, and—only if root authorizes this broader scene-light scope—test one normal-bias factor with ordinary shadows retained rather than change several variables or invent defaults. Current source remains frozen for E; proposal only, no new visual/mechanical PASS or credit. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/finish-shadow-proposal-001/PROPOSAL.md).
+
+### capture_1410_revision002 — YMCA normal-bias diagnostic preparation (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA paired diagnostic pose/readback preparation correction: What worked well: root review caught the loaded-Euler versus explicitly assigned pose boundary before any engine run; the narrow helper correction establishes the identical approved pose before binding state and checks the actual distinct intended normal-bias readback. What did not work well: the initial helper could have reported a false only-one-parameter/restore failure because it captured state before inherited pose setup. Change next time: bind paired diagnostic comparisons after their shared setup, and validate the changed property's actual consumed value. Earlier preparation bytes/pins remain preserved; no product edit, engine or new acceptance claim. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/finish-shadow-diagnostic-001/FILE_READY.md).
+
+### capture_1410_revision002 — YMCA normal-bias diagnostic execution (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA paired normal-bias diagnostic execution: What worked well: one shared-pose pair measured actual2.0 and2.5 bias, retained all other settings, restored the original complete shadow state, saved2/2 separately labelled originals and released the actual engine process before interpretation. What did not work well: the modest bias change did not visibly clear the pale stippling/short marks, so this proposed correction is unsupported; the experiment does not identify a unique cause. Change next time: use the measured settings and failed bounded hypothesis in deciding the next investigation, preserving independent geometry/contact/visual conclusions rather than performing an unapproved sweep. No source/main-light edit, extra run, production adoption or credit. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/finish-shadow-diagnostic-001/OWNER_HANDOFF.md).
+
+### review_1303_source — Fire Station48 queue preparation (exact transcription)
+
+## retro_exact
+
+D — Fire Station48 next-study preparation: The current d6ff2813 catalog/registry resolved the exact unaccepted physical unit and showed that the earlier material prototype did not survive its receiver rejection: all26 runs are placeholder with no active module. Existing May2019/September2025 locators provide a bounded next observation step, but no retained reference pixels were found in the checked temporary/output locations, so this round did not claim visual readiness. Next, recover one useful dated public-side original with exact target/side association before coherent authoring; keep production-inference dimensions separate from missing semantic evidence and preserve source/grade ownership. No engine, acquisition, new checkout or authority change occurred.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station-48-next-study-preparation-001/READY.md).
+
+### review_1303_source — Fire Station48 dated-reference observation (exact transcription)
+
+**retro_exact:** D — Fire Station48 bounded WSW reference observation: The retained pano resolved on one navigation to the exact September2025 camera,125-degree heading and70-degree FOV; one unedited original shows the long pale wall, small framed-window register and thin roof edge. Current-source first-building rays hit target WSW0/1/3/8 and NNW24/25, so the811 Ave I label was not used as identity. The initial bare Playwright import failed before launch; the confirmed installed CommonJS entrypoint and prior persistent-context options succeeded without installation. Networkidle timed out despite the resolved visible panorama, so no navigation or screenshot retry was performed. One file-only source inspection also assumed the foundation-count field was a list; the actual vertices supplied the existing segment schema, with no source change. Awaited context close and fresh ps show all10owned PIDs absent. Next time reuse the complete confirmed import and launch expression, preserve the actual date/pose and target association, and keep occluded lower openings/other sides unknown. No engine, authoring, asset reuse, source/authority change or credit; append once at the next normal serialized checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station-48-next-study-preparation-001/REFERENCE_OBSERVATION.md).
+
+### review_1303_source — Fire Station48 source001 preparation (exact transcription)
+
+**retro_exact:** D / review_1303_source — Fire Station48 first coherent study preparation: What worked well: the newly inspected exact September2025 panorama and current first-building ray association supplied the public WSW/NNW side hierarchy; the isolated checkout populated exactd6ff2813 despite the preserved missing-LFS posthook exit2. One draft combines a quiet pale field,13 complete high framed windows and thin roof/head strips without invented operational openings, ground fill or changes to the source6m mass. Native-Float32 face/strip checks and original land anchor inspection passed; the complete selected new-file whitespace check used an isolated index. What did not work well: an initial private strip draft had separate corner caps; before freeze it was changed to a canonical shared public25->0 miter and internal caps removed, with render prediction1190->1182. One filename lookup guessed a nonexistent seal-preparation.py before locating the successful isolated-index finalize path. No engine or failed capture occurred. Change next time: carry the exact working helper/import/receipt and actual source-channel representation together, check final shared strip coordinates before freezing, and use the first four actual planned views for whole-result judgment rather than extending proof work. Original-source tangent equality, material response, framing, grounding and all independent acceptance remain unrun. No MAIN/RETRO/authority/export or credit change; append once at the normal designated checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-first-coherent-study-001/FILE_READY.md).
+
+### review_1303_source — Fire Station48 source001 execution (exact transcription)
+
+**retro_exact:** D / review_1303_source — Fire Station48 first coherent execution: What worked well: the frozen import→focused→native sequence ran once per approved stage without repair or retry. Focused15,359checks and the actual live-world comparison confirmed original pre-packing channel/tangent preservation, exact protected/roof materials and62original collision triangles; only the authorized public material differed. Four planned1440×900 originals were retained and copied unchanged, three whole views passed full-facade framing and all four settled on direct original-land support. What did not work well: the inherited western-bridge GLB import retained its specular/glossiness conversion warning; actual material/recognition quality is not established by clean technical captures. The near view intentionally does not contain the whole facade, and no movement/roof traversal or continuous support was tested. Change next time: let separate whole-result reference/visual and affected technical reviewers judge these actual first pixels before further authoring or package work. Process durations10.216/3.603/15.328s are stage timing only; no full-workflow speed claim. All415inputs remained exact; all3PIDs are freshly absent with globalengine[]. No additional view, source/MAIN/RETRO edit, export, authority or credit. Append once at the normal serialized checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-first-coherent-study-001/OWNER_HANDOFF.md).
+
+### capture_1410_revision002 — Fire Station48 visual001 (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, independent Fire Station48 visual001: What worked well: directly compared all four native originals with the actual dated/associated reference, separating real palette/window/corner gains from the smooth wall's missing observed cladding character and the near head-strip fringe. What did not work well: technical success and added windows do not establish whole-result fidelity; the candidate still misses the restrained vertical panel rhythm visible above the fence, and the near line has a broken dotted reading. One broad JSON text search unnecessarily included the owned-browser command receipt; only named provenance fields were read afterward. Change next time: keep direct whole/near/reference comparison, use a quiet observed-face material correction and diagnose the existing thin strip, with protected/hidden scope intact and no larger matrix. No engine, asset edit, external acquisition, mechanical/package verdict or recognition credit from this review; append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-first-coherent-study-001/independent-visual-001/REVIEW.md).
+
+### review_1303_source — Fire Station48 source002 preparation (exact transcription)
+
+retro_exact: D / review_1303_source — Fire Station48 source002 file preparation: What worked well: inspected actual001 head-strip native positions/material and dated reference before changing the study; quantified its0.48–1.39px whole and0.78–2.16px near projected height, retained all415 old inputs through three before-images, and preserved the four remaining added arrays, original pre-packing source/collision paths, same four cameras and lights. The bounded correction adds restrained filtered upper cladding and replaces only the inferred tiny relief band with a filtered tonal line. What did not work well: current pixels and file geometry do not prove the fringe cause; C’s separate YMCA finding cannot establish a shared cause. Change next time: test the actual coherent correction with the already useful four views after the strict reused source check, retaining failures and nonfatal-diagnostic stills.437 file checks include415 preservation pins; they are not437 topology checks. No engine/import replay, source terrain/control/authority edit, independent acceptance or credit occurred. Append once at the normal designated checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-first-coherent-study-002/FILE_READY.md).
+
+### review_1303_source — Fire Station48 source002 execution (exact transcription)
+
+retro_exact: D / review_1303_source — Fire Station48 source002 execution: What worked well: the approved focused/native pair ran once, passed14,197 focused checks and all four planned captures, retained449 pins, exact original live-builder channels/tangents and all four unchanged added streams, and released both actual PIDs before byte-identical image collation. The private shader compiled and its actual parameters/public binding passed; measured source-only collision remains52wall+10roof. What did not work well: an unnecessary inline precheck matched its own shell command text and asserted before launch; the unchanged reviewed runner independently passed its fresh-absence/pin gate and performed the sole focused invocation. That extra setup failure is preserved, not a source or engine failure. Change next time: rely on the complete reviewed runner’s prelaunch gate rather than duplicate a substring scan; use executable identity for the separate release snapshot. Same four originals now require C’s whole-result visual decision; no root-cause, movement, receiver, package or recognition claim follows from native PASS. No import replay, automatic retry, source/light/authority change or additional capture. Append once at the next normal designated checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-first-coherent-study-002/OWNER_HANDOFF.md).
+
+### capture_1410_revision002 — Fire Station48 visual002 (exact transcription)
+
+retro_exact — capture_1410_revision002, Station48 visual002: Worked: direct comparison of all four new originals, the dated reference and old near view established a quieter continuous head line, readable fine upper cladding and retained whole-building gains. Failed/limited: static pixels cannot establish dynamic filtering, hidden lower-wall fidelity, surveyed dimensions or the old fringe's cause. Change: close the prior static material HOLD within the observed public exterior only; preserve reference limits and separate technical/integration gates. No extra render or source edit.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-first-coherent-study-002/independent-visual-002/REVIEW.md).
+
+### review_1303_source — Independent YMCA shading diagnosis (exact transcription)
+
+retro_exact: D / review_1303_source — independent YMCA shading diagnosis: directly viewed both failed-to-clear bias originals, checked actual settings/restoration and E’s consumed entrance review, and verified local MAIN14/213 without changes. The evidence supports isolating Sun shadow participation before parameter tuning; it does not prove16-bit depth, packed normals or an engine cause. Recommend only one same-near shadow_enabled true→false→restore diagnostic pair with actual readbacks, leaving direct illumination/source/geometry unchanged and production adoption separate. No engine, screenshots, source edits or acceptance change occurred. Append once at the normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-shading-independent-diagnosis-001/NOTE.md).
+
+### review_1303_recovery_result — Finite YMCA–Station48 efficiency (exact transcription)
+
+RETRO exact — E / review_1303_recovery_result, finite C/D/ROOT YMCA–Station48 efficiency: Actual receipts separated quick engines from unallocated preparation/review intervals. Strict failure, direct art review, ROOT's caught setup bug and one negative hypothesis were useful; raw/native guard assumptions and an extra self-matching process scan added avoidable work. E's other work was excluded. Propose only two-stage single-equivalent-preflight trial, measured in ordinary RETRO without weakening gates. Two broad retrievals exceeded their budgets; only relevant missing visual paragraphs were recovered. No engine, source/harness edit, new framework or ongoing monitoring. Append once through the designated owner.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/team-efficiency-ymca-station48-001/NOTE.md).
+
+### capture_1410_revision002 — MAIN documentation checkpoint005
+
+What worked: MAIN remains d6ff2813 with14 accepted physical units out of213; current448/461/449/485 pin maps and both active authors exclude mutable MAIN documents. Preserved the full dirty prefix, AGENTS/LEARNINGS, real index/config/hooks, four unrelated UID files and authority. Appended25 completed authors’ exact retrospectives once, keeping historical preparation/failure claims distinct from subsequent scoped outcomes. Same-round E draft preparation notes are represented by their completed final reviews, not repeated as separate completed rounds. What did not work: two combined documentation retrievals exceeded their aggregate output budget, followed by one unnecessary long map-key projection; only missing relevant sections were recovered, with no source/engine effect. Change next time: project only selected fields and size the combined output before dispatch. Existing LEARNINGS already covers consumed representations, whole-result review and complete helper reuse, so it remains unchanged. Root adopted E’s single-equivalent-launch-preflight experiment for the next two eligible stages: use the reviewed runner’s existing fresh pin/engine/output checks once, omit only redundant inline scans, and count extra scans/false stops in ordinary RETRO. ROOT GO, identical predicates, failure stops, independent gates and terminal release remain mandatory; no new success/speed measurement exists yet. Station48 independent source/geometry and live-attachment preparation remain open; the next YMCA shadow-participation diagnostic is not yet prepared or run. No engine, product/candidate/authority/skill change, resource, stage, commit or push.
+
+## Consolidated completed rounds — MAIN documentation checkpoint006 (2026-09-10 PDT)
+
+Exact retrospective transcriptions below preserve their original preparation-time limits and failed attempts. Later scoped outcomes do not rewrite earlier evidence.
+
+### review_1303_recovery_result — Station48 source002 independent source/geometry (exact transcription)
+
+**retro_exact:** E independently reviewed Station48 source002 from its existing native/source evidence; original 13-channel/public/protected/material boundaries, source-only 62 collision triangles, 78 separate window boxes and three closed roof-edge components passed at the scoped study level. Exact emitted roof-top coverage had zero overlap and matched its actual boundary rings. Static contacts remain two unique source-land positions, not path or spray acceptance; no extra engine was needed for unchanged collision/ground. One oversized nested-material read was avoidable; subsequent reads projected counts/booleans. The reused exact clipper initially stopped because a hard-coded 65536 grid could not represent x 125.1176986694336; the failed helper/diagnostic are retained under before-grid-correction, and the corrected 131072 grid kept all exact predicates. Derive coordinate precision from actual consumed positions when binding a reused checker. No product or authority edits.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-independent-source-geometry-001/REVIEW.md).
+
+### review_1303_recovery_result — Station48 loader/registry coupling (exact transcription)
+
+**retro_exact:** E traced Station48’s existing loader/builder/1317 and stock spray seam. No loader/authority/controller edit is required for the uncredited candidate; exact pair consumption and wall/roof body/shape/render-layer ownership are the required hooks. Candidate topology remains separate from accepted 14/213 authority. No edits or engine. Initial oversized reads and one mistaken JSON unit-key assumption were avoidable; bounded symbol/key reads resolved them without runtime retries.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-independent-source-geometry-001/loader-coupling-001/NOTE.md).
+
+### review_1303_source — Station48 live attachment preparation (exact transcription)
+
+**retro_exact — D / Station48 live attachment preparation:** Preserved the four reviewed study002 products and all449 prior inputs through a single explicit builder alias; added only supplied-pair attachment and receiver separation. Reused the complete1317 lifecycle/source-world helper, with actual original-producer injection to avoid a builder preload cycle and preserve pre-packing tangent values. One file-only final-summary shape error and two pre-freeze EOF blank lines were retained and corrected before sealing; engine invocations0 and successful-stage replays0. Current14/213 authority is unchanged; all actual attachment, motion/spray and independent live gates remain open.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/FILE_READY.md).
+
+### review_1303_source — Station48 stopped live attachment execution (exact transcription)
+
+**retro_exact — D / Station48 live attachment execution:** Stage2 of the finite preflight experiment launched import001 once (5.111408s,exit0) and focused001 once (59.906677375s,stopped−15). The external frozen-study comparison used an unresolved renamed global-class constructor; depended-script and OLD.build_for_records errors prevented a focused result. All483pins remained exact; no measured-world/attachment acceptance, source repair, retry, motion or export. Both PIDs were freshly absent and global engines empty before collation. Retain the raw FAIL and use explicit pinned-script instantiation/typed dynamic construction for a separately reviewed external-only repair; import need not be replayed. Successful-stage replays0; timing is process scope only.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/OWNER_HANDOFF.md).
+
+### review_1303_recovery_result — Station48 independent static source/lifecycle (exact transcription)
+
+**retro_exact:** E independently reviewed Station48’s supplied-pair builder seam, original-producer injection, exact wall/roof ownership and cleanup. Static implementation review found no concrete product defect; runtime source/lifecycle remains HOLD because the actual focused run failed in an external global-class self-reference and emitted no result. Preserve import success, raw failed receipt and terminal release; use the reviewed comparison-only repair before interpreting actual attachment. No geometry replay, engine or product edits. One initial receipt read unnecessarily printed its large pin map; later reads selected terminal/error fields only. Motion/spray/visual-motion remain separate gates.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/independent-source-lifecycle-001/REVIEW.md).
+
+### review_1303_source — Station48 comparison-only repair preparation (exact transcription)
+
+**retro_exact — D / Station48 comparison-only preparation:** Preserved the failed focused001 helper/log/483-map and all production files. Replaced only the external unregistered self-class construction with the explicitly loaded script resource and typed dynamic call, checked its sole remaining self-name declaration, and rebound unchanged equality checks to a fresh focused002 output. Original import001 is reused; no engine, source edit or acceptance claim in this preparation.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/comparison-repair-001/FILE_READY.md).
+
+### review_1303_source — Station48 repaired live attachment execution (exact transcription)
+
+**retro_exact — D / Station48 live attachment repaired execution:** The separately reviewed explicit-script comparison repair enabled one focused002 invocation:698 checks PASS,18.783815375s,PID49738 terminal0,502inputs exact, clean log. Original seven-mesh array/tangent/material state, source52/10collision and real wall/roof ownership/lifecycle passed; ordinary world measured735/1023/1038/82789/466/477. Successful import was reused, the failed focused001 remains raw, successful-stage replays0 and automatic retries0. The existing standalone release recorded fresh PID/global absence before collation without another inline scan. Process timing is not workflow/model time; motion/spray/visual-motion/package and independent runtime acceptance remain separate, authority14/213 unchanged.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/comparison-repair-001/OWNER_HANDOFF.md).
+
+### review_1303_recovery_result — Station48 independent repaired runtime interpretation (exact transcription)
+
+**retro_exact:** E independently confirmed that Station 48's external comparison repair changes only the two reviewed constructor/call lines and preserves every focused predicate. The actual 698-check focused002 PASS establishes same-runtime native/source preservation, configured wall/roof ownership, exercised pair lifecycle and real ordinary-world attachment with the exact expected count delta and 20 non-target records retained. Carry the prior geometry/static reviews, preserve failedfocused001, and retain motion, actual spray placement and visual-motion gates; 14/213 authority remains unchanged. No engine or unchanged proof replay was needed.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/comparison-repair-001/independent-source-lifecycle-002/REVIEW.md).
+
+### review_1303_recovery_result — YMCA persistent-mark localization (exact transcription)
+
+**retro_exact:** E independently separated YMCA’s shadow-dependent canopy stippling from its persistent left-panel marks. All 43 dark pixels exactly matched the projected subpixel side of one real pilaster; original host geometry lay more than 1.16m behind those hits. This localized sampling/face shading, not a closure/source-overlap defect, without another engine run. The raw diagnostic’s exact-basis inequality remains a FAIL with a measured 0.00002244-pixel effect in this region. A broad settings read and unavailable PIL import were unnecessary; subsequent output selected only the required fields and a small read-only PNG/projection helper completed the bounded diagnosis. Production finish remains unaccepted by this note.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-persistent-mark-localization-001/FINDING.md).
+
+### capture_1410_revision002 — YMCA shadow-participation diagnostic preparation (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA shadow-participation diagnostic preparation: What worked well: reused the complete successful near/world helper but performed shared aiming/settling once, retained actual transform/state readbacks at both images, and isolated one shadow-enabled boolean with restoration. Inspection found the earlier YMCA runner lacked the global/output predicates assumed by the efficiency proposal; the complete existing Station48 predicates are now explicit in this proposed runner delta. What did not work well: the earlier normal-bias experiment did not resolve the finish and does not establish a precision cause; no new runtime outcome exists yet. Change next time: use this reviewed complete runner once as eligible trial stage1, record duplicate scans/false stops in the normal execution retrospective, and preserve diagnostic failures/original images without production-light changes or an unapproved sweep. No engine, product/source/MAIN change or new resource; append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/finish-shadow-participation-diagnostic-001/FILE_READY.md).
+
+### capture_1410_revision002 — YMCA shadow-participation diagnostic execution (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA shadow-participation diagnostic execution: What worked well: the reviewed runner supplied one complete launch preflight with zero duplicate scans/false stops; one setup and two post-draw originals isolated shadow_enabled, preserved462 inputs and restored all observed light/project values before terminal release. Actual images show the stippling disappears without Sun shadows, while short pale-face marks remain and depth/cast shadows are lost. What did not work well: the strict same-view predicate failed on three camera-basis values despite no repeated aim, with maximum component drift3.35276127e−8; raw failure and both originals are retained. Change next time: use the scoped visual discriminator and actual drift, do not claim a unique cause or production fix, and keep the second eligible preflight trial pending. No retry, new view, geometry/material/global-light file change, new resource, acceptance or credit. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/finish-shadow-participation-diagnostic-001/OWNER_HANDOFF.md).
+
+### capture_1410_revision002 — YMCA precision diagnostic preparation (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA precision-diagnostic verification/preparation: What worked well: exact-version primary docs/source and the existing binary establish the supported atlas setter, its requested16/32-bit branch and restoration path; the complete prior one-setup helper/runner was reused with only the precision/readback and camera-comparison changes. What did not work well: a primary rendering-server source-page request returned an internal web error; the exact class documentation and RD implementation supplied the needed contract without a download or engine probe. Prior pose normalization drift is recorded rather than treated as a product invariant. Change next time: distinguish effective configuration getters, completed void API requests and unavailable GPU storage readback; judge the one bounded pair before any production decision and keep vertical-mark geometry separate. Stage2 of the single-complete-preflight experiment remains unrun. No resource, source/MAIN edit, engine or acceptance; append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/finish-shadow-precision-diagnostic-001/FILE_READY.md).
+
+### capture_1410_revision002 — YMCA precision diagnostic execution (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA precision diagnostic execution: What worked well: one complete reviewed runner preflight and one shared-view pair preserved476 inputs, checked actual engine/API availability, recorded4096 true→false→true requests separately from unchanged configuration getters, and retained two originals plus the small camera-basis differences without a logging-only retake. Cast shadows remained visible and the configured-original precision was requested before terminal release. What did not work well: the requested32-bit comparison did not visibly clear the stippling or short marks; a completed API request is not a GPU-format readback or a unique-cause finding. Change next time: retain this negative bounded result alongside the successful shadow-participation discriminator and E’s separate mark localization instead of sweeping parameters or changing geometry speculatively. The frozen proposed stage2 label was overtaken by D’s actual import; record the true later order without rewriting preparation. No extra scan/false prelaunch stop, retry, source/MAIN/light edit, new resource, acceptance or credit. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/finish-shadow-precision-diagnostic-001/OWNER_HANDOFF.md).
+
+### capture_1410_revision002 — YMCA sampling-quality candidate preparation (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA sampling-quality candidate preparation: What worked well: E’s exact43-pixel/native-face association and the failed precision pair bounded a practical coverage-plus-shadow-sampling candidate; exact-version primary docs verified runtime controls and exposed high filtering’s built-in1.5× constant-blur effect. Reused the complete one-setup helper, state comparisons/restoration and single runner preflight. What did not work well: earlier stored AA settings did not establish runtime viewport state, and no setting combination has yet proved the finish clean or affordable in motion. Change next time: observe actual viewport getters, distinguish them from configuration and void filter requests, then judge this one coherent same-pose candidate before any further setting or geometry work. No engine, source/MAIN/light file change, resource, new matrix or acceptance; append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/sampling-quality-candidate-001/FILE_READY.md).
+
+### capture_1410_revision002 — YMCA sampling-quality candidate execution (exact transcription)
+
+RETRO_EXACT — capture_1410_revision002, YMCA sampling-quality candidate execution: What worked well: one complete preflight and one shared-view pair confirmed actual viewport0→4×→0 MSAA getters, retained other AA/scaling states, requested low→high→low shadow filtering and restored observed state with491 pins exact. Both originals survived; the combined candidate softened the isolated pilaster dashes and outlines while keeping shadows and geometry. What did not work well: noticeable diagonal shadow hatching remains, so runtime PASS and the edge gain do not close finish quality; the combined pair cannot attribute each contribution or establish motion/performance. Change next time: keep the concrete partial result and all exact readbacks, judge the remaining shadow field directly, and obtain one bounded next authorization before further settings or adoption. No retry, extra view, duplicate scan/false prelaunch stop, source/MAIN/light file change, resource or acceptance. Append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/sampling-quality-candidate-001/OWNER_HANDOFF.md).
+
+### capture_1410_revision002 — MAIN documentation checkpoint006
+
+What worked: appended 15 completed authors’ exact retrospective bodies once, with the full prior RETRO prefix and guarded MAIN state retained. Both active authors confirmed MAIN docs are unbound; the actual 502-pin Station48 repair and 491-pin YMCA sampling maps also exclude them. Historical static/runtime HOLD and the stopped external-helper failure remain separate from the later independent 698-check source/lifecycle PASS. Shadow participation removed stippling while leaving pilaster marks; the requested precision change did not visibly clear either; the sampling pair improved edges but retained hatching. These are scoped observations, not a clean finish, motion/performance result or recognition credit.
+
+Actual experiment order: YMCA shadow-enabled001 was eligible preflight stage1; Station48 import001 was stage2, followed by its failed focused001. The precision preparation’s proposed stage2 label was overtaken and remains unchanged historical prose; actual precision and sampling runs followed later. The reviewed runners supplied the complete required launch predicates without redundant inline launch scans or false prelaunch stops in those eligible stages. Station48’s external compile failure and its separate failed release-observation assertion remain recorded; they are not hidden as successful preflight outcomes or charged as measured compiler/model time. No full-workflow speed claim.
+
+What did not work: the preceding checkpoint’s heading-only queue transcription omitted its body until ROOT caught and corrected it; this checkpoint extracts and checks complete marker/body blocks against the source, including zero prior occurrences. Change next time: retain that bounded transcription check, reuse explicit pinned-script construction when an external Godot helper lacks project class registration, and localize a suspicious pixel pattern to the actual native face before changing valid geometry. LEARNINGS refines existing sections only; no new experiment or gate. Station48 motion preparation and the YMCA sampling visual follow-up remain open, as do downstream motion/spray/integration gates. No candidate, source, authority, engine, resource, skill, Git stage, commit or push change.
+
+## Consolidated completed rounds — MAIN documentation checkpoint007 (2026-09-11 PDT)
+
+Exact retrospective transcriptions preserve original preparation limits and failures. Later outcomes remain separate. Station48 is published at15/213; Maceo motion001 retains a route-contact HOLD, with its independent reviews deferred from this checkpoint. Preparation statements below are historical, not current pending-state claims.
+
+### E — Maceo queue preparation (exact transcription)
+
+**retro_exact:** E selected only unaccepted Maceo May from existing P1 order, checked current14/213 registry/source ownership and corroborated both stored public-side cameras with actual local first-hit segments. No retained named pixels were found; this round ends at a two-view dated-reference recommendation, with inner courtyard and unknown sides protected. Initial combined rule/index reads exceeded the output budget and required a bounded recovery; next time select only the priority ledger and target packet after current accepted-set filtering. No browser, engine, resource, checkout, product/MAIN/authority edit, authoring or recognition credit occurred. Append once at a normal checkpoint after root review.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-next-study-preparation-001/READY.md).
+
+### E — Maceo dated reference observation (exact transcription)
+
+**retro_exact:** E recovered exactly the two recorded Maceo May Sep2025 public-side panoramas and directly inspected their original pixels. Reusing D's confirmed CommonJS runtime/Chrome options avoided the old import failure; both dated views survived nonfatal networkidle timeouts without retries. Actual camera/source rays support ENE11–13 and SSE10 rather than relying on nearby-address labels; upper crops and other mapped runs remain explicit limits. One preliminary owned-process receipt read printed more command detail than needed; later closure output selected ownership/status. Close the one context and verify all owned PIDs absent before collation, keep originals private, and use the actual visible grammar for the next coherent study. No source/authority change or recognition credit. Append once at a normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-next-study-preparation-001/REFERENCE_OBSERVATION.md).
+
+### C — Maceo first coherent preparation (exact transcription)
+
+**retro_exact — capture_1410_revision002 / Maceo preparation:** Reused both actual references and complete pre-packing/world/capture helpers for one coherent two-side composition with inferred cadence and source-fitted columns. Preserved the summary syntax failure and vent-height failure before correction. A guessed factory name, incorrect nested-record assumption and oversized helper read caused avoidable retrievals; later reads used exact paths/fields. Resumed saved work once after a service usage error, without redoing checkout/authoring or running engine. Next obtain the first regional pixels before further detail/proof; retain all independent gates and record the focused fatal-stop branch as unexercised unless encountered. No shared RETRO edit; append once at the normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-first-coherent-study-001/FILE_READY.md).
+
+### C — Maceo first-render execution (exact transcription)
+
+**retro_exact — capture_1410_revision002 / Maceo study001 execution:** The approved import→focused→native chain produced all five planned originals on the first run with unchanged409 pins, followed by immediate actual release before collation. Explicit macOS/Forward+/Metal/Dummy/resolution flags supplied the reviewed native path. Focused fatal-entry-load stop trial stage1 was eligible, but no entry failure occurred; its stop branch remains unexercised, with null observation and normal terminal recorded. The inherited import material warning stayed scoped; no new failure or image retry occurred. Next use independent visual/source/contact review against these actual pixels before more detail or integration; do not turn owner checks into whole-unit acceptance. Exact retrospective pending the next normal shared checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-first-coherent-study-001/OWNER_HANDOFF.md).
+
+### C — Maceo final-camera correction execution (exact transcription)
+
+**retro_exact — capture_1410_revision002 / Maceo final-camera revision001:** The first helper’s post-aim process/render waits omitted an actual stock physics response and its final clearance check; the retained raw PASS did not establish usable art pixels. A bounded external correction preserved source/player/target settings, added six physics waits and image-bound LAND/segment facts, and produced five originals in one17.477290s native run. Actual SSE SpringArm retraction cleared the measured below-LAND pose; ENE remained above LAND with its separate thin frontage limit. A combined initial read exceeded output budget; no missing changed code was assumed, and subsequent reads were bounded. Keep checks attached to the final saved state, retain original failures, and leave independent camera/art/whole-unit judgments separate. Exact retrospective pending the normal shared checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-first-coherent-study-001/camera-settle-revision-001/OWNER_HANDOFF.md).
+
+### D — Maceo first-render visual HOLD (exact transcription)
+
+**retro_exact — D / Maceo May first-render visual:** Directly compared both dated originals with all five exact gameplay originals. Retained the coherent ENE/SSE recognition gains but held the ordinary-play result on the visibly exposed ground underside/blue field shared by SSE baseline and candidates; did not invent its cause or require hidden architecture. One filename listing inadvertently included the closed browser profile and was truncated; the exact two reference originals were then used, with no further profile inspection. Next resolve the existing SSE presentation through the separately assigned camera/ground diagnosis and reuse its bounded poses, preserving independent source/mechanics and whole-unit gates. No engine, capture, geometry, MAIN or frozenRETRO edit; append once at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-first-coherent-study-001/independent-visual-001/REVIEW.md).
+
+### E — Maceo source/curtain geometry review (exact transcription)
+
+retro_exact: “Independent Maceo study review preserved the ordinary-builder13-channel proof,80+16 source faces,320 congruent column faces and actual LAND fit, but found84 curtain rail/post front crossings and42 exactly coplanar cap overlaps totaling0.218379694306m². Balanced closed edges/no identical triangles had missed duplicate coverage between complete boxes. The author was given the whole affected family for one bounded union repair, preserving other geometry and controls; stock column contact remains open. One file-only enumeration attempt failed because importing a checker prefix replaced its work variable; it wrote no result/product and was corrected by importing only the pure helpers. No engine was run or acceptance credit granted.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-first-coherent-study-001/independent-source-geometry-001/REVIEW.md).
+
+### E — Maceo saved-camera diagnosis (exact transcription)
+
+**retro_exact:** E's bounded Maceo first-capture diagnosis measured the SSE saved camera0.310093m below unchanged native LAND while the player remained correctly grounded; baseline/candidate poses match. The helper checked a different earlier camera aim and did not validate the final saved pose. ENE is above local LAND/road and retains a separate baseline-visible edge limitation. Recommend explicit final-aim physics/clearance evidence and, if needed, a lower stock-compliant SSE aim; its predicted clearance is not runtime PASS. Preserve originals/raw owner PASS, distinguish missing observation from engine cause, and add no broad proof or terrain/controller change. Pending normal shared checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-first-coherent-study-001/independent-camera-ground-001/FINDING.md).
+
+### D — Maceo corrected-camera visual follow-up (exact transcription)
+
+**retro_exact — D / Maceo camera-settle visual follow-up:** Inspected all five exact new originals after the external final-camera correction, retaining the earlier direct dated-reference/architecture comparison. The visible SSE underside/blue-field blocker is gone and no new regional entrance/column blocker appears, so static public-region art passes within cropped/protected/material limits. Did not infer support, movement-camera robustness or whole-unit credit from stills or owner clearance counters. No new capture, engine, source/MAIN change or expanded matrix; preserve the original bad images/HOLD and append once at the normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-first-coherent-study-001/camera-settle-revision-001/independent-visual-001/REVIEW.md).
+
+### E — Maceo corrected-camera review (exact transcription)
+
+**retro_exact:** E independently verified Maceo's final-camera follow-up against retained001 evidence. Six actual post-aim physics frames let the unchanged SSE SpringArm retract to4.3828125m, clearing LAND by0.159243m with empty final segment rays; original player/target/FOV/light and source inputs stayed exact. Five originals/durable copies bind to the actual raw rows, and directly viewed SSE baseline/candidate no longer show the conspicuous below-ground region. Keep final saved-state checks, preserve001 raw PASS/visual failure and ENE's separate frontage limit, and do not expand this scoped camera PASS into art/traversal/whole-unit credit. No engine/source edit or further rerun. Pending normal shared checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-first-coherent-study-001/camera-settle-revision-001/independent-camera-001/REVIEW.md).
+
+### C — Maceo live attachment preparation (exact transcription)
+
+**retro_exact — capture_1410_revision002 / Maceo live attachment preparation:** Reused the accepted static geometry and Station48 atomic-pair/source/lifecycle pattern, injecting the unchanged original producer/tangent implementation while keeping wall80/roof16 ordered faces distinct from320 column faces. Preserved all historical inputs through one old-builder alias and retained first bad/corrected camera evidence. A wrong before-image path lookup stopped before product mutation; later full new-file whitespace caught one factory EOF blank, whose trim refreshed its dependency hash without reauthoring. The focused helper records all13 native slots and uses explicit external script construction; no engine/import/native/contact, MAIN or credit action. Pause for independent source review and root GO; log actual outcomes only after execution.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/FILE_READY.md).
+
+### C — Maceo first focused lifecycle failure (exact transcription)
+
+**retro_exact — capture_1410_revision002 / Maceo focused live001 execution:** Reused the complete working lifecycle helper and446 frozen inputs, with all143 source/study native channel comparisons and ordered80/16/320 collision records retained. Its broader target chunk exposed168 BoxMesh surface-name API errors not present in the earlier Station48 context; raw PASS was correctly rejected by the wrapper, so incomplete neighbor snapshots remain HOLD. The later independent curtain-overlap finding arrived after launch; completed once and preserved both failure scopes. Immediate same-orchestration release followed terminal by0.536468s, without a duplicate scan/run or model-review delay. Second eligible entry-load-stop branch remained unexercised; keep its narrow trigger, type-check mesh-specific snapshot APIs, and bind final geometry correction before the next run. No MAIN or shared RETRO edit.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/OWNER_HANDOFF.md).
+
+### C — Maceo movement preparation (exact transcription)
+
+retro_exact: “C reused the complete Station48 live movement/AVI path for one Maceo ground route, real first-column side contact and close exact wall/column/LAND/roof receiver checks. Roof support uses a separately recorded setup, with no continuous ground-to-roof or jetpack claim. Products and prior509 inputs remained exact. File self-review corrected an EOF newline, inherited dependent-result path and final-camera sampling order before freezing; no engine ran. Actual motion/contact/spray and separate visual acceptance remain pending, with five planned originals and nine preserved AVI samples in the existing scheme.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/FILE_READY.md).
+
+### C — Maceo movement001 execution HOLD (exact transcription)
+
+retro_exact: “C ran the one reviewed Maceo motion route with all539 inputs exact and released the actual engine immediately after terminal. Required ground column-side contact failed;252 input/30 brake rows, all four spray outcomes, one separate roof attempt, five original PNGs and508-frame AVI survived without a retry. A stale release stage name was fixed only in a separate external helper; the new reviewer-confirmation instruction arrived after launch, so this is not an eligible prelaunch experiment sample. An early log-only survival statement was corrected from actual raw/disk evidence. Preserve the contact HOLD and send complete evidence to independent mechanics and visual review before any next action.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/OWNER_HANDOFF.md).
+
+### C — Maceo curtain union and snapshot preparation (exact transcription)
+
+retro_exact: “C repaired the whole localized Maceo curtain family as one shared native union, preserving its intended outline and exact unaffected graphite streams/other buckets. The frozen original comparison now includes original config and geometry; a PrimitiveMesh-aware snapshot preserves arrays/material/collision instead of calling ArrayMesh-only names. Emitted boundary/coverage and complete whitespace preparation passed; independent native geometry/art remain pending. Self-review caught and preserved a missing newline in the first two-view helper draft before any engine run. Both known fixes share one proposed focused→same-SSE native sequence; no snapshot-only replay or source/column/control redesign.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/curtain-union-revision-001/FILE_READY.md).
+
+### C — Maceo combined focused failure (exact transcription)
+
+retro_exact: “C ran the reviewed combined curtain/snapshot fix once. The BoxMesh failure was resolved and original channels/collision/neighbor records passed, but a newly added changed-bucket assertion compared native packed arrays with decoded ordinary Arrays and correctly stopped the chain as FAIL before images. Saved geometry values matched after Float32 reconstruction; E received the raw failure for independent review. The same orchestration released PID21448/global engine before collation, and no retry occurred. The practical prevention is to compare the same consumed packed representation at new helper boundaries, already covered by LEARNINGS; no new gate or experiment is proposed.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/curtain-union-revision-001/OWNER_HANDOFF.md).
+
+### E — Maceo curtain/snapshot preparation review (exact transcription)
+
+`retro_exact`: E independently checked the bounded curtain/snapshot preparation against the original001 fixture and exact changed-region offsets. Shared-junction union addresses the full known family; ten meshes and graphite outside-region native channels retain strict equality. PrimitiveMesh snapshots now preserve supported arrays/material state without an ArrayMesh-only name call. No blocker found before the one justified focused/live-SSE run; original overlap and wrapper failures remain historical, with revised native geometry/art still open. No engine or product edit by E.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/curtain-union-revision-001/PREPARATION_REVIEW.md).
+
+### E — Maceo expected-container diagnosis (exact transcription)
+
+`retro_exact`: E localized the Maceo focused002 failure to ordinary Array versus PackedArray serialization, using actual unchanged-order native positions/indices and the exact factory conversion. The strict fix converts only expected values into the consumed packed containers. The earlier preparation review missed this specific expected-container mismatch; preserve that miss and the failed run. Original-channel/lifecycle observations survive at their scoped predicates, while revised native topology/art and clean wrapper completion remain separate requirements.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/curtain-union-revision-001/FOCUSED_EXPECTATION_FINDING.md).
+
+### E — Maceo repaired native/source review (exact transcription)
+
+`retro_exact`: E independently closed the full Maceo curtain-overlap family using actual emitted Float32 geometry, source-derived occupied boundaries, exact overlap checks and native normals/UVs. The clean packed-expectation repair reused unchanged geometry, and its native/source evidence matches the surviving failed002 dump; the failed wrapper was not relabeled PASS. The preparation review had missed ordinary-versus-packed expected containers; keep that miss and both failure records. Future comparisons must construct the exact consumed container before strict serialization checks. Actual column movement/spray and independent art remain open despite this scoped geometry/source PASS.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/curtain-union-revision-001/NATIVE_INTEGRITY_REVIEW.md).
+
+### C — Maceo packed-expectation continuation (exact transcription)
+
+retro_exact: “C applied only the two packed expected-value constructors after E independently confirmed the mismatch and actual diff/argv. One focused continuation passed888checks, followed by the two existing settled SSE captures;509pins stayed exact and originals were copied unchanged. The same orchestration released both engine PIDs before collation. This closes the expectation helper error, not independent geometry/art/contact or recognition; prior failed runs and source geometry remain preserved. No extra import, image matrix, tuning or new efficiency experiment was introduced.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/curtain-union-revision-001/packed-expectation-repair-001/OWNER_HANDOFF.md).
+
+### D — Maceo curtain visual follow-up (exact transcription)
+
+retro_exact: D — Directly compared both actual curtain-revision SSE originals with the dated September2025 SSE pixels and prior settled-camera default. The full regional composition remains coherent: pale fine cladding, rust asymmetric frames/entrance register, contrasting pale return, dark glazed base and pale columns; no new visual blocker or return of terrain undersides. Scoped static SSE PASS preserves the earlier opaque-glazing/relief/ground-finish and cropped/protected limits. The geometric repair is not claimed as a visible art gain from these two stills. No engine, extra view, mechanics inference or recognition credit; append once at the normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/curtain-union-revision-001/independent-visual-001/REVIEW.md).
+
+### D — Station48 candidate delivery preparation (exact transcription)
+
+**retro_exact:** D / Station48 candidate delivery preparation — Reused accepted static002, source/lifecycle and270-row mechanics plus separate sampled visual decisions; assembled17 unchanged images and retained the347-frame AVI/70-byte tail, sparse limits and raw failures privately. Existing14 authority and all Station48 product geometry/channels remain exact. Added only measured signed-main smoke checks and two export exclusions, with an explicit old-main alias preserving all543 inputs. Reused the complete1317 mounted/privacy/signed invocation and native-plutil binder; file inspection caught the old binder ok-key assumption and matched the actual terminal receipt schema before freeze, with no launch/replay. Full12-file selected/new-file whitespace check passed in an isolated index. Package verification and seventh unit attestation remain null/pending; no engine, export, credit, MAIN or sharedRETRO edit. Continue via the sealed five-stage plan only after root GO, then independent candidate package and unit/image-tree review.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/FILE_READY.md).
+
+### D — Station48 first export failure (exact transcription)
+
+**retro_exact — D / Station48 candidate export001:** The sealed runner preserved614 inputs and stopped downstream on logged script errors despite OSexit0, then standalone release established fresh PID/global absence before collation. What failed: the first candidate export reported many global-class hiding errors and emitted an app that cannot be treated as valid. Cause is assigned to E's bounded file-only cache/path diagnosis, not inferred from exit status or repaired by changing accepted geometry. Retain failed app/log/cache snapshots and use only a separately reviewed remedy/new attempt; no binder/package/successful-proof replay, source/MAIN/authority change or credit. Append once at the normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/OWNER_HANDOFF-stopped-export001.md).
+
+### D — Station48 discovery repair preparation (exact transcription)
+
+**retro_exact — D / Station48 provenance-discovery repair preparation:** E localized the failed export to class registration of raw retained .gd copies, despite build export exclusions. Preserved all failed outputs and source inputs; added only an ignored provenance-root sentinel and a single explicit import with canonical-class verification before fresh export002/package stages. Export exclusion does not exclude editor discovery: retain raw scripts outside scanned roots or behind .gdignore before import/export. No product repair, broad cache reset, engine or successful-proof replay in preparation; exact retrospective goes to C at the next normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/FILE_READY.md).
+
+### D — Station48 repaired candidate execution (exact transcription)
+
+retro_exact: D — Station48 candidate delivery retained export001’s60-error/OSexit0 failure. E localized copied `.gd` provenance overriding59/61 editor global-class entries; one provenance `.gdignore` and one import refresh restored all60 canonical classes, then fresh export and four package stages passed once on unchanged642 inputs/app7. Export exclusion does not exclude editor class discovery: retain raw `.gd` evidence outside scanned roots or behind `.gdignore` before import/export. No successful geometry/motion proof or media was replayed; actual process timings do not establish total workflow time. Candidate14/213 remains uncredited, pending independent package and unit attestation.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/OWNER_HANDOFF.md).
+
+### D — Station48 measured release delay and correction (exact transcription)
+
+D timing addendum / retro_exact: The signed native engine ran54.56292825s and ended06:43:35.483987Z; the standalone fresh release was recorded06:46:23.430121Z,167.946134s later. This is measured terminal-to-release workflow delay, not engine runtime; its internal model/tool attribution is unmeasured. For the next final-current chain, ROOT authorizes one awaited orchestration to invoke the existing standalone release immediately after the final runner becomes terminal, on success or failure, retaining the same owned-PID/global-absence checks before any model collation. No new framework or engine replay.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/TIMING_ADDENDUM.md).
+
+### D — Station48 MAIN transfer preparation (exact transcription)
+
+retro_exact: D — Prepared the single Station4815/213 transfer from ROOT-accepted source/unit/current-app proof using the established copy/stage path. Selected63 files; retained private originals/apps, prior14 authority history and all MAIN dirty agreement/RETRO/UID bytes. Removed the prior unit's RETRO mutation from this transfer rather than duplicate the normal documentation checkpoint. Full final selected-file whitespace passed. No MAIN mutation or successful proof replay occurred; actual copy/commit/push remains pending ROOT GO. Some prior-format reads were oversized and were narrowed to relevant ranges; no unallocated preparation interval is labeled idle/model cost.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/main-integration-001/FILE_READY.md).
+
+### D — Station48 publication (exact transcription)
+
+retro_exact: D — ROOT-approved Station48 copy/stage/commit/push completed once. All63 staged and committed blobs matched the exact plan; app7/private originals and prior14 evidence stayed exact. Non-force origin/main push and actual ls-remote matched8568a73edeb10c4f3dfb623a4aa56e2822c8dcc9. MAIN advances15/213 while its dirty AGENTS/LEARNINGS/RETRO and four unrelated UIDs remain byte-exact and unstaged. No engine, source proof replay, ordinary launch or manual/M1 acceptance was added; historical release snapshots retain their pending-state text and this downstream record supplies publication outcome.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/main-integration-001/OWNER_HANDOFF-published001.md).
+
+### D — Station48 prospective authority preparation (exact transcription)
+
+retro_exact: D — Bound Station48’s accepted seventh once and extended the existing1317 authority route for one prospective unit, preserving prior14 records/213 joins and all reviewed product/config/media bytes. First file-generator write failed on an assumed plan variable; actual `fs48_plan` corrected only the validator marker and write002 passed. Root/author prelaunch review corrected the retained unregistered package predicate to the exact current15 record while historical config14/credit0 stayed frozen. Full selected/new-file whitespace passed with real index unchanged. Pending independent source/ROOT and exact-current checks are not called PASS. The next reviewed engine chain uses one awaited runner→existing standalone release to address the separately measured167.946s prior terminal-to-release delay; no new framework or successful source/motion replay.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/authority-integration-001/FILE_READY.md).
+
+### D — Station48 negative-fixture failure (exact transcription)
+
+retro_exact: D — Existing compiler-check passed; registry001 stopped on an inherited negative mutation assuming every pair has canonical terrain records. Station48 binds the unchanged source chunk instead. Preserve the TypeError and completed Node timings; adapt negative data to each actual contract rather than inventing a terrain requirement. No engine or successful source proof replay; correction remains pending independent/root review.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/authority-integration-001/OWNER_HANDOFF-validation001.md).
+
+### E — Station48 copied-script discovery diagnosis (exact transcription)
+
+**retro_exact:** E traced Station48 export001's class-hiding failures to59 actual global registrations pointing at newly retained `.gd` provenance copies. The copied source hashes/class declarations and prior1317 `.gdignore` assertion localize an omitted editor-discovery boundary; the existing export exclusion addressed a different phase. Preserve failed outputs/caches and originals, add the narrowly authorized provenance sentinel, and require one real canonical-class import refresh before fresh delivery. No product rename, broad cache purge, engine replay by reviewer or package PASS is implied; UID limits remain explicit. Pending normal shared checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/independent-export-diagnosis-001/FINDING.md).
+
+### C — Station48 final seventh attestation (exact transcription)
+
+**retro_exact:** C / Station48 independent seventh attestation — Reused prior directly inspected static and sparse live images; the initial17-image/five-role precheck stayed pending through the real failed export and canonical-discovery repair. After the actual six-stage candidate002 PASS, fully read E’s independent package verdict and the owner receipt, bound their exact original bytes to the unchanged five roles/tree, and rehashed the actual seven-file app. No duplicate visual or engine run was needed. Preserved first-export failure, private reference/raw retention, image-tree/document distinction, historical-image versus package scope, sparse motion and AppleM2/manual limits. Final unit packet PASS enables separate root authority/current-release work; it grants no credit itself. Exact retrospective pending the normal shared checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/independent-unit-visual-001/REVIEW.md).
+
+### E — Station48 prospective authority/source review (exact transcription)
+
+retro_exact: “Independent Station48 prospective authority review confirmed one15/213 unit, exact prior14 records/all213 identity joins, unchanged seven live assets and historical capture14/credit0, with separate current topology and exact seventh/package bindings. The first Node negative suite failed because a reused terrain-map mutation did not apply to the source-only target; adjacent review also found a one-shape reverse no-op. The two target-specific fixture substitutions preserve every earlier mutation/rejection gate, while the raw failure remains. Source review passed at its stated scope; revised Node and exact-current package outcomes, MAIN promotion and publication were not inferred. No duplicate engine/source-geometry replay occurred.”
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/authority-integration-001/independent-authority-source-001/REVIEW.md).
+
+### D — Station48 corrected fixtures and headless failure (exact transcription)
+
+retro_exact: D — The two contract-specific negative-fixture corrections passed Node registry002 and loader001 without replaying the passed compiler. The first headless authority check then stopped on the compound Station48 collision/render-only assertion; preserve the raw FAIL and identify its actual serialized conjunct before any correction. The awaited runner invoked standalone release immediately: final terminal-to-release 0.320302s, with fresh owned/global absence; no export or later package stage ran, and this timing is not a full-workflow speed claim.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/authority-integration-001/readiness-repair-001/OWNER_HANDOFF-stopped001.md).
+
+### D — Station48 expected-FLOAT preparation (exact transcription)
+
+retro_exact: D — Assertion803 compared parsed JSON FLOAT arrays against INT literal arrays. E traced the exact engine comparison without another diagnostic run; the repair changes only expected [52.0]/[10.0], retaining strict equality and the original FAIL. Adjacent new comparisons were checked once; successful compiler/Node receipts are reused. The next headless/export/package continuation is prepared but unrun, with immediate awaited release preserved.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/authority-integration-001/json-number-expectation-repair-001/FILE_READY.md).
+
+### D — Station48 exact-current continuation (exact transcription)
+
+retro_exact: D — Exact-current15 authority and package continuation passed once after the strict expected-FLOAT repair, reusing compiler/Node successes. All532inputs and app7 stayed exact; both signed worlds and mounted/privacy checks passed. Same awaited terminal-to-release was 0.738098s, with fresh owned/global absence, versus prior167.946134s; this is observed release latency, not a controlled full-workflow speedup. Preserve failed registry fixtures/assertion803/export001 and historical14 product/capture limits. MAIN promotion remains separately reviewable and unperformed.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/authority-integration-001/json-number-expectation-repair-001/OWNER_HANDOFF.md).
+
+### E — Station48 exact-current package review (exact transcription)
+
+`retro_exact`: E independently verified the successful prospective15 continuation after the strict FLOAT-array expectation repair, using actual seven-stage argv/logs/receipts plus a final532-source/seven-app rehash. Current authority15, historical capture14, unchanged world/source/ownership, package privacy and signed stock controls remain distinct. Existing source/art/motion evidence was reused without an extra engine run. The prior failed attempts remain intact, and this package PASS does not itself promote MAIN or replace the original acceptance scopes.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/authority-integration-001/json-number-expectation-repair-001/independent-exact-current-package-001/REVIEW.md).
+
+### E — Station48 JSON element-type diagnosis (exact transcription)
+
+`retro_exact`: A new headless assertion compared JSON numeric arrays against integer literals. Correct underlying values still failed because Godot Array equality checks element Variant types. Use expected numeric literals in the consumed JSON representation and retain strict equality; preserve the failed log and avoid a redundant engine probe when exact parser/equality source plus bound values already establishes the cause.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/authority-integration-001/readiness-repair-001/independent-assertion803-diagnosis-001/FINDING.md).
+
+### E — Station48 repaired candidate package review (exact transcription)
+
+**retro_exact:** E independently reviewed Station48 candidate002's exact source/helper change and actual mounted/privacy/signed results, then rehashed app7/source642. The provenance `.gdignore` plus one canonical-path import corrected the demonstrated export-discovery failure without production changes; original failure remains. Actual mounted source ownership and signed full-world/control/jetpack predicates pass, with separate coverage and AppleM2/manual/spray-input/visual limits retained. No duplicate engine was run; package PASS now enables the existing owner receipt and separate seventh unit attestation, not automatic credit/current release. Initial combined reads exceeded output budget and were narrowed before deciding. Keep runtime-discovery exclusions when retaining executable source evidence; pending normal shared checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/independent-package-001/REVIEW.md).
+
+### D — Station48 movement preparation (exact transcription)
+
+**retro_exact — D / Station48 motion-spray preparation:** Reused the successful1317 ordinary-world motion/movie path and Station48 receipt runner, adapting actual source frame, measured live roots/counts, output parents and API signatures together. The file-only ground/basis estimate precedes launch; one initial placement, all120 input rows and30 braking rows, actual in-range source-wall/land spray outcomes, original AVI and sparse payloads have explicit separate scopes. All prior502 inputs and products remain exact, no successful stage replay or engine occurred, and missing-row/logging-only-retry measures remain pending the actual run.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/motion-spray-preparation-001/FILE_READY.md).
+
+### D — Station48 separate roof-support preparation (exact transcription)
+
+**retro_exact — D / Station48 roof-owned preparation supplement:** Root's review identified that the newly separated roof body needed its own observed support/nonreceiver check. Added one source-triangle-contained separate roof setup,90 completed natural-settle rows, direct shape0 support and actual in-range stock rejection after the existing ground cases in the same native run; retained LAND after checking its actual opaque layer5 builder semantics. Original526 inputs and initial plan remain exact, one fourth original preserves roof-phase context, and no controller/geometry edit, engine, replay or continuous ground-to-roof claim occurred. Runtime outcomes remain pending.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/motion-spray-preparation-001/roof-scope-revision-001/FILE_READY.md).
+
+### D — Station48 motion/spray execution (exact transcription)
+
+**retro_exact — D / Station48 actual live motion-spray execution:** What worked well: one reviewed native run completed120 input/30brake rows, real wall placement and actual in-range LAND/ROOF rejection; the separate90-row roof settle retained58 direct support rows. All543 inputs/stock settings/local source surfaces stayed exact, all four originals and the movie survived, and one finalizer copied14 unchanged files with nine exact payloads. Missing planned trace rows0; logging-only reruns0; retries/successful-stage replays0. What did not work well: floor flags outnumber direct contacts and the roof placement event initially retains a stale floor flag, so only the later actual trace/contacts support the respective claims; sparse movie samples and the70-byte container tail remain explicit limits. Change next time: retain the complete preflight and completed-record pattern, separate setup/travel/braking and actual range/ownership results, and release the engine before collation. Independent mechanical/visual-motion acceptance remains separate; no product/authority/MAIN change or new run.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/motion-spray-preparation-001/roof-scope-revision-001/OWNER_HANDOFF.md).
+
+### C — Station48 sampled visual-motion review (exact transcription)
+
+**retro_exact — capture_1410_revision002 / Station48 visual-motion:** Direct inspection of four originals, nine unchanged AVI payloads, prior static views and dated reference found retained public-side gains without a new blocking sampled defect. Sparse frames, repeated late payload and cropped/occluded surfaces limit the claim; mechanical and continuous-playback acceptance were not inferred. One initial copy-inventory read assumed a dictionary although the actual file is a list, producing an avoidable broad print/error; direct list iteration then verified the13 image copies without engine or image work. Keep the scoped verdict and reuse unchanged static evidence. No source, MAIN, engine, capture, image edit, resource or credit change; append once at a normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/motion-spray-preparation-001/roof-scope-revision-001/independent-visual-motion-001/REVIEW.md).
+
+### E — Station48 motion/mechanics review (exact transcription)
+
+**retro_exact:** E independently verified all270 intended Station48 records, actual LAND/roof contacts, unbroken input/brake counters and true in-range stock wall placement plus LAND/roof receiver rejection. Prior502 source bindings carry unchanged;14 media copies and nine original AVI byte slices match. Keep stale setup floor flags, intermittent fresh contacts, direct API invocation, sparse-video mapping and70-byte container tail explicit; no traversal/visual/package/credit extrapolation. One broad spray-field read slightly exceeded its budget and was replaced with selected actual fields. No engine or unchanged source-proof replay; source/mechanics PASS remains separate from visual motion and delivery gates. Append once at a normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/motion-spray-preparation-001/roof-scope-revision-001/independent-motion-mechanics-001/REVIEW.md).
+
+### E — finite Station48/YMCA efficiency review (exact transcription)
+
+**retro_exact:** E's finite C/D/ROOT sample found useful distinct YMCA hypotheses and Station48 attachment progress, plus one avoidable manual stop after an external class failure. Process time is measured; reporting/model time is not. Preserve14/213 gates and propose only a two-stage owned-entry-load-failure stop trial in the existing runner, reporting unexercised status if applicable. E's technical work was excluded. Two retrievals were oversized and narrowed; keep subsequent samples bounded. No engine/browser/source/shared-doc edit, installation, continuous audit or new reporting framework; append once at a normal checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/team-efficiency-station48-ymca-checkpoint006-001/NOTE.md).
+
+### E — finite timing addendum (exact transcription)
+
+**retro_exact:** E extended the finite C/D/root audit with narrow actual rollout timing metadata. Of1,259.707s, assistant-item spans cover910.370s, tool intervals330.929s and combined model/tool/engine coverage1,054.466s, leaving205.241s unclassified. Categories/agents overlap; no idle, cost or speedup claim follows. Preparation/review/handoff spans exceed individual runs, while unchanged credit also reflects unfinished gates. Recommend tighter complete-helper/delta reuse and one eligible-unit finishing lane, measured using existing end-to-end receipts. Encrypted bodies/unsampled intervals remain unknown. No engine/browser/source/shared-doc edit, installation, reset or framework; parallel-engine branch dropped per owner steering.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/team-efficiency-station48-ymca-checkpoint006-001/TIMING_ADDENDUM.md).
+
+### E — finite Station48/Maceo transfer efficiency review (exact transcription)
+
+**retro_exact:** E's finite C/D/ROOT sample measured 234.403s Godot within 1,904.348s; overlapping output/tool/compaction records leave 189.967s unclassified. Helper errors caused failures, while receipt reuse and subsecond releases supported 15/213 delivery. Extend conditional reviewer confirmation for two eligible repairs and measure extra micro-GOs/launch delay; claim no speedup. No engine, source/shared-doc edit or continuous audit.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/team-efficiency-station48-maceo-transfer-001/NOTE.md).
+
+### D — YMCA sampling visual follow-up (exact transcription)
+
+**retro_exact — D / independent YMCA sampling visual:** What worked well: direct comparison of both original near PNGs, exact durable copies and the actual dated reference shows the combined sampling candidate makes pilaster edges continuous and outlines cleaner while retaining depth and the accepted entrance/host composition. What did not work well: conspicuous diagonal hatching persists across the upper pale faces/transoms, so the edge gain and technical PASS do not close finish or justify broader acceptance work. Change next time: retain the concrete partial improvement and target the remaining same-pose shadow-field quality without removing valid architecture; distinguish combined-setting results, runtime getters, filter requests and unreviewed motion/performance. Near finish HOLD; no engine, product change, capture or credit. Append once at the next normal owner checkpoint.
+
+[Original retrospective source](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/ymca-first-coherent-study-002/sampling-quality-candidate-001/independent-visual-001/REVIEW.md).
+
+### ROOT-adopted bounded efficiency decisions
+
+The configured focused-entry-load stop trial reached its two eligible Maceo stages without an entry-load failure; both branches were unexercised, with no speedup established. Same-orchestration terminal release was used after the demonstrated Station48 release delay; recorded subsecond release latencies are narrower observations than full workflow speed.
+
+After the finite Station48/Maceo audit, ROOT adopted a next-two eligible helper-only repair experiment: the author preserves the prior attempt and submits the exact bounded correction/argv to the independent reviewer; under explicit conditional ROOT authorization, a confirmed correction can proceed without another micro-GO. Keep source, independent gates, sole preflight, serialized engine, first-failure and terminal/release predicates unchanged. Record extra ROOT prelaunch requests and actual reviewer-confirmation-to-launch interval in existing notes only. Maceo motion001's new E-confirmation instruction arrived after launch; its post-launch release-helper review is not an eligible sample and supplies no confirmation interval or speedup. A later eligible trial must be assigned before launch.
+
+### C — documentation checkpoint007
+
+retro_exact: C transcribed48 completed retrospective bodies once, preserving historical preparation limits, failures and later scoped outcomes. Station48 publication remains15/213; no Maceo or YMCA credit was inferred. Actual source maps exclude the selected MAIN docs, and original RETRO prefix, dirty AGENTS/UIDs, authority, Git index/config/hooks and candidate products stayed unchanged. A broad retrospective read exceeded its budget and a guessed pin-map filename failed before any MAIN edit; later extraction used actual compact fields and the discovered map. Refined existing lessons for consumed containers, type-specific helper APIs/fixtures, retained-script discovery and evidence-based reporting, plus final saved-camera validation. Future motion repair/reviews and next-unit work remain open; no engine was added for documentation, and no docs were staged or published.
