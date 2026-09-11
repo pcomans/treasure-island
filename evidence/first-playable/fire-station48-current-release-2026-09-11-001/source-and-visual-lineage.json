@@ -1,0 +1,51 @@
+{
+  "derived_summary": true,
+  "recognition_metric": "15/213",
+  "recognized_physical_units": 15,
+  "not_evaluated_physical_units": 198,
+  "added_physical_unit": "physical-building:w764313741",
+  "numerator_effect": 1,
+  "prior14_acceptances_preserved": true,
+  "all213_identity_source_receiver_joins_preserved": true,
+  "unit_closure": {
+    "path": "evidence/first-playable/fire-station48-quality-candidate-2026-09-11-001/candidate-closure.json",
+    "sha256": "45fe6aad83cd709c5091c037d06fec8aae5e369ce083d0dc97f9ad6551cab445"
+  },
+  "seven_acceptance_bindings": {
+    "evidence_manifest_sha256": "f68b77fa5c6e8983288ad9f9ca36a4fd827e716cc1c99877270eeceb547786b6",
+    "motion_telemetry_manifest_sha256": "4e3a0ea032384bc1381468db84ae15c4ebc1eb75212a9fec20156d165414b028",
+    "visual_motion_manifest_sha256": "708692fe592b56c9b18cbf5d9bbc086dadb1c053153d37afbd5c37c6a91c0a3e",
+    "package_verification_receipt_sha256": "502c87a102c90ef446a1e3415b1bb6eca7050d46689c550c18609c3c9dc43b0b",
+    "evidence_tree_sha256": "6e8e1a6d8ff3ee12e961d7adaa78cdc72e8aa57dbb607251d5a1361c171eb895",
+    "mechanical_review_receipt_sha256": "fb4802671d8ec92d2cdff091a221fc6fe8f3d1dae6780446aa5604227f7cfed4",
+    "review_receipt_sha256": "cb06367c7de02d2379c855dfe33915d8bd54b85a33666f0582e949752f9310cf"
+  },
+  "image_count": 17,
+  "image_tree_sha256": "6e8e1a6d8ff3ee12e961d7adaa78cdc72e8aa57dbb607251d5a1361c171eb895",
+  "tree_document_sha256": "9dae353459301e65690a44a3665d41ea4a8d5adf688799df3b1e57247f50173d",
+  "original_media_scope": "4 static002 PNGs,4 live-phase PNGs,9 exact original AVI payload samples.347-frame60fps1280x800 AVI retains70-byte tail; PNGs1440x900. Sparse samples do not prove continuous playback.",
+  "capture_authority": "14/213",
+  "historical_candidate_pck_sha256": "10797243d362f4005755f6ab43e08c5ed467959a11e0beaf2cdcb8b287f42edd",
+  "source_geometry": "e198f49df39671d489bb96cd553ec257df12156a0921b489f434d2c2b37d7597",
+  "current_world": [
+    735,
+    1023,
+    1038,
+    82789,
+    466,
+    477
+  ],
+  "current_topology_owner": "physical-building:w764313741",
+  "source_authority_review": {
+    "path": "build/fire-station48-current-release-provenance-001/authority/independent-authority-source-001/REVIEW.md",
+    "sha256": "25518317e8f79ae8606ecd2538d29ecf53f6b7ff69b86e38a5352df9f5922804",
+    "bytes": 6639
+  },
+  "current_pck_sha256": "8a5a42c73cc14008a30c9a86ef8187743e1328124d631bae2033a7c41683e012",
+  "limits": [
+    "Original source52wall+10roof collision only; all new decoration render-only. Protected/source channels/terrain/controls unchanged.",
+    "Actual in-range wall spray placement and LAND/roof receiver rejections remain scoped; roof setup was separate, not a continuous ground-to-roof path or roof walk/jetpack proof.",
+    "Exact dated reference remains private; visible WSW/NNW side with occlusion, no hidden bays/stairs/entry claim.",
+    "All historical raw failures and independent static/motion/mechanics scope remain; no new screenshots or M1/manual input proof."
+  ]
+}

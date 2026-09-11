@@ -1,0 +1,44 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w764313741",
+  "label": "Accepted separate static and sampled live visual decisions, not seventh attestation",
+  "origins": [
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/36/36bdfe0a63cc1c8d4108893a81a1bd057c2bae169cb486f5fc201ae04e0013e9.md",
+      "sha256": "36bdfe0a63cc1c8d4108893a81a1bd057c2bae169cb486f5fc201ae04e0013e9",
+      "bytes": 4808,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-first-coherent-study-002/independent-visual-002/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/65/655ebd8cdd38321ba29b25ad8cbb221ce0f086039d464ab58f3b123e2a67274c.md",
+      "sha256": "655ebd8cdd38321ba29b25ad8cbb221ce0f086039d464ab58f3b123e2a67274c",
+      "bytes": 5693,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/motion-spray-preparation-001/roof-scope-revision-001/independent-visual-motion-001/REVIEW.md",
+      "role": "exact_original"
+    }
+  ],
+  "data": {
+    "status": "SCOPED_PASS",
+    "reference_metadata": {
+      "pano": "U1HtZQlUKomn07I4TT93ug",
+      "date": "September2025",
+      "heading": 125,
+      "pitch": 0,
+      "fov": 70,
+      "image_sha256": "5e734146400132e6b038a3475b057dbf4cfab0e4049a809a4ac3767f25139adc",
+      "image_retention": "private external original only; no reference pixels copied"
+    },
+    "limits": [
+      "Static source002 is a temporary study swap at historical base world735/1018/1033/81761/466/477; actual live source uses the production pair at735/1023/1038/82789/466/477. The captures are neither app screenshots nor new combined-release observations.",
+      "September2025 WSW/NNW reference scope is corroborated by source association. Fence, vehicles and equipment conceal lower details; protected4/7/10\u201323, retained6m mass/roof and hidden openings are not photo-certified. Dimensions/cadence are reversible production inference.",
+      "120 ground input rows and30 braking rows are all grounded; direct LAND contacts occur81 and25 times. Ground path7.405029m differs from net2.842637m; brake0.133453m and finalnet2.785015m are separate.",
+      "Roof is a separate explicit setup with90 natural-settle rows,32 falling/58 direct roof support. The immediate stale setup floor flag is not contact proof. No ground-to-roof traversal, roof-walk or unit-specific jetpack claim.",
+      "Actual stock direct API spray placed on exact wall shape0, rejected in-range LAND and ROOF shape0, tags0\u21921\u21921\u21921. This does not test mouse/keyboard event dispatch or manual play.",
+      "8 PNGs are1440x900. Original347-frame/60FPS movie and9 exact un-reencoded payloads are1280x800; physical extent retains70 bytes beyond RIFF-declared end. Sparse indices35/54/72/91/110/129/148/166/185 do not establish continuous playback or physics/draw/AVI identity; late two payloads share bytes.",
+      "Raw historical focused001 class-registration failure, original import warning, source002 precheck observation and all old reviewed source evidence remain exact. No successful source/capture proof was replayed for assembly.",
+      "Station48 is an uncredited new physical recognition unit with prospective+1 only after separate packet/visual attestation, candidate package verification and serialized authority/current-release work. Current14/213 remains unchanged; no current-release or M1/manual/universal-runtime claim."
+    ]
+  },
+  "truth_boundary": "Derived assembly references exact original evidence; no source/mechanical/visual decision is newly made by the author. Candidate package and separate seventh unit attestation remain pending; current14/213 unchanged."
+}

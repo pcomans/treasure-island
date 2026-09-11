@@ -98,6 +98,9 @@
         },
         {
           "$ref": "#/$defs/d5_1317_active_runtime_adapter"
+        },
+        {
+          "$ref": "#/$defs/fire_station48_active_runtime_adapter"
         }
       ]
     },
@@ -782,7 +785,7 @@
       "additionalProperties": false,
       "properties": {
         "active_runtime_adapter_receivers": {
-          "const": 13
+          "const": 14
         },
         "building_footprints": {
           "const": 213
@@ -803,7 +806,7 @@
           "const": 213
         },
         "runtime_adapter_receivers": {
-          "const": 22
+          "const": 23
         },
         "source_records": {
           "const": 215
@@ -1616,6 +1619,76 @@
         "whole_building_recognizability_imported"
       ],
       "type": "object"
+    },
+    "fire_station48_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:fire-station48-live:building:w764313741:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_paired_wall_roof_replacement"
+        },
+        "receiver_key": {
+          "const": "building:w764313741:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/fire_station48_live_replacement.gd"
+        },
+        "runtime_asset_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "const": [
+            "game/resources/facades/fire_station48_quality_study.json",
+            "game/resources/facades/fire_station48_upper_cladding.gdshader",
+            "game/scripts/world/facades/fire_station48_live_factory.gd",
+            "game/scripts/world/facades/site_12_housing_kit.gd",
+            "game/resources/facades/fire_station48_study_geometry.json"
+          ]
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/fire_station48_live_replacement.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w764313741"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
     }
   },
   "$id": "https://treasure-island.local/schemas/facade-recognition-catalog.schema.json",
@@ -1629,8 +1702,8 @@
       "items": {
         "$ref": "#/$defs/active_runtime_adapter"
       },
-      "maxItems": 13,
-      "minItems": 13,
+      "maxItems": 14,
+      "minItems": 14,
       "type": "array"
     },
     "capture_contracts": {
@@ -1653,10 +1726,10 @@
       "additionalProperties": false,
       "properties": {
         "emitted_runtime_schema_version": {
-          "const": "ti.facade-runtime-registry/14"
+          "const": "ti.facade-runtime-registry/15"
         },
         "required_compiler_version": {
-          "const": "1.13.0"
+          "const": "1.14.0"
         },
         "unknown_version_policy": {
           "const": "reject"
@@ -1687,7 +1760,7 @@
       "type": "array"
     },
     "schema_version": {
-      "const": "ti.facade-recognition-catalog/14"
+      "const": "ti.facade-recognition-catalog/15"
     },
     "source_contract": {
       "$ref": "#/$defs/source_contract"

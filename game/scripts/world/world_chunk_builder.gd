@@ -14,6 +14,7 @@ const D2_1441_CHINOOK_LIVE_REPLACEMENT := preload("res://game/scripts/world/faca
 const D2_1439_CHINOOK_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd")
 const D5_1308_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1308_gateview_live_replacement.gd")
 const D5_1394_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1394_gateview_live_replacement.gd")
+const FIRE_STATION48_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/fire_station48_live_replacement.gd")
 const D5_1317_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1317_gateview_live_replacement.gd")
 const D2_1444_CROAKER_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd")
 const ISLE_HOUSE_HIGH_FACADE_SCENE := preload("res://game/scenes/world/facades/isle_house/isle_house_high_facade.tscn")
@@ -141,6 +142,10 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	if not bool(d5_1317_pair.get("ok", false)):
 		chunk_root.free()
 		return d5_1317_pair
+	var fs48_pair := FIRE_STATION48_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(fs48_pair.get("ok", false)):
+		chunk_root.free()
+		return fs48_pair
 	var chapel_plan := NAVY_CHAPEL_187_LIVE_REPLACEMENT.build_chunk_plan(chapel_pair)
 	if not bool(chapel_plan.get("ok", false)):
 		chunk_root.free()
@@ -190,6 +195,17 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)
 		chunk_root.free()
 		return d5_1317_plan
+	var fs48_plan := FIRE_STATION48_LIVE_REPLACEMENT.build_chunk_plan(fs48_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(fs48_plan.get("ok", false)):
+		NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
+		D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
+		D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)
+		D2_1444_CROAKER_LIVE_REPLACEMENT.free_unconsumed(d2_1444_plan)
+		D5_1308_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1308_plan)
+		D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)
+		D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)
+		chunk_root.free()
+		return fs48_plan
 	var report := {
 		"ok": true,
 		"node": chunk_root,
@@ -211,9 +227,10 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			D5_1308_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1308_plan)
 			D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)
 			D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)
+			FIRE_STATION48_LIVE_REPLACEMENT.free_unconsumed(fs48_plan)
 			chunk_root.free()
 			return {"ok": false, "code": "builder_parent", "message": "Missing world category parent %s." % parent_key, "source_keys": record.source_keys}
-		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan)
+		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan)
 		if not record_result.ok:
 			NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
 			D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
@@ -222,6 +239,7 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			D5_1308_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1308_plan)
 			D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)
 			D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)
+			FIRE_STATION48_LIVE_REPLACEMENT.free_unconsumed(fs48_plan)
 			chunk_root.free()
 			return record_result
 		var record_node: Node3D = record_result.node
@@ -244,7 +262,8 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	var d5_1308_consumed := D5_1308_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1308_plan)
 	var d5_1394_consumed := D5_1394_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1394_plan)
 	var d5_1317_consumed := D5_1317_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1317_plan)
-	if not chapel_consumed or not d2_1441_consumed or not d2_1439_consumed or not d2_1444_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed:
+	var fs48_consumed := FIRE_STATION48_LIVE_REPLACEMENT.plan_was_fully_consumed(fs48_plan)
+	if not chapel_consumed or not d2_1441_consumed or not d2_1439_consumed or not d2_1444_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed or not fs48_consumed:
 		NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
 		D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
 		D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)
@@ -252,6 +271,7 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		D5_1308_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1308_plan)
 		D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)
 		D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)
+		FIRE_STATION48_LIVE_REPLACEMENT.free_unconsumed(fs48_plan)
 		chunk_root.free()
 		if not chapel_consumed:
 			return {"ok": false, "code": "navy_chapel_187_live_unconsumed_pair", "message": "The supplied Chapel pair was not consumed exactly once.", "source_keys": ["w291189336"]}
@@ -265,7 +285,9 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			return {"ok": false, "code": "d5_1308_live_unconsumed_pair", "message": "The supplied1308pair was not consumed exactly once.", "source_keys": ["w95934123"]}
 		if not d5_1394_consumed:
 			return {"ok": false, "code": "d5_1394_live_unconsumed_pair", "message": "The supplied1394pair was not consumed exactly once.", "source_keys": ["w96215646"]}
-		return {"ok": false, "code": "d5_1317_live_unconsumed_pair", "message": "The supplied 1317 pair was not consumed exactly once.", "source_keys": ["w95934125"]}
+		if not d5_1317_consumed:
+			return {"ok": false, "code": "d5_1317_live_unconsumed_pair", "message": "The supplied 1317 pair was not consumed exactly once.", "source_keys": ["w95934125"]}
+		return {"ok": false, "code": "fire_station48_unconsumed_pair", "message": "The supplied Station 48 pair was not consumed exactly once.", "source_keys": ["w764313741"]}
 	return report
 
 
@@ -316,7 +338,7 @@ func build_context(context: Dictionary, context_parents: Dictionary) -> Dictiona
 	return report
 
 
-func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}, d2_1439_plan: Dictionary = {}, d2_1444_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}) -> Dictionary:
+func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}, d2_1439_plan: Dictionary = {}, d2_1444_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}) -> Dictionary:
 	# Building 1's generated 20 m slab and terrain-level tower are source-valid
 	# horizontal placeholders but visually and physically wrong in the vertical
 	# dimension.  Intercept all four independently keyed records before generic
@@ -359,6 +381,13 @@ func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary
 		return D5_1394_GATEVIEW_LIVE_REPLACEMENT.consume_record(record, d5_1394_plan)
 	if not is_context and D5_1317_GATEVIEW_LIVE_REPLACEMENT.claims_record(record):
 		return D5_1317_GATEVIEW_LIVE_REPLACEMENT.consume_record(record, d5_1317_plan)
+	if not is_context and FIRE_STATION48_LIVE_REPLACEMENT.claims_record(record):
+		return FIRE_STATION48_LIVE_REPLACEMENT.consume_record(record, fs48_plan)
+	return _build_unpaired_record(record, is_context)
+
+# Preserve the original source producer and pre-packing channel path unchanged.
+# The exact-pair adapter receives this callable, avoiding a builder preload cycle.
+func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
 	var b201_prepared: Dictionary = {}
 	if not is_context and D1_B201_LIVE_ATTACHMENT.claims_record(record):
 		b201_prepared = D1_B201_LIVE_ATTACHMENT.prepare(record)

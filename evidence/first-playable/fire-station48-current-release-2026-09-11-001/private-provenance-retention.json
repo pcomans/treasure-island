@@ -1,0 +1,791 @@
+{
+  "derived_index": true,
+  "raw_originals_rewritten": false,
+  "candidate_originals_index": {
+    "path": "evidence/first-playable/fire-station48-quality-candidate-2026-09-11-001/private-provenance-retention.json",
+    "sha256": "c1c5b7e359a52812da682d03c802a81db64c683a633e0b2c7ca2cc505776a4e6"
+  },
+  "new_exact_current_originals": [
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/AUTHORING_DECISIONS.json",
+      "sha256": "e7b6d3b0189742327b3f186de13425d36e6dde3fdd471234c32d7fa07a9bd92f",
+      "bytes": 1179,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/AUTHORING_INTEGRITY.json",
+      "sha256": "da61f902ee568e69ae9a68832b0ea8c4f193a78fb50724c0f7c51d6447b62912",
+      "bytes": 1652,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/FILE_READY.md",
+      "sha256": "4659674eea1f041d7713869a80caccc4c1904babf9a5671f44cdecd37378a257",
+      "bytes": 7829,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/OWNER_HANDOFF-validation001.md",
+      "sha256": "4ba44c4769bd74ee0422c4bcf585647d933b57461fdd6ae05a62e7d258670bfb",
+      "bytes": 1757,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/PREPARATION_COMPARISON.json",
+      "sha256": "6f4c75f81dba9f0be4439713c03b19227816722746de5cad754efc7c08137992",
+      "bytes": 2341,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/SEVENTH_BINDING.json",
+      "sha256": "98e06e55da7701bf6bd06ca5062562bbe1ab2bb566b8b216d461a24aef42c1e1",
+      "bytes": 1319,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/WHITESPACE_PREFLIGHT.json",
+      "sha256": "f40d33e14f8d8e6f25fd8325b63ada2ec78ac58ce31dde3b901c95ea44572d03",
+      "bytes": 3406,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/accepted-definitions.json",
+      "sha256": "995f6d9d1a1eac0ffa600abd0bef9a4befaa356ffacbca26c99d7b6134a6731e",
+      "bytes": 51644,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/authority-functional.diff",
+      "sha256": "433793558d68b56cea185f81b413efe618437d6375335d680370bbcc8f963722",
+      "bytes": 112534,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/authority-source-pins.json",
+      "sha256": "83f6abbab1d764454c6d83592a479385b6ef7b12f93b076d6208231170197e33",
+      "bytes": 1497,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/authority.diff",
+      "sha256": "93213d95f93ddc67109a38a332841258d7ebbc662469ec2ee70ffc929364134d",
+      "bytes": 196239,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before/discovery/facades/facade-recognition-catalog.json",
+      "sha256": "f20ae324e47cf47281f5dcea4b1791d2e1828a0cb35f4122700562460a76f57e",
+      "bytes": 327208,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before/discovery/facades/facade-recognition-catalog.schema.json",
+      "sha256": "842877aa3138e95cf73a784c942f980905aa2bf6fd18714d2825e82f54bc201a",
+      "bytes": 51225,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before/discovery/facades/facade-recognition-validation-report.json",
+      "sha256": "d8201234eecfe6a1a179d6079faff6a7327c1ce14c43079800bb5f1c585c9326",
+      "bytes": 93016,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before/game/resources/facades/facade-runtime-adapter-contracts.json",
+      "sha256": "c00ae73bfc0e74c6055deec9a57faf76ebd839373807eeb0d5f224724511af0c",
+      "bytes": 102576,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before/game/resources/facades/facade-runtime-registry.json",
+      "sha256": "a4e9d189d289085d59d84bec683d70fb3687c7ff8539b93a3260f41885852971",
+      "bytes": 723547,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before/game/scripts/main.gd",
+      "sha256": "6e45c878201635154b43d20b65f84c207a6e1d8958917571493184ff1aed820b",
+      "bytes": 31063,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before/game/scripts/world/facades/facade_runtime_registry_loader.gd",
+      "sha256": "a78866bd4d654f466b8829b88f99ea05a390f9b3dbb262be516a3781240d8362",
+      "bytes": 256999,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before/game/tests/headless_facade_recognition_registry_contract.gd",
+      "sha256": "fbd1844bbd5bd417bfe3f68ac14f9bca98cc7a42eb09923afafad8ba608c65e0",
+      "bytes": 74725,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before/game/tests/headless_facade_runtime_registry_loader_contract.gd",
+      "sha256": "fa857da8708347f54a11b81dd27b8640b5c3b58c5959888d1893474092c21360",
+      "bytes": 101476,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before/tools/build_facade_recognition_registry.mjs",
+      "sha256": "01e0cebe34af163c42af64e335ee9cc96fdfd081333736f8b76a503160acf119",
+      "bytes": 345714,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before/tools/test_facade_recognition_registry.mjs",
+      "sha256": "b648d33459c8ea31c53164ecefc9f3244c5fe43c4b24019ffa7ed36f7f18585f",
+      "bytes": 136689,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before/tools/test_facade_runtime_loader_contract.mjs",
+      "sha256": "748eff27bbef3749a724d04d502e02170fe247a64429f5525170512d6c3a8252",
+      "bytes": 83329,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before-pins.json",
+      "sha256": "00319b1893d52c0afc49e9966e6be57c34a913d715691ba897eb9d338563bb50",
+      "bytes": 1497,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before-seventh/README.md",
+      "sha256": "3d2abcc13658bbce2b94ebfbd767d24c336540c5c3a1c8fd4523e6e33dfe306c",
+      "bytes": 608,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/before-seventh/candidate-closure.json",
+      "sha256": "ff7e8419fcf582c5790e274d2c79db1fb2d7d73cd2fa0f0b5166d4018df11cee",
+      "bytes": 3574,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/bind-export.py",
+      "sha256": "c5f0b0dcfae2395c860c7bdeace41e19ae9651e363697c9ae22bd8cae67c14ed",
+      "bytes": 5079,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/compiler-check-001-execution.json",
+      "sha256": "5ac8377b01cd3c02f5df4eff47687d923f532770fe998da42a973c46200a6ace",
+      "bytes": 223795,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/compiler-check-001.log",
+      "sha256": "53f9c31586e5e934e57a80689ddec6ede41508295242bfbe57573496183ea9eb",
+      "bytes": 815,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/compiler-write-001-execution.json",
+      "sha256": "0613aaa983a639ea2b600907602e579faed1208f641c9625a6dcde0b5e26a4e8",
+      "bytes": 693,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/compiler-write-001.log",
+      "sha256": "4c29de7a394cae111b43c9f61c51baf344b1940c6185bb53898149e513633a2f",
+      "bytes": 1794,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/compiler-write-002-execution.json",
+      "sha256": "191cd8a983ebe9637a33841b18d13862de4b1e45e2b6c7676abab67e41f74d30",
+      "bytes": 693,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/compiler-write-002.log",
+      "sha256": "caa1c8ca2889b59425d438592cc2817b66ff511fbb2f7d59afea2ed79fa40938",
+      "bytes": 815,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/diff-sections.json",
+      "sha256": "843ce6d205fdad45ffb0f819c1f364d0095e373626ebbdd4be0dd21c9fe5f030",
+      "bytes": 3395,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/execution-input-pins.json",
+      "sha256": "7b3e34f889057bfe0c70bce8ddcc87eb86b922b739807d0a58db8f17ac668a4c",
+      "bytes": 110560,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/execution-settings.json",
+      "sha256": "eeba32c784a240eb9a28bc88cc4ba8aab8c78a0c2dc9dc61845696213949c432",
+      "bytes": 1152,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/failed-authoring-001/build_facade_recognition_registry.mjs",
+      "sha256": "07967783be294f25eb48cfc17924b908b0400b5e174784220423f1f248c3fb22",
+      "bytes": 360370,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/failed-authoring-001/prepare-authority.py",
+      "sha256": "bec81339666b3cfeeb7a530872d66091e3756be0d9abc57995b659b4a68c2f9d",
+      "bytes": 27286,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/helper.diff",
+      "sha256": "ea658524eba88981661a14399508f515218861fc59b58c7a4a68e07898e412ea",
+      "bytes": 12343,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/historical-642-aliases.json",
+      "sha256": "611622158a6f3a7949606856c0bc2a3496a485afdc72bb7ddb1d100f9627e66a",
+      "bytes": 3363,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/historical-642-resolved-pins.json",
+      "sha256": "9fdb2227ff522f8aebd473d8f9f3b5875296b58ae038645e824645ecbb00ad88",
+      "bytes": 149254,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/independent-authority-source-001/CHECK.json",
+      "sha256": "f0ef4ddbaf3d77e6dfe9cc45b03ead7c0ddf5896cab0ca74643bb7d7d17f577f",
+      "bytes": 7720,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/independent-authority-source-001/REVIEW.md",
+      "sha256": "25518317e8f79ae8606ecd2538d29ecf53f6b7ff69b86e38a5352df9f5922804",
+      "bytes": 6639,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/invocation.diff",
+      "sha256": "94b90d2401652ae4fa00fb16a812e6daf88ce5582afbff4ddcd91d4c6cb73d17",
+      "bytes": 13565,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/FILE_READY.md",
+      "sha256": "4e2272688a4a0a748b7c7b8c9e5947111e94ae93ffaefb8792379e903f14b5b2",
+      "bytes": 3049,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/OWNER_HANDOFF.json",
+      "sha256": "b6bd42f5a165a469dd316c5e19826629b090f57eff92f46872f3e8d6e0fd43ef",
+      "bytes": 14687,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/OWNER_HANDOFF.md",
+      "sha256": "7f950d73e9d044092f8e3af68c77b685699680ca1be6e7c7be8f399a3b2273b9",
+      "bytes": 3204,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/REPAIR.json",
+      "sha256": "b6216a0c13d529ad6ebb065cd439c91214e94f30a6b5f59becce0457bbc5e17c",
+      "bytes": 2437,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/SLOT_RELEASE.json",
+      "sha256": "6b5112aa561ef431de446b09dc1222b82cd5e321cb86fae74f35f36824cd9644",
+      "bytes": 2810,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/WHITESPACE_PREFLIGHT.json",
+      "sha256": "f40d33e14f8d8e6f25fd8325b63ada2ec78ac58ce31dde3b901c95ea44572d03",
+      "bytes": 3406,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/actual-app-binding.json",
+      "sha256": "dbf7eea1c9153df547b6313348c7aefd4574705825cad500ef5f70b81e1c3f29",
+      "bytes": 3154,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/before/game/tests/headless_facade_recognition_registry_contract.gd",
+      "sha256": "f3881578e0c8a23a4122e6575fc94d64c0b7320eb7a8988136b7a1fbc33ded32",
+      "bytes": 78486,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/bind-export.py",
+      "sha256": "69570bcd28c3cdb6eae10d42b200defc763b672b0d2bdfb262837c16f5fb3e59",
+      "bytes": 5732,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/bind-export.py.diff",
+      "sha256": "8aac4d2419319000e9e360d127f2e0db954edb987cd71c46aeb0641a7ee10422",
+      "bytes": 1932,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/bundle-native-checks-001.json",
+      "sha256": "427a6c7b31a87a9124160d9325c5b271368ec38b5563b5ae5ba8b652a837a023",
+      "bytes": 5061,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/execution-input-pins.json",
+      "sha256": "92c892b242fc297a3ffe08437ff2b44d654398d001d43a5008684d3feba18030",
+      "bytes": 123388,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/execution-settings.json",
+      "sha256": "84bc454c5930de54d82329df4e9f9f5e25d444ab8714f5a8140036b3bc715210",
+      "bytes": 1187,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/execution-settings.json.diff",
+      "sha256": "3a2492526c86e4cac56bfea3989fc75943bf96097345ea8b8d50aa3712c6268e",
+      "bytes": 1416,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/export-exact-current-001-execution.json",
+      "sha256": "7a857356211cd93e97f93fa3e49426cc8479f71810e9dfc28744f7970edeb342",
+      "bytes": 250010,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/export-exact-current-001.log",
+      "sha256": "1c3563f3d77eaf56f9e4ef39024c2af335931893cc8af07d9856e1973609179b",
+      "bytes": 128974,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/headless-loader-001-execution.json",
+      "sha256": "61ddd381cc7902cc5f6d44090b2593ff43e65a73b14b96b377443ea11bd12bbf",
+      "bytes": 249984,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/headless-loader-001.log",
+      "sha256": "608a47d9470fef60d0528086f19535a759237fd6488e178b3677028cf940a0f0",
+      "bytes": 583,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/headless-registry-002-execution.json",
+      "sha256": "6248da187ad17b7fe5b3dc2e87b3f26aee7a48e13e2da1f4dcec958d91bcec00",
+      "bytes": 249949,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/headless-registry-002.log",
+      "sha256": "595de68307c593c25016b18404d7819eeaf4d34f0f4043b3a8ddff67507df891",
+      "bytes": 465,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/historical-509-aliases.json",
+      "sha256": "63e66175fcb4b0b4e2e3fec97556e79dc2f2e05afaf9a84f3b7c4a043bc27cc2",
+      "bytes": 426,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/historical-509-resolved-pins.json",
+      "sha256": "0291c8f166ab96e94283a462459e6a5a9e2bd324b8bc684dcfc7f5e9666e89e9",
+      "bytes": 116653,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/independent-exact-current-package-001/REVIEW.md",
+      "sha256": "9ba930322074001131d1d8a11cfaf2dfc10901a516f8fdfacb561d6852c22dc7",
+      "bytes": 5648,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/mounted-component-001-execution.json",
+      "sha256": "e181f9b30fab8e0605bd8e17550b954a7c684b412835cc0bea2c20de586abd2f",
+      "bytes": 250974,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/mounted-component-001.log",
+      "sha256": "9ce7a6893bc7216edc7e250b42f1558761d41ca23d5e18caa22b1ee68d0c6644",
+      "bytes": 2233,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/mounted-privacy-001-execution.json",
+      "sha256": "da6903fffd33b3e8bddd3b8dda75ee46bb8c79c06d623600e015f34e10365cce",
+      "bytes": 251027,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/mounted-privacy-001.log",
+      "sha256": "08f2151aed012b5cc204275645266353b229df5afadca1a87a859289a46a7026",
+      "bytes": 769,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/package-contract.gd",
+      "sha256": "c3edfb3984b7a4ce9d2651d73f6bf16aa4f755d6a8ced61dca62ce1cac787b49",
+      "bytes": 47918,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/release-headless-smoke-001-execution.json",
+      "sha256": "e3e9c403d1711aecc6a2f7f9cb9f0c6f34a7d15541f6c32efaea3db5e65bc904",
+      "bytes": 250420,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/release-headless-smoke-001.log",
+      "sha256": "e3d36a77edacece80a4400c74b53621d12abe1e1b4b72ecbc43e1f431ac97ea6",
+      "bytes": 4738,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/release-native-smoke-001-execution.json",
+      "sha256": "4dcea2f21bad4b9f21637447f367f6615e4df8fa339f9b33ff8e35d5fae932ac",
+      "bytes": 250564,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/release-native-smoke-001.log",
+      "sha256": "2aa018e149e742a58cf9932a9376089bf1e4171150ad55a1e06bb11490ab9cbd",
+      "bytes": 4804,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/release.py",
+      "sha256": "802ff4c63b1ece1bf35888d7cbfcc10afadd6e4b27ffaf7dbc94780984f25550",
+      "bytes": 1547,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/repair.diff",
+      "sha256": "84ee9820ec5ec0373016e8f0c9683f710d2647ec2a986db627863afdd3cb6de4",
+      "bytes": 1713,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/run-plan.bound-app.json",
+      "sha256": "51ec82199bf345e8b039dc75f22773291a8f8ef50d192ae4034baff034a28dbb",
+      "bytes": 9262,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/run-plan.json",
+      "sha256": "751b847f495a434aa9d0367456c07b4b749a48ec728ed9e6351d478196472cc4",
+      "bytes": 9190,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/run-plan.json.diff",
+      "sha256": "82813b34dace1d632bdd87111f12ab2f16b0c6ef79b43e9cdfea3e6f50bfbe91",
+      "bytes": 9366,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/run-reviewed-chain.py",
+      "sha256": "e4809667c9b7cb733d4fceac64f6ba77840c539eeccf8dc6471d89fc781960bf",
+      "bytes": 688,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/run-stage.py",
+      "sha256": "daa7ed31c81c42883f990f0b00a0e5cabeebdbeb2c2fff503b697933d990e614",
+      "bytes": 4469,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/runtime-001/release-headless-smoke-001-engine.log",
+      "sha256": "e3d36a77edacece80a4400c74b53621d12abe1e1b4b72ecbc43e1f431ac97ea6",
+      "bytes": 4738,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/runtime-001/release-native-smoke-001-engine.log",
+      "sha256": "2aa018e149e742a58cf9932a9376089bf1e4171150ad55a1e06bb11490ab9cbd",
+      "bytes": 4804,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/node-registry-001-execution.json",
+      "sha256": "af2c4099b0d1a04f33cf59a9b5467a9d86685548151dcb36b56e61de2e102f1d",
+      "bytes": 223859,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/node-registry-001.log",
+      "sha256": "e12f4b722192c3bf76599894b4eb0dda997c4c69a7481145414a3e6ba521447a",
+      "bytes": 1361,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/package-contract-preseal-candidate-guard.gd",
+      "sha256": "a297a9fef0272b2e61da9269cc2ab6b99bdb2dfe3a7c8484289f495b2bdb4129",
+      "bytes": 46825,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/package-contract.gd",
+      "sha256": "c3edfb3984b7a4ce9d2651d73f6bf16aa4f755d6a8ced61dca62ce1cac787b49",
+      "bytes": 47918,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/package-source-pins.json",
+      "sha256": "0db01e036cc06c6311a56eb40636b8d1e840bb3b515890b9ed0ad071651c9877",
+      "bytes": 9999,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/prepare-authority.py",
+      "sha256": "c547b7d86a76099c02d317e731f42239f8ce136d1ba0c92cc70395a3e6a63060",
+      "bytes": 27344,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/OWNER_HANDOFF-stopped001.md",
+      "sha256": "b44e399eeeaa692599e6c26acf9c5af32f63998a986a948a9c39ed8a8e84858d",
+      "bytes": 2931,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/REPAIR.json",
+      "sha256": "6fd3346452b8d5c69879e71f97f3b3a3a8725f5ef79a9239ceac5deb2bdc436a",
+      "bytes": 1334,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/SLOT_RELEASE.json",
+      "sha256": "3fa9d4254e1c6ac4c27552a03621238fffddb78f94117c67fa3c2ea6cc202cc0",
+      "bytes": 1291,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/WHITESPACE_PREFLIGHT.json",
+      "sha256": "f40d33e14f8d8e6f25fd8325b63ada2ec78ac58ce31dde3b901c95ea44572d03",
+      "bytes": 3406,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/authority-source-pins.json",
+      "sha256": "d1fa502cb764722a1dbc55f9eac937f7cd78b801b3647440417bf06ddd1b1f6f",
+      "bytes": 1497,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/before/tools/test_facade_recognition_registry.mjs",
+      "sha256": "bd5b7fd5f3dc4a5a6a313f21371d4c14662be7ecc220516a58e4ea82b108155d",
+      "bytes": 142895,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/bind-export.py",
+      "sha256": "89200143e7aedac088ea0713ed05c9ad472a3662bdfb892d8aa2051a64cfdcee",
+      "bytes": 5308,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/bind-export.py.diff",
+      "sha256": "60c4104a76ce749572c357fccd5a8e1989ede6bbf2dc2153512d5e6fca0ff341",
+      "bytes": 1634,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/execution-input-pins.json",
+      "sha256": "a96884c32328bd153cca674685ce58ef16ebd7676540e612f5a387e8bf02a298",
+      "bytes": 116526,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/execution-settings.json",
+      "sha256": "78c17fddb9aeaf65ca1ac66bc8abf075f11ccc5c7b23609667826840cca1c9ab",
+      "bytes": 1173,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/execution-settings.json.diff",
+      "sha256": "f1c0935b3cb56728759ffb9e436ee7431be13ed37b5ae9a8d3e151ccf925a058",
+      "bytes": 1384,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/headless-registry-001-execution.json",
+      "sha256": "e13e252212fbd8d7f9f6c2fdbb8babc287496e10519389bfdb6c275df8172b1b",
+      "bytes": 236270,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/headless-registry-001.log",
+      "sha256": "183d945f8dd11eb1219a3c2e0ce73c47d492fd169bd933b3cd96b54fdc771408",
+      "bytes": 700,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/historical-488-aliases.json",
+      "sha256": "6e401b0937c17f77195f9f40a295c48b4bba57e87fb1e8c00544fa95d6b32362",
+      "bytes": 378,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/historical-488-resolved-pins.json",
+      "sha256": "5bf4445aa24d23231f71ac70ddd802737269ae5eb77386d20a556dc0d406caff",
+      "bytes": 110673,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/independent-assertion803-diagnosis-001/FINDING.md",
+      "sha256": "0299aa1c2d842abd8edc277174f8799c72d54ba69803faad97f1f7594a016ae6",
+      "bytes": 3422,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/node-loader-001-execution.json",
+      "sha256": "20e8fe6ffda5cafd175c8b40669cb03349e571cb43ee873b9f162d6450da3d51",
+      "bytes": 235877,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/node-loader-001.log",
+      "sha256": "bcc995a3579887d4287baae195b3101be18354ef9802255cda724e974950be93",
+      "bytes": 311,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/node-registry-002-execution.json",
+      "sha256": "2bd7f50d913aa395576f8f93ecb368e2e49789493321012377669febc18f2cf2",
+      "bytes": 235851,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/node-registry-002.log",
+      "sha256": "a5437cf88eeccfbbb37053187ff939eaa2640e740514077f0c35912c72bb2ff3",
+      "bytes": 486,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/package-contract.gd",
+      "sha256": "c3edfb3984b7a4ce9d2651d73f6bf16aa4f755d6a8ced61dca62ce1cac787b49",
+      "bytes": 47918,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/package-source-pins.json",
+      "sha256": "0db01e036cc06c6311a56eb40636b8d1e840bb3b515890b9ed0ad071651c9877",
+      "bytes": 9999,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/release.py",
+      "sha256": "802ff4c63b1ece1bf35888d7cbfcc10afadd6e4b27ffaf7dbc94780984f25550",
+      "bytes": 1547,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/repair.diff",
+      "sha256": "2836b053095fc3c79fc472c2c24c32810dd534d699c4e1a7127d5447353ed111",
+      "bytes": 1358,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/run-plan.json",
+      "sha256": "52d29ae14dfa6f225bc11b43baf1382188c09e8088c18bcd5248b26d223c2b30",
+      "bytes": 9418,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/run-plan.json.diff",
+      "sha256": "7bf2e7e4b5591efaf1ac7c1c0926d7e7255277cf9d45932f7f72e7200f1c3ffc",
+      "bytes": 8501,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/run-reviewed-chain.py",
+      "sha256": "e4809667c9b7cb733d4fceac64f6ba77840c539eeccf8dc6471d89fc781960bf",
+      "bytes": 688,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/run-stage.py",
+      "sha256": "daa7ed31c81c42883f990f0b00a0e5cabeebdbeb2c2fff503b697933d990e614",
+      "bytes": 4469,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/readiness-repair-001/source-pins.json",
+      "sha256": "ab05f32c622570ce954d769f710339102383e80297ede13996d9915a444ffe6a",
+      "bytes": 101032,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/release.py",
+      "sha256": "802ff4c63b1ece1bf35888d7cbfcc10afadd6e4b27ffaf7dbc94780984f25550",
+      "bytes": 1547,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/run-plan.json",
+      "sha256": "5c308fd40cf177b3ec1e9f7473e30b4f78165e042733c03c177fafc982bf76c1",
+      "bytes": 9026,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/run-reviewed-chain.py",
+      "sha256": "e4809667c9b7cb733d4fceac64f6ba77840c539eeccf8dc6471d89fc781960bf",
+      "bytes": 688,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/run-stage.py",
+      "sha256": "daa7ed31c81c42883f990f0b00a0e5cabeebdbeb2c2fff503b697933d990e614",
+      "bytes": 4469,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/seal-preparation.py",
+      "sha256": "113370796f0a609b95aab0f1e4ffadc916269ab7d1910073fd7190dbdbe26cb6",
+      "bytes": 14991,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/source-pins.json",
+      "sha256": "5fc52444b3e7a8d5a11e443cc5dfc08f9cb22fd004f1e418a5db0109306ec615",
+      "bytes": 101032,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/authority/write-authority.py",
+      "sha256": "44e99d887cac66a02a2840c6e73a7172e3a23315b3a5829f0e1ad6e92f0ffd3e",
+      "bytes": 946,
+      "role": "authority_and_exact_current_original"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/.gdignore",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0,
+      "role": "private_discovery_guard"
+    },
+    {
+      "retained_repo_relative_path": "build/fire-station48-current-release-provenance-001/.gitignore",
+      "sha256": "cdbcae15105d6b781e620813c79c7e868740d4e9cc53ce6f5fcbbc12387adf4b",
+      "bytes": 2,
+      "role": "private_discovery_guard"
+    }
+  ],
+  "reference_pixels_copied": false,
+  "candidate_and_current_app_paths": [
+    "build/fire-station48-quality-candidate-001",
+    "build/fire-station48-quality-candidate-002",
+    "build/fire-station48-exact-current-001"
+  ],
+  "note": "All original candidate archive files and failed/successful app trees are retained privately; new raw .gd copies are behind .gdignore before any future editor scan. MAIN transfer remains pending."
+}

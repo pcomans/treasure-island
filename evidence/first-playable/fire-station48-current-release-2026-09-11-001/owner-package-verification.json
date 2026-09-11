@@ -1,0 +1,107 @@
+{
+  "derived_summary": true,
+  "original": {
+    "path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/OWNER_HANDOFF.json",
+    "sha256": "b6bd42f5a165a469dd316c5e19826629b090f57eff92f46872f3e8d6e0fd43ef",
+    "bytes": 14687
+  },
+  "original_md": {
+    "path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/OWNER_HANDOFF.md",
+    "sha256": "7f950d73e9d044092f8e3af68c77b685699680ca1be6e7c7be8f399a3b2273b9",
+    "bytes": 3204
+  },
+  "decision": "PASS",
+  "authority": "15/213",
+  "pck_sha256": "8a5a42c73cc14008a30c9a86ef8187743e1328124d631bae2033a7c41683e012",
+  "input_count": 532,
+  "stages": [
+    {
+      "stage": "headless-registry-002",
+      "pid": 20225,
+      "exit_code": 0,
+      "elapsed_seconds": 1.4183829159999999,
+      "receipt_sha256": "6248da187ad17b7fe5b3dc2e87b3f26aee7a48e13e2da1f4dcec958d91bcec00",
+      "log_sha256": "595de68307c593c25016b18404d7819eeaf4d34f0f4043b3a8ddff67507df891"
+    },
+    {
+      "stage": "headless-loader-001",
+      "pid": 20234,
+      "exit_code": 0,
+      "elapsed_seconds": 112.14570562499999,
+      "receipt_sha256": "61ddd381cc7902cc5f6d44090b2593ff43e65a73b14b96b377443ea11bd12bbf",
+      "log_sha256": "608a47d9470fef60d0528086f19535a759237fd6488e178b3677028cf940a0f0"
+    },
+    {
+      "stage": "export-exact-current-001",
+      "pid": 20710,
+      "exit_code": 0,
+      "elapsed_seconds": 9.238370583,
+      "receipt_sha256": "7a857356211cd93e97f93fa3e49426cc8479f71810e9dfc28744f7970edeb342",
+      "log_sha256": "1c3563f3d77eaf56f9e4ef39024c2af335931893cc8af07d9856e1973609179b"
+    },
+    {
+      "stage": "mounted-component-001",
+      "pid": 20840,
+      "exit_code": 0,
+      "elapsed_seconds": 2.908576916,
+      "receipt_sha256": "e181f9b30fab8e0605bd8e17550b954a7c684b412835cc0bea2c20de586abd2f",
+      "log_sha256": "9ce7a6893bc7216edc7e250b42f1558761d41ca23d5e18caa22b1ee68d0c6644"
+    },
+    {
+      "stage": "mounted-privacy-001",
+      "pid": 20863,
+      "exit_code": 0,
+      "elapsed_seconds": 3.420374291,
+      "receipt_sha256": "da6903fffd33b3e8bddd3b8dda75ee46bb8c79c06d623600e015f34e10365cce",
+      "log_sha256": "08f2151aed012b5cc204275645266353b229df5afadca1a87a859289a46a7026"
+    },
+    {
+      "stage": "release-headless-smoke-001",
+      "pid": 20897,
+      "exit_code": 0,
+      "elapsed_seconds": 7.142827041,
+      "receipt_sha256": "e3e9c403d1711aecc6a2f7f9cb9f0c6f34a7d15541f6c32efaea3db5e65bc904",
+      "log_sha256": "e3d36a77edacece80a4400c74b53621d12abe1e1b4b72ecbc43e1f431ac97ea6"
+    },
+    {
+      "stage": "release-native-smoke-001",
+      "pid": 20917,
+      "exit_code": 0,
+      "elapsed_seconds": 54.35803475,
+      "receipt_sha256": "4dcea2f21bad4b9f21637447f367f6615e4df8fa339f9b33ff8e35d5fae932ac",
+      "log_sha256": "2aa018e149e742a58cf9932a9376089bf1e4171150ad55a1e06bb11490ab9cbd"
+    }
+  ],
+  "actual_signed_worlds": {
+    "release-headless-smoke-001": [
+      735,
+      4,
+      1023,
+      1038,
+      82789,
+      466,
+      477
+    ],
+    "release-native-smoke-001": [
+      735,
+      4,
+      1023,
+      1038,
+      82789,
+      466,
+      477
+    ]
+  },
+  "mounted_scope": "Actual supplied-chunk target components: Station48 wall6meshes/1080triangles/1body1shape and roof1mesh/10triangles/1body1shape; seven native arrays/material/source collision52+10 exact. Current registry accepted15, historical config14/credit0 exact. Full signed-main is separate. Prior1439/1444/1308/1394/1317 preserved.",
+  "privacy_row": "PCK_CONTENT_AUDIT: pck_sha256=8a5a42c73cc14008a30c9a86ef8187743e1328124d631bae2033a7c41683e012 pck_bytes=69170808 virtual_files=956 generated_world=47 chunks=38 manifest_sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3 content_sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 rows=739/735/4 polyhaven_maps=18 vegetation_assets=15 vegetation_placements=124 naip_shrubs=22 pavement=427/208/219 movement=4/20/30/40 physical_space=true private_paths=0 private_raw=0 banned=0",
+  "slot_release": {
+    "path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/SLOT_RELEASE.json",
+    "sha256": "6b5112aa561ef431de446b09dc1222b82cd5e321cb86fae74f35f36824cd9644",
+    "bytes": 2810
+  },
+  "limits": [
+    "Native macOS Metal/Forward+ process smoke; no OS-pixel/manual-input/M1 acceptance or universal runtime claim.",
+    "Source/capture/candidate14 evidence remains historical; no source/motion/visual replay or new screenshots.",
+    "Prior failed export/class-discovery, negative-fixture and raw assertion803 attempts remain preserved."
+  ]
+}

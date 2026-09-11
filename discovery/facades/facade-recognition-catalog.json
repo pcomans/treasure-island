@@ -138,6 +138,27 @@
       "whole_building_recognizability_imported": false
     },
     {
+      "adapter_id": "active-adapter:fire-station48-live:building:w764313741:wall",
+      "content_classification": "active_target_specific_paired_wall_roof_replacement",
+      "receiver_key": "building:w764313741:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
+      "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
+      "runtime_adapter_path": "game/scripts/world/facades/fire_station48_live_replacement.gd",
+      "runtime_asset_paths": [
+        "game/resources/facades/fire_station48_quality_study.json",
+        "game/resources/facades/fire_station48_upper_cladding.gdshader",
+        "game/scripts/world/facades/fire_station48_live_factory.gd",
+        "game/scripts/world/facades/site_12_housing_kit.gd",
+        "game/resources/facades/fire_station48_study_geometry.json"
+      ],
+      "runtime_config_path": "game/resources/facades/fire_station48_live_replacement.json",
+      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+      "source_key": "w764313741",
+      "whole_building_recognizability_imported": false
+    },
+    {
       "adapter_id": "active-adapter:d2-1441-live:building:w95934105:wall",
       "content_classification": "active_target_specific_paired_wall_roof_replacement",
       "receiver_key": "building:w95934105:wall",
@@ -938,10 +959,55 @@
       ],
       "status": "configured",
       "unit_id": "physical-building:w95934125"
+    },
+    {
+      "alternate_pose": {
+        "aim_target_m": [
+          133.5,
+          7.69999980926514,
+          -348.799987792969
+        ],
+        "camera_position_m": [
+          106.561141967773,
+          4.73160743713379,
+          -351.556518554688
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          112.0,
+          3.33091425895691,
+          -351.0
+        ]
+      },
+      "ordinary_third_person_required": true,
+      "primary_pose": {
+        "aim_target_m": [
+          145.0,
+          6.65000009536743,
+          -343.0
+        ],
+        "camera_position_m": [
+          100.219673156738,
+          5.03485202789307,
+          -377.458618164062
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          104.576751708984,
+          3.19200396537781,
+          -374.105834960938
+        ]
+      },
+      "required_cue_ids": [
+        "fire-station48-quiet-pale-high-window-register",
+        "fire-station48-restrained-upper-cladding-straight-roof-edge"
+      ],
+      "status": "configured",
+      "unit_id": "physical-building:w764313741"
     }
   ],
   "catalog_id": "treasure-island-physical-building-recognition",
-  "checked_date": "2026-09-10",
+  "checked_date": "2026-09-11",
   "claim_vocabulary": {
     "as_built_fidelity": "A separate surveyed/as-built claim; unclaimed by the Phase 1 seed.",
     "game_distinctive": "Distinguishable inside the game; never evidence of real-world recognizability.",
@@ -955,19 +1021,19 @@
     "reference_recognizable": "An ordinary gameplay view is independently matched to target-identifiable reference evidence."
   },
   "compiler_contract": {
-    "emitted_runtime_schema_version": "ti.facade-runtime-registry/14",
-    "required_compiler_version": "1.13.0",
+    "emitted_runtime_schema_version": "ti.facade-runtime-registry/15",
+    "required_compiler_version": "1.14.0",
     "unknown_version_policy": "reject"
   },
   "expected_counts": {
-    "active_runtime_adapter_receivers": 13,
+    "active_runtime_adapter_receivers": 14,
     "building_footprints": 213,
     "building_parts": 2,
     "composite_units": 1,
     "direct_wall_receivers": 214,
     "legacy_adapter_receivers": 9,
     "recognition_units": 213,
-    "runtime_adapter_receivers": 22,
+    "runtime_adapter_receivers": 23,
     "source_records": 215,
     "standalone_units": 212,
     "visible_wall_runs": 4971
@@ -1065,7 +1131,7 @@
       "whole_building_recognizability_imported": false
     }
   ],
-  "schema_version": "ti.facade-recognition-catalog/14",
+  "schema_version": "ti.facade-recognition-catalog/15",
   "source_contract": {
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_schema_version": "ti.godot-world/2",
@@ -9004,13 +9070,28 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "evidence_manifest_sha256": "f68b77fa5c6e8983288ad9f9ca36a4fd827e716cc1c99877270eeceb547786b6",
+          "motion_telemetry_manifest_sha256": "4e3a0ea032384bc1381468db84ae15c4ebc1eb75212a9fec20156d165414b028",
+          "visual_motion_manifest_sha256": "708692fe592b56c9b18cbf5d9bbc086dadb1c053153d37afbd5c37c6a91c0a3e",
+          "package_verification_receipt_sha256": "502c87a102c90ef446a1e3415b1bb6eca7050d46689c550c18609c3c9dc43b0b",
+          "evidence_tree_sha256": "6e8e1a6d8ff3ee12e961d7adaa78cdc72e8aa57dbb607251d5a1361c171eb895",
+          "mechanical_review_receipt_sha256": "fb4802671d8ec92d2cdff091a221fc6fe8f3d1dae6780446aa5604227f7cfed4",
+          "review_receipt_sha256": "cb06367c7de02d2379c855dfe33915d8bd54b85a33666f0582e949752f9310cf",
+          "capture_time_recognition_metric": "14/213",
+          "numerator_effect": 1,
+          "review_id": "fire-station48-quality-candidate-2026-09-11-001",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w764313741",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -9023,13 +9104,94 @@
         "name_evidence": true
       },
       "legacy_adapter_ids": [],
-      "protected_scopes": [],
+      "protected_scopes": [
+        {
+          "receiver_key": "building:w764313741:wall",
+          "run_indices": [
+            4,
+            7,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23
+          ],
+          "reason": "Protected4/7/10–23 and original6m source mass/roof retained. WSW/NNW lower details are fence/vehicle/equipment-occluded; no bays, entry, stairs, signage, hidden openings or surveyed cadence inferred."
+        }
+      ],
       "receiver_keys": [
         "building:w764313741:wall"
       ],
-      "recognition_cues": [],
-      "reference_records": [],
-      "reference_state": "reference_research_unassessed",
+      "recognition_cues": [
+        {
+          "complete_motif": true,
+          "cue_id": "fire-station48-quiet-pale-high-window-register",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w764313741:wall",
+          "reference_ids": [
+            "FIRE-STATION48-SEP2025-WSW"
+          ],
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            6,
+            8,
+            9,
+            24,
+            25
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "fire-station48-restrained-upper-cladding-straight-roof-edge",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w764313741:wall",
+          "reference_ids": [
+            "FIRE-STATION48-SEP2025-WSW"
+          ],
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            5,
+            6,
+            8,
+            9,
+            24,
+            25
+          ]
+        }
+      ],
+      "reference_records": [
+        {
+          "observation_id": "FIRE-STATION48-SEP2025-WSW",
+          "observed_regions": [
+            "September2025 WSW/NNW, panorama U1HtZQlUKomn07I4TT93ug;37.8271222,-122.3698007 heading125/pitch0/FOV70. Exact source/first-building-hit association; historical reference, no current-condition claim."
+          ],
+          "pixels_packaged": false,
+          "source_locator": "evidence/first-playable/fire-station48-quality-candidate-2026-09-11-001/unit-visual-attestation.json",
+          "supports": [
+            "Quiet pale long public wall with high dark framed-window register and restrained vertical upper cladding.",
+            "Thin straight source roof-edge interpretation; unknown lower/operational detail remains unmodeled."
+          ]
+        }
+      ],
+      "reference_state": "reference_ready",
       "source_records": [
         {
           "role": "standalone_building_footprint",

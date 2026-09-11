@@ -1,0 +1,216 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w764313741",
+  "label": "Four original phases plus nine sparse original AVI payloads",
+  "origins": [
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/df/df5a74078d57f452524e7533839c2202bd8aebd46b2f516ab86f99bc839e8db6.json",
+      "sha256": "df5a74078d57f452524e7533839c2202bd8aebd46b2f516ab86f99bc839e8db6",
+      "bytes": 1628322,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/motion-spray-preparation-001/roof-scope-revision-001/motion-finalization.json",
+      "role": "exact_original"
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/65/655ebd8cdd38321ba29b25ad8cbb221ce0f086039d464ab58f3b123e2a67274c.md",
+      "sha256": "655ebd8cdd38321ba29b25ad8cbb221ce0f086039d464ab58f3b123e2a67274c",
+      "bytes": 5693,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/motion-spray-preparation-001/roof-scope-revision-001/independent-visual-motion-001/REVIEW.md",
+      "role": "exact_original"
+    }
+  ],
+  "data": {
+    "movie": {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/70/70d6c98159b684c5398f5ca68727927f9e73326120c695343570bc25eda830ad.avi",
+      "sha256": "70d6c98159b684c5398f5ca68727927f9e73326120c695343570bc25eda830ad",
+      "bytes": 22204874,
+      "original_locator": "/private/tmp/fire-station48-live-motion-002/station48-live-motion.avi",
+      "role": "full_original_movie"
+    },
+    "movie_metadata": {
+      "path": "/private/tmp/fire-station48-live-motion-002/station48-live-motion.avi",
+      "sha256": "70d6c98159b684c5398f5ca68727927f9e73326120c695343570bc25eda830ad",
+      "physical_bytes": 22204874,
+      "riff_declared_end": 22204804,
+      "microseconds_per_frame": 16666,
+      "total_frames": 347,
+      "width": 1280,
+      "height": 800
+    },
+    "images": [
+      {
+        "path": "images/live-motion/01-motion-start-default.png",
+        "sha256": "bd8ae6b220589bcb7b592e4b99c13c63d8eb4c5d7c0f26b668b2c8630468db2e",
+        "bytes": 491254,
+        "role": "live_native_phase",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/images/01-motion-start-default.png",
+        "counter_binding": {
+          "id": "01-motion-start-default"
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/live-motion/02-motion-endpoint-default.png",
+        "sha256": "f30bc238afc5c62d13e11384451642802b0091bb84b3174aaf3c64b6b34324c3",
+        "bytes": 493273,
+        "role": "live_native_phase",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/images/02-motion-endpoint-default.png",
+        "counter_binding": {
+          "id": "02-motion-endpoint-default"
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/live-motion/03-actual-wall-spray.png",
+        "sha256": "77f76e8aeace681133e612d6ca7eec5152cb4fbc1fb130875043f2d6c33dbd51",
+        "bytes": 953383,
+        "role": "live_native_phase",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/images/03-actual-wall-spray.png",
+        "counter_binding": {
+          "id": "03-actual-wall-spray"
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/live-motion/04-source-roof-support-rejection.png",
+        "sha256": "7d6f974e13dc8db5a2327b587b6f1378562cf6dc82c55c475a3d2d93f58011a3",
+        "bytes": 1343937,
+        "role": "live_native_phase",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/images/04-source-roof-support-rejection.png",
+        "counter_binding": {
+          "id": "04-source-roof-support-rejection"
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/live-avi/avi-index-0035.jpg",
+        "sha256": "68c549f929b06f69e05c040c5aa2dd7ecdc0820cd524ce60a579cd5a6d61bb34",
+        "bytes": 61337,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0035.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 35,
+          "byte_offset": 2719774,
+          "bytes": 61337
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/live-avi/avi-index-0054.jpg",
+        "sha256": "33715ec13259e92ab65102b7544adcd43fb1fa08092a5a6252f5199ff86b6b08",
+        "bytes": 60543,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0054.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 54,
+          "byte_offset": 3920866,
+          "bytes": 60543
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/live-avi/avi-index-0072.jpg",
+        "sha256": "535193672c7e01fca6e527fb08e258bdcb79584a73b24fd3bb5733bec939dfc2",
+        "bytes": 59288,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0072.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 72,
+          "byte_offset": 5059288,
+          "bytes": 59288
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/live-avi/avi-index-0091.jpg",
+        "sha256": "80832652ab0ade55973eff14037488caec4b06af1aa88a2622155d3df6f89e9e",
+        "bytes": 60453,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0091.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 91,
+          "byte_offset": 6269766,
+          "bytes": 60453
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/live-avi/avi-index-0110.jpg",
+        "sha256": "1d0d3c8be98c10f45e02724ae9fb751da36d612481cc84728c0e300573b98c62",
+        "bytes": 60186,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0110.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 110,
+          "byte_offset": 7473624,
+          "bytes": 60186
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/live-avi/avi-index-0129.jpg",
+        "sha256": "2b59541058feeab95f1d40ce5fddf12811a8af163aff4c67169e4af70ce1bdfe",
+        "bytes": 58125,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0129.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 129,
+          "byte_offset": 8664370,
+          "bytes": 58125
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/live-avi/avi-index-0148.jpg",
+        "sha256": "7214b1cb48108aff7e3d18f40728cb44706cf7fabad7ad20475cd4b1e8468ce1",
+        "bytes": 59774,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0148.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 148,
+          "byte_offset": 9850138,
+          "bytes": 59774
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/live-avi/avi-index-0166.jpg",
+        "sha256": "c4c06b6bd4266d9936b2940a3aa71cc84f7fe65b346d6b0676f1d5b249e7460e",
+        "bytes": 61144,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0166.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 166,
+          "byte_offset": 10998002,
+          "bytes": 61144
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/live-avi/avi-index-0185.jpg",
+        "sha256": "c4c06b6bd4266d9936b2940a3aa71cc84f7fe65b346d6b0676f1d5b249e7460e",
+        "bytes": 61144,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0185.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 185,
+          "byte_offset": 12220842,
+          "bytes": 61144
+        },
+        "byte_identical": true
+      }
+    ],
+    "selection_scope": "Nine evenly spread encoded indices selected from the recorded ground-motion draw interval; original payload content must be inspected, especially reversals and held endpoint. Native process/physics/draw/AVI indices remain distinct; no equality or continuous-playback claim. Four original PNGs cover initial placement, held motion endpoint, actual wall spray, and separate original-roof support/rejection; nine AVI samples remain selected only from the ground-motion interval. Roof setup and90frame settle have full telemetry/original movie, not a continuous ground-to-roof traversal or roof-walk claim.",
+    "independent_visual_status": "SCOPED_PASS",
+    "limits": [
+      "Static source002 is a temporary study swap at historical base world735/1018/1033/81761/466/477; actual live source uses the production pair at735/1023/1038/82789/466/477. The captures are neither app screenshots nor new combined-release observations.",
+      "September2025 WSW/NNW reference scope is corroborated by source association. Fence, vehicles and equipment conceal lower details; protected4/7/10\u201323, retained6m mass/roof and hidden openings are not photo-certified. Dimensions/cadence are reversible production inference.",
+      "120 ground input rows and30 braking rows are all grounded; direct LAND contacts occur81 and25 times. Ground path7.405029m differs from net2.842637m; brake0.133453m and finalnet2.785015m are separate.",
+      "Roof is a separate explicit setup with90 natural-settle rows,32 falling/58 direct roof support. The immediate stale setup floor flag is not contact proof. No ground-to-roof traversal, roof-walk or unit-specific jetpack claim.",
+      "Actual stock direct API spray placed on exact wall shape0, rejected in-range LAND and ROOF shape0, tags0\u21921\u21921\u21921. This does not test mouse/keyboard event dispatch or manual play.",
+      "8 PNGs are1440x900. Original347-frame/60FPS movie and9 exact un-reencoded payloads are1280x800; physical extent retains70 bytes beyond RIFF-declared end. Sparse indices35/54/72/91/110/129/148/166/185 do not establish continuous playback or physics/draw/AVI identity; late two payloads share bytes.",
+      "Raw historical focused001 class-registration failure, original import warning, source002 precheck observation and all old reviewed source evidence remain exact. No successful source/capture proof was replayed for assembly.",
+      "Station48 is an uncredited new physical recognition unit with prospective+1 only after separate packet/visual attestation, candidate package verification and serialized authority/current-release work. Current14/213 remains unchanged; no current-release or M1/manual/universal-runtime claim."
+    ]
+  },
+  "truth_boundary": "Derived assembly references exact original evidence; no source/mechanical/visual decision is newly made by the author. Candidate package and separate seventh unit attestation remain pending; current14/213 unchanged."
+}

@@ -1,0 +1,205 @@
+{
+  "images": [
+    {
+      "path": "images/live-avi/avi-index-0035.jpg",
+      "sha256": "68c549f929b06f69e05c040c5aa2dd7ecdc0820cd524ce60a579cd5a6d61bb34",
+      "bytes": 61337,
+      "role": "exact_original_mjpeg_payload",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0035.jpg",
+      "counter_binding": {
+        "zero_based_avi_index": 35,
+        "byte_offset": 2719774,
+        "bytes": 61337
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/live-avi/avi-index-0054.jpg",
+      "sha256": "33715ec13259e92ab65102b7544adcd43fb1fa08092a5a6252f5199ff86b6b08",
+      "bytes": 60543,
+      "role": "exact_original_mjpeg_payload",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0054.jpg",
+      "counter_binding": {
+        "zero_based_avi_index": 54,
+        "byte_offset": 3920866,
+        "bytes": 60543
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/live-avi/avi-index-0072.jpg",
+      "sha256": "535193672c7e01fca6e527fb08e258bdcb79584a73b24fd3bb5733bec939dfc2",
+      "bytes": 59288,
+      "role": "exact_original_mjpeg_payload",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0072.jpg",
+      "counter_binding": {
+        "zero_based_avi_index": 72,
+        "byte_offset": 5059288,
+        "bytes": 59288
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/live-avi/avi-index-0091.jpg",
+      "sha256": "80832652ab0ade55973eff14037488caec4b06af1aa88a2622155d3df6f89e9e",
+      "bytes": 60453,
+      "role": "exact_original_mjpeg_payload",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0091.jpg",
+      "counter_binding": {
+        "zero_based_avi_index": 91,
+        "byte_offset": 6269766,
+        "bytes": 60453
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/live-avi/avi-index-0110.jpg",
+      "sha256": "1d0d3c8be98c10f45e02724ae9fb751da36d612481cc84728c0e300573b98c62",
+      "bytes": 60186,
+      "role": "exact_original_mjpeg_payload",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0110.jpg",
+      "counter_binding": {
+        "zero_based_avi_index": 110,
+        "byte_offset": 7473624,
+        "bytes": 60186
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/live-avi/avi-index-0129.jpg",
+      "sha256": "2b59541058feeab95f1d40ce5fddf12811a8af163aff4c67169e4af70ce1bdfe",
+      "bytes": 58125,
+      "role": "exact_original_mjpeg_payload",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0129.jpg",
+      "counter_binding": {
+        "zero_based_avi_index": 129,
+        "byte_offset": 8664370,
+        "bytes": 58125
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/live-avi/avi-index-0148.jpg",
+      "sha256": "7214b1cb48108aff7e3d18f40728cb44706cf7fabad7ad20475cd4b1e8468ce1",
+      "bytes": 59774,
+      "role": "exact_original_mjpeg_payload",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0148.jpg",
+      "counter_binding": {
+        "zero_based_avi_index": 148,
+        "byte_offset": 9850138,
+        "bytes": 59774
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/live-avi/avi-index-0166.jpg",
+      "sha256": "c4c06b6bd4266d9936b2940a3aa71cc84f7fe65b346d6b0676f1d5b249e7460e",
+      "bytes": 61144,
+      "role": "exact_original_mjpeg_payload",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0166.jpg",
+      "counter_binding": {
+        "zero_based_avi_index": 166,
+        "byte_offset": 10998002,
+        "bytes": 61144
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/live-avi/avi-index-0185.jpg",
+      "sha256": "c4c06b6bd4266d9936b2940a3aa71cc84f7fe65b346d6b0676f1d5b249e7460e",
+      "bytes": 61144,
+      "role": "exact_original_mjpeg_payload",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0185.jpg",
+      "counter_binding": {
+        "zero_based_avi_index": 185,
+        "byte_offset": 12220842,
+        "bytes": 61144
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/live-motion/01-motion-start-default.png",
+      "sha256": "bd8ae6b220589bcb7b592e4b99c13c63d8eb4c5d7c0f26b668b2c8630468db2e",
+      "bytes": 491254,
+      "role": "live_native_phase",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/images/01-motion-start-default.png",
+      "counter_binding": {
+        "id": "01-motion-start-default"
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/live-motion/02-motion-endpoint-default.png",
+      "sha256": "f30bc238afc5c62d13e11384451642802b0091bb84b3174aaf3c64b6b34324c3",
+      "bytes": 493273,
+      "role": "live_native_phase",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/images/02-motion-endpoint-default.png",
+      "counter_binding": {
+        "id": "02-motion-endpoint-default"
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/live-motion/03-actual-wall-spray.png",
+      "sha256": "77f76e8aeace681133e612d6ca7eec5152cb4fbc1fb130875043f2d6c33dbd51",
+      "bytes": 953383,
+      "role": "live_native_phase",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/images/03-actual-wall-spray.png",
+      "counter_binding": {
+        "id": "03-actual-wall-spray"
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/live-motion/04-source-roof-support-rejection.png",
+      "sha256": "7d6f974e13dc8db5a2327b587b6f1378562cf6dc82c55c475a3d2d93f58011a3",
+      "bytes": 1343937,
+      "role": "live_native_phase",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/images/04-source-roof-support-rejection.png",
+      "counter_binding": {
+        "id": "04-source-roof-support-rejection"
+      },
+      "byte_identical": true
+    },
+    {
+      "path": "images/study002/01-whole-baseline-default.png",
+      "sha256": "c89891f34c7554a0a805c841b2be9dd0a945c4addd5108b43a5349daae42d730",
+      "bytes": 847381,
+      "role": "static_baseline",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-first-coherent-study-002/01-whole-baseline-default.png",
+      "counter_binding": null,
+      "byte_identical": true
+    },
+    {
+      "path": "images/study002/02-whole-candidate-default.png",
+      "sha256": "2a260c2c8cbb4a46b9dbe804bc5a48a4f6b642271229cd7b4d98914c79f34822",
+      "bytes": 777927,
+      "role": "static_candidate",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-first-coherent-study-002/02-whole-candidate-default.png",
+      "counter_binding": null,
+      "byte_identical": true
+    },
+    {
+      "path": "images/study002/03-whole-candidate-changed.png",
+      "sha256": "8c7b48aba58cfcaee1990e7239bab97f00c92ab7b7ead5b49174e084b09fd662",
+      "bytes": 761064,
+      "role": "static_candidate",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-first-coherent-study-002/03-whole-candidate-changed.png",
+      "counter_binding": null,
+      "byte_identical": true
+    },
+    {
+      "path": "images/study002/04-high-window-roof-edge-near-default.png",
+      "sha256": "2972a8fbad0c5d97b79f7e11904b6be33cbfea34786b535615ed7768649f11f2",
+      "bytes": 778925,
+      "role": "static_candidate",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-first-coherent-study-002/04-high-window-roof-edge-near-default.png",
+      "counter_binding": null,
+      "byte_identical": true
+    }
+  ],
+  "native_png_count": 8,
+  "avi_payload_image_count": 9,
+  "all_byte_identical": true,
+  "no_reference_pixels_copied": true
+}

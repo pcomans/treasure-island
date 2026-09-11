@@ -1,0 +1,24 @@
+{
+  "derived_summary": true,
+  "original": {
+    "path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/independent-exact-current-package-001/REVIEW.md",
+    "sha256": "9ba930322074001131d1d8a11cfaf2dfc10901a516f8fdfacb561d6852c22dc7",
+    "bytes": 5648
+  },
+  "decision": "PASS",
+  "root_accepted": true,
+  "authority": "15/213",
+  "pck_sha256": "8a5a42c73cc14008a30c9a86ef8187743e1328124d631bae2033a7c41683e012",
+  "app_binding": {
+    "path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/actual-app-binding.json",
+    "sha256": "dbf7eea1c9153df547b6313348c7aefd4574705825cad500ef5f70b81e1c3f29",
+    "bytes": 3154
+  },
+  "input_binding": {
+    "path": "build/fire-station48-current-release-provenance-001/authority/json-number-expectation-repair-001/execution-input-pins.json",
+    "sha256": "92c892b242fc297a3ffe08437ff2b44d654398d001d43a5008684d3feba18030",
+    "bytes": 123388
+  },
+  "reexecution": false,
+  "scope": "Independent full reading of actual owner argv/logs/results/signature/privacy/source/app preservation and release; no duplicate engine run. Mounted-component proof remains separate from signed ordinary main."
+}

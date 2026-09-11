@@ -1,0 +1,72 @@
+{
+  "adapter_id": "active-adapter:fire-station48-live:building:w764313741:wall",
+  "all_additions_render_only": true,
+  "candidate_credit": 0,
+  "captured_authority_metric": "14/213",
+  "geometry_sha256": "e198f49df39671d489bb96cd553ec257df12156a0921b489f434d2c2b37d7597",
+  "mapped_public_runs": [
+    0,
+    1,
+    2,
+    3,
+    5,
+    6,
+    8,
+    9,
+    24,
+    25
+  ],
+  "mesh_triangles": {
+    "CompletePaleWindowSurrounds": 624,
+    "ExactSourceNeutralRoof": 10,
+    "ObservedWSWNNWPaleWallFields": 20,
+    "OpaqueHighWindowGlass": 156,
+    "ProtectedExactNeutralWallRuns": 32,
+    "ThinStraightPublicRoofEdge": 92,
+    "ThinWindowMullions": 156
+  },
+  "pair_partition": {
+    "roof": [
+      1,
+      10,
+      1,
+      1,
+      10
+    ],
+    "wall": [
+      6,
+      1080,
+      1,
+      1,
+      52
+    ]
+  },
+  "protected_runs": [
+    4,
+    7,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "recognition_accepted": false,
+  "record_sha256": {
+    "building:w764313741:roof": "a64186052e8331d3ee744718f19ba8dc6350da4f67c8b51f29b9469c903c89d2",
+    "building:w764313741:wall": "0e3b5283ff9c055dc0a642d3608af13057ed6d1c87293d4b845991d9e96f9a8d"
+  },
+  "schema_version": "ti.fire-station48-live-replacement/1",
+  "source_collision_only": true,
+  "source_key": "w764313741",
+  "study_config_sha256": "2ae853642ed360f81ea6dfe53089fa909531af8776f40462fb129076f16b6795",
+  "target_chunk_id": "x_0__z_-2"
+}

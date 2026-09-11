@@ -1,0 +1,290 @@
+{
+  "schema_version": "ti.d5-batch-owner-package-verification/1",
+  "physical_unit_id": "physical-building:w764313741",
+  "owner_decision": "PASS",
+  "independent_exact_app_review_pending": false,
+  "independent_exact_app_decision": "PASS",
+  "independent_review": {
+    "path": "build/fire-station48-quality-candidate-provenance-001/raw/72/721e572380ae11cda759c8c6105b8a596e9383df092a6dcc654d2e24e7214996.md",
+    "sha256": "721e572380ae11cda759c8c6105b8a596e9383df092a6dcc654d2e24e7214996",
+    "bytes": 7703,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/independent-package-001/REVIEW.md",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "independent_review_scope": "Independent file/source and original owner execution evidence review; no duplicate independent engine invocation.",
+  "candidate_authority": "14/213",
+  "candidate_app_relative_path": "build/fire-station48-quality-candidate-002/Treasure Island First Playable.app",
+  "pck_sha256": "10797243d362f4005755f6ab43e08c5ed467959a11e0beaf2cdcb8b287f42edd",
+  "app_file_pins": {
+    "{BATCH_REPO}/build/fire-station48-quality-candidate-002/Treasure Island First Playable.app/Contents/Info.plist": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+    "{BATCH_REPO}/build/fire-station48-quality-candidate-002/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable": "414a4f1016fec4df0d635782e0c1d4bda39eb94be770dc28bb92bdfe0d2f326e",
+    "{BATCH_REPO}/build/fire-station48-quality-candidate-002/Treasure Island First Playable.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+    "{BATCH_REPO}/build/fire-station48-quality-candidate-002/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+    "{BATCH_REPO}/build/fire-station48-quality-candidate-002/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck": "10797243d362f4005755f6ab43e08c5ed467959a11e0beaf2cdcb8b287f42edd",
+    "{BATCH_REPO}/build/fire-station48-quality-candidate-002/Treasure Island First Playable.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+    "{BATCH_REPO}/build/fire-station48-quality-candidate-002/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources": "b9e9ba7765b2e8a25c0946319fe09d7f209cb35d59d0dcfe1e4e603d8f04f6da"
+  },
+  "source_world": {
+    "bodies": 466,
+    "meshes": 1023,
+    "rows": 735,
+    "shapes": 477,
+    "surfaces": 1038,
+    "triangles": 82789
+  },
+  "owner_actual_signed_worlds": {
+    "release-headless-smoke-001": {
+      "playable_rows": 735,
+      "context_rows": 4,
+      "meshes": 1023,
+      "surfaces": 1038,
+      "triangles": 82789,
+      "bodies": 466,
+      "shapes": 477,
+      "load_ms": 5694
+    },
+    "release-native-smoke-001": {
+      "playable_rows": 735,
+      "context_rows": 4,
+      "meshes": 1023,
+      "surfaces": 1038,
+      "triangles": 82789,
+      "bodies": 466,
+      "shapes": 477,
+      "load_ms": 5463
+    }
+  },
+  "independent_actual_signed_worlds": null,
+  "independent_engine_reexecution": false,
+  "unit_actual_attachment": {
+    "accepted_individual_reference": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/comparison-repair-001/focused-002-result.json",
+    "reference_sha256": "1eceafcba86ccd3df05056914f71f3ee123979aa3c7fe2f4f58285e97677796f",
+    "collision_triangles": [
+      52,
+      10
+    ],
+    "wall_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_0__z_-2__building_w764313741_wall/FireStation48LiveWallReplacement",
+    "roof_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_0__z_-2__building_w764313741_roof/FireStation48LiveRoofReplacement",
+    "scope": "Unchanged source/mechanics/visual gates reused; actual same-runtime native arrays/materials/ordered collision and receiver partitions compare in mounted component."
+  },
+  "signature_privacy_binding": {
+    "path": "build/fire-station48-quality-candidate-provenance-001/raw/8d/8d812f268a275ab854d483363d21711c22acb47732ae597329aaba8484b6a7d8.json",
+    "sha256": "8d812f268a275ab854d483363d21711c22acb47732ae597329aaba8484b6a7d8",
+    "bytes": 3133,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/actual-app-binding.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "owner_bundle_checks": {
+    "path": "build/fire-station48-quality-candidate-provenance-001/raw/54/54650dbe82c80cccab0dd745f069e3db27798889fd5b61050d26904718625a23.json",
+    "sha256": "54650dbe82c80cccab0dd745f069e3db27798889fd5b61050d26904718625a23",
+    "bytes": 5105,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/bundle-native-checks-001.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "independent_bundle_checks": null,
+  "terminal_slot_releases": [
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/3d/3de79cc56e40d90f6ce24b8d886567d1d49501bfeb754f5ec6642dc5a2b4d5e2.json",
+      "sha256": "3de79cc56e40d90f6ce24b8d886567d1d49501bfeb754f5ec6642dc5a2b4d5e2",
+      "bytes": 2412,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/SLOT_RELEASE.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "owner_handoff": {
+    "path": "build/fire-station48-quality-candidate-provenance-001/raw/f0/f07657dbef1ee11f3d1364a40633c29068c384f338d72d6196b1f2be1ce514f1.md",
+    "sha256": "f07657dbef1ee11f3d1364a40633c29068c384f338d72d6196b1f2be1ce514f1",
+    "bytes": 5262,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/OWNER_HANDOFF.md",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "owner_receipts": [
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/83/83f98f5fe7916920599203db875f8de3da62f785bdd70592b25928bb2aaa961f.json",
+      "sha256": "83f98f5fe7916920599203db875f8de3da62f785bdd70592b25928bb2aaa961f",
+      "bytes": 318478,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/import-002-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/fe/febbd9f54de89de6c8d32dc074b4c5223d5554c3b728d7263993497b6accb192.json",
+      "sha256": "febbd9f54de89de6c8d32dc074b4c5223d5554c3b728d7263993497b6accb192",
+      "bytes": 300715,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/export-002-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/08/080e2168a1434d7457cf311e5f65a11126c7b213e32deb96de6652a403de5a6c.json",
+      "sha256": "080e2168a1434d7457cf311e5f65a11126c7b213e32deb96de6652a403de5a6c",
+      "bytes": 301567,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/mounted-component-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/2d/2d45b24e6572fcc5ccb47c4c011c637afc72613623a5ceb291ec29fedb48a9a4.json",
+      "sha256": "2d45b24e6572fcc5ccb47c4c011c637afc72613623a5ceb291ec29fedb48a9a4",
+      "bytes": 301688,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/mounted-privacy-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/a7/a782639e1222020cd0dbc4736041616962778f5be1cb8aee17b3538aed8e2f67.json",
+      "sha256": "a782639e1222020cd0dbc4736041616962778f5be1cb8aee17b3538aed8e2f67",
+      "bytes": 301083,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/release-headless-smoke-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/09/0948ed7578c9d2c17d8195130c5947935f30ab1936c16e090f8ee0d1f6e423d9.json",
+      "sha256": "0948ed7578c9d2c17d8195130c5947935f30ab1936c16e090f8ee0d1f6e423d9",
+      "bytes": 301221,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/release-native-smoke-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "owner_logs": [
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/f1/f15ffd4c558b01611d562c8c257508942bdc2dc542124f423ae2a592a46edfa6.log",
+      "sha256": "f15ffd4c558b01611d562c8c257508942bdc2dc542124f423ae2a592a46edfa6",
+      "bytes": 1017,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/import-002.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/db/db3b7286d13bd7ff326ce736ce7e481f914d1f06f44ce46f72fc4b4986eeaaf0.log",
+      "sha256": "db3b7286d13bd7ff326ce736ce7e481f914d1f06f44ce46f72fc4b4986eeaaf0",
+      "bytes": 128546,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/export-002.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/6b/6b357e38791b42f4ee4fd47e49a76dac3918e4430c476f6008f798b9c5f3ef89.log",
+      "sha256": "6b357e38791b42f4ee4fd47e49a76dac3918e4430c476f6008f798b9c5f3ef89",
+      "bytes": 2180,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/mounted-component-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/31/3131b168dd688fb27ce935be78a39ba98d3535fdce5c81b357efd4e2fc82002e.log",
+      "sha256": "3131b168dd688fb27ce935be78a39ba98d3535fdce5c81b357efd4e2fc82002e",
+      "bytes": 769,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/mounted-privacy-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/ed/ed7193f5913ea90fa10aa7d69b35de15fb2781a4079c39631afd0c866f72eb4c.log",
+      "sha256": "ed7193f5913ea90fa10aa7d69b35de15fb2781a4079c39631afd0c866f72eb4c",
+      "bytes": 4738,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/release-headless-smoke-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/19/19c76f9398b689948fbabbc42a2a740e845da2ee90f4ff6c1302ed948fa3b1a0.log",
+      "sha256": "19c76f9398b689948fbabbc42a2a740e845da2ee90f4ff6c1302ed948fa3b1a0",
+      "bytes": 4804,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/release-native-smoke-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "independent_receipts": [],
+  "independent_logs": [],
+  "repair_lineage": [
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/e6/e645020d83ffa139831b73613c97230605375175207b94fb803c1a3034400b25.json",
+      "sha256": "e645020d83ffa139831b73613c97230605375175207b94fb803c1a3034400b25",
+      "bytes": 180355,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/REPAIR.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/1c/1c9a0241acd65935b5d1f79279cf9d8b67a6f713c418c417f052657034f7bd4f.json",
+      "sha256": "1c9a0241acd65935b5d1f79279cf9d8b67a6f713c418c417f052657034f7bd4f",
+      "bytes": 19144,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/cache-preflight.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/2e/2e093fca77744e6613532aefc788cacf2f9c1343c3b0beaeb71ba26dc378bf59.md",
+      "sha256": "2e093fca77744e6613532aefc788cacf2f9c1343c3b0beaeb71ba26dc378bf59",
+      "bytes": 2328,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/OWNER_HANDOFF-stopped-export001.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/c3/c39f06ba285061fdeca0b14746523cd93f75a81727454b7c8379a38f10d40d89.json",
+      "sha256": "c39f06ba285061fdeca0b14746523cd93f75a81727454b7c8379a38f10d40d89",
+      "bytes": 3356,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/failed-export-001/PRESERVATION.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/b7/b71de5c95d87eb09f6d63d0957cdb2a97841e2b858ee18689f35e9813218ad8a.json",
+      "sha256": "b71de5c95d87eb09f6d63d0957cdb2a97841e2b858ee18689f35e9813218ad8a",
+      "bytes": 292472,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/export-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/84/84e51e219387df62ee3fbb926f95efeff1d2f9fa849b573ea3a180813b3298bf.log",
+      "sha256": "84e51e219387df62ee3fbb926f95efeff1d2f9fa849b573ea3a180813b3298bf",
+      "bytes": 146444,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/export-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/f1/f1c757ccc40559d978c0c77d40362a67ebe44b278305405d4f74ba122b8e0679.json",
+      "sha256": "f1c757ccc40559d978c0c77d40362a67ebe44b278305405d4f74ba122b8e0679",
+      "bytes": 535,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/SLOT_RELEASE.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "coverage_split": [
+    "Reused strict source/lifecycle/motion proof on unchanged products; source owner world735/1023/1038/82789/466/477.",
+    "Mounted actual target builder dispatch/material/array/collision/receiver partitions and complete PCK privacy boundary, separately from ordinary main.",
+    "Signed executable headless and macOS native ordinary world, all six attachment predicates, stock movement defaults and spawn jetpack smoke."
+  ],
+  "limits": [
+    "Independent package review is file/source and actual owner runtime evidence review, with no duplicate engines.",
+    "No target package images, new static/motion visual decision, continuous-playback or manual-gameplay claim.",
+    "No M1/manual, OS-pixel, universal-runtime compatibility or publication claim; bundle slices checked and current Apple M2 runtime observed.",
+    "Original failed export001, cached class aliases and copied evidence preserved; only provenance discovery sentinel plus refresh/fresh output corrected the cause.",
+    "Native stage logs are clean; codesign entitlement-display deprecation warning preserved in bundle checks."
+  ],
+  "truth_boundary": {
+    "candidate_authority": "14/213",
+    "capture_time_authority": "14/213",
+    "inventory_physical_units": 213,
+    "new_unit_candidate": true,
+    "credit_granted": false,
+    "prospective_numerator_effect_after_separate_acceptance": 1,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_candidate_package_decision": "PASS",
+    "independent_unit_packet_visual_attestation_pending": true
+  }
+}

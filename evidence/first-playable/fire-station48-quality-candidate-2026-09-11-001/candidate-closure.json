@@ -1,0 +1,36 @@
+{
+  "schema_version": "ti.d5-fidelity-candidate-closure/1",
+  "status": "SEVEN_ROLES_BOUND_ACCEPTED_FOR_PROSPECTIVE_AUTHORITY",
+  "physical_unit_id": "physical-building:w764313741",
+  "candidate_authority": "14/213",
+  "capture_time_authority": "14/213",
+  "new_unit_candidate": true,
+  "recognition_credit_granted": false,
+  "prospective_numerator_effect_after_separate_acceptance": 1,
+  "seven_acceptance_bindings_prepared": {
+    "evidence_manifest_sha256": "f68b77fa5c6e8983288ad9f9ca36a4fd827e716cc1c99877270eeceb547786b6",
+    "motion_telemetry_manifest_sha256": "4e3a0ea032384bc1381468db84ae15c4ebc1eb75212a9fec20156d165414b028",
+    "visual_motion_manifest_sha256": "708692fe592b56c9b18cbf5d9bbc086dadb1c053153d37afbd5c37c6a91c0a3e",
+    "package_verification_receipt_sha256": "502c87a102c90ef446a1e3415b1bb6eca7050d46689c550c18609c3c9dc43b0b",
+    "evidence_tree_sha256": "6e8e1a6d8ff3ee12e961d7adaa78cdc72e8aa57dbb607251d5a1361c171eb895",
+    "mechanical_review_receipt_sha256": "fb4802671d8ec92d2cdff091a221fc6fe8f3d1dae6780446aa5604227f7cfed4",
+    "review_receipt_sha256": "cb06367c7de02d2379c855dfe33915d8bd54b85a33666f0582e949752f9310cf"
+  },
+  "image_tree_sha256": "6e8e1a6d8ff3ee12e961d7adaa78cdc72e8aa57dbb607251d5a1361c171eb895",
+  "evidence_tree_document_sha256": "9dae353459301e65690a44a3665d41ea4a8d5adf688799df3b1e57247f50173d",
+  "package_verification_pending": false,
+  "seventh_attestation_pending": false,
+  "limits": [
+    "Static source002 is a temporary study swap at historical base world735/1018/1033/81761/466/477; actual live source uses the production pair at735/1023/1038/82789/466/477. The captures are neither app screenshots nor new combined-release observations.",
+    "September2025 WSW/NNW reference scope is corroborated by source association. Fence, vehicles and equipment conceal lower details; protected4/7/10\u201323, retained6m mass/roof and hidden openings are not photo-certified. Dimensions/cadence are reversible production inference.",
+    "120 ground input rows and30 braking rows are all grounded; direct LAND contacts occur81 and25 times. Ground path7.405029m differs from net2.842637m; brake0.133453m and finalnet2.785015m are separate.",
+    "Roof is a separate explicit setup with90 natural-settle rows,32 falling/58 direct roof support. The immediate stale setup floor flag is not contact proof. No ground-to-roof traversal, roof-walk or unit-specific jetpack claim.",
+    "Actual stock direct API spray placed on exact wall shape0, rejected in-range LAND and ROOF shape0, tags0\u21921\u21921\u21921. This does not test mouse/keyboard event dispatch or manual play.",
+    "8 PNGs are1440x900. Original347-frame/60FPS movie and9 exact un-reencoded payloads are1280x800; physical extent retains70 bytes beyond RIFF-declared end. Sparse indices35/54/72/91/110/129/148/166/185 do not establish continuous playback or physics/draw/AVI identity; late two payloads share bytes.",
+    "Raw historical focused001 class-registration failure, original import warning, source002 precheck observation and all old reviewed source evidence remain exact. No successful source/capture proof was replayed for assembly.",
+    "Station48 is an uncredited new physical recognition unit with prospective+1 only after separate packet/visual attestation, candidate package verification and serialized authority/current-release work. Current14/213 remains unchanged; no current-release or M1/manual/universal-runtime claim."
+  ],
+  "independent_candidate_package_decision": "PASS",
+  "package_receipt_independent_review_sha256": "721e572380ae11cda759c8c6105b8a596e9383df092a6dcc654d2e24e7214996",
+  "root_acceptance_scope": "Candidate unit accepted for prospective+1 only; current14/213 unchanged until reviewed authority/current release."
+}

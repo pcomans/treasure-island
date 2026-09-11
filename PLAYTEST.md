@@ -8,18 +8,13 @@ behaves correctly as a continuous jetpack. The exact movement change in current
 source keeps walking at `4 m/s` and raises the same held-Shift run from
 `7 m/s` to `20 m/s` (about 45 mph), with a short acceleration/braking
 ramp. That change still needs ordinary-play feedback in the exact current
-package. Current technical authority is compiler `1.13.0`, catalog/registry v14 and contracts/loader v13: **14/213** recognized physical buildings, with 199 not evaluated. Newly accepted 1317 adds one credit while preserving the latest 1308/1394 quality revisions. Owner and independent package checks passed on the same app, measuring `735/1018/1033/81,761/466/477`. [1317 release closure](evidence/first-playable/d5-1317-current-release-2026-09-10-001/release-closure.json). MAIN transfer, publication and ordinary no-argument launch remain pending in this snapshot. Earlier outcomes and source images retain their original scope. Technical proof does not establish owner acceptance on Apple M1 Pro.
+package. Fire Station48 (`physical-building:w764313741`) adds one accepted physical unit: **15/213**, with **198 not evaluated**. All prior 14 acceptance records and 213 identities remain. Compiler `1.14.0`, catalog/registry v15 and contracts/loader v14 bind 14 active adapters, 23 plans and 17 package-ready plans. Owner package execution and independent review passed on the exact app `build/fire-station48-exact-current-001/Treasure Island First Playable.app`, with actual signed world `735/1023/1038/82,789/466/477`, all six attachments, stock movement/jetpack and separate mounted/privacy checks. PCK `8a5a42c73cc14008a30c9a86ef8187743e1328124d631bae2033a7c41683e012`; seven-file bundle `e8f6280660d251937a77bea97f2a4d8ec50e2f90245fbe24cec230fbdfdda13d`; executable `8136f070a79cb33eef25b496cdb042da9e6727e4ddb117ccdda4468332ed9cd1`. [Release closure](evidence/first-playable/fire-station48-current-release-2026-09-11-001/release-closure.json). Historical capture/candidate 14, 17 original images and sparse-motion/contact/setup limits remain unchanged. Native macOS smoke supplies no new OS pixels, manual-input/M1 acceptance or universal runtime claim. MAIN transfer, commit/push and ordinary no-argument launch remain pending in this preparation snapshot; HUMAN-001 remains owner-only.
 
 ## Start
 
-First quit any older game window (`Esc`, then `Q` while paused); macOS may otherwise focus a historical copy. After its reviewed MAIN transfer, the app is
-`build/d5-1317-exact-current-001/Treasure Island First Playable.app`.
-Use no launch arguments for owner play. The project selects the case-sensitive `Dummy` audio driver itself. Historical and candidate apps have separate identities.
+First quit any older game window (`Esc`, then `Q` while paused). After its reviewed MAIN transfer, use `build/fire-station48-exact-current-001/Treasure Island First Playable.app` with no launch arguments for owner play. The project selects the case-sensitive `Dummy` audio driver itself. Historical and candidate apps retain separate identities.
 
-Executable SHA-256 `bd004c7d772a1f06be6363c53a2d88be4ca335edd54ba6eea4172cb2122aed7b` (`170,963,648` bytes),
-PCK SHA-256 `9ab4e78f98b10cbc381d4cbd6a4f5e4367ec06766f6b5415cb070174c7ad9adf` (`68,678,168` bytes),
-seven-file bundle identity `c62ae8d2878135ace2206755bbb7ee91fee47f68ec8cac4b334be233b710de26`.
-The [release closure](evidence/first-playable/d5-1317-current-release-2026-09-10-001/release-closure.json) binds actual technical gates. Smoke runs supply no current app screenshots/manual input; owner feedback remains pending. [Previous 13 quality release publication](evidence/first-playable/d5-1308-1394-quality-current-release-2026-09-10-001-PUBLICATION.json) remains historical.
+Executable SHA-256 `8136f070a79cb33eef25b496cdb042da9e6727e4ddb117ccdda4468332ed9cd1`; PCK SHA-256 `8a5a42c73cc14008a30c9a86ef8187743e1328124d631bae2033a7c41683e012` (`69,170,808` bytes); seven-file identity `e8f6280660d251937a77bea97f2a4d8ec50e2f90245fbe24cec230fbdfdda13d`. Current package smoke supplies no new screenshots or manual acceptance.
 
 ### Historical B225 package identity (not current playtest bytes)
 

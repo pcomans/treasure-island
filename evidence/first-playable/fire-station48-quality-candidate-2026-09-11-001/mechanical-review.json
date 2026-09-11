@@ -1,0 +1,70 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w764313741",
+  "label": "Independent source geometry, live lifecycle and affected mechanics",
+  "origins": [
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/9d/9def432720cfb0b8c6e1555cd5309ee3eab99347d4ffb6ddbafb24589180c0b5.md",
+      "sha256": "9def432720cfb0b8c6e1555cd5309ee3eab99347d4ffb6ddbafb24589180c0b5",
+      "bytes": 6328,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-independent-source-geometry-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/c7/c77d81e61c49862831a5c97fe6efdaddc4f8c8bc9c96adcb3533f8e6137c6307.md",
+      "sha256": "c77d81e61c49862831a5c97fe6efdaddc4f8c8bc9c96adcb3533f8e6137c6307",
+      "bytes": 5202,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/comparison-repair-001/independent-source-lifecycle-002/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/32/32d08d737df8a729d6cc9a7d1e1de7f8d0090ca89c71ebc9248cdd81a9b25ecc.md",
+      "sha256": "32d08d737df8a729d6cc9a7d1e1de7f8d0090ca89c71ebc9248cdd81a9b25ecc",
+      "bytes": 6372,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/motion-spray-preparation-001/roof-scope-revision-001/independent-motion-mechanics-001/REVIEW.md",
+      "role": "exact_original"
+    }
+  ],
+  "data": {
+    "independent_status": "SCOPED_PASS",
+    "source_geometry_review": {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/9d/9def432720cfb0b8c6e1555cd5309ee3eab99347d4ffb6ddbafb24589180c0b5.md",
+      "sha256": "9def432720cfb0b8c6e1555cd5309ee3eab99347d4ffb6ddbafb24589180c0b5",
+      "bytes": 6328,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-independent-source-geometry-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    "source_lifecycle_review": {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/c7/c77d81e61c49862831a5c97fe6efdaddc4f8c8bc9c96adcb3533f8e6137c6307.md",
+      "sha256": "c77d81e61c49862831a5c97fe6efdaddc4f8c8bc9c96adcb3533f8e6137c6307",
+      "bytes": 5202,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/comparison-repair-001/independent-source-lifecycle-002/REVIEW.md",
+      "role": "exact_original"
+    },
+    "mechanical_review": {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/32/32d08d737df8a729d6cc9a7d1e1de7f8d0090ca89c71ebc9248cdd81a9b25ecc.md",
+      "sha256": "32d08d737df8a729d6cc9a7d1e1de7f8d0090ca89c71ebc9248cdd81a9b25ecc",
+      "bytes": 6372,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/motion-spray-preparation-001/roof-scope-revision-001/independent-motion-mechanics-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    "accepted_focused_result": {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/1e/1eceafcba86ccd3df05056914f71f3ee123979aa3c7fe2f4f58285e97677796f.json",
+      "sha256": "1eceafcba86ccd3df05056914f71f3ee123979aa3c7fe2f4f58285e97677796f",
+      "bytes": 549111,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/comparison-repair-001/focused-002-result.json",
+      "role": "exact_original"
+    },
+    "limits": [
+      "Static source002 is a temporary study swap at historical base world735/1018/1033/81761/466/477; actual live source uses the production pair at735/1023/1038/82789/466/477. The captures are neither app screenshots nor new combined-release observations.",
+      "September2025 WSW/NNW reference scope is corroborated by source association. Fence, vehicles and equipment conceal lower details; protected4/7/10\u201323, retained6m mass/roof and hidden openings are not photo-certified. Dimensions/cadence are reversible production inference.",
+      "120 ground input rows and30 braking rows are all grounded; direct LAND contacts occur81 and25 times. Ground path7.405029m differs from net2.842637m; brake0.133453m and finalnet2.785015m are separate.",
+      "Roof is a separate explicit setup with90 natural-settle rows,32 falling/58 direct roof support. The immediate stale setup floor flag is not contact proof. No ground-to-roof traversal, roof-walk or unit-specific jetpack claim.",
+      "Actual stock direct API spray placed on exact wall shape0, rejected in-range LAND and ROOF shape0, tags0\u21921\u21921\u21921. This does not test mouse/keyboard event dispatch or manual play.",
+      "8 PNGs are1440x900. Original347-frame/60FPS movie and9 exact un-reencoded payloads are1280x800; physical extent retains70 bytes beyond RIFF-declared end. Sparse indices35/54/72/91/110/129/148/166/185 do not establish continuous playback or physics/draw/AVI identity; late two payloads share bytes.",
+      "Raw historical focused001 class-registration failure, original import warning, source002 precheck observation and all old reviewed source evidence remain exact. No successful source/capture proof was replayed for assembly.",
+      "Station48 is an uncredited new physical recognition unit with prospective+1 only after separate packet/visual attestation, candidate package verification and serialized authority/current-release work. Current14/213 remains unchanged; no current-release or M1/manual/universal-runtime claim."
+    ]
+  },
+  "truth_boundary": "Derived assembly references exact original evidence; no source/mechanical/visual decision is newly made by the author. Candidate package and separate seventh unit attestation remain pending; current14/213 unchanged."
+}

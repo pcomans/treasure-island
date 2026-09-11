@@ -1,0 +1,241 @@
+{
+  "reviewer": "capture_1410_revision002",
+  "reviewed_at": "2026-09-11T06:52:49.288093+00:00",
+  "decision": "PASS",
+  "attestation_kind": "Independent per-unit candidate packet and visual attestation (seventh artifact)",
+  "physical_unit_id": "physical-building:w764313741",
+  "scope": "Exact Station48 six-binding/17-image-tree candidate combination, reusing the unchanged independently inspected static and sparse visual-motion result plus separately accepted source/mechanics and exact candidate002 package. Seventh hash is computed externally when owner serializes it.",
+  "independence": "C did not author Station48 implementation or assemble this packet. C authored the separate static and visual-motion reviews; E separately reviewed source/mechanics and actual candidate package evidence. No new engine or repeat image inspection was performed for this assembly attestation.",
+  "packet": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-fire-station48-study-v1/evidence/first-playable/fire-station48-quality-candidate-2026-09-11-001",
+  "candidate_closure_sha256": "ff7e8419fcf582c5790e274d2c79db1fb2d7d73cd2fa0f0b5166d4018df11cee",
+  "acceptance_bindings": {
+    "evidence_manifest_sha256": "f68b77fa5c6e8983288ad9f9ca36a4fd827e716cc1c99877270eeceb547786b6",
+    "motion_telemetry_manifest_sha256": "4e3a0ea032384bc1381468db84ae15c4ebc1eb75212a9fec20156d165414b028",
+    "visual_motion_manifest_sha256": "708692fe592b56c9b18cbf5d9bbc086dadb1c053153d37afbd5c37c6a91c0a3e",
+    "package_verification_receipt_sha256": "502c87a102c90ef446a1e3415b1bb6eca7050d46689c550c18609c3c9dc43b0b",
+    "evidence_tree_sha256": "6e8e1a6d8ff3ee12e961d7adaa78cdc72e8aa57dbb607251d5a1361c171eb895",
+    "mechanical_review_receipt_sha256": "fb4802671d8ec92d2cdff091a221fc6fe8f3d1dae6780446aa5604227f7cfed4"
+  },
+  "evidence_tree_document_sha256": "9dae353459301e65690a44a3665d41ea4a8d5adf688799df3b1e57247f50173d",
+  "binding_check": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/independent-unit-visual-001/BINDING_CHECK.json",
+    "sha256": "0fc7ba102fa9e289265931a07dca2b7cf86ada971b9c0d0cd3afb7196eccead8"
+  },
+  "package_binding_check": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/independent-unit-visual-001/PACKAGE_BINDING_CHECK.json",
+    "sha256": "54d7894268bbe5384a0ba3e5d357e40a56943c595a1d0e615b46a5e19cc01cd0"
+  },
+  "reference": {
+    "pano": "U1HtZQlUKomn07I4TT93ug",
+    "date": "September 2025",
+    "heading": 125,
+    "pitch": 0,
+    "fov": 70,
+    "image_path": "/private/tmp/fire-station48-reference-observation-N9W3Pv/fire-station48-wsw-september-2025-actual70fov.png",
+    "image_sha256": "5e734146400132e6b038a3475b057dbf4cfab0e4049a809a4ac3767f25139adc",
+    "previously_directly_inspected": true,
+    "reference_pixels_retained_outside_repo_and_app": true
+  },
+  "previously_inspected_image_count": 17,
+  "images": [
+    {
+      "path": "images/live-avi/avi-index-0035.jpg",
+      "sha256": "68c549f929b06f69e05c040c5aa2dd7ecdc0820cd524ce60a579cd5a6d61bb34",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0035.jpg",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "exact_original_mjpeg_payload"
+    },
+    {
+      "path": "images/live-avi/avi-index-0054.jpg",
+      "sha256": "33715ec13259e92ab65102b7544adcd43fb1fa08092a5a6252f5199ff86b6b08",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0054.jpg",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "exact_original_mjpeg_payload"
+    },
+    {
+      "path": "images/live-avi/avi-index-0072.jpg",
+      "sha256": "535193672c7e01fca6e527fb08e258bdcb79584a73b24fd3bb5733bec939dfc2",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0072.jpg",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "exact_original_mjpeg_payload"
+    },
+    {
+      "path": "images/live-avi/avi-index-0091.jpg",
+      "sha256": "80832652ab0ade55973eff14037488caec4b06af1aa88a2622155d3df6f89e9e",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0091.jpg",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "exact_original_mjpeg_payload"
+    },
+    {
+      "path": "images/live-avi/avi-index-0110.jpg",
+      "sha256": "1d0d3c8be98c10f45e02724ae9fb751da36d612481cc84728c0e300573b98c62",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0110.jpg",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "exact_original_mjpeg_payload"
+    },
+    {
+      "path": "images/live-avi/avi-index-0129.jpg",
+      "sha256": "2b59541058feeab95f1d40ce5fddf12811a8af163aff4c67169e4af70ce1bdfe",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0129.jpg",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "exact_original_mjpeg_payload"
+    },
+    {
+      "path": "images/live-avi/avi-index-0148.jpg",
+      "sha256": "7214b1cb48108aff7e3d18f40728cb44706cf7fabad7ad20475cd4b1e8468ce1",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0148.jpg",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "exact_original_mjpeg_payload"
+    },
+    {
+      "path": "images/live-avi/avi-index-0166.jpg",
+      "sha256": "c4c06b6bd4266d9936b2940a3aa71cc84f7fe65b346d6b0676f1d5b249e7460e",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0166.jpg",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "exact_original_mjpeg_payload"
+    },
+    {
+      "path": "images/live-avi/avi-index-0185.jpg",
+      "sha256": "c4c06b6bd4266d9936b2940a3aa71cc84f7fe65b346d6b0676f1d5b249e7460e",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/avi-frame-samples/avi-index-0185.jpg",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "exact_original_mjpeg_payload"
+    },
+    {
+      "path": "images/live-motion/01-motion-start-default.png",
+      "sha256": "bd8ae6b220589bcb7b592e4b99c13c63d8eb4c5d7c0f26b668b2c8630468db2e",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/images/01-motion-start-default.png",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "live_native_phase"
+    },
+    {
+      "path": "images/live-motion/02-motion-endpoint-default.png",
+      "sha256": "f30bc238afc5c62d13e11384451642802b0091bb84b3174aaf3c64b6b34324c3",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/images/02-motion-endpoint-default.png",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "live_native_phase"
+    },
+    {
+      "path": "images/live-motion/03-actual-wall-spray.png",
+      "sha256": "77f76e8aeace681133e612d6ca7eec5152cb4fbc1fb130875043f2d6c33dbd51",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/images/03-actual-wall-spray.png",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "live_native_phase"
+    },
+    {
+      "path": "images/live-motion/04-source-roof-support-rejection.png",
+      "sha256": "7d6f974e13dc8db5a2327b587b6f1378562cf6dc82c55c475a3d2d93f58011a3",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-live-motion-002/images/04-source-roof-support-rejection.png",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "live_native_phase"
+    },
+    {
+      "path": "images/study002/01-whole-baseline-default.png",
+      "sha256": "c89891f34c7554a0a805c841b2be9dd0a945c4addd5108b43a5349daae42d730",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-first-coherent-study-002/01-whole-baseline-default.png",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "static_baseline"
+    },
+    {
+      "path": "images/study002/02-whole-candidate-default.png",
+      "sha256": "2a260c2c8cbb4a46b9dbe804bc5a48a4f6b642271229cd7b4d98914c79f34822",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-first-coherent-study-002/02-whole-candidate-default.png",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "static_candidate"
+    },
+    {
+      "path": "images/study002/03-whole-candidate-changed.png",
+      "sha256": "8c7b48aba58cfcaee1990e7239bab97f00c92ab7b7ead5b49174e084b09fd662",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-first-coherent-study-002/03-whole-candidate-changed.png",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "static_candidate"
+    },
+    {
+      "path": "images/study002/04-high-window-roof-edge-near-default.png",
+      "sha256": "2972a8fbad0c5d97b79f7e11904b6be33cbfea34786b535615ed7768649f11f2",
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/fire-station48-first-coherent-study-002/04-high-window-roof-edge-near-default.png",
+      "packet_equals_previously_reviewed_original": true,
+      "role": "static_candidate"
+    }
+  ],
+  "reused_visual_reviews": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-first-coherent-study-002/independent-visual-002/REVIEW.md",
+      "sha256": "36bdfe0a63cc1c8d4108893a81a1bd057c2bae169cb486f5fc201ae04e0013e9"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/motion-spray-preparation-001/roof-scope-revision-001/independent-visual-motion-001/REVIEW.md",
+      "sha256": "655ebd8cdd38321ba29b25ad8cbb221ce0f086039d464ab58f3b123e2a67274c"
+    }
+  ],
+  "whole_visible_result_findings": {
+    "fidelity": "PASS in the dated visible public-side scope: pale fine upper cladding, repeated complete high dark windows and restrained straight roof edge form a coherent recognizable improvement over the source mass baseline. Whole/default/changed/near static evidence retains its prior independent PASS.",
+    "finish": "The previously rejected dotted relief headband was replaced by a quiet filtered tonal line; upper cladding remains restrained and the supplied ordinary near view introduced no new conspicuous material defect. Coarse retained roof texture and hidden lower-wall details remain disclosed limits.",
+    "sampled_motion": "Four actual live phase PNGs and nine original un-reencoded AVI payloads retain the facade/window/roof-edge reading, with no additional blocker in those inspected samples. This reuses the prior655ebd8c review; it is not continuous playback, frame identity or an FPS claim.",
+    "substantive_visible_gap_remaining_in_reviewed_scope": null,
+    "as_built_limit": "Retained6m mass, source/protected runs and inferred13-window cadence/dimensions are not survey-certified. Vehicles, equipment and fence obscure lower reference details; no invented hidden/interior requirement or hidden-face fidelity claim."
+  },
+  "retained_source_mechanics": {
+    "decision": "SCOPED_PASS",
+    "mechanical_role_sha256": "fb4802671d8ec92d2cdff091a221fc6fe8f3d1dae6780446aa5604227f7cfed4",
+    "source_geometry_review_sha256": "9def432720cfb0b8c6e1555cd5309ee3eab99347d4ffb6ddbafb24589180c0b5",
+    "lifecycle_review_sha256": "c77d81e61c49862831a5c97fe6efdaddc4f8c8bc9c96adcb3533f8e6137c6307",
+    "motion_mechanics_review_sha256": "32d08d737df8a729d6cc9a7d1e1de7f8d0090ca89c71ebc9248cdd81a9b25ecc",
+    "scope": "Exact original source channels and wall52/roof10 ordered collision/receiver partition are retained by independently reviewed unchanged source. Actual ground motion/braking, wall spray and separate natural roof support/rejection remain scoped; no ground-to-roof traversal or manual-input claim."
+  },
+  "shared_candidate_package": {
+    "decision": "PASS",
+    "review": {
+      "path": "build/fire-station48-quality-candidate-provenance-001/raw/72/721e572380ae11cda759c8c6105b8a596e9383df092a6dcc654d2e24e7214996.md",
+      "sha256": "721e572380ae11cda759c8c6105b8a596e9383df092a6dcc654d2e24e7214996",
+      "bytes": 7703,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-quality-delivery-001/provenance-discovery-repair-001/independent-package-001/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "package_verification_receipt_sha256": "502c87a102c90ef446a1e3415b1bb6eca7050d46689c550c18609c3c9dc43b0b",
+    "pck_sha256": "10797243d362f4005755f6ab43e08c5ed467959a11e0beaf2cdcb8b287f42edd",
+    "actual_unit_attachment": {
+      "accepted_individual_reference": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/fire-station48-live-integration-001/comparison-repair-001/focused-002-result.json",
+      "reference_sha256": "1eceafcba86ccd3df05056914f71f3ee123979aa3c7fe2f4f58285e97677796f",
+      "collision_triangles": [
+        52,
+        10
+      ],
+      "wall_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_0__z_-2__building_w764313741_wall/FireStation48LiveWallReplacement",
+      "roof_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_0__z_-2__building_w764313741_roof/FireStation48LiveRoofReplacement",
+      "scope": "Unchanged source/mechanics/visual gates reused; actual same-runtime native arrays/materials/ordered collision and receiver partitions compare in mounted component."
+    },
+    "source_world": {
+      "bodies": 466,
+      "meshes": 1023,
+      "rows": 735,
+      "shapes": 477,
+      "surfaces": 1038,
+      "triangles": 82789
+    },
+    "app7_exact_at_attestation": true,
+    "scope": "Actual owner canonical import/export and four package/runtime stages, independently reviewed by E; mounted target/privacy and signed ordinary-main headless/native remain distinct. No duplicate engine execution or new package screenshots.",
+    "platform_limit": "Two binary slices/signature checked; actual native runtime reported Apple M2. No M1, manual play or universal-runtime compatibility claim."
+  },
+  "limits": [
+    "Static source002 is a temporary study swap at historical base world735/1018/1033/81761/466/477; actual live source uses the production pair at735/1023/1038/82789/466/477. The captures are neither app screenshots nor new combined-release observations.",
+    "September2025 WSW/NNW reference scope is corroborated by source association. Fence, vehicles and equipment conceal lower details; protected4/7/10\u201323, retained6m mass/roof and hidden openings are not photo-certified. Dimensions/cadence are reversible production inference.",
+    "120 ground input rows and30 braking rows are all grounded; direct LAND contacts occur81 and25 times. Ground path7.405029m differs from net2.842637m; brake0.133453m and finalnet2.785015m are separate.",
+    "Roof is a separate explicit setup with90 natural-settle rows,32 falling/58 direct roof support. The immediate stale setup floor flag is not contact proof. No ground-to-roof traversal, roof-walk or unit-specific jetpack claim.",
+    "Actual stock direct API spray placed on exact wall shape0, rejected in-range LAND and ROOF shape0, tags0\u21921\u21921\u21921. This does not test mouse/keyboard event dispatch or manual play.",
+    "8 PNGs are1440x900. Original347-frame/60FPS movie and9 exact un-reencoded payloads are1280x800; physical extent retains70 bytes beyond RIFF-declared end. Sparse indices35/54/72/91/110/129/148/166/185 do not establish continuous playback or physics/draw/AVI identity; late two payloads share bytes.",
+    "Raw historical focused001 class-registration failure, original import warning, source002 precheck observation and all old reviewed source evidence remain exact. No successful source/capture proof was replayed for assembly.",
+    "Station48 is an uncredited new physical recognition unit with prospective+1 only after separate packet/visual attestation, candidate package verification and serialized authority/current-release work. Current14/213 remains unchanged; no current-release or M1/manual/universal-runtime claim."
+  ],
+  "next_action": "Root may independently accept this exact seventh artifact and authorize D to serialize Station48 authority plus fresh exact-current export/release. This receipt itself edits neither packet nor authority.",
+  "authority": {
+    "candidate": "14/213",
+    "inventory": 213,
+    "new_uncredited_unit": true,
+    "prospective_effect_after_separate_acceptance": 1,
+    "credit_granted": false,
+    "MAIN_changed": false
+  },
+  "retro_exact": "C / Station48 independent seventh attestation \u2014 Reused prior directly inspected static and sparse live images; the initial17-image/five-role precheck stayed pending through the real failed export and canonical-discovery repair. After the actual six-stage candidate002 PASS, fully read E\u2019s independent package verdict and the owner receipt, bound their exact original bytes to the unchanged five roles/tree, and rehashed the actual seven-file app. No duplicate visual or engine run was needed. Preserved first-export failure, private reference/raw retention, image-tree/document distinction, historical-image versus package scope, sparse motion and AppleM2/manual limits. Final unit packet PASS enables separate root authority/current-release work; it grants no credit itself. Exact retrospective pending the normal shared checkpoint."
+}
