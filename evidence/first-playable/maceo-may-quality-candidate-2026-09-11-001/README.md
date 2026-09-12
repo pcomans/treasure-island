@@ -1,0 +1,3 @@
+Maceo May uncredited current15 candidate packet. All seven roles are bound; candidate002 package verification and independent unit/image-tree attestation passed. Prospective authority integration remains separate. Current15/213 unchanged.
+
+20 exact images:5 historical static views,1 successful001 wall-placement original,5 motion002 PNGs and9 original002 AVI payloads. Both complete original movies/telemetry/raw failures and omitted historical images remain private. Image-tree digest differs from the tree-document hash. Actual reference pixels remain outside repository/app. See candidate-closure.json for the explicit001/002 included and excluded scopes.

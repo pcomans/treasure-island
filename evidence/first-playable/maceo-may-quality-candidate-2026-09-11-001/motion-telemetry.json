@@ -1,0 +1,85 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:r19685981",
+  "label": "Two complete immutable motion origins with expressly combined scoped successes",
+  "origins": [
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/22/229e2907748fc5d6c6f45aa414a7397c116171d8b6727a0454d138d07c3aeccd.json",
+      "sha256": "229e2907748fc5d6c6f45aa414a7397c116171d8b6727a0454d138d07c3aeccd",
+      "bytes": 2809568,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/motion-001-result.json",
+      "role": "exact_original"
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/4e/4eb111a65bf87b5867c38810a24a910194ecaf82a4e6d19f8f9a5c2249288692.json",
+      "sha256": "4eb111a65bf87b5867c38810a24a910194ecaf82a4e6d19f8f9a5c2249288692",
+      "bytes": 2860165,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/motion-002-result.json",
+      "role": "exact_original"
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/f1/f1a97d8d483353a066e8616ee8b88b216cf4a85f108183d3a8a95b67d5f6c436.md",
+      "sha256": "f1a97d8d483353a066e8616ee8b88b216cf4a85f108183d3a8a95b67d5f6c436",
+      "bytes": 4207,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/independent-motion-mechanics-002/COMBINED_APPLICABILITY.md",
+      "role": "exact_original"
+    }
+  ],
+  "data": {
+    "raw_results": [
+      {
+        "path": "build/maceo-may-quality-candidate-provenance-001/raw/22/229e2907748fc5d6c6f45aa414a7397c116171d8b6727a0454d138d07c3aeccd.json",
+        "sha256": "229e2907748fc5d6c6f45aa414a7397c116171d8b6727a0454d138d07c3aeccd",
+        "bytes": 2809568,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/motion-001-result.json",
+        "role": "exact_original"
+      },
+      {
+        "path": "build/maceo-may-quality-candidate-provenance-001/raw/4e/4eb111a65bf87b5867c38810a24a910194ecaf82a4e6d19f8f9a5c2249288692.json",
+        "sha256": "4eb111a65bf87b5867c38810a24a910194ecaf82a4e6d19f8f9a5c2249288692",
+        "bytes": 2860165,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/motion-002-result.json",
+        "role": "exact_original"
+      }
+    ],
+    "raw_ok": [
+      false,
+      false
+    ],
+    "raw_failures": [
+      [
+        "Forward column approach actually contacts the unchanged visible column shape1; a miss is not support proof."
+      ],
+      [
+        "eligible_exposed_original_wall actual exact expected shape within stock range: {\"collider_path\":\"/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_1__building_r19685981_wall/MaceoMayLiveWallReplacement/Collision\",\"collision_layer\":5,\"collision_mask\":0,\"derived_object_key\":\"building:r19685981:wall\",\"exact_structure_body\":true,\"feature_kind\":\"building_wall\",\"resolved_receiver_metadata\":{\"derived_object_key\":\"building:r19685981:wall\",\"opaque\":true,\"receiver_kind\":\"building_wall\",\"source_keys\":[\"r19685981\"]},\"shape_index\":0,\"shape_node_path\":\"/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_1__building_r19685981_wall/MaceoMayLiveWallReplacement/Collision/ExactClosedSourceWalls\",\"structural_role\":\"ExactClosedSourceWalls\",\"wall_receiver_group\":true}",
+        "eligible_exposed_original_wall actual stock result/identity/tag-count matches []"
+      ]
+    ],
+    "independent_mechanics": {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/f1/f1a97d8d483353a066e8616ee8b88b216cf4a85f108183d3a8a95b67d5f6c436.md",
+      "sha256": "f1a97d8d483353a066e8616ee8b88b216cf4a85f108183d3a8a95b67d5f6c436",
+      "bytes": 4207,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/independent-motion-mechanics-002/COMBINED_APPLICABILITY.md",
+      "role": "exact_original"
+    },
+    "independent_status": "SCOPED_PASS",
+    "trace_rows_per_run": 402,
+    "input_rows_per_run": 252,
+    "brake_rows_per_run": 30,
+    "separate_roof_settle_rows_per_run": 90,
+    "initial_settle_rows_per_run": 30,
+    "successful_wall_origin": "motion001",
+    "successful_column_contact_origin": "motion002",
+    "limits": [
+      "All selected photographs of the game were captured in the historical14 world. ENE/baseline study views retain their unchanged original scope; the repaired SSE pair shows the corrected curtain. Actual merged current15 source is now735/1032/1047/99129/466/478. These are neither app screenshots nor new combined-release pictures.",
+      "September2025 ENE/SSE references show pale complete grids/graphite base and fine ribs/rust complete frames/entrance glazing/columns. Trees and crops obscure portions of the public faces; upper whole-building extent, courtyard21\u201339, roof and protected sides remain unknown. Counts/depths/cadence are production inference. No reference pixels are copied.",
+      "Independent affected mechanics PASS combines explicit successes on identical products: motion001 exact in-range wall placement at4.739649m; motion002 real first-column shape1 contact on14 physics rows, all252 input/30 brake rows grounded, retreat/return and in-range column/LAND/roof rejection. Both raw ok:false records remain unchanged; no fictitious single all-success continuous run.",
+      "Motion001 missed the intended column because of reversed lateral helper actions. Motion002 skipped wall placement at6.241111755m beyond stock6m; its03 planned wall-spray filename does not prove a placement or stock rejection. The selected separate00103 shows the successful tag.",
+      "Each motion run retains402 complete records:30 initial,252 input,30 brake and90 separate roof-settle rows. Roof support is explicitly set up and naturally settled, not ground-to-roof walking/jetpack ascent or roof-art certification. Actual spray API calls do not prove physical mouse dispatch.",
+      "11 selected native PNGs are1440x900. Two complete original508-frame AVI files and selected nine002 payloads are1280x800; both movies retain their70-byte physical tails. Sparse indices41/76/112/147/182/217/252/288/323 do not establish continuous playback or physics/draw/AVI identity. All omitted001 media remains private and original.",
+      "Initial bad camera views, original curtain overlap, snapshot/packed-expectation helper failures, both motion failures and unrun preparation/release-guard history remain retained. No successful source/capture or motion evidence was replayed for assembly.",
+      "Maceo is an uncredited physical unit; prospective+1 only after exact candidate package verification, separate seventh attestation and serialized current-authority delivery. Current15/213 and historical14/credit0 runtime metadata remain exact. No manual/M1/universal-runtime/current-release claim."
+    ]
+  },
+  "truth_boundary": "Derived assembly binds unchanged original evidence and its independent scoped decisions; no new author visual/mechanical decision. Current15/213 is unchanged. Candidate package and separate seventh unit attestation remain pending."
+}

@@ -7,11 +7,11 @@ const EXPECTED_MANIFEST_HASH := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e
 const EXPECTED_CHUNKS := 38
 const EXPECTED_PLAYABLE_ROWS := 735
 const EXPECTED_CONTEXT_ROWS := 4
-const EXPECTED_MESHES := 1023
-const EXPECTED_SURFACES := 1038
-const EXPECTED_TRIANGLES := 82789
+const EXPECTED_MESHES := 1032
+const EXPECTED_SURFACES := 1047
+const EXPECTED_TRIANGLES := 99129
 const EXPECTED_STATIC_BODIES := 466
-const EXPECTED_SHAPES := 477
+const EXPECTED_SHAPES := 478
 const EXPECTED_VEGETATION_SEED := 1414092337
 const EXPECTED_VEGETATION_INSTANCES := 124
 const EXPECTED_VEGETATION_ASSETS := 15
@@ -139,6 +139,7 @@ func _finish_mac_export_smoke(report: Dictionary) -> void:
 	var d5_1394_attachment_valid := _mac_export_1394_attachment_valid()
 	var d5_1317_attachment_valid := _mac_export_1317_attachment_valid()
 	var fire_station48_attachment_valid := _mac_export_fire_station48_attachment_valid()
+	var maceo_may_attachment_valid := _mac_export_maceo_may_attachment_valid()
 	var spawn := world_root.get_spawn_transform()
 	var visual_defaults_valid := _visual_defaults_valid()
 	var semantic_materials_valid := _semantic_materials_valid()
@@ -150,6 +151,7 @@ func _finish_mac_export_smoke(report: Dictionary) -> void:
 		and d5_1394_attachment_valid \
 		and d5_1317_attachment_valid \
 		and fire_station48_attachment_valid \
+		and maceo_may_attachment_valid \
 		and str(report.get("content_sha256", "")) == EXPECTED_MANIFEST_HASH \
 		and spawn.origin.is_equal_approx(EXPECTED_FERRY_SPAWN_ORIGIN) \
 		and spawn.basis.is_equal_approx(Basis(Vector3.UP, EXPECTED_FERRY_SPAWN_YAW)) \
@@ -601,4 +603,44 @@ func _mac_export_fire_station48_attachment_valid() -> bool:
 		and bool(wall.get_meta("runtime_attachment", false)) and bool(roof.get_meta("runtime_attachment", false)) \
 		and not bool(wall.get_meta("prototype_only", true)) and not bool(roof.get_meta("prototype_only", true))
 	print("MAC_EXPORT_FIRE_STATION48_ATTACHMENT: valid=%s wall=%s roof=%s wall_counts=%s roof_counts=%s source_geometry=%s captured_authority=14/213 credit=0" % [valid, wall.get_path(), roof.get_path(), wall_measure, roof_measure, metadata.get("accepted_study002_geometry_sha256", "")])
+	return valid
+
+
+func _mac_export_maceo_may_attachment_valid() -> bool:
+	var walls: Array[Node3D] = []
+	var roofs: Array[Node3D] = []
+	for node: Node in world_root.find_children("*", "Node3D", true, false):
+		if not node.has_meta("feature_kind"):
+			continue
+		var key := str(node.get_meta("derived_object_key", ""))
+		if key == "building:r19685981:wall":
+			walls.append(node as Node3D)
+		elif key == "building:r19685981:roof":
+			roofs.append(node as Node3D)
+	if walls.size() != 1 or roofs.size() != 1:
+		print("MAC_EXPORT_MACEO_MAY_ATTACHMENT: invalid pair count wall=%d roof=%d" % [walls.size(), roofs.size()])
+		return false
+	var wall := walls[0]
+	var roof := roofs[0]
+	var wall_measure := _mac_export_attachment_measure(wall)
+	var roof_measure := _mac_export_attachment_measure(roof)
+	var metadata := wall.get_meta("maceo_may_live_replacement", {}) as Dictionary
+	var valid := wall.name == "MaceoMayLiveWallReplacement" and roof.name == "MaceoMayLiveRoofReplacement" \
+		and wall_measure == {"meshes": 10, "surfaces": 10, "triangles": 16420, "bodies": 1, "shapes": 2} \
+		and roof_measure == {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1} \
+		and metadata == (roof.get_meta("maceo_may_live_replacement", {}) as Dictionary) \
+		and str(metadata.get("adapter_id", "")) == "active-adapter:maceo-may-live:building:r19685981:wall" \
+		and str(metadata.get("curtain_repaired_geometry_sha256", "")) == "4caf46d6c3ebb1ef497fbe8012e5f1fd938a055e11a4132c04ed8e6827da12b3" \
+		and int(metadata.get("factory_calls", -1)) == 1 \
+		and not bool(metadata.get("source_collision_only", true)) and not bool(metadata.get("all_additions_render_only", true)) \
+		and str(metadata.get("added_collision_scope", "")) == "Five unchanged visible round columns, separate nonreceiver shape" \
+		and str(metadata.get("captured_authority_metric", "")) == "14/213" \
+		and int(metadata.get("candidate_recognition_credit", -1)) == 0 \
+		and not bool(metadata.get("recognition_accepted", true)) \
+		and not bool(metadata.get("partial_pair_allowed", true)) \
+		and not bool(metadata.get("fallback_allowed", true)) \
+		and not bool(metadata.get("stack_allowed", true)) \
+		and bool(wall.get_meta("runtime_attachment", false)) and bool(roof.get_meta("runtime_attachment", false)) \
+		and not bool(wall.get_meta("prototype_only", true)) and not bool(roof.get_meta("prototype_only", true))
+	print("MAC_EXPORT_MACEO_MAY_ATTACHMENT: valid=%s wall=%s roof=%s wall_counts=%s roof_counts=%s source_geometry=%s captured_authority=14/213 credit=0" % [valid, wall.get_path(), roof.get_path(), wall_measure, roof_measure, metadata.get("curtain_repaired_geometry_sha256", "")])
 	return valid

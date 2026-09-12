@@ -1,0 +1,275 @@
+{
+  "derived_summary": true,
+  "original": {
+    "path": "build/maceo-may-current-release-provenance-001/authority/OWNER_HANDOFF.json",
+    "sha256": "b1845ae8a0897c12ce8dffcc687b7fdea4771d018c10f0480f82850a75073794",
+    "bytes": 21019
+  },
+  "original_md": {
+    "path": "build/maceo-may-current-release-provenance-001/authority/OWNER_HANDOFF.md",
+    "sha256": "e98c4ebd04e922e34983827c5f782740743618b9f1c6eb88ccac7ac95598c477",
+    "bytes": 3815
+  },
+  "decision": "PASS",
+  "authority": "16/213",
+  "pck_sha256": "aa60f0e4e806e1db8922d6f524ba79126f21cd74868690cf7f6bffc42d37c397",
+  "input_count": 1694,
+  "stages": [
+    {
+      "stage": "compiler-check-001",
+      "pid": 62452,
+      "seconds": 0.946983792,
+      "start": "2026-09-12T07:26:42.514667+00:00",
+      "end": "2026-09-12T07:26:43.461981+00:00",
+      "exit_code": 0,
+      "pins_unchanged": true,
+      "markers": {},
+      "warnings": [],
+      "receipt": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/compiler-check-001-execution.json",
+        "sha256": "c8efd43c6cc509c411117253d3fc5b3354d6e399966b9e6ffdd402f95cfcee56"
+      },
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/compiler-check-001.log",
+        "sha256": "ac9ed8f163566a0f651c3d96111c42fa4ae0a09ff34689630fc863aca8461c1b"
+      }
+    },
+    {
+      "stage": "headless-registry-001",
+      "pid": 62456,
+      "seconds": 1.429971792,
+      "start": "2026-09-12T07:26:44.525516+00:00",
+      "end": "2026-09-12T07:26:45.955834+00:00",
+      "exit_code": 0,
+      "pins_unchanged": true,
+      "markers": {
+        "PASS: facade recognition registry is package-safe and fail-closed:": true
+      },
+      "warnings": [],
+      "receipt": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/headless-registry-001-execution.json",
+        "sha256": "56aae6ece062d775a6bc23906be3e07f94e0a91a645582829dce6e8b1f38672f"
+      },
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/headless-registry-001.log",
+        "sha256": "66563c99d83ae4947e650ea67d4b762ae25098a9f2c0ae7bb7e9ab63ac015900"
+      }
+    },
+    {
+      "stage": "headless-loader-001",
+      "pid": 62533,
+      "seconds": 201.09946375,
+      "start": "2026-09-12T07:26:47.103997+00:00",
+      "end": "2026-09-12T07:30:08.203999+00:00",
+      "exit_code": 0,
+      "pins_unchanged": true,
+      "markers": {
+        "PASS: facade runtime loader is version-pinned and topology-neutral:": true
+      },
+      "warnings": [],
+      "receipt": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/headless-loader-001-execution.json",
+        "sha256": "6218d522c63aa232a06360bdb2a6d4beb44045dd071f363e3468c4a413be3581"
+      },
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/headless-loader-001.log",
+        "sha256": "816a36122963e48b80891471552d9da205f2c2ddc4df1ef6124649af99e7b71b"
+      }
+    },
+    {
+      "stage": "export-exact-current-001",
+      "pid": 63481,
+      "seconds": 8.162014833999999,
+      "start": "2026-09-12T07:30:09.786742+00:00",
+      "end": "2026-09-12T07:30:17.949820+00:00",
+      "exit_code": 0,
+      "pins_unchanged": true,
+      "markers": {},
+      "warnings": [],
+      "receipt": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/export-exact-current-001-execution.json",
+        "sha256": "98da33a3c7b6bc997ba75cfa8fca783719d2cbc54e323e2232107f6e9c8f70ee"
+      },
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/export-exact-current-001.log",
+        "sha256": "8fc737e87009c059088bce87a646aa927414f7a44f517f972bb70ec91b1d8c74"
+      }
+    },
+    {
+      "stage": "mounted-component-001",
+      "pid": 63599,
+      "seconds": 2.920492125,
+      "start": "2026-09-12T07:30:21.084394+00:00",
+      "end": "2026-09-12T07:30:24.005204+00:00",
+      "exit_code": 0,
+      "pins_unchanged": true,
+      "markers": {
+        "PASS: Maceo+Station48+1308+1394+1317 mounted package contract": true
+      },
+      "warnings": [],
+      "receipt": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/mounted-component-001-execution.json",
+        "sha256": "9ac07d01471cdefe1c47a41839472fc2ba7010273a571b35950abc98c7f31843"
+      },
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/mounted-component-001.log",
+        "sha256": "e093405c197866d799291c031bec3383685f9ded5aee7066849fcbf902bfc8f5"
+      }
+    },
+    {
+      "stage": "mounted-privacy-001",
+      "pid": 63604,
+      "seconds": 2.290155375,
+      "start": "2026-09-12T07:30:25.483798+00:00",
+      "end": "2026-09-12T07:30:27.774281+00:00",
+      "exit_code": 0,
+      "pins_unchanged": true,
+      "markers": {
+        "PASS: direct-mounted PCK matches the explicit package/world identities": true
+      },
+      "warnings": [],
+      "receipt": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/mounted-privacy-001-execution.json",
+        "sha256": "7ca8879aa67619e6566b9a14c6cda167335e6afade37f5b462f5c599d4f4b2ae"
+      },
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/mounted-privacy-001.log",
+        "sha256": "8b55e43534afb0b9091193c9a065cc983955f722dc3bd44faa289446b4a59948"
+      }
+    },
+    {
+      "stage": "release-headless-smoke-001",
+      "pid": 63614,
+      "seconds": 6.705706333,
+      "start": "2026-09-12T07:30:29.186894+00:00",
+      "end": "2026-09-12T07:30:35.892876+00:00",
+      "exit_code": 0,
+      "pins_unchanged": true,
+      "markers": {
+        "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent": true,
+        "MAC_EXPORT_MACEO_MAY_ATTACHMENT: valid=true": true,
+        "MAC_EXPORT_FIRE_STATION48_ATTACHMENT: valid=true": true
+      },
+      "warnings": [],
+      "receipt": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/release-headless-smoke-001-execution.json",
+        "sha256": "153a3035611b9702c1e902c7d3441ef268cca957cfdfe45bb7523b7b5ed62d26"
+      },
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/release-headless-smoke-001.log",
+        "sha256": "d93729511e3162e7879e8a34af68c457266dfd552b33ff0ece40347e38debe10"
+      }
+    },
+    {
+      "stage": "release-native-smoke-001",
+      "pid": 63629,
+      "seconds": 54.27988775,
+      "start": "2026-09-12T07:30:37.407202+00:00",
+      "end": "2026-09-12T07:31:31.687627+00:00",
+      "exit_code": 0,
+      "pins_unchanged": true,
+      "markers": {
+        "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent": true,
+        "MAC_EXPORT_MACEO_MAY_ATTACHMENT: valid=true": true,
+        "MAC_EXPORT_FIRE_STATION48_ATTACHMENT: valid=true": true
+      },
+      "warnings": [],
+      "receipt": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/release-native-smoke-001-execution.json",
+        "sha256": "4ad91afe6c4f401b03b39d16dcd51531d29daeae50039a483f903869df111295"
+      },
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/release-native-smoke-001.log",
+        "sha256": "9f571fb347f290133d9c35e90c2d8543da640f53c4962a00de53667ecde4b53f"
+      }
+    }
+  ],
+  "actual_signed_worlds": {
+    "release-headless-smoke-001": {
+      "attachments": {
+        "D2_1439": "true",
+        "D2_1444": "true",
+        "D5_1308": "true",
+        "D5_1394": "true",
+        "D5_1317": "true",
+        "FIRE_STATION48": "true",
+        "MACEO_MAY": "true"
+      },
+      "measured_world": {
+        "rows": 735,
+        "context_rows": 4,
+        "meshes": 1032,
+        "surfaces": 1047,
+        "triangles": 99129,
+        "bodies": 466,
+        "shapes": 478
+      },
+      "records": [
+        "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=1032 surfaces=1047 triangles=99129 bodies=466 shapes=478 vegetation=124 seed=1414092337 batches=19 load_ms=5423",
+        "MAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass",
+        "MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass",
+        "MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps"
+      ],
+      "platform": [
+        "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org"
+      ]
+    },
+    "release-native-smoke-001": {
+      "attachments": {
+        "D2_1439": "true",
+        "D2_1444": "true",
+        "D5_1308": "true",
+        "D5_1394": "true",
+        "D5_1317": "true",
+        "FIRE_STATION48": "true",
+        "MACEO_MAY": "true"
+      },
+      "measured_world": {
+        "rows": 735,
+        "context_rows": 4,
+        "meshes": 1032,
+        "surfaces": 1047,
+        "triangles": 99129,
+        "bodies": 466,
+        "shapes": 478
+      },
+      "records": [
+        "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=1032 surfaces=1047 triangles=99129 bodies=466 shapes=478 vegetation=124 seed=1414092337 batches=19 load_ms=5631",
+        "MAC_EXPORT_VISUAL: ambient_source=2 ambient_color=(0.71,0.77,0.82,1.00) ambient_energy=0.65 sky_contribution=0.00 camera_pivot_y=2.00 spring_length=5.50 pitch=-8.0deg semantic_palette=pass",
+        "MAC_EXPORT_MOVEMENT: walk=4.0mps run=20.0mps acceleration=30.0mps2 braking=40.0mps2 defaults=pass",
+        "MAC_EXPORT_JETPACK: rise=2.751m ascent_velocity=5.000mps slow_descent=0.300m minimum_velocity=-1.500mps"
+      ],
+      "platform": [
+        "Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org",
+        "Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)"
+      ]
+    }
+  },
+  "mounted_scope": "Six focused native pair comparisons (1444,1308,1394,1317,Station48,Maceo). 1439 retains resource/dependency closure plus both signed-main attachment predicates. Both signed runs pass all seven attachments.",
+  "slot_release": {
+    "path": "build/maceo-may-current-release-provenance-001/authority/SLOT_RELEASE.json",
+    "sha256": "e3893fb5fee0eaec36bed0e56f1e730a2c38deb65928a496b028f18297526b92",
+    "bytes": 3174
+  },
+  "signature_privacy": {
+    "bundle_checks_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/authority-integration-001/bundle-native-checks-001.json",
+    "bundle_checks_sha256": "3495b64a266c289a534b356445f0b959b756dbbb0ab5c844433d573ca5799fc5",
+    "all_commands_exit0": true,
+    "architectures": [
+      "x86_64",
+      "arm64"
+    ],
+    "entitlements": {},
+    "privacy": {
+      "NSPrivacyTracking": false
+    },
+    "no_quarantine": true
+  },
+  "limits": [
+    "Owner execution PASS is not independent package acceptance or MAIN publication.",
+    "Historical14 images/configs and candidate15 package retain original scope; no replacement art or target-motion replay.",
+    "Mounted unit checks and signed ordinary-main/control checks remain separate; no new manual play or unit-specific continuous-motion claim.",
+    "Native AppleM2/Metal; universal arm64/x86_64 signatures do not establish M1 or both-architecture runtime.",
+    "No MAIN transfer, Git staging/commit/push or live shared documentation mutation."
+  ]
+}

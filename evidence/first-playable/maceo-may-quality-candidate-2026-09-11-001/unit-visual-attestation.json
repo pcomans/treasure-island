@@ -1,0 +1,212 @@
+{
+  "reviewer": "review_1303_source",
+  "reviewed_at": "2026-09-11T09:50:27.596864+00:00",
+  "decision": "PASS",
+  "attestation_kind": "Independent per-unit candidate packet and visual attestation (seventh artifact)",
+  "physical_unit_id": "physical-building:r19685981",
+  "scope": "Exact current15 Maceo candidate002 six-role packet with20 historical14 images; whole visible ENE/SSE regional fidelity and finish plus supplied sampled motion, with unchanged independent source/mechanics and actual package decisions retained. Seventh hash is computed externally when the owner serializes it.",
+  "independence": "D did not author Maceo products or assemble this packet. D previously authored its independent static/sampled-motion reviews. C authored and assembled; E independently reviewed source, combined mechanics and actual package execution. No new engine execution or technical geometry proof.",
+  "packet": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-maceo-may-current15-v1/evidence/first-playable/maceo-may-quality-candidate-2026-09-11-001",
+  "candidate_closure_sha256": "746d1071fee11ae46a168897fcba65e31f7f893d74af8d5485e4b4f161c6b38c",
+  "acceptance_bindings": {
+    "evidence_manifest_sha256": "82543ad09bc51281499280965d9bc949ecc99781d80520801742bd3643404862",
+    "motion_telemetry_manifest_sha256": "83a8637cd539efa3899b8d97147a82a02d976aa8baed4209824e2724a2ac7e2b",
+    "visual_motion_manifest_sha256": "3c7c3e933062d4cf3994f47cb48a62c41b7c1cf42fa41693ff82474cec1db86d",
+    "package_verification_receipt_sha256": "e903e64348aa003ca957b1e1efebc57a516395134f40d56e1ba1c5ebc3ad877f",
+    "evidence_tree_sha256": "916457b92cee4b002cab5c47b6ecd29a8c8d398a9ad685c05e7bc8f5d9874e0a",
+    "mechanical_review_receipt_sha256": "749cd826a0ea791b696ab98464e5c19548f14d45734d88111a79376a74dd5c8c"
+  },
+  "evidence_tree_document_sha256": "eafb9d2dfe9fe89365c6b71a660cd6609aec3a8fa19436d0669351f6a1cc33e2",
+  "binding_check": {
+    "image_count": 20,
+    "native_png_count": 11,
+    "original_avi_payload_count": 9,
+    "all_original_packet_bytes_exact": true,
+    "all_image_tree_paths_sizes_hashes_exact": true,
+    "no_extra_image_files": true,
+    "tree_algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+    "prior_five_roles_unchanged": true,
+    "six_roles_exact": true,
+    "package_retained_original_bindings_checked": 24,
+    "actual_app_files_rehashed": 7,
+    "no_extra_app_files": true,
+    "selected_current_source_files_rehashed": 12,
+    "check_scope": "Read-only hashes of the actual bound images, role originals/private copies, derived receipt, selected current source and app; package runtime interpretation reused from E."
+  },
+  "references": [
+    {
+      "image_path": "/private/tmp/maceo-may-reference-observation-w7guA7/01-maceo-may-ene-requested-september-2025.png",
+      "image_sha256": "f40c52bf867e4de99b31274f515aa66c17cffb47ef4fdbec5ee12ec75bef71f9",
+      "pano": "kEX8mV7OsuHLoA4oK69_KA",
+      "date": "September 2025",
+      "heading": 275,
+      "pitch": 7,
+      "fov": 78,
+      "directly_reopened_this_attestation": true
+    },
+    {
+      "image_path": "/private/tmp/maceo-may-reference-observation-w7guA7/02-maceo-may-sse-requested-september-2025.png",
+      "image_sha256": "401a254c66d417f4093b21cfa8f626dc3266a342479f33bdd95623931efac603",
+      "pano": "OKiASMGBFciyCsC9neeygg",
+      "date": "September 2025",
+      "heading": 320,
+      "pitch": 7,
+      "fov": 78,
+      "directly_reopened_this_attestation": true
+    }
+  ],
+  "image_inspection": {
+    "previously_directly_inspected_selected_images": 20,
+    "reopened_packet_images_this_attestation": [
+      "images/static/01-ENE-baseline-default.png",
+      "images/static/02-ENE-candidate-default.png",
+      "images/static/03-SSE-baseline-default.png",
+      "images/static/04-SSE-candidate-default.png",
+      "images/static/05-SSE-candidate-changed.png",
+      "images/motion001/03-actual-wall-spray.png",
+      "images/motion002/02-motion-endpoint-default.png"
+    ],
+    "remaining_images": "Reuse previously directly inspected unchanged motion002 originals and all9 exact AVI payloads through review afba8803; byte identity to every packet image independently checked. No new capture or continuous playback.",
+    "image_index": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-maceo-may-current15-v1/evidence/first-playable/maceo-may-quality-candidate-2026-09-11-001/evidence-tree.json",
+      "sha256": "eafb9d2dfe9fe89365c6b71a660cd6609aec3a8fa19436d0669351f6a1cc33e2"
+    },
+    "copy_index": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-maceo-may-current15-v1/evidence/first-playable/maceo-may-quality-candidate-2026-09-11-001/copy-inventory.json",
+      "sha256": "c0305a383797decdd659210943e424124cb3e3b959821132ef017a4d503c2308"
+    }
+  },
+  "reused_visual_reviews": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-first-coherent-study-001/camera-settle-revision-001/independent-visual-001/REVIEW.md",
+      "sha256": "c5c42f0e5db0cc423413081be6ca4c20e5ae4e574b1c10eb2cb23bb01a42ce0f"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/curtain-union-revision-001/independent-visual-001/REVIEW.md",
+      "sha256": "573ffed05619c066e634c2ee9ee512c13eeab8b3a0c3cf5254cf6ca3188eae8f"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/independent-visual-motion-001/REVIEW.md",
+      "sha256": "975f456023026eef10efff4bd6a9f293fa358f245b5e89e1f864d93e54eff50f"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/independent-visual-motion-002/REVIEW.md",
+      "sha256": "afba8803654ef3794cb0d6d61f4c49c0fbba61089e00b6214dc1d5c8e5bc4ef1"
+    }
+  ],
+  "whole_visible_result_findings": {
+    "fidelity": "PASS in the observed public-region scope: the ENE pale complete grid/dark paired windows/graphite base and SSE pale rib field/rust asymmetric frames/entrance stack/pale return/glazed base with columns form a coherent target-specific improvement over the actual plain source baselines. Considered the full visible form and ground connection, not only the repaired curtain.",
+    "finish": "PASS at this ordinary-view scope with explicit limits: opaque uniform glazing lacks reference reflections, frame relief is blockier, and retained concrete/landscape/ground interface and protected-wall contrast remain simplified. Default/changed light preserve material hierarchy without a new conspicuous fragmented motif or return of terrain undersides. These are not photorealistic or as-built finish claims.",
+    "sampled_motion": "Prior full5+9 direct inspection remains applicable: approach, column-side positions, retreat and held endpoint retain the facade/base/ground/camera reading. The reopened002 endpoint and001 positive tag remain consistent; sparse images cannot prove continuous temporal cleanliness.",
+    "substantive_visible_gap_remaining_in_reviewed_scope": null,
+    "as_built_limit": "Gameplay70 degree FOV/low eye height/avatar differ from reference78 degree FOV/pitch+7; reference trees/crops and protected sides limit judgment. Retained18m source mass, exact cadence/depths/stories, roof, courtyard21–39, far cropped extent and hidden interiors are not surveyed or newly certified."
+  },
+  "retained_source_mechanics": {
+    "decision": "SCOPED_PASS",
+    "mechanical_role_sha256": "749cd826a0ea791b696ab98464e5c19548f14d45734d88111a79376a74dd5c8c",
+    "reviews": [
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/curtain-union-revision-001/NATIVE_INTEGRITY_REVIEW.md",
+        "sha256": "8228572c5c0b8d6aa9a73fe8450a03d23e5e7850edbc9e697325dfb1d62e2c27"
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/source-context-001/independent-source-review-001/RUNTIME_REVIEW.md",
+        "sha256": "3db1388bd5bc2a349e6a5fd8c32b24cae12c9d60d6e6b4cb73410cb8e8bab45d"
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/independent-motion-mechanics-002/COMBINED_APPLICABILITY.md",
+        "sha256": "f1a97d8d483353a066e8616ee8b88b216cf4a85f108183d3a8a95b67d5f6c436"
+      }
+    ],
+    "actual_current_source_pins": {
+      "game/resources/facades/maceo_may_live_replacement.json": "cf97a1197fdc2c5cea8f5befddcb6f6f75306d9a2b969a6e3297efad0b319c6c",
+      "game/resources/facades/maceo_may_public_fields.gdshader": "04169ff9212cf35fb50d53dc18791600c5c7647618d8e6c58021bbbc3c724279",
+      "game/resources/facades/maceo_may_public_fields.gdshader.uid": "925a9d8841124449193c30393091c937a3ac3e155f7805597f35b6be1c3966ba",
+      "game/resources/facades/maceo_may_quality_study.json": "11a8784bbb08ea4a6244b1da1dcc8e0c2b589ef66c55a0bd2cc8ff20ad16cd6d",
+      "game/resources/facades/maceo_may_study_geometry.json": "4caf46d6c3ebb1ef497fbe8012e5f1fd938a055e11a4132c04ed8e6827da12b3",
+      "game/resources/materials/world/maceo_may/maceo_may_sse_rib.tres": "da68584fa85647d611f825743e3e58164133b51312199fd7955267bc047721bf",
+      "game/scripts/main.gd": "a5e17495656953506106a0e6efcbb2fb5030e7d1ea7c9378e5fc5dfd4134d932",
+      "game/scripts/world/facades/maceo_may_live_factory.gd": "bb47a10d3464f162516ece9ac0591bdead1791e847b89eff35fd3f59adc56c85",
+      "game/scripts/world/facades/maceo_may_live_factory.gd.uid": "c962d5e9bfdebf7c5a2aac85461fcb41708003ed1a390720d70a8aec8724779d",
+      "game/scripts/world/facades/maceo_may_live_replacement.gd": "d9ad456c2d11437a0cf70277c7fab383359c49d6ab34ed698ec316ea97668001",
+      "game/scripts/world/facades/maceo_may_live_replacement.gd.uid": "1ac13621257ccfc52cab7c66c7672d97062615079eba1e0f4f24733e77d9e5e4",
+      "game/scripts/world/world_chunk_builder.gd": "53260a461c1825139f398adb2e7e61ed24a7aa9babcf6dfaca05578b70d5d405"
+    },
+    "historical_art_applicability": "Maceo geometry, two configs, factory, adapter, shader and rib material exactly match their reviewed historical study files. The two actual generated UID sidecars and changed main/builder context are covered by E’s current15 and package reviews, not treated as historical image captures.",
+    "scope": "Original13 native channels and80wall+16roof ordered collision remain independently established; columns add separate320 nonreceiver faces. Combined mechanics retains001 successful in-range wall placement and002 actual column contact/ground/retreat plus in-range column/LAND/roof rejection. Both raw ok:false results stay unchanged; direct API spray is not mouse dispatch and roof setup is not ground-to-roof traversal."
+  },
+  "shared_candidate_package": {
+    "decision": "PASS",
+    "review": {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/14/14431dc7aa9009aee71823f5764309e4525beb52bf7d75761eb493ac436aca4d.md",
+      "sha256": "14431dc7aa9009aee71823f5764309e4525beb52bf7d75761eb493ac436aca4d",
+      "bytes": 6723,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/independent-package-001/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "package_verification_receipt_sha256": "e903e64348aa003ca957b1e1efebc57a516395134f40d56e1ba1c5ebc3ad877f",
+    "pck_sha256": "70d99894bdeb8c50c5997c9601465be693200227616e338cd43fe7cb29b67383",
+    "app_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-maceo-may-current15-v1/build/maceo-may-quality-candidate-002/Treasure Island First Playable.app",
+    "app7_binding_sha256": "8b4ea1755a268bf6682af65eb5bb4757194d9a6d6e1687105f1d14bc2c980127",
+    "actual_unit_attachment": {
+      "accepted_individual_reference": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/source-context-001/focused-context-001-result.json",
+      "reference_sha256": "5649f04abec6822b096f92319330e33a9892c88dba993c59fcdd789e59423adb",
+      "collision_triangles": [
+        80,
+        16
+      ],
+      "separate_column_collision_triangles": 320,
+      "wall_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_1__building_r19685981_wall/MaceoMayLiveWallReplacement",
+      "roof_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_1__building_r19685981_roof/MaceoMayLiveRoofReplacement",
+      "scope": "Original thirteen native channel/geometry proof and current15 source/lifecycle reused; actual mounted eleven-mesh arrays/materials/ordered collision match. Original wall shape0 is receiver eligible; separate column shape1 and original roof are blocking nonreceivers."
+    },
+    "actual_signed_worlds": {
+      "release-headless-smoke-001": {
+        "playable_rows": 735,
+        "context_rows": 4,
+        "meshes": 1032,
+        "surfaces": 1047,
+        "triangles": 99129,
+        "bodies": 466,
+        "shapes": 478,
+        "load_ms": 5902
+      },
+      "release-native-smoke-001": {
+        "playable_rows": 735,
+        "context_rows": 4,
+        "meshes": 1032,
+        "surfaces": 1047,
+        "triangles": 99129,
+        "bodies": 466,
+        "shapes": 478,
+        "load_ms": 5864
+      }
+    },
+    "app7_exact_at_attestation": true,
+    "scope": "E interpreted actual owner export/mounted-component/privacy/signed-main headless/native execution and exact input/app hashes; no independent engine replay. Mounted unit-array/ownership and signed whole-world/control observations retain separate scopes.",
+    "platform_limit": "Actual native AppleM2/Metal; universal slices signed, not execution on x86_64/M1, manual play, notarization or published current release."
+  },
+  "limits": [
+    "All selected photographs of the game were captured in the historical14 world. ENE/baseline study views retain their unchanged original scope; the repaired SSE pair shows the corrected curtain. Actual merged current15 source is now735/1032/1047/99129/466/478. These are neither app screenshots nor new combined-release pictures.",
+    "September2025 ENE/SSE references show pale complete grids/graphite base and fine ribs/rust complete frames/entrance glazing/columns. Trees and crops obscure portions of the public faces; upper whole-building extent, courtyard21–39, roof and protected sides remain unknown. Counts/depths/cadence are production inference. No reference pixels are copied.",
+    "Independent affected mechanics PASS combines explicit successes on identical products: motion001 exact in-range wall placement at4.739649m; motion002 real first-column shape1 contact on14 physics rows, all252 input/30 brake rows grounded, retreat/return and in-range column/LAND/roof rejection. Both raw ok:false records remain unchanged; no fictitious single all-success continuous run.",
+    "Motion001 missed the intended column because of reversed lateral helper actions. Motion002 skipped wall placement at6.241111755m beyond stock6m; its03 planned wall-spray filename does not prove a placement or stock rejection. The selected separate00103 shows the successful tag.",
+    "Each motion run retains402 complete records:30 initial,252 input,30 brake and90 separate roof-settle rows. Roof support is explicitly set up and naturally settled, not ground-to-roof walking/jetpack ascent or roof-art certification. Actual spray API calls do not prove physical mouse dispatch.",
+    "11 selected native PNGs are1440x900. Two complete original508-frame AVI files and selected nine002 payloads are1280x800; both movies retain their70-byte physical tails. Sparse indices41/76/112/147/182/217/252/288/323 do not establish continuous playback or physics/draw/AVI identity. All omitted001 media remains private and original.",
+    "Initial bad camera views, original curtain overlap, snapshot/packed-expectation helper failures, both motion failures and unrun preparation/release-guard history remain retained. No successful source/capture or motion evidence was replayed for assembly.",
+    "Maceo is an uncredited physical unit; prospective+1 only after exact candidate package verification, separate seventh attestation and serialized current-authority delivery. Current15/213 and historical14/credit0 runtime metadata remain exact. No manual/M1/universal-runtime/current-release claim."
+  ],
+  "authority": {
+    "candidate": "15/213",
+    "captured": "14/213",
+    "inventory": 213,
+    "new_uncredited_unit": true,
+    "prospective_effect_after_separate_acceptance": 1,
+    "credit_granted": false,
+    "MAIN_changed": false,
+    "packet_changed_by_reviewer": false
+  },
+  "next_action": "Root may accept this exact seventh artifact and authorize C to serialize it plus the single-unit authority/current-release work. This attestation itself edits neither packet nor authority.",
+  "retro_exact": "D / Maceo independent seventh attestation — Rehashed the 20 selected originals/copies and six exact roles, reopened both dated reference originals alongside five static images and representative motion/tag images, and reused the already inspected complete sparse-motion set. Read E’s actual candidate002 package PASS and C’s derived receipt, then checked all seven app files and current selected source bindings. The coherent ENE/SSE public composition passes within retained glass/relief/ground and hidden-side limits. Both raw motion FAILs remain: 001 supplies successful wall placement; 002 supplies column contact and has a skipped wall attempt. Historical14 pixels remain distinct from current15 package execution. One source-pin projection mistakenly matched the repository name and overselected output; the bounded basename/path recovery was completed before judgment. No engine, packet/MAIN mutation, duplicate proof, new rendering setting or credit; append once at a normal checkpoint."
+}

@@ -2,6 +2,7 @@
   "active_runtime_adapter_receiver_keys": [
     "building-composite:w1249412094:w1282547787:wall",
     "building:r16681702:wall",
+    "building:r19685981:wall",
     "building:w1222720021:wall",
     "building:w291189336:wall",
     "building:w34313540:wall",
@@ -85,7 +86,7 @@
       "status": "pass"
     },
     {
-      "check_id": "reference_recognizable_physical_entity_rollup_exactly_15_of_213",
+      "check_id": "reference_recognizable_physical_entity_rollup_exactly_16_of_213",
       "status": "pass"
     },
     {
@@ -105,7 +106,7 @@
       "status": "pass"
     },
     {
-      "check_id": "adapter_contract_17_ready_6_disabled_13_unique_projection_inputs",
+      "check_id": "adapter_contract_18_ready_6_disabled_13_unique_projection_inputs",
       "status": "pass"
     },
     {
@@ -137,20 +138,20 @@
       "verified": 213
     },
     "reference_recognizable": {
-      "accepted": 15,
+      "accepted": 16,
       "blocked": 0,
-      "not_evaluated": 198,
+      "not_evaluated": 197,
       "rejected": 0
     }
   },
   "counts": {
-    "active_runtime_adapter_receivers": 14,
+    "active_runtime_adapter_receivers": 15,
     "composite_units": 1,
     "direct_wall_receivers": 214,
     "identity_assertion_summaries": 2,
     "legacy_adapter_receivers": 9,
     "recognition_units": 213,
-    "runtime_adapter_receivers": 23,
+    "runtime_adapter_receivers": 24,
     "source_record_memberships": 215,
     "standalone_units": 212,
     "visible_wall_runs": 4971
@@ -254,10 +255,10 @@
     "active_navy_chapel_187_config_sha256": "c8f2ab09f3943a5ec8abea7cb9a108f49990bff1d83003c3b3622187a269dea2",
     "active_navy_chapel_187_live_review_receipt_sha256": "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9",
     "active_navy_chapel_187_prototype_sha256": "067c12e29c9fd352915ef2a501fcd7687b450081c79a4281d63bbfef1c19e7db",
-    "adapter_contracts_sha256": "518fca8b0862d83866579ce9aca44f573c29fcf54e414cc434ae4ad4ead987ac",
-    "authoring_catalog_sha256": "eae2b9e62d0c50521c25897cc8a51f582b284102b88b447a8f8f8d508c20d975",
-    "catalog_schema_sha256": "e1945793d0ee7b1f4555204e9d9afd3a7dab41d61855da7ece8db81510dc41e2",
-    "facade_runtime_loader_sha256": "816a19291b67092912622bb32bca6934717a5de6e357344ca9c40803e047d0c5",
+    "adapter_contracts_sha256": "0426727b12638d7423e8c2c78956ba4c6fc1ee2d4990b6e819d89ea336b4f746",
+    "authoring_catalog_sha256": "2c579aa06e0be3c74c406ab3f696fe293ffd73de31c0ca285bc7ef5112b22d69",
+    "catalog_schema_sha256": "ca94819c685babdabe1b0c4c0ea3f970fa4fddc00a2d2f0cd3116403de4fe9d5",
+    "facade_runtime_loader_sha256": "7df10a942fb8ab78ad0e4bdc0885a76e16c20e8aaaf7ab437858955318b566ec",
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
     "receiver_inventory_sha256": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f",
@@ -276,14 +277,14 @@
   ],
   "next_integration_seam": "Use the topology-neutral facade registry loader API to query receiver plans. Package-safe plans include exact-current Building 1, Building 3, Navy Chapel, D1 B201, D1 B225, and D2 1441 dependencies. The exact-current Isle House Variant C receiver is represented truthfully but remains loader-hard-disabled because its reviewed executable inheritance closure includes three source-token-bearing inputs; keep every disabled plan non-executable until its projected inputs receive independently parity-proven package-safe normalization.",
   "package_boundary": {
-    "adapter_asset_occurrence_count": 165,
-    "clean_direct_asset_count": 114,
-    "dependency_closure_asset_count": 239,
+    "adapter_asset_occurrence_count": 172,
+    "clean_direct_asset_count": 120,
+    "dependency_closure_asset_count": 245,
     "dependency_closure_forbidden_asset_count": 15,
-    "direct_asset_count": 127,
+    "direct_asset_count": 133,
     "projected_direct_asset_count": 13,
     "registry_json_clean": true,
-    "runtime_referenced_asset_count": 114,
+    "runtime_referenced_asset_count": 120,
     "runtime_referenced_dependency_closure_clean": true,
     "source_side_projection_audit": [
       {
@@ -1035,6 +1036,62 @@
         "closure_violations": [],
         "direct_asset_path": "game/scripts/world/facades/building_1_hero_model.gd",
         "direct_asset_sha256": "ce2f21dab02163b5f45d9d7e457f5d0ce96089bc55cca6e65aa9924c9f199c5a",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:maceo-may-live:building:r19685981:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/maceo_may_live_replacement.json",
+        "direct_asset_sha256": "cf97a1197fdc2c5cea8f5befddcb6f6f75306d9a2b969a6e3297efad0b319c6c",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:maceo-may-live:building:r19685981:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/maceo_may_public_fields.gdshader",
+        "direct_asset_sha256": "04169ff9212cf35fb50d53dc18791600c5c7647618d8e6c58021bbbc3c724279",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:maceo-may-live:building:r19685981:wall",
+        "closure_asset_count": 3,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/maceo_may_quality_study.json",
+        "direct_asset_sha256": "11a8784bbb08ea4a6244b1da1dcc8e0c2b589ef66c55a0bd2cc8ff20ad16cd6d",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:maceo-may-live:building:r19685981:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/maceo_may_study_geometry.json",
+        "direct_asset_sha256": "4caf46d6c3ebb1ef497fbe8012e5f1fd938a055e11a4132c04ed8e6827da12b3",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:maceo-may-live:building:r19685981:wall",
+        "closure_asset_count": 5,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/maceo_may_live_factory.gd",
+        "direct_asset_sha256": "bb47a10d3464f162516ece9ac0591bdead1791e847b89eff35fd3f59adc56c85",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:maceo-may-live:building:r19685981:wall",
+        "closure_asset_count": 7,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/maceo_may_live_replacement.gd",
+        "direct_asset_sha256": "d9ad456c2d11437a0cf70277c7fab383359c49d6ab34ed698ec316ea97668001",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:maceo-may-live:building:r19685981:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/site_12_housing_kit.gd",
+        "direct_asset_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
         "emitted_as": "runtime_asset"
       },
       {
@@ -1996,6 +2053,7 @@
   "reference_recognition_metric": {
     "accepted_physical_unit_ids": [
       "physical-building:r16681702",
+      "physical-building:r19685981",
       "physical-building:w1222720021",
       "physical-building:w1249412093",
       "physical-building:w1249412094",
@@ -2013,22 +2071,22 @@
     ],
     "denominator": 213,
     "denominator_kind": "immutable_physical_recognition_units",
-    "display": "15/213",
+    "display": "16/213",
     "isle_house_non_numerator_source_keys": [
       "w1282547786",
       "w1282547787"
     ],
-    "numerator": 15,
+    "numerator": 16,
     "rollup_policy": "one_claim_per_physical_recognition_unit"
   },
-  "runtime_registry_sha256": "259346572b602a4b12eb22444f59c26f2c36f928ae74611d8750fd857dda6b48",
+  "runtime_registry_sha256": "ad9223cbc6972483ac601425231fc95328e7daddf70295ab7627bbacd11ecb3a",
   "schema_version": "ti.facade-recognition-validation-report/4",
   "scope_boundaries": [
     "The D2 1441 promotion preserves generated bytes while atomically replacing the supplied wall+roof pair with nine visual surfaces, two structural owners, one wall spray owner, and zero decorative collision or navigation owners.",
-    "The unchanged D1 B201 attachment retains its pre-B225 735/950/964/66,636/466/466 parity receipt and D1 B225 retains its pre-D2 735/952/967/67,716/466/466 receipt, while D2 1441 retains historical post-B1 735/959/974/70,692/466/466 and D2 1439 retains historical 735/968/983/71,156/466/467; D2 1444 retains historical 735/977/992/71,828/466/468; Station48 owns current735/1023/1038/82,789/466/477 topology; D5 1317 retains pre-Station48 735/1018/1033/81,761/466/477 topology; 1308/1394 retain their measured quality-batch 735/1006/1021/79,913/466/474 scope. Prior 11/213 promotion evidence remains historical. These two existing-unit quality revisions were captured at 13/213 and add zero credit.",
-    "9 legacy receivers and 14 exact-current active receiver adapters are represented without automatic recognition transfer from adapter metadata.",
+    "The unchanged D1 B201 attachment retains its pre-B225 735/950/964/66,636/466/466 parity receipt and D1 B225 retains its pre-D2 735/952/967/67,716/466/466 receipt, while D2 1441 retains historical post-B1 735/959/974/70,692/466/466 and D2 1439 retains historical 735/968/983/71,156/466/467; D2 1444 retains historical 735/977/992/71,828/466/468; Maceo May owns current735/1032/1047/99,129/466/478 topology; Station48 retains pre-Maceo735/1023/1038/82,789/466/477 topology; D5 1317 retains pre-Station48 735/1018/1033/81,761/466/477 topology; 1308/1394 retain their measured quality-batch 735/1006/1021/79,913/466/474 scope. Prior 11/213 promotion evidence remains historical. These two existing-unit quality revisions were captured at 13/213 and add zero credit.",
+    "9 legacy receivers and 15 exact-current active receiver adapters are represented without automatic recognition transfer from adapter metadata.",
     "The version-pinned loader contract authorizes parsing and resource resolution only; it does not authorize node instantiation or world-construction dispatch.",
-    "Exactly 15 independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.",
+    "Exactly 16 independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.",
     "D2 1441 contributes exactly one standalone physical-building claim bound to the frozen capture-time v8 static, telemetry, visual-motion, package, tree, mechanical-review, and visual-review hashes; its paired wall and roof never create a second receiver or numerator entry.",
     "D1 B225 contributes exactly one standalone physical-building claim bound to the frozen capture-time v7 production evidence tree, static manifest, and independent review receipt; its two decorative batches, one wall receiver, and protected roof never create extra units or numerator entries.",
     "D1 B201 contributes exactly one standalone physical-building claim; its six decorative batches, one wall receiver, and protected roof never create extra units or numerator entries.",

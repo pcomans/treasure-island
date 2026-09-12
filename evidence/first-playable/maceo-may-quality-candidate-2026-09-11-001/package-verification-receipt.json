@@ -1,0 +1,294 @@
+{
+  "schema_version": "ti.d5-batch-owner-package-verification/1",
+  "physical_unit_id": "physical-building:r19685981",
+  "owner_decision": "PASS",
+  "independent_exact_app_review_pending": false,
+  "independent_exact_app_decision": "PASS",
+  "independent_review": {
+    "path": "build/maceo-may-quality-candidate-provenance-001/raw/14/14431dc7aa9009aee71823f5764309e4525beb52bf7d75761eb493ac436aca4d.md",
+    "sha256": "14431dc7aa9009aee71823f5764309e4525beb52bf7d75761eb493ac436aca4d",
+    "bytes": 6723,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/independent-package-001/REVIEW.md",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "independent_review_scope": "Independent file/source and original owner execution evidence review; no duplicate independent engine invocation.",
+  "candidate_authority": "15/213",
+  "candidate_app_relative_path": "build/maceo-may-quality-candidate-002/Treasure Island First Playable.app",
+  "pck_sha256": "70d99894bdeb8c50c5997c9601465be693200227616e338cd43fe7cb29b67383",
+  "app_file_pins": {
+    "{BATCH_REPO}/build/maceo-may-quality-candidate-002/Treasure Island First Playable.app/Contents/Info.plist": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+    "{BATCH_REPO}/build/maceo-may-quality-candidate-002/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable": "17899788bb7e847126fdfc0a86e34c9f185881aed16acbe517b6b8a8ad3fd02a",
+    "{BATCH_REPO}/build/maceo-may-quality-candidate-002/Treasure Island First Playable.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+    "{BATCH_REPO}/build/maceo-may-quality-candidate-002/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+    "{BATCH_REPO}/build/maceo-may-quality-candidate-002/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck": "70d99894bdeb8c50c5997c9601465be693200227616e338cd43fe7cb29b67383",
+    "{BATCH_REPO}/build/maceo-may-quality-candidate-002/Treasure Island First Playable.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+    "{BATCH_REPO}/build/maceo-may-quality-candidate-002/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources": "5e80d645ed942aad80e8a625627bf2562908e9cb06280a3782efefed1f432625"
+  },
+  "source_world": {
+    "bodies": 466,
+    "meshes": 1032,
+    "rows": 735,
+    "shapes": 478,
+    "surfaces": 1047,
+    "triangles": 99129
+  },
+  "owner_actual_signed_worlds": {
+    "release-headless-smoke-001": {
+      "playable_rows": 735,
+      "context_rows": 4,
+      "meshes": 1032,
+      "surfaces": 1047,
+      "triangles": 99129,
+      "bodies": 466,
+      "shapes": 478,
+      "load_ms": 5902
+    },
+    "release-native-smoke-001": {
+      "playable_rows": 735,
+      "context_rows": 4,
+      "meshes": 1032,
+      "surfaces": 1047,
+      "triangles": 99129,
+      "bodies": 466,
+      "shapes": 478,
+      "load_ms": 5864
+    }
+  },
+  "independent_actual_signed_worlds": null,
+  "independent_engine_reexecution": false,
+  "unit_actual_attachment": {
+    "accepted_individual_reference": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/source-context-001/focused-context-001-result.json",
+    "reference_sha256": "5649f04abec6822b096f92319330e33a9892c88dba993c59fcdd789e59423adb",
+    "collision_triangles": [
+      80,
+      16
+    ],
+    "separate_column_collision_triangles": 320,
+    "wall_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_1__building_r19685981_wall/MaceoMayLiveWallReplacement",
+    "roof_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_1__building_r19685981_roof/MaceoMayLiveRoofReplacement",
+    "scope": "Original thirteen native channel/geometry proof and current15 source/lifecycle reused; actual mounted eleven-mesh arrays/materials/ordered collision match. Original wall shape0 is receiver eligible; separate column shape1 and original roof are blocking nonreceivers."
+  },
+  "signature_privacy_binding": {
+    "path": "build/maceo-may-quality-candidate-provenance-001/raw/8b/8b4ea1755a268bf6682af65eb5bb4757194d9a6d6e1687105f1d14bc2c980127.json",
+    "sha256": "8b4ea1755a268bf6682af65eb5bb4757194d9a6d6e1687105f1d14bc2c980127",
+    "bytes": 3121,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/actual-app-binding.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "owner_bundle_checks": {
+    "path": "build/maceo-may-quality-candidate-provenance-001/raw/82/82e5ae19c65d4bb1ae9b2ffd26a3adac07f25bbc536c2dc814c39481ddd9b5bc.json",
+    "sha256": "82e5ae19c65d4bb1ae9b2ffd26a3adac07f25bbc536c2dc814c39481ddd9b5bc",
+    "bytes": 5039,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/bundle-native-checks-001.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "independent_bundle_checks": null,
+  "terminal_slot_releases": [
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/d7/d708c3e95eba3890357d8033c9e7adcb48505864cbdcf7809e802a860e70f3bf.json",
+      "sha256": "d708c3e95eba3890357d8033c9e7adcb48505864cbdcf7809e802a860e70f3bf",
+      "bytes": 2034,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/SLOT_RELEASE.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "owner_handoff": {
+    "path": "build/maceo-may-quality-candidate-provenance-001/raw/e8/e8b8183cf4927c7c29ded5ebc694e11dd83051b345fd5e66050c319e813422b1.md",
+    "sha256": "e8b8183cf4927c7c29ded5ebc694e11dd83051b345fd5e66050c319e813422b1",
+    "bytes": 4114,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/OWNER_HANDOFF.md",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "owner_receipts": [
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/73/73261d11d1fa4f5469cefe9be9e72b0f8b7ed312e701700adfc00d63c9cdad93.json",
+      "sha256": "73261d11d1fa4f5469cefe9be9e72b0f8b7ed312e701700adfc00d63c9cdad93",
+      "bytes": 827591,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/export-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/8b/8bed77093aaaa203c0b1cd44234448d323faf60b3ffd045c6fa4c3e03f0eff0e.json",
+      "sha256": "8bed77093aaaa203c0b1cd44234448d323faf60b3ffd045c6fa4c3e03f0eff0e",
+      "bytes": 810194,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/mounted-component-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/4c/4c772f568a35b742131fc95da0de6924dadd72bf5e4520b6b5731ff3b8b0759d.json",
+      "sha256": "4c772f568a35b742131fc95da0de6924dadd72bf5e4520b6b5731ff3b8b0759d",
+      "bytes": 810321,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/mounted-privacy-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/e2/e2efdaaa0a244162396d4c4374106ac31102d5d40f7c7753e12fcdd1e88e6fa5.json",
+      "sha256": "e2efdaaa0a244162396d4c4374106ac31102d5d40f7c7753e12fcdd1e88e6fa5",
+      "bytes": 809832,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/release-headless-smoke-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/16/16913de2a7279f75dbe4e0fb3df21bec3b169d089d53bb96336d7396c7508d09.json",
+      "sha256": "16913de2a7279f75dbe4e0fb3df21bec3b169d089d53bb96336d7396c7508d09",
+      "bytes": 809979,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/release-native-smoke-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "owner_logs": [
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/a5/a5f8bbed696fb0de3e2dad745287c41d72c88d47d58edc4630caa3d154660bce.log",
+      "sha256": "a5f8bbed696fb0de3e2dad745287c41d72c88d47d58edc4630caa3d154660bce",
+      "bytes": 129500,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/export-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/a3/a3839eff46d5761b8b7c03332b90632ee5db30fb55f04aa9b080ccfd30065e33.log",
+      "sha256": "a3839eff46d5761b8b7c03332b90632ee5db30fb55f04aa9b080ccfd30065e33",
+      "bytes": 2614,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/mounted-component-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/da/da0fd51e0a80d00e30d0d6f685367e0e40a757468ee5d8537b9b10f40c34a104.log",
+      "sha256": "da0fd51e0a80d00e30d0d6f685367e0e40a757468ee5d8537b9b10f40c34a104",
+      "bytes": 769,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/mounted-privacy-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/56/56a2e6153f7630c00c3e5e24f8fc7071a457204fcc46c0ce592098ef48467d35.log",
+      "sha256": "56a2e6153f7630c00c3e5e24f8fc7071a457204fcc46c0ce592098ef48467d35",
+      "bytes": 5301,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/release-headless-smoke-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/89/89350b1fae29862671b461707d337bc663eff6b4c35cc72f5a8062f51ec9eb83.log",
+      "sha256": "89350b1fae29862671b461707d337bc663eff6b4c35cc72f5a8062f51ec9eb83",
+      "bytes": 5367,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/release-native-smoke-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "independent_receipts": [],
+  "independent_logs": [],
+  "repair_lineage": [
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/1c/1c728535dd9d4328044a0a1ae939047a61bcaf36be1555070e28812ca058b3e1.json",
+      "sha256": "1c728535dd9d4328044a0a1ae939047a61bcaf36be1555070e28812ca058b3e1",
+      "bytes": 819886,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/export-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/30/30b4d5d1e76d42be427bb843ede8a0314f368fe372f97692c6315f9c3b3fe13a.log",
+      "sha256": "30b4d5d1e76d42be427bb843ede8a0314f368fe372f97692c6315f9c3b3fe13a",
+      "bytes": 1076,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/export-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/32/32a49a9901691e3484ce12826b9a81ecd736c8390673109ef1d82bfc62dee371.json",
+      "sha256": "32a49a9901691e3484ce12826b9a81ecd736c8390673109ef1d82bfc62dee371",
+      "bytes": 542,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/SLOT_RELEASE.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/0e/0e51a8f3fd226caf6618f3db0d262b47e56b7039e80495faa8f2bf7707468780.md",
+      "sha256": "0e51a8f3fd226caf6618f3db0d262b47e56b7039e80495faa8f2bf7707468780",
+      "bytes": 2644,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/OWNER_HANDOFF.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/9e/9ed72edd20c7ca34eed58f645190d18a425d2233057e36ac56a602e4569b5032.json",
+      "sha256": "9ed72edd20c7ca34eed58f645190d18a425d2233057e36ac56a602e4569b5032",
+      "bytes": 1764,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/PREPARATION.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/40/403182d3f17e398d1a11ce6deffaae7beb6a3cd4c58e5ec6d10b01c74a73f9ef.diff",
+      "sha256": "403182d3f17e398d1a11ce6deffaae7beb6a3cd4c58e5ec6d10b01c74a73f9ef",
+      "bytes": 1038,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/run-stage.py.diff",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/b3/b399cfccc9b359699df61619b2a366939259fb9a629f791d474520cc3c98cf48.diff",
+      "sha256": "b399cfccc9b359699df61619b2a366939259fb9a629f791d474520cc3c98cf48",
+      "bytes": 9097,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/run-plan.json.diff",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/c3/c3797d5f41a3b6f3e098a8cbdec36f681b02f663877fe212b95e8bcc5c329f5b.diff",
+      "sha256": "c3797d5f41a3b6f3e098a8cbdec36f681b02f663877fe212b95e8bcc5c329f5b",
+      "bytes": 1487,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/execution-settings.json.diff",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/3d/3d0def751dd3b81700c9128b46d75377b441d6ee2848ea04c42ce1211ed466d4.json",
+      "sha256": "3d0def751dd3b81700c9128b46d75377b441d6ee2848ea04c42ce1211ed466d4",
+      "bytes": 400872,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/execution-input-pins.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "coverage_split": [
+    "Reused exact native/source/lifecycle and historical14 static/motion evidence; current15 source world735/1032/1047/99129/466/478.",
+    "Mounted actual Maceo eleventh-argument dispatch, eleven meshes/materials/native arrays,80+16 original collision and320 separate nonreceiver-column faces; complete PCK privacy boundary.",
+    "Actual signed executable headless and macOS native ordinary world, all seven attachment predicates, stock movement/camera defaults and spawn jetpack smoke.",
+    "Affected target mechanics combines motion001 successful in-range wall placement with motion002 real column contact/ground/retreat and negative spray/roof scopes on identical products. Both rawFAILs remain unchanged."
+  ],
+  "limits": [
+    "Independent reviewer interpreted owner execution and rehashed app/source; no separate engine reexecution.",
+    "No new target app images, static/motion art replay, continuous-playback or manual-gameplay claim.",
+    "Native observed AppleM2/Metal; strict signature checks cover both universal slices but not execution on x86_64 or M1, notarization or publication.",
+    "Original missing-parent export001 failed before binder; retained unchanged. Only fresh destination/runtime paths and a writable-directory guard changed for candidate002.",
+    "Motion001 missed intended column; motion002 skipped wall placement at6.241111755m beyond stock6m. The accepted combined review f1a97d8d483353a066e8616ee8b88b216cf4a85f108183d3a8a95b67d5f6c436 retains distinct origins and exclusions, not a single all-success session.",
+    "Historical14 captures/configs retain credit0; separate roof setup is not an ascent claim; sparse AVI samples are not continuous playback.",
+    "Native stage logs clean; codesign entitlement-display colon-path deprecation warning remains in original bundle checks."
+  ],
+  "truth_boundary": {
+    "candidate_authority": "15/213",
+    "capture_time_authority": "14/213",
+    "inventory_physical_units": 213,
+    "new_unit_candidate": true,
+    "credit_granted": false,
+    "prospective_numerator_effect_after_separate_acceptance": 1,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_candidate_package_decision": "PASS",
+    "independent_unit_packet_visual_attestation_pending": true
+  }
+}

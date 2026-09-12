@@ -14,6 +14,7 @@ const D2_1441_CHINOOK_LIVE_REPLACEMENT := preload("res://game/scripts/world/faca
 const D2_1439_CHINOOK_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd")
 const D5_1308_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1308_gateview_live_replacement.gd")
 const D5_1394_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1394_gateview_live_replacement.gd")
+const MACEO_MAY_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/maceo_may_live_replacement.gd")
 const FIRE_STATION48_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/fire_station48_live_replacement.gd")
 const D5_1317_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1317_gateview_live_replacement.gd")
 const D2_1444_CROAKER_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd")
@@ -146,6 +147,10 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	if not bool(fs48_pair.get("ok", false)):
 		chunk_root.free()
 		return fs48_pair
+	var maceo_pair := MACEO_MAY_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(maceo_pair.get("ok", false)):
+		chunk_root.free()
+		return maceo_pair
 	var chapel_plan := NAVY_CHAPEL_187_LIVE_REPLACEMENT.build_chunk_plan(chapel_pair)
 	if not bool(chapel_plan.get("ok", false)):
 		chunk_root.free()
@@ -206,6 +211,18 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)
 		chunk_root.free()
 		return fs48_plan
+	var maceo_plan := MACEO_MAY_LIVE_REPLACEMENT.build_chunk_plan(maceo_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(maceo_plan.get("ok", false)):
+		NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
+		D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
+		D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)
+		D2_1444_CROAKER_LIVE_REPLACEMENT.free_unconsumed(d2_1444_plan)
+		D5_1308_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1308_plan)
+		D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)
+		D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)
+		FIRE_STATION48_LIVE_REPLACEMENT.free_unconsumed(fs48_plan)
+		chunk_root.free()
+		return maceo_plan
 	var report := {
 		"ok": true,
 		"node": chunk_root,
@@ -228,9 +245,10 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)
 			D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)
 			FIRE_STATION48_LIVE_REPLACEMENT.free_unconsumed(fs48_plan)
+			MACEO_MAY_LIVE_REPLACEMENT.free_unconsumed(maceo_plan)
 			chunk_root.free()
 			return {"ok": false, "code": "builder_parent", "message": "Missing world category parent %s." % parent_key, "source_keys": record.source_keys}
-		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan)
+		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan)
 		if not record_result.ok:
 			NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
 			D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
@@ -240,6 +258,7 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)
 			D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)
 			FIRE_STATION48_LIVE_REPLACEMENT.free_unconsumed(fs48_plan)
+			MACEO_MAY_LIVE_REPLACEMENT.free_unconsumed(maceo_plan)
 			chunk_root.free()
 			return record_result
 		var record_node: Node3D = record_result.node
@@ -263,7 +282,8 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	var d5_1394_consumed := D5_1394_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1394_plan)
 	var d5_1317_consumed := D5_1317_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1317_plan)
 	var fs48_consumed := FIRE_STATION48_LIVE_REPLACEMENT.plan_was_fully_consumed(fs48_plan)
-	if not chapel_consumed or not d2_1441_consumed or not d2_1439_consumed or not d2_1444_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed or not fs48_consumed:
+	var maceo_consumed := MACEO_MAY_LIVE_REPLACEMENT.plan_was_fully_consumed(maceo_plan)
+	if not chapel_consumed or not d2_1441_consumed or not d2_1439_consumed or not d2_1444_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed or not fs48_consumed or not maceo_consumed:
 		NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
 		D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
 		D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)
@@ -272,6 +292,7 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)
 		D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)
 		FIRE_STATION48_LIVE_REPLACEMENT.free_unconsumed(fs48_plan)
+		MACEO_MAY_LIVE_REPLACEMENT.free_unconsumed(maceo_plan)
 		chunk_root.free()
 		if not chapel_consumed:
 			return {"ok": false, "code": "navy_chapel_187_live_unconsumed_pair", "message": "The supplied Chapel pair was not consumed exactly once.", "source_keys": ["w291189336"]}
@@ -287,7 +308,9 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			return {"ok": false, "code": "d5_1394_live_unconsumed_pair", "message": "The supplied1394pair was not consumed exactly once.", "source_keys": ["w96215646"]}
 		if not d5_1317_consumed:
 			return {"ok": false, "code": "d5_1317_live_unconsumed_pair", "message": "The supplied 1317 pair was not consumed exactly once.", "source_keys": ["w95934125"]}
-		return {"ok": false, "code": "fire_station48_unconsumed_pair", "message": "The supplied Station 48 pair was not consumed exactly once.", "source_keys": ["w764313741"]}
+		if not fs48_consumed:
+			return {"ok": false, "code": "fire_station48_unconsumed_pair", "message": "The supplied Station 48 pair was not consumed exactly once.", "source_keys": ["w764313741"]}
+		return {"ok": false, "code": "maceo_may_unconsumed_pair", "message": "The supplied Maceo May pair was not consumed exactly once.", "source_keys": ["r19685981"]}
 	return report
 
 
@@ -338,7 +361,7 @@ func build_context(context: Dictionary, context_parents: Dictionary) -> Dictiona
 	return report
 
 
-func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}, d2_1439_plan: Dictionary = {}, d2_1444_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}) -> Dictionary:
+func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}, d2_1439_plan: Dictionary = {}, d2_1444_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}, maceo_plan: Dictionary = {}) -> Dictionary:
 	# Building 1's generated 20 m slab and terrain-level tower are source-valid
 	# horizontal placeholders but visually and physically wrong in the vertical
 	# dimension.  Intercept all four independently keyed records before generic
@@ -383,6 +406,8 @@ func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary
 		return D5_1317_GATEVIEW_LIVE_REPLACEMENT.consume_record(record, d5_1317_plan)
 	if not is_context and FIRE_STATION48_LIVE_REPLACEMENT.claims_record(record):
 		return FIRE_STATION48_LIVE_REPLACEMENT.consume_record(record, fs48_plan)
+	if not is_context and MACEO_MAY_LIVE_REPLACEMENT.claims_record(record):
+		return MACEO_MAY_LIVE_REPLACEMENT.consume_record(record, maceo_plan)
 	return _build_unpaired_record(record, is_context)
 
 # Preserve the original source producer and pre-packing channel path unchanged.

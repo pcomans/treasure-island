@@ -1,0 +1,109 @@
+{
+  "schema_version": "ti.exact-current-release-closure/1",
+  "status": "CURRENT16_OWNER_AND_INDEPENDENT_PACKAGE_PASS_MAIN_TRANSFER_PENDING",
+  "derived_downstream_release_summary": true,
+  "recognition_metric": "reference_recognized_physical_buildings",
+  "recognized_physical_units": 16,
+  "not_evaluated_physical_units": 197,
+  "added_physical_unit": "physical-building:r19685981",
+  "numerator_effect": 1,
+  "prior15_acceptances_preserved": true,
+  "all213_identities_preserved": true,
+  "compiler_version": "1.15.0",
+  "catalog_registry_version": 16,
+  "contracts_loader_version": 15,
+  "active_adapters": 15,
+  "total_plans": 24,
+  "package_safe_plans": 18,
+  "unchanged_legacy_adapters": 9,
+  "unchanged_disabled_plans": 6,
+  "unchanged_projection_descriptors": 13,
+  "app_relative_path": "build/maceo-may-exact-current-001/Treasure Island First Playable.app",
+  "package": [
+    {
+      "path": "Contents/Info.plist",
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885
+    },
+    {
+      "path": "Contents/MacOS/Treasure Island First Playable",
+      "sha256": "ed29698fa03da04fc85a4a282fc2311a99ee0da4a86f1e0ff4cf2124e4bdb211",
+      "bytes": 170963648
+    },
+    {
+      "path": "Contents/PkgInfo",
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9
+    },
+    {
+      "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229
+    },
+    {
+      "path": "Contents/Resources/Treasure Island First Playable.pck",
+      "sha256": "aa60f0e4e806e1db8922d6f524ba79126f21cd74868690cf7f6bffc42d37c397",
+      "bytes": 76510240
+    },
+    {
+      "path": "Contents/Resources/icon.icns",
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "sha256": "69737f05fce03a4b64246f57a4b1d1b4d9c9d0893113d9966560ce8ce2500d33",
+      "bytes": 3217
+    }
+  ],
+  "bundle_identity_sha256": "f372f9cb947745299ba5bbcd7a69a253b8c24fdca1f348b4cfbdd3d69c892d51",
+  "bundle_identity_encoding": "SHA256 of compact sort_keys JSON array sorted by relative path, each entry path/sha256/bytes",
+  "pck_sha256": "aa60f0e4e806e1db8922d6f524ba79126f21cd74868690cf7f6bffc42d37c397",
+  "pck_bytes": 76510240,
+  "world": [
+    735,
+    1032,
+    1047,
+    99129,
+    466,
+    478
+  ],
+  "owner_package_decision": "PASS",
+  "independent_package_decision": "RELEASE PASS",
+  "root_accepted_package_reviews": true,
+  "independent_review_sha256": "2bbf338339fa6df803afc29f8b20e14d660b210f3ebe9aa8dbe5beb430c41e3f",
+  "main_transfer": "pending",
+  "publication": "pending",
+  "ordinary_no_argument_launch": "not run for these bytes",
+  "primary_commit": null,
+  "remote_head": null,
+  "human_001": "pending owner acceptance; scope unchanged",
+  "artifacts": {
+    "README.md": {
+      "path": "evidence/first-playable/maceo-may-current-release-2026-09-12-001/README.md",
+      "sha256": "d1766b2379bc7d33036d66d22cc19079c58f773f27bac2e62cc36b30e4be35d7",
+      "bytes": 1753
+    },
+    "independent-package-review.json": {
+      "path": "evidence/first-playable/maceo-may-current-release-2026-09-12-001/independent-package-review.json",
+      "sha256": "8a9abe515aea14cd97c5a755b3bb70fe94a7f543a4e48a304b07ef668bb3e585",
+      "bytes": 1435
+    },
+    "owner-package-verification.json": {
+      "path": "evidence/first-playable/maceo-may-current-release-2026-09-12-001/owner-package-verification.json",
+      "sha256": "e4ee2f47bea7be9a3cb957a6cdfdb2c3810514d3ec09457e4de1f467d0282d87",
+      "bytes": 13512
+    },
+    "private-provenance-retention.json": {
+      "path": "evidence/first-playable/maceo-may-current-release-2026-09-12-001/private-provenance-retention.json",
+      "sha256": "dc71c17b3299464fbc751f2ff4fc4dde49bb3dd0e6c48ba1f63cf956132c54f1",
+      "bytes": 22450
+    },
+    "source-and-visual-lineage.json": {
+      "path": "evidence/first-playable/maceo-may-current-release-2026-09-12-001/source-and-visual-lineage.json",
+      "sha256": "4e84e00ab37eb7767c6e233c9e9b4238032fa9d031faf0ae662cc53bdd87b853",
+      "bytes": 5524
+    }
+  },
+  "dependency_chain": "Immutable historical14/candidate15 unit packet -> separately accepted +1 authority -> fresh current16 app -> actual owner execution and independent review -> proposed byte-exact MAIN transfer. Publication is downstream; no new native capture is claimed."
+}

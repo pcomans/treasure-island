@@ -1,0 +1,65 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:r19685981",
+  "label": "Accepted separate static and sampled live visual decisions, not seventh attestation",
+  "origins": [
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/c5/c5c42f0e5db0cc423413081be6ca4c20e5ae4e574b1c10eb2cb23bb01a42ce0f.md",
+      "sha256": "c5c42f0e5db0cc423413081be6ca4c20e5ae4e574b1c10eb2cb23bb01a42ce0f",
+      "bytes": 6399,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-first-coherent-study-001/camera-settle-revision-001/independent-visual-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/57/573ffed05619c066e634c2ee9ee512c13eeab8b3a0c3cf5254cf6ca3188eae8f.md",
+      "sha256": "573ffed05619c066e634c2ee9ee512c13eeab8b3a0c3cf5254cf6ca3188eae8f",
+      "bytes": 4532,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/curtain-union-revision-001/independent-visual-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/97/975f456023026eef10efff4bd6a9f293fa358f245b5e89e1f864d93e54eff50f.md",
+      "sha256": "975f456023026eef10efff4bd6a9f293fa358f245b5e89e1f864d93e54eff50f",
+      "bytes": 2982,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/independent-visual-motion-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/af/afba8803654ef3794cb0d6d61f4c49c0fbba61089e00b6214dc1d5c8e5bc4ef1.md",
+      "sha256": "afba8803654ef3794cb0d6d61f4c49c0fbba61089e00b6214dc1d5c8e5bc4ef1",
+      "bytes": 2740,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/independent-visual-motion-002/REVIEW.md",
+      "role": "exact_original"
+    }
+  ],
+  "data": {
+    "status": "SCOPED_PASS",
+    "reference_metadata": {
+      "date": "September2025",
+      "ENE_pano": "kEX8mV7OsuHLoA4oK69_KA",
+      "SSE_pano": "OKiASMGBFciyCsC9neeygg",
+      "headings": [
+        275,
+        320
+      ],
+      "FOV": 78,
+      "URLtilt": 97,
+      "image_sha256": [
+        "f40c52bf867e4de99b31274f515aa66c17cffb47ef4fdbec5ee12ec75bef71f9",
+        "401a254c66d417f4093b21cfa8f626dc3266a342479f33bdd95623931efac603"
+      ],
+      "image_retention": "private external originals only; no reference pixels copied"
+    },
+    "limits": [
+      "All selected photographs of the game were captured in the historical14 world. ENE/baseline study views retain their unchanged original scope; the repaired SSE pair shows the corrected curtain. Actual merged current15 source is now735/1032/1047/99129/466/478. These are neither app screenshots nor new combined-release pictures.",
+      "September2025 ENE/SSE references show pale complete grids/graphite base and fine ribs/rust complete frames/entrance glazing/columns. Trees and crops obscure portions of the public faces; upper whole-building extent, courtyard21\u201339, roof and protected sides remain unknown. Counts/depths/cadence are production inference. No reference pixels are copied.",
+      "Independent affected mechanics PASS combines explicit successes on identical products: motion001 exact in-range wall placement at4.739649m; motion002 real first-column shape1 contact on14 physics rows, all252 input/30 brake rows grounded, retreat/return and in-range column/LAND/roof rejection. Both raw ok:false records remain unchanged; no fictitious single all-success continuous run.",
+      "Motion001 missed the intended column because of reversed lateral helper actions. Motion002 skipped wall placement at6.241111755m beyond stock6m; its03 planned wall-spray filename does not prove a placement or stock rejection. The selected separate00103 shows the successful tag.",
+      "Each motion run retains402 complete records:30 initial,252 input,30 brake and90 separate roof-settle rows. Roof support is explicitly set up and naturally settled, not ground-to-roof walking/jetpack ascent or roof-art certification. Actual spray API calls do not prove physical mouse dispatch.",
+      "11 selected native PNGs are1440x900. Two complete original508-frame AVI files and selected nine002 payloads are1280x800; both movies retain their70-byte physical tails. Sparse indices41/76/112/147/182/217/252/288/323 do not establish continuous playback or physics/draw/AVI identity. All omitted001 media remains private and original.",
+      "Initial bad camera views, original curtain overlap, snapshot/packed-expectation helper failures, both motion failures and unrun preparation/release-guard history remain retained. No successful source/capture or motion evidence was replayed for assembly.",
+      "Maceo is an uncredited physical unit; prospective+1 only after exact candidate package verification, separate seventh attestation and serialized current-authority delivery. Current15/213 and historical14/credit0 runtime metadata remain exact. No manual/M1/universal-runtime/current-release claim."
+    ]
+  },
+  "truth_boundary": "Derived assembly binds unchanged original evidence and its independent scoped decisions; no new author visual/mechanical decision. Current15/213 is unchanged. Candidate package and separate seventh unit attestation remain pending."
+}

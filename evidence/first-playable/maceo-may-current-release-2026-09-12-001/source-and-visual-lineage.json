@@ -1,0 +1,61 @@
+{
+  "derived_summary": true,
+  "recognition_metric": "reference_recognized_physical_buildings",
+  "recognized_physical_units": 16,
+  "not_evaluated_physical_units": 197,
+  "added_physical_unit": "physical-building:r19685981",
+  "numerator_effect": 1,
+  "prior15_acceptances_preserved": true,
+  "all213_identity_source_receiver_joins_preserved": true,
+  "unit_closure": {
+    "path": "evidence/first-playable/maceo-may-quality-candidate-2026-09-11-001/candidate-closure.json",
+    "sha256": "30d3aa2f19751a93274e72437c947377b480afc88d7c1f18b91fd681b96770d2",
+    "bytes": 4035
+  },
+  "seven_acceptance_bindings": {
+    "evidence_manifest_sha256": "82543ad09bc51281499280965d9bc949ecc99781d80520801742bd3643404862",
+    "motion_telemetry_manifest_sha256": "83a8637cd539efa3899b8d97147a82a02d976aa8baed4209824e2724a2ac7e2b",
+    "visual_motion_manifest_sha256": "3c7c3e933062d4cf3994f47cb48a62c41b7c1cf42fa41693ff82474cec1db86d",
+    "package_verification_receipt_sha256": "e903e64348aa003ca957b1e1efebc57a516395134f40d56e1ba1c5ebc3ad877f",
+    "evidence_tree_sha256": "916457b92cee4b002cab5c47b6ecd29a8c8d398a9ad685c05e7bc8f5d9874e0a",
+    "mechanical_review_receipt_sha256": "749cd826a0ea791b696ab98464e5c19548f14d45734d88111a79376a74dd5c8c",
+    "review_receipt_sha256": "e08d71c45bfc67e05ab2fd2a8d4e8362ef7692f96d5817d60856a251b473b14e"
+  },
+  "image_count": 20,
+  "image_tree_sha256": "916457b92cee4b002cab5c47b6ecd29a8c8d398a9ad685c05e7bc8f5d9874e0a",
+  "tree_document_sha256": "eafb9d2dfe9fe89365c6b71a660cd6609aec3a8fa19436d0669351f6a1cc33e2",
+  "capture_authority": "14/213 credit0",
+  "historical_candidate_authority": "15/213",
+  "historical_candidate_pck_sha256": "70d99894bdeb8c50c5997c9601465be693200227616e338cd43fe7cb29b67383",
+  "current_world": {
+    "bodies": 466,
+    "meshes": 1032,
+    "rows": 735,
+    "shapes": 478,
+    "surfaces": 1047,
+    "triangles": 99129
+  },
+  "current_topology_owner": "physical-building:r19685981",
+  "source_authority_review": {
+    "path": "build/maceo-may-current-release-provenance-001/authority/independent-authority-source-successor-001/REVIEW.md",
+    "sha256": "2099706fc2d89905caf4f2d5ccd5abb5958a93f2640401425c25f21968c3221e",
+    "bytes": 4767
+  },
+  "seventh_binding": {
+    "path": "build/maceo-may-current-release-provenance-001/authority/SEVENTH_BINDING.json",
+    "sha256": "e61bd57b7a966f2d807c97d5462b5956674d187cddc2ed20907d75abcd67fdef",
+    "bytes": 594
+  },
+  "current_pck_sha256": "aa60f0e4e806e1db8922d6f524ba79126f21cd74868690cf7f6bffc42d37c397",
+  "limits_scope": "The following limits are verbatim historical candidate-time statements from the historical14/candidate15 packet. Their uncredited/prospective/current15/no-current-release wording describes that earlier stage, not this accepted current16 release. Current16 authority and release status are stated above; all motion, crop, manual-input, M1 and runtime limits remain applicable.",
+  "limits": [
+    "All selected photographs of the game were captured in the historical14 world. ENE/baseline study views retain their unchanged original scope; the repaired SSE pair shows the corrected curtain. Actual merged current15 source is now735/1032/1047/99129/466/478. These are neither app screenshots nor new combined-release pictures.",
+    "September2025 ENE/SSE references show pale complete grids/graphite base and fine ribs/rust complete frames/entrance glazing/columns. Trees and crops obscure portions of the public faces; upper whole-building extent, courtyard21\u201339, roof and protected sides remain unknown. Counts/depths/cadence are production inference. No reference pixels are copied.",
+    "Independent affected mechanics PASS combines explicit successes on identical products: motion001 exact in-range wall placement at4.739649m; motion002 real first-column shape1 contact on14 physics rows, all252 input/30 brake rows grounded, retreat/return and in-range column/LAND/roof rejection. Both raw ok:false records remain unchanged; no fictitious single all-success continuous run.",
+    "Motion001 missed the intended column because of reversed lateral helper actions. Motion002 skipped wall placement at6.241111755m beyond stock6m; its03 planned wall-spray filename does not prove a placement or stock rejection. The selected separate00103 shows the successful tag.",
+    "Each motion run retains402 complete records:30 initial,252 input,30 brake and90 separate roof-settle rows. Roof support is explicitly set up and naturally settled, not ground-to-roof walking/jetpack ascent or roof-art certification. Actual spray API calls do not prove physical mouse dispatch.",
+    "11 selected native PNGs are1440x900. Two complete original508-frame AVI files and selected nine002 payloads are1280x800; both movies retain their70-byte physical tails. Sparse indices41/76/112/147/182/217/252/288/323 do not establish continuous playback or physics/draw/AVI identity. All omitted001 media remains private and original.",
+    "Initial bad camera views, original curtain overlap, snapshot/packed-expectation helper failures, both motion failures and unrun preparation/release-guard history remain retained. No successful source/capture or motion evidence was replayed for assembly.",
+    "Maceo is an uncredited physical unit; prospective+1 only after exact candidate package verification, separate seventh attestation and serialized current-authority delivery. Current15/213 and historical14/credit0 runtime metadata remain exact. No manual/M1/universal-runtime/current-release claim."
+  ]
+}

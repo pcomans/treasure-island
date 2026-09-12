@@ -1,0 +1,176 @@
+{
+  "schema_version": "ti.maceo-may-quality-study/1",
+  "mapped_runs": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "protected_runs": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "geometry_path": "res://game/resources/facades/maceo_may_study_geometry.json",
+  "geometry_sha256": "4caf46d6c3ebb1ef497fbe8012e5f1fd938a055e11a4132c04ed8e6827da12b3",
+  "truth_boundary": {
+    "prototype_only": true,
+    "runtime_attachment": false,
+    "recognition_accepted": false,
+    "interior_modeled": false,
+    "as_built_claim": false
+  },
+  "frames": {
+    "SSE": {
+      "runs": [
+        8,
+        9,
+        10
+      ],
+      "origin_xz": [
+        -145.544,
+        361.382
+      ],
+      "tangent_xz": [
+        0.655132602738172,
+        -0.7555139130615058
+      ],
+      "normal_xz": [
+        0.7555139130615058,
+        0.655132602738172
+      ],
+      "length_m": 42.19909051152644
+    },
+    "ENE": {
+      "runs": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16
+      ],
+      "origin_xz": [
+        -117.898,
+        329.5
+      ],
+      "tangent_xz": [
+        -0.45315868770147616,
+        -0.8914298647457778
+      ],
+      "normal_xz": [
+        0.8914298647457778,
+        -0.45315868770147616
+      ],
+      "length_m": 56.02011103166433
+    }
+  },
+  "materials": {
+    "pale_rgb": [
+      0.72,
+      0.715,
+      0.67
+    ],
+    "wall_rgb": [
+      0.73,
+      0.72,
+      0.68
+    ],
+    "graphite_rgb": [
+      0.115,
+      0.135,
+      0.142
+    ],
+    "glass_rgb": [
+      0.19,
+      0.29,
+      0.31
+    ],
+    "rust_rgb": [
+      0.36,
+      0.105,
+      0.065
+    ]
+  },
+  "bucket_materials": {
+    "PaleCompleteENEFrames": "pale",
+    "GraphiteRecessAndMullions": "graphite",
+    "OpaqueBlueGrayGlazing": "glass",
+    "GraphiteLouvers": "graphite",
+    "RustCompleteSSEFrames": "rust",
+    "PaleSmallVentFrames": "pale",
+    "RustEntryPanels": "rust",
+    "PaleRoundEntranceColumns": "pale"
+  },
+  "private_wall_material": {
+    "shader_path": "res://game/resources/facades/maceo_may_public_fields.gdshader",
+    "upper_start_y": 7.93,
+    "rib_period_m": 0.065,
+    "rib_albedo_amplitude": 0.025,
+    "sse_corner_start_m": 37.84909051152644
+  },
+  "collision_groups": {
+    "ExactClosedSourceWalls": [
+      "source_walls"
+    ],
+    "ExactSourceNeutralRoof": [
+      "source_roof"
+    ],
+    "EntranceColumnRelief": [
+      "PaleRoundEntranceColumns"
+    ]
+  },
+  "inference": {
+    "window_count": 115,
+    "ene_bays": 13,
+    "sse_bays": 9,
+    "upper_registers": 5,
+    "floor_y": [
+      7.93,
+      10.83,
+      13.73,
+      16.63,
+      19.53
+    ],
+    "unknowns": "Cropped upper extents and far ends; all upper cadence/dimensions inferred inside source18m mass. No neighbor schedule, courtyard transfer, interior, roof or story change. Run7 retained unchanged."
+  },
+  "expected": {
+    "render_triangles": 16436,
+    "meshes": 11,
+    "collision_triangles": 416,
+    "shapes": 3
+  }
+}

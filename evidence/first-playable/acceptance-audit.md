@@ -2,16 +2,22 @@
 
 Original audit checked: 2026-08-28
 Canonical reconciliation: 2026-09-03
-Current release closure: 2026-09-11
+Current release closure: 2026-09-12
 Original reviewer: acceptance audit agent (`/root/runtime_review_sol`)  
 Jetpack/package delivery recheck: completion audit agent (`/root/completion_audit_sol`)  
 Scope: the repository and retained evidence for the approved private Treasure Island first playable
 
 > **Historical-boundary notice:** the detailed 18-ID matrix, package rows, and
 > byte-specific measurements below are sealed point-in-time audits. They are
-> preserved rather than rewritten to describe later bytes. The 2026-09-11 Fire Station48
+> preserved rather than rewritten to describe later bytes. The 2026-09-12 Maceo May
 > addendum immediately below records current technical release status; all
 > earlier addenda retain their original scope and bytes.
+
+## 2026-09-12 Maceo May new-unit release addendum
+
+Maceo May (`physical-building:r19685981`) adds one accepted physical unit: **16/213**, with **197 not evaluated**. All prior 15 acceptance records and all 213 identities remain. Compiler `1.15.0`, catalog/registry v16 and contracts/loader v15 bind 15 active adapters, 24 plans and 18 package-safe plans. ROOT accepted owner execution and independent review of `build/maceo-may-exact-current-001/Treasure Island First Playable.app`: both signed-main runs measured `735/1032/1047/99,129/466/478` rows/meshes/surfaces/triangles/bodies/shapes and passed all seven attachments. The mounted helper compares six focused pairs; 1439 retains its closure and signed-main attachment coverage. PCK `aa60f0e4e806e1db8922d6f524ba79126f21cd74868690cf7f6bffc42d37c397`; seven-file bundle `f372f9cb947745299ba5bbcd7a69a253b8c24fdca1f348b4cfbdd3d69c892d51`; executable `ed29698fa03da04fc85a4a282fc2311a99ee0da4a86f1e0ff4cf2124e4bdb211`. [Release closure](maceo-may-current-release-2026-09-12-001/release-closure.json).
+
+The 20 selected game images retain historical capture14; the separately accepted candidate app retains authority15. Both raw motion failures and their combined affected-mechanics acceptance, sparse AVI samples, camera/contact/roof-setup limits remain unchanged. Native smoke ran on Apple M2 and supplies no new screenshots, manual-input/M1 acceptance or both-architecture runtime claim. MAIN transfer and commit/push remain pending in this preparation snapshot; ordinary no-argument launch and HUMAN-001 owner feedback remain pending.
 
 ## 2026-09-11 Fire Station48 new-unit release addendum
 

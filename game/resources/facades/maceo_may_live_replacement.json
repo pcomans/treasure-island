@@ -1,0 +1,91 @@
+{
+  "adapter_id": "active-adapter:maceo-may-live:building:r19685981:wall",
+  "added_collision_scope": "Five unchanged visible round entrance columns,320 congruent faces, separate nonreceiver shape on wall body; original wall80/roof16 faces retain ordered source identity.",
+  "all_additions_render_only": false,
+  "candidate_credit": 0,
+  "captured_authority_metric": "14/213",
+  "geometry_sha256": "4caf46d6c3ebb1ef497fbe8012e5f1fd938a055e11a4132c04ed8e6827da12b3",
+  "mapped_public_runs": [
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16
+  ],
+  "mesh_triangles": {
+    "ExactSourceNeutralRoof": 16,
+    "GraphiteLouvers": 1380,
+    "GraphiteRecessAndMullions": 4932,
+    "ObservedENESSEWallFields": 18,
+    "OpaqueBlueGrayGlazing": 2556,
+    "PaleCompleteENEFrames": 2240,
+    "PaleRoundEntranceColumns": 320,
+    "PaleSmallVentFrames": 1440,
+    "ProtectedExactNeutralWallRuns": 62,
+    "RustCompleteSSEFrames": 3460,
+    "RustEntryPanels": 12
+  },
+  "pair_partition": {
+    "roof": [
+      1,
+      16,
+      1,
+      1,
+      16
+    ],
+    "wall": [
+      10,
+      16420,
+      1,
+      2,
+      400
+    ]
+  },
+  "protected_runs": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "recognition_accepted": false,
+  "record_sha256": {
+    "building:r19685981:roof": "86a5ea5b74ab4713f75ff1c6c35cf5132b70c7e33c228f988983c6c7303139cc",
+    "building:r19685981:wall": "c68403647a2a1f39a1957813e44c161882c88911d8f0eae574f7f9806ae07b44"
+  },
+  "schema_version": "ti.maceo-may-live-replacement/1",
+  "source_collision_only": false,
+  "source_key": "r19685981",
+  "study_config_sha256": "11a8784bbb08ea4a6244b1da1dcc8e0c2b589ef66c55a0bd2cc8ff20ad16cd6d",
+  "target_chunk_id": "x_-1__z_1"
+}

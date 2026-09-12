@@ -13474,3 +13474,258 @@ After the finite Station48/Maceo audit, ROOT adopted a next-two eligible helper-
 ### C — documentation checkpoint007
 
 retro_exact: C transcribed48 completed retrospective bodies once, preserving historical preparation limits, failures and later scoped outcomes. Station48 publication remains15/213; no Maceo or YMCA credit was inferred. Actual source maps exclude the selected MAIN docs, and original RETRO prefix, dirty AGENTS/UIDs, authority, Git index/config/hooks and candidate products stayed unchanged. A broad retrospective read exceeded its budget and a guessed pin-map filename failed before any MAIN edit; later extraction used actual compact fields and the discovered map. Refined existing lessons for consumed containers, type-specific helper APIs/fixtures, retained-script discovery and evidence-based reporting, plus final saved-camera validation. Future motion repair/reviews and next-unit work remain open; no engine was added for documentation, and no docs were staged or published.
+
+
+## 2026-09-11 — Consolidated checkpoint008
+
+Completed rounds since checkpoint007, through candidate002 package/sixth-role closure and the bounded shadow-distance visual discriminator. Preparation-time statements below remain historical; later results do not rewrite their original failures or scope. The seventh attestation, prospective authority work and any production rendering choice remain open.
+
+### E — Maceo motion001 mechanics
+
+retro_exact: Maceo motion001 retained its real column-contact FAIL and all later ground/spray/roof/media evidence. Authored lateral labels contradicted the actual Input/camera/source-tangent sign; E's preparatory review also missed that relation. Fix only the two helper actions and verify the signed mapping before a bounded continuation; do not alter collision or accept a missed column. The stale release stage was corrected and actual termination independently verified, but late reviewer instruction invalidated that trial's prelaunch metric. Initial log-marker absence understated completed phases; raw saved records and file hashes corrected it. E also repeated oversized nested reads during collation; subsequent selected-field reductions established the result without another engine run.
+
+Source: [maceo-may-live-integration-001/motion-spray-preparation-001/independent-motion-mechanics-001/REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/independent-motion-mechanics-001/REVIEW.md), SHA256 `df17c69d48b9b54b8484c0784d3c9e0e77ad6eb9850a37f3f3febf3201e4b579`.
+
+### D — Maceo motion001 visual
+
+retro_exact: D / Maceo motion001 independent visual — Worked: all five actual originals and nine exact AVI payload samples remained usable after the contact failure; direct comparison retained the coherent ribbed/rust-window/glazed-base reading and showed no renewed terrain underside. Did not: sparse samples cannot establish continuous temporal cleanliness or the failed column-side contact; opaque uniform glazing and protected-wall contrast remain known limits. Change: retain this scoped visual PASS separately from mechanics HOLD and reuse unchanged static/reference evidence without capture replay.
+
+Source: [maceo-may-live-integration-001/motion-spray-preparation-001/independent-visual-motion-001/REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/independent-visual-motion-001/REVIEW.md), SHA256 `975f456023026eef10efff4bd6a9f293fa358f245b5e89e1f864d93e54eff50f`.
+
+### C — Maceo lateral-sign preparation
+
+retro_exact: “C preserved failed motion001 and all539 prior inputs, swapped only the two incorrect lateral actions, and bound the intended route to actual input axes and signed camera/source basis before movement. Matching source preflight retains the original positive-station corridor, durations and targets; no product collision repair or source change is implied. Reused the complete runner and corrected release path under ROOT conditional authorization; independent confirmation and actual continuation outcomes remain pending.”
+
+Source: [maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/FILE_READY.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/FILE_READY.md), SHA256 `931ebea0767cb99d2a0b9b61d526fe54ae86a2c848e5da8f155c5abdacbb0264`.
+
+### C — Maceo motion002 execution
+
+retro_exact: “C completed conditional helper-repair trial1 after E's explicit confirmation, with no additional ROOT prelaunch request and22.500412s to actual launch. The two corrected lateral actions and signed input/basis check produced17 real column side contacts with all252 movement rows grounded, while unchanged products/558inputs stayed exact. The new wall target was6.241112m away, beyond stock6m, so placement correctly remained unattempted and overallFAIL was preserved. All five PNGs,508-frame AVI and nine exact samples survived; the engine was released0.555641s after terminal. Keep actual endpoint/range separate from file predictions, planned filenames separate from successful outcomes, and independent mechanics/visual decisions separate. No retry, source/range change or speedup claim; prior001 failure and the optional preflight station-key null remain documented.”
+
+Source: [maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/OWNER_HANDOFF.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/OWNER_HANDOFF.md), SHA256 `78178ce5b964f086096535c96ea2130602815496d372109df45dabc72d9b7646`.
+
+### E — Maceo combined mechanics applicability
+
+retro_exact: Existing acceptance rules and the accepted1317 packet already support scoped successes from immutable failed runs on unchanged product inputs. Reconcile001 wall placement with002 column movement and retain each excluded failure, instead of running again solely to obtain a green aggregate wrapper. This closes the affected mechanics evidence requirement without weakening source, motion, visual or package gates; it does not turn either failed run into PASS or claim one continuous all-success session.
+
+Source: [maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/independent-motion-mechanics-002/COMBINED_APPLICABILITY.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/independent-motion-mechanics-002/COMBINED_APPLICABILITY.md), SHA256 `f1a97d8d483353a066e8616ee8b88b216cf4a85f108183d3a8a95b67d5f6c436`.
+
+### E — Maceo motion002 mechanics
+
+retro_exact: Correcting the two helper lateral actions produced real first-column side contact without changing products or controls. Actual collision sliding shifted the final endpoint, so the prior static wall target fell outside6m; preserve both raw failed predicates and the already-valid001 placement separately. Count17 contact records as14 physics rows. ROOT's narrowed authorization plus E concrete-diff/argv confirmation required0 extra ROOT prelaunch requests. Issued confirmation08:18:04.681411Z preceded actual started_at08:18:27.181823Z by22.500412s; this is an observed handoff interval, not a measured speedup. The earlier stale-release late-confirmation case remains ineligible. Continue only a specifically scoped remaining probe if needed, with no broad geometry replay.
+
+Source: [maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/independent-motion-mechanics-002/REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/independent-motion-mechanics-002/REVIEW.md), SHA256 `89b9f10a240b8aed2b39034a2ea01bdb284991d266ff46cfe49844929bdc3848`.
+
+### D — Maceo motion002 visual
+
+retro_exact: D / Maceo motion002 independent visual — Worked: directly viewed five originals and nine exact AVI payloads, including the closer column approach and retreat; facade/base/ground continuity remained legible without renewed terrain underside or curtain fragments. Did not: the planned 002 wall-spray filename is not placement evidence; its attempt was skipped at 6.241112m, while the separate 001 original visibly retains the successful tag. Change: carry this scoped visual PASS alongside the independently combined mechanics decision, preserving both raw failures, sparse-sample limits and historical14/current15 distinction; no recapture or source edit.
+
+Source: [maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/independent-visual-motion-002/REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/independent-visual-motion-002/REVIEW.md), SHA256 `afba8803654ef3794cb0d6d61f4c49c0fbba61089e00b6214dc1d5c8e5bc4ef1`.
+
+### E — Maceo additive current15 preparation
+
+retro_exact: Historical Maceo and current Station48 occupied the same newly appended builder seam. A file overwrite would remove an accepted attachment; integration must preserve both plans and cleanup paths. Combined counts derive from the original source pair versus reviewed replacement, while capture14/credit0 remains immutable historical metadata. Verify only the changed context before export and reuse applicable original source/mechanics evidence rather than recapturing unchanged products.
+
+Source: [maceo-may-current15-delivery-preparation-001/FINDING.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-current15-delivery-preparation-001/FINDING.md), SHA256 `2989c7d49229918aec9acbc12e069796c9a49fc5781cb16a810a9f4804dea4b7`.
+
+### C — Maceo candidate packet preparation
+
+retro_exact — capture_1410_revision002, Maceo current15 candidate delivery preparation: Reused accepted static and sampled-motion decisions plus the independently reconciled001/002 mechanics and actual current15 source result. Assembled20 exact selected images, retaining both failed motion origins and omitted originals privately, with raw-script discovery exclusion established before copying. Adapted the successful package/binder/runner path additively for Maceo and selected its two generated script UIDs while excluding unrelated test UIDs. No export or authority change; package/seventh decisions remain pending. Some prior-helper reads were oversized and one file-only function-name lookup used a wrong prefix; narrowed recovery did not repeat an engine. Earlier new-review send_message requests did not wake an idle E; use the ROOT-adopted followup_task default for every new bounded assignment at the next normal harness checkpoint.
+
+Source: [maceo-may-quality-delivery-001/FILE_READY.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/FILE_READY.md), SHA256 `0075a1b8489b303f717f341ec1dfb2a051681daf292ee3e19b224dea1e046b99`.
+
+### C — Maceo first export failure
+
+retro_exact — capture_1410_revision002, Maceo candidate export001: The guarded chain preserved all 1,619 inputs and stopped before dependent stages when the absent export parent caused Godot to exit1 in 2.990382292s. Immediate awaited release kept the engine slot clear; no package or acceptance was inferred. I omitted creating the fresh output parent during preparation, and a closure read initially included the large pin fields before switching to selected receipt keys. Next authorized export preparation should establish and verify only its exact empty destination parent while retaining app-absence, no-overwrite, pin and first-failure checks. No retry or source change was made in this round.
+
+Source: [maceo-may-quality-delivery-001/OWNER_HANDOFF.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/OWNER_HANDOFF.md), SHA256 `0e51a8f3fd226caf6618f3db0d262b47e56b7039e80495faa8f2bf7707468780`.
+
+### E — missing export-parent diagnosis
+
+RETRO exact: Maceo export001 failed in2.990382292s because the fresh app's required parent directory was never prepared. E's prelaunch review checked absent output and correct argv but missed the parent requirement; C's harness also lacked that preflight. The actual build directory is writable, so no access question/cache/source change is warranted. Preserve the failed receipt, prepare a new candidate002 parent and guard, then measure the remaining eligible helper-only trial2 from direct independent confirmation to actual launch with extra ROOTrequests counted. No speedup is inferred.
+
+Source: [maceo-may-quality-delivery-001/independent-delivery-readiness-001/EXPORT001_FINDING.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/independent-delivery-readiness-001/EXPORT001_FINDING.md), SHA256 `b332e8be0547226c3ed4c25d5de43062dcc90f3ec1a08f3bac343db4c7290976`.
+
+### E — output-parent repair readiness
+
+RETRO exact: E directly confirmed the missing export-parent repair under ROOT's existing conditional scope after reviewing the concrete one-line guard, complete current argv, actual empty writable parent and retained input bindings. Sent confirmation through followup_task before the one launch; record actual issued09:32:42.534355Z→started_at and extra ROOTrequests in the normal receipt. This is eligible helper-only trial2, not measured speedup; preserve original failure and all mandatory release/package gates.
+
+Source: [maceo-may-quality-delivery-001/independent-delivery-readiness-001/OUTPUT_PARENT_REPAIR_READY.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/independent-delivery-readiness-001/OUTPUT_PARENT_REPAIR_READY.md), SHA256 `dd8ed835e4973384e255f9a1c7818c0349b2ec9e52dd420d123bc5551b76baab`.
+
+### E — Maceo candidate delivery readiness
+
+RETRO exact: E checked Maceo's candidate package adaptation and actual20-image/five-role assembly, retaining the combined001/002 mechanical scopes and both raw failures. Verified the real adapter's container types, eleventh dispatch and distinct source/column ownership instead of inheriting Station48 assumptions. Reused unchanged current15 source/native/mechanical reviews, and confirmed the concrete guarded five-stage/binder chain without another ROOTmicroGO. Actual candidate package and seventh attestation remain pending; no engine or new proof framework was added.
+
+Source: [maceo-may-quality-delivery-001/independent-delivery-readiness-001/REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/independent-delivery-readiness-001/REVIEW.md), SHA256 `2f347f7da8939f9ba0c7cafbf9d2175761e55f6943872945d1f2a4e226da5f16`.
+
+### C — candidate002 directory preparation
+
+retro_exact — capture_1410_revision002, Maceo candidate002 directory repair preparation: Reused every product, packet and prior input while adding the missing fresh export-parent existence/writability/emptiness requirement to the existing runner plan. Complete changes are output paths and one directory predicate; the successful binder, canonical-class check, first-failure and immediate-release path remain intact. Preserved the actual001 failure and prepared one conditional continuation; no new source proof or engine run occurred during preparation.
+
+Source: [maceo-may-quality-delivery-001/output-parent-repair-001/FILE_READY.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/FILE_READY.md), SHA256 `a8a39641049679af7189911fc3431bc5c39983cb7480341696727fd86c51dda5`.
+
+### C — candidate002 delivery execution
+
+retro_exact — capture_1410_revision002, Maceo candidate002 delivery execution: The bounded fresh-parent correction enabled one clean export, exact-app binding and four package/runtime stages; all1,635 inputs and historical failures stayed intact. Five actual Godot stages totaled85.340531375s and awaited release followed the final terminal by1.609431s. E confirmation-to-launch was29.828391s with zero extra ROOT requests, not measured speedup. I woke the completed reviewer with followup_task for the new package assignment. Independent package/seventh decisions and recognition remained open at owner closure.
+
+Source: [maceo-may-quality-delivery-001/output-parent-repair-001/OWNER_HANDOFF.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/OWNER_HANDOFF.md), SHA256 `e8b8183cf4927c7c29ded5ebc694e11dd83051b345fd5e66050c319e813422b1`.
+
+### C — Maceo current15 source preparation
+
+retro_exact — capture_1410_revision002, Maceo current15 source-context preparation: Created one populated isolated checkout from published MAIN15 with the prescribed local LFS bypass and retained its separate hook error. Copied seven frozen Maceo runtime files exactly and added its pair beside Station48 instead of replacing existing integration seams. Adapted the complete successful focused/lifecycle helper to actual merged totals, retained all historical509 bindings, and exposed this source/focused slice before later package work. No engine or authority change; merged runtime evidence and candidate delivery remain pending.
+
+Source: [maceo-may-quality-delivery-001/source-context-001/FILE_READY.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/source-context-001/FILE_READY.md), SHA256 `15314b8b27d4e961fad5c5778e040cb86bf65d0fd6cf7d664884f4182ead22b2`.
+
+### C — Maceo current15 source execution
+
+retro_exact — capture_1410_revision002, Maceo current15 context execution: One fresh-checkout import and one complete focused check passed, preserving all944 inputs and actual Station48 plus Maceo attachment predicates. The inherited import material warning remained scoped; focused had no errors/warnings and the fatal-entry-load branch was unexercised. The reviewed chain released both owned PIDs/global slot immediately before collation. No art/motion replay or acceptance credit; continue candidate package and independent attestation from these actual current15 results while retaining historical14 evidence and both raw motion failures.
+
+Source: [maceo-may-quality-delivery-001/source-context-001/OWNER_HANDOFF.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/source-context-001/OWNER_HANDOFF.md), SHA256 `0e1a5a709c46a334fad5e020518993067edb101ab39dc30ee9ca2748b964a145`.
+
+### C — release no-overwrite restoration
+
+The complete existing chain still awaits release in `finally` after the terminal stage, including failures; the new guard prevents replacing a prior release. No engine or wider preparation was performed. Pending retrospective: C restored the inherited release no-overwrite assertion after ROOT spotted its omission in the narrow stage-name adaptation; preserved the first seal and requested the already-authorized independent confirmation without changing source or adding a run.
+
+Source: [maceo-may-quality-delivery-001/source-context-001/RELEASE_GUARD_READY.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/source-context-001/RELEASE_GUARD_READY.md), SHA256 `b499b63e8b386e4a39cb73307c78794a422013c8b25b9b9198c94eaf4e8bfbcc`.
+
+### E — Maceo additive source review
+
+RETRO exact: E reviewed the current15 Maceo additive source seam against the earlier minimum-integration finding, independently checking actual unchanged product bytes, Station48/generic preservation and focused changed-context predicates. Reused the original scoped geometry/motion evidence, retaining both motion failures and historical14 metadata instead of recapturing. No new source/focused defect was found; the separate restored release no-overwrite guard remains a prelaunch prerequisite. Actual merged runtime and package decisions remain pending.
+
+Source: [maceo-may-quality-delivery-001/source-context-001/independent-source-review-001/REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/source-context-001/independent-source-review-001/REVIEW.md), SHA256 `60887cd44a0db3b046d8822f54d90472b591b3aed7e1324a79e0e56e5721a509`.
+
+### E — Maceo current15 runtime review
+
+RETRO exact: E read the actual current15 Maceo changed-context result and terminal release, confirming combined world totals, all seven attachment predicates, retained source channels/collision/lifecycle and unchanged historical evidence scopes. Reused prior geometry/motion rather than running them again. The initial release no-overwrite omission was restored before the first chain; this is not eligible runtime-failure repair trial2. Package and recognition decisions remain separate.
+
+Source: [maceo-may-quality-delivery-001/source-context-001/independent-source-review-001/RUNTIME_REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/source-context-001/independent-source-review-001/RUNTIME_REVIEW.md), SHA256 `3db1388bd5bc2a349e6a5fd8c32b24cae12c9d60d6e6b4cb73410cb8e8bab45d`.
+
+### C — harness publication preparation
+
+Pending retrospective, outside MAIN: C prepared the explicit three-file publication from already accepted dirty bytes, preserved the current15 code/app/authority and four unrelated UIDs, and reused the successful command-local Git path. Read-only inspection identified RETRO's two insertion hunks rather than falsely describing it as a simple HEAD-prefix append. Exact hashes/source-checkpoint bindings and full small stage/commit/push helper are reviewable; no document edit or publication was performed. Actual mutation remains pending ROOT review/GO.
+
+Source: [main-harness-publication-001/FILE_READY.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/main-harness-publication-001/FILE_READY.md), SHA256 `a848778dee26bfeceda954e4eafc8d2888751b9d82d09e025c0771a399d21b94`.
+
+### C — harness publication execution
+
+Pending retrospective outside MAIN: C executed the reviewed three-document stage→commit→non-forcepush sequence once; exact selected blobs, whitespace, parent, protected25, app7 and actual remote guards passed. Future agents now receive the accepted harness and completed lessons through007, with existing four UID files preserved and no product/authority or engine work. New publication history belongs at the next normal checkpoint, not a rewrite of sealed007.
+
+Source: [main-harness-publication-001/OWNER_HANDOFF.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/main-harness-publication-001/OWNER_HANDOFF.md), SHA256 `650f0b81257c3597bea116b36ea203a125c99ba07c4528590571bf8585e26529`.
+
+### D — w34313525 first study preparation
+
+retro_exact: D / w34313525 first coherent study preparation — Worked: fixed March2025 NNW/SSE originals and first-hit/source-run association support a ground-level service-front study; retained exact original three-wall/one-roof native resources, authored complete opaque openings/eave/rafters and seven terrain-clipped apron cells, and reused the successful complete capture and immediate-release path. Did not: an initial aggregate edge-incidence assertion mistook touching closed frame bars for open primitives; its raw FAIL is retained, and primitive closure is not Boolean-union acceptance. One inferred NNW opening overlap and loose eave/rafter seating were corrected before freeze. Change: directly compare every original native surface/channel/material against the ordinary builder, check canonical class discovery behind existing sentinels, and retain all five planned early stills after nonfatal post-load diagnostics. No engine, source/visual acceptance or recognition credit yet; parked w291196370 stair evidence remains separately retained.
+
+Source: [w34313525-first-coherent-study-001/FILE_READY.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-001/FILE_READY.md), SHA256 `499a454232f9cc6fd6e64414be782e3877e8ce675bb8bee11782ab6955f9e1b5`.
+
+### D — w34313525 prelaunch camera settle
+
+retro_exact: D / w34313525 prelaunch camera repair — ROOT found the inherited helper waited only render/process frames after final aim despite the accepted Maceo lesson. Reused the six post-aim physics waits and exact final-camera LAND/clearance observations for all five unchanged poses before any launch. Original431 inputs/preparation stayed exact; no product edit, capture replay or execution-failure experiment trial occurred.
+
+Source: [w34313525-first-coherent-study-001/camera-settle-revision-001/FILE_READY.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-001/camera-settle-revision-001/FILE_READY.md), SHA256 `5de44d732f97a0cd274728dcab3e7de85dbb7bd712d03100abc04eed5636e6cc`.
+
+### D — w34313525 first capture execution
+
+retro_exact: D / w34313525 first actual study run — Worked: import canonical discovery and focused source/channel checks passed once; all four original surfaces retained every native channel/material/state, and all five original PNGs survived the final-camera diagnostic HOLD. Same-awaited release followed native terminal by0.542737s. Did not: inherited exact player-tile LAND expectation rejected the SSE camera’s actual adjacent-tile hit; projected bounds also did not establish visible authored frontage, and the actual SSE pixels show a plain occluding/context wall. Change: preserve these raw failures and useful NNW pixels, diagnose final camera ownership and actual first-solid visibility before any camera remedy, and keep independent art/source acceptance separate. No automatic retry, product change or execution-failure trial claim for the earlier prelaunch correction.
+
+Source: [w34313525-first-coherent-study-001/camera-settle-revision-001/OWNER_HANDOFF.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-001/camera-settle-revision-001/OWNER_HANDOFF.md), SHA256 `23bf890b287645450935065a56f697347d392c7a692f2a84bb72a7740181b57d`.
+
+### C — w34313525 first visual review
+
+retro_exact — capture_1410_revision002, w34313525 independent visual001: Direct inspection of five actual renders and both dated references found substantive NNW composition gains, a visible rollup-line finish issue, and an SSE view that cannot support facade acceptance. Kept the raw HOLD and distinguished camera visibility from authored-art quality rather than proposing broad hidden-view changes. No engine, new imagery, product/shared-document edit or acceptance credit; next review should use the corrected existing-view evidence and the bounded finish response.
+
+Source: [w34313525-first-coherent-study-001/camera-settle-revision-001/independent-visual-001/REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-001/camera-settle-revision-001/independent-visual-001/REVIEW.md), SHA256 `91a2be46f9418dd7bf6dfe3593127fa015f90f81c56a9ea95d37227f0858dd82`.
+
+### E — w34313525 camera/occlusion diagnosis
+
+RETRO exact: E independently separated W343's saved-camera LAND false failure from the real neighboring-building occlusion. The prior readiness review carried a player-tile assumption into a camera query and accepted projected bounds without requiring intended first-solid visibility; both were preparation misses. Reuse frozen camera-tile/source identities, inspect actual saved LOS and keep close public-side framing distinct from whole-building coverage. Preserve the original native HOLD and let one source-checked matched view test the combined necessary correction; no runtime gain or product fault is inferred from this file-only diagnosis.
+
+Source: [w34313525-first-coherent-study-001/independent-camera-diagnosis-001/FINDING.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-001/independent-camera-diagnosis-001/FINDING.md), SHA256 `166f59c7661c585f52b21fe3edc31d9c37ce157f3b71353e26f6f3e98dd42daf`.
+
+### E — w34313525 first readiness
+
+retro_exact: The bounded pre-execution source/helper review retained original multi-surface channels and separated primitive/ground preflight from unrun union, art and mechanics. ROOT caught an inherited final-camera render-only wait; D reused the already accepted six-physics-frame settle and image-bound LAND/segment observations before any launch. E confirmed the actual small delta/argv and source-readiness scope, allowing first pixels without expanding into a topology proof cycle. Preserve both the initial author aggregate-edge failure and any real runtime/capture failures.
+
+Source: [w34313525-first-coherent-study-001/independent-readiness-001/REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-001/independent-readiness-001/REVIEW.md), SHA256 `b22d0159b123d6695635affc406639ff987886f68540c02dbd2f5889877ee2a8`.
+
+### D — w34313525 combined correction preparation
+
+`retro_exact`: D prepared one combined w34313525 source002 correction after the first actual native HOLD and C's independent NNW finish HOLD: exact full-width microbars were replaced by a restrained filtered field without moving retained geometry, while E's actual foreign-building occlusion diagnosis supplied a truthful public-side SSE pose and camera-tile LAND/first-solid checks. All original445 inputs and five PNGs remain preserved through three explicit product aliases; successful import is reused and unchangedNNWbaseline is not recaptured. Preparation is file-only, with complete selected-patch whitespace and a two-stage/four-image plan; actual finish/visibility remain unrun. This combined product/camera correction is not labelled a helper-only failure-repair trial or a measured speedup.
+
+Source: [w34313525-first-coherent-study-002/FILE_READY.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-002/FILE_READY.md), SHA256 `5dda0e8561a6043154aa2c1a308247ec327f5c00def91ed89e39c1809075356a`.
+
+### D — w34313525 combined correction execution
+
+`retro_exact`: D executed the combined w34313525 source002 correction once after E's explicit readiness confirmation: focused30,974checks/4.114s and nativefour originals/17.189s passed with480inputs exact. The source-visible SSE pose now records actual targetwall firstsolid and+1.775m cameraLANDclearance; all original source channels/materials and terrain snapshots remain exact. The unchanged standalone release ran in the same awaited chain0.611338s after terminal, before collation, and all four originals were copied byte-for-byte for C's separate bar review. Initial send_message reached an already completed E handle; explicit followup_task started the required review, a coordination mistake preserved without inventing its full wall/model cost. OriginalrawHOLD remains, and this product-plus-camera correction is not classified as a helper-only repair trial or a controlled speedup. One overlarge owner-result projection was truncated; a bounded reread recovered all capture/decision fields before this closure.
+
+Source: [w34313525-first-coherent-study-002/OWNER_HANDOFF.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-002/OWNER_HANDOFF.md), SHA256 `309251aea9e0ec69fb76551479e0fca79ecfaf1f24a2759b8e49c018e16f6399`.
+
+### E — w34313525 combined readiness
+
+RETRO exact: E confirmed the consolidated W343 product/camera correction against actual current source and helper deltas, avoiding an obsolete camera-only render before the known rollup correction. Reused old source/ground scope and NNW baseline, preserved raw001 HOLD, and required intended-target visibility plus camera-tile LAND evidence. Direct confirmation passed to D under ROOT's narrowed GO; this product+camera revision is not eligible helper-only trial2 and no measured speed saving is claimed.
+
+Source: [w34313525-first-coherent-study-002/independent-readiness-001/REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-002/independent-readiness-001/REVIEW.md), SHA256 `7b5977a213937112237b23894b1a2daeaf4ed53de1dcbe7141d5d505b7e547d6`.
+
+### C — w34313525 second visual review
+
+retro_exact — capture_1410_revision002, w34313525 independent visual002: Directly reviewed four actual revised originals, retained NNW baseline and both dated references. The public SSE composition is now visible and the NNW rollup's broken lines are resolved, but conspicuous default-light upper-wall/eave stippling keeps SSE finish on HOLD. Kept the composition gains, reference/crop limits and original failure history; reused existing YMCA negative diagnostics without asserting a shared cause or requesting another sweep. No engine, new image, product/shared-document edit or recognition credit. ROOT/D duplicate dispatch was coalesced into this one finite review.
+
+Source: [w34313525-first-coherent-study-002/independent-visual-002/REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-002/independent-visual-002/REVIEW.md), SHA256 `a11aa223a0478b77b743e934ef89ba0561d654a4750ba25aed88ae3b818ed621`.
+
+### D — w34313525 shading diagnosis
+
+retro_exact — D / w34313525 bounded source002 shading diagnosis: Checked actual preserved wall material/owner layers and native eave/fascia/rafter depths, finding no new broad overlapping wall carrier. The visible default-light stipple resembles YMCA's retained shadow-participation outcome, but the current procedural wall relief differs and the exact cause remains unproved. Reused the negative bias/precision/combined-sampling results instead of repeating them; after C's SSEfinishHOLD, proposed only one reversible same-pose800→160→800 shadow-range discriminator with original close cast depth retained and exact-engine API support. No helper, engine, product/settings/MAIN edit, source reproof or acceptance followed from this finite note.
+
+Source: [w34313525-first-coherent-study-002/shading-diagnosis-001/NOTE.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-002/shading-diagnosis-001/NOTE.md), SHA256 `7261d278556cb57cc23ea99e83b0c74c2bf227eda4e21d5ccdb0357c3aed5e27`.
+
+### D — shadow-distance diagnostic preparation
+
+retro_exact — D / w34313525 shadow-distance diagnostic preparation: Prepared one800→160→restored800same02SSE comparison with three original images, complete actual light/project/viewport/view readbacks and restored-state equality, reusing the successful source002 setup and prior single-dial diagnostic pattern. All480existinginputs remain exact;499totalpins, new helper whitespace/PythonAST and complete native invocation are frozen. PriorYMCA bias/precision/AA negatives are retained, and no shadow/material/geometry setting is adopted or engine run. Next decision is the bounded actual diagnostic after ROOTGO, not a speculative settings matrix or whole-unit acceptance.
+
+Source: [w34313525-first-coherent-study-002/shadow-distance-diagnostic-001/FILE_READY.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-002/shadow-distance-diagnostic-001/FILE_READY.md), SHA256 `056ede186803dffc2c57695f33c2e305b2203b0f68945afabb1ce19b3ba42ebb`.
+
+### D — shadow-distance diagnostic execution
+
+retro_exact — D / w34313525 shadow-distance execution: One sameSSEpose800→160→restored800 diagnostic completed14.005s with499inputs exact,3originals and complete restored-state checks. Only maximum shadow distance changed across43Sun/961Project/3effectiveconfig/5viewport values; actual camera-basis deltas remained below6.71e−8 with all other view fields exact. Broad upperwall hatching reduced at160 and returned after800restoration while useful cast shadows remained; the sharper edge still has jaggedness, so no finished-art, global adoption, motion/performance or unique-GPU-cause claim follows. Same-awaited release occurred0.572615s afterterminal; originals were copied unchanged before this compact closure. No bias/precision/AArepeat, extra setting/pose sweep, source/MAIN edit or credit. Append once at the normal checkpoint.
+
+Source: [w34313525-first-coherent-study-002/shadow-distance-diagnostic-001/OWNER_HANDOFF.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-002/shadow-distance-diagnostic-001/OWNER_HANDOFF.md), SHA256 `42a0c7ce434944f1c533d7b82ad0df2d88e79f7177a68909fc90b6b70f38e880`.
+
+### C — shadow-distance visual discriminator
+
+retro_exact — capture_1410_revision002, w34313525 shadow-distance diagnostic visual review: Directly compared the three800/160/restored800 originals with source002's default SSE and actual March2025 reference. Broad stippling disappeared at160m and returned after restoration while local cast shadows remained; sharper jagged shadow edges persist as a tradeoff. This is a positive local discriminator, not an internal-cause proof, motion/performance result, production adoption or unitPASS. Preserved source002's scoped acceptance limits and numerical camera-basis allowance; no engine, source edit or repeat probe occurred.
+
+Source: [w34313525-first-coherent-study-002/shadow-distance-diagnostic-001/independent-visual-001/REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w34313525-first-coherent-study-002/shadow-distance-diagnostic-001/independent-visual-001/REVIEW.md), SHA256 `5099a31b8392db34b4830aa6db1994f4899f28ab2f91b09d6a4ceddbaee0e049`.
+
+### E — finite dispatch/timing follow-up
+
+retro_exact: E's finite follow-up measured51.899581s Godot inside2030.280415s, leaving other time unattributed rather than calling it idle. Actual metadata proves806.169s between E completion and restart while new review requests were sent with a non-waking message tool; ROOT and authors shared this avoidable dispatch error. Use the correct new-task tool, retain mandatory gates and existing direct-confirmation scope, and do not label prelaunch/product corrections as helper-only trial2. Combined correction/receipt reuse and immediate releases remain useful; no speedup, engine run or new experiment/framework was claimed.
+
+Source: [team-efficiency-station48-maceo-transfer-001/FOLLOWUP_0831.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/team-efficiency-station48-maceo-transfer-001/FOLLOWUP_0831.md), SHA256 `068e20a3801668ddd896baf375975a54ccdf2b85728c1b85e9dbebbf28d60cba`.
+
+### E — Maceo candidate002 package review
+
+**retro_exact:** E independently interpreted actual Maceo candidate002 package stages and rehashed app7/input1635, preserving the failed missing-parent export and both motion FAIL/combined scopes. Mounted source/ownership/privacy and signed current15 world/stock controls pass; no duplicate engine, manual-play claim or recognition credit was added. The readiness miss was an absent fresh export parent, not a permission problem; the narrow parent guard corrected it without product changes. Eligible helper-only trial2 issued confirmation09:32:42.534355Z→actual launch09:33:12.362746Z was29.828391s, with owner-recorded zero extra ROOT prelaunch requests; this is not measured speedup. Immediate awaited release followed the terminal by1.609431s. A combined signed-log read truncated and was narrowed before judgment. Keep fresh-output prerequisites and exact producer/container types in reused delivery helpers; seventh/authority work remains separate.
+
+Source: [maceo-may-quality-delivery-001/output-parent-repair-001/independent-package-001/REVIEW.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/independent-package-001/REVIEW.md), SHA256 `14431dc7aa9009aee71823f5764309e4525beb52bf7d75761eb493ac436aca4d`.
+
+### C — Maceo sixth-role binding
+
+retro_exact — capture_1410_revision002, Maceo sixth-role binding: Reused the existing owner-package receipt format after E's actual candidate002 PASS, preserving original logs/app bindings and the failed first export privately. Bound only the sixth role and its status while keeping all20 images and five prior fields exact; saved the original closure before mutation. Woke D through followup_task to finish its independent seventh attestation. No new capture, source/MAIN edit, engine or recognition credit; the seventh decision remained open.
+
+Source: [maceo-may-quality-delivery-001/output-parent-repair-001/SIX_ROLE_HANDOFF.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-quality-delivery-001/output-parent-repair-001/SIX_ROLE_HANDOFF.md), SHA256 `47f7ed25665173a4de5cba8824b01543989db3dd880b073316cfeaa22f2bbdda`.
+
+### D — parked w291196370 selection and references
+
+retro_exact: D / w291196370 bounded selection and reference observation — Worked: exact retained September2025 panos yielded two useful originals with truthful identity/occlusion limits, and the owned browser closed with fresh absence. Did not: the older summary understated the visible raised deck/stair, so the initial simple-interface selection was unsuitable for this finishing lane; no traversal failure was inferred. Change: check actual ground-interface pixels before choosing a stair-free authoring lane; preserve and park useful evidence instead of flattening the feature.
+
+Source: [w291196370-next-study-preparation-001/PARKED.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/w291196370-next-study-preparation-001/PARKED.md), SHA256 `6ec23c7e996f1a1a3a3fb4f6e7f2c116e57b1d3392aa8e24b92ab377373b572f`.
+
+### ROOT — coordination and conditional continuation
+
+ROOT caught an inherited render-only camera settle before first capture, then rejected obstructed SSE evidence and requested whole-result bar review that caught a separate finish defect; consolidated the rollup and camera correction to avoid an obsolete rerun. ROOT also repeated non-waking new-review dispatch and contributed to the measured806.169s completed-reviewer interval; default every new assignment to followup_task. Three guessed artifact paths caused read misses; read FILE_READY's exact names before dependent reads. Restored the export release guard before launch and authorized the missing-parent repair after actual failure without treating it as permission denial. Both eligible helper-only direct-confirmation trials are now complete (22.500412s and29.828391s,0extraROOTrequests), with no controlledspeedup claim; retain direct continuation within narrow reviewed scopes, no additional trial/framework. Positive shadow-distance diagnostic remains separate from production adoption. No parallelGodot or engineport.
+
+Source: [main-retro-learnings-checkpoint-008/ROOT_RETRO.md](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/main-retro-learnings-checkpoint-008/ROOT_RETRO.md), SHA256 `9a3a20e791a08b19a5fd91003613146d199cd4ac952c2db01fbaaf3ff1fb7d59`.
+
+### capture_1410_revision002 — Documentation checkpoint008
+
+Worked: consolidated41 completed exact bodies once, preserved the prior RETRO prefix and current15 product/index/UID state, and encoded ROOT's dispatch default in AGENTS plus the importing Claude harness. Refined only the observed export-parent and saved-camera helper lessons. Did not: an initial combined documentation read was too large; bounded recovery read the missing section without repeating validation. Change: use exact source names and selected receipt fields, and keep future seventh/authority/rendering decisions outside this sealed cutoff. No engine, Git staging/commit/push or resource change belongs to this documentation round. The w343 reference checkpoint has no separately supplied exact retrospective; its completed reference facts remain bound by D's source-preparation entry, without inventing a historical body.

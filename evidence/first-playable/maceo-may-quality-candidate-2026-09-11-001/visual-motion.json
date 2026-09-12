@@ -1,0 +1,279 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:r19685981",
+  "label": "Separate001 positive wall-tag original, five002 phases and nine002 original AVI payloads",
+  "origins": [
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/f0/f0bb72dfd6c3713a6137aec1b13be1da650b12720e5eb3b40dee4e8ee43ccb42.json",
+      "sha256": "f0bb72dfd6c3713a6137aec1b13be1da650b12720e5eb3b40dee4e8ee43ccb42",
+      "bytes": 2633441,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/motion-finalization.json",
+      "role": "exact_original"
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/4d/4d9f6906ee5f670aef69ba2ba04173a502b88fccd42688ef51a8346947c0a216.json",
+      "sha256": "4d9f6906ee5f670aef69ba2ba04173a502b88fccd42688ef51a8346947c0a216",
+      "bytes": 2684612,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/motion-finalization.json",
+      "role": "exact_original"
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/97/975f456023026eef10efff4bd6a9f293fa358f245b5e89e1f864d93e54eff50f.md",
+      "sha256": "975f456023026eef10efff4bd6a9f293fa358f245b5e89e1f864d93e54eff50f",
+      "bytes": 2982,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/independent-visual-motion-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "build/maceo-may-quality-candidate-provenance-001/raw/af/afba8803654ef3794cb0d6d61f4c49c0fbba61089e00b6214dc1d5c8e5bc4ef1.md",
+      "sha256": "afba8803654ef3794cb0d6d61f4c49c0fbba61089e00b6214dc1d5c8e5bc4ef1",
+      "bytes": 2740,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/maceo-may-live-integration-001/motion-spray-preparation-001/lateral-sign-repair-001/independent-visual-motion-002/REVIEW.md",
+      "role": "exact_original"
+    }
+  ],
+  "data": {
+    "movies": [
+      {
+        "path": "build/maceo-may-quality-candidate-provenance-001/raw/38/38fb114ccc17ba0589d855e1789ad8bde997c3c8bf54aa34ead8ba65df1f156e.avi",
+        "sha256": "38fb114ccc17ba0589d855e1789ad8bde997c3c8bf54aa34ead8ba65df1f156e",
+        "bytes": 41010428,
+        "original_locator": "/private/tmp/maceo-may-live-motion-001/maceo-may-live-motion.avi",
+        "role": "full_original_movie"
+      },
+      {
+        "path": "build/maceo-may-quality-candidate-provenance-001/raw/0c/0cb6cb6f22bba95c2e4764180c19ffed5c282713d41edc90797c60d3d009ee6e.avi",
+        "sha256": "0cb6cb6f22bba95c2e4764180c19ffed5c282713d41edc90797c60d3d009ee6e",
+        "bytes": 43023452,
+        "original_locator": "/private/tmp/maceo-may-live-motion-002/maceo-may-live-motion.avi",
+        "role": "full_original_movie"
+      }
+    ],
+    "movie_metadata": [
+      {
+        "path": "/private/tmp/maceo-may-live-motion-001/maceo-may-live-motion.avi",
+        "sha256": "38fb114ccc17ba0589d855e1789ad8bde997c3c8bf54aa34ead8ba65df1f156e",
+        "physical_bytes": 41010428,
+        "riff_declared_end": 41010358,
+        "microseconds_per_frame": 16666,
+        "total_frames": 508,
+        "width": 1280,
+        "height": 800
+      },
+      {
+        "path": "/private/tmp/maceo-may-live-motion-002/maceo-may-live-motion.avi",
+        "sha256": "0cb6cb6f22bba95c2e4764180c19ffed5c282713d41edc90797c60d3d009ee6e",
+        "physical_bytes": 43023452,
+        "riff_declared_end": 43023382,
+        "microseconds_per_frame": 16666,
+        "total_frames": 508,
+        "width": 1280,
+        "height": 800
+      }
+    ],
+    "images": [
+      {
+        "path": "images/motion001/03-actual-wall-spray.png",
+        "sha256": "40cad2043a45c91161333fc15a51d66cdbdb1e4c63985e2c672cdb3538b9f29c",
+        "bytes": 1231390,
+        "role": "separate_original001_successful_wall_placement",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-001/images/03-actual-wall-spray.png",
+        "counter_binding": {
+          "id": "03-actual-wall-spray",
+          "raw_origin": "motion001"
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002/01-motion-start-default.png",
+        "sha256": "921d6cf22ce8ec1fe2361c463bc3e9987728dbcfc492b8a21dce43fd4670eb4c",
+        "bytes": 1053320,
+        "role": "live_native_phase",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/images/01-motion-start-default.png",
+        "counter_binding": {
+          "id": "01-motion-start-default",
+          "raw_origin": "motion002"
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002/02-motion-endpoint-default.png",
+        "sha256": "7329f21454f0459a9780454bff852bf3f79a2ab8685c65cd59a8256daf26b327",
+        "bytes": 1175387,
+        "role": "live_native_phase",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/images/02-motion-endpoint-default.png",
+        "counter_binding": {
+          "id": "02-motion-endpoint-default",
+          "raw_origin": "motion002"
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002/03-actual-wall-spray.png",
+        "sha256": "3df11ab4bc5550865aa43a9ce38a3b5dfb556eecdd83f8d14edb9fd4654b8079",
+        "bytes": 1230165,
+        "role": "motion002_wall_probe_skipped",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/images/03-actual-wall-spray.png",
+        "counter_binding": {
+          "id": "03-actual-wall-spray",
+          "raw_origin": "motion002"
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002/04-actual-column-rejection.png",
+        "sha256": "72414f75546d65e9646524d047fb38b885ec717fb668fe7133cc12eb534daab3",
+        "bytes": 1567088,
+        "role": "live_native_phase",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/images/04-actual-column-rejection.png",
+        "counter_binding": {
+          "id": "04-actual-column-rejection",
+          "raw_origin": "motion002"
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002/05-source-roof-support-rejection.png",
+        "sha256": "fe7845d9cf87c96234c96ef34293f86b487b11e45378978864daaccc863ebf00",
+        "bytes": 1381062,
+        "role": "live_native_phase",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/images/05-source-roof-support-rejection.png",
+        "counter_binding": {
+          "id": "05-source-roof-support-rejection",
+          "raw_origin": "motion002"
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002-avi/avi-index-0041.jpg",
+        "sha256": "25d691e8c1876839cffeabba4e88568c45f3567445b84163c573d5fb7313836b",
+        "bytes": 75594,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/avi-frame-samples/avi-index-0041.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 41,
+          "byte_offset": 3478650,
+          "bytes": 75594
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002-avi/avi-index-0076.jpg",
+        "sha256": "bc5ed4344e19d42d4c71e3f5f68d76311e0fd44846b6de5673dc0016e9a4d0c3",
+        "bytes": 89083,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/avi-frame-samples/avi-index-0076.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 76,
+          "byte_offset": 6525232,
+          "bytes": 89083
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002-avi/avi-index-0112.jpg",
+        "sha256": "fc7099b010d16ba9955fc7dedc11ab4d0d5d62e432d66c3ec43e80975b345653",
+        "bytes": 91757,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/avi-frame-samples/avi-index-0112.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 112,
+          "byte_offset": 9858464,
+          "bytes": 91757
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002-avi/avi-index-0147.jpg",
+        "sha256": "23df2f279b7b637869ab22a36dba51bcc7b2fe13fda8a61b115d1b98854c0bb3",
+        "bytes": 92957,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/avi-frame-samples/avi-index-0147.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 147,
+          "byte_offset": 13211674,
+          "bytes": 92957
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002-avi/avi-index-0182.jpg",
+        "sha256": "bc508cdc860ef82ba8b9b3abe1003768e5b61efefe9135c3f5d3d82ba147690d",
+        "bytes": 82333,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/avi-frame-samples/avi-index-0182.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 182,
+          "byte_offset": 16374978,
+          "bytes": 82333
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002-avi/avi-index-0217.jpg",
+        "sha256": "278dadf10d5fab0f776b3e35994681ba06ecec3c2da8c4e5bde8ab7d9f38fb77",
+        "bytes": 93298,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/avi-frame-samples/avi-index-0217.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 217,
+          "byte_offset": 19537592,
+          "bytes": 93298
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002-avi/avi-index-0252.jpg",
+        "sha256": "c4b241d8f7b591d521ec72d0f87307bd1796a64b1d908f1192eb4f2d9ffb3a46",
+        "bytes": 95255,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/avi-frame-samples/avi-index-0252.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 252,
+          "byte_offset": 22970298,
+          "bytes": 95255
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002-avi/avi-index-0288.jpg",
+        "sha256": "b66dc44321c2915c6fa9cfa02914e5ee0cc0afdce535dd207e2fb68774f3c452",
+        "bytes": 92738,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/avi-frame-samples/avi-index-0288.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 288,
+          "byte_offset": 26480496,
+          "bytes": 92738
+        },
+        "byte_identical": true
+      },
+      {
+        "path": "images/motion002-avi/avi-index-0323.jpg",
+        "sha256": "59e1b5e8b683ea598c13d4b59689b4f70c5e45a7365c4dbd55c898335daa99b4",
+        "bytes": 91761,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/outputs/maceo-may-live-motion-002/avi-frame-samples/avi-index-0323.jpg",
+        "counter_binding": {
+          "zero_based_avi_index": 323,
+          "byte_offset": 29810494,
+          "bytes": 91761
+        },
+        "byte_identical": true
+      }
+    ],
+    "selection_scope": "Nine evenly spread encoded indices selected from the recorded ground-motion draw interval; original payload content must be inspected, especially reversals and held endpoint. Native process/physics/draw/AVI indices remain distinct; no equality or continuous-playback claim. Five original PNGs cover initial placement, held motion endpoint, actual wall spray, exact column rejection, and separate original-roof support/rejection; nine AVI samples remain selected only from the ground-motion interval. Roof setup and90frame settle have full telemetry/original movie, not a continuous ground-to-roof traversal or roof-walk claim.",
+    "independent_visual_status": "SCOPED_PASS",
+    "limits": [
+      "All selected photographs of the game were captured in the historical14 world. ENE/baseline study views retain their unchanged original scope; the repaired SSE pair shows the corrected curtain. Actual merged current15 source is now735/1032/1047/99129/466/478. These are neither app screenshots nor new combined-release pictures.",
+      "September2025 ENE/SSE references show pale complete grids/graphite base and fine ribs/rust complete frames/entrance glazing/columns. Trees and crops obscure portions of the public faces; upper whole-building extent, courtyard21\u201339, roof and protected sides remain unknown. Counts/depths/cadence are production inference. No reference pixels are copied.",
+      "Independent affected mechanics PASS combines explicit successes on identical products: motion001 exact in-range wall placement at4.739649m; motion002 real first-column shape1 contact on14 physics rows, all252 input/30 brake rows grounded, retreat/return and in-range column/LAND/roof rejection. Both raw ok:false records remain unchanged; no fictitious single all-success continuous run.",
+      "Motion001 missed the intended column because of reversed lateral helper actions. Motion002 skipped wall placement at6.241111755m beyond stock6m; its03 planned wall-spray filename does not prove a placement or stock rejection. The selected separate00103 shows the successful tag.",
+      "Each motion run retains402 complete records:30 initial,252 input,30 brake and90 separate roof-settle rows. Roof support is explicitly set up and naturally settled, not ground-to-roof walking/jetpack ascent or roof-art certification. Actual spray API calls do not prove physical mouse dispatch.",
+      "11 selected native PNGs are1440x900. Two complete original508-frame AVI files and selected nine002 payloads are1280x800; both movies retain their70-byte physical tails. Sparse indices41/76/112/147/182/217/252/288/323 do not establish continuous playback or physics/draw/AVI identity. All omitted001 media remains private and original.",
+      "Initial bad camera views, original curtain overlap, snapshot/packed-expectation helper failures, both motion failures and unrun preparation/release-guard history remain retained. No successful source/capture or motion evidence was replayed for assembly.",
+      "Maceo is an uncredited physical unit; prospective+1 only after exact candidate package verification, separate seventh attestation and serialized current-authority delivery. Current15/213 and historical14/credit0 runtime metadata remain exact. No manual/M1/universal-runtime/current-release claim."
+    ]
+  },
+  "truth_boundary": "Derived assembly binds unchanged original evidence and its independent scoped decisions; no new author visual/mechanical decision. Current15/213 is unchanged. Candidate package and separate seventh unit attestation remain pending."
+}

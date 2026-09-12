@@ -1,0 +1,109 @@
+{
+  "schema_version": "ti.d5-native-image-tree/1",
+  "tree_scope": "Only20 exact selected image files; excludes this document, full AVIs and all manifests/receipts/reviews",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "916457b92cee4b002cab5c47b6ecd29a8c8d398a9ad685c05e7bc8f5d9874e0a",
+  "files": [
+    {
+      "path": "images/motion001/03-actual-wall-spray.png",
+      "sha256": "40cad2043a45c91161333fc15a51d66cdbdb1e4c63985e2c672cdb3538b9f29c",
+      "bytes": 1231390
+    },
+    {
+      "path": "images/motion002-avi/avi-index-0041.jpg",
+      "sha256": "25d691e8c1876839cffeabba4e88568c45f3567445b84163c573d5fb7313836b",
+      "bytes": 75594
+    },
+    {
+      "path": "images/motion002-avi/avi-index-0076.jpg",
+      "sha256": "bc5ed4344e19d42d4c71e3f5f68d76311e0fd44846b6de5673dc0016e9a4d0c3",
+      "bytes": 89083
+    },
+    {
+      "path": "images/motion002-avi/avi-index-0112.jpg",
+      "sha256": "fc7099b010d16ba9955fc7dedc11ab4d0d5d62e432d66c3ec43e80975b345653",
+      "bytes": 91757
+    },
+    {
+      "path": "images/motion002-avi/avi-index-0147.jpg",
+      "sha256": "23df2f279b7b637869ab22a36dba51bcc7b2fe13fda8a61b115d1b98854c0bb3",
+      "bytes": 92957
+    },
+    {
+      "path": "images/motion002-avi/avi-index-0182.jpg",
+      "sha256": "bc508cdc860ef82ba8b9b3abe1003768e5b61efefe9135c3f5d3d82ba147690d",
+      "bytes": 82333
+    },
+    {
+      "path": "images/motion002-avi/avi-index-0217.jpg",
+      "sha256": "278dadf10d5fab0f776b3e35994681ba06ecec3c2da8c4e5bde8ab7d9f38fb77",
+      "bytes": 93298
+    },
+    {
+      "path": "images/motion002-avi/avi-index-0252.jpg",
+      "sha256": "c4b241d8f7b591d521ec72d0f87307bd1796a64b1d908f1192eb4f2d9ffb3a46",
+      "bytes": 95255
+    },
+    {
+      "path": "images/motion002-avi/avi-index-0288.jpg",
+      "sha256": "b66dc44321c2915c6fa9cfa02914e5ee0cc0afdce535dd207e2fb68774f3c452",
+      "bytes": 92738
+    },
+    {
+      "path": "images/motion002-avi/avi-index-0323.jpg",
+      "sha256": "59e1b5e8b683ea598c13d4b59689b4f70c5e45a7365c4dbd55c898335daa99b4",
+      "bytes": 91761
+    },
+    {
+      "path": "images/motion002/01-motion-start-default.png",
+      "sha256": "921d6cf22ce8ec1fe2361c463bc3e9987728dbcfc492b8a21dce43fd4670eb4c",
+      "bytes": 1053320
+    },
+    {
+      "path": "images/motion002/02-motion-endpoint-default.png",
+      "sha256": "7329f21454f0459a9780454bff852bf3f79a2ab8685c65cd59a8256daf26b327",
+      "bytes": 1175387
+    },
+    {
+      "path": "images/motion002/03-actual-wall-spray.png",
+      "sha256": "3df11ab4bc5550865aa43a9ce38a3b5dfb556eecdd83f8d14edb9fd4654b8079",
+      "bytes": 1230165
+    },
+    {
+      "path": "images/motion002/04-actual-column-rejection.png",
+      "sha256": "72414f75546d65e9646524d047fb38b885ec717fb668fe7133cc12eb534daab3",
+      "bytes": 1567088
+    },
+    {
+      "path": "images/motion002/05-source-roof-support-rejection.png",
+      "sha256": "fe7845d9cf87c96234c96ef34293f86b487b11e45378978864daaccc863ebf00",
+      "bytes": 1381062
+    },
+    {
+      "path": "images/static/01-ENE-baseline-default.png",
+      "sha256": "9d938f3e8e32519012bdd17bbe96c5cd10d1678c803d9a03bf02e0f82bf6801b",
+      "bytes": 1168635
+    },
+    {
+      "path": "images/static/02-ENE-candidate-default.png",
+      "sha256": "4e4e6244724ece81266a5d2282554aa5c0a8194cf452d57d0b856fcc9929679b",
+      "bytes": 393723
+    },
+    {
+      "path": "images/static/03-SSE-baseline-default.png",
+      "sha256": "79749962f66ed93e42c38194d38cd872e18b323813721a478356bfc79878d6fb",
+      "bytes": 1221174
+    },
+    {
+      "path": "images/static/04-SSE-candidate-default.png",
+      "sha256": "2daca25c7cffe1bcbb4bfa2c7246e0996f4bcd3ff123d199ea359eebd871a3d7",
+      "bytes": 862849
+    },
+    {
+      "path": "images/static/05-SSE-candidate-changed.png",
+      "sha256": "e4e8bbe3bf19ccc3be0a5f56c0e2b7b0594b13ff878f4f5a9a3ccb57b59a8856",
+      "bytes": 771977
+    }
+  ],
+  "truth_boundary": "Derived assembly binds unchanged original evidence and its independent scoped decisions; no new author visual/mechanical decision. Current15/213 is unchanged. Candidate package and separate seventh unit attestation remain pending."
+}

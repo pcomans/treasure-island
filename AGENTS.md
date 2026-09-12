@@ -67,6 +67,8 @@ Candidate package PASS remains a prerequisite to recognition credit under the ex
 
 Use a small number of named agents with concrete targets, output locations, stop conditions and ownership. The reusable role prompts are in `.claude/agents/`: `ti-implementation`, `ti-source-mechanics-review`, `ti-visual-review` and `ti-release-review`. Other harnesses may use the same role boundaries without changing their tool configuration. An agent must not independently accept its own implementation or exported package; package or technical PASS does not supply the separate visual decision. Return compact handoffs with exact relevant bindings instead of duplicating large manifests or adding reporting frameworks.
 
+Dispatch every new bounded assignment with `followup_task`, whether the target agent is busy or idle. Use `send_message` only for status or clarification within an already active assignment; it does not start a new turn for a completed agent. Coalesce duplicate assignments and preserve the same ownership, review and engine-release gates.
+
 Reuse the complete successful capture/check driver and current supported invocation, adapting target paths, pins and measured expectations together before running it. Preserve source versus mounted-component versus signed-release coverage boundaries. Root serializes heavy render/engine work; the next owner starts only after explicit slot release and actual terminal/PID evidence. A tool-observation timeout or an old output file is not evidence of process completion.
 
 For the first checkout when Git LFS is unavailable on this machine, include the established command-local filter settings in the assignment and the checkout itself:

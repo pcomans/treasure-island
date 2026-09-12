@@ -1,14 +1,14 @@
 extends SceneTree
 
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
-const EXPECTED_REGISTRY_SHA256 := "259346572b602a4b12eb22444f59c26f2c36f928ae74611d8750fd857dda6b48"
+const EXPECTED_REGISTRY_SHA256 := "ad9223cbc6972483ac601425231fc95328e7daddf70295ab7627bbacd11ecb3a"
 const EXPECTED_UNITS := 213
 const EXPECTED_RECEIVERS := 214
 const EXPECTED_SOURCE_RECORDS := 215
 const EXPECTED_RUNS := 4971
 const EXPECTED_LEGACY_ADAPTERS := 9
-const EXPECTED_ACTIVE_ADAPTERS := 14
-const EXPECTED_RUNTIME_ADAPTERS := 23
+const EXPECTED_ACTIVE_ADAPTERS := 15
+const EXPECTED_RUNTIME_ADAPTERS := 24
 const EXPECTED_IDENTITY_ASSERTIONS := 2
 const ACCEPTED_REFERENCE_UNITS := {
 	"physical-building:r16681702": true,
@@ -25,6 +25,7 @@ const ACCEPTED_REFERENCE_UNITS := {
 	"physical-building:w96215646": true,
 	"physical-building:w95934125": true,
 	"physical-building:w764313741": true,
+	"physical-building:r19685981": true,
 	"physical-building:w95934123": true,
 }
 const EXPECTED_IDENTITY_CORRECTIONS := {
@@ -53,6 +54,7 @@ const ACTIVE_UNIT_BY_RECEIVER := {
 	"building:w96215646:wall": "physical-building:w96215646",
 	"building:w95934125:wall": "physical-building:w95934125",
 	"building:w764313741:wall": "physical-building:w764313741",
+	"building:r19685981:wall": "physical-building:r19685981",
 	"building:w95934123:wall": "physical-building:w95934123",
 }
 const ACTIVE_REVIEW_STATUS_BY_RECEIVER := {
@@ -69,6 +71,7 @@ const ACTIVE_REVIEW_STATUS_BY_RECEIVER := {
 	"building:w96215646:wall": "independent_exact_current_live_pass",
 	"building:w95934125:wall": "independent_exact_current_live_pass",
 	"building:w764313741:wall": "independent_exact_current_live_pass",
+	"building:r19685981:wall": "independent_exact_current_live_pass",
 	"building:w95934123:wall": "independent_exact_current_live_pass",
 }
 
@@ -86,7 +89,7 @@ func _run() -> void:
 		return
 	var registry := _json(REGISTRY_PATH)
 	if not _require(not registry.is_empty(), "Runtime facade registry JSON is invalid.") \
-	or not _require(str(registry.get("schema_version", "")) == "ti.facade-runtime-registry/15", "Runtime facade registry schema drifted.") \
+	or not _require(str(registry.get("schema_version", "")) == "ti.facade-runtime-registry/16", "Runtime facade registry schema drifted.") \
 	or not _require(_runtime_boundary_is_clean(registry), "Runtime facade registry leaks a source-only path or URL."):
 		_finish()
 		return
@@ -94,7 +97,7 @@ func _run() -> void:
 	_validate_units(registry)
 	_validate_runtime_adapters(registry)
 	if not _failed:
-		print("PASS: facade recognition registry is package-safe and fail-closed: 213 physical units / 214 direct wall receivers / 215 source records / 4,971 wall runs / 15/213 independently accepted reference-recognizable units / 9 claim-neutral legacy adapters + 14 exact-current active adapters / 2 separated identity corrections; SHA-256 %s" % EXPECTED_REGISTRY_SHA256)
+		print("PASS: facade recognition registry is package-safe and fail-closed: 213 physical units / 214 direct wall receivers / 215 source records / 4,971 wall runs / 16/213 independently accepted reference-recognizable units / 9 claim-neutral legacy adapters + 15 exact-current active adapters / 2 separated identity corrections; SHA-256 %s" % EXPECTED_REGISTRY_SHA256)
 	_finish()
 
 
@@ -116,14 +119,14 @@ func _validate_counts(registry: Dictionary) -> void:
 	_require(int(counts.get("identity_assertion_summaries", -1)) == EXPECTED_IDENTITY_ASSERTIONS, "Identity-assertion summary count is not 2.")
 	_require(int(receiver_claims.get("verified", -1)) == EXPECTED_UNITS and int(receiver_claims.get("failed", -1)) == 0, "Receiver-complete claim aggregate drifted.")
 	_require(int(game_claims.get("accepted", -1)) == 0 and int(game_claims.get("not_evaluated", -1)) == EXPECTED_UNITS, "Game-distinctive claims were imported or omitted.")
-	_require(int(reference_claims.get("accepted", -1)) == 15 and int(reference_claims.get("not_evaluated", -1)) == EXPECTED_UNITS - 15, "Reference-recognition aggregate is not exactly 15/213.")
+	_require(int(reference_claims.get("accepted", -1)) == 16 and int(reference_claims.get("not_evaluated", -1)) == EXPECTED_UNITS - 16, "Reference-recognition aggregate is not exactly 16/213.")
 	_require(int(as_built_claims.get("claimed", -1)) == 0 and int(as_built_claims.get("limited", -1)) == 0 and int(as_built_claims.get("unclaimed", -1)) == EXPECTED_UNITS, "As-built claims were imported or omitted.")
 	var metric := registry.get("recognition_metric", {}) as Dictionary
 	var accepted_ids := metric.get("accepted_physical_unit_ids", []) as Array
 	var expected_ids := ACCEPTED_REFERENCE_UNITS.keys()
 	accepted_ids.sort()
 	expected_ids.sort()
-	_require(int(metric.get("numerator", -1)) == 15 and int(metric.get("denominator", -1)) == EXPECTED_UNITS and str(metric.get("display", "")) == "15/213", "Physical-unit recognition metric is not exactly 15/213.")
+	_require(int(metric.get("numerator", -1)) == 16 and int(metric.get("denominator", -1)) == EXPECTED_UNITS and str(metric.get("display", "")) == "16/213", "Physical-unit recognition metric is not exactly 16/213.")
 	_require(accepted_ids == expected_ids, "Accepted physical-unit set drifted.")
 	_require(metric.get("isle_house_non_numerator_source_keys", []) == ["w1282547786", "w1282547787"], "Isle House source parts entered the numerator.")
 
@@ -422,6 +425,8 @@ func _validate_runtime_adapters(registry: Dictionary) -> void:
 			_validate_d5_1317_runtime_adapter(adapter, contract)
 		elif receiver_key == "building:w764313741:wall":
 			_validate_fire_station48_runtime_adapter(adapter, contract)
+		elif receiver_key == "building:r19685981:wall":
+			_validate_maceo_may_runtime_adapter(adapter, contract)
 		else:
 			_require(str(adapter.get("attachment_kind", "")) == "active_building_1_hero_replacement" and str(adapter.get("content_classification", "")) == "active_target_specific_hero_replacement", "%s has stale active-content classification." % receiver_key)
 			var summary := contract.get("config_summary", {}) as Dictionary
@@ -431,7 +436,7 @@ func _validate_runtime_adapters(registry: Dictionary) -> void:
 			_require(assets.size() == 11 and (adapter.get("runtime_asset_projections", []) as Array).is_empty(), "%s does not account for its hero script, two configs, and eight exact-current materials." % receiver_key)
 			_require(_has_runtime_asset(assets, "res://game/resources/facades/building_1_public_front_believability.json", "99117e1af118592db1d1cfa932b44014862cb8be4f47d0b3ea519e24f9e591fb"), "%s omits the exact current public-front runtime config." % receiver_key)
 			_require(str(contract.get("public_front_config_sha256", "")) == "99117e1af118592db1d1cfa932b44014862cb8be4f47d0b3ea519e24f9e591fb", "%s public-front contract hash drifted." % receiver_key)
-	_require(current_topology_adapter_ids == ["active-adapter:fire-station48-live:building:w764313741:wall"], "Station48 is not the sole current-integration topology authority.")
+	_require(current_topology_adapter_ids == ["active-adapter:maceo-may-live:building:r19685981:wall"], "Maceo May is not the sole current-integration topology authority.")
 	var registry_text := JSON.stringify(registry)
 	_require(not registry_text.contains("building_1_recognizable_facade") and not registry_text.contains("building_1_recognizability_placements"), "Runtime registry retains obsolete Building 1 facade assets.")
 	var world_builder_text := FileAccess.get_file_as_string("res://game/scripts/world/world_chunk_builder.gd")
@@ -799,5 +804,10 @@ func _validate_fire_station48_runtime_adapter(adapter: Dictionary, contract: Dic
 	_require(int(acceptance.get("numerator_effect", -1)) == 1, "Station48 exact numerator_effect.")
 	_require(bool(acceptance.get("reference_recognizable", false)) == true, "Station48 exact reference_recognizable.")
 	_require(bool(acceptance.get("wall_and_roof_are_one_physical_unit", false)) == true, "Station48 exact wall_and_roof_are_one_physical_unit.")
-	_require(str(geometry.get("world_topology_scope", "")) == "current_integration_topology" and [int(geometry.get("world_records", -1)), int(geometry.get("world_mesh_instances", -1)), int(geometry.get("world_surfaces", -1)), int(geometry.get("world_triangles", -1)), int(geometry.get("world_static_bodies", -1)), int(geometry.get("world_shapes", -1))] == [735,1023,1038,82789,466,477], "Station48 actual current topology.")
+	_require(str(geometry.get("world_topology_scope", "")) == "pre_maceo_may_integration_live_parity" and [int(geometry.get("world_records", -1)), int(geometry.get("world_mesh_instances", -1)), int(geometry.get("world_surfaces", -1)), int(geometry.get("world_triangles", -1)), int(geometry.get("world_static_bodies", -1)), int(geometry.get("world_shapes", -1))] == [735,1023,1038,82789,466,477], "Station48 actual current topology.")
 	_require(ownership.get("wall_shape_collision_triangles", []) == [52.0] and ownership.get("roof_shape_collision_triangles", []) == [10.0] and int(ownership.get("shape_count", -1)) == 2 and int(ownership.get("added_collision_triangles", -1)) == 0 and bool(ownership.get("all_additions_render_only", false)) and not bool(ownership.get("roof_is_wall_spray_receiver", true)), "Station48 exact source-only collision and render-only additions.")
+
+func _validate_maceo_may_runtime_adapter(adapter: Dictionary, contract: Dictionary) -> void:
+	var behavior := contract.get("behavior_contract", {}) as Dictionary
+	_require(str(adapter.get("adapter_id", "")) == "active-adapter:maceo-may-live:building:r19685981:wall" and (adapter.get("runtime_assets", []) as Array).size() == 7 and (adapter.get("runtime_asset_projections", []) as Array).is_empty(), "Maceo May exact seven-asset receiver closure.")
+	_require(behavior == JSON.parse_string("{\"schema_version\":\"ti.maceo-may-production-live-parity/1\",\"acceptance_contract\":{\"evidence_manifest_sha256\":\"82543ad09bc51281499280965d9bc949ecc99781d80520801742bd3643404862\",\"motion_telemetry_manifest_sha256\":\"83a8637cd539efa3899b8d97147a82a02d976aa8baed4209824e2724a2ac7e2b\",\"visual_motion_manifest_sha256\":\"3c7c3e933062d4cf3994f47cb48a62c41b7c1cf42fa41693ff82474cec1db86d\",\"package_verification_receipt_sha256\":\"e903e64348aa003ca957b1e1efebc57a516395134f40d56e1ba1c5ebc3ad877f\",\"evidence_tree_sha256\":\"916457b92cee4b002cab5c47b6ecd29a8c8d398a9ad685c05e7bc8f5d9874e0a\",\"mechanical_review_receipt_sha256\":\"749cd826a0ea791b696ab98464e5c19548f14d45734d88111a79376a74dd5c8c\",\"review_receipt_sha256\":\"e08d71c45bfc67e05ab2fd2a8d4e8362ef7692f96d5817d60856a251b473b14e\",\"accepted_physical_unit_id\":\"physical-building:r19685981\",\"capture_time_recognition_metric\":\"14/213\",\"numerator_effect\":1,\"reference_recognizable\":true,\"wall_and_roof_are_one_physical_unit\":true},\"replacement_contract\":{\"source_key\":\"r19685981\",\"wall_object_key\":\"building:r19685981:wall\",\"roof_object_key\":\"building:r19685981:roof\",\"actual_supplied_chunk_pair_required\":true,\"actual_land_and_area_records_required\":false,\"mapped_public_run_indices\":[8,9,10,11,12,13,14,15,16],\"protected_run_indices\":[0,1,2,3,4,5,6,7,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39],\"partial_pair_allowed\":false,\"fallback_allowed\":false,\"generic_stack_allowed\":false,\"factory_calls\":1},\"geometry_contract\":{\"source_geometry_sha256\":\"4caf46d6c3ebb1ef497fbe8012e5f1fd938a055e11a4132c04ed8e6827da12b3\",\"canonical_wall_record_sha256\":\"c68403647a2a1f39a1957813e44c161882c88911d8f0eae574f7f9806ae07b44\",\"canonical_roof_record_sha256\":\"86a5ea5b74ab4713f75ff1c6c35cf5132b70c7e33c228f988983c6c7303139cc\",\"source_chunk_sha256\":\"b8696d4feb4157d39969ec039e610af572f25510d712c802d4a96943d6069c8c\",\"horizontal_source_footprint_preserved\":true,\"original_source_channels_and_roof_preserved\":true,\"visual_mesh_instances\":11,\"visual_surfaces\":11,\"visual_triangles\":16436,\"world_records\":735,\"world_mesh_instances\":1032,\"world_surfaces\":1047,\"world_triangles\":99129,\"world_static_bodies\":466,\"world_shapes\":478,\"world_topology_scope\":\"current_integration_topology\"},\"ownership_contract\":{\"structural_owner_count\":2,\"shape_count\":3,\"spray_owner_count\":1,\"navigation_owner_count\":0,\"wall_is_sole_spray_receiver\":true,\"wall_decal_cull_mask\":2,\"wall_shape_order\":[\"exact_eligible_source_wall\",\"noneligible_entrance_columns\"],\"wall_shape_collision_triangles\":[80,320],\"roof_shape_order\":[\"exact_noneligible_source_roof\"],\"roof_shape_collision_triangles\":[16],\"eligible_exterior_collision_triangles\":80,\"wall_collision_triangles\":400,\"roof_collision_triangles\":16,\"added_collision_triangles\":320,\"all_additions_render_only\":false,\"visual_ground_triangles\":0,\"added_ground_collision_triangles\":0,\"roof_is_wall_spray_receiver\":false,\"roof_world_solid_landing\":true,\"eligible_render_layer\":2,\"noneligible_render_layer\":1,\"terrain_geometry_and_ownership_unchanged\":true},\"truth_boundary\":{\"as_built_fidelity_claimed\":false,\"interior_modeled\":false,\"hidden_schedule_invented\":false,\"capture_time_recognition_credit\":false,\"capture_time_candidate_promoted\":false,\"reference_pixels_packaged\":false,\"receiver_complete_inferred_from_art\":false,\"game_distinctive_claimed\":false,\"unobserved_sides_protected\":true,\"unsurveyed_dimensions_and_counts_are_production_inference\":true,\"continuous_motion_review_claimed\":false,\"ground_to_roof_traversal_claimed\":false,\"roof_support_setup_is_separate\":true,\"spray_input_event_dispatch_claimed\":false}}"), "Maceo May exact source/ownership/acceptance and current-world contract in consumed JSON types.")

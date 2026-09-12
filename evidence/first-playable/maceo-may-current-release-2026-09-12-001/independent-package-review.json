@@ -1,0 +1,29 @@
+{
+  "derived_summary": true,
+  "original": {
+    "path": "build/maceo-may-current-release-provenance-001/authority/independent-exact-current-package-001/REVIEW.md",
+    "sha256": "2bbf338339fa6df803afc29f8b20e14d660b210f3ebe9aa8dbe5beb430c41e3f",
+    "bytes": 6603
+  },
+  "check": {
+    "path": "build/maceo-may-current-release-provenance-001/authority/independent-exact-current-package-001/CHECK.json",
+    "sha256": "f48af47916513410b6667529d350de6b8585aa748a64dc01abce3d61f4823928",
+    "bytes": 25599
+  },
+  "decision": "RELEASE PASS",
+  "root_accepted": true,
+  "authority": "16/213",
+  "pck_sha256": "aa60f0e4e806e1db8922d6f524ba79126f21cd74868690cf7f6bffc42d37c397",
+  "app_binding": {
+    "path": "build/maceo-may-current-release-provenance-001/authority/actual-app-binding.json",
+    "sha256": "9d9dae035c9fa9e9a374015db21038b460a89de882fa2f849c8969d8a308bc25",
+    "bytes": 3220
+  },
+  "input_binding": {
+    "path": "build/maceo-may-current-release-provenance-001/authority/execution-input-pins.json",
+    "sha256": "e8f9131fbeaa2decbf3ae83fe5e27fb21a9b54958f641d4645f0d602fde717e2",
+    "bytes": 416138
+  },
+  "reexecution": false,
+  "scope": "Independent read-only verification of actual eight terminal receipts/logs, exact app7/current1694/historical1635, source and mounted authority, all seven signed attachments, six focused mounted pairs, privacy/signature and awaited release. No MAIN transfer or new engine run."
+}
