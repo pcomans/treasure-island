@@ -13729,3 +13729,47 @@ Source: [main-retro-learnings-checkpoint-008/ROOT_RETRO.md](/Volumes/Macintosh_H
 ### capture_1410_revision002 — Documentation checkpoint008
 
 Worked: consolidated41 completed exact bodies once, preserved the prior RETRO prefix and current15 product/index/UID state, and encoded ROOT's dispatch default in AGENTS plus the importing Claude harness. Refined only the observed export-parent and saved-camera helper lessons. Did not: an initial combined documentation read was too large; bounded recovery read the missing section without repeating validation. Change: use exact source names and selected receipt fields, and keep future seventh/authority/rendering decisions outside this sealed cutoff. No engine, Git staging/commit/push or resource change belongs to this documentation round. The w343 reference checkpoint has no separately supplied exact retrospective; its completed reference facts remain bound by D's source-preparation entry, without inventing a historical body.
+
+## 2026-09-12 — Current16 publication and inactive northern study checkpoint
+
+Consolidated by C from the completed named C/D/E/T external round notes. The source checkpoint retains inactive1201/1238 files; it grants no recognition, live attachment, package or ordinary-launch credit. Current accepted authority remains16/213.1206 is separate file preparation.
+
+### C — publication, source/mechanics reviews and1238 authoring
+
+**What worked well.** Maceo's reviewed69-file publication reached d48760d8 with exact app bytes and preserved prior authority/history.1201's completed305-row routes and three performed stock spray cases supported independent bounded mechanics PASS without replay.1238 reused the accepted construction/capture path with target-specific source, road, grade and camera evidence; independent review caught the sole upper-trim/fascia conflict before any001 engine run, and the preserved center-only002 correction produced76.499939mm actual clearance.
+
+**What did not work well.** The first Maceo commit guard saw a changed raw index SHA although all selected paths/blobs/modes were unchanged; the refresher cause remains unestablished.1238's first mechanics attempt completed210 door rows but exceeded its selected0.15m station limit by about24.461mm; screen and sprays were unperformed, not successful or rejected attempts. The raw finalizer's inherited four-PNG/screen/spray selection prose is false for that attempt and is rejected without rewriting its bytes. Large nested JSON output also obscured finite predicates; one full finalization dump and one overlarge endpoint selection were truncated during author collation.
+
+**What the team should change next time.** Use GIT_OPTIONAL_LOCKS=0 for reads; distinguish raw index bytes from independently revalidated logical staged content. Compute full-record scalar predicates before printing, then inspect only actual failing rows/contacts. Preserve the failed station limit and diagnose actual contact motion before deciding any successor. The1201 wrapper review found missing split counters and factory/builder paired re-entry; inspect the actual caller and use an explicit preserved raw-constructor callback seam before integration. No silent source-hash rebinding. Loader timing inspection supports only one measurement piggybacked on an already-required suite with all fixtures retained, not another run now.
+
+### D — northern references,1201 implementation and independent1238 checks
+
+**What worked well.** Independent source-ray association corrected inherited near/far mapping before art placement; headed coordinate-based reference acquisition recovered the dated original views.1201's outward LAND and actual Bayside road-edge joins supported a coherent corrected002 study and one complete mechanics run.1238 source review independently reconstructed all seven native detail shapes,248 path triangles,13 original channels and final camera/first-solid evidence from immutable inputs. Full-record calculations with compact results supported readiness decisions without replay.
+
+**What did not work well.** Initial reference routes failed or cropped frontage; coordinate/headed recovery did not isolate the reason. The first worktree checkout populated source but its existing LFS hook failed; those outcomes were kept separate. The first1238 HOLD report was formatted against an already authorized changed config; its original misbound report remains retained and the corrected historical attestation binds the frozen001 preimage. Several independent probes initially demanded the wrong numeric/material representation; matching actual Float32, empty generated material paths and horizontal joined-frame tangent resolved probe-only mismatches. File readiness did not prove the later station-drift predicate.
+
+**What the team should change next time.** Freeze exact reviewed bindings before emitting a decision that permits mutation. Reuse actual source/protected-face and ground associations; do not copy camera labels or nearest-centreline assumptions. The completed compact-first trial recorded510seconds for its defined review boundary, one broad numeric dump and one interpretation-only pass; later partial intervals and interrupted reviews do not measure total effort. These qualitative results justify compact presentation within existing reviews, not a claimed speedup or new gate.
+
+### E — independent package, interface and visual scope
+
+**What worked well.** Maceo's independent exact-current review distinguished six focused mounted pair comparisons from all seven attachment predicates in both signed ordinary-main runs.1201 changed-light and sparse original movie samples supported scoped public-front visual PASS with the separate mechanics verdict.1238's three static originals and dated references supported target recognition/finish, and the later two-PNG/partial-door evidence supports changed-light and sampled appearance PASS without demanding a cosmetic recapture.
+
+**What did not work well.** Derived release lineage initially presented frozen candidate15/uncredited statements as current16; an adjacent historical label corrected only derived prose while preserving originals. Original PNGs are1440×900 while AVI payloads are1280×800; a final blue sample is not building evidence. The first1238 mechanics finalizer retained planned scope despite an early HOLD; actual data only covers the door route, and screen/sprays/timing remain unreached.
+
+**What the team should change next time.** Bind actual artifacts before visual decisions and keep sampled pixels distinct from full-movie, manual-input or continuous-traversal proof. Derive execution summaries from completed records, retaining stale raw prose with an explicit correction rather than relabeling planned phases as performed. Wrapper technical HOLDs, source/mechanics decisions and package acceptance remain separate from visual finish.
+
+### T — palette, road/cost facts and portable README
+
+**What worked well.** The bounded1201 palette field was incorporated without parallel material edits. Actual constructor widths resolved1206's generated road association: the closer unnamed path centreline did not own the nearby Mariner road-ribbon edge. Historical1201 receipts supplied a precise whole native wall time of28.487308208seconds and three final-aim waits totaling60physics frames plus18setup frames. The short active README now points to one accepted release/app and two launch routes; its613-line predecessor is retained byte-for-byte at the root.
+
+**What did not work well.** Historical spray-only call/PNG/AVI/preparation/review wall costs are unmeasured; phase frame counts cannot provide them. The initial wrapper mistook the standalone study constructor for a ready live seam, omitting required caller counters and safe dependency direction. Historical README 'current' statements were unsuitable active launch guidance after later checkpoints.
+
+**What the team should change next time.** Keep runtime ray/range/receiver/tag evidence distinct from static metadata and measure existing phase boundaries only in a required run.1238's unreached spray counter is not measured zero cost. Identify accepted release commits separately from later inactive source checkpoints; verify relative links and actual controls. Finish wrapper corrections as a preserved proposal, outside this source checkpoint.
+
+### C — source-checkpoint documentation execution
+
+**What worked well.** Exact inactive factory/config/UID copies, the approved009 LEARNINGS patch and short README reuse preserve playable current16. Original README and the existing RETRO prefix are retained. Documentation before-images and overlap checks keep historical inputs resolvable; the newly frozen1206 map remains932/932 exact with no changed-path overlap.
+
+**What did not work well.** A compact assignment label was initially read as including checkpoint009 in the patch hash; a prewrite assertion stopped before MAIN changes. The actual reviewed SHA726b7201… and prose were unchanged. Source and evidence work was not broadened to repair unrelated held code.
+
+**What the team should change next time.** Use explicit path/hash separators in handoffs and one selected-file review for routine checkpoints. No new engine or tests are needed for these inactive byte copies and documentation edits; commit/push awaits ROOT's exact selected-diff review within existing user authorization.
