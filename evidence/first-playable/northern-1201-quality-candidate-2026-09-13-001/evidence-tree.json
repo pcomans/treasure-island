@@ -1,0 +1,89 @@
+{
+  "schema_version": "ti.d5-native-image-tree/1",
+  "tree_scope": "Only 16 exact selected image files; includes labeled non-scene teardown payloads; excludes this document, full AVIs and all manifests/receipts/reviews",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "df08d70aa4307e2b7689e6c8e3ff0ad31005806b14c2420251456ddb4c60db92",
+  "files": [
+    {
+      "path": "images/motion001-avi/avi-index-0045.jpg",
+      "sha256": "9fa06c86574e25b6f069763dc141f91c83d4915d8b4720b3fb4cf9f5e0810b90",
+      "bytes": 69501
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0115.jpg",
+      "sha256": "16a07df87aa7462e0cbab34ea933a7dbcb2faa62009cdbf5174b8d81844eda99",
+      "bytes": 78508
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0185.jpg",
+      "sha256": "99fed8c10851bf839398963b08fbbb7895da6cf16140417d47284a1d5500a5e7",
+      "bytes": 85182
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0255.jpg",
+      "sha256": "9961e6e13937a8f4f3d15cf57f82df84ae1f48b520071c68d4ed06fa4dcc362b",
+      "bytes": 76165
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0324.jpg",
+      "sha256": "e57bd60a9e22259666369fd7efdb1ac7c4c95c46106e5cbaaa95eec44ec88bb2",
+      "bytes": 83242
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0394.jpg",
+      "sha256": "7aa96f126ddf63cdf2f1a7c910a1645899e13aa9adf5723505bb5d2a404f5a7e",
+      "bytes": 80070
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0464.jpg",
+      "sha256": "249f06ad1d4c1a7bf50c6fb1ba8b56f11c4f7924048c3625b0183cb81d2b560c",
+      "bytes": 84209
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0534.jpg",
+      "sha256": "dc11d05c6c51e6aa95191dbae883649ec62def8344240aa7694152090300a868",
+      "bytes": 98240
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0604.jpg",
+      "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+      "bytes": 16628
+    },
+    {
+      "path": "images/motion001/01-whole-near-face-changed-light.png",
+      "sha256": "6d5a37aa1f329ed9836609f6f30cd0dce699fc1df8f1edc24cf9b8a549ba6236",
+      "bytes": 822849
+    },
+    {
+      "path": "images/motion001/02-held-closed-door-approach.png",
+      "sha256": "5f101e0403d083adc8809d50857ce364e9df892d66a78fa1363171e40bafd3da",
+      "bytes": 440638
+    },
+    {
+      "path": "images/motion001/03-held-short-screen-obstruction.png",
+      "sha256": "f5beb00510b86c0a588097b13aba3e565529c4d81f64099d55f4f5124012bb91",
+      "bytes": 562281
+    },
+    {
+      "path": "images/motion001/04-actual-mapped-siding-spray.png",
+      "sha256": "ae4f5a88a89df698f279491f514c20d2713b350a5de249b1a7741c31010e8221",
+      "bytes": 350851
+    },
+    {
+      "path": "images/static/01-near-face-baseline-default.png",
+      "sha256": "a32b40964634e1890c22d8166ce890b03a35c21b45d0372822bfd0e460b906db",
+      "bytes": 964057
+    },
+    {
+      "path": "images/static/02-near-face-candidate-default.png",
+      "sha256": "98c2d3f036aedd9004e7902e5ce2a56b4534537cd1d1ea7ec35648090d97d408",
+      "bytes": 859607
+    },
+    {
+      "path": "images/static/03-center-roof-entry-ground-candidate.png",
+      "sha256": "0e80fe5e0415fff28ac7d07eeaafab6ffaa550d303a333462fdfc567e4fee65b",
+      "bytes": 524930
+    }
+  ],
+  "truth_boundary": "Derived per-unit preparation only; five roles bound, actual candidate-package and seventh attestation pending. Current16/213 unchanged; credit0."
+}

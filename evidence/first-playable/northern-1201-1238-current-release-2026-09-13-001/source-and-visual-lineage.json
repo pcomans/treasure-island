@@ -1,0 +1,89 @@
+{
+  "derived_summary": true,
+  "recognition_metric": "reference_recognized_physical_buildings",
+  "recognized_physical_units": 18,
+  "not_evaluated_physical_units": 195,
+  "added_physical_units": [
+    "physical-building:w96215672",
+    "physical-building:w96215669"
+  ],
+  "numerator_effect": 2,
+  "previous_16_acceptances_and_all_213_identities_preserved": true,
+  "units": [
+    {
+      "unit": "1201",
+      "physical_unit_id": "physical-building:w96215672",
+      "unit_closure": {
+        "path": "evidence/first-playable/northern-1201-quality-candidate-2026-09-13-001/candidate-closure.json",
+        "sha256": "7baf4bbe46e6173453acb2e67f02575a88735525d431955c6e5f6ae0dd810efa",
+        "bytes": 7899
+      },
+      "seven_acceptance_bindings": {
+        "evidence_manifest_sha256": "fc250debbc032d160e3de5e3e0148f13934a7e3bb17cc882a19f4d5b336fab95",
+        "motion_telemetry_manifest_sha256": "5a5de738ac8e8ed4490d4c83d63a739d5cdb9598ce66021984579dac1bf6e0c4",
+        "visual_motion_manifest_sha256": "c0fcacf741e513402d0b04aa35c7d5927b4205ebb80c85890a62bd2b5456c77d",
+        "package_verification_receipt_sha256": "21be51860e8e35dcdf76df4753d22155cbca013f134250b365764e873b8eac86",
+        "evidence_tree_sha256": "df08d70aa4307e2b7689e6c8e3ff0ad31005806b14c2420251456ddb4c60db92",
+        "mechanical_review_receipt_sha256": "f449c7863040df9873f5bcd268e0eac506a9c26d6e0613881e1b294e9355bb1f",
+        "review_receipt_sha256": "11f87bb5defc8432d5ba53e8e2eb586f631cd81db920f5fa85dc61cc34261589"
+      },
+      "image_tree_sha256": "df08d70aa4307e2b7689e6c8e3ff0ad31005806b14c2420251456ddb4c60db92",
+      "tree_document": {
+        "path": "evidence/first-playable/northern-1201-quality-candidate-2026-09-13-001/evidence-tree.json",
+        "sha256": "d0892abdfc111baabeb147b5e760b3178fa1b9307e3ab4e8dade17296f57d724",
+        "bytes": 3459
+      },
+      "image_count": 16,
+      "capture_time_authority": "15/213",
+      "candidate_authority": "16/213",
+      "candidate_pck_sha256": "770714587948b5068ae3921b1346b5e45e96c99abb3b0e16ae6776dbf14b3619",
+      "historical_limits_scope": "The original packet is frozen at its preparation/acceptance stage. Its pending-seventh or pending-authority phrases are historical statements; this source checkpoint records accepted authority 18/213. All original raw failures, sampling, crop, inference, privacy and runtime limits remain applicable."
+    },
+    {
+      "unit": "1238",
+      "physical_unit_id": "physical-building:w96215669",
+      "unit_closure": {
+        "path": "evidence/first-playable/northern-1238-quality-candidate-2026-09-13-001/candidate-closure.json",
+        "sha256": "68d3bf9850efd0b4a183f799d5b31b8647f07e15a211625d3ff9b7fb2c0646cd",
+        "bytes": 9226
+      },
+      "seven_acceptance_bindings": {
+        "evidence_manifest_sha256": "5eb7648cb03fa1ae73c9733c31456539d39c40a462219be43d4a92ecf7d0ce62",
+        "motion_telemetry_manifest_sha256": "fb3f03daae24bb385cbf6e86ee665a2752017ee9c5c32f54c6e21d00dbc7faf3",
+        "visual_motion_manifest_sha256": "35edd4f41d0cf9009aa59f66b0345992a93bb08ecd1eda8b61086b6eb5dc09db",
+        "package_verification_receipt_sha256": "5b6b2455b8068568e2b877b9f155982af76e4cc81f7be3341e9ec663c7c260de",
+        "evidence_tree_sha256": "a2e2b8aade40eebd01d900728e65c5cabd2cb1f43465399db2ed90329d49a741",
+        "mechanical_review_receipt_sha256": "6e5961faa00944e793c213e444a96732494a6fe15e1799f06636bdd1dd7ad276",
+        "review_receipt_sha256": "805f12798185ad8504cfac0742a27bdcb83c9da79b9aa9a192ba84081117fbab"
+      },
+      "image_tree_sha256": "a2e2b8aade40eebd01d900728e65c5cabd2cb1f43465399db2ed90329d49a741",
+      "tree_document": {
+        "path": "evidence/first-playable/northern-1238-quality-candidate-2026-09-13-001/evidence-tree.json",
+        "sha256": "ad71b9559ac6bcf320a619be6dab98bd3b449f994cf36fa6a810d844669dfb07",
+        "bytes": 5034
+      },
+      "image_count": 25,
+      "capture_time_authority": "16/213",
+      "candidate_authority": "16/213",
+      "candidate_pck_sha256": "770714587948b5068ae3921b1346b5e45e96c99abb3b0e16ae6776dbf14b3619",
+      "historical_limits_scope": "The original packet is frozen at its preparation/acceptance stage. Its pending-seventh or pending-authority phrases are historical statements; this source checkpoint records accepted authority 18/213. All original raw failures, sampling, crop, inference, privacy and runtime limits remain applicable."
+    }
+  ],
+  "current_pck_sha256": "d21f8beffc6670b5bff6808f76757f518a55a88aeaa8ace49aebb395550b0536",
+  "current_world": {
+    "bodies": 468,
+    "meshes": 1050,
+    "rows": 735,
+    "shapes": 492,
+    "surfaces": 1065,
+    "triangles": 108921
+  },
+  "limits": [
+    "Source study originals are historical captures, not screenshots of this app. No reference pixels enter Git or the package.",
+    "Original 1238 door raw failure remains failed: the 150 mm station diagnostic was not met. The separately accepted physical result is safe corridor approach, door obstruction and natural stop. Screen and sprays were absent from that first run and are proved only by the distinct continuation. Contact events and distinct trace rows retain their original different counts.",
+    "Original 1238 motion-finalization selection_scope prose incorrectly claiming four images and completed screen/sprays remains rejected; raw bytes are preserved.",
+    "Full AVI originals and sparse image payload samples remain distinct evidence. PNG/AVI resolution, encoded/physics/draw timing, setup discontinuity, hidden/cropped/inferred reference details and runtime limits are unchanged.",
+    "The image-tree digests identify selected image bytes. Tree document hashes identify the JSON documents and are not substituted for tree digests.",
+    "No 1206 or 1219 recognition or package credit is added by this checkpoint."
+  ]
+}

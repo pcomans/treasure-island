@@ -1,0 +1,193 @@
+{
+  "derived_summary": true,
+  "original": {
+    "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/ACTUAL_HANDOFF.md",
+    "sha256": "9f84149f5f249e4942bcd19d3ea07d2bb60f2f9dd6af2a2989d6c2a065385adf",
+    "bytes": 6243
+  },
+  "decision": "PASS",
+  "authority": "18/213",
+  "pck_sha256": "d21f8beffc6670b5bff6808f76757f518a55a88aeaa8ace49aebb395550b0536",
+  "input_count": 2112,
+  "stages": [
+    {
+      "stage": "source-component-001",
+      "pid": 75207,
+      "exit_code": 0,
+      "seconds": 9.820805374999999,
+      "started_at": "2026-09-13T20:54:40.576811+00:00",
+      "ended_at": "2026-09-13T20:54:50.398324+00:00",
+      "pins_unchanged": true,
+      "pid_absent": true,
+      "receipt": {
+        "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/source-component-001-execution.json",
+        "sha256": "10a5c708af99e5c696a12ae5ab73a6b4272c91b4240132775042908ba3594ec8",
+        "bytes": 939466
+      },
+      "log": {
+        "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/source-component-001.log",
+        "sha256": "cbeb85243c7cde806d37ed2c116e53ceec02a8b5ffb72f1125e1bf1fb10199e1",
+        "bytes": 9715
+      }
+    },
+    {
+      "stage": "export-exact-current-001",
+      "pid": 75309,
+      "exit_code": 0,
+      "seconds": 6.658359625,
+      "started_at": "2026-09-13T20:54:52.128987+00:00",
+      "ended_at": "2026-09-13T20:54:58.788649+00:00",
+      "pins_unchanged": true,
+      "pid_absent": true,
+      "receipt": {
+        "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/export-exact-current-001-execution.json",
+        "sha256": "07499f120c95b4004839b11bd530a2710cbb43ccf4679cdbdbd5799f0c629b24",
+        "bytes": 957959
+      },
+      "log": {
+        "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/export-exact-current-001.log",
+        "sha256": "646cc1ff3a252a0c261e1ee4a980041b847ef9032948e5634770d44dfbe16f36",
+        "bytes": 131255
+      }
+    },
+    {
+      "stage": "mounted-component-001",
+      "pid": 75382,
+      "exit_code": 0,
+      "seconds": 3.0853184170000003,
+      "started_at": "2026-09-13T20:55:05.886444+00:00",
+      "ended_at": "2026-09-13T20:55:08.972186+00:00",
+      "pins_unchanged": true,
+      "pid_absent": true,
+      "receipt": {
+        "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/mounted-component-001-execution.json",
+        "sha256": "3c32802da6066de93ce052c9478a7bdd321db4d73a4031c2bf525f07d1736b08",
+        "bytes": 940453
+      },
+      "log": {
+        "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/mounted-component-001.log",
+        "sha256": "fd21652fa0e4d044242c7defc9b5d8e2223197be916c3f2cda7c213cddf01a6d",
+        "bytes": 3339
+      }
+    },
+    {
+      "stage": "mounted-privacy-001",
+      "pid": 75400,
+      "exit_code": 0,
+      "seconds": 1.883178375,
+      "started_at": "2026-09-13T20:55:10.517418+00:00",
+      "ended_at": "2026-09-13T20:55:12.400911+00:00",
+      "pins_unchanged": true,
+      "pid_absent": true,
+      "receipt": {
+        "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/mounted-privacy-001-execution.json",
+        "sha256": "fb7979bad64d9e89836658b5851b920e2ecbc6cfa6f7a70bb41d899b700e8893",
+        "bytes": 940304
+      },
+      "log": {
+        "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/mounted-privacy-001.log",
+        "sha256": "8276a6f99a2d5d5d59916c8442b07abd1c6c1e74e4d28bf0a39db6c1b8ae1d8a",
+        "bytes": 769
+      }
+    },
+    {
+      "stage": "release-headless-smoke-001",
+      "pid": 75490,
+      "exit_code": 0,
+      "seconds": 6.135039417,
+      "started_at": "2026-09-13T20:55:13.900329+00:00",
+      "ended_at": "2026-09-13T20:55:20.035722+00:00",
+      "pins_unchanged": true,
+      "pid_absent": true,
+      "receipt": {
+        "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/release-headless-smoke-001-execution.json",
+        "sha256": "414983123910c7cf3738892202e7336c2e1583bf897231cf0ef3fb2f001e9d8c",
+        "bytes": 940074
+      },
+      "log": {
+        "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/release-headless-smoke-001.log",
+        "sha256": "38078ff5dd03f3a80fcb86c477eaa0e7bf50096ff764b64cb92208f867d83c22",
+        "bytes": 6228
+      }
+    },
+    {
+      "stage": "release-native-smoke-001",
+      "pid": 75502,
+      "exit_code": 0,
+      "seconds": 52.056662167,
+      "started_at": "2026-09-13T20:55:21.566550+00:00",
+      "ended_at": "2026-09-13T20:56:13.623572+00:00",
+      "pins_unchanged": true,
+      "pid_absent": true,
+      "receipt": {
+        "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/release-native-smoke-001-execution.json",
+        "sha256": "30dfe66a7eb2a073b23ba700c7f59478cd59bd632d757cbd9deca49e7fd85cc2",
+        "bytes": 940219
+      },
+      "log": {
+        "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/release-native-smoke-001.log",
+        "sha256": "baed75638479324b613fce7089df3b2d73cc5711b546475bda0a21817b425ca5",
+        "bytes": 6294
+      }
+    }
+  ],
+  "world": {
+    "bodies": 468,
+    "meshes": 1050,
+    "rows": 735,
+    "shapes": 492,
+    "surfaces": 1065,
+    "triangles": 108921
+  },
+  "signed_main_attachment_predicates_each_run": 9,
+  "mounted_scope": "Eight focused pairs (1444, 1308, 1394, 1317, Station 48, Maceo, 1201 and 1238). The 1439 closure and both signed ordinary-main predicates remain separate. Both target helpers assert 143 native channels, 11 materials and 9 source/detail shapes per unit.",
+  "actual_app_binding": {
+    "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/actual-app-binding.json",
+    "sha256": "e0a280af0a4834a142684f3d2c8bc48cb05d4141101bf1e5952a363d23b3ad13",
+    "bytes": 4241
+  },
+  "source_result": {
+    "path": "build/northern-1201-1238-current-release-provenance-001/preparation-001/source-component-001-result.json",
+    "sha256": "3d05dabb7eb4cc007636562447c3a3959566da91ed27483f890d61e262623074",
+    "bytes": 414
+  },
+  "slot_release": {
+    "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/SLOT_RELEASE.json",
+    "sha256": "c20d4213605d9745011690fb7d7c10c495626119ce39f508d5fc44fa62aea41f",
+    "bytes": 2437
+  },
+  "bundle_checks": {
+    "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/bundle-native-checks-001.json",
+    "sha256": "8632d18cadf0ee4689cec91d1c146d02927db9b4756e0dc5d1194e30ee9b159a",
+    "bytes": 6392
+  },
+  "signature_privacy": {
+    "all_commands_exit0": true,
+    "architectures": [
+      "arm64",
+      "x86_64"
+    ],
+    "entitlements": {},
+    "privacy": {
+      "NSPrivacyTracking": false
+    },
+    "no_quarantine": true,
+    "mounted_private_paths": 0,
+    "mounted_private_raw": 0,
+    "mounted_banned": 0
+  },
+  "runtime": "Apple M2 (Apple8), Metal 4.0 / Forward+, Godot 4.7.2.stable.official.ed1daf0bf",
+  "limits": [
+    "Executor success is separate from independent release acceptance and publication.",
+    "No new per-unit art, motion or spray replay; both signed runs use the existing ordinary-main smoke.",
+    "Universal signatures do not establish Intel or M1 runtime/performance. No new manual-input or no-argument launch observation."
+  ],
+  "auxiliary_warnings": [
+    {
+      "command": "codesign --display --entitlements :-",
+      "exit_code": 0,
+      "stderr_warning": "warning: Specifying ':' in the path is deprecated and will not work in a future release",
+      "scope": "Auxiliary bundle check only; all six engine logs are clean. Original executor retrospective remains unchanged; this explicit exception narrows its broad no-warning wording."
+    }
+  ]
+}

@@ -1,0 +1,109 @@
+{
+  "schema_version": "ti.exact-current-release-closure/1",
+  "status": "CURRENT18_OWNER_AND_INDEPENDENT_RELEASE_PASS",
+  "derived_downstream_release_summary": true,
+  "recognition_metric": "reference_recognized_physical_buildings",
+  "recognized_physical_units": 18,
+  "not_evaluated_physical_units": 195,
+  "added_physical_units": [
+    "physical-building:w96215672",
+    "physical-building:w96215669"
+  ],
+  "numerator_effect": 2,
+  "previous_16_acceptances_preserved": true,
+  "all_213_identities_preserved": true,
+  "compiler_version": "1.17.0",
+  "catalog_registry_version": 18,
+  "contracts_loader_version": 17,
+  "active_adapters": 17,
+  "total_plans": 26,
+  "package_safe_plans": 20,
+  "unchanged_legacy_adapters": 9,
+  "unchanged_disabled_plans": 6,
+  "unchanged_projection_descriptors": 13,
+  "app_relative_path": "build/northern-1201-1238-exact-current-001/Treasure Island First Playable.app",
+  "package": [
+    {
+      "path": "Contents/Info.plist",
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885
+    },
+    {
+      "path": "Contents/MacOS/Treasure Island First Playable",
+      "sha256": "e5a63876e7b893fd625daa63a1e24e4b1f6a6ddc0fe1a2eb4148ba0522cd70f8",
+      "bytes": 170963648
+    },
+    {
+      "path": "Contents/PkgInfo",
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9
+    },
+    {
+      "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229
+    },
+    {
+      "path": "Contents/Resources/Treasure Island First Playable.pck",
+      "sha256": "d21f8beffc6670b5bff6808f76757f518a55a88aeaa8ace49aebb395550b0536",
+      "bytes": 76766512
+    },
+    {
+      "path": "Contents/Resources/icon.icns",
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "sha256": "da0d526ffdc1a36622a6e47746b8434fa192a442666ff839f4848fe2a356fd3a",
+      "bytes": 3217
+    }
+  ],
+  "bundle_identity_sha256": "f33cda9e8bee2005b0d025f2203ae82d3f35cdce4edc17e925b8ab098959b71c",
+  "bundle_identity_encoding": "SHA256 of compact sort_keys JSON array sorted by relative path, each entry path/sha256/bytes",
+  "pck_sha256": "d21f8beffc6670b5bff6808f76757f518a55a88aeaa8ace49aebb395550b0536",
+  "pck_bytes": 76766512,
+  "world": {
+    "bodies": 468,
+    "meshes": 1050,
+    "rows": 735,
+    "shapes": 492,
+    "surfaces": 1065,
+    "triangles": 108921
+  },
+  "owner_package_decision": "PASS",
+  "independent_package_decision": "PASS",
+  "root_accepted_package_review": true,
+  "independent_review_sha256": "6ac1d424066e5df7aee914665c6bcda48aa7b02284930606956ebbd5f40dfbc6",
+  "delivery": "Byte-exact transfer into the ignored destination recorded above; actual copy and Git publication results are retained in the external publication receipt. No re-export or re-signing.",
+  "source_checkpoint": "This source checkpoint contains the integrated authority and these derived release records. Its eventual commit and remote result are recorded externally after publication; no self-referential commit hash is required.",
+  "ordinary_no_argument_launch": "Not run for these bytes",
+  "human_001": "Pending owner acceptance; scope unchanged",
+  "artifacts": {
+    "README.md": {
+      "path": "evidence/first-playable/northern-1201-1238-current-release-2026-09-13-001/README.md",
+      "sha256": "69778ad28ac75f0c0f5a6baf755d7a0d1e6032b2893364190c6ffb67088c0d83",
+      "bytes": 2032
+    },
+    "independent-package-review.json": {
+      "path": "evidence/first-playable/northern-1201-1238-current-release-2026-09-13-001/independent-package-review.json",
+      "sha256": "a8eba81e627d1221bd6a7d229f7c9fa0f0c1f578c2889f357bb8eec336117b72",
+      "bytes": 1763
+    },
+    "owner-package-verification.json": {
+      "path": "evidence/first-playable/northern-1201-1238-current-release-2026-09-13-001/owner-package-verification.json",
+      "sha256": "82d4975be28030bb9432765e580ad531ecae8eb030af9881b98edca74ca8a16c",
+      "bytes": 7875
+    },
+    "private-provenance-retention.json": {
+      "path": "evidence/first-playable/northern-1201-1238-current-release-2026-09-13-001/private-provenance-retention.json",
+      "sha256": "9ec55946246ee82336306d2d228c857aa2dec12d4f13a77f030d339d35c67ae3",
+      "bytes": 53992
+    },
+    "source-and-visual-lineage.json": {
+      "path": "evidence/first-playable/northern-1201-1238-current-release-2026-09-13-001/source-and-visual-lineage.json",
+      "sha256": "3d40e0cf7f707edcc45c4e555d5a1999764ffa7a66b6e358a4b43189beff5b9e",
+      "bytes": 5840
+    }
+  }
+}

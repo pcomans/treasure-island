@@ -1,0 +1,238 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215672",
+  "label": "Complete retained actual motion origins and independently qualified scope",
+  "origins": [
+    {
+      "path": "private/raw/55/55cd4fe3b2697262661cdd1f4218d28fe3200df50690182eb3111c687d784a8d.json",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+      "sha256": "55cd4fe3b2697262661cdd1f4218d28fe3200df50690182eb3111c687d784a8d",
+      "bytes": 3600855,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+      "role": "exact_original"
+    },
+    {
+      "path": "private/raw/2f/2f76d4e434557179f464510c707b56686ce132145810299732a2adcdc74028b4.md",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+      "sha256": "2f76d4e434557179f464510c707b56686ce132145810299732a2adcdc74028b4",
+      "bytes": 7485,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/mechanics-changed-light-preparation-001/independent-actual-mechanics-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "private/raw/b6/b6cd8ab91100a1a1e0d333aa7bb0c46a48376b8685542133becf2b5b5c462bd4.md",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+      "sha256": "b6cd8ab91100a1a1e0d333aa7bb0c46a48376b8685542133becf2b5b5c462bd4",
+      "bytes": 5764,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/mechanics-changed-light-preparation-001/independent-changed-light-motion-001/REVIEW.md",
+      "role": "exact_original"
+    }
+  ],
+  "data": {
+    "runs": [
+      {
+        "phase": "mechanics-changed-light-preparation-001",
+        "raw_result": {
+          "path": "private/raw/55/55cd4fe3b2697262661cdd1f4218d28fe3200df50690182eb3111c687d784a8d.json",
+          "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+          "sha256": "55cd4fe3b2697262661cdd1f4218d28fe3200df50690182eb3111c687d784a8d",
+          "bytes": 3600855,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+          "role": "exact_original"
+        },
+        "raw_ok": true,
+        "raw_failures": [],
+        "routes": [
+          {
+            "label": "extended-approach-to-closed-door",
+            "performed": true,
+            "ok": true,
+            "expected_shape": 3.0,
+            "expected_role": "MaroonClosedDoors",
+            "sampled_input_frames": 180,
+            "sampled_brake_frames": 30,
+            "station_held": true,
+            "normal_progress_m": 10.029666185379,
+            "actual_stop_depth_m": 0.470490217208862,
+            "stopped": true,
+            "transform_writes_during_trace": 0,
+            "complete_trace_rows": 210,
+            "qualifying_contact_events": 28,
+            "distinct_contact_rows": 28,
+            "distinct_contact_row_indices_one_based": [
+              153,
+              154,
+              155,
+              156,
+              157,
+              158,
+              159,
+              160,
+              161,
+              162,
+              163,
+              164,
+              165,
+              166,
+              167,
+              168,
+              169,
+              170,
+              171,
+              172,
+              173,
+              174,
+              175,
+              176,
+              177,
+              178,
+              179,
+              180
+            ],
+            "raw_station_diagnostic_limit_m": null,
+            "raw_maximum_station_drift_m": null
+          },
+          {
+            "label": "nearby-short-screen-obstruction",
+            "performed": true,
+            "ok": true,
+            "expected_shape": 4.0,
+            "expected_role": "LocalPrivacyScreens",
+            "sampled_input_frames": 65,
+            "sampled_brake_frames": 30,
+            "station_held": true,
+            "normal_progress_m": 1.97940516471863,
+            "actual_stop_depth_m": 1.82065296173096,
+            "stopped": true,
+            "transform_writes_during_trace": 0,
+            "complete_trace_rows": 95,
+            "qualifying_contact_events": 32,
+            "distinct_contact_rows": 32,
+            "distinct_contact_row_indices_one_based": [
+              33,
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48,
+              49,
+              50,
+              51,
+              52,
+              53,
+              54,
+              55,
+              56,
+              57,
+              58,
+              59,
+              60,
+              61,
+              62,
+              63,
+              64,
+              65
+            ],
+            "raw_station_diagnostic_limit_m": null,
+            "raw_maximum_station_drift_m": null
+          }
+        ],
+        "sprays": [
+          {
+            "label": "mapped-blank-siding-wall",
+            "performed": true,
+            "skipped_reason": "",
+            "ok": true,
+            "result": [
+              "placed"
+            ],
+            "actual_player_hit_distance_m": 5.21880388259888,
+            "tags_before": 0,
+            "tags_after": 1
+          },
+          {
+            "label": "authored-closed-door",
+            "performed": true,
+            "skipped_reason": "",
+            "ok": true,
+            "result": [
+              "receiver_rejection"
+            ],
+            "actual_player_hit_distance_m": 3.56335806846619,
+            "tags_before": 1,
+            "tags_after": 1
+          },
+          {
+            "label": "authored-short-screen",
+            "performed": true,
+            "skipped_reason": "",
+            "ok": true,
+            "result": [
+              "receiver_rejection"
+            ],
+            "actual_player_hit_distance_m": 2.40063858032227,
+            "tags_before": 1,
+            "tags_after": 1
+          }
+        ],
+        "saved_png_ids": [
+          "01-whole-near-face-changed-light",
+          "02-held-closed-door-approach",
+          "03-held-short-screen-obstruction",
+          "04-actual-mapped-siding-spray"
+        ],
+        "original_finalizer": {
+          "path": "private/raw/1f/1f0a934eadfaacf6a95e4031cb2eeaa7639cf73567b44eb7529c043071048c5f.json",
+          "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+          "sha256": "1f0a934eadfaacf6a95e4031cb2eeaa7639cf73567b44eb7529c043071048c5f",
+          "bytes": 1857063,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/mechanics-changed-light-preparation-001/motion-finalization.json",
+          "role": "exact_original"
+        },
+        "inherited_selection_scope_rejected": false,
+        "reached_scope_interpretation": "Only the actual recorded routes, performed sprays and saved PNG IDs above.",
+        "spray_phase_wall_usec": null,
+        "limits": [
+          "Derived assembly binds unchanged originals and existing independent scoped decisions. It makes no new source, mechanics, visual, package or unit-acceptance decision; current accepted authority remains 16/213.",
+          "Study PNGs are original source-project captures, not app screenshots or a new exact-current release. Original study counters, source maps and capture-time authority remain unchanged; native live-attachment evidence is bound separately.",
+          "Native PNGs are 1440x900; full AVI originals and exact selected MJPEG payloads are 1280x800. Each movie retains its original 70 physical trailing bytes. Encoded, physics, process and drawn counters are distinct; sparse samples do not establish continuous playback or flicker freedom.",
+          "Routes use actual stock inputs and separate explicit setup poses; spray attempts invoke the stock API after grounded/camera/range checks. No continuous traversal between setups, physical mouse dispatch, manual-input, M1 or universal-runtime claim is supplied.",
+          "Reference photographs remain external and private. No reference pixels are copied into these packets, Git or an app. Cropped, occluded, hidden/rear and unsurveyed counts/dimensions remain unknown or production inference.",
+          "Candidate package verification and the separate seventh unit/image-tree attestation remain pending/null. A shared future app must verify each target attachment and predicates; neither one unit packet nor old source results certify another unit or a package.",
+          "1201 Bayside captured at historical 15/213 in the isolated afdc9d8 study. The reviewed live attachment uses current16 source and a distinct original-art/current-neighbor comparison; its source result does not relabel the earlier pixels.",
+          "March 2025 near-side observations support blue-gray siding, pale complete trim, broad windows, maroon doors and short screens. The left termination is cropped; the right is visible in the wide frame. Opening/threshold details behind crop or occlusion stay inferred; no hidden-side or 1206 roof detail is borrowed.",
+          "Actual mechanics raw ok:true contains a 180+30-row door approach and a separate 65+30-row screen approach. Door contacts are 28 events on 28 distinct rows; screen contacts are 32 events on 32 rows. All 305 saved rows are grounded with camera checks and no trace transform writes.",
+          "Three performed sprays place one mapped wall tag at 5.218804m and reject nonreceiver door/screen hits at 3.563358/2.400639m. Tag counts are 0\u21921,1\u21921,1\u21921. These are performed stock outcomes, not skips.",
+          "The original movie has 606 frames. Nine retained samples include encoded index604, plain blue teardown with no scene evidence. The complete file is retained; no full-video review or exact encoded-to-physics mapping is claimed.",
+          "Original 001 palette/path HOLD and original 001 captured sources/images remain historical; accepted 002 repairs were not replayed for this assembly."
+        ]
+      }
+    ],
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "combined_single_success_run_claim": false,
+    "limits": [
+      "Derived assembly binds unchanged originals and existing independent scoped decisions. It makes no new source, mechanics, visual, package or unit-acceptance decision; current accepted authority remains 16/213.",
+      "Study PNGs are original source-project captures, not app screenshots or a new exact-current release. Original study counters, source maps and capture-time authority remain unchanged; native live-attachment evidence is bound separately.",
+      "Native PNGs are 1440x900; full AVI originals and exact selected MJPEG payloads are 1280x800. Each movie retains its original 70 physical trailing bytes. Encoded, physics, process and drawn counters are distinct; sparse samples do not establish continuous playback or flicker freedom.",
+      "Routes use actual stock inputs and separate explicit setup poses; spray attempts invoke the stock API after grounded/camera/range checks. No continuous traversal between setups, physical mouse dispatch, manual-input, M1 or universal-runtime claim is supplied.",
+      "Reference photographs remain external and private. No reference pixels are copied into these packets, Git or an app. Cropped, occluded, hidden/rear and unsurveyed counts/dimensions remain unknown or production inference.",
+      "Candidate package verification and the separate seventh unit/image-tree attestation remain pending/null. A shared future app must verify each target attachment and predicates; neither one unit packet nor old source results certify another unit or a package.",
+      "1201 Bayside captured at historical 15/213 in the isolated afdc9d8 study. The reviewed live attachment uses current16 source and a distinct original-art/current-neighbor comparison; its source result does not relabel the earlier pixels.",
+      "March 2025 near-side observations support blue-gray siding, pale complete trim, broad windows, maroon doors and short screens. The left termination is cropped; the right is visible in the wide frame. Opening/threshold details behind crop or occlusion stay inferred; no hidden-side or 1206 roof detail is borrowed.",
+      "Actual mechanics raw ok:true contains a 180+30-row door approach and a separate 65+30-row screen approach. Door contacts are 28 events on 28 distinct rows; screen contacts are 32 events on 32 rows. All 305 saved rows are grounded with camera checks and no trace transform writes.",
+      "Three performed sprays place one mapped wall tag at 5.218804m and reject nonreceiver door/screen hits at 3.563358/2.400639m. Tag counts are 0\u21921,1\u21921,1\u21921. These are performed stock outcomes, not skips.",
+      "The original movie has 606 frames. Nine retained samples include encoded index604, plain blue teardown with no scene evidence. The complete file is retained; no full-video review or exact encoded-to-physics mapping is claimed.",
+      "Original 001 palette/path HOLD and original 001 captured sources/images remain historical; accepted 002 repairs were not replayed for this assembly."
+    ]
+  },
+  "truth_boundary": "Derived per-unit preparation only; five roles bound, actual candidate-package and seventh attestation pending. Current16/213 unchanged; credit0."
+}

@@ -1,0 +1,133 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215669",
+  "label": "Original settled source-project static captures",
+  "origins": [
+    {
+      "path": "private/raw/21/21757650208285caab3f9a10a819425099e2781f22289b827976fce5ec2aabaf.json",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+      "sha256": "21757650208285caab3f9a10a819425099e2781f22289b827976fce5ec2aabaf",
+      "bytes": 46464,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1238-northpoint-study-002/native-001-result.json",
+      "role": "exact_original"
+    },
+    {
+      "path": "private/raw/25/25b3470e7139f924801be4b1bafadbc143221e75d3af0f7df58abe91e9c6507a.json",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+      "sha256": "25b3470e7139f924801be4b1bafadbc143221e75d3af0f7df58abe91e9c6507a",
+      "bytes": 2133028,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1238-northpoint-study-002/focused-001-result.json",
+      "role": "exact_original"
+    },
+    {
+      "path": "private/raw/13/1346a2e04e1eaa2f4d4878583d081fed9afd9fa13164df1fd383848db71e4d0f.md",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+      "sha256": "1346a2e04e1eaa2f4d4878583d081fed9afd9fa13164df1fd383848db71e4d0f",
+      "bytes": 7029,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1238-northpoint-study-002/independent-visual-001/REVIEW.md",
+      "role": "exact_original"
+    }
+  ],
+  "data": {
+    "images": [
+      {
+        "path": "images/static/01-near-face-baseline-default.png",
+        "sha256": "16acdf83713beb3f33f054815c40e026257832d342ddfd7837a111a30db031c0",
+        "bytes": 944153,
+        "role": "static_source_baseline",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1238-northpoint-study-002/capture/images/01-near-face-baseline-default.png",
+        "counter_binding": {
+          "id": "01-near-face-baseline-default",
+          "native_result": {
+            "path": "private/raw/21/21757650208285caab3f9a10a819425099e2781f22289b827976fce5ec2aabaf.json",
+            "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+            "sha256": "21757650208285caab3f9a10a819425099e2781f22289b827976fce5ec2aabaf",
+            "bytes": 46464,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1238-northpoint-study-002/native-001-result.json",
+            "role": "exact_original"
+          }
+        },
+        "byte_identical": true,
+        "provides_scene_evidence": true
+      },
+      {
+        "path": "images/static/02-near-face-candidate-default.png",
+        "sha256": "9eed76cc325145d94e8a3e165e723fde2fdb13d3333ce7c803d10a3f44a2edb1",
+        "bytes": 846343,
+        "role": "static_source_candidate",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1238-northpoint-study-002/capture/images/02-near-face-candidate-default.png",
+        "counter_binding": {
+          "id": "02-near-face-candidate-default",
+          "native_result": {
+            "path": "private/raw/21/21757650208285caab3f9a10a819425099e2781f22289b827976fce5ec2aabaf.json",
+            "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+            "sha256": "21757650208285caab3f9a10a819425099e2781f22289b827976fce5ec2aabaf",
+            "bytes": 46464,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1238-northpoint-study-002/native-001-result.json",
+            "role": "exact_original"
+          }
+        },
+        "byte_identical": true,
+        "provides_scene_evidence": true
+      },
+      {
+        "path": "images/static/03-center-roof-entry-ground-candidate.png",
+        "sha256": "faac87a3a5bb936cc4315e03b7d1366e3196740fd51eb5a9755fe97ff815c4e0",
+        "bytes": 625149,
+        "role": "static_source_candidate",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1238-northpoint-study-002/capture/images/03-center-roof-entry-ground-candidate.png",
+        "counter_binding": {
+          "id": "03-center-roof-entry-ground-candidate",
+          "native_result": {
+            "path": "private/raw/21/21757650208285caab3f9a10a819425099e2781f22289b827976fce5ec2aabaf.json",
+            "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+            "sha256": "21757650208285caab3f9a10a819425099e2781f22289b827976fce5ec2aabaf",
+            "bytes": 46464,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1238-northpoint-study-002/native-001-result.json",
+            "role": "exact_original"
+          }
+        },
+        "byte_identical": true,
+        "provides_scene_evidence": true
+      }
+    ],
+    "capture_time_authority": "16/213",
+    "current_source_attachment": {
+      "review": {
+        "path": "private/raw/d0/d088a8f49ae169a63bab522a361ca9c68bb95ffe5dd85f40ae5be01e8e4f7c41.md",
+        "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+        "sha256": "d088a8f49ae169a63bab522a361ca9c68bb95ffe5dd85f40ae5be01e8e4f7c41",
+        "bytes": 5984,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1238-live-adapter-proposal-001/validation-001/independent-actual-001/REVIEW.md",
+        "role": "exact_original"
+      },
+      "raw_result": {
+        "path": "private/raw/ef/ef97148413cfca7e0c02c4b57f9d0b013bcf675ac839d136df99ecea9174fa21.json",
+        "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1201-1238-unit-packet-preparation-001",
+        "sha256": "ef97148413cfca7e0c02c4b57f9d0b013bcf675ac839d136df99ecea9174fa21",
+        "bytes": 846234,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1238-live-adapter-proposal-001/validation-001/focused-001-result.json",
+        "role": "exact_original"
+      },
+      "scope": "Independently reviewed current16 source attachment; distinct original-art/current-chunk producers, not package or replacement capture evidence."
+    },
+    "independent_static_status": "SCOPED_PASS",
+    "limits": [
+      "Derived assembly binds unchanged originals and existing independent scoped decisions. It makes no new source, mechanics, visual, package or unit-acceptance decision; current accepted authority remains 16/213.",
+      "Study PNGs are original source-project captures, not app screenshots or a new exact-current release. Original study counters, source maps and capture-time authority remain unchanged; native live-attachment evidence is bound separately.",
+      "Native PNGs are 1440x900; full AVI originals and exact selected MJPEG payloads are 1280x800. Each movie retains its original 70 physical trailing bytes. Encoded, physics, process and drawn counters are distinct; sparse samples do not establish continuous playback or flicker freedom.",
+      "Routes use actual stock inputs and separate explicit setup poses; spray attempts invoke the stock API after grounded/camera/range checks. No continuous traversal between setups, physical mouse dispatch, manual-input, M1 or universal-runtime claim is supplied.",
+      "Reference photographs remain external and private. No reference pixels are copied into these packets, Git or an app. Cropped, occluded, hidden/rear and unsurveyed counts/dimensions remain unknown or production inference.",
+      "Candidate package verification and the separate seventh unit/image-tree attestation remain pending/null. A shared future app must verify each target attachment and predicates; neither one unit packet nor old source results certify another unit or a package.",
+      "1238 Northpoint captures retain their original 16/213 source world and corrected frozen geometry. Rejected readiness001 never ran. All 12 upper trims retain the accepted 76.499939mm fascia separation; no geometry changed during packet assembly.",
+      "March 2025 references support the stepped blue-gray public frontage, pale trim, broad paired windows, dark-blue doors and screens. Both footprint ends appear in the wide reference, while the right tree hides local roof/window/base details; the 1235 panorama label identifies camera context, not the target.",
+      "Original door raw ok:false and exit1 remain unchanged: the 150mm station predicate fails on rows161\u2013210, with maximum actual orthogonal offset174.460835mm. The accepted narrower physical interpretation is grounded, camera-clear corridor traversal and effective door obstruction/natural stop, with minimum lateral capsule-edge margin135.539mm. This is not station-held PASS; the front terminus differs9.731\u00b5m at Float32 scale.",
+      "The original door run contains exactly210 rows (180 input+30 brake),57 qualifying door-contact events on57 rows and17 hardware-contact rows. Screen and all sprays were unperformed. Its motion-finalization.json selection_scope falsely claims four PNGs/screen/sprays; that inherited prose is rejected here while its original bytes and actual two PNGs remain retained.",
+      "The separately reviewed continuation contains95 rows (65 input+30 brake), with36 screen-contact events across31 unique rows35\u201365. Forward input removes normal approach but permits lateral sliding; after input release all30 brake rows stop. It proves neither total arrest while input remains held nor indefinite containment by the finite screen.",
+      "Continuation raw ok:true retains station_held:false at448.665976mm against the150mm diagnostic. The accepted scoped physical result uses actual screen obstruction/natural braking, not false centering. Independent orthogonal final depth1.679356m is distinct from raw nonorthogonal1.655336m.",
+      "Only the continuation performs the three sprays: mapped wall placement at5.161040m, door rejection at3.544172m and screen rejection at2.532521m; tag counts0\u21921,1\u21921,1\u21921. No skipped case counts as rejection. Its separate19.169342375s process includes a measured4.317812s spray phase and14.135ms total stock-call time; those are not preparation/review or avoided-runtime measurements.",
+      "Both full movies remain separate: original door297 frames and continuation315 frames. Each has nine retained exact samples; Original indices264/295 are byte-identical held door views; only continuation index313 is plain blue teardown, not scene evidence. No fictional single continuous all-success movie, changed-light replay or door retry is introduced."
+    ]
+  },
+  "truth_boundary": "Derived per-unit preparation only; five roles bound, actual candidate-package and seventh attestation pending. Current16/213 unchanged; credit0."
+}

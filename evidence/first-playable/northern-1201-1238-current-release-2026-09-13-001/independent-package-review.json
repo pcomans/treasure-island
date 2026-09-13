@@ -1,0 +1,31 @@
+{
+  "derived_summary": true,
+  "original": {
+    "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/independent-actual-001/REVIEW.md",
+    "sha256": "6ac1d424066e5df7aee914665c6bcda48aa7b02284930606956ebbd5f40dfbc6",
+    "bytes": 6817
+  },
+  "decision": "PASS",
+  "status": "EXACT_CURRENT18_SOURCE_MOUNTED_PRIVACY_SIGNED_RELEASE_PASS",
+  "root_accepted": true,
+  "authority": "18/213",
+  "pck_sha256": "d21f8beffc6670b5bff6808f76757f518a55a88aeaa8ace49aebb395550b0536",
+  "app_binding": {
+    "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/actual-app-binding.json",
+    "sha256": "e0a280af0a4834a142684f3d2c8bc48cb05d4141101bf1e5952a363d23b3ad13",
+    "bytes": 4241
+  },
+  "input_binding": {
+    "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/execution-input-pins.json",
+    "sha256": "47275950d7e0ab599150f5a8e33afda979b1168bf15a8aa2ad05079b4e3b30a1",
+    "bytes": 464720
+  },
+  "reexecution": false,
+  "retrospective": {
+    "path": "build/northern-1201-1238-current-release-provenance-001/execution-002/independent-actual-001/RETRO.md",
+    "sha256": "5129972b553d603d7aa16fbfe7f2ea1a05e3fae892b00f357f591902dd16439d",
+    "bytes": 1455
+  },
+  "scope": "Independent read-only verification of all 2112 raw input maps, six exact terminal runs, seven app files, full PCK directory/payload/source closure and actual packed 18/213 records, both target component assertions and nine signed-main attachment predicates, privacy/signatures and release. No new engine, per-unit acceptance or publication.",
+  "auxiliary_warning": "The codesign entitlements command exited 0 and warned that the colon path syntax is deprecated. All six engine logs have no warnings or errors."
+}

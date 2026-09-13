@@ -1,0 +1,59 @@
+{
+  "schema_version": "ti.d5-fidelity-candidate-closure/1",
+  "status": "SEVEN_ROLES_BOUND_SERIALIZED_AUTHORITY_PENDING",
+  "physical_unit_id": "physical-building:w96215672",
+  "candidate_authority": "16/213",
+  "capture_time_authority": "15/213",
+  "new_unit_candidate": true,
+  "recognition_credit_granted": false,
+  "prospective_numerator_effect_after_separate_acceptance": 1,
+  "seven_acceptance_bindings_prepared": {
+    "evidence_manifest_sha256": "fc250debbc032d160e3de5e3e0148f13934a7e3bb17cc882a19f4d5b336fab95",
+    "motion_telemetry_manifest_sha256": "5a5de738ac8e8ed4490d4c83d63a739d5cdb9598ce66021984579dac1bf6e0c4",
+    "visual_motion_manifest_sha256": "c0fcacf741e513402d0b04aa35c7d5927b4205ebb80c85890a62bd2b5456c77d",
+    "package_verification_receipt_sha256": "21be51860e8e35dcdf76df4753d22155cbca013f134250b365764e873b8eac86",
+    "evidence_tree_sha256": "df08d70aa4307e2b7689e6c8e3ff0ad31005806b14c2420251456ddb4c60db92",
+    "mechanical_review_receipt_sha256": "f449c7863040df9873f5bcd268e0eac506a9c26d6e0613881e1b294e9355bb1f",
+    "review_receipt_sha256": "11f87bb5defc8432d5ba53e8e2eb586f631cd81db920f5fa85dc61cc34261589"
+  },
+  "image_tree_sha256": "df08d70aa4307e2b7689e6c8e3ff0ad31005806b14c2420251456ddb4c60db92",
+  "evidence_tree_document_sha256": "d0892abdfc111baabeb147b5e760b3178fa1b9307e3ab4e8dade17296f57d724",
+  "package_verification_pending": false,
+  "seventh_attestation_pending": false,
+  "actual_app_sha256": null,
+  "actual_pck_sha256": "770714587948b5068ae3921b1346b5e45e96c99abb3b0e16ae6776dbf14b3619",
+  "future_shared_package_scope": "Exact Q003 shared candidate package verified for this target by the separately accepted package review; separate seventh unit/image-tree attestation and later exact-current authority delivery remain pending.",
+  "limits": [
+    "Derived six-role assembly binds unchanged original evidence and the accepted exact Q003 package decision. It makes no seventh unit-acceptance decision; current accepted authority remains 16/213.",
+    "Study PNGs are original source-project captures, not app screenshots or a new exact-current release. Original study counters, source maps and capture-time authority remain unchanged; native live-attachment evidence is bound separately.",
+    "Native PNGs are 1440x900; full AVI originals and exact selected MJPEG payloads are 1280x800. Each movie retains its original 70 physical trailing bytes. Encoded, physics, process and drawn counters are distinct; sparse samples do not establish continuous playback or flicker freedom.",
+    "Routes use actual stock inputs and separate explicit setup poses; spray attempts invoke the stock API after grounded/camera/range checks. No continuous traversal between setups, physical mouse dispatch, manual-input, M1 or universal-runtime claim is supplied.",
+    "Reference photographs remain external and private. No reference pixels are copied into these packets, Git or an app. Cropped, occluded, hidden/rear and unsurveyed counts/dimensions remain unknown or production inference.",
+    "Candidate package verification is now bound for this exact unit; the separate seventh unit/image-tree attestation remains pending/null. Original five-role documents retain their historical pending-package prose and exact bytes.",
+    "1201 Bayside captured at historical 15/213 in the isolated afdc9d8 study. The reviewed live attachment uses current16 source and a distinct original-art/current-neighbor comparison; its source result does not relabel the earlier pixels.",
+    "March 2025 near-side observations support blue-gray siding, pale complete trim, broad windows, maroon doors and short screens. The left termination is cropped; the right is visible in the wide frame. Opening/threshold details behind crop or occlusion stay inferred; no hidden-side or 1206 roof detail is borrowed.",
+    "Actual mechanics raw ok:true contains a 180+30-row door approach and a separate 65+30-row screen approach. Door contacts are 28 events on 28 distinct rows; screen contacts are 32 events on 32 rows. All 305 saved rows are grounded with camera checks and no trace transform writes.",
+    "Three performed sprays place one mapped wall tag at 5.218804m and reject nonreceiver door/screen hits at 3.563358/2.400639m. Tag counts are 0→1,1→1,1→1. These are performed stock outcomes, not skips.",
+    "The original movie has 606 frames. Nine retained samples include encoded index604, plain blue teardown with no scene evidence. The complete file is retained; no full-video review or exact encoded-to-physics mapping is claimed.",
+    "Original 001 palette/path HOLD and original 001 captured sources/images remain historical; accepted 002 repairs were not replayed for this assembly."
+  ],
+  "actual_app_binding_document_sha256": "2b0c664e908d7ab73941590a33f66464664a334e262523b20dc2d20ddf3d2df8",
+  "actual_app_file_pins": {
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/Info.plist": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable": "a4637e839d23aa39ede50c98040d793660b4354ff9781685a802c9ddff7d53d5",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck": "770714587948b5068ae3921b1346b5e45e96c99abb3b0e16ae6776dbf14b3619",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources": "3ede4d27134e56db4651e21912bab2722e39a4f9ac050c0e8aaab31d933ec937"
+  },
+  "actual_app_hash_semantics": "The document hash identifies the seven-file hash manifest. Each app_file_pins value identifies that individual file. No single whole-app byte hash is defined or claimed.",
+  "historical_six_role_text_scope": "The inherited limits and future_shared_package_scope are verbatim statements from the frozen six-role predecessor. Their pending-seventh wording describes that earlier stage. The separately accepted seventh is now bound here; MAIN remains16/213 and prospective18 authority/compiler/current export have not run. All motion, raw failure, crop, inference, privacy, manual-input and runtime limits remain applicable.",
+  "owner_seventh_binding": {
+    "attestation_path": "evidence/first-playable/northern-1201-quality-candidate-2026-09-13-001/unit-visual-attestation.json",
+    "attestation_sha256": "11f87bb5defc8432d5ba53e8e2eb586f631cd81db920f5fa85dc61cc34261589",
+    "six_role_closure_sha256": "33615fe3433d62f6b6b5c363eca566582e2199cb338a1424d11e2d4747ddc81e",
+    "numerator_effect_after_separate_integration": 1,
+    "authority_execution_pending": true
+  }
+}

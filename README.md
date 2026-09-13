@@ -5,15 +5,22 @@ place a predefined spray tag on eligible exterior walls. It uses the frozen OSM
 layout and tracked generated world; cars, interiors, missions, multiplayer, and
 public distribution are outside this milestone.
 
-## Current release
+## Current source and release
 
-The latest accepted release was published at commit [`d48760d8`](https://github.com/pcomans/treasure-island/commit/d48760d8dc7637592ab125f8d8a75809bc6a3ebb), which accepts Maceo May as the sixteenth recognized physical building: **16/213** accepted and **197** not evaluated. The current private app is:
+Current source recognizes **18/213** physical buildings, with **195** not evaluated.
+1201 Bayside and 1238 Northpoint are now enabled alongside the previous 16 accepted
+units. Their older [inactive study checkpoint](discovery/facades/northern-study-source-checkpoint-2026-09-12.md)
+remains historical; it does not describe the current playable source.
 
-`build/maceo-may-exact-current-001/Treasure Island First Playable.app`
+This source checkpoint records the current **18/213** app at:
 
-Its package and review bindings are in the [Maceo May release record](evidence/first-playable/maceo-may-current-release-2026-09-12-001/README.md). That record retains the original technical evidence; the commit above identifies that accepted release, independently of later source checkpoints.
+- Private app: `build/northern-1201-1238-exact-current-001/Treasure Island First Playable.app`.
+- [Release record](evidence/first-playable/northern-1201-1238-current-release-2026-09-13-001/README.md), including exact app files, source and smoke-test evidence.
+- Both signed headless and native runs reached the complete world and passed all nine live attachment checks. The exact app also passed independent release review.
 
-The repository also retains reviewed 1201 Bayside and 1238 Northpoint source studies. They are inactive, are not enabled in the playable world, and add no accepted-building credit. See the [study checkpoint](discovery/facades/northern-study-source-checkpoint-2026-09-12.md) for their scope.
+The preceding [Maceo May release](evidence/first-playable/maceo-may-current-release-2026-09-12-001/README.md)
+and its publication at [`d48760d8`](https://github.com/pcomans/treasure-island/commit/d48760d8dc7637592ab125f8d8a75809bc6a3ebb)
+remain historical. The current app is a fresh export of the accepted 18-unit source.
 
 ## Play on another Mac
 
@@ -25,9 +32,11 @@ installation. Then double-click it in Finder, or run:
 open "/Applications/Treasure Island First Playable.app"
 ```
 
-The bundle is ignored by Git and is therefore not included in a clone. Its
-executable contains `arm64` and `x86_64` slices; recorded technical runtime smoke
-was on Apple M2.
+The bundle is ignored by Git and is therefore not included in a clone. Copy the
+whole app, including its embedded data; copying only the executable is insufficient.
+The current app passed its native smoke on Apple M2 with Metal / Forward+.
+Both arm64 and x86_64 slices passed signature checks. M1 Pro remains the owner
+target; neither M1 performance nor Intel runtime is established by those checks.
 
 ## Run from source
 
@@ -47,6 +56,7 @@ ditto "/Volumes/TRANSFER/Godot.app" ".tools/godot/4.7.2/Godot.app"
 touch .tools/godot/4.7.2/_sc_
 
 GODOT="$PWD/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot"
+"$GODOT" --headless --editor --path . --quit  # first-checkout import/class discovery
 "$GODOT" --path .
 ```
 
@@ -54,6 +64,10 @@ Copying the existing Godot app is the simplest setup. When it is unavailable,
 follow the [vetted Godot install plan](discovery/TRUSTED_INSTALL_PLAN.md).
 Matching export templates and `npm ci --ignore-scripts` are for exporting or
 development tooling, not for playing source.
+
+For ordinary authoring, edit and run/reload the source project, then inspect the
+actual gameplay view. Export is for a reviewed delivery checkpoint; no app export
+is needed for each source edit.
 
 ## Controls
 

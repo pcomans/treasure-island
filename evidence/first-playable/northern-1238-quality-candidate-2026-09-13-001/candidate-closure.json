@@ -1,0 +1,61 @@
+{
+  "schema_version": "ti.d5-fidelity-candidate-closure/1",
+  "status": "SEVEN_ROLES_BOUND_SERIALIZED_AUTHORITY_PENDING",
+  "physical_unit_id": "physical-building:w96215669",
+  "candidate_authority": "16/213",
+  "capture_time_authority": "16/213",
+  "new_unit_candidate": true,
+  "recognition_credit_granted": false,
+  "prospective_numerator_effect_after_separate_acceptance": 1,
+  "seven_acceptance_bindings_prepared": {
+    "evidence_manifest_sha256": "5eb7648cb03fa1ae73c9733c31456539d39c40a462219be43d4a92ecf7d0ce62",
+    "motion_telemetry_manifest_sha256": "fb3f03daae24bb385cbf6e86ee665a2752017ee9c5c32f54c6e21d00dbc7faf3",
+    "visual_motion_manifest_sha256": "35edd4f41d0cf9009aa59f66b0345992a93bb08ecd1eda8b61086b6eb5dc09db",
+    "package_verification_receipt_sha256": "5b6b2455b8068568e2b877b9f155982af76e4cc81f7be3341e9ec663c7c260de",
+    "evidence_tree_sha256": "a2e2b8aade40eebd01d900728e65c5cabd2cb1f43465399db2ed90329d49a741",
+    "mechanical_review_receipt_sha256": "6e5961faa00944e793c213e444a96732494a6fe15e1799f06636bdd1dd7ad276",
+    "review_receipt_sha256": "805f12798185ad8504cfac0742a27bdcb83c9da79b9aa9a192ba84081117fbab"
+  },
+  "image_tree_sha256": "a2e2b8aade40eebd01d900728e65c5cabd2cb1f43465399db2ed90329d49a741",
+  "evidence_tree_document_sha256": "ad71b9559ac6bcf320a619be6dab98bd3b449f994cf36fa6a810d844669dfb07",
+  "package_verification_pending": false,
+  "seventh_attestation_pending": false,
+  "actual_app_sha256": null,
+  "actual_pck_sha256": "770714587948b5068ae3921b1346b5e45e96c99abb3b0e16ae6776dbf14b3619",
+  "future_shared_package_scope": "Exact Q003 shared candidate package verified for this target by the separately accepted package review; separate seventh unit/image-tree attestation and later exact-current authority delivery remain pending.",
+  "limits": [
+    "Derived six-role assembly binds unchanged original evidence and the accepted exact Q003 package decision. It makes no seventh unit-acceptance decision; current accepted authority remains 16/213.",
+    "Study PNGs are original source-project captures, not app screenshots or a new exact-current release. Original study counters, source maps and capture-time authority remain unchanged; native live-attachment evidence is bound separately.",
+    "Native PNGs are 1440x900; full AVI originals and exact selected MJPEG payloads are 1280x800. Each movie retains its original 70 physical trailing bytes. Encoded, physics, process and drawn counters are distinct; sparse samples do not establish continuous playback or flicker freedom.",
+    "Routes use actual stock inputs and separate explicit setup poses; spray attempts invoke the stock API after grounded/camera/range checks. No continuous traversal between setups, physical mouse dispatch, manual-input, M1 or universal-runtime claim is supplied.",
+    "Reference photographs remain external and private. No reference pixels are copied into these packets, Git or an app. Cropped, occluded, hidden/rear and unsurveyed counts/dimensions remain unknown or production inference.",
+    "Candidate package verification is now bound for this exact unit; the separate seventh unit/image-tree attestation remains pending/null. Original five-role documents retain their historical pending-package prose and exact bytes.",
+    "1238 Northpoint captures retain their original 16/213 source world and corrected frozen geometry. Rejected readiness001 never ran. All 12 upper trims retain the accepted 76.499939mm fascia separation; no geometry changed during packet assembly.",
+    "March 2025 references support the stepped blue-gray public frontage, pale trim, broad paired windows, dark-blue doors and screens. Both footprint ends appear in the wide reference, while the right tree hides local roof/window/base details; the 1235 panorama label identifies camera context, not the target.",
+    "Original door raw ok:false and exit1 remain unchanged: the 150mm station predicate fails on rows161–210, with maximum actual orthogonal offset174.460835mm. The accepted narrower physical interpretation is grounded, camera-clear corridor traversal and effective door obstruction/natural stop, with minimum lateral capsule-edge margin135.539mm. This is not station-held PASS; the front terminus differs9.731µm at Float32 scale.",
+    "The original door run contains exactly210 rows (180 input+30 brake),57 qualifying door-contact events on57 rows and17 hardware-contact rows. Screen and all sprays were unperformed. Its motion-finalization.json selection_scope falsely claims four PNGs/screen/sprays; that inherited prose is rejected here while its original bytes and actual two PNGs remain retained.",
+    "The separately reviewed continuation contains95 rows (65 input+30 brake), with36 screen-contact events across31 unique rows35–65. Forward input removes normal approach but permits lateral sliding; after input release all30 brake rows stop. It proves neither total arrest while input remains held nor indefinite containment by the finite screen.",
+    "Continuation raw ok:true retains station_held:false at448.665976mm against the150mm diagnostic. The accepted scoped physical result uses actual screen obstruction/natural braking, not false centering. Independent orthogonal final depth1.679356m is distinct from raw nonorthogonal1.655336m.",
+    "Only the continuation performs the three sprays: mapped wall placement at5.161040m, door rejection at3.544172m and screen rejection at2.532521m; tag counts0→1,1→1,1→1. No skipped case counts as rejection. Its separate19.169342375s process includes a measured4.317812s spray phase and14.135ms total stock-call time; those are not preparation/review or avoided-runtime measurements.",
+    "Both full movies remain separate: original door297 frames and continuation315 frames. Each has nine retained exact samples; Original indices264/295 are byte-identical held door views; only continuation index313 is plain blue teardown, not scene evidence. No fictional single continuous all-success movie, changed-light replay or door retry is introduced."
+  ],
+  "actual_app_binding_document_sha256": "2b0c664e908d7ab73941590a33f66464664a334e262523b20dc2d20ddf3d2df8",
+  "actual_app_file_pins": {
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/Info.plist": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable": "a4637e839d23aa39ede50c98040d793660b4354ff9781685a802c9ddff7d53d5",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck": "770714587948b5068ae3921b1346b5e45e96c99abb3b0e16ae6776dbf14b3619",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1201-1238-package-candidate-v2/build/northern-1201-1238-candidate-001/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources": "3ede4d27134e56db4651e21912bab2722e39a4f9ac050c0e8aaab31d933ec937"
+  },
+  "actual_app_hash_semantics": "The document hash identifies the seven-file hash manifest. Each app_file_pins value identifies that individual file. No single whole-app byte hash is defined or claimed.",
+  "historical_six_role_text_scope": "The inherited limits and future_shared_package_scope are verbatim statements from the frozen six-role predecessor. Their pending-seventh wording describes that earlier stage. The separately accepted seventh is now bound here; MAIN remains16/213 and prospective18 authority/compiler/current export have not run. All motion, raw failure, crop, inference, privacy, manual-input and runtime limits remain applicable.",
+  "owner_seventh_binding": {
+    "attestation_path": "evidence/first-playable/northern-1238-quality-candidate-2026-09-13-001/unit-visual-attestation.json",
+    "attestation_sha256": "805f12798185ad8504cfac0742a27bdcb83c9da79b9aa9a192ba84081117fbab",
+    "six_role_closure_sha256": "91376773af9ba79ec75750e7dd871c44e4bda3e91369a12cc1e4d9d7cca6eedb",
+    "numerator_effect_after_separate_integration": 1,
+    "authority_execution_pending": true
+  }
+}
