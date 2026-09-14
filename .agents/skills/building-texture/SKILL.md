@@ -36,10 +36,10 @@ When the user or project prioritizes recognizable game art over surveyed reconst
 2. Before generation, a named research subagent studies target identity, material, pattern regions, cadence, and scale. That subagent reads [research-and-repeat-blueprint.md](references/research-and-repeat-blueprint.md) and produces its normalized handoff. Sources may inform a brief without authorizing image download or reuse. It separates observed facts from reversible implementation inference instead of treating every unmeasured value as a blocker.
 3. A named specification subagent declares the motif grammar, legal and forbidden seams, physical scale status, map set, and exact game receiver. It declares a smallest true repeat cell and edge products only for assets or axes that claim repetition. For a module atlas or unique elevation, it may instead declare complete motif bounds, an identified receiver region, protected regions, and a reversible placement envelope.
 4. A named generation subagent generates only when the user asked for generation. It reads and follows the installed image-generation skill and its privacy/account rules, then uses only the built-in image-generation path. It makes one small, predeclared batch (normally 2–4 candidates) and at most one targeted correction round. Research and review requests alone do not authorize generation.
-5. A named proof subagent normalizes all candidates mechanically and consistently and runs:
+5. When the selected asset kind needs raster repeat proofs, a named proof subagent normalizes the candidates and runs the existing helper from the repository root:
 
    ```bash
-   node scripts/build_proofs.mjs <input-tile> <new-or-empty-output-dir>
+   node .agents/skills/building-texture/scripts/build_proofs.mjs <input-tile> <new-or-empty-output-dir>
    ```
 
    The script records dimensions, hashes, and opposite-edge MAE/RMSE; emits native 3×3, boundary-overlay, circular-roll, and macro-repeat proofs; and deliberately leaves semantic, art, receiver, and overall acceptance unreviewed. Numeric passage is only a candidate screen, never acceptance.

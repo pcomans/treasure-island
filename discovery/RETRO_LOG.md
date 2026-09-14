@@ -13787,3 +13787,25 @@ The first scanner accommodation missed its own descriptive resource strings. The
 ### C — what the team should change next time
 
 ROOT approved efficiency007's one reversible NEXT-authority trial: co-prepare the complete existing native runner, cache/prerequisite/release adaptation and all relevant scanner consumers alongside the required authority proposal. Keep generated pins pending until actual compiler output, independently verify that binding and cache transition, and retain explicit serialized engine GO plus all existing fixtures. In the next ordinary retrospective, record whether a separate readiness round was required solely for unchanged-runner relocation or mechanical pin binding, and any missed-scanner failure. No new framework, extra test, current 18-unit replay or measured saving is claimed. Preserve original documentation before-images when publishing, so historical execution maps remain resolvable. Keep final Git commit/remote outcomes in the external publication receipt rather than creating a self-referential documentation commit.
+
+## 2026-09-13 — C enabled editor inputs and scanner associations
+
+**What worked well.** A bounded check distinguished direct MAIN documentation pins from copied worktree documentation before this edit. The current 1212 and 1224 study maps and 1219 live candidate/execution maps do not directly pin MAIN LEARNINGS or RETRO. Preserved both original MAIN files externally, then added one lesson to the existing validation-path section. The actual enabled cfg → plugin script → export-script preload and two UID files establish the missing editor-input closure; the real Node loader fixture path/hash establishes the scanner association.
+
+**What did not work well.** The original 1212 map (1,077) and preserved 1224 map (921) omitted all five addon files despite enabling the plugin. 1224’s corrected 926 map retains the original; the 1212 repair remains a separate author task at this check. The 1219 live map already includes the addon files, but scanner-scope named a nonexistent fixture and omitted the unchanged actual loader contract (SHA256 d3e87be8a1ec020f1ed8fca09bd900c6c7296a1fcf8b402b8733b734def20631); its narrow correction is separately assigned. These are preparation-binding findings, not new failed engine runs.
+
+**What the team should change next time.** Derive and bind editor entrypoints/transitive preloads/UIDs and verified consumer paths before freezing, within the existing complete-path preparation. No new framework, gate, test, measured speedup or process experiment. Efficiency 007’s next-authority co-preparation trial remains pending. This documentation-only task changes no runtime, helper, map, source geometry, engine or Git history; exact before-images and diff are retained in the external import-closure-learning-001 handoff.
+
+## 2026-09-14 — D project harness persistence checkpoint
+
+### D — what worked well
+
+Inspected the committed harness before editing: four role prompts and one building-texture skill with UI metadata, three references and its proof helper were already present. Preserved them, added only the missing reusable reference/efficiency/documentation roles, indexed actual entrypoints, and updated the existing dated handoff while retaining its superseded history. Eight active package/roof/movement input maps have no direct bindings to the selected MAIN documentation paths; exact before-images are retained externally, and no frozen map or runtime file changed. C’s pending enabled-editor-input/scanner lesson and retrospective are preserved in this documentation set.
+
+### D — what did not work well
+
+The old handoff still presented v9 source/release and no-push instructions as current, while the source is18/213. CLAUDE also assumed Codex-only dispatch tool names instead of the client’s available delegation interface. A full role/map read can be unnecessarily large; this checkpoint uses file/entrypoint inventory and compact exact binding checks. During status inspection, a separate candidate-package displayed invocation-order defect was reported to ROOT; its frozen packet is unchanged and requires its own narrow correction before engine GO.
+
+### D — what the team should change next time
+
+Maintain reusable role/skill instructions in their existing project paths and transient owners/state in the handoff; do not copy account/vendor skills or session configuration into Git. Before documentation publication, preserve exact input aliases where needed, validate changed skills and links, and inspect all selected new/tracked whitespace. Record the final normal commit/push identities externally after ROOT reviews the concrete set. Trial007 remains the approved next-authority experiment; no engine, acceptance or measured efficiency gain is claimed by this checkpoint.

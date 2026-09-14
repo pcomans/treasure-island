@@ -1,5 +1,38 @@
 # Treasure Island next-agent handoff
 
+## Current resume checkpoint — 2026-09-14 UTC
+
+Read [AGENTS.md](AGENTS.md), [LEARNINGS.md](LEARNINGS.md) and the [persisted role/skill index](CLAUDE.md#persisted-entrypoints) first. `/root` orchestrates only. Reassign concrete bounded tasks through the current harness; prior actor letters and session handles are historical routing data, not permanent agent configuration.
+
+The active goal is **213/213 independently accepted recognition units**, plus a final exact-current private macOS app that is independently released and visibly launched; current18 is progress toward that goal.
+
+The authoritative runtime/source checkpoint is `0b0db48f0630923670bc3478d2b6ae8a1fdcefd3`: **18/213 accepted**, including 1201 Bayside and 1238 Northpoint, with 195 not evaluated. The current private app and portable play/source instructions are in [README](README.md#current-source-and-release); its [release record](evidence/first-playable/northern-1201-1238-current-release-2026-09-13-001/README.md) binds the independently reviewed exact-current app. A later documentation-only commit does not change that runtime authority. Recheck actual HEAD/branch/status and remote before publication; do not reuse the older v9 state below as current.
+
+The active northern work is retained outside Git under this machine’s work directory:
+
+`/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001`
+
+These are local evidence locators, not files included in a clone. If relocating work, obtain the preserved private evidence through the authorized retention path; do not invent missing images or reconstruct acceptance from notes.
+
+| Packet within that directory | Current bounded state / next step |
+|---|---|
+| `1206-1219-candidate-package-preparation-001` | Separate detached0b package candidate is materialized; FILE_READY, no engine/export/app or package verdict. Both units’ source/live, static and affected-mechanics evidence and separate first-five packets are retained. Independent package-readiness review is pending. The displayed chain ordering has a reported metadata defect; resolve it against the operative prerequisites before any ROOT engine GO. |
+| `1212-mechanics-changed-light-preparation-001` | FILE_READY for independent review, using accepted source/static evidence. The planned stock door/screen approach/retreat and three spray cases are unrun; no mechanical or unit acceptance. |
+| `1224-roof-readability-correction-001` | Roof successor FILE_READY after the original visual HOLD; no corrected native/visual result. Independent readiness and exact ROOT engine GO precede its two ordinary views. |
+
+Transient ownership at this checkpoint: D authored the 1206/1219 package preparation and owns this documentation checkpoint; G (`/root/bayside_1224_readiness`) authored the 1212 mechanics helper/preflight; F authored the 1212 art. D may independently review the mechanics; G cannot accept its own mechanics work. C remains a separate visual reviewer and E/F authored 1224 work in their assigned rounds. ROOT must confirm or reassign the actual available actors before new work. No row above authorizes an engine. Inspect current live handles/process identity and terminal/release receipts rather than launching a duplicate after an interrupted conversation. Resume a still-running handle; a timeout or missing summary row is not a terminal result.
+
+Preserve original studies, raw failures, frozen maps, actual reference pixels and private originals. Scope/visual corrections remain distinct from their historical rejected preimages. Source and visual acceptance are per unit; first-five packet readiness and a shared candidate package do not award recognition. Package/sixth and seventh/unit attestation remain pending until the exact actual candidate app is independently reviewed. Only then serialize authority and produce the fresh exact-current batch release. Capture-time16 and current18 are different facts; sampled movie evidence is not continuous-video review.
+
+The next-authority **Trial007** is approved but pending: co-prepare the existing native invocation/runner and scanner consumers with the authority source proposal, independently bind actual compiler outputs, then obtain explicit ROOT engine GO. See [the bounded trial](LEARNINGS.md#co-prepare-the-existing-authority-invocation); candidate preparation does not count as running it.
+
+The four untracked `game/tests/*window_reveal*` / `*wing_returns*` UID files are unrelated to this harness checkpoint and must remain excluded. The pre-existing C editor-import/scanner lesson and retrospective are included only as documentation. Use normal installed Git LFS hooks with the approved local binary on PATH; do not carry forward the old no-push/hook-bypass instructions below.
+
+## Historical 2026-09-08 handoff — superseded state and plans
+
+The remainder is retained verbatim history. Its “current”, gate order, local-only commit, no-push, agent assignments and v9 claims apply to that old checkpoint, not the resume instructions above or present authorization. It must not override current AGENTS or the owner’s later commit/push request.
+
+
 Date: **2026-09-08**
 Repository: `https://github.com/pcomans/treasure-island.git`
 Working repository: `/Volumes/Macintosh_HD/Users/user302070/code/treasure-island`

@@ -82,6 +82,7 @@ is needed for each source edit.
 
 - [Playtest guide](PLAYTEST.md) for owner-facing play instructions.
 - [Project agreement](AGENTS.md) before changing project work.
+- [Persisted agent and skill entrypoints](CLAUDE.md#persisted-entrypoints) and [current working handoff](NEXT_AGENT_HANDOFF_2026-09-08.md).
 - [Test, validation, and export commands](game/tests/README.md).
 - [First-playable evidence index](evidence/first-playable/README.md).
 - [Active facade catalog](discovery/facades/facade-recognition-catalog.json) and [runtime registry](game/resources/facades/facade-runtime-registry.json).

@@ -18,6 +18,8 @@ When useful, recommend one small, reversible process experiment at a time with a
 
 For the next already justified movement-driver revision, trial the [completed-record pattern](LEARNINGS.md#construct-completed-evidence-records-once) in the existing parent driver and review emitted trace counts/outcomes in the normal diff/result review. Record missing trace rows and invocations repeated solely to recover logging in RETRO; add no separate engine run or gate.
 
+The approved pending experiment for the next authority source proposal is [co-preparing its existing native invocation](LEARNINGS.md#co-prepare-the-existing-authority-invocation). Record its outcome in the normal retrospective; it adds no engine run or review gate.
+
 Efficiency work must preserve mandatory independent source, mechanical, visual/bar-raiser, and release gates and all project invariants. Changes to approved player-facing behavior, workflow, scope, data contracts, or core invariants retain the existing owner-approval requirements; efficiency review does not grant an exception or make `/root` an executor.
 
 ## Current phase
@@ -65,11 +67,11 @@ Candidate package PASS remains a prerequisite to recognition credit under the ex
 
 ## Bounded subagent execution
 
-Use a small number of named agents with concrete targets, output locations, stop conditions and ownership. The reusable role prompts are in `.claude/agents/`: `ti-implementation`, `ti-source-mechanics-review`, `ti-visual-review` and `ti-release-review`. Other harnesses may use the same role boundaries without changing their tool configuration. An agent must not independently accept its own implementation or exported package; package or technical PASS does not supply the separate visual decision. Return compact handoffs with exact relevant bindings instead of duplicating large manifests or adding reporting frameworks.
+Use a small number of named agents with concrete targets, output locations, stop conditions and ownership. The existing role prompts and project skill are indexed in [the harness entrypoints](CLAUDE.md#persisted-entrypoints). Other harnesses can read these same files without inventing a callable agent configuration or copying local session state. An agent must not independently accept its own implementation or exported package; package or technical PASS does not supply the separate visual decision. Return compact handoffs with exact relevant bindings instead of duplicating large manifests or adding reporting frameworks.
 
-Dispatch every new bounded assignment with `followup_task`, whether the target agent is busy or idle. Use `send_message` only for status or clarification within an already active assignment; it does not start a new turn for a completed agent. Coalesce duplicate assignments and preserve the same ownership, review and engine-release gates.
+Use the current harness’s actual delegation tools. In the Codex multi-agent session, dispatch every new bounded assignment with `followup_task`, whether the target agent is busy or idle; `send_message` only supplies status or clarification and does not restart a completed agent. In another harness, use its available equivalent to start the named role with the bounded task. Do not treat role filenames as callable tools. Coalesce duplicate assignments and preserve the same ownership, review and engine-release gates.
 
-Reuse the complete successful capture/check driver and current supported invocation, adapting target paths, pins and measured expectations together before running it. Preserve source versus mounted-component versus signed-release coverage boundaries. Root serializes heavy render/engine work; the next owner starts only after explicit slot release and actual terminal/PID evidence. A tool-observation timeout or an old output file is not evidence of process completion.
+Reuse the complete successful capture/check driver and current supported invocation, adapting target paths, pins and measured expectations together before running it. Preserve source versus mounted-component versus signed-release coverage boundaries. Root serializes heavy render/engine work; the next owner starts only after explicit slot release and actual terminal/PID evidence. A tool-observation timeout or an old output file is not evidence of process completion. After an interruption, inspect the existing live handle, actual process identity, logs and receipts before acting. Resume waiting on that same handle if it is running; if it has completed, consume its terminal result and release evidence. Do not repeat an already completed checkout, import or invocation because a conversation ended. A new engine attempt still requires the named ROOT assignment and exact invocation authorization; an empty slot alone is not GO.
 
 For the first checkout when Git LFS is unavailable on this machine, include the established command-local filter settings in the assignment and the checkout itself:
 
@@ -118,7 +120,7 @@ Detailed camera tuning, visual style beyond approved simple initial massing and 
 
 ## Resource and access requests
 
-An agent may identify a need but may not silently assume, purchase, install, connect, or download it. The owner has approved only the exact free Godot/templates and pinned npm dependencies in `discovery/APPROACH_PROPOSAL.md`; acquire them from the vetted sources in `discovery/TRUSTED_INSTALL_PLAN.md` and record every operation in `INSTALL_LOG.md`. Any other resource goes through a new request using:
+Needed project tool and dependency installations are owner-authorized; perform them without asking again. This supersedes the earlier per-install approval requirement. Use verified official sources and record installed versions and operations in `INSTALL_LOG.md` or the task’s retained installation record. The existing Godot/templates and pinned npm source plan remains in `discovery/TRUSTED_INSTALL_PLAN.md`. Purchases, paid services and new account connections still require a resource request using:
 
 - Need
 - Concrete task enabled
