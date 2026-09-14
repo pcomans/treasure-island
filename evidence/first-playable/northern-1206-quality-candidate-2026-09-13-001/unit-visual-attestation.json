@@ -1,0 +1,308 @@
+{
+  "reviewer": "smaller_model_routing (E)",
+  "reviewed_at": "2026-09-14T04:45:27.126620+00:00",
+  "decision": "PASS",
+  "attestation_kind": "Independent per-unit candidate packet and visual attestation (seventh artifact)",
+  "physical_unit_id": "physical-building:w96215677",
+  "scope": "Exact frozen six-role1206 packet/image tree; whole observed public-front recognition, static/changed-light finish and retained sampled motion with accepted independent source/mechanics/package evidence.",
+  "independence": "E did not implement1206, assemble its first-five/six-role packet, author its technical/package evidence, or execute its package. E reuses its own independent K/H visual decisions. Authorship of the unrelated1224 study does not supply any1206 acceptance predicate.",
+  "packet": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-unit-package-binding-001/units/1206",
+  "candidate_closure_sha256": "ce732f5e88d6dd9b0134890d91019d8ca128323770a360f90d31dae83d0d640d",
+  "acceptance_bindings": {
+    "evidence_manifest_sha256": "2ef58e0ef4ab39375107bf4d5354b83399eceda0bc36599b7bbb5e98bb79e6b9",
+    "motion_telemetry_manifest_sha256": "bd5aacf373d887cddf2c25ed0788ab0286faa0c9daa7cc0e9e03a81ad744bd0e",
+    "visual_motion_manifest_sha256": "6bee171a27e3a10b3f1927f332a678ec0826e982faa6085e71db525bcdb30096",
+    "package_verification_receipt_sha256": "03f2cf746dc931dd816f28f337b12ae9f11d7cb5ef3c3087601a46bb9df427c7",
+    "evidence_tree_sha256": "70f69ef17176b2810b073f4304fd17f6bc7143a70ac031d1a20922996422661c",
+    "mechanical_review_receipt_sha256": "c806dc1fd6f146f8573e83b3fd8ac8523d87fba1d57e8f5e9d29a066b481f3bd"
+  },
+  "evidence_tree_document_sha256": "95e7ca38a6e6680c61b9aff72221c31a46a70108e617e5743d714ffe071464d4",
+  "binding_check": {
+    "captured_before_decision": true,
+    "input_binding_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-unit-package-binding-001/independent-unit-attestation-1206-001/INPUT_BINDINGS.json",
+    "input_binding_sha256": "936c8cb49bfb9fc171a8853b7fc224b6149da36f415d52cc049eaf7d43a9ec24",
+    "scoped_paths_rehashed": 173,
+    "retained_descriptors_original_and_copy_exact": 67,
+    "prior_five_roles_unchanged": true,
+    "historical_limit_values_unchanged": true,
+    "historical_limit_count": 18,
+    "six_roles_exact": true,
+    "image_count": 16,
+    "native_png_count": 7,
+    "original_avi_payload_count": 9,
+    "all_image_tree_paths_sizes_hashes_exact": true,
+    "no_extra_image_files": true,
+    "tree_algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+    "actual_app_files_rehashed": 7,
+    "no_extra_app_files_or_symlinks": true,
+    "package_target_lines_match_raw_logs": true,
+    "actual_seven_receipts_exit0_ok": true,
+    "all9_samples_match_original_avi_byte_offsets": true
+  },
+  "references": {
+    "metadata": {
+      "date": "March 2025",
+      "external_images": [
+        {
+          "external_private_original": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/reference-acquisition-001/images/1206-mariner-headed-whole-march-2025.png",
+          "sha256": "063d5ac2b03fa79385c50429446e2b33cd3665da72d2b920000915b5f4d5fd11",
+          "bytes": 1800020,
+          "copied": false
+        },
+        {
+          "external_private_original": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/reference-acquisition-001/images/1206-mariner-wide-coordinate-march-2025.png",
+          "sha256": "249bce46e0f38d575b7cc0aa42d57305992d76fefba22fa5a473d8f410381fc1",
+          "bytes": 1576037,
+          "copied": false
+        }
+      ],
+      "camera_latitude": 37.8291157,
+      "camera_longitude": -122.3746345,
+      "heading_degrees": 171,
+      "panorama": "zpNL8pV7Qx4cwOba6sKnhg",
+      "initial_fov_degrees": 75,
+      "wide_actual_fov_cap_degrees": 90,
+      "metric_pitch_or_crop_boundary_calibrated": false
+    },
+    "retained_reference_source_url": "https://www.google.com/maps/@37.8291157,-122.3746345,4a,75y,171h,90t/data=!3m7!1e1!3m5!1szpNL8pV7Qx4cwOba6sKnhg!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DzpNL8pV7Qx4cwOba6sKnhg%26yaw%3D171!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MDkwOS4wIKXMDSoASAFQAw%3D%3D",
+    "directly_reopened_both_originals": true,
+    "fresh_browser_acquisition": false,
+    "target_note": "1219 is camera-side label; accepted association and1206F curb identify1206/w96215677."
+  },
+  "image_inspection": {
+    "previously_directly_inspected_selected_images": "E original K/H reviews inspected the selected originals and all9 motion samples; J baseline was also directly inspected.",
+    "reopened_packet_images_this_attestation": [
+      "images/motion001-avi/avi-index-0412.jpg",
+      "images/motion001-avi/avi-index-0473.jpg",
+      "images/motion001-avi/avi-index-0534.jpg",
+      "images/motion001/01-whole-near-face-changed-light.png",
+      "images/motion001/02-held-closed-door-approach.png",
+      "images/motion001/03-held-short-screen-obstruction.png",
+      "images/motion001/04-actual-mapped-siding-spray.png",
+      "images/static/J-source-baseline/01-whole-front-roof-footway-baseline.png",
+      "images/static/K-corrected/02-whole-front-roof-footway-candidate.png",
+      "images/static/K-corrected/04-entry-footway-parking-road-junction.png"
+    ],
+    "remaining_six_samples": "Exact hashes/payload offsets checked now; reuse unchanged direct H inspection for45/106/167/228/290/351.",
+    "excluded_from_scene_evidence": [
+      "images/motion001-avi/avi-index-0534.jpg"
+    ],
+    "no_continuous_movie_review": true,
+    "image_index": [
+      {
+        "path": "images/motion001-avi/avi-index-0045.jpg",
+        "sha256": "20093a8e0881b9189eb2c96b8a55b09bc9fec5427ed13408de9f549f00a73c2b",
+        "bytes": 74707
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0106.jpg",
+        "sha256": "e5c26eb8538ea83ca8bc0cff6cf80b1048aa5950eed780fc3113631cc89e7099",
+        "bytes": 57166
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0167.jpg",
+        "sha256": "83ea94dd187dbbf014e6a444483ff44b3938c29ab0997d506602494428bf72e3",
+        "bytes": 71955
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0228.jpg",
+        "sha256": "81bce86d8a103971eb72e282688528164ef02d6272e16776f31407260c9aa396",
+        "bytes": 58295
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0290.jpg",
+        "sha256": "3638832b1f31a91e90bd9886ff58912faf6347778b380df62ff89f93633a5bd4",
+        "bytes": 65810
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0351.jpg",
+        "sha256": "1db1d99fd5716802fcf8179bbed7c7049547bac67b990dc1b9c8cfdcef51ab93",
+        "bytes": 67214
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0412.jpg",
+        "sha256": "8387d0b346605e8d0ef198361aee2135b3fcb066814d5efe6347bfbd79db887d",
+        "bytes": 56428
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0473.jpg",
+        "sha256": "a64733894fde876c9c83310c5d52cf9b2a13287ca9b724a8d7caddfad447d4f8",
+        "bytes": 69851
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0534.jpg",
+        "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+        "bytes": 16628
+      },
+      {
+        "path": "images/motion001/01-whole-near-face-changed-light.png",
+        "sha256": "f8a8614ec7192a06d5fedaa602163d176b97dba879bdc28b2a7742c243558682",
+        "bytes": 873791
+      },
+      {
+        "path": "images/motion001/02-held-closed-door-approach.png",
+        "sha256": "93ecf8aaff14d5edf3f3ff04b535ad95460e7b59a923a32ce7fa790981c49fac",
+        "bytes": 503811
+      },
+      {
+        "path": "images/motion001/03-held-short-screen-obstruction.png",
+        "sha256": "0de47dd63bff1f24266558fd9f45530b86e9ac2ddde8152872a14025f2a8bf63",
+        "bytes": 532797
+      },
+      {
+        "path": "images/motion001/04-actual-mapped-siding-spray.png",
+        "sha256": "87e9b2965690cfaa730d12fe80b512f133ed3089960829242c96f40c683d35ab",
+        "bytes": 283695
+      },
+      {
+        "path": "images/static/J-source-baseline/01-whole-front-roof-footway-baseline.png",
+        "sha256": "ad12f391fd3083b66dc08f231a3b9a86c3b0869e58e6126c2c29ab00d5a7628b",
+        "bytes": 985382
+      },
+      {
+        "path": "images/static/K-corrected/02-whole-front-roof-footway-candidate.png",
+        "sha256": "bff475c3180622a8f0b531ebf8feab24d976f42b67caacac4ed35fb3b12521ec",
+        "bytes": 878175
+      },
+      {
+        "path": "images/static/K-corrected/04-entry-footway-parking-road-junction.png",
+        "sha256": "72c90de555890f44c826f7359752693a965430ae403f6d7d0257a9a8a5bae2ee",
+        "bytes": 645498
+      }
+    ]
+  },
+  "reused_visual_reviews": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-implementation-001/independent-visual-001/REVIEW.md",
+      "sha256": "cce0eaeeab63e9d7f7a7a6a15dbd73c02b00d7a918ad24b3cc81d9a4f60edc02",
+      "status": "HOLD retained"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-pavement-join-correction-001/independent-visual-001/REVIEW.md",
+      "sha256": "e3249955269135e59df1631d90f31f196d5b5b960403f66d72cd3abb178d97a8",
+      "status": "PASS within original scope"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-mechanics-changed-light-preparation-001/independent-visual-001/REVIEW.md",
+      "sha256": "d6de6b22fe1e01bb1c7c9eb4f2f344b68ff486873be7fbc5146d2d185928bebb",
+      "status": "PASS within original scope"
+    }
+  ],
+  "whole_visible_result_findings": {
+    "fidelity": "Long stepped two-storey public front, mixed broad/narrow windows, muted horizontal siding, pale bands/eaves, green doors and short screens read coherently with the dated target. Low warm pitched roof with higher central band is readable. The combination makes a substantive recognizable improvement over the old generic floor.",
+    "finish": "K whole/junction and H whole retain a continuous visible parking/road boundary; the prior segmented seam is resolved. Thin trim, roof silhouette, window borders and entry/footway relationships remain clean at ordinary and close views.",
+    "sampled_motion": "Door/screen obstructions remain visually readable; player occlusion limits contact inference. Untagged412 versus tagged H04/473 preserve a discrete wall mark without visible rectangular spill. No new gross artifact appears in the reopened frames; original full sparse review limits remain.",
+    "substantive_visible_gap_remaining_in_reviewed_scope": false,
+    "as_built_limit": "Counts/pitch/hidden closures/precise paving are production inference; reference weathering, vents and clutter are simplified, not claimed reproduced. Hidden/rear/cropped/occluded regions remain unknown."
+  },
+  "gates": {
+    "numeric_opposite_edge_screen": {
+      "verdict": "unreviewed",
+      "scope": "Not an additional periodic facade claim; finite unique elevation."
+    },
+    "semantic_repeat": {
+      "verdict": "pass",
+      "scope": "Complete finite opening/door/screen motifs; no repeated whole-elevation seam claimed."
+    },
+    "material_identity_and_neutral_light": {
+      "verdict": "pass",
+      "scope": "Actual K default-light and H changed-light originals; muted horizontal siding, pale trim, green entries and warm roof remain legible."
+    },
+    "physical_scale_and_map_channel_coherence": {
+      "verdict": "pass",
+      "scope": "Visual plausibility plus separately accepted exact source/mechanical/package roles; no new technical test by E."
+    },
+    "exact_godot_receiver": {
+      "verdict": "pass",
+      "scope": "Observed source gameplay/tag plus exact w96215677 live/package applicability; historical pixels not relabeled as package captures."
+    },
+    "whole_object_resemblance": {
+      "verdict": "pass",
+      "scope": "Whole observed public frontage compared directly with both actual March2025 originals; no substantive visible fidelity gap."
+    },
+    "overall_acceptance": {
+      "verdict": "pass",
+      "scope": "Independent seventh candidate unit/visual and image-tree attestation only; authority credit and final current release remain pending."
+    }
+  },
+  "evidence_status": {
+    "bindings": "verified_fact",
+    "dated_visible_motifs": "reference_observation",
+    "counts_spacing_dimensions_pitch_and_closures": "production_inference",
+    "hidden_rear_cropped_or_occluded_detail": "unknown"
+  },
+  "retained_source_mechanics": {
+    "decision": "Existing independent scoped decisions reused",
+    "mechanical_role_sha256": "c806dc1fd6f146f8573e83b3fd8ac8523d87fba1d57e8f5e9d29a066b481f3bd",
+    "scope": "Entire original mechanical role and limitations retained; no new collision, source, movement or spray test by E."
+  },
+  "shared_candidate_package": {
+    "decision": "PASS reused from G",
+    "independent_review": {
+      "path": "private/raw/61/617c59fe2075f18e79c4ff9a6931b35811d972f375bc3d4a55302c8407a95c3e.md",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-unit-package-binding-001",
+      "sha256": "617c59fe2075f18e79c4ff9a6931b35811d972f375bc3d4a55302c8407a95c3e",
+      "bytes": 8375,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-candidate-package-preparation-001/independent-actual-001/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "package_verification_receipt_sha256": "03f2cf746dc931dd816f28f337b12ae9f11d7cb5ef3c3087601a46bb9df427c7",
+    "pck_sha256": "91384b27a363ccad5c5a9708fc556505124b71b7f55b5497504bd8522040e240",
+    "app_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-candidate-package-preparation-001/export-001/Treasure Island First Playable.app",
+    "app7_binding_sha256": "5cee1c4d28a566c10bbc417fd0553a9489036b037f74460a1a43578bba6e43fe",
+    "app_hash_semantics": "The document hash identifies the seven-file hash manifest. Each app_file_pins value identifies that individual file. No single whole-app byte hash is defined or claimed.",
+    "app_file_pins": {
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/Info.plist": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable": "2d104ed663f687c870ea6d1b8c3ec1e451d70ff9c6ecd85253d22cc975101dd1",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck": "91384b27a363ccad5c5a9708fc556505124b71b7f55b5497504bd8522040e240",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources": "f6739425a72edacea52c3736695a168035c99ccd4c72d12f8bbde46755723a09"
+    },
+    "actual_unit_attachment": {
+      "source_key": "w96215677",
+      "wall_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-3__building_w96215677_wall/Mariner1206LiveWall",
+      "roof_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-3__building_w96215677_roof/Mariner1206LiveRoof",
+      "wall_counts": {
+        "meshes": 12,
+        "surfaces": 12,
+        "triangles": 5068,
+        "bodies": 2,
+        "shapes": 8
+      },
+      "roof_counts": {
+        "meshes": 2,
+        "surfaces": 2,
+        "triangles": 64,
+        "bodies": 2,
+        "shapes": 2
+      },
+      "native_channels": 182,
+      "materials": 14,
+      "source_plus_detail_shapes": 10
+    },
+    "scope": "Actual source/mounted target comparisons and both signed-main real-target predicates verified against retained logs; G owns independent execution/privacy/signature interpretation.",
+    "platform_limit": "Recorded AppleM2/Metal run; both architecture signatures are not dual runtime tests."
+  },
+  "limits": [
+    "This PASS applies only to physical-building:w96215677/1206 Mariner and the exact six-role closure and image tree named here. The untouched author closure still has a null seventh field until separate owner serialization.",
+    "All first-five role values, their entire 18-item historical limits array, images, previous J HOLD and correction history are unchanged. Their then-pending and then-current prose remains historical under the explicit successor scope label.",
+    "All selected gameplay captures are historical source-study 16/213, not app screenshots. Candidate PCK91384b27 is 18/213; it is not a future exact-current20 package. Authority remains18/213 and this receipt does not grant credit.",
+    "J contributes only baseline01. K contributes corrected whole02 and central-junction04; no corrected K03 exists. The junction is a 2.2m central strip and parking outer ends remain cropped.",
+    "March2025 target1206/w96215677 is corroborated by1206F despite1219 camera label. Reference right end, cars/planting/screens obscure some extent/thresholds; hidden/rear/protected roof detail and as-built precision remain unclaimed. Counts, spacing, pitch/closures and paving dimensions are production inference.",
+    "H whole01 is changed light; default sun was restored before routes and sprays. Eight scene MJPEG samples plus blue534 are sparse evidence, not continuous video, flicker freedom or continuous traversal between separate setup poses. PNG1440x900 and movie1280x800 are distinct.",
+    "Complete original AVI4606e751 has536frames and35889968bytes including70trailing bytes. All9 selected payloads match exact offsets;412 is untagged,473 shows tag,534 supplies no scene evidence.",
+    "The existing independent mechanics qualification is inherited, not recertified from pixels:235rows and3performed sprays;24door/31screen contact events occupy24/31rows, non-gating station diagnostics and accepted full-capsule corridor/solver-scale LAND overlaps retain their exact original limitations. Render-only paving supplies no collision support.",
+    "G independent package PASS617c59fe is reused. Same-runtime source/mounted182-slot comparisons, earlier distinct-producer art applicability, and both signed-main11attachment predicates retain separate scopes. No new full-array dump or independent engine replay is claimed.",
+    "Both architecture slices were signature-checked; the recorded runtime is AppleM2/Metal only. No manual-input, M1/Intel runtime, notarization, publication, hidden-geometry or universal-runtime claim follows. Final authority serialization/current export remain separate."
+  ],
+  "current_authority": "18/213",
+  "capture_time_authority": "16/213",
+  "recognition_credit_granted": false,
+  "main_mutated": false,
+  "source_mutated": false,
+  "engine_runs": 0,
+  "owner_closure_serialization_pending": true
+}

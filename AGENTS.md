@@ -18,7 +18,7 @@ When useful, recommend one small, reversible process experiment at a time with a
 
 For the next already justified movement-driver revision, trial the [completed-record pattern](LEARNINGS.md#construct-completed-evidence-records-once) in the existing parent driver and review emitted trace counts/outcomes in the normal diff/result review. Record missing trace rows and invocations repeated solely to recover logging in RETRO; add no separate engine run or gate.
 
-The approved pending experiment for the next authority source proposal is [co-preparing its existing native invocation](LEARNINGS.md#co-prepare-the-existing-authority-invocation). Record its outcome in the normal retrospective; it adds no engine run or review gate.
+Retain [co-preparing the existing authority invocation](LEARNINGS.md#co-prepare-the-existing-authority-invocation) as the normal authority preparation method after Trial007. The one approved next-study experiment is the [1239 early-capture ordering trial](LEARNINGS.md#trial-1239-early-capture-ordering); record its outcome in the existing retrospective. Neither adds an engine run or acceptance gate.
 
 Efficiency work must preserve mandatory independent source, mechanical, visual/bar-raiser, and release gates and all project invariants. Changes to approved player-facing behavior, workflow, scope, data contracts, or core invariants retain the existing owner-approval requirements; efficiency review does not grant an exception or make `/root` an executor.
 

@@ -1,8 +1,8 @@
 {
   "build_contract": {
-    "authoring_catalog_sha256": "7a288020de167ec3e5be32cc2e037201c4968afe77c0ad80dcfe2e3da1283f60",
-    "compiler_version": "1.17.0",
-    "runtime_registry_schema_version": "ti.facade-runtime-registry/18",
+    "authoring_catalog_sha256": "b1782b74ef726300b22f8aa9c1c5e16c9f4cf86b6bc0c0524f8a78c4b9d829e3",
+    "compiler_version": "1.19.0",
+    "runtime_registry_schema_version": "ti.facade-runtime-registry/20",
     "unknown_version_policy": "reject"
   },
   "contract_id": "treasure-island-facade-runtime-adapters",
@@ -10,8 +10,8 @@
     "disabled_adapter_receivers": 6,
     "disabled_projection_occurrences": 13,
     "disabled_unique_projection_inputs": 13,
-    "package_safe_adapter_receivers": 20,
-    "receiver_adapter_plans": 26
+    "package_safe_adapter_receivers": 22,
+    "receiver_adapter_plans": 28
   },
   "loader_contract": {
     "allowed_executable_kinds": [
@@ -22,10 +22,10 @@
       "res://game/scenes/world/",
       "res://game/scripts/world/"
     ],
-    "api_version": "ti.facade-runtime-registry-loader/17",
+    "api_version": "ti.facade-runtime-registry-loader/19",
     "instantiation_authorized": false,
     "loader_path": "res://game/scripts/world/facades/facade_runtime_registry_loader.gd",
-    "loader_sha256": "64ca5ba7b70b971e627e4f01af1b5b16273398647bcbd5131900c5c204746641",
+    "loader_sha256": "3cf1db86cdf204b4cf1f2075cbf102bebe73433ce389e841875c98f2ab656396",
     "projection_execution_policy": "forbidden",
     "unknown_version_policy": "reject"
   },
@@ -2552,7 +2552,7 @@
           "world_shapes": 492,
           "world_static_bodies": 468,
           "world_surfaces": 1065,
-          "world_topology_scope": "current_integration_topology",
+          "world_topology_scope": "pre_mariner_batch_integration_live_parity",
           "world_triangles": 108921
         },
         "ownership_contract": {
@@ -2870,6 +2870,384 @@
         }
       ],
       "source_key": "w96215672"
+    },
+    {
+      "adapter_id": "active-adapter:mariner-1206-live:building:w96215677:wall",
+      "behavior_contract": {
+        "acceptance_contract": {
+          "accepted_physical_unit_id": "physical-building:w96215677",
+          "capture_time_recognition_metric": "16/213",
+          "evidence_manifest_sha256": "2ef58e0ef4ab39375107bf4d5354b83399eceda0bc36599b7bbb5e98bb79e6b9",
+          "evidence_tree_sha256": "70f69ef17176b2810b073f4304fd17f6bc7143a70ac031d1a20922996422661c",
+          "mechanical_review_receipt_sha256": "c806dc1fd6f146f8573e83b3fd8ac8523d87fba1d57e8f5e9d29a066b481f3bd",
+          "motion_telemetry_manifest_sha256": "bd5aacf373d887cddf2c25ed0788ab0286faa0c9daa7cc0e9e03a81ad744bd0e",
+          "numerator_effect": 1,
+          "package_verification_receipt_sha256": "03f2cf746dc931dd816f28f337b12ae9f11d7cb5ef3c3087601a46bb9df427c7",
+          "reference_recognizable": true,
+          "review_receipt_sha256": "b3549c8b8616163a06c8fa2209562bda58ad9ce03ad3ae68751c9ca256b9e09a",
+          "visual_motion_manifest_sha256": "6bee171a27e3a10b3f1927f332a678ec0826e982faa6085e71db525bcdb30096",
+          "wall_and_roof_are_one_physical_unit": true
+        },
+        "geometry_contract": {
+          "horizontal_source_footprint_preserved": true,
+          "original_source_channels_and_roof_preserved": true,
+          "roof_native_counts": [
+            2,
+            2,
+            64,
+            2,
+            2
+          ],
+          "source_chunk_sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+          "visual_mesh_instances": 14,
+          "visual_surfaces": 14,
+          "visual_triangles": 5132,
+          "wall_native_counts": [
+            12,
+            12,
+            5068,
+            2,
+            8
+          ],
+          "world_mesh_instances": 1074,
+          "world_records": 735,
+          "world_shapes": 508,
+          "world_static_bodies": 472,
+          "world_surfaces": 1089,
+          "world_topology_scope": "shared_mariner_1206_1219_candidate_live_parity",
+          "world_triangles": 119049
+        },
+        "ownership_contract": {
+          "added_ground_collision_triangles": 0,
+          "added_public_roof_is_nonreceiver": true,
+          "added_public_roof_triangles": 48,
+          "all_additions_render_only": false,
+          "eligible_render_layer": 2,
+          "navigation_owner_count": 0,
+          "noneligible_render_layer": 1,
+          "original_flat_roof_preserved": true,
+          "roof_is_wall_spray_receiver": false,
+          "roof_shape_order": [
+            "exact_noneligible_source_roof",
+            "ObservedPublicRoof"
+          ],
+          "roof_world_solid_landing": true,
+          "shape_count": 10,
+          "spray_owner_count": 1,
+          "structural_owner_count": 4,
+          "terrain_geometry_and_ownership_unchanged": true,
+          "wall_decal_cull_mask": 2,
+          "wall_is_sole_spray_receiver": true,
+          "wall_shape_order": [
+            "exact_eligible_source_wall",
+            "PaleCompleteTrim",
+            "BlueOpaqueGlazing",
+            "DarkOpaqueGlazing",
+            "GreenClosedDoors",
+            "LocalPrivacyScreens",
+            "PaleDrainageAndFascia",
+            "DoorHardware"
+          ]
+        },
+        "replacement_contract": {
+          "actual_land_and_area_records_required": false,
+          "actual_supplied_chunk_pair_required": true,
+          "factory_calls": 1,
+          "fallback_allowed": false,
+          "generic_stack_allowed": false,
+          "mapped_public_run_indices": [
+            11,
+            12,
+            13,
+            15,
+            16,
+            17,
+            18,
+            19,
+            21,
+            22,
+            23
+          ],
+          "partial_pair_allowed": false,
+          "protected_run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            14,
+            20,
+            24,
+            25
+          ],
+          "raw_source_constructor_callback_required": true,
+          "roof_object_key": "building:w96215677:roof",
+          "source_key": "w96215677",
+          "tangent_callback_required": true,
+          "wall_object_key": "building:w96215677:wall"
+        },
+        "schema_version": "ti.northern-1206-production-live-parity/1",
+        "truth_boundary": {
+          "as_built_fidelity_claimed": false,
+          "capture_time_candidate_promoted": false,
+          "capture_time_recognition_credit": false,
+          "continuous_motion_review_claimed": false,
+          "game_distinctive_claimed": false,
+          "ground_to_roof_traversal_claimed": false,
+          "hidden_schedule_invented": false,
+          "interior_modeled": false,
+          "raw_door_station_failure_retained": false,
+          "receiver_complete_inferred_from_art": false,
+          "reference_pixels_packaged": false,
+          "separate_setup_poses_retained": true,
+          "sparse_movie_samples_only": true,
+          "spray_input_event_dispatch_claimed": false,
+          "station_held_claimed": true,
+          "unobserved_sides_protected": true,
+          "unsurveyed_dimensions_and_counts_are_production_inference": true
+        }
+      },
+      "content_mode": "active_northern_1206_paired_replacement",
+      "disabled_reason_code": null,
+      "executable_assets": [
+        {
+          "path": "res://game/scripts/world/facades/mariner_1206_live_factory.gd",
+          "resource_kind": "gdscript",
+          "sha256": "906922118fd881a5668962c87964b8c46db32d92a5483fd072a4c2a90b521c56"
+        },
+        {
+          "path": "res://game/scripts/world/facades/mariner_1206_live_replacement.gd",
+          "resource_kind": "gdscript",
+          "sha256": "88e0858a2b9d3559c8d2e766874f93cd44335f89c232e8115ef7c7f97ecc951b"
+        },
+        {
+          "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
+          "resource_kind": "gdscript",
+          "sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+        }
+      ],
+      "integration_state": "package_safe_ready_for_integration",
+      "projection_descriptor_ids": [],
+      "receiver_key": "building:w96215677:wall",
+      "resolution_policy": "resolve_only_without_instantiation",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/facades/mariner_1206_study.json",
+          "sha256": "5327998befca469042db9ac728de697e56fb311f9f889bb1bc867617425d4f97"
+        },
+        {
+          "path": "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+          "sha256": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a"
+        },
+        {
+          "path": "res://game/scripts/world/facades/mariner_1206_live_factory.gd",
+          "sha256": "906922118fd881a5668962c87964b8c46db32d92a5483fd072a4c2a90b521c56"
+        },
+        {
+          "path": "res://game/scripts/world/facades/mariner_1206_live_replacement.gd",
+          "sha256": "88e0858a2b9d3559c8d2e766874f93cd44335f89c232e8115ef7c7f97ecc951b"
+        },
+        {
+          "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
+          "sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+        }
+      ],
+      "source_key": "w96215677"
+    },
+    {
+      "adapter_id": "active-adapter:mariner-1219-live:building:w96215680:wall",
+      "behavior_contract": {
+        "acceptance_contract": {
+          "accepted_physical_unit_id": "physical-building:w96215680",
+          "capture_time_recognition_metric": "16/213",
+          "evidence_manifest_sha256": "892c34c422283ba7eadd3b5a8d005f34b8736e4b359ffc67ba7194a6c4fc110d",
+          "evidence_tree_sha256": "bd06a1a34a11937410f82ad5d6903de68e8d0a1660b5a9b2d8815afeee990ea6",
+          "mechanical_review_receipt_sha256": "03003e86b6fb4b7fb28099876e6a788e9c8596bd14f25a794d8a1adce6fd4ecd",
+          "motion_telemetry_manifest_sha256": "98fe533ab07e2ff5f098094ad68e2b32b20712e13de75881e679eb84fb107c0f",
+          "numerator_effect": 1,
+          "package_verification_receipt_sha256": "4c2e64ec36a96058c8d48a7cb5f5e9c29c0e1154ff2c2db179071cc8f7553e62",
+          "reference_recognizable": true,
+          "review_receipt_sha256": "f58284bed7ac7fce861a282a344bac1cdb12d6b69286d0cfbde3936f9022139b",
+          "visual_motion_manifest_sha256": "754b234c8806726b70400dcd759abbed3a309fad42be12669b2cf877e6e5b415",
+          "wall_and_roof_are_one_physical_unit": true
+        },
+        "geometry_contract": {
+          "horizontal_source_footprint_preserved": true,
+          "original_source_channels_and_roof_preserved": true,
+          "roof_native_counts": [
+            2,
+            2,
+            64,
+            2,
+            2
+          ],
+          "source_chunk_sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+          "visual_mesh_instances": 14,
+          "visual_surfaces": 14,
+          "visual_triangles": 5132,
+          "wall_native_counts": [
+            12,
+            12,
+            5068,
+            2,
+            8
+          ],
+          "world_mesh_instances": 1074,
+          "world_records": 735,
+          "world_shapes": 508,
+          "world_static_bodies": 472,
+          "world_surfaces": 1089,
+          "world_topology_scope": "current_integration_topology",
+          "world_triangles": 119049
+        },
+        "ownership_contract": {
+          "added_ground_collision_triangles": 0,
+          "added_public_roof_is_nonreceiver": true,
+          "added_public_roof_triangles": 48,
+          "all_additions_render_only": false,
+          "eligible_render_layer": 2,
+          "navigation_owner_count": 0,
+          "noneligible_render_layer": 1,
+          "original_flat_roof_preserved": true,
+          "roof_is_wall_spray_receiver": false,
+          "roof_shape_order": [
+            "exact_noneligible_source_roof",
+            "ObservedPublicRoof"
+          ],
+          "roof_world_solid_landing": true,
+          "shape_count": 10,
+          "spray_owner_count": 1,
+          "structural_owner_count": 4,
+          "terrain_geometry_and_ownership_unchanged": true,
+          "wall_decal_cull_mask": 2,
+          "wall_is_sole_spray_receiver": true,
+          "wall_shape_order": [
+            "exact_eligible_source_wall",
+            "PaleCompleteTrim",
+            "BlueOpaqueGlazing",
+            "DarkOpaqueGlazing",
+            "DarkBlueClosedDoors",
+            "LocalPrivacyScreens",
+            "PaleDrainageAndFascia",
+            "DoorHardware"
+          ]
+        },
+        "replacement_contract": {
+          "actual_land_and_area_records_required": false,
+          "actual_supplied_chunk_pair_required": true,
+          "factory_calls": 1,
+          "fallback_allowed": false,
+          "generic_stack_allowed": false,
+          "mapped_public_run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "partial_pair_allowed": false,
+          "protected_run_indices": [
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25
+          ],
+          "raw_source_constructor_callback_required": true,
+          "roof_object_key": "building:w96215680:roof",
+          "source_key": "w96215680",
+          "tangent_callback_required": true,
+          "wall_object_key": "building:w96215680:wall"
+        },
+        "schema_version": "ti.northern-1219-production-live-parity/1",
+        "truth_boundary": {
+          "as_built_fidelity_claimed": false,
+          "capture_time_candidate_promoted": false,
+          "capture_time_recognition_credit": false,
+          "continuous_motion_review_claimed": false,
+          "game_distinctive_claimed": false,
+          "ground_to_roof_traversal_claimed": false,
+          "hidden_schedule_invented": false,
+          "interior_modeled": false,
+          "raw_door_station_failure_retained": false,
+          "receiver_complete_inferred_from_art": false,
+          "reference_pixels_packaged": false,
+          "separate_setup_poses_retained": true,
+          "sparse_movie_samples_only": true,
+          "spray_input_event_dispatch_claimed": false,
+          "station_held_claimed": true,
+          "unobserved_sides_protected": true,
+          "unsurveyed_dimensions_and_counts_are_production_inference": true
+        }
+      },
+      "content_mode": "active_northern_1219_paired_replacement",
+      "disabled_reason_code": null,
+      "executable_assets": [
+        {
+          "path": "res://game/scripts/world/facades/mariner_1219_live_factory.gd",
+          "resource_kind": "gdscript",
+          "sha256": "216e83f6ee69313d77ef5c2007720a126e07cff5e30ce23401a1d28cdac84748"
+        },
+        {
+          "path": "res://game/scripts/world/facades/mariner_1219_live_replacement.gd",
+          "resource_kind": "gdscript",
+          "sha256": "c6a0c16cc762d33c62c3f3885d865999be5e65e148f56a66e9da348e6cbfb58a"
+        },
+        {
+          "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
+          "resource_kind": "gdscript",
+          "sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+        }
+      ],
+      "integration_state": "package_safe_ready_for_integration",
+      "projection_descriptor_ids": [],
+      "receiver_key": "building:w96215680:wall",
+      "resolution_policy": "resolve_only_without_instantiation",
+      "runtime_assets": [
+        {
+          "path": "res://game/resources/facades/mariner_1219_study.json",
+          "sha256": "5fd7eeb31c4d2cfac52aadff65f1bc7f35458d3e0c8d8469411f75ce032b9f21"
+        },
+        {
+          "path": "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+          "sha256": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a"
+        },
+        {
+          "path": "res://game/scripts/world/facades/mariner_1219_live_factory.gd",
+          "sha256": "216e83f6ee69313d77ef5c2007720a126e07cff5e30ce23401a1d28cdac84748"
+        },
+        {
+          "path": "res://game/scripts/world/facades/mariner_1219_live_replacement.gd",
+          "sha256": "c6a0c16cc762d33c62c3f3885d865999be5e65e148f56a66e9da348e6cbfb58a"
+        },
+        {
+          "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
+          "sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+        }
+      ],
+      "source_key": "w96215680"
     }
   ],
   "projection_descriptors": [
@@ -3056,5 +3434,5 @@
       "source_asset_type": "gd"
     }
   ],
-  "schema_version": "ti.facade-runtime-adapter-contracts/17"
+  "schema_version": "ti.facade-runtime-adapter-contracts/19"
 }

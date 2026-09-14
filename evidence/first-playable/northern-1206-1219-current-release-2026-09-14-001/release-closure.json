@@ -1,0 +1,88 @@
+{
+  "schema_version": "ti.exact-current-release-closure/1",
+  "status": "CURRENT20_OWNER_AND_INDEPENDENT_RELEASE_PASS",
+  "derived_downstream_release_summary": true,
+  "recognized_physical_units": 20,
+  "not_evaluated_physical_units": 193,
+  "added_physical_units": [
+    "physical-building:w96215677",
+    "physical-building:w96215680"
+  ],
+  "numerator_effect": 2,
+  "previous_18_acceptances_preserved": true,
+  "all_213_identities_preserved": true,
+  "active_adapters": 19,
+  "total_plans": 28,
+  "package_safe_plans": 22,
+  "unchanged_legacy_adapters": 9,
+  "unchanged_disabled_plans": 6,
+  "unchanged_projection_descriptors": 13,
+  "reference_dependency_count": 60,
+  "app_relative_path": "build/northern-1206-1219-exact-current-001/Treasure Island First Playable.app",
+  "package": [
+    {
+      "path": "Contents/Info.plist",
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885
+    },
+    {
+      "path": "Contents/MacOS/Treasure Island First Playable",
+      "sha256": "e3caf9fb8a2274e411e1f943db45c07424a039bf80cbe37d9dd7cfc4f12bc5a5",
+      "bytes": 170963648
+    },
+    {
+      "path": "Contents/PkgInfo",
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9
+    },
+    {
+      "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229
+    },
+    {
+      "path": "Contents/Resources/Treasure Island First Playable.pck",
+      "sha256": "3475d09be898ca1ff950d2dc3069396abed49293491acdb86618755aa2e272b6",
+      "bytes": 77071504
+    },
+    {
+      "path": "Contents/Resources/icon.icns",
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "sha256": "40e81d322e798677e0f43d3b88f8a153e5bf96b79267c3053fe1ff5969c1a0e8",
+      "bytes": 3217
+    }
+  ],
+  "actual_app_binding": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/exact-current-package-preparation-001/actual-app-binding.json",
+    "sha256": "04b642ff49229207b3c0d17eb49feb1655c6b5c953a8d0f3ad61f0ae3c1918ae"
+  },
+  "actual_app_binding_scope": "Hash of the seven-member binding document, not a whole-app byte hash.",
+  "pck_sha256": "3475d09be898ca1ff950d2dc3069396abed49293491acdb86618755aa2e272b6",
+  "pck_bytes": 77071504,
+  "world": {
+    "playable_rows": 735,
+    "meshes": 1074,
+    "surfaces": 1089,
+    "triangles": 119049,
+    "bodies": 472,
+    "shapes": 508
+  },
+  "owner_package_decision": "PASS",
+  "independent_package_decision": "PASS",
+  "root_accepted_package_review": true,
+  "independent_review_sha256": "dc4b670b4430179cef27239cc634627e8e8281883441c3b41313d9cb8cb6a2d1",
+  "delivery": "Seven member hashes and modes preserved by whole-bundle ditto transfer; no extras/symlinks. Original and prior18 apps retained. No re-export/re-sign/relaunch.",
+  "source_checkpoint": "Reviewed source plus docs; future commit/remote identity recorded externally after ROOT staged review.",
+  "ordinary_no_argument_launch": "Not run for these bytes",
+  "human_001": "Pending owner acceptance; scope unchanged",
+  "artifacts": {
+    "source-and-visual-lineage.json": "a0c5a87d53e735483aa06a59c39283ff8156279d3eddb8c2b99c2c81f59186bc",
+    "private-provenance-retention.json": "10e9c141fac89864b1e03b531c4fd8d09e9c6a1ec028d497ef55bf74dd79a00a",
+    "independent-package-review.json": "5801c2c555a776cd427dc29a77edebc485ba20cf8dc458f057ace67627b2de25",
+    "owner-package-verification.json": "4f83cc6c3e3455fd606a5322bfe3ceb30b37c3e1155ff17526f5525219bb5efc"
+  }
+}

@@ -17,6 +17,8 @@ const D5_1394_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/fac
 const MACEO_MAY_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/maceo_may_live_replacement.gd")
 const NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northern_canopy_free_live_replacement.gd")
 const NORTHPOINT_1238_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northpoint_1238_live_replacement.gd")
+const MARINER_1206_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/mariner_1206_live_replacement.gd")
+const MARINER_1219_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/mariner_1219_live_replacement.gd")
 const FIRE_STATION48_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/fire_station48_live_replacement.gd")
 const D5_1317_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1317_gateview_live_replacement.gd")
 const D2_1444_CROAKER_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd")
@@ -161,6 +163,14 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	if not bool(northpoint_1238_pair.get("ok", false)):
 		chunk_root.free()
 		return northpoint_1238_pair
+	var mariner_1206_pair := MARINER_1206_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(mariner_1206_pair.get("ok", false)):
+		chunk_root.free()
+		return mariner_1206_pair
+	var mariner_1219_pair := MARINER_1219_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(mariner_1219_pair.get("ok", false)):
+		chunk_root.free()
+		return mariner_1219_pair
 	var chapel_plan := NAVY_CHAPEL_187_LIVE_REPLACEMENT.build_chunk_plan(chapel_pair)
 	if not bool(chapel_plan.get("ok", false)):
 		chunk_root.free()
@@ -260,6 +270,37 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.free_unconsumed(northern_canopy_plan)
 		chunk_root.free()
 		return northpoint_1238_plan
+	var mariner_1206_plan := MARINER_1206_LIVE_REPLACEMENT.build_chunk_plan(mariner_1206_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(mariner_1206_plan.get("ok", false)):
+		NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
+		D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
+		D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)
+		D2_1444_CROAKER_LIVE_REPLACEMENT.free_unconsumed(d2_1444_plan)
+		D5_1308_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1308_plan)
+		D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)
+		D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)
+		FIRE_STATION48_LIVE_REPLACEMENT.free_unconsumed(fs48_plan)
+		MACEO_MAY_LIVE_REPLACEMENT.free_unconsumed(maceo_plan)
+		NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.free_unconsumed(northern_canopy_plan)
+		NORTHPOINT_1238_LIVE_REPLACEMENT.free_unconsumed(northpoint_1238_plan)
+		chunk_root.free()
+		return mariner_1206_plan
+	var mariner_1219_plan := MARINER_1219_LIVE_REPLACEMENT.build_chunk_plan(mariner_1219_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(mariner_1219_plan.get("ok", false)):
+		NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
+		D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
+		D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)
+		D2_1444_CROAKER_LIVE_REPLACEMENT.free_unconsumed(d2_1444_plan)
+		D5_1308_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1308_plan)
+		D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)
+		D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)
+		FIRE_STATION48_LIVE_REPLACEMENT.free_unconsumed(fs48_plan)
+		MACEO_MAY_LIVE_REPLACEMENT.free_unconsumed(maceo_plan)
+		NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.free_unconsumed(northern_canopy_plan)
+		NORTHPOINT_1238_LIVE_REPLACEMENT.free_unconsumed(northpoint_1238_plan)
+		MARINER_1206_LIVE_REPLACEMENT.free_unconsumed(mariner_1206_plan)
+		chunk_root.free()
+		return mariner_1219_plan
 	var report := {
 		"ok": true,
 		"node": chunk_root,
@@ -285,9 +326,11 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			MACEO_MAY_LIVE_REPLACEMENT.free_unconsumed(maceo_plan)
 			NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.free_unconsumed(northern_canopy_plan)
 			NORTHPOINT_1238_LIVE_REPLACEMENT.free_unconsumed(northpoint_1238_plan)
+			MARINER_1206_LIVE_REPLACEMENT.free_unconsumed(mariner_1206_plan)
+			MARINER_1219_LIVE_REPLACEMENT.free_unconsumed(mariner_1219_plan)
 			chunk_root.free()
 			return {"ok": false, "code": "builder_parent", "message": "Missing world category parent %s." % parent_key, "source_keys": record.source_keys}
-		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan)
+		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan)
 		if not record_result.ok:
 			NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
 			D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
@@ -300,6 +343,8 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			MACEO_MAY_LIVE_REPLACEMENT.free_unconsumed(maceo_plan)
 			NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.free_unconsumed(northern_canopy_plan)
 			NORTHPOINT_1238_LIVE_REPLACEMENT.free_unconsumed(northpoint_1238_plan)
+			MARINER_1206_LIVE_REPLACEMENT.free_unconsumed(mariner_1206_plan)
+			MARINER_1219_LIVE_REPLACEMENT.free_unconsumed(mariner_1219_plan)
 			chunk_root.free()
 			return record_result
 		var record_node: Node3D = record_result.node
@@ -326,7 +371,9 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	var maceo_consumed := MACEO_MAY_LIVE_REPLACEMENT.plan_was_fully_consumed(maceo_plan)
 	var northern_canopy_consumed := NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.plan_was_fully_consumed(northern_canopy_plan)
 	var northpoint_1238_consumed := NORTHPOINT_1238_LIVE_REPLACEMENT.plan_was_fully_consumed(northpoint_1238_plan)
-	if not chapel_consumed or not d2_1441_consumed or not d2_1439_consumed or not d2_1444_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed or not fs48_consumed or not maceo_consumed or not northern_canopy_consumed or not northpoint_1238_consumed:
+	var mariner_1206_consumed := MARINER_1206_LIVE_REPLACEMENT.plan_was_fully_consumed(mariner_1206_plan)
+	var mariner_1219_consumed := MARINER_1219_LIVE_REPLACEMENT.plan_was_fully_consumed(mariner_1219_plan)
+	if not chapel_consumed or not d2_1441_consumed or not d2_1439_consumed or not d2_1444_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed or not fs48_consumed or not maceo_consumed or not northern_canopy_consumed or not northpoint_1238_consumed or not mariner_1206_consumed or not mariner_1219_consumed:
 		NAVY_CHAPEL_187_LIVE_REPLACEMENT.free_unconsumed(chapel_plan)
 		D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)
 		D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)
@@ -338,6 +385,8 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		MACEO_MAY_LIVE_REPLACEMENT.free_unconsumed(maceo_plan)
 		NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.free_unconsumed(northern_canopy_plan)
 		NORTHPOINT_1238_LIVE_REPLACEMENT.free_unconsumed(northpoint_1238_plan)
+		MARINER_1206_LIVE_REPLACEMENT.free_unconsumed(mariner_1206_plan)
+		MARINER_1219_LIVE_REPLACEMENT.free_unconsumed(mariner_1219_plan)
 		chunk_root.free()
 		if not chapel_consumed:
 			return {"ok": false, "code": "navy_chapel_187_live_unconsumed_pair", "message": "The supplied Chapel pair was not consumed exactly once.", "source_keys": ["w291189336"]}
@@ -359,7 +408,11 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			return {"ok": false, "code": "maceo_may_unconsumed_pair", "message": "The supplied Maceo May pair was not consumed exactly once.", "source_keys": ["r19685981"]}
 		if not northern_canopy_consumed:
 			return {"ok": false, "code": "northern_canopy_unconsumed_pair", "message": "The supplied 1201 pair was not consumed exactly once.", "source_keys": ["w96215672"]}
-		return {"ok": false, "code": "northpoint_1238_unconsumed_pair", "message": "The supplied 1238 pair was not consumed exactly once.", "source_keys": ["w96215669"]}
+		if not northpoint_1238_consumed:
+			return {"ok": false, "code": "northpoint_1238_unconsumed_pair", "message": "The supplied 1238 pair was not consumed exactly once.", "source_keys": ["w96215669"]}
+		if not mariner_1206_consumed:
+			return {"ok": false, "code": "mariner_1206_unconsumed_pair", "message": "The supplied 1206 pair was not consumed exactly once.", "source_keys": ["w96215677"]}
+		return {"ok": false, "code": "mariner_1219_unconsumed_pair", "message": "The supplied 1219 pair was not consumed exactly once.", "source_keys": ["w96215680"]}
 	return report
 
 
@@ -410,7 +463,7 @@ func build_context(context: Dictionary, context_parents: Dictionary) -> Dictiona
 	return report
 
 
-func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}, d2_1439_plan: Dictionary = {}, d2_1444_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}, maceo_plan: Dictionary = {}, northern_canopy_plan: Dictionary = {}, northpoint_1238_plan: Dictionary = {}) -> Dictionary:
+func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}, d2_1439_plan: Dictionary = {}, d2_1444_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}, maceo_plan: Dictionary = {}, northern_canopy_plan: Dictionary = {}, northpoint_1238_plan: Dictionary = {}, mariner_1206_plan: Dictionary = {}, mariner_1219_plan: Dictionary = {}) -> Dictionary:
 	# Building 1's generated 20 m slab and terrain-level tower are source-valid
 	# horizontal placeholders but visually and physically wrong in the vertical
 	# dimension.  Intercept all four independently keyed records before generic
@@ -461,6 +514,10 @@ func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary
 		return NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.consume_record(record, northern_canopy_plan)
 	if not is_context and NORTHPOINT_1238_LIVE_REPLACEMENT.claims_record(record):
 		return NORTHPOINT_1238_LIVE_REPLACEMENT.consume_record(record, northpoint_1238_plan)
+	if not is_context and MARINER_1206_LIVE_REPLACEMENT.claims_record(record):
+		return MARINER_1206_LIVE_REPLACEMENT.consume_record(record, mariner_1206_plan)
+	if not is_context and MARINER_1219_LIVE_REPLACEMENT.claims_record(record):
+		return MARINER_1219_LIVE_REPLACEMENT.consume_record(record, mariner_1219_plan)
 	return _build_unpaired_record(record, is_context)
 
 # Preserve the original source producer and pre-packing channel path unchanged.

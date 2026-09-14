@@ -13809,3 +13809,27 @@ The old handoff still presented v9 source/release and no-push instructions as cu
 ### D — what the team should change next time
 
 Maintain reusable role/skill instructions in their existing project paths and transient owners/state in the handoff; do not copy account/vendor skills or session configuration into Git. Before documentation publication, preserve exact input aliases where needed, validate changed skills and links, and inspect all selected new/tracked whitespace. Record the final normal commit/push identities externally after ROOT reviews the concrete set. Trial007 remains the approved next-authority experiment; no engine, acceptance or measured efficiency gain is claimed by this checkpoint.
+
+## 2026-09-14 — E current20 source and harness checkpoint
+
+### What worked well
+
+E's authority preparation, F's independent source/native review, D's current20 package operation and F's independent actual release review remained separate. ROOT accepted both individual1206/1219 seventh decisions and the exact fresh current20 app; prior18 credits and all213 identities remain. Trial007 co-prepared all existing native/scanner/cache/release consumers; the first frozen authority chain required no later scanner or runner-relocation correction. The six-stage package chain ran once, with complete terminal/PID release and no authority replay. This checkpoint preserved documentation preimages/aliases before edits and copied all seven released app members unchanged into the ignored stable path. Portable whole-app and one-time source-import instructions remain.
+
+### What did not work well
+
+The authority preparation initially omitted41 ignored predecessor images, selected unrelated UIDs and found EOF whitespace after dependent checks; originals and failures remain. Promotion copied all74 intended files before discovering the existing comment-versus-empty evidence/.gdignore difference; ROOT accepted one explicit nonproduction association, with no recopy. Some executor/reviewer schema assumptions and oversized nested reads caused avoidable recovery; they supply no measured time loss. The actual1224 raw PASS/on_floor/camera flags coexist with a174.535mm native drop/174.449mm recovery across501 snapshots; independent support remains HOLD and its cause is unresolved. The initial1220 preparation lacked required view.sun fields and could lose terminal/release closure when missing cache/UID hashing failed; those were preparation findings, not invented engine failures. Source references, raw failures and all private payloads remain unchanged.
+
+### What the team should change next time
+
+Retain Trial007 as normal authority preparation. ROOT selected exactly one1239 early-capture ordering trial from efficiency009 ADDENDUM067a52c2…, replacing the unstarted scalar-retry suggestion: author site/scope preflight and full independent execution-boundary readiness before exact GO; full source/geometry and separate actual visual decisions may follow first capture but must finish before mechanics or promotion/credit. The authorized1239 first capture subsequently completed; E delivered separate static visual PASS at07:02:35 UTC while full source review remained pending. Remaining gates and the trial outcome stay open; current1220 order is unchanged. Record the existing ready-to-visual interval and later-source-driven recaptures in normal RETRO, without new paperwork or speedup claims. Preserve required view dictionaries and failure-safe terminal handling together. Current20's39.604805s sum is six process timers, excluding later hashing/binding/review/preparation/transport; it is not workflow speed. E's1224 three-query helper is paused before implementation/readiness for this publication checkpoint.
+
+External evidence: northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001 (E RETRO248630e5…); its exact-current-package-preparation-001 (E preparation RETROb83180f3…, D execution RETRO6870861d…, F actual REVIEWdc4b670b…/RETRO50687be6…); 1224-terrain-contact-observation-preparation-001 (raw041b8646…, actualb9a44f5e…); 1224-next-step-proposal-001 NOTE555341b4…; team-efficiency-review-009 NOTEf2f18a66…/RETRO72ef4300… and ADDENDUM067a52c2…/RETRO-addendum695bc15d…. These machine-local originals are retention locators, not clone contents; the checkpoint binds their full hashes. Commit/push results will be recorded externally after ROOT reviews the selected staged set.
+
+## 2026-09-14 — E separate1239 first-render visual review
+
+**What worked well:** Directly compared both March2025 originals with all four native PNGs, with bindings captured before decision. Scoped static finish/public-front recognition PASS was delivered at07:02:35 UTC while full source review remained pending; the author and technical reviewer were separate actors. The whole roof/frontage/junction result supplied substantive improvement over source massing.
+
+**What remains unknown:** Changed light, motion/support, full independent source and package/unit gates remain open. Reference crops/occlusions, protected runs and inferred dimensions are retained limits. No full-workflow saving follows from this first visual endpoint.
+
+**Next:** Finish existing independent gates and record any later-source-driven recapture in the trial's normal RETRO; no extra capture was requested. Exact external1239 independent-visual-001 REVIEWc5601522…/RETRO2e169bbe…/BINDINGS937495ba… preserve all six image originals. Current20 checkpoint resumed after this bounded interruption;1224 helper stayed paused.

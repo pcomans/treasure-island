@@ -1,0 +1,98 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215677",
+  "label": "Existing independent source, actual live attachment and qualified actual mechanics",
+  "origins": [
+    {
+      "path": "private/raw/04/04cf3205c9448e7f0f4ba59a82cf724fd69fe03d6f125a26f4bf3715d1573556.md",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-unit-packet-preparation-001",
+      "sha256": "04cf3205c9448e7f0f4ba59a82cf724fd69fe03d6f125a26f4bf3715d1573556",
+      "bytes": 4949,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/reference-acquisition-001/independent-source-association-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "private/raw/3f/3f481f5a18a7d5d8e75fc5cc4e72d5ffa3cf247261b667436ac38475ac49b0f0.md",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-unit-packet-preparation-001",
+      "sha256": "3f481f5a18a7d5d8e75fc5cc4e72d5ffa3cf247261b667436ac38475ac49b0f0",
+      "bytes": 5720,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-pavement-join-correction-001/independent-native-source-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "private/raw/33/3309c974dec6875fa6cc5ed3fd384f5549267ad0ef16c149f826116db2b290b2.md",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-unit-packet-preparation-001",
+      "sha256": "3309c974dec6875fa6cc5ed3fd384f5549267ad0ef16c149f826116db2b290b2",
+      "bytes": 12180,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-mechanics-changed-light-preparation-001/independent-actual-mechanics-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "private/raw/28/288cae888a000545ffe7e8ea57877963127befb201645cfe7daf0c27ff02bdf3.md",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-unit-packet-preparation-001",
+      "sha256": "288cae888a000545ffe7e8ea57877963127befb201645cfe7daf0c27ff02bdf3",
+      "bytes": 9660,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-live-adapter-proposal-001/independent-interface-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "private/raw/e4/e43cd5281fbbc5aaad8a2a76fa8c38639910ada027d732abbd15b175da424afc.md",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-unit-packet-preparation-001",
+      "sha256": "e43cd5281fbbc5aaad8a2a76fa8c38639910ada027d732abbd15b175da424afc",
+      "bytes": 8937,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-live-adapter-proposal-001/validation-001/independent-actual-001/REVIEW.md",
+      "role": "exact_original"
+    }
+  ],
+  "data": {
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "current_source_attachment": {
+      "review": {
+        "path": "private/raw/e4/e43cd5281fbbc5aaad8a2a76fa8c38639910ada027d732abbd15b175da424afc.md",
+        "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-unit-packet-preparation-001",
+        "sha256": "e43cd5281fbbc5aaad8a2a76fa8c38639910ada027d732abbd15b175da424afc",
+        "bytes": 8937,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-live-adapter-proposal-001/validation-001/independent-actual-001/REVIEW.md",
+        "role": "exact_original"
+      },
+      "raw_result": {
+        "path": "private/raw/68/68f2555576d5c5c9e4f6b799c61a97417694df443442854cd8c306b172f9e8ac.json",
+        "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-unit-packet-preparation-001",
+        "sha256": "68f2555576d5c5c9e4f6b799c61a97417694df443442854cd8c306b172f9e8ac",
+        "bytes": 909207,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-live-adapter-proposal-001/validation-001/focused-001-result.json",
+        "role": "exact_original"
+      },
+      "scope": "Independently reviewed current16 source attachment; distinct original-art/current-chunk producers, not package or replacement capture evidence."
+    },
+    "raw_motion_ok": [
+      true
+    ],
+    "raw_station_held": [
+      true,
+      true
+    ],
+    "author_unit_acceptance": false,
+    "limits": [
+      "Derived assembly binds unchanged originals and existing independent scoped decisions. It makes no new source, mechanics, visual, package or unit-acceptance decision; current accepted authority remains 16/213.",
+      "Study PNGs are original source-project captures, not app screenshots or a new exact-current release. Original study counters, source maps and capture-time authority remain unchanged; native live-attachment evidence is bound separately.",
+      "Native PNGs are 1440x900; full AVI originals and exact selected MJPEG payloads are 1280x800. Each movie retains its original 70 physical trailing bytes. Encoded, physics, process and drawn counters are distinct; sparse samples do not establish continuous playback or flicker freedom.",
+      "Routes use actual stock inputs and separate explicit setup poses; spray attempts invoke the stock API after grounded/camera/range checks. No continuous traversal between setups, physical mouse dispatch, manual-input, M1 or universal-runtime claim is supplied.",
+      "Reference photographs remain external and private. No reference pixels are copied into these packets, Git or an app. Cropped, occluded, hidden/rear and unsurveyed counts/dimensions remain unknown or production inference.",
+      "Candidate package verification and the separate seventh unit/image-tree attestation remain pending/null. A shared future app must verify each target attachment and predicates; neither one unit packet nor old source results certify another unit or a package.",
+      "All selected1206 pixels retain capture-time16/213 source-study authority. The separately accepted L current16 live-native attachment is bound as source applicability, not replacement screenshots or package evidence. Any later authority context needs separate binding and must not relabel these captures.",
+      "J original static visual HOLD for the segmented dark pavement seam remains unchanged. Only its exact source-baseline01 is selected, labeled J origin. J candidate02/03/04 stay private historical originals; none is relabeled corrected K. K supplies only two new static originals: whole02 and central-junction04; no corrected centre-close03 exists.",
+      "K static PASS resolves the shown parking/source-road seam by the accepted15-existing-rim-vertex correction; its source factoryfa0d9c7d/config5327998b and independent native/source review remain exact. The visible junction claim is limited to the supplied2.2m central strip; outer parking ends remain cropped. Paths, footway and parking are render-only and do not supply collision support.",
+      "March2025 references support the stepped warm-gray siding, green doors, mixed windows and low warm-red pitched public-roof bands with thin pale eaves. Target1206 Mariner/w96215677 is distinct from the1219 camera label;1206F curb corroborates identity. Right termination is cropped and cars/planting/screens hide thresholds. Exact pitch, closure, accessories, counts and paving dimensions remain production inference; hidden/rear regions stay unknown.",
+      "H actual235 rows comprise door110input+30brake and screen65input+30brake. Door24 obstruction events occupy24 rows; screen31 events occupy31 rows. Direct LAND contact occurs139/140 and94/95 rows. Door row87/physics170 and screen row35/physics298 each lack LAND contact but retain intended obstruction contact while on_floor:true. No row has an empty slide-contact list; original author handoff contrary wording is preserved but corrected here.",
+      "Both150mm station diagnostics pass at95.802/123.851mm and remain non-gating. The accepted independent full-capsule margins are154.188/162.805mm in the orthogonal construction frame; raw source-normal station telemetry is distinct. No non-LAND penetration was found; minimum separation0.171/0.138mm. Held input permits82.3/109.8mm chiefly lateral motion after first contact; all30 brake rows per route stop after input release.",
+      "Shallow signed capsule/LAND overlaps reach-1.535/-1.536mm; center gaps are negative in32/27 rows, including the one screen row lacking LAND contact. Existing stock move_and_slide/floor snap0.35m, complete support/contact/grounding, immediate recovery from each center minimum, stable positive-gap destinations and zero recoveries support the accepted solver-scale interpretation. This is not zero-overlap proof, tolerance widening, controller change or a new gameplay gate.",
+      "H source study/body/material/shape and protected site snapshots,1956-input execution closure and unchanged stock settings remain bound in the raw originals and prior technical review. Camera segments and original LAND support pass for all235 rows; trace transform writes are0. Six explicit setup placements are setup-only; there is no continuous traversal, stair/roof walk or manual mouse claim.",
+      "Three actual stock sprays place the source wall tag at5.138133m and reject nonreceiver prototype door/screen shapes3/4 at3.549925/2.480665m. Tags0to1,1to1,1to1 and sourceIDw96215677/cullmask2 remain exact. No case is skipped or unreached. The actual whole changed-light pose restores default sun before motion; H02to04 are not changed-light movement.",
+      "H enclosing spray phase4.167289s includes setup/aim/observation/marker; stock calls total42.742ms. Native process26.068757167s additionally encloses startup/world/changed-light/teardown.235 route rows represent3.916667s at60FPS, distinct from536-frame nominal8.933333s movie duration. Preparation/review time and savings are unknown.",
+      "H retains all four1440x900 PNGs and one complete1280x800536-frame AVI, including70 bytes beyond declared RIFF end. Nine exact samples45/106/167/228/290/351/412/473/534 include eight scene views plus blue teardown534, which supplies no scene evidence.412 remains untagged and473 shows the placed tag per existing visual review; sparse frames do not prove continuous playback or flicker freedom.",
+      "L actual native PASS compares14 meshes/182 channels/14 materials and10 shapes against original K, retaining the separate48-triangle nonreceiver public roof and original52/16 source wall/roof. Split wall12/12/5068/2/8 and roof2/2/64/2/2,54 neighboring rows, retained1201/1238 and ordinary world735/1062/1077/113985/470/500 pass. Full collision snapshots versus channel/retained snapshot digests and runtime-only negative assertions retain their reviewed limits. L1068-input source/live evidence is distinct from H mechanics and future package."
+    ]
+  },
+  "truth_boundary": "Derived per-unit preparation only; five roles bound, actual candidate-package and seventh attestation pending. Current16/213 unchanged; credit0."
+}

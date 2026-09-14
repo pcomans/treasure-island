@@ -3,8 +3,8 @@ extends SceneTree
 const RegistryLoader := preload("res://game/scripts/world/facades/facade_runtime_registry_loader.gd")
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
-const EXPECTED_REGISTRY_SHA256 := "a64e4837616811be58e977d4e4d2a3067fce6b81077fac0a708db2a25d931703"
-const EXPECTED_ADAPTER_CONTRACT_SHA256 := "9fed04e296b555aff50eb4761164193f64d5dee922aa2d0bbd3ec7c47f6da1c0"
+const EXPECTED_REGISTRY_SHA256 := "00323faaf6c7b71eebc4ce9985f493ebe63301b3c514d1443ff80b9e0612d475"
+const EXPECTED_ADAPTER_CONTRACT_SHA256 := "3ce9e03d4ac2e02c0852600450991f9185dcaeebc04c59afb42ada887aee4e6d"
 const READY_RECEIVERS := [
 	"building-composite:w1249412094:w1282547786:wall",
 	"building:r16681702:wall",
@@ -23,6 +23,8 @@ const READY_RECEIVERS := [
 	"building:w95934125:wall",
 	"building:w764313741:wall",
 	"building:r19685981:wall",
+	"building:w96215677:wall",
+	"building:w96215680:wall",
 	"building:w96215672:wall",
 	"building:w96215669:wall",
 	"building:w95934123:wall",
@@ -58,6 +60,8 @@ const ACTIVE_UNIT_BY_RECEIVER := {
 	"building:w95934125:wall": "physical-building:w95934125",
 	"building:w764313741:wall": "physical-building:w764313741",
 	"building:r19685981:wall": "physical-building:r19685981",
+	"building:w96215677:wall": "physical-building:w96215677",
+	"building:w96215680:wall": "physical-building:w96215680",
 	"building:w96215672:wall": "physical-building:w96215672",
 	"building:w96215669:wall": "physical-building:w96215669",
 	"building:w95934123:wall": "physical-building:w95934123",
@@ -77,6 +81,8 @@ const ACTIVE_REVIEW_STATUS_BY_RECEIVER := {
 	"building:w95934125:wall": "independent_exact_current_live_pass",
 	"building:w764313741:wall": "independent_exact_current_live_pass",
 	"building:r19685981:wall": "independent_exact_current_live_pass",
+	"building:w96215677:wall": "independent_exact_current_live_pass",
+	"building:w96215680:wall": "independent_exact_current_live_pass",
 	"building:w96215672:wall": "independent_exact_current_live_pass",
 	"building:w96215669:wall": "independent_exact_current_live_pass",
 	"building:w95934123:wall": "independent_exact_current_live_pass",
@@ -131,11 +137,11 @@ func _run() -> void:
 	phase_started_usec = Time.get_ticks_usec()
 	phase_counters = RegistryLoader.measurement_snapshot()
 	_validate_d5_batch_mutations(registry, contracts)
-	_report_measurement_phase("seven_target_mutations", phase_started_usec, phase_counters)
+	_report_measurement_phase("nine_target_mutations", phase_started_usec, phase_counters)
 	phase_started_usec = Time.get_ticks_usec()
 	phase_counters = RegistryLoader.measurement_snapshot()
 	if not _failed:
-		print("PASS: facade runtime loader is version-pinned and topology-neutral: 213 units / 214 receivers / 18/213 reference-recognizable physical units / 26 adapter plans / 20 package-safe / 6 hard-disabled receivers / 13 unique pathless disabled projection inputs across 13 occurrences; registry %s; adapter contracts %s; snapshot %s" % [EXPECTED_REGISTRY_SHA256, EXPECTED_ADAPTER_CONTRACT_SHA256, first_snapshot.sha256_text()])
+		print("PASS: facade runtime loader is version-pinned and topology-neutral: 213 units / 214 receivers / 20/213 reference-recognizable physical units / 28 adapter plans / 22 package-safe / 6 hard-disabled receivers / 13 unique pathless disabled projection inputs across 13 occurrences; registry %s; adapter contracts %s; snapshot %s" % [EXPECTED_REGISTRY_SHA256, EXPECTED_ADAPTER_CONTRACT_SHA256, first_snapshot.sha256_text()])
 	print("FACADE_LOADER_MEASUREMENT_TOTAL: " + JSON.stringify(RegistryLoader.end_measurement()))
 	_finish()
 
@@ -166,10 +172,10 @@ func _validate_receiver_modes(loader: RefCounted) -> void:
 	_require(loader.get_content_mode("building:w95934117:wall") == "active_d2_1444_paired_replacement" and str((loader.get_unit("physical-building:w95934117") as Dictionary).get("runtime_content_mode", "")) == "all_receivers_active_d2_1444_paired_replacement", "D2 1444 one wall-indexed paired unit mode drifted.")
 	var metric: Dictionary = loader.get_reference_recognition_metric()
 	var accepted_ids := metric.get("accepted_physical_unit_ids", []) as Array
-	var expected_ids := ["physical-building:r16681702", "physical-building:r19685981", "physical-building:w96215669", "physical-building:w96215672", "physical-building:w1222720021", "physical-building:w1249412093", "physical-building:w1249412094", "physical-building:w291189336", "physical-building:w34313540", "physical-building:w34313545", "physical-building:w95934105", "physical-building:w95934117", "physical-building:w95934119", "physical-building:w95934144", "physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125", "physical-building:w764313741"]
+	var expected_ids := ["physical-building:r16681702", "physical-building:r19685981", "physical-building:w96215680", "physical-building:w96215677", "physical-building:w96215669", "physical-building:w96215672", "physical-building:w1222720021", "physical-building:w1249412093", "physical-building:w1249412094", "physical-building:w291189336", "physical-building:w34313540", "physical-building:w34313545", "physical-building:w95934105", "physical-building:w95934117", "physical-building:w95934119", "physical-building:w95934144", "physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125", "physical-building:w764313741"]
 	accepted_ids.sort()
 	expected_ids.sort()
-	_require(int(metric.get("numerator", -1)) == 18 and int(metric.get("denominator", -1)) == 213 and str(metric.get("display", "")) == "18/213" and accepted_ids == expected_ids, "Loader recognition metric is not exactly the accepted 18/213 physical-unit rollup.")
+	_require(int(metric.get("numerator", -1)) == 20 and int(metric.get("denominator", -1)) == 213 and str(metric.get("display", "")) == "20/213" and accepted_ids == expected_ids, "Loader recognition metric is not exactly the accepted 20/213 physical-unit rollup.")
 	_require(metric.get("isle_house_non_numerator_source_keys", []) == ["w1282547786", "w1282547787"], "Loader promotes Isle House source parts into numerator entries.")
 
 
@@ -331,7 +337,7 @@ func _validate_adapter_resolution(loader: RefCounted) -> void:
 	expected_ready.sort()
 	expected_disabled.sort()
 	_require(ready_seen == expected_ready and disabled_seen == expected_disabled, "Ready/disabled receiver partition drifted.")
-	_require(current_topology_plan_ids == ["active-adapter:northpoint-1238-live:building:w96215669:wall"], "1238 is not the sole current-integration topology plan authority.")
+	_require(current_topology_plan_ids == ["active-adapter:mariner-1219-live:building:w96215680:wall"], "1219 is not the sole current-integration topology plan authority.")
 
 
 func _validate_d2_1441_plan(plan: Dictionary) -> void:
@@ -1058,10 +1064,10 @@ func _finish() -> void:
 
 
 func _validate_d5_batch_mutations(registry: Dictionary, contracts: Dictionary) -> void:
-	for target: Dictionary in [{"unit_id": "physical-building:w95934123", "wall": "building:w95934123:wall", "number": "1308"}, {"unit_id": "physical-building:w96215646", "wall": "building:w96215646:wall", "number": "1394"}, {"unit_id": "physical-building:w95934125", "wall": "building:w95934125:wall", "number": "1317"}, {"unit_id": "physical-building:w764313741", "wall": "building:w764313741:wall", "number": "station48"}, {"unit_id": "physical-building:r19685981", "wall": "building:r19685981:wall", "number": "maceo"}, {"unit_id": "physical-building:w96215672", "wall": "building:w96215672:wall", "number": "1201"}, {"unit_id": "physical-building:w96215669", "wall": "building:w96215669:wall", "number": "1238"}]:
+	for target: Dictionary in [{"unit_id": "physical-building:w95934123", "wall": "building:w95934123:wall", "number": "1308"}, {"unit_id": "physical-building:w96215646", "wall": "building:w96215646:wall", "number": "1394"}, {"unit_id": "physical-building:w95934125", "wall": "building:w95934125:wall", "number": "1317"}, {"unit_id": "physical-building:w764313741", "wall": "building:w764313741:wall", "number": "station48"}, {"unit_id": "physical-building:r19685981", "wall": "building:r19685981:wall", "number": "maceo"}, {"unit_id": "physical-building:w96215672", "wall": "building:w96215672:wall", "number": "1201"}, {"unit_id": "physical-building:w96215669", "wall": "building:w96215669:wall", "number": "1238"}, {"unit_id": "physical-building:w96215677", "wall": "building:w96215677:wall", "number": "1206"}, {"unit_id": "physical-building:w96215680", "wall": "building:w96215680:wall", "number": "1219"}]:
 		var receiver := str(target.wall)
 		var unit_id := str(target.unit_id)
-		var code := "northern_1238_parity_mismatch" if str(target.number) == "1238" else "northern_1201_parity_mismatch" if str(target.number) == "1201" else "maceo_may_parity_mismatch" if str(target.number) == "maceo" else "fire_station48_parity_mismatch" if str(target.number) == "station48" else "d5_%s_parity_mismatch" % str(target.number)
+		var code := "northern_1219_parity_mismatch" if str(target.number) == "1219" else "northern_1206_parity_mismatch" if str(target.number) == "1206" else "northern_1238_parity_mismatch" if str(target.number) == "1238" else "northern_1201_parity_mismatch" if str(target.number) == "1201" else "maceo_may_parity_mismatch" if str(target.number) == "maceo" else "fire_station48_parity_mismatch" if str(target.number) == "station48" else "d5_%s_parity_mismatch" % str(target.number)
 		var duplicate_registry := registry.duplicate(true)
 		var records := _unit_by_id(duplicate_registry.get("units", []) as Array, unit_id).get("acceptance_records", []) as Array
 		records.append((records[0] as Dictionary).duplicate(true))
@@ -1087,7 +1093,7 @@ func _validate_d5_batch_mutations(registry: Dictionary, contracts: Dictionary) -
 		for mutation: Dictionary in [
 			{"section":"ownership_contract", "field":"roof_is_wall_spray_receiver", "value":true},
 			{"section":"geometry_contract", "field":"world_shapes", "value":470},
-			{"section":"replacement_contract", "field":"actual_land_and_area_records_required", "value":str(target.number) in ["station48", "maceo", "1201", "1238"]},
+			{"section":"replacement_contract", "field":"actual_land_and_area_records_required", "value":str(target.number) in ["station48", "maceo", "1201", "1238", "1206", "1219"]},
 		]:
 			var invalid_registry := registry.duplicate(true)
 			var invalid_adapter := _active_adapter_by_receiver(invalid_registry, receiver)

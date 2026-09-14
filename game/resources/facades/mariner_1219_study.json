@@ -1,0 +1,4497 @@
+{
+  "facade": {
+    "story_band_y": 5.7,
+    "fascia_center_y": 8.76,
+    "gutter_center_y": 8.835,
+    "roof_low_rgb": [
+      0.42,
+      0.44,
+      0.41
+    ],
+    "roof_high_rgb": [
+      0.72,
+      0.73,
+      0.66
+    ]
+  },
+  "schema_version": "ti.mariner-1219-study/1",
+  "target": {
+    "source_key": "w96215680",
+    "address": "1219 Mariner Drive",
+    "date": "March 2025",
+    "frames": [
+      {
+        "id": "near-1",
+        "runs": [
+          0,
+          1,
+          2
+        ],
+        "start": [
+          -340.628,
+          2.639,
+          -609.157
+        ],
+        "end": [
+          -326.322,
+          2.732,
+          -608.278
+        ],
+        "length_m": 14.33297865065038,
+        "tangent": [
+          0.9981177219817339,
+          0,
+          0.0613270989530242
+        ],
+        "normal": [
+          -0.0613270989530242,
+          0,
+          0.9981177219817339
+        ],
+        "top_y": 8.836,
+        "upper_windows": [
+          {
+            "station_m": 1.7916223313312976,
+            "width_m": 2.02,
+            "height_m": 1.28,
+            "center_y": 7.6,
+            "glazing": "dark"
+          },
+          {
+            "station_m": 5.3748669939938925,
+            "width_m": 2.02,
+            "height_m": 1.28,
+            "center_y": 7.6,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 8.958111656656488,
+            "width_m": 2.02,
+            "height_m": 1.28,
+            "center_y": 7.6,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 12.541356319319084,
+            "width_m": 2.02,
+            "height_m": 1.28,
+            "center_y": 7.6,
+            "glazing": "dark"
+          }
+        ],
+        "lower_windows": [
+          {
+            "station_m": 1.0749733987987784,
+            "width_m": 1.62,
+            "height_m": 1.06,
+            "center_y": 3.961111210063857,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 5.1598723142341365,
+            "width_m": 0.88,
+            "height_m": 1.06,
+            "center_y": 3.985201246381814,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 8.241462724123968,
+            "width_m": 1.62,
+            "height_m": 1.06,
+            "center_y": 4.007583803813857,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 12.326361639559327,
+            "width_m": 0.88,
+            "height_m": 1.06,
+            "center_y": 4.031673840131814,
+            "glazing": "blue"
+          }
+        ],
+        "entries": [
+          {
+            "station_m": 4.15656380868861,
+            "width_m": 0.95,
+            "height_m": 2.1,
+            "bottom_y": 2.7209220480519067,
+            "ground_label": "near-1-door-1",
+            "threshold_inference": "Closed door seated to actual outward grade; hidden threshold not claimed surveyed.",
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -335.933555,
+                    2.706465,
+                    -608.0
+                  ],
+                  [
+                    -335.960767,
+                    2.710593,
+                    -607.557118
+                  ],
+                  [
+                    -337.158455,
+                    2.701483,
+                    -607.631576
+                  ]
+                ],
+                [
+                  [
+                    -335.933555,
+                    2.706465,
+                    -608.0
+                  ],
+                  [
+                    -337.158455,
+                    2.701483,
+                    -607.631576
+                  ],
+                  [
+                    -337.135818,
+                    2.698049,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -337.08549,
+                    2.705108,
+                    -608.819112
+                  ],
+                  [
+                    -335.887749,
+                    2.71289,
+                    -608.74552
+                  ],
+                  [
+                    -335.933555,
+                    2.706465,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -337.08549,
+                    2.705108,
+                    -608.819112
+                  ],
+                  [
+                    -335.933555,
+                    2.706465,
+                    -608.0
+                  ],
+                  [
+                    -337.135818,
+                    2.698049,
+                    -608.0
+                  ]
+                ]
+              ],
+              "boundary_segments": [
+                [
+                  [
+                    -335.933555,
+                    2.706465,
+                    -608.0
+                  ],
+                  [
+                    -335.960767,
+                    2.710593,
+                    -607.557118
+                  ]
+                ],
+                [
+                  [
+                    -335.960767,
+                    2.710593,
+                    -607.557118
+                  ],
+                  [
+                    -337.158455,
+                    2.701483,
+                    -607.631576
+                  ]
+                ],
+                [
+                  [
+                    -337.158455,
+                    2.701483,
+                    -607.631576
+                  ],
+                  [
+                    -337.135818,
+                    2.698049,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -337.08549,
+                    2.705108,
+                    -608.819112
+                  ],
+                  [
+                    -335.887749,
+                    2.71289,
+                    -608.74552
+                  ]
+                ],
+                [
+                  [
+                    -335.887749,
+                    2.71289,
+                    -608.74552
+                  ],
+                  [
+                    -335.933555,
+                    2.706465,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -337.135818,
+                    2.698049,
+                    -608.0
+                  ],
+                  [
+                    -337.08549,
+                    2.705108,
+                    -608.819112
+                  ]
+                ]
+              ],
+              "thickness_m": 0.04
+            },
+            "path_connection": {
+              "kind": "1219_inferred_continuous_footway",
+              "width_m": 1.2,
+              "outward_start_m": 0.12,
+              "end_depths_m": [
+                1.3097757379748614,
+                1.3106430944918512
+              ],
+              "walk_global_depth_m": 2.6,
+              "road_source_way": "w8919063",
+              "road_name": "Mariner Drive",
+              "boundary_status": "production_inference supported by visible footway/parking hierarchy; source OSM has no separate pedestrian/parking surface here",
+              "collision": "none"
+            }
+          },
+          {
+            "station_m": 10.319744628468273,
+            "width_m": 0.95,
+            "height_m": 2.1,
+            "bottom_y": 2.7608884786769066,
+            "ground_label": "near-1-door-2",
+            "threshold_inference": "Closed door seated to actual outward grade; hidden threshold not claimed surveyed.",
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -329.758752,
+                    2.749689,
+                    -608.0
+                  ],
+                  [
+                    -329.809461,
+                    2.75738,
+                    -607.174701
+                  ],
+                  [
+                    -331.007149,
+                    2.748271,
+                    -607.24916
+                  ]
+                ],
+                [
+                  [
+                    -329.758752,
+                    2.749689,
+                    -608.0
+                  ],
+                  [
+                    -331.007149,
+                    2.748271,
+                    -607.24916
+                  ],
+                  [
+                    -330.961015,
+                    2.741273,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -330.93391,
+                    2.745074,
+                    -608.441142
+                  ],
+                  [
+                    -329.736169,
+                    2.752856,
+                    -608.36755
+                  ],
+                  [
+                    -329.758752,
+                    2.749689,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -330.93391,
+                    2.745074,
+                    -608.441142
+                  ],
+                  [
+                    -329.758752,
+                    2.749689,
+                    -608.0
+                  ],
+                  [
+                    -330.961015,
+                    2.741273,
+                    -608.0
+                  ]
+                ]
+              ],
+              "boundary_segments": [
+                [
+                  [
+                    -329.758752,
+                    2.749689,
+                    -608.0
+                  ],
+                  [
+                    -329.809461,
+                    2.75738,
+                    -607.174701
+                  ]
+                ],
+                [
+                  [
+                    -329.809461,
+                    2.75738,
+                    -607.174701
+                  ],
+                  [
+                    -331.007149,
+                    2.748271,
+                    -607.24916
+                  ]
+                ],
+                [
+                  [
+                    -331.007149,
+                    2.748271,
+                    -607.24916
+                  ],
+                  [
+                    -330.961015,
+                    2.741273,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -330.93391,
+                    2.745074,
+                    -608.441142
+                  ],
+                  [
+                    -329.736169,
+                    2.752856,
+                    -608.36755
+                  ]
+                ],
+                [
+                  [
+                    -329.736169,
+                    2.752856,
+                    -608.36755
+                  ],
+                  [
+                    -329.758752,
+                    2.749689,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -330.961015,
+                    2.741273,
+                    -608.0
+                  ],
+                  [
+                    -330.93391,
+                    2.745074,
+                    -608.441142
+                  ]
+                ]
+              ],
+              "thickness_m": 0.04
+            },
+            "path_connection": {
+              "kind": "1219_inferred_continuous_footway",
+              "width_m": 1.2,
+              "outward_start_m": 0.12,
+              "end_depths_m": [
+                1.3142304671829919,
+                1.3150978236999857
+              ],
+              "walk_global_depth_m": 2.6,
+              "road_source_way": "w8919063",
+              "road_name": "Mariner Drive",
+              "boundary_status": "production_inference supported by visible footway/parking hierarchy; source OSM has no separate pedestrian/parking surface here",
+              "collision": "none"
+            }
+          }
+        ],
+        "screens": [
+          {
+            "station_m": 5.733191460260152,
+            "width_m": 1.4,
+            "height_m": 1.32,
+            "depth_m": 1.35,
+            "bottom_y": 2.65452910722022,
+            "ground_label": "near-1-screen-1",
+            "return_length_m": 0.98
+          },
+          {
+            "station_m": 8.456457403883723,
+            "width_m": 1.4,
+            "height_m": 1.32,
+            "depth_m": 1.35,
+            "bottom_y": 2.6724829989440577,
+            "ground_label": "near-1-screen-2",
+            "return_length_m": 0.98
+          }
+        ],
+        "pipes": [
+          {
+            "station_m": 0.15,
+            "bottom_y": 2.759158429349389,
+            "top_y": 8.72
+          },
+          {
+            "station_m": 14.18297865065038,
+            "bottom_y": 2.850158204320031,
+            "top_y": 8.72
+          }
+        ]
+      },
+      {
+        "id": "near-2",
+        "runs": [
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "start": [
+          -326.243,
+          2.743,
+          -609.558
+        ],
+        "end": [
+          -311.734,
+          2.76,
+          -608.656
+        ],
+        "length_m": 14.537010868813454,
+        "tangent": [
+          0.998073134218154,
+          0,
+          0.062048519337295306
+        ],
+        "normal": [
+          -0.062048519337295306,
+          0,
+          0.998073134218154
+        ],
+        "top_y": 8.836,
+        "upper_windows": [
+          {
+            "station_m": 1.8171263586016817,
+            "width_m": 2.02,
+            "height_m": 1.28,
+            "center_y": 7.6,
+            "glazing": "dark"
+          },
+          {
+            "station_m": 5.451379075805045,
+            "width_m": 2.02,
+            "height_m": 1.28,
+            "center_y": 7.6,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 9.085631793008409,
+            "width_m": 2.02,
+            "height_m": 1.28,
+            "center_y": 7.6,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 12.719884510211772,
+            "width_m": 2.02,
+            "height_m": 1.28,
+            "center_y": 7.6,
+            "glazing": "dark"
+          }
+        ],
+        "lower_windows": [
+          {
+            "station_m": 1.090275815161009,
+            "width_m": 1.62,
+            "height_m": 1.06,
+            "center_y": 4.0651767088765585,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 5.2333239127728435,
+            "width_m": 0.88,
+            "height_m": 1.06,
+            "center_y": 4.0896203620672,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 8.358781249567736,
+            "width_m": 1.62,
+            "height_m": 1.06,
+            "center_y": 4.088444840663145,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 12.50182934717957,
+            "width_m": 0.88,
+            "height_m": 1.06,
+            "center_y": 4.076534368233213,
+            "glazing": "blue"
+          }
+        ],
+        "entries": [
+          {
+            "station_m": 4.215733151955901,
+            "width_m": 0.95,
+            "height_m": 2.1,
+            "bottom_y": 2.8252546579562616,
+            "ground_label": "near-2-door-1",
+            "threshold_inference": "Closed door seated to actual outward grade; hidden threshold not claimed surveyed.",
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -321.514828,
+                    2.807396,
+                    -608.0
+                  ],
+                  [
+                    -321.597872,
+                    2.819839,
+                    -606.664201
+                  ],
+                  [
+                    -322.79556,
+                    2.810729,
+                    -606.738659
+                  ]
+                ],
+                [
+                  [
+                    -321.514828,
+                    2.807396,
+                    -608.0
+                  ],
+                  [
+                    -322.79556,
+                    2.810729,
+                    -606.738659
+                  ],
+                  [
+                    -322.717145,
+                    2.79898,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -322.64168,
+                    2.809447,
+                    -609.21388
+                  ],
+                  [
+                    -321.443992,
+                    2.817221,
+                    -609.139422
+                  ],
+                  [
+                    -321.514828,
+                    2.807396,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -322.64168,
+                    2.809447,
+                    -609.21388
+                  ],
+                  [
+                    -321.514828,
+                    2.807396,
+                    -608.0
+                  ],
+                  [
+                    -322.717145,
+                    2.79898,
+                    -608.0
+                  ]
+                ]
+              ],
+              "boundary_segments": [
+                [
+                  [
+                    -321.514828,
+                    2.807396,
+                    -608.0
+                  ],
+                  [
+                    -321.597872,
+                    2.819839,
+                    -606.664201
+                  ]
+                ],
+                [
+                  [
+                    -321.597872,
+                    2.819839,
+                    -606.664201
+                  ],
+                  [
+                    -322.79556,
+                    2.810729,
+                    -606.738659
+                  ]
+                ],
+                [
+                  [
+                    -322.79556,
+                    2.810729,
+                    -606.738659
+                  ],
+                  [
+                    -322.717145,
+                    2.79898,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -322.64168,
+                    2.809447,
+                    -609.21388
+                  ],
+                  [
+                    -321.443992,
+                    2.817221,
+                    -609.139422
+                  ]
+                ],
+                [
+                  [
+                    -321.443992,
+                    2.817221,
+                    -609.139422
+                  ],
+                  [
+                    -321.514828,
+                    2.807396,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -322.717145,
+                    2.79898,
+                    -608.0
+                  ],
+                  [
+                    -322.64168,
+                    2.809447,
+                    -609.21388
+                  ]
+                ]
+              ],
+              "thickness_m": 0.04
+            },
+            "path_connection": {
+              "kind": "1219_inferred_continuous_footway",
+              "width_m": 1.2,
+              "outward_start_m": 0.12,
+              "end_depths_m": [
+                2.599999999999956,
+                2.5999999999999956
+              ],
+              "walk_global_depth_m": 2.6,
+              "road_source_way": "w8919063",
+              "road_name": "Mariner Drive",
+              "boundary_status": "production_inference supported by visible footway/parking hierarchy; source OSM has no separate pedestrian/parking surface here",
+              "collision": "none"
+            }
+          },
+          {
+            "station_m": 10.466647825545687,
+            "width_m": 0.95,
+            "height_m": 2.1,
+            "bottom_y": 2.823997824284441,
+            "ground_label": "near-2-door-2",
+            "threshold_inference": "Closed door seated to actual outward grade; hidden threshold not claimed surveyed.",
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -315.251845,
+                    2.807465,
+                    -608.0
+                  ],
+                  [
+                    -315.359002,
+                    2.81422,
+                    -606.276341
+                  ],
+                  [
+                    -316.55669,
+                    2.816596,
+                    -606.350799
+                  ]
+                ],
+                [
+                  [
+                    -315.251845,
+                    2.807465,
+                    -608.0
+                  ],
+                  [
+                    -316.55669,
+                    2.816596,
+                    -606.350799
+                  ],
+                  [
+                    -316.454162,
+                    2.810133,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -316.40281,
+                    2.815672,
+                    -608.82602
+                  ],
+                  [
+                    -315.205122,
+                    2.812505,
+                    -608.751562
+                  ],
+                  [
+                    -315.251845,
+                    2.807465,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -316.40281,
+                    2.815672,
+                    -608.82602
+                  ],
+                  [
+                    -315.251845,
+                    2.807465,
+                    -608.0
+                  ],
+                  [
+                    -316.454162,
+                    2.810133,
+                    -608.0
+                  ]
+                ]
+              ],
+              "boundary_segments": [
+                [
+                  [
+                    -315.251845,
+                    2.807465,
+                    -608.0
+                  ],
+                  [
+                    -315.359002,
+                    2.81422,
+                    -606.276341
+                  ]
+                ],
+                [
+                  [
+                    -315.359002,
+                    2.81422,
+                    -606.276341
+                  ],
+                  [
+                    -316.55669,
+                    2.816596,
+                    -606.350799
+                  ]
+                ],
+                [
+                  [
+                    -316.55669,
+                    2.816596,
+                    -606.350799
+                  ],
+                  [
+                    -316.454162,
+                    2.810133,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -316.40281,
+                    2.815672,
+                    -608.82602
+                  ],
+                  [
+                    -315.205122,
+                    2.812505,
+                    -608.751562
+                  ]
+                ],
+                [
+                  [
+                    -315.205122,
+                    2.812505,
+                    -608.751562
+                  ],
+                  [
+                    -315.251845,
+                    2.807465,
+                    -608.0
+                  ]
+                ],
+                [
+                  [
+                    -316.454162,
+                    2.810133,
+                    -608.0
+                  ],
+                  [
+                    -316.40281,
+                    2.815672,
+                    -608.82602
+                  ]
+                ]
+              ],
+              "thickness_m": 0.04
+            },
+            "path_connection": {
+              "kind": "1219_inferred_continuous_footway",
+              "width_m": 1.2,
+              "outward_start_m": 0.12,
+              "end_depths_m": [
+                2.600000000000043,
+                2.599999999999969
+              ],
+              "walk_global_depth_m": 2.6,
+              "road_source_way": "w8919063",
+              "road_name": "Mariner Drive",
+              "boundary_status": "production_inference supported by visible footway/parking hierarchy; source OSM has no separate pedestrian/parking surface here",
+              "collision": "none"
+            }
+          }
+        ],
+        "screens": [
+          {
+            "station_m": 5.8148043475253814,
+            "width_m": 1.4,
+            "height_m": 1.32,
+            "depth_m": 1.35,
+            "bottom_y": 2.7523249582273563,
+            "ground_label": "near-2-screen-1",
+            "return_length_m": 0.98
+          },
+          {
+            "station_m": 8.576836412599937,
+            "width_m": 1.4,
+            "height_m": 1.32,
+            "depth_m": 1.35,
+            "bottom_y": 2.7542264421356393,
+            "ground_label": "near-2-screen-2",
+            "return_length_m": 0.98
+          }
+        ],
+        "pipes": [
+          {
+            "station_m": 0.15,
+            "bottom_y": 2.8631348573473483,
+            "top_y": 8.72
+          },
+          {
+            "station_m": 14.387010868813453,
+            "bottom_y": 2.879767473502538,
+            "top_y": 8.72
+          }
+        ]
+      },
+      {
+        "id": "near-3",
+        "runs": [
+          11,
+          12,
+          13
+        ],
+        "start": [
+          -311.796,
+          2.758,
+          -607.532
+        ],
+        "end": [
+          -296.777,
+          2.728,
+          -606.608
+        ],
+        "length_m": 15.04739635285787,
+        "tangent": [
+          0.9981128726729876,
+          0,
+          0.06140597205872108
+        ],
+        "normal": [
+          -0.06140597205872108,
+          0,
+          0.9981128726729876
+        ],
+        "top_y": 8.836,
+        "upper_windows": [
+          {
+            "station_m": 1.8809245441072338,
+            "width_m": 2.02,
+            "height_m": 1.28,
+            "center_y": 7.6,
+            "glazing": "dark"
+          },
+          {
+            "station_m": 5.642773632321701,
+            "width_m": 2.02,
+            "height_m": 1.28,
+            "center_y": 7.6,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 9.40462272053617,
+            "width_m": 2.02,
+            "height_m": 1.28,
+            "center_y": 7.6,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 13.166471808750636,
+            "width_m": 2.02,
+            "height_m": 1.28,
+            "center_y": 7.6,
+            "glazing": "dark"
+          }
+        ],
+        "lower_windows": [
+          {
+            "station_m": 1.1285547264643403,
+            "width_m": 1.62,
+            "height_m": 1.06,
+            "center_y": 4.067561163563859,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 5.417062687028833,
+            "width_m": 0.88,
+            "height_m": 1.06,
+            "center_y": 4.058326269663983,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 8.652252902893276,
+            "width_m": 1.62,
+            "height_m": 1.06,
+            "center_y": 4.052646397938858,
+            "glazing": "blue"
+          },
+          {
+            "station_m": 12.940760863457768,
+            "width_m": 0.88,
+            "height_m": 1.06,
+            "center_y": 4.043411504038982,
+            "glazing": "blue"
+          }
+        ],
+        "entries": [
+          {
+            "station_m": 4.363744942328782,
+            "width_m": 0.95,
+            "height_m": 2.1,
+            "bottom_y": 2.802561927033642,
+            "ground_label": "near-3-door-1",
+            "threshold_inference": "Closed door seated to actual outward grade; hidden threshold not claimed surveyed.",
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -308.046726,
+                    2.794575,
+                    -607.18111
+                  ],
+                  [
+                    -306.848991,
+                    2.792196,
+                    -607.107423
+                  ],
+                  [
+                    -306.93235,
+                    2.797505,
+                    -605.75247
+                  ]
+                ],
+                [
+                  [
+                    -308.046726,
+                    2.794575,
+                    -607.18111
+                  ],
+                  [
+                    -306.93235,
+                    2.797505,
+                    -605.75247
+                  ],
+                  [
+                    -308.130039,
+                    2.79988,
+                    -605.826928
+                  ]
+                ]
+              ],
+              "boundary_segments": [
+                [
+                  [
+                    -308.046726,
+                    2.794575,
+                    -607.18111
+                  ],
+                  [
+                    -306.848991,
+                    2.792196,
+                    -607.107423
+                  ]
+                ],
+                [
+                  [
+                    -306.848991,
+                    2.792196,
+                    -607.107423
+                  ],
+                  [
+                    -306.93235,
+                    2.797505,
+                    -605.75247
+                  ]
+                ],
+                [
+                  [
+                    -306.93235,
+                    2.797505,
+                    -605.75247
+                  ],
+                  [
+                    -308.130039,
+                    2.79988,
+                    -605.826928
+                  ]
+                ],
+                [
+                  [
+                    -308.130039,
+                    2.79988,
+                    -605.826928
+                  ],
+                  [
+                    -308.046726,
+                    2.794575,
+                    -607.18111
+                  ]
+                ]
+              ],
+              "thickness_m": 0.04
+            },
+            "path_connection": {
+              "kind": "1219_inferred_continuous_footway",
+              "width_m": 1.2,
+              "outward_start_m": 0.12,
+              "end_depths_m": [
+                1.476742099435522,
+                1.4775146294618133
+              ],
+              "walk_global_depth_m": 2.6,
+              "road_source_way": "w8919063",
+              "road_name": "Mariner Drive",
+              "boundary_status": "production_inference supported by visible footway/parking hierarchy; source OSM has no separate pedestrian/parking surface here",
+              "collision": "none"
+            }
+          },
+          {
+            "station_m": 10.834125374057667,
+            "width_m": 0.95,
+            "height_m": 2.1,
+            "bottom_y": 2.789735228596142,
+            "ground_label": "near-3-door-2",
+            "threshold_inference": "Closed door seated to actual outward grade; hidden threshold not claimed surveyed.",
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -301.588556,
+                    2.781748,
+                    -606.78379
+                  ],
+                  [
+                    -300.390821,
+                    2.77937,
+                    -606.710103
+                  ],
+                  [
+                    -300.474436,
+                    2.784694,
+                    -605.350992
+                  ]
+                ],
+                [
+                  [
+                    -301.588556,
+                    2.781748,
+                    -606.78379
+                  ],
+                  [
+                    -300.474436,
+                    2.784694,
+                    -605.350992
+                  ],
+                  [
+                    -301.672124,
+                    2.78707,
+                    -605.425451
+                  ]
+                ]
+              ],
+              "boundary_segments": [
+                [
+                  [
+                    -301.588556,
+                    2.781748,
+                    -606.78379
+                  ],
+                  [
+                    -300.390821,
+                    2.77937,
+                    -606.710103
+                  ]
+                ],
+                [
+                  [
+                    -300.390821,
+                    2.77937,
+                    -606.710103
+                  ],
+                  [
+                    -300.474436,
+                    2.784694,
+                    -605.350992
+                  ]
+                ],
+                [
+                  [
+                    -300.474436,
+                    2.784694,
+                    -605.350992
+                  ],
+                  [
+                    -301.672124,
+                    2.78707,
+                    -605.425451
+                  ]
+                ],
+                [
+                  [
+                    -301.672124,
+                    2.78707,
+                    -605.425451
+                  ],
+                  [
+                    -301.588556,
+                    2.781748,
+                    -606.78379
+                  ]
+                ]
+              ],
+              "thickness_m": 0.04
+            },
+            "path_connection": {
+              "kind": "1219_inferred_continuous_footway",
+              "width_m": 1.2,
+              "outward_start_m": 0.12,
+              "end_depths_m": [
+                1.4809075687396505,
+                1.481680098765942
+              ],
+              "walk_global_depth_m": 2.6,
+              "road_source_way": "w8919063",
+              "road_name": "Mariner Drive",
+              "boundary_status": "production_inference supported by visible footway/parking hierarchy; source OSM has no separate pedestrian/parking surface here",
+              "collision": "none"
+            }
+          }
+        ],
+        "screens": [
+          {
+            "station_m": 6.0189585411431485,
+            "width_m": 1.4,
+            "height_m": 1.32,
+            "depth_m": 1.35,
+            "bottom_y": 2.7301078063129887,
+            "ground_label": "near-3-screen-1",
+            "return_length_m": 0.98
+          },
+          {
+            "station_m": 8.877963848186143,
+            "width_m": 1.4,
+            "height_m": 1.32,
+            "depth_m": 1.35,
+            "bottom_y": 2.7244401953754886,
+            "ground_label": "near-3-screen-2",
+            "return_length_m": 0.98
+          }
+        ],
+        "pipes": [
+          {
+            "station_m": 0.15,
+            "bottom_y": 2.878121099025554,
+            "top_y": 8.72
+          },
+          {
+            "station_m": 14.89739635285787,
+            "bottom_y": 2.8488862792568734,
+            "top_y": 8.72
+          }
+        ]
+      }
+    ]
+  },
+  "mapped_runs": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13
+  ],
+  "protected_runs": [
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25
+  ],
+  "source_association": {
+    "review_id": "1219-source-association-001",
+    "sha256": "75e9ef0ab0374e207a2dc76b6d9d6982b69374c99118e9ef343f5d785e47f773",
+    "verdict": "SOURCE remap PASS; no native or visual acceptance",
+    "return_finish_proposal": "Subject to ROOT and independent source review: visible target-only returns3/9/10; original source/collision unchanged. Historical11/15 association retained separately."
+  },
+  "truth_boundary": {
+    "prototype_only": true,
+    "runtime_attachment": false,
+    "recognition_accepted": false,
+    "as_built_claim": false,
+    "interior_modeled": false,
+    "source_roof_unchanged": true,
+    "additive_public_roof_authorized": true
+  },
+  "inference": {
+    "module_scale_count_cadence": "production_inference",
+    "upper_windows": 12,
+    "lower_windows": 12,
+    "closed_doors": 6,
+    "local_privacy_screens": 6,
+    "crop": "Left termination of chain [0,1,2] is cropped; parked cars and screens hide some thresholds. Near-face counts/scales are production inference.",
+    "roof": "Proposed correction: same eave, footprint, end treatment and inner closure; crest rise0.55\u21920.85m (about19.50deg over2.4m). Straight shallow visible roof band, production inference; no measured/as-built pitch or full hidden roof claim.",
+    "other_targets": "1201/1238/1206 have separate parameters and evidence; none instantiated here.",
+    "return_finish": "Proposed only: pale material continuity on source runs3/9/10, with lower car/plant-occluded finish inferred; no openings, hidden-face reconstruction or source geometry change."
+  },
+  "materials": {
+    "siding_rgb": [
+      0.76,
+      0.77,
+      0.73
+    ],
+    "trim_rgb": [
+      0.86,
+      0.87,
+      0.82
+    ],
+    "blue_glass_rgb": [
+      0.19,
+      0.25,
+      0.27
+    ],
+    "dark_glass_rgb": [
+      0.11,
+      0.16,
+      0.16
+    ],
+    "door_rgb": [
+      0.11,
+      0.17,
+      0.28
+    ],
+    "screen_rgb": [
+      0.43,
+      0.48,
+      0.49
+    ],
+    "path_rgb": [
+      0.52,
+      0.51,
+      0.46
+    ],
+    "metal_rgb": [
+      0.35,
+      0.38,
+      0.38
+    ],
+    "parking_rgb": [
+      0.54,
+      0.55,
+      0.52
+    ],
+    "footway_rgb": [
+      0.65,
+      0.65,
+      0.59
+    ]
+  },
+  "siding": {
+    "course_height_m": 0.18,
+    "seam_color_multiplier": 0.9,
+    "roughness": 0.9,
+    "normal_relief": 0.1,
+    "color_variation": 0.032,
+    "filter_start_cycles_per_pixel": 0.24,
+    "filter_end_cycles_per_pixel": 0.52
+  },
+  "ground": {
+    "land_key": "land:w26767313:x_-2__z_-3",
+    "land_collision_kind": "world_solid",
+    "visible_area_key": "area:r17241151:x_-2__z_-3",
+    "visible_area_collision_kind": "none",
+    "source_chunk_sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+    "paths": "Six narrow actual-grade entries meet one continuous observed-type footway, then a bounded parking surface meets exact generated Mariner road. All added ground render-only; boundary dimensions are production inference.",
+    "layout_evidence_sha256": "ad0be67ccabbdc9934b2a6bb2949d7d52930ebed6e76d5c03539dd1c9f409176",
+    "footprint_evidence_sha256": "5b1587e0ec56dbff5f5213d50232f15ac5de30fe05bf65f1b21188b891756b40"
+  },
+  "local_ground": {
+    "FootwaySurface": {
+      "top_triangles": [
+        [
+          [
+            -340.359785,
+            2.677133,
+            -607.830597
+          ],
+          [
+            -321.351138,
+            2.821716,
+            -606.648862
+          ],
+          [
+            -322.435919,
+            2.824699,
+            -605.564081
+          ]
+        ],
+        [
+          [
+            -340.359785,
+            2.677133,
+            -607.830597
+          ],
+          [
+            -322.435919,
+            2.824699,
+            -605.564081
+          ],
+          [
+            -340.43114,
+            2.687825,
+            -606.682813
+          ]
+        ],
+        [
+          [
+            -321.351138,
+            2.821716,
+            -606.648862
+          ],
+          [
+            -320.0,
+            2.823427,
+            -606.564864
+          ],
+          [
+            -320.0,
+            2.827783,
+            -605.412644
+          ]
+        ],
+        [
+          [
+            -321.351138,
+            2.821716,
+            -606.648862
+          ],
+          [
+            -320.0,
+            2.827783,
+            -605.412644
+          ],
+          [
+            -322.435919,
+            2.824699,
+            -605.564081
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.823427,
+            -606.564864
+          ],
+          [
+            -297.218406,
+            2.778235,
+            -605.148571
+          ],
+          [
+            -297.289762,
+            2.782734,
+            -604.000786
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.823427,
+            -606.564864
+          ],
+          [
+            -297.289762,
+            2.782734,
+            -604.000786
+          ],
+          [
+            -320.0,
+            2.827783,
+            -605.412644
+          ]
+        ]
+      ],
+      "boundary_segments": [
+        [
+          [
+            -340.359785,
+            2.677133,
+            -607.830597
+          ],
+          [
+            -321.351138,
+            2.821716,
+            -606.648862
+          ]
+        ],
+        [
+          [
+            -322.435919,
+            2.824699,
+            -605.564081
+          ],
+          [
+            -340.43114,
+            2.687825,
+            -606.682813
+          ]
+        ],
+        [
+          [
+            -340.43114,
+            2.687825,
+            -606.682813
+          ],
+          [
+            -340.359785,
+            2.677133,
+            -607.830597
+          ]
+        ],
+        [
+          [
+            -321.351138,
+            2.821716,
+            -606.648862
+          ],
+          [
+            -320.0,
+            2.823427,
+            -606.564864
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.827783,
+            -605.412644
+          ],
+          [
+            -322.435919,
+            2.824699,
+            -605.564081
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.823427,
+            -606.564864
+          ],
+          [
+            -297.218406,
+            2.778235,
+            -605.148571
+          ]
+        ],
+        [
+          [
+            -297.218406,
+            2.778235,
+            -605.148571
+          ],
+          [
+            -297.289762,
+            2.782734,
+            -604.000786
+          ]
+        ],
+        [
+          [
+            -297.289762,
+            2.782734,
+            -604.000786
+          ],
+          [
+            -320.0,
+            2.827783,
+            -605.412644
+          ]
+        ]
+      ],
+      "thickness_m": 0.04
+    },
+    "ParkingSurface": {
+      "top_triangles": [
+        [
+          [
+            -340.43114,
+            2.687825,
+            -606.682813
+          ],
+          [
+            -339.089943,
+            2.698026,
+            -606.599433
+          ],
+          [
+            -339.623464,
+            2.777965,
+            -598.017555
+          ]
+        ],
+        [
+          [
+            -340.43114,
+            2.687825,
+            -606.682813
+          ],
+          [
+            -339.623464,
+            2.777965,
+            -598.017555
+          ],
+          [
+            -340.958581,
+            2.766852,
+            -598.198742
+          ]
+        ],
+        [
+          [
+            -339.623464,
+            2.777965,
+            -598.017555
+          ],
+          [
+            -339.67,
+            2.842937,
+            -597.269
+          ],
+          [
+            -341.005117,
+            2.831825,
+            -597.450187
+          ]
+        ],
+        [
+          [
+            -339.623464,
+            2.777965,
+            -598.017555
+          ],
+          [
+            -341.005117,
+            2.831825,
+            -597.450187
+          ],
+          [
+            -340.958581,
+            2.766852,
+            -598.198742
+          ]
+        ],
+        [
+          [
+            -339.67,
+            2.842937,
+            -597.269
+          ],
+          [
+            -339.671241,
+            2.837184,
+            -597.249039
+          ],
+          [
+            -341.006358,
+            2.826077,
+            -597.430226
+          ]
+        ],
+        [
+          [
+            -339.67,
+            2.842937,
+            -597.269
+          ],
+          [
+            -341.006358,
+            2.826077,
+            -597.430226
+          ],
+          [
+            -341.005117,
+            2.831825,
+            -597.450187
+          ]
+        ],
+        [
+          [
+            -339.089943,
+            2.698026,
+            -606.599433
+          ],
+          [
+            -333.106657,
+            2.743536,
+            -606.227462
+          ],
+          [
+            -333.645464,
+            2.824266,
+            -597.560555
+          ]
+        ],
+        [
+          [
+            -339.089943,
+            2.698026,
+            -606.599433
+          ],
+          [
+            -333.645464,
+            2.824266,
+            -597.560555
+          ],
+          [
+            -339.623464,
+            2.777965,
+            -598.017555
+          ]
+        ],
+        [
+          [
+            -333.645464,
+            2.824266,
+            -597.560555
+          ],
+          [
+            -333.692,
+            2.889239,
+            -596.812
+          ],
+          [
+            -339.67,
+            2.842937,
+            -597.269
+          ]
+        ],
+        [
+          [
+            -333.645464,
+            2.824266,
+            -597.560555
+          ],
+          [
+            -339.67,
+            2.842937,
+            -597.269
+          ],
+          [
+            -339.623464,
+            2.777965,
+            -598.017555
+          ]
+        ],
+        [
+          [
+            -333.692,
+            2.889239,
+            -596.812
+          ],
+          [
+            -333.693241,
+            2.883187,
+            -596.792039
+          ],
+          [
+            -339.671241,
+            2.837184,
+            -597.249039
+          ]
+        ],
+        [
+          [
+            -333.692,
+            2.889239,
+            -596.812
+          ],
+          [
+            -339.671241,
+            2.837184,
+            -597.249039
+          ],
+          [
+            -339.67,
+            2.842937,
+            -597.269
+          ]
+        ],
+        [
+          [
+            -333.106657,
+            2.743536,
+            -606.227462
+          ],
+          [
+            -330.715996,
+            2.761719,
+            -606.078839
+          ],
+          [
+            -331.252464,
+            2.8421,
+            -597.449555
+          ]
+        ],
+        [
+          [
+            -333.106657,
+            2.743536,
+            -606.227462
+          ],
+          [
+            -331.252464,
+            2.8421,
+            -597.449555
+          ],
+          [
+            -333.645464,
+            2.824266,
+            -597.560555
+          ]
+        ],
+        [
+          [
+            -331.252464,
+            2.8421,
+            -597.449555
+          ],
+          [
+            -331.299,
+            2.907072,
+            -596.701
+          ],
+          [
+            -333.692,
+            2.889239,
+            -596.812
+          ]
+        ],
+        [
+          [
+            -331.252464,
+            2.8421,
+            -597.449555
+          ],
+          [
+            -333.692,
+            2.889239,
+            -596.812
+          ],
+          [
+            -333.645464,
+            2.824266,
+            -597.560555
+          ]
+        ],
+        [
+          [
+            -331.299,
+            2.907072,
+            -596.701
+          ],
+          [
+            -331.318132,
+            2.901054,
+            -596.681868
+          ],
+          [
+            -333.693241,
+            2.883187,
+            -596.792039
+          ]
+        ],
+        [
+          [
+            -331.299,
+            2.907072,
+            -596.701
+          ],
+          [
+            -333.693241,
+            2.883187,
+            -596.792039
+          ],
+          [
+            -333.692,
+            2.889239,
+            -596.812
+          ]
+        ],
+        [
+          [
+            -331.299,
+            2.907072,
+            -596.701
+          ],
+          [
+            -331.300241,
+            2.901076,
+            -596.681039
+          ],
+          [
+            -331.318132,
+            2.901054,
+            -596.681868
+          ]
+        ],
+        [
+          [
+            -330.715996,
+            2.761719,
+            -606.078839
+          ],
+          [
+            -322.435919,
+            2.824699,
+            -605.564081
+          ],
+          [
+            -330.581445,
+            2.847099,
+            -597.418555
+          ]
+        ],
+        [
+          [
+            -330.715996,
+            2.761719,
+            -606.078839
+          ],
+          [
+            -330.581445,
+            2.847099,
+            -597.418555
+          ],
+          [
+            -331.252464,
+            2.8421,
+            -597.449555
+          ]
+        ],
+        [
+          [
+            -330.581445,
+            2.847099,
+            -597.418555
+          ],
+          [
+            -331.299,
+            2.907072,
+            -596.701
+          ],
+          [
+            -331.252464,
+            2.8421,
+            -597.449555
+          ]
+        ],
+        [
+          [
+            -322.435919,
+            2.824699,
+            -605.564081
+          ],
+          [
+            -320.0,
+            2.827783,
+            -605.412644
+          ],
+          [
+            -320.0,
+            2.85986,
+            -596.929705
+          ]
+        ],
+        [
+          [
+            -322.435919,
+            2.824699,
+            -605.564081
+          ],
+          [
+            -320.0,
+            2.85986,
+            -596.929705
+          ],
+          [
+            -330.581445,
+            2.847099,
+            -597.418555
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.85986,
+            -596.929705
+          ],
+          [
+            -320.0,
+            2.920698,
+            -596.179
+          ],
+          [
+            -331.299,
+            2.907072,
+            -596.701
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.85986,
+            -596.929705
+          ],
+          [
+            -331.299,
+            2.907072,
+            -596.701
+          ],
+          [
+            -330.581445,
+            2.847099,
+            -597.418555
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.920698,
+            -596.179
+          ],
+          [
+            -320.001241,
+            2.915072,
+            -596.159039
+          ],
+          [
+            -331.300241,
+            2.901076,
+            -596.681039
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.920698,
+            -596.179
+          ],
+          [
+            -331.300241,
+            2.901076,
+            -596.681039
+          ],
+          [
+            -331.299,
+            2.907072,
+            -596.701
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.827783,
+            -605.412644
+          ],
+          [
+            -319.42817,
+            2.826649,
+            -605.377094
+          ],
+          [
+            -319.953464,
+            2.859764,
+            -596.927555
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.827783,
+            -605.412644
+          ],
+          [
+            -319.953464,
+            2.859764,
+            -596.927555
+          ],
+          [
+            -320.0,
+            2.85986,
+            -596.929705
+          ]
+        ],
+        [
+          [
+            -319.953464,
+            2.859764,
+            -596.927555
+          ],
+          [
+            -320.0,
+            2.920698,
+            -596.179
+          ],
+          [
+            -320.0,
+            2.85986,
+            -596.929705
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.915073,
+            -596.158981
+          ],
+          [
+            -320.001241,
+            2.915072,
+            -596.159039
+          ],
+          [
+            -320.0,
+            2.920698,
+            -596.179
+          ]
+        ],
+        [
+          [
+            -319.42817,
+            2.826649,
+            -605.377094
+          ],
+          [
+            -300.161119,
+            2.78843,
+            -604.179294
+          ],
+          [
+            -300.667464,
+            2.82035,
+            -596.034555
+          ]
+        ],
+        [
+          [
+            -319.42817,
+            2.826649,
+            -605.377094
+          ],
+          [
+            -300.667464,
+            2.82035,
+            -596.034555
+          ],
+          [
+            -319.953464,
+            2.859764,
+            -596.927555
+          ]
+        ],
+        [
+          [
+            -300.667464,
+            2.82035,
+            -596.034555
+          ],
+          [
+            -300.714,
+            2.881284,
+            -595.286
+          ],
+          [
+            -320.0,
+            2.920698,
+            -596.179
+          ]
+        ],
+        [
+          [
+            -300.667464,
+            2.82035,
+            -596.034555
+          ],
+          [
+            -320.0,
+            2.920698,
+            -596.179
+          ],
+          [
+            -319.953464,
+            2.859764,
+            -596.927555
+          ]
+        ],
+        [
+          [
+            -300.714,
+            2.881284,
+            -595.286
+          ],
+          [
+            -300.733133,
+            2.875117,
+            -595.266867
+          ],
+          [
+            -320.0,
+            2.915073,
+            -596.158981
+          ]
+        ],
+        [
+          [
+            -300.714,
+            2.881284,
+            -595.286
+          ],
+          [
+            -320.0,
+            2.915073,
+            -596.158981
+          ],
+          [
+            -320.0,
+            2.920698,
+            -596.179
+          ]
+        ],
+        [
+          [
+            -300.714,
+            2.881284,
+            -595.286
+          ],
+          [
+            -300.715241,
+            2.875003,
+            -595.266039
+          ],
+          [
+            -300.733133,
+            2.875117,
+            -595.266867
+          ]
+        ],
+        [
+          [
+            -300.161119,
+            2.78843,
+            -604.179294
+          ],
+          [
+            -297.289762,
+            2.782734,
+            -604.000786
+          ],
+          [
+            -297.640469,
+            2.804843,
+            -598.359531
+          ]
+        ],
+        [
+          [
+            -300.161119,
+            2.78843,
+            -604.179294
+          ],
+          [
+            -297.640469,
+            2.804843,
+            -598.359531
+          ],
+          [
+            -299.996477,
+            2.818979,
+            -596.003523
+          ]
+        ],
+        [
+          [
+            -300.161119,
+            2.78843,
+            -604.179294
+          ],
+          [
+            -299.996477,
+            2.818979,
+            -596.003523
+          ],
+          [
+            -300.667464,
+            2.82035,
+            -596.034555
+          ]
+        ],
+        [
+          [
+            -299.996477,
+            2.818979,
+            -596.003523
+          ],
+          [
+            -300.714,
+            2.881284,
+            -595.286
+          ],
+          [
+            -300.667464,
+            2.82035,
+            -596.034555
+          ]
+        ],
+        [
+          [
+            -297.640469,
+            2.804843,
+            -598.359531
+          ],
+          [
+            -297.793273,
+            2.804967,
+            -595.901629
+          ],
+          [
+            -299.996477,
+            2.818979,
+            -596.003523
+          ]
+        ],
+        [
+          [
+            -297.793273,
+            2.804967,
+            -595.901629
+          ],
+          [
+            -297.839809,
+            2.863005,
+            -595.153074
+          ],
+          [
+            -300.714,
+            2.881284,
+            -595.286
+          ]
+        ],
+        [
+          [
+            -297.793273,
+            2.804967,
+            -595.901629
+          ],
+          [
+            -300.714,
+            2.881284,
+            -595.286
+          ],
+          [
+            -299.996477,
+            2.818979,
+            -596.003523
+          ]
+        ],
+        [
+          [
+            -297.839809,
+            2.863005,
+            -595.153074
+          ],
+          [
+            -297.84105,
+            2.856691,
+            -595.133112
+          ],
+          [
+            -300.715241,
+            2.875003,
+            -595.266039
+          ]
+        ],
+        [
+          [
+            -297.839809,
+            2.863005,
+            -595.153074
+          ],
+          [
+            -300.715241,
+            2.875003,
+            -595.266039
+          ],
+          [
+            -300.714,
+            2.881284,
+            -595.286
+          ]
+        ]
+      ],
+      "boundary_segments": [
+        [
+          [
+            -340.43114,
+            2.687825,
+            -606.682813
+          ],
+          [
+            -339.089943,
+            2.698026,
+            -606.599433
+          ]
+        ],
+        [
+          [
+            -340.958581,
+            2.766852,
+            -598.198742
+          ],
+          [
+            -340.43114,
+            2.687825,
+            -606.682813
+          ]
+        ],
+        [
+          [
+            -341.005117,
+            2.831825,
+            -597.450187
+          ],
+          [
+            -340.958581,
+            2.766852,
+            -598.198742
+          ]
+        ],
+        [
+          [
+            -339.671241,
+            2.837184,
+            -597.249039
+          ],
+          [
+            -341.006358,
+            2.826077,
+            -597.430226
+          ]
+        ],
+        [
+          [
+            -341.006358,
+            2.826077,
+            -597.430226
+          ],
+          [
+            -341.005117,
+            2.831825,
+            -597.450187
+          ]
+        ],
+        [
+          [
+            -339.089943,
+            2.698026,
+            -606.599433
+          ],
+          [
+            -333.106657,
+            2.743536,
+            -606.227462
+          ]
+        ],
+        [
+          [
+            -333.693241,
+            2.883187,
+            -596.792039
+          ],
+          [
+            -339.671241,
+            2.837184,
+            -597.249039
+          ]
+        ],
+        [
+          [
+            -333.106657,
+            2.743536,
+            -606.227462
+          ],
+          [
+            -330.715996,
+            2.761719,
+            -606.078839
+          ]
+        ],
+        [
+          [
+            -331.318132,
+            2.901054,
+            -596.681868
+          ],
+          [
+            -333.693241,
+            2.883187,
+            -596.792039
+          ]
+        ],
+        [
+          [
+            -331.300241,
+            2.901076,
+            -596.681039
+          ],
+          [
+            -331.318132,
+            2.901054,
+            -596.681868
+          ]
+        ],
+        [
+          [
+            -330.715996,
+            2.761719,
+            -606.078839
+          ],
+          [
+            -322.435919,
+            2.824699,
+            -605.564081
+          ]
+        ],
+        [
+          [
+            -322.435919,
+            2.824699,
+            -605.564081
+          ],
+          [
+            -320.0,
+            2.827783,
+            -605.412644
+          ]
+        ],
+        [
+          [
+            -320.001241,
+            2.915072,
+            -596.159039
+          ],
+          [
+            -331.300241,
+            2.901076,
+            -596.681039
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.827783,
+            -605.412644
+          ],
+          [
+            -319.42817,
+            2.826649,
+            -605.377094
+          ]
+        ],
+        [
+          [
+            -320.0,
+            2.915073,
+            -596.158981
+          ],
+          [
+            -320.001241,
+            2.915072,
+            -596.159039
+          ]
+        ],
+        [
+          [
+            -319.42817,
+            2.826649,
+            -605.377094
+          ],
+          [
+            -300.161119,
+            2.78843,
+            -604.179294
+          ]
+        ],
+        [
+          [
+            -300.733133,
+            2.875117,
+            -595.266867
+          ],
+          [
+            -320.0,
+            2.915073,
+            -596.158981
+          ]
+        ],
+        [
+          [
+            -300.715241,
+            2.875003,
+            -595.266039
+          ],
+          [
+            -300.733133,
+            2.875117,
+            -595.266867
+          ]
+        ],
+        [
+          [
+            -300.161119,
+            2.78843,
+            -604.179294
+          ],
+          [
+            -297.289762,
+            2.782734,
+            -604.000786
+          ]
+        ],
+        [
+          [
+            -297.289762,
+            2.782734,
+            -604.000786
+          ],
+          [
+            -297.640469,
+            2.804843,
+            -598.359531
+          ]
+        ],
+        [
+          [
+            -297.640469,
+            2.804843,
+            -598.359531
+          ],
+          [
+            -297.793273,
+            2.804967,
+            -595.901629
+          ]
+        ],
+        [
+          [
+            -297.793273,
+            2.804967,
+            -595.901629
+          ],
+          [
+            -297.839809,
+            2.863005,
+            -595.153074
+          ]
+        ],
+        [
+          [
+            -297.839809,
+            2.863005,
+            -595.153074
+          ],
+          [
+            -297.84105,
+            2.856691,
+            -595.133112
+          ]
+        ],
+        [
+          [
+            -297.84105,
+            2.856691,
+            -595.133112
+          ],
+          [
+            -300.715241,
+            2.875003,
+            -595.266039
+          ]
+        ]
+      ],
+      "thickness_m": 0.04
+    }
+  },
+  "public_roof": {
+    "triangles": [
+      [
+        [
+          -340.419177,
+          8.886,
+          -609.294452
+        ],
+        [
+          -326.512424,
+          8.886,
+          -608.439983
+        ],
+        [
+          -326.365239,
+          9.736,
+          -610.835466
+        ]
+      ],
+      [
+        [
+          -340.419177,
+          8.886,
+          -609.294452
+        ],
+        [
+          -326.365239,
+          9.736,
+          -610.835466
+        ],
+        [
+          -340.271992,
+          9.736,
+          -611.689935
+        ]
+      ],
+      [
+        [
+          -340.124807,
+          8.886,
+          -614.085417
+        ],
+        [
+          -340.271992,
+          9.736,
+          -611.689935
+        ],
+        [
+          -326.365239,
+          9.736,
+          -610.835466
+        ]
+      ],
+      [
+        [
+          -340.124807,
+          8.886,
+          -614.085417
+        ],
+        [
+          -326.365239,
+          9.736,
+          -610.835466
+        ],
+        [
+          -326.218054,
+          8.886,
+          -613.230948
+        ]
+      ],
+      [
+        [
+          -340.419177,
+          8.886,
+          -609.294452
+        ],
+        [
+          -340.271992,
+          9.736,
+          -611.689935
+        ],
+        [
+          -340.124807,
+          8.886,
+          -614.085417
+        ]
+      ],
+      [
+        [
+          -326.512424,
+          8.886,
+          -608.439983
+        ],
+        [
+          -326.218054,
+          8.886,
+          -613.230948
+        ],
+        [
+          -326.365239,
+          9.736,
+          -610.835466
+        ]
+      ],
+      [
+        [
+          -340.419177,
+          8.886,
+          -609.294452
+        ],
+        [
+          -340.419177,
+          8.856,
+          -609.294452
+        ],
+        [
+          -326.512424,
+          8.856,
+          -608.439983
+        ]
+      ],
+      [
+        [
+          -340.419177,
+          8.886,
+          -609.294452
+        ],
+        [
+          -326.512424,
+          8.856,
+          -608.439983
+        ],
+        [
+          -326.512424,
+          8.886,
+          -608.439983
+        ]
+      ],
+      [
+        [
+          -326.512424,
+          8.886,
+          -608.439983
+        ],
+        [
+          -326.512424,
+          8.856,
+          -608.439983
+        ],
+        [
+          -326.218054,
+          8.856,
+          -613.230948
+        ]
+      ],
+      [
+        [
+          -326.512424,
+          8.886,
+          -608.439983
+        ],
+        [
+          -326.218054,
+          8.856,
+          -613.230948
+        ],
+        [
+          -326.218054,
+          8.886,
+          -613.230948
+        ]
+      ],
+      [
+        [
+          -326.218054,
+          8.886,
+          -613.230948
+        ],
+        [
+          -326.218054,
+          8.856,
+          -613.230948
+        ],
+        [
+          -340.124807,
+          8.856,
+          -614.085417
+        ]
+      ],
+      [
+        [
+          -326.218054,
+          8.886,
+          -613.230948
+        ],
+        [
+          -340.124807,
+          8.856,
+          -614.085417
+        ],
+        [
+          -340.124807,
+          8.886,
+          -614.085417
+        ]
+      ],
+      [
+        [
+          -340.124807,
+          8.886,
+          -614.085417
+        ],
+        [
+          -340.124807,
+          8.856,
+          -614.085417
+        ],
+        [
+          -340.419177,
+          8.856,
+          -609.294452
+        ]
+      ],
+      [
+        [
+          -340.124807,
+          8.886,
+          -614.085417
+        ],
+        [
+          -340.419177,
+          8.856,
+          -609.294452
+        ],
+        [
+          -340.419177,
+          8.886,
+          -609.294452
+        ]
+      ],
+      [
+        [
+          -340.419177,
+          8.856,
+          -609.294452
+        ],
+        [
+          -340.124807,
+          8.856,
+          -614.085417
+        ],
+        [
+          -326.218054,
+          8.856,
+          -613.230948
+        ]
+      ],
+      [
+        [
+          -340.419177,
+          8.856,
+          -609.294452
+        ],
+        [
+          -326.218054,
+          8.856,
+          -613.230948
+        ],
+        [
+          -326.512424,
+          8.856,
+          -608.439983
+        ]
+      ],
+      [
+        [
+          -326.034078,
+          8.886,
+          -609.695301
+        ],
+        [
+          -311.924307,
+          8.886,
+          -608.818121
+        ],
+        [
+          -311.775391,
+          9.736,
+          -611.213496
+        ]
+      ],
+      [
+        [
+          -326.034078,
+          8.886,
+          -609.695301
+        ],
+        [
+          -311.775391,
+          9.736,
+          -611.213496
+        ],
+        [
+          -325.885162,
+          9.736,
+          -612.090677
+        ]
+      ],
+      [
+        [
+          -325.736245,
+          8.886,
+          -614.486052
+        ],
+        [
+          -325.885162,
+          9.736,
+          -612.090677
+        ],
+        [
+          -311.775391,
+          9.736,
+          -611.213496
+        ]
+      ],
+      [
+        [
+          -325.736245,
+          8.886,
+          -614.486052
+        ],
+        [
+          -311.775391,
+          9.736,
+          -611.213496
+        ],
+        [
+          -311.626474,
+          8.886,
+          -613.608872
+        ]
+      ],
+      [
+        [
+          -326.034078,
+          8.886,
+          -609.695301
+        ],
+        [
+          -325.885162,
+          9.736,
+          -612.090677
+        ],
+        [
+          -325.736245,
+          8.886,
+          -614.486052
+        ]
+      ],
+      [
+        [
+          -311.924307,
+          8.886,
+          -608.818121
+        ],
+        [
+          -311.626474,
+          8.886,
+          -613.608872
+        ],
+        [
+          -311.775391,
+          9.736,
+          -611.213496
+        ]
+      ],
+      [
+        [
+          -326.034078,
+          8.886,
+          -609.695301
+        ],
+        [
+          -326.034078,
+          8.856,
+          -609.695301
+        ],
+        [
+          -311.924307,
+          8.856,
+          -608.818121
+        ]
+      ],
+      [
+        [
+          -326.034078,
+          8.886,
+          -609.695301
+        ],
+        [
+          -311.924307,
+          8.856,
+          -608.818121
+        ],
+        [
+          -311.924307,
+          8.886,
+          -608.818121
+        ]
+      ],
+      [
+        [
+          -311.924307,
+          8.886,
+          -608.818121
+        ],
+        [
+          -311.924307,
+          8.856,
+          -608.818121
+        ],
+        [
+          -311.626474,
+          8.856,
+          -613.608872
+        ]
+      ],
+      [
+        [
+          -311.924307,
+          8.886,
+          -608.818121
+        ],
+        [
+          -311.626474,
+          8.856,
+          -613.608872
+        ],
+        [
+          -311.626474,
+          8.886,
+          -613.608872
+        ]
+      ],
+      [
+        [
+          -311.626474,
+          8.886,
+          -613.608872
+        ],
+        [
+          -311.626474,
+          8.856,
+          -613.608872
+        ],
+        [
+          -325.736245,
+          8.856,
+          -614.486052
+        ]
+      ],
+      [
+        [
+          -311.626474,
+          8.886,
+          -613.608872
+        ],
+        [
+          -325.736245,
+          8.856,
+          -614.486052
+        ],
+        [
+          -325.736245,
+          8.886,
+          -614.486052
+        ]
+      ],
+      [
+        [
+          -325.736245,
+          8.886,
+          -614.486052
+        ],
+        [
+          -325.736245,
+          8.856,
+          -614.486052
+        ],
+        [
+          -326.034078,
+          8.856,
+          -609.695301
+        ]
+      ],
+      [
+        [
+          -325.736245,
+          8.886,
+          -614.486052
+        ],
+        [
+          -326.034078,
+          8.856,
+          -609.695301
+        ],
+        [
+          -326.034078,
+          8.886,
+          -609.695301
+        ]
+      ],
+      [
+        [
+          -326.034078,
+          8.856,
+          -609.695301
+        ],
+        [
+          -325.736245,
+          8.856,
+          -614.486052
+        ],
+        [
+          -311.626474,
+          8.856,
+          -613.608872
+        ]
+      ],
+      [
+        [
+          -326.034078,
+          8.856,
+          -609.695301
+        ],
+        [
+          -311.626474,
+          8.856,
+          -613.608872
+        ],
+        [
+          -311.924307,
+          8.856,
+          -608.818121
+        ]
+      ],
+      [
+        [
+          -311.587167,
+          8.886,
+          -607.669436
+        ],
+        [
+          -296.967412,
+          8.886,
+          -606.769998
+        ],
+        [
+          -299.215508,
+          9.736,
+          -609.312843
+        ]
+      ],
+      [
+        [
+          -311.587167,
+          8.886,
+          -607.669436
+        ],
+        [
+          -299.215508,
+          9.736,
+          -609.312843
+        ],
+        [
+          -311.439792,
+          9.736,
+          -610.064907
+        ]
+      ],
+      [
+        [
+          -311.292418,
+          8.886,
+          -612.460378
+        ],
+        [
+          -311.439792,
+          9.736,
+          -610.064907
+        ],
+        [
+          -299.215508,
+          9.736,
+          -609.312843
+        ]
+      ],
+      [
+        [
+          -311.292418,
+          8.886,
+          -612.460378
+        ],
+        [
+          -299.215508,
+          9.736,
+          -609.312843
+        ],
+        [
+          -296.672663,
+          8.886,
+          -611.56094
+        ]
+      ],
+      [
+        [
+          -311.587167,
+          8.886,
+          -607.669436
+        ],
+        [
+          -311.439792,
+          9.736,
+          -610.064907
+        ],
+        [
+          -311.292418,
+          8.886,
+          -612.460378
+        ]
+      ],
+      [
+        [
+          -296.967412,
+          8.886,
+          -606.769998
+        ],
+        [
+          -296.672663,
+          8.886,
+          -611.56094
+        ],
+        [
+          -299.215508,
+          9.736,
+          -609.312843
+        ]
+      ],
+      [
+        [
+          -311.587167,
+          8.886,
+          -607.669436
+        ],
+        [
+          -311.587167,
+          8.856,
+          -607.669436
+        ],
+        [
+          -296.967412,
+          8.856,
+          -606.769998
+        ]
+      ],
+      [
+        [
+          -311.587167,
+          8.886,
+          -607.669436
+        ],
+        [
+          -296.967412,
+          8.856,
+          -606.769998
+        ],
+        [
+          -296.967412,
+          8.886,
+          -606.769998
+        ]
+      ],
+      [
+        [
+          -296.967412,
+          8.886,
+          -606.769998
+        ],
+        [
+          -296.967412,
+          8.856,
+          -606.769998
+        ],
+        [
+          -296.672663,
+          8.856,
+          -611.56094
+        ]
+      ],
+      [
+        [
+          -296.967412,
+          8.886,
+          -606.769998
+        ],
+        [
+          -296.672663,
+          8.856,
+          -611.56094
+        ],
+        [
+          -296.672663,
+          8.886,
+          -611.56094
+        ]
+      ],
+      [
+        [
+          -296.672663,
+          8.886,
+          -611.56094
+        ],
+        [
+          -296.672663,
+          8.856,
+          -611.56094
+        ],
+        [
+          -311.292418,
+          8.856,
+          -612.460378
+        ]
+      ],
+      [
+        [
+          -296.672663,
+          8.886,
+          -611.56094
+        ],
+        [
+          -311.292418,
+          8.856,
+          -612.460378
+        ],
+        [
+          -311.292418,
+          8.886,
+          -612.460378
+        ]
+      ],
+      [
+        [
+          -311.292418,
+          8.886,
+          -612.460378
+        ],
+        [
+          -311.292418,
+          8.856,
+          -612.460378
+        ],
+        [
+          -311.587167,
+          8.856,
+          -607.669436
+        ]
+      ],
+      [
+        [
+          -311.292418,
+          8.886,
+          -612.460378
+        ],
+        [
+          -311.587167,
+          8.856,
+          -607.669436
+        ],
+        [
+          -311.587167,
+          8.886,
+          -607.669436
+        ]
+      ],
+      [
+        [
+          -311.587167,
+          8.856,
+          -607.669436
+        ],
+        [
+          -311.292418,
+          8.856,
+          -612.460378
+        ],
+        [
+          -296.672663,
+          8.856,
+          -611.56094
+        ]
+      ],
+      [
+        [
+          -311.587167,
+          8.856,
+          -607.669436
+        ],
+        [
+          -296.672663,
+          8.856,
+          -611.56094
+        ],
+        [
+          -296.967412,
+          8.856,
+          -606.769998
+        ]
+      ]
+    ],
+    "bands": [
+      {
+        "id": "near-1",
+        "runs": [
+          0,
+          1,
+          2
+        ],
+        "domain_xz": [
+          [
+            -340.419177,
+            -609.294452
+          ],
+          [
+            -326.512424,
+            -608.439983
+          ],
+          [
+            -326.218054,
+            -613.230948
+          ],
+          [
+            -340.124807,
+            -614.085417
+          ]
+        ],
+        "front_inset_m": 0.15,
+        "end_inset_m": 0.2,
+        "eave_y": 8.886,
+        "crest_y": 9.736,
+        "inner_depth_m": 4.95,
+        "front_slope_width_m": 2.4,
+        "hip_start_reference_supported": false,
+        "hip_end_reference_supported": false,
+        "other_end_closures": "Plain closed internal geometry; hidden hip/valley topology unclaimed",
+        "triangles": [
+          [
+            [
+              -340.419177,
+              8.886,
+              -609.294452
+            ],
+            [
+              -326.512424,
+              8.886,
+              -608.439983
+            ],
+            [
+              -326.365239,
+              9.736,
+              -610.835466
+            ]
+          ],
+          [
+            [
+              -340.419177,
+              8.886,
+              -609.294452
+            ],
+            [
+              -326.365239,
+              9.736,
+              -610.835466
+            ],
+            [
+              -340.271992,
+              9.736,
+              -611.689935
+            ]
+          ],
+          [
+            [
+              -340.124807,
+              8.886,
+              -614.085417
+            ],
+            [
+              -340.271992,
+              9.736,
+              -611.689935
+            ],
+            [
+              -326.365239,
+              9.736,
+              -610.835466
+            ]
+          ],
+          [
+            [
+              -340.124807,
+              8.886,
+              -614.085417
+            ],
+            [
+              -326.365239,
+              9.736,
+              -610.835466
+            ],
+            [
+              -326.218054,
+              8.886,
+              -613.230948
+            ]
+          ],
+          [
+            [
+              -340.419177,
+              8.886,
+              -609.294452
+            ],
+            [
+              -340.271992,
+              9.736,
+              -611.689935
+            ],
+            [
+              -340.124807,
+              8.886,
+              -614.085417
+            ]
+          ],
+          [
+            [
+              -326.512424,
+              8.886,
+              -608.439983
+            ],
+            [
+              -326.218054,
+              8.886,
+              -613.230948
+            ],
+            [
+              -326.365239,
+              9.736,
+              -610.835466
+            ]
+          ],
+          [
+            [
+              -340.419177,
+              8.886,
+              -609.294452
+            ],
+            [
+              -340.419177,
+              8.856,
+              -609.294452
+            ],
+            [
+              -326.512424,
+              8.856,
+              -608.439983
+            ]
+          ],
+          [
+            [
+              -340.419177,
+              8.886,
+              -609.294452
+            ],
+            [
+              -326.512424,
+              8.856,
+              -608.439983
+            ],
+            [
+              -326.512424,
+              8.886,
+              -608.439983
+            ]
+          ],
+          [
+            [
+              -326.512424,
+              8.886,
+              -608.439983
+            ],
+            [
+              -326.512424,
+              8.856,
+              -608.439983
+            ],
+            [
+              -326.218054,
+              8.856,
+              -613.230948
+            ]
+          ],
+          [
+            [
+              -326.512424,
+              8.886,
+              -608.439983
+            ],
+            [
+              -326.218054,
+              8.856,
+              -613.230948
+            ],
+            [
+              -326.218054,
+              8.886,
+              -613.230948
+            ]
+          ],
+          [
+            [
+              -326.218054,
+              8.886,
+              -613.230948
+            ],
+            [
+              -326.218054,
+              8.856,
+              -613.230948
+            ],
+            [
+              -340.124807,
+              8.856,
+              -614.085417
+            ]
+          ],
+          [
+            [
+              -326.218054,
+              8.886,
+              -613.230948
+            ],
+            [
+              -340.124807,
+              8.856,
+              -614.085417
+            ],
+            [
+              -340.124807,
+              8.886,
+              -614.085417
+            ]
+          ],
+          [
+            [
+              -340.124807,
+              8.886,
+              -614.085417
+            ],
+            [
+              -340.124807,
+              8.856,
+              -614.085417
+            ],
+            [
+              -340.419177,
+              8.856,
+              -609.294452
+            ]
+          ],
+          [
+            [
+              -340.124807,
+              8.886,
+              -614.085417
+            ],
+            [
+              -340.419177,
+              8.856,
+              -609.294452
+            ],
+            [
+              -340.419177,
+              8.886,
+              -609.294452
+            ]
+          ],
+          [
+            [
+              -340.419177,
+              8.856,
+              -609.294452
+            ],
+            [
+              -340.124807,
+              8.856,
+              -614.085417
+            ],
+            [
+              -326.218054,
+              8.856,
+              -613.230948
+            ]
+          ],
+          [
+            [
+              -340.419177,
+              8.856,
+              -609.294452
+            ],
+            [
+              -326.218054,
+              8.856,
+              -613.230948
+            ],
+            [
+              -326.512424,
+              8.856,
+              -608.439983
+            ]
+          ]
+        ]
+      },
+      {
+        "id": "near-2",
+        "runs": [
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        "domain_xz": [
+          [
+            -326.034078,
+            -609.695301
+          ],
+          [
+            -311.924307,
+            -608.818121
+          ],
+          [
+            -311.626474,
+            -613.608872
+          ],
+          [
+            -325.736245,
+            -614.486052
+          ]
+        ],
+        "front_inset_m": 0.15,
+        "end_inset_m": 0.2,
+        "eave_y": 8.886,
+        "crest_y": 9.736,
+        "inner_depth_m": 4.95,
+        "front_slope_width_m": 2.4,
+        "hip_start_reference_supported": false,
+        "hip_end_reference_supported": false,
+        "other_end_closures": "Plain closed internal geometry; hidden hip/valley topology unclaimed",
+        "triangles": [
+          [
+            [
+              -326.034078,
+              8.886,
+              -609.695301
+            ],
+            [
+              -311.924307,
+              8.886,
+              -608.818121
+            ],
+            [
+              -311.775391,
+              9.736,
+              -611.213496
+            ]
+          ],
+          [
+            [
+              -326.034078,
+              8.886,
+              -609.695301
+            ],
+            [
+              -311.775391,
+              9.736,
+              -611.213496
+            ],
+            [
+              -325.885162,
+              9.736,
+              -612.090677
+            ]
+          ],
+          [
+            [
+              -325.736245,
+              8.886,
+              -614.486052
+            ],
+            [
+              -325.885162,
+              9.736,
+              -612.090677
+            ],
+            [
+              -311.775391,
+              9.736,
+              -611.213496
+            ]
+          ],
+          [
+            [
+              -325.736245,
+              8.886,
+              -614.486052
+            ],
+            [
+              -311.775391,
+              9.736,
+              -611.213496
+            ],
+            [
+              -311.626474,
+              8.886,
+              -613.608872
+            ]
+          ],
+          [
+            [
+              -326.034078,
+              8.886,
+              -609.695301
+            ],
+            [
+              -325.885162,
+              9.736,
+              -612.090677
+            ],
+            [
+              -325.736245,
+              8.886,
+              -614.486052
+            ]
+          ],
+          [
+            [
+              -311.924307,
+              8.886,
+              -608.818121
+            ],
+            [
+              -311.626474,
+              8.886,
+              -613.608872
+            ],
+            [
+              -311.775391,
+              9.736,
+              -611.213496
+            ]
+          ],
+          [
+            [
+              -326.034078,
+              8.886,
+              -609.695301
+            ],
+            [
+              -326.034078,
+              8.856,
+              -609.695301
+            ],
+            [
+              -311.924307,
+              8.856,
+              -608.818121
+            ]
+          ],
+          [
+            [
+              -326.034078,
+              8.886,
+              -609.695301
+            ],
+            [
+              -311.924307,
+              8.856,
+              -608.818121
+            ],
+            [
+              -311.924307,
+              8.886,
+              -608.818121
+            ]
+          ],
+          [
+            [
+              -311.924307,
+              8.886,
+              -608.818121
+            ],
+            [
+              -311.924307,
+              8.856,
+              -608.818121
+            ],
+            [
+              -311.626474,
+              8.856,
+              -613.608872
+            ]
+          ],
+          [
+            [
+              -311.924307,
+              8.886,
+              -608.818121
+            ],
+            [
+              -311.626474,
+              8.856,
+              -613.608872
+            ],
+            [
+              -311.626474,
+              8.886,
+              -613.608872
+            ]
+          ],
+          [
+            [
+              -311.626474,
+              8.886,
+              -613.608872
+            ],
+            [
+              -311.626474,
+              8.856,
+              -613.608872
+            ],
+            [
+              -325.736245,
+              8.856,
+              -614.486052
+            ]
+          ],
+          [
+            [
+              -311.626474,
+              8.886,
+              -613.608872
+            ],
+            [
+              -325.736245,
+              8.856,
+              -614.486052
+            ],
+            [
+              -325.736245,
+              8.886,
+              -614.486052
+            ]
+          ],
+          [
+            [
+              -325.736245,
+              8.886,
+              -614.486052
+            ],
+            [
+              -325.736245,
+              8.856,
+              -614.486052
+            ],
+            [
+              -326.034078,
+              8.856,
+              -609.695301
+            ]
+          ],
+          [
+            [
+              -325.736245,
+              8.886,
+              -614.486052
+            ],
+            [
+              -326.034078,
+              8.856,
+              -609.695301
+            ],
+            [
+              -326.034078,
+              8.886,
+              -609.695301
+            ]
+          ],
+          [
+            [
+              -326.034078,
+              8.856,
+              -609.695301
+            ],
+            [
+              -325.736245,
+              8.856,
+              -614.486052
+            ],
+            [
+              -311.626474,
+              8.856,
+              -613.608872
+            ]
+          ],
+          [
+            [
+              -326.034078,
+              8.856,
+              -609.695301
+            ],
+            [
+              -311.626474,
+              8.856,
+              -613.608872
+            ],
+            [
+              -311.924307,
+              8.856,
+              -608.818121
+            ]
+          ]
+        ]
+      },
+      {
+        "id": "near-3",
+        "runs": [
+          11,
+          12,
+          13
+        ],
+        "domain_xz": [
+          [
+            -311.587167,
+            -607.669436
+          ],
+          [
+            -296.967412,
+            -606.769998
+          ],
+          [
+            -296.672663,
+            -611.56094
+          ],
+          [
+            -311.292418,
+            -612.460378
+          ]
+        ],
+        "front_inset_m": 0.15,
+        "end_inset_m": 0.2,
+        "eave_y": 8.886,
+        "crest_y": 9.736,
+        "inner_depth_m": 4.95,
+        "front_slope_width_m": 2.4,
+        "hip_start_reference_supported": false,
+        "hip_end_reference_supported": true,
+        "other_end_closures": "Plain closed internal geometry; hidden hip/valley topology unclaimed",
+        "triangles": [
+          [
+            [
+              -311.587167,
+              8.886,
+              -607.669436
+            ],
+            [
+              -296.967412,
+              8.886,
+              -606.769998
+            ],
+            [
+              -299.215508,
+              9.736,
+              -609.312843
+            ]
+          ],
+          [
+            [
+              -311.587167,
+              8.886,
+              -607.669436
+            ],
+            [
+              -299.215508,
+              9.736,
+              -609.312843
+            ],
+            [
+              -311.439792,
+              9.736,
+              -610.064907
+            ]
+          ],
+          [
+            [
+              -311.292418,
+              8.886,
+              -612.460378
+            ],
+            [
+              -311.439792,
+              9.736,
+              -610.064907
+            ],
+            [
+              -299.215508,
+              9.736,
+              -609.312843
+            ]
+          ],
+          [
+            [
+              -311.292418,
+              8.886,
+              -612.460378
+            ],
+            [
+              -299.215508,
+              9.736,
+              -609.312843
+            ],
+            [
+              -296.672663,
+              8.886,
+              -611.56094
+            ]
+          ],
+          [
+            [
+              -311.587167,
+              8.886,
+              -607.669436
+            ],
+            [
+              -311.439792,
+              9.736,
+              -610.064907
+            ],
+            [
+              -311.292418,
+              8.886,
+              -612.460378
+            ]
+          ],
+          [
+            [
+              -296.967412,
+              8.886,
+              -606.769998
+            ],
+            [
+              -296.672663,
+              8.886,
+              -611.56094
+            ],
+            [
+              -299.215508,
+              9.736,
+              -609.312843
+            ]
+          ],
+          [
+            [
+              -311.587167,
+              8.886,
+              -607.669436
+            ],
+            [
+              -311.587167,
+              8.856,
+              -607.669436
+            ],
+            [
+              -296.967412,
+              8.856,
+              -606.769998
+            ]
+          ],
+          [
+            [
+              -311.587167,
+              8.886,
+              -607.669436
+            ],
+            [
+              -296.967412,
+              8.856,
+              -606.769998
+            ],
+            [
+              -296.967412,
+              8.886,
+              -606.769998
+            ]
+          ],
+          [
+            [
+              -296.967412,
+              8.886,
+              -606.769998
+            ],
+            [
+              -296.967412,
+              8.856,
+              -606.769998
+            ],
+            [
+              -296.672663,
+              8.856,
+              -611.56094
+            ]
+          ],
+          [
+            [
+              -296.967412,
+              8.886,
+              -606.769998
+            ],
+            [
+              -296.672663,
+              8.856,
+              -611.56094
+            ],
+            [
+              -296.672663,
+              8.886,
+              -611.56094
+            ]
+          ],
+          [
+            [
+              -296.672663,
+              8.886,
+              -611.56094
+            ],
+            [
+              -296.672663,
+              8.856,
+              -611.56094
+            ],
+            [
+              -311.292418,
+              8.856,
+              -612.460378
+            ]
+          ],
+          [
+            [
+              -296.672663,
+              8.886,
+              -611.56094
+            ],
+            [
+              -311.292418,
+              8.856,
+              -612.460378
+            ],
+            [
+              -311.292418,
+              8.886,
+              -612.460378
+            ]
+          ],
+          [
+            [
+              -311.292418,
+              8.886,
+              -612.460378
+            ],
+            [
+              -311.292418,
+              8.856,
+              -612.460378
+            ],
+            [
+              -311.587167,
+              8.856,
+              -607.669436
+            ]
+          ],
+          [
+            [
+              -311.292418,
+              8.886,
+              -612.460378
+            ],
+            [
+              -311.587167,
+              8.856,
+              -607.669436
+            ],
+            [
+              -311.587167,
+              8.886,
+              -607.669436
+            ]
+          ],
+          [
+            [
+              -311.587167,
+              8.856,
+              -607.669436
+            ],
+            [
+              -311.292418,
+              8.856,
+              -612.460378
+            ],
+            [
+              -296.672663,
+              8.856,
+              -611.56094
+            ]
+          ],
+          [
+            [
+              -311.587167,
+              8.856,
+              -607.669436
+            ],
+            [
+              -296.672663,
+              8.856,
+              -611.56094
+            ],
+            [
+              -296.967412,
+              8.856,
+              -606.769998
+            ]
+          ]
+        ]
+      }
+    ],
+    "status": "Bounded observed public roof study using accepted separate rendered/physical nonreceiver representation; exact source16 roof triangles retained",
+    "geometry_inference": "Straight near-facing planes with long ridge lines, physical inner returns and nonobserved end closures are construction inference; no full hidden roof or three-as-built-roofs claim",
+    "source_top_y": 8.836,
+    "roof_object_key": "building:w96215680:roof"
+  }
+}

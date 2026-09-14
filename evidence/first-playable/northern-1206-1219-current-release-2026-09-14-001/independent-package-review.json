@@ -1,0 +1,26 @@
+{
+  "schema_version": "ti.derived-independent-package-summary/1",
+  "derived": true,
+  "reviewer": "F",
+  "decision": "PASS",
+  "root_accepted": true,
+  "review": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/exact-current-package-preparation-001/independent-actual-001/REVIEW.md",
+    "sha256": "dc4b670b4430179cef27239cc634627e8e8281883441c3b41313d9cb8cb6a2d1"
+  },
+  "retro": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/exact-current-package-preparation-001/independent-actual-001/RETRO.md",
+    "sha256": "50687be6b115758fffe3a4614783eaa51a4f3b436285e28107d55b59898a81e1"
+  },
+  "input_bindings": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/exact-current-package-preparation-001/independent-actual-001/BINDINGS.json",
+    "sha256": "641e10e8c60ef0793bd344362eebb8b9cb5ea196154da3ba1a0c3660026b0a26"
+  },
+  "checks": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/exact-current-package-preparation-001/independent-actual-001/CHECK.json",
+    "sha256": "b87f9de31a15c78625296cb3134347840a3563cd26c5886394f03373eced9073"
+  },
+  "native_scope": "Apple M2 Metal4.0 / Forward+; no Intel or M1 runtime/performance or manual-input claim.",
+  "signatures": "Strict/deep plus arm64 and x86_64 checks passed on these exact bytes; auxiliary entitlements-display deprecated-colon warning remains retained.",
+  "privacy": "988 unique virtual paths;47 generated artifacts/38chunks;739 total records=735 playable+4 background; private paths/raw/banned all0."
+}

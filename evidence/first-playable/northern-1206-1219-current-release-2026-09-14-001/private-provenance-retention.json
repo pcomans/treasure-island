@@ -1,0 +1,49 @@
+{
+  "schema_version": "ti.derived-private-retention/1",
+  "derived": true,
+  "external_evidence_root": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001",
+  "original_ap20_input_map": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/exact-current-package-preparation-001/execution-input-pins.json",
+    "sha256": "c8202a777dfdf5fb2ef6aa89e7ed21abc4d39336ce2b04c646e77aed6e1c3fc9"
+  },
+  "original_source_aliases": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/exact-current-package-preparation-001/source-aliases.json",
+    "sha256": "6d3d9a1a12c01c73eff21753537d43ded86f7872507de843881805f2f32fe1ba"
+  },
+  "original_historical_map_associations": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/exact-current-package-preparation-001/historical-map-associations.json",
+    "sha256": "036e1b055fc322e658848f7f6b4375ba5a47d253d6d8b688c3c59b3d0aadc7c6"
+  },
+  "sentinel_difference": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/exact-current-package-preparation-001/source-relocation-exception.json",
+    "sha256": "86fc2638015c6021cb49771f4a71cb52c92e4f6b60aabf1af3496be5a8a20fed"
+  },
+  "checkpoint_doc_aliases": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/current20-source-checkpoint-001/historical-doc-aliases.json",
+    "sha256": "688caed86a354330d2c2981fa0edf5c801661813be7f96fbb54f7d90e8edf717"
+  },
+  "checkpoint_doc_associations": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/current20-source-checkpoint-001/historical-doc-associations.json",
+    "sha256": "6e0d3bb71b4682156d533f519aa74eebbd489fbc5431608102362eedd20dc176"
+  },
+  "preserved_release_records": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/current20-source-checkpoint-001/preserved-release-records.json",
+    "sha256": "ab8d76b92a66c608b31072259a0e6f1eaf5fbf4d05221b5a209e7297d75ab389"
+  },
+  "app_transfer": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/current20-source-checkpoint-001/APP_TRANSFER.json",
+    "sha256": "bf06495b0d160fcf58d61b9e3af07eb6df928a288781f93a49a48fb2f7b07b89"
+  },
+  "private_originals_unchanged": true,
+  "selected_new_gameplay_images": 33,
+  "selected_images_scope": "Only previously accepted gameplay PNG/JPEG originals in the exact 74-file promotion list; no Street View pixels or AVI payloads.",
+  "git_excluded": [
+    "raw Street View reference images",
+    "private originals and movies",
+    "binaries and build output",
+    "unrelated four test UIDs",
+    "local tools and caches"
+  ],
+  "historical_18_app_retained": true,
+  "raw_failures_and_before_images_preserved": true
+}

@@ -7,4 +7,6 @@ Read project AGENTS.md and the exact frozen handoff. Review work you did not imp
 
 Reuse existing complete checks with canonical paths and explicit current target/count bindings. Require actual ownership/collision evidence and stock walking attempts for stair walkability; preserve unsupported contact-identity or motion claims as limits. Inspect real receipts/logs, including failed attempts. Reconcile unchanged evidence instead of rerunning unrelated gates.
 
+Floor/camera flags alone do not establish sound support: compare actual affected motion with source support and contact/destination evidence, retaining unexplained displacement as HOLD. When assigned 1239 execution readiness first, review the complete success/failure invocation boundary before GO; finish independent source/geometry review before mechanics or promotion, as specified in [the trial](../../LEARNINGS.md#trial-1239-early-capture-ordering).
+
 Bind the reviewed immutable map or preimage before delivering a decision that permits later edits. Return concrete PASS/HOLD findings with exact relevant pins and limitations. A technical PASS grants no recognition credit. Record a concise named retrospective through the serialized log owner.

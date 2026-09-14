@@ -1,0 +1,432 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215677",
+  "label": "Complete retained actual motion origins and independently qualified scope",
+  "origins": [
+    {
+      "path": "private/raw/6c/6c2e5387cf9e6bd0dd3e4186135a49cdaccdbb8475de65c9527ce7aad973827f.json",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-unit-packet-preparation-001",
+      "sha256": "6c2e5387cf9e6bd0dd3e4186135a49cdaccdbb8475de65c9527ce7aad973827f",
+      "bytes": 6113859,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+      "role": "exact_original"
+    },
+    {
+      "path": "private/raw/33/3309c974dec6875fa6cc5ed3fd384f5549267ad0ef16c149f826116db2b290b2.md",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-unit-packet-preparation-001",
+      "sha256": "3309c974dec6875fa6cc5ed3fd384f5549267ad0ef16c149f826116db2b290b2",
+      "bytes": 12180,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-mechanics-changed-light-preparation-001/independent-actual-mechanics-001/REVIEW.md",
+      "role": "exact_original"
+    },
+    {
+      "path": "private/raw/d6/d6de6b22fe1e01bb1c7c9eb4f2f344b68ff486873be7fbc5146d2d185928bebb.md",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-unit-packet-preparation-001",
+      "sha256": "d6de6b22fe1e01bb1c7c9eb4f2f344b68ff486873be7fbc5146d2d185928bebb",
+      "bytes": 15764,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-mechanics-changed-light-preparation-001/independent-visual-001/REVIEW.md",
+      "role": "exact_original"
+    }
+  ],
+  "data": {
+    "runs": [
+      {
+        "phase": "1206-mechanics-changed-light-preparation-001",
+        "raw_result": {
+          "path": "private/raw/6c/6c2e5387cf9e6bd0dd3e4186135a49cdaccdbb8475de65c9527ce7aad973827f.json",
+          "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-unit-packet-preparation-001",
+          "sha256": "6c2e5387cf9e6bd0dd3e4186135a49cdaccdbb8475de65c9527ce7aad973827f",
+          "bytes": 6113859,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+          "role": "exact_original"
+        },
+        "raw_ok": true,
+        "raw_failures": [],
+        "routes": [
+          {
+            "label": "extended-approach-to-closed-door",
+            "performed": true,
+            "ok": true,
+            "expected_shape": 3.0,
+            "expected_role": "GreenClosedDoors",
+            "sampled_input_frames": 110,
+            "sampled_brake_frames": 30,
+            "station_held": true,
+            "normal_progress_m": 5.52847146987915,
+            "actual_stop_depth_m": 0.471891403198242,
+            "stopped": true,
+            "transform_writes_during_trace": 0,
+            "complete_trace_rows": 140,
+            "qualifying_contact_events": 24,
+            "distinct_contact_rows": 24,
+            "distinct_contact_row_indices_one_based": [
+              87,
+              88,
+              89,
+              90,
+              91,
+              92,
+              93,
+              94,
+              95,
+              96,
+              97,
+              98,
+              99,
+              100,
+              101,
+              102,
+              103,
+              104,
+              105,
+              106,
+              107,
+              108,
+              109,
+              110
+            ],
+            "direct_land_contact_rows": 139,
+            "rows_lacking_land_contact_one_based": [
+              87
+            ],
+            "empty_contact_rows_one_based": [],
+            "missing_land_rows_retain_expected_obstruction": true,
+            "raw_station_diagnostic_only": true,
+            "raw_station_diagnostic_limit_m": 0.15,
+            "raw_maximum_station_drift_m": 0.0958016057498696
+          },
+          {
+            "label": "nearby-short-screen-obstruction",
+            "performed": true,
+            "ok": true,
+            "expected_shape": 4.0,
+            "expected_role": "LocalPrivacyScreens",
+            "sampled_input_frames": 65,
+            "sampled_brake_frames": 30,
+            "station_held": true,
+            "normal_progress_m": 2.06076395511627,
+            "actual_stop_depth_m": 1.73972713947296,
+            "stopped": true,
+            "transform_writes_during_trace": 0,
+            "complete_trace_rows": 95,
+            "qualifying_contact_events": 31,
+            "distinct_contact_rows": 31,
+            "distinct_contact_row_indices_one_based": [
+              35,
+              36,
+              37,
+              38,
+              39,
+              40,
+              41,
+              42,
+              43,
+              44,
+              45,
+              46,
+              47,
+              48,
+              49,
+              50,
+              51,
+              52,
+              53,
+              54,
+              55,
+              56,
+              57,
+              58,
+              59,
+              60,
+              61,
+              62,
+              63,
+              64,
+              65
+            ],
+            "direct_land_contact_rows": 94,
+            "rows_lacking_land_contact_one_based": [
+              35
+            ],
+            "empty_contact_rows_one_based": [],
+            "missing_land_rows_retain_expected_obstruction": true,
+            "raw_station_diagnostic_only": true,
+            "raw_station_diagnostic_limit_m": 0.15,
+            "raw_maximum_station_drift_m": 0.123851360889766
+          }
+        ],
+        "sprays": [
+          {
+            "label": "mapped-blank-siding-wall",
+            "performed": true,
+            "skipped_reason": "",
+            "ok": true,
+            "result": [
+              "placed"
+            ],
+            "actual_player_hit_distance_m": 5.13813257217407,
+            "actual_ray_distance_m": 9.68382453918457,
+            "actual_ray": {
+              "collider_path": "/root/Main/WorldRoot/CaptureOnlyMariner1206Study/OriginalWallRecord/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "building:w96215677:wall",
+              "feature_kind": "building_wall",
+              "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyMariner1206Study/OriginalWallRecord/Collision/Shape",
+              "structural_role": "",
+              "collision_layer": 5,
+              "spray_receiver_group": true,
+              "resolved_receiver_metadata": {
+                "receiver_kind": "building_wall",
+                "opaque": true,
+                "derived_object_key": "building:w96215677:wall",
+                "source_keys": [
+                  "w96215677"
+                ]
+              }
+            },
+            "identity_signals": [
+              {
+                "derived_object_key": "building:w96215677:wall",
+                "source_keys": [
+                  "w96215677"
+                ]
+              }
+            ],
+            "decal": {
+              "derived_object_key": "building:w96215677:wall",
+              "source_keys": [
+                "w96215677"
+              ],
+              "cull_mask": 2,
+              "transform": "[X: (0.998143, 0.0, 0.060922), Y: (0.060922, 0.0, -0.998143), Z: (0.0, 1.0, 0.0), O: (-316.1036, 6.100274, -579.858)]",
+              "size": [
+                1.20000004768372,
+                0.0799999982118607,
+                0.649999976158142
+              ],
+              "tag_texture": "res://game/resources/textures/tag/predefined_tag.svg"
+            },
+            "timing_usec": {
+              "clock": "Time.get_ticks_usec monotonic wall",
+              "stock_call_usec": 39735,
+              "post_call_observation_usec": 37,
+              "marker_call_usec": 182067,
+              "setup_and_settle_usec": 867321,
+              "final_aim_and_wait_usec": 436589,
+              "pre_call_observation_usec": 5867,
+              "attempt_total_wall_usec": 1531631
+            },
+            "tags_before": 0,
+            "tags_after": 1
+          },
+          {
+            "label": "authored-closed-door",
+            "performed": true,
+            "skipped_reason": "",
+            "ok": true,
+            "result": [
+              "receiver_rejection"
+            ],
+            "actual_player_hit_distance_m": 3.54992461204529,
+            "actual_ray_distance_m": 9.00170803070068,
+            "actual_ray": {
+              "collider_path": "/root/Main/WorldRoot/CaptureOnlyMariner1206Study/PhysicalDetails_NoSprayReceiver",
+              "exact_structure_body": true,
+              "shape_index": 3,
+              "derived_object_key": "prototype:building:w96215677:wall",
+              "feature_kind": "bounded_facade_detail",
+              "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyMariner1206Study/PhysicalDetails_NoSprayReceiver/GreenClosedDoors",
+              "structural_role": "GreenClosedDoors",
+              "collision_layer": 5,
+              "spray_receiver_group": false,
+              "resolved_receiver_metadata": {
+                "receiver_kind": "none",
+                "opaque": false,
+                "derived_object_key": "prototype:building:w96215677:wall",
+                "source_keys": [
+                  "w96215677"
+                ]
+              }
+            },
+            "identity_signals": [],
+            "decal": {},
+            "timing_usec": {
+              "clock": "Time.get_ticks_usec monotonic wall",
+              "stock_call_usec": 2983,
+              "post_call_observation_usec": 6,
+              "marker_call_usec": 0,
+              "setup_and_settle_usec": 922561,
+              "final_aim_and_wait_usec": 441402,
+              "pre_call_observation_usec": 5865,
+              "attempt_total_wall_usec": 1372833
+            },
+            "tags_before": 1,
+            "tags_after": 1
+          },
+          {
+            "label": "authored-short-screen",
+            "performed": true,
+            "skipped_reason": "",
+            "ok": true,
+            "result": [
+              "receiver_rejection"
+            ],
+            "actual_player_hit_distance_m": 2.48066544532776,
+            "actual_ray_distance_m": 8.29920673370361,
+            "actual_ray": {
+              "collider_path": "/root/Main/WorldRoot/CaptureOnlyMariner1206Study/PhysicalDetails_NoSprayReceiver",
+              "exact_structure_body": true,
+              "shape_index": 4,
+              "derived_object_key": "prototype:building:w96215677:wall",
+              "feature_kind": "bounded_facade_detail",
+              "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyMariner1206Study/PhysicalDetails_NoSprayReceiver/LocalPrivacyScreens",
+              "structural_role": "LocalPrivacyScreens",
+              "collision_layer": 5,
+              "spray_receiver_group": false,
+              "resolved_receiver_metadata": {
+                "receiver_kind": "none",
+                "opaque": false,
+                "derived_object_key": "prototype:building:w96215677:wall",
+                "source_keys": [
+                  "w96215677"
+                ]
+              }
+            },
+            "identity_signals": [],
+            "decal": {},
+            "timing_usec": {
+              "clock": "Time.get_ticks_usec monotonic wall",
+              "stock_call_usec": 24,
+              "post_call_observation_usec": 4,
+              "marker_call_usec": 0,
+              "setup_and_settle_usec": 819352,
+              "final_aim_and_wait_usec": 437477,
+              "pre_call_observation_usec": 5943,
+              "attempt_total_wall_usec": 1262812
+            },
+            "tags_before": 1,
+            "tags_after": 1
+          }
+        ],
+        "saved_png_ids": [
+          "01-whole-near-face-changed-light",
+          "02-held-closed-door-approach",
+          "03-held-short-screen-obstruction",
+          "04-actual-mapped-siding-spray"
+        ],
+        "original_finalizer": {
+          "path": "private/raw/d7/d74bf1705c472b704f481b3be33d1872db93a72c71d8f11b7614d47d76a9aa96.json",
+          "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-unit-packet-preparation-001",
+          "sha256": "d74bf1705c472b704f481b3be33d1872db93a72c71d8f11b7614d47d76a9aa96",
+          "bytes": 1528281,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-mechanics-changed-light-preparation-001/motion-finalization.json",
+          "role": "exact_original"
+        },
+        "inherited_selection_scope_rejected": false,
+        "original_handoff_missing_land_wording_corrected": true,
+        "reached_scope_interpretation": "Both actual routes, all three performed sprays and all four saved PNGs; no unreached IDs. One row per route lacks LAND contact, not all slide contacts.",
+        "recorded_reached_scope": {
+          "saved_capture_ids": [
+            "01-whole-near-face-changed-light",
+            "02-held-closed-door-approach",
+            "03-held-short-screen-obstruction",
+            "04-actual-mapped-siding-spray"
+          ],
+          "route_attempts": [
+            {
+              "id": "extended-approach-to-closed-door",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "nearby-short-screen-obstruction",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "spray_attempts": [
+            {
+              "id": "mapped-blank-siding-wall",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-closed-door",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-short-screen",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "unreached_route_ids": [],
+          "unreached_spray_ids": []
+        },
+        "lighting": {
+          "initial_sun": [
+            -51.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "after_changed_capture": [
+            -25.9999980926514,
+            125.999992370605,
+            0.0
+          ],
+          "restored_sun": [
+            -51.9999961853027,
+            -27.9999980926514,
+            0.0
+          ]
+        },
+        "spray_phase_wall_usec": 4167289,
+        "limits": [
+          "Derived assembly binds unchanged originals and existing independent scoped decisions. It makes no new source, mechanics, visual, package or unit-acceptance decision; current accepted authority remains 16/213.",
+          "Study PNGs are original source-project captures, not app screenshots or a new exact-current release. Original study counters, source maps and capture-time authority remain unchanged; native live-attachment evidence is bound separately.",
+          "Native PNGs are 1440x900; full AVI originals and exact selected MJPEG payloads are 1280x800. Each movie retains its original 70 physical trailing bytes. Encoded, physics, process and drawn counters are distinct; sparse samples do not establish continuous playback or flicker freedom.",
+          "Routes use actual stock inputs and separate explicit setup poses; spray attempts invoke the stock API after grounded/camera/range checks. No continuous traversal between setups, physical mouse dispatch, manual-input, M1 or universal-runtime claim is supplied.",
+          "Reference photographs remain external and private. No reference pixels are copied into these packets, Git or an app. Cropped, occluded, hidden/rear and unsurveyed counts/dimensions remain unknown or production inference.",
+          "Candidate package verification and the separate seventh unit/image-tree attestation remain pending/null. A shared future app must verify each target attachment and predicates; neither one unit packet nor old source results certify another unit or a package.",
+          "All selected1206 pixels retain capture-time16/213 source-study authority. The separately accepted L current16 live-native attachment is bound as source applicability, not replacement screenshots or package evidence. Any later authority context needs separate binding and must not relabel these captures.",
+          "J original static visual HOLD for the segmented dark pavement seam remains unchanged. Only its exact source-baseline01 is selected, labeled J origin. J candidate02/03/04 stay private historical originals; none is relabeled corrected K. K supplies only two new static originals: whole02 and central-junction04; no corrected centre-close03 exists.",
+          "K static PASS resolves the shown parking/source-road seam by the accepted15-existing-rim-vertex correction; its source factoryfa0d9c7d/config5327998b and independent native/source review remain exact. The visible junction claim is limited to the supplied2.2m central strip; outer parking ends remain cropped. Paths, footway and parking are render-only and do not supply collision support.",
+          "March2025 references support the stepped warm-gray siding, green doors, mixed windows and low warm-red pitched public-roof bands with thin pale eaves. Target1206 Mariner/w96215677 is distinct from the1219 camera label;1206F curb corroborates identity. Right termination is cropped and cars/planting/screens hide thresholds. Exact pitch, closure, accessories, counts and paving dimensions remain production inference; hidden/rear regions stay unknown.",
+          "H actual235 rows comprise door110input+30brake and screen65input+30brake. Door24 obstruction events occupy24 rows; screen31 events occupy31 rows. Direct LAND contact occurs139/140 and94/95 rows. Door row87/physics170 and screen row35/physics298 each lack LAND contact but retain intended obstruction contact while on_floor:true. No row has an empty slide-contact list; original author handoff contrary wording is preserved but corrected here.",
+          "Both150mm station diagnostics pass at95.802/123.851mm and remain non-gating. The accepted independent full-capsule margins are154.188/162.805mm in the orthogonal construction frame; raw source-normal station telemetry is distinct. No non-LAND penetration was found; minimum separation0.171/0.138mm. Held input permits82.3/109.8mm chiefly lateral motion after first contact; all30 brake rows per route stop after input release.",
+          "Shallow signed capsule/LAND overlaps reach-1.535/-1.536mm; center gaps are negative in32/27 rows, including the one screen row lacking LAND contact. Existing stock move_and_slide/floor snap0.35m, complete support/contact/grounding, immediate recovery from each center minimum, stable positive-gap destinations and zero recoveries support the accepted solver-scale interpretation. This is not zero-overlap proof, tolerance widening, controller change or a new gameplay gate.",
+          "H source study/body/material/shape and protected site snapshots,1956-input execution closure and unchanged stock settings remain bound in the raw originals and prior technical review. Camera segments and original LAND support pass for all235 rows; trace transform writes are0. Six explicit setup placements are setup-only; there is no continuous traversal, stair/roof walk or manual mouse claim.",
+          "Three actual stock sprays place the source wall tag at5.138133m and reject nonreceiver prototype door/screen shapes3/4 at3.549925/2.480665m. Tags0to1,1to1,1to1 and sourceIDw96215677/cullmask2 remain exact. No case is skipped or unreached. The actual whole changed-light pose restores default sun before motion; H02to04 are not changed-light movement.",
+          "H enclosing spray phase4.167289s includes setup/aim/observation/marker; stock calls total42.742ms. Native process26.068757167s additionally encloses startup/world/changed-light/teardown.235 route rows represent3.916667s at60FPS, distinct from536-frame nominal8.933333s movie duration. Preparation/review time and savings are unknown.",
+          "H retains all four1440x900 PNGs and one complete1280x800536-frame AVI, including70 bytes beyond declared RIFF end. Nine exact samples45/106/167/228/290/351/412/473/534 include eight scene views plus blue teardown534, which supplies no scene evidence.412 remains untagged and473 shows the placed tag per existing visual review; sparse frames do not prove continuous playback or flicker freedom.",
+          "L actual native PASS compares14 meshes/182 channels/14 materials and10 shapes against original K, retaining the separate48-triangle nonreceiver public roof and original52/16 source wall/roof. Split wall12/12/5068/2/8 and roof2/2/64/2/2,54 neighboring rows, retained1201/1238 and ordinary world735/1062/1077/113985/470/500 pass. Full collision snapshots versus channel/retained snapshot digests and runtime-only negative assertions retain their reviewed limits. L1068-input source/live evidence is distinct from H mechanics and future package."
+        ]
+      }
+    ],
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "combined_single_success_run_claim": false,
+    "limits": [
+      "Derived assembly binds unchanged originals and existing independent scoped decisions. It makes no new source, mechanics, visual, package or unit-acceptance decision; current accepted authority remains 16/213.",
+      "Study PNGs are original source-project captures, not app screenshots or a new exact-current release. Original study counters, source maps and capture-time authority remain unchanged; native live-attachment evidence is bound separately.",
+      "Native PNGs are 1440x900; full AVI originals and exact selected MJPEG payloads are 1280x800. Each movie retains its original 70 physical trailing bytes. Encoded, physics, process and drawn counters are distinct; sparse samples do not establish continuous playback or flicker freedom.",
+      "Routes use actual stock inputs and separate explicit setup poses; spray attempts invoke the stock API after grounded/camera/range checks. No continuous traversal between setups, physical mouse dispatch, manual-input, M1 or universal-runtime claim is supplied.",
+      "Reference photographs remain external and private. No reference pixels are copied into these packets, Git or an app. Cropped, occluded, hidden/rear and unsurveyed counts/dimensions remain unknown or production inference.",
+      "Candidate package verification and the separate seventh unit/image-tree attestation remain pending/null. A shared future app must verify each target attachment and predicates; neither one unit packet nor old source results certify another unit or a package.",
+      "All selected1206 pixels retain capture-time16/213 source-study authority. The separately accepted L current16 live-native attachment is bound as source applicability, not replacement screenshots or package evidence. Any later authority context needs separate binding and must not relabel these captures.",
+      "J original static visual HOLD for the segmented dark pavement seam remains unchanged. Only its exact source-baseline01 is selected, labeled J origin. J candidate02/03/04 stay private historical originals; none is relabeled corrected K. K supplies only two new static originals: whole02 and central-junction04; no corrected centre-close03 exists.",
+      "K static PASS resolves the shown parking/source-road seam by the accepted15-existing-rim-vertex correction; its source factoryfa0d9c7d/config5327998b and independent native/source review remain exact. The visible junction claim is limited to the supplied2.2m central strip; outer parking ends remain cropped. Paths, footway and parking are render-only and do not supply collision support.",
+      "March2025 references support the stepped warm-gray siding, green doors, mixed windows and low warm-red pitched public-roof bands with thin pale eaves. Target1206 Mariner/w96215677 is distinct from the1219 camera label;1206F curb corroborates identity. Right termination is cropped and cars/planting/screens hide thresholds. Exact pitch, closure, accessories, counts and paving dimensions remain production inference; hidden/rear regions stay unknown.",
+      "H actual235 rows comprise door110input+30brake and screen65input+30brake. Door24 obstruction events occupy24 rows; screen31 events occupy31 rows. Direct LAND contact occurs139/140 and94/95 rows. Door row87/physics170 and screen row35/physics298 each lack LAND contact but retain intended obstruction contact while on_floor:true. No row has an empty slide-contact list; original author handoff contrary wording is preserved but corrected here.",
+      "Both150mm station diagnostics pass at95.802/123.851mm and remain non-gating. The accepted independent full-capsule margins are154.188/162.805mm in the orthogonal construction frame; raw source-normal station telemetry is distinct. No non-LAND penetration was found; minimum separation0.171/0.138mm. Held input permits82.3/109.8mm chiefly lateral motion after first contact; all30 brake rows per route stop after input release.",
+      "Shallow signed capsule/LAND overlaps reach-1.535/-1.536mm; center gaps are negative in32/27 rows, including the one screen row lacking LAND contact. Existing stock move_and_slide/floor snap0.35m, complete support/contact/grounding, immediate recovery from each center minimum, stable positive-gap destinations and zero recoveries support the accepted solver-scale interpretation. This is not zero-overlap proof, tolerance widening, controller change or a new gameplay gate.",
+      "H source study/body/material/shape and protected site snapshots,1956-input execution closure and unchanged stock settings remain bound in the raw originals and prior technical review. Camera segments and original LAND support pass for all235 rows; trace transform writes are0. Six explicit setup placements are setup-only; there is no continuous traversal, stair/roof walk or manual mouse claim.",
+      "Three actual stock sprays place the source wall tag at5.138133m and reject nonreceiver prototype door/screen shapes3/4 at3.549925/2.480665m. Tags0to1,1to1,1to1 and sourceIDw96215677/cullmask2 remain exact. No case is skipped or unreached. The actual whole changed-light pose restores default sun before motion; H02to04 are not changed-light movement.",
+      "H enclosing spray phase4.167289s includes setup/aim/observation/marker; stock calls total42.742ms. Native process26.068757167s additionally encloses startup/world/changed-light/teardown.235 route rows represent3.916667s at60FPS, distinct from536-frame nominal8.933333s movie duration. Preparation/review time and savings are unknown.",
+      "H retains all four1440x900 PNGs and one complete1280x800536-frame AVI, including70 bytes beyond declared RIFF end. Nine exact samples45/106/167/228/290/351/412/473/534 include eight scene views plus blue teardown534, which supplies no scene evidence.412 remains untagged and473 shows the placed tag per existing visual review; sparse frames do not prove continuous playback or flicker freedom.",
+      "L actual native PASS compares14 meshes/182 channels/14 materials and10 shapes against original K, retaining the separate48-triangle nonreceiver public roof and original52/16 source wall/roof. Split wall12/12/5068/2/8 and roof2/2/64/2/2,54 neighboring rows, retained1201/1238 and ordinary world735/1062/1077/113985/470/500 pass. Full collision snapshots versus channel/retained snapshot digests and runtime-only negative assertions retain their reviewed limits. L1068-input source/live evidence is distinct from H mechanics and future package."
+    ]
+  },
+  "truth_boundary": "Derived per-unit preparation only; five roles bound, actual candidate-package and seventh attestation pending. Current16/213 unchanged; credit0."
+}

@@ -1,0 +1,31 @@
+{
+  "schema_version": "ti.derived-owner-package-summary/1",
+  "derived": true,
+  "operator": "D",
+  "preparation_author": "E",
+  "actual_handoff": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/exact-current-package-preparation-001/ACTUAL_HANDOFF.json",
+    "sha256": "0086cee696177692e0052cc6f743df44937dbeb908e7a05a1c70d5d10d42f992"
+  },
+  "session": 14794,
+  "terminal_exit": 0,
+  "stage_ids": [
+    "source-component-001",
+    "export-exact-current-001",
+    "mounted-component-001",
+    "mounted-privacy-001",
+    "release-headless-smoke-001",
+    "release-native-smoke-001"
+  ],
+  "all_six_os_and_runner_pass": true,
+  "source_mounted_pairs": 10,
+  "signed_main_attachments_each": 11,
+  "release": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/exact-current-package-preparation-001/SLOT_RELEASE.json",
+    "sha256": "8b1d24e20238c9ccba479abec90e42aab1cf547ef9426154c669ff30ef4aff1a"
+  },
+  "process_seconds_sum": 39.604805,
+  "timer_scope": "Process timers only, sampled before after-pin hashing; excludes binding/review/preparation/transport.",
+  "independent_acceptance_supplied_by": "independent-package-review.json",
+  "raw_operator_pending_review_prose": "Retained unchanged as its earlier timestamped state; the independent successor review below supplies subsequent PASS."
+}

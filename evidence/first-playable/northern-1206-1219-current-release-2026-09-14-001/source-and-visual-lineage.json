@@ -1,0 +1,189 @@
+{
+  "schema_version": "ti.derived-source-visual-lineage/1",
+  "derived": true,
+  "units": {
+    "1206": {
+      "physical_building": "w96215677",
+      "packet_files": {
+        "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/unit-visual-attestation.json": "b3549c8b8616163a06c8fa2209562bda58ad9ce03ad3ae68751c9ca256b9e09a",
+        "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/capture-manifest.json": "2ef58e0ef4ab39375107bf4d5354b83399eceda0bc36599b7bbb5e98bb79e6b9",
+        "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/.gitignore": "429656f9e7c4ff7ba7298cfcf87fa191bdc2d8547ee469d916a39b7721606b6a",
+        "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/visual-motion.json": "6bee171a27e3a10b3f1927f332a678ec0826e982faa6085e71db525bcdb30096",
+        "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/evidence-tree.json": "95e7ca38a6e6680c61b9aff72221c31a46a70108e617e5743d714ffe071464d4",
+        "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/motion-telemetry.json": "bd5aacf373d887cddf2c25ed0788ab0286faa0c9daa7cc0e9e03a81ad744bd0e",
+        "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/candidate-closure.json": "cd6d955e085eb55397074d6cbd6ed13b2805ca806236d626e80fb85a3e2a27c5",
+        "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/mechanical-review.json": "c806dc1fd6f146f8573e83b3fd8ac8523d87fba1d57e8f5e9d29a066b481f3bd",
+        "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/package-verification-receipt.json": "03f2cf746dc931dd816f28f337b12ae9f11d7cb5ef3c3087601a46bb9df427c7"
+      },
+      "selected_gameplay_images": [
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0534.jpg",
+          "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0290.jpg",
+          "sha256": "3638832b1f31a91e90bd9886ff58912faf6347778b380df62ff89f93633a5bd4"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0045.jpg",
+          "sha256": "20093a8e0881b9189eb2c96b8a55b09bc9fec5427ed13408de9f549f00a73c2b"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0351.jpg",
+          "sha256": "1db1d99fd5716802fcf8179bbed7c7049547bac67b990dc1b9c8cfdcef51ab93"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0167.jpg",
+          "sha256": "83ea94dd187dbbf014e6a444483ff44b3938c29ab0997d506602494428bf72e3"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0228.jpg",
+          "sha256": "81bce86d8a103971eb72e282688528164ef02d6272e16776f31407260c9aa396"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0412.jpg",
+          "sha256": "8387d0b346605e8d0ef198361aee2135b3fcb066814d5efe6347bfbd79db887d"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0106.jpg",
+          "sha256": "e5c26eb8538ea83ca8bc0cff6cf80b1048aa5950eed780fc3113631cc89e7099"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0473.jpg",
+          "sha256": "a64733894fde876c9c83310c5d52cf9b2a13287ca9b724a8d7caddfad447d4f8"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/static/K-corrected/02-whole-front-roof-footway-candidate.png",
+          "sha256": "bff475c3180622a8f0b531ebf8feab24d976f42b67caacac4ed35fb3b12521ec"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/static/K-corrected/04-entry-footway-parking-road-junction.png",
+          "sha256": "72c90de555890f44c826f7359752693a965430ae403f6d7d0257a9a8a5bae2ee"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/static/J-source-baseline/01-whole-front-roof-footway-baseline.png",
+          "sha256": "ad12f391fd3083b66dc08f231a3b9a86c3b0869e58e6126c2c29ab00d5a7628b"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001/01-whole-near-face-changed-light.png",
+          "sha256": "f8a8614ec7192a06d5fedaa602163d176b97dba879bdc28b2a7742c243558682"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001/02-held-closed-door-approach.png",
+          "sha256": "93ecf8aaff14d5edf3f3ff04b535ad95460e7b59a923a32ce7fa790981c49fac"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001/03-held-short-screen-obstruction.png",
+          "sha256": "0de47dd63bff1f24266558fd9f45530b86e9ac2ddde8152872a14025f2a8bf63"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1206-quality-candidate-2026-09-13-001/images/motion001/04-actual-mapped-siding-spray.png",
+          "sha256": "87e9b2965690cfaa730d12fe80b512f133ed3089960829242c96f40c683d35ab"
+        }
+      ]
+    },
+    "1219": {
+      "physical_building": "w96215680",
+      "packet_files": {
+        "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/unit-visual-attestation.json": "f58284bed7ac7fce861a282a344bac1cdb12d6b69286d0cfbde3936f9022139b",
+        "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/capture-manifest.json": "892c34c422283ba7eadd3b5a8d005f34b8736e4b359ffc67ba7194a6c4fc110d",
+        "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/.gitignore": "429656f9e7c4ff7ba7298cfcf87fa191bdc2d8547ee469d916a39b7721606b6a",
+        "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/visual-motion.json": "754b234c8806726b70400dcd759abbed3a309fad42be12669b2cf877e6e5b415",
+        "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/evidence-tree.json": "38bcfd1dd8e0e4df6deb9da79818567163c37ae39ddc2230fe1e5672243cfdfa",
+        "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/motion-telemetry.json": "98fe533ab07e2ff5f098094ad68e2b32b20712e13de75881e679eb84fb107c0f",
+        "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/candidate-closure.json": "19724bb9cd6f9c7dd3d3e87dbff921bbbf77ed4eacfdafe4f9574da57d86e5e0",
+        "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/mechanical-review.json": "03003e86b6fb4b7fb28099876e6a788e9c8596bd14f25a794d8a1adce6fd4ecd",
+        "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/package-verification-receipt.json": "4c2e64ec36a96058c8d48a7cb5f5e9c29c0e1154ff2c2db179071cc8f7553e62"
+      },
+      "selected_gameplay_images": [
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0045.jpg",
+          "sha256": "b13a0980be1b6c0b976d09f7c9befbd50adfa82fa29b83e0aa94f98a1d50b723"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0119.jpg",
+          "sha256": "3ca4d5862dbfc54c19d7dba3f0b592933749ea7136d3a7cd52da35adafd60de7"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0487.jpg",
+          "sha256": "bf592d5b0ad9ab112141912c2aa2e82e67f967c8e47d9e7eb9434da235fe6aa5"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0192.jpg",
+          "sha256": "1ee350f7fd9c5992e3963dbc7f259a78c45a03ac61eb02926d7d281667b04d19"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0634.jpg",
+          "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0340.jpg",
+          "sha256": "e91559b9cf9a0ff8c9298e14ab74c1f00152ae62a699d49fadba8e49466d106b"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0560.jpg",
+          "sha256": "017ca2fdc683c0d18cd27989a7c74d72e06b20f7ecba5613c7e7be052c263ca5"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0413.jpg",
+          "sha256": "c358d77d33a73141d3fade12a007917440c1e94e5f63ccad6cb3189b1e52a16b"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001-avi/avi-index-0266.jpg",
+          "sha256": "e35938753ed32c6a1c1fc4b153067d960b90129d8e3dca113b00b80548806219"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/static/Z-corrected/03-center-roof-entry-footway-candidate.png",
+          "sha256": "e6e93caceae3bfc123f7e440366ea6aeae149b78df9235d281105435a03f9ab3"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/static/Z-corrected/02-whole-front-roof-footway-candidate.png",
+          "sha256": "5d1857c7971a39c0b1ed36b0cafdfb16d31b9787c2feb878e6af72454d6485eb"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/static/I-historical-ground-context/04-entry-footway-parking-road-junction.png",
+          "sha256": "74c3a4886f9f855e13f5b4e9321e3f5a94540d99c45c30ceff07060a1f6dddb2"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/static/I-source-baseline/01-whole-front-roof-footway-baseline.png",
+          "sha256": "c71cfacb6393d5e1e5040e44b864051a0597c5296c77ac2eff894e5377c74b1a"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001/01-whole-near-face-changed-light.png",
+          "sha256": "2c1d15e11619612787e52da3f28edbed153a67b62d1090c2533dec3926b31dcb"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001/02-held-closed-door-approach.png",
+          "sha256": "d33605c501135c290523e27e5c8b9fce731ee7a656c741d7f034e909ec6a3927"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001/03-held-short-screen-obstruction.png",
+          "sha256": "84246d16f061b19188a4b9cca2da7f4d7ebabf579f52ab68c86cac19a7b6f305"
+        },
+        {
+          "relative_path": "evidence/first-playable/northern-1219-quality-candidate-2026-09-13-001/images/motion001/04-actual-mapped-siding-spray.png",
+          "sha256": "2418d1191ea6d5d7cf12e7e949df32a3399cc1071c6130c9025f1191a5e8629c"
+        }
+      ]
+    }
+  },
+  "first_seven_bindings_preserved": true,
+  "candidate_package_authority": 18,
+  "candidate_pck_sha256": "91384b27a363ccad5c5a9708fc556505124b71b7f55b5497504bd8522040e240",
+  "current_release_authority": 20,
+  "limits_scope": "Historical unit/capture evidence is reused only within its original observed and performed scope.",
+  "limits": [
+    "1206 K has only whole and junction corrected stills: no invented K03.",
+    "Historical capture-time15/16/18 remain distinct from current20; sparse original MJPEG samples are not continuous movie or flicker-free review.",
+    "Protected/hidden roof and rear details remain unknown; reversible roof/module counts and dimensions remain production inference.",
+    "Raw failed runs and separate actual mechanical/visual decisions remain unchanged. Package smoke supplies no new source-reference pixels or unit motion acceptance."
+  ],
+  "source_promotion": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/exact-current-package-preparation-001/PROMOTED.json",
+    "sha256": "bb4fc2eb5d1604c4ac90af13fe859ffa87af1bbbdf6b0f335002960839aba35a"
+  },
+  "independent_authority_actual": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1206-1219-authority-integration-001/independent-actual-001/REVIEW.md",
+    "sha256": "68cb16e0db75a0286f10856ea914f30de9a77f2cedff1f16884455d1f590bc8a"
+  }
+}

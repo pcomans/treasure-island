@@ -7,20 +7,22 @@ public distribution are outside this milestone.
 
 ## Current source and release
 
-Current source recognizes **18/213** physical buildings, with **195** not evaluated.
-1201 Bayside and 1238 Northpoint are now enabled alongside the previous 16 accepted
-units. Their older [inactive study checkpoint](discovery/facades/northern-study-source-checkpoint-2026-09-12.md)
+Current source recognizes **20/213** physical buildings, with **193** not evaluated
+and **19 active adapters**. 1206 and 1219 Mariner are enabled alongside the previous
+18 accepted units, including 1201 Bayside and 1238 Northpoint. Their older [inactive study checkpoint](discovery/facades/northern-study-source-checkpoint-2026-09-12.md)
 remains historical; it does not describe the current playable source.
 
-This source checkpoint records the current **18/213** app at:
+This source checkpoint records the independently released **20/213** app at:
 
-- Private app: `build/northern-1201-1238-exact-current-001/Treasure Island First Playable.app`.
-- [Release record](evidence/first-playable/northern-1201-1238-current-release-2026-09-13-001/README.md), including exact app files, source and smoke-test evidence.
-- Both signed headless and native runs reached the complete world and passed all nine live attachment checks. The exact app also passed independent release review.
+- Private app: `build/northern-1206-1219-exact-current-001/Treasure Island First Playable.app`.
+- [Release record](evidence/first-playable/northern-1206-1219-current-release-2026-09-14-001/README.md), including exact app files, source and smoke-test evidence.
+- Both signed headless and native runs reached the complete world and passed all eleven live attachment checks. The exact app also passed independent release review.
 
 The preceding [Maceo May release](evidence/first-playable/maceo-may-current-release-2026-09-12-001/README.md)
 and its publication at [`d48760d8`](https://github.com/pcomans/treasure-island/commit/d48760d8dc7637592ab125f8d8a75809bc6a3ebb)
-remain historical. The current app is a fresh export of the accepted 18-unit source.
+remain historical, as does the [18-unit release](evidence/first-playable/northern-1201-1238-current-release-2026-09-13-001/README.md).
+The current app is a fresh export of the accepted 20-unit source, copied as a whole
+bundle without re-export or re-signing. The PCK is distinct from the candidate18 app.
 
 ## Play on another Mac
 

@@ -7,4 +7,6 @@ Read project AGENTS.md and the exact assigned target packet before work. You are
 
 Bring a coherent source-project edit to actual render inspection early. For visible stairs, test stock-player walking up and down each flight; distinguish that result from jetpack or contact-only access. Deliver exact source/pose bindings, original captures and actual terminal outcomes, including failures, to reviewers independent of your implementation. Older assets establish the floor.
 
+Adapt complete view dictionaries and their consumers together; preserve missing-output terminal/PID/release handling, not only the successful runner path. For the specifically approved 1239 early-capture trial, follow [the bounded order](../../LEARNINGS.md#trial-1239-early-capture-ordering); provisional pixels grant no acceptance.
+
 Do not make routine authoring wait for exports or release paperwork. Stop at the assigned handoff; batch packaging and recognition require their separate assignments and gates. Record a concise named retrospective, coordinating shared-log writes.
