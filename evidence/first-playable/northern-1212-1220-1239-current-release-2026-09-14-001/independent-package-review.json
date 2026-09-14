@@ -1,0 +1,23 @@
+{
+  "schema_version": "ti.derived-independent-package-summary/1",
+  "derived": true,
+  "reviewer": "D",
+  "decision": "PASS",
+  "root_accepted": true,
+  "review": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-authority-integration-002/exact-current-package-preparation-002/independent-actual-001/REVIEW.md",
+    "sha256": "2a333970a7ca295d61ce44f0396b63e3093cf2ab8a6dd6e2f4cffebf7e7f2aa2"
+  },
+  "retro": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-authority-integration-002/exact-current-package-preparation-002/independent-actual-001/RETRO.md",
+    "sha256": "42a07acb315dab11d690b36171702fad78b24786783e2f50e156ce4eeb13cb52"
+  },
+  "native_scope": "Apple M2 Metal4.0 / Forward+; both architecture signatures are not Intel/M1 runtime or manual-input evidence.",
+  "signatures": "Actual deep/strict and arm64/x86_64 signature checks passed; auxiliary deprecated-colon entitlements warning is retained.",
+  "privacy": "1003 virtual files;47 generated artifacts/38chunks;739 total records=735 playable+4 background; private paths/raw/banned all0.",
+  "status": "INDEPENDENT_ACTUAL_RELEASE_PASS",
+  "checks": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-authority-integration-002/exact-current-package-preparation-002/independent-actual-001/CHECK.json",
+    "sha256": "37177ac61dfad4cdd66dd207a317a01aae6e22c6e2b81fcd1d652008d8e3bb50"
+  }
+}

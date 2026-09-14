@@ -1,0 +1,96 @@
+{
+  "schema_version": "ti.exact-current-release-closure/1",
+  "status": "CURRENT23_OWNER_AND_INDEPENDENT_RELEASE_PASS",
+  "derived_downstream_release_summary": true,
+  "recognized_physical_units": 23,
+  "not_evaluated_physical_units": 190,
+  "added_physical_units": [
+    "physical-building:w96215649",
+    "physical-building:w96215652",
+    "physical-building:w96215658"
+  ],
+  "numerator_effect": 3,
+  "previous_20_acceptances_preserved": true,
+  "all_213_identities_preserved": true,
+  "active_adapters": 22,
+  "total_plans": 31,
+  "package_safe_plans": 25,
+  "unchanged_legacy_adapters": 9,
+  "unchanged_disabled_plans": 6,
+  "unchanged_projection_descriptors": 13,
+  "reference_dependency_count": 60,
+  "app_relative_path": "build/northern-1212-1220-1239-exact-current-001/Treasure Island First Playable.app",
+  "package": [
+    {
+      "path": "Contents/Info.plist",
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885,
+      "mode": "0644"
+    },
+    {
+      "path": "Contents/MacOS/Treasure Island First Playable",
+      "sha256": "1944b0c4a40343f31fd66c4f8d61ac95c8e105e6b4b2202c413112255b444fd9",
+      "bytes": 170963648,
+      "mode": "0755"
+    },
+    {
+      "path": "Contents/PkgInfo",
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9,
+      "mode": "0644"
+    },
+    {
+      "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229,
+      "mode": "0644"
+    },
+    {
+      "path": "Contents/Resources/Treasure Island First Playable.pck",
+      "sha256": "3e88f619730e940aa10272d65d76702bc03c0308c233dfbff9da076587d0330a",
+      "bytes": 77690588,
+      "mode": "0644"
+    },
+    {
+      "path": "Contents/Resources/icon.icns",
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500,
+      "mode": "0644"
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "sha256": "1d8f085f7a0a36a096092531c2855534a9de5c59543741c1843597fe99c0f647",
+      "bytes": 3217,
+      "mode": "0644"
+    }
+  ],
+  "actual_app_binding": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-authority-integration-002/exact-current-package-preparation-002/actual-app-binding.json",
+    "sha256": "d3d470a55d43c5861c5d499da207b5a14c97ccfad86e5516a07ca404d07cddb2"
+  },
+  "actual_app_binding_scope": "Hash of the seven-member binding document, not a whole-app byte hash.",
+  "pck_sha256": "3e88f619730e940aa10272d65d76702bc03c0308c233dfbff9da076587d0330a",
+  "pck_bytes": 77690588,
+  "world": {
+    "bodies": 478,
+    "meshes": 1111,
+    "rows": 735,
+    "shapes": 533,
+    "surfaces": 1126,
+    "triangles": 138057
+  },
+  "owner_package_decision": "PASS",
+  "independent_package_decision": "PASS",
+  "root_accepted_package_review": true,
+  "independent_review_sha256": "2a333970a7ca295d61ce44f0396b63e3093cf2ab8a6dd6e2f4cffebf7e7f2aa2",
+  "delivery": "Stable whole-bundle transfer is planned; actual transfer receipt is required before staging these records. No re-export/re-sign/relaunch belongs to publication.",
+  "source_checkpoint": "Current23 source/docs prepared externally against ce72; exact staged review precedes normal commit/nonforce push. Actual commit/remote identity is external, not invented.",
+  "ordinary_no_argument_launch": "Not established by this release; any later ordinary/movie capture remains separate.",
+  "human_001": "Pending owner acceptance; scope unchanged",
+  "artifacts": {
+    "source-and-visual-lineage.json": "cda87f04b4eed1c5a047515f1e3eb4c777bb8483384cc1df9bc5dbe1a4c6e9da",
+    "private-provenance-retention.json": "20fcbb87d7aacd8dabd386c4966c9f51d4686f5facb5efadab4f7f62d6636faa",
+    "independent-package-review.json": "ab2854d84988c84c71ee4d0127377a4fe8dbd01797057415300605110649feb9",
+    "owner-package-verification.json": "9c67a4994fea21f4aee93d37c44e889c4b1db1c1b3a22e792a881419a2c74b9e"
+  }
+}

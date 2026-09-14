@@ -1,0 +1,30 @@
+{
+  "schema_version": "ti.derived-owner-package-summary/1",
+  "derived": true,
+  "operator": "C",
+  "preparation_author": "C",
+  "actual_handoff": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-authority-integration-002/exact-current-package-preparation-002/ACTUAL_HANDOFF.json",
+    "sha256": "8c888fd91dbb2169bb84d7cbaf336eb06ea49c99da86ac8fa5199fe53b9f758a"
+  },
+  "session": 52166,
+  "terminal_exit": 0,
+  "all_six_os_and_runner_pass": true,
+  "source_mounted_component_pairs": 13,
+  "signed_main_attachments_each": 14,
+  "release": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-authority-integration-002/exact-current-package-preparation-002/SLOT_RELEASE.json",
+    "sha256": "ceb4a4eaae1a082ef2b59bcf051213f32dec8a0aef05c7561c82e76b6987fd93"
+  },
+  "timer_scope": "Each retained value is its actual process duration; no sum is a full-workflow latency or savings claim.",
+  "independent_acceptance_supplied_by": "independent-package-review.json",
+  "raw_operator_pending_review_prose": "Original binder/executor pending wording is retained at its original time; a later independent review must supply acceptance.",
+  "stage_ids": [
+    "source-component-001",
+    "export-exact-current-001",
+    "mounted-component-001",
+    "mounted-privacy-001",
+    "release-headless-smoke-001",
+    "release-native-smoke-001"
+  ]
+}

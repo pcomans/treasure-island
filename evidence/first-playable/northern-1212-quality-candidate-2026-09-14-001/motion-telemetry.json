@@ -1,0 +1,824 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215649",
+  "label": "Complete immutable raw motion plus compact actual counters",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-screen-contact-response-preparation-001/native-mechanics-001-result.json",
+      "path_base": "/",
+      "sha256": "a7a4765301bdde87d5f81a40bcea7822e1a660ffe8125a4125c1c21e1b055366",
+      "bytes": 6373586,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-screen-contact-response-preparation-001/native-mechanics-001-result.json",
+      "role": "immutable_external_original",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-screen-contact-response-preparation-001/ACTUAL_HANDOFF.md",
+      "path_base": "/",
+      "sha256": "046e2fe467780ca46bee5459184e4b3a35005107e8017493d441e5a769b9c8b7",
+      "bytes": 9011,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-screen-contact-response-preparation-001/ACTUAL_HANDOFF.md",
+      "role": "immutable_external_original",
+      "copied": false
+    }
+  ],
+  "data": {
+    "runs": [
+      {
+        "phase": "1212-screen-contact-response-preparation-001",
+        "raw_result": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-screen-contact-response-preparation-001/native-mechanics-001-result.json",
+          "path_base": "/",
+          "sha256": "a7a4765301bdde87d5f81a40bcea7822e1a660ffe8125a4125c1c21e1b055366",
+          "bytes": 6373586,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-screen-contact-response-preparation-001/native-mechanics-001-result.json",
+          "role": "immutable_external_original",
+          "copied": false
+        },
+        "raw_ok": true,
+        "raw_failures": [],
+        "routes": [
+          {
+            "label": "extended-approach-to-closed-door",
+            "record_state": "complete",
+            "performed": true,
+            "ok": true,
+            "expected_shape": 3.0,
+            "expected_role": "DarkReddishClosedDoors",
+            "forward_termination": {
+              "mode": "first_verified_expected_contact",
+              "maximum_input_frames": 110,
+              "sampled_input_frames": 87,
+              "termination_reason": "verified_expected_contact",
+              "trigger": {
+                "input_frame": 87,
+                "physics_counter": 170,
+                "process_counter": 169,
+                "drawn_counter": 169,
+                "contact": {
+                  "collider_path": "/root/Main/WorldRoot/CaptureOnlyMariner1212Study/PhysicalDetails_NoSprayReceiver",
+                  "exact_structure_body": true,
+                  "shape_index": 3,
+                  "derived_object_key": "prototype:building:w96215649:wall",
+                  "feature_kind": "bounded_facade_detail",
+                  "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyMariner1212Study/PhysicalDetails_NoSprayReceiver/DarkReddishClosedDoors",
+                  "structural_role": "DarkReddishClosedDoors",
+                  "collision_layer": 5,
+                  "spray_receiver_group": false,
+                  "resolved_receiver_metadata": {
+                    "receiver_kind": "none",
+                    "opaque": false,
+                    "derived_object_key": "prototype:building:w96215649:wall",
+                    "source_keys": [
+                      "w96215649"
+                    ]
+                  },
+                  "position": [
+                    -178.41796875,
+                    3.51774930953979,
+                    -586.493896484375
+                  ],
+                  "normal": [
+                    -0.264957129955292,
+                    0.0,
+                    -0.964260220527649
+                  ]
+                }
+              },
+              "input_released": true,
+              "release_physics_counter": 170,
+              "input_strengths_after_release": {
+                "move_forward": 0.0,
+                "move_back": 0.0,
+                "move_left": 0.0,
+                "move_right": 0.0,
+                "run": 0.0,
+                "jetpack": 0.0
+              }
+            },
+            "forward_rows": 87,
+            "brake_rows": 30,
+            "retreat_input_rows": 30,
+            "retreat_brake_rows": 20,
+            "approach": {
+              "complete_rows": 117,
+              "obstruction_contact_events": 1,
+              "distinct_obstruction_contact_rows": 1,
+              "land_contact_events": 85,
+              "distinct_land_contact_rows": 70,
+              "empty_contact_rows": 46,
+              "all_recorded_on_floor": true
+            },
+            "retreat": {
+              "complete_rows": 50,
+              "obstruction_contact_events": 0,
+              "distinct_obstruction_contact_rows": 0,
+              "land_contact_events": 15,
+              "distinct_land_contact_rows": 15,
+              "empty_contact_rows": 35,
+              "all_recorded_on_floor": true
+            },
+            "stop_depth_m": 0.482700765132904,
+            "station_diagnostic_only": true,
+            "station_held": true,
+            "trace_transform_writes": 0,
+            "retreat_transform_writes": 0,
+            "retreat_ok": true,
+            "retreat_destination_ok": true,
+            "retreat_stopped": true
+          },
+          {
+            "label": "nearby-short-screen-obstruction",
+            "record_state": "complete",
+            "performed": true,
+            "ok": true,
+            "expected_shape": 4.0,
+            "expected_role": "LocalPrivacyScreens",
+            "forward_termination": {
+              "mode": "first_verified_expected_contact",
+              "maximum_input_frames": 65,
+              "sampled_input_frames": 35,
+              "termination_reason": "verified_expected_contact",
+              "trigger": {
+                "input_frame": 35,
+                "physics_counter": 325,
+                "process_counter": 324,
+                "drawn_counter": 324,
+                "contact": {
+                  "collider_path": "/root/Main/WorldRoot/CaptureOnlyMariner1212Study/PhysicalDetails_NoSprayReceiver",
+                  "exact_structure_body": true,
+                  "shape_index": 4,
+                  "derived_object_key": "prototype:building:w96215649:wall",
+                  "feature_kind": "bounded_facade_detail",
+                  "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyMariner1212Study/PhysicalDetails_NoSprayReceiver/LocalPrivacyScreens",
+                  "structural_role": "LocalPrivacyScreens",
+                  "collision_layer": 5,
+                  "spray_receiver_group": false,
+                  "resolved_receiver_metadata": {
+                    "receiver_kind": "none",
+                    "opaque": false,
+                    "derived_object_key": "prototype:building:w96215649:wall",
+                    "source_keys": [
+                      "w96215649"
+                    ]
+                  },
+                  "position": [
+                    -180.427383422852,
+                    3.77078342437744,
+                    -587.256713867188
+                  ],
+                  "normal": [
+                    -0.248902589082718,
+                    0.0,
+                    -0.968528509140015
+                  ]
+                }
+              },
+              "input_released": true,
+              "release_physics_counter": 325,
+              "input_strengths_after_release": {
+                "move_forward": 0.0,
+                "move_back": 0.0,
+                "move_left": 0.0,
+                "move_right": 0.0,
+                "run": 0.0,
+                "jetpack": 0.0
+              }
+            },
+            "forward_rows": 35,
+            "brake_rows": 30,
+            "retreat_input_rows": 30,
+            "retreat_brake_rows": 20,
+            "approach": {
+              "complete_rows": 65,
+              "obstruction_contact_events": 1,
+              "distinct_obstruction_contact_rows": 1,
+              "land_contact_events": 31,
+              "distinct_land_contact_rows": 31,
+              "empty_contact_rows": 33,
+              "all_recorded_on_floor": true
+            },
+            "retreat": {
+              "complete_rows": 50,
+              "obstruction_contact_events": 0,
+              "distinct_obstruction_contact_rows": 0,
+              "land_contact_events": 50,
+              "distinct_land_contact_rows": 50,
+              "empty_contact_rows": 0,
+              "all_recorded_on_floor": true
+            },
+            "stop_depth_m": 1.7513792514801,
+            "station_diagnostic_only": true,
+            "station_held": true,
+            "trace_transform_writes": 0,
+            "retreat_transform_writes": 0,
+            "retreat_ok": true,
+            "retreat_destination_ok": true,
+            "retreat_stopped": true
+          }
+        ],
+        "sprays": [
+          {
+            "label": "mapped-blank-siding-wall",
+            "record_state": "complete",
+            "performed": true,
+            "skipped_reason": "",
+            "ok": true,
+            "result": [
+              "placed"
+            ],
+            "actual_player_hit_distance_m": 5.21450757980347,
+            "actual_ray": {
+              "collider_path": "/root/Main/WorldRoot/CaptureOnlyMariner1212Study/OriginalWallRecord/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "building:w96215649:wall",
+              "feature_kind": "building_wall",
+              "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyMariner1212Study/OriginalWallRecord/Collision/Shape",
+              "structural_role": "",
+              "collision_layer": 5,
+              "spray_receiver_group": true,
+              "resolved_receiver_metadata": {
+                "receiver_kind": "building_wall",
+                "opaque": true,
+                "derived_object_key": "building:w96215649:wall",
+                "source_keys": [
+                  "w96215649"
+                ]
+              }
+            },
+            "identity_signals": [
+              {
+                "derived_object_key": "building:w96215649:wall",
+                "source_keys": [
+                  "w96215649"
+                ]
+              }
+            ],
+            "tags_before": 0,
+            "tags_after": 1,
+            "timing_usec": {
+              "clock": "Time.get_ticks_usec monotonic wall",
+              "stock_call_usec": 37607,
+              "post_call_observation_usec": 59,
+              "marker_call_usec": 193255,
+              "setup_and_settle_usec": 900624,
+              "final_aim_and_wait_usec": 475411,
+              "pre_call_observation_usec": 7797,
+              "attempt_total_wall_usec": 1614807
+            },
+            "stock_result_string": "placed",
+            "result_semantics": "Original result stores a one-element String observation array; shape_index is a separate collision index, not an enum."
+          },
+          {
+            "label": "authored-closed-door",
+            "record_state": "complete",
+            "performed": true,
+            "skipped_reason": "",
+            "ok": true,
+            "result": [
+              "receiver_rejection"
+            ],
+            "actual_player_hit_distance_m": 3.55825281143188,
+            "actual_ray": {
+              "collider_path": "/root/Main/WorldRoot/CaptureOnlyMariner1212Study/PhysicalDetails_NoSprayReceiver",
+              "exact_structure_body": true,
+              "shape_index": 3,
+              "derived_object_key": "prototype:building:w96215649:wall",
+              "feature_kind": "bounded_facade_detail",
+              "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyMariner1212Study/PhysicalDetails_NoSprayReceiver/DarkReddishClosedDoors",
+              "structural_role": "DarkReddishClosedDoors",
+              "collision_layer": 5,
+              "spray_receiver_group": false,
+              "resolved_receiver_metadata": {
+                "receiver_kind": "none",
+                "opaque": false,
+                "derived_object_key": "prototype:building:w96215649:wall",
+                "source_keys": [
+                  "w96215649"
+                ]
+              }
+            },
+            "identity_signals": [],
+            "tags_before": 1,
+            "tags_after": 1,
+            "timing_usec": {
+              "clock": "Time.get_ticks_usec monotonic wall",
+              "stock_call_usec": 3195,
+              "post_call_observation_usec": 7,
+              "marker_call_usec": 0,
+              "setup_and_settle_usec": 823891,
+              "final_aim_and_wait_usec": 455607,
+              "pre_call_observation_usec": 5159,
+              "attempt_total_wall_usec": 1287891
+            },
+            "stock_result_string": "receiver_rejection",
+            "result_semantics": "Original result stores a one-element String observation array; shape_index is a separate collision index, not an enum."
+          },
+          {
+            "label": "authored-short-screen",
+            "record_state": "complete",
+            "performed": true,
+            "skipped_reason": "",
+            "ok": true,
+            "result": [
+              "receiver_rejection"
+            ],
+            "actual_player_hit_distance_m": 2.47863864898682,
+            "actual_ray": {
+              "collider_path": "/root/Main/WorldRoot/CaptureOnlyMariner1212Study/PhysicalDetails_NoSprayReceiver",
+              "exact_structure_body": true,
+              "shape_index": 4,
+              "derived_object_key": "prototype:building:w96215649:wall",
+              "feature_kind": "bounded_facade_detail",
+              "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyMariner1212Study/PhysicalDetails_NoSprayReceiver/LocalPrivacyScreens",
+              "structural_role": "LocalPrivacyScreens",
+              "collision_layer": 5,
+              "spray_receiver_group": false,
+              "resolved_receiver_metadata": {
+                "receiver_kind": "none",
+                "opaque": false,
+                "derived_object_key": "prototype:building:w96215649:wall",
+                "source_keys": [
+                  "w96215649"
+                ]
+              }
+            },
+            "identity_signals": [],
+            "tags_before": 1,
+            "tags_after": 1,
+            "timing_usec": {
+              "clock": "Time.get_ticks_usec monotonic wall",
+              "stock_call_usec": 25,
+              "post_call_observation_usec": 3,
+              "marker_call_usec": 0,
+              "setup_and_settle_usec": 833312,
+              "final_aim_and_wait_usec": 452917,
+              "pre_call_observation_usec": 5352,
+              "attempt_total_wall_usec": 1291637
+            },
+            "stock_result_string": "receiver_rejection",
+            "result_semantics": "Original result stores a one-element String observation array; shape_index is a separate collision index, not an enum."
+          }
+        ],
+        "actual_total_rows": 282,
+        "empty_contact_rows": 114,
+        "setup_placements": [
+          {
+            "position": [
+              -186.793579101562,
+              2.70016813278198,
+              -604.809387207031
+            ],
+            "physics_counter": 6,
+            "setup_only": true
+          },
+          {
+            "position": [
+              -180.027481079102,
+              2.63732862472534,
+              -592.149536132812
+            ],
+            "physics_counter": 46,
+            "setup_only": true
+          },
+          {
+            "position": [
+              -181.108047485352,
+              2.64980840682983,
+              -589.571105957031
+            ],
+            "physics_counter": 253,
+            "setup_only": true
+          },
+          {
+            "position": [
+              -182.255920410156,
+              2.66166639328003,
+              -589.463134765625
+            ],
+            "physics_counter": 408,
+            "setup_only": true
+          },
+          {
+            "position": [
+              -179.362503051758,
+              2.63177251815796,
+              -589.739562988281
+            ],
+            "physics_counter": 468,
+            "setup_only": true
+          },
+          {
+            "position": [
+              -181.108047485352,
+              2.64980840682983,
+              -589.571105957031
+            ],
+            "physics_counter": 525,
+            "setup_only": true
+          }
+        ],
+        "recoveries": [],
+        "lighting": {
+          "initial_sun": [
+            -51.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "after_changed_capture": [
+            -25.9999980926514,
+            125.999992370605,
+            0.0
+          ],
+          "restored_sun": [
+            -51.9999961853027,
+            -27.9999980926514,
+            0.0
+          ]
+        },
+        "recorded_reached_scope": {
+          "saved_capture_ids": [
+            "01-whole-near-face-changed-light",
+            "02-held-closed-door-approach",
+            "03-held-short-screen-obstruction",
+            "04-actual-mapped-siding-spray"
+          ],
+          "route_attempts": [
+            {
+              "id": "extended-approach-to-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "nearby-short-screen-obstruction",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "spray_attempts": [
+            {
+              "id": "mapped-blank-siding-wall",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-short-screen",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "unreached_route_ids": [],
+          "unreached_spray_ids": []
+        },
+        "spray_phase_wall_usec": 4194374,
+        "world_authority": "18/213",
+        "world_baseline_counts": {
+          "rows": 735,
+          "meshes": 1050,
+          "surfaces": 1065,
+          "triangles": 108921,
+          "bodies": 468,
+          "shapes": 492
+        },
+        "scope": "1212 contact-responsive door/screen helper on unchanged accepted static study in capture-time18; original sustained-forward slide remains unfixed: changed-light whole still, door and nearby screen approaches with same-corridor retreats, three stock spray cases. Actual reached/performed records determine partial or completed scope. No authority/recognition or package claim."
+      }
+    ],
+    "corrected_marker": null,
+    "historical_failed_runs": [
+      {
+        "stage": "1212-mechanics-changed-light-preparation-001",
+        "raw_result": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+          "path_base": "/",
+          "sha256": "6662b53b66c82c83770f1af62672207584b2a7136e8f8e030269c341ebd352f2",
+          "bytes": 4668237,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+          "role": "immutable_external_original",
+          "copied": false
+        },
+        "raw_ok": false,
+        "failures": [
+          "extended-approach-to-closed-door actual complete grounded stock input contacts the expected authored obstruction and naturally stops without source/camera penetration."
+        ],
+        "reached_scope": {
+          "saved_capture_ids": [
+            "01-whole-near-face-changed-light",
+            "02-held-closed-door-approach"
+          ],
+          "route_attempts": [
+            {
+              "id": "extended-approach-to-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": false
+            }
+          ],
+          "spray_attempts": [],
+          "unreached_route_ids": [
+            "nearby-short-screen-obstruction"
+          ],
+          "unreached_spray_ids": [
+            "mapped-blank-siding-wall",
+            "authored-closed-door",
+            "authored-short-screen"
+          ]
+        },
+        "movie": {
+          "path": "/private/tmp/1212-mariner-mechanics-001/1212-mariner-mechanics.avi",
+          "sha256": "c210f179d46d7808649e1c419ee7fb8fd2e7c02137ec512e94eb3374b08c6b26",
+          "physical_bytes": 16615346,
+          "riff_declared_end": 16615276,
+          "microseconds_per_frame": 16666,
+          "total_frames": 227,
+          "width": 1280,
+          "height": 800
+        },
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/ACTUAL_HANDOFF.md",
+            "path_base": "/",
+            "sha256": "0130136e54203480176c21ba6e89e2d61e87f3be7bb197cc0591cd9d73c38032",
+            "bytes": 1557,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/ACTUAL_HANDOFF.md",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/FILE_READY.json",
+            "path_base": "/",
+            "sha256": "ce4bf351c0eb915035345f2216dc8d207373a8968df3d6c7b2d884572e3b3177",
+            "bytes": 10836,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/FILE_READY.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/FILE_READY.md",
+            "path_base": "/",
+            "sha256": "c9282c2bb4a0211284e36301ba3f6c945957c5fcf195b749d78ea9386e30a08c",
+            "bytes": 6027,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/FILE_READY.md",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/SLOT_RELEASE.json",
+            "path_base": "/",
+            "sha256": "60bf403137cbb4f05bd05613a72bcb46af0109c52f933d9706d0f67dca566aa7",
+            "bytes": 579,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/SLOT_RELEASE.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/live_driver.gd",
+            "path_base": "/",
+            "sha256": "cefa9bb2b51c22937885723bd11647dc0da84e9f612067fa3568eaeb07c7f90f",
+            "bytes": 75267,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/live_driver.gd",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/motion-finalization.json",
+            "path_base": "/",
+            "sha256": "bf16e195f325b0790e39c775daaa00005bc5fe62cb1c38130d82f4aed4aca030",
+            "bytes": 782361,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/motion-finalization.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/native-mechanics-001-execution.json",
+            "path_base": "/",
+            "sha256": "bb537eedd77c88a5a0dc477d639681ece3b5769c5226be1e96f64efce655e29c",
+            "bytes": 530869,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/native-mechanics-001-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+            "path_base": "/",
+            "sha256": "6662b53b66c82c83770f1af62672207584b2a7136e8f8e030269c341ebd352f2",
+            "bytes": 4668237,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/native-mechanics-001.log",
+            "path_base": "/",
+            "sha256": "e963d0e71bdcc291cde31949001ba94cf5116135a5f986097be31c87dedf43e8",
+            "bytes": 1136,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/native-mechanics-001.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/run-plan.json",
+            "path_base": "/",
+            "sha256": "e7cdc427ca442634a6a0491500fc9ca94837551e3bdbddafc125d8d41d857978",
+            "bytes": 4575,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/run-plan.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/source-pins.json",
+            "path_base": "/",
+            "sha256": "02102f4a7744cc7765ce6c1de77c173e1d3d5865dd6db718b3b953aec9114f57",
+            "bytes": 260333,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-mechanics-changed-light-preparation-001/source-pins.json",
+            "role": "immutable_external_original",
+            "copied": false
+          }
+        ],
+        "not_retroactively_passed": true
+      },
+      {
+        "stage": "1212-contact-response-preparation-001",
+        "raw_result": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/native-mechanics-001-result.json",
+          "path_base": "/",
+          "sha256": "0bf1fa2a5a33c25853dd73ddd918237a31e5223e758f1e736a1c83ba61deba8e",
+          "bytes": 5962053,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/native-mechanics-001-result.json",
+          "role": "immutable_external_original",
+          "copied": false
+        },
+        "raw_ok": false,
+        "failures": [
+          "nearby-short-screen-obstruction actual complete grounded stock input contacts the expected authored obstruction and naturally stops without source/camera penetration."
+        ],
+        "reached_scope": {
+          "saved_capture_ids": [
+            "01-whole-near-face-changed-light",
+            "02-held-closed-door-approach",
+            "03-held-short-screen-obstruction"
+          ],
+          "route_attempts": [
+            {
+              "id": "extended-approach-to-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "nearby-short-screen-obstruction",
+              "record_state": "complete",
+              "performed": true,
+              "ok": false
+            }
+          ],
+          "spray_attempts": [],
+          "unreached_route_ids": [],
+          "unreached_spray_ids": [
+            "mapped-blank-siding-wall",
+            "authored-closed-door",
+            "authored-short-screen"
+          ]
+        },
+        "movie": {
+          "path": "/private/tmp/1212-contact-response-001/1212-contact-response.avi",
+          "sha256": "ac81642a505e7f608b1c2fb400713b6b488c9d76eece74801fdac4cd54b5b7f9",
+          "physical_bytes": 28052660,
+          "riff_declared_end": 28052590,
+          "microseconds_per_frame": 16666,
+          "total_frames": 389,
+          "width": 1280,
+          "height": 800
+        },
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/ACTUAL_HANDOFF.md",
+            "path_base": "/",
+            "sha256": "d52c37b893ad8c8b15cabc6300b1f63dffce09128cc22f60b038b286e0957b2a",
+            "bytes": 7715,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/ACTUAL_HANDOFF.md",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/FILE_READY.json",
+            "path_base": "/",
+            "sha256": "bd6da2a79e623f2736749a8f8a107957b2b46a7b38674f1a830990c4bbaaeb63",
+            "bytes": 9917,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/FILE_READY.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/FILE_READY.md",
+            "path_base": "/",
+            "sha256": "15370ab6e0abcfd8ce66aa196856b35b36fcfa6deee9198c33b28708594127c5",
+            "bytes": 2504,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/FILE_READY.md",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/SLOT_RELEASE.json",
+            "path_base": "/",
+            "sha256": "637a73ba3dc7d8faa5eb5617dc38159214648b7056356e2885fb3fc03e13b11b",
+            "bytes": 580,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/SLOT_RELEASE.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/live_driver.gd",
+            "path_base": "/",
+            "sha256": "e924feaf49cf9bef1f80fb3e5e6d35f3af410996689ba9b80cf7eeb6af27a40c",
+            "bytes": 79164,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/live_driver.gd",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/motion-finalization.json",
+            "path_base": "/",
+            "sha256": "46ecedd177fd9e36b0eb87b04e85bde4c8edc7932fd23ed18a7f0a001aef05e7",
+            "bytes": 1447105,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/motion-finalization.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/native-mechanics-001-execution.json",
+            "path_base": "/",
+            "sha256": "e7eec20bc21008284e624d5f9ee7b25106e0b3c9868fa390766dceaccd46e6a5",
+            "bytes": 564600,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/native-mechanics-001-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/native-mechanics-001-result.json",
+            "path_base": "/",
+            "sha256": "0bf1fa2a5a33c25853dd73ddd918237a31e5223e758f1e736a1c83ba61deba8e",
+            "bytes": 5962053,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/native-mechanics-001-result.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/native-mechanics-001.log",
+            "path_base": "/",
+            "sha256": "85ab14134f22768561151434f9f2c14d9ec411d2b743bde212bfb20e1e9ec7d1",
+            "bytes": 1242,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/native-mechanics-001.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/run-plan.json",
+            "path_base": "/",
+            "sha256": "9265d548d3c0b299a112c5293ca4834dac154722467d13937a934b6beb9cc86e",
+            "bytes": 6481,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/run-plan.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/source-pins.json",
+            "path_base": "/",
+            "sha256": "e695292f06f1b6a97d8501f360c6b044f89469a7adcfaa72ed443f04884ff354",
+            "bytes": 275682,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-contact-response-preparation-001/source-pins.json",
+            "role": "immutable_external_original",
+            "copied": false
+          }
+        ],
+        "not_retroactively_passed": true
+      }
+    ],
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "combined_single_success_run_claim": true,
+    "limits": [
+      "Derived assembly only: existing independently accepted study decisions are bound, not newly accepted by this author. Current preparation context is 20/213; all selected source captures retain their actual historical 18/213 state and original metrics.",
+      "The source study is not a live adapter or app screenshot. Future shared three-unit candidate/app/PCK, per-unit package receipts and independent seventh attestations are pending/null. No authority write or recognition credit is supplied.",
+      "Original 1440x900 PNGs and 1280x800 AVI payloads remain distinct. Full movies retain 70 physical trailing bytes beyond declared RIFF end. Sparse samples are not continuous playback, flicker freedom, manual input or encoded/physics/process/draw equality.",
+      "Changed-light whole is followed by restored default sun before motion. Routes use separate explicit setup poses; no continuous traversal between setups is claimed. Stock String outcomes, hit-shape indices and tag counts remain distinct.",
+      "Reference images remain private external locators and are never copied into packet images, game, Git or app. Counts, dimensions and roof closure are bounded production inference; protected or hidden regions are not newly authorized.",
+      "Full raw records, logs, maps, original films and historical failed media remain in their existing retained locations. This preparation copies only selected gameplay images; it introduces no new source or mechanical proof and preserves all referenced reviewers' narrower limits.",
+      "Both prior sustained-forward attempts remain HOLD: 140 door rows in the first and 262 reached door/screen rows in the successor. The final contact-responsive helper does not repair prolonged pushing, rewrite their media or retroactively pass those attempts.",
+      "The final run has door 87 forward + 30 brake + 30 retreat + 20 brake and screen 35 + 30 + 30 + 20, totaling 282 actual rows. Contact events and distinct contact rows are separate counters. All 114 empty slide-contact arrays are retained as actual records, not missing telemetry or direct-contact proof.",
+      "D retains minimum foot/source LAND -1.431934 mm as a solver/interpolation limitation. Sparse center/ring support and on-floor states are not continuous swept support or zero capsule penetration.",
+      "Source runs 14-17, 19-22 and 24-27 are mapped; runs 0-13, 18 and 23 are protected. Hidden returns 18/23 are not wrapped. Roof pitch, closure, module counts and dimensions remain production inference.",
+      "Final AVI sample 581 is plain blue and supplies no scene credit. Changed-light whole is byte-identical to the prior reached whole image; identical bytes do not relabel the older failed attempt as successful."
+    ]
+  },
+  "truth_boundary": "Derived first-five preparation; existing scoped study decisions only. Package/app/seventh/authority pending; current20 unchanged, captures18, credit0."
+}

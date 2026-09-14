@@ -1,0 +1,515 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215658",
+  "label": "Complete immutable raw motion plus compact actual counters",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1239-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+      "path_base": "/",
+      "sha256": "cbea4cb1697d28973e393da19b3647b153fafa1152c18fe7c8d6c459c248113a",
+      "bytes": 8603969,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1239-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+      "role": "immutable_external_original",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1239-mechanics-changed-light-preparation-001/ACTUAL_HANDOFF.md",
+      "path_base": "/",
+      "sha256": "5567a8d8b461203670d0c806969dfc81f6ef4a2b93eab244852503c13eb62f5e",
+      "bytes": 9448,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1239-mechanics-changed-light-preparation-001/ACTUAL_HANDOFF.md",
+      "role": "immutable_external_original",
+      "copied": false
+    }
+  ],
+  "data": {
+    "runs": [
+      {
+        "phase": "1239-mechanics-changed-light-preparation-001",
+        "raw_result": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1239-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+          "path_base": "/",
+          "sha256": "cbea4cb1697d28973e393da19b3647b153fafa1152c18fe7c8d6c459c248113a",
+          "bytes": 8603969,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1239-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+          "role": "immutable_external_original",
+          "copied": false
+        },
+        "raw_ok": true,
+        "raw_failures": [],
+        "routes": [
+          {
+            "label": "extended-approach-to-closed-door",
+            "record_state": "complete",
+            "performed": true,
+            "ok": true,
+            "expected_shape": 4.0,
+            "expected_role": "MutedRoseClosedDoors",
+            "forward_termination": {
+              "mode": "first_verified_expected_contact",
+              "maximum_input_frames": 110,
+              "sampled_input_frames": 87,
+              "termination_reason": "verified_expected_contact",
+              "trigger": {
+                "input_frame": 87,
+                "physics_counter": 170,
+                "process_counter": 169,
+                "drawn_counter": 169,
+                "contact": {
+                  "collider_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1239Study/PhysicalDetails_NoSprayReceiver",
+                  "exact_structure_body": true,
+                  "shape_index": 4,
+                  "derived_object_key": "prototype:building:w96215658:wall",
+                  "feature_kind": "bounded_facade_detail",
+                  "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1239Study/PhysicalDetails_NoSprayReceiver/MutedRoseClosedDoors",
+                  "structural_role": "MutedRoseClosedDoors",
+                  "collision_layer": 5,
+                  "spray_receiver_group": false,
+                  "resolved_receiver_metadata": {
+                    "receiver_kind": "none",
+                    "opaque": false,
+                    "derived_object_key": "prototype:building:w96215658:wall",
+                    "source_keys": [
+                      "w96215658"
+                    ]
+                  },
+                  "position": [
+                    -153.314865112305,
+                    3.76321244239807,
+                    -823.17529296875
+                  ],
+                  "normal": [
+                    -0.96887481212616,
+                    0.0,
+                    0.247551366686821
+                  ]
+                }
+              },
+              "input_released": true,
+              "release_physics_counter": 170,
+              "input_strengths_after_release": {
+                "move_forward": 0.0,
+                "move_back": 0.0,
+                "move_left": 0.0,
+                "move_right": 0.0,
+                "run": 0.0,
+                "jetpack": 0.0
+              }
+            },
+            "forward_rows": 87,
+            "brake_rows": 30,
+            "retreat_input_rows": 30,
+            "retreat_brake_rows": 20,
+            "approach": {
+              "complete_rows": 117,
+              "obstruction_contact_events": 1,
+              "distinct_obstruction_contact_rows": 1,
+              "land_contact_events": 140,
+              "distinct_land_contact_rows": 116,
+              "empty_contact_rows": 0,
+              "all_recorded_on_floor": true
+            },
+            "retreat": {
+              "complete_rows": 50,
+              "obstruction_contact_events": 0,
+              "distinct_obstruction_contact_rows": 0,
+              "land_contact_events": 2,
+              "distinct_land_contact_rows": 2,
+              "empty_contact_rows": 48,
+              "all_recorded_on_floor": true
+            },
+            "stop_depth_m": 0.481598526239395,
+            "station_diagnostic_only": true,
+            "station_held": true,
+            "trace_transform_writes": 0,
+            "retreat_transform_writes": 0,
+            "retreat_ok": true,
+            "retreat_destination_ok": true,
+            "retreat_stopped": true
+          },
+          {
+            "label": "nearby-short-screen-obstruction",
+            "record_state": "complete",
+            "performed": true,
+            "ok": true,
+            "expected_shape": 5.0,
+            "expected_role": "LocalPrivacyScreens",
+            "forward_termination": {
+              "mode": "first_verified_expected_contact",
+              "maximum_input_frames": 65,
+              "sampled_input_frames": 35,
+              "termination_reason": "verified_expected_contact",
+              "trigger": {
+                "input_frame": 35,
+                "physics_counter": 325,
+                "process_counter": 324,
+                "drawn_counter": 324,
+                "contact": {
+                  "collider_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1239Study/PhysicalDetails_NoSprayReceiver",
+                  "exact_structure_body": true,
+                  "shape_index": 5,
+                  "derived_object_key": "prototype:building:w96215658:wall",
+                  "feature_kind": "bounded_facade_detail",
+                  "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1239Study/PhysicalDetails_NoSprayReceiver/LocalPrivacyScreens",
+                  "structural_role": "LocalPrivacyScreens",
+                  "collision_layer": 5,
+                  "spray_receiver_group": false,
+                  "resolved_receiver_metadata": {
+                    "receiver_kind": "none",
+                    "opaque": false,
+                    "derived_object_key": "prototype:building:w96215658:wall",
+                    "source_keys": [
+                      "w96215658"
+                    ]
+                  },
+                  "position": [
+                    -154.147552490234,
+                    4.01300859451294,
+                    -821.376037597656
+                  ],
+                  "normal": [
+                    -0.971384406089783,
+                    0.0,
+                    0.237512528896332
+                  ]
+                }
+              },
+              "input_released": true,
+              "release_physics_counter": 325,
+              "input_strengths_after_release": {
+                "move_forward": 0.0,
+                "move_back": 0.0,
+                "move_left": 0.0,
+                "move_right": 0.0,
+                "run": 0.0,
+                "jetpack": 0.0
+              }
+            },
+            "forward_rows": 35,
+            "brake_rows": 30,
+            "retreat_input_rows": 30,
+            "retreat_brake_rows": 20,
+            "approach": {
+              "complete_rows": 65,
+              "obstruction_contact_events": 1,
+              "distinct_obstruction_contact_rows": 1,
+              "land_contact_events": 72,
+              "distinct_land_contact_rows": 64,
+              "empty_contact_rows": 0,
+              "all_recorded_on_floor": true
+            },
+            "retreat": {
+              "complete_rows": 50,
+              "obstruction_contact_events": 0,
+              "distinct_obstruction_contact_rows": 0,
+              "land_contact_events": 18,
+              "distinct_land_contact_rows": 18,
+              "empty_contact_rows": 32,
+              "all_recorded_on_floor": true
+            },
+            "stop_depth_m": 1.74574947357178,
+            "station_diagnostic_only": true,
+            "station_held": true,
+            "trace_transform_writes": 0,
+            "retreat_transform_writes": 0,
+            "retreat_ok": true,
+            "retreat_destination_ok": true,
+            "retreat_stopped": true
+          }
+        ],
+        "sprays": [
+          {
+            "label": "mapped-blank-siding-wall",
+            "record_state": "complete",
+            "performed": true,
+            "skipped_reason": "",
+            "ok": true,
+            "result": [
+              "placed"
+            ],
+            "actual_player_hit_distance_m": 4.60715532302856,
+            "actual_ray": {
+              "collider_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1239Study/OriginalWallRecord/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "building:w96215658:wall",
+              "feature_kind": "building_wall",
+              "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1239Study/OriginalWallRecord/Collision/Shape",
+              "structural_role": "",
+              "collision_layer": 5,
+              "spray_receiver_group": true,
+              "resolved_receiver_metadata": {
+                "receiver_kind": "building_wall",
+                "opaque": true,
+                "derived_object_key": "building:w96215658:wall",
+                "source_keys": [
+                  "w96215658"
+                ]
+              }
+            },
+            "identity_signals": [
+              {
+                "derived_object_key": "building:w96215658:wall",
+                "source_keys": [
+                  "w96215658"
+                ]
+              }
+            ],
+            "tags_before": 0,
+            "tags_after": 1,
+            "timing_usec": {
+              "clock": "Time.get_ticks_usec monotonic wall",
+              "stock_call_usec": 37485,
+              "post_call_observation_usec": 42,
+              "marker_call_usec": 262018,
+              "setup_and_settle_usec": 792225,
+              "final_aim_and_wait_usec": 389553,
+              "pre_call_observation_usec": 3045,
+              "attempt_total_wall_usec": 1484493
+            },
+            "stock_result_string": "placed",
+            "result_semantics": "Original result stores a one-element String observation array; shape_index is a separate collision index, not an enum."
+          },
+          {
+            "label": "authored-closed-door",
+            "record_state": "complete",
+            "performed": true,
+            "skipped_reason": "",
+            "ok": true,
+            "result": [
+              "receiver_rejection"
+            ],
+            "actual_player_hit_distance_m": 3.56172776222229,
+            "actual_ray": {
+              "collider_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1239Study/PhysicalDetails_NoSprayReceiver",
+              "exact_structure_body": true,
+              "shape_index": 4,
+              "derived_object_key": "prototype:building:w96215658:wall",
+              "feature_kind": "bounded_facade_detail",
+              "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1239Study/PhysicalDetails_NoSprayReceiver/MutedRoseClosedDoors",
+              "structural_role": "MutedRoseClosedDoors",
+              "collision_layer": 5,
+              "spray_receiver_group": false,
+              "resolved_receiver_metadata": {
+                "receiver_kind": "none",
+                "opaque": false,
+                "derived_object_key": "prototype:building:w96215658:wall",
+                "source_keys": [
+                  "w96215658"
+                ]
+              }
+            },
+            "identity_signals": [],
+            "tags_before": 1,
+            "tags_after": 1,
+            "timing_usec": {
+              "clock": "Time.get_ticks_usec monotonic wall",
+              "stock_call_usec": 2981,
+              "post_call_observation_usec": 5,
+              "marker_call_usec": 0,
+              "setup_and_settle_usec": 749774,
+              "final_aim_and_wait_usec": 411872,
+              "pre_call_observation_usec": 2959,
+              "attempt_total_wall_usec": 1167693
+            },
+            "stock_result_string": "receiver_rejection",
+            "result_semantics": "Original result stores a one-element String observation array; shape_index is a separate collision index, not an enum."
+          },
+          {
+            "label": "authored-short-screen",
+            "record_state": "complete",
+            "performed": true,
+            "skipped_reason": "",
+            "ok": true,
+            "result": [
+              "receiver_rejection"
+            ],
+            "actual_player_hit_distance_m": 2.48327946662903,
+            "actual_ray": {
+              "collider_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1239Study/PhysicalDetails_NoSprayReceiver",
+              "exact_structure_body": true,
+              "shape_index": 5,
+              "derived_object_key": "prototype:building:w96215658:wall",
+              "feature_kind": "bounded_facade_detail",
+              "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1239Study/PhysicalDetails_NoSprayReceiver/LocalPrivacyScreens",
+              "structural_role": "LocalPrivacyScreens",
+              "collision_layer": 5,
+              "spray_receiver_group": false,
+              "resolved_receiver_metadata": {
+                "receiver_kind": "none",
+                "opaque": false,
+                "derived_object_key": "prototype:building:w96215658:wall",
+                "source_keys": [
+                  "w96215658"
+                ]
+              }
+            },
+            "identity_signals": [],
+            "tags_before": 1,
+            "tags_after": 1,
+            "timing_usec": {
+              "clock": "Time.get_ticks_usec monotonic wall",
+              "stock_call_usec": 25,
+              "post_call_observation_usec": 3,
+              "marker_call_usec": 0,
+              "setup_and_settle_usec": 748767,
+              "final_aim_and_wait_usec": 431050,
+              "pre_call_observation_usec": 2960,
+              "attempt_total_wall_usec": 1182896
+            },
+            "stock_result_string": "receiver_rejection",
+            "result_semantics": "Original result stores a one-element String observation array; shape_index is a separate collision index, not an enum."
+          }
+        ],
+        "actual_total_rows": 282,
+        "empty_contact_rows": 80,
+        "setup_placements": [
+          {
+            "position": [
+              -174.855575561523,
+              3.04268789291382,
+              -838.7392578125
+            ],
+            "physics_counter": 6,
+            "setup_only": true
+          },
+          {
+            "position": [
+              -159.000762939453,
+              2.81356573104858,
+              -821.67626953125
+            ],
+            "physics_counter": 46,
+            "setup_only": true
+          },
+          {
+            "position": [
+              -156.466415405273,
+              2.85203504562378,
+              -820.711181640625
+            ],
+            "physics_counter": 253,
+            "setup_only": true
+          },
+          {
+            "position": [
+              -156.310272216797,
+              2.8637957572937,
+              -819.362243652344
+            ],
+            "physics_counter": 408,
+            "setup_only": true
+          },
+          {
+            "position": [
+              -156.578552246094,
+              2.83911085128784,
+              -822.295104980469
+            ],
+            "physics_counter": 468,
+            "setup_only": true
+          },
+          {
+            "position": [
+              -156.466415405273,
+              2.85203504562378,
+              -820.711181640625
+            ],
+            "physics_counter": 525,
+            "setup_only": true
+          }
+        ],
+        "recoveries": [],
+        "lighting": {
+          "initial_sun": [
+            -51.9999961853027,
+            -27.9999980926514,
+            0.0
+          ],
+          "after_changed_capture": [
+            -25.9999980926514,
+            125.999992370605,
+            0.0
+          ],
+          "restored_sun": [
+            -51.9999961853027,
+            -27.9999980926514,
+            0.0
+          ]
+        },
+        "recorded_reached_scope": {
+          "saved_capture_ids": [
+            "01-whole-near-face-changed-light",
+            "02-held-closed-door-approach",
+            "03-held-short-screen-obstruction",
+            "04-actual-mapped-siding-spray"
+          ],
+          "route_attempts": [
+            {
+              "id": "extended-approach-to-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "nearby-short-screen-obstruction",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "spray_attempts": [
+            {
+              "id": "mapped-blank-siding-wall",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-short-screen",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "unreached_route_ids": [],
+          "unreached_spray_ids": []
+        },
+        "spray_phase_wall_usec": 3835143,
+        "world_authority": "18/213",
+        "world_baseline_counts": {
+          "rows": 735,
+          "meshes": 1050,
+          "surfaces": 1065,
+          "triangles": 108921,
+          "bodies": 468,
+          "shapes": 492
+        },
+        "scope": "1239 initial contact-responsive door/screen mechanics on unchanged accepted static study in capture-time18; no sustained-forward behavior beyond first expected contact is claimed: changed-light whole still, door and nearby screen approaches with same-corridor retreats, three stock spray cases. Actual reached/performed records determine partial or completed scope. No authority/recognition or package claim."
+      }
+    ],
+    "corrected_marker": null,
+    "historical_failed_runs": [],
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "combined_single_success_run_claim": true,
+    "limits": [
+      "Derived assembly only: existing independently accepted study decisions are bound, not newly accepted by this author. Current preparation context is 20/213; all selected source captures retain their actual historical 18/213 state and original metrics.",
+      "The source study is not a live adapter or app screenshot. Future shared three-unit candidate/app/PCK, per-unit package receipts and independent seventh attestations are pending/null. No authority write or recognition credit is supplied.",
+      "Original 1440x900 PNGs and 1280x800 AVI payloads remain distinct. Full movies retain 70 physical trailing bytes beyond declared RIFF end. Sparse samples are not continuous playback, flicker freedom, manual input or encoded/physics/process/draw equality.",
+      "Changed-light whole is followed by restored default sun before motion. Routes use separate explicit setup poses; no continuous traversal between setups is claimed. Stock String outcomes, hit-shape indices and tag counts remain distinct.",
+      "Reference images remain private external locators and are never copied into packet images, game, Git or app. Counts, dimensions and roof closure are bounded production inference; protected or hidden regions are not newly authorized.",
+      "Full raw records, logs, maps, original films and historical failed media remain in their existing retained locations. This preparation copies only selected gameplay images; it introduces no new source or mechanical proof and preserves all referenced reviewers' narrower limits.",
+      "The run has door 87 forward + 30 brake + 30 retreat + 20 brake and screen 35 + 30 + 30 + 20, totaling 282 actual rows and 80 empty contact arrays, all in retreats. D retains minimum capsule/LAND clearance -1.507437 mm and minimum underfoot clearance -1.471531 mm within the unchanged 4 mm qualification.",
+      "Mapped runs are 0-8 and 10-18; protected runs are 9 and 19-33. Self-hidden 10/part11 remain field/trim-only where scoped. Slightly curved source anchors, boundary-local native Float32 ground slivers up to 11.165 micrometres and inferred roof extent/pitch remain qualified, not exact-zero overlap or surveyed geometry.",
+      "The 1240 Northpoint UI label is camera-side context. March 2025 references and accepted association identify the 1239 row: taupe/gray siding, pale trim, mixed window widths, ochre and muted rose doors, shallow gray roof and short pale screens. Tree/cars/crop obscure details; hidden/rear/whole-roof closure remains unknown.",
+      "The independent motion visual review preserves the fine hairline seen in sample246 without a causal or continuous-persistence claim. Sample581 is plain blue and supplies no scene credit. PNG04 shows the complete cyan wave and small yellow dot; a W-like orientation is not a missing independent upper stroke."
+    ]
+  },
+  "truth_boundary": "Derived first-five preparation; existing scoped study decisions only. Package/app/seventh/authority pending; current20 unchanged, captures18, credit0."
+}

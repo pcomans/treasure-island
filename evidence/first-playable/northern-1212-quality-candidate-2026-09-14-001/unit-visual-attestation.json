@@ -1,0 +1,450 @@
+{
+  "reviewer": "three_building_bar_raiser",
+  "reviewed_at": "2026-09-14T15:18:19.976601+00:00",
+  "decision": "PASS",
+  "attestation_kind": "Independent per-unit candidate packet and visual attestation (seventh artifact)",
+  "physical_unit_id": "physical-building:w96215649",
+  "scope": "Exact six-role 1212 packet, candidate-package association and image tree; observed public-front recognizability, composition, changed-light finish and retained sparse motion. No authority mutation.",
+  "independence": "This is the reviewer's first involvement with these three buildings. The reviewer implemented none of their art/code/helpers, authored no source/mechanics/export/package evidence, derived none of the six-role packets, and performed no engine run. Earlier separately authored scoped decisions are reused after exact binding, with a new direct dated-reference/gameplay comparison. Technical PASS is a prerequisite, not this visual verdict.",
+  "packet": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-unit-package-binding-001/units/1212",
+  "unchanged_first_five_packet": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-unit-package-preparation-001/units/1212",
+  "candidate_closure_sha256": "ce588d8434ba9b0d78e04877f1195952b4bc7033fe685ffbda982a7b8acd2d05",
+  "acceptance_bindings": {
+    "evidence_manifest_sha256": "e639c2fe4ca2beebdd067a8d804d231ba4e4a9e55e4d85699496533479267de2",
+    "motion_telemetry_manifest_sha256": "e78ac76b320df4869bc882a52e5e37ad56a863f5e99734d9b45e2d84764a6424",
+    "visual_motion_manifest_sha256": "e094b27c9dc69797035270a9acfedcb4db9832338f4915178e101f05621b49af",
+    "package_verification_receipt_sha256": "276b71133a8ae9c1f0fd8caecdbd0365f16c3ca4655d49e99149bbaec61b0ae0",
+    "evidence_tree_sha256": "0c46621cf3d43660a7e7d8168dcdf0be5556d96b5ff1a63b0715295311565d35",
+    "mechanical_review_receipt_sha256": "6f67a10d85551c5e4226ff47edcd15a15ce25f3a179ffa0e3670d3c0981be3fb"
+  },
+  "evidence_tree_document_sha256": "f2b6f2f92521525470e6f21fcea45e519d99410e5c241f2e222e489117aaec32",
+  "binding_check": {
+    "captured_before_packet_decision": true,
+    "batch_unique_bound_files_checked": 271,
+    "batch_faults": 0,
+    "input_bindings_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-independent-seventh-001/INPUT_BINDINGS.json",
+    "input_bindings_sha256": "60148fbc4f121d7020ab2f73309d44388e0808f2cfd4a042961f2de207e971cb",
+    "prior_five_roles_unchanged": true,
+    "original_limits_preserved_count": 11,
+    "six_roles_exact": true,
+    "image_count": 17,
+    "native_png_count": 8,
+    "original_avi_payload_count": 9,
+    "all_tree_paths_sizes_hashes_and_original_copies_exact": true,
+    "no_extra_image_files_or_symlinks": true,
+    "tree_algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+    "actual_app_files_rehashed": 7,
+    "no_extra_app_files_or_symlinks": true,
+    "actual_seven_terminal_stage_associations": true,
+    "actual_target_markers_match_source_mounted_and_both_signed_logs": true,
+    "both_signed_world_vectors_and_14_attachments_bound": true,
+    "scope": "Finite existing byte/receipt/log associations only. No source/native/geometry/movement/spray/package suite rerun or new movie extraction."
+  },
+  "references": {
+    "date": "March 2025",
+    "actual_external_images_personally_inspected": [
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-reference-acquisition-001/images/1212-mariner-headed-front-march-2025.png",
+        "path_base": "/",
+        "sha256": "a0f5792bcf85d6df185f44fc997ae9fceb630fc6b6e784c55979adaefd42b90d",
+        "bytes": 1529440,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-reference-acquisition-001/images/1212-mariner-headed-front-march-2025.png",
+        "role": "private_reference_only_never_copied",
+        "copied": false
+      }
+    ],
+    "source_url_and_viewpoint_metadata": {
+      "actual_url_before_screenshot": "https://www.google.com/maps/@37.8291812,-122.373034,3a,90y,172h,90t/data=!3m7!1e1!3m5!1smoV9e3E7bv5UpjOrgfOOKA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DmoV9e3E7bv5UpjOrgfOOKA%26yaw%3D172!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MDkwOS4wIKXMDSoASAFQAw%3D%3D",
+      "actual_url_after_screenshot": "https://www.google.com/maps/@37.8291812,-122.373034,3a,90y,172h,90t/data=!3m7!1e1!3m5!1smoV9e3E7bv5UpjOrgfOOKA!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail%3Fcb_client%3Dmaps_sv.tactile%26w%3D900%26h%3D600%26pitch%3D0%26panoid%3DmoV9e3E7bv5UpjOrgfOOKA%26yaw%3D172!7i16384!8i8192?entry=ttu&g_ep=EgoyMDI2MDkwOS4wIKXMDSoASAFQAw%3D%3D",
+      "actual_camera_lat_lon": [
+        37.8291812,
+        -122.373034
+      ],
+      "actual_heading_degrees": 172.0,
+      "actual_url_fov_degrees": 90.0,
+      "actual_pano_id": "moV9e3E7bv5UpjOrgfOOKA",
+      "visible_date": "Mar 2025",
+      "visible_address_label": "1212 Mariner Dr",
+      "coverage": "Visible three stepped public-front sections, roof/eave through upper and lower openings/entries, grass/paths/footway and parking/road context. No pronounced projecting front canopy visible.",
+      "limits": [
+        "Cars obscure lower right frontage/ground; planting and local screens obscure other lower details.",
+        "Right outer end/context reaches the image edge; no complete end/rear or hidden whole-roof claim.",
+        "URL FOV/heading are browser metadata, not an independently calibrated pixel-to-source mapping.",
+        "Exact source-side/run association remains independently required before authoring; historical Batch04 material-only scope is not promoted.",
+        "Dated March2025 image does not establish present occupancy, condition or as-built geometry.",
+        "No new visual acceptance, authoring, source/engine/package/authority claim."
+      ]
+    },
+    "source_association": [
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-source-association-001/ASSOCIATION.json",
+        "path_base": "/",
+        "sha256": "d5021c475e1462d0ae647e8f2234ddf11ad7611a8e075dcd6911a625ab3c116d",
+        "bytes": 46569,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-source-association-001/ASSOCIATION.json",
+        "role": "immutable_external_original",
+        "copied": false
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-source-association-001/NOTE.md",
+        "path_base": "/",
+        "sha256": "ca9be1a33a0547f1f7ea4fc415d22b7803d12196bf09565cc8839979ad745a05",
+        "bytes": 5348,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-source-association-001/NOTE.md",
+        "role": "immutable_external_original",
+        "copied": false
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-reference-acquisition-001/HANDOFF.json",
+        "path_base": "/",
+        "sha256": "089b54af0a073cbfcdad084348c7eaeb74f92131b916fd40e2d9126a4f74497b",
+        "bytes": 6289,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-reference-acquisition-001/HANDOFF.json",
+        "role": "immutable_external_original",
+        "copied": false
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-reference-acquisition-001/HANDOFF.md",
+        "path_base": "/",
+        "sha256": "6f6058fbb4e0213e2d04f48faab1cf62bf59694db348c9a9f85e80dde09939f6",
+        "bytes": 3402,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-reference-acquisition-001/HANDOFF.md",
+        "role": "immutable_external_original",
+        "copied": false
+      }
+    ],
+    "private_reference_images_copied": false,
+    "metric_pitch_or_crop_boundary_calibrated": false
+  },
+  "image_inspection": {
+    "previous_personal_involvement": false,
+    "personally_inspected_packet_images_this_attestation": [
+      "images/motion001/01-whole-near-face-changed-light.png",
+      "images/motion001/02-held-closed-door-approach.png",
+      "images/motion001/03-held-short-screen-obstruction.png",
+      "images/motion001/04-actual-mapped-siding-spray.png",
+      "images/static/01-whole-front-roof-footway-baseline.png",
+      "images/static/02-whole-front-roof-footway-candidate.png",
+      "images/static/03-center-roof-entry-footway-candidate.png",
+      "images/static/04-entry-footway-parking-road-junction.png",
+      "images/motion001-avi/avi-index-0179.jpg",
+      "images/motion001-avi/avi-index-0380.jpg",
+      "images/motion001-avi/avi-index-0514.jpg",
+      "images/motion001-avi/avi-index-0581.jpg"
+    ],
+    "personally_inspected_gameplay_image_count": 12,
+    "remaining_images": "The remaining exact AVI payloads reuse the bound separate complete sampled-motion visual review; no personal full-movie inspection is claimed. All tree file hashes and original-copy associations were checked.",
+    "excluded_from_scene_evidence": [
+      "images/motion001-avi/avi-index-0581.jpg"
+    ],
+    "image_index": [
+      {
+        "path": "images/motion001-avi/avi-index-0045.jpg",
+        "sha256": "a35c91bc6310fc9b740cff51de4ce422cbe8b5528ff5f9a19f601ed1840b681e",
+        "bytes": 80102
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0112.jpg",
+        "sha256": "ac4361251cc54f360400bf42befd24c000744434fece1ecd51bf2ab7650c7793",
+        "bytes": 61333
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0179.jpg",
+        "sha256": "34df9e875422cf0a13426fb365748877a5b66d5c402f8de7ec9d10289f561bfc",
+        "bytes": 77965
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0246.jpg",
+        "sha256": "a6223d604a6409421ea41fe14b86807d4de97dc572e41690ab4dc2274b3088b1",
+        "bytes": 69423
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0313.jpg",
+        "sha256": "25309aada0d4ee90be7a5c7aa26d320ff9b683e1a6255c67dc272128dd1f01f5",
+        "bytes": 67785
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0380.jpg",
+        "sha256": "887e173ff4c170db16dafdae558a109a0934ec44ae3e6986265c5ffe77e0f95b",
+        "bytes": 63608
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0447.jpg",
+        "sha256": "0e79b9b386fcadbf2ca87e59097221a900f037d3076a0f131c6a6e2dab40b232",
+        "bytes": 63488
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0514.jpg",
+        "sha256": "d676a5731ce093a51378548a3cd146a9637148b83d1fdafca59a982a0027f0f1",
+        "bytes": 74624
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0581.jpg",
+        "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+        "bytes": 16628
+      },
+      {
+        "path": "images/motion001/01-whole-near-face-changed-light.png",
+        "sha256": "445c096ff5029d5f90f257850faf11aadd93d8799191e20da9d21c51885a5b61",
+        "bytes": 885211
+      },
+      {
+        "path": "images/motion001/02-held-closed-door-approach.png",
+        "sha256": "2b4b75bbb6d5ed13d861e868426fda4bb766fad179d50963ad83c9d21fefb116",
+        "bytes": 512774
+      },
+      {
+        "path": "images/motion001/03-held-short-screen-obstruction.png",
+        "sha256": "c223db65216d6c37dc516a4a9959fcad2ac5fbafb25a4731389ca81025cbd832",
+        "bytes": 541506
+      },
+      {
+        "path": "images/motion001/04-actual-mapped-siding-spray.png",
+        "sha256": "158bd82dafa683b4bd71b0468add236c10e061174285bcbe9ac5dfa21eb2f401",
+        "bytes": 270055
+      },
+      {
+        "path": "images/static/01-whole-front-roof-footway-baseline.png",
+        "sha256": "941f42d3ff29456dbecf434ab7aeb320ad182ae274d505f0b0670f4f45b67774",
+        "bytes": 961823
+      },
+      {
+        "path": "images/static/02-whole-front-roof-footway-candidate.png",
+        "sha256": "6be4f6e622018fffc173e34005924e7e207c505d66913ed09a448b3e40311a1f",
+        "bytes": 831648
+      },
+      {
+        "path": "images/static/03-center-roof-entry-footway-candidate.png",
+        "sha256": "1e599ae44d7781ef2a5540c70f4da1e92ced4bc6307abcf66b24856d45a1d298",
+        "bytes": 409247
+      },
+      {
+        "path": "images/static/04-entry-footway-parking-road-junction.png",
+        "sha256": "fc13582824110fa4de9c758feae47c084db9eba2ceb925310be17c2008f68599",
+        "bytes": 550016
+      }
+    ],
+    "copy_index_document_sha256": "8209bb87571b3c841f2495dfbe5ebd8286dd3741644c527514b4a576cbaa10cf"
+  },
+  "reused_visual_reviews": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-implementation-001/independent-visual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "55c2f139fc221f77d61b4a4f4b0b0067ca35808c4e01a3049230d4071bb6e613",
+      "bytes": 6270,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-implementation-001/independent-visual-001/REVIEW.md",
+      "role": "immutable_external_original",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-screen-contact-response-preparation-001/independent-visual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "b53e42b8be31fe0e2aba49cb836f0524278c6389a5f67118f3bf427d3e385b9a",
+      "bytes": 13545,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-screen-contact-response-preparation-001/independent-visual-001/REVIEW.md",
+      "role": "immutable_external_original",
+      "copied": false
+    }
+  ],
+  "whole_visible_result_findings": {
+    "fidelity": "The March 2025 reference and actual ordinary/near views agree on three stepped blue-gray two-storey frontage sections, horizontal siding, pale framing/eaves/story ledge, broad upper windows, mixed lower openings, red-brown doors and short dark privacy screens. These features form a recognizable Mariner composition beyond the bare textured baseline. No substantive observed-front fidelity gap is identified.",
+    "finish": "The restrained straight eave edges, complete window/door frames and local screen/entry-path composition remain coherent in default and changed light. At these close low angles the roof top is largely hidden, consistent with the thin reference roof/eave presentation. No broad broken trim, floating ground junction or invented front canopy is apparent. Dark opaque glazing and uncalibrated color differences are bounded game-art treatment.",
+    "sampled_motion": "Personally inspected all eight PNGs and payloads179/380/514/581. Door/screen vicinity and visible ground retain readable component boundaries; tag PNG04 and payload514 show the colored wave on clear siding above the ledge. Payload581 is plain blue. Other exact sparse samples reuse the separately authored complete sampled review; no continuous playback verdict.",
+    "as_built_limit": "Cars/screens/planting and right-edge crop obscure lower and end detail. Mapped runs14-17/19-22/24-27 are accepted source scope; protected0-13/18/23 and hidden returns18/23 remain unwrapped. Roof pitch/closure, exact counts/cadence/dimensions and source-self-hidden anchors remain production inference.",
+    "substantive_visible_gap_remaining_in_reviewed_scope": false
+  },
+  "gates": {
+    "numeric_opposite_edge_screen": "UNREVIEWED; no new tile/periodic proof claim in this finite facade packet",
+    "whole_object_resemblance": "PASS within observed public-front/reference scope",
+    "material_identity_and_changed_light": "PASS within inspected default/changed-light pixels and retained finite evidence; no calibrated optical claim",
+    "semantic_repeat_and_physical_scale": "PASS as plausible complete finite modules and bounded production inference, not surveyed counts/cadence",
+    "protected_scope_and_exact_receiver": "REUSE separately accepted source/mechanics/N3/package decisions; no new technical judgment inferred from pixels",
+    "overall_packet_and_visual_attestation": "PASS with retained limitations",
+    "as_built_precision": "UNREVIEWED; not claimed"
+  },
+  "retained_source_mechanics": {
+    "decision": "REUSE separately accepted scoped PASS",
+    "mechanical_role_sha256": "6f67a10d85551c5e4226ff47edcd15a15ce25f3a179ffa0e3670d3c0981be3fb",
+    "origins": [
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-implementation-001/independent-actual-001/REVIEW.md",
+        "path_base": "/",
+        "sha256": "264ed7b1293068df3e37039d7c06e84e713956f7585a527067fce392244275c1",
+        "bytes": 6224,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-implementation-001/independent-actual-001/REVIEW.md",
+        "role": "immutable_external_original",
+        "copied": false
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-screen-contact-response-preparation-001/ACTUAL_HANDOFF.md",
+        "path_base": "/",
+        "sha256": "046e2fe467780ca46bee5459184e4b3a35005107e8017493d441e5a769b9c8b7",
+        "bytes": 9011,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-screen-contact-response-preparation-001/ACTUAL_HANDOFF.md",
+        "role": "immutable_external_original",
+        "copied": false
+      }
+    ],
+    "scope": "Reuse independently accepted282 actual rows with114 actual empty slide-contact arrays and minimum foot/source-LAND -1.431934mm. Original sustained-forward140-row door HOLD and later262-row reached screen HOLD remain unfixed history; the contact-response helper does not establish prolonged-push repair. Sparse centre/ring support is not continuous swept support or zero overlap.",
+    "spray_semantics": "Three original stock String outcomes placed / receiver_rejection / receiver_rejection and tag counts0\u21921\u21921\u21921 remain separate from hit-shape indices 0/3/4. Visual tag evidence does not certify rejected-spray mechanics."
+  },
+  "shared_candidate_package": {
+    "decision": "REUSE ROOT-accepted D independent actual PASS",
+    "independent_review": {
+      "path": "REVIEW.md",
+      "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/independent-actual-001",
+      "sha256": "3d0dda395a4c85fc5353d6e0c65832da6f945cb5b26d6ae979470fc6c7676c5d",
+      "bytes": 5797,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/independent-actual-001/REVIEW.md",
+      "role": "independent_actual_package_review",
+      "byte_identical": true
+    },
+    "package_verification_receipt_sha256": "276b71133a8ae9c1f0fd8caecdbd0365f16c3ca4655d49e99149bbaec61b0ae0",
+    "pck_sha256": "2c9d0c3070175a2f3a22a7feb387bb980ef6a2f57343fffa1c36f38e5495a3f5",
+    "app_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app",
+    "app7_binding_document_sha256": "97e42dd327da341160287aaa36e06232d53e139e7904f28ceabb4d5b94aacf20",
+    "app_hash_semantics": "The document hash identifies the seven-file hash manifest. Each app_file_pins value identifies that individual file. No single whole-app byte hash is defined or claimed.",
+    "app_file_pins": {
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Info.plist": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable": "6858eb3e237550a5f0cca5239543ef4f6b09f9271cdfdcfaed2e2d23b7191921",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck": "2c9d0c3070175a2f3a22a7feb387bb980ef6a2f57343fffa1c36f38e5495a3f5",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources": "a86bd459607250d15249a31dfe1a746e2e1da44a29ec28a0488000097e1f70d6"
+    },
+    "actual_unit_attachment": {
+      "source_key": "w96215649",
+      "accepted_individual_reference": {
+        "path": "focused-001-result.json",
+        "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-live-adapter-proposal-001/validation-001",
+        "sha256": "d18d329865c25e34706321f424d25842c1e855c1171ed9471379babd46f7c81e",
+        "bytes": 3217045,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-live-adapter-proposal-001/validation-001/focused-001-result.json",
+        "role": "independent_N3_native_dataset_units.w96215649",
+        "byte_identical": true
+      },
+      "accepted_individual_review": {
+        "path": "ACTUAL_HANDOFF.md",
+        "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-live-adapter-proposal-001/validation-001",
+        "sha256": "c4c54dfe8dd2e4c7c1fc3a097ceda7fe7b2922daf63c3e7c782210dd7e21d3dd",
+        "bytes": 4516,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-live-adapter-proposal-001/validation-001/ACTUAL_HANDOFF.md",
+        "role": "independent_N3_actual_source_attachment_PASS",
+        "byte_identical": true
+      },
+      "shared_current_live_reference": {
+        "path": "focused-001-result.json",
+        "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-live-adapter-proposal-001/validation-001",
+        "sha256": "d18d329865c25e34706321f424d25842c1e855c1171ed9471379babd46f7c81e",
+        "bytes": 3217045,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-live-adapter-proposal-001/validation-001/focused-001-result.json",
+        "role": "unchanged_external_original",
+        "byte_identical": true
+      },
+      "shared_current_live_review": {
+        "path": "ACTUAL_HANDOFF.md",
+        "path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-live-adapter-proposal-001/validation-001",
+        "sha256": "c4c54dfe8dd2e4c7c1fc3a097ceda7fe7b2922daf63c3e7c782210dd7e21d3dd",
+        "bytes": 4516,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-live-adapter-proposal-001/validation-001/ACTUAL_HANDOFF.md",
+        "role": "unchanged_external_original",
+        "byte_identical": true
+      },
+      "wall_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215649_wall/Mariner1212LiveWall",
+      "roof_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215649_roof/Mariner1212LiveRoof",
+      "wall_counts": {
+        "meshes": 12,
+        "surfaces": 12,
+        "triangles": 5076,
+        "bodies": 2,
+        "shapes": 8
+      },
+      "roof_counts": {
+        "meshes": 2,
+        "surfaces": 2,
+        "triangles": 64,
+        "bodies": 2,
+        "shapes": 2
+      },
+      "asserted_runtime_scopes": {
+        "native_channels": 182,
+        "materials": 14,
+        "source_plus_detail_shapes": 10
+      },
+      "raw_target_records": {
+        "source-component-001": [
+          "FAMILY_PACKAGE_ATTACHMENT: source=w96215649 wall={ \"meshes\": 12, \"surfaces\": 12, \"triangles\": 5076, \"bodies\": 2, \"shapes\": 8 } roof={ \"meshes\": 2, \"surfaces\": 2, \"triangles\": 64, \"bodies\": 2, \"shapes\": 2 } native_channels=182 materials=14 source_plus_detail_shapes=10 current_authority=20/213 credit=0",
+          "MAC_EXPORT_1212_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215649_wall/Mariner1212LiveWall roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215649_roof/Mariner1212LiveRoof wall_counts={ \"meshes\": 12, \"surfaces\": 12, \"triangles\": 5076, \"bodies\": 2, \"shapes\": 8 } roof_counts={ \"meshes\": 2, \"surfaces\": 2, \"triangles\": 64, \"bodies\": 2, \"shapes\": 2 } source=w96215649 credit=0",
+          "FAMILY_PACKAGE_ATTACHMENT: source=w96215649 wall={ \"meshes\": 12, \"surfaces\": 12, \"triangles\": 5076, \"bodies\": 2, \"shapes\": 8 } roof={ \"meshes\": 2, \"surfaces\": 2, \"triangles\": 64, \"bodies\": 2, \"shapes\": 2 } native_channels=182 materials=14 source_plus_detail_shapes=10 current_authority=20/213 credit=0"
+        ],
+        "mounted-component-001": [
+          "FAMILY_PACKAGE_ATTACHMENT: source=w96215649 wall={ \"meshes\": 12, \"surfaces\": 12, \"triangles\": 5076, \"bodies\": 2, \"shapes\": 8 } roof={ \"meshes\": 2, \"surfaces\": 2, \"triangles\": 64, \"bodies\": 2, \"shapes\": 2 } native_channels=182 materials=14 source_plus_detail_shapes=10 current_authority=20/213 credit=0"
+        ],
+        "release-headless-smoke-001": [
+          "MAC_EXPORT_1212_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215649_wall/Mariner1212LiveWall roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215649_roof/Mariner1212LiveRoof wall_counts={ \"meshes\": 12, \"surfaces\": 12, \"triangles\": 5076, \"bodies\": 2, \"shapes\": 8 } roof_counts={ \"meshes\": 2, \"surfaces\": 2, \"triangles\": 64, \"bodies\": 2, \"shapes\": 2 } source=w96215649 credit=0"
+        ],
+        "release-native-smoke-001": [
+          "MAC_EXPORT_1212_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215649_wall/Mariner1212LiveWall roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215649_roof/Mariner1212LiveRoof wall_counts={ \"meshes\": 12, \"surfaces\": 12, \"triangles\": 5076, \"bodies\": 2, \"shapes\": 8 } roof_counts={ \"meshes\": 2, \"surfaces\": 2, \"triangles\": 64, \"bodies\": 2, \"shapes\": 2 } source=w96215649 credit=0"
+        ]
+      },
+      "scope": "Target w96215649 in the accepted N3 dataset is compared with its distinct original study producer and exercised through real shared caller lifecycle/cleanup. The source and mounted package predicates compare 14 target meshes, 182 channel slots, 14 material states and 10 ordered source-plus-detail shapes against the pinned same-runtime live factory. Signed ordinary-main paths/counters are separately observed in both actual logs. No new native array dataset, art or mechanical decision is made here."
+    },
+    "source_world": {
+      "bodies": 478,
+      "meshes": 1111,
+      "rows": 735,
+      "shapes": 533,
+      "surfaces": 1126,
+      "triangles": 138057
+    },
+    "owner_actual_signed_worlds": {
+      "release-headless-smoke-001": {
+        "meshes": 1111,
+        "surfaces": 1126,
+        "triangles": 138057,
+        "bodies": 478,
+        "shapes": 533,
+        "playable_rows": 735,
+        "context_rows": 4,
+        "raw_line": "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=1111 surfaces=1126 triangles=138057 bodies=478 shapes=533 vegetation=124 seed=1414092337 batches=19 load_ms=6120"
+      },
+      "release-native-smoke-001": {
+        "meshes": 1111,
+        "surfaces": 1126,
+        "triangles": 138057,
+        "bodies": 478,
+        "shapes": 533,
+        "playable_rows": 735,
+        "context_rows": 4,
+        "raw_line": "MAC_EXPORT_WORLD_READY: hash=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164 spawn=(-104.364,3.457,786.024) yaw=-0.119 chunks=38/38 coverage=735+4 meshes=1111 surfaces=1126 triangles=138057 bodies=478 shapes=533 vegetation=124 seed=1414092337 batches=19 load_ms=5838"
+      }
+    },
+    "platform_limit": "Recorded Apple M2/Metal Forward+ runtime only. Both architecture signature checks are separate from runtime coverage; no Intel/M1 runtime or notarization claim. Known import conversion and auxiliary codesign deprecation warnings remain retained."
+  },
+  "limits": [
+    "Derived assembly only: existing independently accepted study decisions are bound, not newly accepted by this author. Current preparation context is 20/213; all selected source captures retain their actual historical 18/213 state and original metrics.",
+    "The source study is not a live adapter or app screenshot. Future shared three-unit candidate/app/PCK, per-unit package receipts and independent seventh attestations are pending/null. No authority write or recognition credit is supplied.",
+    "Original 1440x900 PNGs and 1280x800 AVI payloads remain distinct. Full movies retain 70 physical trailing bytes beyond declared RIFF end. Sparse samples are not continuous playback, flicker freedom, manual input or encoded/physics/process/draw equality.",
+    "Changed-light whole is followed by restored default sun before motion. Routes use separate explicit setup poses; no continuous traversal between setups is claimed. Stock String outcomes, hit-shape indices and tag counts remain distinct.",
+    "Reference images remain private external locators and are never copied into packet images, game, Git or app. Counts, dimensions and roof closure are bounded production inference; protected or hidden regions are not newly authorized.",
+    "Full raw records, logs, maps, original films and historical failed media remain in their existing retained locations. This preparation copies only selected gameplay images; it introduces no new source or mechanical proof and preserves all referenced reviewers' narrower limits.",
+    "Both prior sustained-forward attempts remain HOLD: 140 door rows in the first and 262 reached door/screen rows in the successor. The final contact-responsive helper does not repair prolonged pushing, rewrite their media or retroactively pass those attempts.",
+    "The final run has door 87 forward + 30 brake + 30 retreat + 20 brake and screen 35 + 30 + 30 + 20, totaling 282 actual rows. Contact events and distinct contact rows are separate counters. All 114 empty slide-contact arrays are retained as actual records, not missing telemetry or direct-contact proof.",
+    "D retains minimum foot/source LAND -1.431934 mm as a solver/interpolation limitation. Sparse center/ring support and on-floor states are not continuous swept support or zero capsule penetration.",
+    "Source runs 14-17, 19-22 and 24-27 are mapped; runs 0-13, 18 and 23 are protected. Hidden returns 18/23 are not wrapped. Roof pitch, closure, module counts and dimensions remain production inference.",
+    "Final AVI sample 581 is plain blue and supplies no scene credit. Changed-light whole is byte-identical to the prior reached whole image; identical bytes do not relabel the older failed attempt as successful.",
+    "Original first-five pending-package/live wording above is historical. The exact sixth role now binds the accepted current20 candidate and N3 live attachment; all capture18, failed-attempt, protected, fidelity, support and sparse-motion limits remain.",
+    "This seventh PASS is a bounded game-art/packet decision, not as-built fidelity, hidden-face coverage, continuous motion, swept support, manual-input proof or a current-app screenshot.",
+    "The optional MF001 material pilot was held for imperceptible improvement; MF002 remains parked/excluded. Those separate pilots do not supply acceptance evidence here or revoke these exact accepted study pixels. Reflection polish is not a new closure requirement.",
+    "Image-content digest differs from tree-document hash and excludes full AVIs, manifests and reference images. Original images and first-five records were not mutated; private references remain external.",
+    "Separate ROOT acceptance, owner closure serialization, authority integration and a fresh exact-current batch export remain pending. This artifact grants no numerator credit."
+  ],
+  "current_authority": "20/213",
+  "capture_time_authority": "18/213",
+  "recognition_credit_granted": false,
+  "main_mutated": false,
+  "source_mutated": false,
+  "engine_runs": 0,
+  "owner_closure_serialization_pending": true
+}

@@ -7,22 +7,24 @@ public distribution are outside this milestone.
 
 ## Current source and release
 
-Current source recognizes **20/213** physical buildings, with **193** not evaluated
-and **19 active adapters**. 1206 and 1219 Mariner are enabled alongside the previous
-18 accepted units, including 1201 Bayside and 1238 Northpoint. Their older [inactive study checkpoint](discovery/facades/northern-study-source-checkpoint-2026-09-12.md)
+Current source recognizes **23/213** physical buildings, with **190** not evaluated
+and **22 active adapters**. 1212 Mariner,1220 Bayside and1239 Northpoint join the
+previous20 accepted units. The older [inactive study checkpoint](discovery/facades/northern-study-source-checkpoint-2026-09-12.md)
 remains historical; it does not describe the current playable source.
 
-This source checkpoint records the independently released **20/213** app at:
+This checkpoint records the independently released **23/213** app at:
 
-- Private app: `build/northern-1206-1219-exact-current-001/Treasure Island First Playable.app`.
-- [Release record](evidence/first-playable/northern-1206-1219-current-release-2026-09-14-001/README.md), including exact app files, source and smoke-test evidence.
-- Both signed headless and native runs reached the complete world and passed all eleven live attachment checks. The exact app also passed independent release review.
+- Private app: `build/northern-1212-1220-1239-exact-current-001/Treasure Island First Playable.app`.
+- [Release record](evidence/first-playable/northern-1212-1220-1239-current-release-2026-09-14-001/README.md), including the seven exact app members, source and smoke-test evidence.
+- Both signed headless and native runs reached the complete world and passed all14 live attachment checks. Source/mounted checks cover13 component pairs; the app passed separate independent release review.
 
-The preceding [Maceo May release](evidence/first-playable/maceo-may-current-release-2026-09-12-001/README.md)
-and its publication at [`d48760d8`](https://github.com/pcomans/treasure-island/commit/d48760d8dc7637592ab125f8d8a75809bc6a3ebb)
-remain historical, as does the [18-unit release](evidence/first-playable/northern-1201-1238-current-release-2026-09-13-001/README.md).
-The current app is a fresh export of the accepted 20-unit source, copied as a whole
-bundle without re-export or re-signing. The PCK is distinct from the candidate18 app.
+PCK: `3e88f619730e940aa10272d65d76702bc03c0308c233dfbff9da076587d0330a`.
+The fresh export is distinct from the candidate20 and prior current20 apps.
+The original app remains preserved; the stable path uses a complete bundle copy,
+without another export, signing pass or relaunch. The [20-unit release](evidence/first-playable/northern-1206-1219-current-release-2026-09-14-001/README.md),
+[18-unit release](evidence/first-playable/northern-1201-1238-current-release-2026-09-13-001/README.md)
+and earlier releases remain historical. The isolated material-finish pilot is not
+part of this source or app. All213 independently accepted units remain the goal.
 
 ## Play on another Mac
 
@@ -70,6 +72,36 @@ development tooling, not for playing source.
 For ordinary authoring, edit and run/reload the source project, then inspect the
 actual gameplay view. Export is for a reviewed delivery checkpoint; no app export
 is needed for each source edit.
+
+## Reproduce facade validation
+
+Playing the tracked generated world does not rebuild its recognition registry.
+For registry development, use the pinned Node dependencies from
+`package-lock.json` (`npm ci --ignore-scripts`) and run the existing commands:
+
+```sh
+node tools/build_facade_recognition_registry.mjs --check
+node tools/test_facade_recognition_registry.mjs
+node tools/test_facade_runtime_loader_contract.mjs
+```
+
+These checks consume declared gameplay evidence as well as source. The current23
+preparation found 543 required evidence/provenance inputs; 41 historical1201/1238
+PNG/JPEG files were absent from a clean checkout because their local `images/`
+directories were ignored. This publication explicitly selects those41
+and all52 new-unit gameplay images for Git. Keep these declared files even under
+an ignored directory; they are not optional private Street View references or
+historical full AVI downloads. Do not bypass a missing-file error or regenerate
+authority from incomplete evidence. The retained copy plan records each expected hash; keep that exact set in
+source copies used for authority development.
+
+After an intentional authority change, use the existing compiler `--write` path,
+refresh its generated-hash native fixtures, then run `--check` and both Node
+contracts before the required native checks. Reuse a matching imported class
+cache only when its source/dependency bindings match; a fresh clone still needs
+the import shown above. Matching Godot export templates and the reviewed private
+export preset are required for a delivery build. Preserve candidate versus final
+current PCK identity, and copy the complete independently released app bundle.
 
 ## Controls
 

@@ -1,0 +1,61 @@
+{
+  "schema_version": "ti.d5-fidelity-candidate-closure/1",
+  "status": "SEVEN_ROLES_BOUND_SERIALIZED_AUTHORITY_PENDING",
+  "physical_unit_id": "physical-building:w96215652",
+  "candidate_authority": "20/213",
+  "preparation_authority_context": "20/213",
+  "capture_time_authority": "18/213",
+  "new_unit_candidate": true,
+  "recognition_credit_granted": false,
+  "prospective_numerator_effect_after_separate_acceptance": 1,
+  "seven_acceptance_bindings_prepared": {
+    "evidence_manifest_sha256": "410d90ee3599491993fddcc0ed8accea3de05bb4e905be9076078629b36f7835",
+    "motion_telemetry_manifest_sha256": "94994da3f3db23d5bc81d4892e7ddcbafe91228aa891890198b9afee0339e961",
+    "visual_motion_manifest_sha256": "db006b21c253ea7dbcc937ff6ba5bf7805894f9b00b8ef6164396ee9f6b3af23",
+    "package_verification_receipt_sha256": "dbef975d3b3afedac4694ea49c57f4e98e50a41f67ed2a61621dae3cc0c12176",
+    "evidence_tree_sha256": "1d2e5d2682e0b72c9c81b5962680e11c9cdba200d0ab13b11db1c6dac54f1aef",
+    "mechanical_review_receipt_sha256": "923517f30c75e83af49c039111fdac548d8a20c0486cdf202863e04cca41c3ef",
+    "review_receipt_sha256": "ca45fe7f855fb98ecadecddf7a04e8b9e13f73355bed128cfc4c8ef83a13fc1c"
+  },
+  "image_tree_sha256": "1d2e5d2682e0b72c9c81b5962680e11c9cdba200d0ab13b11db1c6dac54f1aef",
+  "evidence_tree_document_sha256": "ad95fd53e946b829825391359a5cb95daddf955eff07b606d3e9f1478d17bcb7",
+  "package_verification_pending": false,
+  "seventh_attestation_pending": false,
+  "actual_app_sha256": null,
+  "actual_pck_sha256": "2c9d0c3070175a2f3a22a7feb387bb980ef6a2f57343fffa1c36f38e5495a3f5",
+  "future_shared_package_scope": "Exact shared1212/1220/1239 current20 candidate package is bound separately for this target using the accepted independent actual package verdict. Seventh unit/image-tree attestation and later authority/exact-current delivery remain pending.",
+  "limits": [
+    "Derived assembly only: existing independently accepted study decisions are bound, not newly accepted by this author. Current preparation context is 20/213; all selected source captures retain their actual historical 18/213 state and original metrics.",
+    "The source study is not a live adapter or app screenshot. Future shared three-unit candidate/app/PCK, per-unit package receipts and independent seventh attestations are pending/null. No authority write or recognition credit is supplied.",
+    "Original 1440x900 PNGs and 1280x800 AVI payloads remain distinct. Full movies retain 70 physical trailing bytes beyond declared RIFF end. Sparse samples are not continuous playback, flicker freedom, manual input or encoded/physics/process/draw equality.",
+    "Changed-light whole is followed by restored default sun before motion. Routes use separate explicit setup poses; no continuous traversal between setups is claimed. Stock String outcomes, hit-shape indices and tag counts remain distinct.",
+    "Reference images remain private external locators and are never copied into packet images, game, Git or app. Counts, dimensions and roof closure are bounded production inference; protected or hidden regions are not newly authorized.",
+    "Full raw records, logs, maps, original films and historical failed media remain in their existing retained locations. This preparation copies only selected gameplay images; it introduces no new source or mechanical proof and preserves all referenced reviewers' narrower limits.",
+    "The movement run passed independent source/mechanics but its original tag marker retained a separate visual HOLD. The corrected single-wall-marker run supplies only one new placed attempt and one PNG; there is no corrected movie or replayed movement.",
+    "The original projector intersected the ledge. C later corrected the overly strong missing-upper-stroke/missing-dot inference: the SVG is one outlined cyan wave plus a yellow circle, approximately 180 degrees in gameplay. The old HOLD/image/AVI and measured overlap stay unchanged; corrected clear-marker PASS does not retroactively certify the old graphic.",
+    "The original movement has door 86 forward + 30 brake + 30 retreat + 20 brake and screen 34 + 30 + 30 + 20, totaling 280 rows with 116 empty slide-contact rows. Door retreat has 63 LAND contact events in 50 distinct rows; screen retreat has 62 in 50. These are not 63 or 62 distinct rows.",
+    "D retains minimum capsule clearance -1.527190 mm and minimum transformed-foot/source difference -1.361696 mm within the unchanged 4 mm solver qualification. No zero-overlap or continuous support claim follows.",
+    "Mapped runs are 0,1,3,4,5,6,7,8,10,11; protected runs are 2,9,12-25. Run 1/run 8 self-hidden restrictions remain. Four incidence-4 render-only vertical parking seams and boundary-local Float32 overlaps retain their original technical qualifications; no manifold proof is inferred from pixels.",
+    "The dated reference establishes beige/light neutral siding, a shallow red-brown roof, mixed windows, gray-green doors and pale bins. Far-right crop and occlusions remain; roof cadence, pitch and counts are production inference. Sample 579 is plain blue. Original PNG04 and sample512 stay selected as labeled held-marker history, not accepted complete-glyph evidence."
+  ],
+  "actual_app_binding_document_sha256": "97e42dd327da341160287aaa36e06232d53e139e7904f28ceabb4d5b94aacf20",
+  "actual_app_file_pins": {
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Info.plist": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable": "6858eb3e237550a5f0cca5239543ef4f6b09f9271cdfdcfaed2e2d23b7191921",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck": "2c9d0c3070175a2f3a22a7feb387bb980ef6a2f57343fffa1c36f38e5495a3f5",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources": "a86bd459607250d15249a31dfe1a746e2e1da44a29ec28a0488000097e1f70d6"
+  },
+  "actual_app_hash_semantics": "The document hash identifies the seven-file hash manifest. Each app_file_pins value identifies that individual file. No single whole-app byte hash is defined or claimed.",
+  "preserved_five_role_limits_scope": "Original first-five files and the complete limits array remain byte-exact at the unchanged predecessor packet path. Their pending-package/live wording is historical. Only this successor binds the current20 app and accepted actual N3 attachment; capture18 and all quality/protected/reference/failed-attempt limits remain unchanged.",
+  "historical_six_role_text_scope": "The inherited limits and future_shared_package_scope are verbatim statements from the frozen six-role predecessor. Their pending-seventh wording describes that earlier stage. The separately accepted seventh is now bound here; MAIN remains20/213 and prospective23 authority/compiler/current export have not run. All motion, raw failure, crop, inference, privacy, manual-input and runtime limits remain applicable.",
+  "owner_seventh_binding": {
+    "attestation_path": "evidence/first-playable/northern-1220-quality-candidate-2026-09-14-001/unit-visual-attestation.json",
+    "attestation_sha256": "ca45fe7f855fb98ecadecddf7a04e8b9e13f73355bed128cfc4c8ef83a13fc1c",
+    "six_role_closure_sha256": "018c6a7b848c1e03892afd297dc74ba0e0540c400369931f2f1fb64071f4796c",
+    "numerator_effect_after_separate_integration": 1,
+    "authority_execution_pending": true
+  }
+}

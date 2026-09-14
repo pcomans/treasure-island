@@ -13833,3 +13833,28 @@ External evidence: northern-canopy-free-family-pilot-001/1206-1219-authority-int
 **What remains unknown:** Changed light, motion/support, full independent source and package/unit gates remain open. Reference crops/occlusions, protected runs and inferred dimensions are retained limits. No full-workflow saving follows from this first visual endpoint.
 
 **Next:** Finish existing independent gates and record any later-source-driven recapture in the trial's normal RETRO; no extra capture was requested. Exact external1239 independent-visual-001 REVIEWc5601522…/RETRO2e169bbe…/BINDINGS937495ba… preserve all six image originals. Current20 checkpoint resumed after this bounded interruption;1224 helper stayed paused.
+
+## 2026-09-14 — D current23 source publication preparation
+
+### What worked well
+
+Reused the current20 copy/preservation/documentation/stage workflow. The proposed148-file source set comes from the actual refreshed authority23 checkout:104 selected paths including the two refreshed native fixtures, three compiler outputs and41 restored declared gameplay images. The93-image set is52 new plus41 old, with no private reference pixels. Preserved current20 source/docs, unchanged app members, sentinel comment and unrelated UID4 before any MAIN change; existing direct pin references retain exact historical aliases. Candidate-package and individual acceptance decisions remain separate from final authority/native/release and publication.
+
+### What did not work well
+
+Authority preparation initially assumed co-located U/W records and per-unit seventh RETROs, used an internal material name as descriptive color, rejected no-index whitespace status1 despite empty diagnostics, then reached a missing ignored historical image. Complete compiler-reader inventory identified543 required inputs and exactly41 missing files, allowing one additive restoration. All failed originals and actual-success continuation receipts remain. This documentation pass also used several oversized reads and a nonexistent npm scripts assumption before switching to named fields; no engine/source action resulted. Static duplicated per-unit code is a maintenance observation, not a measured delay or authority to refactor.
+
+### What the team should change next time
+
+Resolve actual role locators and required evidence closure before copying a donor workflow; include declared ignored gameplay files in the exact private Git selection. Keep genuine whitespace diagnostics and full selected-file/staged checks. The1239 early-capture trial delivered visual PASS at07:02:35 before full technical PASS07:07:41.592007, with zero geometry-caused recaptures; its16m52.659392s ready-to-visual interval is not a speedup estimate. A held finish pilot does not automatically outrank ready delivery or the owner's current need. The independently reviewed native authority23 outcome is now bound separately; final23 app/release and commit/push hashes remain pending in this external preparation; no new gate, source replay or generic framework was added.
+
+Retained evidence: current23-source-checkpoint-001 binds the actual refreshed source selection,543-input/41-file restoration records, failed locator/whitespace/compiler history, candidate package review, current20 before-images and historical aliases. Final execution and publication results must be associated later without rewriting those originals.
+
+
+## 2026-09-14 — E final23 publication preparation successor
+
+**Worked.** Reused D's reviewed148-source/six-doc publication plan and CP20 preservation/copy/stage mechanics. Bound C's actual final23 app/PCK and six-stage result, with D's separate release verdict supplied downstream. The exact source/doc/release set is160 files, including93 declared gameplay images; current20 before-images/aliases/apps and four unrelated UIDs remain. Final-export maps added zero mutable MAIN-source associations. Normal Git hooks receive the installed LFS path locally.
+
+**Limit.** Preparation is external; no MAIN copy, stable-app transfer, staging, commit or push occurred while this append was authored. Future operation receipts establish those actions. The ordinary arrival movie is a separate lane and is not a publication prerequisite. No recorded process duration is a workflow saving, no historical pending binder is rewritten, and source/native acceptance is supplied by independent reviewers rather than this executor.
+
+**Next.** Complete the reviewed exact transfer/copy and selected staging, stop for ROOT's actual staged review, then perform the already authorized normal commit/nonforce push and verify live remote identity. Do not replay engines or broaden the selection. Frozen parent proposal/source and six original app results remain preserved.

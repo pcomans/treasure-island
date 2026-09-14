@@ -1,0 +1,53 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215658",
+  "label": "Existing independent source and actual mechanics decisions",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1239-implementation-001/ACTUAL_HANDOFF.md",
+      "path_base": "/",
+      "sha256": "9b6ac8886c3f6c65ee2b4dde6ec4e1cce8429e1e4fe9558043c524263538b74f",
+      "bytes": 8639,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1239-implementation-001/ACTUAL_HANDOFF.md",
+      "role": "immutable_external_original",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1239-mechanics-changed-light-preparation-001/ACTUAL_HANDOFF.md",
+      "path_base": "/",
+      "sha256": "5567a8d8b461203670d0c806969dfc81f6ef4a2b93eab244852503c13eb62f5e",
+      "bytes": 9448,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1239-mechanics-changed-light-preparation-001/ACTUAL_HANDOFF.md",
+      "role": "immutable_external_original",
+      "copied": false
+    }
+  ],
+  "data": {
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "current_source_attachment": {
+      "status": "PENDING_FUTURE_SHARED_THREE_UNIT_CANDIDATE",
+      "review": null,
+      "raw_result": null,
+      "app": null,
+      "pck_sha256": null,
+      "scope": "No actual live or package verdict is supplied by this assembly."
+    },
+    "raw_motion_ok": [
+      true
+    ],
+    "author_unit_acceptance": false,
+    "limits": [
+      "Derived assembly only: existing independently accepted study decisions are bound, not newly accepted by this author. Current preparation context is 20/213; all selected source captures retain their actual historical 18/213 state and original metrics.",
+      "The source study is not a live adapter or app screenshot. Future shared three-unit candidate/app/PCK, per-unit package receipts and independent seventh attestations are pending/null. No authority write or recognition credit is supplied.",
+      "Original 1440x900 PNGs and 1280x800 AVI payloads remain distinct. Full movies retain 70 physical trailing bytes beyond declared RIFF end. Sparse samples are not continuous playback, flicker freedom, manual input or encoded/physics/process/draw equality.",
+      "Changed-light whole is followed by restored default sun before motion. Routes use separate explicit setup poses; no continuous traversal between setups is claimed. Stock String outcomes, hit-shape indices and tag counts remain distinct.",
+      "Reference images remain private external locators and are never copied into packet images, game, Git or app. Counts, dimensions and roof closure are bounded production inference; protected or hidden regions are not newly authorized.",
+      "Full raw records, logs, maps, original films and historical failed media remain in their existing retained locations. This preparation copies only selected gameplay images; it introduces no new source or mechanical proof and preserves all referenced reviewers' narrower limits.",
+      "The run has door 87 forward + 30 brake + 30 retreat + 20 brake and screen 35 + 30 + 30 + 20, totaling 282 actual rows and 80 empty contact arrays, all in retreats. D retains minimum capsule/LAND clearance -1.507437 mm and minimum underfoot clearance -1.471531 mm within the unchanged 4 mm qualification.",
+      "Mapped runs are 0-8 and 10-18; protected runs are 9 and 19-33. Self-hidden 10/part11 remain field/trim-only where scoped. Slightly curved source anchors, boundary-local native Float32 ground slivers up to 11.165 micrometres and inferred roof extent/pitch remain qualified, not exact-zero overlap or surveyed geometry.",
+      "The 1240 Northpoint UI label is camera-side context. March 2025 references and accepted association identify the 1239 row: taupe/gray siding, pale trim, mixed window widths, ochre and muted rose doors, shallow gray roof and short pale screens. Tree/cars/crop obscure details; hidden/rear/whole-roof closure remains unknown.",
+      "The independent motion visual review preserves the fine hairline seen in sample246 without a causal or continuous-persistence claim. Sample581 is plain blue and supplies no scene credit. PNG04 shows the complete cyan wave and small yellow dot; a W-like orientation is not a missing independent upper stroke."
+    ]
+  },
+  "truth_boundary": "Derived first-five preparation; existing scoped study decisions only. Package/app/seventh/authority pending; current20 unchanged, captures18, credit0."
+}

@@ -1,0 +1,59 @@
+{
+  "schema_version": "ti.d5-fidelity-candidate-closure/1",
+  "status": "SEVEN_ROLES_BOUND_SERIALIZED_AUTHORITY_PENDING",
+  "physical_unit_id": "physical-building:w96215658",
+  "candidate_authority": "20/213",
+  "preparation_authority_context": "20/213",
+  "capture_time_authority": "18/213",
+  "new_unit_candidate": true,
+  "recognition_credit_granted": false,
+  "prospective_numerator_effect_after_separate_acceptance": 1,
+  "seven_acceptance_bindings_prepared": {
+    "evidence_manifest_sha256": "640768775dc2090c5742eb1b8468f0a9992086fbe06cca8ae8f5982309b20ee6",
+    "motion_telemetry_manifest_sha256": "be716635b72e105c8440c51836735e149360f20eda1fdc95b9a0bfd83f39a6e2",
+    "visual_motion_manifest_sha256": "47f2d83b04b14b988f9b72c22b8384120201eba933a0a9fd7ca1dd7163eda22c",
+    "package_verification_receipt_sha256": "2e57bb89f4e646abc95a7db1a7cea82100c058121ad6755ff08edd1fd6403be2",
+    "evidence_tree_sha256": "7da899b63a2f906a643ac3eeb3a92a793fa3b502e9fa60f395b58fe60139d3e0",
+    "mechanical_review_receipt_sha256": "d45db6575672f8c713ce96ec41d577d507722a57c14417657f7c2cc564f70f81",
+    "review_receipt_sha256": "f46366f21b1cc5ed5fb2a230fd35cdc144d02b24833292b9c1ad617f58191c55"
+  },
+  "image_tree_sha256": "7da899b63a2f906a643ac3eeb3a92a793fa3b502e9fa60f395b58fe60139d3e0",
+  "evidence_tree_document_sha256": "0df0773639f05857a4566c3e56b41cf3ae112011dafd6c1ece5a7d1bce551beb",
+  "package_verification_pending": false,
+  "seventh_attestation_pending": false,
+  "actual_app_sha256": null,
+  "actual_pck_sha256": "2c9d0c3070175a2f3a22a7feb387bb980ef6a2f57343fffa1c36f38e5495a3f5",
+  "future_shared_package_scope": "Exact shared1212/1220/1239 current20 candidate package is bound separately for this target using the accepted independent actual package verdict. Seventh unit/image-tree attestation and later authority/exact-current delivery remain pending.",
+  "limits": [
+    "Derived assembly only: existing independently accepted study decisions are bound, not newly accepted by this author. Current preparation context is 20/213; all selected source captures retain their actual historical 18/213 state and original metrics.",
+    "The source study is not a live adapter or app screenshot. Future shared three-unit candidate/app/PCK, per-unit package receipts and independent seventh attestations are pending/null. No authority write or recognition credit is supplied.",
+    "Original 1440x900 PNGs and 1280x800 AVI payloads remain distinct. Full movies retain 70 physical trailing bytes beyond declared RIFF end. Sparse samples are not continuous playback, flicker freedom, manual input or encoded/physics/process/draw equality.",
+    "Changed-light whole is followed by restored default sun before motion. Routes use separate explicit setup poses; no continuous traversal between setups is claimed. Stock String outcomes, hit-shape indices and tag counts remain distinct.",
+    "Reference images remain private external locators and are never copied into packet images, game, Git or app. Counts, dimensions and roof closure are bounded production inference; protected or hidden regions are not newly authorized.",
+    "Full raw records, logs, maps, original films and historical failed media remain in their existing retained locations. This preparation copies only selected gameplay images; it introduces no new source or mechanical proof and preserves all referenced reviewers' narrower limits.",
+    "The run has door 87 forward + 30 brake + 30 retreat + 20 brake and screen 35 + 30 + 30 + 20, totaling 282 actual rows and 80 empty contact arrays, all in retreats. D retains minimum capsule/LAND clearance -1.507437 mm and minimum underfoot clearance -1.471531 mm within the unchanged 4 mm qualification.",
+    "Mapped runs are 0-8 and 10-18; protected runs are 9 and 19-33. Self-hidden 10/part11 remain field/trim-only where scoped. Slightly curved source anchors, boundary-local native Float32 ground slivers up to 11.165 micrometres and inferred roof extent/pitch remain qualified, not exact-zero overlap or surveyed geometry.",
+    "The 1240 Northpoint UI label is camera-side context. March 2025 references and accepted association identify the 1239 row: taupe/gray siding, pale trim, mixed window widths, ochre and muted rose doors, shallow gray roof and short pale screens. Tree/cars/crop obscure details; hidden/rear/whole-roof closure remains unknown.",
+    "The independent motion visual review preserves the fine hairline seen in sample246 without a causal or continuous-persistence claim. Sample581 is plain blue and supplies no scene credit. PNG04 shows the complete cyan wave and small yellow dot; a W-like orientation is not a missing independent upper stroke."
+  ],
+  "actual_app_binding_document_sha256": "97e42dd327da341160287aaa36e06232d53e139e7904f28ceabb4d5b94aacf20",
+  "actual_app_file_pins": {
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Info.plist": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable": "6858eb3e237550a5f0cca5239543ef4f6b09f9271cdfdcfaed2e2d23b7191921",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck": "2c9d0c3070175a2f3a22a7feb387bb980ef6a2f57343fffa1c36f38e5495a3f5",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1212-1220-1239-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources": "a86bd459607250d15249a31dfe1a746e2e1da44a29ec28a0488000097e1f70d6"
+  },
+  "actual_app_hash_semantics": "The document hash identifies the seven-file hash manifest. Each app_file_pins value identifies that individual file. No single whole-app byte hash is defined or claimed.",
+  "preserved_five_role_limits_scope": "Original first-five files and the complete limits array remain byte-exact at the unchanged predecessor packet path. Their pending-package/live wording is historical. Only this successor binds the current20 app and accepted actual N3 attachment; capture18 and all quality/protected/reference/failed-attempt limits remain unchanged.",
+  "historical_six_role_text_scope": "The inherited limits and future_shared_package_scope are verbatim statements from the frozen six-role predecessor. Their pending-seventh wording describes that earlier stage. The separately accepted seventh is now bound here; MAIN remains20/213 and prospective23 authority/compiler/current export have not run. All motion, raw failure, crop, inference, privacy, manual-input and runtime limits remain applicable.",
+  "owner_seventh_binding": {
+    "attestation_path": "evidence/first-playable/northern-1239-quality-candidate-2026-09-14-001/unit-visual-attestation.json",
+    "attestation_sha256": "f46366f21b1cc5ed5fb2a230fd35cdc144d02b24833292b9c1ad617f58191c55",
+    "six_role_closure_sha256": "f80a5a714bb72218707b43ff0536a7d5eb6f334e56c3131bae8a90c6de9df128",
+    "numerator_effect_after_separate_integration": 1,
+    "authority_execution_pending": true
+  }
+}

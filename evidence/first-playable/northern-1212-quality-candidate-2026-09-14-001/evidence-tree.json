@@ -1,0 +1,94 @@
+{
+  "schema_version": "ti.d5-native-image-tree/1",
+  "tree_scope": "Only 17 exact selected gameplay images, including explicitly labeled historical HOLD and non-scene payloads; excludes references, full movies and every document.",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "0c46621cf3d43660a7e7d8168dcdf0be5556d96b5ff1a63b0715295311565d35",
+  "files": [
+    {
+      "path": "images/motion001-avi/avi-index-0045.jpg",
+      "sha256": "a35c91bc6310fc9b740cff51de4ce422cbe8b5528ff5f9a19f601ed1840b681e",
+      "bytes": 80102
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0112.jpg",
+      "sha256": "ac4361251cc54f360400bf42befd24c000744434fece1ecd51bf2ab7650c7793",
+      "bytes": 61333
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0179.jpg",
+      "sha256": "34df9e875422cf0a13426fb365748877a5b66d5c402f8de7ec9d10289f561bfc",
+      "bytes": 77965
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0246.jpg",
+      "sha256": "a6223d604a6409421ea41fe14b86807d4de97dc572e41690ab4dc2274b3088b1",
+      "bytes": 69423
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0313.jpg",
+      "sha256": "25309aada0d4ee90be7a5c7aa26d320ff9b683e1a6255c67dc272128dd1f01f5",
+      "bytes": 67785
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0380.jpg",
+      "sha256": "887e173ff4c170db16dafdae558a109a0934ec44ae3e6986265c5ffe77e0f95b",
+      "bytes": 63608
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0447.jpg",
+      "sha256": "0e79b9b386fcadbf2ca87e59097221a900f037d3076a0f131c6a6e2dab40b232",
+      "bytes": 63488
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0514.jpg",
+      "sha256": "d676a5731ce093a51378548a3cd146a9637148b83d1fdafca59a982a0027f0f1",
+      "bytes": 74624
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0581.jpg",
+      "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+      "bytes": 16628
+    },
+    {
+      "path": "images/motion001/01-whole-near-face-changed-light.png",
+      "sha256": "445c096ff5029d5f90f257850faf11aadd93d8799191e20da9d21c51885a5b61",
+      "bytes": 885211
+    },
+    {
+      "path": "images/motion001/02-held-closed-door-approach.png",
+      "sha256": "2b4b75bbb6d5ed13d861e868426fda4bb766fad179d50963ad83c9d21fefb116",
+      "bytes": 512774
+    },
+    {
+      "path": "images/motion001/03-held-short-screen-obstruction.png",
+      "sha256": "c223db65216d6c37dc516a4a9959fcad2ac5fbafb25a4731389ca81025cbd832",
+      "bytes": 541506
+    },
+    {
+      "path": "images/motion001/04-actual-mapped-siding-spray.png",
+      "sha256": "158bd82dafa683b4bd71b0468add236c10e061174285bcbe9ac5dfa21eb2f401",
+      "bytes": 270055
+    },
+    {
+      "path": "images/static/01-whole-front-roof-footway-baseline.png",
+      "sha256": "941f42d3ff29456dbecf434ab7aeb320ad182ae274d505f0b0670f4f45b67774",
+      "bytes": 961823
+    },
+    {
+      "path": "images/static/02-whole-front-roof-footway-candidate.png",
+      "sha256": "6be4f6e622018fffc173e34005924e7e207c505d66913ed09a448b3e40311a1f",
+      "bytes": 831648
+    },
+    {
+      "path": "images/static/03-center-roof-entry-footway-candidate.png",
+      "sha256": "1e599ae44d7781ef2a5540c70f4da1e92ced4bc6307abcf66b24856d45a1d298",
+      "bytes": 409247
+    },
+    {
+      "path": "images/static/04-entry-footway-parking-road-junction.png",
+      "sha256": "fc13582824110fa4de9c758feae47c084db9eba2ceb925310be17c2008f68599",
+      "bytes": 550016
+    }
+  ],
+  "truth_boundary": "Derived first-five preparation; existing scoped study decisions only. Package/app/seventh/authority pending; current20 unchanged, captures18, credit0."
+}

@@ -1,0 +1,263 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215652",
+  "label": "Original accepted source-project static evidence",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/native-001-result.json",
+      "path_base": "/",
+      "sha256": "5284390eba72292e52c727aa43016fcf7cd14513cf0625d47bb688d095c20043",
+      "bytes": 59308,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/native-001-result.json",
+      "role": "immutable_external_original",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/focused-001-result.json",
+      "path_base": "/",
+      "sha256": "ae876a6137132bb87d82dc5608ce6da35bf04f18354f05f00c75fdb57a963f88",
+      "bytes": 3206325,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/focused-001-result.json",
+      "role": "immutable_external_original",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/ACTUAL_HANDOFF.md",
+      "path_base": "/",
+      "sha256": "a54484b0b93d77fc76c299e598c2742ff80ea02234cd6bdb6c90dbfadd80c7cf",
+      "bytes": 5155,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/ACTUAL_HANDOFF.md",
+      "role": "immutable_external_original",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/independent-visual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "7c01d437b42814030fdc1e03425dbffc80e45e906da09617adfc78aa114d780e",
+      "bytes": 7489,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/independent-visual-001/REVIEW.md",
+      "role": "immutable_external_original",
+      "copied": false
+    }
+  ],
+  "data": {
+    "images": [
+      {
+        "path": "images/static/01-whole-front-roof-footway-baseline.png",
+        "sha256": "303ffce33b8d1a48ffa718ffffa064de5ee6b093b1a9ab59137b86f86229fc46",
+        "bytes": 1043455,
+        "role": "original_source_baseline",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/capture/images/01-whole-front-roof-footway-baseline.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "id": "01-whole-front-roof-footway-baseline",
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/native-001-result.json"
+        }
+      },
+      {
+        "path": "images/static/02-whole-front-roof-footway-candidate.png",
+        "sha256": "637e70cb11729e0c9fa770aa1f0432368462a4d4e67653602d23439356fec022",
+        "bytes": 937608,
+        "role": "accepted_static_candidate",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/capture/images/02-whole-front-roof-footway-candidate.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "id": "02-whole-front-roof-footway-candidate",
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/native-001-result.json"
+        }
+      },
+      {
+        "path": "images/static/03-center-roof-entry-footway-candidate.png",
+        "sha256": "4d72037fd22681471c6573bbc79981c43b78854fa30ac254c32f9b95382a1be0",
+        "bytes": 487052,
+        "role": "accepted_static_candidate",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/capture/images/03-center-roof-entry-footway-candidate.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "id": "03-center-roof-entry-footway-candidate",
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/native-001-result.json"
+        }
+      },
+      {
+        "path": "images/static/04-entry-footway-parking-road-junction.png",
+        "sha256": "d411eb64f42225303c052de5a4bfd6ed00e720e0ebf8927fa7e4defb1699c1a4",
+        "bytes": 687987,
+        "role": "accepted_static_candidate",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/capture/images/04-entry-footway-parking-road-junction.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "id": "04-entry-footway-parking-road-junction",
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-helper-correction-001/native-001-result.json"
+        }
+      }
+    ],
+    "capture_time_authority": "18/213",
+    "preparation_authority_context": "20/213",
+    "current_source_attachment": {
+      "status": "PENDING_FUTURE_SHARED_THREE_UNIT_CANDIDATE",
+      "review": null,
+      "raw_result": null,
+      "app": null,
+      "pck_sha256": null,
+      "scope": "No actual live or package verdict is supplied by this assembly."
+    },
+    "independent_static_status": "EXISTING_SCOPED_PASS",
+    "frozen_source": {
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1220-bayside-study-v1/game/resources/facades/bayside_1220_study.json": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1220-bayside-study-v1/game/resources/facades/bayside_1220_study.json",
+        "path_base": "/",
+        "sha256": "984ebbde55fa5dcb1cea8b0d57c20e2773982bbb195e1a52b16dec250ec0735b",
+        "bytes": 188768,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1220-bayside-study-v1/game/resources/facades/bayside_1220_study.json",
+        "role": "actual_frozen_study_source",
+        "copied": false
+      },
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1220-bayside-study-v1/game/scripts/world/facades/bayside_1220_study.gd": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1220-bayside-study-v1/game/scripts/world/facades/bayside_1220_study.gd",
+        "path_base": "/",
+        "sha256": "950b72ee13624ae82b518b133a51e00dee75d49394cf65cc69efd8016b966177",
+        "bytes": 21102,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1220-bayside-study-v1/game/scripts/world/facades/bayside_1220_study.gd",
+        "role": "actual_frozen_study_source",
+        "copied": false
+      },
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1220-bayside-study-v1/generated/world/chunks/x_-2__z_-3.json": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1220-bayside-study-v1/generated/world/chunks/x_-2__z_-3.json",
+        "path_base": "/",
+        "sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+        "bytes": 650675,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1220-bayside-study-v1/generated/world/chunks/x_-2__z_-3.json",
+        "role": "original_source_chunk",
+        "copied": false
+      }
+    },
+    "source_metadata": {
+      "model_id": "1220-bayside-study-001",
+      "prototype_only": true,
+      "runtime_attachment": false,
+      "recognition_accepted": false,
+      "source_key": "w96215652",
+      "mapped_public_run_indices": [
+        0,
+        1,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        10,
+        11
+      ],
+      "protected_run_indices": [
+        2,
+        9,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25
+      ],
+      "baseline_exact_source": false,
+      "original_wall_roof_resources_preserved": true,
+      "source_roof_geometry_preserved": true,
+      "source_wall_spray_eligibility_preserved": true,
+      "physical_details_spray_receiver": false,
+      "interior_modeled": false,
+      "as_built_claim": false,
+      "module_dimensions_and_counts": "production_inference",
+      "visual_batch_triangles": {
+        "ExactOriginalWallSurfaces": 52,
+        "ExactSourceNeutralRoof": 14,
+        "NearHorizontalSiding": 120,
+        "PaleCompleteTrim": 2568,
+        "BlueOpaqueGlazing": 192,
+        "DarkOpaqueGlazing": 180,
+        "DarkBlueClosedDoors": 96,
+        "LocalPrivacyScreens": 2400,
+        "PaleDrainageAndFascia": 480,
+        "DoorHardware": 96,
+        "DrapedEntryPaths": 128,
+        "FootwaySurface": 52,
+        "ParkingSurface": 676,
+        "ObservedPublicRoof": 64
+      },
+      "visual_triangles": 7118,
+      "mesh_instances": 14,
+      "surfaces": 14,
+      "source_terrain_untouched": true,
+      "draped_paths_render_only": true,
+      "continuous_footway_and_parking_render_only": true,
+      "separate_public_roof_addition": true,
+      "public_roof_shapes": 1,
+      "roof_inference": "Bounded observed front slopes; pitch and hidden inner/end closure are construction inference, not four as-built roof solids",
+      "stairs_authored": false
+    },
+    "source_association": [
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-source-association-001/ASSOCIATION.json",
+        "path_base": "/",
+        "sha256": "74e05df1a6636269c26228a91ff57a01f4b762f2bdd94b68d9bd79beb1e05c70",
+        "bytes": 24893,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-source-association-001/ASSOCIATION.json",
+        "role": "immutable_external_original",
+        "copied": false
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-source-association-001/NOTE.md",
+        "path_base": "/",
+        "sha256": "c702e1f30cf08b222908df68730892f3cba5a2c127de896ae6609cc25ab56fc5",
+        "bytes": 5364,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-source-association-001/NOTE.md",
+        "role": "immutable_external_original",
+        "copied": false
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-reference-acquisition-001/HANDOFF.json",
+        "path_base": "/",
+        "sha256": "e2338e73ef446a6f04e309c67027c0a07091c6fe8525093f74b96b3049d0a990",
+        "bytes": 8443,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-reference-acquisition-001/HANDOFF.json",
+        "role": "immutable_external_original",
+        "copied": false
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-reference-acquisition-001/HANDOFF.md",
+        "path_base": "/",
+        "sha256": "82d03f412c31b226c35aa0e6d907f6a5e01f9c350651ad158bce178a77c3b005",
+        "bytes": 5107,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1220-reference-acquisition-001/HANDOFF.md",
+        "role": "immutable_external_original",
+        "copied": false
+      }
+    ],
+    "limits": [
+      "Derived assembly only: existing independently accepted study decisions are bound, not newly accepted by this author. Current preparation context is 20/213; all selected source captures retain their actual historical 18/213 state and original metrics.",
+      "The source study is not a live adapter or app screenshot. Future shared three-unit candidate/app/PCK, per-unit package receipts and independent seventh attestations are pending/null. No authority write or recognition credit is supplied.",
+      "Original 1440x900 PNGs and 1280x800 AVI payloads remain distinct. Full movies retain 70 physical trailing bytes beyond declared RIFF end. Sparse samples are not continuous playback, flicker freedom, manual input or encoded/physics/process/draw equality.",
+      "Changed-light whole is followed by restored default sun before motion. Routes use separate explicit setup poses; no continuous traversal between setups is claimed. Stock String outcomes, hit-shape indices and tag counts remain distinct.",
+      "Reference images remain private external locators and are never copied into packet images, game, Git or app. Counts, dimensions and roof closure are bounded production inference; protected or hidden regions are not newly authorized.",
+      "Full raw records, logs, maps, original films and historical failed media remain in their existing retained locations. This preparation copies only selected gameplay images; it introduces no new source or mechanical proof and preserves all referenced reviewers' narrower limits.",
+      "The movement run passed independent source/mechanics but its original tag marker retained a separate visual HOLD. The corrected single-wall-marker run supplies only one new placed attempt and one PNG; there is no corrected movie or replayed movement.",
+      "The original projector intersected the ledge. C later corrected the overly strong missing-upper-stroke/missing-dot inference: the SVG is one outlined cyan wave plus a yellow circle, approximately 180 degrees in gameplay. The old HOLD/image/AVI and measured overlap stay unchanged; corrected clear-marker PASS does not retroactively certify the old graphic.",
+      "The original movement has door 86 forward + 30 brake + 30 retreat + 20 brake and screen 34 + 30 + 30 + 20, totaling 280 rows with 116 empty slide-contact rows. Door retreat has 63 LAND contact events in 50 distinct rows; screen retreat has 62 in 50. These are not 63 or 62 distinct rows.",
+      "D retains minimum capsule clearance -1.527190 mm and minimum transformed-foot/source difference -1.361696 mm within the unchanged 4 mm solver qualification. No zero-overlap or continuous support claim follows.",
+      "Mapped runs are 0,1,3,4,5,6,7,8,10,11; protected runs are 2,9,12-25. Run 1/run 8 self-hidden restrictions remain. Four incidence-4 render-only vertical parking seams and boundary-local Float32 overlaps retain their original technical qualifications; no manifold proof is inferred from pixels.",
+      "The dated reference establishes beige/light neutral siding, a shallow red-brown roof, mixed windows, gray-green doors and pale bins. Far-right crop and occlusions remain; roof cadence, pitch and counts are production inference. Sample 579 is plain blue. Original PNG04 and sample512 stay selected as labeled held-marker history, not accepted complete-glyph evidence."
+    ]
+  },
+  "truth_boundary": "Derived first-five preparation; existing scoped study decisions only. Package/app/seventh/authority pending; current20 unchanged, captures18, credit0."
+}

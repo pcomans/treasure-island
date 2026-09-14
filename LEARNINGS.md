@@ -84,7 +84,7 @@ Station48’s retained raw `.gd` provenance was scanned by the editor despite ex
 
 ROOT selected one bounded 1239 trial from efficiency009, replacing the unstarted scalar-retry suggestion. Complete target/side/protected scope and author ground/site preflight, then independently review the full execution boundary before exact ROOT GO: every view field and consumer, import dependencies, cache/UID prerequisites, argv/isolation, output retention, missing-output handling, terminal/PID and finally release. Full independent source/geometry review may continue after first capture, with the separate visual reviewer judging actual originals. Both must resolve before mechanics, promotion or credit. Known unsafe or unapproved scope still stops execution; no parallel engine or skipped gate is allowed.
 
-At this checkpoint the authorized1239 first capture completed and its separate static visual PASS was delivered while full independent source review remained pending. The trial remains open through that source decision and any resulting correction; no overall efficiency outcome is claimed. Record the existing author-ready-to-visual-decision interval, whether source review was pending at launch, and any recapture caused by later source findings in the normal RETRO. Unmeasured transport and full-workflow costs remain unknown; reverse the trial if containment gaps or recaptures offset useful early feedback. Current 1220 ordering remains unchanged.
+The authorized1239 first capture completed with full source review pending at launch. Separate static visual PASS arrived at07:02:35 UTC; the full independent technical PASS followed at07:07:41.592007 UTC, with no source/helper correction or geometry-caused recapture. Author-ready06:45:42.340608 to visual decision was16m52.659392s in this one trial; it is not a controlled speedup measurement or total workflow cost. Record the existing author-ready-to-visual-decision interval, whether source review was pending at launch, and any recapture caused by later source findings in the normal RETRO. Unmeasured transport and full-workflow costs remain unknown; reverse the trial if containment gaps or recaptures offset useful early feedback. Current 1220 ordering remains unchanged.
 
 ## Settle physical-object association before transferring facade details
 
@@ -93,3 +93,41 @@ The inherited 1410 source notes assigned the nearby 1412 paired-garage/two-stair
 ## Start a new agent turn for every new assignment
 
 New Maceo review requests sent through `send_message` did not restart the completed reviewer. Actual metadata measured 806.169 seconds between completion and restart; ROOT and authors repeated the same dispatch mistake while other authoring continued, so the interval is not whole-team idle time. Use `followup_task` for every new bounded assignment, busy or idle, and `send_message` only for active-work status or clarification. This fixes the observed wake-up failure without another monitoring layer or a claim about total workflow speed.
+
+## Preserve exact authority inputs and readable provenance
+
+The three-unit authority donor assumed first-five records and sixth-role summaries
+were co-located. They actually lived in separate U/W packets, and the seventh
+handoff named one shared RETRO. Resolve each role from its explicit locator and
+hash before adapting a consumer. Keep image TREE digests distinct from tree-document
+hashes and preserve historical pending notes. An internal1220 door/material name
+also leaked into descriptive reference prose; use the actual referenced pixels
+and recorded color values for appearance, not identifier wording.
+
+The first selected-source copy stopped before writes because its whitespace helper
+treated `git diff --no-index --check` exit1 with empty stdout/stderr as a whitespace
+failure. Inspect the actual diagnostics: for that established check, clean output
+with status0 or1 is valid; status1 alone can mean the files differ. Retain selected
+full-file and final staged whitespace checks rather than weakening real diagnostics.
+
+The clean authority checkout then lacked41 declared historical gameplay images,
+although the successful local MAIN compiler had them. Complete reader-based
+inventory found543 required evidence/provenance inputs and exactly those41 missing;
+all existed byte-exact in preserved source. Their local image directories were
+ignored, not missing LFS payloads. Include all declared compiler evidence in the
+explicit publication selection, including files that require scoped force-add;
+keep private Street View references and full raw movies outside Git. Restore an
+existing exact file before continuing the failed compiler stage, without replaying
+already successful source generation/copy or changing acceptance inputs.
+
+## Choose the next useful work after a held pilot
+
+The isolated1220 material-finish pilot passed technical preservation but received
+a separate visual HOLD: additional microsurface detail did not establish a useful
+whole-view improvement. A failed finish pilot does not automatically make another
+finish iteration the next priority. Use the owner's current need and the already
+ready source/delivery work to select one bounded next step. Keep the pilot outside
+accepted batch inputs until its own visual issue is resolved; do not turn minor
+material contrast, helper line counts or subprocess seconds into a workflow-speed
+claim. Existing shared helpers and dynamic target specifications remain reusable;
+no generic refactor is implied by this lesson.
