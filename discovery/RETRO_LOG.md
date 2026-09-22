@@ -13867,3 +13867,12 @@ Retained evidence: current23-source-checkpoint-001 binds the actual refreshed so
 **Limit:** Two critique preferences do not establish a universal effort requirement or a winner for the separate de novo building comparison; its verdict remains pending. Anonymous HTML and all source artifacts remain untouched. No engine, browser, new images or Git mutation.
 
 **Next:** Lead future critiques with visible payoff and one practical highest-value improvement, retaining honest evidence limits. This is a communication lesson within existing review, not a new gate or framework.
+
+
+## 2026-09-22 — effort_trial_a de novo owner feedback
+
+**Worked:** Preserved the owner's exact words externally and kept their slight Option 2/Light aesthetic preference, more-natural shrubs and “both good” judgment separate from the independent source check. The check supports the screen motif but identifies inferred repetition/placement and panels crossing direct approaches with an open side remaining.
+
+**Limit:** Medium's two critique preferences and Light's slight edge in one creation case establish no universal routing, speed or fidelity conclusion. First versus final was unspecified, so self-review benefit is unassessed; no walking/impassability claim follows from these stills.
+
+**Next:** Check placement against visible reference evidence and retain an obvious door approach rather than treating motif presence as sufficient. Updated only existing lessons/logs and external feedback; no new gate, model/HTML change or engine run.
