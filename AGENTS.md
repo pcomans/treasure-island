@@ -67,6 +67,8 @@ Candidate package PASS remains a prerequisite to recognition credit under the ex
 
 ## Bounded subagent execution
 
+Never use `ultra` reasoning effort for any subagent. Explicitly select a supported non-ultra reasoning effort at every subagent dispatch instead of inheriting the parent’s effort. Model choice is separate from reasoning effort; this rule does not change the primary/root agent’s setting or runtime configuration.
+
 Use a small number of named agents with concrete targets, output locations, stop conditions and ownership. The existing role prompts and project skill are indexed in [the harness entrypoints](CLAUDE.md#persisted-entrypoints). Other harnesses can read these same files without inventing a callable agent configuration or copying local session state. An agent must not independently accept its own implementation or exported package; package or technical PASS does not supply the separate visual decision. Return compact handoffs with exact relevant bindings instead of duplicating large manifests or adding reporting frameworks.
 
 Use the current harness’s actual delegation tools. In the Codex multi-agent session, dispatch every new bounded assignment with `followup_task`, whether the target agent is busy or idle; `send_message` only supplies status or clarification and does not restart a completed agent. In another harness, use its available equivalent to start the named role with the bounded task. Do not treat role filenames as callable tools. Coalesce duplicate assignments and preserve the same ownership, review and engine-release gates.

@@ -6,6 +6,8 @@ The imported [project agreement](AGENTS.md) is the shared authority. The primary
 
 ## Persisted entrypoints
 
+Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra`; explicitly select a supported non-ultra effort instead of inheriting the parent’s effort. Model choice remains separate, and the primary/root setting is unchanged.
+
 | Role prompt | When used |
 |---|---|
 | [ti-implementation](.claude/agents/ti-implementation.md) | Bounded asset, source, helper or candidate implementation; source render early. |
