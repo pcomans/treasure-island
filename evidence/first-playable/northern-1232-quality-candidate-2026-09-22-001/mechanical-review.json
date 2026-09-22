@@ -1,0 +1,52 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215673",
+  "label": "Existing independent static and mechanics decisions",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-implementation-003/independent-review-001/ACTUAL-REVIEW.md",
+      "path_base": "/",
+      "sha256": "df8361033feabeed39344606d6b5309223070997e2f7f051d96613494596d594",
+      "bytes": 4394,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-implementation-003/independent-review-001/ACTUAL-REVIEW.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-mechanics-001/independent-actual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "36baa4aa62f54485047cd4ff1d650ca3aa23cc9dcec8acffcc5d1beaece87173",
+      "bytes": 3738,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-mechanics-001/independent-actual-001/REVIEW.md",
+      "copied": false
+    }
+  ],
+  "data": {
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "current_source_attachment": {
+      "status": "PENDING_CORRECTED_SHARED_BATCH_LIVE_EQUIVALENCE",
+      "candidate_authority": "28/213",
+      "source_result": null,
+      "source_receipt": null,
+      "independent_source_review": null,
+      "required_after_source_run": [
+        "exact candidate source/config/factory/adapter/checker pins",
+        "successful focused source result and consumed terminal receipt",
+        "actual ordinary-world target attachment and source/live equivalence",
+        "independent source decision binding these outputs"
+      ]
+    },
+    "raw_motion_ok": [
+      true
+    ],
+    "author_unit_acceptance": false,
+    "limits": [
+      "Derived assembly of existing scoped decisions; not new acceptance. Capture26/213 differs from candidate authority28/213. New recognition credit0.",
+      "Live candidate source equivalence and its independent decision pending; app/PCK/package and seventh attestation null.",
+      "Five corrected003 static and four original002 motion PNGs are1440x900; original584-frame AVI/payloads1280x800,70 trailing bytes retained. Nine sparse samples are not continuous playback, flicker freedom, between-setup traversal or manual-play proof. Terminal blue payload582 gives no scene credit.",
+      "Reference pixels and full movies remain external/private. No hidden detail or surveyed dimensions claimed; original reviewers retain their narrower limits.",
+      "Static evidence is corrected003. Motion/art originals remain002: actual003 independent technical ACTUAL-REVIEW explicitly authorizes only unchanged selected-door10/screen11/three-spray reuse. No corrected003 motion capture or roof walkability claim. Old002 inward roof and old live candidate/first-five remain immutable held history.",
+      "Observed15\u201317; partial10\u201313/18;14plain; protected0\u20139/19\u201323/hiddenroof/back/canopyends. Four blue entries; lower13plain. One selected door10 and screen11 with separately established starts,283 actual rows and three stock sprays. Existing finite4mm support qualification; not all four doors, continuous traversal, continuous support or sustained forward input beyond first contact. Original LAND/area/road and12 physical partitions retained."
+    ]
+  },
+  "truth_boundary": "Derived first-five study preparation; captures26, candidate28, credit0. Live equivalence/package/seventh pending."
+}

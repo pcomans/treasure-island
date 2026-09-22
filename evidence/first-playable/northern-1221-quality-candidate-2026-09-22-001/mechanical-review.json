@@ -1,0 +1,60 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215682",
+  "label": "Existing independent static and mechanics decisions",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1221-implementation-002/independent-review-001/ACTUAL.md",
+      "path_base": "/",
+      "sha256": "7d10f4e0e4219d2910023835acb4ae6176e467f400ed5bae35440faddeca20b0",
+      "bytes": 2350,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1221-implementation-002/independent-review-001/ACTUAL.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1221-implementation-002/independent-review-001/FOCUSED_ACTUAL.md",
+      "path_base": "/",
+      "sha256": "84011e6cc2daf0d5bfbbb41d369a4b0a61db1a114d2add7bf774c99f042b4b86",
+      "bytes": 3467,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1221-implementation-002/independent-review-001/FOCUSED_ACTUAL.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1221-mechanics-001/independent-review-001/ACTUAL.md",
+      "path_base": "/",
+      "sha256": "1e23a4cef7cd42476bfb4fcd3e645ccde564a0f58595bf75ab60a7b67e6dad1d",
+      "bytes": 7229,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1221-mechanics-001/independent-review-001/ACTUAL.md",
+      "copied": false
+    }
+  ],
+  "data": {
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "current_source_attachment": {
+      "status": "PENDING_CORRECTED_SHARED_BATCH_LIVE_EQUIVALENCE",
+      "candidate_authority": "28/213",
+      "source_result": null,
+      "source_receipt": null,
+      "independent_source_review": null,
+      "required_after_source_run": [
+        "exact candidate source/config/factory/adapter/checker pins",
+        "successful focused source result and consumed terminal receipt",
+        "actual ordinary-world target attachment and source/live equivalence",
+        "independent source decision binding these outputs"
+      ]
+    },
+    "raw_motion_ok": [
+      true
+    ],
+    "author_unit_acceptance": false,
+    "limits": [
+      "Derived assembly of existing scoped independent decisions; not new acceptance. Both current static002 and motion002 capture authority28/213; new recognition credit0.",
+      "Future live candidate source equivalence and its independent decision pending; app/PCK/package role6 and seventh attestation null.",
+      "Four current002 static and five motion PNGs are1440x900; original745-frame AVI/payloads1280x800,70 physical excess bytes retained. Nine sparse samples are not continuous playback, flicker freedom, between-setup traversal or manual-play proof. Terminal blue payload743 gives no scene credit.",
+      "Reference pixels and full movies remain external/private. Frozen OSM supplies horizontal source identity and actual source/native geometry is measured evidence; facade module cadence, pitch, paths/lawn and dimensions are production inference, not surveyed as-built fidelity. Original reviewers retain their narrower limits.",
+      "Static evidence is corrected002 with newly captured current baseline, whole, changed-light near and revised junction. Motion uses that same unchanged002 art. Old001 held roof/lawn composition and failed junction domain remain immutable history and are never relabelled002.",
+      "Observed2/4\u20136, partial0\u20131/9\u201312, plain3/7\u20138; protected13\u201325 and hidden architecture. One selected near2 door/screen on source run5 with separately established starts,403 actual rows and three stock sprays. Existing finite4mm support qualification; not all doors, continuous traversal/support, stairs or sustained forward input beyond first contact. Original LAND/area/road and12 nonreceiver physical shapes plus projected receiver retained."
+    ]
+  },
+  "truth_boundary": "Derived first-five study preparation; static002 and motion capture28, future candidate28 context, credit0. Live equivalence/package role6/seventh pending."
+}

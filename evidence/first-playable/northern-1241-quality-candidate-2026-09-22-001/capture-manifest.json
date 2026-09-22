@@ -1,0 +1,132 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215674",
+  "label": "Existing accepted static study originals",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/native-003-result.json",
+      "path_base": "/",
+      "sha256": "ef30268d66f927654c22f0e77394a7f0ec2faa73cc59c231e82d12d8e24e7341",
+      "bytes": 79263,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/native-003-result.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/focused-002-result.json",
+      "path_base": "/",
+      "sha256": "cc283e8c6ea714185bf5a3a44e5bc107e61b277a3941be1dee7960c2e73d784c",
+      "bytes": 1600997,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/focused-002-result.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/independent-review-002/ACTUAL.md",
+      "path_base": "/",
+      "sha256": "5729e814354f686c67b452fd469923ea3cf14cb481e98a2214dc673f78442077",
+      "bytes": 2793,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/independent-review-002/ACTUAL.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/independent-visual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "19da6e33dc9be190095be10b850b84d6cddf001489bf2b0fc200153cfa2972e4",
+      "bytes": 4492,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/independent-visual-001/REVIEW.md",
+      "copied": false
+    }
+  ],
+  "data": {
+    "images": [
+      {
+        "path": "images/static/01-whole-front-roof-footway-baseline.png",
+        "sha256": "a6934ee2279dd2ee0306e9d487e2f5d9e993259359d6c0401c323c34bbadd635",
+        "bytes": 1005070,
+        "role": "original_source_baseline",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/capture/images/01-whole-front-roof-footway-baseline.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/native-003-result.json",
+          "id": "01-whole-front-roof-footway-baseline"
+        }
+      },
+      {
+        "path": "images/static/02-whole-front-roof-footway-candidate.png",
+        "sha256": "3edac82d13187fc9b081e09498e3b6c612c0c4a22d31ea6b0bef938509c6da4c",
+        "bytes": 928587,
+        "role": "accepted_scoped_study",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/capture/images/02-whole-front-roof-footway-candidate.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/native-003-result.json",
+          "id": "02-whole-front-roof-footway-candidate"
+        }
+      },
+      {
+        "path": "images/static/03-center-roof-entry-footway-candidate.png",
+        "sha256": "6d142c5d9481c5bb72b7cf3de5dd0801f935b2bd7b04fdc48c27aa4c8429b853",
+        "bytes": 864944,
+        "role": "accepted_scoped_study",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/capture/images/03-center-roof-entry-footway-candidate.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/native-003-result.json",
+          "id": "03-center-roof-entry-footway-candidate"
+        }
+      },
+      {
+        "path": "images/static/04-entry-footway-parking-road-junction.png",
+        "sha256": "c4f066c4d525eeb6df4f73bdef70e5a8bc3fb0e617c6bd15338aae56f04d49e9",
+        "bytes": 845136,
+        "role": "accepted_scoped_study",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/capture/images/04-entry-footway-parking-road-junction.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/native-003-result.json",
+          "id": "04-entry-footway-parking-road-junction"
+        }
+      }
+    ],
+    "capture_time_authority": "28/213",
+    "preparation_authority_context": "28/213",
+    "current_source_attachment": {
+      "status": "PENDING_SHARED_BATCH_LIVE_EQUIVALENCE",
+      "candidate_authority": "28/213",
+      "source_result": null,
+      "source_receipt": null,
+      "independent_source_review": null
+    },
+    "independent_static_status": "EXISTING_SCOPED_PASS_WITH_EXPLICIT_UNCHANGED_VISUAL_REUSE",
+    "frozen_source": [
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1241-northpoint-study-v1/game/resources/facades/northpoint_1241_study_002.json",
+        "path_base": "/",
+        "sha256": "e25a5e7569ad67a36fafb527b825bf9048e7e3d215c459a5c0ee1f0fe0117f46",
+        "bytes": 174200,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1241-northpoint-study-v1/game/resources/facades/northpoint_1241_study_002.json",
+        "copied": false
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1241-northpoint-study-v1/game/scripts/world/facades/northpoint_1241_study_002.gd",
+        "path_base": "/",
+        "sha256": "0398623846633f2f303827d7280184a0e3af8538c68e14fa1f6651e9fc49facb",
+        "bytes": 25952,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1241-northpoint-study-v1/game/scripts/world/facades/northpoint_1241_study_002.gd",
+        "copied": false
+      }
+    ],
+    "limits": [
+      "Derived existing scoped decisions only; source revision002, corrected routing/static capture native003; static visual reviewed original native002 source/views and reuse is explicitly authorized by corrected technical ACTUAL. No history relabeling.",
+      "Capture authority28/213; current candidate authority28/213; new recognition credit0. Live equivalence, package role6 and seventh attestation pending.",
+      "Four current static plus five motion PNGs1440x900; nine exact MJPEG payloads1280x800 from744-frame AVI; terminal0742 solid blue supplies no scene evidence. Eight scene samples are not continuous playback, flicker freedom or between-setup traversal.",
+      "402 actual movement rows, selected run7 door2 and nearby screen approach/stop/retreat; partial-run12 mapped siding spray and door/screen rejection; unchanged4mm finite support qualification. Not all doors, stairs, hidden sides or continuous swept collision.",
+      "Observed5\u20138, partial0\u20133/10\u201312; protected4/9/13\u201325 and hidden architecture unclaimed; dimensions/counts/anchors production inference. Private March2025 StreetView reference and raw AVI remain external.",
+      "Earlier mechanics HEAD-guard failure launched zero Godot processes. One corrected actual mechanics run completed exit0; separate source/native002 failure and corrected native003/focused002 chain retain their own history."
+    ]
+  },
+  "truth_boundary": "Derived first-five study preparation; capture28/current28, credit0. Live equivalence/package/seventh pending."
+}

@@ -1,0 +1,46 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215674",
+  "label": "Existing independent static and mechanics decisions",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/independent-review-002/ACTUAL.md",
+      "path_base": "/",
+      "sha256": "5729e814354f686c67b452fd469923ea3cf14cb481e98a2214dc673f78442077",
+      "bytes": 2793,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/routing-correction-001/independent-review-002/ACTUAL.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-mechanics-001/independent-actual-recovery-001/ACTUAL.md",
+      "path_base": "/",
+      "sha256": "05b5565feaee7702a89d842dc3cdf17a39d0eae5922c2fd3a99de66e7817f168",
+      "bytes": 4512,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-mechanics-001/independent-actual-recovery-001/ACTUAL.md",
+      "copied": false
+    }
+  ],
+  "data": {
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "current_source_attachment": {
+      "status": "PENDING_SHARED_BATCH_LIVE_EQUIVALENCE",
+      "candidate_authority": "28/213",
+      "source_result": null,
+      "source_receipt": null,
+      "independent_source_review": null
+    },
+    "raw_motion_ok": [
+      true
+    ],
+    "author_unit_acceptance": false,
+    "limits": [
+      "Derived existing scoped decisions only; source revision002, corrected routing/static capture native003; static visual reviewed original native002 source/views and reuse is explicitly authorized by corrected technical ACTUAL. No history relabeling.",
+      "Capture authority28/213; current candidate authority28/213; new recognition credit0. Live equivalence, package role6 and seventh attestation pending.",
+      "Four current static plus five motion PNGs1440x900; nine exact MJPEG payloads1280x800 from744-frame AVI; terminal0742 solid blue supplies no scene evidence. Eight scene samples are not continuous playback, flicker freedom or between-setup traversal.",
+      "402 actual movement rows, selected run7 door2 and nearby screen approach/stop/retreat; partial-run12 mapped siding spray and door/screen rejection; unchanged4mm finite support qualification. Not all doors, stairs, hidden sides or continuous swept collision.",
+      "Observed5\u20138, partial0\u20133/10\u201312; protected4/9/13\u201325 and hidden architecture unclaimed; dimensions/counts/anchors production inference. Private March2025 StreetView reference and raw AVI remain external.",
+      "Earlier mechanics HEAD-guard failure launched zero Godot processes. One corrected actual mechanics run completed exit0; separate source/native002 failure and corrected native003/focused002 chain retain their own history."
+    ]
+  },
+  "truth_boundary": "Derived first-five study preparation; capture28/current28, credit0. Live equivalence/package/seventh pending."
+}

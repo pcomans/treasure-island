@@ -1,0 +1,50 @@
+{
+  "derived": true,
+  "status": "PASS_ROOT_ACCEPTED",
+  "source_checkpoint": "55a4de0ecc9bd0f9d6425dc641221805d3f730b9",
+  "authority_map": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/actual-source-pins.json",
+    "sha256": "7fe71a290272eae6d21e095a4c21295fad5ce5cafd4cea71f16ddd7779513090"
+  },
+  "source_execution": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/runtime-preparation-001/ACTUAL_HANDOFF.json",
+    "sha256": "08e54d086a399aae8b3240cbd3682e0625b3bf6f597a9356b95ec6a6aeac7960"
+  },
+  "selected_source": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/correction-002/materialized-selected-source-pins.json",
+    "sha256": "a1052810702eb4ef274cb8ef7d6d5465848e7018676b8461e5ef920d86bbbf45"
+  },
+  "scope": "Historical 1232 capture26 and 1241/1221 capture28 and candidate28 remain unchanged; current 31 is bound to its separately accepted exact-app release below. Original focused001 terminal outcome remains unknown. Unit role bindings remain in exact selected evidence packets.",
+  "candidate_seventh_handoff": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-candidate-attestation-001/FINAL_HANDOFF.json",
+    "sha256": "417a80f708ac86725c8a0c9c3fb79a226bdf3ad4622ebb950c9eade5d05da3bc"
+  },
+  "packet_copy_plan": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/packet-copy-plan.json",
+    "sha256": "ae8d5d3dbd560bff91d886a209078387d0bcc4c20f0c448122f65d2ba3dfc0fe"
+  },
+  "failed_current_package": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/runtime-preparation-001/package/ACTUAL_HANDOFF.json",
+    "sha256": "8a080c8ce7cea9d3258284d16378e1883d47a170812c4551f112f1b089face0a"
+  },
+  "current_package_correction": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/runtime-preparation-001/package-attempt-002/CORRECTION.json",
+    "sha256": "02de44c4a575e9d6d8fe0a9b2ad54f3a8095d7792986db6e8e36c512c8b9f308"
+  },
+  "consumer_comparisons": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/runtime-preparation-001/package-attempt-002/producer-comparisons.json",
+    "sha256": "32066fea04e2646246fdc682d64d04fd59e81747a192a23fba786f5b178ca39d"
+  },
+  "release_actual": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/runtime-preparation-001/package-attempt-002/ACTUAL_HANDOFF.json",
+    "sha256": "c6297e22fa83fa4bc0761de9f03585052417230f563559d06c9d4b12c1c282d2"
+  },
+  "independent_release": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/runtime-preparation-001/package-attempt-002/independent-actual-001/PACKAGE-ACTUAL-RELEASE.md",
+    "sha256": "8e04d68448cea9bba761c73201f4de223ed263ee87acd83e49dd508524d4230e"
+  },
+  "historical_precompiler_selected_source": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/selected-source-pins.json",
+    "sha256": "0dc35dfb556d8c0e1cafdf0aeede41c31cbc6349668411cf5560ee75bb1f20ad"
+  }
+}

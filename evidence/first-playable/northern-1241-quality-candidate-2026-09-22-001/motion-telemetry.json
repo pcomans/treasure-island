@@ -1,0 +1,133 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215674",
+  "label": "Existing immutable actual mechanics",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-mechanics-001/native-mechanics-001-result.json",
+      "path_base": "/",
+      "sha256": "a03e09242b20fb5ca7e2f6b56859243646babe101bf7d64b4604327466838ed4",
+      "bytes": 8648988,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-mechanics-001/native-mechanics-001-result.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-mechanics-001/independent-actual-recovery-001/ACTUAL.md",
+      "path_base": "/",
+      "sha256": "05b5565feaee7702a89d842dc3cdf17a39d0eae5922c2fd3a99de66e7817f168",
+      "bytes": 4512,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-mechanics-001/independent-actual-recovery-001/ACTUAL.md",
+      "copied": false
+    }
+  ],
+  "data": {
+    "runs": [
+      {
+        "raw_result": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-mechanics-001/native-mechanics-001-result.json",
+          "path_base": "/",
+          "sha256": "a03e09242b20fb5ca7e2f6b56859243646babe101bf7d64b4604327466838ed4",
+          "bytes": 8648988,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-mechanics-001/native-mechanics-001-result.json",
+          "copied": false
+        },
+        "raw_ok": true,
+        "raw_failures": [],
+        "world_authority": "28/213",
+        "recorded_reached_scope": {
+          "saved_capture_ids": [
+            "00-whole-near-face-default-light",
+            "01-whole-near-face-changed-light",
+            "02-held-closed-door-approach",
+            "03-held-short-screen-obstruction",
+            "04-actual-mapped-siding-spray"
+          ],
+          "route_attempts": [
+            {
+              "id": "extended-approach-to-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "nearby-short-screen-obstruction",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "spray_attempts": [
+            {
+              "id": "mapped-blank-siding-wall",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-short-screen",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "unreached_route_ids": [],
+          "unreached_spray_ids": []
+        },
+        "scope": "1241 initial contact-responsive door/screen mechanics on unchanged accepted static study in capture-time28; no sustained-forward behavior beyond first expected contact is claimed: changed-light whole still, door and nearby screen approaches with same-corridor retreats, three stock spray cases. Actual reached/performed records determine partial or completed scope. No authority/recognition or package claim."
+      }
+    ],
+    "actual_movement_rows": 402,
+    "historical_failed_runs": [
+      {
+        "status": "HISTORICAL_NATIVE002_ROUTING_HELPER_FAILURE_SOURCE_UNCHANGED",
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/native-002-result.json",
+            "path_base": "/",
+            "sha256": "c82d72cdd4cc3583ea3680a36374708671dbffe522cd8b4bd09882ff049166c8",
+            "bytes": 76401,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/native-002-result.json",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/native-002-execution.json",
+            "path_base": "/",
+            "sha256": "0b83a3eeebb2606bc4216b2d6a49ee9cd3639570ff8fdff5ab887a96f703e14c",
+            "bytes": 466038,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-002/native-002-execution.json",
+            "copied": false
+          }
+        ]
+      },
+      {
+        "status": "HEAD_GUARD_FAILURE_BEFORE_ENGINE_LAUNCH_ZERO_GODOT",
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-mechanics-001/head-guard-repair.json",
+            "path_base": "/",
+            "sha256": "45e9437fc8fea539dd5fef703293aba368b66806e33bf0be392fea22fdd65f29",
+            "bytes": 5482,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-mechanics-001/head-guard-repair.json",
+            "copied": false
+          }
+        ]
+      }
+    ],
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "limits": [
+      "Derived existing scoped decisions only; source revision002, corrected routing/static capture native003; static visual reviewed original native002 source/views and reuse is explicitly authorized by corrected technical ACTUAL. No history relabeling.",
+      "Capture authority28/213; current candidate authority28/213; new recognition credit0. Live equivalence, package role6 and seventh attestation pending.",
+      "Four current static plus five motion PNGs1440x900; nine exact MJPEG payloads1280x800 from744-frame AVI; terminal0742 solid blue supplies no scene evidence. Eight scene samples are not continuous playback, flicker freedom or between-setup traversal.",
+      "402 actual movement rows, selected run7 door2 and nearby screen approach/stop/retreat; partial-run12 mapped siding spray and door/screen rejection; unchanged4mm finite support qualification. Not all doors, stairs, hidden sides or continuous swept collision.",
+      "Observed5\u20138, partial0\u20133/10\u201312; protected4/9/13\u201325 and hidden architecture unclaimed; dimensions/counts/anchors production inference. Private March2025 StreetView reference and raw AVI remain external.",
+      "Earlier mechanics HEAD-guard failure launched zero Godot processes. One corrected actual mechanics run completed exit0; separate source/native002 failure and corrected native003/focused002 chain retain their own history."
+    ]
+  },
+  "truth_boundary": "Derived first-five study preparation; capture28/current28, credit0. Live equivalence/package/seventh pending."
+}

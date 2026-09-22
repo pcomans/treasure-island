@@ -25,8 +25,11 @@
     "building:w96215666:wall",
     "building:w96215669:wall",
     "building:w96215672:wall",
+    "building:w96215673:wall",
+    "building:w96215674:wall",
     "building:w96215677:wall",
-    "building:w96215680:wall"
+    "building:w96215680:wall",
+    "building:w96215682:wall"
   ],
   "checks": [
     {
@@ -98,7 +101,7 @@
       "status": "pass"
     },
     {
-      "check_id": "reference_recognizable_physical_entity_rollup_exactly_28_of_213",
+      "check_id": "reference_recognizable_physical_entity_rollup_exactly_31_of_213",
       "status": "pass"
     },
     {
@@ -118,7 +121,7 @@
       "status": "pass"
     },
     {
-      "check_id": "adapter_contract_30_ready_6_disabled_13_unique_projection_inputs",
+      "check_id": "adapter_contract_33_ready_6_disabled_13_unique_projection_inputs",
       "status": "pass"
     },
     {
@@ -150,20 +153,20 @@
       "verified": 213
     },
     "reference_recognizable": {
-      "accepted": 28,
+      "accepted": 31,
       "blocked": 0,
-      "not_evaluated": 185,
+      "not_evaluated": 182,
       "rejected": 0
     }
   },
   "counts": {
-    "active_runtime_adapter_receivers": 27,
+    "active_runtime_adapter_receivers": 30,
     "composite_units": 1,
     "direct_wall_receivers": 214,
     "identity_assertion_summaries": 2,
     "legacy_adapter_receivers": 9,
     "recognition_units": 213,
-    "runtime_adapter_receivers": 36,
+    "runtime_adapter_receivers": 39,
     "source_record_memberships": 215,
     "standalone_units": 212,
     "visible_wall_runs": 4971
@@ -267,10 +270,10 @@
     "active_navy_chapel_187_config_sha256": "c8f2ab09f3943a5ec8abea7cb9a108f49990bff1d83003c3b3622187a269dea2",
     "active_navy_chapel_187_live_review_receipt_sha256": "63bd6c5a79db837e3b53b60eea36887cee8c4c66af791715f964f023b926b5a9",
     "active_navy_chapel_187_prototype_sha256": "067c12e29c9fd352915ef2a501fcd7687b450081c79a4281d63bbfef1c19e7db",
-    "adapter_contracts_sha256": "71a9309ed79119f32b0bce0f49a9af82bb3861ef279f71ce110bbbef6d30aa22",
-    "authoring_catalog_sha256": "7e99659ffe8ed9c02c8dcdbeb96f39aa8ead5ce6c527870b9c4e6fd08095dd0a",
-    "catalog_schema_sha256": "3d0b9fb4b42edeaf307a4caca702b0d9afacd6579a5d940823d7a75e644dd1c3",
-    "facade_runtime_loader_sha256": "a06641487f361b56684a070cc8f5e8f9a6f97ada4184d311714b214b459edf54",
+    "adapter_contracts_sha256": "c884563abe20477bfadfd31cb7e2a21ac39188236d41926f6105c0ca99eb3144",
+    "authoring_catalog_sha256": "2f87b2784d197c12b727db9cbfbde4bcb69c324084dd6f494f495ec068ae6005",
+    "catalog_schema_sha256": "26c65058f892a838a8df50fe179cf2c68831faae157e15deaa3f0c37025c59f0",
+    "facade_runtime_loader_sha256": "80fa4b84bcb804c90eb27ce7e97701f1a46468888fa0307646b7cbd75551ce7f",
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
     "receiver_inventory_sha256": "0136d02466e46258207cb30658ceadddd5d9e16d785238e3f1ef270fd26ed94f",
@@ -289,14 +292,14 @@
   ],
   "next_integration_seam": "Use the topology-neutral facade registry loader API to query receiver plans. Package-safe plans include exact-current Building 1, Building 3, Navy Chapel, D1 B201, D1 B225, and D2 1441 dependencies. The exact-current Isle House Variant C receiver is represented truthfully but remains loader-hard-disabled because its reviewed executable inheritance closure includes three source-token-bearing inputs; keep every disabled plan non-executable until its projected inputs receive independently parity-proven package-safe normalization.",
   "package_boundary": {
-    "adapter_asset_occurrence_count": 232,
-    "clean_direct_asset_count": 156,
-    "dependency_closure_asset_count": 284,
+    "adapter_asset_occurrence_count": 247,
+    "clean_direct_asset_count": 165,
+    "dependency_closure_asset_count": 293,
     "dependency_closure_forbidden_asset_count": 15,
-    "direct_asset_count": 169,
+    "direct_asset_count": 178,
     "projected_direct_asset_count": 13,
     "registry_json_clean": true,
-    "runtime_referenced_asset_count": 156,
+    "runtime_referenced_asset_count": 165,
     "runtime_referenced_dependency_closure_clean": true,
     "source_side_projection_audit": [
       {
@@ -2395,6 +2398,86 @@
         "emitted_as": "runtime_asset"
       },
       {
+        "adapter_id": "active-adapter:northpoint-1232-live:building:w96215673:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/northpoint_1232_study_003.json",
+        "direct_asset_sha256": "609436c6ee4f3f0170ed02b93ada28f927d67401aeb677c03a3dab9d76109f98",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:northpoint-1232-live:building:w96215673:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+        "direct_asset_sha256": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:northpoint-1232-live:building:w96215673:wall",
+        "closure_asset_count": 12,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/northpoint_1232_live_factory.gd",
+        "direct_asset_sha256": "05a93c31bbdfe0e9bf06530e02a33f49826f3af573e4128eaaa8d127cd686910",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:northpoint-1232-live:building:w96215673:wall",
+        "closure_asset_count": 13,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/northpoint_1232_live_replacement.gd",
+        "direct_asset_sha256": "eab24f028a8956a00d415fb058c84a2be84b86f53f3ce357122b48441f9ec27e",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:northpoint-1232-live:building:w96215673:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/site_12_housing_kit.gd",
+        "direct_asset_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:northpoint-1241-live:building:w96215674:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/northpoint_1241_study_002.json",
+        "direct_asset_sha256": "9ddd9734280fa4380e4eb95d1d0e682300ac55037845f2e73b65dc57de071ccb",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:northpoint-1241-live:building:w96215674:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+        "direct_asset_sha256": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:northpoint-1241-live:building:w96215674:wall",
+        "closure_asset_count": 12,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/northpoint_1241_live_factory.gd",
+        "direct_asset_sha256": "cf94d080e386e5abcffb00328571965cc52a96e6c1522d356a6b2248e18d9bc0",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:northpoint-1241-live:building:w96215674:wall",
+        "closure_asset_count": 13,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/northpoint_1241_live_replacement.gd",
+        "direct_asset_sha256": "1e1cebbd652e2409723c7000398a78aecedf9f4c77624016c5fb9070ffe70c6c",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:northpoint-1241-live:building:w96215674:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/site_12_housing_kit.gd",
+        "direct_asset_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+        "emitted_as": "runtime_asset"
+      },
+      {
         "adapter_id": "active-adapter:mariner-1206-live:building:w96215677:wall",
         "closure_asset_count": 1,
         "closure_violations": [],
@@ -2468,6 +2551,46 @@
       },
       {
         "adapter_id": "active-adapter:mariner-1219-live:building:w96215680:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/site_12_housing_kit.gd",
+        "direct_asset_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:mariner-1221-live:building:w96215682:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/facades/mariner_1221_study_002.json",
+        "direct_asset_sha256": "512fe3b3bd31ed2abd2ea69713028cb76b6aed782a8d572a700e1d53eee2a833",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:mariner-1221-live:building:w96215682:wall",
+        "closure_asset_count": 1,
+        "closure_violations": [],
+        "direct_asset_path": "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+        "direct_asset_sha256": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:mariner-1221-live:building:w96215682:wall",
+        "closure_asset_count": 15,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/mariner_1221_live_factory.gd",
+        "direct_asset_sha256": "0347c885b48e02e376afbbdb7bf5d07ff6aa32c4b11de4521427c85daaa486ac",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:mariner-1221-live:building:w96215682:wall",
+        "closure_asset_count": 16,
+        "closure_violations": [],
+        "direct_asset_path": "game/scripts/world/facades/mariner_1221_live_replacement.gd",
+        "direct_asset_sha256": "15816708f9b6b8f15ae83f5d5d0ec0823165fbc0a2db51bdaeba442c34004b1e",
+        "emitted_as": "runtime_asset"
+      },
+      {
+        "adapter_id": "active-adapter:mariner-1221-live:building:w96215682:wall",
         "closure_asset_count": 1,
         "closure_violations": [],
         "direct_asset_path": "game/scripts/world/facades/site_12_housing_kit.gd",
@@ -2570,27 +2693,30 @@
       "physical-building:w96215666",
       "physical-building:w96215669",
       "physical-building:w96215672",
+      "physical-building:w96215673",
+      "physical-building:w96215674",
       "physical-building:w96215677",
-      "physical-building:w96215680"
+      "physical-building:w96215680",
+      "physical-building:w96215682"
     ],
     "denominator": 213,
     "denominator_kind": "immutable_physical_recognition_units",
-    "display": "28/213",
+    "display": "31/213",
     "isle_house_non_numerator_source_keys": [
       "w1282547786",
       "w1282547787"
     ],
-    "numerator": 28,
+    "numerator": 31,
     "rollup_policy": "one_claim_per_physical_recognition_unit"
   },
-  "runtime_registry_sha256": "2be68f6043446805c7c87372ed4a44161578359f5713ed27822586ef7825bffc",
+  "runtime_registry_sha256": "286da55b5a913215dccaa0741343b240c335ac06b3e647b628af2b714a0770a6",
   "schema_version": "ti.facade-recognition-validation-report/4",
   "scope_boundaries": [
     "The D2 1441 promotion preserves generated bytes while atomically replacing the supplied wall+roof pair with nine visual surfaces, two structural owners, one wall spray owner, and zero decorative collision or navigation owners.",
     "The unchanged D1 B201 attachment retains its pre-B225 735/950/964/66,636/466/466 parity receipt and D1 B225 retains its pre-D2 735/952/967/67,716/466/466 receipt, while D2 1441 retains historical post-B1 735/959/974/70,692/466/466 and D2 1439 retains historical 735/968/983/71,156/466/467; D2 1444 retains historical 735/977/992/71,828/466/468; 1238 owns the shared northern current735/1050/1065/108,921/468/492 topology; 1201 retains that same shared candidate vector; Maceo May retains pre-northern735/1032/1047/99,129/466/478 topology; Station48 retains pre-Maceo735/1023/1038/82,789/466/477 topology; D5 1317 retains pre-Station48 735/1018/1033/81,761/466/477 topology; 1308/1394 retain their measured quality-batch 735/1006/1021/79,913/466/474 scope. Prior 11/213 promotion evidence remains historical. These two existing-unit quality revisions were captured at 13/213 and add zero credit.",
-    "9 legacy receivers and 27 exact-current active receiver adapters are represented without automatic recognition transfer from adapter metadata.",
+    "9 legacy receivers and 30 exact-current active receiver adapters are represented without automatic recognition transfer from adapter metadata.",
     "The version-pinned loader contract authorizes parsing and resource resolution only; it does not authorize node instantiation or world-construction dispatch.",
-    "Exactly 28 independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.",
+    "Exactly 31 independently reviewed physical-building units are reference-recognizable; game distinctiveness and as-built fidelity remain separate and unaccepted.",
     "D2 1441 contributes exactly one standalone physical-building claim bound to the frozen capture-time v8 static, telemetry, visual-motion, package, tree, mechanical-review, and visual-review hashes; its paired wall and roof never create a second receiver or numerator entry.",
     "D1 B225 contributes exactly one standalone physical-building claim bound to the frozen capture-time v7 production evidence tree, static manifest, and independent review receipt; its two decorative batches, one wall receiver, and protected roof never create extra units or numerator entries.",
     "D1 B201 contributes exactly one standalone physical-building claim; its six decorative batches, one wall receiver, and protected roof never create extra units or numerator entries.",

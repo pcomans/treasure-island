@@ -140,6 +140,15 @@
         },
         {
           "$ref": "#/$defs/northern_1215_active_runtime_adapter"
+        },
+        {
+          "$ref": "#/$defs/northern_1232_active_runtime_adapter"
+        },
+        {
+          "$ref": "#/$defs/northern_1241_active_runtime_adapter"
+        },
+        {
+          "$ref": "#/$defs/northern_1221_active_runtime_adapter"
         }
       ]
     },
@@ -824,7 +833,7 @@
       "additionalProperties": false,
       "properties": {
         "active_runtime_adapter_receivers": {
-          "const": 27
+          "const": 30
         },
         "building_footprints": {
           "const": 213
@@ -845,7 +854,7 @@
           "const": 213
         },
         "runtime_adapter_receivers": {
-          "const": 36
+          "const": 39
         },
         "source_records": {
           "const": 215
@@ -2614,6 +2623,210 @@
         "whole_building_recognizability_imported"
       ],
       "type": "object"
+    },
+    "northern_1232_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:northpoint-1232-live:building:w96215673:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_paired_wall_roof_replacement"
+        },
+        "receiver_key": {
+          "const": "building:w96215673:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/northpoint_1232_live_replacement.gd"
+        },
+        "runtime_asset_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "const": [
+            "game/scripts/world/facades/northpoint_1232_live_factory.gd",
+            "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+            "game/scripts/world/facades/site_12_housing_kit.gd"
+          ]
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/northpoint_1232_study_003.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w96215673"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
+    },
+    "northern_1241_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:northpoint-1241-live:building:w96215674:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_paired_wall_roof_replacement"
+        },
+        "receiver_key": {
+          "const": "building:w96215674:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/northpoint_1241_live_replacement.gd"
+        },
+        "runtime_asset_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "const": [
+            "game/scripts/world/facades/northpoint_1241_live_factory.gd",
+            "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+            "game/scripts/world/facades/site_12_housing_kit.gd"
+          ]
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/northpoint_1241_study_002.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w96215674"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
+    },
+    "northern_1221_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:mariner-1221-live:building:w96215682:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_paired_wall_roof_replacement"
+        },
+        "receiver_key": {
+          "const": "building:w96215682:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/mariner_1221_live_replacement.gd"
+        },
+        "runtime_asset_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "const": [
+            "game/scripts/world/facades/mariner_1221_live_factory.gd",
+            "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+            "game/scripts/world/facades/site_12_housing_kit.gd"
+          ]
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/mariner_1221_study_002.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w96215682"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
     }
   },
   "$id": "https://treasure-island.local/schemas/facade-recognition-catalog.schema.json",
@@ -2627,8 +2840,8 @@
       "items": {
         "$ref": "#/$defs/active_runtime_adapter"
       },
-      "maxItems": 27,
-      "minItems": 27,
+      "maxItems": 30,
+      "minItems": 30,
       "type": "array"
     },
     "capture_contracts": {
@@ -2651,10 +2864,10 @@
       "additionalProperties": false,
       "properties": {
         "emitted_runtime_schema_version": {
-          "const": "ti.facade-runtime-registry/28"
+          "const": "ti.facade-runtime-registry/31"
         },
         "required_compiler_version": {
-          "const": "1.27.0"
+          "const": "1.30.0"
         },
         "unknown_version_policy": {
           "const": "reject"
@@ -2685,7 +2898,7 @@
       "type": "array"
     },
     "schema_version": {
-      "const": "ti.facade-recognition-catalog/28"
+      "const": "ti.facade-recognition-catalog/31"
     },
     "source_contract": {
       "$ref": "#/$defs/source_contract"

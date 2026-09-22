@@ -1,0 +1,62 @@
+{
+  "derived": true,
+  "status": "PASS_ROOT_ACCEPTED",
+  "authority": "31/213",
+  "app": "build/northern-1232-1241-1221-exact-current-001/Treasure Island First Playable.app",
+  "pck_sha256": "3fb36f7ca87f26bb26afd8277e93fb38c15096ca23d837b39d567f795064bf77",
+  "pck_bytes": 79313000,
+  "members": {
+    "Contents/Info.plist": {
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "size": 1885,
+      "mode": "0o644"
+    },
+    "Contents/MacOS/Treasure Island First Playable": {
+      "sha256": "b917099967737db9fd770bb8752c9284c0e8fecb753f8b48d1c8249098c67003",
+      "size": 170963648,
+      "mode": "0o755"
+    },
+    "Contents/PkgInfo": {
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "size": 9,
+      "mode": "0o644"
+    },
+    "Contents/Resources/PrivacyInfo.xcprivacy": {
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "size": 229,
+      "mode": "0o644"
+    },
+    "Contents/Resources/Treasure Island First Playable.pck": {
+      "sha256": "3fb36f7ca87f26bb26afd8277e93fb38c15096ca23d837b39d567f795064bf77",
+      "size": 79313000,
+      "mode": "0o644"
+    },
+    "Contents/Resources/icon.icns": {
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "size": 67500,
+      "mode": "0o644"
+    },
+    "Contents/_CodeSignature/CodeResources": {
+      "sha256": "79dafad1fed35399ba6def45eeb9b3f1bb211315d6c81b20e82b0ebae7c57099",
+      "size": 3217,
+      "mode": "0o644"
+    }
+  },
+  "actual_app_binding": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/runtime-preparation-001/package-attempt-002/actual-app-binding.json",
+    "sha256": "0e9065f71908ead51509b55c1cdb48249cb53308c083105da69c75b7e7722b91"
+  },
+  "actual_transfer": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/publication-preparation-001/source-method-001/APP_TRANSFER.json",
+    "sha256": "691b44088131c8f143504696a48839e501cba1ab0a7ff55637bc4d8ac53e6339"
+  },
+  "release": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/runtime-preparation-001/package-attempt-002/SLOT_RELEASE.json",
+    "sha256": "97a39a44c3466213f0c5c887db9af93b27ded82a9da9630273945a955318c587"
+  },
+  "independent_check": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/runtime-preparation-001/package-attempt-002/independent-actual-001/PACKAGE-ACTUAL-RELEASE.md",
+    "sha256": "8e04d68448cea9bba761c73201f4de223ed263ee87acd83e49dd508524d4230e"
+  },
+  "git_publication": "Consult Git history and external publication receipts for the publication outcome."
+}

@@ -1,0 +1,17 @@
+{
+  "derived": true,
+  "status": "PASS_ROOT_ACCEPTED",
+  "review": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/runtime-preparation-001/package-attempt-002/independent-actual-001/PACKAGE-ACTUAL-RELEASE.md",
+    "sha256": "8e04d68448cea9bba761c73201f4de223ed263ee87acd83e49dd508524d4230e"
+  },
+  "check": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/runtime-preparation-001/package-attempt-002/independent-actual-001/PACKAGE-ACTUAL-RELEASE.md",
+    "sha256": "8e04d68448cea9bba761c73201f4de223ed263ee87acd83e49dd508524d4230e"
+  },
+  "retrospective": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/runtime-preparation-001/package-attempt-002/independent-actual-001/RETRO-current31_package_review-actual.md",
+    "sha256": "63555235973e8e43ecb20bcea9893793ef8ea3837a0b1333608f09bac22838f4"
+  },
+  "limits": "Apple M2 Metal/Forward+ bounded startup/scripted smoke; no visible normal launch, manual play, M1 performance, Intel execution, notarization or continuous traversal claim."
+}

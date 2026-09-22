@@ -7,24 +7,24 @@ public distribution are outside this milestone.
 
 ## Current source and release
 
-The current private release recognizes **28 of 213** physical buildings. It adds
-1234 Northpoint and 1215 Bayside to the prior 26 accepted units, preserving all
-213 identities. The remaining **185 buildings are not evaluated**.
+The current private release recognizes **31 of 213** physical buildings, adding
+1232 and 1241 Northpoint and 1221 Mariner to the prior 28 accepted units.
+All 213 identities remain; **182 buildings are not evaluated**.
 
-The macOS app is `build/northern-1234-1215-exact-current-001/Treasure Island First Playable.app`.
-It passed independent source, package and release review, including the signed app’s
-world, movement, privacy and signature checks. See the [release record](evidence/first-playable/northern-1234-1215-current-release-2026-09-22-001/README.md)
-for exact hashes, evidence and runtime limits. The complete app has been transferred
-to the stable path above; it remains ignored by Git.
+The macOS app is `build/northern-1232-1241-1221-exact-current-001/Treasure Island First Playable.app`.
+It passed independent package/release review and ROOT acceptance. The complete
+app has been transferred to that stable ignored path with all seven files verified.
+The [release record](evidence/first-playable/northern-1232-1241-1221-current-release-2026-09-22-001/README.md)
+binds the actual app/PCK, accepted review and verified transfer.
 
-The previous [current26 release](evidence/first-playable/northern-1222-1227-1202-current-release-2026-09-15-001/README.md)
-remains unchanged. The 1232 study and isolated material pilots are outside this release.
-All 213 independently accepted units remain the goal.
+The [released 28-unit app](evidence/first-playable/northern-1234-1215-current-release-2026-09-22-001/README.md)
+and earlier releases remain unchanged. Isolated material pilots are outside this
+batch. All 213 independently accepted units remain the goal.
 
 ## Play on another Mac
 
 Copy the complete existing `Treasure Island First Playable.app` bundle from the
-completed release path above to the other Mac's `/Applications` folder. It needs no Godot or Node
+stable release path above to the other Mac's `/Applications` folder. It needs no Godot or Node
 installation. Then double-click it in Finder, or run:
 
 ```sh
@@ -84,6 +84,8 @@ These checks consume declared gameplay evidence as well as source. Preserve the
 current23 checkpoint's previously restored41 historical1201/1238 images and its52
 new-unit images. The prior26 batch added60 declared gameplay images for1222/1227/1202; current28 adds34 for1234/1215,
 including honestly labeled earlier held studies and sparse movie payloads.
+This three-unit batch adds 54 selected gameplay images for 1232, 1241 and
+1221, preserving each original study/capture label and sparse movie limit.
 Private dated Street View pixels and full AVI files stay outside Git/export.
 Do not bypass missing-file checks or rebuild authority from incomplete evidence;
 the retained copy plan binds every selected image and source hash.

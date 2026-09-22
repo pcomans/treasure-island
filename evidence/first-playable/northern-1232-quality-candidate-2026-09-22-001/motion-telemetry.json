@@ -1,0 +1,205 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215673",
+  "label": "Existing immutable actual mechanics",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-mechanics-001/native-mechanics-001-result.json",
+      "path_base": "/",
+      "sha256": "93b999c8107125adf360ebc11ed3177f26efb33e2754749c6ed19b2ff4f3d461",
+      "bytes": 6613877,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-mechanics-001/native-mechanics-001-result.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-mechanics-001/independent-actual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "36baa4aa62f54485047cd4ff1d650ca3aa23cc9dcec8acffcc5d1beaece87173",
+      "bytes": 3738,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-mechanics-001/independent-actual-001/REVIEW.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-implementation-003/independent-review-001/ACTUAL-REVIEW.md",
+      "path_base": "/",
+      "sha256": "df8361033feabeed39344606d6b5309223070997e2f7f051d96613494596d594",
+      "bytes": 4394,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-implementation-003/independent-review-001/ACTUAL-REVIEW.md",
+      "copied": false
+    }
+  ],
+  "data": {
+    "runs": [
+      {
+        "raw_result": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-mechanics-001/native-mechanics-001-result.json",
+          "path_base": "/",
+          "sha256": "93b999c8107125adf360ebc11ed3177f26efb33e2754749c6ed19b2ff4f3d461",
+          "bytes": 6613877,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-mechanics-001/native-mechanics-001-result.json",
+          "copied": false
+        },
+        "raw_ok": true,
+        "raw_failures": [],
+        "world_authority": "26/213",
+        "recorded_reached_scope": {
+          "saved_capture_ids": [
+            "01-whole-near-face-changed-light",
+            "02-held-closed-door-approach",
+            "03-held-short-screen-obstruction",
+            "04-actual-mapped-siding-spray"
+          ],
+          "route_attempts": [
+            {
+              "id": "extended-approach-to-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "nearby-short-screen-obstruction",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "spray_attempts": [
+            {
+              "id": "mapped-blank-siding-wall",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-short-screen",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "unreached_route_ids": [],
+          "unreached_spray_ids": []
+        },
+        "scope": "1232 initial contact-responsive door/screen mechanics on unchanged accepted static study in capture-time26; no sustained-forward behavior beyond first expected contact is claimed: changed-light whole still, door and nearby screen approaches with same-corridor retreats, three stock spray cases. Actual reached/performed records determine partial or completed scope. No authority/recognition or package claim."
+      }
+    ],
+    "historical_failed_runs": [
+      {
+        "stage": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-implementation-001",
+        "status": "HISTORICAL_FAILED_OR_HELD_NOT_RELABELLED",
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-implementation-001/native-001-result.json",
+            "path_base": "/",
+            "sha256": "dcfb16f3b0f0daba92d3156430bfbf782152add1cf51c6a04a77636bab733cf9",
+            "bytes": 76230,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-implementation-001/native-001-result.json",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-implementation-001/native-001-execution.json",
+            "path_base": "/",
+            "sha256": "2c8a38803e310a7da8311e6c1c441b9f28ce8d11f510e081285517970b5446fc",
+            "bytes": 454661,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-implementation-001/native-001-execution.json",
+            "copied": false
+          }
+        ]
+      },
+      {
+        "stage": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-live-preparation-001",
+        "status": "HISTORICAL_FAILED_OR_HELD_NOT_RELABELLED",
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-live-preparation-001/node-loader-001-execution.json",
+            "path_base": "/",
+            "sha256": "ebf58004ded3fb28edcb4762c28ef6c1d7b7f8d1a9e93211ae750e1507dfe544",
+            "bytes": 185,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-live-preparation-001/node-loader-001-execution.json",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-live-preparation-001/node-loader-001.log",
+            "path_base": "/",
+            "sha256": "1729c2c573e09a9f2fe4761e585d11f5144db7139e57859f2a9189d8d8a6624d",
+            "bytes": 306,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-live-preparation-001/node-loader-001.log",
+            "copied": false
+          }
+        ]
+      },
+      {
+        "stage": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-implementation-002/source-pins.json",
+        "status": "IMMUTABLE_INWARD_ROOF_HISTORY_HELD",
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-implementation-002/source-pins.json",
+            "path_base": "/",
+            "sha256": "3ff8a1fa62f2d87e50763c29155d8deb25c76f51979dcf8bd47fc5db6e0a0588",
+            "bytes": 238109,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-implementation-002/source-pins.json",
+            "copied": false
+          }
+        ]
+      },
+      {
+        "stage": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-live-preparation-001/ACTUAL_HANDOFF.json",
+        "status": "IMMUTABLE_INWARD_ROOF_HISTORY_HELD",
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-live-preparation-001/ACTUAL_HANDOFF.json",
+            "path_base": "/",
+            "sha256": "7ca2231ceb1eb455c4f8fa23881db9e9d5c76a397bf2a53e1f47069e4ef1dc05",
+            "bytes": 6454,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-live-preparation-001/ACTUAL_HANDOFF.json",
+            "copied": false
+          }
+        ]
+      },
+      {
+        "stage": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-unit-packet-preparation-001/FILE_READY.json",
+        "status": "IMMUTABLE_INWARD_ROOF_HISTORY_HELD",
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-unit-packet-preparation-001/FILE_READY.json",
+            "path_base": "/",
+            "sha256": "7d573198a10a69672ea32e994bb4b9e10f497088b7d83731991d4b083d47389b",
+            "bytes": 4202,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-unit-packet-preparation-001/FILE_READY.json",
+            "copied": false
+          }
+        ]
+      },
+      {
+        "stage": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-001/independent-review-001/1232-CARRYOVER.md",
+        "status": "IMMUTABLE_INWARD_ROOF_HISTORY_HELD",
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-001/independent-review-001/1232-CARRYOVER.md",
+            "path_base": "/",
+            "sha256": "ddb05976878d3cfc3ba66e045b0e27511ebf04b4ff19531144ee92fc83adda5e",
+            "bytes": 3110,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1241-implementation-001/independent-review-001/1232-CARRYOVER.md",
+            "copied": false
+          }
+        ]
+      }
+    ],
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "limits": [
+      "Derived assembly of existing scoped decisions; not new acceptance. Capture26/213 differs from candidate authority28/213. New recognition credit0.",
+      "Live candidate source equivalence and its independent decision pending; app/PCK/package and seventh attestation null.",
+      "Five corrected003 static and four original002 motion PNGs are1440x900; original584-frame AVI/payloads1280x800,70 trailing bytes retained. Nine sparse samples are not continuous playback, flicker freedom, between-setup traversal or manual-play proof. Terminal blue payload582 gives no scene credit.",
+      "Reference pixels and full movies remain external/private. No hidden detail or surveyed dimensions claimed; original reviewers retain their narrower limits.",
+      "Static evidence is corrected003. Motion/art originals remain002: actual003 independent technical ACTUAL-REVIEW explicitly authorizes only unchanged selected-door10/screen11/three-spray reuse. No corrected003 motion capture or roof walkability claim. Old002 inward roof and old live candidate/first-five remain immutable held history.",
+      "Observed15\u201317; partial10\u201313/18;14plain; protected0\u20139/19\u201323/hiddenroof/back/canopyends. Four blue entries; lower13plain. One selected door10 and screen11 with separately established starts,283 actual rows and three stock sprays. Existing finite4mm support qualification; not all four doors, continuous traversal, continuous support or sustained forward input beyond first contact. Original LAND/area/road and12 physical partitions retained."
+    ]
+  },
+  "truth_boundary": "Derived first-five study preparation; captures26, candidate28, credit0. Live equivalence/package/seventh pending."
+}

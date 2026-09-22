@@ -1,5 +1,17 @@
 # Treasure Island next-agent handoff
 
+## Current resume checkpoint — accepted 31-unit source and app
+
+This selected source adds 1232 Northpoint, 1241 Northpoint and 1221 Mariner: 31 of 213 units accepted, 182 not evaluated, 30 active adapters, 39 plans and 33 package-safe plans. Import and both native authority fixtures passed. The fresh exact-current successor app passed all six stages and independent release review; ROOT accepted it and the exact whole-app transfer is complete. The [release record](evidence/first-playable/northern-1232-1241-1221-current-release-2026-09-22-001/README.md) binds the actual PCK, app and source/visual lineage.
+
+Preserve the failed candidate predecessor, five-counter correction, initial exact-current `_run` failure, historical test bodies, capture 26/28/28 and candidate 28 scopes, private references/full movies and four unrelated untracked MAIN UIDs. Consult actual Git history and external publication receipts before inferring or repeating a publication action; this status does not embed a self-commit hash.
+
+External producer records are under `1232-1241-1221-authority-integration-001/runtime-preparation-001/package-attempt-002`; publication transfer and selection are under `publication-preparation-001`. These are audit retention locators, not clone/runtime dependencies. Do not repeat accepted source/native/package proof, export, signing or whole-app transfer merely to publish documentation. The goal remains all 213 independently accepted buildings and final visible delivery.
+
+## Historical released 28-unit checkpoint — preserved below
+
+The following current/release wording describes the prior 28-unit checkpoint.
+
 ## Current resume checkpoint — released current28 source tree
 
 Read [AGENTS.md](AGENTS.md), [LEARNINGS.md](LEARNINGS.md) and the [persisted entrypoints](CLAUDE.md#persisted-entrypoints). Current source recognizes28/213:185 not evaluated,27 active adapters,36 plans,30 package-safe,6 disabled and13 projections. 1234/w96215659 and1215/w96215666 add two units to prior26, preserving all213 identities and211 other catalog objects.1215 owns current integration topology. This source tree represents the independently released current28 authority, prepared from checkpoint84f9d60bdfb947877c7bd662e475e74daee4a03b plus the selected authority delta. Git log and the external publication receipt record the commit/push outcome; no self-commit hash is embedded here.

@@ -1,0 +1,3459 @@
+{
+  "schema_version": "ti.northpoint-1232-study/1",
+  "target": {
+    "source_key": "w96215673",
+    "address": "1232 Northpoint Drive",
+    "date": "March 2025",
+    "frames": [
+      {
+        "id": "near-1",
+        "runs": [
+          10,
+          11,
+          12,
+          13
+        ],
+        "start": [
+          -306.124,
+          2.348,
+          -755.909
+        ],
+        "end": [
+          -306.828,
+          2.45,
+          -741.583
+        ],
+        "length_m": 14.343287349837224,
+        "tangent": [
+          -0.04908219314228131,
+          0,
+          0.998794742835756
+        ],
+        "normal": [
+          -0.998794742835756,
+          0,
+          -0.04908219314228131
+        ],
+        "top_y": 8.641,
+        "opening_eligible_station_m": [
+          0,
+          14.343287349837224
+        ],
+        "roof_source_end": [
+          -306.828,
+          2.45,
+          -741.583
+        ],
+        "roof_source_length_m": 14.343287349837224,
+        "upper_windows": [
+          {
+            "station_m": 2.0,
+            "width_m": 1.85,
+            "height_m": 1.16,
+            "center_y": 7.37,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 10,
+              "start": [
+                -306.124,
+                2.348,
+                -755.909
+              ],
+              "end": [
+                -306.3,
+                2.374,
+                -751.479
+              ],
+              "tangent": [
+                -0.039697802427569914,
+                0,
+                0.9992117315576421
+              ],
+              "normal": [
+                -0.9992117315576421,
+                0,
+                -0.039697802427569914
+              ],
+              "length_m": 4.433494784027557
+            },
+            "local_station_m": 2.0000882445620602
+          },
+          {
+            "station_m": 8.5,
+            "width_m": 1.9,
+            "height_m": 1.16,
+            "center_y": 7.37,
+            "glazing": "dark",
+            "basis": {
+              "source_run": 12,
+              "start": [
+                -306.39,
+                2.385,
+                -749.61
+              ],
+              "end": [
+                -306.652,
+                2.43,
+                -744.176
+              ],
+              "tangent": [
+                -0.04815899829876328,
+                0,
+                0.9988396822728157
+              ],
+              "normal": [
+                -0.9988396822728157,
+                0,
+                -0.04815899829876328
+              ],
+              "length_m": 5.440312491024727
+            },
+            "local_station_m": 2.1955369893344554
+          },
+          {
+            "station_m": 12.8,
+            "width_m": 1.65,
+            "height_m": 1.16,
+            "center_y": 7.37,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 13,
+              "start": [
+                -306.652,
+                2.43,
+                -744.176
+              ],
+              "end": [
+                -306.828,
+                2.45,
+                -741.583
+              ],
+              "tangent": [
+                -0.06771923544920025,
+                0,
+                0.9977044177260997
+              ],
+              "normal": [
+                -0.9977044177260997,
+                0,
+                -0.06771923544920025
+              ],
+              "length_m": 2.5989661406029096
+            },
+            "local_station_m": 1.0554098043448352
+          }
+        ],
+        "lower_windows": [
+          {
+            "station_m": 1.2,
+            "width_m": 1.25,
+            "height_m": 1.06,
+            "center_y": 3.669259110799994,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 10,
+              "start": [
+                -306.124,
+                2.348,
+                -755.909
+              ],
+              "end": [
+                -306.3,
+                2.374,
+                -751.479
+              ],
+              "tangent": [
+                -0.039697802427569914,
+                0,
+                0.9992117315576421
+              ],
+              "normal": [
+                -0.9992117315576421,
+                0,
+                -0.039697802427569914
+              ],
+              "length_m": 4.433494784027557
+            },
+            "local_station_m": 1.200052946737236
+          },
+          {
+            "station_m": 10.0,
+            "width_m": 1.45,
+            "height_m": 1.06,
+            "center_y": 3.732420772557321,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 12,
+              "start": [
+                -306.39,
+                2.385,
+                -749.61
+              ],
+              "end": [
+                -306.652,
+                2.43,
+                -744.176
+              ],
+              "tangent": [
+                -0.04815899829876328,
+                0,
+                0.9988396822728157
+              ],
+              "normal": [
+                -0.9988396822728157,
+                0,
+                -0.04815899829876328
+              ],
+              "length_m": 5.440312491024727
+            },
+            "local_station_m": 3.6955376300659335
+          }
+        ],
+        "entries": [
+          {
+            "station_m": 3.05,
+            "width_m": 0.95,
+            "height_m": 2.1,
+            "bottom_y": 2.4212083560561943,
+            "ground_label": "near-1-door-1",
+            "door_tone": "blue_gray",
+            "threshold_inference": "Visible blue entry vocabulary with reversible local placement; no surveyed concealed threshold.",
+            "basis": {
+              "source_run": 10,
+              "start": [
+                -306.124,
+                2.348,
+                -755.909
+              ],
+              "end": [
+                -306.3,
+                2.374,
+                -751.479
+              ],
+              "tangent": [
+                -0.039697802427569914,
+                0,
+                0.9992117315576421
+              ],
+              "normal": [
+                -0.9992117315576421,
+                0,
+                -0.039697802427569914
+              ],
+              "length_m": 4.433494784027557
+            },
+            "local_station_m": 3.0501345729571416,
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -306.34117,
+                    2.40439,
+                    -753.465561
+                  ],
+                  [
+                    -306.388808,
+                    2.411607,
+                    -752.266506
+                  ],
+                  [
+                    -307.983206,
+                    2.38308,
+                    -752.32985
+                  ]
+                ],
+                [
+                  [
+                    -306.34117,
+                    2.40439,
+                    -753.465561
+                  ],
+                  [
+                    -307.983206,
+                    2.38308,
+                    -752.32985
+                  ],
+                  [
+                    -307.924468,
+                    2.376062,
+                    -753.528464
+                  ]
+                ]
+              ],
+              "boundary_segments": [
+                [
+                  [
+                    -306.34117,
+                    2.40439,
+                    -753.465561
+                  ],
+                  [
+                    -306.388808,
+                    2.411607,
+                    -752.266506
+                  ]
+                ],
+                [
+                  [
+                    -306.388808,
+                    2.411607,
+                    -752.266506
+                  ],
+                  [
+                    -307.983206,
+                    2.38308,
+                    -752.32985
+                  ]
+                ],
+                [
+                  [
+                    -307.983206,
+                    2.38308,
+                    -752.32985
+                  ],
+                  [
+                    -307.924468,
+                    2.376062,
+                    -753.528464
+                  ]
+                ],
+                [
+                  [
+                    -307.924468,
+                    2.376062,
+                    -753.528464
+                  ],
+                  [
+                    -306.34117,
+                    2.40439,
+                    -753.465561
+                  ]
+                ]
+              ],
+              "thickness_m": 0.04
+            },
+            "path_connection": {
+              "kind": "1232_inferred_continuous_footway",
+              "width_m": 1.2,
+              "outward_start_m": 0.12,
+              "end_depths_m": [
+                1.7045467822714355,
+                1.7156562350831783
+              ],
+              "walk_global_depth_m": 3.0,
+              "road_source_way": "w8920838",
+              "road_name": "Northpoint Drive",
+              "boundary_status": "production_inference supported by visible footway/parking hierarchy; source OSM has no separate pedestrian/parking surface here",
+              "collision": "none"
+            }
+          },
+          {
+            "station_m": 7.9,
+            "width_m": 0.95,
+            "height_m": 2.1,
+            "bottom_y": 2.4548010289327644,
+            "ground_label": "near-1-door-2",
+            "door_tone": "blue_gray",
+            "threshold_inference": "Visible blue entry vocabulary with reversible local placement; no surveyed concealed threshold.",
+            "basis": {
+              "source_run": 12,
+              "start": [
+                -306.39,
+                2.385,
+                -749.61
+              ],
+              "end": [
+                -306.652,
+                2.43,
+                -744.176
+              ],
+              "tangent": [
+                -0.04815899829876328,
+                0,
+                0.9988396822728157
+              ],
+              "normal": [
+                -0.9988396822728157,
+                0,
+                -0.04815899829876328
+              ],
+              "length_m": 5.440312491024727
+            },
+            "local_station_m": 1.5955367330418648,
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -308.205459,
+                    2.409634,
+                    -747.794541
+                  ],
+                  [
+                    -308.161151,
+                    2.40434,
+                    -748.698703
+                  ],
+                  [
+                    -307.340848,
+                    2.419064,
+                    -748.659152
+                  ]
+                ],
+                [
+                  [
+                    -306.557805,
+                    2.435145,
+                    -748.621397
+                  ],
+                  [
+                    -306.615596,
+                    2.444996,
+                    -747.42279
+                  ],
+                  [
+                    -308.219886,
+                    2.412049,
+                    -747.500141
+                  ]
+                ],
+                [
+                  [
+                    -306.557805,
+                    2.435145,
+                    -748.621397
+                  ],
+                  [
+                    -308.219886,
+                    2.412049,
+                    -747.500141
+                  ],
+                  [
+                    -308.205459,
+                    2.409634,
+                    -747.794541
+                  ]
+                ],
+                [
+                  [
+                    -306.557805,
+                    2.435145,
+                    -748.621397
+                  ],
+                  [
+                    -308.205459,
+                    2.409634,
+                    -747.794541
+                  ],
+                  [
+                    -307.340848,
+                    2.419064,
+                    -748.659152
+                  ]
+                ]
+              ],
+              "boundary_segments": [
+                [
+                  [
+                    -308.205459,
+                    2.409634,
+                    -747.794541
+                  ],
+                  [
+                    -308.161151,
+                    2.40434,
+                    -748.698703
+                  ]
+                ],
+                [
+                  [
+                    -308.161151,
+                    2.40434,
+                    -748.698703
+                  ],
+                  [
+                    -307.340848,
+                    2.419064,
+                    -748.659152
+                  ]
+                ],
+                [
+                  [
+                    -306.557805,
+                    2.435145,
+                    -748.621397
+                  ],
+                  [
+                    -306.615596,
+                    2.444996,
+                    -747.42279
+                  ]
+                ],
+                [
+                  [
+                    -306.615596,
+                    2.444996,
+                    -747.42279
+                  ],
+                  [
+                    -308.219886,
+                    2.412049,
+                    -747.500141
+                  ]
+                ],
+                [
+                  [
+                    -308.219886,
+                    2.412049,
+                    -747.500141
+                  ],
+                  [
+                    -308.205459,
+                    2.409634,
+                    -747.794541
+                  ]
+                ],
+                [
+                  [
+                    -307.340848,
+                    2.419064,
+                    -748.659152
+                  ],
+                  [
+                    -306.557805,
+                    2.435145,
+                    -748.621397
+                  ]
+                ]
+              ],
+              "thickness_m": 0.04
+            },
+            "path_connection": {
+              "kind": "1232_inferred_continuous_footway",
+              "width_m": 1.2,
+              "outward_start_m": 0.12,
+              "end_depths_m": [
+                1.7252083712820252,
+                1.726154230552789
+              ],
+              "walk_global_depth_m": 3.0,
+              "road_source_way": "w8920838",
+              "road_name": "Northpoint Drive",
+              "boundary_status": "production_inference supported by visible footway/parking hierarchy; source OSM has no separate pedestrian/parking surface here",
+              "collision": "none"
+            }
+          }
+        ],
+        "screens": [
+          {
+            "station_m": 5.35,
+            "width_m": 1.05,
+            "height_m": 1.22,
+            "depth_m": 1.3,
+            "bottom_y": 2.337117385976361,
+            "ground_label": "near-1-screen-1",
+            "return_length_m": 0.95,
+            "basis": {
+              "source_run": 11,
+              "start": [
+                -306.3,
+                2.374,
+                -751.479
+              ],
+              "end": [
+                -306.39,
+                2.385,
+                -749.61
+              ],
+              "tangent": [
+                -0.04809835974856352,
+                0,
+                0.9988426041121283
+              ],
+              "normal": [
+                -0.9988426041121283,
+                0,
+                -0.04809835974856352
+              ],
+              "length_m": 1.8711656794629652
+            },
+            "local_station_m": 0.916701267945034
+          }
+        ],
+        "pipes": []
+      },
+      {
+        "id": "near-2",
+        "runs": [
+          15,
+          16,
+          17
+        ],
+        "start": [
+          -305.509,
+          2.477,
+          -741.527
+        ],
+        "end": [
+          -306.036,
+          2.527,
+          -730.773
+        ],
+        "length_m": 10.766905079919688,
+        "tangent": [
+          -0.048946284571863036,
+          0,
+          0.9988014123070763
+        ],
+        "normal": [
+          -0.9988014123070763,
+          0,
+          -0.048946284571863036
+        ],
+        "top_y": 8.641,
+        "opening_eligible_station_m": [
+          0,
+          10.766905079919688
+        ],
+        "roof_source_end": [
+          -306.036,
+          2.527,
+          -730.773
+        ],
+        "roof_source_length_m": 10.766905079919688,
+        "upper_windows": [
+          {
+            "station_m": 1.7,
+            "width_m": 1.9,
+            "height_m": 1.16,
+            "center_y": 7.37,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 15,
+              "start": [
+                -305.509,
+                2.477,
+                -741.527
+              ],
+              "end": [
+                -305.772,
+                2.51,
+                -737.408
+              ],
+              "tangent": [
+                -0.06372069045661334,
+                0,
+                0.9979677718281951
+              ],
+              "normal": [
+                -0.9979677718281951,
+                0,
+                -0.06372069045661334
+              ],
+              "length_m": 4.127387793750452
+            },
+            "local_station_m": 1.7001861517034074
+          },
+          {
+            "station_m": 6.7,
+            "width_m": 1.9,
+            "height_m": 1.16,
+            "center_y": 7.37,
+            "glazing": "dark",
+            "basis": {
+              "source_run": 17,
+              "start": [
+                -305.828,
+                2.522,
+                -736
+              ],
+              "end": [
+                -306.036,
+                2.527,
+                -730.773
+              ],
+              "tangent": [
+                -0.03976191122297338,
+                0,
+                0.9992091825117984
+              ],
+              "normal": [
+                -0.9992091825117984,
+                0,
+                -0.03976191122297338
+              ],
+              "length_m": 5.231136874523525
+            },
+            "local_station_m": 1.1640599219849805
+          },
+          {
+            "station_m": 9.5,
+            "width_m": 1.65,
+            "height_m": 1.16,
+            "center_y": 7.37,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 17,
+              "start": [
+                -305.828,
+                2.522,
+                -736
+              ],
+              "end": [
+                -306.036,
+                2.527,
+                -730.773
+              ],
+              "tangent": [
+                -0.03976191122297338,
+                0,
+                0.9992091825117984
+              ],
+              "normal": [
+                -0.9992091825117984,
+                0,
+                -0.03976191122297338
+              ],
+              "length_m": 5.231136874523525
+            },
+            "local_station_m": 3.964178253572105
+          }
+        ],
+        "lower_windows": [
+          {
+            "station_m": 1.3,
+            "width_m": 1.35,
+            "height_m": 1.06,
+            "center_y": 3.8036413582607054,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 15,
+              "start": [
+                -305.509,
+                2.477,
+                -741.527
+              ],
+              "end": [
+                -305.772,
+                2.51,
+                -737.408
+              ],
+              "tangent": [
+                -0.06372069045661334,
+                0,
+                0.9979677718281951
+              ],
+              "normal": [
+                -0.9979677718281951,
+                0,
+                -0.06372069045661334
+              ],
+              "length_m": 4.127387793750452
+            },
+            "local_station_m": 1.3001423513026056
+          },
+          {
+            "station_m": 6.7,
+            "width_m": 1.4,
+            "height_m": 1.06,
+            "center_y": 3.8335650732274344,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 17,
+              "start": [
+                -305.828,
+                2.522,
+                -736
+              ],
+              "end": [
+                -306.036,
+                2.527,
+                -730.773
+              ],
+              "tangent": [
+                -0.03976191122297338,
+                0,
+                0.9992091825117984
+              ],
+              "normal": [
+                -0.9992091825117984,
+                0,
+                -0.03976191122297338
+              ],
+              "length_m": 5.231136874523525
+            },
+            "local_station_m": 1.1640599219849805
+          }
+        ],
+        "entries": [
+          {
+            "station_m": 3.45,
+            "width_m": 0.95,
+            "height_m": 2.1,
+            "bottom_y": 2.5606991313117127,
+            "ground_label": "near-2-door-1",
+            "door_tone": "blue_gray",
+            "threshold_inference": "Reversible closed door at actual local surface grade, not surveyed.",
+            "basis": {
+              "source_run": 15,
+              "start": [
+                -305.509,
+                2.477,
+                -741.527
+              ],
+              "end": [
+                -305.772,
+                2.51,
+                -737.408
+              ],
+              "tangent": [
+                -0.06372069045661334,
+                0,
+                0.9979677718281951
+              ],
+              "normal": [
+                -0.9979677718281951,
+                0,
+                -0.06372069045661334
+              ],
+              "length_m": 4.127387793750452
+            },
+            "local_station_m": 3.450377778456915,
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -305.810384,
+                    2.541408,
+                    -738.690061
+                  ],
+                  [
+                    -305.886849,
+                    2.550874,
+                    -737.4925
+                  ],
+                  [
+                    -308.701504,
+                    2.492666,
+                    -737.672217
+                  ]
+                ],
+                [
+                  [
+                    -305.810384,
+                    2.541408,
+                    -738.690061
+                  ],
+                  [
+                    -308.701504,
+                    2.492666,
+                    -737.672217
+                  ],
+                  [
+                    -308.642762,
+                    2.482833,
+                    -738.87091
+                  ]
+                ]
+              ],
+              "boundary_segments": [
+                [
+                  [
+                    -305.810384,
+                    2.541408,
+                    -738.690061
+                  ],
+                  [
+                    -305.886849,
+                    2.550874,
+                    -737.4925
+                  ]
+                ],
+                [
+                  [
+                    -305.886849,
+                    2.550874,
+                    -737.4925
+                  ],
+                  [
+                    -308.701504,
+                    2.492666,
+                    -737.672217
+                  ]
+                ],
+                [
+                  [
+                    -308.701504,
+                    2.492666,
+                    -737.672217
+                  ],
+                  [
+                    -308.642762,
+                    2.482833,
+                    -738.87091
+                  ]
+                ],
+                [
+                  [
+                    -308.642762,
+                    2.482833,
+                    -738.87091
+                  ],
+                  [
+                    -305.810384,
+                    2.541408,
+                    -738.690061
+                  ]
+                ]
+              ],
+              "thickness_m": 0.04
+            },
+            "path_connection": {
+              "kind": "1232_inferred_continuous_footway",
+              "width_m": 1.2,
+              "outward_start_m": 0.12,
+              "end_depths_m": [
+                2.9581454162011376,
+                2.940386470510331
+              ],
+              "walk_global_depth_m": 3.0,
+              "road_source_way": "w8920838",
+              "road_name": "Northpoint Drive",
+              "boundary_status": "production_inference supported by visible footway/parking hierarchy; source OSM has no separate pedestrian/parking surface here",
+              "collision": "none"
+            }
+          },
+          {
+            "station_m": 8.1,
+            "width_m": 0.95,
+            "height_m": 2.1,
+            "bottom_y": 2.576502431335186,
+            "ground_label": "near-2-door-2",
+            "door_tone": "blue_gray",
+            "threshold_inference": "Reversible closed door at actual local surface grade, not surveyed.",
+            "basis": {
+              "source_run": 17,
+              "start": [
+                -305.828,
+                2.522,
+                -736
+              ],
+              "end": [
+                -306.036,
+                2.527,
+                -730.773
+              ],
+              "tangent": [
+                -0.03976191122297338,
+                0,
+                0.9992091825117984
+              ],
+              "normal": [
+                -0.9992091825117984,
+                0,
+                -0.03976191122297338
+              ],
+              "length_m": 5.231136874523525
+            },
+            "local_station_m": 2.5641190877785425,
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -306.026002,
+                    2.565339,
+                    -734.042206
+                  ],
+                  [
+                    -306.073717,
+                    2.566553,
+                    -732.843155
+                  ],
+                  [
+                    -308.932577,
+                    2.508902,
+                    -732.956918
+                  ]
+                ],
+                [
+                  [
+                    -306.026002,
+                    2.565339,
+                    -734.042206
+                  ],
+                  [
+                    -308.932577,
+                    2.508902,
+                    -732.956918
+                  ],
+                  [
+                    -308.873839,
+                    2.507909,
+                    -734.155531
+                  ]
+                ]
+              ],
+              "boundary_segments": [
+                [
+                  [
+                    -306.026002,
+                    2.565339,
+                    -734.042206
+                  ],
+                  [
+                    -306.073717,
+                    2.566553,
+                    -732.843155
+                  ]
+                ],
+                [
+                  [
+                    -306.073717,
+                    2.566553,
+                    -732.843155
+                  ],
+                  [
+                    -308.932577,
+                    2.508902,
+                    -732.956918
+                  ]
+                ],
+                [
+                  [
+                    -308.932577,
+                    2.508902,
+                    -732.956918
+                  ],
+                  [
+                    -308.873839,
+                    2.507909,
+                    -734.155531
+                  ]
+                ],
+                [
+                  [
+                    -308.873839,
+                    2.507909,
+                    -734.155531
+                  ],
+                  [
+                    -306.026002,
+                    2.565339,
+                    -734.042206
+                  ]
+                ]
+              ],
+              "thickness_m": 0.04
+            },
+            "path_connection": {
+              "kind": "1232_inferred_continuous_footway",
+              "width_m": 1.2,
+              "outward_start_m": 0.12,
+              "end_depths_m": [
+                2.970090761807837,
+                2.981123216723977
+              ],
+              "walk_global_depth_m": 3.0,
+              "road_source_way": "w8920838",
+              "road_name": "Northpoint Drive",
+              "boundary_status": "production_inference supported by visible footway/parking hierarchy; source OSM has no separate pedestrian/parking surface here",
+              "collision": "none"
+            }
+          }
+        ],
+        "screens": [
+          {
+            "station_m": 4.85,
+            "width_m": 1.1,
+            "height_m": 1.22,
+            "depth_m": 1.3,
+            "bottom_y": 2.468182026271795,
+            "ground_label": "near-2-screen-1",
+            "return_length_m": 0.95,
+            "basis": {
+              "source_run": 16,
+              "start": [
+                -305.772,
+                2.51,
+                -737.408
+              ],
+              "end": [
+                -305.828,
+                2.522,
+                -736
+              ],
+              "tangent": [
+                -0.03974130690624381,
+                0,
+                0.9992100022144413
+              ],
+              "normal": [
+                -0.9992100022144413,
+                0,
+                -0.03974130690624381
+              ],
+              "length_m": 1.4091131963046977
+            },
+            "local_station_m": 0.7230948047183898
+          }
+        ],
+        "pipes": [
+          {
+            "station_m": 0.18,
+            "bottom_y": 2.596759265712206,
+            "top_y": 8.5,
+            "basis": {
+              "source_run": 15,
+              "start": [
+                -305.509,
+                2.477,
+                -741.527
+              ],
+              "end": [
+                -305.772,
+                2.51,
+                -737.408
+              ],
+              "tangent": [
+                -0.06372069045661334,
+                0,
+                0.9979677718281951
+              ],
+              "normal": [
+                -0.9979677718281951,
+                0,
+                -0.06372069045661334
+              ],
+              "length_m": 4.127387793750452
+            },
+            "local_station_m": 0.18001971018036075
+          },
+          {
+            "station_m": 10.586905079919688,
+            "bottom_y": 2.644525083462837,
+            "top_y": 8.5,
+            "basis": {
+              "source_run": 17,
+              "start": [
+                -305.828,
+                2.522,
+                -736
+              ],
+              "end": [
+                -306.036,
+                2.527,
+                -730.773
+              ],
+              "tangent": [
+                -0.03976191122297338,
+                0,
+                0.9992091825117984
+              ],
+              "normal": [
+                -0.9992091825117984,
+                0,
+                -0.03976191122297338
+              ],
+              "length_m": 5.231136874523525
+            },
+            "local_station_m": 5.0511292674929225
+          }
+        ]
+      },
+      {
+        "id": "near-3",
+        "runs": [
+          18
+        ],
+        "start": [
+          -306.036,
+          2.527,
+          -730.773
+        ],
+        "end": [
+          -306.212,
+          2.53,
+          -727.011
+        ],
+        "length_m": 3.7661147088213376,
+        "tangent": [
+          -0.046732511781370986,
+          0,
+          0.9989074393268897
+        ],
+        "normal": [
+          -0.9989074393268897,
+          0,
+          -0.046732511781370986
+        ],
+        "top_y": 8.641,
+        "opening_eligible_station_m": [
+          0,
+          3.7661147088213376
+        ],
+        "roof_source_end": [
+          -306.212,
+          2.53,
+          -727.011
+        ],
+        "roof_source_length_m": 3.7661147088213376,
+        "upper_windows": [],
+        "lower_windows": [],
+        "entries": [],
+        "screens": [],
+        "pipes": []
+      }
+    ]
+  },
+  "mapped_runs": [
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "protected_runs": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    19,
+    20,
+    21,
+    22,
+    23
+  ],
+  "source_association": {
+    "sha256": "c7fa2fec485f8f3b74d0e13bf738b5b5316be24dee05951d981fd46dc879a402",
+    "lower_north_refinement": {
+      "sha256": "68e5ecd0197b905aa0af0066d9e68e608f8b106f052d3b2ed3e74052f1f2554b"
+    }
+  },
+  "truth_boundary": {
+    "prototype_only": true,
+    "runtime_attachment": false,
+    "recognition_accepted": false,
+    "as_built_claim": false,
+    "interior_modeled": false,
+    "source_roof_unchanged": true,
+    "additive_public_roof_authorized": true
+  },
+  "inference": {
+    "module_scale_count_cadence": "production_inference",
+    "observed": [
+      15,
+      16,
+      17
+    ],
+    "partial": [
+      10,
+      11,
+      12,
+      13,
+      18
+    ],
+    "plain_continuity": [
+      14
+    ],
+    "scope": "Observed15-17 retained. Partial10-13 now receives only visibly supported lower vocabulary: two blue entries, two lower windows and one short screen on runs10-12;13 lower remains plain.18 plain,14 continuity,protected0-9/19-23 and genuine occlusion remain. Exact local dimensions/counts/cadence are production_inference, not surveyed or neighbor-derived."
+  },
+  "facade": {
+    "story_band_y": 5.53,
+    "fascia_center_y": 8.672,
+    "gutter_center_y": 8.757,
+    "upper_projection_m": 0.06,
+    "roof_low_rgb": [
+      0.34,
+      0.36,
+      0.35
+    ],
+    "roof_high_rgb": [
+      0.57,
+      0.58,
+      0.55
+    ]
+  },
+  "materials": {
+    "siding_rgb": [
+      0.53,
+      0.59,
+      0.62
+    ],
+    "trim_rgb": [
+      0.83,
+      0.85,
+      0.81
+    ],
+    "blue_glass_rgb": [
+      0.28,
+      0.35,
+      0.39
+    ],
+    "dark_glass_rgb": [
+      0.14,
+      0.2,
+      0.24
+    ],
+    "door_rgb": [
+      0.105,
+      0.17,
+      0.245
+    ],
+    "plum_door_rgb": [
+      0.105,
+      0.17,
+      0.245
+    ],
+    "pale_door_rgb": [
+      0.62,
+      0.65,
+      0.62
+    ],
+    "screen_rgb": [
+      0.38,
+      0.46,
+      0.51
+    ],
+    "path_rgb": [
+      0.52,
+      0.51,
+      0.46
+    ],
+    "metal_rgb": [
+      0.35,
+      0.38,
+      0.38
+    ],
+    "carport_roof_rgb": [
+      0.26,
+      0.29,
+      0.29
+    ],
+    "carport_post_rgb": [
+      0.43,
+      0.32,
+      0.23
+    ],
+    "parking_rgb": [
+      0.54,
+      0.55,
+      0.52
+    ],
+    "footway_rgb": [
+      0.65,
+      0.65,
+      0.59
+    ]
+  },
+  "siding": {
+    "course_height_m": 0.18,
+    "seam_color_multiplier": 0.9,
+    "roughness": 0.9,
+    "normal_relief": 0.1,
+    "color_variation": 0.032,
+    "filter_start_cycles_per_pixel": 0.24,
+    "filter_end_cycles_per_pixel": 0.52
+  },
+  "carport": {
+    "frame": {
+      "start": [
+        -306.124,
+        2.348,
+        -755.909
+      ],
+      "end": [
+        -306.828,
+        2.45,
+        -741.583
+      ],
+      "tangent": [
+        -0.04908219314228131,
+        0,
+        0.998794742835756
+      ],
+      "normal": [
+        -0.998794742835756,
+        0,
+        -0.04908219314228131
+      ],
+      "length_m": 14.343287349837224
+    },
+    "station_m": [
+      1.0,
+      26.7
+    ],
+    "depth_m": [
+      2.65,
+      8.1
+    ],
+    "roof_y": 5.53,
+    "posts": [
+      {
+        "station_m": 1.6,
+        "depth_m": 2.88,
+        "bottom_y": 2.2891974194283677,
+        "ground_label": "carport-post-1"
+      },
+      {
+        "station_m": 1.6,
+        "depth_m": 7.91,
+        "bottom_y": 2.1989917719402636,
+        "ground_label": "carport-post-2"
+      },
+      {
+        "station_m": 7.7,
+        "depth_m": 2.88,
+        "bottom_y": 2.3248554484265673,
+        "ground_label": "carport-post-3"
+      },
+      {
+        "station_m": 7.7,
+        "depth_m": 7.91,
+        "bottom_y": 2.234649800938464,
+        "ground_label": "carport-post-4"
+      },
+      {
+        "station_m": 13.8,
+        "depth_m": 2.88,
+        "bottom_y": 2.3702533878899805,
+        "ground_label": "carport-post-5"
+      },
+      {
+        "station_m": 13.8,
+        "depth_m": 7.91,
+        "bottom_y": 2.270307829936663,
+        "ground_label": "carport-post-6"
+      },
+      {
+        "station_m": 19.9,
+        "depth_m": 2.88,
+        "bottom_y": 2.4202134943162217,
+        "ground_label": "carport-post-7"
+      },
+      {
+        "station_m": 19.9,
+        "depth_m": 7.91,
+        "bottom_y": 2.3169955075140685,
+        "ground_label": "carport-post-8"
+      },
+      {
+        "station_m": 26.1,
+        "depth_m": 2.88,
+        "bottom_y": 2.427033541683498,
+        "ground_label": "carport-post-9"
+      },
+      {
+        "station_m": 26.1,
+        "depth_m": 7.91,
+        "bottom_y": 2.325636320188698,
+        "ground_label": "carport-post-10"
+      }
+    ],
+    "inference": "One bounded visible canopy segment. Length,depth and post stations are production_inference; endpoints do not claim physical endpoints or hidden attachment continuation."
+  },
+  "ground": {
+    "land_key": "land:w26767313:x_-2__z_-3",
+    "sampled_land_keys": [
+      "land:w26767313:x_-2__z_-3",
+      "land:w26767313:x_-2__z_-4"
+    ],
+    "sampled_area_keys": [
+      "area:r17241151:x_-2__z_-3",
+      "area:r17241151:x_-2__z_-4"
+    ],
+    "sampled_road_keys": [
+      "roads:x_-2__z_-3",
+      "roads:x_-2__z_-4"
+    ],
+    "land_collision_kind": "world_solid",
+    "visible_area_key": "area:r17241151:x_-2__z_-3",
+    "visible_area_collision_kind": "none",
+    "source_chunk_sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+    "paths": "Four narrow actual-grade entries meet one continuous observed-type footway, then a bounded parking surface meets exact generated Northpoint road; unobserved source ground beyond the bounded frontage is retained. All added ground render-only; boundary dimensions are production inference.",
+    "layout_evidence_sha256": "6f102eff5c2737673b4089d47a9488645472edbcea903ad8e15dc35d4d727100",
+    "footprint_evidence_sha256": "63ed4c29fb0ed135a7b57aa32791a91ba50237437999e9fe95a523490a482fdd"
+  },
+  "public_roof": {
+    "triangles": [
+      [
+        [
+          -305.2760061124525,
+          8.86,
+          -755.8473042409723
+        ],
+        [
+          -306.9868255149908,
+          8.69,
+          -741.6108290457594
+        ],
+        [
+          -305.9780428247267,
+          8.86,
+          -741.5612560306857
+        ]
+      ],
+      [
+        [
+          -305.2760061124525,
+          8.86,
+          -755.8473042409723
+        ],
+        [
+          -306.2847888027166,
+          8.69,
+          -755.896877256046
+        ],
+        [
+          -306.9868255149908,
+          8.69,
+          -741.6108290457594
+        ]
+      ],
+      [
+        [
+          -306.2847888027166,
+          8.66,
+          -755.896877256046
+        ],
+        [
+          -305.9780428247267,
+          8.83,
+          -741.5612560306857
+        ],
+        [
+          -306.9868255149908,
+          8.66,
+          -741.6108290457594
+        ]
+      ],
+      [
+        [
+          -306.2847888027166,
+          8.66,
+          -755.896877256046
+        ],
+        [
+          -305.2760061124525,
+          8.83,
+          -755.8473042409723
+        ],
+        [
+          -305.9780428247267,
+          8.83,
+          -741.5612560306857
+        ]
+      ],
+      [
+        [
+          -305.2760061124525,
+          8.86,
+          -755.8473042409723
+        ],
+        [
+          -305.9780428247267,
+          8.83,
+          -741.5612560306857
+        ],
+        [
+          -305.2760061124525,
+          8.83,
+          -755.8473042409723
+        ]
+      ],
+      [
+        [
+          -305.2760061124525,
+          8.86,
+          -755.8473042409723
+        ],
+        [
+          -305.9780428247267,
+          8.86,
+          -741.5612560306857
+        ],
+        [
+          -305.9780428247267,
+          8.83,
+          -741.5612560306857
+        ]
+      ],
+      [
+        [
+          -305.9780428247267,
+          8.86,
+          -741.5612560306857
+        ],
+        [
+          -306.9868255149908,
+          8.66,
+          -741.6108290457594
+        ],
+        [
+          -305.9780428247267,
+          8.83,
+          -741.5612560306857
+        ]
+      ],
+      [
+        [
+          -305.9780428247267,
+          8.86,
+          -741.5612560306857
+        ],
+        [
+          -306.9868255149908,
+          8.69,
+          -741.6108290457594
+        ],
+        [
+          -306.9868255149908,
+          8.66,
+          -741.6108290457594
+        ]
+      ],
+      [
+        [
+          -306.9868255149908,
+          8.69,
+          -741.6108290457594
+        ],
+        [
+          -306.2847888027166,
+          8.66,
+          -755.896877256046
+        ],
+        [
+          -306.9868255149908,
+          8.66,
+          -741.6108290457594
+        ]
+      ],
+      [
+        [
+          -306.9868255149908,
+          8.69,
+          -741.6108290457594
+        ],
+        [
+          -306.2847888027166,
+          8.69,
+          -755.896877256046
+        ],
+        [
+          -306.2847888027166,
+          8.66,
+          -755.896877256046
+        ]
+      ],
+      [
+        [
+          -306.2847888027166,
+          8.69,
+          -755.896877256046
+        ],
+        [
+          -305.2760061124525,
+          8.83,
+          -755.8473042409723
+        ],
+        [
+          -306.2847888027166,
+          8.66,
+          -755.896877256046
+        ]
+      ],
+      [
+        [
+          -306.2847888027166,
+          8.69,
+          -755.896877256046
+        ],
+        [
+          -305.2760061124525,
+          8.86,
+          -755.8473042409723
+        ],
+        [
+          -305.2760061124525,
+          8.83,
+          -755.8473042409723
+        ]
+      ],
+      [
+        [
+          -304.6609977252304,
+          8.86,
+          -741.4654196298678
+        ],
+        [
+          -306.1948293002777,
+          8.69,
+          -730.8008074337777
+        ],
+        [
+          -305.18603987384756,
+          8.86,
+          -730.75137168636
+        ]
+      ],
+      [
+        [
+          -304.6609977252304,
+          8.86,
+          -741.4654196298678
+        ],
+        [
+          -305.66978715166056,
+          8.69,
+          -741.5148553772855
+        ],
+        [
+          -306.1948293002777,
+          8.69,
+          -730.8008074337777
+        ]
+      ],
+      [
+        [
+          -305.66978715166056,
+          8.66,
+          -741.5148553772855
+        ],
+        [
+          -305.18603987384756,
+          8.83,
+          -730.75137168636
+        ],
+        [
+          -306.1948293002777,
+          8.66,
+          -730.8008074337777
+        ]
+      ],
+      [
+        [
+          -305.66978715166056,
+          8.66,
+          -741.5148553772855
+        ],
+        [
+          -304.6609977252304,
+          8.83,
+          -741.4654196298678
+        ],
+        [
+          -305.18603987384756,
+          8.83,
+          -730.75137168636
+        ]
+      ],
+      [
+        [
+          -304.6609977252304,
+          8.86,
+          -741.4654196298678
+        ],
+        [
+          -305.18603987384756,
+          8.83,
+          -730.75137168636
+        ],
+        [
+          -304.6609977252304,
+          8.83,
+          -741.4654196298678
+        ]
+      ],
+      [
+        [
+          -304.6609977252304,
+          8.86,
+          -741.4654196298678
+        ],
+        [
+          -305.18603987384756,
+          8.86,
+          -730.75137168636
+        ],
+        [
+          -305.18603987384756,
+          8.83,
+          -730.75137168636
+        ]
+      ],
+      [
+        [
+          -305.18603987384756,
+          8.86,
+          -730.75137168636
+        ],
+        [
+          -306.1948293002777,
+          8.66,
+          -730.8008074337777
+        ],
+        [
+          -305.18603987384756,
+          8.83,
+          -730.75137168636
+        ]
+      ],
+      [
+        [
+          -305.18603987384756,
+          8.86,
+          -730.75137168636
+        ],
+        [
+          -306.1948293002777,
+          8.69,
+          -730.8008074337777
+        ],
+        [
+          -306.1948293002777,
+          8.66,
+          -730.8008074337777
+        ]
+      ],
+      [
+        [
+          -306.1948293002777,
+          8.69,
+          -730.8008074337777
+        ],
+        [
+          -305.66978715166056,
+          8.66,
+          -741.5148553772855
+        ],
+        [
+          -306.1948293002777,
+          8.66,
+          -730.8008074337777
+        ]
+      ],
+      [
+        [
+          -306.1948293002777,
+          8.69,
+          -730.8008074337777
+        ],
+        [
+          -305.66978715166056,
+          8.69,
+          -741.5148553772855
+        ],
+        [
+          -305.66978715166056,
+          8.66,
+          -741.5148553772855
+        ]
+      ],
+      [
+        [
+          -305.66978715166056,
+          8.69,
+          -741.5148553772855
+        ],
+        [
+          -304.6609977252304,
+          8.83,
+          -741.4654196298678
+        ],
+        [
+          -305.66978715166056,
+          8.66,
+          -741.5148553772855
+        ]
+      ],
+      [
+        [
+          -305.66978715166056,
+          8.69,
+          -741.5148553772855
+        ],
+        [
+          -304.6609977252304,
+          8.86,
+          -741.4654196298678
+        ],
+        [
+          -304.6609977252304,
+          8.83,
+          -741.4654196298678
+        ]
+      ],
+      [
+        [
+          -305.1878633268078,
+          8.86,
+          -730.7132992161993
+        ],
+        [
+          -306.3708905400566,
+          8.69,
+          -727.0384553506715
+        ],
+        [
+          -305.3619940263365,
+          8.86,
+          -726.9912555137723
+        ]
+      ],
+      [
+        [
+          -305.1878633268078,
+          8.86,
+          -730.7132992161993
+        ],
+        [
+          -306.19675984052793,
+          8.69,
+          -730.7604990530984
+        ],
+        [
+          -306.3708905400566,
+          8.69,
+          -727.0384553506715
+        ]
+      ],
+      [
+        [
+          -306.19675984052793,
+          8.66,
+          -730.7604990530984
+        ],
+        [
+          -305.3619940263365,
+          8.83,
+          -726.9912555137723
+        ],
+        [
+          -306.3708905400566,
+          8.66,
+          -727.0384553506715
+        ]
+      ],
+      [
+        [
+          -306.19675984052793,
+          8.66,
+          -730.7604990530984
+        ],
+        [
+          -305.1878633268078,
+          8.83,
+          -730.7132992161993
+        ],
+        [
+          -305.3619940263365,
+          8.83,
+          -726.9912555137723
+        ]
+      ],
+      [
+        [
+          -305.1878633268078,
+          8.86,
+          -730.7132992161993
+        ],
+        [
+          -305.3619940263365,
+          8.83,
+          -726.9912555137723
+        ],
+        [
+          -305.1878633268078,
+          8.83,
+          -730.7132992161993
+        ]
+      ],
+      [
+        [
+          -305.1878633268078,
+          8.86,
+          -730.7132992161993
+        ],
+        [
+          -305.3619940263365,
+          8.86,
+          -726.9912555137723
+        ],
+        [
+          -305.3619940263365,
+          8.83,
+          -726.9912555137723
+        ]
+      ],
+      [
+        [
+          -305.3619940263365,
+          8.86,
+          -726.9912555137723
+        ],
+        [
+          -306.3708905400566,
+          8.66,
+          -727.0384553506715
+        ],
+        [
+          -305.3619940263365,
+          8.83,
+          -726.9912555137723
+        ]
+      ],
+      [
+        [
+          -305.3619940263365,
+          8.86,
+          -726.9912555137723
+        ],
+        [
+          -306.3708905400566,
+          8.69,
+          -727.0384553506715
+        ],
+        [
+          -306.3708905400566,
+          8.66,
+          -727.0384553506715
+        ]
+      ],
+      [
+        [
+          -306.3708905400566,
+          8.69,
+          -727.0384553506715
+        ],
+        [
+          -306.19675984052793,
+          8.66,
+          -730.7604990530984
+        ],
+        [
+          -306.3708905400566,
+          8.66,
+          -727.0384553506715
+        ]
+      ],
+      [
+        [
+          -306.3708905400566,
+          8.69,
+          -727.0384553506715
+        ],
+        [
+          -306.19675984052793,
+          8.69,
+          -730.7604990530984
+        ],
+        [
+          -306.19675984052793,
+          8.66,
+          -730.7604990530984
+        ]
+      ],
+      [
+        [
+          -306.19675984052793,
+          8.69,
+          -730.7604990530984
+        ],
+        [
+          -305.1878633268078,
+          8.83,
+          -730.7132992161993
+        ],
+        [
+          -306.19675984052793,
+          8.66,
+          -730.7604990530984
+        ]
+      ],
+      [
+        [
+          -306.19675984052793,
+          8.69,
+          -730.7604990530984
+        ],
+        [
+          -305.1878633268078,
+          8.86,
+          -730.7132992161993
+        ],
+        [
+          -305.1878633268078,
+          8.83,
+          -730.7132992161993
+        ]
+      ]
+    ],
+    "inference": "Narrow three planar visible-edge cue strips; exact flat source roof unchanged. No hidden pitch/topology or surveyed roof claim."
+  },
+  "local_ground": {
+    "FootwaySurface": {
+      "top_triangles": [
+        [
+          [
+            -308.783451,
+            2.506383,
+            -736.0
+          ],
+          [
+            -309.19961,
+            2.513412,
+            -727.507828
+          ],
+          [
+            -310.348232,
+            2.49023,
+            -727.564116
+          ]
+        ],
+        [
+          [
+            -308.783451,
+            2.506383,
+            -736.0
+          ],
+          [
+            -310.348232,
+            2.49023,
+            -727.564116
+          ],
+          [
+            -309.934831,
+            2.483247,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -307.820907,
+            2.363689,
+            -755.641737
+          ],
+          [
+            -308.205459,
+            2.409634,
+            -747.794541
+          ],
+          [
+            -309.41617,
+            2.39643,
+            -746.58383
+          ]
+        ],
+        [
+          [
+            -307.820907,
+            2.363689,
+            -755.641737
+          ],
+          [
+            -309.41617,
+            2.39643,
+            -746.58383
+          ],
+          [
+            -308.969529,
+            2.343066,
+            -755.698025
+          ]
+        ],
+        [
+          [
+            -308.205459,
+            2.409634,
+            -747.794541
+          ],
+          [
+            -308.783451,
+            2.506383,
+            -736.0
+          ],
+          [
+            -309.934831,
+            2.483247,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -308.205459,
+            2.409634,
+            -747.794541
+          ],
+          [
+            -309.934831,
+            2.483247,
+            -736.0
+          ],
+          [
+            -309.41617,
+            2.39643,
+            -746.58383
+          ]
+        ]
+      ],
+      "boundary_segments": [
+        [
+          [
+            -308.783451,
+            2.506383,
+            -736.0
+          ],
+          [
+            -309.19961,
+            2.513412,
+            -727.507828
+          ]
+        ],
+        [
+          [
+            -309.19961,
+            2.513412,
+            -727.507828
+          ],
+          [
+            -310.348232,
+            2.49023,
+            -727.564116
+          ]
+        ],
+        [
+          [
+            -310.348232,
+            2.49023,
+            -727.564116
+          ],
+          [
+            -309.934831,
+            2.483247,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -307.820907,
+            2.363689,
+            -755.641737
+          ],
+          [
+            -308.205459,
+            2.409634,
+            -747.794541
+          ]
+        ],
+        [
+          [
+            -309.41617,
+            2.39643,
+            -746.58383
+          ],
+          [
+            -308.969529,
+            2.343066,
+            -755.698025
+          ]
+        ],
+        [
+          [
+            -308.969529,
+            2.343066,
+            -755.698025
+          ],
+          [
+            -307.820907,
+            2.363689,
+            -755.641737
+          ]
+        ],
+        [
+          [
+            -308.205459,
+            2.409634,
+            -747.794541
+          ],
+          [
+            -308.783451,
+            2.506383,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -309.934831,
+            2.483247,
+            -736.0
+          ],
+          [
+            -309.41617,
+            2.39643,
+            -746.58383
+          ]
+        ]
+      ],
+      "thickness_m": 0.04
+    },
+    "ParkingSurface": {
+      "top_triangles": [
+        [
+          [
+            -308.96954345703125,
+            2.3430659770965576,
+            -755.697998046875
+          ],
+          [
+            -309.2703552246094,
+            2.3790090084075928,
+            -749.5592041015625
+          ],
+          [
+            -313.25750732421875,
+            2.3074231147766113,
+            -749.7545776367188
+          ]
+        ],
+        [
+          [
+            -308.96954345703125,
+            2.3430659770965576,
+            -755.697998046875
+          ],
+          [
+            -313.25750732421875,
+            2.3074231147766113,
+            -749.7545776367188
+          ],
+          [
+            -313.0501403808594,
+            2.2698020935058594,
+            -755.8980102539062
+          ]
+        ],
+        [
+          [
+            -313.25750732421875,
+            2.3074231147766113,
+            -749.7545776367188
+          ],
+          [
+            -314.006591796875,
+            2.351973056793213,
+            -749.7913208007812
+          ],
+          [
+            -313.79925537109375,
+            2.314352035522461,
+            -755.9346923828125
+          ]
+        ],
+        [
+          [
+            -313.25750732421875,
+            2.3074231147766113,
+            -749.7545776367188
+          ],
+          [
+            -313.79925537109375,
+            2.314352035522461,
+            -755.9346923828125
+          ],
+          [
+            -313.0501403808594,
+            2.2698020935058594,
+            -755.8980102539062
+          ]
+        ],
+        [
+          [
+            -314.006591796875,
+            2.351973056793213,
+            -749.7913208007812
+          ],
+          [
+            -314.00860595703125,
+            2.3455209732055664,
+            -749.7913818359375
+          ],
+          [
+            -313.8012390136719,
+            2.3078830242156982,
+            -755.934814453125
+          ]
+        ],
+        [
+          [
+            -314.006591796875,
+            2.351973056793213,
+            -749.7913208007812
+          ],
+          [
+            -313.8012390136719,
+            2.3078830242156982,
+            -755.934814453125
+          ],
+          [
+            -313.79925537109375,
+            2.314352035522461,
+            -755.9346923828125
+          ]
+        ],
+        [
+          [
+            -309.2703552246094,
+            2.3790090084075928,
+            -749.5592041015625
+          ],
+          [
+            -309.4161682128906,
+            2.396430015563965,
+            -746.5838012695312
+          ],
+          [
+            -313.50244140625,
+            2.3518640995025635,
+            -742.49755859375
+          ]
+        ],
+        [
+          [
+            -309.2703552246094,
+            2.3790090084075928,
+            -749.5592041015625
+          ],
+          [
+            -313.50244140625,
+            2.3518640995025635,
+            -742.49755859375
+          ],
+          [
+            -313.25750732421875,
+            2.3074231147766113,
+            -749.7545776367188
+          ]
+        ],
+        [
+          [
+            -313.50244140625,
+            2.3518640995025635,
+            -742.49755859375
+          ],
+          [
+            -314.27899169921875,
+            2.401395082473755,
+            -741.7210083007812
+          ],
+          [
+            -314.006591796875,
+            2.351973056793213,
+            -749.7913208007812
+          ]
+        ],
+        [
+          [
+            -313.50244140625,
+            2.3518640995025635,
+            -742.49755859375
+          ],
+          [
+            -314.006591796875,
+            2.351973056793213,
+            -749.7913208007812
+          ],
+          [
+            -313.25750732421875,
+            2.3074231147766113,
+            -749.7545776367188
+          ]
+        ],
+        [
+          [
+            -314.27899169921875,
+            2.401395082473755,
+            -741.7210083007812
+          ],
+          [
+            -314.281005859375,
+            2.3949639797210693,
+            -741.7210693359375
+          ],
+          [
+            -314.00860595703125,
+            2.3455209732055664,
+            -749.7913818359375
+          ]
+        ],
+        [
+          [
+            -314.27899169921875,
+            2.401395082473755,
+            -741.7210083007812
+          ],
+          [
+            -314.00860595703125,
+            2.3455209732055664,
+            -749.7913818359375
+          ],
+          [
+            -314.006591796875,
+            2.351973056793213,
+            -749.7913208007812
+          ]
+        ],
+        [
+          [
+            -309.4161682128906,
+            2.396430015563965,
+            -746.5838012695312
+          ],
+          [
+            -309.6655578613281,
+            2.4381730556488037,
+            -741.4949340820312
+          ],
+          [
+            -313.5299072265625,
+            2.3587839603424072,
+            -741.6842651367188
+          ]
+        ],
+        [
+          [
+            -309.4161682128906,
+            2.396430015563965,
+            -746.5838012695312
+          ],
+          [
+            -313.5299072265625,
+            2.3587839603424072,
+            -741.6842651367188
+          ],
+          [
+            -313.50244140625,
+            2.3518640995025635,
+            -742.49755859375
+          ]
+        ],
+        [
+          [
+            -313.5299072265625,
+            2.3587839603424072,
+            -741.6842651367188
+          ],
+          [
+            -314.27899169921875,
+            2.401395082473755,
+            -741.7210083007812
+          ],
+          [
+            -313.50244140625,
+            2.3518640995025635,
+            -742.49755859375
+          ]
+        ],
+        [
+          [
+            -309.9348449707031,
+            2.4832470417022705,
+            -736.0
+          ],
+          [
+            -309.9457092285156,
+            2.483431100845337,
+            -735.7781982421875
+          ],
+          [
+            -313.722900390625,
+            2.4071969985961914,
+            -735.9633178710938
+          ]
+        ],
+        [
+          [
+            -309.9348449707031,
+            2.4832470417022705,
+            -736.0
+          ],
+          [
+            -313.722900390625,
+            2.4071969985961914,
+            -735.9633178710938
+          ],
+          [
+            -313.7216491699219,
+            2.4071550369262695,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -313.722900390625,
+            2.4071969985961914,
+            -735.9633178710938
+          ],
+          [
+            -314.47198486328125,
+            2.450078010559082,
+            -736.0
+          ],
+          [
+            -313.7216491699219,
+            2.4071550369262695,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -314.28106689453125,
+            2.3949780464172363,
+            -741.7189331054688
+          ],
+          [
+            -314.281005859375,
+            2.3949639797210693,
+            -741.7210693359375
+          ],
+          [
+            -314.27899169921875,
+            2.401395082473755,
+            -741.7210083007812
+          ]
+        ],
+        [
+          [
+            -309.6655578613281,
+            2.4381730556488037,
+            -741.4949340820312
+          ],
+          [
+            -309.9348449707031,
+            2.4832470417022705,
+            -736.0
+          ],
+          [
+            -313.7216491699219,
+            2.4071550369262695,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -309.6655578613281,
+            2.4381730556488037,
+            -741.4949340820312
+          ],
+          [
+            -313.7216491699219,
+            2.4071550369262695,
+            -736.0
+          ],
+          [
+            -313.5299072265625,
+            2.3587839603424072,
+            -741.6842651367188
+          ]
+        ],
+        [
+          [
+            -313.7216491699219,
+            2.4071550369262695,
+            -736.0
+          ],
+          [
+            -314.47198486328125,
+            2.450078010559082,
+            -736.0
+          ],
+          [
+            -314.27899169921875,
+            2.401395082473755,
+            -741.7210083007812
+          ]
+        ],
+        [
+          [
+            -313.7216491699219,
+            2.4071550369262695,
+            -736.0
+          ],
+          [
+            -314.27899169921875,
+            2.401395082473755,
+            -741.7210083007812
+          ],
+          [
+            -313.5299072265625,
+            2.3587839603424072,
+            -741.6842651367188
+          ]
+        ],
+        [
+          [
+            -314.47198486328125,
+            2.450078010559082,
+            -736.0
+          ],
+          [
+            -314.4739990234375,
+            2.4439589977264404,
+            -736.0001220703125
+          ],
+          [
+            -314.28106689453125,
+            2.3949780464172363,
+            -741.7189331054688
+          ]
+        ],
+        [
+          [
+            -314.47198486328125,
+            2.450078010559082,
+            -736.0
+          ],
+          [
+            -314.28106689453125,
+            2.3949780464172363,
+            -741.7189331054688
+          ],
+          [
+            -314.27899169921875,
+            2.401395082473755,
+            -741.7210083007812
+          ]
+        ],
+        [
+          [
+            -309.9457092285156,
+            2.483431100845337,
+            -735.7781982421875
+          ],
+          [
+            -309.9589538574219,
+            2.483654022216797,
+            -735.5079345703125
+          ],
+          [
+            -313.7320251464844,
+            2.407504081726074,
+            -735.6928100585938
+          ]
+        ],
+        [
+          [
+            -309.9457092285156,
+            2.483431100845337,
+            -735.7781982421875
+          ],
+          [
+            -313.7320251464844,
+            2.407504081726074,
+            -735.6928100585938
+          ],
+          [
+            -313.722900390625,
+            2.4071969985961914,
+            -735.9633178710938
+          ]
+        ],
+        [
+          [
+            -313.7320251464844,
+            2.407504081726074,
+            -735.6928100585938
+          ],
+          [
+            -314.48114013671875,
+            2.450385093688965,
+            -735.7295532226562
+          ],
+          [
+            -314.47198486328125,
+            2.450078010559082,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -313.7320251464844,
+            2.407504081726074,
+            -735.6928100585938
+          ],
+          [
+            -314.47198486328125,
+            2.450078010559082,
+            -736.0
+          ],
+          [
+            -313.722900390625,
+            2.4071969985961914,
+            -735.9633178710938
+          ]
+        ],
+        [
+          [
+            -314.48114013671875,
+            2.450385093688965,
+            -735.7295532226562
+          ],
+          [
+            -314.4831237792969,
+            2.4442639350891113,
+            -735.7296752929688
+          ],
+          [
+            -314.4739990234375,
+            2.443959951400757,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -314.48114013671875,
+            2.450385093688965,
+            -735.7295532226562
+          ],
+          [
+            -314.4739990234375,
+            2.443959951400757,
+            -736.0
+          ],
+          [
+            -314.47198486328125,
+            2.450078010559082,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -314.4739990234375,
+            2.443959951400757,
+            -736.0
+          ],
+          [
+            -314.4739990234375,
+            2.4439589977264404,
+            -736.0001220703125
+          ],
+          [
+            -314.47198486328125,
+            2.450078010559082,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -309.9589538574219,
+            2.483654022216797,
+            -735.5079345703125
+          ],
+          [
+            -309.9600830078125,
+            2.4836740493774414,
+            -735.4846801757812
+          ],
+          [
+            -313.7328186035156,
+            2.4075300693511963,
+            -735.6695556640625
+          ]
+        ],
+        [
+          [
+            -309.9589538574219,
+            2.483654022216797,
+            -735.5079345703125
+          ],
+          [
+            -313.7328186035156,
+            2.4075300693511963,
+            -735.6695556640625
+          ],
+          [
+            -313.7320251464844,
+            2.407504081726074,
+            -735.6928100585938
+          ]
+        ],
+        [
+          [
+            -313.7328186035156,
+            2.4075300693511963,
+            -735.6695556640625
+          ],
+          [
+            -314.48193359375,
+            2.450411081314087,
+            -735.7062377929688
+          ],
+          [
+            -314.48114013671875,
+            2.450385093688965,
+            -735.7295532226562
+          ]
+        ],
+        [
+          [
+            -313.7328186035156,
+            2.4075300693511963,
+            -735.6695556640625
+          ],
+          [
+            -314.48114013671875,
+            2.450385093688965,
+            -735.7295532226562
+          ],
+          [
+            -313.7320251464844,
+            2.407504081726074,
+            -735.6928100585938
+          ]
+        ],
+        [
+          [
+            -314.48193359375,
+            2.450411081314087,
+            -735.7062377929688
+          ],
+          [
+            -314.4839172363281,
+            2.4442899227142334,
+            -735.7063598632812
+          ],
+          [
+            -314.4831237792969,
+            2.4442639350891113,
+            -735.7296752929688
+          ]
+        ],
+        [
+          [
+            -314.48193359375,
+            2.450411081314087,
+            -735.7062377929688
+          ],
+          [
+            -314.4831237792969,
+            2.4442639350891113,
+            -735.7296752929688
+          ],
+          [
+            -314.48114013671875,
+            2.450385093688965,
+            -735.7295532226562
+          ]
+        ],
+        [
+          [
+            -309.9600830078125,
+            2.4836740493774414,
+            -735.4846801757812
+          ],
+          [
+            -309.9841613769531,
+            2.4840810298919678,
+            -734.9930419921875
+          ],
+          [
+            -313.74945068359375,
+            2.408087968826294,
+            -735.1775512695312
+          ]
+        ],
+        [
+          [
+            -309.9600830078125,
+            2.4836740493774414,
+            -735.4846801757812
+          ],
+          [
+            -313.74945068359375,
+            2.408087968826294,
+            -735.1775512695312
+          ],
+          [
+            -313.7328186035156,
+            2.4075300693511963,
+            -735.6695556640625
+          ]
+        ],
+        [
+          [
+            -313.74945068359375,
+            2.408087968826294,
+            -735.1775512695312
+          ],
+          [
+            -314.49853515625,
+            2.4509689807891846,
+            -735.2142944335938
+          ],
+          [
+            -314.48193359375,
+            2.450411081314087,
+            -735.7062377929688
+          ]
+        ],
+        [
+          [
+            -313.74945068359375,
+            2.408087968826294,
+            -735.1775512695312
+          ],
+          [
+            -314.48193359375,
+            2.450411081314087,
+            -735.7062377929688
+          ],
+          [
+            -313.7328186035156,
+            2.4075300693511963,
+            -735.6695556640625
+          ]
+        ],
+        [
+          [
+            -314.49853515625,
+            2.4509689807891846,
+            -735.2142944335938
+          ],
+          [
+            -314.50054931640625,
+            2.4448440074920654,
+            -735.2144165039062
+          ],
+          [
+            -314.4839172363281,
+            2.4442899227142334,
+            -735.7063598632812
+          ]
+        ],
+        [
+          [
+            -314.49853515625,
+            2.4509689807891846,
+            -735.2142944335938
+          ],
+          [
+            -314.4839172363281,
+            2.4442899227142334,
+            -735.7063598632812
+          ],
+          [
+            -314.48193359375,
+            2.450411081314087,
+            -735.7062377929688
+          ]
+        ],
+        [
+          [
+            -309.9841613769531,
+            2.4840810298919678,
+            -734.9930419921875
+          ],
+          [
+            -310.3482360839844,
+            2.490230083465576,
+            -727.5640869140625
+          ],
+          [
+            -314.0006408691406,
+            2.4165151119232178,
+            -727.7431030273438
+          ]
+        ],
+        [
+          [
+            -309.9841613769531,
+            2.4840810298919678,
+            -734.9930419921875
+          ],
+          [
+            -314.0006408691406,
+            2.4165151119232178,
+            -727.7431030273438
+          ],
+          [
+            -313.74945068359375,
+            2.408087968826294,
+            -735.1775512695312
+          ]
+        ],
+        [
+          [
+            -314.0006408691406,
+            2.4165151119232178,
+            -727.7431030273438
+          ],
+          [
+            -314.749755859375,
+            2.4593958854675293,
+            -727.77978515625
+          ],
+          [
+            -314.49853515625,
+            2.4509689807891846,
+            -735.2142944335938
+          ]
+        ],
+        [
+          [
+            -314.0006408691406,
+            2.4165151119232178,
+            -727.7431030273438
+          ],
+          [
+            -314.49853515625,
+            2.4509689807891846,
+            -735.2142944335938
+          ],
+          [
+            -313.74945068359375,
+            2.408087968826294,
+            -735.1775512695312
+          ]
+        ],
+        [
+          [
+            -314.749755859375,
+            2.4593958854675293,
+            -727.77978515625
+          ],
+          [
+            -314.7517395019531,
+            2.4532060623168945,
+            -727.7799072265625
+          ],
+          [
+            -314.50054931640625,
+            2.4448440074920654,
+            -735.2144165039062
+          ]
+        ],
+        [
+          [
+            -314.749755859375,
+            2.4593958854675293,
+            -727.77978515625
+          ],
+          [
+            -314.50054931640625,
+            2.4448440074920654,
+            -735.2144165039062
+          ],
+          [
+            -314.49853515625,
+            2.4509689807891846,
+            -735.2142944335938
+          ]
+        ]
+      ],
+      "boundary_segments": [
+        [
+          [
+            -308.96954345703125,
+            2.3430659770965576,
+            -755.697998046875
+          ],
+          [
+            -309.2703552246094,
+            2.3790090084075928,
+            -749.5592041015625
+          ]
+        ],
+        [
+          [
+            -313.0501403808594,
+            2.2698020935058594,
+            -755.8980102539062
+          ],
+          [
+            -308.96954345703125,
+            2.3430659770965576,
+            -755.697998046875
+          ]
+        ],
+        [
+          [
+            -313.79925537109375,
+            2.314352035522461,
+            -755.9346923828125
+          ],
+          [
+            -313.0501403808594,
+            2.2698020935058594,
+            -755.8980102539062
+          ]
+        ],
+        [
+          [
+            -314.00860595703125,
+            2.3455209732055664,
+            -749.7913818359375
+          ],
+          [
+            -313.8012390136719,
+            2.3078830242156982,
+            -755.934814453125
+          ]
+        ],
+        [
+          [
+            -313.8012390136719,
+            2.3078830242156982,
+            -755.934814453125
+          ],
+          [
+            -313.79925537109375,
+            2.314352035522461,
+            -755.9346923828125
+          ]
+        ],
+        [
+          [
+            -309.2703552246094,
+            2.3790090084075928,
+            -749.5592041015625
+          ],
+          [
+            -309.4161682128906,
+            2.396430015563965,
+            -746.5838012695312
+          ]
+        ],
+        [
+          [
+            -314.281005859375,
+            2.3949639797210693,
+            -741.7210693359375
+          ],
+          [
+            -314.00860595703125,
+            2.3455209732055664,
+            -749.7913818359375
+          ]
+        ],
+        [
+          [
+            -309.4161682128906,
+            2.396430015563965,
+            -746.5838012695312
+          ],
+          [
+            -309.6655578613281,
+            2.4381730556488037,
+            -741.4949340820312
+          ]
+        ],
+        [
+          [
+            -309.9348449707031,
+            2.4832470417022705,
+            -736.0
+          ],
+          [
+            -309.9457092285156,
+            2.483431100845337,
+            -735.7781982421875
+          ]
+        ],
+        [
+          [
+            -314.28106689453125,
+            2.3949780464172363,
+            -741.7189331054688
+          ],
+          [
+            -314.281005859375,
+            2.3949639797210693,
+            -741.7210693359375
+          ]
+        ],
+        [
+          [
+            -309.6655578613281,
+            2.4381730556488037,
+            -741.4949340820312
+          ],
+          [
+            -309.9348449707031,
+            2.4832470417022705,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -314.4739990234375,
+            2.4439589977264404,
+            -736.0001220703125
+          ],
+          [
+            -314.28106689453125,
+            2.3949780464172363,
+            -741.7189331054688
+          ]
+        ],
+        [
+          [
+            -309.9457092285156,
+            2.483431100845337,
+            -735.7781982421875
+          ],
+          [
+            -309.9589538574219,
+            2.483654022216797,
+            -735.5079345703125
+          ]
+        ],
+        [
+          [
+            -314.4831237792969,
+            2.4442639350891113,
+            -735.7296752929688
+          ],
+          [
+            -314.4739990234375,
+            2.443959951400757,
+            -736.0
+          ]
+        ],
+        [
+          [
+            -314.4739990234375,
+            2.443959951400757,
+            -736.0
+          ],
+          [
+            -314.4739990234375,
+            2.4439589977264404,
+            -736.0001220703125
+          ]
+        ],
+        [
+          [
+            -309.9589538574219,
+            2.483654022216797,
+            -735.5079345703125
+          ],
+          [
+            -309.9600830078125,
+            2.4836740493774414,
+            -735.4846801757812
+          ]
+        ],
+        [
+          [
+            -314.4839172363281,
+            2.4442899227142334,
+            -735.7063598632812
+          ],
+          [
+            -314.4831237792969,
+            2.4442639350891113,
+            -735.7296752929688
+          ]
+        ],
+        [
+          [
+            -309.9600830078125,
+            2.4836740493774414,
+            -735.4846801757812
+          ],
+          [
+            -309.9841613769531,
+            2.4840810298919678,
+            -734.9930419921875
+          ]
+        ],
+        [
+          [
+            -314.50054931640625,
+            2.4448440074920654,
+            -735.2144165039062
+          ],
+          [
+            -314.4839172363281,
+            2.4442899227142334,
+            -735.7063598632812
+          ]
+        ],
+        [
+          [
+            -309.9841613769531,
+            2.4840810298919678,
+            -734.9930419921875
+          ],
+          [
+            -310.3482360839844,
+            2.490230083465576,
+            -727.5640869140625
+          ]
+        ],
+        [
+          [
+            -310.3482360839844,
+            2.490230083465576,
+            -727.5640869140625
+          ],
+          [
+            -314.0006408691406,
+            2.4165151119232178,
+            -727.7431030273438
+          ]
+        ],
+        [
+          [
+            -314.0006408691406,
+            2.4165151119232178,
+            -727.7431030273438
+          ],
+          [
+            -314.749755859375,
+            2.4593958854675293,
+            -727.77978515625
+          ]
+        ],
+        [
+          [
+            -314.749755859375,
+            2.4593958854675293,
+            -727.77978515625
+          ],
+          [
+            -314.7517395019531,
+            2.4532060623168945,
+            -727.7799072265625
+          ]
+        ],
+        [
+          [
+            -314.7517395019531,
+            2.4532060623168945,
+            -727.7799072265625
+          ],
+          [
+            -314.50054931640625,
+            2.4448440074920654,
+            -735.2144165039062
+          ]
+        ]
+      ],
+      "thickness_m": 0.04,
+      "native_cleanup": {
+        "original_top_triangles": 50,
+        "surviving_top_triangles": 50,
+        "scope": "Only collapsed/duplicate added parking triangles; no source world triangle changed."
+      }
+    }
+  }
+}

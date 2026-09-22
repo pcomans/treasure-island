@@ -1,0 +1,25 @@
+{
+  "derived": true,
+  "external_locators_are_runtime_dependencies": false,
+  "selected_gameplay_images": 54,
+  "excluded": [
+    "private Street View originals",
+    "full raw movies",
+    "app binaries"
+  ],
+  "named_external_retrospectives": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-candidate-package-preparation-001/package-attempt-002/RETRO-shared_continue_prepare.md",
+      "sha256": "d55bb3a340da4bf6f156980d87d6c0b0670b69c46920295f24c4d72e8fb717e1"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-candidate-attestation-001/RETRO-three_unit_final_visual.md",
+      "sha256": "3e44367c656ae1fdb7bd5806ed238ce6a22a275228bc39b24c0deeddb5aad27f"
+    }
+  ],
+  "packet_copy_plan": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1232-1241-1221-authority-integration-001/packet-copy-plan.json",
+    "sha256": "ae8d5d3dbd560bff91d886a209078387d0bcc4c20f0c448122f65d2ba3dfc0fe"
+  },
+  "scope": "Preserve original unit capture dates, source26/source28, corrected 1232 roof003 with scoped nonroof motion002 reuse, 1241 source002/static visual002/helper capture003, sparse movie limits, failed candidate app and five-counter repair, and initial exact-current _run failure. Raw private sources stay external."
+}
