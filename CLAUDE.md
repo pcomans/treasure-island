@@ -6,7 +6,7 @@ The imported [project agreement](AGENTS.md) is the shared authority. The primary
 
 ## Persisted entrypoints
 
-Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra`; explicitly select a supported non-ultra effort instead of inheriting the parent’s effort. Model choice remains separate, and the primary/root setting is unchanged.
+Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra`; explicitly select a supported non-ultra effort instead of inheriting the parent’s effort. That section also defines the owner-authorized modeling/judging trial defaults and discretionary non-ultra escalation; the primary/root setting is unchanged.
 
 | Role prompt | When used |
 |---|---|
@@ -18,7 +18,7 @@ Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution):
 | [ti-efficiency-review](.claude/agents/ti-efficiency-review.md) | Bounded periodic review of other actors; at most one reversible experiment. |
 | [ti-documentation](.claude/agents/ti-documentation.md) | Serialized harness, handoff, lessons and authorized documentation publication. |
 
-These project-owned role files are reusable instructions, not persisted running agents. Use the actual delegation tool available in the client, loading the chosen role when it is not discovered automatically. Codex task handles, letter assignments and model choices are transient; the [current handoff](NEXT_AGENT_HANDOFF_2026-09-08.md) records work state, not callable tool configuration. There is no project `.codex/config.toml`, `.claude/commands/` or separate `.claude/skills/` catalog to install. Account-level client configuration is not part of this repository.
+These project-owned role files are reusable instructions, not persisted running agents. Use the actual delegation tool available in the client, loading the chosen role when it is not discovered automatically. Codex task handles, letter assignments and per-dispatch selections are transient, subject to the routing defaults in AGENTS.md; the [current handoff](NEXT_AGENT_HANDOFF_2026-09-08.md) records work state, not callable tool configuration. There is no project `.codex/config.toml`, `.claude/commands/` or separate `.claude/skills/` catalog to install. Account-level client configuration is not part of this repository.
 
 The existing skill is [building-texture](.agents/skills/building-texture/SKILL.md), with [UI/invocation metadata](.agents/skills/building-texture/agents/openai.yaml), three linked references and its proof helper. Use `$building-texture` when the client exposes that skill, or explicitly read the linked entrypoint for its declared facade-art task. If it is absent from a client’s skill list, the committed path remains usable; do not claim that a missing catalog entry is installed or create replacement copies. Load only the applicable references. Geometry, reference access and engine execution retain the project’s boundaries.
 

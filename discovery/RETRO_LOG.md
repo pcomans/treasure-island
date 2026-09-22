@@ -13876,3 +13876,12 @@ Retained evidence: current23-source-checkpoint-001 binds the actual refreshed so
 **Limit:** Medium's two critique preferences and Light's slight edge in one creation case establish no universal routing, speed or fidelity conclusion. First versus final was unspecified, so self-review benefit is unassessed; no walking/impassability claim follows from these stills.
 
 **Next:** Check placement against visible reference evidence and retain an obvious door approach rather than treating motif presence as sufficient. Updated only existing lessons/logs and external feedback; no new gate, model/HTML change or engine run.
+
+
+## 2026-09-22 — effort_trial_a owner-authorized routing trial
+
+**Worked:** Persisted the owner's explicit default: Astra Light/gpt-6-astra low for modeling, Astra Medium/gpt-6-astra medium for independent judging. Canonical AGENTS policy is linked from the harness and the two applicable role prompts; no unrelated roles or skills changed.
+
+**Limit:** This is a user-authorized trial, not a broad benchmark result. ROOT can diagnose unproductive cycles and escalate to stronger supported non-ultra efforts when work cannot converge; no fixed retry count, automatic ladder or new approval gate. Independent judging and the absolute no-ultra rule remain; root effort is unchanged.
+
+**Next:** Apply the explicit defaults in actual dispatches and use discretion when evidence warrants escalation. Preserve these additions when reconciling stale current26 documentation copies.
