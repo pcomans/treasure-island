@@ -1,5 +1,11 @@
 # Treasure Island next-agent handoff
 
+## Current resume checkpoint — accepted1240/current32
+
+Sole1240 delta31→32,181 not evaluated; other212 records and213identities preserved. Current32 source/native and six exact-current package stages independently passed and ROOT accepted. Stable whole-app destination is `build/northern-1240-exact-current-001/Treasure Island First Playable.app`; consult external transfer/publication receipts and Git history for actual copy/commit status. Do not replay accepted compiler/Node/import/native/package checks for documentation. Candidate31 seven-role evidence, prior source failures and held1204 remain distinct. Current engine is approved standard4.7.2; experimental physics diagnostics are not production.
+
+## Historical31 checkpoint follows
+
 ## Current resume checkpoint — accepted 31-unit source and app
 
 This selected source adds 1232 Northpoint, 1241 Northpoint and 1221 Mariner: 31 of 213 units accepted, 182 not evaluated, 30 active adapters, 39 plans and 33 package-safe plans. Import and both native authority fixtures passed. The fresh exact-current successor app passed all six stages and independent release review; ROOT accepted it and the exact whole-app transfer is complete. The [release record](evidence/first-playable/northern-1232-1241-1221-current-release-2026-09-22-001/README.md) binds the actual PCK, app and source/visual lineage.

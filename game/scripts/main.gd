@@ -7,11 +7,11 @@ const EXPECTED_MANIFEST_HASH := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e
 const EXPECTED_CHUNKS := 38
 const EXPECTED_PLAYABLE_ROWS := 735
 const EXPECTED_CONTEXT_ROWS := 4
-const EXPECTED_MESHES := 1244
-const EXPECTED_SURFACES := 1259
-const EXPECTED_TRIANGLES := 173181
-const EXPECTED_STATIC_BODIES := 494
-const EXPECTED_SHAPES := 633
+const EXPECTED_MESHES := 1260
+const EXPECTED_SURFACES := 1275
+const EXPECTED_TRIANGLES := 176165
+const EXPECTED_STATIC_BODIES := 496
+const EXPECTED_SHAPES := 646
 const EXPECTED_VEGETATION_SEED := 1414092337
 const EXPECTED_VEGETATION_INSTANCES := 124
 const EXPECTED_VEGETATION_ASSETS := 15
@@ -155,6 +155,7 @@ func _finish_mac_export_smoke(report: Dictionary) -> void:
 	var projected_1232_attachment_valid: bool = _mac_export_projected_family_attachment_valid(preload("res://game/scripts/world/facades/northpoint_1232_live_replacement.gd"), "1232")
 	var projected_1241_attachment_valid: bool = _mac_export_projected_family_attachment_valid(preload("res://game/scripts/world/facades/northpoint_1241_live_replacement.gd"), "1241")
 	var projected_1221_attachment_valid: bool = _mac_export_projected_family_attachment_valid(preload("res://game/scripts/world/facades/mariner_1221_live_replacement.gd"), "1221")
+	var projected_1240_attachment_valid: bool = _mac_export_projected_family_attachment_valid(preload("res://game/scripts/world/facades/northpoint_1240_live_replacement.gd"), "1240")
 	var spawn := world_root.get_spawn_transform()
 	var visual_defaults_valid := _visual_defaults_valid()
 	var semantic_materials_valid := _semantic_materials_valid()
@@ -181,6 +182,7 @@ func _finish_mac_export_smoke(report: Dictionary) -> void:
 		and projected_1232_attachment_valid \
 		and projected_1241_attachment_valid \
 		and projected_1221_attachment_valid \
+		and projected_1240_attachment_valid \
 		and family_1239_attachment_valid \
 		and str(report.get("content_sha256", "")) == EXPECTED_MANIFEST_HASH \
 		and spawn.origin.is_equal_approx(EXPECTED_FERRY_SPAWN_ORIGIN) \
@@ -1075,6 +1077,7 @@ func _mac_export_family_pair_valid(wall: Node3D, roof: Node3D, adapter: Script) 
 
 func _mac_export_projected_family_spec(adapter: Script) -> Dictionary:
 	match str(adapter.SOURCE_KEY):
+		"w96215688": return {"prefix": "Northpoint1240Live", "wall": {"meshes": 17, "surfaces": 17, "triangles": 3040, "bodies": 3, "shapes": 14}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 12, "meshes": 18, "channels": 234, "shapes": 15, "detail_tangents": 16, "projected_runs": [15, 16, 18, 19, 20, 21, 23, 24, 25], "projected_triangles": 6, "public_roof": true}
 		"w96215666": return {"prefix": "Bayside1215Live", "wall": {"meshes": 17, "surfaces": 17, "triangles": 4736, "bodies": 3, "shapes": 13}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 10, "bodies": 1, "shapes": 1}, "detail_shapes": 11, "meshes": 18, "channels": 234, "shapes": 14, "detail_tangents": 16, "projected_runs": [1, 3, 4, 5, 19], "projected_triangles": 6, "public_roof": true}
 		"w96215659": return {"prefix": "Northpoint1234Live", "wall": {"meshes": 18, "surfaces": 18, "triangles": 5484, "bodies": 3, "shapes": 14}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 12, "meshes": 19, "channels": 247, "shapes": 15, "detail_tangents": 17, "projected_runs": [1, 2, 3, 4, 17, 18, 19, 20, 22, 23, 24, 25], "projected_triangles": 6, "public_roof": true}
 		"w96215673": return {"prefix": "Northpoint1232Live", "wall": {"meshes": 18, "surfaces": 18, "triangles": 2560, "bodies": 3, "shapes": 14}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 12, "meshes": 19, "channels": 247, "shapes": 15, "detail_tangents": 17, "projected_runs": [10, 11, 12, 13, 15, 16, 17, 18], "projected_triangles": 6, "public_roof": true}
@@ -1181,9 +1184,16 @@ func _mac_export_projected_family_pair_valid(wall: Node3D, roof: Node3D, adapter
 		var label: String = adapter.FACTORY.PHYSICAL_BUCKETS[index]
 		var shape := detail.get_child(index) as CollisionShape3D
 		var mesh := wall.get_node_or_null(NodePath(label)) as MeshInstance3D
-		if shape == null or mesh == null or mesh.mesh == null or shape.transform != Transform3D.IDENTITY or shape.disabled \
+		if shape == null or shape.transform != Transform3D.IDENTITY or shape.disabled \
 		or str(shape.name) != label or not shape.shape is ConcavePolygonShape3D \
 		or str(shape.shape.get_meta("receiver_kind", "")) != "none" or str(shape.shape.get_meta("structural_role", "")) != label:
+			return false
+		#1240 deliberately retains this named zero-face physical slot without a visual mesh.
+		if str(adapter.SOURCE_KEY) == "w96215688" and label == "DarkOpaqueGlazing":
+			if mesh != null or not shape.shape.get_faces().is_empty():
+				return false
+			continue
+		if mesh == null or mesh.mesh == null:
 			return false
 		var arrays: Array = mesh.mesh.surface_get_arrays(0)
 		var expected := PackedVector3Array()

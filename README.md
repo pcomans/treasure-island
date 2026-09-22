@@ -7,19 +7,13 @@ public distribution are outside this milestone.
 
 ## Current source and release
 
-The current private release recognizes **31 of 213** physical buildings, adding
-1232 and 1241 Northpoint and 1221 Mariner to the prior 28 accepted units.
-All 213 identities remain; **182 buildings are not evaluated**.
+The current private release recognizes **32 of213** physical buildings, adding
+1240 Northpoint to the prior31. All213 identities remain; **181 buildings are not evaluated**.
 
-The macOS app is `build/northern-1232-1241-1221-exact-current-001/Treasure Island First Playable.app`.
-It passed independent package/release review and ROOT acceptance. The complete
-app has been transferred to that stable ignored path with all seven files verified.
-The [release record](evidence/first-playable/northern-1232-1241-1221-current-release-2026-09-22-001/README.md)
-binds the actual app/PCK, accepted review and verified transfer.
-
-The [released 28-unit app](evidence/first-playable/northern-1234-1215-current-release-2026-09-22-001/README.md)
-and earlier releases remain unchanged. Isolated material pilots are outside this
-batch. All 213 independently accepted units remain the goal.
+The stable macOS app path is `build/northern-1240-exact-current-001/Treasure Island First Playable.app`.
+The exact seven-file app passed independent package/release review and ROOT acceptance.
+The [release record](evidence/first-playable/northern-1240-current-release-2026-09-22-001/README.md) binds its PCK, scope and publication transfer plan.
+Prior releases and the candidate31 app remain unchanged. All213 accepted units remain the goal.
 
 ## Play on another Mac
 

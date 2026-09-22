@@ -4,21 +4,21 @@ extends RefCounted
 const DEFAULT_REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const DEFAULT_ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
 const DEFAULT_LOADER_PATH := "res://game/scripts/world/facades/facade_runtime_registry_loader.gd"
-const REGISTRY_SCHEMA_VERSION := "ti.facade-runtime-registry/31"
-const ADAPTER_CONTRACT_SCHEMA_VERSION := "ti.facade-runtime-adapter-contracts/30"
-const CATALOG_SCHEMA_VERSION := "ti.facade-recognition-catalog/31"
-const COMPILER_VERSION := "1.30.0"
-const LOADER_API_VERSION := "ti.facade-runtime-registry-loader/30"
+const REGISTRY_SCHEMA_VERSION := "ti.facade-runtime-registry/32"
+const ADAPTER_CONTRACT_SCHEMA_VERSION := "ti.facade-runtime-adapter-contracts/31"
+const CATALOG_SCHEMA_VERSION := "ti.facade-recognition-catalog/32"
+const COMPILER_VERSION := "1.31.0"
+const LOADER_API_VERSION := "ti.facade-runtime-registry-loader/31"
 const UNKNOWN_VERSION_POLICY := "reject"
 const EXPECTED_UNIT_COUNT := 213
 const EXPECTED_RECEIVER_COUNT := 214
 const EXPECTED_SOURCE_RECORD_COUNT := 215
-const EXPECTED_ADAPTER_COUNT := 39
-const EXPECTED_READY_ADAPTER_COUNT := 33
+const EXPECTED_ADAPTER_COUNT := 40
+const EXPECTED_READY_ADAPTER_COUNT := 34
 const EXPECTED_DISABLED_ADAPTER_COUNT := 6
 const EXPECTED_PROJECTION_DESCRIPTOR_COUNT := 13
 const EXPECTED_PROJECTION_OCCURRENCE_COUNT := 13
-const EXPECTED_REFERENCE_RECOGNIZABLE_COUNT := 31
+const EXPECTED_REFERENCE_RECOGNIZABLE_COUNT := 32
 const EXPECTED_REFERENCE_RECOGNIZABLE_UNIT_IDS := [
 	"physical-building:r16681702",
 	"physical-building:w1222720021",
@@ -36,6 +36,7 @@ const EXPECTED_REFERENCE_RECOGNIZABLE_UNIT_IDS := [
 	"physical-building:w95934125",
 	"physical-building:w764313741",
 	"physical-building:r19685981",
+	"physical-building:w96215688",
 	"physical-building:w96215673",
 	"physical-building:w96215674",
 	"physical-building:w96215682",
@@ -73,6 +74,7 @@ const ACTIVE_UNIT_BY_RECEIVER := {
 	"building:w95934125:wall": "physical-building:w95934125",
 	"building:w764313741:wall": "physical-building:w764313741",
 	"building:r19685981:wall": "physical-building:r19685981",
+	"building:w96215688:wall": "physical-building:w96215688",
 	"building:w96215673:wall": "physical-building:w96215673",
 	"building:w96215674:wall": "physical-building:w96215674",
 	"building:w96215682:wall": "physical-building:w96215682",
@@ -105,6 +107,7 @@ const ACTIVE_REVIEW_STATUS_BY_RECEIVER := {
 	"building:w95934125:wall": "independent_exact_current_live_pass",
 	"building:w764313741:wall": "independent_exact_current_live_pass",
 	"building:r19685981:wall": "independent_exact_current_live_pass",
+	"building:w96215688:wall": "independent_exact_current_live_pass",
 	"building:w96215673:wall": "independent_exact_current_live_pass",
 	"building:w96215674:wall": "independent_exact_current_live_pass",
 	"building:w96215682:wall": "independent_exact_current_live_pass",
@@ -129,6 +132,7 @@ const EXPECTED_REVIEW_RECEIPTS := {
 	"physical-building:w95934125": ["19edda17a50fd957ec09bd9a2ea310b7f82524e717c63467d5198e2e3f9500df", "4fcdd7f900dfadb12187f558bf0e545038d8386134ed1e7f9830810be763ddb5", "a1e3d98ebacaf73c5fb985a2fa2ee4597fe4c2b334cc102c3d3ea460bf361214", "088c0a0df84440cf2ddb35996aabc5d1b1aa5e1fcafe47217cd92dbbca08fc15", "18da75ad3394e86f3129449bbf113efd14d2e845acd767acba995545b3e5f6ee", "d6041941c9ec59d6a6d8fac4cbb79964fe842cdc135baf5c7a36df3a65a2c98e", "7cd3ef79e13c19bbb34b601338f86533b9de429d274d35e55e8e6f8fbd8afdce"],
 	"physical-building:w764313741": ["cb06367c7de02d2379c855dfe33915d8bd54b85a33666f0582e949752f9310cf", "f68b77fa5c6e8983288ad9f9ca36a4fd827e716cc1c99877270eeceb547786b6", "4e3a0ea032384bc1381468db84ae15c4ebc1eb75212a9fec20156d165414b028", "708692fe592b56c9b18cbf5d9bbc086dadb1c053153d37afbd5c37c6a91c0a3e", "6e8e1a6d8ff3ee12e961d7adaa78cdc72e8aa57dbb607251d5a1361c171eb895", "502c87a102c90ef446a1e3415b1bb6eca7050d46689c550c18609c3c9dc43b0b", "fb4802671d8ec92d2cdff091a221fc6fe8f3d1dae6780446aa5604227f7cfed4"],
 	"physical-building:r19685981": ["e08d71c45bfc67e05ab2fd2a8d4e8362ef7692f96d5817d60856a251b473b14e", "82543ad09bc51281499280965d9bc949ecc99781d80520801742bd3643404862", "83a8637cd539efa3899b8d97147a82a02d976aa8baed4209824e2724a2ac7e2b", "3c7c3e933062d4cf3994f47cb48a62c41b7c1cf42fa41693ff82474cec1db86d", "916457b92cee4b002cab5c47b6ecd29a8c8d398a9ad685c05e7bc8f5d9874e0a", "e903e64348aa003ca957b1e1efebc57a516395134f40d56e1ba1c5ebc3ad877f", "749cd826a0ea791b696ab98464e5c19548f14d45734d88111a79376a74dd5c8c"],
+	"physical-building:w96215688": ["deee84ad808e2a740f79f3c796b87c18b242e18f005a902646d3645d9c580939", "35ca950b839ba5337ec6aa1afa23c3a41b541ddbcc72d8cd948fd3ff945f357e", "6940be3303a7bb398e89594dbbe029913b6199836e96b58ca5ed6f8cfdab6d3d", "cef4880c25f45a6d11699843dce565efd2620fc48a0904aa5af2e6f4aa8b2b9e", "d272fe5677097e67016ea21af2e9eb5e9a5daff69ad7f86deb1d343b02b7e18c", "aa9865bc070916b027cb58759259bd8ee0b27d1ca36ac413360d4b9d261c1ad4", "0a6727056299a7bbf91fc97137ff794d5350128c9b3f15276f7680de9aa921d3"],
 	"physical-building:w96215682": ["235ae67b88d48acccd234af320e5a2c439318f9bff2fa1af66744858a01cb41f", "cb80718812047da42fb907917cafe4ce59a15eada7b2dc9aaef1b26b56697970", "cffac7d9d8bda08c1651fa0db0f4969ddf9de5ce9065548dd25e1aab415e571f", "a00772f32f2b9a68adc9607638b4045bb1abafa6455c906a718e6e9cc6ef2259", "b3861383f25ceb1f14f6f068dcabf145b3afe9fb5ba8b0056f1e6b79a145e757", "80140a7a02f241033157e6f22813a98b56ddf718193298ee0237f040562d8885", "76517f928240abbe44a989e29546135711039869f595b0d7f6073a3cf8262153"],
 	"physical-building:w96215674": ["b89b6e90ed0cd33dcf4a540a62965a71ff75c3d8d2eb9ec1e8368b6e3016f869", "465fd62a4b0ce93e7185b6eb17bdf50ede9127e60c492e59848d830d1fb0d2f7", "c2e401e59485819a039b4b40bf0f025edabf9691673b179e89c338927a10939c", "690e653a17e8adcebe8908ffa06c8a6dd7b2c5e6886d42f9415e1b03f2ecfd9a", "4b293afae85d79015d9f6c0a0b22dff50962db7bf8b05d9f4ba52e152cb13a32", "c7a8caf732d9d50ba481b3a889ab9c8aff72833fb2277c56fb997d7af3baef98", "6c956cd7f3b7502ab73505d11297efa68d365f7f393f8419fd9293fb71a99cb9"],
 	"physical-building:w96215673": ["1cbb4737ed14190e9f6a744b152eaaeddf8d18c39f827cfab784ec94f07c16be", "d2d9bd3d7f643d92b45d4c1ca974892d3b35210ae2d2cfe55b89fb4afb94df26", "1fd9e52c06c062e48dfc3d6489dfaba4350ba1413a97923f9a44371b052dad39", "26d44f6abccabc4c3075a214a22feff4ba4f6d5b2f6b1b2815d4c32301c37577", "c323d879c100e3ac1898905a9841e7f52cc4a76022e7329638ae7feeb586739d", "f38bbb66dce45b62bdb82705335b55547f571992a8389f6b8346b16f56e32c1f", "2560c1e1032fd997a2cf8db74de48d0430d9bb0fb61165cc09312efba5e9af5f"],
@@ -324,7 +328,7 @@ const D5_1308_RECEIVER := "building:w95934123:wall"
 const D5_1308_ADAPTER_ID := "active-adapter:d5-1308-live:building:w95934123:wall"
 const D5_1308_CONFIG_SHA256 := "c35951faebaa921d41bf0230bf511b3a3fde9b9b1f533272030a5dfb8d8dfe8a"
 const D5_1308_ADAPTER_SHA256 := "3faca37243c2ee51ff1d2834b3d581d4b7d4552a45179224371a2570b7f08ad5"
-const D5_1308_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const D5_1308_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const D5_1308_PROTOTYPE_SHA256 := "6950aab112f73fdf78c1cad2f3deca72ac7e46b2a07faffe04f82987a1e07498"
 const D5_1308_PROTOTYPE_CONFIG_SHA256 := "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a"
 const D5_1308_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -334,7 +338,7 @@ const D5_1394_RECEIVER := "building:w96215646:wall"
 const D5_1394_ADAPTER_ID := "active-adapter:d5-1394-live:building:w96215646:wall"
 const D5_1394_CONFIG_SHA256 := "3d74e15f0a438dd4a45f2c778c415879888ef1b7a3cef75ebe7a9682db4de203"
 const D5_1394_ADAPTER_SHA256 := "42e0233cdbe1be7bdcbb63603c1bb2cae4c247dde87a51f9518cc1afafc82076"
-const D5_1394_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const D5_1394_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const D5_1394_PROTOTYPE_SHA256 := "25284afdd779f6b491da47218fc6fdd169dad3bb3c56da70d76680cc91781fcb"
 const D5_1394_PROTOTYPE_CONFIG_SHA256 := "2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86"
 const D5_1394_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -344,7 +348,7 @@ const D5_1317_RECEIVER := "building:w95934125:wall"
 const D5_1317_ADAPTER_ID := "active-adapter:d5-1317-live:building:w95934125:wall"
 const D5_1317_CONFIG_SHA256 := "d15f6ea9e14ca9723dfd3f5794718fab6ad6d0cbf24091ce0e81fd34821e554f"
 const D5_1317_ADAPTER_SHA256 := "283a020492c03fde62c591ea9ebcb1e5c5403a55aca514f0998908b440d9e819"
-const D5_1317_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const D5_1317_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const D5_1317_PROTOTYPE_SHA256 := "80930edee46371825bfb7b337b94bdbb4e3b7fc064aa2ba3061b6a86886af884"
 const D5_1317_PROTOTYPE_CONFIG_SHA256 := "33b54fb72cf829e933a0e386e984f6ffe9d9a7c9d335ecb034e779c12bf89a26"
 const D5_1317_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -354,7 +358,7 @@ const FIRE_STATION48_RECEIVER := "building:w764313741:wall"
 const FIRE_STATION48_ADAPTER_ID := "active-adapter:fire-station48-live:building:w764313741:wall"
 const FIRE_STATION48_CONFIG_SHA256 := "4b31025a80909b03b882c089bf17d50dbc6a4ee9d32fa9b072b884fd4eec061a"
 const FIRE_STATION48_ADAPTER_SHA256 := "163db6f19bb7368f5aa271282c11d4028337d48cc1b2e3d37b8231e1c329d25a"
-const FIRE_STATION48_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const FIRE_STATION48_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const FIRE_STATION48_PROTOTYPE_SHA256 := "33c945be3699fe7f94874d7a65ff0d01963092d0c0cb85deacaf4f794d9996d5"
 const FIRE_STATION48_PROTOTYPE_CONFIG_SHA256 := "2ae853642ed360f81ea6dfe53089fa909531af8776f40462fb129076f16b6795"
 const FIRE_STATION48_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -364,7 +368,7 @@ const MACEO_MAY_RECEIVER := "building:r19685981:wall"
 const MACEO_MAY_ADAPTER_ID := "active-adapter:maceo-may-live:building:r19685981:wall"
 const MACEO_MAY_CONFIG_SHA256 := "cf97a1197fdc2c5cea8f5befddcb6f6f75306d9a2b969a6e3297efad0b319c6c"
 const MACEO_MAY_ADAPTER_SHA256 := "d9ad456c2d11437a0cf70277c7fab383359c49d6ab34ed698ec316ea97668001"
-const MACEO_MAY_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const MACEO_MAY_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const MACEO_MAY_PROTOTYPE_SHA256 := "bb47a10d3464f162516ece9ac0591bdead1791e847b89eff35fd3f59adc56c85"
 const MACEO_MAY_PROTOTYPE_CONFIG_SHA256 := "11a8784bbb08ea4a6244b1da1dcc8e0c2b589ef66c55a0bd2cc8ff20ad16cd6d"
 const MACEO_MAY_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -374,7 +378,7 @@ const NORTHERN_1201_RECEIVER := "building:w96215672:wall"
 const NORTHERN_1201_ADAPTER_ID := "active-adapter:northern-canopy-free-live:building:w96215672:wall"
 const NORTHERN_1201_CONFIG_SHA256 := "54659ba6dde676f8a3ea122d654ff9532ffc706c6ea95b0913e4ef10fa5100b0"
 const NORTHERN_1201_ADAPTER_SHA256 := "8967229a37be5401962132b846b08f1f527fb27f6aae3cd2d6d97eb70f608b82"
-const NORTHERN_1201_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1201_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1201_PROTOTYPE_SHA256 := "2a01cf9fe20d81b381e445e3531377a2802082f69424445196ede570d15b2f96"
 const NORTHERN_1201_PROTOTYPE_CONFIG_SHA256 := "54659ba6dde676f8a3ea122d654ff9532ffc706c6ea95b0913e4ef10fa5100b0"
 const NORTHERN_1201_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -384,7 +388,7 @@ const NORTHERN_1238_RECEIVER := "building:w96215669:wall"
 const NORTHERN_1238_ADAPTER_ID := "active-adapter:northpoint-1238-live:building:w96215669:wall"
 const NORTHERN_1238_CONFIG_SHA256 := "a7f733e4f67351f9919769ff1329f263efbd43ca0d39a3fb30c3ac77e626c2a9"
 const NORTHERN_1238_ADAPTER_SHA256 := "fef8305341da71b88c1fa90a5ccdd9bba98afc10f999de7208cc6373ff7ba9c3"
-const NORTHERN_1238_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1238_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1238_PROTOTYPE_SHA256 := "2046c934f4fdaa35f12c7e343910b26a7e1cb2d7e489adc22467bcd1b41bb45f"
 const NORTHERN_1238_PROTOTYPE_CONFIG_SHA256 := "a7f733e4f67351f9919769ff1329f263efbd43ca0d39a3fb30c3ac77e626c2a9"
 const NORTHERN_1238_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -394,7 +398,7 @@ const NORTHERN_1206_RECEIVER := "building:w96215677:wall"
 const NORTHERN_1206_ADAPTER_ID := "active-adapter:mariner-1206-live:building:w96215677:wall"
 const NORTHERN_1206_CONFIG_SHA256 := "5327998befca469042db9ac728de697e56fb311f9f889bb1bc867617425d4f97"
 const NORTHERN_1206_ADAPTER_SHA256 := "88e0858a2b9d3559c8d2e766874f93cd44335f89c232e8115ef7c7f97ecc951b"
-const NORTHERN_1206_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1206_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1206_PROTOTYPE_SHA256 := "906922118fd881a5668962c87964b8c46db32d92a5483fd072a4c2a90b521c56"
 const NORTHERN_1206_PROTOTYPE_CONFIG_SHA256 := "5327998befca469042db9ac728de697e56fb311f9f889bb1bc867617425d4f97"
 const NORTHERN_1206_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -404,7 +408,7 @@ const NORTHERN_1219_RECEIVER := "building:w96215680:wall"
 const NORTHERN_1219_ADAPTER_ID := "active-adapter:mariner-1219-live:building:w96215680:wall"
 const NORTHERN_1219_CONFIG_SHA256 := "5fd7eeb31c4d2cfac52aadff65f1bc7f35458d3e0c8d8469411f75ce032b9f21"
 const NORTHERN_1219_ADAPTER_SHA256 := "c6a0c16cc762d33c62c3f3885d865999be5e65e148f56a66e9da348e6cbfb58a"
-const NORTHERN_1219_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1219_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1219_PROTOTYPE_SHA256 := "216e83f6ee69313d77ef5c2007720a126e07cff5e30ce23401a1d28cdac84748"
 const NORTHERN_1219_PROTOTYPE_CONFIG_SHA256 := "5fd7eeb31c4d2cfac52aadff65f1bc7f35458d3e0c8d8469411f75ce032b9f21"
 const NORTHERN_1219_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -414,7 +418,7 @@ const NORTHERN_1212_RECEIVER := "building:w96215649:wall"
 const NORTHERN_1212_ADAPTER_ID := "active-adapter:mariner-1212-live:building:w96215649:wall"
 const NORTHERN_1212_CONFIG_SHA256 := "f56009b6ccb5bea7ed63911c7d940573996aad4e1c5ccaa55267adbd150b3066"
 const NORTHERN_1212_ADAPTER_SHA256 := "c0941706e3cee909b260e278a07d846932b805aaeb5e12440463e43678b3513c"
-const NORTHERN_1212_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1212_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1212_PROTOTYPE_SHA256 := "0594ea7a6e1f09a918349ee5af58722896e3b300ae640d8c1d4025b8219bc2a9"
 const NORTHERN_1212_PROTOTYPE_CONFIG_SHA256 := "f56009b6ccb5bea7ed63911c7d940573996aad4e1c5ccaa55267adbd150b3066"
 const NORTHERN_1212_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -424,7 +428,7 @@ const NORTHERN_1220_RECEIVER := "building:w96215652:wall"
 const NORTHERN_1220_ADAPTER_ID := "active-adapter:bayside-1220-live:building:w96215652:wall"
 const NORTHERN_1220_CONFIG_SHA256 := "984ebbde55fa5dcb1cea8b0d57c20e2773982bbb195e1a52b16dec250ec0735b"
 const NORTHERN_1220_ADAPTER_SHA256 := "1edb75f24c3de6b4c6c780c9bb6b478225925453872e11c76f82fece8a146c38"
-const NORTHERN_1220_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1220_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1220_PROTOTYPE_SHA256 := "dcfb622e4f5d2759459e17d1ab465ae9fa772167f335a2d1e0c88a111482273d"
 const NORTHERN_1220_PROTOTYPE_CONFIG_SHA256 := "984ebbde55fa5dcb1cea8b0d57c20e2773982bbb195e1a52b16dec250ec0735b"
 const NORTHERN_1220_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -434,7 +438,7 @@ const NORTHERN_1239_RECEIVER := "building:w96215658:wall"
 const NORTHERN_1239_ADAPTER_ID := "active-adapter:northpoint-1239-live:building:w96215658:wall"
 const NORTHERN_1239_CONFIG_SHA256 := "bf1a2073f0d371242d5636dcb47820cb6cbf47f8df9300de7aab95da3cfa6174"
 const NORTHERN_1239_ADAPTER_SHA256 := "e397a0879a8beb8eca7e8ec32e80c40652cfb1b5b67a50bf6f52952f4ae44aa5"
-const NORTHERN_1239_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1239_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1239_PROTOTYPE_SHA256 := "3573433b35a317f40f908c64ef05519559918f5ccca0f9af14849af2b932732d"
 const NORTHERN_1239_PROTOTYPE_CONFIG_SHA256 := "bf1a2073f0d371242d5636dcb47820cb6cbf47f8df9300de7aab95da3cfa6174"
 const NORTHERN_1239_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -444,7 +448,7 @@ const NORTHERN_1222_RECEIVER := "building:w96215661:wall"
 const NORTHERN_1222_ADAPTER_ID := "active-adapter:bayside-1222-live:building:w96215661:wall"
 const NORTHERN_1222_CONFIG_SHA256 := "65a67decfd83b376209c8c8f80ab7f456be2006a8a907c2f36211c3e863e0ab2"
 const NORTHERN_1222_ADAPTER_SHA256 := "a4f6e7242dd4130b3dca67cad165a8a3067129ab2a7455e4e0f0f76ef3c144bf"
-const NORTHERN_1222_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1222_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1222_PROTOTYPE_SHA256 := "639a5ce1cce22b5635f3bccfe6cb1c7764988662b826f0c25c4183fe2ec787f9"
 const NORTHERN_1222_PROTOTYPE_CONFIG_SHA256 := "65a67decfd83b376209c8c8f80ab7f456be2006a8a907c2f36211c3e863e0ab2"
 const NORTHERN_1222_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -454,7 +458,7 @@ const NORTHERN_1227_RECEIVER := "building:w96215653:wall"
 const NORTHERN_1227_ADAPTER_ID := "active-adapter:northpoint-1227-live:building:w96215653:wall"
 const NORTHERN_1227_CONFIG_SHA256 := "2e8573eb855c110c0d13545d63f8fd467a25a68613d16b91cb1336462baadde7"
 const NORTHERN_1227_ADAPTER_SHA256 := "ace49917dc8935c75124e70f3dc573330a2236a6a82ef948b41b1eeeee451c6e"
-const NORTHERN_1227_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1227_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1227_PROTOTYPE_SHA256 := "6492b8e48226ed09c7e7171bd7fd51e25b8e347c38d87d2d0931b2b3337fb2f4"
 const NORTHERN_1227_PROTOTYPE_CONFIG_SHA256 := "2e8573eb855c110c0d13545d63f8fd467a25a68613d16b91cb1336462baadde7"
 const NORTHERN_1227_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -464,7 +468,7 @@ const NORTHERN_1202_RECEIVER := "building:w96215651:wall"
 const NORTHERN_1202_ADAPTER_ID := "active-adapter:mariner-1202-live:building:w96215651:wall"
 const NORTHERN_1202_CONFIG_SHA256 := "8490ec8dab6302c9892b37b86542ccc18793dfe309ac7d589fb9dc9cad9ddf22"
 const NORTHERN_1202_ADAPTER_SHA256 := "29f17b796ae922d967e87212f7e3ed21fa30db7d9ce4b9c2c7a2ba079e847a70"
-const NORTHERN_1202_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1202_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1202_PROTOTYPE_SHA256 := "c81cf174af5f91a21dc95306b77296d8d82152a54ef301e87853944b3b78c59c"
 const NORTHERN_1202_PROTOTYPE_CONFIG_SHA256 := "8490ec8dab6302c9892b37b86542ccc18793dfe309ac7d589fb9dc9cad9ddf22"
 const NORTHERN_1202_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -474,7 +478,7 @@ const NORTHERN_1234_RECEIVER := "building:w96215659:wall"
 const NORTHERN_1234_ADAPTER_ID := "active-adapter:northpoint-1234-live:building:w96215659:wall"
 const NORTHERN_1234_CONFIG_SHA256 := "bb7f2af978cc985491eba694e8e179d39b41f609c594efcc4815a6ee8756d917"
 const NORTHERN_1234_ADAPTER_SHA256 := "6bf227c87c36c2ff02b883bf6224bb35d281f098e76035cc8d64e5ac25bfbbdc"
-const NORTHERN_1234_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1234_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1234_PROTOTYPE_SHA256 := "75b93b31c6b6bbad59ee32cd0373d96b638212370281c055b37909c43fb38ae8"
 const NORTHERN_1234_PROTOTYPE_CONFIG_SHA256 := "bb7f2af978cc985491eba694e8e179d39b41f609c594efcc4815a6ee8756d917"
 const NORTHERN_1234_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -484,7 +488,7 @@ const NORTHERN_1215_RECEIVER := "building:w96215666:wall"
 const NORTHERN_1215_ADAPTER_ID := "active-adapter:bayside-1215-live:building:w96215666:wall"
 const NORTHERN_1215_CONFIG_SHA256 := "69ec5d8fdf7a9fb93148ae459c5c570726509ea30e10a4193adb2294810b52d8"
 const NORTHERN_1215_ADAPTER_SHA256 := "cc6266cc71e9e0243006af8bb6161f061b981ac313b312fea58c4abd3d607c55"
-const NORTHERN_1215_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1215_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1215_PROTOTYPE_SHA256 := "6613df3605004f128b22bf9f2d3a1a67c8e367c45216557c0c3ab293afb36880"
 const NORTHERN_1215_PROTOTYPE_CONFIG_SHA256 := "69ec5d8fdf7a9fb93148ae459c5c570726509ea30e10a4193adb2294810b52d8"
 const NORTHERN_1215_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -494,7 +498,7 @@ const NORTHERN_1232_RECEIVER := "building:w96215673:wall"
 const NORTHERN_1232_ADAPTER_ID := "active-adapter:northpoint-1232-live:building:w96215673:wall"
 const NORTHERN_1232_CONFIG_SHA256 := "609436c6ee4f3f0170ed02b93ada28f927d67401aeb677c03a3dab9d76109f98"
 const NORTHERN_1232_ADAPTER_SHA256 := "eab24f028a8956a00d415fb058c84a2be84b86f53f3ce357122b48441f9ec27e"
-const NORTHERN_1232_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1232_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1232_PROTOTYPE_SHA256 := "05a93c31bbdfe0e9bf06530e02a33f49826f3af573e4128eaaa8d127cd686910"
 const NORTHERN_1232_PROTOTYPE_CONFIG_SHA256 := "609436c6ee4f3f0170ed02b93ada28f927d67401aeb677c03a3dab9d76109f98"
 const NORTHERN_1232_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -504,7 +508,7 @@ const NORTHERN_1241_RECEIVER := "building:w96215674:wall"
 const NORTHERN_1241_ADAPTER_ID := "active-adapter:northpoint-1241-live:building:w96215674:wall"
 const NORTHERN_1241_CONFIG_SHA256 := "9ddd9734280fa4380e4eb95d1d0e682300ac55037845f2e73b65dc57de071ccb"
 const NORTHERN_1241_ADAPTER_SHA256 := "1e1cebbd652e2409723c7000398a78aecedf9f4c77624016c5fb9070ffe70c6c"
-const NORTHERN_1241_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1241_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1241_PROTOTYPE_SHA256 := "cf94d080e386e5abcffb00328571965cc52a96e6c1522d356a6b2248e18d9bc0"
 const NORTHERN_1241_PROTOTYPE_CONFIG_SHA256 := "9ddd9734280fa4380e4eb95d1d0e682300ac55037845f2e73b65dc57de071ccb"
 const NORTHERN_1241_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -514,11 +518,21 @@ const NORTHERN_1221_RECEIVER := "building:w96215682:wall"
 const NORTHERN_1221_ADAPTER_ID := "active-adapter:mariner-1221-live:building:w96215682:wall"
 const NORTHERN_1221_CONFIG_SHA256 := "512fe3b3bd31ed2abd2ea69713028cb76b6aed782a8d572a700e1d53eee2a833"
 const NORTHERN_1221_ADAPTER_SHA256 := "15816708f9b6b8f15ae83f5d5d0ec0823165fbc0a2db51bdaeba442c34004b1e"
-const NORTHERN_1221_BUILDER_SHA256 := "6abdfde418718c62ce48b7449f1eb08510feb03362f40cd784ed4f76c3d61b9e"
+const NORTHERN_1221_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
 const NORTHERN_1221_PROTOTYPE_SHA256 := "0347c885b48e02e376afbbdb7bf5d07ff6aa32c4b11de4521427c85daaa486ac"
 const NORTHERN_1221_PROTOTYPE_CONFIG_SHA256 := "512fe3b3bd31ed2abd2ea69713028cb76b6aed782a8d572a700e1d53eee2a833"
 const NORTHERN_1221_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
 const NORTHERN_1221_RUNTIME_ASSETS := ["res://game/scripts/world/facades/mariner_1221_live_replacement.gd", "res://game/resources/facades/mariner_1221_study_002.json", "res://game/scripts/world/facades/mariner_1221_live_factory.gd", "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader", "res://game/scripts/world/facades/site_12_housing_kit.gd"]
+
+const NORTHERN_1240_RECEIVER := "building:w96215688:wall"
+const NORTHERN_1240_ADAPTER_ID := "active-adapter:northpoint-1240-live:building:w96215688:wall"
+const NORTHERN_1240_CONFIG_SHA256 := "aebf5005af3e89a2a60db46f38760a9341b1c7a8a6a6216e8777195b37ab42ba"
+const NORTHERN_1240_ADAPTER_SHA256 := "a2c7536488783593e48a5a91641fcc5bf11df490e830beaa61c3d1b7e7cc8b48"
+const NORTHERN_1240_BUILDER_SHA256 := "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6"
+const NORTHERN_1240_PROTOTYPE_SHA256 := "8e34fe18e29158a883fa258a927420676c6be1cbb2748ef4a443299a7afed476"
+const NORTHERN_1240_PROTOTYPE_CONFIG_SHA256 := "aebf5005af3e89a2a60db46f38760a9341b1c7a8a6a6216e8777195b37ab42ba"
+const NORTHERN_1240_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+const NORTHERN_1240_RUNTIME_ASSETS := ["res://game/scripts/world/facades/northpoint_1240_live_replacement.gd", "res://game/resources/facades/northpoint_1240_study.json", "res://game/scripts/world/facades/northpoint_1240_live_factory.gd", "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader", "res://game/scripts/world/facades/site_12_housing_kit.gd"]
 
 const PRE_D2_1444_INTEGRATION_WORLD_TOPOLOGY_SCOPE := "pre_d2_1444_integration_live_parity"
 const PRE_D2_1439_INTEGRATION_WORLD_TOPOLOGY_SCOPE := "pre_d2_1439_integration_live_parity"
@@ -783,7 +797,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 	var active_adapters := registry.get("active_runtime_adapters", []) as Array
 	var adapters := legacy_adapters.duplicate()
 	adapters.append_array(active_adapters)
-	if not _require(legacy_adapters.size() == 9 and active_adapters.size() == 30 and adapters.size() == EXPECTED_ADAPTER_COUNT, "registry_count_drift", "Runtime adapter arrays do not match the expected legacy/active counts."):
+	if not _require(legacy_adapters.size() == 9 and active_adapters.size() == 31 and adapters.size() == EXPECTED_ADAPTER_COUNT, "registry_count_drift", "Runtime adapter arrays do not match the expected legacy/active counts."):
 		return false
 	var adapter_receivers := {}
 	var registry_projection_ids := {}
@@ -822,6 +836,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 	var d5_1317_adapter := {}
 	var fire_station48_adapter := {}
 	var maceo_may_adapter := {}
+	var northern_1240_adapter := {}
 	var northern_1221_adapter := {}
 	var northern_1241_adapter := {}
 	var northern_1232_adapter := {}
@@ -864,6 +879,8 @@ func _validate_registry(registry: Dictionary) -> bool:
 			fire_station48_adapter = active_adapter
 		elif str(active_adapter.get("receiver_key", "")) == MACEO_MAY_RECEIVER:
 			maceo_may_adapter = active_adapter
+		elif str(active_adapter.get("receiver_key", "")) == NORTHERN_1240_RECEIVER:
+			northern_1240_adapter = active_adapter
 		elif str(active_adapter.get("receiver_key", "")) == NORTHERN_1221_RECEIVER:
 			northern_1221_adapter = active_adapter
 		elif str(active_adapter.get("receiver_key", "")) == NORTHERN_1241_RECEIVER:
@@ -921,6 +938,8 @@ func _validate_registry(registry: Dictionary) -> bool:
 	if not _validate_fire_station48_registry_adapter(fire_station48_adapter):
 		return false
 	if not _validate_maceo_may_registry_adapter(maceo_may_adapter):
+		return false
+	if not _validate_northern_1240_registry_adapter(northern_1240_adapter):
 		return false
 	if not _validate_northern_1221_registry_adapter(northern_1221_adapter):
 		return false
@@ -992,7 +1011,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 			var adapter_id_value: Variant = receiver.get("runtime_adapter_id")
 			if not _require(not receiver_key.is_empty() and not _receivers_by_key.has(receiver_key), "duplicate_receiver", "%s has a missing or duplicate direct receiver." % unit_id):
 				return false
-			if not _require(["generated_placeholder", "legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment", "active_d1_b225_host_partition_attachment", "active_d2_1441_paired_replacement", "active_d2_1439_paired_replacement", "active_d2_1444_paired_replacement", "active_d5_1308_paired_replacement", "active_d5_1394_paired_replacement", "active_d5_1317_paired_replacement", "active_fire_station48_paired_replacement", "active_northern_1201_paired_replacement", "active_northern_1238_paired_replacement", "active_northern_1206_paired_replacement", "active_northern_1219_paired_replacement", "active_northern_1212_paired_replacement", "active_northern_1220_paired_replacement", "active_northern_1239_paired_replacement", "active_northern_1222_paired_replacement", "active_northern_1227_paired_replacement", "active_northern_1202_paired_replacement", "active_northern_1234_paired_replacement", "active_northern_1215_paired_replacement", "active_northern_1232_paired_replacement", "active_northern_1241_paired_replacement", "active_northern_1221_paired_replacement", "active_maceo_may_paired_replacement"].has(content_mode), "unknown_content_mode", "%s has an unknown receiver content mode." % receiver_key):
+			if not _require(["generated_placeholder", "legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment", "active_d1_b225_host_partition_attachment", "active_d2_1441_paired_replacement", "active_d2_1439_paired_replacement", "active_d2_1444_paired_replacement", "active_d5_1308_paired_replacement", "active_d5_1394_paired_replacement", "active_d5_1317_paired_replacement", "active_fire_station48_paired_replacement", "active_northern_1201_paired_replacement", "active_northern_1238_paired_replacement", "active_northern_1206_paired_replacement", "active_northern_1219_paired_replacement", "active_northern_1212_paired_replacement", "active_northern_1220_paired_replacement", "active_northern_1239_paired_replacement", "active_northern_1222_paired_replacement", "active_northern_1227_paired_replacement", "active_northern_1202_paired_replacement", "active_northern_1234_paired_replacement", "active_northern_1215_paired_replacement", "active_northern_1232_paired_replacement", "active_northern_1241_paired_replacement", "active_northern_1221_paired_replacement", "active_northern_1240_paired_replacement", "active_maceo_may_paired_replacement"].has(content_mode), "unknown_content_mode", "%s has an unknown receiver content mode." % receiver_key):
 				return false
 			if content_mode == "generated_placeholder":
 				if not _require(adapter_id_value == null, "receiver_adapter_mismatch", "%s placeholder unexpectedly references an adapter." % receiver_key):
@@ -1035,12 +1054,12 @@ func _validate_reference_acceptance_record(unit_id: String, records: Array) -> b
 		return false
 	var record := records[0] as Dictionary
 	var expected := EXPECTED_REVIEW_RECEIPTS[unit_id] as Array
-	if unit_id in ["physical-building:w95934105", "physical-building:w95934144", "physical-building:w95934117", "physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125", "physical-building:w764313741", "physical-building:r19685981", "physical-building:w96215672", "physical-building:w96215669", "physical-building:w96215677", "physical-building:w96215680", "physical-building:w96215649", "physical-building:w96215652", "physical-building:w96215658", "physical-building:w96215661", "physical-building:w96215653", "physical-building:w96215651", "physical-building:w96215659", "physical-building:w96215666", "physical-building:w96215673", "physical-building:w96215674", "physical-building:w96215682"]:
+	if unit_id in ["physical-building:w95934105", "physical-building:w95934144", "physical-building:w95934117", "physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125", "physical-building:w764313741", "physical-building:r19685981", "physical-building:w96215672", "physical-building:w96215669", "physical-building:w96215677", "physical-building:w96215680", "physical-building:w96215649", "physical-building:w96215652", "physical-building:w96215658", "physical-building:w96215661", "physical-building:w96215653", "physical-building:w96215651", "physical-building:w96215659", "physical-building:w96215666", "physical-building:w96215673", "physical-building:w96215674", "physical-building:w96215682", "physical-building:w96215688"]:
 		if not _require(_has_exact_keys(record, ["capture_time_recognition_metric", "evidence_manifest_sha256", "evidence_tree_sha256", "mechanical_review_receipt_sha256", "motion_telemetry_manifest_sha256", "numerator_effect", "package_verification_receipt_sha256", "review_id", "review_kind", "review_receipt_sha256", "status", "visual_motion_manifest_sha256"]), "recognition_receipt_mismatch", "%s acceptance receipt fields drifted." % unit_id):
 			return false
 		if not _require(
-			str(record.get("capture_time_recognition_metric", "")) == ("28/213" if unit_id == "physical-building:w96215682" else ("28/213" if unit_id == "physical-building:w96215674" else ("26/213" if unit_id == "physical-building:w96215673" else ("23/213" if unit_id == "physical-building:w96215666" else ("23/213" if unit_id == "physical-building:w96215659" else ("23/213" if unit_id == "physical-building:w96215651" else ("23/213" if unit_id == "physical-building:w96215653" else ("23/213" if unit_id == "physical-building:w96215661" else ("18/213" if unit_id == "physical-building:w96215658" else ("18/213" if unit_id == "physical-building:w96215652" else ("18/213" if unit_id == "physical-building:w96215649" else ("16/213" if unit_id == "physical-building:w96215680" else ("16/213" if unit_id == "physical-building:w96215677" else ("16/213" if unit_id == "physical-building:w96215669" else ("15/213" if unit_id == "physical-building:w96215672" else ("14/213" if unit_id in ["physical-building:w764313741", "physical-building:r19685981"] else ("13/213" if unit_id in ["physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125"] else ("8/213" if unit_id == "physical-building:w95934105" else "9/213"))))))))))))))))))
-			and str(record.get("review_id", "")) == ("northern-1221-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215682" else ("northern-1241-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215674" else ("northern-1232-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215673" else ("northern-1215-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215666" else ("northern-1234-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215659" else ("northern-1202-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215651" else ("northern-1227-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215653" else ("northern-1222-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215661" else ("northern-1239-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215658" else ("northern-1220-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215652" else ("northern-1212-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215649" else ("northern-1219-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215680" else ("northern-1206-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215677" else ("northern-1238-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215669" else ("northern-1201-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215672" else ("maceo-may-quality-candidate-2026-09-11-001" if unit_id == "physical-building:r19685981" else ("fire-station48-quality-candidate-2026-09-11-001" if unit_id == "physical-building:w764313741" else ("d5-1317-quality-candidate-2026-09-10-001" if unit_id == "physical-building:w95934125" else ("d5-1394-fidelity-quality-candidate-2026-09-10-001" if unit_id == "physical-building:w96215646" else ("d5-1308-fidelity-quality-candidate-2026-09-10-001" if unit_id == "physical-building:w95934123" else ("d2-1444-quality-v2-promotion-candidate-2026-09-09-001" if unit_id == "physical-building:w95934117" else ("d2-1439-quality-v2-promotion-candidate-2026-09-09-001" if unit_id == "physical-building:w95934144" else "d2-1441-production-v8-staging-2026-09-05-009"))))))))))))))))))))))
+			str(record.get("capture_time_recognition_metric", "")) == ("31/213" if unit_id == "physical-building:w96215688" else ("28/213" if unit_id == "physical-building:w96215682" else ("28/213" if unit_id == "physical-building:w96215674" else ("26/213" if unit_id == "physical-building:w96215673" else ("23/213" if unit_id == "physical-building:w96215666" else ("23/213" if unit_id == "physical-building:w96215659" else ("23/213" if unit_id == "physical-building:w96215651" else ("23/213" if unit_id == "physical-building:w96215653" else ("23/213" if unit_id == "physical-building:w96215661" else ("18/213" if unit_id == "physical-building:w96215658" else ("18/213" if unit_id == "physical-building:w96215652" else ("18/213" if unit_id == "physical-building:w96215649" else ("16/213" if unit_id == "physical-building:w96215680" else ("16/213" if unit_id == "physical-building:w96215677" else ("16/213" if unit_id == "physical-building:w96215669" else ("15/213" if unit_id == "physical-building:w96215672" else ("14/213" if unit_id in ["physical-building:w764313741", "physical-building:r19685981"] else ("13/213" if unit_id in ["physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125"] else ("8/213" if unit_id == "physical-building:w95934105" else "9/213")))))))))))))))))))
+			and str(record.get("review_id", "")) == ("northern-1240-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215688" else ("northern-1221-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215682" else ("northern-1241-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215674" else ("northern-1232-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215673" else ("northern-1215-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215666" else ("northern-1234-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215659" else ("northern-1202-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215651" else ("northern-1227-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215653" else ("northern-1222-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215661" else ("northern-1239-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215658" else ("northern-1220-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215652" else ("northern-1212-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215649" else ("northern-1219-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215680" else ("northern-1206-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215677" else ("northern-1238-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215669" else ("northern-1201-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215672" else ("maceo-may-quality-candidate-2026-09-11-001" if unit_id == "physical-building:r19685981" else ("fire-station48-quality-candidate-2026-09-11-001" if unit_id == "physical-building:w764313741" else ("d5-1317-quality-candidate-2026-09-10-001" if unit_id == "physical-building:w95934125" else ("d5-1394-fidelity-quality-candidate-2026-09-10-001" if unit_id == "physical-building:w96215646" else ("d5-1308-fidelity-quality-candidate-2026-09-10-001" if unit_id == "physical-building:w95934123" else ("d2-1444-quality-v2-promotion-candidate-2026-09-09-001" if unit_id == "physical-building:w95934117" else ("d2-1439-quality-v2-promotion-candidate-2026-09-09-001" if unit_id == "physical-building:w95934144" else "d2-1441-production-v8-staging-2026-09-05-009")))))))))))))))))))))))
 			and str(record.get("review_receipt_sha256", "")) == str(expected[0])
 			and str(record.get("evidence_manifest_sha256", "")) == str(expected[1])
 			and str(record.get("motion_telemetry_manifest_sha256", "")) == str(expected[2])
@@ -1352,6 +1371,12 @@ func _validate_adapter_contracts(contracts: Dictionary, registry: Dictionary) ->
 			if not _validate_maceo_may_behavior_contract(plan.get("behavior_contract", {}) as Dictionary) \
 			or not _validate_maceo_may_plan_contract(plan) \
 			or not _require(JSON.stringify(plan.get("behavior_contract", {})) == JSON.stringify(runtime_contract.get("behavior_contract", {})), "adapter_plan_mismatch", "%s Maceo May behavior contract drifted from the registry." % adapter_id):
+				return false
+		elif str(plan.get("content_mode", "")) == "active_northern_1240_paired_replacement":
+			var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+			if not _validate_northern_1240_behavior_contract(plan.get("behavior_contract", {}) as Dictionary) \
+			or not _validate_northern_1240_plan_contract(plan) \
+			or not _require(JSON.stringify(plan.get("behavior_contract", {})) == JSON.stringify(runtime_contract.get("behavior_contract", {})), "adapter_plan_mismatch", "%s 1240 behavior contract drifted from the registry." % adapter_id):
 				return false
 		elif str(plan.get("content_mode", "")) == "active_northern_1221_paired_replacement":
 			var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
@@ -3453,9 +3478,9 @@ func _validate_current_topology_authority(active_adapters: Array) -> bool:
 		if str(geometry_contract.get("world_topology_scope", "")) == CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE:
 			current_topology_adapter_ids.append(str(adapter.get("adapter_id", "")))
 	return _require(
-		current_topology_adapter_ids == [NORTHERN_1221_ADAPTER_ID],
+		current_topology_adapter_ids == [NORTHERN_1240_ADAPTER_ID],
 		"current_topology_authority_mismatch",
-		"Exactly the final serialized 1221 adapter must own the measured combined integration topology; prior evidence scopes must remain historical.",
+		"Exactly the final serialized 1240 adapter must own the measured combined integration topology; prior evidence scopes must remain historical.",
 	)
 
 
@@ -3491,8 +3516,8 @@ func _runtime_asset_closure_is_clean(path: String, visited: Dictionary) -> bool:
 		_measurement.closure_read_usec += Time.get_ticks_usec() - read_started_usec
 	if not _runtime_asset_text_is_clean(contents):
 		return _require(false, "dirty_asset_closure", "Runtime dependency closure contains a source-only path or URL: %s" % path)
-	if path in ["res://game/scripts/world/facades/northpoint_1232_live_replacement.gd", "res://game/scripts/world/facades/northpoint_1241_live_replacement.gd", "res://game/scripts/world/facades/mariner_1221_live_replacement.gd", "res://game/scripts/world/facades/northern_canopy_free_live_replacement.gd", "res://game/scripts/world/facades/mariner_1206_live_replacement.gd", "res://game/scripts/world/facades/mariner_1219_live_replacement.gd", "res://game/scripts/world/facades/mariner_1212_live_replacement.gd", "res://game/scripts/world/facades/bayside_1220_live_replacement.gd", "res://game/scripts/world/facades/northpoint_1239_live_replacement.gd", "res://game/scripts/world/facades/bayside_1222_live_replacement.gd", "res://game/scripts/world/facades/northpoint_1227_live_replacement.gd", "res://game/scripts/world/facades/mariner_1202_live_replacement.gd", "res://game/scripts/world/facades/northpoint_1234_live_replacement.gd", "res://game/scripts/world/facades/bayside_1215_live_replacement.gd", "res://game/scripts/world/facades/northpoint_1238_live_replacement.gd"]:
-		var expected_hash: String = "1e1cebbd652e2409723c7000398a78aecedf9f4c77624016c5fb9070ffe70c6c" if path == "res://game/scripts/world/facades/northpoint_1241_live_replacement.gd" else "15816708f9b6b8f15ae83f5d5d0ec0823165fbc0a2db51bdaeba442c34004b1e" if path == "res://game/scripts/world/facades/mariner_1221_live_replacement.gd" else "eab24f028a8956a00d415fb058c84a2be84b86f53f3ce357122b48441f9ec27e" if path == "res://game/scripts/world/facades/northpoint_1232_live_replacement.gd" else NORTHERN_1234_ADAPTER_SHA256 if path.ends_with("/northpoint_1234_live_replacement.gd") else NORTHERN_1215_ADAPTER_SHA256 if path.ends_with("/bayside_1215_live_replacement.gd") else NORTHERN_1202_ADAPTER_SHA256 if path.ends_with("/mariner_1202_live_replacement.gd") else NORTHERN_1227_ADAPTER_SHA256 if path.ends_with("/northpoint_1227_live_replacement.gd") else NORTHERN_1222_ADAPTER_SHA256 if path.ends_with("/bayside_1222_live_replacement.gd") else NORTHERN_1239_ADAPTER_SHA256 if path.ends_with("/northpoint_1239_live_replacement.gd") else NORTHERN_1220_ADAPTER_SHA256 if path.ends_with("/bayside_1220_live_replacement.gd") else NORTHERN_1212_ADAPTER_SHA256 if path.ends_with("/mariner_1212_live_replacement.gd") else NORTHERN_1219_ADAPTER_SHA256 if path.ends_with("/mariner_1219_live_replacement.gd") else NORTHERN_1206_ADAPTER_SHA256 if path.ends_with("/mariner_1206_live_replacement.gd") else NORTHERN_1201_ADAPTER_SHA256 if path.ends_with("/northern_canopy_free_live_replacement.gd") else NORTHERN_1238_ADAPTER_SHA256
+	if path in ["res://game/scripts/world/facades/northpoint_1240_live_replacement.gd", "res://game/scripts/world/facades/northpoint_1232_live_replacement.gd", "res://game/scripts/world/facades/northpoint_1241_live_replacement.gd", "res://game/scripts/world/facades/mariner_1221_live_replacement.gd", "res://game/scripts/world/facades/northern_canopy_free_live_replacement.gd", "res://game/scripts/world/facades/mariner_1206_live_replacement.gd", "res://game/scripts/world/facades/mariner_1219_live_replacement.gd", "res://game/scripts/world/facades/mariner_1212_live_replacement.gd", "res://game/scripts/world/facades/bayside_1220_live_replacement.gd", "res://game/scripts/world/facades/northpoint_1239_live_replacement.gd", "res://game/scripts/world/facades/bayside_1222_live_replacement.gd", "res://game/scripts/world/facades/northpoint_1227_live_replacement.gd", "res://game/scripts/world/facades/mariner_1202_live_replacement.gd", "res://game/scripts/world/facades/northpoint_1234_live_replacement.gd", "res://game/scripts/world/facades/bayside_1215_live_replacement.gd", "res://game/scripts/world/facades/northpoint_1238_live_replacement.gd"]:
+		var expected_hash: String = "a2c7536488783593e48a5a91641fcc5bf11df490e830beaa61c3d1b7e7cc8b48" if path == "res://game/scripts/world/facades/northpoint_1240_live_replacement.gd" else "1e1cebbd652e2409723c7000398a78aecedf9f4c77624016c5fb9070ffe70c6c" if path == "res://game/scripts/world/facades/northpoint_1241_live_replacement.gd" else "15816708f9b6b8f15ae83f5d5d0ec0823165fbc0a2db51bdaeba442c34004b1e" if path == "res://game/scripts/world/facades/mariner_1221_live_replacement.gd" else "eab24f028a8956a00d415fb058c84a2be84b86f53f3ce357122b48441f9ec27e" if path == "res://game/scripts/world/facades/northpoint_1232_live_replacement.gd" else NORTHERN_1234_ADAPTER_SHA256 if path.ends_with("/northpoint_1234_live_replacement.gd") else NORTHERN_1215_ADAPTER_SHA256 if path.ends_with("/bayside_1215_live_replacement.gd") else NORTHERN_1202_ADAPTER_SHA256 if path.ends_with("/mariner_1202_live_replacement.gd") else NORTHERN_1227_ADAPTER_SHA256 if path.ends_with("/northpoint_1227_live_replacement.gd") else NORTHERN_1222_ADAPTER_SHA256 if path.ends_with("/bayside_1222_live_replacement.gd") else NORTHERN_1239_ADAPTER_SHA256 if path.ends_with("/northpoint_1239_live_replacement.gd") else NORTHERN_1220_ADAPTER_SHA256 if path.ends_with("/bayside_1220_live_replacement.gd") else NORTHERN_1212_ADAPTER_SHA256 if path.ends_with("/mariner_1212_live_replacement.gd") else NORTHERN_1219_ADAPTER_SHA256 if path.ends_with("/mariner_1219_live_replacement.gd") else NORTHERN_1206_ADAPTER_SHA256 if path.ends_with("/mariner_1206_live_replacement.gd") else NORTHERN_1201_ADAPTER_SHA256 if path.ends_with("/northern_canopy_free_live_replacement.gd") else NORTHERN_1238_ADAPTER_SHA256
 		if not _require(contents.sha256_text() == expected_hash, "runtime_asset_hash_drift", "Northern format-probe wrapper source drifted."):
 			return false
 		for probe_name: String in ["project.binary", "project.godot"]:
@@ -3632,6 +3657,8 @@ func _derive_unit_content_mode(receivers: Array) -> String:
 		return "all_receivers_active_fire_station48_paired_replacement"
 	if values == ["active_maceo_may_paired_replacement"]:
 		return "all_receivers_active_maceo_may_paired_replacement"
+	if values == ["active_northern_1240_paired_replacement"]:
+		return "all_receivers_active_northern_1240_paired_replacement"
 	if values == ["active_northern_1221_paired_replacement"]:
 		return "all_receivers_active_northern_1221_paired_replacement"
 	if values == ["active_northern_1241_paired_replacement"]:
@@ -6528,7 +6555,7 @@ func _validate_northern_1221_behavior_contract(contract: Dictionary) -> bool:
 		and typeof((contract.get("geometry_contract") as Dictionary).get("world_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_triangles"))) and float((contract.get("geometry_contract") as Dictionary).get("world_triangles")) == 173181.0
 		and typeof((contract.get("geometry_contract") as Dictionary).get("world_static_bodies")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_static_bodies"))) and float((contract.get("geometry_contract") as Dictionary).get("world_static_bodies")) == 494.0
 		and typeof((contract.get("geometry_contract") as Dictionary).get("world_shapes")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_shapes"))) and float((contract.get("geometry_contract") as Dictionary).get("world_shapes")) == 633.0
-		and typeof((contract.get("geometry_contract") as Dictionary).get("world_topology_scope")) == TYPE_STRING and (contract.get("geometry_contract") as Dictionary).get("world_topology_scope") == "current_integration_topology"
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_topology_scope")) == TYPE_STRING and (contract.get("geometry_contract") as Dictionary).get("world_topology_scope") == "pre_northern_1240_integration_live_parity"
 		and _has_exact_keys((contract.get("ownership_contract") as Dictionary), ["structural_owner_count", "shape_count", "spray_owner_count", "navigation_owner_count", "wall_is_sole_spray_receiver", "original_wall_and_projected_front_are_receivers", "projected_receiver_runs", "projected_receiver_triangles", "projected_receiver_shape_order", "projected_receiver_physics_layer", "projected_receiver_cull_mask", "wall_decal_cull_mask", "wall_shape_order", "roof_shape_order", "added_public_roof_triangles", "original_flat_roof_preserved", "added_public_roof_is_nonreceiver", "all_additions_render_only", "added_ground_collision_triangles", "roof_is_wall_spray_receiver", "roof_world_solid_landing", "eligible_render_layer", "noneligible_render_layer", "terrain_geometry_and_ownership_unchanged"])
 		and typeof((contract.get("ownership_contract") as Dictionary).get("structural_owner_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("structural_owner_count"))) and float((contract.get("ownership_contract") as Dictionary).get("structural_owner_count")) == 4.0
 		and typeof((contract.get("ownership_contract") as Dictionary).get("shape_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("shape_count"))) and float((contract.get("ownership_contract") as Dictionary).get("shape_count")) == 15.0
@@ -6604,4 +6631,191 @@ func _validate_northern_1221_plan_contract(plan: Dictionary) -> bool:
 		and _runtime_asset_match(executable_assets, "res://game/scripts/world/facades/site_12_housing_kit.gd", NORTHERN_1221_SITE_KIT_SHA256),
 		"northern_1221_parity_mismatch",
 		"1221 executable subset must contain exactly the paired adapter, reviewed prototype, and site kit.",
+	)
+
+func _validate_northern_1240_registry_adapter(adapter: Dictionary) -> bool:
+	if not _require(not adapter.is_empty(), "northern_1240_parity_mismatch", "1240 exact-current paired wall/roof adapter is missing."):
+		return false
+	if not _require(
+		str(adapter.get("adapter_id", "")) == NORTHERN_1240_ADAPTER_ID
+		and str(adapter.get("source_key", "")) == "w96215688"
+		and str(adapter.get("receiver_key", "")) == NORTHERN_1240_RECEIVER
+		and str(adapter.get("attachment_kind", "")) == "active_northern_1240_paired_wall_roof_replacement"
+		and str(adapter.get("content_classification", "")) == "active_target_specific_paired_wall_roof_replacement"
+		and str(adapter.get("runtime_content_mode", "")) == "active_northern_1240_paired_replacement"
+		and str(adapter.get("state", "")) == "active_runtime_target_specific_content"
+		and str(adapter.get("recognition_acceptance_status", "")) == "accepted"
+		and str(adapter.get("recognition_claim_effect", "")) == "none"
+		and (adapter.get("accepted_run_scopes", []) as Array).is_empty()
+		and (adapter.get("runtime_asset_projections", []) as Array).is_empty(),
+		"northern_1240_parity_mismatch",
+		"1240 active adapter identity, paired classification, acceptance, or package boundary drifted.",
+	):
+		return false
+	var receiver_scope := adapter.get("active_receiver_scope", {}) as Dictionary
+	if not _require(
+		_has_exact_keys(receiver_scope, ["coverage", "run_count"])
+		and str(receiver_scope.get("coverage", "")) == "whole_direct_wall_receiver"
+		and int(receiver_scope.get("run_count", -1)) == 28,
+		"northern_1240_parity_mismatch",
+		"1240 active receiver scope does not cover the exact source-run direct wall receiver.",
+	):
+		return false
+	var assets := adapter.get("runtime_assets", []) as Array
+	var actual_paths := []
+	for asset_value: Variant in assets:
+		actual_paths.append(str((asset_value as Dictionary).get("path", "")))
+	actual_paths.sort()
+	var expected_paths := NORTHERN_1240_RUNTIME_ASSETS.duplicate()
+	expected_paths.sort()
+	if not _require(actual_paths == expected_paths, "northern_1240_parity_mismatch", "1240 active adapter does not contain its exact 5-asset paired runtime closure."):
+		return false
+	var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+	if not _require(
+		_has_exact_keys(runtime_contract, ["adapter_sha256", "behavior_contract", "config_sha256", "config_summary", "dispatch_sha256", "prototype_config_sha256", "prototype_sha256", "site_kit_sha256"]),
+		"northern_1240_parity_mismatch",
+		"1240 active runtime contract fields drifted.",
+	):
+		return false
+	if not _require(
+		str(runtime_contract.get("adapter_sha256", "")) == NORTHERN_1240_ADAPTER_SHA256
+		and str(runtime_contract.get("config_sha256", "")) == NORTHERN_1240_CONFIG_SHA256
+		and str(runtime_contract.get("dispatch_sha256", "")) == NORTHERN_1240_BUILDER_SHA256
+		and str(runtime_contract.get("prototype_sha256", "")) == NORTHERN_1240_PROTOTYPE_SHA256
+		and str(runtime_contract.get("prototype_config_sha256", "")) == NORTHERN_1240_PROTOTYPE_CONFIG_SHA256
+		and str(runtime_contract.get("site_kit_sha256", "")) == NORTHERN_1240_SITE_KIT_SHA256
+		and _runtime_asset_match(assets, "res://game/scripts/world/facades/northpoint_1240_live_replacement.gd", "a2c7536488783593e48a5a91641fcc5bf11df490e830beaa61c3d1b7e7cc8b48")
+		and _runtime_asset_match(assets, "res://game/resources/facades/northpoint_1240_study.json", "aebf5005af3e89a2a60db46f38760a9341b1c7a8a6a6216e8777195b37ab42ba")
+		and _runtime_asset_match(assets, "res://game/scripts/world/facades/northpoint_1240_live_factory.gd", "8e34fe18e29158a883fa258a927420676c6be1cbb2748ef4a443299a7afed476")
+		and _runtime_asset_match(assets, "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader", "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a")
+		and _runtime_asset_match(assets, "res://game/scripts/world/facades/site_12_housing_kit.gd", "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"),
+		"northern_1240_parity_mismatch",
+		"1240 adapter/config/dispatch/prototype/site-kit pins do not bind the exact reviewed bytes.",
+	):
+		return false
+	return _require(runtime_contract.get("config_summary", {}) == JSON.parse_string("{\"schema_version\":\"ti.northpoint-1240-study/1\",\"source_key\":\"w96215688\",\"chunk_id\":\"x_-1__z_-4\",\"chunk_sha256\":\"bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac\",\"mapped_runs\":[15,16,18,19,20,21,23,24,25],\"protected_runs\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,17,22,26,27]}"), "northern_1240_parity_mismatch", "Exact northern source scope summary drifted.") and _validate_northern_1240_behavior_contract(runtime_contract.get("behavior_contract", {}) as Dictionary)
+
+
+func _validate_northern_1240_behavior_contract(contract: Dictionary) -> bool:
+	return _require(
+		_has_exact_keys(contract, ["schema_version", "acceptance_contract", "replacement_contract", "geometry_contract", "ownership_contract", "truth_boundary"])
+		and typeof(contract.get("schema_version")) == TYPE_STRING and contract.get("schema_version") == "ti.northern-1240-production-live-parity/1"
+		and _has_exact_keys((contract.get("acceptance_contract") as Dictionary), ["evidence_manifest_sha256", "motion_telemetry_manifest_sha256", "visual_motion_manifest_sha256", "package_verification_receipt_sha256", "evidence_tree_sha256", "mechanical_review_receipt_sha256", "review_receipt_sha256", "accepted_physical_unit_id", "capture_time_recognition_metric", "numerator_effect", "reference_recognizable", "wall_and_roof_are_one_physical_unit"])
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("evidence_manifest_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("evidence_manifest_sha256") == "35ca950b839ba5337ec6aa1afa23c3a41b541ddbcc72d8cd948fd3ff945f357e"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("motion_telemetry_manifest_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("motion_telemetry_manifest_sha256") == "6940be3303a7bb398e89594dbbe029913b6199836e96b58ca5ed6f8cfdab6d3d"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("visual_motion_manifest_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("visual_motion_manifest_sha256") == "cef4880c25f45a6d11699843dce565efd2620fc48a0904aa5af2e6f4aa8b2b9e"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("package_verification_receipt_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("package_verification_receipt_sha256") == "aa9865bc070916b027cb58759259bd8ee0b27d1ca36ac413360d4b9d261c1ad4"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("evidence_tree_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("evidence_tree_sha256") == "d272fe5677097e67016ea21af2e9eb5e9a5daff69ad7f86deb1d343b02b7e18c"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("mechanical_review_receipt_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("mechanical_review_receipt_sha256") == "0a6727056299a7bbf91fc97137ff794d5350128c9b3f15276f7680de9aa921d3"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("review_receipt_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("review_receipt_sha256") == "deee84ad808e2a740f79f3c796b87c18b242e18f005a902646d3645d9c580939"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("accepted_physical_unit_id")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("accepted_physical_unit_id") == "physical-building:w96215688"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("capture_time_recognition_metric")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("capture_time_recognition_metric") == "31/213"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("numerator_effect")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("acceptance_contract") as Dictionary).get("numerator_effect"))) and float((contract.get("acceptance_contract") as Dictionary).get("numerator_effect")) == 1.0
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("reference_recognizable")) == TYPE_BOOL and (contract.get("acceptance_contract") as Dictionary).get("reference_recognizable") == true
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("wall_and_roof_are_one_physical_unit")) == TYPE_BOOL and (contract.get("acceptance_contract") as Dictionary).get("wall_and_roof_are_one_physical_unit") == true
+		and _has_exact_keys((contract.get("replacement_contract") as Dictionary), ["source_key", "wall_object_key", "roof_object_key", "actual_supplied_chunk_pair_required", "actual_land_and_area_records_required", "mapped_public_run_indices", "protected_run_indices", "partial_pair_allowed", "fallback_allowed", "generic_stack_allowed", "factory_calls", "raw_source_constructor_callback_required", "tangent_callback_required"])
+		and typeof((contract.get("replacement_contract") as Dictionary).get("source_key")) == TYPE_STRING and (contract.get("replacement_contract") as Dictionary).get("source_key") == "w96215688"
+		and typeof((contract.get("replacement_contract") as Dictionary).get("wall_object_key")) == TYPE_STRING and (contract.get("replacement_contract") as Dictionary).get("wall_object_key") == "building:w96215688:wall"
+		and typeof((contract.get("replacement_contract") as Dictionary).get("roof_object_key")) == TYPE_STRING and (contract.get("replacement_contract") as Dictionary).get("roof_object_key") == "building:w96215688:roof"
+		and typeof((contract.get("replacement_contract") as Dictionary).get("actual_supplied_chunk_pair_required")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("actual_supplied_chunk_pair_required") == true
+		and typeof((contract.get("replacement_contract") as Dictionary).get("actual_land_and_area_records_required")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("actual_land_and_area_records_required") == false
+		and _int_array_matches(((contract.get("replacement_contract") as Dictionary).get("mapped_public_run_indices") as Array), [15, 16, 18, 19, 20, 21, 23, 24, 25])
+		and _int_array_matches(((contract.get("replacement_contract") as Dictionary).get("protected_run_indices") as Array), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 17, 22, 26, 27])
+		and typeof((contract.get("replacement_contract") as Dictionary).get("partial_pair_allowed")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("partial_pair_allowed") == false
+		and typeof((contract.get("replacement_contract") as Dictionary).get("fallback_allowed")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("fallback_allowed") == false
+		and typeof((contract.get("replacement_contract") as Dictionary).get("generic_stack_allowed")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("generic_stack_allowed") == false
+		and typeof((contract.get("replacement_contract") as Dictionary).get("factory_calls")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("replacement_contract") as Dictionary).get("factory_calls"))) and float((contract.get("replacement_contract") as Dictionary).get("factory_calls")) == 1.0
+		and typeof((contract.get("replacement_contract") as Dictionary).get("raw_source_constructor_callback_required")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("raw_source_constructor_callback_required") == true
+		and typeof((contract.get("replacement_contract") as Dictionary).get("tangent_callback_required")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("tangent_callback_required") == true
+		and _has_exact_keys((contract.get("geometry_contract") as Dictionary), ["source_chunk_sha256", "horizontal_source_footprint_preserved", "original_source_channels_and_roof_preserved", "visual_mesh_instances", "visual_surfaces", "visual_triangles", "wall_native_counts", "roof_native_counts", "world_records", "world_mesh_instances", "world_surfaces", "world_triangles", "world_static_bodies", "world_shapes", "world_topology_scope"])
+		and typeof((contract.get("geometry_contract") as Dictionary).get("source_chunk_sha256")) == TYPE_STRING and (contract.get("geometry_contract") as Dictionary).get("source_chunk_sha256") == "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac"
+		and typeof((contract.get("geometry_contract") as Dictionary).get("horizontal_source_footprint_preserved")) == TYPE_BOOL and (contract.get("geometry_contract") as Dictionary).get("horizontal_source_footprint_preserved") == true
+		and typeof((contract.get("geometry_contract") as Dictionary).get("original_source_channels_and_roof_preserved")) == TYPE_BOOL and (contract.get("geometry_contract") as Dictionary).get("original_source_channels_and_roof_preserved") == true
+		and typeof((contract.get("geometry_contract") as Dictionary).get("visual_mesh_instances")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("visual_mesh_instances"))) and float((contract.get("geometry_contract") as Dictionary).get("visual_mesh_instances")) == 18.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("visual_surfaces")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("visual_surfaces"))) and float((contract.get("geometry_contract") as Dictionary).get("visual_surfaces")) == 18.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("visual_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("visual_triangles"))) and float((contract.get("geometry_contract") as Dictionary).get("visual_triangles")) == 3056.0
+		and _int_array_matches(((contract.get("geometry_contract") as Dictionary).get("wall_native_counts") as Array), [17, 17, 3040, 3, 14])
+		and _int_array_matches(((contract.get("geometry_contract") as Dictionary).get("roof_native_counts") as Array), [1, 1, 16, 1, 1])
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_records")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_records"))) and float((contract.get("geometry_contract") as Dictionary).get("world_records")) == 735.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_mesh_instances")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_mesh_instances"))) and float((contract.get("geometry_contract") as Dictionary).get("world_mesh_instances")) == 1260.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_surfaces")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_surfaces"))) and float((contract.get("geometry_contract") as Dictionary).get("world_surfaces")) == 1275.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_triangles"))) and float((contract.get("geometry_contract") as Dictionary).get("world_triangles")) == 176165.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_static_bodies")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_static_bodies"))) and float((contract.get("geometry_contract") as Dictionary).get("world_static_bodies")) == 496.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_shapes")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_shapes"))) and float((contract.get("geometry_contract") as Dictionary).get("world_shapes")) == 646.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_topology_scope")) == TYPE_STRING and (contract.get("geometry_contract") as Dictionary).get("world_topology_scope") == "current_integration_topology"
+		and _has_exact_keys((contract.get("ownership_contract") as Dictionary), ["structural_owner_count", "shape_count", "spray_owner_count", "navigation_owner_count", "wall_is_sole_spray_receiver", "original_wall_and_projected_front_are_receivers", "projected_receiver_runs", "projected_receiver_triangles", "projected_receiver_shape_order", "projected_receiver_physics_layer", "projected_receiver_cull_mask", "wall_decal_cull_mask", "wall_shape_order", "roof_shape_order", "added_public_roof_triangles", "original_flat_roof_preserved", "added_public_roof_is_nonreceiver", "all_additions_render_only", "added_ground_collision_triangles", "roof_is_wall_spray_receiver", "roof_world_solid_landing", "eligible_render_layer", "noneligible_render_layer", "terrain_geometry_and_ownership_unchanged"])
+		and typeof((contract.get("ownership_contract") as Dictionary).get("structural_owner_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("structural_owner_count"))) and float((contract.get("ownership_contract") as Dictionary).get("structural_owner_count")) == 4.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("shape_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("shape_count"))) and float((contract.get("ownership_contract") as Dictionary).get("shape_count")) == 15.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("spray_owner_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("spray_owner_count"))) and float((contract.get("ownership_contract") as Dictionary).get("spray_owner_count")) == 2.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("navigation_owner_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("navigation_owner_count"))) and float((contract.get("ownership_contract") as Dictionary).get("navigation_owner_count")) == 0.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("wall_is_sole_spray_receiver")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("wall_is_sole_spray_receiver") == false
+		and typeof((contract.get("ownership_contract") as Dictionary).get("original_wall_and_projected_front_are_receivers")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("original_wall_and_projected_front_are_receivers") == true
+		and _int_array_matches(((contract.get("ownership_contract") as Dictionary).get("projected_receiver_runs") as Array), [15, 16, 18, 19, 20, 21, 23, 24, 25])
+		and typeof((contract.get("ownership_contract") as Dictionary).get("projected_receiver_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_triangles"))) and float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_triangles")) == 6.0
+		and ((contract.get("ownership_contract") as Dictionary).get("projected_receiver_shape_order") as Array).size() == 1
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("projected_receiver_shape_order") as Array)[0]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("projected_receiver_shape_order") as Array)[0] == "ProjectedUpperSiding"
+		and typeof((contract.get("ownership_contract") as Dictionary).get("projected_receiver_physics_layer")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_physics_layer"))) and float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_physics_layer")) == 5.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("projected_receiver_cull_mask")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_cull_mask"))) and float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_cull_mask")) == 2.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("wall_decal_cull_mask")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("wall_decal_cull_mask"))) and float((contract.get("ownership_contract") as Dictionary).get("wall_decal_cull_mask")) == 2.0
+		and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array).size() == 13
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[0]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[0] == "exact_eligible_source_wall"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[1]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[1] == "ObservedPublicRoof"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[2]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[2] == "CarportRoof"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[3]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[3] == "CarportPosts"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[4]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[4] == "CarportFascia"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[5]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[5] == "ProjectedUpperClosures"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[6]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[6] == "PaleCompleteTrim"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[7]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[7] == "BlueOpaqueGlazing"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[8]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[8] == "DarkOpaqueGlazing"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[9]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[9] == "MaroonClosedDoors"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[10]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[10] == "LocalPrivacyScreens"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[11]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[11] == "PaleDrainageAndFascia"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[12]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[12] == "DoorHardware"
+		and ((contract.get("ownership_contract") as Dictionary).get("roof_shape_order") as Array).size() == 1
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("roof_shape_order") as Array)[0]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("roof_shape_order") as Array)[0] == "exact_noneligible_source_roof"
+		and typeof((contract.get("ownership_contract") as Dictionary).get("added_public_roof_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("added_public_roof_triangles"))) and float((contract.get("ownership_contract") as Dictionary).get("added_public_roof_triangles")) == 36.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("original_flat_roof_preserved")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("original_flat_roof_preserved") == true
+		and typeof((contract.get("ownership_contract") as Dictionary).get("added_public_roof_is_nonreceiver")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("added_public_roof_is_nonreceiver") == true
+		and typeof((contract.get("ownership_contract") as Dictionary).get("all_additions_render_only")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("all_additions_render_only") == false
+		and typeof((contract.get("ownership_contract") as Dictionary).get("added_ground_collision_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("added_ground_collision_triangles"))) and float((contract.get("ownership_contract") as Dictionary).get("added_ground_collision_triangles")) == 0.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("roof_is_wall_spray_receiver")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("roof_is_wall_spray_receiver") == false
+		and typeof((contract.get("ownership_contract") as Dictionary).get("roof_world_solid_landing")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("roof_world_solid_landing") == true
+		and typeof((contract.get("ownership_contract") as Dictionary).get("eligible_render_layer")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("eligible_render_layer"))) and float((contract.get("ownership_contract") as Dictionary).get("eligible_render_layer")) == 2.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("noneligible_render_layer")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("noneligible_render_layer"))) and float((contract.get("ownership_contract") as Dictionary).get("noneligible_render_layer")) == 1.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("terrain_geometry_and_ownership_unchanged")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("terrain_geometry_and_ownership_unchanged") == true
+		and _has_exact_keys((contract.get("truth_boundary") as Dictionary), ["as_built_fidelity_claimed", "interior_modeled", "hidden_schedule_invented", "capture_time_recognition_credit", "capture_time_candidate_promoted", "reference_pixels_packaged", "receiver_complete_inferred_from_art", "game_distinctive_claimed", "unobserved_sides_protected", "unsurveyed_dimensions_and_counts_are_production_inference", "continuous_motion_review_claimed", "ground_to_roof_traversal_claimed", "spray_input_event_dispatch_claimed", "separate_setup_poses_retained", "sparse_movie_samples_only", "native_support_qualification_mm", "scope_authority", "unit_packet_limits_retained", "motion_route_scope"])
+		and typeof((contract.get("truth_boundary") as Dictionary).get("as_built_fidelity_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("as_built_fidelity_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("interior_modeled")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("interior_modeled") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("hidden_schedule_invented")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("hidden_schedule_invented") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("capture_time_recognition_credit")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("capture_time_recognition_credit") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("capture_time_candidate_promoted")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("capture_time_candidate_promoted") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("reference_pixels_packaged")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("reference_pixels_packaged") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("receiver_complete_inferred_from_art")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("receiver_complete_inferred_from_art") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("game_distinctive_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("game_distinctive_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("unobserved_sides_protected")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("unobserved_sides_protected") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("unsurveyed_dimensions_and_counts_are_production_inference")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("unsurveyed_dimensions_and_counts_are_production_inference") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("continuous_motion_review_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("continuous_motion_review_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("ground_to_roof_traversal_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("ground_to_roof_traversal_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("spray_input_event_dispatch_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("spray_input_event_dispatch_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("separate_setup_poses_retained")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("separate_setup_poses_retained") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("sparse_movie_samples_only")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("sparse_movie_samples_only") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("native_support_qualification_mm")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("truth_boundary") as Dictionary).get("native_support_qualification_mm"))) and float((contract.get("truth_boundary") as Dictionary).get("native_support_qualification_mm")) == 4.0
+		and typeof((contract.get("truth_boundary") as Dictionary).get("scope_authority")) == TYPE_STRING and (contract.get("truth_boundary") as Dictionary).get("scope_authority") == "exact_unit_seventh_attestation_and_retained_first_five"
+		and typeof((contract.get("truth_boundary") as Dictionary).get("unit_packet_limits_retained")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("unit_packet_limits_retained") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("motion_route_scope")) == TYPE_STRING and (contract.get("truth_boundary") as Dictionary).get("motion_route_scope") == "six_selected_stock_approaches_returns_four_spray_callbacks_separate_setups_activation_limit_retained",
+		"northern_1240_parity_mismatch",
+		"1240 exact source, physical detail ownership, historical motion limits or accepted unit bindings drifted.",
+	)
+
+
+func _validate_northern_1240_plan_contract(plan: Dictionary) -> bool:
+	var executable_assets := plan.get("executable_assets", []) as Array
+	return _require(
+		(plan.get("projection_descriptor_ids", []) as Array).is_empty()
+		and executable_assets.size() == 3
+		and _runtime_asset_match(executable_assets, "res://game/scripts/world/facades/northpoint_1240_live_replacement.gd", NORTHERN_1240_ADAPTER_SHA256)
+		and _runtime_asset_match(executable_assets, "res://game/scripts/world/facades/northpoint_1240_live_factory.gd", NORTHERN_1240_PROTOTYPE_SHA256)
+		and _runtime_asset_match(executable_assets, "res://game/scripts/world/facades/site_12_housing_kit.gd", NORTHERN_1240_SITE_KIT_SHA256),
+		"northern_1240_parity_mismatch",
+		"1240 executable subset must contain exactly the paired adapter, reviewed prototype, and site kit.",
 	)

@@ -1,0 +1,66 @@
+{
+  "accepted": 32,
+  "previous_accepted": 31,
+  "total": 213,
+  "not_evaluated": 181,
+  "unit": "physical-building:w96215688",
+  "stable_ignored_app": "build/northern-1240-exact-current-001/Treasure Island First Playable.app",
+  "pck_sha256": "af53cf51cf94aa9f6bcb154bcb525bcd51cbd02c9639e018285d91d9ae641201",
+  "seven_app_members": {
+    "Contents/Info.plist": {
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885,
+      "mode": 420
+    },
+    "Contents/MacOS/Treasure Island First Playable": {
+      "sha256": "1c3646704c145dc39ec18437d53162ca87c9bf92aa2af714f3d026437163b4fd",
+      "bytes": 170963648,
+      "mode": 493
+    },
+    "Contents/PkgInfo": {
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9,
+      "mode": 420
+    },
+    "Contents/Resources/PrivacyInfo.xcprivacy": {
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229,
+      "mode": 420
+    },
+    "Contents/Resources/Treasure Island First Playable.pck": {
+      "sha256": "af53cf51cf94aa9f6bcb154bcb525bcd51cbd02c9639e018285d91d9ae641201",
+      "bytes": 79451860,
+      "mode": 420
+    },
+    "Contents/Resources/icon.icns": {
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500,
+      "mode": 420
+    },
+    "Contents/_CodeSignature/CodeResources": {
+      "sha256": "2b3d78fb0dbf4819601faafc6fd5000a7fea12d83a5a6c3b3f67c582c76ebfc9",
+      "bytes": 3217,
+      "mode": 420
+    }
+  },
+  "operator_handoff_sha256": "79d6e131b7bb40ecefdb41a3180065997e9413d7c83852c6dbc8cf79d4fa5ce2",
+  "independent_review_sha256": "7c09e8ca3a324fb20aa27c2d26400878e737bab18740332efeac6222422161f5",
+  "actual_slot_release_sha256": "309373e37a804b49b0f17d387bb0d8f5e91d008c486fdab1b09af6e8bbf46c43",
+  "root_decision": "ACCEPTED",
+  "transfer": "Publication operation verifies destination; external APP_TRANSFER.json records actual result",
+  "world": {
+    "bodies": 496,
+    "meshes": 1260,
+    "rows": 735,
+    "shapes": 646,
+    "surfaces": 1275,
+    "triangles": 176165
+  },
+  "limits": [
+    "Apple M2 Metal/Forward+ native smoke; no M1 or Intel runtime claim",
+    "Separate setup routes and sparse original movie samples; no continuous traversal claim",
+    "Production inference, not as-built geometry",
+    "Held1204 excluded; private reference pixels/full movies remain external",
+    "Historical31 candidate app and seven original roles unchanged"
+  ]
+}

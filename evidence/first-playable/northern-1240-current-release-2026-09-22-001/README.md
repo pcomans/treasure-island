@@ -1,0 +1,9 @@
+# Accepted current32 private macOS release
+
+1240 Northpoint (`w96215688`) adds one accepted unit:31→32 of213;182→181 remain not evaluated. All other212 unit records are unchanged. Current accounting is31 active adapters,40 plans,34 package-safe,6 disabled and13 projections.
+
+The fresh exact-current app passed source component, export, mounted component/privacy, signed headless and signed native smoke, followed by independent review and ROOT acceptance. PCK SHA256 `af53cf51cf94aa9f6bcb154bcb525bcd51cbd02c9639e018285d91d9ae641201`; the seven-member bundle and raw decisions are bound in [release closure](release-closure.json). Stable ignored destination: `build/northern-1240-exact-current-001/Treasure Island First Playable.app`. Publication copies the complete existing bundle and verifies every hash, size and mode; external transfer/publication receipts record the actual outcome. No re-export or signing replay is needed.
+
+World totals are735 rows,1260 meshes,1275 surfaces,176165 triangles,496 bodies and646 shapes. Both signed smokes reached ordinary world readiness and retained stock movement/jetpack checks. Source and mounted checks remain distinct. Apple M2 Metal/Forward+ was exercised; signature checks for arm64/x86_64 do not establish M1 performance, Intel execution, notarization or manual play.
+
+The original31-authority candidate app and seven individual roles remain historical. Unit motion uses separate setup poses and sparse retained movie samples; no continuous route/roof traversal claim is added. The shipping config removes only a private locator, retaining its digest and geometry. Original failed preparations and later scanner repairs are preserved externally. Held1204 is excluded. Private StreetView pixels and full AVI originals are not published;14 selected gameplay images keep their original evidence scope.

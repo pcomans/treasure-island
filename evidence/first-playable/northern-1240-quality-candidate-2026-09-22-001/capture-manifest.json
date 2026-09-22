@@ -1,0 +1,54 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215688",
+  "label": "Actual static1240 originals and real spray marker",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-implementation-002/1240/capture/images/01-whole-front-roof-footway-baseline.png",
+      "path_base": "/",
+      "sha256": "af0ca404c7c509feffafee0ceeefdc1dda5981249f229879569a68bbd0756904",
+      "bytes": 569225,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-implementation-002/1240/capture/images/01-whole-front-roof-footway-baseline.png",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-implementation-002/1240/capture/images/02-whole-front-roof-footway-candidate.png",
+      "path_base": "/",
+      "sha256": "6fbfba353deaf2216278dc0563a33a96a18e7720a4db3070d2660be60b48c289",
+      "bytes": 460365,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-implementation-002/1240/capture/images/02-whole-front-roof-footway-candidate.png",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-implementation-002/1240/capture/images/03-center-roof-entry-footway-candidate.png",
+      "path_base": "/",
+      "sha256": "fff71889e9767093a13d433b915bec632208b3b1d708b26b64d434a9036375f3",
+      "bytes": 546645,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-implementation-002/1240/capture/images/03-center-roof-entry-footway-candidate.png",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-implementation-002/1240/capture/images/04-entry-footway-parking-road-junction.png",
+      "path_base": "/",
+      "sha256": "913a7e102f0b002013f4add04b6c26b060497e96fd276e82ab3d8e9aaeabc14a",
+      "bytes": 634318,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-implementation-002/1240/capture/images/04-entry-footway-parking-road-junction.png",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-mechanics-002/1240/capture/images/01-actual-eligible-wall-spray.png",
+      "path_base": "/",
+      "sha256": "4c6f65b1ac3703e9f8caa121711cf1b523e17f74f74d95d6b0d63a91cf0021c5",
+      "bytes": 354165,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-mechanics-002/1240/capture/images/01-actual-eligible-wall-spray.png",
+      "copied": false
+    }
+  ],
+  "data": {
+    "status": "BOUND_ACTUAL_ORIGINALS",
+    "static_count": 4,
+    "mechanics_markers": 1,
+    "recognition_credit": 0,
+    "later_live_candidate_views": "No art replay proposed; exact source234channels/materials and4collision subtrees independently passed."
+  }
+}

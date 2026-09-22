@@ -1,0 +1,67 @@
+{
+  "reviewer": "two_unit_visual_review",
+  "model": "gpt-6-astra",
+  "reasoning_effort": "medium",
+  "reviewed_at": "2026-09-22T21:23:40Z",
+  "decision": "PASS",
+  "attestation_kind": "Independent per-unit candidate packet and visual attestation; seventh artifact",
+  "physical_unit_id": "physical-building:w96215688",
+  "scope": "Exact six-role1240 candidate packet, independently accepted exact app, reference-led observed-front game art and finite mechanics/visual-motion evidence. Reuses same independent reviewer original pixel judgments; no new engine or screenshots.",
+  "independence": "Reviewer authored no asset, study, live integration, mechanics producer or package under review; previously supplied separate original visual decisions. Independent technical/exact-app reviews reused in their stated scope.",
+  "packet": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-candidate-package-preparation-001/units/1240",
+  "candidate_closure_sha256": "89cf1a578c65c49c6541ff703f2b8b2f61b44194c28a5b201bed56ed056007b6",
+  "acceptance_bindings": {
+    "evidence_manifest_sha256": "35ca950b839ba5337ec6aa1afa23c3a41b541ddbcc72d8cd948fd3ff945f357e",
+    "motion_telemetry_manifest_sha256": "6940be3303a7bb398e89594dbbe029913b6199836e96b58ca5ed6f8cfdab6d3d",
+    "visual_motion_manifest_sha256": "cef4880c25f45a6d11699843dce565efd2620fc48a0904aa5af2e6f4aa8b2b9e",
+    "package_verification_receipt_sha256": "aa9865bc070916b027cb58759259bd8ee0b27d1ca36ac413360d4b9d261c1ad4",
+    "evidence_tree_sha256": "d272fe5677097e67016ea21af2e9eb5e9a5daff69ad7f86deb1d343b02b7e18c",
+    "mechanical_review_receipt_sha256": "0a6727056299a7bbf91fc97137ff794d5350128c9b3f15276f7680de9aa921d3"
+  },
+  "evidence_tree_document_sha256": "c7df57d4e2dc56cf5ff809e372e9435d72a008ac0834c9522adfdd3e9beecb4f",
+  "image_tree_sha256": "d272fe5677097e67016ea21af2e9eb5e9a5daff69ad7f86deb1d343b02b7e18c",
+  "actual_pck_sha256": "35563fe5c28637c8c7f1d26428cfae670a3f195eb046bd48e62fe4db6462ddf5",
+  "actual_app_file_pins": {
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/Info.plist": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable": "30e425e025c75cdaa0e992ee862e5b5208b22eee3097481aad5334364d848a1f",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck": "35563fe5c28637c8c7f1d26428cfae670a3f195eb046bd48e62fe4db6462ddf5",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-candidate-package-preparation-001/export-001/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources": "c3889933112f542dfc43ac29d830de31c31db548f539d6b7f752d87faeec3a8f"
+  },
+  "binding_check": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-candidate-package-preparation-001/independent-seventh-001/CHECK_BINDINGS.json",
+    "sha256": "4da2205639124fbbe9de59148eda2554475ac23404e5d7745827c3eac1498720",
+    "checks": 64,
+    "all_match": true
+  },
+  "visual_judgments_reused": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-implementation-002/visual-review-001/REVIEW.md",
+      "sha256": "962e89a97fc2d3ad8724fb367780ab35598ebdd232ad7357fadec4e5c173ca65"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-mechanics-continuation-001/visual-review-001/REVIEW.md",
+      "sha256": "7650b90b65b8d7e39444dffd7ef595f812599354f784d1ee3ac27577ffcaf526"
+    }
+  ],
+  "limits": [
+    "March2025 observed ENE scope only; protected/occluded portions unchanged; dimensions/cadence production inference, no survey/as-built claim.",
+    "Cleaner fascia and limited roof-surface visibility remain nonblocking finish/evidence limits at accepted game-art scope.",
+    "Four static originals, one eligible marker and nine exact AVI payload samples reused; not current-app screenshots or continuous movie inspection. Terminal blue1867 supplies no gameplay endpoint.",
+    "Six finite routes with separate setups and four real callbacks; no all-door, continuous swept support, roof-walking or uninterrupted traversal claim.",
+    "Independent live234channel/material and four collision equivalence supplies current-source association; package source/mounted/signed coverage splits remain separate.",
+    "Synchronous unpaused node/server activation observation is source-only over18us at physics frame3; no retroactive activation proof for historical motion and no resolution of1204 supportHOLD.",
+    "Prior failures, repair lineage and raw warning history remain retained.",
+    "Exact app acceptance is for31/213 candidate PCK35563fe5; no future-current artifact claim.",
+    "This external receipt supplies role7 only; owner closure serialization, authority integration and exact-current export remain separate."
+  ],
+  "current_authority": "31/213",
+  "capture_time_authority": "31/213",
+  "recognition_credit_granted": false,
+  "source_mutated": false,
+  "main_mutated": false,
+  "engine_runs": 0,
+  "owner_closure_serialization_pending": true
+}

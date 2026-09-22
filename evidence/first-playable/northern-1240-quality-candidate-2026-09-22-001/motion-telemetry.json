@@ -1,0 +1,1549 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215688",
+  "label": "Actual six routes and four stock callbacks",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-mechanics-002/native-mechanics-1240-002-result.json",
+      "path_base": "/",
+      "sha256": "53b1c20642a053b08bb2c3c9c7efd7f36db3e5a92dcb49a62a6da8e28ff6c82f",
+      "bytes": 25259549,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-mechanics-002/native-mechanics-1240-002-result.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-mechanics-002/native-mechanics-1240-002-execution.json",
+      "path_base": "/",
+      "sha256": "eea28013d4fcc5cc2c62d0979ed1b5daab1682fb65afc7ac6d5263cbe7571c14",
+      "bytes": 499085,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-mechanics-002/native-mechanics-1240-002-execution.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-mechanics-002/SLOT_RELEASE-native-mechanics-1240-002.json",
+      "path_base": "/",
+      "sha256": "8d7792b4039a076a70b43a75932ecd2ac2d47e0b77a0ede25326513f1b0145e3",
+      "bytes": 590,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1204-1240-mechanics-002/SLOT_RELEASE-native-mechanics-1240-002.json",
+      "copied": false
+    }
+  ],
+  "data": {
+    "status": "ACTUAL_PASS_ROOT_ACCEPTED",
+    "routes": [
+      {
+        "label": "near-2-door-1",
+        "ok": true,
+        "retreat_ok": true
+      },
+      {
+        "label": "near-2-door-2",
+        "ok": true,
+        "retreat_ok": true
+      },
+      {
+        "label": "near-3-door-1",
+        "ok": true,
+        "retreat_ok": true
+      },
+      {
+        "label": "screen",
+        "ok": true,
+        "retreat_ok": true
+      },
+      {
+        "label": "canopy-post",
+        "ok": true,
+        "retreat_ok": true
+      },
+      {
+        "label": "source-wall",
+        "ok": true,
+        "retreat_ok": true
+      }
+    ],
+    "sprays": [
+      {
+        "record_state": "complete",
+        "setup_support_query": {
+          "terrain_basis": {
+            "ok": true,
+            "y": 2.94777399257191,
+            "xz": [
+              -173.037780761719,
+              -810.470092773438
+            ],
+            "triangles": [
+              {
+                "triangle": 32,
+                "y": 2.94777399257191,
+                "barycentric": [
+                  0.327190399169922,
+                  0.265378952026367,
+                  0.407430648803711
+                ]
+              }
+            ],
+            "binding": [
+              {
+                "key": "land:w26767313:x_-1__z_-4",
+                "body_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision",
+                "shape_index": 0,
+                "shape_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision/Shape",
+                "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]",
+                "faces_sha256": "61cc1aa367a01ec21737f26a38c6de76a3d0ae453a2bb893bd5a2ad84e64a507",
+                "triangle_begin": 0,
+                "triangle_end_exclusive": 94,
+                "triangles": 94,
+                "scope": "Actual unchanged native LAND faces; full before/after surface snapshot also bound."
+              },
+              {
+                "key": "land:w26767313:x_-1__z_-3",
+                "body_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+                "shape_index": 0,
+                "shape_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+                "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]",
+                "faces_sha256": "16556dc6a9f20005362834829d65f6ac555bb5b8cad08049894f2857b7356c2b",
+                "triangle_begin": 94,
+                "triangle_end_exclusive": 222,
+                "triangles": 128,
+                "scope": "Actual unchanged native LAND faces; full before/after surface snapshot also bound."
+              }
+            ]
+          },
+          "query_performed": true,
+          "from": [
+            -173.037780761719,
+            3.44777393341064,
+            -810.470092773438
+          ],
+          "to": [
+            -173.037780761719,
+            2.44777393341064,
+            -810.470092773438
+          ],
+          "collision_mask": 1,
+          "excludes_only_player": true,
+          "actual_hit": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-4",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision/Shape",
+            "structural_role": "",
+            "collision_layer": 5,
+            "spray_receiver_group": false,
+            "resolved_receiver_metadata": {
+              "receiver_kind": "none",
+              "opaque": true,
+              "derived_object_key": "land:w26767313:x_-1__z_-4",
+              "source_keys": [
+                "w26767313",
+                "w29399800"
+              ]
+            },
+            "hit": true,
+            "position": [
+              -173.037780761719,
+              2.94777393341064,
+              -810.470092773438
+            ],
+            "normal": [
+              0.0126549005508423,
+              0.999893426895142,
+              -0.00728047545999289
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true
+          }
+        },
+        "timing_usec": {
+          "clock": "Time.get_ticks_usec monotonic wall",
+          "stock_call_usec": 30433,
+          "post_call_observation_usec": 65117,
+          "marker_call_usec": 265579,
+          "setup_and_settle_usec": 787783,
+          "final_aim_and_wait_usec": 417788,
+          "pre_call_observation_usec": 3119,
+          "attempt_total_wall_usec": 1570048
+        },
+        "label": "ProjectedUpperSiding",
+        "performed": true,
+        "skipped_reason": "",
+        "ok": true,
+        "aim": {
+          "ok": true,
+          "yaw_degrees": 110.929965009309,
+          "pitch_degrees": 17.3103298915057
+        },
+        "aim_physics_start": 1674,
+        "explicit_final_aim_physics_waits": 20,
+        "final_camera": {
+          "pivot": [
+            -173.037780761719,
+            4.94796943664551,
+            -810.470092773438
+          ],
+          "camera": [
+            -167.945358276367,
+            3.31146168708801,
+            -811.750244140625
+          ],
+          "camera_near": 0.0799999982118607,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "arm_margin": 0.150000005960464,
+          "arm_collision_mask": 1,
+          "pivot_to_camera_length_m": 5.4999737739563,
+          "segment_hit": {
+            "hit": false,
+            "excludes_only_player": true
+          },
+          "segment_hit_distance_m": 5.4999737739563,
+          "segment_endpoint_allowance_m": 0.04,
+          "segment_clear": true,
+          "land_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-4",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision/Shape",
+            "structural_role": "",
+            "collision_layer": 5,
+            "spray_receiver_group": false,
+            "resolved_receiver_metadata": {
+              "receiver_kind": "none",
+              "opaque": true,
+              "derived_object_key": "land:w26767313:x_-1__z_-4",
+              "source_keys": [
+                "w26767313",
+                "w29399800"
+              ]
+            },
+            "hit": true,
+            "position": [
+              -167.945358276367,
+              2.87400197982788,
+              -811.750244140625
+            ],
+            "normal": [
+              0.0126549005508423,
+              0.999893426895142,
+              -0.00728047545999289
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true,
+            "face_index": 32
+          },
+          "query_from": [
+            -167.945358276367,
+            3.31146168708801,
+            -811.750244140625
+          ],
+          "query_to": [
+            -167.945358276367,
+            -16.6885375976562,
+            -811.750244140625
+          ],
+          "expected_camera_land": {
+            "ok": true,
+            "actual_camera_xz": [
+              -167.945358276367,
+              -811.750244140625
+            ],
+            "tile": "x_-1__z_-4",
+            "chunk_size_m": 256.0,
+            "expected_object_key": "land:w26767313:x_-1__z_-4",
+            "expected_shape_index": 0,
+            "source_file": "res://generated/world/chunks/x_-1__z_-4.json",
+            "source_sha256": "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac",
+            "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+          },
+          "land_identity_ok": true,
+          "camera_minus_land_y_m": 0.437459707260132,
+          "camera_above_land": true,
+          "physics_counter": 1694,
+          "process_counter": 1693
+        },
+        "target": [
+          -177.19831068807,
+          6.285,
+          -809.424128874772
+        ],
+        "player": [
+          -173.037780761719,
+          2.94796919822693,
+          -810.470092773438
+        ],
+        "stock_player_grounded": true,
+        "player_land_state": {
+          "ok": true,
+          "source_keys": [
+            "land:w26767313:x_-1__z_-4",
+            "land:w26767313:x_-1__z_-3"
+          ],
+          "shape_index": 0,
+          "foot": [
+            -173.037780761719,
+            2.94796895980835,
+            -810.470092773438
+          ],
+          "player_origin": [
+            -173.037780761719,
+            2.94796919822693,
+            -810.470092773438
+          ],
+          "capsule_axis": [
+            [
+              -173.037780761719,
+              3.2979691028595,
+              -810.470092773438
+            ],
+            [
+              -173.037780761719,
+              4.39796924591064,
+              -810.470092773438
+            ]
+          ],
+          "capsule_radius_m": 0.349999994039536,
+          "capsule_height_m": 1.79999995231628,
+          "actual_stock_transform": true,
+          "nearest_land_triangle": 32,
+          "capsule_land_clearance_m": 0.00015789270401001,
+          "foot_land_y": 2.94777399257191,
+          "foot_minus_land_m": 0.00019496723643897,
+          "foot_source_triangles": [
+            {
+              "triangle": 32,
+              "y": 2.94777399257191
+            }
+          ],
+          "safe_margin_m": 0.00100000004749745,
+          "solver_qualification_m": 0.00400000018998981,
+          "slope_derived_maximum_foot_gap_m": 0.00962057710180349,
+          "scope": "Actual sampled native capsule-to-LAND triangle distance. Negative means geometric overlap;2mm or4x safe-margin bounds solver-scale qualification. Independent of on_floor, empty contacts are retained; no continuous swept-volume proof."
+        },
+        "actual_ray": {
+          "collider_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/ProjectedUpperWallReceiver",
+          "exact_structure_body": false,
+          "shape_index": 0,
+          "derived_object_key": "building:w96215688:wall",
+          "feature_kind": "",
+          "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/ProjectedUpperWallReceiver/ProjectedUpperSiding",
+          "structural_role": "",
+          "collision_layer": 5,
+          "spray_receiver_group": true,
+          "resolved_receiver_metadata": {
+            "receiver_kind": "building_wall",
+            "opaque": true,
+            "derived_object_key": "building:w96215688:wall",
+            "source_keys": [
+              "w96215688"
+            ]
+          }
+        },
+        "actual_ray_origin": [
+          -167.945358276367,
+          3.31146168708801,
+          -811.750244140625
+        ],
+        "actual_ray_direction": [
+          -0.925896048545837,
+          0.297546952962875,
+          0.232771143317223
+        ],
+        "actual_hit_position": [
+          -177.198303222656,
+          6.28499603271484,
+          -809.424072265625
+        ],
+        "actual_hit_normal": [
+          0.969822287559509,
+          0.0,
+          -0.243812948465347
+        ],
+        "actual_ray_distance_m": 9.99349594116211,
+        "actual_player_hit_distance_m": 5.43505764007568,
+        "maximum_stock_range_m": 6.0,
+        "conservative_attempt_limit_m": 5.7,
+        "expected_result": "placed",
+        "result": [
+          "placed"
+        ],
+        "identity_signals": [
+          {
+            "derived_object_key": "building:w96215688:wall",
+            "source_keys": [
+              "w96215688"
+            ]
+          }
+        ],
+        "tags_before": 0,
+        "tags_after": 1,
+        "decal": {
+          "derived_object_key": "building:w96215688:wall",
+          "source_keys": [
+            "w96215688"
+          ],
+          "cull_mask": 2,
+          "transform": "[X: (0.243813, 0.0, 0.969822), Y: (0.969822, 0.0, -0.243813), Z: (0.0, 1.0, 0.0), O: (-177.1838, 6.284996, -809.4277)]",
+          "size": [
+            1.20000004768372,
+            0.0799999982118607,
+            0.649999976158142
+          ],
+          "tag_texture": "res://game/resources/textures/tag/predefined_tag.svg",
+          "full_footprint": {
+            "ok": true,
+            "size_ok": true,
+            "mapped_front_skin_coverage_ok": true,
+            "mapped_front_skin_area_m2": 0.780018925666809,
+            "whole_rectangle_framed": true,
+            "centre": [
+              -177.198303222656,
+              6.28499603271484,
+              -809.424072265625
+            ],
+            "actual_hit": [
+              -177.198303222656,
+              6.28499603271484,
+              -809.424072265625
+            ],
+            "origin": [
+              -177.18376159668,
+              6.28499603271484,
+              -809.427734375
+            ],
+            "basis_x": [
+              0.243812948465347,
+              0.0,
+              0.969822287559509
+            ],
+            "basis_y": [
+              0.969822287559509,
+              0.0,
+              -0.243812948465347
+            ],
+            "basis_z": [
+              0.0,
+              1.0,
+              0.0
+            ],
+            "size": [
+              1.20000004768372,
+              0.0799999982118607,
+              0.649999976158142
+            ],
+            "normal_depth_from_hit_m": [
+              -0.0249999991059303,
+              0.0549999991059303
+            ],
+            "corners": [
+              [
+                -177.344589233398,
+                5.95999622344971,
+                -810.005981445312
+              ],
+              [
+                -177.052017211914,
+                5.95999622344971,
+                -808.842163085938
+              ],
+              [
+                -177.052017211914,
+                6.60999584197998,
+                -808.842163085938
+              ],
+              [
+                -177.344589233398,
+                6.60999584197998,
+                -810.005981445312
+              ]
+            ],
+            "pixel_corners": [
+              [
+                758.96484375,
+                470.148468017578
+              ],
+              [
+                681.038696289062,
+                470.148712158203
+              ],
+              [
+                681.785461425781,
+                430.237762451172
+              ],
+              [
+                758.217956542969,
+                430.237487792969
+              ]
+            ],
+            "camera": [
+              -167.945358276367,
+              3.31146168708801,
+              -811.750244140625
+            ],
+            "box_nonreceiver_intersections": [],
+            "box_receiver_intersections": [
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/ProjectedUpperSiding",
+                "surface": 0,
+                "triangle": 2,
+                "clipped_area_m2": 0.780018925666809,
+                "layers": 2
+              }
+            ],
+            "camera_cone_intersections": [],
+            "unsupported_surfaces": [],
+            "inspected_meshes": [
+              {
+                "path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__area_r17241151_x_-1__z_-4/area_r17241151_x_-1__z_-4/Mesh",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Mesh",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/PlayableWorld/RoadsAndPaths/x_-1__z_-4__roads-pedestrian_x_-1__z_-4/roads-pedestrian_x_-1__z_-4/Mesh",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/PlayableWorld/RoadsAndPaths/x_-1__z_-4__roads_x_-1__z_-4/roads_x_-1__z_-4/Mesh",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/ExactOriginalWallSurfaces",
+                "layers": 2,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/CarportRoof",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/CarportPosts",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/CarportFascia",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/NearHorizontalSiding",
+                "layers": 2,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/ProjectedUpperSiding",
+                "layers": 2,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/ProjectedUpperClosures",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/PaleCompleteTrim",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/BlueOpaqueGlazing",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/MaroonClosedDoors",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/LocalPrivacyScreens",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/DoorHardware",
+                "layers": 1,
+                "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]"
+              },
+              {
+                "path": "/root/Main/Player/AvatarPivot/PlaceholderAvatar",
+                "layers": 1,
+                "transform": "[X: (-0.080207, 0.0, -0.996778), Y: (0.0, 1.0, 0.0), Z: (0.996778, 0.0, -0.080207), O: (-173.0378, 3.772969, -810.4701)]"
+              }
+            ],
+            "triangles_tested": 6842,
+            "scope": "Actual complete triangle/box and camera-cone clipping at this camera, including visible source-world geometry and stock avatar. Cone stops 1 mm before the coincident projected front plane; <=1e-9m2 is numerical zero. Full projected front area tolerance.0001m2, hit-origin1mm. This finite geometry result does not replace independent inspection of the whole unchanged SVG in the original PNG."
+          }
+        },
+        "physics_counter": 1694,
+        "process_counter": 1693,
+        "drawn_counter": 1693
+      },
+      {
+        "record_state": "complete",
+        "setup_support_query": {
+          "terrain_basis": {
+            "ok": true,
+            "y": 2.98389834992111,
+            "xz": [
+              -172.379135131836,
+              -804.363952636719
+            ],
+            "triangles": [
+              {
+                "triangle": 32,
+                "y": 2.98389834992111,
+                "barycentric": [
+                  0.136373519897461,
+                  0.476778507232666,
+                  0.386847972869873
+                ]
+              }
+            ],
+            "binding": [
+              {
+                "key": "land:w26767313:x_-1__z_-4",
+                "body_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision",
+                "shape_index": 0,
+                "shape_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision/Shape",
+                "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]",
+                "faces_sha256": "61cc1aa367a01ec21737f26a38c6de76a3d0ae453a2bb893bd5a2ad84e64a507",
+                "triangle_begin": 0,
+                "triangle_end_exclusive": 94,
+                "triangles": 94,
+                "scope": "Actual unchanged native LAND faces; full before/after surface snapshot also bound."
+              },
+              {
+                "key": "land:w26767313:x_-1__z_-3",
+                "body_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+                "shape_index": 0,
+                "shape_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+                "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]",
+                "faces_sha256": "16556dc6a9f20005362834829d65f6ac555bb5b8cad08049894f2857b7356c2b",
+                "triangle_begin": 94,
+                "triangle_end_exclusive": 222,
+                "triangles": 128,
+                "scope": "Actual unchanged native LAND faces; full before/after surface snapshot also bound."
+              }
+            ]
+          },
+          "query_performed": true,
+          "from": [
+            -172.379135131836,
+            3.48389840126038,
+            -804.363952636719
+          ],
+          "to": [
+            -172.379135131836,
+            2.48389840126038,
+            -804.363952636719
+          ],
+          "collision_mask": 1,
+          "excludes_only_player": true,
+          "actual_hit": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-4",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision/Shape",
+            "structural_role": "",
+            "collision_layer": 5,
+            "spray_receiver_group": false,
+            "resolved_receiver_metadata": {
+              "receiver_kind": "none",
+              "opaque": true,
+              "derived_object_key": "land:w26767313:x_-1__z_-4",
+              "source_keys": [
+                "w26767313",
+                "w29399800"
+              ]
+            },
+            "hit": true,
+            "position": [
+              -172.379135131836,
+              2.98389840126038,
+              -804.363952636719
+            ],
+            "normal": [
+              0.0126549005508423,
+              0.999893426895142,
+              -0.00728047545999289
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true
+          }
+        },
+        "timing_usec": {
+          "clock": "Time.get_ticks_usec monotonic wall",
+          "stock_call_usec": 3440,
+          "post_call_observation_usec": 6,
+          "marker_call_usec": 0,
+          "setup_and_settle_usec": 798097,
+          "final_aim_and_wait_usec": 429005,
+          "pre_call_observation_usec": 3405,
+          "attempt_total_wall_usec": 1234174
+        },
+        "label": "BlueOpaqueGlazing",
+        "performed": true,
+        "skipped_reason": "",
+        "ok": true,
+        "aim": {
+          "ok": true,
+          "yaw_degrees": 110.929437334725,
+          "pitch_degrees": -7.99885764289852
+        },
+        "aim_physics_start": 1734,
+        "explicit_final_aim_physics_waits": 20,
+        "final_camera": {
+          "pivot": [
+            -172.379135131836,
+            4.98409366607666,
+            -804.363952636719
+          ],
+          "camera": [
+            -167.097015380859,
+            5.74943494796753,
+            -805.691833496094
+          ],
+          "camera_near": 0.0799999982118607,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "arm_margin": 0.150000005960464,
+          "arm_collision_mask": 1,
+          "pivot_to_camera_length_m": 5.49998235702515,
+          "segment_hit": {
+            "hit": false,
+            "excludes_only_player": true
+          },
+          "segment_hit_distance_m": 5.49998235702515,
+          "segment_endpoint_allowance_m": 0.04,
+          "segment_clear": true,
+          "land_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-4",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision/Shape",
+            "structural_role": "",
+            "collision_layer": 5,
+            "spray_receiver_group": false,
+            "resolved_receiver_metadata": {
+              "receiver_kind": "none",
+              "opaque": true,
+              "derived_object_key": "land:w26767313:x_-1__z_-4",
+              "source_keys": [
+                "w26767313",
+                "w29399800"
+              ]
+            },
+            "hit": true,
+            "position": [
+              -167.097015380859,
+              2.90737795829773,
+              -805.691833496094
+            ],
+            "normal": [
+              0.0126549005508423,
+              0.999893426895142,
+              -0.00728047545999289
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true,
+            "face_index": 32
+          },
+          "query_from": [
+            -167.097015380859,
+            5.74943494796753,
+            -805.691833496094
+          ],
+          "query_to": [
+            -167.097015380859,
+            -14.2505645751953,
+            -805.691833496094
+          ],
+          "expected_camera_land": {
+            "ok": true,
+            "actual_camera_xz": [
+              -167.097015380859,
+              -805.691833496094
+            ],
+            "tile": "x_-1__z_-4",
+            "chunk_size_m": 256.0,
+            "expected_object_key": "land:w26767313:x_-1__z_-4",
+            "expected_shape_index": 0,
+            "source_file": "res://generated/world/chunks/x_-1__z_-4.json",
+            "source_sha256": "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac",
+            "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+          },
+          "land_identity_ok": true,
+          "camera_minus_land_y_m": 2.8420569896698,
+          "camera_above_land": true,
+          "physics_counter": 1754,
+          "process_counter": 1753
+        },
+        "target": [
+          -175.708028157552,
+          4.50176167488098,
+          -803.527079264323
+        ],
+        "player": [
+          -172.379135131836,
+          2.98409366607666,
+          -804.363952636719
+        ],
+        "stock_player_grounded": true,
+        "player_land_state": {
+          "ok": true,
+          "source_keys": [
+            "land:w26767313:x_-1__z_-4",
+            "land:w26767313:x_-1__z_-3"
+          ],
+          "shape_index": 0,
+          "foot": [
+            -172.379135131836,
+            2.98409366607666,
+            -804.363952636719
+          ],
+          "player_origin": [
+            -172.379135131836,
+            2.98409366607666,
+            -804.363952636719
+          ],
+          "capsule_axis": [
+            [
+              -172.379135131836,
+              3.33409380912781,
+              -804.363952636719
+            ],
+            [
+              -172.379135131836,
+              4.4340934753418,
+              -804.363952636719
+            ]
+          ],
+          "capsule_radius_m": 0.349999994039536,
+          "capsule_height_m": 1.79999995231628,
+          "actual_stock_transform": true,
+          "nearest_land_triangle": 32,
+          "capsule_land_clearance_m": 0.000157684087753296,
+          "foot_land_y": 2.98389834992111,
+          "foot_minus_land_m": 0.000195316155554792,
+          "foot_source_triangles": [
+            {
+              "triangle": 32,
+              "y": 2.98389834992111
+            }
+          ],
+          "safe_margin_m": 0.00100000004749745,
+          "solver_qualification_m": 0.00400000018998981,
+          "slope_derived_maximum_foot_gap_m": 0.00962057710180349,
+          "scope": "Actual sampled native capsule-to-LAND triangle distance. Negative means geometric overlap;2mm or4x safe-margin bounds solver-scale qualification. Independent of on_floor, empty contacts are retained; no continuous swept-volume proof."
+        },
+        "actual_ray": {
+          "collider_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/PhysicalDetails_NoSprayReceiver",
+          "exact_structure_body": true,
+          "shape_index": 6,
+          "derived_object_key": "prototype:building:w96215688:wall",
+          "feature_kind": "bounded_facade_detail",
+          "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/PhysicalDetails_NoSprayReceiver/BlueOpaqueGlazing",
+          "structural_role": "BlueOpaqueGlazing",
+          "collision_layer": 5,
+          "spray_receiver_group": false,
+          "resolved_receiver_metadata": {
+            "receiver_kind": "none",
+            "opaque": false,
+            "derived_object_key": "prototype:building:w96215688:wall",
+            "source_keys": [
+              "w96215688"
+            ]
+          }
+        },
+        "actual_ray_origin": [
+          -167.097015380859,
+          5.74943494796753,
+          -805.691833496094
+        ],
+        "actual_ray_direction": [
+          -0.960388600826263,
+          -0.139153495430946,
+          0.241433247923851
+        ],
+        "actual_hit_position": [
+          -175.708038330078,
+          4.50175952911377,
+          -803.527099609375
+        ],
+        "actual_hit_normal": [
+          0.969721257686615,
+          0.0,
+          -0.244214445352554
+        ],
+        "actual_ray_distance_m": 8.96618556976318,
+        "actual_player_hit_distance_m": 3.75302934646606,
+        "maximum_stock_range_m": 6.0,
+        "conservative_attempt_limit_m": 5.7,
+        "expected_result": "receiver_rejection",
+        "result": [
+          "receiver_rejection"
+        ],
+        "identity_signals": [],
+        "tags_before": 1,
+        "tags_after": 1,
+        "decal": {},
+        "physics_counter": 1754,
+        "process_counter": 1753,
+        "drawn_counter": 1753
+      },
+      {
+        "record_state": "complete",
+        "setup_support_query": {
+          "terrain_basis": {
+            "ok": true,
+            "y": 2.98207735536494,
+            "xz": [
+              -172.490814208984,
+              -804.808166503906
+            ],
+            "triangles": [
+              {
+                "triangle": 32,
+                "y": 2.98207735536494,
+                "barycentric": [
+                  0.15025520324707,
+                  0.459406852722168,
+                  0.390337944030762
+                ]
+              }
+            ],
+            "binding": [
+              {
+                "key": "land:w26767313:x_-1__z_-4",
+                "body_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision",
+                "shape_index": 0,
+                "shape_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision/Shape",
+                "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]",
+                "faces_sha256": "61cc1aa367a01ec21737f26a38c6de76a3d0ae453a2bb893bd5a2ad84e64a507",
+                "triangle_begin": 0,
+                "triangle_end_exclusive": 94,
+                "triangles": 94,
+                "scope": "Actual unchanged native LAND faces; full before/after surface snapshot also bound."
+              },
+              {
+                "key": "land:w26767313:x_-1__z_-3",
+                "body_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+                "shape_index": 0,
+                "shape_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+                "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]",
+                "faces_sha256": "16556dc6a9f20005362834829d65f6ac555bb5b8cad08049894f2857b7356c2b",
+                "triangle_begin": 94,
+                "triangle_end_exclusive": 222,
+                "triangles": 128,
+                "scope": "Actual unchanged native LAND faces; full before/after surface snapshot also bound."
+              }
+            ]
+          },
+          "query_performed": true,
+          "from": [
+            -172.490814208984,
+            3.4820773601532,
+            -804.808166503906
+          ],
+          "to": [
+            -172.490814208984,
+            2.4820773601532,
+            -804.808166503906
+          ],
+          "collision_mask": 1,
+          "excludes_only_player": true,
+          "actual_hit": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-4",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision/Shape",
+            "structural_role": "",
+            "collision_layer": 5,
+            "spray_receiver_group": false,
+            "resolved_receiver_metadata": {
+              "receiver_kind": "none",
+              "opaque": true,
+              "derived_object_key": "land:w26767313:x_-1__z_-4",
+              "source_keys": [
+                "w26767313",
+                "w29399800"
+              ]
+            },
+            "hit": true,
+            "position": [
+              -172.490814208984,
+              2.9820773601532,
+              -804.808166503906
+            ],
+            "normal": [
+              0.0126549005508423,
+              0.999893426895142,
+              -0.00728047545999289
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true
+          }
+        },
+        "timing_usec": {
+          "clock": "Time.get_ticks_usec monotonic wall",
+          "stock_call_usec": 29,
+          "post_call_observation_usec": 3,
+          "marker_call_usec": 0,
+          "setup_and_settle_usec": 805123,
+          "final_aim_and_wait_usec": 427910,
+          "pre_call_observation_usec": 3075,
+          "attempt_total_wall_usec": 1236316
+        },
+        "label": "PaleCompleteTrim",
+        "performed": true,
+        "skipped_reason": "",
+        "ok": true,
+        "aim": {
+          "ok": true,
+          "yaw_degrees": 110.930335374051,
+          "pitch_degrees": -1.74404927446241
+        },
+        "aim_physics_start": 1791,
+        "explicit_final_aim_physics_waits": 20,
+        "final_camera": {
+          "pivot": [
+            -172.490814208984,
+            4.98227262496948,
+            -804.808166503906
+          ],
+          "camera": [
+            -167.159240722656,
+            5.14966344833374,
+            -806.148498535156
+          ],
+          "camera_near": 0.0799999982118607,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "arm_margin": 0.150000005960464,
+          "arm_collision_mask": 1,
+          "pivot_to_camera_length_m": 5.50001668930054,
+          "segment_hit": {
+            "hit": false,
+            "excludes_only_player": true
+          },
+          "segment_hit_distance_m": 5.50001668930054,
+          "segment_endpoint_allowance_m": 0.04,
+          "segment_clear": true,
+          "land_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-4",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision/Shape",
+            "structural_role": "",
+            "collision_layer": 5,
+            "spray_receiver_group": false,
+            "resolved_receiver_metadata": {
+              "receiver_kind": "none",
+              "opaque": true,
+              "derived_object_key": "land:w26767313:x_-1__z_-4",
+              "source_keys": [
+                "w26767313",
+                "w29399800"
+              ]
+            },
+            "hit": true,
+            "position": [
+              -167.159240722656,
+              2.90484023094177,
+              -806.148498535156
+            ],
+            "normal": [
+              0.0126549005508423,
+              0.999893426895142,
+              -0.00728047545999289
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true,
+            "face_index": 32
+          },
+          "query_from": [
+            -167.159240722656,
+            5.14966344833374,
+            -806.148498535156
+          ],
+          "query_to": [
+            -167.159240722656,
+            -14.8503360748291,
+            -806.148498535156
+          ],
+          "expected_camera_land": {
+            "ok": true,
+            "actual_camera_xz": [
+              -167.159240722656,
+              -806.148498535156
+            ],
+            "tile": "x_-1__z_-4",
+            "chunk_size_m": 256.0,
+            "expected_object_key": "land:w26767313:x_-1__z_-4",
+            "expected_shape_index": 0,
+            "source_file": "res://generated/world/chunks/x_-1__z_-4.json",
+            "source_sha256": "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac",
+            "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+          },
+          "land_identity_ok": true,
+          "camera_minus_land_y_m": 2.24482321739197,
+          "camera_above_land": true,
+          "physics_counter": 1811,
+          "process_counter": 1810
+        },
+        "target": [
+          -175.755879720052,
+          4.87976169586182,
+          -803.987325032552
+        ],
+        "player": [
+          -172.490814208984,
+          2.98227262496948,
+          -804.808166503906
+        ],
+        "stock_player_grounded": true,
+        "player_land_state": {
+          "ok": true,
+          "source_keys": [
+            "land:w26767313:x_-1__z_-4",
+            "land:w26767313:x_-1__z_-3"
+          ],
+          "shape_index": 0,
+          "foot": [
+            -172.490814208984,
+            2.98227262496948,
+            -804.808166503906
+          ],
+          "player_origin": [
+            -172.490814208984,
+            2.98227262496948,
+            -804.808166503906
+          ],
+          "capsule_axis": [
+            [
+              -172.490814208984,
+              3.33227276802063,
+              -804.808166503906
+            ],
+            [
+              -172.490814208984,
+              4.43227291107178,
+              -804.808166503906
+            ]
+          ],
+          "capsule_radius_m": 0.349999994039536,
+          "capsule_height_m": 1.79999995231628,
+          "actual_stock_transform": true,
+          "nearest_land_triangle": 32,
+          "capsule_land_clearance_m": 0.000158131122589111,
+          "foot_land_y": 2.98207735536494,
+          "foot_minus_land_m": 0.000195269604546411,
+          "foot_source_triangles": [
+            {
+              "triangle": 32,
+              "y": 2.98207735536494
+            }
+          ],
+          "safe_margin_m": 0.00100000004749745,
+          "solver_qualification_m": 0.00400000018998981,
+          "slope_derived_maximum_foot_gap_m": 0.00962057710180349,
+          "scope": "Actual sampled native capsule-to-LAND triangle distance. Negative means geometric overlap;2mm or4x safe-margin bounds solver-scale qualification. Independent of on_floor, empty contacts are retained; no continuous swept-volume proof."
+        },
+        "actual_ray": {
+          "collider_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/PhysicalDetails_NoSprayReceiver",
+          "exact_structure_body": true,
+          "shape_index": 5,
+          "derived_object_key": "prototype:building:w96215688:wall",
+          "feature_kind": "bounded_facade_detail",
+          "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/PhysicalDetails_NoSprayReceiver/PaleCompleteTrim",
+          "structural_role": "PaleCompleteTrim",
+          "collision_layer": 5,
+          "spray_receiver_group": false,
+          "resolved_receiver_metadata": {
+            "receiver_kind": "none",
+            "opaque": false,
+            "derived_object_key": "prototype:building:w96215688:wall",
+            "source_keys": [
+              "w96215688"
+            ]
+          }
+        },
+        "actual_ray_origin": [
+          -167.159240722656,
+          5.14966344833374,
+          -806.148498535156
+        ],
+        "actual_ray_direction": [
+          -0.969371140003204,
+          -0.0304348357021809,
+          0.243707686662674
+        ],
+        "actual_hit_position": [
+          -175.755859375,
+          4.87975978851318,
+          -803.987243652344
+        ],
+        "actual_hit_normal": [
+          0.969724535942078,
+          0.0,
+          -0.244201466441154
+        ],
+        "actual_ray_distance_m": 8.86824226379395,
+        "actual_player_hit_distance_m": 3.86456871032715,
+        "maximum_stock_range_m": 6.0,
+        "conservative_attempt_limit_m": 5.7,
+        "expected_result": "receiver_rejection",
+        "result": [
+          "receiver_rejection"
+        ],
+        "identity_signals": [],
+        "tags_before": 1,
+        "tags_after": 1,
+        "decal": {},
+        "physics_counter": 1811,
+        "process_counter": 1810,
+        "drawn_counter": 1810
+      },
+      {
+        "record_state": "complete",
+        "setup_support_query": {
+          "terrain_basis": {
+            "ok": true,
+            "y": 2.8424994920216,
+            "xz": [
+              -168.754470825195,
+              -817.483154296875
+            ],
+            "triangles": [
+              {
+                "triangle": 32,
+                "y": 2.8424994920216,
+                "barycentric": [
+                  0.546348571777344,
+                  0.180074214935303,
+                  0.273577213287354
+                ]
+              }
+            ],
+            "binding": [
+              {
+                "key": "land:w26767313:x_-1__z_-4",
+                "body_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision",
+                "shape_index": 0,
+                "shape_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision/Shape",
+                "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]",
+                "faces_sha256": "61cc1aa367a01ec21737f26a38c6de76a3d0ae453a2bb893bd5a2ad84e64a507",
+                "triangle_begin": 0,
+                "triangle_end_exclusive": 94,
+                "triangles": 94,
+                "scope": "Actual unchanged native LAND faces; full before/after surface snapshot also bound."
+              },
+              {
+                "key": "land:w26767313:x_-1__z_-3",
+                "body_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+                "shape_index": 0,
+                "shape_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+                "shape_transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]",
+                "faces_sha256": "16556dc6a9f20005362834829d65f6ac555bb5b8cad08049894f2857b7356c2b",
+                "triangle_begin": 94,
+                "triangle_end_exclusive": 222,
+                "triangles": 128,
+                "scope": "Actual unchanged native LAND faces; full before/after surface snapshot also bound."
+              }
+            ]
+          },
+          "query_performed": true,
+          "from": [
+            -168.754470825195,
+            3.34249949455261,
+            -817.483154296875
+          ],
+          "to": [
+            -168.754470825195,
+            2.34249949455261,
+            -817.483154296875
+          ],
+          "collision_mask": 1,
+          "excludes_only_player": true,
+          "actual_hit": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-4",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision/Shape",
+            "structural_role": "",
+            "collision_layer": 5,
+            "spray_receiver_group": false,
+            "resolved_receiver_metadata": {
+              "receiver_kind": "none",
+              "opaque": true,
+              "derived_object_key": "land:w26767313:x_-1__z_-4",
+              "source_keys": [
+                "w26767313",
+                "w29399800"
+              ]
+            },
+            "hit": true,
+            "position": [
+              -168.754470825195,
+              2.84249949455261,
+              -817.483154296875
+            ],
+            "normal": [
+              0.0126549005508423,
+              0.999893426895142,
+              -0.00728047545999289
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true
+          }
+        },
+        "timing_usec": {
+          "clock": "Time.get_ticks_usec monotonic wall",
+          "stock_call_usec": 29,
+          "post_call_observation_usec": 3,
+          "marker_call_usec": 0,
+          "setup_and_settle_usec": 786480,
+          "final_aim_and_wait_usec": 412251,
+          "pre_call_observation_usec": 3179,
+          "attempt_total_wall_usec": 1202116
+        },
+        "label": "CarportRoof",
+        "performed": true,
+        "skipped_reason": "",
+        "ok": true,
+        "aim": {
+          "ok": true,
+          "yaw_degrees": 110.995537899956,
+          "pitch_degrees": 18.0751871599272
+        },
+        "aim_physics_start": 1848,
+        "explicit_final_aim_physics_waits": 20,
+        "final_camera": {
+          "pivot": [
+            -168.754470825195,
+            4.8426947593689,
+            -817.483154296875
+          ],
+          "camera": [
+            -163.685150146484,
+            3.13623142242432,
+            -818.763732910156
+          ],
+          "camera_near": 0.0799999982118607,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "arm_margin": 0.150000005960464,
+          "arm_collision_mask": 1,
+          "pivot_to_camera_length_m": 5.49999189376831,
+          "segment_hit": {
+            "hit": false,
+            "excludes_only_player": true
+          },
+          "segment_hit_distance_m": 5.49999189376831,
+          "segment_endpoint_allowance_m": 0.04,
+          "segment_clear": true,
+          "land_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-4",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-4__land_w26767313_x_-1__z_-4/land_w26767313_x_-1__z_-4/Collision/Shape",
+            "structural_role": "",
+            "collision_layer": 5,
+            "spray_receiver_group": false,
+            "resolved_receiver_metadata": {
+              "receiver_kind": "none",
+              "opaque": true,
+              "derived_object_key": "land:w26767313:x_-1__z_-4",
+              "source_keys": [
+                "w26767313",
+                "w29399800"
+              ]
+            },
+            "hit": true,
+            "position": [
+              -163.685150146484,
+              2.7690167427063,
+              -818.763732910156
+            ],
+            "normal": [
+              0.0126549005508423,
+              0.999893426895142,
+              -0.00728047545999289
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true,
+            "face_index": 32
+          },
+          "query_from": [
+            -163.685150146484,
+            3.13623142242432,
+            -818.763732910156
+          ],
+          "query_to": [
+            -163.685150146484,
+            -16.86376953125,
+            -818.763732910156
+          ],
+          "expected_camera_land": {
+            "ok": true,
+            "actual_camera_xz": [
+              -163.685150146484,
+              -818.763732910156
+            ],
+            "tile": "x_-1__z_-4",
+            "chunk_size_m": 256.0,
+            "expected_object_key": "land:w26767313:x_-1__z_-4",
+            "expected_shape_index": 0,
+            "source_file": "res://generated/world/chunks/x_-1__z_-4.json",
+            "source_sha256": "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac",
+            "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+          },
+          "land_identity_ok": true,
+          "camera_minus_land_y_m": 0.367214679718018,
+          "camera_above_land": true,
+          "physics_counter": 1868,
+          "process_counter": 1867
+        },
+        "target": [
+          -172.147883895051,
+          5.985,
+          -816.625938359354
+        ],
+        "player": [
+          -168.754470825195,
+          2.8426947593689,
+          -817.483154296875
+        ],
+        "stock_player_grounded": true,
+        "player_land_state": {
+          "ok": true,
+          "source_keys": [
+            "land:w26767313:x_-1__z_-4",
+            "land:w26767313:x_-1__z_-3"
+          ],
+          "shape_index": 0,
+          "foot": [
+            -168.754470825195,
+            2.8426947593689,
+            -817.483154296875
+          ],
+          "player_origin": [
+            -168.754470825195,
+            2.8426947593689,
+            -817.483154296875
+          ],
+          "capsule_axis": [
+            [
+              -168.754470825195,
+              3.19269490242004,
+              -817.483154296875
+            ],
+            [
+              -168.754470825195,
+              4.29269504547119,
+              -817.483154296875
+            ]
+          ],
+          "capsule_radius_m": 0.349999994039536,
+          "capsule_height_m": 1.79999995231628,
+          "actual_stock_transform": true,
+          "nearest_land_triangle": 32,
+          "capsule_land_clearance_m": 0.000158131122589111,
+          "foot_land_y": 2.8424994920216,
+          "foot_minus_land_m": 0.000195267347294248,
+          "foot_source_triangles": [
+            {
+              "triangle": 32,
+              "y": 2.8424994920216
+            }
+          ],
+          "safe_margin_m": 0.00100000004749745,
+          "solver_qualification_m": 0.00400000018998981,
+          "slope_derived_maximum_foot_gap_m": 0.00962057710180349,
+          "scope": "Actual sampled native capsule-to-LAND triangle distance. Negative means geometric overlap;2mm or4x safe-margin bounds solver-scale qualification. Independent of on_floor, empty contacts are retained; no continuous swept-volume proof."
+        },
+        "actual_ray": {
+          "collider_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/PhysicalDetails_NoSprayReceiver",
+          "exact_structure_body": true,
+          "shape_index": 1,
+          "derived_object_key": "prototype:building:w96215688:wall",
+          "feature_kind": "bounded_facade_detail",
+          "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyNorthpoint1240Study/PhysicalDetails_NoSprayReceiver/CarportRoof",
+          "structural_role": "CarportRoof",
+          "collision_layer": 5,
+          "spray_receiver_group": false,
+          "resolved_receiver_metadata": {
+            "receiver_kind": "none",
+            "opaque": false,
+            "derived_object_key": "prototype:building:w96215688:wall",
+            "source_keys": [
+              "w96215688"
+            ]
+          }
+        },
+        "actual_ray_origin": [
+          -163.685150146484,
+          3.13623142242432,
+          -818.763732910156
+        ],
+        "actual_ray_direction": [
+          -0.921695530414581,
+          0.310264855623245,
+          0.232837125658989
+        ],
+        "actual_hit_position": [
+          -172.147903442383,
+          5.98499965667725,
+          -816.625915527344
+        ],
+        "actual_hit_normal": [
+          0.0,
+          -1.0,
+          0.0
+        ],
+        "actual_ray_distance_m": 9.18171787261963,
+        "actual_player_hit_distance_m": 4.70364999771118,
+        "maximum_stock_range_m": 6.0,
+        "conservative_attempt_limit_m": 5.7,
+        "expected_result": "receiver_rejection",
+        "result": [
+          "receiver_rejection"
+        ],
+        "identity_signals": [],
+        "tags_before": 1,
+        "tags_after": 1,
+        "decal": {},
+        "physics_counter": 1868,
+        "process_counter": 1867,
+        "drawn_counter": 1867
+      }
+    ],
+    "scope": "Finite source002 study mechanics, unchanged controls; no stairs/interior/global traversal or extra jetpack phase claim."
+  }
+}
