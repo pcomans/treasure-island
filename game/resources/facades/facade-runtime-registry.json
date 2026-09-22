@@ -759,7 +759,7 @@
           "study_config_sha256": "11a8784bbb08ea4a6244b1da1dcc8e0c2b589ef66c55a0bd2cc8ff20ad16cd6d",
           "target_chunk_id": "x_-1__z_1"
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "11a8784bbb08ea4a6244b1da1dcc8e0c2b589ef66c55a0bd2cc8ff20ad16cd6d",
         "prototype_sha256": "bb47a10d3464f162516ece9ac0591bdead1791e847b89eff35fd3f59adc56c85",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -2017,7 +2017,7 @@
           "study_config_sha256": "2ae853642ed360f81ea6dfe53089fa909531af8776f40462fb129076f16b6795",
           "target_chunk_id": "x_0__z_-2"
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "2ae853642ed360f81ea6dfe53089fa909531af8776f40462fb129076f16b6795",
         "prototype_sha256": "33c945be3699fe7f94874d7a65ff0d01963092d0c0cb85deacaf4f794d9996d5",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -3280,7 +3280,7 @@
             "runtime_attachment": true
           }
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a",
         "prototype_sha256": "6950aab112f73fdf78c1cad2f3deca72ac7e46b2a07faffe04f82987a1e07498",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -3544,7 +3544,7 @@
             "runtime_attachment": true
           }
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "33b54fb72cf829e933a0e386e984f6ffe9d9a7c9d335ecb034e779c12bf89a26",
         "prototype_sha256": "80930edee46371825bfb7b337b94bdbb4e3b7fc064aa2ba3061b6a86886af884",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -4166,7 +4166,7 @@
             "runtime_attachment": true
           }
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86",
         "prototype_sha256": "25284afdd779f6b491da47218fc6fdd169dad3bb3c56da70d76680cc91781fcb",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -4409,7 +4409,7 @@
           "schema_version": "ti.mariner-1212-study/1",
           "source_key": "w96215649"
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "f56009b6ccb5bea7ed63911c7d940573996aad4e1c5ccaa55267adbd150b3066",
         "prototype_sha256": "0594ea7a6e1f09a918349ee5af58722896e3b300ae640d8c1d4025b8219bc2a9",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -4666,7 +4666,7 @@
           "schema_version": "ti.mariner-1202-study/1",
           "source_key": "w96215651"
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "8490ec8dab6302c9892b37b86542ccc18793dfe309ac7d589fb9dc9cad9ddf22",
         "prototype_sha256": "c81cf174af5f91a21dc95306b77296d8d82152a54ef301e87853944b3b78c59c",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -4897,7 +4897,7 @@
           "schema_version": "ti.bayside-1220-study/1",
           "source_key": "w96215652"
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "984ebbde55fa5dcb1cea8b0d57c20e2773982bbb195e1a52b16dec250ec0735b",
         "prototype_sha256": "dcfb622e4f5d2759459e17d1ab465ae9fa772167f335a2d1e0c88a111482273d",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -5149,7 +5149,7 @@
           "schema_version": "ti.northpoint-1227-study/1",
           "source_key": "w96215653"
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "2e8573eb855c110c0d13545d63f8fd467a25a68613d16b91cb1336462baadde7",
         "prototype_sha256": "6492b8e48226ed09c7e7171bd7fd51e25b8e347c38d87d2d0931b2b3337fb2f4",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -5397,7 +5397,7 @@
           "schema_version": "ti.northpoint-1239-study/1",
           "source_key": "w96215658"
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "bf1a2073f0d371242d5636dcb47820cb6cbf47f8df9300de7aab95da3cfa6174",
         "prototype_sha256": "3573433b35a317f40f908c64ef05519559918f5ccca0f9af14849af2b932732d",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -5636,7 +5636,7 @@
           "schema_version": "ti.bayside-1222-study/1",
           "source_key": "w96215661"
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "65a67decfd83b376209c8c8f80ab7f456be2006a8a907c2f36211c3e863e0ab2",
         "prototype_sha256": "639a5ce1cce22b5635f3bccfe6cb1c7764988662b826f0c25c4183fe2ec787f9",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -5856,7 +5856,7 @@
           "schema_version": "ti.northpoint-1238-study/1",
           "source_key": "w96215669"
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "a7f733e4f67351f9919769ff1329f263efbd43ca0d39a3fb30c3ac77e626c2a9",
         "prototype_sha256": "2046c934f4fdaa35f12c7e343910b26a7e1cb2d7e489adc22467bcd1b41bb45f",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -6068,7 +6068,7 @@
           "schema_version": "ti.northern-canopy-free-study/1",
           "source_key": "w96215672"
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "54659ba6dde676f8a3ea122d654ff9532ffc706c6ea95b0913e4ef10fa5100b0",
         "prototype_sha256": "2a01cf9fe20d81b381e445e3531377a2802082f69424445196ede570d15b2f96",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -6296,7 +6296,7 @@
           "schema_version": "ti.mariner-1206-study/1",
           "source_key": "w96215677"
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "5327998befca469042db9ac728de697e56fb311f9f889bb1bc867617425d4f97",
         "prototype_sha256": "906922118fd881a5668962c87964b8c46db32d92a5483fd072a4c2a90b521c56",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -6524,7 +6524,7 @@
           "schema_version": "ti.mariner-1219-study/1",
           "source_key": "w96215680"
         },
-        "dispatch_sha256": "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54",
+        "dispatch_sha256": "2f592c6d4cc75f222f32fded5d0ab1591c4af250f45e311bbaf3828098f54228",
         "prototype_config_sha256": "5fd7eeb31c4d2cfac52aadff65f1bc7f35458d3e0c8d8469411f75ce032b9f21",
         "prototype_sha256": "216e83f6ee69313d77ef5c2007720a126e07cff5e30ce23401a1d28cdac84748",
         "site_kit_sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
@@ -6571,7 +6571,7 @@
   "adapter_contract": {
     "path": "res://game/resources/facades/facade-runtime-adapter-contracts.json",
     "schema_version": "ti.facade-runtime-adapter-contracts/25",
-    "sha256": "1ed5be304a3aff2ce6282397c0fc6e0af762e195c66b5ecebe71ca6a7ba22432"
+    "sha256": "3c895baac0ebbd5ec40797adc55812a8763f72ef9e0b23d41660c89c2f0ebf69"
   },
   "build_contract": {
     "authoring_catalog_sha256": "30840989f06869d87a844044e61ca495d17d7bdd25da5df3fbe3293f55dfaf79",

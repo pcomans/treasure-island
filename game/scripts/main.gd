@@ -7,11 +7,11 @@ const EXPECTED_MANIFEST_HASH := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e
 const EXPECTED_CHUNKS := 38
 const EXPECTED_PLAYABLE_ROWS := 735
 const EXPECTED_CONTEXT_ROWS := 4
-const EXPECTED_MESHES := 1159
-const EXPECTED_SURFACES := 1174
-const EXPECTED_TRIANGLES := 153873
-const EXPECTED_STATIC_BODIES := 484
-const EXPECTED_SHAPES := 569
+const EXPECTED_MESHES := 1192
+const EXPECTED_SURFACES := 1207
+const EXPECTED_TRIANGLES := 164001
+const EXPECTED_STATIC_BODIES := 488
+const EXPECTED_SHAPES := 594
 const EXPECTED_VEGETATION_SEED := 1414092337
 const EXPECTED_VEGETATION_INSTANCES := 124
 const EXPECTED_VEGETATION_ASSETS := 15
@@ -150,6 +150,8 @@ func _finish_mac_export_smoke(report: Dictionary) -> void:
 	var projected_1222_attachment_valid: bool = _mac_export_projected_family_attachment_valid(preload("res://game/scripts/world/facades/bayside_1222_live_replacement.gd"), "1222")
 	var projected_1227_attachment_valid: bool = _mac_export_projected_family_attachment_valid(preload("res://game/scripts/world/facades/northpoint_1227_live_replacement.gd"), "1227")
 	var projected_1202_attachment_valid: bool = _mac_export_projected_family_attachment_valid(preload("res://game/scripts/world/facades/mariner_1202_live_replacement.gd"), "1202")
+	var projected_1234_attachment_valid: bool = _mac_export_projected_family_attachment_valid(preload("res://game/scripts/world/facades/northpoint_1234_live_replacement.gd"), "1234")
+	var projected_1215_attachment_valid: bool = _mac_export_projected_family_attachment_valid(preload("res://game/scripts/world/facades/bayside_1215_live_replacement.gd"), "1215")
 	var spawn := world_root.get_spawn_transform()
 	var visual_defaults_valid := _visual_defaults_valid()
 	var semantic_materials_valid := _semantic_materials_valid()
@@ -171,6 +173,8 @@ func _finish_mac_export_smoke(report: Dictionary) -> void:
 		and projected_1222_attachment_valid \
 		and projected_1227_attachment_valid \
 		and projected_1202_attachment_valid \
+		and projected_1234_attachment_valid \
+		and projected_1215_attachment_valid \
 		and family_1239_attachment_valid \
 		and str(report.get("content_sha256", "")) == EXPECTED_MANIFEST_HASH \
 		and spawn.origin.is_equal_approx(EXPECTED_FERRY_SPAWN_ORIGIN) \
@@ -1065,6 +1069,8 @@ func _mac_export_family_pair_valid(wall: Node3D, roof: Node3D, adapter: Script) 
 
 func _mac_export_projected_family_spec(adapter: Script) -> Dictionary:
 	match str(adapter.SOURCE_KEY):
+		"w96215666": return {"prefix": "Bayside1215Live", "wall": {"meshes": 17, "surfaces": 17, "triangles": 4736, "bodies": 3, "shapes": 13}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 10, "bodies": 1, "shapes": 1}, "detail_shapes": 11, "meshes": 18, "channels": 234, "shapes": 14, "detail_tangents": 16, "projected_runs": [1, 3, 4, 5, 19], "projected_triangles": 6, "public_roof": true}
+		"w96215659": return {"prefix": "Northpoint1234Live", "wall": {"meshes": 18, "surfaces": 18, "triangles": 5484, "bodies": 3, "shapes": 14}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 12, "meshes": 19, "channels": 247, "shapes": 15, "detail_tangents": 17, "projected_runs": [1, 2, 3, 4, 17, 18, 19, 20, 22, 23, 24, 25], "projected_triangles": 6, "public_roof": true}
 		"w96215661": return {"prefix": "Bayside1222Live", "wall": {"meshes": 15, "surfaces": 15, "triangles": 5336, "bodies": 3, "shapes": 11}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 10, "bodies": 1, "shapes": 1}, "detail_shapes": 9, "meshes": 16, "channels": 208, "shapes": 12, "detail_tangents": 14, "projected_runs": [10, 11, 12, 15, 16, 19], "projected_triangles": 6, "public_roof": false}
 		"w96215653": return {"prefix": "Northpoint1227Live", "wall": {"meshes": 19, "surfaces": 19, "triangles": 5528, "bodies": 3, "shapes": 15}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 13, "meshes": 20, "channels": 260, "shapes": 16, "detail_tangents": 18, "projected_runs": [4, 5, 6, 7, 9, 10, 11, 13, 14, 15, 16], "projected_triangles": 6, "public_roof": true}
 		"w96215651": return {"prefix": "Mariner1202Live", "wall": {"meshes": 17, "surfaces": 17, "triangles": 5088, "bodies": 3, "shapes": 13}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 11, "meshes": 18, "channels": 234, "shapes": 14, "detail_tangents": 16, "projected_runs": [10, 11, 12, 13, 14, 16, 17, 18, 19, 21], "projected_triangles": 6, "public_roof": true}

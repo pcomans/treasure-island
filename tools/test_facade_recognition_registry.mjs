@@ -907,7 +907,7 @@ expectCompileFailureWithInputs(withWorldBuilderText(swapExactlyOnce(
 
 expectCompileFailureWithInputs(withWorldBuilderText(swapExactlyOnce(
   inputs.runtimeContracts.worldBuilderText,
-  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan)",
+  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan)",
   "NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)",
   "Navy Chapel dispatch fully consumed order",
 )), "Navy Chapel per-record consumption dispatch must precede the fully-consumed assertion");
@@ -935,14 +935,14 @@ let reorderedD21441ConsumedInputs = replaceExactlyOnce(
 );
 reorderedD21441ConsumedInputs = replaceExactlyOnce(
   reorderedD21441ConsumedInputs,
-  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan)",
+  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan)",
   "var d2_1441_consumed := D2_1441_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1441_plan)",
   "D2 1441 consumed order record",
 );
 reorderedD21441ConsumedInputs = replaceExactlyOnce(
   reorderedD21441ConsumedInputs,
   "var chapel_consumed := NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)",
-  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan)",
+  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan)",
   "D2 1441 consumed order chapel",
 );
 reorderedD21441ConsumedInputs = replaceExactlyOnce(

@@ -1,7 +1,7 @@
 extends SceneTree
 
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
-const EXPECTED_REGISTRY_SHA256 := "7bd4a8599af1cf9e5a4a4bee261cf87333f1c37f7ceaeb93686a68623d0bf730"
+const EXPECTED_REGISTRY_SHA256 := "f727cfdc2e514ebe201f2267f978a3a9674b718a6435f409a7f42690085820e7"
 const EXPECTED_UNITS := 213
 const EXPECTED_RECEIVERS := 214
 const EXPECTED_SOURCE_RECORDS := 215
