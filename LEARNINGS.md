@@ -12,6 +12,10 @@ Keep this a short, living guide to mistakes worth preventing. Update an applicab
 
 YMCA’s 43 isolated dark pixels matched the projected side of a valid 14cm-deep pilaster only 0.234–0.236 pixels wide; the source wall was more than 1.16m behind those hits. Localize persistent marks against actual native faces before removing valid closure geometry. Keep this subpixel face shading separate from shadow-dependent stippling: the later combined sampling candidate improved edges but left hatching. Stored AA configuration is not an observed viewport getter, and a completed rendering API request is not GPU-state readback. See the completed mark-localization and diagnostic entries in [RETRO](discovery/RETRO_LOG.md).
 
+## Make visual critique actionable
+
+In the first two-case blind taste comparison, the owner preferred Reviewer X (Astra Medium) over Reviewer Y (Astra Light/low) in both cases: Case A because it gave instructions for improvement, Case B because “nearly indistinguishable” was the most useful feedback. This is limited evidence about those critiques, not proof that all art tasks need Medium; the separate de novo building comparison remains undecided. Lead with a direct pixel-grounded judgment of meaningful visible change and one concrete highest-value next change explaining how to improve. Plainly call an imperceptible change “nearly indistinguishable” when the shown pixels support that judgment. Feature inventories and caveats should not displace actionable direction; retain honest uncertainty without implying unsupported confidence.
+
 ## Inspect the early coherent render before extended proof work
 
 Bring the first coherent actual source render to the separate visual reviewer before extended refinement, proof collation or release packaging. Resolve visible form and composition problems while the change is small. Keep required independent gates and batch delivery checks; reuse unchanged evidence with its original scope.

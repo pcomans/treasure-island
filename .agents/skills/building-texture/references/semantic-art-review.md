@@ -61,6 +61,8 @@ A gray placeholder may be shown at the same pose as a diagnostic baseline, but â
 
 Review the first coherent native source-project result early; export is not a prerequisite for this art decision. Earlier accepted assets are a floor, so require substantive target recognition, coherent composition and believable geometry at ordinary play distance. Inspect actual originals, not only manifests. Describe sampled motion as sampled, and do not imply continuous playback, current-package imagery or a changed source binding from historical captures. Keep each target's verdict separate when package runs are later shared across a batch. For a timed edit-to-verdict task, deliver an explicit visual decision within the recorded task boundary; a save/readback receipt alone is not that decision.
 
+Lead the critique with a pixel-grounded verdict on meaningful visible change and one concrete highest-value next change/how to improve. If the compared images are nearly indistinguishable, say so plainly; do not substitute a feature list or let caveats dominate the direction. Keep uncertainty honest and proportionate to the evidence.
+
 ## Evidence record
 
 For each candidate, record source/prompt, tool mode, dimensions, hash, physical-span status, placement basis/confidence, correction count, applicable proof paths, numeric values, annotated semantic findings, exact-game-receiver captures, game-art and as-built verdicts, and rejection reasons. One small initial batch and at most one diagnosed correction round are allowed. If none passes, revise the classification or research brief instead of generating indefinitely.

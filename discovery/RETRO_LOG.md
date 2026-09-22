@@ -13858,3 +13858,12 @@ Retained evidence: current23-source-checkpoint-001 binds the actual refreshed so
 **Limit.** Preparation is external; no MAIN copy, stable-app transfer, staging, commit or push occurred while this append was authored. Future operation receipts establish those actions. The ordinary arrival movie is a separate lane and is not a publication prerequisite. No recorded process duration is a workflow saving, no historical pending binder is rewritten, and source/native acceptance is supplied by independent reviewers rather than this executor.
 
 **Next.** Complete the reviewed exact transfer/copy and selected staging, stop for ROOT's actual staged review, then perform the already authorized normal commit/nonforce push and verify live remote identity. Do not replay engines or broaden the selection. Frozen parent proposal/source and six original app results remain preserved.
+
+
+## 2026-09-22 — effort_trial_a owner critique feedback
+
+**Worked:** Recorded the owner's first-HTML choices verbatim: Case A X for improvement instructions; Case B X for “nearly indistinguishable.” Verified first-test mapping is X=Astra Medium, Y=Astra Light/low. Added one concise lesson and one instruction in canonical visual-review guidance.
+
+**Limit:** Two critique preferences do not establish a universal effort requirement or a winner for the separate de novo building comparison; its verdict remains pending. Anonymous HTML and all source artifacts remain untouched. No engine, browser, new images or Git mutation.
+
+**Next:** Lead future critiques with visible payoff and one practical highest-value improvement, retaining honest evidence limits. This is a communication lesson within existing review, not a new gate or framework.
