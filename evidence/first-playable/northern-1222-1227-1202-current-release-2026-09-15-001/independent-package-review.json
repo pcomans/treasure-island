@@ -1,0 +1,23 @@
+{
+  "schema_version": "ti.derived-independent-package-summary/1",
+  "derived": true,
+  "reviewer": "D",
+  "decision": "PASS",
+  "root_accepted": true,
+  "review": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-authority-integration-003/exact-current-package-preparation-001/independent-actual-001/REVIEW.md",
+    "sha256": "c8821ad464afcc1d18e7629d47e0b618ffcd8fb51b763b33b6f36e51e1c25d5c"
+  },
+  "retro": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-authority-integration-003/exact-current-package-preparation-001/independent-actual-001/RETRO.md",
+    "sha256": "21909286d807410b78c84f15702ccd758615e0b7530a010b21a16ca33338870a"
+  },
+  "native_scope": "Apple M2 Metal / Forward+ only; signature coverage of arm64 and x86_64 is not runtime evidence on both architectures.",
+  "signatures": "Deep/strict and both architecture signature checks passed. Deprecated colon syntax warning in the separate entitlements command is retained.",
+  "privacy": "1,018 virtual files; 47 generated artifacts, 38 chunks, 739/735/4 total/building/nonbuilding records; private paths/raw/banned counts zero.",
+  "status": "ACTUAL_FINAL_CURRENT26_PACKAGE_RELEASE_PASS",
+  "checks": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-authority-integration-003/exact-current-package-preparation-001/independent-actual-001/ACTUAL_CHECK.json",
+    "sha256": "f3281922aeadab2583991e2fc57e7c1f3d44400f030b708881c2664b94ec6875"
+  }
+}

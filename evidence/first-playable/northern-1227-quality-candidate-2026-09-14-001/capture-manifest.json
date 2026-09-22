@@ -1,0 +1,820 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215653",
+  "label": "Accepted revised roof visual originals with original roof-HOLD lineage",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/native-001-result.json",
+      "path_base": "/",
+      "sha256": "eedd7349eb8cdec2ce212ebc19e21f005574d1c237a81c8999e0ce3c67653cb9",
+      "bytes": 64849,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/native-001-result.json",
+      "role": "immutable_external_original",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/focused-001-result.json",
+      "path_base": "/",
+      "sha256": "955d0c3470810205fe822395cd7dbfb5f86c864ed9f80918c5b22ebfbbad6907",
+      "bytes": 2412579,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/focused-001-result.json",
+      "role": "immutable_external_original",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/independent-actual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "6dc4e51cd4857ddb98e8e38ff2dac3299defd756eab574468eac05b05fb7fb92",
+      "bytes": 4096,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/independent-actual-001/REVIEW.md",
+      "role": "immutable_external_original",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/independent-visual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "7f2c500a21b2826bed0b08d68e35d1b954f6eb3d8548e543db9fcb08764174c2",
+      "bytes": 4492,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/independent-visual-001/REVIEW.md",
+      "role": "immutable_external_original",
+      "copied": false
+    }
+  ],
+  "data": {
+    "images": [
+      {
+        "path": "images/static/02-whole-front-roof-footway-candidate.png",
+        "sha256": "644e36bffb1f7e89cc150a9fa3cedcc3aa1b785e215eb718bf324907de225b0b",
+        "bytes": 788672,
+        "role": "accepted_static_candidate",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/capture/images/02-whole-front-roof-footway-candidate.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "id": "02-whole-front-roof-footway-candidate",
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/native-001-result.json",
+          "original_attempt_strict_status": "PASS",
+          "visual_status": "accepted_revised_static",
+          "source_producer": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001"
+        }
+      },
+      {
+        "path": "images/static/03-center-roof-entry-footway-candidate.png",
+        "sha256": "08d4522c1cf231333d0a40603cd0752bafd117a3505d60bc7c95d12537fe9168",
+        "bytes": 460099,
+        "role": "accepted_static_candidate",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/capture/images/03-center-roof-entry-footway-candidate.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "id": "03-center-roof-entry-footway-candidate",
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/native-001-result.json",
+          "original_attempt_strict_status": "PASS",
+          "visual_status": "accepted_revised_static",
+          "source_producer": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001"
+        }
+      },
+      {
+        "path": "images/static/04-north-gable-roof-candidate.png",
+        "sha256": "bfec167ef9ccc40c4ddaa541d5cc0671fda6f89a7b5fcd358e2ff420a5c6eb03",
+        "bytes": 1202492,
+        "role": "accepted_static_candidate",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/capture/images/04-north-gable-roof-candidate.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "id": "04-north-gable-roof-candidate",
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001/native-001-result.json",
+          "original_attempt_strict_status": "PASS",
+          "visual_status": "accepted_revised_static",
+          "source_producer": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-roof-transition-correction-001"
+        }
+      }
+    ],
+    "historical_static_attempts": [
+      {
+        "stage": "1227-implementation-001",
+        "original_status": "INITIAL_ROOF_TRANSITION_VISUAL_HOLD",
+        "raw_result": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/native-001-result.json",
+          "path_base": "/",
+          "sha256": "8423b1e14cc93ae7d4463e4f7b37ad0145186016ddd4608517216938847d031f",
+          "bytes": 76655,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/native-001-result.json",
+          "role": "immutable_external_original",
+          "copied": false
+        },
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/ACTUAL_HANDOFF.json",
+            "path_base": "/",
+            "sha256": "6b7cf650a784a79822dec037e453a5e52133d2035bfea090cdcdc1b1d03f992d",
+            "bytes": 23909,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/ACTUAL_HANDOFF.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/ACTUAL_HANDOFF.md",
+            "path_base": "/",
+            "sha256": "5c83c8a35ab929f289e0e219d2506b6baad1822bd6625dbf57a02fb2314c8a80",
+            "bytes": 3942,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/ACTUAL_HANDOFF.md",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/FILE_READY.json",
+            "path_base": "/",
+            "sha256": "ca29f995f3be72e289377905332abc63f118f1052e60dad735d84990586e27bc",
+            "bytes": 9383,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/FILE_READY.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/FILE_READY.md",
+            "path_base": "/",
+            "sha256": "ebee03c7594ea1ffe6d769d0b55b669a05bd1f64a986253f71a4340a40f06830",
+            "bytes": 6783,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/FILE_READY.md",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/SLOT_RELEASE.json",
+            "path_base": "/",
+            "sha256": "197ccb122ef1d51dc43cd48b883b2f87cdd38aba1f1de26d3ad9d05f2c89722a",
+            "bytes": 1318,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/SLOT_RELEASE.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/check-helper-boundary-003-execution.json",
+            "path_base": "/",
+            "sha256": "635aaa23d778e646301b4ce3519e4342e456fcd80606b3ae834758a4ab508e3d",
+            "bytes": 365,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/check-helper-boundary-003-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/check-helper-boundary-003.log",
+            "path_base": "/",
+            "sha256": "11108b7c4c900aaa8483f460dbb24b01c8e2d73503cb28e72c3e8c3b10513651",
+            "bytes": 39,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/check-helper-boundary-003.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/check-helper-boundary-004-execution.json",
+            "path_base": "/",
+            "sha256": "5f903c45a3997f323e1de06b25ded3e3415f0e9a1f0d43b9345e546245b63bc6",
+            "bytes": 365,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/check-helper-boundary-004-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/check-helper-boundary-004.log",
+            "path_base": "/",
+            "sha256": "11108b7c4c900aaa8483f460dbb24b01c8e2d73503cb28e72c3e8c3b10513651",
+            "bytes": 39,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/check-helper-boundary-004.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-001-execution.json",
+            "path_base": "/",
+            "sha256": "7cd7c453ec3adf7e8db6231998dd956d79466d3512bfb898661bed05b9f0b230",
+            "bytes": 358,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-001-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-001.log",
+            "path_base": "/",
+            "sha256": "6753f70170704d5a485398b0719116296b5945f9e4619ea053c33a9077e943ce",
+            "bytes": 1093,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-001.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-002-execution.json",
+            "path_base": "/",
+            "sha256": "9878e146e84d476dd4c8beae2919de7f5333e2f8a2ea8a2619246202547d292a",
+            "bytes": 358,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-002-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-002.log",
+            "path_base": "/",
+            "sha256": "e5856027ac3064da66a0455d9365262617b337cda5e06e827c770f3999fd848b",
+            "bytes": 1000,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-002.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-003-execution.json",
+            "path_base": "/",
+            "sha256": "a7278cb08288d21ba6e6b3de731ead64c0e5ffe20b0b46842ff3d806be447b73",
+            "bytes": 358,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-003-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-003.log",
+            "path_base": "/",
+            "sha256": "b0f9deb9c49ae34d8eac947562c153cc3cfd76d0044c4c3d1cd41cc1f4bb491f",
+            "bytes": 898,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-003.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-004-execution.json",
+            "path_base": "/",
+            "sha256": "44126e739b6693fc413989b51417c94184ceb0a51a301dd2aeabd8af6dcb61f1",
+            "bytes": 358,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-004-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-004.log",
+            "path_base": "/",
+            "sha256": "b0f9deb9c49ae34d8eac947562c153cc3cfd76d0044c4c3d1cd41cc1f4bb491f",
+            "bytes": 898,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/file-preflight-004.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/focused-001-execution.json",
+            "path_base": "/",
+            "sha256": "70f41fadf5aaff4d6db61bbcb82079f98936ae32114334b031094340f0245eeb",
+            "bytes": 471631,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/focused-001-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/focused-001-result.json",
+            "path_base": "/",
+            "sha256": "c9ac7eea3b80f43123211689c4df33f64216bb93b9c111d39a04a80614880ead",
+            "bytes": 2385197,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/focused-001-result.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/focused-001.log",
+            "path_base": "/",
+            "sha256": "fb031bee94ccb42dab74777fc7dc714151390898f92f01d6eba4eb286ed3c24c",
+            "bytes": 101,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/focused-001.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/import-001-execution.json",
+            "path_base": "/",
+            "sha256": "2d56107380fb886d456585abdf791a28252679cb6e08d4789f8dc73ee62d88ee",
+            "bytes": 490790,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/import-001-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/import-001.log",
+            "path_base": "/",
+            "sha256": "cd7feac0035a58b40df3e34bcafceb04f86766fab47f78b8eeaae46d06ca4e1e",
+            "bytes": 34983,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/import-001.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/live_driver.gd",
+            "path_base": "/",
+            "sha256": "6b138bb036b994bdfbd20764937d949e28499e2ec930b4b8774ff26b0ae71d92",
+            "bytes": 43628,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/live_driver.gd",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/native-001-execution.json",
+            "path_base": "/",
+            "sha256": "19c53c9b4c6e63837db18df156ab629e175e0a68ada63bbc1be7dc494260b553",
+            "bytes": 474242,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/native-001-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/native-001-result.json",
+            "path_base": "/",
+            "sha256": "8423b1e14cc93ae7d4463e4f7b37ad0145186016ddd4608517216938847d031f",
+            "bytes": 76655,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/native-001-result.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/native-001.log",
+            "path_base": "/",
+            "sha256": "0b4ff407def55cbba68bfe7e2e37c42e99f69c5c4f7e5ff308c3d05425c5883e",
+            "bytes": 621,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/native-001.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-roof-ground-001-execution.json",
+            "path_base": "/",
+            "sha256": "abe0592f64eff4adc4f09254edfa35243e941c2f27cc3efa8d07325d443c36b8",
+            "bytes": 363,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-roof-ground-001-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-roof-ground-001.log",
+            "path_base": "/",
+            "sha256": "267e38e43151fee8661900f63208b7bed4e9c047c96c7b58aa1427c836e5ec6a",
+            "bytes": 712,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-roof-ground-001.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-roof-ground-002-execution.json",
+            "path_base": "/",
+            "sha256": "79716f2d88ff553bf6ee20ab7db768023e1e5bf0d74a68b6e3afe2ac6828e854",
+            "bytes": 363,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-roof-ground-002-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-roof-ground-002.log",
+            "path_base": "/",
+            "sha256": "267e38e43151fee8661900f63208b7bed4e9c047c96c7b58aa1427c836e5ec6a",
+            "bytes": 712,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-roof-ground-002.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-views-001-execution.json",
+            "path_base": "/",
+            "sha256": "c884fa61a254a93bcf9702c7ebdfbda64a7120edac96f49532f40e51d9379661",
+            "bytes": 357,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-views-001-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-views-001.log",
+            "path_base": "/",
+            "sha256": "c930de90c5398c94ed57a19122d0110d54e14c564f0f1b1f050c2ea9672cfd74",
+            "bytes": 2977,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-views-001.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-views-002-execution.json",
+            "path_base": "/",
+            "sha256": "73df0cf438cc0ee2567a5be801147fc2426bf90ac667245bb3e90c44b289bdd9",
+            "bytes": 357,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-views-002-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-views-002.log",
+            "path_base": "/",
+            "sha256": "c930de90c5398c94ed57a19122d0110d54e14c564f0f1b1f050c2ea9672cfd74",
+            "bytes": 2977,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-views-002.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-views-003-execution.json",
+            "path_base": "/",
+            "sha256": "f272eac99bdd87a31df72b82e7c8d399aa8fc2973cdd24e192e7e6ea69d9e1b1",
+            "bytes": 357,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-views-003-execution.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-views-003.log",
+            "path_base": "/",
+            "sha256": "c930de90c5398c94ed57a19122d0110d54e14c564f0f1b1f050c2ea9672cfd74",
+            "bytes": 2977,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/prepare-views-003.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/run-plan.json",
+            "path_base": "/",
+            "sha256": "41df4a65c09a29960e9fe3b167fbd8efdbcdd8fe31830557199cfba76639e6a5",
+            "bytes": 4684,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/run-plan.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/seal-preparation-001.log",
+            "path_base": "/",
+            "sha256": "ecb6b6d25cd6d75108733e3a9d04b745af60761a476ac45e4de7fa7f8eb9bdcb",
+            "bytes": 249,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/seal-preparation-001.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/source-pins.json",
+            "path_base": "/",
+            "sha256": "355762e9f64288950b369c1bb55c0430f54c6b7fb7896364dca90658952ce8be",
+            "bytes": 232327,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/source-pins.json",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/worktree-checkout.log",
+            "path_base": "/",
+            "sha256": "69878080c1b65364d0979adfa2b740e946b2f5433ddbe2e310f511586bedff5b",
+            "bytes": 2773,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/worktree-checkout.log",
+            "role": "immutable_external_original",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/independent-actual-001/REVIEW.md",
+            "path_base": "/",
+            "sha256": "fe37c732c104359410547bb5c8777ffd14158f65af597389ff737cdacf634bba",
+            "bytes": 5206,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/independent-actual-001/REVIEW.md",
+            "role": "original_scoped_decision",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/independent-execution-readiness-001/REVIEW.md",
+            "path_base": "/",
+            "sha256": "a9ce2da8cce5998657cfcb82124de06e050e9616e38d29976624806fe3a31261",
+            "bytes": 3480,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/independent-execution-readiness-001/REVIEW.md",
+            "role": "original_scoped_decision",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/independent-visual-001/REVIEW.md",
+            "path_base": "/",
+            "sha256": "77973f8a3fdf2c065971a07e16fc7815062e23fadcacd05667ecc514df74b1a5",
+            "bytes": 5421,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-implementation-001/independent-visual-001/REVIEW.md",
+            "role": "original_scoped_decision",
+            "copied": false
+          }
+        ],
+        "not_retroactively_passed": true
+      }
+    ],
+    "capture_time_authority": "23/213",
+    "preparation_authority_context": "23/213",
+    "current_source_attachment": {
+      "status": "EXISTING_INDEPENDENT_LIVE_SOURCE_ATTACHMENT_PASS",
+      "physical_unit_id": "physical-building:w96215653",
+      "source_key": "w96215653",
+      "candidate": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1222-1227-1202-live-candidate-v1",
+      "base": "d1e907341040ce9dbf45db27da292b5de02daf4c",
+      "current_authority": "23/213",
+      "independent_review": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/independent-actual-integration-001/REVIEW.md",
+        "sha256": "e062c3e6b8df7e872eae6e39a0ee91f09a2cc5060db2dd80c8e92b89a64cfb20"
+      },
+      "independent_reviewer": "E /root/smaller_model_routing",
+      "independent_review_scope": "C-authored combined live integration only; E-authored standalone art is not reaccepted by E. Prior D source/mechanics and C separate visual decisions remain independently owned.",
+      "root_core_acceptance": "ROOT accepted the independent combined integration core and D M1202 core and authorized this guarded file-only assembly; exact sealed originals are bound.",
+      "raw_result": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/validation-001/focused-001-result.json",
+        "sha256": "ca7a7fd1ea2be847dbc94480ef6e0d806651f1134f7d40661be476318471fc9d"
+      },
+      "unit_result_json_path": "units.w96215653",
+      "world": [
+        735,
+        1159,
+        1174,
+        153873,
+        484,
+        569
+      ],
+      "assembly_prerequisites": {
+        "combined_live_integration": "EXISTING_INDEPENDENT_PASS",
+        "1202_mechanics": "EXISTING_INDEPENDENT_PASS",
+        "1202_mechanics_reviewer": "D /root/building_family_audit",
+        "1202_mechanics_review": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1202-mechanics-changed-light-preparation-001/independent-actual-001/REVIEW.md",
+          "sha256": "b71d37fc7113539d4c9f3e067d25559427d10c780ac88d71aa381b03120737c0"
+        }
+      },
+      "bindings": [
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/independent-actual-integration-001/REVIEW.md",
+          "sha256": "e062c3e6b8df7e872eae6e39a0ee91f09a2cc5060db2dd80c8e92b89a64cfb20"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/independent-actual-integration-001/RETRO.md",
+          "sha256": "757992ebdb9e20f6cfc02ea11a585d2eec2de91e4d2741df2430e2a20943776d"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/independent-actual-integration-001/CHECK.json",
+          "sha256": "695856b05f8ce2ed7fe2f5f5a107874af2440cf01386d42bc913c495ad17cc48"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/independent-actual-integration-001/EVIDENCE_BINDINGS.json",
+          "sha256": "7c76fc6c3a6f2085e7053d827729e6b8f933fa7ca8a7eb4075fd0aa74a75af1a"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1202-mechanics-changed-light-preparation-001/independent-actual-001/REVIEW.md",
+          "sha256": "b71d37fc7113539d4c9f3e067d25559427d10c780ac88d71aa381b03120737c0"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1202-mechanics-changed-light-preparation-001/independent-actual-001/RETRO.md",
+          "sha256": "c0ce7bccfba00e3d224c9dd7ae067865ef1a047ddfe5e51a9f3e7aa5e6399e0e"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1202-mechanics-changed-light-preparation-001/independent-actual-001/CHECK.json",
+          "sha256": "b70e0b87f4f83c24deb69878e3967931353cd3b1b7fb6d0ccee76e8613b4996f"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/FILE_READY.json",
+          "sha256": "c9e73e024bdc2a498ced55e1c806b65dbbb7e239e81ef89a7235f73631c2c2a6"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/SOURCE_LINEAGE.json",
+          "sha256": "d1039fe1650fcb0eecd543d27f7857edf05e38d2246b698a4d69fbc1e6797f11"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/SELECTED_FILES.json",
+          "sha256": "1984c503da3f4d89b5125df8b36ee17a45977f2b99ca68c0ed3acd6570581af2"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/PRE_FREEZE_SOURCE_CHECKS.json",
+          "sha256": "9f4b48bc7ac9c4d8a0c68e851b601dbe15b1d1af3be41a347552ec6ab1ad62e3"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/functional-attachment.diff",
+          "sha256": "94a7daf1bb078bc75c25449e215b284e29c2416c7e86c9418d21c56a7624e21d"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/focused-helper.diff",
+          "sha256": "6e0894774355fc64b08678d23074af2903a7a97b5c9761bae5e7aa92c4b9ba6d"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/validation-001/ACTUAL_HANDOFF.md",
+          "sha256": "35904ba423e54d680e0791ebd090051c078f30e7173f6854a150a3a383fbd5d9"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/validation-001/ACTUAL_HANDOFF.json",
+          "sha256": "914c653b9d05805616a361018636a6474259f82f5db96b636da9da4652f8e772"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/validation-001/execution-RETRO.md",
+          "sha256": "9892ebe189c44d144b2f7e75c60cb2d90c94790d2b6cd0e3feaf42434f88e2d2"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/validation-001/focused-001-result.json",
+          "sha256": "ca7a7fd1ea2be847dbc94480ef6e0d806651f1134f7d40661be476318471fc9d"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/validation-001/focused-001-execution.json",
+          "sha256": "a1f1be0d39673a42b1b424bff783bb5d35ca9f1dec26a207a3b81a6275e1f1d6"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/validation-001/import-001-execution.json",
+          "sha256": "8906f5ddc6ad130c2eeac1487a7fb52ddec156ef926768f90b99d0393d2657ab"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/validation-001/SLOT_RELEASE.json",
+          "sha256": "00234caa3505f472ae4ec50a4ac485e9adee70258eff31bb43f9ce7eb7c914d6"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/validation-001/candidate-source-pins.json",
+          "sha256": "b5eb20d62d7bc2f90e1cdc64f3cb2474d15d13e59c85dfb6b25759fc22be4944"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/validation-001/source-pins.json",
+          "sha256": "c80ae9fdbd701d3416aebf0dc4c571dafb3315b525578ed0c141d7c68618c7ac"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/validation-001/run-plan.json",
+          "sha256": "f2a5787c2ba490bf12ee131870769020eb8adb708817393ac0a70d55c21720d7"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/validation-001/focused_live_contract.gd",
+          "sha256": "486e9c63bf2f38380c36ca19cc1422e41d1b17fe7e5351e973911bca6f14ca3e"
+        },
+        {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-live-adapter-proposal-001/1227-SOURCE_LINEAGE.json",
+          "sha256": "643f136579027a148b589088475584b7d8ec6026fd27db101150ad9aa70a12b1"
+        }
+      ],
+      "app": null,
+      "pck_sha256": null,
+      "package_receipt": null,
+      "seventh": null,
+      "recognition_credit": false,
+      "scope": "Actual candidate source attachment only. Standalone accepted art/mechanics images retain their study producers; no signed-app image or acceptance is inferred. Historical checkpoints and failed preparations remain historical, superseded only by named actual current outputs."
+    },
+    "independent_static_status": "EXISTING_SCOPED_PASS",
+    "frozen_source": {
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1227-northpoint-study-v2/game/resources/facades/northpoint_1227_study.json": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1227-northpoint-study-v2/game/resources/facades/northpoint_1227_study.json",
+        "path_base": "/",
+        "sha256": "2e8573eb855c110c0d13545d63f8fd467a25a68613d16b91cb1336462baadde7",
+        "bytes": 143146,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1227-northpoint-study-v2/game/resources/facades/northpoint_1227_study.json",
+        "role": "actual_frozen_study_source",
+        "copied": false
+      },
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1227-northpoint-study-v2/game/scripts/world/facades/northpoint_1227_study.gd": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1227-northpoint-study-v2/game/scripts/world/facades/northpoint_1227_study.gd",
+        "path_base": "/",
+        "sha256": "1083aaa91ee4b680e2bfdbbe49e4a6e2dd1d92e6e5bd783d9e95a20a7a7c206a",
+        "bytes": 26106,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1227-northpoint-study-v2/game/scripts/world/facades/northpoint_1227_study.gd",
+        "role": "actual_frozen_study_source",
+        "copied": false
+      },
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1227-northpoint-study-v2/generated/world/chunks/x_-2__z_-4.json": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1227-northpoint-study-v2/generated/world/chunks/x_-2__z_-4.json",
+        "path_base": "/",
+        "sha256": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4",
+        "bytes": 189757,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1227-northpoint-study-v2/generated/world/chunks/x_-2__z_-4.json",
+        "role": "original_source_chunk",
+        "copied": false
+      }
+    },
+    "source_metadata": {
+      "model_id": "1227-northpoint-first-coherent-001",
+      "projected_upper_front_m": 0.45,
+      "projected_upper_receiver_key": "building:w96215653:wall",
+      "projected_upper_receiver_source_runs": [
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16
+      ],
+      "prototype_only": true,
+      "runtime_attachment": false,
+      "recognition_accepted": false,
+      "source_key": "w96215653",
+      "mapped_public_run_indices": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "protected_run_indices": [
+        0,
+        1,
+        2,
+        3,
+        12,
+        18,
+        19,
+        20,
+        21
+      ],
+      "baseline_exact_source": false,
+      "original_wall_roof_resources_preserved": true,
+      "source_roof_geometry_preserved": true,
+      "source_wall_spray_eligibility_preserved": true,
+      "physical_details_spray_receiver": false,
+      "interior_modeled": false,
+      "as_built_claim": false,
+      "module_dimensions_and_counts": "production_inference",
+      "visual_batch_triangles": {
+        "ExactOriginalWallSurfaces": 44,
+        "ExactSourceNeutralRoof": 16,
+        "ObservedPublicRoof": 92,
+        "NorthGableSiding": 8,
+        "CarportRoof": 12,
+        "CarportPosts": 120,
+        "NearHorizontalSiding": 156,
+        "ProjectedUpperSiding": 6,
+        "ProjectedUpperClosures": 30,
+        "PaleCompleteTrim": 2052,
+        "BlueOpaqueGlazing": 144,
+        "DarkOpaqueGlazing": 144,
+        "BlueGrayClosedDoors": 60,
+        "PaleClosedDoor": 12,
+        "LocalPrivacyScreens": 1800,
+        "PaleDrainageAndFascia": 504,
+        "DoorHardware": 72,
+        "DrapedEntryPaths": 80,
+        "FootwaySurface": 36,
+        "ParkingSurface": 156
+      },
+      "visual_triangles": 5544,
+      "mesh_instances": 20,
+      "surfaces": 20,
+      "source_terrain_untouched": true,
+      "draped_paths_render_only": true,
+      "continuous_footway_and_parking_render_only": true,
+      "separate_public_roof_addition": true,
+      "public_roof_shapes": 1,
+      "roof_inference": "Original flat roof retained; observed east pitches and north gable added. Plain inner/other end closures are production inference, no hidden architectural detail.",
+      "stairs_authored": false
+    },
+    "source_association": [
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-reference-acquisition-001/ASSOCIATION.json",
+        "path_base": "/",
+        "sha256": "d7375f035bf523cde593ac622c4322581f246d819709b69c52407a0b762b85e2",
+        "bytes": 10161,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-reference-acquisition-001/ASSOCIATION.json",
+        "role": "immutable_external_original",
+        "copied": false
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-reference-acquisition-001/independent-association-001/REVIEW.md",
+        "path_base": "/",
+        "sha256": "f58916cc4c578a91110b130f2c7a35e064992ec0af418d3bdf088f322e8a1e1f",
+        "bytes": 4358,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-reference-acquisition-001/independent-association-001/REVIEW.md",
+        "role": "immutable_external_original",
+        "copied": false
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-reference-acquisition-001/HANDOFF.json",
+        "path_base": "/",
+        "sha256": "0c978916b504ec1fb4fe7cc809de42e004cab557578d0e955dc3972a6d4536a3",
+        "bytes": 2952,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-reference-acquisition-001/HANDOFF.json",
+        "role": "immutable_external_original",
+        "copied": false
+      },
+      {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-reference-acquisition-001/HANDOFF.md",
+        "path_base": "/",
+        "sha256": "a26f61eef86a9443e821e9d4bee7749130583816003e12bebe486e2eb3da6c86",
+        "bytes": 5185,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-reference-acquisition-001/HANDOFF.md",
+        "role": "immutable_external_original",
+        "copied": false
+      }
+    ],
+    "limits": [
+      "Derived assembly only: existing independently accepted study decisions are bound, not newly accepted by this author. Current capture and preparation authority is 23/213; held first study, accepted v2 and separate live source producers remain distinct.",
+      "The source study is not a live adapter or app screenshot. Future batch app/PCK, package receipts and independent seventh attestations are pending/null. No authority write or recognition credit is supplied.",
+      "Original 1440x900 PNGs and 1280x800 AVI payloads remain distinct. Full movies retain 70 physical trailing bytes beyond declared RIFF end. Sparse samples are not continuous playback, flicker freedom, manual input or encoded/physics/process/draw equality.",
+      "Changed-light whole is followed by restored default sun before motion. Routes use separate explicit setup poses; no continuous traversal between setups is claimed. Stock String outcomes, hit-shape indices and tag counts remain distinct.",
+      "Reference images remain private external locators and are never copied into packet images, game, Git or app. Counts, dimensions and roof closure are bounded production inference; protected or hidden regions are not newly authorized.",
+      "Full raw records, logs, maps, original films and historical failed media remain in their existing retained locations. This preparation copies only selected gameplay images; it introduces no new source or mechanical proof and preserves all referenced reviewers' narrower limits.",
+      "Initial 1227-implementation-001 preserves its roof-transition visual HOLD and four historical PNGs. Accepted roof-transition-correction-001 has three current whole/near/north-gable originals, joined shallow roof and retained original flat source roof. No held image is relabeled current.",
+      "Capture/preparation authority remains23/213. Standalone temporary study swaps are not live-candidate or package screenshots. The separate combined live-source result is bound to E’s independent integration-only PASS, reusing D source/mechanics and C visual study decisions.",
+      "Mapped source runs 4–11/13–17 include field-only return8; protected0–3/12/18–21 and hidden run11 tail remain. Source-ray station 0.633791 is not a pixel-calibrated opening anchor. Unknown farther southern canopy continuation, reference occlusion and production-inferred roof/post/count limits remain.",
+      "Motion contains door 87 forward+30 brake+30 reverse+20 brake and screen 35+30+30+20, totaling 282 rows. 116 rows have empty contacts. Events, rows and setup poses remain distinct; first-contact release is not indefinite-pushing or connected-between-setups proof.",
+      "Minimum capsule/LAND−1.602143mm and capsule-foot−1.599043mm retain the unchanged 4mm solver qualification; negative support samples are not zero penetration or continuous swept support.",
+      "Actual stock String results placed/receiver_rejection/receiver_rejection remain separate from hit indices 0/8/10; tag counts 0→1→1→1. Complete wave/yellow dot appears about 180 degrees from the SVG preview; no separately authored upper stroke is missing. C authored/executed the mechanics helper but not E art; D independently accepted actual source/mechanics.",
+      "The 583-frame 1280×800 AVI supplies nine untouched finite payloads 45/112/179/246/313/380/447/514/581. Last 581 is blue and supplies no scene credit; PNGs are 1440×900. No continuous flicker-free, manual-camera or full traversal claim. 70 physical trailing AVI bytes remain retained.",
+      "Known fine gable seam, partial foreground/avatar occlusion and dark clean default finish remain qualified. The corrected static and changed-light visual decisions are scoped existing PASS records, not whole-unit seventh, authority or package acceptance."
+    ]
+  },
+  "truth_boundary": "Derived first-five preparation; existing scoped study decisions only. Package/app/seventh/authority pending; current23 unchanged, captures23, credit0."
+}

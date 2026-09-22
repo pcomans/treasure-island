@@ -22,12 +22,12 @@ import {
 } from "./lib/world-contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const COMPILER_VERSION = "1.22.0";
-const CATALOG_SCHEMA = "ti.facade-recognition-catalog/23";
-const RUNTIME_SCHEMA = "ti.facade-runtime-registry/23";
+const COMPILER_VERSION = "1.25.0";
+const CATALOG_SCHEMA = "ti.facade-recognition-catalog/26";
+const RUNTIME_SCHEMA = "ti.facade-runtime-registry/26";
 const REPORT_SCHEMA = "ti.facade-recognition-validation-report/4";
-const ADAPTER_CONTRACT_SCHEMA = "ti.facade-runtime-adapter-contracts/22";
-const LOADER_API_VERSION = "ti.facade-runtime-registry-loader/22";
+const ADAPTER_CONTRACT_SCHEMA = "ti.facade-runtime-adapter-contracts/25";
+const LOADER_API_VERSION = "ti.facade-runtime-registry-loader/25";
 const UNKNOWN_VERSION_POLICY = "reject";
 const CATALOG_ID = "treasure-island-physical-building-recognition";
 const CATALOG_SCHEMA_REFERENCE = "./facade-recognition-catalog.schema.json";
@@ -337,6 +337,9 @@ const ACCEPTED_REFERENCE_UNIT_IDS = Object.freeze([
   "physical-building:w95934125",
   "physical-building:w764313741",
   "physical-building:r19685981",
+  "physical-building:w96215661",
+  "physical-building:w96215653",
+  "physical-building:w96215651",
   "physical-building:w96215649",
   "physical-building:w96215652",
   "physical-building:w96215658",
@@ -3372,7 +3375,7 @@ const D5_BATCH_ACCEPTED = Object.freeze([
         "world_triangles": 138057,
         "world_static_bodies": 478,
         "world_shapes": 533,
-        "world_topology_scope": "current_integration_topology"
+        "world_topology_scope": "pre_northern_1222_1227_1202_integration_live_parity"
       },
       "ownership_contract": {
         "structural_owner_count": 4,
@@ -3465,9 +3468,793 @@ const D5_BATCH_ACCEPTED = Object.freeze([
     },
     "tree_document_sha256": "0df0773639f05857a4566c3e56b41cf3ae112011dafd6c1ece5a7d1bce551beb",
     "image_count": 17
+  },
+  {
+    "number": "1222",
+    "source": "w96215661",
+    "wall": "building:w96215661:wall",
+    "roof": "building:w96215661:roof",
+    "unit_id": "physical-building:w96215661",
+    "adapter_id": "active-adapter:bayside-1222-live:building:w96215661:wall",
+    "mode": "active_northern_1222_paired_replacement",
+    "attachment_kind": "active_northern_1222_paired_wall_roof_replacement",
+    "candidate_authority_metric": "23/213",
+    "source_chunk": {
+      "path": "generated/world/chunks/x_-2__z_-3.json",
+      "sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5"
+    },
+    "files": {
+      "adapter": "game/scripts/world/facades/bayside_1222_live_replacement.gd",
+      "config": "game/resources/facades/bayside_1222_study.json",
+      "factory": "game/scripts/world/facades/bayside_1222_live_factory.gd",
+      "shader": "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+      "site_kit": "game/scripts/world/facades/site_12_housing_kit.gd"
+    },
+    "hashes": {
+      "adapter": "a4f6e7242dd4130b3dca67cad165a8a3067129ab2a7455e4e0f0f76ef3c144bf",
+      "config": "65a67decfd83b376209c8c8f80ab7f456be2006a8a907c2f36211c3e863e0ab2",
+      "factory": "639a5ce1cce22b5635f3bccfe6cb1c7764988662b826f0c25c4183fe2ec787f9",
+      "shader": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a",
+      "site_kit": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+    },
+    "config": {
+      "schema_version": "ti.bayside-1222-study/1",
+      "source_key": "w96215661",
+      "chunk_id": "x_-2__z_-3",
+      "chunk_sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+      "mapped_runs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        19
+      ],
+      "protected_runs": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        17,
+        18
+      ]
+    },
+    "behavior": {
+      "schema_version": "ti.northern-1222-production-live-parity/1",
+      "acceptance_contract": {
+        "evidence_manifest_sha256": "c9bdee01510d7e0c2f43be4c454b154437009583b2c59c15ba211f07ee16f259",
+        "motion_telemetry_manifest_sha256": "ac2950c05d8472b5a8edb0ce2f7b4437159d6af963145dfd142ec5bc59019b98",
+        "visual_motion_manifest_sha256": "0976e8393145f40ce9e07c861bdc1a032f15b0cf70e6c984244318e2adfb92d3",
+        "package_verification_receipt_sha256": "a6ea228918898454c56fd5aebe1affbd94d0bc7c1878c966c14fc704409e028b",
+        "evidence_tree_sha256": "4870b6e92d8d9d42c7107a27f38af1f115f39cd934e920d297363c018d3d2822",
+        "mechanical_review_receipt_sha256": "ec1e740bd93a8325094811bf634d90d43c672574a002a90c96a1a454662996cf",
+        "review_receipt_sha256": "20a5a14b31c9918f7e9e4c3884c1ca3deef55af1ccd5720c4c9d581710c42f76",
+        "accepted_physical_unit_id": "physical-building:w96215661",
+        "capture_time_recognition_metric": "23/213",
+        "numerator_effect": 1,
+        "reference_recognizable": true,
+        "wall_and_roof_are_one_physical_unit": true
+      },
+      "replacement_contract": {
+        "source_key": "w96215661",
+        "wall_object_key": "building:w96215661:wall",
+        "roof_object_key": "building:w96215661:roof",
+        "actual_supplied_chunk_pair_required": true,
+        "actual_land_and_area_records_required": false,
+        "mapped_public_run_indices": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          19
+        ],
+        "protected_run_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          17,
+          18
+        ],
+        "partial_pair_allowed": false,
+        "fallback_allowed": false,
+        "generic_stack_allowed": false,
+        "factory_calls": 1,
+        "raw_source_constructor_callback_required": true,
+        "tangent_callback_required": true
+      },
+      "geometry_contract": {
+        "source_chunk_sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+        "horizontal_source_footprint_preserved": true,
+        "original_source_channels_and_roof_preserved": true,
+        "visual_mesh_instances": 16,
+        "visual_surfaces": 16,
+        "visual_triangles": 5346,
+        "wall_native_counts": [
+          15,
+          15,
+          5336,
+          3,
+          11
+        ],
+        "roof_native_counts": [
+          1,
+          1,
+          10,
+          1,
+          1
+        ],
+        "world_records": 735,
+        "world_mesh_instances": 1159,
+        "world_surfaces": 1174,
+        "world_triangles": 153873,
+        "world_static_bodies": 484,
+        "world_shapes": 569,
+        "world_topology_scope": "shared_northern_1222_1227_1202_candidate_live_parity"
+      },
+      "ownership_contract": {
+        "structural_owner_count": 4,
+        "shape_count": 12,
+        "spray_owner_count": 2,
+        "navigation_owner_count": 0,
+        "wall_is_sole_spray_receiver": false,
+        "original_wall_and_projected_front_are_receivers": true,
+        "projected_receiver_runs": [
+          10,
+          11,
+          12,
+          15,
+          16,
+          19
+        ],
+        "projected_receiver_triangles": 6,
+        "projected_receiver_shape_order": [
+          "ProjectedUpperSiding"
+        ],
+        "projected_receiver_physics_layer": 5,
+        "projected_receiver_cull_mask": 2,
+        "wall_decal_cull_mask": 2,
+        "wall_shape_order": [
+          "exact_eligible_source_wall",
+          "ProjectedUpperClosures",
+          "PaleCompleteTrim",
+          "BlueOpaqueGlazing",
+          "DarkOpaqueGlazing",
+          "BlueGrayClosedDoors",
+          "PaleClosedDoor",
+          "LocalPrivacyScreens",
+          "PaleDrainageAndFascia",
+          "DoorHardware"
+        ],
+        "roof_shape_order": [
+          "exact_noneligible_source_roof"
+        ],
+        "added_public_roof_triangles": 0,
+        "original_flat_roof_preserved": true,
+        "added_public_roof_is_nonreceiver": true,
+        "all_additions_render_only": false,
+        "added_ground_collision_triangles": 0,
+        "roof_is_wall_spray_receiver": false,
+        "roof_world_solid_landing": true,
+        "eligible_render_layer": 2,
+        "noneligible_render_layer": 1,
+        "terrain_geometry_and_ownership_unchanged": true
+      },
+      "truth_boundary": {
+        "as_built_fidelity_claimed": false,
+        "interior_modeled": false,
+        "hidden_schedule_invented": false,
+        "capture_time_recognition_credit": false,
+        "capture_time_candidate_promoted": false,
+        "reference_pixels_packaged": false,
+        "receiver_complete_inferred_from_art": false,
+        "game_distinctive_claimed": false,
+        "unobserved_sides_protected": true,
+        "unsurveyed_dimensions_and_counts_are_production_inference": true,
+        "continuous_motion_review_claimed": false,
+        "ground_to_roof_traversal_claimed": false,
+        "spray_input_event_dispatch_claimed": false,
+        "separate_setup_poses_retained": true,
+        "sparse_movie_samples_only": true,
+        "raw_door_station_failure_retained": false,
+        "original_visual_hold_retained": true,
+        "metadata_only_observer_retained": true,
+        "unexecuted_central_carport_proposal_retained": false,
+        "motion_route_scope": "one_door_one_screen_finite_routes",
+        "station_held_claimed": false,
+        "prior_clipped_tag_failure_retained": false,
+        "scoped_hairline_observation_retained": false,
+        "native_support_qualification_mm": 4
+      }
+    },
+    "acceptance": {
+      "evidence_manifest_sha256": "c9bdee01510d7e0c2f43be4c454b154437009583b2c59c15ba211f07ee16f259",
+      "motion_telemetry_manifest_sha256": "ac2950c05d8472b5a8edb0ce2f7b4437159d6af963145dfd142ec5bc59019b98",
+      "visual_motion_manifest_sha256": "0976e8393145f40ce9e07c861bdc1a032f15b0cf70e6c984244318e2adfb92d3",
+      "package_verification_receipt_sha256": "a6ea228918898454c56fd5aebe1affbd94d0bc7c1878c966c14fc704409e028b",
+      "evidence_tree_sha256": "4870b6e92d8d9d42c7107a27f38af1f115f39cd934e920d297363c018d3d2822",
+      "mechanical_review_receipt_sha256": "ec1e740bd93a8325094811bf634d90d43c672574a002a90c96a1a454662996cf",
+      "review_receipt_sha256": "20a5a14b31c9918f7e9e4c3884c1ca3deef55af1ccd5720c4c9d581710c42f76",
+      "capture_time_recognition_metric": "23/213",
+      "numerator_effect": 1,
+      "review_id": "northern-1222-quality-candidate-2026-09-14-001",
+      "review_kind": "independent_reference_recognition",
+      "status": "accept"
+    },
+    "receipt": {
+      "evidence_manifest_sha256": "c9bdee01510d7e0c2f43be4c454b154437009583b2c59c15ba211f07ee16f259",
+      "motion_telemetry_manifest_sha256": "ac2950c05d8472b5a8edb0ce2f7b4437159d6af963145dfd142ec5bc59019b98",
+      "visual_motion_manifest_sha256": "0976e8393145f40ce9e07c861bdc1a032f15b0cf70e6c984244318e2adfb92d3",
+      "package_verification_receipt_sha256": "a6ea228918898454c56fd5aebe1affbd94d0bc7c1878c966c14fc704409e028b",
+      "evidence_tree_sha256": "4870b6e92d8d9d42c7107a27f38af1f115f39cd934e920d297363c018d3d2822",
+      "mechanical_review_receipt_sha256": "ec1e740bd93a8325094811bf634d90d43c672574a002a90c96a1a454662996cf",
+      "review_receipt_sha256": "20a5a14b31c9918f7e9e4c3884c1ca3deef55af1ccd5720c4c9d581710c42f76",
+      "capture_time_recognition_metric": "23/213",
+      "numerator_effect": 1,
+      "unit_id": "physical-building:w96215661",
+      "evidence_manifest_path": "evidence/first-playable/northern-1222-quality-candidate-2026-09-14-001/capture-manifest.json",
+      "motion_telemetry_manifest_path": "evidence/first-playable/northern-1222-quality-candidate-2026-09-14-001/motion-telemetry.json",
+      "visual_motion_manifest_path": "evidence/first-playable/northern-1222-quality-candidate-2026-09-14-001/visual-motion.json",
+      "package_verification_receipt_path": "evidence/first-playable/northern-1222-quality-candidate-2026-09-14-001/package-verification-receipt.json",
+      "evidence_tree_path": "evidence/first-playable/northern-1222-quality-candidate-2026-09-14-001/evidence-tree.json",
+      "mechanical_review_receipt_path": "evidence/first-playable/northern-1222-quality-candidate-2026-09-14-001/mechanical-review.json",
+      "review_path": "evidence/first-playable/northern-1222-quality-candidate-2026-09-14-001/unit-visual-attestation.json"
+    },
+    "tree_document_sha256": "0ad59b9b933e1500f3db270f1c7ca79d089b7a8d5c9e56b4c9e4a35d35d97de9",
+    "image_count": 21
+  },
+  {
+    "number": "1227",
+    "source": "w96215653",
+    "wall": "building:w96215653:wall",
+    "roof": "building:w96215653:roof",
+    "unit_id": "physical-building:w96215653",
+    "adapter_id": "active-adapter:northpoint-1227-live:building:w96215653:wall",
+    "mode": "active_northern_1227_paired_replacement",
+    "attachment_kind": "active_northern_1227_paired_wall_roof_replacement",
+    "candidate_authority_metric": "23/213",
+    "source_chunk": {
+      "path": "generated/world/chunks/x_-2__z_-4.json",
+      "sha256": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4"
+    },
+    "files": {
+      "adapter": "game/scripts/world/facades/northpoint_1227_live_replacement.gd",
+      "config": "game/resources/facades/northpoint_1227_study.json",
+      "factory": "game/scripts/world/facades/northpoint_1227_live_factory.gd",
+      "shader": "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+      "site_kit": "game/scripts/world/facades/site_12_housing_kit.gd"
+    },
+    "hashes": {
+      "adapter": "ace49917dc8935c75124e70f3dc573330a2236a6a82ef948b41b1eeeee451c6e",
+      "config": "2e8573eb855c110c0d13545d63f8fd467a25a68613d16b91cb1336462baadde7",
+      "factory": "6492b8e48226ed09c7e7171bd7fd51e25b8e347c38d87d2d0931b2b3337fb2f4",
+      "shader": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a",
+      "site_kit": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+    },
+    "config": {
+      "schema_version": "ti.northpoint-1227-study/1",
+      "source_key": "w96215653",
+      "chunk_id": "x_-2__z_-4",
+      "chunk_sha256": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4",
+      "mapped_runs": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "protected_runs": [
+        0,
+        1,
+        2,
+        3,
+        12,
+        18,
+        19,
+        20,
+        21
+      ]
+    },
+    "behavior": {
+      "schema_version": "ti.northern-1227-production-live-parity/1",
+      "acceptance_contract": {
+        "evidence_manifest_sha256": "f240c0a442a66cdb5e20fffa4883e2b9098ce681d0fdefa3c30e846e376d517b",
+        "motion_telemetry_manifest_sha256": "c45ad15c677f1413d106695f8a1c6e339c0b6da6f4fb67eea0d9b6ae53b64018",
+        "visual_motion_manifest_sha256": "a28bf431f24e58cc147b3adc6df9983784f68d6f0335c61bea3bda7d02e0cfa8",
+        "package_verification_receipt_sha256": "802e3287f84f0363a688d35454e88aebef7d34b93db88b88d16785311ec3d7d4",
+        "evidence_tree_sha256": "34e252f76805cd5e152fd58056f95852ba5c4ebfdc2e73ceeb20f1410c74eadb",
+        "mechanical_review_receipt_sha256": "45cf53232bcb34f4bf43b2370a7ce0e84ade628dc23e9aa7a8439f70eb102c03",
+        "review_receipt_sha256": "8957bff439a37e22880af8b0df5c6641e348bb19e13207bd65ac8e94cb1484ad",
+        "accepted_physical_unit_id": "physical-building:w96215653",
+        "capture_time_recognition_metric": "23/213",
+        "numerator_effect": 1,
+        "reference_recognizable": true,
+        "wall_and_roof_are_one_physical_unit": true
+      },
+      "replacement_contract": {
+        "source_key": "w96215653",
+        "wall_object_key": "building:w96215653:wall",
+        "roof_object_key": "building:w96215653:roof",
+        "actual_supplied_chunk_pair_required": true,
+        "actual_land_and_area_records_required": false,
+        "mapped_public_run_indices": [
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          16,
+          17
+        ],
+        "protected_run_indices": [
+          0,
+          1,
+          2,
+          3,
+          12,
+          18,
+          19,
+          20,
+          21
+        ],
+        "partial_pair_allowed": false,
+        "fallback_allowed": false,
+        "generic_stack_allowed": false,
+        "factory_calls": 1,
+        "raw_source_constructor_callback_required": true,
+        "tangent_callback_required": true
+      },
+      "geometry_contract": {
+        "source_chunk_sha256": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4",
+        "horizontal_source_footprint_preserved": true,
+        "original_source_channels_and_roof_preserved": true,
+        "visual_mesh_instances": 20,
+        "visual_surfaces": 20,
+        "visual_triangles": 5544,
+        "wall_native_counts": [
+          19,
+          19,
+          5528,
+          3,
+          15
+        ],
+        "roof_native_counts": [
+          1,
+          1,
+          16,
+          1,
+          1
+        ],
+        "world_records": 735,
+        "world_mesh_instances": 1159,
+        "world_surfaces": 1174,
+        "world_triangles": 153873,
+        "world_static_bodies": 484,
+        "world_shapes": 569,
+        "world_topology_scope": "shared_northern_1222_1227_1202_candidate_live_parity"
+      },
+      "ownership_contract": {
+        "structural_owner_count": 4,
+        "shape_count": 16,
+        "spray_owner_count": 2,
+        "navigation_owner_count": 0,
+        "wall_is_sole_spray_receiver": false,
+        "original_wall_and_projected_front_are_receivers": true,
+        "projected_receiver_runs": [
+          4,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          16
+        ],
+        "projected_receiver_triangles": 6,
+        "projected_receiver_shape_order": [
+          "ProjectedUpperSiding"
+        ],
+        "projected_receiver_physics_layer": 5,
+        "projected_receiver_cull_mask": 2,
+        "wall_decal_cull_mask": 2,
+        "wall_shape_order": [
+          "exact_eligible_source_wall",
+          "ObservedPublicRoof",
+          "NorthGableSiding",
+          "CarportRoof",
+          "CarportPosts",
+          "ProjectedUpperClosures",
+          "PaleCompleteTrim",
+          "BlueOpaqueGlazing",
+          "DarkOpaqueGlazing",
+          "BlueGrayClosedDoors",
+          "PaleClosedDoor",
+          "LocalPrivacyScreens",
+          "PaleDrainageAndFascia",
+          "DoorHardware"
+        ],
+        "roof_shape_order": [
+          "exact_noneligible_source_roof"
+        ],
+        "added_public_roof_triangles": 92,
+        "original_flat_roof_preserved": true,
+        "added_public_roof_is_nonreceiver": true,
+        "all_additions_render_only": false,
+        "added_ground_collision_triangles": 0,
+        "roof_is_wall_spray_receiver": false,
+        "roof_world_solid_landing": true,
+        "eligible_render_layer": 2,
+        "noneligible_render_layer": 1,
+        "terrain_geometry_and_ownership_unchanged": true
+      },
+      "truth_boundary": {
+        "as_built_fidelity_claimed": false,
+        "interior_modeled": false,
+        "hidden_schedule_invented": false,
+        "capture_time_recognition_credit": false,
+        "capture_time_candidate_promoted": false,
+        "reference_pixels_packaged": false,
+        "receiver_complete_inferred_from_art": false,
+        "game_distinctive_claimed": false,
+        "unobserved_sides_protected": true,
+        "unsurveyed_dimensions_and_counts_are_production_inference": true,
+        "continuous_motion_review_claimed": false,
+        "ground_to_roof_traversal_claimed": false,
+        "spray_input_event_dispatch_claimed": false,
+        "separate_setup_poses_retained": true,
+        "sparse_movie_samples_only": true,
+        "raw_door_station_failure_retained": false,
+        "original_visual_hold_retained": true,
+        "metadata_only_observer_retained": false,
+        "unexecuted_central_carport_proposal_retained": false,
+        "motion_route_scope": "one_door_one_screen_finite_routes",
+        "station_held_claimed": false,
+        "prior_clipped_tag_failure_retained": false,
+        "scoped_hairline_observation_retained": true,
+        "native_support_qualification_mm": 4
+      }
+    },
+    "acceptance": {
+      "evidence_manifest_sha256": "f240c0a442a66cdb5e20fffa4883e2b9098ce681d0fdefa3c30e846e376d517b",
+      "motion_telemetry_manifest_sha256": "c45ad15c677f1413d106695f8a1c6e339c0b6da6f4fb67eea0d9b6ae53b64018",
+      "visual_motion_manifest_sha256": "a28bf431f24e58cc147b3adc6df9983784f68d6f0335c61bea3bda7d02e0cfa8",
+      "package_verification_receipt_sha256": "802e3287f84f0363a688d35454e88aebef7d34b93db88b88d16785311ec3d7d4",
+      "evidence_tree_sha256": "34e252f76805cd5e152fd58056f95852ba5c4ebfdc2e73ceeb20f1410c74eadb",
+      "mechanical_review_receipt_sha256": "45cf53232bcb34f4bf43b2370a7ce0e84ade628dc23e9aa7a8439f70eb102c03",
+      "review_receipt_sha256": "8957bff439a37e22880af8b0df5c6641e348bb19e13207bd65ac8e94cb1484ad",
+      "capture_time_recognition_metric": "23/213",
+      "numerator_effect": 1,
+      "review_id": "northern-1227-quality-candidate-2026-09-14-001",
+      "review_kind": "independent_reference_recognition",
+      "status": "accept"
+    },
+    "receipt": {
+      "evidence_manifest_sha256": "f240c0a442a66cdb5e20fffa4883e2b9098ce681d0fdefa3c30e846e376d517b",
+      "motion_telemetry_manifest_sha256": "c45ad15c677f1413d106695f8a1c6e339c0b6da6f4fb67eea0d9b6ae53b64018",
+      "visual_motion_manifest_sha256": "a28bf431f24e58cc147b3adc6df9983784f68d6f0335c61bea3bda7d02e0cfa8",
+      "package_verification_receipt_sha256": "802e3287f84f0363a688d35454e88aebef7d34b93db88b88d16785311ec3d7d4",
+      "evidence_tree_sha256": "34e252f76805cd5e152fd58056f95852ba5c4ebfdc2e73ceeb20f1410c74eadb",
+      "mechanical_review_receipt_sha256": "45cf53232bcb34f4bf43b2370a7ce0e84ade628dc23e9aa7a8439f70eb102c03",
+      "review_receipt_sha256": "8957bff439a37e22880af8b0df5c6641e348bb19e13207bd65ac8e94cb1484ad",
+      "capture_time_recognition_metric": "23/213",
+      "numerator_effect": 1,
+      "unit_id": "physical-building:w96215653",
+      "evidence_manifest_path": "evidence/first-playable/northern-1227-quality-candidate-2026-09-14-001/capture-manifest.json",
+      "motion_telemetry_manifest_path": "evidence/first-playable/northern-1227-quality-candidate-2026-09-14-001/motion-telemetry.json",
+      "visual_motion_manifest_path": "evidence/first-playable/northern-1227-quality-candidate-2026-09-14-001/visual-motion.json",
+      "package_verification_receipt_path": "evidence/first-playable/northern-1227-quality-candidate-2026-09-14-001/package-verification-receipt.json",
+      "evidence_tree_path": "evidence/first-playable/northern-1227-quality-candidate-2026-09-14-001/evidence-tree.json",
+      "mechanical_review_receipt_path": "evidence/first-playable/northern-1227-quality-candidate-2026-09-14-001/mechanical-review.json",
+      "review_path": "evidence/first-playable/northern-1227-quality-candidate-2026-09-14-001/unit-visual-attestation.json"
+    },
+    "tree_document_sha256": "e07300b7070c2035312b7c854561900fa52951a58c075339db4fdd3f7fbecedf",
+    "image_count": 20
+  },
+  {
+    "number": "1202",
+    "source": "w96215651",
+    "wall": "building:w96215651:wall",
+    "roof": "building:w96215651:roof",
+    "unit_id": "physical-building:w96215651",
+    "adapter_id": "active-adapter:mariner-1202-live:building:w96215651:wall",
+    "mode": "active_northern_1202_paired_replacement",
+    "attachment_kind": "active_northern_1202_paired_wall_roof_replacement",
+    "candidate_authority_metric": "23/213",
+    "source_chunk": {
+      "path": "generated/world/chunks/x_-2__z_-3.json",
+      "sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5"
+    },
+    "files": {
+      "adapter": "game/scripts/world/facades/mariner_1202_live_replacement.gd",
+      "config": "game/resources/facades/mariner_1202_study.json",
+      "factory": "game/scripts/world/facades/mariner_1202_live_factory.gd",
+      "shader": "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+      "site_kit": "game/scripts/world/facades/site_12_housing_kit.gd"
+    },
+    "hashes": {
+      "adapter": "29f17b796ae922d967e87212f7e3ed21fa30db7d9ce4b9c2c7a2ba079e847a70",
+      "config": "8490ec8dab6302c9892b37b86542ccc18793dfe309ac7d589fb9dc9cad9ddf22",
+      "factory": "c81cf174af5f91a21dc95306b77296d8d82152a54ef301e87853944b3b78c59c",
+      "shader": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a",
+      "site_kit": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+    },
+    "config": {
+      "schema_version": "ti.mariner-1202-study/1",
+      "source_key": "w96215651",
+      "chunk_id": "x_-2__z_-3",
+      "chunk_sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+      "mapped_runs": [
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        21
+      ],
+      "protected_runs": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        20,
+        22,
+        23,
+        24,
+        25
+      ]
+    },
+    "behavior": {
+      "schema_version": "ti.northern-1202-production-live-parity/1",
+      "acceptance_contract": {
+        "evidence_manifest_sha256": "497ce96296ada0265a26c4d24215db320b278cff8883be00b5d637a94d2cfd64",
+        "motion_telemetry_manifest_sha256": "8205cf8904929d56d9e90842922a6be37cf64869f283c60aac666e42e571c236",
+        "visual_motion_manifest_sha256": "4de165e49df045101b1fd7156f0f7595c0026617db255ab3c23412b1a4424081",
+        "package_verification_receipt_sha256": "1da322cc863b923b4befee6eac8f3876c1fa0360a1848527c88cba774c935769",
+        "evidence_tree_sha256": "3c30e9c73026a885f2ee2b3941b28e7ed6be799571c58fa733d2e209adfad7fe",
+        "mechanical_review_receipt_sha256": "669f108baf4c343f766da111c808232e6b4b611d13cf919526372e54f8642d34",
+        "review_receipt_sha256": "6a7813fc1a94f816bd01f55f6901a61f7d421b67e085663b6e51ad865408754e",
+        "accepted_physical_unit_id": "physical-building:w96215651",
+        "capture_time_recognition_metric": "23/213",
+        "numerator_effect": 1,
+        "reference_recognizable": true,
+        "wall_and_roof_are_one_physical_unit": true
+      },
+      "replacement_contract": {
+        "source_key": "w96215651",
+        "wall_object_key": "building:w96215651:wall",
+        "roof_object_key": "building:w96215651:roof",
+        "actual_supplied_chunk_pair_required": true,
+        "actual_land_and_area_records_required": false,
+        "mapped_public_run_indices": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          15,
+          16,
+          17,
+          18,
+          19,
+          21
+        ],
+        "protected_run_indices": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8,
+          9,
+          20,
+          22,
+          23,
+          24,
+          25
+        ],
+        "partial_pair_allowed": false,
+        "fallback_allowed": false,
+        "generic_stack_allowed": false,
+        "factory_calls": 1,
+        "raw_source_constructor_callback_required": true,
+        "tangent_callback_required": true
+      },
+      "geometry_contract": {
+        "source_chunk_sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+        "horizontal_source_footprint_preserved": true,
+        "original_source_channels_and_roof_preserved": true,
+        "visual_mesh_instances": 18,
+        "visual_surfaces": 18,
+        "visual_triangles": 5104,
+        "wall_native_counts": [
+          17,
+          17,
+          5088,
+          3,
+          13
+        ],
+        "roof_native_counts": [
+          1,
+          1,
+          16,
+          1,
+          1
+        ],
+        "world_records": 735,
+        "world_mesh_instances": 1159,
+        "world_surfaces": 1174,
+        "world_triangles": 153873,
+        "world_static_bodies": 484,
+        "world_shapes": 569,
+        "world_topology_scope": "current_integration_topology"
+      },
+      "ownership_contract": {
+        "structural_owner_count": 4,
+        "shape_count": 14,
+        "spray_owner_count": 2,
+        "navigation_owner_count": 0,
+        "wall_is_sole_spray_receiver": false,
+        "original_wall_and_projected_front_are_receivers": true,
+        "projected_receiver_runs": [
+          10,
+          11,
+          12,
+          13,
+          14,
+          16,
+          17,
+          18,
+          19,
+          21
+        ],
+        "projected_receiver_triangles": 6,
+        "projected_receiver_shape_order": [
+          "ProjectedUpperSiding"
+        ],
+        "projected_receiver_physics_layer": 5,
+        "projected_receiver_cull_mask": 2,
+        "wall_decal_cull_mask": 2,
+        "wall_shape_order": [
+          "exact_eligible_source_wall",
+          "ObservedPublicRoof",
+          "CarportRoof",
+          "CarportPosts",
+          "ProjectedUpperClosures",
+          "PaleCompleteTrim",
+          "BlueOpaqueGlazing",
+          "DarkOpaqueGlazing",
+          "BlueGrayClosedDoors",
+          "LocalPrivacyScreens",
+          "PaleDrainageAndFascia",
+          "DoorHardware"
+        ],
+        "roof_shape_order": [
+          "exact_noneligible_source_roof"
+        ],
+        "added_public_roof_triangles": 108,
+        "original_flat_roof_preserved": true,
+        "added_public_roof_is_nonreceiver": true,
+        "all_additions_render_only": false,
+        "added_ground_collision_triangles": 0,
+        "roof_is_wall_spray_receiver": false,
+        "roof_world_solid_landing": true,
+        "eligible_render_layer": 2,
+        "noneligible_render_layer": 1,
+        "terrain_geometry_and_ownership_unchanged": true
+      },
+      "truth_boundary": {
+        "as_built_fidelity_claimed": false,
+        "interior_modeled": false,
+        "hidden_schedule_invented": false,
+        "capture_time_recognition_credit": false,
+        "capture_time_candidate_promoted": false,
+        "reference_pixels_packaged": false,
+        "receiver_complete_inferred_from_art": false,
+        "game_distinctive_claimed": false,
+        "unobserved_sides_protected": true,
+        "unsurveyed_dimensions_and_counts_are_production_inference": true,
+        "continuous_motion_review_claimed": false,
+        "ground_to_roof_traversal_claimed": false,
+        "spray_input_event_dispatch_claimed": false,
+        "separate_setup_poses_retained": true,
+        "sparse_movie_samples_only": true,
+        "raw_door_station_failure_retained": false,
+        "original_visual_hold_retained": true,
+        "metadata_only_observer_retained": false,
+        "unexecuted_central_carport_proposal_retained": true,
+        "motion_route_scope": "uncovered_run21",
+        "station_held_claimed": false,
+        "prior_clipped_tag_failure_retained": false,
+        "scoped_hairline_observation_retained": false,
+        "native_support_qualification_mm": 4
+      }
+    },
+    "acceptance": {
+      "evidence_manifest_sha256": "497ce96296ada0265a26c4d24215db320b278cff8883be00b5d637a94d2cfd64",
+      "motion_telemetry_manifest_sha256": "8205cf8904929d56d9e90842922a6be37cf64869f283c60aac666e42e571c236",
+      "visual_motion_manifest_sha256": "4de165e49df045101b1fd7156f0f7595c0026617db255ab3c23412b1a4424081",
+      "package_verification_receipt_sha256": "1da322cc863b923b4befee6eac8f3876c1fa0360a1848527c88cba774c935769",
+      "evidence_tree_sha256": "3c30e9c73026a885f2ee2b3941b28e7ed6be799571c58fa733d2e209adfad7fe",
+      "mechanical_review_receipt_sha256": "669f108baf4c343f766da111c808232e6b4b611d13cf919526372e54f8642d34",
+      "review_receipt_sha256": "6a7813fc1a94f816bd01f55f6901a61f7d421b67e085663b6e51ad865408754e",
+      "capture_time_recognition_metric": "23/213",
+      "numerator_effect": 1,
+      "review_id": "northern-1202-quality-candidate-2026-09-14-001",
+      "review_kind": "independent_reference_recognition",
+      "status": "accept"
+    },
+    "receipt": {
+      "evidence_manifest_sha256": "497ce96296ada0265a26c4d24215db320b278cff8883be00b5d637a94d2cfd64",
+      "motion_telemetry_manifest_sha256": "8205cf8904929d56d9e90842922a6be37cf64869f283c60aac666e42e571c236",
+      "visual_motion_manifest_sha256": "4de165e49df045101b1fd7156f0f7595c0026617db255ab3c23412b1a4424081",
+      "package_verification_receipt_sha256": "1da322cc863b923b4befee6eac8f3876c1fa0360a1848527c88cba774c935769",
+      "evidence_tree_sha256": "3c30e9c73026a885f2ee2b3941b28e7ed6be799571c58fa733d2e209adfad7fe",
+      "mechanical_review_receipt_sha256": "669f108baf4c343f766da111c808232e6b4b611d13cf919526372e54f8642d34",
+      "review_receipt_sha256": "6a7813fc1a94f816bd01f55f6901a61f7d421b67e085663b6e51ad865408754e",
+      "capture_time_recognition_metric": "23/213",
+      "numerator_effect": 1,
+      "unit_id": "physical-building:w96215651",
+      "evidence_manifest_path": "evidence/first-playable/northern-1202-quality-candidate-2026-09-14-001/capture-manifest.json",
+      "motion_telemetry_manifest_path": "evidence/first-playable/northern-1202-quality-candidate-2026-09-14-001/motion-telemetry.json",
+      "visual_motion_manifest_path": "evidence/first-playable/northern-1202-quality-candidate-2026-09-14-001/visual-motion.json",
+      "package_verification_receipt_path": "evidence/first-playable/northern-1202-quality-candidate-2026-09-14-001/package-verification-receipt.json",
+      "evidence_tree_path": "evidence/first-playable/northern-1202-quality-candidate-2026-09-14-001/evidence-tree.json",
+      "mechanical_review_receipt_path": "evidence/first-playable/northern-1202-quality-candidate-2026-09-14-001/mechanical-review.json",
+      "review_path": "evidence/first-playable/northern-1202-quality-candidate-2026-09-14-001/unit-visual-attestation.json"
+    },
+    "tree_document_sha256": "37b27eb48fa01ec83edcc0b5a4d475920011d0a39799de183b87e794edb903b3",
+    "image_count": 19
   }
 ]);
-const D5_BATCH_BUILDER_SHA256 = "fa03651d36ac83889239ab9bfc50446fadc536803954faa6c4350ba1c64ccf0c";
+const D5_BATCH_BUILDER_SHA256 = "a9e1c93285cde7ca0ac0469102518ec4045a7f9be2a59572868eb7d1f53e7f54";
 
 const REVIEW_RECEIPTS = Object.freeze({
   ...Object.fromEntries(D5_BATCH_ACCEPTED.map((d) => [d.acceptance.review_id, Object.freeze(d.receipt)])),
@@ -3597,7 +4384,7 @@ const PATHS = Object.freeze({
 });
 
 const EXPECTED = Object.freeze({
-  active_runtime_adapter_receivers: 22,
+  active_runtime_adapter_receivers: 25,
   building_footprints: 213,
   building_parts: 2,
   composite_units: 1,
@@ -3606,7 +4393,7 @@ const EXPECTED = Object.freeze({
   recognition_units: 213,
   source_records: 215,
   standalone_units: 212,
-  runtime_adapter_receivers: 31,
+  runtime_adapter_receivers: 34,
   visible_wall_runs: 4971,
 });
 
@@ -3614,8 +4401,8 @@ const EXPECTED_ADAPTER_CONTRACTS = Object.freeze({
   disabled_adapter_receivers: 6,
   disabled_projection_occurrences: 13,
   disabled_unique_projection_inputs: 13,
-  package_safe_adapter_receivers: 25,
-  receiver_adapter_plans: 31,
+  package_safe_adapter_receivers: 28,
+  receiver_adapter_plans: 34,
 });
 
 const ADAPTER_CONTRACT_CHECK_ID = `adapter_contract_${EXPECTED_ADAPTER_CONTRACTS.package_safe_adapter_receivers}_ready_${EXPECTED_ADAPTER_CONTRACTS.disabled_adapter_receivers}_disabled_${EXPECTED_ADAPTER_CONTRACTS.disabled_unique_projection_inputs}_unique_projection_inputs`;
@@ -3654,6 +4441,9 @@ const ACTIVE_ADAPTER_UNIT_BY_RECEIVER = Object.freeze({
   [D2_1444_WALL]: unitId(D2_1444_SOURCE),
   "building:w764313741:wall": "physical-building:w764313741",
   "building:r19685981:wall": "physical-building:r19685981",
+  "building:w96215661:wall": "physical-building:w96215661",
+  "building:w96215653:wall": "physical-building:w96215653",
+  "building:w96215651:wall": "physical-building:w96215651",
   "building:w96215649:wall": "physical-building:w96215649",
   "building:w96215652:wall": "physical-building:w96215652",
   "building:w96215658:wall": "physical-building:w96215658",
@@ -3678,6 +4468,9 @@ const ACTIVE_ADAPTER_REVIEW_STATUS_BY_RECEIVER = Object.freeze({
   [D2_1444_WALL]: "independent_exact_current_live_pass",
   "building:w764313741:wall": "independent_exact_current_live_pass",
   "building:r19685981:wall": "independent_exact_current_live_pass",
+  "building:w96215661:wall": "independent_exact_current_live_pass",
+  "building:w96215653:wall": "independent_exact_current_live_pass",
+  "building:w96215651:wall": "independent_exact_current_live_pass",
   "building:w96215649:wall": "independent_exact_current_live_pass",
   "building:w96215652:wall": "independent_exact_current_live_pass",
   "building:w96215658:wall": "independent_exact_current_live_pass",
@@ -4219,28 +5012,28 @@ function validateCurrentWorldBuilderDispatch(inputs) {
     navy_chapel_preload: `const NAVY_CHAPEL_187_LIVE_REPLACEMENT := preload("res://${NAVY_CHAPEL_LIVE_ADAPTER_PATH}")`,
     navy_chapel_prepare: "NAVY_CHAPEL_187_LIVE_REPLACEMENT.prepare_chunk_records(chunk.records as Array)",
     navy_chapel_plan: "NAVY_CHAPEL_187_LIVE_REPLACEMENT.build_chunk_plan(chapel_pair)",
-    navy_chapel_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan)",
+    navy_chapel_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan)",
     navy_chapel_claim: "if not is_context and NAVY_CHAPEL_187_LIVE_REPLACEMENT.claims_record(record):",
     navy_chapel_consume: "return NAVY_CHAPEL_187_LIVE_REPLACEMENT.consume_record(record, chapel_plan)",
     navy_chapel_consumed: "NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)",
     d2_1441_preload: `const D2_1441_CHINOOK_LIVE_REPLACEMENT := preload("res://${D2_1441_LIVE_ADAPTER_PATH}")`,
     d2_1441_prepare: "D2_1441_CHINOOK_LIVE_REPLACEMENT.prepare_chunk_records(chunk)",
     d2_1441_plan: "D2_1441_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1441_pair)",
-    d2_1441_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan)",
+    d2_1441_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan)",
     d2_1441_claim: "if not is_context and D2_1441_CHINOOK_LIVE_REPLACEMENT.claims_record(record):",
     d2_1441_consume: "return D2_1441_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1441_plan)",
     d2_1441_consumed: "D2_1441_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1441_plan)",
     d2_1439_preload: `const D2_1439_CHINOOK_LIVE_REPLACEMENT := preload("res://${D2_1439_LIVE_ADAPTER_PATH}")`,
     d2_1439_prepare: "D2_1439_CHINOOK_LIVE_REPLACEMENT.prepare_chunk_records(chunk)",
     d2_1439_plan: "D2_1439_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1439_pair)",
-    d2_1439_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan)",
+    d2_1439_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan)",
     d2_1439_claim: "if not is_context and D2_1439_CHINOOK_LIVE_REPLACEMENT.claims_record(record):",
     d2_1439_consume: "return D2_1439_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1439_plan)",
     d2_1439_consumed: "D2_1439_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1439_plan)",
     d2_1444_preload: `const D2_1444_CROAKER_LIVE_REPLACEMENT := preload("res://${D2_1444_LIVE_ADAPTER_PATH}")`,
     d2_1444_prepare: "D2_1444_CROAKER_LIVE_REPLACEMENT.prepare_chunk_records(chunk)",
     d2_1444_plan: "D2_1444_CROAKER_LIVE_REPLACEMENT.build_chunk_plan(d2_1444_pair)",
-    d2_1444_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan)",
+    d2_1444_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan)",
     d2_1444_claim: "if not is_context and D2_1444_CROAKER_LIVE_REPLACEMENT.claims_record(record):",
     d2_1444_consume: "return D2_1444_CROAKER_LIVE_REPLACEMENT.consume_record(record, d2_1444_plan)",
     d2_1444_consumed: "D2_1444_CROAKER_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1444_plan)",
@@ -4357,7 +5150,6 @@ function validateCurrentWorldBuilderDispatch(inputs) {
   before("d5_1308_claim", "d5_1308_consume", "D5 1308 atomic lifecycle order drifted");
   before("d5_1308_consume", "generic_vertices", "D5 1308 must consume before generic construction");
   before("d2_1444_record_dispatch", "d5_1308_consumed", "D5 1308 consumption must precede its sealed-plan assertion");
-  invariant(occurrenceCount(builderText, "D5_1308_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1308_plan)") === 14, "D5 1308 rollback lifecycle drifted");
   before("d5_1394_prepare", "d5_1394_plan", "D5 1394 atomic lifecycle order drifted");
   before("d5_1317_prepare", "d5_1317_plan", "D5 1317 atomic lifecycle order drifted");
   before("fire_station48_prepare", "fire_station48_plan", "Station48 atomic lifecycle order drifted");
@@ -4413,17 +5205,6 @@ function validateCurrentWorldBuilderDispatch(inputs) {
   before("d2_1444_record_dispatch", "mariner_1206_consumed", "1206 consumption must precede its sealed-plan assertion");
   before("d2_1444_record_dispatch", "northpoint_1238_consumed", "1238 consumption must precede its sealed-plan assertion");
   before("d2_1444_record_dispatch", "northern_canopy_consumed", "1201 consumption must precede its sealed-plan assertion");
-  invariant(occurrenceCount(builderText, "D5_1394_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1394_plan)") === 13, "D5 1394 rollback lifecycle drifted");
-  invariant(occurrenceCount(builderText, "D5_1317_GATEVIEW_LIVE_REPLACEMENT.free_unconsumed(d5_1317_plan)") === 12, "D5 1317 rollback lifecycle drifted");
-  invariant(occurrenceCount(builderText, "FIRE_STATION48_LIVE_REPLACEMENT.free_unconsumed(fs48_plan)") === 11, "Station48 rollback lifecycle drifted");
-  invariant(occurrenceCount(builderText, "MACEO_MAY_LIVE_REPLACEMENT.free_unconsumed(maceo_plan)") === 10, "Maceo May rollback lifecycle drifted");
-  invariant(occurrenceCount(builderText, "NORTHPOINT_1239_LIVE_REPLACEMENT.free_unconsumed(northpoint_1239_plan)") === 3, "1239 rollback lifecycle drifted");
-  invariant(occurrenceCount(builderText, "BAYSIDE_1220_LIVE_REPLACEMENT.free_unconsumed(bayside_1220_plan)") === 4, "1220 rollback lifecycle drifted");
-  invariant(occurrenceCount(builderText, "MARINER_1212_LIVE_REPLACEMENT.free_unconsumed(mariner_1212_plan)") === 5, "1212 rollback lifecycle drifted");
-  invariant(occurrenceCount(builderText, "MARINER_1219_LIVE_REPLACEMENT.free_unconsumed(mariner_1219_plan)") === 6, "1219 rollback lifecycle drifted");
-  invariant(occurrenceCount(builderText, "MARINER_1206_LIVE_REPLACEMENT.free_unconsumed(mariner_1206_plan)") === 7, "1206 rollback lifecycle drifted");
-  invariant(occurrenceCount(builderText, "NORTHPOINT_1238_LIVE_REPLACEMENT.free_unconsumed(northpoint_1238_plan)") === 8, "1238 rollback lifecycle drifted");
-  invariant(occurrenceCount(builderText, "NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.free_unconsumed(northern_canopy_plan)") === 9, "1201 rollback lifecycle drifted");
   before("d1_b201_validate", "d1_b201_claim", "D1 B201 chunk validation must precede its per-record claim");
   before("d1_b201_claim", "d1_b201_prepare", "D1 B201 claim must precede preparation");
   before("d1_b201_prepare", "generic_vertices", "D1 B201 preparation must precede generic construction");
@@ -4441,11 +5222,48 @@ function validateCurrentWorldBuilderDispatch(inputs) {
   before("generic_body", "isle_house_claim", "Isle House low attachment must follow retained generic body construction");
   before("isle_house_claim", "isle_house_build", "Isle House low claim must precede its attachment build");
 
+  // A successful plan registers once; later failures release that exact ordered prefix.
+  const cleanupPlans = [
+    ["NAVY_CHAPEL_187_LIVE_REPLACEMENT", "chapel_plan"],
+    ["D2_1441_CHINOOK_LIVE_REPLACEMENT", "d2_1441_plan"],
+    ["D2_1439_CHINOOK_LIVE_REPLACEMENT", "d2_1439_plan"],
+    ["D2_1444_CROAKER_LIVE_REPLACEMENT", "d2_1444_plan"],
+    ["D5_1308_GATEVIEW_LIVE_REPLACEMENT", "d5_1308_plan"],
+    ["D5_1394_GATEVIEW_LIVE_REPLACEMENT", "d5_1394_plan"],
+    ["D5_1317_GATEVIEW_LIVE_REPLACEMENT", "d5_1317_plan"],
+    ["FIRE_STATION48_LIVE_REPLACEMENT", "fs48_plan"],
+    ["MACEO_MAY_LIVE_REPLACEMENT", "maceo_plan"],
+    ["NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT", "northern_canopy_plan"],
+    ["NORTHPOINT_1238_LIVE_REPLACEMENT", "northpoint_1238_plan"],
+    ["MARINER_1206_LIVE_REPLACEMENT", "mariner_1206_plan"],
+    ["MARINER_1219_LIVE_REPLACEMENT", "mariner_1219_plan"],
+    ["MARINER_1212_LIVE_REPLACEMENT", "mariner_1212_plan"],
+    ["BAYSIDE_1220_LIVE_REPLACEMENT", "bayside_1220_plan"],
+    ["NORTHPOINT_1239_LIVE_REPLACEMENT", "northpoint_1239_plan"],
+    ["BAYSIDE_1222_LIVE_REPLACEMENT", "bayside_1222_plan"],
+    ["NORTHPOINT_1227_LIVE_REPLACEMENT", "northpoint_1227_plan"],
+    ["MARINER_1202_LIVE_REPLACEMENT", "mariner_1202_plan"]
+  ];
+  const cleanupCall = "_free_unconsumed_plans(rollback_plans)";
+  const cleanupStart = exactWorldBuilderMarkerIndex(builderText, "var rollback_plans: Array[Dictionary] = []", "cleanup list");
+  let previousRegistration = cleanupStart;
+  for (const [adapter, plan] of cleanupPlans) {
+    const construction = exactWorldBuilderMarkerIndex(builderText, `var ${plan} := ${adapter}.build_chunk_plan(`, `${plan} construction`);
+    const registration = exactWorldBuilderMarkerIndex(builderText, `rollback_plans.append({"adapter": ${adapter}, "plan": ${plan}})`, `${plan} cleanup registration`);
+    invariant(previousRegistration < construction && construction < registration, `${plan} cleanup registration order drifted`);
+    const failure = `if not bool(${plan}.get("ok", false)):\n${plan === "chapel_plan" ? "" : "\t\t" + cleanupCall + "\n"}\t\tchunk_root.free()\n\t\treturn ${plan}\n\t`;
+    invariant(builderText.slice(construction, registration).endsWith(failure), `${plan} must register only after successful construction and ordered prior cleanup`);
+    previousRegistration = registration;
+  }
+  invariant(previousRegistration < positions.navy_chapel_record_dispatch, "Every successful plan must register before per-row dispatch");
+  invariant(occurrenceCount(builderText, "rollback_plans.append(") === cleanupPlans.length, "Unexpected cleanup registration");
+  invariant(occurrenceCount(builderText, cleanupCall) === cleanupPlans.length + 2, "Plan-build and three row/post-loop failure cleanups must remain complete");
+  invariant(occurrenceCount(builderText, `${cleanupCall}\n\t\t\tchunk_root.free()`) === 2 && occurrenceCount(builderText, `${cleanupCall}\n\t\tchunk_root.free()`) === cleanupPlans.length, "Cleanup must retain its position before the owning chunk is freed");
+  const cleanupBody = "func _free_unconsumed_plans(plans: Array[Dictionary]) -> void:\n\tfor entry: Dictionary in plans:\n\t\tvar adapter: Script = entry.adapter\n\t\tvar plan: Dictionary = entry.plan\n\t\tadapter.free_unconsumed(plan)";
+  invariant(occurrenceCount(builderText, cleanupBody) === 1 && occurrenceCount(builderText, ".free_unconsumed(") === 1, "Cleanup must call the registered adapter on the original plan exactly once in order");
+
   invariant(sha256File(absolute(WORLD_CHUNK_BUILDER_PATH)) === D5_BATCH_BUILDER_SHA256, "Current batch dispatch bytes drifted");
-  invariant(occurrenceCount(builderText, "D2_1439_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1439_plan)") === 16, "Current 1439 cleanup lifecycle drifted");
-  invariant(occurrenceCount(builderText, "D2_1444_CROAKER_LIVE_REPLACEMENT.free_unconsumed(d2_1444_plan)") === 15, "Current 1444 cleanup lifecycle drifted");
   const currentDependencies = runtimeDependencies(builderText);
-  invariant(occurrenceCount(builderText, "D2_1441_CHINOOK_LIVE_REPLACEMENT.free_unconsumed(d2_1441_plan)") === 17, "Current world-builder D2 1441 cleanup marker must occur exactly five times");
   for (const dependency of D2_1441_REVIEWED_WORLD_BUILDER_DEPENDENCY_PATHS) {
     invariant(currentDependencies.includes(dependency), `Current world builder lost accepted D2 1441 package dependency ${dependency}`);
   }
@@ -5866,6 +6684,54 @@ function deriveActiveRuntimeAdapterSeeds(inputs, units) {
   "source_key": "w96215658",
   "whole_building_recognizability_imported": false
 },
+    {
+  "adapter_id": "active-adapter:bayside-1222-live:building:w96215661:wall",
+  "content_classification": "active_target_specific_paired_wall_roof_replacement",
+  "receiver_key": "building:w96215661:wall",
+  "review_status": "independent_exact_current_live_pass",
+  "runtime_adapter_path": "game/scripts/world/facades/bayside_1222_live_replacement.gd",
+  "runtime_asset_paths": [
+    "game/scripts/world/facades/bayside_1222_live_factory.gd",
+    "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+    "game/scripts/world/facades/site_12_housing_kit.gd"
+  ],
+  "runtime_config_path": "game/resources/facades/bayside_1222_study.json",
+  "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+  "source_key": "w96215661",
+  "whole_building_recognizability_imported": false
+},
+    {
+  "adapter_id": "active-adapter:northpoint-1227-live:building:w96215653:wall",
+  "content_classification": "active_target_specific_paired_wall_roof_replacement",
+  "receiver_key": "building:w96215653:wall",
+  "review_status": "independent_exact_current_live_pass",
+  "runtime_adapter_path": "game/scripts/world/facades/northpoint_1227_live_replacement.gd",
+  "runtime_asset_paths": [
+    "game/scripts/world/facades/northpoint_1227_live_factory.gd",
+    "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+    "game/scripts/world/facades/site_12_housing_kit.gd"
+  ],
+  "runtime_config_path": "game/resources/facades/northpoint_1227_study.json",
+  "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+  "source_key": "w96215653",
+  "whole_building_recognizability_imported": false
+},
+    {
+  "adapter_id": "active-adapter:mariner-1202-live:building:w96215651:wall",
+  "content_classification": "active_target_specific_paired_wall_roof_replacement",
+  "receiver_key": "building:w96215651:wall",
+  "review_status": "independent_exact_current_live_pass",
+  "runtime_adapter_path": "game/scripts/world/facades/mariner_1202_live_replacement.gd",
+  "runtime_asset_paths": [
+    "game/scripts/world/facades/mariner_1202_live_factory.gd",
+    "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+    "game/scripts/world/facades/site_12_housing_kit.gd"
+  ],
+  "runtime_config_path": "game/resources/facades/mariner_1202_study.json",
+  "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+  "source_key": "w96215651",
+  "whole_building_recognizability_imported": false
+},
   ].map((seed) => ({
     ...seed,
     ...activeRecognitionAuthority(seed.receiver_key, units),
@@ -6184,7 +7050,7 @@ function d21439AcceptanceRecord() {
 }
 
 function northernConfigSummary(d, config) {
-  if (!["1201", "1238", "1206", "1219", "1212", "1220", "1239"].includes(d.number)) return config;
+  if (!["1201", "1238", "1206", "1219", "1212", "1220", "1239", "1222", "1227", "1202"].includes(d.number)) return config;
   return {schema_version: config.schema_version, source_key: config.target.source_key, chunk_id: d.config.chunk_id, chunk_sha256: d.source_chunk.sha256, mapped_runs: config.mapped_runs, protected_runs: config.protected_runs};
 }
 
@@ -6205,8 +7071,17 @@ function validateD5BatchAuthority(inputs) {
     const six = Object.fromEntries(Object.entries(d.acceptance).filter(([key]) => key.endsWith("_sha256") && key !== "review_receipt_sha256"));
     invariant(review.decision === "PASS" && review.physical_unit_id === d.unit_id && equalStable(review.acceptance_bindings, six) && review.evidence_tree_document_sha256 === d.tree_document_sha256, `${label} independent seventh attestation binding drifted`);
     const pkg = readJson(receipt.package_verification_receipt_path);
-    invariant(pkg.owner_decision === "PASS" && pkg.independent_exact_app_decision === "PASS" && pkg.independent_exact_app_review_pending === false && pkg.physical_unit_id === d.unit_id && pkg.candidate_authority === (d.candidate_authority_metric ?? d.acceptance.capture_time_recognition_metric) && (["1201", "1238", "1206", "1219", "1212", "1220", "1239"].includes(d.number) ? pkg.unit_acceptance_granted === false && pkg.recognition_credit_granted === false : pkg.truth_boundary.credit_granted === false && pkg.truth_boundary.authority_mutated === false), `${label} historical candidate package truth drifted`);
-    if (d.number === "1212") {
+    invariant(pkg.owner_decision === "PASS" && pkg.independent_exact_app_decision === "PASS" && pkg.independent_exact_app_review_pending === false && pkg.physical_unit_id === d.unit_id && pkg.candidate_authority === (d.candidate_authority_metric ?? d.acceptance.capture_time_recognition_metric) && (["1201", "1238", "1206", "1219", "1212", "1220", "1239", "1222", "1227", "1202"].includes(d.number) ? pkg.unit_acceptance_granted === false && pkg.recognition_credit_granted === false : pkg.truth_boundary.credit_granted === false && pkg.truth_boundary.authority_mutated === false), `${label} historical candidate package truth drifted`);
+    if (d.number === "1222") {
+      invariant(pkg.capture_time_authority === d.acceptance.capture_time_recognition_metric && pkg.independent_review.sha256 === "2c58abb68f87eac1365a21af1fc4356be769c7eef981a539b1c7b996cbd9eed5" && pkg.terminal_slot_releases.some((r) => r.sha256 === "b20f0af6a561858fc157da6c7ba2a000242befc5958eef7a7be8c290fe650d6f"), `${label} independent candidate review or terminal drifted`);
+      invariant(pkg.signature_privacy_binding.sha256 === "fc65f97ff8ef0e9019e4e8095615d199ba61f1aaa220ba6e27edc14081240eee" && pkg.pck_sha256 === "4168858ec54a62f8a7d30dced60c43ea234b775268ee41546c53c6d990797a8d" && pkg.unit_actual_attachment.source_key === d.source, `${label} exact candidate23 app/target drifted`);
+    }     else if (d.number === "1227") {
+      invariant(pkg.capture_time_authority === d.acceptance.capture_time_recognition_metric && pkg.independent_review.sha256 === "2c58abb68f87eac1365a21af1fc4356be769c7eef981a539b1c7b996cbd9eed5" && pkg.terminal_slot_releases.some((r) => r.sha256 === "b20f0af6a561858fc157da6c7ba2a000242befc5958eef7a7be8c290fe650d6f"), `${label} independent candidate review or terminal drifted`);
+      invariant(pkg.signature_privacy_binding.sha256 === "fc65f97ff8ef0e9019e4e8095615d199ba61f1aaa220ba6e27edc14081240eee" && pkg.pck_sha256 === "4168858ec54a62f8a7d30dced60c43ea234b775268ee41546c53c6d990797a8d" && pkg.unit_actual_attachment.source_key === d.source, `${label} exact candidate23 app/target drifted`);
+    }     else if (d.number === "1202") {
+      invariant(pkg.capture_time_authority === d.acceptance.capture_time_recognition_metric && pkg.independent_review.sha256 === "2c58abb68f87eac1365a21af1fc4356be769c7eef981a539b1c7b996cbd9eed5" && pkg.terminal_slot_releases.some((r) => r.sha256 === "b20f0af6a561858fc157da6c7ba2a000242befc5958eef7a7be8c290fe650d6f"), `${label} independent candidate review or terminal drifted`);
+      invariant(pkg.signature_privacy_binding.sha256 === "fc65f97ff8ef0e9019e4e8095615d199ba61f1aaa220ba6e27edc14081240eee" && pkg.pck_sha256 === "4168858ec54a62f8a7d30dced60c43ea234b775268ee41546c53c6d990797a8d" && pkg.unit_actual_attachment.source_key === d.source, `${label} exact candidate23 app/target drifted`);
+    } else if (d.number === "1212") {
       invariant(pkg.capture_time_authority === d.acceptance.capture_time_recognition_metric && pkg.independent_review.sha256 === "3d0dda395a4c85fc5353d6e0c65832da6f945cb5b26d6ae979470fc6c7676c5d" && pkg.terminal_slot_releases.some((r) => r.sha256 === "7711f4040f799ce8bb1db320a3166f407864b98e3bcf459e882f6c4846ca2a1a"), `${label} independent candidate review or terminal drifted`);
       invariant(pkg.signature_privacy_binding.sha256 === "97e42dd327da341160287aaa36e06232d53e139e7904f28ceabb4d5b94aacf20" && pkg.pck_sha256 === "2c9d0c3070175a2f3a22a7feb387bb980ef6a2f57343fffa1c36f38e5495a3f5" && pkg.unit_actual_attachment.source_key === d.source, `${label} exact candidate20 app/target drifted`);
     }     else if (d.number === "1220") {
@@ -6503,7 +7378,7 @@ function runtimeDependencies(text) {
 
 function acceptedAuthorityRuntimeDependencies(path, text) {
   let dependencyText = text;
-  const northern = D5_BATCH_ACCEPTED.find((d) => ["1201", "1238", "1206", "1219", "1212", "1220", "1239"].includes(d.number) && d.files.adapter === path);
+  const northern = D5_BATCH_ACCEPTED.find((d) => ["1201", "1238", "1206", "1219", "1212", "1220", "1239", "1222", "1227", "1202"].includes(d.number) && d.files.adapter === path);
   if (northern) {
     invariant(sha256Bytes(text) === northern.hashes.adapter, "Northern format-probe wrapper source drifted");
     for (const probe of ['FileAccess.file_exists("res://project.binary")', 'FileAccess.file_exists("res://project.godot")']) {

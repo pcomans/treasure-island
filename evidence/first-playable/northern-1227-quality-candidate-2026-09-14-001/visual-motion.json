@@ -1,0 +1,251 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215653",
+  "label": "Changed-light/contact/tag images and finite original AVI samples",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/motion-finalization.json",
+      "path_base": "/",
+      "sha256": "c508312da8de290f0b9f0c19cb9bd169b089fa5ff5c8150ecb0da3e41454b6b6",
+      "bytes": 2200815,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/motion-finalization.json",
+      "role": "immutable_external_original",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/independent-visual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "1cb0c0ff699d896495396b223a2595d70e15072114a8e7258b8963d4ceff7a96",
+      "bytes": 3363,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/independent-visual-001/REVIEW.md",
+      "role": "immutable_external_original",
+      "copied": false
+    }
+  ],
+  "data": {
+    "movies": [
+      {
+        "original": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/1227-mechanics-changed-light.avi",
+          "path_base": "/",
+          "sha256": "2be1e0c467359a133061870e6475cbf82e0dccea47ec002cd8a501642f0d6a0c",
+          "bytes": 42866870,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/1227-mechanics-changed-light.avi",
+          "role": "full_original_movie_external",
+          "copied": false
+        },
+        "metadata": {
+          "path": "/private/tmp/1227-mechanics-changed-light-001/1227-mechanics-changed-light.avi",
+          "sha256": "2be1e0c467359a133061870e6475cbf82e0dccea47ec002cd8a501642f0d6a0c",
+          "physical_bytes": 42866870,
+          "riff_declared_end": 42866800,
+          "microseconds_per_frame": 16666,
+          "total_frames": 583,
+          "width": 1280,
+          "height": 800
+        },
+        "phase": "1227-mechanics-changed-light-preparation-001"
+      }
+    ],
+    "images": [
+      {
+        "path": "images/motion001/01-whole-near-face-changed-light.png",
+        "sha256": "535c90e782025c86a01248b01fe53b9bc5944d0e4a5c927cbcefefc737b0aa7d",
+        "bytes": 822912,
+        "role": "accepted_reached_motion_marker",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/images/01-whole-near-face-changed-light.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "id": "01-whole-near-face-changed-light",
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/native-mechanics-001-result.json"
+        }
+      },
+      {
+        "path": "images/motion001/02-held-closed-door-approach.png",
+        "sha256": "f2cb1eac4c5678926daf8ef53ffae70cbf69ace06bf169f748156c662cad490c",
+        "bytes": 750305,
+        "role": "accepted_reached_motion_marker",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/images/02-held-closed-door-approach.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "id": "02-held-closed-door-approach",
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/native-mechanics-001-result.json"
+        }
+      },
+      {
+        "path": "images/motion001/03-held-short-screen-obstruction.png",
+        "sha256": "0c36310377256345f35a4da3a2c2e7149d051d6a542d890984831c1115ef14cf",
+        "bytes": 444738,
+        "role": "accepted_reached_motion_marker",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/images/03-held-short-screen-obstruction.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "id": "03-held-short-screen-obstruction",
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/native-mechanics-001-result.json"
+        }
+      },
+      {
+        "path": "images/motion001/04-actual-mapped-siding-spray.png",
+        "sha256": "222e9e14a711e7cbb9008955fb81650d7d0dbee2b0fb9759a1931c86e45d2330",
+        "bytes": 398478,
+        "role": "accepted_reached_motion_marker",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/images/04-actual-mapped-siding-spray.png",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "id": "04-actual-mapped-siding-spray",
+          "raw_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/native-mechanics-001-result.json"
+        }
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0045.jpg",
+        "sha256": "914c2c49269a2311fb2297111b5924738c62d5edcef7d4dfa84a87c76ad5f1d1",
+        "bytes": 65769,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/avi-frame-samples/avi-index-0045.jpg",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "zero_based_avi_index": 45,
+          "byte_offset": 3334608,
+          "bytes": 65769
+        }
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0112.jpg",
+        "sha256": "b219d10dc9e4ba09465c74c4bf867c0ad1dc4335c4eba28517711a1aa3c57c8c",
+        "bytes": 80129,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/avi-frame-samples/avi-index-0112.jpg",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "zero_based_avi_index": 112,
+          "byte_offset": 8733702,
+          "bytes": 80129
+        }
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0179.jpg",
+        "sha256": "99f651993397a022a21d730393831dc4b90f2c835edffbc06dec9e3dbaf556f6",
+        "bytes": 74714,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/avi-frame-samples/avi-index-0179.jpg",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "zero_based_avi_index": 179,
+          "byte_offset": 14255208,
+          "bytes": 74714
+        }
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0246.jpg",
+        "sha256": "3e6abee5855bc8f3dc97a012c7f3fd25291a48b7cc2e343b4d293bf497fff494",
+        "bytes": 81364,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/avi-frame-samples/avi-index-0246.jpg",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "zero_based_avi_index": 246,
+          "byte_offset": 19704144,
+          "bytes": 81364
+        }
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0313.jpg",
+        "sha256": "2f92e0dcdd53a2f0f253dd1beda97766a94c310d718d7097f526a502f351c713",
+        "bytes": 58908,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/avi-frame-samples/avi-index-0313.jpg",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "zero_based_avi_index": 313,
+          "byte_offset": 23997006,
+          "bytes": 58908
+        }
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0380.jpg",
+        "sha256": "1869930b3610288667b46f6e1d94d355354f95f64cfd4f86d3460d17ea866575",
+        "bytes": 57744,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/avi-frame-samples/avi-index-0380.jpg",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "zero_based_avi_index": 380,
+          "byte_offset": 28257958,
+          "bytes": 57744
+        }
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0447.jpg",
+        "sha256": "fc21e95a8aab5248bf434a94e9b7b01f12f121b3d32f77c0439d5445c41c2fc3",
+        "bytes": 61309,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/avi-frame-samples/avi-index-0447.jpg",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "zero_based_avi_index": 447,
+          "byte_offset": 32821860,
+          "bytes": 61309
+        }
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0514.jpg",
+        "sha256": "4933aa91e75142e0d5b8e98b74a27ca238c0441b2ee7ff9e0e0bee227e244e52",
+        "bytes": 90894,
+        "role": "exact_original_mjpeg_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/avi-frame-samples/avi-index-0514.jpg",
+        "byte_identical": true,
+        "provides_scene_evidence": true,
+        "counter_binding": {
+          "zero_based_avi_index": 514,
+          "byte_offset": 38102722,
+          "bytes": 90894
+        }
+      },
+      {
+        "path": "images/motion001-avi/avi-index-0581.jpg",
+        "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+        "bytes": 16628,
+        "role": "non_scene_blue_payload",
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1227-mechanics-changed-light-preparation-001/capture/avi-frame-samples/avi-index-0581.jpg",
+        "byte_identical": true,
+        "provides_scene_evidence": false,
+        "counter_binding": {
+          "zero_based_avi_index": 581,
+          "byte_offset": 42808526,
+          "bytes": 16628
+        }
+      }
+    ],
+    "independent_visual_status": "EXISTING_SCOPED_PASS_WITH_EXPLICIT_HISTORY",
+    "corrected_marker": null,
+    "continuous_video_review_claim": false,
+    "limits": [
+      "Derived assembly only: existing independently accepted study decisions are bound, not newly accepted by this author. Current capture and preparation authority is 23/213; held first study, accepted v2 and separate live source producers remain distinct.",
+      "The source study is not a live adapter or app screenshot. Future batch app/PCK, package receipts and independent seventh attestations are pending/null. No authority write or recognition credit is supplied.",
+      "Original 1440x900 PNGs and 1280x800 AVI payloads remain distinct. Full movies retain 70 physical trailing bytes beyond declared RIFF end. Sparse samples are not continuous playback, flicker freedom, manual input or encoded/physics/process/draw equality.",
+      "Changed-light whole is followed by restored default sun before motion. Routes use separate explicit setup poses; no continuous traversal between setups is claimed. Stock String outcomes, hit-shape indices and tag counts remain distinct.",
+      "Reference images remain private external locators and are never copied into packet images, game, Git or app. Counts, dimensions and roof closure are bounded production inference; protected or hidden regions are not newly authorized.",
+      "Full raw records, logs, maps, original films and historical failed media remain in their existing retained locations. This preparation copies only selected gameplay images; it introduces no new source or mechanical proof and preserves all referenced reviewers' narrower limits.",
+      "Initial 1227-implementation-001 preserves its roof-transition visual HOLD and four historical PNGs. Accepted roof-transition-correction-001 has three current whole/near/north-gable originals, joined shallow roof and retained original flat source roof. No held image is relabeled current.",
+      "Capture/preparation authority remains23/213. Standalone temporary study swaps are not live-candidate or package screenshots. The separate combined live-source result is bound to E’s independent integration-only PASS, reusing D source/mechanics and C visual study decisions.",
+      "Mapped source runs 4–11/13–17 include field-only return8; protected0–3/12/18–21 and hidden run11 tail remain. Source-ray station 0.633791 is not a pixel-calibrated opening anchor. Unknown farther southern canopy continuation, reference occlusion and production-inferred roof/post/count limits remain.",
+      "Motion contains door 87 forward+30 brake+30 reverse+20 brake and screen 35+30+30+20, totaling 282 rows. 116 rows have empty contacts. Events, rows and setup poses remain distinct; first-contact release is not indefinite-pushing or connected-between-setups proof.",
+      "Minimum capsule/LAND−1.602143mm and capsule-foot−1.599043mm retain the unchanged 4mm solver qualification; negative support samples are not zero penetration or continuous swept support.",
+      "Actual stock String results placed/receiver_rejection/receiver_rejection remain separate from hit indices 0/8/10; tag counts 0→1→1→1. Complete wave/yellow dot appears about 180 degrees from the SVG preview; no separately authored upper stroke is missing. C authored/executed the mechanics helper but not E art; D independently accepted actual source/mechanics.",
+      "The 583-frame 1280×800 AVI supplies nine untouched finite payloads 45/112/179/246/313/380/447/514/581. Last 581 is blue and supplies no scene credit; PNGs are 1440×900. No continuous flicker-free, manual-camera or full traversal claim. 70 physical trailing AVI bytes remain retained.",
+      "Known fine gable seam, partial foreground/avatar occlusion and dark clean default finish remain qualified. The corrected static and changed-light visual decisions are scoped existing PASS records, not whole-unit seventh, authority or package acceptance."
+    ]
+  },
+  "truth_boundary": "Derived first-five preparation; existing scoped study decisions only. Package/app/seventh/authority pending; current23 unchanged, captures23, credit0."
+}

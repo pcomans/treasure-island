@@ -1,0 +1,104 @@
+{
+  "schema_version": "ti.d5-native-image-tree/1",
+  "tree_scope": "Only 19 exact selected gameplay images, including explicitly labeled historical HOLD and non-scene payloads; excludes references, full movies and every document.",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "3c30e9c73026a885f2ee2b3941b28e7ed6be799571c58fa733d2e209adfad7fe",
+  "files": [
+    {
+      "path": "images/history-first-study/01-whole-front-roof-footway-baseline.png",
+      "sha256": "dc5c07c160939062f97dcc97f3905a4abb8fe8e18e06938286959ef94e3b2a9a",
+      "bytes": 961320
+    },
+    {
+      "path": "images/history-first-study/02-whole-front-roof-footway-candidate.png",
+      "sha256": "0bcc64dcd538a52a7747eccbabf80a82793b1423b12da107e8dab9caf1ceda3f",
+      "bytes": 914507
+    },
+    {
+      "path": "images/history-first-study/03-center-roof-entry-footway-candidate.png",
+      "sha256": "08f21739147b3ced258b5acf36f3587b2224d6d1162edeb5a65af32817c61fd8",
+      "bytes": 448550
+    },
+    {
+      "path": "images/history-first-study/04-entry-footway-parking-road-junction.png",
+      "sha256": "ab40dce8c50ccd4c6f40f261786c187e4c984d8eb5ad241d8eab70c9d5f65eb5",
+      "bytes": 872123
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0045.jpg",
+      "sha256": "547d704eb431217c93bfae0b7d8a16fd06da321eef47e7d5eb82312383b36d9e",
+      "bytes": 78231
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0112.jpg",
+      "sha256": "04b39aef707f67826cb3d083767fdbe77d18f20ffdeb58f70365b0e5494ed5ce",
+      "bytes": 74906
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0178.jpg",
+      "sha256": "bd8a1d81aefc563a46664b4482b7d52e6fd4f8db52f9c6029a4e797147cbc670",
+      "bytes": 79024
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0245.jpg",
+      "sha256": "30bb2b0b3af1b9cc22b8fbd98f41eaad529fe74583534ebd4d3e9083ab342a51",
+      "bytes": 77344
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0312.jpg",
+      "sha256": "29acba74bd9a8528cbd5f4e46a877bd222577a39805716d50dbcbf99e8c569c0",
+      "bytes": 71073
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0379.jpg",
+      "sha256": "bc438897c465cf94239073f2d5bbb9e9c6e2e593e1d29e2c2ebb3f69e2020c53",
+      "bytes": 67591
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0446.jpg",
+      "sha256": "f522de67ca295424bb2ea4e6f03a464a223e4ac03f6f67df419e4b0bb0d6c039",
+      "bytes": 58380
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0512.jpg",
+      "sha256": "97aa2b55377ba39176ad156d40928dc723b20ba5bf942749533fe13ee835706b",
+      "bytes": 85380
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0579.jpg",
+      "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+      "bytes": 16628
+    },
+    {
+      "path": "images/motion001/01-whole-near-face-changed-light.png",
+      "sha256": "81bfce0346ad5b27ab6a92e2d5663cdcc70ad8ec3b506357642f5cc5d76b343f",
+      "bytes": 975390
+    },
+    {
+      "path": "images/motion001/02-held-closed-door-approach.png",
+      "sha256": "c0f1303f652cc720da90f0bae5912c94a500b105b243f7310a69d7d1f84391ba",
+      "bytes": 959475
+    },
+    {
+      "path": "images/motion001/03-held-short-screen-obstruction.png",
+      "sha256": "86e61542c93c76c2e266ec650e009794e9d01948289e46dffab5b9685d106b52",
+      "bytes": 851499
+    },
+    {
+      "path": "images/motion001/04-actual-mapped-siding-spray.png",
+      "sha256": "7c3f6bd12ae0531f545d563b1d60566c5dade43b82e3f20ebe12a90b68f0660c",
+      "bytes": 522383
+    },
+    {
+      "path": "images/static/02-whole-front-roof-footway-candidate.png",
+      "sha256": "c0c3f0944f277673a88311611610128fff2d875922f0408dd2728069f4fa6f8f",
+      "bytes": 916879
+    },
+    {
+      "path": "images/static/03-center-roof-entry-footway-candidate.png",
+      "sha256": "705f4c0b9561191e2205037307ad6a8800a06e9dd4affc03c48089d0f10ddbf4",
+      "bytes": 449634
+    }
+  ],
+  "truth_boundary": "Derived first-five preparation; existing scoped study decisions only. Package/app/seventh/authority pending; current23 unchanged, captures23, credit0."
+}

@@ -1,0 +1,114 @@
+{
+  "schema_version": "ti.d5-native-image-tree/1",
+  "tree_scope": "Only 21 exact selected gameplay images, including explicitly labeled historical HOLD and non-scene payloads; excludes references, full movies and every document.",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "4870b6e92d8d9d42c7107a27f38af1f115f39cd934e920d297363c018d3d2822",
+  "files": [
+    {
+      "path": "images/history-first-study/01-whole-front-roof-footway-baseline.png",
+      "sha256": "ebdbb35e76b461839fb8ab18a0cbe3d80bb04a152f56ac8355fe5a4ef2a49032",
+      "bytes": 970825
+    },
+    {
+      "path": "images/history-first-study/02-whole-front-roof-footway-candidate.png",
+      "sha256": "ff9e83b6092682920d69859b30b9d9cf05ab973f97cd29cfe97f7e44c936427a",
+      "bytes": 869584
+    },
+    {
+      "path": "images/history-first-study/03-center-roof-entry-footway-candidate.png",
+      "sha256": "27390dbd92b8452ae42875556477c319b7a11cd906b8524ba1e3ed1ca66e47cf",
+      "bytes": 404735
+    },
+    {
+      "path": "images/history-first-study/04-entry-footway-parking-road-junction.png",
+      "sha256": "72d0694b7ad3d60de4e8de33691a295f44e59f87cc87ad3fa7c894a2cc73a545",
+      "bytes": 567571
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0045.jpg",
+      "sha256": "fde3cf986918fd55342f6d0390410c77e4cc6cc8b96beee040324f751413b697",
+      "bytes": 78688
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0112.jpg",
+      "sha256": "2ec898f7de36351d1a07e02b08141011cc8f0e84f585ef2312db59c4f7266b76",
+      "bytes": 61646
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0178.jpg",
+      "sha256": "c450ba58dfdeda31b245eef2d3cdb85f8ced0a28686ecab53ac437ce04e835af",
+      "bytes": 72968
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0245.jpg",
+      "sha256": "1bcabe82074b0a78041d2a86d776f871537f70029287992c5e22afbf6e632a6a",
+      "bytes": 69160
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0312.jpg",
+      "sha256": "e1973ab71f9f6fd80b1cce4870a93e17a76e2196b2838c9fa7fc4e07646d9a5c",
+      "bytes": 68777
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0379.jpg",
+      "sha256": "2012257ac44e6050083bbad7616c149180905ff09a75f018914f0bfbb0ec1e83",
+      "bytes": 63294
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0446.jpg",
+      "sha256": "c7e93f4539e7bede14b51ea7d00d8f3563ef29d32f045293dc71bfaee8591f7b",
+      "bytes": 65130
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0512.jpg",
+      "sha256": "bc159ae5e95bb3e24847962d36eb5c9a745763b405de1caa7e68903c46fe4ca1",
+      "bytes": 72327
+    },
+    {
+      "path": "images/motion001-avi/avi-index-0579.jpg",
+      "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+      "bytes": 16628
+    },
+    {
+      "path": "images/motion001/01-whole-near-face-changed-light.png",
+      "sha256": "73a241e9ed21bb0ea70f7cbe1a67742d4f15585707c2b47c7f1311bf15184b33",
+      "bytes": 946046
+    },
+    {
+      "path": "images/motion001/02-held-closed-door-approach.png",
+      "sha256": "700c1c033ee4afbbb9e23e44364858d7a1cff6c7ab0672e02b5b3d7b5b95896a",
+      "bytes": 539760
+    },
+    {
+      "path": "images/motion001/03-held-short-screen-obstruction.png",
+      "sha256": "5f095235031f0acf4211a8a04dafbe159160fe93b0c39f74970390239631a8ab",
+      "bytes": 575824
+    },
+    {
+      "path": "images/motion001/04-actual-mapped-siding-spray.png",
+      "sha256": "b701245b99d49a2a2aba3ddfb21274f29eec71056d4f7b27d7b8d1c304f5a371",
+      "bytes": 319254
+    },
+    {
+      "path": "images/static/01-whole-front-roof-footway-baseline.png",
+      "sha256": "f0cf90614b7bd219378da9d04554f5d977bd4fff7422b86112555ec03e2d1238",
+      "bytes": 970552
+    },
+    {
+      "path": "images/static/02-whole-front-roof-footway-candidate.png",
+      "sha256": "d5a431c2cadda4823886fca100815a8150fa5cae252ccbaf828904093ecacc91",
+      "bytes": 869468
+    },
+    {
+      "path": "images/static/03-center-roof-entry-footway-candidate.png",
+      "sha256": "b0b25e558957cce191a033a53c925d7954dc705fd2da8b53374b8d46d6c0f8f1",
+      "bytes": 403765
+    },
+    {
+      "path": "images/static/04-entry-footway-parking-road-junction.png",
+      "sha256": "29341bd5aa4523f738f53fc0c13f70247ae12f9285522a052c5b0c039d3580a3",
+      "bytes": 565569
+    }
+  ],
+  "truth_boundary": "Derived first-five preparation; existing scoped study decisions only. Package/app/seventh/authority pending; current23 unchanged, captures23, credit0."
+}

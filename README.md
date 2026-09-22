@@ -7,29 +7,22 @@ public distribution are outside this milestone.
 
 ## Current source and release
 
-Current source recognizes **23/213** physical buildings, with **190** not evaluated
-and **22 active adapters**. 1212 Mariner,1220 Bayside and1239 Northpoint join the
-previous20 accepted units. The older [inactive study checkpoint](discovery/facades/northern-study-source-checkpoint-2026-09-12.md)
-remains historical; it does not describe the current playable source.
+The current private release recognizes **26 of 213** physical buildings. It adds
+1222 Bayside, 1227 Northpoint and 1202 Mariner to the prior 23 accepted units,
+preserving all 213 identities. The remaining **187 buildings are not evaluated**.
 
-This checkpoint records the independently released **23/213** app at:
+The macOS app is `build/northern-1222-1227-1202-exact-current-001/Treasure Island First Playable.app`.
+It passed independent package and release review, including the signed app’s world,
+movement, privacy and signature checks. See the [release record](evidence/first-playable/northern-1222-1227-1202-current-release-2026-09-15-001/README.md) for exact hashes, evidence and runtime limits.
 
-- Private app: `build/northern-1212-1220-1239-exact-current-001/Treasure Island First Playable.app`.
-- [Release record](evidence/first-playable/northern-1212-1220-1239-current-release-2026-09-14-001/README.md), including the seven exact app members, source and smoke-test evidence.
-- Both signed headless and native runs reached the complete world and passed all14 live attachment checks. Source/mounted checks cover13 component pairs; the app passed separate independent release review.
-
-PCK: `3e88f619730e940aa10272d65d76702bc03c0308c233dfbff9da076587d0330a`.
-The fresh export is distinct from the candidate20 and prior current20 apps.
-The original app remains preserved; the stable path uses a complete bundle copy,
-without another export, signing pass or relaunch. The [20-unit release](evidence/first-playable/northern-1206-1219-current-release-2026-09-14-001/README.md),
-[18-unit release](evidence/first-playable/northern-1201-1238-current-release-2026-09-13-001/README.md)
-and earlier releases remain historical. The isolated material-finish pilot is not
-part of this source or app. All213 independently accepted units remain the goal.
+The previous [current 23 release](evidence/first-playable/northern-1212-1220-1239-current-release-2026-09-14-001/README.md) remains unchanged. The 1234 and 1215 studies and
+isolated material pilots are not included. All 213 independently accepted units
+remain the goal.
 
 ## Play on another Mac
 
 Copy the complete existing `Treasure Island First Playable.app` bundle from the
-path above to the other Mac's `/Applications` folder. It needs no Godot or Node
+completed release path above to the other Mac's `/Applications` folder. It needs no Godot or Node
 installation. Then double-click it in Finder, or run:
 
 ```sh
@@ -85,15 +78,13 @@ node tools/test_facade_recognition_registry.mjs
 node tools/test_facade_runtime_loader_contract.mjs
 ```
 
-These checks consume declared gameplay evidence as well as source. The current23
-preparation found 543 required evidence/provenance inputs; 41 historical1201/1238
-PNG/JPEG files were absent from a clean checkout because their local `images/`
-directories were ignored. This publication explicitly selects those41
-and all52 new-unit gameplay images for Git. Keep these declared files even under
-an ignored directory; they are not optional private Street View references or
-historical full AVI downloads. Do not bypass a missing-file error or regenerate
-authority from incomplete evidence. The retained copy plan records each expected hash; keep that exact set in
-source copies used for authority development.
+These checks consume declared gameplay evidence as well as source. Preserve the
+current23 checkpoint's previously restored41 historical1201/1238 images and its52
+new-unit images. This batch adds60 declared gameplay images for1222/1227/1202,
+including honestly labeled earlier held studies and sparse movie payloads.
+Private dated Street View pixels and full AVI files stay outside Git/export.
+Do not bypass missing-file checks or rebuild authority from incomplete evidence;
+the retained copy plan binds every selected image and source hash.
 
 After an intentional authority change, use the existing compiler `--write` path,
 refresh its generated-hash native fixtures, then run `--check` and both Node

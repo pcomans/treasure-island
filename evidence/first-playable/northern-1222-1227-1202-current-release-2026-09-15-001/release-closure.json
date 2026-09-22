@@ -1,0 +1,101 @@
+{
+  "schema_version": "ti.exact-current-release-closure/1",
+  "status": "CURRENT26_OWNER_AND_INDEPENDENT_RELEASE_PASS",
+  "derived_downstream_release_summary": true,
+  "recognized_physical_units": 26,
+  "not_evaluated_physical_units": 187,
+  "added_physical_units": [
+    "physical-building:w96215661",
+    "physical-building:w96215653",
+    "physical-building:w96215651"
+  ],
+  "numerator_effect": 3,
+  "previous_23_acceptances_preserved": true,
+  "all_213_identities_preserved": true,
+  "active_adapters": 25,
+  "total_plans": 34,
+  "package_safe_plans": 28,
+  "unchanged_legacy_adapters": 9,
+  "unchanged_disabled_plans": 6,
+  "unchanged_projection_descriptors": 13,
+  "reference_dependency_count": 60,
+  "app_relative_path": "build/northern-1222-1227-1202-exact-current-001/Treasure Island First Playable.app",
+  "package": [
+    {
+      "path": "Contents/Info.plist",
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885,
+      "mode": "0644"
+    },
+    {
+      "path": "Contents/MacOS/Treasure Island First Playable",
+      "sha256": "07b782e524d7683b3a20c45a65c35674d9cde016b561be562907c69a20676ff6",
+      "bytes": 170963648,
+      "mode": "0755"
+    },
+    {
+      "path": "Contents/PkgInfo",
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9,
+      "mode": "0644"
+    },
+    {
+      "path": "Contents/Resources/PrivacyInfo.xcprivacy",
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229,
+      "mode": "0644"
+    },
+    {
+      "path": "Contents/Resources/Treasure Island First Playable.pck",
+      "sha256": "ada9dd70ebe0bd790c913d387a23c642ef924e2e5090cdf52a0febf179c8ab3c",
+      "bytes": 78332072,
+      "mode": "0644"
+    },
+    {
+      "path": "Contents/Resources/icon.icns",
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500,
+      "mode": "0644"
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "sha256": "d1acdc071eeae78f40a2b2ed5d0a00807ff0895babb49ffbe7c8c37bba35b0b8",
+      "bytes": 3217,
+      "mode": "0644"
+    }
+  ],
+  "actual_app_binding": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1222-1227-1202-authority-integration-003/exact-current-package-preparation-001/actual-app-binding.json",
+    "sha256": "66d7be5a3cc8c376f9c899515a1301befbabc3ea5d6e275a76d0d73b48bb7128"
+  },
+  "actual_app_binding_scope": "Hash of the seven-member binding document, not a whole-app byte hash.",
+  "pck_sha256": "ada9dd70ebe0bd790c913d387a23c642ef924e2e5090cdf52a0febf179c8ab3c",
+  "pck_bytes": 78332072,
+  "world": {
+    "bodies": 484,
+    "meshes": 1159,
+    "rows": 735,
+    "shapes": 569,
+    "surfaces": 1174,
+    "triangles": 153873
+  },
+  "owner_package_decision": "PASS",
+  "independent_package_decision": "PASS",
+  "root_accepted_package_review": true,
+  "independent_review_sha256": "c8821ad464afcc1d18e7629d47e0b618ffcd8fb51b763b33b6f36e51e1c25d5c",
+  "delivery": "Stable whole-bundle transfer completed via the authorized ditto command; seven destination hashes, sizes and modes match with no extra files or symlinks. No re-export, re-sign or launch occurred. Operational publication outcomes are retained in the external finalization execution receipts.",
+  "source_checkpoint": "Frozen release-source preparation baseline: d1e907341040ce9dbf45db27da292b5de02daf4c. This identifies historical preparation, not current MAIN or a new execution binding. Current publication is reconciled against c5557f20aac1138424510bbfdaecc5943174152c; operational execution receipts and actual publication identities for this 26-unit source checkpoint are recorded externally in current26-source-checkpoint-001/finalization-001.",
+  "ordinary_no_argument_launch": "Not established by these release smokes; no ordinary launch or new capture was performed.",
+  "human_001": "Pending owner acceptance; scope unchanged",
+  "artifacts": {
+    "source-and-visual-lineage.json": "3be81672862bb664521bc361656574c82a0f4d95c51dbc485446536e0e5a8932",
+    "private-provenance-retention.json": "b3604a10c820b9989515b1b992a9ead836015432433ae21cff9da8e00357cc75",
+    "independent-package-review.json": "1e372458f25d85433640ab91dd0e6c8a94e18bf3f178e8b33c9ce94e36d11929",
+    "owner-package-verification.json": "d5b8f127ae04e7d97a592df428278f002854ae87de764bb7060f94ac7ae59b46"
+  },
+  "app_transfer_receipt": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/current26-source-checkpoint-001/finalization-001/APP_TRANSFER.json",
+    "sha256": "ab76ab759c9d357c91a8bfac59f0c7191dd93c9f4fb874551d564b07fc9e4c05"
+  },
+  "publication_base_head": "c5557f20aac1138424510bbfdaecc5943174152c"
+}

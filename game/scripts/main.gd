@@ -7,11 +7,11 @@ const EXPECTED_MANIFEST_HASH := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e
 const EXPECTED_CHUNKS := 38
 const EXPECTED_PLAYABLE_ROWS := 735
 const EXPECTED_CONTEXT_ROWS := 4
-const EXPECTED_MESHES := 1111
-const EXPECTED_SURFACES := 1126
-const EXPECTED_TRIANGLES := 138057
-const EXPECTED_STATIC_BODIES := 478
-const EXPECTED_SHAPES := 533
+const EXPECTED_MESHES := 1159
+const EXPECTED_SURFACES := 1174
+const EXPECTED_TRIANGLES := 153873
+const EXPECTED_STATIC_BODIES := 484
+const EXPECTED_SHAPES := 569
 const EXPECTED_VEGETATION_SEED := 1414092337
 const EXPECTED_VEGETATION_INSTANCES := 124
 const EXPECTED_VEGETATION_ASSETS := 15
@@ -147,6 +147,9 @@ func _finish_mac_export_smoke(report: Dictionary) -> void:
 	var family_1212_attachment_valid: bool = _mac_export_1212_attachment_valid()
 	var family_1220_attachment_valid: bool = _mac_export_1220_attachment_valid()
 	var family_1239_attachment_valid: bool = _mac_export_1239_attachment_valid()
+	var projected_1222_attachment_valid: bool = _mac_export_projected_family_attachment_valid(preload("res://game/scripts/world/facades/bayside_1222_live_replacement.gd"), "1222")
+	var projected_1227_attachment_valid: bool = _mac_export_projected_family_attachment_valid(preload("res://game/scripts/world/facades/northpoint_1227_live_replacement.gd"), "1227")
+	var projected_1202_attachment_valid: bool = _mac_export_projected_family_attachment_valid(preload("res://game/scripts/world/facades/mariner_1202_live_replacement.gd"), "1202")
 	var spawn := world_root.get_spawn_transform()
 	var visual_defaults_valid := _visual_defaults_valid()
 	var semantic_materials_valid := _semantic_materials_valid()
@@ -165,6 +168,9 @@ func _finish_mac_export_smoke(report: Dictionary) -> void:
 		and mariner_1219_attachment_valid \
 		and family_1212_attachment_valid \
 		and family_1220_attachment_valid \
+		and projected_1222_attachment_valid \
+		and projected_1227_attachment_valid \
+		and projected_1202_attachment_valid \
 		and family_1239_attachment_valid \
 		and str(report.get("content_sha256", "")) == EXPECTED_MANIFEST_HASH \
 		and spawn.origin.is_equal_approx(EXPECTED_FERRY_SPAWN_ORIGIN) \
@@ -1053,5 +1059,146 @@ func _mac_export_family_pair_valid(wall: Node3D, roof: Node3D, adapter: Script) 
 	var roof_faces := PackedVector3Array()
 	for vertex: int in roof_arrays[Mesh.ARRAY_INDEX]: roof_faces.append(roof_arrays[Mesh.ARRAY_VERTEX][vertex])
 	if roof_faces.size() != int(spec.added_roof_triangles) * 3 or var_to_bytes(roof_shape.shape.get_faces()) != var_to_bytes(roof_faces):
+		return false
+	return true
+
+
+func _mac_export_projected_family_spec(adapter: Script) -> Dictionary:
+	match str(adapter.SOURCE_KEY):
+		"w96215661": return {"prefix": "Bayside1222Live", "wall": {"meshes": 15, "surfaces": 15, "triangles": 5336, "bodies": 3, "shapes": 11}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 10, "bodies": 1, "shapes": 1}, "detail_shapes": 9, "meshes": 16, "channels": 208, "shapes": 12, "detail_tangents": 14, "projected_runs": [10, 11, 12, 15, 16, 19], "projected_triangles": 6, "public_roof": false}
+		"w96215653": return {"prefix": "Northpoint1227Live", "wall": {"meshes": 19, "surfaces": 19, "triangles": 5528, "bodies": 3, "shapes": 15}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 13, "meshes": 20, "channels": 260, "shapes": 16, "detail_tangents": 18, "projected_runs": [4, 5, 6, 7, 9, 10, 11, 13, 14, 15, 16], "projected_triangles": 6, "public_roof": true}
+		"w96215651": return {"prefix": "Mariner1202Live", "wall": {"meshes": 17, "surfaces": 17, "triangles": 5088, "bodies": 3, "shapes": 13}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 11, "meshes": 18, "channels": 234, "shapes": 14, "detail_tangents": 16, "projected_runs": [10, 11, 12, 13, 14, 16, 17, 18, 19, 21], "projected_triangles": 6, "public_roof": true}
+	return {}
+
+
+func _mac_export_projected_family_attachment_valid(adapter: Script, unit: String) -> bool:
+	var buildings := world_root.get_node_or_null("PlayableWorld/Buildings")
+	if buildings == null:
+		return false
+	var roots: Dictionary = {}
+	for key: String in [adapter.WALL_KEY, adapter.ROOF_KEY]:
+		var matches: Array[Node3D] = []
+		# Only category children own attachments; nested original collision roots share source keys.
+		for proxy: Node in buildings.get_children():
+			for child: Node in proxy.get_children():
+				if child is Node3D and str(child.get_meta("derived_object_key", "")) == key:
+					matches.append(child as Node3D)
+		if matches.size() != 1:
+			print("MAC_EXPORT_%s_ATTACHMENT: invalid pair count key=%s count=%d" % [unit, key, matches.size()])
+			return false
+		var outer := matches[0]
+		var proxy := outer.get_parent()
+		if str(proxy.name) != "%s__%s" % [adapter.TARGET_CHUNK_ID, key.validate_node_name()] or proxy.get_child_count() != 1 or proxy.has_meta("target_parent"):
+			return false
+		roots[key] = outer
+	var valid := _mac_export_projected_family_pair_valid(roots[adapter.WALL_KEY], roots[adapter.ROOF_KEY], adapter)
+	print("MAC_EXPORT_%s_ATTACHMENT: valid=%s wall=%s roof=%s wall_counts=%s roof_counts=%s source=%s credit=0" % [unit, valid, roots[adapter.WALL_KEY].get_path(), roots[adapter.ROOF_KEY].get_path(), _mac_export_attachment_measure(roots[adapter.WALL_KEY]), _mac_export_attachment_measure(roots[adapter.ROOF_KEY]), adapter.SOURCE_KEY])
+	return valid
+
+
+func _mac_export_projected_family_pair_valid(wall: Node3D, roof: Node3D, adapter: Script) -> bool:
+	if wall == null or roof == null or wall == roof:
+		return false
+	var spec: Dictionary = _mac_export_projected_family_spec(adapter)
+	if spec.is_empty(): return false
+	var prefix: String = str(spec.prefix)
+	if str(wall.name) != prefix + "Wall" or str(roof.name) != prefix + "Roof" \
+	or _mac_export_attachment_measure(wall) != spec.wall \
+	or _mac_export_attachment_measure(roof) != spec.roof:
+		return false
+	var chunk: Dictionary = adapter.FACTORY._json(adapter.FACTORY.CHUNK_PATH)
+	var prepared: Dictionary = adapter.prepare_chunk_records(chunk)
+	if not bool(prepared.get("ok", false)) or not bool(prepared.get("contains_target", false)):
+		return false
+	for pair_spec: Array in [[wall, adapter.WALL_KEY, true], [roof, adapter.ROOF_KEY, false]]:
+		var outer: Node3D = pair_spec[0]
+		var key: String = pair_spec[1]
+		var is_wall: bool = pair_spec[2]
+		var receiver := "building_wall" if is_wall else "none"
+		if outer.transform != Transform3D.IDENTITY or str(outer.get_meta("adapter_id", "")) != adapter.ADAPTER_ID \
+		or str(outer.get_meta("derived_object_key", "")) != key or outer.get_meta("source_keys", []) != [adapter.SOURCE_KEY] \
+		or str(outer.get_meta("feature_kind", "")) != ("building_wall" if is_wall else "building_roof") \
+		or str(outer.get_meta("receiver_kind", "")) != receiver or not bool(outer.get_meta("runtime_attachment", false)) \
+		or bool(outer.get_meta("prototype_only", true)) or bool(outer.get_meta("recognition_accepted", true)) \
+		or not bool(outer.get_meta("runtime_supersedes_generated_placeholder", false)) \
+		or outer.get_meta("superseded_object_keys", []) != [adapter.WALL_KEY, adapter.ROOF_KEY]:
+			return false
+		var original := outer.get_node_or_null("OriginalWallRecord" if is_wall else "OriginalRoofRecord") as Node3D
+		var body := original.get_node_or_null("Collision") as StaticBody3D if original != null else null
+		if original == null or original.transform != Transform3D.IDENTITY or original.get_child_count() != 1 \
+		or body == null or body.transform != Transform3D.IDENTITY or body.get_child_count() != 1 \
+		or body.collision_layer != 5 or body.collision_mask != 0 or body.is_in_group("spray_receiver_wall") != is_wall:
+			return false
+		var shape := body.get_child(0) as CollisionShape3D
+		if shape == null or shape.transform != Transform3D.IDENTITY or shape.disabled or not shape.shape is ConcavePolygonShape3D:
+			return false
+		# The raw builder owns metadata on the body and shape resource, not the shape node.
+		for object: Object in [body, shape.shape]:
+			if str(object.get_meta("derived_object_key", "")) != key or object.get_meta("source_keys", []) != [adapter.SOURCE_KEY] \
+			or str(object.get_meta("receiver_kind", "")) != receiver or not bool(object.get_meta("opaque", false)):
+				return false
+		var record: Dictionary = prepared.source_records[key]
+		var expected := PackedVector3Array()
+		for offset in range(0, record.indices.size(), 3):
+			for index: int in [int(record.indices[offset]), int(record.indices[offset + 2]), int(record.indices[offset + 1])]:
+				expected.append(Vector3(float(record.vertices[index * 3]), float(record.vertices[index * 3 + 1]), float(record.vertices[index * 3 + 2])))
+		if var_to_bytes(shape.shape.get_faces()) != var_to_bytes(expected):
+			return false
+		for child: Node in outer.get_children():
+			if child is MeshInstance3D:
+				if child.transform != Transform3D.IDENTITY or str(child.get_meta("derived_object_key", "")) != key \
+				or child.get_meta("source_keys", []) != [adapter.SOURCE_KEY] or not bool(child.get_meta("runtime_attachment", false)) \
+				or bool(child.get_meta("prototype_only", true)) or child.layers != (2 if str(child.name) in ["ExactOriginalWallSurfaces", "NearHorizontalSiding", "ProjectedUpperSiding"] else 1):
+					return false
+	if wall.get_node_or_null("ExactSourceNeutralRoof") != null or wall.get_node_or_null("OriginalRoofRecord") != null \
+	or roof.get_child_count() != 2 or roof.get_node_or_null("ExactSourceNeutralRoof") == null \
+	or roof.get_node_or_null("ObservedPublicRoof") != null or roof.get_node_or_null("ObservedRoof_NoSprayReceiver") != null \
+	or wall.has_node("ObservedPublicRoof") != bool(spec.public_roof) \
+	or wall.get_meta("mapped_public_run_indices", []) != adapter.MAPPED_RUNS or wall.get_meta("protected_run_indices", []) != adapter.PROTECTED_RUNS:
+		return false
+	var detail := wall.get_node_or_null("PhysicalDetails_NoSprayReceiver") as StaticBody3D
+	if detail == null or detail.transform != Transform3D.IDENTITY or detail.get_child_count() != int(spec.detail_shapes) \
+	or detail.collision_layer != 5 or detail.collision_mask != 0 or detail.is_in_group("spray_receiver_wall") \
+	or str(detail.get_meta("receiver_kind", "")) != "none" or str(detail.get_meta("derived_object_key", "")) != "prototype:" + adapter.WALL_KEY \
+	or detail.get_meta("source_keys", []) != [adapter.SOURCE_KEY] or str(detail.get_meta("feature_kind", "")) != "bounded_facade_detail":
+		return false
+	for index in adapter.FACTORY.PHYSICAL_BUCKETS.size():
+		var label: String = adapter.FACTORY.PHYSICAL_BUCKETS[index]
+		var shape := detail.get_child(index) as CollisionShape3D
+		var mesh := wall.get_node_or_null(NodePath(label)) as MeshInstance3D
+		if shape == null or mesh == null or mesh.mesh == null or shape.transform != Transform3D.IDENTITY or shape.disabled \
+		or str(shape.name) != label or not shape.shape is ConcavePolygonShape3D \
+		or str(shape.shape.get_meta("receiver_kind", "")) != "none" or str(shape.shape.get_meta("structural_role", "")) != label:
+			return false
+		var arrays: Array = mesh.mesh.surface_get_arrays(0)
+		var expected := PackedVector3Array()
+		for vertex: int in arrays[Mesh.ARRAY_INDEX]:
+			expected.append(arrays[Mesh.ARRAY_VERTEX][vertex])
+		if var_to_bytes(shape.shape.get_faces()) != var_to_bytes(expected):
+			return false
+	# The added front is an eligible surface at the visible projected plane; closures stay in the nonreceiver detail body.
+	var projected := wall.get_node_or_null("ProjectedUpperWallReceiver") as StaticBody3D
+	var projected_mesh := wall.get_node_or_null("ProjectedUpperSiding") as MeshInstance3D
+	if projected == null or projected_mesh == null or projected_mesh.mesh == null \
+	or projected.transform != Transform3D.IDENTITY or projected.get_child_count() != 1 \
+	or projected.collision_layer != 5 or projected.collision_mask != 0 or not projected.is_in_group("spray_receiver_wall") \
+	or projected_mesh.layers != 2:
+		return false
+	var runs: Array[int] = []
+	for value: Variant in spec.projected_runs: runs.append(int(value))
+	if projected.get_meta("source_run_indices", []) != runs: return false
+	var projected_shape := projected.get_child(0) as CollisionShape3D
+	if projected_shape == null or projected_shape.transform != Transform3D.IDENTITY or projected_shape.disabled \
+	or str(projected_shape.name) != "ProjectedUpperSiding" or not projected_shape.shape is ConcavePolygonShape3D:
+		return false
+	var source_wall: Dictionary = prepared.source_records[adapter.WALL_KEY]
+	for owner: Object in [projected, projected_shape.shape]:
+		if owner.get_meta("receiver_kind", "") != source_wall.receiver_kind or owner.get_meta("opaque", false) != source_wall.opaque \
+		or owner.get_meta("derived_object_key", "") != source_wall.object_key or owner.get_meta("source_keys", []) != source_wall.source_keys:
+			return false
+	var projected_arrays: Array = projected_mesh.mesh.surface_get_arrays(0)
+	var projected_faces := PackedVector3Array()
+	for vertex: int in projected_arrays[Mesh.ARRAY_INDEX]: projected_faces.append(projected_arrays[Mesh.ARRAY_VERTEX][vertex])
+	if projected_faces.size() != int(spec.projected_triangles) * 3 or var_to_bytes(projected_shape.shape.get_faces()) != var_to_bytes(projected_faces):
 		return false
 	return true

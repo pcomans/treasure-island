@@ -364,6 +364,25 @@
       "whole_building_recognizability_imported": false
     },
     {
+      "adapter_id": "active-adapter:mariner-1202-live:building:w96215651:wall",
+      "content_classification": "active_target_specific_paired_wall_roof_replacement",
+      "receiver_key": "building:w96215651:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
+      "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
+      "runtime_adapter_path": "game/scripts/world/facades/mariner_1202_live_replacement.gd",
+      "runtime_asset_paths": [
+        "game/scripts/world/facades/mariner_1202_live_factory.gd",
+        "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+        "game/scripts/world/facades/site_12_housing_kit.gd"
+      ],
+      "runtime_config_path": "game/resources/facades/mariner_1202_study.json",
+      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+      "source_key": "w96215651",
+      "whole_building_recognizability_imported": false
+    },
+    {
       "adapter_id": "active-adapter:bayside-1220-live:building:w96215652:wall",
       "content_classification": "active_target_specific_paired_wall_roof_replacement",
       "receiver_key": "building:w96215652:wall",
@@ -383,6 +402,25 @@
       "whole_building_recognizability_imported": false
     },
     {
+      "adapter_id": "active-adapter:northpoint-1227-live:building:w96215653:wall",
+      "content_classification": "active_target_specific_paired_wall_roof_replacement",
+      "receiver_key": "building:w96215653:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
+      "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
+      "runtime_adapter_path": "game/scripts/world/facades/northpoint_1227_live_replacement.gd",
+      "runtime_asset_paths": [
+        "game/scripts/world/facades/northpoint_1227_live_factory.gd",
+        "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+        "game/scripts/world/facades/site_12_housing_kit.gd"
+      ],
+      "runtime_config_path": "game/resources/facades/northpoint_1227_study.json",
+      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+      "source_key": "w96215653",
+      "whole_building_recognizability_imported": false
+    },
+    {
       "adapter_id": "active-adapter:northpoint-1239-live:building:w96215658:wall",
       "content_classification": "active_target_specific_paired_wall_roof_replacement",
       "receiver_key": "building:w96215658:wall",
@@ -399,6 +437,25 @@
       "runtime_config_path": "game/resources/facades/northpoint_1239_study.json",
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
       "source_key": "w96215658",
+      "whole_building_recognizability_imported": false
+    },
+    {
+      "adapter_id": "active-adapter:bayside-1222-live:building:w96215661:wall",
+      "content_classification": "active_target_specific_paired_wall_roof_replacement",
+      "receiver_key": "building:w96215661:wall",
+      "recognition_acceptance_authority": "physical_unit_claim_and_independent_acceptance_record",
+      "recognition_acceptance_status": "accepted",
+      "review_status": "independent_exact_current_live_pass",
+      "review_status_scope": "runtime_asset_original_detail_provenance_only_not_reference_recognition",
+      "runtime_adapter_path": "game/scripts/world/facades/bayside_1222_live_replacement.gd",
+      "runtime_asset_paths": [
+        "game/scripts/world/facades/bayside_1222_live_factory.gd",
+        "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+        "game/scripts/world/facades/site_12_housing_kit.gd"
+      ],
+      "runtime_config_path": "game/resources/facades/bayside_1222_study.json",
+      "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
+      "source_key": "w96215661",
       "whole_building_recognizability_imported": false
     },
     {
@@ -1527,6 +1584,144 @@
       ],
       "status": "configured",
       "unit_id": "physical-building:w96215658"
+    },
+    {
+      "alternate_pose": {
+        "aim_target_m": [
+          -482.956939697266,
+          5.01999998092651,
+          -727.139709472656
+        ],
+        "camera_position_m": [
+          -489.392700195312,
+          3.02879500389099,
+          -739.510559082031
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -486.879821777344,
+          1.80625998973846,
+          -734.680358886719
+        ]
+      },
+      "ordinary_third_person_required": true,
+      "primary_pose": {
+        "aim_target_m": [
+          -490.808074951172,
+          5.01999998092651,
+          -723.055297851562
+        ],
+        "camera_position_m": [
+          -504.418762207031,
+          3.53439736366272,
+          -749.220031738281
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -501.883758544922,
+          1.81109702587128,
+          -744.346862792969
+        ]
+      },
+      "required_cue_ids": [
+        "northern-1222-1-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+        "northern-1222-2-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+        "northern-1222-3-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof"
+      ],
+      "status": "configured",
+      "unit_id": "physical-building:w96215661"
+    },
+    {
+      "alternate_pose": {
+        "aim_target_m": [
+          -334.717803955078,
+          4.94999980926514,
+          -772.853454589844
+        ],
+        "camera_position_m": [
+          -320.764801025391,
+          3.40763521194458,
+          -772.23193359375
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -326.226226806641,
+          2.01133990287781,
+          -772.475158691406
+        ]
+      },
+      "ordinary_third_person_required": true,
+      "primary_pose": {
+        "aim_target_m": [
+          -334.392822265625,
+          4.94999980926514,
+          -780.746765136719
+        ],
+        "camera_position_m": [
+          -308.24609375,
+          3.92460465431213,
+          -794.399597167969
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -313.118499755859,
+          2.11568522453308,
+          -791.855407714844
+        ]
+      },
+      "required_cue_ids": [
+        "northern-1227-1-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+        "northern-1227-2-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+        "northern-1227-3-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof"
+      ],
+      "status": "configured",
+      "unit_id": "physical-building:w96215653"
+    },
+    {
+      "alternate_pose": {
+        "aim_target_m": [
+          -399.117706298828,
+          5.42999982833862,
+          -614.642272949219
+        ],
+        "camera_position_m": [
+          -385.884063720703,
+          3.93759536743164,
+          -622.6630859375
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -390.565856933594,
+          2.46557879447937,
+          -619.825500488281
+        ]
+      },
+      "ordinary_third_person_required": true,
+      "primary_pose": {
+        "aim_target_m": [
+          -403.574310302734,
+          5.42999982833862,
+          -621.997436523438
+        ],
+        "camera_position_m": [
+          -389.359405517578,
+          4.09785318374634,
+          -647.840270996094
+        ],
+        "fov_degrees": 70.0,
+        "player_position_m": [
+          -392.007415771484,
+          2.34601283073425,
+          -643.026123046875
+        ]
+      },
+      "required_cue_ids": [
+        "northern-1202-1-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+        "northern-1202-2-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+        "northern-1202-3-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof"
+      ],
+      "status": "configured",
+      "unit_id": "physical-building:w96215651"
     }
   ],
   "catalog_id": "treasure-island-physical-building-recognition",
@@ -1544,19 +1739,19 @@
     "reference_recognizable": "An ordinary gameplay view is independently matched to target-identifiable reference evidence."
   },
   "compiler_contract": {
-    "emitted_runtime_schema_version": "ti.facade-runtime-registry/23",
-    "required_compiler_version": "1.22.0",
+    "emitted_runtime_schema_version": "ti.facade-runtime-registry/26",
+    "required_compiler_version": "1.25.0",
     "unknown_version_policy": "reject"
   },
   "expected_counts": {
-    "active_runtime_adapter_receivers": 22,
+    "active_runtime_adapter_receivers": 25,
     "building_footprints": 213,
     "building_parts": 2,
     "composite_units": 1,
     "direct_wall_receivers": 214,
     "legacy_adapter_receivers": 9,
     "recognition_units": 213,
-    "runtime_adapter_receivers": 31,
+    "runtime_adapter_receivers": 34,
     "source_records": 215,
     "standalone_units": 212,
     "visible_wall_runs": 4971
@@ -1654,7 +1849,7 @@
       "whole_building_recognizability_imported": false
     }
   ],
-  "schema_version": "ti.facade-recognition-catalog/23",
+  "schema_version": "ti.facade-recognition-catalog/26",
   "source_contract": {
     "generated_content_sha256": "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164",
     "generated_manifest_schema_version": "ti.godot-world/2",
@@ -5355,13 +5550,28 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "evidence_manifest_sha256": "497ce96296ada0265a26c4d24215db320b278cff8883be00b5d637a94d2cfd64",
+          "motion_telemetry_manifest_sha256": "8205cf8904929d56d9e90842922a6be37cf64869f283c60aac666e42e571c236",
+          "visual_motion_manifest_sha256": "4de165e49df045101b1fd7156f0f7595c0026617db255ab3c23412b1a4424081",
+          "package_verification_receipt_sha256": "1da322cc863b923b4befee6eac8f3876c1fa0360a1848527c88cba774c935769",
+          "evidence_tree_sha256": "3c30e9c73026a885f2ee2b3941b28e7ed6be799571c58fa733d2e209adfad7fe",
+          "mechanical_review_receipt_sha256": "669f108baf4c343f766da111c808232e6b4b611d13cf919526372e54f8642d34",
+          "review_receipt_sha256": "6a7813fc1a94f816bd01f55f6901a61f7d421b67e085663b6e51ad865408754e",
+          "capture_time_recognition_metric": "23/213",
+          "numerator_effect": 1,
+          "review_id": "northern-1202-quality-candidate-2026-09-14-001",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w96215651",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -5374,13 +5584,95 @@
         "name_evidence": false
       },
       "legacy_adapter_ids": [],
-      "protected_scopes": [],
+      "protected_scopes": [
+        {
+          "receiver_key": "building:w96215651:wall",
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            20,
+            22,
+            23,
+            24,
+            25
+          ],
+          "reason": "Preserve original source wall/roof channels and protected faces. Original wall and projected fronts retain exact eligible identity; detail/closures and any observed public roof remain nonreceivers. Crop/occlusion, hidden continuity and unsurveyed dimensions retain their bounded scope."
+        }
+      ],
       "receiver_keys": [
         "building:w96215651:wall"
       ],
-      "recognition_cues": [],
-      "reference_records": [],
-      "reference_state": "reference_research_unassessed",
+      "recognition_cues": [
+        {
+          "complete_motif": true,
+          "cue_id": "northern-1202-1-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w96215651:wall",
+          "reference_ids": [
+            "NORTHERN-1202-MAR2025-PUBLIC-FRONT"
+          ],
+          "run_indices": [
+            10,
+            11,
+            12,
+            13,
+            14
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "northern-1202-2-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w96215651:wall",
+          "reference_ids": [
+            "NORTHERN-1202-MAR2025-PUBLIC-FRONT"
+          ],
+          "run_indices": [
+            16,
+            17,
+            18,
+            19
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "northern-1202-3-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w96215651:wall",
+          "reference_ids": [
+            "NORTHERN-1202-MAR2025-PUBLIC-FRONT"
+          ],
+          "run_indices": [
+            21
+          ]
+        }
+      ],
+      "reference_records": [
+        {
+          "observation_id": "NORTHERN-1202-MAR2025-PUBLIC-FRONT",
+          "observed_regions": [
+            "March 2025 near-side public frontage; target/source association and direct dated-reference/native comparisons retained in independent unit attestation. Historical observations, not current-condition or surveyed proof."
+          ],
+          "pixels_packaged": false,
+          "source_locator": "evidence/first-playable/northern-1202-quality-candidate-2026-09-14-001/unit-visual-attestation.json",
+          "supports": [
+            "Muted pale siding, shallow warm roof, upper projection, screened blue-gray entries and broad carport ending before uncovered right entries.",
+            "Captured full-public-front recognition scope retains crop/tree/hidden schedule and sparse motion limits."
+          ]
+        }
+      ],
+      "reference_state": "reference_ready",
       "source_records": [
         {
           "role": "standalone_building_footprint",
@@ -5536,13 +5828,28 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "evidence_manifest_sha256": "f240c0a442a66cdb5e20fffa4883e2b9098ce681d0fdefa3c30e846e376d517b",
+          "motion_telemetry_manifest_sha256": "c45ad15c677f1413d106695f8a1c6e339c0b6da6f4fb67eea0d9b6ae53b64018",
+          "visual_motion_manifest_sha256": "a28bf431f24e58cc147b3adc6df9983784f68d6f0335c61bea3bda7d02e0cfa8",
+          "package_verification_receipt_sha256": "802e3287f84f0363a688d35454e88aebef7d34b93db88b88d16785311ec3d7d4",
+          "evidence_tree_sha256": "34e252f76805cd5e152fd58056f95852ba5c4ebfdc2e73ceeb20f1410c74eadb",
+          "mechanical_review_receipt_sha256": "45cf53232bcb34f4bf43b2370a7ce0e84ade628dc23e9aa7a8439f70eb102c03",
+          "review_receipt_sha256": "8957bff439a37e22880af8b0df5c6641e348bb19e13207bd65ac8e94cb1484ad",
+          "capture_time_recognition_metric": "23/213",
+          "numerator_effect": 1,
+          "review_id": "northern-1227-quality-candidate-2026-09-14-001",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w96215653",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -5555,13 +5862,90 @@
         "name_evidence": false
       },
       "legacy_adapter_ids": [],
-      "protected_scopes": [],
+      "protected_scopes": [
+        {
+          "receiver_key": "building:w96215653:wall",
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            12,
+            18,
+            19,
+            20,
+            21
+          ],
+          "reason": "Preserve original source wall/roof channels and protected faces. Original wall and projected fronts retain exact eligible identity; detail/closures and any observed public roof remain nonreceivers. Crop/occlusion, hidden continuity and unsurveyed dimensions retain their bounded scope."
+        }
+      ],
       "receiver_keys": [
         "building:w96215653:wall"
       ],
-      "recognition_cues": [],
-      "reference_records": [],
-      "reference_state": "reference_research_unassessed",
+      "recognition_cues": [
+        {
+          "complete_motif": true,
+          "cue_id": "northern-1227-1-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w96215653:wall",
+          "reference_ids": [
+            "NORTHERN-1227-MAR2025-PUBLIC-FRONT"
+          ],
+          "run_indices": [
+            4,
+            5,
+            6,
+            7
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "northern-1227-2-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w96215653:wall",
+          "reference_ids": [
+            "NORTHERN-1227-MAR2025-PUBLIC-FRONT"
+          ],
+          "run_indices": [
+            9,
+            10,
+            11
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "northern-1227-3-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w96215653:wall",
+          "reference_ids": [
+            "NORTHERN-1227-MAR2025-PUBLIC-FRONT"
+          ],
+          "run_indices": [
+            13,
+            14,
+            15,
+            16
+          ]
+        }
+      ],
+      "reference_records": [
+        {
+          "observation_id": "NORTHERN-1227-MAR2025-PUBLIC-FRONT",
+          "observed_regions": [
+            "March 2025 near-side public frontage; target/source association and direct dated-reference/native comparisons retained in independent unit attestation. Historical observations, not current-condition or surveyed proof."
+          ],
+          "pixels_packaged": false,
+          "source_locator": "evidence/first-playable/northern-1227-quality-candidate-2026-09-14-001/unit-visual-attestation.json",
+          "supports": [
+            "Pale gray horizontal siding, connected pitched roof/north gable, projected upper story, blue-gray and pale entries/screens and southern flat carport.",
+            "Captured full-public-front recognition scope retains crop/tree/hidden schedule and sparse motion limits."
+          ]
+        }
+      ],
+      "reference_state": "reference_ready",
       "source_records": [
         {
           "role": "standalone_building_footprint",
@@ -5903,13 +6287,28 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "evidence_manifest_sha256": "c9bdee01510d7e0c2f43be4c454b154437009583b2c59c15ba211f07ee16f259",
+          "motion_telemetry_manifest_sha256": "ac2950c05d8472b5a8edb0ce2f7b4437159d6af963145dfd142ec5bc59019b98",
+          "visual_motion_manifest_sha256": "0976e8393145f40ce9e07c861bdc1a032f15b0cf70e6c984244318e2adfb92d3",
+          "package_verification_receipt_sha256": "a6ea228918898454c56fd5aebe1affbd94d0bc7c1878c966c14fc704409e028b",
+          "evidence_tree_sha256": "4870b6e92d8d9d42c7107a27f38af1f115f39cd934e920d297363c018d3d2822",
+          "mechanical_review_receipt_sha256": "ec1e740bd93a8325094811bf634d90d43c672574a002a90c96a1a454662996cf",
+          "review_receipt_sha256": "20a5a14b31c9918f7e9e4c3884c1ca3deef55af1ccd5720c4c9d581710c42f76",
+          "capture_time_recognition_metric": "23/213",
+          "numerator_effect": 1,
+          "review_id": "northern-1222-quality-candidate-2026-09-14-001",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w96215661",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -5922,13 +6321,88 @@
         "name_evidence": false
       },
       "legacy_adapter_ids": [],
-      "protected_scopes": [],
+      "protected_scopes": [
+        {
+          "receiver_key": "building:w96215661:wall",
+          "run_indices": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            8,
+            9,
+            17,
+            18
+          ],
+          "reason": "Preserve original source wall/roof channels and protected faces. Original wall and projected fronts retain exact eligible identity; detail/closures and any observed public roof remain nonreceivers. Crop/occlusion, hidden continuity and unsurveyed dimensions retain their bounded scope."
+        }
+      ],
       "receiver_keys": [
         "building:w96215661:wall"
       ],
-      "recognition_cues": [],
-      "reference_records": [],
-      "reference_state": "reference_research_unassessed",
+      "recognition_cues": [
+        {
+          "complete_motif": true,
+          "cue_id": "northern-1222-1-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w96215661:wall",
+          "reference_ids": [
+            "NORTHERN-1222-MAR2025-PUBLIC-FRONT"
+          ],
+          "run_indices": [
+            10,
+            11,
+            12
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "northern-1222-2-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w96215661:wall",
+          "reference_ids": [
+            "NORTHERN-1222-MAR2025-PUBLIC-FRONT"
+          ],
+          "run_indices": [
+            15,
+            16
+          ]
+        },
+        {
+          "complete_motif": true,
+          "cue_id": "northern-1222-3-muted-siding-pale-trim-mixed-openings-entry-screen-public-roof",
+          "cue_kind": "unique_elevation",
+          "evidence_class": "reference_observation",
+          "receiver_key": "building:w96215661:wall",
+          "reference_ids": [
+            "NORTHERN-1222-MAR2025-PUBLIC-FRONT"
+          ],
+          "run_indices": [
+            19
+          ]
+        }
+      ],
+      "reference_records": [
+        {
+          "observation_id": "NORTHERN-1222-MAR2025-PUBLIC-FRONT",
+          "observed_regions": [
+            "March 2025 near-side public frontage; target/source association and direct dated-reference/native comparisons retained in independent unit attestation. Historical observations, not current-condition or surveyed proof."
+          ],
+          "pixels_packaged": false,
+          "source_locator": "evidence/first-playable/northern-1222-quality-candidate-2026-09-14-001/unit-visual-attestation.json",
+          "supports": [
+            "Pale blue-gray horizontal siding, shallow roof edge, projecting upper story, paired windows, blue-gray and pale doors, short screens.",
+            "Captured full-public-front recognition scope retains crop/tree/hidden schedule and sparse motion limits."
+          ]
+        }
+      ],
+      "reference_state": "reference_ready",
       "source_records": [
         {
           "role": "standalone_building_footprint",

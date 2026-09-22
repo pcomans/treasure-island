@@ -13885,3 +13885,20 @@ Retained evidence: current23-source-checkpoint-001 binds the actual refreshed so
 **Limit:** This is a user-authorized trial, not a broad benchmark result. ROOT can diagnose unproductive cycles and escalate to stronger supported non-ultra efforts when work cannot converge; no fixed retry count, automatic ladder or new approval gate. Independent judging and the absolute no-ultra rule remain; root effort is unchanged.
 
 **Next:** Apply the explicit defaults in actual dispatches and use discretion when evidence warrants escalation. Preserve these additions when reconciling stale current26 documentation copies.
+
+## 2026-09-14 — C comparator and review-guidance consolidation
+
+**What worked well.** Prepared the exact independently reviewed comparator `8e8454d4d02f024edd3ce114ecd22b17ec92a985e5fae852d750b4d039e91af2` and four focused documentation changes against unchanged MAIN `d1e907341040ce9dbf45db27da292b5de02daf4c`. D’s comparator review and efficiency014 support replacing copied normalization while retaining strict caller-owned source coverage, independent source/mechanics and separate visual gates. The external patch preserves all frozen studies/candidates and MAIN bytes.
+
+**What did not work well.** The 1202 reader repeated 1227’s transient-ID comparison error; M1202 also needed both reported quantities canonicalized to consumed Float32 and correct marker-versus-whole field selection. Their failed records remain preserved. By contrast, 1234 reused the corrected reader without repair or native rerun. This consolidation’s first broad text search included the large RETRO log and truncated; bounded relevant reads recovered the needed guidance. That is avoidable reader overhead, not measured runtime cost.
+
+**What the team should change next time.** At the later normal batch checkpoint, install this exact helper and call it from independent readers with explicit hashes and source-key/count expectations. In the next two already-required equivalent reviews, record comparator reimplementation/repair counts in ordinary RETRO; retain if neither is needed, stop if broader exclusions or target branches are required. This trial has not run. Do not convert the finite comparator checks or successful1234 reuse into a speedup claim, extra engine run, monitoring framework or new gate.
+
+Evidence: external `northern-canopy-free-family-pilot-001/shared-source-surface-comparator-001/independent-review-001/REVIEW.md`, `team-efficiency-review-014/NOTE.md`, and the named 1202/1227/1234 actual-review retrospectives are hash-bound by `harness-comparator-consolidation-001/FILE_READY.json`. These are local retention locators, not additional clone/runtime dependencies.
+
+## C — current 26 source/docs checkpoint preparation, 2026-09-15
+
+- Worked: retained the exact 115-file R26-v2 source delta, 210 unchanged non-target catalog objects and the independently reviewed HC five-file guidance/comparator patch. Source/compiler/Node/native proof is reused. The final app completed all six stages and independent release review passed; publication awaits the concrete copy/stage review and authorization.
+- Comparator reuse trial: M1234 completed the first compatible review with the exact unchanged source-surface comparator, zero helper repairs and one external tag-intersection reader correction (two triangle rows of one eligible surface). The second compatible review is pending. The earlier HC proposal above remains historical; no speedup is claimed.
+- Did not work: the original package owner-name/lookup assumptions and later authority anchor/current-dispatch failures are retained. The bounded current-dispatch fix now has a check in the existing Node loader fixture. During publication selection, a blanket new-UID guard stopped before output; it was corrected to preserve the exact four unrelated MAIN UIDs while retaining six legitimate new class UIDs.
+- Next time: read actual producer schemas and current consumer bindings, retain completed proof, and finalize app/release provenance only from the actual independently accepted result. No new framework or timing claim is added.
