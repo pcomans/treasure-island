@@ -1,0 +1,43 @@
+{
+  "derived": true,
+  "status": "PASS",
+  "actual_handoff": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-1215-authority-integration-001/correction-002/runtime-preparation-001/package/ACTUAL_HANDOFF.json",
+    "sha256": "88d9b9ccb554c29b643e309aca1dbf36e9caf927f7e3b040f131fdefd9a85ec6"
+  },
+  "six_receipts": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-1215-authority-integration-001/correction-002/runtime-preparation-001/package/source-component-001-execution.json",
+      "sha256": "58a7fccfb957edb814be6abe53a2cf3bd4ad1b8f065ea7f610e5daf9f54db93c"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-1215-authority-integration-001/correction-002/runtime-preparation-001/package/export-exact-current-001-execution.json",
+      "sha256": "36703cd76f71278d3ab9a7e5e8e575081e187c5cd9a61690730c7a0f9ede1ee3"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-1215-authority-integration-001/correction-002/runtime-preparation-001/package/mounted-component-001-execution.json",
+      "sha256": "03181fa8fc00646f12130ba87f04be5688a8d834a860ed69d93894850009c5a7"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-1215-authority-integration-001/correction-002/runtime-preparation-001/package/mounted-privacy-001-execution.json",
+      "sha256": "d53418080d7c7713795406b3f27ee147e8d87618bd9b05d0ef545828121e935b"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-1215-authority-integration-001/correction-002/runtime-preparation-001/package/release-headless-smoke-001-execution.json",
+      "sha256": "652481c4226ec4c7533a9691a609d9294c2412e420af0586774ee6802112bf6a"
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-1215-authority-integration-001/correction-002/runtime-preparation-001/package/release-native-smoke-001-execution.json",
+      "sha256": "7efa0d65103526aa61262f897d18a20605073b1a09bc8de6539b99b9e61b2fd5"
+    }
+  ],
+  "measured_world": {
+    "bodies": 488,
+    "meshes": 1192,
+    "rows": 735,
+    "shapes": 594,
+    "surfaces": 1207,
+    "triangles": 164001
+  },
+  "scope": "Source ordinary-main, mounted components/privacy and signed ordinary-main remain distinct."
+}

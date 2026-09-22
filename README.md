@@ -7,17 +7,19 @@ public distribution are outside this milestone.
 
 ## Current source and release
 
-The current private release recognizes **26 of 213** physical buildings. It adds
-1222 Bayside, 1227 Northpoint and 1202 Mariner to the prior 23 accepted units,
-preserving all 213 identities. The remaining **187 buildings are not evaluated**.
+The current private release recognizes **28 of 213** physical buildings. It adds
+1234 Northpoint and 1215 Bayside to the prior 26 accepted units, preserving all
+213 identities. The remaining **185 buildings are not evaluated**.
 
-The macOS app is `build/northern-1222-1227-1202-exact-current-001/Treasure Island First Playable.app`.
-It passed independent package and release review, including the signed app’s world,
-movement, privacy and signature checks. See the [release record](evidence/first-playable/northern-1222-1227-1202-current-release-2026-09-15-001/README.md) for exact hashes, evidence and runtime limits.
+The macOS app is `build/northern-1234-1215-exact-current-001/Treasure Island First Playable.app`.
+It passed independent source, package and release review, including the signed app’s
+world, movement, privacy and signature checks. See the [release record](evidence/first-playable/northern-1234-1215-current-release-2026-09-22-001/README.md)
+for exact hashes, evidence and runtime limits. The complete app has been transferred
+to the stable path above; it remains ignored by Git.
 
-The previous [current 23 release](evidence/first-playable/northern-1212-1220-1239-current-release-2026-09-14-001/README.md) remains unchanged. The 1234 and 1215 studies and
-isolated material pilots are not included. All 213 independently accepted units
-remain the goal.
+The previous [current26 release](evidence/first-playable/northern-1222-1227-1202-current-release-2026-09-15-001/README.md)
+remains unchanged. The 1232 study and isolated material pilots are outside this release.
+All 213 independently accepted units remain the goal.
 
 ## Play on another Mac
 
@@ -80,7 +82,7 @@ node tools/test_facade_runtime_loader_contract.mjs
 
 These checks consume declared gameplay evidence as well as source. Preserve the
 current23 checkpoint's previously restored41 historical1201/1238 images and its52
-new-unit images. This batch adds60 declared gameplay images for1222/1227/1202,
+new-unit images. The prior26 batch added60 declared gameplay images for1222/1227/1202; current28 adds34 for1234/1215,
 including honestly labeled earlier held studies and sparse movie payloads.
 Private dated Street View pixels and full AVI files stay outside Git/export.
 Do not bypass missing-file checks or rebuild authority from incomplete evidence;

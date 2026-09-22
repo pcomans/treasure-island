@@ -1,0 +1,95 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215659",
+  "label": "Existing immutable actual mechanics",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+      "path_base": "/",
+      "sha256": "e5cb9629429fe5e19f17060c741c44f2a99d30d23001b456242c374728799f4f",
+      "bytes": 7954143,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-mechanics-changed-light-preparation-001/independent-actual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "aad7db5e9a63e00762acce061cda638223ce1911d454e9ab9ea94c10f0f68981",
+      "bytes": 4709,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-mechanics-changed-light-preparation-001/independent-actual-001/REVIEW.md",
+      "copied": false
+    }
+  ],
+  "data": {
+    "runs": [
+      {
+        "raw_result": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+          "path_base": "/",
+          "sha256": "e5cb9629429fe5e19f17060c741c44f2a99d30d23001b456242c374728799f4f",
+          "bytes": 7954143,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1234-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+          "copied": false
+        },
+        "raw_ok": true,
+        "raw_failures": [],
+        "world_authority": "23/213",
+        "recorded_reached_scope": {
+          "saved_capture_ids": [
+            "01-whole-near-face-changed-light",
+            "02-held-closed-door-approach",
+            "03-held-short-screen-obstruction",
+            "04-actual-mapped-siding-spray"
+          ],
+          "route_attempts": [
+            {
+              "id": "extended-approach-to-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "nearby-short-screen-obstruction",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "spray_attempts": [
+            {
+              "id": "mapped-blank-siding-wall",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-short-screen",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "unreached_route_ids": [],
+          "unreached_spray_ids": []
+        },
+        "scope": "1234 initial contact-responsive door/screen mechanics on unchanged accepted static study in capture-time23; no sustained-forward behavior beyond first expected contact is claimed: changed-light whole still, door and nearby screen approaches with same-corridor retreats, three stock spray cases. Actual reached/performed records determine partial or completed scope. No authority/recognition or package claim."
+      }
+    ],
+    "historical_failed_runs": [],
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "limits": [
+      "Derived assembly of existing scoped decisions; not new acceptance. Capture23/213 differs from candidate authority26/213. New recognition credit0.",
+      "Live candidate source equivalence and its independent decision pending; app/PCK/package and seventh attestation null.",
+      "Four static and four motion PNGs are1440x900; original583-frame AVI/payloads1280x800,70 trailing bytes retained. Nine sparse samples are not continuous playback, flicker freedom, between-setup traversal or manual-play proof. Terminal blue payload581 gives no scene credit.",
+      "Reference pixels and full movies remain external/private. No hidden detail or surveyed dimensions claimed; original reviewers retain their narrower limits.",
+      "Observed1\u20134/17\u201319/22\u201325/initial0.329339685of20; continuity0; protected5\u201316/21/hidden20tail. Uncovered run2 only, not all entries/carport. Finite4mm support qualification:68 negative capsule-clearance rows(min\u22122.023846mm),70 empty-contact rows; no zero-penetration/continuous-support claim. Plum door preserved, not interaction-tested."
+    ]
+  },
+  "truth_boundary": "Derived first-five study preparation; captures23, candidate26, credit0. Live equivalence/package/seventh pending."
+}

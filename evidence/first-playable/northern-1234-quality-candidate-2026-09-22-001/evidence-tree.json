@@ -1,0 +1,94 @@
+{
+  "schema_version": "ti.d5-native-image-tree/1",
+  "tree_scope": "17 exact selected gameplay images; excludes reference pixels, full movies and documents; terminal blue581 has no scene credit.",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "f8941af510bc00e6e14ea5125f06b7503514b674449e84a543ffdc1765f64852",
+  "files": [
+    {
+      "path": "images/motion-avi/avi-index-0045.jpg",
+      "sha256": "31b24f30a6d2090f45edd54f7a37d604eb2ba2f418a44f856a35ef4375762abd",
+      "bytes": 69336
+    },
+    {
+      "path": "images/motion-avi/avi-index-0112.jpg",
+      "sha256": "66e06de085f3d811d337b07d75c31931fb8376879b4e400585df72413c72574a",
+      "bytes": 87897
+    },
+    {
+      "path": "images/motion-avi/avi-index-0179.jpg",
+      "sha256": "0fe8d281c3ba2587ca520db13ccb1e10887449271267c071dd28807de1a971fa",
+      "bytes": 100806
+    },
+    {
+      "path": "images/motion-avi/avi-index-0246.jpg",
+      "sha256": "f62a8f4beb20751de2a3a7d10bf7c57084142a7705ede7bc8b6fa03505030c02",
+      "bytes": 106352
+    },
+    {
+      "path": "images/motion-avi/avi-index-0313.jpg",
+      "sha256": "4b132da28586661bd2c1c750c760528e199be33191a40c47c1f5d71cada94893",
+      "bytes": 104077
+    },
+    {
+      "path": "images/motion-avi/avi-index-0380.jpg",
+      "sha256": "c8adef2c055b5af486a103df54751b2b30e92f79d3c561fa1e4f8a2e189fd15a",
+      "bytes": 99851
+    },
+    {
+      "path": "images/motion-avi/avi-index-0447.jpg",
+      "sha256": "aca8fb2c457be9fc7805d0d2819057c88032577d450b9d41f6d9886cc451acaf",
+      "bytes": 74335
+    },
+    {
+      "path": "images/motion-avi/avi-index-0514.jpg",
+      "sha256": "03f4f2f16bd0f40ba798d45be22492198a9ad38ec15e48cfdb89840a098ec65b",
+      "bytes": 108250
+    },
+    {
+      "path": "images/motion-avi/avi-index-0581.jpg",
+      "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+      "bytes": 16628
+    },
+    {
+      "path": "images/motion/01-whole-near-face-changed-light.png",
+      "sha256": "f0e9e7f2e0357bc8f81dd14b24454903e9541067088ca293c3df728aa6105361",
+      "bytes": 843877
+    },
+    {
+      "path": "images/motion/02-held-closed-door-approach.png",
+      "sha256": "5146318631a74222ae78200d795fe478f104fe0756d1bde90c50d443d17e672d",
+      "bytes": 1208358
+    },
+    {
+      "path": "images/motion/03-held-short-screen-obstruction.png",
+      "sha256": "ed3c38c23885ed03d505a44244bdeaeb44143e6abbcea4071e57dbbf40a45b76",
+      "bytes": 1235732
+    },
+    {
+      "path": "images/motion/04-actual-mapped-siding-spray.png",
+      "sha256": "ab0074a0e2a767083603ef61fac185c659c13649173880e0e2a87a024b56c3aa",
+      "bytes": 643697
+    },
+    {
+      "path": "images/static/01-whole-front-roof-footway-baseline.png",
+      "sha256": "1db2bf1721b0c333c15c80a481825a69c89f3e27f9a517511d9ea2ac77138dfb",
+      "bytes": 1024677
+    },
+    {
+      "path": "images/static/02-whole-front-roof-footway-candidate.png",
+      "sha256": "9081af72a88eea9b4d256dd0f947432005ff0035a417dd56f23705c8b27c7c09",
+      "bytes": 994651
+    },
+    {
+      "path": "images/static/03-center-roof-entry-footway-candidate.png",
+      "sha256": "f4895a5bf2be84667361c8fb6086dc20d4e275ebebd9793cda741e029c67f1f5",
+      "bytes": 701240
+    },
+    {
+      "path": "images/static/04-entry-footway-parking-road-junction.png",
+      "sha256": "ff3b1bc83699a035f11b0400190194c31053e1a24b8e03755756014175aef8e0",
+      "bytes": 1002799
+    }
+  ],
+  "truth_boundary": "Derived first-five study preparation; captures23, candidate26, credit0. Live equivalence/package/seventh pending."
+}

@@ -1,0 +1,140 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215666",
+  "label": "Existing immutable actual mechanics",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-003/native-mechanics-003-result.json",
+      "path_base": "/",
+      "sha256": "3a380232863227f183681bb09e77a459c19956c6bfe9bdd80c0abaf804440c5e",
+      "bytes": 7598376,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-003/native-mechanics-003-result.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-003/independent-actual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "9fc5bd908c5776ea3d6c6d8654337f1124032674af57bfa5f77fbf27cb10ec3e",
+      "bytes": 3102,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-003/independent-actual-001/REVIEW.md",
+      "copied": false
+    }
+  ],
+  "data": {
+    "runs": [
+      {
+        "raw_result": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-003/native-mechanics-003-result.json",
+          "path_base": "/",
+          "sha256": "3a380232863227f183681bb09e77a459c19956c6bfe9bdd80c0abaf804440c5e",
+          "bytes": 7598376,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-003/native-mechanics-003-result.json",
+          "copied": false
+        },
+        "raw_ok": true,
+        "raw_failures": [],
+        "world_authority": "23/213",
+        "recorded_reached_scope": {
+          "saved_capture_ids": [
+            "01-whole-near-face-changed-light",
+            "02-held-closed-door-approach",
+            "03-held-short-screen-obstruction",
+            "04-actual-mapped-siding-spray"
+          ],
+          "route_attempts": [
+            {
+              "id": "extended-approach-to-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "nearby-short-screen-obstruction",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "spray_attempts": [
+            {
+              "id": "mapped-blank-siding-wall",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-closed-door",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            },
+            {
+              "id": "authored-short-screen",
+              "record_state": "complete",
+              "performed": true,
+              "ok": true
+            }
+          ],
+          "unreached_route_ids": [],
+          "unreached_spray_ids": []
+        },
+        "scope": "1215 initial contact-responsive door/screen mechanics on unchanged accepted static study in capture-time23; no sustained-forward behavior beyond first expected contact is claimed: changed-light whole still, door and nearby screen approaches with same-corridor retreats, three stock spray cases. Actual reached/performed records determine partial or completed scope. No authority/recognition or package claim."
+      }
+    ],
+    "historical_failed_runs": [
+      {
+        "stage": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-001",
+        "status": "HISTORICAL_FAILED_NOT_RELABELLED",
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+            "path_base": "/",
+            "sha256": "e11645ade4d89d83c573fc6d08da0820376f437e085804852373be70fda2fc31",
+            "bytes": 3039482,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-001/native-mechanics-001-result.json",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-001/native-mechanics-001-execution.json",
+            "path_base": "/",
+            "sha256": "d3c7f1d012fa89e59769c73ce6593360f8a003c7facd7aec530f50ac3926f446",
+            "bytes": 509230,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-001/native-mechanics-001-execution.json",
+            "copied": false
+          }
+        ]
+      },
+      {
+        "stage": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-002",
+        "status": "HISTORICAL_FAILED_NOT_RELABELLED",
+        "records": [
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-002/native-mechanics-002-result.json",
+            "path_base": "/",
+            "sha256": "8a20f08f1b85891fb0e0893d3ac41ba8855dcd48f6fafa8e640389e2e0125d1c",
+            "bytes": 4829345,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-002/native-mechanics-002-result.json",
+            "copied": false
+          },
+          {
+            "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-002/native-mechanics-002-execution.json",
+            "path_base": "/",
+            "sha256": "988001b630b59daaa456e010c51d1793ebd42cbf9cc254e5aac3f8ec5c73143c",
+            "bytes": 519966,
+            "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1215-mechanics-changed-light-preparation-002/native-mechanics-002-execution.json",
+            "copied": false
+          }
+        ]
+      }
+    ],
+    "status": "EXISTING_INDEPENDENT_SCOPED_DECISIONS_BOUND",
+    "limits": [
+      "Derived assembly of existing scoped decisions; not new acceptance. Capture23/213 differs from candidate authority26/213. New recognition credit0.",
+      "Live candidate source equivalence and its independent decision pending; app/PCK/package and seventh attestation null.",
+      "Four static and four motion PNGs are1440x900; original583-frame AVI/payloads1280x800,70 trailing bytes retained. Nine sparse samples are not continuous playback, flicker freedom, between-setup traversal or manual-play proof. Terminal blue payload581 gives no scene credit.",
+      "Reference pixels and full movies remain external/private. No hidden detail or surveyed dimensions claimed; original reviewers retain their narrower limits.",
+      "Observed1/3\u20134 and partial19/5; continuity0/2; protected6\u201318/unestablished outer5/19. Five authored entries, not historical six. Prior001/002 failures retained without relabeling. Other entries/carport/stairs/roof and continued forward input beyond first contact untested."
+    ]
+  },
+  "truth_boundary": "Derived first-five study preparation; captures23, candidate26, credit0. Live equivalence/package/seventh pending."
+}
