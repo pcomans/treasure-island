@@ -1,0 +1,220 @@
+{
+  "ok": true,
+  "attempts": [
+    {
+      "ok": true,
+      "checks": [
+        {
+          "label": "Complete .78m2 mapped receiving skin within projection depth",
+          "ok": true
+        },
+        {
+          "label": "Whole source receiver rectangle covered by exact observed run",
+          "ok": true
+        },
+        {
+          "label": "Only mapped siding intersects full projection box",
+          "ok": true
+        },
+        {
+          "label": "Entire camera-to-skin rectangle cone clear of all target and relevant world triangles",
+          "ok": true
+        },
+        {
+          "label": "Whole tag rectangle framed at stock FOV70",
+          "ok": true
+        },
+        {
+          "label": "Stock camera segment and actual LAND clearance",
+          "ok": true
+        },
+        {
+          "label": "Player to receiver range below5.7/6m",
+          "ok": true
+        },
+        {
+          "label": "Static capsule LAND qualification and no nearby source/detail penetration",
+          "ok": true
+        }
+      ],
+      "box_intersections": [
+        {
+          "label": "ProjectedUpperSiding",
+          "triangle": 0,
+          "projected_overlap_m2": 0.3504873461667418,
+          "y_range": [
+            4.899002057502956,
+            5.332470296095506
+          ]
+        },
+        {
+          "label": "ProjectedUpperSiding",
+          "triangle": 1,
+          "projected_overlap_m2": 0.4295126538332703,
+          "y_range": [
+            5.049679395854966,
+            5.549002057502956
+          ]
+        }
+      ],
+      "cone_intersections": [],
+      "skin_area_m2": 0.7800000000000121,
+      "source_run_coverage": [
+        {
+          "runs": [
+            2
+          ],
+          "station_interval_m": [
+            1.1000000000000516,
+            2.299999999999996
+          ],
+          "source_length_m": 13.804122898612553,
+          "covered_area_m2": 0.7800000000000121
+        }
+      ],
+      "range_m": 5.370163699484064,
+      "corners": [
+        [
+          -335.4396206387115,
+          4.899002057502956,
+          -808.0643149502494
+        ],
+        [
+          -335.83706751049624,
+          4.899002057502956,
+          -806.9320446715135
+        ],
+        [
+          -335.83706751049624,
+          5.549002057502956,
+          -806.9320446715135
+        ],
+        [
+          -335.4396206387115,
+          5.549002057502956,
+          -808.0643149502494
+        ]
+      ],
+      "camera": {
+        "player": [
+          -331.590470561641,
+          1.993754915264125,
+          -806.077306282953
+        ],
+        "pivot": [
+          -331.590470561641,
+          3.993754915264125,
+          -806.077306282953
+        ],
+        "camera": [
+          -326.60196614617183,
+          2.4776271801648635,
+          -804.3262550593427
+        ],
+        "clearance": 0.47408796218686744,
+        "segment_hit": null,
+        "pitch": 16.00132516039727
+      },
+      "capsule_land_clearance_m": -8.479330523281092e-06,
+      "nearby_solids": [
+        {
+          "key": "building:w96665911:wall",
+          "role": "source",
+          "clearance_m": 3.99999999999999
+        },
+        {
+          "key": "prototype:building:w96665911:wall",
+          "role": "PaleCompleteTrim",
+          "clearance_m": 4.094439588289312
+        },
+        {
+          "key": "prototype:building:w96665911:wall",
+          "role": "PaleDrainageAndFascia",
+          "clearance_m": 4.026631649543571
+        }
+      ],
+      "spec": {
+        "role": "ProjectedUpperSiding",
+        "frame": {
+          "source_run": 2,
+          "start": [
+            -336.258,
+            1.954,
+            -805.914
+          ],
+          "end": [
+            -331.686,
+            2.044,
+            -818.939
+          ],
+          "tangent": [
+            0.33120539664707943,
+            0,
+            -0.9435586813928696
+          ],
+          "normal": [
+            0.9435586813928696,
+            0,
+            0.33120539664707943
+          ],
+          "length_m": 13.804122898612553,
+          "runs": [
+            2
+          ]
+        },
+        "station_m": 1.7,
+        "start_depth_m": 4.35,
+        "setup_position_xz": [
+          -331.590470561641,
+          -806.077306282953
+        ],
+        "target": [
+          -335.6383373048164,
+          5.224,
+          -807.498177434569
+        ],
+        "expected_result": "placed",
+        "first_hit": {
+          "distance_m": 9.962921642859168,
+          "key": "building:w96665911:wall",
+          "shape": 0,
+          "role": "ProjectedUpperSiding",
+          "triangle": 1,
+          "position": [
+            -335.6383440746039,
+            5.224002057502956,
+            -807.4981798108814
+          ],
+          "normal": [
+            -0.9435585656131921,
+            0.0,
+            -0.3312057264872929
+          ]
+        },
+        "camera": {
+          "player": [
+            -331.590470561641,
+            1.993754915264125,
+            -806.077306282953
+          ],
+          "pivot": [
+            -331.590470561641,
+            3.993754915264125,
+            -806.077306282953
+          ],
+          "camera": [
+            -326.60196614617183,
+            2.4776271801648635,
+            -804.3262550593427
+          ],
+          "clearance": 0.47408796218686744,
+          "segment_hit": null,
+          "pitch": 16.00132516039727
+        },
+        "player_hit_distance": 5.370163699484064,
+        "query_feasible": true
+      }
+    }
+  ],
+  "scope": "Full stock decal box and view cone, actual002 meshes and frozen world. File proposal only."
+}

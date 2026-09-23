@@ -5869,7 +5869,7 @@ const D5_BATCH_ACCEPTED = Object.freeze([
     "image_count": 14
   }
 ]);
-const D5_BATCH_BUILDER_SHA256 = "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6";
+const D5_BATCH_BUILDER_SHA256 = "a89a31212fcd181350ab5090e86df7140d8246077871cfae3b69a8c835539e54";
 
 const REVIEW_RECEIPTS = Object.freeze({
   ...Object.fromEntries(D5_BATCH_ACCEPTED.map((d) => [d.acceptance.review_id, Object.freeze(d.receipt)])),
@@ -6639,28 +6639,28 @@ function validateCurrentWorldBuilderDispatch(inputs) {
     navy_chapel_preload: `const NAVY_CHAPEL_187_LIVE_REPLACEMENT := preload("res://${NAVY_CHAPEL_LIVE_ADAPTER_PATH}")`,
     navy_chapel_prepare: "NAVY_CHAPEL_187_LIVE_REPLACEMENT.prepare_chunk_records(chunk.records as Array)",
     navy_chapel_plan: "NAVY_CHAPEL_187_LIVE_REPLACEMENT.build_chunk_plan(chapel_pair)",
-    navy_chapel_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan)",
+    navy_chapel_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)",
     navy_chapel_claim: "if not is_context and NAVY_CHAPEL_187_LIVE_REPLACEMENT.claims_record(record):",
     navy_chapel_consume: "return NAVY_CHAPEL_187_LIVE_REPLACEMENT.consume_record(record, chapel_plan)",
     navy_chapel_consumed: "NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)",
     d2_1441_preload: `const D2_1441_CHINOOK_LIVE_REPLACEMENT := preload("res://${D2_1441_LIVE_ADAPTER_PATH}")`,
     d2_1441_prepare: "D2_1441_CHINOOK_LIVE_REPLACEMENT.prepare_chunk_records(chunk)",
     d2_1441_plan: "D2_1441_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1441_pair)",
-    d2_1441_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan)",
+    d2_1441_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)",
     d2_1441_claim: "if not is_context and D2_1441_CHINOOK_LIVE_REPLACEMENT.claims_record(record):",
     d2_1441_consume: "return D2_1441_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1441_plan)",
     d2_1441_consumed: "D2_1441_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1441_plan)",
     d2_1439_preload: `const D2_1439_CHINOOK_LIVE_REPLACEMENT := preload("res://${D2_1439_LIVE_ADAPTER_PATH}")`,
     d2_1439_prepare: "D2_1439_CHINOOK_LIVE_REPLACEMENT.prepare_chunk_records(chunk)",
     d2_1439_plan: "D2_1439_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1439_pair)",
-    d2_1439_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan)",
+    d2_1439_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)",
     d2_1439_claim: "if not is_context and D2_1439_CHINOOK_LIVE_REPLACEMENT.claims_record(record):",
     d2_1439_consume: "return D2_1439_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1439_plan)",
     d2_1439_consumed: "D2_1439_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1439_plan)",
     d2_1444_preload: `const D2_1444_CROAKER_LIVE_REPLACEMENT := preload("res://${D2_1444_LIVE_ADAPTER_PATH}")`,
     d2_1444_prepare: "D2_1444_CROAKER_LIVE_REPLACEMENT.prepare_chunk_records(chunk)",
     d2_1444_plan: "D2_1444_CROAKER_LIVE_REPLACEMENT.build_chunk_plan(d2_1444_pair)",
-    d2_1444_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan)",
+    d2_1444_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)",
     d2_1444_claim: "if not is_context and D2_1444_CROAKER_LIVE_REPLACEMENT.claims_record(record):",
     d2_1444_consume: "return D2_1444_CROAKER_LIVE_REPLACEMENT.consume_record(record, d2_1444_plan)",
     d2_1444_consumed: "D2_1444_CROAKER_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1444_plan)",
@@ -6875,6 +6875,8 @@ function validateCurrentWorldBuilderDispatch(inputs) {
     ["MARINER_1221_LIVE_REPLACEMENT", "mariner_1221_plan"],
     ["NORTHPOINT_1241_LIVE_REPLACEMENT", "northpoint_1241_plan"],
     ["NORTHPOINT_1240_LIVE_REPLACEMENT", "northpoint_1240_plan"],
+    ["GATEVIEW_1397_LIVE_REPLACEMENT", "gateview_1397_plan"],
+    ["BAYSIDE_1226_LIVE_REPLACEMENT", "bayside_1226_plan"],
     ["BAYSIDE_1215_LIVE_REPLACEMENT", "bayside_1215_plan"]
   ];
   const cleanupCall = "_free_unconsumed_plans(rollback_plans)";
@@ -9126,7 +9128,7 @@ function runtimeDependencies(text) {
 function acceptedAuthorityRuntimeDependencies(path, text) {
   let dependencyText = text;
   const northern = D5_BATCH_ACCEPTED.find((d) => ["1201", "1238", "1206", "1219", "1212", "1220", "1239", "1222", "1227", "1202", "1234", "1215", "1232", "1241", "1221", "1240"].includes(d.number) && d.files.adapter === path);
-  const candidateHash = {"game/scripts/world/facades/northpoint_1232_live_replacement.gd": "eab24f028a8956a00d415fb058c84a2be84b86f53f3ce357122b48441f9ec27e", "game/scripts/world/facades/northpoint_1241_live_replacement.gd": "1e1cebbd652e2409723c7000398a78aecedf9f4c77624016c5fb9070ffe70c6c", "game/scripts/world/facades/mariner_1221_live_replacement.gd": "15816708f9b6b8f15ae83f5d5d0ec0823165fbc0a2db51bdaeba442c34004b1e"}[path];
+  const candidateHash = {"game/scripts/world/facades/bayside_1226_live_replacement.gd": "d26993a5443fdf4b30477c9f47e96fdc54fdc1f517c5dbaaeb14d3f8b2120c66", "game/scripts/world/facades/gateview_1397_live_replacement.gd": "a906e841e11ad3c421abe208ef19b4ba3f4fb3e1e2c9ef563d609dd565d5fd77", "game/scripts/world/facades/northpoint_1232_live_replacement.gd": "eab24f028a8956a00d415fb058c84a2be84b86f53f3ce357122b48441f9ec27e", "game/scripts/world/facades/northpoint_1241_live_replacement.gd": "1e1cebbd652e2409723c7000398a78aecedf9f4c77624016c5fb9070ffe70c6c", "game/scripts/world/facades/mariner_1221_live_replacement.gd": "15816708f9b6b8f15ae83f5d5d0ec0823165fbc0a2db51bdaeba442c34004b1e"}[path];
   const candidate1232 = candidateHash ? { hashes: { adapter: candidateHash } } : null;
   const reviewedWrapper = northern || candidate1232;
   if (reviewedWrapper) {

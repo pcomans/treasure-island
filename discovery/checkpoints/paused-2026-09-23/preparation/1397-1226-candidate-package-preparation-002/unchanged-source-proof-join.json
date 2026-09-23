@@ -1,0 +1,20 @@
+{
+  "actual_source_bindings": {
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-continuation-001/SLOT_RELEASE-focused-002-native-registry-001-native-loader-001.json": "b7a9ea8bb56f56c390444b6ae02be12bdcaed5e014e06c7746c0ac9f1ed9bbcc",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-continuation-001/focused-002-execution.json": "b7575547bb52319ac9bff2d8987959efdb66ed1223d85fed361436163b03757c",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-continuation-001/focused-002-result.json": "f3fb51e961416a4656b7e16a0e5b475ed20e4db81a40de07594360becc811b93",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-continuation-001/independent-actual-001/RETRO-next_family_source_review.md": "79d043f171265399b329a377e8ebd2c3fe75978256d78f3e77237b04fce1bf2a",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-continuation-001/independent-actual-001/REVIEW.md": "e53795ac0f36c45bceeb74c64215b2e0c2fa5a749eaa806ed5704969e6bca335",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-continuation-001/native-loader-001-execution.json": "b2f08e074aa9db130d03889533588337b94fd15d3e8d87f5812ca1f8628eabbc",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-continuation-001/native-registry-001-execution.json": "103e913685bf119bb31286bedf2b26b53a5255d61fa931ccaf679acd4a7b7a00",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/import-001-execution.json": "843d11bedecb0f2a47d9a16d20e2a6914e6bf84599fdde7a3a94f0764074bc1b"
+  },
+  "main_before": "ab904888dd9d4520911eac461e638e7df03ad201aaf2b5c274b2103e85ecf784",
+  "main_proposed": "495d61639cf86d6bc89b8fbe7459aab34df24dbc070644271e98bdeb08484b61",
+  "package_delta": [
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1/game/scripts/main.gd"
+  ],
+  "scope": "Only five main smoke counters and two attachment calls/conjunctions proposed; all remaining source bindings unchanged. Existing invoked projected spec/pair helpers byte-exact; source/mounted/signed stages exercise new smoke path.",
+  "unchanged_main_suffix_sha256": "31ea692b598e313d1205fbfaf6bdca2906fa332c7e1692d14dd28449c1e78a33",
+  "unchanged_source_count": 3974
+}

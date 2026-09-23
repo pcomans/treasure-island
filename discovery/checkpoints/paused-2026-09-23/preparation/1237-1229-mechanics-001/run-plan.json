@@ -1,0 +1,96 @@
+{
+  "native-mechanics-1237-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--display-driver",
+      "macos",
+      "--rendering-method",
+      "forward_plus",
+      "--rendering-driver",
+      "metal",
+      "--audio-driver",
+      "Dummy",
+      "--resolution",
+      "1440x900",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1",
+      "--fixed-fps",
+      "60",
+      "--write-movie",
+      "/private/tmp/1237-1229-mechanics-001/1237/1237-mechanics.avi",
+      "--script",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-mechanics-001/1237/live_driver.gd",
+      "--",
+      "--probe-mode=mechanics",
+      "--output=/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-mechanics-001/native-mechanics-1237-001-result.json"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1",
+    "dependent_inputs": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/import-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/.godot/global_script_class_cache.cfg",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/scripts/world/facades/northpoint_1237_study.gd.uid",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/scripts/world/facades/northpoint_1229_study.gd.uid",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/focused-1237-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/focused-1237-001-result.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/native-1237-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/native-1237-001-result.json"
+    ],
+    "prerequisites": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/import-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/focused-1237-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/native-1237-001-execution.json"
+    ],
+    "import_receipt": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/import-001-execution.json",
+    "result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-mechanics-001/native-mechanics-1237-001-result.json",
+    "image_dir": "/private/tmp/1237-1229-mechanics-001/1237/images",
+    "durable_image_dir": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-mechanics-001/1237/capture/images",
+    "movie": "/private/tmp/1237-1229-mechanics-001/1237/1237-mechanics.avi"
+  },
+  "native-mechanics-1229-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--display-driver",
+      "macos",
+      "--rendering-method",
+      "forward_plus",
+      "--rendering-driver",
+      "metal",
+      "--audio-driver",
+      "Dummy",
+      "--resolution",
+      "1440x900",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1",
+      "--fixed-fps",
+      "60",
+      "--write-movie",
+      "/private/tmp/1237-1229-mechanics-001/1229/1229-mechanics.avi",
+      "--script",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-mechanics-001/1229/live_driver.gd",
+      "--",
+      "--probe-mode=mechanics",
+      "--output=/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-mechanics-001/native-mechanics-1229-001-result.json"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1",
+    "dependent_inputs": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/import-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/.godot/global_script_class_cache.cfg",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/scripts/world/facades/northpoint_1237_study.gd.uid",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/scripts/world/facades/northpoint_1229_study.gd.uid",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/focused-1229-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/focused-1229-001-result.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/native-1229-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/native-1229-001-result.json"
+    ],
+    "prerequisites": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/import-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/focused-1229-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/native-1229-001-execution.json"
+    ],
+    "import_receipt": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/import-001-execution.json",
+    "result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-mechanics-001/native-mechanics-1229-001-result.json",
+    "image_dir": "/private/tmp/1237-1229-mechanics-001/1229/images",
+    "durable_image_dir": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-mechanics-001/1229/capture/images",
+    "movie": "/private/tmp/1237-1229-mechanics-001/1229/1229-mechanics.avi"
+  }
+}

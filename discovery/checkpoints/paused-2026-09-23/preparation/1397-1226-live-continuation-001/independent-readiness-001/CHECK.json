@@ -1,0 +1,49 @@
+{
+  "utc": "2026-09-23T00:21:32.272176+00:00",
+  "pins": {
+    "count": 4012,
+    "mismatches": []
+  },
+  "builder_original_hash": "793baf69aeaf24b43c280234d1c85422f54aab835f3d658658e9951f4d584dc6",
+  "sole_declaration_removal": true,
+  "self_references": 0,
+  "helper_classes": {
+    "focused_live_contract.gd": [],
+    "observed_builder.gd": [],
+    "comparison/current-chunk-builder.gd": [],
+    "comparison/study-1397.gd": [],
+    "comparison/study-1226.gd": []
+  },
+  "normalized_helper_matches": {
+    "focused_live_contract.gd": true,
+    "observed_builder.gd": true,
+    "comparison/study-1397.gd": true,
+    "comparison/study-1226.gd": true
+  },
+  "unchanged_expectations": {
+    "unit-expectations.json": true,
+    "baseline-world.json": true,
+    "accepted-registry-before.json": true
+  },
+  "cache_match": true,
+  "uid_count": 4,
+  "uids_match": true,
+  "import_ok": {
+    "status": "terminal",
+    "exit_code": 0,
+    "pins_unchanged": true,
+    "pid_absent": true,
+    "class_discovery_ok": true
+  },
+  "fresh": {
+    "focused-002-execution.json": true,
+    "focused-002.log": true,
+    "native-registry-001-execution.json": true,
+    "native-registry-001.log": true,
+    "native-loader-001-execution.json": true,
+    "native-loader-001.log": true,
+    "focused-002-result.json": true,
+    "release": true
+  },
+  "engine_snapshot": []
+}

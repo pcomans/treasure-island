@@ -1,0 +1,667 @@
+{
+  "land_key": "land:w26767313:x_-2__z_-4",
+  "sampled_land_keys": [
+    "land:w26767313:x_-2__z_-4",
+    "land:w26767313:x_-1__z_-4"
+  ],
+  "sampled_area_keys": [
+    "area:r17241151:x_-2__z_-4",
+    "area:r17241151:x_-1__z_-4"
+  ],
+  "sampled_road_keys": [
+    "roads:x_-2__z_-4",
+    "roads:x_-1__z_-4"
+  ],
+  "land_collision_kind": "world_solid",
+  "visible_area_key": "area:r17241151:x_-2__z_-4",
+  "visible_area_collision_kind": "none",
+  "source_chunk_sha256": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4",
+  "samples": [
+    {
+      "label": "near-2-door-1",
+      "station_m": 3.2,
+      "width_m": 1.15,
+      "outward_depth_m": [
+        0.022,
+        0.19
+      ],
+      "samples": [
+        {
+          "xz": [
+            -329.136144808199,
+            -820.8446051760161
+          ],
+          "station_m": 2.625,
+          "outward_m": 0.022,
+          "land_y": 2.0879460111428028,
+          "land_triangle": 41,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 41
+          },
+          "visible_area_y": 2.107946011142803,
+          "area_triangle": 35,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 35
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -328.7602311640307,
+            -821.9314303377271
+          ],
+          "station_m": 3.7750000000000004,
+          "outward_m": 0.022,
+          "land_y": 2.09565319981163,
+          "land_triangle": 41,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 41
+          },
+          "visible_area_y": 2.11565319981163,
+          "area_triangle": 35,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 35
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -328.6014601838851,
+            -821.8765142575355
+          ],
+          "station_m": 3.7750000000000004,
+          "outward_m": 0.19,
+          "land_y": 2.0959692708054876,
+          "land_triangle": 41,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 41
+          },
+          "visible_area_y": 2.1159692708054876,
+          "area_triangle": 35,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 35
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -328.9773738280534,
+            -820.7896890958245
+          ],
+          "station_m": 2.625,
+          "outward_m": 0.19,
+          "land_y": 2.08826208213666,
+          "land_triangle": 41,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 41
+          },
+          "visible_area_y": 2.10826208213666,
+          "area_triangle": 35,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 35
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -328.868802496042,
+            -821.3605597167758
+          ],
+          "station_m": 3.2,
+          "outward_m": 0.106,
+          "land_y": 2.091957640974145,
+          "land_triangle": 41,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 41
+          },
+          "visible_area_y": 2.111957640974145,
+          "area_triangle": 35,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 35
+          },
+          "source_wall_bottom_y": 2.044
+        }
+      ],
+      "land_min_y": 2.0879460111428023,
+      "land_max_y": 2.0959692708054876,
+      "visible_max_y": 2.115969270805487,
+      "complete_affine_extrema": {
+        "LAND": [
+          2.0879460111428023,
+          2.0959692708054876
+        ],
+        "area": [
+          2.1079460111428023,
+          2.115969270805487
+        ]
+      }
+    },
+    {
+      "label": "near-2-lower-1",
+      "station_m": 1.1,
+      "width_m": 1.52,
+      "outward_depth_m": [
+        0.01,
+        0.204
+      ],
+      "samples": [
+        {
+          "xz": [
+            -329.8944096599976,
+            -818.6890534083524
+          ],
+          "station_m": 0.3400000000000001,
+          "outward_m": 0.01,
+          "land_y": 2.0726095858408997,
+          "land_triangle": 41,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 41
+          },
+          "visible_area_y": 2.0926095858408997,
+          "area_triangle": 35,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 35
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -329.39754988683603,
+            -820.1255527525269
+          ],
+          "station_m": 1.86,
+          "outward_m": 0.01,
+          "land_y": 2.082796478690133,
+          "land_triangle": 41,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 41
+          },
+          "visible_area_y": 2.102796478690133,
+          "area_triangle": 35,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 35
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -329.2142072073822,
+            -820.0621377551629
+          ],
+          "station_m": 1.86,
+          "outward_m": 0.204,
+          "land_y": 2.0831614654330397,
+          "land_triangle": 41,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 41
+          },
+          "visible_area_y": 2.1031614654330397,
+          "area_triangle": 35,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 35
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -329.71106698054376,
+            -818.6256384109884
+          ],
+          "station_m": 0.3400000000000001,
+          "outward_m": 0.204,
+          "land_y": 2.0729745725838065,
+          "land_triangle": 41,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 41
+          },
+          "visible_area_y": 2.092974572583807,
+          "area_triangle": 35,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 35
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -329.5543084336899,
+            -819.3755955817577
+          ],
+          "station_m": 1.1,
+          "outward_m": 0.107,
+          "land_y": 2.07788552563697,
+          "land_triangle": 41,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 41
+          },
+          "visible_area_y": 2.09788552563697,
+          "area_triangle": 35,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 35
+          },
+          "source_wall_bottom_y": 2.044
+        }
+      ],
+      "land_min_y": 2.0726095858408997,
+      "land_max_y": 2.0831614654330397,
+      "visible_max_y": 2.1031614654330397,
+      "complete_affine_extrema": {
+        "LAND": [
+          2.0726095858408997,
+          2.0831614654330397
+        ],
+        "area": [
+          2.0926095858408997,
+          2.1031614654330397
+        ]
+      }
+    },
+    {
+      "label": "near-2-door-2",
+      "station_m": 9.346156509972527,
+      "width_m": 1.15,
+      "outward_depth_m": [
+        0.022,
+        0.19
+      ],
+      "samples": [
+        {
+          "xz": [
+            -327.1270896740649,
+            -826.6531280765549
+          ],
+          "station_m": 8.771156509972528,
+          "outward_m": 0.022,
+          "land_y": 2.1167866783989284,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.1367866783989284,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -326.7511796937588,
+            -827.7399545055242
+          ],
+          "station_m": 9.921156509972526,
+          "outward_m": 0.022,
+          "land_y": 2.1195618769113356,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.1395618769113356,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -326.59240852848325,
+            -827.6850389605752
+          ],
+          "station_m": 9.921156509972526,
+          "outward_m": 0.19,
+          "land_y": 2.121360403253029,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.141360403253029,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -326.96831850878937,
+            -826.5982125316059
+          ],
+          "station_m": 8.771156509972528,
+          "outward_m": 0.19,
+          "land_y": 2.1185852047406213,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.1385852047406213,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -326.8597491012741,
+            -827.169083518565
+          ],
+          "station_m": 9.346156509972527,
+          "outward_m": 0.106,
+          "land_y": 2.119073540825979,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.1390735408259784,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        }
+      ],
+      "land_min_y": 2.1167866783989284,
+      "land_max_y": 2.121360403253029,
+      "visible_max_y": 2.141360403253029,
+      "complete_affine_extrema": {
+        "LAND": [
+          2.1167866783989284,
+          2.121360403253029
+        ],
+        "area": [
+          2.136786678398928,
+          2.141360403253029
+        ]
+      }
+    },
+    {
+      "label": "near-2-lower-2",
+      "station_m": 6.846156509972528,
+      "width_m": 1.52,
+      "outward_depth_m": [
+        0.01,
+        0.204
+      ],
+      "samples": [
+        {
+          "xz": [
+            -328.016098556655,
+            -824.1195471686691
+          ],
+          "station_m": 6.086156509972528,
+          "outward_m": 0.01,
+          "land_y": 2.110178727004666,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.130178727004666,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -327.51924362616336,
+            -825.5560481878285
+          ],
+          "station_m": 7.606156509972528,
+          "outward_m": 0.01,
+          "land_y": 2.11384681547324,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.1338468154732397,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -327.33590073292856,
+            -825.4926338085421
+          ],
+          "station_m": 7.606156509972528,
+          "outward_m": 0.204,
+          "land_y": 2.115923685177337,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.1359236851773375,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -327.8327556634202,
+            -824.0561327893827
+          ],
+          "station_m": 6.086156509972528,
+          "outward_m": 0.204,
+          "land_y": 2.1114847603500833,
+          "land_triangle": 41,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 41
+          },
+          "visible_area_y": 2.1314847603500833,
+          "area_triangle": 35,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 35
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -327.6759996447918,
+            -824.8060904886055
+          ],
+          "station_m": 6.846156509972528,
+          "outward_m": 0.107,
+          "land_y": 2.113051206091002,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.133051206091002,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        }
+      ],
+      "land_min_y": 2.1101787270046666,
+      "land_max_y": 2.115923685177337,
+      "visible_max_y": 2.135923685177337,
+      "complete_affine_extrema": {
+        "LAND": [
+          2.1101787270046666,
+          2.115923685177337
+        ],
+        "area": [
+          2.1301787270046666,
+          2.135923685177337
+        ]
+      }
+    },
+    {
+      "label": "near-2-lower-3",
+      "station_m": 12.646156509972528,
+      "width_m": 1.52,
+      "outward_depth_m": [
+        0.01,
+        0.204
+      ],
+      "samples": [
+        {
+          "xz": [
+            -326.12020474150677,
+            -829.6009326406495
+          ],
+          "station_m": 11.886156509972528,
+          "outward_m": 0.01,
+          "land_y": 2.1241753803821504,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.1441753803821504,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -325.62334981101515,
+            -831.0374336598089
+          ],
+          "station_m": 13.406156509972528,
+          "outward_m": 0.01,
+          "land_y": 2.127843468850724,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.147843468850724,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -325.44000691778035,
+            -830.9740192805225
+          ],
+          "station_m": 13.406156509972528,
+          "outward_m": 0.204,
+          "land_y": 2.1299203385548213,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.1499203385548213,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -325.936861848272,
+            -829.5375182613631
+          ],
+          "station_m": 11.886156509972528,
+          "outward_m": 0.204,
+          "land_y": 2.1262522500862477,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.1462522500862478,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        },
+        {
+          "xz": [
+            -325.78010582964356,
+            -830.287475960586
+          ],
+          "station_m": 12.646156509972528,
+          "outward_m": 0.107,
+          "land_y": 2.127047859468486,
+          "land_triangle": 40,
+          "land_source": {
+            "object_key": "land:w26767313:x_-2__z_-4",
+            "triangle": 40
+          },
+          "visible_area_y": 2.147047859468486,
+          "area_triangle": 34,
+          "area_source": {
+            "object_key": "area:r17241151:x_-2__z_-4",
+            "triangle": 34
+          },
+          "source_wall_bottom_y": 2.044
+        }
+      ],
+      "land_min_y": 2.1241753803821504,
+      "land_max_y": 2.1299203385548213,
+      "visible_max_y": 2.1499203385548213,
+      "complete_affine_extrema": {
+        "LAND": [
+          2.1241753803821504,
+          2.1299203385548213
+        ],
+        "area": [
+          2.1441753803821504,
+          2.1499203385548213
+        ]
+      }
+    }
+  ],
+  "paths": "Render-only bounded actual local grade; original support unchanged"
+}

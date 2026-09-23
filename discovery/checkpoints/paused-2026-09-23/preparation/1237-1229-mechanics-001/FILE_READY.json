@@ -1,0 +1,32 @@
+{
+  "status": "FILE_READY_PENDING_INDEPENDENT_MEDIUM_READINESS_AND_ROOT_GO",
+  "at": "2026-09-23T01:11:20.603832+00:00",
+  "author": "next_pair_mechanics_preparation",
+  "model": "gpt-6-astra",
+  "effort": "low",
+  "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-mechanics-001",
+  "source_checkout": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1",
+  "base": "fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+  "authority": "32/213",
+  "intended_invocations": [
+    [
+      "/usr/bin/python3",
+      "-B",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-mechanics-001/run-1237.py"
+    ],
+    [
+      "/usr/bin/python3",
+      "-B",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-mechanics-001/run-1229.py"
+    ]
+  ],
+  "invocation_boundary": "Each native stage requires exact ROOT GO and owned release; no import/materializer or automatic second-stage dispatch. Retain same actual handle on timeout.",
+  "pins_sha256": "79b9654bcd88f4f877d496c16534f233dabdfaa11a99d7363977720b3ce7c5e2",
+  "pin_count": 2146,
+  "delta_sha256": "f59608871f97a7753e87ed39f293a73c240b84074774db4dc71fd0924c60f267",
+  "checks_sha256": "d9aa0beed576d9448179cfbb88ef1ba14f9fdf58fbee2ee73936c6ca87295816",
+  "retro": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-mechanics-001/discovery/RETRO_LOG.md",
+  "no_engine_executed": true,
+  "no_MAIN_or_QS_edits": true,
+  "recognition_credit": 0
+}

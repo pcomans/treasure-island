@@ -1,0 +1,140 @@
+[
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-band-visibility-003/1226/capture/images/01-whole-front-baseline.png",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/static/01-whole-front-baseline.png",
+    "sha256": "537fd4436b868cb41d69b0fafa1bf62592011fa748a157327ea4056e7b946830",
+    "bytes": 1045000
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-band-visibility-003/1226/capture/images/02-whole-front-candidate.png",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/static/02-whole-front-candidate.png",
+    "sha256": "9892c58485b3a2cea096134d424d98a49c8a67f958da957921ea4b9e915a6c09",
+    "bytes": 944671
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-band-visibility-003/1226/capture/images/03-roof-entry-candidate.png",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/static/03-roof-entry-candidate.png",
+    "sha256": "f636bae7ec87ae03ddfe6eaa09a3247929203f7f8dbe21685eee203f499a14c8",
+    "bytes": 586153
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-band-visibility-003/1226/capture/images/04-door-path-footway-junction.png",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/static/04-door-path-footway-junction.png",
+    "sha256": "bbea0f6799fb02c4e9ee32cf084bc70870cc5ebbf7d7df91cead5507ef1ef208",
+    "bytes": 1017199
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/images/01-actual-eligible-wall-spray.png",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/spray/01-actual-eligible-wall-spray.png",
+    "sha256": "3ee840eafb80fc5fd7888faca5a9a8b94410407b38a5cbac99a3e27cb9132ce2",
+    "bytes": 882061
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/avi-frame-samples/avi-index-0004.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-prior/avi-index-0004.jpg",
+    "sha256": "ca6ac6b9620b35ae16fab32d3c35a868e2e3019da14f178b1f8fc1a50a328d60",
+    "bytes": 48453
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/avi-frame-samples/avi-index-0134.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-prior/avi-index-0134.jpg",
+    "sha256": "c780558efc7fa37d8461357ff882c7025ab4e0b6e64f1516f06dcca893e02e50",
+    "bytes": 78943
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/avi-frame-samples/avi-index-0263.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-prior/avi-index-0263.jpg",
+    "sha256": "38bec561ef0ebf697302ef1b29831f3d7dc85639711e31a1ad1facdb904b8ef6",
+    "bytes": 82457
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/avi-frame-samples/avi-index-0392.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-prior/avi-index-0392.jpg",
+    "sha256": "bb6991daa1f2d9134467075bfcf9e05c6b79b51be0004480c058b597ff7f84f5",
+    "bytes": 81376
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/avi-frame-samples/avi-index-0522.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-prior/avi-index-0522.jpg",
+    "sha256": "abf22ffea86129e97518071e82e3ae0ef987e4763cc15541249952b06af81429",
+    "bytes": 51771
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/avi-frame-samples/avi-index-0652.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-prior/avi-index-0652.jpg",
+    "sha256": "cf70e81a622d4ee3d4d958feb752ce92a6adbf57ca7375c280bd851fdb333ea5",
+    "bytes": 86291
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/avi-frame-samples/avi-index-0781.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-prior/avi-index-0781.jpg",
+    "sha256": "99035a587402fa28fec7eec197bd518d575b3320cd949b2966a4883fbafbb228",
+    "bytes": 73634
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/avi-frame-samples/avi-index-0910.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-prior/avi-index-0910.jpg",
+    "sha256": "43e1cf800edddaf739d091e0e54d545aaf9371cd1b41f834b3ea017737466a0e",
+    "bytes": 86325
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/avi-frame-samples/avi-index-1040.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-prior/avi-index-1040.jpg",
+    "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+    "bytes": 16628
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/avi-frame-samples/avi-index-0004.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-sprays/avi-index-0004.jpg",
+    "sha256": "98a7538f398125ac72f3343e1a1d718994a79a8599d64261b37b0671477fe26d",
+    "bytes": 83979
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/avi-frame-samples/avi-index-0026.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-sprays/avi-index-0026.jpg",
+    "sha256": "777d889fd94725fe4197ee2c925c190a7fa589ac846cb1c3af361c14278af946",
+    "bytes": 85285
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/avi-frame-samples/avi-index-0048.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-sprays/avi-index-0048.jpg",
+    "sha256": "77274232f3b7219e3785155ee7b73f094e682e5ce4be853b85cd1d1ed571e0c7",
+    "bytes": 87718
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/avi-frame-samples/avi-index-0069.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-sprays/avi-index-0069.jpg",
+    "sha256": "e50b81f19b637730a9835f349a9b87fab6742ce505c62d7c7408048892e70357",
+    "bytes": 86046
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/avi-frame-samples/avi-index-0091.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-sprays/avi-index-0091.jpg",
+    "sha256": "e50b81f19b637730a9835f349a9b87fab6742ce505c62d7c7408048892e70357",
+    "bytes": 86046
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/avi-frame-samples/avi-index-0113.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-sprays/avi-index-0113.jpg",
+    "sha256": "f491b256947b1e81ca733ba466b927aeb85052a50670f1c471a9190492ae1acb",
+    "bytes": 93446
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/avi-frame-samples/avi-index-0134.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-sprays/avi-index-0134.jpg",
+    "sha256": "e413ddf01b33c7c99e44be894f920dcbcd2152f35fe0ac9e4d88f6462da26e1a",
+    "bytes": 86123
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/avi-frame-samples/avi-index-0156.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-sprays/avi-index-0156.jpg",
+    "sha256": "e413ddf01b33c7c99e44be894f920dcbcd2152f35fe0ac9e4d88f6462da26e1a",
+    "bytes": 86123
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/avi-frame-samples/avi-index-0178.jpg",
+    "destination": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/images/motion-sprays/avi-index-0178.jpg",
+    "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+    "bytes": 16628
+  }
+]

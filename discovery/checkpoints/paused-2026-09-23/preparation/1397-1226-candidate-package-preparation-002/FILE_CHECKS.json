@@ -1,0 +1,40 @@
+{
+  "accepted_map_sizes": [
+    2,
+    2,
+    3,
+    9
+  ],
+  "actual_source_review": "e53795ac0f36c45bceeb74c64215b2e0c2fa5a749eaa806ed5704969e6bca335",
+  "classes": 73,
+  "consumed_scalars": [
+    32,
+    213,
+    31,
+    40,
+    34,
+    6,
+    13,
+    9
+  ],
+  "engine_invoked": false,
+  "main_only_overlay": true,
+  "package_roles_pending": true,
+  "resource_count": 137,
+  "scope": "Actual producers and named source/mounted/signed consumers; existing intended negative checks retained. This is not engine or independent acceptance.",
+  "status": "FILE_ONLY_PASS",
+  "uids": {
+    "game/scripts/world/facades/bayside_1226_live_factory.gd.uid": "f4465623a164636409db4c2d23a19bad2f03c1911b8b31dddb8e3afa54afedbc",
+    "game/scripts/world/facades/bayside_1226_live_replacement.gd.uid": "32235b223e6f2cd9473d55fefc62a456e1bdf0f25e85ee3f010c50926fc77deb",
+    "game/scripts/world/facades/gateview_1397_live_factory.gd.uid": "800d76449faaab629d39549fe8d85a6dc0f22cdf5b8d58d2ef7da58aa2b786f9",
+    "game/scripts/world/facades/gateview_1397_live_replacement.gd.uid": "f6aae0b1d6ed6763ce5ce49f9cd2a133d65330bf9ef495c875d1ff0435eab0c7"
+  },
+  "world": {
+    "bodies": 500,
+    "meshes": 1287,
+    "rows": 735,
+    "shapes": 667,
+    "surfaces": 1302,
+    "triangles": 183761
+  }
+}

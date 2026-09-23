@@ -1,0 +1,11 @@
+{
+  "HEAD": "fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+  "index_sha256": "a2455a9bc52939902ba7b0ee5da080abe00c61726ac86f7e0f0b9550f4e1091a",
+  "untracked_uids": {
+    "game/tests/building_1_wing_window_reveal_candidate_capture.gd.uid": "0ff69b6df4a8f8d89c9027d7f8ce64ecde3ecc9927a3a1f6ee626784e81a9aff",
+    "game/tests/headless_building_1_wing_returns_v2_current_package_contract.gd.uid": "a81972840fb1218b9d3e0ebcbb55550ed5dcf2b0174efa2eeae152c0110a457e",
+    "game/tests/headless_building_1_wing_window_reveal_candidate_evidence_contract.gd.uid": "c2f7c99de5c6aae195369e905a61cbe52028232c04f48180cda3dabfacf796da",
+    "game/tests/headless_building_1_wing_window_reveal_candidate_package_contract.gd.uid": "20be180ae447b1faddd59d96ebd2134e9b929a9c9e94cfae51af4ec995a8fad8"
+  },
+  "status": "?? game/tests/building_1_wing_window_reveal_candidate_capture.gd.uid\n?? game/tests/headless_building_1_wing_returns_v2_current_package_contract.gd.uid\n?? game/tests/headless_building_1_wing_window_reveal_candidate_evidence_contract.gd.uid\n?? game/tests/headless_building_1_wing_window_reveal_candidate_package_contract.gd.uid\n"
+}

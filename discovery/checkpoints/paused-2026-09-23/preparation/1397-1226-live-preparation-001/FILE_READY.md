@@ -1,0 +1,15 @@
+# Shared1397+1226 live-source FILE_READY
+
+Fresh external successor only. Base `fdfc100704200e6570b654a4e6a4fccc9a1a61be`, authority32/213. Frozen1397 S2 and1226 H003 were captured against31; no old proof is relabeled current.1397 sole-unit source/readiness remains immutable, and all three1397 target files are byte-identical here.
+
+16 selected files add both exact callback factories/configs/atomic adapters, one dispatcher/main spec and the actually consumed compiler/native branches. All213 unit records and the catalog are unchanged; no new recognition credit. All material/geometry/protected/receiver construction is retained. No checkout/import/Godot/export/MAIN edits occurred.
+
+Actual shared compiler and both Node suites passed on their first invocations. Registry `9247d36589c36c948f28d58f2a72002379906850e5b094e2633129a3cb05e2fc`; contracts `6e76908b51d96afacdd722a0facda82dd43f9a13bea7eb3ddd2dde818eac74aa`. Exact full adapter path/hash membership is present for each unit in JS scanner, native fixture and production loader, preserving privacy checks and exact two format probes. Three native current expected hashes bind these actual outputs.
+
+Focused proposal compares195+208 mesh channels, both four-subtree collision closures, caller atomic cleanup/ownership and ordinary attachment. Current prior32 roots/non-target records are compared through the actual baseline builder. Prior actual callback counts29 and126 are bound to unchanged producers; the new13 and14 calls yield42 and140 in the two distinct chunks. Combined expected WORLD735rows/1287meshes/1302surfaces/183761triangles/500bodies/667shapes is derived, not an actual new native measurement.
+
+Both first-five packets are ROOT-accepted.1226 retains original raw movementHOLD with925 derived physically qualified rows and separate fresh3-sprayPASS. No continuous all-PASS original movie, grounded roof callback, jetpack or hidden/interior claim.1397's finite663 rows and3callbacks remain scoped. Candidate package and independent role6/seventh remain pending.
+
+`staged-source-pins.json` binds3970 actual external files. `source-pins.json` binds a prospective candidate that does not yet exist plus current helper inputs. Independent review and ROOT-authorized materialization must precede execution. The materializer checks the literal detached base before firstwrite and reuses staged bytes (including already available skipped-smudge resources without downloading); it verifies the complete destination map. One import→shared focused→native registry→native loader chain is proposed under separate exact ROOT GO, with existing failure/terminal/cache/fourUID/release handling. One later shared package is planned; no one-unit export is proposed.
+
+Approved fixture experiment: the three negative mutation positions now reuse exactly one anchored dispatch statement selected from the named build_chunk body after positive compilation/dispatch checks. Positive compiler call/hash literals remain independent. Existing mutation cardinality/non-no-op/placeholders and both intended order-error assertions passed. See the normal RETRO for measured trial outcome.

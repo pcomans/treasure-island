@@ -1,0 +1,22 @@
+{
+  "at": "2026-09-23T00:34:55.037838+00:00",
+  "changes": [
+    {
+      "path": "staged/game/scripts/world/facades/northpoint_1237_study.gd",
+      "before": "543f1442cf8fa1f9dcd5b231282a2fc49d99ff2a2d600b9c9e275d266a9cbc48",
+      "after": "b55b0f4bd850ad011c7387fb2fe6ab593deca5b89794c9d681967f6dee32dc1e"
+    },
+    {
+      "path": "staged/game/scripts/world/facades/northpoint_1229_study.gd",
+      "before": "60e0097275cc02c234b064782211af8a9ec3b15cc32e86b041750592225639a8",
+      "after": "a7c923866a64be90974ae3d1f2f72253b0ee5c10faa99275b1fa8e3def5cce11"
+    }
+  ],
+  "original_regular_files_unchanged": 62,
+  "original_READY_sha256": "e59355922f11c35d1af0ab065da4a83346c1d19c509897a2ed3dcbefff3495f8",
+  "original_pins_sha256": "21cf7fa5c5535ddb82629c288ddf94a4be10c31dcd489650fd9ad5351fb6d9dd",
+  "geometry_configs_and_views_unchanged": true,
+  "runner_materializer_predicates_unchanged": true,
+  "preflight": "Carried forward existing checks, only input provenance paths/hashes rebound; no replay",
+  "engine_executed": false
+}

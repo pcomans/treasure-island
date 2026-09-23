@@ -1,0 +1,41 @@
+{
+  "at": "2026-09-23T00:35:58.531535+00:00",
+  "stages": [
+    {
+      "stage": "focused-002",
+      "pid": 60956,
+      "exit_code": 0,
+      "elapsed_seconds": 66.75468641699999,
+      "fresh_pid_absent": true,
+      "receipt_sha256": "b7575547bb52319ac9bff2d8987959efdb66ed1223d85fed361436163b03757c",
+      "log_sha256": "324838d909f7dec6056723b2312feff7940288fdf0184bf8e6206aca6af6c604",
+      "pins_unchanged": true
+    },
+    {
+      "stage": "native-registry-001",
+      "pid": 61849,
+      "exit_code": 0,
+      "elapsed_seconds": 2.796886417,
+      "fresh_pid_absent": true,
+      "receipt_sha256": "103e913685bf119bb31286bedf2b26b53a5255d61fa931ccaf679acd4a7b7a00",
+      "log_sha256": "3727ad6a25574b16e4eb0ac1159a4c9f700ca805a24344534b32109bc0377a55",
+      "pins_unchanged": true
+    },
+    {
+      "stage": "native-loader-001",
+      "pid": 61994,
+      "exit_code": 0,
+      "elapsed_seconds": 683.365836708,
+      "fresh_pid_absent": true,
+      "receipt_sha256": "b2f08e074aa9db130d03889533588337b94fd15d3e8d87f5812ca1f8628eabbc",
+      "log_sha256": "a4d9e4c1f53666ff788a31e34d7dfb30fe86bf61428a6e306a4c7de265fc9d3a",
+      "pins_unchanged": true
+    }
+  ],
+  "engine_processes": [],
+  "slot_released": true,
+  "result_files_present": [
+    "focused-002-result.json"
+  ],
+  "retry": false
+}

@@ -1,0 +1,33 @@
+{
+  "at": "2026-09-23T00:28:29.902031+00:00",
+  "status": "PROPOSAL_NOT_FILE_READY",
+  "live_wrapper_session": 28005,
+  "live_loader_pid": 61994,
+  "frozen_sources_untouched": true,
+  "builder_parameter_positions": {
+    "1397": {
+      "zero_based_parameter": 27,
+      "preceding_empty_plans": 25
+    },
+    "1226": {
+      "zero_based_parameter": 28,
+      "preceding_empty_plans": 26
+    }
+  },
+  "resource_pin_count": 137,
+  "required_stages": [
+    "source-component-001",
+    "export-001",
+    "mounted-component-001",
+    "mounted-privacy-001",
+    "release-headless-smoke-001",
+    "release-native-smoke-001"
+  ],
+  "pending": [
+    "actual loader/release and independent source decision",
+    "main smoke proposal review/authorization before materialization",
+    "complete package schema/consumer checks and execution binders",
+    "independent package readiness and ROOT GO"
+  ],
+  "app_binding": null
+}

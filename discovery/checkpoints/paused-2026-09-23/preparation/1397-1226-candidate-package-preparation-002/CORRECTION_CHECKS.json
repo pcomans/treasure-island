@@ -1,0 +1,31 @@
+{
+  "status": "FILE_ONLY_CORRECTION_READY",
+  "changed_paths": [
+    "execution-settings.template.json",
+    "execution-settings.proposed.json",
+    "bind-export.py",
+    "execution-input-pins.json",
+    "NEXT_COMMANDS.json",
+    "bind-export.proposed.py",
+    "readiness-authorization.template.json",
+    "selected-helper.diff",
+    "package-contract.gd",
+    "package-contract.proposed.gd",
+    "source-actual-binding.json",
+    "run-plan.proposed.json",
+    "run-plan.json",
+    "units/1397/package-verification-receipt.template.json",
+    "units/1226/package-verification-receipt.template.json"
+  ],
+  "execution_pins_checked": 90,
+  "python_ast": "PASS",
+  "binder_forms_equal": true,
+  "production_proposal_unchanged": true,
+  "source_pin_map_unchanged": true,
+  "historical_unit_files_unchanged": true,
+  "engine_export_replays": 0,
+  "source_producer": "package-contract.gd:291",
+  "receipt_hash_producer": "run-stage.py:89",
+  "prior_independent_review": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-001/independent-readiness-001/READINESS.md",
+  "prior_independent_review_sha256": "5a7be7c3896a6aa2df4b20fb20528e438f6deefba600c38bf5fd900e5d81e45b"
+}

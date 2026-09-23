@@ -1,0 +1,93 @@
+{
+  "status": "ACTUAL_IMPORT_FOCUSED_PASS_PENDING_INDEPENDENT_REVIEW",
+  "stages": [
+    {
+      "pid": 73679,
+      "exit_code": 0,
+      "elapsed_seconds": 7.051296333,
+      "pins_unchanged": true,
+      "pid_absent": true,
+      "log_errors": [],
+      "warnings": [
+        "WARNING: Material uses a specular and glossiness workflow. Textures will be converted to roughness and metallic workflow, which may not be 100% accurate."
+      ],
+      "result_ok": true,
+      "class_discovery_ok": true,
+      "post_import_outputs_ok": true,
+      "stage": "import-001",
+      "receipt": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/import-001-execution.json",
+        "sha256": "7d85c8db5789d79652025e1c97c9a653069bc83222bc27f8b8d5436329de53f4"
+      },
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/import-001.log",
+        "sha256": "e6ad16b5db85c717039f48468a1a44d28e9ba1323d4039f35c0a89adc98f9225"
+      },
+      "post_import_outputs": {
+        "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/.godot/global_script_class_cache.cfg": "f60e0a9e580a3c687d9b4f8bfc27e0866e573be3c2ed6f876089c6baa45b3a25",
+        "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/scripts/world/facades/northpoint_1237_study.gd.uid": "4541242fc2b37166af50f60bdd1271ae479cca10aefdca4cf8dd3483a87f5498",
+        "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/scripts/world/facades/northpoint_1229_study.gd.uid": "175133586b4722c61ee741bf424161391eb06cca625cea8a927bd3f69351db41"
+      }
+    },
+    {
+      "pid": 73744,
+      "exit_code": 0,
+      "elapsed_seconds": 3.1459699580000002,
+      "pins_unchanged": true,
+      "pid_absent": true,
+      "log_errors": [],
+      "warnings": [],
+      "result_ok": true,
+      "class_discovery_ok": true,
+      "post_import_outputs_ok": true,
+      "stage": "focused-1237-001",
+      "receipt": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/focused-1237-001-execution.json",
+        "sha256": "56becb55d20947d9843f323f30d3841eff1d27ecd9a2fde6bab56bf6ef5ab76f"
+      },
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/focused-1237-001.log",
+        "sha256": "be1dee0e00c5f93b846dfcc563c3ee1deca666e37938e0301a91d11529fac4d1"
+      },
+      "result": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/focused-1237-001-result.json",
+        "sha256": "f29ca01a1948197628fbebfb64f9901a503893687001ddfa7c4ef46df81c834f",
+        "ok": true,
+        "checks": 16585
+      }
+    },
+    {
+      "pid": 73786,
+      "exit_code": 0,
+      "elapsed_seconds": 3.133458208,
+      "pins_unchanged": true,
+      "pid_absent": true,
+      "log_errors": [],
+      "warnings": [],
+      "result_ok": true,
+      "class_discovery_ok": true,
+      "post_import_outputs_ok": true,
+      "stage": "focused-1229-001",
+      "receipt": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/focused-1229-001-execution.json",
+        "sha256": "980bf4556eee7ed9e8643e2ee15764763dd3cb4d79d379e8a86957e9510316e7"
+      },
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/focused-1229-001.log",
+        "sha256": "fb6d52d250a220ba894d8f08a87b28cf2f2271bfe207a99d50ec8739a602fca5"
+      },
+      "result": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/focused-1229-001-result.json",
+        "sha256": "33fecaec6bae480fa1bdd0a7c789e19541f2b656a2c39e42627761870a8925c8",
+        "ok": true,
+        "checks": 14345
+      }
+    }
+  ],
+  "release": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/SLOT_RELEASE-import-001-focused-1237-001-focused-1229-001.json",
+    "sha256": "7e301dd38d0b4d4992cfe3cbda0f50f3e082d1f0ef78b3c22026c09e52ba0a30"
+  },
+  "native_executed": false,
+  "recognition_credit": 0
+}

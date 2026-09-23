@@ -1,0 +1,5 @@
+# RETRO — next_family_reference_prep — materialization completion
+
+Astra Low file-only continuation under exact ROOT GO. Reused the existing clean fdfc100 checkout; verified all sources and all destination absences before copying exactly the eight authorized paths: four frozen test UID sidecars and four reviewed study additions. All973 destination-map hashes now match their frozen inputs. Completed existing fresh capture directories and build sentinel steps; MATERIALIZED.json and separately named materialization-continuation-001.json bind actual copy list, full map, exact HEAD and original failure.
+
+Original terminal1/raw HOLD remains untouched. All1094 pins and MAIN HEAD/status remain unchanged. No checkout recreation, failed-materializer rerun, source change, hydration, download, global configuration or engine execution. This completes exact materialization and adds no acceptance gate; ROOT consumes the receipt before separate engine GO, with normal independent actual-focused review retained.

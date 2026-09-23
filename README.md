@@ -5,6 +5,12 @@ place a predefined spray tag on eligible exterior walls. It uses the frozen OSM
 layout and tracked generated world; cars, interiors, missions, multiplayer, and
 public distribution are outside this milestone.
 
+## Paused work checkpoint
+
+This branch preserves unfinished 1397/1226 candidate and1237/1229 study work.
+The owner paused work due to inference cost; no new acceptance or release is claimed.
+Production remains **32/213** at `fdfc100`. See the [resume handoff](discovery/checkpoints/paused-2026-09-23/README.md) for completed stages, mechanics HOLD and local-only evidence.
+
 ## Current source and release
 
 The current private release recognizes **32 of213** physical buildings, adding

@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/materialize-package-main.py",
+    "--root-authorized-package-main-overlay"
+  ],
+  "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002",
+  "started_at": "2026-09-23T01:13:44.439373+00:00",
+  "status": "terminal",
+  "exit_code": 0,
+  "elapsed_seconds": 2.0952577079999997,
+  "log": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/materialization-001.log",
+  "log_sha256": "fd6acfbff37a56e35eed4902f13d332f91f4ad5b87d417cdc047d49592ee03ed",
+  "engine_invoked": false
+}

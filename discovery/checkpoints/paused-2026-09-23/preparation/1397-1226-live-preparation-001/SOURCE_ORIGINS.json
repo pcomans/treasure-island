@@ -1,0 +1,21 @@
+{
+  "1397_unchanged_selected": {
+    "game/scripts/world/facades/gateview_1397_live_replacement.gd": "a906e841e11ad3c421abe208ef19b4ba3f4fb3e1e2c9ef563d609dd565d5fd77",
+    "game/scripts/world/facades/gateview_1397_live_factory.gd": "ce6223bf527c74431dc794bfc9ab7211feabd881e9d080e318a2f712547e4a91",
+    "game/resources/facades/gateview_1397_study.json": "97919d0168bab83ff0f7118cf00fb0bbea1eb062c731d2b956de896a1330616a"
+  },
+  "1397_readiness": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-live-preparation-001/independent-readiness-001/READINESS.md",
+  "1226_factory": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1205-1226-band-visibility-v3/game/scripts/world/facades/bayside_1226_study.gd",
+    "sha256": "33b506f4fbcd36b907ca7039a120057635b7ef6de1aa10dd1c5bdf3bbfa21e49"
+  },
+  "1226_config": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1205-1226-band-visibility-v3/game/resources/facades/bayside_1226_study.json",
+    "sha256": "34fb34bec3fa672277fa081dec042ecf1ee4597f293690a6588f85460ff59da2"
+  },
+  "1226_actual_source": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-band-visibility-003/focused-1226-003-result.json",
+    "sha256": "220c242dfc54dedc3a2d593f574cb9aa3d2cdcb9845f951ee6fe77838b0fd05e"
+  },
+  "1397_readiness_sha256": "44b07e8abe381f37ae0eda7eedb27881faea48325f85ba5e3b640122d1f088ac"
+}

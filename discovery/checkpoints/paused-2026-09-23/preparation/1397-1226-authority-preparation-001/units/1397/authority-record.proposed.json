@@ -1,0 +1,92 @@
+{
+  "status": "PROPOSED_NOT_ACCEPTED",
+  "unit_id": "physical-building:w96215670",
+  "receiver": "building:w96215670:wall",
+  "roof": "building:w96215670:roof",
+  "first_five_original_metric": "31/213",
+  "candidate_package_expected_authority": "32/213",
+  "proposed_current_after_both_acceptances": "34/213",
+  "numerator_effect_only_after_acceptance": 1,
+  "first_five_bindings": {
+    "capture-manifest.json": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-first-five-preparation-001/units/1397/capture-manifest.json",
+      "sha256": "cde59334d381c071cb3b79c5591b07b33d0d40e7cfd9533c9bb411729f0389e5"
+    },
+    "motion-telemetry.json": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-first-five-preparation-001/units/1397/motion-telemetry.json",
+      "sha256": "9b1d6a56ca2c1700d3e7013b878b07bf1651822d8869ae5bb351f090ff75abfb"
+    },
+    "visual-motion.json": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-first-five-preparation-001/units/1397/visual-motion.json",
+      "sha256": "967714aaac2103a6e6a4db329943c8102aac83da9eded80b5a0b40bbc329dfb1"
+    },
+    "evidence-tree.json": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-first-five-preparation-001/units/1397/evidence-tree.json",
+      "sha256": "671870d96b968ec57719b9da2ed3dea5a92437dcf0e732f398e041bb340069b4"
+    },
+    "mechanical-review.json": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-first-five-preparation-001/units/1397/mechanical-review.json",
+      "sha256": "6b7fc9735392613c74b96919f49845787a9f2814cd3d45b9487c5173b75f455d"
+    }
+  },
+  "specification": {
+    "number": "1397",
+    "stem": "gateview_1397",
+    "source_key": "w96215670",
+    "chunk": "x_-1__z_-3",
+    "neighbor": "x_-2__z_-3",
+    "factory": "game/scripts/world/facades/gateview_1397_live_factory.gd",
+    "wrapper": "game/scripts/world/facades/gateview_1397_live_replacement.gd",
+    "config": "game/resources/facades/gateview_1397_study.json",
+    "study_factory_sha256": "cb3b4ea03521d959708b85c599f90814cd5811a86f40e80451e227e58fffb042",
+    "current_art_receipt": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/focused-1397-002-result.json",
+    "current_art_receipt_sha256": "144b5a3c6a08b65a7ac0cc656246ec3efb7cc14e89de5c58031d8154aad07b3d",
+    "mesh_count": 15,
+    "surface_count": 15,
+    "total_triangles": 4278,
+    "total_bodies": 4,
+    "total_shapes": 12,
+    "detail_shape_count": 9,
+    "added_mesh_count": 13,
+    "added_shape_count": 10,
+    "added_triangles": 4180,
+    "wall_mesh_count": 14,
+    "wall_live_triangles": 4256,
+    "wall_bodies": 3,
+    "wall_shapes": 11,
+    "roof_mesh_count": 1,
+    "roof_live_triangles": 22,
+    "roof_bodies": 1,
+    "roof_shapes": 1,
+    "standalone_detail_callbacks": 13,
+    "target_records": 50,
+    "projected_receiver_runs": [
+      17,
+      18,
+      19,
+      20,
+      23,
+      24,
+      25,
+      26,
+      27,
+      28,
+      30,
+      31,
+      32,
+      33,
+      34,
+      35,
+      36,
+      37
+    ],
+    "projected_receiver_triangles": 8,
+    "public_roof_detail": true,
+    "baseline_chunk_detail_callbacks": 29
+  },
+  "package_receipt": null,
+  "seventh_attestation": null,
+  "root_acceptance": null,
+  "image_tree_rule": "Preserve image tree and digest distinct from document SHA256. No historical capture relabel.",
+  "motion_limit": "Preserve original sampled motion/source/static/spray scope; source actual PASS adds no visual/motion claim."
+}

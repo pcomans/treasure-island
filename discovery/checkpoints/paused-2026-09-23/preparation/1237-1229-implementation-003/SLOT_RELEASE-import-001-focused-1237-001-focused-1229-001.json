@@ -1,0 +1,42 @@
+{
+  "at": "2026-09-23T00:46:20.973320+00:00",
+  "stages": [
+    {
+      "stage": "import-001",
+      "pid": 73679,
+      "exit_code": 0,
+      "elapsed_seconds": 7.051296333,
+      "fresh_pid_absent": true,
+      "receipt_sha256": "7d85c8db5789d79652025e1c97c9a653069bc83222bc27f8b8d5436329de53f4",
+      "log_sha256": "e6ad16b5db85c717039f48468a1a44d28e9ba1323d4039f35c0a89adc98f9225",
+      "pins_unchanged": true
+    },
+    {
+      "stage": "focused-1237-001",
+      "pid": 73744,
+      "exit_code": 0,
+      "elapsed_seconds": 3.1459699580000002,
+      "fresh_pid_absent": true,
+      "receipt_sha256": "56becb55d20947d9843f323f30d3841eff1d27ecd9a2fde6bab56bf6ef5ab76f",
+      "log_sha256": "be1dee0e00c5f93b846dfcc563c3ee1deca666e37938e0301a91d11529fac4d1",
+      "pins_unchanged": true
+    },
+    {
+      "stage": "focused-1229-001",
+      "pid": 73786,
+      "exit_code": 0,
+      "elapsed_seconds": 3.133458208,
+      "fresh_pid_absent": true,
+      "receipt_sha256": "980bf4556eee7ed9e8643e2ee15764763dd3cb4d79d379e8a86957e9510316e7",
+      "log_sha256": "fb6d52d250a220ba894d8f08a87b28cf2f2271bfe207a99d50ec8739a602fca5",
+      "pins_unchanged": true
+    }
+  ],
+  "engine_processes": [],
+  "slot_released": true,
+  "result_files_present": [
+    "focused-1237-001-result.json",
+    "focused-1229-001-result.json"
+  ],
+  "retry": false
+}

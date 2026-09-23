@@ -1,0 +1,27 @@
+{
+  "ok": true,
+  "checks": {
+    "prior_frozen_source_exact": true,
+    "materialized_sources_and_eight_continuation_files_exact": true,
+    "canonical_import_cache_uids_exact": true,
+    "1237": {
+      "full_route_and_return_geometry": true,
+      "unchanged_donor_movement_support_camera_decal_functions_except_event_assertion": true,
+      "global_class_declarations": 0,
+      "routes": 4,
+      "sprays": 3,
+      "max_physics_rows": 1181
+    },
+    "1229": {
+      "full_route_and_return_geometry": true,
+      "unchanged_donor_movement_support_camera_decal_functions_except_event_assertion": true,
+      "global_class_declarations": 0,
+      "routes": 2,
+      "sprays": 3,
+      "max_physics_rows": 780
+    },
+    "selected_file_whitespace_and_python_parse_only": true,
+    "engine_test_build_git_main_mutation": false
+  },
+  "scope": "Static file preparation only; no engine/script execution or independent acceptance."
+}

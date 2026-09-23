@@ -1,0 +1,88 @@
+{
+  "expected_HEAD_supplied_by_ROOT": "fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+  "git_not_invoked": true,
+  "preimages": [
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/discovery/facades/facade-recognition-catalog.json",
+      "sha256": "5380b4eb0f1f0ab40c73f241018062cd55cdbd7678ca9b26bc6858b443460f8e",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/discovery/facades/facade-recognition-catalog.json"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/discovery/facades/facade-recognition-catalog.schema.json",
+      "sha256": "463872dc37f195a4f639a08418e97043c13ba3cbbbda3593883eabd31b81a1bf",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/discovery/facades/facade-recognition-catalog.schema.json"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/tools/build_facade_recognition_registry.mjs",
+      "sha256": "5231bfd195bdc31c8251bcf19007576bc9dd8f64cfb3b11d1efe7eece9e3df4c",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/tools/build_facade_recognition_registry.mjs"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/tools/test_facade_recognition_registry.mjs",
+      "sha256": "9997b31de59c9557ddd6a0c528d596eb833d45a693865d02d39284320acbc67a",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/tools/test_facade_recognition_registry.mjs"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/tools/test_facade_runtime_loader_contract.mjs",
+      "sha256": "30530ebfad7fb35a086e23103706f2e48aaf856e96bbbfc2bf20770875a873c6",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/tools/test_facade_runtime_loader_contract.mjs"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/game/scripts/world/facades/facade_runtime_registry_loader.gd",
+      "sha256": "14abbbe32425194bd1e6412ac8bf53b917f14dbfc010ddc4324e0791095e2f65",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/game/scripts/world/facades/facade_runtime_registry_loader.gd"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/game/tests/headless_facade_recognition_registry_contract.gd",
+      "sha256": "4ad6d8bc76993a882e57316605b5d1e2238350cec6b0e77ec9d7ce4e24745e46",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/game/tests/headless_facade_recognition_registry_contract.gd"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/game/tests/headless_facade_runtime_registry_loader_contract.gd",
+      "sha256": "220051842539ddf9a2387311ce4cc3037bfadb61ccbfcbb3030f330f8af023c3",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/game/tests/headless_facade_runtime_registry_loader_contract.gd"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/game/scripts/main.gd",
+      "sha256": "845f8e6faedbbad8cdca5caf43976ad01d2ee86cdaa57081b374b5d6fc01d268",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/game/scripts/main.gd"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/AGENTS.md",
+      "sha256": "a2438f9f478860b1a8db8af65b7d02f581735e2231ed8e1ef95a294b62f21537",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/AGENTS.md"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/LEARNINGS.md",
+      "sha256": "30d2b2e3b988d0909fce73308e0414b205dc9b32d334534b8f466f0294eec920",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/LEARNINGS.md"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/discovery/RETRO_LOG.md",
+      "sha256": "4f87ae2745d8a3629f84695e76070d84f58d13dffc08a0eafa4240cf4e91cc81",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/discovery/RETRO_LOG.md"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/README.md",
+      "sha256": "fe28eac07923615de2ce55ec8641393f143a08f67abb94686b9e74ec765d5144",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/README.md"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/CLAUDE.md",
+      "sha256": "b703dc3ae06700edeaa01bcdb86f782a46be87fbef97a42267ae937e601428a3",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/CLAUDE.md"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/NEXT_AGENT_HANDOFF_2026-09-08.md",
+      "sha256": "9d03f8ffa08d7dcda3ded314ea80f3865be23f544e7536832c2c764bbcb76e21",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/NEXT_AGENT_HANDOFF_2026-09-08.md"
+    },
+    {
+      "source": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/evidence/first-playable/README.md",
+      "sha256": "92830bcd895199c3d7af51db79e59fae000aaf15bd23846fee57542d98984f1d",
+      "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/before/evidence/first-playable/README.md"
+    }
+  ],
+  "current_metric": "32/213",
+  "MAIN_written": false
+}

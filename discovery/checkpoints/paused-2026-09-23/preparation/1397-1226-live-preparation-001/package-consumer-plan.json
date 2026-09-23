@@ -1,0 +1,38 @@
+{
+  "status": "PENDING_ACTUAL_SHARED_SOURCE_AND_PACKAGE_READINESS",
+  "prior_package": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/current-package-preparation-001",
+  "current_counts": {
+    "accepted": 32,
+    "units": 213,
+    "active": 31,
+    "plans": 40,
+    "safe": 34,
+    "disabled": 6,
+    "projections": 13,
+    "legacy": 9
+  },
+  "proposed_world": {
+    "bodies": 500,
+    "meshes": 1287,
+    "rows": 735,
+    "shapes": 667,
+    "surfaces": 1302,
+    "triangles": 183761
+  },
+  "registry_sha256": "9247d36589c36c948f28d58f2a72002379906850e5b094e2633129a3cb05e2fc",
+  "contracts_sha256": "6e76908b51d96afacdd722a0facda82dd43f9a13bea7eb3ddd2dde818eac74aa",
+  "production_loader_sha256": "ad5ffd28dcd19653c9d32f05e7e4cc33795656db5266042d511309ae77bf32be",
+  "package_required_changes": [
+    "Both exact study/live specs and actual focused result; prior32 unchanged",
+    "One complete shared candidate package and later exact-current app, not one export per unit",
+    "Current main smoke world scalars and both attachment calls; actual output-derived131+new resource bindings",
+    "Separate role6/seventh per unit; no old application relabeling"
+  ],
+  "app": null,
+  "role6": null,
+  "role7": null,
+  "units": [
+    "1397",
+    "1226"
+  ]
+}

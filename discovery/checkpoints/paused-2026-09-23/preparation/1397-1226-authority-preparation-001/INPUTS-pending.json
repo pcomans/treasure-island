@@ -1,0 +1,17 @@
+{
+  "candidate_correction002": "completed per ROOT; actual package PASS pending",
+  "pending": [
+    "Actual candidate package PASS and exact app/PCK/privacy/release bindings",
+    "Both actual per-unit role6 receipts",
+    "Both actual independent role7 attestations and ROOT acceptance",
+    "Final selected shipping/source pins",
+    "Actual compiler outputs and independent registry acceptance",
+    "Exact-current34 package and independent release/privacy acceptance",
+    "ROOT publication GO"
+  ],
+  "audit002": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/throughput-recovery-review-002/REVIEW.md",
+    "sha256": "b7b9b90698cceadf6fdfd80c8b0528129be84eaccfd2864a66e1399689864928"
+  },
+  "credit_granted": 0
+}

@@ -1,0 +1,23 @@
+{
+  "status": "FILE_READY_PENDING_INDEPENDENT_READINESS_AND_ROOT_GO",
+  "at": "2026-09-23T00:19:37.883828+00:00",
+  "base": "fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+  "source_pins_sha256": "3f88a55e3e5cddb9095fbb6971a165386e1787d7cd4fdc5d20dade97b074c73e",
+  "pin_count": 4012,
+  "file_checks_sha256": "12657f4e4875f997022e64b323fcc511fa22a96fdbbf2ac86c98233a1971808d",
+  "argv": [
+    "/usr/bin/env",
+    "TI_1397_1226_ENGINE_GO=fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+    "/usr/bin/python3",
+    "-B",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-continuation-001/run-reviewed-chain.py",
+    "focused-002",
+    "native-registry-001",
+    "native-loader-001"
+  ],
+  "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-continuation-001",
+  "retained_import": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/import-001-execution.json",
+  "production_changes": 0,
+  "engine": false,
+  "recognition_credit": 0
+}

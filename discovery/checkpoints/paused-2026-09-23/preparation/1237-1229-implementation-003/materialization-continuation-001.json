@@ -1,0 +1,73 @@
+{
+  "at": "2026-09-23T00:44:47.953651+00:00",
+  "exit_code": 0,
+  "materialized": true,
+  "source_inputs_equal": true,
+  "engine_executed": false,
+  "checkout_head": "fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+  "copies": [
+    {
+      "path": "game/tests/headless_building_1_wing_window_reveal_candidate_evidence_contract.gd.uid",
+      "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/frozen-main/game/tests/headless_building_1_wing_window_reveal_candidate_evidence_contract.gd.uid",
+      "destination": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/tests/headless_building_1_wing_window_reveal_candidate_evidence_contract.gd.uid",
+      "sha256": "c2f7c99de5c6aae195369e905a61cbe52028232c04f48180cda3dabfacf796da"
+    },
+    {
+      "path": "game/tests/headless_building_1_wing_returns_v2_current_package_contract.gd.uid",
+      "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/frozen-main/game/tests/headless_building_1_wing_returns_v2_current_package_contract.gd.uid",
+      "destination": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/tests/headless_building_1_wing_returns_v2_current_package_contract.gd.uid",
+      "sha256": "a81972840fb1218b9d3e0ebcbb55550ed5dcf2b0174efa2eeae152c0110a457e"
+    },
+    {
+      "path": "game/tests/headless_building_1_wing_window_reveal_candidate_package_contract.gd.uid",
+      "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/frozen-main/game/tests/headless_building_1_wing_window_reveal_candidate_package_contract.gd.uid",
+      "destination": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/tests/headless_building_1_wing_window_reveal_candidate_package_contract.gd.uid",
+      "sha256": "20be180ae447b1faddd59d96ebd2134e9b929a9c9e94cfae51af4ec995a8fad8"
+    },
+    {
+      "path": "game/tests/building_1_wing_window_reveal_candidate_capture.gd.uid",
+      "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/frozen-main/game/tests/building_1_wing_window_reveal_candidate_capture.gd.uid",
+      "destination": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/tests/building_1_wing_window_reveal_candidate_capture.gd.uid",
+      "sha256": "0ff69b6df4a8f8d89c9027d7f8ce64ecde3ecc9927a3a1f6ee626784e81a9aff"
+    },
+    {
+      "path": "game/scripts/world/facades/northpoint_1237_study.gd",
+      "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/staged/game/scripts/world/facades/northpoint_1237_study.gd",
+      "destination": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/scripts/world/facades/northpoint_1237_study.gd",
+      "sha256": "b55b0f4bd850ad011c7387fb2fe6ab593deca5b89794c9d681967f6dee32dc1e"
+    },
+    {
+      "path": "game/resources/facades/northpoint_1237_study.json",
+      "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/staged/game/resources/facades/northpoint_1237_study.json",
+      "destination": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/resources/facades/northpoint_1237_study.json",
+      "sha256": "af31f59979233b94229c05286d2712cafc7c0d28f29d9d6fc2ecf049668f8ace"
+    },
+    {
+      "path": "game/scripts/world/facades/northpoint_1229_study.gd",
+      "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/staged/game/scripts/world/facades/northpoint_1229_study.gd",
+      "destination": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/scripts/world/facades/northpoint_1229_study.gd",
+      "sha256": "a7c923866a64be90974ae3d1f2f72253b0ee5c10faa99275b1fa8e3def5cce11"
+    },
+    {
+      "path": "game/resources/facades/northpoint_1229_study.json",
+      "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/staged/game/resources/facades/northpoint_1229_study.json",
+      "destination": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/resources/facades/northpoint_1229_study.json",
+      "sha256": "ee5a79b5cb8ed44465d861b40ad06514bd9a557cccfdd09e89600784100fe9b6"
+    }
+  ],
+  "destination_map": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/materialization-destination-map-001.json",
+    "sha256": "aa377e18a11021d33cbe344e902d1619deb52be3e87fd54e94ea2ad50c63e3c4",
+    "files": 973
+  },
+  "original_failure": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/ACTUAL_MATERIALIZATION-next_family_reference_prep.json",
+    "sha256": "b1e87f621afb3777e7b56b89d5640f0f66de8e3530dd69aa0e507bffe820bf45",
+    "raw_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/materialization-raw.json",
+    "raw_sha256": "3aa6d78e5bf07cc6e1981110283fae5c7c0c80d87aabfaf283bbb0f8d1ffd3a8",
+    "terminal_exit": 1
+  },
+  "pins_unchanged": true,
+  "MAIN_preserved": true,
+  "checkout_recreated": false
+}

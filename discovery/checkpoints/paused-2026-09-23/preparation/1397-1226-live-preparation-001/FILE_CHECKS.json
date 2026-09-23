@@ -1,0 +1,35 @@
+{
+  "engine_invoked": false,
+  "candidate_materialized": false,
+  "staged_files": 3970,
+  "selected_files": 16,
+  "all213_unit_records_equal": true,
+  "catalog_byte_equal": true,
+  "new_recognition_credit": 0,
+  "native_current_hashes": "PASS",
+  "three_format_probe_consumers": "PASS",
+  "selected_whitespace": "PASS",
+  "python_ast": "PASS",
+  "world_baseline": {
+    "measured_world": {
+      "bodies": 496,
+      "meshes": 1260,
+      "rows": 735,
+      "shapes": 646,
+      "surfaces": 1275,
+      "triangles": 176165
+    }
+  },
+  "world_proposal": {
+    "bodies": 500,
+    "meshes": 1287,
+    "rows": 735,
+    "shapes": 667,
+    "surfaces": 1302,
+    "triangles": 183761
+  },
+  "same_chunk_callbacks": {
+    "1397": 42,
+    "1226": 140
+  }
+}

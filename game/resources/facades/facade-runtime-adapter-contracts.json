@@ -25,7 +25,7 @@
     "api_version": "ti.facade-runtime-registry-loader/31",
     "instantiation_authorized": false,
     "loader_path": "res://game/scripts/world/facades/facade_runtime_registry_loader.gd",
-    "loader_sha256": "14abbbe32425194bd1e6412ac8bf53b917f14dbfc010ddc4324e0791095e2f65",
+    "loader_sha256": "ad5ffd28dcd19653c9d32f05e7e4cc33795656db5266042d511309ae77bf32be",
     "projection_execution_policy": "forbidden",
     "unknown_version_policy": "reject"
   },

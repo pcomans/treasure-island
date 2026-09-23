@@ -1,0 +1,5 @@
+# RETRO — next_family_reference_prep — frozen inputs003
+
+Astra Low narrow file correction. Frozen969 already-bound MAIN dependencies with byte-for-byte equality; original path/hash provenance retained. Remapped inherited staged symlinks, materialization/source maps and preflight provenance. Actual per-stage reader checks now resolve frozen source copies and isolated runtime bytes; shared engine is separately pinned. Git administrative origin in materializer still points to MAIN, using exact fdfc100, without consuming changed MAIN source files.
+
+Prior001/002 bytes and wrong-model-id history remain intact. Config geometry, corrected emitted identities, native/focused predicates, eight poses, player controls and expected counts are unchanged. No new dependency framework, engine, checkout, compiler or broad tests. Reused existing map structures and direct equality assertions. This prevents unrelated source publication from invalidating runtime guards; actual materialization/import/capture remain unperformed and independently gated.

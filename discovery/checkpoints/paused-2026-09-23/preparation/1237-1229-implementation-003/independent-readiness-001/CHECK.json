@@ -1,0 +1,26 @@
+{
+  "utc": "2026-09-23T00:40:11.004677+00:00",
+  "pins_count": 1094,
+  "mismatches": [],
+  "remaining_MAIN_resolutions": [
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot"
+  ],
+  "freeze_count": 969,
+  "freeze_mismatches": [],
+  "staged_symlink_outside_frozen": [],
+  "checkout_absent": true,
+  "identity_only": {
+    "1237": true,
+    "1229": true
+  },
+  "003_target_exact": {
+    "1237": true,
+    "1229": true
+  },
+  "materialization": {
+    "count": 973,
+    "mismatches": [],
+    "MAIN_sources": []
+  },
+  "engine_snapshot": []
+}

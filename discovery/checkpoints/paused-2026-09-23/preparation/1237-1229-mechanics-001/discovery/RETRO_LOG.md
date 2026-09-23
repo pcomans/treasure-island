@@ -1,0 +1,9 @@
+# next_pair_mechanics_preparation — files-only ordinary mechanics
+
+What worked well: located the complete successful1397 donor through first-five preparation. Preserved complete route/return/ground/camera/decal functions, adding only target source bindings and the accepted1226 removal of incidental retreat land_rows>0. Five affected doors and1237's single screen retain full approaches, component return rows and natural braking. Both actual saved junction PNGs were inspected; all eight original camera/ground states are bound without recapture. QS and frozen S remain unchanged.
+
+What did not work well: the copied blue-window rejection assumption failed1229's query because its lower windows are dark; the preserved initial ROUTE_PREFLIGHT-initial-query records that failure. The query now uses actual dark geometry. A broad campaign bounding box overlapped empty space between separately placed setups; canopy exclusion now measures each finite point envelope, including full component rows, rather than claiming traversal between setups. Static shape-count review caught that zero-face buckets still create native shapes; retain all nine shape slots. No engine failure or rerun occurred.
+
+Change next time: compare physical child creation, glazing roles and separate-setup envelope semantics with exact consumed producers before copying their literals. Preparation scripts are retained history; intended execution is only run-1237.py and run-1229.py after separate exact GO. No route shortening, tolerance relaxation or art change. The4mm independent retained-support criterion is unchanged; raw stock safe-margin geometric qualification and full contacts remain. Roof/jetpack unperformed. No broad qualification or timing improvement claimed.
+
+This external named RETRO satisfies this round's logging while honoring the explicit no-MAIN-writes assignment; MAIN discovery/RETRO_LOG.md was not edited.

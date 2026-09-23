@@ -1,0 +1,29 @@
+{
+  "at": "2026-09-23T00:15:45.174713+00:00",
+  "stages": [
+    {
+      "stage": "import-001",
+      "pid": 58417,
+      "exit_code": 0,
+      "elapsed_seconds": 9.280401832999999,
+      "fresh_pid_absent": true,
+      "receipt_sha256": "843d11bedecb0f2a47d9a16d20e2a6914e6bf84599fdde7a3a94f0764074bc1b",
+      "log_sha256": "f856bcdd49c00cd547ef46237419736c457c9c89c958eaa84e85ee07946d3dfd",
+      "pins_unchanged": true
+    },
+    {
+      "stage": "focused-001",
+      "pid": 58558,
+      "exit_code": -15,
+      "elapsed_seconds": 1.7308741669999999,
+      "fresh_pid_absent": true,
+      "receipt_sha256": "7d23672808a8eef52cd9b4321ce7f674f3316a5af17331ce8ae034ebfcbbcc66",
+      "log_sha256": "eef9d7807ec1619eafe45a3f3257b5b290705788a251ab5265fd119966bbad41",
+      "pins_unchanged": true
+    }
+  ],
+  "engine_processes": [],
+  "slot_released": true,
+  "result_files_present": [],
+  "retry": false
+}

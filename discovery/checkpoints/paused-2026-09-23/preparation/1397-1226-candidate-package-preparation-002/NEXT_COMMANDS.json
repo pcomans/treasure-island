@@ -1,0 +1,29 @@
+{
+  "bind_after_independent_readiness_and_actual_materialization": [
+    "/usr/bin/python3",
+    "-B",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/bind-readiness.py",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/readiness-authorization.json"
+  ],
+  "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002",
+  "engine_after_separate_exact_ROOT_GO": [
+    "/usr/bin/env",
+    "TI_1397_1226_ENGINE_GO=fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+    "/usr/bin/python3",
+    "-B",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/run-reviewed-chain.py",
+    "source-component-001",
+    "export-001",
+    "mounted-component-001",
+    "mounted-privacy-001",
+    "release-headless-smoke-001",
+    "release-native-smoke-001"
+  ],
+  "materialize_after_ROOT_GO": [
+    "/usr/bin/python3",
+    "-B",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/materialize-package-main.py",
+    "--root-authorized-package-main-overlay"
+  ],
+  "next_release": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/SLOT_RELEASE.json"
+}

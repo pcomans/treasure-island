@@ -1,0 +1,14 @@
+{
+  "status": "terminal",
+  "exit_code": 0,
+  "engine": false,
+  "receipts": {
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/compiler-001-execution.json": "ed6ad7a5746df3a8844d3c1e399c3992782f9c2c742cfb7a6455786f9c7161e0",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/node-registry-001-execution.json": "dda9e4f2a43f413ef584f68480252c9030fd263c41ca602410ec653260940e19",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/node-loader-001-execution.json": "c4acad31b02f765f2f72de8654006b5f3c7545f0f73e7b258805892ee7aa0c8d"
+  },
+  "authority": "32/213",
+  "credit": 0,
+  "registry_sha256": "9247d36589c36c948f28d58f2a72002379906850e5b094e2633129a3cb05e2fc",
+  "adapter_contract_sha256": "6e76908b51d96afacdd722a0facda82dd43f9a13bea7eb3ddd2dde818eac74aa"
+}

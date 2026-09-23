@@ -1,0 +1,20 @@
+{
+  "at": "2026-09-23T00:42:33.167587+00:00",
+  "argv": [
+    "git",
+    "-c",
+    "filter.lfs.required=false",
+    "-c",
+    "filter.lfs.smudge=",
+    "-c",
+    "filter.lfs.process=",
+    "worktree",
+    "add",
+    "--detach",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1",
+    "fdfc100704200e6570b654a4e6a4fccc9a1a61be"
+  ],
+  "exit_code": 2,
+  "stdout": "HEAD is now at fdfc100 Release current32 with 1240 Northpoint\n",
+  "stderr": "Preparing worktree (detached HEAD fdfc100)\nUpdating files:  23% (942/3990)\nUpdating files:  24% (958/3990)\nUpdating files:  25% (998/3990)\nUpdating files:  26% (1038/3990)\nUpdating files:  27% (1078/3990)\nUpdating files:  28% (1118/3990)\nUpdating files:  29% (1158/3990)\nUpdating files:  30% (1197/3990)\nUpdating files:  31% (1237/3990)\nUpdating files:  32% (1277/3990)\nUpdating files:  33% (1317/3990)\nUpdating files:  34% (1357/3990)\nUpdating files:  35% (1397/3990)\nUpdating files:  36% (1437/3990)\nUpdating files:  37% (1477/3990)\nUpdating files:  37% (1478/3990)\nUpdating files:  38% (1517/3990)\nUpdating files:  39% (1557/3990)\nUpdating files:  40% (1596/3990)\nUpdating files:  41% (1636/3990)\nUpdating files:  42% (1676/3990)\nUpdating files:  43% (1716/3990)\nUpdating files:  44% (1756/3990)\nUpdating files:  45% (1796/3990)\nUpdating files:  46% (1836/3990)\nUpdating files:  47% (1876/3990)\nUpdating files:  48% (1916/3990)\nUpdating files:  49% (1956/3990)\nUpdating files:  50% (1995/3990)\nUpdating files:  51% (2035/3990)\nUpdating files:  52% (2075/3990)\nUpdating files:  53% (2115/3990)\nUpdating files:  54% (2155/3990)\nUpdating files:  55% (2195/3990)\nUpdating files:  55% (2220/3990)\nUpdating files:  56% (2235/3990)\nUpdating files:  57% (2275/3990)\nUpdating files:  58% (2315/3990)\nUpdating files:  59% (2355/3990)\nUpdating files:  60% (2394/3990)\nUpdating files:  61% (2434/3990)\nUpdating files:  62% (2474/3990)\nUpdating files:  63% (2514/3990)\nUpdating files:  64% (2554/3990)\nUpdating files:  65% (2594/3990)\nUpdating files:  66% (2634/3990)\nUpdating files:  67% (2674/3990)\nUpdating files:  68% (2714/3990)\nUpdating files:  69% (2754/3990)\nUpdating files:  70% (2793/3990)\nUpdating files:  71% (2833/3990)\nUpdating files:  72% (2873/3990)\nUpdating files:  72% (2890/3990)\nUpdating files:  73% (2913/3990)\nUpdating files:  74% (2953/3990)\nUpdating files:  75% (2993/3990)\nUpdating files:  76% (3033/3990)\nUpdating files:  77% (3073/3990)\nUpdating files:  78% (3113/3990)\nUpdating files:  79% (3153/3990)\nUpdating files:  80% (3192/3990)\nUpdating files:  81% (3232/3990)\nUpdating files:  82% (3272/3990)\nUpdating files:  83% (3312/3990)\nUpdating files:  84% (3352/3990)\nUpdating files:  85% (3392/3990)\nUpdating files:  86% (3432/3990)\nUpdating files:  87% (3472/3990)\nUpdating files:  88% (3512/3990)\nUpdating files:  89% (3552/3990)\nUpdating files:  90% (3591/3990)\nUpdating files:  91% (3631/3990)\nUpdating files:  92% (3671/3990)\nUpdating files:  93% (3711/3990)\nUpdating files:  94% (3751/3990)\nUpdating files:  95% (3791/3990)\nUpdating files:  96% (3831/3990)\nUpdating files:  97% (3871/3990)\nUpdating files:  98% (3911/3990)\nUpdating files:  99% (3951/3990)\nUpdating files: 100% (3990/3990)\nUpdating files: 100% (3990/3990), done.\n\nThis repository is configured for Git LFS but 'git-lfs' was not found on your path. If you no longer wish to use Git LFS, remove this hook by deleting the 'post-checkout' file in the hooks directory (set by 'core.hookspath'; usually '.git/hooks').\n\n"
+}

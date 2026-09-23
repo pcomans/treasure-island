@@ -1,0 +1,5 @@
+# RETRO — next_family_reference_prep — actual materialization
+
+Astra Low executed exact authorized materializer once. Initial30-second exec returned terminal1 after5.596s. The worktree exists at exact fdfc100 and is clean; never retry checkout creation. Materialization stopped at the first absent frozen test UID because the input map includes four preexisting untracked MAIN .gd.uid files, which Git does not populate. All existing mapped checkout files match; remaining missing inputs are those four UIDs and four study additions not yet reached. No geometry or source-input mismatch.
+
+Original raw materialization receipt retained; no MATERIALIZED success receipt exists. All1094 pins and MAIN HEAD/status remain unchanged. No engine, hydration, global configuration or repeat copy. The preparation/readiness boundary verified bytes but did not distinguish tracked checkout files from frozen untracked import sidecars. A separately authorized continuation can reuse this actual checkout and copy only the eight exact frozen missing inputs before completing the existing map/marker steps. Actual handoff binds precise names/status; no success claim.

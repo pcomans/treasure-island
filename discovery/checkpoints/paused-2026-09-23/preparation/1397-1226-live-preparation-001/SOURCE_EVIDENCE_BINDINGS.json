@@ -1,0 +1,23 @@
+{
+  "1397_first_five": "root-accepted",
+  "1226_source_mechanics_visual": "root-accepted",
+  "1226_first_five_packet_review": "root-accepted",
+  "unit_ids": [
+    "physical-building:w96215670",
+    "physical-building:w96215685"
+  ],
+  "capture_authority": 31,
+  "candidate_authority": 32,
+  "files": {
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-first-five-preparation-001/FILE_READY.json": "89081e485e3682529d8c23f467ad317a5cfe17f7c3851cd8505b85f3fcd9ce31",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-first-five-preparation-001/packet-pins.json": "09a76dd8f870c9c40745a671dfb9d777f0be2d3d743d6d824f8a6c1c8063e8a6",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-first-five-preparation-001/units/1397/candidate-closure.json": "1855826cb93169759127c51c86038b69b3b479f42d96531e30a0f22b670f887f",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/FILE_READY.json": "721ac8c4197d3be7e56dc647f7dd972c5fcb6667830d6dfcd011e22f4682a8e6",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/packet-pins.json": "6dadefccad005f4a4f8efb811f0222e98bf961b726a006c9b87d1b410ca461bc",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/candidate-closure.json": "646226fed2db8c6abe9f67626d180461731e285531930a114489cdee5bde86c7",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/independent-actual-001/REVIEW.md": "2a59c4f678e9774a3fd25d26c5fb8a2729fa89c31f2bd90f7f27892ede3e579f",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-first-five-preparation-001/independent-readiness-001/READINESS.md": "0d48e8c84a79a69ab149e6d769c379b8d22c60c3abc5b351682e306a5bef65f4",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/independent-readiness-001/READINESS.md": "d1bfae4024768bcc8a5a3f6c40e136ec030041f3663d95f70d662b6c66b7c7ad"
+  },
+  "limits": "1397 finite663 route rows/3callbacks;1226 original movement rawHOLD retained with925 derived qualified rows plus separate fresh3sprayPASS. No continuous all-PASS movie or grounded roof/jetpack claim. Package/seventh pending."
+}

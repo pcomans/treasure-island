@@ -1,0 +1,10 @@
+{
+  "status": "PACKAGE_MAIN_MATERIALIZED",
+  "at": "2026-09-23T01:13:46.525934+00:00",
+  "base": "fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+  "main_before": "ab904888dd9d4520911eac461e638e7df03ad201aaf2b5c274b2103e85ecf784",
+  "main_after": "495d61639cf86d6bc89b8fbe7459aab34df24dbc070644271e98bdeb08484b61",
+  "source_map_sha256": "1ed47861e43802a4c269b0efd5a19cb91aa62c5c0f60072c3cb3e935231f3aaa",
+  "source_count": 3975,
+  "engine_invoked": false
+}

@@ -1,0 +1,2884 @@
+{
+  "ok": true,
+  "checks": [
+    {
+      "ok": true,
+      "label": "near-2-door-1 entire proposed endpoint interval on actual road overlay"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 entire proposed endpoint interval on actual road overlay"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 entire proposed endpoint interval on actual road overlay"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "screen LAND coverage"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule clears nonland before analytic contact"
+    },
+    {
+      "ok": true,
+      "label": "screen sampled capsule LAND solver qualification"
+    },
+    {
+      "ok": true,
+      "label": "screen stock horizontal camera path and LAND clearance"
+    },
+    {
+      "ok": true,
+      "label": "Reachable stock callback query ProjectedUpperSiding"
+    },
+    {
+      "ok": true,
+      "label": "Reachable stock callback query BlueOpaqueGlazing"
+    },
+    {
+      "ok": true,
+      "label": "Reachable stock callback query PaleCompleteTrim"
+    }
+  ],
+  "failures": [],
+  "route_geometry": [
+    {
+      "id": "near-2-door-1",
+      "samples": [
+        {
+          "depth_m": 0.47009014713188907,
+          "foot": [
+            -173.6793507053348,
+            2.7096663080001915,
+            -868.9956527899899
+          ],
+          "nearest_nonland": [
+            {
+              "key": "prototype:building:w96665904:wall",
+              "role": "MaroonClosedDoors",
+              "clearance_m": 9.999999998955289e-05
+            }
+          ],
+          "capsule_land_clearance_m": -9.797047053716756e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0370101458443806
+        },
+        {
+          "depth_m": 0.9567530576680603,
+          "foot": [
+            -174.05916095694923,
+            2.7063914961281927,
+            -868.691375020082
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053716756e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.037010145844381
+        },
+        {
+          "depth_m": 1.4434159682042316,
+          "foot": [
+            -174.43897120856366,
+            2.7031166842561927,
+            -868.3870972501742
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053716756e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0370101458443814
+        },
+        {
+          "depth_m": 1.930078878740403,
+          "foot": [
+            -174.8187814601781,
+            2.6998418723841935,
+            -868.0828194802663
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0370101458443806
+        },
+        {
+          "depth_m": 2.4167417892765743,
+          "foot": [
+            -175.19859171179252,
+            2.696567060512195,
+            -867.7785417103584
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0370101458443814
+        },
+        {
+          "depth_m": 2.9034046998127456,
+          "foot": [
+            -175.57840196340695,
+            2.6932922486401965,
+            -867.4742639404504
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0370101458443806
+        },
+        {
+          "depth_m": 3.3900676103489173,
+          "foot": [
+            -175.95821221502138,
+            2.6900174367681977,
+            -867.1699861705425
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.034775779185296
+        },
+        {
+          "depth_m": 3.876730520885088,
+          "foot": [
+            -176.3380224666358,
+            2.6867426248961976,
+            -866.8657084006347
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0322464702229377
+        },
+        {
+          "depth_m": 4.363393431421259,
+          "foot": [
+            -176.71783271825026,
+            2.6834678130241985,
+            -866.5614306307268
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053716756e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0297171612605784
+        },
+        {
+          "depth_m": 4.85005634195743,
+          "foot": [
+            -177.0976429698647,
+            2.6801930011521993,
+            -866.2571528608189
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053805574e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0271878522982183
+        },
+        {
+          "depth_m": 5.336719252493602,
+          "foot": [
+            -177.47745322147912,
+            2.676918189280201,
+            -865.952875090911
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0246585433358586
+        },
+        {
+          "depth_m": 5.823382163029773,
+          "foot": [
+            -177.85726347309355,
+            2.6736433774082027,
+            -865.6485973210031
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053716756e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0221292343735
+        },
+        {
+          "depth_m": 6.310045073565945,
+          "foot": [
+            -178.23707372470798,
+            2.670368565536202,
+            -865.3443195510953
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0195999254111414
+        },
+        {
+          "depth_m": 6.796707984102115,
+          "foot": [
+            -178.6168839763224,
+            2.6670937536642034,
+            -865.0400417811874
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0170706164487813
+        },
+        {
+          "depth_m": 7.283370894638287,
+          "foot": [
+            -178.99669422793684,
+            2.6638189417922047,
+            -864.7357640112795
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0145413074864216
+        },
+        {
+          "depth_m": 7.7700338051744575,
+          "foot": [
+            -179.37650447955127,
+            2.6605441299202064,
+            -864.4314862413715
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053716756e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.012011998524062
+        },
+        {
+          "depth_m": 8.25669671571063,
+          "foot": [
+            -179.75631473116573,
+            2.6572693180482054,
+            -864.1272084714637
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0094826895617044
+        },
+        {
+          "depth_m": 8.743359626246802,
+          "foot": [
+            -180.13612498278016,
+            2.655466394719524,
+            -863.8229307015558
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.000149284707988806,
+          "camera_hit": null,
+          "camera_above_land": 2.008425269142661
+        },
+        {
+          "depth_m": 9.230022536782972,
+          "foot": [
+            -180.5159352343946,
+            2.6547208918098852,
+            -863.5186529316479
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079883619,
+          "camera_hit": null,
+          "camera_above_land": 2.0084252691426623
+        },
+        {
+          "depth_m": 9.716685447319144,
+          "foot": [
+            -180.89574548600902,
+            2.6539753889002458,
+            -863.21437516174
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0084252691426623
+        },
+        {
+          "depth_m": 10.203348357855315,
+          "foot": [
+            -181.27555573762345,
+            2.6532298859906067,
+            -862.9100973918321
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079878068,
+          "camera_hit": null,
+          "camera_above_land": 2.008425269142662
+        },
+        {
+          "depth_m": 10.690011268391487,
+          "foot": [
+            -181.65536598923788,
+            2.652484383080965,
+            -862.6058196219243
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0084252691426623
+        },
+        {
+          "depth_m": 11.176674178927659,
+          "foot": [
+            -182.0351762408523,
+            2.6517388801713255,
+            -862.3015418520164
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.000149284707988806,
+          "camera_hit": null,
+          "camera_above_land": 2.008425269142662
+        },
+        {
+          "depth_m": 11.663337089463829,
+          "foot": [
+            -182.41498649246674,
+            2.650993377261687,
+            -861.9972640821085
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079878068,
+          "camera_hit": null,
+          "camera_above_land": 2.0084252691426614
+        },
+        {
+          "depth_m": 12.150000000000002,
+          "foot": [
+            -182.7947967440812,
+            2.650247874352047,
+            -861.6929863122006
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.008425269142662
+        }
+      ]
+    },
+    {
+      "id": "near-2-door-2",
+      "samples": [
+        {
+          "depth_m": 0.4701060770179795,
+          "foot": [
+            -171.1130460407342,
+            2.802389332041609,
+            -865.8222841141941
+          ],
+          "nearest_nonland": [
+            {
+              "key": "prototype:building:w96665904:wall",
+              "role": "MaroonClosedDoors",
+              "clearance_m": 9.999999999593667e-05
+            }
+          ],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.022617466984088
+        },
+        {
+          "depth_m": 0.9359349904755637,
+          "foot": [
+            -171.47485617585505,
+            2.799317695759897,
+            -865.528873134957
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0201784882191807
+        },
+        {
+          "depth_m": 1.401763903933148,
+          "foot": [
+            -171.83666631097594,
+            2.796246059478186,
+            -865.2354621557199
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.017739509454272
+        },
+        {
+          "depth_m": 1.8675928173907324,
+          "foot": [
+            -172.1984764460968,
+            2.7931744231964757,
+            -864.9420511764828
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0153005306893634
+        },
+        {
+          "depth_m": 2.3334217308483165,
+          "foot": [
+            -172.5602865812177,
+            2.7901027869147645,
+            -864.6486401972456
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0128615519244546
+        },
+        {
+          "depth_m": 2.7992506443059004,
+          "foot": [
+            -172.92209671633856,
+            2.7870311506330543,
+            -864.3552292180085
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053761165e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.0104225731595458
+        },
+        {
+          "depth_m": 3.2650795577634852,
+          "foot": [
+            -173.28390685145945,
+            2.7839595143513436,
+            -864.0618182387714
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -9.797047053716756e-05,
+          "camera_hit": null,
+          "camera_above_land": 2.007983594394637
+        },
+        {
+          "depth_m": 3.730908471221069,
+          "foot": [
+            -173.6457169865803,
+            2.782812992724755,
+            -863.7684072595342
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079878068,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 4.196737384678653,
+          "foot": [
+            -174.0075271217012,
+            2.7821803352079524,
+            -863.4749962802971
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 4.6625662981362375,
+          "foot": [
+            -174.36933725682206,
+            2.7815476776911483,
+            -863.1815853010601
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848503
+        },
+        {
+          "depth_m": 5.128395211593822,
+          "foot": [
+            -174.73114739194295,
+            2.780915020174346,
+            -862.8881743218229
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848503
+        },
+        {
+          "depth_m": 5.594224125051406,
+          "foot": [
+            -175.09295752706382,
+            2.7802823626575446,
+            -862.5947633425858
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 6.0600530385089915,
+          "foot": [
+            -175.45476766218468,
+            2.7796497051407427,
+            -862.3013523633487
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 6.525881951966575,
+          "foot": [
+            -175.81657779730557,
+            2.779017047623941,
+            -862.0079413841115
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079878068,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 6.991710865424159,
+          "foot": [
+            -176.17838793242643,
+            2.7783843901071386,
+            -861.7145304048744
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 7.457539778881744,
+          "foot": [
+            -176.54019806754732,
+            2.7777517325903363,
+            -861.4211194256372
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.00014928470798869498,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 7.923368692339327,
+          "foot": [
+            -176.90200820266818,
+            2.777119075073532,
+            -861.1277084464002
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.000149284707988806,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 8.38919760579691,
+          "foot": [
+            -177.26381833778908,
+            2.77648641755673,
+            -860.8342974671631
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.00014928470798869498,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 8.855026519254494,
+          "foot": [
+            -177.62562847290994,
+            2.7758537600399285,
+            -860.540886487926
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 9.32085543271208,
+          "foot": [
+            -177.98743860803083,
+            2.775221102523126,
+            -860.2474755086888
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 9.786684346169663,
+          "foot": [
+            -178.3492487431517,
+            2.7745884450063247,
+            -859.9540645294517
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079878068,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 10.252513259627248,
+          "foot": [
+            -178.71105887827258,
+            2.7739557874895224,
+            -859.6606535502145
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079883619,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 10.718342173084832,
+          "foot": [
+            -179.07286901339344,
+            2.7733231299727206,
+            -859.3672425709774
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 11.184171086542417,
+          "foot": [
+            -179.43467914851433,
+            2.7726904724559187,
+            -859.0738315917403
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079878068,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 11.650000000000002,
+          "foot": [
+            -179.7964892836352,
+            2.7720578149391137,
+            -858.7804206125032
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079892501,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        }
+      ]
+    },
+    {
+      "id": "near-3-door-1",
+      "samples": [
+        {
+          "depth_m": 0.47008228673152785,
+          "foot": [
+            -163.0272627180196,
+            2.9610941789143492,
+            -854.1356671589341
+          ],
+          "nearest_nonland": [
+            {
+              "key": "prototype:building:w96665904:wall",
+              "role": "MaroonClosedDoors",
+              "clearance_m": 0.00010000000003912435
+            }
+          ],
+          "capsule_land_clearance_m": -7.123230094402411e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.9801736900585851
+        },
+        {
+          "depth_m": 0.9359121914510475,
+          "foot": [
+            -163.38679561517924,
+            2.962773394927251,
+            -853.8394685836658
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.9801736900585851
+        },
+        {
+          "depth_m": 1.4017420961705673,
+          "foot": [
+            -163.74632851233886,
+            2.9644526109401506,
+            -853.5432700083975
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058586
+        },
+        {
+          "depth_m": 1.8675720008900871,
+          "foot": [
+            -164.1058614094985,
+            2.96613182695305,
+            -853.2470714331291
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058586
+        },
+        {
+          "depth_m": 2.3334019056096067,
+          "foot": [
+            -164.4653943066581,
+            2.9678110429659497,
+            -852.9508728578608
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.9801736900585865
+        },
+        {
+          "depth_m": 2.7992318103291267,
+          "foot": [
+            -164.82492720381774,
+            2.9694902589788494,
+            -852.6546742825924
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058586
+        },
+        {
+          "depth_m": 3.2650617150486463,
+          "foot": [
+            -165.18446010097736,
+            2.9711694749917488,
+            -852.358475707324
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.9801736900585856
+        },
+        {
+          "depth_m": 3.730891619768166,
+          "foot": [
+            -165.54399299813699,
+            2.9728486910046485,
+            -852.0622771320557
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.9801736900585856
+        },
+        {
+          "depth_m": 4.196721524487685,
+          "foot": [
+            -165.9035258952966,
+            2.9745279070175483,
+            -851.7660785567873
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094313593e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058586
+        },
+        {
+          "depth_m": 4.6625514292072054,
+          "foot": [
+            -166.26305879245623,
+            2.9762071230304477,
+            -851.469879981519
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058586
+        },
+        {
+          "depth_m": 5.1283813339267255,
+          "foot": [
+            -166.62259168961586,
+            2.9778863390433474,
+            -851.1736814062506
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058587
+        },
+        {
+          "depth_m": 5.594211238646245,
+          "foot": [
+            -166.98212458677548,
+            2.979565555056247,
+            -850.8774828309822
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094313593e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058586
+        },
+        {
+          "depth_m": 6.060041143365765,
+          "foot": [
+            -167.34165748393514,
+            2.981244771069147,
+            -850.5812842557139
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.9801736900585851
+        },
+        {
+          "depth_m": 6.525871048085285,
+          "foot": [
+            -167.70119038109476,
+            2.9829239870820468,
+            -850.2850856804455
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058586
+        },
+        {
+          "depth_m": 6.991700952804804,
+          "foot": [
+            -168.0607232782544,
+            2.9846032030949465,
+            -849.9888871051771
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094313593e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058587
+        },
+        {
+          "depth_m": 7.457530857524324,
+          "foot": [
+            -168.420256175414,
+            2.9862824191078476,
+            -849.6926885299089
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094313593e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058587
+        },
+        {
+          "depth_m": 7.923360762243844,
+          "foot": [
+            -168.77978907257364,
+            2.987961635120747,
+            -849.3964899546405
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.9801736900585865
+        },
+        {
+          "depth_m": 8.389190666963364,
+          "foot": [
+            -169.13932196973326,
+            2.9896408511336463,
+            -849.1002913793722
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.9801736900585865
+        },
+        {
+          "depth_m": 8.855020571682882,
+          "foot": [
+            -169.49885486689288,
+            2.991320067146546,
+            -848.8040928041038
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058586
+        },
+        {
+          "depth_m": 9.320850476402402,
+          "foot": [
+            -169.8583877640525,
+            2.9929992831594454,
+            -848.5078942288354
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094402411e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.9801736900585856
+        },
+        {
+          "depth_m": 9.786680381121922,
+          "foot": [
+            -170.21792066121213,
+            2.9946784991723456,
+            -848.2116956535671
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094313593e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058586
+        },
+        {
+          "depth_m": 10.252510285841442,
+          "foot": [
+            -170.57745355837176,
+            2.996357715185245,
+            -847.9154970782987
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.9801736900585856
+        },
+        {
+          "depth_m": 10.71834019056096,
+          "foot": [
+            -170.93698645553138,
+            2.9980369311981447,
+            -847.6192985030303
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.9801736900585865
+        },
+        {
+          "depth_m": 11.18417009528048,
+          "foot": [
+            -171.296519352691,
+            2.999716147211044,
+            -847.323099927762
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094363553e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.9801736900585865
+        },
+        {
+          "depth_m": 11.65,
+          "foot": [
+            -171.65605224985063,
+            3.0013953632239434,
+            -847.0269013524936
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -7.123230094402411e-05,
+          "camera_hit": null,
+          "camera_above_land": 1.980173690058586
+        }
+      ]
+    },
+    {
+      "id": "screen",
+      "samples": [
+        {
+          "depth_m": 1.6151126054034652,
+          "foot": [
+            -170.9567927063673,
+            2.8341334262320426,
+            -863.8117554401349
+          ],
+          "nearest_nonland": [
+            {
+              "key": "prototype:building:w96665904:wall",
+              "role": "LocalPrivacyScreens",
+              "clearance_m": 0.00010461919500759365
+            }
+          ],
+          "capsule_land_clearance_m": -0.000149284707988806,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 1.7067792720701318,
+          "foot": [
+            -171.0279903673424,
+            2.834008930727295,
+            -863.7540174903146
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848503
+        },
+        {
+          "depth_m": 1.7984459387367986,
+          "foot": [
+            -171.09918802831749,
+            2.833884435222547,
+            -863.6962795404943
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.000149284707988806,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 1.8901126054034654,
+          "foot": [
+            -171.17038568929257,
+            2.8337599397177997,
+            -863.638541590674
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079878068,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848503
+        },
+        {
+          "depth_m": 1.981779272070132,
+          "foot": [
+            -171.24158335026766,
+            2.8336354442130514,
+            -863.5808036408537
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.00014928470798869498,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 2.0734459387367985,
+          "foot": [
+            -171.31278101124275,
+            2.8335109487083066,
+            -863.5230656910333
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079883619,
+          "camera_hit": null,
+          "camera_above_land": 2.007469730284851
+        },
+        {
+          "depth_m": 2.1651126054034653,
+          "foot": [
+            -171.38397867221784,
+            2.8333864532035586,
+            -863.465327741213
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079878068,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 2.256779272070132,
+          "foot": [
+            -171.45517633319292,
+            2.8332619576988107,
+            -863.4075897913926
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.000149284707988806,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 2.3484459387367984,
+          "foot": [
+            -171.526373994168,
+            2.833137462194063,
+            -863.3498518415723
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.000149284707988806,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 2.440112605403465,
+          "foot": [
+            -171.5975716551431,
+            2.833012966689315,
+            -863.292113891752
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848503
+        },
+        {
+          "depth_m": 2.531779272070132,
+          "foot": [
+            -171.6687693161182,
+            2.832888471184567,
+            -863.2343759419317
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848503
+        },
+        {
+          "depth_m": 2.6234459387367988,
+          "foot": [
+            -171.73996697709327,
+            2.8327639756798195,
+            -863.1766379921114
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079883619,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848503
+        },
+        {
+          "depth_m": 2.7151126054034656,
+          "foot": [
+            -171.81116463806836,
+            2.832639480175074,
+            -863.118900042291
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.000149284707988806,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 2.806779272070132,
+          "foot": [
+            -171.88236229904345,
+            2.8325149846703264,
+            -863.0611620924707
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848503
+        },
+        {
+          "depth_m": 2.8984459387367987,
+          "foot": [
+            -171.95355996001854,
+            2.832390489165578,
+            -863.0034241426504
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079892501,
+          "camera_hit": null,
+          "camera_above_land": 2.007469730284849
+        },
+        {
+          "depth_m": 2.990112605403465,
+          "foot": [
+            -172.02475762099363,
+            2.832265993660831,
+            -862.9456861928301
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079883619,
+          "camera_hit": null,
+          "camera_above_land": 2.007469730284851
+        },
+        {
+          "depth_m": 3.081779272070132,
+          "foot": [
+            -172.0959552819687,
+            2.8321414981560826,
+            -862.8879482430098
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 3.1734459387367986,
+          "foot": [
+            -172.1671529429438,
+            2.832017002651335,
+            -862.8302102931895
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079878068,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 3.2651126054034654,
+          "foot": [
+            -172.2383506039189,
+            2.8318925071465872,
+            -862.7724723433691
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.000149284707988806,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 3.356779272070132,
+          "foot": [
+            -172.30954826489398,
+            2.831768011641842,
+            -862.7147343935487
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079878068,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 3.4484459387367985,
+          "foot": [
+            -172.38074592586906,
+            2.831643516137094,
+            -862.6569964437284
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 3.5401126054034653,
+          "foot": [
+            -172.45194358684415,
+            2.831519020632346,
+            -862.5992584939081
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.00746973028485
+        },
+        {
+          "depth_m": 3.6317792720701325,
+          "foot": [
+            -172.52314124781924,
+            2.8313945251275983,
+            -862.5415205440878
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079882509,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848494
+        },
+        {
+          "depth_m": 3.7234459387367984,
+          "foot": [
+            -172.59433890879433,
+            2.831270029622851,
+            -862.4837825942675
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.0001492847079883619,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848508
+        },
+        {
+          "depth_m": 3.815112605403465,
+          "foot": [
+            -172.66553656976942,
+            2.8311455341181024,
+            -862.4260446444472
+          ],
+          "nearest_nonland": [],
+          "capsule_land_clearance_m": -0.00014928470798869498,
+          "camera_hit": null,
+          "camera_above_land": 2.0074697302848494
+        }
+      ]
+    }
+  ],
+  "stock_speed_binding": {
+    "walk": 4.0,
+    "run": 20.0,
+    "acceleration": 30.0,
+    "braking": 40.0,
+    "source": "Actual controller defaults and retained donor actual stock_settings_before"
+  },
+  "scope": "File-only planned capsule/support/camera and actual emitted query checks; native dynamic evidence pending."
+}

@@ -1,0 +1,110 @@
+{
+  "status": "FILE_READY_FROZEN_INPUT_SUCCESSOR_PENDING_INDEPENDENT_DELTA_REVIEW",
+  "at": "2026-09-23T00:37:43.936528+00:00",
+  "first_source_edit": {
+    "at": "2026-09-23T00:24:03.404646+00:00",
+    "scope": "first staged material source edit; no checkout/engine"
+  },
+  "base": "fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+  "capture_authority": "32/213",
+  "proposed_checkout": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1",
+  "staged_overlay": "Read-only frozen-main symlinks plus four unchanged regular target files; not runnable",
+  "units": [
+    {
+      "unit": "1237",
+      "file_checks": 240,
+      "mapped": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        9,
+        10,
+        11,
+        12,
+        13
+      ],
+      "protected": [
+        0,
+        8,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26
+      ],
+      "views": 4,
+      "closed_roof_triangles": 36,
+      "attached_termination_triangles": 36,
+      "broad_band_triangles": 0
+    },
+    {
+      "unit": "1229",
+      "file_checks": 219,
+      "mapped": [
+        2,
+        4,
+        5,
+        6,
+        8
+      ],
+      "protected": [
+        0,
+        1,
+        3,
+        7,
+        9,
+        10,
+        11
+      ],
+      "views": 4,
+      "closed_roof_triangles": 36,
+      "attached_termination_triangles": 36,
+      "broad_band_triangles": 0
+    }
+  ],
+  "bindings": {
+    "source-pins.json": "6457109aa5b4ee7ed439fabb2f51e1026c4fd48d61078ae6cef219af3f803e08",
+    "materialization-inputs.json": "f4d6f262e6e65530915e61ca273ca07f0f4690e585d4230a337cbb276c949c2c",
+    "run-plan.json": "2b53d3ee429f8b811ac9530fb81fb16af3e0041453dc64cb7e8024376b6579cb",
+    "FILE_CHECKS.json": "dca5fd98b1d81458ac215961d5cc822ce9f30539935f1df0fce0601d031d8b8c",
+    "source.diff": "0d9c92724fb3c76f79426be5c260cfa34dfd3d984d7b916bbbdf0153024cabe6",
+    "DELTA.json": "3e9fcb619af10b1213f53231770ca8b1f4c2abd5d0aa6c870e151dac99043d5e",
+    "identity.diff": "1743708b8b840837594676ea571a147152efe657b94e763767fe09842e5affce",
+    "FREEZE_DELTA.json": "3f85eb46780ba3671d26d5684c24a93f4dcfbb12e4efc5c629479b9acd2e0a8a"
+  },
+  "materialize_argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/materialize.py"
+  ],
+  "import_focused_argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/run-reviewed-chain.py",
+    "import-001",
+    "focused-1237-001",
+    "focused-1229-001"
+  ],
+  "native_argv": [
+    "/usr/bin/python3",
+    "-B",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/run-reviewed-chain.py",
+    "native-1237-001",
+    "native-1229-001"
+  ],
+  "engine_executed": false,
+  "recognition_credit": 0,
+  "frozen_dependencies": 969
+}

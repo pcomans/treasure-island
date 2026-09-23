@@ -1,0 +1,10 @@
+{
+  "measured_world": {
+    "bodies": 496,
+    "meshes": 1260,
+    "rows": 735,
+    "shapes": 646,
+    "surfaces": 1275,
+    "triangles": 176165
+  }
+}

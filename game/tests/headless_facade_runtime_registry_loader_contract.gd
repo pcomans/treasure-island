@@ -3,8 +3,8 @@ extends SceneTree
 const RegistryLoader := preload("res://game/scripts/world/facades/facade_runtime_registry_loader.gd")
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
-const EXPECTED_REGISTRY_SHA256 := "82f77d9a4bf70aa7905d66b0347a29b267e899e3c4cef6722342cc4139be1e18"
-const EXPECTED_ADAPTER_CONTRACT_SHA256 := "d9f79936c5b1921cf04a0da2581fc9bf39f3c1bb7d5a7a337f22ab9157210103"
+const EXPECTED_REGISTRY_SHA256 := "9247d36589c36c948f28d58f2a72002379906850e5b094e2633129a3cb05e2fc"
+const EXPECTED_ADAPTER_CONTRACT_SHA256 := "6e76908b51d96afacdd722a0facda82dd43f9a13bea7eb3ddd2dde818eac74aa"
 const READY_RECEIVERS := [
 	"building-composite:w1249412094:w1282547786:wall",
 	"building:r16681702:wall",

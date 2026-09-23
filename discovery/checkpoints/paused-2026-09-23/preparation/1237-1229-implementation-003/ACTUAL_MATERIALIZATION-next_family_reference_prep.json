@@ -1,0 +1,28 @@
+{
+  "at": "2026-09-23T00:42:51.459415+00:00",
+  "status": "MATERIALIZATION_HOLD_PARTIAL_CHECKOUT_NO_RETRY",
+  "terminal_exit": 1,
+  "raw": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/materialization-raw.json",
+    "sha256": "3aa6d78e5bf07cc6e1981110283fae5c7c0c80d87aabfaf283bbb0f8d1ffd3a8"
+  },
+  "checkout_exists": true,
+  "checkout_head": "fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+  "checkout_status": "",
+  "missing_inputs": [
+    "game/tests/headless_building_1_wing_window_reveal_candidate_evidence_contract.gd.uid",
+    "game/tests/headless_building_1_wing_returns_v2_current_package_contract.gd.uid",
+    "game/tests/headless_building_1_wing_window_reveal_candidate_package_contract.gd.uid",
+    "game/tests/building_1_wing_window_reveal_candidate_capture.gd.uid",
+    "game/scripts/world/facades/northpoint_1237_study.gd",
+    "game/resources/facades/northpoint_1237_study.json",
+    "game/scripts/world/facades/northpoint_1229_study.gd",
+    "game/resources/facades/northpoint_1229_study.json"
+  ],
+  "mismatched_existing_inputs": [],
+  "pins_unchanged": true,
+  "main_head_unchanged": true,
+  "main_status_unchanged": true,
+  "engine_executed": false,
+  "scope": "Fresh checkout exists; stopped at first frozen untracked UID absent in git checkout. No MATERIALIZED success receipt. No copy/retry authorized."
+}

@@ -1,0 +1,16 @@
+{
+  "scope": "three negative mutation selectors only",
+  "removed_duplicate_full_calls": 3,
+  "positive_compiler_expectations": "explicit independent call markers/hash retained",
+  "negative_expected_errors": [
+    "Navy Chapel per-record consumption dispatch must precede the fully-consumed assertion",
+    "D2 1441 per-record consumption dispatch must precede the fully-consumed assertion"
+  ],
+  "baseline_token_repairs": 3,
+  "baseline_repeat_invocations": 1,
+  "current_token_repairs": 0,
+  "current_repeat_invocations": 0,
+  "actual_node_outcome": "PASS",
+  "actual_node_receipt_sha256": "dda9e4f2a43f413ef584f68480252c9030fd263c41ca602410ec653260940e19",
+  "negative_outcomes": "Both existing expected compiler-error assertions passed in the successful suite; replaceExactlyOnce/non-no-op/cardinality/placeholder semantics unchanged."
+}

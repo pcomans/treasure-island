@@ -1,0 +1,684 @@
+{
+  "status": "ACTUAL_NATIVE_CHECKS_PASS_PENDING_INDEPENDENT_TECHNICAL_AND_VISUAL",
+  "session": 82474,
+  "terminal_exit": 0,
+  "release": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/SLOT_RELEASE-native-1237-001-native-1229-001.json",
+    "sha256": "b8090405082c1ea566033bff39b1b5557d5e37b7358aa3f10d64577e5129d003"
+  },
+  "units": [
+    {
+      "unit": "1237",
+      "ok": true,
+      "failures": [],
+      "world": {
+        "authority": "32/213",
+        "baseline_before_capture_swap": {
+          "rows": 735,
+          "meshes": 1260,
+          "surfaces": 1275,
+          "triangles": 176165,
+          "bodies": 496,
+          "shapes": 646
+        },
+        "capture_only_target_swap": true,
+        "production_adapter": false,
+        "recognition_credit": 0,
+        "source_channel_comparison": {
+          "ok": true,
+          "meshes": {
+            "ExactOriginalWallSurfaces": {
+              "source_state_equal": true,
+              "surfaces": [
+                {
+                  "surface": 0,
+                  "name": "generated_record",
+                  "channels": {
+                    "0": {
+                      "equal": true,
+                      "actual_count": 108,
+                      "original_count": 108
+                    },
+                    "1": {
+                      "equal": true,
+                      "actual_count": 108,
+                      "original_count": 108
+                    },
+                    "2": {
+                      "equal": true,
+                      "actual_count": 432,
+                      "original_count": 432
+                    },
+                    "3": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "4": {
+                      "equal": true,
+                      "actual_count": 108,
+                      "original_count": 108
+                    },
+                    "5": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "6": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "7": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "8": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "9": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "10": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "11": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "12": {
+                      "equal": true,
+                      "actual_count": 162,
+                      "original_count": 162
+                    }
+                  },
+                  "material_equal": true
+                }
+              ],
+              "complete_original_material_partitions_preserved": true
+            },
+            "ExactSourceNeutralRoof": {
+              "source_state_equal": true,
+              "surfaces": [
+                {
+                  "surface": 0,
+                  "name": "generated_record",
+                  "channels": {
+                    "0": {
+                      "equal": true,
+                      "actual_count": 17,
+                      "original_count": 17
+                    },
+                    "1": {
+                      "equal": true,
+                      "actual_count": 17,
+                      "original_count": 17
+                    },
+                    "2": {
+                      "equal": true,
+                      "actual_count": 68,
+                      "original_count": 68
+                    },
+                    "3": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "4": {
+                      "equal": true,
+                      "actual_count": 17,
+                      "original_count": 17
+                    },
+                    "5": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "6": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "7": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "8": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "9": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "10": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "11": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "12": {
+                      "equal": true,
+                      "actual_count": 45,
+                      "original_count": 45
+                    }
+                  },
+                  "material_equal": true
+                }
+              ],
+              "complete_original_material_partitions_preserved": true
+            }
+          }
+        },
+        "study_build": {
+          "model_id": "1237-northpoint-study-001",
+          "projected_upper_front_m": 0.06,
+          "projected_upper_receiver_key": "building:w96665904:wall",
+          "projected_upper_receiver_source_runs": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "prototype_only": true,
+          "runtime_attachment": false,
+          "recognition_accepted": false,
+          "source_key": "w96665904",
+          "mapped_public_run_indices": [
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7,
+            9,
+            10,
+            11,
+            12,
+            13
+          ],
+          "protected_run_indices": [
+            0,
+            8,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26
+          ],
+          "baseline_exact_source": false,
+          "original_wall_roof_resources_preserved": true,
+          "source_roof_geometry_preserved": true,
+          "source_wall_spray_eligibility_preserved": true,
+          "physical_details_spray_receiver": false,
+          "interior_modeled": false,
+          "as_built_claim": false,
+          "module_dimensions_and_counts": "production_inference",
+          "visual_batch_triangles": {
+            "ExactOriginalWallSurfaces": 54,
+            "ExactSourceNeutralRoof": 15,
+            "ObservedPublicRoof": 36,
+            "NearHorizontalSiding": 144,
+            "ProjectedUpperSiding": 6,
+            "ProjectedUpperClosures": 30,
+            "PaleCompleteTrim": 1152,
+            "BlueOpaqueGlazing": 156,
+            "MaroonClosedDoors": 36,
+            "LocalPrivacyScreens": 300,
+            "PaleDrainageAndFascia": 540,
+            "DoorHardware": 36,
+            "DrapedEntryPaths": 44,
+            "FootwaySurface": 36
+          },
+          "visual_triangles": 2585,
+          "mesh_instances": 14,
+          "surfaces": 14,
+          "source_terrain_untouched": true,
+          "draped_paths_render_only": true,
+          "bounded_footway_render_only": true,
+          "new_parking_authored": false,
+          "separate_public_roof_addition": true,
+          "public_roof_shapes": 1,
+          "roof_inference": "Original flat roof retained; broad shallow visible front roof strips only. No hidden roof topology, canopies, ramps or stairs authored.",
+          "stairs_authored": false
+        },
+        "original_source_roots_preserved": [
+          "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-4__building_w96665904_wall/building_w96665904_wall",
+          "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-4__building_w96665904_roof/building_w96665904_roof"
+        ]
+      },
+      "images": [
+        {
+          "private_path": "/private/tmp/1237-1229-study-001/1237/images/01-whole-front-baseline.png",
+          "durable_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/1237/capture/images/01-whole-front-baseline.png",
+          "sha256": "ab10ac218a35cda450d5ef311f9fe494ec2712e95e04e2946bef598c04b477ee"
+        },
+        {
+          "private_path": "/private/tmp/1237-1229-study-001/1237/images/02-whole-front-candidate.png",
+          "durable_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/1237/capture/images/02-whole-front-candidate.png",
+          "sha256": "91bd392895c5bee8033ac24273043f301a7ee185de7beede87c35f3fc9e9eb3e"
+        },
+        {
+          "private_path": "/private/tmp/1237-1229-study-001/1237/images/03-roof-entry-candidate.png",
+          "durable_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/1237/capture/images/03-roof-entry-candidate.png",
+          "sha256": "fd34fe021078ae2a74af58eacf2245fea19d9735f861317dfe4abbd5300e07e1"
+        },
+        {
+          "private_path": "/private/tmp/1237-1229-study-001/1237/images/04-door-path-footway-junction.png",
+          "durable_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/1237/capture/images/04-door-path-footway-junction.png",
+          "sha256": "f1eaf5af3552904e80cfab7af9e94a6cf72f8e2c19a593e5d8477a59d932918b"
+        }
+      ],
+      "captures": [
+        {
+          "id": "01-whole-front-baseline",
+          "on_floor": true,
+          "final_camera": {
+            "segment_clear": true,
+            "land_identity_ok": true,
+            "camera_above_land": true
+          }
+        },
+        {
+          "id": "02-whole-front-candidate",
+          "on_floor": true,
+          "final_camera": {
+            "segment_clear": true,
+            "land_identity_ok": true,
+            "camera_above_land": true
+          }
+        },
+        {
+          "id": "03-roof-entry-candidate",
+          "on_floor": true,
+          "final_camera": {
+            "segment_clear": true,
+            "land_identity_ok": true,
+            "camera_above_land": true
+          }
+        },
+        {
+          "id": "04-door-path-footway-junction",
+          "on_floor": true,
+          "final_camera": {
+            "segment_clear": true,
+            "land_identity_ok": true,
+            "camera_above_land": true
+          }
+        }
+      ],
+      "bindings": {
+        "-result.json": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/native-1237-001-result.json",
+          "sha256": "cd636b0e6a86ddc768b6dc9393c8e195e1131e10a08f8f300839d7188bc74761"
+        },
+        "-execution.json": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/native-1237-001-execution.json",
+          "sha256": "8f3b5c7d611237774ebd1831d29c9a6317f566a5baf0208af2fb365d943ece9f"
+        },
+        ".log": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/native-1237-001.log",
+          "sha256": "df95bbaac0a5d0cdba12364c095ab13bf6945e84231e82b4bd0cac5890097636"
+        }
+      }
+    },
+    {
+      "unit": "1229",
+      "ok": true,
+      "failures": [],
+      "world": {
+        "authority": "32/213",
+        "baseline_before_capture_swap": {
+          "rows": 735,
+          "meshes": 1260,
+          "surfaces": 1275,
+          "triangles": 176165,
+          "bodies": 496,
+          "shapes": 646
+        },
+        "capture_only_target_swap": true,
+        "production_adapter": false,
+        "recognition_credit": 0,
+        "source_channel_comparison": {
+          "ok": true,
+          "meshes": {
+            "ExactOriginalWallSurfaces": {
+              "source_state_equal": true,
+              "surfaces": [
+                {
+                  "surface": 0,
+                  "name": "generated_record",
+                  "channels": {
+                    "0": {
+                      "equal": true,
+                      "actual_count": 48,
+                      "original_count": 48
+                    },
+                    "1": {
+                      "equal": true,
+                      "actual_count": 48,
+                      "original_count": 48
+                    },
+                    "2": {
+                      "equal": true,
+                      "actual_count": 192,
+                      "original_count": 192
+                    },
+                    "3": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "4": {
+                      "equal": true,
+                      "actual_count": 48,
+                      "original_count": 48
+                    },
+                    "5": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "6": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "7": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "8": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "9": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "10": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "11": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "12": {
+                      "equal": true,
+                      "actual_count": 72,
+                      "original_count": 72
+                    }
+                  },
+                  "material_equal": true
+                }
+              ],
+              "complete_original_material_partitions_preserved": true
+            },
+            "ExactSourceNeutralRoof": {
+              "source_state_equal": true,
+              "surfaces": [
+                {
+                  "surface": 0,
+                  "name": "generated_record",
+                  "channels": {
+                    "0": {
+                      "equal": true,
+                      "actual_count": 8,
+                      "original_count": 8
+                    },
+                    "1": {
+                      "equal": true,
+                      "actual_count": 8,
+                      "original_count": 8
+                    },
+                    "2": {
+                      "equal": true,
+                      "actual_count": 32,
+                      "original_count": 32
+                    },
+                    "3": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "4": {
+                      "equal": true,
+                      "actual_count": 8,
+                      "original_count": 8
+                    },
+                    "5": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "6": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "7": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "8": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "9": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "10": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "11": {
+                      "equal": true,
+                      "actual_count": 0,
+                      "original_count": 0
+                    },
+                    "12": {
+                      "equal": true,
+                      "actual_count": 18,
+                      "original_count": 18
+                    }
+                  },
+                  "material_equal": true
+                }
+              ],
+              "complete_original_material_partitions_preserved": true
+            }
+          }
+        },
+        "study_build": {
+          "model_id": "1229-northpoint-study-001",
+          "projected_upper_front_m": 0.06,
+          "projected_upper_receiver_key": "building:w96665911:wall",
+          "projected_upper_receiver_source_runs": [
+            2,
+            4,
+            5,
+            6,
+            8
+          ],
+          "prototype_only": true,
+          "runtime_attachment": false,
+          "recognition_accepted": false,
+          "source_key": "w96665911",
+          "mapped_public_run_indices": [
+            2,
+            4,
+            5,
+            6,
+            8
+          ],
+          "protected_run_indices": [
+            0,
+            1,
+            3,
+            7,
+            9,
+            10,
+            11
+          ],
+          "baseline_exact_source": false,
+          "original_wall_roof_resources_preserved": true,
+          "source_roof_geometry_preserved": true,
+          "source_wall_spray_eligibility_preserved": true,
+          "physical_details_spray_receiver": false,
+          "interior_modeled": false,
+          "as_built_claim": false,
+          "module_dimensions_and_counts": "production_inference",
+          "visual_batch_triangles": {
+            "ExactOriginalWallSurfaces": 24,
+            "ExactSourceNeutralRoof": 6,
+            "ObservedPublicRoof": 36,
+            "NearHorizontalSiding": 60,
+            "ProjectedUpperSiding": 6,
+            "ProjectedUpperClosures": 30,
+            "PaleCompleteTrim": 1188,
+            "BlueOpaqueGlazing": 108,
+            "DarkOpaqueGlazing": 60,
+            "MaroonClosedDoors": 24,
+            "PaleDrainageAndFascia": 540,
+            "DoorHardware": 24,
+            "DrapedEntryPaths": 32,
+            "FootwaySurface": 36
+          },
+          "visual_triangles": 2174,
+          "mesh_instances": 14,
+          "surfaces": 14,
+          "source_terrain_untouched": true,
+          "draped_paths_render_only": true,
+          "bounded_footway_render_only": true,
+          "new_parking_authored": false,
+          "separate_public_roof_addition": true,
+          "public_roof_shapes": 1,
+          "roof_inference": "Original flat roof retained; broad shallow visible front roof strips only. No hidden roof topology, canopies, ramps or stairs authored.",
+          "stairs_authored": false
+        },
+        "original_source_roots_preserved": [
+          "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-4__building_w96665911_wall/building_w96665911_wall",
+          "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-2__z_-4__building_w96665911_roof/building_w96665911_roof"
+        ]
+      },
+      "images": [
+        {
+          "private_path": "/private/tmp/1237-1229-study-001/1229/images/01-whole-front-baseline.png",
+          "durable_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/1229/capture/images/01-whole-front-baseline.png",
+          "sha256": "6bc336da3a226726ad4e26c2f52d0eb362b394994dca2db393d48130f96223d3"
+        },
+        {
+          "private_path": "/private/tmp/1237-1229-study-001/1229/images/02-whole-front-candidate.png",
+          "durable_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/1229/capture/images/02-whole-front-candidate.png",
+          "sha256": "aea21690af1dd0c37660be3cdd82d26871d5f95492beee611f1408f95eeece65"
+        },
+        {
+          "private_path": "/private/tmp/1237-1229-study-001/1229/images/03-roof-entry-candidate.png",
+          "durable_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/1229/capture/images/03-roof-entry-candidate.png",
+          "sha256": "e8664100746191ffdb42f685cfa746f2643162c1449b325fefc973e9c38f99a7"
+        },
+        {
+          "private_path": "/private/tmp/1237-1229-study-001/1229/images/04-door-path-footway-junction.png",
+          "durable_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/1229/capture/images/04-door-path-footway-junction.png",
+          "sha256": "cb6270630c6ebe2e81137c48e31af2a0d78ff0d7077745b0ca79b55b9968a1b8"
+        }
+      ],
+      "captures": [
+        {
+          "id": "01-whole-front-baseline",
+          "on_floor": true,
+          "final_camera": {
+            "segment_clear": true,
+            "land_identity_ok": true,
+            "camera_above_land": true
+          }
+        },
+        {
+          "id": "02-whole-front-candidate",
+          "on_floor": true,
+          "final_camera": {
+            "segment_clear": true,
+            "land_identity_ok": true,
+            "camera_above_land": true
+          }
+        },
+        {
+          "id": "03-roof-entry-candidate",
+          "on_floor": true,
+          "final_camera": {
+            "segment_clear": true,
+            "land_identity_ok": true,
+            "camera_above_land": true
+          }
+        },
+        {
+          "id": "04-door-path-footway-junction",
+          "on_floor": true,
+          "final_camera": {
+            "segment_clear": true,
+            "land_identity_ok": true,
+            "camera_above_land": true
+          }
+        }
+      ],
+      "bindings": {
+        "-result.json": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/native-1229-001-result.json",
+          "sha256": "5f6e16a36078eecfa3883abff89a6cc318fd81c1492d9cb9d65eb4c5da8b291a"
+        },
+        "-execution.json": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/native-1229-001-execution.json",
+          "sha256": "7aa53216dee7b631ae4eded45162b9412e14e047c45a1afcf15478331eb0fab5"
+        },
+        ".log": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/native-1229-001.log",
+          "sha256": "bb0a7bdf06f036eab2d7bdc8c42e17ce7b840d68baacdb685b28e558e102e91c"
+        }
+      }
+    }
+  ],
+  "full_movement_or_recognition_claim": false
+}

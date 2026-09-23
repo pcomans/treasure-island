@@ -1,0 +1,3 @@
+# RETRO — next_family_source_review / shared live readiness
+
+Reviewed only the successor delta to accepted1397 and1226 packets: new1226 callback factory/atomic lifecycle, joint exact consumers, two genuine chunk baselines and fresh source/import boundaries. Verified approved negative-fixture selection remains separate from explicit positive compiler expectations; actual first-pass receipts support zero repair/repeat claims. Reused unchanged focused/materializer/runner logic instead of test replay. Preserved prospective versus actual and originalHOLD versus derived/actual roles. No engine, checkout, source changes or new gate.

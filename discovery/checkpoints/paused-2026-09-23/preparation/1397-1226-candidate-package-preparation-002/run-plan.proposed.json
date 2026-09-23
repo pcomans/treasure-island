@@ -1,0 +1,244 @@
+{
+  "export-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+      "--export-release",
+      "macOS Private",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/export-001/Treasure Island First Playable.app"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+    "new_output_paths": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/export-001/Treasure Island First Playable.app"
+    ],
+    "output_directories": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/export-001"
+    ],
+    "prerequisite_receipts": [],
+    "requires": [
+      "source-component-001"
+    ],
+    "success_markers": []
+  },
+  "mounted-component-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--fixed-fps",
+      "60",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/runtime-001",
+      "--main-pack",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+      "--script",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/package-contract.gd",
+      "--",
+      "--pck=/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+      "--pck-sha256=<ACTUAL_EXPORTED_PCK_SHA256>"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/runtime-001",
+    "output_directories": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/runtime-001"
+    ],
+    "prerequisite_receipts": [],
+    "requires": [
+      "export-001"
+    ],
+    "success_markers": [
+      "PASS: Current32Families1212+1220+1239+Mariner1206+1219+Northern1201+1238+Maceo+Station48+1308+1394+1317 mounted package contract",
+      "NORTHERN_PACKAGE_ATTACHMENT: source=w96215672",
+      "NORTHERN_PACKAGE_ATTACHMENT: source=w96215669",
+      "MARINER_PACKAGE_ATTACHMENT: source=w96215677",
+      "MARINER_PACKAGE_ATTACHMENT: source=w96215680",
+      "FAMILY_PACKAGE_ATTACHMENT: source=w96215649",
+      "FAMILY_PACKAGE_ATTACHMENT: source=w96215652",
+      "FAMILY_PACKAGE_ATTACHMENT: source=w96215658",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215661",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215653",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215651",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215659",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215666",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215673",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215674",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215682",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215688"
+    ]
+  },
+  "mounted-privacy-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--fixed-fps",
+      "60",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/runtime-001",
+      "--main-pack",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+      "--script",
+      "res://game/tests/mounted_pck_content_audit.gd",
+      "--",
+      "--pck-audit-pck=/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+      "--pck-audit-pck-sha256=<ACTUAL_EXPORTED_PCK_SHA256>",
+      "--pck-audit-manifest-sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+      "--pck-audit-content-sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/runtime-001",
+    "prerequisite_receipts": [],
+    "requires": [
+      "mounted-component-001"
+    ],
+    "success_markers": [
+      "PASS: direct-mounted PCK matches the explicit package/world identities"
+    ]
+  },
+  "release-headless-smoke-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+      "--headless",
+      "--fixed-fps",
+      "60",
+      "--log-file",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/runtime-001/release-headless-smoke-001-engine.log",
+      "--",
+      "--mac-export-smoke"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/runtime-001",
+    "prerequisite_receipts": [],
+    "requires": [
+      "mounted-privacy-001"
+    ],
+    "success_markers": [
+      "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent",
+      "MAC_EXPORT_D2_1439_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D2_1444_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1308_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1394_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1317_ATTACHMENT: valid=true",
+      "MAC_EXPORT_FIRE_STATION48_ATTACHMENT: valid=true",
+      "MAC_EXPORT_MACEO_MAY_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1201_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1238_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1206_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1219_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1212_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1220_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1239_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1222_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1227_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1202_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1234_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1215_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1232_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1241_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1221_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1240_ATTACHMENT: valid=true"
+    ]
+  },
+  "release-native-smoke-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+      "--fixed-fps",
+      "60",
+      "--display-driver",
+      "macos",
+      "--rendering-method",
+      "forward_plus",
+      "--rendering-driver",
+      "metal",
+      "--audio-driver",
+      "Dummy",
+      "--log-file",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/runtime-001/release-native-smoke-001-engine.log",
+      "--",
+      "--mac-export-smoke"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/runtime-001",
+    "prerequisite_receipts": [],
+    "requires": [
+      "release-headless-smoke-001"
+    ],
+    "success_markers": [
+      "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent",
+      "MAC_EXPORT_D2_1439_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D2_1444_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1308_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1394_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1317_ATTACHMENT: valid=true",
+      "MAC_EXPORT_FIRE_STATION48_ATTACHMENT: valid=true",
+      "MAC_EXPORT_MACEO_MAY_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1201_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1238_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1206_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1219_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1212_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1220_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1239_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1222_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1227_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1202_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1234_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1215_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1232_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1241_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1221_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1240_ATTACHMENT: valid=true"
+    ]
+  },
+  "source-component-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--fixed-fps",
+      "60",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+      "--script",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/package-contract.gd"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+    "new_output_paths": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/source-component-001-result.json"
+    ],
+    "prerequisite_receipts": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-live-preparation-001/continuation-001/focused-002-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-live-preparation-001/continuation-001/native-registry-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-live-preparation-001/continuation-001/native-loader-001-execution.json"
+    ],
+    "requires": [],
+    "result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/source-component-001-result.json",
+    "success_markers": [
+      "PASS: Current32Families1212+1220+1239+Mariner1206+1219+Northern1201+1238+Maceo+Station48+1308+1394+1317 source package contract",
+      "NORTHERN_PACKAGE_ATTACHMENT: source=w96215672",
+      "NORTHERN_PACKAGE_ATTACHMENT: source=w96215669",
+      "MAC_EXPORT_1201_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1238_ATTACHMENT: valid=true",
+      "MARINER_PACKAGE_ATTACHMENT: source=w96215677",
+      "MARINER_PACKAGE_ATTACHMENT: source=w96215680",
+      "MAC_EXPORT_1206_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1219_ATTACHMENT: valid=true",
+      "FAMILY_PACKAGE_ATTACHMENT: source=w96215649",
+      "FAMILY_PACKAGE_ATTACHMENT: source=w96215652",
+      "FAMILY_PACKAGE_ATTACHMENT: source=w96215658",
+      "MAC_EXPORT_1212_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1220_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1239_ATTACHMENT: valid=true",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215661",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215653",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215651",
+      "MAC_EXPORT_1222_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1227_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1202_ATTACHMENT: valid=true",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215659",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215666",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215673",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215674",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215682",
+      "MAC_EXPORT_1232_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1241_ATTACHMENT: valid=true",
+      "MAC_EXPORT_1221_ATTACHMENT: valid=true",
+      "PROJECTED_FAMILY_PACKAGE_ATTACHMENT: source=w96215688"
+    ]
+  }
+}

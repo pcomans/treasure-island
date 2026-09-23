@@ -1,0 +1,22 @@
+{
+  "CORRECTION_CHECKS.json": "910f0be8c509fb2b2ded2fa002fb513ea1f2c6b6d5779e2faf6112074d181c3f",
+  "FILE_READY.json": "19943049d67c316ca5704a82ef38e60945f7b7f2d657d361ad1113ee67bcffe4",
+  "FILE_READY.md": "70f6d0fcf11f60035081b364f9c6bcb0ef69cf9d4ba875fc47b5fe6a7ff9992e",
+  "NEXT_COMMANDS.json": "3451b754a4186ab098bd6b29e408a8b641b86afa6832f843d6253da69b2add02",
+  "RETRO-shared_package_correction.md": "925ed368ecb277db48a1beb11714b6f18711081724019e03966206376f740370",
+  "bind-export.proposed.py": "9eae36743063d4dbde1f0f15165faba791412b5f0f960f05a67a71062c47a4f3",
+  "bind-export.py": "9eae36743063d4dbde1f0f15165faba791412b5f0f960f05a67a71062c47a4f3",
+  "correction.diff": "6d91460954b5667b423133a49048b2a9429911985a283c0496221c997f9e9633",
+  "execution-input-pins.json": "d980004de8d63220b16a7448c4ec58544b1ee361ff04e83cbba89ba1b4be19dc",
+  "execution-settings.proposed.json": "54fdaed843f3b4a096a224c374fae4161f20dc53d1e78972f3c9b3854e8ef6d5",
+  "execution-settings.template.json": "b42530b05d901b1253652d86b37acf4efec67a63cc2de8097a6131c0e8c5e51d",
+  "package-contract.gd": "04ff4f03fcacb8a3c26b4d7fb1e0b136aa489611c4d3b777127862d1a46e0f36",
+  "package-contract.proposed.gd": "494c79ca8c4c151f3869e95b6da945baf8d1997795f6809a7e0c42cf05c53fac",
+  "readiness-authorization.template.json": "9818b6b3178674b3a77c3f28afeed9e37b1054687abe8f6e422ca7856dfeffb8",
+  "run-plan.json": "818018351005ebfc6b92950b0750cddd1d0b71fbc5cdabd0b3ea523c758c3d65",
+  "run-plan.proposed.json": "0c7bb2ba26f603fb81dc882970c187a0f0a0a972404e43752a1e7868824e2ca4",
+  "selected-helper.diff": "a5d5da4c673e5a40b54a14cdfe672d0d1d54687a5a3297cd7836534432c14d41",
+  "source-actual-binding.json": "1fcebd19aa9f5151808864057dc44cd9a45412b42132631acafd3bd5f85908de",
+  "units/1226/package-verification-receipt.template.json": "cce30f102ba02ed119259dc486a2db45bf9449d042e257a31fe1ce40f361ea79",
+  "units/1397/package-verification-receipt.template.json": "c924d2a74b3699ecbe7bed6bea2ee4357a7c11d705ad9781032d723ae429064c"
+}

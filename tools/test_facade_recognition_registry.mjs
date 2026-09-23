@@ -202,6 +202,19 @@ assertSchemaDocument(schema, PATHS.schema);
 assertJsonSchema(catalog, schema, PATHS.catalog);
 validateActiveHeroDispatch(inputs);
 validateCurrentWorldBuilderDispatch(inputs);
+
+// Negative mutation construction only; compiler argument/hash expectations remain independent.
+const currentBuilderLines = inputs.runtimeContracts.worldBuilderText.split("\n");
+const buildChunkStarts = currentBuilderLines.flatMap((line, index) => /^func build_chunk\(/u.test(line) ? [index] : []);
+assert(buildChunkStarts.length === 1, "exactly one named build_chunk body required for mutation construction");
+const buildChunkStart = buildChunkStarts[0];
+const followingFunction = currentBuilderLines.findIndex((line, index) => index > buildChunkStart && /^(?:static )?func /u.test(line));
+assert(followingFunction > buildChunkStart, "bounded build_chunk body required for mutation construction");
+const currentDispatchStatements = currentBuilderLines.slice(buildChunkStart + 1, followingFunction)
+  .flatMap((line) => { const match = /^\t\t(var record_result := _build_record\(record, false, [^\n]+\))$/u.exec(line); return match ? [match[1]] : []; });
+assert(currentDispatchStatements.length === 1, "exactly one current per-record dispatch statement required for mutation construction");
+const currentRecordDispatchStatement = currentDispatchStatements[0];
+
 assert(inputs.runtimeContracts.acceptedWorldBuilderSha256 === "7107dc0789e8ca8ee13d53510293a39b3f64e9a92e0ee81bef7317d90a08a87a", "accepted dispatch provenance is not the reviewed D2 1441 builder");
 assert(inputs.runtimeContracts.currentWorldBuilderSha256 === sha256Bytes(inputs.runtimeContracts.worldBuilderText), "current builder text/hash binding is not exact");
 for (const expectation of [
@@ -925,7 +938,7 @@ expectCompileFailureWithInputs(withWorldBuilderText(swapExactlyOnce(
 
 expectCompileFailureWithInputs(withWorldBuilderText(swapExactlyOnce(
   inputs.runtimeContracts.worldBuilderText,
-  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan)",
+  currentRecordDispatchStatement,
   "NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)",
   "Navy Chapel dispatch fully consumed order",
 )), "Navy Chapel per-record consumption dispatch must precede the fully-consumed assertion");
@@ -953,14 +966,14 @@ let reorderedD21441ConsumedInputs = replaceExactlyOnce(
 );
 reorderedD21441ConsumedInputs = replaceExactlyOnce(
   reorderedD21441ConsumedInputs,
-  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan)",
+  currentRecordDispatchStatement,
   "var d2_1441_consumed := D2_1441_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1441_plan)",
   "D2 1441 consumed order record",
 );
 reorderedD21441ConsumedInputs = replaceExactlyOnce(
   reorderedD21441ConsumedInputs,
   "var chapel_consumed := NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)",
-  "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan)",
+  currentRecordDispatchStatement,
   "D2 1441 consumed order chapel",
 );
 reorderedD21441ConsumedInputs = replaceExactlyOnce(

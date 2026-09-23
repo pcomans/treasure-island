@@ -1,0 +1,21 @@
+{
+  "app": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/export-001/Treasure Island First Playable.app",
+  "authority": "32/213",
+  "base": "fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+  "candidate_export_receipt": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/export-001-execution.json",
+  "canonical_cache_sha256": "f60e0a9e580a3c687d9b4f8bfc27e0866e573be3c2ed6f876089c6baa45b3a25",
+  "planned_world": {
+    "bodies": 500,
+    "meshes": 1287,
+    "rows": 735,
+    "shapes": 667,
+    "surfaces": 1302,
+    "triangles": 183761
+  },
+  "repo": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+  "reused_import_receipt": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/import-001-execution.json",
+  "reused_source_receipt": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/source-component-001-execution.json",
+  "reused_source_result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/source-component-001-result.json",
+  "source_pin_map": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/package-source-pins.json",
+  "source_pin_map_sha256": "1ed47861e43802a4c269b0efd5a19cb91aa62c5c0f60072c3cb3e935231f3aaa"
+}

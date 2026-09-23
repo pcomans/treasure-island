@@ -1,0 +1,68 @@
+{
+  "status": "FILE_READY_PENDING_INDEPENDENT_REVIEW_MATERIALIZATION_AND_ROOT_ENGINE_GO",
+  "at": "2026-09-23T00:00:45.339524+00:00",
+  "base": "fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+  "authority": "32/213",
+  "credit": 0,
+  "frozen_study_authority": "31/213",
+  "units": [
+    "physical-building:w96215670",
+    "physical-building:w96215685"
+  ],
+  "source_root": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/source",
+  "future_candidate": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+  "selected": {
+    "tools/test_facade_recognition_registry.mjs": "f86e9edf1e594fd224894581fa1f9de7697600af7aa1673686b3ad85520fd3da",
+    "tools/build_facade_recognition_registry.mjs": "9958ab36ed20eb6b209e320e153df09bd0c725e660d24546b09f298bd7bc02ef",
+    "game/tests/headless_facade_recognition_registry_contract.gd": "023f2219bb8f7d4450a21e9358be764c0f377ed78ed6020edc6292e6703fb3df",
+    "game/tests/headless_facade_runtime_registry_loader_contract.gd": "d1b21c9ac0b8b589aaba01c3b520332be56bc2c1b1469d8a5f718f332414ead6",
+    "game/scripts/main.gd": "ab904888dd9d4520911eac461e638e7df03ad201aaf2b5c274b2103e85ecf784",
+    "game/scripts/world/world_chunk_builder.gd": "a89a31212fcd181350ab5090e86df7140d8246077871cfae3b69a8c835539e54",
+    "game/scripts/world/facades/gateview_1397_live_replacement.gd": "a906e841e11ad3c421abe208ef19b4ba3f4fb3e1e2c9ef563d609dd565d5fd77",
+    "game/scripts/world/facades/gateview_1397_live_factory.gd": "ce6223bf527c74431dc794bfc9ab7211feabd881e9d080e318a2f712547e4a91",
+    "game/scripts/world/facades/facade_runtime_registry_loader.gd": "ad5ffd28dcd19653c9d32f05e7e4cc33795656db5266042d511309ae77bf32be",
+    "game/scripts/world/facades/bayside_1226_live_factory.gd": "7060cf8a32b12781be8ed52f7056680af838f6d4930fb88a782901db98bef62e",
+    "game/scripts/world/facades/bayside_1226_live_replacement.gd": "d26993a5443fdf4b30477c9f47e96fdc54fdc1f517c5dbaaeb14d3f8b2120c66",
+    "game/resources/facades/facade-runtime-registry.json": "9247d36589c36c948f28d58f2a72002379906850e5b094e2633129a3cb05e2fc",
+    "game/resources/facades/facade-runtime-adapter-contracts.json": "6e76908b51d96afacdd722a0facda82dd43f9a13bea7eb3ddd2dde818eac74aa",
+    "game/resources/facades/gateview_1397_study.json": "97919d0168bab83ff0f7118cf00fb0bbea1eb062c731d2b956de896a1330616a",
+    "game/resources/facades/bayside_1226_study.json": "34fb34bec3fa672277fa081dec042ecf1ee4597f293690a6588f85460ff59da2",
+    "discovery/facades/facade-recognition-validation-report.json": "c19d6fc109d6717e016b570b930cce6312d3e46353d034ec99a8bea67979b17c"
+  },
+  "staged_source_pins_sha256": "2298cc112255d476162ac1a874fc42a6eb47a4d3b3a83008970775f00130db3b",
+  "prospective_source_pins_sha256": "26151e515fd26a7491beec1376666e82a36534e888c839ad4c909fb20b4ac793",
+  "file_checks_sha256": "60877ac9411859a7ad680fd61252721ab97307b80171ac11f5b674af2d188174",
+  "argv": [
+    "/usr/bin/env",
+    "TI_1397_1226_ENGINE_GO=fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+    "/usr/bin/python3",
+    "-B",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/run-reviewed-chain.py",
+    "import-001",
+    "focused-001",
+    "native-registry-001",
+    "native-loader-001"
+  ],
+  "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001",
+  "pending": [
+    "independent source readiness",
+    "root-authorized isolated materialization and actual source-map verification",
+    "separate exact root engine GO",
+    "actual source/live equivalence and registry/loader results",
+    "candidate package,role6,seventh"
+  ],
+  "actual_nonengine": {
+    "status": "terminal",
+    "exit_code": 0,
+    "engine": false,
+    "receipts": {
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/compiler-001-execution.json": "ed6ad7a5746df3a8844d3c1e399c3992782f9c2c742cfb7a6455786f9c7161e0",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/node-registry-001-execution.json": "dda9e4f2a43f413ef584f68480252c9030fd263c41ca602410ec653260940e19",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/node-loader-001-execution.json": "c4acad31b02f765f2f72de8654006b5f3c7545f0f73e7b258805892ee7aa0c8d"
+    },
+    "authority": "32/213",
+    "credit": 0,
+    "registry_sha256": "9247d36589c36c948f28d58f2a72002379906850e5b094e2633129a3cb05e2fc",
+    "adapter_contract_sha256": "6e76908b51d96afacdd722a0facda82dd43f9a13bea7eb3ddd2dde818eac74aa"
+  }
+}

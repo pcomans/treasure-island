@@ -1,0 +1,89 @@
+{
+  "focused-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+      "--script",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/focused_live_contract.gd"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+    "dependent_inputs": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/import-001-execution.json"
+    ],
+    "prerequisites": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/import-001-execution.json"
+    ],
+    "purpose": "Shared1397+1226 live-source integration only; current32 authority and all213 unit records unchanged. No credit/package acceptance.",
+    "result": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/focused-001-result.json",
+    "preparation_prerequisites": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/source-preparation.json"
+    ]
+  },
+  "import-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--editor",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+      "--quit"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+    "dependent_inputs": [],
+    "prerequisites": [],
+    "purpose": "Shared1397+1226 live-source integration only; current32 authority and all213 unit records unchanged. No credit/package acceptance.",
+    "preparation_prerequisites": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/source-preparation.json"
+    ]
+  },
+  "native-registry-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+      "--script",
+      "res://game/tests/headless_facade_recognition_registry_contract.gd"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+    "dependent_inputs": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/import-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/focused-001-execution.json"
+    ],
+    "prerequisites": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/import-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/focused-001-execution.json"
+    ],
+    "preparation_prerequisites": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/source-preparation.json"
+    ],
+    "purpose": "Shared1397+1226 live-source integration only; current32 authority and all213 unit records unchanged. No credit/package acceptance."
+  },
+  "native-loader-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+      "--script",
+      "res://game/tests/headless_facade_runtime_registry_loader_contract.gd"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+    "dependent_inputs": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/import-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/focused-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/native-registry-001-execution.json"
+    ],
+    "prerequisites": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/import-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/focused-001-execution.json",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/native-registry-001-execution.json"
+    ],
+    "preparation_prerequisites": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/source-preparation.json"
+    ],
+    "purpose": "Shared1397+1226 live-source integration only; current32 authority and all213 unit records unchanged. No credit/package acceptance."
+  }
+}

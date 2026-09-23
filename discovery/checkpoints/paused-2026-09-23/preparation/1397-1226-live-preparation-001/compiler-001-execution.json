@@ -1,0 +1,13 @@
+{
+  "argv": [
+    "/opt/homebrew/bin/node",
+    "tools/build_facade_recognition_registry.mjs",
+    "--write"
+  ],
+  "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/source",
+  "started_at": "2026-09-22T23:56:55.762728+00:00",
+  "exit_code": 0,
+  "elapsed_seconds": 1.3982165418565273,
+  "engine": false,
+  "log_sha256": "e963e13b36dae7a574ef46fc23f9743fd7d51b5e1e8a66e4db7ae4620978d40d"
+}

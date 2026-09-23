@@ -1,0 +1,13 @@
+{
+  "measured_world": {
+    "bodies": 496,
+    "meshes": 1260,
+    "rows": 735,
+    "shapes": 646,
+    "surfaces": 1275,
+    "triangles": 176165
+  },
+  "authority": "32/213",
+  "producer": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/baseline-world.json",
+  "producer_sha256": "b245e5f083dc52abf06d83b381e874beb5a44c525db641ddde1422f18e0d8310"
+}

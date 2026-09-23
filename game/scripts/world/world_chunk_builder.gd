@@ -30,6 +30,8 @@ const NORTHPOINT_1232_LIVE_REPLACEMENT := preload("res://game/scripts/world/faca
 const MARINER_1221_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/mariner_1221_live_replacement.gd")
 const NORTHPOINT_1241_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northpoint_1241_live_replacement.gd")
 const NORTHPOINT_1240_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northpoint_1240_live_replacement.gd")
+const GATEVIEW_1397_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/gateview_1397_live_replacement.gd")
+const BAYSIDE_1226_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/bayside_1226_live_replacement.gd")
 const BAYSIDE_1215_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/bayside_1215_live_replacement.gd")
 const FIRE_STATION48_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/fire_station48_live_replacement.gd")
 const D5_1317_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1317_gateview_live_replacement.gd")
@@ -227,6 +229,14 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	if not bool(northpoint_1240_pair.get("ok", false)):
 		chunk_root.free()
 		return northpoint_1240_pair
+	var gateview_1397_pair := GATEVIEW_1397_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(gateview_1397_pair.get("ok", false)):
+		chunk_root.free()
+		return gateview_1397_pair
+	var bayside_1226_pair := BAYSIDE_1226_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(bayside_1226_pair.get("ok", false)):
+		chunk_root.free()
+		return bayside_1226_pair
 	var bayside_1215_pair := BAYSIDE_1215_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
 	if not bool(bayside_1215_pair.get("ok", false)):
 		chunk_root.free()
@@ -375,6 +385,18 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		chunk_root.free()
 		return northpoint_1240_plan
 	rollback_plans.append({"adapter": NORTHPOINT_1240_LIVE_REPLACEMENT, "plan": northpoint_1240_plan})
+	var gateview_1397_plan := GATEVIEW_1397_LIVE_REPLACEMENT.build_chunk_plan(gateview_1397_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(gateview_1397_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return gateview_1397_plan
+	rollback_plans.append({"adapter": GATEVIEW_1397_LIVE_REPLACEMENT, "plan": gateview_1397_plan})
+	var bayside_1226_plan := BAYSIDE_1226_LIVE_REPLACEMENT.build_chunk_plan(bayside_1226_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(bayside_1226_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return bayside_1226_plan
+	rollback_plans.append({"adapter": BAYSIDE_1226_LIVE_REPLACEMENT, "plan": bayside_1226_plan})
 	var bayside_1215_plan := BAYSIDE_1215_LIVE_REPLACEMENT.build_chunk_plan(bayside_1215_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
 	if not bool(bayside_1215_plan.get("ok", false)):
 		_free_unconsumed_plans(rollback_plans)
@@ -398,7 +420,7 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			_free_unconsumed_plans(rollback_plans)
 			chunk_root.free()
 			return {"ok": false, "code": "builder_parent", "message": "Missing world category parent %s." % parent_key, "source_keys": record.source_keys}
-		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan)
+		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)
 		if not record_result.ok:
 			_free_unconsumed_plans(rollback_plans)
 			chunk_root.free()
@@ -440,8 +462,10 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	var mariner_1221_consumed := MARINER_1221_LIVE_REPLACEMENT.plan_was_fully_consumed(mariner_1221_plan)
 	var northpoint_1241_consumed := NORTHPOINT_1241_LIVE_REPLACEMENT.plan_was_fully_consumed(northpoint_1241_plan)
 	var northpoint_1240_consumed := NORTHPOINT_1240_LIVE_REPLACEMENT.plan_was_fully_consumed(northpoint_1240_plan)
+	var gateview_1397_consumed := GATEVIEW_1397_LIVE_REPLACEMENT.plan_was_fully_consumed(gateview_1397_plan)
+	var bayside_1226_consumed := BAYSIDE_1226_LIVE_REPLACEMENT.plan_was_fully_consumed(bayside_1226_plan)
 	var bayside_1215_consumed := BAYSIDE_1215_LIVE_REPLACEMENT.plan_was_fully_consumed(bayside_1215_plan)
-	if not chapel_consumed or not d2_1441_consumed or not d2_1439_consumed or not d2_1444_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed or not fs48_consumed or not maceo_consumed or not northern_canopy_consumed or not northpoint_1238_consumed or not mariner_1206_consumed or not mariner_1219_consumed or not mariner_1212_consumed or not bayside_1220_consumed or not northpoint_1239_consumed or not bayside_1222_consumed or not northpoint_1227_consumed or not mariner_1202_consumed or not northpoint_1234_consumed or not bayside_1215_consumed or not northpoint_1232_consumed or not northpoint_1241_consumed or not mariner_1221_consumed or not northpoint_1240_consumed:
+	if not chapel_consumed or not d2_1441_consumed or not d2_1439_consumed or not d2_1444_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed or not fs48_consumed or not maceo_consumed or not northern_canopy_consumed or not northpoint_1238_consumed or not mariner_1206_consumed or not mariner_1219_consumed or not mariner_1212_consumed or not bayside_1220_consumed or not northpoint_1239_consumed or not bayside_1222_consumed or not northpoint_1227_consumed or not mariner_1202_consumed or not northpoint_1234_consumed or not bayside_1215_consumed or not northpoint_1232_consumed or not northpoint_1241_consumed or not mariner_1221_consumed or not northpoint_1240_consumed or not gateview_1397_consumed or not bayside_1226_consumed:
 		_free_unconsumed_plans(rollback_plans)
 		chunk_root.free()
 		if not chapel_consumed:
@@ -490,6 +514,10 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			return {"ok": false, "code": "northpoint_1241_unconsumed_pair", "message": "The supplied 1241 pair was not consumed exactly once.", "source_keys": ["w96215674"]}
 		if not northpoint_1240_consumed:
 			return {"ok": false, "code": "northpoint_1240_unconsumed_pair", "message": "The supplied 1240 pair was not consumed exactly once.", "source_keys": ["w96215688"]}
+		if not gateview_1397_consumed:
+			return {"ok": false, "code": "gateview_1397_unconsumed_pair", "message": "The supplied 1397 pair was not consumed exactly once.", "source_keys": ["w96215670"]}
+		if not bayside_1226_consumed:
+			return {"ok": false, "code": "bayside_1226_unconsumed_pair", "message": "The supplied 1226 pair was not consumed exactly once.", "source_keys": ["w96215685"]}
 		if not bayside_1215_consumed:
 			return {"ok": false, "code": "bayside_1215_unconsumed_pair", "message": "The supplied 1215 pair was not consumed exactly once.", "source_keys": ["w96215666"]}
 		return {"ok": false, "code": "mariner_1202_unconsumed_pair", "message": "The supplied 1202 pair was not consumed exactly once.", "source_keys": ["w96215651"]}
@@ -550,7 +578,7 @@ func build_context(context: Dictionary, context_parents: Dictionary) -> Dictiona
 	return report
 
 
-func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}, d2_1439_plan: Dictionary = {}, d2_1444_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}, maceo_plan: Dictionary = {}, northern_canopy_plan: Dictionary = {}, northpoint_1238_plan: Dictionary = {}, mariner_1206_plan: Dictionary = {}, mariner_1219_plan: Dictionary = {}, mariner_1212_plan: Dictionary = {}, bayside_1220_plan: Dictionary = {}, northpoint_1239_plan: Dictionary = {}, bayside_1222_plan: Dictionary = {}, northpoint_1227_plan: Dictionary = {}, mariner_1202_plan: Dictionary = {}, northpoint_1234_plan: Dictionary = {}, bayside_1215_plan: Dictionary = {}, northpoint_1232_plan: Dictionary = {}, northpoint_1241_plan: Dictionary = {}, mariner_1221_plan: Dictionary = {}, northpoint_1240_plan: Dictionary = {}) -> Dictionary:
+func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}, d2_1439_plan: Dictionary = {}, d2_1444_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}, maceo_plan: Dictionary = {}, northern_canopy_plan: Dictionary = {}, northpoint_1238_plan: Dictionary = {}, mariner_1206_plan: Dictionary = {}, mariner_1219_plan: Dictionary = {}, mariner_1212_plan: Dictionary = {}, bayside_1220_plan: Dictionary = {}, northpoint_1239_plan: Dictionary = {}, bayside_1222_plan: Dictionary = {}, northpoint_1227_plan: Dictionary = {}, mariner_1202_plan: Dictionary = {}, northpoint_1234_plan: Dictionary = {}, bayside_1215_plan: Dictionary = {}, northpoint_1232_plan: Dictionary = {}, northpoint_1241_plan: Dictionary = {}, mariner_1221_plan: Dictionary = {}, northpoint_1240_plan: Dictionary = {}, gateview_1397_plan: Dictionary = {}, bayside_1226_plan: Dictionary = {}) -> Dictionary:
 	# Building 1's generated 20 m slab and terrain-level tower are source-valid
 	# horizontal placeholders but visually and physically wrong in the vertical
 	# dimension.  Intercept all four independently keyed records before generic
@@ -627,6 +655,10 @@ func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary
 		return NORTHPOINT_1241_LIVE_REPLACEMENT.consume_record(record, northpoint_1241_plan)
 	if not is_context and NORTHPOINT_1240_LIVE_REPLACEMENT.claims_record(record):
 		return NORTHPOINT_1240_LIVE_REPLACEMENT.consume_record(record, northpoint_1240_plan)
+	if not is_context and GATEVIEW_1397_LIVE_REPLACEMENT.claims_record(record):
+		return GATEVIEW_1397_LIVE_REPLACEMENT.consume_record(record, gateview_1397_plan)
+	if not is_context and BAYSIDE_1226_LIVE_REPLACEMENT.claims_record(record):
+		return BAYSIDE_1226_LIVE_REPLACEMENT.consume_record(record, bayside_1226_plan)
 	if not is_context and BAYSIDE_1215_LIVE_REPLACEMENT.claims_record(record):
 		return BAYSIDE_1215_LIVE_REPLACEMENT.consume_record(record, bayside_1215_plan)
 	return _build_unpaired_record(record, is_context)

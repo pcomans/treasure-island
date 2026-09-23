@@ -1,0 +1,71 @@
+{
+  "app_binding": null,
+  "app_binding_document_sha256": null,
+  "app_file_pins": null,
+  "app_hash_semantics": null,
+  "candidate_app_locator": null,
+  "candidate_app_relative_path": null,
+  "candidate_app_relative_path_base": null,
+  "candidate_authority": "32/213",
+  "candidate_repository": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+  "capture_time_authority": "31/213",
+  "coverage_split": null,
+  "image_tree_sha256": "612b7acc1e2a7f81abe8c6a4939c484861766ab2a22678c5bffe17a1659c178d",
+  "independent_check": null,
+  "independent_engine_reexecution": false,
+  "independent_exact_app_decision": null,
+  "independent_exact_app_review_pending": true,
+  "independent_review": null,
+  "limits": "Seventh independent per-unit attestation pending; all original finite/protected/source-history limits remain exact. Role6 remains null until actual shared app and independent exact-app decision.",
+  "original_five_role_limits": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-001/units/1397/candidate-closure.json",
+    "sha256": "1855826cb93169759127c51c86038b69b3b479f42d96531e30a0f22b670f887f"
+  },
+  "owner_decision": "PENDING_ACTUAL_PACKAGE",
+  "owner_decision_scope": "One shared app, source ordinary world + mounted components + signed main smoke; no new visual/motion proof.",
+  "owner_logs": null,
+  "owner_receipts": null,
+  "pck_sha256": null,
+  "physical_unit_id": "physical-building:w96215670",
+  "prepared_five_role_closure_sha256": "1855826cb93169759127c51c86038b69b3b479f42d96531e30a0f22b670f887f",
+  "recognition_credit_granted": false,
+  "repair_lineage": [
+    {
+      "bytes": 2018061,
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/focused-001-execution.json",
+      "path_base": "/",
+      "sha256": "7d23672808a8eef52cd9b4321ce7f674f3316a5af17331ce8ae034ebfcbbcc66"
+    },
+    {
+      "bytes": 3437,
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/independent-actual-diagnosis-001/ACTUAL-HOLD.md",
+      "path_base": "/",
+      "sha256": "e4a79b0ba88005b07e6ac8942545740916d835a0990fb58fdefa2d39382c9f93"
+    },
+    {
+      "bytes": 9064,
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-continuation-001/helper.diff",
+      "path_base": "/",
+      "sha256": "0fff2398c621aed75b3d77bca371f81c5415abfe6c9464f3b024b5a9ba72800e"
+    },
+    {
+      "bytes": 3595,
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-continuation-001/independent-actual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "e53795ac0f36c45bceeb74c64215b2e0c2fa5a749eaa806ed5704969e6bca335"
+    },
+    {
+      "bytes": 2118,
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/main-smoke-proposal.diff",
+      "path_base": "/",
+      "sha256": "9034b4110420223cf15e4cdb0062ba14c3d7fae908b05996f5238c12ac9a4eac"
+    }
+  ],
+  "schema_version": "ti.d5-batch-owner-package-verification/1",
+  "signature_privacy_binding": null,
+  "source_world": null,
+  "terminal_slot_releases": null,
+  "tree_document_sha256": "671870d96b968ec57719b9da2ed3dea5a92437dcf0e732f398e041bb340069b4",
+  "unit_acceptance_granted": false,
+  "unit_actual_attachment": null
+}

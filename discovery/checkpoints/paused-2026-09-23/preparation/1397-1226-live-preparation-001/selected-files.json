@@ -1,0 +1,18 @@
+{
+  "tools/test_facade_recognition_registry.mjs": "f86e9edf1e594fd224894581fa1f9de7697600af7aa1673686b3ad85520fd3da",
+  "tools/build_facade_recognition_registry.mjs": "9958ab36ed20eb6b209e320e153df09bd0c725e660d24546b09f298bd7bc02ef",
+  "game/tests/headless_facade_recognition_registry_contract.gd": "023f2219bb8f7d4450a21e9358be764c0f377ed78ed6020edc6292e6703fb3df",
+  "game/tests/headless_facade_runtime_registry_loader_contract.gd": "d1b21c9ac0b8b589aaba01c3b520332be56bc2c1b1469d8a5f718f332414ead6",
+  "game/scripts/main.gd": "ab904888dd9d4520911eac461e638e7df03ad201aaf2b5c274b2103e85ecf784",
+  "game/scripts/world/world_chunk_builder.gd": "a89a31212fcd181350ab5090e86df7140d8246077871cfae3b69a8c835539e54",
+  "game/scripts/world/facades/gateview_1397_live_replacement.gd": "a906e841e11ad3c421abe208ef19b4ba3f4fb3e1e2c9ef563d609dd565d5fd77",
+  "game/scripts/world/facades/gateview_1397_live_factory.gd": "ce6223bf527c74431dc794bfc9ab7211feabd881e9d080e318a2f712547e4a91",
+  "game/scripts/world/facades/facade_runtime_registry_loader.gd": "ad5ffd28dcd19653c9d32f05e7e4cc33795656db5266042d511309ae77bf32be",
+  "game/scripts/world/facades/bayside_1226_live_factory.gd": "7060cf8a32b12781be8ed52f7056680af838f6d4930fb88a782901db98bef62e",
+  "game/scripts/world/facades/bayside_1226_live_replacement.gd": "d26993a5443fdf4b30477c9f47e96fdc54fdc1f517c5dbaaeb14d3f8b2120c66",
+  "game/resources/facades/facade-runtime-registry.json": "9247d36589c36c948f28d58f2a72002379906850e5b094e2633129a3cb05e2fc",
+  "game/resources/facades/facade-runtime-adapter-contracts.json": "6e76908b51d96afacdd722a0facda82dd43f9a13bea7eb3ddd2dde818eac74aa",
+  "game/resources/facades/gateview_1397_study.json": "97919d0168bab83ff0f7118cf00fb0bbea1eb062c731d2b956de896a1330616a",
+  "game/resources/facades/bayside_1226_study.json": "34fb34bec3fa672277fa081dec042ecf1ee4597f293690a6588f85460ff59da2",
+  "discovery/facades/facade-recognition-validation-report.json": "c19d6fc109d6717e016b570b930cce6312d3e46353d034ec99a8bea67979b17c"
+}

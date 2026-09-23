@@ -1,0 +1,47 @@
+{
+  "status": "STATIC_PROPOSAL_PENDING_ACCEPTANCES_NOT_GENERATED_AUTHORITY",
+  "proposed_counts": {
+    "recognition_units": 213,
+    "direct_wall_receivers": 214,
+    "source_record_memberships": 215,
+    "reference_recognizable": 34,
+    "legacy_adapters": 9,
+    "active_adapters": 33,
+    "runtime_adapters": 42,
+    "package_safe": 36,
+    "disabled": 6,
+    "projection_descriptors": 13,
+    "projection_occurrences": 13
+  },
+  "world": {
+    "records": 735,
+    "meshes": 1287,
+    "surfaces": 1302,
+    "triangles": 183761,
+    "bodies": 500,
+    "shapes": 667
+  },
+  "order": [
+    "1397",
+    "1226"
+  ],
+  "final_current_topology_owner": "1226",
+  "versions": {
+    "catalog": "ti.facade-recognition-catalog/33",
+    "registry": "ti.facade-runtime-registry/33",
+    "contracts": "ti.facade-runtime-adapter-contracts/32",
+    "loader": "ti.facade-runtime-registry-loader/32",
+    "compiler": "1.32.0"
+  },
+  "consumers": {
+    "catalog_and_schema": "Append both real accepted unit records/adapters; preserve prior32 and 213 inventory; 33 active/42 total. Update exact bounds/schema versions.",
+    "compiler": "Append both exact source/config/behavior/acceptance definitions; set final1226 current topology, preserve historical1240 and1397 source scope; bind actual seven packet hashes, source world and builder.",
+    "production_loader": "Extend both target branches/exact lists/receipt maps/behavior validators/plan dispatch and current D5 builder constants; preserve historical D1/D2 constants and B1/HUMAN.",
+    "Node_registry_and_loader_fixtures": "Extend both exact expected definitions/IDs/target mutations; 34 recognition,42plans,36safe,6disabled; update invoked check-ID/error strings as well as numeric declarations.",
+    "native_registry_and_loader_fixtures": "Same exact pair/counts in actually invoked consumers; retain negative-control bodies and all predicates.",
+    "all_scanners": "Compiler acceptedAuthorityRuntimeDependencies (both Node fixtures), native registry, production/native loader: adapt both exact wrapper paths/shipping hashes and exact binary/godot format probes together, preserving hash/privacy/recursion checks.",
+    "main_and_package": "Bind all eight invoked scalars and WORLD to accepted actual producers; both real target attachments.",
+    "current_package_binder": "Reuse corrected batch-neutral002 body; authority from pinned settings equals pinned successful source-component authority; scope from reviewed source-component scope. Preserve credit_granted false and existing schema."
+  },
+  "binding_rule": "Actual receipt/hash/compiler outputs only after they exist; no blind opaque hash replacement; no donor receipts copied."
+}

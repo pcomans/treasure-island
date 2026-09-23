@@ -1,0 +1,39 @@
+{
+  "schema_version": "ti.d5-fidelity-candidate-closure/1",
+  "status": "FIRST_FIVE_PREPARED_PENDING_INDEPENDENT_PACKET_LIVE_PACKAGE_SEVENTH",
+  "physical_unit_id": "physical-building:w96215685",
+  "candidate_authority": "32/213",
+  "preparation_authority_context": "32/213",
+  "capture_time_authority": "31/213",
+  "new_unit_candidate": true,
+  "recognition_credit_granted": false,
+  "prospective_numerator_effect_after_separate_acceptance": 1,
+  "seven_acceptance_bindings_prepared": {
+    "evidence_manifest_sha256": "d22c4ea98b753531685b40ff1f05c3087ee029bb4fc78cbf0c106fff4e0189b5",
+    "motion_telemetry_manifest_sha256": "a188d596b298c6ed5d45552aae62cf8ea90b1a234ed00c52a7e669b6f75760d7",
+    "visual_motion_manifest_sha256": "9c7620c3980d6904b5d11d8de53e4f37147814e3da30c0c1b0bd9ae94f25fbd1",
+    "package_verification_receipt_sha256": null,
+    "evidence_tree_sha256": "7f71cadbe18c72b605a1eb624fe817427dd2d7454fb5f951abcb26563b2b3774",
+    "mechanical_review_receipt_sha256": "6a60ae2b4d8f78e64b8bcb7b8e6af47aa178fca74a7ad5bf0119b2bf058e3938",
+    "review_receipt_sha256": null
+  },
+  "image_tree_sha256": "7f71cadbe18c72b605a1eb624fe817427dd2d7454fb5f951abcb26563b2b3774",
+  "evidence_tree_document_sha256": "b7ea117eaacbc5146f2ae4d1079087788758d086d0e32fe9c12c29fa3ab54553",
+  "package_verification_pending": true,
+  "seventh_attestation_pending": true,
+  "actual_app_sha256": null,
+  "actual_pck_sha256": null,
+  "current_source_attachment": "PENDING",
+  "limits": [
+    "Physical1226 Bayside source w96215685; March2025 F street-view first-hit association, not nearby address UI identity.",
+    "H capture source at915f8a2595cb3184fba7008b97ff73f9bc028117 authority31/213; prospective live baseline fdfc100704200e6570b654a4e6a4fccc9a1a61be authority32/213.",
+    "Original1042-frame movement run remains raw HOLD.925 retained rows qualify under separately authorized DERIVED rule removing only incidental retreat land_rows>0; unchanged4mm and all physical predicates.",
+    "Later180-frame spray-only run supplies three actual callbacks with independent grounded setups; no single all-PASS original run, movement replay or continuous journey between setups.",
+    "Two full AVIs external; nine exact payload samples from each. Sparse samples do not establish continuous playback or draw/physics parity; terminal blue frames provide no endpoint evidence.",
+    "ObservedLowerWall placed existing marker; BlueOpaqueGlazing and PaleCompleteTrim rejected; original collision receiver and10mm rendered siding plane remain distinct.",
+    "Roof callback, roof landing/walk and jetpack unperformed; upper siding blocked/infeasible at this grounded scope.",
+    "Tree/canopy-hidden faces and roof backs protected; no neighbor canopy/ramp ownership inference; dimensions/cadence production inference.",
+    "Current live equivalence, package role6 and seventh attestation pending; no recognition credit."
+  ],
+  "actual_app_file_pins": null
+}

@@ -1,0 +1,3 @@
+# RETRO — next_family_source_review / shared live actual load failure
+
+The readiness review checked comparison behavior and pin closure but missed the external helper's duplicate `class_name WorldChunkBuilder`. Existing LEARNINGS81/85 identified the relevant external-registration boundary; I should have applied it to this copied builder. Actual import success did not exercise the external focused dependency. Diagnose the first fatal load line before discussing geometry: focused never ran. Recommend the single declaration removal in a preserved successor, explicit existing Script construction and exact helper-delta provenance; keep production and successful cache/UIDs. No engine replay, broad audit or new framework.

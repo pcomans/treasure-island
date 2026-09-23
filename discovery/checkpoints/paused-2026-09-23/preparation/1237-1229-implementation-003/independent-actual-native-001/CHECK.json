@@ -1,0 +1,270 @@
+{
+  "pins_match": true,
+  "units": {
+    "1237": {
+      "result_ok": true,
+      "failures": [],
+      "world": {
+        "rows": 735,
+        "meshes": 1260,
+        "surfaces": 1275,
+        "triangles": 176165,
+        "bodies": 496,
+        "shapes": 646
+      },
+      "source_surface_exact": true,
+      "channels_equal": true,
+      "channel_count": 26,
+      "material_equal": true,
+      "cameras": [
+        {
+          "id": "01-whole-front-baseline",
+          "floor": true,
+          "foot_minus_ray_land_m": 0.00019526481628018288,
+          "player_settle_exact": true,
+          "camera_clearance_recomputed": true,
+          "camera_above": true,
+          "camera_land_identity": true,
+          "segment_clear_recomputed": true,
+          "fov": 70.0,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "first_solid_owner": true,
+          "public_framing": true,
+          "junction_framing": null
+        },
+        {
+          "id": "02-whole-front-candidate",
+          "floor": true,
+          "foot_minus_ray_land_m": 0.00019526481628018288,
+          "player_settle_exact": true,
+          "camera_clearance_recomputed": true,
+          "camera_above": true,
+          "camera_land_identity": true,
+          "segment_clear_recomputed": true,
+          "fov": 70.0,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "first_solid_owner": true,
+          "public_framing": true,
+          "junction_framing": null
+        },
+        {
+          "id": "03-roof-entry-candidate",
+          "floor": true,
+          "foot_minus_ray_land_m": 0.0001952648162797388,
+          "player_settle_exact": true,
+          "camera_clearance_recomputed": true,
+          "camera_above": true,
+          "camera_land_identity": true,
+          "segment_clear_recomputed": true,
+          "fov": 70.0,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "first_solid_owner": true,
+          "public_framing": null,
+          "junction_framing": null
+        },
+        {
+          "id": "04-door-path-footway-junction",
+          "floor": true,
+          "foot_minus_ray_land_m": 0.00045156478882013573,
+          "player_settle_exact": true,
+          "camera_clearance_recomputed": true,
+          "camera_above": true,
+          "camera_land_identity": true,
+          "segment_clear_recomputed": true,
+          "fov": 70.0,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "first_solid_owner": true,
+          "public_framing": null,
+          "junction_framing": true
+        }
+      ],
+      "images": [
+        {
+          "sha256": "ab10ac218a35cda450d5ef311f9fe494ec2712e95e04e2946bef598c04b477ee",
+          "hash_match": true,
+          "dimensions": [
+            1440,
+            900
+          ]
+        },
+        {
+          "sha256": "91bd392895c5bee8033ac24273043f301a7ee185de7beede87c35f3fc9e9eb3e",
+          "hash_match": true,
+          "dimensions": [
+            1440,
+            900
+          ]
+        },
+        {
+          "sha256": "fd34fe021078ae2a74af58eacf2245fea19d9735f861317dfe4abbd5300e07e1",
+          "hash_match": true,
+          "dimensions": [
+            1440,
+            900
+          ]
+        },
+        {
+          "sha256": "f1eaf5af3552904e80cfab7af9e94a6cf72f8e2c19a593e5d8477a59d932918b",
+          "hash_match": true,
+          "dimensions": [
+            1440,
+            900
+          ]
+        }
+      ],
+      "route_rows": 6,
+      "route_all_ok": true,
+      "receipt": {
+        "pid": 75866,
+        "exit_code": 0,
+        "pins_unchanged": true,
+        "log_errors": [],
+        "warnings": [],
+        "result_ok": true
+      },
+      "result_hash_match": true,
+      "log_hash_match": true,
+      "pid_absent_now": true,
+      "samples": 16,
+      "walk_attempts": 0,
+      "recoveries": 0
+    },
+    "1229": {
+      "result_ok": true,
+      "failures": [],
+      "world": {
+        "rows": 735,
+        "meshes": 1260,
+        "surfaces": 1275,
+        "triangles": 176165,
+        "bodies": 496,
+        "shapes": 646
+      },
+      "source_surface_exact": true,
+      "channels_equal": true,
+      "channel_count": 26,
+      "material_equal": true,
+      "cameras": [
+        {
+          "id": "01-whole-front-baseline",
+          "floor": true,
+          "foot_minus_ray_land_m": 0.00019526481628018288,
+          "player_settle_exact": true,
+          "camera_clearance_recomputed": true,
+          "camera_above": true,
+          "camera_land_identity": true,
+          "segment_clear_recomputed": true,
+          "fov": 70.0,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "first_solid_owner": true,
+          "public_framing": true,
+          "junction_framing": null
+        },
+        {
+          "id": "02-whole-front-candidate",
+          "floor": true,
+          "foot_minus_ray_land_m": 0.00019526481628018288,
+          "player_settle_exact": true,
+          "camera_clearance_recomputed": true,
+          "camera_above": true,
+          "camera_land_identity": true,
+          "segment_clear_recomputed": true,
+          "fov": 70.0,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "first_solid_owner": true,
+          "public_framing": true,
+          "junction_framing": null
+        },
+        {
+          "id": "03-roof-entry-candidate",
+          "floor": true,
+          "foot_minus_ray_land_m": 0.0001952648162797388,
+          "player_settle_exact": true,
+          "camera_clearance_recomputed": true,
+          "camera_above": true,
+          "camera_land_identity": true,
+          "segment_clear_recomputed": true,
+          "fov": 70.0,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "first_solid_owner": true,
+          "public_framing": null,
+          "junction_framing": null
+        },
+        {
+          "id": "04-door-path-footway-junction",
+          "floor": true,
+          "foot_minus_ray_land_m": 0.00019526481628995285,
+          "player_settle_exact": true,
+          "camera_clearance_recomputed": true,
+          "camera_above": true,
+          "camera_land_identity": true,
+          "segment_clear_recomputed": true,
+          "fov": 70.0,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "first_solid_owner": true,
+          "public_framing": null,
+          "junction_framing": true
+        }
+      ],
+      "images": [
+        {
+          "sha256": "6bc336da3a226726ad4e26c2f52d0eb362b394994dca2db393d48130f96223d3",
+          "hash_match": true,
+          "dimensions": [
+            1440,
+            900
+          ]
+        },
+        {
+          "sha256": "aea21690af1dd0c37660be3cdd82d26871d5f95492beee611f1408f95eeece65",
+          "hash_match": true,
+          "dimensions": [
+            1440,
+            900
+          ]
+        },
+        {
+          "sha256": "e8664100746191ffdb42f685cfa746f2643162c1449b325fefc973e9c38f99a7",
+          "hash_match": true,
+          "dimensions": [
+            1440,
+            900
+          ]
+        },
+        {
+          "sha256": "cb6270630c6ebe2e81137c48e31af2a0d78ff0d7077745b0ca79b55b9968a1b8",
+          "hash_match": true,
+          "dimensions": [
+            1440,
+            900
+          ]
+        }
+      ],
+      "route_rows": 6,
+      "route_all_ok": true,
+      "receipt": {
+        "pid": 76021,
+        "exit_code": 0,
+        "pins_unchanged": true,
+        "log_errors": [],
+        "warnings": [],
+        "result_ok": true
+      },
+      "result_hash_match": true,
+      "log_hash_match": true,
+      "pid_absent_now": true,
+      "samples": 16,
+      "walk_attempts": 0,
+      "recoveries": 0
+    }
+  },
+  "import_outputs_match": true
+}

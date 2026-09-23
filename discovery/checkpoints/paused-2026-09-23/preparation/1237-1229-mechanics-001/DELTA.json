@@ -1,0 +1,155 @@
+{
+  "donor": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001",
+  "units": {
+    "1237": {
+      "routes": 4,
+      "sprays": 3,
+      "physical_rows_max": 1181,
+      "detail_shapes": 9,
+      "window_role": "BlueOpaqueGlazing",
+      "source_key": "w96665904",
+      "route_distances_m": [
+        {
+          "id": "near-2-door-1",
+          "start_depth_m": 11.5,
+          "stop_depth_m": 0.47009014713188907,
+          "approach_limit_frames": 216,
+          "retreat_segments": [
+            {
+              "actions": [
+                "move_back"
+              ],
+              "input_frames": 46
+            },
+            {
+              "actions": [
+                "move_back",
+                "run"
+              ],
+              "input_frames": 24
+            }
+          ]
+        },
+        {
+          "id": "near-2-door-2",
+          "start_depth_m": 11.0,
+          "stop_depth_m": 0.4701060770179795,
+          "approach_limit_frames": 208,
+          "retreat_segments": [
+            {
+              "actions": [
+                "move_back"
+              ],
+              "input_frames": 46
+            },
+            {
+              "actions": [
+                "move_back",
+                "run"
+              ],
+              "input_frames": 22
+            }
+          ]
+        },
+        {
+          "id": "near-3-door-1",
+          "start_depth_m": 11.0,
+          "stop_depth_m": 0.47008228673152785,
+          "approach_limit_frames": 208,
+          "retreat_segments": [
+            {
+              "actions": [
+                "move_back"
+              ],
+              "input_frames": 46
+            },
+            {
+              "actions": [
+                "move_back",
+                "run"
+              ],
+              "input_frames": 22
+            }
+          ]
+        },
+        {
+          "id": "screen",
+          "start_depth_m": 3.5999999999999996,
+          "stop_depth_m": 1.6151126054034652,
+          "approach_limit_frames": 80,
+          "retreat_segments": [
+            {
+              "actions": [
+                "move_back"
+              ],
+              "input_frames": 23
+            }
+          ]
+        }
+      ]
+    },
+    "1229": {
+      "routes": 2,
+      "sprays": 3,
+      "physical_rows_max": 780,
+      "detail_shapes": 9,
+      "window_role": "DarkOpaqueGlazing",
+      "source_key": "w96665911",
+      "route_distances_m": [
+        {
+          "id": "near-2-door-1",
+          "start_depth_m": 14.25,
+          "stop_depth_m": 0.4700704781738053,
+          "approach_limit_frames": 257,
+          "retreat_segments": [
+            {
+              "actions": [
+                "move_back"
+              ],
+              "input_frames": 46
+            },
+            {
+              "actions": [
+                "move_back",
+                "run"
+              ],
+              "input_frames": 31
+            }
+          ]
+        },
+        {
+          "id": "near-2-door-2",
+          "start_depth_m": 13.75,
+          "stop_depth_m": 0.4700773233291407,
+          "approach_limit_frames": 250,
+          "retreat_segments": [
+            {
+              "actions": [
+                "move_back"
+              ],
+              "input_frames": 46
+            },
+            {
+              "actions": [
+                "move_back",
+                "run"
+              ],
+              "input_frames": 30
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "intentional_predicate_change": "Only incidental retreat land_rows>0 event-count assertion removed; counts still emitted. Full per-row geometric LAND support, wrong-support identity, camera, corridor, complete route, destination and natural brake retained.",
+  "retained_independent_support_criterion_m": 0.004,
+  "stock": {
+    "walk": 4,
+    "run": 20,
+    "acceleration": 30,
+    "brake": 40
+  },
+  "roof_jetpack": "Unperformed; no added contract or broad qualification.",
+  "study_changed": false,
+  "new_framework": false
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": "ti.d5-fidelity-candidate-closure/1",
+  "status": "FIRST_FIVE_PREPARED_PENDING_INDEPENDENT_PACKET_LIVE_PACKAGE_SEVENTH",
+  "physical_unit_id": "physical-building:w96215670",
+  "candidate_authority": "32/213",
+  "preparation_authority_context": "32/213",
+  "capture_time_authority": "31/213",
+  "new_unit_candidate": true,
+  "recognition_credit_granted": false,
+  "prospective_numerator_effect_after_separate_acceptance": 1,
+  "seven_acceptance_bindings_prepared": {
+    "evidence_manifest_sha256": "cde59334d381c071cb3b79c5591b07b33d0d40e7cfd9533c9bb411729f0389e5",
+    "motion_telemetry_manifest_sha256": "9b1d6a56ca2c1700d3e7013b878b07bf1651822d8869ae5bb351f090ff75abfb",
+    "visual_motion_manifest_sha256": "967714aaac2103a6e6a4db329943c8102aac83da9eded80b5a0b40bbc329dfb1",
+    "package_verification_receipt_sha256": null,
+    "evidence_tree_sha256": "612b7acc1e2a7f81abe8c6a4939c484861766ab2a22678c5bffe17a1659c178d",
+    "mechanical_review_receipt_sha256": "6b7fc9735392613c74b96919f49845787a9f2814cd3d45b9487c5173b75f455d",
+    "review_receipt_sha256": null
+  },
+  "image_tree_sha256": "612b7acc1e2a7f81abe8c6a4939c484861766ab2a22678c5bffe17a1659c178d",
+  "evidence_tree_document_sha256": "671870d96b968ec57719b9da2ed3dea5a92437dcf0e732f398e041bb340069b4",
+  "package_verification_pending": true,
+  "seventh_attestation_pending": true,
+  "actual_app_sha256": null,
+  "actual_pck_sha256": null,
+  "current_source_attachment": "PENDING",
+  "limits": [
+    "Frozen1246/current1397 Gateview identity is physical-building:w96215670; address labels do not replace source association",
+    "Study/source capture authority31/213 at915; current preparation baseline32/213 atfdfc100",
+    "Three separately placed finite routes/returns,663 actual rows; not traversal between setups",
+    "954-frameAVI retained externally;9original payload samples,terminalblueframe supplies no endpoint evidence; no continuous playback claim",
+    "Three actual stock callbacks:ProjectedUpperSiding placed one;blueglazing/paletrim rejected",
+    "Grounded roof callback and jetpack unperformed; no roof landing/walk claim",
+    "Production-inferencecadence/scale; hiddenleftlowerfrontageprotected,tinyrunscontinuity-only",
+    "Liveattachment/current32equivalence,candidatepackageandseventh pending; no newcredit"
+  ],
+  "actual_app_file_pins": null
+}

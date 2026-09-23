@@ -1,0 +1,155 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215670",
+  "label": "Actual1397 three finite routes and three stockcallbacks",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/native-mechanics-1397-001-result.json",
+      "path_base": "/",
+      "sha256": "ee40e9330b5b0de35a81caffd0760de818db82ce31e9f91db435b37349109bd8",
+      "bytes": 13395053,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/native-mechanics-1397-001-result.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/native-mechanics-1397-001-execution.json",
+      "path_base": "/",
+      "sha256": "32cd362d3cf1b8b1272c8f0cf9f8bd4d6c0ca25ca58a82bd33b3deba24145ca1",
+      "bytes": 620554,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/native-mechanics-1397-001-execution.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/SLOT_RELEASE-native-mechanics-1397-001.json",
+      "path_base": "/",
+      "sha256": "e6fd00e296c35247a30af2e7b538b8682727901f231a146f703023445e172478",
+      "bytes": 590,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/SLOT_RELEASE-native-mechanics-1397-001.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/ACTUAL_HANDOFF.json",
+      "path_base": "/",
+      "sha256": "118f933d3d892fda6123da7e8e2bb7163caf508087cb1d5651c5b3c20b168b96",
+      "bytes": 4953,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/ACTUAL_HANDOFF.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/ROOF_SCOPE.json",
+      "path_base": "/",
+      "sha256": "7f1ed1aad78085319933c95b8d1c4062e5614a7ec230fa07a1fa3919263319b2",
+      "bytes": 157709,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/ROOF_SCOPE.json",
+      "copied": false
+    }
+  ],
+  "data": {
+    "status": "ACTUAL_FINITE_CAMPAIGN_BOUND",
+    "routes": [
+      {
+        "label": "near-2-door-1",
+        "ok": true,
+        "sampled_input_frames": 143,
+        "sampled_brake_frames": 30,
+        "direct_land_contact_frames": 72,
+        "direct_expected_obstruction_contact_events": 1,
+        "all_grounded_on_original_land": true,
+        "all_camera_checks": true,
+        "transform_writes_during_trace": 0,
+        "retreat": {
+          "ok": true,
+          "sampled_input_frames": 68,
+          "sampled_brake_frames": 30,
+          "destination_ok": true,
+          "stopped": true,
+          "transform_writes_during_route": 0
+        }
+      },
+      {
+        "label": "near-4-door-1",
+        "ok": true,
+        "sampled_input_frames": 147,
+        "sampled_brake_frames": 30,
+        "direct_land_contact_frames": 176,
+        "direct_expected_obstruction_contact_events": 1,
+        "all_grounded_on_original_land": true,
+        "all_camera_checks": true,
+        "transform_writes_during_trace": 0,
+        "retreat": {
+          "ok": true,
+          "sampled_input_frames": 68,
+          "sampled_brake_frames": 30,
+          "destination_ok": true,
+          "stopped": true,
+          "transform_writes_during_route": 0
+        }
+      },
+      {
+        "label": "screen",
+        "ok": true,
+        "sampled_input_frames": 34,
+        "sampled_brake_frames": 30,
+        "direct_land_contact_frames": 38,
+        "direct_expected_obstruction_contact_events": 1,
+        "all_grounded_on_original_land": true,
+        "all_camera_checks": true,
+        "transform_writes_during_trace": 0,
+        "retreat": {
+          "ok": true,
+          "sampled_input_frames": 23,
+          "sampled_brake_frames": 30,
+          "destination_ok": true,
+          "stopped": true,
+          "transform_writes_during_route": 0
+        }
+      }
+    ],
+    "sprays": [
+      {
+        "label": "ProjectedUpperSiding",
+        "performed": true,
+        "ok": true,
+        "result": [
+          "placed"
+        ],
+        "tags_before": 0,
+        "tags_after": 1,
+        "actual_player_hit_distance_m": 5.44680023193359
+      },
+      {
+        "label": "BlueOpaqueGlazing",
+        "performed": true,
+        "ok": true,
+        "result": [
+          "receiver_rejection"
+        ],
+        "tags_before": 1,
+        "tags_after": 1,
+        "actual_player_hit_distance_m": 3.64709973335266
+      },
+      {
+        "label": "PaleCompleteTrim",
+        "performed": true,
+        "ok": true,
+        "result": [
+          "receiver_rejection"
+        ],
+        "tags_before": 1,
+        "tags_after": 1,
+        "actual_player_hit_distance_m": 3.88000464439392
+      }
+    ],
+    "finite_rows": 663,
+    "scope": [
+      "Frozen1246/current1397 Gateview identity is physical-building:w96215670; address labels do not replace source association",
+      "Study/source capture authority31/213 at915; current preparation baseline32/213 atfdfc100",
+      "Three separately placed finite routes/returns,663 actual rows; not traversal between setups",
+      "954-frameAVI retained externally;9original payload samples,terminalblueframe supplies no endpoint evidence; no continuous playback claim",
+      "Three actual stock callbacks:ProjectedUpperSiding placed one;blueglazing/paletrim rejected",
+      "Grounded roof callback and jetpack unperformed; no roof landing/walk claim",
+      "Production-inferencecadence/scale; hiddenleftlowerfrontageprotected,tinyrunscontinuity-only",
+      "Liveattachment/current32equivalence,candidatepackageandseventh pending; no newcredit"
+    ]
+  }
+}

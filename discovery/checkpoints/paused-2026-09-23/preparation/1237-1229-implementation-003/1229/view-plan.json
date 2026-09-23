@@ -1,0 +1,90 @@
+{
+  "views": [
+    {
+      "id": "01-whole-front-baseline",
+      "xz": [
+        -304.88330168932686,
+        -817.610522090058
+      ],
+      "target": [
+        -327.56490765911826,
+        6.444000000000001,
+        -825.4546173137728
+      ],
+      "run": 5,
+      "public_front": true,
+      "baseline": true,
+      "sun": [
+        -52,
+        -28,
+        0
+      ]
+    },
+    {
+      "id": "02-whole-front-candidate",
+      "xz": [
+        -304.88330168932686,
+        -817.610522090058
+      ],
+      "target": [
+        -327.56490765911826,
+        6.444000000000001,
+        -825.4546173137728
+      ],
+      "run": 5,
+      "public_front": true,
+      "baseline": false,
+      "sun": [
+        -52,
+        -28,
+        0
+      ]
+    },
+    {
+      "id": "03-roof-entry-candidate",
+      "xz": [
+        -314.3340932512488,
+        -820.8789374328662
+      ],
+      "target": [
+        -327.56490765911826,
+        6.444000000000001,
+        -825.4546173137728
+      ],
+      "run": 5,
+      "public_front": false,
+      "baseline": false,
+      "sun": [
+        -26,
+        126,
+        0
+      ]
+    },
+    {
+      "id": "04-door-path-footway-junction",
+      "xz": [
+        -320.71934532555184,
+        -823.8327583408103
+      ],
+      "target": [
+        -328.2171521349846,
+        3.4779692708054872,
+        -823.5688594736839
+      ],
+      "run": 4,
+      "public_front": false,
+      "baseline": false,
+      "sun": [
+        -52,
+        -28,
+        0
+      ],
+      "junction": true,
+      "junction_station_min": 2.1,
+      "junction_station_max": 4.300000000000001,
+      "junction_depth_min": -0.05,
+      "junction_depth_max": 4.4
+    }
+  ],
+  "scope": "Exact unchanged stock poses; actual pixels/native contacts unrun"
+}

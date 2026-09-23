@@ -14,6 +14,8 @@ The primary `/root` agent may use coordination tools and the minimum read-only i
 
 At meaningful work checkpoints, ordinarily after a few substantial work rounds and earlier when repeated churn appears, `/root` assigns a named independent subagent to evaluate other subagents' efficiency. Sample relevant task/tool activity and `discovery/RETRO_LOG.md`; distinguish necessary evidence and acceptance checks from repeated low-value cycles, duplicated work, or avoidable waits. Keep the review bounded and its findings concise and evidence-backed. The owner subsequently requested a 30-minute progress reminder; honor that explicit reminder without turning every wakeup into an independent audit. Keep ordinary unchanged-state checks quiet. Do not add continuous monitoring, idle audits, additional recurring timers or a separate reporting framework.
 
+A same-task Codex heartbeat defers while its target turn is unfinished. During an active goal, `/root` must perform its own already-authorized bounded progress check at least every 30 minutes, and earlier after a failure or completed handoff. Compare the accepted count, latest completed milestone, current blocking step and actual owner/handle; if stalled, take one bounded corrective action within existing authorization, delegating execution as required. Keep unchanged, non-actionable checks quiet. Retain the existing 30-minute heartbeat as an idle fallback, without promising a fire. These checks do not add a timer, independent audit on every check, framework or acceptance gate.
+
 When useful, recommend one small, reversible process experiment at a time with a simple observable measure, such as fewer redundant reruns or less avoidable waiting. `/root` reviews the findings and may approve routine process changes within existing authorization, delegates execution, and has the responsible subagent record a before/after comparison in existing retrospective notes at a later meaningful checkpoint. Retain useful changes and revise or undo ineffective ones.
 
 For the next already justified movement-driver revision, trial the [completed-record pattern](LEARNINGS.md#construct-completed-evidence-records-once) in the existing parent driver and review emitted trace counts/outcomes in the normal diff/result review. Record missing trace rows and invocations repeated solely to recover logging in RETRO; add no separate engine run or gate.
@@ -155,3 +157,7 @@ At the end of each assigned work round, every executing subagent must add a conc
 - What the team should change next time
 
 Be concrete and candid. Record process lessons, not praise. Never include credentials, serial numbers, hardware UUIDs, personal identifiers, or other secrets. The project lead verifies through read-only review that every executing subagent has written an entry before closing the round; the project lead does not edit the log itself.
+
+## Owner pause — 2026-09-23
+
+The owner requested finishing in-flight work, pushing the checkpoint, and stopping due to inference cost. The progress reminder is paused. Do not resume autonomous work or monitoring without a new owner instruction; active-goal progress rules apply only after authorized resumption.

@@ -1,0 +1,82 @@
+{
+  "status": "PROPOSED_NOT_ACCEPTED",
+  "unit_id": "physical-building:w96215685",
+  "receiver": "building:w96215685:wall",
+  "roof": "building:w96215685:roof",
+  "first_five_original_metric": "31/213",
+  "candidate_package_expected_authority": "32/213",
+  "proposed_current_after_both_acceptances": "34/213",
+  "numerator_effect_only_after_acceptance": 1,
+  "first_five_bindings": {
+    "capture-manifest.json": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/capture-manifest.json",
+      "sha256": "d22c4ea98b753531685b40ff1f05c3087ee029bb4fc78cbf0c106fff4e0189b5"
+    },
+    "motion-telemetry.json": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/motion-telemetry.json",
+      "sha256": "a188d596b298c6ed5d45552aae62cf8ea90b1a234ed00c52a7e669b6f75760d7"
+    },
+    "visual-motion.json": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/visual-motion.json",
+      "sha256": "9c7620c3980d6904b5d11d8de53e4f37147814e3da30c0c1b0bd9ae94f25fbd1"
+    },
+    "evidence-tree.json": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/evidence-tree.json",
+      "sha256": "b7ea117eaacbc5146f2ae4d1079087788758d086d0e32fe9c12c29fa3ab54553"
+    },
+    "mechanical-review.json": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-first-five-preparation-001/units/1226/mechanical-review.json",
+      "sha256": "6a60ae2b4d8f78e64b8bcb7b8e6af47aa178fca74a7ad5bf0119b2bf058e3938"
+    }
+  },
+  "specification": {
+    "number": "1226",
+    "stem": "bayside_1226",
+    "source_key": "w96215685",
+    "chunk": "x_-2__z_-3",
+    "neighbor": "x_-1__z_-3",
+    "factory": "game/scripts/world/facades/bayside_1226_live_factory.gd",
+    "wrapper": "game/scripts/world/facades/bayside_1226_live_replacement.gd",
+    "config": "game/resources/facades/bayside_1226_study.json",
+    "study_factory_sha256": "33b506f4fbcd36b907ca7039a120057635b7ef6de1aa10dd1c5bdf3bbfa21e49",
+    "current_art_receipt": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-band-visibility-003/focused-1226-003-result.json",
+    "current_art_receipt_sha256": "220c242dfc54dedc3a2d593f574cb9aa3d2cdcb9845f951ee6fe77838b0fd05e",
+    "mesh_count": 16,
+    "surface_count": 16,
+    "total_triangles": 3482,
+    "total_bodies": 4,
+    "total_shapes": 13,
+    "detail_shape_count": 10,
+    "added_mesh_count": 14,
+    "added_shape_count": 11,
+    "added_triangles": 3416,
+    "wall_mesh_count": 15,
+    "wall_live_triangles": 3468,
+    "wall_bodies": 3,
+    "wall_shapes": 12,
+    "roof_mesh_count": 1,
+    "roof_live_triangles": 14,
+    "roof_bodies": 1,
+    "roof_shapes": 1,
+    "standalone_detail_callbacks": 14,
+    "target_records": 56,
+    "projected_receiver_runs": [
+      5,
+      6,
+      7,
+      8,
+      9,
+      11,
+      12,
+      14
+    ],
+    "projected_receiver_triangles": 8,
+    "public_roof_detail": true,
+    "baseline_chunk_detail_callbacks": 126
+  },
+  "package_receipt": null,
+  "seventh_attestation": null,
+  "root_acceptance": null,
+  "image_tree_rule": "Preserve image tree and digest distinct from document SHA256. No historical capture relabel.",
+  "motion_limit": "Preserve original raw HOLD, corrected DERIVED925 routes and later3 ACTUAL sprays separately."
+}

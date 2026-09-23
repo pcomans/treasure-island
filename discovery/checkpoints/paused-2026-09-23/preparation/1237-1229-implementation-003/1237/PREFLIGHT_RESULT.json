@@ -1,0 +1,1091 @@
+{
+  "ok": true,
+  "scope": "Bounded file geometry/ground/source-camera preflight only; no native runtime or independent acceptance",
+  "checks": [
+    {
+      "ok": true,
+      "label": "Exact independent candidate and protected partition"
+    },
+    {
+      "ok": true,
+      "label": "Exact target wall roof cardinality"
+    },
+    {
+      "ok": true,
+      "label": "Accepted independent association pin"
+    },
+    {
+      "ok": true,
+      "label": "Orthonormal target-local chord near-1"
+    },
+    {
+      "ok": true,
+      "label": "near-1 complete upper_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-1 complete upper_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "Orthonormal target-local chord near-2"
+    },
+    {
+      "ok": true,
+      "label": "near-2 complete upper_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-2 complete upper_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-2 complete upper_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-2 complete upper_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-2 complete lower_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-2 complete lower_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-2 complete entries inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-2 complete entries inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-2 complete screens inside source run"
+    },
+    {
+      "ok": true,
+      "label": "Screen clears1.2m approach near-2-door-1"
+    },
+    {
+      "ok": true,
+      "label": "Screen clears1.2m approach near-2-door-2"
+    },
+    {
+      "ok": true,
+      "label": "Orthonormal target-local chord near-3"
+    },
+    {
+      "ok": true,
+      "label": "near-3 complete upper_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-3 complete upper_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-3 complete upper_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-3 complete upper_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-3 complete lower_windows inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-3 complete entries inside source run"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-lower-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-lower-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-lower-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-lower-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-lower-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-lower-2 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-lower-2 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-lower-2 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-lower-2 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-lower-2 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-screen-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-screen-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-screen-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-screen-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-2-screen-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-3-lower-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-3-lower-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-3-lower-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-3-lower-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "near-3-lower-1 exact source ground samples"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 0"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 1"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 2"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 3"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 4"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 5"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 6"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 7"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 8"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 9"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 10"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 11"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 12"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 13"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 14"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 15"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 16"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 17"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 18"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 19"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 20"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 21"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 22"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 23"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 24"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 25"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 26"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 27"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 28"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 29"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 30"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 31"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 32"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 33"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 34"
+    },
+    {
+      "ok": true,
+      "label": "Nondegenerate roof cue 35"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 0"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 1"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 2"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 3"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 4"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 5"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 6"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 7"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 8"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 9"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 10"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 11"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 12"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 13"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 14"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 15"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 16"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 17"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 18"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 19"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 20"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 21"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 22"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 23"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 24"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 25"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 26"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 27"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 28"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 29"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 30"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 31"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 32"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 33"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 34"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 35"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 36"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 37"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 38"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 39"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 40"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 41"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 42"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 43"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 44"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 45"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 46"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 47"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 48"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 49"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 50"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 51"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 52"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 53"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 54"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 55"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 56"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 57"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 58"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 59"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 60"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 61"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 62"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 63"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 64"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 65"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 66"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 67"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 68"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 69"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 70"
+    },
+    {
+      "ok": true,
+      "label": "Closed roof outward normal and reversed Godot clockwise indices 71"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-2-door-2 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "near-3-door-1 frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "FootwaySurface frozen support coverage"
+    },
+    {
+      "ok": true,
+      "label": "Proposed player support 01-whole-front-baseline"
+    },
+    {
+      "ok": true,
+      "label": "Source-only stock-camera placement 01-whole-front-baseline"
+    },
+    {
+      "ok": true,
+      "label": "Proposed player support 02-whole-front-candidate"
+    },
+    {
+      "ok": true,
+      "label": "Source-only stock-camera placement 02-whole-front-candidate"
+    },
+    {
+      "ok": true,
+      "label": "Proposed player support 03-roof-entry-candidate"
+    },
+    {
+      "ok": true,
+      "label": "Source-only stock-camera placement 03-roof-entry-candidate"
+    },
+    {
+      "ok": true,
+      "label": "Proposed player support 04-door-path-footway-junction"
+    },
+    {
+      "ok": true,
+      "label": "Source-only stock-camera placement 04-door-path-footway-junction"
+    }
+  ],
+  "failures": [],
+  "ground_meshes": [
+    {
+      "label": "near-2-door-1",
+      "triangles": 2,
+      "above_land_range": [
+        0.02399956281250004,
+        0.02400023131250073
+      ],
+      "above_area_range": [
+        0.00399956281249958,
+        0.004000231312500713
+      ],
+      "collision": "none"
+    },
+    {
+      "label": "near-2-door-2",
+      "triangles": 4,
+      "above_land_range": [
+        0.023999741499999505,
+        0.024000221562499924
+      ],
+      "above_area_range": [
+        0.0039997414999999314,
+        0.00400022156250035
+      ],
+      "collision": "none"
+    },
+    {
+      "label": "near-3-door-1",
+      "triangles": 2,
+      "above_land_range": [
+        0.02399954418749939,
+        0.024000443593750198
+      ],
+      "above_area_range": [
+        0.003999544187499371,
+        0.00400044359375018
+      ],
+      "collision": "none"
+    },
+    {
+      "label": "FootwaySurface",
+      "triangles": 8,
+      "above_land_range": [
+        0.023999514250000686,
+        0.02400046549999857
+      ],
+      "above_area_range": [
+        0.003999514250001113,
+        0.004005035652329347
+      ],
+      "collision": "none"
+    }
+  ],
+  "camera_preflight": [
+    {
+      "id": "01-whole-front-baseline",
+      "camera": [
+        -190.8158739579655,
+        4.346079552499341,
+        -844.1194740483273
+      ],
+      "target_hit": [
+        29.594735108455367,
+        "building:w96665904:wall",
+        15
+      ],
+      "segment_hit": null,
+      "source_camera_clear": true
+    },
+    {
+      "id": "02-whole-front-candidate",
+      "camera": [
+        -190.8158739579655,
+        4.346079552499341,
+        -844.1194740483273
+      ],
+      "target_hit": [
+        29.594735108455367,
+        "building:w96665904:wall",
+        15
+      ],
+      "segment_hit": null,
+      "source_camera_clear": true
+    },
+    {
+      "id": "03-roof-entry-candidate",
+      "camera": [
+        -183.01367889938524,
+        3.987544409192747,
+        -850.453346557046
+      ],
+      "target_hit": [
+        19.674532623536024,
+        "building:w96665904:wall",
+        15
+      ],
+      "segment_hit": null,
+      "source_camera_clear": true
+    },
+    {
+      "id": "04-door-path-footway-junction",
+      "camera": [
+        -178.2984264454618,
+        5.3163767861222055,
+        -856.254822929335
+      ],
+      "target_hit": [
+        13.00987861446366,
+        "building:w96665904:wall",
+        10
+      ],
+      "segment_hit": null,
+      "source_camera_clear": true
+    }
+  ],
+  "input_hashes": {
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/staged/game/resources/facades/northpoint_1237_study.json": "af31f59979233b94229c05286d2712cafc7c0d28f29d9d6fc2ecf049668f8ace",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/staged/generated/world/chunks/x_-1__z_-4.json": "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/next-two-family-reference-preparation-002/independent-source-001/REVIEW.md": "834ab568a5da1bd689f3983594ac82d2f66b1fca7900aaa4798af1a142d10165",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/1237/ground-footprints.json": "5431e1e63f215d123545d9f70689cf1a47419629238052baa275affe60053360",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/1237/roof-ground-layout.json": "a375865293bb9fad1ccefda79b0fdb9632cba91082bba6e49bc3e7c3ea5ac38b",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1237-1229-implementation-003/1237/view-plan.json": "fb01d942ee8b62fbb02381a732c8544a6a4f58a41b7b4117872dcb2d8f969b09"
+  }
+}

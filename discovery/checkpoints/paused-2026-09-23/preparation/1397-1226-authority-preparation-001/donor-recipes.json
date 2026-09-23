@@ -1,0 +1,107 @@
+[
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/prepare-authority.py",
+    "sha256": "75e6417f9c2e135ed3a7b21e484e51cf6420ce153748338a11ebdb75ee5c6200",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/prepare-authority.py.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/materialize-source.py",
+    "sha256": "a56ddfdc2a831a371d6c6edb4a07cfc91b6d8e679f8d3833490ec55643fa7884",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/materialize-source.py.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/bind-compiled.py",
+    "sha256": "a61a1e8821fb8dea087bbdaebf24a71285ce9f2895985333e8019679c9b89556",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/bind-compiled.py.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/NEXT_COMMANDS.json",
+    "sha256": "400ac7601cbb10a97042793277c760818bbc8d2f098f8e53c262b85a4a24218b",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/NEXT_COMMANDS.json.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/runtime-preparation-001/run-source-stage.py",
+    "sha256": "1a284ddc3e11d3bcb95952cb3098d45e9afc0f0a189ccbe584793d0d4b6f76ed",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/runtime-preparation-001/run-source-stage.py.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/runtime-preparation-001/release-source.py",
+    "sha256": "2cf7241ea9a6531dbf7a8d0f93c48c61feae076cb60a8e0a0d893ccfe3b7a0f5",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/runtime-preparation-001/release-source.py.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/runtime-preparation-001/bind-source.py",
+    "sha256": "7619baa17a877d15353bd44899cb34785227803a69d65ea6f5202fade05f8250",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/runtime-preparation-001/bind-source.py.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/runtime-preparation-001/run-source-chain.py",
+    "sha256": "d92470be0400efd7fee07b42a5b398300d7df67b7b7be53601a52e75c9dfd321",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/runtime-preparation-001/run-source-chain.py.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/runtime-preparation-001/run-plan.json",
+    "sha256": "6b95e60acda6697e69b989eb1aac355f24947fc4459ac8287f1d9b7a1c95a06a",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/runtime-preparation-001/run-plan.json.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/current-package-preparation-001/execution-settings.template.json",
+    "sha256": "5c885a7d6fe8beb81cd946a168bde78873b026ad1ea32b2820b74220baa49758",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/current-package-preparation-001/execution-settings.template.json.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/current-package-preparation-001/release.py",
+    "sha256": "568bd6bacda707034a3e257d47de6939a1a35e85f6d79a4775cf6484a87c8d9b",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/current-package-preparation-001/release.py.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/current-package-preparation-001/bind-export.py",
+    "sha256": "4c20570bfb1652c634fc53d90751d6b180537096d4f39c903c652fab82a66937",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/current-package-preparation-001/bind-export.py.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/current-package-preparation-001/unit-packet-prerequisites.template.json",
+    "sha256": "e456fd75f07585606dba562a78e5ca05696cdf66170d2979ba30fa345df1547e",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/current-package-preparation-001/unit-packet-prerequisites.template.json.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/current-package-preparation-001/bind-readiness.py",
+    "sha256": "4b342f376ed311efaf586c9a6fb1585cf3e1a8744c5cde4eb2151d1e618a7ed2",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/current-package-preparation-001/bind-readiness.py.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/current-package-preparation-001/run-reviewed-chain.py",
+    "sha256": "70d80455d731929407fd515dce95d9198793108197be4d2b4b522be8d2b0491f",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/current-package-preparation-001/run-reviewed-chain.py.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/current-package-preparation-001/readiness-authorization.template.json",
+    "sha256": "4405361233a5cd741bdf1d49a721e2b143ceaca4530910e31e74ef18494c1ca3",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/current-package-preparation-001/readiness-authorization.template.json.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/current-package-preparation-001/run-stage.py",
+    "sha256": "af852c9f9fe271e58203a91c2f02706ba8e8e8a08f0f50b54d8916692d3f196b",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/current-package-preparation-001/run-stage.py.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/current-package-preparation-001/run-plan.json",
+    "sha256": "f724f697206f4f61bb7857a18cac2e1aa7bbfb5f39687794c027fef0c38c83d4",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/current-package-preparation-001/run-plan.json.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/publication-preparation-001/COMMANDS.json",
+    "sha256": "82aaacd651dbd990551ddff6900d3be189f7c1051a37b4af9ac85c3e5413aa03",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/publication-preparation-001/COMMANDS.json.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/publication-preparation-001/selected-paths.txt",
+    "sha256": "c2696f4eb78b68bc5341d383948661b01c0a40f7a5bf48454b32e00c4a2af111",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/publication-preparation-001/selected-paths.txt.historical"
+  },
+  {
+    "source": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1240-authority-integration-001/publication-preparation-001/apply-publication.py",
+    "sha256": "7ba023ee6cd25af3ca655b778a355908ac7a71e82e31ecc2226376b5d378a284",
+    "frozen": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-authority-preparation-001/donor-recipes/publication-preparation-001/apply-publication.py.historical"
+  }
+]

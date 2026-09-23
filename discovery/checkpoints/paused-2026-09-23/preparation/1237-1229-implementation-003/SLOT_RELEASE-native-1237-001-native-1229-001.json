@@ -1,0 +1,32 @@
+{
+  "at": "2026-09-23T00:50:21.330847+00:00",
+  "stages": [
+    {
+      "stage": "native-1237-001",
+      "pid": 75866,
+      "exit_code": 0,
+      "elapsed_seconds": 16.388117375,
+      "fresh_pid_absent": true,
+      "receipt_sha256": "8f3b5c7d611237774ebd1831d29c9a6317f566a5baf0208af2fb365d943ece9f",
+      "log_sha256": "df95bbaac0a5d0cdba12364c095ab13bf6945e84231e82b4bd0cac5890097636",
+      "pins_unchanged": true
+    },
+    {
+      "stage": "native-1229-001",
+      "pid": 76021,
+      "exit_code": 0,
+      "elapsed_seconds": 15.754034708999999,
+      "fresh_pid_absent": true,
+      "receipt_sha256": "7aa53216dee7b631ae4eded45162b9412e14e047c45a1afcf15478331eb0fab5",
+      "log_sha256": "bb0a7bdf06f036eab2d7bdc8c42e17ce7b840d68baacdb685b28e558e102e91c",
+      "pins_unchanged": true
+    }
+  ],
+  "engine_processes": [],
+  "slot_released": true,
+  "result_files_present": [
+    "native-1237-001-result.json",
+    "native-1229-001-result.json"
+  ],
+  "retry": false
+}

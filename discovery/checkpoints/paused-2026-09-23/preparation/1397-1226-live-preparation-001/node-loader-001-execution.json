@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "/opt/homebrew/bin/node",
+    "tools/test_facade_runtime_loader_contract.mjs"
+  ],
+  "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-live-preparation-001/source",
+  "started_at": "2026-09-22T23:58:33.930380+00:00",
+  "exit_code": 0,
+  "elapsed_seconds": 2.7787807919085026,
+  "engine": false,
+  "log_sha256": "37ff7abdb92220cf0ddfa0e334a2bcd42f27b1135398c42f3cfc569c03511d69"
+}

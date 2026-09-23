@@ -1,0 +1,57 @@
+{
+  "at": "2026-09-23T01:05:15.228242+00:00",
+  "authority": "32/213",
+  "base": "fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+  "candidate": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1397-1226-live-candidate-v1",
+  "commands": {
+    "bind_after_independent_readiness_and_actual_materialization": [
+      "/usr/bin/python3",
+      "-B",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/bind-readiness.py",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/readiness-authorization.json"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002",
+    "engine_after_separate_exact_ROOT_GO": [
+      "/usr/bin/env",
+      "TI_1397_1226_ENGINE_GO=fdfc100704200e6570b654a4e6a4fccc9a1a61be",
+      "/usr/bin/python3",
+      "-B",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/run-reviewed-chain.py",
+      "source-component-001",
+      "export-001",
+      "mounted-component-001",
+      "mounted-privacy-001",
+      "release-headless-smoke-001",
+      "release-native-smoke-001"
+    ],
+    "materialize_after_ROOT_GO": [
+      "/usr/bin/python3",
+      "-B",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/materialize-package-main.py",
+      "--root-authorized-package-main-overlay"
+    ],
+    "next_release": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-002/SLOT_RELEASE.json"
+  },
+  "credit": 0,
+  "effort": "low",
+  "execution_input_map_sha256": "d980004de8d63220b16a7448c4ec58544b1ee361ff04e83cbba89ba1b4be19dc",
+  "main_patch_sha256": "9034b4110420223cf15e4cdb0062ba14c3d7fae908b05996f5238c12ac9a4eac",
+  "model": "gpt-6-astra",
+  "named_retro_sha256": "925ed368ecb277db48a1beb11714b6f18711081724019e03966206376f740370",
+  "no_engine_executed": true,
+  "source_materialized": false,
+  "source_pin_map_sha256": "1ed47861e43802a4c269b0efd5a19cb91aa62c5c0f60072c3cb3e935231f3aaa",
+  "source_review_sha256": "e53795ac0f36c45bceeb74c64215b2e0c2fa5a749eaa806ed5704969e6bca335",
+  "status": "AUTHOR_FILE_READY_INDEPENDENT_PACKAGE_REVIEW_REQUIRED",
+  "units": [
+    "1397",
+    "1226"
+  ],
+  "prior_preparation": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-1226-candidate-package-preparation-001",
+  "prior_readiness_sha256": "5a7be7c3896a6aa2df4b20fb20528e438f6deefba600c38bf5fd900e5d81e45b",
+  "correction_checks_sha256": "910f0be8c509fb2b2ded2fa002fb513ea1f2c6b6d5779e2faf6112074d181c3f",
+  "correction_diff_sha256": "6d91460954b5667b423133a49048b2a9429911985a283c0496221c997f9e9633",
+  "stale_metadata_repair_count": 1,
+  "extra_preparation_turns": 1,
+  "actual_binding_export_replays": 0
+}

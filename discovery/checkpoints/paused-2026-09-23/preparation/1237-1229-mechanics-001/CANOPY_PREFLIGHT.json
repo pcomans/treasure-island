@@ -1,0 +1,172 @@
+{
+  "ok": true,
+  "capsule_camera_campaign_envelope": {
+    "1237": [
+      [
+        -187.12794809961426,
+        -158.57213457775032
+      ],
+      [
+        -875.0735922501203,
+        -843.402929610734
+      ]
+    ],
+    "1229": [
+      [
+        -335.9883373048164,
+        -308.2591543075891
+      ],
+      [
+        -843.405633415717,
+        -803.9762550593426
+      ]
+    ]
+  },
+  "canopies": [
+    {
+      "config": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/resources/facades/northpoint_1227_study.json",
+      "sha256": "2e8573eb855c110c0d13545d63f8fd467a25a68613d16b91cb1336462baadde7",
+      "expanded_bounds": [
+        [
+          -335.43965217632615,
+          -325.1755833516756
+        ],
+        [
+          -775.5758708737945,
+          -752.9577819927046
+        ]
+      ],
+      "horizontal_clearance_m_by_unit": {
+        "1237": 160.55092793087627,
+        "1229": 28.150384185548113
+      }
+    },
+    {
+      "config": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/resources/facades/northpoint_1241_study_002.json",
+      "sha256": "9ddd9734280fa4380e4eb95d1d0e682300ac55037845f2e73b65dc57de071ccb",
+      "expanded_bounds": [
+        [
+          -150.38545029756145,
+          -130.92501065283273
+        ],
+        [
+          -780.4686868763317,
+          -734.8993650499714
+        ]
+      ],
+      "horizontal_clearance_m_by_unit": {
+        "1237": 64.55526434403852,
+        "1229": 162.58641334697086
+      }
+    },
+    {
+      "config": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/resources/facades/mariner_1221_study_002.json",
+      "sha256": "512fe3b3bd31ed2abd2ea69713028cb76b6aed782a8d572a700e1d53eee2a833",
+      "expanded_bounds": [
+        [
+          -288.8705663142461,
+          -242.4158755366056
+        ],
+        [
+          -605.8702085722415,
+          -593.8440715457211
+        ]
+      ],
+      "horizontal_clearance_m_by_unit": {
+        "1237": 246.56261327469937,
+        "1229": 201.31009906356977
+      }
+    },
+    {
+      "config": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/resources/facades/northpoint_1240_study.json",
+      "sha256": "aebf5005af3e89a2a60db46f38760a9341b1c7a8a6a6216e8777195b37ab42ba",
+      "expanded_bounds": [
+        [
+          -180.9092749184194,
+          -163.3864928716831
+        ],
+        [
+          -835.1517649034905,
+          -798.1001118152185
+        ]
+      ],
+      "horizontal_clearance_m_by_unit": {
+        "1237": 8.00116470724347,
+        "1229": 127.0998793891697
+      }
+    },
+    {
+      "config": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/resources/facades/northpoint_1234_study.json",
+      "sha256": "bb7f2af978cc985491eba694e8e179d39b41f609c594efcc4815a6ee8756d917",
+      "expanded_bounds": [
+        [
+          -313.2958834791136,
+          -302.62091990516456
+        ],
+        [
+          -807.944637765627,
+          -776.2835745343942
+        ]
+      ],
+      "horizontal_clearance_m_by_unit": {
+        "1237": 125.64846589231088,
+        "1229": 6.394663145895175
+      }
+    },
+    {
+      "config": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/resources/facades/northpoint_1232_study_003.json",
+      "sha256": "609436c6ee4f3f0170ed02b93ada28f927d67401aeb677c03a3dab9d76109f98",
+      "expanded_bounds": [
+        [
+          -317.52473197386854,
+          -306.81988826165707
+        ],
+        [
+          -757.3077710216166,
+          -727.3712481781124
+        ]
+      ],
+      "horizontal_clearance_m_by_unit": {
+        "1237": 156.17990292755053,
+        "1229": 47.186217898584445
+      }
+    },
+    {
+      "config": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/resources/facades/bayside_1215_study.json",
+      "sha256": "69ec5d8fdf7a9fb93148ae459c5c570726509ea30e10a4193adb2294810b52d8",
+      "expanded_bounds": [
+        [
+          -390.56599101021766,
+          -380.0111081852982
+        ],
+        [
+          -736.3659316118002,
+          -698.2962197683214
+        ]
+      ],
+      "horizontal_clearance_m_by_unit": {
+        "1237": 227.8004781291265,
+        "1229": 83.0111629322144
+      }
+    },
+    {
+      "config": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1237-1229-study-v1/game/resources/facades/mariner_1202_study.json",
+      "sha256": "8490ec8dab6302c9892b37b86542ccc18793dfe309ac7d589fb9dc9cad9ddf22",
+      "expanded_bounds": [
+        [
+          -403.25322837172604,
+          -381.6142271044612
+        ],
+        [
+          -626.8458588696415,
+          -598.6233787265428
+        ]
+      ],
+      "horizontal_clearance_m_by_unit": {
+        "1237": 298.5774678302886,
+        "1229": 185.06044606781492
+      }
+    }
+  ],
+  "scope": "Each sampled campaign player/camera point expanded0.6m versus canopy bounds expanded2m; finite samples plus component row paths. Unit aggregate bounds overlap empty space between separate setups and are reported only as context. Original source/detail solids separately swept."
+}
