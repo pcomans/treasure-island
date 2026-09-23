@@ -7,9 +7,9 @@ public distribution are outside this milestone.
 
 ## Paused work checkpoint
 
-This branch preserves unfinished 1397/1226 candidate and1237/1229 study work.
+Main now preserves unfinished 1397/1226 candidate and1237/1229 study work.
 The owner paused work due to inference cost; no new acceptance or release is claimed.
-Production remains **32/213** at `fdfc100`. See the [resume handoff](discovery/checkpoints/paused-2026-09-23/README.md) for completed stages, mechanics HOLD and local-only evidence.
+The last accepted release remains **32/213** at `fdfc100`; the current main source is a paused WIP checkpoint. See the [resume handoff](discovery/checkpoints/paused-2026-09-23/README.md) for completed stages, mechanics HOLD and local-only evidence.
 
 ## Current source and release
 

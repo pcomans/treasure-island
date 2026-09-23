@@ -1,6 +1,6 @@
 # Paused WIP checkpoint — 2026-09-23
 
-The owner requested completion of in-flight work, push, then stop because inference is too expensive. This branch is an unfinished source checkpoint, not a release or new acceptance. Production MAIN remains fdfc100704200e6570b654a4e6a4fccc9a1a61be, current32/213; the current1240 app/release remains unchanged. No engine/build/export/test ran for this checkpoint.
+The owner requested completion of in-flight work, push, then stop because inference is too expensive. The owner subsequently requested this unfinished source checkpoint on main. Main now includes the paused WIP; the last accepted release remains fdfc100704200e6570b654a4e6a4fccc9a1a61be, current32/213. This is not a release or new acceptance; the current1240 app/release remains unchanged. No engine/build/export/test ran for this checkpoint.
 
 ## Preserved work
 
