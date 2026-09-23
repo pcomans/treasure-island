@@ -14086,3 +14086,7 @@ What did not: the skill validator initially could not import PyYAML in system/de
 Next time: assess the complete actual-world composition after each revision, report visible quality before historical count and spend independent technical review on changed risk seams. Do not turn each author function into a separate handoff or package each art iteration. This bounded change authorizes no full-program/reminder resumption; independent instruction review and explicit publication handoff precede the separately assigned1232 study.
 
 Independent quality_harness_analysis (Astra Medium) review and forward-check passed with no blockers; ROOT accepted the actual ten-file delta and authorized commit/push. No engine or product source was changed.
+
+## 2026-09-23 — benchmark_recovery — deferred tree scope
+
+What worked: recorded the owner’s current preference to defer bespoke trees to a future vegetation-asset pass in the existing authoring and visual guidance. Architecture/material judgment, reference honesty and other gates remain intact; existing vegetation and simple ground treatment are allowed. What did not: treating the benchmark’s whole composition as a quality anchor could accidentally make its custom trees mandatory. Next time: state this scope explicitly in building assignments and do not fail a study solely for absent trees. No vegetation service/tool installation, model-routing change, engine or product-source edit.
