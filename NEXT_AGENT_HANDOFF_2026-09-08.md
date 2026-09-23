@@ -4,7 +4,7 @@
 
 The bounded delivery adds1397 Gateview and1226 Bayside:34/213 accepted,179 not evaluated; prior32 and all213 identities preserved. Current source and exact-current package passed their separate independent gates. Stable app: `build/northern-1397-1226-exact-current-001/Treasure Island First Playable.app`; see the [release record](evidence/first-playable/northern-1397-1226-current-release-2026-09-23-001/README.md) and [34 ID-labeled snapshots](evidence/building-snapshots/accepted-34-2026-09-23/README.md). Consult Git history for actual commit/push status. Do not replay completed source/package checks.
 
-The earlier paused checkpoint remains historical.1237/1229 WIP and four unrelated B1 UID files are preserved; Mersea deferred. The recurring reminder stays paused, and work stops after this bounded delivery. Candidate32 native descent failed once; unchanged retry passed without a proven cause. The zero-marker diagnostic supplies no telemetry acceptance. Current34 six-stage package passed first attempt.
+The earlier paused checkpoint remains historical.1237/1229 WIP and four unrelated B1 UID files are preserved; Mersea deferred. The owner subsequently resumed improvements to the audited buildings; follow the hourly weekly-quota guard and below-40% wind-down rule in [AGENTS.md](AGENTS.md#owner-resumption-and-quota-wind-down--2026-09-23). Candidate32 native descent failed once; unchanged retry passed without a proven cause. The zero-marker diagnostic supplies no telemetry acceptance. Current34 six-stage package passed first attempt.
 
 ## Historical32 checkpoint follows
 
