@@ -14076,3 +14076,13 @@ Prepared and executed the ID-labeled accepted34 gallery on frozen source. Preser
 ### milestone34_visual / gallery_visual (GPT-6 Astra, Medium)
 
 Preserved per-unit role7 scope, directly reviewed all selected gallery originals and requested only missing/occluded-view corrections. Rescinded the Station48 camera HOLD after checking its deliberately limited accepted detail; do not infer an unmodeled richer frontage. Final34 pixels, labels and selected-byte continuity passed, including limited Building1 lantern/context scope. The local HTML decoded all34 images, matched34 links/labels and opened IsleHouse at full1440×900; browser closed. No art reacceptance, reference publication or new recognition credit.
+
+## 2026-09-23 — benchmark_recovery — whole-building authoring harness
+
+What worked: consolidated active project, client, role, specialist and texture-review instructions around one whole-building art owner, an owner-approved visual quality anchor and a finite once-authorized source-render loop. Texture-only and narrow repair preservation rules remain scoped; serialized engine ownership, live-handle/failure truth and independent source/mechanical/visual/release promotion gates remain intact. Historical1239 evidence and all34 recognition credits are unchanged.
+
+What did not: the skill validator initially could not import PyYAML in system/default Python. Installed cached PyYAML6.0.3 only under `/tmp/ti-skill-validator-pyyaml` and reran the existing validator with command-local PYTHONPATH; no global dependency/config change. The prior harness's early-render intent conflicted with target-only ordering and per-attempt approval wording.
+
+Next time: assess the complete actual-world composition after each revision, report visible quality before historical count and spend independent technical review on changed risk seams. Do not turn each author function into a separate handoff or package each art iteration. This bounded change authorizes no full-program/reminder resumption; independent instruction review and explicit publication handoff precede the separately assigned1232 study.
+
+Independent quality_harness_analysis (Astra Medium) review and forward-check passed with no blockers; ROOT accepted the actual ten-file delta and authorized commit/push. No engine or product source was changed.

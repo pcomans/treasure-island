@@ -1,6 +1,6 @@
 # Absolute semantic and art review
 
-Read this reference after proof generation and before selection or integration. The reviewer must be independent of candidate generation when delegation is available.
+Read this reference for independent visual review; texture repeat proofs apply only when the asset claims repetition. Review coherent source renders before export. The reviewer must be independent of candidate generation when delegation is available.
 
 ## Asset-kind applicability
 
@@ -46,6 +46,8 @@ In the rejected Hawkins experiment, two partial edge fragments joined into a nar
 
 For a named building's recognition/fidelity decision, inspect actual dated exterior-reference images (such as Street View) alongside the native gameplay captures. Confirm target identity and comparable visible side/angle scope; record the source URL, image date and meaningful viewpoint or historical limits. Written observations supplement this direct comparison. If reference pixels cannot be inspected, leave the affected recognition/fidelity claim unresolved rather than passing from notes alone. Identical cameras and exhaustive views of protected or unobserved faces are unnecessary; do not invent hidden detail. Follow existing source access and retention rules: direct inspection does not require or authorize storing third-party imagery in the repository or using it as game assets.
 
+For whole-building work, compare the complete actual-world composition with dated target references and the owner-approved visual quality anchor. The anchor sets finish/composition ambition, not as-built geometry. Reassess roof/silhouette, openings, materials, contact and immediate setting after every revision, not only the last requested fix. Historical recognition count and cue presence do not establish contemporary visual parity. Protected/unknown areas remain honest limits; if those limits leave the visible result short of the requested quality, state that gap rather than silently lowering the whole-building verdict.
+
 Judge against the researched target and the intended gameplay view:
 
 - Does the candidate read as the declared material, coating, finish, relief scale, and weathering state?
@@ -55,7 +57,7 @@ Judge against the researched target and the intended gameplay view:
 - Is macro repetition subordinate rather than a visible grid or focal pattern?
 - For an architectural pattern, atlas, or unique elevation, does the selected region preserve the observed motif families and any cadence actually established by the references?
 - If count, cadence, dimensions, or anchors are inferred, are they plausible, reversible, clearly labeled, within the identified region, and not contradicted by the reference observations? Missing survey data alone is not an art failure.
-- For a named building, does the combined view read recognizably and remain honest about its evidence status? Report geometry/massing mismatches separately and route them out instead of painting around them.
+- For a named building, does the combined view read recognizably and remain honest about its evidence status? Report geometry/massing mismatches to the whole-building art owner for correction within the approved scope; for texture-only work, identify the geometry limitation instead of painting around it.
 
 A gray placeholder may be shown at the same pose as a diagnostic baseline, but “better than gray,” “more detailed,” a green automated test, or a single attractive isolated tile is never acceptance evidence. Report visible reference matches and substantive gaps separately from finish and mechanical results. Unresolved substantive fidelity gaps keep whole-unit acceptance open; a scoped finish PASS does not clear them. Game-art acceptance need not claim survey-level as-built precision, but production inference cannot excuse a visible contradiction of the reference.
 
@@ -65,4 +67,4 @@ Lead the critique with a pixel-grounded verdict on meaningful visible change and
 
 ## Evidence record
 
-For each candidate, record source/prompt, tool mode, dimensions, hash, physical-span status, placement basis/confidence, correction count, applicable proof paths, numeric values, annotated semantic findings, exact-game-receiver captures, game-art and as-built verdicts, and rejection reasons. One small initial batch and at most one diagnosed correction round are allowed. If none passes, revise the classification or research brief instead of generating indefinitely.
+For each candidate, record source/prompt, tool mode, dimensions, hash, physical-span status, placement basis/confidence, correction count, applicable proof paths, numeric values, annotated semantic findings, exact-game-receiver captures, game-art and as-built verdicts, and rejection reasons. For generated raster candidates, use one small initial batch and at most one diagnosed correction round. Whole-building procedural/source iteration instead follows the finite owner/path/engine budget in AGENTS; stop when that budget or scope is exhausted. Neither permits indefinite generation.
