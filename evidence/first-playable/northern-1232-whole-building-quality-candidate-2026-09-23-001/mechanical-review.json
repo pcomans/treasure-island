@@ -1,0 +1,46 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Independent scoped source/mechanics",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/final-pair-007/REVIEW.md",
+      "sha256": "a16163f0acddfbc6a3f581c64c3e717d024a3bae28c34b2a8bd47d129c05d1e8",
+      "bytes": 5610,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/final-pair-007/REVIEW.md",
+      "role": "unchanged_external_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/final-pair-007/DECISION.json",
+      "sha256": "f1b2cc341214a479fe0a37fa003abda8c3adeefe1b3afdf0ebf0cfbf68a21ed2",
+      "bytes": 1095,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/final-pair-007/DECISION.json",
+      "role": "unchanged_external_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "status": "PASS independent scoped capture5476 source/mechanics",
+    "author_unit_acceptance": false,
+    "source_package_join_pending": true,
+    "capture_time_recognition_metric": "34/213",
+    "numerator_effect": 0,
+    "limits": [
+      "Derived actual independently reviewed scopes; no package/seventh acceptance yet. Historical recognition34/213 unchanged; proposed quality numerator_effect0.",
+      "All old raw HOLDs preserved. Capture5476 geometry joins packaging-only guards through unchanged model/support/config/land/controller; independent package-helper equivalence still required.",
+      "Sparse movie sampling is not continuous playback/manual play, all-door traversal, ground-to-roof traversal, interior or surveyed dimensions.",
+      "Private references/full movies remain outside Git/runtime. Selected original images copied without re-encoding."
+    ],
+    "physical_unit_id": "physical-building:w96215673"
+  },
+  "truth_boundary": {
+    "candidate_authority": "34/213",
+    "inventory_physical_units": 213,
+    "credit_granted": false,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_exact_app_and_packet_attestation_pending": true
+  }
+}

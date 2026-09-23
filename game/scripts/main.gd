@@ -7,11 +7,11 @@ const EXPECTED_MANIFEST_HASH := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e
 const EXPECTED_CHUNKS := 38
 const EXPECTED_PLAYABLE_ROWS := 735
 const EXPECTED_CONTEXT_ROWS := 4
-const EXPECTED_MESHES := 1287
-const EXPECTED_SURFACES := 1302
-const EXPECTED_TRIANGLES := 183761
-const EXPECTED_STATIC_BODIES := 500
-const EXPECTED_SHAPES := 667
+const EXPECTED_MESHES := 2991
+const EXPECTED_SURFACES := 3006
+const EXPECTED_TRIANGLES := 207893
+const EXPECTED_STATIC_BODIES := 498
+const EXPECTED_SHAPES := 1925
 const EXPECTED_VEGETATION_SEED := 1414092337
 const EXPECTED_VEGETATION_INSTANCES := 124
 const EXPECTED_VEGETATION_ASSETS := 15
@@ -1086,8 +1086,8 @@ func _mac_export_projected_family_spec(adapter: Script) -> Dictionary:
 		"w96215688": return {"prefix": "Northpoint1240Live", "wall": {"meshes": 17, "surfaces": 17, "triangles": 3040, "bodies": 3, "shapes": 14}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 12, "meshes": 18, "channels": 234, "shapes": 15, "detail_tangents": 16, "projected_runs": [15, 16, 18, 19, 20, 21, 23, 24, 25], "projected_triangles": 6, "public_roof": true}
 		"w96215666": return {"prefix": "Bayside1215Live", "wall": {"meshes": 17, "surfaces": 17, "triangles": 4736, "bodies": 3, "shapes": 13}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 10, "bodies": 1, "shapes": 1}, "detail_shapes": 11, "meshes": 18, "channels": 234, "shapes": 14, "detail_tangents": 16, "projected_runs": [1, 3, 4, 5, 19], "projected_triangles": 6, "public_roof": true}
 		"w96215659": return {"prefix": "Northpoint1234Live", "wall": {"meshes": 18, "surfaces": 18, "triangles": 5484, "bodies": 3, "shapes": 14}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 12, "meshes": 19, "channels": 247, "shapes": 15, "detail_tangents": 17, "projected_runs": [1, 2, 3, 4, 17, 18, 19, 20, 22, 23, 24, 25], "projected_triangles": 6, "public_roof": true}
-		"w96215673": return {"prefix": "Northpoint1232Live", "wall": {"meshes": 18, "surfaces": 18, "triangles": 2560, "bodies": 3, "shapes": 14}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 12, "meshes": 19, "channels": 247, "shapes": 15, "detail_tangents": 17, "projected_runs": [10, 11, 12, 13, 15, 16, 17, 18], "projected_triangles": 6, "public_roof": true}
-		"w96215674": return {"prefix": "Northpoint1241Live", "wall": {"meshes": 18, "surfaces": 18, "triangles": 3416, "bodies": 3, "shapes": 14}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 12, "meshes": 19, "channels": 247, "shapes": 15, "detail_tangents": 17, "projected_runs": [0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12], "projected_triangles": 6, "public_roof": true}
+		"w96215673": return {"prefix":"Northpoint1232Live","wall":{"meshes":681,"surfaces":681,"triangles":21850,"bodies":2,"shapes":620},"roof":{"meshes":41,"surfaces":41,"triangles":996,"bodies":1,"shapes":41},"meshes":722,"channels":9386,"shapes":661,"detail_tangents":0,"whole_building_quality":true}
+		"w96215674": return {"prefix":"Northpoint1241Live","wall":{"meshes":996,"surfaces":996,"triangles":7270,"bodies":2,"shapes":603},"roof":{"meshes":24,"surfaces":24,"triangles":24,"bodies":1,"shapes":24},"meshes":1020,"channels":13260,"shapes":627,"detail_tangents":0,"whole_building_quality":true}
 		"w96215682": return {"prefix": "Mariner1221Live", "wall": {"meshes": 19, "surfaces": 19, "triangles": 3356, "bodies": 3, "shapes": 14}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 12, "meshes": 20, "channels": 260, "shapes": 15, "detail_tangents": 18, "projected_runs": [0, 1, 2, 4, 5, 6, 9, 10, 11, 12], "projected_triangles": 6, "public_roof": true}
 		"w96215661": return {"prefix": "Bayside1222Live", "wall": {"meshes": 15, "surfaces": 15, "triangles": 5336, "bodies": 3, "shapes": 11}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 10, "bodies": 1, "shapes": 1}, "detail_shapes": 9, "meshes": 16, "channels": 208, "shapes": 12, "detail_tangents": 14, "projected_runs": [10, 11, 12, 15, 16, 19], "projected_triangles": 6, "public_roof": false}
 		"w96215653": return {"prefix": "Northpoint1227Live", "wall": {"meshes": 19, "surfaces": 19, "triangles": 5528, "bodies": 3, "shapes": 15}, "roof": {"meshes": 1, "surfaces": 1, "triangles": 16, "bodies": 1, "shapes": 1}, "detail_shapes": 13, "meshes": 20, "channels": 260, "shapes": 16, "detail_tangents": 18, "projected_runs": [4, 5, 6, 7, 9, 10, 11, 13, 14, 15, 16], "projected_triangles": 6, "public_roof": true}
@@ -1121,6 +1121,8 @@ func _mac_export_projected_family_attachment_valid(adapter: Script, unit: String
 
 
 func _mac_export_projected_family_pair_valid(wall: Node3D, roof: Node3D, adapter: Script) -> bool:
+	if str(adapter.SOURCE_KEY) in ["w96215673", "w96215674"]:
+		return _mac_export_housing_quality_pair_valid(wall, roof, adapter)
 	if wall == null or roof == null or wall == roof:
 		return false
 	var spec: Dictionary = _mac_export_projected_family_spec(adapter)
@@ -1233,3 +1235,77 @@ func _mac_export_projected_family_pair_valid(wall: Node3D, roof: Node3D, adapter
 	if projected_faces.size() != int(spec.projected_triangles) * 3 or var_to_bytes(projected_shape.shape.get_faces()) != var_to_bytes(projected_faces):
 		return false
 	return true
+
+
+# The two quality replacements own current mesh-derived contacts, not the historical
+# projected receivers. Compare the entire consumed pair with a fresh pinned atomic
+# adapter result, including ground visuals, materials, metadata and collision faces.
+func _mac_export_housing_quality_pair_valid(wall: Node3D, roof: Node3D, adapter: Script) -> bool:
+	if wall == null or roof == null or wall == roof:
+		return false
+	var expected: Array = [{"meshes":681,"surfaces":681,"triangles":21850,"bodies":2,"shapes":620}, {"meshes":41,"surfaces":41,"triangles":996,"bodies":1,"shapes":41}] if str(adapter.SOURCE_KEY) == "w96215673" else [{"meshes":996,"surfaces":996,"triangles":7270,"bodies":2,"shapes":603}, {"meshes":24,"surfaces":24,"triangles":24,"bodies":1,"shapes":24}]
+	if _mac_export_attachment_measure(wall) != expected[0] or _mac_export_attachment_measure(roof) != expected[1]:
+		return false
+	var prepared: Dictionary = adapter.prepare_chunk_records(adapter.FACTORY._json(adapter.FACTORY.CHUNK_PATH))
+	var callback_counts := {"source": 0, "tangent": 0}
+	var source_builder := func(_record: Dictionary) -> Dictionary:
+		callback_counts.source += 1
+		return {}
+	var tangent_builder := func(_record: Dictionary, _tangent: bool) -> Dictionary:
+		callback_counts.tangent += 1
+		return {}
+	var plan: Dictionary = adapter.build_chunk_plan(prepared, source_builder, tangent_builder)
+	if not bool(plan.get("ok", false)) or not bool(plan.get("contains_target", false)):
+		return false
+	var valid := callback_counts == {"source": 0, "tangent": 0}
+	for pair: Array in [[wall, adapter.WALL_KEY], [roof, adapter.ROOF_KEY]]:
+		var actual: Node3D = pair[0]
+		var key: String = pair[1]
+		var expected_node: Node3D = plan.records[key].node
+		valid = valid and _mac_export_housing_snapshot(actual) == _mac_export_housing_snapshot(expected_node)
+		valid = valid and not bool(actual.get_meta("old_collision_proxy_retained", true))
+		valid = valid and str(actual.get_meta("collision_geometry", "")) == "current_visible_mesh_faces_except_draped_ground_and_shrubs"
+	adapter.free_unconsumed(plan)
+	return valid
+
+
+func _mac_export_housing_material_state(material:Material) -> Dictionary:
+	if material == null: return {"class": "null"}
+	var state:Dictionary={"class":material.get_class()}
+	for property:Dictionary in material.get_property_list():
+		if (int(property.usage)&PROPERTY_USAGE_STORAGE)==0 or str(property.name) in ["script","resource_path"]:continue
+		var value:Variant=material.get(str(property.name))
+		if value is Resource:
+			state[str(property.name)]={"class":value.get_class(),"path":value.resource_path,"name":value.resource_name}
+			if value is Shader:state[str(property.name)]["code_sha256"]=value.code.sha256_text()
+			if not value.resource_path.is_empty() and FileAccess.file_exists(value.resource_path):state[str(property.name)]["source_sha256"]=FileAccess.get_sha256(value.resource_path)
+		else:state[str(property.name)]=var_to_bytes(value).hex_encode()
+	return state
+
+
+
+func _mac_export_housing_snapshot(node:Node) -> Dictionary:
+	var out:Dictionary={"class":node.get_class(),"name":str(node.name),"children":[]}
+	if str(node.name).begins_with("@MeshInstance3D@"):
+		out["name"] = "<ephemeral MeshInstance3D name>"
+	if node is Node3D:out["transform"]=var_to_bytes(node.transform).hex_encode()
+	var metadata:Dictionary={}
+	for key:StringName in node.get_meta_list():metadata[str(key)]=var_to_bytes(node.get_meta(key)).hex_encode()
+	out["metadata"]=metadata
+	if node is MeshInstance3D:
+		out["layers"]=node.layers;out["shadow"]=node.cast_shadow;out["surfaces"]=[]
+		out["mesh_class"]=node.mesh.get_class()
+		out["named_surface_api"]=node.mesh is ArrayMesh
+		for surface in node.mesh.get_surface_count():
+			var surface_name:Variant=node.mesh.surface_get_name(surface) if node.mesh is ArrayMesh else null
+			out.surfaces.append({"arrays":var_to_bytes(node.mesh.surface_get_arrays(surface)).hex_encode(),"name":surface_name,"material":_mac_export_housing_material_state(node.get_active_material(surface))})
+	if node is CollisionObject3D:out["collision_layer"]=node.collision_layer;out["collision_mask"]=node.collision_mask;out["wall_group"]=node.is_in_group("spray_receiver_wall")
+	if node is CollisionShape3D and node.shape is ConcavePolygonShape3D:
+		out["disabled"] = node.disabled
+		out["backface_collision"] = node.shape.backface_collision
+		out["faces"]=var_to_bytes(node.shape.get_faces()).hex_encode()
+		var shape_meta:Dictionary={}
+		for key:StringName in node.shape.get_meta_list():shape_meta[str(key)]=var_to_bytes(node.shape.get_meta(key)).hex_encode()
+		out["shape_metadata"]=shape_meta
+	for child:Node in node.get_children():out.children.append(_mac_export_housing_snapshot(child))
+	return out

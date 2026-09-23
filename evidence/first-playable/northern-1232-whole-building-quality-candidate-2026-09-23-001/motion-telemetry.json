@@ -1,0 +1,63 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Actual stock movement and spray",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/mechanics-006/completed-output-map.json",
+      "sha256": "1401c9fcdd27d6e2d6381e66efb366c0950eb29b4edca9344614a33ccc2c68f2",
+      "bytes": 915,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/mechanics-006/completed-output-map.json",
+      "role": "unchanged_external_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/mechanics-006/receipt.json",
+      "sha256": "fef49ea2cbd28a69cc1c20678066d416e9f302b4c23c975b6ac4c98b6c6efcd3",
+      "bytes": 20422107,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/mechanics-006/receipt.json",
+      "role": "unchanged_external_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/mechanics-003/completed-output-map.json",
+      "sha256": "451f38868bf8e4c26294538c457d854fbed337c1492c79ab3ffe9d3156b7c8a9",
+      "bytes": 822,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/mechanics-003/completed-output-map.json",
+      "role": "unchanged_external_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/mechanics-003/receipt.json",
+      "sha256": "6a90d12beb2183cdb4ad6efb67fc249f30f9267b14f5da99888c250e5aa7232c",
+      "bytes": 19484762,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/mechanics-003/receipt.json",
+      "role": "unchanged_external_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "scope": "003 full1232 mechanics/two sprays through exact005 physical/spray-volume join;006 current visual approach/retreat",
+    "general_support_tolerance_mm": 4,
+    "threshold_edge_qualification_separate": true,
+    "camera_numerical_tolerance_rad": 1e-06,
+    "capture_time_recognition_metric": "34/213",
+    "numerator_effect": 0,
+    "limits": [
+      "Derived actual independently reviewed scopes; no package/seventh acceptance yet. Historical recognition34/213 unchanged; proposed quality numerator_effect0.",
+      "All old raw HOLDs preserved. Capture5476 geometry joins packaging-only guards through unchanged model/support/config/land/controller; independent package-helper equivalence still required.",
+      "Sparse movie sampling is not continuous playback/manual play, all-door traversal, ground-to-roof traversal, interior or surveyed dimensions.",
+      "Private references/full movies remain outside Git/runtime. Selected original images copied without re-encoding."
+    ],
+    "physical_unit_id": "physical-building:w96215673"
+  },
+  "truth_boundary": {
+    "candidate_authority": "34/213",
+    "inventory_physical_units": 213,
+    "credit_granted": false,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_exact_app_and_packet_attestation_pending": true
+  }
+}

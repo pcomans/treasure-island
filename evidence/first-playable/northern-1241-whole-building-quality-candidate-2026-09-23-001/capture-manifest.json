@@ -1,0 +1,54 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Current capture and source joins",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/actual-world-005/completed-output-map.json",
+      "sha256": "f345341902ee1ce8d95e52a598764bb1f7d5d4c782b1526c6b8b86aa098e77ea",
+      "bytes": 1134,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/actual-world-005/completed-output-map.json",
+      "role": "unchanged_external_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/actual-world-005/images/receipt.json",
+      "sha256": "475f455a6d5bd6a822edd06f45b21cb8977907c5e79187dbc6b7e4dbdf4ed417",
+      "bytes": 15045169,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/actual-world-005/images/receipt.json",
+      "role": "unchanged_external_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/correction-ready-005/1232-derived-join.json",
+      "sha256": "5980350a2e6b3c7211792b22fc65084681319acc45ae23ba2782849918b1fe26",
+      "bytes": 1088,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/correction-ready-005/1232-derived-join.json",
+      "role": "unchanged_external_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "current_static_capture": "actual-world-005",
+    "raw_capture_status": "HOLD retained; only two native-vs-JSON equality failures independently resolved by exact serialized physical join",
+    "capture_source_map_sha256": "5476aa89c23a1e4f7149d5297809c3b52d876d24a5e9265afc80d963228a498d",
+    "capture_time_recognition_metric": "34/213",
+    "numerator_effect": 0,
+    "limits": [
+      "Derived actual independently reviewed scopes; no package/seventh acceptance yet. Historical recognition34/213 unchanged; proposed quality numerator_effect0.",
+      "All old raw HOLDs preserved. Capture5476 geometry joins packaging-only guards through unchanged model/support/config/land/controller; independent package-helper equivalence still required.",
+      "Sparse movie sampling is not continuous playback/manual play, all-door traversal, ground-to-roof traversal, interior or surveyed dimensions.",
+      "Private references/full movies remain outside Git/runtime. Selected original images copied without re-encoding."
+    ],
+    "physical_unit_id": "physical-building:w96215674"
+  },
+  "truth_boundary": {
+    "candidate_authority": "34/213",
+    "inventory_physical_units": 213,
+    "credit_granted": false,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_exact_app_and_packet_attestation_pending": true
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "schema_version": "ti.housing-whole-building-revision/1",
+  "source_key": "w96215673",
+  "reviewed_art_sha256": "428f3e428ec8acd9cdf37dec238179f3b08409d3b3b301284c1d18ac5b5a9f9f",
+  "revision_acceptance": "pending",
+  "historical_recognition_credit_unchanged": true,
+  "ground_chunks": {
+    "res://generated/world/chunks/x_-2__z_-3.json": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+    "res://generated/world/chunks/x_-2__z_-4.json": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4"
+  }
+}

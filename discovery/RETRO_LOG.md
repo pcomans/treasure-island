@@ -14138,3 +14138,241 @@ Worked: refined the existing completed-evidence binding paragraph and added one 
 ## 2026-09-23 — review_1241 — documentation checkpoint publication
 
 Worked: reviewed the exact four-file documentation diff against expected MAIN636768f and matching remote; selected whitespace check passed. Selection contains the accepted resumption/hourly quota wind-down guidance, immutable-map handoff experiment and retained34-building audit/guard retrospectives, without new production/count claims. Four unrelated B1 UID files remain untracked and excluded. Did not: git-lfs is absent and inspected post-commit/pre-push hooks invoke it; all four selected files have unspecified LFS filter, so use the established command-local hooksPath workaround only for this documentation commit/push, leaving hooks/config unchanged. Next: verify staged whitespace, exact committed file list and local/remote equality from actual command receipts. Commit/push have not yet occurred at this entry's preparation; no art, authority, engine, package, goal closure or work pause is implied.
+
+
+## 2026-09-23 — housing_pair_integration: actual housing revision preparation
+
+Prepared 1232/1241 whole-building art behind their existing atomic source-pair adapters in isolated HEAD 636768f. Reviewed model construction is preserved with semantic role metadata; actual geometry supplies wall/detail/roof contacts, obsolete proxies are removed, and paths sample frozen colliding land triangles. No engine slot, native execution, export, commit, promotion or new recognition credit. Historical 34/213 authority and receipts are unchanged; current compiler/registry promotion checks remain expected to reject these pending revisions.
+
+Checkout completed with command-local LFS bypass; its post-checkout hook returned 2 because git-lfs is unavailable. Verified populated HEAD and did not repeat checkout. The independent reviewer initially observed a prefreeze model hash during the final annotation/pin cascade; the explicitly announced source-pins document and direct consumed-binding check now match actual model/support/factory/adapter bytes. This was static preparation, not an engine failure. Native parse/contact/navigation/spray and new actual-world visual judgment remain pending.
+
+Early capture uses ordinary WorldLoader/WorldChunkBuilder dispatch with six target views, no helper injection or hiding. Ordinary runtime has no call to FacadeRuntimeRegistryLoader; its independent registry fixture remains enforced for promotion. This avoided inventing a provisional acceptance bypass. Remaining changed-risk review covers roof/canopy/screen contacts, recessed eligible wall surfaces, local land fit and actual stock-player routes/spray. Source-only early pixels precede extended proof and batch package work.
+
+## housing_pair_technical_review — 2026-09-23 source/readiness001
+
+- What worked well: inspected actual pair dispatch, visible-mesh contact construction and stock spray consumer; frozen16-input map and consumed factory guards match. Six-view early source render can proceed without registry/export paperwork.
+- What did not work well: my initial source read overlapped author prefreeze pin cascade; I incorrectly described the transient guard mismatch as frozen readiness failure, then retracted it against immutable87a6df1c map. No engine failure occurred. Static1241 review also exposed up to~156mm lower-wall clearance and25.6–29.3mm stitched footprint departures.
+- What to change next time: bind the frozen-ready map before issuing any blocking judgment; retain coherent early pixels while resolving actual lower-wall/footprint seams before source acceptance. Review current stock motion/contact/spray records instead of reusing old hidden-proxy study proof.
+
+## housing_pair_technical_review — 2026-09-23 mechanics readiness002
+
+- What worked well: direct comparison against complete retained1241 donor caught stale removed receiver/source literals and full-tag belt intersection before native mechanics. Corrected source/driver/plan/runner were frozen and copied before readiness PASS. Exact-source foundation strips and join caps addressed lower-wall cause without changing upper composition.
+- What did not work well: initial static review missed ArrayMesh-only counting calls on primitive meshes; actual001 logged three script errors despite receipt ok and exit0. Preserve its partial pixels, and use clean count-only002/current site003 evidence within their limits. My intermediate preflight snapshot overlapped author corrections, so it is explicitly not the rejected preimage; author retained that original separately.
+- What to change next time: compare actual consumed donor literals and primitive mesh API membership before invocation, freeze helpers before review-copy, and serialize already-collected full target snapshots so independent source/contact checks need no logging recovery run. Actual mechanics remains pending; early image settlement supplies no movement proof.
+
+
+## 2026-09-23 — housing_pair_integration: real attachment, site fix and first motion HOLD
+
+One canonical import completed cleanly. Actual-world001 produced six actual-dispatch images but emitted three PrimitiveMesh measurement errors; retained that raw receipt/log without calling it clean nativePASS. Replaced ArrayMesh-only count methods with Mesh arrays. Actual-world002 was already launched within the bounded setup repair when ROOT asked to reuse planned mechanics for count logging; consumed its terminal0 rather than interrupt/restart. This unnecessary count-only recapture is a real efficiency loss.
+
+Actual images and independent technical review exposed1241 lower-wall gaps. Added foundation strips following exact frozen lower edges and small join caps to the reviewed facade chords; recorded their≤29.3mm alignment as production inference. Actual-world003 completed six clean views and received separate static visualPASS for both units at source mapb01d3109.1232 original images were byte-identical across the static sets. No recognition or package acceptance follows.
+
+The first combined mechanics invocation reached only1232:180 actual approach/brake rows, no retreat/spray/1241 continuation. It returnedHOLD because source-land-only support did not describe the raised doorstep and because a continuous foundation trim crossed the doorway; native shape faces corroborate the obstruction. Node and PhysicsServer positions agree exactly. Preserve that failure. Prepared a narrow unexecuted repair breaking only the doorway-crossing trim and binding the exact threshold top triangles as intended support, while retaining4mm geometry qualification, wrong-support rejection and explicit recessed-door expectation. Source map4aa9809a and drivercc6e27b9 require independent readiness and another explicit slot transfer; no engine run after repair.
+
+Engine released19:53:32.621730Z: lastPID29488 terminal1/absent, actual Godot census empty. Runtime/registry authority, historical34/213, MAIN, exports and publication remain untouched. Native import generated unrelated UID files in isolated checkout; they are excluded from the selected patch and were not edited or published.
+
+## 2026-09-23 — review_1241 — integrated pair static visual gate
+
+Worked: directly compared six actual-world-003 native originals with endorsed1232 architectural005/design002 and1241 design002 study originals and actual March2025 references. Separate static visual PASS for each preserves coherent roof/wall/canopy depth and frontage;1241 has no conspicuous open foundation gap in those views. Did not: opaque glazing/plain pale surfaces and1232 unknown closure remain inherited limits, and still images cannot establish support/collision safety. Next time: keep actual integration regression review distinct from a new aesthetic goal and leave mechanics/motion to their own evidence. Source map b01d310910a6d98875e68ec9bed05175630def6b375b8f9c258f90fd2c6402b4 and six image hashes are bound in external independent-visual-001/REVIEW.md. Author confirmed append-ready; mechanics001 remains a separate retained HOLD and an unexecuted1232 correction is outside this static verdict. No final pair HTML or completed motion handoff yet. No engine, assets, MAIN, package, release or promotion actions.
+
+## 2026-09-23 — roof_1397_diagnosis — independent housing pair repair readiness003
+
+Worked: reused predecessor source/readiness evidence and independently decoded mechanics001 native faces plus all180 motion rows. Confirmed doorstep203, obstructing foundation band211, missing door202 contact and zero unreached route/spray outcomes. Reviewed only the current physical/support delta, exact16-file source map and real consumers; froze a focused mechanics002 readiness PASS under independent-technical-001/mechanics-repair-ready-003. Author coordinated this RETRO append.
+
+Did not work: mechanics001's land-only qualification could not legitimately classify the visible doorway step, while the decorative band physically crossed the route. Its HOLD remains unchanged; a prepared geometric correction does not prove that the next approach reaches the door.
+
+Next time: keep decorative trim out of openings and bind intended new support surfaces exactly without widening tolerance or relabeling land counters. ROOT must grant engine ownership; author runs one mechanics002 and independent review consumes its actual full records. No reviewer engine/code changes, broader retesting, visual/release acceptance or promotion in this round.
+
+## 2026-09-23 — roof_1397_diagnosis — independent actual mechanics002 diagnosis
+
+Worked: decoded the actual native threshold mesh and independently recomputed the two failing capsule-edge distances against116 native Node/PhysicsServer rows. The foundation repair reaches exact door204. Rows79/80 have real4.36/4.48mm endpoint edge gaps but actual exact205 contacts,0.934/0.929mm latest-contact normal-plane separation and tangential offsets within that frame's motion. All physical camera checks pass; yaw mismatch is one float32ULP. Frozen report/row math lives in independent-technical-001/actual-mechanics-002, bound to producer input-map e0e6cd401da21a72ae817e84351b0292cd09e3759de3046b59e2a181e5b6edc1.
+
+Did not work: the fixture treated finite curved-edge motion as static4mm contact and compared Euler arrays bit-exactly. The positive radial gaps are not numeric noise; internal engine substeps are not traced, so the finite tangent-motion explanation remains an evidence-supported geometric inference. Raw mechanics002 HOLD and all unrun stages remain unchanged.
+
+Next time: retain the general4mm/penetration limits and distinguish a tightly bounded, actual-contact-backed threshold-edge transition from static support. Use a tight float comparison for fixed camera. Author may prepare that narrow check, then ROOT must separately authorize one continuation to reach the missing retreat/sprays/1241; no collider/controller change or blanket replay is justified. No engine/source edits or acceptance promotion by this reviewer; final source/normal/collision, visual and release decisions remain separate. RETRO append coordinated with author.
+
+## 2026-09-23 — housing_pair_integration — mechanics002 and bounded release preparation
+
+Worked: consumed the single authorized repair campaign to actual terminal, retaining raw traces, movie, original contact marker and immutable producer map e0e6cd401da21a72ae817e84351b0292cd09e3759de3046b59e2a181e5b6edc1. Exact recessed door204 is now reached. PID38570 exited1 and was absent; release receipt records an empty Godot census. All16 reviewed source bindings still match map4aa9809a. Private release preparation reuses the established D5 1308/1394 zero-credit seven-artifact refresh, preserves historical34/213 and old+1 capture receipts, and proposes one shared candidate followed by one exact-current final batch.
+
+Did not work: mechanics002 still HOLD on two real4.361/4.475mm threshold-edge endpoint clearances and one-float32-ULP camera yaw comparison. It failed before retreat, spray and1241; none are claimed passed. Initial release investigation overestimated need for a new schema before checking the existing zero-credit quality precedent; that proposal is withdrawn. No further engine work or predicate edits followed the failed run.
+
+Next time: inspect existing quality-refresh history before proposing core workflow changes, and hand reviewers an immutable input-map path plus SHA rather than a mutable alias. Private release-preparation-001 contains an unapplied four-file source dependency patch, selected files/UIDs and pending candidate argv. It is explicitly unexecutable until actual mechanics, separate visual delta, current receipt bindings and consumer adaptation are complete. No authority mutation, export, MAIN copy, commit or push occurred.
+
+## 2026-09-23 — housing_pair_integration — mechanics003 evidence-only preparation
+
+Worked: implemented the independently diagnosed narrow native threshold-edge transition check separately from static_distance_ok, retaining raw distances and general4mm/penetration bounds. Exact same-row shape/body contacts, upward normal, native boundary edge, stock capsule/foot, on_floor, Node/server agreement, single-frame actual movement, signed normal-plane separation and tangential displacement are all consumed. Camera comparison records wrapped Euler and basis errors within1e-6rad. All route/braking/retreat/four-spray stages and full native snapshots remain. Immutable input map mechanics-continuation-003/input-map.json SHA2b713ac02db4810b646cfd23ee063697c7e8d6f714075a2de381d3e18fc64fbe; six invocation and sixteen source pins verified, Python runner parses.
+
+Limits: no native parser/runtime validation or mechanicsPASS is claimed. Original001/002 HOLD remain unchanged. No art, collider, controller, source-land or authority changes; source map4aa9809a remains exact. Independent readiness and ROOT engine transfer are still required.
+
+Next time: retain separate evidence qualifications instead of replacing raw geometric results, and reuse complete current mesh/normal snapshots rather than adding another standalone observation run. Release preparation stays private until actual remaining mechanics and independent visual/source gates pass.
+
+## 2026-09-23 — roof_1397_diagnosis — mechanics003 independent readiness004
+
+Worked: inspected the frozen evidence-helper-only delta against exact raw002 conditions. Source map/all16 files unchanged; separately recorded threshold-edge qualification retains raw gap/static result and rejects stationary hover, penetration, wrong/missing contacts and skipped frames. Camera uses recorded<=1e-6rad Euler/basis errors. Complete routes/sprays remain. Immutable map2b713ac02db4810b646cfd23ee063697c7e8d6f714075a2de381d3e18fc64fbe is copied into independent-technical-001/mechanics-continuation-ready-004 with focused readiness PASS.
+
+Did not work: earlier exact Euler equality and static-edge assumption blocked otherwise observed approach; raw002 remains HOLD, not overwritten. Existing snapshots already contain all required normal arrays—adding another probe or engine run would duplicate evidence. Current1232 consumed normals/transforms were decoded; intended exterior direction and1241 still require final native source judgment.
+
+Next time: distinguish raw geometry from a narrow contact-manifold-supported transition and keep all limits explicit. ROOT alone grants mechanics003 engine ownership; final source/mechanical review consumes actual remaining stages and both native pairs. No reviewer code/model edit, engine invocation, promotion or visual/release acceptance. RETRO append coordinated with author.
+
+## 2026-09-23 — housing_pair_integration — actual mechanics003 continuation
+
+Worked: completed the authorized native campaign to terminal without parser error.1232 approach, braking, retreat, eligible wall spray and door rejection pass with raw static distances and narrow edge qualification distinct. Full both-unit native surface/shape snapshots survive. PID44205 exit1/absent at20:20:38Z; actual census empty and release recorded. Immutable consumed map2b713ac0; source4aa9809a unchanged.
+
+Did not work:1241 approach stops at depth0.383303m before expected door92; all support/camera checks pass but actual bottom trim95 and side trim93 obstruct. No1241 retreat or sprays executed. Native bottom trim spans y3.337–3.407 above land about3.249; this is a new geometry/contact finding, not parser/serialization failure. Overall HOLD preserved.
+
+Next time: inspect each unit's complete doorway collision route before assuming a second model shares the first's threshold behavior. Stop on new geometry as authorized; no source edit, tolerance change or extra run was made. Release/export authority remains pending independent diagnosis and remaining mechanics. Original images, movie, full raw receipt and exact output hashes are retained in mechanics-003.
+
+
+## roof_1397_diagnosis — independent actual mechanics003 review, 2026-09-23
+
+Inspected immutable actual003 inputs/outputs, all166 completed1232 motion rows, both actual stock spray outcomes and both units’ native arrays/collision evidence.1232 scoped source identity/collision and mechanics PASS; separate paving motion HOLD remains after directly viewing retained frames150/180.1241 HOLD is demonstrated construction: centered approach meets a transverse rail157mm above land, then slides into the jamb. Fixture recentering is unjustified. Also decoded24 downward roof fronts and six specifically identified closure second triangles with reversed or degenerate-first inherited normals. Exact findings and local correction directions are in private independent-technical-001/actual-mechanics-003/REVIEW.md and NATIVE-NORMALS.json, bound to completed map451f3886 and input map2b713ac0.
+
+Preserved raw HOLD and unrun1241 retreat/sprays. Recommended local entry/roof/closure correction, then1241 continuation;1232 mechanics can be reused through unchanged consumed physical/collision/support partitions even if noncolliding paving rendering changes. No engine or implementation edits by reviewer. The existing early actual-world capture can expose consumed front/normal/intended-exterior disagreements before movement in its own receipt; no extra run, framework or prose lesson added. Corrected consumed data still needs independent final source judgment.
+
+## 2026-09-23 — review_1241 — mechanics003 visual motion/delta
+
+Worked: directly inspected three original native captures and20/546 byte-exact MJPEG samples; revised1232 entry band reads cleanly. Immutable input/output/source maps verified and cited in external independent-visual-002/REVIEW.md.
+
+Caught:1232 entrance paving changes from an irregular triangle to virtually absent lawn, then returns across frames120/150/180/210. Band delta PASS but sampled visual motion HOLD; cause was not inferred by visual review.1241 observed approach coherent, with technical HOLD and unrun retreat/sprays excluded.
+
+Next time: retain sampled-frame coverage and exact indices alongside static judgments. One broad receipt print was wasteful; use selected scalar reads. No engine/source edits or continuous-playback claim.
+
+## 2026-09-23 — housing_pair_integration — correction004 and actual005 early pixels
+
+Worked: diagnosed1232 native entrance path/lawn overlap as effectively coplanar (849samples,4.5–72.6nm difference), and changed only entrance paving lift55→75mm.1241 lowerdoor now follows local land with a60mm threshold, grade-reaching jambs and no window-like bottom rail; roof and lowerclosure emit per-triangle intended exterior orientation, with crossing caps split. Six corrected actual005 views and full consumed snapshots complete; native front/normal readback reports no offenses. Source5476aa89 remains pending acceptance.
+
+Did not work: initial004 had a definite local outward variable shadow and no images; the one authorized naming-only parser repair produced005.005 remains nativeHOLD because direct in-memory/current versus JSON/prior dictionary equality rejected reuse. The actual emitted1232 physical snapshots serialize identically to003 after excluding only noncollidingground_visual and node names: exact wall73b4b4db androofada23f3a hashes match. Derived join is separately bound in serialized-1232-physics-join.json SHA167211b1; rawHOLD untouched. No pixels repeated to repair equality logging.
+
+Next time: compare consumed evidence through a consistent serialized representation, and keep an independent corrected join distinct from native producer verdict. PID51569 exit1/absent; actual census empty and engine released. Mechanics004 waits for independent corrected source/readiness and ROOT GO; planned1241 full movement/two sprays plus1232 visual retreat reproduction reuses its passed sprays. No authority mutation, export, MAIN copy or commit.
+
+## 2026-09-23 — housing_pair_integration — mechanics004 readiness completion
+
+Worked: existing runner now consumes the independently reviewed strict serialized1232 join. Recomputed exact wallf71f91d6/roof10b03461 hashes while retaining deterministic owner/body/shape names, metadata, transforms, material/mesh arrays, collision faces and order; only explicitly ground_visual meshes and autogenerated mesh names are excluded. Full preflight executed without engine or output-directory creation and passed. Immutable map mechanics-004-readiness/input-map.json SHA36c17ad222d6eb19ce87ad933c4b12eb673d0f84f3d7b35f669ed06e9fdf018d binds unchangedsource5476aa89/driver2ba53c7f, runner and corrected scope.
+
+Limits: rawactual005 HOLD is required and preserved. Only its exact two known equality errors qualify; all raw/output/independent hashes, six views, zero native orientation offenses and terminal absence are checked. This is separate derived physical reuse, not blanket early.ok bypass. No engine, geometry, control or source edit occurred.
+
+Next: after High readiness and ROOT GO, one campaign runs1241 full approach/braking/retreat plus wall placement and door rejection, alongside1232 visual approach/retreat reproduction. Prior1232 sprays remain reusable evidence; they are not repeated. Native actual result, paving motion review and final authority/release remain separate.
+
+
+## roof_1397_diagnosis — corrected pair source/readiness005, 2026-09-23
+
+Reviewed correction004 and rename-only parser repair; retained failed004 and actual005 raw exit1/HOLD. Independently decoded all005 native mesh fronts/normals and collisionfaces, checked all24 roof fronts UP with identical priortrianglepositions,25 cap surfaces UP,34 lowerwall closures aligned to frozenedge outward. Scoped consumed source PASS. Recomputed1232 exact physical hierarchy join with narrower exclusions than producer: omit only explicitly noncollidingground_visual and normalize only autogenerated mesh names; retain deterministic names and all semantics/geometry. Both canonical joins match003. Changed paving is outside oldwalltag box/camera cone, so completed1232 mechanics/spray evidence remains reusable as old evidence.
+
+Final mechanics004 input map36c17ad222d6eb19ce87ad933c4b12eb673d0f84f3d7b35f669ed06e9fdf018d readiness PASS after focused driver/runner review and read-only preflight. Runner binds raw005 failure exactly plus separately derived comparison; no blanket early-success override. General4mm/contact/camera/stock predicates retained. Root still owns named engine authorization;1241 actual movement/sprays and1232 current paving-motion visual decision remain unrun. No engine or implementation changes by reviewer. Detailed evidence in private independent-technical-001/correction-ready-005; existing consumed-representation practice applied, no duplicate lesson or framework.
+
+
+## roof_1397_diagnosis — actual mechanics004 diagnosis and005 readiness, 2026-09-23
+
+Independently verified004 outputmap d8e029a6 and116rawrows: PhysicsServer getter stays atone settledsetup pose while allNodepositions/velocities exactlymatch003. RawHOLD remains; getter-versus-transform-notification cause not inferred beyond retaineddata. No geometry/controller modification justified.1232 priorphysical/trajectory joins support visual-only continuation, not fabricated currentmechanicsPASS.1241 unrun.
+
+Reviewed concrete005 scope+read-onlyphysicscallback and found firstproposal collected directstate without letting it resolve a getter-only false rejection. Final frozenmap0a8d8a3e0275a6ec7f393be999181c304c2a8cf4cbef44b8d3d45f66602a5338 readinessPASS: directstate alternate requires sameframe/phase/RID/objectidentity/callbackNode andfinite agreement withinunchanged1micrometre; allrawdiagnostics retained, noNodefallback orsyncwrites.1232 visualjoin explicitlyconsumed;1241 fullgate remains. Noengine byreviewer; namedROOTGO stillrequired. Releaseprep reviewedusingexistingD5zero-credit path; flagged staleproposalmodel/factorypins and oldconfig/geometryconsumers forlaterauthorizedadaptation. Report/pins underprivate independent-technical-001/actual-mechanics-004.
+
+## 2026-09-23 — housing_pair_integration — mechanics004 HOLD and005 recorder correction
+
+Worked: retained004 terminal/raw evidence and released PID55224 exit1/absent with empty actualGodot census. All116 raw server positions stay at setup while Node trajectory/velocity exactly matches passed003. No source/controller/collider change is justified.005 preparation now consumes1232 visual-onlyscope with exactprior physical+position/velocity/floor/length joins; original mechanical diagnostics remain separate and1241 fullgate stays. Read-only physicscallback after stockplayer records boundNode/RID/objectID/phase/frame andnullable directstate alongside rawgetter. Only exactsame-row identity-bound finite directstate agreeing underunchanged1e-6m may qualify a stalegetter; noNodefallback, sync ortransform writes. Frozenmap mechanics-005-readiness-002/input-map.json SHA0a8d8a3e0275a6ec7f393be999181c304c2a8cf4cbef44b8d3d45f66602a5338; source5476 unchanged.
+
+Did not work:004 still treated1232 visual reproduction as a fresh mechanical acceptance gate, so it stopped before neededretreat pixels and1241. RawHOLD remains; failure was not suppressed or automatically rerun. Underlying stalegetter notification cause is not proven.005 awaits independent readiness and ROOTGO.
+
+Release preparation: refreshed private four-file source/mounted dependency patch againstcurrent5476, preserved oldproposal, gitapply--checkPASS withoutapplication. Canonicalcache remains73uniqueclasses atf60e0a9e hash. Current read-only compiler correctly fails D51232adapter drift; accepted consumer/artifact repinning cannot be claimedcomplete. No authority write/export/MAINcopy/commit.
+
+
+## roof_1397_diagnosis — actual005/006 and doorassembly007 readiness, 2026-09-23
+
+Confirmed005 seededok merge bug and exact one-line overwrite repair; rawHOLD preserved.006 completed1232visual approach/retreat with exact003trajectory and currentfullnative005join. All346 reached rows have currentNode/server/RID/floor/support/camera agreement and1292nativechecks pass.1241 stops within intendeddepth on attachedkickplate98,27.5mm proudofleaf92; waiting forleafalone causescontinuedpush/jambcontact. Derived geometry and capsule/contact analysis supports an over-specific fixturepredicate, not a newart/traversal defect; no modelchange recommended.1241retreat/sprays remainunrun.
+
+Reviewed exactsource-bound92OR98 blockingpredicate and nativefaceshash; otherdetail/threshold/jambs excluded, sprayleafbinding unchanged. Frozen007mapec1f37157012ec6d5b8789ec4da70c335b6e6ef86b926f1e73f30a256b5872f2 readinessPASS afterallpins andread-onlypreflight. ROOTconditionalGO remains theexecutionauthority.1232mechanics003reuse and006visual are explicit; separatevisualreview004PASS nowexists. Noengine/sourceedits byreviewer. Evidence/report underprivate independent-technical-001/actual-mechanics-006.
+
+
+## roof_1397_diagnosis — final pair source/mechanics007 closure, 2026-09-23
+
+Independent scoped pair source/mechanics PASS at capture-time5476 source. Actual007 all163 rows,629nativechecks, exact1241 current005 snapshot joins, attacheddoor98 firstcontact/braking,1.939584m retreat tosource-land and bothrealstock sprays verified. Rawdirectstate lag remains visible andunused; postprocessNode/server/RID agreement holds allrows. Both originalstills viewed; visualmotion remains separate.1232 mechanics003 is reused through exact005physical/sprayvolume joins plus complete006currentmotion; no repeated/relabelled spray evidence. AllolderHOLDs retained.
+
+Reviewed and accepted currentreleaseguard proposal84d2d88e forROOT-authorized application: exactcurrent factory/model/support hashes, rawsource checks movedbeforefactorycall inadapter, mountedclosure retained/expanded. No geometry changes; completecandidate consumer/package readiness remains pending frozeninputs. ExistingD5zero-credit path and34/213 preserved. Final report/pins privateindependent-technical-001/final-pair-007. Noengine/sourceimplementation/authority writes byreviewer. Applied retained-success init/merge/continuation check to the targeted005 repair; no new gate/checker layer.
+
+
+### housing_pair_integration — mechanics005–007 closure and candidate preparation (2026-09-23)
+
+Mechanics005 retained a bookkeeping HOLD: completed visual trajectory comparison was merged into a seeded `ok=false` dictionary without overwrite. The single reviewed serialization repair006 changed only `merge(..., true)` and completed1232 visual approach/retreat. Independent High then identified1241 exact kickplate98 as legitimate attached door hardware; waiting exclusively for leaf92 caused later input-driven jamb slide. Reviewed007 accepted only exact leaf92 or native-hash-bound kickplate98, preserving support/camera/depth/corridor/retreat/two-spray checks and excluding thresholds/jambs.007 completed exit0, PID63204 absent, Godot census empty; immutable output map `mechanics-007/completed-output-map.json` SHA f599b03642f34d27568dcc4f19db6685fe10d755d4afb2a737245d2201ef4e29. Separate source/mechanics and visual decisions PASS within their stated scopes; prior raw HOLDs remain unchanged.
+
+Efficiency correction: trace a known-good retained result through initialization, merge and the actual continuation branch before freezing future helper edits. Baseline005 had one bookkeeping-only abort; target is zero across the next two comparable handoffs. The approximately four-minute High-ready→007-launch interval had no technical prerequisite; context restoration preceded launch, but exact wall-time attribution was not instrumented. Ready native completion/release should take priority over secondary preparation.
+
+Applied the independently accepted four-file dependency-guard relocation, leaving model/support/config/land/controller bytes unchanged. Added package-only main checks comparing complete current native snapshots against a fresh pinned atomic pair, with the actual whole-building counts. Existing1308/1394 quality candidate precedent resolved ordering: preserve historical registry/compiler/receipts in the candidate and test pending new components separately; package+seventh acceptance precede exact-current authority and final export. No provisional registry acceptance or old-receipt relabeling. Candidate six-stage runner, source/cache/threeUID/native joins, first-five derived packets and exact MAIN guards are prepared under external `candidate-package-001`; frozen execution input map SHA5bf5eafb82a25b3e7282733e88ea1828c90f999111e7f354e1ee826ff1d2de94. Python parsing, selected tracked/new whitespace and actual read-only preflight passed. Independent binding and ROOT engine authorization remain pending; no export, authority write, MAIN mutation, commit or push. Recognition remains34/213.
+
+
+## 2026-09-23 — roof_1397_diagnosis — independent pair candidate readiness
+
+Reviewed the complete frozen candidate chain after final pair source/mechanics closure. Confirmed the successful zero-credit D5 candidate-before-authority order and caught draft donor prerequisites/one indentation issue before freezing. The final review found a new evidence-wrapper schema; the author reused the existing donor shape and preserved the original map/preimages. Corrected map593d09fa passes scoped preparation review; actual candidate package and later authority remain pending. No engine, implementation or promotion by reviewer. Separate bounded1444 side check confirmed packet compass/run inversion from consumed fronts; early six-image art critique supplied only two priorities, with no final1444 technical claim. Existing lessons suffice; no new instruction layer.
+
+
+### housing_pair_integration — donor wrapper correction and bound candidate readiness (2026-09-23)
+
+Independent review caught a wrapper mismatch: I had reused the later `ti.unit-derived-evidence/1` shape instead of the specifically selected1308/1394 `ti.d5-batch-derived-evidence/1` donor. Preserved the5bf input map and affected preimages, converted only the four per-unit derived wrappers to the existing seven-field shape, retained all evidence/data/limits and origin hashes, and cascaded dependent pins. No source, geometry, runner or gate change. Successor immutable `candidate-preparation-wrapper-repair-001/input-map.json` SHA593d09fae13bc0825bc28c47eb9fc7a68b0c130d023964df518a862ccc6506b4 passed independent review. Existing file-only binder completed; readiness-binding SHA08ac77d21cfce0eca68f2409f9ece1f33b4cb3528055187f640b51a9beb9cf91. No engine/export/authority operation occurred. Root engine transfer remains required. Lesson: take wrapper fields from the exact chosen quality-refresh donor before packet assembly, not an adjacent later unit packet.
+
+
+### housing_pair_integration — complete shared candidate chain (2026-09-23)
+
+ROOT named the sole slot after1444 release. Consumed one existing six-stage chain against reviewed593d09fa inputs, without import/retry: source component PID72435, export72498, mounted component72635, mounted privacy72658, signed headless72675, signed native72715; all exit0, absent, unchanged pins, no warnings/errors. Source and signed ordinary main measured735rows/2991meshes/3006surfaces/207893triangles/498bodies/1925shapes. Both current target native surface/material/contact snapshot predicates passed alongside unrelated controls. The same seven-file signed candidate app passed signature/architectures/privacy binding, direct-mounted component/privacy and complete headless/native stock movement/jetpack smoke. PCK42257134ee726413276b754bd5f94ca4df9a92293b9fa865892ccba98020b7cb. Actual release21:39:13Z recorded all PIDs absent and empty census. Completed output map SHA08cc360a5a6bd1e76779fcdb220a37b966489477bfb5ffd25ad8bcc1ff53b6bd under external candidate-package-001. Independent exact-app review is pending; no seventh acceptance, authority refresh, final export, MAIN write or promotion occurred. Historical34/213 remains unchanged. The source-before-export measured-vector check and complete existing runner avoided a package replay; preserve these actual successful stages.
+
+
+## 2026-09-23 — roof_1397_diagnosis — independent exact candidate package and unit6/7
+
+Candidate PCK42257134 passed independent signature/privacy/both-architecture inspection and two authorized fresh mounted checks, PIDs74724/74971 exit0/absent,10.048s/4.785s.253 inputs/seven app files unchanged; engine logs byte-identical owner. Slot released21:42:59.335258Z census empty. Independently reviewed owner source/export/mounted/privacy/headless/native raw results; signed ordinary-main outcomes remain owner evidence, not new independent runs. Both separate unit sixth/seventh records bind the exact current app and the previously separate Medium visual004/005 plus source/mechanical gates;1232 reuse003→005→006 remains explicit. Historical34 unchanged, zero new credit, no authority/promotion. No extra engine gate, schema or prose lesson was added.
+
+
+### housing_pair_integration — offline zero-credit authority/current-release preparation, 2026-09-23
+
+Consumed the independently completed candidate and separate per-unit six/seventh artifacts. Prepared the existing one-current-record zero-credit refresh privately, retaining old +1 records/seven originals and a byte-exact historical catalog. Private overlay compiler write/check and both existing JS contract suites pass at 34/213. Updated exact catalog-schema path literals without changing its shape/version; current pair closure is four executable files, with other D5 closures unchanged. Single-quoted embedded JSON avoids misleading escaped resource-path tokens in the existing scanner. Prepared existing native registry/loader checks plus the successful six-stage batch with exact proposed source maps, native/candidate reuse and fresh outputs. All selected new text whitespace/Python AST pass. No active authority writes, geometry/controller changes, engine, export, MAIN change or promotion occurred. Independent frozen review and named ROOT GO remain required.
+
+
+### housing_pair_integration — post-candidate cache provenance correction, 2026-09-23
+
+Independent frozen review caught one stale editor filesystem_cache10 pin among 116 reused cache files. Preserved prior authority0d4c45/finala81129/cache maps and rebound only that actual file; its 21:37:35.219012Z mtime lies inside the completed PASS candidate export interval. Existing full-cache check remains; canonical class cache and all three UIDs still match. Successor immutable authority25142295/final645a9c82 maps bind the completed export provenance. No reimport, engine, source/geometry/controller change, authority write, or broader cache exclusion.
+
+## Independent authority/final readiness — roof_1397_diagnosis — 2026-09-23
+
+Bounded review passed corrected immutable authority25142295 and final645a9c82 preparations. Verified complete zero-credit transaction, retained +1 history, exact current seven-role joins, compiler/native/JS closure and full eight-stage runner. Found a stale editor filesystem cache pin inherited from before the completed candidate export; author preserved the old map and pinned actual post-export bytes with the timestamp/export receipt, no reimport or removed guard. All335/94 map entries,116 cache files and214 simulated final source pins match;139 candidate source inputs remain unchanged. Report: independent-technical-001/authority-final-ready-001/REVIEW.md. No engine, authority write, release completion or promotion claimed by reviewer; ROOT GO and actual final chain remain pending.
+
+
+### housing_pair_integration — actual authority applied, first final native gate HOLD, 2026-09-23
+
+Applied the exact independently reviewed 75-file zero-credit transaction; compiler write/check passed and all generated bytes matched the private dry output. Final first native registry stage stopped exit1 before any export: two scanner format-probe adapter hashes and the sole-current-topology summary predicate remained historical in the native test. JS and detailed native behavior updates had not covered these separate literals; author preparation missed them despite independent readiness. PID74207 is terminal/absent and census empty at22:12:17Z. Raw failure/output map retained, no automatic repair or repeat, no later stages, no MAIN/commit/push. Minimal diagnosis is exact current adapter hash and topology literal alignment, not weakened closure or geometry change; independent review and a new bounded assignment remain required.
+
+
+### housing_pair_integration — narrow native-consumer repair preparation, 2026-09-23
+
+Independently corroborated the three stale literals from actual native-registry001. A focused same-cause sweep caught the matching runtime-loader sole-current1226 predicate before the next native stage; ROOT approved exact1241 alignment, not a general audit or relaxed closure. Preserved both source preimages, failed8292 output map and applied4f450e receipt. Private correction updates two adapter hashes, the two topology assertions/diagnostics, necessary fixture expected hashes and three generated document hash cascades. Normalized generated JSON is identical apart from loader/dependent hashes; catalog, acceptance records, credit34 and geometry/control/main bytes unchanged. Existing compiler-check/loader-JS and selected literal/probe/whitespace/AST checks pass; all116 cache pins remain current. Repairb19073fa and finald7c5ba45 maps bind explicit old-applied-to-six-file join and fresh eight-stage continuation. No active repair application, import, engine or repeated completed authority transaction.
+
+## Independent final native001 miss and narrow continuation002 — roof_1397_diagnosis — 2026-09-23
+
+Actual native001 failed because I missed unchanged native recognition format-probe hashes and current-topology singleton despite reviewing updated per-unit predicates and native-loader test. Author found the same stale singleton in runtime loader before the next stage; I independently corroborated all four predicates. Earlier complete-readiness consistency claim was too strong. Failed output8292 and exact applied authority4f450e remain intact. Readiness now passes repairb19073fa/finald7c5ba45: two semantic consumer changes plus exact native-fixture/generated hash cascade,324/92 pins verified; normalized generated JSON proves no records/count/scope change. Existing repair join checks all other original75 applied outputs, fresh full8-stage chain and all strict guards retained. No broad hash replacement, import, authority-transaction replay or art/mechanics replay. Actual native validation remains required; no engine or production edits by reviewer. Existing report directory contains diagnosis and CONTINUATION-002-REVIEW.md.
+
+
+### housing_pair_integration — final002 loader duration observation, 2026-09-23
+
+Retained original handle11870/PID79202 while full native negative-control work continued. At the root status check, actual elapsed08:36/CPU08:30.94 and100%CPU,stateR showed active work. Existing-mutations phase had completed176.05s with12.82GB aggregate closure reads; the next17-target mutation phase emits its record only after completion. No errors/stall evidence, no restart, no midrun optimization or new monitoring framework.
+
+
+### housing_pair_integration — final002 native PASS retained, final-only target branch correction, 2026-09-23
+
+Final002 native registry and full loader passed; loader completed719.64s with52.10GB aggregate closure reads, no errors/warnings. Source-component then correctly stopped on obsolete candidate +1 predicate inside pair early-return branch, before export. The lower exact-current acceptance dictionary had been updated but was unreachable for this pair: preparation must trace the actual consumed branch, not just find updated data. Preserved raw7b1de9da and allterminalPIDs/census release51195f36. Final003 binds exact current seven-role records/sole adapter/claim state/one physical unit inside reached branch; unchanged source metadata pending remains explicitly historical construction metadata. All306 inputs for each completed native stage remain byte-exact and are runtime-guarded reuse prerequisites; no native replay. Fresh six-stage package continuation only, maps17e1b9f7/e7f51fda. No source/art/authority/cache changes, engine pending independent readiness and ROOT GO.
+
+## Independent final002 authority-branch miss and003 readiness — roof_1397_diagnosis — 2026-09-23
+
+Final002 native registry+loader passed, then source helper failed stale+1 assertion in the pair early-return branch. I had reviewed refreshed exact authority data below that return without tracing its reachability; this was another readiness miss. Actual13file output7b1de9da retained. Reviewed whole remaining package-authority consumption and exact records, then frozen003 repair: reached pair branch now compares full current seven-role record/sole adapter/claim state/unique unit, retaining real pending construction metadata and all geometry/privacy/count checks. Both native306-input proofs remain exact and guarded;214 production-source pins unchanged. Readiness PASS correction17e1b9f7/finale7f51fda for fresh six-stage source→export→mounted→privacy→signed smokes, no native/import/authority replay. New and historical acceptance remain separate; runtime outcome still pending ROOT GO. Existing report directory holds SOURCE-002-DIAGNOSIS.md and CONTINUATION-003-REVIEW.md.
+
+
+### housing_pair_integration — final003 complete owner package PASS, 2026-09-23
+
+Six-stage final003 completed first attempts: source19.16s, export6.55s, mounted8.06s, privacy2.20s, signedheadless8.09s, signednative66.76s. All six terminal0/absent, exact inputs/app unchanged, no errors/warnings. Current world735/2991/3006/207893/498/1925 and all current attachments passed; mounted privacy reports zero private paths/raw/banned payloads; signed main verifies stock controls and jetpack. Actual PCK6621b3a46656a91a0687f1a6d1bd0081c7d4c96e3987545269003a196d417d2d, completedmap35ea108d, releasea80c2571 at22:46:15.966028Z,census empty. Completed native registry/loader PASS reused via exact306-input joins, not rerun. Preserved both earlier final HOLDs and authority/repair receipts. Independent exact-app final gate remains pending; no MAIN copy/commit/push. Publication selection excludes four unrelated testUIDs and must merge named RETRO additions into current94f85a4 MAIN documentation.
+
+## Independent exact final003 release — roof_1397_diagnosis — 2026-09-23
+
+PASS on exactPCK6621b3a4 after independent mountedcomponent86917exit0/8.3698s and privacy87060exit0/2.2239s, first attempts,348pins/sevenappfiles unchanged, no engineerrors/warnings. Fresh empty external runtime; current authority records and exact geometry/material/shape checks passed, privatepaths/raw/banned0. Independent codesign botharches/deepstrict/plist/xattr checks passed. Owner six clean final003 stages and retained native306input joins independently reviewed, ordinary native/headless/export not duplicated. Separate Medium unit visuals and scoped003/006/007 mechanics remain unchanged authorities. Released22:49:30.939622Z, bothPIDsabsent/census[]; no MAIN/promotion by reviewer. Report independent-technical-001/final-package-actual-002/REVIEW.json. Earlier rawHOLDs and readiness misses remain recorded; no further checks requested.
+
+
+### housing_pair_integration — ROOT-authorized selected publication, 2026-09-23
+
+Independent final release24b1fffb passed and ROOT authorized the exact93-file selection on MAIN94f85a4, whole-app transfer, commit and normal push. Private clean declared-root compiler passed with only tracked+selected dependencies. Preserve all current MAIN docs/history, append named isolated retrospective sections, exclude four unrelated testUIDs and all private reference photos/full movies/app/cache bytes from Git. Actual transfer/source equality/compiler/staged checks and Git results are recorded by external publication receipts and Git history; no extra engine/export is authorized or needed.
+
+Actual publication transfer completed: all93 selected files initially matched, seven exact app members/modes and strict signature verified, MAIN compiler passed at34/213. Final selected/staged checks precede normal commit/push; completed Git identity is recorded in publication receipts/history. No engine or reexport.

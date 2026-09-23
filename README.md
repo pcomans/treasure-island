@@ -7,18 +7,11 @@ public distribution are outside this milestone.
 
 ## Current source and release
 
-The current private release recognizes **34 of 213** physical buildings, adding
-1397 Gateview and 1226 Bayside to the prior 32. All 213 identities remain;
-**179 buildings are not evaluated**.
+The current source retains **34 of 213** accepted physical buildings and **179 not evaluated**. This batch improves the complete 1232 and 1241 Northpoint buildings without adding recognition credit. Their original acceptance history remains intact.
 
-The stable macOS app is `build/northern-1397-1226-exact-current-001/Treasure Island First Playable.app`.
-Its [release record](evidence/first-playable/northern-1397-1226-current-release-2026-09-23-001/README.md)
-binds the exact app, source and independent review. The [accepted-building snapshots](evidence/building-snapshots/accepted-34-2026-09-23/README.md)
-show the 34 accepted IDs in the current source.
+The new exact-current macOS app passed source, mounted-content/privacy and signed headless/native checks. Its [release record](evidence/first-playable/housing-1232-1241-quality-current-release-2026-09-23-001/README.md) binds the app and independent decisions. Stable whole-app destination: `build/housing-1232-1241-quality-current-001/Treasure Island First Playable.app`; consult the release record for actual transfer status. The [34 ID snapshots](evidence/building-snapshots/accepted-34-2026-09-23/README.md) predate these two quality replacements.
 
-The [paused checkpoint](discovery/checkpoints/paused-2026-09-23/README.md) is historical:
-1397/1226 are now complete; 1237/1229 remain unfinished and preserved. Mersea is deferred.
-The recurring reminder remains paused. This bounded delivery ends after commit and push.
+The new 1397 and 1444 art revisions remain isolated studies pending their own integration and release gates; their existing production versions remain unchanged. The [paused checkpoint](discovery/checkpoints/paused-2026-09-23/README.md), unfinished 1237/1229 work and deferred Mersea remain preserved. Follow the resumed-work and hourly quota rules in [AGENTS.md](AGENTS.md).
 
 ## Play on another Mac
 

@@ -1,0 +1,122 @@
+{
+  "reviewer": "/root/roof_1397_diagnosis",
+  "reviewed_at": "2026-09-23T21:46:16.422725+00:00",
+  "decision": "PASS",
+  "attestation_kind": "Independent per-unit candidate packet and visual attestation (seventh artifact)",
+  "physical_unit_id": "physical-building:w96215674",
+  "scope": "Exact current six-role packet/image tree and completed candidate package. Visual quality is the separately bound independent Astra Medium decision on unchanged current geometry; this artifact joins those gates and grants no new recognition credit.",
+  "independence": "Reviewer did not implement pair models/adapters/controller or author the first-five packets. Reviewer performed independent source/mechanics/package judging and serializes this derived sixth/seventh join. Separate review_1241 Astra Medium supplied actual visual004/005/static003 judgments; no new self-supplied art judgment.",
+  "packet": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/unit-packets-001/1241",
+  "candidate_closure_sha256": "f7d9c88e3103a3d930c913df7ba1a551b1cb4d7dd6732f4c6181261c69321c43",
+  "candidate_closure": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/unit-packets-001/1241/candidate-closure.json",
+    "sha256": "f7d9c88e3103a3d930c913df7ba1a551b1cb4d7dd6732f4c6181261c69321c43",
+    "bytes": 1689,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/unit-packets-001/1241/candidate-closure.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "acceptance_bindings": {
+    "evidence_manifest_sha256": "3f27b6862b35ba94a5a12fb5bc93dfa66b728470a3d3d05b27740c2c94ab3713",
+    "motion_telemetry_manifest_sha256": "896d653a9d8b654f04432b20d144f3ceae43628fd9b9035d141069d13cd4b151",
+    "visual_motion_manifest_sha256": "ec55cf895115a1e683556b4a06a2c1d76d6cc7727e29933103cfa000c3640973",
+    "package_verification_receipt_sha256": "517ad61710c09b58dcdf7502b32a828a7abc976660dc5555e9c89b08159428f6",
+    "mechanical_review_receipt_sha256": "c4646381adea015f2486a8bb3019d2de568395ac7a2772001c9442b5f70c15c1",
+    "evidence_tree_sha256": "c6ab5cbd43c2b81b62a7fe5c72f742e1a9aa4f92c5712d1b1e236a1f2d0bc286"
+  },
+  "evidence_tree_document_sha256": "c082ed4202f02b84d52817d179e1350a3432d7dbd34882b52e4f0947fb2aa0ad",
+  "image_tree_sha256": "c6ab5cbd43c2b81b62a7fe5c72f742e1a9aa4f92c5712d1b1e236a1f2d0bc286",
+  "binding_check": {
+    "six_values_exact": true,
+    "tree_document_hash_distinct_from_image_tree_digest": true,
+    "image_files_exact": true,
+    "raw_origins_preserved": true,
+    "originals_rewritten": false
+  },
+  "visual_readiness_review": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-visual-005/REVIEW.md",
+    "sha256": "f238b825aaae912cd5dedf37d7647692b513d487286789cbc2510c3f58ad6450",
+    "bytes": 3425,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-visual-005/REVIEW.md",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "reused_visual_reviews": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-visual-003/REVIEW.md",
+      "sha256": "ca59fa9fda15b8235a281c4c0427776e324b8187a20fd36fd08e984661c4669d",
+      "bytes": 3979,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-visual-003/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-visual-005/REVIEW.md",
+      "sha256": "f238b825aaae912cd5dedf37d7647692b513d487286789cbc2510c3f58ad6450",
+      "bytes": 3425,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-visual-005/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "whole_visible_result_findings": "Separate Medium visual005 PASS: actual005 architecture and007 approach/contact/retreat remain coherent; full visible wall-tag footprint stays clear of frame/opening/band. Even pale materials/opaque glazing remain disclosed.",
+  "gates": {
+    "source_mechanics": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/final-pair-007/REVIEW.md",
+      "sha256": "a16163f0acddfbc6a3f581c64c3e717d024a3bae28c34b2a8bd47d129c05d1e8",
+      "bytes": 5610,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/final-pair-007/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "source_to_package": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/source-equivalence-join.json",
+      "sha256": "93c3b94b4dda614f730aa7c443c8418557ca07fe4a5c4a57e5024a58cd0af067",
+      "bytes": 3275,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/source-equivalence-join.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "package": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/REVIEW.json",
+      "sha256": "3e8e391ad08bca8f0517ff18416695b88ee447689a167cfe53afda9f000d37e3",
+      "bytes": 24049,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/REVIEW.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    "visual": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-visual-005/REVIEW.md",
+      "sha256": "f238b825aaae912cd5dedf37d7647692b513d487286789cbc2510c3f58ad6450",
+      "bytes": 3425,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-visual-005/REVIEW.md",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  },
+  "retained_source_mechanics": "007 actual1241 approach/brake leaf92-or-exactkickplate98 assembly contact, retreat, wall placement and door rejection; exact source5476 geometry.",
+  "candidate_package": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/unit-packets-001/1241/package-verification-receipt.json",
+    "sha256": "517ad61710c09b58dcdf7502b32a828a7abc976660dc5555e9c89b08159428f6",
+    "bytes": 26895,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/unit-packets-001/1241/package-verification-receipt.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "candidate_authority": "34/213",
+  "capture_time_authority": "34/213",
+  "numerator_effect": 0,
+  "recognition_credit_granted": false,
+  "authority_write_performed": false,
+  "limits": [
+    "Derived actual independently reviewed scopes; no package/seventh acceptance yet. Historical recognition34/213 unchanged; proposed quality numerator_effect0.",
+    "All old raw HOLDs preserved. Capture5476 geometry joins packaging-only guards through unchanged model/support/config/land/controller; independent package-helper equivalence still required.",
+    "Sparse movie sampling is not continuous playback/manual play, all-door traversal, ground-to-roof traversal, interior or surveyed dimensions.",
+    "Private references/full movies remain outside Git/runtime. Selected original images copied without re-encoding.",
+    "No independent signed ordinary-main replay; authorized independent executions are exactly mounted component/privacy.",
+    "No new art imagery, manual play, continuous motion playback, M1-specific or interior/all-door/ground-to-roof traversal claim.",
+    "1232 mechanics003 reuse remains through exact005 physical/spray-volume joins; current006 visual route;1241 full007 current mechanics. All old raw HOLDs remain intact.",
+    "Historical34 authority remains unchanged. Separate per-unit seventh records follow this package gate; authority refresh and final exact-current package remain required before promotion."
+  ],
+  "as_built_fidelity": "Not asserted; bounded game-art recognition and dated reference observations, not surveyed dimensions or hidden details."
+}

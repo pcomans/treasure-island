@@ -1,0 +1,24 @@
+{
+  "physical_unit_id": "physical-building:w96215673",
+  "status": "SIX_ROLES_BOUND_FOR_INDEPENDENT_SEVENTH",
+  "acceptance_bindings": {
+    "evidence_manifest_sha256": "8cbaf41ac64c5ebdfc986d6fa10f23395d277239dc732f3ed8998db6ece2fd69",
+    "motion_telemetry_manifest_sha256": "bf352edf6b9088a92fef76079bebd40942c423b6fc66d16db445f9cbd1a25c40",
+    "visual_motion_manifest_sha256": "e548a2660055c1123f42653215c1fa7c50b40b3d2ed93787842bb73404148f31",
+    "package_verification_receipt_sha256": "2845135486b956467a58f28676c13fdab8a8348dd8785a1e163239f0e446e56a",
+    "mechanical_review_receipt_sha256": "87ec76ee5508e984230a73fe01181c7968bf5d3092dfe4eb653612edaa2aaf2b",
+    "evidence_tree_sha256": "c8877020da371725757f4f836fd2a80f899f13412766b837b0a97b7ed85bf508"
+  },
+  "evidence_tree_document_sha256": "fb4fed5023678df46d951e85c9385170f4d5ef07edda8966bdc6b239637bd900",
+  "original_first_five_closure": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/unit-packets-001/1232/DRAFT_BINDINGS.json",
+    "sha256": "91a594c77aadccbcb056286794784164cc5372d9e073211b7af998e10a63fae3",
+    "bytes": 672,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/unit-packets-001/1232/DRAFT_BINDINGS.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "package_actual": "PASS; owner six stages + independent exact mounted component/privacy; signed smokes owner-reviewed only.",
+  "candidate_authority": "34/213",
+  "numerator_effect": 0
+}

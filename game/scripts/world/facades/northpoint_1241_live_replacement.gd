@@ -1,8 +1,7 @@
 extends RefCounted
 
-## Proposed atomic live adapter for the reviewed 1241 Northpoint source pair.
-## It preserves the original roof pair and keeps the added projected receiver
-## on the wall side; nested collision ownership is preserved verbatim.
+## Atomic source-pair adapter for an unaccepted whole-building revision of 1241 Northpoint source pair.
+## Source identities remain exact. Contacts now derive from the current visible shell.
 
 const FACTORY := preload("res://game/scripts/world/facades/northpoint_1241_live_factory.gd")
 const ADAPTER_ID := "active-adapter:northpoint-1241-live:building:w96215674:wall"
@@ -10,10 +9,9 @@ const SOURCE_KEY := "w96215674"
 const WALL_KEY := "building:w96215674:wall"
 const ROOF_KEY := "building:w96215674:roof"
 const TARGET_CHUNK_ID := "x_-1__z_-3"
-const EXPECTED_FACTORY_SHA256 := "cf94d080e386e5abcffb00328571965cc52a96e6c1522d356a6b2248e18d9bc0"
-const EXPECTED_CONFIG_SHA256 := "9ddd9734280fa4380e4eb95d1d0e682300ac55037845f2e73b65dc57de071ccb"
+const EXPECTED_FACTORY_SHA256 := "b36d5147e164f59d7c13c0b7983096a9a0b202caa7a94df5c700794bda07a278"
+const EXPECTED_CONFIG_SHA256 := "dc87fc7947e22607d9529fa3d34ea10296a47cc504cd5a5e276d1f03ebe92c52"
 const MAPPED_RUNS := [0, 1, 2, 3, 5, 6, 7, 8, 10, 11, 12]
-const PROTECTED_RUNS := [4, 9, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25]
 
 
 static func claims_record(record: Dictionary) -> bool:
@@ -107,29 +105,27 @@ static func _dependencies_match() -> bool:
 
 static func source_dependency_hashes_match() -> bool:
 	return FileAccess.get_sha256(FACTORY.SELF_PATH) == EXPECTED_FACTORY_SHA256 \
-		and FileAccess.get_sha256(FACTORY.CONFIG_PATH) == EXPECTED_CONFIG_SHA256
+		and FileAccess.get_sha256(FACTORY.CONFIG_PATH) == EXPECTED_CONFIG_SHA256 \
+		and FileAccess.get_sha256("res://game/scripts/world/facades/northpoint_1241_quality_model.gd") == "f1e49be1021d4bab36d125c1363b3b259f12c61781cd8b2fc1c89160a28bec6b" \
+		and FileAccess.get_sha256("res://game/scripts/world/facades/housing_quality_support.gd") == "34d14eedb3c5296061bec5b10003c240aabb90e9654dcd61165f4bd917392b97"
 
 
 static func runtime_dependency_closure_exists() -> bool:
 	return ResourceLoader.exists(FACTORY.SELF_PATH) \
-		and FileAccess.get_sha256(FACTORY.CONFIG_PATH) == EXPECTED_CONFIG_SHA256
+		and FileAccess.get_sha256(FACTORY.CONFIG_PATH) == EXPECTED_CONFIG_SHA256 \
+		and ResourceLoader.exists("res://game/scripts/world/facades/northpoint_1241_quality_model.gd") \
+		and ResourceLoader.exists("res://game/scripts/world/facades/housing_quality_support.gd")
 
 
 static func _split_factory_result(built: Dictionary, wall_record: Dictionary) -> Dictionary:
 	var wall_root := built.get("node", null) as Node3D
 	if wall_root == null:
 		return _failure("northpoint_1241_factory_node", "Factory returned no root.", wall_record)
-	var roof_mesh := wall_root.get_node_or_null("ExactSourceNeutralRoof") as MeshInstance3D
-	var roof_source := wall_root.get_node_or_null("OriginalRoofRecord") as Node3D
-	if roof_mesh == null or roof_source == null:
+	var roof_root := wall_root.get_node_or_null("QualityRoof") as Node3D
+	if roof_root == null:
 		wall_root.free()
-		return _failure("northpoint_1241_factory_shape", "Factory did not retain both original roof resources.", wall_record)
-	var roof_root := Node3D.new()
-	# Local transforms remain exact under the new identity root. The projected
-	# eligible front and all detail shapes stay on the original wall owner.
-	for child: Node in [roof_mesh, roof_source]:
-		wall_root.remove_child(child)
-		roof_root.add_child(child)
+		return _failure("quality_roof_missing", "Whole-building revision has no roof owner.", wall_record)
+	wall_root.remove_child(roof_root)
 	_apply_live_metadata(wall_root, WALL_KEY, true)
 	_apply_live_metadata(roof_root, ROOF_KEY, false)
 	# Count the actual split roots. Do not reuse the factory's combined totals.
@@ -139,13 +135,16 @@ static func _split_factory_result(built: Dictionary, wall_record: Dictionary) ->
 		"adapter_id": ADAPTER_ID,
 		"source_key": SOURCE_KEY,
 		"factory_calls": 1,
-		"mapped_public_run_indices": MAPPED_RUNS.duplicate(),
-		"protected_run_indices": PROTECTED_RUNS.duplicate(),
+		"observed_reference_run_indices": MAPPED_RUNS.duplicate(),
+		"unknown_faces": "plain inferred closure",
 		"partial_pair_allowed": false,
 		"fallback_allowed": false,
 		"stack_allowed": false,
-		"original_source_channels_and_roof_preserved": true,
-		"source_wall_spray_eligibility_preserved": true,
+		"frozen_source_records_preserved": true,
+		"old_visual_and_collision_proxies_retained": false,
+		"revision_acceptance": "pending",
+		"historical_recognition_credit_unchanged": true,
+		"wall_spray_receiver_identity_preserved": true,
 		"recognition_accepted": false,
 		"package_attachment_pending": true,
 	}
@@ -199,7 +198,9 @@ static func _measure(roots: Array) -> Dictionary:
 				if mesh != null:
 					result.surfaces += mesh.get_surface_count()
 					for surface_index in mesh.get_surface_count():
-						result.triangles += int(mesh.surface_get_array_index_len(surface_index) / 3)
+						var arrays := mesh.surface_get_arrays(surface_index)
+						var indices: Variant = arrays[Mesh.ARRAY_INDEX]
+						result.triangles += int((indices.size() if indices != null and indices.size() > 0 else arrays[Mesh.ARRAY_VERTEX].size()) / 3)
 			elif node is StaticBody3D:
 				result.static_bodies += 1
 			elif node is CollisionShape3D:

@@ -564,10 +564,10 @@
       "runtime_adapter_path": "game/scripts/world/facades/northpoint_1232_live_replacement.gd",
       "runtime_asset_paths": [
         "game/scripts/world/facades/northpoint_1232_live_factory.gd",
-        "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
-        "game/scripts/world/facades/site_12_housing_kit.gd"
+        "game/scripts/world/facades/northpoint_1232_quality_model.gd",
+        "game/scripts/world/facades/housing_quality_support.gd"
       ],
-      "runtime_config_path": "game/resources/facades/northpoint_1232_study_003.json",
+      "runtime_config_path": "game/resources/facades/northpoint_1232_quality_revision.json",
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
       "source_key": "w96215673",
       "whole_building_recognizability_imported": false
@@ -583,10 +583,10 @@
       "runtime_adapter_path": "game/scripts/world/facades/northpoint_1241_live_replacement.gd",
       "runtime_asset_paths": [
         "game/scripts/world/facades/northpoint_1241_live_factory.gd",
-        "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
-        "game/scripts/world/facades/site_12_housing_kit.gd"
+        "game/scripts/world/facades/northpoint_1241_quality_model.gd",
+        "game/scripts/world/facades/housing_quality_support.gd"
       ],
-      "runtime_config_path": "game/resources/facades/northpoint_1241_study_002.json",
+      "runtime_config_path": "game/resources/facades/northpoint_1241_quality_revision.json",
       "runtime_dispatch_path": "game/scripts/world/world_chunk_builder.gd",
       "source_key": "w96215674",
       "whole_building_recognizability_imported": false
@@ -7718,16 +7718,16 @@
     {
       "acceptance_records": [
         {
-          "evidence_manifest_sha256": "d2d9bd3d7f643d92b45d4c1ca974892d3b35210ae2d2cfe55b89fb4afb94df26",
-          "motion_telemetry_manifest_sha256": "1fd9e52c06c062e48dfc3d6489dfaba4350ba1413a97923f9a44371b052dad39",
-          "visual_motion_manifest_sha256": "26d44f6abccabc4c3075a214a22feff4ba4f6d5b2f6b1b2815d4c32301c37577",
-          "package_verification_receipt_sha256": "f38bbb66dce45b62bdb82705335b55547f571992a8389f6b8346b16f56e32c1f",
-          "evidence_tree_sha256": "c323d879c100e3ac1898905a9841e7f52cc4a76022e7329638ae7feeb586739d",
-          "mechanical_review_receipt_sha256": "2560c1e1032fd997a2cf8db74de48d0430d9bb0fb61165cc09312efba5e9af5f",
-          "review_receipt_sha256": "1cbb4737ed14190e9f6a744b152eaaeddf8d18c39f827cfab784ec94f07c16be",
-          "capture_time_recognition_metric": "26/213",
-          "numerator_effect": 1,
-          "review_id": "northern-1232-quality-candidate-2026-09-22-001",
+          "evidence_manifest_sha256": "8cbaf41ac64c5ebdfc986d6fa10f23395d277239dc732f3ed8998db6ece2fd69",
+          "motion_telemetry_manifest_sha256": "bf352edf6b9088a92fef76079bebd40942c423b6fc66d16db445f9cbd1a25c40",
+          "visual_motion_manifest_sha256": "e548a2660055c1123f42653215c1fa7c50b40b3d2ed93787842bb73404148f31",
+          "package_verification_receipt_sha256": "2845135486b956467a58f28676c13fdab8a8348dd8785a1e163239f0e446e56a",
+          "mechanical_review_receipt_sha256": "87ec76ee5508e984230a73fe01181c7968bf5d3092dfe4eb653612edaa2aaf2b",
+          "evidence_tree_sha256": "c8877020da371725757f4f836fd2a80f899f13412766b837b0a97b7ed85bf508",
+          "review_receipt_sha256": "6a72ba662cd7f3087129cb678384919ccfe805dfe31904fc6a511c4f4d56d8dd",
+          "capture_time_recognition_metric": "34/213",
+          "numerator_effect": 0,
+          "review_id": "northern-1232-whole-building-quality-candidate-2026-09-23-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
         }
@@ -7848,16 +7848,16 @@
     {
       "acceptance_records": [
         {
-          "evidence_manifest_sha256": "465fd62a4b0ce93e7185b6eb17bdf50ede9127e60c492e59848d830d1fb0d2f7",
-          "motion_telemetry_manifest_sha256": "c2e401e59485819a039b4b40bf0f025edabf9691673b179e89c338927a10939c",
-          "visual_motion_manifest_sha256": "690e653a17e8adcebe8908ffa06c8a6dd7b2c5e6886d42f9415e1b03f2ecfd9a",
-          "package_verification_receipt_sha256": "c7a8caf732d9d50ba481b3a889ab9c8aff72833fb2277c56fb997d7af3baef98",
-          "evidence_tree_sha256": "4b293afae85d79015d9f6c0a0b22dff50962db7bf8b05d9f4ba52e152cb13a32",
-          "mechanical_review_receipt_sha256": "6c956cd7f3b7502ab73505d11297efa68d365f7f393f8419fd9293fb71a99cb9",
-          "review_receipt_sha256": "b89b6e90ed0cd33dcf4a540a62965a71ff75c3d8d2eb9ec1e8368b6e3016f869",
-          "capture_time_recognition_metric": "28/213",
-          "numerator_effect": 1,
-          "review_id": "northern-1241-quality-candidate-2026-09-22-001",
+          "evidence_manifest_sha256": "3f27b6862b35ba94a5a12fb5bc93dfa66b728470a3d3d05b27740c2c94ab3713",
+          "motion_telemetry_manifest_sha256": "896d653a9d8b654f04432b20d144f3ceae43628fd9b9035d141069d13cd4b151",
+          "visual_motion_manifest_sha256": "ec55cf895115a1e683556b4a06a2c1d76d6cc7727e29933103cfa000c3640973",
+          "package_verification_receipt_sha256": "517ad61710c09b58dcdf7502b32a828a7abc976660dc5555e9c89b08159428f6",
+          "mechanical_review_receipt_sha256": "c4646381adea015f2486a8bb3019d2de568395ac7a2772001c9442b5f70c15c1",
+          "evidence_tree_sha256": "c6ab5cbd43c2b81b62a7fe5c72f742e1a9aa4f92c5712d1b1e236a1f2d0bc286",
+          "review_receipt_sha256": "44fea517292dce9f86aeb783a413291ba510551a2d13acc391c879e40f680345",
+          "capture_time_recognition_metric": "34/213",
+          "numerator_effect": 0,
+          "review_id": "northern-1241-whole-building-quality-candidate-2026-09-23-001",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
         }

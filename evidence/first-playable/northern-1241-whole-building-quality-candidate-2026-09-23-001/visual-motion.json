@@ -1,0 +1,53 @@
+{
+  "schema_version": "ti.d5-batch-derived-evidence/1",
+  "role": "Separate independent current still/sample-motion judgments",
+  "derived_summary_not_raw_capture": true,
+  "originals_rewritten": false,
+  "raw_origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-visual-005/REVIEW.md",
+      "sha256": "f238b825aaae912cd5dedf37d7647692b513d487286789cbc2510c3f58ad6450",
+      "bytes": 3425,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-visual-005/REVIEW.md",
+      "role": "unchanged_external_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-visual-005/sampling.json",
+      "sha256": "b91b4a4f0fb83a11b95a98f654673644a2d6c023f248b0416c3d4871ee3b6f15",
+      "bytes": 568,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-visual-005/sampling.json",
+      "role": "unchanged_external_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "data": {
+    "status": "PASS scoped visual",
+    "motion_original": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/mechanics-007/motion.avi",
+      "path_base": "/",
+      "sha256": "eb11e86376ad66becf61325a038ff5f9757800b7426529684fd354d9537a518a",
+      "bytes": 16899500,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/mechanics-007/motion.avi",
+      "copied": false
+    },
+    "static": "actual005 static PASS; old003 visual HOLD retained",
+    "capture_time_recognition_metric": "34/213",
+    "numerator_effect": 0,
+    "limits": [
+      "Derived actual independently reviewed scopes; no package/seventh acceptance yet. Historical recognition34/213 unchanged; proposed quality numerator_effect0.",
+      "All old raw HOLDs preserved. Capture5476 geometry joins packaging-only guards through unchanged model/support/config/land/controller; independent package-helper equivalence still required.",
+      "Sparse movie sampling is not continuous playback/manual play, all-door traversal, ground-to-roof traversal, interior or surveyed dimensions.",
+      "Private references/full movies remain outside Git/runtime. Selected original images copied without re-encoding."
+    ],
+    "physical_unit_id": "physical-building:w96215674"
+  },
+  "truth_boundary": {
+    "candidate_authority": "34/213",
+    "inventory_physical_units": 213,
+    "credit_granted": false,
+    "authority_mutated": false,
+    "individual_source_captures_are_combined_or_package_pixels": false,
+    "independent_exact_app_and_packet_attestation_pending": true
+  }
+}

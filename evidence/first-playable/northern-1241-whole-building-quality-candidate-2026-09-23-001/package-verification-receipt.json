@@ -1,0 +1,312 @@
+{
+  "schema_version": "ti.d5-batch-owner-package-verification/1",
+  "owner_decision": "PASS",
+  "owner_decision_scope": "Six actual clean candidate stages; ordinary source/signed world and both targets, mounted components/privacy. No new visual/motion evidence.",
+  "independent_exact_app_review_pending": false,
+  "independent_exact_app_decision": "PASS",
+  "independent_review": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/REVIEW.json",
+    "sha256": "3e8e391ad08bca8f0517ff18416695b88ee447689a167cfe53afda9f000d37e3",
+    "bytes": 24049,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/REVIEW.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "independent_check": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/REVIEW.md",
+    "sha256": "d210e8a5e611f1f6d7db3e87f6b71de869fd76f1f3c4365d326590fc8b5ef348",
+    "bytes": 2620,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/REVIEW.md",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "candidate_authority": "34/213",
+  "capture_time_authority": "34/213",
+  "physical_unit_id": "physical-building:w96215674",
+  "candidate_app_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/export-001/Treasure Island First Playable.app",
+  "candidate_app_relative_path": "export-001/Treasure Island First Playable.app",
+  "candidate_app_relative_path_base": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001",
+  "candidate_repository": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-integration-20260923",
+  "pck_sha256": "42257134ee726413276b754bd5f94ca4df9a92293b9fa865892ccba98020b7cb",
+  "app_file_pins": {
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/export-001/Treasure Island First Playable.app/Contents/Info.plist": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable": "a3e86d90869c5a0b79526fa06a81fb7c79735edc3a02fd725887a4c25126207f",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/export-001/Treasure Island First Playable.app/Contents/PkgInfo": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/export-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck": "42257134ee726413276b754bd5f94ca4df9a92293b9fa865892ccba98020b7cb",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/export-001/Treasure Island First Playable.app/Contents/Resources/icon.icns": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/export-001/Treasure Island First Playable.app/Contents/_CodeSignature/CodeResources": "9a10e6f788b50abbdcb4337bfee55b0b98885dfc09242eb14074333aec7508c3"
+  },
+  "app_binding_document_sha256": "ed4dc4a171d6ebd9380b8dc38a4bbdb7ef36f7782f485fb86e65a5e82e34c8cf",
+  "app_binding": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/actual-app-binding.json",
+    "sha256": "ed4dc4a171d6ebd9380b8dc38a4bbdb7ef36f7782f485fb86e65a5e82e34c8cf",
+    "bytes": 3613,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/actual-app-binding.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "app_hash_semantics": "Exact seven regular-file map; PCK hash separate.",
+  "source_world": {
+    "bodies": 498,
+    "meshes": 2991,
+    "rows": 735,
+    "shapes": 1925,
+    "surfaces": 3006,
+    "triangles": 207893
+  },
+  "unit_actual_attachment": {
+    "source-component-001": {
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/source-component-001.log",
+        "sha256": "b3bb2da1762953244039bfa87706e17aa0339d5a4b0df38b33b59c4c61b7391c",
+        "bytes": 27913,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/source-component-001.log",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "raw_lines": [
+        "HOUSING_QUALITY_PACKAGE_ATTACHMENT: source=w96215674 wall={ \"meshes\": 996, \"surfaces\": 996, \"triangles\": 7270, \"bodies\": 2, \"shapes\": 603 } roof={ \"meshes\": 24, \"surfaces\": 24, \"triangles\": 24, \"bodies\": 1, \"shapes\": 24 } native_channels=13260 materials=1020 current_geometry_shapes=627 historical_authority=34/213 revision_acceptance=pending credit=0",
+        "MAC_EXPORT_1241_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215674_wall/Northpoint1241LiveWall roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215674_roof/Northpoint1241LiveRoof wall_counts={ \"meshes\": 996, \"surfaces\": 996, \"triangles\": 7270, \"bodies\": 2, \"shapes\": 603 } roof_counts={ \"meshes\": 24, \"surfaces\": 24, \"triangles\": 24, \"bodies\": 1, \"shapes\": 24 } source=w96215674 credit=0",
+        "HOUSING_QUALITY_PACKAGE_ATTACHMENT: source=w96215674 wall={ \"meshes\": 996, \"surfaces\": 996, \"triangles\": 7270, \"bodies\": 2, \"shapes\": 603 } roof={ \"meshes\": 24, \"surfaces\": 24, \"triangles\": 24, \"bodies\": 1, \"shapes\": 24 } native_channels=13260 materials=1020 current_geometry_shapes=627 historical_authority=34/213 revision_acceptance=pending credit=0"
+      ]
+    },
+    "mounted-component-001": {
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/mounted-component-001.log",
+        "sha256": "760c878fe6c22e618c96390414df541e46db13ecd0ce95c02608d242f5fbb806",
+        "bytes": 8322,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/mounted-component-001.log",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "raw_lines": [
+        "HOUSING_QUALITY_PACKAGE_ATTACHMENT: source=w96215674 wall={ \"meshes\": 996, \"surfaces\": 996, \"triangles\": 7270, \"bodies\": 2, \"shapes\": 603 } roof={ \"meshes\": 24, \"surfaces\": 24, \"triangles\": 24, \"bodies\": 1, \"shapes\": 24 } native_channels=13260 materials=1020 current_geometry_shapes=627 historical_authority=34/213 revision_acceptance=pending credit=0"
+      ]
+    },
+    "release-headless-smoke-001": {
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/release-headless-smoke-001.log",
+        "sha256": "27c4f641e8717cd6aa6bb122b85eaf0e30c5974dde2c1ec22cdf93b20987d860",
+        "bytes": 13540,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/release-headless-smoke-001.log",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "raw_lines": [
+        "MAC_EXPORT_1241_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215674_wall/Northpoint1241LiveWall roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215674_roof/Northpoint1241LiveRoof wall_counts={ \"meshes\": 996, \"surfaces\": 996, \"triangles\": 7270, \"bodies\": 2, \"shapes\": 603 } roof_counts={ \"meshes\": 24, \"surfaces\": 24, \"triangles\": 24, \"bodies\": 1, \"shapes\": 24 } source=w96215674 credit=0"
+      ]
+    },
+    "release-native-smoke-001": {
+      "log": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/release-native-smoke-001.log",
+        "sha256": "3c2227113c2445a8580c1c7babd84a71fd4fb43151b9364f6018497475ec6d27",
+        "bytes": 13606,
+        "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/release-native-smoke-001.log",
+        "role": "byte_identical_raw_original",
+        "byte_identical": true
+      },
+      "raw_lines": [
+        "MAC_EXPORT_1241_ATTACHMENT: valid=true wall=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215674_wall/Northpoint1241LiveWall roof=/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215674_roof/Northpoint1241LiveRoof wall_counts={ \"meshes\": 996, \"surfaces\": 996, \"triangles\": 7270, \"bodies\": 2, \"shapes\": 603 } roof_counts={ \"meshes\": 24, \"surfaces\": 24, \"triangles\": 24, \"bodies\": 1, \"shapes\": 24 } source=w96215674 credit=0"
+      ]
+    }
+  },
+  "signature_privacy_binding": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/bundle-native-checks-001.json",
+    "sha256": "48bac741f57d0d45dd43f666e1c676e46307846650399b12763f2c842ab523ef",
+    "bytes": 5677,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/bundle-native-checks-001.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "independent_signature_privacy_binding": {
+    "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/signature-privacy-checks.json",
+    "sha256": "79e630dbf2666cd4b6b43964315a516e5e68b190c97c5a6578e20bddc0ce9c0a",
+    "bytes": 5499,
+    "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/signature-privacy-checks.json",
+    "role": "byte_identical_raw_original",
+    "byte_identical": true
+  },
+  "terminal_slot_releases": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/SLOT_RELEASE.json",
+      "sha256": "f9d959d552473490b698d7441513a7e19058c0fdbe00f14b02cfcb24a1bb0007",
+      "bytes": 2434,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/SLOT_RELEASE.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/SLOT_RELEASE.json",
+      "sha256": "3ffd766123250b8b80f42bb1ce0b3f0b205919549cc45e07a7d8d24cb40d984e",
+      "bytes": 928,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/SLOT_RELEASE.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "owner_receipts": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/source-component-001-execution.json",
+      "sha256": "cb5212987081df33555c6c6137ffd13b4de313f905efb377bc2593f5ac2dc778",
+      "bytes": 108645,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/source-component-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/export-001-execution.json",
+      "sha256": "c00bc7115fb008f23109371fbfa95db025b0a0cdfcb2546630c685f7faecb088",
+      "bytes": 128924,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/export-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/mounted-component-001-execution.json",
+      "sha256": "a1452ab67a61105694ef437863b3e0df0c285fe4cfda5484641ec7cab1783b20",
+      "bytes": 108640,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/mounted-component-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/mounted-privacy-001-execution.json",
+      "sha256": "5b01a408c391c75bcd57a49e39dc98f803e3f76db97eb10955e44766b28fc379",
+      "bytes": 107524,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/mounted-privacy-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/release-headless-smoke-001-execution.json",
+      "sha256": "0fc9076c2c0517a40481a9fcdc108161d68a404ab5111d415b38666562ce0cbd",
+      "bytes": 108197,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/release-headless-smoke-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/release-native-smoke-001-execution.json",
+      "sha256": "2636574d667351202d922149dabdc2874138a47fb88be1766c05a429fe790e14",
+      "bytes": 108341,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/release-native-smoke-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "owner_logs": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/source-component-001.log",
+      "sha256": "b3bb2da1762953244039bfa87706e17aa0339d5a4b0df38b33b59c4c61b7391c",
+      "bytes": 27913,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/source-component-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/export-001.log",
+      "sha256": "24df3836737d23aac5467db6d9f608f8e9cda2f3dd009c37dc2a682d21dbe93b",
+      "bytes": 143418,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/export-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/mounted-component-001.log",
+      "sha256": "760c878fe6c22e618c96390414df541e46db13ecd0ce95c02608d242f5fbb806",
+      "bytes": 8322,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/mounted-component-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/mounted-privacy-001.log",
+      "sha256": "dd05cf9418f6a2ec27bf998694b40144cd05c0c5de6842117b843dc7ba266dbd",
+      "bytes": 770,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/mounted-privacy-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/release-headless-smoke-001.log",
+      "sha256": "27c4f641e8717cd6aa6bb122b85eaf0e30c5974dde2c1ec22cdf93b20987d860",
+      "bytes": 13540,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/release-headless-smoke-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/release-native-smoke-001.log",
+      "sha256": "3c2227113c2445a8580c1c7babd84a71fd4fb43151b9364f6018497475ec6d27",
+      "bytes": 13606,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/candidate-package-001/release-native-smoke-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "independent_engine_reexecution": true,
+  "independent_stage_scope": [
+    "mounted-component-001",
+    "mounted-privacy-001"
+  ],
+  "independent_receipts": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/mounted-component-001-execution.json",
+      "sha256": "332f7a1e3fcb4fa50c0a8e14deb3f588260d3b5918c7976eb3418f913891decf",
+      "bytes": 129918,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/mounted-component-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/mounted-privacy-001-execution.json",
+      "sha256": "bad95dfbb802e270ed721992e5f61a51077aa2ca941c6c5fd32332c8f0f0f9bf",
+      "bytes": 128321,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/mounted-privacy-001-execution.json",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "independent_logs": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/mounted-component-001.log",
+      "sha256": "760c878fe6c22e618c96390414df541e46db13ecd0ce95c02608d242f5fbb806",
+      "bytes": 8322,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/mounted-component-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/mounted-privacy-001.log",
+      "sha256": "dd05cf9418f6a2ec27bf998694b40144cd05c0c5de6842117b843dc7ba266dbd",
+      "bytes": 770,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-integration-2026-09-23/independent-technical-001/candidate-package-actual-001/mounted-privacy-001.log",
+      "role": "byte_identical_raw_original",
+      "byte_identical": true
+    }
+  ],
+  "unit_acceptance_granted": false,
+  "recognition_credit_granted": false,
+  "prepared_five_role_closure_sha256": "b5190eb9d0af41797b201bd4361ee6c56405c1be863a3dfb3eb89e12852dd5bb",
+  "image_tree_sha256": "c6ab5cbd43c2b81b62a7fe5c72f742e1a9aa4f92c5712d1b1e236a1f2d0bc286",
+  "tree_document_sha256": "c082ed4202f02b84d52817d179e1350a3432d7dbd34882b52e4f0947fb2aa0ad",
+  "original_five_role_limits": [
+    "Derived actual independently reviewed scopes; no package/seventh acceptance yet. Historical recognition34/213 unchanged; proposed quality numerator_effect0.",
+    "All old raw HOLDs preserved. Capture5476 geometry joins packaging-only guards through unchanged model/support/config/land/controller; independent package-helper equivalence still required.",
+    "Sparse movie sampling is not continuous playback/manual play, all-door traversal, ground-to-roof traversal, interior or surveyed dimensions.",
+    "Private references/full movies remain outside Git/runtime. Selected original images copied without re-encoding."
+  ],
+  "repair_lineage": "Candidate first attempt passed. All historical mechanics/source HOLDs preserved in original packets; wrapper-only preparation repair5bf\u2192593d preserved.",
+  "coverage_split": "Independent exact candidate package review for existing1232/1241 quality revisions; zero new credit. Two own mounted stages; owner signed ordinary-main outcomes reviewed, not independently rerun.",
+  "limits": [
+    "No independent signed ordinary-main replay; authorized independent executions are exactly mounted component/privacy.",
+    "No new art imagery, manual play, continuous motion playback, M1-specific or interior/all-door/ground-to-roof traversal claim.",
+    "1232 mechanics003 reuse remains through exact005 physical/spray-volume joins; current006 visual route;1241 full007 current mechanics. All old raw HOLDs remain intact.",
+    "Historical34 authority remains unchanged. Separate per-unit seventh records follow this package gate; authority refresh and final exact-current package remain required before promotion."
+  ],
+  "truth_boundary": {
+    "credit_granted": false,
+    "authority_mutated": false
+  }
+}

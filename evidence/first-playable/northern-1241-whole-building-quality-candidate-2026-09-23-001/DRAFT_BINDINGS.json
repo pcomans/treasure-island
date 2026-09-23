@@ -1,0 +1,13 @@
+{
+  "physical_unit_id": "physical-building:w96215674",
+  "status": "FIRST_FIVE_ASSEMBLED_FOR_INDEPENDENT_REVIEW",
+  "bindings": {
+    "capture-manifest.json": "3f27b6862b35ba94a5a12fb5bc93dfa66b728470a3d3d05b27740c2c94ab3713",
+    "motion-telemetry.json": "896d653a9d8b654f04432b20d144f3ceae43628fd9b9035d141069d13cd4b151",
+    "visual-motion.json": "ec55cf895115a1e683556b4a06a2c1d76d6cc7727e29933103cfa000c3640973",
+    "mechanical-review.json": "c4646381adea015f2486a8bb3019d2de568395ac7a2772001c9442b5f70c15c1",
+    "evidence-tree.json": "c082ed4202f02b84d52817d179e1350a3432d7dbd34882b52e4f0947fb2aa0ad"
+  },
+  "package_receipt": null,
+  "seventh_acceptance": null
+}

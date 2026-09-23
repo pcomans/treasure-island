@@ -1,0 +1,98 @@
+{
+  "schema_version": "ti.d5-native-image-tree/1",
+  "tree_scope": "Current005 static/current sampled motion/native endpoints;1232 spray explicitly joined003. No private reference pixels.",
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "tree_sha256": "c6ab5cbd43c2b81b62a7fe5c72f742e1a9aa4f92c5712d1b1e236a1f2d0bc286",
+  "files": [
+    {
+      "path": "images/motion/frame-0000.jpg",
+      "sha256": "1bc173ccfef2116f385b1421fb2a96fbdd026d293986bc7b94412c85976f05eb",
+      "bytes": 59576
+    },
+    {
+      "path": "images/motion/frame-0030.jpg",
+      "sha256": "01b9e8ce7c97d3762ae58e9f6c755ae48966cd842dd7faa9d077700cb43bc187",
+      "bytes": 53641
+    },
+    {
+      "path": "images/motion/frame-0060.jpg",
+      "sha256": "785b64e1ea7aa7196c08d6eae3ad07503f6e9d9a81953556f4258fc84d54de4d",
+      "bytes": 44126
+    },
+    {
+      "path": "images/motion/frame-0090.jpg",
+      "sha256": "e55c579ec17d8a11ca7ca00e6656fa248f30328534ff2edcbfff358d7efd16ac",
+      "bytes": 46216
+    },
+    {
+      "path": "images/motion/frame-0120.jpg",
+      "sha256": "1f63f2df47163de8d4eb0777143ca7a3fb8d5166cf92f772183cac45494c0883",
+      "bytes": 49918
+    },
+    {
+      "path": "images/motion/frame-0150.jpg",
+      "sha256": "09fdf937a301e2cb49c5f9313d377c4129597cb0539c9bad26f9008e24e0ccf2",
+      "bytes": 53799
+    },
+    {
+      "path": "images/motion/frame-0180.jpg",
+      "sha256": "57f14e475db36847872cb4fee450c97fafc54e2acb6c02b2defe99e14dad5e47",
+      "bytes": 48785
+    },
+    {
+      "path": "images/motion/frame-0210.jpg",
+      "sha256": "127969948d36aaf4e7a7669e8cc20dfdb03775a3019540adb5f3a5af847d1672",
+      "bytes": 45362
+    },
+    {
+      "path": "images/motion/frame-0240.jpg",
+      "sha256": "127969948d36aaf4e7a7669e8cc20dfdb03775a3019540adb5f3a5af847d1672",
+      "bytes": 45362
+    },
+    {
+      "path": "images/motion/frame-0270.jpg",
+      "sha256": "78f590a3eb5ec392796b7b214b333ae1bda8395fc42e9cff8c9c60b05a56994f",
+      "bytes": 46071
+    },
+    {
+      "path": "images/motion/frame-0300.jpg",
+      "sha256": "78f590a3eb5ec392796b7b214b333ae1bda8395fc42e9cff8c9c60b05a56994f",
+      "bytes": 46071
+    },
+    {
+      "path": "images/motion/frame-0321.jpg",
+      "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+      "bytes": 16628
+    },
+    {
+      "path": "images/motion/frame-0322.jpg",
+      "sha256": "52ffeacfccc35063cc5aa76a531fb999110c21ba2b8ff58fa4fa07c37efa1824",
+      "bytes": 16628
+    },
+    {
+      "path": "images/native/1241-door-contact.png",
+      "sha256": "8c3bce7f6ad52a81f34a9c47226501b64412084c5986791b1aa7118d9324d8be",
+      "bytes": 465142
+    },
+    {
+      "path": "images/native/1241-wall-spray.png",
+      "sha256": "3a55d47f8304cf4606fa4641299b6ad637c0dcac6af48b6064440ef3fdc8434c",
+      "bytes": 295959
+    },
+    {
+      "path": "images/static/1241-01-whole.png",
+      "sha256": "7d9797acd516bd08f8635a80acc37b63fbf9c4462c472f546a969b0c4f081d9e",
+      "bytes": 910306
+    },
+    {
+      "path": "images/static/1241-02-three-quarter.png",
+      "sha256": "4a1825d8ff746fe4fb146bc08afd6e390635b3c9560140141fef3e0541b15b02",
+      "bytes": 924226
+    },
+    {
+      "path": "images/static/1241-03-near.png",
+      "sha256": "4fea5604c7bdd8cdc15976f3eda11764c348e4e29e7822b7b6d4d132faa23954",
+      "bytes": 744861
+    }
+  ]
+}

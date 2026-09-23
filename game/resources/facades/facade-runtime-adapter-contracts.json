@@ -1,6 +1,6 @@
 {
   "build_contract": {
-    "authoring_catalog_sha256": "101eecb6d0c557ed472236d5ee83f7642265ba41922e9441ac6fa754b0c85c4a",
+    "authoring_catalog_sha256": "63dff67a2768c9d063ea5fffaa49bb0d896a11e75c9bebe5305fa442ce1737b2",
     "compiler_version": "1.32.0",
     "runtime_registry_schema_version": "ti.facade-runtime-registry/33",
     "unknown_version_policy": "reject"
@@ -25,7 +25,7 @@
     "api_version": "ti.facade-runtime-registry-loader/32",
     "instantiation_authorized": false,
     "loader_path": "res://game/scripts/world/facades/facade_runtime_registry_loader.gd",
-    "loader_sha256": "67e0bb9bc284746213c97115283ae2167b3bfa676ebdafd3fe3b30b5d141d162",
+    "loader_sha256": "b38ae1bc8e21a6c133e1e28ec09331ed9014bf1d67c8f5b69a2973cc6666f15e",
     "projection_execution_policy": "forbidden",
     "unknown_version_policy": "reject"
   },
@@ -4790,119 +4790,84 @@
       "behavior_contract": {
         "acceptance_contract": {
           "accepted_physical_unit_id": "physical-building:w96215673",
-          "capture_time_recognition_metric": "26/213",
-          "evidence_manifest_sha256": "d2d9bd3d7f643d92b45d4c1ca974892d3b35210ae2d2cfe55b89fb4afb94df26",
-          "evidence_tree_sha256": "c323d879c100e3ac1898905a9841e7f52cc4a76022e7329638ae7feeb586739d",
-          "mechanical_review_receipt_sha256": "2560c1e1032fd997a2cf8db74de48d0430d9bb0fb61165cc09312efba5e9af5f",
-          "motion_telemetry_manifest_sha256": "1fd9e52c06c062e48dfc3d6489dfaba4350ba1413a97923f9a44371b052dad39",
-          "numerator_effect": 1,
-          "package_verification_receipt_sha256": "f38bbb66dce45b62bdb82705335b55547f571992a8389f6b8346b16f56e32c1f",
+          "capture_time_recognition_metric": "34/213",
+          "evidence_manifest_sha256": "8cbaf41ac64c5ebdfc986d6fa10f23395d277239dc732f3ed8998db6ece2fd69",
+          "evidence_tree_sha256": "c8877020da371725757f4f836fd2a80f899f13412766b837b0a97b7ed85bf508",
+          "mechanical_review_receipt_sha256": "87ec76ee5508e984230a73fe01181c7968bf5d3092dfe4eb653612edaa2aaf2b",
+          "motion_telemetry_manifest_sha256": "bf352edf6b9088a92fef76079bebd40942c423b6fc66d16db445f9cbd1a25c40",
+          "numerator_effect": 0,
+          "package_verification_receipt_sha256": "2845135486b956467a58f28676c13fdab8a8348dd8785a1e163239f0e446e56a",
           "reference_recognizable": true,
-          "review_receipt_sha256": "1cbb4737ed14190e9f6a744b152eaaeddf8d18c39f827cfab784ec94f07c16be",
-          "visual_motion_manifest_sha256": "26d44f6abccabc4c3075a214a22feff4ba4f6d5b2f6b1b2815d4c32301c37577",
+          "review_receipt_sha256": "6a72ba662cd7f3087129cb678384919ccfe805dfe31904fc6a511c4f4d56d8dd",
+          "visual_motion_manifest_sha256": "e548a2660055c1123f42653215c1fa7c50b40b3d2ed93787842bb73404148f31",
           "wall_and_roof_are_one_physical_unit": true
         },
         "geometry_contract": {
           "horizontal_source_footprint_preserved": true,
-          "original_source_channels_and_roof_preserved": true,
+          "original_source_channels_and_roof_preserved": false,
           "roof_native_counts": [
+            41,
+            41,
+            996,
             1,
-            1,
-            16,
-            1,
-            1
+            41
           ],
           "source_chunk_sha256": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
-          "visual_mesh_instances": 19,
-          "visual_surfaces": 19,
-          "visual_triangles": 2576,
+          "visual_mesh_instances": 722,
+          "visual_surfaces": 722,
+          "visual_triangles": 22846,
           "wall_native_counts": [
-            18,
-            18,
-            2560,
-            3,
-            14
+            681,
+            681,
+            21850,
+            2,
+            620
           ],
-          "world_mesh_instances": 1244,
+          "world_mesh_instances": 2991,
           "world_records": 735,
-          "world_shapes": 633,
-          "world_static_bodies": 494,
-          "world_surfaces": 1259,
-          "world_topology_scope": "shared_northern_1232_1241_1221_candidate_live_parity",
-          "world_triangles": 173181
+          "world_shapes": 1925,
+          "world_static_bodies": 498,
+          "world_surfaces": 3006,
+          "world_topology_scope": "shared_housing_quality_1232_1241_candidate_live_parity",
+          "world_triangles": 207893
         },
         "ownership_contract": {
           "added_ground_collision_triangles": 0,
-          "added_public_roof_is_nonreceiver": true,
-          "added_public_roof_triangles": 36,
           "all_additions_render_only": false,
-          "eligible_render_layer": 2,
+          "current_visible_mesh_faces_own_contacts": true,
+          "eligible_render_layer": 3,
           "navigation_owner_count": 0,
+          "noncolliding_visual_roles": [
+            "ground_visual"
+          ],
           "noneligible_render_layer": 1,
-          "original_flat_roof_preserved": true,
-          "original_wall_and_projected_front_are_receivers": true,
-          "projected_receiver_cull_mask": 2,
-          "projected_receiver_physics_layer": 5,
-          "projected_receiver_runs": [
-            10,
-            11,
-            12,
-            13,
-            15,
-            16,
-            17,
-            18
+          "old_collision_proxies_retained": false,
+          "physical_collision_layer": 5,
+          "physical_roles": [
+            "wall",
+            "detail",
+            "roof"
           ],
-          "projected_receiver_shape_order": [
-            "ProjectedUpperSiding"
-          ],
-          "projected_receiver_triangles": 6,
           "roof_is_wall_spray_receiver": false,
-          "roof_shape_order": [
-            "exact_noneligible_source_roof"
-          ],
           "roof_world_solid_landing": true,
-          "shape_count": 15,
-          "spray_owner_count": 2,
-          "structural_owner_count": 4,
+          "shape_count": 661,
+          "spray_owner_count": 1,
+          "structural_owner_count": 3,
           "terrain_geometry_and_ownership_unchanged": true,
           "wall_decal_cull_mask": 2,
-          "wall_is_sole_spray_receiver": false,
-          "wall_shape_order": [
-            "exact_eligible_source_wall",
-            "ObservedPublicRoof",
-            "CarportRoof",
-            "CarportPosts",
-            "CarportFascia",
-            "ProjectedUpperClosures",
-            "PaleCompleteTrim",
-            "BlueOpaqueGlazing",
-            "DarkOpaqueGlazing",
-            "BlueGrayClosedDoors",
-            "LocalPrivacyScreens",
-            "PaleDrainageAndFascia",
-            "DoorHardware"
-          ]
+          "wall_is_sole_spray_receiver": true
         },
         "replacement_contract": {
           "actual_land_and_area_records_required": false,
           "actual_supplied_chunk_pair_required": true,
           "factory_calls": 1,
           "fallback_allowed": false,
+          "frozen_colliding_land_chunks_required": {
+            "res://generated/world/chunks/x_-2__z_-3.json": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+            "res://generated/world/chunks/x_-2__z_-4.json": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4"
+          },
           "generic_stack_allowed": false,
           "mapped_public_run_indices": [
-            10,
-            11,
-            12,
-            13,
-            14,
-            15,
-            16,
-            17,
-            18
-          ],
-          "partial_pair_allowed": false,
-          "protected_run_indices": [
             0,
             1,
             2,
@@ -4913,38 +4878,54 @@
             7,
             8,
             9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
             19,
             20,
             21,
             22,
             23
           ],
+          "partial_pair_allowed": false,
+          "protected_run_indices": [],
           "raw_source_constructor_callback_required": true,
           "roof_object_key": "building:w96215673:roof",
           "source_key": "w96215673",
           "tangent_callback_required": true,
-          "wall_object_key": "building:w96215673:wall"
+          "wall_object_key": "building:w96215673:wall",
+          "whole_building_revision": true
         },
         "schema_version": "ti.northern-1232-production-live-parity/1",
         "truth_boundary": {
           "as_built_fidelity_claimed": false,
+          "camera_numerical_tolerance_radians": 0.000001,
           "capture_time_candidate_promoted": false,
           "capture_time_recognition_credit": false,
           "continuous_motion_review_claimed": false,
+          "footprint_scope": "Frozen source identity and foundation edge; shallow facade chords and unsurveyed details are production inference.",
           "game_distinctive_claimed": false,
           "ground_to_roof_traversal_claimed": false,
           "hidden_schedule_invented": false,
           "interior_modeled": false,
-          "motion_route_scope": "selected_door10_screen11_three_sprays_separate_setups",
+          "motion_route_scope": "selected_entry_approach_braking_retreat_wall_spray_and_door_reject",
           "native_support_qualification_mm": 4,
+          "original_failed_mechanics_attempts_retained": true,
           "receiver_complete_inferred_from_art": false,
           "reference_pixels_packaged": false,
           "scope_authority": "exact_unit_seventh_attestation_and_retained_first_five",
           "separate_setup_poses_retained": true,
           "sparse_movie_samples_only": true,
           "spray_input_event_dispatch_claimed": false,
+          "threshold_edge_transition_qualification_separate": true,
           "unit_packet_limits_retained": true,
-          "unobserved_sides_protected": true,
+          "unobserved_sides_protected": false,
           "unsurveyed_dimensions_and_counts_are_production_inference": true
         }
       },
@@ -4952,19 +4933,24 @@
       "disabled_reason_code": null,
       "executable_assets": [
         {
+          "path": "res://game/scripts/world/facades/housing_quality_support.gd",
+          "resource_kind": "gdscript",
+          "sha256": "34d14eedb3c5296061bec5b10003c240aabb90e9654dcd61165f4bd917392b97"
+        },
+        {
           "path": "res://game/scripts/world/facades/northpoint_1232_live_factory.gd",
           "resource_kind": "gdscript",
-          "sha256": "05a93c31bbdfe0e9bf06530e02a33f49826f3af573e4128eaaa8d127cd686910"
+          "sha256": "1001b9e4e91bc1e3762f12369ece87ee6bfa510b15b6d3441d62f945bebaef21"
         },
         {
           "path": "res://game/scripts/world/facades/northpoint_1232_live_replacement.gd",
           "resource_kind": "gdscript",
-          "sha256": "eab24f028a8956a00d415fb058c84a2be84b86f53f3ce357122b48441f9ec27e"
+          "sha256": "226854de49a23ba5808152f596f104753d96200c50c2d3241fc1dfbed19667f6"
         },
         {
-          "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
+          "path": "res://game/scripts/world/facades/northpoint_1232_quality_model.gd",
           "resource_kind": "gdscript",
-          "sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+          "sha256": "4d4d570033ba15bd014c643c9bc41d3fe2b43e1fdf35dac87b75de721d5001c5"
         }
       ],
       "integration_state": "package_safe_ready_for_integration",
@@ -4973,24 +4959,24 @@
       "resolution_policy": "resolve_only_without_instantiation",
       "runtime_assets": [
         {
-          "path": "res://game/resources/facades/northpoint_1232_study_003.json",
-          "sha256": "609436c6ee4f3f0170ed02b93ada28f927d67401aeb677c03a3dab9d76109f98"
+          "path": "res://game/resources/facades/northpoint_1232_quality_revision.json",
+          "sha256": "44bc884f5288cb8eb0561a0f4a2dea539607a6f386fdecb05bbfeb6fde9be4e7"
         },
         {
-          "path": "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
-          "sha256": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a"
+          "path": "res://game/scripts/world/facades/housing_quality_support.gd",
+          "sha256": "34d14eedb3c5296061bec5b10003c240aabb90e9654dcd61165f4bd917392b97"
         },
         {
           "path": "res://game/scripts/world/facades/northpoint_1232_live_factory.gd",
-          "sha256": "05a93c31bbdfe0e9bf06530e02a33f49826f3af573e4128eaaa8d127cd686910"
+          "sha256": "1001b9e4e91bc1e3762f12369ece87ee6bfa510b15b6d3441d62f945bebaef21"
         },
         {
           "path": "res://game/scripts/world/facades/northpoint_1232_live_replacement.gd",
-          "sha256": "eab24f028a8956a00d415fb058c84a2be84b86f53f3ce357122b48441f9ec27e"
+          "sha256": "226854de49a23ba5808152f596f104753d96200c50c2d3241fc1dfbed19667f6"
         },
         {
-          "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
-          "sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+          "path": "res://game/scripts/world/facades/northpoint_1232_quality_model.gd",
+          "sha256": "4d4d570033ba15bd014c643c9bc41d3fe2b43e1fdf35dac87b75de721d5001c5"
         }
       ],
       "source_key": "w96215673"
@@ -5000,126 +4986,97 @@
       "behavior_contract": {
         "acceptance_contract": {
           "accepted_physical_unit_id": "physical-building:w96215674",
-          "capture_time_recognition_metric": "28/213",
-          "evidence_manifest_sha256": "465fd62a4b0ce93e7185b6eb17bdf50ede9127e60c492e59848d830d1fb0d2f7",
-          "evidence_tree_sha256": "4b293afae85d79015d9f6c0a0b22dff50962db7bf8b05d9f4ba52e152cb13a32",
-          "mechanical_review_receipt_sha256": "6c956cd7f3b7502ab73505d11297efa68d365f7f393f8419fd9293fb71a99cb9",
-          "motion_telemetry_manifest_sha256": "c2e401e59485819a039b4b40bf0f025edabf9691673b179e89c338927a10939c",
-          "numerator_effect": 1,
-          "package_verification_receipt_sha256": "c7a8caf732d9d50ba481b3a889ab9c8aff72833fb2277c56fb997d7af3baef98",
+          "capture_time_recognition_metric": "34/213",
+          "evidence_manifest_sha256": "3f27b6862b35ba94a5a12fb5bc93dfa66b728470a3d3d05b27740c2c94ab3713",
+          "evidence_tree_sha256": "c6ab5cbd43c2b81b62a7fe5c72f742e1a9aa4f92c5712d1b1e236a1f2d0bc286",
+          "mechanical_review_receipt_sha256": "c4646381adea015f2486a8bb3019d2de568395ac7a2772001c9442b5f70c15c1",
+          "motion_telemetry_manifest_sha256": "896d653a9d8b654f04432b20d144f3ceae43628fd9b9035d141069d13cd4b151",
+          "numerator_effect": 0,
+          "package_verification_receipt_sha256": "517ad61710c09b58dcdf7502b32a828a7abc976660dc5555e9c89b08159428f6",
           "reference_recognizable": true,
-          "review_receipt_sha256": "b89b6e90ed0cd33dcf4a540a62965a71ff75c3d8d2eb9ec1e8368b6e3016f869",
-          "visual_motion_manifest_sha256": "690e653a17e8adcebe8908ffa06c8a6dd7b2c5e6886d42f9415e1b03f2ecfd9a",
+          "review_receipt_sha256": "44fea517292dce9f86aeb783a413291ba510551a2d13acc391c879e40f680345",
+          "visual_motion_manifest_sha256": "ec55cf895115a1e683556b4a06a2c1d76d6cc7727e29933103cfa000c3640973",
           "wall_and_roof_are_one_physical_unit": true
         },
         "geometry_contract": {
           "horizontal_source_footprint_preserved": true,
-          "original_source_channels_and_roof_preserved": true,
+          "original_source_channels_and_roof_preserved": false,
           "roof_native_counts": [
+            24,
+            24,
+            24,
             1,
-            1,
-            16,
-            1,
-            1
+            24
           ],
           "source_chunk_sha256": "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc",
-          "visual_mesh_instances": 19,
-          "visual_surfaces": 19,
-          "visual_triangles": 3432,
+          "visual_mesh_instances": 1020,
+          "visual_surfaces": 1020,
+          "visual_triangles": 7294,
           "wall_native_counts": [
-            18,
-            18,
-            3416,
-            3,
-            14
+            996,
+            996,
+            7270,
+            2,
+            603
           ],
-          "world_mesh_instances": 1244,
+          "world_mesh_instances": 2991,
           "world_records": 735,
-          "world_shapes": 633,
-          "world_static_bodies": 494,
-          "world_surfaces": 1259,
-          "world_topology_scope": "shared_northern_1232_1241_1221_candidate_live_parity",
-          "world_triangles": 173181
+          "world_shapes": 1925,
+          "world_static_bodies": 498,
+          "world_surfaces": 3006,
+          "world_topology_scope": "current_integration_topology",
+          "world_triangles": 207893
         },
         "ownership_contract": {
           "added_ground_collision_triangles": 0,
-          "added_public_roof_is_nonreceiver": true,
-          "added_public_roof_triangles": 36,
           "all_additions_render_only": false,
-          "eligible_render_layer": 2,
+          "current_visible_mesh_faces_own_contacts": true,
+          "eligible_render_layer": 3,
           "navigation_owner_count": 0,
+          "noncolliding_visual_roles": [
+            "ground_visual"
+          ],
           "noneligible_render_layer": 1,
-          "original_flat_roof_preserved": true,
-          "original_wall_and_projected_front_are_receivers": true,
-          "projected_receiver_cull_mask": 2,
-          "projected_receiver_physics_layer": 5,
-          "projected_receiver_runs": [
-            0,
-            1,
-            2,
-            3,
-            5,
-            6,
-            7,
-            8,
-            10,
-            11,
-            12
+          "old_collision_proxies_retained": false,
+          "physical_collision_layer": 5,
+          "physical_roles": [
+            "wall",
+            "detail",
+            "roof"
           ],
-          "projected_receiver_shape_order": [
-            "ProjectedUpperSiding"
-          ],
-          "projected_receiver_triangles": 6,
           "roof_is_wall_spray_receiver": false,
-          "roof_shape_order": [
-            "exact_noneligible_source_roof"
-          ],
           "roof_world_solid_landing": true,
-          "shape_count": 15,
-          "spray_owner_count": 2,
-          "structural_owner_count": 4,
+          "shape_count": 627,
+          "spray_owner_count": 1,
+          "structural_owner_count": 3,
           "terrain_geometry_and_ownership_unchanged": true,
           "wall_decal_cull_mask": 2,
-          "wall_is_sole_spray_receiver": false,
-          "wall_shape_order": [
-            "exact_eligible_source_wall",
-            "ObservedPublicRoof",
-            "CarportRoof",
-            "CarportPosts",
-            "CarportFascia",
-            "ProjectedUpperClosures",
-            "PaleCompleteTrim",
-            "BlueOpaqueGlazing",
-            "DarkOpaqueGlazing",
-            "MaroonClosedDoors",
-            "LocalPrivacyScreens",
-            "PaleDrainageAndFascia",
-            "DoorHardware"
-          ]
+          "wall_is_sole_spray_receiver": true
         },
         "replacement_contract": {
           "actual_land_and_area_records_required": false,
           "actual_supplied_chunk_pair_required": true,
           "factory_calls": 1,
           "fallback_allowed": false,
+          "frozen_colliding_land_chunks_required": {
+            "res://generated/world/chunks/x_-1__z_-3.json": "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc",
+            "res://generated/world/chunks/x_-1__z_-4.json": "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac"
+          },
           "generic_stack_allowed": false,
           "mapped_public_run_indices": [
             0,
             1,
             2,
             3,
+            4,
             5,
             6,
             7,
             8,
+            9,
             10,
             11,
-            12
-          ],
-          "partial_pair_allowed": false,
-          "protected_run_indices": [
-            4,
-            9,
+            12,
             13,
             14,
             15,
@@ -5134,32 +5091,39 @@
             24,
             25
           ],
+          "partial_pair_allowed": false,
+          "protected_run_indices": [],
           "raw_source_constructor_callback_required": true,
           "roof_object_key": "building:w96215674:roof",
           "source_key": "w96215674",
           "tangent_callback_required": true,
-          "wall_object_key": "building:w96215674:wall"
+          "wall_object_key": "building:w96215674:wall",
+          "whole_building_revision": true
         },
         "schema_version": "ti.northern-1241-production-live-parity/1",
         "truth_boundary": {
           "as_built_fidelity_claimed": false,
+          "camera_numerical_tolerance_radians": 0.000001,
           "capture_time_candidate_promoted": false,
           "capture_time_recognition_credit": false,
           "continuous_motion_review_claimed": false,
+          "footprint_scope": "Frozen source identity and foundation edge; shallow facade chords and unsurveyed details are production inference.",
           "game_distinctive_claimed": false,
           "ground_to_roof_traversal_claimed": false,
           "hidden_schedule_invented": false,
           "interior_modeled": false,
-          "motion_route_scope": "selected_run7_door2_screen_partial_run12_spray_separate_setups",
+          "motion_route_scope": "selected_entry_approach_braking_retreat_wall_spray_and_door_reject",
           "native_support_qualification_mm": 4,
+          "original_failed_mechanics_attempts_retained": true,
           "receiver_complete_inferred_from_art": false,
           "reference_pixels_packaged": false,
           "scope_authority": "exact_unit_seventh_attestation_and_retained_first_five",
           "separate_setup_poses_retained": true,
           "sparse_movie_samples_only": true,
           "spray_input_event_dispatch_claimed": false,
+          "threshold_edge_transition_qualification_separate": true,
           "unit_packet_limits_retained": true,
-          "unobserved_sides_protected": true,
+          "unobserved_sides_protected": false,
           "unsurveyed_dimensions_and_counts_are_production_inference": true
         }
       },
@@ -5167,19 +5131,24 @@
       "disabled_reason_code": null,
       "executable_assets": [
         {
+          "path": "res://game/scripts/world/facades/housing_quality_support.gd",
+          "resource_kind": "gdscript",
+          "sha256": "34d14eedb3c5296061bec5b10003c240aabb90e9654dcd61165f4bd917392b97"
+        },
+        {
           "path": "res://game/scripts/world/facades/northpoint_1241_live_factory.gd",
           "resource_kind": "gdscript",
-          "sha256": "cf94d080e386e5abcffb00328571965cc52a96e6c1522d356a6b2248e18d9bc0"
+          "sha256": "b36d5147e164f59d7c13c0b7983096a9a0b202caa7a94df5c700794bda07a278"
         },
         {
           "path": "res://game/scripts/world/facades/northpoint_1241_live_replacement.gd",
           "resource_kind": "gdscript",
-          "sha256": "1e1cebbd652e2409723c7000398a78aecedf9f4c77624016c5fb9070ffe70c6c"
+          "sha256": "8ce0c5108f394ec20d3f26cdd91f0100435fcf17f4d82ab685ced5e43a7dd429"
         },
         {
-          "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
+          "path": "res://game/scripts/world/facades/northpoint_1241_quality_model.gd",
           "resource_kind": "gdscript",
-          "sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+          "sha256": "f1e49be1021d4bab36d125c1363b3b259f12c61781cd8b2fc1c89160a28bec6b"
         }
       ],
       "integration_state": "package_safe_ready_for_integration",
@@ -5188,24 +5157,24 @@
       "resolution_policy": "resolve_only_without_instantiation",
       "runtime_assets": [
         {
-          "path": "res://game/resources/facades/northpoint_1241_study_002.json",
-          "sha256": "9ddd9734280fa4380e4eb95d1d0e682300ac55037845f2e73b65dc57de071ccb"
+          "path": "res://game/resources/facades/northpoint_1241_quality_revision.json",
+          "sha256": "dc87fc7947e22607d9529fa3d34ea10296a47cc504cd5a5e276d1f03ebe92c52"
         },
         {
-          "path": "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
-          "sha256": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a"
+          "path": "res://game/scripts/world/facades/housing_quality_support.gd",
+          "sha256": "34d14eedb3c5296061bec5b10003c240aabb90e9654dcd61165f4bd917392b97"
         },
         {
           "path": "res://game/scripts/world/facades/northpoint_1241_live_factory.gd",
-          "sha256": "cf94d080e386e5abcffb00328571965cc52a96e6c1522d356a6b2248e18d9bc0"
+          "sha256": "b36d5147e164f59d7c13c0b7983096a9a0b202caa7a94df5c700794bda07a278"
         },
         {
           "path": "res://game/scripts/world/facades/northpoint_1241_live_replacement.gd",
-          "sha256": "1e1cebbd652e2409723c7000398a78aecedf9f4c77624016c5fb9070ffe70c6c"
+          "sha256": "8ce0c5108f394ec20d3f26cdd91f0100435fcf17f4d82ab685ced5e43a7dd429"
         },
         {
-          "path": "res://game/scripts/world/facades/site_12_housing_kit.gd",
-          "sha256": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+          "path": "res://game/scripts/world/facades/northpoint_1241_quality_model.gd",
+          "sha256": "f1e49be1021d4bab36d125c1363b3b259f12c61781cd8b2fc1c89160a28bec6b"
         }
       ],
       "source_key": "w96215674"
@@ -5845,7 +5814,7 @@
           "world_shapes": 667,
           "world_static_bodies": 500,
           "world_surfaces": 1302,
-          "world_topology_scope": "current_integration_topology",
+          "world_topology_scope": "pre_housing_quality_1232_1241_integration_live_parity",
           "world_triangles": 183761
         },
         "ownership_contract": {

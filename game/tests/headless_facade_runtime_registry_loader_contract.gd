@@ -3,8 +3,8 @@ extends SceneTree
 const RegistryLoader := preload("res://game/scripts/world/facades/facade_runtime_registry_loader.gd")
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
-const EXPECTED_REGISTRY_SHA256 := "98697c8e6df2dbc7f6aa1080f1af8cba948ca8e4912c7b681067f276e3d60918"
-const EXPECTED_ADAPTER_CONTRACT_SHA256 := "47f4741106b9619a5f9e19dc275015a55429a5fdde3262de5882cc9aa3542f62"
+const EXPECTED_REGISTRY_SHA256 := "3606232d56e22a921c5359df8a363816787d01f08c14fe1e7f9a92e5b5e5e78b"
+const EXPECTED_ADAPTER_CONTRACT_SHA256 := "686b4087377c20c7adecdaf3d62c1a8589f1f9e18c401e03b328577b42ff296d"
 const READY_RECEIVERS := [
 	"building-composite:w1249412094:w1282547786:wall",
 	"building:r16681702:wall",
@@ -379,7 +379,7 @@ func _validate_adapter_resolution(loader: RefCounted) -> void:
 	expected_ready.sort()
 	expected_disabled.sort()
 	_require(ready_seen == expected_ready and disabled_seen == expected_disabled, "Ready/disabled receiver partition drifted.")
-	_require(current_topology_plan_ids == ["active-adapter:bayside-1226-live:building:w96215685:wall"], "1226 is not the sole current-integration topology plan authority.")
+	_require(current_topology_plan_ids == ["active-adapter:northpoint-1241-live:building:w96215674:wall"], "1241 is not the sole current-integration topology plan authority.")
 
 
 func _validate_d2_1441_plan(plan: Dictionary) -> void:
@@ -1128,7 +1128,8 @@ func _validate_d5_batch_mutations(registry: Dictionary, contracts: Dictionary) -
 				var behavior := (adapter.get("active_runtime_contract", {}) as Dictionary).get("behavior_contract", {}) as Dictionary
 				var replacement := behavior.get("replacement_contract", {}) as Dictionary
 				var values := replacement.get(field, []) as Array
-				values[0] = float(values[0]) + invalid if typeof(invalid) == TYPE_FLOAT else invalid
+				if values.is_empty(): values.append(invalid)
+				else: values[0] = float(values[0]) + invalid if typeof(invalid) == TYPE_FLOAT else invalid
 				var plan := _plan_by_receiver(fractional_contracts, receiver)
 				plan["behavior_contract"] = behavior.duplicate(true)
 				_expect_data_error(fractional_registry, fractional_contracts, code, "D5 coherent invalid exact-run number")

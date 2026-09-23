@@ -2667,12 +2667,12 @@
           },
           "const": [
             "game/scripts/world/facades/northpoint_1232_live_factory.gd",
-            "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
-            "game/scripts/world/facades/site_12_housing_kit.gd"
+            "game/scripts/world/facades/northpoint_1232_quality_model.gd",
+            "game/scripts/world/facades/housing_quality_support.gd"
           ]
         },
         "runtime_config_path": {
-          "const": "game/resources/facades/northpoint_1232_study_003.json"
+          "const": "game/resources/facades/northpoint_1232_quality_revision.json"
         },
         "runtime_dispatch_path": {
           "const": "game/scripts/world/world_chunk_builder.gd"
@@ -2735,12 +2735,12 @@
           },
           "const": [
             "game/scripts/world/facades/northpoint_1241_live_factory.gd",
-            "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
-            "game/scripts/world/facades/site_12_housing_kit.gd"
+            "game/scripts/world/facades/northpoint_1241_quality_model.gd",
+            "game/scripts/world/facades/housing_quality_support.gd"
           ]
         },
         "runtime_config_path": {
-          "const": "game/resources/facades/northpoint_1241_study_002.json"
+          "const": "game/resources/facades/northpoint_1241_quality_revision.json"
         },
         "runtime_dispatch_path": {
           "const": "game/scripts/world/world_chunk_builder.gd"

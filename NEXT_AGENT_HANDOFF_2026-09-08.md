@@ -1,5 +1,13 @@
 # Treasure Island next-agent handoff
 
+## Current quality refresh — 1232/1241, recognition remains34
+
+Both owner-endorsed whole-building replacements are attached to the actual world with current mesh-derived contacts and wall-spray ownership. Independent source/mechanics and separate static/motion visual decisions passed; completed candidate supplied separate sixth/seventh unit artifacts. One current zero-credit acceptance record per unit preserves34/213 and the old +1/history. Final003 owner package stages and independent exact-app release review all passed; consult the [exact release record](evidence/first-playable/housing-1232-1241-quality-current-release-2026-09-23-001/README.md) for independent final decision and actual transfer/publication status. Stable destination: `build/housing-1232-1241-quality-current-001/Treasure Island First Playable.app`.
+
+Do not replay completed native registry/loader (final002, exact unchanged306-input joins) or final003 source/export/mounted/privacy/signed smoke checks. Preserve final001/002 raw HOLDs and their narrowly corrected consumer causes. The selected packet includes complete declared image trees; private dated reference pixels, full movies and app/cache bytes stay external. Current 1397/1444 higher-quality art studies are not integrated by this pair batch. Preserve current MAIN docs, unfinished studies and unrelated UID files.
+
+## Historical34 recognition checkpoint follows
+
 ## Current checkpoint — accepted1397/1226, current34
 
 The bounded delivery adds1397 Gateview and1226 Bayside:34/213 accepted,179 not evaluated; prior32 and all213 identities preserved. Current source and exact-current package passed their separate independent gates. Stable app: `build/northern-1397-1226-exact-current-001/Treasure Island First Playable.app`; see the [release record](evidence/first-playable/northern-1397-1226-current-release-2026-09-23-001/README.md) and [34 ID-labeled snapshots](evidence/building-snapshots/accepted-34-2026-09-23/README.md). Consult Git history for actual commit/push status. Do not replay completed source/package checks.
