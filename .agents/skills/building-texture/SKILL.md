@@ -42,9 +42,9 @@ When the user or project prioritizes recognizable game art over surveyed reconst
 
    Its numeric/proof outputs screen candidates; they do not supply semantic or art acceptance.
 4. Reach the first coherent actual-world render after focused identity/site/execution-safety preflight, before completed independent review or export. Within the approved finite loop, inspect and revise using the supported driver without per-invocation reapproval; retain serialized engine ownership, live handles, fresh outputs and failed records. Technical review addresses changed risk seams rather than replaying unrelated gates.
-5. An independent visual reviewer uses [semantic-art-review.md](references/semantic-art-review.md) to judge actual references and gameplay pixels, including the complete building and owner-approved visual quality anchor when assigned. Keep this reviewer separate from implementation and technical judging. Applicable independent source/mechanical decisions and batch release gates remain required before promotion. ROOT reviews evidence read-only; no author self-grants acceptance or credit.
+5. An independent visual reviewer uses [semantic-art-review.md](references/semantic-art-review.md) to judge actual references and gameplay pixels, including the complete building’s believability and recognizability against real-world references when assigned. Keep this reviewer separate from implementation and technical judging. Applicable independent source/mechanical decisions and batch release gates remain required before promotion. ROOT reviews evidence read-only; no author self-grants acceptance or credit.
 
-Export/signing/package paperwork belongs at the batch checkpoint, not each art revision. Keep standalone texture quality, receiver integrity, whole-building game-art quality, as-built fidelity and release verdicts distinct. The owner-approved benchmark establishes quality ambition, not a surveyed replica or permission for unsupported motifs.
+Export/signing/package paperwork belongs at the batch checkpoint, not each art revision. Keep standalone texture quality, receiver integrity, whole-building game-art quality, as-built fidelity and release verdicts distinct. Sensible game-art inference may support a believable, recognizable result without claiming surveyed fidelity or inventing unsupported motifs.
 
 ## Stop conditions
 

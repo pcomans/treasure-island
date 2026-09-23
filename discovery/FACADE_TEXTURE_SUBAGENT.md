@@ -12,7 +12,7 @@
 2. Whole-building quality study or texture-only task; for the latter, declare `homogeneous_material_tile`, `architectural_pattern_tile`, `module_atlas`, or `unique_elevation`.
 3. Reference roles or an approved observation ledger, including observed side/region and protected/unobserved regions.
 4. Placement goal: surveyed reconstruction or recognizable game art.
-5. Evidence directory, source/asset paths, editable and protected regions/systems, owner-approved visual quality anchor, supported source-render driver, finite engine/iteration budget and stop conditions.
+5. Evidence directory, source/asset paths, editable and protected regions/systems, supported source-render driver, finite engine/iteration budget and stop conditions.
 
 ## Asset-kind dispatch
 
@@ -51,7 +51,7 @@ Reference basis: [approved source/observation paths and observed regions]
 Placement goal: [surveyed reconstruction | recognizable ordinary-gameplay art]
 Protected scope: [unobserved sides, runs, geometry, systems]
 Allowed mutations: [exact allowlist]
-Quality anchor: [owner-approved actual image; not an as-built specification]
+Art objective: [believable, recognizable real-world building; sensible game-art inference allowed]
 Render loop: [supported driver, serialized slot, finite engine/iteration budget]
 Evidence and stop condition: [paths, safety/scope/budget limits, required independent review]
 
@@ -65,7 +65,7 @@ receiver ownership plus all geometry/physics/privacy/resource invariants.
 
 - Correct asset-kind review and complete motif/seam semantics.
 - Reference-observed facade language and plausible bounded inference.
-- Complete actual-world composition judged against dated references and the owner-approved quality anchor when whole-building work is requested; historical credit or a repaired local defect alone is insufficient.
+- Complete actual-world composition judged against dated real-world references for believability and recognizability when whole-building work is requested; historical credit or a repaired local defect alone is insufficient.
 - Correct game receiver, containment, contact, scale, lighting response, and protected-region ownership.
 - No unauthorized massing, collision, navigation, spray, terrain, roof, source, or generated-data change.
 - Independent art verdict plus explicit `as-built fidelity: claimed | limited | unclaimed`.
