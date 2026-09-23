@@ -1,0 +1,2249 @@
+{
+  "ok": true,
+  "derived_assembly": true,
+  "scope": "31 selected original frames from preserved failed002/003 batches plus3 successful004 originals; original batch failures retained; independent visual review remains required",
+  "authority": "34/213",
+  "private_reference_pixels": false,
+  "captures": [
+    {
+      "bytes": 766115,
+      "camera_aim_target": [
+        507.869384765625,
+        14.5,
+        448.884887695312
+      ],
+      "camera_forward": [
+        -0.878129780292511,
+        0.135317891836166,
+        0.458886921405792
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.24221849441528,
+      "camera_position": [
+        576.511352539062,
+        3.92240953445435,
+        413.014373779297
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "01-w34313540.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_2__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.66654968261719,
+      "id": "01-w34313540",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "Building 3 \u2014 600 California Avenue, CA",
+      "loaded_receiver_keys": [
+        "building:w34313540:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w34313540\nBuilding 3 \u2014 600 California Avenue, CA",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w34313540",
+      "physics_grounded": true,
+      "player_position": [
+        571.681701660156,
+        2.66666150093079,
+        415.538299560547
+      ],
+      "region": "physical-building:w34313540",
+      "sample_luminance_range": 0.708790604025126,
+      "sample_unique_colors": 279,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.66654968261719,
+      "settled_y": 2.66666150093079,
+      "sha256": "1f14624a9d9c67b8c11510953d948cf82053ccc1f64f62f20cd3d758e292a8a5",
+      "source_manifest_sha256": "a80c0342478f757d3caa5a0df1494f6f3e44759af7bf185713cba68e332372ee",
+      "origin_attempt": "capture-002",
+      "origin_receipt_sha256": "95a09faefef59d82420bf61ac1f20ed4e45f47148e68f2f02e2b23601c928b46"
+    },
+    {
+      "bytes": 970345,
+      "camera_aim_target": [
+        64.2819976806641,
+        5.80000019073486,
+        -253.462997436523
+      ],
+      "camera_forward": [
+        0.881466746330261,
+        0.00820862594991922,
+        -0.472174763679504
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.93253326416016,
+      "camera_position": [
+        -12.8487815856934,
+        5.08171844482422,
+        -212.146408081055
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "02-w34313545.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 3.12675476074219,
+      "id": "02-w34313545",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "800 Avenue I, San Francisco, CA",
+      "loaded_receiver_keys": [
+        "building:w34313545:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w34313545\n800 Avenue I, San Francisco, CA",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w34313545",
+      "physics_grounded": true,
+      "player_position": [
+        -8.00070762634277,
+        3.12686657905579,
+        -214.743362426758
+      ],
+      "region": "physical-building:w34313545",
+      "sample_luminance_range": 0.476266652345657,
+      "sample_unique_colors": 303,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 6.12675476074219,
+      "settled_y": 3.12686657905579,
+      "sha256": "a664a1be56f1b567139f7a31d85cb733cfdc2c60fabfea5dac7386c7ec1953b8",
+      "source_manifest_sha256": "a80c0342478f757d3caa5a0df1494f6f3e44759af7bf185713cba68e332372ee",
+      "origin_attempt": "capture-002",
+      "origin_receipt_sha256": "95a09faefef59d82420bf61ac1f20ed4e45f47148e68f2f02e2b23601c928b46"
+    },
+    {
+      "bytes": 898053,
+      "camera_aim_target": [
+        -249.514007568359,
+        6.3600001335144,
+        -26.7000007629395
+      ],
+      "camera_forward": [
+        -0.453699707984924,
+        0.0348493233323097,
+        0.890472948551178
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.82605791091919,
+      "camera_position": [
+        -227.504653930664,
+        4.66942644119263,
+        -69.897590637207
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "03-w95934105.png",
+      "ground_clearance_m": -0.00291562080383301,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.864013671875,
+      "id": "03-w95934105",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1441 Chinook Court",
+      "loaded_receiver_keys": [
+        "building:w95934105:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w95934105\n1441 Chinook Court",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w95934105",
+      "physics_grounded": true,
+      "player_position": [
+        -230.0,
+        2.86109805107117,
+        -65.0
+      ],
+      "region": "physical-building:w95934105",
+      "sample_luminance_range": 0.708790604025126,
+      "sample_unique_colors": 299,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.864013671875,
+      "settled_y": 2.86109805107117,
+      "sha256": "bb520e58afaff3e2c7386c2f0ffc27d5b219d15954bbefbd8a977c464a1e0267",
+      "source_manifest_sha256": "a80c0342478f757d3caa5a0df1494f6f3e44759af7bf185713cba68e332372ee",
+      "origin_attempt": "capture-002",
+      "origin_receipt_sha256": "95a09faefef59d82420bf61ac1f20ed4e45f47148e68f2f02e2b23601c928b46"
+    },
+    {
+      "bytes": 941815,
+      "camera_aim_target": [
+        -353.370513916016,
+        5.34999990463257,
+        -43.8199996948242
+      ],
+      "camera_forward": [
+        -0.730478048324585,
+        0.0161752048879862,
+        0.682744681835175
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.84030437469482,
+      "camera_position": [
+        -323.482360839844,
+        4.6881742477417,
+        -71.7550964355469
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "04-w95934117.png",
+      "ground_clearance_m": -8.34465026855469e-05,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.7772216796875,
+      "id": "04-w95934117",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1444 Croaker Court",
+      "loaded_receiver_keys": [
+        "building:w95934117:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w95934117\n1444 Croaker Court",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w95934117",
+      "physics_grounded": true,
+      "player_position": [
+        -327.5,
+        2.77713823318481,
+        -68.0
+      ],
+      "region": "physical-building:w95934117",
+      "sample_luminance_range": 0.615454912185669,
+      "sample_unique_colors": 297,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.7772216796875,
+      "settled_y": 2.77713823318481,
+      "sha256": "a289d0e48ed2c8e919d45a9702c2f62fa82ec0d18b1f91f9bea0aebbae024336",
+      "source_manifest_sha256": "a80c0342478f757d3caa5a0df1494f6f3e44759af7bf185713cba68e332372ee",
+      "origin_attempt": "capture-002",
+      "origin_receipt_sha256": "95a09faefef59d82420bf61ac1f20ed4e45f47148e68f2f02e2b23601c928b46"
+    },
+    {
+      "bytes": 899529,
+      "camera_aim_target": [
+        -421.542999267578,
+        5.30000019073486,
+        -186.115005493164
+      ],
+      "camera_forward": [
+        -0.339856058359146,
+        0.0159041248261929,
+        0.940343022346497
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.87915992736816,
+      "camera_position": [
+        -407.133941650391,
+        4.62569618225098,
+        -225.983352661133
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "05-w95934119.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.71305847167969,
+      "id": "05-w95934119",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "148 12th Street",
+      "loaded_receiver_keys": [
+        "building:w95934119:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w95934119\n148 12th Street",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w95934119",
+      "physics_grounded": true,
+      "player_position": [
+        -409.003112792969,
+        2.71317028999329,
+        -220.811447143555
+      ],
+      "region": "physical-building:w95934119",
+      "sample_luminance_range": 0.649647854268551,
+      "sample_unique_colors": 322,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.71305847167969,
+      "settled_y": 2.71317028999329,
+      "sha256": "9e843dce111bbf7d23d93607b2f383bf5a42101d0e8d6ed2d2c073ffd2f2ac81",
+      "source_manifest_sha256": "a80c0342478f757d3caa5a0df1494f6f3e44759af7bf185713cba68e332372ee",
+      "origin_attempt": "capture-002",
+      "origin_receipt_sha256": "95a09faefef59d82420bf61ac1f20ed4e45f47148e68f2f02e2b23601c928b46"
+    },
+    {
+      "bytes": 915541,
+      "camera_aim_target": [
+        -490.5,
+        5.8,
+        -66.0
+      ],
+      "camera_forward": [
+        0.887165546417236,
+        0.0803504064679146,
+        -0.454401940107346
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.38295149803162,
+      "camera_position": [
+        -515.87939453125,
+        3.50139021873474,
+        -53.0007781982422
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "06-w95934123.png",
+      "ground_clearance_m": 0.000112175941467285,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 1.94320678710938,
+      "id": "06-w95934123",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1308 Gateview Avenue",
+      "loaded_receiver_keys": [
+        "building:w95934123:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w95934123\n1308 Gateview Avenue",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w95934123",
+      "physics_grounded": true,
+      "player_position": [
+        -511.0,
+        1.94331896305084,
+        -55.5
+      ],
+      "region": "physical-building:w95934123",
+      "sample_luminance_range": 0.874215681105852,
+      "sample_unique_colors": 301,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 4.94320678710938,
+      "settled_y": 1.94331896305084,
+      "sha256": "28d685776a71c6f1ec9c411b6b831247d54879b138a06fa0a283d0d78b556a59",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 1083334,
+      "camera_aim_target": [
+        -584.496948242188,
+        5.09999990463257,
+        -298.223327636719
+      ],
+      "camera_forward": [
+        -0.780072510242462,
+        0.0329040475189686,
+        0.624823331832886
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.77271270751953,
+      "camera_position": [
+        -560.307312011719,
+        4.07965850830078,
+        -317.598754882812
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "07-w95934125.png",
+      "ground_clearance_m": 0.000209331512451172,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-3__z_-2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.26042175292969,
+      "id": "07-w95934125",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1317 Gateview Avenue",
+      "loaded_receiver_keys": [
+        "building:w95934125:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w95934125\n1317 Gateview Avenue",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w95934125",
+      "physics_grounded": true,
+      "player_position": [
+        -564.597717285156,
+        2.26063108444214,
+        -314.162231445312
+      ],
+      "region": "physical-building:w95934125",
+      "sample_luminance_range": 0.708790604025126,
+      "sample_unique_colors": 376,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.26042175292969,
+      "settled_y": 2.26063108444214,
+      "sha256": "7470d85a91bfb4fbeac6f066c012720f080d13480168c2fc5e6ad343cbaa6227",
+      "source_manifest_sha256": "a80c0342478f757d3caa5a0df1494f6f3e44759af7bf185713cba68e332372ee",
+      "origin_attempt": "capture-002",
+      "origin_receipt_sha256": "95a09faefef59d82420bf61ac1f20ed4e45f47148e68f2f02e2b23601c928b46"
+    },
+    {
+      "bytes": 912879,
+      "camera_aim_target": [
+        -292.059997558594,
+        6.15000009536743,
+        2.01799988746643
+      ],
+      "camera_forward": [
+        0.41103783249855,
+        0.0454337149858475,
+        0.910485446453094
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.82650899887085,
+      "camera_position": [
+        -304.260711669922,
+        4.80139303207397,
+        -25.0076694488525
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "08-w95934144.png",
+      "ground_clearance_m": 0.000209331512451172,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 3.05107116699219,
+      "id": "08-w95934144",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1439 Chinook Court",
+      "loaded_receiver_keys": [
+        "building:w95934144:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w95934144\n1439 Chinook Court",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w95934144",
+      "physics_grounded": true,
+      "player_position": [
+        -302.0,
+        3.05128049850464,
+        -20.0
+      ],
+      "region": "physical-building:w95934144",
+      "sample_luminance_range": 0.708790604025126,
+      "sample_unique_colors": 278,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 6.05107116699219,
+      "settled_y": 3.05128049850464,
+      "sha256": "a97f8efc882764b645f4e46fa2310d7d8c12e9e583f34dd9c616a86c30a64413",
+      "source_manifest_sha256": "a80c0342478f757d3caa5a0df1494f6f3e44759af7bf185713cba68e332372ee",
+      "origin_attempt": "capture-002",
+      "origin_receipt_sha256": "95a09faefef59d82420bf61ac1f20ed4e45f47148e68f2f02e2b23601c928b46"
+    },
+    {
+      "bytes": 990643,
+      "camera_aim_target": [
+        -279.371490478516,
+        4.5,
+        -653.050476074219
+      ],
+      "camera_forward": [
+        0.333853632211685,
+        -0.0045742429792881,
+        0.942613899707794
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 2.13114070892334,
+      "camera_position": [
+        -297.836181640625,
+        4.7529821395874,
+        -705.184387207031
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "09-w96215646.png",
+      "ground_clearance_m": 0.000209331512451172,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.72761535644531,
+      "id": "09-w96215646",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1394 Gateview Avenue",
+      "loaded_receiver_keys": [
+        "building:w96215646:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215646\n1394 Gateview Avenue",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215646",
+      "physics_grounded": true,
+      "player_position": [
+        -296.0,
+        2.72782468795776,
+        -700.0
+      ],
+      "region": "physical-building:w96215646",
+      "sample_luminance_range": 0.665502741932869,
+      "sample_unique_colors": 337,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.72761535644531,
+      "settled_y": 2.72782468795776,
+      "sha256": "df1169d0be3d735f3cdfbb7d2616fbc4ffdcecde955f4a533f446c1a83d9504f",
+      "source_manifest_sha256": "a80c0342478f757d3caa5a0df1494f6f3e44759af7bf185713cba68e332372ee",
+      "origin_attempt": "capture-002",
+      "origin_receipt_sha256": "95a09faefef59d82420bf61ac1f20ed4e45f47148e68f2f02e2b23601c928b46"
+    },
+    {
+      "bytes": 849016,
+      "camera_aim_target": [
+        -181.494995117188,
+        5.5,
+        -585.523986816406
+      ],
+      "camera_forward": [
+        0.264661252498627,
+        0.0449408032000065,
+        0.963293731212616
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.72792720794678,
+      "camera_position": [
+        -188.249221801758,
+        4.35309505462646,
+        -610.107482910156
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "10-w96215649.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.60015869140625,
+      "id": "10-w96215649",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1212 Mariner Drive",
+      "loaded_receiver_keys": [
+        "building:w96215649:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215649\n1212 Mariner Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215649",
+      "physics_grounded": true,
+      "player_position": [
+        -186.793579101562,
+        2.60027050971985,
+        -604.809387207031
+      ],
+      "region": "physical-building:w96215649",
+      "sample_luminance_range": 0.708790604025126,
+      "sample_unique_colors": 285,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.60015869140625,
+      "settled_y": 2.60027050971985,
+      "sha256": "bb41f3d01c00823d6739efc1271bf1a84c47ab35398ec80297d66641d1ab82e2",
+      "source_manifest_sha256": "a80c0342478f757d3caa5a0df1494f6f3e44759af7bf185713cba68e332372ee",
+      "origin_attempt": "capture-002",
+      "origin_receipt_sha256": "95a09faefef59d82420bf61ac1f20ed4e45f47148e68f2f02e2b23601c928b46"
+    },
+    {
+      "bytes": 934342,
+      "camera_aim_target": [
+        -403.574310302734,
+        5.42999982833862,
+        -621.997436523438
+      ],
+      "camera_forward": [
+        -0.481463015079498,
+        0.0451347380876541,
+        0.875303506851196
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.80786943435669,
+      "camera_position": [
+        -389.359405517578,
+        4.09742021560669,
+        -647.840209960938
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "11-w96215651.png",
+      "ground_clearance_m": -0.000181198120117188,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.34584045410156,
+      "id": "11-w96215651",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1202 Mariner Drive",
+      "loaded_receiver_keys": [
+        "building:w96215651:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215651\n1202 Mariner Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215651",
+      "physics_grounded": true,
+      "player_position": [
+        -392.007415771484,
+        2.34565925598145,
+        -643.026123046875
+      ],
+      "region": "physical-building:w96215651",
+      "sample_luminance_range": 0.708790604025126,
+      "sample_unique_colors": 329,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.34584045410156,
+      "settled_y": 2.34565925598145,
+      "sha256": "3f89d234fda65c5052f744aa5a09e0c2b325180acb0d45c9cd9869f03f6976a6",
+      "source_manifest_sha256": "a80c0342478f757d3caa5a0df1494f6f3e44759af7bf185713cba68e332372ee",
+      "origin_attempt": "capture-002",
+      "origin_receipt_sha256": "95a09faefef59d82420bf61ac1f20ed4e45f47148e68f2f02e2b23601c928b46"
+    },
+    {
+      "bytes": 955828,
+      "camera_aim_target": [
+        -460.293365478516,
+        5.15999984741211,
+        -674.81689453125
+      ],
+      "camera_forward": [
+        -0.179718598723412,
+        0.0236177537590265,
+        -0.983434498310089
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.98797655105591,
+      "camera_position": [
+        -453.192749023438,
+        4.22686815261841,
+        -635.9619140625
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "12-w96215652.png",
+      "ground_clearance_m": -0.000181198120117188,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.35694885253906,
+      "id": "12-w96215652",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1220 Bayside Drive",
+      "loaded_receiver_keys": [
+        "building:w96215652:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215652\n1220 Bayside Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215652",
+      "physics_grounded": true,
+      "player_position": [
+        -454.181243896484,
+        2.35676765441895,
+        -641.370788574219
+      ],
+      "region": "physical-building:w96215652",
+      "sample_luminance_range": 0.938356071710587,
+      "sample_unique_colors": 319,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.35694885253906,
+      "settled_y": 2.35676765441895,
+      "sha256": "dbb6c54bd2a08f65f3bc9c67be7fba42bed9fc4821569dee9fb1e0acea154099",
+      "source_manifest_sha256": "a80c0342478f757d3caa5a0df1494f6f3e44759af7bf185713cba68e332372ee",
+      "origin_attempt": "capture-002",
+      "origin_receipt_sha256": "95a09faefef59d82420bf61ac1f20ed4e45f47148e68f2f02e2b23601c928b46"
+    },
+    {
+      "bytes": 610643,
+      "camera_aim_target": [
+        -334.392822265625,
+        4.94999980926514,
+        -780.746765136719
+      ],
+      "camera_forward": [
+        -0.885565638542175,
+        0.0441723056137562,
+        0.462409257888794
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.688556432724,
+      "camera_position": [
+        -311.793609619141,
+        3.82272696495056,
+        -792.547302246094
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "13-w96215653.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-4",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.06556701660156,
+      "id": "13-w96215653",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1227 Northpoint Drive",
+      "loaded_receiver_keys": [
+        "building:w96215653:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215653\n1227 Northpoint Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215653",
+      "physics_grounded": true,
+      "player_position": [
+        -316.664215087891,
+        2.06567883491516,
+        -790.003967285156
+      ],
+      "region": "physical-building:w96215653",
+      "sample_luminance_range": 0.708790604025126,
+      "sample_unique_colors": 242,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.06556701660156,
+      "settled_y": 2.06567883491516,
+      "sha256": "8759bdbe37d0c589872547284bc295c31275598bd0301842f2190fd2f73f8245",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 957911,
+      "camera_aim_target": [
+        -150.899597167969,
+        5.76000022888184,
+        -814.612243652344
+      ],
+      "camera_forward": [
+        0.704384028911591,
+        0.0240301191806793,
+        0.709412217140198
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.75732564926147,
+      "camera_position": [
+        -178.729690551758,
+        4.81054830551147,
+        -842.641052246094
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "14-w96215658.png",
+      "ground_clearance_m": 1.40666961669922e-05,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-4",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.94270324707031,
+      "id": "14-w96215658",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1239 Northpoint Drive",
+      "loaded_receiver_keys": [
+        "building:w96215658:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215658\n1239 Northpoint Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215658",
+      "physics_grounded": true,
+      "player_position": [
+        -174.855575561523,
+        2.94271731376648,
+        -838.7392578125
+      ],
+      "region": "physical-building:w96215658",
+      "sample_luminance_range": 0.853239256888628,
+      "sample_unique_colors": 327,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.94270324707031,
+      "settled_y": 2.94271731376648,
+      "sha256": "22add7997b4d297a45fc99885c5192286b4e19895af5cc1fc5485f7343d421de",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 672106,
+      "camera_aim_target": [
+        -305.219787597656,
+        5.25,
+        -778.632019042969
+      ],
+      "camera_forward": [
+        0.883172631263733,
+        0.0749642699956894,
+        -0.463018804788589
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.61113977432251,
+      "camera_position": [
+        -324.247863769531,
+        3.63488245010376,
+        -768.656127929688
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "15-w96215659.png",
+      "ground_clearance_m": -8.34465026855469e-05,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-4",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.04727172851562,
+      "id": "15-w96215659",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1234 Northpoint Drive",
+      "loaded_receiver_keys": [
+        "building:w96215659:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215659\n1234 Northpoint Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215659",
+      "physics_grounded": true,
+      "player_position": [
+        -319.390411376953,
+        2.04718828201294,
+        -771.202819824219
+      ],
+      "region": "physical-building:w96215659",
+      "sample_luminance_range": 0.732672929763794,
+      "sample_unique_colors": 202,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.04727172851562,
+      "settled_y": 2.04718828201294,
+      "sha256": "58d1bd0aefd2cc73e769b0e6780fd3705ff1ebabbf712346168147019af31b89",
+      "source_manifest_sha256": "f34e2f9bddb74901c6d82d3a7edba73dc24c1d18d10536ecfe17385caeed70e7",
+      "origin_attempt": "capture-004",
+      "origin_receipt_sha256": "ae74a2f2a95584f846e1729d095b7e47660b807b05778a44d5b5d2d231789575"
+    },
+    {
+      "bytes": 887633,
+      "camera_aim_target": [
+        -490.808074951172,
+        5.01999998092651,
+        -723.055297851562
+      ],
+      "camera_forward": [
+        0.460902363061905,
+        0.0503100529313087,
+        0.886023700237274
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.71322631835938,
+      "camera_position": [
+        -504.418731689453,
+        3.5343017578125,
+        -749.219970703125
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "16-w96215661.png",
+      "ground_clearance_m": 0.000112771987915039,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 1.81089782714844,
+      "id": "16-w96215661",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1222 Bayside Drive",
+      "loaded_receiver_keys": [
+        "building:w96215661:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215661\n1222 Bayside Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215661",
+      "physics_grounded": true,
+      "player_position": [
+        -501.883758544922,
+        1.81101059913635,
+        -744.346862792969
+      ],
+      "region": "physical-building:w96215661",
+      "sample_luminance_range": 0.976738039404154,
+      "sample_unique_colors": 308,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 4.81089782714844,
+      "settled_y": 1.81101059913635,
+      "sha256": "6348e914347dd02935a32a8651f3791c194aaa08660099b4d549ab7e463d14d6",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 963628,
+      "camera_aim_target": [
+        -378.240692138672,
+        5.05000019073486,
+        -713.827026367188
+      ],
+      "camera_forward": [
+        0.866750419139862,
+        0.0331515707075596,
+        -0.497639119625092
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.77048683166504,
+      "camera_position": [
+        -403.821258544922,
+        4.07157325744629,
+        -699.14013671875
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "17-w96215666.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.25379943847656,
+      "id": "17-w96215666",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1215 Bayside Drive",
+      "loaded_receiver_keys": [
+        "building:w96215666:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215666\n1215 Bayside Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215666",
+      "physics_grounded": true,
+      "player_position": [
+        -399.054138183594,
+        2.25391125679016,
+        -701.877136230469
+      ],
+      "region": "physical-building:w96215666",
+      "sample_luminance_range": 0.976738039404154,
+      "sample_unique_colors": 312,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.25379943847656,
+      "settled_y": 2.25391125679016,
+      "sha256": "661a5a2a9a6d1871187f4c84e22f4b515169e9679e586823fdec5e0c8f89aa24",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 867222,
+      "camera_aim_target": [
+        -212.776504516602,
+        5.30000019073486,
+        -856.080017089844
+      ],
+      "camera_forward": [
+        -0.366719514131546,
+        0.0217011626809835,
+        0.930078387260437
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.80664253234863,
+      "camera_position": [
+        -201.194427490234,
+        4.61461067199707,
+        -885.45458984375
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "18-w96215669.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-4",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.73385620117188,
+      "id": "18-w96215669",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1238 Northpoint Drive",
+      "loaded_receiver_keys": [
+        "building:w96215669:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215669\n1238 Northpoint Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215669",
+      "physics_grounded": true,
+      "player_position": [
+        -203.211380004883,
+        2.73396801948547,
+        -880.339172363281
+      ],
+      "region": "physical-building:w96215669",
+      "sample_luminance_range": 0.705152172595263,
+      "sample_unique_colors": 313,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.73385620117188,
+      "settled_y": 2.73396801948547,
+      "sha256": "0d58b03c187fdb7e710dbff98a83cfc7d1ef4779cf3b2e0922b9c298b0b0c748",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 709971,
+      "camera_aim_target": [
+        -485.709320068359,
+        5.5,
+        -656.3671875
+      ],
+      "camera_forward": [
+        -0.352635771036148,
+        0.0543812848627567,
+        0.934179186820984
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.69952726364136,
+      "camera_position": [
+        -475.067413330078,
+        3.85887479782104,
+        -684.558959960938
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "19-w96215672.png",
+      "ground_clearance_m": 1.40666961669922e-05,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.157958984375,
+      "id": "19-w96215672",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1201 Bayside Drive",
+      "loaded_receiver_keys": [
+        "building:w96215672:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215672\n1201 Bayside Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215672",
+      "physics_grounded": true,
+      "player_position": [
+        -477.006927490234,
+        2.15797305107117,
+        -679.420959472656
+      ],
+      "region": "physical-building:w96215672",
+      "sample_luminance_range": 0.908233724534512,
+      "sample_unique_colors": 290,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.157958984375,
+      "settled_y": 2.15797305107117,
+      "sha256": "59b9cc8a0bf8d6fb49a3317db5628f3fcfa0036eb74ee610e6c9fd0867fe4ec8",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 1038037,
+      "camera_aim_target": [
+        -305.874298095703,
+        6.0,
+        -734.836853027344
+      ],
+      "camera_forward": [
+        0.887169063091278,
+        0.07173902541399,
+        -0.455833941698074
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.60441422462463,
+      "camera_position": [
+        -332.100769042969,
+        3.87925553321838,
+        -721.361511230469
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "20-w96215673.png",
+      "ground_clearance_m": 1.40666961669922e-05,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.2738037109375,
+      "id": "20-w96215673",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1232 Northpoint Drive",
+      "loaded_receiver_keys": [
+        "building:w96215673:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215673\n1232 Northpoint Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215673",
+      "physics_grounded": true,
+      "player_position": [
+        -327.221343994141,
+        2.27381777763367,
+        -723.868591308594
+      ],
+      "region": "physical-building:w96215673",
+      "sample_luminance_range": 0.860248629003763,
+      "sample_unique_colors": 343,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.2738037109375,
+      "settled_y": 2.27381777763367,
+      "sha256": "debca04ba1d35cb34b75427e3710a4191ce2fb580f3b0be559f94d5534088f01",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 949458,
+      "camera_aim_target": [
+        -137.447906494141,
+        6.65000009536743,
+        -759.969421386719
+      ],
+      "camera_forward": [
+        0.512321412563324,
+        0.0533102340996265,
+        -0.857137560844421
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.75483465194702,
+      "camera_position": [
+        -154.631088256836,
+        4.8619818687439,
+        -731.221130371094
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "21-w96215674.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 3.15507507324219,
+      "id": "21-w96215674",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1241 Northpoint Drive",
+      "loaded_receiver_keys": [
+        "building:w96215674:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215674\n1241 Northpoint Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215674",
+      "physics_grounded": true,
+      "player_position": [
+        -151.813354492188,
+        3.15518689155579,
+        -735.935363769531
+      ],
+      "region": "physical-building:w96215674",
+      "sample_luminance_range": 0.742196872830391,
+      "sample_unique_colors": 302,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 6.15507507324219,
+      "settled_y": 3.15518689155579,
+      "sha256": "8f6cb79a4ef7657e3edd9a8999790e37bf2164ededf8a8a24845247659a8bc31",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 504620,
+      "camera_aim_target": [
+        -317.888000488281,
+        5.69999980926514,
+        -579.952026367188
+      ],
+      "camera_forward": [
+        -0.0610382333397865,
+        0.0412971079349518,
+        0.997280776500702
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.79438018798828,
+      "camera_position": [
+        -316.238830566406,
+        4.58422088623047,
+        -606.896911621094
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "22-w96215677.png",
+      "ground_clearance_m": 1.40666961669922e-05,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.81134033203125,
+      "id": "22-w96215677",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1206 Mariner Drive",
+      "loaded_receiver_keys": [
+        "building:w96215677:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215677\n1206 Mariner Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215677",
+      "physics_grounded": true,
+      "player_position": [
+        -316.574554443359,
+        2.81135439872742,
+        -601.411865234375
+      ],
+      "region": "physical-building:w96215677",
+      "sample_luminance_range": 0.651917658746243,
+      "sample_unique_colors": 221,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.81134033203125,
+      "settled_y": 2.81135439872742,
+      "sha256": "b0f1efefc9ea6666f1bd6b5b0e1745059bdf89f778b9d7cf381d395f79a085fd",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 546121,
+      "camera_aim_target": [
+        -317.243988037109,
+        5.69999980926514,
+        -609.003479003906
+      ],
+      "camera_forward": [
+        0.0620021671056747,
+        0.0386587120592594,
+        -0.997327029705048
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.76590919494629,
+      "camera_position": [
+        -318.919036865234,
+        4.65560340881348,
+        -582.059631347656
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "23-w96215680.png",
+      "ground_clearance_m": 1.40666961669922e-05,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.86820983886719,
+      "id": "23-w96215680",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1219 Mariner Drive",
+      "loaded_receiver_keys": [
+        "building:w96215680:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215680\n1219 Mariner Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215680",
+      "physics_grounded": true,
+      "player_position": [
+        -318.578033447266,
+        2.86822390556335,
+        -587.544921875
+      ],
+      "region": "physical-building:w96215680",
+      "sample_luminance_range": 0.889367062598467,
+      "sample_unique_colors": 132,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.86820983886719,
+      "settled_y": 2.86822390556335,
+      "sha256": "67531d26b0eed8d707f123cc734cecef2e17c892dddf589745704b464bb35ea3",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 924657,
+      "camera_aim_target": [
+        -265.0,
+        6.0,
+        -606.47998046875
+      ],
+      "camera_forward": [
+        0.521948039531708,
+        0.044444166123867,
+        -0.8518186211586
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.76653957366943,
+      "camera_position": [
+        -282.825866699219,
+        4.4821310043335,
+        -577.38818359375
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "24-w96215682.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.72264099121094,
+      "id": "24-w96215682",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1221 Mariner Drive",
+      "loaded_receiver_keys": [
+        "building:w96215682:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215682\n1221 Mariner Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215682",
+      "physics_grounded": true,
+      "player_position": [
+        -280.0,
+        2.72275280952454,
+        -582.0
+      ],
+      "region": "physical-building:w96215682",
+      "sample_luminance_range": 0.803541973233223,
+      "sample_unique_colors": 309,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.72264099121094,
+      "settled_y": 2.72275280952454,
+      "sha256": "5b35331a140617d0cc3a6ef29901b06695a85bf3154b386f21d2f167563e9420",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 480226,
+      "camera_aim_target": [
+        -178.646499633789,
+        7.47499990463257,
+        -814.931884765625
+      ],
+      "camera_forward": [
+        -0.960778653621674,
+        0.136246785521507,
+        0.241539195179939
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.23575305938721,
+      "camera_position": [
+        -154.232528686523,
+        4.01289844512939,
+        -821.069519042969
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "25-w96215688.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-4",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.72409057617188,
+      "id": "25-w96215688",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1240 Northpoint Drive",
+      "loaded_receiver_keys": [
+        "building:w96215688:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215688\n1240 Northpoint Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215688",
+      "physics_grounded": true,
+      "player_position": [
+        -159.248489379883,
+        2.72420239448547,
+        -819.808532714844
+      ],
+      "region": "physical-building:w96215688",
+      "sample_luminance_range": 0.775075346231461,
+      "sample_unique_colors": 200,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.72409057617188,
+      "settled_y": 2.72420239448547,
+      "sha256": "add307b85ac93fe15b3cd62408c357ae3532d6cd108c0c97b0d9d00ba2d73aa3",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 629570,
+      "camera_aim_target": [
+        -100.468505859375,
+        9.01949977874756,
+        648.694946289062
+      ],
+      "camera_forward": [
+        -0.877644002437592,
+        0.0534907169640064,
+        -0.476319074630737
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.79093742370605,
+      "camera_position": [
+        -47.1729583740234,
+        5.77126884460449,
+        677.619750976562
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "26-w291189336.png",
+      "ground_clearance_m": 0.000111579895019531,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 4.06535339355469,
+      "id": "26-w291189336",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "Navy Chapel Building 187 \u2014 51 California Avenue",
+      "loaded_receiver_keys": [
+        "building:w291189336:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w291189336\nNavy Chapel Building 187 \u2014 51 California Avenue",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w291189336",
+      "physics_grounded": true,
+      "player_position": [
+        -52.0,
+        4.06546497344971,
+        675.0
+      ],
+      "region": "physical-building:w291189336",
+      "sample_luminance_range": 0.870058063417673,
+      "sample_unique_colors": 214,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 7.06535339355469,
+      "settled_y": 4.06546497344971,
+      "sha256": "c7ce7f18904207fae7c29aaacee70d889698433be35eace5e879290f92e7fec0",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 797374,
+      "camera_aim_target": [
+        145.0,
+        6.65000009536743,
+        -343.0
+      ],
+      "camera_forward": [
+        0.792195796966553,
+        0.0285753663629293,
+        0.609597563743591
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.96128273010254,
+      "camera_position": [
+        100.219657897949,
+        5.03475379943848,
+        -377.458587646484
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "27-w764313741.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_0__z_-2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 3.19180297851562,
+      "id": "27-w764313741",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "San Francisco Fire Station 48",
+      "loaded_receiver_keys": [
+        "building:w764313741:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w764313741\nSan Francisco Fire Station 48",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w764313741",
+      "physics_grounded": true,
+      "player_position": [
+        104.576751708984,
+        3.19191479682922,
+        -374.105834960938
+      ],
+      "region": "physical-building:w764313741",
+      "sample_luminance_range": 0.810090962797403,
+      "sample_unique_colors": 247,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 6.19180297851562,
+      "settled_y": 3.19191479682922,
+      "sha256": "55402f822fc9c7a12cb6ae5f35621598ab8694f2660c93582309e2af4bc989a4",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 698478,
+      "camera_aim_target": [
+        14.6,
+        20.0,
+        722.4
+      ],
+      "camera_forward": [
+        -0.63377982378006,
+        0.145549118518829,
+        0.759696424007416
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.17838525772095,
+      "camera_position": [
+        78.4857635498047,
+        5.3284707069397,
+        645.821655273438
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "28-w1222720021.png",
+      "ground_clearance_m": 0.000111579895019531,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_0__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 4.12887573242188,
+      "id": "28-w1222720021",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "Building 1 tower",
+      "loaded_receiver_keys": [
+        "building:w1222720021:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w1222720021\nBuilding 1 tower",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w1222720021",
+      "physics_grounded": true,
+      "player_position": [
+        75.0,
+        4.12898731231689,
+        650.0
+      ],
+      "region": "physical-building:w1222720021",
+      "sample_luminance_range": 0.708790604025126,
+      "sample_unique_colors": 274,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 7.12887573242188,
+      "settled_y": 4.12898731231689,
+      "sha256": "1fc2f261f024791334c57926d7225bcebd5deee4f2dcea10bbc2893502f2b983",
+      "source_manifest_sha256": "f34e2f9bddb74901c6d82d3a7edba73dc24c1d18d10536ecfe17385caeed70e7",
+      "origin_attempt": "capture-004",
+      "origin_receipt_sha256": "ae74a2f2a95584f846e1729d095b7e47660b807b05778a44d5b5d2d231789575"
+    },
+    {
+      "bytes": 830782,
+      "camera_aim_target": [
+        -60.6100006103516,
+        14.7740001678467,
+        503.549987792969
+      ],
+      "camera_forward": [
+        -0.763660609722137,
+        0.103961512446404,
+        -0.637192606925964
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.5054497718811,
+      "camera_position": [
+        6.57015800476074,
+        5.62842035293579,
+        559.604553222656
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "29-w1249412093.png",
+      "ground_clearance_m": 1.43051147460938e-05,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_0__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 4.2001953125,
+      "id": "29-w1249412093",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "Hawkins \u2014 77 Bruton Street, San Francisco, CA 94130",
+      "loaded_receiver_keys": [
+        "building:w1249412093:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w1249412093\nHawkins \u2014 77 Bruton Street, San Francisco, CA 94130",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w1249412093",
+      "physics_grounded": true,
+      "player_position": [
+        2.36999988555908,
+        4.20020961761475,
+        556.099975585938
+      ],
+      "region": "physical-building:w1249412093",
+      "sample_luminance_range": 0.862498048692942,
+      "sample_unique_colors": 306,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 7.2001953125,
+      "settled_y": 4.20020961761475,
+      "sha256": "5fdf6e2154b90290bce95e723af24d5b32e3350fddb9d329ca28b4ac6995c66b",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 727535,
+      "camera_aim_target": [
+        -128.0,
+        28.0,
+        559.0
+      ],
+      "camera_forward": [
+        -0.986068844795227,
+        0.164885327219963,
+        0.0219346955418587
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.23177146911621,
+      "camera_position": [
+        7.79337787628174,
+        5.2933406829834,
+        555.979248046875
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "30-w1249412094.png",
+      "ground_clearance_m": 1.43051147460938e-05,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_0__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 4.2001953125,
+      "id": "30-w1249412094",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "Isle House \u2014 39 Bruton Street, San Francisco, CA 94130",
+      "loaded_receiver_keys": [
+        "building-composite:w1249412094:w1282547786:wall",
+        "building-composite:w1249412094:w1282547787:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w1249412094\nIsle House \u2014 39 Bruton Street, San Francisco, CA 94130",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w1249412094",
+      "physics_grounded": true,
+      "player_position": [
+        2.36999988555908,
+        4.20020961761475,
+        556.099975585938
+      ],
+      "region": "physical-building:w1249412094",
+      "sample_luminance_range": 0.862498048692942,
+      "sample_unique_colors": 285,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 7.2001953125,
+      "settled_y": 4.20020961761475,
+      "sha256": "483909735b2a8ab057eca263afd750f5acb1645858aed17b09dd24602711d08e",
+      "source_manifest_sha256": "f34e2f9bddb74901c6d82d3a7edba73dc24c1d18d10536ecfe17385caeed70e7",
+      "origin_attempt": "capture-004",
+      "origin_receipt_sha256": "ae74a2f2a95584f846e1729d095b7e47660b807b05778a44d5b5d2d231789575"
+    },
+    {
+      "bytes": 874210,
+      "camera_aim_target": [
+        0.0,
+        18.0,
+        738.0
+      ],
+      "camera_forward": [
+        0.975357174873352,
+        0.088059701025486,
+        0.20229683816433
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.71041631698608,
+      "camera_position": [
+        -140.364486694336,
+        5.3273138999939,
+        708.887451171875
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "31-r16681702.png",
+      "ground_clearance_m": 0.000209331512451172,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_2",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 3.81143188476562,
+      "id": "31-r16681702",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "Treasure Island Museum",
+      "loaded_receiver_keys": [
+        "building:r16681702:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:r16681702\nTreasure Island Museum",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:r16681702",
+      "physics_grounded": true,
+      "player_position": [
+        -135.0,
+        3.81164121627808,
+        710.0
+      ],
+      "region": "physical-building:r16681702",
+      "sample_luminance_range": 0.809185151010752,
+      "sample_unique_colors": 306,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 6.81143188476562,
+      "settled_y": 3.81164121627808,
+      "sha256": "558b6703c92bc2a0cb4d2a830d17f13f44c78c6afe22551bac51aaf269e6a354",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 409168,
+      "camera_aim_target": [
+        -125.300003051758,
+        10.1000003814697,
+        317.200012207031
+      ],
+      "camera_forward": [
+        -0.933881163597107,
+        0.347871452569962,
+        -0.0827732384204865
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 0.310370445251465,
+      "camera_position": [
+        -108.365447998047,
+        3.79187679290771,
+        318.701019287109
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "32-r19685981.png",
+      "ground_clearance_m": 0.000404834747314453,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_1",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 3.70475769042969,
+      "id": "32-r19685981",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "Maceo May",
+      "loaded_receiver_keys": [
+        "building:r19685981:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:r19685981\nMaceo May",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:r19685981",
+      "physics_grounded": true,
+      "player_position": [
+        -113.50178527832,
+        3.705162525177,
+        318.245727539062
+      ],
+      "region": "physical-building:r19685981",
+      "sample_luminance_range": 0.708790604025126,
+      "sample_unique_colors": 155,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 6.70475769042969,
+      "settled_y": 3.705162525177,
+      "sha256": "636dde8d3c02e6d045ed285b029d20d99e1bb1502b06c45116e07831c99fff30",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 984651,
+      "camera_aim_target": [
+        -225.567031860352,
+        7.30000019073486,
+        -726.448852539062
+      ],
+      "camera_forward": [
+        0.277830988168716,
+        0.0722233206033707,
+        0.957911193370819
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.64640474319458,
+      "camera_position": [
+        -237.001510620117,
+        4.32758760452271,
+        -765.872802734375
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "33-w96215670.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-1__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.72470092773438,
+      "id": "33-w96215670",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1246/1397 Gateview Court",
+      "loaded_receiver_keys": [
+        "building:w96215670:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215670\n1246/1397 Gateview Court",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215670",
+      "physics_grounded": true,
+      "player_position": [
+        -235.473434448242,
+        2.72481274604797,
+        -760.604309082031
+      ],
+      "region": "physical-building:w96215670",
+      "sample_luminance_range": 0.723580364137888,
+      "sample_unique_colors": 341,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.72470092773438,
+      "settled_y": 2.72481274604797,
+      "sha256": "eb6d4890bacc411bdbe23bbaacf31eae22e8d11d2ad43ee111c23759ff843304",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    },
+    {
+      "bytes": 966901,
+      "camera_aim_target": [
+        -411.528900146484,
+        6.89400005340576,
+        -704.170043945312
+      ],
+      "camera_forward": [
+        -0.960710883140564,
+        0.0977090820670128,
+        -0.259783536195755
+      ],
+      "camera_fov": 70.0,
+      "camera_ground_clearance_m": 1.4264497756958,
+      "camera_position": [
+        -378.237670898438,
+        3.50813007354736,
+        -695.167846679688
+      ],
+      "capture_only_overlay": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "34-w96215685.png",
+      "ground_clearance_m": 0.000111818313598633,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-3",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.04542541503906,
+      "id": "34-w96215685",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Fresh final accepted-34 ordinary gameplay snapshot; not a new acceptance decision.",
+      "label": "1226 Bayside Drive",
+      "loaded_receiver_keys": [
+        "building:w96215685:wall"
+      ],
+      "movement_proof": false,
+      "on_image_label": "physical-building:w96215685\n1226 Bayside Drive",
+      "pause_overlay_visible": false,
+      "physical_unit_id": "physical-building:w96215685",
+      "physics_grounded": true,
+      "player_position": [
+        -383.521636962891,
+        2.04553723335266,
+        -696.5966796875
+      ],
+      "region": "physical-building:w96215685",
+      "sample_luminance_range": 0.912855684757233,
+      "sample_unique_colors": 321,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0.0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.04542541503906,
+      "settled_y": 2.04553723335266,
+      "sha256": "9f84f098e8631c037bf7fdc06a8a9058b0c6982531a976b2568048867f5258b0",
+      "source_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "origin_attempt": "capture-003",
+      "origin_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a"
+    }
+  ],
+  "attempt_bindings": {
+    "capture-002": {
+      "frozen_manifest_sha256": "a80c0342478f757d3caa5a0df1494f6f3e44759af7bf185713cba68e332372ee",
+      "helper_sha256": "2d49fe83100263932dfcdec4d291bb5ed96cfa32870424899954c97c4d169e20",
+      "complete_source_map_sha256": "038ce4c0b1585f6b6e344c0bf6c362d25a851245e9bab48597e4135f72e92257",
+      "native_receipt_sha256": "95a09faefef59d82420bf61ac1f20ed4e45f47148e68f2f02e2b23601c928b46",
+      "original_batch_ok": false,
+      "original_batch_failure": "Final camera ground clearance or target frustum invalid: 13-w96215653",
+      "selected_count": 11
+    },
+    "capture-003": {
+      "frozen_manifest_sha256": "89038c3bdb2dc0123879f1dde2f656e0915dd3df250bd495535f6eeef8215eaf",
+      "helper_sha256": "f099f6c28743394ae31e626ebe50dc7f3273b3828af2d948182eb943d777e557",
+      "complete_source_map_sha256": "038ce4c0b1585f6b6e344c0bf6c362d25a851245e9bab48597e4135f72e92257",
+      "native_receipt_sha256": "bf56fa9bd69de16eeaffa9df3f6041a857a0a2eb162d537c51c3ba2c9ec3680a",
+      "original_batch_ok": false,
+      "original_batch_failure": "Final camera ground clearance or target frustum invalid: 15-w96215659",
+      "selected_count": 20
+    },
+    "capture-004": {
+      "frozen_manifest_sha256": "f34e2f9bddb74901c6d82d3a7edba73dc24c1d18d10536ecfe17385caeed70e7",
+      "helper_sha256": "f099f6c28743394ae31e626ebe50dc7f3273b3828af2d948182eb943d777e557",
+      "complete_source_map_sha256": "038ce4c0b1585f6b6e344c0bf6c362d25a851245e9bab48597e4135f72e92257",
+      "native_receipt_sha256": "ae74a2f2a95584f846e1729d095b7e47660b807b05778a44d5b5d2d231789575",
+      "original_batch_ok": true,
+      "original_batch_failure": "",
+      "selected_count": 3
+    }
+  }
+}

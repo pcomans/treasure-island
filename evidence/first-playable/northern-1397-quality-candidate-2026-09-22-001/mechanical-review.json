@@ -1,0 +1,73 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215670",
+  "label": "Independent1397 source/native and finite mechanics decisions",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/independent-actual-source-002/REVIEW.md",
+      "path_base": "/",
+      "sha256": "2e102b9d729473b27142bce513cf9e7a132dd3acadb19659a1e7942d5a04e053",
+      "bytes": 3763,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/independent-actual-source-002/REVIEW.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/independent-actual-native-002/REVIEW.md",
+      "path_base": "/",
+      "sha256": "919698a49c16b9b4cbcf0957f10b8d654e2c0b330dcba1f7e3ffe5686ab676e4",
+      "bytes": 3807,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/independent-actual-native-002/REVIEW.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/visual-review-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "b8b8cfbe0ccea6bead087c3f21671278b5ada054e2b1cc10af770268eac78edf",
+      "bytes": 4412,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/visual-review-001/REVIEW.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/ACTUAL-REVIEW-support_event_diagnosis.md",
+      "path_base": "/",
+      "sha256": "9080715fb63509e496d612abdcbc9f6867fea693c624143acffdf2df152d1261",
+      "bytes": 3267,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/ACTUAL-REVIEW-support_event_diagnosis.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/ACTUAL_TECHNICAL_CHECKS-support_event_diagnosis.json",
+      "path_base": "/",
+      "sha256": "71ac22e30d5af91b3668ecef38a40f27b7125aa5cfbd81cd5b3e0c92bf916fc5",
+      "bytes": 1906,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/ACTUAL_TECHNICAL_CHECKS-support_event_diagnosis.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/visual-review-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "abad34ef5185ce9b6c5d9c65b0786456ba1515ce76483b724a219249cb67ecb0",
+      "bytes": 2933,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/visual-review-001/REVIEW.md",
+      "copied": false
+    }
+  ],
+  "data": {
+    "status": "SCOPED_SOURCE_AND_MECHANICS_PASS",
+    "source002_exact": true,
+    "mechanics": "663rows/3routes/3callbacks independentlychecked; originalqualifiedsupport retained",
+    "candidate_live_equivalence": "PENDING",
+    "package_role_checks": "PENDING",
+    "activation_limit": "40discrete active node/server observations; not everyframe/continuous proof",
+    "scope": [
+      "Frozen1246/current1397 Gateview identity is physical-building:w96215670; address labels do not replace source association",
+      "Study/source capture authority31/213 at915; current preparation baseline32/213 atfdfc100",
+      "Three separately placed finite routes/returns,663 actual rows; not traversal between setups",
+      "954-frameAVI retained externally;9original payload samples,terminalblueframe supplies no endpoint evidence; no continuous playback claim",
+      "Three actual stock callbacks:ProjectedUpperSiding placed one;blueglazing/paletrim rejected",
+      "Grounded roof callback and jetpack unperformed; no roof landing/walk claim",
+      "Production-inferencecadence/scale; hiddenleftlowerfrontageprotected,tinyrunscontinuity-only",
+      "Liveattachment/current32equivalence,candidatepackageandseventh pending; no newcredit"
+    ]
+  }
+}

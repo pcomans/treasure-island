@@ -152,6 +152,12 @@
         },
         {
           "$ref": "#/$defs/northern_1240_active_runtime_adapter"
+        },
+        {
+          "$ref": "#/$defs/northern_1397_active_runtime_adapter"
+        },
+        {
+          "$ref": "#/$defs/northern_1226_active_runtime_adapter"
         }
       ]
     },
@@ -836,7 +842,7 @@
       "additionalProperties": false,
       "properties": {
         "active_runtime_adapter_receivers": {
-          "const": 31
+          "const": 33
         },
         "building_footprints": {
           "const": 213
@@ -857,7 +863,7 @@
           "const": 213
         },
         "runtime_adapter_receivers": {
-          "const": 40
+          "const": 42
         },
         "source_records": {
           "const": 215
@@ -2898,6 +2904,142 @@
         "whole_building_recognizability_imported"
       ],
       "type": "object"
+    },
+    "northern_1397_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:gateview-1397-live:building:w96215670:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_paired_wall_roof_replacement"
+        },
+        "receiver_key": {
+          "const": "building:w96215670:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/gateview_1397_live_replacement.gd"
+        },
+        "runtime_asset_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "const": [
+            "game/scripts/world/facades/gateview_1397_live_factory.gd",
+            "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+            "game/scripts/world/facades/site_12_housing_kit.gd"
+          ]
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/gateview_1397_study.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w96215670"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
+    },
+    "northern_1226_active_runtime_adapter": {
+      "additionalProperties": false,
+      "properties": {
+        "adapter_id": {
+          "const": "active-adapter:bayside-1226-live:building:w96215685:wall"
+        },
+        "content_classification": {
+          "const": "active_target_specific_paired_wall_roof_replacement"
+        },
+        "receiver_key": {
+          "const": "building:w96215685:wall"
+        },
+        "recognition_acceptance_authority": {
+          "const": "physical_unit_claim_and_independent_acceptance_record"
+        },
+        "recognition_acceptance_status": {
+          "const": "accepted"
+        },
+        "review_status": {
+          "const": "independent_exact_current_live_pass"
+        },
+        "review_status_scope": {
+          "const": "runtime_asset_original_detail_provenance_only_not_reference_recognition"
+        },
+        "runtime_adapter_path": {
+          "const": "game/scripts/world/facades/bayside_1226_live_replacement.gd"
+        },
+        "runtime_asset_paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "const": [
+            "game/scripts/world/facades/bayside_1226_live_factory.gd",
+            "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader",
+            "game/scripts/world/facades/site_12_housing_kit.gd"
+          ]
+        },
+        "runtime_config_path": {
+          "const": "game/resources/facades/bayside_1226_study.json"
+        },
+        "runtime_dispatch_path": {
+          "const": "game/scripts/world/world_chunk_builder.gd"
+        },
+        "source_key": {
+          "const": "w96215685"
+        },
+        "whole_building_recognizability_imported": {
+          "const": false
+        }
+      },
+      "required": [
+        "adapter_id",
+        "content_classification",
+        "receiver_key",
+        "recognition_acceptance_authority",
+        "recognition_acceptance_status",
+        "review_status",
+        "review_status_scope",
+        "runtime_adapter_path",
+        "runtime_asset_paths",
+        "runtime_config_path",
+        "runtime_dispatch_path",
+        "source_key",
+        "whole_building_recognizability_imported"
+      ],
+      "type": "object"
     }
   },
   "$id": "https://treasure-island.local/schemas/facade-recognition-catalog.schema.json",
@@ -2911,8 +3053,8 @@
       "items": {
         "$ref": "#/$defs/active_runtime_adapter"
       },
-      "maxItems": 31,
-      "minItems": 31,
+      "maxItems": 33,
+      "minItems": 33,
       "type": "array"
     },
     "capture_contracts": {
@@ -2935,10 +3077,10 @@
       "additionalProperties": false,
       "properties": {
         "emitted_runtime_schema_version": {
-          "const": "ti.facade-runtime-registry/32"
+          "const": "ti.facade-runtime-registry/33"
         },
         "required_compiler_version": {
-          "const": "1.31.0"
+          "const": "1.32.0"
         },
         "unknown_version_policy": {
           "const": "reject"
@@ -2969,7 +3111,7 @@
       "type": "array"
     },
     "schema_version": {
-      "const": "ti.facade-recognition-catalog/32"
+      "const": "ti.facade-recognition-catalog/33"
     },
     "source_contract": {
       "$ref": "#/$defs/source_contract"

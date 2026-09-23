@@ -1,0 +1,84 @@
+{
+  "accepted": 34,
+  "previous_accepted": 32,
+  "total": 213,
+  "not_evaluated": 179,
+  "units": [
+    "physical-building:w96215670",
+    "physical-building:w96215685"
+  ],
+  "stable_ignored_app": "build/northern-1397-1226-exact-current-001/Treasure Island First Playable.app",
+  "pck_sha256": "316f7b61b650e282413770aff57dbd7b4cd127437b0de5c5fcdc40a8bb57b395",
+  "seven_app_members": {
+    "Contents/Info.plist": {
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885,
+      "mode": 420
+    },
+    "Contents/MacOS/Treasure Island First Playable": {
+      "sha256": "6276647936d9fab6947a233997fa4f6eeca9911682a70a0df187843e85aeadcb",
+      "bytes": 170963648,
+      "mode": 493
+    },
+    "Contents/PkgInfo": {
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9,
+      "mode": 420
+    },
+    "Contents/Resources/PrivacyInfo.xcprivacy": {
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229,
+      "mode": 420
+    },
+    "Contents/Resources/Treasure Island First Playable.pck": {
+      "sha256": "316f7b61b650e282413770aff57dbd7b4cd127437b0de5c5fcdc40a8bb57b395",
+      "bytes": 79755980,
+      "mode": 420
+    },
+    "Contents/Resources/icon.icns": {
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500,
+      "mode": 420
+    },
+    "Contents/_CodeSignature/CodeResources": {
+      "sha256": "fd1ab21dfd88fbc6b64dd33b7d0fbc734c4f717826f4b4f1adb8939bcdae1bfd",
+      "bytes": 3217,
+      "mode": 420
+    }
+  },
+  "operator_handoff_sha256": "bfac17073653ff0ba13f42e1775668bb743bfed8d2d62a42e412cc8a36c0cb82",
+  "independent_review_sha256": "5e819668f3d30749f6ca2fd82551e6ffbcb1ddb385eca2128d821a654dad0a47",
+  "actual_slot_release_sha256": "c114f0585d45f7b7759e883461dd6fb0fa88e3c2ef6a8d735d7602d56b139b53",
+  "root_decision": "ACCEPTED",
+  "app_transfer_sha256": "b9dbccee02a4734cb0d4aa7b36f9915a8d5d9d96a108d6d7673bf0409a6ebf0d",
+  "source_copy_sha256": "0ae398a1ab273afec6271fe16256cbe04cec1962cf091b78315bd245c8eb9a0d",
+  "git_publication": "This receipt records file transfer; Git history is authority for final commit/push.",
+  "world": {
+    "bodies": 500,
+    "meshes": 1287,
+    "rows": 735,
+    "shapes": 667,
+    "surfaces": 1302,
+    "triangles": 183761
+  },
+  "limits": [
+    "Apple M2 Metal/Forward+ native smoke; no M1 or Intel runtime claim",
+    "Private reference pixels excluded; unit images are original gameplay evidence",
+    "Prior candidate32 native descent failure remains unexplained; unchanged ordinary retry passed and external diagnostic produced zero observer markers",
+    "Current34 exact package all six stages passed first attempt; no controller or threshold change",
+    "1397/1226 frozen study capture metrics and per-unit motion/visual limits retained",
+    "1237/1229 unfinished work preserved; Mersea deferred; recurring reminder paused",
+    "Gallery is a current-source presentation; it grants no additional recognition credit."
+  ],
+  "gallery": {
+    "folder": "evidence/building-snapshots/accepted-34-2026-09-23",
+    "png_count": 34,
+    "public_files": 38,
+    "actual_handoff_sha256": "e5b037c2f575f375b944d1668e76abc590da089089702749e03ee8205cc5bf1a",
+    "exact_transfer_sha256": "48c0efa39b155d1ff0f5f5036415bdbc1f92dc9807296fa3604c99a9b65d575b",
+    "technical_review_sha256": "8c4184ed03513cd7bddaaacef554b0912263e087aea5435682959207d5153e80",
+    "visual_review_sha256": "51a856c22ddfaa618efd69d8d08648d9ba25321ab18fad692b9d48dae4a54636",
+    "decision": "PASS",
+    "root_decision": "ACCEPTED"
+  }
+}

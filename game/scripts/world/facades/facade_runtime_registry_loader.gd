@@ -4,21 +4,21 @@ extends RefCounted
 const DEFAULT_REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const DEFAULT_ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
 const DEFAULT_LOADER_PATH := "res://game/scripts/world/facades/facade_runtime_registry_loader.gd"
-const REGISTRY_SCHEMA_VERSION := "ti.facade-runtime-registry/32"
-const ADAPTER_CONTRACT_SCHEMA_VERSION := "ti.facade-runtime-adapter-contracts/31"
-const CATALOG_SCHEMA_VERSION := "ti.facade-recognition-catalog/32"
-const COMPILER_VERSION := "1.31.0"
-const LOADER_API_VERSION := "ti.facade-runtime-registry-loader/31"
+const REGISTRY_SCHEMA_VERSION := "ti.facade-runtime-registry/33"
+const ADAPTER_CONTRACT_SCHEMA_VERSION := "ti.facade-runtime-adapter-contracts/32"
+const CATALOG_SCHEMA_VERSION := "ti.facade-recognition-catalog/33"
+const COMPILER_VERSION := "1.32.0"
+const LOADER_API_VERSION := "ti.facade-runtime-registry-loader/32"
 const UNKNOWN_VERSION_POLICY := "reject"
 const EXPECTED_UNIT_COUNT := 213
 const EXPECTED_RECEIVER_COUNT := 214
 const EXPECTED_SOURCE_RECORD_COUNT := 215
-const EXPECTED_ADAPTER_COUNT := 40
-const EXPECTED_READY_ADAPTER_COUNT := 34
+const EXPECTED_ADAPTER_COUNT := 42
+const EXPECTED_READY_ADAPTER_COUNT := 36
 const EXPECTED_DISABLED_ADAPTER_COUNT := 6
 const EXPECTED_PROJECTION_DESCRIPTOR_COUNT := 13
 const EXPECTED_PROJECTION_OCCURRENCE_COUNT := 13
-const EXPECTED_REFERENCE_RECOGNIZABLE_COUNT := 32
+const EXPECTED_REFERENCE_RECOGNIZABLE_COUNT := 34
 const EXPECTED_REFERENCE_RECOGNIZABLE_UNIT_IDS := [
 	"physical-building:r16681702",
 	"physical-building:w1222720021",
@@ -36,6 +36,8 @@ const EXPECTED_REFERENCE_RECOGNIZABLE_UNIT_IDS := [
 	"physical-building:w95934125",
 	"physical-building:w764313741",
 	"physical-building:r19685981",
+	"physical-building:w96215670",
+	"physical-building:w96215685",
 	"physical-building:w96215688",
 	"physical-building:w96215673",
 	"physical-building:w96215674",
@@ -74,6 +76,8 @@ const ACTIVE_UNIT_BY_RECEIVER := {
 	"building:w95934125:wall": "physical-building:w95934125",
 	"building:w764313741:wall": "physical-building:w764313741",
 	"building:r19685981:wall": "physical-building:r19685981",
+	"building:w96215670:wall": "physical-building:w96215670",
+	"building:w96215685:wall": "physical-building:w96215685",
 	"building:w96215688:wall": "physical-building:w96215688",
 	"building:w96215673:wall": "physical-building:w96215673",
 	"building:w96215674:wall": "physical-building:w96215674",
@@ -107,6 +111,8 @@ const ACTIVE_REVIEW_STATUS_BY_RECEIVER := {
 	"building:w95934125:wall": "independent_exact_current_live_pass",
 	"building:w764313741:wall": "independent_exact_current_live_pass",
 	"building:r19685981:wall": "independent_exact_current_live_pass",
+	"building:w96215670:wall": "independent_exact_current_live_pass",
+	"building:w96215685:wall": "independent_exact_current_live_pass",
 	"building:w96215688:wall": "independent_exact_current_live_pass",
 	"building:w96215673:wall": "independent_exact_current_live_pass",
 	"building:w96215674:wall": "independent_exact_current_live_pass",
@@ -132,6 +138,8 @@ const EXPECTED_REVIEW_RECEIPTS := {
 	"physical-building:w95934125": ["19edda17a50fd957ec09bd9a2ea310b7f82524e717c63467d5198e2e3f9500df", "4fcdd7f900dfadb12187f558bf0e545038d8386134ed1e7f9830810be763ddb5", "a1e3d98ebacaf73c5fb985a2fa2ee4597fe4c2b334cc102c3d3ea460bf361214", "088c0a0df84440cf2ddb35996aabc5d1b1aa5e1fcafe47217cd92dbbca08fc15", "18da75ad3394e86f3129449bbf113efd14d2e845acd767acba995545b3e5f6ee", "d6041941c9ec59d6a6d8fac4cbb79964fe842cdc135baf5c7a36df3a65a2c98e", "7cd3ef79e13c19bbb34b601338f86533b9de429d274d35e55e8e6f8fbd8afdce"],
 	"physical-building:w764313741": ["cb06367c7de02d2379c855dfe33915d8bd54b85a33666f0582e949752f9310cf", "f68b77fa5c6e8983288ad9f9ca36a4fd827e716cc1c99877270eeceb547786b6", "4e3a0ea032384bc1381468db84ae15c4ebc1eb75212a9fec20156d165414b028", "708692fe592b56c9b18cbf5d9bbc086dadb1c053153d37afbd5c37c6a91c0a3e", "6e8e1a6d8ff3ee12e961d7adaa78cdc72e8aa57dbb607251d5a1361c171eb895", "502c87a102c90ef446a1e3415b1bb6eca7050d46689c550c18609c3c9dc43b0b", "fb4802671d8ec92d2cdff091a221fc6fe8f3d1dae6780446aa5604227f7cfed4"],
 	"physical-building:r19685981": ["e08d71c45bfc67e05ab2fd2a8d4e8362ef7692f96d5817d60856a251b473b14e", "82543ad09bc51281499280965d9bc949ecc99781d80520801742bd3643404862", "83a8637cd539efa3899b8d97147a82a02d976aa8baed4209824e2724a2ac7e2b", "3c7c3e933062d4cf3994f47cb48a62c41b7c1cf42fa41693ff82474cec1db86d", "916457b92cee4b002cab5c47b6ecd29a8c8d398a9ad685c05e7bc8f5d9874e0a", "e903e64348aa003ca957b1e1efebc57a516395134f40d56e1ba1c5ebc3ad877f", "749cd826a0ea791b696ab98464e5c19548f14d45734d88111a79376a74dd5c8c"],
+	"physical-building:w96215685": ["9b9d209e3c61376dd96ded5869754a5261407602b4647473e321fff1454c6727", "d22c4ea98b753531685b40ff1f05c3087ee029bb4fc78cbf0c106fff4e0189b5", "a188d596b298c6ed5d45552aae62cf8ea90b1a234ed00c52a7e669b6f75760d7", "9c7620c3980d6904b5d11d8de53e4f37147814e3da30c0c1b0bd9ae94f25fbd1", "7f71cadbe18c72b605a1eb624fe817427dd2d7454fb5f951abcb26563b2b3774", "ac58f77b8ebbe04fe5398fdd6f48f1aa009bcb80b81710161bfd7a90259cfbfd", "6a60ae2b4d8f78e64b8bcb7b8e6af47aa178fca74a7ad5bf0119b2bf058e3938"],
+	"physical-building:w96215670": ["8cd5135999eee64795decf6957b78668d51c31c8f232144a1506680759b0315c", "cde59334d381c071cb3b79c5591b07b33d0d40e7cfd9533c9bb411729f0389e5", "9b1d6a56ca2c1700d3e7013b878b07bf1651822d8869ae5bb351f090ff75abfb", "967714aaac2103a6e6a4db329943c8102aac83da9eded80b5a0b40bbc329dfb1", "612b7acc1e2a7f81abe8c6a4939c484861766ab2a22678c5bffe17a1659c178d", "0f365d480a4e65c08ec9dd16d90d5137db1d79b1ea126e62268f0f7d05c7343e", "6b7fc9735392613c74b96919f49845787a9f2814cd3d45b9487c5173b75f455d"],
 	"physical-building:w96215688": ["deee84ad808e2a740f79f3c796b87c18b242e18f005a902646d3645d9c580939", "35ca950b839ba5337ec6aa1afa23c3a41b541ddbcc72d8cd948fd3ff945f357e", "6940be3303a7bb398e89594dbbe029913b6199836e96b58ca5ed6f8cfdab6d3d", "cef4880c25f45a6d11699843dce565efd2620fc48a0904aa5af2e6f4aa8b2b9e", "d272fe5677097e67016ea21af2e9eb5e9a5daff69ad7f86deb1d343b02b7e18c", "aa9865bc070916b027cb58759259bd8ee0b27d1ca36ac413360d4b9d261c1ad4", "0a6727056299a7bbf91fc97137ff794d5350128c9b3f15276f7680de9aa921d3"],
 	"physical-building:w96215682": ["235ae67b88d48acccd234af320e5a2c439318f9bff2fa1af66744858a01cb41f", "cb80718812047da42fb907917cafe4ce59a15eada7b2dc9aaef1b26b56697970", "cffac7d9d8bda08c1651fa0db0f4969ddf9de5ce9065548dd25e1aab415e571f", "a00772f32f2b9a68adc9607638b4045bb1abafa6455c906a718e6e9cc6ef2259", "b3861383f25ceb1f14f6f068dcabf145b3afe9fb5ba8b0056f1e6b79a145e757", "80140a7a02f241033157e6f22813a98b56ddf718193298ee0237f040562d8885", "76517f928240abbe44a989e29546135711039869f595b0d7f6073a3cf8262153"],
 	"physical-building:w96215674": ["b89b6e90ed0cd33dcf4a540a62965a71ff75c3d8d2eb9ec1e8368b6e3016f869", "465fd62a4b0ce93e7185b6eb17bdf50ede9127e60c492e59848d830d1fb0d2f7", "c2e401e59485819a039b4b40bf0f025edabf9691673b179e89c338927a10939c", "690e653a17e8adcebe8908ffa06c8a6dd7b2c5e6886d42f9415e1b03f2ecfd9a", "4b293afae85d79015d9f6c0a0b22dff50962db7bf8b05d9f4ba52e152cb13a32", "c7a8caf732d9d50ba481b3a889ab9c8aff72833fb2277c56fb997d7af3baef98", "6c956cd7f3b7502ab73505d11297efa68d365f7f393f8419fd9293fb71a99cb9"],
@@ -534,6 +542,26 @@ const NORTHERN_1240_PROTOTYPE_CONFIG_SHA256 := "aebf5005af3e89a2a60db46f38760a93
 const NORTHERN_1240_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
 const NORTHERN_1240_RUNTIME_ASSETS := ["res://game/scripts/world/facades/northpoint_1240_live_replacement.gd", "res://game/resources/facades/northpoint_1240_study.json", "res://game/scripts/world/facades/northpoint_1240_live_factory.gd", "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader", "res://game/scripts/world/facades/site_12_housing_kit.gd"]
 
+const NORTHERN_1397_RECEIVER := "building:w96215670:wall"
+const NORTHERN_1397_ADAPTER_ID := "active-adapter:gateview-1397-live:building:w96215670:wall"
+const NORTHERN_1397_CONFIG_SHA256 := "97919d0168bab83ff0f7118cf00fb0bbea1eb062c731d2b956de896a1330616a"
+const NORTHERN_1397_ADAPTER_SHA256 := "a906e841e11ad3c421abe208ef19b4ba3f4fb3e1e2c9ef563d609dd565d5fd77"
+const NORTHERN_1397_BUILDER_SHA256 := "a89a31212fcd181350ab5090e86df7140d8246077871cfae3b69a8c835539e54"
+const NORTHERN_1397_PROTOTYPE_SHA256 := "ce6223bf527c74431dc794bfc9ab7211feabd881e9d080e318a2f712547e4a91"
+const NORTHERN_1397_PROTOTYPE_CONFIG_SHA256 := "97919d0168bab83ff0f7118cf00fb0bbea1eb062c731d2b956de896a1330616a"
+const NORTHERN_1397_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+const NORTHERN_1397_RUNTIME_ASSETS := ["res://game/scripts/world/facades/gateview_1397_live_replacement.gd", "res://game/resources/facades/gateview_1397_study.json", "res://game/scripts/world/facades/gateview_1397_live_factory.gd", "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader", "res://game/scripts/world/facades/site_12_housing_kit.gd"]
+
+const NORTHERN_1226_RECEIVER := "building:w96215685:wall"
+const NORTHERN_1226_ADAPTER_ID := "active-adapter:bayside-1226-live:building:w96215685:wall"
+const NORTHERN_1226_CONFIG_SHA256 := "34fb34bec3fa672277fa081dec042ecf1ee4597f293690a6588f85460ff59da2"
+const NORTHERN_1226_ADAPTER_SHA256 := "d26993a5443fdf4b30477c9f47e96fdc54fdc1f517c5dbaaeb14d3f8b2120c66"
+const NORTHERN_1226_BUILDER_SHA256 := "a89a31212fcd181350ab5090e86df7140d8246077871cfae3b69a8c835539e54"
+const NORTHERN_1226_PROTOTYPE_SHA256 := "7060cf8a32b12781be8ed52f7056680af838f6d4930fb88a782901db98bef62e"
+const NORTHERN_1226_PROTOTYPE_CONFIG_SHA256 := "34fb34bec3fa672277fa081dec042ecf1ee4597f293690a6588f85460ff59da2"
+const NORTHERN_1226_SITE_KIT_SHA256 := "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"
+const NORTHERN_1226_RUNTIME_ASSETS := ["res://game/scripts/world/facades/bayside_1226_live_replacement.gd", "res://game/resources/facades/bayside_1226_study.json", "res://game/scripts/world/facades/bayside_1226_live_factory.gd", "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader", "res://game/scripts/world/facades/site_12_housing_kit.gd"]
+
 const PRE_D2_1444_INTEGRATION_WORLD_TOPOLOGY_SCOPE := "pre_d2_1444_integration_live_parity"
 const PRE_D2_1439_INTEGRATION_WORLD_TOPOLOGY_SCOPE := "pre_d2_1439_integration_live_parity"
 
@@ -797,7 +825,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 	var active_adapters := registry.get("active_runtime_adapters", []) as Array
 	var adapters := legacy_adapters.duplicate()
 	adapters.append_array(active_adapters)
-	if not _require(legacy_adapters.size() == 9 and active_adapters.size() == 31 and adapters.size() == EXPECTED_ADAPTER_COUNT, "registry_count_drift", "Runtime adapter arrays do not match the expected legacy/active counts."):
+	if not _require(legacy_adapters.size() == 9 and active_adapters.size() == 33 and adapters.size() == EXPECTED_ADAPTER_COUNT, "registry_count_drift", "Runtime adapter arrays do not match the expected legacy/active counts."):
 		return false
 	var adapter_receivers := {}
 	var registry_projection_ids := {}
@@ -836,6 +864,8 @@ func _validate_registry(registry: Dictionary) -> bool:
 	var d5_1317_adapter := {}
 	var fire_station48_adapter := {}
 	var maceo_may_adapter := {}
+	var northern_1226_adapter := {}
+	var northern_1397_adapter := {}
 	var northern_1240_adapter := {}
 	var northern_1221_adapter := {}
 	var northern_1241_adapter := {}
@@ -879,6 +909,10 @@ func _validate_registry(registry: Dictionary) -> bool:
 			fire_station48_adapter = active_adapter
 		elif str(active_adapter.get("receiver_key", "")) == MACEO_MAY_RECEIVER:
 			maceo_may_adapter = active_adapter
+		elif str(active_adapter.get("receiver_key", "")) == NORTHERN_1226_RECEIVER:
+			northern_1226_adapter = active_adapter
+		elif str(active_adapter.get("receiver_key", "")) == NORTHERN_1397_RECEIVER:
+			northern_1397_adapter = active_adapter
 		elif str(active_adapter.get("receiver_key", "")) == NORTHERN_1240_RECEIVER:
 			northern_1240_adapter = active_adapter
 		elif str(active_adapter.get("receiver_key", "")) == NORTHERN_1221_RECEIVER:
@@ -938,6 +972,10 @@ func _validate_registry(registry: Dictionary) -> bool:
 	if not _validate_fire_station48_registry_adapter(fire_station48_adapter):
 		return false
 	if not _validate_maceo_may_registry_adapter(maceo_may_adapter):
+		return false
+	if not _validate_northern_1226_registry_adapter(northern_1226_adapter):
+		return false
+	if not _validate_northern_1397_registry_adapter(northern_1397_adapter):
 		return false
 	if not _validate_northern_1240_registry_adapter(northern_1240_adapter):
 		return false
@@ -1011,7 +1049,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 			var adapter_id_value: Variant = receiver.get("runtime_adapter_id")
 			if not _require(not receiver_key.is_empty() and not _receivers_by_key.has(receiver_key), "duplicate_receiver", "%s has a missing or duplicate direct receiver." % unit_id):
 				return false
-			if not _require(["generated_placeholder", "legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment", "active_d1_b225_host_partition_attachment", "active_d2_1441_paired_replacement", "active_d2_1439_paired_replacement", "active_d2_1444_paired_replacement", "active_d5_1308_paired_replacement", "active_d5_1394_paired_replacement", "active_d5_1317_paired_replacement", "active_fire_station48_paired_replacement", "active_northern_1201_paired_replacement", "active_northern_1238_paired_replacement", "active_northern_1206_paired_replacement", "active_northern_1219_paired_replacement", "active_northern_1212_paired_replacement", "active_northern_1220_paired_replacement", "active_northern_1239_paired_replacement", "active_northern_1222_paired_replacement", "active_northern_1227_paired_replacement", "active_northern_1202_paired_replacement", "active_northern_1234_paired_replacement", "active_northern_1215_paired_replacement", "active_northern_1232_paired_replacement", "active_northern_1241_paired_replacement", "active_northern_1221_paired_replacement", "active_northern_1240_paired_replacement", "active_maceo_may_paired_replacement"].has(content_mode), "unknown_content_mode", "%s has an unknown receiver content mode." % receiver_key):
+			if not _require(["generated_placeholder", "legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment", "active_d1_b225_host_partition_attachment", "active_d2_1441_paired_replacement", "active_d2_1439_paired_replacement", "active_d2_1444_paired_replacement", "active_d5_1308_paired_replacement", "active_d5_1394_paired_replacement", "active_d5_1317_paired_replacement", "active_fire_station48_paired_replacement", "active_northern_1201_paired_replacement", "active_northern_1238_paired_replacement", "active_northern_1206_paired_replacement", "active_northern_1219_paired_replacement", "active_northern_1212_paired_replacement", "active_northern_1220_paired_replacement", "active_northern_1239_paired_replacement", "active_northern_1222_paired_replacement", "active_northern_1227_paired_replacement", "active_northern_1202_paired_replacement", "active_northern_1234_paired_replacement", "active_northern_1215_paired_replacement", "active_northern_1232_paired_replacement", "active_northern_1241_paired_replacement", "active_northern_1221_paired_replacement", "active_northern_1240_paired_replacement", "active_northern_1397_paired_replacement", "active_northern_1226_paired_replacement", "active_maceo_may_paired_replacement"].has(content_mode), "unknown_content_mode", "%s has an unknown receiver content mode." % receiver_key):
 				return false
 			if content_mode == "generated_placeholder":
 				if not _require(adapter_id_value == null, "receiver_adapter_mismatch", "%s placeholder unexpectedly references an adapter." % receiver_key):
@@ -1054,12 +1092,12 @@ func _validate_reference_acceptance_record(unit_id: String, records: Array) -> b
 		return false
 	var record := records[0] as Dictionary
 	var expected := EXPECTED_REVIEW_RECEIPTS[unit_id] as Array
-	if unit_id in ["physical-building:w95934105", "physical-building:w95934144", "physical-building:w95934117", "physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125", "physical-building:w764313741", "physical-building:r19685981", "physical-building:w96215672", "physical-building:w96215669", "physical-building:w96215677", "physical-building:w96215680", "physical-building:w96215649", "physical-building:w96215652", "physical-building:w96215658", "physical-building:w96215661", "physical-building:w96215653", "physical-building:w96215651", "physical-building:w96215659", "physical-building:w96215666", "physical-building:w96215673", "physical-building:w96215674", "physical-building:w96215682", "physical-building:w96215688"]:
+	if unit_id in ["physical-building:w95934105", "physical-building:w95934144", "physical-building:w95934117", "physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125", "physical-building:w764313741", "physical-building:r19685981", "physical-building:w96215672", "physical-building:w96215669", "physical-building:w96215677", "physical-building:w96215680", "physical-building:w96215649", "physical-building:w96215652", "physical-building:w96215658", "physical-building:w96215661", "physical-building:w96215653", "physical-building:w96215651", "physical-building:w96215659", "physical-building:w96215666", "physical-building:w96215673", "physical-building:w96215674", "physical-building:w96215682", "physical-building:w96215688", "physical-building:w96215670", "physical-building:w96215685"]:
 		if not _require(_has_exact_keys(record, ["capture_time_recognition_metric", "evidence_manifest_sha256", "evidence_tree_sha256", "mechanical_review_receipt_sha256", "motion_telemetry_manifest_sha256", "numerator_effect", "package_verification_receipt_sha256", "review_id", "review_kind", "review_receipt_sha256", "status", "visual_motion_manifest_sha256"]), "recognition_receipt_mismatch", "%s acceptance receipt fields drifted." % unit_id):
 			return false
 		if not _require(
-			str(record.get("capture_time_recognition_metric", "")) == ("31/213" if unit_id == "physical-building:w96215688" else ("28/213" if unit_id == "physical-building:w96215682" else ("28/213" if unit_id == "physical-building:w96215674" else ("26/213" if unit_id == "physical-building:w96215673" else ("23/213" if unit_id == "physical-building:w96215666" else ("23/213" if unit_id == "physical-building:w96215659" else ("23/213" if unit_id == "physical-building:w96215651" else ("23/213" if unit_id == "physical-building:w96215653" else ("23/213" if unit_id == "physical-building:w96215661" else ("18/213" if unit_id == "physical-building:w96215658" else ("18/213" if unit_id == "physical-building:w96215652" else ("18/213" if unit_id == "physical-building:w96215649" else ("16/213" if unit_id == "physical-building:w96215680" else ("16/213" if unit_id == "physical-building:w96215677" else ("16/213" if unit_id == "physical-building:w96215669" else ("15/213" if unit_id == "physical-building:w96215672" else ("14/213" if unit_id in ["physical-building:w764313741", "physical-building:r19685981"] else ("13/213" if unit_id in ["physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125"] else ("8/213" if unit_id == "physical-building:w95934105" else "9/213")))))))))))))))))))
-			and str(record.get("review_id", "")) == ("northern-1240-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215688" else ("northern-1221-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215682" else ("northern-1241-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215674" else ("northern-1232-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215673" else ("northern-1215-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215666" else ("northern-1234-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215659" else ("northern-1202-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215651" else ("northern-1227-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215653" else ("northern-1222-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215661" else ("northern-1239-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215658" else ("northern-1220-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215652" else ("northern-1212-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215649" else ("northern-1219-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215680" else ("northern-1206-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215677" else ("northern-1238-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215669" else ("northern-1201-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215672" else ("maceo-may-quality-candidate-2026-09-11-001" if unit_id == "physical-building:r19685981" else ("fire-station48-quality-candidate-2026-09-11-001" if unit_id == "physical-building:w764313741" else ("d5-1317-quality-candidate-2026-09-10-001" if unit_id == "physical-building:w95934125" else ("d5-1394-fidelity-quality-candidate-2026-09-10-001" if unit_id == "physical-building:w96215646" else ("d5-1308-fidelity-quality-candidate-2026-09-10-001" if unit_id == "physical-building:w95934123" else ("d2-1444-quality-v2-promotion-candidate-2026-09-09-001" if unit_id == "physical-building:w95934117" else ("d2-1439-quality-v2-promotion-candidate-2026-09-09-001" if unit_id == "physical-building:w95934144" else "d2-1441-production-v8-staging-2026-09-05-009")))))))))))))))))))))))
+			str(record.get("capture_time_recognition_metric", "")) == ("31/213" if unit_id == "physical-building:w96215685" else ("31/213" if unit_id == "physical-building:w96215670" else ("31/213" if unit_id == "physical-building:w96215688" else ("28/213" if unit_id == "physical-building:w96215682" else ("28/213" if unit_id == "physical-building:w96215674" else ("26/213" if unit_id == "physical-building:w96215673" else ("23/213" if unit_id == "physical-building:w96215666" else ("23/213" if unit_id == "physical-building:w96215659" else ("23/213" if unit_id == "physical-building:w96215651" else ("23/213" if unit_id == "physical-building:w96215653" else ("23/213" if unit_id == "physical-building:w96215661" else ("18/213" if unit_id == "physical-building:w96215658" else ("18/213" if unit_id == "physical-building:w96215652" else ("18/213" if unit_id == "physical-building:w96215649" else ("16/213" if unit_id == "physical-building:w96215680" else ("16/213" if unit_id == "physical-building:w96215677" else ("16/213" if unit_id == "physical-building:w96215669" else ("15/213" if unit_id == "physical-building:w96215672" else ("14/213" if unit_id in ["physical-building:w764313741", "physical-building:r19685981"] else ("13/213" if unit_id in ["physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125"] else ("8/213" if unit_id == "physical-building:w95934105" else "9/213")))))))))))))))))))))
+			and str(record.get("review_id", "")) == ("northern-1226-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215685" else ("northern-1397-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215670" else ("northern-1240-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215688" else ("northern-1221-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215682" else ("northern-1241-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215674" else ("northern-1232-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215673" else ("northern-1215-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215666" else ("northern-1234-quality-candidate-2026-09-22-001" if unit_id == "physical-building:w96215659" else ("northern-1202-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215651" else ("northern-1227-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215653" else ("northern-1222-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215661" else ("northern-1239-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215658" else ("northern-1220-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215652" else ("northern-1212-quality-candidate-2026-09-14-001" if unit_id == "physical-building:w96215649" else ("northern-1219-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215680" else ("northern-1206-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215677" else ("northern-1238-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215669" else ("northern-1201-quality-candidate-2026-09-13-001" if unit_id == "physical-building:w96215672" else ("maceo-may-quality-candidate-2026-09-11-001" if unit_id == "physical-building:r19685981" else ("fire-station48-quality-candidate-2026-09-11-001" if unit_id == "physical-building:w764313741" else ("d5-1317-quality-candidate-2026-09-10-001" if unit_id == "physical-building:w95934125" else ("d5-1394-fidelity-quality-candidate-2026-09-10-001" if unit_id == "physical-building:w96215646" else ("d5-1308-fidelity-quality-candidate-2026-09-10-001" if unit_id == "physical-building:w95934123" else ("d2-1444-quality-v2-promotion-candidate-2026-09-09-001" if unit_id == "physical-building:w95934117" else ("d2-1439-quality-v2-promotion-candidate-2026-09-09-001" if unit_id == "physical-building:w95934144" else "d2-1441-production-v8-staging-2026-09-05-009")))))))))))))))))))))))))
 			and str(record.get("review_receipt_sha256", "")) == str(expected[0])
 			and str(record.get("evidence_manifest_sha256", "")) == str(expected[1])
 			and str(record.get("motion_telemetry_manifest_sha256", "")) == str(expected[2])
@@ -1371,6 +1409,18 @@ func _validate_adapter_contracts(contracts: Dictionary, registry: Dictionary) ->
 			if not _validate_maceo_may_behavior_contract(plan.get("behavior_contract", {}) as Dictionary) \
 			or not _validate_maceo_may_plan_contract(plan) \
 			or not _require(JSON.stringify(plan.get("behavior_contract", {})) == JSON.stringify(runtime_contract.get("behavior_contract", {})), "adapter_plan_mismatch", "%s Maceo May behavior contract drifted from the registry." % adapter_id):
+				return false
+		elif str(plan.get("content_mode", "")) == "active_northern_1226_paired_replacement":
+			var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+			if not _validate_northern_1226_behavior_contract(plan.get("behavior_contract", {}) as Dictionary) \
+			or not _validate_northern_1226_plan_contract(plan) \
+			or not _require(JSON.stringify(plan.get("behavior_contract", {})) == JSON.stringify(runtime_contract.get("behavior_contract", {})), "adapter_plan_mismatch", "%s 1226 behavior contract drifted from the registry." % adapter_id):
+				return false
+		elif str(plan.get("content_mode", "")) == "active_northern_1397_paired_replacement":
+			var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+			if not _validate_northern_1397_behavior_contract(plan.get("behavior_contract", {}) as Dictionary) \
+			or not _validate_northern_1397_plan_contract(plan) \
+			or not _require(JSON.stringify(plan.get("behavior_contract", {})) == JSON.stringify(runtime_contract.get("behavior_contract", {})), "adapter_plan_mismatch", "%s 1397 behavior contract drifted from the registry." % adapter_id):
 				return false
 		elif str(plan.get("content_mode", "")) == "active_northern_1240_paired_replacement":
 			var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
@@ -3478,9 +3528,9 @@ func _validate_current_topology_authority(active_adapters: Array) -> bool:
 		if str(geometry_contract.get("world_topology_scope", "")) == CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE:
 			current_topology_adapter_ids.append(str(adapter.get("adapter_id", "")))
 	return _require(
-		current_topology_adapter_ids == [NORTHERN_1240_ADAPTER_ID],
+		current_topology_adapter_ids == [NORTHERN_1226_ADAPTER_ID],
 		"current_topology_authority_mismatch",
-		"Exactly the final serialized 1240 adapter must own the measured combined integration topology; prior evidence scopes must remain historical.",
+		"Exactly the final serialized 1226 adapter must own the measured combined integration topology; prior evidence scopes must remain historical.",
 	)
 
 
@@ -3657,6 +3707,10 @@ func _derive_unit_content_mode(receivers: Array) -> String:
 		return "all_receivers_active_fire_station48_paired_replacement"
 	if values == ["active_maceo_may_paired_replacement"]:
 		return "all_receivers_active_maceo_may_paired_replacement"
+	if values == ["active_northern_1226_paired_replacement"]:
+		return "all_receivers_active_northern_1226_paired_replacement"
+	if values == ["active_northern_1397_paired_replacement"]:
+		return "all_receivers_active_northern_1397_paired_replacement"
 	if values == ["active_northern_1240_paired_replacement"]:
 		return "all_receivers_active_northern_1240_paired_replacement"
 	if values == ["active_northern_1221_paired_replacement"]:
@@ -6742,7 +6796,7 @@ func _validate_northern_1240_behavior_contract(contract: Dictionary) -> bool:
 		and typeof((contract.get("geometry_contract") as Dictionary).get("world_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_triangles"))) and float((contract.get("geometry_contract") as Dictionary).get("world_triangles")) == 176165.0
 		and typeof((contract.get("geometry_contract") as Dictionary).get("world_static_bodies")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_static_bodies"))) and float((contract.get("geometry_contract") as Dictionary).get("world_static_bodies")) == 496.0
 		and typeof((contract.get("geometry_contract") as Dictionary).get("world_shapes")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_shapes"))) and float((contract.get("geometry_contract") as Dictionary).get("world_shapes")) == 646.0
-		and typeof((contract.get("geometry_contract") as Dictionary).get("world_topology_scope")) == TYPE_STRING and (contract.get("geometry_contract") as Dictionary).get("world_topology_scope") == "current_integration_topology"
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_topology_scope")) == TYPE_STRING and (contract.get("geometry_contract") as Dictionary).get("world_topology_scope") == "pre_northern_1397_1226_integration_live_parity"
 		and _has_exact_keys((contract.get("ownership_contract") as Dictionary), ["structural_owner_count", "shape_count", "spray_owner_count", "navigation_owner_count", "wall_is_sole_spray_receiver", "original_wall_and_projected_front_are_receivers", "projected_receiver_runs", "projected_receiver_triangles", "projected_receiver_shape_order", "projected_receiver_physics_layer", "projected_receiver_cull_mask", "wall_decal_cull_mask", "wall_shape_order", "roof_shape_order", "added_public_roof_triangles", "original_flat_roof_preserved", "added_public_roof_is_nonreceiver", "all_additions_render_only", "added_ground_collision_triangles", "roof_is_wall_spray_receiver", "roof_world_solid_landing", "eligible_render_layer", "noneligible_render_layer", "terrain_geometry_and_ownership_unchanged"])
 		and typeof((contract.get("ownership_contract") as Dictionary).get("structural_owner_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("structural_owner_count"))) and float((contract.get("ownership_contract") as Dictionary).get("structural_owner_count")) == 4.0
 		and typeof((contract.get("ownership_contract") as Dictionary).get("shape_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("shape_count"))) and float((contract.get("ownership_contract") as Dictionary).get("shape_count")) == 15.0
@@ -6818,4 +6872,375 @@ func _validate_northern_1240_plan_contract(plan: Dictionary) -> bool:
 		and _runtime_asset_match(executable_assets, "res://game/scripts/world/facades/site_12_housing_kit.gd", NORTHERN_1240_SITE_KIT_SHA256),
 		"northern_1240_parity_mismatch",
 		"1240 executable subset must contain exactly the paired adapter, reviewed prototype, and site kit.",
+	)
+
+func _validate_northern_1397_registry_adapter(adapter: Dictionary) -> bool:
+	if not _require(not adapter.is_empty(), "northern_1397_parity_mismatch", "1397 exact-current paired wall/roof adapter is missing."):
+		return false
+	if not _require(
+		str(adapter.get("adapter_id", "")) == NORTHERN_1397_ADAPTER_ID
+		and str(adapter.get("source_key", "")) == "w96215670"
+		and str(adapter.get("receiver_key", "")) == NORTHERN_1397_RECEIVER
+		and str(adapter.get("attachment_kind", "")) == "active_northern_1397_paired_wall_roof_replacement"
+		and str(adapter.get("content_classification", "")) == "active_target_specific_paired_wall_roof_replacement"
+		and str(adapter.get("runtime_content_mode", "")) == "active_northern_1397_paired_replacement"
+		and str(adapter.get("state", "")) == "active_runtime_target_specific_content"
+		and str(adapter.get("recognition_acceptance_status", "")) == "accepted"
+		and str(adapter.get("recognition_claim_effect", "")) == "none"
+		and (adapter.get("accepted_run_scopes", []) as Array).is_empty()
+		and (adapter.get("runtime_asset_projections", []) as Array).is_empty(),
+		"northern_1397_parity_mismatch",
+		"1397 active adapter identity, paired classification, acceptance, or package boundary drifted.",
+	):
+		return false
+	var receiver_scope := adapter.get("active_receiver_scope", {}) as Dictionary
+	if not _require(
+		_has_exact_keys(receiver_scope, ["coverage", "run_count"])
+		and str(receiver_scope.get("coverage", "")) == "whole_direct_wall_receiver"
+		and int(receiver_scope.get("run_count", -1)) == 38,
+		"northern_1397_parity_mismatch",
+		"1397 active receiver scope does not cover the exact source-run direct wall receiver.",
+	):
+		return false
+	var assets := adapter.get("runtime_assets", []) as Array
+	var actual_paths := []
+	for asset_value: Variant in assets:
+		actual_paths.append(str((asset_value as Dictionary).get("path", "")))
+	actual_paths.sort()
+	var expected_paths := NORTHERN_1397_RUNTIME_ASSETS.duplicate()
+	expected_paths.sort()
+	if not _require(actual_paths == expected_paths, "northern_1397_parity_mismatch", "1397 active adapter does not contain its exact 5-asset paired runtime closure."):
+		return false
+	var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+	if not _require(
+		_has_exact_keys(runtime_contract, ["adapter_sha256", "behavior_contract", "config_sha256", "config_summary", "dispatch_sha256", "prototype_config_sha256", "prototype_sha256", "site_kit_sha256"]),
+		"northern_1397_parity_mismatch",
+		"1397 active runtime contract fields drifted.",
+	):
+		return false
+	if not _require(
+		str(runtime_contract.get("adapter_sha256", "")) == NORTHERN_1397_ADAPTER_SHA256
+		and str(runtime_contract.get("config_sha256", "")) == NORTHERN_1397_CONFIG_SHA256
+		and str(runtime_contract.get("dispatch_sha256", "")) == NORTHERN_1397_BUILDER_SHA256
+		and str(runtime_contract.get("prototype_sha256", "")) == NORTHERN_1397_PROTOTYPE_SHA256
+		and str(runtime_contract.get("prototype_config_sha256", "")) == NORTHERN_1397_PROTOTYPE_CONFIG_SHA256
+		and str(runtime_contract.get("site_kit_sha256", "")) == NORTHERN_1397_SITE_KIT_SHA256
+		and _runtime_asset_match(assets, "res://game/scripts/world/facades/gateview_1397_live_replacement.gd", "a906e841e11ad3c421abe208ef19b4ba3f4fb3e1e2c9ef563d609dd565d5fd77")
+		and _runtime_asset_match(assets, "res://game/resources/facades/gateview_1397_study.json", "97919d0168bab83ff0f7118cf00fb0bbea1eb062c731d2b956de896a1330616a")
+		and _runtime_asset_match(assets, "res://game/scripts/world/facades/gateview_1397_live_factory.gd", "ce6223bf527c74431dc794bfc9ab7211feabd881e9d080e318a2f712547e4a91")
+		and _runtime_asset_match(assets, "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader", "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a")
+		and _runtime_asset_match(assets, "res://game/scripts/world/facades/site_12_housing_kit.gd", "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"),
+		"northern_1397_parity_mismatch",
+		"1397 adapter/config/dispatch/prototype/site-kit pins do not bind the exact reviewed bytes.",
+	):
+		return false
+	return _require(runtime_contract.get("config_summary", {}) == JSON.parse_string("{\"schema_version\":\"ti.gateview-1397-study/1\",\"source_key\":\"w96215670\",\"chunk_id\":\"x_-1__z_-3\",\"chunk_sha256\":\"d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc\",\"mapped_runs\":[17,18,19,20,23,24,25,26,27,28,30,31,32,33,34,35,36,37],\"protected_runs\":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,21,22,29]}"), "northern_1397_parity_mismatch", "Exact northern source scope summary drifted.") and _validate_northern_1397_behavior_contract(runtime_contract.get("behavior_contract", {}) as Dictionary)
+
+
+func _validate_northern_1397_behavior_contract(contract: Dictionary) -> bool:
+	return _require(
+		_has_exact_keys(contract, ["schema_version", "acceptance_contract", "replacement_contract", "geometry_contract", "ownership_contract", "truth_boundary"])
+		and typeof(contract.get("schema_version")) == TYPE_STRING and contract.get("schema_version") == "ti.northern-1397-production-live-parity/1"
+		and _has_exact_keys((contract.get("acceptance_contract") as Dictionary), ["evidence_manifest_sha256", "motion_telemetry_manifest_sha256", "visual_motion_manifest_sha256", "package_verification_receipt_sha256", "evidence_tree_sha256", "mechanical_review_receipt_sha256", "review_receipt_sha256", "accepted_physical_unit_id", "capture_time_recognition_metric", "numerator_effect", "reference_recognizable", "wall_and_roof_are_one_physical_unit"])
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("evidence_manifest_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("evidence_manifest_sha256") == "cde59334d381c071cb3b79c5591b07b33d0d40e7cfd9533c9bb411729f0389e5"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("motion_telemetry_manifest_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("motion_telemetry_manifest_sha256") == "9b1d6a56ca2c1700d3e7013b878b07bf1651822d8869ae5bb351f090ff75abfb"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("visual_motion_manifest_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("visual_motion_manifest_sha256") == "967714aaac2103a6e6a4db329943c8102aac83da9eded80b5a0b40bbc329dfb1"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("package_verification_receipt_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("package_verification_receipt_sha256") == "0f365d480a4e65c08ec9dd16d90d5137db1d79b1ea126e62268f0f7d05c7343e"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("evidence_tree_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("evidence_tree_sha256") == "612b7acc1e2a7f81abe8c6a4939c484861766ab2a22678c5bffe17a1659c178d"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("mechanical_review_receipt_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("mechanical_review_receipt_sha256") == "6b7fc9735392613c74b96919f49845787a9f2814cd3d45b9487c5173b75f455d"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("review_receipt_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("review_receipt_sha256") == "8cd5135999eee64795decf6957b78668d51c31c8f232144a1506680759b0315c"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("accepted_physical_unit_id")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("accepted_physical_unit_id") == "physical-building:w96215670"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("capture_time_recognition_metric")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("capture_time_recognition_metric") == "31/213"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("numerator_effect")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("acceptance_contract") as Dictionary).get("numerator_effect"))) and float((contract.get("acceptance_contract") as Dictionary).get("numerator_effect")) == 1.0
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("reference_recognizable")) == TYPE_BOOL and (contract.get("acceptance_contract") as Dictionary).get("reference_recognizable") == true
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("wall_and_roof_are_one_physical_unit")) == TYPE_BOOL and (contract.get("acceptance_contract") as Dictionary).get("wall_and_roof_are_one_physical_unit") == true
+		and _has_exact_keys((contract.get("replacement_contract") as Dictionary), ["source_key", "wall_object_key", "roof_object_key", "actual_supplied_chunk_pair_required", "actual_land_and_area_records_required", "mapped_public_run_indices", "protected_run_indices", "partial_pair_allowed", "fallback_allowed", "generic_stack_allowed", "factory_calls", "raw_source_constructor_callback_required", "tangent_callback_required"])
+		and typeof((contract.get("replacement_contract") as Dictionary).get("source_key")) == TYPE_STRING and (contract.get("replacement_contract") as Dictionary).get("source_key") == "w96215670"
+		and typeof((contract.get("replacement_contract") as Dictionary).get("wall_object_key")) == TYPE_STRING and (contract.get("replacement_contract") as Dictionary).get("wall_object_key") == "building:w96215670:wall"
+		and typeof((contract.get("replacement_contract") as Dictionary).get("roof_object_key")) == TYPE_STRING and (contract.get("replacement_contract") as Dictionary).get("roof_object_key") == "building:w96215670:roof"
+		and typeof((contract.get("replacement_contract") as Dictionary).get("actual_supplied_chunk_pair_required")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("actual_supplied_chunk_pair_required") == true
+		and typeof((contract.get("replacement_contract") as Dictionary).get("actual_land_and_area_records_required")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("actual_land_and_area_records_required") == false
+		and _int_array_matches(((contract.get("replacement_contract") as Dictionary).get("mapped_public_run_indices") as Array), [17, 18, 19, 20, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 36, 37])
+		and _int_array_matches(((contract.get("replacement_contract") as Dictionary).get("protected_run_indices") as Array), [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 21, 22, 29])
+		and typeof((contract.get("replacement_contract") as Dictionary).get("partial_pair_allowed")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("partial_pair_allowed") == false
+		and typeof((contract.get("replacement_contract") as Dictionary).get("fallback_allowed")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("fallback_allowed") == false
+		and typeof((contract.get("replacement_contract") as Dictionary).get("generic_stack_allowed")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("generic_stack_allowed") == false
+		and typeof((contract.get("replacement_contract") as Dictionary).get("factory_calls")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("replacement_contract") as Dictionary).get("factory_calls"))) and float((contract.get("replacement_contract") as Dictionary).get("factory_calls")) == 1.0
+		and typeof((contract.get("replacement_contract") as Dictionary).get("raw_source_constructor_callback_required")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("raw_source_constructor_callback_required") == true
+		and typeof((contract.get("replacement_contract") as Dictionary).get("tangent_callback_required")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("tangent_callback_required") == true
+		and _has_exact_keys((contract.get("geometry_contract") as Dictionary), ["source_chunk_sha256", "horizontal_source_footprint_preserved", "original_source_channels_and_roof_preserved", "visual_mesh_instances", "visual_surfaces", "visual_triangles", "wall_native_counts", "roof_native_counts", "world_records", "world_mesh_instances", "world_surfaces", "world_triangles", "world_static_bodies", "world_shapes", "world_topology_scope"])
+		and typeof((contract.get("geometry_contract") as Dictionary).get("source_chunk_sha256")) == TYPE_STRING and (contract.get("geometry_contract") as Dictionary).get("source_chunk_sha256") == "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc"
+		and typeof((contract.get("geometry_contract") as Dictionary).get("horizontal_source_footprint_preserved")) == TYPE_BOOL and (contract.get("geometry_contract") as Dictionary).get("horizontal_source_footprint_preserved") == true
+		and typeof((contract.get("geometry_contract") as Dictionary).get("original_source_channels_and_roof_preserved")) == TYPE_BOOL and (contract.get("geometry_contract") as Dictionary).get("original_source_channels_and_roof_preserved") == true
+		and typeof((contract.get("geometry_contract") as Dictionary).get("visual_mesh_instances")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("visual_mesh_instances"))) and float((contract.get("geometry_contract") as Dictionary).get("visual_mesh_instances")) == 15.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("visual_surfaces")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("visual_surfaces"))) and float((contract.get("geometry_contract") as Dictionary).get("visual_surfaces")) == 15.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("visual_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("visual_triangles"))) and float((contract.get("geometry_contract") as Dictionary).get("visual_triangles")) == 4278.0
+		and _int_array_matches(((contract.get("geometry_contract") as Dictionary).get("wall_native_counts") as Array), [14, 14, 4256, 3, 11])
+		and _int_array_matches(((contract.get("geometry_contract") as Dictionary).get("roof_native_counts") as Array), [1, 1, 22, 1, 1])
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_records")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_records"))) and float((contract.get("geometry_contract") as Dictionary).get("world_records")) == 735.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_mesh_instances")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_mesh_instances"))) and float((contract.get("geometry_contract") as Dictionary).get("world_mesh_instances")) == 1287.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_surfaces")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_surfaces"))) and float((contract.get("geometry_contract") as Dictionary).get("world_surfaces")) == 1302.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_triangles"))) and float((contract.get("geometry_contract") as Dictionary).get("world_triangles")) == 183761.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_static_bodies")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_static_bodies"))) and float((contract.get("geometry_contract") as Dictionary).get("world_static_bodies")) == 500.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_shapes")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_shapes"))) and float((contract.get("geometry_contract") as Dictionary).get("world_shapes")) == 667.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_topology_scope")) == TYPE_STRING and (contract.get("geometry_contract") as Dictionary).get("world_topology_scope") == "pre_northern_1226_authority_serialization_live_parity"
+		and _has_exact_keys((contract.get("ownership_contract") as Dictionary), ["structural_owner_count", "shape_count", "spray_owner_count", "navigation_owner_count", "wall_is_sole_spray_receiver", "original_wall_and_projected_front_are_receivers", "projected_receiver_runs", "projected_receiver_triangles", "projected_receiver_shape_order", "projected_receiver_physics_layer", "projected_receiver_cull_mask", "wall_decal_cull_mask", "wall_shape_order", "roof_shape_order", "added_public_roof_triangles", "original_flat_roof_preserved", "added_public_roof_is_nonreceiver", "all_additions_render_only", "added_ground_collision_triangles", "roof_is_wall_spray_receiver", "roof_world_solid_landing", "eligible_render_layer", "noneligible_render_layer", "terrain_geometry_and_ownership_unchanged"])
+		and typeof((contract.get("ownership_contract") as Dictionary).get("structural_owner_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("structural_owner_count"))) and float((contract.get("ownership_contract") as Dictionary).get("structural_owner_count")) == 4.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("shape_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("shape_count"))) and float((contract.get("ownership_contract") as Dictionary).get("shape_count")) == 12.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("spray_owner_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("spray_owner_count"))) and float((contract.get("ownership_contract") as Dictionary).get("spray_owner_count")) == 2.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("navigation_owner_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("navigation_owner_count"))) and float((contract.get("ownership_contract") as Dictionary).get("navigation_owner_count")) == 0.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("wall_is_sole_spray_receiver")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("wall_is_sole_spray_receiver") == false
+		and typeof((contract.get("ownership_contract") as Dictionary).get("original_wall_and_projected_front_are_receivers")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("original_wall_and_projected_front_are_receivers") == true
+		and _int_array_matches(((contract.get("ownership_contract") as Dictionary).get("projected_receiver_runs") as Array), [17, 18, 19, 20, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 36, 37])
+		and typeof((contract.get("ownership_contract") as Dictionary).get("projected_receiver_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_triangles"))) and float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_triangles")) == 8.0
+		and ((contract.get("ownership_contract") as Dictionary).get("projected_receiver_shape_order") as Array).size() == 1
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("projected_receiver_shape_order") as Array)[0]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("projected_receiver_shape_order") as Array)[0] == "ProjectedUpperSiding"
+		and typeof((contract.get("ownership_contract") as Dictionary).get("projected_receiver_physics_layer")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_physics_layer"))) and float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_physics_layer")) == 5.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("projected_receiver_cull_mask")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_cull_mask"))) and float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_cull_mask")) == 2.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("wall_decal_cull_mask")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("wall_decal_cull_mask"))) and float((contract.get("ownership_contract") as Dictionary).get("wall_decal_cull_mask")) == 2.0
+		and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array).size() == 10
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[0]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[0] == "exact_eligible_source_wall"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[1]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[1] == "ObservedPublicRoof"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[2]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[2] == "ProjectedUpperClosures"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[3]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[3] == "PaleCompleteTrim"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[4]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[4] == "BlueOpaqueGlazing"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[5]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[5] == "DarkOpaqueGlazing"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[6]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[6] == "MaroonClosedDoors"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[7]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[7] == "LocalPrivacyScreens"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[8]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[8] == "PaleDrainageAndFascia"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[9]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[9] == "DoorHardware"
+		and ((contract.get("ownership_contract") as Dictionary).get("roof_shape_order") as Array).size() == 1
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("roof_shape_order") as Array)[0]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("roof_shape_order") as Array)[0] == "exact_noneligible_source_roof"
+		and typeof((contract.get("ownership_contract") as Dictionary).get("added_public_roof_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("added_public_roof_triangles"))) and float((contract.get("ownership_contract") as Dictionary).get("added_public_roof_triangles")) == 48.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("original_flat_roof_preserved")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("original_flat_roof_preserved") == true
+		and typeof((contract.get("ownership_contract") as Dictionary).get("added_public_roof_is_nonreceiver")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("added_public_roof_is_nonreceiver") == true
+		and typeof((contract.get("ownership_contract") as Dictionary).get("all_additions_render_only")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("all_additions_render_only") == false
+		and typeof((contract.get("ownership_contract") as Dictionary).get("added_ground_collision_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("added_ground_collision_triangles"))) and float((contract.get("ownership_contract") as Dictionary).get("added_ground_collision_triangles")) == 0.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("roof_is_wall_spray_receiver")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("roof_is_wall_spray_receiver") == false
+		and typeof((contract.get("ownership_contract") as Dictionary).get("roof_world_solid_landing")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("roof_world_solid_landing") == true
+		and typeof((contract.get("ownership_contract") as Dictionary).get("eligible_render_layer")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("eligible_render_layer"))) and float((contract.get("ownership_contract") as Dictionary).get("eligible_render_layer")) == 2.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("noneligible_render_layer")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("noneligible_render_layer"))) and float((contract.get("ownership_contract") as Dictionary).get("noneligible_render_layer")) == 1.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("terrain_geometry_and_ownership_unchanged")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("terrain_geometry_and_ownership_unchanged") == true
+		and _has_exact_keys((contract.get("truth_boundary") as Dictionary), ["as_built_fidelity_claimed", "interior_modeled", "hidden_schedule_invented", "capture_time_recognition_credit", "capture_time_candidate_promoted", "reference_pixels_packaged", "receiver_complete_inferred_from_art", "game_distinctive_claimed", "unobserved_sides_protected", "unsurveyed_dimensions_and_counts_are_production_inference", "continuous_motion_review_claimed", "ground_to_roof_traversal_claimed", "spray_input_event_dispatch_claimed", "separate_setup_poses_retained", "sparse_movie_samples_only", "native_support_qualification_mm", "scope_authority", "unit_packet_limits_retained", "motion_route_scope"])
+		and typeof((contract.get("truth_boundary") as Dictionary).get("as_built_fidelity_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("as_built_fidelity_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("interior_modeled")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("interior_modeled") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("hidden_schedule_invented")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("hidden_schedule_invented") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("capture_time_recognition_credit")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("capture_time_recognition_credit") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("capture_time_candidate_promoted")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("capture_time_candidate_promoted") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("reference_pixels_packaged")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("reference_pixels_packaged") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("receiver_complete_inferred_from_art")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("receiver_complete_inferred_from_art") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("game_distinctive_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("game_distinctive_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("unobserved_sides_protected")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("unobserved_sides_protected") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("unsurveyed_dimensions_and_counts_are_production_inference")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("unsurveyed_dimensions_and_counts_are_production_inference") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("continuous_motion_review_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("continuous_motion_review_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("ground_to_roof_traversal_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("ground_to_roof_traversal_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("spray_input_event_dispatch_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("spray_input_event_dispatch_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("separate_setup_poses_retained")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("separate_setup_poses_retained") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("sparse_movie_samples_only")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("sparse_movie_samples_only") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("native_support_qualification_mm")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("truth_boundary") as Dictionary).get("native_support_qualification_mm"))) and float((contract.get("truth_boundary") as Dictionary).get("native_support_qualification_mm")) == 4.0
+		and typeof((contract.get("truth_boundary") as Dictionary).get("scope_authority")) == TYPE_STRING and (contract.get("truth_boundary") as Dictionary).get("scope_authority") == "exact_unit_seventh_attestation_and_retained_first_five"
+		and typeof((contract.get("truth_boundary") as Dictionary).get("unit_packet_limits_retained")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("unit_packet_limits_retained") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("motion_route_scope")) == TYPE_STRING and (contract.get("truth_boundary") as Dictionary).get("motion_route_scope") == "Preserve original sampled motion/source/static/spray scope; source actual PASS adds no visual/motion claim.",
+		"northern_1397_parity_mismatch",
+		"1397 exact source, physical detail ownership, historical motion limits or accepted unit bindings drifted.",
+	)
+
+
+func _validate_northern_1397_plan_contract(plan: Dictionary) -> bool:
+	var executable_assets := plan.get("executable_assets", []) as Array
+	return _require(
+		(plan.get("projection_descriptor_ids", []) as Array).is_empty()
+		and executable_assets.size() == 3
+		and _runtime_asset_match(executable_assets, "res://game/scripts/world/facades/gateview_1397_live_replacement.gd", NORTHERN_1397_ADAPTER_SHA256)
+		and _runtime_asset_match(executable_assets, "res://game/scripts/world/facades/gateview_1397_live_factory.gd", NORTHERN_1397_PROTOTYPE_SHA256)
+		and _runtime_asset_match(executable_assets, "res://game/scripts/world/facades/site_12_housing_kit.gd", NORTHERN_1397_SITE_KIT_SHA256),
+		"northern_1397_parity_mismatch",
+		"1397 executable subset must contain exactly the paired adapter, reviewed prototype, and site kit.",
+	)
+
+
+
+func _validate_northern_1226_registry_adapter(adapter: Dictionary) -> bool:
+	if not _require(not adapter.is_empty(), "northern_1226_parity_mismatch", "1226 exact-current paired wall/roof adapter is missing."):
+		return false
+	if not _require(
+		str(adapter.get("adapter_id", "")) == NORTHERN_1226_ADAPTER_ID
+		and str(adapter.get("source_key", "")) == "w96215685"
+		and str(adapter.get("receiver_key", "")) == NORTHERN_1226_RECEIVER
+		and str(adapter.get("attachment_kind", "")) == "active_northern_1226_paired_wall_roof_replacement"
+		and str(adapter.get("content_classification", "")) == "active_target_specific_paired_wall_roof_replacement"
+		and str(adapter.get("runtime_content_mode", "")) == "active_northern_1226_paired_replacement"
+		and str(adapter.get("state", "")) == "active_runtime_target_specific_content"
+		and str(adapter.get("recognition_acceptance_status", "")) == "accepted"
+		and str(adapter.get("recognition_claim_effect", "")) == "none"
+		and (adapter.get("accepted_run_scopes", []) as Array).is_empty()
+		and (adapter.get("runtime_asset_projections", []) as Array).is_empty(),
+		"northern_1226_parity_mismatch",
+		"1226 active adapter identity, paired classification, acceptance, or package boundary drifted.",
+	):
+		return false
+	var receiver_scope := adapter.get("active_receiver_scope", {}) as Dictionary
+	if not _require(
+		_has_exact_keys(receiver_scope, ["coverage", "run_count"])
+		and str(receiver_scope.get("coverage", "")) == "whole_direct_wall_receiver"
+		and int(receiver_scope.get("run_count", -1)) == 26,
+		"northern_1226_parity_mismatch",
+		"1226 active receiver scope does not cover the exact source-run direct wall receiver.",
+	):
+		return false
+	var assets := adapter.get("runtime_assets", []) as Array
+	var actual_paths := []
+	for asset_value: Variant in assets:
+		actual_paths.append(str((asset_value as Dictionary).get("path", "")))
+	actual_paths.sort()
+	var expected_paths := NORTHERN_1226_RUNTIME_ASSETS.duplicate()
+	expected_paths.sort()
+	if not _require(actual_paths == expected_paths, "northern_1226_parity_mismatch", "1226 active adapter does not contain its exact 5-asset paired runtime closure."):
+		return false
+	var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
+	if not _require(
+		_has_exact_keys(runtime_contract, ["adapter_sha256", "behavior_contract", "config_sha256", "config_summary", "dispatch_sha256", "prototype_config_sha256", "prototype_sha256", "site_kit_sha256"]),
+		"northern_1226_parity_mismatch",
+		"1226 active runtime contract fields drifted.",
+	):
+		return false
+	if not _require(
+		str(runtime_contract.get("adapter_sha256", "")) == NORTHERN_1226_ADAPTER_SHA256
+		and str(runtime_contract.get("config_sha256", "")) == NORTHERN_1226_CONFIG_SHA256
+		and str(runtime_contract.get("dispatch_sha256", "")) == NORTHERN_1226_BUILDER_SHA256
+		and str(runtime_contract.get("prototype_sha256", "")) == NORTHERN_1226_PROTOTYPE_SHA256
+		and str(runtime_contract.get("prototype_config_sha256", "")) == NORTHERN_1226_PROTOTYPE_CONFIG_SHA256
+		and str(runtime_contract.get("site_kit_sha256", "")) == NORTHERN_1226_SITE_KIT_SHA256
+		and _runtime_asset_match(assets, "res://game/scripts/world/facades/bayside_1226_live_replacement.gd", "d26993a5443fdf4b30477c9f47e96fdc54fdc1f517c5dbaaeb14d3f8b2120c66")
+		and _runtime_asset_match(assets, "res://game/resources/facades/bayside_1226_study.json", "34fb34bec3fa672277fa081dec042ecf1ee4597f293690a6588f85460ff59da2")
+		and _runtime_asset_match(assets, "res://game/scripts/world/facades/bayside_1226_live_factory.gd", "7060cf8a32b12781be8ed52f7056680af838f6d4930fb88a782901db98bef62e")
+		and _runtime_asset_match(assets, "res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader", "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a")
+		and _runtime_asset_match(assets, "res://game/scripts/world/facades/site_12_housing_kit.gd", "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd"),
+		"northern_1226_parity_mismatch",
+		"1226 adapter/config/dispatch/prototype/site-kit pins do not bind the exact reviewed bytes.",
+	):
+		return false
+	return _require(runtime_contract.get("config_summary", {}) == JSON.parse_string("{\"schema_version\":\"ti.bayside-1226-study/1\",\"source_key\":\"w96215685\",\"chunk_id\":\"x_-2__z_-3\",\"chunk_sha256\":\"7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5\",\"mapped_runs\":[5,6,7,8,9,11,12,14],\"protected_runs\":[0,1,2,3,4,10,13,15,16,17,18,19,20,21,22,23,24,25]}"), "northern_1226_parity_mismatch", "Exact northern source scope summary drifted.") and _validate_northern_1226_behavior_contract(runtime_contract.get("behavior_contract", {}) as Dictionary)
+
+
+func _validate_northern_1226_behavior_contract(contract: Dictionary) -> bool:
+	return _require(
+		_has_exact_keys(contract, ["schema_version", "acceptance_contract", "replacement_contract", "geometry_contract", "ownership_contract", "truth_boundary"])
+		and typeof(contract.get("schema_version")) == TYPE_STRING and contract.get("schema_version") == "ti.northern-1226-production-live-parity/1"
+		and _has_exact_keys((contract.get("acceptance_contract") as Dictionary), ["evidence_manifest_sha256", "motion_telemetry_manifest_sha256", "visual_motion_manifest_sha256", "package_verification_receipt_sha256", "evidence_tree_sha256", "mechanical_review_receipt_sha256", "review_receipt_sha256", "accepted_physical_unit_id", "capture_time_recognition_metric", "numerator_effect", "reference_recognizable", "wall_and_roof_are_one_physical_unit"])
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("evidence_manifest_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("evidence_manifest_sha256") == "d22c4ea98b753531685b40ff1f05c3087ee029bb4fc78cbf0c106fff4e0189b5"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("motion_telemetry_manifest_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("motion_telemetry_manifest_sha256") == "a188d596b298c6ed5d45552aae62cf8ea90b1a234ed00c52a7e669b6f75760d7"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("visual_motion_manifest_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("visual_motion_manifest_sha256") == "9c7620c3980d6904b5d11d8de53e4f37147814e3da30c0c1b0bd9ae94f25fbd1"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("package_verification_receipt_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("package_verification_receipt_sha256") == "ac58f77b8ebbe04fe5398fdd6f48f1aa009bcb80b81710161bfd7a90259cfbfd"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("evidence_tree_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("evidence_tree_sha256") == "7f71cadbe18c72b605a1eb624fe817427dd2d7454fb5f951abcb26563b2b3774"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("mechanical_review_receipt_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("mechanical_review_receipt_sha256") == "6a60ae2b4d8f78e64b8bcb7b8e6af47aa178fca74a7ad5bf0119b2bf058e3938"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("review_receipt_sha256")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("review_receipt_sha256") == "9b9d209e3c61376dd96ded5869754a5261407602b4647473e321fff1454c6727"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("accepted_physical_unit_id")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("accepted_physical_unit_id") == "physical-building:w96215685"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("capture_time_recognition_metric")) == TYPE_STRING and (contract.get("acceptance_contract") as Dictionary).get("capture_time_recognition_metric") == "31/213"
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("numerator_effect")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("acceptance_contract") as Dictionary).get("numerator_effect"))) and float((contract.get("acceptance_contract") as Dictionary).get("numerator_effect")) == 1.0
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("reference_recognizable")) == TYPE_BOOL and (contract.get("acceptance_contract") as Dictionary).get("reference_recognizable") == true
+		and typeof((contract.get("acceptance_contract") as Dictionary).get("wall_and_roof_are_one_physical_unit")) == TYPE_BOOL and (contract.get("acceptance_contract") as Dictionary).get("wall_and_roof_are_one_physical_unit") == true
+		and _has_exact_keys((contract.get("replacement_contract") as Dictionary), ["source_key", "wall_object_key", "roof_object_key", "actual_supplied_chunk_pair_required", "actual_land_and_area_records_required", "mapped_public_run_indices", "protected_run_indices", "partial_pair_allowed", "fallback_allowed", "generic_stack_allowed", "factory_calls", "raw_source_constructor_callback_required", "tangent_callback_required"])
+		and typeof((contract.get("replacement_contract") as Dictionary).get("source_key")) == TYPE_STRING and (contract.get("replacement_contract") as Dictionary).get("source_key") == "w96215685"
+		and typeof((contract.get("replacement_contract") as Dictionary).get("wall_object_key")) == TYPE_STRING and (contract.get("replacement_contract") as Dictionary).get("wall_object_key") == "building:w96215685:wall"
+		and typeof((contract.get("replacement_contract") as Dictionary).get("roof_object_key")) == TYPE_STRING and (contract.get("replacement_contract") as Dictionary).get("roof_object_key") == "building:w96215685:roof"
+		and typeof((contract.get("replacement_contract") as Dictionary).get("actual_supplied_chunk_pair_required")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("actual_supplied_chunk_pair_required") == true
+		and typeof((contract.get("replacement_contract") as Dictionary).get("actual_land_and_area_records_required")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("actual_land_and_area_records_required") == false
+		and _int_array_matches(((contract.get("replacement_contract") as Dictionary).get("mapped_public_run_indices") as Array), [5, 6, 7, 8, 9, 11, 12, 14])
+		and _int_array_matches(((contract.get("replacement_contract") as Dictionary).get("protected_run_indices") as Array), [0, 1, 2, 3, 4, 10, 13, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25])
+		and typeof((contract.get("replacement_contract") as Dictionary).get("partial_pair_allowed")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("partial_pair_allowed") == false
+		and typeof((contract.get("replacement_contract") as Dictionary).get("fallback_allowed")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("fallback_allowed") == false
+		and typeof((contract.get("replacement_contract") as Dictionary).get("generic_stack_allowed")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("generic_stack_allowed") == false
+		and typeof((contract.get("replacement_contract") as Dictionary).get("factory_calls")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("replacement_contract") as Dictionary).get("factory_calls"))) and float((contract.get("replacement_contract") as Dictionary).get("factory_calls")) == 1.0
+		and typeof((contract.get("replacement_contract") as Dictionary).get("raw_source_constructor_callback_required")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("raw_source_constructor_callback_required") == true
+		and typeof((contract.get("replacement_contract") as Dictionary).get("tangent_callback_required")) == TYPE_BOOL and (contract.get("replacement_contract") as Dictionary).get("tangent_callback_required") == true
+		and _has_exact_keys((contract.get("geometry_contract") as Dictionary), ["source_chunk_sha256", "horizontal_source_footprint_preserved", "original_source_channels_and_roof_preserved", "visual_mesh_instances", "visual_surfaces", "visual_triangles", "wall_native_counts", "roof_native_counts", "world_records", "world_mesh_instances", "world_surfaces", "world_triangles", "world_static_bodies", "world_shapes", "world_topology_scope"])
+		and typeof((contract.get("geometry_contract") as Dictionary).get("source_chunk_sha256")) == TYPE_STRING and (contract.get("geometry_contract") as Dictionary).get("source_chunk_sha256") == "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5"
+		and typeof((contract.get("geometry_contract") as Dictionary).get("horizontal_source_footprint_preserved")) == TYPE_BOOL and (contract.get("geometry_contract") as Dictionary).get("horizontal_source_footprint_preserved") == true
+		and typeof((contract.get("geometry_contract") as Dictionary).get("original_source_channels_and_roof_preserved")) == TYPE_BOOL and (contract.get("geometry_contract") as Dictionary).get("original_source_channels_and_roof_preserved") == true
+		and typeof((contract.get("geometry_contract") as Dictionary).get("visual_mesh_instances")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("visual_mesh_instances"))) and float((contract.get("geometry_contract") as Dictionary).get("visual_mesh_instances")) == 16.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("visual_surfaces")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("visual_surfaces"))) and float((contract.get("geometry_contract") as Dictionary).get("visual_surfaces")) == 16.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("visual_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("visual_triangles"))) and float((contract.get("geometry_contract") as Dictionary).get("visual_triangles")) == 3482.0
+		and _int_array_matches(((contract.get("geometry_contract") as Dictionary).get("wall_native_counts") as Array), [15, 15, 3468, 3, 12])
+		and _int_array_matches(((contract.get("geometry_contract") as Dictionary).get("roof_native_counts") as Array), [1, 1, 14, 1, 1])
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_records")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_records"))) and float((contract.get("geometry_contract") as Dictionary).get("world_records")) == 735.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_mesh_instances")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_mesh_instances"))) and float((contract.get("geometry_contract") as Dictionary).get("world_mesh_instances")) == 1287.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_surfaces")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_surfaces"))) and float((contract.get("geometry_contract") as Dictionary).get("world_surfaces")) == 1302.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_triangles"))) and float((contract.get("geometry_contract") as Dictionary).get("world_triangles")) == 183761.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_static_bodies")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_static_bodies"))) and float((contract.get("geometry_contract") as Dictionary).get("world_static_bodies")) == 500.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_shapes")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("geometry_contract") as Dictionary).get("world_shapes"))) and float((contract.get("geometry_contract") as Dictionary).get("world_shapes")) == 667.0
+		and typeof((contract.get("geometry_contract") as Dictionary).get("world_topology_scope")) == TYPE_STRING and (contract.get("geometry_contract") as Dictionary).get("world_topology_scope") == "current_integration_topology"
+		and _has_exact_keys((contract.get("ownership_contract") as Dictionary), ["structural_owner_count", "shape_count", "spray_owner_count", "navigation_owner_count", "wall_is_sole_spray_receiver", "original_wall_and_projected_front_are_receivers", "projected_receiver_runs", "projected_receiver_triangles", "projected_receiver_shape_order", "projected_receiver_physics_layer", "projected_receiver_cull_mask", "wall_decal_cull_mask", "wall_shape_order", "roof_shape_order", "added_public_roof_triangles", "original_flat_roof_preserved", "added_public_roof_is_nonreceiver", "all_additions_render_only", "added_ground_collision_triangles", "roof_is_wall_spray_receiver", "roof_world_solid_landing", "eligible_render_layer", "noneligible_render_layer", "terrain_geometry_and_ownership_unchanged"])
+		and typeof((contract.get("ownership_contract") as Dictionary).get("structural_owner_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("structural_owner_count"))) and float((contract.get("ownership_contract") as Dictionary).get("structural_owner_count")) == 4.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("shape_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("shape_count"))) and float((contract.get("ownership_contract") as Dictionary).get("shape_count")) == 13.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("spray_owner_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("spray_owner_count"))) and float((contract.get("ownership_contract") as Dictionary).get("spray_owner_count")) == 2.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("navigation_owner_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("navigation_owner_count"))) and float((contract.get("ownership_contract") as Dictionary).get("navigation_owner_count")) == 0.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("wall_is_sole_spray_receiver")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("wall_is_sole_spray_receiver") == false
+		and typeof((contract.get("ownership_contract") as Dictionary).get("original_wall_and_projected_front_are_receivers")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("original_wall_and_projected_front_are_receivers") == true
+		and _int_array_matches(((contract.get("ownership_contract") as Dictionary).get("projected_receiver_runs") as Array), [5, 6, 7, 8, 9, 11, 12, 14])
+		and typeof((contract.get("ownership_contract") as Dictionary).get("projected_receiver_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_triangles"))) and float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_triangles")) == 8.0
+		and ((contract.get("ownership_contract") as Dictionary).get("projected_receiver_shape_order") as Array).size() == 1
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("projected_receiver_shape_order") as Array)[0]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("projected_receiver_shape_order") as Array)[0] == "ProjectedUpperSiding"
+		and typeof((contract.get("ownership_contract") as Dictionary).get("projected_receiver_physics_layer")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_physics_layer"))) and float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_physics_layer")) == 5.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("projected_receiver_cull_mask")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_cull_mask"))) and float((contract.get("ownership_contract") as Dictionary).get("projected_receiver_cull_mask")) == 2.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("wall_decal_cull_mask")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("wall_decal_cull_mask"))) and float((contract.get("ownership_contract") as Dictionary).get("wall_decal_cull_mask")) == 2.0
+		and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array).size() == 11
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[0]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[0] == "exact_eligible_source_wall"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[1]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[1] == "ObservedPublicRoof"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[2]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[2] == "ShallowStoryBands"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[3]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[3] == "ProjectedUpperClosures"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[4]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[4] == "PaleCompleteTrim"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[5]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[5] == "BlueOpaqueGlazing"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[6]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[6] == "DarkOpaqueGlazing"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[7]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[7] == "MaroonClosedDoors"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[8]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[8] == "LocalPrivacyScreens"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[9]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[9] == "PaleDrainageAndFascia"
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[10]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("wall_shape_order") as Array)[10] == "DoorHardware"
+		and ((contract.get("ownership_contract") as Dictionary).get("roof_shape_order") as Array).size() == 1
+		and typeof(((contract.get("ownership_contract") as Dictionary).get("roof_shape_order") as Array)[0]) == TYPE_STRING and ((contract.get("ownership_contract") as Dictionary).get("roof_shape_order") as Array)[0] == "exact_noneligible_source_roof"
+		and typeof((contract.get("ownership_contract") as Dictionary).get("added_public_roof_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("added_public_roof_triangles"))) and float((contract.get("ownership_contract") as Dictionary).get("added_public_roof_triangles")) == 48.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("original_flat_roof_preserved")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("original_flat_roof_preserved") == true
+		and typeof((contract.get("ownership_contract") as Dictionary).get("added_public_roof_is_nonreceiver")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("added_public_roof_is_nonreceiver") == true
+		and typeof((contract.get("ownership_contract") as Dictionary).get("all_additions_render_only")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("all_additions_render_only") == false
+		and typeof((contract.get("ownership_contract") as Dictionary).get("added_ground_collision_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("added_ground_collision_triangles"))) and float((contract.get("ownership_contract") as Dictionary).get("added_ground_collision_triangles")) == 0.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("roof_is_wall_spray_receiver")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("roof_is_wall_spray_receiver") == false
+		and typeof((contract.get("ownership_contract") as Dictionary).get("roof_world_solid_landing")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("roof_world_solid_landing") == true
+		and typeof((contract.get("ownership_contract") as Dictionary).get("eligible_render_layer")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("eligible_render_layer"))) and float((contract.get("ownership_contract") as Dictionary).get("eligible_render_layer")) == 2.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("noneligible_render_layer")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("ownership_contract") as Dictionary).get("noneligible_render_layer"))) and float((contract.get("ownership_contract") as Dictionary).get("noneligible_render_layer")) == 1.0
+		and typeof((contract.get("ownership_contract") as Dictionary).get("terrain_geometry_and_ownership_unchanged")) == TYPE_BOOL and (contract.get("ownership_contract") as Dictionary).get("terrain_geometry_and_ownership_unchanged") == true
+		and _has_exact_keys((contract.get("truth_boundary") as Dictionary), ["as_built_fidelity_claimed", "interior_modeled", "hidden_schedule_invented", "capture_time_recognition_credit", "capture_time_candidate_promoted", "reference_pixels_packaged", "receiver_complete_inferred_from_art", "game_distinctive_claimed", "unobserved_sides_protected", "unsurveyed_dimensions_and_counts_are_production_inference", "continuous_motion_review_claimed", "ground_to_roof_traversal_claimed", "spray_input_event_dispatch_claimed", "separate_setup_poses_retained", "sparse_movie_samples_only", "native_support_qualification_mm", "scope_authority", "unit_packet_limits_retained", "motion_route_scope"])
+		and typeof((contract.get("truth_boundary") as Dictionary).get("as_built_fidelity_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("as_built_fidelity_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("interior_modeled")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("interior_modeled") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("hidden_schedule_invented")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("hidden_schedule_invented") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("capture_time_recognition_credit")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("capture_time_recognition_credit") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("capture_time_candidate_promoted")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("capture_time_candidate_promoted") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("reference_pixels_packaged")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("reference_pixels_packaged") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("receiver_complete_inferred_from_art")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("receiver_complete_inferred_from_art") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("game_distinctive_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("game_distinctive_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("unobserved_sides_protected")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("unobserved_sides_protected") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("unsurveyed_dimensions_and_counts_are_production_inference")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("unsurveyed_dimensions_and_counts_are_production_inference") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("continuous_motion_review_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("continuous_motion_review_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("ground_to_roof_traversal_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("ground_to_roof_traversal_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("spray_input_event_dispatch_claimed")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("spray_input_event_dispatch_claimed") == false
+		and typeof((contract.get("truth_boundary") as Dictionary).get("separate_setup_poses_retained")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("separate_setup_poses_retained") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("sparse_movie_samples_only")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("sparse_movie_samples_only") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("native_support_qualification_mm")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float((contract.get("truth_boundary") as Dictionary).get("native_support_qualification_mm"))) and float((contract.get("truth_boundary") as Dictionary).get("native_support_qualification_mm")) == 4.0
+		and typeof((contract.get("truth_boundary") as Dictionary).get("scope_authority")) == TYPE_STRING and (contract.get("truth_boundary") as Dictionary).get("scope_authority") == "exact_unit_seventh_attestation_and_retained_first_five"
+		and typeof((contract.get("truth_boundary") as Dictionary).get("unit_packet_limits_retained")) == TYPE_BOOL and (contract.get("truth_boundary") as Dictionary).get("unit_packet_limits_retained") == true
+		and typeof((contract.get("truth_boundary") as Dictionary).get("motion_route_scope")) == TYPE_STRING and (contract.get("truth_boundary") as Dictionary).get("motion_route_scope") == "Preserve original raw HOLD, corrected DERIVED925 routes and later3 ACTUAL sprays separately.",
+		"northern_1226_parity_mismatch",
+		"1226 exact source, physical detail ownership, historical motion limits or accepted unit bindings drifted.",
+	)
+
+
+func _validate_northern_1226_plan_contract(plan: Dictionary) -> bool:
+	var executable_assets := plan.get("executable_assets", []) as Array
+	return _require(
+		(plan.get("projection_descriptor_ids", []) as Array).is_empty()
+		and executable_assets.size() == 3
+		and _runtime_asset_match(executable_assets, "res://game/scripts/world/facades/bayside_1226_live_replacement.gd", NORTHERN_1226_ADAPTER_SHA256)
+		and _runtime_asset_match(executable_assets, "res://game/scripts/world/facades/bayside_1226_live_factory.gd", NORTHERN_1226_PROTOTYPE_SHA256)
+		and _runtime_asset_match(executable_assets, "res://game/scripts/world/facades/site_12_housing_kit.gd", NORTHERN_1226_SITE_KIT_SHA256),
+		"northern_1226_parity_mismatch",
+		"1226 executable subset must contain exactly the paired adapter, reviewed prototype, and site kit.",
 	)

@@ -14058,3 +14058,21 @@ Next time: concise verdict/reason/next fix, and inspect the whole final composit
 Retained local benchmark archive (not a runtime/clone dependency): `work/astra-sol-high-benchmark-2026-09-22/` in the existing `start-from-commit-f377dcac-and-read` task workspace. `RESULTS.md` preserves the exact verdict; `INPUT_MANIFEST.json`, `combined-private.json`, `PRIVATE_TIMING.md`, author notes and raw result/release files preserve inputs, mapping and timing. Blind `benchmark-blind.html` SHA256 `20ec264dbab2dc49d9b6cbcf0f54b117cce2d7c35019c11941efb32304478e30`. No private source photos, images, source models or large manifests imported. The repository's [material panel capture record](../evidence/first-playable/genai-texture-pilot-v1-2026-09-04/capture-manifest.json) supplies the replacement Case B provenance.
 
 Read-only progress check: authority remains 32/213 (181 not evaluated), last accepted release 1240/current32 at fdfc100; main contains paused unaccepted WIP. 1397/1226 source integration passed and candidate materialization/file readiness completed, but actual package/roles 6–7/authority remain pending. 1237/1229 early visual/native study passed; mechanics readiness remains HOLD until the archived strict source-ID correction is rebound/reviewed and authorized execution completes. B1 retains its accepted recognition and published wing-returns-v2 scope; this benchmark changes neither. See the [paused checkpoint](checkpoints/paused-2026-09-23/README.md). Only LEARNINGS and this RETRO selected for commit; four unrelated untracked B1 UID files preserved. No engine, tests, browser, export, default/config change or push.
+
+## 2026-09-23 — Bounded 1397/1226 milestone delivery
+
+### benchmark_recovery (GPT-6 Astra, Low)
+
+Reused retained candidate materialization, source/visual evidence and first five package stages. Preserved the original native descent failure and zero-marker diagnostic; the unchanged ordinary retry passed, with cause unresolved. The current34 compiler exposed a missed exact dispatch signature/cleanup list; its narrow reviewed correction passed existing Node checks. No model routing changes, unmeasured speed claims or new acceptance gates. Final native/release/gallery and publication facts are bound in the delivery records; 1237/1229 and unrelated B1 UID files remain preserved, Mersea deferred.
+
+### delivery_technical (GPT-6 Astra, Medium)
+
+Independently verified current34 authority native contracts, all six fresh final-package stages/signature/privacy/app identity, and exact34 gallery native-to-public hashes/IDs/three-attempt provenance. Preserved candidate native intermittency and failed gallery batches; no causal-fix claim or new gate. Earlier gallery static review missed a Vector2/Vector2i comparison; narrow correction was reviewed before subsequent runs. Visual framing remained a separate review. No engine/source edits or Git by the reviewer.
+
+### model_astra_low (GPT-6 Astra, Low)
+
+Prepared and executed the ID-labeled accepted34 gallery on frozen source. Preserved the zero-image type failure and later partial camera-guard failures, continuing only missing/corrected targets. The final public assembly retains11 images from002,20 from003 and3 from004 with exact original hashes and provenance;34 native PNGs and both indexes contain the accepted IDs. No image editing, production-model changes or Mersea integration.
+
+### milestone34_visual / gallery_visual (GPT-6 Astra, Medium)
+
+Preserved per-unit role7 scope, directly reviewed all selected gallery originals and requested only missing/occluded-view corrections. Rescinded the Station48 camera HOLD after checking its deliberately limited accepted detail; do not infer an unmodeled richer frontage. Final34 pixels, labels and selected-byte continuity passed, including limited Building1 lantern/context scope. The local HTML decoded all34 images, matched34 links/labels and opened IsleHouse at full1440×900; browser closed. No art reacceptance, reference publication or new recognition credit.

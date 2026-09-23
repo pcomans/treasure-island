@@ -1,0 +1,289 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215685",
+  "label": "1226 original HOLD separately derived routes plus actual later sprays",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/native-mechanics-1226-001-result.json",
+      "path_base": "/",
+      "sha256": "b0d3ddd0a9b3a2e4d44e7ee2a807e840f96bcccb568ac557019929c452a02a62",
+      "bytes": 16988515,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/native-mechanics-1226-001-result.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/DERIVED_ROUTE_QUALIFICATION.json",
+      "path_base": "/",
+      "sha256": "03c326aa0eab46a496295e52871994185e48962910eab877719e5faf95232e69",
+      "bytes": 4029,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/DERIVED_ROUTE_QUALIFICATION.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/native-sprays-1226-002-result.json",
+      "path_base": "/",
+      "sha256": "cfdbd79a54144839b195bcada4b2b40a2493b6f675968a1d2713c4e667ab95f7",
+      "bytes": 2357248,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/native-sprays-1226-002-result.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/native-mechanics-1226-001-execution.json",
+      "path_base": "/",
+      "sha256": "a2bdc72d63c82f20b2eebf9d8d303bcaeaaf8834ca0061d34d623ff6ecee231e",
+      "bytes": 602466,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/native-mechanics-1226-001-execution.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/native-sprays-1226-002-execution.json",
+      "path_base": "/",
+      "sha256": "ed89ebf35fac983fae780dd6b9b4c44f705f983273370b1de8958af91af754ed",
+      "bytes": 629928,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/native-sprays-1226-002-execution.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/SLOT_RELEASE-native-sprays-1226-002.json",
+      "path_base": "/",
+      "sha256": "1ee01d7e8bd393283d4327784d34b5ff024e60ccbf0a75d9d5a644fa9a599b50",
+      "bytes": 584,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/SLOT_RELEASE-native-sprays-1226-002.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/ACTUAL_HANDOFF-next_family_reference_prep.json",
+      "path_base": "/",
+      "sha256": "09b1bb44755af7f409e533eb4ee0febd3f87459eb8fe8b04fe8cc3c006a8cfb5",
+      "bytes": 7138,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/ACTUAL_HANDOFF-next_family_reference_prep.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/LOWER_WALL_AND_ROOF_SCOPE.json",
+      "path_base": "/",
+      "sha256": "dfbcecb1e8e350139e053c7327ce87ca609837b2a7339aaefeade263173b0e1e",
+      "bytes": 273124,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/LOWER_WALL_AND_ROOF_SCOPE.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/1226-mechanics.avi",
+      "path_base": "/",
+      "sha256": "6bf6f912349bc8faec56d5aa65d92cb8d7e95316a6b7530db17c4ceea2625987",
+      "bytes": 82234000,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/1226-mechanics.avi",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/1226-mechanics.avi",
+      "path_base": "/",
+      "sha256": "cee737c4cd52b3c06b1f5b26ef73294a15fa3e35a04915b3c2a6ccaf4f6215cf",
+      "bytes": 16112524,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/1226-mechanics.avi",
+      "copied": false
+    }
+  ],
+  "data": {
+    "status": "DERIVED_FINITE_ROUTES_PLUS_ACTUAL_SPRAYS_BOUND",
+    "original_runtime_ok": false,
+    "original_failures": [
+      "screen complete stock retreat reaches the source-grounded corridor destination and naturally brakes with no transform writes."
+    ],
+    "derived_route_qualification": {
+      "label": "DERIVED corrected route-only qualification; not rewritten native outcome",
+      "at": "2026-09-22T23:40:36.417062+00:00",
+      "raw": {
+        "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/native-mechanics-1226-001-result.json",
+        "sha256": "b0d3ddd0a9b3a2e4d44e7ee2a807e840f96bcccb568ac557019929c452a02a62"
+      },
+      "rule_change": "Remove only and land_rows>0 from retreat acceptance; diagnostic counts retained",
+      "all_other_predicates_retained": true,
+      "qualification_mm_unchanged": 4,
+      "rows_recomputed": 925,
+      "routes": [
+        {
+          "route": "near-1-door-1",
+          "original_route_ok": true,
+          "original_retreat_ok": true,
+          "removed_atom_original_value": true,
+          "derived_approach_qualification": true,
+          "derived_retreat_qualification": true,
+          "derived_route_qualification": true,
+          "phases": [
+            {
+              "phase": "approach",
+              "rows": 331,
+              "input_rows": 301,
+              "brake_rows": 30,
+              "all_ground_qualification": true,
+              "all_camera": true,
+              "minimum_recomputed_capsule_side_clearance_m": 0.24034931566014084,
+              "direct_land_slide_rows": 330,
+              "stopped": true
+            },
+            {
+              "phase": "retreat",
+              "rows": 125,
+              "input_rows": 95,
+              "brake_rows": 30,
+              "all_ground_qualification": true,
+              "all_camera": true,
+              "minimum_recomputed_capsule_side_clearance_m": 0.23245319099955974,
+              "direct_land_slide_rows": 1,
+              "stopped": true
+            }
+          ]
+        },
+        {
+          "route": "near-3-door-1",
+          "original_route_ok": true,
+          "original_retreat_ok": true,
+          "removed_atom_original_value": true,
+          "derived_approach_qualification": true,
+          "derived_retreat_qualification": true,
+          "derived_route_qualification": true,
+          "phases": [
+            {
+              "phase": "approach",
+              "rows": 244,
+              "input_rows": 214,
+              "brake_rows": 30,
+              "all_ground_qualification": true,
+              "all_camera": true,
+              "minimum_recomputed_capsule_side_clearance_m": 0.2467057035433169,
+              "direct_land_slide_rows": 243,
+              "stopped": true
+            },
+            {
+              "phase": "retreat",
+              "rows": 108,
+              "input_rows": 78,
+              "brake_rows": 30,
+              "all_ground_qualification": true,
+              "all_camera": true,
+              "minimum_recomputed_capsule_side_clearance_m": 0.24587352778723925,
+              "direct_land_slide_rows": 2,
+              "stopped": true
+            }
+          ]
+        },
+        {
+          "route": "screen",
+          "original_route_ok": false,
+          "original_retreat_ok": false,
+          "removed_atom_original_value": false,
+          "derived_approach_qualification": true,
+          "derived_retreat_qualification": true,
+          "derived_route_qualification": true,
+          "phases": [
+            {
+              "phase": "approach",
+              "rows": 64,
+              "input_rows": 34,
+              "brake_rows": 30,
+              "all_ground_qualification": true,
+              "all_camera": true,
+              "minimum_recomputed_capsule_side_clearance_m": 0.1969409690165208,
+              "direct_land_slide_rows": 63,
+              "stopped": true
+            },
+            {
+              "phase": "retreat",
+              "rows": 53,
+              "input_rows": 23,
+              "brake_rows": 30,
+              "all_ground_qualification": true,
+              "all_camera": true,
+              "minimum_recomputed_capsule_side_clearance_m": 0.18180556521463861,
+              "direct_land_slide_rows": 0,
+              "stopped": true
+            }
+          ]
+        }
+      ],
+      "derived_routes_qualify": true,
+      "scope": "Arithmetic reevaluation of complete retained native observations; no new independent triangle-distance computation, movement execution, spray result or full mechanics acceptance.",
+      "missing_sprays": [
+        "ObservedLowerWall",
+        "BlueOpaqueGlazing",
+        "PaleCompleteTrim"
+      ]
+    },
+    "finite_rows": 925,
+    "sprays": [
+      {
+        "label": "ObservedLowerWall",
+        "performed": true,
+        "ok": true,
+        "result": [
+          "placed"
+        ],
+        "tags_before": 0,
+        "tags_after": 1,
+        "actual_player_hit_distance_m": 3.93564033508301
+      },
+      {
+        "label": "BlueOpaqueGlazing",
+        "performed": true,
+        "ok": true,
+        "result": [
+          "receiver_rejection"
+        ],
+        "tags_before": 1,
+        "tags_after": 1,
+        "actual_player_hit_distance_m": 3.63521432876587
+      },
+      {
+        "label": "PaleCompleteTrim",
+        "performed": true,
+        "ok": true,
+        "result": [
+          "receiver_rejection"
+        ],
+        "tags_before": 1,
+        "tags_after": 1,
+        "actual_player_hit_distance_m": 3.87660241127014
+      }
+    ],
+    "movement_replayed": false,
+    "continuous_combined_run": false,
+    "movie_sources": [
+      {
+        "origin": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/1226-mechanics.avi",
+          "path_base": "/",
+          "sha256": "6bf6f912349bc8faec56d5aa65d92cb8d7e95316a6b7530db17c4ceea2625987",
+          "bytes": 82234000,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-mechanics-001/1226/capture/1226-mechanics.avi",
+          "copied": false
+        },
+        "frames": 1042,
+        "role": "original movement HOLD; derived rows"
+      },
+      {
+        "origin": {
+          "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/1226-mechanics.avi",
+          "path_base": "/",
+          "sha256": "cee737c4cd52b3c06b1f5b26ef73294a15fa3e35a04915b3c2a6ccaf4f6215cf",
+          "bytes": 16112524,
+          "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/1226/capture/1226-mechanics.avi",
+          "copied": false
+        },
+        "frames": 180,
+        "role": "later three sprays PASS"
+      }
+    ],
+    "scope": [
+      "Physical1226 Bayside source w96215685; March2025 F street-view first-hit association, not nearby address UI identity.",
+      "H capture source at915f8a2595cb3184fba7008b97ff73f9bc028117 authority31/213; prospective live baseline fdfc100704200e6570b654a4e6a4fccc9a1a61be authority32/213.",
+      "Original1042-frame movement run remains raw HOLD.925 retained rows qualify under separately authorized DERIVED rule removing only incidental retreat land_rows>0; unchanged4mm and all physical predicates.",
+      "Later180-frame spray-only run supplies three actual callbacks with independent grounded setups; no single all-PASS original run, movement replay or continuous journey between setups.",
+      "Two full AVIs external; nine exact payload samples from each. Sparse samples do not establish continuous playback or draw/physics parity; terminal blue frames provide no endpoint evidence.",
+      "ObservedLowerWall placed existing marker; BlueOpaqueGlazing and PaleCompleteTrim rejected; original collision receiver and10mm rendered siding plane remain distinct.",
+      "Roof callback, roof landing/walk and jetpack unperformed; upper siding blocked/infeasible at this grounded scope.",
+      "Tree/canopy-hidden faces and roof backs protected; no neighbor canopy/ramp ownership inference; dimensions/cadence production inference.",
+      "Current live equivalence, package role6 and seventh attestation pending; no recognition credit."
+    ]
+  }
+}

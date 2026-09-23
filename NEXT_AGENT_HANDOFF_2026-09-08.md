@@ -1,5 +1,13 @@
 # Treasure Island next-agent handoff
 
+## Current checkpoint — accepted1397/1226, current34
+
+The bounded delivery adds1397 Gateview and1226 Bayside:34/213 accepted,179 not evaluated; prior32 and all213 identities preserved. Current source and exact-current package passed their separate independent gates. Stable app: `build/northern-1397-1226-exact-current-001/Treasure Island First Playable.app`; see the [release record](evidence/first-playable/northern-1397-1226-current-release-2026-09-23-001/README.md) and [34 ID-labeled snapshots](evidence/building-snapshots/accepted-34-2026-09-23/README.md). Consult Git history for actual commit/push status. Do not replay completed source/package checks.
+
+The earlier paused checkpoint remains historical.1237/1229 WIP and four unrelated B1 UID files are preserved; Mersea deferred. The recurring reminder stays paused, and work stops after this bounded delivery. Candidate32 native descent failed once; unchanged retry passed without a proven cause. The zero-marker diagnostic supplies no telemetry acceptance. Current34 six-stage package passed first attempt.
+
+## Historical32 checkpoint follows
+
 ## Current resume checkpoint — accepted1240/current32
 
 Sole1240 delta31→32,181 not evaluated; other212 records and213identities preserved. Current32 source/native and six exact-current package stages independently passed and ROOT accepted. Stable whole-app destination is `build/northern-1240-exact-current-001/Treasure Island First Playable.app`; consult external transfer/publication receipts and Git history for actual copy/commit status. Do not replay accepted compiler/Node/import/native/package checks for documentation. Candidate31 seven-role evidence, prior source failures and held1204 remain distinct. Current engine is approved standard4.7.2; experimental physics diagnostics are not production.

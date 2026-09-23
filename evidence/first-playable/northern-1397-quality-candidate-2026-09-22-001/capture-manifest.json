@@ -1,0 +1,1696 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215670",
+  "label": "Actual1397 S2 originals and performed upper-siding marker",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/1397/capture/images/01-whole-front-baseline.png",
+      "path_base": "/",
+      "sha256": "23a28f79308917c8906d2a7782a01f364f9da03425eb9f05531bf32e2edb4931",
+      "bytes": 992825,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/1397/capture/images/01-whole-front-baseline.png",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/1397/capture/images/02-whole-front-candidate.png",
+      "path_base": "/",
+      "sha256": "b936feb2229719d791e8d9dc98f2bb1bfbb1d416a12040d156c33d20c3fef905",
+      "bytes": 960726,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/1397/capture/images/02-whole-front-candidate.png",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/1397/capture/images/03-roof-entry-candidate.png",
+      "path_base": "/",
+      "sha256": "cc4e58ceca47d0c7f1567f4768ad5077871a0e25ff7dc0d6b2c42d1ff97c9a11",
+      "bytes": 572857,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/1397/capture/images/03-roof-entry-candidate.png",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/1397/capture/images/04-door-path-footway-junction.png",
+      "path_base": "/",
+      "sha256": "ebc2a66bbc7b0fc8f2b6a63514269427afdc30a7c619d10254e1da3a47b56287",
+      "bytes": 1179304,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/1397/capture/images/04-door-path-footway-junction.png",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/1397/capture/images/01-actual-eligible-wall-spray.png",
+      "path_base": "/",
+      "sha256": "7f1e100cd19315f2028e54e7e75ed8a74c82712f42f728295dbaa61ead998fe2",
+      "bytes": 717264,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1397-mechanics-001/1397/capture/images/01-actual-eligible-wall-spray.png",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/native-1397-002-result.json",
+      "path_base": "/",
+      "sha256": "44032cbe5b48e353c505a24accc2e69b5ae36e1877c87bbf37839b28a089aa35",
+      "bytes": 79247,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/native-1397-002-result.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/native-1397-002-execution.json",
+      "path_base": "/",
+      "sha256": "b8fbe199a7485f4350db9ac4e656472b914256064f9373a4619adaa65a7072e7",
+      "bytes": 580184,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/native-1397-002-execution.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/1397/view-plan.json",
+      "path_base": "/",
+      "sha256": "620fd60c6e69ac0c6bfb07873ed1f448f4a05bddb7f68d45b82aade5e1c83994",
+      "bytes": 1776,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/1397/view-plan.json",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/1397/target.json",
+      "path_base": "/",
+      "sha256": "4d0e07af7951eb4099c9c97010b09ee0f72eaa4f68e769de06be14a718ef70ee",
+      "bytes": 1843,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-1397-implementation-002/1397/target.json",
+      "copied": false
+    }
+  ],
+  "data": {
+    "status": "ACTUAL_STATIC_AND_MARKER_BOUND",
+    "static_count": 4,
+    "mechanics_markers": 1,
+    "recognition_credit": 0,
+    "later_live_candidate_views": "PENDING_LIVE_EQUIVALENCE_SCOPE",
+    "actual_capture_records": [
+      {
+        "id": "01-whole-front-baseline",
+        "baseline_exact_source": true,
+        "requested_xz": [
+          -235.473434448242,
+          -760.604309082031
+        ],
+        "aim_target": [
+          -225.567031860352,
+          7.30000019073486,
+          -726.448852539062
+        ],
+        "sun": [
+          -51.9999961853027,
+          -27.9999980926514,
+          0.0
+        ],
+        "player": {
+          "position": [
+            -235.473434448242,
+            2.72488284111023,
+            -760.604309082031
+          ],
+          "depth_m": 19.7252883911133,
+          "station_m": -26.882942199707,
+          "on_floor": true,
+          "slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-1__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -235.477478027344,
+                2.72478246688843,
+                -760.600280761719
+              ],
+              "normal": [
+                0.0114984689280391,
+                0.999866724014282,
+                -0.0115922065451741
+              ]
+            }
+          ],
+          "upward_slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-1__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -235.477478027344,
+                2.72478246688843,
+                -760.600280761719
+              ],
+              "normal": [
+                0.0114984689280391,
+                0.999866724014282,
+                -0.0115922065451741
+              ]
+            }
+          ],
+          "unfiltered_world_solid_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-3",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+            "structural_role": "",
+            "hit": true,
+            "position": [
+              -235.473434448242,
+              2.72468757629395,
+              -760.604309082031
+            ],
+            "normal": [
+              0.0114984689280391,
+              0.999866724014282,
+              -0.0115922065451741
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true
+          }
+        },
+        "camera": [
+          -237.001510620117,
+          4.3276686668396,
+          -765.872802734375
+        ],
+        "camera_forward": [
+          0.27783140540123,
+          0.0722208172082901,
+          0.957911252975464
+        ],
+        "camera_fov": 70.0,
+        "final_camera": {
+          "pivot": [
+            -235.473434448242,
+            4.72488307952881,
+            -760.604309082031
+          ],
+          "camera": [
+            -237.001510620117,
+            4.3276686668396,
+            -765.872802734375
+          ],
+          "camera_near": 0.0799999982118607,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "arm_margin": 0.150000005960464,
+          "arm_collision_mask": 1,
+          "pivot_to_camera_length_m": 5.49998378753662,
+          "segment_hit": {
+            "hit": false,
+            "excludes_only_player": true
+          },
+          "segment_hit_distance_m": 5.49998378753662,
+          "segment_endpoint_allowance_m": 0.04,
+          "segment_clear": true,
+          "land_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-3",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+            "structural_role": "",
+            "hit": true,
+            "position": [
+              -237.001510620117,
+              2.68118095397949,
+              -765.872802734375
+            ],
+            "normal": [
+              0.0114984689280391,
+              0.999866724014282,
+              -0.0115922065451741
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true,
+            "face_index": 14
+          },
+          "expected_camera_land": {
+            "ok": true,
+            "actual_camera_xz": [
+              -237.001510620117,
+              -765.872802734375
+            ],
+            "tile": "x_-1__z_-3",
+            "chunk_size_m": 256.0,
+            "expected_object_key": "land:w26767313:x_-1__z_-3",
+            "expected_shape_index": 0,
+            "source_file": "res://generated/world/chunks/x_-1__z_-3.json",
+            "source_sha256": "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc",
+            "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+          },
+          "land_identity_ok": true,
+          "camera_minus_land_y_m": 1.64648771286011,
+          "camera_above_land": true,
+          "physics_counter": 56,
+          "process_counter": 183,
+          "physics_start": 50,
+          "physics_end": 56,
+          "explicit_physics_waits": 6,
+          "player_position_before": [
+            -235.473434448242,
+            2.72488284111023,
+            -760.604309082031
+          ],
+          "player_position_unchanged": true
+        },
+        "framing": {
+          "ok": true,
+          "scope": "facade_with_render_only_window_register",
+          "mesh_labels": [
+            "Mesh",
+            "Mesh"
+          ],
+          "metadata": {
+            "target_bounds_point_count": 16,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              -82.338752746582,
+              283.324615478516
+            ],
+            "target_projected_max_px": [
+              882.720825195312,
+              577.067321777344
+            ],
+            "target_projected_width_ratio": 0.670180257161458,
+            "target_projected_height_ratio": 0.326380784776476,
+            "target_bounds_fully_in_frame": false
+          }
+        },
+        "public_front_framing": {
+          "ok": true,
+          "scope": "Bounded accepted public-front regions, shallow roof strips, no authored canopies, locally inferred entries and local ground; hidden/cropped geometry unclaimed.",
+          "source_runs": [
+            17,
+            18,
+            19,
+            20,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37
+          ],
+          "mesh_labels": [
+            "ObservedPublicRoof",
+            "NearHorizontalSiding",
+            "ProjectedUpperSiding",
+            "ProjectedUpperClosures",
+            "PaleCompleteTrim",
+            "BlueOpaqueGlazing",
+            "DarkOpaqueGlazing",
+            "MaroonClosedDoors",
+            "LocalPrivacyScreens",
+            "PaleDrainageAndFascia",
+            "DoorHardware",
+            "DrapedEntryPaths",
+            "FootwaySurface"
+          ],
+          "metadata": {
+            "target_bounds_point_count": 8568,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              119.356025695801,
+              337.512390136719
+            ],
+            "target_projected_max_px": [
+              922.265075683594,
+              567.312377929688
+            ],
+            "target_projected_width_ratio": 0.55757573445638,
+            "target_projected_height_ratio": 0.255333319769965,
+            "target_bounds_fully_in_frame": true
+          }
+        },
+        "ground_framing": {
+          "ok": false,
+          "scope": "ground_only",
+          "mesh_labels": []
+        },
+        "junction_framing": {},
+        "visibility_ray_endpoint": [
+          -225.561477661133,
+          7.30144453048706,
+          -726.4296875
+        ],
+        "visibility_extension_m": 0.02,
+        "target_first_solid_visible": true,
+        "first_world_solid_los": {
+          "collider_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215670_wall/building_w96215670_wall/Collision",
+          "exact_structure_body": false,
+          "shape_index": 0,
+          "derived_object_key": "building:w96215670:wall",
+          "feature_kind": "building_wall",
+          "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/Buildings/x_-1__z_-3__building_w96215670_wall/building_w96215670_wall/Collision/Shape",
+          "structural_role": "",
+          "hit": true,
+          "position": [
+            -225.567031860352,
+            7.29999971389771,
+            -726.448852539062
+          ],
+          "normal": [
+            -0.953562378883362,
+            0.0,
+            -0.301195591688156
+          ],
+          "excludes_only_player": true,
+          "not_a_stock_contact_claim": true
+        },
+        "source_world_land_and_area_intact": true,
+        "projected_routing": {},
+        "path": "/private/tmp/1205-1226-1397-study-002/1397/images/01-whole-front-baseline.png",
+        "sha256": "23a28f79308917c8906d2a7782a01f364f9da03425eb9f05531bf32e2edb4931",
+        "sample": {
+          "unique_colors": 339,
+          "luminance_range": 0.569741979241371
+        }
+      },
+      {
+        "id": "02-whole-front-candidate",
+        "baseline_exact_source": false,
+        "requested_xz": [
+          -235.473434448242,
+          -760.604309082031
+        ],
+        "aim_target": [
+          -225.567031860352,
+          7.30000019073486,
+          -726.448852539062
+        ],
+        "sun": [
+          -51.9999961853027,
+          -27.9999980926514,
+          0.0
+        ],
+        "player": {
+          "position": [
+            -235.473434448242,
+            2.72488284111023,
+            -760.604309082031
+          ],
+          "depth_m": 19.7252883911133,
+          "station_m": -26.882942199707,
+          "on_floor": true,
+          "slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-1__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -235.477478027344,
+                2.72478246688843,
+                -760.600280761719
+              ],
+              "normal": [
+                0.0114984689280391,
+                0.999866724014282,
+                -0.0115922065451741
+              ]
+            }
+          ],
+          "upward_slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-1__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -235.477478027344,
+                2.72478246688843,
+                -760.600280761719
+              ],
+              "normal": [
+                0.0114984689280391,
+                0.999866724014282,
+                -0.0115922065451741
+              ]
+            }
+          ],
+          "unfiltered_world_solid_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-3",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+            "structural_role": "",
+            "hit": true,
+            "position": [
+              -235.473434448242,
+              2.72468757629395,
+              -760.604309082031
+            ],
+            "normal": [
+              0.0114984689280391,
+              0.999866724014282,
+              -0.0115922065451741
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true
+          }
+        },
+        "camera": [
+          -237.001510620117,
+          4.3276686668396,
+          -765.872802734375
+        ],
+        "camera_forward": [
+          0.27783140540123,
+          0.0722208693623543,
+          0.957911252975464
+        ],
+        "camera_fov": 70.0,
+        "final_camera": {
+          "pivot": [
+            -235.473434448242,
+            4.72488307952881,
+            -760.604309082031
+          ],
+          "camera": [
+            -237.001510620117,
+            4.3276686668396,
+            -765.872802734375
+          ],
+          "camera_near": 0.0799999982118607,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "arm_margin": 0.150000005960464,
+          "arm_collision_mask": 1,
+          "pivot_to_camera_length_m": 5.49998378753662,
+          "segment_hit": {
+            "hit": false,
+            "excludes_only_player": true
+          },
+          "segment_hit_distance_m": 5.49998378753662,
+          "segment_endpoint_allowance_m": 0.04,
+          "segment_clear": true,
+          "land_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-3",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+            "structural_role": "",
+            "hit": true,
+            "position": [
+              -237.001510620117,
+              2.68118095397949,
+              -765.872802734375
+            ],
+            "normal": [
+              0.0114984689280391,
+              0.999866724014282,
+              -0.0115922065451741
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true,
+            "face_index": 14
+          },
+          "expected_camera_land": {
+            "ok": true,
+            "actual_camera_xz": [
+              -237.001510620117,
+              -765.872802734375
+            ],
+            "tile": "x_-1__z_-3",
+            "chunk_size_m": 256.0,
+            "expected_object_key": "land:w26767313:x_-1__z_-3",
+            "expected_shape_index": 0,
+            "source_file": "res://generated/world/chunks/x_-1__z_-3.json",
+            "source_sha256": "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc",
+            "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+          },
+          "land_identity_ok": true,
+          "camera_minus_land_y_m": 1.64648771286011,
+          "camera_above_land": true,
+          "physics_counter": 102,
+          "process_counter": 388,
+          "physics_start": 96,
+          "physics_end": 102,
+          "explicit_physics_waits": 6,
+          "player_position_before": [
+            -235.473434448242,
+            2.72488284111023,
+            -760.604309082031
+          ],
+          "player_position_unchanged": true
+        },
+        "framing": {
+          "ok": true,
+          "scope": "facade_with_render_only_window_register",
+          "mesh_labels": [
+            "ExactOriginalWallSurfaces",
+            "ExactSourceNeutralRoof",
+            "ObservedPublicRoof",
+            "NearHorizontalSiding",
+            "ProjectedUpperSiding",
+            "ProjectedUpperClosures",
+            "PaleCompleteTrim",
+            "BlueOpaqueGlazing",
+            "DarkOpaqueGlazing",
+            "MaroonClosedDoors",
+            "LocalPrivacyScreens",
+            "PaleDrainageAndFascia",
+            "DoorHardware"
+          ],
+          "metadata": {
+            "target_bounds_point_count": 104,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              -82.338752746582,
+              260.755798339844
+            ],
+            "target_projected_max_px": [
+              885.139343261719,
+              577.101318359375
+            ],
+            "target_projected_width_ratio": 0.671859783596463,
+            "target_projected_height_ratio": 0.351495022243924,
+            "target_bounds_fully_in_frame": false
+          }
+        },
+        "public_front_framing": {
+          "ok": true,
+          "scope": "Bounded accepted public-front regions, shallow roof strips, no authored canopies, locally inferred entries and local ground; hidden/cropped geometry unclaimed.",
+          "source_runs": [
+            17,
+            18,
+            19,
+            20,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37
+          ],
+          "mesh_labels": [
+            "ObservedPublicRoof",
+            "NearHorizontalSiding",
+            "ProjectedUpperSiding",
+            "ProjectedUpperClosures",
+            "PaleCompleteTrim",
+            "BlueOpaqueGlazing",
+            "DarkOpaqueGlazing",
+            "MaroonClosedDoors",
+            "LocalPrivacyScreens",
+            "PaleDrainageAndFascia",
+            "DoorHardware",
+            "DrapedEntryPaths",
+            "FootwaySurface"
+          ],
+          "metadata": {
+            "target_bounds_point_count": 8568,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              119.356025695801,
+              337.512390136719
+            ],
+            "target_projected_max_px": [
+              922.265075683594,
+              567.312377929688
+            ],
+            "target_projected_width_ratio": 0.55757573445638,
+            "target_projected_height_ratio": 0.255333319769965,
+            "target_bounds_fully_in_frame": true
+          }
+        },
+        "ground_framing": {
+          "ok": true,
+          "scope": "ground_only",
+          "mesh_labels": [
+            "DrapedEntryPaths",
+            "FootwaySurface"
+          ],
+          "metadata": {
+            "target_bounds_point_count": 16,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              194.612503051758,
+              508.103546142578
+            ],
+            "target_projected_max_px": [
+              995.220703125,
+              598.747436523438
+            ],
+            "target_projected_width_ratio": 0.555977927313911,
+            "target_projected_height_ratio": 0.10071543375651,
+            "target_bounds_fully_in_frame": true
+          }
+        },
+        "junction_framing": {},
+        "visibility_ray_endpoint": [
+          -225.561477661133,
+          7.30144453048706,
+          -726.4296875
+        ],
+        "visibility_extension_m": 0.02,
+        "target_first_solid_visible": true,
+        "first_world_solid_los": {
+          "collider_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/PhysicalDetails_NoSprayReceiver",
+          "exact_structure_body": true,
+          "shape_index": 3,
+          "derived_object_key": "prototype:building:w96215670:wall",
+          "feature_kind": "bounded_facade_detail",
+          "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/PhysicalDetails_NoSprayReceiver/BlueOpaqueGlazing",
+          "structural_role": "BlueOpaqueGlazing",
+          "hit": true,
+          "position": [
+            -225.631301879883,
+            7.28329467773438,
+            -726.67041015625
+          ],
+          "normal": [
+            -0.953563272953033,
+            0.0,
+            -0.301192909479141
+          ],
+          "excludes_only_player": true,
+          "not_a_stock_contact_claim": true
+        },
+        "source_world_land_and_area_intact": true,
+        "projected_routing": {
+          "scope": "Two read-only stock-mask rays per target field; no tag placement or motion claim",
+          "rows": [
+            {
+              "frame": "near-1",
+              "kind": "eligible_front",
+              "from": [
+                -218.912292480469,
+                7.27500009536743,
+                -745.233093261719
+              ],
+              "to": [
+                -217.866134643555,
+                7.27500009536743,
+                -744.893188476562
+              ],
+              "physics_mask": 4,
+              "hit": {
+                "collider_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/ProjectedUpperWallReceiver",
+                "exact_structure_body": false,
+                "shape_index": 0,
+                "derived_object_key": "building:w96215670:wall",
+                "feature_kind": "",
+                "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/ProjectedUpperWallReceiver/ProjectedUpperSiding",
+                "structural_role": "",
+                "hit": true,
+                "position": [
+                  -217.961212158203,
+                  7.27500009536743,
+                  -744.924072265625
+                ],
+                "normal": [
+                  -0.951055228710175,
+                  0.0,
+                  -0.309021055698395
+                ],
+                "excludes_only_player": true,
+                "not_a_stock_contact_claim": true
+              },
+              "resolved_metadata": {
+                "receiver_kind": "building_wall",
+                "opaque": true,
+                "derived_object_key": "building:w96215670:wall",
+                "source_keys": [
+                  "w96215670"
+                ]
+              },
+              "eligible": true,
+              "expected_eligible": true,
+              "ok": true
+            },
+            {
+              "frame": "near-1",
+              "kind": "underside",
+              "from": [
+                -217.932708740234,
+                5.15000009536743,
+                -744.914794921875
+              ],
+              "to": [
+                -217.932708740234,
+                5.75,
+                -744.914794921875
+              ],
+              "physics_mask": 4,
+              "hit": {
+                "collider_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/PhysicalDetails_NoSprayReceiver",
+                "exact_structure_body": true,
+                "shape_index": 2,
+                "derived_object_key": "prototype:building:w96215670:wall",
+                "feature_kind": "bounded_facade_detail",
+                "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/PhysicalDetails_NoSprayReceiver/PaleCompleteTrim",
+                "structural_role": "PaleCompleteTrim",
+                "hit": true,
+                "position": [
+                  -217.932708740234,
+                  5.59999990463257,
+                  -744.914794921875
+                ],
+                "normal": [
+                  0.0,
+                  -1.0,
+                  0.0
+                ],
+                "excludes_only_player": true,
+                "not_a_stock_contact_claim": true
+              },
+              "resolved_metadata": {
+                "receiver_kind": "none",
+                "opaque": null,
+                "derived_object_key": "prototype:building:w96215670:wall",
+                "source_keys": [
+                  "w96215670"
+                ]
+              },
+              "eligible": false,
+              "expected_eligible": false,
+              "ok": true
+            },
+            {
+              "frame": "near-2",
+              "kind": "eligible_front",
+              "from": [
+                -224.673843383789,
+                7.27500009536743,
+                -732.593994140625
+              ],
+              "to": [
+                -223.627868652344,
+                7.27500009536743,
+                -732.253479003906
+              ],
+              "physics_mask": 4,
+              "hit": {
+                "collider_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/ProjectedUpperWallReceiver",
+                "exact_structure_body": false,
+                "shape_index": 0,
+                "derived_object_key": "building:w96215670:wall",
+                "feature_kind": "",
+                "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/ProjectedUpperWallReceiver/ProjectedUpperSiding",
+                "structural_role": "",
+                "hit": true,
+                "position": [
+                  -223.722961425781,
+                  7.27500009536743,
+                  -732.284423828125
+                ],
+                "normal": [
+                  -0.950880110263824,
+                  0.0,
+                  -0.309559404850006
+                ],
+                "excludes_only_player": true,
+                "not_a_stock_contact_claim": true
+              },
+              "resolved_metadata": {
+                "receiver_kind": "building_wall",
+                "opaque": true,
+                "derived_object_key": "building:w96215670:wall",
+                "source_keys": [
+                  "w96215670"
+                ]
+              },
+              "eligible": true,
+              "expected_eligible": true,
+              "ok": true
+            },
+            {
+              "frame": "near-2",
+              "kind": "underside",
+              "from": [
+                -223.694442749023,
+                5.15000009536743,
+                -732.275146484375
+              ],
+              "to": [
+                -223.694442749023,
+                5.75,
+                -732.275146484375
+              ],
+              "physics_mask": 4,
+              "hit": {
+                "collider_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/PhysicalDetails_NoSprayReceiver",
+                "exact_structure_body": true,
+                "shape_index": 2,
+                "derived_object_key": "prototype:building:w96215670:wall",
+                "feature_kind": "bounded_facade_detail",
+                "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/PhysicalDetails_NoSprayReceiver/PaleCompleteTrim",
+                "structural_role": "PaleCompleteTrim",
+                "hit": true,
+                "position": [
+                  -223.694442749023,
+                  5.59999847412109,
+                  -732.275146484375
+                ],
+                "normal": [
+                  0.0,
+                  -1.0,
+                  0.0
+                ],
+                "excludes_only_player": true,
+                "not_a_stock_contact_claim": true
+              },
+              "resolved_metadata": {
+                "receiver_kind": "none",
+                "opaque": null,
+                "derived_object_key": "prototype:building:w96215670:wall",
+                "source_keys": [
+                  "w96215670"
+                ]
+              },
+              "eligible": false,
+              "expected_eligible": false,
+              "ok": true
+            },
+            {
+              "frame": "near-3",
+              "kind": "eligible_front",
+              "from": [
+                -227.505157470703,
+                7.27500009536743,
+                -718.888671875
+              ],
+              "to": [
+                -226.46012878418,
+                7.27500009536743,
+                -718.545349121094
+              ],
+              "physics_mask": 4,
+              "hit": {
+                "collider_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/ProjectedUpperWallReceiver",
+                "exact_structure_body": false,
+                "shape_index": 0,
+                "derived_object_key": "building:w96215670:wall",
+                "feature_kind": "",
+                "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/ProjectedUpperWallReceiver/ProjectedUpperSiding",
+                "structural_role": "",
+                "hit": true,
+                "position": [
+                  -226.555130004883,
+                  7.27500009536743,
+                  -718.576538085938
+                ],
+                "normal": [
+                  -0.950029253959656,
+                  0.0,
+                  -0.312160938978195
+                ],
+                "excludes_only_player": true,
+                "not_a_stock_contact_claim": true
+              },
+              "resolved_metadata": {
+                "receiver_kind": "building_wall",
+                "opaque": true,
+                "derived_object_key": "building:w96215670:wall",
+                "source_keys": [
+                  "w96215670"
+                ]
+              },
+              "eligible": true,
+              "expected_eligible": true,
+              "ok": true
+            },
+            {
+              "frame": "near-3",
+              "kind": "underside",
+              "from": [
+                -226.526626586914,
+                5.15000009536743,
+                -718.567138671875
+              ],
+              "to": [
+                -226.526626586914,
+                5.75,
+                -718.567138671875
+              ],
+              "physics_mask": 4,
+              "hit": {
+                "collider_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/PhysicalDetails_NoSprayReceiver",
+                "exact_structure_body": true,
+                "shape_index": 2,
+                "derived_object_key": "prototype:building:w96215670:wall",
+                "feature_kind": "bounded_facade_detail",
+                "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/PhysicalDetails_NoSprayReceiver/PaleCompleteTrim",
+                "structural_role": "PaleCompleteTrim",
+                "hit": true,
+                "position": [
+                  -226.526626586914,
+                  5.59999895095825,
+                  -718.567138671875
+                ],
+                "normal": [
+                  0.0,
+                  -1.0,
+                  0.0
+                ],
+                "excludes_only_player": true,
+                "not_a_stock_contact_claim": true
+              },
+              "resolved_metadata": {
+                "receiver_kind": "none",
+                "opaque": null,
+                "derived_object_key": "prototype:building:w96215670:wall",
+                "source_keys": [
+                  "w96215670"
+                ]
+              },
+              "eligible": false,
+              "expected_eligible": false,
+              "ok": true
+            },
+            {
+              "frame": "near-4",
+              "kind": "eligible_front",
+              "from": [
+                -233.278091430664,
+                7.27500009536743,
+                -705.983215332031
+              ],
+              "to": [
+                -232.232009887695,
+                7.27500009536743,
+                -705.643005371094
+              ],
+              "physics_mask": 4,
+              "hit": {
+                "collider_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/ProjectedUpperWallReceiver",
+                "exact_structure_body": false,
+                "shape_index": 0,
+                "derived_object_key": "building:w96215670:wall",
+                "feature_kind": "",
+                "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/ProjectedUpperWallReceiver/ProjectedUpperSiding",
+                "structural_role": "",
+                "hit": true,
+                "position": [
+                  -232.327102661133,
+                  7.27500009536743,
+                  -705.673950195312
+                ],
+                "normal": [
+                  -0.950981378555298,
+                  0.0,
+                  -0.309248179197311
+                ],
+                "excludes_only_player": true,
+                "not_a_stock_contact_claim": true
+              },
+              "resolved_metadata": {
+                "receiver_kind": "building_wall",
+                "opaque": true,
+                "derived_object_key": "building:w96215670:wall",
+                "source_keys": [
+                  "w96215670"
+                ]
+              },
+              "eligible": true,
+              "expected_eligible": true,
+              "ok": true
+            },
+            {
+              "frame": "near-4",
+              "kind": "underside",
+              "from": [
+                -232.298583984375,
+                5.15000009536743,
+                -705.664672851562
+              ],
+              "to": [
+                -232.298583984375,
+                5.75,
+                -705.664672851562
+              ],
+              "physics_mask": 4,
+              "hit": {
+                "collider_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/PhysicalDetails_NoSprayReceiver",
+                "exact_structure_body": true,
+                "shape_index": 2,
+                "derived_object_key": "prototype:building:w96215670:wall",
+                "feature_kind": "bounded_facade_detail",
+                "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/PhysicalDetails_NoSprayReceiver/PaleCompleteTrim",
+                "structural_role": "PaleCompleteTrim",
+                "hit": true,
+                "position": [
+                  -232.298583984375,
+                  5.60000133514404,
+                  -705.664672851562
+                ],
+                "normal": [
+                  0.0,
+                  -1.0,
+                  0.0
+                ],
+                "excludes_only_player": true,
+                "not_a_stock_contact_claim": true
+              },
+              "resolved_metadata": {
+                "receiver_kind": "none",
+                "opaque": null,
+                "derived_object_key": "prototype:building:w96215670:wall",
+                "source_keys": [
+                  "w96215670"
+                ]
+              },
+              "eligible": false,
+              "expected_eligible": false,
+              "ok": true
+            }
+          ]
+        },
+        "path": "/private/tmp/1205-1226-1397-study-002/1397/images/02-whole-front-candidate.png",
+        "sha256": "b936feb2229719d791e8d9dc98f2bb1bfbb1d416a12040d156c33d20c3fef905",
+        "sample": {
+          "unique_colors": 339,
+          "luminance_range": 0.584531739354134
+        }
+      },
+      {
+        "id": "03-roof-entry-candidate",
+        "baseline_exact_source": false,
+        "requested_xz": [
+          -238.872665405273,
+          -730.780578613281
+        ],
+        "aim_target": [
+          -225.567031860352,
+          7.30000019073486,
+          -726.448852539062
+        ],
+        "sun": [
+          -25.9999980926514,
+          125.999992370605,
+          0.0
+        ],
+        "player": {
+          "position": [
+            -238.872665405273,
+            2.88344073295593,
+            -730.780578613281
+          ],
+          "depth_m": 13.9932670593262,
+          "station_m": 2.57967972755432,
+          "on_floor": true,
+          "slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-1__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -238.878860473633,
+                2.88340210914612,
+                -730.784606933594
+              ],
+              "normal": [
+                0.0176523216068745,
+                0.999777376651764,
+                0.0115599296987057
+              ]
+            }
+          ],
+          "upward_slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-1__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -238.878860473633,
+                2.88340210914612,
+                -730.784606933594
+              ],
+              "normal": [
+                0.0176523216068745,
+                0.999777376651764,
+                0.0115599296987057
+              ]
+            }
+          ],
+          "unfiltered_world_solid_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-3",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+            "structural_role": "",
+            "hit": true,
+            "position": [
+              -238.872665405273,
+              2.88324546813965,
+              -730.780578613281
+            ],
+            "normal": [
+              0.0176523216068745,
+              0.999777376651764,
+              0.0115599296987057
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true
+          }
+        },
+        "camera": [
+          -244.026214599609,
+          3.94745278358459,
+          -732.458435058594
+        ],
+        "camera_forward": [
+          0.937008380889893,
+          0.170178860425949,
+          0.305048555135727
+        ],
+        "camera_fov": 70.0,
+        "final_camera": {
+          "pivot": [
+            -238.872665405273,
+            4.88344097137451,
+            -730.780578613281
+          ],
+          "camera": [
+            -244.026214599609,
+            3.94745278358459,
+            -732.458435058594
+          ],
+          "camera_near": 0.0799999982118607,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "arm_margin": 0.150000005960464,
+          "arm_collision_mask": 1,
+          "pivot_to_camera_length_m": 5.50003147125244,
+          "segment_hit": {
+            "hit": false,
+            "excludes_only_player": true
+          },
+          "segment_hit_distance_m": 5.50003147125244,
+          "segment_endpoint_allowance_m": 0.04,
+          "segment_clear": true,
+          "land_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-3",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+            "structural_role": "",
+            "hit": true,
+            "position": [
+              -244.026214599609,
+              2.99363708496094,
+              -732.458435058594
+            ],
+            "normal": [
+              0.0176523216068745,
+              0.999777376651764,
+              0.0115599296987057
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true,
+            "face_index": 12
+          },
+          "expected_camera_land": {
+            "ok": true,
+            "actual_camera_xz": [
+              -244.026214599609,
+              -732.458435058594
+            ],
+            "tile": "x_-1__z_-3",
+            "chunk_size_m": 256.0,
+            "expected_object_key": "land:w26767313:x_-1__z_-3",
+            "expected_shape_index": 0,
+            "source_file": "res://generated/world/chunks/x_-1__z_-3.json",
+            "source_sha256": "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc",
+            "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+          },
+          "land_identity_ok": true,
+          "camera_minus_land_y_m": 0.953815698623657,
+          "camera_above_land": true,
+          "physics_counter": 147,
+          "process_counter": 634,
+          "physics_start": 141,
+          "physics_end": 147,
+          "explicit_physics_waits": 6,
+          "player_position_before": [
+            -238.872665405273,
+            2.88344073295593,
+            -730.780578613281
+          ],
+          "player_position_unchanged": true
+        },
+        "framing": {
+          "ok": true,
+          "scope": "facade_with_render_only_window_register",
+          "mesh_labels": [
+            "ExactOriginalWallSurfaces",
+            "ExactSourceNeutralRoof",
+            "ObservedPublicRoof",
+            "NearHorizontalSiding",
+            "ProjectedUpperSiding",
+            "ProjectedUpperClosures",
+            "PaleCompleteTrim",
+            "BlueOpaqueGlazing",
+            "DarkOpaqueGlazing",
+            "MaroonClosedDoors",
+            "LocalPrivacyScreens",
+            "PaleDrainageAndFascia",
+            "DoorHardware"
+          ],
+          "metadata": {
+            "target_bounds_point_count": 104,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              -5545.8427734375,
+              -476.192077636719
+            ],
+            "target_projected_max_px": [
+              1756.15991210938,
+              917.113403320312
+            ],
+            "target_projected_width_ratio": 5.07083536783854,
+            "target_projected_height_ratio": 1.54811713324653,
+            "target_bounds_fully_in_frame": false
+          }
+        },
+        "public_front_framing": {},
+        "ground_framing": {
+          "ok": true,
+          "scope": "ground_only",
+          "mesh_labels": [
+            "DrapedEntryPaths",
+            "FootwaySurface"
+          ],
+          "metadata": {
+            "target_bounds_point_count": 16,
+            "target_bounds_points_behind_camera": 2,
+            "target_projected_min_px": [
+              -412.266418457031,
+              577.824401855469
+            ],
+            "target_projected_max_px": [
+              1972.45837402344,
+              671.47021484375
+            ],
+            "target_projected_width_ratio": 1.65605892605252,
+            "target_projected_height_ratio": 0.104050903320312,
+            "target_bounds_fully_in_frame": false
+          }
+        },
+        "junction_framing": {},
+        "visibility_ray_endpoint": [
+          -225.548294067383,
+          7.30340385437012,
+          -726.442749023438
+        ],
+        "visibility_extension_m": 0.02,
+        "target_first_solid_visible": true,
+        "first_world_solid_los": {
+          "collider_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/PhysicalDetails_NoSprayReceiver",
+          "exact_structure_body": true,
+          "shape_index": 2,
+          "derived_object_key": "prototype:building:w96215670:wall",
+          "feature_kind": "bounded_facade_detail",
+          "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/PhysicalDetails_NoSprayReceiver/PaleCompleteTrim",
+          "structural_role": "PaleCompleteTrim",
+          "hit": true,
+          "position": [
+            -225.751525878906,
+            7.26649236679077,
+            -726.508911132812
+          ],
+          "normal": [
+            -0.953595161437988,
+            0.0,
+            -0.301091909408569
+          ],
+          "excludes_only_player": true,
+          "not_a_stock_contact_claim": true
+        },
+        "source_world_land_and_area_intact": true,
+        "projected_routing": {},
+        "path": "/private/tmp/1205-1226-1397-study-002/1397/images/03-roof-entry-candidate.png",
+        "sha256": "cc4e58ceca47d0c7f1567f4768ad5077871a0e25ff7dc0d6b2c42d1ff97c9a11",
+        "sample": {
+          "unique_colors": 227,
+          "luminance_range": 0.773917689919472
+        }
+      },
+      {
+        "id": "04-door-path-footway-junction",
+        "baseline_exact_source": false,
+        "requested_xz": [
+          -231.945526123047,
+          -729.445983886719
+        ],
+        "aim_target": [
+          -224.4736328125,
+          4.13847827911377,
+          -729.852966308594
+        ],
+        "sun": [
+          -51.9999961853027,
+          -27.9999980926514,
+          0.0
+        ],
+        "player": {
+          "position": [
+            -231.945526123047,
+            2.74570345878601,
+            -729.445983886719
+          ],
+          "depth_m": 6.94827508926392,
+          "station_m": 4.25684976577759,
+          "on_floor": true,
+          "slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-1__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -231.951721191406,
+                2.74566340446472,
+                -729.450012207031
+              ],
+              "normal": [
+                0.0176523216068745,
+                0.999777376651764,
+                0.0115599296987057
+              ]
+            }
+          ],
+          "upward_slide_contacts": [
+            {
+              "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+              "exact_structure_body": false,
+              "shape_index": 0,
+              "derived_object_key": "land:w26767313:x_-1__z_-3",
+              "feature_kind": "land_ground",
+              "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+              "structural_role": "",
+              "position": [
+                -231.951721191406,
+                2.74566340446472,
+                -729.450012207031
+              ],
+              "normal": [
+                0.0176523216068745,
+                0.999777376651764,
+                0.0115599296987057
+              ]
+            }
+          ],
+          "unfiltered_world_solid_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-3",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+            "structural_role": "",
+            "hit": true,
+            "position": [
+              -231.945526123047,
+              2.74550819396973,
+              -729.445983886719
+            ],
+            "normal": [
+              0.0176523216068745,
+              0.999777376651764,
+              0.0115599296987057
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true
+          }
+        },
+        "camera": [
+          -237.419372558594,
+          5.19055032730103,
+          -729.147827148438
+        ],
+        "camera_forward": [
+          0.995248436927795,
+          -0.0808817371726036,
+          -0.0542096309363842
+        ],
+        "camera_fov": 70.0,
+        "final_camera": {
+          "pivot": [
+            -231.945526123047,
+            4.74570369720459,
+            -729.445983886719
+          ],
+          "camera": [
+            -237.419372558594,
+            5.19055032730103,
+            -729.147827148438
+          ],
+          "camera_near": 0.0799999982118607,
+          "arm_length": 5.5,
+          "arm_hit_length": 5.5,
+          "arm_margin": 0.150000005960464,
+          "arm_collision_mask": 1,
+          "pivot_to_camera_length_m": 5.49998044967651,
+          "segment_hit": {
+            "hit": false,
+            "excludes_only_player": true
+          },
+          "segment_hit_distance_m": 5.49998044967651,
+          "segment_endpoint_allowance_m": 0.04,
+          "segment_clear": true,
+          "land_ray": {
+            "collider_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision",
+            "exact_structure_body": false,
+            "shape_index": 0,
+            "derived_object_key": "land:w26767313:x_-1__z_-3",
+            "feature_kind": "land_ground",
+            "shape_node_path": "/root/Main/WorldRoot/PlayableWorld/GroundAndAreas/x_-1__z_-3__land_w26767313_x_-1__z_-3/land_w26767313_x_-1__z_-3/Collision/Shape",
+            "structural_role": "",
+            "hit": true,
+            "position": [
+              -237.419372558594,
+              2.83870506286621,
+              -729.147827148438
+            ],
+            "normal": [
+              0.0176523216068745,
+              0.999777376651764,
+              0.0115599296987057
+            ],
+            "excludes_only_player": true,
+            "not_a_stock_contact_claim": true,
+            "face_index": 12
+          },
+          "expected_camera_land": {
+            "ok": true,
+            "actual_camera_xz": [
+              -237.419372558594,
+              -729.147827148438
+            ],
+            "tile": "x_-1__z_-3",
+            "chunk_size_m": 256.0,
+            "expected_object_key": "land:w26767313:x_-1__z_-3",
+            "expected_shape_index": 0,
+            "source_file": "res://generated/world/chunks/x_-1__z_-3.json",
+            "source_sha256": "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc",
+            "manifest_sha256": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
+          },
+          "land_identity_ok": true,
+          "camera_minus_land_y_m": 2.35184526443481,
+          "camera_above_land": true,
+          "physics_counter": 192,
+          "process_counter": 855,
+          "physics_start": 186,
+          "physics_end": 192,
+          "explicit_physics_waits": 6,
+          "player_position_before": [
+            -231.945526123047,
+            2.74570345878601,
+            -729.445983886719
+          ],
+          "player_position_unchanged": true
+        },
+        "framing": {
+          "ok": true,
+          "scope": "facade_with_render_only_window_register",
+          "mesh_labels": [
+            "ExactOriginalWallSurfaces",
+            "ExactSourceNeutralRoof",
+            "ObservedPublicRoof",
+            "NearHorizontalSiding",
+            "ProjectedUpperSiding",
+            "ProjectedUpperClosures",
+            "PaleCompleteTrim",
+            "BlueOpaqueGlazing",
+            "DarkOpaqueGlazing",
+            "MaroonClosedDoors",
+            "LocalPrivacyScreens",
+            "PaleDrainageAndFascia",
+            "DoorHardware"
+          ],
+          "metadata": {
+            "target_bounds_point_count": 104,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              -3544.35913085938,
+              -4533.875
+            ],
+            "target_projected_max_px": [
+              38039.52734375,
+              1882.3193359375
+            ],
+            "target_projected_width_ratio": 28.8776991102431,
+            "target_projected_height_ratio": 7.12910481770833,
+            "target_bounds_fully_in_frame": false
+          }
+        },
+        "public_front_framing": {},
+        "ground_framing": {
+          "ok": true,
+          "scope": "ground_only",
+          "mesh_labels": [
+            "DrapedEntryPaths",
+            "FootwaySurface"
+          ],
+          "metadata": {
+            "target_bounds_point_count": 16,
+            "target_bounds_points_behind_camera": 2,
+            "target_projected_min_px": [
+              -29356.5625,
+              468.506866455078
+            ],
+            "target_projected_max_px": [
+              19838.53515625,
+              3321.296875
+            ],
+            "target_projected_width_ratio": 34.1632622612847,
+            "target_projected_height_ratio": 3.16976671006944,
+            "target_bounds_fully_in_frame": false
+          }
+        },
+        "junction_framing": {
+          "ok": true,
+          "scope": "Actual near-2 first complete door/trim and its approach, bounded footway junction in the explicit 2.2m station strip. Original road and surrounding ground stay unchanged.",
+          "station_interval_m": [
+            6.14436340391177,
+            8.34436340391177
+          ],
+          "depth_interval_m": [
+            -0.05,
+            4.4
+          ],
+          "height_max_m": 5.03847821812245,
+          "mesh_labels": [
+            "MaroonClosedDoors",
+            "PaleCompleteTrim",
+            "DrapedEntryPaths",
+            "FootwaySurface"
+          ],
+          "metadata": {
+            "target_bounds_point_count": 256,
+            "target_bounds_points_behind_camera": 0,
+            "target_projected_min_px": [
+              434.86279296875,
+              407.180267333984
+            ],
+            "target_projected_max_px": [
+              644.042236328125,
+              563.559631347656
+            ],
+            "target_projected_width_ratio": 0.145263502332899,
+            "target_projected_height_ratio": 0.17375484890408,
+            "target_bounds_fully_in_frame": true
+          }
+        },
+        "visibility_ray_endpoint": [
+          -224.453735351562,
+          4.13686084747314,
+          -729.854064941406
+        ],
+        "visibility_extension_m": 0.02,
+        "target_first_solid_visible": true,
+        "first_world_solid_los": {
+          "collider_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/OriginalWallRecord/Collision",
+          "exact_structure_body": false,
+          "shape_index": 0,
+          "derived_object_key": "building:w96215670:wall",
+          "feature_kind": "building_wall",
+          "shape_node_path": "/root/Main/WorldRoot/CaptureOnlyGateview1397Study/OriginalWallRecord/Collision/Shape",
+          "structural_role": "",
+          "hit": true,
+          "position": [
+            -224.4736328125,
+            4.13847780227661,
+            -729.852966308594
+          ],
+          "normal": [
+            -0.947399914264679,
+            0.0,
+            -0.320052295923233
+          ],
+          "excludes_only_player": true,
+          "not_a_stock_contact_claim": true
+        },
+        "source_world_land_and_area_intact": true,
+        "projected_routing": {},
+        "path": "/private/tmp/1205-1226-1397-study-002/1397/images/04-door-path-footway-junction.png",
+        "sha256": "ebc2a66bbc7b0fc8f2b6a63514269427afdc30a7c619d10254e1da3a47b56287",
+        "sample": {
+          "unique_colors": 344,
+          "luminance_range": 0.616472959518433
+        }
+      }
+    ],
+    "limits": [
+      "Frozen1246/current1397 Gateview identity is physical-building:w96215670; address labels do not replace source association",
+      "Study/source capture authority31/213 at915; current preparation baseline32/213 atfdfc100",
+      "Three separately placed finite routes/returns,663 actual rows; not traversal between setups",
+      "954-frameAVI retained externally;9original payload samples,terminalblueframe supplies no endpoint evidence; no continuous playback claim",
+      "Three actual stock callbacks:ProjectedUpperSiding placed one;blueglazing/paletrim rejected",
+      "Grounded roof callback and jetpack unperformed; no roof landing/walk claim",
+      "Production-inferencecadence/scale; hiddenleftlowerfrontageprotected,tinyrunscontinuity-only",
+      "Liveattachment/current32equivalence,candidatepackageandseventh pending; no newcredit"
+    ]
+  }
+}

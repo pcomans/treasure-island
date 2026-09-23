@@ -5,21 +5,20 @@ place a predefined spray tag on eligible exterior walls. It uses the frozen OSM
 layout and tracked generated world; cars, interiors, missions, multiplayer, and
 public distribution are outside this milestone.
 
-## Paused work checkpoint
-
-Main now preserves unfinished 1397/1226 candidate and1237/1229 study work.
-The owner paused work due to inference cost; no new acceptance or release is claimed.
-The last accepted release remains **32/213** at `fdfc100`; the current main source is a paused WIP checkpoint. See the [resume handoff](discovery/checkpoints/paused-2026-09-23/README.md) for completed stages, mechanics HOLD and local-only evidence.
-
 ## Current source and release
 
-The current private release recognizes **32 of213** physical buildings, adding
-1240 Northpoint to the prior31. All213 identities remain; **181 buildings are not evaluated**.
+The current private release recognizes **34 of 213** physical buildings, adding
+1397 Gateview and 1226 Bayside to the prior 32. All 213 identities remain;
+**179 buildings are not evaluated**.
 
-The stable macOS app path is `build/northern-1240-exact-current-001/Treasure Island First Playable.app`.
-The exact seven-file app passed independent package/release review and ROOT acceptance.
-The [release record](evidence/first-playable/northern-1240-current-release-2026-09-22-001/README.md) binds its PCK, scope and publication transfer plan.
-Prior releases and the candidate31 app remain unchanged. All213 accepted units remain the goal.
+The stable macOS app is `build/northern-1397-1226-exact-current-001/Treasure Island First Playable.app`.
+Its [release record](evidence/first-playable/northern-1397-1226-current-release-2026-09-23-001/README.md)
+binds the exact app, source and independent review. The [accepted-building snapshots](evidence/building-snapshots/accepted-34-2026-09-23/README.md)
+show the 34 accepted IDs in the current source.
+
+The [paused checkpoint](discovery/checkpoints/paused-2026-09-23/README.md) is historical:
+1397/1226 are now complete; 1237/1229 remain unfinished and preserved. Mersea is deferred.
+The recurring reminder remains paused. This bounded delivery ends after commit and push.
 
 ## Play on another Mac
 
@@ -84,8 +83,9 @@ These checks consume declared gameplay evidence as well as source. Preserve the
 current23 checkpoint's previously restored41 historical1201/1238 images and its52
 new-unit images. The prior26 batch added60 declared gameplay images for1222/1227/1202; current28 adds34 for1234/1215,
 including honestly labeled earlier held studies and sparse movie payloads.
-This three-unit batch adds 54 selected gameplay images for 1232, 1241 and
+The prior three-unit batch added 54 selected gameplay images for 1232, 1241 and
 1221, preserving each original study/capture label and sparse movie limit.
+The current 1397/1226 packet bindings are in the [current release proof](evidence/first-playable/northern-1397-1226-current-release-2026-09-23-001/release-closure.json).
 Private dated Street View pixels and full AVI files stay outside Git/export.
 Do not bypass missing-file checks or rebuild authority from incomplete evidence;
 the retained copy plan binds every selected image and source hash.

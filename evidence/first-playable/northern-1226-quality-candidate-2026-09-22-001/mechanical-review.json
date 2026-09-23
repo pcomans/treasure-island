@@ -1,0 +1,90 @@
+{
+  "schema_version": "ti.unit-derived-evidence/1",
+  "physical_unit_id": "physical-building:w96215685",
+  "label": "Independent1226 source and combined corrected-route/actual-spray decisions",
+  "origins": [
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-band-visibility-003/independent-actual-focused-003/REVIEW.md",
+      "path_base": "/",
+      "sha256": "110c8b36d1d41805ef9602a696aea820e6c78cf14f6f9daf1b74e12b9ee64f5f",
+      "bytes": 2648,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-band-visibility-003/independent-actual-focused-003/REVIEW.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-band-visibility-003/ACTUAL-NATIVE-REVIEW-support_event_diagnosis.md",
+      "path_base": "/",
+      "sha256": "15e3162f52ed8463a42685f51c685245cab3c54b311432fbfcbc4667a213839e",
+      "bytes": 2417,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-band-visibility-003/ACTUAL-NATIVE-REVIEW-support_event_diagnosis.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-band-visibility-003/visual-review-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "c7e9f1f0c79f6bbd20ff4e3c7e697f809c416a94d11f8d2e867d7aef04dcf329",
+      "bytes": 2706,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1205-1226-band-visibility-003/visual-review-001/REVIEW.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-mechanics-continuation-001/independent-actual-001/ACTUAL-HOLD.md",
+      "path_base": "/",
+      "sha256": "007600a89cb1c5b7d0595a789ec36ee252b250b590aed35cb3ccf7199a417052",
+      "bytes": 5453,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-mechanics-continuation-001/independent-actual-001/ACTUAL-HOLD.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/independent-readiness-001/READINESS.md",
+      "path_base": "/",
+      "sha256": "9e96a624ce20f873f0b1280772866870bd9347ad8f652780a5260a9f01b37107",
+      "bytes": 3460,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/independent-readiness-001/READINESS.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/independent-actual-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "2a59c4f678e9774a3fd25d26c5fb8a2729fa89c31f2bd90f7f27892ede3e579f",
+      "bytes": 3264,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/independent-actual-001/REVIEW.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/visual-review-001/REVIEW.md",
+      "path_base": "/",
+      "sha256": "21f204238c682af8cd192486aa1fd093f5b21a2e84bc9041b2cea7fbf0939754",
+      "bytes": 3268,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/visual-review-001/REVIEW.md",
+      "copied": false
+    },
+    {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/DERIVED_ROUTE_QUALIFICATION.json",
+      "path_base": "/",
+      "sha256": "03c326aa0eab46a496295e52871994185e48962910eab877719e5faf95232e69",
+      "bytes": 4029,
+      "original_locator": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/northern-canopy-free-family-pilot-001/1226-spray-continuation-001/DERIVED_ROUTE_QUALIFICATION.json",
+      "copied": false
+    }
+  ],
+  "data": {
+    "status": "SCOPED_SOURCE_AND_MECHANICS_PASS",
+    "source_H_exact": true,
+    "mechanics": "925 retained actual rows separately DERIVED qualify; three later actual callbacks PASS; original raw HOLD immutable",
+    "candidate_live_equivalence": "PENDING",
+    "package_role_checks": "PENDING",
+    "activation_limit": "Discrete setup/route boundary observations only; not continuous every-frame active-state proof",
+    "scope": [
+      "Physical1226 Bayside source w96215685; March2025 F street-view first-hit association, not nearby address UI identity.",
+      "H capture source at915f8a2595cb3184fba7008b97ff73f9bc028117 authority31/213; prospective live baseline fdfc100704200e6570b654a4e6a4fccc9a1a61be authority32/213.",
+      "Original1042-frame movement run remains raw HOLD.925 retained rows qualify under separately authorized DERIVED rule removing only incidental retreat land_rows>0; unchanged4mm and all physical predicates.",
+      "Later180-frame spray-only run supplies three actual callbacks with independent grounded setups; no single all-PASS original run, movement replay or continuous journey between setups.",
+      "Two full AVIs external; nine exact payload samples from each. Sparse samples do not establish continuous playback or draw/physics parity; terminal blue frames provide no endpoint evidence.",
+      "ObservedLowerWall placed existing marker; BlueOpaqueGlazing and PaleCompleteTrim rejected; original collision receiver and10mm rendered siding plane remain distinct.",
+      "Roof callback, roof landing/walk and jetpack unperformed; upper siding blocked/infeasible at this grounded scope.",
+      "Tree/canopy-hidden faces and roof backs protected; no neighbor canopy/ramp ownership inference; dimensions/cadence production inference.",
+      "Current live equivalence, package role6 and seventh attestation pending; no recognition credit."
+    ]
+  }
+}
