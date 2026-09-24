@@ -14501,3 +14501,13 @@ Limits: this factual technical review supplies no visual, gameplay or collision-
 ### housing_family_reference_review — independent final visual closeout (Astra Medium)
 
 Read-only reviewer found a useful provisional A/B result: shared story/step trim and screen character substantially restored, and 1221 warm roof variation recovered. Five incomplete regional studies remain: 1204, 1205, 1237, 1229 and 1397/frozen 1246. 1397 canopy ownership is unknown; 1229 roof/apron fidelity remains unresolved in the unobstructed view. 1227/1234 screens remain denser than A and 1226 is partly occluded. No further capture, blanket whole-building PASS, recognition credit or production promotion. This entry transcribes the independent reviewer’s final verdict because its handle was read-only.
+
+## 2026-09-24 — family_branch_setup — targeted-reference harness outcome
+
+Acquisition and private-gallery preparation: `family_instance_artist` (Astra Low); independent outcome review: `housing_family_reference_review` (Astra Medium, read-only).
+
+Applied the independently supported pilot to one optional question-driven section in the existing research reference, with one whole-building skill link. Updated the existing inventory to 24 photo-confirmed (23 captured plus unmodeled 1394), 21 written-only and 30 imagery-insufficient; the frozen 23-target/46-image checkpoint remains unchanged. Private NOTES/gallery retain source/date/association and reusable original locators; no photos entered Git/runtime.
+
+Read-only independent reviewer confirmed the new 1204 evidence is specifically the left-end broad window, pale door and recessed entry; central openings/screens were already supported. It checked 1394’s exact D5 panorama/camera/heading and frozen-1230 crosswalk, confirming the family/canopy without a new model or acceptance. 1397 alternatives mainly corroborate extent, leaving attachment/exact receiver ownership unknown. Existing 1229 pixels were sufficient; no acquisition was needed.
+
+Worked: four distinct additional views changed or bounded concrete decisions; one duplicate was excluded. Failed relative screenshot and text-selector attempts were retained and narrowly corrected by the artist. Recorded acquisition start 16:15:40.465426 UTC to gallery preparation end 16:19:20.053147 UTC is 219.6 seconds; root task start was 16:13:27 UTC. No exact reviewer-finish timestamp is bound here, so no full-task duration or token/workflow savings is claimed. Next: reuse relevant originals and distinguish missing evidence from unmodeled visible detail before requesting another view. No new report, view quota, engine/model change or general building resumption.

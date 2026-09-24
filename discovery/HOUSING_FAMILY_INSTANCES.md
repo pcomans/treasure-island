@@ -2,7 +2,7 @@
 
 Baseline: `9c7f2440d3db6a7f2d0a5d474c612c0362a01c16`; branch: `experiment/housing-family-instances`. The owner authorized a separate shared-family experiment for comparison with MAIN. No merge, production promotion or recognition credit follows from this inventory.
 
-The [frozen catalog](facades/facade-recognition-catalog.json) contains 213 physical buildings represented by 215 source records (213 footprints and 2 parts). Named reference packets cover 152 physical units; packet presence is not exhaustive visual proof. The 75-unit candidate shortlist below has 23 photo-reviewed initial targets, 22 written matches requiring pixel validation, and 30 candidates requiring imagery. The other 138 catalog units are not proven unrelated. Physical unit IDs use `physical-building:<source ID>`.
+The [frozen catalog](facades/facade-recognition-catalog.json) contains 213 physical buildings represented by 215 source records (213 footprints and 2 parts). Named reference packets cover 152 physical units; packet presence is not exhaustive visual proof. The current 75-unit candidate shortlist has 24 photo-confirmed targets (23 captured in the A/B experiment and one not modeled), 21 written matches requiring pixel validation, and 30 candidates requiring imagery. The original frozen capture selection remains 23 targets. The other 138 catalog units are not proven unrelated. Physical unit IDs use `physical-building:<source ID>`.
 
 Reuse decision: evolve the [shared housing family](../game/resources/housing_family/README.md) with target-specific stepped runs, opening schedules, roof/canopy variants and semantic palettes; the straight six-metre prototype is not a drop-in fit for these targets. Preserve frozen source identity/footprints, orientation, grade, gameplay and independent per-building verification.
 
@@ -38,11 +38,16 @@ Direct frontage pixels were reviewed from March 2025 imagery. This supports stru
 | `w96665911` | 1229 Northpoint Drive | [D9 packet](facades/d9_reference_packets/w96665911_1229_northpoint_drive.md) | boarded/blank-opening variant |
 | `w96215670` | frozen 1246/current 1397 Gateview Court | [D7 packet](facades/d7_reference_packets/w96215670_1246_1397_gateview_court.md) | stepped row, mixed openings; canopy ownership unresolved |
 
-## Written matches requiring pixel validation (22)
+## Additional photo-confirmed target, not modeled (1)
 
 | Source ID | Address | Evidence | Variant / uncertainty |
 |---|---|---|---|
-| `w96215646` | 1230/1394 Gateview | [D5 packet](facades/d5_reference_packets/w96215646_1230_1394_gateview.md) | long row, continuous flat canopy |
+| `w96215646` | frozen 1230/current 1394 Gateview | [D5 packet](facades/d5_reference_packets/w96215646_1230_1394_gateview.md); [March 2025 source](https://www.google.com/maps/@?api=1&map_action=pano&pano=j3ugQSzJZtl9lpbb5i58bQ&heading=90&pitch=0&fov=90) | Direct pixels confirm shared row/continuous canopy; exact D5 panorama/camera/heading and address crosswalk independently checked. Hidden schedules remain unknown; no new model or acceptance. |
+
+## Written matches requiring pixel validation (21)
+
+| Source ID | Address | Evidence | Variant / uncertainty |
+|---|---|---|---|
 | `w96215667` | 1248/1395 Gateview Court | [D6 packet](facades/d6_reference_packets/w96215667_1248_1395_gateview_court.md) | April 2019 pale row, flat canopy; address crosswalk |
 | `w96215668` | 1236 Northpoint Drive | [D6 packet](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md) | March 2025 boarded/secured opening pattern |
 | `w96215676` | 1143 Ozbourn Court | [D7 packet](facades/d7_reference_packets/w96215676_1143_ozbourn_court.md) | April 2019 pale row, red-brown roof, green doors; no deep canopy |
@@ -102,16 +107,22 @@ Direct frontage pixels were reviewed from March 2025 imagery. This supports stru
 
 ## Reference and comparison limits
 
-The 23 reviewed references are March 2025 Google Street View frontages. Their named acquisition/selection records retain private originals; no imagery was copied into this branch. Target association uses existing explicit source joins, not nearby UI address labels: the 1234, 1202, 1241, 1205 and 1397 views carry misleading neighboring labels; 1237 and 1229 also require their recorded joins. For 1205, use `1205-resolved-original.png`; the earlier headed image is a failed black receipt. Canopy ownership at 1397 remains unresolved. No source-geometry revalidation was performed by the pixel reviewer.
+The original 23 reviewed references are March 2025 Google Street View frontages. Their named acquisition/selection records retain private originals; no imagery was copied into this branch. Target association uses existing explicit source joins, not nearby UI address labels: the 1234, 1202, 1241, 1205 and 1397 views carry misleading neighboring labels; 1237 and 1229 also require their recorded joins. For 1205, use `1205-resolved-original.png`; the earlier headed image is a failed black receipt. Canopy ownership at 1397 remains unresolved. No source-geometry revalidation was performed by the pixel reviewer.
 
-A bounded retained-image search for the additional 22 targets found no directly inspectable originals and produced no photo-tier upgrades. Historical notes report 1394 imagery, but its temporary original was not recovered. Written packet descriptions in the second tier still need direct-image validation. Partial images and OSM tags/footprints in the third tier only justify shortlisting; they do not establish visual family membership. Do not infer missing openings or attach the generic prototype from these rows alone. Subsequent validated targets can move tiers with a concise evidence note.
+The initial retained-image search for 22 written matches found no directly inspectable originals. A later targeted pilot recovered and independently associated 1394 imagery, moving that one target to the additional photo-confirmed tier; the other 21 remain written-only. Written packet descriptions in the second tier still need direct-image validation. Partial images and OSM tags/footprints in the third tier only justify shortlisting; they do not establish visual family membership. Do not infer missing openings or attach the generic prototype from these rows alone. Subsequent validated targets can move tiers with a concise evidence note.
 
 Broad-gabled-carport Gateview 1301–1318 and paired garage/stair fish-street courts may share components but have different topologies. Boundary cases `w96698611` (dark-clad courtyard/pergola), `w96698650` (unaddressed Avenue H) and `w110188516` (Avenue H) remain unresolved outside this shortlist.
 
 ## Final branch checkpoint
 
-The [A/B gallery](../evidence/housing-family-experiment/index.html) shows final run `all23-006`: 46 original images for 23 targets. The [reproduction instructions](../game/tests/housing_family_experiment/README.md) explain the baseline, shared assembly and retained 1232/1241 roof/site components. The other 52 shortlisted targets remain unconfirmed. Earlier failed/held runs are preserved locally outside the committed checkpoint.
+The [A/B gallery](../evidence/housing-family-experiment/index.html) shows final run `all23-006`: 46 original images for 23 targets. The [reproduction instructions](../game/tests/housing_family_experiment/README.md) explain the baseline, shared assembly and retained 1232/1241 roof/site components. At that frozen checkpoint, the other 52 shortlisted targets remained unconfirmed. The later reference-only pilot confirms one additional target (1394), leaving 51 unconfirmed and no additional modeled target. Earlier failed/held runs are preserved locally outside the committed checkpoint.
 
 Independent factual source review (`family_branch_setup`, Astra Low) found consistent source identities, genuine shared construction, unchanged production loader/registry/collision/control boundaries and successful final native capture. All frozen input bindings and 46 image hashes matched; camera invariance passed the native approximate-transform guard, and Sun state equality passed its guard. This is visual-only technical evidence, not collision fit, playable integration or release acceptance.
 
 Independent visual review (`housing_family_reference_review`, Astra Medium) found a useful provisional A/B experiment: the shared trim/screen regression was substantially repaired and 1221 roof variation restored. Five targets remain incomplete regional studies: 1204 (`w96215691`), 1205 (`w96215678`), 1237 (`w96665904`), 1229 (`w96665911`) and 1397/frozen 1246 (`w96215670`). 1397 canopy ownership remains unknown. The unobstructed 1229 view still weakly conveys the reference shallow roof surface/projecting upper-storey apron; fidelity remains unresolved, not proven missing geometry. 1227/1234 have useful views but denser, less open screens than A; 1226 is partly occluded. No blanket whole-building PASS, recognition credit or MAIN promotion is granted.
+
+## Targeted reference pilot outcome
+
+The later reference-only pilot supports optional question-driven acquisition. 1204’s March 2025 east view specifically exposes the left-end broad window, pale door and recessed entry; central openings and screen motifs were already supported and remain an implementation gap. 1394’s direct March 2025 view confirms the family/canopy description and raises current photo-confirmed coverage to 24. Alternate April 2019/March 2025 views of 1397 mainly corroborate canopy extent; attachment and exact receiver ownership remain unknown, so acquisition stopped. The existing 1229 image already supports the roof/apron question; no new view was needed. No runtime/model/acceptance state changed.
+
+Permitted private originals and source/date/association notes are retained in [pilot NOTES](/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/targeted-streetview-pilot-2026-09-24/NOTES.md): `images/1204-east-oblique.png`, `images/1394-west-front.png`, `images/1397-north-oblique.png`, `images/1397-south-oblique.png`, and the reused `images/1229-baseline.png`. These locators are for local reference reuse; images are outside Git and runtime. Four distinct new views were usable; one duplicate is excluded. 1204 and 1394 supplied material evidence gains, while 1397 mainly corroborated existing context. Recorded acquisition-through-gallery time was 219.6 seconds, not total task time or measured token savings.

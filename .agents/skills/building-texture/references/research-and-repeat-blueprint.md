@@ -22,6 +22,12 @@ Label every claim as one of:
 - `production_inference`: a reversible art or implementation choice, which may have a precise implementation value without becoming source truth;
 - `unknown`: not established and not safely bounded for the requested use.
 
+## Targeted reference questions
+
+When additional imagery could resolve an architectural uncertainty, name the decision first and compare relevant retained target and family originals. Separate an evidence gap from an already-visible detail that has not yet been modeled. Choose a bounded additional viewpoint likely to change that decision; stop when it is resolved, the view adds no useful information, or the assigned budget is exhausted. This is an optional research method, not a fixed view quota or a requirement to expose every hidden face.
+
+Reuse permitted private originals with their date, URL and target/side association, passing only relevant images to subsequent tasks under the existing access and retention rules. Family references can inform shared construction vocabulary; they cannot transfer another building's identity or establish unknown motifs. Record a short before → after decision in the ordinary task note, including unresolved limits. Existing independent source, mechanical, visual and release gates remain unchanged.
+
 ## Region and motif method
 
 1. Partition the facade into regions whenever material, orientation, motif family, spacing, base/roof condition, or cadence changes.
