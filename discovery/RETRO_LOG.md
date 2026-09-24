@@ -14398,3 +14398,22 @@ Actual publication transfer completed: all93 selected files initially matched, s
 ## 2026-09-24 — rebuild_1439_artist — held draft checkpoint publication
 
 Preserved 1397 and 1439 as inert source patches plus six original game images, independently reviewed for source scope and privacy. Both physical movement HOLDs remain; no runtime promotion, reference-photo copy, engine run or completed-stage replay. Selected publication includes the existing HIGH lessons and retrospective entries unchanged. Publication identity and final remote verification are recorded externally; four unrelated test UID files remain untouched.
+
+## 2026-09-24 — rebuild_1439_artist — retain bounded continuation behavior
+
+The independent missing-work audit measured PAIR006 reaching 21 cases: 17 PASS, 4 HOLD, zero fatal failures, with 892 previously completed rows reused. PAIR005 had stopped at a fatal setup condition. Retained the reviewed safe-continuation and unchanged-evidence reuse behavior in existing authoring guidance; no accepted-building throughput or universal speedup claim.
+
+
+### 2026-09-23 — 1444 shelter authoring and consumed-union HOLD
+
+1444 sheltered finish authoring and bounded repair — Astra HIGH
+
+Worked: new isolated MAIN checkout, exact C2 target selection, immutable failed invocations and live-handle release; actual pinned-engine get_faces semantics reconstructed all144 retained native vertices exactly. Explicit union subtraction identified thin nonzero coverage gaps that local-area checks missed. Pin-only repair checked29 actual consumers.
+
+Failed: I omitted the selected callback during initial transplant, then missed three consumed helper/data hashes before using the final invocation. Both errors prevented first pixels and consumed the authorized budget. The source partition was based on raw surface coordinates, overlooking existing TriangleMesh local snapping; merging raw regions did not restore the native contact union.
+
+Change: next bounded author must inspect the actual selected callback AND every existing consumed producer literal in one focused preflight, then derive any collision-sensitive partition through the actual get_faces snap/transform sequence before native invocation. Do not spend another engine run on this held draft, weaken a guard, or claim local-area equality proves native union. No art acceptance granted.
+
+## 2026-09-24 — rebuild_1439_artist — final quota-reserve checkpoint
+
+Stopped new autonomous work conservatively at the reported 40% weekly quota remaining, not a claimed below-40% trigger. Preserved 1444 study and unverified ceiling attempt as reviewed inert artifacts alongside held1397/1439 drafts; no runtime promotion. Existing hourly guard is being paused with no automatic resumption; actual saved/scheduler state and publication SHA are recorded externally.

@@ -2,7 +2,7 @@
   "schema": 1,
   "status": "INERT HELD DRAFTS \u2014 not live promotion or acceptance",
   "base_commit": "6f44545c4c22eb722fe66abcf7039674ccd3c8b6",
-  "apply_scope": "Each patch independently applies only selected production paths against exact base. No1444 changes. Neither patch is applied here. No acceptance/authority/compiler changes.",
+  "apply_scope": "Inert patches only.1397/1439 retain6f44545base.1444A independently against01845490;1444B requiresA. No actual application/acceptance.",
   "units": {
     "1397": {
       "selected_sources": [
@@ -215,12 +215,208 @@
         }
       ],
       "scope": "Visual-ready held draft, not promoted. Source/fit224meshes214unchanged; static and sampled-motion appearance; wall approach/loggias, derived roof flight, all spray callbacks and read-only query reusable. Original86.289mm wall-retreat penetration remains. No whole-unit mechanics/release PASS."
+    },
+    "1444": {
+      "status": "STUDY ONLY / HOLD; no promotion",
+      "base_commit": "01845490ecab848400888126a84fa513740fda5d",
+      "lineage": "A applies independently to01845490; B applies only afterA. Do not applyB to bareMAIN. Existing1397/1439 patches retain their6f44545base.",
+      "selected_study_sources": [
+        {
+          "path": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
+          "source_sha256": "87f2814463994f46f1968492328e33d4f302bae8b868fe0b704390af1da72c5b",
+          "base_sha256": "178cc9df2c7add966a95427099b3a9900fde459e5bfc4825211e06c119cc2e32",
+          "operation": "modify"
+        },
+        {
+          "path": "game/resources/facades/croaker_1444_quality_revision.json",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/game/resources/facades/croaker_1444_quality_revision.json",
+          "source_sha256": "773179c5129ddee89595ad14cd132d939598d924a5ce6c1b5f4d6ade560f9a39",
+          "base_sha256": null,
+          "operation": "add"
+        },
+        {
+          "path": "game/scripts/world/facades/croaker_1444_live_factory.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/game/scripts/world/facades/croaker_1444_live_factory.gd",
+          "source_sha256": "ae8f3faf64a74f9ad5f05f65f62e3cbaf113e69b079ecfebd50b9197a0c5148d",
+          "base_sha256": null,
+          "operation": "add"
+        },
+        {
+          "path": "game/scripts/world/facades/croaker_1444_quality_model.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/game/scripts/world/facades/croaker_1444_quality_model.gd",
+          "source_sha256": "d2afc1b871a1c0cc5392195780cc4ee9a8e91ea238f1a00758b1751298b5b72c",
+          "base_sha256": null,
+          "operation": "add"
+        },
+        {
+          "path": "game/scripts/world/facades/croaker_1444_roof003.json",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/game/scripts/world/facades/croaker_1444_roof003.json",
+          "source_sha256": "c8e2c57f0bba1431982d4960f34900d952b97a81390f0d7f419b98ff002b3e3e",
+          "base_sha256": null,
+          "operation": "add"
+        },
+        {
+          "path": "game/scripts/world/facades/croaker_1444_shelter_visibility.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/game/scripts/world/facades/croaker_1444_shelter_visibility.gd",
+          "source_sha256": "62cb24ba0dffa66fc26246ed3b4e20e07b0cc1d0cc95b0491951dfab89d62411",
+          "base_sha256": null,
+          "operation": "add"
+        },
+        {
+          "path": "game/scripts/world/facades/croaker_1444_shelter_visibility.json",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/game/scripts/world/facades/croaker_1444_shelter_visibility.json",
+          "source_sha256": "e24743de4d8aa774eb518f316bf42e15a7e61052f5d3f6009509cb158cb9273a",
+          "base_sha256": null,
+          "operation": "add"
+        },
+        {
+          "path": "game/scripts/world/world_chunk_builder.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/game/scripts/world/world_chunk_builder.gd",
+          "source_sha256": "b95106b38cfba527fba611d788b3eaced421658f092313c89fa007d04a2307a5",
+          "base_sha256": "a89a31212fcd181350ab5090e86df7140d8246077871cfae3b69a8c835539e54",
+          "operation": "modify"
+        }
+      ],
+      "selected_attempt_delta": [
+        {
+          "path": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1444-shelter-lining-20260924/game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
+          "author_sha256": "ec07514fd54b9a33ac08dac8c9b9fb43cfe7a359070886c04f6ed82d7b120038",
+          "packaged_sha256": "ec07514fd54b9a33ac08dac8c9b9fb43cfe7a359070886c04f6ed82d7b120038",
+          "study_preimage_sha256": "87f2814463994f46f1968492328e33d4f302bae8b868fe0b704390af1da72c5b",
+          "note": "Exact HIGHsource bytes."
+        },
+        {
+          "path": "game/resources/facades/croaker_1444_quality_revision.json",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1444-shelter-lining-20260924/game/resources/facades/croaker_1444_quality_revision.json",
+          "author_sha256": "02e2f023a33f9e373a68f015a32228f8ea05548731b27b487761cf12e435aae3",
+          "packaged_sha256": "02e2f023a33f9e373a68f015a32228f8ea05548731b27b487761cf12e435aae3",
+          "study_preimage_sha256": "773179c5129ddee89595ad14cd132d939598d924a5ce6c1b5f4d6ade560f9a39",
+          "note": "Exact HIGHsource bytes."
+        },
+        {
+          "path": "game/scripts/world/facades/croaker_1444_shelter_visibility.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1444-shelter-lining-20260924/game/scripts/world/facades/croaker_1444_shelter_visibility.gd",
+          "author_sha256": "c41712395a9f89e380b55693741584c07919fc2e0a6f8c19c911d35c6a119efc",
+          "packaged_sha256": "c41712395a9f89e380b55693741584c07919fc2e0a6f8c19c911d35c6a119efc",
+          "study_preimage_sha256": "62cb24ba0dffa66fc26246ed3b4e20e07b0cc1d0cc95b0491951dfab89d62411",
+          "note": "Exact HIGHsource bytes."
+        },
+        {
+          "path": "game/scripts/world/facades/croaker_1444_shelter_visibility.json",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1444-shelter-lining-20260924/game/scripts/world/facades/croaker_1444_shelter_visibility.json",
+          "author_sha256": "8fd62534339a24d0b386f781e232cb557e68092c2ffd44b23a22c3f12914c589",
+          "packaged_sha256": "8fd62534339a24d0b386f781e232cb557e68092c2ffd44b23a22c3f12914c589",
+          "study_preimage_sha256": "e24743de4d8aa774eb518f316bf42e15a7e61052f5d3f6009509cb158cb9273a",
+          "note": "Exact HIGHsource bytes."
+        },
+        {
+          "path": "game/resources/facades/facade-runtime-adapter-contracts.json",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1444-shelter-lining-20260924/game/resources/facades/facade-runtime-adapter-contracts.json",
+          "author_sha256": "0164a51d92c0f44fe555693225520053325e5d565d485c57577e313d01249566",
+          "packaged_sha256": "e8baf676f70168ef1c6a934cf69cc1db470b5a9df90d1c713ad28100452f055d",
+          "study_preimage_sha256": "686b4087377c20c7adecdaf3d62c1a8589f1f9e18c401e03b328577b42ff296d",
+          "note": "Only two1444adapter pin replacements; unrelated JSON numeric spelling retained fromMAIN."
+        }
+      ],
+      "patches": [
+        "1444-study-held.patch",
+        "1444-ceiling-attempt-unverified.patch"
+      ],
+      "validation": "Temporary-only sequential application with error-all whitespace; all resulting selected bytes equal projected study/candidate; no runtime applied.",
+      "study_scope": "Whole-building staticPASS retained; mechanics006close-ceiling visualHOLD and north-mouth marker/dependent retreat pending. No whole-unit release.",
+      "attempt_scope": "HIGH unrendered attempt.29producer/consumer pin checks PASS is not readiness. Native consumed physical union FAIL after validated get_faces snapping: uncovered wall92~0.000161921m2/wall93~0.000033879m2. Two failedengine invocations; no candidatepixels/native readback. No launch or promotion authorization.",
+      "images": [
+        {
+          "path": "images/1444-01-whole.png",
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/actual-world-001/images/1444-01-whole.png",
+          "sha256": "147f59af2320f1380e2d27e163e87a00f27b6bef9022c7e5837b530bb27001f6",
+          "bytes": 802393,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "label": "1444 STUDY ONLY \u2014 original actual-world001 01-whole",
+          "privacy": "Actual game framebuffer; not HIGHcandidate; no reference photo."
+        },
+        {
+          "path": "images/1444-02-three-quarter.png",
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/actual-world-001/images/1444-02-three-quarter.png",
+          "sha256": "c066c202334709e488d89d94fb1cb0a82b815c42a41fb2c644f36355315290a5",
+          "bytes": 884163,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "label": "1444 STUDY ONLY \u2014 original actual-world001 02-three-quarter",
+          "privacy": "Actual game framebuffer; not HIGHcandidate; no reference photo."
+        },
+        {
+          "path": "images/1444-03-near.png",
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/actual-world-001/images/1444-03-near.png",
+          "sha256": "b6a7c4f89955a1cef064009741e96fea13162a50b61c46f213ef66fd1d83266e",
+          "bytes": 695138,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "label": "1444 STUDY ONLY \u2014 original actual-world001 03-near",
+          "privacy": "Actual game framebuffer; not HIGHcandidate; no reference photo."
+        }
+      ],
+      "filtered_contract_validation": {
+        "packaged_sha256": "e8baf676f70168ef1c6a934cf69cc1db470b5a9df90d1c713ad28100452f055d",
+        "HIGH_original_sha256": "0164a51d92c0f44fe555693225520053325e5d565d485c57577e313d01249566",
+        "semantic_JSON_equal": true,
+        "exact1444adapter_pin_occurrences": 2,
+        "standalone_HIGH_contract_hash_consumers_in_game_scripts_resources": [],
+        "literal_dependency_checks": [
+          {
+            "consumer": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
+            "producer": "game/scripts/world/facades/croaker_1444_quality_model.gd",
+            "sha256": "d2afc1b871a1c0cc5392195780cc4ee9a8e91ea238f1a00758b1751298b5b72c"
+          },
+          {
+            "consumer": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
+            "producer": "game/scripts/world/facades/housing_quality_support.gd",
+            "sha256": "34d14eedb3c5296061bec5b10003c240aabb90e9654dcd61165f4bd917392b97"
+          },
+          {
+            "consumer": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
+            "producer": "game/scripts/world/facades/croaker_1444_shelter_visibility.gd",
+            "sha256": "c41712395a9f89e380b55693741584c07919fc2e0a6f8c19c911d35c6a119efc"
+          },
+          {
+            "consumer": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
+            "producer": "game/scripts/world/facades/croaker_1444_shelter_visibility.json",
+            "sha256": "8fd62534339a24d0b386f781e232cb557e68092c2ffd44b23a22c3f12914c589"
+          },
+          {
+            "consumer": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
+            "producer": "game/scripts/world/facades/croaker_1444_roof003.json",
+            "sha256": "c8e2c57f0bba1431982d4960f34900d952b97a81390f0d7f419b98ff002b3e3e"
+          },
+          {
+            "consumer": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
+            "producer": "game/scripts/world/facades/croaker_1444_shelter_visibility.json",
+            "sha256": "8fd62534339a24d0b386f781e232cb557e68092c2ffd44b23a22c3f12914c589"
+          },
+          {
+            "consumer": "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd",
+            "producer": "game/scripts/world/facades/croaker_1444_roof003.json",
+            "sha256": "c8e2c57f0bba1431982d4960f34900d952b97a81390f0d7f419b98ff002b3e3e"
+          }
+        ],
+        "factory_config_visibility_hashes_match": true,
+        "scope": "Packaging-only two1444contract pins with published unrelated formatting. No standalone HIGH contract hash literal found; generic facade_runtime_registry_loader.gd compares contract bytes with registry.adapter_contract.sha256. That registry/loader closure is stale (registry686b4087\u2026 versus packaged contracte8baf676\u2026). This inert HOLD is not runnable, READY or promoted. Exact author art/helper/model/roof bytes retained; no registry/source fix made."
+      }
     }
   },
   "artifacts": {
     "README.md": {
-      "sha256": "35aedf8b329c2ce42cbb817ee1cd383617fb876ce353ca41b3996433ac218794",
-      "bytes": 1531
+      "sha256": "cc859675baeb8b9ee68e0fb58402a100f3fef91b64b5ed719fc79cf4652e1229",
+      "bytes": 2964
     },
     "1439-held-draft.patch": {
       "sha256": "a89faa99448d71eeab0ecfa889349400166147932f72c15ba1b7d20aeeea93e1",
@@ -253,6 +449,26 @@
     "images/1439-02-three-quarter.png": {
       "sha256": "2aadb331a551257ad67bd859f0216e0672a4cbec15c7fb6a9c97301d4c197577",
       "bytes": 774069
+    },
+    "1444-study-held.patch": {
+      "sha256": "28b1363903b9000dd4774fe22cc8f050dee03123e55d5c35b4d89b1d86899f83",
+      "bytes": 123514
+    },
+    "1444-ceiling-attempt-unverified.patch": {
+      "sha256": "8c8cb7185cabc17082d5cbcbe6ef1b52064577fd8d7fc2d479194631239a67ec",
+      "bytes": 77173
+    },
+    "images/1444-01-whole.png": {
+      "sha256": "147f59af2320f1380e2d27e163e87a00f27b6bef9022c7e5837b530bb27001f6",
+      "bytes": 802393
+    },
+    "images/1444-03-near.png": {
+      "sha256": "b6a7c4f89955a1cef064009741e96fea13162a50b61c46f213ef66fd1d83266e",
+      "bytes": 695138
+    },
+    "images/1444-02-three-quarter.png": {
+      "sha256": "c066c202334709e488d89d94fb1cb0a82b815c42a41fb2c644f36355315290a5",
+      "bytes": 884163
     }
   },
   "external_evidence": {
@@ -315,6 +531,46 @@
       "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/discovery/SECOND_PAIR_STATIC_VISUAL_REVIEW_20260923.md",
       "sha256": "c1fe730fbc3d95e86ee78f0b4fd721640888b4ddac22a87024cbec2fc83c65f3",
       "retention": "External independent report; private dated references remain outside Git."
+    },
+    "1444_attempt_final_HOLD": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/1444-shelter-finish-001/repair004-hold/RESULT.md",
+      "sha256": "816cd7815e1a01ce55f0e30463e6c46d33da1644a99c2bc9501d6c3917a17e50",
+      "retention": "External required evidence; informative HOLD is notREADY. Private references/movies remain outsideGit."
+    },
+    "1444_attempt_informative_NOT_READY_map": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/1444-shelter-finish-001/repair004-hold/input-map.json",
+      "sha256": "417b38a1a636fdaffe93adf09c94c549c8cd051726698a966c3a3b37536dc892",
+      "retention": "External required evidence; informative HOLD is notREADY. Private references/movies remain outsideGit."
+    },
+    "1444_external_original_candidate_patch": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/1444-shelter-finish-001/repair004-hold/INERT_DRAFT_VS_MAIN.patch",
+      "sha256": "e3964fb8d22fbcfb7edc040bdad41d299a7dd94b1b4b3ae673ab55a2169e514f",
+      "retention": "External required evidence; informative HOLD is notREADY. Private references/movies remain outsideGit."
+    },
+    "1444_study_output": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/actual-world-001/completed-output-map.json",
+      "sha256": "7dcd7d68b083e1e22fb46dbedc5e795cc06d10c178f8412ccb16da09d6d0b518",
+      "retention": "External required evidence; informative HOLD is notREADY. Private references/movies remain outsideGit."
+    },
+    "1444_static_visual": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/discovery/SECOND_PAIR_STATIC_VISUAL_REVIEW_20260923.md",
+      "sha256": "c1fe730fbc3d95e86ee78f0b4fd721640888b4ddac22a87024cbec2fc83c65f3",
+      "retention": "External required evidence; informative HOLD is notREADY. Private references/movies remain outsideGit."
+    },
+    "1444_close_ceiling_visual_HOLD": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/independent-visual-mechanics006/REVIEW.md",
+      "sha256": "151d31e0af4a975282391918da88d11347547b907fe7f496081d96154684a63b",
+      "retention": "External required evidence; informative HOLD is notREADY. Private references/movies remain outsideGit."
+    },
+    "1444_source_diagnosis": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/1444-ceiling-diagnosis-001/DIAGNOSIS.md",
+      "sha256": "124505fb6dcddcd77e6cd89cb6fb0f0144831da5a8b91fdc030ddd55c2d200cf",
+      "retention": "External required evidence; informative HOLD is notREADY. Private references/movies remain outsideGit."
+    },
+    "1444_mechanics_scopes": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/independent-reviews/SECOND_PAIR_MECHANICS006_ACTUAL_REVIEW.md",
+      "sha256": "7ff3a0c301d1a21b60be52e6ba7fd3968f1899f8a77c9901551edce61ff5bc4a",
+      "retention": "External required evidence; informative HOLD is notREADY. Private references/movies remain outsideGit."
     }
   }
 }
