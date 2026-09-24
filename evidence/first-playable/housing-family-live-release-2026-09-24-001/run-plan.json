@@ -1,0 +1,213 @@
+{
+  "export-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances",
+      "--export-release",
+      "macOS Private",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances",
+    "new_output_paths": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app"
+    ],
+    "output_directories": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001"
+    ],
+    "requires": [
+      "source-component-001"
+    ],
+    "success_markers": []
+  },
+  "mounted-component-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--fixed-fps",
+      "60",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001",
+      "--main-pack",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+      "--script",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/package-contract.gd",
+      "--",
+      "--pck=/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+      "--pck-sha256=<ACTUAL_EXPORTED_PCK_SHA256>"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001",
+    "output_directories": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001"
+    ],
+    "requires": [
+      "export-001"
+    ],
+    "success_markers": [
+      "FAMILY_RELEASE_COMPONENT_PASS"
+    ]
+  },
+  "mounted-privacy-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--fixed-fps",
+      "60",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001",
+      "--main-pack",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+      "--script",
+      "res://game/tests/mounted_pck_content_audit.gd",
+      "--",
+      "--pck-audit-pck=/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+      "--pck-audit-pck-sha256=<ACTUAL_EXPORTED_PCK_SHA256>",
+      "--pck-audit-manifest-sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+      "--pck-audit-content-sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001",
+    "requires": [
+      "export-001"
+    ],
+    "success_markers": [
+      "PASS: direct-mounted PCK matches the explicit package/world identities"
+    ]
+  },
+  "release-headless-smoke-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+      "--headless",
+      "--fixed-fps",
+      "60",
+      "--log-file",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001/release-headless-smoke-001-engine.log",
+      "--",
+      "--mac-export-smoke"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001",
+    "requires": [
+      "mounted-privacy-001"
+    ],
+    "success_markers": [
+      "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent",
+      "MAC_EXPORT_D2_1439_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D2_1444_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1308_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1317_ATTACHMENT: valid=true",
+      "MAC_EXPORT_FIRE_STATION48_ATTACHMENT: valid=true",
+      "MAC_EXPORT_MACEO_MAY_ATTACHMENT: valid=true",
+      "MAC_EXPORT_HOUSING_FAMILY_ADOPTION:"
+    ],
+    "coverage": "Exact packaged adoption and signed headless smoke: GameMain fatal ADOPTION.validate_live checks24 identities, ownership/layers/bodies/current topology and authority."
+  },
+  "release-native-smoke-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+      "--fixed-fps",
+      "60",
+      "--display-driver",
+      "macos",
+      "--rendering-method",
+      "forward_plus",
+      "--rendering-driver",
+      "metal",
+      "--audio-driver",
+      "Dummy",
+      "--log-file",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001/release-native-smoke-001-engine.log",
+      "--",
+      "--mac-export-smoke"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001",
+    "requires": [
+      "release-headless-smoke-001"
+    ],
+    "success_markers": [
+      "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent",
+      "MAC_EXPORT_D2_1439_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D2_1444_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1308_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1317_ATTACHMENT: valid=true",
+      "MAC_EXPORT_FIRE_STATION48_ATTACHMENT: valid=true",
+      "MAC_EXPORT_MACEO_MAY_ATTACHMENT: valid=true",
+      "MAC_EXPORT_HOUSING_FAMILY_ADOPTION:"
+    ]
+  },
+  "source-component-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances",
+      "--script",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/package-contract.gd"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances",
+    "new_output_paths": [],
+    "requires": [],
+    "success_markers": [
+      "FAMILY_RELEASE_COMPONENT_PASS"
+    ]
+  },
+  "mounted-component-002": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--fixed-fps",
+      "60",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001",
+      "--main-pack",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+      "--script",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/package-contract.gd",
+      "--",
+      "--pck=/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+      "--pck-sha256=<ACTUAL_EXPORTED_PCK_SHA256>"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001",
+    "output_directories": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001"
+    ],
+    "requires": [
+      "export-001"
+    ],
+    "success_markers": [
+      "FAMILY_RELEASE_COMPONENT_PASS"
+    ]
+  },
+  "release-native-smoke-002": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+      "--fixed-fps",
+      "60",
+      "--display-driver",
+      "macos",
+      "--rendering-method",
+      "forward_plus",
+      "--rendering-driver",
+      "metal",
+      "--audio-driver",
+      "Dummy",
+      "--log-file",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001/release-native-smoke-002-engine.log",
+      "--",
+      "--mac-export-smoke"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/runtime-001",
+    "requires": [
+      "release-headless-smoke-001"
+    ],
+    "success_markers": [
+      "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent",
+      "MAC_EXPORT_D2_1439_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D2_1444_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1308_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1317_ATTACHMENT: valid=true",
+      "MAC_EXPORT_FIRE_STATION48_ATTACHMENT: valid=true",
+      "MAC_EXPORT_MACEO_MAY_ATTACHMENT: valid=true",
+      "MAC_EXPORT_HOUSING_FAMILY_ADOPTION:"
+    ]
+  }
+}

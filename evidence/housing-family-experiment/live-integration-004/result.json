@@ -1,0 +1,16 @@
+{
+  "terminal": 1,
+  "errors": [],
+  "engine_errors": [
+    "ERROR: VISUAL_CAPTURE_FAIL: { \"ok\": false, \"message\": \"w96215659 anchor hit  rather than land_ground.\" }",
+    "ERROR: VISUAL_CAPTURE_FAIL: Incomplete normal-play captures",
+    "ERROR: VISUAL_CAPTURE_FAIL: Installed mesh contact missing w96215651 role support mesh 879 triangle 0 points (-379.0291, 2.6113, -607.9038) (-378.9375, 2.6052, -607.9592) (-377.9491, 2.606, -606.8895) area 0.07647148519754 actual_hit { \"position\": (-378.6385, 2.608818, -607.5842), \"normal\": (0.027033, 0.999307, -0.025603), \"face_index\": 4884, \"collider_id\": 1776992473020, \"collider\": FamilyContact_support:<StaticBody3D#1776992473020>, \"shape\": 0, \"rid\": RID(539782899827248) }"
+  ],
+  "receipt_ok": false,
+  "elapsed_seconds": 36.59271537465975,
+  "pid": 30182,
+  "slot_released": true,
+  "engines_after": [],
+  "ended_utc": "2026-09-24T22:19:34.074811+00:00",
+  "ok": false
+}

@@ -104,12 +104,18 @@ func _on_world_ready(report: Dictionary) -> void:
 		_on_world_failed("player_grounding", "Player could not settle on generated land before its first visible frame.", [])
 		return
 	_world_ready = true
-	player.feedback_requested.connect(hud.show_feedback)
-	player.spray_result.connect(world_root.get_runtime_evidence().record_spray)
-	player.recovered.connect(world_root.get_runtime_evidence().record_recovery)
-	player.get_spray_controller().spray_identity.connect(world_root.get_runtime_evidence().record_spray_identity)
-	player.get_spray_controller().tag_instances.active_count_changed.connect(world_root.get_runtime_evidence().set_active_decals)
-	player.get_spray_controller().tag_instances.oldest_tag_removed.connect(world_root.get_runtime_evidence().record_tag_eviction)
+	if not player.feedback_requested.is_connected(hud.show_feedback):
+		player.feedback_requested.connect(hud.show_feedback)
+	if not player.spray_result.is_connected(world_root.get_runtime_evidence().record_spray):
+		player.spray_result.connect(world_root.get_runtime_evidence().record_spray)
+	if not player.recovered.is_connected(world_root.get_runtime_evidence().record_recovery):
+		player.recovered.connect(world_root.get_runtime_evidence().record_recovery)
+	if not player.get_spray_controller().spray_identity.is_connected(world_root.get_runtime_evidence().record_spray_identity):
+		player.get_spray_controller().spray_identity.connect(world_root.get_runtime_evidence().record_spray_identity)
+	if not player.get_spray_controller().tag_instances.active_count_changed.is_connected(world_root.get_runtime_evidence().set_active_decals):
+		player.get_spray_controller().tag_instances.active_count_changed.connect(world_root.get_runtime_evidence().set_active_decals)
+	if not player.get_spray_controller().tag_instances.oldest_tag_removed.is_connected(world_root.get_runtime_evidence().record_tag_eviction):
+		player.get_spray_controller().tag_instances.oldest_tag_removed.connect(world_root.get_runtime_evidence().record_tag_eviction)
 	world_root.get_runtime_evidence().bind_runtime(player, world_root.get_boundary())
 	player.set_gameplay_enabled(true)
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -528,6 +534,8 @@ func _mac_export_1308_attachment_valid() -> bool:
 
 
 func _mac_export_1394_attachment_valid() -> bool:
+	if _is_adopted_family_source("w96215646"):
+		return _mac_export_live_family_valid()
 	var walls: Array[Node3D] = []
 	var roofs: Array[Node3D] = []
 	for node: Node in world_root.find_children("*", "Node3D", true, false):
@@ -691,6 +699,8 @@ func _mac_export_1238_attachment_valid() -> bool:
 
 
 func _mac_export_northern_attachment_valid(adapter: Script, unit: String, roof_triangles: int) -> bool:
+	if _is_adopted_family_source(adapter.SOURCE_KEY):
+		return _mac_export_live_family_valid()
 	var buildings := world_root.get_node_or_null("PlayableWorld/Buildings")
 	if buildings == null:
 		return false
@@ -804,6 +814,8 @@ func _mac_export_1219_attachment_valid() -> bool:
 
 
 func _mac_export_mariner_attachment_valid(adapter: Script, unit: String) -> bool:
+	if _is_adopted_family_source(adapter.SOURCE_KEY):
+		return _mac_export_live_family_valid()
 	var buildings := world_root.get_node_or_null("PlayableWorld/Buildings")
 	if buildings == null:
 		return false
@@ -977,6 +989,8 @@ func _mac_export_family_attachment_valid(adapter: Script, unit: String) -> bool:
 
 
 func _mac_export_family_pair_valid(wall: Node3D, roof: Node3D, adapter: Script) -> bool:
+	if _is_adopted_family_source(adapter.SOURCE_KEY):
+		return _mac_export_live_family_valid()
 	if wall == null or roof == null or wall == roof:
 		return false
 	var spec: Dictionary = _mac_export_family_spec(adapter)
@@ -1096,6 +1110,8 @@ func _mac_export_projected_family_spec(adapter: Script) -> Dictionary:
 
 
 func _mac_export_projected_family_attachment_valid(adapter: Script, unit: String) -> bool:
+	if _is_adopted_family_source(adapter.SOURCE_KEY):
+		return _mac_export_live_family_valid()
 	var buildings := world_root.get_node_or_null("PlayableWorld/Buildings")
 	if buildings == null:
 		return false
@@ -1309,3 +1325,14 @@ func _mac_export_housing_snapshot(node:Node) -> Dictionary:
 		out["shape_metadata"]=shape_meta
 	for child:Node in node.get_children():out.children.append(_mac_export_housing_snapshot(child))
 	return out
+
+func _is_adopted_family_source(source: String) -> bool:
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://game/resources/housing_family/live_instances.json"))
+	for item: Dictionary in manifest.instances:
+		if str(item.source_key)==source: return true
+	return false
+
+func _mac_export_live_family_valid() -> bool:
+	var result: Dictionary = WorldLoader.HOUSING_FAMILY.validate_live(world_root)
+	print("MAC_EXPORT_HOUSING_FAMILY_ADOPTION: ",JSON.stringify(result))
+	return bool(result.get("ok",false))

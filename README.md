@@ -7,11 +7,11 @@ public distribution are outside this milestone.
 
 ## Current source and release
 
-The current source retains **34 of 213** accepted physical buildings and **179 not evaluated**. This batch improves the complete 1232 and 1241 Northpoint buildings without adding recognition credit. Their original acceptance history remains intact.
+The current source enables the owner-approved **24 shared-family housing appearances in normal gameplay**, with source-owned contacts and wall spray layers. Recognition remains **34 of 213** accepted physical buildings and **179 not evaluated**; this adoption adds no credit.
 
-The new exact-current macOS app passed source, mounted-content/privacy and signed headless/native checks. Its [release record](evidence/first-playable/housing-1232-1241-quality-current-release-2026-09-23-001/README.md) binds the app and independent decisions. Stable whole-app destination: `build/housing-1232-1241-quality-current-001/Treasure Island First Playable.app`; consult the release record for actual transfer status. The [34 ID snapshots](evidence/building-snapshots/accepted-34-2026-09-23/README.md) predate these two quality replacements.
+The reviewed macOS app is delivered at `build/housing-family-live-2026-09-24-001/Treasure Island First Playable.app`. Its [release record](evidence/first-playable/housing-family-live-release-2026-09-24-001/README.md) binds the exact app, source and independent decisions. Source, mounted privacy, signed-headless adoption/startup and repeat Metal smoke checks passed. The first Metal smoke timed out; repeat completion does not establish a cold-start guarantee.
 
-The new 1397 and 1444 art revisions remain isolated studies pending their own integration and release gates; their existing production versions remain unchanged. The [paused checkpoint](discovery/checkpoints/paused-2026-09-23/README.md), unfinished 1237/1229 work and deferred Mersea remain preserved. Follow the resumed-work and hourly quota rules in [AGENTS.md](AGENTS.md).
+The [24-pair MAIN/TEST comparison](evidence/housing-family-experiment/main-vs-test.html) remains pinned to its pre-integration commits. The normal game now uses the approved appearance; no comparison harness is needed to play. Historical [34 ID snapshots](evidence/building-snapshots/accepted-34-2026-09-23/README.md) and acceptance receipts remain intact. The separate 1444 study and deferred Mersea work are unchanged. This bounded shipping task is complete; broader autonomous work remains paused.
 
 ## Play on another Mac
 

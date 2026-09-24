@@ -1,0 +1,47 @@
+{
+  "app": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app",
+  "files": {
+    "Contents/Info.plist": {
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885,
+      "mode": 420
+    },
+    "Contents/MacOS/Treasure Island First Playable": {
+      "sha256": "9c9978d9f4c1a6d1504b4363c98f37ac206348e3a72e41140b76fc36e88637b3",
+      "bytes": 170963648,
+      "mode": 493
+    },
+    "Contents/PkgInfo": {
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9,
+      "mode": 420
+    },
+    "Contents/Resources/PrivacyInfo.xcprivacy": {
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229,
+      "mode": 420
+    },
+    "Contents/Resources/Treasure Island First Playable.pck": {
+      "sha256": "443fb85ff8209cb346c777e0b2d86cf3b74c26ba0c97b400617a9405ddfbe56e",
+      "bytes": 82720688,
+      "mode": 420
+    },
+    "Contents/Resources/icon.icns": {
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500,
+      "mode": 420
+    },
+    "Contents/_CodeSignature/CodeResources": {
+      "sha256": "16c87099c5311a5d79232b186bdde6aca68e728d431f54a32e6c8cd6ddeaa2cc",
+      "bytes": 3217,
+      "mode": 420
+    }
+  },
+  "pck": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+  "pck_sha256": "443fb85ff8209cb346c777e0b2d86cf3b74c26ba0c97b400617a9405ddfbe56e",
+  "binary": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+  "binary_sha256": "9c9978d9f4c1a6d1504b4363c98f37ac206348e3a72e41140b76fc36e88637b3",
+  "signature_ok": true,
+  "bundle_checks_sha256": "0c5ddcbe7d6af0fcd4d6e65e7ccbd56c0f7d45db1c166581f4c1514769a6ba8c",
+  "signature_log_sha256": "71d436117b6dd375446b9c90dd7b8e4379e61d6372298812d0a00afefb37b2e1"
+}

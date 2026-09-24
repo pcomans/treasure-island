@@ -1,0 +1,177 @@
+{
+	"captures": [],
+	"checks": [
+		{
+			"failures": 0,
+			"grade_occluded": 24,
+			"samples": 943,
+			"source": "w96215678",
+			"tiny_unresolved": 2
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 6,
+			"samples": 1167,
+			"source": "w96215653",
+			"tiny_unresolved": 12
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 0,
+			"samples": 1154,
+			"source": "w96215659",
+			"tiny_unresolved": 9
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 18,
+			"samples": 641,
+			"source": "w96665911",
+			"tiny_unresolved": 0
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 0,
+			"samples": 1000,
+			"source": "w96215646",
+			"tiny_unresolved": 7
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 0,
+			"samples": 1096,
+			"source": "w96215651",
+			"tiny_unresolved": 11
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 36,
+			"samples": 1706,
+			"source": "w96215652",
+			"tiny_unresolved": 7
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 0,
+			"samples": 1319,
+			"source": "w96215656",
+			"tiny_unresolved": 0
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 13,
+			"samples": 1346,
+			"source": "w96215661",
+			"tiny_unresolved": 5
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 8,
+			"samples": 1121,
+			"source": "w96215666",
+			"tiny_unresolved": 13
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 29,
+			"samples": 1219,
+			"source": "w96215672",
+			"tiny_unresolved": 0
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 31,
+			"samples": 531,
+			"source": "w96215673",
+			"tiny_unresolved": 0
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 4,
+			"samples": 1130,
+			"source": "w96215677",
+			"tiny_unresolved": 2
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 3,
+			"samples": 1117,
+			"source": "w96215680",
+			"tiny_unresolved": 1
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 0,
+			"samples": 672,
+			"source": "w96215682",
+			"tiny_unresolved": 2
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 9,
+			"samples": 713,
+			"source": "w96215685",
+			"tiny_unresolved": 0
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 23,
+			"samples": 1049,
+			"source": "w96215691",
+			"tiny_unresolved": 12
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 19,
+			"samples": 1538,
+			"source": "w96215658",
+			"tiny_unresolved": 0
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 21,
+			"samples": 1059,
+			"source": "w96215669",
+			"tiny_unresolved": 0
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 0,
+			"samples": 654,
+			"source": "w96215688",
+			"tiny_unresolved": 9
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 14,
+			"samples": 924,
+			"source": "w96665904",
+			"tiny_unresolved": 0
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 1,
+			"samples": 1108,
+			"source": "w96215649",
+			"tiny_unresolved": 0
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 0,
+			"samples": 1007,
+			"source": "w96215670",
+			"tiny_unresolved": 0
+		},
+		{
+			"failures": 0,
+			"grade_occluded": 0,
+			"samples": 534,
+			"source": "w96215674",
+			"tiny_unresolved": 0
+		}
+	],
+	"failure": "",
+	"ok": true,
+	"reused_visuals": "live-integration-005",
+	"scope": "Normal-load source integration; representative stock motion and per-instance exposed contact samples"
+}

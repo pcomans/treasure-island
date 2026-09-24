@@ -222,3 +222,13 @@ positions and check the destination builder's winding convention before capture;
 002 reversed only those triangles and made them visible. Correct visibility did
 not settle composition: the rear walk also needed to account for stepped entry
 paths, addressed separately in 003.
+
+## Probe exposed geometry and keep completion claims stage-bound
+
+The shared-family live integration retained positive clipping triangles, but its first-face ray sampled a 20 mm² fragment; a later wall centroid was 0.255 mm below actual land while the triangle's upper portion remained exposed. Neither miss demonstrated a usable wall gap. Select stable interior samples against canonical world terrain across chunk boundaries, keep all rendered/contact triangles, aggregate read-only failures, and explicitly leave tiny or unsampled regions unproved. Do not add collision backing solely to satisfy a degenerate probe. Ground overlaps require verification against the actual hit owner's triangles; wall and roof source ownership stays exact.
+
+The same run series exposed two completion hazards: visible MeshInstance nodes can have null meshes, and real reload re-emits world-ready signals. Count empty meshes as zero geometry and make runtime signal connections idempotent. Build a successful final receipt only after its required stages complete; a native exit of zero does not override engine errors. Reuse independently reviewed completed subsets without relabeling their failed parent runs as passes. Keep historical builder topology separate from current visible/active topology after an adoption hook.
+
+When a JSON topology binding is consumed, compare the same keys and exact finite integral numeric values rather than Dictionary representation equality: parsed JSON floats and native integer counters can describe identical counts. Reject fractions and wrong types; do not repair this with truncation or tolerance.
+
+The shared-family release adaptation exposed two external-contract assumptions: two physics frames did not establish deferred world readiness, and an editor-mounted full-world loader intentionally required raw source files excluded from the PCK. Wait for actual validated/failure state with a deadline, and check the executable feature boundary before reusing a loader. The existing signed-app fatal adoption validator supplied the same package predicate without duplicate manual construction; source/export evidence remained valid. Preserve failed attempts and distinguish repeat-run native success from an unproved cold-start guarantee.

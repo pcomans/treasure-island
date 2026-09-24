@@ -1,0 +1,14 @@
+{
+  "terminal": 1,
+  "errors": [],
+  "engine_errors": [
+    "ERROR: VISUAL_CAPTURE_FAIL: Installed mesh contact missing w96215653 role wall"
+  ],
+  "receipt_ok": false,
+  "elapsed_seconds": 22.298133875243366,
+  "pid": 27468,
+  "slot_released": true,
+  "engines_after": [],
+  "ended_utc": "2026-09-24T22:12:33.452359+00:00",
+  "ok": false
+}

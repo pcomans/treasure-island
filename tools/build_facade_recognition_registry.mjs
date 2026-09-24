@@ -6252,7 +6252,7 @@ const D5_BATCH_ACCEPTED = Object.freeze([
         "world_triangles": 207893,
         "world_static_bodies": 498,
         "world_shapes": 1925,
-        "world_topology_scope": "current_integration_topology"
+        "world_topology_scope": "pre_shared_family_base_topology"
       },
       "ownership_contract": {
         "structural_owner_count": 3,
@@ -10413,6 +10413,25 @@ function validateAdapterContracts(contracts, registry = null) {
   assertRuntimeBoundary(contracts, "facade runtime adapter contracts");
 }
 
+const FAMILY_ADOPTION_PATH = "game/resources/housing_family/live_adoption.json";
+function buildAppearanceAdoption() {
+  const manifest = readJson("game/resources/housing_family/live_instances.json");
+  const sources = manifest.instances.map((item) => item.source_key).sort();
+  invariant(sources.length === 24 && new Set(sources).size === 24, "Expected 24 adopted family sources");
+  const paths = ["game/scripts/main.gd", "game/scripts/world/world_loader.gd", "game/scripts/world/facades/housing_family_live_attachment.gd", "game/scripts/world/facades/housing_site_family.gd", "game/scripts/world/facades/northpoint_1232_quality_model.gd", "game/scripts/world/facades/facade_runtime_registry_loader.gd", "game/resources/housing_family/live_instances.json", "game/resources/housing_family/siding.gdshader", "game/resources/housing_family/roof.gdshader", "generated/world/manifest.json", ...manifest.instances.map((item) => item.config.replace(/^res:\/\//u, ""))];
+  return {
+    schema_version: "housing-family-live-adoption-v1",
+    scope: "owner_approved_appearance_current_visible_active_topology",
+    base_recognition: "34/213", recognition_credit: 0,
+    base_builder_topology_scope: "pre_shared_family_base_topology",
+    enabled_sources: sources,
+    retained_production_roof_and_site: ["w96215673", "w96215674"],
+    current_visible_active_topology: {visible_meshes:26585, visible_surfaces:26603, visible_triangles:725842, active_bodies:512, active_shapes:585, disabled_bodies:78},
+    contact_scope: "Exact installed mesh contacts; exposed representative samples per instance. Tiny and grade-occluded samples remain unproved; stock motion/spray are representative.",
+    dependencies: Object.fromEntries(paths.sort().map((path) => [path, sha256File(absolute(path))])),
+  };
+}
+
 function buildRuntimeRegistry(catalog, inputs, receiverByKey) {
   const packageAudit = [];
   const attachmentByReceiver = inventoryAttachmentByReceiver(inputs.inventory);
@@ -10498,6 +10517,7 @@ function buildRuntimeRegistry(catalog, inputs, receiverByKey) {
   const adapterContracts = buildAdapterContracts(catalog, importedLegacyAdapters, importedActiveAdapters);
   const adapterContractsSha256 = sha256Bytes(stableJson(adapterContracts));
   const registry = {
+    appearance_adoption: {path: `res://${FAMILY_ADOPTION_PATH}`, sha256: sha256Bytes(stableJson(buildAppearanceAdoption())), scope: "current_enabled_appearance_zero_credit"},
     adapter_contract: {
       path: `res://${PATHS.adapterContracts}`,
       schema_version: ADAPTER_CONTRACT_SCHEMA,
@@ -10866,7 +10886,10 @@ function validateRuntimeRegistry(registry, adapterContracts = null) {
     invariant(equalStable(adapter.runtime_assets.map((a) => [a.path,a.sha256]).sort(), Object.entries(d.files).map(([key,path]) => [`res://${path}`, d.hashes[key]]).sort()), `D5 ${d.number} runtime dependency closure drifted`);
   }
   const currentTopologyOwners = registry.active_runtime_adapters.filter((adapter) => adapter.active_runtime_contract?.behavior_contract?.geometry_contract?.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE);
-  invariant(currentTopologyOwners.length === 1 && currentTopologyOwners[0].adapter_id === D5_BATCH_ACCEPTED.at(-1).adapter_id, "The final accepted D5 batch unit must be the sole current-integration topology authority");
+  invariant(currentTopologyOwners.length === 0, "Accepted base adapters must not claim post-adoption current topology");
+  const baseTopologyOwners = registry.active_runtime_adapters.filter((adapter) => adapter.active_runtime_contract?.behavior_contract?.geometry_contract?.world_topology_scope === "pre_shared_family_base_topology");
+  invariant(baseTopologyOwners.length === 1 && baseTopologyOwners[0].adapter_id === D5_BATCH_ACCEPTED.at(-1).adapter_id, "1241 must retain the pre-adoption base topology scope");
+  invariant(equalStable(registry.appearance_adoption, {path:`res://${FAMILY_ADOPTION_PATH}`,sha256:sha256Bytes(stableJson(buildAppearanceAdoption())),scope:"current_enabled_appearance_zero_credit"}), "Current zero-credit appearance adoption binding drifted");
   invariant(
     equalStable(
       building3Adapter.runtime_assets.map((asset) => asset.path).sort(),
@@ -11095,7 +11118,7 @@ function compile(catalog, inputs) {
   validateRuntimeRegistry(registry, adapterContracts);
   const report = buildReport(catalog, registry, adapterContracts, inputs, packageAudit);
   invariant(report.reference_dependencies.identity_or_reference_research_required_unit_count === 60, "Expected 60 remaining identity/reference research dependencies after accepting the separately researched Building 1 tower");
-  return { adapterContracts, packageAudit, registry, report };
+  return { adapterContracts, packageAudit, registry, report, appearanceAdoption: buildAppearanceAdoption() };
 }
 
 function writeOutput(relativePath, value) {
@@ -11132,12 +11155,14 @@ function main() {
   invariant(existsSync(absolute(PATHS.catalog)), `Missing ${PATHS.catalog}; bootstrap once with --seed-catalog --write`);
   invariant(existsSync(absolute(PATHS.schema)), `Missing ${PATHS.schema}`);
   const catalog = readJson(PATHS.catalog);
-  const { adapterContracts, registry, report } = compile(catalog, inputs);
+  const { adapterContracts, registry, report, appearanceAdoption } = compile(catalog, inputs);
   if (mode.write) {
+    writeOutput(FAMILY_ADOPTION_PATH, appearanceAdoption);
     writeOutput(PATHS.adapterContracts, adapterContracts);
     writeOutput(PATHS.registry, registry);
     writeOutput(PATHS.report, report);
   } else if (mode.check) {
+    assertCheckedIn(FAMILY_ADOPTION_PATH, appearanceAdoption);
     assertCheckedIn(PATHS.adapterContracts, adapterContracts);
     assertCheckedIn(PATHS.registry, registry);
     assertCheckedIn(PATHS.report, report);

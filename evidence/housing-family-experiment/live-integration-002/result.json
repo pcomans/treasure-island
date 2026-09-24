@@ -1,0 +1,14 @@
+{
+  "terminal": 1,
+  "errors": [],
+  "engine_errors": [
+    "ERROR: VISUAL_CAPTURE_FAIL: Installed mesh contact missing w96215653 role wall mesh 751 triangle 0 points (-334.6209, 2.7336, -775.2015) (-334.6199, 2.7352, -775.2265) (-334.6199, 2.7336, -775.2265) area 0.00002003510781"
+  ],
+  "receipt_ok": false,
+  "elapsed_seconds": 21.133048916701227,
+  "pid": 28005,
+  "slot_released": true,
+  "engines_after": [],
+  "ended_utc": "2026-09-24T22:13:43.465034+00:00",
+  "ok": false
+}

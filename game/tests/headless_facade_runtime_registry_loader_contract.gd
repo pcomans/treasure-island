@@ -3,8 +3,8 @@ extends SceneTree
 const RegistryLoader := preload("res://game/scripts/world/facades/facade_runtime_registry_loader.gd")
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
-const EXPECTED_REGISTRY_SHA256 := "3606232d56e22a921c5359df8a363816787d01f08c14fe1e7f9a92e5b5e5e78b"
-const EXPECTED_ADAPTER_CONTRACT_SHA256 := "686b4087377c20c7adecdaf3d62c1a8589f1f9e18c401e03b328577b42ff296d"
+const EXPECTED_REGISTRY_SHA256 := "deb3029e40b924e5f70b5d8a8d829323d168c73204d87d66840e24e82beec7d2"
+const EXPECTED_ADAPTER_CONTRACT_SHA256 := "176619adcfaf7d5c2ae67c20ee8dc4bacdf47dcf3e1f3c2bd18f80b606189121"
 const READY_RECEIVERS := [
 	"building-composite:w1249412094:w1282547786:wall",
 	"building:r16681702:wall",
@@ -379,7 +379,7 @@ func _validate_adapter_resolution(loader: RefCounted) -> void:
 	expected_ready.sort()
 	expected_disabled.sort()
 	_require(ready_seen == expected_ready and disabled_seen == expected_disabled, "Ready/disabled receiver partition drifted.")
-	_require(current_topology_plan_ids == ["active-adapter:northpoint-1241-live:building:w96215674:wall"], "1241 is not the sole current-integration topology plan authority.")
+	_require(current_topology_plan_ids.is_empty(), "Accepted base plans must not claim current post-adoption topology.")
 
 
 func _validate_d2_1441_plan(plan: Dictionary) -> void:

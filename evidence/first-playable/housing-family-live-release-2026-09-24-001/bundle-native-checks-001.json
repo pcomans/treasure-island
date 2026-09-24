@@ -1,0 +1,113 @@
+{
+  "signature": {
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--deep",
+      "--strict",
+      "--verbose=4",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app: valid on disk\n/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app: satisfies its Designated Requirement\n"
+  },
+  "arm64": {
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--strict",
+      "--arch",
+      "arm64",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "x86_64": {
+    "argv": [
+      "/usr/bin/codesign",
+      "--verify",
+      "--strict",
+      "--arch",
+      "x86_64",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "architectures": {
+    "argv": [
+      "/usr/bin/lipo",
+      "-archs",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable"
+    ],
+    "exit_code": 0,
+    "stdout": "x86_64 arm64\n",
+    "stderr": ""
+  },
+  "entitlements": {
+    "argv": [
+      "/usr/bin/codesign",
+      "--display",
+      "--entitlements",
+      ":-",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app"
+    ],
+    "exit_code": 0,
+    "stdout": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"https://www.apple.com/DTDs/PropertyList-1.0.dtd\"><plist version=\"1.0\"><dict></dict></plist>\n",
+    "stderr": "Executable=/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable\nwarning: Specifying ':' in the path is deprecated and will not work in a future release\n"
+  },
+  "xattrs": {
+    "argv": [
+      "/usr/bin/xattr",
+      "-lr",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app"
+    ],
+    "exit_code": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "info": {
+    "argv": [
+      "/usr/bin/plutil",
+      "-convert",
+      "json",
+      "-o",
+      "-",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/Info.plist"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"LSMinimumSystemVersionByArchitecture\":{\"arm64\":\"13.00\",\"x86_64\":\"11.00\"},\"CFBundleName\":\"Treasure Island First Playable\",\"NSHumanReadableCopyright\":\"Private hobby project\",\"DTXcode\":\"1420\",\"DTSDKName\":\"macosx13.1\",\"DTSDKBuild\":\"22C55\",\"CFBundleDevelopmentRegion\":\"English\",\"CFBundleVersion\":\"0.1.0\",\"LSArchitecturePriority\":[\"arm64\",\"x86_64\"],\"NSPrincipalClass\":\"NSApplication\",\"DTPlatformName\":\"macosx\",\"CFBundlePackageType\":\"APPL\",\"CFBundleIconFile\":\"icon.icns\",\"CFBundleSupportedPlatforms\":[\"MacOSX\"],\"CFBundleShortVersionString\":\"0.1.0\",\"NSHighResolutionCapable\":true,\"CFBundleInfoDictionaryVersion\":\"6.0\",\"CFBundleExecutable\":\"Treasure Island First Playable\",\"CFBundleIdentifier\":\"local.treasure-island.first-playable\",\"LSApplicationCategoryType\":\"public.app-category.games\",\"DTPlatformVersion\":\"13.1\",\"DTXcodeBuild\":\"14C18\",\"CFBundleDisplayName\":\"Treasure Island First Playable\",\"CFBundleSignature\":\"TreasureIsland\",\"DTPlatformBuild\":\"14C18\"}",
+    "stderr": ""
+  },
+  "privacy": {
+    "argv": [
+      "/usr/bin/plutil",
+      "-convert",
+      "json",
+      "-o",
+      "-",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-ship-2026-09-24/export-001/Treasure Island First Playable.app/Contents/Resources/PrivacyInfo.xcprivacy"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"NSPrivacyTracking\":false}",
+    "stderr": ""
+  },
+  "entitlements_native_json": {
+    "argv": [
+      "/usr/bin/plutil",
+      "-convert",
+      "json",
+      "-o",
+      "-",
+      "-"
+    ],
+    "stdin_source": "codesign entitlements stdout recorded above",
+    "exit_code": 0,
+    "stdout": "{}",
+    "stderr": ""
+  }
+}

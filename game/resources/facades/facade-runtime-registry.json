@@ -7176,7 +7176,7 @@
             "world_shapes": 1925,
             "world_static_bodies": 498,
             "world_surfaces": 3006,
-            "world_topology_scope": "current_integration_topology",
+            "world_topology_scope": "pre_shared_family_base_topology",
             "world_triangles": 207893
           },
           "ownership_contract": {
@@ -8556,7 +8556,12 @@
   "adapter_contract": {
     "path": "res://game/resources/facades/facade-runtime-adapter-contracts.json",
     "schema_version": "ti.facade-runtime-adapter-contracts/32",
-    "sha256": "686b4087377c20c7adecdaf3d62c1a8589f1f9e18c401e03b328577b42ff296d"
+    "sha256": "176619adcfaf7d5c2ae67c20ee8dc4bacdf47dcf3e1f3c2bd18f80b606189121"
+  },
+  "appearance_adoption": {
+    "path": "res://game/resources/housing_family/live_adoption.json",
+    "scope": "current_enabled_appearance_zero_credit",
+    "sha256": "cc35996589a64ac3c4cb8bd0be27b5ddde32a354a304e0983bd03105ff2842e4"
   },
   "build_contract": {
     "authoring_catalog_sha256": "63dff67a2768c9d063ea5fffaa49bb0d896a11e75c9bebe5305fa442ce1737b2",

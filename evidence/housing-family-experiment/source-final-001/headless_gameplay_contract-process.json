@@ -1,0 +1,11 @@
+{
+  "pid": 26426,
+  "command": [
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+    "--headless",
+    "--path",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances",
+    "--script",
+    "res://game/tests/headless_gameplay_contract.gd"
+  ]
+}

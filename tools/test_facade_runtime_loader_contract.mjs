@@ -560,7 +560,7 @@ assert(d21444Plan && stableJson(d21444Plan.behavior_contract) === stableJson(exp
 assert(d21444Plan.executable_assets.length === 3 && d21444Plan.runtime_assets.length === 13, "D2 1444 exact runtime/executable closure drifted");
 
 const currentTopologyPlans = adapterContracts.plans.filter((plan) => plan.behavior_contract?.geometry_contract?.world_topology_scope === CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE).map((plan) => plan.adapter_id);
-assert(JSON.stringify(currentTopologyPlans) === JSON.stringify(["active-adapter:northpoint-1241-live:building:w96215674:wall"]), "1241 is not the sole current-integration topology plan authority");
+assert(JSON.stringify(currentTopologyPlans) === JSON.stringify([]), "Accepted base plans claim current post-adoption topology");
 
 expectFailure(() => {
   const candidate = structuredClone(catalog);
@@ -3981,7 +3981,7 @@ const expectedD5Batch = [
         "world_triangles": 207893,
         "world_static_bodies": 498,
         "world_shapes": 1925,
-        "world_topology_scope": "current_integration_topology"
+        "world_topology_scope": "pre_shared_family_base_topology"
       },
       "ownership_contract": {
         "structural_owner_count": 3,

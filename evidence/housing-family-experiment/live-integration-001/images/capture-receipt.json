@@ -1,0 +1,6 @@
+{
+	"captures": [],
+	"failure": "Installed mesh contact missing w96215653 role wall",
+	"ok": false,
+	"scope": "Visual experiment, no acceptance or collision fit claim"
+}

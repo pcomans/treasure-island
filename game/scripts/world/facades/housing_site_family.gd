@@ -1,6 +1,6 @@
 extends RefCounted
 ## Shared site assembly. Exact source edges and per-instance opening schedules;
-## render-only experiment, with no authority, receiver or collision mutation.
+## Geometry shared by preview and normal-play attachment; ownership lives in the adapter.
 const PARTS = preload("res://game/scripts/world/facades/northpoint_1232_quality_model.gd")
 const SIDING = preload("res://game/resources/housing_family/siding.gdshader")
 const ROOF = preload("res://game/resources/housing_family/roof.gdshader")
@@ -14,6 +14,7 @@ static func color(cfg: Dictionary, key: String, fallback: Color) -> Color:
 
 static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D:
 	var root := Node3D.new()
+	root.set_meta("build_valid",true)
 	root.name = "SharedHousing_" + str(cfg.target.source_key)
 	root.set_meta("source_key", cfg.target.source_key)
 	root.set_meta("scope", "experimental_visual_only_collision_unchanged")
@@ -57,6 +58,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 							run = int(r)
 							break
 				if run < 0:
+					root.set_meta("build_valid",false)
 					push_error("Unmatched scheduled motif: %s %s" % [cfg.target.source_key,frame.id])
 					continue
 				var ra := Vector3(vertices[run*12],vertices[run*12+1],vertices[run*12+2])
@@ -85,6 +87,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 					holes_by_run[int(candidate)].append(Rect2(lo,cy-height/2,hi-lo,height))
 					covered += hi-lo
 				if covered < width-0.06:
+					root.set_meta("build_valid",false)
 					push_error("Incomplete opening containment: %s %s %s" % [cfg.target.source_key,frame.id,station])
 				point.y = cy
 				if group == "entries":
@@ -152,12 +155,15 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 		var top := float(cfg.get("wall_top_y", maxf(float(vertices[i+7]),float(vertices[i+10]))))
 		var holes: Array[Rect2] = []
 		for hole: Rect2 in holes_by_run.get(i/12, []): holes.append(hole)
+		var wall_begin := root.get_child_count()
 		PARTS._wall_with_openings(root,a,b,top,holes,siding)
+		_tag_since(root,wall_begin,"wall")
 		var t := Vector3(b.x-a.x,0,b.z-a.z).normalized()
 		var n := Vector3(-t.z,0,t.x)
 		if bool(cfg.get("vertical_seams",false)):
 			PARTS._panel(root,Vector3(a.x,(a.y+top)/2,a.z),t,n,Vector3(0.08,top-a.y,0.08),trim)
 		PARTS._beam(root,Vector3(a.x,top,a.z)+n*0.05,Vector3(b.x,top,b.z)+n*0.05,0.23,0.13,trim)
+	var roof_begin := root.get_child_count()
 	# Keep the frozen roof footprint; existing observed pitched surfaces are data.
 	if str(cfg.get("roof_kind","")) == "shallow_hip":
 		_hip_roof(root,wall,cfg,roofing,trim)
@@ -173,8 +179,10 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 				var station := center.x*float(facade.warm_roof_axis[0])+center.z*float(facade.warm_roof_axis[1])
 				if station <= float(facade.warm_roof_station_max): roof_material=warm_roof
 			PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),roof_material)
+	_tag_since(root,roof_begin,"roof")
 	for triangle: Array in cfg.get("shallow_band", {}).get("triangles", []):
 		PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),siding)
+	var ground_begin := root.get_child_count()
 	if not bool(cfg.get("retain_production_roof",false)):
 		for surface: Dictionary in cfg.get("local_ground", {}).values():
 			var ground_material: Material = concrete
@@ -185,6 +193,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 			for entry: Dictionary in frame.get("entries",[]):
 				for triangle: Array in entry.get("path_mesh",{}).get("top_triangles",[]):
 					PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),concrete)
+	_tag_since(root,ground_begin,"ground")
 	var canopies: Array = cfg.get("carports", []).duplicate()
 	if cfg.has("carport") and not cfg.carport.is_empty(): canopies.append(cfg.carport)
 	for canopy: Dictionary in canopies:
@@ -300,6 +309,7 @@ static func _hip_piece(root: Node3D, polygon: PackedVector2Array, t: Vector2, n:
 			for q: Vector2 in piece: local_polygon.append(q-piece[0])
 			var indices := PackedInt32Array([0,1,2]) if piece.size()==3 else Geometry2D.triangulate_polygon(local_polygon)
 			if indices.is_empty():
+				root.set_meta("build_valid",false)
 				push_error("Nondegenerate roof triangulation failed: %s area=%s vertices=%s" % [root.get_meta("source_key"),area,piece])
 				continue
 			# Roof normals must face the sky independent of polygon winding.
@@ -364,3 +374,7 @@ static func _polygon_area(polygon: PackedVector2Array) -> float:
 		var by := float(b.y)-float(origin.y)
 		sum += ax*by-ay*bx
 	return absf(sum)*0.5
+
+static func _tag_since(root: Node3D, begin: int, role: String) -> void:
+	for i in range(begin,root.get_child_count()):
+		root.get_child(i).set_meta("family_role",role)

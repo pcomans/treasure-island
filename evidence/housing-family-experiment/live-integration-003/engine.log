@@ -1,0 +1,21 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)
+
+SCRIPT ERROR: Parse Error: Could not preload resource script "res://game/scripts/world/facades/housing_family_live_attachment.gd".
+          at: GDScript::reload (res://game/scripts/world/world_loader.gd:4)
+SCRIPT ERROR: Parse Error: Could not resolve script "res://game/scripts/world/facades/housing_family_live_attachment.gd".
+          at: GDScript::reload (res://game/scripts/world/world_loader.gd:4)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "HOUSING_FAMILY" constant because the value doesn't have a set type.
+          at: GDScript::reload (res://game/scripts/world/world_loader.gd:4)
+SCRIPT ERROR: Parse Error: Cannot infer the type of "family_result" variable because the value doesn't have a set type.
+          at: GDScript::reload (res://game/scripts/world/world_loader.gd:82)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+          at: GDScript::reload (res://game/tests/rendered_visual_evidence_capture.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+          at: GDScript::reload (res://game/tests/housing_family_experiment/normal_capture.gd:0)
+ERROR: Failed to load script "res://game/tests/housing_family_experiment/normal_capture.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Invalid access to property or key 'world_ready' on a base object of type 'Nil'.
+          at: _run (res://game/tests/housing_family_experiment/normal_capture.gd:25)
+          GDScript backtrace (most recent call first):
+              [0] _run (res://game/tests/housing_family_experiment/normal_capture.gd:25)

@@ -1,0 +1,799 @@
+{
+	"captures": [
+		{
+			"bytes": 814415,
+			"camera_forward": [
+				0.264661133289337,
+				0.0449409559369087,
+				0.963293731212616
+			],
+			"camera_position": [
+				-188.249221801758,
+				4.35309505462646,
+				-610.107482910156
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215649-LIVE.png",
+			"id": "w96215649-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-186.793579101562,
+				2.60027050971985,
+				-604.809387207031
+			],
+			"region": "w96215649",
+			"sample_luminance_range": 0.64068628102541,
+			"sample_unique_colors": 286,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "47c08d959f150367a11f6cfe6642b4dc4527f6903952d3cf08660c9d72fd56f3",
+			"source_key": "w96215649"
+		},
+		{
+			"bytes": 831146,
+			"camera_forward": [
+				-0.481462985277176,
+				0.0451348945498466,
+				0.875303447246552
+			],
+			"camera_position": [
+				-389.359405517578,
+				4.09742021560669,
+				-647.840209960938
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215651-LIVE.png",
+			"id": "w96215651-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-392.007415771484,
+				2.34565925598145,
+				-643.026123046875
+			],
+			"region": "w96215651",
+			"sample_luminance_range": 0.601322367787361,
+			"sample_unique_colors": 300,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "c45fd1db484639a4382c4d19085eff66586a77bdaf3d03b2fd1d5c24788eb830",
+			"source_key": "w96215651"
+		},
+		{
+			"bytes": 950523,
+			"camera_forward": [
+				-0.179718598723412,
+				0.023617984727025,
+				-0.983434498310089
+			],
+			"camera_position": [
+				-453.192749023438,
+				4.22686815261841,
+				-635.9619140625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215652-LIVE.png",
+			"id": "w96215652-LIVE",
+			"intent": "Matched A/B source-world visual study",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-454.181243896484,
+				2.35676765441895,
+				-641.370788574219
+			],
+			"region": "w96215652",
+			"sample_luminance_range": 0.732957646250725,
+			"sample_unique_colors": 312,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "26c593af88952516d1c24cea2b7ade648012c073b4512d0e667f15c18b301cc2",
+			"source_key": "w96215652"
+		},
+		{
+			"bytes": 576859,
+			"camera_forward": [
+				-0.88556569814682,
+				0.0441729985177517,
+				0.46240907907486
+			],
+			"camera_position": [
+				-311.793609619141,
+				3.82272696495056,
+				-792.547302246094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215653-LIVE.png",
+			"id": "w96215653-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-316.664215087891,
+				2.06567883491516,
+				-790.003967285156
+			],
+			"region": "w96215653",
+			"sample_luminance_range": 0.609598442912102,
+			"sample_unique_colors": 235,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "6602d0795345b6ff84505612f86575e219c0b3a850a81b6fe8ddca4cb8f77465",
+			"source_key": "w96215653"
+		},
+		{
+			"bytes": 747253,
+			"camera_forward": [
+				0.460263460874557,
+				0.0727514550089836,
+				0.884796440601349
+			],
+			"camera_position": [
+				-450.973693847656,
+				3.29241538047791,
+				-772.121215820312
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215656-LIVE.png",
+			"id": "w96215656-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-448.442260742188,
+				1.69254803657532,
+				-767.254821777344
+			],
+			"region": "w96215656",
+			"sample_luminance_range": 0.615542739629745,
+			"sample_unique_colors": 267,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "afaf2eb960ebbf9635a583aa9ea81f44c09112220aaa6118c263e7e4930da7ce",
+			"source_key": "w96215656"
+		},
+		{
+			"bytes": 906872,
+			"camera_forward": [
+				0.704383850097656,
+				0.0240309983491898,
+				0.709412455558777
+			],
+			"camera_position": [
+				-178.729690551758,
+				4.81054830551147,
+				-842.641052246094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215658-LIVE.png",
+			"id": "w96215658-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-174.855575561523,
+				2.94271731376648,
+				-838.7392578125
+			],
+			"region": "w96215658",
+			"sample_luminance_range": 0.751772582530975,
+			"sample_unique_colors": 300,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "c5d9b8f10d10ab46887adeb0657d5541c4ce46d76df3600f261d62aab2332570",
+			"source_key": "w96215658"
+		},
+		{
+			"bytes": 442809,
+			"camera_forward": [
+				0.883475542068481,
+				0.0702637135982513,
+				-0.463178008794785
+			],
+			"camera_position": [
+				-324.24951171875,
+				3.73654890060425,
+				-768.6552734375
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215659-LIVE.png",
+			"id": "w96215659-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-319.390411376953,
+				2.12299704551697,
+				-771.202819824219
+			],
+			"region": "w96215659",
+			"sample_luminance_range": 0.764370962977409,
+			"sample_unique_colors": 183,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "17a77f2d0bd0be7e19fbaa07c19b9ff160c030e2729ae7f614cf1ecd61d94959",
+			"source_key": "w96215659"
+		},
+		{
+			"bytes": 851708,
+			"camera_forward": [
+				0.460902124643326,
+				0.0503107719123363,
+				0.886023759841919
+			],
+			"camera_position": [
+				-504.418731689453,
+				3.5343017578125,
+				-749.219970703125
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215661-LIVE.png",
+			"id": "w96215661-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-501.883758544922,
+				1.81101059913635,
+				-744.346862792969
+			],
+			"region": "w96215661",
+			"sample_luminance_range": 0.734101995825768,
+			"sample_unique_colors": 303,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "6b89530db1b2c9438fe255ba28f30d01a37ff7d4e3b5c69cda95db3163f09ff9",
+			"source_key": "w96215661"
+		},
+		{
+			"bytes": 939448,
+			"camera_forward": [
+				0.866750538349152,
+				0.0331522636115551,
+				-0.497638911008835
+			],
+			"camera_position": [
+				-403.821258544922,
+				4.07157325744629,
+				-699.14013671875
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215666-LIVE.png",
+			"id": "w96215666-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-399.054138183594,
+				2.25391125679016,
+				-701.877136230469
+			],
+			"region": "w96215666",
+			"sample_luminance_range": 0.630885511636734,
+			"sample_unique_colors": 292,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "fd65b4d1935548257526025a006c24550d1ccd0c55652a74f34bc199c11c7c67",
+			"source_key": "w96215666"
+		},
+		{
+			"bytes": 844837,
+			"camera_forward": [
+				-0.366719514131546,
+				0.0217017866671085,
+				0.930078446865082
+			],
+			"camera_position": [
+				-201.194427490234,
+				4.61461067199707,
+				-885.45458984375
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215669-LIVE.png",
+			"id": "w96215669-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-203.211380004883,
+				2.73396801948547,
+				-880.339172363281
+			],
+			"region": "w96215669",
+			"sample_luminance_range": 0.644562363624573,
+			"sample_unique_colors": 316,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "f741148ce379596bb3054ca3b32aeacee353a0df51e6ce3c96aad71d9383b239",
+			"source_key": "w96215669"
+		},
+		{
+			"bytes": 949644,
+			"camera_forward": [
+				0.277831435203552,
+				0.0722232908010483,
+				0.957911014556885
+			],
+			"camera_position": [
+				-237.001510620117,
+				4.32758760452271,
+				-765.872802734375
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215670-LIVE.png",
+			"id": "w96215670-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-235.473434448242,
+				2.72481274604797,
+				-760.604309082031
+			],
+			"region": "w96215670",
+			"sample_luminance_range": 0.602727815508842,
+			"sample_unique_colors": 330,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "f03334830a20037c7b22802662d98221a175cbdc672248253e9f1374cca2e49c",
+			"source_key": "w96215670"
+		},
+		{
+			"bytes": 500917,
+			"camera_forward": [
+				-0.352654248476028,
+				0.0534165725111961,
+				0.934227883815765
+			],
+			"camera_position": [
+				-475.067352294922,
+				3.88807821273804,
+				-684.559204101562
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215672-LIVE.png",
+			"id": "w96215672-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-477.006927490234,
+				2.1818642616272,
+				-679.420959472656
+			],
+			"region": "w96215672",
+			"sample_luminance_range": 0.640286289155483,
+			"sample_unique_colors": 201,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "50c47347d0ab4b7d5c3efeca44b0034530c5fefcefb43f21ab14285d772b50d1",
+			"source_key": "w96215672"
+		},
+		{
+			"bytes": 926617,
+			"camera_forward": [
+				0.887169122695923,
+				0.0717396810650826,
+				-0.45583388209343
+			],
+			"camera_position": [
+				-332.100769042969,
+				3.87925553321838,
+				-721.361511230469
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215673-LIVE.png",
+			"id": "w96215673-LIVE",
+			"intent": "Matched A/B source-world visual study",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-327.221343994141,
+				2.27381777763367,
+				-723.868591308594
+			],
+			"region": "w96215673",
+			"sample_luminance_range": 0.662879943847656,
+			"sample_unique_colors": 304,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "e0e222f734268f0558d2d4fbc787642b32281e023abbd04de9e4c5e807cd1fe0",
+			"source_key": "w96215673"
+		},
+		{
+			"bytes": 906113,
+			"camera_forward": [
+				0.512321472167969,
+				0.0533104985952377,
+				-0.857137560844421
+			],
+			"camera_position": [
+				-154.631088256836,
+				4.8619818687439,
+				-731.221130371094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215674-LIVE.png",
+			"id": "w96215674-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-151.813354492188,
+				3.15518689155579,
+				-735.935363769531
+			],
+			"region": "w96215674",
+			"sample_luminance_range": 0.738275304436684,
+			"sample_unique_colors": 288,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "f452f4e8b9e733c04a22477c1295244f179083e669630a324a86e4c9f2287996",
+			"source_key": "w96215674"
+		},
+		{
+			"bytes": 165407,
+			"camera_forward": [
+				-0.0610410124063492,
+				0.0401803962886333,
+				0.997326195240021
+			],
+			"camera_position": [
+				-316.238800048828,
+				4.61444234848022,
+				-606.897094726562
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215677-LIVE.png",
+			"id": "w96215677-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-316.574554443359,
+				2.83543038368225,
+				-601.411865234375
+			],
+			"region": "w96215677",
+			"sample_luminance_range": 0.593012556433678,
+			"sample_unique_colors": 125,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "e30785564e223ed3464cfd301237a84de3a832d45175d0c50e3986cda3c8a307",
+			"source_key": "w96215677"
+		},
+		{
+			"bytes": 583766,
+			"camera_forward": [
+				-0.995892286300659,
+				0.078955851495266,
+				-0.0443235971033573
+			],
+			"camera_position": [
+				-513.944885253906,
+				3.85889649391174,
+				-710.660522460938
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215678-LIVE.png",
+			"id": "w96215678-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-519.422302246094,
+				2.29315066337585,
+				-710.904235839844
+			],
+			"region": "w96215678",
+			"sample_luminance_range": 0.588221177458763,
+			"sample_unique_colors": 221,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "322393374b28a549a269ab570b79ea4d97d4fadf3d75686a369898716813fe0e",
+			"source_key": "w96215678"
+		},
+		{
+			"bytes": 193445,
+			"camera_forward": [
+				0.0620048195123672,
+				0.0375485643744469,
+				-0.997369289398193
+			],
+			"camera_position": [
+				-318.919067382812,
+				4.68563079833984,
+				-582.059326171875
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215680-LIVE.png",
+			"id": "w96215680-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-318.578033447266,
+				2.89214754104614,
+				-587.544921875
+			],
+			"region": "w96215680",
+			"sample_luminance_range": 0.669015690684319,
+			"sample_unique_colors": 123,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "8768c4828060020f6d3c97f13aff4ca7a7a65d3f0dd96a60a142ce4ab40f6a66",
+			"source_key": "w96215680"
+		},
+		{
+			"bytes": 896997,
+			"camera_forward": [
+				0.521948397159576,
+				0.0444445386528969,
+				-0.851818382740021
+			],
+			"camera_position": [
+				-282.825866699219,
+				4.4821310043335,
+				-577.38818359375
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215682-LIVE.png",
+			"id": "w96215682-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-280.0,
+				2.72275280952454,
+				-582.0
+			],
+			"region": "w96215682",
+			"sample_luminance_range": 0.871278420090675,
+			"sample_unique_colors": 297,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "ecc194bfb719d11d1cd82d739b5194a6bfa9ed21fd9019af015d9051cfbcb450",
+			"source_key": "w96215682"
+		},
+		{
+			"bytes": 736413,
+			"camera_forward": [
+				-0.960710942745209,
+				0.0977093428373337,
+				-0.25978347659111
+			],
+			"camera_position": [
+				-378.237670898438,
+				3.50813007354736,
+				-695.167846679688
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215685-LIVE.png",
+			"id": "w96215685-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-383.521636962891,
+				2.04553723335266,
+				-696.5966796875
+			],
+			"region": "w96215685",
+			"sample_luminance_range": 0.645921528339386,
+			"sample_unique_colors": 267,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "5c4414df417270ac93563b817530d050636d7522caf5a902868feb8ebd6d0a7a",
+			"source_key": "w96215685"
+		},
+		{
+			"bytes": 154220,
+			"camera_forward": [
+				-0.960924029350281,
+				0.135153189301491,
+				0.241575345396996
+			],
+			"camera_position": [
+				-154.278228759766,
+				4.04764175415039,
+				-821.058044433594
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215688-LIVE.png",
+			"id": "w96215688-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-159.248489379883,
+				2.74670147895813,
+				-819.808532714844
+			],
+			"region": "w96215688",
+			"sample_luminance_range": 0.62907687574625,
+			"sample_unique_colors": 122,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "2c8374665f9a3f6c0d792c93d50a68dabc59a5fc5664818600f63a50491c4955",
+			"source_key": "w96215688"
+		},
+		{
+			"bytes": 764371,
+			"camera_forward": [
+				-0.398067712783813,
+				0.0583991967141628,
+				0.915495276451111
+			],
+			"camera_position": [
+				-355.386901855469,
+				4.23534679412842,
+				-609.062927246094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215691-LIVE.png",
+			"id": "w96215691-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-357.576293945312,
+				2.55653882026672,
+				-604.027648925781
+			],
+			"region": "w96215691",
+			"sample_luminance_range": 0.631881587207317,
+			"sample_unique_colors": 277,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "d4f751a81aabe95ef64a7054bd1e394b326070e79c8d1240ca458002489f4417",
+			"source_key": "w96215691"
+		},
+		{
+			"bytes": 882227,
+			"camera_forward": [
+				0.775149405002594,
+				0.0562289468944073,
+				-0.629270792007446
+			],
+			"camera_position": [
+				-189.723999023438,
+				4.4542236328125,
+				-850.679382324219
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96665904-LIVE.png",
+			"id": "w96665904-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-185.460678100586,
+				2.76347541809082,
+				-854.140380859375
+			],
+			"region": "w96665904",
+			"sample_luminance_range": 0.811079993844032,
+			"sample_unique_colors": 285,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "a314da1dcb49558f768e749f95f611c1ee24ec27efc191002c5ac57d3a75b9e9",
+			"source_key": "w96665904"
+		},
+		{
+			"bytes": 897164,
+			"camera_forward": [
+				-0.962396681308746,
+				0.0376135930418968,
+				0.269031286239624
+			],
+			"camera_position": [
+				-291.804656982422,
+				4.2028603553772,
+				-835.483215332031
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96665911-LIVE.png",
+			"id": "w96665911-LIVE",
+			"intent": "Matched A/B source-world visual study",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-297.097808837891,
+				2.40973091125488,
+				-834.003540039062
+			],
+			"region": "w96665911",
+			"sample_luminance_range": 0.559633746743202,
+			"sample_unique_colors": 309,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "ad8c84b6cd8e4e9e8578f30ead1820a6d66055f6e135365c8fed42a9ef471a64",
+			"source_key": "w96665911"
+		},
+		{
+			"bytes": 876556,
+			"camera_forward": [
+				0.996666371822357,
+				0.0391920432448387,
+				-0.0715563297271729
+			],
+			"camera_position": [
+				-302.481628417969,
+				4.71765804290771,
+				-651.6064453125
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215646-LIVE.png",
+			"id": "w96215646-LIVE",
+			"intent": "Matched source-world render-only shared-family study",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-297.0,
+				2.93321108818054,
+				-652.0
+			],
+			"region": "w96215646",
+			"sample_luminance_range": 0.758730217814445,
+			"sample_unique_colors": 295,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "8e7f710cd5d4712d9dfefb41bfed4dbe0f978757f8beeca78f35111e2404492e",
+			"source_key": "w96215646"
+		}
+	],
+	"failure": "Installed mesh contact missing w96215656 role wall mesh 702 triangle 0 points (-431.6516, 1.9822, -756.0263) (-432.4324, 2.039, -755.6205) (-432.4324, 1.98, -755.6205) area 0.02595966309309 actual_hit { \"position\": (-432.1795, 2.0004, -755.7698), \"normal\": (-0.009686, 0.999867, -0.013092), \"face_index\": 46, \"collider_id\": 227801045891, \"collider\": Collision:<StaticBody3D#227801045891>, \"shape\": 0, \"rid\": RID(44461501448316) }",
+	"ok": false,
+	"scope": "Visual experiment, no acceptance or collision fit claim"
+}

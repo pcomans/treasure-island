@@ -1,0 +1,22 @@
+{
+  "repo": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances",
+  "recognition": "34/213",
+  "enabled_family_instances": 24,
+  "measured_topology_source": "source-final-002 PASS: exact 24-instance topology before and after real GameMain reload",
+  "actual_visible_active_topology": {
+    "visible_meshes": 26585,
+    "visible_surfaces": 26603,
+    "visible_triangles": 725842,
+    "active_bodies": 512,
+    "active_shapes": 585,
+    "disabled_bodies": 78
+  },
+  "base_builder_totals": {
+    "meshes": 2991,
+    "surfaces": 3006,
+    "triangles": 207893,
+    "bodies": 498,
+    "shapes": 1925
+  },
+  "final_source_release_ready": true
+}

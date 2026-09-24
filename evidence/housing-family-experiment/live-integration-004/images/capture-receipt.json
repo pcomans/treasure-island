@@ -1,0 +1,205 @@
+{
+	"captures": [
+		{
+			"bytes": 814323,
+			"camera_forward": [
+				0.264661133289337,
+				0.044940959662199,
+				0.963293790817261
+			],
+			"camera_position": [
+				-188.249221801758,
+				4.35309505462646,
+				-610.107482910156
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215649-LIVE.png",
+			"id": "w96215649-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-186.793579101562,
+				2.60027050971985,
+				-604.809387207031
+			],
+			"region": "w96215649",
+			"sample_luminance_range": 0.64068628102541,
+			"sample_unique_colors": 286,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "8f6e4295b5f2b9a09b1e8981205ffcb41e33df69cbf82a7b6ce5e07cb5cdce2b",
+			"source_key": "w96215649"
+		},
+		{
+			"bytes": 831146,
+			"camera_forward": [
+				-0.481462985277176,
+				0.0451348945498466,
+				0.875303447246552
+			],
+			"camera_position": [
+				-389.359405517578,
+				4.09742021560669,
+				-647.840209960938
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215651-LIVE.png",
+			"id": "w96215651-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-392.007415771484,
+				2.34565925598145,
+				-643.026123046875
+			],
+			"region": "w96215651",
+			"sample_luminance_range": 0.601322367787361,
+			"sample_unique_colors": 300,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "c45fd1db484639a4382c4d19085eff66586a77bdaf3d03b2fd1d5c24788eb830",
+			"source_key": "w96215651"
+		},
+		{
+			"bytes": 950523,
+			"camera_forward": [
+				-0.179718598723412,
+				0.023617984727025,
+				-0.983434498310089
+			],
+			"camera_position": [
+				-453.192749023438,
+				4.22686815261841,
+				-635.9619140625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215652-LIVE.png",
+			"id": "w96215652-LIVE",
+			"intent": "Matched A/B source-world visual study",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-454.181243896484,
+				2.35676765441895,
+				-641.370788574219
+			],
+			"region": "w96215652",
+			"sample_luminance_range": 0.732957646250725,
+			"sample_unique_colors": 312,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "26c593af88952516d1c24cea2b7ade648012c073b4512d0e667f15c18b301cc2",
+			"source_key": "w96215652"
+		},
+		{
+			"bytes": 576859,
+			"camera_forward": [
+				-0.88556569814682,
+				0.0441729985177517,
+				0.46240907907486
+			],
+			"camera_position": [
+				-311.793609619141,
+				3.82272696495056,
+				-792.547302246094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215653-LIVE.png",
+			"id": "w96215653-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-316.664215087891,
+				2.06567883491516,
+				-790.003967285156
+			],
+			"region": "w96215653",
+			"sample_luminance_range": 0.609598442912102,
+			"sample_unique_colors": 235,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "6602d0795345b6ff84505612f86575e219c0b3a850a81b6fe8ddca4cb8f77465",
+			"source_key": "w96215653"
+		},
+		{
+			"bytes": 747251,
+			"camera_forward": [
+				0.460263460874557,
+				0.0727514550089836,
+				0.884796440601349
+			],
+			"camera_position": [
+				-450.973693847656,
+				3.29241538047791,
+				-772.121215820312
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215656-LIVE.png",
+			"id": "w96215656-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-448.442260742188,
+				1.69254803657532,
+				-767.254821777344
+			],
+			"region": "w96215656",
+			"sample_luminance_range": 0.615542739629745,
+			"sample_unique_colors": 267,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "091529a1a3ec4c84cd4dc751d98b58922c566962f880ee12b8f586d234300cf2",
+			"source_key": "w96215656"
+		},
+		{
+			"bytes": 906872,
+			"camera_forward": [
+				0.704383850097656,
+				0.0240309983491898,
+				0.709412455558777
+			],
+			"camera_position": [
+				-178.729690551758,
+				4.81054830551147,
+				-842.641052246094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215658-LIVE.png",
+			"id": "w96215658-LIVE",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "LIVE",
+			"player_position": [
+				-174.855575561523,
+				2.94271731376648,
+				-838.7392578125
+			],
+			"region": "w96215658",
+			"sample_luminance_range": 0.751772582530975,
+			"sample_unique_colors": 300,
+			"scope": "Normal WorldLoader family integration",
+			"sha256": "c5d9b8f10d10ab46887adeb0657d5541c4ce46d76df3600f261d62aab2332570",
+			"source_key": "w96215658"
+		}
+	],
+	"failure": "{ \"ok\": false, \"message\": \"w96215659 anchor hit  rather than land_ground.\" }",
+	"ok": false,
+	"scope": "Visual experiment, no acceptance or collision fit claim"
+}

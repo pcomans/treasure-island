@@ -1,0 +1,14 @@
+{
+  "terminal": 0,
+  "errors": [],
+  "engine_errors": [
+    "SCRIPT ERROR: Attempt to call function 'get_surface_count' in base 'null instance' on a null instance."
+  ],
+  "receipt_ok": true,
+  "elapsed_seconds": 28.51709987502545,
+  "pid": 24187,
+  "slot_released": true,
+  "engines_after": [],
+  "ended_utc": "2026-09-24T22:38:26.163494+00:00",
+  "ok": false
+}

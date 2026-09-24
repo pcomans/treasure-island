@@ -1,0 +1,455 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)
+
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-551.277, 8.145, -704.7132), S: (5.617065, 1.249992, 14.05927)] normal0=(-0.218426, 0.975806, -0.009681) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-545.8196, 8.145, -704.2495), S: (5.6203, 1.249992, 14.06354)] normal0=(0.232026, 0.972655, 0.010327) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-551.2756, 8.145, -695.647), S: (10.45355, 1.249992, 5.46106)] normal0=(-0.01029, 0.972647, 0.232061) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.6576, 8.145, -704.7132), S: (10.45825, 1.249992, 5.460999)] normal0=(0.010309, 0.972625, -0.232152) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.6575, 8.145, -719.5883), S: (6.353577, 1.25, 14.87225)] normal0=(-0.20485, 0.978751, -0.009081) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-544.4347, 8.145, -719.0601), S: (6.356567, 1.25, 14.625)] normal0=(0.204794, 0.978763, 0.009118) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.6576, 8.145, -710.4109), S: (11.68311, 1.25, 6.161072)] normal0=(-0.009154, 0.97877, 0.204759) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.0015, 8.145, -719.5883), S: (11.92334, 1.25, 6.225769)] normal0=(0.009099, 0.97879, -0.204664) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-538.4246, 8.145, -719.0769), S: (0.346558, 0.005278, 0.016846)] normal0=(0.015173, 0.999885, 0.000666) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-538.7712, 8.145, -719.0908), S: (0.693115, 0.005278, 0.030762)] normal0=(-0.042724, 0.268098, 0.962444) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.0013, 8.145, -733.746), S: (5.667725, 1.249992, 14.15491)] normal0=(-0.23007, 0.973121, -0.010202) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-544.4933, 8.145, -733.2753), S: (5.667175, 1.249992, 14.15442)] normal0=(0.230048, 0.973126, 0.010202) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.0015, 8.145, -724.6319), S: (10.55157, 1.249992, 5.511047)] normal0=(-0.0102, 0.973177, 0.229831) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-549.3771, 8.145, -733.746), S: (10.55109, 1.249992, 5.510986)] normal0=(0.010137, 0.973456, -0.228649) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-177.6843, 8.155, -888.958), S: (9.833679, 1.25, 11.16809)] normal0=(0.172891, 0.974988, -0.139669) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-185.394, 8.155, -882.0679), S: (9.845215, 1.25, 11.0946)] normal0=(-0.172919, 0.974976, 0.139715) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-185.394, 8.155, -888.957), S: (8.52771, 1.25, 7.707336)] normal0=(-0.139737, 0.974973, -0.172922) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-176.359, 8.155, -878.6069), S: (8.513519, 1.25, 7.659912)] normal0=(0.139179, 0.975159, 0.17232) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-167.2072, 8.155, -878.9211), S: (10.04865, 1.25, 11.18915)] normal0=(0.155741, 0.979753, -0.125813) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-174.8828, 8.286647, -871.2498), S: (9.122253, 1.118353, 10.24023)] normal0=(-0.155763, 0.979749, 0.125815) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-175.8092, 8.155, -878.929), S: (9.502686, 1.25, 8.493958)] normal0=(-0.125922, 0.979733, -0.155776) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-166.5797, 8.155, -868.6449), S: (9.421143, 1.25, 8.526123)] normal0=(0.125815, 0.979749, 0.155763) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-158.1019, 8.478888, -865.3536), S: (8.093597, 0.926112, 9.077759)] normal0=(0.150442, 0.981123, -0.121512) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-157.2567, 8.155, -867.7286), S: (0.52771, 0.133927, 0.949585)] normal0=(0.119479, 0.979955, -0.159414) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-167.017, 8.155, -859.7621), S: (10.40134, 1.25, 11.62646)] normal0=(-0.150425, 0.98112, 0.121553) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-167.0132, 8.155, -867.7319), S: (9.8573, 1.25, 8.915649)] normal0=(-0.119864, 0.981469, -0.149505) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-157.5541, 8.155, -856.9772), S: (8.56308, 1.25, 8.884155)] normal0=(0.121464, 0.981139, 0.150373) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-345.8325, 7.695, -822.3261), S: (7.917236, 1.1, 13.00861)] normal0=(-0.183719, 0.980861, -0.064497) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-338.819, 7.87014, -818.1147), S: (6.843628, 0.92486, 11.3681)] normal0=(0.183698, 0.980865, 0.064496) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-345.843, 7.695, -812.6865), S: (9.877289, 1.1, 6.772522)] normal0=(-0.064539, 0.980844, 0.18379) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-341.3089, 7.695, -822.3261), S: (10.45837, 1.1, 7.064758)] normal0=(0.064605, 0.980814, -0.183928) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-341.2943, 7.695, -836.569), S: (8.615234, 1.099994, 14.20105)] normal0=(-0.170036, 0.98363, -0.059672) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-333.6954, 7.695, -832.5486), S: (8.583588, 1.099994, 14.17755)] normal0=(0.169978, 0.983637, 0.059708) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-341.3089, 7.695, -826.0182), S: (11.28571, 1.099994, 7.64447)] normal0=(-0.059669, 0.983641, 0.169972) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-336.3564, 7.695, -836.569), S: (11.26544, 1.099994, 7.655457)] normal0=(0.059424, 0.983784, -0.169224) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-336.3431, 7.695, -849.496), S: (7.905518, 1.099994, 12.88861)] normal0=(-0.182656, 0.981075, -0.064252) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-329.2936, 7.855357, -845.3463), S: (6.921997, 0.939638, 11.3844)] normal0=(0.182794, 0.981054, 0.064179) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-336.3564, 7.695, -839.9937), S: (10.47394, 1.099994, 7.101196)] normal0=(-0.064174, 0.981079, 0.182665) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-331.8245, 7.695, -849.483), S: (9.72345, 1.099994, 7.050598)] normal0=(0.064195, 0.981069, -0.182711) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.3344, 8.405, -661.3797), S: (0.381592, 0.000367, 0.030212)] normal0=(-0.078535, 0.091344, 0.992718) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4099), S: (0.381622, 0.000367, 0.030212)] normal0=(-0.000978, 1.0, -0.000076) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4099), S: (0.416321, 0.000367, 0.032959)] normal0=(0.078518, 0.091361, -0.992718) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4096), S: (0.763214, 0.000367, 0.06012)] normal0=(-0.072464, 0.385274, 0.919953) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-271.1329, 8.405, -674.7025), S: (6.168945, 1.149997, 14.28204)] normal0=(0.202546, 0.979142, 0.015991) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-277.0368, 8.405, -675.568), S: (6.167236, 1.149997, 14.2887)] normal0=(-0.20436, 0.978764, -0.016085) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-275.9111, 8.405, -675.57), S: (10.94162, 1.149997, 5.905884)] normal0=(0.016101, 0.978802, -0.204173) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-277.037, 8.405, -666.3209), S: (10.94272, 1.149997, 5.905579)] normal0=(-0.016168, 0.978586, 0.205202) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-273.0963, 8.610164, -659.3782), S: (5.787048, 0.944831, 12.81958)] normal0=(0.178158, 0.983901, 0.014088) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-266.8586, 8.405, -660.4153), S: (0.763916, 0.129039, 0.708435)] normal0=(0.178158, 0.983901, 0.014088) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.9028, 8.405, -661.4096), S: (7.000275, 1.149995, 15.07971)] normal0=(-0.178214, 0.983891, -0.014053) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4096), S: (12.62137, 1.149995, 6.8078)] normal0=(0.014034, 0.983903, -0.178149) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.9029, 8.405, -652.1423), S: (11.57474, 1.149995, 6.718384)] normal0=(-0.014052, 0.983895, 0.178193) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.903, 8.405, -646.3287), S: (0.470673, 0.001898, 0.037964)] normal0=(-0.004015, 0.999992, -0.000291) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.9029, 8.405, -646.3287), S: (0.958649, 0.001898, 0.075562)] normal0=(0.071428, 0.41754, -0.905847) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-273.2894, 8.405, -645.2115), S: (6.136322, 1.149997, 14.30255)] normal0=(0.205598, 0.978502, 0.016246) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.156, 8.405, -646.1804), S: (6.145233, 1.149997, 14.41388)] normal0=(-0.205648, 0.978492, -0.016173) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.0211, 8.405, -646.1804), S: (10.74664, 1.149997, 5.86731)] normal0=(0.016227, 0.978512, -0.205552) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.156, 8.405, -636.7763), S: (10.87698, 1.149997, 5.86731)] normal0=(-0.01625, 0.97843, 0.205938) points=4 triangles=2
+VISUAL_SETTLED: id=mechanics-street spawn_y=5.933 settled_y=2.933 ground_y=2.933 clearance=0.000 frames=125 recovery_delta=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=487 sampled_max_clearance=-0.00420115768975 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=496 sampled_max_clearance=-0.00626412749352 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=504 sampled_max_clearance=-0.01800496060741 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=513 sampled_max_clearance=-0.02335969467003 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=524 sampled_max_clearance=-0.02418136247297 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=529 sampled_max_clearance=-0.02488133907445 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=533 sampled_max_clearance=-0.02746008885379 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=543 sampled_max_clearance=-0.03068697217122 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=544 sampled_max_clearance=0.00189262673803 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=598 sampled_max_clearance=-0.02164720588371 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=609 sampled_max_clearance=-0.02072687203554 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=614 sampled_max_clearance=-0.02063498747339 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=625 sampled_max_clearance=-0.01625914068359 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=635 sampled_max_clearance=-0.01101421236126 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=643 sampled_max_clearance=-0.00481268003955 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=711 sampled_max_clearance=-0.02344975936876 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=722 sampled_max_clearance=-0.02325491802981 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=731 sampled_max_clearance=-0.02215968413702 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=739 sampled_max_clearance=-0.02137431623737 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=749 sampled_max_clearance=-0.02086725337335 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=760 sampled_max_clearance=-0.01995286475881 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=765 sampled_max_clearance=-0.01019728207893 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=776 sampled_max_clearance=-0.00380887918186 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215678 mesh=786 sampled_max_clearance=-0.00196065074329 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215678 mesh=909 max_triangle_area=0.00008151482325
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215678 mesh=927 max_triangle_area=0.00008058294043
+FAMILY_LIVE_FIT source=w96215678 bodies=4 mesh_contact_samples=943 tiny_meshes_not_ray_proved=2 grade_occluded_meshes=24 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215653 mesh=545 sampled_max_clearance=-0.00477753756638 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215653 mesh=552 sampled_max_clearance=-0.00329584850306 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215653 mesh=590 sampled_max_clearance=-0.01857520270357 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215653 mesh=598 sampled_max_clearance=-0.01108730679539 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215653 mesh=604 sampled_max_clearance=-0.00919258340059 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215653 mesh=611 sampled_max_clearance=-0.00004542622446 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215653 mesh=749 max_triangle_area=0.00007638478564
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215653 mesh=751 max_triangle_area=0.00002003510781
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215653 mesh=753 max_triangle_area=0.00007638478564
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215653 mesh=798 max_triangle_area=0.00007208326133
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215653 mesh=800 max_triangle_area=0.00007208326133
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215653 mesh=823 max_triangle_area=0.00007731853839
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215653 mesh=825 max_triangle_area=0.00002028002564
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215653 mesh=827 max_triangle_area=0.00002028002564
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215653 mesh=829 max_triangle_area=0.00007731853839
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215653 mesh=923 max_triangle_area=0.00004503041782
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215653 mesh=1130 max_triangle_area=0.0
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215653 mesh=1150 max_triangle_area=0.00000748368029
+FAMILY_LIVE_FIT source=w96215653 bodies=4 mesh_contact_samples=1167 tiny_meshes_not_ray_proved=12 grade_occluded_meshes=6 failures=0
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215659 mesh=736 max_triangle_area=0.00001115178475
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215659 mesh=1058 max_triangle_area=0.00001091944068
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215659 mesh=1059 max_triangle_area=0.00001091944068
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215659 mesh=1066 max_triangle_area=0.0
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215659 mesh=1067 max_triangle_area=0.00004727229316
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215659 mesh=1068 max_triangle_area=0.00000045347781
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215659 mesh=1096 max_triangle_area=0.00000018995503
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215659 mesh=1106 max_triangle_area=0.00000644088141
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215659 mesh=1122 max_triangle_area=0.00000020739589
+FAMILY_LIVE_FIT source=w96215659 bodies=4 mesh_contact_samples=1154 tiny_meshes_not_ray_proved=9 grade_occluded_meshes=0 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=324 sampled_max_clearance=-0.00566516067397 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=335 sampled_max_clearance=-0.00945909713846 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=344 sampled_max_clearance=-0.01324337955793 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=352 sampled_max_clearance=-0.01726262622606 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=362 sampled_max_clearance=-0.02318369197314 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=515 sampled_max_clearance=-0.0161983587559 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=522 sampled_max_clearance=-0.02374964463161 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=528 sampled_max_clearance=-0.02651659554203 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=533 sampled_max_clearance=-0.03861774797815 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=539 sampled_max_clearance=-0.04369766946002 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=546 sampled_max_clearance=-0.05038549213714 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=550 sampled_max_clearance=-0.05875325750367 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=557 sampled_max_clearance=-0.06478867173428 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=563 sampled_max_clearance=-0.07135558951722 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=568 sampled_max_clearance=-0.07946887935032 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=574 sampled_max_clearance=-0.08500348593634 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=581 sampled_max_clearance=-0.11087095345738 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665911 mesh=587 sampled_max_clearance=-0.12026920945709 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_LIVE_FIT source=w96665911 bodies=4 mesh_contact_samples=641 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=18 failures=0
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215646 mesh=826 max_triangle_area=0.00000695539711
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215646 mesh=827 max_triangle_area=0.00005823097672
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215646 mesh=828 max_triangle_area=0.00000695476592
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215646 mesh=830 max_triangle_area=0.00000839238055
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215646 mesh=865 max_triangle_area=0.00004563665061
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215646 mesh=883 max_triangle_area=0.00001177072409
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215646 mesh=889 max_triangle_area=0.000047064721
+FAMILY_LIVE_FIT source=w96215646 bodies=4 mesh_contact_samples=1000 tiny_meshes_not_ray_proved=7 grade_occluded_meshes=0 failures=0
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215651 mesh=763 max_triangle_area=0.00006272811879
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215651 mesh=789 max_triangle_area=0.00006257928908
+FAMILY_VERIFIED_GROUND_OVERLAP expected=w96215651 actual=w96215691 position=(-378.6385, 2.6075, -607.5842) expected_y=2.60750304244142 actual_y=2.60885540770412
+FAMILY_VERIFIED_GROUND_OVERLAP expected=w96215651 actual=w96215691 position=(-378.3396, 2.609567, -607.2091) expected_y=2.60956739792059 actual_y=2.61018562294068
+FAMILY_VERIFIED_GROUND_OVERLAP expected=w96215651 actual=w96215691 position=(-379.0103, 2.607233, -607.9864) expected_y=2.60725494448371 actual_y=2.60870862806514
+FAMILY_VERIFIED_GROUND_OVERLAP expected=w96215651 actual=w96215691 position=(-379.0282, 2.609267, -607.9543) expected_y=2.6092904194956 actual_y=2.61001897977208
+FAMILY_VERIFIED_GROUND_OVERLAP expected=w96215651 actual=w96215691 position=(-379.0399, 2.607167, -608.0185) expected_y=2.6071786336579 actual_y=2.60863385900117
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215651 mesh=1013 max_triangle_area=0.00008807710401
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215651 mesh=1014 max_triangle_area=0.00008457345393
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215651 mesh=1015 max_triangle_area=0.00001658846668
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215651 mesh=1016 max_triangle_area=0.0000176295689
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215651 mesh=1043 max_triangle_area=0.0
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215651 mesh=1045 max_triangle_area=0.00005710554615
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215651 mesh=1046 max_triangle_area=0.00003749137613
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215651 mesh=1047 max_triangle_area=0.00000560285571
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215651 mesh=1048 max_triangle_area=0.00000813503902
+FAMILY_LIVE_FIT source=w96215651 bodies=4 mesh_contact_samples=1096 tiny_meshes_not_ray_proved=11 grade_occluded_meshes=0 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=695 sampled_max_clearance=0.00103146470428 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=704 sampled_max_clearance=0.00179248008726 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=757 sampled_max_clearance=-0.01459967764276 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=763 sampled_max_clearance=-0.00316821216165 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=770 sampled_max_clearance=0.00150877287297 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=902 sampled_max_clearance=-0.00111455911519 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=911 sampled_max_clearance=-0.02143865018797 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=921 sampled_max_clearance=-0.02563856323468 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=934 sampled_max_clearance=-0.04355390573437 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=946 sampled_max_clearance=-0.04879276114752 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=955 sampled_max_clearance=-0.05587673332161 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=967 sampled_max_clearance=-0.05974195251997 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=980 sampled_max_clearance=-0.06487788554091 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=985 sampled_max_clearance=-0.06879799063586 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=998 sampled_max_clearance=-0.07190685451474 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1010 sampled_max_clearance=-0.07501336190353 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1019 sampled_max_clearance=-0.07793289853771 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1020 sampled_max_clearance=-0.00358605290057 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1029 sampled_max_clearance=-0.08416372407737 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1030 sampled_max_clearance=-0.02307367050207 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1106 sampled_max_clearance=-0.01712092793696 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1115 sampled_max_clearance=-0.01990540327779 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1177 sampled_max_clearance=-0.00260734768744 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1205 sampled_max_clearance=-0.05326502004891 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1212 sampled_max_clearance=-0.05035102173542 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1218 sampled_max_clearance=-0.02421988556807 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1223 sampled_max_clearance=-0.00985218267419 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1241 sampled_max_clearance=-0.10811679106246 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1246 sampled_max_clearance=-0.10096622778019 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1250 sampled_max_clearance=-0.08274101800271 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1262 sampled_max_clearance=-0.06549581336822 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1271 sampled_max_clearance=-0.06189195869729 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1281 sampled_max_clearance=-0.04056236775159 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1294 sampled_max_clearance=-0.0271103717123 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1304 sampled_max_clearance=-0.01091588524832 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215652 mesh=1313 sampled_max_clearance=-0.00517861181288 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215652 mesh=1585 max_triangle_area=0.00007917626499
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215652 mesh=1586 max_triangle_area=0.00008275421715
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215652 mesh=1587 max_triangle_area=0.00001358554528
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215652 mesh=1588 max_triangle_area=0.00001358554528
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215652 mesh=1715 max_triangle_area=0.00009810804477
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215652 mesh=1717 max_triangle_area=0.00001401549616
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215652 mesh=1718 max_triangle_area=0.00001612502092
+FAMILY_LIVE_FIT source=w96215652 bodies=4 mesh_contact_samples=1706 tiny_meshes_not_ray_proved=7 grade_occluded_meshes=36 failures=0
+FAMILY_LIVE_FIT source=w96215656 bodies=4 mesh_contact_samples=1319 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215661 mesh=660 max_triangle_area=0.0000487029647
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=953 sampled_max_clearance=-0.00022936695859 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=957 sampled_max_clearance=-0.00127441350014 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=971 sampled_max_clearance=-0.00537842099584 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=981 sampled_max_clearance=-0.00834257064889 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=992 sampled_max_clearance=-0.00972178332813 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=1160 sampled_max_clearance=-0.00109290782996 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=1174 sampled_max_clearance=-0.00390125250681 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=1189 sampled_max_clearance=-0.00796263698589 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=1194 sampled_max_clearance=-0.01088430100435 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=1198 sampled_max_clearance=-0.0136511150979 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=1212 sampled_max_clearance=-0.01908598649447 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=1222 sampled_max_clearance=-0.02255137053589 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215661 mesh=1233 sampled_max_clearance=-0.02520453137936 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215661 mesh=1266 max_triangle_area=0.00000334524566
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215661 mesh=1299 max_triangle_area=0.00001280958713
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215661 mesh=1328 max_triangle_area=0.00003702598042
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215661 mesh=1329 max_triangle_area=0.0000368564688
+FAMILY_LIVE_FIT source=w96215661 bodies=4 mesh_contact_samples=1346 tiny_meshes_not_ray_proved=5 grade_occluded_meshes=13 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215666 mesh=571 sampled_max_clearance=-0.00225113640431 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215666 mesh=585 sampled_max_clearance=-0.00505123376047 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215666 mesh=600 sampled_max_clearance=-0.00762583283699 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215666 mesh=605 sampled_max_clearance=-0.01228309895805 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215666 mesh=620 sampled_max_clearance=-0.01422387826676 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215666 mesh=634 sampled_max_clearance=-0.01817859898847 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215666 mesh=644 sampled_max_clearance=-0.02070070337686 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215666 mesh=658 sampled_max_clearance=-0.02128816139555 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=918 max_triangle_area=0.00005343556404
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=942 max_triangle_area=0.00005344580859
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=1024 max_triangle_area=0.00000617323985
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=1049 max_triangle_area=0.00004596745566
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=1050 max_triangle_area=0.00000054748864
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=1051 max_triangle_area=0.00000039789012
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=1052 max_triangle_area=0.00009708212747
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=1057 max_triangle_area=0.00009715717169
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=1058 max_triangle_area=0.00009716060595
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=1073 max_triangle_area=0.00000999213989
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=1074 max_triangle_area=0.00000999213989
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=1096 max_triangle_area=0.00004583147529
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215666 mesh=1097 max_triangle_area=0.00004564000483
+FAMILY_LIVE_FIT source=w96215666 bodies=4 mesh_contact_samples=1121 tiny_meshes_not_ray_proved=13 grade_occluded_meshes=8 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=642 sampled_max_clearance=-0.00355030632295 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=653 sampled_max_clearance=-0.02675412324538 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=661 sampled_max_clearance=-0.03537785777326 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=669 sampled_max_clearance=-0.05107753799621 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=675 sampled_max_clearance=-0.0351669210695 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=683 sampled_max_clearance=-0.03190451603018 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=692 sampled_max_clearance=-0.0118443746087 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=756 sampled_max_clearance=-0.03030725797953 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=757 sampled_max_clearance=-0.00495010626446 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=768 sampled_max_clearance=-0.03013845529426 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=769 sampled_max_clearance=-0.00319977755817 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=781 sampled_max_clearance=-0.02841341319254 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=791 sampled_max_clearance=-0.0273381248835 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=804 sampled_max_clearance=-0.02668572378752 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=816 sampled_max_clearance=-0.02522535169965 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=820 sampled_max_clearance=-0.02410624840741 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=832 sampled_max_clearance=-0.02186029151108 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=845 sampled_max_clearance=-0.02114428224354 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=855 sampled_max_clearance=-0.01395052927273 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=864 sampled_max_clearance=-0.00547989948382 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=876 sampled_max_clearance=-0.00313388446421 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=1102 sampled_max_clearance=-0.00331280786213 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=1116 sampled_max_clearance=-0.00755379348425 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=1131 sampled_max_clearance=-0.00875789688916 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=1142 sampled_max_clearance=-0.01673837280441 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=1157 sampled_max_clearance=-0.02064416081703 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=1171 sampled_max_clearance=-0.02143002619459 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=1175 sampled_max_clearance=-0.02205212691661 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215672 mesh=1189 sampled_max_clearance=-0.02276475945382 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_LIVE_FIT source=w96215672 bodies=4 mesh_contact_samples=1219 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=29 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=303 sampled_max_clearance=0.00092058591781 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=309 sampled_max_clearance=-0.00207378220307 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=313 sampled_max_clearance=-0.00803345803433 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=318 sampled_max_clearance=-0.00974192089984 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=325 sampled_max_clearance=-0.01113070275824 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=331 sampled_max_clearance=-0.01412417251004 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=335 sampled_max_clearance=-0.01870921520185 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=341 sampled_max_clearance=-0.02051974040569 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=353 sampled_max_clearance=0.00168008040237 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=360 sampled_max_clearance=-0.00191029098232 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=366 sampled_max_clearance=-0.00693179171003 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=370 sampled_max_clearance=-0.01484008070929 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=375 sampled_max_clearance=-0.01767350793125 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=382 sampled_max_clearance=-0.02082590025566 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=388 sampled_max_clearance=-0.02154123051787 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=392 sampled_max_clearance=-0.0217463311028 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=398 sampled_max_clearance=-0.02209936998679 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=413 sampled_max_clearance=0.00159267604113 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=420 sampled_max_clearance=-0.00288200858677 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=425 sampled_max_clearance=-0.00699844139899 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=429 sampled_max_clearance=-0.01370387369298 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=435 sampled_max_clearance=-0.01760907423022 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=439 sampled_max_clearance=-0.01941214252383 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=444 sampled_max_clearance=-0.02076467477855 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=469 sampled_max_clearance=0.00168088003375 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=473 sampled_max_clearance=0.00068248509888 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=478 sampled_max_clearance=0.00035271790557 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=485 sampled_max_clearance=-0.0001084488249 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=491 sampled_max_clearance=-0.00067520381435 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=495 sampled_max_clearance=-0.0014598511043 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215673 mesh=501 sampled_max_clearance=-0.00172291623176 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_LIVE_FIT source=w96215673 bodies=2 mesh_contact_samples=531 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=31 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215677 mesh=660 sampled_max_clearance=0.00055640167011 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215677 mesh=670 sampled_max_clearance=-0.0015451836498 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215677 mesh=681 sampled_max_clearance=-0.00607405235223 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215677 mesh=686 sampled_max_clearance=-0.01083113067216 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215677 mesh=1077 max_triangle_area=0.00001281144705
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215677 mesh=1084 max_triangle_area=0.0
+FAMILY_LIVE_FIT source=w96215677 bodies=4 mesh_contact_samples=1130 tiny_meshes_not_ray_proved=2 grade_occluded_meshes=4 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215680 mesh=623 sampled_max_clearance=0.0003183743811 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215680 mesh=633 sampled_max_clearance=-0.00394698103628 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215680 mesh=637 sampled_max_clearance=-0.00492974418285 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215680 mesh=1084 max_triangle_area=0.00001328582766
+FAMILY_LIVE_FIT source=w96215680 bodies=4 mesh_contact_samples=1117 tiny_meshes_not_ray_proved=1 grade_occluded_meshes=3 failures=0
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215682 mesh=584 max_triangle_area=0.00000536133257
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215682 mesh=597 max_triangle_area=0.00000027149062
+FAMILY_LIVE_FIT source=w96215682 bodies=4 mesh_contact_samples=672 tiny_meshes_not_ray_proved=2 grade_occluded_meshes=0 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215685 mesh=416 sampled_max_clearance=0.00098391376559 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215685 mesh=425 sampled_max_clearance=-0.01260750381789 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215685 mesh=433 sampled_max_clearance=-0.02097861362836 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215685 mesh=485 sampled_max_clearance=-0.01843248310342 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215685 mesh=491 sampled_max_clearance=-0.02179142472551 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215685 mesh=525 sampled_max_clearance=-0.02039037007012 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215685 mesh=534 sampled_max_clearance=-0.014029792771 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215685 mesh=539 sampled_max_clearance=-0.00774599496242 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215685 mesh=548 sampled_max_clearance=-0.00177051997412 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_LIVE_FIT source=w96215685 bodies=4 mesh_contact_samples=713 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=9 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=84 sampled_max_clearance=-0.10450862642119 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=92 sampled_max_clearance=-0.08080742449965 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=100 sampled_max_clearance=-0.01542012995742 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=400 sampled_max_clearance=-0.1754834673884 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=403 sampled_max_clearance=-0.17360182186167 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215691 mesh=406 max_triangle_area=0.00000385115345
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=408 sampled_max_clearance=-0.16177252589796 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=411 sampled_max_clearance=-0.15134399827321 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=413 sampled_max_clearance=-0.14929222524279 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=417 sampled_max_clearance=-0.1323047652204 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=424 sampled_max_clearance=-0.12780791835075 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=430 sampled_max_clearance=-0.11233540421881 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=435 sampled_max_clearance=-0.1038119024056 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=441 sampled_max_clearance=-0.0985029027247 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=448 sampled_max_clearance=-0.08612789778181 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=452 sampled_max_clearance=-0.08149843106276 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=506 sampled_max_clearance=-0.04032996667956 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=507 sampled_max_clearance=-0.00930840592582 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=517 sampled_max_clearance=-0.03943368090631 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=518 sampled_max_clearance=-0.00557355820865 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=527 sampled_max_clearance=-0.03261436900766 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=535 sampled_max_clearance=-0.02982479559978 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=545 sampled_max_clearance=-0.01945803028957 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215691 mesh=556 sampled_max_clearance=-0.00664308593969 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215691 mesh=746 max_triangle_area=0.00003894706242
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215691 mesh=747 max_triangle_area=0.00004118228753
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215691 mesh=752 max_triangle_area=0.00000057276338
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215691 mesh=872 max_triangle_area=0.00007229512266
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215691 mesh=873 max_triangle_area=0.00007229416224
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215691 mesh=874 max_triangle_area=0.00002876484177
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215691 mesh=875 max_triangle_area=0.0000168316019
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215691 mesh=914 max_triangle_area=0.00008102403808
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215691 mesh=915 max_triangle_area=0.0000660011865
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215691 mesh=920 max_triangle_area=0.00009029695502
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215691 mesh=921 max_triangle_area=0.00007503909001
+FAMILY_VERIFIED_GROUND_OVERLAP expected=w96215691 actual=w96215651 position=(-378.6788, 2.591567, -607.1876) expected_y=2.59157839991886 actual_y=2.59284353784396
+FAMILY_VERIFIED_GROUND_OVERLAP expected=w96215691 actual=w96215651 position=(-378.4819, 2.571833, -606.6374) expected_y=2.5718202673347 actual_y=2.57435218314021
+FAMILY_VERIFIED_GROUND_OVERLAP expected=w96215691 actual=w96215651 position=(-379.1369, 2.591533, -607.6833) expected_y=2.5915468546642 actual_y=2.59280986642241
+FAMILY_VERIFIED_GROUND_OVERLAP expected=w96215691 actual=w96215651 position=(-379.1559, 2.571767, -607.3667) expected_y=2.57176947736791 actual_y=2.57429943714635
+FAMILY_VERIFIED_GROUND_OVERLAP expected=w96215691 actual=w96215651 position=(-379.4237, 2.583767, -607.8609) expected_y=2.5837431042929 actual_y=2.58549760878561
+FAMILY_VERIFIED_GROUND_OVERLAP expected=w96215691 actual=w96215651 position=(-379.4008, 2.571767, -607.6317) expected_y=2.57174930033442 actual_y=2.57427600825065
+FAMILY_VERIFIED_GROUND_OVERLAP expected=w96215691 actual=w96215651 position=(-379.324, 2.603167, -608.0901) expected_y=2.60317176532416 actual_y=2.60367017691148
+FAMILY_LIVE_FIT source=w96215691 bodies=4 mesh_contact_samples=1049 tiny_meshes_not_ray_proved=12 grade_occluded_meshes=23 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=700 sampled_max_clearance=-0.00877592010329 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=707 sampled_max_clearance=-0.00679299062813 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=906 sampled_max_clearance=-0.00302141893962 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=914 sampled_max_clearance=-0.00502262093187 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=920 sampled_max_clearance=-0.01828496982853 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=928 sampled_max_clearance=-0.02065872352671 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1074 sampled_max_clearance=-0.00183695216663 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1085 sampled_max_clearance=-0.00656402632455 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1093 sampled_max_clearance=-0.00784784898974 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1100 sampled_max_clearance=-0.01498666417558 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1217 sampled_max_clearance=-0.00079404317046 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1224 sampled_max_clearance=-0.0023035887109 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1233 sampled_max_clearance=-0.01452690372798 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1240 sampled_max_clearance=-0.01991816007489 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1246 sampled_max_clearance=-0.02786880270639 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1253 sampled_max_clearance=-0.02936439933148 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1283 sampled_max_clearance=-0.00019205781587 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1288 sampled_max_clearance=-0.00510145220346 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215658 mesh=1294 sampled_max_clearance=-0.009307624435 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_LIVE_FIT source=w96215658 bodies=4 mesh_contact_samples=1538 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=19 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=535 sampled_max_clearance=-0.08101466642756 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=542 sampled_max_clearance=-0.07458421572687 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=548 sampled_max_clearance=-0.0323464820757 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=553 sampled_max_clearance=-0.01856249256298 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=559 sampled_max_clearance=0.00035908184555 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=571 sampled_max_clearance=-0.16018133560669 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=576 sampled_max_clearance=-0.15161367968892 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=587 sampled_max_clearance=-0.12064474912813 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=597 sampled_max_clearance=-0.09666598837259 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=605 sampled_max_clearance=-0.08452780999971 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=614 sampled_max_clearance=-0.05244344665266 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=625 sampled_max_clearance=-0.04181322198235 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=634 sampled_max_clearance=-0.01950467690835 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=793 sampled_max_clearance=0.00122224407551 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=799 sampled_max_clearance=-0.0042190279587 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=807 sampled_max_clearance=-0.01019079670868 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=928 sampled_max_clearance=0.0001865671411 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=935 sampled_max_clearance=-0.00372768177942 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=944 sampled_max_clearance=-0.01413458146294 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=951 sampled_max_clearance=-0.0158288272828 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215669 mesh=958 sampled_max_clearance=-0.00980879180861 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_LIVE_FIT source=w96215669 bodies=4 mesh_contact_samples=1059 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=21 failures=0
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215688 mesh=578 max_triangle_area=0.0000036157835
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215688 mesh=591 max_triangle_area=0.00000168651945
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215688 mesh=596 max_triangle_area=0.00005497258462
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215688 mesh=611 max_triangle_area=0.00009340029646
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215688 mesh=612 max_triangle_area=0.00009273077012
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215688 mesh=615 max_triangle_area=0.00000086344505
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215688 mesh=616 max_triangle_area=0.00000105653544
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215688 mesh=631 max_triangle_area=0.00002165535625
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215688 mesh=632 max_triangle_area=0.00002122622209
+FAMILY_LIVE_FIT source=w96215688 bodies=4 mesh_contact_samples=654 tiny_meshes_not_ray_proved=9 grade_occluded_meshes=0 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=425 sampled_max_clearance=-0.01209175627639 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=434 sampled_max_clearance=-0.01075255980186 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=647 sampled_max_clearance=0.00002039691435 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=651 sampled_max_clearance=-0.00336772528021 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=710 sampled_max_clearance=-0.10619006876459 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=711 sampled_max_clearance=-0.02043996576776 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=719 sampled_max_clearance=-0.10241823402248 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=720 sampled_max_clearance=-0.01666813102565 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=727 sampled_max_clearance=-0.08137318229819 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=734 sampled_max_clearance=-0.06827011504993 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=742 sampled_max_clearance=-0.06088149776588 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=751 sampled_max_clearance=-0.04492038275293 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=756 sampled_max_clearance=-0.02951319521571 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96665904 mesh=765 sampled_max_clearance=-0.01228167001773 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_LIVE_FIT source=w96665904 bodies=4 mesh_contact_samples=924 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=14 failures=0
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215649 mesh=841 sampled_max_clearance=-0.00029489432723 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_LIVE_FIT source=w96215649 bodies=4 mesh_contact_samples=1108 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=1 failures=0
+FAMILY_LIVE_FIT source=w96215670 bodies=4 mesh_contact_samples=1007 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0
+FAMILY_LIVE_FIT source=w96215674 bodies=2 mesh_contact_samples=534 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0
+SCRIPT ERROR: Attempt to call function 'get_surface_count' in base 'null instance' on a null instance.
+          at: _verify_family (res://game/tests/housing_family_experiment/normal_capture.gd:189)
+          GDScript backtrace (most recent call first):
+              [0] _verify_family (res://game/tests/housing_family_experiment/normal_capture.gd:189)
+              [1] _run (res://game/tests/housing_family_experiment/normal_capture.gd:70)
+              [2] _settle_player (res://game/tests/housing_family_experiment/normal_capture.gd:309)

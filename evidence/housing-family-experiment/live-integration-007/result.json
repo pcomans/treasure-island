@@ -1,0 +1,19 @@
+{
+  "terminal": 0,
+  "errors": [],
+  "engine_errors": [
+    "ERROR: Signal 'feedback_requested' is already connected to given callable 'Control(GameHUD)::show_feedback' in that object.",
+    "ERROR: Signal 'spray_result' is already connected to given callable 'Node(RuntimeEvidence)::record_spray' in that object.",
+    "ERROR: Signal 'recovered' is already connected to given callable 'Node(RuntimeEvidence)::record_recovery' in that object.",
+    "ERROR: Signal 'spray_identity' is already connected to given callable 'Node(RuntimeEvidence)::record_spray_identity' in that object.",
+    "ERROR: Signal 'active_count_changed' is already connected to given callable 'Node(RuntimeEvidence)::set_active_decals' in that object.",
+    "ERROR: Signal 'oldest_tag_removed' is already connected to given callable 'Node(RuntimeEvidence)::record_tag_eviction' in that object."
+  ],
+  "receipt_ok": true,
+  "elapsed_seconds": 46.57611791603267,
+  "pid": 16383,
+  "slot_released": true,
+  "engines_after": [],
+  "ended_utc": "2026-09-24T22:42:50.497603+00:00",
+  "ok": false
+}

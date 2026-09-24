@@ -1,0 +1,3 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, and ambient fill

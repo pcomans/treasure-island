@@ -1,0 +1,23 @@
+{
+  "terminal": -15,
+  "errors": [
+    "missing receipt FileNotFoundError(2, 'No such file or directory')"
+  ],
+  "engine_errors": [
+    "SCRIPT ERROR: Parse Error: Could not preload resource script \"res://game/scripts/world/facades/housing_family_live_attachment.gd\".",
+    "SCRIPT ERROR: Parse Error: Could not resolve script \"res://game/scripts/world/facades/housing_family_live_attachment.gd\".",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"HOUSING_FAMILY\" constant because the value doesn't have a set type.",
+    "SCRIPT ERROR: Parse Error: Cannot infer the type of \"family_result\" variable because the value doesn't have a set type.",
+    "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+    "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+    "ERROR: Failed to load script \"res://game/tests/housing_family_experiment/normal_capture.gd\" with error \"Compilation failed\".",
+    "SCRIPT ERROR: Invalid access to property or key 'world_ready' on a base object of type 'Nil'."
+  ],
+  "receipt_ok": false,
+  "elapsed_seconds": 10.060624667443335,
+  "pid": 28949,
+  "slot_released": true,
+  "engines_after": [],
+  "ended_utc": "2026-09-24T22:16:07.129467+00:00",
+  "ok": false
+}

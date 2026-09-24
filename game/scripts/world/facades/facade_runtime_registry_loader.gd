@@ -765,7 +765,10 @@ func deterministic_snapshot() -> Dictionary:
 
 
 func _validate_registry_header(registry: Dictionary) -> bool:
-	if not _require(_has_exact_keys(registry, ["active_runtime_adapters", "adapter_contract", "build_contract", "claim_totals", "claim_vocabulary", "compatibility_contract", "counts", "legacy_adapters", "recognition_metric", "registry_id", "schema_version", "units"]), "unknown_registry_version", "Runtime registry contains unknown top-level fields."):
+	var adoption: Dictionary = registry.get("appearance_adoption",{})
+	if not _require(_has_exact_keys(adoption,["path","sha256","scope"]) and str(adoption.get("path",""))=="res://game/resources/housing_family/live_adoption.json" and str(adoption.get("scope",""))=="current_enabled_appearance_zero_credit" and str(adoption.get("sha256",""))==FileAccess.get_sha256("res://game/resources/housing_family/live_adoption.json"),"appearance_adoption_mismatch","Current zero-credit appearance binding drifted."):
+		return false
+	if not _require(_has_exact_keys(registry, ["active_runtime_adapters", "appearance_adoption", "adapter_contract", "build_contract", "claim_totals", "claim_vocabulary", "compatibility_contract", "counts", "legacy_adapters", "recognition_metric", "registry_id", "schema_version", "units"]), "unknown_registry_version", "Runtime registry contains unknown top-level fields."):
 		return false
 	if not _require(str(registry.get("schema_version", "")) == REGISTRY_SCHEMA_VERSION, "unknown_registry_version", "Runtime registry version is unknown or forward-incompatible."):
 		return false
@@ -3519,6 +3522,7 @@ func _validate_d5_1308_plan_contract(plan: Dictionary) -> bool:
 
 func _validate_current_topology_authority(active_adapters: Array) -> bool:
 	var current_topology_adapter_ids := []
+	var base_topology_adapter_ids := []
 	for adapter_value: Variant in active_adapters:
 		var adapter := adapter_value as Dictionary
 		var runtime_contract := adapter.get("active_runtime_contract", {}) as Dictionary
@@ -3527,10 +3531,12 @@ func _validate_current_topology_authority(active_adapters: Array) -> bool:
 		var geometry_contract := behavior_contract.get("geometry_contract", {}) as Dictionary
 		if str(geometry_contract.get("world_topology_scope", "")) == CURRENT_INTEGRATION_WORLD_TOPOLOGY_SCOPE:
 			current_topology_adapter_ids.append(str(adapter.get("adapter_id", "")))
+		if str(geometry_contract.get("world_topology_scope", "")) == "pre_shared_family_base_topology":
+			base_topology_adapter_ids.append(str(adapter.get("adapter_id", "")))
 	return _require(
-		current_topology_adapter_ids == [NORTHERN_1241_ADAPTER_ID],
+		current_topology_adapter_ids.is_empty() and base_topology_adapter_ids == [NORTHERN_1241_ADAPTER_ID],
 		"current_topology_authority_mismatch",
-		"Exactly the final serialized 1241 adapter must own the measured combined integration topology; prior evidence scopes must remain historical.",
+		"1241 retains base topology; current enabled family topology belongs to the separate zero-credit adoption binding.",
 	)
 
 
@@ -6507,7 +6513,7 @@ func _validate_northern_1241_behavior_contract(contract: Dictionary) -> bool:
 		and typeof(((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_triangles")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_triangles"))) and float(((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_triangles")) == 207893.0
 		and typeof(((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_static_bodies")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_static_bodies"))) and float(((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_static_bodies")) == 498.0
 		and typeof(((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_shapes")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_shapes"))) and float(((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_shapes")) == 1925.0
-		and typeof(((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_topology_scope")) == TYPE_STRING and ((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_topology_scope") == "current_integration_topology"
+		and typeof(((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_topology_scope")) == TYPE_STRING and ((contract as Dictionary).get("geometry_contract") as Dictionary).get("world_topology_scope") == "pre_shared_family_base_topology"
 		and typeof((contract as Dictionary).get("ownership_contract")) == TYPE_DICTIONARY
 		and _has_exact_keys((contract as Dictionary).get("ownership_contract") as Dictionary, ["structural_owner_count","shape_count","spray_owner_count","navigation_owner_count","wall_is_sole_spray_receiver","all_additions_render_only","added_ground_collision_triangles","roof_is_wall_spray_receiver","roof_world_solid_landing","eligible_render_layer","noneligible_render_layer","terrain_geometry_and_ownership_unchanged","current_visible_mesh_faces_own_contacts","old_collision_proxies_retained","physical_roles","noncolliding_visual_roles","wall_decal_cull_mask","physical_collision_layer"])
 		and typeof(((contract as Dictionary).get("ownership_contract") as Dictionary).get("structural_owner_count")) in [TYPE_INT, TYPE_FLOAT] and is_finite(float(((contract as Dictionary).get("ownership_contract") as Dictionary).get("structural_owner_count"))) and float(((contract as Dictionary).get("ownership_contract") as Dictionary).get("structural_owner_count")) == 3.0

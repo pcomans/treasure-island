@@ -1,0 +1,10 @@
+{
+  "terminal": 1,
+  "engine_errors": [
+    "ERROR: FAIL [world_material_contract]: Current adoption: { \"ok\": false, \"message\": \"Current adoption topology drift\", \"topology\": { \"visible_meshes\": 26585, \"visible_surfaces\": 26603, \"visible_triangles\": 725842, \"active_bodies\": 512, \"active_shapes\": 585, \"disabled_bodies\": 78 } }"
+  ],
+  "pid": 26616,
+  "slot_released": true,
+  "elapsed_seconds": 11.701737124938518,
+  "ok": false
+}

@@ -25,7 +25,7 @@
     "api_version": "ti.facade-runtime-registry-loader/32",
     "instantiation_authorized": false,
     "loader_path": "res://game/scripts/world/facades/facade_runtime_registry_loader.gd",
-    "loader_sha256": "b38ae1bc8e21a6c133e1e28ec09331ed9014bf1d67c8f5b69a2973cc6666f15e",
+    "loader_sha256": "e8fb82c973752de5df17272b391c6b8706d727daccccb5fb941f58e7692a1e50",
     "projection_execution_policy": "forbidden",
     "unknown_version_policy": "reject"
   },
@@ -5024,7 +5024,7 @@
           "world_shapes": 1925,
           "world_static_bodies": 498,
           "world_surfaces": 3006,
-          "world_topology_scope": "current_integration_topology",
+          "world_topology_scope": "pre_shared_family_base_topology",
           "world_triangles": 207893
         },
         "ownership_contract": {

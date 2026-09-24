@@ -1,0 +1,14 @@
+{
+  "terminal": 1,
+  "errors": [],
+  "engine_errors": [
+    "ERROR: VISUAL_CAPTURE_FAIL: Installed mesh contact missing w96215656 role wall mesh 702 triangle 0 points (-431.6516, 1.9822, -756.0263) (-432.4324, 2.039, -755.6205) (-432.4324, 1.98, -755.6205) area 0.02595966309309 actual_hit { \"position\": (-432.1795, 2.0004, -755.7698), \"normal\": (-0.009686, 0.999867, -0.013092), \"face_index\": 46, \"collider_id\": 227801045891, \"collider\": Collision:<StaticBody3D#227801045891>, \"shape\": 0, \"rid\": RID(44461501448316) }"
+  ],
+  "receipt_ok": false,
+  "elapsed_seconds": 80.52638758393005,
+  "pid": 32351,
+  "slot_released": true,
+  "engines_after": [],
+  "ended_utc": "2026-09-24T22:26:04.450843+00:00",
+  "ok": false
+}

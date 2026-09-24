@@ -1,0 +1,25 @@
+{
+  "stage": "mounted-component-001",
+  "terminal": 1,
+  "errors": [
+    "ERROR: Normal world not validated",
+    "Missing marker: FAMILY_RELEASE_COMPONENT_PASS"
+  ],
+  "pid": 30479,
+  "slot_released": true,
+  "engines_after": [],
+  "elapsed_seconds": 2.8923020409420133,
+  "ended_utc": "2026-09-24T23:13:26.433943+00:00",
+  "harness_pins": {
+    "settings.json": "e9cb558999e896c815f6831e80e99f73904c0f8397cb352b7740290910b0efe6",
+    "source-pins.json": "c609ef03a30cbab97f16593fdce628c5c6c030bc3b2ecac48d918a8cd20e06dc",
+    "native-readiness.json": "5480092c5b33eb8b4b87945ec1abe100589a4d5ee63982daa6f2158d4d427602",
+    "run-plan.json": "cef333cd71ef83761e6d70d278c322652e756ba9704f87c865327a1bf5e38d6b",
+    "package-contract.gd": "019c590c159f16935f2aa22e1463b850d5381beaeac3bda3ed975ef149461aa2",
+    "run-stage.py": "bbe441e3f3fd13eab4b6f1470f8e7885ff353082a9c18a8527289fa87efb3fc5",
+    "bind-export.py": "85b77be46e7a4898b9e9db7315ecc85d4028ce3d88699268efb48d089da56122",
+    "run-reviewed-chain.py": "3d8691085c1d281ad1986db6f32100c0563c358fd776a1125f2471bdd107a6f7"
+  },
+  "app_binding_sha256": "0a789c2043d2e0cc6277a23fe372f9347f719e9bd390389d74a7a4ef0e19e1ab",
+  "ok": false
+}
