@@ -1,6 +1,6 @@
 # Housing family source experiment
 
-This branch provides one shared assembly, `housing_site_family.gd`, and 23 data
+This branch provides one shared assembly, `housing_site_family.gd`, and 24 data
 instances in `game/resources/housing_family/w*.json`. The assembly uses the
 existing 1232 recessed-window and entry primitives. Source edges, opening
 schedules, palette, canopy segments and roof variants belong to each instance.
@@ -157,3 +157,9 @@ paths and separates lawn panels from a wider parking apron. All records remain
 preserved. Screens received independent scoped visual retention; final ground
 review is recorded in RETRO. Canopy weathering, lawn and entry depth remain
 simplified; unknown canopy attachment/endpoints and hidden faces remain unknown.
+
+## Pinned MAIN / TEST comparison
+
+Open [main-vs-test.html](../../../evidence/housing-family-experiment/main-vs-test.html) directly in a browser; no server is needed. It shows all 24 current pairs, with address/ID filtering and original-image links. MAIN is pinned to `9c7f2440d3db6a7f2d0a5d474c612c0362a01c16`; TEST art is pinned to `431343935f6ac9e693db511b9b0c7c8050136565`. The normal world is loaded once and the driver switches target visuals. Normal gameplay remains unchanged: merging this code alone does not enable the preview; integration is separate.
+
+The fresh `main-vs-test-001` run uses `main_vs_test.json` with the existing runner. Regenerate the static page with `python3 game/tests/housing_family_experiment/build_main_vs_test.py`. Keep its sibling capture folder when copying the page offline. Source comparison confirmed generated world, scenes, project settings, production loaders/controllers and existing production assets unchanged between pinned commits; changes are isolated family resources/emitter additions and UIDs, with no production references enabling them. Each pair passes the existing camera/light guard; the receipt records positions/directions, not a full light-state snapshot.

@@ -14693,3 +14693,21 @@ non-ground inputs from 002, upward winding and entry gaps. Owner explicitly
 overrode the prior 25% pause only to finish 1394/1227/1234, publish and stop
 (24% remaining reported at 20:34:51Z). This checkpoint completes that scope;
 no further building work starts, and the old hourly automation stays PAUSED.
+
+### 2026-09-24 — pinned MAIN / TEST comparison
+
+Owner requested comparison only for a later merge decision. `family_instance_artist`
+captured one fresh 24-target run (48 originals) using retained successful poses;
+no model edits or recovery run. `family_branch_setup` built the offline searchable
+side-by-side page, verified MAIN-equivalent production sources, and checked
+filter/jump/original links and responsive layout in installed headless Chrome.
+The page pins MAIN9c7f244 and TEST4313439 and explicitly explains that the harness
+switches visuals; merging alone does not enable them in normal gameplay.
+Native interval was 74.721 seconds; the engine was released. No merge, integration
+or acceptance decision was made.
+
+Read-only `housing_family_reference_review` (Astra Medium) inspected desktop/mobile
+presentation and representative fresh pairs: ordering/labels were correct, with
+no blocking issue. Root approved the condensed header; full pins and capture
+time remain under Capture details. Publication includes comparison artifacts
+only. All capture and owned browser processes are closed; work stops here.
