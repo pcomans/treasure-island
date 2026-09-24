@@ -14455,3 +14455,49 @@ Source/test PASS for the two visual-study variants: fixed six-metre bays reuse e
 ## 2026-09-23 — housing_reuse_skill — structural family usage and publication
 
 Worked: linked the existing durable skill to the structural family and kept usage beside its resource variants, with shared-module instantiation, canopy limits and root-placement examples. No new reporting layer. The earlier palette-only entrypoint was too narrow for structural reuse; it remains documented as such. Next: choose or duplicate a variant resource after the reference comparison, and qualify real-site identity/grade/physics separately. Publication selects only family code/resources, usage, focused demo, approved two images and these existing retrospective notes; prior cropped palette image and four B1 UIDs remain local.
+
+## 2026-09-24 — family_branch_setup — isolated A/B branch setup
+
+Worked: created `experiment/housing-family-instances` in its own worktree from exact baseline `9c7f2440d3db6a7f2d0a5d474c612c0362a01c16`; installed command-local Git LFS and `GIT_LFS_SKIP_SMUDGE=1` kept checkout offline, with checkout/hook exit 0. MAIN and its unrelated local crop/four B1 UID files were preserved.
+
+Limitation: skipped smudge leaves LFS pointers until needed locally cached assets are explicitly checked out; pointers are not usable runtime evidence. No engine, commit, push, MAIN promotion or recognition claim occurred in setup.
+
+Next: retain one compact evidence-tiered inventory beside the experiment and share family implementation while verifying each physical target independently.
+
+family_branch_setup — inventory handoff: persisted the completed 75-unit shortlist as one Markdown table set with existing packet links and explicit 23/22/30 evidence tiers. The remaining 138 catalog units are unclassified, not exclusions. Original research had no writable artifact; consumed its completed messages without rerunning discovery. Private reference pixels stayed external.
+
+### 2026-09-24 — family_instance_artist / shared housing branch experiment
+
+Built one source-edge assembly with 23 per-site data variants on the isolated
+`experiment/housing-family-instances` branch. Reused 1232 opening/entry primitives,
+retained richer 1232/1241 roof and tagged site components, and kept production
+loaders, authority, collision and controls unchanged. All 23 dated originals were
+inspected privately. The first native attempt exposed a stale copied global-class
+cache; its owned process was stopped and failure retained. A local import fixed
+the cache. First-three pixels then exposed a real shared-art regression (color
+space, canopy depth, missing site/detail vocabulary), and independent review kept
+it on HOLD. A joint correction restored a useful provisional base before the
+23-pair run. Static preflight checked 580 complete opening motifs across exact
+source identities, including collinear run splits, without silent clipping.
+
+Run 005 delivered 46 originals but independent review found lost story edges,
+pipe/step trim and screen character in multiple variants. The final bounded run
+006 applies one common articulation correction, preserves broad-band distinctions,
+honors 1221's warm roof-region parameters, and changes matched camera poses where
+obstruction/readability needed it. No hidden opening schedule was filled merely
+for visual richness, and 1229's roof pitch was not inflated for a screenshot.
+Original failures, HOLD pixels and run 005 inputs remain retained. Native results
+and current originals live under `evidence/housing-family-experiment`; the HTML
+labels every candidate provisional and identifies retained components and
+incomplete regional studies. This is shared authoring/capture evidence, not
+collision fit, whole-building fidelity acceptance, an export or recognition credit.
+
+## 2026-09-24 — family_branch_setup — technical review and branch checkpoint
+
+Worked: caught six silently omitted 1220 motifs at serialization seams before capture; the common split-hole correction and explicit error handling resolved that source issue. Final run 006 ended cleanly with 46 original A/B images, exact frozen-input/image bindings, source-ID joins and camera/Sun guards. Shared assembly and 23 instance configs preserve production loader/authority/collision/control files.
+
+Limits: this factual technical review supplies no visual, gameplay or collision-fit acceptance. A tentative duplicate-ground concern was cleared by tracing actual role producers, without another engine run. Publish only the branch experiment, final originals and reproduction inputs; keep earlier failures/HOLDs locally. Next: compare retained semantic details early when extracting a common base; do not treat successful assembly as whole-building quality.
+
+### housing_family_reference_review — independent final visual closeout (Astra Medium)
+
+Read-only reviewer found a useful provisional A/B result: shared story/step trim and screen character substantially restored, and 1221 warm roof variation recovered. Five incomplete regional studies remain: 1204, 1205, 1237, 1229 and 1397/frozen 1246. 1397 canopy ownership is unknown; 1229 roof/apron fidelity remains unresolved in the unobstructed view. 1227/1234 screens remain denser than A and 1226 is partly occluded. No further capture, blanket whole-building PASS, recognition credit or production promotion. This entry transcribes the independent reviewer’s final verdict because its handle was read-only.

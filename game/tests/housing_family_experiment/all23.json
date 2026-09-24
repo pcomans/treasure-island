@@ -1,0 +1,418 @@
+{
+  "targets": [
+    {
+      "source_key": "w96215649",
+      "label": "1212 Mariner Drive",
+      "id": "w96215649",
+      "region": "w96215649",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -186.793579101562,
+        -604.809387207031
+      ],
+      "aim_target": [
+        -181.494995117188,
+        5.5,
+        -585.523986816406
+      ],
+      "config": "res://game/resources/housing_family/w96215649.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-3.json"
+    },
+    {
+      "source_key": "w96215651",
+      "label": "1202 Mariner Drive",
+      "id": "w96215651",
+      "region": "w96215651",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -392.007415771484,
+        -643.026123046875
+      ],
+      "aim_target": [
+        -403.574310302734,
+        5.42999982833862,
+        -621.997436523438
+      ],
+      "config": "res://game/resources/housing_family/w96215651.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215652",
+      "label": "1220 Bayside Drive",
+      "id": "w96215652",
+      "region": "w96215652",
+      "intent": "Matched A/B source-world visual study",
+      "requested_xz": [
+        -454.181243896484,
+        -641.370788574219
+      ],
+      "aim_target": [
+        -460.293365478516,
+        5.15999984741211,
+        -674.81689453125
+      ],
+      "config": "res://game/resources/housing_family/w96215652.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215653",
+      "label": "1227 Northpoint Drive",
+      "id": "w96215653",
+      "region": "w96215653",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -316.6642240578991,
+        -790.003965257212
+      ],
+      "aim_target": [
+        -334.392822265625,
+        4.94999980926514,
+        -780.746765136719
+      ],
+      "config": "res://game/resources/housing_family/w96215653.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-4.json"
+    },
+    {
+      "source_key": "w96215656",
+      "label": "1224 Bayside Drive",
+      "id": "w96215656",
+      "region": "w96215656",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -448.4422475321808,
+        -767.2547953005608
+      ],
+      "aim_target": [
+        -439.674,
+        5.0785,
+        -750.399
+      ],
+      "config": "res://game/resources/housing_family/w96215656.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215658",
+      "label": "1239 Northpoint Drive",
+      "id": "w96215658",
+      "region": "w96215658",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -174.855575561523,
+        -838.7392578125
+      ],
+      "aim_target": [
+        -150.899597167969,
+        5.76000022888184,
+        -814.612243652344
+      ],
+      "config": "res://game/resources/housing_family/w96215658.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-4.json"
+    },
+    {
+      "source_key": "w96215659",
+      "label": "1234 Northpoint Drive",
+      "id": "w96215659",
+      "region": "w96215659",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -319.3904197176536,
+        -771.2028207845852
+      ],
+      "aim_target": [
+        -305.219787597656,
+        5.25,
+        -778.632019042969
+      ],
+      "config": "res://game/resources/housing_family/w96215659.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-4.json"
+    },
+    {
+      "source_key": "w96215661",
+      "label": "1222 Bayside Drive",
+      "id": "w96215661",
+      "region": "w96215661",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -501.883758544922,
+        -744.346862792969
+      ],
+      "aim_target": [
+        -490.808074951172,
+        5.01999998092651,
+        -723.055297851562
+      ],
+      "config": "res://game/resources/housing_family/w96215661.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215666",
+      "label": "1215 Bayside Drive",
+      "id": "w96215666",
+      "region": "w96215666",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -399.054138183594,
+        -701.877136230469
+      ],
+      "aim_target": [
+        -378.240692138672,
+        5.05000019073486,
+        -713.827026367188
+      ],
+      "config": "res://game/resources/housing_family/w96215666.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215669",
+      "label": "1238 Northpoint Drive",
+      "id": "w96215669",
+      "region": "w96215669",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -203.211380004883,
+        -880.339172363281
+      ],
+      "aim_target": [
+        -212.776504516602,
+        5.30000019073486,
+        -856.080017089844
+      ],
+      "config": "res://game/resources/housing_family/w96215669.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-4.json"
+    },
+    {
+      "source_key": "w96215670",
+      "label": "1397 Gateview",
+      "id": "w96215670",
+      "region": "w96215670",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -235.473434448242,
+        -760.604309082031
+      ],
+      "aim_target": [
+        -225.567031860352,
+        7.30000019073486,
+        -726.448852539062
+      ],
+      "config": "res://game/resources/housing_family/w96215670.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-3.json"
+    },
+    {
+      "source_key": "w96215672",
+      "label": "1201 Bayside Drive",
+      "id": "w96215672",
+      "region": "w96215672",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -477.006927490234,
+        -679.420959472656
+      ],
+      "aim_target": [
+        -485.709320068359,
+        5.5,
+        -656.3671875
+      ],
+      "config": "res://game/resources/housing_family/w96215672.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215673",
+      "label": "1232 Northpoint Drive",
+      "id": "w96215673",
+      "region": "w96215673",
+      "intent": "Matched A/B source-world visual study",
+      "requested_xz": [
+        -327.221343994141,
+        -723.868591308594
+      ],
+      "aim_target": [
+        -305.874298095703,
+        6.0,
+        -734.836853027344
+      ],
+      "config": "res://game/resources/housing_family/w96215673.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215674",
+      "label": "1241 Northpoint Drive",
+      "id": "w96215674",
+      "region": "w96215674",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -151.813354492188,
+        -735.935363769531
+      ],
+      "aim_target": [
+        -137.447906494141,
+        6.65000009536743,
+        -759.969421386719
+      ],
+      "config": "res://game/resources/housing_family/w96215674.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-3.json"
+    },
+    {
+      "source_key": "w96215677",
+      "label": "1206 Mariner Drive",
+      "id": "w96215677",
+      "region": "w96215677",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -316.574554443359,
+        -601.411865234375
+      ],
+      "aim_target": [
+        -317.888000488281,
+        5.69999980926514,
+        -579.952026367188
+      ],
+      "config": "res://game/resources/housing_family/w96215677.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215678",
+      "label": "1205 Bayside",
+      "id": "w96215678",
+      "region": "w96215678",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -519.4222875932087,
+        -710.9042659777945
+      ],
+      "aim_target": [
+        -538.4035,
+        5.798,
+        -711.749
+      ],
+      "config": "res://game/resources/housing_family/w96215678.json",
+      "chunk": "res://generated/world/chunks/x_-3__z_-3.json"
+    },
+    {
+      "source_key": "w96215680",
+      "label": "1219 Mariner Drive",
+      "id": "w96215680",
+      "region": "w96215680",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -318.578033447266,
+        -587.544921875
+      ],
+      "aim_target": [
+        -317.243988037109,
+        5.69999980926514,
+        -609.003479003906
+      ],
+      "config": "res://game/resources/housing_family/w96215680.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215682",
+      "label": "1221 Mariner Drive",
+      "id": "w96215682",
+      "region": "w96215682",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -280.0,
+        -582.0
+      ],
+      "aim_target": [
+        -265.0,
+        6.0,
+        -606.47998046875
+      ],
+      "config": "res://game/resources/housing_family/w96215682.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215685",
+      "label": "1226 Bayside",
+      "id": "w96215685",
+      "region": "w96215685",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -383.521636962891,
+        -696.5966796875
+      ],
+      "aim_target": [
+        -411.528900146484,
+        6.89400005340576,
+        -704.170043945312
+      ],
+      "config": "res://game/resources/housing_family/w96215685.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215688",
+      "label": "1240 Northpoint Drive",
+      "id": "w96215688",
+      "region": "w96215688",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -159.248489379883,
+        -819.808532714844
+      ],
+      "aim_target": [
+        -178.646499633789,
+        7.47499990463257,
+        -814.931884765625
+      ],
+      "config": "res://game/resources/housing_family/w96215688.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-4.json"
+    },
+    {
+      "source_key": "w96215691",
+      "label": "1204 Mariner Drive",
+      "id": "w96215691",
+      "region": "w96215691",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -357.57629061100886,
+        -604.0276513794549
+      ],
+      "aim_target": [
+        -365.1525,
+        5.668,
+        -586.6034999999999
+      ],
+      "config": "res://game/resources/housing_family/w96215691.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96665904",
+      "label": "1237 Northpoint",
+      "id": "w96665904",
+      "region": "w96665904",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -185.46067150898995,
+        -854.1404033777442
+      ],
+      "aim_target": [
+        -170.7095,
+        5.833500000000001,
+        -866.1155
+      ],
+      "config": "res://game/resources/housing_family/w96665904.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-4.json"
+    },
+    {
+      "source_key": "w96665911",
+      "label": "1229 Northpoint",
+      "id": "w96665911",
+      "region": "w96665911",
+      "intent": "Matched A/B source-world visual study",
+      "requested_xz": [
+        -297.097794321948,
+        -834.0035449201582
+      ],
+      "aim_target": [
+        -327.553,
+        5.6,
+        -825.49
+      ],
+      "config": "res://game/resources/housing_family/w96665911.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-4.json"
+    }
+  ]
+}

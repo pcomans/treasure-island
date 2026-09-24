@@ -1,0 +1,1525 @@
+{
+	"captures": [
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 831501,
+			"camera_forward": [
+				0.264661252498627,
+				0.044940959662199,
+				0.963293731212616
+			],
+			"camera_position": [
+				-188.249221801758,
+				4.35309505462646,
+				-610.107482910156
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215649-A.png",
+			"id": "w96215649-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-186.793579101562,
+				2.60027050971985,
+				-604.809387207031
+			],
+			"region": "w96215649",
+			"sample_luminance_range": 0.622912175953388,
+			"sample_unique_colors": 285,
+			"sha256": "7117d39a77664384fb65465b04da110f176c97b2c3e0b320b47ea7e517fa3253",
+			"source_key": "w96215649"
+		},
+		{
+			"bytes": 814315,
+			"camera_forward": [
+				0.264661431312561,
+				0.044940959662199,
+				0.963293671607971
+			],
+			"camera_position": [
+				-188.249221801758,
+				4.35309505462646,
+				-610.107482910156
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215649-B.png",
+			"id": "w96215649-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-186.793579101562,
+				2.60027050971985,
+				-604.809387207031
+			],
+			"region": "w96215649",
+			"sample_luminance_range": 0.64068628102541,
+			"sample_unique_colors": 286,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "6e347a720be4a6b8d3b320e4f19158fe7be88ef071dad4fb6a20044a4539c429",
+			"source_key": "w96215649"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 916703,
+			"camera_forward": [
+				-0.481463015079498,
+				0.0451348796486855,
+				0.875303506851196
+			],
+			"camera_position": [
+				-389.359405517578,
+				4.09742021560669,
+				-647.840209960938
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215651-A.png",
+			"id": "w96215651-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-392.007415771484,
+				2.34565925598145,
+				-643.026123046875
+			],
+			"region": "w96215651",
+			"sample_luminance_range": 0.626134134829044,
+			"sample_unique_colors": 329,
+			"sha256": "8878d4ad592cbcaf8b7636dc025dcefa446b11f323bce337a3db2a1805b4ba05",
+			"source_key": "w96215651"
+		},
+		{
+			"bytes": 857549,
+			"camera_forward": [
+				-0.481462985277176,
+				0.0451348759233952,
+				0.875303447246552
+			],
+			"camera_position": [
+				-389.359405517578,
+				4.09742021560669,
+				-647.840209960938
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215651-B.png",
+			"id": "w96215651-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-392.007415771484,
+				2.34565925598145,
+				-643.026123046875
+			],
+			"region": "w96215651",
+			"sample_luminance_range": 0.521611765027046,
+			"sample_unique_colors": 306,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "9f8e136af8cba4dc26fa60b5dbe3d1e5efd2f7a6f35500720bd193500cc7d24d",
+			"source_key": "w96215651"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 936598,
+			"camera_forward": [
+				-0.179718598723412,
+				0.0236178953200579,
+				-0.983434498310089
+			],
+			"camera_position": [
+				-453.192749023438,
+				4.22686815261841,
+				-635.9619140625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215652-A.png",
+			"id": "w96215652-A",
+			"intent": "Matched A/B source-world visual study",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-454.181243896484,
+				2.35676765441895,
+				-641.370788574219
+			],
+			"region": "w96215652",
+			"sample_luminance_range": 0.775499671697617,
+			"sample_unique_colors": 319,
+			"sha256": "0f83b81c9001af5dd6753d133ec6de863d0631e9f006c952846cada8088fd5f1",
+			"source_key": "w96215652"
+		},
+		{
+			"bytes": 958164,
+			"camera_forward": [
+				-0.179718598723412,
+				0.0236178953200579,
+				-0.983434498310089
+			],
+			"camera_position": [
+				-453.192749023438,
+				4.22686815261841,
+				-635.9619140625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215652-B.png",
+			"id": "w96215652-B",
+			"intent": "Matched A/B source-world visual study",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-454.181243896484,
+				2.35676765441895,
+				-641.370788574219
+			],
+			"region": "w96215652",
+			"sample_luminance_range": 0.771578043699265,
+			"sample_unique_colors": 312,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "e51e9f093d31980f1da3c1fd87ddb8195bb34210c50d61ba8e3f6c1f029842ea",
+			"source_key": "w96215652"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 590621,
+			"camera_forward": [
+				-0.88556569814682,
+				0.0441729351878166,
+				0.46240907907486
+			],
+			"camera_position": [
+				-311.793609619141,
+				3.82272696495056,
+				-792.547302246094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215653-A.png",
+			"id": "w96215653-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-316.664215087891,
+				2.06567883491516,
+				-790.003967285156
+			],
+			"region": "w96215653",
+			"sample_luminance_range": 0.622212566435337,
+			"sample_unique_colors": 243,
+			"sha256": "bfb00ee7f9241e07681cabee9e3394ab2e565645126b4bfbfb7c558ebecf6cec",
+			"source_key": "w96215653"
+		},
+		{
+			"bytes": 576589,
+			"camera_forward": [
+				-0.88556569814682,
+				0.0441729351878166,
+				0.46240907907486
+			],
+			"camera_position": [
+				-311.793609619141,
+				3.82272696495056,
+				-792.547302246094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215653-B.png",
+			"id": "w96215653-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-316.664215087891,
+				2.06567883491516,
+				-790.003967285156
+			],
+			"region": "w96215653",
+			"sample_luminance_range": 0.609598442912102,
+			"sample_unique_colors": 236,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "0db1af2568b1f2f0c78d14444028a8c690f8cf3ada44d9be6cbb6a9bd7930246",
+			"source_key": "w96215653"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 954494,
+			"camera_forward": [
+				0.460263460874557,
+				0.0727514177560806,
+				0.884796440601349
+			],
+			"camera_position": [
+				-450.973693847656,
+				3.29241538047791,
+				-772.121215820312
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215656-A.png",
+			"id": "w96215656-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-448.442260742188,
+				1.69254803657532,
+				-767.254821777344
+			],
+			"region": "w96215656",
+			"sample_luminance_range": 0.591042369604111,
+			"sample_unique_colors": 336,
+			"sha256": "382d5398855cbaaeadbe13695c26e654ce8260316f87559471423296962b7318",
+			"source_key": "w96215656"
+		},
+		{
+			"bytes": 758260,
+			"camera_forward": [
+				0.460263460874557,
+				0.0727514550089836,
+				0.884796440601349
+			],
+			"camera_position": [
+				-450.973693847656,
+				3.29241538047791,
+				-772.121215820312
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215656-B.png",
+			"id": "w96215656-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-448.442260742188,
+				1.69254803657532,
+				-767.254821777344
+			],
+			"region": "w96215656",
+			"sample_luminance_range": 0.615542739629745,
+			"sample_unique_colors": 268,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "fc8e0d884106d5f5c16f051c85cc0b1a24e3f62867b03d360a0a7d8796ea204c",
+			"source_key": "w96215656"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 937347,
+			"camera_forward": [
+				0.704383850097656,
+				0.0240309592336416,
+				0.709412455558777
+			],
+			"camera_position": [
+				-178.729690551758,
+				4.81054830551147,
+				-842.641052246094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215658-A.png",
+			"id": "w96215658-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-174.855575561523,
+				2.94271731376648,
+				-838.7392578125
+			],
+			"region": "w96215658",
+			"sample_luminance_range": 0.789356902241707,
+			"sample_unique_colors": 327,
+			"sha256": "fbf39e0d6d4c6ae28ea43369d95168cd0d3165d80155dee27c11a4aa94762049",
+			"source_key": "w96215658"
+		},
+		{
+			"bytes": 920977,
+			"camera_forward": [
+				0.704383850097656,
+				0.0240309443324804,
+				0.709412455558777
+			],
+			"camera_position": [
+				-178.729690551758,
+				4.81054830551147,
+				-842.641052246094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215658-B.png",
+			"id": "w96215658-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-174.855575561523,
+				2.94271731376648,
+				-838.7392578125
+			],
+			"region": "w96215658",
+			"sample_luminance_range": 0.789356902241707,
+			"sample_unique_colors": 307,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "4f986eef4ac661d7112256a6fe5a00cbe1e7cf60f8f7067ec37629a86bdb69d3",
+			"source_key": "w96215658"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 652282,
+			"camera_forward": [
+				0.883172452449799,
+				0.07496427744627,
+				-0.463019132614136
+			],
+			"camera_position": [
+				-324.247863769531,
+				3.63488245010376,
+				-768.656127929688
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215659-A.png",
+			"id": "w96215659-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-319.390411376953,
+				2.04718828201294,
+				-771.202819824219
+			],
+			"region": "w96215659",
+			"sample_luminance_range": 0.732672929763794,
+			"sample_unique_colors": 203,
+			"sha256": "8efd32c92154c31170735a89443f44863f8110bafd88290dc4cf7db1ee6c4227",
+			"source_key": "w96215659"
+		},
+		{
+			"bytes": 666628,
+			"camera_forward": [
+				0.883172452449799,
+				0.0749642923474312,
+				-0.463019132614136
+			],
+			"camera_position": [
+				-324.247863769531,
+				3.63488245010376,
+				-768.656127929688
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215659-B.png",
+			"id": "w96215659-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-319.390411376953,
+				2.04718828201294,
+				-771.202819824219
+			],
+			"region": "w96215659",
+			"sample_luminance_range": 0.766861155629158,
+			"sample_unique_colors": 191,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "98f4bfd9804f107204f60203884b0018a9bfcb762ef920086278403399f92e09",
+			"source_key": "w96215659"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 869574,
+			"camera_forward": [
+				0.460902094841003,
+				0.0503110662102699,
+				0.886023759841919
+			],
+			"camera_position": [
+				-504.418731689453,
+				3.5343017578125,
+				-749.219970703125
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215661-A.png",
+			"id": "w96215661-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-501.883758544922,
+				1.81101059913635,
+				-744.346862792969
+			],
+			"region": "w96215661",
+			"sample_luminance_range": 0.573967084288597,
+			"sample_unique_colors": 306,
+			"sha256": "3f591ce4acaccf4ff654e8cbf7bf7dd02dafdae8211e0c566b90aa260f50f596",
+			"source_key": "w96215661"
+		},
+		{
+			"bytes": 861901,
+			"camera_forward": [
+				0.460902094841003,
+				0.0503110475838184,
+				0.886023759841919
+			],
+			"camera_position": [
+				-504.418731689453,
+				3.5343017578125,
+				-749.219970703125
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215661-B.png",
+			"id": "w96215661-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-501.883758544922,
+				1.81101059913635,
+				-744.346862792969
+			],
+			"region": "w96215661",
+			"sample_luminance_range": 0.734101995825768,
+			"sample_unique_colors": 302,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "bfe02e5198f31f9570aa57fe91549be0b34a3e050c1cc99a90fcb9e83589698b",
+			"source_key": "w96215661"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 944787,
+			"camera_forward": [
+				0.866750478744507,
+				0.0331524983048439,
+				-0.497638881206512
+			],
+			"camera_position": [
+				-403.821258544922,
+				4.07157325744629,
+				-699.14013671875
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215666-A.png",
+			"id": "w96215666-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-399.054138183594,
+				2.25391125679016,
+				-701.877136230469
+			],
+			"region": "w96215666",
+			"sample_luminance_range": 0.78655219078064,
+			"sample_unique_colors": 311,
+			"sha256": "f69f1d21374db82ad57e4f5a68599e455787f3e4c365f32a26292bbd846ecc29",
+			"source_key": "w96215666"
+		},
+		{
+			"bytes": 939253,
+			"camera_forward": [
+				0.866750478744507,
+				0.0331525355577469,
+				-0.497638881206512
+			],
+			"camera_position": [
+				-403.821258544922,
+				4.07157325744629,
+				-699.14013671875
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215666-B.png",
+			"id": "w96215666-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-399.054138183594,
+				2.25391125679016,
+				-701.877136230469
+			],
+			"region": "w96215666",
+			"sample_luminance_range": 0.630885511636734,
+			"sample_unique_colors": 291,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "3da2a2087064b2c6bb569894c19d289f21c0b25a05bfdd5f571e73dc7b68d8ef",
+			"source_key": "w96215666"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 847111,
+			"camera_forward": [
+				-0.366719514131546,
+				0.0217020362615585,
+				0.930078446865082
+			],
+			"camera_position": [
+				-201.194427490234,
+				4.61461067199707,
+				-885.45458984375
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215669-A.png",
+			"id": "w96215669-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-203.211380004883,
+				2.73396801948547,
+				-880.339172363281
+			],
+			"region": "w96215669",
+			"sample_luminance_range": 0.695428252220154,
+			"sample_unique_colors": 312,
+			"sha256": "eac7abcbd4d70a65621e66d81876fc43a2f6a6db48ffb214955842b3ef00718e",
+			"source_key": "w96215669"
+		},
+		{
+			"bytes": 859769,
+			"camera_forward": [
+				-0.366719514131546,
+				0.0217020343989134,
+				0.930078446865082
+			],
+			"camera_position": [
+				-201.194427490234,
+				4.61461067199707,
+				-885.45458984375
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215669-B.png",
+			"id": "w96215669-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-203.211380004883,
+				2.73396801948547,
+				-880.339172363281
+			],
+			"region": "w96215669",
+			"sample_luminance_range": 0.695428252220154,
+			"sample_unique_colors": 317,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "93209256c5b3e8f6f4225385ab2ca460e91365a6b8a75cc197c4ef9a2040f106",
+			"source_key": "w96215669"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 960729,
+			"camera_forward": [
+				0.277831465005875,
+				0.072223536670208,
+				0.95791095495224
+			],
+			"camera_position": [
+				-237.001510620117,
+				4.32758760452271,
+				-765.872802734375
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215670-A.png",
+			"id": "w96215670-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-235.473434448242,
+				2.72481274604797,
+				-760.604309082031
+			],
+			"region": "w96215670",
+			"sample_luminance_range": 0.584248602390289,
+			"sample_unique_colors": 339,
+			"sha256": "6d7f1088cf4574f61ac0c0522fd3269a6c154944b46aa4465723568121ce3d78",
+			"source_key": "w96215670"
+		},
+		{
+			"bytes": 948666,
+			"camera_forward": [
+				0.277831494808197,
+				0.072223536670208,
+				0.957911014556885
+			],
+			"camera_position": [
+				-237.001510620117,
+				4.32758760452271,
+				-765.872802734375
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215670-B.png",
+			"id": "w96215670-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-235.473434448242,
+				2.72481274604797,
+				-760.604309082031
+			],
+			"region": "w96215670",
+			"sample_luminance_range": 0.583965480327606,
+			"sample_unique_colors": 327,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "9714f32624f70a2f3f5d737cb5e86b66a121d49b5e15a245a1b52089bf7cc9ea",
+			"source_key": "w96215670"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 690697,
+			"camera_forward": [
+				-0.352635741233826,
+				0.0543820783495903,
+				0.934179127216339
+			],
+			"camera_position": [
+				-475.067413330078,
+				3.85887479782104,
+				-684.558959960938
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215672-A.png",
+			"id": "w96215672-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-477.006927490234,
+				2.15797305107117,
+				-679.420959472656
+			],
+			"region": "w96215672",
+			"sample_luminance_range": 0.640286289155483,
+			"sample_unique_colors": 290,
+			"sha256": "bdb3dec19184572d88acb764f4b6fed02b4420adacc9ffcb24272d647b488c67",
+			"source_key": "w96215672"
+		},
+		{
+			"bytes": 703479,
+			"camera_forward": [
+				-0.352635741233826,
+				0.0543820746243,
+				0.934179127216339
+			],
+			"camera_position": [
+				-475.067413330078,
+				3.85887479782104,
+				-684.558959960938
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215672-B.png",
+			"id": "w96215672-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-477.006927490234,
+				2.15797305107117,
+				-679.420959472656
+			],
+			"region": "w96215672",
+			"sample_luminance_range": 0.640286289155483,
+			"sample_unique_colors": 290,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "1b1b23b0194d3da6828a2ff765af2ef5608ca947e6d3931badb0f738a54fec43",
+			"source_key": "w96215672"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 966938,
+			"camera_forward": [
+				0.887168943881989,
+				0.0717397779226303,
+				-0.455834001302719
+			],
+			"camera_position": [
+				-332.100769042969,
+				3.87925553321838,
+				-721.361511230469
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215673-A.png",
+			"id": "w96215673-A",
+			"intent": "Matched A/B source-world visual study",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-327.221343994141,
+				2.27381777763367,
+				-723.868591308594
+			],
+			"region": "w96215673",
+			"sample_luminance_range": 0.655304312705994,
+			"sample_unique_colors": 312,
+			"sha256": "e71441e3229cc0881dea8160ae802aa33627664a77b137464b94c323855e8cfd",
+			"source_key": "w96215673"
+		},
+		{
+			"bytes": 924857,
+			"camera_forward": [
+				0.887168943881989,
+				0.0717397257685661,
+				-0.455834001302719
+			],
+			"camera_position": [
+				-332.100769042969,
+				3.87925553321838,
+				-721.361511230469
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215673-B.png",
+			"id": "w96215673-B",
+			"intent": "Matched A/B source-world visual study",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-327.221343994141,
+				2.27381777763367,
+				-723.868591308594
+			],
+			"region": "w96215673",
+			"sample_luminance_range": 0.662879943847656,
+			"sample_unique_colors": 304,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "06748eca60cdd81649c4507423bc96c3790341e17681af23b44b6a682e630b67",
+			"source_key": "w96215673"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 912300,
+			"camera_forward": [
+				0.512323200702667,
+				0.0533106960356236,
+				-0.857136487960815
+			],
+			"camera_position": [
+				-154.631088256836,
+				4.8619818687439,
+				-731.221130371094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215674-A.png",
+			"id": "w96215674-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-151.813354492188,
+				3.15518689155579,
+				-735.935363769531
+			],
+			"region": "w96215674",
+			"sample_luminance_range": 0.708019629120827,
+			"sample_unique_colors": 284,
+			"sha256": "0fd3079cb18db1b5347d5df10c5ead39a89ac01213a6d840c8211643ef4d67f4",
+			"source_key": "w96215674"
+		},
+		{
+			"bytes": 908020,
+			"camera_forward": [
+				0.512323141098022,
+				0.0533106848597527,
+				-0.857136487960815
+			],
+			"camera_position": [
+				-154.631088256836,
+				4.8619818687439,
+				-731.221130371094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215674-B.png",
+			"id": "w96215674-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-151.813354492188,
+				3.15518689155579,
+				-735.935363769531
+			],
+			"region": "w96215674",
+			"sample_luminance_range": 0.738275304436684,
+			"sample_unique_colors": 290,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "112c849f8d6b9a663d6ff0068e52ef10e903d0812bd34a21e4fee21697c02995",
+			"source_key": "w96215674"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 486074,
+			"camera_forward": [
+				-0.0610403157770634,
+				0.0412974953651428,
+				0.997280657291412
+			],
+			"camera_position": [
+				-316.238830566406,
+				4.58422088623047,
+				-606.896911621094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215677-A.png",
+			"id": "w96215677-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-316.574554443359,
+				2.81135439872742,
+				-601.411865234375
+			],
+			"region": "w96215677",
+			"sample_luminance_range": 0.651917658746243,
+			"sample_unique_colors": 219,
+			"sha256": "43c344b75e9bee58ca3a1d1dd90b2d78437826b051e58f304e652f50b91e4656",
+			"source_key": "w96215677"
+		},
+		{
+			"bytes": 478812,
+			"camera_forward": [
+				-0.0610403157770634,
+				0.0412975028157234,
+				0.997280657291412
+			],
+			"camera_position": [
+				-316.238830566406,
+				4.58422088623047,
+				-606.896911621094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215677-B.png",
+			"id": "w96215677-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-316.574554443359,
+				2.81135439872742,
+				-601.411865234375
+			],
+			"region": "w96215677",
+			"sample_luminance_range": 0.651917658746243,
+			"sample_unique_colors": 220,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "04896bf7dc797de4c63bf2743da5851af8cdf3e13509f85b8db0c6919b02833b",
+			"source_key": "w96215677"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 717121,
+			"camera_forward": [
+				-0.99589216709137,
+				0.0789558663964272,
+				-0.0443256683647633
+			],
+			"camera_position": [
+				-513.944885253906,
+				3.85889649391174,
+				-710.660522460938
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215678-A.png",
+			"id": "w96215678-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-519.422302246094,
+				2.29315066337585,
+				-710.904235839844
+			],
+			"region": "w96215678",
+			"sample_luminance_range": 0.586069032549858,
+			"sample_unique_colors": 270,
+			"sha256": "1c4f47f7cfba351e73c04b3dad82094169e29bc6080f1499ca89785c53b61d5e",
+			"source_key": "w96215678"
+		},
+		{
+			"bytes": 587850,
+			"camera_forward": [
+				-0.99589216709137,
+				0.0789558663964272,
+				-0.0443256683647633
+			],
+			"camera_position": [
+				-513.944885253906,
+				3.85889649391174,
+				-710.660522460938
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215678-B.png",
+			"id": "w96215678-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-519.422302246094,
+				2.29315066337585,
+				-710.904235839844
+			],
+			"region": "w96215678",
+			"sample_luminance_range": 0.588221177458763,
+			"sample_unique_colors": 223,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "cd6503ddbe5bd91373f893e9a1be3fce451e21ca9394a4303097a1d64762a4bf",
+			"source_key": "w96215678"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 526978,
+			"camera_forward": [
+				0.0620042383670807,
+				0.0386588536202908,
+				-0.997326910495758
+			],
+			"camera_position": [
+				-318.919036865234,
+				4.65560340881348,
+				-582.059631347656
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215680-A.png",
+			"id": "w96215680-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-318.578033447266,
+				2.86822390556335,
+				-587.544921875
+			],
+			"region": "w96215680",
+			"sample_luminance_range": 0.730533331632614,
+			"sample_unique_colors": 130,
+			"sha256": "4f22af0e33570be6a058f096a7ae89cbf72891a0f23a4152eb03eae14ccfec7a",
+			"source_key": "w96215680"
+		},
+		{
+			"bytes": 519811,
+			"camera_forward": [
+				0.0620042383670807,
+				0.0386588536202908,
+				-0.997326910495758
+			],
+			"camera_position": [
+				-318.919036865234,
+				4.65560340881348,
+				-582.059631347656
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215680-B.png",
+			"id": "w96215680-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-318.578033447266,
+				2.86822390556335,
+				-587.544921875
+			],
+			"region": "w96215680",
+			"sample_luminance_range": 0.730533331632614,
+			"sample_unique_colors": 121,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "7c5ae171f6b70d098473aa0b5eead9190903cb057145c161a6e7d5f7d5063100",
+			"source_key": "w96215680"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 905954,
+			"camera_forward": [
+				0.521949827671051,
+				0.0444443002343178,
+				-0.851817548274994
+			],
+			"camera_position": [
+				-282.825866699219,
+				4.4821310043335,
+				-577.38818359375
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215682-A.png",
+			"id": "w96215682-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-280.0,
+				2.72275280952454,
+				-582.0
+			],
+			"region": "w96215682",
+			"sample_luminance_range": 0.803541973233223,
+			"sample_unique_colors": 312,
+			"sha256": "28be320cc5fef29b49042bae8600d72754a34fa5492c049079183e07d274eb26",
+			"source_key": "w96215682"
+		},
+		{
+			"bytes": 896486,
+			"camera_forward": [
+				0.521949827671051,
+				0.0444443002343178,
+				-0.851817548274994
+			],
+			"camera_position": [
+				-282.825866699219,
+				4.4821310043335,
+				-577.38818359375
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215682-B.png",
+			"id": "w96215682-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-280.0,
+				2.72275280952454,
+				-582.0
+			],
+			"region": "w96215682",
+			"sample_luminance_range": 0.871278420090675,
+			"sample_unique_colors": 298,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "75cde3005d9375f2aea1b6daab40f84e9eb43f09d683e87548e673a9389e0392",
+			"source_key": "w96215682"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 944433,
+			"camera_forward": [
+				-0.960710465908051,
+				0.0977090895175934,
+				-0.259785115718842
+			],
+			"camera_position": [
+				-378.237670898438,
+				3.50813007354736,
+				-695.167846679688
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215685-A.png",
+			"id": "w96215685-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-383.521636962891,
+				2.04553723335266,
+				-696.5966796875
+			],
+			"region": "w96215685",
+			"sample_luminance_range": 0.748741209506989,
+			"sample_unique_colors": 317,
+			"sha256": "f5d992f16212df90cbb60925c22dc80487264c58b9e394863fce73e3f1352d62",
+			"source_key": "w96215685"
+		},
+		{
+			"bytes": 942249,
+			"camera_forward": [
+				-0.960710465908051,
+				0.0977090895175934,
+				-0.259785115718842
+			],
+			"camera_position": [
+				-378.237670898438,
+				3.50813007354736,
+				-695.167846679688
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215685-B.png",
+			"id": "w96215685-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-383.521636962891,
+				2.04553723335266,
+				-696.5966796875
+			],
+			"region": "w96215685",
+			"sample_luminance_range": 0.652569472789764,
+			"sample_unique_colors": 316,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "f7d479c78416bdb277b52ce905b5a9d5190028989024dfb85723d1f89909db45",
+			"source_key": "w96215685"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 460058,
+			"camera_forward": [
+				-0.960779190063477,
+				0.136246845126152,
+				0.241537153720856
+			],
+			"camera_position": [
+				-154.232528686523,
+				4.01289844512939,
+				-821.069519042969
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215688-A.png",
+			"id": "w96215688-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-159.248489379883,
+				2.72420239448547,
+				-819.808532714844
+			],
+			"region": "w96215688",
+			"sample_luminance_range": 0.73654829710722,
+			"sample_unique_colors": 200,
+			"sha256": "d9b83ec7f585ff71bc5d3d99cf57519d2a81f05de7010f48ac84d3a429b2c780",
+			"source_key": "w96215688"
+		},
+		{
+			"bytes": 408454,
+			"camera_forward": [
+				-0.960779190063477,
+				0.136246845126152,
+				0.241537153720856
+			],
+			"camera_position": [
+				-154.232528686523,
+				4.01289844512939,
+				-821.069519042969
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215688-B.png",
+			"id": "w96215688-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-159.248489379883,
+				2.72420239448547,
+				-819.808532714844
+			],
+			"region": "w96215688",
+			"sample_luminance_range": 0.62907687574625,
+			"sample_unique_colors": 194,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "f36939790824d3f64c8f04323e9303b16ba1da321e54b534fd385c554b75e7f9",
+			"source_key": "w96215688"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 920297,
+			"camera_forward": [
+				-0.3980692923069,
+				0.0583987012505531,
+				0.915494620800018
+			],
+			"camera_position": [
+				-355.386901855469,
+				4.23534679412842,
+				-609.062927246094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215691-A.png",
+			"id": "w96215691-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-357.576293945312,
+				2.55653882026672,
+				-604.027648925781
+			],
+			"region": "w96215691",
+			"sample_luminance_range": 0.538410216569901,
+			"sample_unique_colors": 328,
+			"sha256": "498f464d2b4130bff399ccb4e4679e7907041eac511313bdafde1fad9fe397a4",
+			"source_key": "w96215691"
+		},
+		{
+			"bytes": 771485,
+			"camera_forward": [
+				-0.3980692923069,
+				0.0583987012505531,
+				0.915494620800018
+			],
+			"camera_position": [
+				-355.386901855469,
+				4.23534679412842,
+				-609.062927246094
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215691-B.png",
+			"id": "w96215691-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-357.576293945312,
+				2.55653882026672,
+				-604.027648925781
+			],
+			"region": "w96215691",
+			"sample_luminance_range": 0.631881587207317,
+			"sample_unique_colors": 277,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "3737ce50086211efb8ef5e0ee866a98de4ce2fd9c17c9076c04d407c60d5a135",
+			"source_key": "w96215691"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 1021972,
+			"camera_forward": [
+				0.7751504778862,
+				0.0562284216284752,
+				-0.629269540309906
+			],
+			"camera_position": [
+				-189.723999023438,
+				4.4542236328125,
+				-850.679382324219
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96665904-A.png",
+			"id": "w96665904-A",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-185.460678100586,
+				2.76347541809082,
+				-854.140380859375
+			],
+			"region": "w96665904",
+			"sample_luminance_range": 0.454583555459976,
+			"sample_unique_colors": 330,
+			"sha256": "b6f3cc50dafa013f0518bee162d355d25190dae0ff9846a0ce12f2ff6200a38e",
+			"source_key": "w96665904"
+		},
+		{
+			"bytes": 864579,
+			"camera_forward": [
+				0.7751504778862,
+				0.0562283582985401,
+				-0.629269540309906
+			],
+			"camera_position": [
+				-189.723999023438,
+				4.4542236328125,
+				-850.679382324219
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96665904-B.png",
+			"id": "w96665904-B",
+			"intent": "Matched A/B visual family experiment",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-185.460678100586,
+				2.76347541809082,
+				-854.140380859375
+			],
+			"region": "w96665904",
+			"sample_luminance_range": 0.688435301184654,
+			"sample_unique_colors": 276,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "2bd28efb42d3ffbd815796a4b8ffd8f5f37805e3f020d0509c020ecd9b654ba7",
+			"source_key": "w96665904"
+		},
+		{
+			"baseline": "9c7f2440d3db6a7f2d0a5d474c612c0362a01c16",
+			"bytes": 947055,
+			"camera_forward": [
+				-0.962397277355194,
+				0.03761300817132,
+				0.269029408693314
+			],
+			"camera_position": [
+				-291.804656982422,
+				4.2028603553772,
+				-835.483215332031
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96665911-A.png",
+			"id": "w96665911-A",
+			"intent": "Matched A/B source-world visual study",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-297.097808837891,
+				2.40973091125488,
+				-834.003540039062
+			],
+			"region": "w96665911",
+			"sample_luminance_range": 0.56017492711544,
+			"sample_unique_colors": 313,
+			"sha256": "2ddd5ed4d6ad95e805aca64c7c2664945e927b30ecd877ffbc99760ca7ec0be3",
+			"source_key": "w96665911"
+		},
+		{
+			"bytes": 877910,
+			"camera_forward": [
+				-0.962397396564484,
+				0.0376130230724812,
+				0.269029080867767
+			],
+			"camera_position": [
+				-291.804656982422,
+				4.2028603553772,
+				-835.483215332031
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96665911-B.png",
+			"id": "w96665911-B",
+			"intent": "Matched A/B source-world visual study",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-297.097808837891,
+				2.40973091125488,
+				-834.003540039062
+			],
+			"region": "w96665911",
+			"sample_luminance_range": 0.56017492711544,
+			"sample_unique_colors": 305,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "3a9a11546d85594e57ff11773d6f2476cbf75a1c535dc4726fcedf415d6b7b9a",
+			"source_key": "w96665911"
+		}
+	],
+	"failure": "",
+	"ok": true,
+	"scope": "Visual experiment, no acceptance or collision fit claim"
+}
