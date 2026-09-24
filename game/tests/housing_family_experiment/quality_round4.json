@@ -1,0 +1,22 @@
+{
+  "targets": [
+    {
+      "source_key": "w96215646",
+      "label": "1394 / frozen 1230 Gateview",
+      "id": "w96215646",
+      "region": "w96215646",
+      "intent": "Matched source-world render-only shared-family study",
+      "requested_xz": [
+        -297,
+        -652
+      ],
+      "aim_target": [
+        -277.5,
+        5.7,
+        -653.4
+      ],
+      "config": "res://game/resources/housing_family/w96215646.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    }
+  ]
+}

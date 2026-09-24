@@ -1,0 +1,15 @@
+{
+  "terminal": 1,
+  "errors": [],
+  "engine_errors": [
+    "ERROR: VISUAL_CAPTURE_FAIL: { \"ok\": false, \"message\": \"w96215646 invalid settlement: drift=0.239 clearance=-0.001 recovery_delta=0.\" }",
+    "ERROR: VISUAL_CAPTURE_FAIL: Incomplete A/B pairs"
+  ],
+  "receipt_ok": false,
+  "elapsed_seconds": 15.914828000124544,
+  "pid": 34157,
+  "slot_released": true,
+  "engines_after": [],
+  "ended_utc": "2026-09-24T17:10:46.706240+00:00",
+  "ok": false
+}

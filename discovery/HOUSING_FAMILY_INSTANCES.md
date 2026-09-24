@@ -2,7 +2,7 @@
 
 Baseline: `9c7f2440d3db6a7f2d0a5d474c612c0362a01c16`; branch: `experiment/housing-family-instances`. The owner authorized a separate shared-family experiment for comparison with MAIN. No merge, production promotion or recognition credit follows from this inventory.
 
-The [frozen catalog](facades/facade-recognition-catalog.json) contains 213 physical buildings represented by 215 source records (213 footprints and 2 parts). Named reference packets cover 152 physical units; packet presence is not exhaustive visual proof. The current 75-unit candidate shortlist has 24 photo-confirmed targets (23 captured in the A/B experiment and one not modeled), 21 written matches requiring pixel validation, and 30 candidates requiring imagery. The original frozen capture selection remains 23 targets. The other 138 catalog units are not proven unrelated. Physical unit IDs use `physical-building:<source ID>`.
+The [frozen catalog](facades/facade-recognition-catalog.json) contains 213 physical buildings represented by 215 source records (213 footprints and 2 parts). Named reference packets cover 152 physical units; packet presence is not exhaustive visual proof. The current 75-unit candidate shortlist has 24 photo-confirmed targets (all 24 now captured in the A/B experiment), 21 written matches requiring pixel validation, and 30 candidates requiring imagery. The original frozen capture selection remains 23 targets. The other 138 catalog units are not proven unrelated. Physical unit IDs use `physical-building:<source ID>`.
 
 Reuse decision: evolve the [shared housing family](../game/resources/housing_family/README.md) with target-specific stepped runs, opening schedules, roof/canopy variants and semantic palettes; the straight six-metre prototype is not a drop-in fit for these targets. Preserve frozen source identity/footprints, orientation, grade, gameplay and independent per-building verification.
 
@@ -38,7 +38,7 @@ Direct frontage pixels were reviewed from March 2025 imagery. This supports stru
 | `w96665911` | 1229 Northpoint Drive | [D9 packet](facades/d9_reference_packets/w96665911_1229_northpoint_drive.md) | boarded/blank-opening variant |
 | `w96215670` | frozen 1246/current 1397 Gateview Court | [D7 packet](facades/d7_reference_packets/w96215670_1246_1397_gateview_court.md) | stepped row, mixed openings; canopy ownership unresolved |
 
-## Additional photo-confirmed target, not modeled (1)
+## Additional photo-confirmed and captured target (1)
 
 | Source ID | Address | Evidence | Variant / uncertainty |
 |---|---|---|---|
@@ -130,3 +130,5 @@ Permitted private originals and source/date/association notes are retained in [p
 The subsequent [focused 1204/1229 comparison](../evidence/housing-family-experiment/quality-round1.html) retains final round-1 run 003 against historical 006, with unchanged control views from 002. Independent visual review found both fronts materially improved as a provisional branch checkpoint; simplified recesses/screens/ground and incomplete regions remain. This adds no photo-confirmed unit, whole-building acceptance or production integration.
 
 The [focused 1205/1237 comparison](../evidence/housing-family-experiment/quality-round2.html) retains round-2 run 004. Independent visual review found restored frontage groups and distinct broad/thin bands useful, with low roof contrast and simplified entry-screen/ground detail still limiting the result. The main gallery now selects these latest reviewed pairs, the prior 1204/1229 pairs and historical 006 pairs for the other 19 targets; it is not current-source proof for every instance. Photo-confirmed and acceptance counts do not change.
+
+Round 4 adds [1394 / frozen 1230](../evidence/housing-family-experiment/quality-round4.html) as the 24th captured instance; the frozen all23 selection is unchanged. Independent visual review retained a provisional comparison, not an unqualified fidelity improvement: canopy fascia is too pale and under-canopy parking/ground separation is less legible than A. Support/extent are inferred; attachment, hidden endpoints and physics remain unresolved. Reference totals stay 24 confirmed and 51 unconfirmed; no recognition credit changes.

@@ -52,7 +52,7 @@ The original failure and earlier visual HOLD attempts remain locally in
 `evidence/housing-family-experiment` outside this committed checkpoint; do not replace their outputs or relabel
 those attempts as successful. The HTML gallery links full-resolution originals.
 
-The main gallery selects the latest reviewed matching A/B pair: 1204/1229 from `quality-round1-003`, 1205/1237 from `quality-round2-004`, 1397 from `quality-round3-001`, and the other 18 from `all23-006`. These unchanged-instance captures are reused historical evidence, not current-source proof. The explicit override mapping in `build_gallery.py` preserves original images and links the earlier pairs.
+The main gallery selects the latest reviewed matching A/B pair: 1204/1229 from `quality-round1-003`, 1205/1237 from `quality-round2-004`, 1397 from `quality-round3-001`, 1394 from `quality-round4-002`, and the other 18 from `all23-006`. These unchanged-instance captures are reused historical evidence, not current-source proof. The explicit override mapping in `build_gallery.py` preserves original images and links the earlier pairs.
 
 Historical run `all23-006` contains 46 originals for 23 provisional comparisons. 1237, 1204, 1205, 1229 and 1397 remain incomplete regional studies, with
 blank lower fields and unverified elevations. The farther three-quarter 1229
@@ -106,3 +106,25 @@ privacy screens on runs 17–20 using existing shared modules. Taller slatted
 returns remain local screen variants. Cadence/dimensions are inferred from
 identified visible frontage, not measured. The upper schedule, roof, thin band
 and unknown canopy attachment remain unchanged. No new imagery was acquired.
+
+## 1394 / frozen 1230 first study
+
+`quality_round4.json` selects the new `w96215646` instance. The original
+`all23.json` remains the historical 23-target selection; this new target is
+checked with the same script's optional manifest argument:
+
+```sh
+python3 game/tests/housing_family_experiment/check_instances.py game/tests/housing_family_experiment/quality_round4.json
+```
+
+Use that manifest with the existing native runner. Final first-study images are
+`quality-round4-002`; `quality-round4.html` compares production A and shared B.
+The first attempt failed settlement near a neighboring building before images;
+the successful pose moves into the clear street without relaxing the guard.
+
+The W-front groups 15–18, 20–23 and 1–4 use existing shared modules. Canopy
+support bottoms sample the actual local terrain/surface triangles; this is
+visual placement, not mechanical support verification. Canopy association is
+observed but extent, freestanding support arrangement and dimensions are inferred.
+No attachment/receiver ownership, cropped endpoint or hidden-face claim is made.
+Canopy finish and parking/entry ground remain simplified.

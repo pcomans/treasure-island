@@ -14605,3 +14605,39 @@ agree. Screens sit beside entry spans; this is not a walkability verdict.
 Read-only visual reviewer `housing_family_reference_review` (Astra Medium)
 confirmed a meaningful frontage repair without substantive regression; hidden
 faces and canopy ownership remain unreviewed/unresolved.
+
+### 2026-09-24 — family_instance_artist / 1394 first shared instance
+
+Reused the existing shared assembly for newly photo-confirmed 1394 / frozen
+1230 (`w96215646`): three observed W-facing groups, pale entries, white-framed
+sliders, mixed-height screens and continuous deep flat canopy. No new imagery
+or copied builder was needed. Exact host wall/roof identity is preserved; no
+separate canopy source/receiver exists in the immediate strip, so it remains a
+render-only associated structure with explicitly inferred freestanding supports
+and extent. Fourteen post bottoms were sampled against actual local triangles
+(2.8613–2.9656 m); that is visual grade evidence, not physics support acceptance.
+
+First native attempt failed the existing settlement drift guard before images:
+its backed-off anchor lay near a neighboring building. The second used a clear
+street anchor near the retained camera; it passed unchanged guards with two
+originals and released the engine. Both attempts and actual inputs are retained.
+All 27 new motifs passed the existing identity/containment checker through its
+small optional-manifest extension. Shared code/defaults and prior instances were
+unchanged. The canopy fascia remains paler/less weathered than reference and
+parking/entry-ground composition is simplified; independent final visual judgment
+is separate from factual run success. No third run or production claim.
+
+Final factual review passed. Independent Medium review provisionally retained
+the A/B study, not whole-building quality PASS: recognizable family composition,
+but pale canopy fascia and earth-colored canopy ground lose the photographed
+dark weathered canopy/paved-parking versus lawn distinction, less legible than
+baseline strips. No unqualified improvement claim; no third run requested.
+
+Factual closeout (`family_branch_setup`, Astra Low) verified exact host identity,
+14 post bottoms against named terrain triangles, unchanged shared code/other
+23 configs, four archived inputs and both PNG hashes. Final 002 took 16.298
+seconds (runner interval), settled without recovery, and passed camera/light
+guards; positions match and direction differs only by 7.45e-8. Failed 001
+settlement remains failed. Read-only Medium reviewer `housing_family_reference_review`
+retained the comparison provisionally, with pale fascia and less-legible parking
+ground separation explicitly unresolved; no physics or whole-building credit.

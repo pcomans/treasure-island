@@ -1,7 +1,8 @@
 from pathlib import Path
-import json,math
+import json,math,sys
 ROOT=Path(__file__).resolve().parents[3]
-manifest=json.loads((ROOT/'game/tests/housing_family_experiment/all23.json').read_text())
+manifest_path=Path(sys.argv[1]).resolve() if len(sys.argv)>1 else ROOT/'game/tests/housing_family_experiment/all23.json'
+manifest=json.loads(manifest_path.read_text())
 errors=[];count=0
 for target in manifest['targets']:
  cfg=json.loads((ROOT/target['config'].replace('res://','')).read_text()); chunk=json.loads((ROOT/target['chunk'].replace('res://','')).read_text())

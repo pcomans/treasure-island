@@ -1,0 +1,1901 @@
+{
+  "schema_version": "ti.housing-family-instance/1",
+  "target": {
+    "source_key": "w96215646",
+    "address": "1394 / frozen 1230 Gateview",
+    "date": "March 2025",
+    "frames": [
+      {
+        "id": "west-1",
+        "runs": [
+          15,
+          16,
+          17,
+          18
+        ],
+        "start": [
+          -275.911,
+          2.858,
+          -675.57
+        ],
+        "end": [
+          -277.037,
+          2.901,
+          -661.277
+        ],
+        "tangent": [
+          -0.07853649029723422,
+          0,
+          0.9969112396255709
+        ],
+        "normal": [
+          -0.9969112396255709,
+          0,
+          -0.07853649029723422
+        ],
+        "length_m": 14.337284436042975,
+        "upper_windows": [
+          {
+            "station_m": 1.5,
+            "local_station_m": 1.5,
+            "width_m": 1.65,
+            "height_m": 1.12,
+            "center_y": 7.35,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 15,
+              "start": [
+                -275.911,
+                2.858,
+                -675.57
+              ],
+              "end": [
+                -276.192,
+                2.868,
+                -672
+              ],
+              "tangent": [
+                -0.07846878333961567,
+                0,
+                0.996916571254185
+              ],
+              "normal": [
+                -0.996916571254185,
+                0,
+                -0.07846878333961567
+              ],
+              "length_m": 3.5810418874959224
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 5.0,
+            "local_station_m": 0.6345041622940842,
+            "width_m": 1.65,
+            "height_m": 1.12,
+            "center_y": 7.35,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 17,
+              "start": [
+                -276.254,
+                2.871,
+                -671.218
+              ],
+              "end": [
+                -276.79,
+                2.891,
+                -664.438
+              ],
+              "tangent": [
+                -0.07881015463634523,
+                0,
+                0.9968896426015246
+              ],
+              "normal": [
+                -0.9968896426015246,
+                0,
+                -0.07881015463634523
+              ],
+              "length_m": 6.80115401972339
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 8.5,
+            "local_station_m": 4.134504162294084,
+            "width_m": 1.65,
+            "height_m": 1.12,
+            "center_y": 7.35,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 17,
+              "start": [
+                -276.254,
+                2.871,
+                -671.218
+              ],
+              "end": [
+                -276.79,
+                2.891,
+                -664.438
+              ],
+              "tangent": [
+                -0.07881015463634523,
+                0,
+                0.9968896426015246
+              ],
+              "normal": [
+                -0.9968896426015246,
+                0,
+                -0.07881015463634523
+              ],
+              "length_m": 6.80115401972339
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 12.937284436042974,
+            "local_station_m": 1.7706345786136675,
+            "width_m": 1.65,
+            "height_m": 1.12,
+            "center_y": 7.35,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 18,
+              "start": [
+                -276.79,
+                2.891,
+                -664.438
+              ],
+              "end": [
+                -277.037,
+                2.901,
+                -661.277
+              ],
+              "tangent": [
+                -0.07790236169889214,
+                0,
+                0.9969609932398233
+              ],
+              "normal": [
+                -0.9969609932398233,
+                0,
+                -0.07790236169889214
+              ],
+              "length_m": 3.170635582970649
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          }
+        ],
+        "lower_windows": [
+          {
+            "station_m": 1.55,
+            "local_station_m": 1.55,
+            "width_m": 1.55,
+            "height_m": 1.1,
+            "center_y": 4.230846078986388,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 15,
+              "start": [
+                -275.911,
+                2.858,
+                -675.57
+              ],
+              "end": [
+                -276.192,
+                2.868,
+                -672
+              ],
+              "tangent": [
+                -0.07846878333961567,
+                0,
+                0.996916571254185
+              ],
+              "normal": [
+                -0.996916571254185,
+                0,
+                -0.07846878333961567
+              ],
+              "length_m": 3.5810418874959224
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 7.0,
+            "local_station_m": 2.634504162294084,
+            "width_m": 1.55,
+            "height_m": 1.1,
+            "center_y": 4.2472132750767635,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 17,
+              "start": [
+                -276.254,
+                2.871,
+                -671.218
+              ],
+              "end": [
+                -276.79,
+                2.891,
+                -664.438
+              ],
+              "tangent": [
+                -0.07881015463634523,
+                0,
+                0.9968896426015246
+              ],
+              "normal": [
+                -0.9968896426015246,
+                0,
+                -0.07881015463634523
+              ],
+              "length_m": 6.80115401972339
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 12.937284436042974,
+            "local_station_m": 1.7706345786136675,
+            "width_m": 1.55,
+            "height_m": 1.1,
+            "center_y": 4.265189671845596,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 18,
+              "start": [
+                -276.79,
+                2.891,
+                -664.438
+              ],
+              "end": [
+                -277.037,
+                2.901,
+                -661.277
+              ],
+              "tangent": [
+                -0.07790236169889214,
+                0,
+                0.9969609932398233
+              ],
+              "normal": [
+                -0.9969609932398233,
+                0,
+                -0.07790236169889214
+              ],
+              "length_m": 3.170635582970649
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          }
+        ],
+        "entries": [
+          {
+            "station_m": 4.1,
+            "local_station_m": 0.5189581125040772,
+            "width_m": 0.92,
+            "height_m": 2.13,
+            "center_y": 4.238437291657893,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 16,
+              "start": [
+                -276.192,
+                2.868,
+                -672
+              ],
+              "end": [
+                -276.254,
+                2.871,
+                -671.218
+              ],
+              "tangent": [
+                -0.07903586945213906,
+                0,
+                0.9968717727671621
+              ],
+              "normal": [
+                -0.9968717727671621,
+                0,
+                -0.07903586945213906
+              ],
+              "length_m": 0.7844539502099933
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.9384372916578925,
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -276.43876452062415,
+                    2.932023750649588,
+                    -672.0507037487811
+                  ],
+                  [
+                    -276.52570397702146,
+                    2.935348206887013,
+                    -670.9541447987373
+                  ],
+                  [
+                    -278.66897828847084,
+                    2.9247227943019034,
+                    -671.1240719180594
+                  ]
+                ],
+                [
+                  [
+                    -276.43876452062415,
+                    2.932023750649588,
+                    -672.0507037487811
+                  ],
+                  [
+                    -278.66897828847084,
+                    2.9247227943019034,
+                    -671.1240719180594
+                  ],
+                  [
+                    -278.5820388320735,
+                    2.9214089585094354,
+                    -672.2206308681032
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "station_m": 10.1,
+            "local_station_m": 5.734504162294083,
+            "width_m": 0.92,
+            "height_m": 2.13,
+            "center_y": 4.256594596587051,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 17,
+              "start": [
+                -276.254,
+                2.871,
+                -671.218
+              ],
+              "end": [
+                -276.79,
+                2.891,
+                -664.438
+              ],
+              "tangent": [
+                -0.07881015463634523,
+                0,
+                0.9968896426015246
+              ],
+              "normal": [
+                -0.9968896426015246,
+                0,
+                -0.07881015463634523
+              ],
+              "length_m": 6.80115401972339
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.9565945965870504,
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -276.91181398539356,
+                    2.9501772369416073,
+                    -666.0693240372435
+                  ],
+                  [
+                    -276.9985051554935,
+                    2.9535060929613857,
+                    -664.9727454303819
+                  ],
+                  [
+                    -279.1418178870868,
+                    2.942882153290198,
+                    -665.14218726285
+                  ]
+                ],
+                [
+                  [
+                    -276.91181398539356,
+                    2.9501772369416073,
+                    -666.0693240372435
+                  ],
+                  [
+                    -279.1418178870868,
+                    2.942882153290198,
+                    -665.14218726285
+                  ],
+                  [
+                    -279.0551267169869,
+                    2.9395532972704186,
+                    -666.2387658697116
+                  ]
+                ]
+              ]
+            }
+          }
+        ],
+        "screens": [
+          {
+            "station_m": 5.25,
+            "local_station_m": 0.8845041622940842,
+            "width_m": 1.05,
+            "height_m": 1.05,
+            "center_y": 4.241917367772571,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 17,
+              "start": [
+                -276.254,
+                2.871,
+                -671.218
+              ],
+              "end": [
+                -276.79,
+                2.891,
+                -664.438
+              ],
+              "tangent": [
+                -0.07881015463634523,
+                0,
+                0.9968896426015246
+              ],
+              "normal": [
+                -0.9968896426015246,
+                0,
+                -0.07881015463634523
+              ],
+              "length_m": 6.80115401972339
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.9419173677725707,
+            "depth_m": 0.9,
+            "return_length_m": 0.75,
+            "return_height_m": 1.5,
+            "panel_style": "boarded",
+            "material_rgb": [
+              0.57,
+              0.59,
+              0.56
+            ]
+          },
+          {
+            "station_m": 11.25,
+            "local_station_m": 0.08335014257069329,
+            "width_m": 1.05,
+            "height_m": 1.05,
+            "center_y": 4.26007596649357,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 18,
+              "start": [
+                -276.79,
+                2.891,
+                -664.438
+              ],
+              "end": [
+                -277.037,
+                2.901,
+                -661.277
+              ],
+              "tangent": [
+                -0.07790236169889214,
+                0,
+                0.9969609932398233
+              ],
+              "normal": [
+                -0.9969609932398233,
+                0,
+                -0.07790236169889214
+              ],
+              "length_m": 3.170635582970649
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.9600759664935703,
+            "depth_m": 0.9,
+            "return_length_m": 0.75,
+            "return_height_m": 1.5,
+            "panel_style": "boarded",
+            "material_rgb": [
+              0.57,
+              0.59,
+              0.56
+            ]
+          }
+        ],
+        "pipes": [
+          {
+            "station_m": 0.16,
+            "local_station_m": 0.16,
+            "width_m": 1.6,
+            "height_m": 1.1,
+            "center_y": 4.226723870851503,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 15,
+              "start": [
+                -275.911,
+                2.858,
+                -675.57
+              ],
+              "end": [
+                -276.192,
+                2.868,
+                -672
+              ],
+              "tangent": [
+                -0.07846878333961567,
+                0,
+                0.996916571254185
+              ],
+              "normal": [
+                -0.996916571254185,
+                0,
+                -0.07846878333961567
+              ],
+              "length_m": 3.5810418874959224
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.926723870851503,
+            "top_y": 8.35
+          },
+          {
+            "station_m": 14.177284436042974,
+            "local_station_m": 3.0106345786136677,
+            "width_m": 1.6,
+            "height_m": 1.1,
+            "center_y": 4.268947778363418,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 18,
+              "start": [
+                -276.79,
+                2.891,
+                -664.438
+              ],
+              "end": [
+                -277.037,
+                2.901,
+                -661.277
+              ],
+              "tangent": [
+                -0.07790236169889214,
+                0,
+                0.9969609932398233
+              ],
+              "normal": [
+                -0.9969609932398233,
+                0,
+                -0.07790236169889214
+              ],
+              "length_m": 3.170635582970649
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.968947778363418,
+            "top_y": 8.35
+          }
+        ]
+      },
+      {
+        "id": "west-2",
+        "runs": [
+          20,
+          21,
+          22,
+          23
+        ],
+        "start": [
+          -278.716,
+          2.893,
+          -661.41
+        ],
+        "end": [
+          -279.903,
+          2.922,
+          -646.327
+        ],
+        "tangent": [
+          -0.07845529603499396,
+          0,
+          0.9969176327681548
+        ],
+        "normal": [
+          -0.9969176327681548,
+          0,
+          -0.07845529603499396
+        ],
+        "length_m": 15.129635091435587,
+        "upper_windows": [
+          {
+            "station_m": 1.5,
+            "local_station_m": 1.5,
+            "width_m": 1.65,
+            "height_m": 1.12,
+            "center_y": 7.35,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 20,
+              "start": [
+                -278.716,
+                2.893,
+                -661.41
+              ],
+              "end": [
+                -279.077,
+                2.907,
+                -656.791
+              ],
+              "tangent": [
+                -0.07791783546752346,
+                0,
+                0.9969597840013688
+              ],
+              "normal": [
+                -0.9969597840013688,
+                0,
+                -0.07791783546752346
+              ],
+              "length_m": 4.6330855809060125
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 5.0,
+            "local_station_m": 0.3669144190939875,
+            "width_m": 1.65,
+            "height_m": 1.12,
+            "center_y": 7.35,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 21,
+              "start": [
+                -279.077,
+                2.907,
+                -656.791
+              ],
+              "end": [
+                -279.666,
+                2.929,
+                -649.31
+              ],
+              "tangent": [
+                -0.07848989195540244,
+                0,
+                0.9969149095388379
+              ],
+              "normal": [
+                -0.9969149095388379,
+                0,
+                -0.07848989195540244
+              ],
+              "length_m": 7.5041509846218855
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 8.5,
+            "local_station_m": 3.8669144190939875,
+            "width_m": 1.65,
+            "height_m": 1.12,
+            "center_y": 7.35,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 21,
+              "start": [
+                -279.077,
+                2.907,
+                -656.791
+              ],
+              "end": [
+                -279.666,
+                2.929,
+                -649.31
+              ],
+              "tangent": [
+                -0.07848989195540244,
+                0,
+                0.9969149095388379
+              ],
+              "normal": [
+                -0.9969149095388379,
+                0,
+                -0.07848989195540244
+              ],
+              "length_m": 7.5041509846218855
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 13.729635091435586,
+            "local_station_m": 0.5290754329580971,
+            "width_m": 1.65,
+            "height_m": 1.12,
+            "center_y": 7.35,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 23,
+              "start": [
+                -279.75,
+                2.933,
+                -648.25
+              ],
+              "end": [
+                -279.903,
+                2.922,
+                -646.327
+              ],
+              "tangent": [
+                -0.07931254246392082,
+                0,
+                0.9968497984189538
+              ],
+              "normal": [
+                -0.9968497984189538,
+                0,
+                -0.07931254246392082
+              ],
+              "length_m": 1.9290769813566313
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          }
+        ],
+        "lower_windows": [
+          {
+            "station_m": 1.55,
+            "local_station_m": 1.55,
+            "width_m": 1.55,
+            "height_m": 1.1,
+            "center_y": 4.265806854851906,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 20,
+              "start": [
+                -278.716,
+                2.893,
+                -661.41
+              ],
+              "end": [
+                -279.077,
+                2.907,
+                -656.791
+              ],
+              "tangent": [
+                -0.07791783546752346,
+                0,
+                0.9969597840013688
+              ],
+              "normal": [
+                -0.9969597840013688,
+                0,
+                -0.07791783546752346
+              ],
+              "length_m": 4.6330855809060125
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 7.0,
+            "local_station_m": 2.3669144190939875,
+            "width_m": 1.55,
+            "height_m": 1.1,
+            "center_y": 4.2823166912161295,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 21,
+              "start": [
+                -279.077,
+                2.907,
+                -656.791
+              ],
+              "end": [
+                -279.666,
+                2.929,
+                -649.31
+              ],
+              "tangent": [
+                -0.07848989195540244,
+                0,
+                0.9969149095388379
+              ],
+              "normal": [
+                -0.9969149095388379,
+                0,
+                -0.07848989195540244
+              ],
+              "length_m": 7.5041509846218855
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 13.729635091435586,
+            "local_station_m": 0.5290754329580971,
+            "width_m": 1.55,
+            "height_m": 1.1,
+            "center_y": 4.30113747311218,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 23,
+              "start": [
+                -279.75,
+                2.933,
+                -648.25
+              ],
+              "end": [
+                -279.903,
+                2.922,
+                -646.327
+              ],
+              "tangent": [
+                -0.07931254246392082,
+                0,
+                0.9968497984189538
+              ],
+              "normal": [
+                -0.9968497984189538,
+                0,
+                -0.07931254246392082
+              ],
+              "length_m": 1.9290769813566313
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          }
+        ],
+        "entries": [
+          {
+            "station_m": 4.1,
+            "local_station_m": 4.1,
+            "width_m": 0.92,
+            "height_m": 2.13,
+            "center_y": 4.273535023598683,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 20,
+              "start": [
+                -278.716,
+                2.893,
+                -661.41
+              ],
+              "end": [
+                -279.077,
+                2.907,
+                -656.791
+              ],
+              "tangent": [
+                -0.07791783546752346,
+                0,
+                0.9969597840013688
+              ],
+              "normal": [
+                -0.9969597840013688,
+                0,
+                -0.07791783546752346
+              ],
+              "length_m": 4.6330855809060125
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.9735350235986826,
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -279.24184826191004,
+                    2.9671150965036355,
+                    -657.890272225662
+                  ],
+                  [
+                    -279.32755788092436,
+                    2.970448816355186,
+                    -656.7936164632605
+                  ],
+                  [
+                    -281.4710214165273,
+                    2.9598307046338657,
+                    -656.9611398095157
+                  ]
+                ],
+                [
+                  [
+                    -279.24184826191004,
+                    2.9671150965036355,
+                    -657.890272225662
+                  ],
+                  [
+                    -281.4710214165273,
+                    2.9598307046338657,
+                    -656.9611398095157
+                  ],
+                  [
+                    -281.385311797513,
+                    2.9564969847823153,
+                    -658.0577955719172
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "station_m": 10.1,
+            "local_station_m": 5.466914419093987,
+            "width_m": 0.92,
+            "height_m": 2.13,
+            "center_y": 4.291702933346564,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 21,
+              "start": [
+                -279.077,
+                2.907,
+                -656.791
+              ],
+              "end": [
+                -279.666,
+                2.929,
+                -649.31
+              ],
+              "tangent": [
+                -0.07848989195540244,
+                0,
+                0.9969149095388379
+              ],
+              "normal": [
+                -0.9969149095388379,
+                0,
+                -0.07848989195540244
+              ],
+              "length_m": 7.5041509846218855
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.991702933346564,
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -279.7121568088934,
+                    2.98528465206507,
+                    -651.9088771796676
+                  ],
+                  [
+                    -279.7984956900443,
+                    2.988615254111353,
+                    -650.8122707791749
+                  ],
+                  [
+                    -281.94186274555284,
+                    2.9779934052205395,
+                    -650.981024046879
+                  ]
+                ],
+                [
+                  [
+                    -279.7121568088934,
+                    2.98528465206507,
+                    -651.9088771796676
+                  ],
+                  [
+                    -281.94186274555284,
+                    2.9779934052205395,
+                    -650.981024046879
+                  ],
+                  [
+                    -281.8555238644019,
+                    2.9746628031742564,
+                    -652.0776304473717
+                  ]
+                ]
+              ]
+            }
+          }
+        ],
+        "screens": [
+          {
+            "station_m": 5.25,
+            "local_station_m": 0.6169144190939875,
+            "width_m": 1.05,
+            "height_m": 1.05,
+            "center_y": 4.277018006142497,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 21,
+              "start": [
+                -279.077,
+                2.907,
+                -656.791
+              ],
+              "end": [
+                -279.666,
+                2.929,
+                -649.31
+              ],
+              "tangent": [
+                -0.07848989195540244,
+                0,
+                0.9969149095388379
+              ],
+              "normal": [
+                -0.9969149095388379,
+                0,
+                -0.07848989195540244
+              ],
+              "length_m": 7.5041509846218855
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.9770180061424973,
+            "depth_m": 0.9,
+            "return_length_m": 0.75,
+            "return_height_m": 1.5,
+            "panel_style": "boarded",
+            "material_rgb": [
+              0.57,
+              0.59,
+              0.56
+            ]
+          },
+          {
+            "station_m": 11.25,
+            "local_station_m": 6.6169144190939875,
+            "width_m": 1.05,
+            "height_m": 1.05,
+            "center_y": 4.295184926394952,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 21,
+              "start": [
+                -279.077,
+                2.907,
+                -656.791
+              ],
+              "end": [
+                -279.666,
+                2.929,
+                -649.31
+              ],
+              "tangent": [
+                -0.07848989195540244,
+                0,
+                0.9969149095388379
+              ],
+              "normal": [
+                -0.9969149095388379,
+                0,
+                -0.07848989195540244
+              ],
+              "length_m": 7.5041509846218855
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.995184926394952,
+            "depth_m": 0.9,
+            "return_length_m": 0.75,
+            "return_height_m": 1.5,
+            "panel_style": "boarded",
+            "material_rgb": [
+              0.57,
+              0.59,
+              0.56
+            ]
+          }
+        ],
+        "pipes": [
+          {
+            "station_m": 0.16,
+            "local_station_m": 0.16,
+            "width_m": 1.6,
+            "height_m": 1.1,
+            "center_y": 4.26159424522131,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 20,
+              "start": [
+                -278.716,
+                2.893,
+                -661.41
+              ],
+              "end": [
+                -279.077,
+                2.907,
+                -656.791
+              ],
+              "tangent": [
+                -0.07791783546752346,
+                0,
+                0.9969597840013688
+              ],
+              "normal": [
+                -0.9969597840013688,
+                0,
+                -0.07791783546752346
+              ],
+              "length_m": 4.6330855809060125
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.9615942452213098,
+            "top_y": 8.35
+          },
+          {
+            "station_m": 14.969635091435586,
+            "local_station_m": 1.7690754329580973,
+            "width_m": 1.6,
+            "height_m": 1.1,
+            "center_y": 4.294042769851362,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 23,
+              "start": [
+                -279.75,
+                2.933,
+                -648.25
+              ],
+              "end": [
+                -279.903,
+                2.922,
+                -646.327
+              ],
+              "tangent": [
+                -0.07931254246392082,
+                0,
+                0.9968497984189538
+              ],
+              "normal": [
+                -0.9968497984189538,
+                0,
+                -0.07931254246392082
+              ],
+              "length_m": 1.9290769813566313
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.9940427698513625,
+            "top_y": 8.35
+          }
+        ]
+      },
+      {
+        "id": "west-3",
+        "runs": [
+          1,
+          2,
+          3,
+          4
+        ],
+        "start": [
+          -278.021,
+          2.912,
+          -646.182
+        ],
+        "end": [
+          -279.156,
+          2.823,
+          -631.766
+        ],
+        "tangent": [
+          -0.0784890743196117,
+          0,
+          0.9969149739132472
+        ],
+        "normal": [
+          -0.9969149739132472,
+          0,
+          -0.0784890743196117
+        ],
+        "length_m": 14.460611363286185,
+        "upper_windows": [
+          {
+            "station_m": 1.5,
+            "local_station_m": 1.5,
+            "width_m": 1.65,
+            "height_m": 1.12,
+            "center_y": 7.35,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 1,
+              "start": [
+                -278.021,
+                2.912,
+                -646.182
+              ],
+              "end": [
+                -278.355,
+                2.887,
+                -641.885
+              ],
+              "tangent": [
+                -0.07749489830771766,
+                0,
+                0.9969927485876096
+              ],
+              "normal": [
+                -0.9969927485876096,
+                0,
+                -0.07749489830771766
+              ],
+              "length_m": 4.309961136715762
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 5.0,
+            "local_station_m": 0.6900388632842382,
+            "width_m": 1.65,
+            "height_m": 1.12,
+            "center_y": 7.35,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 2,
+              "start": [
+                -278.355,
+                2.887,
+                -641.885
+              ],
+              "end": [
+                -278.505,
+                2.876,
+                -640
+              ],
+              "tangent": [
+                -0.07932483978212494,
+                0,
+                0.9968488199288497
+              ],
+              "normal": [
+                -0.9968488199288497,
+                0,
+                -0.07932483978212494
+              ],
+              "length_m": 1.8909587515331896
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 8.5,
+            "local_station_m": 2.2990801117510484,
+            "width_m": 1.65,
+            "height_m": 1.12,
+            "center_y": 7.35,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 3,
+              "start": [
+                -278.505,
+                2.876,
+                -640
+              ],
+              "end": [
+                -278.857,
+                2.847,
+                -635.562
+              ],
+              "tangent": [
+                -0.07906669749849465,
+                0,
+                0.9968693281201311
+              ],
+              "normal": [
+                -0.9968693281201311,
+                0,
+                -0.07906669749849465
+              ],
+              "length_m": 4.4519375557166025
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 13.060611363286185,
+            "local_station_m": 2.4077539193206308,
+            "width_m": 1.65,
+            "height_m": 1.12,
+            "center_y": 7.35,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 4,
+              "start": [
+                -278.857,
+                2.847,
+                -635.562
+              ],
+              "end": [
+                -279.156,
+                2.823,
+                -631.766
+              ],
+              "tangent": [
+                -0.0785239085849489,
+                0,
+                0.9969122307307412
+              ],
+              "normal": [
+                -0.9969122307307412,
+                0,
+                -0.0785239085849489
+              ],
+              "length_m": 3.8077574765208406
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          }
+        ],
+        "lower_windows": [
+          {
+            "station_m": 1.55,
+            "local_station_m": 1.55,
+            "width_m": 1.55,
+            "height_m": 1.1,
+            "center_y": 4.274236737972729,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 1,
+              "start": [
+                -278.021,
+                2.912,
+                -646.182
+              ],
+              "end": [
+                -278.355,
+                2.887,
+                -641.885
+              ],
+              "tangent": [
+                -0.07749489830771766,
+                0,
+                0.9969927485876096
+              ],
+              "normal": [
+                -0.9969927485876096,
+                0,
+                -0.07749489830771766
+              ],
+              "length_m": 4.309961136715762
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 7.0,
+            "local_station_m": 0.7990801117510486,
+            "width_m": 1.55,
+            "height_m": 1.1,
+            "center_y": 4.242473950665008,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 3,
+              "start": [
+                -278.505,
+                2.876,
+                -640
+              ],
+              "end": [
+                -278.857,
+                2.847,
+                -635.562
+              ],
+              "tangent": [
+                -0.07906669749849465,
+                0,
+                0.9968693281201311
+              ],
+              "normal": [
+                -0.9968693281201311,
+                0,
+                -0.07906669749849465
+              ],
+              "length_m": 4.4519375557166025
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          },
+          {
+            "station_m": 13.060611363286185,
+            "local_station_m": 2.4077539193206308,
+            "width_m": 1.55,
+            "height_m": 1.1,
+            "center_y": 4.203439492957128,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 4,
+              "start": [
+                -278.857,
+                2.847,
+                -635.562
+              ],
+              "end": [
+                -279.156,
+                2.823,
+                -631.766
+              ],
+              "tangent": [
+                -0.0785239085849489,
+                0,
+                0.9969122307307412
+              ],
+              "normal": [
+                -0.9969122307307412,
+                0,
+                -0.0785239085849489
+              ],
+              "length_m": 3.8077574765208406
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions."
+          }
+        ],
+        "entries": [
+          {
+            "station_m": 4.1,
+            "local_station_m": 4.1,
+            "width_m": 0.92,
+            "height_m": 2.13,
+            "center_y": 4.259622140560605,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 1,
+              "start": [
+                -278.021,
+                2.912,
+                -646.182
+              ],
+              "end": [
+                -278.355,
+                2.887,
+                -641.885
+              ],
+              "tangent": [
+                -0.07749489830771766,
+                0,
+                0.9969927485876096
+              ],
+              "normal": [
+                -0.9969927485876096,
+                0,
+                -0.07749489830771766
+              ],
+              "length_m": 4.309961136715762
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.959622140560605,
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -278.54535507613934,
+                    2.9575091166359817,
+                    -642.6620494670909
+                  ],
+                  [
+                    -278.6305994642778,
+                    2.951204780497418,
+                    -641.5653574436445
+                  ],
+                  [
+                    -280.77413387374116,
+                    2.9626080362353466,
+                    -641.7319714750062
+                  ]
+                ],
+                [
+                  [
+                    -278.54535507613934,
+                    2.9575091166359817,
+                    -642.6620494670909
+                  ],
+                  [
+                    -280.77413387374116,
+                    2.9626080362353466,
+                    -641.7319714750062
+                  ],
+                  [
+                    -280.6888894856027,
+                    2.96891237237391,
+                    -642.8286634984526
+                  ]
+                ]
+              ]
+            }
+          },
+          {
+            "station_m": 10.1,
+            "local_station_m": 3.899080111751048,
+            "width_m": 0.92,
+            "height_m": 2.13,
+            "center_y": 4.222511980705235,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 3,
+              "start": [
+                -278.505,
+                2.876,
+                -640
+              ],
+              "end": [
+                -278.857,
+                2.847,
+                -635.562
+              ],
+              "tangent": [
+                -0.07906669749849465,
+                0,
+                0.9968693281201311
+              ],
+              "normal": [
+                -0.9968693281201311,
+                0,
+                -0.07906669749849465
+              ],
+              "length_m": 4.4519375557166025
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.922511980705235,
+            "path_mesh": {
+              "top_triangles": [
+                [
+                  [
+                    -279.01901803612407,
+                    2.9207851356108536,
+                    -636.6811714335529
+                  ],
+                  [
+                    -279.1059914033724,
+                    2.913701855947708,
+                    -635.5846151726207
+                  ],
+                  [
+                    -281.2492604588307,
+                    2.9252467077637454,
+                    -635.7546085722424
+                  ]
+                ],
+                [
+                  [
+                    -279.01901803612407,
+                    2.9207851356108536,
+                    -636.6811714335529
+                  ],
+                  [
+                    -281.2492604588307,
+                    2.9252467077637454,
+                    -635.7546085722424
+                  ],
+                  [
+                    -281.16228709158236,
+                    2.9323299874268907,
+                    -636.8511648331746
+                  ]
+                ]
+              ]
+            }
+          }
+        ],
+        "screens": [
+          {
+            "station_m": 5.25,
+            "local_station_m": 0.9400388632842382,
+            "width_m": 1.05,
+            "height_m": 1.05,
+            "center_y": 4.253043558059863,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 2,
+              "start": [
+                -278.355,
+                2.887,
+                -641.885
+              ],
+              "end": [
+                -278.505,
+                2.876,
+                -640
+              ],
+              "tangent": [
+                -0.07932483978212494,
+                0,
+                0.9968488199288497
+              ],
+              "normal": [
+                -0.9968488199288497,
+                0,
+                -0.07932483978212494
+              ],
+              "length_m": 1.8909587515331896
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.9530435580598633,
+            "depth_m": 0.9,
+            "return_length_m": 0.75,
+            "return_height_m": 1.5,
+            "panel_style": "boarded",
+            "material_rgb": [
+              0.57,
+              0.59,
+              0.56
+            ]
+          },
+          {
+            "station_m": 11.25,
+            "local_station_m": 0.5971425560344459,
+            "width_m": 1.05,
+            "height_m": 1.05,
+            "center_y": 4.215103936416507,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 4,
+              "start": [
+                -278.857,
+                2.847,
+                -635.562
+              ],
+              "end": [
+                -279.156,
+                2.823,
+                -631.766
+              ],
+              "tangent": [
+                -0.0785239085849489,
+                0,
+                0.9969122307307412
+              ],
+              "normal": [
+                -0.9969122307307412,
+                0,
+                -0.0785239085849489
+              ],
+              "length_m": 3.8077574765208406
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.9151039364165072,
+            "depth_m": 0.9,
+            "return_length_m": 0.75,
+            "return_height_m": 1.5,
+            "panel_style": "boarded",
+            "material_rgb": [
+              0.57,
+              0.59,
+              0.56
+            ]
+          }
+        ],
+        "pipes": [
+          {
+            "station_m": 0.16,
+            "local_station_m": 0.16,
+            "width_m": 1.6,
+            "height_m": 1.1,
+            "center_y": 4.282203126366005,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 1,
+              "start": [
+                -278.021,
+                2.912,
+                -646.182
+              ],
+              "end": [
+                -278.355,
+                2.887,
+                -641.885
+              ],
+              "tangent": [
+                -0.07749489830771766,
+                0,
+                0.9969927485876096
+              ],
+              "normal": [
+                -0.9969927485876096,
+                0,
+                -0.07749489830771766
+              ],
+              "length_m": 4.309961136715762
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.982203126366005,
+            "top_y": 8.35
+          },
+          {
+            "station_m": 14.300611363286185,
+            "local_station_m": 3.647753919320632,
+            "width_m": 1.6,
+            "height_m": 1.1,
+            "center_y": 4.195451080765028,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 4,
+              "start": [
+                -278.857,
+                2.847,
+                -635.562
+              ],
+              "end": [
+                -279.156,
+                2.823,
+                -631.766
+              ],
+              "tangent": [
+                -0.0785239085849489,
+                0,
+                0.9969122307307412
+              ],
+              "normal": [
+                -0.9969122307307412,
+                0,
+                -0.0785239085849489
+              ],
+              "length_m": 3.8077574765208406
+            },
+            "inference": "Observed W-front motif, bounded inferred cadence/dimensions.",
+            "bottom_y": 2.895451080765028,
+            "top_y": 8.35
+          }
+        ]
+      }
+    ]
+  },
+  "materials": {
+    "siding_rgb": [
+      0.58,
+      0.64,
+      0.67
+    ],
+    "trim_rgb": [
+      0.86,
+      0.87,
+      0.84
+    ],
+    "door_rgb": [
+      0.62,
+      0.65,
+      0.62
+    ],
+    "blue_glass_rgb": [
+      0.27,
+      0.35,
+      0.39
+    ],
+    "dark_glass_rgb": [
+      0.14,
+      0.2,
+      0.22
+    ],
+    "screen_rgb": [
+      0.56,
+      0.58,
+      0.55
+    ],
+    "path_rgb": [
+      0.55,
+      0.55,
+      0.51
+    ],
+    "carport_post_rgb": [
+      0.45,
+      0.4,
+      0.31
+    ]
+  },
+  "facade": {
+    "story_band_y": 5.45,
+    "roof_high_rgb": [
+      0.53,
+      0.54,
+      0.48
+    ]
+  },
+  "wall_top_y": 8.35,
+  "roof_kind": "shallow_hip",
+  "segmented_roof": true,
+  "roof_rise_m": 1.15,
+  "roof_eave_depth_m": 0.28,
+  "clamp_pipe_to_eave": true,
+  "carport": {
+    "frame": {
+      "start": [
+        -275.911,
+        2.858,
+        -675.57
+      ],
+      "end": [
+        -279.156,
+        2.823,
+        -631.766
+      ],
+      "tangent": [
+        -0.07387755575118428,
+        0,
+        0.9972673196070503
+      ],
+      "normal": [
+        -0.9972673196070503,
+        0,
+        -0.07387755575118428
+      ],
+      "length_m": 43.924030336479916
+    },
+    "station_m": [
+      0.5,
+      43.4
+    ],
+    "depth_m": [
+      2.65,
+      8.15
+    ],
+    "roof_y": 5.72,
+    "posts": [
+      {
+        "station_m": 0.9,
+        "depth_m": 2.85,
+        "bottom_y": 2.886392582284169,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 0.9,
+        "depth_m": 7.95,
+        "bottom_y": 2.8612918172318937,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 8.1,
+        "depth_m": 2.85,
+        "bottom_y": 2.9081770076380393,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 8.1,
+        "depth_m": 7.95,
+        "bottom_y": 2.883052694114868,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 15.3,
+        "depth_m": 2.85,
+        "bottom_y": 2.9301416211447995,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 15.3,
+        "depth_m": 7.95,
+        "bottom_y": 2.9050173076216286,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 22.5,
+        "depth_m": 2.85,
+        "bottom_y": 2.95210623465156,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 22.5,
+        "depth_m": 7.95,
+        "bottom_y": 2.926981921128389,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 29.7,
+        "depth_m": 2.85,
+        "bottom_y": 2.965579332752595,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 29.7,
+        "depth_m": 7.95,
+        "bottom_y": 2.9489465346351498,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 36.9,
+        "depth_m": 2.85,
+        "bottom_y": 2.9234441955781523,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 36.9,
+        "depth_m": 7.95,
+        "bottom_y": 2.950658372395899,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 43.0,
+        "depth_m": 2.85,
+        "bottom_y": 2.8839942523500177,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      },
+      {
+        "station_m": 43.0,
+        "depth_m": 7.95,
+        "bottom_y": 2.911208429167764,
+        "ground_label": "area:r17241151:x_-2__z_-3"
+      }
+    ],
+    "inference": "Render-only associated continuous canopy. Freestanding supports, dimensions and visible extent inferred; cropped endpoints are not physical endpoint claims. No structural attachment or generated receiver ownership claim."
+  },
+  "study_notes": "Source-owned W groups15\u201318/20\u201323/1\u20134 only. March2025 direct pano association from retained D5/pilot. Hidden N/S/E motifs and cropped canopy endpoints unknown. All dimensions/cadence and shallow roof proportions are bounded art inference; original collisions remain unchanged."
+}

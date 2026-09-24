@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)
+
+ERROR: VISUAL_CAPTURE_FAIL: { "ok": false, "message": "w96215646 invalid settlement: drift=0.239 clearance=-0.001 recovery_delta=0." }
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://game/tests/rendered_visual_evidence_capture.gd:1251)
+       [1] _require (res://game/tests/rendered_visual_evidence_capture.gd:1243)
+       [2] _run (res://game/tests/housing_family_experiment/capture.gd:45)
+       [3] _settle_player (res://game/tests/rendered_visual_evidence_capture.gd:871)
+ERROR: VISUAL_CAPTURE_FAIL: Incomplete A/B pairs
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _fail (res://game/tests/rendered_visual_evidence_capture.gd:1251)
+       [1] _run (res://game/tests/housing_family_experiment/capture.gd:91)
+       [2] _settle_player (res://game/tests/rendered_visual_evidence_capture.gd:871)
