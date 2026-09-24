@@ -14648,3 +14648,48 @@ Next pending work includes 1394 canopy fascia and paved parking/ground separatio
 plus documented remaining frontage/roof/screen quality limits. No next building
 was dispatched; engines are released and the existing hourly automation remains
 PAUSED. MAIN and unrelated local artifacts remain untouched.
+
+
+## 2026-09-24 — owner-authorized finishing refinements: 1394, 1227, 1234
+
+The owner explicitly resumed only these unfinished refinements after the quota
+pause; no wider work or reminder resumption. Reuse: existing shared screen,
+canopy and triangle-ground modules, with per-instance composition and two opt-in
+material fields (`fascia_rgb`, local-ground `material_rgb`); defaults unchanged.
+1227/1234 now split each old 1.4 m screen span into a 0.65 m tall open panel and
+0.75 m short solid panel, parallel to the facade, retaining original bases and
+collective horizontal bounds. March 2025 pixels support mixed-height/open-solid
+roles; exact pairing/dimensions remain bounded inference.
+
+1394 uses darker canopy fascia, a rear walk beyond its stepped entry paths,
+parking apron and separate lawn panels with entry gaps/links. New surfaces are
+clipped from area:r17241151:x_-2__z_-3, not an invented flat slab. Source-area
+minus colliding-land samples were 0.020 m; the 0.025 m visual bias places all
+checked new vertices 0.045 m above land. Original source footprint, receiver
+identity, canopy supports, controls and collisions remain unchanged. Canopy
+attachment/endpoints remain unknown; appearance and extents are visual inference.
+
+Three bounded native runs: refinement-001 passed execution but the new ground
+was invisible due to copied triangle winding; 002 corrected winding, then
+independent visual review held the still-narrow parking/walk composition; 003
+recomposed the ground within the named scope. All three terminal 0/error-free
+records, original PNGs and actual input archives remain; their native success
+does not erase the earlier visual defects. Final native interval 19.688 s,
+PID 88542 released. No fourth invocation. Focused source preflight matched all
+three identities and 85 complete motifs with zero containment failures.
+
+Independent Medium review retained 1227/1234 screen refinements from 001; those
+inputs stayed unchanged. Final 1394 ground review found the named refinement visibly complete: green
+panels, pale walk/entry links and dark parking separate in the ordinary camera.
+Separate factual review confirmed upward winding, entry gaps/links and current
+input binding. Root accepted bounded closeout. Foreshortened widths, simplified
+weathering and inferred supports/hidden faces remain limitations. No whole-building,
+collision, release or recognition credit is claimed.
+
+Closeout attribution: `housing_family_reference_review` (Astra Medium, read-only)
+confirmed the three named refinements within study scope; `family_branch_setup`
+(Astra Low) verified final five input bindings, six image hashes, unchanged
+non-ground inputs from 002, upward winding and entry gaps. Owner explicitly
+overrode the prior 25% pause only to finish 1394/1227/1234, publish and stop
+(24% remaining reported at 20:34:51Z). This checkpoint completes that scope;
+no further building work starts, and the old hourly automation stays PAUSED.

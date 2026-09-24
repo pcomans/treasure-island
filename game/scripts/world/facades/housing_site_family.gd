@@ -177,8 +177,10 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 		PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),siding)
 	if not bool(cfg.get("retain_production_roof",false)):
 		for surface: Dictionary in cfg.get("local_ground", {}).values():
+			var ground_material: Material = concrete
+			if surface.has("material_rgb"): ground_material = PARTS._material(color(surface,"material_rgb",Color.GRAY),0.98)
 			for triangle: Array in surface.get("top_triangles",[]):
-				PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),concrete)
+				PARTS._mesh(root,[vec(triangle[0]),vec(triangle[1]),vec(triangle[2])],PackedInt32Array([0,1,2]),ground_material)
 		for frame: Dictionary in cfg.target.frames:
 			for entry: Dictionary in frame.get("entries",[]):
 				for triangle: Array in entry.get("path_mesh",{}).get("top_triangles",[]):
@@ -205,8 +207,10 @@ static func _canopy(root: Node3D, cfg: Dictionary, palette: Dictionary, roof: Ma
 	var underside := PARTS._material(Color(0.16,0.20,0.19),0.97)
 	PARTS._beam(root,a-Vector3(0,0.10,0),b-Vector3(0,0.10,0),depth-0.10,0.025,underside)
 	var steel := PARTS._material(color(palette,"carport_post_rgb",Color(0.35,0.3,0.25)),0.9)
+	var fascia: Material = trim
+	if cfg.has("fascia_rgb"): fascia = PARTS._material(color(cfg,"fascia_rgb",Color.GRAY),0.96)
 	for d in cfg.depth_m:
-		PARTS._beam(root,a+n*(float(d)-middle),b+n*(float(d)-middle),0.13,0.29,trim)
+		PARTS._beam(root,a+n*(float(d)-middle),b+n*(float(d)-middle),0.13,0.29,fascia)
 	for post: Dictionary in cfg.get("posts", []):
 		var p := start+t*float(post.station_m)+n*float(post.depth_m)
 		var bottom := float(post.bottom_y)

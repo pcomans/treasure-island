@@ -211,3 +211,14 @@ products and triangulate translated coordinates while applying indices to the
 original points. Remove only exact duplicate vertices; retain errors for positive
 area failures. Round2 run 004 preserved the pieces and passed; 001/003 failures
 remain evidence. Do not label tolerance-based area loss as zero-area cleanup.
+
+
+## Check winding when reusing source triangles in generated meshes
+
+The finishing-refinement 001 copied correctly placed area triangles into the
+shared SurfaceTool builder, but their ordering produced downward-facing ground.
+Native execution passed while the parking/walk was invisible. Preserve source
+positions and check the destination builder's winding convention before capture;
+002 reversed only those triangles and made them visible. Correct visibility did
+not settle composition: the rear walk also needed to account for stepped entry
+paths, addressed separately in 003.

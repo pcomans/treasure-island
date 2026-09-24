@@ -52,7 +52,7 @@ The original failure and earlier visual HOLD attempts remain locally in
 `evidence/housing-family-experiment` outside this committed checkpoint; do not replace their outputs or relabel
 those attempts as successful. The HTML gallery links full-resolution originals.
 
-The main gallery selects the latest reviewed matching A/B pair: 1204/1229 from `quality-round1-003`, 1205/1237 from `quality-round2-004`, 1397 from `quality-round3-001`, 1394 from `quality-round4-002`, and the other 18 from `all23-006`. These unchanged-instance captures are reused historical evidence, not current-source proof. The explicit override mapping in `build_gallery.py` preserves original images and links the earlier pairs.
+The main gallery selects the latest reviewed matching A/B pair: 1204/1229 from `quality-round1-003`, 1205/1237 from `quality-round2-004`, 1397 from `quality-round3-001`, 1394/1227/1234 from `refinement-003`, and the other 16 from `all23-006`. These unchanged-instance captures are reused historical evidence, not current-source proof. The explicit override mapping in `build_gallery.py` preserves original images and links the earlier pairs.
 
 Historical run `all23-006` contains 46 originals for 23 provisional comparisons. 1237, 1204, 1205, 1229 and 1397 remain incomplete regional studies, with
 blank lower fields and unverified elevations. The farther three-quarter 1229
@@ -128,3 +128,32 @@ visual placement, not mechanical support verification. Canopy association is
 observed but extent, freestanding support arrangement and dimensions are inferred.
 No attachment/receiver ownership, cropped endpoint or hidden-face claim is made.
 Canopy finish and parking/entry ground remain simplified.
+
+## Owner-authorized finishing refinements
+
+`refinement.json` selects 1394, 1227 and 1234 at their successful historical
+comparison poses. Reuse the existing checker and runner:
+
+```sh
+python3 game/tests/housing_family_experiment/check_instances.py game/tests/housing_family_experiment/refinement.json
+python3 game/tests/housing_family_experiment/run_capture.py refinement-FRESH game/tests/housing_family_experiment/refinement.json
+```
+
+`evidence/housing-family-experiment/refinement.html` compares production A,
+previous shared B and refined B. A retains the baseline 9c7f244 production world;
+B replaces owned visual meshes only. The 1394 canopy fascia and local-ground
+colors are opt-in fields with unchanged defaults. Parking and rear walk follow
+clipped existing visible-area triangles, 0.025 m above that surface and 0.045 m
+above colliding land at the checked vertices. This is visual ground placement,
+not new collision or support verification. Existing entry paths remain.
+1227/1234 retain each old screen group's total frontage span, split into a tall
+open panel and short solid panel parallel to the facade. Dimensions and grouping
+are inferred from the retained March 2025 photos, not measured.
+
+Run 001 passed native execution but the new ground was invisible because of
+triangle winding; run 002 corrected that winding but its composition remained
+visually held. Run 003 connects the rear walk beyond the deepest stepped entry
+paths and separates lawn panels from a wider parking apron. All records remain
+preserved. Screens received independent scoped visual retention; final ground
+review is recorded in RETRO. Canopy weathering, lawn and entry depth remain
+simplified; unknown canopy attachment/endpoints and hidden faces remain unknown.

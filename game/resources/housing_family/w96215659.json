@@ -534,9 +534,44 @@
         ],
         "screens": [
           {
-            "station_m": 4.95,
-            "width_m": 1.4,
-            "height_m": 1.32,
+            "station_m": 4.575,
+            "width_m": 0.65,
+            "height_m": 1.65,
+            "depth_m": 1.35,
+            "bottom_y": 2.2049009386991334,
+            "ground_label": "near-1-screen-1",
+            "basis": {
+              "source_run": 18,
+              "start": [
+                -302.484,
+                2.242,
+                -802.274
+              ],
+              "end": [
+                -302.574,
+                2.241,
+                -800
+              ],
+              "tangent": [
+                -0.03954687531699829,
+                0,
+                0.9992177163424706
+              ],
+              "normal": [
+                -0.9992177163424706,
+                0,
+                -0.03954687531699829
+              ],
+              "length_m": 2.2757803057413097
+            },
+            "local_station_m": 0.8858480324830635,
+            "inference": "March 2025 visible paired tall open / short solid frontage composition; dimensions and pairing are bounded art inference.",
+            "panel_style": "slatted"
+          },
+          {
+            "station_m": 5.275,
+            "width_m": 0.75,
+            "height_m": 1.05,
             "depth_m": 1.35,
             "bottom_y": 2.2049009386991334,
             "ground_label": "near-1-screen-1",
@@ -565,12 +600,49 @@
               ],
               "length_m": 2.2757803057413097
             },
-            "local_station_m": 1.2608480324830635
+            "local_station_m": 1.5858480324830635,
+            "inference": "March 2025 visible paired tall open / short solid frontage composition; dimensions and pairing are bounded art inference.",
+            "return_height_m": 1.05
           },
           {
-            "station_m": 9.1,
-            "width_m": 1.4,
-            "height_m": 1.32,
+            "station_m": 8.725,
+            "width_m": 0.65,
+            "height_m": 1.65,
+            "depth_m": 1.35,
+            "bottom_y": 2.206128577647378,
+            "ground_label": "near-1-screen-2",
+            "basis": {
+              "source_run": 19,
+              "start": [
+                -302.574,
+                2.241,
+                -800
+              ],
+              "end": [
+                -302.748,
+                2.243,
+                -795.65
+              ],
+              "tangent": [
+                -0.039968038348866364,
+                0,
+                0.9992009587217896
+              ],
+              "normal": [
+                -0.9992009587217896,
+                0,
+                -0.039968038348866364
+              ],
+              "length_m": 4.35347860911251
+            },
+            "local_station_m": 2.7600880799715153,
+            "inference": "March 2025 visible paired tall open / short solid frontage composition; dimensions and pairing are bounded art inference.",
+            "panel_style": "slatted"
+          },
+          {
+            "station_m": 9.424999999999999,
+            "width_m": 0.75,
+            "height_m": 1.05,
             "depth_m": 1.35,
             "bottom_y": 2.206128577647378,
             "ground_label": "near-1-screen-2",
@@ -599,7 +671,9 @@
               ],
               "length_m": 4.35347860911251
             },
-            "local_station_m": 3.1350880799715153
+            "local_station_m": 3.4600880799715155,
+            "inference": "March 2025 visible paired tall open / short solid frontage composition; dimensions and pairing are bounded art inference.",
+            "return_height_m": 1.05
           }
         ],
         "pipes": [
@@ -1307,9 +1381,44 @@
         ],
         "screens": [
           {
-            "station_m": 5.15,
-            "width_m": 1.4,
-            "height_m": 1.32,
+            "station_m": 4.775,
+            "width_m": 0.65,
+            "height_m": 1.65,
+            "depth_m": 1.35,
+            "bottom_y": 2.1865954250531248,
+            "ground_label": "near-2-screen-1",
+            "basis": {
+              "source_run": 23,
+              "start": [
+                -304.77,
+                2.222,
+                -788.081
+              ],
+              "end": [
+                -305.03,
+                2.225,
+                -782.97
+              ],
+              "tangent": [
+                -0.05080497637717185,
+                0,
+                0.9987085933220534
+              ],
+              "normal": [
+                -0.9987085933220534,
+                0,
+                -0.05080497637717185
+              ],
+              "length_m": 5.117608914327071
+            },
+            "local_station_m": 1.1345123686472034,
+            "inference": "March 2025 visible paired tall open / short solid frontage composition; dimensions and pairing are bounded art inference.",
+            "panel_style": "slatted"
+          },
+          {
+            "station_m": 5.4750000000000005,
+            "width_m": 0.75,
+            "height_m": 1.05,
             "depth_m": 1.35,
             "bottom_y": 2.1865954250531248,
             "ground_label": "near-2-screen-1",
@@ -1338,12 +1447,49 @@
               ],
               "length_m": 5.117608914327071
             },
-            "local_station_m": 1.5095123686472034
+            "local_station_m": 1.8345123686472034,
+            "inference": "March 2025 visible paired tall open / short solid frontage composition; dimensions and pairing are bounded art inference.",
+            "return_height_m": 1.05
           },
           {
-            "station_m": 9.3,
-            "width_m": 1.4,
-            "height_m": 1.32,
+            "station_m": 8.925,
+            "width_m": 0.65,
+            "height_m": 1.65,
+            "depth_m": 1.35,
+            "bottom_y": 2.1882913492668097,
+            "ground_label": "near-2-screen-2",
+            "basis": {
+              "source_run": 24,
+              "start": [
+                -305.03,
+                2.225,
+                -782.97
+              ],
+              "end": [
+                -305.122,
+                2.23,
+                -781.168
+              ],
+              "tangent": [
+                -0.0509879759060883,
+                0,
+                0.9986992672035963
+              ],
+              "normal": [
+                -0.9986992672035963,
+                0,
+                -0.0509879759060883
+              ],
+              "length_m": 1.8043469732842636
+            },
+            "local_station_m": 0.16711617016703595,
+            "inference": "March 2025 visible paired tall open / short solid frontage composition; dimensions and pairing are bounded art inference.",
+            "panel_style": "slatted"
+          },
+          {
+            "station_m": 9.625,
+            "width_m": 0.75,
+            "height_m": 1.05,
             "depth_m": 1.35,
             "bottom_y": 2.1882913492668097,
             "ground_label": "near-2-screen-2",
@@ -1372,7 +1518,9 @@
               ],
               "length_m": 1.8043469732842636
             },
-            "local_station_m": 0.542116170167036
+            "local_station_m": 0.867116170167036,
+            "inference": "March 2025 visible paired tall open / short solid frontage composition; dimensions and pairing are bounded art inference.",
+            "return_height_m": 1.05
           }
         ],
         "pipes": [
@@ -2022,9 +2170,44 @@
         ],
         "screens": [
           {
-            "station_m": 5.05,
-            "width_m": 1.4,
-            "height_m": 1.32,
+            "station_m": 4.675,
+            "width_m": 0.65,
+            "height_m": 1.65,
+            "depth_m": 1.35,
+            "bottom_y": 2.2533403530775447,
+            "ground_label": "near-3-screen-1",
+            "basis": {
+              "source_run": 2,
+              "start": [
+                -303.539,
+                2.288,
+                -773.876
+              ],
+              "end": [
+                -303.755,
+                2.308,
+                -768
+              ],
+              "tangent": [
+                -0.03673488937588749,
+                0,
+                0.9993250461699345
+              ],
+              "normal": [
+                -0.9993250461699345,
+                0,
+                -0.03673488937588749
+              ],
+              "length_m": 5.879968707399701
+            },
+            "local_station_m": 2.023697937227595,
+            "inference": "March 2025 visible paired tall open / short solid frontage composition; dimensions and pairing are bounded art inference.",
+            "panel_style": "slatted"
+          },
+          {
+            "station_m": 5.375,
+            "width_m": 0.75,
+            "height_m": 1.05,
             "depth_m": 1.35,
             "bottom_y": 2.2533403530775447,
             "ground_label": "near-3-screen-1",
@@ -2053,12 +2236,49 @@
               ],
               "length_m": 5.879968707399701
             },
-            "local_station_m": 2.398697937227595
+            "local_station_m": 2.723697937227595,
+            "inference": "March 2025 visible paired tall open / short solid frontage composition; dimensions and pairing are bounded art inference.",
+            "return_height_m": 1.05
           },
           {
-            "station_m": 9.15,
-            "width_m": 1.4,
-            "height_m": 1.32,
+            "station_m": 8.775,
+            "width_m": 0.65,
+            "height_m": 1.65,
+            "depth_m": 1.35,
+            "bottom_y": 2.267458910608887,
+            "ground_label": "near-3-screen-2",
+            "basis": {
+              "source_run": 3,
+              "start": [
+                -303.755,
+                2.308,
+                -768
+              ],
+              "end": [
+                -303.803,
+                2.316,
+                -766.696
+              ],
+              "tangent": [
+                -0.036784903303794414,
+                0,
+                0.9993232064196901
+              ],
+              "normal": [
+                -0.9993232064196901,
+                0,
+                -0.036784903303794414
+              ],
+              "length_m": 1.3048831365298317
+            },
+            "local_station_m": 0.24379953634073526,
+            "inference": "March 2025 visible paired tall open / short solid frontage composition; dimensions and pairing are bounded art inference.",
+            "panel_style": "slatted"
+          },
+          {
+            "station_m": 9.475,
+            "width_m": 0.75,
+            "height_m": 1.05,
             "depth_m": 1.35,
             "bottom_y": 2.267458910608887,
             "ground_label": "near-3-screen-2",
@@ -2087,7 +2307,9 @@
               ],
               "length_m": 1.3048831365298317
             },
-            "local_station_m": 0.6187995363407353
+            "local_station_m": 0.9437995363407352,
+            "inference": "March 2025 visible paired tall open / short solid frontage composition; dimensions and pairing are bounded art inference.",
+            "return_height_m": 1.05
           }
         ],
         "pipes": [

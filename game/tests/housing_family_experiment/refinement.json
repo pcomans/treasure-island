@@ -1,0 +1,58 @@
+{
+  "targets": [
+    {
+      "source_key": "w96215646",
+      "label": "1394 / frozen 1230 Gateview",
+      "id": "w96215646",
+      "region": "w96215646",
+      "intent": "Matched source-world render-only shared-family study",
+      "requested_xz": [
+        -297,
+        -652
+      ],
+      "aim_target": [
+        -277.5,
+        5.7,
+        -653.4
+      ],
+      "config": "res://game/resources/housing_family/w96215646.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96215653",
+      "label": "1227 Northpoint Drive",
+      "id": "w96215653",
+      "region": "w96215653",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -316.6642240578991,
+        -790.003965257212
+      ],
+      "aim_target": [
+        -334.392822265625,
+        4.94999980926514,
+        -780.746765136719
+      ],
+      "config": "res://game/resources/housing_family/w96215653.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-4.json"
+    },
+    {
+      "source_key": "w96215659",
+      "label": "1234 Northpoint Drive",
+      "id": "w96215659",
+      "region": "w96215659",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -319.3904197176536,
+        -771.2028207845852
+      ],
+      "aim_target": [
+        -305.219787597656,
+        5.25,
+        -778.632019042969
+      ],
+      "config": "res://game/resources/housing_family/w96215659.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-4.json"
+    }
+  ]
+}

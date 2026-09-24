@@ -1,0 +1,31 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)
+
+VISUAL_SETTLED: id=w96215646 spawn_y=5.933 settled_y=2.933 ground_y=2.933 clearance=0.000 frames=126 recovery_delta=0
+VISUAL_CAPTURE: id=w96215646-A region=w96215646 player=(-297.000,2.933,-652.000) camera=(-302.482,4.718,-651.606) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/refinement-002/images/w96215646-A.png sha256=4bd5b50d2c16e362f2cb4e9744bc1fee0b4c02e9736a2343724850a6753eabb1 colors=284 luminance_range=0.753
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.3344, 8.405, -661.3797), S: (0.381592, 0.000367, 0.030212)] normal0=(-0.078535, 0.091344, 0.992718) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4099), S: (0.381622, 0.000367, 0.030212)] normal0=(-0.000978, 1.0, -0.000076) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4099), S: (0.416321, 0.000367, 0.032959)] normal0=(0.078518, 0.091361, -0.992718) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4096), S: (0.763214, 0.000367, 0.06012)] normal0=(-0.072464, 0.385274, 0.919953) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-271.1329, 8.405, -674.7025), S: (6.168945, 1.149997, 14.28204)] normal0=(0.202546, 0.979142, 0.015991) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-277.0368, 8.405, -675.568), S: (6.167236, 1.149997, 14.2887)] normal0=(-0.20436, 0.978764, -0.016085) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-275.9111, 8.405, -675.57), S: (10.94162, 1.149997, 5.905884)] normal0=(0.016101, 0.978802, -0.204173) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-277.037, 8.405, -666.3209), S: (10.94272, 1.149997, 5.905579)] normal0=(-0.016168, 0.978586, 0.205202) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-273.0963, 8.610164, -659.3782), S: (5.787048, 0.944831, 12.81958)] normal0=(0.178158, 0.983901, 0.014088) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-266.8586, 8.405, -660.4153), S: (0.763916, 0.129039, 0.708435)] normal0=(0.178158, 0.983901, 0.014088) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.9028, 8.405, -661.4096), S: (7.000275, 1.149995, 15.07971)] normal0=(-0.178214, 0.983891, -0.014053) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4096), S: (12.62137, 1.149995, 6.8078)] normal0=(0.014034, 0.983903, -0.178149) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.9029, 8.405, -652.1423), S: (11.57474, 1.149995, 6.718384)] normal0=(-0.014052, 0.983895, 0.178193) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.903, 8.405, -646.3287), S: (0.470673, 0.001898, 0.037964)] normal0=(-0.004015, 0.999992, -0.000291) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.9029, 8.405, -646.3287), S: (0.958649, 0.001898, 0.075562)] normal0=(0.071428, 0.41754, -0.905847) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-273.2894, 8.405, -645.2115), S: (6.136322, 1.149997, 14.30255)] normal0=(0.205598, 0.978502, 0.016246) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.156, 8.405, -646.1804), S: (6.145233, 1.149997, 14.41388)] normal0=(-0.205648, 0.978492, -0.016173) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.0211, 8.405, -646.1804), S: (10.74664, 1.149997, 5.86731)] normal0=(0.016227, 0.978512, -0.205552) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.156, 8.405, -636.7763), S: (10.87698, 1.149997, 5.86731)] normal0=(-0.01625, 0.97843, 0.205938) points=4 triangles=2
+VISUAL_CAPTURE: id=w96215646-B region=w96215646 player=(-297.000,2.933,-652.000) camera=(-302.482,4.718,-651.606) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/refinement-002/images/w96215646-B.png sha256=f6830767284f760cb3449426fc98267bb1e30bdcd92ed942018c982c7f21643c colors=299 luminance_range=0.759
+VISUAL_SETTLED: id=w96215653 spawn_y=5.066 settled_y=2.066 ground_y=2.066 clearance=0.000 frames=126 recovery_delta=0
+VISUAL_CAPTURE: id=w96215653-A region=w96215653 player=(-316.664,2.066,-790.004) camera=(-311.794,3.823,-792.547) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/refinement-002/images/w96215653-A.png sha256=f0aef0798cd2b78bc7432e0dde2ce04b096551800e5864ad604ad1d1b1a38934 colors=241 luminance_range=0.622
+VISUAL_CAPTURE: id=w96215653-B region=w96215653 player=(-316.664,2.066,-790.004) camera=(-311.794,3.823,-792.547) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/refinement-002/images/w96215653-B.png sha256=4072ff1d67038d3cb404b09a67046acabdb8ba9acfea5dc00feafe2b9557d44d colors=233 luminance_range=0.610
+VISUAL_SETTLED: id=w96215659 spawn_y=5.047 settled_y=2.047 ground_y=2.047 clearance=-0.000 frames=126 recovery_delta=0
+VISUAL_CAPTURE: id=w96215659-A region=w96215659 player=(-319.390,2.047,-771.203) camera=(-324.248,3.635,-768.656) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/refinement-002/images/w96215659-A.png sha256=419d14810e74e5048c784856bd64fdd922810b2b7668e298a05508e0eb1df29b colors=201 luminance_range=0.733
+VISUAL_CAPTURE: id=w96215659-B region=w96215659 player=(-319.390,2.047,-771.203) camera=(-324.248,3.635,-768.656) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/refinement-002/images/w96215659-B.png sha256=153aa8ec2efe31c52ccc055fc46807c64c882db17be7cd7c3d7098901260b0f0 colors=188 luminance_range=0.767
