@@ -174,9 +174,265 @@
             "local_station_m": 1.2000521100049795
           }
         ],
-        "lower_windows": [],
-        "entries": [],
-        "screens": [],
+        "lower_windows": [
+          {
+            "station_m": 1.7,
+            "local_station_m": 1.7,
+            "width_m": 1.65,
+            "height_m": 1.1,
+            "center_y": 4.030223888612507,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 17,
+              "start": [
+                -215.432,
+                2.657,
+                -752.514
+              ],
+              "end": [
+                -216.751,
+                2.665,
+                -748.507
+              ],
+              "tangent": [
+                -0.3126697852864828,
+                0,
+                0.9498618875230781
+              ],
+              "normal": [
+                -0.9498618875230781,
+                0,
+                -0.3126697852864828
+              ],
+              "length_m": 4.218508030097909
+            },
+            "inference": "Observed March 2025 WNW frontage motif; complete cadence and dimensions are bounded art inference, not measured."
+          },
+          {
+            "station_m": 6.7,
+            "local_station_m": 2.481491969902091,
+            "width_m": 1.65,
+            "height_m": 1.1,
+            "center_y": 4.0400606464143705,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 18,
+              "start": [
+                -216.751,
+                2.665,
+                -748.507
+              ],
+              "end": [
+                -219.037,
+                2.68,
+                -741.516
+              ],
+              "tangent": [
+                -0.31079790823603815,
+                0,
+                0.9504760177069715
+              ],
+              "normal": [
+                -0.9504760177069715,
+                0,
+                -0.31079790823603815
+              ],
+              "length_m": 7.355261858017007
+            },
+            "inference": "Observed March 2025 WNW frontage motif; complete cadence and dimensions are bounded art inference, not measured."
+          },
+          {
+            "station_m": 12.4,
+            "local_station_m": 0.8262301118850832,
+            "width_m": 1.7,
+            "height_m": 1.1,
+            "center_y": 4.051953195816261,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 19,
+              "start": [
+                -219.037,
+                2.68,
+                -741.516
+              ],
+              "end": [
+                -219.291,
+                2.682,
+                -740.709
+              ],
+              "tangent": [
+                -0.3002261296180389,
+                0,
+                0.9538680574872882
+              ],
+              "normal": [
+                -0.9538680574872882,
+                0,
+                -0.3002261296180389
+              ],
+              "length_m": 0.8460289593152363
+            },
+            "inference": "Observed March 2025 WNW frontage motif; complete cadence and dimensions are bounded art inference, not measured."
+          }
+        ],
+        "entries": [
+          {
+            "station_m": 4.1,
+            "local_station_m": 4.1,
+            "width_m": 0.92,
+            "height_m": 2.13,
+            "center_y": 4.034775260771339,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 17,
+              "start": [
+                -215.432,
+                2.657,
+                -752.514
+              ],
+              "end": [
+                -216.751,
+                2.665,
+                -748.507
+              ],
+              "tangent": [
+                -0.3126697852864828,
+                0,
+                0.9498618875230781
+              ],
+              "normal": [
+                -0.9498618875230781,
+                0,
+                -0.3126697852864828
+              ],
+              "length_m": 4.218508030097909
+            },
+            "inference": "Observed March 2025 WNW frontage motif; complete cadence and dimensions are bounded art inference, not measured.",
+            "bottom_y": 2.734775260771339
+          },
+          {
+            "station_m": 9.0,
+            "local_station_m": 4.781491969902091,
+            "width_m": 0.92,
+            "height_m": 2.13,
+            "center_y": 4.044751166026857,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 18,
+              "start": [
+                -216.751,
+                2.665,
+                -748.507
+              ],
+              "end": [
+                -219.037,
+                2.68,
+                -741.516
+              ],
+              "tangent": [
+                -0.31079790823603815,
+                0,
+                0.9504760177069715
+              ],
+              "normal": [
+                -0.9504760177069715,
+                0,
+                -0.31079790823603815
+              ],
+              "length_m": 7.355261858017007
+            },
+            "inference": "Observed March 2025 WNW frontage motif; complete cadence and dimensions are bounded art inference, not measured.",
+            "bottom_y": 2.7447511660268566
+          }
+        ],
+        "screens": [
+          {
+            "station_m": 5.2,
+            "local_station_m": 0.9814919699020912,
+            "width_m": 1.1,
+            "height_m": 1.08,
+            "center_y": 4.037001611884488,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 18,
+              "start": [
+                -216.751,
+                2.665,
+                -748.507
+              ],
+              "end": [
+                -219.037,
+                2.68,
+                -741.516
+              ],
+              "tangent": [
+                -0.31079790823603815,
+                0,
+                0.9504760177069715
+              ],
+              "normal": [
+                -0.9504760177069715,
+                0,
+                -0.31079790823603815
+              ],
+              "length_m": 7.355261858017007
+            },
+            "inference": "Observed March 2025 WNW frontage motif; complete cadence and dimensions are bounded art inference, not measured.",
+            "bottom_y": 2.737001611884488,
+            "depth_m": 1.0,
+            "return_length_m": 0.8,
+            "return_height_m": 1.45,
+            "panel_style": "boarded",
+            "material_rgb": [
+              0.61,
+              0.58,
+              0.49
+            ]
+          },
+          {
+            "station_m": 10.15,
+            "local_station_m": 5.931491969902091,
+            "width_m": 1.1,
+            "height_m": 1.08,
+            "center_y": 4.0470964258331,
+            "glazing": "blue",
+            "basis": {
+              "source_run": 18,
+              "start": [
+                -216.751,
+                2.665,
+                -748.507
+              ],
+              "end": [
+                -219.037,
+                2.68,
+                -741.516
+              ],
+              "tangent": [
+                -0.31079790823603815,
+                0,
+                0.9504760177069715
+              ],
+              "normal": [
+                -0.9504760177069715,
+                0,
+                -0.31079790823603815
+              ],
+              "length_m": 7.355261858017007
+            },
+            "inference": "Observed March 2025 WNW frontage motif; complete cadence and dimensions are bounded art inference, not measured.",
+            "bottom_y": 2.7470964258331003,
+            "depth_m": 1.0,
+            "return_length_m": 0.8,
+            "return_height_m": 1.45,
+            "panel_style": "boarded",
+            "material_rgb": [
+              0.61,
+              0.58,
+              0.49
+            ]
+          }
+        ],
         "pipes": [
           {
             "station_m": 0.2,
@@ -3111,5 +3367,6 @@
       "thickness_m": 0.04
     }
   },
-  "dimensions": "production_inference; retained observed-side schedules, hidden elevations unknown"
+  "dimensions": "production_inference; retained observed-side schedules, hidden elevations unknown",
+  "study_notes": "Near-1 runs17\u201320 lower window/entry groups restored from March2025 WNW frontage evidence. Existing upper schedule and thin story edge preserved. Short tan solid-front screens with taller slatted returns group around entries; no canopy authored or receiver ownership inferred. Dimensions/cadence are bounded production inference; obscured/rear motifs remain unknown."
 }

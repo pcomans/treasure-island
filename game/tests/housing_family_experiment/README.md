@@ -52,7 +52,7 @@ The original failure and earlier visual HOLD attempts remain locally in
 `evidence/housing-family-experiment` outside this committed checkpoint; do not replace their outputs or relabel
 those attempts as successful. The HTML gallery links full-resolution originals.
 
-The main gallery selects the latest reviewed matching A/B pair: 1204/1229 from `quality-round1-003`, 1205/1237 from `quality-round2-004`, and the other 19 from `all23-006`. These unchanged-instance captures are reused historical evidence, not current-source proof. The explicit override mapping in `build_gallery.py` preserves original images and links the earlier pairs.
+The main gallery selects the latest reviewed matching A/B pair: 1204/1229 from `quality-round1-003`, 1205/1237 from `quality-round2-004`, 1397 from `quality-round3-001`, and the other 18 from `all23-006`. These unchanged-instance captures are reused historical evidence, not current-source proof. The explicit override mapping in `build_gallery.py` preserves original images and links the earlier pairs.
 
 Historical run `all23-006` contains 46 originals for 23 provisional comparisons. 1237, 1204, 1205, 1229 and 1397 remain incomplete regional studies, with
 blank lower fields and unverified elevations. The farther three-quarter 1229
@@ -95,3 +95,14 @@ Each run retains its changed inputs in `rendered-inputs.zip`. No new imagery
 was acquired and no production collision/acceptance status changed.
 
 Final round-2 004 native records and four originals are included. Independent visual review found the numerical repair preserved the art gains without a new substantive regression: provisional branch checkpoint only. Low roof contrast, simplified entry-screen depth and ground/path subdivision remain, and the 1.25 m rise is inferred. No whole-building, physics or release credit.
+
+## Focused quality round 3
+
+`quality_round3.json` selects 1397 / frozen 1246 Gateview (`w96215670`) at its
+original comparison pose. `quality-round3.html` under the experiment evidence
+compares run 001 A/B with prior all23-006 B. This config-only change restores
+three broad lower windows, two recessed green entries and two grouped tan
+privacy screens on runs 17–20 using existing shared modules. Taller slatted
+returns remain local screen variants. Cadence/dimensions are inferred from
+identified visible frontage, not measured. The upper schedule, roof, thin band
+and unknown canopy attachment remain unchanged. No new imagery was acquired.

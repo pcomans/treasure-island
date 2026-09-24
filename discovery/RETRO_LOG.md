@@ -14577,3 +14577,31 @@ Verified final 004 terminal 0, empty error list, released PID and four original 
 Read-only independent `housing_family_reference_review` (Astra Medium) inspected both 004 originals and retained a useful provisional checkpoint without a new substantive visual regression. Low roof contrast, simplified entry-screen depth and ground/path subdivision remain; rise is inferred, no whole-building/physics/release credit. Main gallery selection now points to the latest reviewed pair per improved target and explicitly reuses historical captures elsewhere.
 
 Actual native-run wall times were 18.496 s (001), 17.967 s (002), 17.840 s (003), and 18.722 s (004); these are runner intervals, not full authoring/review time. Final run ended 2026-09-24T16:53:41.738551 UTC. No reviewer engine invocation, new imagery or unrelated test campaign was used.
+
+### 2026-09-24 — family_instance_artist / 1397 lower-frontage composition
+
+Reused the finished family modules in a config-only edit on identified runs
+17–20. Three broad white-framed lower windows, two recessed green entries and
+two short tan fronts with taller slatted returns replace the blank first field.
+March 2025 originals supply the vocabulary; the 2019 oblique only corroborates
+association. No new imagery, canopy attachment, upper/roof alteration or shared
+default change was needed. Cadence and dimensions remain bounded inference.
+The first native run completed without errors and released its owned process;
+612 complete motifs passed source identity/containment. Original inputs and
+previous 006 pixels are retained. Simplified ground transitions and unknown
+regions remain outside any whole-building acceptance claim.
+
+Independent Medium review retained the first result as a provisional branch
+checkpoint: no substantive correction warranted the spare invocation. One run
+used; no second run. Roof, recess/screen/ground simplifications and canopy
+ownership remain documented limitations.
+
+Factual closeout (`family_branch_setup`, Astra Low) verified only the seven
+near-1 motifs and study note changed; source frame, other config content and
+shared/production code remain unchanged. Final native run took 15.992 seconds
+(runner interval, not total work), with terminal 0 and no errors. Three archived
+inputs and both original image hashes match; recorded A/B camera/player poses
+agree. Screens sit beside entry spans; this is not a walkability verdict.
+Read-only visual reviewer `housing_family_reference_review` (Astra Medium)
+confirmed a meaningful frontage repair without substantive regression; hidden
+faces and canopy ownership remain unreviewed/unresolved.

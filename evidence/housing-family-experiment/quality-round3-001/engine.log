@@ -1,0 +1,6 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)
+
+VISUAL_SETTLED: id=w96215670 spawn_y=5.725 settled_y=2.725 ground_y=2.725 clearance=0.000 frames=126 recovery_delta=0
+VISUAL_CAPTURE: id=w96215670-A region=w96215670 player=(-235.473,2.725,-760.604) camera=(-237.002,4.328,-765.873) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/quality-round3-001/images/w96215670-A.png sha256=1a0bc3ab3219bd9d935ad65d55cb8e9c17eb09f365249560d2ac067ac564d110 colors=339 luminance_range=0.584
+VISUAL_CAPTURE: id=w96215670-B region=w96215670 player=(-235.473,2.725,-760.604) camera=(-237.002,4.328,-765.873) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/quality-round3-001/images/w96215670-B.png sha256=0f05d71fb95fbeed7fa7bdc798fd6f387c2dd1764fe73901c46e02ef8b6b9339 colors=330 luminance_range=0.603

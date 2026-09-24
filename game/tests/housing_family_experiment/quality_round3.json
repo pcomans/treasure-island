@@ -1,0 +1,22 @@
+{
+  "targets": [
+    {
+      "source_key": "w96215670",
+      "label": "1397 Gateview",
+      "id": "w96215670",
+      "region": "w96215670",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -235.473434448242,
+        -760.604309082031
+      ],
+      "aim_target": [
+        -225.567031860352,
+        7.30000019073486,
+        -726.448852539062
+      ],
+      "config": "res://game/resources/housing_family/w96215670.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-3.json"
+    }
+  ]
+}
