@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="" load_steps=2 format=3]
+[ext_resource type="Script" path="res://game/scripts/world/facades/housing_family_variant.gd" id="1"]
+[resource]
+script = ExtResource("1")
+bay_count = 5
+canopy_bays = 4
+canopy_start = 1
+walls = Color(0.20, 0.38, 0.53, 1)
+doors = Color(0.60, 0.12, 0.09, 1)
