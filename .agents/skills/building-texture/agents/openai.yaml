@@ -1,6 +1,6 @@
 interface:
-  display_name: "Building Texture"
-  short_description: "Create and review recognizable building facade art"
-  default_prompt: "Use $building-texture to classify, create, and validate recognizable facade art on the correct Godot receiver while labeling reversible production inference."
+  display_name: "Building Authoring and Texture"
+  short_description: "Reuse shared buildings and author recognizable facade art"
+  default_prompt: "Use $building-texture before modeling a new building to compare existing shared assets, reuse a suitable family with instance variants, and author recognizable geometry and facade art."
 policy:
   allow_implicit_invocation: true

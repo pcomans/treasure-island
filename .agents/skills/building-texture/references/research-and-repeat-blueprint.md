@@ -34,7 +34,7 @@ Label every claim as one of:
 
 ## Normalized research handoff
 
-Emit a machine-readable YAML block with this shape. Add fields only when they change downstream decisions.
+Use the existing task note for ordinary research and authoring decisions. The shape below is available when a downstream consumer or assigned structured research deliverable requires it; do not emit a separate YAML packet for every building or duplicate an existing record. Retain the applicable identity, evidence, inference and repeat-boundary information, and any fields required by an existing contract.
 
 ```yaml
 schema_version: codex.building-texture-research/1

@@ -1,11 +1,11 @@
 ---
 name: building-texture
-description: Research, specify, create, validate, and absolutely review exterior building textures for Godot, including homogeneous material tiles, architectural pattern tiles, module atlases, and unique elevations. Use when a building surface or facade image must match references, repeat without invented motifs, or fit an exact receiver; do not use for terrain, road, water, or building-massing work.
+description: Author reference-grounded Godot building art with a mandatory existing-asset comparison before any new building, shared-family reuse, instance variants, and exterior texture validation. Use for building authoring and facade work; not terrain, road, or water assets.
 ---
 
-# Building Texture
+# Building Authoring and Texture
 
-Build evidence-backed exterior building textures whose repeat structure, physical scale, material behavior, and in-game appearance survive absolute review.
+Before authoring any new building, compare it with existing assets and reuse a suitable shared base. Build reference-grounded geometry and facade art within the assignment; apply the texture guidance only to applicable surfaces.
 
 ## Mandatory root boundary
 
@@ -15,16 +15,28 @@ Build evidence-backed exterior building textures whose repeat structure, physica
 - Root may use coordination tools and the minimum read-only inspection needed solely to verify subagent output. Reuse a small number of bounded specialists; do not create agents or analysis rounds without a concrete need.
 - This persistent boundary takes precedence over older workflow wording that assigns direct execution or file editing to root. It does not relax project approvals, privacy rules, external-service restrictions, receiver contracts, or geometry decision boundaries.
 
+## Before every new building: compare and reuse
+
+This check happens before new building implementation, including whole-building studies. Inspect the target's actual dated exterior references and the existing shared family entrypoints and relevant building assets. Compare silhouette and massing, roof form, opening organization, canopies, stairs and other structural motifs; palette similarity alone is not a close match. Confirm target association rather than borrowing a neighboring building's identity.
+
+For a concrete existing entrypoint, inspect [northpoint_1232_asset.gd](../../../game/scripts/world/facades/northpoint_1232_asset.gd): `prepare(record, ground)` builds the shared asset and `instantiate()` accepts semantic `walls`/`doors` color overrides. The [reuse demo](../../../game/tests/housing_asset_reuse_demo.gd) illustrates default and blue-wall/red-door instances. This palette-only adapter retains fixed 1232 geometry; it does not establish another target's footprint, collision, source identity or acceptance. Inspect other relevant family builders when its structure does not fit, and adapt only within the assignment.
+
+When the structure closely matches a suitable asset, build from its shared base geometry, components or master family. Express differences as instance parameters with semantic material roles (for example, blue walls and a red door), plus reference-supported structural variants where needed. Preserve each target's frozen footprint, orientation, local grade and source identity. Copying a complete building script into another file is not reuse.
+
+Existing quality is a floor: do not force a poor or incorrect base onto the target. Improve the shared family when that serves its instances, respecting the assigned edit scope and checking affected instances. If no base fits, state the structural reason briefly and author a new reusable base within the assignment. A whole-family art owner may handle shared design and variants; independent source/mechanical, visual and release verification remains per building.
+
+Record the choice in about one line of the ordinary assignment or handoff: base/family and instance differences, or why a new base is needed. This is an authoring decision, not another approval, report, JSON schema, hash/count layer or acceptance gate.
+
 ## Asset boundary and ownership
 
-- Classify the requested output before making pixels:
+- For texture work, classify the requested texture output before making pixels:
   - `homogeneous_material_tile`: one local material field, with no facade-scale layout;
   - `architectural_pattern_tile`: a proven periodic architectural cell;
   - `module_atlas`: complete reusable motifs with explicit placement rules;
   - `unique_elevation`: a target-specific, nonperiodic elevation or mask.
 - Apply repeat and seam gates only to axes and assets that claim repetition. A complete `module_atlas` motif does not need to tile, and a finite `unique_elevation` does not need a repeat cell.
 - For texture-only tasks, route story count, silhouette, roofline, podiums, setbacks, deep recesses and collision to geometry rather than painting them into a texture. For an authorized whole-building study, the same art owner may change reference-supported geometry and immediate setting inside the explicit project scope; this texture skill does not impose a separate geometry approval.
-- This skill is for building textures broadly. Windows are only one possible motif; the same repeat rules apply to bricks, blocks, panels, ribs, joints, doors, vents, louvers, balconies, trim, bands, and stains.
+- The texture guidance covers building textures broadly. Windows are only one possible motif; the same repeat rules apply to bricks, blocks, panels, ribs, joints, doors, vents, louvers, balconies, trim, bands, and stains.
 
 ## Recognizability and evidence precision
 
@@ -32,7 +44,7 @@ When the user or project prioritizes recognizable game art over surveyed reconst
 
 ## Root-coordinated workflow
 
-1. ROOT assigns one named author the identity/receiver, asset kind, references, editable/protected paths, privacy boundary and finite attempt budget. Follow the project's [bounded authoring loop](../../../AGENTS.md#authoring-and-batch-delivery). Research, specification, implementation, applicable proof and self-inspection belong to that author; do not require a separate actor or handoff for each function.
+1. ROOT assigns one named author the building or family scope, identity/receiver, texture asset kind when applicable, references, editable/protected paths, privacy boundary and finite attempt budget. That author completes the existing-asset comparison above before implementing a new building. Follow the project's [bounded authoring loop](../../../AGENTS.md#authoring-and-batch-delivery). Research, specification, implementation, applicable proof and self-inspection belong to that author; do not require a separate actor or handoff for each function.
 2. Read [research-and-repeat-blueprint.md](references/research-and-repeat-blueprint.md) for applicable texture evidence/grammar and [godot-material-contract.md](references/godot-material-contract.md) for receiver integration. Separate observations from reversible inference. Declare repeat cells/seams only for periodic assets; finite motifs need bounds and placement, not artificial repeat proof. Reference access does not grant download/reuse permission.
 3. If image generation is requested, follow the installed image-generation skill and privacy/account rules, using the built-in path and a small declared batch (normally 2–4 candidates, at most one targeted correction). Otherwise author the assigned procedural/code/asset changes without requiring generation. For raster assets claiming repetition, use the existing helper:
 
@@ -48,4 +60,4 @@ Export/signing/package paperwork belongs at the batch checkpoint, not each art r
 
 ## Stop conditions
 
-The responsible subagent stops and returns a precise blocker to root when the asset kind or exact game receiver is unknown; target or side/region identity is inadequate; a claimed periodic asset lacks a defensible motif grammar, repeat cell, or edge contract; safe placement cannot be bounded; any boundary changes a motif; the finite attempt budget is exhausted; or proceeding requires unapproved geometry, download, external service, account/upload, skill/install, new resource, license assumption, integration, export, launch, overwrite, or commit. For a complete module atlas or finite unique elevation, unknown surveyed anchors, count, cadence, or dimensions are not blockers when plausible bounds can be recorded as reversible production inference and geometry integrity does not depend on survey precision.
+The responsible subagent stops and returns a precise blocker to root when the exact game receiver is unknown, or a texture task has an unknown asset kind; target or side/region identity is inadequate; a claimed periodic asset lacks a defensible motif grammar, repeat cell, or edge contract; safe placement cannot be bounded; any boundary changes a motif; the finite attempt budget is exhausted; or proceeding requires unapproved geometry, download, external service, account/upload, skill/install, new resource, license assumption, integration, export, launch, overwrite, or commit. For a complete module atlas or finite unique elevation, unknown surveyed anchors, count, cadence, or dimensions are not blockers when plausible bounds can be recorded as reversible production inference and geometry integrity does not depend on survey precision.
