@@ -1,0 +1,51 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)
+
+VISUAL_SETTLED: id=w96215678 spawn_y=5.293 settled_y=2.293 ground_y=2.293 clearance=0.000 frames=126 recovery_delta=0
+VISUAL_CAPTURE: id=w96215678-A region=w96215678 player=(-519.422,2.293,-710.904) camera=(-513.945,3.859,-710.661) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/quality-round2-003/images/w96215678-A.png sha256=30f8c9cfa04b86c489f13e2d212c35794e4e7ff8bdcaff0436030d600827de52 colors=269 luminance_range=0.586
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-551.277, 8.145, -704.7132), S: (5.617065, 1.249992, 14.05927)] normal0=(-0.218426, 0.975806, -0.009681) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-545.8196, 8.145, -704.2495), S: (5.6203, 1.249992, 14.06354)] normal0=(0.232026, 0.972655, 0.010327) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-551.2756, 8.145, -695.647), S: (10.45355, 1.249992, 5.46106)] normal0=(-0.01029, 0.972647, 0.232061) points=4 triangles=2
+FAMILY_ROOF_CLIP_CLEANUP source=w96215678 removed_vertices=1 max_distance_m=0.00042724609375 area_before_m2=27.3994802571833 area_after_m2=27.3983621522784
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.6576, 8.145, -704.7132), S: (10.45825, 1.249992, 5.460999)] normal0=(0.010308, 0.972666, -0.231978) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.6575, 8.145, -719.5883), S: (6.353577, 1.25, 14.87225)] normal0=(-0.20485, 0.978751, -0.009081) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-544.4347, 8.145, -719.0601), S: (6.356567, 1.25, 14.625)] normal0=(0.204794, 0.978763, 0.009118) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.6576, 8.145, -710.4109), S: (11.68311, 1.25, 6.161072)] normal0=(-0.009154, 0.97877, 0.204759) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.0015, 8.145, -719.5883), S: (11.92334, 1.25, 6.225769)] normal0=(0.009099, 0.97879, -0.204664) points=6 triangles=4
+ERROR: Nondegenerate roof triangulation failed: w96215678 area=0.00050809979439 vertices=[(694.5433, -569.376), (694.5404, -569.376), (694.5419, -569.7229)]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _hip_piece (res://game/scripts/world/facades/housing_site_family.gd:295)
+       [1] _hip_roof (res://game/scripts/world/facades/housing_site_family.gd:246)
+       [2] build (res://game/scripts/world/facades/housing_site_family.gd:163)
+       [3] _run (res://game/tests/housing_family_experiment/capture.gd:73)
+       [4] _wait_for_render (res://game/tests/rendered_visual_evidence_capture.gd:1097)
+ERROR: Nondegenerate roof triangulation failed: w96215678 area=0.00050814449787 vertices=[(694.5419, -569.7229), (694.5404, -569.376), (694.5404, -570.0698)]
+   at: push_error (core/variant/variant_utility.cpp:1023)
+   GDScript backtrace (most recent call first):
+       [0] _hip_piece (res://game/scripts/world/facades/housing_site_family.gd:295)
+       [1] _hip_roof (res://game/scripts/world/facades/housing_site_family.gd:246)
+       [2] build (res://game/scripts/world/facades/housing_site_family.gd:163)
+       [3] _run (res://game/tests/housing_family_experiment/capture.gd:73)
+       [4] _wait_for_render (res://game/tests/rendered_visual_evidence_capture.gd:1097)
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.0013, 8.145, -733.746), S: (5.667725, 1.249992, 14.15491)] normal0=(-0.23007, 0.973121, -0.010202) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-544.4933, 8.145, -733.2753), S: (5.667175, 1.249992, 14.15442)] normal0=(0.230048, 0.973126, 0.010202) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.0015, 8.145, -724.6319), S: (10.55157, 1.249992, 5.511047)] normal0=(-0.0102, 0.973177, 0.229831) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-549.3771, 8.145, -733.746), S: (10.55109, 1.249992, 5.510986)] normal0=(0.010137, 0.973456, -0.228649) points=6 triangles=4
+VISUAL_CAPTURE: id=w96215678-B region=w96215678 player=(-519.422,2.293,-710.904) camera=(-513.945,3.859,-710.661) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/quality-round2-003/images/w96215678-B.png sha256=cd80ee38f1562067e225da8d4181493f0caed95758d7f4fd9304db1e38c296a1 colors=224 luminance_range=0.588
+VISUAL_SETTLED: id=w96665904 spawn_y=5.763 settled_y=2.763 ground_y=2.763 clearance=0.000 frames=126 recovery_delta=0
+VISUAL_CAPTURE: id=w96665904-A region=w96665904 player=(-185.461,2.763,-854.140) camera=(-189.724,4.454,-850.679) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/quality-round2-003/images/w96665904-A.png sha256=13d099ca3178c96c25aea255f1001c8bb3bc6eea51ee22e685886321555afc18 colors=330 luminance_range=0.455
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-177.6843, 8.155, -888.958), S: (9.833679, 1.25, 11.16809)] normal0=(0.172891, 0.974988, -0.139669) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-185.394, 8.155, -882.0679), S: (9.845215, 1.25, 11.0946)] normal0=(-0.172919, 0.974976, 0.139715) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-185.394, 8.155, -888.957), S: (8.52771, 1.25, 7.707336)] normal0=(-0.139737, 0.974973, -0.172922) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-176.359, 8.155, -878.6069), S: (8.513519, 1.25, 7.659912)] normal0=(0.139179, 0.975159, 0.17232) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-167.2072, 8.155, -878.9211), S: (10.04865, 1.25, 11.18915)] normal0=(0.155741, 0.979753, -0.125813) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-174.8828, 8.286647, -871.2498), S: (9.122253, 1.118353, 10.24023)] normal0=(-0.155763, 0.979749, 0.125815) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-175.8092, 8.155, -878.929), S: (9.502686, 1.25, 8.493958)] normal0=(-0.125922, 0.979733, -0.155776) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-166.5797, 8.155, -868.6449), S: (9.421143, 1.25, 8.526123)] normal0=(0.125815, 0.979749, 0.155763) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-158.1019, 8.478888, -865.3536), S: (8.093597, 0.926112, 9.077759)] normal0=(0.150442, 0.981123, -0.121512) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-157.2567, 8.155, -867.7286), S: (0.52771, 0.133927, 0.949585)] normal0=(0.119479, 0.979955, -0.159414) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-167.017, 8.155, -859.7621), S: (10.40134, 1.25, 11.62646)] normal0=(-0.150425, 0.98112, 0.121553) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-167.0132, 8.155, -867.7319), S: (9.8573, 1.25, 8.915649)] normal0=(-0.119864, 0.981469, -0.149505) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-157.5541, 8.155, -856.9772), S: (8.56308, 1.25, 8.884155)] normal0=(0.121464, 0.981139, 0.150373) points=5 triangles=3
+VISUAL_CAPTURE: id=w96665904-B region=w96665904 player=(-185.461,2.763,-854.140) camera=(-189.724,4.454,-850.679) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/quality-round2-003/images/w96665904-B.png sha256=6b9c5dcbddddd2b4f66d03e9db41baae415075a7106fa91456c03d515c2bcbb4 colors=285 luminance_range=0.811

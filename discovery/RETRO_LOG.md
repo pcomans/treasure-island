@@ -14545,3 +14545,35 @@ changed. Independent Medium visual review retained run 003 as a provisional bran
 Verified final 003 retained emitter/config/manifest bytes and four original image hashes, clean native exit and actual slot release. Native roof bounds/normals support real upward pitched surfaces; diagnostics sample the first normal per surface, not all triangles or full topology. Optional pale-door/closure and segmented-roof paths affect the two edited instances; prior 002 controls remain applicable within their original visual scope. Preserved production loaders/registry/collision/controls and richer 1232/1241 retained components.
 
 The potential internal fascia overlap was a source-level risk, not a demonstrated visible defect; final code omits segmentation-cut fascia. No reviewer engine run or broader mechanics audit was needed. Publish only the two-target/shared-source change, reproduction manifests/docs, final 003 evidence and referenced 002 control evidence; 001 and unrelated historical attempts remain local. Independent visual verdict stays provisional, with simplified details and incomplete regions open.
+
+### 2026-09-24 — family_instance_artist / focused 1205 and 1237 quality round
+
+Used only retained actual March 2025 references. 1205's central lower group and
+1237's first-field/lower frontage were visible but missing from the shared data.
+1237 run 0 is contiguous with the existing frame; the resolved source-camera
+ray first hits its midpoint at 30.124 m before its own rear wall. Photo continuity
+and source identity support the region, not calibrated pixel stations. Existing
+window dimensions and horizontal motif bases remain; final upper positions and
+eaves use modest reference-relative vertical inference. Reused shallow hips,
+entry/window recesses and opt-in screen variation, preserving 1205's broad apron
+and 1237's thin band. No extra imagery or embellishment was needed.
+
+Run 001 exposed an empty triangulated roof surface. Run 002 passed, but independent
+technical review found that large-coordinate float32 area calculation could hide
+small positive pieces. Corrected local scalar area in run 003 exposed two genuine
+positive triangles (~0.000508 m² each), so that attempt correctly failed. Root
+authorized one additional repair invocation: local-coordinate triangulation,
+original emitted points, exact duplicate removal only, and direct positive-triangle
+indices with upward winding. Run 004 passed with no cleanup/discard or error
+messages. All four owned native processes terminated and released; no fifth run.
+607 complete motifs passed identity/containment. Earlier failures and exact
+changed inputs remain retained. Low roof contrast, simplified paths/screens and
+unobserved regions remain; this is provisional branch art, not full acceptance.
+
+### family_branch_setup — round 2 factual review and checkpoint
+
+Verified final 004 terminal 0, empty error list, released PID and four original image hashes against its receipt; all four archived runtime inputs match frozen source. Final code preserves positive polygons through origin-relative area/local triangulation and original-coordinate index mapping, with only exact duplicate removal. Native 004 logged no cleanup or degenerate discards. Earlier 001/003 remain FAIL, and 002’s silent numerical omission remains superseded rather than relabeled. Pipe clamping and screen/eave variants are opt-in; production authority/collision/controls and source footprints are unchanged.
+
+Read-only independent `housing_family_reference_review` (Astra Medium) inspected both 004 originals and retained a useful provisional checkpoint without a new substantive visual regression. Low roof contrast, simplified entry-screen depth and ground/path subdivision remain; rise is inferred, no whole-building/physics/release credit. Main gallery selection now points to the latest reviewed pair per improved target and explicitly reuses historical captures elsewhere.
+
+Actual native-run wall times were 18.496 s (001), 17.967 s (002), 17.840 s (003), and 18.722 s (004); these are runner intervals, not full authoring/review time. Final run ended 2026-09-24T16:53:41.738551 UTC. No reviewer engine invocation, new imagery or unrelated test campaign was used.

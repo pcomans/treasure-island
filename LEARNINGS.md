@@ -201,3 +201,13 @@ The owner identified that similar housing was being treated as independent build
 The housing-family A/B extraction initially lost existing story/step trim and screen character across several instances. The final shared correction substantially restored these details and 1221 roof variation, while five regional studies and 1229 roof/apron fidelity remained incomplete. Compare family instances with both their prior art and actual references; preserve semantic variations instead of flattening them to shared defaults. This is one provisional experiment, not universal family acceptance or a new gate.
 
 The targeted reference pilot separated evidence gaps from execution gaps: a new 1204 angle revealed specific left-end openings, while its central motifs and 1229 roof/apron already had sufficient pixels. Direct 1394 imagery confirmed one written family match; extra 1397 views mainly corroborated extent and left attachment/receiver ownership unknown. Ask what architectural decision another view could change, reuse relevant originals, and stop when the question is resolved or information gain ends. Four distinct views and 219.6 seconds of acquisition-through-gallery time support this bounded method, not a per-building quota or a workflow/token-savings claim.
+
+## Condition small polygon calculations locally
+
+The housing roof clipper produced thin positive-area triangles at large projected
+coordinates. Float32 cross-product area cancellation initially hid them; then
+Godot triangulation rejected them. Compute signed area with origin-relative scalar
+products and triangulate translated coordinates while applying indices to the
+original points. Remove only exact duplicate vertices; retain errors for positive
+area failures. Round2 run 004 preserved the pieces and passed; 001/003 failures
+remain evidence. Do not label tolerance-based area loss as zero-area cleanup.

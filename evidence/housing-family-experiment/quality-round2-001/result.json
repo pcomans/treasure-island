@@ -1,0 +1,15 @@
+{
+  "terminal": 0,
+  "errors": [],
+  "engine_errors": [
+    "ERROR: Index p_surface = 0 is out of bounds (surfaces.size() = 0).",
+    "SCRIPT ERROR: Out of bounds get index '1' (on base: 'Array')"
+  ],
+  "receipt_ok": true,
+  "elapsed_seconds": 18.49576466716826,
+  "pid": 24521,
+  "slot_released": true,
+  "engines_after": [],
+  "ended_utc": "2026-09-24T16:45:49.887242+00:00",
+  "ok": false
+}

@@ -46,7 +46,7 @@
             "station_m": 1.6,
             "width_m": 1.9,
             "height_m": 1.18,
-            "center_y": 7.617,
+            "center_y": 7.267,
             "glazing": "blue",
             "basis": {
               "source_run": 2,
@@ -78,7 +78,7 @@
             "station_m": 5.0,
             "width_m": 0.8,
             "height_m": 1.18,
-            "center_y": 7.617,
+            "center_y": 7.267,
             "glazing": "dark",
             "basis": {
               "source_run": 2,
@@ -110,7 +110,7 @@
             "station_m": 7.0,
             "width_m": 0.8,
             "height_m": 1.18,
-            "center_y": 7.617,
+            "center_y": 7.267,
             "glazing": "blue",
             "basis": {
               "source_run": 2,
@@ -142,7 +142,7 @@
             "station_m": 11.0,
             "width_m": 1.9,
             "height_m": 1.18,
-            "center_y": 7.617,
+            "center_y": 7.267,
             "glazing": "blue",
             "basis": {
               "source_run": 2,
@@ -511,7 +511,7 @@
           {
             "station_m": 6.5,
             "width_m": 1.1,
-            "height_m": 1.12,
+            "height_m": 1.08,
             "solid_lower_height_m": 0.58,
             "depth_m": 1.2,
             "bottom_y": 2.6407567655381072,
@@ -541,7 +541,8 @@
               ],
               "length_m": 13.82755003606926
             },
-            "local_station_m": 6.499999999999999
+            "local_station_m": 6.499999999999999,
+            "return_height_m": 1.5
           }
         ],
         "pipes": [
@@ -651,7 +652,7 @@
             "station_m": 2.7,
             "width_m": 1.9,
             "height_m": 1.18,
-            "center_y": 7.617,
+            "center_y": 7.267,
             "glazing": "blue",
             "basis": {
               "source_run": 5,
@@ -683,7 +684,7 @@
             "station_m": 7.4659990076719875,
             "width_m": 1.9,
             "height_m": 1.18,
-            "center_y": 7.617,
+            "center_y": 7.267,
             "glazing": "dark",
             "basis": {
               "source_run": 6,
@@ -715,7 +716,7 @@
             "station_m": 11.365999007671988,
             "width_m": 1.9,
             "height_m": 1.18,
-            "center_y": 7.617,
+            "center_y": 7.267,
             "glazing": "blue",
             "basis": {
               "source_run": 6,
@@ -808,6 +809,39 @@
               "length_m": 9.576479781213981
             },
             "local_station_m": 6.0000000017751836
+          },
+          {
+            "station_m": 1.65,
+            "local_station_m": 1.65,
+            "basis": {
+              "source_run": 5,
+              "start": [
+                -538.729,
+                2.782,
+                -704.435
+              ],
+              "end": [
+                -538.504,
+                2.71,
+                -709.496
+              ],
+              "tangent": [
+                0.04441374730263503,
+                0,
+                -0.99901322266051
+              ],
+              "normal": [
+                0.99901322266051,
+                0,
+                0.04441374730263503
+              ],
+              "length_m": 5.06599901302797
+            },
+            "width_m": 1.55,
+            "height_m": 1.12,
+            "center_y": 4.108549541424211,
+            "glazing": "blue",
+            "inference": "Observed public frontage motif; bounded inferred cadence and scale, not measured."
           }
         ],
         "entries": [
@@ -1136,13 +1170,47 @@
               "collision": "none",
               "boundary_status": "Visible entry/footway motif; bounded dimensions are production inference. No added parking or source-road join."
             }
+          },
+          {
+            "station_m": 3.6,
+            "local_station_m": 3.6,
+            "basis": {
+              "source_run": 5,
+              "start": [
+                -538.729,
+                2.782,
+                -704.435
+              ],
+              "end": [
+                -538.504,
+                2.71,
+                -709.496
+              ],
+              "tangent": [
+                0.04441374730263503,
+                0,
+                -0.99901322266051
+              ],
+              "normal": [
+                0.99901322266051,
+                0,
+                0.04441374730263503
+              ],
+              "length_m": 5.06599901302797
+            },
+            "width_m": 1.3,
+            "height_m": 2.13,
+            "center_y": 4.0808353631073695,
+            "glazing": "blue",
+            "inference": "Observed public frontage motif; bounded inferred cadence and scale, not measured.",
+            "bottom_y": 2.8008353631073692
           }
         ],
         "screens": [
           {
             "station_m": 9.565999007671987,
             "width_m": 1.1,
-            "height_m": 1.12,
+            "height_m": 1.08,
             "solid_lower_height_m": 0.58,
             "depth_m": 1.2,
             "bottom_y": 2.611386989765751,
@@ -1172,7 +1240,46 @@
               ],
               "length_m": 9.576479781213981
             },
-            "local_station_m": 4.5000000013313874
+            "local_station_m": 4.5000000013313874,
+            "return_height_m": 1.5
+          },
+          {
+            "station_m": 4.65,
+            "local_station_m": 4.65,
+            "basis": {
+              "source_run": 5,
+              "start": [
+                -538.729,
+                2.782,
+                -704.435
+              ],
+              "end": [
+                -538.504,
+                2.71,
+                -709.496
+              ],
+              "tangent": [
+                0.04441374730263503,
+                0,
+                -0.99901322266051
+              ],
+              "normal": [
+                0.99901322266051,
+                0,
+                0.04441374730263503
+              ],
+              "length_m": 5.06599901302797
+            },
+            "width_m": 1.15,
+            "height_m": 1.08,
+            "center_y": 4.065912344013686,
+            "glazing": "blue",
+            "inference": "Observed public frontage motif; bounded inferred cadence and scale, not measured.",
+            "bottom_y": 2.7859123440136857,
+            "depth_m": 1.05,
+            "return_length_m": 0.85,
+            "return_height_m": 1.5,
+            "panel_style": "boarded"
           }
         ],
         "pipes": [
@@ -1281,7 +1388,7 @@
             "station_m": 2.0,
             "width_m": 1.9,
             "height_m": 1.18,
-            "center_y": 7.617,
+            "center_y": 7.267,
             "glazing": "blue",
             "basis": {
               "source_run": 8,
@@ -1313,7 +1420,7 @@
             "station_m": 6.3,
             "width_m": 0.8,
             "height_m": 1.18,
-            "center_y": 7.617,
+            "center_y": 7.267,
             "glazing": "dark",
             "basis": {
               "source_run": 8,
@@ -1345,7 +1452,7 @@
             "station_m": 8.3,
             "width_m": 0.8,
             "height_m": 1.18,
-            "center_y": 7.617,
+            "center_y": 7.267,
             "glazing": "blue",
             "basis": {
               "source_run": 8,
@@ -1377,7 +1484,7 @@
             "station_m": 12.0,
             "width_m": 1.9,
             "height_m": 1.18,
-            "center_y": 7.617,
+            "center_y": 7.267,
             "glazing": "blue",
             "basis": {
               "source_run": 8,
@@ -1746,7 +1853,7 @@
           {
             "station_m": 7.3,
             "width_m": 1.1,
-            "height_m": 1.12,
+            "height_m": 1.08,
             "solid_lower_height_m": 0.58,
             "depth_m": 1.2,
             "bottom_y": 2.523256939419324,
@@ -1776,7 +1883,8 @@
               ],
               "length_m": 14.173742483903082
             },
-            "local_station_m": 7.299999999999999
+            "local_station_m": 7.299999999999999,
+            "return_height_m": 1.5
           }
         ],
         "pipes": [
@@ -1866,7 +1974,7 @@
     15
   ],
   "facade": {
-    "story_band_y": 5.587,
+    "story_band_y": 5.387,
     "fascia_center_y": 8.853,
     "gutter_center_y": 8.922,
     "upper_projection_m": 0.06,
@@ -1876,9 +1984,9 @@
       0.25
     ],
     "roof_high_rgb": [
-      0.62,
-      0.56,
-      0.44
+      0.59,
+      0.54,
+      0.43
     ]
   },
   "materials": {
@@ -1918,9 +2026,9 @@
       0.62
     ],
     "screen_rgb": [
-      0.48,
-      0.44,
-      0.35
+      0.62,
+      0.61,
+      0.53
     ],
     "path_rgb": [
       0.52,
@@ -2789,8 +2897,16 @@
   },
   "dimensions": "production_inference; retained observed-side schedules, hidden elevations unknown",
   "broad_band": {
-    "bottom_y": 5.487,
-    "top_y": 6.487,
-    "projection_m": 0.4
-  }
+    "bottom_y": 5.287,
+    "top_y": 6.287,
+    "projection_m": 0.46,
+    "closed_returns": true
+  },
+  "roof_kind": "shallow_hip",
+  "segmented_roof": true,
+  "roof_rise_m": 1.25,
+  "wall_top_y": 8.09,
+  "study_notes": "Observed run5 lower group completed from retained March2025 frontage. Pale solid-front screens with taller slatted returns; shallow muted tan roof/apron proportions are bounded art inference. Shrub-obscured details and backs remain unknown. Final source-relative vertical composition lowers upper groups/eave 0.35m without resizing motifs; 1.25m roof rise and 0.32m eave depth are explicit shallow-roof art inference, not measured geometry.",
+  "clamp_pipe_to_eave": true,
+  "roof_eave_depth_m": 0.32
 }

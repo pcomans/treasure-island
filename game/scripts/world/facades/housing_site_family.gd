@@ -129,6 +129,7 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 			var p := vec(basis.start)+vec(basis.tangent)*float(pipe.get("local_station_m",pipe.station_m))
 			var low := float(pipe.bottom_y)
 			var high := float(pipe.top_y)
+			if bool(cfg.get("clamp_pipe_to_eave",false)): high=minf(high,float(cfg.wall_top_y)-0.03)
 			p.y=(low+high)/2
 			PARTS._panel(root,p+vec(basis.normal)*0.12,vec(basis.tangent),vec(basis.normal),Vector3(0.075,high-low,0.09),trim)
 		for screen: Dictionary in frame.get("screens", []):
@@ -139,11 +140,12 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 			var h := float(screen.height_m)
 			var width := float(screen.width_m)
 			point.y = float(screen.bottom_y)+h/2
-			var screen_material := PARTS._material(color(palette,"screen_rgb",Color(0.5,0.55,0.57)),0.9)
+			var screen_material := PARTS._material(color(screen,"material_rgb",color(palette,"screen_rgb",Color(0.5,0.55,0.57))),0.9)
 			_screen(root,point,t,n,width,h,screen_material,str(screen.get("panel_style","boarded")) == "slatted")
 			if screen.has("return_length_m"):
 				var length := float(screen.return_length_m)
-				_screen(root,point-t*(width/2-0.045)-n*(length/2+0.035),-n,t,length,h,screen_material,true)
+				var return_height := float(screen.get("return_height_m",h))
+				_screen(root,point-t*(width/2-0.045)-n*(length/2+0.035)+Vector3.UP*(return_height-h)/2,-n,t,length,return_height,screen_material,true)
 	for i in range(0, vertices.size(), 12):
 		var a := Vector3(vertices[i],vertices[i+1],vertices[i+2])
 		var b := Vector3(vertices[i+3],vertices[i+4],vertices[i+5])
@@ -241,11 +243,11 @@ static func _hip_roof(root: Node3D, wall: Dictionary, cfg: Dictionary, material:
 		for j in range(boundaries.size()-1):
 			var slab := PackedVector2Array([Vector2(boundaries[j],lo.y-1),Vector2(boundaries[j+1],lo.y-1),Vector2(boundaries[j+1],hi.y+1),Vector2(boundaries[j],hi.y+1)])
 			for piece in Geometry2D.intersect_polygons(polygon,slab):
-				_hip_piece(root,piece,t,n,top,float(cfg.get("roof_rise_m",0.72)),material,trim,polygon)
+				_hip_piece(root,piece,t,n,top,float(cfg.get("roof_rise_m",0.72)),material,trim,polygon,float(cfg.get("roof_eave_depth_m",0.16)))
 	else:
-		_hip_piece(root,polygon,t,n,top,float(cfg.get("roof_rise_m",0.72)),material,trim,polygon)
+		_hip_piece(root,polygon,t,n,top,float(cfg.get("roof_rise_m",0.72)),material,trim,polygon,float(cfg.get("roof_eave_depth_m",0.16)))
 
-static func _hip_piece(root: Node3D, polygon: PackedVector2Array, t: Vector2, n: Vector2, top: float, rise: float, material: Material, trim: Material, outline: PackedVector2Array) -> void:
+static func _hip_piece(root: Node3D, polygon: PackedVector2Array, t: Vector2, n: Vector2, top: float, rise: float, material: Material, trim: Material, outline: PackedVector2Array, eave_depth: float) -> void:
 	var lo := Vector2(INF,INF)
 	var hi := Vector2(-INF,-INF)
 	for q: Vector2 in polygon:
@@ -260,13 +262,42 @@ static func _hip_piece(root: Node3D, polygon: PackedVector2Array, t: Vector2, n:
 		PackedVector2Array([lo,Vector2(lo.x+inset,center),Vector2(lo.x,hi.y)]),
 		PackedVector2Array([Vector2(hi.x,lo.y),hi,Vector2(hi.x-inset,center)])]
 	for face: PackedVector2Array in faces:
-		for piece in Geometry2D.intersect_polygons(polygon,face):
+		for clipped in Geometry2D.intersect_polygons(polygon,face):
+			# Remove exact duplicate clipping vertices only; never silently discard
+			# a positive-area triangulation failure. Area uses local scalar products
+			# to avoid float32 cancellation at large world coordinates.
+			var piece := PackedVector2Array()
+			var collapsed := 0
+			var max_collapse := 0.0
+			for q: Vector2 in clipped:
+				var distance := INF if piece.is_empty() else q.distance_to(piece[-1])
+				if distance>0.0: piece.append(q)
+				else:
+					collapsed += 1
+					max_collapse=maxf(max_collapse,distance)
+			if piece.size()>1 and piece[0].distance_to(piece[-1])==0.0:
+				max_collapse=maxf(max_collapse,piece[0].distance_to(piece[-1]))
+				collapsed += 1
+				piece.resize(piece.size()-1)
+			var area := _polygon_area(piece)
+			if collapsed>0:
+				print("FAMILY_ROOF_CLIP_CLEANUP source=",root.get_meta("source_key")," removed_vertices=",collapsed," max_distance_m=",max_collapse," area_before_m2=",_polygon_area(clipped)," area_after_m2=",area)
+			if piece.size()<3 or area==0.0:
+				print("FAMILY_ROOF_DEGENERATE source=",root.get_meta("source_key")," vertices=",piece.size()," area_m2=",area)
+				continue
 			var points: Array = []
 			for q: Vector2 in piece:
 				var p := t*q.x+n*q.y
 				var edge_distance := minf(minf(q.y-lo.y,hi.y-q.y),minf(q.x-lo.x,hi.x-q.x))
 				points.append(Vector3(p.x,top+0.055+rise*clampf(edge_distance/half,0,1),p.y))
-			var indices := Geometry2D.triangulate_polygon(piece)
+			# Translate only the triangulation input. Indices still address the
+			# original point array; no emitted coordinate or positive area is lost.
+			var local_polygon := PackedVector2Array()
+			for q: Vector2 in piece: local_polygon.append(q-piece[0])
+			var indices := PackedInt32Array([0,1,2]) if piece.size()==3 else Geometry2D.triangulate_polygon(local_polygon)
+			if indices.is_empty():
+				push_error("Nondegenerate roof triangulation failed: %s area=%s vertices=%s" % [root.get_meta("source_key"),area,piece])
+				continue
 			# Roof normals must face the sky independent of polygon winding.
 			for i in range(0,indices.size(),3):
 				var a: Vector3 = points[indices[i]]
@@ -301,7 +332,7 @@ static func _hip_piece(root: Node3D, polygon: PackedVector2Array, t: Vector2, n:
 		var ya := top+0.055+rise*clampf(da/half,0,1)
 		var yb := top+0.055+rise*clampf(db/half,0,1)
 		PARTS._quad(root,[Vector3(pa.x,top,pa.y),Vector3(pb.x,top,pb.y),Vector3(pb.x,yb,pb.y),Vector3(pa.x,ya,pa.y)],trim)
-		PARTS._beam(root,Vector3(pa.x,ya,pa.y),Vector3(pb.x,yb,pb.y),0.16,0.12,trim)
+		PARTS._beam(root,Vector3(pa.x,ya,pa.y),Vector3(pb.x,yb,pb.y),eave_depth,0.12,trim)
 
 static func _screen(root: Node3D, point: Vector3, t: Vector3, n: Vector3, width: float, height: float, material: Material, slatted: bool = false) -> void:
 	if width < 0.16:
@@ -315,3 +346,17 @@ static func _screen(root: Node3D, point: Vector3, t: Vector3, n: Vector3, width:
 	for i in count:
 		var station := lerpf(-width/2+0.13,width/2-0.13,float(i)/float(count-1))
 		PARTS._panel(root,point+t*station+n*0.02,t,n,Vector3(0.078 if slatted else (width-0.16)/count,height-0.08,0.04),material)
+
+static func _polygon_area(polygon: PackedVector2Array) -> float:
+	if polygon.size()<3: return 0.0
+	var origin := polygon[0]
+	var sum := 0.0
+	for j in polygon.size():
+		var a := polygon[j]
+		var b := polygon[(j+1)%polygon.size()]
+		var ax := float(a.x)-float(origin.x)
+		var ay := float(a.y)-float(origin.y)
+		var bx := float(b.x)-float(origin.x)
+		var by := float(b.y)-float(origin.y)
+		sum += ax*by-ay*bx
+	return absf(sum)*0.5

@@ -1,0 +1,40 @@
+{
+  "targets": [
+    {
+      "source_key": "w96215678",
+      "label": "1205 Bayside",
+      "id": "w96215678",
+      "region": "w96215678",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -519.4222875932087,
+        -710.9042659777945
+      ],
+      "aim_target": [
+        -538.4035,
+        5.798,
+        -711.749
+      ],
+      "config": "res://game/resources/housing_family/w96215678.json",
+      "chunk": "res://generated/world/chunks/x_-3__z_-3.json"
+    },
+    {
+      "source_key": "w96665904",
+      "label": "1237 Northpoint",
+      "id": "w96665904",
+      "region": "w96665904",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -185.46067150898995,
+        -854.1404033777442
+      ],
+      "aim_target": [
+        -170.7095,
+        5.833500000000001,
+        -866.1155
+      ],
+      "config": "res://game/resources/housing_family/w96665904.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-4.json"
+    }
+  ]
+}
