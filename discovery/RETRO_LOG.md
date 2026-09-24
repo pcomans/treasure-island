@@ -14517,3 +14517,31 @@ Worked: four distinct additional views changed or bounded concrete decisions; on
 Owner explicitly resumed building work until weekly quota reaches 25%, superseding the previous 40% cutoff. Root supplied the verified 31% observation at 16:26:56 UTC. AGENTS now requires substantial-round-boundary and at-least-hourly checks, no new building dispatch at/below 25%, safe bounded in-flight completion/checkpointing, independent gates, branch-only checkpoint publication and then pause. No timer/reporting layer added.
 
 Updated the existing `treasure-island-progress-check` hourly guard prompt to the same cutoff/branch policy. It remains PAUSED: available tools/CLI expose no automation update method, and supported app-server proxy could not connect because its control socket is absent. Local app-server schema exposes goal status changes, but the unavailable transport prevents a supported resume here; no hidden goal storage or second goal/monitor was created. Root manual checks remain the active fallback. Official references checked: https://learn.chatgpt.com/docs/automations?surface=app and https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex. No engine, model or private-reference change.
+
+### 2026-09-24 — family_instance_artist / focused 1204 and 1229 quality round
+
+The targeted reference pilot made 1204's left lower frontage actionable; the
+central facade and 1229 roof/apron were already visible evidence, so no further
+imagery was acquired. Added complete observed lower motifs through shared
+source-edge instances, semantic pale/dark door roles and framed pale closures.
+1229's apron gained coherent depth/returns. Native roof diagnostics established
+real upward-facing surfaces and a 0.75 m rise: the weak cap was a shallow
+proportion/view issue, not wholesale missing geometry. Independent visual review
+supported a modest inferred 1.10 m rise and gray-brown cap, with lower eave
+proportions and segmented hips; exact pitch is not measured. Internal section
+cuts no longer add duplicate fascia/closure faces.
+
+Three serialized native invocations completed successfully and released their
+owned processes; first pixels arrived in run 001. Run 002 unnecessarily repeated
+the unchanged 1204/1220 views through the same focused manifest. Run 003 corrected
+that by capturing only changed targets. 1237/1220 control pixels were independently
+judged unchanged; all 593 complete motifs passed static identity/containment.
+The prior 006 comparisons, earlier inputs and all native originals remain.
+No production loader, collider, control, acceptance credit, export or main merge
+changed. Independent Medium visual review retained run 003 as a provisional branch art checkpoint: both targets materially improved, no new substantive regression, and no fourth run justified. Simplified recesses/screens/ground and incomplete regions remain; no whole-building acceptance was granted.
+
+### family_branch_setup — focused round 1 factual review and checkpoint
+
+Verified final 003 retained emitter/config/manifest bytes and four original image hashes, clean native exit and actual slot release. Native roof bounds/normals support real upward pitched surfaces; diagnostics sample the first normal per surface, not all triangles or full topology. Optional pale-door/closure and segmented-roof paths affect the two edited instances; prior 002 controls remain applicable within their original visual scope. Preserved production loaders/registry/collision/controls and richer 1232/1241 retained components.
+
+The potential internal fascia overlap was a source-level risk, not a demonstrated visible defect; final code omits segmentation-cut fascia. No reviewer engine run or broader mechanics audit was needed. Publish only the two-target/shared-source change, reproduction manifests/docs, final 003 evidence and referenced 002 control evidence; 001 and unrelated historical attempts remain local. Independent visual verdict stays provisional, with simplified details and incomplete regions open.

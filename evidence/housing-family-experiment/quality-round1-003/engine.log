@@ -1,0 +1,21 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)
+
+VISUAL_SETTLED: id=w96215691 spawn_y=5.556 settled_y=2.557 ground_y=2.556 clearance=0.000 frames=126 recovery_delta=0
+VISUAL_CAPTURE: id=w96215691-A region=w96215691 player=(-357.576,2.557,-604.028) camera=(-355.387,4.235,-609.063) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/quality-round1-003/images/w96215691-A.png sha256=9f088b57f91c42e05458a479b39804606a9395d868639f94368695ad4365d778 colors=327 luminance_range=0.538
+VISUAL_CAPTURE: id=w96215691-B region=w96215691 player=(-357.576,2.557,-604.028) camera=(-355.387,4.235,-609.063) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/quality-round1-003/images/w96215691-B.png sha256=85ec5053940fc6928a296806d2560dede21774a240ef7eb7b82fe477dd71fe9c colors=277 luminance_range=0.632
+VISUAL_SETTLED: id=w96665911 spawn_y=5.410 settled_y=2.410 ground_y=2.410 clearance=-0.000 frames=126 recovery_delta=0
+VISUAL_CAPTURE: id=w96665911-A region=w96665911 player=(-297.098,2.410,-834.004) camera=(-291.805,4.203,-835.483) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/quality-round1-003/images/w96665911-A.png sha256=bbd38c225a590d88038d1ac0cbdbc21633f8e43b8ccfa15f05924e9e22808a27 colors=312 luminance_range=0.560
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-345.8325, 7.695, -822.3261), S: (7.917236, 1.1, 13.00861)] normal0=(-0.183719, 0.980861, -0.064497) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-338.819, 7.87014, -818.1147), S: (6.843628, 0.92486, 11.3681)] normal0=(0.183698, 0.980865, 0.064496) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-345.843, 7.695, -812.6865), S: (9.877289, 1.1, 6.772522)] normal0=(-0.064539, 0.980844, 0.18379) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-341.3089, 7.695, -822.3261), S: (10.45837, 1.1, 7.064758)] normal0=(0.064605, 0.980814, -0.183928) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-341.2943, 7.695, -836.569), S: (8.615234, 1.099994, 14.20105)] normal0=(-0.170036, 0.98363, -0.059672) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-333.6954, 7.695, -832.5486), S: (8.583588, 1.099994, 14.17755)] normal0=(0.169978, 0.983637, 0.059708) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-341.3089, 7.695, -826.0182), S: (11.28571, 1.099994, 7.64447)] normal0=(-0.059669, 0.983641, 0.169972) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-336.3564, 7.695, -836.569), S: (11.26544, 1.099994, 7.655457)] normal0=(0.059424, 0.983784, -0.169224) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-336.3431, 7.695, -849.496), S: (7.905518, 1.099994, 12.88861)] normal0=(-0.182656, 0.981075, -0.064252) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-329.2936, 7.855357, -845.3463), S: (6.921997, 0.939638, 11.3844)] normal0=(0.182794, 0.981054, 0.064179) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-336.3564, 7.695, -839.9937), S: (10.47394, 1.099994, 7.101196)] normal0=(-0.064174, 0.981079, 0.182665) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-331.8245, 7.695, -849.483), S: (9.72345, 1.099994, 7.050598)] normal0=(0.064195, 0.981069, -0.182711) points=4 triangles=2
+VISUAL_CAPTURE: id=w96665911-B region=w96665911 player=(-297.098,2.410,-834.004) camera=(-291.805,4.203,-835.483) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-family-instances/evidence/housing-family-experiment/quality-round1-003/images/w96665911-B.png sha256=4429f7ca97ceffddece44f30381962e46d611424f1a98e6c1b3c38f19c6b04f3 colors=304 luminance_range=0.560

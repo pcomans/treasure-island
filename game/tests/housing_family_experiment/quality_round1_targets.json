@@ -1,0 +1,40 @@
+{
+  "targets": [
+    {
+      "source_key": "w96215691",
+      "label": "1204 Mariner Drive",
+      "id": "w96215691",
+      "region": "w96215691",
+      "intent": "Matched A/B visual family experiment",
+      "requested_xz": [
+        -357.57629061100886,
+        -604.0276513794549
+      ],
+      "aim_target": [
+        -365.1525,
+        5.668,
+        -586.6034999999999
+      ],
+      "config": "res://game/resources/housing_family/w96215691.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-3.json"
+    },
+    {
+      "source_key": "w96665911",
+      "label": "1229 Northpoint",
+      "id": "w96665911",
+      "region": "w96665911",
+      "intent": "Matched A/B source-world visual study",
+      "requested_xz": [
+        -297.097794321948,
+        -834.0035449201582
+      ],
+      "aim_target": [
+        -327.553,
+        5.6,
+        -825.49
+      ],
+      "config": "res://game/resources/housing_family/w96665911.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-4.json"
+    }
+  ]
+}

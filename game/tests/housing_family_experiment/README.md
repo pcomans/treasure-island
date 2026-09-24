@@ -55,5 +55,22 @@ those attempts as successful. The HTML gallery links full-resolution originals.
 The gallery selects final run `all23-006`: 46 originals for 23 provisional
 comparisons. 1237, 1204, 1205, 1229 and 1397 remain incomplete regional studies, with
 blank lower fields and unverified elevations. The farther three-quarter 1229
-view does not establish whole-building roof fidelity. The other 52 of the
-75 shortlisted buildings remain unconfirmed. Earlier run 005 stays unchanged locally. Independent visual review calls the final result a useful provisional A/B experiment, with shared trim/screen regressions substantially repaired and 1221 roof variation restored. 1229 roof/apron fidelity remains unresolved; 1227/1234 screens are denser than A, and 1226 is partly occluded. No whole-building acceptance follows.
+view does not establish whole-building roof fidelity. Current reference coverage is maintained in the [canonical inventory](../../../discovery/HOUSING_FAMILY_INSTANCES.md); this paragraph describes the frozen 006 checkpoint. Earlier run 005 stays unchanged locally. Independent visual review calls the final result a useful provisional A/B experiment, with shared trim/screen regressions substantially repaired and 1221 roof variation restored. 1229 roof/apron fidelity remains unresolved; 1227/1234 screens are denser than A, and 1226 is partly occluded. No whole-building acceptance follows.
+
+## Focused quality round 1
+
+`quality_round1.json` selects 1204 and 1229 plus the 1237 hip-roof and 1220
+broad-band controls. `quality_round1_targets.json` selects only the two edited
+targets. Pass either manifest to the same runner with a fresh run name.
+The three-way comparison is `evidence/housing-family-experiment/quality-round1.html`:
+production A, previous shared B from all23-006, and revised shared B. Final
+target images are quality-round1-003; unchanged controls use quality-round1-002.
+
+1204 adds only the newly observed left lower frontage and a pale closed-door
+variant. 1229 adds visible closures/entries, framed pale closure panels, a deeper
+closed apron and segmented shallow hips. Its 1.10 m rise and 7.64 m absolute
+eave wall height are bounded reference-relative art proportions, not measured
+roof dimensions. The original collision remains at its baseline geometry and
+may diverge; this is still a visual experiment. Native roof diagnostics report
+actual mesh bounds and the first generated normal per surface, not every normal.
+Runs 002 and 003 include original images, native records and rendered-inputs.zip in this checkpoint; run 001 and its original inputs remain locally retained. Independent visual review found useful provisional improvements to both fronts, with simplified recesses/screens/ground and incomplete regions still unresolved. Factual review confirmed final archived input bytes, image hashes, opt-in material isolation and unchanged production scope. It supplies no collision-fit or whole-building acceptance.

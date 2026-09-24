@@ -143,9 +143,251 @@
             "local_station_m": 1.500000129148137
           }
         ],
-        "lower_windows": [],
-        "entries": [],
-        "screens": [],
+        "lower_windows": [
+          {
+            "station_m": 1.65,
+            "local_station_m": 1.65,
+            "basis": {
+              "source_run": 12,
+              "start": [
+                -345.737,
+                2.64,
+                -576.329
+              ],
+              "end": [
+                -348.885,
+                2.64,
+                -577.698
+              ],
+              "tangent": [
+                -0.9170376342058897,
+                0,
+                -0.3988006738335139
+              ],
+              "normal": [
+                0.3988006738335139,
+                0,
+                -0.9170376342058897
+              ],
+              "length_m": 3.432792594958203
+            },
+            "width_m": 1.65,
+            "height_m": 1.05,
+            "center_y": 3.99,
+            "glazing": "blue",
+            "inference": "Bounded observed-front motif from dated reference; station and dimensions are production inference."
+          },
+          {
+            "station_m": 8.85,
+            "local_station_m": 2.02105751528732,
+            "basis": {
+              "source_run": 15,
+              "start": [
+                -352,
+                2.64,
+                -579.051
+              ],
+              "end": [
+                -356.06,
+                2.64,
+                -580.815
+              ],
+              "tangent": [
+                -0.9171705885238729,
+                0,
+                -0.3984948074276158
+              ],
+              "normal": [
+                0.3984948074276158,
+                0,
+                -0.9171705885238729
+              ],
+              "length_m": 4.426657429709245
+            },
+            "width_m": 1.25,
+            "height_m": 1.05,
+            "center_y": 3.99,
+            "glazing": "blue",
+            "inference": "Bounded observed-front motif from dated reference; station and dimensions are production inference."
+          },
+          {
+            "station_m": 12.45,
+            "local_station_m": 1.1944000855780743,
+            "basis": {
+              "source_run": 16,
+              "start": [
+                -356.06,
+                2.64,
+                -580.815
+              ],
+              "end": [
+                -358.883,
+                2.64,
+                -582.04
+              ],
+              "tangent": [
+                -0.9173539671418203,
+                0,
+                -0.39807247954256275
+              ],
+              "normal": [
+                0.39807247954256275,
+                0,
+                -0.9173539671418203
+              ],
+              "length_m": 3.077329036680943
+            },
+            "width_m": 1.25,
+            "height_m": 1.05,
+            "center_y": 3.99,
+            "glazing": "blue",
+            "inference": "Bounded observed-front motif from dated reference; station and dimensions are production inference."
+          }
+        ],
+        "entries": [
+          {
+            "station_m": 4.05,
+            "local_station_m": 0.6172074050417966,
+            "basis": {
+              "source_run": 13,
+              "start": [
+                -348.885,
+                2.64,
+                -577.698
+              ],
+              "end": [
+                -349.873,
+                2.64,
+                -578.127
+              ],
+              "tangent": [
+                -0.9172618297872074,
+                0,
+                -0.3982847418812631
+              ],
+              "normal": [
+                0.3982847418812631,
+                0,
+                -0.9172618297872074
+              ],
+              "length_m": 1.0771188420968116
+            },
+            "width_m": 1.3,
+            "height_m": 2.13,
+            "center_y": 3.99,
+            "glazing": "blue",
+            "inference": "Bounded observed-front motif from dated reference; station and dimensions are production inference.",
+            "bottom_y": 2.71,
+            "door_role": "pale"
+          },
+          {
+            "station_m": 6.35,
+            "local_station_m": 1.8400885629449848,
+            "basis": {
+              "source_run": 14,
+              "start": [
+                -349.873,
+                2.64,
+                -578.127
+              ],
+              "end": [
+                -352,
+                2.64,
+                -579.051
+              ],
+              "tangent": [
+                -0.917193412372975,
+                0,
+                -0.39844227222976464
+              ],
+              "normal": [
+                0.39844227222976464,
+                0,
+                -0.917193412372975
+              ],
+              "length_m": 2.3190310476576657
+            },
+            "width_m": 1.3,
+            "height_m": 2.13,
+            "center_y": 3.99,
+            "glazing": "blue",
+            "inference": "Bounded observed-front motif from dated reference; station and dimensions are production inference.",
+            "bottom_y": 2.71
+          },
+          {
+            "station_m": 10.65,
+            "local_station_m": 3.8210575152873205,
+            "basis": {
+              "source_run": 15,
+              "start": [
+                -352,
+                2.64,
+                -579.051
+              ],
+              "end": [
+                -356.06,
+                2.64,
+                -580.815
+              ],
+              "tangent": [
+                -0.9171705885238729,
+                0,
+                -0.3984948074276158
+              ],
+              "normal": [
+                0.3984948074276158,
+                0,
+                -0.9171705885238729
+              ],
+              "length_m": 4.426657429709245
+            },
+            "width_m": 1.3,
+            "height_m": 2.13,
+            "center_y": 3.99,
+            "glazing": "blue",
+            "inference": "Bounded observed-front motif from dated reference; station and dimensions are production inference.",
+            "bottom_y": 2.71
+          }
+        ],
+        "screens": [
+          {
+            "station_m": 5.3,
+            "local_station_m": 0.790088562944985,
+            "basis": {
+              "source_run": 14,
+              "start": [
+                -349.873,
+                2.64,
+                -578.127
+              ],
+              "end": [
+                -352,
+                2.64,
+                -579.051
+              ],
+              "tangent": [
+                -0.917193412372975,
+                0,
+                -0.39844227222976464
+              ],
+              "normal": [
+                0.39844227222976464,
+                0,
+                -0.917193412372975
+              ],
+              "length_m": 2.3190310476576657
+            },
+            "width_m": 0.85,
+            "height_m": 1.35,
+            "center_y": 3.99,
+            "glazing": "blue",
+            "inference": "Bounded observed-front motif from dated reference; station and dimensions are production inference.",
+            "bottom_y": 2.7,
+            "depth_m": 0.75,
+            "return_length_m": 0.7,
+            "panel_style": "slatted"
+          }
+        ],
         "pipes": []
       },
       {
@@ -9370,5 +9612,6 @@
       }
     }
   },
-  "dimensions": "production_inference; retained observed-side schedules, hidden elevations unknown"
+  "dimensions": "production_inference; retained observed-side schedules, hidden elevations unknown",
+  "study_notes": "Near-1 lower observed motifs added from March 2025 east-oblique reference. Bounded cadence, not measured; unobserved rear and remaining obscured regions unchanged."
 }

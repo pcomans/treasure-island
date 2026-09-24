@@ -88,9 +88,15 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 					push_error("Incomplete opening containment: %s %s %s" % [cfg.target.source_key,frame.id,station])
 				point.y = cy
 				if group == "entries":
-					PARTS._entry(root,point,t,n,trim,door,concrete)
+					var entry_material := door
+					if str(motif.get("door_role","")) == "pale":
+						entry_material = PARTS._material(color(palette,"pale_door_rgb",Color(0.62,0.65,0.62)),0.85)
+					PARTS._entry(root,point,t,n,trim,entry_material,concrete)
 				elif str(motif.get("glazing", "")) == "boarded":
-					PARTS._panel(root,point-n*0.03,t,n,Vector3(width,height,0.07),PARTS._material(Color(0.48,0.40,0.28),0.96))
+					PARTS._panel(root,point-n*0.03,t,n,Vector3(width,height,0.07),PARTS._material(color(palette,"closure_rgb",Color(0.48,0.40,0.28)),0.96))
+					for side in [-1.0,1.0]:
+						PARTS._panel(root,point+t*side*(width/2+0.025),t,n,Vector3(0.065,height+0.12,0.09),trim)
+						PARTS._panel(root,point+Vector3.UP*side*(height/2+0.025),t,n,Vector3(width+0.12,0.065,0.09),trim)
 				else:
 					PARTS._recessed_window(root,point,t,n,width,height,trim,dark,glass)
 		if cfg.has("broad_band"):
@@ -108,6 +114,9 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 			PARTS._quad(root,[p0,p1,p2,p3],siding)
 			PARTS._beam(root,p0,p1,0.10,0.10,trim)
 			PARTS._quad(root,[Vector3(a.x,low,a.z),Vector3(b.x,low,b.z),p1,p0],trim)
+			if bool(band.get("closed_returns",false)):
+				PARTS._quad(root,[Vector3(a.x,low,a.z),p0,p3,Vector3(a.x,high,a.z)],siding)
+				PARTS._quad(root,[p1,Vector3(b.x,low,b.z),Vector3(b.x,high,b.z),p2],siding)
 		var ft := vec(frame.tangent)
 		var fn := vec(frame.normal)
 		var fa := vec(frame.start)
@@ -220,10 +229,31 @@ static func _hip_roof(root: Node3D, wall: Dictionary, cfg: Dictionary, material:
 		lo=lo.min(q)
 		hi=hi.max(q)
 		top=maxf(top,float(values[i+7]))
+	top = float(cfg.get("wall_top_y",top))
+	if bool(cfg.get("segmented_roof",false)):
+		var boundaries: Array[float] = [lo.x]
+		var frames: Array = cfg.target.frames
+		for j in range(frames.size()-1):
+			var a := vec(frames[j].end)
+			var b := vec(frames[j+1].start)
+			boundaries.append((Vector2(a.x,a.z).dot(t)+Vector2(b.x,b.z).dot(t))/2)
+		boundaries.append(hi.x)
+		for j in range(boundaries.size()-1):
+			var slab := PackedVector2Array([Vector2(boundaries[j],lo.y-1),Vector2(boundaries[j+1],lo.y-1),Vector2(boundaries[j+1],hi.y+1),Vector2(boundaries[j],hi.y+1)])
+			for piece in Geometry2D.intersect_polygons(polygon,slab):
+				_hip_piece(root,piece,t,n,top,float(cfg.get("roof_rise_m",0.72)),material,trim,polygon)
+	else:
+		_hip_piece(root,polygon,t,n,top,float(cfg.get("roof_rise_m",0.72)),material,trim,polygon)
+
+static func _hip_piece(root: Node3D, polygon: PackedVector2Array, t: Vector2, n: Vector2, top: float, rise: float, material: Material, trim: Material, outline: PackedVector2Array) -> void:
+	var lo := Vector2(INF,INF)
+	var hi := Vector2(-INF,-INF)
+	for q: Vector2 in polygon:
+		lo=lo.min(q)
+		hi=hi.max(q)
 	var half := (hi.y-lo.y)/2
 	var inset := minf(half,(hi.x-lo.x)/2)
 	var center := (hi.y+lo.y)/2
-	var rise := float(cfg.get("roof_rise_m",0.72))
 	var faces: Array = [
 		PackedVector2Array([lo,Vector2(hi.x,lo.y),Vector2(hi.x-inset,center),Vector2(lo.x+inset,center)]),
 		PackedVector2Array([Vector2(lo.x,hi.y),Vector2(lo.x+inset,center),Vector2(hi.x-inset,center),hi]),
@@ -247,9 +277,23 @@ static func _hip_roof(root: Node3D, wall: Dictionary, cfg: Dictionary, material:
 					indices[i+1]=indices[i+2]
 					indices[i+2]=temp
 			PARTS._mesh(root,points,indices,material)
+			var roof_mesh := root.get_child(-1) as MeshInstance3D
+			roof_mesh.name = "HipSurface"
+			var normals: PackedVector3Array = roof_mesh.mesh.surface_get_arrays(0)[Mesh.ARRAY_NORMAL]
+			print("FAMILY_ROOF_GEOMETRY source=",root.get_meta("source_key")," aabb=",roof_mesh.get_aabb()," normal0=",normals[0]," points=",points.size()," triangles=",indices.size()/3)
 	for i in polygon.size():
 		var a := polygon[i]
 		var b := polygon[(i+1)%polygon.size()]
+		# Section cuts share a roof junction, not a doubled fascia or closure face.
+		var midpoint := (a+b)/2
+		var exterior := false
+		for edge in outline.size():
+			var oa := outline[edge]
+			var ob := outline[(edge+1)%outline.size()]
+			if Geometry2D.get_closest_point_to_segment(midpoint,oa,ob).distance_to(midpoint)<0.005:
+				exterior=true
+				break
+		if not exterior: continue
 		var da := minf(minf(a.y-lo.y,hi.y-a.y),minf(a.x-lo.x,hi.x-a.x))
 		var db := minf(minf(b.y-lo.y,hi.y-b.y),minf(b.x-lo.x,hi.x-b.x))
 		var pa := t*a.x+n*a.y
