@@ -14376,3 +14376,25 @@ PASS on exactPCK6621b3a4 after independent mountedcomponent86917exit0/8.3698s an
 Independent final release24b1fffb passed and ROOT authorized the exact93-file selection on MAIN94f85a4, whole-app transfer, commit and normal push. Private clean declared-root compiler passed with only tracked+selected dependencies. Preserve all current MAIN docs/history, append named isolated retrospective sections, exclude four unrelated testUIDs and all private reference photos/full movies/app/cache bytes from Git. Actual transfer/source equality/compiler/staged checks and Git results are recorded by external publication receipts and Git history; no extra engine/export is authorized or needed.
 
 Actual publication transfer completed: all93 selected files initially matched, seven exact app members/modes and strict signature verified, MAIN compiler passed at34/213. Final selected/staged checks precede normal commit/push; completed Git identity is recorded in publication receipts/history. No engine or reexport.
+
+## 2026-09-23 — native_support_diagnosis — 1397 mechanics004
+
+- Worked: original native snapshot and73 complete rows allowed exact all-local-surface reconstruction with no engine replay. Full1114-input/10-output binding checks passed. Body-qualified wall240 top explains the current false support/final-state failures, with0.170 mm resting gap; prior rail4.271 mm failures remain independently valid.
+- Did not work: the route plan enumerated only foundation/rail support; source-coherent geometry changes exposed a previously excluded visible bottom wall strip. LAND distance was initially described as a native support gap without checking all relevant contacts. `numpy` was absent; used a small standard-library reader without installing dependencies.
+- Change next time: use complete local native contact identities to verify the support-domain declaration before diagnosing a physical gap or authoring another geometry change. Keep derived reinterpretation, unchanged raw HOLD and missing retreat/campaign evidence separate. No new run, source edit or tolerance relaxation in this round.
+
+## 2026-09-23 — native_support_diagnosis — 1439 mechanics002
+
+- Worked:921/921 valid observer joins and exact60-row recurrence isolated the87.500 mm residual inside stock movement; retained public fields plus original pinned source narrowed it to floor snap without a build/run. Source snapshots stayed exact. Nonfatal continuation retained368 successful loggia samples,2 spray callbacks and a complete420-row roof flight while preserving aggregateHOLD.
+- Did not work: JSON float IDs versus integer Array membership falsely rejected an actual roof0 contact and skipped the dependent spray. Initial glance at `exact_final_contact:false` suggested missing contact; checking the last raw row immediately disproved that and led to the type-specific source diagnosis. Snap solver fractions/internal result remain unobserved.
+- Change next time: normalize validated JSON shape IDs in the exact comparison, keep full raw contact evidence, and use retained original engine source before proposing a geometry change or duplicate run. Stop at the proven motion-path boundary; one narrow query is the next useful evidence if separately authorized. No product/controller/terrain/tolerance edits or new engine run in this round.
+
+## 2026-09-23 — native_support_diagnosis — pair mechanics005
+
+- Worked: all1,147 input and18 output bindings verified; exact004→005 snapshots supported reuse of1,224 geometry checks. Full retained traces distinguished892 successful complete-case rows from670 failed/incomplete-case rows without an engine replay. Exact first contacts and source footprint exposed actionable test-definition faults.
+- Did not work: four door stop sets omitted raised foundation/lowerwall obstructions, causing held-forward jamb drift and genuine corridor failures; initial handoff named only missing expected events. Two source-seam midpoint routes extended their starts into the building footprint. Spray target required26.493° against25° stock limit, stopping the unrelated target schedule.
+- Change next time: preflight full exterior capsule paths and actual grounded-pivot aim, and qualify each first assembly stop with exact body/shape/source/role. Never erase later corridor failures by broadening contact labels. Schedule the unchanged independent1444 campaign separately; reuse successful1397 cases. No engine/product/controller/terrain/tolerance edits in this review.
+
+## 2026-09-24 — rebuild_1439_artist — held draft checkpoint publication
+
+Preserved 1397 and 1439 as inert source patches plus six original game images, independently reviewed for source scope and privacy. Both physical movement HOLDs remain; no runtime promotion, reference-photo copy, engine run or completed-stage replay. Selected publication includes the existing HIGH lessons and retrospective entries unchanged. Publication identity and final remote verification are recorded externally; four unrelated test UID files remain untouched.

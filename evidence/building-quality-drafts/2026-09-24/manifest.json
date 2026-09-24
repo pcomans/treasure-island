@@ -1,0 +1,320 @@
+{
+  "schema": 1,
+  "status": "INERT HELD DRAFTS \u2014 not live promotion or acceptance",
+  "base_commit": "6f44545c4c22eb722fe66abcf7039674ccd3c8b6",
+  "apply_scope": "Each patch independently applies only selected production paths against exact base. No1444 changes. Neither patch is applied here. No acceptance/authority/compiler changes.",
+  "units": {
+    "1397": {
+      "selected_sources": [
+        {
+          "path": "game/scripts/world/facades/gateview_1397_quality_model.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/game/scripts/world/facades/gateview_1397_quality_model.gd",
+          "source_sha256": "5a46ba485235415344dbb51570ecc34d8b2e7818bfd1b46172ff11a5679900b3",
+          "base_sha256": null,
+          "operation": "add"
+        },
+        {
+          "path": "game/scripts/world/facades/gateview_1397_live_factory.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/game/scripts/world/facades/gateview_1397_live_factory.gd",
+          "source_sha256": "87da4b434791cfae1d59a707fb9c70d8fea69ed5c670f5fa17174b0e885eb224",
+          "base_sha256": "ce6223bf527c74431dc794bfc9ab7211feabd881e9d080e318a2f712547e4a91",
+          "operation": "modify"
+        },
+        {
+          "path": "game/scripts/world/facades/gateview_1397_live_replacement.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/game/scripts/world/facades/gateview_1397_live_replacement.gd",
+          "source_sha256": "4eb8361d6fa04282d9779fa793b3707cddc694eb8eac0906fcce630216f3c759",
+          "base_sha256": "a906e841e11ad3c421abe208ef19b4ba3f4fb3e1e2c9ef563d609dd565d5fd77",
+          "operation": "modify"
+        },
+        {
+          "path": "game/resources/facades/gateview_1397_quality_revision.json",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/game/resources/facades/gateview_1397_quality_revision.json",
+          "source_sha256": "7510928b8c5278a352a0681bceaf6bd592aa558963128f86f74c7ec58ed12efe",
+          "base_sha256": null,
+          "operation": "add"
+        }
+      ],
+      "unchanged_base_dependencies": {
+        "game/scripts/world/facades/housing_quality_support.gd": "34d14eedb3c5296061bec5b10003c240aabb90e9654dcd61165f4bd917392b97",
+        "generated/world/chunks/x_-1__z_-3.json": "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc",
+        "generated/world/chunks/x_-2__z_-4.json": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4",
+        "generated/world/chunks/x_-2__z_-3.json": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+        "generated/world/chunks/x_-1__z_-4.json": "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac"
+      },
+      "patch": "1397-held-draft.patch",
+      "patch_application_checked": "Fresh temporary index/base files; whitespace error-all; exact output source SHA equality",
+      "images": [
+        {
+          "path": "images/1397-01-whole.png",
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/mechanics-004/images/1397-01-whole.png",
+          "sha256": "f80cb93c34f6bb1ae92466ad6f618056379e3f6c87d4e9d8db5b482a2c9316d2",
+          "bytes": 975518,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "label": "1397 actual game 01-whole \u2014 CURRENT HOLD",
+          "privacy": "Actual game framebuffer only; no StreetView/reference pixels."
+        },
+        {
+          "path": "images/1397-02-three-quarter.png",
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/mechanics-004/images/1397-02-three-quarter.png",
+          "sha256": "818267d60bf2e91ca95a0364749b1ff4f9e24f483e05fc57718438bfda9c297b",
+          "bytes": 856849,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "label": "1397 actual game 02-three-quarter \u2014 CURRENT HOLD",
+          "privacy": "Actual game framebuffer only; no StreetView/reference pixels."
+        },
+        {
+          "path": "images/1397-03-near.png",
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/mechanics-004/images/1397-03-near.png",
+          "sha256": "325efa1acbe25be63809d3beaea5ebba981f7cd45695310fa9afb3564ccf0fe8",
+          "bytes": 862355,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "label": "1397 actual game 03-near \u2014 CURRENT HOLD",
+          "privacy": "Actual game framebuffer only; no StreetView/reference pixels."
+        }
+      ],
+      "scope": "Held art/source checkpoint. Retained scoped source/static evidence; six005 campaigns plus four006 full routes and three roof flights and rejection callbacks reusable per final review. Unresolved85.957mm retreat and4.040mm join21 LAND penetrations, dependent join21 retreat, wall full-footprint interference. Actual wall placement does not qualify its footprint. No whole-unit mechanics/release PASS.",
+      "visual_scope": "mechanics004 whole-building static PASS; sampled approach appearance only, full-motion acceptance open; no changed-light material response acceptance."
+    },
+    "1439": {
+      "selected_sources": [
+        {
+          "path": "game/scripts/world/facades/chinook_1439_quality_model.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1439-from-scratch-20260923/game/scripts/world/facades/chinook_1439_quality_model.gd",
+          "source_sha256": "3947c25a42e09c675c09955ace58e5a4d468ed8f18b11e0802bbd88d94da06a3",
+          "base_sha256": null,
+          "operation": "add"
+        },
+        {
+          "path": "game/scripts/world/facades/chinook_1439_roof001.json",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1439-from-scratch-20260923/game/scripts/world/facades/chinook_1439_roof001.json",
+          "source_sha256": "5eff097818af04acf849aff988f543e68379497f3cf7d4aa0f52683a70521359",
+          "base_sha256": null,
+          "operation": "add"
+        },
+        {
+          "path": "game/scripts/world/facades/chinook_1439_live_factory.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1439-from-scratch-20260923/game/scripts/world/facades/chinook_1439_live_factory.gd",
+          "source_sha256": "e5325692fb12c1bdca826a82705db39e8f07a302de67d9a64ebd547046a98b32",
+          "base_sha256": null,
+          "operation": "add"
+        },
+        {
+          "path": "game/resources/facades/chinook_1439_quality_revision.json",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1439-from-scratch-20260923/game/resources/facades/chinook_1439_quality_revision.json",
+          "source_sha256": "1b58ad8528ebe128dc65ea68026432647da60a1386375a48a1812bcf2f398816",
+          "base_sha256": null,
+          "operation": "add"
+        },
+        {
+          "path": "game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1439-from-scratch-20260923/game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd",
+          "source_sha256": "fc4c7a75c9041567d8835b29e25baedc127f55f59feac62492a72cc5a2fdf6b1",
+          "base_sha256": "d5a4458be7a5c2fb6989f9d8a343d497d2f144eb19c445de6016888e7b3cce5e",
+          "operation": "modify"
+        },
+        {
+          "path": "game/scripts/world/world_chunk_builder.gd",
+          "source_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1439-from-scratch-20260923/game/scripts/world/world_chunk_builder.gd",
+          "source_sha256": "4a5721899c9fbea2523c576c291dc149e0b6646526ac66d0cbc57bdf6ac4021c",
+          "base_sha256": "a89a31212fcd181350ab5090e86df7140d8246077871cfae3b69a8c835539e54",
+          "operation": "modify"
+        }
+      ],
+      "unchanged_base_dependencies": {
+        "game/scripts/world/facades/housing_quality_support.gd": "34d14eedb3c5296061bec5b10003c240aabb90e9654dcd61165f4bd917392b97",
+        "generated/world/chunks/x_-2__z_0.json": "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b",
+        "generated/world/chunks/x_-2__z_-1.json": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2",
+        "game/scripts/world/massing/hawkins_77_bruton_massing.gd": "b572d5b75faf47e91e9283af757cdc33a0c0b4a37de87230d7e7a505442f6a4d",
+        "game/scripts/world/massing/building_3_600_california_massing.gd": "0755ab9846357207143f4bb0a50c27e710d92aa3a529903c61d4d3495bb94419",
+        "game/scripts/world/facades/navy_chapel_187_live_replacement.gd": "deffb5956d8e808565d1c557208647a89dff4730c15f97aa9b1085a087968cad",
+        "game/scripts/world/facades/d2_1441_chinook_live_replacement.gd": "bf51562a211126c0ea7b631321dfb021171ad68bffd6dd07667ad504d770b9a1",
+        "game/scripts/world/facades/d5_1308_gateview_live_replacement.gd": "3faca37243c2ee51ff1d2834b3d581d4b7d4552a45179224371a2570b7f08ad5",
+        "game/scripts/world/facades/d5_1394_gateview_live_replacement.gd": "42e0233cdbe1be7bdcbb63603c1bb2cae4c247dde87a51f9518cc1afafc82076",
+        "game/scripts/world/facades/maceo_may_live_replacement.gd": "d9ad456c2d11437a0cf70277c7fab383359c49d6ab34ed698ec316ea97668001",
+        "game/scripts/world/facades/northern_canopy_free_live_replacement.gd": "8967229a37be5401962132b846b08f1f527fb27f6aae3cd2d6d97eb70f608b82",
+        "game/scripts/world/facades/northpoint_1238_live_replacement.gd": "fef8305341da71b88c1fa90a5ccdd9bba98afc10f999de7208cc6373ff7ba9c3",
+        "game/scripts/world/facades/mariner_1206_live_replacement.gd": "88e0858a2b9d3559c8d2e766874f93cd44335f89c232e8115ef7c7f97ecc951b",
+        "game/scripts/world/facades/mariner_1219_live_replacement.gd": "c6a0c16cc762d33c62c3f3885d865999be5e65e148f56a66e9da348e6cbfb58a",
+        "game/scripts/world/facades/mariner_1212_live_replacement.gd": "c0941706e3cee909b260e278a07d846932b805aaeb5e12440463e43678b3513c",
+        "game/scripts/world/facades/bayside_1220_live_replacement.gd": "1edb75f24c3de6b4c6c780c9bb6b478225925453872e11c76f82fece8a146c38",
+        "game/scripts/world/facades/northpoint_1239_live_replacement.gd": "e397a0879a8beb8eca7e8ec32e80c40652cfb1b5b67a50bf6f52952f4ae44aa5",
+        "game/scripts/world/facades/bayside_1222_live_replacement.gd": "a4f6e7242dd4130b3dca67cad165a8a3067129ab2a7455e4e0f0f76ef3c144bf",
+        "game/scripts/world/facades/northpoint_1227_live_replacement.gd": "ace49917dc8935c75124e70f3dc573330a2236a6a82ef948b41b1eeeee451c6e",
+        "game/scripts/world/facades/mariner_1202_live_replacement.gd": "29f17b796ae922d967e87212f7e3ed21fa30db7d9ce4b9c2c7a2ba079e847a70",
+        "game/scripts/world/facades/northpoint_1234_live_replacement.gd": "6bf227c87c36c2ff02b883bf6224bb35d281f098e76035cc8d64e5ac25bfbbdc",
+        "game/scripts/world/facades/northpoint_1232_live_replacement.gd": "226854de49a23ba5808152f596f104753d96200c50c2d3241fc1dfbed19667f6",
+        "game/scripts/world/facades/mariner_1221_live_replacement.gd": "15816708f9b6b8f15ae83f5d5d0ec0823165fbc0a2db51bdaeba442c34004b1e",
+        "game/scripts/world/facades/northpoint_1241_live_replacement.gd": "8ce0c5108f394ec20d3f26cdd91f0100435fcf17f4d82ab685ced5e43a7dd429",
+        "game/scripts/world/facades/northpoint_1240_live_replacement.gd": "a2c7536488783593e48a5a91641fcc5bf11df490e830beaa61c3d1b7e7cc8b48",
+        "game/scripts/world/facades/gateview_1397_live_replacement.gd": "a906e841e11ad3c421abe208ef19b4ba3f4fb3e1e2c9ef563d609dd565d5fd77",
+        "game/scripts/world/facades/bayside_1226_live_replacement.gd": "d26993a5443fdf4b30477c9f47e96fdc54fdc1f517c5dbaaeb14d3f8b2120c66",
+        "game/scripts/world/facades/bayside_1215_live_replacement.gd": "cc6266cc71e9e0243006af8bb6161f061b981ac313b312fea58c4abd3d607c55",
+        "game/scripts/world/facades/fire_station48_live_replacement.gd": "163db6f19bb7368f5aa271282c11d4028337d48cc1b2e3d37b8231e1c329d25a",
+        "game/scripts/world/facades/d5_1317_gateview_live_replacement.gd": "283a020492c03fde62c591ea9ebcb1e5c5403a55aca514f0998908b440d9e819",
+        "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd": "178cc9df2c7add966a95427099b3a9900fde459e5bfc4825211e06c119cc2e32",
+        "game/scenes/world/facades/isle_house/isle_house_high_facade.tscn": "7ff4a91c402cecea19d2686d29139d2c0f139673b06d21c67d1c14835fd31d12",
+        "game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd": "e2767b01fab68d7f16ffe2e7f8e0313c711347e2006a72e028c19aaa2195b891",
+        "game/scripts/world/facades/d1_b201_live_attachment.gd": "499f6d2657b593ee5b0801cf1205a2925a993f3b1836922d3656a6d00c51cc19",
+        "game/scripts/world/facades/d1_b225_live_attachment.gd": "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9",
+        "game/scripts/world/facades/accepted_material_run_trials.gd": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+        "game/scripts/world/facades/w34313564_live_modules.gd": "74a7eb9a29750baf47e59194374c2669278bba5af091f5cbe04b13f45c230b8e",
+        "game/scripts/world/facades/w34313515_live_modules.gd": "8034932d57f8e42ee9c96a1bdd2508d8bf51b52abc0e5d7ff5f2659cbf75ddc7",
+        "game/scripts/world/facades/w291196370_live_modules.gd": "2b4da98b780af42bbc59dce911410c73964f670ce6d58624b77211b7cf981653",
+        "game/scripts/world/facades/w34313520_live_modules.gd": "765d8546e2fcfca68c855d1e1bcfb93bdcf1b1791c9b71ce4bcd6dcc35fe432e",
+        "game/scripts/world/facades/w34313525_live_modules.gd": "308cfe8aa3e6320f122f2b81ea74976d30f7d87de91736aeed60e67a01dc121b",
+        "game/scripts/world/facades/building_1_hero_model.gd": "ce2f21dab02163b5f45d9d7e457f5d0ce96089bc55cca6e65aa9924c9f199c5a"
+      },
+      "patch": "1439-held-draft.patch",
+      "patch_application_checked": "Fresh temporary index/base files; whitespace error-all; exact output source SHA equality",
+      "images": [
+        {
+          "path": "images/1439-01-whole.png",
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/images/1439-01-whole.png",
+          "sha256": "4d56d857a924a156469f314f910d66847d3e2a748f8f432ee73dbde4e38c71a1",
+          "bytes": 747556,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "label": "1439 actual game 01-whole \u2014 CURRENT HOLD",
+          "privacy": "Actual game framebuffer only; no StreetView/reference pixels."
+        },
+        {
+          "path": "images/1439-02-three-quarter.png",
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/images/1439-02-three-quarter.png",
+          "sha256": "2aadb331a551257ad67bd859f0216e0672a4cbec15c7fb6a9c97301d4c197577",
+          "bytes": 774069,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "label": "1439 actual game 02-three-quarter \u2014 CURRENT HOLD",
+          "privacy": "Actual game framebuffer only; no StreetView/reference pixels."
+        },
+        {
+          "path": "images/1439-03-near.png",
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/images/1439-03-near.png",
+          "sha256": "91716ee5508f705784a28ad47c84e534d3868bcb933204ad34f1fc1db80e46c3",
+          "bytes": 893548,
+          "dimensions": [
+            1440,
+            900
+          ],
+          "label": "1439 actual game 03-near \u2014 CURRENT HOLD",
+          "privacy": "Actual game framebuffer only; no StreetView/reference pixels."
+        }
+      ],
+      "scope": "Visual-ready held draft, not promoted. Source/fit224meshes214unchanged; static and sampled-motion appearance; wall approach/loggias, derived roof flight, all spray callbacks and read-only query reusable. Original86.289mm wall-retreat penetration remains. No whole-unit mechanics/release PASS."
+    }
+  },
+  "artifacts": {
+    "README.md": {
+      "sha256": "35aedf8b329c2ce42cbb817ee1cd383617fb876ce353ca41b3996433ac218794",
+      "bytes": 1531
+    },
+    "1439-held-draft.patch": {
+      "sha256": "a89faa99448d71eeab0ecfa889349400166147932f72c15ba1b7d20aeeea93e1",
+      "bytes": 93299
+    },
+    "1397-held-draft.patch": {
+      "sha256": "dc00a339360179152508e267fd1c68c61e33a7adb8f25f5fa22c122419b1386f",
+      "bytes": 56216
+    },
+    "images/1439-03-near.png": {
+      "sha256": "91716ee5508f705784a28ad47c84e534d3868bcb933204ad34f1fc1db80e46c3",
+      "bytes": 893548
+    },
+    "images/1439-01-whole.png": {
+      "sha256": "4d56d857a924a156469f314f910d66847d3e2a748f8f432ee73dbde4e38c71a1",
+      "bytes": 747556
+    },
+    "images/1397-02-three-quarter.png": {
+      "sha256": "818267d60bf2e91ca95a0364749b1ff4f9e24f483e05fc57718438bfda9c297b",
+      "bytes": 856849
+    },
+    "images/1397-01-whole.png": {
+      "sha256": "f80cb93c34f6bb1ae92466ad6f618056379e3f6c87d4e9d8db5b482a2c9316d2",
+      "bytes": 975518
+    },
+    "images/1397-03-near.png": {
+      "sha256": "325efa1acbe25be63809d3beaea5ebba981f7cd45695310fa9afb3564ccf0fe8",
+      "bytes": 862355
+    },
+    "images/1439-02-three-quarter.png": {
+      "sha256": "2aadb331a551257ad67bd859f0216e0672a4cbec15c7fb6a9c97301d4c197577",
+      "bytes": 774069
+    }
+  },
+  "external_evidence": {
+    "1397_final_mechanics": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/independent-reviews/SECOND_PAIR_MECHANICS006_ACTUAL_REVIEW.md",
+      "sha256": "7ff3a0c301d1a21b60be52e6ba7fd3968f1899f8a77c9901551edce61ff5bc4a",
+      "retention": "Private external originals/review; do not copy reference photos or full movies into Git."
+    },
+    "1397_current_art_output": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/mechanics-004/completed-output-map.json",
+      "sha256": "82015b3a99e8861b28fe83a9517360d89c359feef4cb433b2aa50107ffd42678",
+      "retention": "Private external originals/review; do not copy reference photos or full movies into Git."
+    },
+    "1439_held_handoff": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/HELD-DRAFT-HANDOFF-2026-09-24.md",
+      "sha256": "2354613e304a906aa0d81206aed77325f7c8136ac5a06d6a4ca1ba81e8d4c78b",
+      "retention": "Private external originals/review; do not copy reference photos or full movies into Git."
+    },
+    "1439_stage": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/pair-integration-staging-001/STAGING-MAP.json",
+      "sha256": "5cf93aa2aec843ea014edc2a6769adc06a554638b7b193ccb4cc1aabd12396ba",
+      "retention": "Private external originals/review; do not copy reference photos or full movies into Git."
+    },
+    "1439_final_scope": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/independent-reviews/1439_CALLBACK006_ACTUAL_FINAL_SCOPE.md",
+      "sha256": "85d69e0b0f774541ba9ad7eac4a64354c5359f33bf111e122b8c233dd13de603",
+      "retention": "Private external originals/review; do not copy reference photos or full movies into Git."
+    },
+    "1439_native_mechanics": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/independent-reviews/1439_MECHANICS002_NATIVE_SUPPORT_DIAGNOSIS.md",
+      "sha256": "11871643d7bacb5a7107b8e3ed40f66f502c1eace16c14b9e34b942442773f97",
+      "retention": "Private external originals/review; do not copy reference photos or full movies into Git."
+    },
+    "1439_static_visual": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1439-from-scratch-20260923/discovery/1439-production-visual-review-002.md",
+      "sha256": "a32ddf7e0f99696121fb6ca8917477482503acaba9bfa107a2d143b9b63361f2",
+      "retention": "Private external originals/review; do not copy reference photos or full movies into Git."
+    },
+    "1439_sampled_motion": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1439-from-scratch-20260923/discovery/1439-mechanics002-visual-review.md",
+      "sha256": "fdd4c430f7ac390bfa77aee9c5e46bbe4d1fb50176e417374700d8190c38cff9",
+      "retention": "Private external originals/review; do not copy reference photos or full movies into Git."
+    },
+    "1439_source_fit": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1439-from-scratch-20260923/discovery/1439-actual002-technical-review.md",
+      "sha256": "fd41cae025d2aca79dbd7fa7cbb4f11c4f54483dd82150750df3980c2df4a1e9",
+      "retention": "Private external originals/review; do not copy reference photos or full movies into Git."
+    },
+    "1439_current_art_output": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/completed-output-map.json",
+      "sha256": "3a0f03336a380345c3d68e0f484d6e26572e2890dd9e307be8b7be4538827d04",
+      "retention": "Private external originals/review; do not copy reference photos or full movies into Git."
+    },
+    "1397_current_static_visual": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/discovery/1397-mechanics004-visual-review.md",
+      "sha256": "d73c4a7d42b15a5fe239739fabb1607bff3a230c3a44b17a44a801fec5617b48",
+      "retention": "External independent report; private dated references remain outside Git."
+    },
+    "1397_reference_visual_scope": {
+      "path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-quality-second-pair-20260923/discovery/SECOND_PAIR_STATIC_VISUAL_REVIEW_20260923.md",
+      "sha256": "c1fe730fbc3d95e86ee78f0b4fd721640888b4ddac22a87024cbec2fc83c65f3",
+      "retention": "External independent report; private dated references remain outside Git."
+    }
+  }
+}

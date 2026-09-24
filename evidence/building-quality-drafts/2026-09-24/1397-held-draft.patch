@@ -1,0 +1,856 @@
+diff --git a/game/resources/facades/gateview_1397_quality_revision.json b/game/resources/facades/gateview_1397_quality_revision.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..ff5f4fb8a640c37acc2348e0c1161106a94d8786
+--- /dev/null
++++ b/game/resources/facades/gateview_1397_quality_revision.json
+@@ -0,0 +1,15 @@
++{
++  "schema_version": "ti.housing-whole-building-revision/1",
++  "source_key": "w96215670",
++  "reviewed_art_sha256": "b6117d1b9a4a9f7457dda32411d26f4c8ba2fddba28fab07b3a050e1314dab85",
++  "revision_acceptance": "pending",
++  "historical_recognition_credit_unchanged": true,
++  "ground_chunks": {
++    "res://generated/world/chunks/x_-2__z_-4.json": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4",
++    "res://generated/world/chunks/x_-2__z_-3.json": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
++    "res://generated/world/chunks/x_-1__z_-4.json": "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac",
++    "res://generated/world/chunks/x_-1__z_-3.json": "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc"
++  },
++  "site_fit_revision": "reviewed_staged_source_bottom_closure; owning clipped-ring local filled-side exterior for all56 closures; only inward12/16/40/41 reverse fronts/normals; no position/profile change; all eight door lower rails preserve inner face/span/elevations/material and terminate flush with the existing leaf front (32.5mm depth); windows/jambs/foundation unchanged",
++  "facade_alignment": "Frozen source horizontal identity; architectural details are production inference."
++}
+diff --git a/game/scripts/world/facades/gateview_1397_live_factory.gd b/game/scripts/world/facades/gateview_1397_live_factory.gd
+index 2ee8c53bb6fbbdf71813fc6ff41a45d51d4de068..e50549055d12fe28517a240739257f1a284723f4 100644
+--- a/game/scripts/world/facades/gateview_1397_live_factory.gd
++++ b/game/scripts/world/facades/gateview_1397_live_factory.gd
+@@ -1,27 +1,13 @@
+-extends Node3D
+-## Exact S2 construction supplied through live caller callbacks.
+-const KIT := preload("res://game/scripts/world/facades/site_12_housing_kit.gd")
+-const SIDING_FIELD := preload("res://game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader")
+-const ROOF_MATERIAL := preload("res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres")
+-const ROOF_TONE := preload("res://game/resources/facades/d5_1317_surface_tone.gdshader")
+-const CONCRETE := preload("res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg")
+-const CONCRETE_ROUGH := preload("res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg")
+-const ASPHALT := preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg")
+-const ASPHALT_ROUGH := preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_rough_1k.jpg")
+-const GROUND_BUCKETS := ["DrapedEntryPaths", "FootwaySurface"]
+-const ROOF_BUCKET := "ObservedPublicRoof"
++extends RefCounted
++## Unaccepted whole-building revision. Frozen source identity survives; old visual/physics proxies do not.
++const MODEL := preload("res://game/scripts/world/facades/gateview_1397_quality_model.gd")
++const SUPPORT := preload("res://game/scripts/world/facades/housing_quality_support.gd")
++const CONFIG_PATH := "res://game/resources/facades/gateview_1397_quality_revision.json"
+ const SELF_PATH := "res://game/scripts/world/facades/gateview_1397_live_factory.gd"
+-const CONFIG_PATH := "res://game/resources/facades/gateview_1397_study.json"
+ const CHUNK_PATH := "res://generated/world/chunks/x_-1__z_-3.json"
+ const WALL_KEY := "building:w96215670:wall"
+ const ROOF_KEY := "building:w96215670:roof"
+ const EXPECTED_CHUNK_SHA256 := "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc"
+-const TARGET_RUNS := [17, 18, 19, 20, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 36, 37]
+-const PROTECTED_RUNS := [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 21, 22, 29]
+-const PHYSICAL_BUCKETS := ["ObservedPublicRoof","ProjectedUpperClosures","PaleCompleteTrim","BlueOpaqueGlazing","DarkOpaqueGlazing","MaroonClosedDoors", "LocalPrivacyScreens","PaleDrainageAndFascia","DoorHardware"]
+-var _last_result: Dictionary = {}
+-var _tangent_builder: Callable
+-var _buckets: Dictionary = {}
+ 
+ static func _json(path: String) -> Dictionary:
+ 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+@@ -38,370 +24,20 @@ static func matches_record_pair(wall: Dictionary, roof: Dictionary) -> bool:
+ 	return not wall.is_empty() and not roof.is_empty() and wall == _record(records, WALL_KEY) and roof == _record(records, ROOF_KEY)
+ 
+ static func build_for_records(wall: Dictionary, roof: Dictionary, source_builder: Callable, tangent_builder: Callable, baseline: bool = false) -> Dictionary:
+-	# Explicit construction avoids global-class discovery assumptions in helpers.
+-	var node: Node3D = load(SELF_PATH).new() as Node3D
+-	var result: Dictionary = node.call("configure_records", wall, roof, source_builder, tangent_builder, baseline) as Dictionary
+-	if not bool(result.get("ok", false)): node.free()
+-	return result
+-
+-func configure_records(wall: Dictionary, roof: Dictionary, source_builder: Callable, tangent_builder: Callable, baseline: bool = false) -> Dictionary:
+-	if not _last_result.is_empty(): return {"ok": false, "message": "Duplicate study construction."}
+-	if not source_builder.is_valid() or not tangent_builder.is_valid(): return {"ok": false, "message": "Original source and tangent producers required."}
+-	_tangent_builder = tangent_builder
+-	if not matches_record_pair(wall, roof): return {"ok": false, "message": "Exact source pair changed."}
++	if baseline or not source_builder.is_valid() or not tangent_builder.is_valid() or not matches_record_pair(wall, roof):
++		return {"ok": false, "message": "Exact source pair and live caller required; no baseline fallback."}
+ 	var cfg := _json(CONFIG_PATH)
+-	if not _same_numeric_runs(cfg.get("mapped_runs", []), TARGET_RUNS) or not _same_numeric_runs(cfg.get("protected_runs", []), PROTECTED_RUNS):
+-		return {"ok": false, "message": "Observed/protected scope changed."}
+-	if str(cfg.get("schema_version", "")) != "ti.gateview-1397-study/1" or str(cfg.target.source_key) != "w96215670":
+-		return {"ok": false, "message": "This coherent study is 1397 only."}
+-	var truth: Dictionary = cfg.truth_boundary
+-	if not bool(truth.prototype_only) or bool(truth.runtime_attachment) or bool(truth.recognition_accepted) or bool(truth.as_built_claim) or bool(truth.interior_modeled):
+-		return {"ok": false, "message": "Study truth boundary changed."}
+-	var originals: Array = [source_builder.call(wall, false), source_builder.call(roof, false)]
+-	if not bool(originals[0].get("ok", false)) or not bool(originals[1].get("ok", false)):
+-		for row: Dictionary in originals:
+-			if row.has("node"): (row.node as Node).free()
+-		return {"ok": false, "message": "Ordinary original construction failed."}
+-	for i in 2:
+-		var original: Node3D = originals[i].node as Node3D
+-		original.name = "OriginalWallRecord" if i == 0 else "OriginalRoofRecord"
+-		add_child(original)
+-		var mesh := original.get_node("Mesh") as MeshInstance3D
+-		mesh.reparent(self, false)
+-		mesh.name = "ExactOriginalWallSurfaces" if i == 0 else "ExactSourceNeutralRoof"
+-		# Ordinary-builder mesh resources, all thirteen channels, materials,
+-		# source collision shapes and wall spray groups remain untouched.
+-	for label: String in ["ShallowStoryBands", "ObservedPublicRoof",  "CarportRoof", "CarportPosts", "CarportFascia", "NearHorizontalSiding", "ProjectedUpperSiding", "ProjectedUpperClosures", "PaleCompleteTrim", "BlueOpaqueGlazing", "DarkOpaqueGlazing", "MaroonClosedDoors",   "LocalPrivacyScreens", "PaleDrainageAndFascia", "DoorHardware", "DrapedEntryPaths", "FootwaySurface"]:
+-		_buckets[label] = KIT.new_bucket()
+-	if not baseline:
+-		for run: int in TARGET_RUNS: _append_skin(wall, run)
+-		for frame: Dictionary in cfg.target.frames:
+-			_append_upper_volume(frame, cfg.facade)
+-			_append_zone(frame, cfg.facade)
+-		_append_roof(cfg.public_roof.triangles)
+-		_append_roof(cfg.roof_termination.triangles, "PaleDrainageAndFascia")
+-		_append_roof(cfg.shallow_band.triangles, "ShallowStoryBands")
+-		for carport: Dictionary in cfg.carports: _append_carport(carport)
+-		for label: String in cfg.local_ground: _append_path(cfg.local_ground[label], label)
+-		for label: String in _buckets:
+-			if _buckets[label].indices.is_empty(): continue
+-			_add_mesh(label, _buckets[label], _surface_material(label, cfg))
+-		var body := StaticBody3D.new()
+-		body.name = "PhysicalDetails_NoSprayReceiver"
+-		body.collision_layer = 5
+-		body.collision_mask = 0
+-		body.set_meta("receiver_kind", "none")
+-		body.set_meta("derived_object_key", "prototype:" + WALL_KEY)
+-		body.set_meta("feature_kind", "bounded_facade_detail")
+-		body.set_meta("source_keys", ["w96215670"])
+-		for label: String in PHYSICAL_BUCKETS:
+-			var bucket: Dictionary = _buckets[label]
+-			var faces := PackedVector3Array()
+-			for index: int in bucket.indices: faces.append(bucket.vertices[index])
+-			var shape := ConcavePolygonShape3D.new()
+-			shape.set_faces(faces)
+-			shape.set_meta("receiver_kind", "none")
+-			shape.set_meta("structural_role", label)
+-			var child := CollisionShape3D.new()
+-			child.name = label
+-			child.shape = shape
+-			body.add_child(child)
+-		add_child(body)
+-		_add_projected_receiver(wall)
+-	var batches: Dictionary = {}
+-	var triangles := 0
+-	var surfaces := 0
+-	for child: Node in get_children():
+-		if not child is MeshInstance3D: continue
+-		var count := 0
+-		for surface in child.mesh.get_surface_count():
+-			count += child.mesh.surface_get_arrays(surface)[Mesh.ARRAY_INDEX].size() / 3
+-		batches[str(child.name)] = count
+-		triangles += count
+-		surfaces += child.mesh.get_surface_count()
+-	var metadata: Dictionary = {"model_id": "1397-gateview-study-001", "projected_upper_front_m": float(cfg.facade.upper_projection_m), "projected_upper_receiver_key": WALL_KEY, "projected_upper_receiver_source_runs": TARGET_RUNS, "prototype_only": true, "runtime_attachment": false, "recognition_accepted": false, "source_key": "w96215670", "mapped_public_run_indices": TARGET_RUNS, "protected_run_indices": PROTECTED_RUNS, "baseline_exact_source": baseline, "original_wall_roof_resources_preserved": true, "source_roof_geometry_preserved": true, "source_wall_spray_eligibility_preserved": true, "physical_details_spray_receiver": false, "interior_modeled": false, "as_built_claim": false, "module_dimensions_and_counts": "production_inference", "visual_batch_triangles": batches, "visual_triangles": triangles, "mesh_instances": batches.size(), "surfaces": surfaces, "source_terrain_untouched": true, "draped_paths_render_only": true, "bounded_footway_render_only": true, "new_parking_authored": false, "separate_public_roof_addition": not baseline, "public_roof_shapes": 0 if baseline else 1, "roof_inference": "Original flat roof retained; broad shallow visible front roof strips only. No hidden roof topology, canopies, ramps or stairs authored.", "stairs_authored": false}
+-	for key: String in metadata: set_meta(key, metadata[key])
+-	_last_result = {"ok": true, "node": self, "metadata": metadata}
+-	return _last_result
+-
+-func get_buckets() -> Dictionary:
+-	return _buckets
+-
+-func _append_zone(frame: Dictionary, facade: Dictionary) -> void:
+-	var tangent := _v(frame.tangent)
+-	var normal := _v(frame.normal)
+-	var trim: Dictionary = _buckets.PaleCompleteTrim
+-	# Each rigid detail uses the exact local source run rather than the bent host chord.
+-	for key: String in ["upper_windows", "lower_windows"]:
+-		for window: Dictionary in frame[key]:
+-			var basis: Dictionary = window.basis
+-			var wt := _v(basis.tangent); var wn := _v(basis.normal)
+-			var ws := float(window.local_station_m)
+-			var advance: float = float(facade.upper_projection_m) if key == "upper_windows" else 0.0
+-			var bucket: Dictionary = _buckets.DarkOpaqueGlazing if str(window.glazing) == "dark" else _buckets.BlueOpaqueGlazing
+-			KIT.append_grouped_opening(bucket, trim, _point(basis, ws, float(window.center_y), .022 + advance), wt, wn, float(window.width_m), float(window.height_m), .046, .074, .066, .047)
+-			KIT.append_box(trim, _point(basis, ws, float(window.center_y) - float(window.height_m) / 2.0 - .087, .104 + advance), wt, wn, float(window.width_m) + .22, .06, .20)
+-	for entry: Dictionary in frame.entries:
+-		var basis: Dictionary = entry.basis
+-		var et := _v(basis.tangent); var en := _v(basis.normal)
+-		var s := float(entry.local_station_m)
+-		var bottom := float(entry.bottom_y); var width := float(entry.width_m); var height := float(entry.height_m)
+-		var door: Dictionary = _buckets.MaroonClosedDoors
+-		KIT.append_box(door, _point(basis, s, bottom + height / 2.0, .071), et, en, width, height, .098)
+-		for side in [-1.0, 1.0]:
+-			KIT.append_box(trim, _point(basis, s + side * (width / 2.0 + .05), bottom + height / 2.0, .115), et, en, .10, height, .15)
+-		KIT.append_box(trim, _point(basis, s, bottom + height + .05, .115), et, en, width + .20, .10, .15)
+-		KIT.append_box(_buckets.DoorHardware, _point(basis, s + width * .34, bottom + 1.03, .131), et, en, .045, .16, .035)
+-		_append_path(entry.path_mesh)
+-	for screen: Dictionary in frame.screens:
+-		var basis: Dictionary = screen.basis
+-		var st := _v(basis.tangent); var sn := _v(basis.normal)
+-		var center := _point(basis, float(screen.local_station_m), float(screen.bottom_y) + float(screen.height_m) / 2.0, float(screen.depth_m))
+-		_append_screen(center, st, sn, float(screen.width_m), float(screen.height_m), float(screen.solid_lower_height_m))
+-		var length := float(screen.return_length_m)
+-		var return_center := center - st * (float(screen.width_m) / 2.0 - .045) - sn * (length / 2.0 + .035)
+-		_append_screen(return_center, -sn, st, length, float(screen.height_m), float(screen.solid_lower_height_m))
+-	var advance: float = float(facade.upper_projection_m)
+-	var band: float = float(facade.story_band_y)
+-	for pipe: Dictionary in frame.pipes:
+-		var basis: Dictionary = pipe.basis
+-		var pt := _v(basis.tangent); var pn := _v(basis.normal)
+-		var station: float = float(pipe.local_station_m)
+-		var bottom: float = float(pipe.bottom_y); var top: float = float(pipe.top_y)
+-		# Lower drainage stays against the original wall; the elbow joins its advanced upper run.
+-		KIT.append_box(_buckets.PaleDrainageAndFascia, _point(basis, station, (bottom + band) / 2.0, .162), pt, pn, .073, band - bottom, .085)
+-		KIT.append_box(_buckets.PaleDrainageAndFascia, _point(basis, station, band + .035, .162 + advance / 2.0), pt, pn, .073, .085, advance + .085)
+-		KIT.append_box(_buckets.PaleDrainageAndFascia, _point(basis, station, (band + top) / 2.0, .162 + advance), pt, pn, .073, top - band, .085)
+-		for y in [bottom + .42, band + .11, top - .3]:
+-			var bracket_advance: float = advance if y > band else 0.0
+-			KIT.append_box(_buckets.PaleDrainageAndFascia, _point(basis, station, y, .17 + bracket_advance), pt, pn, .103, .044, .10)
+-	var length := float(frame.length_m) - .035
+-	# Same shallow roof edge, now aligned with the projected upper wall; original roof stays exact.
+-	KIT.append_eave_band(_buckets.PaleDrainageAndFascia, _point(frame, float(frame.length_m) / 2.0, float(facade.fascia_center_y), .015 + advance), tangent, normal, length, .145, .25)
+-	KIT.append_box(_buckets.PaleDrainageAndFascia, _point(frame, float(frame.length_m) / 2.0, float(facade.gutter_center_y), .21 + advance), tangent, normal, length, .038, .15)
+-	# Full underside reaches the advanced wall, rather than a belt on the original wall plane.
+-	KIT.append_box(trim, _point(frame, float(frame.length_m) / 2.0, band, (advance + .02) / 2.0), tangent, normal, length, .100, advance + .06)
+-	for station in [.0375, float(frame.length_m) - .0375]:
+-		KIT.append_box(trim, _point(frame, station, (band + float(frame.top_y)) / 2.0, advance + .025), tangent, normal, .075, float(frame.top_y) - band, .070)
+-
+-func _append_upper_volume(frame: Dictionary, facade: Dictionary) -> void:
+-	# The observed front source runs form three near-coplanar chains; plain closures stay within their span.
+-	# Offset and shell thickness are reversible production inference, not surveyed dimensions.
+-	var volume: Dictionary = KIT.new_bucket()
+-	var advance: float = float(facade.upper_projection_m)
+-	var rear: float = -.015
+-	var bottom: float = float(facade.story_band_y)
+-	var top: float = float(frame.top_y) - .004
+-	var tangent := _v(frame.tangent); var normal := _v(frame.normal)
+-	KIT.append_box(volume, _point(frame, float(frame.length_m) / 2.0, (bottom + top) / 2.0, (advance + rear) / 2.0), tangent, normal, float(frame.length_m) - .030, top - bottom, advance - rear)
+-	# Reuse the kit's complete box quads, splitting only front-facing ownership.
+-	for face in 6:
+-		var i: int = face * 4
+-		var bucket: Dictionary = _buckets.ProjectedUpperSiding if face == 0 else _buckets.ProjectedUpperClosures
+-		KIT.append_quad(bucket, volume.vertices[i], volume.vertices[i+1], volume.vertices[i+2], volume.vertices[i+3], volume.normals[i], volume.uvs[i], volume.uvs[i+2] - volume.uvs[i])
+-
+-func _add_projected_receiver(wall: Dictionary) -> void:
+-	# Existing ordinary-builder receiver semantics: body and shape carry the exact wall owner.
+-	# Only the projected vertical siding front is eligible; closures/glazing/trim stay nonreceivers.
+-	var body := StaticBody3D.new()
+-	body.name = "ProjectedUpperWallReceiver"
+-	body.collision_layer = 5
+-	body.collision_mask = 0
+-	var faces := PackedVector3Array()
+-	var bucket: Dictionary = _buckets.ProjectedUpperSiding
+-	for index: int in bucket.indices: faces.append(bucket.vertices[index])
+-	var shape := ConcavePolygonShape3D.new()
+-	shape.set_faces(faces)
+-	for owner: Object in [body, shape]:
+-		owner.set_meta("receiver_kind", str(wall.receiver_kind))
+-		owner.set_meta("opaque", bool(wall.opaque))
+-		owner.set_meta("derived_object_key", str(wall.object_key))
+-		owner.set_meta("source_keys", wall.source_keys.duplicate())
+-	body.set_meta("source_run_indices", TARGET_RUNS)
+-	body.add_to_group("spray_receiver_wall")
+-	var child := CollisionShape3D.new()
+-	child.name = "ProjectedUpperSiding"
+-	child.shape = shape
+-	body.add_child(child)
+-	add_child(body)
+-
+-func _append_screen(center: Vector3, tangent: Vector3, normal: Vector3, width: float, height: float, solid_lower: float) -> void:
+-	var bucket: Dictionary = _buckets.LocalPrivacyScreens
+-	for side in [-1.0, 1.0]:
+-		KIT.append_box(bucket, center + tangent * side * (width / 2.0 - .045), tangent, normal, .09, height, .09)
+-	var slat_height := height - solid_lower
+-	var slat_center := center + Vector3.UP * solid_lower / 2.0
+-	if solid_lower > 0.0:
+-		KIT.append_box(bucket, center + Vector3.UP * (solid_lower - height) / 2.0, tangent, normal, width - .10, solid_lower, .09)
+-		KIT.append_box(bucket, center + Vector3.UP * (solid_lower - height / 2.0), tangent, normal, width, .07, .13)
+-	for vertical in [-.36, .36]:
+-		KIT.append_box(bucket, slat_center + Vector3.UP * slat_height * vertical - normal * .036, tangent, normal, width - .10, .075, .064)
+-	var count := maxi(2, int(floor((width - .16) / .115)))
+-	for i in count:
+-		var along := lerpf(-width / 2.0 + .13, width / 2.0 - .13, float(i) / float(count - 1))
+-		KIT.append_box(bucket, slat_center + tangent * along + normal * .018, tangent, normal, .078, slat_height - .08, .04)
+-
+-func _append_path(path: Dictionary, label: String = "DrapedEntryPaths") -> void:
+-	var bucket: Dictionary = _buckets[label]
+-	var down := Vector3.DOWN * float(path.thickness_m)
+-	# The four paths are clipped to actual LAND triangles and the existing road
+-	# overlay transition. Only LAND supplies walking support; no new collider.
+-	for triangle: Array in path.top_triangles:
+-		_append_path_triangle(bucket, _v(triangle[0]), _v(triangle[1]), _v(triangle[2]), false)
+-		_append_path_triangle(bucket, _v(triangle[0]) + down, _v(triangle[1]) + down, _v(triangle[2]) + down, true)
+-	for segment: Array in path.boundary_segments:
+-		var start := _v(segment[0]); var end := _v(segment[1])
+-		var outward := Vector3.UP.cross(end - start).normalized()
+-		KIT.append_quad(bucket, start, end, end + down, start + down, outward, Vector2.ZERO, Vector2(start.distance_to(end), float(path.thickness_m)))
+-
+-func _append_path_triangle(bucket: Dictionary, a: Vector3, b: Vector3, c: Vector3, underside: bool) -> void:
+-	var normal := (b - a).cross(c - a).normalized()
+-	if (normal.y > 0.0) == underside:
+-		var swap := b; b = c; c = swap
+-		normal = -normal
+-	var base: int = bucket.vertices.size()
+-	for point: Vector3 in [a, b, c]:
+-		bucket.vertices.append(point)
+-		bucket.normals.append(normal)
+-		bucket.uvs.append(Vector2(point.x, point.z))
+-	bucket.indices.append_array([base, base + 2, base + 1])
+-
+-func _append_skin(wall: Dictionary, run: int) -> void:
+-	var bucket: Dictionary = _buckets.NearHorizontalSiding
+-	var f := KIT.run_frame(wall, run)
+-	var normal: Vector3 = f.normal
+-	var points: Array[Vector3] = []
+-	for i in 4: points.append(_v(wall.vertices.slice(run * 12 + i * 3, run * 12 + i * 3 + 3)))
+-	var a := points[0] + normal * .010; var b := points[1] + normal * .010
+-	var c := points[2] + normal * .010; var d := points[3] + normal * .010
+-	# One thin closed skin per source run, meeting at exact shared run endpoints.
+-	KIT.append_quad(bucket, a, b, c, d, normal, Vector2(a.dot(f.tangent), a.y), Vector2(float(f.length_m), c.y - b.y))
+-	KIT.append_quad(bucket, points[1], points[0], points[3], points[2], -normal, Vector2.ZERO, Vector2.ONE)
+-	for i in 4:
+-		var j := (i + 1) % 4
+-		var outside := (points[j] - points[i]).cross(normal).normalized()
+-		var midpoint := (points[0] + points[1] + points[2] + points[3]) / 4.0
+-		if outside.dot((points[i] + points[j]) / 2.0 - midpoint) < 0: outside = -outside
+-		KIT.append_quad(bucket, points[i], points[j], points[j] + normal * .010, points[i] + normal * .010, outside, Vector2.ZERO, Vector2(points[i].distance_to(points[j]), .010))
+-
+-func _append_carport(carport: Dictionary) -> void:
+-	var frame: Dictionary = carport.frame
+-	var tangent := _v(frame.tangent); var normal := _v(frame.normal)
+-	var s0: float = float(carport.station_m[0]); var s1: float = float(carport.station_m[1])
+-	var d0: float = float(carport.depth_m[0]); var d1: float = float(carport.depth_m[1])
+-	KIT.append_box(_buckets.CarportRoof, _point(frame,(s0+s1)/2.0,float(carport.roof_y),(d0+d1)/2.0),tangent,normal,s1-s0,.18,d1-d0)
+-	KIT.append_box(_buckets.CarportFascia, _point(frame,(s0+s1)/2.0,float(carport.roof_y)+.025,d1-.035),tangent,normal,s1-s0,.23,.085)
+-	KIT.append_box(_buckets.CarportPosts, _point(frame,(s0+s1)/2.0,float(carport.roof_y)+.15,d1-.035),tangent,normal,s1-s0,.027,.09)
+-	for post: Dictionary in carport.posts:
+-		var low: float = float(post.bottom_y); var high: float = float(carport.roof_y)-.09
+-		KIT.append_box(_buckets.CarportPosts,_point(frame,float(post.station_m),(low+high)/2.0,float(post.depth_m)),tangent,normal,.11,high-low,.11)
+-	for depth: float in [d0+.10,d1-.10]:
+-		KIT.append_box(_buckets.CarportPosts,_point(frame,(s0+s1)/2.0,float(carport.roof_y)-.18,depth),tangent,normal,s1-s0,.18,.12)
+-
+-func _append_roof(triangles: Array, label: String = ROOF_BUCKET) -> void:
+-	var bucket: Dictionary = _buckets[label]
+-	for triangle: Array in triangles:
+-		var a := _v(triangle[0]); var b := _v(triangle[1]); var c := _v(triangle[2])
+-		var normal := (b-a).cross(c-a).normalized()
+-		var u := normal.cross(Vector3.UP)
+-		if u.length_squared() < .000001: u = Vector3.RIGHT
+-		u = u.normalized()
+-		var v := normal.cross(u).normalized()
+-		var base: int = bucket.vertices.size()
+-		for point: Vector3 in [a,b,c]:
+-			bucket.vertices.append(point)
+-			bucket.normals.append(normal)
+-			bucket.uvs.append(Vector2(point.dot(u),point.dot(v)))
+-		bucket.indices.append_array([base,base+2,base+1])
+-
+-static func _surface_material(label: String, cfg: Dictionary) -> Material:
+-	if label == "CarportFascia":
+-		var fascia := StandardMaterial3D.new()
+-		fascia.resource_name = "1397_weathered_gray_canopy_fascia"
+-		fascia.albedo_texture = CONCRETE
+-		fascia.albedo_color = Color(.72,.72,.65,1.0)
+-		fascia.roughness = .96
+-		fascia.uv1_scale = Vector3(.7,.7,1.0)
+-		fascia.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+-		return fascia
+-	if label == ROOF_BUCKET:
+-		var roof := ShaderMaterial.new()
+-		roof.shader = ROOF_TONE
+-		roof.resource_name = "1397_shallow_gray_observed_roof"
+-		roof.set_shader_parameter("source_albedo", ROOF_MATERIAL.albedo_texture)
+-		roof.set_shader_parameter("low_color", _color(cfg.facade.roof_low_rgb))
+-		roof.set_shader_parameter("high_color", _color(cfg.facade.roof_high_rgb))
+-		roof.set_shader_parameter("boarded_grain", false)
+-		return roof
+-	if label in GROUND_BUCKETS:
+-		var ground := StandardMaterial3D.new()
+-		var parking := label == "ParkingSurface"
+-		ground.resource_name = "1397_actual_grade_" + label
+-		ground.albedo_texture = ASPHALT if parking else CONCRETE
+-		ground.roughness_texture = ASPHALT_ROUGH if parking else CONCRETE_ROUGH
+-		ground.albedo_color = _color(cfg.materials.parking_rgb if parking else (cfg.materials.footway_rgb if label == "FootwaySurface" else cfg.materials.path_rgb))
+-		ground.roughness = .93
+-		ground.uv1_scale = Vector3(.55,.55,1.0)
+-		ground.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+-		return ground
+-	var colors: Dictionary = {"CarportRoof": cfg.materials.carport_roof_rgb, "CarportPosts": cfg.materials.carport_post_rgb, "PaleCompleteTrim": cfg.materials.trim_rgb, "BlueOpaqueGlazing": cfg.materials.blue_glass_rgb, "DarkOpaqueGlazing": cfg.materials.dark_glass_rgb, "MaroonClosedDoors": cfg.materials.door_rgb, "PlumClosedDoors": cfg.materials.plum_door_rgb, "PaleClosedDoor": cfg.materials.pale_door_rgb, "LocalPrivacyScreens": cfg.materials.screen_rgb, "PaleDrainageAndFascia": cfg.materials.trim_rgb, "DoorHardware": cfg.materials.metal_rgb, "DrapedEntryPaths": cfg.materials.path_rgb}
+-	if label in ["NearHorizontalSiding", "ProjectedUpperSiding", "ProjectedUpperClosures", "ShallowStoryBands"]:
+-		var material := ShaderMaterial.new()
+-		var shader := Shader.new()
+-		shader.code = SIDING_FIELD.code.replace("normalize(NORMAL.xz)", "(length(NORMAL.xz) > 0.0 ? normalize(NORMAL.xz) : vec2(1.0, 0.0))")
+-		material.shader = shader
+-		material.resource_name = "1397_pale_horizontal_siding"
+-		var base := _color(cfg.materials.siding_rgb)
+-		material.set_shader_parameter("base_color", base)
+-		material.set_shader_parameter("seam_color", base * float(cfg.siding.seam_color_multiplier))
+-		for key: String in ["course_height_m", "color_variation", "filter_start_cycles_per_pixel", "filter_end_cycles_per_pixel"]:
+-			material.set_shader_parameter(key, float(cfg.siding[key]))
+-		material.set_shader_parameter("roughness_value", float(cfg.siding.roughness))
+-		material.set_shader_parameter("relief_strength", float(cfg.siding.normal_relief))
+-		return material
+-	var material := StandardMaterial3D.new()
+-	material.resource_name = "1397_" + label
+-	material.albedo_color = _color(colors[label])
+-	material.roughness = .48 if "Glazing" in label else .86
+-	return material
+-
+-func _add_mesh(label: String, bucket: Dictionary, material: Material) -> void:
+-	var arrays: Array = []; arrays.resize(Mesh.ARRAY_MAX)
+-	arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array(bucket.vertices)
+-	arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array(bucket.normals)
+-	arrays[Mesh.ARRAY_TEX_UV] = PackedVector2Array(bucket.uvs)
+-	arrays[Mesh.ARRAY_INDEX] = PackedInt32Array(bucket.indices)
+-	arrays[Mesh.ARRAY_TANGENT] = _tangent_builder.call(arrays[Mesh.ARRAY_VERTEX], arrays[Mesh.ARRAY_NORMAL], arrays[Mesh.ARRAY_TEX_UV], arrays[Mesh.ARRAY_INDEX])
+-	var mesh := ArrayMesh.new(); mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays); mesh.surface_set_material(0, material)
+-	var node := MeshInstance3D.new(); node.name = label; node.mesh = mesh
+-	# Original decal routing stays on the10mm skin; projected front receives at its own exact visible plane.
+-	node.layers = 2 if label in ["NearHorizontalSiding", "ProjectedUpperSiding"] else 1
+-	if label == "NearHorizontalSiding" or label in GROUND_BUCKETS: node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+-	add_child(node)
+-
+-static func _same_numeric_runs(actual: Array, expected: Array) -> bool:
+-	if actual.size() != expected.size(): return false
+-	for i in actual.size():
+-		if not (actual[i] is float or actual[i] is int): return false
+-		var value := float(actual[i])
+-		if not is_finite(value) or floorf(value) != value or value != float(expected[i]): return false
+-	return true
+-
+-static func _v(a: Array) -> Vector3:
+-	return Vector3(float(a[0]), float(a[1]), float(a[2]))
+-
+-static func _color(a: Array) -> Color:
+-	return Color(float(a[0]), float(a[1]), float(a[2]), 1.0)
+-
+-static func _point(frame: Dictionary, station: float, y: float, depth: float) -> Vector3:
+-	var point := _v(frame.start) + _v(frame.tangent) * station + _v(frame.normal) * depth
+-	point.y = y
+-	return point
+-
+-static func _joined_frame(wall: Dictionary, first: int, last: int) -> Dictionary:
+-	var frame := KIT.run_frame(wall, first)
+-	frame.end = KIT.run_frame(wall, last).end
+-	var delta: Vector3 = frame.end - frame.start
+-	delta.y = 0.0
+-	frame.length_m = delta.length(); frame.tangent = delta.normalized()
+-	return frame
++	var land := SUPPORT.land_triangles(cfg.get("ground_chunks", {}))
++	if not bool(land.get("ok", false)): return land
++	var misses: Array = []
++	var ground := func(p: Vector2) -> float:
++		var value := SUPPORT.height_at(p, land.triangles)
++		if not is_finite(value):
++			misses.append(p)
++			return 0.0
++		return value
++	var model: Node3D = MODEL.build(wall, ground)
++	if not misses.is_empty():
++		model.free()
++		return {"ok": false, "message": "Reviewed local ground sample outside frozen colliding land."}
++	return SUPPORT.attach(model, wall, roof, cfg)
+diff --git a/game/scripts/world/facades/gateview_1397_live_replacement.gd b/game/scripts/world/facades/gateview_1397_live_replacement.gd
+index 634230e0472f303b55300e7ecf1753bcb9a9370b..2eb3ec1bd7a30a75d46653d97aee870c8dcfd43d 100644
+--- a/game/scripts/world/facades/gateview_1397_live_replacement.gd
++++ b/game/scripts/world/facades/gateview_1397_live_replacement.gd
+@@ -1,8 +1,7 @@
+ extends RefCounted
+ 
+-## Proposed atomic live adapter for the reviewed 1397 Gateview source pair.
+-## It preserves the original roof pair and keeps the added projected receiver
+-## on the wall side; nested collision ownership is preserved verbatim.
++## Atomic source-pair adapter for an unaccepted whole-building revision of 1397 Gateview source pair.
++## Source identities remain exact. Contacts now derive from the current visible shell.
+ 
+ const FACTORY := preload("res://game/scripts/world/facades/gateview_1397_live_factory.gd")
+ const ADAPTER_ID := "active-adapter:gateview-1397-live:building:w96215670:wall"
+@@ -10,10 +9,9 @@ const SOURCE_KEY := "w96215670"
+ const WALL_KEY := "building:w96215670:wall"
+ const ROOF_KEY := "building:w96215670:roof"
+ const TARGET_CHUNK_ID := "x_-1__z_-3"
+-const EXPECTED_FACTORY_SHA256 := "ce6223bf527c74431dc794bfc9ab7211feabd881e9d080e318a2f712547e4a91"
+-const EXPECTED_CONFIG_SHA256 := "97919d0168bab83ff0f7118cf00fb0bbea1eb062c731d2b956de896a1330616a"
+-const MAPPED_RUNS := [17, 18, 19, 20, 23, 24, 25, 26, 27, 28, 30, 31, 32, 33, 34, 35, 36, 37]
+-const PROTECTED_RUNS := [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 21, 22, 29]
++const EXPECTED_FACTORY_SHA256 := "87da4b434791cfae1d59a707fb9c70d8fea69ed5c670f5fa17174b0e885eb224"
++const EXPECTED_CONFIG_SHA256 := "7510928b8c5278a352a0681bceaf6bd592aa558963128f86f74c7ec58ed12efe"
++const MAPPED_RUNS := [17, 18, 19, 20, 23, 24, 25, 26, 27, 28, 30, 31, 32, 34, 35, 36, 37]
+ 
+ 
+ static func claims_record(record: Dictionary) -> bool:
+@@ -107,29 +105,27 @@ static func _dependencies_match() -> bool:
+ 
+ static func source_dependency_hashes_match() -> bool:
+ 	return FileAccess.get_sha256(FACTORY.SELF_PATH) == EXPECTED_FACTORY_SHA256 \
+-		and FileAccess.get_sha256(FACTORY.CONFIG_PATH) == EXPECTED_CONFIG_SHA256
++		and FileAccess.get_sha256(FACTORY.CONFIG_PATH) == EXPECTED_CONFIG_SHA256 \
++		and FileAccess.get_sha256("res://game/scripts/world/facades/gateview_1397_quality_model.gd") == "5a46ba485235415344dbb51570ecc34d8b2e7818bfd1b46172ff11a5679900b3" \
++		and FileAccess.get_sha256("res://game/scripts/world/facades/housing_quality_support.gd") == "34d14eedb3c5296061bec5b10003c240aabb90e9654dcd61165f4bd917392b97"
+ 
+ 
+ static func runtime_dependency_closure_exists() -> bool:
+ 	return ResourceLoader.exists(FACTORY.SELF_PATH) \
+-		and FileAccess.get_sha256(FACTORY.CONFIG_PATH) == EXPECTED_CONFIG_SHA256
++		and FileAccess.get_sha256(FACTORY.CONFIG_PATH) == EXPECTED_CONFIG_SHA256 \
++		and ResourceLoader.exists("res://game/scripts/world/facades/gateview_1397_quality_model.gd") \
++		and ResourceLoader.exists("res://game/scripts/world/facades/housing_quality_support.gd")
+ 
+ 
+ static func _split_factory_result(built: Dictionary, wall_record: Dictionary) -> Dictionary:
+ 	var wall_root := built.get("node", null) as Node3D
+ 	if wall_root == null:
+ 		return _failure("gateview_1397_factory_node", "Factory returned no root.", wall_record)
+-	var roof_mesh := wall_root.get_node_or_null("ExactSourceNeutralRoof") as MeshInstance3D
+-	var roof_source := wall_root.get_node_or_null("OriginalRoofRecord") as Node3D
+-	if roof_mesh == null or roof_source == null:
++	var roof_root := wall_root.get_node_or_null("QualityRoof") as Node3D
++	if roof_root == null:
+ 		wall_root.free()
+-		return _failure("gateview_1397_factory_shape", "Factory did not retain both original roof resources.", wall_record)
+-	var roof_root := Node3D.new()
+-	# Local transforms remain exact under the new identity root. The projected
+-	# eligible front and all detail shapes stay on the original wall owner.
+-	for child: Node in [roof_mesh, roof_source]:
+-		wall_root.remove_child(child)
+-		roof_root.add_child(child)
++		return _failure("quality_roof_missing", "Whole-building revision has no roof owner.", wall_record)
++	wall_root.remove_child(roof_root)
+ 	_apply_live_metadata(wall_root, WALL_KEY, true)
+ 	_apply_live_metadata(roof_root, ROOF_KEY, false)
+ 	# Count the actual split roots. Do not reuse the factory's combined totals.
+@@ -139,13 +135,16 @@ static func _split_factory_result(built: Dictionary, wall_record: Dictionary) ->
+ 		"adapter_id": ADAPTER_ID,
+ 		"source_key": SOURCE_KEY,
+ 		"factory_calls": 1,
+-		"mapped_public_run_indices": MAPPED_RUNS.duplicate(),
+-		"protected_run_indices": PROTECTED_RUNS.duplicate(),
++		"observed_reference_run_indices": MAPPED_RUNS.duplicate(),
++		"unknown_faces": "plain inferred closure",
+ 		"partial_pair_allowed": false,
+ 		"fallback_allowed": false,
+ 		"stack_allowed": false,
+-		"original_source_channels_and_roof_preserved": true,
+-		"source_wall_spray_eligibility_preserved": true,
++		"frozen_source_records_preserved": true,
++		"old_visual_and_collision_proxies_retained": false,
++		"revision_acceptance": "pending",
++		"historical_recognition_credit_unchanged": true,
++		"wall_spray_receiver_identity_preserved": true,
+ 		"recognition_accepted": false,
+ 		"package_attachment_pending": true,
+ 	}
+@@ -199,7 +198,9 @@ static func _measure(roots: Array) -> Dictionary:
+ 				if mesh != null:
+ 					result.surfaces += mesh.get_surface_count()
+ 					for surface_index in mesh.get_surface_count():
+-						result.triangles += int(mesh.surface_get_array_index_len(surface_index) / 3)
++						var arrays := mesh.surface_get_arrays(surface_index)
++						var indices: Variant = arrays[Mesh.ARRAY_INDEX]
++						result.triangles += int((indices.size() if indices != null and indices.size() > 0 else arrays[Mesh.ARRAY_VERTEX].size()) / 3)
+ 			elif node is StaticBody3D:
+ 				result.static_bodies += 1
+ 			elif node is CollisionShape3D:
+diff --git a/game/scripts/world/facades/gateview_1397_quality_model.gd b/game/scripts/world/facades/gateview_1397_quality_model.gd
+new file mode 100644
+index 0000000000000000000000000000000000000000..e78651e48b36d57e82b3c0868a9937660dd764aa
+--- /dev/null
++++ b/game/scripts/world/facades/gateview_1397_quality_model.gd
+@@ -0,0 +1,304 @@
++extends RefCounted
++# Whole-building study from March 2025 references. No source record/collision changes.
++static func color_material(c:String,rough:float=0.82)->StandardMaterial3D:
++	var m:=StandardMaterial3D.new();m.albedo_color=Color(c);m.roughness=rough;return m
++static func cladding()->ShaderMaterial:
++	var sh:=Shader.new();sh.code="""shader_type spatial;
++	varying vec3 wp;
++	void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;}
++	void fragment(){float course=fract(wp.y/0.15);float aa=max(fwidth(wp.y/0.15),0.025);float joint=1.0-smoothstep(0.018,0.018+aa,course);ALBEDO=vec3(0.655,0.66,0.625)*(1.0-joint*0.095);ROUGHNESS=0.88;}"""
++	var m:=ShaderMaterial.new();m.shader=sh;return m
++static func box(root:Node3D,p:Vector3,size:Vector3,m:Material,angle:float=0.0)->void:
++	if size.x<0.001 or size.y<0.001 or size.z<0.001:return
++	var mesh:=BoxMesh.new();mesh.size=size;var n:=MeshInstance3D.new();n.mesh=mesh;n.material_override=m;n.position=p;n.rotation.y=angle;root.add_child(n)
++static func face(root:Node3D,pts:Array,m:Material,label:String="",orientation:Dictionary={})->void:
++	# Only crossing closure quads need a new triangulation. Preserve their four
++	# boundary endpoints; split at the actual wall-top/roof-edge intersection.
++	if label == "RoofWallClosure":
++		var ha:float = pts[3].y - pts[0].y
++		var hb:float = pts[2].y - pts[1].y
++		if ha * hb < 0.0:
++			var crossing:Vector3 = pts[0].lerp(pts[1], ha / (ha - hb))
++			var exterior:Vector3 = (pts[1]-pts[0]).cross(pts[2]-pts[0]).normalized()
++			if not orientation.is_empty() and exterior.dot(orientation.outward)<0.0:exterior=-exterior
++			var vertices := PackedVector3Array()
++			var normals := PackedVector3Array()
++			var uvs := PackedVector2Array()
++			for triangle:Array in [[pts[0], crossing, pts[3]], [crossing, pts[1], pts[2]]]:
++				var a:Vector3=triangle[0];var b:Vector3=triangle[1];var c:Vector3=triangle[2]
++				if (b-a).cross(c-a).dot(exterior)>0.0:
++					var swap:Vector3=b;b=c;c=swap
++				assert((b-a).cross(c-a).length_squared()>0.000000000001)
++				for point:Vector3 in [a,b,c]:
++					vertices.append(point);normals.append(exterior);uvs.append(Vector2(point.x,point.z))
++			var arrays:Array=[];arrays.resize(Mesh.ARRAY_MAX)
++			arrays[Mesh.ARRAY_VERTEX]=vertices;arrays[Mesh.ARRAY_NORMAL]=normals;arrays[Mesh.ARRAY_TEX_UV]=uvs
++			var mesh:=ArrayMesh.new();mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
++			var node:=MeshInstance3D.new();node.mesh=mesh;node.material_override=m;node.name=label
++			node.set_meta("construction_detail","closure_crossing_split")
++			node.set_meta("closure_orientation",orientation.duplicate(true))
++			root.add_child(node,true)
++			return
++	var ar:Array=[];ar.resize(Mesh.ARRAY_MAX);var vs:=PackedVector3Array();var ns:=PackedVector3Array();var uv:=PackedVector2Array()
++	var normal:Vector3=(pts[1]-pts[0]).cross(pts[2]-pts[0]).normalized()
++	var order:Array=[0,2,1,0,3,2]
++	if not orientation.is_empty() and normal.dot(orientation.outward)<0.0:
++		normal=-normal;order=[0,1,2,0,2,3]
++	for i in order:vs.append(pts[i]);ns.append(normal);uv.append(Vector2(pts[i].x,pts[i].z))
++	ar[Mesh.ARRAY_VERTEX]=vs;ar[Mesh.ARRAY_NORMAL]=ns;ar[Mesh.ARRAY_TEX_UV]=uv
++	var mesh:=ArrayMesh.new();mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,ar);var n:=MeshInstance3D.new();n.mesh=mesh;n.material_override=m
++	if not label.is_empty():n.name=label
++	if not orientation.is_empty():n.set_meta("closure_orientation",orientation.duplicate(true))
++	root.add_child(n,true)
++static func roof_material()->ShaderMaterial:
++	var sh:=Shader.new();sh.code="""shader_type spatial;
++	varying vec3 wp;
++	void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;}
++	void fragment(){
++	 vec2 p=vec2(dot(wp.xz,vec2(-0.3108,0.9505)),dot(wp.xz,vec2(-0.9505,-0.3108)));
++	 vec2 cell=floor(p/vec2(0.42,0.20));float grain=fract(sin(dot(cell,vec2(12.9898,78.233)))*43758.5453);
++	 float course=fract(p.y/0.20);float aa=max(fwidth(p.y/0.20),0.035);float seam=1.0-smoothstep(0.025,0.025+aa,course);
++	 ALBEDO=vec3(0.30,0.315,0.265)*(0.94+grain*0.12)*(1.0-seam*0.09);ROUGHNESS=0.94;
++	}"""
++	var m:=ShaderMaterial.new();m.shader=sh;return m
++static func roof_y(depth:float,lo:float,hi:float,base:float)->float:
++	return base+5.55+1.12*maxf(0.0,1.0-absf((depth-(lo+hi)*0.5)/((hi-lo)*0.5)))
++static func roof_edge(root:Node3D,a:Vector3,b:Vector3,m:Material)->void:
++	if Vector2(b.x-a.x,b.z-a.z).length()<0.001:return
++	var along:Vector3=(b-a).normalized();var side:=along.cross(Vector3.UP).normalized();var up:=side.cross(along).normalized()
++	var mesh:=BoxMesh.new();mesh.size=Vector3(a.distance_to(b),0.14,0.13)
++	var n:=MeshInstance3D.new();n.mesh=mesh;n.material_override=m;n.transform=Transform3D(Basis(along,up,side),(a+b)*0.5-Vector3.UP*0.09);n.name="RoofFascia";root.add_child(n,true)
++static func exterior_quad(root:Node3D,pts:Array,m:Material,outward:Vector3,kind:String)->void:
++	var ar:=[];ar.resize(Mesh.ARRAY_MAX)
++	var vertices:=PackedVector3Array();var normals:=PackedVector3Array()
++	for ids:Array in [[0,1,2],[0,2,3]]:
++		var a:Vector3=pts[ids[0]];var b:Vector3=pts[ids[1]];var c:Vector3=pts[ids[2]]
++		var cross:Vector3=(b-a).cross(c-a)
++		if cross.length_squared()<0.000000000001:continue
++		if cross.dot(outward)>0.0:
++			var swap:Vector3=b;b=c;c=swap
++		var normal:Vector3=-(b-a).cross(c-a).normalized()
++		vertices.append_array(PackedVector3Array([a,b,c]));normals.append_array(PackedVector3Array([normal,normal,normal]))
++	if vertices.is_empty():return
++	ar[Mesh.ARRAY_VERTEX]=vertices;ar[Mesh.ARRAY_NORMAL]=normals
++	var mesh:=ArrayMesh.new();mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,ar)
++	var node:=MeshInstance3D.new();node.mesh=mesh;node.material_override=m
++	node.set_meta("exterior_kind",kind);node.set_meta("intended_exterior",outward);root.add_child(node)
++
++
++static func build(record:Dictionary,ground:Callable)->Node3D:
++	var root:=Node3D.new();root.name="Gateview1397ScratchStudy"
++	var siding:=cladding();var trim:=color_material("d9d8c7");var foundation:=color_material("99998b");var glass:=color_material("46585b",0.30);var curtain:=color_material("a6aaa0",0.85);var green:=color_material("293f38");var screen:=color_material("858171");var black:=color_material("2e3834");var shingles:=roof_material();var concrete:=color_material("aba99a");var lawn:=color_material("66784b")
++	var base:float=record.flat_base_elevation_m;var height:=5.50;var v:Array=record.vertices;var pts:Array[Vector3]=[]
++	for i in range(0,v.size(),12):pts.append(Vector3(v[i],base,v[i+2]))
++	var wings:Array=[[17,21],[23,29],[30,33],[34,38]]
++	var front:Dictionary={};for wing in wings:for j in range(wing[0],wing[1]):front[j]=true
++	for j in pts.size():
++		if front.has(j):continue
++		var a:Vector3=pts[j];var b:Vector3=pts[(j+1)%pts.size()]
++		face(root,[a,b,b+Vector3.UP*height,a+Vector3.UP*height],siding)
++	# Four coherent townhouse fields, not one apartment per source triangle.
++	for wi in wings.size():
++		var wing:Array=wings[wi];var start:Vector3=pts[wing[0]];var finish:Vector3=pts[wing[1]%pts.size()];var axis:Vector3=(finish-start).normalized();var out:=Vector3(-axis.z,0,axis.x);var length:=start.distance_to(finish);var angle:=atan2(-axis.z,axis.x)
++		var openings:Array[Rect2]=[]
++		# Mixed broad living-room and narrow service openings, reference-supported family.
++		var window_positions:Array=[1.55,4.25,7.0,10.0,12.6]
++		for k in window_positions.size():
++			var w:float=1.80 if k==0 or k==3 else (0.80 if k==2 else 1.28)
++			var x:float=float(window_positions[k])*length/14.5
++			openings.append(Rect2(x-w*0.5,3.82,w,1.20))
++		for k in 2:
++			var center:float=length*(float(k)+0.5)/2.0
++			openings.append(Rect2(center-1.72,0.08,0.93,2.12))
++			openings.append(Rect2(center+0.06,0.88,2.12,1.28))
++		# Retain every original horizontal wall point, including tiny converters' splits.
++		for j in range(wing[0],wing[1]):
++			var a:Vector3=pts[j];var b:Vector3=pts[(j+1)%pts.size()];var t:Vector3=(b-a).normalized();var n:=Vector3(-t.z,0,t.x);var len:=a.distance_to(b);var aa:=atan2(-t.z,t.x);var station:float=(a-start).dot(axis)
++			var xs:Array[float]=[0.0,len];var ys:Array[float]=[0.0,height]
++			for h in openings:
++				if h.end.x>station and h.position.x<station+len:
++					xs.append(clampf(h.position.x-station,0,len));xs.append(clampf(h.end.x-station,0,len));ys.append(h.position.y);ys.append(h.end.y)
++			xs.sort();ys.sort()
++			for xi in range(xs.size()-1):
++				for yi in range(ys.size()-1):
++					var w:float=xs[xi+1]-xs[xi];var h:float=ys[yi+1]-ys[yi]
++					if w<0.001 or h<0.001:continue
++					var mid:=Vector2((xs[xi]+xs[xi+1])*0.5+station,(ys[yi]+ys[yi+1])*0.5);var empty:=false
++					for opening in openings:if opening.has_point(mid):empty=true
++					if not empty:box(root,a+t*(mid.x-station)+Vector3.UP*mid.y-n*0.11,Vector3(w,h,0.22),siding,aa)
++			box(root,(a+b)*0.5+Vector3.UP*2.85+n*0.018,Vector3(len,0.095,0.075),trim,aa)
++			box(root,(a+b)*0.5-Vector3.UP*0.10-n*0.05,Vector3(len,0.22,0.16),foundation,aa)
++			box(root,(a+b)*0.5+Vector3.UP*5.48+n*0.16,Vector3(len+0.012,0.12,0.43),trim,aa)
++		for k in openings.size():
++			var h:Rect2=openings[k];var c:=h.get_center();var p:=start+axis*c.x+Vector3.UP*c.y;var isdoor:bool=h.position.y<0.5
++			box(root,p-out*0.155,Vector3(h.size.x,h.size.y,0.035),green if isdoor else glass,angle)
++			for dx in [-1.0,1.0]:box(root,p+axis*(float(dx)*(h.size.x*0.5+0.037))-out*0.03,Vector3(0.075,h.size.y+0.14,0.28),trim,angle)
++			for dy in [-1.0,1.0]:
++				if isdoor and float(dy)<0.0:
++					# Door sill ends at the actual leaf front (-.155+.035/2).
++					# Keep old inner face (-.03-.28/2), height, span and material.
++					box(root,p+Vector3.UP*(float(dy)*(h.size.y*0.5+0.03))-out*0.15375,Vector3(h.size.x+0.15,0.06,0.0325),trim,angle)
++				else:box(root,p+Vector3.UP*(float(dy)*(h.size.y*0.5+0.03))-out*0.03,Vector3(h.size.x+0.15,0.06,0.28),trim,angle)
++			if isdoor:
++				box(root,p+axis*0.29-out*0.09,Vector3(0.045,0.14,0.09),trim,angle)
++				box(root,p+axis*0.64+Vector3.UP*0.92+out*0.08,Vector3(0.16,0.22,0.18),black,angle)
++				# Flat threshold; no untested stair flight is added in this visual study.
++				var approach:Array=[]
++				for offset in [Vector2(-0.61,0.05),Vector2(-0.61,4.1),Vector2(0.61,4.1),Vector2(0.61,0.05)]:
++					var q:Vector3=start+axis*(c.x+offset.x)+out*offset.y;q.y=float(ground.call(Vector2(q.x,q.z)))+0.05;approach.append(q)
++				face(root,approach,concrete)
++			else:
++				box(root,p-out*0.08,Vector3(0.046,h.size.y,0.07),trim,angle)
++				if h.size.x>1.5:box(root,p+Vector3.UP*0.03-out*0.08,Vector3(h.size.x,0.04,0.07),trim,angle)
++				box(root,p-Vector3.UP*(h.size.y*0.5+0.055)+out*0.065,Vector3(h.size.x+0.24,0.07,0.36),trim,angle)
++				var blindheight:float=0.28+float((wi+k)%3)*0.10
++				box(root,p+Vector3.UP*(h.size.y*0.5-blindheight*0.5)-out*0.115,Vector3(h.size.x-0.1,blindheight,0.02),curtain,angle)
++		# Short utility/privacy boxes remain beside, rather than across, door approaches.
++		for sx in [length*0.25+2.75,length*0.75+2.65]:
++			var p:Vector3=start+axis*float(sx)+out*0.82;var gy:float=ground.call(Vector2(p.x,p.z))
++			for slat in 12:box(root,Vector3(p.x,gy+0.61,p.z)+axis*((float(slat)-5.5)*0.105),Vector3(0.077,1.20,0.045),screen,angle)
++			box(root,Vector3(p.x,gy+1.23,p.z),Vector3(1.32,0.065,0.09),screen,angle)
++		for end in [start,finish]:
++			box(root,end+Vector3.UP*2.73+out*0.10,Vector3(0.10,5.46,0.12),trim,angle)
++		# Small plain grass and footway band follows actual land; no terrain displacement.
++		for s in range(int(ceil(length))):
++			for d in 4:
++				var corners:Array=[]
++				for off in [Vector2(0,0),Vector2(0,1),Vector2(1,1),Vector2(1,0)]:
++					var q:Vector3=start+axis*minf(float(s)+off.x,length)+out*(float(d)+off.y);q.y=float(ground.call(Vector2(q.x,q.z)))+0.026;corners.append(q)
++				face(root,corners,lawn if d<3 else concrete)
++	# A shallow planar gable roof is clipped to the exact source footprint.
++	var origin:Vector3=pts[17];var along:=Vector3(-0.3108,0,0.9505).normalized();var across:=Vector3(-along.z,0,along.x)
++	var polygon:=PackedVector2Array()
++	for p in pts:polygon.append(Vector2((p-origin).dot(along),(p-origin).dot(across)))
++	var original_polygon:=polygon
++	var expanded:=Geometry2D.offset_polygon(polygon,0.32,Geometry2D.JOIN_MITER)
++	if not expanded.is_empty():polygon=expanded[0]
++	var roof_face_count:=0
++	var limits:Array[float]=[-1.0]
++	for i in [21,29,33]:limits.append(original_polygon[i].x)
++	limits.append(60.0)
++	# Profiles use each wing's own long rear run. A neighboring return at the
++	# clipping seam must not change the pitch of an entire wing.
++	var rear_runs:Array=[[13,14,15],[11,12],[8,9,10],[2,3,4,5,6]]
++	for wing in 4:
++		var clip:=PackedVector2Array([Vector2(limits[wing],-20),Vector2(limits[wing+1],-20),Vector2(limits[wing+1],5),Vector2(limits[wing],5)])
++		var back_depth:=0.0
++		for index in rear_runs[wing]:back_depth+=original_polygon[index].y
++		back_depth/=float(rear_runs[wing].size())
++		var front_depth:float=(original_polygon[wings[wing][0]].y+original_polygon[wings[wing][1]%pts.size()].y)*0.5
++		var lo:float=back_depth-0.32;var hi:float=front_depth+0.32
++		var mid:float=(lo+hi)*0.5
++		for region in Geometry2D.intersect_polygons(polygon,clip):
++			for half in [Vector2(-20,lo),Vector2(lo,mid),Vector2(mid,hi),Vector2(hi,5)]:
++				var cut:=PackedVector2Array([Vector2(-2,half.x),Vector2(61,half.x),Vector2(61,half.y),Vector2(-2,half.y)])
++				for patch in Geometry2D.intersect_polygons(region,cut):
++					var triangles:=Geometry2D.triangulate_polygon(patch)
++					for n in range(0,triangles.size(),3):
++						var verts:Array=[]
++						for j in 3:
++							var p:Vector2=patch[triangles[n+j]];var q:Vector3=origin+along*p.x+across*p.y;q.y=roof_y(p.y,lo,hi,base);verts.append(q)
++						if (verts[1]-verts[0]).cross(verts[2]-verts[0]).length_squared()<0.00000001:continue
++						if (verts[1]-verts[0]).cross(verts[2]-verts[0]).y<0:var temp:Vector3=verts[1];verts[1]=verts[2];verts[2]=temp
++						face(root,[verts[0],verts[1],verts[2],verts[2]],shingles,"RoofTop")
++						face(root,[verts[2]-Vector3.UP*0.10,verts[1]-Vector3.UP*0.10,verts[0]-Vector3.UP*0.10,verts[0]-Vector3.UP*0.10],trim,"RoofSoffit")
++						roof_face_count+=1
++			# The roof shell may overhang; wall/gable infill must stay on its wall.
++			var shell_center:=Vector2.ZERO
++			for rp in region:shell_center+=rp
++			shell_center/=float(region.size())
++			for n in region.size():
++				var p:Vector2=region[n];var q:Vector2=region[(n+1)%region.size()]
++				# Do not put exterior fascia along artificial internal clip seams.
++				if absf(p.x-q.x)<0.001 and (absf(p.x-limits[wing])<0.001 or absf(p.x-limits[wing+1])<0.001):continue
++				var edge:Array[Vector2]=[p]
++				if (p.y-mid)*(q.y-mid)<-0.0001:edge.append(p.lerp(q,(mid-p.y)/(q.y-p.y)))
++				edge.append(q)
++				for ei in range(edge.size()-1):
++					var f:Vector2=edge[ei];var g:Vector2=edge[ei+1]
++					if f.distance_to(g)<0.001:continue
++					var a:Vector3=origin+along*f.x+across*f.y;var b:Vector3=origin+along*g.x+across*g.y
++					a.y=roof_y(f.y,lo,hi,base);b.y=roof_y(g.y,lo,hi,base)
++					var center_world:Vector3=origin+along*shell_center.x+across*shell_center.y
++					var outward:bool=(b-a).cross(-Vector3.UP).dot((a+b)*0.5-center_world)>0.0
++					face(root,[a,b,b-Vector3.UP*0.10,a-Vector3.UP*0.10] if outward else [b,a,a-Vector3.UP*0.10,b-Vector3.UP*0.10],shingles,"RoofRim")
++					roof_edge(root,a,b,trim)
++		# Close the actual walls to the underside, leaving only a real narrow soffit.
++		for wall_region in Geometry2D.intersect_polygons(original_polygon,clip):
++			var center:=Vector2.ZERO
++			for rp in wall_region:center+=rp
++			center/=float(wall_region.size())
++			for n in wall_region.size():
++				var p:Vector2=wall_region[n];var q:Vector2=wall_region[(n+1)%wall_region.size()];var edge:Array[Vector2]=[p]
++				if (p.y-mid)*(q.y-mid)<-0.0001:edge.append(p.lerp(q,(mid-p.y)/(q.y-p.y)))
++				edge.append(q)
++				for ei in range(edge.size()-1):
++					var f:Vector2=edge[ei];var g:Vector2=edge[ei+1]
++					if f.distance_to(g)<0.001:continue
++					var a:Vector3=origin+along*f.x+across*f.y;var b:Vector3=origin+along*g.x+across*g.y;a.y=base+height;b.y=base+height
++					var c:=b;var d:=a;c.y=roof_y(g.y,lo,hi,base)-0.10;d.y=roof_y(f.y,lo,hi,base)-0.10
++					# Preserve the existing corner order, but determine exterior from this
++					# actual owning ring's local filled side, not its concave centroid.
++					var center_world:Vector3=origin+along*center.x+across*center.y
++					var old_order:bool=(b-a).cross(c-a).dot((a+b)*0.5-center_world)>0.0
++					var edge_axis:Vector2=(g-f).normalized()
++					var left:Vector2=Vector2(-edge_axis.y,edge_axis.x)
++					var edge_mid:Vector2=(f+g)*0.5
++					var plus_inside:bool=Geometry2D.is_point_in_polygon(edge_mid+left*0.001,wall_region)
++					var minus_inside:bool=Geometry2D.is_point_in_polygon(edge_mid-left*0.001,wall_region)
++					assert(plus_inside!=minus_inside,"Owning closure edge must have one locally filled side")
++					var outside:Vector2=-left if plus_inside else left
++					var exterior:Vector3=(along*outside.x+across*outside.y).normalized()
++					var proof:Dictionary={"wing":wing,"owning_region":wall_region,"edge_start":f,"edge_end":g,"probe_distance_m":0.001,"plus_inside":plus_inside,"minus_inside":minus_inside,"outward":exterior,"profile_lo":lo,"profile_hi":hi}
++					face(root,[a,b,c,d] if old_order else [b,a,d,c],siding,"RoofWallClosure",proof)
++	root.set_meta("roof_triangle_count",roof_face_count)
++	# Close only the missing lower wall, on the original source boundary.
++	# Source vertices retain the terrain-following bottom; no land is displaced.
++	for edge in pts.size():
++		var offset:int=edge*12
++		var a:=Vector3(v[offset],v[offset+1],v[offset+2])
++		var b:=Vector3(v[offset+3],v[offset+4],v[offset+5])
++		var direction:=Vector3(b.x-a.x,0,b.z-a.z).normalized()
++		var outward:=Vector3(-direction.z,0,direction.x)
++		var cuts:Array[float]=[0.0,1.0]
++		var doors:Array=[]
++		var frontage_start:=Vector3.ZERO
++		var frontage_axis:=Vector3.ZERO
++		for wing:Array in wings:
++			if edge<int(wing[0]) or edge>=int(wing[1]):continue
++			frontage_start=pts[wing[0]]
++			var finish:Vector3=pts[int(wing[1])%pts.size()]
++			frontage_axis=(finish-frontage_start).normalized()
++			var length:float=frontage_start.distance_to(finish)
++			var sa:float=(a-frontage_start).dot(frontage_axis)
++			var sb:float=(b-frontage_start).dot(frontage_axis)
++			for k in 2:
++				# Same inferred door rectangle as the unchanged facade above.
++				var left:float=length*(float(k)+0.5)/2.0-1.72
++				var right:float=left+0.93
++				var sample:Vector3=frontage_start+frontage_axis*((left+right)*0.5)+outward*0.25
++				var top_y:float=minf(base,float(ground.call(Vector2(sample.x,sample.z)))+0.04)
++				doors.append({"left":left,"right":right,"top":top_y})
++				for station:float in [left,right]:
++					var ratio:float=(station-sa)/(sb-sa)
++					if ratio>0.000001 and ratio<0.999999:cuts.append(ratio)
++		cuts.sort()
++		for part in range(cuts.size()-1):
++			var pa:Vector3=a.lerp(b,cuts[part]);var pb:Vector3=a.lerp(b,cuts[part+1])
++			var top_y:float=base
++			if frontage_axis!=Vector3.ZERO:
++				var middle:float=((pa+pb)*0.5-frontage_start).dot(frontage_axis)
++				for door:Dictionary in doors:
++					if middle>float(door.left) and middle<float(door.right):top_y=minf(top_y,float(door.top))
++			var at:=Vector3(pa.x,maxf(pa.y,top_y),pa.z)
++			var bt:=Vector3(pb.x,maxf(pb.y,top_y),pb.z)
++			exterior_quad(root,[pa,pb,bt,at],siding,outward,"source_lower_wall")
++	for child:Node in root.get_children():
++		if child is MeshInstance3D:
++			var mesh:=child as MeshInstance3D
++			var role:="detail"
++			if mesh.material_override == siding:role="wall"
++			elif mesh.material_override == lawn or mesh.material_override == concrete:role="ground_visual"
++			elif str(mesh.name).begins_with("Roof"):role="roof"
++			mesh.set_meta("physical_role",role)
++	return root

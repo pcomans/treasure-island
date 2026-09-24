@@ -1,0 +1,1252 @@
+diff --git a/game/resources/facades/chinook_1439_quality_revision.json b/game/resources/facades/chinook_1439_quality_revision.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..684f582b2fdd7c1fe317297905103c2859bce3d3
+--- /dev/null
++++ b/game/resources/facades/chinook_1439_quality_revision.json
+@@ -0,0 +1,13 @@
++{
++  "schema_version": "ti.housing-whole-building-revision/1",
++  "source_key": "w95934144",
++  "reviewed_art_sha256": "0200053b3147035ea8eae01bbcb57a5f4171264e695aee966d8b393585879330",
++  "revision_acceptance": "pending",
++  "historical_recognition_credit_unchanged": true,
++  "ground_chunks": {
++    "res://generated/world/chunks/x_-2__z_0.json": "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b",
++    "res://generated/world/chunks/x_-2__z_-1.json": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2"
++  },
++  "facade_alignment": "corrected SSE principal runs4+5; exact frozen source footprint; roof pitch and obscured lower openings production inference",
++  "site_fit_revision": "grounded_lower_exterior_loggias_on_intact_land; raised inferred lip and bottom returns removed; pending native stock entry/retreat"
++}
+diff --git a/game/scripts/world/facades/chinook_1439_live_factory.gd b/game/scripts/world/facades/chinook_1439_live_factory.gd
+new file mode 100644
+index 0000000000000000000000000000000000000000..87aa512d98c311336d4678274fbf56fb8fe31826
+--- /dev/null
++++ b/game/scripts/world/facades/chinook_1439_live_factory.gd
+@@ -0,0 +1,43 @@
++extends RefCounted
++## Unaccepted whole-building revision. Frozen source identity survives; old visual/physics proxies do not.
++const MODEL := preload("res://game/scripts/world/facades/chinook_1439_quality_model.gd")
++const SUPPORT := preload("res://game/scripts/world/facades/housing_quality_support.gd")
++const CONFIG_PATH := "res://game/resources/facades/chinook_1439_quality_revision.json"
++const SELF_PATH := "res://game/scripts/world/facades/chinook_1439_live_factory.gd"
++const CHUNK_PATH := "res://generated/world/chunks/x_-2__z_0.json"
++const WALL_KEY := "building:w95934144:wall"
++const ROOF_KEY := "building:w95934144:roof"
++const EXPECTED_CHUNK_SHA256 := "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b"
++
++static func _json(path: String) -> Dictionary:
++	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
++	return parsed as Dictionary if parsed is Dictionary else {}
++
++static func _record(records: Array, key: String) -> Dictionary:
++	for row: Dictionary in records:
++		if str(row.get("object_key", "")) == key: return row
++	return {}
++
++static func matches_record_pair(wall: Dictionary, roof: Dictionary) -> bool:
++	if FileAccess.get_sha256(CHUNK_PATH) != EXPECTED_CHUNK_SHA256: return false
++	var records: Array = _json(CHUNK_PATH).get("records", [])
++	return not wall.is_empty() and not roof.is_empty() and wall == _record(records, WALL_KEY) and roof == _record(records, ROOF_KEY)
++
++static func build_for_records(wall: Dictionary, roof: Dictionary, source_builder: Callable, tangent_builder: Callable, baseline: bool = false) -> Dictionary:
++	if baseline or not source_builder.is_valid() or not tangent_builder.is_valid() or not matches_record_pair(wall, roof):
++		return {"ok": false, "message": "Exact source pair and live caller required; no baseline fallback."}
++	var cfg := _json(CONFIG_PATH)
++	var land := SUPPORT.land_triangles(cfg.get("ground_chunks", {}))
++	if not bool(land.get("ok", false)): return land
++	var misses: Array = []
++	var ground := func(p: Vector2) -> float:
++		var value := SUPPORT.height_at(p, land.triangles)
++		if not is_finite(value):
++			misses.append(p)
++			return 0.0
++		return value
++	var model: Node3D = MODEL.build(wall, ground)
++	if not misses.is_empty():
++		model.free()
++		return {"ok": false, "message": "Reviewed local ground sample outside frozen colliding land."}
++	return SUPPORT.attach(model, wall, roof, cfg)
+diff --git a/game/scripts/world/facades/chinook_1439_quality_model.gd b/game/scripts/world/facades/chinook_1439_quality_model.gd
+new file mode 100644
+index 0000000000000000000000000000000000000000..720db6c7a9967d1b0bf5a2314ca141caeffe1be8
+--- /dev/null
++++ b/game/scripts/world/facades/chinook_1439_quality_model.gd
+@@ -0,0 +1,146 @@
++extends RefCounted
++# Isolated1439 whole-building study. July2023 observed SSE face; unsurveyed dimensions are production inference.
++static func color_material(c:String,rough:float=0.82)->StandardMaterial3D:
++	var m:=StandardMaterial3D.new();m.albedo_color=Color(c);m.roughness=rough;return m
++static func cladding()->ShaderMaterial:
++	var sh:=Shader.new();sh.code="""shader_type spatial;
++	varying vec3 wp;
++	void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;}
++	void fragment(){ALBEDO=vec3(0.62,0.58,0.49)*(0.995+0.005*sin(wp.x*83.0)*sin(wp.y*91.0));ROUGHNESS=0.88;}"""
++	var m:=ShaderMaterial.new();m.shader=sh;return m
++static func box(root:Node3D,p:Vector3,size:Vector3,m:Material,angle:float=0.0,detail:String="")->void:
++	if size.x<0.001 or size.y<0.001 or size.z<0.001:return
++	var mesh:=BoxMesh.new();mesh.size=size;var n:=MeshInstance3D.new();n.mesh=mesh;n.material_override=m;n.position=p;n.rotation.y=angle;root.add_child(n)
++	if not detail.is_empty():n.set_meta("construction_detail",detail)
++# The roof resource contains checked clockwise Float32 triangles. No runtime
++# offset/boolean cleanup can create empty surfaces between preflight and rendering.
++static func roof_part(root:Node3D,part:Dictionary,material:Material)->void:
++	var vertices:=PackedVector3Array()
++	var normals:=PackedVector3Array()
++	var uv:=PackedVector2Array()
++	for triangle in part.triangles:
++		var a:=Vector3(triangle[0][0],triangle[0][1],triangle[0][2])
++		var b:=Vector3(triangle[1][0],triangle[1][1],triangle[1][2])
++		var c:=Vector3(triangle[2][0],triangle[2][1],triangle[2][2])
++		var front:Vector3=(c-a).cross(b-a)
++		assert(front.length_squared()>0.000000000001,"Degenerate authored roof triangle")
++		for point in [a,b,c]:
++			vertices.append(point)
++			normals.append(front.normalized())
++			uv.append(Vector2(point.x,point.z))
++	assert(not vertices.is_empty(),"Missing authored roof surface")
++	var arrays:Array=[]
++	arrays.resize(Mesh.ARRAY_MAX)
++	arrays[Mesh.ARRAY_VERTEX]=vertices
++	arrays[Mesh.ARRAY_NORMAL]=normals
++	arrays[Mesh.ARRAY_TEX_UV]=uv
++	var mesh:=ArrayMesh.new()
++	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
++	var node:=MeshInstance3D.new()
++	node.mesh=mesh
++	node.material_override=material
++	node.name=part.label
++	root.add_child(node,true)
++static func roof_material()->ShaderMaterial:
++	var sh:=Shader.new();sh.code="""shader_type spatial;
++	varying vec3 wp;
++	void vertex(){wp=(MODEL_MATRIX*vec4(VERTEX,1.0)).xyz;}
++	void fragment(){
++	 vec2 p=vec2(dot(wp.xz,vec2(0.891,-0.454)),dot(wp.xz,vec2(0.454,0.891)));
++	 vec2 cell=floor(p/vec2(0.42,0.20));float grain=fract(sin(dot(cell,vec2(12.9898,78.233)))*43758.5453);
++	 float course=fract(p.y/0.20);float aa=max(fwidth(p.y/0.20),0.035);float seam=1.0-smoothstep(0.025,0.025+aa,course);
++	 ALBEDO=vec3(0.085,0.068,0.047)*(0.94+grain*0.12)*(1.0-seam*0.09);ROUGHNESS=0.94;
++	}"""
++	var m:=ShaderMaterial.new();m.shader=sh;return m
++static func build(record:Dictionary,ground:Callable)->Node3D:
++	var root:=Node3D.new();root.name="Chinook1439ScratchStudy"
++	var stucco:=cladding();var glass:=color_material("414c4a",0.38);var frame:=color_material("b5b4a4");var rail:=color_material("555a4c");var slab:=color_material("a19d8a");var soffit:=color_material("bcb6a3")
++	var base:float=record.flat_base_elevation_m;var height:=5.62;var pts:Array[Vector3]=[]
++	for i in range(0,record.vertices.size(),12):pts.append(Vector3(record.vertices[i],base,record.vertices[i+2]))
++	var origin:Vector3=pts[4];var along:Vector3=(pts[6]-origin).normalized();var out:=Vector3(-along.z,0,along.x);var angle:=atan2(-along.z,along.x)
++	# Finite elevation: broad pale panels separated by two exterior loggias.
++	# Upper proportions are observed; precise positions and lower treatment inferred.
++	var holes:Array[Rect2]=[Rect2(3.05,2.98,3.15,2.48),Rect2(14.1,2.98,3.9,2.48),Rect2(3.05,0.10,3.15,2.54),Rect2(14.1,0.10,3.9,2.54),Rect2(8.55,4.12,0.98,1.05),Rect2(10.55,4.12,1.10,1.05),Rect2(8.55,0.98,0.98,1.08),Rect2(10.55,0.98,1.10,1.08)]
++	for j in pts.size():
++		var a:Vector3=pts[j];var b:Vector3=pts[(j+1)%pts.size()];var t:Vector3=(b-a).normalized();var n:=Vector3(-t.z,0,t.x);var size:=a.distance_to(b);var rot:=atan2(-t.z,t.x)
++		var cuts:Array[Rect2]=[];var station:float=(a-origin).dot(along)
++		if j in [4,5]:cuts=holes
++		var xs:Array[float]=[0.0,size];var ys:Array[float]=[0.0,height]
++		for h in cuts:
++			if h.end.x>station and h.position.x<station+size:
++				xs.append(clampf(h.position.x-station,0,size));xs.append(clampf(h.end.x-station,0,size));ys.append(h.position.y);ys.append(h.end.y)
++		xs.sort();ys.sort()
++		for xi in range(xs.size()-1):
++			for yi in range(ys.size()-1):
++				var wid:float=xs[xi+1]-xs[xi];var hei:float=ys[yi+1]-ys[yi]
++				if wid<0.001 or hei<0.001:continue
++				var mid:=Vector2((xs[xi]+xs[xi+1])*0.5+station,(ys[yi]+ys[yi+1])*0.5);var empty:=false
++				for h in cuts:if h.has_point(mid):empty=true
++				if j in [4,5] and mid.y<0.10:
++					for lower:int in [2,3]:
++						if mid.x>holes[lower].position.x and mid.x<holes[lower].end.x:empty=true
++				if not empty:box(root,a+t*(mid.x-station)+Vector3.UP*mid.y-n*0.10,Vector3(wid,hei,0.20),stucco,rot)
++		# Follow each frozen source wall bottom rather than flattening local terrain.
++		var bottom:float=base
++		for v in range(4):bottom=minf(bottom,float(record.vertices[j*12+v*3+1]))
++		var skirt:float=base-bottom+0.08
++		if j in [4,5]:
++			var spans:Array[Vector2]=[Vector2(0,size)]
++			for lower:int in [2,3]:
++				var left:float=clampf(holes[lower].position.x-station,0,size)
++				var right:float=clampf(holes[lower].end.x-station,0,size)
++				if right<=left:continue
++				var kept:Array[Vector2]=[]
++				for span:Vector2 in spans:
++					if left>span.x:kept.append(Vector2(span.x,minf(left,span.y)))
++					if right<span.y:kept.append(Vector2(maxf(right,span.x),span.y))
++				spans=kept
++			for span:Vector2 in spans:
++				box(root,a+t*((span.x+span.y)*0.5)-Vector3.UP*(skirt*0.5)-n*0.10,Vector3(span.y-span.x,skirt,0.20),stucco,rot,"1439_grounded_loggia_fit")
++		else:
++			box(root,a+t*(size*0.5)-Vector3.UP*(skirt*0.5)-n*0.10,Vector3(size,skirt,0.20),stucco,rot)
++	for k in holes.size():
++		var h:Rect2=holes[k];var c:=h.get_center();var p:=origin+along*c.x+Vector3.UP*c.y;var loggia:bool=k<4;var deep:float=1.55 if loggia else 0.19
++		var shell_p:Vector3=p;var shell_height:float=h.size.y;var fit_detail:String=""
++		if k in [2,3]:
++			# Open the lower mouth onto intact LAND; no slab, ramp or altered terrain.
++			var low:float=base
++			for station_x:float in [h.position.x,h.end.x]:
++				for depth:float in [0.0,deep]:
++					var sample:Vector3=origin+along*station_x-out*depth
++					low=minf(low,float(ground.call(Vector2(sample.x,sample.z))))
++			low-=0.03
++			var top:float=base+h.end.y
++			shell_height=top-low;shell_p.y=(top+low)*0.5;fit_detail="1439_grounded_loggia_fit"
++		# Opaque exterior back seals the recess; no interior space or borrowed scene.
++		box(root,shell_p-out*deep,Vector3(h.size.x,shell_height,0.12),stucco if loggia else glass,angle,fit_detail)
++		for side in [-1.0,1.0]:box(root,shell_p+along*(float(side)*(h.size.x*0.5-0.06))-out*(deep*0.5),Vector3(0.12,shell_height,deep),stucco if loggia else frame,angle,fit_detail)
++		for side in [-1.0,1.0]:
++			if k in [2,3] and side<0:continue
++			box(root,p+Vector3.UP*(float(side)*(h.size.y*0.5-0.04))-out*(deep*0.5),Vector3(h.size.x,0.08,deep),soffit if loggia else frame,angle)
++		if loggia:
++			var floor_y:float=base+h.position.y
++			if k<2:box(root,Vector3(p.x,floor_y+0.04,p.z)-out*0.77,Vector3(h.size.x,0.12,1.55),slab,angle)
++			# Restrained rear glazing reads as exterior access from ordinary distance.
++			box(root,p-out*(deep-0.07)+Vector3.UP*0.06,Vector3(h.size.x*0.58,h.size.y*0.80,0.04),glass,angle)
++			box(root,p-out*(deep-0.10)+Vector3.UP*0.06,Vector3(0.055,h.size.y*0.80,0.05),frame,angle)
++			if k<2:
++				for y in [0.16,1.12]:box(root,Vector3(p.x,floor_y+float(y),p.z)-out*0.12,Vector3(h.size.x,0.07,0.08),rail,angle)
++				var count:int=int(h.size.x/0.18)
++				for i in count+1:box(root,Vector3(p.x,floor_y+0.63,p.z)+along*((float(i)/count-0.5)*(h.size.x-0.12))-out*0.12,Vector3(0.035,0.92,0.045),rail,angle)
++		else:
++			box(root,p-out*0.09,Vector3(0.035,h.size.y,0.06),frame,angle)
++			box(root,p-Vector3.UP*(h.size.y*0.5)+out*0.03,Vector3(h.size.x+0.12,0.065,0.25),frame,angle)
++	var roof_data:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://game/scripts/world/facades/chinook_1439_roof001.json"))
++	assert(roof_data.object_key==record.object_key)
++	for part in roof_data.parts:roof_part(root,part,stucco if part.label=="RoofWallClosure" else soffit if part.label=="RoofSoffit" else roof_material())
++	root.set_meta("roof_expected",roof_data.expected)
++	# Shared production support owns classified contacts once from these meshes.
++	for child:Node in root.get_children():
++		if child is MeshInstance3D:
++			var mesh:=child as MeshInstance3D
++			var role:="wall" if mesh.material_override == stucco else "detail"
++			if str(mesh.name).begins_with("Roof") and str(mesh.name)!="RoofWallClosure":role="roof"
++			mesh.set_meta("physical_role",role)
++	root.set_meta("roof_triangle_count",roof_data.expected.triangle_counts.RoofTop)
++	return root
+diff --git a/game/scripts/world/facades/chinook_1439_roof001.json b/game/scripts/world/facades/chinook_1439_roof001.json
+new file mode 100644
+index 0000000000000000000000000000000000000000..91f384b5b6293ecf2195bc1fa34378d15a5864b4
+--- /dev/null
++++ b/game/scripts/world/facades/chinook_1439_roof001.json
+@@ -0,0 +1 @@
++{"schema":"chinook1439-roof001","object_key":"building:w95934144:wall","source_plan":[[-308.516,4.269],[-303.033,15.033],[-302.255,16.559],[-298.676,14.733],[-297.278,17.494],[-288,12.767],[-274.662,5.972],[-276.447,2.477],[-273.352,0.896],[-273.809,0],[-278.599,-9.401],[-279.332,-10.837],[-288,-6.417],[-289.505,-5.649],[-288,-2.697],[-287.089,-0.911],[-286.929,-0.596],[-287.898,-0.102],[-288,-0.05],[-288.098,0],[-296.021,4.035],[-298.073,0],[-298.501,-0.84],[-300.148,0]],"roof_plan_local":[[-4.2899478645755424,-17.16515617994819],[-4.290218614121918,-2.812237228645436],[-0.27301106765644934,-2.814584089621771],[-0.280696221166306,0.27999999999999997],[25.662163837509407,0.2800000000000018],[25.658217017305155,-3.644743306669797],[29.133406502454246,-3.6484979364010988],[29.131104197268417,-17.377352656573272],[17.15156512344497,-17.37245493124369],[17.153068127047053,-11.700859216696331],[7.509846524217078,-11.701727833658248],[7.51308003632096,-17.17145606088072]],"parts":[{"label":"RoofTop","triangles":[[[-304.9812316894531,11.295999526977539,11.824407577514648],[-308.89251708984375,9.280110359191895,4.146747589111328],[-298.3785400390625,9.27863597869873,-1.2168015241622925]],[[-304.9812316894531,11.295999526977539,11.824407577514648],[-298.3785400390625,9.27863597869873,-1.2168015241622925],[-295.8984680175781,10.558311462402344,3.6583542823791504]],[[-304.9812316894531,11.295999526977539,11.824407577514648],[-295.8984680175781,10.558311462402344,3.6583542823791504],[-287.3056640625,10.558514595031738,-0.7183721661567688]],[[-287.3056640625,10.558514595031738,-0.7183721661567688],[-289.8816223144531,9.231611251831055,-5.771247863769531],[-279.209716796875,9.23046588897705,-11.21367359161377]],[[-287.3056640625,10.558514595031738,-0.7183721661567688],[-279.209716796875,9.23046588897705,-11.21367359161377],[-275.20062255859375,11.295999526977539,-3.3476858139038086]],[[-287.3056640625,10.558514595031738,-0.7183721661567688],[-275.20062255859375,11.295999526977539,-3.3476858139038086],[-304.9812316894531,11.295999526977539,11.824407577514648]],[[-298.7989196777344,9.954488754272461,15.110054969787598],[-302.3773193359375,9.953939437866211,16.935741424560547],[-304.9812316894531,11.295999526977539,11.824407577514648]],[[-298.7989196777344,9.954488754272461,15.110054969787598],[-304.9812316894531,11.295999526977539,11.824407577514648],[-275.20062255859375,11.295999526977539,-3.3476858139038086]],[[-275.20062255859375,11.295999526977539,-3.3476858139038086],[-272.9754943847656,10.149587631225586,1.0180926322937012],[-276.0702819824219,10.148709297180176,2.5989859104156494]],[[-276.0702819824219,10.148709297180176,2.5989859104156494],[-274.28515625,9.23049259185791,6.094255447387695],[-297.4010009765625,9.23049259185791,17.870908737182617]],[[-276.0702819824219,10.148709297180176,2.5989859104156494],[-297.4010009765625,9.23049259185791,17.870908737182617],[-298.7989196777344,9.954488754272461,15.110054969787598]],[[-276.0702819824219,10.148709297180176,2.5989859104156494],[-298.7989196777344,9.954488754272461,15.110054969787598],[-275.20062255859375,11.295999526977539,-3.3476858139038086]]]},{"label":"RoofSoffit","triangles":[[[-304.9812316894531,11.196000099182129,11.824407577514648],[-298.3785400390625,9.17863655090332,-1.2168015241622925],[-308.89251708984375,9.180109977722168,4.146747589111328]],[[-304.9812316894531,11.196000099182129,11.824407577514648],[-295.8984680175781,10.458312034606934,3.6583542823791504],[-298.3785400390625,9.17863655090332,-1.2168015241622925]],[[-304.9812316894531,11.196000099182129,11.824407577514648],[-287.3056640625,10.458515167236328,-0.7183721661567688],[-295.8984680175781,10.458312034606934,3.6583542823791504]],[[-287.3056640625,10.458515167236328,-0.7183721661567688],[-279.209716796875,9.130465507507324,-11.21367359161377],[-289.8816223144531,9.131611824035645,-5.771247863769531]],[[-287.3056640625,10.458515167236328,-0.7183721661567688],[-275.20062255859375,11.196000099182129,-3.3476858139038086],[-279.209716796875,9.130465507507324,-11.21367359161377]],[[-287.3056640625,10.458515167236328,-0.7183721661567688],[-304.9812316894531,11.196000099182129,11.824407577514648],[-275.20062255859375,11.196000099182129,-3.3476858139038086]],[[-298.7989196777344,9.854488372802734,15.110054969787598],[-304.9812316894531,11.196000099182129,11.824407577514648],[-302.3773193359375,9.8539400100708,16.935741424560547]],[[-298.7989196777344,9.854488372802734,15.110054969787598],[-275.20062255859375,11.196000099182129,-3.3476858139038086],[-304.9812316894531,11.196000099182129,11.824407577514648]],[[-275.20062255859375,11.196000099182129,-3.3476858139038086],[-276.0702819824219,10.04870891571045,2.5989859104156494],[-272.9754943847656,10.04958724975586,1.0180926322937012]],[[-276.0702819824219,10.04870891571045,2.5989859104156494],[-297.4010009765625,9.130492210388184,17.870908737182617],[-274.28515625,9.130492210388184,6.094255447387695]],[[-276.0702819824219,10.04870891571045,2.5989859104156494],[-298.7989196777344,9.854488372802734,15.110054969787598],[-297.4010009765625,9.130492210388184,17.870908737182617]],[[-276.0702819824219,10.04870891571045,2.5989859104156494],[-275.20062255859375,11.196000099182129,-3.3476858139038086],[-298.7989196777344,9.854488372802734,15.110054969787598]]]},{"label":"RoofRim","triangles":[[[-308.89251708984375,9.280110359191895,4.146747589111328],[-304.9812316894531,11.295999526977539,11.824407577514648],[-304.9812316894531,11.196000099182129,11.824407577514648]],[[-308.89251708984375,9.280110359191895,4.146747589111328],[-304.9812316894531,11.196000099182129,11.824407577514648],[-308.89251708984375,9.180109977722168,4.146747589111328]],[[-304.9812316894531,11.295999526977539,11.824407577514648],[-302.3773193359375,9.953939437866211,16.935741424560547],[-302.3773193359375,9.8539400100708,16.935741424560547]],[[-304.9812316894531,11.295999526977539,11.824407577514648],[-302.3773193359375,9.8539400100708,16.935741424560547],[-304.9812316894531,11.196000099182129,11.824407577514648]],[[-302.3773193359375,9.953939437866211,16.935741424560547],[-298.7989196777344,9.954488754272461,15.110054969787598],[-298.7989196777344,9.854488372802734,15.110054969787598]],[[-302.3773193359375,9.953939437866211,16.935741424560547],[-298.7989196777344,9.854488372802734,15.110054969787598],[-302.3773193359375,9.8539400100708,16.935741424560547]],[[-298.7989196777344,9.954488754272461,15.110054969787598],[-297.4010009765625,9.23049259185791,17.870908737182617],[-297.4010009765625,9.130492210388184,17.870908737182617]],[[-298.7989196777344,9.954488754272461,15.110054969787598],[-297.4010009765625,9.130492210388184,17.870908737182617],[-298.7989196777344,9.854488372802734,15.110054969787598]],[[-297.4010009765625,9.23049259185791,17.870908737182617],[-274.28515625,9.23049259185791,6.094255447387695],[-274.28515625,9.130492210388184,6.094255447387695]],[[-297.4010009765625,9.23049259185791,17.870908737182617],[-274.28515625,9.130492210388184,6.094255447387695],[-297.4010009765625,9.130492210388184,17.870908737182617]],[[-274.28515625,9.23049259185791,6.094255447387695],[-276.0702819824219,10.148709297180176,2.5989859104156494],[-276.0702819824219,10.04870891571045,2.5989859104156494]],[[-274.28515625,9.23049259185791,6.094255447387695],[-276.0702819824219,10.04870891571045,2.5989859104156494],[-274.28515625,9.130492210388184,6.094255447387695]],[[-276.0702819824219,10.148709297180176,2.5989859104156494],[-272.9754943847656,10.149587631225586,1.0180926322937012],[-272.9754943847656,10.04958724975586,1.0180926322937012]],[[-276.0702819824219,10.148709297180176,2.5989859104156494],[-272.9754943847656,10.04958724975586,1.0180926322937012],[-276.0702819824219,10.04870891571045,2.5989859104156494]],[[-272.9754943847656,10.149587631225586,1.0180926322937012],[-275.20062255859375,11.295999526977539,-3.3476858139038086],[-275.20062255859375,11.196000099182129,-3.3476858139038086]],[[-272.9754943847656,10.149587631225586,1.0180926322937012],[-275.20062255859375,11.196000099182129,-3.3476858139038086],[-272.9754943847656,10.04958724975586,1.0180926322937012]],[[-275.20062255859375,11.295999526977539,-3.3476858139038086],[-279.209716796875,9.23046588897705,-11.21367359161377],[-279.209716796875,9.130465507507324,-11.21367359161377]],[[-275.20062255859375,11.295999526977539,-3.3476858139038086],[-279.209716796875,9.130465507507324,-11.21367359161377],[-275.20062255859375,11.196000099182129,-3.3476858139038086]],[[-279.209716796875,9.23046588897705,-11.21367359161377],[-289.8816223144531,9.231611251831055,-5.771247863769531],[-289.8816223144531,9.131611824035645,-5.771247863769531]],[[-279.209716796875,9.23046588897705,-11.21367359161377],[-289.8816223144531,9.131611824035645,-5.771247863769531],[-279.209716796875,9.130465507507324,-11.21367359161377]],[[-289.8816223144531,9.231611251831055,-5.771247863769531],[-287.3056640625,10.558514595031738,-0.7183721661567688],[-287.3056640625,10.458515167236328,-0.7183721661567688]],[[-289.8816223144531,9.231611251831055,-5.771247863769531],[-287.3056640625,10.458515167236328,-0.7183721661567688],[-289.8816223144531,9.131611824035645,-5.771247863769531]],[[-287.3056640625,10.558514595031738,-0.7183721661567688],[-295.8984680175781,10.558311462402344,3.6583542823791504],[-295.8984680175781,10.458312034606934,3.6583542823791504]],[[-287.3056640625,10.558514595031738,-0.7183721661567688],[-295.8984680175781,10.458312034606934,3.6583542823791504],[-287.3056640625,10.458515167236328,-0.7183721661567688]],[[-295.8984680175781,10.558311462402344,3.6583542823791504],[-298.3785400390625,9.27863597869873,-1.2168015241622925],[-298.3785400390625,9.17863655090332,-1.2168015241622925]],[[-295.8984680175781,10.558311462402344,3.6583542823791504],[-298.3785400390625,9.17863655090332,-1.2168015241622925],[-295.8984680175781,10.458312034606934,3.6583542823791504]],[[-298.3785400390625,9.27863597869873,-1.2168015241622925],[-308.89251708984375,9.280110359191895,4.146747589111328],[-308.89251708984375,9.180109977722168,4.146747589111328]],[[-298.3785400390625,9.27863597869873,-1.2168015241622925],[-308.89251708984375,9.180109977722168,4.146747589111328],[-298.3785400390625,9.17863655090332,-1.2168015241622925]]]},{"label":"RoofWallClosure","triangles":[[[-308.5159912109375,9.156000137329102,4.269000053405762],[-304.7320556640625,11.196000099182129,11.697469711303711],[-304.7320556640625,9.156000137329102,11.697469711303711]],[[-308.5159912109375,9.156000137329102,4.269000053405762],[-308.5159912109375,9.245582580566406,4.269000053405762],[-304.7320556640625,11.196000099182129,11.697469711303711]],[[-304.7320556640625,9.156000137329102,11.697469711303711],[-303.0329895019531,10.320223808288574,15.032999992370605],[-303.0329895019531,9.156000137329102,15.032999992370605]],[[-304.7320556640625,9.156000137329102,11.697469711303711],[-304.7320556640625,11.196000099182129,11.697469711303711],[-303.0329895019531,10.320223808288574,15.032999992370605]],[[-303.0329895019531,9.156000137329102,15.032999992370605],[-302.2550048828125,9.919485092163086,16.55900001525879],[-302.2550048828125,9.156000137329102,16.55900001525879]],[[-303.0329895019531,9.156000137329102,15.032999992370605],[-303.0329895019531,10.320223808288574,15.032999992370605],[-302.2550048828125,9.919485092163086,16.55900001525879]],[[-302.2550048828125,9.156000137329102,16.55900001525879],[-298.6759948730469,9.920034408569336,14.732999801635742],[-298.6759948730469,9.156000137329102,14.732999801635742]],[[-302.2550048828125,9.156000137329102,16.55900001525879],[-302.2550048828125,9.919485092163086,16.55900001525879],[-298.6759948730469,9.920034408569336,14.732999801635742]],[[-298.6759948730469,9.156000137329102,14.732999801635742],[-297.27801513671875,9.196000099182129,17.493999481201172],[-297.27801513671875,9.156000137329102,17.493999481201172]],[[-298.6759948730469,9.156000137329102,14.732999801635742],[-298.6759948730469,9.920034408569336,14.732999801635742],[-297.27801513671875,9.196000099182129,17.493999481201172]],[[-297.27801513671875,9.156000137329102,17.493999481201172],[-288,9.196043014526367,12.767000198364258],[-288,9.156000137329102,12.767000198364258]],[[-297.27801513671875,9.156000137329102,17.493999481201172],[-297.27801513671875,9.196000099182129,17.493999481201172],[-288,9.196043014526367,12.767000198364258]],[[-288,9.156000137329102,12.767000198364258],[-274.6619873046875,9.196000099182129,5.9720001220703125],[-274.6619873046875,9.156000137329102,5.9720001220703125]],[[-288,9.156000137329102,12.767000198364258],[-288,9.196043014526367,12.767000198364258],[-274.6619873046875,9.196000099182129,5.9720001220703125]],[[-274.6619873046875,9.156000137329102,5.9720001220703125],[-276.4469909667969,10.11414623260498,2.4769999980926514],[-276.4469909667969,9.156000137329102,2.4769999980926514]],[[-274.6619873046875,9.156000137329102,5.9720001220703125],[-274.6619873046875,9.196000099182129,5.9720001220703125],[-276.4469909667969,10.11414623260498,2.4769999980926514]],[[-276.4469909667969,9.156000137329102,2.4769999980926514],[-273.35198974609375,10.11502456665039,0.8960000276565552],[-273.35198974609375,9.156000137329102,0.8960000276565552]],[[-276.4469909667969,9.156000137329102,2.4769999980926514],[-276.4469909667969,10.11414623260498,2.4769999980926514],[-273.35198974609375,10.11502456665039,0.8960000276565552]],[[-273.35198974609375,9.156000137329102,0.8960000276565552],[-273.8089904785156,10.350340843200684,2.6645352591003757e-15],[-273.8089904785156,9.156000137329102,2.6645352591003757e-15]],[[-273.35198974609375,9.156000137329102,0.8960000276565552],[-273.35198974609375,10.11502456665039,0.8960000276565552],[-273.8089904785156,10.350340843200684,2.6645352591003757e-15]],[[-273.8089904785156,9.156000137329102,2.6645352591003757e-15],[-275.4499816894531,11.196000099182129,-3.2206461429595947],[-275.4499816894531,9.156000137329102,-3.2206461429595947]],[[-273.8089904785156,9.156000137329102,2.6645352591003757e-15],[-273.8089904785156,10.350340843200684,2.6645352591003757e-15],[-275.4499816894531,11.196000099182129,-3.2206461429595947]],[[-275.4499816894531,9.156000137329102,-3.2206461429595947],[-278.5989990234375,9.573198318481445,-9.401000022888184],[-278.5989990234375,9.156000137329102,-9.401000022888184]],[[-275.4499816894531,9.156000137329102,-3.2206461429595947],[-275.4499816894531,11.196000099182129,-3.2206461429595947],[-278.5989990234375,9.573198318481445,-9.401000022888184]],[[-278.5989990234375,9.156000137329102,-9.401000022888184],[-279.3320007324219,9.196000099182129,-10.836999893188477],[-279.3320007324219,9.156000137329102,-10.836999893188477]],[[-278.5989990234375,9.156000137329102,-9.401000022888184],[-278.5989990234375,9.573198318481445,-9.401000022888184],[-279.3320007324219,9.196000099182129,-10.836999893188477]],[[-279.3320007324219,9.156000137329102,-10.836999893188477],[-288,9.196829795837402,-6.416999816894531],[-288,9.156000137329102,-6.416999816894531]],[[-279.3320007324219,9.156000137329102,-10.836999893188477],[-279.3320007324219,9.196000099182129,-10.836999893188477],[-288,9.196829795837402,-6.416999816894531]],[[-288,9.156000137329102,-6.416999816894531],[-289.5050048828125,9.197092056274414,-5.64900016784668],[-289.5050048828125,9.156000137329102,-5.64900016784668]],[[-288,9.156000137329102,-6.416999816894531],[-288,9.196829795837402,-6.416999816894531],[-289.5050048828125,9.197092056274414,-5.64900016784668]],[[-289.5050048828125,9.156000137329102,-5.64900016784668],[-288,9.972307205200195,-2.697000026702881],[-288,9.156000137329102,-2.697000026702881]],[[-289.5050048828125,9.156000137329102,-5.64900016784668],[-289.5050048828125,9.197092056274414,-5.64900016784668],[-288,9.972307205200195,-2.697000026702881]],[[-288,9.156000137329102,-2.697000026702881],[-287.0889892578125,10.441370010375977,-0.9110000133514404],[-287.0889892578125,9.156000137329102,-0.9110000133514404]],[[-288,9.156000137329102,-2.697000026702881],[-288,9.972307205200195,-2.697000026702881],[-287.0889892578125,10.441370010375977,-0.9110000133514404]],[[-287.0889892578125,9.156000137329102,-0.9110000133514404],[-286.9289855957031,10.524028778076172,-0.5960000157356262],[-286.9289855957031,9.156000137329102,-0.5960000157356262]],[[-287.0889892578125,9.156000137329102,-0.9110000133514404],[-287.0889892578125,10.441370010375977,-0.9110000133514404],[-286.9289855957031,10.524028778076172,-0.5960000157356262]],[[-286.9289855957031,9.156000137329102,-0.5960000157356262],[-287.89801025390625,10.524097442626953,-0.10199999809265137],[-287.89801025390625,9.156000137329102,-0.10199999809265137]],[[-286.9289855957031,9.156000137329102,-0.5960000157356262],[-286.9289855957031,10.524028778076172,-0.5960000157356262],[-287.89801025390625,10.524097442626953,-0.10199999809265137]],[[-287.89801025390625,9.156000137329102,-0.10199999809265137],[-288,10.524105072021484,-0.05000000074505806],[-288,9.156000137329102,-0.05000000074505806]],[[-287.89801025390625,9.156000137329102,-0.10199999809265137],[-287.89801025390625,10.524097442626953,-0.10199999809265137],[-288,10.524105072021484,-0.05000000074505806]],[[-288,9.156000137329102,-0.05000000074505806],[-288.0979919433594,10.52411937713623,3.552713678800501e-15],[-288.0979919433594,9.156000137329102,3.552713678800501e-15]],[[-288,9.156000137329102,-0.05000000074505806],[-288,10.524105072021484,-0.05000000074505806],[-288.0979919433594,10.52411937713623,3.552713678800501e-15]],[[-288.0979919433594,9.156000137329102,3.552713678800501e-15],[-296.02099609375,10.523813247680664,4.034999847412109],[-296.02099609375,9.156000137329102,4.034999847412109]],[[-288.0979919433594,9.156000137329102,3.552713678800501e-15],[-288.0979919433594,10.52411937713623,3.552713678800501e-15],[-296.02099609375,10.523813247680664,4.034999847412109]],[[-296.02099609375,9.156000137329102,4.034999847412109],[-298.072998046875,9.464741706848145,1.7763568394002505e-15],[-298.072998046875,9.156000137329102,1.7763568394002505e-15]],[[-296.02099609375,9.156000137329102,4.034999847412109],[-296.02099609375,10.523813247680664,4.034999847412109],[-298.072998046875,9.464741706848145,1.7763568394002505e-15]],[[-298.072998046875,9.156000137329102,1.7763568394002505e-15],[-298.5010070800781,9.244178771972656,-0.8399999737739563],[-298.5010070800781,9.156000137329102,-0.8399999737739563]],[[-298.072998046875,9.156000137329102,1.7763568394002505e-15],[-298.072998046875,9.464741706848145,1.7763568394002505e-15],[-298.5010070800781,9.244178771972656,-0.8399999737739563]],[[-298.5010070800781,9.156000137329102,-0.8399999737739563],[-300.14801025390625,9.244369506835938,0],[-300.14801025390625,9.156000137329102,0]],[[-298.5010070800781,9.156000137329102,-0.8399999737739563],[-298.5010070800781,9.244178771972656,-0.8399999737739563],[-300.14801025390625,9.244369506835938,0]],[[-300.14801025390625,9.156000137329102,0],[-308.5159912109375,9.245582580566406,4.269000053405762],[-308.5159912109375,9.156000137329102,4.269000053405762]],[[-300.14801025390625,9.156000137329102,0],[-300.14801025390625,9.244369506835938,0],[-308.5159912109375,9.245582580566406,4.269000053405762]]]}],"expected":{"triangle_counts":{"RoofTop":12,"RoofSoffit":12,"RoofRim":28,"RoofWallClosure":52},"projected_area_m2":506.88364556982015}}
+diff --git a/game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd b/game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd
+index 14d85a5ed3d4a92e4b7d90939e7bd8959222cb3c..5bb6cad72f95e053d8d277904ad52a10334a8d23 100644
+--- a/game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd
++++ b/game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd
+@@ -1,93 +1,17 @@
+-class_name D21439ChinookQualityV2LiveReplacement
+ extends RefCounted
+ 
+-## Fail-closed paired live translation of the independently reviewed 1439
+-## Chinook standalone hero. The supplied chunk is preflighted before row
+-## dispatch, the pinned factory runs once, and its exact shell is partitioned
+-## into one wall spray receiver and one input-only roof landing/blocking owner.
+-## Closed recesses remain noneligible solid blockers; other relief is render-only. The sealed factory predates Godot's
+-## clockwise roof-front correction, so this live seam reverses only the roof
+-## index order while retaining exact vertices, UVs, normals, and material.
+-
+-const PROTOTYPE := preload("res://game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd")
+-const CONFIG_PATH := "res://game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json"
+-const EXPECTED_CONFIG_SHA256 := "58ba0093d002a3acad06b76876b7333077bb5152827f4a59b0c9b6da132b68d9"
++## Atomic source-pair adapter for an unaccepted whole-building revision of 1439 Chinook source pair.
++## Source identities remain exact. Contacts now derive from the current visible shell.
++
++const FACTORY := preload("res://game/scripts/world/facades/chinook_1439_live_factory.gd")
+ const ADAPTER_ID := "active-adapter:d2-1439-live:building:w95934144:wall"
+ const SOURCE_KEY := "w95934144"
+ const WALL_KEY := "building:w95934144:wall"
+ const ROOF_KEY := "building:w95934144:roof"
+ const TARGET_CHUNK_ID := "x_-2__z_0"
+-const TARGET_CHUNK_SHA256 := "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b"
+-const SOURCE_GEOMETRY_SHA256 := "a59bd2abf2020c25071a55ecb96f32b7871a810e8d1bdd95c213b512273f87f2"
+-const CANONICAL_WALL_RECORD_SHA256 := "0a0b5d7c002a3364714343704404e3e37fa1e55461c3bfae6ae0766d59bb8b11"
+-const CANONICAL_ROOF_RECORD_SHA256 := "ab98ae1442174841c0d9ae3aeb344991e73c2b85bf07252d2dc12d834ac0f8c0"
+-const EXPECTED_RUNTIME_WALL_DICTIONARY_SHA256 := "7b907a99a05ce52552393f8e71e58d072647b197ae1aab698270ef35c4404e42"
+-const EXPECTED_RUNTIME_ROOF_DICTIONARY_SHA256 := "49f675abb0aff5c39a02aae667b7023ee1c901f21cb524d427ea0b9e315c5307"
+-const EXPECTED_WALL_PROJECTION_SHA256 := "a801ff083961a7fafab455d18a80f2ea3ea87791ad5e967f91937ad3fc2b82a0"
+-const EXPECTED_ROOF_PROJECTION_SHA256 := "83ea383a9a490871fbd7891ebb5a179adfe0af5e27607e727550563a27c20e58"
+-const EXPECTED_GEOMETRY_SIGNATURE := "81a05d20b03e16253675a36692c9856cf4d53509e008aacbb69bbe4eea7683e5"
+-const EXPECTED_LIVE_OWNERSHIP_SIGNATURE := "82e1fdfae492aa1942bbbb5cfb65b51d4da4c980cf85a4231c2093aaf3edc27a"
+-const STANDALONE_APPROVAL_RECEIPT_ID := "d2-1439-quality-v2-isolated-art-pass-2026-09-09"
+-const STANDALONE_APPROVAL_RECEIPT_SHA256 := "c12dc4f71468634f2994feff55e19aeed62edb578a5931ae313b86bc7b5582ee"
+-const PACKAGE_AUDIT_RECEIPT_SHA256 := "285ad681634bfa4ec800be0a935bb17b3e850e384581300357ce1e56b1ff09b1"
+-const PACKAGE_PROMOTION_RECEIPT_SHA256 := "74052c247c5d2dbd6828301aca29eed2e842cb90d5a1c3aa9db5c1b743aeadfb"
+-const PHYSICS_WORLD_SOLID := 1 << 0
+-const PHYSICS_SPRAY_SURFACE := 1 << 2
+-const EXPECTED_MESH_INSTANCES := 11
+-const EXPECTED_SURFACES := 11
+-const EXPECTED_VISUAL_TRIANGLES := 522
+-const EXPECTED_WALL_VISUAL_TRIANGLES := 512
+-const EXPECTED_ROOF_VISUAL_TRIANGLES := 10
+-const EXPECTED_DECORATIVE_TRIANGLES := 420
+-const EXPECTED_COLLISION_TRIANGLES := 102
+-const EXPECTED_WALL_COLLISION_TRIANGLES := 92
+-const EXPECTED_ROOF_COLLISION_TRIANGLES := 10
+-const EXPECTED_ELIGIBLE_WALL_TRIANGLES := 62
+-const EXPECTED_CLOSED_RECESS_TRIANGLES := 30
+-const CLOSED_RECESS_MESH_NAMES := ["OffsetEndTwoLevelBalconyVoids", "OffsetEndBalconySlabsAndSideReturns", "BlankEndGroundPassageShadow", "BlankEndGroundPassageFrame"]
+-const ROOF_MESH_NAME := "ExactPlanShallowGableRoof"
+-const SOURCE_WALL_MESH_NAMES := ["ProtectedExactWallRuns", "MappedSSEExactWarmStuccoWallRuns"]
+-const EXPECTED_BATCH_TRIANGLES := {
+-	"BlankEndGroundPassageFrame": 8,
+-	"BlankEndGroundPassageShadow": 2,
+-	"ExactPlanShallowGableRoof": 10,
+-	"MappedSSEContinuousEaveChains": 36,
+-	"MappedSSEExactWarmStuccoWallRuns": 30,
+-	"OffsetEndBalconySlabsAndSideReturns": 16,
+-	"OffsetEndSimpleMetalRails": 168,
+-	"OffsetEndTwoLevelBalconyVoids": 4,
+-	"ProtectedExactWallRuns": 32,
+-	"QuietRegisterUpperOpaqueOpenings": 36,
+-	"QuietRegisterUpperPaleFrames": 180
+-}
+-const EXPECTED_MATERIALS := {
+-	"ProtectedExactWallRuns": {"path": "res://game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres", "name": "site_12_protected_neutral_nonclaim", "color": Color(0.54, 0.55, 0.53, 1.0), "metallic": 0.0, "roughness": 0.91},
+-	"MappedSSEExactWarmStuccoWallRuns": {"path": "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres", "name": "site_12_warm_ivory_stucco_meter_repeat", "color": Color(0.96, 0.94, 0.87, 1.0), "metallic": 0.0, "roughness": 0.88, "texture": "res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png", "uv_scale": Vector3(0.333333, 0.333333, 1.0)},
+-	"ExactPlanShallowGableRoof": {"path": "res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres", "name": "site_12_dark_brown_roof_albedo_surrogate", "color": Color(0.40, 0.28, 0.20, 1.0), "metallic": 0.0, "roughness": 0.9, "texture": "res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg", "uv_scale": Vector3(0.2, 0.2, 1.0)},
+-	"MappedSSEContinuousEaveChains": {"path": "res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres", "name": "site_12_dark_brown_roof_albedo_surrogate", "color": Color(0.40, 0.28, 0.20, 1.0), "metallic": 0.0, "roughness": 0.9, "texture": "res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg", "uv_scale": Vector3(0.2, 0.2, 1.0)},
+-	"OffsetEndTwoLevelBalconyVoids": {"path": "res://game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres", "name": "d2_1439_quality_v2_neutral_exterior_recess_backing", "color": Color(0.24, 0.23, 0.21, 1.0), "metallic": 0.0, "roughness": 0.88},
+-	"OffsetEndBalconySlabsAndSideReturns": {"path": "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres", "name": "site_12_warm_ivory_stucco_meter_repeat", "color": Color(0.96, 0.94, 0.87, 1.0), "metallic": 0.0, "roughness": 0.88, "texture": "res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png", "uv_scale": Vector3(0.333333, 0.333333, 1.0)},
+-	"OffsetEndSimpleMetalRails": {"path": "res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres", "name": "site_12_dark_simple_metal", "color": Color(0.075, 0.068, 0.06, 1.0), "metallic": 0.38, "roughness": 0.57},
+-	"QuietRegisterUpperOpaqueOpenings": {"path": "res://game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres", "name": "site_12_opaque_blue_gray_opening", "color": Color(0.105, 0.145, 0.16, 1.0), "metallic": 0.0, "roughness": 0.47},
+-	"QuietRegisterUpperPaleFrames": {"path": "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres", "name": "site_12_warm_ivory_stucco_meter_repeat", "color": Color(0.96, 0.94, 0.87, 1.0), "metallic": 0.0, "roughness": 0.88, "texture": "res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png", "uv_scale": Vector3(0.333333, 0.333333, 1.0)},
+-	"BlankEndGroundPassageShadow": {"path": "res://game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres", "name": "d2_1439_quality_v2_neutral_exterior_recess_backing", "color": Color(0.24, 0.23, 0.21, 1.0), "metallic": 0.0, "roughness": 0.88},
+-	"BlankEndGroundPassageFrame": {"path": "res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres", "name": "site_12_warm_ivory_stucco_meter_repeat", "color": Color(0.96, 0.94, 0.87, 1.0), "metallic": 0.0, "roughness": 0.88, "texture": "res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png", "uv_scale": Vector3(0.333333, 0.333333, 1.0)},
+-}
+-const SOURCE_DEPENDENCY_HASHES := {
+-	"res://game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd": "797dfb3075dacdf24a32b4ee0fa4959c296b35ae2d51f2d3c4dbba407fead3b7",
+-	"res://game/resources/facades/d2_1439_chinook_quality_v2_prototype.json": "1217ae0a101f0f1951a3c12303d11af3aace225745922a09aed276b1958553be",
+-	"res://game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+-	"res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres": "81fd15832670516b2cc752e89310acda201f30705b01297639703f76f2111a64",
+-	"res://game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres": "d97d7b4a442ffe8ad9a0b003e5c1d6466f9ef9effc7cdb2be8ef966195e66782",
+-	"res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres": "389c01066767b085ef8ed8ae4c5e1b06062d9ffb135e3e6a7bfa968b963717d7",
+-	"res://game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres": "09928b8617c7ac90e421aa0e61acab916e391c3bac84c486a2e3beda995139fe",
+-	"res://game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres": "eddc4900c351dc3a75d163bd380a8b3a39bf6a1c1c3647299e3af19634a60ead",
+-	"res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres": "75c13aa30a4e3c9f49980d78abe41f40c6c7ab270be6152c201eb8a72ebe8720",
+-	"res://game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+-	"res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+-	"res://game/scripts/player/player_camera.gd": "1d53f11cc3d9de00d4bb580aa6322c6f53b0080e5b9e1e3b18baeefd52125cc3",
+-	"res://game/scenes/player/player.tscn": "a37b00ecc620b4f3106a14d1dc9ec22a519f81481e5e6c68252389e13488a793"
+-}
++const EXPECTED_FACTORY_SHA256 := "e5325692fb12c1bdca826a82705db39e8f07a302de67d9a64ebd547046a98b32"
++const EXPECTED_CONFIG_SHA256 := "1b58ad8528ebe128dc65ea68026432647da60a1386375a48a1812bcf2f398816"
++const MAPPED_RUNS := [4, 5]
+ 
+ 
+ static func claims_record(record: Dictionary) -> bool:
+@@ -95,702 +19,179 @@ static func claims_record(record: Dictionary) -> bool:
+ 
+ 
+ static func prepare_chunk_records(chunk: Dictionary) -> Dictionary:
+-	var records_value: Variant = chunk.get("records", null)
+-	if not (records_value is Array):
+-		return _failure("d2_1439_live_chunk_records", "The supplied chunk has no record array.", {})
+-	var target_records: Array[Dictionary] = []
+-	for record_value: Variant in records_value as Array:
+-		if not (record_value is Dictionary):
++	if not (chunk.get("records", null) is Array):
++		return _failure("chinook_1439_chunk_records", "Missing supplied records.", {})
++	var records: Dictionary = {}
++	for value: Variant in chunk.records:
++		if not value is Dictionary:
+ 			continue
+-		var record := record_value as Dictionary
+-		var object_key := str(record.get("object_key", ""))
+-		var source_keys_value: Variant = record.get("source_keys", [])
+-		var source_keys := source_keys_value as Array if source_keys_value is Array else []
+-		if object_key in [WALL_KEY, ROOF_KEY] or SOURCE_KEY in source_keys:
+-			target_records.append(record)
+-	var target_chunk := str(chunk.get("chunk_id", "")) == TARGET_CHUNK_ID
+-	if target_records.is_empty() and not target_chunk:
++		var record := value as Dictionary
++		var source_value: Variant = record.get("source_keys", [])
++		var source_keys := source_value as Array if source_value is Array else []
++		if claims_record(record) or SOURCE_KEY in source_keys:
++			if not claims_record(record):
++				return _failure("chinook_1439_source_alias", "Unexpected target source alias.", record)
++			var key := str(record.get("object_key", ""))
++			if records.has(key):
++				return _failure("chinook_1439_duplicate_record", "Duplicate target pair member.", record)
++			records[key] = record
++	if records.is_empty() and str(chunk.get("chunk_id", "")) != TARGET_CHUNK_ID:
+ 		return {"ok": true, "contains_target": false}
+-	if not target_chunk or target_records.size() != 2:
+-		return _failure("d2_1439_live_chunk_pair_count", "1439 Chinook must remain exactly one wall+roof pair in x_-2__z_0.", target_records[0] if not target_records.is_empty() else {})
+-	var wall := _record_for_key(target_records, WALL_KEY)
+-	var roof := _record_for_key(target_records, ROOF_KEY)
+-	if wall.is_empty() or roof.is_empty() or not _record_pair_matches(wall, roof):
+-		return _failure("d2_1439_live_chunk_pair", "The supplied 1439 Chinook pair is missing, duplicated, or drifted.", target_records[0])
+-	return {"ok": true, "contains_target": true, "wall": wall, "roof": roof}
+-
+-
+-static func build_chunk_plan(prepared_pair: Dictionary) -> Dictionary:
+-	if not bool(prepared_pair.get("ok", false)):
+-		return prepared_pair
+-	if not bool(prepared_pair.get("contains_target", false)):
++	if str(chunk.get("chunk_id", "")) != TARGET_CHUNK_ID or not _pair_matches(records):
++		return _failure("chinook_1439_pair", "Exact supplied 1439 wall and roof are required.", {})
++	return {"ok": true, "contains_target": true, "source_records": records}
++
++
++static func build_chunk_plan(prepared: Dictionary, source_builder: Callable, tangent_builder: Callable) -> Dictionary:
++	if not bool(prepared.get("ok", false)):
++		return prepared
++	if not bool(prepared.get("contains_target", false)):
+ 		return {"ok": true, "contains_target": false, "records": {}, "pending_keys": {}}
+-	var wall := prepared_pair.get("wall", {}) as Dictionary
+-	var roof := prepared_pair.get("roof", {}) as Dictionary
+-	if not _record_pair_matches(wall, roof):
+-		return _failure("d2_1439_live_prepared_pair", "The prepared 1439 pair drifted after chunk preflight.", wall)
+-	var config_result := _validated_config()
+-	if not bool(config_result.get("ok", false)):
+-		return _failure("d2_1439_live_config", str(config_result.get("message", "Live config drifted.")), wall)
+-	if not runtime_dependency_closure_exists():
+-		return _failure("d2_1439_live_dependency", "The reviewed executable dependency closure is incomplete.", wall)
+-	var pair_result := _build_paired_replacement(wall, roof)
+-	if not bool(pair_result.get("ok", false)):
+-		return pair_result
+-	return {
+-		"ok": true,
+-		"contains_target": true,
+-		"records": {WALL_KEY: pair_result.wall_result, ROOF_KEY: pair_result.roof_result},
+-		"pending_keys": {WALL_KEY: true, ROOF_KEY: true},
+-	}
++	var records := prepared.get("source_records", {}) as Dictionary
++	if not _pair_matches(records) or not _dependencies_match():
++		return _failure("chinook_1439_preflight", "Pinned factory, config, or source pair drifted.", {})
++	var built := FACTORY.build_for_records(records[WALL_KEY], records[ROOF_KEY], source_builder, tangent_builder)
++	if not bool(built.get("ok", false)):
++		return _failure("chinook_1439_factory", str(built.get("message", "Factory failed.")), records[WALL_KEY])
++	var split := _split_factory_result(built, records[WALL_KEY])
++	if not bool(split.get("ok", false)):
++		return split
++	return {"ok": true, "contains_target": true, "source_records": records, "records": {WALL_KEY: split.wall_result, ROOF_KEY: split.roof_result}, "pending_keys": {WALL_KEY: true, ROOF_KEY: true}}
+ 
+ 
+-static func consume_record(record: Dictionary, chunk_plan: Dictionary) -> Dictionary:
+-	if not claims_record(record):
+-		return _failure("d2_1439_live_target", "The 1439 adapter received an unrelated row.", record)
+-	if not bool(chunk_plan.get("ok", false)) or not bool(chunk_plan.get("contains_target", false)):
+-		return _failure("d2_1439_live_unprepared_pair", "The validated supplied-chunk plan is required.", record)
++static func consume_record(record: Dictionary, plan: Dictionary) -> Dictionary:
+ 	var key := str(record.get("object_key", ""))
+-	var pending := chunk_plan.get("pending_keys", {}) as Dictionary
+-	var results := chunk_plan.get("records", {}) as Dictionary
++	if not claims_record(record) or not bool(plan.get("ok", false)) or not bool(plan.get("contains_target", false)):
++		return _failure("chinook_1439_unprepared", "Validated supplied plan required.", record)
++	if not FACTORY.matches_record_pair(
++		record if key == WALL_KEY else (plan.get("source_records", {}) as Dictionary).get(WALL_KEY, {}),
++		record if key == ROOF_KEY else (plan.get("source_records", {}) as Dictionary).get(ROOF_KEY, {})
++	):
++		return _failure("chinook_1439_consumed_drift", "Consumed row differs from the frozen source pair.", record)
++	var pending := plan.get("pending_keys", {}) as Dictionary
++	var results := plan.get("records", {}) as Dictionary
+ 	if not pending.has(key) or not results.has(key):
+-		return _failure("d2_1439_live_duplicate_consume", "A 1439 row was missing or consumed twice.", record)
+-	var expected_runtime := EXPECTED_RUNTIME_WALL_DICTIONARY_SHA256 if key == WALL_KEY else EXPECTED_RUNTIME_ROOF_DICTIONARY_SHA256
+-	var expected_canonical := CANONICAL_WALL_RECORD_SHA256 if key == WALL_KEY else CANONICAL_ROOF_RECORD_SHA256
+-	if record_signature(record) != expected_runtime or canonical_record_signature(record) != expected_canonical:
+-		return _failure("d2_1439_live_supplied_record", "The consumed row differs from the sealed pair plan.", record)
++		return _failure("chinook_1439_duplicate_consume", "Pair member missing or consumed twice.", record)
+ 	var result := results[key] as Dictionary
+ 	pending.erase(key)
+ 	results.erase(key)
+ 	return result
+ 
+ 
+-static func plan_was_fully_consumed(chunk_plan: Dictionary) -> bool:
+-	return not bool(chunk_plan.get("contains_target", false)) or (chunk_plan.get("pending_keys", {}) as Dictionary).is_empty()
++static func plan_was_fully_consumed(plan: Dictionary) -> bool:
++	return not bool(plan.get("contains_target", false)) or (plan.get("pending_keys", {}) as Dictionary).is_empty()
+ 
+ 
+-static func free_unconsumed(chunk_plan: Dictionary) -> void:
+-	var results := chunk_plan.get("records", {}) as Dictionary
+-	for key: Variant in results.keys():
+-		var result := results[key] as Dictionary
+-		var node := result.get("node", null) as Node
++static func free_unconsumed(plan: Dictionary) -> void:
++	for value: Variant in (plan.get("records", {}) as Dictionary).values():
++		var node := (value as Dictionary).get("node", null) as Node
+ 		if node != null and not node.is_inside_tree():
+ 			node.free()
+-	results.clear()
+-	(chunk_plan.get("pending_keys", {}) as Dictionary).clear()
+-
+-
+-static func record_signature(record: Dictionary) -> String:
+-	return JSON.stringify(record).sha256_text()
+-
+-
+-static func canonical_record_signature(record: Dictionary) -> String:
+-	return (_stable_json(record, 0) + "\n").sha256_text()
+-
+-
+-static func _stable_json(value: Variant, depth: int) -> String:
+-	match typeof(value):
+-		TYPE_NIL:
+-			return "null"
+-		TYPE_BOOL:
+-			return "true" if bool(value) else "false"
+-		TYPE_INT:
+-			return str(int(value))
+-		TYPE_FLOAT:
+-			var number := float(value)
+-			return str(int(number)) if number == floor(number) else JSON.stringify(number)
+-		TYPE_STRING, TYPE_STRING_NAME:
+-			return JSON.stringify(str(value))
+-		TYPE_ARRAY:
+-			var values := value as Array
+-			if values.is_empty():
+-				return "[]"
+-			var lines: Array[String] = []
+-			for item: Variant in values:
+-				lines.append(" ".repeat((depth + 1) * 2) + _stable_json(item, depth + 1))
+-			return "[\n%s\n%s]" % [",\n".join(lines), " ".repeat(depth * 2)]
+-		TYPE_DICTIONARY:
+-			var object := value as Dictionary
+-			if object.is_empty():
+-				return "{}"
+-			var keys: Array[String] = []
+-			for key: Variant in object.keys():
+-				keys.append(str(key))
+-			keys.sort()
+-			var lines: Array[String] = []
+-			for key: String in keys:
+-				lines.append(" ".repeat((depth + 1) * 2) + JSON.stringify(key) + ": " + _stable_json(object[key], depth + 1))
+-			return "{\n%s\n%s}" % [",\n".join(lines), " ".repeat(depth * 2)]
+-	return JSON.stringify(value)
+-
+-
+-static func _record_pair_matches(wall: Dictionary, roof: Dictionary) -> bool:
+-	return _record_shape_matches(wall, true) and _record_shape_matches(roof, false) \
+-		and canonical_record_signature(wall) == CANONICAL_WALL_RECORD_SHA256 \
+-		and canonical_record_signature(roof) == CANONICAL_ROOF_RECORD_SHA256 \
+-		and record_signature(wall) == EXPECTED_RUNTIME_WALL_DICTIONARY_SHA256 \
+-		and record_signature(roof) == EXPECTED_RUNTIME_ROOF_DICTIONARY_SHA256 \
+-		and PROTOTYPE.record_signature(wall) == EXPECTED_WALL_PROJECTION_SHA256 \
+-		and PROTOTYPE.record_signature(roof) == EXPECTED_ROOF_PROJECTION_SHA256 \
+-		and PROTOTYPE.matches_record_pair(wall, roof)
+-
+-
+-static func _record_shape_matches(record: Dictionary, wall: bool) -> bool:
+-	var expected_keys: Array[String] = [
+-		"collision_kind", "feature_kind", "flat_base_elevation_m", "indices", "material_key",
+-		"normals", "object_key", "opaque", "receiver_kind", "source_height_m", "source_keys",
+-		"top_elevation_m", "uvs", "vertices",
+-	]
+-	if wall:
+-		expected_keys.append_array(["exterior_foundation_segments", "shared_wall_segments"])
+-	expected_keys.sort()
+-	var actual_keys: Array[String] = []
+-	for key: Variant in record.keys():
+-		actual_keys.append(str(key))
+-	actual_keys.sort()
+-	return actual_keys == expected_keys \
+-		and str(record.get("object_key", "")) == (WALL_KEY if wall else ROOF_KEY) \
+-		and record.get("source_keys", []) == [SOURCE_KEY] \
+-		and str(record.get("feature_kind", "")) == ("building_wall" if wall else "building_roof") \
+-		and str(record.get("material_key", "")) == ("building_wall" if wall else "building_roof") \
+-		and str(record.get("receiver_kind", "")) == ("building_wall" if wall else "none") \
+-		and str(record.get("collision_kind", "")) == "world_solid" and bool(record.get("opaque", false)) \
+-		and is_equal_approx(float(record.get("source_height_m", -1.0)), 6.0) \
+-		and is_equal_approx(float(record.get("flat_base_elevation_m", -1.0)), 3.536) \
+-		and is_equal_approx(float(record.get("top_elevation_m", -1.0)), 9.536) \
+-		and (record.get("vertices", []) as Array).size() == (288 if wall else 36) \
+-		and (record.get("normals", []) as Array).size() == (288 if wall else 36) \
+-		and (record.get("uvs", []) as Array).size() == (192 if wall else 24) \
+-		and (record.get("indices", []) as Array).size() == (144 if wall else 30) \
+-		and (not wall or (int(record.get("exterior_foundation_segments", -1)) == 24 and int(record.get("shared_wall_segments", -1)) == 0))
+-
+-
+-static func _build_paired_replacement(wall: Dictionary, roof: Dictionary) -> Dictionary:
+-	var prototype_result := PROTOTYPE.build_for_records(wall, roof)
+-	if not bool(prototype_result.get("ok", false)):
+-		return _failure("d2_1439_live_factory", str(prototype_result.get("message", "The reviewed geometry factory failed.")), wall)
+-	var wall_root := prototype_result.get("node", null) as Node3D
++	(plan.get("records", {}) as Dictionary).clear()
++	(plan.get("pending_keys", {}) as Dictionary).clear()
++
++
++static func _pair_matches(records: Dictionary) -> bool:
++	return records.size() == 2 and records.has(WALL_KEY) and records.has(ROOF_KEY) \
++		and FACTORY.matches_record_pair(records[WALL_KEY], records[ROOF_KEY])
++
++
++static func _dependencies_match() -> bool:
++	# Exported scripts are remapped resources; JSON and source records stay raw.
++	if FileAccess.file_exists("res://project.binary") and not FileAccess.file_exists("res://project.godot"):
++		return runtime_dependency_closure_exists()
++	return source_dependency_hashes_match()
++
++
++static func source_dependency_hashes_match() -> bool:
++	return FileAccess.get_sha256(FACTORY.SELF_PATH) == EXPECTED_FACTORY_SHA256 \
++		and FileAccess.get_sha256(FACTORY.CONFIG_PATH) == EXPECTED_CONFIG_SHA256 \
++		and FileAccess.get_sha256("res://game/scripts/world/facades/chinook_1439_quality_model.gd") == "3947c25a42e09c675c09955ace58e5a4d468ed8f18b11e0802bbd88d94da06a3" \
++		and FileAccess.get_sha256("res://game/scripts/world/facades/chinook_1439_roof001.json") == "5eff097818af04acf849aff988f543e68379497f3cf7d4aa0f52683a70521359" \
++		and FileAccess.get_sha256("res://game/scripts/world/facades/housing_quality_support.gd") == "34d14eedb3c5296061bec5b10003c240aabb90e9654dcd61165f4bd917392b97"
++
++
++static func runtime_dependency_closure_exists() -> bool:
++	return ResourceLoader.exists(FACTORY.SELF_PATH) \
++		and FileAccess.get_sha256(FACTORY.CONFIG_PATH) == EXPECTED_CONFIG_SHA256 \
++		and ResourceLoader.exists("res://game/scripts/world/facades/chinook_1439_quality_model.gd") \
++		and FileAccess.get_sha256("res://game/scripts/world/facades/chinook_1439_roof001.json") == "5eff097818af04acf849aff988f543e68379497f3cf7d4aa0f52683a70521359" \
++		and ResourceLoader.exists("res://game/scripts/world/facades/housing_quality_support.gd")
++
++
++static func _split_factory_result(built: Dictionary, wall_record: Dictionary) -> Dictionary:
++	var wall_root := built.get("node", null) as Node3D
+ 	if wall_root == null:
+-		return _failure("d2_1439_live_factory_node", "The reviewed factory returned no root.", wall)
+-	if not _factory_contract_matches(wall_root, prototype_result):
+-		wall_root.free()
+-		return _failure("d2_1439_live_factory_contract", "The reviewed signature, batch contract, or pinned historical roof order drifted.", wall)
+-	if not material_semantics_match(wall_root):
+-		wall_root.free()
+-		return _failure("d2_1439_live_material_semantics", "The reviewed material paths or semantics drifted.", wall)
+-	var roof_mesh := wall_root.get_node_or_null(ROOF_MESH_NAME) as MeshInstance3D
+-	if roof_mesh == null or not _normalize_live_roof_winding(roof_mesh):
+-		wall_root.free()
+-		return _failure("d2_1439_live_roof_winding", "The pinned roof could not be normalized to Godot's visible clockwise top order.", wall)
+-	var split := _split_collision(wall_root)
+-	if not bool(split.get("ok", false)):
+-		wall_root.free()
+-		return _failure("d2_1439_live_collision_partition", str(split.get("message", "Structural partition failed.")), wall)
+-	var roof_root := Node3D.new()
+-	wall_root.remove_child(roof_mesh)
+-	roof_root.add_child(roof_mesh)
+-	if _face_signature(split.wall_faces as PackedVector3Array) != _mesh_face_signature(wall_root, SOURCE_WALL_MESH_NAMES) \
+-	or _face_signature(split.closure_faces as PackedVector3Array) != _mesh_face_signature(wall_root, CLOSED_RECESS_MESH_NAMES) \
+-	or _oriented_face_signature(split.roof_faces as PackedVector3Array) != _mesh_oriented_face_signature(roof_root, [ROOF_MESH_NAME]):
+-		wall_root.free()
+-		roof_root.free()
+-		(split.wall_body as StaticBody3D).free()
+-		(split.roof_body as StaticBody3D).free()
+-		return _failure("d2_1439_live_collision_congruence", "Wall face sets or ordered roof collision faces differ from reviewed structural visuals.", wall)
+-	wall_root.add_child(split.wall_body as StaticBody3D)
+-	roof_root.add_child(split.roof_body as StaticBody3D)
+-	_apply_live_metadata(wall_root, roof_root)
+-	var measured := _measure([wall_root, roof_root])
+-	if not _measured_contract_matches(measured):
++		return _failure("chinook_1439_factory_node", "Factory returned no root.", wall_record)
++	var roof_root := wall_root.get_node_or_null("QualityRoof") as Node3D
++	if roof_root == null:
+ 		wall_root.free()
+-		roof_root.free()
+-		return _failure("d2_1439_live_topology", "The paired live topology or ownership drifted: %s" % measured, wall)
+-	if not material_semantics_match(wall_root, roof_root):
+-		wall_root.free()
+-		roof_root.free()
+-		return _failure("d2_1439_live_postsplit_material", "Material semantics drifted during the live split.", wall)
+-	var ownership_signature := live_ownership_signature()
+-	if ownership_signature != EXPECTED_LIVE_OWNERSHIP_SIGNATURE:
+-		wall_root.free()
+-		roof_root.free()
+-		return _failure("d2_1439_live_ownership_signature", "Live ownership signature drifted (%s)." % ownership_signature, wall)
++		return _failure("quality_roof_missing", "Whole-building revision has no roof owner.", wall_record)
++	wall_root.remove_child(roof_root)
++	_apply_live_metadata(wall_root, WALL_KEY, true)
++	_apply_live_metadata(roof_root, ROOF_KEY, false)
++	# Count the actual split roots. Do not reuse the factory's combined totals.
++	var wall_measure := _measure([wall_root])
++	var roof_measure := _measure([roof_root])
+ 	var metadata := {
+-		"schema_version": "ti.d2-1439-chinook-live-replacement/1",
+ 		"adapter_id": ADAPTER_ID,
+ 		"source_key": SOURCE_KEY,
+-		"wall_object_key": WALL_KEY,
+-		"roof_object_key": ROOF_KEY,
+-		"canonical_wall_record_sha256": CANONICAL_WALL_RECORD_SHA256,
+-		"canonical_roof_record_sha256": CANONICAL_ROOF_RECORD_SHA256,
+-		"runtime_wall_dictionary_sha256": EXPECTED_RUNTIME_WALL_DICTIONARY_SHA256,
+-		"runtime_roof_dictionary_sha256": EXPECTED_RUNTIME_ROOF_DICTIONARY_SHA256,
+-		"geometry_signature": EXPECTED_GEOMETRY_SIGNATURE,
+-		"live_ownership_signature": ownership_signature,
+-		"standalone_approval_receipt_id": STANDALONE_APPROVAL_RECEIPT_ID,
+-		"standalone_approval_receipt_sha256": STANDALONE_APPROVAL_RECEIPT_SHA256,
+-		"shared_stucco_historical_package_audit_receipt_sha256": PACKAGE_AUDIT_RECEIPT_SHA256,
+-		"shared_stucco_historical_package_promotion_receipt_sha256": PACKAGE_PROMOTION_RECEIPT_SHA256,
+-		"replacement_mode": "atomic_pair_visual_replacement_with_split_exact_wall_and_normalized_gable_collision",
+-		"fallback_allowed": false,
++		"factory_calls": 1,
++		"observed_reference_run_indices": MAPPED_RUNS.duplicate(),
++		"unknown_faces": "plain inferred closure",
+ 		"partial_pair_allowed": false,
++		"fallback_allowed": false,
+ 		"stack_allowed": false,
+-		"mesh_instances": EXPECTED_MESH_INSTANCES,
+-		"surfaces": EXPECTED_SURFACES,
+-		"visual_triangles": EXPECTED_VISUAL_TRIANGLES,
+-		"decorative_noncolliding_triangles": EXPECTED_DECORATIVE_TRIANGLES,
+-		"structural_owner_count": 2,
+-		"shape_count": 3,
+-		"wall_collision_triangles": EXPECTED_WALL_COLLISION_TRIANGLES,
+-		"eligible_wall_collision_triangles": EXPECTED_ELIGIBLE_WALL_TRIANGLES,
+-		"closed_recess_collision_triangles": EXPECTED_CLOSED_RECESS_TRIANGLES,
+-		"roof_collision_triangles": EXPECTED_ROOF_COLLISION_TRIANGLES,
+-		"spray_owner_count": 1,
+-		"roof_spray_receiver_count": 0,
+-		"roof_spray_ray_blocking": true,
+-		"roof_landing_world_solid": true,
+-		"roof_winding_normalized_from_pinned_factory": true,
+-		"navigation_owner_count": 0,
+-		"accepted_authority_schema": "ti.facade-runtime-registry/9",
+-		"accepted_recognition_metric": "9/213",
+-		"candidate_recognition_credit": 0,
++		"frozen_source_records_preserved": true,
++		"old_visual_and_collision_proxies_retained": false,
++		"revision_acceptance": "pending",
++		"historical_recognition_credit_unchanged": true,
++		"wall_spray_receiver_identity_preserved": true,
+ 		"recognition_accepted": false,
+-		"believability_accepted": false,
+-		"as_built_fidelity_claimed": false,
+-		"independent_live_review_status": "pending",
+-		"live_technical_evidence_status": "pending",
+-		"mapped_public_run_indices": PROTOTYPE.TARGET_RUNS.duplicate(),
+-		"motif_host_run_indices": PROTOTYPE.MOTIF_HOST_RUNS.duplicate(),
+-		"mapped_motif_free_run_indices": PROTOTYPE.MAPPED_MOTIF_FREE_RUNS.duplicate(),
+-		"tiny_fragment_run_indices": PROTOTYPE.TINY_FRAGMENT_RUNS.duplicate(),
+-		"protected_run_indices": PROTOTYPE.PROTECTED_RUNS.duplicate(),
+-		"measured": measured.duplicate(true),
++		"package_attachment_pending": true,
+ 	}
+-	wall_root.set_meta("d2_1439_chinook_live_replacement", metadata.duplicate(true))
+-	roof_root.set_meta("d2_1439_chinook_live_replacement", metadata.duplicate(true))
+ 	return {
+ 		"ok": true,
+-		"wall_result": {"ok": true, "node": wall_root, "metadata": metadata, "mesh_instances": 10, "surfaces": 10, "triangles": EXPECTED_WALL_VISUAL_TRIANGLES, "static_bodies": 1, "shapes": 2},
+-		"roof_result": {"ok": true, "node": roof_root, "metadata": metadata, "mesh_instances": 1, "surfaces": 1, "triangles": EXPECTED_ROOF_VISUAL_TRIANGLES, "static_bodies": 1, "shapes": 1},
++		"wall_result": _result(wall_root, metadata, wall_measure),
++		"roof_result": _result(roof_root, metadata, roof_measure),
+ 	}
+ 
+ 
+-static func _factory_contract_matches(root: Node3D, result: Dictionary) -> bool:
+-	var metadata := result.get("metadata", {}) as Dictionary
+-	var measured := _measure([root])
+-	if str(root.get_meta("deterministic_signature", "")) != EXPECTED_GEOMETRY_SIGNATURE \
+-	or str(metadata.get("deterministic_signature", "")) != EXPECTED_GEOMETRY_SIGNATURE \
+-	or not bool(root.get_meta("prototype_only", false)) or bool(root.get_meta("runtime_attachment", true)) \
+-	or int(measured.get("mesh_instances", -1)) != EXPECTED_MESH_INSTANCES \
+-	or int(measured.get("surfaces", -1)) != EXPECTED_SURFACES \
+-	or int(measured.get("visual_triangles", -1)) != EXPECTED_VISUAL_TRIANGLES \
+-	or int(measured.get("static_bodies", -1)) != 1 or int(measured.get("shapes", -1)) != 3 \
+-	or int(measured.get("collision_triangles", -1)) != EXPECTED_COLLISION_TRIANGLES:
+-		return false
+-	var seen := {}
+-	for child: Node in root.get_children():
+-		if child is MeshInstance3D:
+-			var mesh := (child as MeshInstance3D).mesh
+-			if not EXPECTED_BATCH_TRIANGLES.has(child.name) or mesh == null or mesh.get_surface_count() != 1:
+-				return false
+-			if int(mesh.surface_get_array_index_len(0) / 3) != int(EXPECTED_BATCH_TRIANGLES[child.name]):
+-				return false
+-			seen[child.name] = true
+-	var roof_mesh := root.get_node_or_null(ROOF_MESH_NAME) as MeshInstance3D
+-	return seen.size() == EXPECTED_BATCH_TRIANGLES.size() and pinned_factory_roof_winding_matches(roof_mesh)
+-
+-
+-static func pinned_factory_roof_winding_matches(instance: MeshInstance3D) -> bool:
+-	if instance == null or instance.material_override != null or instance.mesh == null \
+-	or instance.mesh.get_surface_count() != 1 or not (instance.mesh.surface_get_material(0) is BaseMaterial3D):
+-		return false
+-	var material := instance.mesh.surface_get_material(0) as BaseMaterial3D
+-	if material.cull_mode != BaseMaterial3D.CULL_BACK:
+-		return false
+-	var arrays := instance.mesh.surface_get_arrays(0)
+-	var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
+-	var normals := arrays[Mesh.ARRAY_NORMAL] as PackedVector3Array
+-	var indices := arrays[Mesh.ARRAY_INDEX] as PackedInt32Array
+-	if indices.size() != EXPECTED_ROOF_VISUAL_TRIANGLES * 3 or normals.size() != vertices.size():
+-		return false
+-	for offset in range(0, indices.size(), 3):
+-		var winding := (vertices[indices[offset + 1]] - vertices[indices[offset]]).cross(vertices[indices[offset + 2]] - vertices[indices[offset]])
+-		if winding.length_squared() <= 0.000001 or winding.normalized().y <= 0.4:
+-			return false
+-		for corner in 3:
+-			if normals[indices[offset + corner]].y <= 0.4:
+-				return false
+-	return true
+-
+-
+-static func _normalize_live_roof_winding(instance: MeshInstance3D) -> bool:
+-	if not pinned_factory_roof_winding_matches(instance):
+-		return false
+-	var source_mesh := instance.mesh
+-	var arrays := source_mesh.surface_get_arrays(0)
+-	var indices := arrays[Mesh.ARRAY_INDEX] as PackedInt32Array
+-	for offset in range(0, indices.size(), 3):
+-		var swap := indices[offset + 1]
+-		indices[offset + 1] = indices[offset + 2]
+-		indices[offset + 2] = swap
+-	arrays[Mesh.ARRAY_INDEX] = indices
+-	var normalized := ArrayMesh.new()
+-	normalized.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+-	normalized.surface_set_name(0, source_mesh.surface_get_name(0))
+-	normalized.surface_set_material(0, source_mesh.surface_get_material(0))
+-	instance.mesh = normalized
+-	return roof_render_front_face_matches(instance)
+-
+-
+-static func roof_render_front_face_matches(instance: MeshInstance3D) -> bool:
+-	if instance == null or instance.material_override != null or instance.mesh == null \
+-	or instance.mesh.get_surface_count() != 1 or not (instance.mesh.surface_get_material(0) is BaseMaterial3D):
+-		return false
+-	var material := instance.mesh.surface_get_material(0) as BaseMaterial3D
+-	if material.cull_mode != BaseMaterial3D.CULL_BACK:
+-		return false
+-	var arrays := instance.mesh.surface_get_arrays(0)
+-	var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
+-	var normals := arrays[Mesh.ARRAY_NORMAL] as PackedVector3Array
+-	var indices := arrays[Mesh.ARRAY_INDEX] as PackedInt32Array
+-	if indices.size() != EXPECTED_ROOF_VISUAL_TRIANGLES * 3 or normals.size() != vertices.size():
+-		return false
+-	for offset in range(0, indices.size(), 3):
+-		var winding := (vertices[indices[offset + 1]] - vertices[indices[offset]]).cross(vertices[indices[offset + 2]] - vertices[indices[offset]])
+-		if winding.length_squared() <= 0.000001 or winding.normalized().y >= -0.4:
+-			return false
+-		for corner in 3:
+-			if normals[indices[offset + corner]].y <= 0.4:
+-				return false
+-	return true
+-
+-
+-static func _split_collision(root: Node3D) -> Dictionary:
+-	var original := root.get_node_or_null("ExactFootprintStructuralCollision_NoSprayOwnership") as StaticBody3D
+-	if original == null or original.get_child_count() != 3:
+-		return {"ok": false, "message": "Reviewed factory must retain three ordered structural shapes."}
+-	var names := ["EligibleExteriorWallShape", "NoneligibleClosedRecessShape", "NoneligibleExactRoofShape"]
+-	var triangle_counts := [EXPECTED_ELIGIBLE_WALL_TRIANGLES, EXPECTED_CLOSED_RECESS_TRIANGLES, EXPECTED_ROOF_COLLISION_TRIANGLES]
+-	var faces: Array[PackedVector3Array] = []
+-	for index in 3:
+-		var node := original.get_child(index) as CollisionShape3D
+-		if node == null or node.name != names[index] or not (node.shape is ConcavePolygonShape3D):
+-			return {"ok": false, "message": "Reviewed structural shape order or type drifted."}
+-		var vertices := (node.shape as ConcavePolygonShape3D).get_faces()
+-		if vertices.size() != int(triangle_counts[index]) * 3 or str(node.shape.get_meta("receiver_kind", "")) != ("building_wall" if index == 0 else "none"):
+-			return {"ok": false, "message": "Reviewed structural face count or spray eligibility drifted."}
+-		faces.append(vertices)
+-	var roof_faces := PackedVector3Array()
+-	for offset in range(0, faces[2].size(), 3):
+-		# Same roof-only winding seam as the frozen earlier live adapter.
+-		for corner in [0, 2, 1]:
+-			roof_faces.append(faces[2][offset + int(corner)])
+-	var roof_shape := original.get_child(2)
+-	original.remove_child(roof_shape)
+-	roof_shape.free()
+-	root.remove_child(original)
+-	original.name = "Collision"
+-	_clear_metadata(original)
+-	original.collision_layer = PHYSICS_WORLD_SOLID | PHYSICS_SPRAY_SURFACE
+-	original.collision_mask = 0
+-	original.set_meta("receiver_kind", "building_wall")
+-	original.set_meta("opaque", true)
+-	original.set_meta("derived_object_key", WALL_KEY)
+-	original.set_meta("source_keys", [SOURCE_KEY])
+-	original.set_meta("runtime_attachment", true)
+-	original.set_meta("prototype_only", false)
+-	original.set_meta("spray_ownership", "sole_wall_receiver_with_noneligible_closed_recess")
+-	original.set_meta("spray_ray_blocking", true)
+-	original.add_to_group("spray_receiver_wall")
+-	for index in 2:
+-		var node := original.get_child(index) as CollisionShape3D
+-		node.name = "Shape" if index == 0 else "ClosedRecessShape"
+-		node.shape.set_meta("derived_object_key", WALL_KEY)
+-		node.shape.set_meta("source_keys", [SOURCE_KEY])
+-		node.shape.set_meta("runtime_attachment", true)
+-		node.shape.set_meta("prototype_only", false)
++static func _result(node: Node3D, metadata: Dictionary, measured: Dictionary) -> Dictionary:
+ 	return {
+-		"ok": true, "wall_faces": faces[0], "closure_faces": faces[1], "roof_faces": roof_faces,
+-		"wall_body": original,
+-		"roof_body": _collision_body("Collision", roof_faces, ROOF_KEY, "none", false),
++		"ok": true,
++		"node": node,
++		"metadata": metadata.duplicate(true),
++		"mesh_instances": int(measured.get("mesh_instances", 0)),
++		"surfaces": int(measured.get("surfaces", 0)),
++		"triangles": int(measured.get("triangles", 0)),
++		"static_bodies": int(measured.get("static_bodies", 0)),
++		"shapes": int(measured.get("shapes", 0)),
+ 	}
+ 
+ 
+-static func _collision_body(node_name: String, faces: PackedVector3Array, object_key: String, receiver_kind: String, wall: bool) -> StaticBody3D:
+-	var shape := ConcavePolygonShape3D.new()
+-	shape.set_faces(faces)
+-	shape.set_meta("receiver_kind", receiver_kind)
+-	shape.set_meta("opaque", true)
+-	shape.set_meta("derived_object_key", object_key)
+-	shape.set_meta("source_keys", [SOURCE_KEY])
+-	shape.set_meta("runtime_attachment", true)
+-	shape.set_meta("prototype_only", false)
+-	shape.set_meta("ownership_partition", "exact_source_wall_shell" if wall else "exact_plan_shallow_gable_roof")
+-	var shape_node := CollisionShape3D.new()
+-	shape_node.name = "Shape"
+-	shape_node.shape = shape
+-	var body := StaticBody3D.new()
+-	body.name = node_name
+-	body.collision_layer = PHYSICS_WORLD_SOLID | PHYSICS_SPRAY_SURFACE
+-	body.collision_mask = 0
+-	body.set_meta("receiver_kind", receiver_kind)
+-	body.set_meta("opaque", true)
+-	body.set_meta("derived_object_key", object_key)
+-	body.set_meta("source_keys", [SOURCE_KEY])
+-	body.set_meta("runtime_attachment", true)
+-	body.set_meta("prototype_only", false)
+-	body.set_meta("spray_ownership", "sole_wall_receiver" if wall else "none_roof_rejection_blocker")
+-	body.set_meta("spray_ray_blocking", true)
+-	body.set_meta("roof_landing_world_solid", not wall)
+-	body.set_meta("ownership_partition", "exact_source_wall_shell" if wall else "exact_plan_shallow_gable_roof")
+-	if wall:
+-		body.add_to_group("spray_receiver_wall")
+-	body.add_child(shape_node)
+-	return body
+-
+-
+-static func _apply_live_metadata(wall_root: Node3D, roof_root: Node3D) -> void:
+-	wall_root.name = "D21439ChinookLiveWallReplacement"
+-	roof_root.name = "D21439ChinookLiveRoofReplacement"
+-	for root: Node3D in [wall_root, roof_root]:
+-		_clear_metadata(root)
+-		root.set_meta("prototype_only", false)
+-		root.set_meta("runtime_attachment", true)
+-		root.set_meta("adapter_id", ADAPTER_ID)
+-		root.set_meta("registry_status", "unregistered_live_candidate_authority_remains_v9")
+-		root.set_meta("world_builder_status", "directly_attached_uncredited_candidate")
+-		root.set_meta("technical_evidence_status", "live_capture_pending")
+-		root.set_meta("independent_live_review_status", "pending")
+-		root.set_meta("recognition_accepted", false)
+-		root.set_meta("believability_accepted", false)
+-		root.set_meta("runtime_supersedes_generated_placeholder", true)
+-		root.set_meta("superseded_object_keys", [WALL_KEY, ROOF_KEY])
+-		root.set_meta("source_geometry_sha256", SOURCE_GEOMETRY_SHA256)
+-		root.set_meta("geometry_signature", EXPECTED_GEOMETRY_SIGNATURE)
+-		root.set_meta("live_ownership_signature", EXPECTED_LIVE_OWNERSHIP_SIGNATURE)
+-		root.set_meta("fallback_allowed", false)
+-		root.set_meta("partial_pair_allowed", false)
+-		root.set_meta("stack_allowed", false)
+-	wall_root.set_meta("derived_object_key", WALL_KEY)
+-	wall_root.set_meta("source_keys", [SOURCE_KEY])
+-	wall_root.set_meta("feature_kind", "building_wall")
+-	wall_root.set_meta("receiver_kind", "building_wall")
+-	roof_root.set_meta("derived_object_key", ROOF_KEY)
+-	roof_root.set_meta("source_keys", [SOURCE_KEY])
+-	roof_root.set_meta("feature_kind", "building_roof")
+-	roof_root.set_meta("receiver_kind", "none")
+-	for root: Node3D in [wall_root, roof_root]:
+-		for node: Node in _descendants(root):
+-			if node is MeshInstance3D:
+-				_clear_metadata(node)
+-				node.set_meta("material_role", node.name)
+-				node.set_meta("prototype_only", false)
+-				node.set_meta("runtime_attachment", true)
+-				node.set_meta("derived_object_key", ROOF_KEY if node.name == ROOF_MESH_NAME else WALL_KEY)
+-				node.set_meta("source_keys", [SOURCE_KEY])
+-				node.set_meta("collision_ownership", "exact_roof_shape" if node.name == ROOF_MESH_NAME else ("eligible_exterior_wall_shape" if node.name in SOURCE_WALL_MESH_NAMES else ("noneligible_closed_recess_shape" if node.name in CLOSED_RECESS_MESH_NAMES else "render_only_noncolliding_relief")))
+-
+-
+-static func _clear_metadata(node: Node) -> void:
+-	for key: StringName in node.get_meta_list():
+-		node.remove_meta(key)
+-
+-
+-static func material_semantics_match(wall_root: Node3D, roof_root: Node3D = null) -> bool:
+-	var seen := {}
+-	var roots: Array[Node3D] = [wall_root]
+-	if roof_root != null:
+-		roots.append(roof_root)
+-	for root: Node3D in roots:
+-		for node: Node in _descendants(root):
+-			if not (node is MeshInstance3D):
+-				continue
+-			var instance := node as MeshInstance3D
+-			if seen.has(instance.name) or not EXPECTED_MATERIALS.has(instance.name) \
+-			or instance.mesh == null or instance.mesh.get_surface_count() != 1:
+-				return false
+-			if not _material_matches(instance.mesh.surface_get_material(0), EXPECTED_MATERIALS[instance.name] as Dictionary):
+-				return false
+-			seen[instance.name] = true
+-	return seen.size() == EXPECTED_MATERIALS.size()
+-
+-
+-static func _material_matches(material: Material, expected: Dictionary) -> bool:
+-	if not (material is StandardMaterial3D):
+-		return false
+-	var standard := material as StandardMaterial3D
+-	var expected_texture := str(expected.get("texture", ""))
+-	var texture_path := "" if standard.albedo_texture == null else standard.albedo_texture.resource_path
+-	return standard.resource_path == str(expected.path) \
+-		and standard.resource_name == str(expected.name) \
+-		and standard.albedo_color.is_equal_approx(expected.color as Color) \
+-		and is_equal_approx(standard.metallic, float(expected.metallic)) \
+-		and is_equal_approx(standard.roughness, float(expected.roughness)) \
+-		and texture_path == expected_texture \
+-		and standard.normal_texture == null and standard.roughness_texture == null \
+-		and standard.next_pass == null \
+-		and (not expected.has("uv_scale") or standard.uv1_scale.is_equal_approx(expected.uv_scale as Vector3))
+-
+-
+-static func source_dependency_hashes_match() -> bool:
+-	if FileAccess.get_sha256(CONFIG_PATH) != EXPECTED_CONFIG_SHA256:
+-		return false
+-	for path: String in SOURCE_DEPENDENCY_HASHES:
+-		if FileAccess.get_sha256(path) != str(SOURCE_DEPENDENCY_HASHES[path]):
+-			return false
+-	return true
+-
+-
+-static func runtime_dependency_closure_exists() -> bool:
+-	if not FileAccess.file_exists(CONFIG_PATH) or not FileAccess.file_exists(PROTOTYPE.CONFIG_PATH):
+-		return false
+-	for path: String in SOURCE_DEPENDENCY_HASHES:
+-		if path.get_extension() == "json":
+-			if not FileAccess.file_exists(path):
+-				return false
+-		elif not ResourceLoader.exists(path) and not FileAccess.file_exists(path):
+-			return false
+-	return true
+-
+-
+-static func _validated_config() -> Dictionary:
+-	if FileAccess.get_sha256(CONFIG_PATH) != EXPECTED_CONFIG_SHA256:
+-		return {"ok": false, "message": "Live config bytes drifted."}
+-	var value: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONFIG_PATH))
+-	if not (value is Dictionary):
+-		return {"ok": false, "message": "Live config did not parse."}
+-	var config := value as Dictionary
+-	var target := config.get("target", {}) as Dictionary
+-	var art := config.get("reviewed_art", {}) as Dictionary
+-	var pair := config.get("live_pair_contract", {}) as Dictionary
+-	var combined := pair.get("combined", {}) as Dictionary
+-	var wall := pair.get("wall", {}) as Dictionary
+-	var roof := pair.get("roof", {}) as Dictionary
+-	var truth := config.get("truth_boundary", {}) as Dictionary
+-	var package := config.get("package_boundary", {}) as Dictionary
+-	if str(config.get("schema_version", "")) != "ti.d2-1439-chinook-live-replacement/1" \
+-	or str(config.get("adapter_id", "")) != ADAPTER_ID \
+-	or str(target.get("source_key", "")) != SOURCE_KEY or str(target.get("wall_object_key", "")) != WALL_KEY \
+-	or str(target.get("roof_object_key", "")) != ROOF_KEY or str(target.get("chunk_id", "")) != TARGET_CHUNK_ID \
+-	or str(target.get("chunk_sha256", "")) != TARGET_CHUNK_SHA256 or str(target.get("source_geometry_sha256", "")) != SOURCE_GEOMETRY_SHA256 \
+-	or str(target.get("canonical_wall_record_sha256", "")) != CANONICAL_WALL_RECORD_SHA256 \
+-	or str(target.get("canonical_roof_record_sha256", "")) != CANONICAL_ROOF_RECORD_SHA256 \
+-	or str(target.get("prototype_wall_projection_sha256", "")) != EXPECTED_WALL_PROJECTION_SHA256 \
+-	or str(target.get("prototype_roof_projection_sha256", "")) != EXPECTED_ROOF_PROJECTION_SHA256 \
+-	or str(art.get("factory_geometry_signature", "")) != EXPECTED_GEOMETRY_SIGNATURE \
+-	or str(art.get("standalone_bar_raiser_receipt_id", "")) != STANDALONE_APPROVAL_RECEIPT_ID \
+-	or str(art.get("standalone_bar_raiser_receipt_sha256", "")) != STANDALONE_APPROVAL_RECEIPT_SHA256 \
+-	or _int_array(art.get("mapped_public_sse_runs", []) as Array) != PROTOTYPE.TARGET_RUNS \
+-	or _int_array(art.get("motif_host_runs", []) as Array) != PROTOTYPE.MOTIF_HOST_RUNS \
+-	or _int_array(art.get("mapped_motif_free_runs", []) as Array) != PROTOTYPE.MAPPED_MOTIF_FREE_RUNS \
+-	or _int_array(art.get("tiny_fragment_runs", []) as Array) != PROTOTYPE.TINY_FRAGMENT_RUNS \
+-	or _int_array(art.get("protected_runs", []) as Array) != PROTOTYPE.PROTECTED_RUNS \
+-	or int(combined.get("mesh_instances", -1)) != 11 or int(combined.get("surfaces", -1)) != 11 \
+-	or int(combined.get("visual_triangles", -1)) != 522 or int(combined.get("static_bodies", -1)) != 2 \
+-	or int(combined.get("shapes", -1)) != 3 or int(combined.get("collision_triangles", -1)) != 102 \
+-	or int(wall.get("shapes", -1)) != 2 or int(wall.get("eligible_exterior_triangles", -1)) != 62 or int(wall.get("noneligible_closed_recess_triangles", -1)) != 30 \
+-	or int(wall.get("collision_triangles", -1)) != 92 or int(roof.get("collision_triangles", -1)) != 10 \
+-	or not bool(roof.get("live_winding_normalized_from_pinned_factory", false)) \
+-	or not bool(truth.get("runtime_attachment", false)) or not bool(truth.get("candidate_is_uncredited", false)) \
+-	or str(truth.get("accepted_authority_schema", "")) != "ti.facade-runtime-registry/9" \
+-	or str(truth.get("accepted_recognition_metric", "")) != "9/213" \
+-	or bool(truth.get("catalog_or_registry_promoted", true)) or bool(truth.get("recognition_accepted", true)) \
+-	or bool(truth.get("believability_accepted", true)) or bool(truth.get("as_built_fidelity_claimed", true)) \
+-	or str(truth.get("run_17_18_policy", "")) != "tiny_clipping_fragments_no_addressable_motifs" \
+-	or bool(package.get("standalone_scene_instantiated", true)) or bool(package.get("generic_registry_loader_used", true)) \
+-	or bool(package.get("flag_or_environment_toggle", true)) or bool(package.get("missing_pair_member_loaded_from_disk", true)):
+-		return {"ok": false, "message": "Live config semantics drifted."}
+-	return {"ok": true, "config": config}
+-
+-
+-static func _int_array(values: Array) -> Array[int]:
+-	var result: Array[int] = []
+-	for value: Variant in values:
+-		result.append(int(value))
+-	return result
+-
+-
+-static func live_ownership_signature() -> String:
+-	return JSON.stringify({
+-		"schema_version": "ti.d2-1439-chinook-live-ownership/1",
+-		"adapter_id": ADAPTER_ID,
+-		"geometry_signature": EXPECTED_GEOMETRY_SIGNATURE,
+-		"wall_record_sha256": CANONICAL_WALL_RECORD_SHA256,
+-		"roof_record_sha256": CANONICAL_ROOF_RECORD_SHA256,
+-		"wall_shape_order": ["eligible_exterior", "noneligible_closed_recess"],
+-		"shape_count": 3,
+-		"wall_collision_triangles": EXPECTED_WALL_COLLISION_TRIANGLES,
+-		"eligible_wall_collision_triangles": EXPECTED_ELIGIBLE_WALL_TRIANGLES,
+-		"closed_recess_collision_triangles": EXPECTED_CLOSED_RECESS_TRIANGLES,
+-		"roof_collision_triangles": EXPECTED_ROOF_COLLISION_TRIANGLES,
+-		"wall_mesh_instances": 10,
+-		"roof_mesh_instances": 1,
+-		"wall_spray_owner_count": 1,
+-		"roof_spray_owner_count": 0,
+-		"decorative_collision_triangles": 0,
+-		"roof_winding_normalized_from_pinned_factory": true,
+-		"tiny_fragment_motif_hosts": 0,
+-	}).sha256_text()
+-
+-
+-static func _mesh_face_signature(root: Node, names: Array) -> String:
+-	var faces := PackedVector3Array()
+-	for name_value: Variant in names:
+-		var instance := root.get_node_or_null(str(name_value)) as MeshInstance3D
+-		if instance == null or instance.mesh == null or instance.mesh.get_surface_count() != 1:
+-			return ""
+-		var arrays := instance.mesh.surface_get_arrays(0)
+-		var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
+-		var indices := arrays[Mesh.ARRAY_INDEX] as PackedInt32Array
+-		for index: int in indices:
+-			faces.append(vertices[index])
+-	return _face_signature(faces)
+-
+-
+-static func _mesh_oriented_face_signature(root: Node, names: Array) -> String:
+-	var faces := PackedVector3Array()
+-	for name_value: Variant in names:
+-		var instance := root.get_node_or_null(str(name_value)) as MeshInstance3D
+-		if instance == null or instance.mesh == null or instance.mesh.get_surface_count() != 1:
+-			return ""
+-		var arrays := instance.mesh.surface_get_arrays(0)
+-		var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
+-		var indices := arrays[Mesh.ARRAY_INDEX] as PackedInt32Array
+-		for index: int in indices:
+-			faces.append(vertices[index])
+-	return _oriented_face_signature(faces)
+-
+-
+-static func _face_signature(faces: PackedVector3Array) -> String:
+-	if faces.size() % 3 != 0:
+-		return ""
+-	var triangles: Array[String] = []
+-	for offset in range(0, faces.size(), 3):
+-		var points: Array[String] = []
+-		for corner in 3:
+-			var point := faces[offset + corner]
+-			points.append("%.5f|%.5f|%.5f" % [point.x, point.y, point.z])
+-		points.sort()
+-		triangles.append("/".join(points))
+-	triangles.sort()
+-	return "\n".join(triangles).sha256_text()
+-
+-
+-static func _oriented_face_signature(faces: PackedVector3Array) -> String:
+-	if faces.size() % 3 != 0:
+-		return ""
+-	var triangles: Array[String] = []
+-	for offset in range(0, faces.size(), 3):
+-		var points: Array[String] = []
+-		for corner in 3:
+-			var point := faces[offset + corner]
+-			points.append("%.5f|%.5f|%.5f" % [point.x, point.y, point.z])
+-		triangles.append("/".join(points))
+-	triangles.sort()
+-	return "\n".join(triangles).sha256_text()
++static func _apply_live_metadata(root: Node3D, key: String, wall: bool) -> void:
++	root.name = "Chinook1439LiveWall" if wall else "Chinook1439LiveRoof"
++	root.set_meta("derived_object_key", key)
++	root.set_meta("source_keys", [SOURCE_KEY])
++	root.set_meta("feature_kind", "building_wall" if wall else "building_roof")
++	root.set_meta("receiver_kind", "building_wall" if wall else "none")
++	root.set_meta("runtime_attachment", true)
++	root.set_meta("prototype_only", false)
++	root.set_meta("adapter_id", ADAPTER_ID)
++	root.set_meta("runtime_supersedes_generated_placeholder", true)
++	root.set_meta("superseded_object_keys", [WALL_KEY, ROOF_KEY])
++	root.set_meta("recognition_accepted", false)
++	for child: Node in root.get_children():
++		if child is MeshInstance3D:
++			child.set_meta("derived_object_key", key)
++			child.set_meta("source_keys", [SOURCE_KEY])
++			child.set_meta("runtime_attachment", true)
++			child.set_meta("prototype_only", false)
+ 
+ 
+ static func _measure(roots: Array) -> Dictionary:
+-	var result := {"mesh_instances": 0, "surfaces": 0, "visual_triangles": 0, "static_bodies": 0, "shapes": 0, "collision_triangles": 0, "wall_collision_triangles": 0, "eligible_wall_collision_triangles": 0, "closed_recess_collision_triangles": 0, "roof_collision_triangles": 0, "spray_owners": 0, "roof_spray_owners": 0, "navigation_nodes": 0, "decals": 0}
++	var result := {"mesh_instances": 0, "surfaces": 0, "triangles": 0, "static_bodies": 0, "shapes": 0}
+ 	for root_value: Variant in roots:
+ 		for node: Node in _descendants(root_value as Node):
+ 			if node is MeshInstance3D:
+@@ -799,48 +200,16 @@ static func _measure(roots: Array) -> Dictionary:
+ 				if mesh != null:
+ 					result.surfaces += mesh.get_surface_count()
+ 					for surface_index in mesh.get_surface_count():
+-						result.visual_triangles += int(mesh.surface_get_array_index_len(surface_index) / 3)
++						var arrays := mesh.surface_get_arrays(surface_index)
++						var indices: Variant = arrays[Mesh.ARRAY_INDEX]
++						result.triangles += int((indices.size() if indices != null and indices.size() > 0 else arrays[Mesh.ARRAY_VERTEX].size()) / 3)
+ 			elif node is StaticBody3D:
+ 				result.static_bodies += 1
+-				if node.is_in_group("spray_receiver_wall"):
+-					result.spray_owners += 1
+-					if str(node.get_meta("derived_object_key", "")) == ROOF_KEY:
+-						result.roof_spray_owners += 1
+ 			elif node is CollisionShape3D:
+ 				result.shapes += 1
+-				var shape := (node as CollisionShape3D).shape
+-				if shape is ConcavePolygonShape3D:
+-					var triangles := int((shape as ConcavePolygonShape3D).get_faces().size() / 3)
+-					result.collision_triangles += triangles
+-					if str(shape.get_meta("derived_object_key", "")) == WALL_KEY:
+-						result.wall_collision_triangles += triangles
+-						if str(shape.get_meta("receiver_kind", "")) == "building_wall":
+-							result.eligible_wall_collision_triangles += triangles
+-						else:
+-							result.closed_recess_collision_triangles += triangles
+-					elif str(shape.get_meta("derived_object_key", "")) == ROOF_KEY:
+-						result.roof_collision_triangles += triangles
+-			elif node is NavigationRegion3D or node is NavigationObstacle3D or node is NavigationLink3D:
+-				result.navigation_nodes += 1
+-			elif node is Decal:
+-				result.decals += 1
+ 	return result
+ 
+ 
+-static func _measured_contract_matches(measured: Dictionary) -> bool:
+-	return int(measured.get("mesh_instances", -1)) == EXPECTED_MESH_INSTANCES \
+-		and int(measured.get("surfaces", -1)) == EXPECTED_SURFACES \
+-		and int(measured.get("visual_triangles", -1)) == EXPECTED_VISUAL_TRIANGLES \
+-		and int(measured.get("static_bodies", -1)) == 2 and int(measured.get("shapes", -1)) == 3 \
+-		and int(measured.get("collision_triangles", -1)) == EXPECTED_COLLISION_TRIANGLES \
+-		and int(measured.get("wall_collision_triangles", -1)) == EXPECTED_WALL_COLLISION_TRIANGLES \
+-		and int(measured.get("eligible_wall_collision_triangles", -1)) == EXPECTED_ELIGIBLE_WALL_TRIANGLES \
+-		and int(measured.get("closed_recess_collision_triangles", -1)) == EXPECTED_CLOSED_RECESS_TRIANGLES \
+-		and int(measured.get("roof_collision_triangles", -1)) == EXPECTED_ROOF_COLLISION_TRIANGLES \
+-		and int(measured.get("spray_owners", -1)) == 1 and int(measured.get("roof_spray_owners", -1)) == 0 \
+-		and int(measured.get("navigation_nodes", -1)) == 0 and int(measured.get("decals", -1)) == 0
+-
+-
+ static func _descendants(root: Node) -> Array[Node]:
+ 	var result: Array[Node] = []
+ 	var pending: Array[Node] = [root]
+@@ -852,14 +221,7 @@ static func _descendants(root: Node) -> Array[Node]:
+ 	return result
+ 
+ 
+-static func _record_for_key(records: Array[Dictionary], object_key: String) -> Dictionary:
+-	for record: Dictionary in records:
+-		if str(record.get("object_key", "")) == object_key:
+-			return record
+-	return {}
+-
+-
+ static func _failure(code: String, message: String, record: Dictionary) -> Dictionary:
+-	var source_keys_value: Variant = record.get("source_keys", [])
+-	var source_keys := source_keys_value as Array if source_keys_value is Array else []
++	var source_value: Variant = record.get("source_keys", [])
++	var source_keys := source_value as Array if source_value is Array else []
+ 	return {"ok": false, "code": code, "message": message, "source_keys": source_keys.duplicate()}
+diff --git a/game/scripts/world/world_chunk_builder.gd b/game/scripts/world/world_chunk_builder.gd
+index b77ed13ad8a4b0b43fe012eb0919e6e60ab86993..24560af39903b7341ae6cb87d39cf5623fc586d7 100644
+--- a/game/scripts/world/world_chunk_builder.gd
++++ b/game/scripts/world/world_chunk_builder.gd
+@@ -253,7 +253,7 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
+ 		chunk_root.free()
+ 		return d2_1441_plan
+ 	rollback_plans.append({"adapter": D2_1441_CHINOOK_LIVE_REPLACEMENT, "plan": d2_1441_plan})
+-	var d2_1439_plan := D2_1439_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1439_pair)
++	var d2_1439_plan := D2_1439_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1439_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+ 	if not bool(d2_1439_plan.get("ok", false)):
+ 		_free_unconsumed_plans(rollback_plans)
+ 		chunk_root.free()
