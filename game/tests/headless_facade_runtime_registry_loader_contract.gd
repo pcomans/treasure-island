@@ -3,8 +3,8 @@ extends SceneTree
 const RegistryLoader := preload("res://game/scripts/world/facades/facade_runtime_registry_loader.gd")
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
-const EXPECTED_REGISTRY_SHA256 := "deb3029e40b924e5f70b5d8a8d829323d168c73204d87d66840e24e82beec7d2"
-const EXPECTED_ADAPTER_CONTRACT_SHA256 := "176619adcfaf7d5c2ae67c20ee8dc4bacdf47dcf3e1f3c2bd18f80b606189121"
+const EXPECTED_REGISTRY_SHA256 := "652110aa71905f130096a8f179eea7088edf395e4dcf82175216663d8614b965"
+const EXPECTED_ADAPTER_CONTRACT_SHA256 := "9592e3bf0e81ba41f67cda5edcef1297f821b60c3757db1b5891881090412154"
 const READY_RECEIVERS := [
 	"building-composite:w1249412094:w1282547786:wall",
 	"building:r16681702:wall",
@@ -148,6 +148,14 @@ func _run() -> void:
 		_finish()
 		return
 	var loader := RegistryLoader.new()
+	# Numeric representation checks use a draft, never synthetic PASS evidence.
+	var draft := {"numerator_effect": 1, "status": "draft"}
+	var parsed_draft: Dictionary = JSON.parse_string('{"numerator_effect":1,"status":"draft"}')
+	_require(loader._family_receipt_matches(parsed_draft, draft), "Family receipt comparison rejected equivalent JSON integer representation.")
+	parsed_draft.numerator_effect = 1.5
+	_require(not loader._family_receipt_matches(parsed_draft, draft), "Family receipt comparison accepted fractional credit.")
+	parsed_draft.numerator_effect = "1"
+	_require(not loader._family_receipt_matches(parsed_draft, draft), "Family receipt comparison accepted string credit.")
 	var loaded := loader.load_default(EXPECTED_REGISTRY_SHA256)
 	if not _require(bool(loaded.get("ok", false)), "Default registry load failed: %s" % str(loaded)):
 		_finish()

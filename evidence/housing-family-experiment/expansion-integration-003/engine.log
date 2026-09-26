@@ -1,0 +1,328 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)
+
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-551.277, 8.145, -704.7132), S: (5.617065, 1.249992, 14.05927)] normal0=(-0.218426, 0.975806, -0.009681) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-545.8196, 8.145, -704.2495), S: (5.6203, 1.249992, 14.06354)] normal0=(0.232026, 0.972655, 0.010327) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-551.2756, 8.145, -695.647), S: (10.45355, 1.249992, 5.46106)] normal0=(-0.01029, 0.972647, 0.232061) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.6576, 8.145, -704.7132), S: (10.45825, 1.249992, 5.460999)] normal0=(0.010309, 0.972625, -0.232152) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.6575, 8.145, -719.5883), S: (6.353577, 1.25, 14.87225)] normal0=(-0.20485, 0.978751, -0.009081) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-544.4347, 8.145, -719.0601), S: (6.356567, 1.25, 14.625)] normal0=(0.204794, 0.978763, 0.009118) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.6576, 8.145, -710.4109), S: (11.68311, 1.25, 6.161072)] normal0=(-0.009154, 0.97877, 0.204759) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.0015, 8.145, -719.5883), S: (11.92334, 1.25, 6.225769)] normal0=(0.009099, 0.97879, -0.204664) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-538.4246, 8.145, -719.0769), S: (0.346558, 0.005278, 0.016846)] normal0=(0.015173, 0.999885, 0.000666) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-538.7712, 8.145, -719.0908), S: (0.693115, 0.005278, 0.030762)] normal0=(-0.042724, 0.268098, 0.962444) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.0013, 8.145, -733.746), S: (5.667725, 1.249992, 14.15491)] normal0=(-0.23007, 0.973121, -0.010202) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-544.4933, 8.145, -733.2753), S: (5.667175, 1.249992, 14.15442)] normal0=(0.230048, 0.973126, 0.010202) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.0015, 8.145, -724.6319), S: (10.55157, 1.249992, 5.511047)] normal0=(-0.0102, 0.973177, 0.229831) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-549.3771, 8.145, -733.746), S: (10.55109, 1.249992, 5.510986)] normal0=(0.010137, 0.973456, -0.228649) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-177.6843, 8.155, -888.958), S: (9.833679, 1.25, 11.16809)] normal0=(0.172891, 0.974988, -0.139669) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-185.394, 8.155, -882.0679), S: (9.845215, 1.25, 11.0946)] normal0=(-0.172919, 0.974976, 0.139715) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-185.394, 8.155, -888.957), S: (8.52771, 1.25, 7.707336)] normal0=(-0.139737, 0.974973, -0.172922) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-176.359, 8.155, -878.6069), S: (8.513519, 1.25, 7.659912)] normal0=(0.139179, 0.975159, 0.17232) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-167.2072, 8.155, -878.9211), S: (10.04865, 1.25, 11.18915)] normal0=(0.155741, 0.979753, -0.125813) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-174.8828, 8.286647, -871.2498), S: (9.122253, 1.118353, 10.24023)] normal0=(-0.155763, 0.979749, 0.125815) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-175.8092, 8.155, -878.929), S: (9.502686, 1.25, 8.493958)] normal0=(-0.125922, 0.979733, -0.155776) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-166.5797, 8.155, -868.6449), S: (9.421143, 1.25, 8.526123)] normal0=(0.125815, 0.979749, 0.155763) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-158.1019, 8.478888, -865.3536), S: (8.093597, 0.926112, 9.077759)] normal0=(0.150442, 0.981123, -0.121512) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-157.2567, 8.155, -867.7286), S: (0.52771, 0.133927, 0.949585)] normal0=(0.119479, 0.979955, -0.159414) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-167.017, 8.155, -859.7621), S: (10.40134, 1.25, 11.62646)] normal0=(-0.150425, 0.98112, 0.121553) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-167.0132, 8.155, -867.7319), S: (9.8573, 1.25, 8.915649)] normal0=(-0.119864, 0.981469, -0.149505) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-157.5541, 8.155, -856.9772), S: (8.56308, 1.25, 8.884155)] normal0=(0.121464, 0.981139, 0.150373) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-345.8325, 7.695, -822.3261), S: (7.917236, 1.1, 13.00861)] normal0=(-0.183719, 0.980861, -0.064497) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-338.819, 7.87014, -818.1147), S: (6.843628, 0.92486, 11.3681)] normal0=(0.183698, 0.980865, 0.064496) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-345.843, 7.695, -812.6865), S: (9.877289, 1.1, 6.772522)] normal0=(-0.064539, 0.980844, 0.18379) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-341.3089, 7.695, -822.3261), S: (10.45837, 1.1, 7.064758)] normal0=(0.064605, 0.980814, -0.183928) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-341.2943, 7.695, -836.569), S: (8.615234, 1.099994, 14.20105)] normal0=(-0.170036, 0.98363, -0.059672) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-333.6954, 7.695, -832.5486), S: (8.583588, 1.099994, 14.17755)] normal0=(0.169978, 0.983637, 0.059708) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-341.3089, 7.695, -826.0182), S: (11.28571, 1.099994, 7.64447)] normal0=(-0.059669, 0.983641, 0.169972) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-336.3564, 7.695, -836.569), S: (11.26544, 1.099994, 7.655457)] normal0=(0.059424, 0.983784, -0.169224) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-336.3431, 7.695, -849.496), S: (7.905518, 1.099994, 12.88861)] normal0=(-0.182656, 0.981075, -0.064252) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-329.2936, 7.855357, -845.3463), S: (6.921997, 0.939638, 11.3844)] normal0=(0.182794, 0.981054, 0.064179) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-336.3564, 7.695, -839.9937), S: (10.47394, 1.099994, 7.101196)] normal0=(-0.064174, 0.981079, 0.182665) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-331.8245, 7.695, -849.483), S: (9.72345, 1.099994, 7.050598)] normal0=(0.064195, 0.981069, -0.182711) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.3344, 8.405, -661.3797), S: (0.381592, 0.000367, 0.030212)] normal0=(-0.078535, 0.091344, 0.992718) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4099), S: (0.381622, 0.000367, 0.030212)] normal0=(-0.000978, 1.0, -0.000076) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4099), S: (0.416321, 0.000367, 0.032959)] normal0=(0.078518, 0.091361, -0.992718) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4096), S: (0.763214, 0.000367, 0.06012)] normal0=(-0.072464, 0.385274, 0.919953) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-271.1329, 8.405, -674.7025), S: (6.168945, 1.149997, 14.28204)] normal0=(0.202546, 0.979142, 0.015991) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-277.0368, 8.405, -675.568), S: (6.167236, 1.149997, 14.2887)] normal0=(-0.20436, 0.978764, -0.016085) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-275.9111, 8.405, -675.57), S: (10.94162, 1.149997, 5.905884)] normal0=(0.016101, 0.978802, -0.204173) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-277.037, 8.405, -666.3209), S: (10.94272, 1.149997, 5.905579)] normal0=(-0.016168, 0.978586, 0.205202) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-273.0963, 8.610164, -659.3782), S: (5.787048, 0.944831, 12.81958)] normal0=(0.178158, 0.983901, 0.014088) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-266.8586, 8.405, -660.4153), S: (0.763916, 0.129039, 0.708435)] normal0=(0.178158, 0.983901, 0.014088) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.9028, 8.405, -661.4096), S: (7.000275, 1.149995, 15.07971)] normal0=(-0.178214, 0.983891, -0.014053) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4096), S: (12.62137, 1.149995, 6.8078)] normal0=(0.014034, 0.983903, -0.178149) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.9029, 8.405, -652.1423), S: (11.57474, 1.149995, 6.718384)] normal0=(-0.014052, 0.983895, 0.178193) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.903, 8.405, -646.3287), S: (0.470673, 0.001898, 0.037964)] normal0=(-0.004015, 0.999992, -0.000291) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.9029, 8.405, -646.3287), S: (0.958649, 0.001898, 0.075562)] normal0=(0.071428, 0.41754, -0.905847) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-273.2894, 8.405, -645.2115), S: (6.136322, 1.149997, 14.30255)] normal0=(0.205598, 0.978502, 0.016246) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.156, 8.405, -646.1804), S: (6.145233, 1.149997, 14.41388)] normal0=(-0.205648, 0.978492, -0.016173) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.0211, 8.405, -646.1804), S: (10.74664, 1.149997, 5.86731)] normal0=(0.016227, 0.978512, -0.205552) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.156, 8.405, -636.7763), S: (10.87698, 1.149997, 5.86731)] normal0=(-0.01625, 0.97843, 0.205938) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-259.7573, 8.895, -569.9622), S: (14.30548, 0.669999, 6.045227)] normal0=(-0.008277, 0.992454, 0.122341) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-259.02, 8.895, -575.7714), S: (14.30237, 0.669999, 6.040466)] normal0=(0.00822, 0.992553, -0.121539) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-250.5269, 8.895, -574.8043), S: (5.813904, 0.669999, 10.88458)] normal0=(0.121389, 0.992571, 0.008236) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-259.7606, 8.895, -575.7717), S: (5.813965, 0.669999, 10.88409)] normal0=(-0.121943, 0.992503, -0.008275) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-259.0476, 8.895, -575.772), S: (0.022949, 0.003553, 0.314392)] normal0=(0.000834, 0.999937, -0.011226) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-259.0673, 8.895, -575.7717), S: (0.042694, 0.003553, 0.631409)] normal0=(0.899683, 0.432276, 0.060891) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-273.5533, 8.895, -576.6071), S: (0.016296, 0.002106, 0.230164)] normal0=(0.00077, 0.999959, -0.009045) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-273.5699, 8.895, -576.6071), S: (0.031433, 0.002106, 0.464844)] normal0=(-0.938326, 0.339881, -0.063443) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-274.3889, 8.895, -569.3411), S: (14.38455, 0.669996, 6.337097)] normal0=(-0.007818, 0.99332, 0.115127) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-273.6134, 8.895, -575.4828), S: (14.50299, 0.669996, 6.344299)] normal0=(0.007801, 0.993325, -0.115087) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-265.2533, 8.895, -574.5032), S: (6.142883, 0.669996, 11.37506)] normal0=(0.115127, 0.99332, 0.007818) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-274.3924, 8.895, -575.4829), S: (6.142639, 0.669996, 11.5033)] normal0=(-0.114913, 0.993345, -0.007748) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-287.624, 9.072434, -570.884), S: (11.66479, 0.492565, 5.110046)] normal0=(-0.007109, 0.994446, 0.105008) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-275.102, 8.895, -564.7374), S: (0.709625, 0.075267, 0.757507)] normal0=(-0.007109, 0.994446, 0.105008) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-288.5493, 8.895, -577.6196), S: (15.00656, 0.669999, 6.896912)] normal0=(0.007125, 0.99445, -0.104973) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-280.281, 8.895, -576.6074), S: (6.742493, 0.669999, 12.62756)] normal0=(0.104679, 0.99448, 0.007141) points=11 triangles=9
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-289.294, 8.895, -577.6201), S: (6.627106, 0.669999, 11.06519)] normal0=(-0.089978, 0.995925, -0.006082) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-173.6513, 8.875, -752.8254), S: (7.83844, 0.669999, 13.86621)] normal0=(-0.109054, 0.993632, 0.028321) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-166.4448, 8.970147, -754.7739), S: (6.813736, 0.574852, 12.24487)] normal0=(0.109035, 0.993634, -0.02832) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-170.0431, 8.875, -746.1605), S: (10.62309, 0.669999, 7.205444)] normal0=(0.028282, 0.993646, 0.108937) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-173.6513, 8.875, -755.7986), S: (11.43977, 0.669999, 7.206482)] normal0=(-0.021347, 0.996397, -0.082082) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-176.0856, 8.993962, -766.6594), S: (6.968521, 0.551038, 12.46234)] normal0=(-0.101889, 0.994443, 0.02647) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-173.831, 8.875, -753.6917), S: (0.6884, 0.075188, 0.866028)] normal0=(-0.101889, 0.994443, 0.02647) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-169.7371, 8.875, -770.6354), S: (8.339066, 0.67, 14.62543)] normal0=(0.101871, 0.994445, -0.02647) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-173.6514, 8.875, -760.5444), S: (12.25328, 0.669997, 7.718933)] normal0=(0.025898, 0.994679, 0.099712) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-176.3684, 8.875, -770.6464), S: (11.1577, 0.67, 7.716248)] normal0=(-0.026486, 0.994451, -0.101816) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-166.1285, 8.875, -770.5283), S: (0.45726, 0.001211, 0.11969)] normal0=(0.187933, 0.662851, 0.724782) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-165.6712, 8.875, -770.6481), S: (0.457672, 0.001211, 0.119812)] normal0=(0.00251, 0.999997, -0.000597) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-166.1285, 8.875, -770.6464), S: (0.914932, 0.001211, 0.237793)] normal0=(0.208298, 0.560486, 0.80154) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-165.679, 8.875, -770.6481), S: (0.464996, 0.001211, 0.121826)] normal0=(-0.178465, 0.703319, -0.688108) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-181.244, 8.875, -781.4252), S: (7.547852, 0.67, 13.88312)] normal0=(-0.119072, 0.992406, 0.030871) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-174.5895, 8.875, -784.1688), S: (7.545273, 0.67, 13.99518)] normal0=(0.117948, 0.992548, -0.030593) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-177.5207, 8.875, -774.0813), S: (10.47723, 0.67, 6.51062)] normal0=(0.030423, 0.992508, 0.118332) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-181.2398, 8.875, -784.173), S: (10.55693, 0.67, 6.65448)] normal0=(-0.025157, 0.994983, -0.096826) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-254.8865, 8.355, -847.2394), S: (12.88144, 0.67, 8.908936)] normal0=(0.055449, 0.992408, 0.109785) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-259.767, 8.355, -854.505), S: (12.92596, 0.67, 8.921875)] normal0=(-0.055272, 0.992351, -0.110385) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-249.2276, 8.355, -854.5051), S: (7.20105, 0.67, 9.630981)] normal0=(0.085193, 0.994332, -0.063615) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-259.7656, 8.355, -847.9683), S: (7.261353, 0.67, 9.642151)] normal0=(-0.109792, 0.992403, 0.055523) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-254.1745, 8.355, -836.9047), S: (0.035446, 0.017639, 0.067505)] normal0=(0.103182, 0.973198, 0.205523) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-254.21, 8.355, -836.9707), S: (0.067474, 0.017639, 0.133484)] normal0=(-0.886971, 0.110654, 0.448373) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-271.9273, 8.355, -841.5591), S: (0.180023, 0.026641, 0.336731)] normal0=(-0.032349, 0.997416, -0.064148) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-271.9273, 8.355, -841.5458), S: (0.333771, 0.026641, 0.660278)] normal0=(-0.781094, 0.48373, 0.39484) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-266.3803, 8.355, -839.3942), S: (12.23778, 0.67, 8.700134)] normal0=(0.047865, 0.99435, 0.094742) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-270.5051, 8.452642, -845.9971), S: (10.74683, 0.572357, 7.577515)] normal0=(-0.051841, 0.993377, -0.102543) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-261.9271, 8.355, -847.1787), S: (7.784531, 0.67, 10.34149)] normal0=(0.102518, 0.993382, -0.051785) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-271.2597, 8.355, -840.6039), S: (7.404724, 0.67, 9.872375)] normal0=(-0.102541, 0.993378, 0.051822) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-278.4264, 8.507486, -833.2169), S: (10.19553, 0.517513, 7.245117)] normal0=(0.048375, 0.994232, 0.095725) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-279.0603, 8.355, -824.348), S: (0.212311, 0.024665, 0.306458)] normal0=(0.048373, 0.994235, 0.095687) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-284.6511, 8.355, -841.537), S: (12.7063, 0.67, 9.149902)] normal0=(-0.04836, 0.994225, -0.095799) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-274.6777, 8.355, -841.5458), S: (7.709961, 0.67, 10.44666)] normal0=(0.095744, 0.99423, -0.048376) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-284.6441, 8.355, -835.1217), S: (8.325043, 0.67, 11.08044)] normal0=(-0.097935, 0.99396, 0.049516) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-291.4752, 8.355, -826.582), S: (12.41431, 0.669997, 8.772461)] normal0=(0.052142, 0.993295, 0.10318) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-295.466, 8.460734, -833.0964), S: (10.80945, 0.564262, 7.603821)] normal0=(-0.052161, 0.993294, -0.103182) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-286.7964, 8.355, -834.3175), S: (7.735443, 0.669997, 10.27625)] normal0=(0.103116, 0.993306, -0.052066) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-296.2581, 8.355, -827.6324), S: (7.306488, 0.669997, 9.840332)] normal0=(-0.103184, 0.993293, 0.052179) points=6 triangles=4
+VISUAL_SETTLED: id=w96215693 spawn_y=5.737 settled_y=2.737 ground_y=2.737 clearance=0.000 frames=125 recovery_delta=0
+VISUAL_CAPTURE: id=w96215693-INSTALLED region=w96215693 player=(-270.000,2.737,-590.000) camera=(-271.340,4.413,-595.324) grounded=true clearance=0.000 image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215693-INSTALLED.png sha256=790c4ba20c9882d199a019fc4d18b094f5d4e2212f8c073f7b94d3d08020191b colors=230 luminance_range=0.617
+VISUAL_SETTLED: id=w96665916 spawn_y=6.103 settled_y=3.103 ground_y=3.103 clearance=0.000 frames=126 recovery_delta=0
+VISUAL_CAPTURE: id=w96665916-INSTALLED region=w96665916 player=(-153.748,3.103,-770.771) camera=(-149.289,4.896,-773.984) grounded=true clearance=0.000 image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96665916-INSTALLED.png sha256=eae41089b8f2be02c3386461f91ab3424c73b9984db8ee0057854c6b3d3b9c06 colors=212 luminance_range=0.644
+VISUAL_SETTLED: id=w96215668 spawn_y=5.606 settled_y=2.605 ground_y=2.606 clearance=-0.000 frames=126 recovery_delta=0
+VISUAL_CAPTURE: id=w96215668-INSTALLED region=w96215668 player=(-290.578,2.605,-846.512) camera=(-295.837,4.329,-848.099) grounded=true clearance=-0.000 image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215668-INSTALLED.png sha256=d53df82cc7819304aa5d6e1d03a51c3482a645ab70dd8d143f0dd7d2fbdb9712 colors=201 luminance_range=0.621
+FAMILY_LIVE_FIT source=w96215678 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=969 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215653 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1185 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215659 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1163 reused_contact_run=
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215668 mesh=712 sampled_max_clearance=0.00021776602898 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215668 mesh=716 sampled_max_clearance=-0.00051514595725 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215668 mesh=730 sampled_max_clearance=-0.00392456559348 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215668 mesh=740 sampled_max_clearance=-0.00774005589255 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215668 mesh=754 sampled_max_clearance=-0.00983425388813 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215668 mesh=962 sampled_max_clearance=-0.00123612252492 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215668 mesh=966 sampled_max_clearance=-0.0017978442711 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215668 mesh=980 sampled_max_clearance=-0.00547442621291 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215668 mesh=990 sampled_max_clearance=-0.00929712439211 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_GRADE_OCCLUDED_CONTACT source=w96215668 mesh=1004 sampled_max_clearance=-0.01141295172647 scope=retained_geometry_no_stable_exposed_probe
+FAMILY_LIVE_FIT source=w96215668 bodies=4 mesh_contact_samples=1360 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=10 failures=0 mesh_inventory=1370 reused_contact_run=
+FAMILY_LIVE_FIT source=w96665911 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=659 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215646 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1007 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215651 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1107 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215652 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1749 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215656 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1319 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215661 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1364 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215666 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1142 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215672 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1248 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215673 bodies=2 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=562 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215677 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1136 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215680 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1121 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215682 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=674 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215685 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=722 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215691 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1084 reused_contact_run=
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=667 max_triangle_area=0.00006103099076
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=691 max_triangle_area=0.00009275717457
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=693 max_triangle_area=0.00009275717457
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=710 max_triangle_area=0.00003815004675
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=712 max_triangle_area=0.00001907786464
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=714 max_triangle_area=0.00001907786464
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=716 max_triangle_area=0.00003814436059
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=728 max_triangle_area=0.0000781823037
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=730 max_triangle_area=0.00003909697989
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=732 max_triangle_area=0.00007817065489
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=832 max_triangle_area=0.00002722502541
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=875 max_triangle_area=0.00004528369391
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=877 max_triangle_area=0.00002263584793
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=879 max_triangle_area=0.00002263584793
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=881 max_triangle_area=0.00004528369391
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=893 max_triangle_area=0.00009020745347
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=895 max_triangle_area=0.00004509177961
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=897 max_triangle_area=0.00009020745347
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=968 max_triangle_area=0.00009396919631
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=990 max_triangle_area=0.00009353107453
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=998 max_triangle_area=0.00004115619231
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96215693 mesh=1055 max_triangle_area=0.00004130605521
+FAMILY_LIVE_FIT source=w96215693 bodies=4 mesh_contact_samples=1129 tiny_meshes_not_ray_proved=22 grade_occluded_meshes=0 failures=0 mesh_inventory=1151 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215658 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1557 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215669 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1080 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215688 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=663 reused_contact_run=
+FAMILY_LIVE_FIT source=w96665904 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=938 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215649 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1109 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215670 bodies=4 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=1007 reused_contact_run=
+FAMILY_LIVE_FIT source=w96215674 bodies=2 mesh_contact_samples=0 tiny_meshes_not_ray_proved=0 grade_occluded_meshes=0 failures=0 mesh_inventory=534 reused_contact_run=
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96665916 mesh=1025 max_triangle_area=0.00004917245315
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96665916 mesh=1047 max_triangle_area=0.00001541909114
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96665916 mesh=1050 max_triangle_area=0.00001576623799
+FAMILY_TINY_CONTACT_UNRESOLVED source=w96665916 mesh=1051 max_triangle_area=0.00004824706411
+FAMILY_LIVE_FIT source=w96665916 bodies=4 mesh_contact_samples=1715 tiny_meshes_not_ray_proved=4 grade_occluded_meshes=0 failures=0 mesh_inventory=1719 reused_contact_run=
+FAMILY_CURRENT_TOPOLOGY {"active_bodies":518,"active_shapes":591,"disabled_bodies":84,"visible_meshes":30819,"visible_surfaces":30837,"visible_triangles":748544}
+FAMILY_LIVE_TOTAL instances=27 mesh_contact_samples=4204
+VISUAL_SETTLED: id=w96215693-approach spawn_y=5.696 settled_y=2.696 ground_y=2.696 clearance=0.000 frames=125 recovery_delta=0
+VISUAL_SETTLED: id=w96215693-jetpack spawn_y=5.737 settled_y=2.737 ground_y=2.737 clearance=0.000 frames=125 recovery_delta=0
+VISUAL_CAPTURE: id=w96215693-jetpack-start region=w96215693 player=(-270.000,2.737,-590.000) camera=(-271.340,4.413,-595.324) grounded=true clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215693-jetpack-start.png sha256=aa23e12e158ec7e826c8d84b481d5f8ff5f626b8ca4de0f4109e0568ed390646 colors=227 luminance_range=0.617
+VISUAL_CAPTURE: id=w96215693-jetpack-ascent region=w96215693 player=(-270.000,5.154,-590.000) camera=(-271.340,6.830,-595.324) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215693-jetpack-ascent.png sha256=93164121ffb07a7f54a5f1b478046565c4e00c18b39bca04cbbcff19b7c88d60 colors=233 luminance_range=0.640
+VISUAL_CAPTURE: id=w96215693-jetpack-release region=w96215693 player=(-270.000,8.817,-590.000) camera=(-271.340,10.494,-595.324) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215693-jetpack-release.png sha256=e0a9539501a9625386dc0a07da54e771edf2733e5c547d6ac235404b26290da2 colors=202 luminance_range=0.682
+VISUAL_CAPTURE: id=w96215693-stock-roof-oblique region=w96215693 player=(-270.000,9.284,-590.000) camera=(-271.331,11.980,-595.291) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215693-stock-roof-oblique.png sha256=fd32a766283da724a9d10642ef9bb9d6590fd4cb7d3c004ad7a033ceb0fbeb94 colors=288 luminance_range=0.772
+VISUAL_CAPTURE: id=w96215693-jetpack-descent region=w96215693 player=(-270.000,9.094,-590.000) camera=(-271.331,11.790,-595.291) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215693-jetpack-descent.png sha256=7fdd1e42673b4c82a77404934e5f28601dbc0ce816897fd454aaed5d534448eb colors=294 luminance_range=0.599
+VISUAL_CAPTURE: id=w96215693-jetpack-landed region=w96215693 player=(-270.000,2.737,-590.000) camera=(-271.331,5.432,-595.291) grounded=true clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215693-jetpack-landed.png sha256=90ec9c8489f29289027a4ff1f15dae61a0a06463137d3ba2fe2f9dfb6f190556 colors=272 luminance_range=0.617
+VISUAL_SETTLED: id=w96215693-spray spawn_y=5.680 settled_y=2.713 ground_y=2.680 clearance=0.033 frames=124 recovery_delta=0
+VISUAL_CAPTURE: id=w96215693-stock-spray region=w96215693 player=(-245.276,2.713,-576.847) camera=(-245.116,2.838,-579.220) grounded=true clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215693-stock-spray.png sha256=48b8bbef7e5002c89486b8fba64bd7209c318975ebb16f1553546d388ceb78ff colors=116 luminance_range=0.556
+VISUAL_SETTLED: id=w96665916-approach spawn_y=6.190 settled_y=3.191 ground_y=3.190 clearance=0.000 frames=125 recovery_delta=0
+VISUAL_SETTLED: id=w96665916-jetpack spawn_y=6.103 settled_y=3.103 ground_y=3.103 clearance=0.000 frames=125 recovery_delta=0
+VISUAL_CAPTURE: id=w96665916-jetpack-start region=w96665916 player=(-153.748,3.103,-770.771) camera=(-149.289,4.896,-773.984) grounded=true clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96665916-jetpack-start.png sha256=5568517c87ddfa69768f305f0c02f7da35cb21a3719e13c249192868d1c666c0 colors=209 luminance_range=0.644
+VISUAL_CAPTURE: id=w96665916-jetpack-ascent region=w96665916 player=(-153.748,5.770,-770.771) camera=(-149.289,7.563,-773.984) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96665916-jetpack-ascent.png sha256=d4da9115d4dfb59d3a385751f409e232767a5aa02e5ff8d02aa1adff1546d5ff colors=167 luminance_range=0.701
+VISUAL_CAPTURE: id=w96665916-jetpack-release region=w96665916 player=(-153.748,9.584,-770.771) camera=(-149.289,11.377,-773.984) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96665916-jetpack-release.png sha256=2d47f98fa17871d663de8567af657913c1a9e9a79599afda8a69a3b51bb57c0f colors=157 luminance_range=0.755
+VISUAL_CAPTURE: id=w96665916-jetpack-descent region=w96665916 player=(-153.748,9.735,-770.771) camera=(-149.289,11.528,-773.984) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96665916-jetpack-descent.png sha256=24398aef0240bd46e7564fcbe9c6538796746593293693cffef94bebd61085f7 colors=158 luminance_range=0.691
+VISUAL_CAPTURE: id=w96665916-jetpack-landed region=w96665916 player=(-153.748,3.103,-770.771) camera=(-149.289,4.896,-773.984) grounded=true clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96665916-jetpack-landed.png sha256=7021a86a3375f5725cdc4f1701c229e1452db8e1108e20ec50b312a1d4636391 colors=213 luminance_range=0.644
+VISUAL_SETTLED: id=w96665916-spray spawn_y=6.147 settled_y=3.180 ground_y=3.147 clearance=0.033 frames=124 recovery_delta=0
+VISUAL_CAPTURE: id=w96665916-stock-spray region=w96665916 player=(-157.660,3.180,-742.897) camera=(-154.447,3.370,-743.732) grounded=true clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96665916-stock-spray.png sha256=3da7b4fb7c9ce7f0b402fe69a33529e89a387ac0c12fb7a416ebc1cf803645bc colors=141 luminance_range=0.608
+VISUAL_SETTLED: id=w96215668-approach spawn_y=5.229 settled_y=2.230 ground_y=2.229 clearance=0.000 frames=125 recovery_delta=0
+VISUAL_SETTLED: id=w96215668-jetpack spawn_y=5.606 settled_y=2.605 ground_y=2.606 clearance=-0.000 frames=125 recovery_delta=0
+VISUAL_CAPTURE: id=w96215668-jetpack-start region=w96215668 player=(-290.578,2.605,-846.512) camera=(-295.837,4.329,-848.099) grounded=true clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215668-jetpack-start.png sha256=501e453ca4ecba57635ad3769eb1af2248b8e2955f761d4b8a651cc5585d36c2 colors=197 luminance_range=0.621
+VISUAL_CAPTURE: id=w96215668-jetpack-ascent region=w96215668 player=(-290.578,5.106,-846.512) camera=(-295.837,6.829,-848.099) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215668-jetpack-ascent.png sha256=97663edd2c3c9bad4e0ee5818e78f2d375864dfb957288461f5fa19b4a75e315 colors=207 luminance_range=0.644
+VISUAL_CAPTURE: id=w96215668-jetpack-release region=w96215668 player=(-290.578,8.770,-846.512) camera=(-295.837,10.493,-848.099) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215668-jetpack-release.png sha256=76d435b0e75a05d5bd6a133acb1d25bac6d99e00cf4e5e018500bfdf2f03c535 colors=199 luminance_range=0.651
+VISUAL_CAPTURE: id=w96215668-jetpack-descent region=w96215668 player=(-290.578,9.196,-846.512) camera=(-295.837,10.919,-848.099) grounded=false clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215668-jetpack-descent.png sha256=46dc91d50ef6cd4bd0df77376755da5d271db64ade3ad5dbbbf9b3e88ac836a0 colors=195 luminance_range=0.798
+VISUAL_CAPTURE: id=w96215668-jetpack-landed region=w96215668 player=(-290.578,2.605,-846.512) camera=(-295.837,4.329,-848.099) grounded=true clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215668-jetpack-landed.png sha256=2e7107694ffd7a5454ac3d9f98c780c43145ca4b96cbb29464102cd22826ed4f colors=197 luminance_range=0.621
+VISUAL_SETTLED: id=w96215668-spray spawn_y=5.330 settled_y=2.330 ground_y=2.330 clearance=0.000 frames=126 recovery_delta=0
+VISUAL_CAPTURE: id=w96215668-stock-spray region=w96215668 player=(-248.368,2.330,-855.974) camera=(-249.601,2.389,-858.413) grounded=true clearance=inf image=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-integration-003/images/w96215668-stock-spray.png sha256=e8a468a94599b1fcfab4c781a0411716879b9e488f6ccbb00d248681c0ef3bf8 colors=65 luminance_range=0.471
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-551.277, 8.145, -704.7132), S: (5.617065, 1.249992, 14.05927)] normal0=(-0.218426, 0.975806, -0.009681) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-545.8196, 8.145, -704.2495), S: (5.6203, 1.249992, 14.06354)] normal0=(0.232026, 0.972655, 0.010327) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-551.2756, 8.145, -695.647), S: (10.45355, 1.249992, 5.46106)] normal0=(-0.01029, 0.972647, 0.232061) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.6576, 8.145, -704.7132), S: (10.45825, 1.249992, 5.460999)] normal0=(0.010309, 0.972625, -0.232152) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.6575, 8.145, -719.5883), S: (6.353577, 1.25, 14.87225)] normal0=(-0.20485, 0.978751, -0.009081) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-544.4347, 8.145, -719.0601), S: (6.356567, 1.25, 14.625)] normal0=(0.204794, 0.978763, 0.009118) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.6576, 8.145, -710.4109), S: (11.68311, 1.25, 6.161072)] normal0=(-0.009154, 0.97877, 0.204759) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.0015, 8.145, -719.5883), S: (11.92334, 1.25, 6.225769)] normal0=(0.009099, 0.97879, -0.204664) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-538.4246, 8.145, -719.0769), S: (0.346558, 0.005278, 0.016846)] normal0=(0.015173, 0.999885, 0.000666) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-538.7712, 8.145, -719.0908), S: (0.693115, 0.005278, 0.030762)] normal0=(-0.042724, 0.268098, 0.962444) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.0013, 8.145, -733.746), S: (5.667725, 1.249992, 14.15491)] normal0=(-0.23007, 0.973121, -0.010202) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-544.4933, 8.145, -733.2753), S: (5.667175, 1.249992, 14.15442)] normal0=(0.230048, 0.973126, 0.010202) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-550.0015, 8.145, -724.6319), S: (10.55157, 1.249992, 5.511047)] normal0=(-0.0102, 0.973177, 0.229831) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215678 aabb=[P: (-549.3771, 8.145, -733.746), S: (10.55109, 1.249992, 5.510986)] normal0=(0.010137, 0.973456, -0.228649) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-177.6843, 8.155, -888.958), S: (9.833679, 1.25, 11.16809)] normal0=(0.172891, 0.974988, -0.139669) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-185.394, 8.155, -882.0679), S: (9.845215, 1.25, 11.0946)] normal0=(-0.172919, 0.974976, 0.139715) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-185.394, 8.155, -888.957), S: (8.52771, 1.25, 7.707336)] normal0=(-0.139737, 0.974973, -0.172922) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-176.359, 8.155, -878.6069), S: (8.513519, 1.25, 7.659912)] normal0=(0.139179, 0.975159, 0.17232) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-167.2072, 8.155, -878.9211), S: (10.04865, 1.25, 11.18915)] normal0=(0.155741, 0.979753, -0.125813) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-174.8828, 8.286647, -871.2498), S: (9.122253, 1.118353, 10.24023)] normal0=(-0.155763, 0.979749, 0.125815) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-175.8092, 8.155, -878.929), S: (9.502686, 1.25, 8.493958)] normal0=(-0.125922, 0.979733, -0.155776) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-166.5797, 8.155, -868.6449), S: (9.421143, 1.25, 8.526123)] normal0=(0.125815, 0.979749, 0.155763) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-158.1019, 8.478888, -865.3536), S: (8.093597, 0.926112, 9.077759)] normal0=(0.150442, 0.981123, -0.121512) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-157.2567, 8.155, -867.7286), S: (0.52771, 0.133927, 0.949585)] normal0=(0.119479, 0.979955, -0.159414) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-167.017, 8.155, -859.7621), S: (10.40134, 1.25, 11.62646)] normal0=(-0.150425, 0.98112, 0.121553) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-167.0132, 8.155, -867.7319), S: (9.8573, 1.25, 8.915649)] normal0=(-0.119864, 0.981469, -0.149505) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96665904 aabb=[P: (-157.5541, 8.155, -856.9772), S: (8.56308, 1.25, 8.884155)] normal0=(0.121464, 0.981139, 0.150373) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-345.8325, 7.695, -822.3261), S: (7.917236, 1.1, 13.00861)] normal0=(-0.183719, 0.980861, -0.064497) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-338.819, 7.87014, -818.1147), S: (6.843628, 0.92486, 11.3681)] normal0=(0.183698, 0.980865, 0.064496) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-345.843, 7.695, -812.6865), S: (9.877289, 1.1, 6.772522)] normal0=(-0.064539, 0.980844, 0.18379) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-341.3089, 7.695, -822.3261), S: (10.45837, 1.1, 7.064758)] normal0=(0.064605, 0.980814, -0.183928) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-341.2943, 7.695, -836.569), S: (8.615234, 1.099994, 14.20105)] normal0=(-0.170036, 0.98363, -0.059672) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-333.6954, 7.695, -832.5486), S: (8.583588, 1.099994, 14.17755)] normal0=(0.169978, 0.983637, 0.059708) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-341.3089, 7.695, -826.0182), S: (11.28571, 1.099994, 7.64447)] normal0=(-0.059669, 0.983641, 0.169972) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-336.3564, 7.695, -836.569), S: (11.26544, 1.099994, 7.655457)] normal0=(0.059424, 0.983784, -0.169224) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-336.3431, 7.695, -849.496), S: (7.905518, 1.099994, 12.88861)] normal0=(-0.182656, 0.981075, -0.064252) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-329.2936, 7.855357, -845.3463), S: (6.921997, 0.939638, 11.3844)] normal0=(0.182794, 0.981054, 0.064179) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-336.3564, 7.695, -839.9937), S: (10.47394, 1.099994, 7.101196)] normal0=(-0.064174, 0.981079, 0.182665) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665911 aabb=[P: (-331.8245, 7.695, -849.483), S: (9.72345, 1.099994, 7.050598)] normal0=(0.064195, 0.981069, -0.182711) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.3344, 8.405, -661.3797), S: (0.381592, 0.000367, 0.030212)] normal0=(-0.078535, 0.091344, 0.992718) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4099), S: (0.381622, 0.000367, 0.030212)] normal0=(-0.000978, 1.0, -0.000076) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4099), S: (0.416321, 0.000367, 0.032959)] normal0=(0.078518, 0.091361, -0.992718) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4096), S: (0.763214, 0.000367, 0.06012)] normal0=(-0.072464, 0.385274, 0.919953) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-271.1329, 8.405, -674.7025), S: (6.168945, 1.149997, 14.28204)] normal0=(0.202546, 0.979142, 0.015991) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-277.0368, 8.405, -675.568), S: (6.167236, 1.149997, 14.2887)] normal0=(-0.20436, 0.978764, -0.016085) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-275.9111, 8.405, -675.57), S: (10.94162, 1.149997, 5.905884)] normal0=(0.016101, 0.978802, -0.204173) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-277.037, 8.405, -666.3209), S: (10.94272, 1.149997, 5.905579)] normal0=(-0.016168, 0.978586, 0.205202) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-273.0963, 8.610164, -659.3782), S: (5.787048, 0.944831, 12.81958)] normal0=(0.178158, 0.983901, 0.014088) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-266.8586, 8.405, -660.4153), S: (0.763916, 0.129039, 0.708435)] normal0=(0.178158, 0.983901, 0.014088) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.9028, 8.405, -661.4096), S: (7.000275, 1.149995, 15.07971)] normal0=(-0.178214, 0.983891, -0.014053) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.716, 8.405, -661.4096), S: (12.62137, 1.149995, 6.8078)] normal0=(0.014034, 0.983903, -0.178149) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.9029, 8.405, -652.1423), S: (11.57474, 1.149995, 6.718384)] normal0=(-0.014052, 0.983895, 0.178193) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.903, 8.405, -646.3287), S: (0.470673, 0.001898, 0.037964)] normal0=(-0.004015, 0.999992, -0.000291) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.9029, 8.405, -646.3287), S: (0.958649, 0.001898, 0.075562)] normal0=(0.071428, 0.41754, -0.905847) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-273.2894, 8.405, -645.2115), S: (6.136322, 1.149997, 14.30255)] normal0=(0.205598, 0.978502, 0.016246) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.156, 8.405, -646.1804), S: (6.145233, 1.149997, 14.41388)] normal0=(-0.205648, 0.978492, -0.016173) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-278.0211, 8.405, -646.1804), S: (10.74664, 1.149997, 5.86731)] normal0=(0.016227, 0.978512, -0.205552) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215646 aabb=[P: (-279.156, 8.405, -636.7763), S: (10.87698, 1.149997, 5.86731)] normal0=(-0.01625, 0.97843, 0.205938) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-259.7573, 8.895, -569.9622), S: (14.30548, 0.669999, 6.045227)] normal0=(-0.008277, 0.992454, 0.122341) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-259.02, 8.895, -575.7714), S: (14.30237, 0.669999, 6.040466)] normal0=(0.00822, 0.992553, -0.121539) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-250.5269, 8.895, -574.8043), S: (5.813904, 0.669999, 10.88458)] normal0=(0.121389, 0.992571, 0.008236) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-259.7606, 8.895, -575.7717), S: (5.813965, 0.669999, 10.88409)] normal0=(-0.121943, 0.992503, -0.008275) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-259.0476, 8.895, -575.772), S: (0.022949, 0.003553, 0.314392)] normal0=(0.000834, 0.999937, -0.011226) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-259.0673, 8.895, -575.7717), S: (0.042694, 0.003553, 0.631409)] normal0=(0.899683, 0.432276, 0.060891) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-273.5533, 8.895, -576.6071), S: (0.016296, 0.002106, 0.230164)] normal0=(0.00077, 0.999959, -0.009045) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-273.5699, 8.895, -576.6071), S: (0.031433, 0.002106, 0.464844)] normal0=(-0.938326, 0.339881, -0.063443) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-274.3889, 8.895, -569.3411), S: (14.38455, 0.669996, 6.337097)] normal0=(-0.007818, 0.99332, 0.115127) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-273.6134, 8.895, -575.4828), S: (14.50299, 0.669996, 6.344299)] normal0=(0.007801, 0.993325, -0.115087) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-265.2533, 8.895, -574.5032), S: (6.142883, 0.669996, 11.37506)] normal0=(0.115127, 0.99332, 0.007818) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-274.3924, 8.895, -575.4829), S: (6.142639, 0.669996, 11.5033)] normal0=(-0.114913, 0.993345, -0.007748) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-287.624, 9.072434, -570.884), S: (11.66479, 0.492565, 5.110046)] normal0=(-0.007109, 0.994446, 0.105008) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-275.102, 8.895, -564.7374), S: (0.709625, 0.075267, 0.757507)] normal0=(-0.007109, 0.994446, 0.105008) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-288.5493, 8.895, -577.6196), S: (15.00656, 0.669999, 6.896912)] normal0=(0.007125, 0.99445, -0.104973) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-280.281, 8.895, -576.6074), S: (6.742493, 0.669999, 12.62756)] normal0=(0.104679, 0.99448, 0.007141) points=11 triangles=9
+FAMILY_ROOF_GEOMETRY source=w96215693 aabb=[P: (-289.294, 8.895, -577.6201), S: (6.627106, 0.669999, 11.06519)] normal0=(-0.089978, 0.995925, -0.006082) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-173.6513, 8.875, -752.8254), S: (7.83844, 0.669999, 13.86621)] normal0=(-0.109054, 0.993632, 0.028321) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-166.4448, 8.970147, -754.7739), S: (6.813736, 0.574852, 12.24487)] normal0=(0.109035, 0.993634, -0.02832) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-170.0431, 8.875, -746.1605), S: (10.62309, 0.669999, 7.205444)] normal0=(0.028282, 0.993646, 0.108937) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-173.6513, 8.875, -755.7986), S: (11.43977, 0.669999, 7.206482)] normal0=(-0.021347, 0.996397, -0.082082) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-176.0856, 8.993962, -766.6594), S: (6.968521, 0.551038, 12.46234)] normal0=(-0.101889, 0.994443, 0.02647) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-173.831, 8.875, -753.6917), S: (0.6884, 0.075188, 0.866028)] normal0=(-0.101889, 0.994443, 0.02647) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-169.7371, 8.875, -770.6354), S: (8.339066, 0.67, 14.62543)] normal0=(0.101871, 0.994445, -0.02647) points=9 triangles=7
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-173.6514, 8.875, -760.5444), S: (12.25328, 0.669997, 7.718933)] normal0=(0.025898, 0.994679, 0.099712) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-176.3684, 8.875, -770.6464), S: (11.1577, 0.67, 7.716248)] normal0=(-0.026486, 0.994451, -0.101816) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-166.1285, 8.875, -770.5283), S: (0.45726, 0.001211, 0.11969)] normal0=(0.187933, 0.662851, 0.724782) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-165.6712, 8.875, -770.6481), S: (0.457672, 0.001211, 0.119812)] normal0=(0.00251, 0.999997, -0.000597) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-166.1285, 8.875, -770.6464), S: (0.914932, 0.001211, 0.237793)] normal0=(0.208298, 0.560486, 0.80154) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-165.679, 8.875, -770.6481), S: (0.464996, 0.001211, 0.121826)] normal0=(-0.178465, 0.703319, -0.688108) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-181.244, 8.875, -781.4252), S: (7.547852, 0.67, 13.88312)] normal0=(-0.119072, 0.992406, 0.030871) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-174.5895, 8.875, -784.1688), S: (7.545273, 0.67, 13.99518)] normal0=(0.117948, 0.992548, -0.030593) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-177.5207, 8.875, -774.0813), S: (10.47723, 0.67, 6.51062)] normal0=(0.030423, 0.992508, 0.118332) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96665916 aabb=[P: (-181.2398, 8.875, -784.173), S: (10.55693, 0.67, 6.65448)] normal0=(-0.025157, 0.994983, -0.096826) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-254.8865, 8.355, -847.2394), S: (12.88144, 0.67, 8.908936)] normal0=(0.055449, 0.992408, 0.109785) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-259.767, 8.355, -854.505), S: (12.92596, 0.67, 8.921875)] normal0=(-0.055272, 0.992351, -0.110385) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-249.2276, 8.355, -854.5051), S: (7.20105, 0.67, 9.630981)] normal0=(0.085193, 0.994332, -0.063615) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-259.7656, 8.355, -847.9683), S: (7.261353, 0.67, 9.642151)] normal0=(-0.109792, 0.992403, 0.055523) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-254.1745, 8.355, -836.9047), S: (0.035446, 0.017639, 0.067505)] normal0=(0.103182, 0.973198, 0.205523) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-254.21, 8.355, -836.9707), S: (0.067474, 0.017639, 0.133484)] normal0=(-0.886971, 0.110654, 0.448373) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-271.9273, 8.355, -841.5591), S: (0.180023, 0.026641, 0.336731)] normal0=(-0.032349, 0.997416, -0.064148) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-271.9273, 8.355, -841.5458), S: (0.333771, 0.026641, 0.660278)] normal0=(-0.781094, 0.48373, 0.39484) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-266.3803, 8.355, -839.3942), S: (12.23778, 0.67, 8.700134)] normal0=(0.047865, 0.99435, 0.094742) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-270.5051, 8.452642, -845.9971), S: (10.74683, 0.572357, 7.577515)] normal0=(-0.051841, 0.993377, -0.102543) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-261.9271, 8.355, -847.1787), S: (7.784531, 0.67, 10.34149)] normal0=(0.102518, 0.993382, -0.051785) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-271.2597, 8.355, -840.6039), S: (7.404724, 0.67, 9.872375)] normal0=(-0.102541, 0.993378, 0.051822) points=6 triangles=4
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-278.4264, 8.507486, -833.2169), S: (10.19553, 0.517513, 7.245117)] normal0=(0.048375, 0.994232, 0.095725) points=4 triangles=2
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-279.0603, 8.355, -824.348), S: (0.212311, 0.024665, 0.306458)] normal0=(0.048373, 0.994235, 0.095687) points=3 triangles=1
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-284.6511, 8.355, -841.537), S: (12.7063, 0.67, 9.149902)] normal0=(-0.04836, 0.994225, -0.095799) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-274.6777, 8.355, -841.5458), S: (7.709961, 0.67, 10.44666)] normal0=(0.095744, 0.99423, -0.048376) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-284.6441, 8.355, -835.1217), S: (8.325043, 0.67, 11.08044)] normal0=(-0.097935, 0.99396, 0.049516) points=8 triangles=6
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-291.4752, 8.355, -826.582), S: (12.41431, 0.669997, 8.772461)] normal0=(0.052142, 0.993295, 0.10318) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-295.466, 8.460734, -833.0964), S: (10.80945, 0.564262, 7.603821)] normal0=(-0.052161, 0.993294, -0.103182) points=7 triangles=5
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-286.7964, 8.355, -834.3175), S: (7.735443, 0.669997, 10.27625)] normal0=(0.103116, 0.993306, -0.052066) points=5 triangles=3
+FAMILY_ROOF_GEOMETRY source=w96215668 aabb=[P: (-296.2581, 8.355, -827.6324), S: (7.306488, 0.669997, 9.840332)] normal0=(-0.103184, 0.993293, 0.052179) points=6 triangles=4

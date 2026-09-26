@@ -3,10 +3,12 @@ extends RefCounted
 const FAMILY = preload("res://game/scripts/world/facades/housing_site_family.gd")
 const CONFIG := "res://game/resources/housing_family/live_instances.json"
 
-static func install(buildings: Node3D, chunks: Array) -> Dictionary:
-	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONFIG))
-	if not manifest is Dictionary or manifest.get("instances",[]).size()!=24:
-		return {"ok":false,"message":"Invalid 24-instance family manifest"}
+static func install(buildings: Node3D, chunks: Array, candidate_manifest: Dictionary = {}) -> Dictionary:
+	# A source fixture may construct a bounded additional candidate before its
+	# measured topology is promoted. Normal WorldLoader calls omit this argument.
+	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONFIG)) if candidate_manifest.is_empty() else candidate_manifest
+	if not manifest is Dictionary or not manifest.get("instances") is Array or manifest.instances.is_empty():
+		return {"ok":false,"message":"Invalid family instance manifest"}
 	var records: Dictionary = {}
 	for chunk: Dictionary in chunks:
 		for record: Dictionary in chunk.records: records[str(record.object_key)] = record
@@ -186,10 +188,10 @@ static func validate_live(world: Node3D) -> Dictionary:
 				if roof_owner.has_meta("feature_kind") and str(roof_owner.get_meta("derived_object_key",""))=="building:"+source+":roof":
 					for body: CollisionObject3D in roof_owner.find_children("*","CollisionObject3D",true,false):
 						if body.collision_layer!=0: return {"ok":false,"message":"Active hidden legacy roof "+source}
-	if found.size()!=24: return {"ok":false,"message":"Missing adopted instances"}
+	if found.size()!=expected.size(): return {"ok":false,"message":"Missing adopted instances"}
 	var topology := measure_world(world)
 	if not topology_matches(topology,binding.current_visible_active_topology): return {"ok":false,"message":"Current adoption topology drift","topology":topology}
-	return {"ok":true,"instances":24,"topology":topology,"recognition_credit":0}
+	return {"ok":true,"instances":expected.size(),"topology":topology,"recognition_credit":0}
 
 static func topology_matches(actual: Dictionary, expected: Dictionary) -> bool:
 	var actual_keys := actual.keys()

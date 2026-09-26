@@ -22,6 +22,12 @@ import {
 } from "./lib/world-contract.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+import {
+  loadHousingFamilyAuthority, validateHousingFamilyAuthority,
+  validateHousingFamilyInstances, familyRuntimeSummary, FAMILY_MANIFEST_PATH,
+} from "./lib/housing-family-authority.mjs";
+const FAMILY_ACCEPTED = Object.freeze(loadHousingFamilyAuthority(ROOT));
+
 const COMPILER_VERSION = "1.32.0";
 const CATALOG_SCHEMA = "ti.facade-recognition-catalog/33";
 const RUNTIME_SCHEMA = "ti.facade-runtime-registry/33";
@@ -320,7 +326,7 @@ const D2_1444_RUNTIME_ASSET_PATHS = Object.freeze([
 const PRE_D2_1444_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_d2_1444_integration_live_parity";
 const PRE_D2_1439_INTEGRATION_WORLD_TOPOLOGY_SCOPE = "pre_d2_1439_integration_live_parity";
 
-const ACCEPTED_REFERENCE_UNIT_IDS = Object.freeze([
+const HISTORICAL_REFERENCE_UNIT_IDS = Object.freeze([
   "physical-building:r16681702",
   "physical-building:w1222720021",
   "physical-building:w1249412093",
@@ -356,6 +362,8 @@ const ACCEPTED_REFERENCE_UNIT_IDS = Object.freeze([
   "physical-building:w96215672",
   "physical-building:w96215669",
 ]);
+
+const ACCEPTED_REFERENCE_UNIT_IDS = Object.freeze([...HISTORICAL_REFERENCE_UNIT_IDS, ...FAMILY_ACCEPTED.map(entry => entry.unit_id)]);
 
 const D5_BATCH_ACCEPTED = Object.freeze([
   {
@@ -9396,6 +9404,11 @@ function d21444AcceptanceRecord() {
 }
 
 function validateAcceptanceReceipt(unit, record) {
+  const family = FAMILY_ACCEPTED.find(entry => entry.acceptance.review_id === record.review_id);
+  if (family) {
+    invariant(family.unit_id === unit.unit_id && equalStable(record, family.acceptance), `${unit.unit_id} family seven-artifact receipt drifted`);
+    return;
+  }
   const expectedKeys = ["evidence_manifest_sha256", "review_id", "review_kind", "review_receipt_sha256", "status"];
   for (const optionalKey of [
     "capture_time_recognition_metric",
@@ -10136,6 +10149,7 @@ function unitRuntimeContentMode(directReceivers) {
   }
   const modes = [...new Set(directReceivers.map((receiver) => receiver.runtime_content_mode))];
   if (modes.length === 1) {
+    if (modes[0] === "shared_housing_family") return "all_receivers_shared_housing_family";
     if (modes[0] === "generated_placeholder") return "all_receivers_generated_placeholder";
     if (modes[0] === "legacy_adapter") return "all_receivers_legacy_adapter";
     if (modes[0] === "active_building_1_hero") return "all_receivers_active_building_1_hero";
@@ -10416,8 +10430,7 @@ function validateAdapterContracts(contracts, registry = null) {
 const FAMILY_ADOPTION_PATH = "game/resources/housing_family/live_adoption.json";
 function buildAppearanceAdoption() {
   const manifest = readJson("game/resources/housing_family/live_instances.json");
-  const sources = manifest.instances.map((item) => item.source_key).sort();
-  invariant(sources.length === 24 && new Set(sources).size === 24, "Expected 24 adopted family sources");
+  const sources = validateHousingFamilyInstances(ROOT, manifest, readJson(PATHS.manifest));
   const paths = ["game/scripts/main.gd", "game/scripts/world/world_loader.gd", "game/scripts/world/facades/housing_family_live_attachment.gd", "game/scripts/world/facades/housing_site_family.gd", "game/scripts/world/facades/northpoint_1232_quality_model.gd", "game/scripts/world/facades/facade_runtime_registry_loader.gd", "game/resources/housing_family/live_instances.json", "game/resources/housing_family/siding.gdshader", "game/resources/housing_family/roof.gdshader", "generated/world/manifest.json", ...manifest.instances.map((item) => item.config.replace(/^res:\/\//u, ""))];
   return {
     schema_version: "housing-family-live-adoption-v1",
@@ -10426,7 +10439,7 @@ function buildAppearanceAdoption() {
     base_builder_topology_scope: "pre_shared_family_base_topology",
     enabled_sources: sources,
     retained_production_roof_and_site: ["w96215673", "w96215674"],
-    current_visible_active_topology: {visible_meshes:26585, visible_surfaces:26603, visible_triangles:725842, active_bodies:512, active_shapes:585, disabled_bodies:78},
+    current_visible_active_topology: manifest.expected_visible_active_topology,
     contact_scope: "Exact installed mesh contacts; exposed representative samples per instance. Tiny and grade-occluded samples remain unproved; stock motion/spray are representative.",
     dependencies: Object.fromEntries(paths.sort().map((path) => [path, sha256File(absolute(path))])),
   };
@@ -10464,6 +10477,10 @@ function buildRuntimeRegistry(catalog, inputs, receiverByKey) {
     const summaries = identityAssertionsByUnit.get(record.unit_id) ?? [];
     summaries.push(runtimeIdentityAssertion(record));
     identityAssertionsByUnit.set(record.unit_id, summaries);
+  }
+  for (const entry of FAMILY_ACCEPTED) {
+    invariant(!adapterBindingByReceiver.has(entry.receiver_key), "Family instance conflicts with a historical adapter");
+    adapterBindingByReceiver.set(entry.receiver_key, {adapter_id: null, content_mode: "shared_housing_family"});
   }
   const runtimeUnits = catalog.units.map((unit) => {
     const directReceivers = unit.receiver_keys.map((receiverKey) => runtimeReceiverBinding(
@@ -10517,6 +10534,7 @@ function buildRuntimeRegistry(catalog, inputs, receiverByKey) {
   const adapterContracts = buildAdapterContracts(catalog, importedLegacyAdapters, importedActiveAdapters);
   const adapterContractsSha256 = sha256Bytes(stableJson(adapterContracts));
   const registry = {
+    housing_family_acceptance: FAMILY_ACCEPTED.map(familyRuntimeSummary),
     appearance_adoption: {path: `res://${FAMILY_ADOPTION_PATH}`, sha256: sha256Bytes(stableJson(buildAppearanceAdoption())), scope: "current_enabled_appearance_zero_credit"},
     adapter_contract: {
       path: `res://${PATHS.adapterContracts}`,
@@ -10540,7 +10558,7 @@ function buildRuntimeRegistry(catalog, inputs, receiverByKey) {
       identity_assertion_summaries: runtimeUnits.flatMap((unit) => unit.identity_assertions).length,
       legacy_adapter_receivers: importedLegacyAdapters.length,
       recognition_units: runtimeUnits.length,
-      runtime_adapter_receivers: adapterBindingByReceiver.size,
+      runtime_adapter_receivers: importedLegacyAdapters.length + importedActiveAdapters.length,
       source_record_memberships: runtimeUnits.flatMap((unit) => unit.source_records).length,
       standalone_units: runtimeUnits.filter((unit) => unit.unit_kind === "standalone_building").length,
       visible_wall_runs: runtimeUnits.flatMap((unit) => unit.direct_receivers).reduce((sum, receiver) => sum + receiver.run_count, 0),
@@ -10619,6 +10637,11 @@ function assertRuntimeAssetClosures(registry) {
 }
 
 function validateRuntimeRegistry(registry, adapterContracts = null) {
+  invariant(equalStable(registry.housing_family_acceptance, FAMILY_ACCEPTED.map(familyRuntimeSummary)), "Runtime family authority summary drifted");
+  for (const entry of FAMILY_ACCEPTED) {
+    const unit = registry.units.find(unit => unit.unit_id === entry.unit_id);
+    invariant(unit?.claim_status.reference_recognizable === "accepted" && unit.runtime_content_mode === "all_receivers_shared_housing_family" && unit.direct_receivers.length === 1 && unit.direct_receivers[0].receiver_key === entry.receiver_key && unit.direct_receivers[0].runtime_content_mode === "shared_housing_family" && unit.direct_receivers[0].runtime_adapter_id === null, "Runtime family normal-load receiver binding drifted");
+  }
   invariant(Array.isArray(registry.units), "Runtime registry units are missing");
   invariant(Array.isArray(registry.legacy_adapters), "Runtime registry legacy adapters are missing");
   invariant(Array.isArray(registry.active_runtime_adapters), "Runtime registry active adapters are missing");
@@ -11110,7 +11133,18 @@ function buildReport(catalog, registry, adapterContracts, inputs, packageAudit) 
   };
 }
 
+function validateFamilyAuthority(inputs) {
+  const loader = readFileSync(absolute("game/scripts/world/facades/facade_runtime_registry_loader.gd"), "utf8");
+  const declaration = loader.match(/^const FAMILY_ACCEPTANCE_ALLOWLIST := (.+)$/mu);
+  invariant(declaration && equalStable(JSON.parse(declaration[1]), Object.fromEntries(FAMILY_ACCEPTED.map(entry => [entry.unit_id, entry.acceptance]))), "Family native independent receipt allowlist drifted");
+  return validateHousingFamilyAuthority(ROOT, FAMILY_ACCEPTED, {
+    manifest: readJson(FAMILY_MANIFEST_PATH), world: inputs.manifest,
+    units: deriveUnitSeeds(inputs.inventory), historicalUnitIds: HISTORICAL_REFERENCE_UNIT_IDS,
+  });
+}
+
 function compile(catalog, inputs) {
+  validateFamilyAuthority(inputs);
   const receiverByKey = loadWallReceivers(inputs.manifest);
   const derivedUnits = deriveUnitSeeds(inputs.inventory);
   validateCatalog(catalog, inputs, derivedUnits, receiverByKey);

@@ -33,3 +33,7 @@ Written observation: a long two-storey light blue-gray horizontal-sided frontage
 Minimum cue: **long light-blue-gray ENE row, repeated upper windows, deep flat canopy, and blue-door/privacy-box rhythm**. Close confusion: 1237/1238/1240/1241/1244 Northpoint and other canopy-bearing Site 12 rows. Share the pale siding/trim/roof family and parametric flat-canopy, door, and privacy-box modules; keep canopy extent, post rhythm, and ENE opening cadence local. Prototype/component blocker: **none for a detached ENE-side study; vehicle-covered lower endpoints still need receiver-relative matching**. Hidden sides, exact module endpoints, interiors, occupancy, and post-capture changes remain unknown. No panorama pixels are retained or proposed as texture inputs.
 
 Shared sources, lifecycle caveats, registry-role boundary, and rights boundary: [D9 index](README.md).
+
+## 2026-09-25 generated-side correction
+
+The historical facing-run row above uses reversed compass directions. Against current frozen generated vertices and serialized outward normals, the ENE frontage is runs `10–13,15–19,21–23` (75.4–75.5°); the old ENE set faces WSW. The same March2025 panorama/camera and frozen target identity remain valid. Independently checked by `housing_expansion_technical` using the canonical coordinate projection and actual wall normals. This corrects the receiver-side annotation, not the dated source provenance.

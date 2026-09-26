@@ -53,3 +53,7 @@ receiver-relative photo matching around vehicle occlusion**. No panorama pixels
 are retained.
 
 Shared sources, lifecycle caveats, and rights boundary: [D8 index](README.md).
+
+## 2026-09-25 generated-side correction
+
+The historical facing-run row above uses reversed compass directions. Against current frozen generated vertices and serialized outward normals, the N frontage is runs `9–13,15–17,20–24` (3.8–4.0°); the old N set faces south. The same March2025 panorama/camera and frozen target identity remain valid. Independently checked by `housing_expansion_technical` using the canonical coordinate projection and actual wall normals. This corrects the receiver-side annotation, not the dated source provenance.

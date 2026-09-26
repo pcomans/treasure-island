@@ -23,6 +23,8 @@ static func build(wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Node3D
 	var siding := ShaderMaterial.new()
 	siding.shader = SIDING
 	siding.set_shader_parameter("wall_color", color(palette, "siding_rgb", Color.GRAY))
+	siding.set_shader_parameter("weathering_strength", float(cfg.get("weathering_strength", 0.0)))
+	siding.set_shader_parameter("weathering_base_y", float(cfg.get("weathering_base_y", 0.0)))
 	var trim := PARTS._material(color(palette, "trim_rgb", Color.WHITE), 0.8)
 	var door := PARTS._material(color(palette, "door_rgb", Color.DARK_SLATE_GRAY), 0.75)
 	var dark := PARTS._material(color(palette, "dark_glass_rgb", Color(0.1,0.15,0.16)), 0.4)

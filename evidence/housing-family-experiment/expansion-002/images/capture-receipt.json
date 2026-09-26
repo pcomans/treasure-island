@@ -1,0 +1,6 @@
+{
+	"captures": [],
+	"failure": "{ \"ok\": false, \"message\": \"w96215693 anchor hit  rather than land_ground.\" }",
+	"ok": false,
+	"scope": "Visual experiment, no acceptance or collision fit claim"
+}

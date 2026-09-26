@@ -8556,12 +8556,12 @@
   "adapter_contract": {
     "path": "res://game/resources/facades/facade-runtime-adapter-contracts.json",
     "schema_version": "ti.facade-runtime-adapter-contracts/32",
-    "sha256": "176619adcfaf7d5c2ae67c20ee8dc4bacdf47dcf3e1f3c2bd18f80b606189121"
+    "sha256": "9592e3bf0e81ba41f67cda5edcef1297f821b60c3757db1b5891881090412154"
   },
   "appearance_adoption": {
     "path": "res://game/resources/housing_family/live_adoption.json",
     "scope": "current_enabled_appearance_zero_credit",
-    "sha256": "cc35996589a64ac3c4cb8bd0be27b5ddde32a354a304e0983bd03105ff2842e4"
+    "sha256": "65edb32c4da3d61b88ea9c233443e063a3b780b933ffd0b424d7c9bce3d32e67"
   },
   "build_contract": {
     "authoring_catalog_sha256": "63dff67a2768c9d063ea5fffaa49bb0d896a11e75c9bebe5305fa442ce1737b2",
@@ -8624,6 +8624,7 @@
     "standalone_units": 212,
     "visible_wall_runs": 4971
   },
+  "housing_family_acceptance": [],
   "legacy_adapters": [
     {
       "accepted_run_scopes": [],

@@ -1,0 +1,19 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)
+
+SCRIPT ERROR: Parse Error: Identifier "Mariner1212LiveReplacement" not declared in the current scope.
+          at: GDScript::reload (res://game/scripts/main.gd:947)
+SCRIPT ERROR: Parse Error: Identifier "Bayside1220LiveReplacement" not declared in the current scope.
+          at: GDScript::reload (res://game/scripts/main.gd:951)
+SCRIPT ERROR: Parse Error: Identifier "Northpoint1239LiveReplacement" not declared in the current scope.
+          at: GDScript::reload (res://game/scripts/main.gd:955)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+          at: GDScript::reload (res://game/tests/rendered_visual_evidence_capture.gd:0)
+SCRIPT ERROR: Compile Error: Failed to compile depended scripts.
+          at: GDScript::reload (res://game/tests/housing_family_experiment/expansion_capture.gd:0)
+ERROR: Failed to load script "res://game/tests/housing_family_experiment/expansion_capture.gd" with error "Compilation failed".
+   at: load (modules/gdscript/gdscript_resource_format.cpp:46)
+SCRIPT ERROR: Cannot call method 'get_node' on a null value.
+          at: _run (res://game/tests/housing_family_experiment/expansion_capture.gd:21)
+          GDScript backtrace (most recent call first):
+              [0] _run (res://game/tests/housing_family_experiment/expansion_capture.gd:21)

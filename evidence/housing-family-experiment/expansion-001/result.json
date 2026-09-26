@@ -1,0 +1,22 @@
+{
+  "terminal": -15,
+  "errors": [
+    "missing receipt FileNotFoundError(2, 'No such file or directory')"
+  ],
+  "engine_errors": [
+    "SCRIPT ERROR: Parse Error: Identifier \"Mariner1212LiveReplacement\" not declared in the current scope.",
+    "SCRIPT ERROR: Parse Error: Identifier \"Bayside1220LiveReplacement\" not declared in the current scope.",
+    "SCRIPT ERROR: Parse Error: Identifier \"Northpoint1239LiveReplacement\" not declared in the current scope.",
+    "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+    "SCRIPT ERROR: Compile Error: Failed to compile depended scripts.",
+    "ERROR: Failed to load script \"res://game/tests/housing_family_experiment/expansion_capture.gd\" with error \"Compilation failed\".",
+    "SCRIPT ERROR: Cannot call method 'get_node' on a null value."
+  ],
+  "receipt_ok": false,
+  "elapsed_seconds": 23.326334083918482,
+  "pid": 6069,
+  "slot_released": true,
+  "engines_after": [],
+  "ended_utc": "2026-09-26T03:55:56.410392+00:00",
+  "ok": false
+}

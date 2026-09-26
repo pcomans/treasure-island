@@ -764,11 +764,76 @@ func deterministic_snapshot() -> Dictionary:
 	}
 
 
+# Populated only by the reviewed batch authority serializer, never by appearance adoption.
+const FAMILY_ACCEPTANCE_ALLOWLIST := {}
+var _family_acceptance_by_unit: Dictionary = {}
+
+func _family_receipt_matches(record: Dictionary, expected: Dictionary) -> bool:
+	if not _has_exact_keys(record, expected.keys()) or not record.has("numerator_effect"):
+		return false
+	for key: String in record:
+		if key == "numerator_effect":
+			if typeof(record[key]) not in [TYPE_INT, TYPE_FLOAT] or typeof(expected[key]) not in [TYPE_INT, TYPE_FLOAT]: return false
+			var actual := float(record[key])
+			var wanted := float(expected[key])
+			if not is_finite(actual) or not is_finite(wanted) or actual != floor(actual) or wanted != floor(wanted) or actual != wanted: return false
+		elif typeof(record[key]) != TYPE_STRING or typeof(expected[key]) != TYPE_STRING or record[key] != expected[key]:
+			return false
+	return true
+
+func _validate_family_acceptance_header(registry: Dictionary) -> bool:
+	_family_acceptance_by_unit.clear()
+	var entries: Variant = registry.get("housing_family_acceptance")
+	if not _require(entries is Array, "family_authority_mismatch", "Family authority list is missing."):
+		return false
+	var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://game/resources/housing_family/live_instances.json"))
+	if not _require(manifest is Dictionary and manifest.get("instances") is Array, "family_authority_mismatch", "Family instance manifest is invalid."):
+		return false
+	for value: Variant in entries:
+		if not _require(value is Dictionary and _has_exact_keys(value, ["unit_id", "source_key", "receiver_key", "config", "chunk", "dependencies", "acceptance_record"]), "family_authority_mismatch", "Family authority fields drifted."):
+			return false
+		var entry: Dictionary = value
+		var source := str(entry.get("source_key", ""))
+		var unit_id := str(entry.get("unit_id", ""))
+		if not _require(unit_id == "physical-building:"+source and str(entry.get("receiver_key", "")) == "building:"+source+":wall" and not EXPECTED_REFERENCE_RECOGNIZABLE_UNIT_IDS.has(unit_id) and not _family_acceptance_by_unit.has(unit_id), "family_authority_mismatch", "Family physical-unit/receiver authority duplicates or drifts."):
+			return false
+		var matches: Array = manifest.instances.filter(func(item: Variant) -> bool: return item is Dictionary and str(item.get("source_key", "")) == source)
+		if not _require(matches.size() == 1 and entry.config is Dictionary and entry.chunk is Dictionary and entry.dependencies is Dictionary, "family_authority_mismatch", "Accepted family instance is not installed normally."):
+			return false
+		var config: Dictionary = entry.config
+		var chunk: Dictionary = entry.chunk
+		if not _require(_has_exact_keys(config,["path","sha256"]) and _has_exact_keys(chunk,["path","sha256"]) and str(config.path) == "game/resources/housing_family/"+source+".json" and str(matches[0].config) == "res://"+str(config.path) and str(matches[0].chunk) == "res://"+str(chunk.path), "family_authority_mismatch", "Family config/chunk identity drifted."):
+			return false
+		var required := ["game/scripts/world/world_loader.gd", "game/scripts/world/facades/housing_family_live_attachment.gd", "game/scripts/world/facades/housing_site_family.gd", "game/scripts/world/facades/northpoint_1232_quality_model.gd", "game/resources/housing_family/siding.gdshader", "game/resources/housing_family/roof.gdshader", "game/resources/housing_family/live_instances.json", "generated/world/manifest.json", str(config.path), str(chunk.path)]
+		for item: Dictionary in manifest.instances:
+			for resource: String in [str(item.config), str(item.chunk)]:
+				var relative_path := resource.trim_prefix("res://")
+				if not required.has(relative_path): required.append(relative_path)
+		if not _require(_has_exact_keys(entry.dependencies,required) and entry.dependencies.get(config.path) == config.sha256 and entry.dependencies.get(chunk.path) == chunk.sha256, "family_authority_mismatch", "Family exact dependencies drifted."):
+			return false
+		for path: String in required:
+			if not _require(_is_sha256(str(entry.dependencies[path])), "family_authority_mismatch", "Malformed family dependency hash."):
+				return false
+			if not _require(FileAccess.get_sha256("res://"+path) == str(entry.dependencies[path]), "family_authority_mismatch", "Family dependency bytes drifted."):
+				return false
+		var record: Variant = entry.acceptance_record
+		if not _require(record is Dictionary and _has_exact_keys(record,["capture_time_recognition_metric", "evidence_manifest_sha256", "evidence_tree_sha256", "mechanical_review_receipt_sha256", "motion_telemetry_manifest_sha256", "numerator_effect", "package_verification_receipt_sha256", "review_id", "review_kind", "review_receipt_sha256", "status", "visual_motion_manifest_sha256"]), "family_authority_mismatch", "Family seven-artifact receipt fields drifted."):
+			return false
+		for key: String in record:
+			if key.ends_with("_sha256") and not _require(_is_sha256(str(record[key])), "family_authority_mismatch", "Family receipt hash malformed."):
+				return false
+		if not _require(_family_receipt_matches(record, FAMILY_ACCEPTANCE_ALLOWLIST.get(unit_id, {})) and record.status == "accept" and record.review_kind == "independent_reference_recognition" and typeof(record.numerator_effect) in [TYPE_INT,TYPE_FLOAT] and float(record.numerator_effect) == 1.0 and str(record.review_id).length()>0, "family_authority_mismatch", "Family receipt cannot supply this credit."):
+			return false
+		_family_acceptance_by_unit[unit_id] = entry
+	return _require(_family_acceptance_by_unit.size() == FAMILY_ACCEPTANCE_ALLOWLIST.size(), "family_authority_mismatch", "Family accepted-unit allowlist is incomplete.")
+
 func _validate_registry_header(registry: Dictionary) -> bool:
+	if not _validate_family_acceptance_header(registry):
+		return false
 	var adoption: Dictionary = registry.get("appearance_adoption",{})
 	if not _require(_has_exact_keys(adoption,["path","sha256","scope"]) and str(adoption.get("path",""))=="res://game/resources/housing_family/live_adoption.json" and str(adoption.get("scope",""))=="current_enabled_appearance_zero_credit" and str(adoption.get("sha256",""))==FileAccess.get_sha256("res://game/resources/housing_family/live_adoption.json"),"appearance_adoption_mismatch","Current zero-credit appearance binding drifted."):
 		return false
-	if not _require(_has_exact_keys(registry, ["active_runtime_adapters", "appearance_adoption", "adapter_contract", "build_contract", "claim_totals", "claim_vocabulary", "compatibility_contract", "counts", "legacy_adapters", "recognition_metric", "registry_id", "schema_version", "units"]), "unknown_registry_version", "Runtime registry contains unknown top-level fields."):
+	if not _require(_has_exact_keys(registry, ["active_runtime_adapters", "housing_family_acceptance", "appearance_adoption", "adapter_contract", "build_contract", "claim_totals", "claim_vocabulary", "compatibility_contract", "counts", "legacy_adapters", "recognition_metric", "registry_id", "schema_version", "units"]), "unknown_registry_version", "Runtime registry contains unknown top-level fields."):
 		return false
 	if not _require(str(registry.get("schema_version", "")) == REGISTRY_SCHEMA_VERSION, "unknown_registry_version", "Runtime registry version is unknown or forward-incompatible."):
 		return false
@@ -1032,6 +1097,10 @@ func _validate_registry(registry: Dictionary) -> bool:
 		if not _require(str(unit.get("runtime_content_mode", "")) == _derive_unit_content_mode(receivers), "mixed_unit_mismatch", "%s unit summary does not match its receiver-level content modes." % unit_id):
 			return false
 		var claim_status := unit.get("claim_status", {}) as Dictionary
+		if _family_acceptance_by_unit.has(unit_id):
+			var family: Dictionary = _family_acceptance_by_unit[unit_id]
+			if not _require(receivers.size() == 1 and str(receivers[0].get("receiver_key", "")) == family.receiver_key and str(receivers[0].get("runtime_content_mode", "")) == "shared_housing_family", "family_authority_mismatch", "Accepted family unit lost its normal-load receiver."):
+				return false
 		var acceptance_records := unit.get("acceptance_records", []) as Array
 		if str(claim_status.get("reference_recognizable", "")) == "accepted":
 			accepted_reference_unit_ids.append(unit_id)
@@ -1052,9 +1121,13 @@ func _validate_registry(registry: Dictionary) -> bool:
 			var adapter_id_value: Variant = receiver.get("runtime_adapter_id")
 			if not _require(not receiver_key.is_empty() and not _receivers_by_key.has(receiver_key), "duplicate_receiver", "%s has a missing or duplicate direct receiver." % unit_id):
 				return false
-			if not _require(["generated_placeholder", "legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment", "active_d1_b225_host_partition_attachment", "active_d2_1441_paired_replacement", "active_d2_1439_paired_replacement", "active_d2_1444_paired_replacement", "active_d5_1308_paired_replacement", "active_d5_1394_paired_replacement", "active_d5_1317_paired_replacement", "active_fire_station48_paired_replacement", "active_northern_1201_paired_replacement", "active_northern_1238_paired_replacement", "active_northern_1206_paired_replacement", "active_northern_1219_paired_replacement", "active_northern_1212_paired_replacement", "active_northern_1220_paired_replacement", "active_northern_1239_paired_replacement", "active_northern_1222_paired_replacement", "active_northern_1227_paired_replacement", "active_northern_1202_paired_replacement", "active_northern_1234_paired_replacement", "active_northern_1215_paired_replacement", "active_northern_1232_paired_replacement", "active_northern_1241_paired_replacement", "active_northern_1221_paired_replacement", "active_northern_1240_paired_replacement", "active_northern_1397_paired_replacement", "active_northern_1226_paired_replacement", "active_maceo_may_paired_replacement"].has(content_mode), "unknown_content_mode", "%s has an unknown receiver content mode." % receiver_key):
+			if not _require(["shared_housing_family", "generated_placeholder", "legacy_adapter", "active_building_1_hero", "active_building_3_hero", "active_isle_house_variant_c", "active_navy_chapel_187_paired_replacement", "active_d1_b201_host_partition_attachment", "active_d1_b225_host_partition_attachment", "active_d2_1441_paired_replacement", "active_d2_1439_paired_replacement", "active_d2_1444_paired_replacement", "active_d5_1308_paired_replacement", "active_d5_1394_paired_replacement", "active_d5_1317_paired_replacement", "active_fire_station48_paired_replacement", "active_northern_1201_paired_replacement", "active_northern_1238_paired_replacement", "active_northern_1206_paired_replacement", "active_northern_1219_paired_replacement", "active_northern_1212_paired_replacement", "active_northern_1220_paired_replacement", "active_northern_1239_paired_replacement", "active_northern_1222_paired_replacement", "active_northern_1227_paired_replacement", "active_northern_1202_paired_replacement", "active_northern_1234_paired_replacement", "active_northern_1215_paired_replacement", "active_northern_1232_paired_replacement", "active_northern_1241_paired_replacement", "active_northern_1221_paired_replacement", "active_northern_1240_paired_replacement", "active_northern_1397_paired_replacement", "active_northern_1226_paired_replacement", "active_maceo_may_paired_replacement"].has(content_mode), "unknown_content_mode", "%s has an unknown receiver content mode." % receiver_key):
 				return false
-			if content_mode == "generated_placeholder":
+			if content_mode == "shared_housing_family":
+				var family: Dictionary = _family_acceptance_by_unit.get(unit_id,{})
+				if not _require(not family.is_empty() and family.receiver_key == receiver_key and adapter_id_value == null and str(receiver.get("source_key", "")) == family.source_key and str(receiver.get("chunk_sha256", "")) == family.chunk.sha256, "family_authority_mismatch", "Family receiver is not bound to its exact normal-load instance."):
+					return false
+			elif content_mode == "generated_placeholder":
 				if not _require(adapter_id_value == null, "receiver_adapter_mismatch", "%s placeholder unexpectedly references an adapter." % receiver_key):
 					return false
 			else:
@@ -1069,6 +1142,7 @@ func _validate_registry(registry: Dictionary) -> bool:
 		return false
 	accepted_reference_unit_ids.sort()
 	var expected_accepted_ids := EXPECTED_REFERENCE_RECOGNIZABLE_UNIT_IDS.duplicate()
+	expected_accepted_ids.append_array(_family_acceptance_by_unit.keys())
 	expected_accepted_ids.sort()
 	if not _require(accepted_reference_unit_ids == expected_accepted_ids, "recognition_metric_mismatch", "Reference-recognizable physical-unit set does not match the independently accepted set."):
 		return false
@@ -1091,6 +1165,8 @@ func _validate_registry(registry: Dictionary) -> bool:
 
 
 func _validate_reference_acceptance_record(unit_id: String, records: Array) -> bool:
+	if _family_acceptance_by_unit.has(unit_id):
+		return _require(records.size() == 1 and records[0] is Dictionary and _family_receipt_matches(records[0], _family_acceptance_by_unit[unit_id].acceptance_record), "recognition_receipt_mismatch", "Family unit must bind its exact independent seven-artifact receipt.")
 	if not _require(records.size() == 1 and EXPECTED_REVIEW_RECEIPTS.has(unit_id), "recognition_receipt_mismatch", "%s must have one allowlisted independent recognition receipt." % unit_id):
 		return false
 	var record := records[0] as Dictionary
@@ -1202,6 +1278,7 @@ func _validate_active_recognition_authority(active_adapters: Array) -> bool:
 
 
 func _validate_recognition_metric(registry: Dictionary, accepted_unit_ids: Array) -> bool:
+	var expected_count := EXPECTED_REFERENCE_RECOGNIZABLE_COUNT + _family_acceptance_by_unit.size()
 	var metric := registry.get("recognition_metric", {}) as Dictionary
 	if not _require(_has_exact_keys(metric, ["accepted_physical_unit_ids", "denominator", "denominator_kind", "display", "isle_house_non_numerator_source_keys", "numerator", "rollup_policy"]), "recognition_metric_mismatch", "Runtime recognition metric fields drifted."):
 		return false
@@ -1214,14 +1291,14 @@ func _validate_recognition_metric(registry: Dictionary, accepted_unit_ids: Array
 	var receiver_totals := claim_totals.get("receiver_complete", {}) as Dictionary
 	return _require(
 		metric_ids == accepted_unit_ids
-		and int(metric.get("numerator", -1)) == EXPECTED_REFERENCE_RECOGNIZABLE_COUNT
+		and int(metric.get("numerator", -1)) == expected_count
 		and int(metric.get("denominator", -1)) == EXPECTED_UNIT_COUNT
-		and str(metric.get("display", "")) == "%d/%d" % [EXPECTED_REFERENCE_RECOGNIZABLE_COUNT, EXPECTED_UNIT_COUNT]
+		and str(metric.get("display", "")) == "%d/%d" % [expected_count, EXPECTED_UNIT_COUNT]
 		and str(metric.get("denominator_kind", "")) == "immutable_physical_recognition_units"
 		and str(metric.get("rollup_policy", "")) == "one_claim_per_physical_recognition_unit"
 		and metric.get("isle_house_non_numerator_source_keys", []) == ["w1282547786", "w1282547787"]
-		and int(reference_totals.get("accepted", -1)) == EXPECTED_REFERENCE_RECOGNIZABLE_COUNT
-		and int(reference_totals.get("not_evaluated", -1)) == EXPECTED_UNIT_COUNT - EXPECTED_REFERENCE_RECOGNIZABLE_COUNT
+		and int(reference_totals.get("accepted", -1)) == expected_count
+		and int(reference_totals.get("not_evaluated", -1)) == EXPECTED_UNIT_COUNT - expected_count
 		and int(reference_totals.get("blocked", -1)) == 0
 		and int(reference_totals.get("rejected", -1)) == 0
 		and int(game_totals.get("accepted", -1)) == 0
@@ -3683,6 +3760,8 @@ func _derive_unit_content_mode(receivers: Array) -> String:
 		modes[str((receiver_value as Dictionary).get("runtime_content_mode", ""))] = true
 	var values := modes.keys()
 	values.sort()
+	if values == ["shared_housing_family"]:
+		return "all_receivers_shared_housing_family"
 	if values == ["generated_placeholder"]:
 		return "all_receivers_generated_placeholder"
 	if values == ["legacy_adapter"]:
