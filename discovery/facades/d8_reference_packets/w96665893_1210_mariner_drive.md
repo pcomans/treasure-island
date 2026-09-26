@@ -51,3 +51,8 @@ door rhythm, footprint proportions, and lack of canopy. Prototype blocker:
 panorama pixels are retained.
 
 Shared sources, lifecycle caveats, and rights boundary: [D8 index](README.md).
+
+
+### 2026-09-26 direct-reference / canonical-geometry correction
+
+Canonical outward-facing north source runs are8–11,13–17. March2025 pano fxeD0MyE_l4b5gxxnpqK6Q heading164.3 first intersects source run14 at17.842m. Direct pixels support two shallow-hip sections/no deep canopy; prior facing labels were reversed relative to serialized geometry. Private original pixels and exact acquisition provenance remain in work/housing-expansion-2026-09-25/next-batch-reference/NOTES.md. This additive correction preserves the historical packet and does not claim surveyed dimensions or hidden-side coverage.

@@ -33,3 +33,8 @@ Written observation: a compact two-storey pale blue-gray horizontal-sided block 
 Minimum cue: **compact pale-blue-gray block, shallow gable end, repeated upper windows, and blue screened entry run**. Close confusion: 1201/1205/1220/1226 Bayside and nearby gray Site 12 blocks. Share pale siding, white trim, glass, door, and privacy-screen modules; preserve the compact footprint, gable end, and observed SE corner organization. Prototype/component blocker: **none for a detached observed-corner study; exact far-end and hidden-side schedules remain intentionally unresolved**. Hidden sides, exact module endpoints, interiors, occupancy, and post-capture changes remain unknown. No panorama pixels are retained or proposed as texture inputs.
 
 Shared sources, lifecycle caveats, registry-role boundary, and rights boundary: [D9 index](README.md).
+
+
+### 2026-09-26 direct-reference / canonical-geometry correction
+
+Canonical outward-facing NE source runs are9–11,13–14, normal about34.3deg. The old named pano is about76m from target vertex mean, not2.7m, and is not adequate target-specific frontage proof. Bounded alternate March2025 pano HWErKwGlkepfWp3vC7-G2A, camera37.8300046,-122.3768444 heading215, first intersects this source run13 at17.015m. UI1205 is excluded. Actual pixels show two-section shallow-hip row, varied upper widths, yellow/pale entries and partial LEFT parking canopy; hidden endpoint/occluded cadence remain inferred. Private original pixels and exact acquisition provenance remain in work/housing-expansion-2026-09-25/next-batch-reference/NOTES.md. This additive correction preserves the historical packet and does not claim surveyed dimensions or hidden-side coverage.

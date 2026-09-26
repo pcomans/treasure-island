@@ -1,0 +1,225 @@
+{
+	"captures": [
+		{
+			"bytes": 712796,
+			"camera_forward": [
+				0.321617871522903,
+				0.0500756949186325,
+				0.945544540882111
+			],
+			"camera_position": [
+				-230.698196411133,
+				4.35690355300903,
+				-596.179016113281
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96665893-INSTALLED.png",
+			"ground_clearance_m": 0.0000140666961669922,
+			"ground_feature": "land_ground",
+			"ground_object": "land:w26767313:x_-1__z_-3",
+			"ground_sources": [
+				"w26767313",
+				"w29399800"
+			],
+			"ground_y": 2.63230895996094,
+			"id": "w96665893-INSTALLED",
+			"in_boundary": true,
+			"input_driven_after_reset": false,
+			"intent": "Dated-reference existing-family study in current normal27 world",
+			"movement_proof": false,
+			"pause_overlay_visible": false,
+			"phase": "candidate30",
+			"physics_grounded": true,
+			"player_position": [
+				-228.929275512695,
+				2.6323230266571,
+				-590.978454589844
+			],
+			"region": "w96665893",
+			"sample_luminance_range": 0.775487124919891,
+			"sample_unique_colors": 285,
+			"scenario_reset": "fixed_player_transform_then_physics_settle",
+			"settle_horizontal_drift_m": 0.0,
+			"settle_physics_frames": 125,
+			"settle_recovery_delta": 0,
+			"settle_spawn_y": 5.63230895996094,
+			"settled_y": 2.6323230266571,
+			"sha256": "0e548fe6da2b96c722309f1555c00850b1c0ea35ec04a8c2b27c827750d5325e",
+			"source_key": "w96665893"
+		},
+		{
+			"bytes": 558935,
+			"camera_forward": [
+				-0.961880683898926,
+				0.0417702458798885,
+				-0.270260751247406
+			],
+			"camera_position": [
+				-289.59619140625,
+				4.69589567184448,
+				-650.55078125
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215698-INSTALLED.png",
+			"ground_clearance_m": 0.000111818313598633,
+			"ground_feature": "land_ground",
+			"ground_object": "land:w26767313:x_-2__z_-3",
+			"ground_sources": [
+				"w26767313",
+				"w29399800"
+			],
+			"ground_y": 2.92552185058594,
+			"id": "w96215698-INSTALLED",
+			"in_boundary": true,
+			"input_driven_after_reset": false,
+			"intent": "Dated-reference existing-family study in current normal27 world",
+			"movement_proof": false,
+			"pause_overlay_visible": false,
+			"phase": "candidate30",
+			"physics_grounded": true,
+			"player_position": [
+				-294.886566162109,
+				2.92563366889954,
+				-652.037231445312
+			],
+			"region": "w96215698",
+			"sample_luminance_range": 0.599763929843903,
+			"sample_unique_colors": 195,
+			"scenario_reset": "fixed_player_transform_then_physics_settle",
+			"settle_horizontal_drift_m": 0.0,
+			"settle_physics_frames": 126,
+			"settle_recovery_delta": 0,
+			"settle_spawn_y": 5.92552185058594,
+			"settled_y": 2.92563366889954,
+			"sha256": "88415374ef84cbfb8cd940c9e975baa2045e7969496db456e94cb2df6a2cecd1",
+			"source_key": "w96215698"
+		},
+		{
+			"bytes": 592430,
+			"camera_forward": [
+				-0.429743885993958,
+				0.0729981809854507,
+				0.899995267391205
+			],
+			"camera_position": [
+				-512.421630859375,
+				3.88860893249512,
+				-699.923095703125
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96665908-INSTALLED.png",
+			"ground_clearance_m": 0.0000140666961669922,
+			"ground_feature": "land_ground",
+			"ground_object": "land:w26767313:x_-3__z_-3",
+			"ground_sources": [
+				"w26767313",
+				"w29399800"
+			],
+			"ground_y": 2.29008483886719,
+			"id": "w96665908-INSTALLED",
+			"in_boundary": true,
+			"input_driven_after_reset": false,
+			"intent": "Dated-reference existing-family study in current normal27 world",
+			"movement_proof": false,
+			"pause_overlay_visible": false,
+			"phase": "candidate30",
+			"physics_grounded": true,
+			"player_position": [
+				-514.785278320312,
+				2.29009890556335,
+				-694.97314453125
+			],
+			"region": "w96665908",
+			"sample_luminance_range": 0.63646275550127,
+			"sample_unique_colors": 220,
+			"scenario_reset": "fixed_player_transform_then_physics_settle",
+			"settle_horizontal_drift_m": 0.0,
+			"settle_physics_frames": 126,
+			"settle_recovery_delta": 0,
+			"settle_spawn_y": 5.29008483886719,
+			"settled_y": 2.29009890556335,
+			"sha256": "3c29fea0622002318477abe40d7549251c6694a972bdb5b04abbb4d38fb75504",
+			"source_key": "w96665908"
+		}
+	],
+	"checks": [
+		{
+			"candidate_actual_sources": [
+				"w96215646",
+				"w96215649",
+				"w96215651",
+				"w96215652",
+				"w96215653",
+				"w96215656",
+				"w96215658",
+				"w96215659",
+				"w96215661",
+				"w96215666",
+				"w96215668",
+				"w96215669",
+				"w96215670",
+				"w96215672",
+				"w96215673",
+				"w96215674",
+				"w96215677",
+				"w96215678",
+				"w96215680",
+				"w96215682",
+				"w96215685",
+				"w96215688",
+				"w96215691",
+				"w96215693",
+				"w96215698",
+				"w96665893",
+				"w96665904",
+				"w96665908",
+				"w96665911",
+				"w96665916"
+			],
+			"scope": "normal27 plus fixture3"
+		},
+		{
+			"scope": "candidate30 pending normal declaration",
+			"topology": {
+				"active_bodies": 524,
+				"active_shapes": 597,
+				"disabled_bodies": 90,
+				"visible_meshes": 34653,
+				"visible_surfaces": 34671,
+				"visible_triangles": 768556
+			}
+		},
+		{
+			"disabled_final": true,
+			"released_inputs": true,
+			"velocity": [
+				0.0,
+				0.0,
+				0.0
+			]
+		}
+	],
+	"contact_samples": [],
+	"failure": "",
+	"ok": true,
+	"safe_final": true,
+	"scope": "candidate construction/count measurement only",
+	"topology": {
+		"active_bodies": 524,
+		"active_shapes": 597,
+		"disabled_bodies": 90,
+		"visible_meshes": 34653,
+		"visible_surfaces": 34671,
+		"visible_triangles": 768556
+	},
+	"unit_results": []
+}

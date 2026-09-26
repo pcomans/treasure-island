@@ -1,0 +1,24 @@
+{
+  "pid": 21229,
+  "command": [
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+    "--path",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion",
+    "--rendering-method",
+    "forward_plus",
+    "--rendering-driver",
+    "metal",
+    "--display-driver",
+    "macos",
+    "--audio-driver",
+    "Dummy",
+    "--resolution",
+    "1440x900",
+    "--script",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/tests/housing_family_experiment/expansion_next_integration.gd",
+    "--",
+    "--manifest=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/tests/housing_family_experiment/expansion_next.json",
+    "--output=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-next-integration-001/images",
+    "--measure-candidate"
+  ]
+}

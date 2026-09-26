@@ -8561,7 +8561,7 @@
   "appearance_adoption": {
     "path": "res://game/resources/housing_family/live_adoption.json",
     "scope": "current_enabled_appearance_zero_credit",
-    "sha256": "65edb32c4da3d61b88ea9c233443e063a3b780b933ffd0b424d7c9bce3d32e67"
+    "sha256": "ad3592aaa96adb9ffd9d0d6ffd63eff9931c61ad84b7c7446d0dd931378b3126"
   },
   "build_contract": {
     "authoring_catalog_sha256": "63dff67a2768c9d063ea5fffaa49bb0d896a11e75c9bebe5305fa442ce1737b2",

@@ -1,4 +1,4 @@
-import { readFileSync, statSync } from "node:fs";
+import { readFileSync, statSync, readdirSync, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { dirname, resolve } from "node:path";
 import { invariant, sha256File, stableJson } from "./world-contract.mjs";
@@ -85,6 +85,79 @@ export function validateFamilyImageTree(root, treePath, tree, expectedDigest, im
   invariant(digest.digest("hex") === expectedDigest && tree.tree_sha256 === expectedDigest, "Family image tree digest drifted");
 }
 
+// Capture inputs are immutable, while unrelated family membership may grow.
+// Keep all runtime executables/scenes/shaders and canonical world bytes: a changed
+// shared dependency is never made reusable by a reviewer saying it is unrelated.
+// The authority-only registry loader is bound by the current package, because
+// serializing genuine credit necessarily updates its allowlist after capture.
+export function familyCapturePaths(root, entry, world) {
+  const walk = dir => readdirSync(resolve(root, dir), {withFileTypes:true}).flatMap(item =>
+    item.isDirectory() ? walk(`${dir}/${item.name}`) : [`${dir}/${item.name}`]);
+  const authorityFiles = new Set([
+    "game/scripts/world/facades/facade_runtime_registry_loader.gd",
+    "game/resources/facades/facade-runtime-registry.json",
+    "game/resources/facades/facade-runtime-adapter-contracts.json",
+    "game/resources/housing_family/live_adoption.json", FAMILY_MANIFEST_PATH,
+  ]);
+  const runtimeInputs = walk("game").filter(path => !path.startsWith("game/tests/") && !authorityFiles.has(path)
+    && (!/^game\/resources\/housing_family\/w[0-9]+\.json$/u.test(path) || path === entry.config.path));
+  return [...new Set([...FAMILY_SHARED_PATHS, "project.godot", entry.config.path, entry.chunk.path,
+    ...runtimeInputs, "generated/world/manifest.json",
+    ...world.chunks.map(c => `generated/world/${c.path}`)])].sort();
+}
+
+export function validateFamilyCapture(root, entry, world) {
+  const capture = entry.capture;
+  keys(capture, ["project_root", "input_map", "dependencies", "retained_inputs"], "Family frozen capture");
+  invariant(typeof capture.project_root === "string" && capture.project_root.startsWith("/") && !capture.project_root.endsWith("/"), "Family capture project root missing");
+  const map = bound(root, capture.input_map);
+  const required = familyCapturePaths(root, entry, world);
+  invariant(same(Object.keys(capture.dependencies).sort(), required), "Family capture dependency set drifted");
+  for (const path of required) {
+    const digest = capture.dependencies[path];
+    invariant(hash(digest) && map[`${capture.project_root}/${path}`] === digest && sha256File(resolve(root,path)) === digest, `Family frozen capture dependency drifted: ${path}`);
+  }
+  invariant(Array.isArray(capture.retained_inputs) && capture.retained_inputs.length > 0, "Family original capture inputs missing");
+  const retained = new Set();
+  for (const input of capture.retained_inputs) {
+    keys(input, ["original_path", "file"], "Family retained original");
+    invariant(typeof input.original_path === "string" && !retained.has(input.original_path) && map[input.original_path] === input.file.sha256, "Family original/input-map binding drifted");
+    retained.add(input.original_path); bound(root,input.file,false);
+  }
+  // Preserve the actual producer and its configuration, not a rewritten driver.
+  for (const suffix of [".gd", ".py", ".json"]) invariant([...retained].some(p => p.startsWith(`${capture.project_root}/game/tests/`) && p.endsWith(suffix)), "Family original capture producer/configuration missing");
+  return map;
+}
+
+export function familyCurrentBinding(entry, manifest) {
+  return {unit_id:entry.unit_id, source_key:entry.source_key, receiver_key:entry.receiver_key,
+    config:entry.config, chunk:entry.chunk, dependencies:entry.dependencies,
+    capture_dependencies:entry.capture.dependencies,
+    instances:manifest.instances, expected_visible_active_topology:manifest.expected_visible_active_topology};
+}
+
+export function familySiteDelta(root, entry, map) {
+  // Includes removed and newly added configs, not only today's declared targets.
+  const prefix = `${entry.capture.project_root}/`;
+  const paths = new Set([...Object.keys(entry.dependencies), ...readdirSync(resolve(root,"game/resources/housing_family")).filter(p => /^w[0-9]+\.json$/u.test(p)).map(p => `game/resources/housing_family/${p}`), ...Object.keys(map)
+    .filter(p => p.startsWith(`${prefix}game/resources/housing_family/`) && /\/w[0-9]+\.json$/u.test(p))
+    .map(p => p.slice(prefix.length))]);
+  return [...paths].sort().flatMap(path => {
+    const before = map[prefix+path] ?? null, after = entry.dependencies[path] ?? (existsSync(resolve(root,path)) ? sha256File(resolve(root,path)) : null);
+    return before === after ? [] : [{path, capture_sha256:before, current_sha256:after}];
+  });
+}
+
+export function validateFamilyCurrentAttachment(attachment, currentBinding, pckSha) {
+  invariant(hash(pckSha) && attachment.pck_sha256 === pckSha && same(attachment.source_binding,currentBinding), "Family candidate exact app/target attachment drifted");
+  invariant(attachment.build_valid === true && attachment.normal_loader_owned === true, "Family candidate normal-loader ownership missing");
+  const expected = Object.fromEntries(["ground","roof","support","wall"].map(role => [role, {
+    object_key:`building:${currentBinding.source_key}:${role === "roof" ? "roof" : "wall"}`,
+    collision_layer:role === "wall" ? 5 : 1, visual_layer:role === "wall" ? 2 : 1,
+    spray_receiver:role === "wall"}]));
+  invariant(same(attachment.roles,expected), "Family candidate actual target roles drifted");
+}
+
 export function familyRuntimeSummary(entry) {
   return {unit_id: entry.unit_id, source_key: entry.source_key, receiver_key: entry.receiver_key,
     config: entry.config, chunk: entry.chunk, dependencies: entry.dependencies,
@@ -97,7 +170,7 @@ export function validateHousingFamilyAuthority(root, entries, {manifest, world, 
   validateHousingFamilyInstances(root, manifest, world);
   const seenUnits = new Set(), seenReviews = new Set();
   for (const entry of entries) {
-    keys(entry, ["unit_id", "source_key", "receiver_key", "config", "chunk", "dependencies", "acceptance", "receipt", "tree_document_sha256", "image_count", "author_id", "mechanical_reviewer_id", "visual_reviewer_id"], "Family authority entry");
+    keys(entry, ["unit_id", "source_key", "receiver_key", "config", "chunk", "dependencies", "capture", "acceptance", "receipt", "tree_document_sha256", "image_count", "author_id", "mechanical_reviewer_id", "visual_reviewer_id"], "Family authority entry");
     invariant(entry.unit_id === `physical-building:${entry.source_key}` && entry.receiver_key === `building:${entry.source_key}:wall`, "Family physical-unit/receiver identity drifted");
     invariant(!seenUnits.has(entry.unit_id) && !historicalUnitIds.includes(entry.unit_id), "Family authority duplicates existing credit");
     seenUnits.add(entry.unit_id);
@@ -109,6 +182,9 @@ export function validateHousingFamilyAuthority(root, entries, {manifest, world, 
     const requiredPaths = [...new Set([...FAMILY_SHARED_PATHS, FAMILY_MANIFEST_PATH, ...manifest.instances.flatMap(item => [item.config.slice(6), item.chunk.slice(6)]), "generated/world/manifest.json"])].sort();
     invariant(same(Object.keys(entry.dependencies).sort(), requiredPaths), "Family executable/config/chunk dependency set drifted");
     for (const path of requiredPaths) invariant(hash(entry.dependencies[path]) && sha256File(resolve(root, path)) === entry.dependencies[path], `Family dependency drifted: ${path}`);
+    const captureMap = validateFamilyCapture(root,entry,world);
+    const currentBinding = familyCurrentBinding(entry,manifest);
+    const siteDelta = familySiteDelta(root,entry,captureMap);
     const a = entry.acceptance;
     keys(a, [...Object.values(FAMILY_ARTIFACT_FIELDS), "evidence_tree_sha256", "capture_time_recognition_metric", "numerator_effect", "review_id", "review_kind", "status"], "Family seven-artifact acceptance");
     invariant(a.status === "accept" && a.review_kind === "independent_reference_recognition" && a.numerator_effect === 1 && /^\d+\/213$/u.test(a.capture_time_recognition_metric), "Family acceptance semantics drifted");
@@ -125,15 +201,28 @@ export function validateHousingFamilyAuthority(root, entries, {manifest, world, 
     }
     const tree = bound(root, {path: receipt.evidence_tree_path, sha256: entry.tree_document_sha256});
     validateFamilyImageTree(root, receipt.evidence_tree_path, tree, a.evidence_tree_sha256, entry.image_count);
-    const sourceBinding = {unit_id: entry.unit_id, source_key: entry.source_key, receiver_key: entry.receiver_key, config: entry.config, chunk: entry.chunk, dependencies: entry.dependencies};
+    const sourceBinding = {unit_id: entry.unit_id, source_key: entry.source_key, receiver_key: entry.receiver_key, config: entry.config, chunk: entry.chunk, capture: entry.capture};
     for (const field of ["evidence_manifest_path", "motion_telemetry_manifest_path", "visual_motion_manifest_path", "mechanical_review_receipt_path"]) {
       const artifact = artifacts[field];
       invariant(artifact.decision === "PASS" && same(artifact.source_binding, sourceBinding) && artifact.capture_time_recognition_metric === a.capture_time_recognition_metric, `Family ${field} source/capture decision drifted`);
     }
+    // Every image is an original in the frozen map; retained relocation is allowed.
+    for (const file of tree.files) {
+      const imagePath = resolve(root,dirname(receipt.evidence_tree_path),file.path);
+      invariant(entry.capture.retained_inputs.some(input => resolve(root,input.file.path) === imagePath && input.file.sha256 === file.sha256), "Family image is not a retained original");
+    }
+    for (const field of ["evidence_manifest_path","motion_telemetry_manifest_path","visual_motion_manifest_path"]) {
+      const originals = artifacts[field].original_inputs;
+      invariant(Array.isArray(originals) && originals.length > 0 && originals.every(input => entry.capture.retained_inputs.some(retained => same(input,retained))), "Family source/motion original artifact binding missing");
+    }
+    const applicability = {capture_input_map:entry.capture.input_map, current_binding:currentBinding, site_delta:siteDelta};
+    for (const artifact of [artifacts.mechanical_review_receipt_path,artifacts.review_path]) {
+      invariant(same(artifact.site_context_binding,applicability) && artifact.site_context_applicable === true && typeof artifact.site_context_reason === "string" && artifact.site_context_reason.trim().length > 0, "Family changed site context lacks independent applicability review");
+    }
     invariant(artifacts.mechanical_review_receipt_path.reviewer_id === entry.mechanical_reviewer_id, "Family mechanical independence drifted");
     const pkg = artifacts.package_verification_receipt_path;
     invariant(pkg.owner_decision === "PASS" && pkg.independent_exact_app_decision === "PASS" && pkg.independent_exact_app_review_pending === false && pkg.physical_unit_id === entry.unit_id && pkg.candidate_authority === a.capture_time_recognition_metric && pkg.unit_acceptance_granted === false && pkg.recognition_credit_granted === false, "Family candidate-before-credit package decision drifted");
-    invariant(hash(pkg.pck_sha256) && same(pkg.unit_actual_attachment.source_binding, sourceBinding) && pkg.unit_actual_attachment.pck_sha256 === pkg.pck_sha256, "Family candidate exact app/target attachment drifted");
+    validateFamilyCurrentAttachment(pkg.unit_actual_attachment,currentBinding,pkg.pck_sha256);
     // Raw runs and independent release/privacy review remain bound, not transcribed
     // into a per-unit fake native execution.
     for (const binding of [pkg.independent_review, pkg.signature_privacy_binding, ...pkg.terminal_slot_releases, ...pkg.unit_actual_attachment.raw_runs]) bound(root, binding, false);
