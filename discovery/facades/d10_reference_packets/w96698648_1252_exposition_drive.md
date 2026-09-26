@@ -33,3 +33,8 @@ Written observation: a two-storey gray horizontal-sided frontage, shallow tan/gr
 Minimum cue: **gray siding, shallow tan/gray roof, regular upper windows, and deep dark post-supported canopy**. Close confusion: 1249/1253 Exposition and Gateview deep-canopy rows. Share gray siding, roof, glazing, door, privacy-box, and parametric canopy modules; retain this ENE cadence and canopy proportion locally. Prototype/component blocker: **none for a detached ENE study; parked-vehicle intersections and exact endpoints require receiver-relative matching**. Frozen street value, hidden sides, exact obscured endpoints, interiors, occupancy, and post-capture changes remain unknown. No panorama pixels are retained or proposed as texture inputs.
 
 Shared sources, capture/currentness caveats, packet-time/current registry split, and rights boundary: [D10 index](README.md).
+
+
+### 2026-09-26 direct-reference / canonical-geometry correction
+
+March2025 panoqx_9deE29P7CNgtNpldcvw, camera37.8290910,-122.3716190 heading252.9, first exact wall hit run15 at15.778m. Actual ENE outward runs10–13,15,17–19 (~62.6deg), reversing old labels. UI1253 excluded. Three stepped gray sections, tan-gray shallow roof, blue entries and continuous dark parking canopy/pale posts directly observed; occluded endpoints remain inference. Private originals and exact provenance retained in work/housing-expansion-2026-09-25/next-third-reference/NOTES.md. Historical packet remains intact; no surveyed or hidden-side schedule claim.

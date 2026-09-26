@@ -33,3 +33,8 @@ Written observation: a two-storey light-gray/white horizontal-sided frontage wit
 Minimum cue: **light-gray/white frontage, shallow roof, regular upper windows, and varied dark/green entry/privacy rhythm**. Close confusion: 1252/1253 Exposition and other pale Site 12 rows. Share pale siding, roof-edge, glazing, door, and privacy-box modules; preserve the varied door tones and observed SSE cadence locally. Prototype/component blocker: **none for a detached SSE study; tree/car-hidden lower endpoints require receiver-relative matching**. Frozen street value, hidden sides, exact obscured endpoints, interiors, occupancy, and post-capture changes remain unknown. No panorama pixels are retained or proposed as texture inputs.
 
 Shared sources, capture/currentness caveats, packet-time/current registry split, and rights boundary: [D10 index](README.md).
+
+
+### 2026-09-26 direct-reference / canonical-geometry correction
+
+March2025 pano4uBsPyve1glFjTam2OWVpA, camera37.8295334,-122.3720601 heading2.8, first exact wall hit run5 at20.816m. Actual SSE outward runs2,4–5,7–8 (~151.8deg), reversing old labels. Pale three-section no-canopy row and green/dark entries directly observed; vehicle/vegetation-obscured lower endpoints remain production inference. Private originals and exact provenance retained in work/housing-expansion-2026-09-25/next-third-reference/NOTES.md. Historical packet remains intact; no surveyed or hidden-side schedule claim.

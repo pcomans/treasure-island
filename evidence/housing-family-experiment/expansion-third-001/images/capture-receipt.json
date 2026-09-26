@@ -1,0 +1,253 @@
+{
+	"captures": [
+		{
+			"bytes": 565885,
+			"camera_forward": [
+				0.243613570928574,
+				0.0588500164449215,
+				0.96808534860611
+			],
+			"camera_position": [
+				-271.33984375,
+				4.41299343109131,
+				-595.324462890625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96215693-current-context.png",
+			"ground_clearance_m": 0.000111818313598633,
+			"ground_feature": "land_ground",
+			"ground_object": "land:w26767313:x_-2__z_-3",
+			"ground_sources": [
+				"w26767313",
+				"w29399800"
+			],
+			"ground_y": 2.73655700683594,
+			"id": "w96215693-current-context",
+			"in_boundary": true,
+			"input_driven_after_reset": false,
+			"intent": "Unchanged1208 appearance with newly integrated1210 neighbor",
+			"movement_proof": false,
+			"pause_overlay_visible": false,
+			"physics_grounded": true,
+			"player_position": [
+				-270.0,
+				2.73666882514954,
+				-590.0
+			],
+			"region": "w96215693",
+			"sample_luminance_range": 0.617441587150097,
+			"sample_unique_colors": 228,
+			"scenario_reset": "fixed_player_transform_then_physics_settle",
+			"settle_horizontal_drift_m": 0.0,
+			"settle_physics_frames": 126,
+			"settle_recovery_delta": 0,
+			"settle_spawn_y": 5.73655700683594,
+			"settled_y": 2.73666882514954,
+			"sha256": "a486df765efd5793deeecfda44e418b69face6eedf152fc95ed1470239785687"
+		},
+		{
+			"baseline": "current normal30 source world; targets retain frozen original massing in A",
+			"bytes": 1000444,
+			"camera_forward": [
+				-0.755097985267639,
+				0.0343249477446079,
+				-0.654712796211243
+			],
+			"camera_position": [
+				-52.6066474914551,
+				4.83741617202759,
+				-529.547119140625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96698619-A.png",
+			"id": "w96698619-A",
+			"intent": "Dated-reference existing-family study in current normal30 world",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-56.7596855163574,
+				3.02620434761047,
+				-533.148010253906
+			],
+			"region": "w96698619",
+			"sample_luminance_range": 0.471579670906067,
+			"sample_unique_colors": 296,
+			"sha256": "926530bbd4e47486e000827895f1cbbad09714c0d2041f4a00e417c9302f0f81",
+			"source_key": "w96698619"
+		},
+		{
+			"bytes": 746987,
+			"camera_forward": [
+				-0.755097985267639,
+				0.0343249663710594,
+				-0.654712796211243
+			],
+			"camera_position": [
+				-52.6066474914551,
+				4.83741617202759,
+				-529.547119140625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96698619-B.png",
+			"id": "w96698619-B",
+			"intent": "Dated-reference existing-family study in current normal30 world",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-56.7596855163574,
+				3.02620434761047,
+				-533.148010253906
+			],
+			"region": "w96698619",
+			"sample_luminance_range": 0.731865882873535,
+			"sample_unique_colors": 244,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "4693f614581fe1d2606f0efde5f4d3876aa24560ba2b9065fbadfde61641972f",
+			"source_key": "w96698619"
+		},
+		{
+			"baseline": "current normal30 source world; targets retain frozen original massing in A",
+			"bytes": 896656,
+			"camera_forward": [
+				0.166404470801353,
+				0.0292675830423832,
+				-0.985623121261597
+			],
+			"camera_position": [
+				-95.0105743408203,
+				4.63400793075562,
+				-637.098510742188
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96698643-A.png",
+			"id": "w96698643-A",
+			"intent": "Dated-reference existing-family study in current normal30 world",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-94.0953369140625,
+				2.79497861862183,
+				-642.519409179688
+			],
+			"region": "w96698643",
+			"sample_luminance_range": 0.492360830307007,
+			"sample_unique_colors": 231,
+			"sha256": "10b8a19a3687d3e32a09d6af3ab108ced67d56b4ede0dbe37193bee3e934107c",
+			"source_key": "w96698643"
+		},
+		{
+			"bytes": 814647,
+			"camera_forward": [
+				0.166404440999031,
+				0.0292675830423832,
+				-0.985623121261597
+			],
+			"camera_position": [
+				-95.0105743408203,
+				4.63400793075562,
+				-637.098510742188
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96698643-B.png",
+			"id": "w96698643-B",
+			"intent": "Dated-reference existing-family study in current normal30 world",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-94.0953369140625,
+				2.79497861862183,
+				-642.519409179688
+			],
+			"region": "w96698643",
+			"sample_luminance_range": 0.602494955062866,
+			"sample_unique_colors": 210,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "87f40fd4ee4a092684f5f62913aeb4a223855997017d8cdc5fe8c6ed14381952",
+			"source_key": "w96698643"
+		},
+		{
+			"baseline": "current normal30 source world; targets retain frozen original massing in A",
+			"bytes": 866740,
+			"camera_forward": [
+				-0.968512654304504,
+				0.0207143519073725,
+				0.248101234436035
+			],
+			"camera_position": [
+				-49.9820137023926,
+				5.07300615310669,
+				-594.636291503906
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96698648-A.png",
+			"id": "w96698648-A",
+			"intent": "Dated-reference existing-family study in current normal30 world",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-55.3088188171387,
+				3.18693423271179,
+				-593.271667480469
+			],
+			"region": "w96698648",
+			"sample_luminance_range": 0.613520011305809,
+			"sample_unique_colors": 285,
+			"sha256": "b4ecd45032b750da66fc8af814b5ef4a1536b33c3f139c94f61d641bb00743b2",
+			"source_key": "w96698648"
+		},
+		{
+			"bytes": 579129,
+			"camera_forward": [
+				-0.968512654304504,
+				0.0207143500447273,
+				0.248101234436035
+			],
+			"camera_position": [
+				-49.9820137023926,
+				5.07300615310669,
+				-594.636291503906
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "w96698648-B.png",
+			"id": "w96698648-B",
+			"intent": "Dated-reference existing-family study in current normal30 world",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-55.3088188171387,
+				3.18693423271179,
+				-593.271667480469
+			],
+			"region": "w96698648",
+			"sample_luminance_range": 0.613520011305809,
+			"sample_unique_colors": 219,
+			"scope": "Shared family visual experiment; original collision and receivers retained",
+			"sha256": "268433133b4f6d115122ecd7797f28cd0feeb2806f723d010023088aff729f96",
+			"source_key": "w96698648"
+		}
+	],
+	"failure": "",
+	"ok": true,
+	"scope": "Visual experiment, no acceptance or collision fit claim"
+}

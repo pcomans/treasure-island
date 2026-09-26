@@ -1335,4 +1335,8 @@ func _is_adopted_family_source(source: String) -> bool:
 func _mac_export_live_family_valid() -> bool:
 	var result: Dictionary = WorldLoader.HOUSING_FAMILY.validate_live(world_root)
 	print("MAC_EXPORT_HOUSING_FAMILY_ADOPTION: ",JSON.stringify(result))
+	if bool(result.get("ok",false)) and OS.get_cmdline_user_args().has("--family-evidence"):
+		var attachment: Dictionary = preload("res://game/tests/housing_family_signed_attachment.gd").inspect(world_root)
+		print("MAC_EXPORT_HOUSING_FAMILY_TARGETS: ", JSON.stringify(attachment))
+		return bool(attachment.get("ok", false))
 	return bool(result.get("ok",false))

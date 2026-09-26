@@ -145,6 +145,36 @@ static func measure_world(world: Node3D) -> Dictionary:
 					if shape is CollisionShape3D and not shape.disabled: totals.active_shapes+=1
 	return totals
 
+# Source SHA equality remains mandatory whenever source bytes exist. Exported
+# compiled representations are measured separately and bound by the exact PCK;
+# their digest is never claimed to be the original source digest.
+static func dependency_representation(relative_path: String, source_sha256: String) -> Dictionary:
+	var path := "res://" + relative_path
+	if relative_path.is_empty() or relative_path.begins_with("/") or ":" in relative_path or ".." in relative_path.split("/") or source_sha256.length() != 64:
+		return {"ok": false}
+	if FileAccess.file_exists(path):
+		var actual := FileAccess.get_sha256(path)
+		return {"ok": actual == source_sha256, "kind": "source", "path": path, "sha256": actual, "source_sha256": source_sha256}
+	var exported := FileAccess.file_exists("res://project.binary") and not FileAccess.file_exists("res://project.godot")
+	if not exported or not (path.ends_with(".gd") or path.ends_with(".gdshader")) or not ResourceLoader.exists(path):
+		return {"ok": false}
+	var resource := ResourceLoader.load(path)
+	if (path.ends_with(".gd") and not resource is GDScript) or (path.ends_with(".gdshader") and not resource is Shader):
+		return {"ok": false}
+	var remap_path := path + ".remap"
+	var representation := path.trim_suffix(".gd") + ".gdc" if path.ends_with(".gd") else ""
+	var remap_sha256 := ""
+	if FileAccess.file_exists(remap_path):
+		var remap := ConfigFile.new()
+		if remap.load(remap_path) != OK: return {"ok": false}
+		representation = str(remap.get_value("remap", "path", ""))
+		remap_sha256 = FileAccess.get_sha256(remap_path)
+	if not representation.begins_with("res://") or ".." in representation.trim_prefix("res://").split("/") or not FileAccess.file_exists(representation):
+		return {"ok": false}
+	var representation_sha256 := FileAccess.get_sha256(representation)
+	if representation_sha256.length() != 64: return {"ok": false}
+	return {"ok": true, "kind": "exported_resource", "path": representation, "sha256": representation_sha256, "remap_sha256": remap_sha256, "source_sha256": source_sha256, "resource_class": resource.get_class()}
+
 static func validate_live(world: Node3D) -> Dictionary:
 	var binding: Variant = JSON.parse_string(FileAccess.get_file_as_string(ADOPTION))
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(CONFIG))
@@ -154,13 +184,10 @@ static func validate_live(world: Node3D) -> Dictionary:
 	for item: Dictionary in manifest.instances: expected.append(str(item.source_key))
 	expected.sort()
 	if binding.get("enabled_sources",[])!=expected: return {"ok":false,"message":"Adoption target set drift"}
-	var exported := FileAccess.file_exists("res://project.binary") and not FileAccess.file_exists("res://project.godot")
 	for relative_path: String in binding.dependencies:
-		var path := "res://"+relative_path
-		if exported and (path.ends_with(".gd") or path.ends_with(".gdshader")):
-			if not ResourceLoader.exists(path): return {"ok":false,"message":"Missing remapped adoption resource "+path}
-		elif FileAccess.get_sha256(path)!=str(binding.dependencies[relative_path]):
-			return {"ok":false,"message":"Adoption dependency drift "+path}
+		var representation: Dictionary = dependency_representation(relative_path, str(binding.dependencies[relative_path]))
+		if not bool(representation.get("ok", false)):
+			return {"ok":false,"message":"Adoption dependency drift "+relative_path}
 	var found: Dictionary = {}
 	for model: Node3D in world.find_children("SharedHousing_*","Node3D",true,false):
 		var source := str(model.get_meta("source_key",""))

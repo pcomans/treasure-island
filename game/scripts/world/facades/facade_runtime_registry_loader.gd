@@ -814,7 +814,8 @@ func _validate_family_acceptance_header(registry: Dictionary) -> bool:
 		for path: String in required:
 			if not _require(_is_sha256(str(entry.dependencies[path])), "family_authority_mismatch", "Malformed family dependency hash."):
 				return false
-			if not _require(FileAccess.get_sha256("res://"+path) == str(entry.dependencies[path]), "family_authority_mismatch", "Family dependency bytes drifted."):
+			var representation: Dictionary = preload("res://game/scripts/world/facades/housing_family_live_attachment.gd").dependency_representation(path, str(entry.dependencies[path]))
+			if not _require(bool(representation.get("ok", false)), "family_authority_mismatch", "Family dependency representation drifted."):
 				return false
 		var record: Variant = entry.acceptance_record
 		if not _require(record is Dictionary and _has_exact_keys(record,["capture_time_recognition_metric", "evidence_manifest_sha256", "evidence_tree_sha256", "mechanical_review_receipt_sha256", "motion_telemetry_manifest_sha256", "numerator_effect", "package_verification_receipt_sha256", "review_id", "review_kind", "review_receipt_sha256", "status", "visual_motion_manifest_sha256"]), "family_authority_mismatch", "Family seven-artifact receipt fields drifted."):

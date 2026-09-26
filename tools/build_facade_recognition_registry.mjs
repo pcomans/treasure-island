@@ -9668,6 +9668,14 @@ function acceptedAuthorityRuntimeDependencies(path, text) {
       dependencyText = dependencyText.replace(probe, "true");
     }
   }
+  if (path === "game/scripts/world/facades/housing_family_live_attachment.gd") {
+    const adoption = JSON.parse(readFileSync(absolute("game/resources/housing_family/live_adoption.json"), "utf8"));
+    invariant(sha256Bytes(text) === adoption.dependencies[path], "Family reviewed format-probe source drifted from current adoption binding");
+    for (const probe of ['FileAccess.file_exists("res://project.binary")', 'FileAccess.file_exists("res://project.godot")']) {
+      invariant(occurrenceCount(text, probe) === 1, "Family exact format-probe expression drifted");
+      dependencyText = dependencyText.replace(probe, "true");
+    }
+  }
   const currentDependencies = runtimeDependencies(dependencyText);
   if (path !== WORLD_CHUNK_BUILDER_PATH) return currentDependencies;
   assertUnique(D2_1441_REVIEWED_WORLD_BUILDER_DEPENDENCY_PATHS, "Reviewed D2 1441 world-builder dependencies");

@@ -3,15 +3,15 @@
   "base_recognition": "34/213",
   "contact_scope": "Exact installed mesh contacts; exposed representative samples per instance. Tiny and grade-occluded samples remain unproved; stock motion/spray are representative.",
   "current_visible_active_topology": {
-    "active_bodies": 524,
-    "active_shapes": 597,
-    "disabled_bodies": 90,
-    "visible_meshes": 34653,
-    "visible_surfaces": 34671,
-    "visible_triangles": 768556
+    "active_bodies": 530,
+    "active_shapes": 603,
+    "disabled_bodies": 96,
+    "visible_meshes": 40247,
+    "visible_surfaces": 40265,
+    "visible_triangles": 794997
   },
   "dependencies": {
-    "game/resources/housing_family/live_instances.json": "e7710851c6fa92ad0cd870b36073d89ccf7c9e2bc094035fcb2fc987d174b13e",
+    "game/resources/housing_family/live_instances.json": "68d77193f0f42cd92acfdc499f902eba757baf6cc2b89b734746fae2caba0f6d",
     "game/resources/housing_family/roof.gdshader": "2b35613975a3ec4b7271159a6074c8fd4c1e1b483d9b6fb42466d852dcab72ce",
     "game/resources/housing_family/siding.gdshader": "5a56085c060167b7b65b556acd09bb87781e04ff2fb3e43f6978ea8f50e800aa",
     "game/resources/housing_family/w96215646.json": "c5406b62b15d3ee2231631c1223899d765a43c192aa6edc793e8a5360b249204",
@@ -44,9 +44,12 @@
     "game/resources/housing_family/w96665908.json": "9b96c573f27be948ca3a3338ef989f23028aed367e8cb1927b3beec750be73d9",
     "game/resources/housing_family/w96665911.json": "96dcd3e855102bc5f7072c1bd9d92268d757eb4cdb32917ba51ff788f974a10d",
     "game/resources/housing_family/w96665916.json": "67250fe449da625983c0f7c24397288abd67cce6265e3ea84bdbed3e476299a4",
-    "game/scripts/main.gd": "3a7380da33283e962d40193fc68610b820e976b7df7518f15d87856ffd7255f9",
-    "game/scripts/world/facades/facade_runtime_registry_loader.gd": "1c846110a6df2c48b33d426c1cce4767347216e3251a30561a5a4ecb0a3a4332",
-    "game/scripts/world/facades/housing_family_live_attachment.gd": "e7700213244f089d558566cf73d09a456a9aeacca788a072a7d77f045ace4cc9",
+    "game/resources/housing_family/w96698619.json": "5711dc19852a693dae02674b62575a1058e719e4a24e37423ac244be6d1d32ab",
+    "game/resources/housing_family/w96698643.json": "6829f1a7fbc25c05b7ba4083816dc136bb78afdfa9c7131d94f10f28379223f1",
+    "game/resources/housing_family/w96698648.json": "fb609bd9493ee6e75ff33d6835334e5f2de5a80741f2abb94c00e3e91296cb5a",
+    "game/scripts/main.gd": "413b066a2ebc7e367e798db3b02f65d7698fc9ab0f13915279aab1d34c137550",
+    "game/scripts/world/facades/facade_runtime_registry_loader.gd": "064c695be62dcaae08d52c4f5f0f22433dbbdd848699988989fefa123918d27d",
+    "game/scripts/world/facades/housing_family_live_attachment.gd": "6569c08cb8052e6aae87c3fa0597f9efdfe7e01cc249326f38b1d50f5274c703",
     "game/scripts/world/facades/housing_site_family.gd": "ca37309ec1f7bd3a57f0caf772c14f9cff9344061cce858e1db5f7473680b335",
     "game/scripts/world/facades/northpoint_1232_quality_model.gd": "4d4d570033ba15bd014c643c9bc41d3fe2b43e1fdf35dac87b75de721d5001c5",
     "game/scripts/world/world_loader.gd": "b8dc35fb671a62ff7867e54883ea0268f36fd73c5bac5a787b7e42c128b40501",
@@ -82,7 +85,10 @@
     "w96665904",
     "w96665908",
     "w96665911",
-    "w96665916"
+    "w96665916",
+    "w96698619",
+    "w96698643",
+    "w96698648"
   ],
   "recognition_credit": 0,
   "retained_production_roof_and_site": [
