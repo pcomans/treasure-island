@@ -2,20 +2,41 @@ extends RefCounted
 # Read-only evidence for the already constructed signed normal world. No fixture
 # construction, player movement, settings changes, or recognition decisions.
 const ADOPTION = preload("res://game/scripts/world/facades/housing_family_live_attachment.gd")
+static var _snapshot_key: Dictionary = {}
+static var _snapshot_json_sha256 := ""
 
 static func inspect(world: Node3D) -> Dictionary:
-	var adoption: Dictionary = ADOPTION.validate_live(world)
-	if not bool(adoption.get("ok", false)):
-		return {"ok": false, "message": "Existing adoption validator failed", "adoption": adoption}
-	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(ADOPTION.CONFIG))
-	var binding: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(ADOPTION.ADOPTION))
+	if not world.has_method("is_world_validated") or not bool(world.call("is_world_validated")):
+		return {"ok": false, "message": "Snapshot requires validated world readiness"}
+	var buildings_root: Node = world.get("buildings")
+	if buildings_root == null or buildings_root.get_child_count() == 0:
+		return {"ok": false, "message": "Snapshot requires actual generated buildings"}
 	var executable := OS.get_executable_path()
 	var pck_path := executable.get_base_dir().get_base_dir().path_join("Resources").path_join(executable.get_file() + ".pck")
 	var pck_expected := ""
 	for argument: String in OS.get_cmdline_user_args():
 		if argument.begins_with("--family-evidence-pck-sha256="): pck_expected = argument.trim_prefix("--family-evidence-pck-sha256=")
-	if pck_path.is_empty() or pck_expected.length() != 64 or FileAccess.get_sha256(pck_path) != pck_expected or not FileAccess.file_exists("res://project.binary") or FileAccess.file_exists("res://project.godot"):
+	var pck_file := FileAccess.open(pck_path, FileAccess.READ)
+	if pck_file == null or pck_expected.length() != 64 or not FileAccess.file_exists("res://project.binary") or FileAccess.file_exists("res://project.godot"):
 		return {"ok": false, "message": "Signed exact PCK boundary missing"}
+	# The smoke sequence is synchronous and never reloads the world or mounts a new
+	# package. A regenerated first building detects a same-WorldLoader reload too.
+	# Exact bundle bytes/signature are independently pinned before/after each run.
+	var key := {"world_instance": world.get_instance_id(), "building_generation": buildings_root.get_child(0).get_instance_id(), "manifest_sha256": FileAccess.get_sha256(ADOPTION.CONFIG), "adoption_sha256": FileAccess.get_sha256(ADOPTION.ADOPTION), "pck_path": pck_path, "pck_expected": pck_expected, "pck_bytes": pck_file.get_length(), "pck_modified_time": FileAccess.get_modified_time(pck_path)}
+	pck_file.close()
+	if not _snapshot_json_sha256.is_empty():
+		if key != _snapshot_key:
+			return {"ok": false, "message": "Initial snapshot world/source/package binding changed; refusing stale reuse"}
+		# main.gd independently ran ADOPTION.validate_live immediately before calling
+		# inspect. This is a reference to the initial measurement, not a new one.
+		return {"ok": true, "record_kind": "reuse_initial_signed_family_snapshot", "snapshot_json_sha256": _snapshot_json_sha256, "scope": "Initial measurement reference; caller independently revalidates live adoption"}
+	if FileAccess.get_sha256(pck_path) != pck_expected:
+		return {"ok": false, "message": "Actual bundled PCK hash mismatch"}
+	var adoption: Dictionary = ADOPTION.validate_live(world)
+	if not bool(adoption.get("ok", false)):
+		return {"ok": false, "message": "Existing adoption validator failed", "adoption": adoption}
+	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(ADOPTION.CONFIG))
+	var binding: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(ADOPTION.ADOPTION))
 	var dependency_representations: Dictionary = {}
 	for path: String in binding.dependencies:
 		var representation: Dictionary = ADOPTION.dependency_representation(path, str(binding.dependencies[path]))
@@ -55,4 +76,7 @@ static func inspect(world: Node3D) -> Dictionary:
 	if found != declared_sources: return {"ok": false, "message": "Actual membership differs from manifest"}
 	# Raw source digests for remapped executables are verified by the export binding,
 	# not falsely reported as FileAccess hashes of nonexistent packaged .gd bytes.
-	return {"ok": true, "pck_sha256": pck_expected, "manifest_sha256": FileAccess.get_sha256(ADOPTION.CONFIG), "adoption_sha256": FileAccess.get_sha256(ADOPTION.ADOPTION), "declared_dependencies": binding.dependencies, "dependency_representations": dependency_representations, "instances": manifest.instances, "actual_sources": found, "topology": ADOPTION.measure_world(world), "units": units}
+	var snapshot := {"ok": true, "record_kind": "actual_signed_family_snapshot", "pck_sha256": pck_expected, "manifest_sha256": FileAccess.get_sha256(ADOPTION.CONFIG), "adoption_sha256": FileAccess.get_sha256(ADOPTION.ADOPTION), "declared_dependencies": binding.dependencies, "dependency_representations": dependency_representations, "instances": manifest.instances, "actual_sources": found, "topology": ADOPTION.measure_world(world), "units": units}
+	_snapshot_key = key.duplicate(true)
+	_snapshot_json_sha256 = JSON.stringify(snapshot).sha256_text()
+	return snapshot
