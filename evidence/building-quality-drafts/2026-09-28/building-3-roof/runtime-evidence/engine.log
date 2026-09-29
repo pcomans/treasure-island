@@ -1,0 +1,16 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+Metal 4.0 - Forward+ - Using Device #0: Apple - Apple M2 (Apple8)
+
+ROOF_DIAG environment 0.55000001192093 ambient (0.75, 0.82, 0.91, 1.0) tonemap 2 exposure 1.0 sun (-42.0, -32.0, 0.0) energy 1.39999997615814
+ROOF_DIAG mesh 0 vertices 354 normalY -0.00002150533146 to 0.0 firstNormal (0.004383, 0.0, -0.99999) firstVertex (-44.91253, 0.0, -136.7045)
+ROOF_DIAG mesh 1 vertices 171 normalY 1.0 to 1.0 firstNormal (0.0, 1.0, -0.000015) firstVertex (-45.00275, 9.95, -116.2455)
+ROOF_DIAG mesh 2 vertices 420 normalY 0.9625471830368 to 0.99999904632568 firstNormal (-0.271114, 0.962547, -0.000019) firstVertex (-35.0, 18.0, -5.0)
+ROOF_DIAG mesh 3 vertices 840 normalY -0.00001525925472 to 0.0 firstNormal (-0.000015, -0.000015, 1.0) firstVertex (-35.0, 9.9, -5.0)
+ROOF_DIAG mesh 8 vertices 840 normalY -0.00001525925472 to 0.99999171495438 firstNormal (-0.000015, -0.000015, 1.0) firstVertex (-35.0, 18.0, -4.9)
+ROOF_DIAG camera 01-whole position (0.0, 1.7, 110.0) aim (0.0, 12.0, 0.0) fov 60.0 near 0.10000000149012 far 600.0
+TASTE_CAPTURE /Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/hangar-blender-comparison-2026-09-28/streetview-correction/godot-roof-refinement/capture-final-repair/01-whole.png
+ROOF_DIAG camera 02-oblique position (95.0, 1.7, 100.0) aim (0.0, 12.0, -25.0) fov 60.0 near 0.10000000149012 far 600.0
+TASTE_CAPTURE /Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/hangar-blender-comparison-2026-09-28/streetview-correction/godot-roof-refinement/capture-final-repair/02-oblique.png
+ROOF_DIAG camera 03-roof-detail position (85.0, 70.0, 70.0) aim (0.0, 14.0, -35.0) fov 60.0 near 0.10000000149012 far 600.0
+TASTE_CAPTURE /Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/hangar-blender-comparison-2026-09-28/streetview-correction/godot-roof-refinement/capture-final-repair/03-roof-detail.png
+TASTE_CAPTURE_COMPLETE

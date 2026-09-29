@@ -202,6 +202,10 @@ The housing-family A/B extraction initially lost existing story/step trim and sc
 
 The targeted reference pilot separated evidence gaps from execution gaps: a new 1204 angle revealed specific left-end openings, while its central motifs and 1229 roof/apron already had sufficient pixels. Direct 1394 imagery confirmed one written family match; extra 1397 views mainly corroborated extent and left attachment/receiver ownership unknown. Ask what architectural decision another view could change, reuse relevant originals, and stop when the question is resolved or information gain ends. Four distinct views and 219.6 seconds of acquisition-through-gallery time support this bounded method, not a per-building quota or a workflow/token-savings claim.
 
+## Preserve required reference standards after browser failures
+
+The hangar comparison substituted 2003 HABS photographs after headless/API-locator Street View pages rendered black. The owner required Street View; a headed browser with the full validated panorama locator immediately recovered dated November 2025 pixels. Because both browser mode and URL form changed, the precise failure cause is unproved. Verify the actual required imagery, resolved date and target association before artist dispatch. A browser loading failure does not establish unavailable imagery or justify a weaker source. Diagnose viewer readiness once, then report the blocker if unresolved. Archival imagery may supplement, but must not replace required contemporary views.
+
 ## Condition small polygon calculations locally
 
 The housing roof clipper produced thin positive-area triangles at large projected

@@ -14806,3 +14806,68 @@ The signed evidence helper originally repeated a large full scene snapshot19 tim
 - What worked well: Checked shared-family receipts and official Blender/Godot pipeline docs, separating authoring benefits from total workflow cost.
 - What did not work well: No measured model-token attribution exists; narrow native timings cannot establish Blender-first savings.
 - What the team should change next time: Compare one family at the same visual bar using all-agent tokens and full edit-to-accepted-Godot elapsed time, preserving integration and independent checks. No engine run or benchmark was performed for this assessment.
+
+## 2026-09-28 — hangar Street View correction
+
+### blender_workflow_assessment — reference and assembly
+
+- Worked: Headed full-panorama navigation recovered three dated November 2025 views; the corrected blind gallery retains all originals, both passes and unchanged shared cameras/light. Exact fresh artist token counters were retained separately from cached subfields and unknown shared costs.
+- Did not work: Earlier black headless imagery was treated as permission to substitute HABS, changing the requested comparison. Historical photographs could not satisfy the required Street View standard.
+- Next time: Verify required actual dated pixels before dispatch; retain browser failures as execution evidence, not evidence of unavailable imagery. Keep archival views supplementary and report any unresolved acquisition blocker.
+
+### hangar_sv_godot_artist — transported retrospective
+
+What worked well: Opening current originals first established the low frontage/crown/compact entry hierarchy; first engine run succeeded and revealed material/normal issues early.
+What did not work well: Initial smooth wall normals rounded footprint corners; final fine lines still alias and the sparse distant facade remains simple.
+What the team should change next time: Set hard architectural normals at creation and favor distance-readable material divisions over subpixel geometry lines.
+
+### hangar_sv_blender_artist — transported retrospective
+
+- What worked: Direct meshes and embedded PBR textures exported in two successful Blender runs; both shared Godot capture sets completed, and a new monumental base retained the frozen irregular footprint because housing modules do not fit.
+- What did not: Initial thin seams aliased and one inferred side pipe floated; the sole revision removed them. Remaining fine trim still aliases at the fixed distant views, and unseen roof/side details and all heights remain inference.
+- Next time: Establish broad silhouette/material hierarchy first and avoid subpixel detail in the fixed camera; record the exact first-write onset rather than only the completed-write timestamp. No self-acceptance or production claim.
+
+### hangar_sv_visual_judge — transported retrospective
+
+Worked: Neutral matched first/final images plus dated reference pixels supported a direct whole-building comparison without workflow identities.
+Did not work: Broad LEARNINGS keyword output exposed unrelated historical benchmark prose; it was not used in this decision.
+Change next time: Supply only relevant quality lesson sections to blind reviewers, preserving the full-image comparison and explicit verdict timestamp.
+
+## 2026-09-28 — blender_workflow_assessment owner preference and lighting check
+
+Owner feedback, verbatim: “both have strengths and weaknesses, Option 1 facade looks better, option 2 roof looks better., I would choose option 1 if I had to. lighting is also different for some reason.”
+
+Fixed private mapping verified: Option 1 Godot; Option 2 Blender. Preference does not change either independent visual HOLD. Read-only lighting diagnosis distinguishes intended shared lighting from consumed material/normal behavior; no asset revisions or new engine run.
+
+Lighting follow-up (read-only): shared capture arguments were consistent, but Godot barrel winding implies downward generated normals while the exported Blender barrel NORMAL data points upward; materials also differ. No imported GLB lights/emission/unlit path found. Exact saved-pixel causality remains unmeasured; next diagnostic should inspect runtime normals/backface handling and common-material response before attributing the difference to light configuration. No engine or asset edits performed.
+
+## hangar_godot_roof_refinement — 2026-09-29
+- Worked: reused preferred Godot source and existing capture harness; headed Maps immediately provided useful full-roof evidence; two captures retained actual runtime normals/light state.
+- Did not work: first grid/repair contrast looked schematic; corrected once. Diagnostic Array(null) on non-indexed meshes consumed one mechanical repair; retained failed attempt and verified PID exit. Final thin eave still aliases.
+- Next time: acquire the one missing roof-plan view before choosing roofing finish, and preflight clockwise normals before any first render.
+
+## hangar_roof_technical_review — 2026-09-28 isolated Godot refinement
+- Worked: consumed the artist’s existing capture arrays and checked every changed clockwise front against actual normals; no independent engine run or artist change.
+- Did not work: first final diagnostic assumed indexed meshes and failed on null; retained failure, then interpreted repaired empty indices as sequential triangle triples.
+- Change next time: serialize optional native mesh channels defensively in the already planned capture; retain source primitive-type binding and separate visual/gameplay decisions.
+
+## 2026-09-28 — hangar_sv_visual_judge — roof refinement review
+
+Worked: Matched before/initial/final views separated genuine roof hierarchy improvement from preserved facade qualities.
+Did not work: Initial grid and pale patches competed with the broad curved surface; final softening improved their hierarchy.
+Change next time: Keep roof material inference grounded in overhead pixels while retaining a separate dated frontage comparison and whole-building verdict.
+
+
+## 2026-09-28 — blender_workflow_assessment — current modeling inventory
+Worked: counted current canonical unit claims (43 accepted,170 not evaluated) and distinguished footprint coverage, family shortlist and historical quality triage.
+Did not: historical inventory headings and held drafts can look current after later family adoption; no new art rating was inferred from them.
+Next: verify dated pixels for a small written-only housing group, while retaining unpromoted hangar work and existing quality gaps as separate queues. Read-only inventory; no engine or production edits.
+
+
+## 2026-09-28 — blender_workflow_assessment — roof draft delivery
+
+Worked: reused the gallery modal, verified eight originals decoded and native1440px enlargement; preserved unchanged standalone source, six nonprivate renders and runtime normal evidence as an unattached WIP draft. Did not: whole-building readiness remains HOLD despite scoped roof and technical PASS. Next: reuse this draft for bounded full-world integration rather than recreating its roof. Private references remain outside Git; no engine, attachment, count change, commit or push.
+
+## 2026-09-28 — blender_workflow_assessment — draft preservation checkpoint
+
+Worked: selected only the reviewed unattached roof draft and owned LEARNINGS/RETRO changes; remote main matched the starting commit and five unrelated untracked files remain excluded. Did not: scoped roof PASS is not whole-building acceptance. Next: resume from the preserved builder and runtime-normal evidence when integration is assigned; do not repeat modeling or infer recognition credit from this documentation checkpoint.

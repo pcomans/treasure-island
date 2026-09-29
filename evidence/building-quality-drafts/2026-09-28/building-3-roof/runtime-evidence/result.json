@@ -1,0 +1,31 @@
+{
+  "command": [
+    "/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+    "--path",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/hangar-blender-comparison-2026-09-28/streetview-correction/godot-roof-refinement/render/project",
+    "--rendering-method",
+    "forward_plus",
+    "--display-driver",
+    "macos",
+    "--resolution",
+    "1440x900",
+    "--script",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/hangar-blender-comparison-2026-09-28/streetview-correction/godot-roof-refinement/render/project/capture.gd",
+    "--",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/hangar-blender-comparison-2026-09-28/streetview-correction/godot-roof-refinement/model.gd",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/hangar-blender-comparison-2026-09-28/streetview-correction/godot-roof-refinement/capture-final-repair"
+  ],
+  "started_utc": "2026-09-29T02:45:01.287596+00:00",
+  "ended_utc": "2026-09-29T02:45:03.665788+00:00",
+  "elapsed_seconds": 2.378211291041225,
+  "pid": 12280,
+  "terminal": 0,
+  "timed_out": false,
+  "owned_process_exited": true,
+  "images": {
+    "01-whole.png": true,
+    "02-oblique.png": true,
+    "03-roof-detail.png": true
+  },
+  "ok": true
+}
