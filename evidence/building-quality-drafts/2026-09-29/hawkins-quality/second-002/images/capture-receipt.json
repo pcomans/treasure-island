@@ -1,0 +1,139 @@
+{
+	"captures": [
+		{
+			"baseline": "MAIN a8f4844 accepted Hawkins massing and facade",
+			"bytes": 660077,
+			"camera_forward": [
+				-0.590826332569122,
+				0.219311714172363,
+				-0.776419103145599
+			],
+			"camera_position": [
+				-36.0722694396973,
+				5.2234354019165,
+				536.937072753906
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "hawkins-whole-A.png",
+			"id": "hawkins-whole-A",
+			"intent": "Observed SE whole facade/entrance composition; matched stock camera and actual source world",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-39.3218307495117,
+				4.42965602874756,
+				532.666748046875
+			],
+			"region": "w1249412093",
+			"sample_luminance_range": 0.715343534946442,
+			"sample_unique_colors": 251,
+			"sha256": "fdeb90254f901f13e182b0e51c278843f0a3849b10bae98044cfe13c395fc590",
+			"source_key": "w1249412093"
+		},
+		{
+			"bytes": 732782,
+			"camera_forward": [
+				-0.590826332569122,
+				0.219311788678169,
+				-0.776419162750244
+			],
+			"camera_position": [
+				-36.0722694396973,
+				5.2234354019165,
+				536.937072753906
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "hawkins-whole-B.png",
+			"id": "hawkins-whole-B",
+			"intent": "Observed SE whole facade/entrance composition; matched stock camera and actual source world",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-39.3218307495117,
+				4.42965602874756,
+				532.666748046875
+			],
+			"region": "w1249412093",
+			"sample_luminance_range": 0.715343534946442,
+			"sample_unique_colors": 267,
+			"scope": "Hawkins isolated facade assemblies; accepted shell/wall/roof contacts and source footprint/foundation/terrain preserved; stock mechanics pending",
+			"sha256": "4f994f1f27c9e8e19708ac0f3e8489f4ba2c9abb7fcac746abf15fb4f61cecb1",
+			"source_key": "w1249412093"
+		},
+		{
+			"baseline": "MAIN a8f4844 accepted Hawkins massing and facade",
+			"bytes": 878653,
+			"camera_forward": [
+				-0.0895117446780205,
+				0.059913445264101,
+				-0.994182109832764
+			],
+			"camera_position": [
+				-62.1334381103516,
+				6.14258813858032,
+				539.52294921875
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "hawkins-near-A.png",
+			"id": "hawkins-near-A",
+			"intent": "Observed SE whole facade/entrance composition; matched stock camera and actual source world",
+			"pause_overlay_visible": false,
+			"phase": "A",
+			"player_position": [
+				-62.6257553100586,
+				4.47211170196533,
+				534.054931640625
+			],
+			"region": "w1249412093",
+			"sample_luminance_range": 0.771333277225494,
+			"sample_unique_colors": 297,
+			"sha256": "09582ea0d8a3d54b794ad6e9f5554b3faebb6116729c5503652d708b87860550",
+			"source_key": "w1249412093"
+		},
+		{
+			"bytes": 1008387,
+			"camera_forward": [
+				-0.0895116627216339,
+				0.0599134378135204,
+				-0.994182109832764
+			],
+			"camera_position": [
+				-62.1334381103516,
+				6.14258813858032,
+				539.52294921875
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "hawkins-near-B.png",
+			"id": "hawkins-near-B",
+			"intent": "Observed SE whole facade/entrance composition; matched stock camera and actual source world",
+			"pause_overlay_visible": false,
+			"phase": "B",
+			"player_position": [
+				-62.6257553100586,
+				4.47211170196533,
+				534.054931640625
+			],
+			"region": "w1249412093",
+			"sample_luminance_range": 0.723157599568367,
+			"sample_unique_colors": 315,
+			"scope": "Hawkins isolated facade assemblies; accepted shell/wall/roof contacts and source footprint/foundation/terrain preserved; stock mechanics pending",
+			"sha256": "cba336bd3ad52adde8d602dcd1a3b84da557d57927291eaa87509707a7c10112",
+			"source_key": "w1249412093"
+		}
+	],
+	"failure": "",
+	"ok": true,
+	"scope": "Visual experiment, no acceptance or collision fit claim"
+}

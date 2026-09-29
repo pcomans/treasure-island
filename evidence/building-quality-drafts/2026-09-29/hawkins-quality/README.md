@@ -1,0 +1,9 @@
+# Hawkins /77 Bruton — scoped art / source-mechanics PASS draft
+
+Second002 complete visible art PASS; physical `w1249412093`. First001 composition HOLD is preserved in the [independent visual review](first-001/VISUAL_REVIEW.md). Independent mechanics002 scoped PASS and single installed-still appearance PASS are complete. No normal-loader/package, promotion or recognition acceptance. Live43/213 and33family unchanged.
+
+[Gallery](gallery.html) · [Final technical review](second-002/TECHNICAL_REVIEW.md) · [Provenance](PROVENANCE.md)
+
+The revised lobby glazing, ribbed solid service zone and recessed garage form a coherent entrance composition. Upper windows and stepped mass remain reused; exact cadence/hidden continuations are inference. Opaque blue glazing and fine ground-floor stippling remain limitations. These are matched second002 A/B stills, not motion evidence or cross-revision pixel comparisons.
+
+Final metadata-corrected candidate and complete helpers are now retained. Actual mechanics002 raw cases completed: nonempty63540/36 face collections,218 motion rows, entry approach/retreat, lobby stock placement and canopy rejection. Final independent technical and installed visual reviews accept their scoped results. Mechanics001 collector HOLD remains: mutation through a dictionary/cast PackedVector3Array temporary lost collected output;002 changes only collection through typed locals before assignment. The technical review retains218 sampled rows and9 projector points, not swept-volume or exhaustive projection proof; the one installed view excludes garage/roof and does not establish motion stability. `.gdignore` is ready for inert retained code. Private September2025 source remains external; unresolved wider-photo tiles support no claims. No additional native work was performed for this archive.

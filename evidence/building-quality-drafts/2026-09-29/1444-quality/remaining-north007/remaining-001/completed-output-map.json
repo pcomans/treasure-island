@@ -1,0 +1,13 @@
+{
+  "input_map_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/remaining-north007/input-map.json",
+  "input_map_sha256": "d2b855d8c8c2337088a0d941e17d5be20e7b89dd885c3953b8b5ffde8dbbd36f",
+  "outputs": {
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/remaining-north007/remaining-001/SLOT_RELEASE.json": "6c24dd95c9e308388c26c53ebb4ed9e19938eaa43de39efc7e9a6683240bcaf2",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/remaining-north007/remaining-001/engine.log": "6b0bda9bba9ecde9e8c1e48422ddbef7ad802671e294a5c49c2b459b8ce2b0f0",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/remaining-north007/remaining-001/images/1444-north-mouth.png": "0549a368658c1b1285296ac304e4e081b8ace154ec0a11699eab6c46cab86f81",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/remaining-north007/remaining-001/motion.avi": "25dadaaf1aaefef29a7342e69570a79e99795ad1cbc89162cad36f356ae890ab",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/remaining-north007/remaining-001/process.json": "29f2f8b41d4749aaa961f880a6780d575ccd7ffb299386f3d7e8a4cf77e04685",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/remaining-north007/remaining-001/receipt.json": "adab33ee86e629a73a419ef1ebc81131824943b94ced4d7e65f73898607147ba",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/remaining-north007/remaining-001/terminal.json": "6c24dd95c9e308388c26c53ebb4ed9e19938eaa43de39efc7e9a6683240bcaf2"
+  }
+}

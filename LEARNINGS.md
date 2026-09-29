@@ -249,6 +249,8 @@ The same run series exposed two completion hazards: visible MeshInstance nodes c
 
 When a JSON topology binding is consumed, compare the same keys and exact finite integral numeric values rather than Dictionary representation equality: parsed JSON floats and native integer counters can describe identical counts. Reject fractions and wrong types; do not repair this with truncation or tolerance.
 
+Hawkins mechanics001 exposed lost collection through dictionary/cast `PackedVector3Array` mutation; source review had missed that producer behavior. Collect into typed local arrays, then assign completed arrays into the dictionary, and bind the actual nonempty consumed output. Collector-only002 retained63540/36 face streams and completed its raw scoped cases. This extends the existing producer-representation check, not a new validator/test gate; independent final interpretation remains separate.
+
 The shared-family release adaptation exposed two external-contract assumptions: two physics frames did not establish deferred world readiness, and an editor-mounted full-world loader intentionally required raw source files excluded from the PCK. Wait for actual validated/failure state with a deadline, and check the executable feature boundary before reusing a loader. The existing signed-app fatal adoption validator supplied the same package predicate without duplicate manual construction; source/export evidence remained valid. Preserve failed attempts and distinguish repeat-run native success from an unproved cold-start guarantee.
 
 ## Match Godot triangle winding at the actual emitter

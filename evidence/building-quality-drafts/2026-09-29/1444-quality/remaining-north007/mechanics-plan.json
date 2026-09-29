@@ -1,0 +1,97 @@
+{
+  "targets": [
+    {
+      "number": "1444",
+      "source": "w95934117",
+      "land_keys": [
+        "land:w26767313:x_-2__z_-1"
+      ],
+      "routes": [
+        {
+          "id": "1444-north-mouth",
+          "kind": "open",
+          "station_m": 0,
+          "setup_position_xz": [
+            -377.54443823098387,
+            -57.08573353703671
+          ],
+          "frame": {
+            "start": [
+              -375.7424348914657,
+              2.521,
+              -57.95336477458252
+            ],
+            "normal": [
+              -0.901001669759098,
+              0,
+              0.4338156187729034
+            ],
+            "tangent": [
+              0.4338156187729034,
+              0.0,
+              0.901001669759098
+            ]
+          },
+          "input_frames": 65,
+          "brake_frames": 30,
+          "stop_on_expected_contact": false,
+          "expected_shape": -1,
+          "expected_role": "none",
+          "native_bindings": [],
+          "minimum_progress_m": 3.5,
+          "maximum_station_drift_m": 0.15,
+          "expected_depth_interval_m": [
+            -3,
+            -1.5
+          ],
+          "marker": "1444-north-mouth",
+          "inspection_target": [
+            -375.7424348914657,
+            2.521,
+            -57.95336477458252
+          ],
+          "source_corridor": {
+            "construction_frame_start": [
+              -375.7424348914657,
+              2.521,
+              -57.95336477458252
+            ],
+            "construction_tangent": [
+              0.4338156187729034,
+              0.0,
+              0.901001669759098
+            ],
+            "centre_station_m": 0,
+            "half_width_m": 1.0,
+            "capsule_radius_m": 0.35
+          },
+          "retreat": {
+            "input_frames": 65,
+            "brake_frames": 20,
+            "minimum_progress_m": 3.5,
+            "maximum_progress_m": 5,
+            "depth_interval_m": [
+              1.5,
+              2.5
+            ]
+          },
+          "support_bindings": [],
+          "route_scope": "north marker and dependent retreat; approach repeated only as supported setup dependency"
+        }
+      ],
+      "sprays": [],
+      "surface_queries": [],
+      "roof_routes": []
+    }
+  ],
+  "scope": "Only1444north-mouth: repeat the unchanged approach solely as supported setup, observe the corrected actual stopped-position+1mY marker, perform its original dependent retreat and safe released rest. Existing movie records this short stock shelter motion for separate visual stability review. Retain completed006scopes and rawHOLD; no roof, spray, other route or1397replay.",
+  "reuse": {
+    "prior006": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/mechanics-006/receipt.json",
+    "prior006_sha256": "bf3ddda652f509ee4e18488ce57e22fccc4317b29e7f7ded87c4a5543aef8c9d",
+    "raw_aggregate": "HOLD retained",
+    "native_material005": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-003/images/receipt.json",
+    "native_material005_sha256": "d1b50328db5cd7d787ecd022bf203fba825d4acc0aa11ed0a3ac9674f419b783",
+    "scope": "Completed006physical scopes retained via exact material005 native geometry/role preservation; no claim globally identical materials."
+  },
+  "raw_capture_hold_preserved": true
+}

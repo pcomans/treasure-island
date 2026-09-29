@@ -21,3 +21,13 @@ Independent capture003 completion: confirmed original native203shape/role preser
 ## continuation_visual_review — 2026-09-29 independent recovery005 review
 
 Compared five current originals, matched119/588 prior ordinary pixels and actual July2023 reference.588 shows a meaningful seam/return improvement while119 changes little; retained scoped static PASS without treating intentional overlap as a failure or claiming motion stability. Distinct neutral return fields and shadow-edge limits remain explicit. Located RESULT under capture directories after the supplied parent shorthand; no engine/art edit or extra evidence request.
+
+### Independent north007 preparation review
+Retained the complete driver and necessary approach setup instead of manufacturing a shorter starting state. Current material full-snapshot join and unchanged stock marker/contact/rest consumers are coherent; only stale top-level scope prose needs correction before freeze. The corrected marker still requires actual full-world observation, and retreat remains unrun; prior006 HOLD is preserved. No new threshold, engine or proof framework.
+
+### Independent north007 result review
+The necessary supported approach reproduced the held endpoint; correcting only its marker exposed the missing original retreat without replaying other completed cases. Actual marker LOS/framing and85 retreat samples close that scope. Preserve raw006 HOLD and sampled−1.497mm solver-scale overlap rather than rewriting historical outcomes or claiming perfect contact. Current005 exact snapshot join retains prior physical evidence; movie appearance stays independently judged. No engine or runtime edits.
+
+## continuation_visual_review — sampled north007 motion
+
+Used receipt ranges and lossless AVI JPEG extraction because ffmpeg/image libraries were unavailable. Consecutive retreat frames exposed a residual changing pale lip sliver that static588 did not show; separated stable broad tone from incomplete seam stability. Kept exact viewed-frame scope, grazing-angle/occlusion limits and prior static PASS rather than claiming whole-movie or all-angle acceptance.

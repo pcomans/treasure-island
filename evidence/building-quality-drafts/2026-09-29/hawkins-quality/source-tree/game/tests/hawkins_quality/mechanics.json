@@ -1,0 +1,125 @@
+{
+  "baseline": "a8f4844",
+  "scope": "Changed Hawkins frontage only; no roof flight; original shell/roof/LAND/neighbors preserved",
+  "targets": [
+    {
+      "id": "hawkins-whole",
+      "source_key": "w1249412093",
+      "config": "res://game/tests/hawkins_quality/config.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_1.json",
+      "requested_xz": [
+        -39.321830626838874,
+        532.6667291657766
+      ],
+      "aim_target": [
+        -61.063367796207395,
+        14.5,
+        504.095667555942
+      ],
+      "region": "w1249412093",
+      "label": "Hawkins 77 Bruton whole",
+      "intent": "Observed SE whole facade/entrance composition; matched stock camera and actual source world"
+    }
+  ],
+  "rays": [
+    {
+      "id": "lobby-pane-spray",
+      "anchor": [
+        -74.17758097036202,
+        522.613815757715
+      ],
+      "aim": [
+        -75.50180591746548,
+        5.7,
+        521.5083505662825
+      ],
+      "region_geometry": {
+        "origin": [
+          -79.648,
+          526.358
+        ],
+        "tangent": [
+          0.6408493863376759,
+          -0.7676666360019981
+        ],
+        "depth": 0.075,
+        "u": [
+          5.546,
+          7.229
+        ],
+        "y": [
+          4.65,
+          6.93
+        ]
+      },
+      "point": [
+        -75.50180591746548,
+        5.7,
+        521.5083505662825
+      ],
+      "normal": [
+        0.7676666360019981,
+        0.6408493863376759
+      ]
+    }
+  ],
+  "service": {
+    "anchor": [
+      -65.9399099565882,
+      516.9591560624875
+    ],
+    "aim": [
+      -69.26390649047684,
+      5.7,
+      514.1842782196454
+    ],
+    "normal": [
+      0.7676666360019981,
+      0.6408493863376759
+    ]
+  },
+  "sprays": [
+    {
+      "id": "lobby-pane-spray",
+      "anchor": [
+        -74.17758097036202,
+        522.613815757715
+      ],
+      "aim": [
+        -75.50180591746548,
+        5.7,
+        521.5083505662825
+      ],
+      "region_geometry": {
+        "origin": [
+          -79.648,
+          526.358
+        ],
+        "tangent": [
+          0.6408493863376759,
+          -0.7676666360019981
+        ],
+        "depth": 0.075,
+        "u": [
+          5.546,
+          7.229
+        ],
+        "y": [
+          4.65,
+          6.93
+        ]
+      }
+    }
+  ],
+  "canopy": {
+    "anchor": [
+      -71.8343716832916,
+      522.4596397641658
+    ],
+    "aim": [
+      -73.88404160141693,
+      7.24,
+      520.7485719026441
+    ]
+  }
+}

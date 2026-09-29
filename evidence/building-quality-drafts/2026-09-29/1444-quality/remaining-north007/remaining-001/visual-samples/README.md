@@ -1,0 +1,1 @@
+Lossless JPEG payload extraction from motion.avi, zero-based AVI frame indices. 223 frames total at 60 fps. Samples96–103 approach,136–144 marker/retreat,194–201 retreat using receipt drawn ranges; counter convention may differ by one frame. Original movie remains authoritative.

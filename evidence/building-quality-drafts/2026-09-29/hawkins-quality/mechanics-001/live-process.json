@@ -1,0 +1,23 @@
+{
+  "pid": 34394,
+  "command": [
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+    "--path",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-hawkins-quality",
+    "--rendering-method",
+    "forward_plus",
+    "--rendering-driver",
+    "metal",
+    "--display-driver",
+    "macos",
+    "--audio-driver",
+    "Dummy",
+    "--resolution",
+    "1440x900",
+    "--script",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-hawkins-quality/game/tests/hawkins_quality/mechanics.gd",
+    "--",
+    "--manifest=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-hawkins-quality/game/tests/hawkins_quality/mechanics.json",
+    "--output=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-hawkins-quality/evidence/hawkins-quality/mechanics-001/images"
+  ]
+}

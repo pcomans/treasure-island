@@ -1,0 +1,41 @@
+{
+  "baseline": "MAIN a8f4844 accepted Hawkins massing and facade",
+  "targets": [
+    {
+      "id": "hawkins-whole",
+      "source_key": "w1249412093",
+      "config": "res://game/tests/hawkins_quality/config.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_1.json",
+      "requested_xz": [
+        -39.321830626838874,
+        532.6667291657766
+      ],
+      "aim_target": [
+        -61.063367796207395,
+        14.5,
+        504.095667555942
+      ],
+      "region": "w1249412093",
+      "label": "Hawkins 77 Bruton whole",
+      "intent": "Observed SE whole facade/entrance composition; matched stock camera and actual source world"
+    },
+    {
+      "id": "hawkins-near",
+      "source_key": "w1249412093",
+      "config": "res://game/tests/hawkins_quality/config.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_1.json",
+      "requested_xz": [
+        -62.62575362027566,
+        534.0549557740682
+      ],
+      "aim_target": [
+        -64.90846411423345,
+        8.0,
+        508.701667371954
+      ],
+      "region": "w1249412093",
+      "label": "Hawkins 77 Bruton near",
+      "intent": "Observed SE whole facade/entrance composition; matched stock camera and actual source world"
+    }
+  ]
+}

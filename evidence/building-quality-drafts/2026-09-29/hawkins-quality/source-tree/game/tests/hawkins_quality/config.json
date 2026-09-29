@@ -1,0 +1,25 @@
+{
+  "target": {
+    "source_key": "w1249412093",
+    "logical_object_key": "building:w1249412093",
+    "receiver_object_key": "building:w1249412093:wall",
+    "chunk_id": "x_-1__z_1",
+    "source_height_m": 6.0,
+    "base_y_m": 4.274,
+    "band_split_y_m": 7.774,
+    "source_top_y_m": 10.274,
+    "main_top_y_m": 25.274,
+    "companion_top_y_m": 18.274,
+    "story_height_m": 3.5,
+    "main_story_count": 6,
+    "companion_story_count": 4,
+    "source_wall_segments": 20,
+    "source_wall_triangles": 40,
+    "runtime_wall_quads": 23,
+    "runtime_wall_triangles": 46,
+    "runtime_roof_triangles": 4
+  },
+  "reuse": "Accepted Hawkins massing/layout/module library unchanged; isolated facade subclass",
+  "reference": "Private actual Sep2025 pano CqLfgqkDJF4LkB8NhgB1NQ; SE address facade",
+  "inference": "Projection depths/material response and concealed continuation are plausible game art, not surveyed; no new unique modules on unobserved sides"
+}

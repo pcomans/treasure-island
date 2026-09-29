@@ -14950,3 +14950,19 @@ ROOT accepted the narrow manifest mechanism from the [batch_efficiency_check ent
 ## 2026-09-29 — authority28_publish — Chapel187 /1444 archive checkpoint
 
 Retained Chapel revision003 whole art, installed visual and joined mechanics002/003 source PASS, including exact final candidate and historical HOLDs.1444 material recovery005 archive binds final scoped source/native/output and static visual PASS; original overlap/contact preservation is explicit, failed partition004 and capture001/002 aggregates remain historical. North-mouth marker/retreat and finish motion stability remain open, separately assigned and excluded from this checkpoint. Selected generated stills, inert sources and immutable reviews/provenance are archived; private references and large traces stay external. Existing accepted process/XHigh documentation is included unchanged. Exact-copy/checksum, gallery-link and selected/staged whitespace checks accompany publication; no engine, runtime, schema or recognition change.
+
+## 2026-09-29 — authority28_publish —1444 north007 archive addendum
+
+Prepared exact north007 driver/plan/runner and final independent report addenda, retaining external full map/movie/trace hashes. Scoped marker/retreat and unchanged006 physical join PASS; static visual PASS retained, sampled close-motion finish HOLD for changing pale lip sliver in originalAVI frames194–196. Four exact JPEG payload extracts preserve evidence without recompression or a cause claim. No further tuning, engine, runtime or promotion work; held for next normal combined checkpoint.
+
+## 2026-09-29 — authority28_publish — Hawkins stable-art preparation
+
+Retained second002 matched whole/near A/B originals and final visual addendum with first001 HOLD history. Source/metadata/mechanics remain in flight and are deliberately not frozen into this art-only preparation.1444 north007 mechanics PASS/static PASS/close-motion finish HOLD addendum preserved. No new workflow policy or native work; final combined scope and publication GO pending.
+
+## 2026-09-29 — authority28_publish — Hawkins actual002 preparation
+
+Added exact final metadata-corrected candidate and complete inert helpers, installed lobby image,001/002 terminal bindings and external full-proof hashes.001 raw HOLD exposed packed-array temporary mutation missed in source review; collector-only002 saved nonempty63540/36 face streams and218rows with raw scoped cases complete. Added one concise consumed-representation lesson; no new gate. Final independent source/mechanics and installed visual interpretation pending, so no archive PASS/promotion or commit yet.1444 static/mechanics PASS and close-motion finish HOLD preserved.
+
+## 2026-09-29 — authority28_publish — final Hawkins /1444 archive checkpoint
+
+Bound final Hawkins independent mechanics002 scoped PASS and single installed-still appearance PASS, retaining001 collector HOLD, second002 simplifications and sampled218-row/9-projector-point limits.1444 north007 scoped mechanics/static PASS remains separate from sampled close-motion finish HOLD. Final source/helper copies, reviews and selected originals retained with hashes; private references/full traces/movies stay external. Selected/staged whitespace, internal gallery links and scoped-copy checks accompany normal publication. No runtime, schema, promotion or further study work.
