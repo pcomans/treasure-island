@@ -1,0 +1,136 @@
+{
+  "aggregate": "HOLD",
+  "cases": [
+    {
+      "id": "upper_nonreceiver_rejection",
+      "ok": false,
+      "verdict": "HOLD",
+      "fatal": true,
+      "anchor_clearance": [
+        {
+          "height": 0.05,
+          "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-576.7145, 3.224811, -277.5974)]",
+          "overlap_count": 0
+        },
+        {
+          "height": 3.0,
+          "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-576.7145, 6.174811, -277.5974)]",
+          "overlap_count": 0
+        }
+      ],
+      "results": [],
+      "rejected": false,
+      "range_m": 5.90811061859131,
+      "maximum_range_m": 6.0,
+      "in_range": true,
+      "setup": {
+        "ok": true,
+        "parent_framing_result": {
+          "ok": false,
+          "message": "upper_nonreceiver_rejection stock camera contract failed: fov=70.000 configured=5.500 actual=4.383 height=0.168."
+        },
+        "stock_terrain_shortened_camera": true,
+        "camera_position": [
+          -573.177551269531,
+          2.44283771514893,
+          -279.428527832031
+        ],
+        "actual_arm_m": 4.38282012939453,
+        "camera_overlap_count": 0,
+        "camera_ground_clearance": 0.158520698547363,
+        "camera_hull_radius": 0.150000005960464,
+        "pitch_degrees": 24.6686454517538
+      },
+      "first_hit": {
+        "hit": true,
+        "body": "CandidateUpperDetailContact",
+        "key": "building:w95934125:wall",
+        "sources": [
+          "w95934125"
+        ],
+        "shape": 4,
+        "position": [
+          -580.577514648438,
+          6.27318811416626,
+          -275.597473144531
+        ],
+        "normal": [
+          0.888044953346252,
+          0.0,
+          -0.459756642580032
+        ]
+      },
+      "resolved_metadata": {
+        "receiver_kind": "none",
+        "opaque": true,
+        "derived_object_key": "building:w95934125:wall",
+        "source_keys": [
+          "w95934125"
+        ]
+      },
+      "placed": false,
+      "tag": {},
+      "rest": {
+        "ok": true,
+        "pre_disable": {
+          "frame": 158,
+          "position": [
+            -576.714477539062,
+            2.27530360221863,
+            -277.597381591797
+          ],
+          "velocity": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "floor": true,
+          "enabled": true,
+          "support": {
+            "hit": true,
+            "body": "Collision",
+            "key": "land:w26767313:x_-3__z_-2",
+            "sources": [
+              "w26767313",
+              "w29399800"
+            ],
+            "shape": 0,
+            "position": [
+              -576.714477539062,
+              2.27482676506042,
+              -277.597381591797
+            ],
+            "normal": [
+              0.00518742669373751,
+              0.999985098838806,
+              0.00171872647479177
+            ]
+          },
+          "inputs": [],
+          "recovery": 0
+        },
+        "disabled": true,
+        "velocity": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "released": true
+      }
+    }
+  ],
+  "prior_completed_join": {
+    "cases": "res://evidence/first-playable/1317-quality-2026-09-29/contact001/cases.json",
+    "cases_sha256": "34fc212bc4eda6ec8b7f24f74fb5192d968fb1363632af1d1c3e64a9c172b3e3",
+    "native": "res://evidence/first-playable/1317-quality-2026-09-29/contact001/native-contact.json",
+    "native_sha256": "0686fa7f3aebe087b90b3952ec5b1bcaab988e2830a3d7ad8f9cc1c588eebf56",
+    "raw_aggregate_retained": "HOLD",
+    "reused_ids": [
+      "upper_contact_congruence",
+      "adjacent_wall_spray"
+    ]
+  },
+  "input_map": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1317-quality/build/1317-contact-preparation002/input-map.json",
+  "input_map_sha256": "664a4aff4d4724c9bd3bccbc0a76c4c8a6954bcd3c99a90b612783fa6f39df9c",
+  "scope": "remaining upper nonreceiver rejection only; prior contact001 completed cases explicitly reused, raw HOLD preserved"
+}

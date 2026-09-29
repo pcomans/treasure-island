@@ -1,0 +1,41 @@
+{
+  "baseline": "69755310ea7ae2d24053e0d516a7ea2bfe83057c",
+  "targets": [
+    {
+      "id": "w95934119-wsw",
+      "source_key": "w95934119",
+      "label": "Building225 wsw",
+      "region": "w95934119",
+      "intent": "Matched whole-building study; unchanged source roof/collision",
+      "requested_xz": [
+        -452.9519728167727,
+        -174.66584702924334
+      ],
+      "aim_target": [
+        -432.5,
+        5.3,
+        -177
+      ],
+      "config": "res://game/tests/building225_quality/config.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    },
+    {
+      "id": "w95934119-nnw",
+      "source_key": "w95934119",
+      "label": "Building225 nnw",
+      "region": "w95934119",
+      "intent": "Matched whole-building study; unchanged source roof/collision",
+      "requested_xz": [
+        -437,
+        -199
+      ],
+      "aim_target": [
+        -423.5,
+        5.6,
+        -185
+      ],
+      "config": "res://game/tests/building225_quality/config.json",
+      "chunk": "res://generated/world/chunks/x_-2__z_-1.json"
+    }
+  ]
+}

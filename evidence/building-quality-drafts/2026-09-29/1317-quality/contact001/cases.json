@@ -1,0 +1,458 @@
+{
+  "aggregate": "HOLD",
+  "cases": [
+    {
+      "id": "upper_contact_congruence",
+      "ok": true,
+      "verdict": "PASS"
+    },
+    {
+      "id": "adjacent_wall_spray",
+      "ok": true,
+      "verdict": "PASS",
+      "fatal": false,
+      "anchor_clearance": [
+        {
+          "height": 0.05,
+          "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-586.9122, 3.093402, -314.4519)]",
+          "overlap_count": 0
+        },
+        {
+          "height": 3.0,
+          "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (-586.9122, 6.043402, -314.4519)]",
+          "overlap_count": 0
+        }
+      ],
+      "results": [
+        "placed"
+      ],
+      "rejected": false,
+      "range_m": 4.65893745422363,
+      "maximum_range_m": 6.0,
+      "in_range": true,
+      "setup": {
+        "ok": true,
+        "metadata": {
+          "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+          "physics_grounded": true,
+          "ordinary_player_rig": true,
+          "input_reachable_camera_orientation": true,
+          "requested_xz": [
+            -586.912231445312,
+            -314.451934814453
+          ],
+          "settle_spawn_y_m": 5.14340209960938,
+          "player_position_m": [
+            -586.912231445312,
+            2.14341616630554,
+            -314.451934814453
+          ],
+          "ground_y_m": 2.14340209960938,
+          "ground_clearance_m": 0.0000140666961669922,
+          "settle_horizontal_drift_m": 0.0,
+          "settle_physics_frames": 125,
+          "settle_recovery_delta": 0,
+          "ground_feature": "land_ground",
+          "ground_object": "land:w26767313:x_-3__z_-2",
+          "ground_sources": [
+            "w26767313",
+            "w29399800"
+          ],
+          "ground_normal_up_dot": 0.999741435050964,
+          "in_boundary": true,
+          "aim_target_m": [
+            -590.906372070312,
+            3.34999990463257,
+            -312.379089355469
+          ],
+          "camera_position_m": [
+            -582.104553222656,
+            5.09843683242798,
+            -316.946990966797
+          ],
+          "camera_height_above_ground_m": 2.9550347328186,
+          "camera_forward": [
+            -0.874107420444489,
+            -0.173637136816978,
+            0.453636854887009
+          ],
+          "camera_fov_degrees": 70.0,
+          "configured_spring_length_m": 5.5,
+          "actual_spring_length_m": 5.50010347366333,
+          "camera_yaw_degrees": 117.428029628127,
+          "camera_pitch_degrees": -9.99935928074238
+        }
+      },
+      "first_hit": {
+        "hit": true,
+        "body": "Collision",
+        "key": "building:w95934125:wall",
+        "sources": [
+          "w95934125"
+        ],
+        "shape": 0,
+        "position": [
+          -590.906372070312,
+          3.3500018119812,
+          -312.379089355469
+        ],
+        "normal": [
+          0.887592256069183,
+          0.0,
+          -0.460630029439926
+        ]
+      },
+      "resolved_metadata": {
+        "receiver_kind": "building_wall",
+        "opaque": true,
+        "derived_object_key": "building:w95934125:wall",
+        "source_keys": [
+          "w95934125"
+        ]
+      },
+      "placed": true,
+      "tag": {
+        "key": "building:w95934125:wall",
+        "sources": [
+          "w95934125"
+        ],
+        "cull_mask": 2,
+        "position": [
+          -590.89306640625,
+          3.3500018119812,
+          -312.385986328125
+        ],
+        "size": [
+          1.20000004768372,
+          0.0799999982118607,
+          0.649999976158142
+        ],
+        "projector_samples": [
+          {
+            "u": -0.5,
+            "v": -0.5,
+            "fits": true,
+            "hit": {
+              "hit": true,
+              "body": "Collision",
+              "key": "building:w95934125:wall",
+              "sources": [
+                "w95934125"
+              ],
+              "shape": 0,
+              "position": [
+                -591.182739257812,
+                3.02500176429749,
+                -312.911651611328
+              ],
+              "normal": [
+                0.887592256069183,
+                0.0,
+                -0.460630029439926
+              ]
+            }
+          },
+          {
+            "u": -0.5,
+            "v": 0.0,
+            "fits": true,
+            "hit": {
+              "hit": true,
+              "body": "Collision",
+              "key": "building:w95934125:wall",
+              "sources": [
+                "w95934125"
+              ],
+              "shape": 0,
+              "position": [
+                -591.182739257812,
+                3.3500018119812,
+                -312.911651611328
+              ],
+              "normal": [
+                0.887592256069183,
+                0.0,
+                -0.460630029439926
+              ]
+            }
+          },
+          {
+            "u": -0.5,
+            "v": 0.5,
+            "fits": true,
+            "hit": {
+              "hit": true,
+              "body": "Collision",
+              "key": "building:w95934125:wall",
+              "sources": [
+                "w95934125"
+              ],
+              "shape": 0,
+              "position": [
+                -591.182739257812,
+                3.67500185966492,
+                -312.911651611328
+              ],
+              "normal": [
+                0.887592256069183,
+                0.0,
+                -0.460630029439926
+              ]
+            }
+          },
+          {
+            "u": 0.0,
+            "v": -0.5,
+            "fits": true,
+            "hit": {
+              "hit": true,
+              "body": "Collision",
+              "key": "building:w95934125:wall",
+              "sources": [
+                "w95934125"
+              ],
+              "shape": 0,
+              "position": [
+                -590.906372070312,
+                3.02500176429749,
+                -312.379089355469
+              ],
+              "normal": [
+                0.887592256069183,
+                0.0,
+                -0.460630029439926
+              ]
+            }
+          },
+          {
+            "u": 0.0,
+            "v": 0.0,
+            "fits": true,
+            "hit": {
+              "hit": true,
+              "body": "Collision",
+              "key": "building:w95934125:wall",
+              "sources": [
+                "w95934125"
+              ],
+              "shape": 0,
+              "position": [
+                -590.906372070312,
+                3.3500018119812,
+                -312.379089355469
+              ],
+              "normal": [
+                0.887592256069183,
+                0.0,
+                -0.460630029439926
+              ]
+            }
+          },
+          {
+            "u": 0.0,
+            "v": 0.5,
+            "fits": true,
+            "hit": {
+              "hit": true,
+              "body": "Collision",
+              "key": "building:w95934125:wall",
+              "sources": [
+                "w95934125"
+              ],
+              "shape": 0,
+              "position": [
+                -590.906372070312,
+                3.67500185966492,
+                -312.379089355469
+              ],
+              "normal": [
+                0.887592256069183,
+                0.0,
+                -0.460630029439926
+              ]
+            }
+          },
+          {
+            "u": 0.5,
+            "v": -0.5,
+            "fits": true,
+            "hit": {
+              "hit": true,
+              "body": "Collision",
+              "key": "building:w95934125:wall",
+              "sources": [
+                "w95934125"
+              ],
+              "shape": 0,
+              "position": [
+                -590.630004882812,
+                3.02500176429749,
+                -311.846527099609
+              ],
+              "normal": [
+                0.887592256069183,
+                0.0,
+                -0.460630029439926
+              ]
+            }
+          },
+          {
+            "u": 0.5,
+            "v": 0.0,
+            "fits": true,
+            "hit": {
+              "hit": true,
+              "body": "Collision",
+              "key": "building:w95934125:wall",
+              "sources": [
+                "w95934125"
+              ],
+              "shape": 0,
+              "position": [
+                -590.630004882812,
+                3.3500018119812,
+                -311.846527099609
+              ],
+              "normal": [
+                0.887592256069183,
+                0.0,
+                -0.460630029439926
+              ]
+            }
+          },
+          {
+            "u": 0.5,
+            "v": 0.5,
+            "fits": true,
+            "hit": {
+              "hit": true,
+              "body": "Collision",
+              "key": "building:w95934125:wall",
+              "sources": [
+                "w95934125"
+              ],
+              "shape": 0,
+              "position": [
+                -590.630004882812,
+                3.67500185966492,
+                -311.846527099609
+              ],
+              "normal": [
+                0.887592256069183,
+                0.0,
+                -0.460630029439926
+              ]
+            }
+          }
+        ]
+      },
+      "rest": {
+        "ok": true,
+        "pre_disable": {
+          "frame": 158,
+          "position": [
+            -586.912231445312,
+            2.14341616630554,
+            -314.451934814453
+          ],
+          "velocity": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "floor": true,
+          "enabled": true,
+          "support": {
+            "hit": true,
+            "body": "Collision",
+            "key": "land:w26767313:x_-3__z_-2",
+            "sources": [
+              "w26767313",
+              "w29399800"
+            ],
+            "shape": 0,
+            "position": [
+              -586.912231445312,
+              2.143385887146,
+              -314.451934814453
+            ],
+            "normal": [
+              0.0191200561821461,
+              0.999741435050964,
+              0.01230931840837
+            ]
+          },
+          "inputs": [],
+          "recovery": 0
+        },
+        "disabled": true,
+        "velocity": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "released": true
+      }
+    },
+    {
+      "id": "upper_nonreceiver_rejection",
+      "ok": false,
+      "verdict": "HOLD",
+      "fatal": true,
+      "setup": {
+        "ok": false,
+        "message": "upper_nonreceiver_rejection target pitch 41.81 is outside stock PlayerCamera limits."
+      },
+      "rest": {
+        "ok": true,
+        "pre_disable": {
+          "frame": 292,
+          "position": [
+            -578.135375976562,
+            2.28095889091492,
+            -276.861785888672
+          ],
+          "velocity": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "floor": true,
+          "enabled": true,
+          "support": {
+            "hit": true,
+            "body": "Collision",
+            "key": "land:w26767313:x_-3__z_-2",
+            "sources": [
+              "w26767313",
+              "w29399800"
+            ],
+            "shape": 0,
+            "position": [
+              -578.135375976562,
+              2.28093338012695,
+              -276.861785888672
+            ],
+            "normal": [
+              0.00518742669373751,
+              0.999985098838806,
+              0.00171872647479177
+            ]
+          },
+          "inputs": [],
+          "recovery": 0
+        },
+        "disabled": true,
+        "velocity": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "released": true
+      }
+    }
+  ],
+  "input_map": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1317-quality/build/1317-contact-preparation001/input-map.json",
+  "input_map_sha256": "b6f54b12b586d1cbdf80335743868cfba621c80442046c9e87832fc4546e04cf",
+  "scope": "upper-detail static contact queries and adjacent stock spray only; no new roof/movement claim"
+}

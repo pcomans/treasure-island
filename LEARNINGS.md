@@ -54,11 +54,15 @@ Maceo’s changed-bucket helper compared native PackedVector3Array/PackedInt32Ar
 
 1232 study 002 retained 36 inward closed-strip roof faces because its normals and consumed clockwise fronts agreed with each other; live equivalence preserved that defect. For these bounded closed strips, derive each interior from the actual unique vertices and check both supplied normals and consumed fronts point outward. Verify the sanctioned triangle reversal, render/collision congruence, cull mode and derived UV/tangent changes while keeping unaffected channels exact. Corrected 003 passed those checks; this does not establish roof walkability or invalidate unrelated historical evidence. See the completed three-unit source notes in [RETRO](discovery/RETRO_LOG.md).
 
+1317 material001 replaced `source_color` palette inputs with raw `ALBEDO` constants and changed the intended warm boarding into a pale mineral-looking surface. Preserve color representation and conversion when refactoring shaders; material002 restored `source_color` inputs and actual whole/near renders validated the visual correction. Source intent alone did not establish the rendered result.
+
 ## Validate the final saved camera state
 
 Maceo’s first SSE captures placed the camera0.310093m below unchanged LAND although the player was grounded: final upward aim followed earlier clearance checks and only process/render waits. Six post-aim physics frames let the stock SpringArm retract and clear LAND by0.159243m. Observe clearance and camera/land relation after final aim, physics response and the last capture waits; an earlier pose is not the saved view. Preserve controls and bad originals. Record small normalization differences as comparison data instead of inventing bit-equality requirements or retaking solely for logging.
 
 w34313525's SSE camera was above adjacent-tile LAND by 1.951693 m, but an inherited player-tile identity assertion rejected that valid camera hit. A separate unfiltered camera-to-target ray hit a neighboring building, so projected target bounds did not establish visible frontage. Resolve the actual saved camera tile/ground from frozen source evidence, retain measured clearance even on identity mismatch, and require the intended first solid independently of projected framing. Keep public-side coverage distinct from whole-building bounds; do not alter terrain or exclude an occluder to make a helper pass.
+
+1317 contact002 hit inside the intended sill face with a7.015µm plane residual but a3.188mm offset from the nominal aim center. The center-distance guard blocked the stock attempt despite valid contact geometry. Nominal mouse-aim precision is not geometry integrity: bind the actual first hit to the intended complete face/region, source and shape ownership, normal and plane, and keep center error diagnostic. Preserve stock camera/range limits and existing numerical geometry checks without adding or widening a tolerance. Retain the raw HOLD: a valid saved contact does not prove the stock rejection that was never attempted.
 
 ## Construct completed evidence records once
 

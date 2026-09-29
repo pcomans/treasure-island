@@ -1,0 +1,33 @@
+{
+  "target": {
+    "source_key": "w95934119",
+    "address": "148 12th Street / Building225"
+  },
+  "reference_digest": "e13f06afe8b41ce74b653020f04e1634713b567021c00d5d07aad3754ccc7c87",
+  "reference_date": "March 2025",
+  "observed": "WSW/NNW aged horizontal cladding continuity, dense high pale clerestory and partly visible lower industrial openings",
+  "inference": "Reuses accepted high-group schedule; exact lower opening stations, dimensions and hidden bottoms are reversible production inference. Unobserved SSE/ENE continue quiet cladding without invented openings. No current2026 or as-built claim.",
+  "lower_nnw": [
+    {
+      "station": 10.5,
+      "width": 2.8,
+      "height": 1.0,
+      "center_y": 4.22,
+      "kind": "window"
+    },
+    {
+      "station": 21.0,
+      "width": 2.8,
+      "height": 1.0,
+      "center_y": 4.22,
+      "kind": "window"
+    },
+    {
+      "station": 36.0,
+      "width": 3.15,
+      "height": 2.35,
+      "center_y": 3.682,
+      "kind": "service"
+    }
+  ]
+}
