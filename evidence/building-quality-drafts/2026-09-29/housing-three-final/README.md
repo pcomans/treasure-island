@@ -1,0 +1,11 @@
+# Final three housing candidates — UNATTACHED DRAFTS
+
+Targets:1149 Ozbourn (`w96665909`),1116 Hutchins (`w96665919`),1113 Keppler (`w96665921`). Together with the other two galleries, **12 housing drafts** have scoped independent source/mechanical and visual PASS. Production remains **33 family instances and43/213 recognized buildings**. These drafts are unattached; release-format approval and normal package/release gates remain pending.
+
+[Open gallery](gallery.html). Initial A/Bs compare original source appearance with unchanged authored candidates.1149's initial distant view received an evidence HOLD, not an asset-defect decision. The subsequent standalone close002 attempt failed its native land-ground anchor check; its raw failure remains unchanged in the source packet. The already-needed mechanics001 run supplied the retained closer installed and roof-oblique views that closed the visual evidence gap. No architecture was changed to improve the camera evidence. The unchanged [visual report](VISUAL_REVIEW.md) preserves initial HOLD and final installed-source PASS addendum.
+
+Source worktree: `treasure-island-housing-continuation-five-2026-09-29`, base `18ae9644be0290fe07ba42eb0336a4a1dec15a5d`. Exact configs come from `game/resources/housing_family/<sourceID>.json`; A/B images/report from `evidence/housing-family-experiment/continuation-five-001/`; closer1149 originals from `continuation-five-mechanics001/images/`. Configs require the unchanged shared housing_site_family.gd and actual frozen chunks. Nothing here is attached to runtime. Historical report paths are provenance, not runtime dependencies.
+
+[SHA256SUMS](SHA256SUMS) binds exact copied bytes; initial images matched original capture-receipt hashes. Private dated reference pixels, full raw traces, caches and mechanics harnesses are excluded. Complete mechanical proof and original failures remain in their source packet. Static visual judgment does not itself establish mechanics or release acceptance. Hidden schedules, unseen faces and exact dimensions remain production inference; limited roof/finish detail and uniform glazing remain scoped limits.
+
+Archive RETRO: preserved the final unchanged configs, initial comparisons and useful later1149 evidence without erasing the original evidence HOLD or failed close002. No new capture, authority, export or recognition changes.
