@@ -1,0 +1,78 @@
+{
+  "baseline": "MAIN dfcc81d accepted Chapel hero",
+  "targets": [
+    {
+      "id": "chapel187-sse",
+      "source_key": "w291189336",
+      "config": "res://game/tests/chapel187_quality/config.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_2.json",
+      "requested_xz": [
+        -61.127358230034304,
+        662.9520411880047
+      ],
+      "aim_target": [
+        -98.9888203044096,
+        10.2,
+        629.8179315326413
+      ],
+      "region": "w291189336",
+      "label": "Navy Chapel187 chapel187-sse",
+      "intent": "Matched Chapel nave/wing/belfry composition and unobscured entry; stock pose, no avatar/control changes"
+    }
+  ],
+  "roof": {
+    "anchor": [
+      -92.16924983202158,
+      614.8960023053785
+    ],
+    "altitude": 14.0,
+    "destinations": [
+      [
+        -104.77260124410148,
+        10.76,
+        619.2977862008023
+      ],
+      [
+        -101.05969342674724,
+        9.2,
+        617.3345451203871
+      ]
+    ],
+    "reject_aim": [
+      -100.82961654622522,
+      9.98,
+      615.6292251177906
+    ],
+    "regions": [
+      {
+        "name": "nave-right-pitch",
+        "station": [
+          5.8,
+          7.8
+        ],
+        "depth": [
+          27,
+          29
+        ]
+      },
+      {
+        "name": "public-wing-front-pitch",
+        "station": [
+          10,
+          12
+        ],
+        "depth": [
+          27,
+          29
+        ]
+      }
+    ]
+  },
+  "execution_scope": "remaining-roof",
+  "continuation": {
+    "prior_run": "mechanics-002",
+    "prior_input_map_sha256": "5d1574bc8424e83bc2843ec06a710adfd71bbe6918e99d4244de0895877b825f",
+    "prior_receipt_sha256": "9b403eb86865309abf4f997e266c884217767bd07b675e464f62e67d9b074fab",
+    "scope": "Repeat current installation/native safety guards and grounded LAND roof setup; perform original nave flight/landing, public-wing junction flight/landing and reachable stock roof rejection. Ground movement and wall/detail sprays remain prior-run evidence requiring independent adjudication; no aggregate PASS inferred."
+  }
+}

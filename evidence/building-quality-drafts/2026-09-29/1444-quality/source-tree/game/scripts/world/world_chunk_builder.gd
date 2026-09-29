@@ -1,0 +1,1059 @@
+class_name WorldChunkBuilder
+extends RefCounted
+
+const PHYSICS_WORLD_SOLID := 1 << 0
+const PHYSICS_SPRAY_SURFACE := 1 << 2
+const RENDER_WORLD_VISIBLE := 1 << 0
+const RENDER_BUILDING_WALL := 1 << 1
+const WESTERN_BRIDGE_REPLACEMENT_MAX_X_M := 500.0
+const POLYHAVEN_DEFAULT_NORMAL_STRENGTH := 0.2
+const HAWKINS_MASSING := preload("res://game/scripts/world/massing/hawkins_77_bruton_massing.gd")
+const BUILDING_3_MASSING := preload("res://game/scripts/world/massing/building_3_600_california_massing.gd")
+const NAVY_CHAPEL_187_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/navy_chapel_187_live_replacement.gd")
+const D2_1441_CHINOOK_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d2_1441_chinook_live_replacement.gd")
+const D2_1439_CHINOOK_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd")
+const D5_1308_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1308_gateview_live_replacement.gd")
+const D5_1394_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1394_gateview_live_replacement.gd")
+const MACEO_MAY_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/maceo_may_live_replacement.gd")
+const NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northern_canopy_free_live_replacement.gd")
+const NORTHPOINT_1238_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northpoint_1238_live_replacement.gd")
+const MARINER_1206_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/mariner_1206_live_replacement.gd")
+const MARINER_1219_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/mariner_1219_live_replacement.gd")
+const MARINER_1212_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/mariner_1212_live_replacement.gd")
+const BAYSIDE_1220_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/bayside_1220_live_replacement.gd")
+const NORTHPOINT_1239_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northpoint_1239_live_replacement.gd")
+const BAYSIDE_1222_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/bayside_1222_live_replacement.gd")
+const NORTHPOINT_1227_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northpoint_1227_live_replacement.gd")
+const MARINER_1202_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/mariner_1202_live_replacement.gd")
+const NORTHPOINT_1234_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northpoint_1234_live_replacement.gd")
+const NORTHPOINT_1232_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northpoint_1232_live_replacement.gd")
+const MARINER_1221_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/mariner_1221_live_replacement.gd")
+const NORTHPOINT_1241_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northpoint_1241_live_replacement.gd")
+const NORTHPOINT_1240_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/northpoint_1240_live_replacement.gd")
+const GATEVIEW_1397_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/gateview_1397_live_replacement.gd")
+const BAYSIDE_1226_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/bayside_1226_live_replacement.gd")
+const BAYSIDE_1215_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/bayside_1215_live_replacement.gd")
+const FIRE_STATION48_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/fire_station48_live_replacement.gd")
+const D5_1317_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1317_gateview_live_replacement.gd")
+const D2_1444_CROAKER_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd")
+const ISLE_HOUSE_HIGH_FACADE_SCENE := preload("res://game/scenes/world/facades/isle_house/isle_house_high_facade.tscn")
+const ISLE_HOUSE_LOW_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd")
+const D1_B201_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/d1_b201_live_attachment.gd")
+const D1_B225_LIVE_ATTACHMENT := preload("res://game/scripts/world/facades/d1_b225_live_attachment.gd")
+const ACCEPTED_MATERIAL_RUN_TRIALS := preload("res://game/scripts/world/facades/accepted_material_run_trials.gd")
+const W34313564_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313564_live_modules.gd")
+const W34313515_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313515_live_modules.gd")
+const W291196370_LIVE_MODULES := preload("res://game/scripts/world/facades/w291196370_live_modules.gd")
+const W34313520_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313520_live_modules.gd")
+const W34313525_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313525_live_modules.gd")
+const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
+const POLYHAVEN_TEXTURE_SETS := {
+	"clean_asphalt": {
+		"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"),
+		"normal": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_nor_gl_1k.jpg"),
+		"roughness": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_rough_1k.jpg"),
+		"source_dimension_m": 2.1,
+		"repeat_dimension_m": 2.1,
+	},
+	"concrete_pavement": {
+		"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg"),
+		"normal": preload("res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_nor_gl_1k.jpg"),
+		"roughness": preload("res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg"),
+		"source_dimension_m": 1.8,
+		"repeat_dimension_m": 1.8,
+	},
+	"concrete_floor_03": {
+		"albedo": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg"),
+		"normal": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_nor_gl_1k.jpg"),
+		"roughness": preload("res://game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_rough_1k.jpg"),
+		"source_dimension_m": 2.5,
+		"repeat_dimension_m": 2.5,
+	},
+	"sparse_grass": {
+		"albedo": preload("res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg"),
+		"normal": preload("res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_nor_gl_1k.jpg"),
+		"roughness": preload("res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg"),
+		"source_dimension_m": 2.0,
+		"repeat_dimension_m": 5.0,
+	},
+	"plaster_grey_04": {
+		"albedo": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg"),
+		"normal": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_nor_gl_1k.jpg"),
+		"roughness": preload("res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg"),
+		"source_dimension_m": 1.5,
+		"repeat_dimension_m": 0.75,
+		"normal_strength": 0.1,
+	},
+	"bitumen": {
+		"albedo": preload("res://game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg"),
+		"normal": preload("res://game/resources/textures/world/polyhaven/bitumen/bitumen_nor_gl_1k.jpg"),
+		"roughness": preload("res://game/resources/textures/world/polyhaven/bitumen/bitumen_rough_1k.jpg"),
+		"source_dimension_m": 20.0,
+		"repeat_dimension_m": 10.0,
+	},
+}
+const POLYHAVEN_MATERIAL_TEXTURE_SET := {
+	"road_path": "clean_asphalt",
+	"road_path_pedestrian": "concrete_pavement",
+	"major_area_paved": "concrete_floor_03",
+	"land_ground": "sparse_grass",
+	"major_area_landuse": "sparse_grass",
+	"major_area_leisure": "sparse_grass",
+	"context_ybi": "sparse_grass",
+	"building_wall": "plaster_grey_04",
+	"building_part_wall": "plaster_grey_04",
+	"building_roof": "bitumen",
+	"building_part_roof": "bitumen",
+}
+
+var _materials: Dictionary = {}
+
+
+func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
+	var chunk_root := Node3D.new()
+	chunk_root.name = str(chunk.chunk_id).validate_node_name()
+	# Claim the target chunk before per-row dispatch so a drifted/missing B201
+	# wall cannot silently fall through to generic construction.
+	var b201_chunk_validation := D1_B201_LIVE_ATTACHMENT.validate_chunk_records(chunk)
+	if not bool(b201_chunk_validation.get("ok", false)):
+		chunk_root.free()
+		return b201_chunk_validation
+	# B225's production attachment is equally exact-target-only. Validate the
+	# complete wall/roof membership before any row from its chunk is staged so a
+	# missing, duplicate, moved, or drifted receiver can never fall back generic.
+	var b225_chunk_validation := D1_B225_LIVE_ATTACHMENT.validate_chunk_records(chunk)
+	if not bool(b225_chunk_validation.get("ok", false)):
+		chunk_root.free()
+		return b225_chunk_validation
+	# Pair-preflight the actual supplied chunk before any generic node exists.
+	# This prevents either Chapel row from borrowing its mate from disk or from
+	# being suppressed alone when the other row is missing or drifted.
+	var chapel_pair := NAVY_CHAPEL_187_LIVE_REPLACEMENT.prepare_chunk_records(chunk.records as Array)
+	if not bool(chapel_pair.get("ok", false)):
+		chunk_root.free()
+		return chapel_pair
+	# 1441 Chinook is another atomic wall+roof replacement, but its adapter also
+	# claims the exact target chunk so a missing pair cannot disappear from that
+	# chunk without failing before either generic row is constructed.
+	var d2_1441_pair := D2_1441_CHINOOK_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(d2_1441_pair.get("ok", false)):
+		chunk_root.free()
+		return d2_1441_pair
+	# 1439 Chinook uses the same atomic source-pair seam. Its exact target chunk
+	# must contain one wall and one roof or fail before any generic node exists.
+	var d2_1439_pair := D2_1439_CHINOOK_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(d2_1439_pair.get("ok", false)):
+		chunk_root.free()
+		return d2_1439_pair
+	var d2_1444_pair := D2_1444_CROAKER_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(d2_1444_pair.get("ok", false)):
+		chunk_root.free()
+		return d2_1444_pair
+	var d5_1308_pair := D5_1308_GATEVIEW_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(d5_1308_pair.get("ok", false)):
+		chunk_root.free()
+		return d5_1308_pair
+	var d5_1394_pair := D5_1394_GATEVIEW_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(d5_1394_pair.get("ok", false)):
+		chunk_root.free()
+		return d5_1394_pair
+	var d5_1317_pair := D5_1317_GATEVIEW_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(d5_1317_pair.get("ok", false)):
+		chunk_root.free()
+		return d5_1317_pair
+	var fs48_pair := FIRE_STATION48_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(fs48_pair.get("ok", false)):
+		chunk_root.free()
+		return fs48_pair
+	var maceo_pair := MACEO_MAY_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(maceo_pair.get("ok", false)):
+		chunk_root.free()
+		return maceo_pair
+	var northern_canopy_pair := NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(northern_canopy_pair.get("ok", false)):
+		chunk_root.free()
+		return northern_canopy_pair
+	var northpoint_1238_pair := NORTHPOINT_1238_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(northpoint_1238_pair.get("ok", false)):
+		chunk_root.free()
+		return northpoint_1238_pair
+	var mariner_1206_pair := MARINER_1206_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(mariner_1206_pair.get("ok", false)):
+		chunk_root.free()
+		return mariner_1206_pair
+	var mariner_1219_pair := MARINER_1219_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(mariner_1219_pair.get("ok", false)):
+		chunk_root.free()
+		return mariner_1219_pair
+	var mariner_1212_pair := MARINER_1212_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(mariner_1212_pair.get("ok", false)):
+		chunk_root.free()
+		return mariner_1212_pair
+	var bayside_1220_pair := BAYSIDE_1220_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(bayside_1220_pair.get("ok", false)):
+		chunk_root.free()
+		return bayside_1220_pair
+	var northpoint_1239_pair := NORTHPOINT_1239_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(northpoint_1239_pair.get("ok", false)):
+		chunk_root.free()
+		return northpoint_1239_pair
+	var bayside_1222_pair := BAYSIDE_1222_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(bayside_1222_pair.get("ok", false)):
+		chunk_root.free()
+		return bayside_1222_pair
+	var northpoint_1227_pair := NORTHPOINT_1227_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(northpoint_1227_pair.get("ok", false)):
+		chunk_root.free()
+		return northpoint_1227_pair
+	var mariner_1202_pair := MARINER_1202_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(mariner_1202_pair.get("ok", false)):
+		chunk_root.free()
+		return mariner_1202_pair
+	var northpoint_1234_pair := NORTHPOINT_1234_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(northpoint_1234_pair.get("ok", false)):
+		chunk_root.free()
+		return northpoint_1234_pair
+	var northpoint_1232_pair := NORTHPOINT_1232_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(northpoint_1232_pair.get("ok", false)):
+		chunk_root.free()
+		return northpoint_1232_pair
+	var mariner_1221_pair := MARINER_1221_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(mariner_1221_pair.get("ok", false)):
+		chunk_root.free()
+		return mariner_1221_pair
+	var northpoint_1241_pair := NORTHPOINT_1241_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(northpoint_1241_pair.get("ok", false)):
+		chunk_root.free()
+		return northpoint_1241_pair
+	var northpoint_1240_pair := NORTHPOINT_1240_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(northpoint_1240_pair.get("ok", false)):
+		chunk_root.free()
+		return northpoint_1240_pair
+	var gateview_1397_pair := GATEVIEW_1397_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(gateview_1397_pair.get("ok", false)):
+		chunk_root.free()
+		return gateview_1397_pair
+	var bayside_1226_pair := BAYSIDE_1226_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(bayside_1226_pair.get("ok", false)):
+		chunk_root.free()
+		return bayside_1226_pair
+	var bayside_1215_pair := BAYSIDE_1215_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(bayside_1215_pair.get("ok", false)):
+		chunk_root.free()
+		return bayside_1215_pair
+	var rollback_plans: Array[Dictionary] = []
+	var chapel_plan := NAVY_CHAPEL_187_LIVE_REPLACEMENT.build_chunk_plan(chapel_pair)
+	if not bool(chapel_plan.get("ok", false)):
+		chunk_root.free()
+		return chapel_plan
+	rollback_plans.append({"adapter": NAVY_CHAPEL_187_LIVE_REPLACEMENT, "plan": chapel_plan})
+	var d2_1441_plan := D2_1441_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1441_pair)
+	if not bool(d2_1441_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return d2_1441_plan
+	rollback_plans.append({"adapter": D2_1441_CHINOOK_LIVE_REPLACEMENT, "plan": d2_1441_plan})
+	var d2_1439_plan := D2_1439_CHINOOK_LIVE_REPLACEMENT.build_chunk_plan(d2_1439_pair)
+	if not bool(d2_1439_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return d2_1439_plan
+	rollback_plans.append({"adapter": D2_1439_CHINOOK_LIVE_REPLACEMENT, "plan": d2_1439_plan})
+	var d2_1444_plan := D2_1444_CROAKER_LIVE_REPLACEMENT.build_chunk_plan(d2_1444_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(d2_1444_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return d2_1444_plan
+	rollback_plans.append({"adapter": D2_1444_CROAKER_LIVE_REPLACEMENT, "plan": d2_1444_plan})
+	var d5_1308_plan := D5_1308_GATEVIEW_LIVE_REPLACEMENT.build_chunk_plan(d5_1308_pair, _material_for("building_wall", "building_wall", false), _material_for("building_roof", "building_roof", false))
+	if not bool(d5_1308_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return d5_1308_plan
+	rollback_plans.append({"adapter": D5_1308_GATEVIEW_LIVE_REPLACEMENT, "plan": d5_1308_plan})
+	var d5_1394_plan := D5_1394_GATEVIEW_LIVE_REPLACEMENT.build_chunk_plan(d5_1394_pair, _material_for("building_wall", "building_wall", false), _material_for("building_roof", "building_roof", false))
+	if not bool(d5_1394_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return d5_1394_plan
+	rollback_plans.append({"adapter": D5_1394_GATEVIEW_LIVE_REPLACEMENT, "plan": d5_1394_plan})
+	var d5_1317_plan := D5_1317_GATEVIEW_LIVE_REPLACEMENT.build_chunk_plan(d5_1317_pair, _material_for("building_wall", "building_wall", false), _material_for("building_roof", "building_roof", false))
+	if not bool(d5_1317_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return d5_1317_plan
+	rollback_plans.append({"adapter": D5_1317_GATEVIEW_LIVE_REPLACEMENT, "plan": d5_1317_plan})
+	var fs48_plan := FIRE_STATION48_LIVE_REPLACEMENT.build_chunk_plan(fs48_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(fs48_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return fs48_plan
+	rollback_plans.append({"adapter": FIRE_STATION48_LIVE_REPLACEMENT, "plan": fs48_plan})
+	var maceo_plan := MACEO_MAY_LIVE_REPLACEMENT.build_chunk_plan(maceo_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(maceo_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return maceo_plan
+	rollback_plans.append({"adapter": MACEO_MAY_LIVE_REPLACEMENT, "plan": maceo_plan})
+	var northern_canopy_plan := NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.build_chunk_plan(northern_canopy_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(northern_canopy_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return northern_canopy_plan
+	rollback_plans.append({"adapter": NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT, "plan": northern_canopy_plan})
+	var northpoint_1238_plan := NORTHPOINT_1238_LIVE_REPLACEMENT.build_chunk_plan(northpoint_1238_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(northpoint_1238_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return northpoint_1238_plan
+	rollback_plans.append({"adapter": NORTHPOINT_1238_LIVE_REPLACEMENT, "plan": northpoint_1238_plan})
+	var mariner_1206_plan := MARINER_1206_LIVE_REPLACEMENT.build_chunk_plan(mariner_1206_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(mariner_1206_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return mariner_1206_plan
+	rollback_plans.append({"adapter": MARINER_1206_LIVE_REPLACEMENT, "plan": mariner_1206_plan})
+	var mariner_1219_plan := MARINER_1219_LIVE_REPLACEMENT.build_chunk_plan(mariner_1219_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(mariner_1219_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return mariner_1219_plan
+	rollback_plans.append({"adapter": MARINER_1219_LIVE_REPLACEMENT, "plan": mariner_1219_plan})
+	var mariner_1212_plan := MARINER_1212_LIVE_REPLACEMENT.build_chunk_plan(mariner_1212_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(mariner_1212_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return mariner_1212_plan
+	rollback_plans.append({"adapter": MARINER_1212_LIVE_REPLACEMENT, "plan": mariner_1212_plan})
+	var bayside_1220_plan := BAYSIDE_1220_LIVE_REPLACEMENT.build_chunk_plan(bayside_1220_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(bayside_1220_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return bayside_1220_plan
+	rollback_plans.append({"adapter": BAYSIDE_1220_LIVE_REPLACEMENT, "plan": bayside_1220_plan})
+	var northpoint_1239_plan := NORTHPOINT_1239_LIVE_REPLACEMENT.build_chunk_plan(northpoint_1239_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(northpoint_1239_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return northpoint_1239_plan
+	rollback_plans.append({"adapter": NORTHPOINT_1239_LIVE_REPLACEMENT, "plan": northpoint_1239_plan})
+	var bayside_1222_plan := BAYSIDE_1222_LIVE_REPLACEMENT.build_chunk_plan(bayside_1222_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(bayside_1222_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return bayside_1222_plan
+	rollback_plans.append({"adapter": BAYSIDE_1222_LIVE_REPLACEMENT, "plan": bayside_1222_plan})
+	var northpoint_1227_plan := NORTHPOINT_1227_LIVE_REPLACEMENT.build_chunk_plan(northpoint_1227_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(northpoint_1227_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return northpoint_1227_plan
+	rollback_plans.append({"adapter": NORTHPOINT_1227_LIVE_REPLACEMENT, "plan": northpoint_1227_plan})
+	var mariner_1202_plan := MARINER_1202_LIVE_REPLACEMENT.build_chunk_plan(mariner_1202_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(mariner_1202_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return mariner_1202_plan
+	rollback_plans.append({"adapter": MARINER_1202_LIVE_REPLACEMENT, "plan": mariner_1202_plan})
+	var northpoint_1234_plan := NORTHPOINT_1234_LIVE_REPLACEMENT.build_chunk_plan(northpoint_1234_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(northpoint_1234_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return northpoint_1234_plan
+	rollback_plans.append({"adapter": NORTHPOINT_1234_LIVE_REPLACEMENT, "plan": northpoint_1234_plan})
+	var northpoint_1232_plan := NORTHPOINT_1232_LIVE_REPLACEMENT.build_chunk_plan(northpoint_1232_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(northpoint_1232_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return northpoint_1232_plan
+	rollback_plans.append({"adapter": NORTHPOINT_1232_LIVE_REPLACEMENT, "plan": northpoint_1232_plan})
+	var mariner_1221_plan := MARINER_1221_LIVE_REPLACEMENT.build_chunk_plan(mariner_1221_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(mariner_1221_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return mariner_1221_plan
+	rollback_plans.append({"adapter": MARINER_1221_LIVE_REPLACEMENT, "plan": mariner_1221_plan})
+	var northpoint_1241_plan := NORTHPOINT_1241_LIVE_REPLACEMENT.build_chunk_plan(northpoint_1241_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(northpoint_1241_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return northpoint_1241_plan
+	rollback_plans.append({"adapter": NORTHPOINT_1241_LIVE_REPLACEMENT, "plan": northpoint_1241_plan})
+	var northpoint_1240_plan := NORTHPOINT_1240_LIVE_REPLACEMENT.build_chunk_plan(northpoint_1240_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(northpoint_1240_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return northpoint_1240_plan
+	rollback_plans.append({"adapter": NORTHPOINT_1240_LIVE_REPLACEMENT, "plan": northpoint_1240_plan})
+	var gateview_1397_plan := GATEVIEW_1397_LIVE_REPLACEMENT.build_chunk_plan(gateview_1397_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(gateview_1397_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return gateview_1397_plan
+	rollback_plans.append({"adapter": GATEVIEW_1397_LIVE_REPLACEMENT, "plan": gateview_1397_plan})
+	var bayside_1226_plan := BAYSIDE_1226_LIVE_REPLACEMENT.build_chunk_plan(bayside_1226_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(bayside_1226_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return bayside_1226_plan
+	rollback_plans.append({"adapter": BAYSIDE_1226_LIVE_REPLACEMENT, "plan": bayside_1226_plan})
+	var bayside_1215_plan := BAYSIDE_1215_LIVE_REPLACEMENT.build_chunk_plan(bayside_1215_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
+	if not bool(bayside_1215_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return bayside_1215_plan
+	rollback_plans.append({"adapter": BAYSIDE_1215_LIVE_REPLACEMENT, "plan": bayside_1215_plan})
+	var report := {
+		"ok": true,
+		"node": chunk_root,
+		"mesh_instances": 0,
+		"surfaces": 0,
+		"triangles": 0,
+		"static_bodies": 0,
+		"shapes": 0,
+		"source_keys": {},
+	}
+	for record_value: Variant in chunk.records:
+		var record: Dictionary = record_value
+		var parent_key := _parent_key_for_feature(str(record.feature_kind))
+		if not category_parents.has(parent_key):
+			_free_unconsumed_plans(rollback_plans)
+			chunk_root.free()
+			return {"ok": false, "code": "builder_parent", "message": "Missing world category parent %s." % parent_key, "source_keys": record.source_keys}
+		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)
+		if not record_result.ok:
+			_free_unconsumed_plans(rollback_plans)
+			chunk_root.free()
+			return record_result
+		var record_node: Node3D = record_result.node
+		var category_proxy := Node3D.new()
+		category_proxy.name = "%s__%s" % [str(chunk.chunk_id), str(record.object_key).validate_node_name()]
+		category_proxy.add_child(record_node)
+		category_proxy.set_meta("target_parent", category_parents[parent_key])
+		chunk_root.add_child(category_proxy)
+		report.mesh_instances += int(record_result.get("mesh_instances", 1))
+		report.surfaces += int(record_result.get("surfaces", 1))
+		report.triangles += int(record_result.triangles)
+		report.static_bodies += int(record_result.get("static_bodies", 1 if str(record.collision_kind) == "world_solid" else 0))
+		report.shapes += int(record_result.get("shapes", 1 if str(record.collision_kind) == "world_solid" else 0))
+		for key_value: Variant in record.source_keys:
+			report.source_keys[str(key_value)] = true
+	var chapel_consumed := NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)
+	var d2_1441_consumed := D2_1441_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1441_plan)
+	var d2_1439_consumed := D2_1439_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1439_plan)
+	var d2_1444_consumed := D2_1444_CROAKER_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1444_plan)
+	var d5_1308_consumed := D5_1308_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1308_plan)
+	var d5_1394_consumed := D5_1394_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1394_plan)
+	var d5_1317_consumed := D5_1317_GATEVIEW_LIVE_REPLACEMENT.plan_was_fully_consumed(d5_1317_plan)
+	var fs48_consumed := FIRE_STATION48_LIVE_REPLACEMENT.plan_was_fully_consumed(fs48_plan)
+	var maceo_consumed := MACEO_MAY_LIVE_REPLACEMENT.plan_was_fully_consumed(maceo_plan)
+	var northern_canopy_consumed := NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.plan_was_fully_consumed(northern_canopy_plan)
+	var northpoint_1238_consumed := NORTHPOINT_1238_LIVE_REPLACEMENT.plan_was_fully_consumed(northpoint_1238_plan)
+	var mariner_1206_consumed := MARINER_1206_LIVE_REPLACEMENT.plan_was_fully_consumed(mariner_1206_plan)
+	var mariner_1219_consumed := MARINER_1219_LIVE_REPLACEMENT.plan_was_fully_consumed(mariner_1219_plan)
+	var mariner_1212_consumed := MARINER_1212_LIVE_REPLACEMENT.plan_was_fully_consumed(mariner_1212_plan)
+	var bayside_1220_consumed := BAYSIDE_1220_LIVE_REPLACEMENT.plan_was_fully_consumed(bayside_1220_plan)
+	var northpoint_1239_consumed := NORTHPOINT_1239_LIVE_REPLACEMENT.plan_was_fully_consumed(northpoint_1239_plan)
+	var bayside_1222_consumed := BAYSIDE_1222_LIVE_REPLACEMENT.plan_was_fully_consumed(bayside_1222_plan)
+	var northpoint_1227_consumed := NORTHPOINT_1227_LIVE_REPLACEMENT.plan_was_fully_consumed(northpoint_1227_plan)
+	var mariner_1202_consumed := MARINER_1202_LIVE_REPLACEMENT.plan_was_fully_consumed(mariner_1202_plan)
+	var northpoint_1234_consumed := NORTHPOINT_1234_LIVE_REPLACEMENT.plan_was_fully_consumed(northpoint_1234_plan)
+	var northpoint_1232_consumed := NORTHPOINT_1232_LIVE_REPLACEMENT.plan_was_fully_consumed(northpoint_1232_plan)
+	var mariner_1221_consumed := MARINER_1221_LIVE_REPLACEMENT.plan_was_fully_consumed(mariner_1221_plan)
+	var northpoint_1241_consumed := NORTHPOINT_1241_LIVE_REPLACEMENT.plan_was_fully_consumed(northpoint_1241_plan)
+	var northpoint_1240_consumed := NORTHPOINT_1240_LIVE_REPLACEMENT.plan_was_fully_consumed(northpoint_1240_plan)
+	var gateview_1397_consumed := GATEVIEW_1397_LIVE_REPLACEMENT.plan_was_fully_consumed(gateview_1397_plan)
+	var bayside_1226_consumed := BAYSIDE_1226_LIVE_REPLACEMENT.plan_was_fully_consumed(bayside_1226_plan)
+	var bayside_1215_consumed := BAYSIDE_1215_LIVE_REPLACEMENT.plan_was_fully_consumed(bayside_1215_plan)
+	if not chapel_consumed or not d2_1441_consumed or not d2_1439_consumed or not d2_1444_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed or not fs48_consumed or not maceo_consumed or not northern_canopy_consumed or not northpoint_1238_consumed or not mariner_1206_consumed or not mariner_1219_consumed or not mariner_1212_consumed or not bayside_1220_consumed or not northpoint_1239_consumed or not bayside_1222_consumed or not northpoint_1227_consumed or not mariner_1202_consumed or not northpoint_1234_consumed or not bayside_1215_consumed or not northpoint_1232_consumed or not northpoint_1241_consumed or not mariner_1221_consumed or not northpoint_1240_consumed or not gateview_1397_consumed or not bayside_1226_consumed:
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		if not chapel_consumed:
+			return {"ok": false, "code": "navy_chapel_187_live_unconsumed_pair", "message": "The supplied Chapel pair was not consumed exactly once.", "source_keys": ["w291189336"]}
+		if not d2_1441_consumed:
+			return {"ok": false, "code": "d2_1441_live_unconsumed_pair", "message": "The supplied 1441 Chinook pair was not consumed exactly once.", "source_keys": ["w95934105"]}
+		if not d2_1439_consumed:
+			return {"ok": false, "code": "d2_1439_live_unconsumed_pair", "message": "The supplied 1439 Chinook pair was not consumed exactly once.", "source_keys": ["w95934144"]}
+		if not d2_1444_consumed:
+			return {"ok": false, "code": "d2_1444_live_unconsumed_pair", "message": "The supplied 1444 Croaker pair was not consumed exactly once.", "source_keys": ["w95934117"]}
+		if not d5_1308_consumed:
+			return {"ok": false, "code": "d5_1308_live_unconsumed_pair", "message": "The supplied1308pair was not consumed exactly once.", "source_keys": ["w95934123"]}
+		if not d5_1394_consumed:
+			return {"ok": false, "code": "d5_1394_live_unconsumed_pair", "message": "The supplied1394pair was not consumed exactly once.", "source_keys": ["w96215646"]}
+		if not d5_1317_consumed:
+			return {"ok": false, "code": "d5_1317_live_unconsumed_pair", "message": "The supplied 1317 pair was not consumed exactly once.", "source_keys": ["w95934125"]}
+		if not fs48_consumed:
+			return {"ok": false, "code": "fire_station48_unconsumed_pair", "message": "The supplied Station 48 pair was not consumed exactly once.", "source_keys": ["w764313741"]}
+		if not maceo_consumed:
+			return {"ok": false, "code": "maceo_may_unconsumed_pair", "message": "The supplied Maceo May pair was not consumed exactly once.", "source_keys": ["r19685981"]}
+		if not northern_canopy_consumed:
+			return {"ok": false, "code": "northern_canopy_unconsumed_pair", "message": "The supplied 1201 pair was not consumed exactly once.", "source_keys": ["w96215672"]}
+		if not northpoint_1238_consumed:
+			return {"ok": false, "code": "northpoint_1238_unconsumed_pair", "message": "The supplied 1238 pair was not consumed exactly once.", "source_keys": ["w96215669"]}
+		if not mariner_1206_consumed:
+			return {"ok": false, "code": "mariner_1206_unconsumed_pair", "message": "The supplied 1206 pair was not consumed exactly once.", "source_keys": ["w96215677"]}
+		if not mariner_1219_consumed:
+			return {"ok": false, "code": "mariner_1219_unconsumed_pair", "message": "The supplied 1219 pair was not consumed exactly once.", "source_keys": ["w96215680"]}
+		if not mariner_1212_consumed:
+			return {"ok": false, "code": "mariner_1212_unconsumed_pair", "message": "The supplied 1212 pair was not consumed exactly once.", "source_keys": ["w96215649"]}
+		if not bayside_1220_consumed:
+			return {"ok": false, "code": "bayside_1220_unconsumed_pair", "message": "The supplied 1220 pair was not consumed exactly once.", "source_keys": ["w96215652"]}
+		if not northpoint_1239_consumed:
+			return {"ok": false, "code": "northpoint_1239_unconsumed_pair", "message": "The supplied 1239 pair was not consumed exactly once.", "source_keys": ["w96215658"]}
+		if not bayside_1222_consumed:
+			return {"ok": false, "code": "bayside_1222_unconsumed_pair", "message": "The supplied 1222 pair was not consumed exactly once.", "source_keys": ["w96215661"]}
+		if not northpoint_1227_consumed:
+			return {"ok": false, "code": "northpoint_1227_unconsumed_pair", "message": "The supplied 1227 pair was not consumed exactly once.", "source_keys": ["w96215653"]}
+		if not northpoint_1234_consumed:
+			return {"ok": false, "code": "northpoint_1234_unconsumed_pair", "message": "The supplied 1234 pair was not consumed exactly once.", "source_keys": ["w96215659"]}
+		if not northpoint_1232_consumed:
+			return {"ok": false, "code": "northpoint_1232_unconsumed_pair", "message": "The supplied 1232 pair was not consumed exactly once.", "source_keys": ["w96215673"]}
+		if not mariner_1221_consumed:
+			return {"ok": false, "code": "mariner_1221_unconsumed_pair", "message": "The supplied 1221 pair was not consumed exactly once.", "source_keys": ["w96215682"]}
+		if not northpoint_1241_consumed:
+			return {"ok": false, "code": "northpoint_1241_unconsumed_pair", "message": "The supplied 1241 pair was not consumed exactly once.", "source_keys": ["w96215674"]}
+		if not northpoint_1240_consumed:
+			return {"ok": false, "code": "northpoint_1240_unconsumed_pair", "message": "The supplied 1240 pair was not consumed exactly once.", "source_keys": ["w96215688"]}
+		if not gateview_1397_consumed:
+			return {"ok": false, "code": "gateview_1397_unconsumed_pair", "message": "The supplied 1397 pair was not consumed exactly once.", "source_keys": ["w96215670"]}
+		if not bayside_1226_consumed:
+			return {"ok": false, "code": "bayside_1226_unconsumed_pair", "message": "The supplied 1226 pair was not consumed exactly once.", "source_keys": ["w96215685"]}
+		if not bayside_1215_consumed:
+			return {"ok": false, "code": "bayside_1215_unconsumed_pair", "message": "The supplied 1215 pair was not consumed exactly once.", "source_keys": ["w96215666"]}
+		return {"ok": false, "code": "mariner_1202_unconsumed_pair", "message": "The supplied 1202 pair was not consumed exactly once.", "source_keys": ["w96215651"]}
+	return report
+
+
+func _free_unconsumed_plans(plans: Array[Dictionary]) -> void:
+	for entry: Dictionary in plans:
+		var adapter: Script = entry.adapter
+		var plan: Dictionary = entry.plan
+		adapter.free_unconsumed(plan)
+
+
+func attach_built_chunk(report: Dictionary, _category_parents: Dictionary) -> void:
+	var chunk_root: Node3D = report.node
+	while chunk_root.get_child_count() > 0:
+		var proxy := chunk_root.get_child(0) as Node3D
+		chunk_root.remove_child(proxy)
+		var target: Node3D = proxy.get_meta("target_parent") as Node3D
+		proxy.set_meta("target_parent", null)
+		target.add_child(proxy)
+	chunk_root.free()
+
+
+func build_context(context: Dictionary, context_parents: Dictionary) -> Dictionary:
+	var staging := Node3D.new()
+	staging.name = "ValidatedContext"
+	var report := {
+		"ok": true,
+		"node": staging,
+		"mesh_instances": 0,
+		"surfaces": 0,
+		"triangles": 0,
+		"static_bodies": 0,
+		"shapes": 0,
+		"source_keys": {},
+	}
+	var context_records: Array = context.records.duplicate()
+	context_records.append_array(context.boundary_attached_visuals)
+	for record_value: Variant in context_records:
+		var record: Dictionary = record_value
+		var adapted := record.duplicate(true)
+		adapted["feature_kind"] = str(record.context_kind)
+		var record_result := _build_record(adapted, true)
+		if not record_result.ok:
+			staging.free()
+			return record_result
+		var proxy := Node3D.new()
+		proxy.name = str(record.object_key).validate_node_name()
+		proxy.add_child(record_result.node)
+		proxy.set_meta("target_parent", context_parents[str(record.context_kind)])
+		staging.add_child(proxy)
+		report.mesh_instances += int(record_result.get("mesh_instances", 1))
+		report.surfaces += int(record_result.get("surfaces", 1))
+		report.triangles += int(record_result.triangles)
+		for key_value: Variant in record.source_keys:
+			report.source_keys[str(key_value)] = true
+	return report
+
+
+func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}, d2_1439_plan: Dictionary = {}, d2_1444_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}, maceo_plan: Dictionary = {}, northern_canopy_plan: Dictionary = {}, northpoint_1238_plan: Dictionary = {}, mariner_1206_plan: Dictionary = {}, mariner_1219_plan: Dictionary = {}, mariner_1212_plan: Dictionary = {}, bayside_1220_plan: Dictionary = {}, northpoint_1239_plan: Dictionary = {}, bayside_1222_plan: Dictionary = {}, northpoint_1227_plan: Dictionary = {}, mariner_1202_plan: Dictionary = {}, northpoint_1234_plan: Dictionary = {}, bayside_1215_plan: Dictionary = {}, northpoint_1232_plan: Dictionary = {}, northpoint_1241_plan: Dictionary = {}, mariner_1221_plan: Dictionary = {}, northpoint_1240_plan: Dictionary = {}, gateview_1397_plan: Dictionary = {}, bayside_1226_plan: Dictionary = {}) -> Dictionary:
+	# Building 1's generated 20 m slab and terrain-level tower are source-valid
+	# horizontal placeholders but visually and physically wrong in the vertical
+	# dimension.  Intercept all four independently keyed records before generic
+	# mesh/collision construction so no invisible legacy surfaces survive.
+	if not is_context and BUILDING_1_HERO_MODEL.matches_record(record):
+		return BUILDING_1_HERO_MODEL.build_record(record)
+	if not is_context and HAWKINS_MASSING.matches_record(record):
+		return HAWKINS_MASSING.build_record(
+			record,
+			_material_for(str(record.material_key), str(record.feature_kind), false)
+		)
+	# Building 3's frozen horizontal receiver remains authoritative, while its
+	# flat vertical placeholder obscures the landmark hangar family. Replace
+	# wall and roof together before generic collision is ever constructed.
+	if not is_context and BUILDING_3_MASSING.matches_record(record):
+		return BUILDING_3_MASSING.build_record(
+			record,
+			_material_for(str(record.material_key), str(record.feature_kind), false)
+		)
+	# Chapel 187 is a paired wall+roof replacement. The plan constructs approved
+	# visuals once and splits wall spray collision from roof/cap/cross landing
+	# collision; both exact rows are consumed without generic fallback or stack.
+	if not is_context and NAVY_CHAPEL_187_LIVE_REPLACEMENT.claims_record(record):
+		return NAVY_CHAPEL_187_LIVE_REPLACEMENT.consume_record(record, chapel_plan)
+	# The exact 1441 wall and roof have already been built together from this
+	# supplied chunk. Consume each result once before generic mesh or collision
+	# construction, so there is no overlay, partial replacement, or fallback.
+	if not is_context and D2_1441_CHINOOK_LIVE_REPLACEMENT.claims_record(record):
+		return D2_1441_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1441_plan)
+	# 1439's exact wall and roof are likewise consumed from one prebuilt plan.
+	# This replaces, rather than overlays, both generic rows and keeps the sole
+	# spray receiver on the exact wall owner.
+	if not is_context and D2_1439_CHINOOK_LIVE_REPLACEMENT.claims_record(record):
+		return D2_1439_CHINOOK_LIVE_REPLACEMENT.consume_record(record, d2_1439_plan)
+	if not is_context and D2_1444_CROAKER_LIVE_REPLACEMENT.claims_record(record):
+		return D2_1444_CROAKER_LIVE_REPLACEMENT.consume_record(record, d2_1444_plan)
+	if not is_context and D5_1308_GATEVIEW_LIVE_REPLACEMENT.claims_record(record):
+		return D5_1308_GATEVIEW_LIVE_REPLACEMENT.consume_record(record, d5_1308_plan)
+	if not is_context and D5_1394_GATEVIEW_LIVE_REPLACEMENT.claims_record(record):
+		return D5_1394_GATEVIEW_LIVE_REPLACEMENT.consume_record(record, d5_1394_plan)
+	if not is_context and D5_1317_GATEVIEW_LIVE_REPLACEMENT.claims_record(record):
+		return D5_1317_GATEVIEW_LIVE_REPLACEMENT.consume_record(record, d5_1317_plan)
+	if not is_context and FIRE_STATION48_LIVE_REPLACEMENT.claims_record(record):
+		return FIRE_STATION48_LIVE_REPLACEMENT.consume_record(record, fs48_plan)
+	if not is_context and MACEO_MAY_LIVE_REPLACEMENT.claims_record(record):
+		return MACEO_MAY_LIVE_REPLACEMENT.consume_record(record, maceo_plan)
+	if not is_context and NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.claims_record(record):
+		return NORTHERN_CANOPY_FREE_LIVE_REPLACEMENT.consume_record(record, northern_canopy_plan)
+	if not is_context and NORTHPOINT_1238_LIVE_REPLACEMENT.claims_record(record):
+		return NORTHPOINT_1238_LIVE_REPLACEMENT.consume_record(record, northpoint_1238_plan)
+	if not is_context and MARINER_1206_LIVE_REPLACEMENT.claims_record(record):
+		return MARINER_1206_LIVE_REPLACEMENT.consume_record(record, mariner_1206_plan)
+	if not is_context and MARINER_1219_LIVE_REPLACEMENT.claims_record(record):
+		return MARINER_1219_LIVE_REPLACEMENT.consume_record(record, mariner_1219_plan)
+	if not is_context and MARINER_1212_LIVE_REPLACEMENT.claims_record(record):
+		return MARINER_1212_LIVE_REPLACEMENT.consume_record(record, mariner_1212_plan)
+	if not is_context and BAYSIDE_1220_LIVE_REPLACEMENT.claims_record(record):
+		return BAYSIDE_1220_LIVE_REPLACEMENT.consume_record(record, bayside_1220_plan)
+	if not is_context and NORTHPOINT_1239_LIVE_REPLACEMENT.claims_record(record):
+		return NORTHPOINT_1239_LIVE_REPLACEMENT.consume_record(record, northpoint_1239_plan)
+	if not is_context and BAYSIDE_1222_LIVE_REPLACEMENT.claims_record(record):
+		return BAYSIDE_1222_LIVE_REPLACEMENT.consume_record(record, bayside_1222_plan)
+	if not is_context and NORTHPOINT_1227_LIVE_REPLACEMENT.claims_record(record):
+		return NORTHPOINT_1227_LIVE_REPLACEMENT.consume_record(record, northpoint_1227_plan)
+	if not is_context and MARINER_1202_LIVE_REPLACEMENT.claims_record(record):
+		return MARINER_1202_LIVE_REPLACEMENT.consume_record(record, mariner_1202_plan)
+	if not is_context and NORTHPOINT_1234_LIVE_REPLACEMENT.claims_record(record):
+		return NORTHPOINT_1234_LIVE_REPLACEMENT.consume_record(record, northpoint_1234_plan)
+	if not is_context and NORTHPOINT_1232_LIVE_REPLACEMENT.claims_record(record):
+		return NORTHPOINT_1232_LIVE_REPLACEMENT.consume_record(record, northpoint_1232_plan)
+	if not is_context and MARINER_1221_LIVE_REPLACEMENT.claims_record(record):
+		return MARINER_1221_LIVE_REPLACEMENT.consume_record(record, mariner_1221_plan)
+	if not is_context and NORTHPOINT_1241_LIVE_REPLACEMENT.claims_record(record):
+		return NORTHPOINT_1241_LIVE_REPLACEMENT.consume_record(record, northpoint_1241_plan)
+	if not is_context and NORTHPOINT_1240_LIVE_REPLACEMENT.claims_record(record):
+		return NORTHPOINT_1240_LIVE_REPLACEMENT.consume_record(record, northpoint_1240_plan)
+	if not is_context and GATEVIEW_1397_LIVE_REPLACEMENT.claims_record(record):
+		return GATEVIEW_1397_LIVE_REPLACEMENT.consume_record(record, gateview_1397_plan)
+	if not is_context and BAYSIDE_1226_LIVE_REPLACEMENT.claims_record(record):
+		return BAYSIDE_1226_LIVE_REPLACEMENT.consume_record(record, bayside_1226_plan)
+	if not is_context and BAYSIDE_1215_LIVE_REPLACEMENT.claims_record(record):
+		return BAYSIDE_1215_LIVE_REPLACEMENT.consume_record(record, bayside_1215_plan)
+	return _build_unpaired_record(record, is_context)
+
+# Preserve the original source producer and pre-packing channel path unchanged.
+# The exact-pair adapter receives this callable, avoiding a builder preload cycle.
+func _build_unpaired_record(record: Dictionary, is_context: bool) -> Dictionary:
+	var b201_prepared: Dictionary = {}
+	if not is_context and D1_B201_LIVE_ATTACHMENT.claims_record(record):
+		b201_prepared = D1_B201_LIVE_ATTACHMENT.prepare(record)
+		if not bool(b201_prepared.get("ok", false)):
+			return b201_prepared
+	var b225_prepared: Dictionary = {}
+	if not is_context and D1_B225_LIVE_ATTACHMENT.claims_record(record):
+		b225_prepared = D1_B225_LIVE_ATTACHMENT.prepare(record)
+		if not bool(b225_prepared.get("ok", false)):
+			return b225_prepared
+	var vertices := PackedVector3Array()
+	var normals := PackedVector3Array()
+	var uvs := PackedVector2Array()
+	var indices := PackedInt32Array()
+	for index in range(0, record.vertices.size(), 3):
+		vertices.append(Vector3(float(record.vertices[index]), float(record.vertices[index + 1]), float(record.vertices[index + 2])))
+	for index in range(0, record.normals.size(), 3):
+		normals.append(Vector3(float(record.normals[index]), float(record.normals[index + 1]), float(record.normals[index + 2])))
+	for index in range(0, record.uvs.size(), 2):
+		uvs.append(Vector2(float(record.uvs[index]), float(record.uvs[index + 1])))
+	if not b201_prepared.is_empty():
+		uvs = D1_B201_LIVE_ATTACHMENT.host_uvs(record, b201_prepared)
+		if uvs.size() != vertices.size():
+			return {"ok": false, "code": "d1_b201_live_host_uv", "message": "Prepared B201 host UVs did not cover the supplied wall.", "source_keys": record.source_keys}
+	elif not b225_prepared.is_empty():
+		uvs = D1_B225_LIVE_ATTACHMENT.host_uvs(record, b225_prepared)
+		if uvs.size() != vertices.size():
+			return {"ok": false, "code": "d1_b225_live_host_uv", "message": "Prepared B225 host UVs did not cover the supplied wall.", "source_keys": record.source_keys}
+	# The generated contract stores counterclockwise triangles around its
+	# outward normals. Godot treats clockwise winding as front-facing, so adapt
+	# every triplet once at runtime while preserving the generated bytes/normals.
+	for index in range(0, record.indices.size(), 3):
+		var first := int(record.indices[index])
+		var second := int(record.indices[index + 1])
+		var third := int(record.indices[index + 2])
+		# The old western span is a disconnected component west of X=500 m.
+		# Its imported replacement is owned by world_root.tscn; retain the modern
+		# eastern-span component from the same generated context record.
+		if is_context and str(record.feature_kind) == "bay_bridge" \
+		and vertices[first].x < WESTERN_BRIDGE_REPLACEMENT_MAX_X_M \
+		and vertices[second].x < WESTERN_BRIDGE_REPLACEMENT_MAX_X_M \
+		and vertices[third].x < WESTERN_BRIDGE_REPLACEMENT_MAX_X_M:
+			continue
+		indices.append(first)
+		indices.append(third)
+		indices.append(second)
+
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = vertices
+	arrays[Mesh.ARRAY_NORMAL] = normals
+	if not uvs.is_empty():
+		arrays[Mesh.ARRAY_TEX_UV] = uvs
+	arrays[Mesh.ARRAY_INDEX] = indices
+	if POLYHAVEN_MATERIAL_TEXTURE_SET.has(str(record.material_key)) and not uvs.is_empty():
+		arrays[Mesh.ARRAY_TANGENT] = _tangents_for(vertices, normals, uvs, indices)
+	var placeholder_material := _material_for(str(record.material_key), str(record.feature_kind), is_context)
+	var surface_plan: Dictionary
+	if not b201_prepared.is_empty():
+		surface_plan = D1_B201_LIVE_ATTACHMENT.partition_host(record, indices, placeholder_material, b201_prepared)
+	elif not b225_prepared.is_empty():
+		surface_plan = D1_B225_LIVE_ATTACHMENT.partition_host(record, indices, placeholder_material, b225_prepared)
+	elif not is_context:
+		surface_plan = ACCEPTED_MATERIAL_RUN_TRIALS.partition(record, indices, placeholder_material)
+	else:
+		surface_plan = {"ok": true, "surfaces": [{"name": "generated_record", "indices": indices, "material": placeholder_material}]}
+	if not bool(surface_plan.get("ok", false)):
+		return surface_plan
+	var mesh := ArrayMesh.new()
+	for surface_value: Variant in surface_plan.surfaces:
+		var surface := surface_value as Dictionary
+		arrays[Mesh.ARRAY_INDEX] = surface.indices as PackedInt32Array
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+		var surface_index := mesh.get_surface_count() - 1
+		mesh.surface_set_name(surface_index, str(surface.name))
+		mesh.surface_set_material(surface_index, surface.material as Material)
+
+	var root := Node3D.new()
+	root.name = str(record.object_key).validate_node_name()
+	root.set_meta("derived_object_key", str(record.object_key))
+	root.set_meta("source_keys", record.source_keys.duplicate())
+	root.set_meta("feature_kind", str(record.feature_kind))
+	if not b201_prepared.is_empty() and surface_plan.has("metadata"):
+		root.set_meta("d1_b201_host_partition", (surface_plan.metadata as Dictionary).duplicate(true))
+	elif not b225_prepared.is_empty() and surface_plan.has("metadata"):
+		root.set_meta("d1_b225_host_partition", (surface_plan.metadata as Dictionary).duplicate(true))
+	elif surface_plan.has("metadata"):
+		root.set_meta("accepted_material_run_trial", (surface_plan.metadata as Dictionary).duplicate(true))
+	var mesh_instance := MeshInstance3D.new()
+	mesh_instance.name = "Mesh"
+	mesh_instance.mesh = mesh
+	mesh_instance.layers = RENDER_BUILDING_WALL if str(record.receiver_kind) == "building_wall" else RENDER_WORLD_VISIBLE
+	mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF \
+		if str(record.feature_kind) in ["road_path", "major_area", "terrain_overlay"] \
+		else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
+	root.add_child(mesh_instance)
+	var mesh_instances := 1
+	var surfaces := mesh.get_surface_count()
+	var triangle_count := int(indices.size() / 3)
+
+	if not is_context and str(record.collision_kind) == "world_solid":
+		var body := StaticBody3D.new()
+		body.name = "Collision"
+		body.collision_layer = PHYSICS_WORLD_SOLID
+		if bool(record.opaque):
+			body.collision_layer |= PHYSICS_SPRAY_SURFACE
+		body.collision_mask = 0
+		body.set_meta("receiver_kind", str(record.receiver_kind))
+		body.set_meta("opaque", bool(record.opaque))
+		body.set_meta("derived_object_key", str(record.object_key))
+		body.set_meta("source_keys", record.source_keys.duplicate())
+		if str(record.receiver_kind) == "building_wall":
+			body.add_to_group("spray_receiver_wall")
+		var faces := PackedVector3Array()
+		for index_value: int in indices:
+			faces.append(vertices[index_value])
+		var shape := ConcavePolygonShape3D.new()
+		shape.set_faces(faces)
+		shape.set_meta("receiver_kind", str(record.receiver_kind))
+		shape.set_meta("opaque", bool(record.opaque))
+		shape.set_meta("derived_object_key", str(record.object_key))
+		shape.set_meta("source_keys", record.source_keys.duplicate())
+		var collision_shape := CollisionShape3D.new()
+		collision_shape.name = "Shape"
+		collision_shape.shape = shape
+		body.add_child(collision_shape)
+		root.add_child(body)
+
+	if not is_context and W34313564_LIVE_MODULES.matches_record(record):
+		var live_module_result := W34313564_LIVE_MODULES.build(record)
+		if not bool(live_module_result.get("ok", false)):
+			root.free()
+			return live_module_result
+		root.add_child(live_module_result.node as Node3D)
+		root.set_meta("w34313564_live_modules", (live_module_result.metadata as Dictionary).duplicate(true))
+		mesh_instances += int(live_module_result.mesh_instances)
+		surfaces += int(live_module_result.surfaces)
+		triangle_count += int(live_module_result.triangles)
+
+	if not is_context and W34313515_LIVE_MODULES.matches_record(record):
+		var live_module_result := W34313515_LIVE_MODULES.build(record)
+		if not bool(live_module_result.get("ok", false)):
+			root.free()
+			return live_module_result
+		root.add_child(live_module_result.node as Node3D)
+		root.set_meta("w34313515_live_modules", (live_module_result.metadata as Dictionary).duplicate(true))
+		mesh_instances += int(live_module_result.mesh_instances)
+		surfaces += int(live_module_result.surfaces)
+		triangle_count += int(live_module_result.triangles)
+
+	if not is_context and W291196370_LIVE_MODULES.matches_record(record):
+		var live_module_result := W291196370_LIVE_MODULES.build(record)
+		if not bool(live_module_result.get("ok", false)):
+			root.free()
+			return live_module_result
+		root.add_child(live_module_result.node as Node3D)
+		root.set_meta("w291196370_live_modules", (live_module_result.metadata as Dictionary).duplicate(true))
+		mesh_instances += int(live_module_result.mesh_instances)
+		surfaces += int(live_module_result.surfaces)
+		triangle_count += int(live_module_result.triangles)
+
+	if not is_context and W34313520_LIVE_MODULES.matches_record(record):
+		var live_module_result := W34313520_LIVE_MODULES.build(record)
+		if not bool(live_module_result.get("ok", false)):
+			root.free()
+			return live_module_result
+		root.add_child(live_module_result.node as Node3D)
+		root.set_meta("w34313520_live_modules", (live_module_result.metadata as Dictionary).duplicate(true))
+		mesh_instances += int(live_module_result.mesh_instances)
+		surfaces += int(live_module_result.surfaces)
+		triangle_count += int(live_module_result.triangles)
+
+	if not is_context and W34313525_LIVE_MODULES.matches_record(record):
+		var live_module_result := W34313525_LIVE_MODULES.build(record)
+		if not bool(live_module_result.get("ok", false)):
+			root.free()
+			return live_module_result
+		root.add_child(live_module_result.node as Node3D)
+		root.set_meta("w34313525_live_modules", (live_module_result.metadata as Dictionary).duplicate(true))
+		mesh_instances += int(live_module_result.mesh_instances)
+		surfaces += int(live_module_result.surfaces)
+		triangle_count += int(live_module_result.triangles)
+
+	if not is_context and IsleHouse39BrutonHighFacade.matches_target(record):
+		var isle_house_facade := ISLE_HOUSE_HIGH_FACADE_SCENE.instantiate() as IsleHouse39BrutonHighFacade
+		var isle_house_result := isle_house_facade.configure(record)
+		if not bool(isle_house_result.get("ok", false)):
+			isle_house_facade.free()
+			root.free()
+			return {
+				"ok": false,
+				"code": "isle_house_high_facade_contract",
+				"message": str(isle_house_result.get("message", "Could not build target-specific Isle House high facade.")),
+				"source_keys": record.source_keys,
+			}
+		root.add_child(isle_house_facade)
+	if not is_context and ISLE_HOUSE_LOW_LIVE_ATTACHMENT.matches_record(record):
+		var isle_house_low_result := ISLE_HOUSE_LOW_LIVE_ATTACHMENT.build(record)
+		if not bool(isle_house_low_result.get("ok", false)):
+			root.free()
+			return isle_house_low_result
+		root.add_child(isle_house_low_result.node as Node3D)
+		root.set_meta("isle_house_low_live_attachment", (isle_house_low_result.metadata as Dictionary).duplicate(true))
+		mesh_instances += int(isle_house_low_result.mesh_instances)
+		surfaces += int(isle_house_low_result.surfaces)
+		triangle_count += int(isle_house_low_result.triangles)
+	# B225 keeps the exact generated wall MeshInstance and its already-created
+	# sole collision/spray owner. Only after those ordinary host nodes exist do
+	# we attach the reviewed, receiver-relative two-batch render detail.
+	if not b225_prepared.is_empty():
+		var b225_result := D1_B225_LIVE_ATTACHMENT.build_prepared(record, b225_prepared)
+		if not bool(b225_result.get("ok", false)):
+			root.free()
+			return b225_result
+		root.add_child(b225_result.node as Node3D)
+		root.set_meta("d1_b225_live_attachment", (b225_result.metadata as Dictionary).duplicate(true))
+		mesh_instances += int(b225_result.mesh_instances)
+		surfaces += int(b225_result.surfaces)
+		triangle_count += int(b225_result.triangles)
+	# B201 retains its exact generic wall mesh/collider/spray receiver. Only the
+	# reviewed public runs receive a host-material partition; all added detail is
+	# non-coplanar render-only geometry, claimed and validated fail closed.
+	if not b201_prepared.is_empty():
+		var b201_result := D1_B201_LIVE_ATTACHMENT.build_prepared(record, b201_prepared)
+		if not bool(b201_result.get("ok", false)):
+			root.free()
+			return b201_result
+		root.add_child(b201_result.node as Node3D)
+		root.set_meta("d1_b201_live_attachment", (b201_result.metadata as Dictionary).duplicate(true))
+		mesh_instances += int(b201_result.mesh_instances)
+		surfaces += int(b201_result.surfaces)
+		triangle_count += int(b201_result.triangles)
+	return {
+		"ok": true,
+		"node": root,
+		"mesh_instances": mesh_instances,
+		"surfaces": surfaces,
+		"triangles": triangle_count,
+	}
+
+func _material_for(material_key: String, feature_kind: String, is_context: bool) -> StandardMaterial3D:
+	var cache_key := "%s|%s|%s" % [material_key, feature_kind, is_context]
+	if _materials.has(cache_key):
+		return _materials[cache_key]
+	var material := StandardMaterial3D.new()
+	material.resource_name = material_key
+	material.albedo_color = _color_for(material_key, feature_kind, is_context)
+	material.roughness = 0.92
+	# Context remains double-sided because it is distant, non-colliding scenery.
+	if is_context:
+		material.cull_mode = BaseMaterial3D.CULL_DISABLED
+	if feature_kind == "road_path":
+		material.roughness = 1.0
+	_apply_polyhaven_textures(material, material_key)
+	_materials[cache_key] = material
+	return material
+
+
+func _apply_polyhaven_textures(material: StandardMaterial3D, material_key: String) -> void:
+	if not POLYHAVEN_MATERIAL_TEXTURE_SET.has(material_key):
+		return
+	var texture_set_key := str(POLYHAVEN_MATERIAL_TEXTURE_SET[material_key])
+	var texture_set: Dictionary = POLYHAVEN_TEXTURE_SETS[texture_set_key]
+	var albedo_texture := texture_set.albedo as Texture2D
+	var normal_texture := texture_set.normal as Texture2D
+	var roughness_texture := texture_set.roughness as Texture2D
+	assert(albedo_texture != null and normal_texture != null and roughness_texture != null, "Approved Poly Haven texture set %s did not load." % texture_set_key)
+	material.albedo_color = _polyhaven_tint_for(material_key, material.albedo_color)
+	material.albedo_texture = albedo_texture
+	material.normal_enabled = true
+	material.normal_texture = normal_texture
+	material.normal_scale = float(texture_set.get("normal_strength", POLYHAVEN_DEFAULT_NORMAL_STRENGTH))
+	material.roughness_texture = roughness_texture
+	var uv_scale := 10.0 / float(texture_set.repeat_dimension_m)
+	material.uv1_scale = Vector3(uv_scale, uv_scale, 1.0)
+	material.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	material.set_flag(BaseMaterial3D.FLAG_USE_TEXTURE_REPEAT, true)
+	material.heightmap_enabled = false
+
+
+func _polyhaven_tint_for(material_key: String, fallback: Color) -> Color:
+	match material_key:
+		"road_path":
+			return Color("b0b4b8")
+		"road_path_pedestrian":
+			return Color("d8d6cf")
+		"major_area_paved":
+			return Color("adb0ae")
+		"land_ground":
+			return Color("f2f3ee")
+		"major_area_landuse":
+			return Color("f4ebdd")
+		"major_area_leisure":
+			return Color("eaf8e5")
+		"context_ybi":
+			return Color("d2d8cb")
+		"building_wall", "building_part_wall":
+			return Color("f7f2eb")
+		"building_roof", "building_part_roof":
+			return Color("d8d4d0")
+	return fallback
+
+
+func _tangents_for(vertices: PackedVector3Array, normals: PackedVector3Array, uvs: PackedVector2Array, indices: PackedInt32Array) -> PackedFloat32Array:
+	var tangent_sums := PackedVector3Array()
+	var bitangent_sums := PackedVector3Array()
+	tangent_sums.resize(vertices.size())
+	bitangent_sums.resize(vertices.size())
+	for offset in range(0, indices.size(), 3):
+		var first := indices[offset]
+		var second := indices[offset + 1]
+		var third := indices[offset + 2]
+		var edge_one := vertices[second] - vertices[first]
+		var edge_two := vertices[third] - vertices[first]
+		var uv_one := uvs[second] - uvs[first]
+		var uv_two := uvs[third] - uvs[first]
+		var determinant := uv_one.x * uv_two.y - uv_one.y * uv_two.x
+		if absf(determinant) <= 0.00000001:
+			continue
+		var inverse := 1.0 / determinant
+		var tangent := (edge_one * uv_two.y - edge_two * uv_one.y) * inverse
+		var bitangent := (edge_two * uv_one.x - edge_one * uv_two.x) * inverse
+		for vertex_index in [first, second, third]:
+			tangent_sums[vertex_index] += tangent
+			bitangent_sums[vertex_index] += bitangent
+
+	var tangents := PackedFloat32Array()
+	tangents.resize(vertices.size() * 4)
+	for vertex_index in vertices.size():
+		var normal := normals[vertex_index].normalized()
+		var tangent := tangent_sums[vertex_index] - normal * normal.dot(tangent_sums[vertex_index])
+		if tangent.length_squared() <= 0.00000001:
+			var reference_axis := Vector3.UP if absf(normal.y) < 0.999 else Vector3.RIGHT
+			tangent = reference_axis.cross(normal)
+		tangent = tangent.normalized()
+		var handedness := -1.0 if normal.cross(tangent).dot(bitangent_sums[vertex_index]) < 0.0 else 1.0
+		var tangent_offset := vertex_index * 4
+		tangents[tangent_offset] = tangent.x
+		tangents[tangent_offset + 1] = tangent.y
+		tangents[tangent_offset + 2] = tangent.z
+		tangents[tangent_offset + 3] = handedness
+	return tangents
+
+
+func _color_for(material_key: String, feature_kind: String, is_context: bool) -> Color:
+	if is_context:
+		if feature_kind == "ybi":
+			return Color("66765c")
+		if feature_kind == "boundary_attached_visual":
+			return Color("718b8c") if "marina" in material_key else Color("a4947e")
+		return Color("bbb7af")
+	match feature_kind:
+		"land_ground":
+			return Color("8ca777")
+		"road_path":
+			if material_key == "road_path_pedestrian":
+				return Color("8b918e")
+			return Color("555b60")
+		"building_wall", "building_part_wall":
+			return Color("c6b79f")
+		"building_roof", "building_part_roof":
+			return Color("827468")
+		"terrain_overlay":
+			if "sand" in material_key:
+				return Color("d7c78e")
+			if "wet" in material_key or "marina" in material_key:
+				return Color("78a49a")
+			if "pier" in material_key:
+				return Color("8b8174")
+			if "breakwater" in material_key:
+				return Color("777a73")
+			return Color("8fb486")
+		"major_area":
+			if "paved" in material_key:
+				return Color("707573")
+			if "amenity" in material_key:
+				return Color("a7a597")
+			if "landuse" in material_key:
+				return Color("a99b78")
+			return Color("79a66d")
+		"boundary_blocker":
+			return Color(0.0, 0.0, 0.0, 0.0)
+	return Color("aeb4ad")
+
+
+func _parent_key_for_feature(feature_kind: String) -> String:
+	if feature_kind == "road_path":
+		return "roads"
+	if feature_kind.begins_with("building_") or feature_kind.begins_with("building_part_"):
+		return "buildings"
+	return "ground"

@@ -1,0 +1,25 @@
+{
+  "target": {
+    "source_key": "w291189336"
+  },
+  "reference": "September2025 SSE chapel; unseen rear inferred",
+  "eave_y": 9.8,
+  "ridge_y": 15.5,
+  "main_length": 42.75,
+  "width": 16.361515822196925,
+  "front_center": [
+    -97.705,
+    4.0105,
+    647.2339999999999
+  ],
+  "tangent": [
+    0.8840256707986278,
+    0.0,
+    -0.467438352479807
+  ],
+  "normal": [
+    0.467,
+    0,
+    0.884
+  ]
+}

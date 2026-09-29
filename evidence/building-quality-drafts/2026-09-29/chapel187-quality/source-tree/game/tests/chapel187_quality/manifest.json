@@ -1,0 +1,41 @@
+{
+  "baseline": "MAIN dfcc81d accepted Chapel hero",
+  "targets": [
+    {
+      "id": "chapel187-sse",
+      "source_key": "w291189336",
+      "config": "res://game/tests/chapel187_quality/config.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_2.json",
+      "requested_xz": [
+        -61.127358230034304,
+        662.9520411880047
+      ],
+      "aim_target": [
+        -98.9888203044096,
+        10.2,
+        629.8179315326413
+      ],
+      "region": "w291189336",
+      "label": "Navy Chapel187 chapel187-sse",
+      "intent": "Matched Chapel nave/wing/belfry composition and unobscured entry; stock pose, no avatar/control changes"
+    },
+    {
+      "id": "chapel187-near",
+      "source_key": "w291189336",
+      "config": "res://game/tests/chapel187_quality/config.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_2.json",
+      "requested_xz": [
+        -76.45564060881921,
+        657.4858630652827
+      ],
+      "aim_target": [
+        -102.64210268319451,
+        10.2,
+        646.4517534099191
+      ],
+      "region": "w291189336",
+      "label": "Navy Chapel187 chapel187-near",
+      "intent": "Matched Chapel nave/wing/belfry composition and unobscured entry; stock pose, no avatar/control changes"
+    }
+  ]
+}

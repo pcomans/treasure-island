@@ -1,0 +1,23 @@
+
+## Independent material-only preflight
+Reused the XHigh partition adjudication and original native-role comparison instead of repeating union math. Confirmed original producer/contact hashes, empty geometry replacements, common world-XZ underside finish/AO and current helper/data consumers. Source-ready for first five views; native equality and art success remain unproved. No engine, freeze, new gate or mechanics replay.
+
+
+## chapel_native_diagnosis — 1444 recovery005 comparison repair, 2026-09-29
+
+- Worked: traced the actual frozen guard and complete original C2 baseline before changing code. Failed input-map SHA256 c6f199e117bdaf58e8790ca73b72b6a6f0d69c18e3f26c4a4bac6a1dc6130479 and original receipt SHA256 33a573a8512845ebd683d9d6bd4229daf9b703e664478ad1e844ad8ca4eb9632 remain unchanged. The original projected operand contains 412 numeric flags (203 render layers, 203 shadow modes, three body layers and three masks); current `_snapshot` produces INT but baseline JSON parsing produces FLOAT. At exact running engine commit ed1daf0bf, core/io/json.cpp:374–377 parses all numbers as double; core/variant/dictionary.cpp:261 calls hash_compare, whose core/variant/variant.cpp:3038–3040 rejects type differences. This is a sufficient source-demonstrated false failure even for identical geometry. Materials were already excluded correctly; body/shape names are explicitly stable. No evidence supports a geometry change.
+- Did not work: failed capture001 retained only false, so other actual live differences cannot be ruled out. The prior source check overlooked the native/serialized numeric boundary and the missing failure operands. This diagnosis does not retrospectively mark capture001 PASS.
+- Changed only recovery005 capture/runner helpers: JSON-roundtrip both projected operands before strict equality, leaving all geometry/transform/metadata hex strings and ordered body/shape arrays exact. Existing original-contact-comparison.json now retains both complete operands, all unequal field paths, native fronts/contact checks and prior failure before returning. A preexisting native/contact failure also stops before pixels. Runner allows fresh capture002 with separately named input-map-capture002.json; neither that freeze nor an engine invocation was performed. Product inputs matched all frozen hashes before these helper edits; material-only original get_faces→Float32 transform/filter policy remains untouched.
+- Next: independent helper review, then author-created fresh capture002 bindings and one guarded five-view invocation under ROOT GO. No separate diagnostic-only run is needed. Runtime equality and visual success remain pending, and failed001/partition004 evidence stays intact. Python runner AST and selected whitespace were checked; no Godot parse/import or acceptance is claimed.
+
+Primary source references: https://raw.githubusercontent.com/godotengine/godot/ed1daf0bf/core/io/json.cpp ; https://raw.githubusercontent.com/godotengine/godot/ed1daf0bf/core/variant/dictionary.cpp ; https://raw.githubusercontent.com/godotengine/godot/ed1daf0bf/core/variant/variant.cpp .
+
+Independent capture002 repair review: shared JSON projection keeps exact hex operands/order/flags while removing INT-vs-FLOAT container comparison mismatch. Complete operands close before failure. No asset change, new tolerance or diagnostic-only engine requested.
+
+Independent capture003 closure: verified1000 unchanged sourceinputs, complete002 native comparison and retained119/588close outputs. ordinary-only skips those completed views and fixes inherited saver resolution to1440×900. Raw002aggregateHOLD preserved; one missing-three-view continuation, no replay or acceptance claim.
+
+Independent capture003 completion: confirmed original native203shape/role preservation, three ordinary PNG hashes and exact002close donor join. Reused retained006 mechanical scope; only north-mouth marker/retreat is missing, caused by forward-extended observation target, not failed approach. Material visual/motion judgment remains separate. No engine or renewed geometry math/campaign.
+
+## continuation_visual_review — 2026-09-29 independent recovery005 review
+
+Compared five current originals, matched119/588 prior ordinary pixels and actual July2023 reference.588 shows a meaningful seam/return improvement while119 changes little; retained scoped static PASS without treating intentional overlap as a failure or claiming motion stability. Distinct neutral return fields and shadow-edge limits remain explicit. Located RESULT under capture directories after the supplied parent shorthand; no engine/art edit or extra evidence request.

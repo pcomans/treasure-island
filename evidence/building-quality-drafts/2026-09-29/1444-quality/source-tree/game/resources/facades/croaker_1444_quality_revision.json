@@ -1,0 +1,14 @@
+{
+  "schema_version": "ti.housing-whole-building-revision/1",
+  "source_key": "w95934117",
+  "reviewed_art_sha256": "9b97f1fc74af2aaa1e6b9a2cde34fbd1c8db7f1eb507299bc9f2afb367d50074",
+  "revision_acceptance": "pending",
+  "historical_recognition_credit_unchanged": true,
+  "ground_chunks": {
+    "res://generated/world/chunks/x_-2__z_-1.json": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2"
+  },
+  "site_fit_revision": "material_recovery005_original_opaque_boxes",
+  "facade_alignment": "Frozen source horizontal identity; architectural details are production inference.",
+  "shelter_visibility_sha256": "06e3caaaf99344abe72a35d51b0c309d429681ca7f28851a70df3e19c5dcbdf7",
+  "shelter_helper_sha256": "3ae4c88f9682d104546e7b1c68a544f9da9e47d64c2b321207a6179b2e903459"
+}

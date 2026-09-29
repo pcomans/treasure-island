@@ -1,0 +1,15 @@
+{
+  "terminal": 1,
+  "errors": [],
+  "engine_errors": [
+    "ERROR: VISUAL_CAPTURE_FAIL: Supported input-released stock rest: pitched-landing-rest",
+    "ERROR: VISUAL_CAPTURE_FAIL: Enabled released pitched roof landing"
+  ],
+  "receipt_ok": false,
+  "elapsed_seconds": 54.161447749938816,
+  "pid": 17828,
+  "slot_released": true,
+  "engines_after": [],
+  "ended_utc": "2026-09-29T07:45:02.676899+00:00",
+  "ok": false
+}

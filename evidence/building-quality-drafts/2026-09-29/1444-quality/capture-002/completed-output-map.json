@@ -1,0 +1,15 @@
+{
+  "original_receipt": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/1444-ceiling-native-diagnostic-001/diagnostic-001/images/receipt.json",
+  "original_receipt_sha256": "33a573a8512845ebd683d9d6bd4229daf9b703e664478ad1e844ad8ca4eb9632",
+  "input_map_sha256": "146731143fe024a970649ca69a51c5d953a0b837cea0b2ec1138b73859fa3239",
+  "outputs": {
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-002/SLOT_RELEASE.json": "2f97b9551ec0e1c934e9792eb7bcc81284080345605a12495ebd01a352434839",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-002/engine.log": "eec5916d2f04694284748f065ef7bafc2f2c54eb68f8fd8eb8505c2b1b9cb3ce",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-002/images/119-candidate.png": "4b7ba46f43aacae4d6c1f5f546eff41e20cf49c204f607c3cbd49ce921bb6db6",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-002/images/588-candidate.png": "dc329982e4df9f71e0dd54e73451119f199b73cba0c5c38d8e04cf4804660860",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-002/images/original-contact-comparison.json": "08578f6fe360d653dca77a9198157f80844f8035ae5b8911ab97876b62a67267",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-002/images/receipt.json": "08ae752c960a40d76f8ff3da1c953142d0a5f91c02456301be8b38453ca49d2b",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-002/process.json": "c89c8780fb6c7d3b9761ec6e3c3ea41162aac28857425ff970e13e9fc55885ce",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-002/terminal.json": "2f97b9551ec0e1c934e9792eb7bcc81284080345605a12495ebd01a352434839"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "original_receipt": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/1444-ceiling-native-diagnostic-001/diagnostic-001/images/receipt.json",
+  "original_receipt_sha256": "33a573a8512845ebd683d9d6bd4229daf9b703e664478ad1e844ad8ca4eb9632",
+  "input_map_sha256": "3096a508685fe5c99f1fb90dbe99e0c17e7c4f250dd097ced129e0ea945a0652",
+  "completed_capture002_donor": {
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-002/images/receipt.json": "08ae752c960a40d76f8ff3da1c953142d0a5f91c02456301be8b38453ca49d2b",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-002/images/original-contact-comparison.json": "08578f6fe360d653dca77a9198157f80844f8035ae5b8911ab97876b62a67267",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-002/images/119-candidate.png": "4b7ba46f43aacae4d6c1f5f546eff41e20cf49c204f607c3cbd49ce921bb6db6",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-002/images/588-candidate.png": "dc329982e4df9f71e0dd54e73451119f199b73cba0c5c38d8e04cf4804660860"
+  },
+  "outputs": {
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-003/SLOT_RELEASE.json": "f939298f785b6c9ce3cafeceeabe76385b0771e6bc4d0c10fae114e7a2172ff2",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-003/engine.log": "98475aafb3966e44b62678a636c4a4cdb23666ef3645955f557701520d48cec2",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-003/images/1444-01-whole.png": "63044dd16587297f3b28c19dbcb891fa9e0843f6418e4d448cc76b9d12a7d3a9",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-003/images/1444-02-three-quarter.png": "66e7eafa8e1dc764311c0980bcade120d0f6a34d94079f711e01ead51e0a1bab",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-003/images/1444-03-near.png": "03b78d1a6246f8a435540b8ecd6c02ad38b5a908bfd1bde594badbea49f10d6f",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-003/images/original-contact-comparison.json": "08578f6fe360d653dca77a9198157f80844f8035ae5b8911ab97876b62a67267",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-003/images/receipt.json": "d1b50328db5cd7d787ecd022bf203fba825d4acc0aa11ed0a3ac9674f419b783",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-003/process.json": "c1e632dfb53425c3bdf873b52cfdbe7fc74c480362157753e4f6a55587093c70",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-quality-second-pair-2026-09-23/material-recovery005/capture-003/terminal.json": "f939298f785b6c9ce3cafeceeabe76385b0771e6bc4d0c10fae114e7a2172ff2"
+  }
+}
