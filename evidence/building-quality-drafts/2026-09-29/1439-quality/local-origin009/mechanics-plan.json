@@ -1,0 +1,178 @@
+{
+  "targets": [
+    {
+      "number": "1439",
+      "source": "w95934144",
+      "land_keys": [
+        "land:w26767313:x_-2__z_0",
+        "land:w26767313:x_-2__z_-1"
+      ],
+      "routes": [
+        {
+          "id": "1439-solid-wall-contact",
+          "kind": "closed",
+          "station_m": 0,
+          "setup_position_xz": [
+            -294.57961854531806,
+            19.486169050313833
+          ],
+          "frame": {
+            "start": [
+              -295.9414560889381,
+              4.9,
+              16.813081228189972
+            ],
+            "normal": [
+              0.45394584787335146,
+              0,
+              0.8910292740412877
+            ],
+            "tangent": [
+              0.8910292740412877,
+              0,
+              -0.45394584787335146
+            ]
+          },
+          "input_frames": 90,
+          "brake_frames": 30,
+          "stop_on_expected_contact": true,
+          "expected_shape": 10,
+          "expected_role": "wall",
+          "native_bindings": [
+            {
+              "body": "CurrentGeometry_wall",
+              "shape_index": 8,
+              "shape_name": "ArtContact_0008",
+              "role": "wall",
+              "faces_sha256": "bb8bb97192acd60839e67f3a769ea7382b0559df35d57368c41a66058bbb9455",
+              "bounds": [
+                [
+                  -297.36883544921875,
+                  3.5360000133514404,
+                  15.93121337890625
+                ],
+                [
+                  -294.5604248046875,
+                  3.635999917984009,
+                  17.493999481201172
+                ]
+              ]
+            },
+            {
+              "body": "CurrentGeometry_wall",
+              "shape_index": 9,
+              "shape_name": "ArtContact_0009",
+              "role": "wall",
+              "faces_sha256": "35b42ec2b835c5157720dbed6ff6d28102dd742ef0eadf29900b025922e863c4",
+              "bounds": [
+                [
+                  -297.36883544921875,
+                  3.636000156402588,
+                  15.93121337890625
+                ],
+                [
+                  -294.5604248046875,
+                  4.516000270843506,
+                  17.493999481201172
+                ]
+              ]
+            },
+            {
+              "body": "CurrentGeometry_wall",
+              "shape_index": 10,
+              "shape_name": "ArtContact_0010",
+              "role": "wall",
+              "faces_sha256": "f557f7b31beb48902959c4bab83f58396247a8dcc88421e8bde7334f9ca487ed",
+              "bounds": [
+                [
+                  -297.36883544921875,
+                  4.515999794006348,
+                  15.93121337890625
+                ],
+                [
+                  -294.5604248046875,
+                  5.595999717712402,
+                  17.493999481201172
+                ]
+              ]
+            },
+            {
+              "body": "CurrentGeometry_wall",
+              "shape_index": 44,
+              "shape_name": "ArtContact_0044",
+              "role": "wall",
+              "faces_sha256": "f1301c6e62e2f63a5ecd83208fadd73957c9063952b064c4d9a56f285eae8e22",
+              "bounds": [
+                [
+                  -297.36883544921875,
+                  3.388000011444092,
+                  15.93121337890625
+                ],
+                [
+                  -294.5604248046875,
+                  3.5359997749328613,
+                  17.493999481201172
+                ]
+              ]
+            }
+          ],
+          "minimum_progress_m": 2.3,
+          "maximum_station_drift_m": 0.15,
+          "expected_depth_interval_m": [
+            0.275,
+            0.675
+          ],
+          "marker": "1439-wall-contact",
+          "inspection_target": [
+            -295.9414560889381,
+            4.9,
+            16.813081228189972
+          ],
+          "source_corridor": {
+            "construction_frame_start": [
+              -295.9414560889381,
+              4.9,
+              16.813081228189972
+            ],
+            "construction_tangent": [
+              0.8910292740412877,
+              0,
+              -0.45394584787335146
+            ],
+            "centre_station_m": 0,
+            "half_width_m": 1.1,
+            "capsule_radius_m": 0.35
+          },
+          "retreat": {
+            "input_frames": 40,
+            "brake_frames": 20,
+            "minimum_progress_m": 1.5,
+            "maximum_progress_m": 3,
+            "depth_interval_m": [
+              1.8,
+              3.5
+            ]
+          },
+          "support_bindings": [],
+          "assembly_selection": "Actual current solid wall column across capsule height, not lower recess route replay"
+        }
+      ],
+      "sprays": [],
+      "surface_queries": [],
+      "roof_routes": []
+    }
+  ],
+  "scope": "Only original solid-wall approach, contact, braking and complete retreat/released enabled rest with candidate same-body LAND local origin. Completed loggia, spray and roof cases are retained, not replayed.",
+  "reuse": {
+    "actual002_output_map": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/completed-output-map.json",
+    "sha256": "3a0f03336a380345c3d68e0f484d6e26572e2890dd9e307be8b7be4538827d04",
+    "input_map_sha256": "f76244b45b9eb1e92e5f37bbbb64b7cd18890c5fd5de2bd3437dc6c5911f8621",
+    "claims": [
+      "two complete enabled lower-loggia entry/retreat attempts",
+      "214 exact retained meshes and14-to10 declared fit delta",
+      "three ordinary actual002 stills"
+    ],
+    "limits": "Actual002 fit/source/static evidence and completed remaining-mechanics002 loggia/wall-spray/roof-flight plus callback006 roof-rejection evidence remain scoped historical evidence. Exact unchanged source/target bindings are required;009 does not replay or relabel them. Wall-retreat HOLD remains until actual009 trajectory is independently judged."
+  },
+  "motion_scope": "Full original wall route only, with unchanged per-tick native/contact/support/camera traces and criteria; no inter-setup traversal claim."
+}

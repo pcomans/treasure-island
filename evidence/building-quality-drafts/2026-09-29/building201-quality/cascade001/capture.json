@@ -1,0 +1,422 @@
+{
+  "scope": "isolated B201 candidate, no promotion/mechanics acceptance",
+  "captures": [
+    {
+      "ok": true,
+      "file": "/Users/user302070/code/treasure-island-building201-quality/evidence/first-playable/building201-quality-2026-09-29/cascade001/01-baseline-whole.png",
+      "pose": {
+        "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+        "physics_grounded": true,
+        "ordinary_player_rig": true,
+        "input_reachable_camera_orientation": true,
+        "requested_xz": [
+          -8.00070762634277,
+          -214.743362426758
+        ],
+        "settle_spawn_y_m": 6.12675476074219,
+        "player_position_m": [
+          -8.00070762634277,
+          3.12686657905579,
+          -214.743362426758
+        ],
+        "ground_y_m": 3.12675476074219,
+        "ground_clearance_m": 0.000111818313598633,
+        "settle_horizontal_drift_m": 0.0,
+        "settle_physics_frames": 125,
+        "settle_recovery_delta": 0,
+        "ground_feature": "land_ground",
+        "ground_object": "land:w26767313:x_-1__z_-1",
+        "ground_sources": [
+          "w26767313",
+          "w29399800"
+        ],
+        "ground_normal_up_dot": 0.999939322471619,
+        "in_boundary": true,
+        "aim_target_m": [
+          64.2819976806641,
+          5.80000019073486,
+          -253.462997436523
+        ],
+        "camera_position_m": [
+          -12.8487815856934,
+          5.08171844482422,
+          -212.146408081055
+        ],
+        "camera_height_above_ground_m": 1.95496368408203,
+        "camera_forward": [
+          0.881466746330261,
+          0.00820867158472538,
+          -0.472174763679504
+        ],
+        "camera_fov_degrees": 70.0,
+        "configured_spring_length_m": 5.5,
+        "actual_spring_length_m": 5.50000286102295,
+        "camera_yaw_degrees": -61.8234078311079,
+        "camera_pitch_degrees": 0.470327589923938
+      }
+    },
+    {
+      "ok": true,
+      "file": "/Users/user302070/code/treasure-island-building201-quality/evidence/first-playable/building201-quality-2026-09-29/cascade001/02-candidate-whole_wsw.png",
+      "pose": {
+        "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+        "physics_grounded": true,
+        "ordinary_player_rig": true,
+        "input_reachable_camera_orientation": true,
+        "requested_xz": [
+          -8.00070762634277,
+          -214.743362426758
+        ],
+        "settle_spawn_y_m": 6.12675476074219,
+        "player_position_m": [
+          -8.00070762634277,
+          3.12686657905579,
+          -214.743362426758
+        ],
+        "ground_y_m": 3.12675476074219,
+        "ground_clearance_m": 0.000111818313598633,
+        "settle_horizontal_drift_m": 0.0,
+        "settle_physics_frames": 125,
+        "settle_recovery_delta": 0,
+        "ground_feature": "land_ground",
+        "ground_object": "land:w26767313:x_-1__z_-1",
+        "ground_sources": [
+          "w26767313",
+          "w29399800"
+        ],
+        "ground_normal_up_dot": 0.999939322471619,
+        "in_boundary": true,
+        "aim_target_m": [
+          64.2819976806641,
+          5.80000019073486,
+          -253.462997436523
+        ],
+        "camera_position_m": [
+          -12.8487815856934,
+          5.08171844482422,
+          -212.146408081055
+        ],
+        "camera_height_above_ground_m": 1.95496368408203,
+        "camera_forward": [
+          0.881466746330261,
+          0.00820863619446754,
+          -0.472174763679504
+        ],
+        "camera_fov_degrees": 70.0,
+        "configured_spring_length_m": 5.5,
+        "actual_spring_length_m": 5.50000286102295,
+        "camera_yaw_degrees": -61.8234078311079,
+        "camera_pitch_degrees": 0.470327589923938
+      }
+    },
+    {
+      "ok": true,
+      "file": "/Users/user302070/code/treasure-island-building201-quality/evidence/first-playable/building201-quality-2026-09-29/cascade001/03-candidate-near_canopy.png",
+      "pose": {
+        "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+        "physics_grounded": true,
+        "ordinary_player_rig": true,
+        "input_reachable_camera_orientation": true,
+        "requested_xz": [
+          65.5088043212891,
+          -225.759292602539
+        ],
+        "settle_spawn_y_m": 6.23869323730469,
+        "player_position_m": [
+          65.5088043212891,
+          3.23880505561829,
+          -225.759292602539
+        ],
+        "ground_y_m": 3.23869323730469,
+        "ground_clearance_m": 0.000111818313598633,
+        "settle_horizontal_drift_m": 0.0,
+        "settle_physics_frames": 126,
+        "settle_recovery_delta": 0,
+        "ground_feature": "land_ground",
+        "ground_object": "land:w26767313:x_0__z_-1",
+        "ground_sources": [
+          "w26767313",
+          "w29399800"
+        ],
+        "ground_normal_up_dot": 0.999991178512573,
+        "in_boundary": true,
+        "aim_target_m": [
+          76.0867614746094,
+          6.30000019073486,
+          -231.425582885742
+        ],
+        "camera_position_m": [
+          60.6794204711914,
+          4.75431442260742,
+          -223.172332763672
+        ],
+        "camera_height_above_ground_m": 1.51562118530273,
+        "camera_forward": [
+          0.878069579601288,
+          0.0880891233682632,
+          -0.470355272293091
+        ],
+        "camera_fov_degrees": 70.0,
+        "configured_spring_length_m": 5.5,
+        "actual_spring_length_m": 5.50000381469727,
+        "camera_yaw_degrees": -61.8233984328063,
+        "camera_pitch_degrees": 5.05368770939092
+      }
+    }
+  ],
+  "diagnostic": {
+    "ok": true,
+    "files": [
+      {
+        "ok": true,
+        "file": "/Users/user302070/code/treasure-island-building201-quality/evidence/first-playable/building201-quality-2026-09-29/cascade001/cascade-near_canopy-control.png",
+        "pose": {
+          "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+          "physics_grounded": true,
+          "ordinary_player_rig": true,
+          "input_reachable_camera_orientation": true,
+          "requested_xz": [
+            65.5088043212891,
+            -225.759292602539
+          ],
+          "settle_spawn_y_m": 6.23869323730469,
+          "player_position_m": [
+            65.5088043212891,
+            3.23880505561829,
+            -225.759292602539
+          ],
+          "ground_y_m": 3.23869323730469,
+          "ground_clearance_m": 0.000111818313598633,
+          "settle_horizontal_drift_m": 0.0,
+          "settle_physics_frames": 126,
+          "settle_recovery_delta": 0,
+          "ground_feature": "land_ground",
+          "ground_object": "land:w26767313:x_0__z_-1",
+          "ground_sources": [
+            "w26767313",
+            "w29399800"
+          ],
+          "ground_normal_up_dot": 0.999991178512573,
+          "in_boundary": true,
+          "aim_target_m": [
+            76.0867614746094,
+            6.30000019073486,
+            -231.425582885742
+          ],
+          "camera_position_m": [
+            60.6794204711914,
+            4.75431442260742,
+            -223.172332763672
+          ],
+          "camera_height_above_ground_m": 1.51562118530273,
+          "camera_forward": [
+            0.878069579601288,
+            0.0880891755223274,
+            -0.470355272293091
+          ],
+          "camera_fov_degrees": 70.0,
+          "configured_spring_length_m": 5.5,
+          "actual_spring_length_m": 5.50000381469727,
+          "camera_yaw_degrees": -61.8233984328063,
+          "camera_pitch_degrees": 5.05368770939092
+        }
+      },
+      {
+        "ok": true,
+        "file": "/Users/user302070/code/treasure-island-building201-quality/evidence/first-playable/building201-quality-2026-09-29/cascade001/cascade-near_canopy-trial.png",
+        "camera_unchanged": true,
+        "camera_far": 5000.0,
+        "shadow_distance_m": 800.0,
+        "splits": [
+          0.025000000372529,
+          0.100000001490116,
+          0.25
+        ]
+      },
+      {
+        "ok": true,
+        "file": "/Users/user302070/code/treasure-island-building201-quality/evidence/first-playable/building201-quality-2026-09-29/cascade001/cascade-whole_wsw-control.png",
+        "pose": {
+          "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+          "physics_grounded": true,
+          "ordinary_player_rig": true,
+          "input_reachable_camera_orientation": true,
+          "requested_xz": [
+            -8.00070762634277,
+            -214.743362426758
+          ],
+          "settle_spawn_y_m": 6.12675476074219,
+          "player_position_m": [
+            -8.00070762634277,
+            3.12686657905579,
+            -214.743362426758
+          ],
+          "ground_y_m": 3.12675476074219,
+          "ground_clearance_m": 0.000111818313598633,
+          "settle_horizontal_drift_m": 0.0,
+          "settle_physics_frames": 126,
+          "settle_recovery_delta": 0,
+          "ground_feature": "land_ground",
+          "ground_object": "land:w26767313:x_-1__z_-1",
+          "ground_sources": [
+            "w26767313",
+            "w29399800"
+          ],
+          "ground_normal_up_dot": 0.999939322471619,
+          "in_boundary": true,
+          "aim_target_m": [
+            64.2819976806641,
+            5.80000019073486,
+            -253.462997436523
+          ],
+          "camera_position_m": [
+            -12.8487815856934,
+            5.08171844482422,
+            -212.146408081055
+          ],
+          "camera_height_above_ground_m": 1.95496368408203,
+          "camera_forward": [
+            0.881466746330261,
+            0.00820868276059628,
+            -0.472174763679504
+          ],
+          "camera_fov_degrees": 70.0,
+          "configured_spring_length_m": 5.5,
+          "actual_spring_length_m": 5.50000286102295,
+          "camera_yaw_degrees": -61.8234078311079,
+          "camera_pitch_degrees": 0.470327589923938
+        }
+      },
+      {
+        "ok": true,
+        "file": "/Users/user302070/code/treasure-island-building201-quality/evidence/first-playable/building201-quality-2026-09-29/cascade001/cascade-whole_wsw-trial.png",
+        "camera_unchanged": true,
+        "camera_far": 5000.0,
+        "shadow_distance_m": 800.0,
+        "splits": [
+          0.025000000372529,
+          0.100000001490116,
+          0.25
+        ]
+      },
+      {
+        "ok": true,
+        "file": "/Users/user302070/code/treasure-island-building201-quality/evidence/first-playable/building201-quality-2026-09-29/cascade001/cascade-hawkins_context-control.png",
+        "pose": {
+          "scenario_reset": "fixed_xz_then_real_character_physics_settle",
+          "physics_grounded": true,
+          "ordinary_player_rig": true,
+          "input_reachable_camera_orientation": true,
+          "requested_xz": [
+            2.36999988555908,
+            556.099975585938
+          ],
+          "settle_spawn_y_m": 7.2001953125,
+          "player_position_m": [
+            2.36999988555908,
+            4.20020961761475,
+            556.099975585938
+          ],
+          "ground_y_m": 4.2001953125,
+          "ground_clearance_m": 0.0000143051147460938,
+          "settle_horizontal_drift_m": 0.0,
+          "settle_physics_frames": 126,
+          "settle_recovery_delta": 0,
+          "ground_feature": "land_ground",
+          "ground_object": "land:w26767313:x_0__z_2",
+          "ground_sources": [
+            "w26767313",
+            "w29399800"
+          ],
+          "ground_normal_up_dot": 0.999643206596375,
+          "in_boundary": true,
+          "aim_target_m": [
+            -60.6100006103516,
+            14.7740001678467,
+            503.549987792969
+          ],
+          "camera_position_m": [
+            6.57015800476074,
+            5.62842035293579,
+            559.604553222656
+          ],
+          "camera_height_above_ground_m": 1.42822504043579,
+          "camera_forward": [
+            -0.763660907745361,
+            0.103961050510406,
+            -0.63719230890274
+          ],
+          "camera_fov_degrees": 70.0,
+          "configured_spring_length_m": 5.5,
+          "actual_spring_length_m": 5.50003051757812,
+          "camera_yaw_degrees": 50.1586606081215,
+          "camera_pitch_degrees": 5.9673131912063
+        }
+      },
+      {
+        "ok": true,
+        "file": "/Users/user302070/code/treasure-island-building201-quality/evidence/first-playable/building201-quality-2026-09-29/cascade001/cascade-hawkins_context-trial.png",
+        "camera_unchanged": true,
+        "camera_far": 5000.0,
+        "shadow_distance_m": 800.0,
+        "splits": [
+          0.025000000372529,
+          0.100000001490116,
+          0.25
+        ]
+      }
+    ],
+    "original_light_settings": {
+      "directional_shadow_mode": 2,
+      "directional_shadow_split_1": 0.100000001490116,
+      "directional_shadow_split_2": 0.200000002980232,
+      "directional_shadow_split_3": 0.5,
+      "directional_shadow_blend_splits": false,
+      "directional_shadow_fade_start": 0.800000011920929,
+      "directional_shadow_max_distance": 800.0,
+      "shadow_bias": 0.100000001490116,
+      "shadow_normal_bias": 2.0,
+      "shadow_blur": 1.0,
+      "light_angular_distance": 0.0,
+      "shadow_enabled": true
+    },
+    "filter_settings": {
+      "rendering/lights_and_shadows/directional_shadow/size": 4096,
+      "rendering/lights_and_shadows/directional_shadow/soft_shadow_filter_quality": 2
+    },
+    "light_state_restored": true,
+    "scope": "unpromoted scene-wide shadow allocation/distance experiment; all casters/materials retained, no performance or distant-coverage acceptance"
+  },
+  "source_shapes_unchanged": true,
+  "source_shapes": [
+    {
+      "owner": "building:w34313545:wall",
+      "body": "Collision",
+      "shape": "Shape",
+      "layer": 5,
+      "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]",
+      "faces": "[(37.01, 3.288, -304.375), (40.975, 8.402, -296.975), (40.975, 3.264, -296.975), (37.01, 3.288, -304.375), (37.01, 8.402, -304.375), (40.975, 8.402, -296.975), (40.975, 3.264, -296.975), (45.782, 8.402, -288.0), (45.782, 3.198, -288.0), (40.975, 3.264, -296.975), (40.975, 8.402, -296.975), (45.782, 8.402, -288.0), (45.782, 3.198, -288.0), (52.137, 8.402, -276.137), (52.137, 3.292, -276.137), (45.782, 3.198, -288.0), (45.782, 8.402, -288.0), (52.137, 8.402, -276.137), (52.137, 3.292, -276.137), (62.923, 8.402, -256.0), (62.923, 3.3, -256.0), (52.137, 3.292, -276.137), (52.137, 8.402, -276.137), (62.923, 8.402, -256.0), (62.923, 3.3, -256.0), (63.299, 8.402, -255.299), (63.299, 3.306, -255.299), (62.923, 3.3, -256.0), (62.923, 8.402, -256.0), (63.299, 8.402, -255.299), (63.299, 3.306, -255.299), (64.0, 8.402, -253.99), (64.0, 3.296, -253.99), (63.299, 3.306, -255.299), (63.299, 8.402, -255.299), (64.0, 8.402, -253.99), (64.0, 3.296, -253.99), (74.461, 8.402, -234.461), (74.461, 3.271, -234.461), (64.0, 3.296, -253.99), (64.0, 8.402, -253.99), (74.461, 8.402, -234.461), (74.461, 3.271, -234.461), (80.065, 8.402, -224.0), (80.065, 3.325, -224.0), (74.461, 3.271, -234.461), (74.461, 8.402, -234.461), (80.065, 8.402, -224.0), (80.065, 3.325, -224.0), (85.623, 8.402, -213.623), (85.623, 3.381, -213.623), (80.065, 3.325, -224.0), (80.065, 8.402, -224.0), (85.623, 8.402, -213.623), (85.623, 3.381, -213.623), (91.554, 8.402, -202.551), (91.554, 3.355, -202.551), (85.623, 3.381, -213.623), (85.623, 8.402, -213.623), (91.554, 8.402, -202.551), (91.554, 3.355, -202.551), (96.0, 8.402, -204.932), (96.0, 3.374, -204.932), (91.554, 3.355, -202.551), (91.554, 8.402, -202.551), (96.0, 8.402, -204.932), (96.0, 3.374, -204.932), (123.838, 8.402, -219.838), (123.838, 3.402, -219.838), (96.0, 3.374, -204.932), (96.0, 8.402, -204.932), (123.838, 8.402, -219.838), (123.838, 3.402, -219.838), (128.0, 8.402, -222.066), (128.0, 3.402, -222.066), (123.838, 3.402, -219.838), (123.838, 8.402, -219.838), (128.0, 8.402, -222.066), (128.0, 3.402, -222.066), (131.611, 8.402, -224.0), (131.611, 3.402, -224.0), (128.0, 3.402, -222.066), (128.0, 8.402, -222.066), (131.611, 8.402, -224.0), (131.611, 3.402, -224.0), (151.699, 8.402, -234.756), (151.699, 3.293, -234.756), (131.611, 3.402, -224.0), (131.611, 8.402, -224.0), (151.699, 8.402, -234.756), (151.699, 3.293, -234.756), (147.187, 8.402, -243.187), (147.187, 3.271, -243.187), (151.699, 3.293, -234.756), (151.699, 8.402, -234.756), (147.187, 8.402, -243.187), (147.187, 3.271, -243.187), (141.737, 8.402, -253.369), (141.737, 3.402, -253.369), (147.187, 3.271, -243.187), (147.187, 8.402, -243.187), (141.737, 8.402, -253.369), (141.737, 3.402, -253.369), (138.993, 8.402, -251.899), (138.993, 3.402, -251.899), (141.737, 3.402, -253.369), (141.737, 8.402, -253.369), (138.993, 8.402, -251.899), (138.993, 3.402, -251.899), (136.796, 8.402, -256.0), (136.796, 3.402, -256.0), (138.993, 3.402, -251.899), (138.993, 8.402, -251.899), (136.796, 8.402, -256.0), (136.796, 3.402, -256.0), (133.728, 8.402, -261.728), (133.728, 3.402, -261.728), (136.796, 3.402, -256.0), (136.796, 8.402, -256.0), (133.728, 8.402, -261.728), (133.728, 3.402, -261.728), (132.266, 8.402, -264.456), (132.266, 3.402, -264.456), (133.728, 3.402, -261.728), (133.728, 8.402, -261.728), (132.266, 8.402, -264.456), (132.266, 3.402, -264.456), (134.711, 8.402, -265.77), (134.711, 3.402, -265.77), (132.266, 3.402, -264.456), (132.266, 8.402, -264.456), (134.711, 8.402, -265.77), (134.711, 3.402, -265.77), (130.226, 8.402, -274.152), (130.226, 3.402, -274.152), (134.711, 3.402, -265.77), (134.711, 8.402, -265.77), (130.226, 8.402, -274.152), (130.226, 3.402, -274.152), (133.823, 8.402, -276.078), (133.823, 3.402, -276.078), (130.226, 3.402, -274.152), (130.226, 8.402, -274.152), (133.823, 8.402, -276.078), (133.823, 3.402, -276.078), (128.793, 8.402, -285.484), (128.793, 3.33, -285.484), (133.823, 3.402, -276.078), (133.823, 8.402, -276.078), (128.793, 8.402, -285.484), (128.793, 3.33, -285.484), (133.491, 8.402, -288.0), (133.491, 3.332, -288.0), (128.793, 3.33, -285.484), (128.793, 8.402, -285.484), (133.491, 8.402, -288.0), (133.491, 3.332, -288.0), (141.807, 8.402, -292.453), (141.807, 3.402, -292.453), (133.491, 3.332, -288.0), (133.491, 8.402, -288.0), (141.807, 8.402, -292.453), (141.807, 3.402, -292.453), (138.544, 8.402, -298.544), (138.544, 3.402, -298.544), (141.807, 3.402, -292.453), (141.807, 8.402, -292.453), (138.544, 8.402, -298.544), (138.544, 3.402, -298.544), (130.71, 8.402, -313.17), (130.71, 3.144, -313.17), (138.544, 3.402, -298.544), (138.544, 8.402, -298.544), (130.71, 8.402, -313.17), (130.71, 3.144, -313.17), (128.353, 8.402, -311.901), (128.353, 3.11, -311.901), (130.71, 3.144, -313.17), (130.71, 8.402, -313.17), (128.353, 8.402, -311.901), (128.353, 3.11, -311.901), (128.0, 8.402, -312.561), (128.0, 3.098, -312.561), (128.353, 3.11, -311.901), (128.353, 8.402, -311.901), (128.0, 8.402, -312.561), (128.0, 3.098, -312.561), (125.406, 8.402, -317.406), (125.406, 3.064, -317.406), (128.0, 3.098, -312.561), (128.0, 8.402, -312.561), (125.406, 8.402, -317.406), (125.406, 3.064, -317.406), (124.017, 8.402, -320.0), (124.017, 3.084, -320.0), (125.406, 3.064, -317.406), (125.406, 8.402, -317.406), (124.017, 8.402, -320.0), (124.017, 3.084, -320.0), (114.247, 8.402, -338.247), (114.247, 3.402, -338.247), (124.017, 3.084, -320.0), (124.017, 8.402, -320.0), (114.247, 8.402, -338.247), (114.247, 3.402, -338.247), (111.128, 8.402, -344.072), (111.128, 3.352, -344.072), (114.247, 3.402, -338.247), (114.247, 8.402, -338.247), (111.128, 8.402, -344.072), (111.128, 3.352, -344.072), (96.0, 8.402, -335.97), (96.0, 3.307, -335.97), (111.128, 3.352, -344.072), (111.128, 8.402, -344.072), (96.0, 8.402, -335.97), (96.0, 3.307, -335.97), (66.183, 8.402, -320.0), (66.183, 3.402, -320.0), (96.0, 3.307, -335.97), (96.0, 8.402, -335.97), (66.183, 8.402, -320.0), (66.183, 3.402, -320.0), (64.0, 8.402, -318.831), (64.0, 3.402, -318.831), (66.183, 3.402, -320.0), (66.183, 8.402, -320.0), (64.0, 8.402, -318.831), (64.0, 3.402, -318.831), (61.482, 8.402, -317.482), (61.482, 3.402, -317.482), (64.0, 3.402, -318.831), (64.0, 8.402, -318.831), (61.482, 8.402, -317.482), (61.482, 3.402, -317.482), (37.01, 8.402, -304.375), (37.01, 3.288, -304.375), (61.482, 3.402, -317.482), (61.482, 8.402, -317.482), (37.01, 8.402, -304.375)]"
+    },
+    {
+      "owner": "building:w34313545:roof",
+      "body": "Collision",
+      "shape": "Shape",
+      "layer": 5,
+      "transform": "[X: (1.0, 0.0, 0.0), Y: (0.0, 1.0, 0.0), Z: (0.0, 0.0, 1.0), O: (0.0, 0.0, 0.0)]",
+      "faces": "[(128.353, 8.402, -311.901), (37.01, 8.402, -304.375), (111.128, 8.402, -344.072), (128.353, 8.402, -311.901), (91.554, 8.402, -202.551), (37.01, 8.402, -304.375), (91.554, 8.402, -202.551), (141.737, 8.402, -253.369), (151.699, 8.402, -234.756), (91.554, 8.402, -202.551), (138.993, 8.402, -251.899), (141.737, 8.402, -253.369), (91.554, 8.402, -202.551), (132.266, 8.402, -264.456), (138.993, 8.402, -251.899), (132.266, 8.402, -264.456), (130.226, 8.402, -274.152), (134.711, 8.402, -265.77), (130.226, 8.402, -274.152), (128.793, 8.402, -285.484), (133.823, 8.402, -276.078), (128.793, 8.402, -285.484), (130.71, 8.402, -313.17), (141.807, 8.402, -292.453), (128.793, 8.402, -285.484), (128.353, 8.402, -311.901), (130.71, 8.402, -313.17), (128.793, 8.402, -285.484), (91.554, 8.402, -202.551), (128.353, 8.402, -311.901), (91.554, 8.402, -202.551), (130.226, 8.402, -274.152), (132.266, 8.402, -264.456), (91.554, 8.402, -202.551), (128.793, 8.402, -285.484), (130.226, 8.402, -274.152)]"
+    }
+  ],
+  "contact": {
+    "ok": true,
+    "triangles": 2148,
+    "max_contact_error_m": 0.000000238418579101562,
+    "render_layers": 2,
+    "receiver_kind": "building_wall",
+    "source": "w34313545",
+    "apron": "render1 no collider, draped original support",
+    "stock_mechanics": "pending"
+  },
+  "candidate_sha256": "3712c3fca46864a3b8e17274f21a4067fcdc9ca604df100dea1c7204b3e32832",
+  "shader_sha256": "b1e9dd03d87f73a00e993b82c0ec7df3f1e3f4b82e90f390b7f74c853aad4f5f",
+  "source_chunk_sha256": "c0e1f86787410d975ad90272482e5f4971c4aedc7eb83132cd28b22acf1a3456"
+}

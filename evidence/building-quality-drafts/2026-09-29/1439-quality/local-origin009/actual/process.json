@@ -1,0 +1,30 @@
+{
+  "pid": 3779,
+  "argv": [
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+    "--path",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-1439-from-scratch-20260923",
+    "--rendering-method",
+    "forward_plus",
+    "--rendering-driver",
+    "metal",
+    "--display-driver",
+    "macos",
+    "--audio-driver",
+    "Dummy",
+    "--resolution",
+    "1440x900",
+    "--script",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/mechanics.gd",
+    "--write-movie",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/mechanics-001/motion.avi",
+    "--fixed-fps",
+    "60",
+    "--",
+    "--artifact-output=/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/mechanics-001",
+    "--output=/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/mechanics-001/receipt.json"
+  ],
+  "start": "2026-09-29T06:57:24.124603+00:00",
+  "input_map_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/input-map.json",
+  "input_map_sha256": "8dde75afb368120cef8d442a11a10c6b4ba420544ef97cc0b02f50c34b908720"
+}

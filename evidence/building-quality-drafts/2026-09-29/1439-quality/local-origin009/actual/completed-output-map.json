@@ -1,0 +1,13 @@
+{
+  "input_map_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/input-map.json",
+  "input_map_sha256": "8dde75afb368120cef8d442a11a10c6b4ba420544ef97cc0b02f50c34b908720",
+  "outputs": {
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/mechanics-001/SLOT_RELEASE.json": "45375c3617f13825bc3606566b33b4a50985048d7e7d83bc132599648c5c03b2",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/mechanics-001/engine.log": "62fa7e6694d07177c2dcf155c97f96fd9571271519044b24d40bc242739cef46",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/mechanics-001/images/1439-wall-contact.png": "42f78aa54a85ff0805ddb83ee28db134f06cd18e91bbbb4d2d2f27ee733de000",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/mechanics-001/motion.avi": "966b63973d38ef6512a937e10e6f3ca30d7ce6a5778b86fce83174e95d6fefa7",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/mechanics-001/process.json": "1f2cb68143a036ebc637de7dd9c160f081131f97f2203bf2dc3147fb0f7706d4",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/mechanics-001/receipt.json": "3e7efe96e0e048ae108e136f24cbc54f74c1dc239e0dc8649825b27bd15d41d9",
+    "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/remaining-mechanics/local-origin-motion-009/mechanics-001/terminal.json": "45375c3617f13825bc3606566b33b4a50985048d7e7d83bc132599648c5c03b2"
+  }
+}

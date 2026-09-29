@@ -1,0 +1,14 @@
+{
+  "input_map_path": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/input-map-003.json",
+  "input_map_sha256": "f76244b45b9eb1e92e5f37bbbb64b7cd18890c5fd5de2bd3437dc6c5911f8621",
+  "outputs": {
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/SLOT_RELEASE.json": "323117763b4c20944c554fc0cab1a729f9734bfe483dc317906a9b490778e3e2",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/engine.log": "fa27afbdaf9c5c909de332cb39556e906d2daa30fd7b630c0d48727aa4997118",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/images/1439-01-whole.png": "4d56d857a924a156469f314f910d66847d3e2a748f8f432ee73dbde4e38c71a1",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/images/1439-02-three-quarter.png": "2aadb331a551257ad67bd859f0216e0672a4cbec15c7fb6a9c97301d4c197577",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/images/1439-03-near.png": "91716ee5508f705784a28ad47c84e534d3868bcb933204ad34f1fc1db80e46c3",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/images/receipt.json": "8fc781333c46ff66faa43d006f17d1a1eac8b7de563c4f3466c88b5e8e63f275",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/process.json": "7d1fb21b9fbf892029d3bc3068857d14ae187a4257743b06b7e370ccad8b29be",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/1439-from-scratch-2026-09-23/production-implementation/actual-world-002/terminal.json": "323117763b4c20944c554fc0cab1a729f9734bfe483dc317906a9b490778e3e2"
+  }
+}

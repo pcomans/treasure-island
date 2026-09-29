@@ -250,3 +250,7 @@ The shared-family release adaptation exposed two external-contract assumptions: 
 ## Match Godot triangle winding at the actual emitter
 
 Housing expansion004's new draped parking apron passed a conventional positive-cross-product normal preflight but was backface-culled by Godot SurfaceTool. The existing shared roof producer already used clockwise triangles and explicitly reversed positive-Y cross products.005 reversed the new ground triangle order and the apron became visible. For procedural ground, validate winding against the actual producer's convention (Godot clockwise here), not a generic mathematical upward normal; inspect the first actual render before claiming surface coverage. Preserve the failed run and treat visible fit separately from contact verification.
+
+## 2026-09-29 —1439 collision coordinate representation
+
+In the reviewed1439 experiment, recentering the same LAND body at(-296,0,17), with366 byte-identical world vertices and unchanged filters, resolved the prior retreat dip across the original133-row approach/retreat campaign. World-equivalent collision coordinates can affect an observed native contact outcome; preserve body identity, world geometry, original route and exact teardown when testing this possibility. This is route-specific evidence, not a universal Jolt root cause or approved loader change. See `evidence/building-quality-drafts/2026-09-29/1439-quality/local-origin009/INDEPENDENT_REVIEW.md`.

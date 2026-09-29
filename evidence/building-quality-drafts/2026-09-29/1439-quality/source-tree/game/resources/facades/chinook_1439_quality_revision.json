@@ -1,0 +1,13 @@
+{
+  "schema_version": "ti.housing-whole-building-revision/1",
+  "source_key": "w95934144",
+  "reviewed_art_sha256": "0200053b3147035ea8eae01bbcb57a5f4171264e695aee966d8b393585879330",
+  "revision_acceptance": "pending",
+  "historical_recognition_credit_unchanged": true,
+  "ground_chunks": {
+    "res://generated/world/chunks/x_-2__z_0.json": "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b",
+    "res://generated/world/chunks/x_-2__z_-1.json": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2"
+  },
+  "facade_alignment": "corrected SSE principal runs4+5; exact frozen source footprint; roof pitch and obscured lower openings production inference",
+  "site_fit_revision": "grounded_lower_exterior_loggias_on_intact_land; raised inferred lip and bottom returns removed; pending native stock entry/retreat"
+}
