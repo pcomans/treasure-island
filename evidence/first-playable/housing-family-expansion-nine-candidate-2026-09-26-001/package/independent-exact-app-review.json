@@ -1,0 +1,216 @@
+{
+  "decision": "PASS",
+  "reviewer_id": "housing_family_acceptance",
+  "pck_sha256": "3fee919c973ce9ee8b268cce8f1a2b4abbee289794ce5e40db2ad82b41efc38c",
+  "candidate_authority": "34/213",
+  "actual_sources": [
+    "w96215646",
+    "w96215649",
+    "w96215651",
+    "w96215652",
+    "w96215653",
+    "w96215656",
+    "w96215658",
+    "w96215659",
+    "w96215661",
+    "w96215666",
+    "w96215668",
+    "w96215669",
+    "w96215670",
+    "w96215672",
+    "w96215673",
+    "w96215674",
+    "w96215677",
+    "w96215678",
+    "w96215680",
+    "w96215682",
+    "w96215685",
+    "w96215688",
+    "w96215691",
+    "w96215693",
+    "w96215698",
+    "w96665893",
+    "w96665904",
+    "w96665908",
+    "w96665911",
+    "w96665916",
+    "w96698619",
+    "w96698643",
+    "w96698648"
+  ],
+  "actual_topology": {
+    "active_bodies": 530,
+    "active_shapes": 603,
+    "disabled_bodies": 96,
+    "visible_meshes": 40247,
+    "visible_surfaces": 40265,
+    "visible_triangles": 794997
+  },
+  "snapshot_json_sha256": "9803bef4e1fc2d39343d8c495b2faf2839bb8633d2f0fdfeb143ab01574f0d03",
+  "snapshot_scope": "One genuine scene-inspected snapshot;18 verified references to its exact raw JSON hash, not19 measurements",
+  "owner_headless_execution": {
+    "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/release-headless-smoke-001-execution.json",
+    "sha256": "5cd6cde4eed18be9096792c19ee36000cd48486a3c7b1ff9f9a151eab0ad1ad9"
+  },
+  "independent_native_execution": {
+    "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/independent-signed-native-001-execution.json",
+    "sha256": "050bbb1542fa5fcd5ac4b396a83e4a5ce184eb5979f24565fc058c320df90523"
+  },
+  "signature_privacy_binding": {
+    "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/signature-privacy.json",
+    "sha256": "d97ae9a45c0a3b4edcd8475295253cf2b663b53bad7840eac1350087834c767d"
+  },
+  "raw_runs": [
+    {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/release-headless-smoke-001.log.gz",
+      "sha256": "1e7bfd720548ce11b4cae56427a7722c7cf937e90560515869e602ef8c5d8db2"
+    },
+    {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/independent-mounted-privacy-002.log.gz",
+      "sha256": "22a09079515542a7b8e30820d40b708c007d0ba5608c2ea932285b4a954405e3"
+    },
+    {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/independent-signed-native-001.log.gz",
+      "sha256": "46311b0992bab065fedd3b78770b212e6d411358fe2ac10935a63df62b356a23"
+    },
+    {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/original-owner-native-001.log.gz",
+      "sha256": "6b8a49011aa3208bcd7e68bba9687a0465ffc5624b4a0632425ea5a48968b198"
+    },
+    {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/original-owner-native-002.log.gz",
+      "sha256": "8145936853c6a8c15bd8a3161120737f2e085c670c362dd1d9cd977b225b46eb"
+    },
+    {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/corrected-owner-native-001.log.gz",
+      "sha256": "6b8a49011aa3208bcd7e68bba9687a0465ffc5624b4a0632425ea5a48968b198"
+    },
+    {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/independent-privacy-setup-001.log.gz",
+      "sha256": "352b7994876858a63e9f287c1caa3ae15e414cd607111dce66054a3061c9e3df"
+    }
+  ],
+  "raw_log_provenance": [
+    {
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/release-headless-smoke-001.log.gz",
+        "sha256": "1e7bfd720548ce11b4cae56427a7722c7cf937e90560515869e602ef8c5d8db2"
+      },
+      "encoding": "lossless gzip of original native log",
+      "original_sha256": "7260a867662203c32129654ef9a79536ef3eaebdf49c2f4bdaa7a73f84d39eec",
+      "original_bytes": 7299514,
+      "original_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-candidate-corrected-2026-09-26/release-headless-smoke-001.log"
+    },
+    {
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/independent-mounted-privacy-002.log.gz",
+        "sha256": "22a09079515542a7b8e30820d40b708c007d0ba5608c2ea932285b4a954405e3"
+      },
+      "encoding": "lossless gzip of original native log",
+      "original_sha256": "9e2919c33bc017fe3d50b68e64e1b3521ef7dc71b67b391b19c8b6dfd6a757b7",
+      "original_bytes": 910,
+      "original_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-candidate-independent-corrected-2026-09-26/privacy-retry-002/independent-mounted-privacy-002.log"
+    },
+    {
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/independent-signed-native-001.log.gz",
+        "sha256": "46311b0992bab065fedd3b78770b212e6d411358fe2ac10935a63df62b356a23"
+      },
+      "encoding": "lossless gzip of original native log",
+      "original_sha256": "565b24a2d34d169ffb759c1fc95e06ddbdc3fd25e151cd4bc05ccee21710debd",
+      "original_bytes": 7299581,
+      "original_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-candidate-independent-corrected-2026-09-26/privacy-retry-002/independent-signed-native-001.log"
+    },
+    {
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/original-owner-native-001.log.gz",
+        "sha256": "6b8a49011aa3208bcd7e68bba9687a0465ffc5624b4a0632425ea5a48968b198"
+      },
+      "encoding": "lossless gzip of original native log",
+      "original_sha256": "f35a40af14d03550661871e4607ccd8051cd9e75d264a5f9a8ab63a0035c41e8",
+      "original_bytes": 33312,
+      "original_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-candidate-2026-09-26/release-native-smoke-001.log"
+    },
+    {
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/original-owner-native-002.log.gz",
+        "sha256": "8145936853c6a8c15bd8a3161120737f2e085c670c362dd1d9cd977b225b46eb"
+      },
+      "encoding": "lossless gzip of original native log",
+      "original_sha256": "97f86573da7256e51771276c8838045d779c59fee4179ee05a7da51e1c2250bd",
+      "original_bytes": 137810464,
+      "original_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-candidate-2026-09-26/release-native-smoke-002.log"
+    },
+    {
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/corrected-owner-native-001.log.gz",
+        "sha256": "6b8a49011aa3208bcd7e68bba9687a0465ffc5624b4a0632425ea5a48968b198"
+      },
+      "encoding": "lossless gzip of original native log",
+      "original_sha256": "f35a40af14d03550661871e4607ccd8051cd9e75d264a5f9a8ab63a0035c41e8",
+      "original_bytes": 33312,
+      "original_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-candidate-corrected-2026-09-26/release-native-smoke-001.log"
+    },
+    {
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/independent-privacy-setup-001.log.gz",
+        "sha256": "352b7994876858a63e9f287c1caa3ae15e414cd607111dce66054a3061c9e3df"
+      },
+      "encoding": "lossless gzip of original native log",
+      "original_sha256": "6413c1d0d5e347afd69cdece93644c41b73e8d36bf2bcab079a079456fa8f18a",
+      "original_bytes": 842,
+      "original_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-candidate-independent-corrected-2026-09-26/independent-mounted-privacy-001.log"
+    }
+  ],
+  "preserved_failures": [
+    {
+      "receipt": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/original-owner-native-001-execution.json",
+        "sha256": "903458cabd78aa46dfbb0e89d7b0f7c8fc2cfb4c8c7f1a5c765fc1eadc6bfe6a"
+      },
+      "log": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/original-owner-native-001.log.gz",
+        "sha256": "6b8a49011aa3208bcd7e68bba9687a0465ffc5624b4a0632425ea5a48968b198"
+      },
+      "status": "retained failure; not promoted to PASS"
+    },
+    {
+      "receipt": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/original-owner-native-002-execution.json",
+        "sha256": "a9ebb769321a5a1159c172cd4b1de3557726cd2a4ffeff761de585f78f372ba7"
+      },
+      "log": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/original-owner-native-002.log.gz",
+        "sha256": "8145936853c6a8c15bd8a3161120737f2e085c670c362dd1d9cd977b225b46eb"
+      },
+      "status": "retained failure; not promoted to PASS"
+    },
+    {
+      "receipt": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/corrected-owner-native-001-execution.json",
+        "sha256": "3d10cc57f9264841e297d14822919bd8747ddde86ce2eb5c9100f20c6df1d3e0"
+      },
+      "log": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/corrected-owner-native-001.log.gz",
+        "sha256": "6b8a49011aa3208bcd7e68bba9687a0465ffc5624b4a0632425ea5a48968b198"
+      },
+      "status": "retained failure; not promoted to PASS"
+    },
+    {
+      "receipt": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/independent-privacy-setup-001-execution.json",
+        "sha256": "546155e3d67d834fe1da9f20b795846fdd5b19349589a4e767da6b8c0604ab93"
+      },
+      "log": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/failed/independent-privacy-setup-001.log.gz",
+        "sha256": "352b7994876858a63e9f287c1caa3ae15e414cd607111dce66054a3061c9e3df"
+      },
+      "status": "retained failure; not promoted to PASS"
+    }
+  ],
+  "limitations": [
+    "Owner Metal attempts remain failed; successful exact candidate coverage combines owner signed headless and independent signed Metal under existing owner/independent package predicates.",
+    "No cold-start guarantee, timeout root-cause diagnosis, continuous motion, hidden-face, or readable-tag claim.",
+    "Capture-time and candidate recognition remain34/213; no acceptance credit granted."
+  ]
+}

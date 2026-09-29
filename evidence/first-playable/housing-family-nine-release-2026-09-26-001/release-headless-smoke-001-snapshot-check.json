@@ -1,0 +1,11 @@
+{
+  "ok": true,
+  "scope": "Owner derived check of raw signed snapshot; independent review separate",
+  "full_records": 1,
+  "reuse_records": 18,
+  "snapshot_raw_json_sha256": "3ced7b27e4fae7158ae0557599ec3c6f9a6254e9dc2ddeb8a965f99e3d6ce25b",
+  "raw_log_sha256": "581279359e2a78193ca7396681d2ac767f0ff5cd8db064d342027f527806cde0",
+  "pck_sha256": "7a6bc153e5807241c3ce05771f0391b2094eec2bc64a10d59394105d97bb27ca",
+  "actual_units": 33,
+  "stdout_bytes": 7299514
+}

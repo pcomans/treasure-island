@@ -1,0 +1,20 @@
+{
+  "stage": "independent-signed-native-001",
+  "terminal": 0,
+  "errors": [],
+  "pid": 43912,
+  "slot_released": true,
+  "engines_after": [],
+  "elapsed_seconds": 42.46544250007719,
+  "ended_utc": "2026-09-26T05:49:03.316978+00:00",
+  "harness_pins": {
+    "run-stage.py": "1467c5c724fa49f889e01aefaeb86beae9fa9bc117fe8a4dff320e73d170db96",
+    "run-plan.json": "9808b73fbd86af52e2a22741623cf21ebbf58a75152c017b5542ea2770deb2a2",
+    "settings.json": "e8b0b5048fdcfb6606d2fb777ec9e72df9033d720f2a38700973fddb4a202952",
+    "source-pins.json": "c41a00715d9149eb328010ac58da38983fce62490eb67199418520f94d5dd471",
+    "native-readiness.json": "aa79050c082dfe82392c8acb61f8ca23f7a853aa9cba7e08b30b62350bf19ed8",
+    "final-privacy.gd": "32261708cfddea7629fec5aaffc0c5f2e936de4b290e6696594a8c5e2e7ece8c"
+  },
+  "app_binding_sha256": "4a7c1e7d6a30f1e7bf00fa97020eb0c77ad4240f9eb96f8f0e72d37e16ab2092",
+  "ok": true
+}

@@ -1,0 +1,72 @@
+{
+  "independent-signed-native-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+      "--fixed-fps",
+      "60",
+      "--display-driver",
+      "macos",
+      "--rendering-method",
+      "forward_plus",
+      "--rendering-driver",
+      "metal",
+      "--audio-driver",
+      "Dummy",
+      "--log-file",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/runtime-001/release-native-smoke-001-engine.log",
+      "--",
+      "--mac-export-smoke",
+      "--family-evidence",
+      "--family-evidence-pck-sha256=<ACTUAL_EXPORTED_PCK_SHA256>"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/runtime-001",
+    "requires": [
+      "independent-mounted-privacy-001"
+    ],
+    "success_markers": [
+      "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent",
+      "MAC_EXPORT_D2_1439_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D2_1444_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1308_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1317_ATTACHMENT: valid=true",
+      "MAC_EXPORT_FIRE_STATION48_ATTACHMENT: valid=true",
+      "MAC_EXPORT_MACEO_MAY_ATTACHMENT: valid=true",
+      "MAC_EXPORT_HOUSING_FAMILY_ADOPTION:",
+      "MAC_EXPORT_HOUSING_FAMILY_TARGETS:"
+    ],
+    "timeout_seconds": 240,
+    "coverage": "Exact signed current33 normal-loader construction, actual per-target source-owned roles and packaged stock smoke; independent package approval separate.",
+    "output_directories": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/runtime-001"
+    ]
+  },
+  "independent-mounted-privacy-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--fixed-fps",
+      "60",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/runtime-001",
+      "--main-pack",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+      "--script",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/final-privacy.gd",
+      "--",
+      "--pck-audit-pck=/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+      "--pck-audit-pck-sha256=<ACTUAL_EXPORTED_PCK_SHA256>",
+      "--pck-audit-manifest-sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+      "--pck-audit-content-sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/runtime-001",
+    "output_directories": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/runtime-001"
+    ],
+    "requires": [],
+    "success_markers": [
+      "FINAL_FAMILY_AUTHORITY:",
+      "PASS: direct-mounted PCK matches the explicit package/world identities"
+    ],
+    "timeout_seconds": 120
+  }
+}

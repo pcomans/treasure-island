@@ -1,0 +1,23 @@
+{
+  "stage": "independent-mounted-privacy-001",
+  "terminal": 1,
+  "errors": [
+    "ERROR: PCK_AUDIT_FAIL [arguments]: Unexpected user argument: --family-candidate-registry-sha256=ea19f54c0f8b215b797d1cd61359fa1998eb574f97dc56bb4484ed195a0a3258",
+    "Missing marker: PASS: direct-mounted PCK matches the explicit package/world identities"
+  ],
+  "pid": 37216,
+  "slot_released": true,
+  "engines_after": [],
+  "elapsed_seconds": 0.9472248749807477,
+  "ended_utc": "2026-09-26T05:27:44.085530+00:00",
+  "harness_pins": {
+    "run-stage.py": "1467c5c724fa49f889e01aefaeb86beae9fa9bc117fe8a4dff320e73d170db96",
+    "run-plan.json": "76ebc04a61bbd99fad6afe9abcae496581c534ccaf28f00dcaa6a1856e86142d",
+    "settings.json": "e8b0b5048fdcfb6606d2fb777ec9e72df9033d720f2a38700973fddb4a202952",
+    "native-readiness.json": "57f5404aa37cab3645af0d19fd301c62a27dacc09c85e47ceaf61c961fd727d3",
+    "source-pins.json": "353f2db11768c1e4000f63f07d0994019f9538cbe6770e2bbaba34a0a67c3a7a",
+    "candidate-privacy.gd": "25c688f5dee665f44d1d2de41ff5fb80053b3e35a539bb2bf6aac716b330e511"
+  },
+  "app_binding_sha256": "0d4326a6f0f2cbb3b8c3d50c37cd69e60b2a945811c040deefc40cd88c1320eb",
+  "ok": false
+}

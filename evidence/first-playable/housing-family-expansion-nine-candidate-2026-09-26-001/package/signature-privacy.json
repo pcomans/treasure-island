@@ -1,0 +1,116 @@
+{
+  "decision": "PASS",
+  "pck_sha256": "3fee919c973ce9ee8b268cce8f1a2b4abbee289794ce5e40db2ad82b41efc38c",
+  "signature": {
+    "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/strict-signature.log",
+    "sha256": "5797a115ea4d83788159550b7062a4e298231ab6823c64e0bee17a5b5d43abd1"
+  },
+  "bundle_checks": {
+    "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/bundle-native-checks-001.json",
+    "sha256": "82918314c027ba013f3ebb715f56a2fbae0b0082b5aea8e9ead77e1bf7508051"
+  },
+  "privacy_execution": {
+    "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/independent-mounted-privacy-002-execution.json",
+    "sha256": "1714971a2faa5abff0fe2c25352d160eb30360d297c33cf693064d16e95bf23d"
+  },
+  "candidate_registry_metric": "34/213",
+  "family_authority_entries": 0,
+  "bindings": {
+    "owner/app-binding.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/app-binding.json",
+      "sha256": "0d4326a6f0f2cbb3b8c3d50c37cd69e60b2a945811c040deefc40cd88c1320eb"
+    },
+    "owner/source-pins.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/source-pins.json",
+      "sha256": "353f2db11768c1e4000f63f07d0994019f9538cbe6770e2bbaba34a0a67c3a7a"
+    },
+    "owner/native-readiness.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/native-readiness.json",
+      "sha256": "57f5404aa37cab3645af0d19fd301c62a27dacc09c85e47ceaf61c961fd727d3"
+    },
+    "owner/bundle-native-checks-001.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/bundle-native-checks-001.json",
+      "sha256": "82918314c027ba013f3ebb715f56a2fbae0b0082b5aea8e9ead77e1bf7508051"
+    },
+    "owner/signature.log": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/signature.log",
+      "sha256": "5797a115ea4d83788159550b7062a4e298231ab6823c64e0bee17a5b5d43abd1"
+    },
+    "owner/run-plan.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/run-plan.json",
+      "sha256": "729190b07196feec22e8fa579579e96bf1420e2e0006baab54b7bcb317f308ad"
+    },
+    "owner/run-stage.py": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/run-stage.py",
+      "sha256": "1467c5c724fa49f889e01aefaeb86beae9fa9bc117fe8a4dff320e73d170db96"
+    },
+    "owner/settings.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/settings.json",
+      "sha256": "e8b0b5048fdcfb6606d2fb777ec9e72df9033d720f2a38700973fddb4a202952"
+    },
+    "owner/harness-pins.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/harness-pins.json",
+      "sha256": "78b878fcf2d6339fee41d9a0194eee20ac2581244aa8ccaaf1f812894a762186"
+    },
+    "owner/export-001-execution.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/export-001-execution.json",
+      "sha256": "27952bf1a1b9e9dfbd6dc3c5720986bb7e73ba2399d00138623c75c2821b75f8"
+    },
+    "owner/release-headless-smoke-001-execution.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/owner/release-headless-smoke-001-execution.json",
+      "sha256": "5cd6cde4eed18be9096792c19ee36000cd48486a3c7b1ff9f9a151eab0ad1ad9"
+    },
+    "independent/app-binding.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/app-binding.json",
+      "sha256": "0d4326a6f0f2cbb3b8c3d50c37cd69e60b2a945811c040deefc40cd88c1320eb"
+    },
+    "independent/source-pins.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/source-pins.json",
+      "sha256": "353f2db11768c1e4000f63f07d0994019f9538cbe6770e2bbaba34a0a67c3a7a"
+    },
+    "independent/native-readiness.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/native-readiness.json",
+      "sha256": "57f5404aa37cab3645af0d19fd301c62a27dacc09c85e47ceaf61c961fd727d3"
+    },
+    "independent/bundle-native-checks-001.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/bundle-native-checks-001.json",
+      "sha256": "82918314c027ba013f3ebb715f56a2fbae0b0082b5aea8e9ead77e1bf7508051"
+    },
+    "independent/signature.log": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/signature.log",
+      "sha256": "5797a115ea4d83788159550b7062a4e298231ab6823c64e0bee17a5b5d43abd1"
+    },
+    "independent/run-plan.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/run-plan.json",
+      "sha256": "2720a96a8e3ba3df2c6adc1c29db2c2a39b316200318030c7d7e3ede4fccfde1"
+    },
+    "independent/run-stage.py": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/run-stage.py",
+      "sha256": "1467c5c724fa49f889e01aefaeb86beae9fa9bc117fe8a4dff320e73d170db96"
+    },
+    "independent/settings.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/settings.json",
+      "sha256": "e8b0b5048fdcfb6606d2fb777ec9e72df9033d720f2a38700973fddb4a202952"
+    },
+    "independent/harness-pins.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/harness-pins.json",
+      "sha256": "0095a9706e7ebc745f472acd9bbfb4d954cd2efe3b00497d6511b1dfe1226a50"
+    },
+    "independent/candidate-privacy.gd": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/candidate-privacy.gd",
+      "sha256": "5698837c7b7b3e0a26e5a0bf10ac75818a50947f84e77f903fb3f22b188e90de"
+    },
+    "independent/independent-mounted-privacy-002-execution.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/independent-mounted-privacy-002-execution.json",
+      "sha256": "1714971a2faa5abff0fe2c25352d160eb30360d297c33cf693064d16e95bf23d"
+    },
+    "independent/independent-signed-native-001-execution.json": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/independent-signed-native-001-execution.json",
+      "sha256": "050bbb1542fa5fcd5ac4b396a83e4a5ce184eb5979f24565fc058c320df90523"
+    },
+    "independent/strict-signature.log": {
+      "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/package/independent/strict-signature.log",
+      "sha256": "5797a115ea4d83788159550b7062a4e298231ab6823c64e0bee17a5b5d43abd1"
+    }
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "algorithm": "ascii_relative_path_nul_sha256_nul_bytes_lf_sorted_lc_all_c",
+  "files": [
+    {
+      "path": "images/w96665908-INSTALLED.png",
+      "sha256": "ec898895a2c7a8c9ba0891d580e5565340a5fc9dc75e59de973714951ce493d4",
+      "bytes": 592377
+    },
+    {
+      "path": "images/w96665908-jetpack-ascent.png",
+      "sha256": "91d3e1df18a178b6e418a8688fcc647fc8f0bbded8fbc3f47d29e6bbe95d4063",
+      "bytes": 566456
+    },
+    {
+      "path": "images/w96665908-jetpack-descent.png",
+      "sha256": "c21f5b93bf25b7dce768bbc3428e209cbbf22b8f9a33592193b502535dc36d1e",
+      "bytes": 677583
+    },
+    {
+      "path": "images/w96665908-jetpack-landed.png",
+      "sha256": "614a612cd4bc3a9b57972874c85c8662e08497f6e267bced2e2806384841257a",
+      "bytes": 744245
+    },
+    {
+      "path": "images/w96665908-jetpack-release.png",
+      "sha256": "f4be8f8740b5a30e8f2f679c943abc533af024c96275186991e0cdae84b456b8",
+      "bytes": 452189
+    },
+    {
+      "path": "images/w96665908-jetpack-start.png",
+      "sha256": "56a40016e5c7e5bc40bd3299bb56cf28590ca89916173c4323224e6a29ae9b0a",
+      "bytes": 592750
+    },
+    {
+      "path": "images/w96665908-stock-roof-oblique.png",
+      "sha256": "4bcba7f29fbbbd061ef1b5f16c89b9f374f2590eff8b8951682b3300fa3ec310",
+      "bytes": 675273
+    },
+    {
+      "path": "images/w96665908-stock-spray.png",
+      "sha256": "7a92def2c0e303454ef8a0ff2c1532d3de33e50f205d43d7a4a48ba920f48357",
+      "bytes": 152927
+    }
+  ],
+  "tree_sha256": "fcf2b3af412c7bb938d1c19c50f9735c84ef8210f58b19510fadc95a94ac2ad0"
+}

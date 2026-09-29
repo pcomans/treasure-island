@@ -1,0 +1,22 @@
+{
+  "pid": 42811,
+  "argv": [
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+    "--fixed-fps",
+    "60",
+    "--display-driver",
+    "macos",
+    "--rendering-method",
+    "forward_plus",
+    "--rendering-driver",
+    "metal",
+    "--audio-driver",
+    "Dummy",
+    "--log-file",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001/release-native-smoke-001-engine.log",
+    "--",
+    "--mac-export-smoke",
+    "--family-evidence",
+    "--family-evidence-pck-sha256=7a6bc153e5807241c3ce05771f0391b2094eec2bc64a10d59394105d97bb27ca"
+  ]
+}

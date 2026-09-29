@@ -1,0 +1,37 @@
+[
+  {
+    "original_private_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/independent-strict-signature.log",
+    "raw_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "raw_bytes": 0,
+    "published_gzip": "independent-strict-signature.log.gz",
+    "gzip_sha256": "9ceffb7310338057cfe71a4ae1e2c98d2c485d81cdef906532a801f457a38d64"
+  },
+  {
+    "original_private_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/independent-signed-native-001.log",
+    "raw_sha256": "ccc62b37dc8c0fd9fb0ee206cf13f92efdb7d6cfc3d40406e83d54b7cdb7c9a8",
+    "raw_bytes": 7299581,
+    "published_gzip": "independent-signed-native-001.log.gz",
+    "gzip_sha256": "63783693fb074faeb28de80ab6a741ed121e27cf5a6fd5df954f8c2428ef9913"
+  },
+  {
+    "original_private_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/signature.log",
+    "raw_sha256": "cc2d3486905d0edc94e63d8cf9d62798501c2351c8b536a26ebb02a8a6618690",
+    "raw_bytes": 433,
+    "published_gzip": "signature.log.gz",
+    "gzip_sha256": "46376ba84dd53108b2897369bbe2c19114650b982edddfde3d268aa1bf2662c1"
+  },
+  {
+    "original_private_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/independent-mounted-privacy-001.log",
+    "raw_sha256": "698eb7b1b64b658ea71a5a52857cd3bfef75b6aa8748578a87c5658c3dd02be9",
+    "raw_bytes": 906,
+    "published_gzip": "independent-mounted-privacy-001.log.gz",
+    "gzip_sha256": "e4056bb5ff918b5eb3105a0753134384733f1b4515c3a3ebe13780b54cb34536"
+  },
+  {
+    "original_private_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/runtime-001/release-native-smoke-001-engine.log",
+    "raw_sha256": "ccc62b37dc8c0fd9fb0ee206cf13f92efdb7d6cfc3d40406e83d54b7cdb7c9a8",
+    "raw_bytes": 7299581,
+    "published_gzip": "release-native-smoke-001-engine.log.gz",
+    "gzip_sha256": "63783693fb074faeb28de80ab6a741ed121e27cf5a6fd5df954f8c2428ef9913"
+  }
+]

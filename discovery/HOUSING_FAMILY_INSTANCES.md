@@ -2,7 +2,7 @@
 
 Baseline: `9c7f2440d3db6a7f2d0a5d474c612c0362a01c16`; branch: `experiment/housing-family-instances`. The owner authorized a separate shared-family experiment for comparison with MAIN. No merge, production promotion or recognition credit follows from this inventory.
 
-The [frozen catalog](facades/facade-recognition-catalog.json) contains 213 physical buildings represented by 215 source records (213 footprints and 2 parts). Named reference packets cover 152 physical units; packet presence is not exhaustive visual proof. The current 75-unit candidate shortlist has 24 photo-confirmed targets (all 24 now captured in the A/B experiment), 21 written matches requiring pixel validation, and 30 candidates requiring imagery. The original frozen capture selection remains 23 targets. The other 138 catalog units are not proven unrelated. Physical unit IDs use `physical-building:<source ID>`.
+The [frozen catalog](facades/facade-recognition-catalog.json) contains 213 physical buildings represented by 215 source records (213 footprints and 2 parts). Named reference packets cover 152 physical units; packet presence is not exhaustive visual proof. The current 75-unit candidate shortlist has 33 photo-confirmed targets (24 previous instances plus nine source-bound expansions), 12 written matches requiring pixel validation, and 30 candidates requiring imagery. The original frozen capture selection remains 23 targets. The other 138 catalog units are not proven unrelated. Physical unit IDs use `physical-building:<source ID>`.
 
 Reuse decision: evolve the [shared housing family](../game/resources/housing_family/README.md) with target-specific stepped runs, opening schedules, roof/canopy variants and semantic palettes; the straight six-metre prototype is not a drop-in fit for these targets. Preserve frozen source identity/footprints, orientation, grade, gameplay and independent per-building verification.
 
@@ -44,31 +44,22 @@ Direct frontage pixels were reviewed from March 2025 imagery. This supports stru
 |---|---|---|---|
 | `w96215646` | frozen 1230/current 1394 Gateview | [D5 packet](facades/d5_reference_packets/w96215646_1230_1394_gateview.md); [March 2025 source](https://www.google.com/maps/@?api=1&map_action=pano&pano=j3ugQSzJZtl9lpbb5i58bQ&heading=90&pitch=0&fov=90) | Direct pixels confirm shared row/continuous canopy; exact D5 panorama/camera/heading and address crosswalk independently checked. Hidden schedules remain unknown; no new model or acceptance. |
 
-## Written matches requiring pixel validation (21)
+## Written matches requiring pixel validation (12)
 
 | Source ID | Address | Evidence | Variant / uncertainty |
 |---|---|---|---|
 | `w96215667` | 1248/1395 Gateview Court | [D6 packet](facades/d6_reference_packets/w96215667_1248_1395_gateview_court.md) | April 2019 pale row, flat canopy; address crosswalk |
-| `w96215668` | 1236 Northpoint Drive | [D6 packet](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md) | March 2025 boarded/secured opening pattern |
 | `w96215676` | 1143 Ozbourn Court | [D7 packet](facades/d7_reference_packets/w96215676_1143_ozbourn_court.md) | April 2019 pale row, red-brown roof, green doors; no deep canopy |
-| `w96215693` | 1208 Mariner Drive | [D8 packet](facades/d8_reference_packets/w96215693_1208_mariner_drive.md) | shallow hip, no canopy |
-| `w96215698` | 1228/1390 Gateview Court | [D8 packet](facades/d8_reference_packets/w96215698_1228_1390_gateview_court.md) | continuous flat canopy, slender rust posts |
 | `w96665890` | 1111 Keppler Court | [D8 packet](facades/d8_reference_packets/w96665890_1111_keppler_court.md) | compact row, shallow hip, privacy boxes |
-| `w96665893` | 1210 Mariner Drive | [D8 packet](facades/d8_reference_packets/w96665893_1210_mariner_drive.md) | compact row, shallow hip, mixed doors |
 | `w96665897` | 1112 Hutchins Court | [D8 packet](facades/d8_reference_packets/w96665897_1112_hutchins_court.md) | compact row, blue doors, privacy boxes |
 | `w96665903` | 1124 Reeves Court | [D8 packet](facades/d8_reference_packets/w96665903_1124_reeves_court.md) | central projecting gable mass |
 | `w96665906` | 1147 Ozbourn Court | [D9 packet](facades/d9_reference_packets/w96665906_1147_ozbourn_court.md) | long row, shallow hip, lower enclosures |
-| `w96665908` | 1203 Bayside Drive | [D9 packet](facades/d9_reference_packets/w96665908_1203_bayside_drive.md) | compact block, shallow gable end, screened entry |
 | `w96665909` | 1149 Ozbourn Court | [D9 packet](facades/d9_reference_packets/w96665909_1149_ozbourn_court.md) | compact row, asymmetric upper groups, yellow entry |
-| `w96665916` | 1242 Northpoint Drive | [D9 packet](facades/d9_reference_packets/w96665916_1242_northpoint_drive.md) | deep flat canopy, local post/opening cadence |
 | `w96665919` | 1116 Hutchins Court | [D9 packet](facades/d9_reference_packets/w96665919_1116_hutchins_court.md) | long row, shallow hip, paired upper windows |
 | `w96665935` | 1135 Mason Court | [D10 packet](facades/d10_reference_packets/w96665935_1135_mason_court.md) | long row, low entry projections |
 | `w96665936` | 1128 Reeves Court | [D10 packet](facades/d10_reference_packets/w96665936_1128_reeves_court.md) | partial boarding/privacy-box rhythm |
-| `w96698619` | 1254/625 13th Street | [D10 packet](facades/d10_reference_packets/w96698619_1254_625_13th_street.md) | deep dark post-supported canopy, paired windows |
 | `w96698627` | 1216/1430 Gateview Court | [D10 packet](facades/d10_reference_packets/w96698627_1216_1430_gateview_court.md) | cream row, reddish roof, entry/privacy rhythm |
-| `w96698643` | 1249 Exposition Drive | [D10 packet](facades/d10_reference_packets/w96698643_1249_exposition_drive.md) | varied dark/green entry/privacy rhythm |
 | `w96698645` | 1214/1420 Gateview Court | [D10 packet](facades/d10_reference_packets/w96698645_1214_1420_gateview_court.md) | deep canopy, irregular openings |
-| `w96698648` | 1252 Exposition Drive | [D10 packet](facades/d10_reference_packets/w96698648_1252_exposition_drive.md) | deep canopy, shallow tan/gray roof |
 
 ## Candidates requiring imagery (30)
 
@@ -138,3 +129,21 @@ The later [three-target refinement](../evidence/housing-family-experiment/refine
 ## Normal-play adoption after owner approval
 
 The owner approved the 24 comparison pairs and authorized their normal-game integration and shipment. The [current release record](../evidence/first-playable/housing-family-live-release-2026-09-24-001/README.md) binds the live adoption, source-owned contacts, spray layers and independent gates. Reference totals remain 24 confirmed and 51 unconfirmed in this 75-unit shortlist; the full inventory remains 213 and recognition remains 34/213 with zero new credit. Historical study statements above describe their original checkpoints, not the later activation.
+
+## Nine additional photo-reviewed instances — 2026-09-26
+
+These nine now use the shared site family in normal gameplay, bringing appearance membership to 33. Direct dated exterior pixels, source-owned contacts, stock movement/jetpack/spray checks and independent sampled visual review are complete. Recognition is now 43/213, and the distinct exact final app passed independent signed Metal and mounted privacy verification in the [release evidence](../evidence/first-playable/housing-family-nine-release-2026-09-26-001/README.md); the earlier 34/213 capture metric is preserved. The 75-candidate list covers this housing-row archetype, not all island architecture: 42 candidates remain unconfirmed, and the other 138 catalog units are not proven unrelated.
+
+| Source ID | Address | Written evidence | Variant / uncertainty |
+|---|---|---|---|
+| `w96215668` | 1236 Northpoint Drive | [D6 packet](facades/d6_reference_packets/w96215668_1236_northpoint_drive.md) | March 2025 boarded/secured opening pattern |
+| `w96215693` | 1208 Mariner Drive | [D8 packet](facades/d8_reference_packets/w96215693_1208_mariner_drive.md) | shallow hip, no canopy |
+| `w96215698` | 1228/1390 Gateview Court | [D8 packet](facades/d8_reference_packets/w96215698_1228_1390_gateview_court.md) | continuous flat canopy, slender rust posts |
+| `w96665893` | 1210 Mariner Drive | [D8 packet](facades/d8_reference_packets/w96665893_1210_mariner_drive.md) | compact row, shallow hip, mixed doors |
+| `w96665908` | 1203 Bayside Drive | [D9 packet](facades/d9_reference_packets/w96665908_1203_bayside_drive.md) | compact block, shallow gable end, screened entry |
+| `w96665916` | 1242 Northpoint Drive | [D9 packet](facades/d9_reference_packets/w96665916_1242_northpoint_drive.md) | deep flat canopy, local post/opening cadence |
+| `w96698619` | 1254/625 13th Street | [D10 packet](facades/d10_reference_packets/w96698619_1254_625_13th_street.md) | deep dark post-supported canopy, paired windows |
+| `w96698643` | 1249 Exposition Drive | [D10 packet](facades/d10_reference_packets/w96698643_1249_exposition_drive.md) | varied dark/green entry/privacy rhythm |
+| `w96698648` | 1252 Exposition Drive | [D10 packet](facades/d10_reference_packets/w96698648_1252_exposition_drive.md) | deep canopy, shallow tan/gray roof |
+
+The current 1203 reference supports a shallow hip and a partial left canopy with yellow entries; the inherited shallow-gable description is superseded. 1208 lower cadence and 1254 canopy-occluded upper cadence are responsible family-based production inference. Private reference photos are excluded from Git and runtime.

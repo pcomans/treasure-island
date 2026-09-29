@@ -355,7 +355,9 @@ const acceptedUnitIds = [
   "physical-building:w96215646",
   "physical-building:w95934123",
 ].sort();
-assert(registry.recognition_metric.numerator === 34 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "34/213", "runtime recognition metric is not exactly 34/213");
+acceptedUnitIds.push(...["w96215693","w96665916","w96215668","w96665893","w96215698","w96665908","w96698619","w96698643","w96698648"].map(id => `physical-building:${id}`));
+acceptedUnitIds.sort();
+assert(registry.recognition_metric.numerator === 43 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "43/213", "runtime recognition metric is not exactly 43/213");
 assert(JSON.stringify(registry.recognition_metric.accepted_physical_unit_ids) === JSON.stringify(acceptedUnitIds), "runtime accepted physical-unit set drifted");
 assert(JSON.stringify(registry.recognition_metric.isle_house_non_numerator_source_keys) === JSON.stringify(["w1282547786", "w1282547787"]), "Isle House source parts entered the physical-unit numerator");
 const islePlan = disabledPlans.find((plan) => plan.receiver_key === "building-composite:w1249412094:w1282547787:wall");

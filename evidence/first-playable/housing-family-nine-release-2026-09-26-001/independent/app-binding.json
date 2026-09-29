@@ -1,0 +1,47 @@
+{
+  "app": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app",
+  "files": {
+    "Contents/Info.plist": {
+      "sha256": "12210013168f4197b156c151636a81d27285741b3d2cdd138740d09853a9f085",
+      "bytes": 1885,
+      "mode": 420
+    },
+    "Contents/MacOS/Treasure Island First Playable": {
+      "sha256": "ee2e407e50ac4490ab8359ebc9beafa089219cbaf23e2036c1bba7498e5555e9",
+      "bytes": 170963648,
+      "mode": 493
+    },
+    "Contents/PkgInfo": {
+      "sha256": "7e50a30efad50208a173203ced60818d693bb61266b75aa10927d1a2adce80cb",
+      "bytes": 9,
+      "mode": 420
+    },
+    "Contents/Resources/PrivacyInfo.xcprivacy": {
+      "sha256": "0535353bb08c25b8ce5ed9ac7e442a5994f402e0f6cbc4bed668cfc63c2ceac3",
+      "bytes": 229,
+      "mode": 420
+    },
+    "Contents/Resources/Treasure Island First Playable.pck": {
+      "sha256": "7a6bc153e5807241c3ce05771f0391b2094eec2bc64a10d59394105d97bb27ca",
+      "bytes": 84709500,
+      "mode": 420
+    },
+    "Contents/Resources/icon.icns": {
+      "sha256": "779ff524928785811d6d4c61f47a26491160b1092db9b610e85fcdfd9b2d2b2a",
+      "bytes": 67500,
+      "mode": 420
+    },
+    "Contents/_CodeSignature/CodeResources": {
+      "sha256": "50fddd947191f4ac849359845e7f4b7bd9d97185802b59dd085f16456c45c48b",
+      "bytes": 3217,
+      "mode": 420
+    }
+  },
+  "pck": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+  "pck_sha256": "7a6bc153e5807241c3ce05771f0391b2094eec2bc64a10d59394105d97bb27ca",
+  "binary": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+  "binary_sha256": "ee2e407e50ac4490ab8359ebc9beafa089219cbaf23e2036c1bba7498e5555e9",
+  "signature_ok": true,
+  "bundle_checks_sha256": "d9eb56948d781dd656b801334a4aefea775e58c8db1e8de5c3e6951e5352b358",
+  "signature_log_sha256": "cc2d3486905d0edc94e63d8cf9d62798501c2351c8b536a26ebb02a8a6618690"
+}

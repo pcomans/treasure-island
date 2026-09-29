@@ -5,7 +5,7 @@ import { invariant, sha256File, stableJson } from "./world-contract.mjs";
 
 export const FAMILY_AUTHORITY_PATH = "discovery/facades/housing-family-acceptance.json";
 // Updated only when a reviewed batch serializes its actual seven-artifact authority.
-export const FAMILY_AUTHORITY_SHA256 = "7531f8cd9172cad12a8e791952c7058947bb43fb2c4001e093e1b067680230ff";
+export const FAMILY_AUTHORITY_SHA256 = "12c0830ee6f4a08154fc2743dd481acea6ee8e7cde670f2ce348fdac741c704f";
 export const FAMILY_MANIFEST_PATH = "game/resources/housing_family/live_instances.json";
 export const FAMILY_SHARED_PATHS = Object.freeze([
   "game/scripts/world/world_loader.gd",

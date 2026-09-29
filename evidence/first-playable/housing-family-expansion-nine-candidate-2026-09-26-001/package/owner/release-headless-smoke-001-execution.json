@@ -1,0 +1,20 @@
+{
+  "stage": "release-headless-smoke-001",
+  "terminal": 0,
+  "errors": [],
+  "pid": 35555,
+  "slot_released": true,
+  "engines_after": [],
+  "elapsed_seconds": 25.888641125056893,
+  "ended_utc": "2026-09-26T05:23:05.451931+00:00",
+  "harness_pins": {
+    "run-stage.py": "1467c5c724fa49f889e01aefaeb86beae9fa9bc117fe8a4dff320e73d170db96",
+    "bind-export.py": "85b77be46e7a4898b9e9db7315ecc85d4028ce3d88699268efb48d089da56122",
+    "run-plan.json": "729190b07196feec22e8fa579579e96bf1420e2e0006baab54b7bcb317f308ad",
+    "settings.json": "e8b0b5048fdcfb6606d2fb777ec9e72df9033d720f2a38700973fddb4a202952",
+    "source-pins.json": "353f2db11768c1e4000f63f07d0994019f9538cbe6770e2bbaba34a0a67c3a7a",
+    "native-readiness.json": "57f5404aa37cab3645af0d19fd301c62a27dacc09c85e47ceaf61c961fd727d3"
+  },
+  "app_binding_sha256": "0d4326a6f0f2cbb3b8c3d50c37cd69e60b2a945811c040deefc40cd88c1320eb",
+  "ok": true
+}

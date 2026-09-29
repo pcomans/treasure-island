@@ -48,7 +48,7 @@
     "game/resources/housing_family/w96698643.json": "6829f1a7fbc25c05b7ba4083816dc136bb78afdfa9c7131d94f10f28379223f1",
     "game/resources/housing_family/w96698648.json": "fb609bd9493ee6e75ff33d6835334e5f2de5a80741f2abb94c00e3e91296cb5a",
     "game/scripts/main.gd": "413b066a2ebc7e367e798db3b02f65d7698fc9ab0f13915279aab1d34c137550",
-    "game/scripts/world/facades/facade_runtime_registry_loader.gd": "064c695be62dcaae08d52c4f5f0f22433dbbdd848699988989fefa123918d27d",
+    "game/scripts/world/facades/facade_runtime_registry_loader.gd": "e587d6e6481a3ba742dafc2cc05e0f178a61572d5d35f8a44228e60bebb98dc8",
     "game/scripts/world/facades/housing_family_live_attachment.gd": "6569c08cb8052e6aae87c3fa0597f9efdfe7e01cc249326f38b1d50f5274c703",
     "game/scripts/world/facades/housing_site_family.gd": "ca37309ec1f7bd3a57f0caf772c14f9cff9344061cce858e1db5f7473680b335",
     "game/scripts/world/facades/northpoint_1232_quality_model.gd": "4d4d570033ba15bd014c643c9bc41d3fe2b43e1fdf35dac87b75de721d5001c5",

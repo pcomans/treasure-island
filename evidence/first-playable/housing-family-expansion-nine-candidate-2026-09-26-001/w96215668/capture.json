@@ -1,0 +1,1279 @@
+{
+  "decision": "PASS",
+  "capture_time_recognition_metric": "34/213",
+  "source_binding": {
+    "unit_id": "physical-building:w96215668",
+    "source_key": "w96215668",
+    "receiver_key": "building:w96215668:wall",
+    "config": {
+      "path": "game/resources/housing_family/w96215668.json",
+      "sha256": "0fcf199458f938505e8073e34683689c4a2be1379d13933a2261b9e8f2eb149b"
+    },
+    "chunk": {
+      "path": "generated/world/chunks/x_-2__z_-4.json",
+      "sha256": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4"
+    },
+    "capture": {
+      "project_root": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion",
+      "input_map": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/input-map.json",
+        "sha256": "20d2f5f430bf35187a0e229ace86441fe07ae7db046c4ccc9943800f8825ff48"
+      },
+      "dependencies": {
+        "game/resources/facades/batch_02_material_registry.json": "e7d1167869640867e2857de1f08df81e878e68230b59feff3fb947b16ff56cb7",
+        "game/resources/facades/batch_03_material_registry.json": "31983ae1529e6248e93ec8d231d2b870de3979778b35eef6019cd19e1a964516",
+        "game/resources/facades/batch_04_material_registry.json": "b4c5983a628d076cda0aaa24d0023fc7a43983fd6c00f82c9806871af0409cf7",
+        "game/resources/facades/batch_06_prototype_registry.json": "a599df850a3ca51a51a3223820fc840201559ba26eb5ed514211eaedc2304132",
+        "game/resources/facades/bayside_1215_study.json": "69ec5d8fdf7a9fb93148ae459c5c570726509ea30e10a4193adb2294810b52d8",
+        "game/resources/facades/bayside_1220_study.json": "984ebbde55fa5dcb1cea8b0d57c20e2773982bbb195e1a52b16dec250ec0735b",
+        "game/resources/facades/bayside_1222_study.json": "65a67decfd83b376209c8c8f80ab7f456be2006a8a907c2f36211c3e863e0ab2",
+        "game/resources/facades/bayside_1226_study.json": "34fb34bec3fa672277fa081dec042ecf1ee4597f293690a6588f85460ff59da2",
+        "game/resources/facades/building_1_exact_receiver_calibration.json": "10ab1f25d0f9d37ccbb20be9dfe77a37c66f63918b1fdf070c1de9c61633414a",
+        "game/resources/facades/building_1_hero_model.json": "f10bc92a6e74cbae41347e742e6c68c50faccddbd52ab3ecce210ac8243bc6e9",
+        "game/resources/facades/building_1_public_front_believability.json": "99117e1af118592db1d1cfa932b44014862cb8be4f47d0b3ea519e24f9e591fb",
+        "game/resources/facades/building_1_recognizability_placements.json": "affc41797999b83610352c5945c21d5206167a67bdc1aa5134a3021dd280df05",
+        "game/resources/facades/building_1_standalone_prototypes.json": "2014040edb3985be4aaae437749063474aacaedc0534b6d54e69b7dfd92612cc",
+        "game/resources/facades/building_3_600_california_ene_layout.json": "a491a3c7916191b9ca5f6adacc6d1f2289c0103f5079516b102b94e3993dae0c",
+        "game/resources/facades/building_3_hero_massing.json": "2a7eacee21c88046deb587e53224b2c6c189172922265ed5a63711789ee37553",
+        "game/resources/facades/d1_current/d1_b201_live_attachment.json": "0f3bf052688ec813b5fa58b077d74c963949574623fe4cf67c12c347e7257229",
+        "game/resources/facades/d1_current/d1_b201_public_wsw.json": "30bc1f62e5fa44c60bdcfb1bfd4f6f679d391618fa213373e571080face6ec6c",
+        "game/resources/facades/d1_current/d1_b225_live_attachment.json": "80b42c33fce84361aa7512f64305f5bff273e8fed95640ca4f9c19d49d55621d",
+        "game/resources/facades/d1_current/d1_b225_nnw_long.json": "dc3591df4a68af19b5fa53f402ed15d5e3f83946c4a113f024d5b7d41f2f82b8",
+        "game/resources/facades/d1_current/d1_current_standalone_pair.json": "fdf00bba0562036f499a5a64e47e5e1b695d49d6cb4ada7acafd450b3dcfefb9",
+        "game/resources/facades/d1_current/repairs/d1_b225_nnw_long_cladding_repair_v1.json": "7c1c2d508f78236590c6d413604be60b3a5c48865878e69d294177d05c48d166",
+        "game/resources/facades/d2_1439_chinook_quality_v2_live_replacement.json": "58ba0093d002a3acad06b76876b7333077bb5152827f4a59b0c9b6da132b68d9",
+        "game/resources/facades/d2_1439_chinook_quality_v2_prototype.json": "1217ae0a101f0f1951a3c12303d11af3aace225745922a09aed276b1958553be",
+        "game/resources/facades/d2_1439_chinook_standalone_hero_prototype.json": "bd83cdd7a70a832701fccdf8ee39b976b57602ce4105244b2266f8fd35cac500",
+        "game/resources/facades/d2_1441_chinook_live_replacement.json": "aef5717332cda1cf2ba1457ce9e9e92aaaceae46345595a979813b9369ad8111",
+        "game/resources/facades/d2_1441_chinook_standalone_hero_prototype.json": "ebb6be74a630ad405030938dc7d27bc6fed46b2d6892a847ee653d374df57f75",
+        "game/resources/facades/d2_1444_croaker_quality_v2_live_replacement.json": "472f82f5a3d98b0778aca758ae8277f8b8ba9b4a39875ff54f67781280965135",
+        "game/resources/facades/d2_1444_croaker_quality_v2_prototype.json": "22efb2fa24ea1db245f8fe204e3f029312da59a7a67644d2f1464f02661046ef",
+        "game/resources/facades/d2_1444_croaker_standalone_hero_prototype.json": "1176b20c7ab350733dc0f07cb7ab2d46b88077f6378bd9380af3756a069e9fae",
+        "game/resources/facades/d5_1308_gateview_live_factory.json": "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a",
+        "game/resources/facades/d5_1308_gateview_live_replacement.json": "c35951faebaa921d41bf0230bf511b3a3fde9b9b1f533272030a5dfb8d8dfe8a",
+        "game/resources/facades/d5_1308_lawn_tone.gdshader": "d60b1db292234046d2e8fd1a451e0f3f52a69b12afe401e871bedef6067ca7af",
+        "game/resources/facades/d5_1308_lawn_tone.gdshader.uid": "aa606f8c607c165e1c65f292545177b0cfd772c0d8b1cfe80a9c312478aa4370",
+        "game/resources/facades/d5_1308_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
+        "game/resources/facades/d5_1308_siding_marks.gdshader.uid": "7dfcdcdc2b11520545502947707323810c3fbe29e518587eabb56335ba2847c6",
+        "game/resources/facades/d5_1317_gateview_live_replacement.json": "d15f6ea9e14ca9723dfd3f5794718fab6ad6d0cbf24091ce0e81fd34821e554f",
+        "game/resources/facades/d5_1317_gateview_quality_study.json": "33b54fb72cf829e933a0e386e984f6ffe9d9a7c9d335ecb034e779c12bf89a26",
+        "game/resources/facades/d5_1317_quality_study_geometry.json": "48ba2658a74b4e51ab43fb07b3940a737ffa351350081063c45908e878a5bcf9",
+        "game/resources/facades/d5_1317_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
+        "game/resources/facades/d5_1317_siding_marks.gdshader.uid": "75bcf616e69dbe0a62b5a3f168e5d7439bf4c7ddcbac94a41b149c4c819c089e",
+        "game/resources/facades/d5_1317_surface_tone.gdshader": "2388fbee5821352c30ec5925f4ff159439090c8cb1f4973344a947c65b4e4da0",
+        "game/resources/facades/d5_1317_surface_tone.gdshader.uid": "4ec6ab77a407cf232608a4d6d59e4c785bfbd01a3e21e01cc39f18c7af81f670",
+        "game/resources/facades/d5_1394_gateview_live_factory.json": "2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86",
+        "game/resources/facades/d5_1394_gateview_live_replacement.json": "3d74e15f0a438dd4a45f2c778c415879888ef1b7a3cef75ebe7a9682db4de203",
+        "game/resources/facades/d5_1394_lawn_tone.gdshader": "d60b1db292234046d2e8fd1a451e0f3f52a69b12afe401e871bedef6067ca7af",
+        "game/resources/facades/d5_1394_lawn_tone.gdshader.uid": "38f54ac1223b3638b681e82e9be927a0091c09c4a5dd8191293daaf163cc517f",
+        "game/resources/facades/d5_1394_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e",
+        "game/resources/facades/d5_1394_siding_marks.gdshader.uid": "f125279d02ccb25244f8afc92fb997257478223386fd42b6f47615ec47269dfc",
+        "game/resources/facades/dormitory_369_standalone_hero_prototype.json": "b02b098bfeca628cd6a71e7393897d53f5f46dfd0efddd915e316c2dd5204c2e",
+        "game/resources/facades/fire_station48_live_replacement.json": "4b31025a80909b03b882c089bf17d50dbc6a4ee9d32fa9b072b884fd4eec061a",
+        "game/resources/facades/fire_station48_quality_study.json": "2ae853642ed360f81ea6dfe53089fa909531af8776f40462fb129076f16b6795",
+        "game/resources/facades/fire_station48_study_geometry.json": "e198f49df39671d489bb96cd553ec257df12156a0921b489f434d2c2b37d7597",
+        "game/resources/facades/fire_station48_upper_cladding.gdshader": "4600d14f6d45455c56ce400cc2b073c124462eee1da0e33f7492b356614f319e",
+        "game/resources/facades/fire_station48_upper_cladding.gdshader.uid": "22ce7461d5eeb0970c94241a476bdeaa29d3d1f643a0d9deaa560cd8cdd35866",
+        "game/resources/facades/gateview_1397_study.json": "97919d0168bab83ff0f7118cf00fb0bbea1eb062c731d2b956de896a1330616a",
+        "game/resources/facades/hawkins_77_bruton_layout.json": "4de2239af2e18fe4121930d51dee15e081d2f81a40393da2f1f29c69464761d9",
+        "game/resources/facades/isle_house_39_bruton_high_se_layout.json": "c5e6393e90152cef62f6478d7bd87750f3db5598d6ebc36cd307ce20acaa090d",
+        "game/resources/facades/isle_house_39_bruton_low_facade_prototype.json": "a0bfb094bfc4a7878a6dba0b5383dbd29cb8256f5a030a04ece222e912540ae0",
+        "game/resources/facades/isle_house_composite_repair_standalone_v1.json": "a3e1865d18cfbb4155cf01df3b5eb265ca67e4ee80acfc07986c84d0cd7db393",
+        "game/resources/facades/isle_house_composite_repair_variant_c_standalone_v1.json": "bafdef392ee638e860ba15f140c10de61e266ae63005b12e0e310e52c176897a",
+        "game/resources/facades/maceo_may_live_replacement.json": "cf97a1197fdc2c5cea8f5befddcb6f6f75306d9a2b969a6e3297efad0b319c6c",
+        "game/resources/facades/maceo_may_public_fields.gdshader": "04169ff9212cf35fb50d53dc18791600c5c7647618d8e6c58021bbbc3c724279",
+        "game/resources/facades/maceo_may_public_fields.gdshader.uid": "925a9d8841124449193c30393091c937a3ac3e155f7805597f35b6be1c3966ba",
+        "game/resources/facades/maceo_may_quality_study.json": "11a8784bbb08ea4a6244b1da1dcc8e0c2b589ef66c55a0bd2cc8ff20ad16cd6d",
+        "game/resources/facades/maceo_may_study_geometry.json": "4caf46d6c3ebb1ef497fbe8012e5f1fd938a055e11a4132c04ed8e6827da12b3",
+        "game/resources/facades/mariner_1202_study.json": "8490ec8dab6302c9892b37b86542ccc18793dfe309ac7d589fb9dc9cad9ddf22",
+        "game/resources/facades/mariner_1206_study.json": "5327998befca469042db9ac728de697e56fb311f9f889bb1bc867617425d4f97",
+        "game/resources/facades/mariner_1212_study.json": "f56009b6ccb5bea7ed63911c7d940573996aad4e1c5ccaa55267adbd150b3066",
+        "game/resources/facades/mariner_1219_study.json": "5fd7eeb31c4d2cfac52aadff65f1bc7f35458d3e0c8d8469411f75ce032b9f21",
+        "game/resources/facades/mariner_1221_study_002.json": "512fe3b3bd31ed2abd2ea69713028cb76b6aed782a8d572a700e1d53eee2a833",
+        "game/resources/facades/navy_chapel_187_standalone_hero_prototype.json": "c8f2ab09f3943a5ec8abea7cb9a108f49990bff1d83003c3b3622187a269dea2",
+        "game/resources/facades/northern_canopy_free_study.json": "54659ba6dde676f8a3ea122d654ff9532ffc706c6ea95b0913e4ef10fa5100b0",
+        "game/resources/facades/northpoint_1227_study.json": "2e8573eb855c110c0d13545d63f8fd467a25a68613d16b91cb1336462baadde7",
+        "game/resources/facades/northpoint_1229_study.json": "ee5a79b5cb8ed44465d861b40ad06514bd9a557cccfdd09e89600784100fe9b6",
+        "game/resources/facades/northpoint_1232_quality_revision.json": "44bc884f5288cb8eb0561a0f4a2dea539607a6f386fdecb05bbfeb6fde9be4e7",
+        "game/resources/facades/northpoint_1232_study_003.json": "609436c6ee4f3f0170ed02b93ada28f927d67401aeb677c03a3dab9d76109f98",
+        "game/resources/facades/northpoint_1234_study.json": "bb7f2af978cc985491eba694e8e179d39b41f609c594efcc4815a6ee8756d917",
+        "game/resources/facades/northpoint_1237_study.json": "af31f59979233b94229c05286d2712cafc7c0d28f29d9d6fc2ecf049668f8ace",
+        "game/resources/facades/northpoint_1238_study.json": "a7f733e4f67351f9919769ff1329f263efbd43ca0d39a3fb30c3ac77e626c2a9",
+        "game/resources/facades/northpoint_1239_study.json": "bf1a2073f0d371242d5636dcb47820cb6cbf47f8df9300de7aab95da3cfa6174",
+        "game/resources/facades/northpoint_1240_study.json": "aebf5005af3e89a2a60db46f38760a9341b1c7a8a6a6216e8777195b37ab42ba",
+        "game/resources/facades/northpoint_1241_quality_revision.json": "dc87fc7947e22607d9529fa3d34ea10296a47cc504cd5a5e276d1f03ebe92c52",
+        "game/resources/facades/northpoint_1241_study_002.json": "9ddd9734280fa4380e4eb95d1d0e682300ac55037845f2e73b65dc57de071ccb",
+        "game/resources/facades/w291196370_module_calibration.json": "b30a8f19091288cde4b8e891ec40287ab28a73776588f96ee86fc5565cfc25b8",
+        "game/resources/facades/w34313515_module_calibration.json": "2d378a94da4b7badd334d5c00f926a26a4ff9109782abb18e4859301df4b5c1d",
+        "game/resources/facades/w34313520_exact_receiver_calibration.json": "28ea8b6e506d747299a920e4d456d8676031e18ec3b6d9e959cab31fa33de4f1",
+        "game/resources/facades/w34313520_standalone_prototypes.json": "ab80f0cd0424c22f7f24e5fc82211353e9aee7c95bea4903022681a48c5620a4",
+        "game/resources/facades/w34313525_exact_receiver_calibration.json": "ba22916618510f610719606c1c18f84b8965bbd76fe74eddc5430745470bbddd",
+        "game/resources/facades/w34313525_standalone_prototypes.json": "86d3634e62f367f24bef98206fe1e6f34124023f0d9672bbd318c45c0a33b170",
+        "game/resources/facades/w34313564_module_calibration.json": "45a47d333c997887cef7d1c97a633d37ae050efda597186430c7af6d52116f0f",
+        "game/resources/housing_family/README.md": "69d6d2b227b755dd7308c0a273219c13e895e5664f819d729c577378749379b2",
+        "game/resources/housing_family/long_row.tres": "7c65f2147222fe733aede8ce5312d60ad06d15e02e1622bd7192a6c8886354bb",
+        "game/resources/housing_family/roof.gdshader": "2b35613975a3ec4b7271159a6074c8fd4c1e1b483d9b6fb42466d852dcab72ce",
+        "game/resources/housing_family/roof.gdshader.uid": "8f8cbf17623dbbf1617b45666a2ce2c374c91329f56d146bd8f27100dbf33ebb",
+        "game/resources/housing_family/short_row.tres": "137cd89e847a1bfcfd562f871da368f8823ef7e7621a71fbf97da9c15a0696d6",
+        "game/resources/housing_family/siding.gdshader": "5a56085c060167b7b65b556acd09bb87781e04ff2fb3e43f6978ea8f50e800aa",
+        "game/resources/housing_family/siding.gdshader.uid": "fa1f8c371a1004425916fabf5c2346b95c485da5d803768258e8710f9fb30e1e",
+        "game/resources/housing_family/w96215668.json": "0fcf199458f938505e8073e34683689c4a2be1379d13933a2261b9e8f2eb149b",
+        "game/resources/materials/world/1212_mariner/1212_mariner_entry_accent.tres": "8b48483e70b6365b67d3d492d4f2e611ea1d09fc6c3fe8cf74f69628f0170f61",
+        "game/resources/materials/world/1212_mariner/1212_mariner_privacy_accent.tres": "719ca1fa5e74d298a338e4985a4951551bae47cd3a8a003aee39340a6013d857",
+        "game/resources/materials/world/1212_mariner/1212_mariner_siding.tres": "fcf16d01599d9152e4c69c29243005efafb7128ebc989f8ef2ca49b2f76e662e",
+        "game/resources/materials/world/1212_mariner/1212_mariner_white_trim.tres": "21bdf88cbc0acf6de4a6a02a470d4925722ad6232dc7d39eed0b8e0903f23482",
+        "game/resources/materials/world/1318_gateview/1318_gateview_siding.tres": "abf1e18a2e55ae511957a92aca271bda811fe683f813d09b1591fc7b51d54327",
+        "game/resources/materials/world/1318_gateview/1318_gateview_white_trim.tres": "30c896ddb23419a590744572fe4396c00fee942c3654985be97e2f33694a7452",
+        "game/resources/materials/world/449_avenue_h/449_h_historical_siding.tres": "a4b6858a9f1997874e74321463429546e10acdaf6eac58521d5239f3360ec34d",
+        "game/resources/materials/world/449_avenue_h/449_h_historical_trim.tres": "10e22c5ce4a5f43140a383b5387e8b83e9eeadcd7672b77a1613f88f22832c68",
+        "game/resources/materials/world/490_avenue_palms/490_thin_brick.tres": "76ae45e057f1d6502c09c6a937d45256c388ee01a67c450a249dffce82cbce39",
+        "game/resources/materials/world/810_avenue_d/810_d_historical_brown_trim.tres": "d8810705d79ba8b79c5fb742b32c65b343a607aba0ed86b989d7aa35760e5a65",
+        "game/resources/materials/world/810_avenue_d/810_d_historical_siding.tres": "9c3f2cf0fbc237910652f93fb384444f957b77552f662942f728ec804aae7180",
+        "game/resources/materials/world/850_avenue_h/850_h_tan_field.tres": "d92f7137edf2be91b0268659843423764528db58c194cbe5d0b1596a4f8303a8",
+        "game/resources/materials/world/850_avenue_h/850_h_teal_edge.tres": "76cf6b1231952c05362bf41e29ee473452a87aa6aa6f663404b0fed10e42481f",
+        "game/resources/materials/world/batch_02/batch_02_homogeneous_field.gdshader": "1918177080126199ddbfc0715a77b85a9355800479a098ec9b81c9726b7cc4d5",
+        "game/resources/materials/world/batch_02/batch_02_homogeneous_field.gdshader.uid": "298b3c78f94f0b0f88423b90c7498c37c9378389e34876cb0d70a12a6a00f190",
+        "game/resources/materials/world/batch_02_04_aperiodic_field.gdshader": "324ba33a7c78f4b05038168a479ebb8e875c56704236492a050cee8da8e5f798",
+        "game/resources/materials/world/batch_02_04_aperiodic_field.gdshader.uid": "14aae7557eaa3475ea086981d277eaa82ed3f393d6c0de12a11d3edcafea97d2",
+        "game/resources/materials/world/batch_04/batch_04_horizontal_siding_field.gdshader": "63f0be4ab7995f94653298cff1d5a271728209e05ee014c67b76165bc4f0dc8d",
+        "game/resources/materials/world/batch_04/batch_04_horizontal_siding_field.gdshader.uid": "888cd4290dcb5a514b268ae65dc1393896fa6aa6f513e1ec6ce9665d6f386f0d",
+        "game/resources/materials/world/batch_06/batch_06_wall_tangent_aperiodic_field.gdshader": "d4a9dbb7c58443be93362699b0983b7377dab70698fd782b6710315c31be3e69",
+        "game/resources/materials/world/batch_06/batch_06_wall_tangent_aperiodic_field.gdshader.uid": "85d6e42b2fad59ba4dfe954dad893033a9936c34ce52fe8b9043580d8eb02cfe",
+        "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader": "cb531c7ee029a3cb8d163a644b2adea885606bab89b688df06828c33d3bc6d9a",
+        "game/resources/materials/world/batch_06/batch_06_wall_tangent_horizontal_siding_field.gdshader.uid": "84af1eaa8ab83e29dc3eef37c8fb32f08db07beeea5c551e08a85d67cd7bc270",
+        "game/resources/materials/world/bldg_461/bldg_461_gray_field.tres": "e44738c8f1d06a34bfc876b610e2c70a0890c85cbb63342b613094d7b8b80a66",
+        "game/resources/materials/world/bldg_461/bldg_461_pale_end.tres": "fb07e022a7a58c593f97c8aeabede62d849587593dbbaffb629658783dd4874d",
+        "game/resources/materials/world/building_1/building_1_blue_door.tres": "6554b282d6a77bcc50859b03eaea4889c18868d1f3a1580dbaa4bc2a9a6ff361",
+        "game/resources/materials/world/building_1/building_1_bluegrey_glass.tres": "41c1c31d4a78da25d4abfac59e82fe919fbb539afa479ab7601d0fb51939d59f",
+        "game/resources/materials/world/building_1/building_1_bronze.tres": "7948c9fca74345f4ff5e57a44191beb59300847b66cc54ddc176c5ca1b315ca3",
+        "game/resources/materials/world/building_1/building_1_canopy_underside.tres": "661a7b8cfaef2394e47a42f9bbd04df5fdfbb2cd4be9e6733d5bf3101817cea9",
+        "game/resources/materials/world/building_1/building_1_chain_metres_aperiodic_field.gdshader": "a4a5df4fbb8fd4f13187ec284708879b540677ac2c827642b4c3040b4bce4c09",
+        "game/resources/materials/world/building_1/building_1_chain_metres_aperiodic_field.gdshader.uid": "286ec4d73d609240aff6856cb526d7c87dbe6fc2cc16880c45bfebfb39f8bf20",
+        "game/resources/materials/world/building_1/building_1_light_trim.tres": "6e543d57ff078c267e952f633f4cee232e0743e30218d2f341dc3f31e4a4c8d9",
+        "game/resources/materials/world/building_1/building_1_projecting_base_stone.tres": "8bdd85aa10ac78c9225c59aad5ed9d26266ae517ea3f5910b8be3daf41f131ab",
+        "game/resources/materials/world/building_1/building_1_reveal_shadow.tres": "2e1f36f163c037fe060a1ecfcdcc5dd062849290a96c508970384585b176e14a",
+        "game/resources/materials/world/building_1/building_1_roof_metal.tres": "8bee442442f8b7bc3004cd3f703ce4e21eb9bc3b1f4d3d8800b02a77268329c8",
+        "game/resources/materials/world/building_1/building_1_rose_base.tres": "dd0ad6a95267c6be55ae415d8e044847b3ac53b7c1fceb823b12bb1a4fe44514",
+        "game/resources/materials/world/building_1/building_1_warm_ivory.tres": "572c3165cec91f74a49066873c31c071ae02333f85721bbd6b43981d814cdabb",
+        "game/resources/materials/world/building_1/building_1_warm_ivory_exact_trial.tres": "12d059d9d806c629225254f1aaf945be69a00ce5878db276ce299ad0c8cdbb9a",
+        "game/resources/materials/world/building_2/building_2_primary.tres": "e936dc561b653e43eafdef633dc2260c7489a713b5d8da5521b5b118a9b8f8a9",
+        "game/resources/materials/world/building_3/building_3_shadow_recess.tres": "6f0dbe93b776bf88654bd83230e8329a21a71fc030a3883e571c0a62d6b21d73",
+        "game/resources/materials/world/building_3/building_3_teal_door.tres": "dfb3114e6c419e3f1519364b58aa19d7aa3f65e08cb5fc64945ffe24874a0846",
+        "game/resources/materials/world/building_3/building_3_white_primary.tres": "5b76d33ed0f8ae940bc9761989c8fda43c1106059bc93029a994a1ebf8edc49b",
+        "game/resources/materials/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_v1.tres": "7fa7f3165dee560c48f5a092f317900b87b0876f27bb6a0e937b9c406a8d4ea1",
+        "game/resources/materials/world/d1_current/b201_green_hierarchy.tres": "5bdd67e659a0cce14abe3605f5a7fbfd85b0374d0a38be23cda326017235fe13",
+        "game/resources/materials/world/d1_current/b201_muted_rust_post.tres": "be97cdfd7367cd73172c4429ca212db0d1fc68bed34f4db6ce307d02a5225b94",
+        "game/resources/materials/world/d1_current/b201_service_leaf.tres": "de9895a808e4d64afc2c727e77ef92b590c9c718266ba118e64c489e84690cfd",
+        "game/resources/materials/world/d1_current/b201_warm_wall.tres": "6f5f6835790ab338454e72be58c2956deb6e470086797e209be0fab4d37ec788",
+        "game/resources/materials/world/d1_current/b225_aged_horizontal_cladding.tres": "49e2a7cb075707f1384106301583d295ffe955450d10c36a8526a7a87722f9f0",
+        "game/resources/materials/world/d1_current/shared_dark_glass.tres": "ad8931db8954fd5ebc8fdd809f70afb279dd74a36e53e1d9ca907c44409f10d3",
+        "game/resources/materials/world/d1_current/shared_deep_reveal.tres": "b15a82b4e37546cffac83d1b7c4e30f5e6828c7940a8da6581b218589cd908d5",
+        "game/resources/materials/world/d1_current/shared_pale_frame.tres": "9a2de298ff545cf80c5da0ed0aa37d9d4ebbf10fec8eb78810af7e4d012d1436",
+        "game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres": "488ad52ae9aa0155fd0356eaff128b3ab88ba0c23528c6ae332e7e54c772ffb6",
+        "game/resources/materials/world/fire_station_48/fire_station_48_primary.tres": "515135c3d0da6bb8eb8681e69d7e3f7818d896d948fe5dcc7c2bd8c6d076b188",
+        "game/resources/materials/world/fire_training_b600/fire_training_primary.tres": "fd1437ed9c0e00508d10d9a3c5d859d9a07c73fb28edc3fad62c473e9d865483",
+        "game/resources/materials/world/genai_pilot_v1/muted_brown_red_brick_albedo_pilot.tres": "c73902e7dcbcbd0ad179c8d8ed76379bcd950f95a4ba2014aaca514dc7fcc822",
+        "game/resources/materials/world/genai_pilot_v1/warm_ivory_mineral_albedo_pilot.tres": "0a31f8416a1babb860caadd74714f199c8d067e288fe7b2036649605466498a9",
+        "game/resources/materials/world/hawkins/hawkins_base_ribbed.tres": "3fdd57da8d860edf5b8a59d9eb9ac7330cddacf5f96d335d2c75fd000e298709",
+        "game/resources/materials/world/hawkins/hawkins_base_smooth.tres": "94b73c60e1d43bcc2bfac0ecf0803c021ec34c88b6579799a58b8bf7f3e617dc",
+        "game/resources/materials/world/hawkins/hawkins_frame_charcoal.tres": "2e99cc73385650e19bd957f0f6fa92826e2cef2e53c88653910f64a81efc244a",
+        "game/resources/materials/world/hawkins/hawkins_garage_dark.tres": "db479ea790823d13f09df35d9fa558afa53fde5ca09585aa68160a98b3569501",
+        "game/resources/materials/world/hawkins/hawkins_glass_proxy.tres": "10bcc87b347aa51557e0597476c97d4173f74c67f2bdb9883418026e60e49c63",
+        "game/resources/materials/world/hawkins/hawkins_pearl_fluted.gdshader": "82de521449dc386ed9ad5630abc8e1a874585a56731fa95fbfa3b984c0a6b330",
+        "game/resources/materials/world/hawkins/hawkins_pearl_fluted.gdshader.uid": "c34fe653ff12fce6fc894147389cc0758b3951d0165e77a64469c8c25161de84",
+        "game/resources/materials/world/hawkins/hawkins_pearl_fluted.tres": "171cb1d9c8ba31b19622ad7ccf2d005eed94d7793f59e1d90882291ec9ce5415",
+        "game/resources/materials/world/hawkins/hawkins_pearl_plain.tres": "ca16d8e5ae23097f449040a61c6682fe7552d47eaf310acdffa78a3994b77546",
+        "game/resources/materials/world/hawkins/hawkins_sign_letters.tres": "6954194a853d4440ccb2e544870c18ab21c7ffdeaa7420ee83f1aa5b32dceb6c",
+        "game/resources/materials/world/hawkins/hawkins_spandrel_pale.tres": "55319e2dfb543173a212b4f79653f5622e4db6f40e0941821e6cdfd7a5a55a15",
+        "game/resources/materials/world/isle_house/isle_house_dark_charcoal.tres": "6910208cb7130a86fbe8a063a6e8fa8e96cfa657d493e02449379b981ce961fe",
+        "game/resources/materials/world/isle_house/isle_house_glass_proxy.tres": "19adff893d82c8c76542140b0ed6f1b3e08fa5e5b75101c0bb55c08b69f2c7ce",
+        "game/resources/materials/world/isle_house/isle_house_identifier.tres": "40078e3cf6209c128372cdcbd85ead7f852dd88ab33fddfdecddc34130586b5f",
+        "game/resources/materials/world/isle_house/isle_house_low_brick.tres": "fabab09ee257278336c1b7e9a2e6efab5f8e100df65340038ed03c7b0ea89635",
+        "game/resources/materials/world/isle_house/isle_house_low_landscape_proxy.tres": "534cb523b48639e87ec365b120b793a6ddca819e4b09ae590a592fc63d1a010f",
+        "game/resources/materials/world/isle_house/isle_house_low_patio.tres": "a4790cb821a8bf37e57de4b02e9257a23b0abf6970af5f3da8daf2a22c8eaea5",
+        "game/resources/materials/world/isle_house/isle_house_podium_light.tres": "52c57cff2f596f23222ec4f21cdc2a3791d62b667c34d6abb966ca06a0831d7f",
+        "game/resources/materials/world/isle_house/isle_house_podium_mid_warm_v1.tres": "a9c7230ff52d37327e6d98e0f14953eee2bd3eec7426dc993c0b7cf90e0ec037",
+        "game/resources/materials/world/isle_house/isle_house_return_quiet_v1.tres": "15d4848127a5153724d873dceea9d46121c0d65e5b53be61abed6e70a2f964c1",
+        "game/resources/materials/world/isle_house/isle_house_support_grey.tres": "55cb958134db30d533ad311a6a73f10aa523502c8099caf38edb17e30fb4fc04",
+        "game/resources/materials/world/isle_house/isle_house_tower_accent.tres": "a1f60aa46ff59101166ae0af0ee15f79a7115a2279b906d813f30355fe3f7e81",
+        "game/resources/materials/world/isle_house/isle_house_tower_light.tres": "713d582eb572d7a828af002fe4a855e32b5bebdd1fea862b1a564914c7ae6850",
+        "game/resources/materials/world/job_corps_dormitory_b369/dormitory_b369_blue_end.tres": "03f46e12f4b6b671fc0859e9d68d73ab0fbadd957af97855bbab698b467c4a41",
+        "game/resources/materials/world/job_corps_dormitory_b369/dormitory_b369_green_trim.tres": "ad4387598f23a327420043f7971ffc4db34274245b639e531071a5f917699ffa",
+        "game/resources/materials/world/job_corps_dormitory_b369/dormitory_b369_warm_field.tres": "fb50d3989b7aa41421753ad4db5d195366d9a2c25c15087e5e3a2b7863c69602",
+        "game/resources/materials/world/job_corps_dormitory_b369/standalone_hero/dormitory_369_inferred_blue_gray.tres": "77f9f1dc4e7e0ebcd45cc3725942f2edc35af46c1899c102a23037ed14e65fa6",
+        "game/resources/materials/world/job_corps_dormitory_b369/standalone_hero/dormitory_369_inferred_green_trim.tres": "81ccefa48d500a56cbc4aa61a202c6219496514405f0b5a5b2427ee1dafc6093",
+        "game/resources/materials/world/job_corps_dormitory_b369/standalone_hero/dormitory_369_neutral_roof.tres": "f27469e3c8a5625446535a8cb9020eb2664b8202bc4c5bab1135445cd59c629e",
+        "game/resources/materials/world/job_corps_dormitory_b369/standalone_hero/dormitory_369_opaque_opening.tres": "046a5cf8ea3b0be4e462c2797840e0701c2a7722fe87263c25b7d8a6751c9a6e",
+        "game/resources/materials/world/job_corps_dormitory_b369/standalone_hero/dormitory_369_opening_frame.tres": "aefab0d5fd9c1d6c94e82618708624f694a398e540aed1eb9dbe62882b414178",
+        "game/resources/materials/world/job_corps_dormitory_b369/standalone_hero/dormitory_369_protected_neutral.tres": "d193d209dd3a38ab29ff0995ff8f15f4a96d4bc6bc011309d71de2be194b6c47",
+        "game/resources/materials/world/maceo_may/maceo_may_sse_rib.tres": "da68584fa85647d611f825743e3e58164133b51312199fd7955267bc047721bf",
+        "game/resources/materials/world/navy_chapel_187/navy_chapel_primary.tres": "4020e4c75350929359be9c16686ad80a2a0eac46918cc32746089694017a61a5",
+        "game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_inferred_cream_structure.tres": "2ee243415387c9f3d9dfd5664c0a5e13107745a83d9dcb489dd39e5aeb2ff17a",
+        "game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_neutral_roof.tres": "89be7fbe0feb68525c5423540d3a6f17f269567875174f23522b4e964ba737b1",
+        "game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_opaque_opening.tres": "253e9c2a5013f81aed446f6e55b702dea3792189658ce285726788d15376bc41",
+        "game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_pale_trim.tres": "b565aa44566a0bb93d07d041b1e8331d9f35cb83ec34f6a2ec403b362311c380",
+        "game/resources/materials/world/navy_chapel_187/standalone_hero/navy_chapel_protected_neutral.tres": "91cd7ce14550bdfb6773a4013ef0db8bbb24bd5cc9d0734f6c591f23d6552206",
+        "game/resources/materials/world/personnel_support_detachment/psd_outer.tres": "ec103e8a030903e17c3d863e80f6c904fafd0806b24db0385c8aac999c821692",
+        "game/resources/materials/world/site_12_housing/d2_1439_quality_v2_recess_backing.tres": "09928b8617c7ac90e421aa0e61acab916e391c3bac84c486a2e3beda995139fe",
+        "game/resources/materials/world/site_12_housing/d2_1444_quality_v2_recess_backing.tres": "796b27c2821e62f554232d2b355adb566d96aa3cd5ed8ef7fb765317f190721a",
+        "game/resources/materials/world/site_12_housing/site_12_dark_metal.tres": "75c13aa30a4e3c9f49980d78abe41f40c6c7ab270be6152c201eb8a72ebe8720",
+        "game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres": "389c01066767b085ef8ed8ae4c5e1b06062d9ffb135e3e6a7bfa968b963717d7",
+        "game/resources/materials/world/site_12_housing/site_12_ochre_tan_stucco.tres": "9486ccf52e1f2aff9fc940f60644733d5cf9bf1cb03cebb5332bcc1d7c0aaaf6",
+        "game/resources/materials/world/site_12_housing/site_12_opaque_opening.tres": "eddc4900c351dc3a75d163bd380a8b3a39bf6a1c1c3647299e3af19634a60ead",
+        "game/resources/materials/world/site_12_housing/site_12_protected_neutral.tres": "d97d7b4a442ffe8ad9a0b003e5c1d6466f9ef9effc7cdb2be8ef966195e66782",
+        "game/resources/materials/world/site_12_housing/site_12_void_shadow.tres": "4159f82cc5c4c17c0d8173eddbc171120326fbd99578aa68012275b1274ce02d",
+        "game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres": "81fd15832670516b2cc752e89310acda201f30705b01297639703f76f2111a64",
+        "game/resources/materials/world/star_view_court/star_view_grey_base.tres": "c7cd8fc95b76539a9bf20d6aa05cba5b494efdbb27ff93ba74a9a0077f60dc9c",
+        "game/resources/materials/world/ti_ymca/ti_ymca_primary.tres": "b5e44afcf4feb6df6ffba46f4e3b60a25fa6043c07c12c33e31c483cb2bf2399",
+        "game/resources/materials/world/ti_ymca/ti_ymca_wall_tangent_aperiodic_field.gdshader": "8943853363f5a2571ebf15a6e9711c6310b706d2e4415f3e1f314d8643d55f6c",
+        "game/resources/materials/world/ti_ymca/ti_ymca_wall_tangent_aperiodic_field.gdshader.uid": "7c9f23a4969908dc624b99f4a500d6a03a6c491c8dfc752c693170e1a17bd0be",
+        "game/resources/materials/world/w291196370/w291196370_entry.tres": "da23ac9280107f5cd3ca3f73bfe6e236149634a27213d5a8ac453781a4b7248f",
+        "game/resources/materials/world/w291196370/w291196370_glass.tres": "bb2727b8bfe6e8228cfe938345fd38950055f13a2c3ee27a7fd0daafaa5ba6ff",
+        "game/resources/materials/world/w291196370/w291196370_service.tres": "ec7973f9b7849a7ae36c2027bed9fa3c019405cedc4c254f8a104391923981a2",
+        "game/resources/materials/world/w291196370/w291196370_siding_exact_trial.tres": "715cf02b3c006c1a492ad61def9b2535fbaf04a3b1a41c69c5f092d705fab677",
+        "game/resources/materials/world/w291196370/w291196370_siding_field.tres": "f5c359c34f6e4c61020a49391f0dad04f637730b955ae14195a87260588fce5f",
+        "game/resources/materials/world/w291196370/w291196370_trim.tres": "0223453497849cddb947701aaf6c83044d3bfd1e610dbc2eea49ed79cb5b56ad",
+        "game/resources/materials/world/w34313515/w34313515_frame.tres": "716afbdf12f55975747b08c615236462d335b62ca0c46730b4cb8439b9691aa5",
+        "game/resources/materials/world/w34313515/w34313515_glass.tres": "963160407868064dcbb66b56cf477d0901f53a27351cbb23905474b5b613a4cc",
+        "game/resources/materials/world/w34313515/w34313515_pale_exact_trial.tres": "0b8704ccc352374adc1d6a553ff3d985ae2b70559d92b5171092450783b4395f",
+        "game/resources/materials/world/w34313515/w34313515_pale_field.tres": "0f97c958b35fe8c52e61db532c9caed95566330d9269e4b830e2c319ec47023e",
+        "game/resources/materials/world/w34313520/w34313520_bay_frame.tres": "445d3bec9d2ef3130aab27c816b27e384c689af68298b2db5ada37e0178f249b",
+        "game/resources/materials/world/w34313520/w34313520_bay_glass.tres": "40caf8b054b51ebf247a41286dec9efdbf925f09acf698a75285a4321a41bba6",
+        "game/resources/materials/world/w34313520/w34313520_pale_exact_trial.tres": "89fbb97ed797275a86c394af7eab13f946cbf23f29cba58b89a2b2d467030ab2",
+        "game/resources/materials/world/w34313520/w34313520_pale_field.tres": "7944151fd5ab8e977e7052d0cdb8df20132c82f967d8ebfefff83ede8fcf07a4",
+        "game/resources/materials/world/w34313525/w34313525_frame.tres": "2298f55a4129757eb69af498236e609384acb1565a2c0654e8200bc79e0ae21e",
+        "game/resources/materials/world/w34313525/w34313525_high_group.tres": "68f56c35a7e2ef870dd395e5f2e38b8cc5d640b532de32339ae4b22ffbabadfb",
+        "game/resources/materials/world/w34313525/w34313525_pale_exact_trial.tres": "d8a4500d3f3ec036b5e0b4c4273caf0644abdc3bda626fb831e2989d63559752",
+        "game/resources/materials/world/w34313525/w34313525_pale_field.tres": "00ad40bbc932d7b7d4a3ce77d13a3798f25a35e908bd45a1a5f7f38ba4c80eff",
+        "game/resources/materials/world/w34313525/w34313525_personnel.tres": "bcc6295ffe9229f6b7105c13896f0ff0cfcd5d3227e3b30046d9957c2272a88f",
+        "game/resources/materials/world/w34313525/w34313525_rollup_gray.tres": "b0beeb8e0cf894e3cafd8f7084e0d235074b67daf29c2a863f514d5386173b8a",
+        "game/resources/materials/world/w34313525/w34313525_rollup_pale.tres": "ded6d1de11ce4e77c71ee384be689257707c522718c9f8fad20fb3d1933fee47",
+        "game/resources/materials/world/w34313564/w34313564_door.tres": "88babf9bdceb46e8475f6d1acf1853ac451433c91f1264ca70c41d8c19d2aa3d",
+        "game/resources/materials/world/w34313564/w34313564_frame.tres": "5487fa17415e4022d85b82e3f013ac9a41be1dd07d88354f1caf4b05a9ab5994",
+        "game/resources/materials/world/w34313564/w34313564_glass.tres": "0f5b2ac833346143e777b81e85079f4502ca5a2692944228a9fbfeff28ddd669",
+        "game/resources/materials/world/w34313564/w34313564_pale_exact_trial.tres": "c7ec2df12b0dcf41e2b5019fd98155dbe3668d16379070210fe9f97ef032a343",
+        "game/resources/materials/world/w34313564/w34313564_pale_field.tres": "4523c071e50875db052e98ac39b9d9eff9cfb487aa37344064834ae82c0aae83",
+        "game/resources/materials/world/w34313564/w34313564_plinth_field.tres": "89a36e7fb036bf8bd3f5db0996076c477641e2c7e97d29537c2c464155b12d88",
+        "game/resources/materials/world/w34313564/w34313564_tan_exact_trial.tres": "3b895743b247a20641cb7564004d2f890bacfc286feaec9044b334b5e8e170bb",
+        "game/resources/materials/world/w34313564/w34313564_tan_field.tres": "2503ee946804bd16db9ca60ae05a0a1b9b6ca7c46422e0997ac2891c79a7ea76",
+        "game/resources/models/context/PROVENANCE.md": "f99f2e721c2fb053af21a486f50031d5f797f6920a657af11bde6106d7128f14",
+        "game/resources/models/context/baybridge-western-span.glb": "bd358ffeca95c07fc724ef775ebe51bf00117bad0d1c82ced75ee211de64ade8",
+        "game/resources/models/context/baybridge-western-span.glb.import": "bab599e18fcb1b0b66c69a434e0c3ef022ea21142db2bf2b2e0c908699315b01",
+        "game/resources/models/vegetation/PROVENANCE.md": "943e807c7e0634f3e515003d4ca40f24522e8b88c8a55e7ef8ef4cc680b70fe1",
+        "game/resources/models/vegetation/kenney_nature_kit/grass.glb": "260e41d3e5f2472492ed7b475c5b92a30b13ce2bad408535b5ff50574d4575e7",
+        "game/resources/models/vegetation/kenney_nature_kit/grass.glb.import": "da828a6a1be1faafdb0a7163372604535409eb626c54328bfcc49ad16c407529",
+        "game/resources/models/vegetation/kenney_nature_kit/grass_large.glb": "af49a595624abca7249824eeefb944d4baf974abeeb5b16110d175da3563d6cd",
+        "game/resources/models/vegetation/kenney_nature_kit/grass_large.glb.import": "3e0263241b23c7d76401985f4d9f13252411cca2d3050cb38799beb7e2e30760",
+        "game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb": "a68b9b3d9639afaeb4ace840d5a8e3f21ffc4e8afc1eab15566500fbb2bee3e3",
+        "game/resources/models/vegetation/kenney_nature_kit/grass_leafsLarge.glb.import": "b9b17641d37d77f326a151a12c5aee8f8d5fc1d39ed3c9770d41ecc515edbeef",
+        "game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb": "2e0487020d68ccf664435db9d829c78ae00e6d2785ee3ec10b9f89cc70a10406",
+        "game/resources/models/vegetation/kenney_nature_kit/plant_bushDetailed.glb.import": "832810e5bd2ddaa729831368b6f3650cde253401a381d84d36ea4012a0d199c4",
+        "game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb": "10e1d9fbf29d96d1d1a56fb2ce25ae66537505101759229afe01ae22c6c45e02",
+        "game/resources/models/vegetation/kenney_nature_kit/plant_bushLarge.glb.import": "fc8cf0e23ee4265f34ac0217976f3066af513f46379e307470eb4da4f750846e",
+        "game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb": "a9620a7d1fb165ae68d323676f80dbb2a9e3aafb21110d18d18d90b07026b91d",
+        "game/resources/models/vegetation/kenney_nature_kit/plant_bushSmall.glb.import": "fc74021f6cd9b71b06ae780961c7214d8e29b6ec1c3c0a8c4a3ff57249237aa5",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb": "c041daf2f0fb1d49e4325227cbcd58667adbe51e9b55e8c1f0a94b74cc521b3b",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_detailed.glb.import": "e6c7e547a3dcc0201e2b16294d7091605ef50486bd7c8b5e11b5f456307f613d",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb": "d7fd8773674928c50c11b66d12c636d49bdcc15a8b1c7fbb98e6f63a3439a3f3",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_oak.glb.import": "d86d721313dc4a1ddea69d6efe8338baa19173774177921eb9c736608b09c175",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb": "8af9dae16ce3c03183f9457996ebdd135167199514e8f4f944ee2bd82828d5c9",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_palmBend.glb.import": "100cc98ee730a4b01ad59a04ef5486c1a65b9eda21b8c5fcfc1ab8f158f7dff7",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb": "bc1013aaacca3bdd116ad1cded4f9499f008fe3056e760f3238be05aa21ff9f2",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedShort.glb.import": "c50da6e4d9002cee8cd01aa4c0434796981ba3f7eafd256c9ad4e9848113c096",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb": "2cbea0f9621cde884c63a7b4ad787bda1d051fa27ef3c66b9f2b65328dc53683",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_palmDetailedTall.glb.import": "de0b7ad40687ce510d89822d9830e13f6df25bb2854e6fa4ac3f412d70b1e070",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb": "9ba6337460e718b8baf165b23c02f39455e3d5757b1911505410c46bc88a86b5",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_pineTallA_detailed.glb.import": "c873551296b0cc339a9614ea7e5d7711245af7741c33f5dd3b549fddcf02ce49",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb": "a26b4434e1592ec1a83f364a54688bb34c48d9521bfccbe63f0cc37b381c4696",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_pineTallB_detailed.glb.import": "c759c68f667d93b915f39e0e5b5a14d530e68a2e1b35a238b4df78e8e36e9f07",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb": "7f19e347ff28703dd9e5fcce89b920156e291fbdb19331a57cb31a95c73e1322",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_plateau.glb.import": "8419c0598c6efd94a6eb7cce9b723c29aebf279be20a443dedc263a702a55ba1",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb": "f0f1f6861fe0446963d3be216cc628324f538bb0841bc9a8e14140313f64e2f3",
+        "game/resources/models/vegetation/kenney_nature_kit/tree_thin.glb.import": "f66582cd1aeb2e31ba5a45b42ed8ae4da5a592f0305a6fc091d2c6e383790913",
+        "game/resources/textures/context/PROVENANCE.md": "9853ddd29bb1c0ceb79a333b890158c3b11b648bbbaaa06c8d68d6acc7c366dc",
+        "game/resources/textures/context/sf_skyline.svg": "21197db2d54e092b08ae0743b187edcfe099c1d868995ecda5824c67674fc5f0",
+        "game/resources/textures/context/sf_skyline.svg.import": "c16fd478c51572aeb6d3065488eabf84695dfb7f2667df82ee43a73c4a4c8653",
+        "game/resources/textures/context/sf_skyline_owner_outline_final.png": "1939151e1098c4935d1a5fd230bc9a692c5484fc93fc5d5bd4064da0678927d4",
+        "game/resources/textures/context/sf_skyline_owner_outline_final.png.import": "ec2e06e8523cecce5346506b416fc4f812914c6c89bafd1a499ab8b30da152c9",
+        "game/resources/textures/context/sf_skyline_owner_silhouette_final.png": "9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5",
+        "game/resources/textures/context/sf_skyline_owner_silhouette_final.png.import": "0a242bab6ad00fcea8719b39be29e5f496b90e80d8f58ac72f456d83e9cdc226",
+        "game/resources/textures/tag/PROVENANCE.md": "72f560f42b0303f468a9b3ed438cfe3742e33e3694979f3cd59df511087da8c3",
+        "game/resources/textures/tag/predefined_tag.svg": "9eb345572cd3298ea14bad008fc6405e46123c0243444e4582393d0aa84af885",
+        "game/resources/textures/tag/predefined_tag.svg.import": "7df6456c4b51007428b68ec44b96987ffb9c9fdc8f072985bbdf3dd29fe59da0",
+        "game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png": "63e755e9fe5a5dcfb662b4265f1e769fc1b371987b55579b1ca4ffb63015015b",
+        "game/resources/textures/world/d1_b225_repair_v1/b225_aged_painted_horizontal_cladding_albedo_v1.png.import": "7224babd6149245a96bd2b7ed3d37236fed888e8f172d4cddea673af6a80869d",
+        "game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png": "0abbb429066966c1cfc1e0209a2a454c41dae73743fc119ffdf7cd82ee3ef35d",
+        "game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png.import": "e90b63a0ba9e2fd2331491782cb120e2017e406edb8eb2281846581744a2b6e7",
+        "game/resources/textures/world/genai_pilot_v1/muted_brown_red_brick_albedo.png": "0abbb429066966c1cfc1e0209a2a454c41dae73743fc119ffdf7cd82ee3ef35d",
+        "game/resources/textures/world/genai_pilot_v1/muted_brown_red_brick_albedo.png.import": "23d811d29ae45aaef88a9af04f52bd1b879b750b8c4e617f8e8450beebd75515",
+        "game/resources/textures/world/genai_pilot_v1/warm_ivory_mineral_albedo_v2.png": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+        "game/resources/textures/world/genai_pilot_v1/warm_ivory_mineral_albedo_v2.png.import": "e532a182a23be2919a48890e6aa51869118a226962bef119579aab8e9585b212",
+        "game/resources/textures/world/polyhaven/PROVENANCE.md": "1e9685e22301f01ffc48807994975828a2be18d1c923b8207c3b77ec054da599",
+        "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg": "fa09ed33d59c3bb90ef70d36352207e2e1ca5564cfc61295c0124d1a7d785808",
+        "game/resources/textures/world/polyhaven/bitumen/bitumen_diff_1k.jpg.import": "574e89cce2b7ed47b3409d35aee1060ab0170621757151fc436e74d5004424ef",
+        "game/resources/textures/world/polyhaven/bitumen/bitumen_nor_gl_1k.jpg": "a584bd64cac6ce37153b48a481612bc20be5d5f1d36cac572119560f67c1c756",
+        "game/resources/textures/world/polyhaven/bitumen/bitumen_nor_gl_1k.jpg.import": "aef833539b96383be5c53c0cafacee3e4964db16ed339e121c3b58843b7d32cd",
+        "game/resources/textures/world/polyhaven/bitumen/bitumen_rough_1k.jpg": "ae78d0e22b3c771d8ae8fd392c721daf545bbc24f137aad978ddd899dd376b39",
+        "game/resources/textures/world/polyhaven/bitumen/bitumen_rough_1k.jpg.import": "8c77eb6fdb6e8b9f9d5e565587d47560f44b5d00a407fc0800413338287b48d0",
+        "game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg": "ddf9224e9cfa3eb2998d9097e4cd34bd3630c85e0e6798e5a0a000415a684083",
+        "game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg.import": "19b0744b6602369148f8606a21ff8252b257e994571d1de4cf0c9ecf304e5e16",
+        "game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_nor_gl_1k.jpg": "99cdf6b6f0b8a319d206e1d561bf2a5d9933d8d33e1d685f8e25388101d21310",
+        "game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_nor_gl_1k.jpg.import": "8f047619e7a2d8a4fffc6c2ae1de459529e8ca2be64e7703bc380b6cfd9917e0",
+        "game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_rough_1k.jpg": "2280be133c104eb04370b625ebcc7f6709d2173b43ae2cd15a0074c26f492bf9",
+        "game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_rough_1k.jpg.import": "fa93e76108d7ac2b6f8a02894fb80141d637fc88e3b9bcf597beadef3e0339bf",
+        "game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg": "6403524d194100d80e3040435b953ddf44e90069bd404cfb116204dec3c35df7",
+        "game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_diff_1k.jpg.import": "08e358d6d562f45172ceefeb971ecb89816edaf1a193b6521e826fa277cd5367",
+        "game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_nor_gl_1k.jpg": "f9f18d02c1e4e655aa321ddeaf2c696a87a9c4782fea7119c65310c510367f5a",
+        "game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_nor_gl_1k.jpg.import": "95e108e71f24208c5744acdf7bef2945b2eecb68df8b9d72482a154b21570a54",
+        "game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_rough_1k.jpg": "13bf9548e801ada85c2445782544ad6ffba17c9ec08e39aa35c6f6ad2bc83961",
+        "game/resources/textures/world/polyhaven/concrete_floor_03/concrete_floor_03_rough_1k.jpg.import": "a07e518347028fc7e31b81cce55376447e6f5bba8f7ad9dd184641310f89352b",
+        "game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg": "70d3ff969a7421c7ae057b5d16386d11f5e59c6740db643352e1039413f419c4",
+        "game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg.import": "43f28c627e6f671bcb04ed1655c2dff7985f82d0c630570cd24a979cfc819b2b",
+        "game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_nor_gl_1k.jpg": "a5009e409ff0f7b2d19e1316fe5e2b2b4f28e4a6b79990a664be69d4e8a0e690",
+        "game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_nor_gl_1k.jpg.import": "ffc34fe18b508a9c07208926c182ffe0faf63af296fc7a5e0ad936d0bfde2454",
+        "game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg": "99f81099af07b009134b6a81bf0f95ab16da09c57156cc2ed534975664a68533",
+        "game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg.import": "000d54b268a41188dc4eabfbfbf03527f1ca00d68c48eed6b8a1ad8e62a4de27",
+        "game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg": "e78df7d6e762fe767634278e14316564e0d4510031986239458994ec9fc5410d",
+        "game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg.import": "3e587f74f2434bcad4c7d42b8f599ecfe119013d38b04777157f5479f81d55dc",
+        "game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_nor_gl_1k.jpg": "9d0eb5299f797c07eb841737eb7164755a2c8a2363540e175a76188a2aa5a2dc",
+        "game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_nor_gl_1k.jpg.import": "b5fe0de081e697ad8291f401b1ffe97688cc051328a135eb29ec2e92f69250dc",
+        "game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg": "0d8cc6216ac3dc9dc4339cb17a08d249f7341961f432ae1451c35cdff222869b",
+        "game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg.import": "3df77cfd3216574b1887d566b5722093a26f3edd62d87558e1276b1ca4dc27df",
+        "game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg": "ae94f2b34597b9108eefd88217f55eccaec6d6b382e858a478ee92df90e66617",
+        "game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg.import": "fd7a168f3e90cb1c1b31a37a5ade7a0dc8ab2fba143e592181135477b9b4ec33",
+        "game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_nor_gl_1k.jpg": "1c840a24807346ddaaf94a5057aee4078fcec3a4cd84bfe45da7d3b480ef460b",
+        "game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_nor_gl_1k.jpg.import": "61e765542330c91939a918085af68fa7049eb351ffcee21f1730b8f16d30363d",
+        "game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg": "9ebe6d03a9551c17d1802835c92c1442acb8f5d38d4874ee8c37770f11c4bed1",
+        "game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg.import": "48284c4f1b4ed3bab63fd57e8afdae16294f86e833f398bf0dd949e44569ec14",
+        "game/resources/textures/world/site_12_housing/README.md": "96125a2d0af80ee4af1fce083bc609eb38125b4932129e70891bc0b9e693dd4f",
+        "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png": "af1c7a8f90ab5e60b9ab40a3bcf087aa26b00892edd48a2b4f1c84533f8be51c",
+        "game/resources/textures/world/site_12_housing/warm_ivory_mineral_albedo_v2.png.import": "ecab97b965c6cf0d7f1fde9a5101af22658395239d67e4d2a2f5e066264dd8d0",
+        "game/scenes/main.tscn": "959a0f8a14057ea8402790ba374c7839d5f9835ce20ad194846f0a4d45b43d66",
+        "game/scenes/player/player.tscn": "a37b00ecc620b4f3106a14d1dc9ec22a519f81481e5e6c68252389e13488a793",
+        "game/scenes/ui/hud.tscn": "79cdb7f0cc07f959d3884246fea238e73572fba3595ab6925b618908453d440a",
+        "game/scenes/world/facades/batch_06/w291196370_prototype_set.tscn": "20bf67d9bb94c7925380ac49133ad582dce50c708be8a6b6794003a1b03b93cc",
+        "game/scenes/world/facades/batch_06/w34313515_prototype_set.tscn": "4e205d9ff642c90d6e0b5b0ed285a370e2ae7dab267441ff304c13abcc975933",
+        "game/scenes/world/facades/batch_06/w34313520_standalone_prototype_set.tscn": "4d0ee0e79ea6fd5a7e85b21cdf4a103d125818626b6c97875737cad44cc65785",
+        "game/scenes/world/facades/batch_06/w34313525_standalone_prototype_set.tscn": "9259ab6f231fee7d3d3ad8bfea0a290a455b1490b291a1d05b7cd64df4965cbe",
+        "game/scenes/world/facades/batch_06/w34313564_prototype_set.tscn": "ad00442bc2096cafa98f6009f8a896e12d8740f5d634ec9e0577a4d5255bf0dd",
+        "game/scenes/world/facades/building_1/building_1_exact_receiver_calibration.tscn": "3fb0c925cec5d65e0d7ed3ca86c1d8d464c4f43965997545af5c0b575978b0cb",
+        "game/scenes/world/facades/building_1/building_1_standalone_prototype_set.tscn": "1d205d4d6e176d4ed1e82746d1f1f8c4c2547910b1a71f87a213d9ada14967ef",
+        "game/scenes/world/facades/building_3/building_3_600_california_facade.tscn": "20acecc80aac526c5add6feb52f2f3e86969bf756533e81c9dcf9d59297fd354",
+        "game/scenes/world/facades/building_3/building_3_ene_modules.tscn": "c1f031ef4eb6c4643507dd686f2c6b222f1c8bdf851d7cd63c63470b0ea76c30",
+        "game/scenes/world/facades/d1_current/d1_current_standalone_prototype_pair.tscn": "0fdd5d356deb57664549db95fd04e123290c1fb9490b8024569e997616893d7f",
+        "game/scenes/world/facades/d1_current/repairs/d1_b225_standalone_cladding_repair_v1.tscn": "008669d9e0c2e04801ee8d720976e72e2041c82188c7fd14fe075ad48cb69914",
+        "game/scenes/world/facades/hawkins/hawkins_77_bruton_facade.tscn": "3e79430994309ad07a3a8763004b8a4d4f20a52e5d759e707ba5e7ad6a85ba3b",
+        "game/scenes/world/facades/hawkins/hawkins_ground_modules.tscn": "02e2c6808d02e6b0b8f1547cd2b1a814dc4f2a5b39725bae3e45ee501cd0cbde",
+        "game/scenes/world/facades/hawkins/hawkins_upper_modules.tscn": "7e12e6c0e7aa3a8763387e98a16cabf2d9459f15c4572d8cf6725a1c026cacc4",
+        "game/scenes/world/facades/isle_house/isle_house_composite_repair_standalone_v1.tscn": "e16cd72955169e199f7631677f09e75441bea143c4f1b39d08e2409aaefdbb9a",
+        "game/scenes/world/facades/isle_house/isle_house_composite_repair_variant_c_standalone_v1.tscn": "568cf7b229ff10aec5aade61562c7a8f48e84119d650b1529af7f84071721d39",
+        "game/scenes/world/facades/isle_house/isle_house_high_facade.tscn": "7ff4a91c402cecea19d2686d29139d2c0f139673b06d21c67d1c14835fd31d12",
+        "game/scenes/world/facades/isle_house/isle_house_high_modules.tscn": "1f462007c32f63dba7aaf24be58981737b2969882c9f91ae52d3e82144b5fdbe",
+        "game/scenes/world/facades/isle_house/isle_house_low_facade_prototype.tscn": "6dc28dbe5c0a6019ef770be90f830a0e72f7b454c21a785fdec992b96b6ebec3",
+        "game/scenes/world/facades/job_corps_dormitory_b369/dormitory_369_standalone_hero_prototype.tscn": "e9d1fd159c1a54b48bdfd5d6274c6435f32b6fa2d4b54a9d42503a16930f2720",
+        "game/scenes/world/facades/navy_chapel_187/navy_chapel_187_standalone_hero_prototype.tscn": "2ab7db7ef064bf8d9d59fb3dd631dd1b7cddd9fc18eebbb67832e75df8eb8083",
+        "game/scenes/world/facades/site_12_housing/d2_1439_chinook_standalone_hero_prototype.tscn": "a5a9fb270e014ba613e422a897c36d0ee39bed456ef6b236ae2e5349ad1c0f0b",
+        "game/scenes/world/facades/site_12_housing/d2_1441_chinook_standalone_hero_prototype.tscn": "a551c9dfe1f1139c721999a3748ccaa91637ec38a999a8aa2300f419f673c91c",
+        "game/scenes/world/facades/site_12_housing/d2_1444_croaker_standalone_hero_prototype.tscn": "eefd9d656b64ccf5e68f15c2eecf8b36790add43dc8b1ff6dd9a5526d6375ae1",
+        "game/scenes/world/world_root.tscn": "ed6dfaa1933cedf2a70ca6afd677a645d588dbf6c823fb04402aaaea4b709ab8",
+        "game/scripts/debug/runtime_evidence.gd": "ec533cb1f200ebd77750e83b1713a15f52fca1ee58d64fd9df8c53f06f640386",
+        "game/scripts/debug/runtime_evidence.gd.uid": "4d714dc591ae56b82a8e04d05057096f6daea60e393eff959357e5fa0b49bf3a",
+        "game/scripts/interaction/spray_controller.gd": "9897042fbffc6740ebe3eb4c19da544a0d437391ded9987318edc7238c403da4",
+        "game/scripts/interaction/spray_controller.gd.uid": "22056b83c696ad5005be65e4d946f99f8e3a54b9bc4815f25b4e2aa7e5b417db",
+        "game/scripts/interaction/tag_instance_pool.gd": "2460b12b9f70945dc88d2e321b72c1779dab4d867fd80f5920f4734213ce0950",
+        "game/scripts/interaction/tag_instance_pool.gd.uid": "dcbadec0ba5137c9ed643d504e645c63ba903011263ada7c0478c9dee7a85213",
+        "game/scripts/main.gd": "413b066a2ebc7e367e798db3b02f65d7698fc9ab0f13915279aab1d34c137550",
+        "game/scripts/main.gd.uid": "20b6a9032821634f3755a3c9d5d03484dd2c904389901416adcfbd2cb00c600c",
+        "game/scripts/player/player_camera.gd": "1d53f11cc3d9de00d4bb580aa6322c6f53b0080e5b9e1e3b18baeefd52125cc3",
+        "game/scripts/player/player_camera.gd.uid": "ed9fc295da74ff6380e4c4198ce174287db65f1e4354d41ce4b0f4a72c7af19f",
+        "game/scripts/player/player_controller.gd": "8b114132d66c78dd0bfd09783c7b9a3a3a441a8b1ae14f33f7308bd9b04ed0ea",
+        "game/scripts/player/player_controller.gd.uid": "386eb2c74b06392ba514992a23e1495c26ff341ffbdf952640ebcb506a405230",
+        "game/scripts/player/recovery_controller.gd": "b38f77cff221420c7e98d1b9227da0b44543274c4258cb2054b25ba52be9d8cb",
+        "game/scripts/player/recovery_controller.gd.uid": "3bb5f335802f82951e24682ffec4c505754e73b95ed67f62b0232a6565c700a2",
+        "game/scripts/ui/hud.gd": "a121992d1e838065f04e767c8179c0df4cf5dda39eda8a9265b36df17d676ffd",
+        "game/scripts/ui/hud.gd.uid": "6c9c4c7b658f12e3c48f26bd9870be887c76a8b4f803df49afd8fc464310ec58",
+        "game/scripts/world/facades/accepted_material_run_trials.gd": "d2d4909d5f8cc8a26e7ca77757ceaeebe337131dc33eaece3c7756e2b3d76c9c",
+        "game/scripts/world/facades/accepted_material_run_trials.gd.uid": "0821972b4e0b82579a6cb0238b39aac8d87c46547c70634432b84867b35a4a9c",
+        "game/scripts/world/facades/batch_06_prototype_set.gd": "fecc656332599acefbf307ce6b5978e62c689ae146f713cf9d935ef66b81de60",
+        "game/scripts/world/facades/batch_06_prototype_set.gd.uid": "141e707e9ff44ff25817681cafd7e589a3e8cdf84a653bfbfdb6a24e824b9085",
+        "game/scripts/world/facades/bayside_1215_live_factory.gd": "6613df3605004f128b22bf9f2d3a1a67c8e367c45216557c0c3ab293afb36880",
+        "game/scripts/world/facades/bayside_1215_live_factory.gd.uid": "1831af261f885594a65b49682e89f5e7baa76002f4ea71cfc6073afbac43d3a1",
+        "game/scripts/world/facades/bayside_1215_live_replacement.gd": "cc6266cc71e9e0243006af8bb6161f061b981ac313b312fea58c4abd3d607c55",
+        "game/scripts/world/facades/bayside_1215_live_replacement.gd.uid": "23ad65f960dbf2c1d951801fbe4c1f1c113b1b76f5856f005008e31f9b3cdd17",
+        "game/scripts/world/facades/bayside_1220_live_factory.gd": "dcfb622e4f5d2759459e17d1ab465ae9fa772167f335a2d1e0c88a111482273d",
+        "game/scripts/world/facades/bayside_1220_live_factory.gd.uid": "543aea6415cedfbe94c6de6e0fda079127ba8e95fbf8517d9f71abfd3c97a2a5",
+        "game/scripts/world/facades/bayside_1220_live_replacement.gd": "1edb75f24c3de6b4c6c780c9bb6b478225925453872e11c76f82fece8a146c38",
+        "game/scripts/world/facades/bayside_1220_live_replacement.gd.uid": "abf53cc32e88b64b144e9a960f94c7869fb5d53ac124b0bc5496c57c5e0a4432",
+        "game/scripts/world/facades/bayside_1222_live_factory.gd": "639a5ce1cce22b5635f3bccfe6cb1c7764988662b826f0c25c4183fe2ec787f9",
+        "game/scripts/world/facades/bayside_1222_live_factory.gd.uid": "fee75fe31f06851c3ff1dde0dd5c05d3b4321e3d7ab4afe93fda2e233b36c592",
+        "game/scripts/world/facades/bayside_1222_live_replacement.gd": "a4f6e7242dd4130b3dca67cad165a8a3067129ab2a7455e4e0f0f76ef3c144bf",
+        "game/scripts/world/facades/bayside_1222_live_replacement.gd.uid": "51cf078ae5fc092a1452c734eee7801b462da34131e5ed8461b01b4e279be175",
+        "game/scripts/world/facades/bayside_1226_live_factory.gd": "7060cf8a32b12781be8ed52f7056680af838f6d4930fb88a782901db98bef62e",
+        "game/scripts/world/facades/bayside_1226_live_factory.gd.uid": "f4465623a164636409db4c2d23a19bad2f03c1911b8b31dddb8e3afa54afedbc",
+        "game/scripts/world/facades/bayside_1226_live_replacement.gd": "d26993a5443fdf4b30477c9f47e96fdc54fdc1f517c5dbaaeb14d3f8b2120c66",
+        "game/scripts/world/facades/bayside_1226_live_replacement.gd.uid": "32235b223e6f2cd9473d55fefc62a456e1bdf0f25e85ee3f010c50926fc77deb",
+        "game/scripts/world/facades/building_1_exact_receiver_calibration_scene.gd": "2b21baff993ee30652072e3f51d95a239d2d22a77e0ff025f0dfe44fb1baa730",
+        "game/scripts/world/facades/building_1_exact_receiver_calibration_scene.gd.uid": "f65a4d267fdbb5a6db81762c9e5a38716041575bce1780a8ac464c7169f2208c",
+        "game/scripts/world/facades/building_1_hero_model.gd": "ce2f21dab02163b5f45d9d7e457f5d0ce96089bc55cca6e65aa9924c9f199c5a",
+        "game/scripts/world/facades/building_1_hero_model.gd.uid": "3c656c8d499efbc4c02425166772e35734b566001feb156abe6cb59d955a49ba",
+        "game/scripts/world/facades/building_1_live_field.gd": "26f7ea876300fdc9b01653fa21f95e575c0b48900e413fbe008f7001dadb3aa9",
+        "game/scripts/world/facades/building_1_live_field.gd.uid": "7c2dcc5b4452a81e8eac8a4e7b8cd041c22f309a19f160e76deb4b915135191c",
+        "game/scripts/world/facades/building_1_recognizable_facade.gd": "f39ce8b043dda6c78e1b7cabc223552b6afcceed67538ce973aa6cdc53fbd507",
+        "game/scripts/world/facades/building_1_recognizable_facade.gd.uid": "cbde92009a0dc25a31e3a4d5436600bca1eeb5eb31906743c90ceb83946a5c4d",
+        "game/scripts/world/facades/building_1_standalone_prototypes.gd": "cf18bfcfa40c7770d92aad569cba05da7ac85fe0fc89c0fd8cba6167ef62fb1f",
+        "game/scripts/world/facades/building_1_standalone_prototypes.gd.uid": "06c43b02cf40bdcc7344840a0cc54493a6f3421b8efe67121cfb7b84a52f806d",
+        "game/scripts/world/facades/building_3_600_california_facade.gd": "5fa9851a90e886bb0a75ff35bf137ed891ed5f1e0cd53d95ee840a0573c2c55a",
+        "game/scripts/world/facades/building_3_600_california_facade.gd.uid": "7bdd3196600273d3e887daf895de40d056f172825e2a6dcf89e50c360009d1cc",
+        "game/scripts/world/facades/d1_b201_live_attachment.gd": "499f6d2657b593ee5b0801cf1205a2925a993f3b1836922d3656a6d00c51cc19",
+        "game/scripts/world/facades/d1_b201_live_attachment.gd.uid": "a76a786d700885111cbcf8409e2ba882edd4b90a0223a1e95c19906b060fa4cd",
+        "game/scripts/world/facades/d1_b225_cumulative_meter_uv_v1.gd": "20d0f597ef0a49f85a0b8062d01186c7ad13262592f99a7f630be06938cd7dc2",
+        "game/scripts/world/facades/d1_b225_cumulative_meter_uv_v1.gd.uid": "4c90146847243fb88133e9f877686d8d47cd9214a9a59b2540fc676514d4a8db",
+        "game/scripts/world/facades/d1_b225_live_attachment.gd": "4b1defd92a77b23de692437f044dfaa579fa2ee5b3dee77465ec8404f1644ac9",
+        "game/scripts/world/facades/d1_b225_live_attachment.gd.uid": "ce32cc2e84a9bfcb52dc681b82424e007d8885a2921802b485d8f3fa94038314",
+        "game/scripts/world/facades/d1_b225_standalone_cladding_repair_v1.gd": "8c06afec4835441ec386251e700cc7ba91b8fea9fe070549561e401aa530d58e",
+        "game/scripts/world/facades/d1_b225_standalone_cladding_repair_v1.gd.uid": "b814be5aea13dc92fe8d6ddaf66a8f17f86c2ffe202d569a9aeb8b7b0a2840c3",
+        "game/scripts/world/facades/d1_current_standalone_prototypes.gd": "797bbb81e7f772f3fab3989d358772be4f1b16cb7e31a05571463e0d6ec31a5e",
+        "game/scripts/world/facades/d1_current_standalone_prototypes.gd.uid": "3f53790e7295f65af6d7df9a0ccfda9f7ce7f1cd4aa8e1ca1dca7457d22a650e",
+        "game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd": "d5a4458be7a5c2fb6989f9d8a343d497d2f144eb19c445de6016888e7b3cce5e",
+        "game/scripts/world/facades/d2_1439_chinook_quality_v2_live_replacement.gd.uid": "6569deea1d3503a3dd3fbc743d75f65ccd688bae4d8e91444a2228cd4690d2fe",
+        "game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd": "797dfb3075dacdf24a32b4ee0fa4959c296b35ae2d51f2d3c4dbba407fead3b7",
+        "game/scripts/world/facades/d2_1439_chinook_quality_v2_prototype.gd.uid": "3bb692928f9bb4b9a81505f8349872f22f640c425d6ed953f0a2b1fa73b8b326",
+        "game/scripts/world/facades/d2_1439_chinook_standalone_hero_prototype.gd": "70e487d34c9fc7f036d4f2f9119f1f4eca41801c98447319a39fd849ea549f1c",
+        "game/scripts/world/facades/d2_1439_chinook_standalone_hero_prototype.gd.uid": "5efb13f6c2c385ae2d773c9176cbf98a78f31fb4986b11258c4732f78d62a646",
+        "game/scripts/world/facades/d2_1441_chinook_live_replacement.gd": "bf51562a211126c0ea7b631321dfb021171ad68bffd6dd07667ad504d770b9a1",
+        "game/scripts/world/facades/d2_1441_chinook_live_replacement.gd.uid": "2015e89976a24d36378441af41c9962fa2f17a535dd995efe91763ad9a28ee66",
+        "game/scripts/world/facades/d2_1441_chinook_standalone_hero_prototype.gd": "6c0bf201bbb38a424453f753471cb7cb8060d0323e2386a9fda3bad84acd5933",
+        "game/scripts/world/facades/d2_1441_chinook_standalone_hero_prototype.gd.uid": "3d6408dd331005c629906bee8a4356e28dfea0f60f596a2c236d8f0d7c24f09f",
+        "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd": "178cc9df2c7add966a95427099b3a9900fde459e5bfc4825211e06c119cc2e32",
+        "game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd.uid": "3dfe337278ab24e32c2c21dd8cb59410398387c24bf8009aa725c4e61341133e",
+        "game/scripts/world/facades/d2_1444_croaker_quality_v2_prototype.gd": "afe74e5254af720cd855fb8dbadcb71a283d0c8b2d0f79c9565dd2e62b6e9d42",
+        "game/scripts/world/facades/d2_1444_croaker_quality_v2_prototype.gd.uid": "5e01f4bb9eca915e6ca489d2b9f850a97f1bb14b7a24ef95b9b608134492e97a",
+        "game/scripts/world/facades/d2_1444_croaker_standalone_hero_prototype.gd": "0c5cada54350d0a8dcd37fb1ecd737d91c5eab3ce1c469e423683ab30285cfc8",
+        "game/scripts/world/facades/d2_1444_croaker_standalone_hero_prototype.gd.uid": "45069f0464b9b347f80b06083e102e894c2e534f461d4d621b39daea00fe0185",
+        "game/scripts/world/facades/d5_1308_gateview_live_factory.gd": "6950aab112f73fdf78c1cad2f3deca72ac7e46b2a07faffe04f82987a1e07498",
+        "game/scripts/world/facades/d5_1308_gateview_live_factory.gd.uid": "8852163123f4a231186f1768939e8a585908547a8628486bce62d452e5e24ff5",
+        "game/scripts/world/facades/d5_1308_gateview_live_replacement.gd": "3faca37243c2ee51ff1d2834b3d581d4b7d4552a45179224371a2570b7f08ad5",
+        "game/scripts/world/facades/d5_1308_gateview_live_replacement.gd.uid": "db1b98628a31ab71a16600170b6af37416f77666843129676521265a9fde24b0",
+        "game/scripts/world/facades/d5_1317_gateview_live_factory.gd": "80930edee46371825bfb7b337b94bdbb4e3b7fc064aa2ba3061b6a86886af884",
+        "game/scripts/world/facades/d5_1317_gateview_live_factory.gd.uid": "2acdda632724086c034aefb94d34e98f973b291d7b508fd175f30d48d6af1eae",
+        "game/scripts/world/facades/d5_1317_gateview_live_replacement.gd": "283a020492c03fde62c591ea9ebcb1e5c5403a55aca514f0998908b440d9e819",
+        "game/scripts/world/facades/d5_1317_gateview_live_replacement.gd.uid": "4aa3822c606c05fc75c42954d6e97c6bef7043ca6fae834a3dcefc1b027e2cf8",
+        "game/scripts/world/facades/d5_1394_gateview_live_factory.gd": "25284afdd779f6b491da47218fc6fdd169dad3bb3c56da70d76680cc91781fcb",
+        "game/scripts/world/facades/d5_1394_gateview_live_factory.gd.uid": "8619c58b42621d3f8f8ad8e39c6fe1d59de23439453ee84a149f5036c7a8c2d2",
+        "game/scripts/world/facades/d5_1394_gateview_live_replacement.gd": "42e0233cdbe1be7bdcbb63603c1bb2cae4c247dde87a51f9518cc1afafc82076",
+        "game/scripts/world/facades/d5_1394_gateview_live_replacement.gd.uid": "a9eb52a8930d7ed99844bc09ed3b532dc6f87d7ba614cdf4abd058cdab6e3d06",
+        "game/scripts/world/facades/dormitory_369_standalone_hero_prototype.gd": "0416effb03f6d833baaa24bf988fa26ae716b83c98780b2ede224d6759db37a5",
+        "game/scripts/world/facades/dormitory_369_standalone_hero_prototype.gd.uid": "4cbe78e7bea2ed42955de16a4bb912f0c82e08f7f979efeb2a1e7158ecc83ee4",
+        "game/scripts/world/facades/facade_meter_uv_adapter.gd": "47e710b9ea7c5de5122430199e4105cbba5f672d22f59832f13b8004f16c5a1d",
+        "game/scripts/world/facades/facade_meter_uv_adapter.gd.uid": "fccc6a65c9a35f971f3f1bf628497615d8f2f8b05fc147baa858606ed639b77c",
+        "game/scripts/world/facades/facade_runtime_registry_loader.gd.uid": "5593255391611cf66fe897f18d27ff02542511662b6db0189115161537147462",
+        "game/scripts/world/facades/fire_station48_live_factory.gd": "33c945be3699fe7f94874d7a65ff0d01963092d0c0cb85deacaf4f794d9996d5",
+        "game/scripts/world/facades/fire_station48_live_factory.gd.uid": "c3003a24533d1b3b211347d77ed7bdb637d116b5d11d453eddbd57ad592b20ae",
+        "game/scripts/world/facades/fire_station48_live_replacement.gd": "163db6f19bb7368f5aa271282c11d4028337d48cc1b2e3d37b8231e1c329d25a",
+        "game/scripts/world/facades/fire_station48_live_replacement.gd.uid": "9147419a666531c3a2e64fc8752416a8906d0a81760ea7e89c92a66d7f1ec332",
+        "game/scripts/world/facades/gateview_1397_live_factory.gd": "ce6223bf527c74431dc794bfc9ab7211feabd881e9d080e318a2f712547e4a91",
+        "game/scripts/world/facades/gateview_1397_live_factory.gd.uid": "800d76449faaab629d39549fe8d85a6dc0f22cdf5b8d58d2ef7da58aa2b786f9",
+        "game/scripts/world/facades/gateview_1397_live_replacement.gd": "a906e841e11ad3c421abe208ef19b4ba3f4fb3e1e2c9ef563d609dd565d5fd77",
+        "game/scripts/world/facades/gateview_1397_live_replacement.gd.uid": "f6aae0b1d6ed6763ce5ce49f9cd2a133d65330bf9ef495c875d1ff0435eab0c7",
+        "game/scripts/world/facades/hawkins_77_bruton_facade.gd": "de733e43896fdf8c0437dcb266564b07fbb0e0ad42a40ef40d480623a748dd1e",
+        "game/scripts/world/facades/hawkins_77_bruton_facade.gd.uid": "30bd16027a2bc49f59c1c97346d86d999c8250fb3f9ef2abf4d2ba4a8d493dc2",
+        "game/scripts/world/facades/housing_family_live_attachment.gd": "6569c08cb8052e6aae87c3fa0597f9efdfe7e01cc249326f38b1d50f5274c703",
+        "game/scripts/world/facades/housing_family_variant.gd": "ee114852e2550cc287ac14f7c64350223a339c766e531daae0a96d3beb270b8b",
+        "game/scripts/world/facades/housing_family_variant.gd.uid": "e46c78140ab31b08128e7cf56115cdd5555aaefe5a480a9e909114fce86e15cf",
+        "game/scripts/world/facades/housing_quality_support.gd": "34d14eedb3c5296061bec5b10003c240aabb90e9654dcd61165f4bd917392b97",
+        "game/scripts/world/facades/housing_quality_support.gd.uid": "30a55741c0dbf73b6b0660423e46ece7053417de58d2a5411960d389f2a57501",
+        "game/scripts/world/facades/housing_row_family.gd": "1dc5dbfb83fa27bc43eab8c05d8b9ca803c61f833ad54b71d9af0d8a66a2d27c",
+        "game/scripts/world/facades/housing_row_family.gd.uid": "d87e8f8ebf91aae4cdc8127566bb31583afec55c3d177f45e18a7ba7890a2da2",
+        "game/scripts/world/facades/housing_site_family.gd": "ca37309ec1f7bd3a57f0caf772c14f9cff9344061cce858e1db5f7473680b335",
+        "game/scripts/world/facades/housing_site_family.gd.uid": "7b5c9b04fd7476a83bf1cc9d3a30936e6d96105cd34559181cf151899a0c2e15",
+        "game/scripts/world/facades/isle_house_39_bruton_high_facade.gd": "f8243cedd3f331cbc37e6343b1b48e76a73a81644c96cc1f80e623e0c71a3113",
+        "game/scripts/world/facades/isle_house_39_bruton_high_facade.gd.uid": "8fdededa721b9208a24f783f891f914cec4b49857b990a4737ad99230f7f138b",
+        "game/scripts/world/facades/isle_house_39_bruton_low_facade_prototype.gd": "68373632dd41989bee82244bdfcef02b89e74202e5a0e22a86d7919285c3e321",
+        "game/scripts/world/facades/isle_house_39_bruton_low_facade_prototype.gd.uid": "b86b6995ba812f2496f7faa99cdd19ce48459a864291799c94512657136c11fb",
+        "game/scripts/world/facades/isle_house_39_bruton_low_live_attachment.gd": "1b36a0ad92ded4607e0c1e0df5d5581d1c7afff5843cb75cd4c490790a86c413",
+        "game/scripts/world/facades/isle_house_39_bruton_low_live_attachment.gd.uid": "8aad352423d3e46307dd07caf63cea8c29fe5029447dc3f2403ca6debef7aa82",
+        "game/scripts/world/facades/isle_house_composite_repair_standalone_v1.gd": "b23d9cb3acbedacb323197fd38660f45b13e532dd11c1cca1fafe785338037d8",
+        "game/scripts/world/facades/isle_house_composite_repair_standalone_v1.gd.uid": "80c6bf14ee785b987e6533f4bb0ee1a8c395e2d39660bdfba6b23965a4c5287c",
+        "game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd": "e2767b01fab68d7f16ffe2e7f8e0313c711347e2006a72e028c19aaa2195b891",
+        "game/scripts/world/facades/isle_house_composite_repair_variant_c_live_attachment.gd.uid": "765eb1762640eadc6c423e5dfb800c41a017117b92c20e1f74df315546607267",
+        "game/scripts/world/facades/isle_house_composite_repair_variant_c_repair_only_factory.gd": "4336e821e240b973f8d97e5cb46e17332b19dea03869abb1fa81b96a7e380582",
+        "game/scripts/world/facades/isle_house_composite_repair_variant_c_repair_only_factory.gd.uid": "761c6019ae2fc623e0985eb8309964d83ae27b8d81f52f26d693c185ba6ac7de",
+        "game/scripts/world/facades/isle_house_composite_repair_variant_c_standalone_v1.gd": "b24fd72cd12aa0c6c45a123f005fc834ea657c343e8332a872eae07fa017ace7",
+        "game/scripts/world/facades/isle_house_composite_repair_variant_c_standalone_v1.gd.uid": "0ff9c7305be4a5485c7cd3ae6a42335c223e1577ce49f2e4df3d685069dacbe3",
+        "game/scripts/world/facades/maceo_may_live_factory.gd": "bb47a10d3464f162516ece9ac0591bdead1791e847b89eff35fd3f59adc56c85",
+        "game/scripts/world/facades/maceo_may_live_factory.gd.uid": "c962d5e9bfdebf7c5a2aac85461fcb41708003ed1a390720d70a8aec8724779d",
+        "game/scripts/world/facades/maceo_may_live_replacement.gd": "d9ad456c2d11437a0cf70277c7fab383359c49d6ab34ed698ec316ea97668001",
+        "game/scripts/world/facades/maceo_may_live_replacement.gd.uid": "1ac13621257ccfc52cab7c66c7672d97062615079eba1e0f4f24733e77d9e5e4",
+        "game/scripts/world/facades/mariner_1202_live_factory.gd": "c81cf174af5f91a21dc95306b77296d8d82152a54ef301e87853944b3b78c59c",
+        "game/scripts/world/facades/mariner_1202_live_factory.gd.uid": "f5b74c79027cf30bc0cde2c34d6b38a586e8e658ac44184f8e3f8c8b01926c9c",
+        "game/scripts/world/facades/mariner_1202_live_replacement.gd": "29f17b796ae922d967e87212f7e3ed21fa30db7d9ce4b9c2c7a2ba079e847a70",
+        "game/scripts/world/facades/mariner_1202_live_replacement.gd.uid": "c162505f305194b8e3da7a140168bca94af44dd3b503b9fbe43c57c69da4186c",
+        "game/scripts/world/facades/mariner_1206_live_factory.gd": "906922118fd881a5668962c87964b8c46db32d92a5483fd072a4c2a90b521c56",
+        "game/scripts/world/facades/mariner_1206_live_factory.gd.uid": "5d5221599c6de804956da7d2ccd0e2e5520f13a2d60f677d089cc2e9830dc1cd",
+        "game/scripts/world/facades/mariner_1206_live_replacement.gd": "88e0858a2b9d3559c8d2e766874f93cd44335f89c232e8115ef7c7f97ecc951b",
+        "game/scripts/world/facades/mariner_1206_live_replacement.gd.uid": "989222b89199724efb36bccf70efdbfdc06e1e63c5db9973969b7bfef71aa47a",
+        "game/scripts/world/facades/mariner_1212_live_factory.gd": "0594ea7a6e1f09a918349ee5af58722896e3b300ae640d8c1d4025b8219bc2a9",
+        "game/scripts/world/facades/mariner_1212_live_factory.gd.uid": "c1918e740ab0b1e4585550cb2c8fabef8fa9196aa5eef7cfc91a9f8a26163fcb",
+        "game/scripts/world/facades/mariner_1212_live_replacement.gd": "c0941706e3cee909b260e278a07d846932b805aaeb5e12440463e43678b3513c",
+        "game/scripts/world/facades/mariner_1212_live_replacement.gd.uid": "c2c1173d4bf5ba17c48e084f9cc1c3cfd3bdda5bb86f3b4a2064663c3774693f",
+        "game/scripts/world/facades/mariner_1219_live_factory.gd": "216e83f6ee69313d77ef5c2007720a126e07cff5e30ce23401a1d28cdac84748",
+        "game/scripts/world/facades/mariner_1219_live_factory.gd.uid": "ad54ab8ae9aab1888e02a735dd90be0b0501ea1d913ffdeb8cacd0da27119895",
+        "game/scripts/world/facades/mariner_1219_live_replacement.gd": "c6a0c16cc762d33c62c3f3885d865999be5e65e148f56a66e9da348e6cbfb58a",
+        "game/scripts/world/facades/mariner_1219_live_replacement.gd.uid": "49acc9a0a2d9ab89c582f43417d3fbd19aa858a9d6b0f49f2034672a05bd2774",
+        "game/scripts/world/facades/mariner_1221_live_factory.gd": "0347c885b48e02e376afbbdb7bf5d07ff6aa32c4b11de4521427c85daaa486ac",
+        "game/scripts/world/facades/mariner_1221_live_factory.gd.uid": "03d548f7af5ed5742950445fbf9ded14337e5d4c75f4cbc988cd0d024035f2aa",
+        "game/scripts/world/facades/mariner_1221_live_replacement.gd": "15816708f9b6b8f15ae83f5d5d0ec0823165fbc0a2db51bdaeba442c34004b1e",
+        "game/scripts/world/facades/mariner_1221_live_replacement.gd.uid": "09b7726186437e553c32f2c6013a4c3cd7dce6d1f42b20f35f69d687feab3e9a",
+        "game/scripts/world/facades/navy_chapel_187_live_replacement.gd": "deffb5956d8e808565d1c557208647a89dff4730c15f97aa9b1085a087968cad",
+        "game/scripts/world/facades/navy_chapel_187_live_replacement.gd.uid": "7657859c3b89a313e6b0b0fa49d4717a461a32a61ca0579651fafedd3bda88bc",
+        "game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd": "067c12e29c9fd352915ef2a501fcd7687b450081c79a4281d63bbfef1c19e7db",
+        "game/scripts/world/facades/navy_chapel_187_standalone_hero_prototype.gd.uid": "9c8308b004a8e0eba610c13d9e0bb2af5d37ce9b2a505a26a168503b1c5e18a2",
+        "game/scripts/world/facades/northern_canopy_free_live_factory.gd": "2a01cf9fe20d81b381e445e3531377a2802082f69424445196ede570d15b2f96",
+        "game/scripts/world/facades/northern_canopy_free_live_factory.gd.uid": "80e32a4dc1d146ece95e8393e9e7ff54926b6be3afab2c36b915818d6adc4710",
+        "game/scripts/world/facades/northern_canopy_free_live_replacement.gd": "8967229a37be5401962132b846b08f1f527fb27f6aae3cd2d6d97eb70f608b82",
+        "game/scripts/world/facades/northern_canopy_free_live_replacement.gd.uid": "cc6b21dbfc4b7874618d6efcb6075298d63d3be4fc0bd541147734e0697d542b",
+        "game/scripts/world/facades/northern_canopy_free_study.gd": "00734e1bfe15aafa5b34f55aa2fe40cff147272e213a3bedbdcc9ffd293e8d78",
+        "game/scripts/world/facades/northern_canopy_free_study.gd.uid": "ec43ef7ca3638cf969841af9307465b46143fc89f4353e1ab7d07e715769f52f",
+        "game/scripts/world/facades/northpoint_1227_live_factory.gd": "6492b8e48226ed09c7e7171bd7fd51e25b8e347c38d87d2d0931b2b3337fb2f4",
+        "game/scripts/world/facades/northpoint_1227_live_factory.gd.uid": "50154cefb8c2e87bfa4856e468fabcc01f7e661654874bbc41e67c3753f73b3f",
+        "game/scripts/world/facades/northpoint_1227_live_replacement.gd": "ace49917dc8935c75124e70f3dc573330a2236a6a82ef948b41b1eeeee451c6e",
+        "game/scripts/world/facades/northpoint_1227_live_replacement.gd.uid": "9cc306a53b207a73d295eac23b46c872ff3062b69d7b48e1a5ae69c1d37c8f90",
+        "game/scripts/world/facades/northpoint_1229_study.gd": "a7c923866a64be90974ae3d1f2f72253b0ee5c10faa99275b1fa8e3def5cce11",
+        "game/scripts/world/facades/northpoint_1229_study.gd.uid": "175133586b4722c61ee741bf424161391eb06cca625cea8a927bd3f69351db41",
+        "game/scripts/world/facades/northpoint_1232_asset.gd": "e794ba4529e513cd6ae342c9e98a40e2032b6af68afd3674373c182577c6bb88",
+        "game/scripts/world/facades/northpoint_1232_live_factory.gd": "1001b9e4e91bc1e3762f12369ece87ee6bfa510b15b6d3441d62f945bebaef21",
+        "game/scripts/world/facades/northpoint_1232_live_factory.gd.uid": "e583e9098880200ebf893a2de75dd653ad86101f58c1a150dcf72a6bf9d9ee58",
+        "game/scripts/world/facades/northpoint_1232_live_replacement.gd": "226854de49a23ba5808152f596f104753d96200c50c2d3241fc1dfbed19667f6",
+        "game/scripts/world/facades/northpoint_1232_live_replacement.gd.uid": "8ad8ca730773680e72cfe6d2b0f6e77028d97f144a5860aec52da9f5c1fdb933",
+        "game/scripts/world/facades/northpoint_1232_quality_model.gd": "4d4d570033ba15bd014c643c9bc41d3fe2b43e1fdf35dac87b75de721d5001c5",
+        "game/scripts/world/facades/northpoint_1232_quality_model.gd.uid": "a491aff5dbe3404c621da54a3eff1c4c52ba64da73d9b9e45530c98f9346b0ce",
+        "game/scripts/world/facades/northpoint_1234_live_factory.gd": "75b93b31c6b6bbad59ee32cd0373d96b638212370281c055b37909c43fb38ae8",
+        "game/scripts/world/facades/northpoint_1234_live_factory.gd.uid": "efcf6001163488ab9ca0629df37b16ad4dd5a5fa953af696d5f936882812ae10",
+        "game/scripts/world/facades/northpoint_1234_live_replacement.gd": "6bf227c87c36c2ff02b883bf6224bb35d281f098e76035cc8d64e5ac25bfbbdc",
+        "game/scripts/world/facades/northpoint_1234_live_replacement.gd.uid": "39acb4950f01cdb77eadc972e1dfafb9e05b5e8371cc2415fb872894b1af2ee3",
+        "game/scripts/world/facades/northpoint_1237_study.gd": "b55b0f4bd850ad011c7387fb2fe6ab593deca5b89794c9d681967f6dee32dc1e",
+        "game/scripts/world/facades/northpoint_1237_study.gd.uid": "4541242fc2b37166af50f60bdd1271ae479cca10aefdca4cf8dd3483a87f5498",
+        "game/scripts/world/facades/northpoint_1238_live_factory.gd": "2046c934f4fdaa35f12c7e343910b26a7e1cb2d7e489adc22467bcd1b41bb45f",
+        "game/scripts/world/facades/northpoint_1238_live_factory.gd.uid": "ddffc95dbcdf889db23afb717d40477efe3ecb8bfe69b5e2f06fedd212abdeaa",
+        "game/scripts/world/facades/northpoint_1238_live_replacement.gd": "fef8305341da71b88c1fa90a5ccdd9bba98afc10f999de7208cc6373ff7ba9c3",
+        "game/scripts/world/facades/northpoint_1238_live_replacement.gd.uid": "020823b566db732d3c8fcba869d490c52f7f6b18888f67c1cb4171a3d9f3a269",
+        "game/scripts/world/facades/northpoint_1238_study.gd": "6957142cee7d8785ffd36d2aa0c71037165ab3b85bf8d7505ff1f1d0863408ce",
+        "game/scripts/world/facades/northpoint_1238_study.gd.uid": "104812a07c9128acf73a41f2768fa19d91c575f501232db4dafb30f8de5cf882",
+        "game/scripts/world/facades/northpoint_1239_live_factory.gd": "3573433b35a317f40f908c64ef05519559918f5ccca0f9af14849af2b932732d",
+        "game/scripts/world/facades/northpoint_1239_live_factory.gd.uid": "acb958528819a50eaabf8ef698759948a9b7851fa85a450f9b56e89b9a1c1ba6",
+        "game/scripts/world/facades/northpoint_1239_live_replacement.gd": "e397a0879a8beb8eca7e8ec32e80c40652cfb1b5b67a50bf6f52952f4ae44aa5",
+        "game/scripts/world/facades/northpoint_1239_live_replacement.gd.uid": "2c6acfff61a1e0c751aa5952efa6f243a8f47c6a7a7751a4df169e309e8c3e1f",
+        "game/scripts/world/facades/northpoint_1240_live_factory.gd": "8e34fe18e29158a883fa258a927420676c6be1cbb2748ef4a443299a7afed476",
+        "game/scripts/world/facades/northpoint_1240_live_factory.gd.uid": "3c5cc0dc2d432b2aec145e54f0e321d2139be8015f98e55ccd91622f8e2bda5d",
+        "game/scripts/world/facades/northpoint_1240_live_replacement.gd": "a2c7536488783593e48a5a91641fcc5bf11df490e830beaa61c3d1b7e7cc8b48",
+        "game/scripts/world/facades/northpoint_1240_live_replacement.gd.uid": "9472b6c2c951868b698b9d82b1adc2923892cd591a72648c037319f1d3e51317",
+        "game/scripts/world/facades/northpoint_1241_live_factory.gd": "b36d5147e164f59d7c13c0b7983096a9a0b202caa7a94df5c700794bda07a278",
+        "game/scripts/world/facades/northpoint_1241_live_factory.gd.uid": "83dd01b2a58e03de0690e0517b24fe0dd671535415addccf0f970b8edc31cfd5",
+        "game/scripts/world/facades/northpoint_1241_live_replacement.gd": "8ce0c5108f394ec20d3f26cdd91f0100435fcf17f4d82ab685ced5e43a7dd429",
+        "game/scripts/world/facades/northpoint_1241_live_replacement.gd.uid": "6a16685714c0f27184279d96bd6782f294ab35712b8b459443a1a552fb6cf58e",
+        "game/scripts/world/facades/northpoint_1241_quality_model.gd": "f1e49be1021d4bab36d125c1363b3b259f12c61781cd8b2fc1c89160a28bec6b",
+        "game/scripts/world/facades/northpoint_1241_quality_model.gd.uid": "24c957158d4f30b922d9fd523211631319353a04e843c1e699f9a973be6a4a7c",
+        "game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd",
+        "game/scripts/world/facades/site_12_housing_kit.gd.uid": "6aeef0bda9f274ec87d9bb8c44d63bd53e0b309ffe7118fbb17a91f5ed35698a",
+        "game/scripts/world/facades/w291196370_live_modules.gd": "2b4da98b780af42bbc59dce911410c73964f670ce6d58624b77211b7cf981653",
+        "game/scripts/world/facades/w291196370_live_modules.gd.uid": "8d4546d33ae91622e8c156e7e87262748c88f3b46bb534b7e5f04c4638883de4",
+        "game/scripts/world/facades/w34313515_live_modules.gd": "8034932d57f8e42ee9c96a1bdd2508d8bf51b52abc0e5d7ff5f2659cbf75ddc7",
+        "game/scripts/world/facades/w34313515_live_modules.gd.uid": "ec8987e954157a2045472781ae0a7ff284ae447eb0ba592b8a4ec86e505e1fe5",
+        "game/scripts/world/facades/w34313520_live_modules.gd": "765d8546e2fcfca68c855d1e1bcfb93bdcf1b1791c9b71ce4bcd6dcc35fe432e",
+        "game/scripts/world/facades/w34313520_live_modules.gd.uid": "8cb2b2d9a6399c40a363c97ba06da04f4c7b420d5aaf2ec35e616dd631ee1371",
+        "game/scripts/world/facades/w34313520_standalone_prototypes.gd": "1244f590ed0854219f50a25a4c7931f4f094ce19fb65cefcf2d61b8ce4cd8566",
+        "game/scripts/world/facades/w34313520_standalone_prototypes.gd.uid": "c00ca65d07fc1fe85b4c774d5fef009080c6ecf3e6da62efb5ba257bff8dd0bd",
+        "game/scripts/world/facades/w34313525_live_modules.gd": "308cfe8aa3e6320f122f2b81ea74976d30f7d87de91736aeed60e67a01dc121b",
+        "game/scripts/world/facades/w34313525_live_modules.gd.uid": "5d56771e3e34755fddd662aad1a6c03cf9121a8421fa60674114dfa13106dc66",
+        "game/scripts/world/facades/w34313525_standalone_prototypes.gd": "a8e432b8cae545532aa976b095e2dc012454dd73648dccf09d55be550ccbcc76",
+        "game/scripts/world/facades/w34313525_standalone_prototypes.gd.uid": "b765b73719a0c9938c5953f79d2b0b5eef288cc5803f940a0dd955c0b2c91eda",
+        "game/scripts/world/facades/w34313564_live_modules.gd": "74a7eb9a29750baf47e59194374c2669278bba5af091f5cbe04b13f45c230b8e",
+        "game/scripts/world/facades/w34313564_live_modules.gd.uid": "7d8e57772a90364c464454d968837c3ae568be806be8e5d1dc241a99a8a2c6be",
+        "game/scripts/world/generated_world_contract.gd": "d88d15dc4d8cf55eb9fc6bee86fe18fdc3e065818dac2a92b96f6f0dc2ce87c6",
+        "game/scripts/world/generated_world_contract.gd.uid": "d094ba2bed70bdfb32bac2f59cf9c09139c9ced56d89fe6acec18686942ae51d",
+        "game/scripts/world/massing/building_3_600_california_massing.gd": "0755ab9846357207143f4bb0a50c27e710d92aa3a529903c61d4d3495bb94419",
+        "game/scripts/world/massing/building_3_600_california_massing.gd.uid": "f8a2f85966758e24a894b45f5e81a113015175809a9ad8fafe3a3b5770ea0f57",
+        "game/scripts/world/massing/hawkins_77_bruton_massing.gd": "b572d5b75faf47e91e9283af757cdc33a0c0b4a37de87230d7e7a505442f6a4d",
+        "game/scripts/world/massing/hawkins_77_bruton_massing.gd.uid": "0764c9735471fce737fc25ee1781c20936013bfe911141de27e6eed0addfedf7",
+        "game/scripts/world/vegetation_builder.gd": "f7be7aba8eb23e2461d4bc6dbcc37aae78f29588c9c4169d34877b884d87bf67",
+        "game/scripts/world/vegetation_builder.gd.uid": "16bfda52ac718951fa4993632e2a2b19cebe566868f765bcdd4709da21fae027",
+        "game/scripts/world/world_boundary.gd": "d239843d99e553cfc68734e81c6ce9d8a2f5bd91c729e3a707a5804310210c72",
+        "game/scripts/world/world_boundary.gd.uid": "e515b575fadfb2c887011d6afd7a310b026ead477e647e8d19bd61c952712870",
+        "game/scripts/world/world_chunk_builder.gd": "a89a31212fcd181350ab5090e86df7140d8246077871cfae3b69a8c835539e54",
+        "game/scripts/world/world_chunk_builder.gd.uid": "203d51a23b6bd1c794385431e4b10a2ff54863da5219ffef91d35eddf8db1d05",
+        "game/scripts/world/world_loader.gd": "b8dc35fb671a62ff7867e54883ea0268f36fd73c5bac5a787b7e42c128b40501",
+        "game/scripts/world/world_loader.gd.uid": "e6073cbfb26f95769256e59c97143f1fe3bbc4728c479d6416e8daa4047edbd3",
+        "generated/world/chunks/x_-1__z_-1.json": "5e3b7efb7a2c61e1092c6a42ca9c04212c7d2603890b7a3f4c5e46777005f17b",
+        "generated/world/chunks/x_-1__z_-2.json": "09f3b10d05f8852964d935a87899fc95a38304fac9d7078c65597a10e66da973",
+        "generated/world/chunks/x_-1__z_-3.json": "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc",
+        "generated/world/chunks/x_-1__z_-4.json": "bb21618ff0bc88549e3a600d981880415817747475c2c3a0d368a7da8db4d3ac",
+        "generated/world/chunks/x_-1__z_0.json": "b935890b89202fa181248552176364668e506a7630f0024ec86f12a084743d86",
+        "generated/world/chunks/x_-1__z_1.json": "b8696d4feb4157d39969ec039e610af572f25510d712c802d4a96943d6069c8c",
+        "generated/world/chunks/x_-1__z_2.json": "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce",
+        "generated/world/chunks/x_-1__z_3.json": "a67aa41bbab215a4b5675d82bcad71de8650fc6379a189ce7ed571a169220403",
+        "generated/world/chunks/x_-2__z_-1.json": "6de57eb30f5771f43b33d7b71b53952be5ea6ec17706102be634a781152a3ee2",
+        "generated/world/chunks/x_-2__z_-2.json": "3a07310461da7d9e76667412c6ca18dac8bdea89923cd8392436421882132ef9",
+        "generated/world/chunks/x_-2__z_-3.json": "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5",
+        "generated/world/chunks/x_-2__z_-4.json": "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4",
+        "generated/world/chunks/x_-2__z_0.json": "3e7d1cb020d4a8f8a2852121a181a1e2d441fee40de42d744d37fbbcba59168b",
+        "generated/world/chunks/x_-2__z_1.json": "9d57b616cbaadb18c5d6ac0c61493385746e858f9073f2b0bb74e609287dd56e",
+        "generated/world/chunks/x_-2__z_2.json": "5125928d9ecb21597f2cebf3f21780b9914aa2c752fca923cfbb21f72aadceb0",
+        "generated/world/chunks/x_-3__z_-1.json": "e45c1670c1714cbb982a14a809054a640e53f9a4add5e3c6080a0f98efb877d2",
+        "generated/world/chunks/x_-3__z_-2.json": "35bf23d64e860d39c5b79a98be7830f4f477143f7e9490c6739dec0627062d11",
+        "generated/world/chunks/x_-3__z_-3.json": "7f0ecd2e16fe4327f351496ed8c2f8640d68278fbaf33d428b6314ec862d9944",
+        "generated/world/chunks/x_-3__z_-4.json": "6256caf542398f17a6ff1e5572657bd5081fee32a7655281a5a8f026f21b3f98",
+        "generated/world/chunks/x_-3__z_0.json": "1cd2caaf02334a9aa39228e681a85b659b6da8e5fda3e7a875126071260ee74c",
+        "generated/world/chunks/x_0__z_-1.json": "52ab0da6e6598839261e4b65ce7fadee9bac1b5c727210dccd6b2f7cb962331e",
+        "generated/world/chunks/x_0__z_-2.json": "c0e1f86787410d975ad90272482e5f4971c4aedc7eb83132cd28b22acf1a3456",
+        "generated/world/chunks/x_0__z_-3.json": "6dfa4b8f4b91f309b313428829e37cedd13e4067ff94f896a8e2e5ef05002a1d",
+        "generated/world/chunks/x_0__z_-4.json": "b9ed8d18acdcfe4f89e3d7fb1d69c11ba7152e174398c0943bfe295be2b12954",
+        "generated/world/chunks/x_0__z_0.json": "ce3f058affe28f4d4040a2f50a68e2f3f8c0fae667fbf969d233dadfd486add8",
+        "generated/world/chunks/x_0__z_1.json": "a35f63a877588d198e0e905167968bf9948f4616c16e708a6799d0e6c1bde00a",
+        "generated/world/chunks/x_0__z_2.json": "886f4e6ecfbf570dac9cb36f682a089a0cfe51b735692e3220df4d5b4ac3d7b6",
+        "generated/world/chunks/x_0__z_3.json": "9c5bbebdee1c652f780d5315f14afa65313226d31119bd98d856853e5785c706",
+        "generated/world/chunks/x_1__z_-1.json": "a952756b1c6d8d547669dffb89723c2be81d6c9a4b3afd2ae7f2dc3702a82b0d",
+        "generated/world/chunks/x_1__z_-2.json": "432cac0daf8d91ec5c642e040fac0a1f3f65053daca722a07fa0062744d18828",
+        "generated/world/chunks/x_1__z_-3.json": "c7413816a37f78f146cd9ac7c3b5aa0e24e59718342a78c98b85fda74531cd0a",
+        "generated/world/chunks/x_1__z_0.json": "a952e4b16557561f6d8655e20d2c3d02041f859110f1c37d4693acc9952d59f3",
+        "generated/world/chunks/x_1__z_1.json": "784d89c2ac1392f5ff329b8c6c437ad9050363e9f00b4f993dd9d378851f1758",
+        "generated/world/chunks/x_1__z_2.json": "0f1bde8bde1f436e060699852dc4651454f793097b3970712de6fed2180f3b42",
+        "generated/world/chunks/x_2__z_-1.json": "f4f429d2832f36e43af2c3d612ffa131532b162dd63318bfd6f543f2810a1a64",
+        "generated/world/chunks/x_2__z_0.json": "759351dd4738afa37068dc14ea312a201251be566092c0cc5bab531c949a567d",
+        "generated/world/chunks/x_2__z_1.json": "3d32a78267ae574cc6353e20122791269beb5bddbc13b2ae16afd22cc72a80b9",
+        "generated/world/chunks/x_2__z_2.json": "f6fd17666df382f89b51dff1b5a3b906e1c17fdc36d4af3e1aa4ecf4aad817a5",
+        "generated/world/manifest.json": "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+        "project.godot": "305bfb3bf0493c485f48ea8a01d4effccb58d9dd74ad6dc9be78a64ed23981af"
+      },
+      "retained_inputs": [
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/tests/housing_family_experiment/expansion_final_integration.gd",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/game/tests/housing_family_experiment/expansion_final_integration.gd",
+            "sha256": "71a776a990b6ac7e782c1320d3200658ac34377e381cab0f61883d04b674122c"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/tests/housing_family_experiment/run_expansion_final_integration.py",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/game/tests/housing_family_experiment/run_expansion_final_integration.py",
+            "sha256": "09285b7f6ad19062b5a91c4399de487e797d5d53357d91b585769e2d358cdac1"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/tests/housing_family_experiment/expansion_all_nine.json",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/game/tests/housing_family_experiment/expansion_all_nine.json",
+            "sha256": "bde4550b2b4df1bbc81f94c1c609792701f48a6426f5187755a0aab019c9aa56"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/tests/housing_family_experiment/normal_capture.gd",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/game/tests/housing_family_experiment/normal_capture.gd",
+            "sha256": "aebcbe3c2268f83d113d5047acc22c31bd1611349d420c44abe7ba65b9cc4ee4"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/tests/rendered_visual_evidence_capture.gd",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/game/tests/rendered_visual_evidence_capture.gd",
+            "sha256": "378ee654106926eefcf2ed506ebfa8017a73b269af930bebeb7c0ec384c7403d"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/resources/facades/facade-runtime-registry.json",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/game/resources/facades/facade-runtime-registry.json",
+            "sha256": "ea19f54c0f8b215b797d1cd61359fa1998eb574f97dc56bb4484ed195a0a3258"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/result.json",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/run/result.json",
+            "sha256": "b2e3ca574caa640907b5ad94020ebe4a933ad0ecdc3fe4c42b5a6f4d16770cc5"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/engine.log",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/run/engine.log",
+            "sha256": "15c3fd4b56ccdc84ccfa80ca4eabea0bbc3e4ffac2c3fef63eb4fef053d20a8a"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/capture-receipt.json",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/run/images/capture-receipt.json",
+            "sha256": "eb8da310491d69ca80af2971deb125786b563e062da8a2adfd42eac5afe2d33e"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/motion-trace.json",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/run/images/motion-trace.json",
+            "sha256": "5c38a60a0118a35a4e955be8842dc34f10b9f9f8a7ccabd354c7d2e1405d3138"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-INSTALLED.png",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-INSTALLED.png",
+            "sha256": "b454661f39b41b1a2ea984818b65a48fedc6d44b2cdaf8adf1bd168f4bacceb9"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-jetpack-start.png",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-jetpack-start.png",
+            "sha256": "b285fe8d9e900a87143c96ff41fd93c7a563fa706acfde8a06e2fdf64fbc68eb"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-jetpack-ascent.png",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-jetpack-ascent.png",
+            "sha256": "ab68b1506802c7269bad88a16306385cd9d4546d4b9309df5ee7b9b1d97c3845"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-jetpack-release.png",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-jetpack-release.png",
+            "sha256": "19f9dce6d6b88eab2dedeede2535a02efcc874422bcbadf393e400d9b8468f5b"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-stock-roof-oblique.png",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-stock-roof-oblique.png",
+            "sha256": "4abd9c77fb4d4fc45269fa769340f1910d870e874437b50cd33464f1b1bea396"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-jetpack-descent.png",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-jetpack-descent.png",
+            "sha256": "94e4a2c53431fe5de47be3eb28821a10268ed71737898b0495b732c91fadfc1e"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-jetpack-landed.png",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-jetpack-landed.png",
+            "sha256": "f8c3f0edb114a77a58edd781a9099d29b0911306e5401a2a615bd175e938bc9e"
+          }
+        },
+        {
+          "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-stock-spray.png",
+          "file": {
+            "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-stock-spray.png",
+            "sha256": "9aac5591f5cdf83d1a7a132cbfccf7f12a7197fe58ae99969e21d34272eda0fc"
+          }
+        }
+      ]
+    }
+  },
+  "reference": {
+    "sha256": "380d594d26360deb60d617bfc420d7890c2d7d9809d74c9f0596354e8ac07db1",
+    "date": "March 2025",
+    "address": "1236 Northpoint Drive",
+    "private_original_excluded_from_publication": true
+  },
+  "truth_boundary": {
+    "dimensions": "production_inference; dated visible frontage only; hidden elevations plain",
+    "study_notes": "Exact frozen source edges; target-local observed-front motif schedule. Dimensions and positions inferred, not surveyed. No unseen opening schedule."
+  },
+  "original_inputs": [
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/tests/housing_family_experiment/expansion_final_integration.gd",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/game/tests/housing_family_experiment/expansion_final_integration.gd",
+        "sha256": "71a776a990b6ac7e782c1320d3200658ac34377e381cab0f61883d04b674122c"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/tests/housing_family_experiment/run_expansion_final_integration.py",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/game/tests/housing_family_experiment/run_expansion_final_integration.py",
+        "sha256": "09285b7f6ad19062b5a91c4399de487e797d5d53357d91b585769e2d358cdac1"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/tests/housing_family_experiment/expansion_all_nine.json",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/game/tests/housing_family_experiment/expansion_all_nine.json",
+        "sha256": "bde4550b2b4df1bbc81f94c1c609792701f48a6426f5187755a0aab019c9aa56"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/tests/housing_family_experiment/normal_capture.gd",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/game/tests/housing_family_experiment/normal_capture.gd",
+        "sha256": "aebcbe3c2268f83d113d5047acc22c31bd1611349d420c44abe7ba65b9cc4ee4"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/tests/rendered_visual_evidence_capture.gd",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/game/tests/rendered_visual_evidence_capture.gd",
+        "sha256": "378ee654106926eefcf2ed506ebfa8017a73b269af930bebeb7c0ec384c7403d"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/game/resources/facades/facade-runtime-registry.json",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/game/resources/facades/facade-runtime-registry.json",
+        "sha256": "ea19f54c0f8b215b797d1cd61359fa1998eb574f97dc56bb4484ed195a0a3258"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/result.json",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/run/result.json",
+        "sha256": "b2e3ca574caa640907b5ad94020ebe4a933ad0ecdc3fe4c42b5a6f4d16770cc5"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/engine.log",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/run/engine.log",
+        "sha256": "15c3fd4b56ccdc84ccfa80ca4eabea0bbc3e4ffac2c3fef63eb4fef053d20a8a"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/capture-receipt.json",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/run/images/capture-receipt.json",
+        "sha256": "eb8da310491d69ca80af2971deb125786b563e062da8a2adfd42eac5afe2d33e"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/motion-trace.json",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/originals/run/images/motion-trace.json",
+        "sha256": "5c38a60a0118a35a4e955be8842dc34f10b9f9f8a7ccabd354c7d2e1405d3138"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-INSTALLED.png",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-INSTALLED.png",
+        "sha256": "b454661f39b41b1a2ea984818b65a48fedc6d44b2cdaf8adf1bd168f4bacceb9"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-jetpack-start.png",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-jetpack-start.png",
+        "sha256": "b285fe8d9e900a87143c96ff41fd93c7a563fa706acfde8a06e2fdf64fbc68eb"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-jetpack-ascent.png",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-jetpack-ascent.png",
+        "sha256": "ab68b1506802c7269bad88a16306385cd9d4546d4b9309df5ee7b9b1d97c3845"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-jetpack-release.png",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-jetpack-release.png",
+        "sha256": "19f9dce6d6b88eab2dedeede2535a02efcc874422bcbadf393e400d9b8468f5b"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-stock-roof-oblique.png",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-stock-roof-oblique.png",
+        "sha256": "4abd9c77fb4d4fc45269fa769340f1910d870e874437b50cd33464f1b1bea396"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-jetpack-descent.png",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-jetpack-descent.png",
+        "sha256": "94e4a2c53431fe5de47be3eb28821a10268ed71737898b0495b732c91fadfc1e"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-jetpack-landed.png",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-jetpack-landed.png",
+        "sha256": "f8c3f0edb114a77a58edd781a9099d29b0911306e5401a2a615bd175e938bc9e"
+      }
+    },
+    {
+      "original_path": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion/evidence/housing-family-experiment/expansion-final-integration-002/images/w96215668-stock-spray.png",
+      "file": {
+        "path": "evidence/first-playable/housing-family-expansion-nine-candidate-2026-09-26-001/w96215668/images/w96215668-stock-spray.png",
+        "sha256": "9aac5591f5cdf83d1a7a132cbfccf7f12a7197fe58ae99969e21d34272eda0fc"
+      }
+    }
+  ],
+  "actual_capture_rows": [
+    {
+      "bytes": 667437,
+      "camera_forward": [
+        0.956145346164703,
+        0.0503516159951687,
+        0.288532108068466
+      ],
+      "camera_position": [
+        -295.836791992188,
+        4.32852745056152,
+        -848.098999023438
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "w96215668-INSTALLED.png",
+      "ground_clearance_m": -8.34465026855469e-05,
+      "ground_feature": "land_ground",
+      "ground_object": "land:w26767313:x_-2__z_-4",
+      "ground_sources": [
+        "w26767313",
+        "w29399800"
+      ],
+      "ground_y": 2.60554504394531,
+      "id": "w96215668-INSTALLED",
+      "in_boundary": true,
+      "input_driven_after_reset": false,
+      "intent": "Current source-world target-local shared-family candidate",
+      "movement_proof": false,
+      "pause_overlay_visible": false,
+      "phase": "normal33",
+      "physics_grounded": true,
+      "player_position": [
+        -290.578002929688,
+        2.60546159744263,
+        -846.512023925781
+      ],
+      "region": "w96215668",
+      "sample_luminance_range": 0.621194466948509,
+      "sample_unique_colors": 199,
+      "scenario_reset": "fixed_player_transform_then_physics_settle",
+      "settle_horizontal_drift_m": 0,
+      "settle_physics_frames": 126,
+      "settle_recovery_delta": 0,
+      "settle_spawn_y": 5.60554504394531,
+      "settled_y": 2.60546159744263,
+      "sha256": "b454661f39b41b1a2ea984818b65a48fedc6d44b2cdaf8adf1bd168f4bacceb9",
+      "source_key": "w96215668"
+    },
+    {
+      "actions": {
+        "jetpack": false,
+        "move_back": false,
+        "move_forward": false,
+        "move_left": false,
+        "move_right": false,
+        "run": false,
+        "spray": false
+      },
+      "bytes": 667329,
+      "camera_forward": [
+        0.956145286560059,
+        0.0503519475460052,
+        0.288532286882401
+      ],
+      "camera_position": [
+        -295.836791992188,
+        4.32852745056152,
+        -848.098999023438
+      ],
+      "controller_enabled": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "w96215668-jetpack-start.png",
+      "id": "w96215668-jetpack-start",
+      "intent": "Sampled actual stock motion: jetpack-start",
+      "movement_proof": true,
+      "pause_overlay_visible": false,
+      "phase": "jetpack-start",
+      "physics_frame": 4435,
+      "physics_grounded": true,
+      "player_position": [
+        -290.578002929688,
+        2.60546159744263,
+        -846.512023925781
+      ],
+      "region": "w96215668",
+      "sample_luminance_range": 0.621194466948509,
+      "sample_unique_colors": 201,
+      "scope": "Single sampled frame; physics trace has gaps while awaiting renderer",
+      "sha256": "b285fe8d9e900a87143c96ff41fd93c7a563fa706acfde8a06e2fdf64fbc68eb",
+      "source_key": "w96215668"
+    },
+    {
+      "actions": {
+        "jetpack": true,
+        "move_back": false,
+        "move_forward": false,
+        "move_left": false,
+        "move_right": false,
+        "run": false,
+        "spray": false
+      },
+      "bytes": 619799,
+      "camera_forward": [
+        0.956145286560059,
+        0.0503519624471664,
+        0.288532286882401
+      ],
+      "camera_position": [
+        -295.836730957031,
+        6.91276884078979,
+        -848.098999023438
+      ],
+      "controller_enabled": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "w96215668-jetpack-ascent.png",
+      "id": "w96215668-jetpack-ascent",
+      "intent": "Sampled actual stock motion: jetpack-ascent",
+      "movement_proof": true,
+      "pause_overlay_visible": false,
+      "phase": "jetpack-ascent",
+      "physics_frame": 4478,
+      "physics_grounded": false,
+      "player_position": [
+        -290.578002929688,
+        5.18970012664795,
+        -846.512023925781
+      ],
+      "region": "w96215668",
+      "sample_luminance_range": 0.626401528716087,
+      "sample_unique_colors": 203,
+      "scope": "Single sampled frame; physics trace has gaps while awaiting renderer",
+      "sha256": "ab68b1506802c7269bad88a16306385cd9d4546d4b9309df5ee7b9b1d97c3845",
+      "source_key": "w96215668"
+    },
+    {
+      "actions": {
+        "jetpack": false,
+        "move_back": false,
+        "move_forward": false,
+        "move_left": false,
+        "move_right": false,
+        "run": false,
+        "spray": false
+      },
+      "bytes": 549622,
+      "camera_forward": [
+        0.956145286560059,
+        0.050351969897747,
+        0.288532286882401
+      ],
+      "camera_position": [
+        -295.836791992188,
+        10.6527643203735,
+        -848.098999023438
+      ],
+      "controller_enabled": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "w96215668-jetpack-release.png",
+      "id": "w96215668-jetpack-release",
+      "intent": "Sampled actual stock motion: jetpack-release",
+      "movement_proof": true,
+      "pause_overlay_visible": false,
+      "phase": "jetpack-release",
+      "physics_frame": 4523,
+      "physics_grounded": false,
+      "player_position": [
+        -290.578002929688,
+        8.92970275878906,
+        -846.512023925781
+      ],
+      "region": "w96215668",
+      "sample_luminance_range": 0.801827490329742,
+      "sample_unique_colors": 203,
+      "scope": "Single sampled frame; physics trace has gaps while awaiting renderer",
+      "sha256": "19f9dce6d6b88eab2dedeede2535a02efcc874422bcbadf393e400d9b8468f5b",
+      "source_key": "w96215668"
+    },
+    {
+      "bytes": 742084,
+      "camera_forward": [
+        0.952574908733368,
+        -0.0998543724417686,
+        0.287454843521118
+      ],
+      "camera_position": [
+        -295.817138671875,
+        12.0622367858887,
+        -848.093078613281
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "w96215668-stock-roof-oblique.png",
+      "id": "w96215668-stock-roof-oblique",
+      "intent": "Roof observed during actual stock jetpack ascent/release",
+      "movement_proof": true,
+      "pause_overlay_visible": false,
+      "phase": "stock-jetpack",
+      "physics_grounded": false,
+      "player_position": [
+        -290.578002929688,
+        9.51303672790527,
+        -846.512023925781
+      ],
+      "region": "w96215668",
+      "sample_luminance_range": 0.826756834983826,
+      "sample_unique_colors": 250,
+      "scope": "Actual stock airborne view; not settled ground",
+      "sha256": "4abd9c77fb4d4fc45269fa769340f1910d870e874437b50cd33464f1b1bea396",
+      "source_key": "w96215668"
+    },
+    {
+      "actions": {
+        "jetpack": false,
+        "move_back": false,
+        "move_forward": false,
+        "move_left": false,
+        "move_right": false,
+        "run": false,
+        "spray": false
+      },
+      "bytes": 749045,
+      "camera_forward": [
+        0.952574908733368,
+        -0.0998543724417686,
+        0.287454843521118
+      ],
+      "camera_position": [
+        -295.817138671875,
+        11.5289106369019,
+        -848.093078613281
+      ],
+      "controller_enabled": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "w96215668-jetpack-descent.png",
+      "id": "w96215668-jetpack-descent",
+      "intent": "Sampled actual stock motion: jetpack-descent",
+      "movement_proof": true,
+      "pause_overlay_visible": false,
+      "phase": "jetpack-descent",
+      "physics_frame": 4581,
+      "physics_grounded": false,
+      "player_position": [
+        -290.578002929688,
+        8.97971439361572,
+        -846.512023925781
+      ],
+      "region": "w96215668",
+      "sample_luminance_range": 0.792579561471939,
+      "sample_unique_colors": 257,
+      "scope": "Single sampled frame; physics trace has gaps while awaiting renderer",
+      "sha256": "94e4a2c53431fe5de47be3eb28821a10268ed71737898b0495b732c91fadfc1e",
+      "source_key": "w96215668"
+    },
+    {
+      "actions": {
+        "jetpack": false,
+        "move_back": false,
+        "move_forward": false,
+        "move_left": false,
+        "move_right": false,
+        "run": false,
+        "spray": false
+      },
+      "bytes": 830742,
+      "camera_forward": [
+        0.952574908733368,
+        -0.0998543724417686,
+        0.287454843521118
+      ],
+      "camera_position": [
+        -295.817138671875,
+        5.15466594696045,
+        -848.093078613281
+      ],
+      "controller_enabled": true,
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "w96215668-jetpack-landed.png",
+      "id": "w96215668-jetpack-landed",
+      "intent": "Sampled actual stock motion: jetpack-landed",
+      "movement_proof": true,
+      "pause_overlay_visible": false,
+      "phase": "jetpack-landed",
+      "physics_frame": 4885,
+      "physics_grounded": true,
+      "player_position": [
+        -290.578002929688,
+        2.60546565055847,
+        -846.512023925781
+      ],
+      "region": "w96215668",
+      "sample_luminance_range": 0.623967781662941,
+      "sample_unique_colors": 254,
+      "scope": "Single sampled frame; physics trace has gaps while awaiting renderer",
+      "sha256": "f8c3f0edb114a77a58edd781a9099d29b0911306e5401a2a615bd175e938bc9e",
+      "source_key": "w96215668"
+    },
+    {
+      "bytes": 140766,
+      "camera_forward": [
+        0.367813587188721,
+        0.579024732112885,
+        0.727628707885742
+      ],
+      "camera_position": [
+        -249.600769042969,
+        2.38895010948181,
+        -858.412841796875
+      ],
+      "dimensions": [
+        1440,
+        900
+      ],
+      "file": "w96215668-stock-spray.png",
+      "id": "w96215668-stock-spray",
+      "intent": "Per-unit stock wall spray",
+      "pause_overlay_visible": false,
+      "phase": "stock-spray",
+      "physics_grounded": true,
+      "player_position": [
+        -248.36799621582,
+        2.32962203025818,
+        -855.97412109375
+      ],
+      "region": "w96215668",
+      "sample_luminance_range": 0.470819592475891,
+      "sample_unique_colors": 65,
+      "sha256": "9aac5591f5cdf83d1a7a132cbfccf7f12a7197fe58ae99969e21d34272eda0fc",
+      "source_key": "w96215668"
+    }
+  ],
+  "raw_result": {
+    "terminal": 0,
+    "errors": [],
+    "engine_errors": [],
+    "receipt_ok": true,
+    "elapsed_seconds": 274.20205266587436,
+    "pid": 29805,
+    "slot_released": true,
+    "engines_after": [],
+    "ended_utc": "2026-09-26T05:07:55.835710+00:00",
+    "ok": true
+  },
+  "scope": "Actual final normal33 source capture; no package or credit claim",
+  "independent_source_mechanical_reviewer": "housing_family_acceptance"
+}

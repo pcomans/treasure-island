@@ -1,0 +1,12 @@
+{
+  "pid": 42459,
+  "argv": [
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+    "--headless",
+    "--path",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion",
+    "--export-release",
+    "macOS Private",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app"
+  ]
+}

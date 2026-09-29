@@ -1,0 +1,20 @@
+{
+  "pid": 43897,
+  "argv": [
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+    "--headless",
+    "--fixed-fps",
+    "60",
+    "--path",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/runtime-001",
+    "--main-pack",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+    "--script",
+    "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-independent-2026-09-26/final-privacy.gd",
+    "--",
+    "--pck-audit-pck=/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app/Contents/Resources/Treasure Island First Playable.pck",
+    "--pck-audit-pck-sha256=7a6bc153e5807241c3ce05771f0391b2094eec2bc64a10d59394105d97bb27ca",
+    "--pck-audit-manifest-sha256=e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3",
+    "--pck-audit-content-sha256=01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
+  ]
+}

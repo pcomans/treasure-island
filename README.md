@@ -7,11 +7,11 @@ public distribution are outside this milestone.
 
 ## Current source and release
 
-The current source enables the owner-approved **24 shared-family housing appearances in normal gameplay**, with source-owned contacts and wall spray layers. Recognition remains **34 of 213** accepted physical buildings and **179 not evaluated**; this adoption adds no credit.
+The current source enables **33 shared-family housing appearances in normal gameplay**. Nine additional reference-reviewed houses bring recognition to **43 of 213** physical buildings; the historical 34 accepted units and the 213-unit inventory remain intact. The [housing inventory](discovery/HOUSING_FAMILY_INSTANCES.md) distinguishes 33 photo-confirmed instances from 42 still-unconfirmed housing-row candidates; this is not island-wide completion.
 
-The reviewed macOS app is delivered at `build/housing-family-live-2026-09-24-001/Treasure Island First Playable.app`. Its [release record](evidence/first-playable/housing-family-live-release-2026-09-24-001/README.md) binds the exact app, source and independent decisions. Source, mounted privacy, signed-headless adoption/startup and repeat Metal smoke checks passed. The first Metal smoke timed out; repeat completion does not establish a cold-start guarantee.
+The nine-house candidate passed independent source, sampled visual, stock movement/jetpack/spray, signed package and privacy checks. Owner Metal startup failures are retained; successful unchanged independent Metal completion does not establish a cold-start guarantee. The distinct final 43/213 app passed independent signed Metal and mounted privacy checks. The verified app is at `build/housing-family-nine-2026-09-26-001/Treasure Island First Playable.app`; its [release record](evidence/first-playable/housing-family-nine-release-2026-09-26-001/README.md) retains exact bindings and failed attempts.
 
-The [24-pair MAIN/TEST comparison](evidence/housing-family-experiment/main-vs-test.html) remains pinned to its pre-integration commits. The normal game now uses the approved appearance; no comparison harness is needed to play. Historical [34 ID snapshots](evidence/building-snapshots/accepted-34-2026-09-23/README.md) and acceptance receipts remain intact. The separate 1444 study and deferred Mersea work are unchanged. This bounded shipping task is complete; broader autonomous work remains paused.
+Historical [34 ID snapshots](evidence/building-snapshots/accepted-34-2026-09-23/README.md) and acceptance receipts remain intact. Private reference photographs are excluded from the repository and packaged app.
 
 ## Play on another Mac
 

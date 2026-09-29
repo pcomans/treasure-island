@@ -1,0 +1,44 @@
+[
+  {
+    "original_private_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/release-native-smoke-001.log",
+    "raw_sha256": "fc7923de3e45540b6b1a132db9a3b1629999f451c43bb8ab664a8edf909741f8",
+    "raw_bytes": 7299278,
+    "published_gzip": "release-native-smoke-001.log.gz",
+    "gzip_sha256": "15b57db11c717b000edecb4330fdfe3f535e0fa0a286ae6ffdae4c1d188b7495"
+  },
+  {
+    "original_private_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/release-native-smoke-002.log",
+    "raw_sha256": "f019b15b5306f6001f61cbdff46cfbe7b6c26d510c378c3050dc9bcf0b1edf9f",
+    "raw_bytes": 7299581,
+    "published_gzip": "release-native-smoke-002.log.gz",
+    "gzip_sha256": "f6af62195378238c5b4641f9f91764344600d76262bca16bc38b2eb745360645"
+  },
+  {
+    "original_private_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/release-headless-smoke-001.log",
+    "raw_sha256": "581279359e2a78193ca7396681d2ac767f0ff5cd8db064d342027f527806cde0",
+    "raw_bytes": 7299514,
+    "published_gzip": "release-headless-smoke-001.log.gz",
+    "gzip_sha256": "c96a3de96d26d4f0273a814c45baa89028c7f2f9d622feea5a02321b0846a593"
+  },
+  {
+    "original_private_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001/release-native-smoke-001-engine.log",
+    "raw_sha256": "ffa87caf09d8f30ab586de14735490b52f0ba98974fa5a45fd0e89335b4f41ef",
+    "raw_bytes": 7299278,
+    "published_gzip": "release-native-smoke-001-engine.log.gz",
+    "gzip_sha256": "f3baa888d3a3e87434e9743e3a2f95dc077c6ac9e011391fdfd6923717c0b9a7"
+  },
+  {
+    "original_private_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001/release-headless-smoke-001-engine.log",
+    "raw_sha256": "581279359e2a78193ca7396681d2ac767f0ff5cd8db064d342027f527806cde0",
+    "raw_bytes": 7299514,
+    "published_gzip": "release-headless-smoke-001-engine.log.gz",
+    "gzip_sha256": "c96a3de96d26d4f0273a814c45baa89028c7f2f9d622feea5a02321b0846a593"
+  },
+  {
+    "original_private_path": "/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001/release-native-smoke-002-engine.log",
+    "raw_sha256": "f019b15b5306f6001f61cbdff46cfbe7b6c26d510c378c3050dc9bcf0b1edf9f",
+    "raw_bytes": 7299581,
+    "published_gzip": "release-native-smoke-002-engine.log.gz",
+    "gzip_sha256": "f6af62195378238c5b4641f9f91764344600d76262bca16bc38b2eb745360645"
+  }
+]

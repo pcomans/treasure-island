@@ -14787,3 +14787,22 @@ Infrastructure peer review caught an omission of runtime materials/models/textur
 Third001 reused the established modules for1254/current62513th(w96698619),1249Exposition(w96698643),1252Exposition(w96698648),126 target-specific features with protected hidden faces. Canopy-occluded1254 upper rhythm is explicit production inference. First actual source run captured six A/B originals plus the requested1208 current-neighbor-context still: terminal0,no engine errors,PID23841 released37.313s. All new ground visible; first-render winding holds0. MED passed all3 ordinary views and1208 changed-neighbor composition, with no further decorative work. Only1/3 art invocations used. Frozen third001 map/archive preserve pre-helper source; no live addition or mechanical claim yet.
 
 The signed per-target evidence helper received independent source review before integration. Its optional existing smoke branch records actual normal-loader ownership, bodies/meshes/roles, current manifest/topology and bundled PCK hash; it does not construct targets or claim raw hashes for remapped executables. The main script byte change requires an explicitly authorized combined nine-target final mechanics refresh before final source freeze; all previous successful and failed stages remain retained.
+
+## 2026-09-26 — blueprint_inventory — nine shared-family expansions
+
+Completed nine target-specific configurations on the existing shared site family; current normal membership33, genuine candidate-backed recognition43/213. Preserved source IDs, source-owned contacts, protected faces and explicit occluded production inference. Final002 exercised all nine through actual stock movement, jetpack descent/rest and spray with independent mechanical and sampled visual review. First batch required ground winding and weathering refinement; next two batches had zero first-render ground visibility holds.
+
+The signed evidence helper originally repeated a large full scene snapshot19 times. A reviewed test-only one-snapshot cache preserves all existing live validators and emits explicit hash references, reducing signed headless time52.7s to25.9s. Three owner Metal attempts remained startup-timeout failures; unchanged independent Metal passed42.4s. No cold-start guarantee or readable spray-closeup claim. The frozen game README is intentionally unchanged because it is part of original capture dependencies; current status lives in root README, this inventory and release evidence. Private references and large immutable archives remain outside publication.
+
+
+## 2026-09-28 — nine_house_publication_recovery
+
+- What worked well: Recovered the already completed independent final PASS from saved records. Read-only checks matched the exact app, all source/harness pins, raw 33-unit snapshot plus 18 hash references, nine accepted role/receiver records, released terminal receipts and strict signature; no export or engine replay was needed.
+- What did not work well: Quota interruption left release documentation saying pending after the formal review had completed. Earlier owner Metal timeouts remain retained; successful repeat runs do not establish cold-start reliability.
+- What the team should change next time: Resume from actual terminal evidence and close publication documents before spending further engine time. Preserve frozen capture dependencies, exact selected compiler evidence and unrelated local files. Current compiler check passed 43/213; all 1,651 consumed files are selected in Git, all 183 frozen publication files match their hashes, and staged whitespace is clean.
+
+## 2026-09-28 — blender_workflow_assessment
+
+- What worked well: Checked shared-family receipts and official Blender/Godot pipeline docs, separating authoring benefits from total workflow cost.
+- What did not work well: No measured model-token attribution exists; narrow native timings cannot establish Blender-first savings.
+- What the team should change next time: Compare one family at the same visual bar using all-agent tokens and full edit-to-accepted-Godot elapsed time, preserving integration and independent checks. No engine run or benchmark was performed for this assessment.

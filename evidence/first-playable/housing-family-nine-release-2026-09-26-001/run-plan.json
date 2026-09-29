@@ -1,0 +1,138 @@
+{
+  "export-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+      "--headless",
+      "--path",
+      "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion",
+      "--export-release",
+      "macOS Private",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island-housing-expansion",
+    "new_output_paths": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app"
+    ],
+    "output_directories": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001"
+    ],
+    "requires": [],
+    "success_markers": []
+  },
+  "release-headless-smoke-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+      "--headless",
+      "--fixed-fps",
+      "60",
+      "--log-file",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001/release-headless-smoke-001-engine.log",
+      "--",
+      "--mac-export-smoke",
+      "--family-evidence",
+      "--family-evidence-pck-sha256=<ACTUAL_EXPORTED_PCK_SHA256>"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001",
+    "requires": [
+      "export-001"
+    ],
+    "success_markers": [
+      "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent",
+      "MAC_EXPORT_D2_1439_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D2_1444_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1308_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1317_ATTACHMENT: valid=true",
+      "MAC_EXPORT_FIRE_STATION48_ATTACHMENT: valid=true",
+      "MAC_EXPORT_MACEO_MAY_ATTACHMENT: valid=true",
+      "MAC_EXPORT_HOUSING_FAMILY_ADOPTION:",
+      "MAC_EXPORT_HOUSING_FAMILY_TARGETS:"
+    ],
+    "coverage": "Exact signed current33 normal-loader construction, actual per-target source-owned roles and packaged stock smoke; independent package approval separate.",
+    "timeout_seconds": 240,
+    "output_directories": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001"
+    ]
+  },
+  "release-native-smoke-001": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+      "--fixed-fps",
+      "60",
+      "--display-driver",
+      "macos",
+      "--rendering-method",
+      "forward_plus",
+      "--rendering-driver",
+      "metal",
+      "--audio-driver",
+      "Dummy",
+      "--log-file",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001/release-native-smoke-001-engine.log",
+      "--",
+      "--mac-export-smoke",
+      "--family-evidence",
+      "--family-evidence-pck-sha256=<ACTUAL_EXPORTED_PCK_SHA256>"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001",
+    "requires": [
+      "release-headless-smoke-001"
+    ],
+    "success_markers": [
+      "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent",
+      "MAC_EXPORT_D2_1439_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D2_1444_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1308_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1317_ATTACHMENT: valid=true",
+      "MAC_EXPORT_FIRE_STATION48_ATTACHMENT: valid=true",
+      "MAC_EXPORT_MACEO_MAY_ATTACHMENT: valid=true",
+      "MAC_EXPORT_HOUSING_FAMILY_ADOPTION:",
+      "MAC_EXPORT_HOUSING_FAMILY_TARGETS:"
+    ],
+    "timeout_seconds": 240,
+    "coverage": "Exact signed current33 normal-loader construction, actual per-target source-owned roles and packaged stock smoke; independent package approval separate.",
+    "output_directories": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001"
+    ]
+  },
+  "release-native-smoke-002": {
+    "argv": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/export-001/Treasure Island First Playable.app/Contents/MacOS/Treasure Island First Playable",
+      "--fixed-fps",
+      "60",
+      "--display-driver",
+      "macos",
+      "--rendering-method",
+      "forward_plus",
+      "--rendering-driver",
+      "metal",
+      "--audio-driver",
+      "Dummy",
+      "--log-file",
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001/release-native-smoke-002-engine.log",
+      "--",
+      "--mac-export-smoke",
+      "--family-evidence",
+      "--family-evidence-pck-sha256=<ACTUAL_EXPORTED_PCK_SHA256>"
+    ],
+    "cwd": "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001",
+    "requires": [
+      "release-headless-smoke-001"
+    ],
+    "success_markers": [
+      "PASS: packaged main scene reached full world_ready, verified movement defaults, enabled the player, and exercised jetpack rise/slow descent",
+      "MAC_EXPORT_D2_1439_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D2_1444_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1308_ATTACHMENT: valid=true",
+      "MAC_EXPORT_D5_1317_ATTACHMENT: valid=true",
+      "MAC_EXPORT_FIRE_STATION48_ATTACHMENT: valid=true",
+      "MAC_EXPORT_MACEO_MAY_ATTACHMENT: valid=true",
+      "MAC_EXPORT_HOUSING_FAMILY_ADOPTION:",
+      "MAC_EXPORT_HOUSING_FAMILY_TARGETS:"
+    ],
+    "timeout_seconds": 240,
+    "coverage": "Exact signed current33 normal-loader construction, actual per-target source-owned roles and packaged stock smoke; independent package approval separate.",
+    "output_directories": [
+      "/Volumes/Macintosh_HD/Users/user302070/Documents/Codex/2026-09-08/start-from-commit-f377dcac-and-read/work/housing-family-nine-final-2026-09-26/runtime-001"
+    ]
+  }
+}
