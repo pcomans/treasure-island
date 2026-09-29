@@ -1,0 +1,216 @@
+diff --git a/game/scripts/world/facades/facade_runtime_registry_loader.gd b/game/scripts/world/facades/facade_runtime_registry_loader.gd
+index 1ba230f..a8f9c0f 100644
+--- a/game/scripts/world/facades/facade_runtime_registry_loader.gd
++++ b/game/scripts/world/facades/facade_runtime_registry_loader.gd
+@@ -577,0 +578,3 @@ const BUILDING_3_RUNTIME_ASSETS := [
++	"res://game/resources/facades/building_3_candidate_apron.json",
++	"res://game/scripts/world/facades/building_3_roof_candidate.gd",
++	"res://game/scripts/world/facades/building_3_roof_candidate_model.gd",
+@@ -1790,6 +1793,6 @@ func _validate_building_3_behavior_contract(contract: Dictionary) -> bool:
+-		and int(geometry.get("wall_triangles", 0)) == 236
+-		and int(geometry.get("roof_triangles", 0)) == 675
+-		and int(geometry.get("topology_delta_triangles", 0)) == 766
+-		and str(geometry.get("profile_signature", "")) == "f82192fe9ebeb04a6da1222bcd84afd217f163ff6ce1cceed826a5d436dd1693"
+-		and str(geometry.get("wall_geometry_signature", "")) == "e03f830e6a41da16107b5db14bcb8a8ff9f43b46f9df89b1f157958cc68909d4"
+-		and str(geometry.get("roof_geometry_signature", "")) == "2dee9acf24616423230895d70827acb56c8f402a56ac1fe8e4a93d2409b34b63"
++		and int(geometry.get("wall_triangles", 0)) == 1204
++		and int(geometry.get("roof_triangles", 0)) == 6077
++		and int(geometry.get("topology_delta_triangles", 0)) == 7136
++		and str(geometry.get("profile_signature", "")) == "51e23ccfa571801b29077b6163dd153cc7c9858b833b29cba7e186f38fa07d0e"
++		and str(geometry.get("wall_geometry_signature", "")) == "bfc3e3c521878cb62b7f16e139ef058d8205043e3eb9952e15bec5c5369ee2ec"
++		and str(geometry.get("roof_geometry_signature", "")) == "e175c9258cd02b52a705d319a8577198155c3b0df1bc8fc046cda3d88c21c4f9"
+@@ -1801 +1804 @@ func _validate_building_3_behavior_contract(contract: Dictionary) -> bool:
+-		and bool(facade.get("render_only", false))
++		and facade.get("render_only", null) == false
+@@ -1803 +1806 @@ func _validate_building_3_behavior_contract(contract: Dictionary) -> bool:
+-		and str(facade.get("deterministic_signature", "")) == "e0b30339bd2ca8642a7b49b5e6153f52017ec4a840e9b0dc1e3841f5373ca5f8",
++		and str(facade.get("deterministic_signature", "")) == "58cff737bd9f0f9fe3245be866f802cf0dd78cb536f657b2765c7f228bbdb8a7",
+diff --git a/game/scripts/world/massing/building_3_600_california_massing.gd b/game/scripts/world/massing/building_3_600_california_massing.gd
+index bede3da..92e5a15 100644
+--- a/game/scripts/world/massing/building_3_600_california_massing.gd
++++ b/game/scripts/world/massing/building_3_600_california_massing.gd
+@@ -14,0 +15,2 @@ const RENDER_BUILDING_WALL := 1 << 1
++const FINAL_CANDIDATE := preload("res://game/scripts/world/facades/building_3_roof_candidate.gd")
++const FINAL_ROOF_SPAN := 6.0
+@@ -417,0 +420,74 @@ static func _validate_source_record(record: Dictionary, config: Dictionary) -> D
++
++# Final art uses the established paired-record lifecycle. The prior build_record
++# remains as a recoverable baseline; production dispatch consumes only this plan.
++static func prepare_chunk_records(chunk: Dictionary) -> Dictionary:
++	var supplied: Dictionary={}
++	for value: Dictionary in chunk.get("records",[]):
++		var key: String=str(value.get("object_key",""))
++		if key in [TARGET_WALL_KEY,TARGET_ROOF_KEY] or TARGET_SOURCE_KEY in value.get("source_keys",[]):
++			if key not in [TARGET_WALL_KEY,TARGET_ROOF_KEY] or supplied.has(key):return _pair_failure("Unexpected or duplicate B3 receiver")
++			supplied[key]=value
++	if supplied.is_empty() and str(chunk.get("chunk_id",""))!="x_1__z_1":return {"ok":true,"contains_target":false}
++	if supplied.size()!=2 or str(chunk.get("chunk_id",""))!="x_1__z_1":return _pair_failure("B3 source chunk requires its exact wall/roof pair")
++	if FileAccess.get_sha256(FINAL_CANDIDATE.CHUNK)!="784d89c2ac1392f5ff329b8c6c437ad9050363e9f00b4f993dd9d378851f1758":return _pair_failure("Frozen B3 source chunk changed")
++	var frozen: Dictionary=FINAL_CANDIDATE.records()
++	for key: String in [TARGET_WALL_KEY,TARGET_ROOF_KEY]:
++		if supplied[key]!=frozen[key] or not matches_record(supplied[key]):return _pair_failure("Supplied B3 receiver differs from frozen source")
++	return {"ok":true,"contains_target":true,"source_records":supplied.duplicate(true)}
++
++static func build_chunk_plan(prepared: Dictionary) -> Dictionary:
++	if not bool(prepared.get("ok",false)):return prepared
++	if not bool(prepared.get("contains_target",false)):return {"ok":true,"contains_target":false,"pending_keys":{},"records":{}}
++	var rechecked: Dictionary=prepare_chunk_records({"chunk_id":"x_1__z_1","records":prepared.source_records.values()})
++	if not bool(rechecked.get("ok",false)):return rechecked
++	var pair: Dictionary=FINAL_CANDIDATE.build(FINAL_ROOF_SPAN)
++	if not bool(pair.get("ok",false)):return pair
++	var results: Dictionary={}
++	for key: String in [TARGET_WALL_KEY,TARGET_ROOF_KEY]:
++		var node: Node3D=pair.wall if key==TARGET_WALL_KEY else pair.roof
++		node.remove_meta("candidate_unaccepted")
++		node.set_meta("building_3_massing_override",true)
++		node.set_meta("runtime_supersedes_generated_placeholder",true)
++		node.set_meta("horizontal_source_geometry_preserved",true)
++		node.set_meta("foundation_geometry_preserved",key==TARGET_WALL_KEY)
++		node.set_meta("corrected_nrhp_id","08000083")
++		node.set_meta("frozen_osm_nrhp_ref","08000081")
++		node.set_meta("frozen_osm_nrhp_ref_role","provenance_only_incorrect_for_building_3")
++		node.set_meta("production_inference_reversible",true)
++		node.set_meta("exterior_only",true);node.set_meta("interior_modeled",false);node.set_meta("as_built_fidelity_claimed",false)
++		node.set_meta("roof_longitudinal_span",FINAL_ROOF_SPAN)
++		var result: Dictionary={"ok":true,"node":node,"mesh_instances":0,"surfaces":0,"triangles":0,"static_bodies":0,"shapes":0}
++		for child: Node in node.get_children():
++			if child is MeshInstance3D:
++				result.mesh_instances+=1;result.surfaces+=child.mesh.get_surface_count()
++				for surface_index in child.mesh.get_surface_count():
++					var arrays: Array=child.mesh.surface_get_arrays(surface_index)
++					var indices:=PackedInt32Array()
++					if arrays[Mesh.ARRAY_INDEX]!=null:indices=arrays[Mesh.ARRAY_INDEX]
++					result.triangles+=indices.size()/3 if not indices.is_empty() else (arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array).size()/3
++			if child is StaticBody3D:result.static_bodies+=1;result.shapes+=child.get_shape_owners().size()
++		results[key]=result
++	if int(results[TARGET_WALL_KEY].triangles)!=1204 or int(results[TARGET_ROOF_KEY].triangles)!=6077:
++		pair.wall.free();pair.roof.free();return _pair_failure("Final B3 measured topology drifted")
++	return {"ok":true,"contains_target":true,"source_records":rechecked.source_records,"records":results,"pending_keys":{TARGET_WALL_KEY:true,TARGET_ROOF_KEY:true}}
++
++static func consume_record(record: Dictionary,plan: Dictionary) -> Dictionary:
++	var key: String=str(record.get("object_key",""))
++	if not bool(plan.get("ok",false)) or not bool(plan.get("contains_target",false)) or not (plan.get("pending_keys",{}) as Dictionary).has(key):return _pair_failure("B3 requires an unconsumed paired plan")
++	if record!=plan.source_records[key]:return _pair_failure("B3 consumed record differs from sealed supplied pair")
++	var result: Dictionary=plan.records[key]
++	plan.pending_keys.erase(key);plan.records.erase(key)
++	return result
++
++static func plan_was_fully_consumed(plan: Dictionary) -> bool:
++	return not bool(plan.get("contains_target",false)) or (plan.get("pending_keys",{}) as Dictionary).is_empty()
++
++static func free_unconsumed(plan: Dictionary) -> void:
++	var records: Dictionary=plan.get("records",{})
++	for result: Dictionary in records.values():
++		var node: Node=result.get("node")
++		if is_instance_valid(node) and not node.is_inside_tree():node.free()
++	records.clear();(plan.get("pending_keys",{}) as Dictionary).clear()
++
++static func _pair_failure(message: String) -> Dictionary:
++	return {"ok":false,"code":"building_3_paired_attachment","message":message,"source_keys":[TARGET_SOURCE_KEY]}
+diff --git a/game/scripts/world/world_chunk_builder.gd b/game/scripts/world/world_chunk_builder.gd
+index b77ed13..38856ef 100644
+--- a/game/scripts/world/world_chunk_builder.gd
++++ b/game/scripts/world/world_chunk_builder.gd
+@@ -130,0 +131,4 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
++	var building_3_pair := BUILDING_3_MASSING.prepare_chunk_records(chunk)
++	if not bool(building_3_pair.get("ok",false)):
++		chunk_root.free()
++		return building_3_pair
+@@ -244,0 +249,5 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
++	var building_3_plan := BUILDING_3_MASSING.build_chunk_plan(building_3_pair)
++	if not bool(building_3_plan.get("ok", false)):
++		chunk_root.free()
++		return building_3_plan
++	rollback_plans.append({"adapter": BUILDING_3_MASSING, "plan": building_3_plan})
+@@ -246,0 +256 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
++		_free_unconsumed_plans(rollback_plans)
+@@ -423 +433 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
+-		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)
++		var record_result := _build_record(record, false, building_3_plan, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)
+@@ -440,0 +451 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
++	var building_3_consumed := BUILDING_3_MASSING.plan_was_fully_consumed(building_3_plan)
+@@ -468 +479 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
+-	if not chapel_consumed or not d2_1441_consumed or not d2_1439_consumed or not d2_1444_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed or not fs48_consumed or not maceo_consumed or not northern_canopy_consumed or not northpoint_1238_consumed or not mariner_1206_consumed or not mariner_1219_consumed or not mariner_1212_consumed or not bayside_1220_consumed or not northpoint_1239_consumed or not bayside_1222_consumed or not northpoint_1227_consumed or not mariner_1202_consumed or not northpoint_1234_consumed or not bayside_1215_consumed or not northpoint_1232_consumed or not northpoint_1241_consumed or not mariner_1221_consumed or not northpoint_1240_consumed or not gateview_1397_consumed or not bayside_1226_consumed:
++	if not building_3_consumed or not chapel_consumed or not d2_1441_consumed or not d2_1439_consumed or not d2_1444_consumed or not d5_1308_consumed or not d5_1394_consumed or not d5_1317_consumed or not fs48_consumed or not maceo_consumed or not northern_canopy_consumed or not northpoint_1238_consumed or not mariner_1206_consumed or not mariner_1219_consumed or not mariner_1212_consumed or not bayside_1220_consumed or not northpoint_1239_consumed or not bayside_1222_consumed or not northpoint_1227_consumed or not mariner_1202_consumed or not northpoint_1234_consumed or not bayside_1215_consumed or not northpoint_1232_consumed or not northpoint_1241_consumed or not mariner_1221_consumed or not northpoint_1240_consumed or not gateview_1397_consumed or not bayside_1226_consumed:
+@@ -470,0 +482,2 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
++		if not building_3_consumed:
++			return {"ok":false,"code":"building_3_live_unconsumed_pair","message":"The supplied B3 pair was not consumed exactly once.","source_keys":["w34313540"]}
+@@ -581 +594 @@ func build_context(context: Dictionary, context_parents: Dictionary) -> Dictiona
+-func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}, d2_1439_plan: Dictionary = {}, d2_1444_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}, maceo_plan: Dictionary = {}, northern_canopy_plan: Dictionary = {}, northpoint_1238_plan: Dictionary = {}, mariner_1206_plan: Dictionary = {}, mariner_1219_plan: Dictionary = {}, mariner_1212_plan: Dictionary = {}, bayside_1220_plan: Dictionary = {}, northpoint_1239_plan: Dictionary = {}, bayside_1222_plan: Dictionary = {}, northpoint_1227_plan: Dictionary = {}, mariner_1202_plan: Dictionary = {}, northpoint_1234_plan: Dictionary = {}, bayside_1215_plan: Dictionary = {}, northpoint_1232_plan: Dictionary = {}, northpoint_1241_plan: Dictionary = {}, mariner_1221_plan: Dictionary = {}, northpoint_1240_plan: Dictionary = {}, gateview_1397_plan: Dictionary = {}, bayside_1226_plan: Dictionary = {}) -> Dictionary:
++func _build_record(record: Dictionary, is_context: bool, building_3_plan: Dictionary = {}, chapel_plan: Dictionary = {}, d2_1441_plan: Dictionary = {}, d2_1439_plan: Dictionary = {}, d2_1444_plan: Dictionary = {}, d5_1308_plan: Dictionary = {}, d5_1394_plan: Dictionary = {}, d5_1317_plan: Dictionary = {}, fs48_plan: Dictionary = {}, maceo_plan: Dictionary = {}, northern_canopy_plan: Dictionary = {}, northpoint_1238_plan: Dictionary = {}, mariner_1206_plan: Dictionary = {}, mariner_1219_plan: Dictionary = {}, mariner_1212_plan: Dictionary = {}, bayside_1220_plan: Dictionary = {}, northpoint_1239_plan: Dictionary = {}, bayside_1222_plan: Dictionary = {}, northpoint_1227_plan: Dictionary = {}, mariner_1202_plan: Dictionary = {}, northpoint_1234_plan: Dictionary = {}, bayside_1215_plan: Dictionary = {}, northpoint_1232_plan: Dictionary = {}, northpoint_1241_plan: Dictionary = {}, mariner_1221_plan: Dictionary = {}, northpoint_1240_plan: Dictionary = {}, gateview_1397_plan: Dictionary = {}, bayside_1226_plan: Dictionary = {}) -> Dictionary:
+@@ -597,4 +610 @@ func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary
+-		return BUILDING_3_MASSING.build_record(
+-			record,
+-			_material_for(str(record.material_key), str(record.feature_kind), false)
+-		)
++		return BUILDING_3_MASSING.consume_record(record, building_3_plan)
+diff --git a/tools/build_facade_recognition_registry.mjs b/tools/build_facade_recognition_registry.mjs
+index 32d42e1..4cfb0bb 100644
+--- a/tools/build_facade_recognition_registry.mjs
++++ b/tools/build_facade_recognition_registry.mjs
+@@ -90,0 +91,3 @@ const BUILDING_3_FACADE_ASSET_PATHS = Object.freeze([
++  "game/resources/facades/building_3_candidate_apron.json",
++  "game/scripts/world/facades/building_3_roof_candidate.gd",
++  "game/scripts/world/facades/building_3_roof_candidate_model.gd",
+@@ -7121 +7124 @@ function validateCurrentWorldBuilderDispatch(inputs) {
+-    building_3_build: "return BUILDING_3_MASSING.build_record(",
++    building_3_build: "return BUILDING_3_MASSING.consume_record(record, building_3_plan)",
+@@ -7128 +7131 @@ function validateCurrentWorldBuilderDispatch(inputs) {
+-    navy_chapel_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)",
++    navy_chapel_record_dispatch: "var record_result := _build_record(record, false, building_3_plan, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)",
+@@ -7135 +7138 @@ function validateCurrentWorldBuilderDispatch(inputs) {
+-    d2_1441_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)",
++    d2_1441_record_dispatch: "var record_result := _build_record(record, false, building_3_plan, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)",
+@@ -7142 +7145 @@ function validateCurrentWorldBuilderDispatch(inputs) {
+-    d2_1439_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)",
++    d2_1439_record_dispatch: "var record_result := _build_record(record, false, building_3_plan, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)",
+@@ -7149 +7152 @@ function validateCurrentWorldBuilderDispatch(inputs) {
+-    d2_1444_record_dispatch: "var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)",
++    d2_1444_record_dispatch: "var record_result := _build_record(record, false, building_3_plan, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)",
+@@ -7339,0 +7343 @@ function validateCurrentWorldBuilderDispatch(inputs) {
++    ["BUILDING_3_MASSING", "building_3_plan"],
+@@ -7375 +7379 @@ function validateCurrentWorldBuilderDispatch(inputs) {
+-    const failure = `if not bool(${plan}.get("ok", false)):\n${plan === "chapel_plan" ? "" : "\t\t" + cleanupCall + "\n"}\t\tchunk_root.free()\n\t\treturn ${plan}\n\t`;
++    const failure = `if not bool(${plan}.get("ok", false)):\n${plan === "building_3_plan" ? "" : "\t\t" + cleanupCall + "\n"}\t\tchunk_root.free()\n\t\treturn ${plan}\n\t`;
+@@ -7524,0 +7529,4 @@ function validateActiveBuilding3Dispatch(inputs) {
++    'const FINAL_ROOF_SPAN := 6.0',
++    'FINAL_CANDIDATE.build(FINAL_ROOF_SPAN)',
++    'static func prepare_chunk_records(chunk: Dictionary)',
++    'static func consume_record(record: Dictionary,plan: Dictionary)',
+@@ -7930,2 +7938,2 @@ function building3BehaviorContract() {
+-      deterministic_signature: "e0b30339bd2ca8642a7b49b5e6153f52017ec4a840e9b0dc1e3841f5373ca5f8",
+-      render_only: true,
++      deterministic_signature: "58cff737bd9f0f9fe3245be866f802cf0dd78cb536f657b2765c7f228bbdb8a7",
++      render_only: false,
+@@ -7937,6 +7945,6 @@ function building3BehaviorContract() {
+-      profile_signature: "f82192fe9ebeb04a6da1222bcd84afd217f163ff6ce1cceed826a5d436dd1693",
+-      roof_geometry_signature: "2dee9acf24616423230895d70827acb56c8f402a56ac1fe8e4a93d2409b34b63",
+-      roof_triangles: 675,
+-      topology_delta_triangles: 766,
+-      wall_geometry_signature: "e03f830e6a41da16107b5db14bcb8a8ff9f43b46f9df89b1f157958cc68909d4",
+-      wall_triangles: 236,
++      profile_signature: "51e23ccfa571801b29077b6163dd153cc7c9858b833b29cba7e186f38fa07d0e",
++      roof_geometry_signature: "e175c9258cd02b52a705d319a8577198155c3b0df1bc8fc046cda3d88c21c4f9",
++      roof_triangles: 6077,
++      topology_delta_triangles: 7136,
++      wall_geometry_signature: "bfc3e3c521878cb62b7f16e139ef058d8205043e3eb9952e15bec5c5369ee2ec",
++      wall_triangles: 1204,
+@@ -11254,0 +11263 @@ export {
++  validateActiveBuilding3Dispatch,
+diff --git a/tools/test_facade_recognition_registry.mjs b/tools/test_facade_recognition_registry.mjs
+index 1f20927..1203b75 100644
+--- a/tools/test_facade_recognition_registry.mjs
++++ b/tools/test_facade_recognition_registry.mjs
+@@ -443,0 +444,3 @@ const expectedBuilding3AssetPaths = [
++  "res://game/resources/facades/building_3_candidate_apron.json",
++  "res://game/scripts/world/facades/building_3_roof_candidate.gd",
++  "res://game/scripts/world/facades/building_3_roof_candidate_model.gd",
+@@ -458 +461 @@ assert(building3Behavior.replacement_contract.receiver_roles.join("|") === "wall
+-assert(building3Behavior.geometry_contract.wall_triangles === 236 && building3Behavior.geometry_contract.roof_triangles === 675 && building3Behavior.geometry_contract.topology_delta_triangles === 766, "Building 3 topology parity drifted");
++assert(building3Behavior.geometry_contract.wall_triangles === 1204 && building3Behavior.geometry_contract.roof_triangles === 6077 && building3Behavior.geometry_contract.topology_delta_triangles === 7136, "Building 3 topology parity drifted");
+@@ -460 +463 @@ assert(building3Behavior.collision_contract.collision_matches_visible_geometry =
+-assert(building3Behavior.facade_contract.runtime_bound_to_wall_massing === true && building3Behavior.facade_contract.deterministic_signature === "e0b30339bd2ca8642a7b49b5e6153f52017ec4a840e9b0dc1e3841f5373ca5f8", "Building 3 facade parity drifted");
++assert(building3Behavior.facade_contract.render_only === false && building3Behavior.facade_contract.runtime_bound_to_wall_massing === true && building3Behavior.facade_contract.deterministic_signature === "58cff737bd9f0f9fe3245be866f802cf0dd78cb536f657b2765c7f228bbdb8a7", "Building 3 facade parity drifted");
+@@ -848 +851 @@ const missingBuilding3DispatchInputs = withWorldBuilderText(replaceExactlyOnce(
+-  "return BUILDING_3_MASSING.build_record(",
++  "return BUILDING_3_MASSING.consume_record(record, building_3_plan)",
