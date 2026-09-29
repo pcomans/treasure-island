@@ -1,0 +1,175 @@
+{
+  "verdict": "SCOPED_SOURCE_MECHANICS_PASS",
+  "scope": "normal33 plus one physical1253 fixture, two observed sides; no authority/package",
+  "sampled_and_stored_frames": 1754,
+  "capture_hashes_verified": 10,
+  "native_roles": {
+    "native_array_roles": [
+      "wall",
+      "roof",
+      "support",
+      "ground"
+    ],
+    "render_contact_arrays_exact": true,
+    "source": "w96698634"
+  },
+  "contacts": {
+    "failures": 0,
+    "grade_occluded": 9,
+    "samples": 2840,
+    "source": "w96698634",
+    "tiny_unresolved": 48
+  },
+  "stock_cases": {
+    "disabled_final": true,
+    "fatal": false,
+    "ok": true,
+    "pedestrian_crossing": {
+      "disabled_final": true,
+      "fatal": false,
+      "inward": {
+        "arrived": true,
+        "destination_depth_m": 2.79998826980591,
+        "fatal": false,
+        "final_depth_m": 2.81064462661743,
+        "ok": true,
+        "recovery_delta": 0,
+        "safe_rest": true,
+        "trace_end": 313,
+        "trace_start": 90
+      },
+      "ok": true,
+      "outward": {
+        "arrived": true,
+        "destination_depth_m": 14.5570096969604,
+        "fatal": false,
+        "final_depth_m": 14.5567970275879,
+        "ok": true,
+        "recovery_delta": 0,
+        "safe_rest": true,
+        "trace_end": 535,
+        "trace_start": 313
+      },
+      "safe_rest": true,
+      "source": "w96698634"
+    },
+    "rear_spray": {
+      "cull_mask": 2,
+      "disabled_final": true,
+      "fatal": false,
+      "first_hit": [
+        -18.9282455444336,
+        6.73798513412476,
+        -583.769653320312
+      ],
+      "ok": true,
+      "safe_rest": true
+    },
+    "safe_rest": true,
+    "source": "w96698634",
+    "stages": [
+      {
+        "distance": 15.8500480651855,
+        "end": [
+          -34.113525390625,
+          3.36500024795532,
+          -587.356262207031
+        ],
+        "recovery_delta": 0,
+        "safe_rest": true,
+        "stage": "walk-to-closed-threshold",
+        "start": [
+          -48.0699653625488,
+          3.2543568611145,
+          -579.844299316406
+        ],
+        "threshold_outward_distance": 0.150329366326332
+      },
+      {
+        "distance": 2.61575651168823,
+        "end": [
+          -36.4118461608887,
+          3.30330610275269,
+          -586.108825683594
+        ],
+        "recovery_delta": 0,
+        "safe_rest": true,
+        "stage": "walk-retreat",
+        "start": [
+          -34.113525390625,
+          3.36500024795532,
+          -587.356262207031
+        ]
+      },
+      {
+        "distance": 1.48487460613251,
+        "end": [
+          -37.4618492126465,
+          3.30330610275269,
+          -585.058898925781
+        ],
+        "recovery_delta": 0,
+        "safe_rest": true,
+        "stage": "short-run-retreat",
+        "start": [
+          -36.4118461608887,
+          3.30330610275269,
+          -586.108825683594
+        ]
+      },
+      {
+        "landed": [
+          -55.3088188171387,
+          3.18691325187683,
+          -593.271667480469
+        ],
+        "recovery_delta": 0,
+        "released": [
+          -55.3088188171387,
+          9.18775177001953,
+          -593.271667480469
+        ],
+        "safe_rest": true,
+        "stage": "stock-jetpack",
+        "start": [
+          -55.3088188171387,
+          3.18693423271179,
+          -593.271667480469
+        ]
+      },
+      {
+        "cull_mask": 2,
+        "first_hit": [
+          -35.6416320800781,
+          6.73802661895752,
+          -590.517333984375
+        ],
+        "ok": true,
+        "stage": "stock-spray"
+      }
+    ]
+  },
+  "crossing_rows": 355,
+  "crossing_supports": {
+    "land:w26767313:x_-1__z_-3": 32,
+    "building:w96698634:wall": 323
+  },
+  "floor_point_ray_gap_m": [
+    -0.0013294219970698684,
+    0.10173058509825994
+  ],
+  "largest_same_stage_consecutive_floor_y_change_m": 0.03828120231628995,
+  "max_node_server_origin_difference_m": 0.0,
+  "last8_final_rear_reload_rests_supported_enabled_released": true,
+  "reload": {
+    "ready_signals": 2,
+    "reload": true,
+    "safe_rest": true
+  },
+  "limits": [
+    "point-ray support is not full capsule reconstruction",
+    "renderer waits cause trace gaps",
+    "stock flight lands on ground, not main roof",
+    "tiny and grade-occluded geometry retains native congruence but lacks individual exposed ray proof"
+  ]
+}

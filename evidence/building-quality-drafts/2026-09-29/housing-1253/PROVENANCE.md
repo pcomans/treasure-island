@@ -1,0 +1,26 @@
+# Exact retained input/output bindings
+
+Source worktree: `treasure-island-housing-continuation-six-2026-09-29`, base `69755310ea7ae2d24053e0d516a7ea2bfe83057c`. Paths below are relative to that source worktree. Copied bytes were verified against source once.
+
+Initial001 config is a later deterministic reconstruction from the retained generator with its original wrong `frames[:2]` selection. It is **not** a contemporaneous source receipt. Final002 config is the exact captured snapshot, independently checked by the technical reviewer.
+
+- `source-tree/game/resources/housing_family/w96698634.json` ← `game/resources/housing_family/w96698634.json`; SHA256 `9f005916116ad5ca3d828e82c3ff917d802e6e4176b84aaf4a9cac93a9d6d6e4`
+- `source-tree/game/tests/housing_family_experiment/continuation_six_20260929.json` ← `game/tests/housing_family_experiment/continuation_six_20260929.json`; SHA256 `d14b08d4dadd0ada34655e9c49829bf881170b7f754a992620f4e7dc036efc67`
+- `source-tree/game/tests/housing_family_experiment/continuation_six_integration.gd` ← `game/tests/housing_family_experiment/continuation_six_integration.gd`; SHA256 `78210c615011f319471f41e71771da761b12a3df7bf6f37b1bd35de663aa63e5`
+- `source-tree/game/tests/housing_family_experiment/continuation_six_mechanics.json` ← `game/tests/housing_family_experiment/continuation_six_mechanics.json`; SHA256 `ae9b8294bb5e393367ef4f353e4f5382ee5dd7fc873c7fd68748d5221be9d5dd`
+- `source-tree/game/tests/housing_family_experiment/run_continuation_six_integration.py` ← `game/tests/housing_family_experiment/run_continuation_six_integration.py`; SHA256 `47826179dfe2ca51ec966fc1a53b7f8763bdb9236b6a466e2769abe2689b217b`
+- `continuation-six-002/VISUAL_REVIEW.md` ← `evidence/housing-family-experiment/continuation-six-002/VISUAL_REVIEW.md`; SHA256 `be4cce07e219cd39e9c91f38c28bf725a47439400249f2735f8b454d63f98bf6`
+- `continuation-six-002/TECHNICAL_REVIEW.md` ← `evidence/housing-family-experiment/continuation-six-002/TECHNICAL_REVIEW.md`; SHA256 `5bd4f4631229b1eb04dfe8e3cf21a46ce93e70d658ff5075c8ab5f5cf8963d78`
+- `continuation-six-002/result.json` ← `evidence/housing-family-experiment/continuation-six-002/result.json`; SHA256 `f2c16d8bfef65a8c8e7535e2b4687a541b2a3385a46554c1188b5e7d0525f009`
+- `continuation-six-002/images/w96698634-A.png` ← `evidence/housing-family-experiment/continuation-six-002/images/w96698634-A.png`; SHA256 `7f595bf362dc6dac55228770602ff9345e886ef7df7e41aefaab754024c5ee66`
+- `continuation-six-002/images/w96698634-B.png` ← `evidence/housing-family-experiment/continuation-six-002/images/w96698634-B.png`; SHA256 `74af5716e5ee67434377ba4343e8d5ad2934cf7d69ac7c7ee380dd07df3b937d`
+- `continuation-six-002/images/w96698634-rear-A.png` ← `evidence/housing-family-experiment/continuation-six-002/images/w96698634-rear-A.png`; SHA256 `7fbc56a58f7581ef203f4bd5ebcec1273d94c769a9cf1cb0204a3a2898fcb90b`
+- `continuation-six-002/images/w96698634-rear-B.png` ← `evidence/housing-family-experiment/continuation-six-002/images/w96698634-rear-B.png`; SHA256 `0543a2f2a95bf8c8d05285e0f089676c4ab3c03fad21ed3d36c9fe005d254670`
+- `continuation-six-mechanics001/images/w96698634-INSTALLED.png` ← `evidence/housing-family-experiment/continuation-six-mechanics001/images/w96698634-INSTALLED.png`; SHA256 `19c279dec77b76e315bcdb8757442b73d1169bdfc6262a4f91c6f95818e337e3`
+- `continuation-six-mechanics001/images/w96698634-rear-INSTALLED.png` ← `evidence/housing-family-experiment/continuation-six-mechanics001/images/w96698634-rear-INSTALLED.png`; SHA256 `9a869c399d77ec553feeb359972c24fd57dcaec0d085965b2c5161ea94da86d8`
+- `continuation-six-mechanics001/images/w96698634-stock-roof-oblique.png` ← `evidence/housing-family-experiment/continuation-six-mechanics001/images/w96698634-stock-roof-oblique.png`; SHA256 `3ac87cfe3ae29ee1fc3bed45cf6e15c320b9cf348a085861e65d9df7dc0bb189`
+- `continuation-six-mechanics001/result.json` ← `evidence/housing-family-experiment/continuation-six-mechanics001/result.json`; SHA256 `933807ad812e2a11dfd97d5743756ae898c4189dbbbeee48505cc38fc327ce43`
+- `continuation-six-mechanics001/independent-motion-summary.json` ← `evidence/housing-family-experiment/continuation-six-mechanics001/independent-motion-summary.json`; SHA256 `5f5485042ace6316502b4730f8342e2ef62cfef0bca75b5c539ccb19589a1302`
+- `continuation-six-001/w96698634-config.json` ← `evidence/housing-family-experiment/continuation-six-001/w96698634-config.json`; SHA256 `1d9999448d294038f5d8141792e6e1b3cc7e1aa548bd3d36865bbb6b131d8b54`
+- `continuation-six-001/result.json` ← `evidence/housing-family-experiment/continuation-six-001/result.json`; SHA256 `2817869186d3c87fef3397e187073f1d6c332c9f7c4601a1b69a5ed2d25603f7`
+- `continuation-six-001/images/w96698634-B.png` ← `evidence/housing-family-experiment/continuation-six-001/images/w96698634-B.png`; SHA256 `385d99bcc4353ddb84d5e455305020b9b362124d6a2e360cf2c0c98a2ad187fe`

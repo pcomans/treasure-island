@@ -1,0 +1,61 @@
+{
+  "baseline": "69755310ea7ae2d24053e0d516a7ea2bfe83057c",
+  "targets": [
+    {
+      "source_key": "w96698634",
+      "label": "1253 Exposition Drive",
+      "id": "w96698634",
+      "region": "w96698634",
+      "intent": "March 2025 front / September 2025 rear confirmed frontage; hidden cadence production inference",
+      "requested_xz": [
+        -55.30881947835546,
+        -593.2716602079723
+      ],
+      "aim_target": [
+        -33.181000000000004,
+        6.638,
+        -584.2453333333333
+      ],
+      "config": "res://game/resources/housing_family/w96698634.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-3.json"
+    }
+  ],
+  "views": [
+    {
+      "source_key": "w96698634",
+      "label": "1253 Exposition Drive",
+      "id": "w96698634",
+      "region": "w96698634",
+      "intent": "March 2025 front / September 2025 rear confirmed frontage; hidden cadence production inference",
+      "requested_xz": [
+        -55.30881947835546,
+        -593.2716602079723
+      ],
+      "aim_target": [
+        -33.181000000000004,
+        6.638,
+        -584.2453333333333
+      ],
+      "config": "res://game/resources/housing_family/w96698634.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-3.json"
+    },
+    {
+      "source_key": "w96698634",
+      "label": "1253 Exposition rear glazing",
+      "id": "w96698634-rear",
+      "region": "w96698634",
+      "intent": "September2025 observed ENE rear, broad lower glazing, no front entries",
+      "requested_xz": [
+        -9.883483798131985,
+        -591.4571525081938
+      ],
+      "aim_target": [
+        -25.0,
+        6.638,
+        -589.0
+      ],
+      "config": "res://game/resources/housing_family/w96698634.json",
+      "chunk": "res://generated/world/chunks/x_-1__z_-3.json"
+    }
+  ]
+}

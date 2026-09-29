@@ -1,0 +1,12 @@
+{
+  "terminal": 0,
+  "errors": [],
+  "engine_errors": [],
+  "receipt_ok": true,
+  "elapsed_seconds": 32.24927704082802,
+  "pid": 50526,
+  "slot_released": true,
+  "engines_after": [],
+  "ended_utc": "2026-09-29T05:20:53.276670+00:00",
+  "ok": true
+}
