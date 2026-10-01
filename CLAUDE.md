@@ -26,7 +26,7 @@ The existing skill is [building-texture](.agents/skills/building-texture/SKILL.m
 
 The maintained [source-surface comparator](tools/source_surface_comparator.py) exposes `compare_source_surfaces(before, after, prior_before, prior_after)` for independent native-evidence readers. Caller-owned input pins, expected source coverage and the existing review gates remain required; usage limits and the first completed comparator reuse trial (second pending) are in [LEARNINGS](LEARNINGS.md#validate-the-representation-actually-consumed).
 
-For model comparisons, use the canonical [blind shootout protocol](discovery/MODEL_SHOOTOUT.md): critique HTML and owner vote first, then isolated modeling through the fixed parameterized renderer.
+For model comparisons, use the canonical [blind shootout protocol](discovery/MODEL_SHOOTOUT.md): critique HTML and owner vote first, then isolated modeling through the committed `tools/model_shootout/run_capture.py <variant> <phase> --packet-root <private-packet>` renderer (`--godot` overrides the clone-local binary). Participants author models, not capture machinery.
 
 ## Shared building-study geometry verification
 
