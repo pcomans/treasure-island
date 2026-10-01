@@ -1,5 +1,7 @@
 extends SceneTree
 
+const StudyGeometry = preload("res://game/tests/support/building_study_geometry.gd")
+
 const ART_REVIEW_PATH := "res://discovery/facades/BATCH_06_PROTOTYPE_SET_01_ART_REVIEW.md"
 const FIELD_REVIEW_PATH := "res://discovery/facades/BATCH_06_EXACT_RECEIVER_FIELD_TRIALS_ART_REVIEW.md"
 const MODULE_REVIEW_PATH := "res://discovery/facades/W34313564_MODULE_CALIBRATION_CORRECTION_ART_REVIEW.md"
@@ -654,17 +656,11 @@ func _run_length(record: Dictionary, runs: Array[int]) -> float:
 
 
 func _triangle_signatures_for_mesh(mesh: ArrayMesh) -> Dictionary:
-	var signatures := {}
-	for surface_index in mesh.get_surface_count():
-		var arrays := mesh.surface_get_arrays(surface_index)
-		var vertices := arrays[Mesh.ARRAY_VERTEX] as PackedVector3Array
-		var indices := arrays[Mesh.ARRAY_INDEX] as PackedInt32Array
-		for offset in range(0, indices.size(), 3):
-			var signature := _triangle_signature(vertices[indices[offset]], vertices[indices[offset + 1]], vertices[indices[offset + 2]])
-			if signatures.has(signature):
-				return {}
-			signatures[signature] = true
-	return signatures
+	var collected := StudyGeometry.collect(mesh, [Transform3D.IDENTITY], StudyGeometry.INDEXED_ARRAYS)
+	if not collected.ok:
+		push_error("Indexed surface collection failed: %s" % [collected])
+		return {}
+	return _triangle_signatures_for_faces(collected.faces)
 
 
 func _triangle_signatures_for_faces(faces: PackedVector3Array) -> Dictionary:
