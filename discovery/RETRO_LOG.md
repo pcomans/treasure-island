@@ -15078,3 +15078,11 @@ Private outcome notes retain exact terminal author counters and separate author 
 ## 2026-10-01 — mersea_reference_curator: routing adoption
 
 At the owner's request, adopted Astra Low modeling and GPT-6.1 Sol High independent visual critique/bar-raiser in canonical AGENTS, its quota wind-down paragraph and the CLAUDE/LEARNINGS entrypoints. Other source/mechanical/release review retains Astra Medium. The visual role now names its specific canonical routing; the artist prompt already delegates modeling routing to AGENTS. Building-texture skill and its visual guidance contain no conflicting model default and remain unchanged. Independent author/reviewer separation and source/mechanical, visual and release gates remain mandatory, with explicit supported non-ultra effort and discretionary escalation rather than a fixed ladder. The small comparison supports this owner choice, not global quality, cost or speed claims; lower Sol effort is untested. No new experiment, production restart or quota-reminder activation.
+
+## 2026-10-02 — Mersea mural private refinement
+
+Publisher consolidation of the named private NOTES/RETRO entries:
+
+- `/root/mersea_mural_artist`: Opaque wall albedo removed generated alpha holes while physical ribs retained relief. Transparent repair failed; spatial checks prevented a known-bad rerender. Check alpha distribution and installed orientation early.
+- `/root/mersea_mural_review`: Narrow diffs and actual PNG/receipt/HTML checks worked. Stock basis did not predict image orientation; gray remains approximate. Reuse unchanged baseline evidence and keep source/preview PASS separate from mechanics and release.
+- `/root/mersea_mural_visual`: Matched native originals beside the reference established improved botanical composition and paint. Initial previews missed native defects; lower-center occlusion remains. Judge actual receiver pixels, preserve failures and limit PASS to visible evidence.

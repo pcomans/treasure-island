@@ -1,0 +1,383 @@
+extends RefCounted
+
+static func mat(c: String, metal: float = 0.0, rough: float = 0.7) -> StandardMaterial3D:
+	var m = StandardMaterial3D.new()
+	m.albedo_color = Color(c)
+	m.metallic = metal
+	m.roughness = rough
+	return m
+
+static func box(p: Node3D, pos: Vector3, size: Vector3, m: Material) -> MeshInstance3D:
+	var n = MeshInstance3D.new()
+	var mesh = BoxMesh.new()
+	mesh.size = size
+	n.mesh = mesh
+	n.material_override = m
+	n.position = pos
+	p.add_child(n)
+	return n
+
+static func cyl(p: Node3D, pos: Vector3, radius: float, height: float, m: Material, top: float = -1.0) -> MeshInstance3D:
+	var n = MeshInstance3D.new()
+	var mesh = CylinderMesh.new()
+	mesh.top_radius = radius if top < 0.0 else top
+	mesh.bottom_radius = radius
+	mesh.height = height
+	mesh.radial_segments = 24
+	n.mesh = mesh
+	n.material_override = m
+	n.position = pos
+	p.add_child(n)
+	return n
+
+static func rod(p: Node3D, a: Vector3, b: Vector3, r: float, m: Material) -> void:
+	var n = cyl(p, (a+b)*0.5, r, a.distance_to(b), m)
+	var d = (b-a).normalized()
+	if abs(d.dot(Vector3.UP)) < 0.999:
+		n.quaternion = Quaternion(Vector3.UP, d)
+
+static func text_sign(p: Node3D, s: String, pos: Vector3, size: int, color: Color) -> void:
+	var n = Label3D.new()
+	n.text = s
+	n.font_size = size
+	n.pixel_size = 0.007
+	n.modulate = color
+	n.outline_size = 0
+	n.position = pos
+	p.add_child(n)
+
+static func granular(c: String, other: String, scale_value: float) -> StandardMaterial3D:
+	var m = mat(c)
+	var noise = FastNoiseLite.new()
+	noise.frequency = 0.7
+	var tex = NoiseTexture2D.new()
+	tex.width = 256
+	tex.height = 256
+	tex.noise = noise
+	var gradient = Gradient.new()
+	gradient.set_color(0, Color(c))
+	gradient.set_color(1, Color(other))
+	tex.color_ramp = gradient
+	m.albedo_texture = tex
+	m.uv1_triplanar = true
+	m.uv1_scale = Vector3.ONE * scale_value
+	return m
+
+static func chair(p: Node3D, pos: Vector3, yaw: float, m: Material) -> void:
+	var g = Node3D.new()
+	g.position = pos
+	g.rotation.y = yaw
+	p.add_child(g)
+	box(g,Vector3(0,0.46,0),Vector3(0.46,0.045,0.43),m)
+	for x in [-0.21,0.21]:
+		for z in [-0.18,0.18]:
+			rod(g,Vector3(x,0.03,z),Vector3(x,0.46,z),0.017,m)
+		rod(g,Vector3(x,0.46,0.18),Vector3(x,0.86,0.24),0.018,m)
+	for y in [0.60,0.68,0.76,0.84]:
+		box(g,Vector3(0,y,0.22),Vector3(0.45,0.025,0.025),m)
+
+static func table(p: Node3D, x: float, z: float, long_table: bool = false) -> void:
+	var metal = mat("a9b1ae",0.7,0.35)
+	var dark = mat("333b3d",0.4,0.5)
+	if long_table:
+		box(p,Vector3(x,0.81,z),Vector3(2.7,0.10,1.03),mat("768c86",0.15,0.5))
+		for dx in [-1.14,1.14]:
+			for dz in [-0.4,0.4]:
+				box(p,Vector3(x+dx,0.4,z+dz),Vector3(0.055,0.8,0.055),dark)
+		for dx in [-0.85,0.0,0.85]:
+			chair(p,Vector3(x+dx,0,z+0.87),0,dark)
+			chair(p,Vector3(x+dx,0,z-0.87),PI,dark)
+	else:
+		cyl(p,Vector3(x,0.79,z),0.55,0.06,metal)
+		cyl(p,Vector3(x,0.40,z),0.045,0.74,metal)
+		cyl(p,Vector3(x,0.07,z),0.30,0.08,metal,0.08)
+		chair(p,Vector3(x,0,z+0.85),0,metal)
+		chair(p,Vector3(x,0,z-0.85),PI,metal)
+	cyl(p,Vector3(x,0.9,z),0.07,0.16,mat("316f71"))
+
+static func umbrella(p: Node3D, x: float, z: float, c: String) -> void:
+	var wood = mat("99714c")
+	cyl(p,Vector3(x,1.4,z),0.032,2.8,wood)
+	cyl(p,Vector3(x,0.08,z),0.3,0.12,mat("414442"))
+	var canopy = cyl(p,Vector3(x,2.65,z),1.6,0.43,mat(c),0.07)
+	canopy.mesh.radial_segments = 8
+	for i in range(8):
+		var a = i*PI/4
+		rod(p,Vector3(x,2.86,z),Vector3(x+cos(a)*1.55,2.44,z+sin(a)*1.55),0.013,wood)
+
+static func plant(p: Node3D, pos: Vector3, s: float, rng: RandomNumberGenerator) -> void:
+	var greens = [mat("687449"),mat("829165"),mat("4f6250"),mat("927748")]
+	for i in range(7):
+		var a = i*TAU/7.0
+		var n = box(p,pos+Vector3(cos(a)*s*0.20,s*0.28,sin(a)*s*0.20),Vector3(s*0.14,s*0.6,s*0.08),greens[rng.randi_range(0,3)])
+		n.rotation = Vector3(sin(a)*0.7,a,cos(a)*0.7)
+
+static func fence(p: Node3D, a: Vector3, b: Vector3) -> void:
+	var dark = mat("424c4b",0.6)
+	var count = int(a.distance_to(b)/0.21)
+	for i in range(count+1):
+		var pt = a.lerp(b,float(i)/count)
+		box(p,pt+Vector3(0,0.68,0),Vector3(0.025,1.36,0.025),dark)
+	for h in [0.22,1.13]:
+		rod(p,a+Vector3(0,h,0),b+Vector3(0,h,0),0.025,dark)
+
+# Frozen OSM perimeter vertices, in source order; no bounding-box substitute.
+const POI := "n8017457805"
+const SOURCES := ["w1308007114","w1308007113","w1308007112","w1098437841"]
+const POLYGONS := {
+"w1308007114":[[-419.318,133.689],[-412.293,130.160],[-410.719,133.288],[-408.010,131.930],[-406.955,134.012],[-401.521,131.285],[-400.404,133.511],[-411.132,138.910],[-405.592,149.920],[-410.033,152.157]],
+"w1308007113":[[-394.610,145.968],[-392.112,150.354],[-402.778,156.432],[-405.276,152.057]],
+"w1308007112":[[-389.228,145.745],[-390.433,143.541],[-385.069,140.613],[-383.864,142.806]],
+"w1098437841":[[-397.590,122.045],[-393.317,119.652],[-390.406,124.873],[-394.671,127.255]]}
+const BASES := {"w1308007114":3.140,"w1308007113":2.882,"w1308007112":2.982,"w1098437841":3.202}
+const HEIGHT := 2.9
+const SITE_ORIGIN := Vector3(-403.7,0,137.0)
+const SITE_YAW := 2.034444
+
+static func edge_frame(a: Vector2,b: Vector2,base: float) -> Transform3D:
+	var t := Vector3(b.x-a.x,0,b.y-a.y).normalized()
+	return Transform3D(Basis(-t,Vector3.UP,Vector3(t.z,0,-t.x)),Vector3((a.x+b.x)/2,base,(a.y+b.y)/2))
+
+static func glazing(p: Node3D,x: float,w: float,open_bay: bool=false) -> void:
+	var frame := mat("d8d9ce",0.15,0.38)
+	var glass := mat("b3c8c3",0.12,0.12)
+	glass.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA
+	glass.albedo_color.a=0.20
+	glass.cull_mode=BaseMaterial3D.CULL_DISABLED
+	# Recessed panes and deep perimeter reveal; no furniture/interior scene.
+	for xx in [x-w/2,x+w/2]:
+		box(p,Vector3(xx,1.32,-0.075),Vector3(0.11,2.42,0.25),frame)
+	box(p,Vector3(x,0.14,-0.07),Vector3(w,0.12,0.28),frame)
+	box(p,Vector3(x,2.54,-0.07),Vector3(w+0.18,0.15,0.30),frame)
+	box(p,Vector3(x,2.66,0.06),Vector3(w+0.28,0.065,0.42),frame)
+	if open_bay:
+		# Observed raised sectional panel, folded under the head on its tracks.
+		var raised := box(p,Vector3(x,2.53,-1.27),Vector3(w-0.12,0.025,2.32),glass)
+		raised.set_meta("mersea_role","glass")
+		for xx in [x-w/2+0.08,x+w/2-0.08]:
+			box(p,Vector3(xx,2.52,-1.27),Vector3(0.045,0.08,2.44),frame)
+		for z in [-0.11,-0.69,-1.27,-1.85,-2.43]:
+			box(p,Vector3(x,2.53,z),Vector3(w-0.12,0.075,0.075),frame)
+		box(p,Vector3(x,2.53,-1.27),Vector3(0.065,0.075,2.32),frame)
+	else:
+		for row in range(4):
+			for column in range(2):
+				var pane := box(p,Vector3(x+(column-0.5)*w/2,0.17+(row+0.5)*2.32/4,-0.135),Vector3(w/2-0.09,0.50,0.025),glass)
+				pane.set_meta("mersea_role","glass")
+		for y in [0.73,1.31,1.89]:
+			box(p,Vector3(x,y,-0.10),Vector3(w,0.075,0.105),frame)
+		box(p,Vector3(x,1.33,-0.10),Vector3(0.065,2.32,0.105),frame)
+
+static func polygon_surface(p: Node3D,points: PackedVector2Array,y: float,m: Material,role: String) -> MeshInstance3D:
+	var v := PackedVector3Array()
+	var n := PackedVector3Array()
+	var uv := PackedVector2Array()
+	for q in points:
+		v.append(Vector3(q.x,y,q.y));n.append(Vector3.UP);uv.append(q)
+	var indices := Geometry2D.triangulate_polygon(points)
+	var arrays := [];arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX]=v;arrays[Mesh.ARRAY_NORMAL]=n;arrays[Mesh.ARRAY_TEX_UV]=uv;arrays[Mesh.ARRAY_INDEX]=indices
+	var mesh := ArrayMesh.new();mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
+	var node := MeshInstance3D.new();node.mesh=mesh;node.material_override=m
+	node.set_meta("mersea_role",role);p.add_child(node)
+	return node
+
+static func building(source: String,wall_record: Dictionary,mural_asset_path: String) -> Node3D:
+	var p := Node3D.new();p.name="Mersea_"+source
+	p.set_meta("source_keys",[source]);p.set_meta("mersea_role","wall")
+	p.set_meta("derived_object_key","building:"+source+":wall")
+	var origin: Array=POLYGONS[source][0]
+	p.position=Vector3(origin[0],float(wall_record.flat_base_elevation_m),origin[1])
+	var points := PackedVector2Array()
+	for q: Array in POLYGONS[source]:points.append(Vector2(q[0]-origin[0],q[1]-origin[1]))
+	var roofmat := granular("b8bbb2","d7d8ce",1.0)
+	var underside := mat("c6c8bc",0.0,0.88)
+	underside.cull_mode=BaseMaterial3D.CULL_DISABLED
+	polygon_surface(p,points,HEIGHT,roofmat,"roof")
+	polygon_surface(p,points,HEIGHT-0.10,underside,"roof")
+	polygon_surface(p,points,0.10,mat("bdb4a0"),"support")
+	var steel := mat("7e827d",0.05,0.66)
+	var rib := mat("888d87",0.08,0.58)
+	var rail := mat("65716e",0.12,0.54)
+	for i in points.size():
+		var a := points[i];var b := points[(i+1)%points.size()]
+		var length := a.distance_to(b)
+		var g := Node3D.new();g.name="Edge_%d"%i;g.transform=edge_frame(a,b,0);p.add_child(g)
+		var openings: Array=[]
+		if (source=="w1308007114" and i==7) or (source=="w1308007113" and i==3):openings=[Vector2(-2.10,3.55),Vector2(2.10,3.55)]
+		if source=="w1308007114" and i==6:openings=[Vector2(-3.6,1.60),Vector2(-1.4,1.6),Vector2(1.6,1.15)]
+		if source=="w1308007113" and i==0:openings=[Vector2(0,length-0.38)]
+		# Photo-supported daylight through the rear pavilion; inferred bay alignment
+		# follows the frozen opposite perimeter, with no furnished interior.
+		if source=="w1308007114" and i==9:openings=[Vector2(2.068948,3.55),Vector2(6.268947,3.55)]
+		# Opposite glazing completes an exterior glass room, without invented interior.
+		if source=="w1308007113" and i==1:openings=[Vector2(-2.10,3.55),Vector2(2.10,3.55)]
+		for j in range(int(ceil(length/0.24))):
+			var x: float = -length/2+(j+0.5)*length/ceil(length/0.24)
+			var span: float = length/ceil(length/0.24)
+			var hole := false
+			for op: Vector2 in openings:
+				if absf(x-op.x)<op.y/2+span/2:hole=true
+			if not hole:
+				box(g,Vector3(x,1.47,-0.06),Vector3(span,2.70,0.12),steel)
+				box(g,Vector3(x,1.47,0.012),Vector3(0.085,2.59,0.038),rib)
+			else:box(g,Vector3(x,2.73,-0.06),Vector3(span,0.24,0.12),steel)
+		for y in [0.16,2.82]:box(g,Vector3(0,y,-0.02),Vector3(length,0.14,0.16),rail)
+		for x in [-length/2+0.08,length/2-0.08]:
+			box(g,Vector3(x,1.47,-0.05),Vector3(0.16,2.85,0.18),rail)
+			for y in [0.16,2.82]:
+				box(g,Vector3(x,y,0),Vector3(0.22,0.21,0.20),rib)
+				box(g,Vector3(x,y,0.106),Vector3(0.08,0.085,0.014),mat("394442"))
+		for op: Vector2 in openings:
+			# One raised rear courtyard bay as observed in the later patio photo.
+			# Its adjacent closed bay retains the exact glazing-contact test plane.
+			var raised_bay: bool = source=="w1308007114" and i==7 and op.x>0.0
+			glazing(g,op.x,op.y,raised_bay)
+		if source=="w1308007114" and i==6:
+			box(g,Vector3(-1.7,0.93,0.30),Vector3(5.5,0.10,0.65),mat("bdc0b7",0.65,0.30))
+			box(g,Vector3(4.3,1.75,0.10),Vector3(1.7,1.0,0.09),mat("384440"))
+			text_sign(g,"MERSEA",Vector3(4.3,1.95,0.16),24,Color("e5dfca"))
+			text_sign(g,"KITCHEN / BAR",Vector3(4.3,1.64,0.16),14,Color("e5dfca"))
+		if source=="w1308007112" and i==0:
+			for dx in [-0.65,-0.25,0.25,0.65]:
+				rod(g,Vector3(dx,0.30,0.10),Vector3(dx,2.64,0.10),0.022,mat("a4aba4",0.7))
+				box(g,Vector3(dx+0.08,1.08,0.13),Vector3(0.20,0.045,0.055),mat("a4aba4",0.7))
+		if source=="w1098437841" and i==3:mural(g,length,mural_asset_path)
+	# Low foundation apron connects the retained source base to actual terrain.
+	var wall_vertices: Array=wall_record.vertices
+	var minimum := float(wall_record.flat_base_elevation_m)
+	for j in range(1,wall_vertices.size(),3):minimum=minf(minimum,float(wall_vertices[j]))
+	for i in points.size():
+		var a := points[i];var b := points[(i+1)%points.size()]
+		var g := Node3D.new();g.transform=edge_frame(a,b,0);g.set_meta("mersea_role","support");p.add_child(g)
+		var depth := maxf(0.12,p.position.y-minimum+0.10)
+		box(g,Vector3(0,-depth/2+0.10,-0.09),Vector3(a.distance_to(b),depth,0.16),mat("aaa796"))
+	return p
+
+static func mural(g: Node3D,length: float,mural_asset_path: String) -> void:
+	# Private prototype: finite source-inspired paint, projected onto existing ribs.
+	# Raw PNG loading avoids an import or any change to the MAIN resource tree.
+	var image := Image.load_from_file(mural_asset_path)
+	image.generate_mipmaps()
+	var decal := Decal.new()
+	decal.name="MerseaMuralPaint"
+	decal.texture_albedo=ImageTexture.create_from_image(image)
+	var width: float=length-0.40
+	decal.size=Vector3(width,0.16,width*827.0/1902.0)
+	# Rotate the image plane 180 degrees; retain +Y outward / -Y projection inward.
+	decal.transform=Transform3D(Basis(Vector3.RIGHT,Vector3.BACK,Vector3.DOWN),Vector3(0,1.47,0.035))
+	decal.cull_mask=2
+	decal.normal_fade=0.15
+	decal.upper_fade=0.02
+	decal.lower_fade=0.02
+	decal.set_meta("mersea_role","decor")
+	g.add_child(decal)
+
+static func terrain_y(land: Dictionary,x: float,z: float) -> float:
+	var v: Array=land.vertices;var ix: Array=land.indices
+	for i in range(0,ix.size(),3):
+		var a:=Vector3(v[ix[i]*3],v[ix[i]*3+1],v[ix[i]*3+2])
+		var b:=Vector3(v[ix[i+1]*3],v[ix[i+1]*3+1],v[ix[i+1]*3+2])
+		var c:=Vector3(v[ix[i+2]*3],v[ix[i+2]*3+1],v[ix[i+2]*3+2])
+		var den: float=(b.z-c.z)*(a.x-c.x)+(c.x-b.x)*(a.z-c.z)
+		if absf(den)<0.0000001:continue
+		var u: float=((b.z-c.z)*(x-c.x)+(c.x-b.x)*(z-c.z))/den
+		var w: float=((c.z-a.z)*(x-c.x)+(a.x-c.x)*(z-c.z))/den
+		if minf(u,minf(w,1-u-w))>=-0.00001:return u*a.y+w*b.y+(1-u-w)*c.y
+	return NAN
+
+static func site_point(x: float,z: float) -> Vector3:
+	return SITE_ORIGIN+Basis(Vector3.UP,SITE_YAW)*Vector3(x,0,z)
+
+static func skin(p: Node3D,land: Dictionary,polygon: PackedVector2Array,m: Material,bias: float) -> void:
+	# Clip actual terrain triangles; visual skin has no competing land collider.
+	var v: Array=land.vertices;var ix: Array=land.indices
+	var verts:=PackedVector3Array();var normals:=PackedVector3Array();var uvs:=PackedVector2Array()
+	for i in range(0,ix.size(),3):
+		var tri:=PackedVector2Array()
+		for j in range(3):tri.append(Vector2(v[ix[i+j]*3],v[ix[i+j]*3+2]))
+		for piece: PackedVector2Array in Geometry2D.intersect_polygons(polygon,tri):
+			var ids:=Geometry2D.triangulate_polygon(piece)
+			for k in ids:
+				var q:=piece[k];verts.append(Vector3(q.x,terrain_y(land,q.x,q.y)+bias,q.y));normals.append(Vector3.UP);uvs.append(q)
+	if verts.is_empty():return
+	var arrays:=[];arrays.resize(Mesh.ARRAY_MAX);arrays[Mesh.ARRAY_VERTEX]=verts;arrays[Mesh.ARRAY_NORMAL]=normals;arrays[Mesh.ARRAY_TEX_UV]=uvs
+	var mesh:=ArrayMesh.new();mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
+	var node:=MeshInstance3D.new();node.mesh=mesh;node.material_override=m;node.set_meta("mersea_role","decor");p.add_child(node)
+
+static func rectangle(x: float,z: float,w: float,d: float) -> PackedVector2Array:
+	var points:=PackedVector2Array()
+	for q in [Vector2(x-w/2,z-d/2),Vector2(x+w/2,z-d/2),Vector2(x+w/2,z+d/2),Vector2(x-w/2,z+d/2)]:
+		var pt:=site_point(q.x,q.y);points.append(Vector2(pt.x,pt.z))
+	return points
+
+static func ground_material(a: String,b: String,frequency: float) -> StandardMaterial3D:
+	var m:=granular(a,b,1.0)
+	# World-metre UVs; 256 texels per metre gives visible fine aggregate, no macro blotches.
+	m.uv1_triplanar=false;m.albedo_color=Color.WHITE
+	var tex: NoiseTexture2D=m.albedo_texture;tex.noise.frequency=frequency
+	m.texture_filter=BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC
+	m.roughness=0.95
+	return m
+
+static func site(land: Dictionary) -> Node3D:
+	var p:=Node3D.new();p.name="MerseaSite_"+POI
+	p.set_meta("source_keys",[POI]);p.set_meta("derived_object_key","site:"+POI);p.set_meta("mersea_role","decor")
+	var sand:=ground_material("b4a283","d1c09e",0.72)
+	var concrete:=ground_material("c1baa7","d8d1bf",0.08)
+	var gravel:=ground_material("6e746b","96988b",0.9)
+	skin(p,land,rectangle(-2,1,32,29),sand,0.015)
+	skin(p,land,rectangle(-1,-7.0,21.0,1.5),concrete,0.020)
+	skin(p,land,rectangle(3.8,2.0,1.5,19.5),concrete,0.020)
+	skin(p,land,rectangle(-10.1,-0.8,1.5,13.2),concrete,0.020)
+	skin(p,land,rectangle(-1,-6.13,21.0,0.18),gravel,0.024)
+	var rng:=RandomNumberGenerator.new();rng.seed=93
+	var furniture:=Node3D.new();furniture.name="CourtyardFurniture";p.add_child(furniture)
+	for q in [Vector2(-4.6,-2.2),Vector2(-4.5,4.0),Vector2(-1.5,-3.6),Vector2(0.7,6.0)]:
+		var group:=Node3D.new();var pt:=site_point(q.x,q.y);pt.y=terrain_y(land,pt.x,pt.z)+0.025;group.position=pt;group.rotation.y=SITE_YAW;furniture.add_child(group)
+		table(group,0,0,q.x<0)
+		if q.y<0:umbrella(group,0,0,"9bc9c3" if q.x<0 else "d8d3bc")
+	var planter:=Node3D.new();var pp:=site_point(-1,1.5);pp.y=terrain_y(land,pp.x,pp.z)+0.02;planter.position=pp;planter.rotation.y=SITE_YAW;planter.set_meta("mersea_role","support");p.add_child(planter)
+	box(planter,Vector3(0,0.32,0),Vector3(3.5,0.62,2.4),mat("719997"))
+	box(planter,Vector3(0,0.65,0),Vector3(3.65,0.10,2.55),mat("8a644b"))
+	var greens:=Node3D.new();greens.set_meta("mersea_role","decor");planter.add_child(greens)
+	for i in range(25):plant(greens,Vector3(rng.randf_range(-1.55,1.55),0.72,rng.randf_range(-1,1)),rng.randf_range(0.30,0.60),rng)
+	# Compact adjacent twin lanes retain their observed relationship to the court.
+	for x in [-7.0,-3.9]:
+		skin(p,land,rectangle(x,10.1,2.85,10.0),sand,0.028)
+		for side in [-1,1]:
+			var a:=site_point(x+side*1.48,5.1);var b:=site_point(x+side*1.48,15.1)
+			a.y=terrain_y(land,a.x,a.z)+0.17;b.y=terrain_y(land,b.x,b.z)+0.17
+			var rail:=box(p,(a+b)/2,Vector3(0.10,0.28,a.distance_to(b)),mat("8a684c"));rail.rotation.y=SITE_YAW
+		for z in [5.1,15.1]:
+			var pt:=site_point(x,z);pt.y=terrain_y(land,pt.x,pt.z)+0.17
+			var rail:=box(p,pt,Vector3(3.05,0.28,0.10),mat("8a684c"));rail.rotation.y=SITE_YAW
+	var turf:=ground_material("58734e","7e955f",0.60)
+	var green:=PackedVector2Array()
+	for i in range(32):
+		var a:=TAU*i/32;var pt:=site_point(12+cos(a)*3.6,8+sin(a)*5.0);green.append(Vector2(pt.x,pt.z))
+	skin(p,land,green,turf,0.025)
+	for q in [Vector2(11,6),Vector2(13,10)]:
+		var pt:=site_point(q.x,q.y);pt.y=terrain_y(land,pt.x,pt.z)
+		cyl(p,pt+Vector3(0,0.60,0),0.012,1.15,mat("dfdfd0"));box(p,pt+Vector3(0.13,1.08,0),Vector3(0.26,0.18,0.012),mat("dfdfd0"))
+	# Shallow attached cover; no neighboring event roof or new barrier.
+	var canopy:=Node3D.new();var cp:=site_point(4.0,7.1);cp.y=terrain_y(land,cp.x,cp.z);canopy.position=cp;canopy.rotation.y=SITE_YAW;canopy.set_meta("mersea_role","support");p.add_child(canopy)
+	var metal:=mat("72817a",0.10,0.6);var cover:=mat("a5bab0",0.05,0.3);cover.transparency=BaseMaterial3D.TRANSPARENCY_ALPHA;cover.albedo_color.a=0.5
+	box(canopy,Vector3(0,2.80,0),Vector3(5.0,0.06,5.0),cover)
+	for x in [-2.5,2.5]:
+		for z in [-2.5,2.5]:box(canopy,Vector3(x,1.37,z),Vector3(0.09,2.74,0.09),metal)
+	for x in range(-2,3):box(canopy,Vector3(x,2.74,0),Vector3(0.065,0.12,5.0),metal)
+	for z in [-2.5,2.5]:box(canopy,Vector3(0,2.72,z),Vector3(5.1,0.16,0.10),metal)
+	return p
+
+static func build(records: Dictionary,land: Dictionary,mural_asset_path: String) -> Node3D:
+	var p:=Node3D.new();p.name="MerseaAssembly"
+	for source: String in SOURCES:p.add_child(building(source,records["building:"+source+":wall"],mural_asset_path))
+	p.add_child(site(land))
+	# Roof extractors belong to the actual kitchen's northern wing.
+	var host:Node3D=p.get_node("Mersea_w1308007114")
+	for pt in [Vector2(-411.6,132.8),Vector2(-406.2,133.2)]:
+		var g:=Node3D.new();g.position=Vector3(pt.x,BASES.w1308007114+HEIGHT,pt.y)-host.position;g.set_meta("mersea_role","roof");host.add_child(g)
+		box(g,Vector3(0,0.08,0),Vector3(1.0,0.16,1.0),mat("b9bdb5",0.7))
+		cyl(g,Vector3(0,0.32,0),0.30,0.5,mat("b6bcb5",0.75,0.3));cyl(g,Vector3(0,0.62,0),0.51,0.32,mat("c8cbc2",0.7,0.3),0.44)
+	return p
