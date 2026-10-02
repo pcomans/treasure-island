@@ -28,6 +28,8 @@ When additional imagery could resolve an architectural uncertainty, name the dec
 
 Reuse permitted private originals with their date, URL and target/side association, passing only relevant images to subsequent tasks under the existing access and retention rules. Family references can inform shared construction vocabulary; they cannot transfer another building's identity or establish unknown motifs. Record a short before → after decision in the ordinary task note, including unresolved limits. Existing independent source, mechanical, visual and release gates remain unchanged.
 
+Close reference-image capture/acquisition with ROOT’s [reference-sufficiency review](../SKILL.md#reference-sufficiency-before-authoring) before artist dispatch or continued authoring.
+
 ## Region and motif method
 
 1. Partition the facade into regions whenever material, orientation, motif family, spacing, base/roof condition, or cadence changes.
