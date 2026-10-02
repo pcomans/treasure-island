@@ -16,6 +16,7 @@ def main():
                         help="Private packet containing render/<variant>/model.gd")
     default_godot = Path(__file__).resolve().parents[2] / ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot"
     parser.add_argument("--godot", type=Path, default=default_godot)
+    parser.add_argument("--study", choices=("housing", "mersea"), default="housing")
     args = parser.parse_args()
     code_root = Path(__file__).resolve().parent
     root = args.packet_root.expanduser().resolve() / "render"
@@ -39,6 +40,8 @@ def main():
     cmd = [str(godot), "--path", str(project), "--rendering-method", "forward_plus",
            "--display-driver", "macos", "--resolution", "1440x900", "--script",
            str(project / "capture.gd"), "--", str(out / "model.gd"), str(out)]
+    if args.study != "housing":
+        cmd.append(args.study)
     start = time.monotonic()
     begin = datetime.datetime.now(datetime.timezone.utc).isoformat()
     proc, code, error = None, None, None

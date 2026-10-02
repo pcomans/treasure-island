@@ -5,8 +5,13 @@ func _initialize() -> void:
 
 func _run() -> void:
 	var args: PackedStringArray = OS.get_cmdline_user_args()
-	if args.size() != 2:
-		push_error("Expected absolute model.gd and output directory")
+	if args.size() != 2 and args.size() != 3:
+		push_error("Expected absolute model.gd, output directory and optional study")
+		quit(2)
+		return
+	var study: String = args[2] if args.size() == 3 else "housing"
+	if study != "housing" and study != "mersea":
+		push_error("Unknown study: " + study)
 		quit(2)
 		return
 	var script := GDScript.new()
@@ -62,13 +67,19 @@ func _run() -> void:
 	camera.make_current()
 	DirAccess.make_dir_recursive_absolute(args[1])
 	var poses: Array = [
-		["01-frontal",Vector3(0,1.7,30)],
-		["02-three-quarter",Vector3(23,1.7,27)],
-		["03-near",Vector3(0,1.7,11)]
+		["01-frontal",Vector3(0,1.7,30),Vector3(0,3,0)],
+		["02-three-quarter",Vector3(23,1.7,27),Vector3(0,3,0)],
+		["03-near",Vector3(0,1.7,11),Vector3(0,3,0)]
 	]
+	if study == "mersea":
+		poses = [
+			["01-frontal",Vector3(0,10,62),Vector3(0,1,0)],
+			["02-three-quarter",Vector3(46,36,50),Vector3(0,0,0)],
+			["03-near",Vector3(7,1.7,12),Vector3(-4,1.8,-8)]
+		]
 	for pose: Array in poses:
 		camera.position = pose[1]
-		camera.look_at(Vector3(0,3,0),Vector3.UP)
+		camera.look_at(pose[2],Vector3.UP)
 		for frame in 16:
 			await process_frame
 		await RenderingServer.frame_post_draw

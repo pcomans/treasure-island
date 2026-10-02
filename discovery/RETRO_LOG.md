@@ -15057,3 +15057,12 @@ ROOT inspected all 18 selected originals and accepted reference sufficiency for 
 ## 2026-10-01 — shootout_capture_61: initial Mersea STOP checkpoint
 
 Official exterior assets were accessible and should drive the next curated pack. API StreetView navigation initially captured loading frames and one wrong-target historical contributor view; preserving and classifying these prevented them from becoming evidence. Current pack is insufficient; stop honored before modeling. This paragraph records the initial stopped acquisition checkpoint; the later curator pack and ROOT sufficiency decision are recorded separately. Modeling remains stopped.
+
+
+## 2026-10-01 — mersea_blind_capture_executor
+
+The reused curator completed four serialized native Mersea captures through the maintained optional study profile. Each owned PID reached terminal zero, clean logs, completion marker and three 1440×900 originals before an empty PID census released the next run. Engine time totaled 16.33 seconds; author reference inspection, inference, transport and capture waits are separate private measurements. The app thread-limit blocked executor allocation, so ROOT reused an available agent after preparation; failed allocation calls did no capture work.
+
+The full private blind page preserves four exact prior critique answers, twenty prior image joins, all eighteen approved Mersea references and twelve new renders. Thirty new blind asset copies match their originals byte for byte. Browser verification loaded all fifty images at 1600px and 390px, with no horizontal overflow; native enlargement and original download targets matched, and voting text contained no model identities or private mappings. All engine and browser processes were closed. Mixed-date references and inferred dimensions remain explicit; this is an exterior/site study, not measured as-built or production acceptance.
+
+Artist retros: one artist used the first preview to move an obstructing entry pavilion beyond the fixed courtyard sightline and translate a raised floral treatment into paint on corrugation. The other used its single revision to connect service geometry and improve ground/perimeter continuity; opaque glazing and abstract foliage limit photographic depth. Both inspected only their own initial three originals and made one revision. No further art changes or capture rounds were requested. Source preparation, author counters and reused executor delta are retained separately in the private packet; exact active inference/tool time is uninstrumented.
