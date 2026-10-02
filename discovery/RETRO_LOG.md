@@ -14998,3 +14998,43 @@ Persisted code-only capture/project/model interface from the retained successful
 - Independently confirmed model-interface.gd,capture.gd,project.godot byte-identical to the current private packet. The five checked-in files are code/project/.gdignore only; no photographs, encoded image templates, participant models or anonymous mapping. Cameras, lighting, three1440x900 views and standalone build interface unchanged.
 - Wrapper review CLOSED: explicit packet/Godot paths, snapshot of executed model in fresh preview/final directory, exact existing-project byte guard, private writable cache, immediate PID/argv,180s timeout then terminate/kill/wait and finally launch-error/terminal/image/completion receipt are coherent. Model input snapshot plus exact project guard preserve this existing experiment boundary; no new production binding framework added. Slot serialization remains executor-owned per protocol, not inferred from wrapper ok.
 - Native portability remains unproved until the separately authorized modeling capture after blind critique owner vote. No engine/commit/repeated syntax run by reviewer. Do not turn source equivalence into image acceptance or broaden into a benchmark audit.
+
+## 2026-10-02 — shootout_capture_61: blind modeling capture and comparison
+
+Owner-authorized isolated study proceeded before unanswered critique vote; production remains paused. Used committed parameterized renderer unchanged. Five serialized invocations: Y preview parse failure preserved, X preview PASS, Y mechanically repaired preview PASS on fresh private root, Y final PASS, X final PASS. Each terminal was observed, logs and original1440x900 images checked, and engine slot explicitly released with empty census. All14 comparison image/source joins exact; wide/narrow/enlargement verified and browser closed. Private packet holds timings, token counters, anonymous mapping and full evidence. Owner delivery/verdict pending at 2026-10-02T02:45:59.027787+00:00. No production or crossplatform acceptance. Preparation over-read broad source/session metadata; targeted excerpts/fields would reduce executor input overhead next time without removing evidence.
+
+### shootout_model_x_61 — verbatim author RETRO
+
+Actual UTC record
+- Task start / first observed clock: 2026-10-02 02:32:47 UTC.
+- First source edit: 2026-10-02 02:36:18 UTC.
+- Initial ready / source frozen: 2026-10-02 02:36:40 UTC.
+- Parent-reported preview capture: 02:37:56.080577–02:38:02.123207 UTC, terminal 0, PASS.
+- Preview receipt / one-pass art review and revision start: 2026-10-02 02:38:58 UTC.
+- Revision source edit: 2026-10-02 02:40:18 UTC.
+- Revision complete, model frozen: 2026-10-02 02:40:45 UTC.
+- Final ready including author notes: 2026-10-02 02:41:06 UTC.
+
+Initial author interval: 3m53s elapsed, includes reference/tool reading and source drafting. Revision/review interval: 1m47s elapsed to source freeze; notes are additionally included through final-ready. Author-side idle between initial-ready and preview receipt: 2m18s; separately reported capture runtime 6.042630s. Remaining idle includes scheduling/delivery, whose split is unknown. Exact dispatch time and exact sampling-versus-tool subdivisions are unknown; no unknown interval has been silently treated as measured render time.
+
+First capture ran successfully. Preview revealed roof rake direction artifacts, overly bright material values, and dense siding courses. One bounded art revision addresses those and slightly raises the canopy for the fixed close camera. No author Godot invocation, no mechanical repair cycle, no subsequent preview inspection. Roof normals/end closure and shingle overlap changes are part of the single visual revision, not a separate hidden iteration. No integration or surveyed fidelity claim. See NOTE.md for inferences.
+
+### shootout_model_y_61 — verbatim author RETRO
+
+# Timing and process
+
+All timestamps UTC, 2026-10-02.
+
+- Task start clock sample: 02:33:05.
+- First source write completed: 02:35:29. The exact write-start time was not sampled; source composition preceded that completion.
+- Initial ready: 02:35:37. Initial author interval: 2m32s.
+- First capture failed before images with a GDScript type inference error on `xx` from an untyped array loop variable. Capture timestamps for that failure were not supplied to this author.
+- ROOT-authorized mechanical repair: 02:37:45–02:37:52, 7s. One declaration was explicitly typed and its loop value cast to float. No art change, engine launch, or test launch occurred during repair. Token cost is unavailable.
+- Successful capture interval supplied by ROOT: 02:39:14.464139–02:39:19.171147 (4.707008s); terminal exit 0. Queue waiting cannot be separated exactly from communication latency here.
+- Preview receipt/inspection clock sample: 02:40:08. Each of the three original images was opened once in one tool call.
+- Art revision decision/inspection interval began 02:40:08; edit command clock 02:40:47, completed 02:40:48. One revision only; 40s including inspection and judgment.
+- Final source ready: 02:40:48. Final handoff follows writing these notes; its clock is reported separately.
+
+Elapsed initial-ready to preview receipt was 4m31s, containing the 7s authorized repair and the known 4.707s successful capture. Remaining time cannot be classified precisely as queue versus communication/dispatch delay. Active initial art plus revision totaled 3m12s by sampled intervals, plus 7s mechanical repair and note-writing time. No local engine validation was performed. Final appearance after the one revision is unobserved by this author. The viewer alone judges artistic success.
+
+The first pixels exposed excessive repetitive covering patterns and overly pronounced siding/trim. The bounded revision addresses those specific observations without changing the building concept. Physical siding strips and tiny trim can still alias at distant views; this was not separately tested. The model intentionally infers repetitive architecture through substantial photographic occlusion.

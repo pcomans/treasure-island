@@ -11,11 +11,11 @@ The prepared [2026-09-30 packet](/Users/user302070/Documents/Codex/2026-09-08/st
 
 Record setup and harness-push intervals separately from participant work. Ordinary notes retain dispatch, first edit, initial-ready, preview, revision, final-ready, capture, HTML delivery and owner-verdict timestamps; include human waiting, queueing, failures and transport in full-workflow timing. Engine seconds are narrower. Record run order/cache/interruption, and actual token-counter deltas when available; inference time, missing token counts and cost remain unknown. No token estimate from prose length, no speed claim from render seconds, and no extra reporting framework.
 
-The current packet's engine compatibility must be established by its authorized invocation; setup alone is not a successful run. These taste verdicts do not replace independent source/mechanics, visual or release decisions for future production adoption.
+The 2026-10-02 modeling run established this packet's native macOS compatibility through four successful committed-runner captures; the initial model parse failure and its bounded numeric-typing repair remain preserved in the private packet. This is neither cross-platform nor production validation. These taste verdicts do not replace independent source/mechanics, visual or release decisions for future production adoption.
 
 ## Prepare and run from a clone
 
-The code-only renderer, project and model interface live in [tools/model_shootout](../tools/model_shootout/run_capture.py). Its capture.gd/project.godot/interface are byte-identical to the retained successful packet; cameras, lights, envelope and image names are unchanged. The wrapper adds configurable paths and explicit launch/error/final cleanup receipts. Existing external packet code is preserved. Native portability has not been rerun; the next authorized modeling capture validates it.
+The code-only renderer, project and model interface live in [tools/model_shootout](../tools/model_shootout/run_capture.py). Its capture.gd/project.godot/interface are byte-identical to the retained successful packet; cameras, lights, envelope and image names are unchanged. The wrapper adds configurable paths and explicit launch/error/final cleanup receipts. Existing external packet code is preserved. The 2026-10-02 modeling run exercised this committed runner successfully on macOS with Godot 4.7.2, Metal and Forward+; other platforms remain unvalidated.
 
 Prepare the same private references/briefs and anonymous mapping outside the clone. Authors receive `tools/model_shootout/model-interface.gd` and place their standalone model at `<packet>/render/variant-x/model.gd` or `variant-y/model.gd`; no participant model or photo belongs in Git. The capture executor uses:
 

@@ -260,3 +260,7 @@ Housing expansion004's new draped parking apron passed a conventional positive-c
 ## 2026-09-29 —1439 collision coordinate representation
 
 In the reviewed1439 experiment, recentering the same LAND body at(-296,0,17), with366 byte-identical world vertices and unchanged filters, resolved the prior retreat dip across the original133-row approach/retreat campaign. World-equivalent collision coordinates can affect an observed native contact outcome; preserve body identity, world geometry, original route and exact teardown when testing this possibility. This is route-specific evidence, not a universal Jolt root cause or approved loader change. See `evidence/building-quality-drafts/2026-09-29/1439-quality/local-origin009/INDEPENDENT_REVIEW.md`.
+
+## Read only the fields needed for measurement and assembly
+
+The 2026-10-02 blind modeling capture/assembly executor over-read broad source files and session metadata. At HTML-ready, its observed uncached input was 124,475 tokens versus 84,479 for both authors combined; this as-of comparison is not billing or proof of cost attribution. Use standard JSON parsing to select only required session identity and token fields, strip embedded base64 before reading HTML template structure, and read relevant source excerpts. Preserve the required evidence without adding a workflow gate or report. See the named shootout_capture_61 entry in [RETRO](discovery/RETRO_LOG.md).
