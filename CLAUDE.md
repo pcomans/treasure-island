@@ -8,7 +8,7 @@ Follow the current [quota wind-down rule](AGENTS.md#owner-resumption-and-quota-w
 
 ## Persisted entrypoints
 
-Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra`; explicitly select a supported non-ultra effort instead of inheriting the parent’s effort. That section also defines the owner-authorized modeling/judging trial defaults and discretionary non-ultra escalation; the primary/root setting is unchanged.
+Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra`; explicitly select a supported non-ultra effort instead of inheriting the parent’s effort. That section defines the current routing: Astra Low modeling, GPT-6.1 Sol High independent visual critique/bar-raiser, and Astra Medium other source/mechanical/release review, with discretionary supported non-ultra escalation. Preserve independent review gates; the primary/root setting is unchanged.
 
 | Role prompt | When used |
 |---|---|

@@ -2,7 +2,7 @@
 
 Keep this a short, living guide to mistakes worth preventing. Update an applicable lesson when new evidence changes it; preserve uncertainty and useful gains. Routine execution history belongs in `discovery/RETRO_LOG.md`.
 
-Retain the owner-authorized routing in [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra` for subagents; explicitly select effort. Current defaults are Astra Low for modeling and Astra Medium for independent judging. These observations do not establish a universal model or throughput ranking.
+Retain the owner-authorized routing in [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra` for subagents; explicitly select effort. Current defaults, adopted 2026-10-01, are Astra Low for modeling, GPT-6.1 Sol High for independent visual critique/bar-raiser, and Astra Medium for other source/mechanical/release review. Earlier routing notes below are historical. This small sample does not establish a universal quality, cost or speed ranking; lower Sol effort is untested.
 
 ## Judge the whole visible result after a fix
 
