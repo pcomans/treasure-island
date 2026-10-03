@@ -222,6 +222,8 @@ The targeted reference pilot separated evidence gaps from execution gaps: a new 
 
 The hangar comparison substituted 2003 HABS photographs after headless/API-locator Street View pages rendered black. The owner required Street View; a headed browser with the full validated panorama locator immediately recovered dated November 2025 pixels. Because both browser mode and URL form changed, the precise failure cause is unproved. Verify the actual required imagery, resolved date and target association before artist dispatch. A browser loading failure does not establish unavailable imagery or justify a weaker source. Diagnose viewer readiness once, then report the blocker if unresolved. Archival imagery may supplement, but must not replace required contemporary views.
 
+The same failure recurred for the Bulgarian Wall neighbor on 2026-10-03 UTC: coordinate/copied-pano deep links had produced black frames, but a fresh headed session entering Street View from the actual Maps pin and road-coverage UI immediately returned September 2025 imagery. Avenue D and Chinook Court supplied March 2025 opposite-side and complete-frontage views, establishing 1445 Chinook Court / w95934121. This repeats the existing lesson, not a new evidence exception; the precise earlier failure cause is still unproved. Apply the headed UI fallback before declaring imagery unavailable, preserving failed originals and actual resolved panorama/date/location.
+
 ## Condition small polygon calculations locally
 
 The housing roof clipper produced thin positive-area triangles at large projected
