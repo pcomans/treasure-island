@@ -1,0 +1,23 @@
+{
+  "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+  "workspaceMount": "source=${localWorkspaceFolder},target=/workspaces/${localWorkspaceFolderBasename},type=bind,relabel=private",
+  "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
+  "remoteUser": "vscode",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "mounts": [
+    "source=/run/user/1000/ssh-agent.socket,target=/ssh-auth-sock,type=bind,relabel=shared"
+  ],
+  "containerEnv": {
+    "SSH_AUTH_SOCK": "/ssh-auth-sock"
+  },
+  "runArgs": [
+    "--userns=keep-id",
+    "--dns=1.1.1.1",
+    "--dns=8.8.8.8",
+    "--device=/dev/dri"
+  ],
+  "postCreateCommand": "bash -c 'curl -fsSL https://claude.ai/install.sh | bash && sudo apt-get update -qq && sudo apt-get install -y -qq tmux libgl1 libvulkan1 mesa-utils mesa-vulkan-drivers vulkan-tools xvfb unzip'"
+}
