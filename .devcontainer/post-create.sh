@@ -17,7 +17,8 @@ sudo apt-get install -y -qq tmux unzip git-lfs weston \
 git lfs install --skip-smudge
 
 npm install -g @openai/codex@0.160.0
-# The named volume for ~/.codex (login survives rebuilds) is created root-owned.
+# ~/.codex is the codex-home volume shared by all DevPod workspaces (one login,
+# survives rebuilds; see pcomans/devpods). It is created root-owned.
 sudo chown vscode:vscode /home/vscode/.codex
 
 bash .devcontainer/setup-godot.sh
