@@ -1,95 +1,60 @@
-# Treasure Island First Playable
+# Treasure Island
 
-A private macOS Godot first playable of Treasure Island: walk, run, jetpack, and
-place a predefined spray tag on eligible exterior walls. It uses the frozen OSM
-layout and tracked generated world; cars, interiors, missions, multiplayer, and
-public distribution are outside this milestone.
+A private Godot game of Treasure Island, San Francisco, built autonomously by
+agents: walk, run, jetpack, and spray a tag on building walls. The whole island
+comes from a frozen OpenStreetMap snapshot; agents improve its buildings one at a
+time so they look like the real ones.
 
-## Current source and release
+**Score: 43 of 213 buildings** recognizably match their real counterparts
+(`recognition_metric` in [the runtime registry](game/resources/facades/facade-runtime-registry.json)).
 
-The current source enables **33 shared-family housing appearances in normal gameplay**. Nine additional reference-reviewed houses bring recognition to **43 of 213** physical buildings; the historical 34 accepted units and the 213-unit inventory remain intact. The [housing inventory](discovery/HOUSING_FAMILY_INSTANCES.md) distinguishes 33 photo-confirmed instances from 42 still-unconfirmed housing-row candidates; this is not island-wide completion.
+## Develop
 
-The nine-house candidate passed independent source, sampled visual, stock movement/jetpack/spray, signed package and privacy checks. Owner Metal startup failures are retained; successful unchanged independent Metal completion does not establish a cold-start guarantee. The distinct final 43/213 app passed independent signed Metal and mounted privacy checks. The verified app is at `build/housing-family-nine-2026-09-26-001/Treasure Island First Playable.app`; its [release record](evidence/first-playable/housing-family-nine-release-2026-09-26-001/README.md) retains exact bindings and failed attempts.
-
-Historical [34 ID snapshots](evidence/building-snapshots/accepted-34-2026-09-23/README.md) and acceptance receipts remain intact. Private reference photographs are excluded from the repository and packaged app.
-
-## Play on another Mac
-
-Copy the complete existing `Treasure Island First Playable.app` bundle from the
-stable release path above to the other Mac's `/Applications` folder. It needs no Godot or Node
-installation. Then double-click it in Finder, or run:
+Development runs in the Linux devcontainer on the GMKtec (`.devcontainer/`), with
+GPU rendering:
 
 ```sh
-open "/Applications/Treasure Island First Playable.app"
+devpod up git@github.com:pcomans/treasure-island.git --id treasure-island --ide none
+devpod ssh treasure-island
+cd /workspaces/content
 ```
 
-The bundle is ignored by Git and is therefore not included in a clone. Copy the
-whole app, including its embedded data; copying only the executable is insufficient.
-The current app passed its native smoke on Apple M2 with Metal / Forward+.
-Both arm64 and x86_64 slices passed signature checks. M1 Pro remains the owner
-target; neither M1 performance nor Intel runtime is established by those checks.
+Creating the container installs Godot 4.7.2, its export templates, Codex,
+Claude Code and Node dependencies (`.devcontainer/post-create.sh`). Log in to
+Codex once with `codex login --device-auth`; the login survives rebuilds.
 
-## Run from source
-
-For a source checkout, use macOS, Git, and the approved standard Godot
-`4.7.2.stable.official.ed1daf0bf`. The generated world and runtime skyline asset
-are tracked. If Git LFS is installed, this play-only clone skips optional
-historical AVI downloads:
+Always start Godot through `tools/godot`. It picks the project's Godot and, for
+anything that renders, a headless display on the GPU:
 
 ```sh
-GIT_LFS_SKIP_SMUDGE=1 git clone https://github.com/pcomans/treasure-island.git
-cd treasure-island
-git switch main
-
-# Copy the existing approved Godot app into this exact project-local location.
-mkdir -p .tools/godot/4.7.2
-ditto "/Volumes/TRANSFER/Godot.app" ".tools/godot/4.7.2/Godot.app"
-touch .tools/godot/4.7.2/_sc_
-
-GODOT="$PWD/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot"
-"$GODOT" --headless --editor --path . --quit  # first-checkout import/class discovery
-"$GODOT" --path .
+tools/godot --headless --path . --import                       # after a fresh clone
+tools/godot --headless --path . --script game/tests/<test>.gd  # a headless test
 ```
 
-Copying the existing Godot app is the simplest setup. When it is unavailable,
-follow the [vetted Godot install plan](discovery/TRUSTED_INSTALL_PLAN.md).
-Matching export templates and `npm ci --ignore-scripts` are for exporting or
-development tooling, not for playing source.
-
-For ordinary authoring, edit and run/reload the source project, then inspect the
-actual gameplay view. Export is for a reviewed delivery checkpoint; no app export
-is needed for each source edit.
-
-## Reproduce facade validation
-
-Playing the tracked generated world does not rebuild its recognition registry.
-For registry development, use the pinned Node dependencies from
-`package-lock.json` (`npm ci --ignore-scripts`) and run the existing commands:
+## Check a building
 
 ```sh
-node tools/build_facade_recognition_registry.mjs --check
-node tools/test_facade_recognition_registry.mjs
-node tools/test_facade_runtime_loader_contract.mjs
+# Screenshots for review: gameplay close-ups, the building in its surroundings, island overviews
+tools/godot --path . --resolution 1600x900 --script game/tests/shared/building_shots.gd -- --source w291189336 --island --out /tmp/shots
+
+# Fit and playability: roof and walls are solid, walls reach the ground, the player can walk up to it
+tools/godot --headless --path . --script game/tests/shared/building_fit_test.gd -- --source w291189336
 ```
 
-These checks consume declared gameplay evidence as well as source. Preserve the
-current23 checkpoint's previously restored41 historical1201/1238 images and its52
-new-unit images. The prior26 batch added60 declared gameplay images for1222/1227/1202; current28 adds34 for1234/1215,
-including honestly labeled earlier held studies and sparse movie payloads.
-The prior three-unit batch added 54 selected gameplay images for 1232, 1241 and
-1221, preserving each original study/capture label and sparse movie limit.
-The current 1397/1226 packet bindings are in the [current release proof](evidence/first-playable/northern-1397-1226-current-release-2026-09-23-001/release-closure.json).
-Private dated Street View pixels and full AVI files stay outside Git/export.
-Do not bypass missing-file checks or rebuild authority from incomplete evidence;
-the retained copy plan binds every selected image and source hash.
+`--source` is the building's OSM id from `generated/world/` (e.g. `w291189336`
+is the Navy Chapel). [AGENTS.md](AGENTS.md#what-done-means-for-a-building) says
+when a building counts as done.
 
-After an intentional authority change, use the existing compiler `--write` path,
-refresh its generated-hash native fixtures, then run `--check` and both Node
-contracts before the required native checks. Reuse a matching imported class
-cache only when its source/dependency bindings match; a fresh clone still needs
-the import shown above. Matching Godot export templates and the reviewed private
-export preset are required for a delivery build. Preserve candidate versus final
-current PCK identity, and copy the complete independently released app bundle.
+## Build for the Mac
+
+```sh
+tools/build-mac.sh   # -> build/mac/treasure-island-mac-<commit>.zip
+```
+
+This exports the macOS build, checks it contains no reference photos or research
+material, and launches a Linux build of the same commit to confirm the island
+loads. Copy the zip to the Mac, unzip it, and right-click the app → Open the
+first time (it is not notarized).
 
 ## Controls
 
@@ -100,12 +65,10 @@ current PCK identity, and copy the complete independently released app bundle.
 - `R` recovers to a safe position.
 - `Esc` pauses; `Q` quits while paused; `F3` toggles runtime evidence.
 
-## More information
+## More
 
-- [Playtest guide](PLAYTEST.md) for owner-facing play instructions.
-- [Project agreement](AGENTS.md) before changing project work.
-- [Persisted agent and skill entrypoints](CLAUDE.md#persisted-entrypoints) and [current working handoff](NEXT_AGENT_HANDOFF_2026-09-08.md).
-- [Test, validation, and export commands](game/tests/README.md).
-- [First-playable evidence index](evidence/first-playable/README.md).
-- [Active facade catalog](discovery/facades/facade-recognition-catalog.json) and [runtime registry](game/resources/facades/facade-runtime-registry.json).
-- [Archived prior README](README_HISTORY_2026-09-12.md) for the full historical release and export record.
+- [AGENTS.md](AGENTS.md): how agents work on this project. Read it before changing anything.
+- [CLAUDE.md](CLAUDE.md#persisted-entrypoints): agent roles and the building skill.
+- [LEARNINGS.md](LEARNINGS.md): lessons from earlier work.
+- [HUMAN.md](HUMAN.md): things only the owner can do.
+- Older records: [README history](README_HISTORY_2026-10-03.md), [earlier README history](README_HISTORY_2026-09-12.md), `evidence/`.

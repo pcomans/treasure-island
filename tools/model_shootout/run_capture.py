@@ -1,4 +1,4 @@
-"""Fixed Mac/Forward+ study renderer; private inputs and outputs stay in a packet."""
+"""Fixed Forward+ study renderer; private inputs and outputs stay in a packet."""
 from pathlib import Path
 import argparse
 import datetime
@@ -14,7 +14,8 @@ def main():
     parser.add_argument("phase", choices=("preview", "final"))
     parser.add_argument("--packet-root", required=True, type=Path,
                         help="Private packet containing render/<variant>/model.gd")
-    default_godot = Path(__file__).resolve().parents[2] / ".tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot"
+    # tools/godot picks the project Godot and a GPU display; --godot overrides it.
+    default_godot = Path(__file__).resolve().parents[1] / "godot"
     parser.add_argument("--godot", type=Path, default=default_godot)
     parser.add_argument("--study", choices=("housing", "mersea"), default="housing")
     args = parser.parse_args()
@@ -38,7 +39,7 @@ def main():
     out.mkdir(exist_ok=False)
     shutil.copy2(source, out / "model.gd")
     cmd = [str(godot), "--path", str(project), "--rendering-method", "forward_plus",
-           "--display-driver", "macos", "--resolution", "1440x900", "--script",
+           "--resolution", "1440x900", "--script",
            str(project / "capture.gd"), "--", str(out / "model.gd"), str(out)]
     if args.study != "housing":
         cmd.append(args.study)
