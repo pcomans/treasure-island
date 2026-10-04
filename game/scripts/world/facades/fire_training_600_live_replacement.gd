@@ -35,7 +35,7 @@ static func prepare_chunk_records(chunk: Dictionary) -> Dictionary:
 static func build_chunk_plan(pair: Dictionary) -> Dictionary:
 	if not pair.get("contains_target", false):
 		return {"ok": true, "contains_target": false, "records": {}}
-	var built := FACTORY.build(pair.roof, pair.land)
+	var built := FACTORY.build(pair.roof, pair.wall, pair.land)
 	if not built.get("ok", false):
 		return _failure(str(built.get("message", "Building 600 construction failed.")))
 	return {"ok": true, "contains_target": true, "records": {WALL: built.wall, ROOF: built.roof}}

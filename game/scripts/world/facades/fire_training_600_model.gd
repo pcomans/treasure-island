@@ -15,7 +15,6 @@ const SOURCE_KEY := "w34313548"
 const WALL_KEY := "building:w34313548:wall"
 const ROOF_KEY := "building:w34313548:roof"
 const TEX_ROOT := "res://game/resources/textures/world/polyhaven/"
-const WALL_BOTTOM_Y := 3.40
 const ROLES := ["wall", "roof", "detail", "visual", "setting"]
 
 # Heights above the flat source base B (production_inference).
@@ -66,15 +65,16 @@ var B := 0.0
 var origin_world := Vector3.ZERO
 var axis_a := Vector3.ZERO
 var axis_b := Vector3.ZERO
-var footprint_world: Array = []
+var _wall_bottom := 0.0
+## Sample points that fell outside the ground records (the build fails if any).
+var _land_misses := 0
 var _land: Array = []
 var _surfs: Dictionary = {}
 var _materials: Dictionary = {}
 var _textures: Dictionary = {}
 var _grain: ImageTexture
 var _font: Font
-var ground_contacts: Array = []
-var letters: Array = []
+var _letter_count := 0
 var west_door_centres: Array = []
 
 
@@ -131,7 +131,7 @@ class Surf:
 ## record used only to seat ground-contacting details on actual local terrain.
 ## land_records: the ground records of the building's chunk; walls and fixtures
 ## are seated on their triangles.
-func build(roof_record: Dictionary, land_records: Array) -> Dictionary:
+func build(roof_record: Dictionary, wall_record: Dictionary, land_records: Array) -> Dictionary:
 	name = "FireTraining600"
 	if str(roof_record.get("object_key", "")) != ROOF_KEY or roof_record.get("source_keys", []) != [SOURCE_KEY]:
 		return {"ok": false, "message": "Exact w34313548 roof record required"}
@@ -141,7 +141,6 @@ func build(roof_record: Dictionary, land_records: Array) -> Dictionary:
 		pts.append(Vector3(float(rv[i]), float(rv[i + 1]), float(rv[i + 2])))
 	if pts.size() != 4:
 		return {"ok": false, "message": "Rectangular four-vertex roof expected"}
-	footprint_world = pts.duplicate()
 	var south := pts[0]
 	var west := pts[0]
 	var east := pts[0]
@@ -161,6 +160,15 @@ func build(roof_record: Dictionary, land_records: Array) -> Dictionary:
 	if absf(axis_b.dot(across.normalized()) - 1.0) > 0.0005 or Vector2(predicted_north.x - north.x, predicted_north.z - north.z).length() > 0.02:
 		return {"ok": false, "message": "Footprint is not the expected rectangle/orientation"}
 	B = float(roof_record.flat_base_elevation_m)
+	# The fixed positions below (porch, east wall, hatch, vents) assume a long, deep bar.
+	if L < PORCH_A + 3.0 or W < EAST_WALL_B + 0.5:
+		return {"ok": false, "message": "Building 600 footprint is too small for this design"}
+	# Walls reach 0.26 m below the generated walls' bottom, so they meet sloping ground.
+	var wall_vertices: Array = wall_record.vertices
+	_wall_bottom = INF
+	for i in range(1, wall_vertices.size(), 3):
+		_wall_bottom = minf(_wall_bottom, float(wall_vertices[i]))
+	_wall_bottom -= 0.26
 	origin_world = Vector3(south.x, 0.0, south.z)
 	transform = Transform3D(Basis(axis_a, Vector3.UP, axis_b), origin_world)
 	for land_record: Dictionary in land_records:
@@ -184,10 +192,9 @@ func build(roof_record: Dictionary, land_records: Array) -> Dictionary:
 	_commit()
 	set_meta("source_keys", [SOURCE_KEY])
 	set_meta("derived_object_key", WALL_KEY)
-	set_meta("footprint_l_m", L)
-	set_meta("footprint_w_m", W)
-	set_meta("base_y_m", B)
-	return {"ok": true, "L": L, "W": W, "B": B, "origin": [origin_world.x, origin_world.z], "axis_a": [axis_a.x, axis_a.z], "axis_b": [axis_b.x, axis_b.z]}
+	if _land_misses > 0:
+		return {"ok": false, "message": "%d Building 600 points fall outside the ground records" % _land_misses}
+	return {"ok": true}
 
 
 func local_to_world(p: Vector3) -> Vector3:
@@ -208,7 +215,8 @@ func land_y(a: float, b: float) -> float:
 		var l3 := 1.0 - l1 - l2
 		if l1 >= -1e-9 and l2 >= -1e-9 and l3 >= -1e-9:
 			return l1 * p1.y + l2 * p2.y + l3 * p3.y
-	return NAN
+	_land_misses += 1
+	return B
 
 
 func _prepare_land(record: Dictionary) -> void:
@@ -392,9 +400,9 @@ func _build_south_block() -> void:
 	var sz := Vector3(0, 0, 1)
 	var east_b := W - 0.356
 	# West: recessed maroon south wall, then two proud low maroon blocks flank the frame.
-	_wall("wall", "maroon", Vector3(0, 0, WEST_FACE_B), sx, Vector3(0, 0, -1), SOUTH_A, A_LOW_S0, WALL_BOTTOM_Y, low, [])
-	_abox("wall", "maroon", Vector3(A_LOW_S0, WALL_BOTTOM_Y, FRAME_FRONT_B), Vector3(A_FRAME0, low, WEST_FACE_B), 2 | 4 | 8 | 32)
-	_abox("wall", "maroon", Vector3(A_FRAME1, WALL_BOTTOM_Y, FRAME_FRONT_B), Vector3(A_MAIN, low, WEST_FACE_B), 1 | 4 | 8 | 32)
+	_wall("wall", "maroon", Vector3(0, 0, WEST_FACE_B), sx, Vector3(0, 0, -1), SOUTH_A, A_LOW_S0, _wall_bottom, low, [])
+	_abox("wall", "maroon", Vector3(A_LOW_S0, _wall_bottom, FRAME_FRONT_B), Vector3(A_FRAME0, low, WEST_FACE_B), 2 | 4 | 8 | 32)
+	_abox("wall", "maroon", Vector3(A_FRAME1, _wall_bottom, FRAME_FRONT_B), Vector3(A_MAIN, low, WEST_FACE_B), 1 | 4 | 8 | 32)
 	# South end (r14 occluded): low cream wall, one door and two windows.
 	var so := Vector3(SOUTH_A, 0, 0)
 	var sn := Vector3(-1, 0, 0)
@@ -403,12 +411,11 @@ func _build_south_block() -> void:
 	var w1 := Rect2(7.4, B + H_SILL, 1.4, 1.2)
 	var w2 := Rect2(11.4, B + H_SILL, 1.4, 1.2)
 	var holes := [door, w1, w2]
-	_wall("wall", "cream_base", so, sz, sn, WEST_FACE_B, east_b, WALL_BOTTOM_Y, B + H_PLINTH, holes)
+	_wall("wall", "cream_base", so, sz, sn, WEST_FACE_B, east_b, _wall_bottom, B + H_PLINTH, holes)
 	_wall("wall", "cream", so, sz, sn, WEST_FACE_B, east_b, B + H_PLINTH, low, holes)
 	_door("cream", "door", so, sz, sn, door, 0.14, SOUTH_A - 0.03)
 	_window("cream", so, sz, sn, w1, 2, 0.0)
 	_window("cream", so, sz, sn, w2, 2, 0.0)
-	ground_contacts.append({"id": "south-door", "a": SOUTH_A, "b": 3.5, "bottom_y": door.position.y, "land_y": door_g})
 	# East (yard) low blocks flanking the cream east arch; doors break the plane.
 	var eo := Vector3(0, 0, east_b)
 	var en := Vector3(0, 0, 1)
@@ -418,17 +425,15 @@ func _build_south_block() -> void:
 	var ed2 := Rect2(13.3, eg2 + 0.02, 1.0, 2.15)
 	for seg: Array in [[SOUTH_A, A_FRAME0, ed1], [A_FRAME1, A_MAIN, ed2]]:
 		var d: Rect2 = seg[2]
-		_wall("wall", "cream_base", eo, sx, en, float(seg[0]), float(seg[1]), WALL_BOTTOM_Y, B + H_PLINTH, [d])
+		_wall("wall", "cream_base", eo, sx, en, float(seg[0]), float(seg[1]), _wall_bottom, B + H_PLINTH, [d])
 		_wall("wall", "cream", eo, sx, en, float(seg[0]), float(seg[1]), B + H_PLINTH, low, [d])
 		_door("cream", "door", eo, sx, en, d, 0.14, 0.12)
-	ground_contacts.append({"id": "east-low-door-s", "a": 1.4, "b": east_b, "bottom_y": ed1.position.y, "land_y": eg1})
-	ground_contacts.append({"id": "east-low-door-n", "a": 13.8, "b": east_b, "bottom_y": ed2.position.y, "land_y": eg2})
 	# Step walls rising from the low roofs to the high passage roof.
 	_wall("wall", "cream", Vector3(A_FRAME0, 0, 0), sz, Vector3(-1, 0, 0), FRAME_BACK_B, W - 0.656, B + H_LOW_ROOF, B + H_HI_PARAPET, [])
 	_wall("wall", "cream", Vector3(A_FRAME1, 0, 0), sz, Vector3(1, 0, 0), FRAME_BACK_B, W - 0.656, B + H_LOW_ROOF, B + H_HI_PARAPET, [])
 	# Main bar south end above the north low block, and the low block's north wall under the walkway.
 	_wall("wall", "cream", Vector3(A_MAIN, 0, 0), sz, Vector3(-1, 0, 0), WEST_FACE_B, EAST_WALL_B, B + H_LOW_ROOF, B + H_PARAPET, [])
-	_wall("wall", "cream", Vector3(A_MAIN, 0, 0), sz, Vector3(1, 0, 0), EAST_WALL_B, east_b, WALL_BOTTOM_Y, low, [])
+	_wall("wall", "cream", Vector3(A_MAIN, 0, 0), sz, Vector3(1, 0, 0), EAST_WALL_B, east_b, _wall_bottom, low, [])
 
 
 func _arch_centre() -> Vector2:
@@ -471,7 +476,7 @@ func _build_portal_frame(west: bool) -> void:
 	for pair: Array in [[A_FRAME0, A_OPEN0], [A_OPEN1, A_FRAME1]]:
 		var s0: float = pair[0]
 		var s1: float = pair[1]
-		_quad("wall", mat, Vector3(s0, WALL_BOTTOM_Y, front), Vector3(s1, WALL_BOTTOM_Y, front), Vector3(s1, top, front), Vector3(s0, top, front), out)
+		_quad("wall", mat, Vector3(s0, _wall_bottom, front), Vector3(s1, _wall_bottom, front), Vector3(s1, top, front), Vector3(s0, top, front), out)
 	for i in arch.size() - 1:
 		var p: Vector2 = arch[i]
 		var q: Vector2 = arch[i + 1]
@@ -481,12 +486,12 @@ func _build_portal_frame(west: bool) -> void:
 		_quad("wall", mat, Vector3(p.x, p.y, front), Vector3(q.x, q.y, front), Vector3(q.x, q.y, back), Vector3(p.x, p.y, back), Vector3(inward.x, inward.y, 0))
 	# Back face above the high passage roof and over the jamb rooms.
 	_quad("wall", mat, Vector3(A_FRAME0, B + H_HI_ROOF, back), Vector3(A_FRAME1, B + H_HI_ROOF, back), Vector3(A_FRAME1, top, back), Vector3(A_FRAME0, top, back), -out)
-	_quad("wall", mat, Vector3(A_OPEN0, WALL_BOTTOM_Y, front), Vector3(A_OPEN0, WALL_BOTTOM_Y, back), Vector3(A_OPEN0, spring, back), Vector3(A_OPEN0, spring, front), Vector3(1, 0, 0))
-	_quad("wall", mat, Vector3(A_OPEN1, WALL_BOTTOM_Y, front), Vector3(A_OPEN1, WALL_BOTTOM_Y, back), Vector3(A_OPEN1, spring, back), Vector3(A_OPEN1, spring, front), Vector3(-1, 0, 0))
+	_quad("wall", mat, Vector3(A_OPEN0, _wall_bottom, front), Vector3(A_OPEN0, _wall_bottom, back), Vector3(A_OPEN0, spring, back), Vector3(A_OPEN0, spring, front), Vector3(1, 0, 0))
+	_quad("wall", mat, Vector3(A_OPEN1, _wall_bottom, front), Vector3(A_OPEN1, _wall_bottom, back), Vector3(A_OPEN1, spring, back), Vector3(A_OPEN1, spring, front), Vector3(-1, 0, 0))
 	_quad("wall", mat, Vector3(A_FRAME0, top, front), Vector3(A_FRAME1, top, front), Vector3(A_FRAME1, top, back), Vector3(A_FRAME0, top, back), Vector3.UP)
 	for e: Array in [[A_FRAME0, Vector3(-1, 0, 0)], [A_FRAME1, Vector3(1, 0, 0)]]:
 		var a: float = e[0]
-		_quad("wall", mat, Vector3(a, WALL_BOTTOM_Y, front), Vector3(a, WALL_BOTTOM_Y, back), Vector3(a, top, back), Vector3(a, top, front), e[1])
+		_quad("wall", mat, Vector3(a, _wall_bottom, front), Vector3(a, _wall_bottom, back), Vector3(a, top, back), Vector3(a, top, front), e[1])
 	var zmin := minf(front, back)
 	var zmax := maxf(front, back)
 	_abox("detail", "coping", Vector3(A_FRAME0, top, zmin), Vector3(A_FRAME1, top + COPING_H, zmax), 4)
@@ -517,10 +522,10 @@ func _arch_ring(front: float, out: Vector3, proud: float, width: float, mat: Str
 		var sgn: float = side[1]
 		var oq: Vector2 = side[2]
 		var xo := jx + sgn * wj
-		_quad("wall", mat, Vector3(xo, WALL_BOTTOM_Y, f), Vector3(jx, WALL_BOTTOM_Y, f), Vector3(jx, spring, f), Vector3(xo, spring, f), out)
+		_quad("wall", mat, Vector3(xo, _wall_bottom, f), Vector3(jx, _wall_bottom, f), Vector3(jx, spring, f), Vector3(xo, spring, f), out)
 		_s("wall", mat).tri(Vector3(xo, spring, f), Vector3(jx, spring, f), Vector3(oq.x, oq.y, f), out)
-		_quad("wall", mat, Vector3(xo, WALL_BOTTOM_Y, front), Vector3(xo, oq.y, front), Vector3(xo, oq.y, f), Vector3(xo, WALL_BOTTOM_Y, f), Vector3(sgn, 0, 0))
-		_quad("wall", mat, Vector3(jx, WALL_BOTTOM_Y, front), Vector3(jx, spring, front), Vector3(jx, spring, f), Vector3(jx, WALL_BOTTOM_Y, f), Vector3(-sgn, 0, 0))
+		_quad("wall", mat, Vector3(xo, _wall_bottom, front), Vector3(xo, oq.y, front), Vector3(xo, oq.y, f), Vector3(xo, _wall_bottom, f), Vector3(sgn, 0, 0))
+		_quad("wall", mat, Vector3(jx, _wall_bottom, front), Vector3(jx, spring, front), Vector3(jx, spring, f), Vector3(jx, _wall_bottom, f), Vector3(-sgn, 0, 0))
 
 
 func _build_passage() -> void:
@@ -536,14 +541,12 @@ func _build_passage() -> void:
 	var w1 := Rect2(5.0, B + H_SILL, 2.2, 1.6)
 	var w2 := Rect2(12.6, B + H_SILL, 2.2, 1.6)
 	var holes := [d1, d2, w1, w2]
-	_wall("wall", "cream_base", no, sdir, nn, b0, b1, WALL_BOTTOM_Y, B + 0.9, holes)
+	_wall("wall", "cream_base", no, sdir, nn, b0, b1, _wall_bottom, B + 0.9, holes)
 	_wall("wall", "cream", no, sdir, nn, b0, b1, B + 0.9, deck_y, holes)
 	_door("cream", "door", no, sdir, nn, d1)
 	_door("cream", "door", no, sdir, nn, d2)
 	_window("cream", no, sdir, nn, w1, 2, 0.5)
 	_window("cream", no, sdir, nn, w2, 2, 0.5)
-	ground_contacts.append({"id": "passage-north-door-1", "a": A_OPEN1, "b": 3.2, "bottom_y": d1.position.y, "land_y": d1.position.y - 0.02})
-	ground_contacts.append({"id": "passage-north-door-2", "a": A_OPEN1, "b": 10.7, "bottom_y": d2.position.y, "land_y": d2.position.y - 0.02})
 	# South side near the west entrance: deep breeze-block screen, high-contrast
 	# near-square cells readable from Avenue M (r08/r15), then a door and window.
 	var so := Vector3(A_OPEN0, 0, 0)
@@ -559,14 +562,13 @@ func _build_passage() -> void:
 	var south_holes := cells.duplicate()
 	south_holes.append(sd)
 	south_holes.append(sw)
-	_wall("wall", "cream_base", so, sdir, sn, b0, b1, WALL_BOTTOM_Y, B + 0.45, south_holes)
+	_wall("wall", "cream_base", so, sdir, sn, b0, b1, _wall_bottom, B + 0.45, south_holes)
 	_wall("wall", "cream", so, sdir, sn, b0, b1, B + 0.45, deck_y, south_holes)
 	for c: Rect2 in cells:
 		_reveals("cell_side", so, sdir, sn, c, 0.20, true)
 		_quad("wall", "cell_dark", _wp(so, sdir, sn, c.position.x, c.position.y, 0.20), _wp(so, sdir, sn, c.end.x, c.position.y, 0.20), _wp(so, sdir, sn, c.end.x, c.end.y, 0.20), _wp(so, sdir, sn, c.position.x, c.end.y, 0.20), sn)
 	_door("cream", "door", so, sdir, sn, sd)
 	_window("cream", so, sdir, sn, sw, 1, 0.0)
-	ground_contacts.append({"id": "passage-south-door", "a": A_OPEN0, "b": 12.1, "bottom_y": sd.position.y, "land_y": sd.position.y - 0.02})
 	# Prominent round SFFD badge high on the screen wall (visual only).
 	_cyl("visual", "badge_white", Vector3(A_OPEN0, B + 3.40, 3.17), Vector3(1, 0, 0), 0.44, 0.03, 24)
 	_cyl("visual", "badge_red", Vector3(A_OPEN0 + 0.03, B + 3.40, 3.17), Vector3(1, 0, 0), 0.36, 0.015, 24)
@@ -594,7 +596,6 @@ func _build_passage() -> void:
 		var g := land_y(ba, bb)
 		_cyl("detail", "bollard", Vector3(ba, g - 0.10, bb), Vector3.UP, 0.11, 1.03, 12, false)
 		_cyl("detail", "bollard_cap", Vector3(ba, g + 0.93, bb), Vector3.UP, 0.115, 0.07, 12, true)
-		ground_contacts.append({"id": "bollard-%.2f" % ba, "a": ba, "b": bb, "bottom_y": g - 0.10, "land_y": g, "top_y": g + 1.0})
 
 
 func _drape(role: String, mat: String, a0: float, a1: float, c0: float, c1: float, lift: float) -> void:
@@ -680,8 +681,7 @@ func _build_main_bar() -> void:
 				var d := Rect2(float(item[1]) - 0.5, g + 0.02, 1.0, 2.15)
 				holes.append(d)
 				doors.append(d)
-				ground_contacts.append({"id": "west-door-bay-%d" % i, "a": float(item[1]), "b": WEST_FACE_B, "bottom_y": d.position.y, "land_y": g})
-	_wall("wall", "plinth", wo, sdir, wn, A_MAIN, PORCH_A, WALL_BOTTOM_Y, B + H_PLINTH, holes)
+	_wall("wall", "plinth", wo, sdir, wn, A_MAIN, PORCH_A, _wall_bottom, B + H_PLINTH, holes)
 	_wall("wall", "cream", wo, sdir, wn, A_MAIN, PORCH_A, B + H_PLINTH, B + H_PARAPET, holes)
 	for r: Rect2 in windows:
 		_window("cream", wo, sdir, wn, r, 2, 0.55)
@@ -701,34 +701,31 @@ func _build_main_bar() -> void:
 	# Pilasters at bay lines with a deeper shadow edge (r12 joints).
 	for k in range(1, BAY_COUNT):
 		var ap := A_MAIN + bw * k
-		_wbox("wall", "cream", wo, sdir, wn, ap - 0.20, ap + 0.20, WALL_BOTTOM_Y, B + H_PARAPET, -0.09, 0.0, 32 | 8)
+		_wbox("wall", "cream", wo, sdir, wn, ap - 0.20, ap + 0.20, _wall_bottom, B + H_PARAPET, -0.09, 0.0, 32 | 8)
 	# Shadow reglet under the coping (visual only, 4 mm proud).
 	_quad("visual", "reglet", Vector3(A_MAIN, B + H_PARAPET - 0.07, WEST_FACE_B - 0.004), Vector3(PORCH_A, B + H_PARAPET - 0.07, WEST_FACE_B - 0.004), Vector3(PORCH_A, B + H_PARAPET, WEST_FACE_B - 0.004), Vector3(A_MAIN, B + H_PARAPET, WEST_FACE_B - 0.004), Vector3(0, 0, -1))
 	# NW corner porch step (r10 low cream-banded corner element).
 	var step_o := Vector3(PORCH_A, 0, 0)
-	_wall("wall", "bluegrey", step_o, Vector3(0, 0, 1), Vector3(1, 0, 0), WEST_FACE_B, PORCH_B, WALL_BOTTOM_Y, B + H_BAND_LO, [])
+	_wall("wall", "bluegrey", step_o, Vector3(0, 0, 1), Vector3(1, 0, 0), WEST_FACE_B, PORCH_B, _wall_bottom, B + H_BAND_LO, [])
 	_wall("wall", "north_grey", step_o, Vector3(0, 0, 1), Vector3(1, 0, 0), WEST_FACE_B, PORCH_B, B + H_BAND_LO, B + H_PARAPET, [])
 	var w2o := Vector3(0, 0, PORCH_B)
 	var pd := Rect2(101.6, land_y(102.1, PORCH_B) + 0.02, 1.0, 2.15)
-	_wall("wall", "bluegrey", w2o, sdir, wn, PORCH_A, L - 0.05, WALL_BOTTOM_Y, B + H_BAND_LO, [pd])
+	_wall("wall", "bluegrey", w2o, sdir, wn, PORCH_A, L - 0.05, _wall_bottom, B + H_BAND_LO, [pd])
 	_wall("wall", "cream", w2o, sdir, wn, PORCH_A, L - 0.05, B + H_BAND_LO, B + H_PARAPET, [])
 	_door("bluegrey", "door", w2o, sdir, wn, pd)
-	ground_contacts.append({"id": "porch-door", "a": 102.1, "b": PORCH_B, "bottom_y": pd.position.y, "land_y": pd.position.y - 0.02})
 	_abox("wall", "north_cream", Vector3(PORCH_A, B + H_BAND_LO, WEST_FACE_B), Vector3(L - 0.05, B + H_BAND_HI, PORCH_B), 1 | 32)
 	var pier_g := land_y(L - 0.35, 0.65)
-	_abox("wall", "bluegrey", Vector3(L - 0.65, WALL_BOTTOM_Y, WEST_FACE_B), Vector3(L - 0.05, B + H_BAND_LO, 0.95), 8)
-	ground_contacts.append({"id": "porch-pier", "a": L - 0.35, "b": 0.65, "bottom_y": WALL_BOTTOM_Y, "land_y": pier_g})
+	_abox("wall", "bluegrey", Vector3(L - 0.65, _wall_bottom, WEST_FACE_B), Vector3(L - 0.05, B + H_BAND_LO, 0.95), 8)
 	# North end (10th St): windowless banded wall, teal service door near the walkway.
 	var no := Vector3(L - 0.05, 0, 0)
 	var ndir := Vector3(0, 0, 1)
 	var nn := Vector3(1, 0, 0)
 	var nd := Rect2(11.55, land_y(L - 0.05, 12.05) + 0.02, 1.0, 2.15)
-	_wall("wall", "bluegrey", no, ndir, nn, PORCH_B, EAST_WALL_B, WALL_BOTTOM_Y, B + H_BAND_LO, [nd])
+	_wall("wall", "bluegrey", no, ndir, nn, PORCH_B, EAST_WALL_B, _wall_bottom, B + H_BAND_LO, [nd])
 	_wall("wall", "north_cream", no, ndir, nn, PORCH_B, EAST_WALL_B, B + H_BAND_LO, B + H_BAND_HI, [])
 	_wall("wall", "north_grey", no, ndir, nn, PORCH_B, EAST_WALL_B, B + H_BAND_HI, B + H_PARAPET, [])
 	_door("bluegrey", "door_teal", no, ndir, nn, nd, 0.14, 0.0)
 	_quad("visual", "reglet", Vector3(L - 0.046, B + H_PARAPET - 0.07, PORCH_B), Vector3(L - 0.046, B + H_PARAPET - 0.07, EAST_WALL_B), Vector3(L - 0.046, B + H_PARAPET, EAST_WALL_B), Vector3(L - 0.046, B + H_PARAPET, PORCH_B), Vector3(1, 0, 0))
-	ground_contacts.append({"id": "north-door", "a": L - 0.05, "b": 12.05, "bottom_y": nd.position.y, "land_y": nd.position.y - 0.02})
 	# East (yard) face under the walkway: varied doors, windows, double doors and vents (inference).
 	var eo := Vector3(0, 0, EAST_WALL_B)
 	var en := Vector3(0, 0, 1)
@@ -766,8 +763,7 @@ func _build_main_bar() -> void:
 				var d := Rect2(float(it[1]) - wdt * 0.5, g + 0.02, wdt, 2.15)
 				eholes.append(d)
 				edoor.append(d)
-				ground_contacts.append({"id": "east-door-bay-%d" % i, "a": float(it[1]), "b": EAST_WALL_B, "bottom_y": d.position.y, "land_y": g})
-	_wall("wall", "cream_base", eo, sdir, en, A_MAIN, L - 0.05, WALL_BOTTOM_Y, B + 0.55, eholes)
+	_wall("wall", "cream_base", eo, sdir, en, A_MAIN, L - 0.05, _wall_bottom, B + 0.55, eholes)
 	_wall("wall", "cream", eo, sdir, en, A_MAIN, L - 0.05, B + 0.55, B + H_PARAPET, eholes)
 	for r: Rect2 in ewin:
 		_window("cream", eo, sdir, en, r, 2, 0.45)
@@ -805,7 +801,6 @@ func _build_walkway() -> void:
 		var g := land_y(ap, post_b)
 		_abox("detail", "post_light", Vector3(ap - 0.075, g - 0.10, post_b - 0.075), Vector3(ap + 0.075, y_soffit, post_b + 0.075), 4 | 8)
 		_abox("detail", "post_light", Vector3(ap - 0.15, g - 0.10, post_b - 0.15), Vector3(ap + 0.15, g + 0.02, post_b + 0.15), 4)
-		ground_contacts.append({"id": "walkway-post-%.2f" % ap, "a": ap, "b": post_b, "bottom_y": g - 0.10, "land_y": g, "top_y": y_soffit})
 
 
 func _build_roofs() -> void:
@@ -968,7 +963,7 @@ func _letter(ch: String, pos: Vector3, x_axis: Vector3, y_axis: Vector3, z_axis:
 	mesh.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
 	mesh.material = _material(mat)
 	var inst := MeshInstance3D.new()
-	inst.name = "Letter%d" % letters.size()
+	inst.name = "Letter%d" % _letter_count
 	inst.mesh = mesh
 	inst.layers = 1
 	inst.transform = Transform3D(Basis(x_axis, y_axis, z_axis), pos)
@@ -976,7 +971,7 @@ func _letter(ch: String, pos: Vector3, x_axis: Vector3, y_axis: Vector3, z_axis:
 	inst.set_meta("derived_object_key", WALL_KEY)
 	inst.set_meta("receiver_kind", "none")
 	add_child(inst)
-	letters.append(inst)
+	_letter_count += 1
 
 
 # ---------------------------------------------------------------- materials / commit
@@ -1202,7 +1197,6 @@ func _commit() -> void:
 		inst.layers = 2 if role == "wall" else 1
 		inst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF if role in ["visual", "setting"] else GeometryInstance3D.SHADOW_CASTING_SETTING_ON
 		_tag(inst, "building_wall" if role == "wall" else "none", WALL_KEY if role != "roof" else ROOF_KEY)
-		inst.set_meta("b600_role", role)
 		add_child(inst)
 		if not bodies.has(role):
 			continue
@@ -1220,7 +1214,6 @@ func _commit() -> void:
 		var receiver := "building_wall" if role == "wall" else "none"
 		var key := ROOF_KEY if role == "roof" else WALL_KEY
 		_tag(body, receiver, key)
-		body.set_meta("b600_role", role)
 		if role == "wall":
 			body.add_to_group("spray_receiver_wall")
 		var shape := ConcavePolygonShape3D.new()

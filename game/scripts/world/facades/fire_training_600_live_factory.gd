@@ -7,9 +7,9 @@ const SOURCE := "w34313548"
 const ROOF := "building:w34313548:roof"
 
 
-static func build(roof: Dictionary, land_records: Array) -> Dictionary:
+static func build(roof: Dictionary, wall: Dictionary, land_records: Array) -> Dictionary:
 	var model: Node3D = MODEL.new()
-	var built: Dictionary = model.build(roof, land_records)
+	var built: Dictionary = model.build(roof, wall, land_records)
 	if not built.get("ok", false):
 		model.free()
 		return {"ok": false, "message": str(built.get("message", "Building 600 construction failed."))}
