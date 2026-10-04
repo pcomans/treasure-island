@@ -19,6 +19,7 @@ failed=()
 godot_errors='SCRIPT ERROR|Parse Error|Failed to load script|^ERROR'
 
 echo "== junk check"
+command -v file >/dev/null || { echo "FAIL: the 'file' tool is missing; rebuild the devcontainer"; failed+=("junk check"); }
 git fetch -q origin main || echo "NOTE: could not fetch origin/main; using the local copy"
 if ! base="$(git merge-base HEAD origin/main)"; then
   echo "FAIL: no origin/main to compare against"
@@ -38,7 +39,7 @@ else
         junk+="${path}  (screenshots, videos, builds and logs stay out of the repo)"$'\n'; continue ;;
     esac
     # Renamed media (e.g. a photo saved as .dat) is still media.
-    case "$(file -b --mime-type "${path}")" in
+    case "$(file -b --mime-type "${path}" 2>/dev/null || echo missing-file-tool)" in
       image/*|video/*)
         junk+="${path}  (an image or video, whatever its name; those belong in game/resources/)"$'\n'; continue ;;
     esac
