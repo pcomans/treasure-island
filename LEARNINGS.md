@@ -184,3 +184,17 @@ compare both material ownership and exposed planes before capture. Collision
 solidness alone does not establish clean visible junctions. The final roof end
 was recessed 0.18 m into the existing 0.36 m return without changing passage or
 ground-contact geometry.
+
+## Serve remote visual galleries over loopback HTTP
+
+On 2026-10-04, VS Code's integrated browser rejected the Building 600 comparison
+at `/tmp/b600-three-model-comparison/index.html` as outside the trusted folder.
+Serving that directory on `127.0.0.1:8765` and using a VS Code forwarded-port URL
+provided verified HTTP delivery without changing trust settings. Checks returned 200 for
+the index and an original image; actual browser inspection confirmed all 15
+images loaded. The observed restriction concerned remote-file delivery, not a
+broken gallery. For future outside-workspace HTML artifacts, choose an available
+loopback port, verify the actual page/images, and retain explicit live-server
+ownership until viewing is finished. Port 8765 was this run's choice, not a
+requirement. Keep reference privacy intact; do not move photos into Git/game as
+a delivery workaround.
