@@ -173,3 +173,14 @@ The owner found the Mersea images insufficient for the planned modeling assignme
 Mersea's procedural-only 15-minute shootout brief encouraged mesh paint; that restriction is not general quality policy. Owner-authorized material/Decal refinement using authored opaque wall albedo on existing corrugation improved the private visual result. Choose representation by the task and physical meaning: painted art belongs in a material or decal; existing geometry supplies relief.
 
 RGBA presence did not guarantee opaque navy: two transparent generated outputs retained holes. Spatial alpha checks caught v2 before another engine run; opaque RGB resolved this instance. Validate intended asset properties and first-render orientation—the initial projection was upside down. This does not reject transparent textures generally or add a gate, framework or timing claim. Independent gates and pending contract approval remain separate; private visual PASS grants no production integration or release.
+
+## Check junction end planes when combining solid building modules
+
+Building 600's roof edge initially coincided with red portal surfaces, causing
+pale slivers in actual gameplay captures. After a full-height classroom return
+was added, source review found a second coincident roof-end/return plane. Bury
+concealed component ends within their receiving solid or omit concealed faces;
+compare both material ownership and exposed planes before capture. Collision
+solidness alone does not establish clean visible junctions. The final roof end
+was recessed 0.18 m into the existing 0.36 m return without changing passage or
+ground-contact geometry.

@@ -16,6 +16,8 @@ extends SceneTree
 ## A check with nothing to sample fails: it would otherwise pass untested.
 ##
 ## Prints PASS or FAIL lines and exits non-zero on failure.
+## Optional --routes FILE: {"source":"KEY", "routes":[{"name":"passage",
+## "start_xz":[x,z], "end_xz":[x,z]}]}. Each route is walked in both directions.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
 const BuildingFit := preload("res://game/tests/shared/building_fit.gd")
@@ -33,6 +35,14 @@ func _run() -> void:
 		quit(1)
 		return
 	var source_key := str(args.source)
+	var routes: Array = []
+	if args.has("routes"):
+		var plan: Variant = JSON.parse_string(FileAccess.get_file_as_string(str(args.routes)))
+		if not plan is Dictionary or plan.get("source", "") != source_key or not plan.get("routes") is Array or plan.routes.is_empty():
+			push_error("routes need a nonempty route list bound to --source")
+			quit(1)
+			return
+		routes = plan.routes
 	var h := WorldHarness.new(self)
 	var error := await h.load_world()
 	if error != "":
@@ -40,7 +50,7 @@ func _run() -> void:
 		quit(1)
 		return
 	var stairs: Array = Catalog.unit_for(source_key).get("stairs", [])
-	var failures := await BuildingFit.new(h).check(source_key, true, "", stairs)
+	var failures := await BuildingFit.new(h).check(source_key, true, "", stairs, routes)
 	if failures.is_empty():
 		print("PASS: building %s fits and plays" % source_key)
 	else:
