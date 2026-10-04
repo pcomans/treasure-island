@@ -23,8 +23,8 @@ import {
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 import {
-  loadHousingFamilyAuthority, validateHousingFamilyAuthority,
-  validateHousingFamilyInstances, familyRuntimeSummary, FAMILY_MANIFEST_PATH,
+  loadHousingFamilyAuthority, validateHousingFamilyAuthority, validateCurrentFamilyApplicability,
+  validateHousingFamilyInstances, familyRuntimeSummary, familyCurrentDependencies, FAMILY_CURRENT_ADDITIONS, FAMILY_MANIFEST_PATH,
 } from "./lib/housing-family-authority.mjs";
 const FAMILY_ACCEPTED = Object.freeze(loadHousingFamilyAuthority(ROOT));
 
@@ -10439,7 +10439,7 @@ const FAMILY_ADOPTION_PATH = "game/resources/housing_family/live_adoption.json";
 function buildAppearanceAdoption() {
   const manifest = readJson("game/resources/housing_family/live_instances.json");
   const sources = validateHousingFamilyInstances(ROOT, manifest, readJson(PATHS.manifest));
-  const paths = ["game/scripts/main.gd", "game/scripts/world/world_loader.gd", "game/scripts/world/facades/housing_family_live_attachment.gd", "game/scripts/world/facades/housing_site_family.gd", "game/scripts/world/facades/northpoint_1232_quality_model.gd", "game/scripts/world/facades/facade_runtime_registry_loader.gd", "game/resources/housing_family/live_instances.json", "game/resources/housing_family/siding.gdshader", "game/resources/housing_family/roof.gdshader", "generated/world/manifest.json", ...manifest.instances.map((item) => item.config.replace(/^res:\/\//u, ""))];
+  const paths = ["game/scripts/main.gd", "game/scripts/world/world_loader.gd", "game/scripts/world/facades/housing_family_live_attachment.gd", "game/scripts/world/facades/housing_site_family.gd", "game/scripts/world/facades/northpoint_1232_quality_model.gd", "game/scripts/world/facades/facade_runtime_registry_loader.gd", "game/resources/housing_family/live_instances.json", "game/resources/housing_family/siding.gdshader", "game/resources/housing_family/roof.gdshader", "generated/world/manifest.json", ...FAMILY_CURRENT_ADDITIONS, ...manifest.instances.map((item) => item.config.replace(/^res:\/\//u, ""))];
   return {
     schema_version: "housing-family-live-adoption-v1",
     scope: "owner_approved_appearance_current_visible_active_topology",
@@ -10542,7 +10542,7 @@ function buildRuntimeRegistry(catalog, inputs, receiverByKey) {
   const adapterContracts = buildAdapterContracts(catalog, importedLegacyAdapters, importedActiveAdapters);
   const adapterContractsSha256 = sha256Bytes(stableJson(adapterContracts));
   const registry = {
-    housing_family_acceptance: FAMILY_ACCEPTED.map(familyRuntimeSummary),
+    housing_family_acceptance: FAMILY_ACCEPTED.map(entry => familyRuntimeSummary(entry, familyCurrentDependencies(ROOT, readJson(FAMILY_MANIFEST_PATH)))),
     appearance_adoption: {path: `res://${FAMILY_ADOPTION_PATH}`, sha256: sha256Bytes(stableJson(buildAppearanceAdoption())), scope: "current_enabled_appearance_zero_credit"},
     adapter_contract: {
       path: `res://${PATHS.adapterContracts}`,
@@ -10645,7 +10645,7 @@ function assertRuntimeAssetClosures(registry) {
 }
 
 function validateRuntimeRegistry(registry, adapterContracts = null) {
-  invariant(equalStable(registry.housing_family_acceptance, FAMILY_ACCEPTED.map(familyRuntimeSummary)), "Runtime family authority summary drifted");
+  invariant(equalStable(registry.housing_family_acceptance, FAMILY_ACCEPTED.map(entry => familyRuntimeSummary(entry, familyCurrentDependencies(ROOT, readJson(FAMILY_MANIFEST_PATH))))), "Runtime family authority summary drifted");
   for (const entry of FAMILY_ACCEPTED) {
     const unit = registry.units.find(unit => unit.unit_id === entry.unit_id);
     invariant(unit?.claim_status.reference_recognizable === "accepted" && unit.runtime_content_mode === "all_receivers_shared_housing_family" && unit.direct_receivers.length === 1 && unit.direct_receivers[0].receiver_key === entry.receiver_key && unit.direct_receivers[0].runtime_content_mode === "shared_housing_family" && unit.direct_receivers[0].runtime_adapter_id === null, "Runtime family normal-load receiver binding drifted");
@@ -11175,12 +11175,21 @@ function assertCheckedIn(relativePath, value) {
 }
 
 function parseArguments(arguments_) {
+  const currentIndex = arguments_.indexOf("--current-applicability");
+  let currentApplicability = null;
+  if (currentIndex !== -1) {
+    invariant(currentIndex + 1 < arguments_.length && !arguments_[currentIndex + 1].startsWith("--"), "--current-applicability requires a path");
+    currentApplicability = resolve(arguments_[currentIndex + 1]);
+    arguments_ = [...arguments_.slice(0, currentIndex), ...arguments_.slice(currentIndex + 2)];
+    invariant(arguments_.includes("--check") && !arguments_.includes("--write"), "--current-applicability requires --check");
+  }
   const allowed = new Set(["--check", "--seed-catalog", "--write"]);
   for (const argument of arguments_) invariant(allowed.has(argument), `Unknown argument ${argument}`);
   const flags = new Set(arguments_);
   invariant(!(flags.has("--check") && flags.has("--write")), "--check and --write are mutually exclusive");
   invariant(!flags.has("--seed-catalog") || flags.has("--write"), "--seed-catalog requires --write");
   return {
+    currentApplicability,
     check: flags.has("--check") || !flags.has("--write"),
     seedCatalog: flags.has("--seed-catalog"),
     write: flags.has("--write"),
@@ -11209,7 +11218,9 @@ function main() {
     assertCheckedIn(PATHS.registry, registry);
     assertCheckedIn(PATHS.report, report);
   }
+  if (mode.currentApplicability) validateCurrentFamilyApplicability(ROOT, FAMILY_ACCEPTED, JSON.parse(readFileSync(mode.currentApplicability, "utf8")));
   process.stdout.write(stableJson({
+    current_applicability_checked: Boolean(mode.currentApplicability),
     active_runtime_adapter_receivers: report.counts.active_runtime_adapter_receivers,
     adapter_contract_disabled_receivers: adapterContracts.counts.disabled_adapter_receivers,
     adapter_contract_package_safe_receivers: adapterContracts.counts.package_safe_adapter_receivers,

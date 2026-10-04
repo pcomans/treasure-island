@@ -20,6 +20,7 @@ import {
   validateRuntimeRegistry,
 } from "./build_facade_recognition_registry.mjs";
 
+import {FAMILY_CURRENT_ADDITIONS, familyCurrentDependencies} from "./lib/housing-family-authority.mjs";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const READY_RECEIVERS = [
   "building-composite:w1249412094:w1282547786:wall",
@@ -4808,3 +4809,19 @@ for (const d of expectedD5Batch) {
 console.log(
   `PASS facade runtime loader contract: ${EXPECTED.recognition_units} units / ${EXPECTED.direct_wall_receivers} receivers / ${adapterContracts.plans.length} plans / ${readyPlans.length} package-safe / ${disabledPlans.length} hard-disabled receivers / ${adapterContracts.projection_descriptors.length} pathless projection inputs; registry ${sha256File(PATHS.registry)}; adapter contracts ${sha256File(PATHS.adapterContracts)}`,
 );
+
+// Current dependency agreement must not inherit archived acceptance hashes.
+{
+  const currentRegistry=JSON.parse(readFileSync(resolve(ROOT,"game/resources/facades/facade-runtime-registry.json"),"utf8"));
+  const manifest=JSON.parse(readFileSync(resolve(ROOT,"game/resources/housing_family/live_instances.json"),"utf8"));
+  const expected=familyCurrentDependencies(ROOT,manifest);
+  const loader=readFileSync(resolve(ROOT,"game/scripts/world/facades/facade_runtime_registry_loader.gd"),"utf8");
+  const requiredLine=loader.split("\n").find(line=>line.includes("var required := [") && line.includes("housing_family_live_attachment"));
+  for(const path of FAMILY_CURRENT_ADDITIONS) assert(requiredLine.includes(JSON.stringify(path)),"Native required set omitted current resource: "+path);
+  for(const entry of currentRegistry.housing_family_acceptance) assert(stableJson(entry.dependencies)===stableJson(expected),"Family current dependency summary differs");
+  for(const path of FAMILY_CURRENT_ADDITIONS) {
+    const changed=structuredClone(currentRegistry);delete changed.housing_family_acceptance[0].dependencies[path];
+    let rejected=false;try {validateRuntimeRegistry(changed,JSON.parse(readFileSync(resolve(ROOT,PATHS.adapterContracts),"utf8")));} catch(error) {rejected=/family authority summary/.test(error.message);}
+    assert(rejected,"Omitted current resource accepted: "+path);
+  }
+}

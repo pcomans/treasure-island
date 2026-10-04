@@ -3,8 +3,8 @@ extends SceneTree
 const RegistryLoader := preload("res://game/scripts/world/facades/facade_runtime_registry_loader.gd")
 const REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
 const ADAPTER_CONTRACT_PATH := "res://game/resources/facades/facade-runtime-adapter-contracts.json"
-const EXPECTED_REGISTRY_SHA256 := "652110aa71905f130096a8f179eea7088edf395e4dcf82175216663d8614b965"
-const EXPECTED_ADAPTER_CONTRACT_SHA256 := "9592e3bf0e81ba41f67cda5edcef1297f821b60c3757db1b5891881090412154"
+const EXPECTED_REGISTRY_SHA256 := "ff338926eae0227a7a07bc128409eb0dfc39802858833c31cf6ca77847c8411a"
+const EXPECTED_ADAPTER_CONTRACT_SHA256 := "6d9d91a7199e85049ba8dc885b7e778023564dbec7ea7d2bcfd9c5ed460ce98c"
 const READY_RECEIVERS := [
 	"building-composite:w1249412094:w1282547786:wall",
 	"building:r16681702:wall",
@@ -161,6 +161,14 @@ func _run() -> void:
 		_finish()
 		return
 	_require(str(loaded.get("adapter_contract_sha256", "")) == EXPECTED_ADAPTER_CONTRACT_SHA256, "Loader did not return the exact adapter-contract hash.")
+	# Exact current coverage is independent of the immutable receipt allowlist.
+	var required_current := ["game/scripts/world/facades/bulgarian_wall_live_attachment.gd", "game/resources/models/bulgarian_wall/neighbor.gd", "game/resources/models/bulgarian_wall/court.gd", "game/resources/models/bulgarian_wall/mural.png.dat", "game/resources/models/bulgarian_wall/concrete.gdshader", "game/resources/models/bulgarian_wall/roof.gdshader", "game/resources/models/bulgarian_wall/siding.gdshader"]
+	for dependency: String in required_current:
+		_require(registry.housing_family_acceptance[0].dependencies.has(dependency), "Family current dependency omitted: " + dependency)
+		var changed := registry.duplicate(true)
+		changed.housing_family_acceptance[0].dependencies.erase(dependency)
+		var rejected: Dictionary = RegistryLoader.new().load_from_data(changed, contracts)
+		_require(not rejected.get("ok", true) and rejected.get("error_code", "") == "family_authority_mismatch", "Missing current dependency accepted: " + dependency)
 	_validate_active_authority_records(registry)
 	_require(loader.is_loaded() and loader.get_unit_count() == 213 and loader.get_receiver_count() == 214, "Loader lookup cardinality is not 213 units / 214 receivers.")
 	_require(not FileAccess.get_file_as_string("res://game/scripts/world/world_chunk_builder.gd").contains("facade_runtime_registry_loader"), "Generic facade registry loader was wired into world construction.")
@@ -191,7 +199,7 @@ func _run() -> void:
 	phase_started_usec = Time.get_ticks_usec()
 	phase_counters = RegistryLoader.measurement_snapshot()
 	if not _failed:
-		print("PASS: facade runtime loader is version-pinned and topology-neutral: 213 units / 214 receivers / 34/213 reference-recognizable physical units / 42 adapter plans / 36 package-safe / 6 hard-disabled receivers / 13 unique pathless disabled projection inputs across 13 occurrences; registry %s; adapter contracts %s; snapshot %s" % [EXPECTED_REGISTRY_SHA256, EXPECTED_ADAPTER_CONTRACT_SHA256, first_snapshot.sha256_text()])
+		print("PASS: facade runtime loader is version-pinned and topology-neutral: 213 units / 214 receivers / 43/213 reference-recognizable physical units / 42 adapter plans / 36 package-safe / 6 hard-disabled receivers / 13 unique pathless disabled projection inputs across 13 occurrences; registry %s; adapter contracts %s; snapshot %s" % [EXPECTED_REGISTRY_SHA256, EXPECTED_ADAPTER_CONTRACT_SHA256, first_snapshot.sha256_text()])
 	print("FACADE_LOADER_MEASUREMENT_TOTAL: " + JSON.stringify(RegistryLoader.end_measurement()))
 	_finish()
 
@@ -222,10 +230,10 @@ func _validate_receiver_modes(loader: RefCounted) -> void:
 	_require(loader.get_content_mode("building:w95934117:wall") == "active_d2_1444_paired_replacement" and str((loader.get_unit("physical-building:w95934117") as Dictionary).get("runtime_content_mode", "")) == "all_receivers_active_d2_1444_paired_replacement", "D2 1444 one wall-indexed paired unit mode drifted.")
 	var metric: Dictionary = loader.get_reference_recognition_metric()
 	var accepted_ids := metric.get("accepted_physical_unit_ids", []) as Array
-	var expected_ids := ["physical-building:r16681702", "physical-building:r19685981", "physical-building:w96215685", "physical-building:w96215670", "physical-building:w96215688", "physical-building:w96215682", "physical-building:w96215674", "physical-building:w96215673", "physical-building:w96215666", "physical-building:w96215659", "physical-building:w96215651", "physical-building:w96215653", "physical-building:w96215661", "physical-building:w96215658", "physical-building:w96215652", "physical-building:w96215649", "physical-building:w96215680", "physical-building:w96215677", "physical-building:w96215669", "physical-building:w96215672", "physical-building:w1222720021", "physical-building:w1249412093", "physical-building:w1249412094", "physical-building:w291189336", "physical-building:w34313540", "physical-building:w34313545", "physical-building:w95934105", "physical-building:w95934117", "physical-building:w95934119", "physical-building:w95934144", "physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125", "physical-building:w764313741"]
+	var expected_ids := ["physical-building:r16681702", "physical-building:r19685981", "physical-building:w96215685", "physical-building:w96215670", "physical-building:w96215688", "physical-building:w96215682", "physical-building:w96215674", "physical-building:w96215673", "physical-building:w96215666", "physical-building:w96215659", "physical-building:w96215651", "physical-building:w96215653", "physical-building:w96215661", "physical-building:w96215658", "physical-building:w96215652", "physical-building:w96215649", "physical-building:w96215680", "physical-building:w96215677", "physical-building:w96215669", "physical-building:w96215672", "physical-building:w1222720021", "physical-building:w1249412093", "physical-building:w1249412094", "physical-building:w291189336", "physical-building:w34313540", "physical-building:w34313545", "physical-building:w95934105", "physical-building:w95934117", "physical-building:w95934119", "physical-building:w95934144", "physical-building:w95934123", "physical-building:w96215646", "physical-building:w95934125", "physical-building:w764313741", "physical-building:w96215693", "physical-building:w96665916", "physical-building:w96215668", "physical-building:w96665893", "physical-building:w96215698", "physical-building:w96665908", "physical-building:w96698619", "physical-building:w96698643", "physical-building:w96698648"]
 	accepted_ids.sort()
 	expected_ids.sort()
-	_require(int(metric.get("numerator", -1)) == 34 and int(metric.get("denominator", -1)) == 213 and str(metric.get("display", "")) == "34/213" and accepted_ids == expected_ids, "Loader recognition metric is not exactly the accepted 34/213 physical-unit rollup.")
+	_require(int(metric.get("numerator", -1)) == 43 and int(metric.get("denominator", -1)) == 213 and str(metric.get("display", "")) == "43/213" and accepted_ids == expected_ids, "Loader recognition metric is not exactly the accepted 43/213 physical-unit rollup.")
 	_require(metric.get("isle_house_non_numerator_source_keys", []) == ["w1282547786", "w1282547787"], "Loader promotes Isle House source parts into numerator entries.")
 
 

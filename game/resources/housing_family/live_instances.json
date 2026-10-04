@@ -167,11 +167,11 @@
     }
   ],
   "expected_visible_active_topology": {
-    "active_bodies": 530,
-    "active_shapes": 603,
-    "disabled_bodies": 96,
-    "visible_meshes": 40247,
-    "visible_surfaces": 40265,
-    "visible_triangles": 794997
+    "active_bodies": 532,
+    "active_shapes": 605,
+    "disabled_bodies": 98,
+    "visible_meshes": 40562,
+    "visible_surfaces": 40580,
+    "visible_triangles": 800219
   }
 }
