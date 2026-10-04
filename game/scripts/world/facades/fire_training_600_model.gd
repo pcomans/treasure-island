@@ -569,10 +569,6 @@ func _build_passage() -> void:
 		_quad("wall", "cell_dark", _wp(so, sdir, sn, c.position.x, c.position.y, 0.20), _wp(so, sdir, sn, c.end.x, c.position.y, 0.20), _wp(so, sdir, sn, c.end.x, c.end.y, 0.20), _wp(so, sdir, sn, c.position.x, c.end.y, 0.20), sn)
 	_door("cream", "door", so, sdir, sn, sd)
 	_window("cream", so, sdir, sn, sw, 1, 0.0)
-	# Prominent round SFFD badge high on the screen wall (visual only).
-	_cyl("visual", "badge_white", Vector3(A_OPEN0, B + 3.40, 3.17), Vector3(1, 0, 0), 0.44, 0.03, 24)
-	_cyl("visual", "badge_red", Vector3(A_OPEN0 + 0.03, B + 3.40, 3.17), Vector3(1, 0, 0), 0.36, 0.015, 24)
-	_cyl("visual", "badge_white", Vector3(A_OPEN0 + 0.045, B + 3.40, 3.17), Vector3(1, 0, 0), 0.13, 0.008, 16)
 	# Metal deck soffit and open-web steel joists spanning the passage.
 	_quad("roof", "deck", Vector3(A_OPEN0, deck_y, b0), Vector3(A_OPEN1, deck_y, b0), Vector3(A_OPEN1, deck_y, b1), Vector3(A_OPEN0, deck_y, b1), Vector3.DOWN)
 	var jb := 1.3
@@ -909,16 +905,20 @@ func _build_setting() -> void:
 # ---------------------------------------------------------------- lettering
 
 func _build_lettering() -> void:
-	# "FIRE FIGHTING SCHOOL" follows the arch, cream on maroon (Sep 2025 state).
+	# "SFFD FIRE FIGHTING SCHOOL" follows the arch, cream on maroon (Sep 2025
+	# state); "SFFD" is the largest word, as on the real sign.
 	var r_text := _arch_radius() + 0.30
 	var centre := _arch_centre()
-	var text := "FIRE FIGHTING SCHOOL"
+	var text := "SFFD FIRE FIGHTING SCHOOL"
+	var scales: Array[float] = []
+	for i in text.length():
+		scales.append(1.4 if i < 4 else 1.0)
 	var font_size := 64
-	var px := 0.0052
+	var px := 0.0046
 	var advances: Array[float] = []
 	var total := 0.0
-	for ch in text:
-		var adv := _font.get_char_size(ch.unicode_at(0), font_size).x * px * 1.18
+	for i in text.length():
+		var adv := _font.get_char_size(text.unicode_at(i), font_size).x * px * scales[i] * 1.18
 		advances.append(adv)
 		total += adv
 	var cursor := -total * 0.5
@@ -931,7 +931,7 @@ func _build_lettering() -> void:
 		var radial := Vector3(-sin(th), cos(th), 0)
 		var tangent := Vector3(-cos(th), -sin(th), 0)
 		var pos := Vector3(centre.x - r_text * sin(th), centre.y + r_text * cos(th), FRAME_FRONT_B - 0.016)
-		_letter(text[i], pos, tangent, radial, Vector3(0, 0, -1), font_size, px, "letter_cream")
+		_letter(text[i], pos, tangent, radial, Vector3(0, 0, -1), font_size, px * scales[i], "letter_cream")
 	# Small "600" at mid-height of the low north block (r08).
 	_word("600", Vector3(13.8, B + 1.45, FRAME_FRONT_B - 0.016), Vector3(-1, 0, 0), Vector3(0, 0, -1), 64, 0.0045, "letter_cream")
 	# Walkway north fascia lettering (r10 shows "...TRAINING...").
@@ -1142,10 +1142,6 @@ func _material(key: String) -> StandardMaterial3D:
 		"fixture_lens":
 			m.albedo_color = Color8(232, 228, 210)
 			m.roughness = 0.3
-		"badge_red":
-			m.albedo_color = Color8(176, 30, 34)
-		"badge_white":
-			m.albedo_color = Color8(236, 234, 228)
 		"letter_cream":
 			m.albedo_color = Color8(242, 232, 206)
 			m.roughness = 0.6
