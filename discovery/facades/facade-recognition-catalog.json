@@ -1602,12 +1602,12 @@
     {
       "acceptance_records": [
         {
-          "review_id": "b600-visual-model03-20261004",
-          "review_kind": "independent_reference_recognition",
+          "review_id": "b600-pr5-code-20261005",
+          "review_kind": "independent_code_review",
           "status": "accept"
         },
         {
-          "review_id": "b600-visual-seam04-20261004",
+          "review_id": "b600-pr5-visual-20261005",
           "review_kind": "independent_reference_recognition",
           "status": "accept"
         }

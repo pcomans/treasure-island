@@ -710,7 +710,7 @@ func _build_main_bar() -> void:
 	_wall("wall", "cream", w2o, sdir, wn, PORCH_A, L - 0.05, B + H_BAND_LO, B + H_PARAPET, [])
 	_door("bluegrey", "door", w2o, sdir, wn, pd)
 	_abox("wall", "north_cream", Vector3(PORCH_A, B + H_BAND_LO, WEST_FACE_B), Vector3(L - 0.05, B + H_BAND_HI, PORCH_B), 1 | 32)
-	var pier_g := land_y(L - 0.35, 0.65)
+	land_y(L - 0.35, 0.65)  # sampled so a point off the ground still fails the build
 	_abox("wall", "bluegrey", Vector3(L - 0.65, _wall_bottom, WEST_FACE_B), Vector3(L - 0.05, B + H_BAND_LO, 0.95), 8)
 	# North end (10th St): windowless banded wall, teal service door near the walkway.
 	var no := Vector3(L - 0.05, 0, 0)
