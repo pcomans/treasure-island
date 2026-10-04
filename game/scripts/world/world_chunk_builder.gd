@@ -112,7 +112,7 @@ var _materials: Dictionary = {}
 func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	var chunk_root := Node3D.new()
 	chunk_root.name = str(chunk.chunk_id).validate_node_name()
-	# Claim the target chunk before per-row dispatch so a drifted/missing B201
+	# Claim the target chunk before per-row dispatch so a malformed/missing B201
 	# wall cannot silently fall through to generic construction.
 	var b201_chunk_validation := D1_B201_LIVE_ATTACHMENT.validate_chunk_records(chunk)
 	if not bool(b201_chunk_validation.get("ok", false)):
@@ -120,7 +120,7 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		return b201_chunk_validation
 	# B225's production attachment is equally exact-target-only. Validate the
 	# complete wall/roof membership before any row from its chunk is staged so a
-	# missing, duplicate, moved, or drifted receiver can never fall back generic.
+	# missing, duplicate, moved, or malformed receiver can never fall back generic.
 	var b225_chunk_validation := D1_B225_LIVE_ATTACHMENT.validate_chunk_records(chunk)
 	if not bool(b225_chunk_validation.get("ok", false)):
 		chunk_root.free()

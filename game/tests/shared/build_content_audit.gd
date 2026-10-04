@@ -1,19 +1,17 @@
 extends SceneTree
-## Checks an exported game data pack (.pck) for material that must not ship:
-## reference photos (Street View etc.), research/evidence folders, source assets.
+## Checks an exported game data pack (.pck) contains only game files: no
+## reference photos (Street View etc.), research, evidence or source assets.
 ## Run against the pack itself, so res:// is exactly what the build contains:
 ##
 ##   tools/godot --headless --main-pack /abs/path/game.pck --script res://game/tests/shared/build_content_audit.gd
 ##
-## tools/build-mac.sh runs this on every Mac build.
+## tools/build-mac.sh runs this on every build. This script must stay in the
+## export (it runs from inside the pack), so don't exclude game/tests/shared/.
 
-## Folders that hold research, references and tooling, never game content.
-const FORBIDDEN_FOLDERS := [
-	"discovery/", "evidence/", "source_assets/", "data/", "tools/", "build/", ".tools/",
-	"third_party_staging/", "node_modules/", "unused-assets/",
-]
-## Images may only come from the game's own asset folders.
-const IMAGE_FOLDERS := ["game/resources/", "generated/", "addons/"]
+## The only top-level entries a build may contain.
+const ALLOWED_TOP_LEVEL := ["game", "generated", ".godot", "project.binary"]
+## Images may only come from the game's own asset folder.
+const IMAGE_FOLDER := "game/resources/"
 const IMAGE_EXTENSIONS := ["png", "jpg", "jpeg", "webp", "bmp", "tga", "exr", "hdr", "svg"]
 ## Names that suggest a reference photo rather than a game texture.
 const SUSPICIOUS_NAMES := ["streetview", "street_view", "street-view", "gsv_", "panorama", "reference", "screenshot"]
@@ -31,7 +29,7 @@ func _initialize() -> void:
 		if problem != "":
 			problems.append(problem)
 	if problems.is_empty():
-		print("PASS: %d files in the build, no reference or research material" % files.size())
+		print("PASS: %d files in the build, all game files" % files.size())
 		quit(0)
 	else:
 		for problem in problems:
@@ -40,22 +38,16 @@ func _initialize() -> void:
 
 
 func _check(path: String) -> String:
-	for folder: String in FORBIDDEN_FOLDERS:
-		if path.begins_with(folder):
-			return "%s is from %s, which must not ship" % [path, folder]
-	# Imported images keep their source path in the .import file name and in
-	# the cached .godot/imported/<name>-<hash>.ctex name.
+	if path.get_slice("/", 0) not in ALLOWED_TOP_LEVEL:
+		return "%s is outside game/ and generated/; it must not ship" % path
+	# Imported images keep their source path in the .import file name and
+	# their file name in the cached .godot/imported/<name>-<hash>.ctex.
 	var source := path.trim_suffix(".import")
-	var lower := source.get_file().to_lower()
 	for name: String in SUSPICIOUS_NAMES:
-		if name in lower:
+		if name in source.get_file().to_lower():
 			return "%s looks like a reference photo" % path
-	if source.get_extension().to_lower() in IMAGE_EXTENSIONS and not path.begins_with(".godot/"):
-		var allowed := false
-		for folder: String in IMAGE_FOLDERS:
-			allowed = allowed or source.begins_with(folder)
-		if not allowed:
-			return "%s is an image outside the game asset folders" % path
+	if source.get_extension().to_lower() in IMAGE_EXTENSIONS and not source.begins_with(IMAGE_FOLDER):
+		return "%s is an image outside %s" % [path, IMAGE_FOLDER]
 	return ""
 
 

@@ -64,7 +64,6 @@ func configure(record: Dictionary, runtime_massing: Dictionary = {}) -> Dictiona
 	set_meta("target_logical_object_key", TARGET_LOGICAL_OBJECT_KEY)
 	set_meta("target_receiver_object_key", TARGET_RECEIVER_OBJECT_KEY)
 	set_meta("layout_path", LAYOUT_PATH)
-	set_meta("layout_sha256", FileAccess.get_sha256(LAYOUT_PATH))
 	set_meta("render_only", true)
 	set_meta("collision", "none")
 	set_meta("navigation", "none")

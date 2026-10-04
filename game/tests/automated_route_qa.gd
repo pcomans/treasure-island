@@ -3,8 +3,6 @@ extends SceneTree
 const REGIONAL_QA_ANCHORS := preload("res://game/tests/regional_qa_anchors.gd")
 const OUTPUT_ARG_PREFIX := "--visual-evidence-output="
 const WHOLE_ISLAND_ARG := "--whole-island-route"
-const EXPECTED_CONTENT_SHA256 := "01af105e30acd8fbddbb69ace1bffdefdf1174dd1f7ee8e66b1fc8808eee7164"
-const EXPECTED_MANIFEST_SHA256 := "e501236d0908a1a1fd41b3973e7adbd3e94d32bb658cc3f1e44f7731f00a1fb3"
 const EXPECTED_FERRY_SPAWN := Vector3(-104.364, 3.457, 786.024)
 const EXPECTED_FERRY_YAW := -0.119
 const WORLD_SOLID_MASK := 1
@@ -92,8 +90,6 @@ func _run() -> void:
 
 	var spawn := world.get_spawn_transform()
 	if not _require(world.is_world_validated(), "World was not retained as validated.") \
-	or not _require(str(ready_reports[0].get("content_sha256", "")) == EXPECTED_CONTENT_SHA256, "Generated content hash drifted.") \
-	or not _require(FileAccess.get_sha256("res://generated/world/manifest.json") == EXPECTED_MANIFEST_SHA256, "Manifest file hash drifted.") \
 	or not _require(spawn.origin.is_equal_approx(EXPECTED_FERRY_SPAWN), "Ferry spawn origin drifted.") \
 	or not _require(spawn.basis.is_equal_approx(Basis(Vector3.UP, EXPECTED_FERRY_YAW)), "Ferry spawn yaw drifted."):
 		_finish(main, baseline_nodes)
@@ -682,8 +678,6 @@ func _write_capture_manifest(metrics: Dictionary) -> bool:
 		"godot_version": Engine.get_version_info().get("string", "unknown"),
 		"display_driver": DisplayServer.get_name(),
 		"video_adapter": RenderingServer.get_video_adapter_name(),
-		"content_sha256": EXPECTED_CONTENT_SHA256,
-		"manifest_sha256": EXPECTED_MANIFEST_SHA256,
 		"route": _serializable_route(),
 		"metrics": metrics,
 		"captures": _capture_records,

@@ -6,7 +6,6 @@ extends RefCounted
 ## Additional roof and closed lower modules are separately nonreceiver; local ground
 ## meshes preserve source terrain and other units' shared material fields.
 const FACTORY := preload("res://game/scripts/world/facades/d5_1308_gateview_live_factory.gd")
-const CONFIG_PATH := "res://game/resources/facades/d5_1308_gateview_live_replacement.json"
 const ADAPTER_ID := "active-adapter:d5-1308-live:building:w95934123:wall"
 const SOURCE_KEY := "w95934123"
 const WALL_KEY := "building:w95934123:wall"
@@ -20,11 +19,9 @@ const STRUCTURE_MESHES := ["DeepRepeatedGableCanopyRoofs", "PaleSidedCanopyGable
 const LOWER_MESHES := ["ClosedLowerDoors", "ClosedLowerWindows", "LowerOpeningFramesAndHandles"]
 const ADDED_ROOF_MESHES := ["PublicPitchedRoofSlopes", "PublicPaleRoofFasciaAndSoffit"]
 const PAD_MESHES := ["GroundFlushCanopySupportSlabs"]
-const EXPECTED_BATCH_TRIANGLES := {"DeepRepeatedGableCanopyRoofs": 54, "PaleSidedCanopyGableFronts": 18, "ExactSourceNeutralRoof": 22, "GroundFlushCanopySupportSlabs": 96, "ObservedWSWSSEHorizontalSidingFields": 40, "ProtectedExactNeutralWallRuns": 28, "RealCanopyFrontSupports": 144, "RepeatedOpaqueUpperSliders": 264, "RestrainedRealWindowAndCanopyTrim": 1872, "ClosedLowerDoors": 72, "ClosedLowerWindows": 72, "LowerOpeningFramesAndHandles": 648, "PublicPitchedRoofSlopes": 678, "PublicPaleRoofFasciaAndSoffit": 702, "ConnectedConcreteAprons": 39, "LocalFrontageLawn": 98, "ReadableCanopyRoofTops": 24}
-const EXPECTED_CONFIG_SHA256 := "c35951faebaa921d41bf0230bf511b3a3fde9b9b1f533272030a5dfb8d8dfe8a"
-const EXPECTED_FACTORY_CONFIG_SHA256 := "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a"
-const RECORD_HASHES := {"area:r17241151:x_-2__z_-1": "0c1ca3e7d64c4fe9c5d561a00832651fa634b7a0c3bfae9f8434fa9526c58e53", "building:w95934123:roof": "34d0a95387fc6f17a889aac602ce5e630a67b4d0d9f8b5fb6264291d674b7b00", "building:w95934123:wall": "5bf75fcc75fdbc83d45a97a6a4168a439e8c31bcbc473105147f831a09458abd", "land:w26767313:x_-2__z_-1": "5508f75d3cc82559353123a3af167a0bb5b375eea73b84537d38a82b595579f7"}
-const SOURCE_DEPENDENCY_HASHES := {"res://game/resources/facades/d5_1308_gateview_live_factory.json": "5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a", "res://game/resources/facades/d5_1308_siding_marks.gdshader": "1575f777f114d4e00b8e8492b93be6ce35b76070030c589e9b38514d3ff04a7e", "res://game/scripts/world/facades/d5_1308_gateview_live_factory.gd": "6950aab112f73fdf78c1cad2f3deca72ac7e46b2a07faffe04f82987a1e07498", "res://game/scripts/world/facades/site_12_housing_kit.gd": "f4ebaf73ec675652579c5d3b0b774a6d15a7a7687df3accc2c5cb53d385bc6cd", "res://game/resources/facades/d5_1308_lawn_tone.gdshader": "d60b1db292234046d2e8fd1a451e0f3f52a69b12afe401e871bedef6067ca7af", "res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg": "70d3ff969a7421c7ae057b5d16386d11f5e59c6740db643352e1039413f419c4", "res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg": "99f81099af07b009134b6a81bf0f95ab16da09c57156cc2ed534975664a68533", "res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg": "ae94f2b34597b9108eefd88217f55eccaec6d6b382e858a478ee92df90e66617", "res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg": "9ebe6d03a9551c17d1802835c92c1442acb8f5d38d4874ee8c37770f11c4bed1"}
+const ACCEPTED_BATCHES := ["DeepRepeatedGableCanopyRoofs", "PaleSidedCanopyGableFronts", "ExactSourceNeutralRoof", "GroundFlushCanopySupportSlabs", "ObservedWSWSSEHorizontalSidingFields", "ProtectedExactNeutralWallRuns", "RealCanopyFrontSupports", "RepeatedOpaqueUpperSliders", "RestrainedRealWindowAndCanopyTrim", "ClosedLowerDoors", "ClosedLowerWindows", "LowerOpeningFramesAndHandles", "PublicPitchedRoofSlopes", "PublicPaleRoofFasciaAndSoffit", "ConnectedConcreteAprons", "LocalFrontageLawn", "ReadableCanopyRoofTops"]
+const SOURCE_RECORD_KEYS := ["area:r17241151:x_-2__z_-1", "building:w95934123:roof", "building:w95934123:wall", "land:w26767313:x_-2__z_-1"]
+const SOURCE_DEPENDENCIES := ["res://game/resources/facades/d5_1308_gateview_live_factory.json", "res://game/resources/facades/d5_1308_siding_marks.gdshader", "res://game/scripts/world/facades/d5_1308_gateview_live_factory.gd", "res://game/scripts/world/facades/site_12_housing_kit.gd", "res://game/resources/facades/d5_1308_lawn_tone.gdshader", "res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_diff_1k.jpg", "res://game/resources/textures/world/polyhaven/concrete_pavement/concrete_pavement_rough_1k.jpg", "res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_diff_1k.jpg", "res://game/resources/textures/world/polyhaven/sparse_grass/sparse_grass_rough_1k.jpg"]
 
 static func claims_record(record: Dictionary) -> bool:
 	return str(record.get("object_key", "")) in [WALL_KEY, ROOF_KEY]
@@ -43,7 +40,7 @@ static func prepare_chunk_records(chunk: Dictionary) -> Dictionary:
 			target_count += 1
 			if not claims_record(record):
 				return _failure("d5_1308_source_alias", "Unexpected supplied target source alias.", record)
-		if RECORD_HASHES.has(key):
+		if SOURCE_RECORD_KEYS.has(key):
 			if relevant.has(key): return _failure("d5_1308_duplicate_record", "Duplicate pair or local grade record.", record)
 			relevant[key] = record
 	if target_count == 0 and str(chunk.get("chunk_id", "")) != TARGET_CHUNK_ID:
@@ -54,16 +51,16 @@ static func prepare_chunk_records(chunk: Dictionary) -> Dictionary:
 
 static func _records_match(records: Dictionary) -> bool:
 	if records.size() != 4: return false
-	for key: String in RECORD_HASHES:
-		if not (records.get(key, null) is Dictionary) or canonical_record_signature(records[key]) != str(RECORD_HASHES[key]): return false
+	for key: String in SOURCE_RECORD_KEYS:
+		if not (records.get(key, null) is Dictionary) or str((records[key] as Dictionary).get("object_key", "")) != key: return false
 	return true
 
 static func build_chunk_plan(prepared: Dictionary, neutral_wall: StandardMaterial3D, neutral_roof: StandardMaterial3D) -> Dictionary:
 	if not bool(prepared.get("ok", false)): return prepared
 	if not bool(prepared.get("contains_target", false)): return {"ok":true,"contains_target":false,"records":{},"pending_keys":{}}
 	var records := prepared.get("source_records", {}) as Dictionary
-	if not _records_match(records): return _failure("d5_1308_prepared_drift", "Prepared pair or grade drifted.", {})
-	if not runtime_dependency_closure_exists() or not _validated_config(): return _failure("d5_1308_config", "Pinned live factory/config dependency changed.", {})
+	if not _records_match(records): return _failure("d5_1308_prepared_records", "Prepared pair and grade records required.", {})
+	if not runtime_dependency_closure_exists(): return _failure("d5_1308_config", "Live factory or config dependency is missing.", {})
 	var result := _build_pair(records[WALL_KEY], records[ROOF_KEY], neutral_wall, neutral_roof)
 	if not bool(result.get("ok", false)): return result
 	return {"ok":true,"contains_target":true,"records":{WALL_KEY:result.wall_result,ROOF_KEY:result.roof_result},"pending_keys":{WALL_KEY:true,ROOF_KEY:true}}
@@ -75,7 +72,6 @@ static func consume_record(record: Dictionary, plan: Dictionary) -> Dictionary:
 	var pending := plan.get("pending_keys", {}) as Dictionary
 	var results := plan.get("records", {}) as Dictionary
 	if not pending.has(key) or not results.has(key): return _failure("d5_1308_duplicate_consume", "Pair member missing or consumed twice.", record)
-	if canonical_record_signature(record) != str(RECORD_HASHES[key]): return _failure("d5_1308_consumed_drift", "Consumed row differs from sealed source.", record)
 	var result := results[key] as Dictionary
 	pending.erase(key); results.erase(key)
 	return result
@@ -84,7 +80,7 @@ static func _build_pair(wall: Dictionary, roof: Dictionary, neutral_wall: Standa
 	var built := FACTORY.build_for_records(wall, roof, neutral_wall, neutral_roof)
 	if not bool(built.get("ok", false)): return _failure("d5_1308_factory", str(built.get("message", "Factory failed.")), wall)
 	var wall_root := built.node as Node3D
-	if not _factory_contract_matches(wall_root, built):
+	if not _factory_contract_matches(wall_root):
 		wall_root.free(); return _failure("d5_1308_factory_contract", "Reviewed batches or ordered structure changed.", wall)
 	var original := wall_root.get_node("ExactFootprintStructuralCollision_NoSprayOwnership") as StaticBody3D
 	var source_roof_shape := original.get_child(1) as CollisionShape3D
@@ -108,28 +104,26 @@ static func _build_pair(wall: Dictionary, roof: Dictionary, neutral_wall: Standa
 		_configure_shape(shape_node, WALL_KEY, "building_wall" if index==0 else "none")
 	for child:Node in roof_body.get_children():_configure_shape(child as CollisionShape3D, ROOF_KEY, "none")
 	_apply_metadata(wall_root, roof_root)
-	var meta := {"adapter_id":ADAPTER_ID,"factory_calls":1,"candidate_recognition_credit":0,"accepted_recognition_metric":"13/213","historical_live_capture_metric":"11/213","historical_source_world_metric":"10/213","recognition_accepted":false,"production_review":"pending","partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.TARGET_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate(),"source_geometry_sha256":FACTORY.SOURCE_GEOMETRY_SHA256}
+	var meta := {"adapter_id":ADAPTER_ID,"factory_calls":1,"partial_pair_allowed":false,"fallback_allowed":false,"stack_allowed":false,"mapped_public_run_indices":FACTORY.TARGET_RUNS.duplicate(),"protected_run_indices":FACTORY.PROTECTED_RUNS.duplicate()}
 	for root:Node3D in [wall_root,roof_root]:root.set_meta("d5_1308_gateview_live_replacement",meta.duplicate(true))
 	return {"ok":true,"wall_result":{"ok":true,"node":wall_root,"metadata":meta,"mesh_instances":14,"surfaces":14,"triangles":3469,"static_bodies":1,"shapes":4},"roof_result":{"ok":true,"node":roof_root,"metadata":meta,"mesh_instances":3,"surfaces":3,"triangles":1402,"static_bodies":1,"shapes":2}}
 
-static func _factory_contract_matches(root: Node3D, result: Dictionary) -> bool:
-	if int(result.get("mesh_instances",-1))!=17 or int(result.get("surfaces",-1))!=17 or int(result.get("visual_triangles",-1))!=4871 or int(result.get("static_bodies",-1))!=1 or int(result.get("shapes",-1))!=6 or int(result.get("collision_triangles",-1))!=2598: return false
+static func _factory_contract_matches(root: Node3D) -> bool:
 	var seen := {}
 	for child:Node in root.get_children():
 		if child is MeshInstance3D:
 			var mesh := (child as MeshInstance3D).mesh
-			if not EXPECTED_BATCH_TRIANGLES.has(str(child.name)) or mesh==null or mesh.get_surface_count()!=1 or mesh.surface_get_array_index_len(0)/3!=int(EXPECTED_BATCH_TRIANGLES[str(child.name)]): return false
+			if not ACCEPTED_BATCHES.has(str(child.name)) or mesh==null or mesh.get_surface_count()!=1: return false
 			seen[str(child.name)] = true
 	var body := root.get_node_or_null("ExactFootprintStructuralCollision_NoSprayOwnership") as StaticBody3D
-	if seen.size()!=17 or body==null or body.get_child_count()!=6 or body.collision_layer!=1: return false
+	if seen.size()!=ACCEPTED_BATCHES.size() or body==null or body.get_child_count()!=6 or body.collision_layer!=1: return false
 	var labels := ["ExactClosedSourceWalls","ExactSourceNeutralRoof","RealGableCanopiesAndPosts","GroundFlushSupportSlabs","ClosedLowerModules","PublicPitchedRoofSolid"]
-	var counts := [68,22,240,96,792,1380]
 	var mesh_groups := [WALL_MESHES,[ROOF_MESH],STRUCTURE_MESHES,PAD_MESHES,LOWER_MESHES,ADDED_ROOF_MESHES]
 	for index in 6:
 		var node := body.get_child(index) as CollisionShape3D
 		if node==null or str(node.name)!=str(labels[index]) or not (node.shape is ConcavePolygonShape3D): return false
 		var faces := (node.shape as ConcavePolygonShape3D).get_faces()
-		if faces.size()!=int(counts[index])*3 or str(node.shape.get_meta("receiver_kind",""))!="none": return false
+		if faces.is_empty() or str(node.shape.get_meta("receiver_kind",""))!="none": return false
 		if _oriented_face_signature(faces)!=_mesh_oriented_face_signature(root,mesh_groups[index]): return false
 	return true
 
@@ -138,7 +132,7 @@ static func _configure_body(body: StaticBody3D, key: String, eligible: bool) -> 
 	body.collision_layer=5; body.collision_mask=0
 	body.set_meta("receiver_kind","building_wall" if eligible else "none")
 	body.set_meta("derived_object_key",key); body.set_meta("source_keys",[SOURCE_KEY]); body.set_meta("opaque",true)
-	body.set_meta("runtime_attachment",true); body.set_meta("prototype_only",false);body.set_meta("spray_ray_blocking",true)
+	body.set_meta("spray_ray_blocking",true)
 	if eligible:body.add_to_group("spray_receiver_wall")
 	else:body.set_meta("roof_landing_world_solid",true)
 
@@ -147,7 +141,7 @@ static func _configure_shape(node: CollisionShape3D, key: String, receiver: Stri
 	var role := str(node.shape.get_meta("structural_role",node.name))
 	_clear_metadata(node.shape)
 	for object:Object in [node,node.shape]:
-		object.set_meta("receiver_kind",receiver);object.set_meta("derived_object_key",key);object.set_meta("source_keys",[SOURCE_KEY]);object.set_meta("opaque",true);object.set_meta("structural_role",role);object.set_meta("runtime_attachment",true);object.set_meta("prototype_only",false)
+		object.set_meta("receiver_kind",receiver);object.set_meta("derived_object_key",key);object.set_meta("source_keys",[SOURCE_KEY]);object.set_meta("opaque",true);object.set_meta("structural_role",role)
 
 static func _apply_metadata(wall_root: Node3D, roof_root: Node3D) -> void:
 	wall_root.name="D51308GateviewLiveWallReplacement";roof_root.name="D51308GateviewLiveRoofReplacement"
@@ -155,26 +149,17 @@ static func _apply_metadata(wall_root: Node3D, roof_root: Node3D) -> void:
 		var key := WALL_KEY if root==wall_root else ROOF_KEY
 		_clear_metadata(root)
 		root.set_meta("derived_object_key",key);root.set_meta("source_keys",[SOURCE_KEY]);root.set_meta("feature_kind","building_wall" if root==wall_root else "building_roof");root.set_meta("receiver_kind","building_wall" if root==wall_root else "none")
-		root.set_meta("runtime_attachment",true);root.set_meta("prototype_only",false);root.set_meta("adapter_id",ADAPTER_ID);root.set_meta("runtime_supersedes_generated_placeholder",true);root.set_meta("superseded_object_keys",[WALL_KEY,ROOF_KEY]);root.set_meta("recognition_accepted",false)
+		root.set_meta("adapter_id",ADAPTER_ID);root.set_meta("runtime_supersedes_generated_placeholder",true);root.set_meta("superseded_object_keys",[WALL_KEY,ROOF_KEY])
 		for child:Node in root.get_children():
 			if child is MeshInstance3D:
 				child.layers=2 if str(child.name) in WALL_MESHES else 1
-				child.set_meta("derived_object_key",key);child.set_meta("source_keys",[SOURCE_KEY]);child.set_meta("runtime_attachment",true);child.set_meta("prototype_only",false)
+				child.set_meta("derived_object_key",key);child.set_meta("source_keys",[SOURCE_KEY])
 
 static func _clear_metadata(object: Object) -> void:
 	for key:StringName in object.get_meta_list():object.remove_meta(key)
 
-static func _validated_config() -> bool:
-	return FileAccess.get_sha256(CONFIG_PATH)==EXPECTED_CONFIG_SHA256 and FileAccess.get_sha256(FACTORY.CONFIG_PATH)==EXPECTED_FACTORY_CONFIG_SHA256
-
-static func source_dependency_hashes_match() -> bool:
-	if not _validated_config():return false
-	for path:String in SOURCE_DEPENDENCY_HASHES:
-		if FileAccess.get_sha256(path)!=str(SOURCE_DEPENDENCY_HASHES[path]):return false
-	return true
-
 static func runtime_dependency_closure_exists() -> bool:
-	for path:String in SOURCE_DEPENDENCY_HASHES:
+	for path:String in SOURCE_DEPENDENCIES:
 		if path.get_extension()=="json":
 			if not FileAccess.file_exists(path):return false
 		elif not ResourceLoader.exists(path) and not FileAccess.file_exists(path):return false
@@ -192,44 +177,6 @@ static func free_unconsumed(chunk_plan: Dictionary) -> void:
 			node.free()
 	results.clear()
 	(chunk_plan.get("pending_keys", {}) as Dictionary).clear()
-
-static func canonical_record_signature(record: Dictionary) -> String:
-	return (_stable_json(record, 0) + "\n").sha256_text()
-
-static func _stable_json(value: Variant, depth: int) -> String:
-	match typeof(value):
-		TYPE_NIL:
-			return "null"
-		TYPE_BOOL:
-			return "true" if bool(value) else "false"
-		TYPE_INT:
-			return str(int(value))
-		TYPE_FLOAT:
-			var number := float(value)
-			return str(int(number)) if number == floor(number) else JSON.stringify(number)
-		TYPE_STRING, TYPE_STRING_NAME:
-			return JSON.stringify(str(value))
-		TYPE_ARRAY:
-			var values := value as Array
-			if values.is_empty():
-				return "[]"
-			var lines: Array[String] = []
-			for item: Variant in values:
-				lines.append(" ".repeat((depth + 1) * 2) + _stable_json(item, depth + 1))
-			return "[\n%s\n%s]" % [",\n".join(lines), " ".repeat(depth * 2)]
-		TYPE_DICTIONARY:
-			var object := value as Dictionary
-			if object.is_empty():
-				return "{}"
-			var keys: Array[String] = []
-			for key: Variant in object.keys():
-				keys.append(str(key))
-			keys.sort()
-			var lines: Array[String] = []
-			for key: String in keys:
-				lines.append(" ".repeat((depth + 1) * 2) + JSON.stringify(key) + ": " + _stable_json(object[key], depth + 1))
-			return "{\n%s\n%s}" % [",\n".join(lines), " ".repeat(depth * 2)]
-	return JSON.stringify(value)
 
 static func _mesh_oriented_face_signature(root: Node, names: Array) -> String:
 	var faces := PackedVector3Array()

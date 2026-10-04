@@ -29,7 +29,7 @@ house.rotation.y = deg_to_rad(90)
 
 Coordinates are metres: the row begins at local X=0, grows along +X, fronts +Z and extends 8 m toward −Z. Place and rotate the root at scale 1; change bay count rather than stretching the root. Palette changes are applied at instantiation, so rebuild an instance after editing its config.
 
-The [focused demo](../../tests/housing_row_family_demo.gd) checks shared geometry, variant structure, material isolation and generated normals, and can capture paired whole/detail views. Its successful [whole](../../../evidence/first-playable/housing-family-study-2026-09-23/001/whole.png) and [detail](../../../evidence/first-playable/housing-family-study-2026-09-23/001/detail.png) images show the isolated study. There is no terrain fit, collision, source-ID attachment or production acceptance here. Before using it for a real target, compare actual references and preserve that target's footprint, orientation, grade and identity through the existing integration and independent checks.
+The family has no standalone demo; check it in the real island with `game/tests/shared/building_shots.gd` and `building_fit_test.gd`.
 
 ## Separate housing-instance experiment
 

@@ -2,57 +2,69 @@
 # Runs the project's pinned Godot. Use this instead of a hardcoded binary path.
 #
 #   tools/godot --headless --path . --script game/tests/<test>.gd
-#   tools/godot --path . --script tools/capture/building_shots.gd -- <args>
+#   tools/godot --path . --script game/tests/shared/building_shots.gd -- <args>
 #
-# Binary: $GODOT_BIN if set, else .tools/godot/4.7.2/godot (installed by
-# .devcontainer/setup-godot.sh); on macOS, .tools/godot/4.7.2/Godot.app.
+# Binary: $GODOT_BIN if set, else /opt/godot/4.7.2/godot (installed by
+# .devcontainer/setup-godot.sh).
 #
-# On Linux without --headless, renders on the GPU through a headless Weston
-# compositor. Under xvfb Godot silently falls back to llvmpipe (CPU), so
-# xvfb is not used.
+# Without --headless, renders on the GPU through a private headless Weston
+# compositor. Under xvfb Godot silently falls back to llvmpipe (CPU), so xvfb
+# is not used.
 set -euo pipefail
-root="$(cd "$(dirname "$0")/.." && pwd)"
 
-if [ -n "${GODOT_BIN:-}" ]; then
-  bin="${GODOT_BIN}"
-elif [ "$(uname)" = Darwin ]; then
-  bin="${root}/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot"
-else
-  bin="${root}/.tools/godot/4.7.2/godot"
-fi
+bin="${GODOT_BIN:-/opt/godot/4.7.2/godot}"
 if [ ! -x "${bin}" ]; then
   echo "tools/godot: no Godot at ${bin}; run .devcontainer/setup-godot.sh" >&2
   exit 1
 fi
 
-if [ "$(uname)" = Darwin ] || [[ " $* " == *" --headless "* ]]; then
+# Engine flags only; anything after "--" belongs to the script.
+engine_args=()
+for arg in "$@"; do
+  [ "${arg}" = "--" ] && break
+  engine_args+=("${arg}")
+done
+has_flag() { local flag; for flag in "${engine_args[@]}"; do [ "${flag}" = "$1" ] && return 0; done; return 1; }
+
+if has_flag --headless; then
   exec "${bin}" "$@"
 fi
 
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:-/tmp/xdg-$(id -u)}"
 mkdir -p "${XDG_RUNTIME_DIR}"
 chmod 700 "${XDG_RUNTIME_DIR}"
-weston_pid=""
-if [ -z "${WAYLAND_DISPLAY:-}" ]; then
-  # A private compositor per run, so concurrent or crashed runs can't interfere.
-  export WAYLAND_DISPLAY="wl-godot-$$"
-  weston --backend=headless --renderer=gl --socket="${WAYLAND_DISPLAY}" \
-    --width=1920 --height=1080 >"${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}.log" 2>&1 &
-  weston_pid=$!
-  trap 'kill "${weston_pid}" 2>/dev/null || true' EXIT
-  for _ in $(seq 50); do
-    [ -S "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}" ] && break
-    sleep 0.1
-  done
+# A private compositor per run, so concurrent or crashed runs can't interfere.
+export WAYLAND_DISPLAY="wl-godot-$$"
+weston_log="${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}.log"
+weston --backend=headless --renderer=gl --socket="${WAYLAND_DISPLAY}" \
+  --width=1920 --height=1080 >"${weston_log}" 2>&1 &
+weston_pid=$!
+godot_pid=""
+cleanup() {
+  [ -n "${godot_pid}" ] && kill "${godot_pid}" 2>/dev/null
+  kill "${weston_pid}" 2>/dev/null
+  rm -f "${weston_log}"
+}
+trap cleanup EXIT
+trap 'exit 143' INT TERM
+for _ in $(seq 50); do
+  [ -S "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}" ] && break
+  sleep 0.1
+done
+if [ ! -S "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}" ]; then
+  echo "tools/godot: Weston did not start:" >&2
+  cat "${weston_log}" >&2
+  exit 1
 fi
 # The GTK window-decoration plugin crashes inside the container.
 export LIBDECOR_PLUGIN_DIR="${LIBDECOR_PLUGIN_DIR:-/nonexistent}"
 
-has_flag() { local flag="$1"; shift; [[ " $* " == *" ${flag} "* ]]; }
 extra=()
-has_flag --display-driver "$@" || extra+=(--display-driver wayland)
-has_flag --rendering-driver "$@" || extra+=(--rendering-driver vulkan)
-if [ -z "${weston_pid}" ]; then
-  exec "${bin}" "${extra[@]}" "$@"
-fi
-"${bin}" "${extra[@]}" "$@"
+has_flag --display-driver || extra+=(--display-driver wayland)
+has_flag --rendering-driver || extra+=(--rendering-driver vulkan)
+"${bin}" "${extra[@]}" "$@" &
+godot_pid=$!
+status=0
+wait "${godot_pid}" || status=$?
+godot_pid=""
+exit "${status}"

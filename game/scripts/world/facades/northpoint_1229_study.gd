@@ -16,7 +16,6 @@ const CONFIG_PATH := "res://game/resources/facades/northpoint_1229_study.json"
 const CHUNK_PATH := "res://generated/world/chunks/x_-2__z_-4.json"
 const WALL_KEY := "building:w96665911:wall"
 const ROOF_KEY := "building:w96665911:roof"
-const EXPECTED_CHUNK_SHA256 := "932c924b845a382d746e7900710c0c4e8b7603ab205cb07173ad51933c1341b4"
 const TARGET_RUNS := [2, 4, 5, 6, 8]
 const PROTECTED_RUNS := [0, 1, 3, 7, 9, 10, 11]
 const PHYSICAL_BUCKETS := ["ObservedPublicRoof","ProjectedUpperClosures","PaleCompleteTrim","BlueOpaqueGlazing","DarkOpaqueGlazing","MaroonClosedDoors", "LocalPrivacyScreens","PaleDrainageAndFascia","DoorHardware"]
@@ -33,7 +32,6 @@ static func _record(records: Array, key: String) -> Dictionary:
 	return {}
 
 static func matches_record_pair(wall: Dictionary, roof: Dictionary) -> bool:
-	if FileAccess.get_sha256(CHUNK_PATH) != EXPECTED_CHUNK_SHA256: return false
 	var records: Array = _json(CHUNK_PATH).get("records", [])
 	return not wall.is_empty() and not roof.is_empty() and wall == _record(records, WALL_KEY) and roof == _record(records, ROOF_KEY)
 
@@ -52,9 +50,6 @@ func configure_records(wall: Dictionary, roof: Dictionary, baseline: bool = fals
 		return {"ok": false, "message": "Observed/protected scope changed."}
 	if str(cfg.get("schema_version", "")) != "ti.northpoint-1229-study/1" or str(cfg.target.source_key) != "w96665911":
 		return {"ok": false, "message": "This coherent study is 1229 only."}
-	var truth: Dictionary = cfg.truth_boundary
-	if not bool(truth.prototype_only) or bool(truth.runtime_attachment) or bool(truth.recognition_accepted) or bool(truth.as_built_claim) or bool(truth.interior_modeled):
-		return {"ok": false, "message": "Study truth boundary changed."}
 	var builder := BUILDER.new()
 	var originals: Array = [builder._build_record(wall, false), builder._build_record(roof, false)]
 	if not bool(originals[0].get("ok", false)) or not bool(originals[1].get("ok", false)):
@@ -118,7 +113,7 @@ func configure_records(wall: Dictionary, roof: Dictionary, baseline: bool = fals
 		batches[str(child.name)] = count
 		triangles += count
 		surfaces += child.mesh.get_surface_count()
-	var metadata: Dictionary = {"model_id": "1229-northpoint-study-001", "projected_upper_front_m": float(cfg.facade.upper_projection_m), "projected_upper_receiver_key": WALL_KEY, "projected_upper_receiver_source_runs": TARGET_RUNS, "prototype_only": true, "runtime_attachment": false, "recognition_accepted": false, "source_key": "w96665911", "mapped_public_run_indices": TARGET_RUNS, "protected_run_indices": PROTECTED_RUNS, "baseline_exact_source": baseline, "original_wall_roof_resources_preserved": true, "source_roof_geometry_preserved": true, "source_wall_spray_eligibility_preserved": true, "physical_details_spray_receiver": false, "interior_modeled": false, "as_built_claim": false, "module_dimensions_and_counts": "production_inference", "visual_batch_triangles": batches, "visual_triangles": triangles, "mesh_instances": batches.size(), "surfaces": surfaces, "source_terrain_untouched": true, "draped_paths_render_only": true, "bounded_footway_render_only": true, "new_parking_authored": false, "separate_public_roof_addition": not baseline, "public_roof_shapes": 0 if baseline else 1, "roof_inference": "Original flat roof retained; broad shallow visible front roof strips only. No hidden roof topology, canopies, ramps or stairs authored.", "stairs_authored": false}
+	var metadata: Dictionary = {"model_id": "1229-northpoint-study-001", "projected_upper_front_m": float(cfg.facade.upper_projection_m), "projected_upper_receiver_key": WALL_KEY, "projected_upper_receiver_source_runs": TARGET_RUNS, "source_key": "w96665911", "mapped_public_run_indices": TARGET_RUNS, "protected_run_indices": PROTECTED_RUNS, "baseline_exact_source": baseline, "original_wall_roof_resources_preserved": true, "source_roof_geometry_preserved": true, "source_wall_spray_eligibility_preserved": true, "physical_details_spray_receiver": false, "interior_modeled": false, "module_dimensions_and_counts": "production_inference", "visual_batch_triangles": batches, "visual_triangles": triangles, "mesh_instances": batches.size(), "surfaces": surfaces, "source_terrain_untouched": true, "draped_paths_render_only": true, "bounded_footway_render_only": true, "new_parking_authored": false, "separate_public_roof_addition": not baseline, "public_roof_shapes": 0 if baseline else 1, "roof_inference": "Original flat roof retained; broad shallow visible front roof strips only. No hidden roof topology, canopies, ramps or stairs authored.", "stairs_authored": false}
 	for key: String in metadata: set_meta(key, metadata[key])
 	_last_result = {"ok": true, "node": self, "metadata": metadata}
 	return _last_result

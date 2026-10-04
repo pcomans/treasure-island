@@ -5,8 +5,9 @@ agents: walk, run, jetpack, and spray a tag on building walls. The whole island
 comes from a frozen OpenStreetMap snapshot; agents improve its buildings one at a
 time so they look like the real ones.
 
-**Score: 43 of 213 buildings** recognizably match their real counterparts
-(`recognition_metric` in [the runtime registry](game/resources/facades/facade-runtime-registry.json)).
+**Score:** the number of buildings (out of 213) that recognizably match their real
+counterparts, i.e. accepted buildings in [the building catalog](discovery/facades/facade-recognition-catalog.json).
+`tools/test.sh` prints it.
 
 ## Develop
 
@@ -15,13 +16,16 @@ GPU rendering:
 
 ```sh
 devpod up git@github.com:pcomans/treasure-island.git --id treasure-island --ide none
+# Inside the container git pushes over HTTPS (DevPod's credential helper), not SSH:
+devpod ssh treasure-island --command "cd /workspaces/content && git remote set-url origin https://github.com/pcomans/treasure-island.git"
 devpod ssh treasure-island
 cd /workspaces/content
 ```
 
-Creating the container installs Godot 4.7.2, its export templates, Codex,
-Claude Code and Node dependencies (`.devcontainer/post-create.sh`). Log in to
-Codex once with `codex login --device-auth`; the login survives rebuilds.
+Creating the container installs Godot 4.7.2 and its export templates (in the
+`/opt/godot` volume, shared by every checkout), Codex, Claude Code and Node
+dependencies (`.devcontainer/post-create.sh`). Log in to Codex with
+`codex login --device-auth`.
 
 Always start Godot through `tools/godot`. It picks the project's Godot and, for
 anything that renders, a headless display on the GPU:
@@ -51,8 +55,8 @@ when a building counts as done.
 tools/build-mac.sh   # -> build/mac/treasure-island-mac-<commit>.zip
 ```
 
-This exports the macOS build, checks it contains no reference photos or research
-material, and launches a Linux build of the same commit to confirm the island
+This exports the macOS build, checks it contains only game files (no research or
+evidence folders, no images outside `game/resources/`), and launches a Linux build of the same commit to confirm the island
 loads. Copy the zip to the Mac, unzip it, and right-click the app → Open the
 first time (it is not notarized).
 
@@ -71,4 +75,4 @@ first time (it is not notarized).
 - [CLAUDE.md](CLAUDE.md#persisted-entrypoints): agent roles and the building skill.
 - [LEARNINGS.md](LEARNINGS.md): lessons from earlier work.
 - [HUMAN.md](HUMAN.md): things only the owner can do.
-- Older records: [README history](README_HISTORY_2026-10-03.md), [earlier README history](README_HISTORY_2026-09-12.md), `evidence/`.
+- Older records: Git history and `evidence/`.

@@ -1,9 +1,9 @@
 ---
 name: ti-documentation
-description: Maintain Treasure Island harness, current handoff and lessons, and publish only the explicitly authorized reviewed documentation set.
+description: Maintain the Treasure Island harness and lessons, and publish only the explicitly authorized reviewed documentation set.
 ---
 
-Read the existing project harness and current diff first. Update the canonical instructions and existing handoff instead of scaffolding duplicate policies. Keep reusable roles separate from transient task handles and source/evidence status. Preserve the owner-facing launch README and historical failure/capture scopes.
+Read the existing project harness and current diff first. Update the canonical instructions instead of scaffolding duplicate policies. Keep reusable roles separate from transient task handles and source/evidence status. Preserve the owner-facing launch README and historical failure/capture scopes.
 
 Before changing a document, inspect active immutable input maps for direct bindings to that exact path. Preserve before-images and explicit historical associations where needed; do not silently invalidate a reviewed input or relabel a changed file as its preimage. Coordinate the single shared documentation owner and include already-authorized pending edits only after inspecting their actual diff.
 

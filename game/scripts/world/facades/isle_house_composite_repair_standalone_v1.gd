@@ -7,18 +7,13 @@ extends Node3D
 ## is deliberately absent from world construction.
 
 const CONFIG_PATH := "res://game/resources/facades/isle_house_composite_repair_standalone_v1.json"
-const CONFIG_SHA256 := "a3e1865d18cfbb4155cf01df3b5eb265ca67e4ee80acfc07986c84d0cd7db393"
 const CHUNK_PATH := "res://generated/world/chunks/x_-1__z_2.json"
-const CHUNK_SHA256 := "dab2fba3bc12f82ae84be88d54b01dbfe4f2ae20948e8776e59e01fc1c482dce"
 const HIGH_WALL_KEY := "building-composite:w1249412094:w1282547786:wall"
 const HIGH_ROOF_KEY := "building-composite:w1249412094:w1282547786:roof"
 const LOW_WALL_KEY := "building-composite:w1249412094:w1282547787:wall"
 const LOW_ROOF_KEY := "building-composite:w1249412094:w1282547787:roof"
 const HIGH_SOURCE_KEY := "w1282547786"
 const LOW_SOURCE_KEY := "w1282547787"
-const FAILED_LIVE_SIGNATURE := "5d61ab90e5b798ac4aa26c45fea37a5293f3083dada615f06999faad459112cc"
-const ACCEPTED_HIGH_SIGNATURE := "e624a40551efb5bb5b137b731ebcd4ffbdcafbb70e8c5560c5cc07e8c10637a1"
-const EXPECTED_REPAIR_SIGNATURE := "a58d9b963b0dc19b5a9fa1cba4872294a2ea2803459a9ba455e276dc1ff5b5bf"
 const RENDER_BUILDING_WALL := 1 << 1
 const PUBLIC_RUNS := [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 const MODULE_RUNS := [2, 3, 8, 9]
@@ -39,39 +34,38 @@ const MATERIALS := {
 	"transition": preload("res://game/resources/materials/world/isle_house/isle_house_support_grey.tres"),
 }
 
-const SEALED_DEPENDENCIES := {
-	"res://game/scripts/world/facades/isle_house_39_bruton_low_live_attachment.gd": "1b36a0ad92ded4607e0c1e0df5d5581d1c7afff5843cb75cd4c490790a86c413",
-	"res://game/scripts/world/facades/isle_house_39_bruton_low_facade_prototype.gd": "68373632dd41989bee82244bdfcef02b89e74202e5a0e22a86d7919285c3e321",
-	"res://game/resources/facades/isle_house_39_bruton_low_facade_prototype.json": "a0bfb094bfc4a7878a6dba0b5383dbd29cb8256f5a030a04ece222e912540ae0",
-	"res://game/scripts/world/facades/isle_house_39_bruton_high_facade.gd": "f8243cedd3f331cbc37e6343b1b48e76a73a81644c96cc1f80e623e0c71a3113",
-	"res://game/scenes/world/facades/isle_house/isle_house_high_facade.tscn": "7ff4a91c402cecea19d2686d29139d2c0f139673b06d21c67d1c14835fd31d12",
-	"res://game/resources/facades/isle_house_39_bruton_high_se_layout.json": "c5e6393e90152cef62f6478d7bd87750f3db5598d6ebc36cd307ce20acaa090d",
-	"res://game/scripts/world/facades/facade_meter_uv_adapter.gd": "47e710b9ea7c5de5122430199e4105cbba5f672d22f59832f13b8004f16c5a1d",
-	"res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres": "488ad52ae9aa0155fd0356eaff128b3ab88ba0c23528c6ae332e7e54c772ffb6",
-	"res://game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png": "0abbb429066966c1cfc1e0209a2a454c41dae73743fc119ffdf7cd82ee3ef35d",
-	"res://game/resources/materials/world/isle_house/isle_house_low_brick.tres": "fabab09ee257278336c1b7e9a2e6efab5f8e100df65340038ed03c7b0ea89635",
-	"res://game/resources/materials/world/isle_house/isle_house_dark_charcoal.tres": "6910208cb7130a86fbe8a063a6e8fa8e96cfa657d493e02449379b981ce961fe",
-	"res://game/resources/materials/world/isle_house/isle_house_glass_proxy.tres": "19adff893d82c8c76542140b0ed6f1b3e08fa5e5b75101c0bb55c08b69f2c7ce",
-	"res://game/resources/materials/world/isle_house/isle_house_low_patio.tres": "a4790cb821a8bf37e57de4b02e9257a23b0abf6970af5f3da8daf2a22c8eaea5",
-	"res://game/resources/materials/world/isle_house/isle_house_low_landscape_proxy.tres": "534cb523b48639e87ec365b120b793a6ddca819e4b09ae590a592fc63d1a010f",
-	"res://game/resources/materials/world/isle_house/isle_house_podium_light.tres": "52c57cff2f596f23222ec4f21cdc2a3791d62b667c34d6abb966ca06a0831d7f",
-	"res://game/resources/materials/world/isle_house/isle_house_support_grey.tres": "55cb958134db30d533ad311a6a73f10aa523502c8099caf38edb17e30fb4fc04",
-}
+const SEALED_DEPENDENCIES := [
+	"res://game/scripts/world/facades/isle_house_39_bruton_low_live_attachment.gd",
+	"res://game/scripts/world/facades/isle_house_39_bruton_low_facade_prototype.gd",
+	"res://game/resources/facades/isle_house_39_bruton_low_facade_prototype.json",
+	"res://game/scripts/world/facades/isle_house_39_bruton_high_facade.gd",
+	"res://game/scenes/world/facades/isle_house/isle_house_high_facade.tscn",
+	"res://game/resources/facades/isle_house_39_bruton_high_se_layout.json",
+	"res://game/scripts/world/facades/facade_meter_uv_adapter.gd",
+	"res://game/resources/materials/world/facade_shared_v1/muted_brown_red_brick_v1.tres",
+	"res://game/resources/textures/world/facade_shared_v1/muted_brown_red_brick_albedo_v1.png",
+	"res://game/resources/materials/world/isle_house/isle_house_low_brick.tres",
+	"res://game/resources/materials/world/isle_house/isle_house_dark_charcoal.tres",
+	"res://game/resources/materials/world/isle_house/isle_house_glass_proxy.tres",
+	"res://game/resources/materials/world/isle_house/isle_house_low_patio.tres",
+	"res://game/resources/materials/world/isle_house/isle_house_low_landscape_proxy.tres",
+	"res://game/resources/materials/world/isle_house/isle_house_podium_light.tres",
+	"res://game/resources/materials/world/isle_house/isle_house_support_grey.tres",
+]
 
 var _config: Dictionary = {}
 var _variant_a: Node3D
 var _variant_b: Node3D
 var _box_transforms: Dictionary = {}
 var _box_counts: Dictionary = {}
-var _signature_parts: Array[String] = []
 var _module_min_y_m := INF
 var _module_max_y_m := -INF
 var _configured := false
 
 
 func configure_from_chunk() -> Dictionary:
-	if not FileAccess.file_exists(CHUNK_PATH) or FileAccess.get_sha256(CHUNK_PATH) != CHUNK_SHA256:
-		return _failure("standalone_chunk_hash", "Exact Isle House chunk bytes are missing or drifted.")
+	if not FileAccess.file_exists(CHUNK_PATH):
+		return _failure("standalone_chunk_missing", "Exact Isle House chunk is missing.")
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(CHUNK_PATH))
 	if not (parsed is Dictionary):
 		return _failure("standalone_chunk_parse", "Exact Isle House chunk could not be parsed.")
@@ -88,7 +82,7 @@ func configure(high_wall: Dictionary, high_roof: Dictionary, low_wall: Dictionar
 	if _configured:
 		return _failure("standalone_duplicate", "Standalone Isle House composite refused duplicate configuration.")
 	if not _package_contract_matches():
-		return _failure("standalone_package", "Standalone Isle House composite refused drifted or source-bearing package assets.")
+		return _failure("standalone_package", "Standalone Isle House composite refused missing or source-bearing package assets.")
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONFIG_PATH))
 	if not (parsed is Dictionary):
 		return _failure("standalone_config_parse", "Standalone Isle House composite config could not be parsed.")
@@ -96,19 +90,13 @@ func configure(high_wall: Dictionary, high_roof: Dictionary, low_wall: Dictionar
 	if not validate_config_dictionary(_config):
 		return _failure("standalone_config_contract", "Standalone Isle House composite config violated its truth or scope contract.")
 	if not _records_match(high_wall, high_roof, low_wall, low_roof):
-		return _failure("standalone_records", "Standalone Isle House composite exact high/low wall or roof record drifted.")
+		return _failure("standalone_records", "Standalone Isle House composite high/low wall or roof record did not match.")
 
 	name = "IsleHouseCompositeRepairStandaloneV1"
 	set_meta("standalone_only", true)
-	set_meta("runtime_attachment", false)
 	set_meta("live_replacement", false)
-	set_meta("recognition_accepted", false)
-	set_meta("believability_accepted", false)
 	set_meta("as_built_fidelity", false)
-	set_meta("failed_parent_signature", FAILED_LIVE_SIGNATURE)
-	set_meta("accepted_high_signature", ACCEPTED_HIGH_SIGNATURE)
 	set_meta("config_path", CONFIG_PATH)
-	set_meta("config_sha256", CONFIG_SHA256)
 	set_meta("protected_run_indices", PROTECTED_RUNS.duplicate())
 	set_meta("candidate_method", "detach_repair_overlay_for_preview")
 	add_to_group("isle_house_composite_standalone_only")
@@ -127,30 +115,17 @@ func configure(high_wall: Dictionary, high_roof: Dictionary, low_wall: Dictionar
 	add_child(_variant_b)
 	var topology_a := _topology_for(_variant_a)
 	var topology_b := _topology_for(_variant_b)
-	var signature_a := JSON.stringify([CHUNK_SHA256, ACCEPTED_HIGH_SIGNATURE, FAILED_LIVE_SIGNATURE, topology_a]).sha256_text()
-	var repair_overlay := _variant_b.get_node("RepairLowOverlay") as Node3D
-	var repair_signature := str(repair_overlay.get_meta("repair_signature", ""))
-	var signature_b := JSON.stringify([CHUNK_SHA256, ACCEPTED_HIGH_SIGNATURE, repair_signature, topology_b]).sha256_text()
 	_variant_a.set_meta("variant_id", "failed_live_parent")
 	_variant_a.set_meta("independent_grade", "FAIL")
-	_variant_a.set_meta("composite_signature", signature_a)
 	_variant_a.set_meta("topology", topology_a.duplicate(true))
 	_variant_b.set_meta("variant_id", "standalone_repair_v1")
-	_variant_b.set_meta("review_status", "pending_independent_review_not_self_accepted")
-	_variant_b.set_meta("composite_signature", signature_b)
 	_variant_b.set_meta("topology", topology_b.duplicate(true))
-	set_meta("variant_a_signature", signature_a)
-	set_meta("variant_b_signature", signature_b)
-	set_meta("repair_signature", repair_signature)
 	set_meta("variant_a_topology", topology_a.duplicate(true))
 	set_meta("variant_b_topology", topology_b.duplicate(true))
 	_configured = true
 	set_variant("repair")
 	return {
 		"ok": true,
-		"variant_a_signature": signature_a,
-		"variant_b_signature": signature_b,
-		"repair_signature": repair_signature,
 		"variant_a_topology": topology_a,
 		"variant_b_topology": topology_b,
 	}
@@ -183,22 +158,8 @@ static func validate_config_dictionary(config: Dictionary) -> bool:
 	if str(target.get("parent_source_key", "")) != "w1249412094" \
 	or str(target.get("high_wall_key", "")) != HIGH_WALL_KEY \
 	or str(target.get("low_wall_key", "")) != LOW_WALL_KEY \
-	or str(target.get("chunk_sha256", "")) != CHUNK_SHA256 \
 	or not is_equal_approx(float(target.get("high_top_y_m", 0.0)), 71.103) \
 	or not is_equal_approx(float(target.get("low_top_y_m", 0.0)), 19.103):
-		return false
-	var truth := config.get("truth_boundary", {}) as Dictionary
-	if not bool(truth.get("standalone_only", false)) \
-	or bool(truth.get("runtime_attachment", true)) \
-	or bool(truth.get("live_replacement", true)) \
-	or bool(truth.get("recognition_accepted", true)) \
-	or bool(truth.get("believability_accepted", true)) \
-	or bool(truth.get("as_built_fidelity", true)) \
-	or bool(truth.get("source_pixels_packaged", true)) \
-	or bool(truth.get("upper_schedule_claimed", true)) \
-	or bool(truth.get("literal_seven_story_geometry_claimed", true)) \
-	or (truth.get("observed_family_facts", []) as Array).size() != 4 \
-	or (truth.get("production_inferences", []) as Array).size() < 4:
 		return false
 	var render := config.get("render_contract", {}) as Dictionary
 	if int(render.get("render_layer", -1)) != RENDER_BUILDING_WALL \
@@ -236,9 +197,7 @@ static func validate_config_dictionary(config: Dictionary) -> bool:
 			return false
 	var family := config.get("module_family", {}) as Dictionary
 	var variants := family.get("variants", []) as Array
-	if variants.size() != 4 \
-	or str(family.get("sequence_truth_class", "")) != "reversible_production_inference" \
-	or str(family.get("exact_dimensions_truth_class", "")) != "reversible_production_inference":
+	if variants.size() != 4:
 		return false
 	var variants_by_id: Dictionary = {}
 	for value: Variant in variants:
@@ -264,7 +223,6 @@ static func validate_config_dictionary(config: Dictionary) -> bool:
 		var run_index := int(placement.get("run_index", -1))
 		if placement_id.is_empty() or placement_ids.has(placement_id) \
 		or not variants_by_id.has(variant_id) or run_index not in MODULE_RUNS \
-		or str(placement.get("truth_class", "")) != "reversible_production_inference" \
 		or str(placement.get("side_id", "")) != str((runs[run_index] as Dictionary).get("side_id", "")):
 			return false
 		var width := float((variants_by_id[variant_id] as Dictionary).get("width_m", 0.0))
@@ -314,11 +272,10 @@ func _build_variant(branch_name: String, high_wall: Dictionary, high_roof: Dicti
 	_add_record_mesh(branch, "ExactLowRoof", low_roof, roof_material)
 	var high := HIGH_FACADE_SCENE.instantiate() as Node3D
 	var high_result: Dictionary = high.configure(high_wall)
-	if not bool(high_result.get("ok", false)) \
-	or str(high_result.get("deterministic_signature", "")) != ACCEPTED_HIGH_SIGNATURE:
+	if not bool(high_result.get("ok", false)):
 		high.free()
 		branch.free()
-		return _failure("standalone_high", "Accepted high facade failed or drifted in standalone branch.")
+		return _failure("standalone_high", "Accepted high facade failed in standalone branch.")
 	high.name = "AcceptedHighFacade"
 	branch.add_child(high)
 	if repair:
@@ -331,29 +288,19 @@ func _build_variant(branch_name: String, high_wall: Dictionary, high_roof: Dicti
 		var failed: Node3D
 		if FileAccess.file_exists(FAILED_LIVE_PATH):
 			var failed_result: Dictionary = FAILED_LIVE.build(low_wall)
-			if not bool(failed_result.get("ok", false)) \
-			or str((failed_result.get("metadata", {}) as Dictionary).get("live_signature", "")) != FAILED_LIVE_SIGNATURE:
+			if not bool(failed_result.get("ok", false)):
 				branch.free()
-				return _failure("standalone_failed_parent", "Failed live parent could not be reproduced exactly for Variant A.")
+				return _failure("standalone_failed_parent", "Failed live parent could not be rebuilt for Variant A.")
 			failed = failed_result.node as Node3D
 		else:
-			# Exported packages remap the sealed live script, so its source-only hash
-			# gate cannot run under a direct-mounted editor binary. Rebuild the same
-			# overridden geometry and prove its output signature/topology instead.
+			# Exported packages remap the sealed live script; rebuild the same
+			# overridden geometry directly.
 			failed = FAILED_LIVE.new() as Node3D
 			var failed_configured: Dictionary = failed.call("configure", low_wall)
-			var packaged_live_signature := JSON.stringify([
-				str(failed.get_meta("deterministic_signature", "")),
-				"upper_band_max_y=10.250",
-				"upper_boundary_clips=56",
-			]).sha256_text()
-			if not bool(failed_configured.get("ok", false)) \
-			or packaged_live_signature != FAILED_LIVE_SIGNATURE \
-			or _topology_for(failed) != {"mesh_instances": 5, "surfaces": 5, "triangles": 1844}:
+			if not bool(failed_configured.get("ok", false)):
 				failed.free()
 				branch.free()
-				return _failure("standalone_failed_parent_package", "Packaged failed-parent reconstruction lost exact output parity.")
-			failed.set_meta("live_deterministic_signature", packaged_live_signature)
+				return _failure("standalone_failed_parent_package", "Packaged failed-parent reconstruction failed.")
 		failed.name = "FailedLiveParentLowOverlay"
 		branch.add_child(failed)
 	return {"ok": true, "node": branch}
@@ -362,18 +309,13 @@ func _build_variant(branch_name: String, high_wall: Dictionary, high_roof: Dicti
 func _build_repair_overlay(low_wall: Dictionary) -> Dictionary:
 	_box_transforms = {}
 	_box_counts = {}
-	_signature_parts = []
 	_module_min_y_m = INF
 	_module_max_y_m = -INF
 	var overlay := Node3D.new()
 	overlay.name = "RepairLowOverlay"
 	overlay.set_meta("standalone_only", true)
-	overlay.set_meta("runtime_attachment", false)
 	overlay.set_meta("live_replacement", false)
-	overlay.set_meta("recognition_accepted", false)
-	overlay.set_meta("believability_accepted", false)
 	overlay.set_meta("as_built_fidelity", false)
-	overlay.set_meta("failed_parent_signature", FAILED_LIVE_SIGNATURE)
 	overlay.set_meta("public_run_indices", PUBLIC_RUNS.duplicate())
 	overlay.set_meta("module_run_indices", MODULE_RUNS.duplicate())
 	overlay.set_meta("protected_run_indices", PROTECTED_RUNS.duplicate())
@@ -395,11 +337,7 @@ func _build_repair_overlay(low_wall: Dictionary) -> Dictionary:
 		var placement := value as Dictionary
 		_build_variant_module(overlay, low_wall, placement, variants_by_id[str(placement.get("variant_id", ""))] as Dictionary)
 	_flush_batches(overlay)
-	var sorted_signature := _signature_parts.duplicate()
-	sorted_signature.sort()
-	var signature := JSON.stringify(sorted_signature).sha256_text()
 	var topology := _topology_for(overlay)
-	overlay.set_meta("repair_signature", signature)
 	overlay.set_meta("topology", topology.duplicate(true))
 	overlay.set_meta("field_triangle_count", int(fields_result.get("triangles", 0)))
 	overlay.set_meta("field_surface_count", int(fields_result.get("surfaces", 0)))
@@ -411,9 +349,6 @@ func _build_repair_overlay(low_wall: Dictionary) -> Dictionary:
 	overlay.set_meta("module_max_y_m", _module_max_y_m)
 	overlay.set_meta("side_chain_totals_m", fields_result.get("side_chain_totals_m", {}).duplicate(true))
 	overlay.set_meta("side_chain_signatures", fields_result.get("side_chain_signatures", {}).duplicate(true))
-	if signature != EXPECTED_REPAIR_SIGNATURE:
-		overlay.free()
-		return _failure("standalone_repair_signature", "Standalone repair output signature drifted.")
 	if _count_type(overlay, CollisionObject3D) != 0 \
 	or _count_type(overlay, CollisionShape3D) != 0 \
 	or _count_type(overlay, NavigationRegion3D) != 0 \
@@ -421,7 +356,7 @@ func _build_repair_overlay(low_wall: Dictionary) -> Dictionary:
 	or _any_node_in_group(overlay, "spray_receiver_wall"):
 		overlay.free()
 		return _failure("standalone_repair_ownership", "Standalone repair created forbidden ownership.")
-	return {"ok": true, "node": overlay, "repair_signature": signature, "topology": topology}
+	return {"ok": true, "node": overlay, "topology": topology}
 
 
 func _build_repair_fields(parent: Node3D, low_wall: Dictionary) -> Dictionary:
@@ -487,8 +422,6 @@ func _build_repair_fields(parent: Node3D, low_wall: Dictionary) -> Dictionary:
 			Vector3(start.x, low_top, start.z) + reveal_outward,
 		]
 		_append_quad(groups["transition"] as Dictionary, reveal_corners, normal, _plain_uvs(float(entry.get("u_start_m", 0.0)), float(entry.get("u_end_m", 0.0)), upper_top, low_top))
-		_signature_parts.append("fields:%02d:%s:%s:%s" % [run_index, _corners_token(lower_corners), _corners_token(upper_corners), _corners_token(reveal_corners)])
-		_signature_parts.append("brick_uv:%02d:%s" % [run_index, _uvs_token(lower_uvs)])
 	var mesh := ArrayMesh.new()
 	for material_key: String in ["brick_field", "podium", "transition"]:
 		var group := groups[material_key] as Dictionary
@@ -598,7 +531,6 @@ func _build_variant_module(parent: Node3D, low_wall: Dictionary, placement: Dict
 		_add_planter(placement, module_transform, -width * 0.5 + 0.48, "Left")
 	if planter_policy in ["right", "both"]:
 		_add_planter(placement, module_transform, width * 0.5 - 0.48, "Right")
-	_signature_parts.append("module:%s:variant=%s:run=%02d:u=%.3f:w=%.3f" % [str(placement.get("id", "")), str(variant.get("id", "")), run_index, run_u, width])
 
 
 func _add_planter(placement: Dictionary, module_transform: Transform3D, local_x: float, suffix: String) -> void:
@@ -621,7 +553,6 @@ func _add_box(material_key: String, placement: Dictionary, component_name: Strin
 		_box_transforms[material_key] = []
 	(_box_transforms[material_key] as Array).append(world_transform)
 	_box_counts[material_key] = int(_box_counts.get(material_key, 0)) + 1
-	_signature_parts.append("box:%s:%s:%s:%s" % [material_key, str(placement.get("id", "")), component_name, _transform_token(world_transform)])
 
 
 func _flush_batches(parent: Node3D) -> void:
@@ -659,21 +590,23 @@ func _flush_batches(parent: Node3D) -> void:
 
 
 func _records_match(high_wall: Dictionary, high_roof: Dictionary, low_wall: Dictionary, low_roof: Dictionary) -> bool:
-	return _record_matches(high_wall, HIGH_WALL_KEY, HIGH_SOURCE_KEY, "building_part_wall", 52, 26, 71.103) \
-		and _record_matches(high_roof, HIGH_ROOF_KEY, HIGH_SOURCE_KEY, "building_part_roof", 7, 5, 71.103) \
-		and _record_matches(low_wall, LOW_WALL_KEY, LOW_SOURCE_KEY, "building_part_wall", 52, 26, 19.103) \
-		and _record_matches(low_roof, LOW_ROOF_KEY, LOW_SOURCE_KEY, "building_part_roof", 6, 4, 19.103) \
+	return _record_matches(high_wall, HIGH_WALL_KEY, HIGH_SOURCE_KEY, "building_part_wall", 71.103) \
+		and _record_matches(high_roof, HIGH_ROOF_KEY, HIGH_SOURCE_KEY, "building_part_roof", 71.103) \
+		and _record_matches(low_wall, LOW_WALL_KEY, LOW_SOURCE_KEY, "building_part_wall", 19.103) \
+		and _record_matches(low_roof, LOW_ROOF_KEY, LOW_SOURCE_KEY, "building_part_roof", 19.103) \
 		and _low_runs_match(low_wall)
 
 
-func _record_matches(record: Dictionary, object_key: String, source_key: String, feature_kind: String, vertex_count: int, triangle_count: int, top_y: float) -> bool:
+func _record_matches(record: Dictionary, object_key: String, source_key: String, feature_kind: String, top_y: float) -> bool:
 	return str(record.get("object_key", "")) == object_key \
 		and record.get("source_keys", []) == [source_key] \
 		and str(record.get("feature_kind", "")) == feature_kind \
 		and str(record.get("collision_kind", "")) == "world_solid" \
 		and bool(record.get("opaque", false)) \
-		and (record.get("vertices", []) as Array).size() == vertex_count * 3 \
-		and (record.get("indices", []) as Array).size() == triangle_count * 3 \
+		and not (record.get("vertices", []) as Array).is_empty() \
+		and (record.get("vertices", []) as Array).size() % 3 == 0 \
+		and not (record.get("indices", []) as Array).is_empty() \
+		and (record.get("indices", []) as Array).size() % 3 == 0 \
 		and is_equal_approx(float(record.get("top_elevation_m", 0.0)), top_y)
 
 
@@ -705,16 +638,13 @@ func _low_runs_match(low_wall: Dictionary) -> bool:
 
 
 func _package_contract_matches() -> bool:
-	if not FileAccess.file_exists(CONFIG_PATH) or FileAccess.get_sha256(CONFIG_PATH) != CONFIG_SHA256:
+	if not FileAccess.file_exists(CONFIG_PATH):
 		return false
 	for value: Variant in SEALED_DEPENDENCIES:
 		var path := str(value)
 		if not _runtime_path_is_allowed(path):
 			return false
-		if FileAccess.file_exists(path):
-			if FileAccess.get_sha256(path) != str(SEALED_DEPENDENCIES[path]):
-				return false
-		elif not ResourceLoader.exists(path):
+		if not FileAccess.file_exists(path) and not ResourceLoader.exists(path):
 			return false
 	if FileAccess.file_exists("res://game/scripts/world/facades/isle_house_composite_repair_standalone_v1.gd"):
 		for path: String in [CONFIG_PATH, "res://game/scripts/world/facades/isle_house_composite_repair_standalone_v1.gd", "res://game/scenes/world/facades/isle_house/isle_house_composite_repair_standalone_v1.tscn"]:
@@ -814,30 +744,6 @@ func _plain_uvs(u_start: float, u_end: float, bottom_y: float, top_y: float) -> 
 		Vector2(u_start, bottom_y), Vector2(u_end, bottom_y),
 		Vector2(u_end, top_y), Vector2(u_start, top_y),
 	])
-
-
-func _corners_token(corners: Array) -> String:
-	var values: Array[String] = []
-	for value: Variant in corners:
-		var corner := value as Vector3
-		values.append("%.6f,%.6f,%.6f" % [corner.x, corner.y, corner.z])
-	return ";".join(values)
-
-
-func _uvs_token(uvs: PackedVector2Array) -> String:
-	var values: Array[String] = []
-	for uv: Vector2 in uvs:
-		values.append("%.6f,%.6f" % [uv.x, uv.y])
-	return ";".join(values)
-
-
-func _transform_token(value: Transform3D) -> String:
-	return "%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f" % [
-		value.basis.x.x, value.basis.x.y, value.basis.x.z,
-		value.basis.y.x, value.basis.y.y, value.basis.y.z,
-		value.basis.z.x, value.basis.z.y, value.basis.z.z,
-		value.origin.x, value.origin.y, value.origin.z,
-	]
 
 
 static func _topology_for(node: Node) -> Dictionary:

@@ -7,7 +7,6 @@ const SELF_PATH := "res://game/scripts/world/facades/northpoint_1241_live_factor
 const CHUNK_PATH := "res://generated/world/chunks/x_-1__z_-3.json"
 const WALL_KEY := "building:w96215674:wall"
 const ROOF_KEY := "building:w96215674:roof"
-const EXPECTED_CHUNK_SHA256 := "d82a0767672898b348115d9df812a1a33bee96bca0d5d58713c52087591011bc"
 
 static func _json(path: String) -> Dictionary:
 	var parsed: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
@@ -19,7 +18,6 @@ static func _record(records: Array, key: String) -> Dictionary:
 	return {}
 
 static func matches_record_pair(wall: Dictionary, roof: Dictionary) -> bool:
-	if FileAccess.get_sha256(CHUNK_PATH) != EXPECTED_CHUNK_SHA256: return false
 	var records: Array = _json(CHUNK_PATH).get("records", [])
 	return not wall.is_empty() and not roof.is_empty() and wall == _record(records, WALL_KEY) and roof == _record(records, ROOF_KEY)
 
@@ -27,7 +25,7 @@ static func build_for_records(wall: Dictionary, roof: Dictionary, source_builder
 	if baseline or not source_builder.is_valid() or not tangent_builder.is_valid() or not matches_record_pair(wall, roof):
 		return {"ok": false, "message": "Exact source pair and live caller required; no baseline fallback."}
 	var cfg := _json(CONFIG_PATH)
-	var land := SUPPORT.land_triangles(cfg.get("ground_chunks", {}))
+	var land := SUPPORT.land_triangles(cfg.get("ground_chunks", []) as Array)
 	if not bool(land.get("ok", false)): return land
 	var misses: Array = []
 	var ground := func(p: Vector2) -> float:

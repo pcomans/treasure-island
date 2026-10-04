@@ -1,13 +1,7 @@
 extends SceneTree
 
 const EXPECTED_AUDIO_DRIVER := "Dummy"
-const RUNTIME_REGISTRY_PATH := "res://game/resources/facades/facade-runtime-registry.json"
-const EXPECTED_RUNTIME_SCHEMA := "ti.facade-runtime-registry/9"
-const EXPECTED_RECOGNITION_NUMERATOR := 9
-const EXPECTED_RECOGNITION_DENOMINATOR := 213
-const EXPECTED_RUNTIME_MESHES := 959
-const EXPECTED_RUNTIME_SURFACES := 974
-const EXPECTED_RUNTIME_TRIANGLES := 70692
+const CATALOG_PATH := "res://discovery/facades/facade-recognition-catalog.json"
 
 
 func _initialize() -> void:
@@ -26,27 +20,28 @@ func _initialize() -> void:
 	if AudioServer.get_driver_name() != EXPECTED_AUDIO_DRIVER:
 		_fail("The focused startup process did not initialize the Dummy audio driver.")
 		return
-	if GameMain.EXPECTED_MESHES != EXPECTED_RUNTIME_MESHES \
-	or GameMain.EXPECTED_SURFACES != EXPECTED_RUNTIME_SURFACES \
-	or GameMain.EXPECTED_TRIANGLES != EXPECTED_RUNTIME_TRIANGLES:
-		_fail("The packaged main-scene smoke oracle does not match the accepted B1 returns v2 current-world topology 959/974/70692.")
+	var catalog_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(CATALOG_PATH))
+	if not (catalog_value is Dictionary):
+		_fail("The building catalog did not parse.")
 		return
-	var registry_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(RUNTIME_REGISTRY_PATH))
-	if not (registry_value is Dictionary):
-		_fail("The packaged facade runtime registry did not parse.")
+	# Every one of the 213 buildings has exactly one recognition status, and the
+	# accepted ones carry the reviewer verdict they were accepted on.
+	var units := (catalog_value as Dictionary).get("units", []) as Array
+	var accepted := 0
+	for unit: Dictionary in units:
+		var status := str((unit.get("claim_status", {}) as Dictionary).get("reference_recognizable", ""))
+		if status == "accepted":
+			accepted += 1
+			if (unit.get("acceptance_records", []) as Array).is_empty():
+				_fail("%s is accepted without a reviewer verdict." % unit.get("unit_id", "?"))
+				return
+		elif status != "not_evaluated":
+			_fail("%s has unknown recognition status '%s'." % [unit.get("unit_id", "?"), status])
+			return
+	if units.size() != 213:
+		_fail("The catalog lists %d buildings, not 213." % units.size())
 		return
-	var registry := registry_value as Dictionary
-	var metric := registry.get("recognition_metric", {}) as Dictionary
-	var accepted_ids := metric.get("accepted_physical_unit_ids", []) as Array
-	if str(registry.get("schema_version", "")) != EXPECTED_RUNTIME_SCHEMA \
-	or int(metric.get("numerator", -1)) != EXPECTED_RECOGNITION_NUMERATOR \
-	or int(metric.get("denominator", -1)) != EXPECTED_RECOGNITION_DENOMINATOR \
-	or str(metric.get("display", "")) != "%d/%d" % [EXPECTED_RECOGNITION_NUMERATOR, EXPECTED_RECOGNITION_DENOMINATOR] \
-	or accepted_ids.size() != EXPECTED_RECOGNITION_NUMERATOR \
-	or "physical-building:w95934105" not in accepted_ids:
-		_fail("The packaged facade authority is not exact runtime-registry v9 at 9/213 with 1441 accepted.")
-		return
-	print("PASS: project startup selects exact Dummy audio before AudioServer initialization, packaged smoke expects accepted B1 returns v2 current-world topology 959/974/70692, and accepted facade authority is exact runtime-registry v9 at 9/213 with one 1441 credit")
+	print("PASS: Dummy audio selected before AudioServer initialization; catalog score %d/213" % accepted)
 	quit(0)
 
 

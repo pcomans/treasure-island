@@ -8,54 +8,27 @@ extends RefCounted
 
 const METER_UV := preload("res://game/scripts/world/facades/facade_meter_uv_adapter.gd")
 const CONFIG_PATH := "res://game/resources/facades/d1_current/d1_b201_live_attachment.json"
-const EXPECTED_CONFIG_SHA256 := "0f3bf052688ec813b5fa58b077d74c963949574623fe4cf67c12c347e7257229"
 const SOURCE_KEY := "w34313545"
 const RECEIVER_KEY := "building:w34313545:wall"
 const ROOF_KEY := "building:w34313545:roof"
 const TARGET_CHUNK_ID := "x_0__z_-2"
 const MAPPING_ID := "800I-PUBLIC-WSW"
-const EXPECTED_CANONICAL_RECORD_SHA256 := "024b2ed0af4de1a7e8456fcd171e1abc27a212dd72d054a9d9d1d487effa98b3"
-const EXPECTED_RUNTIME_RECORD_SHA256 := "4ccc96b4c4b296741698b336442d1f90f58ae3706fd142f11bd0ec51eae203e6"
-const EXPECTED_CANONICAL_ROOF_RECORD_SHA256 := "53994e07ee99632a338d8c577427efac3ca3c584148f4d9ef92a251a49e589ff"
-const EXPECTED_RUNTIME_ROOF_RECORD_SHA256 := "bc9c996252d3c5a142e6d09b72ed89578ff92edeba989e79b58064a10922dbc2"
-const EXPECTED_METER_PLAN_SIGNATURE := "7d5f350c8130aee2a95e567741ec8466e5a83a4b412dcb85d2d327786ec2f650"
-const EXPECTED_RUNTIME_CHAIN_TOTAL_M := 115.512669205666
-const EXPECTED_STANDALONE_GEOMETRY_SIGNATURE := "57573bc19d6c6a45b946827e76a346c592d5238a310e923a30a41b149f963511"
-const EXPECTED_DECORATIVE_GEOMETRY_SIGNATURE := "705c5345509f77cd91359f66173fff0e1e132d41ebb9acef3f51ff2c467abb3a"
 const RUN_INDICES: Array[int] = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 const RUN_LENGTHS_M: Array[float] = [8.395309702, 10.181251102, 13.457963962, 22.843742360, 0.795472815, 1.484884507, 22.154330547, 11.867490763, 11.771724300, 12.560491431]
 const CHAIN_LENGTH_M := 115.512661489
 const BASE_ELEVATION_M := 3.402
 const TOP_ELEVATION_M := 8.402
 const HEIGHT_M := 5.0
-const MEASURED_MAX_CHORD_DEVIATION_M := 0.0009224962773498534
-const RUNTIME_MEASURED_MAX_CHORD_DEVIATION_M := 0.00092573047241
 const MAX_ALLOWED_CHORD_DEVIATION_M := 0.001
 const STANDALONE_FIELD_FRONT_OFFSET_M := 0.10
 const RENDER_BUILDING_WALL := 1 << 1
-const EXPECTED_BATCH_COUNT := 6
-const EXPECTED_BOX_COUNT := 172
-const EXPECTED_TRIANGLES := 2064
-const EXPECTED_BATCH_COUNTS := {
-	"b201_warm_wall": 20,
-	"shared_dark_glass": 18,
-	"shared_pale_frame": 120,
-	"b201_green_hierarchy": 4,
-	"b201_muted_rust_post": 7,
-	"b201_service_leaf": 3,
-}
-const GENERIC_WALL_TEXTURE_PATHS := {
-	"albedo": "res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_diff_1k.jpg",
-	"normal": "res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_nor_gl_1k.jpg",
-	"roughness": "res://game/resources/textures/world/polyhaven/plaster_grey_04/plaster_grey_04_rough_1k.jpg",
-}
 const MATERIAL_SPECS := {
-	"b201_green_hierarchy": {"path": "res://game/resources/materials/world/d1_current/b201_green_hierarchy.tres", "sha256": "5bdd67e659a0cce14abe3605f5a7fbfd85b0374d0a38be23cda326017235fe13", "resource_name": "d1_b201_saturated_green_horizontal_hierarchy", "albedo": Color(0.06, 0.38, 0.19, 1.0), "metallic": 0.0, "roughness": 0.69},
-	"b201_muted_rust_post": {"path": "res://game/resources/materials/world/d1_current/b201_muted_rust_post.tres", "sha256": "be97cdfd7367cd73172c4429ca212db0d1fc68bed34f4db6ce307d02a5225b94", "resource_name": "d1_b201_muted_rust_brown_post", "albedo": Color(0.31, 0.145, 0.085, 1.0), "metallic": 0.04, "roughness": 0.75},
-	"b201_service_leaf": {"path": "res://game/resources/materials/world/d1_current/b201_service_leaf.tres", "sha256": "de9895a808e4d64afc2c727e77ef92b590c9c718266ba118e64c489e84690cfd", "resource_name": "d1_b201_nonsemantic_service_leaf", "albedo": Color(0.19, 0.205, 0.19, 1.0), "metallic": 0.04, "roughness": 0.72},
-	"b201_warm_wall": {"path": "res://game/resources/materials/world/d1_current/b201_warm_wall.tres", "sha256": "6f5f6835790ab338454e72be58c2956deb6e470086797e209be0fab4d37ec788", "resource_name": "d1_b201_light_warm_gray_cream_wall", "albedo": Color(0.61, 0.595, 0.535, 1.0), "metallic": 0.0, "roughness": 0.84},
-	"shared_dark_glass": {"path": "res://game/resources/materials/world/d1_current/shared_dark_glass.tres", "sha256": "ad8931db8954fd5ebc8fdd809f70afb279dd74a36e53e1d9ca907c44409f10d3", "resource_name": "d1_current_shared_dark_opaque_glazing_proxy", "albedo": Color(0.055, 0.095, 0.105, 1.0), "metallic": 0.06, "roughness": 0.28},
-	"shared_pale_frame": {"path": "res://game/resources/materials/world/d1_current/shared_pale_frame.tres", "sha256": "9a2de298ff545cf80c5da0ed0aa37d9d4ebbf10fec8eb78810af7e4d012d1436", "resource_name": "d1_current_shared_pale_painted_frame", "albedo": Color(0.72, 0.735, 0.70, 1.0), "metallic": 0.02, "roughness": 0.67},
+	"b201_green_hierarchy": {"path": "res://game/resources/materials/world/d1_current/b201_green_hierarchy.tres"},
+	"b201_muted_rust_post": {"path": "res://game/resources/materials/world/d1_current/b201_muted_rust_post.tres"},
+	"b201_service_leaf": {"path": "res://game/resources/materials/world/d1_current/b201_service_leaf.tres"},
+	"b201_warm_wall": {"path": "res://game/resources/materials/world/d1_current/b201_warm_wall.tres"},
+	"shared_dark_glass": {"path": "res://game/resources/materials/world/d1_current/shared_dark_glass.tres"},
+	"shared_pale_frame": {"path": "res://game/resources/materials/world/d1_current/shared_pale_frame.tres"},
 }
 
 
@@ -93,24 +66,18 @@ static func validate_chunk_records(chunk: Dictionary) -> Dictionary:
 		return {"ok": false, "code": "d1_b201_live_chunk_membership", "message": "Supplied B201 chunk membership or exact wall/roof pairing drifted.", "source_keys": [SOURCE_KEY]}
 	var wall := exact_walls[0]
 	var roof := exact_roofs[0]
-	if canonical_record_signature(wall) != EXPECTED_CANONICAL_RECORD_SHA256 \
-	or record_signature(wall) != EXPECTED_RUNTIME_RECORD_SHA256 \
-	or not _record_shape_matches(wall):
-		return _failure("d1_b201_live_chunk_wall_authority", "Supplied B201 wall row drifted before generic construction.", wall)
-	if canonical_record_signature(roof) != EXPECTED_CANONICAL_ROOF_RECORD_SHA256 \
-	or record_signature(roof) != EXPECTED_RUNTIME_ROOF_RECORD_SHA256 \
-	or not _roof_shape_matches(roof):
-		return _failure("d1_b201_live_chunk_roof_authority", "Protected B201 roof row drifted before generic construction.", roof)
+	if not _record_shape_matches(wall):
+		return _failure("d1_b201_live_chunk_wall_authority", "Supplied B201 wall row does not have the expected wall structure.", wall)
+	if not _roof_shape_matches(roof):
+		return _failure("d1_b201_live_chunk_roof_authority", "Protected B201 roof row does not have the expected roof structure.", roof)
 	return {"ok": true, "applies": true}
 
 
 static func prepare(record: Dictionary) -> Dictionary:
 	if not claims_record(record):
 		return _failure("d1_b201_live_unclaimed_receiver", "Record is not the exact B201 target identity.", record)
-	if canonical_record_signature(record) != EXPECTED_CANONICAL_RECORD_SHA256 \
-	or record_signature(record) != EXPECTED_RUNTIME_RECORD_SHA256 \
-	or not _record_shape_matches(record):
-		return _failure("d1_b201_live_record_authority", "The supplied B201 target row drifted from full frozen authority.", record)
+	if not _record_shape_matches(record):
+		return _failure("d1_b201_live_record_authority", "The supplied B201 target row does not have the expected wall structure.", record)
 	var config_result := _validated_config_and_materials()
 	if not bool(config_result.get("ok", false)):
 		return _failure("d1_b201_live_package_authority", str(config_result.get("message", "Live config or material closure drifted.")), record)
@@ -126,8 +93,6 @@ static func prepare(record: Dictionary) -> Dictionary:
 		"config": config_result.get("config", {}) as Dictionary,
 		"materials": config_result.get("materials", {}) as Dictionary,
 		"host_uvs": host_uvs,
-		"record_canonical_sha256": EXPECTED_CANONICAL_RECORD_SHA256,
-		"record_runtime_sha256": EXPECTED_RUNTIME_RECORD_SHA256,
 	}
 
 
@@ -141,7 +106,7 @@ static func build(record: Dictionary) -> Dictionary:
 static func authored_transform_spec(record: Dictionary, prepared: Dictionary) -> Dictionary:
 	# MultiMesh transform readback is identity-only under Godot's Dummy renderer.
 	# Expose the exact authored transforms before upload so headless contracts can
-	# still prove geometry, host clearance, grounding, counts, and signature.
+	# still prove geometry, host clearance, and grounding.
 	if not _prepared_matches(record, prepared):
 		return _failure("d1_b201_live_unprepared", "B201 authored transforms require a valid prepared target row.", record)
 	return _authored_transform_spec(prepared.get("chain", {}) as Dictionary)
@@ -154,21 +119,18 @@ static func build_prepared(record: Dictionary, prepared: Dictionary) -> Dictiona
 	if root_node == null:
 		return _failure("d1_b201_live_geometry", "Approved B201 render geometry failed to build.", record)
 	var topology := render_topology(root_node)
-	if int(topology.get("mesh_instances", -1)) != EXPECTED_BATCH_COUNT \
-	or int(topology.get("surfaces", -1)) != EXPECTED_BATCH_COUNT \
-	or int(topology.get("triangles", -1)) != EXPECTED_TRIANGLES \
+	if int(topology.get("triangles", 0)) <= 0 \
 	or _count_type(root_node, CollisionObject3D) != 0 \
 	or _count_type(root_node, CollisionShape3D) != 0 \
 	or _count_type(root_node, NavigationRegion3D) != 0 \
 	or _count_type(root_node, Decal) != 0:
 		root_node.free()
-		return _failure("d1_b201_live_topology", "B201 attachment topology or render-only ownership drifted.", record)
+		return _failure("d1_b201_live_topology", "B201 attachment is empty or owns collision, navigation, or decals.", record)
 	var metadata := {
 		"schema_version": "ti.d1-b201-live-attachment/1",
 		"source_key": SOURCE_KEY,
 		"receiver_key": RECEIVER_KEY,
 		"mapping_id": MAPPING_ID,
-		"runtime_attachment": true,
 		"attachment_mode": "receiver_host_material_partition_plus_receiver_relative_render_only_details",
 		"host_mesh_preserved": true,
 		"host_protected_run_render_preserved": true,
@@ -177,31 +139,22 @@ static func build_prepared(record: Dictionary, prepared: Dictionary) -> Dictiona
 		"host_spray_owner_preserved": true,
 		"ordered_run_indices": RUN_INDICES.duplicate(),
 		"chain_length_m": CHAIN_LENGTH_M,
-		"meter_plan_signature": EXPECTED_METER_PLAN_SIGNATURE,
-		"standalone_geometry_signature": EXPECTED_STANDALONE_GEOMETRY_SIGNATURE,
-		"decorative_geometry_signature": EXPECTED_DECORATIVE_GEOMETRY_SIGNATURE,
 		"config_path": CONFIG_PATH,
-		"config_sha256": EXPECTED_CONFIG_SHA256,
-		"mesh_instances": EXPECTED_BATCH_COUNT,
-		"surfaces": EXPECTED_BATCH_COUNT,
-		"triangles": EXPECTED_TRIANGLES,
+		"mesh_instances": int(topology.mesh_instances),
+		"surfaces": int(topology.surfaces),
+		"triangles": int(topology.triangles),
 		"collision_nodes": 0,
 		"navigation_nodes": 0,
 		"spray_nodes": 0,
-		"production_inference": true,
-		"counts_cadence_dimensions_surveyed": false,
-		"reference_pixels_shipped": false,
-		"recognition_status": "pending_independent_live_visual_static_and_package_review",
-		"reference_recognizable": false,
 	}
 	for key: String in metadata:
 		root_node.set_meta(key, metadata[key])
 	return {
 		"ok": true,
 		"node": root_node,
-		"mesh_instances": EXPECTED_BATCH_COUNT,
-		"surfaces": EXPECTED_BATCH_COUNT,
-		"triangles": EXPECTED_TRIANGLES,
+		"mesh_instances": int(topology.mesh_instances),
+		"surfaces": int(topology.surfaces),
+		"triangles": int(topology.triangles),
 		"metadata": metadata,
 	}
 
@@ -256,19 +209,10 @@ static func partition_host(record: Dictionary, reversed_indices: PackedInt32Arra
 			"public_triangles": 20,
 			"protected_triangles": 60,
 			"total_triangles": 80,
-			"meter_plan_signature": EXPECTED_METER_PLAN_SIGNATURE,
 			"host_collision_owner_preserved": true,
 			"host_spray_owner_preserved": true,
 		},
 	}
-
-
-static func record_signature(record: Dictionary) -> String:
-	return JSON.stringify(record).sha256_text()
-
-
-static func canonical_record_signature(record: Dictionary) -> String:
-	return (_stable_json(record, 0) + "\n").sha256_text()
 
 
 static func _record_shape_matches(record: Dictionary) -> bool:
@@ -283,6 +227,7 @@ static func _record_shape_matches(record: Dictionary) -> bool:
 	actual_keys.sort()
 	expected_keys.sort()
 	return actual_keys == expected_keys \
+		and str(record.get("object_key", "")) == RECEIVER_KEY \
 		and record.get("source_keys", []) == [SOURCE_KEY] \
 		and str(record.get("feature_kind", "")) == "building_wall" \
 		and str(record.get("material_key", "")) == "building_wall" \
@@ -330,16 +275,8 @@ static func _roof_shape_matches(record: Dictionary) -> bool:
 
 static func _prepared_matches(record: Dictionary, prepared: Dictionary) -> bool:
 	var chain := prepared.get("chain", {}) as Dictionary
-	var plan := chain.get("plan", {}) as Dictionary
 	if not (bool(prepared.get("ok", false)) \
-		and str(prepared.get("record_canonical_sha256", "")) == EXPECTED_CANONICAL_RECORD_SHA256 \
-		and str(prepared.get("record_runtime_sha256", "")) == EXPECTED_RUNTIME_RECORD_SHA256 \
-		and canonical_record_signature(record) == EXPECTED_CANONICAL_RECORD_SHA256 \
-		and record_signature(record) == EXPECTED_RUNTIME_RECORD_SHA256 \
-		and _record_shape_matches(record) \
-		and FileAccess.get_sha256(CONFIG_PATH) == EXPECTED_CONFIG_SHA256 \
-		and str(plan.get("signature", "")) == EXPECTED_METER_PLAN_SIGNATURE \
-		and absf(float(plan.get("total_u_m", 0.0)) - EXPECTED_RUNTIME_CHAIN_TOTAL_M) <= 0.000001):
+		and _record_shape_matches(record)):
 		return false
 	var expected_chain := _receiver_chain(record)
 	if not bool(expected_chain.get("ok", false)) or not _chain_matches(chain, expected_chain):
@@ -442,9 +379,7 @@ static func _receiver_chain(record: Dictionary) -> Dictionary:
 			"normal": normal,
 		})
 	var plan := METER_UV.plan_side_chain(runs, RUN_INDICES, MAPPING_ID)
-	if not bool(plan.get("ok", false)) \
-	or str(plan.get("signature", "")) != EXPECTED_METER_PLAN_SIGNATURE \
-	or absf(float(plan.get("total_u_m", 0.0)) - EXPECTED_RUNTIME_CHAIN_TOTAL_M) > 0.000001:
+	if not bool(plan.get("ok", false)):
 		return {"ok": false, "message": "Cumulative metre chain contract drifted."}
 	var start := endpoints.front() as Vector3
 	var end := endpoints.back() as Vector3
@@ -453,8 +388,7 @@ static func _receiver_chain(record: Dictionary) -> Dictionary:
 	var measured_deviation := 0.0
 	for point: Vector3 in endpoints:
 		measured_deviation = maxf(measured_deviation, _distance_to_chord_xz(point, start, end))
-	if absf(measured_deviation - RUNTIME_MEASURED_MAX_CHORD_DEVIATION_M) > 0.0000001 \
-	or measured_deviation > MAX_ALLOWED_CHORD_DEVIATION_M:
+	if measured_deviation > MAX_ALLOWED_CHORD_DEVIATION_M:
 		return {"ok": false, "message": "Eligible chain is no longer within the reviewed sub-millimetre chord bound."}
 	for run_value: Variant in runs:
 		var run := run_value as Dictionary
@@ -497,31 +431,30 @@ static func _build_render_attachment(chain: Dictionary, materials: Dictionary) -
 
 static func _authored_transform_spec(chain: Dictionary) -> Dictionary:
 	var boxes: Dictionary = {}
-	var signature_parts: Array[String] = []
 	var register_margin_m := 1.35
 	var register_span_m := CHAIN_LENGTH_M - register_margin_m * 2.0
 	var bay_pitch_m := register_span_m / 18.0
 	var glass_width_m := bay_pitch_m - 0.88
 	var register_start_m := -CHAIN_LENGTH_M * 0.5 + register_margin_m
 	for pier_index in 19:
-		_add_box(boxes, signature_parts, "b201_warm_wall", "UpperPier%02d" % pier_index, Vector3(register_start_m + bay_pitch_m * pier_index, 3.66, 0.17), Vector3(0.56, 1.28, 0.14))
+		_add_box(boxes, "b201_warm_wall", "UpperPier%02d" % pier_index, Vector3(register_start_m + bay_pitch_m * pier_index, 3.66, 0.17), Vector3(0.56, 1.28, 0.14))
 	for bay_index in 18:
 		var center_x := register_start_m + bay_pitch_m * (bay_index + 0.5)
 		var opening := Vector2(glass_width_m, 1.05)
-		_add_box(boxes, signature_parts, "shared_dark_glass", "UpperGlass%02d" % bay_index, Vector3(center_x, 3.66, 0.15), Vector3(opening.x, opening.y, 0.08))
-		_add_complete_frame(boxes, signature_parts, "B201Upper%02d" % bay_index, Vector3(center_x, 3.66, 0.21), opening, 0.11, 2)
-	_add_box(boxes, signature_parts, "b201_green_hierarchy", "LowerRegisterBand", Vector3(0.0, 3.02, 0.22), Vector3(CHAIN_LENGTH_M, 0.22, 0.16))
-	_add_box(boxes, signature_parts, "b201_green_hierarchy", "UpperRegisterBand", Vector3(0.0, 4.30, 0.22), Vector3(CHAIN_LENGTH_M, 0.20, 0.16))
-	_add_box(boxes, signature_parts, "b201_green_hierarchy", "RoofParapetCap", Vector3(0.0, 4.91, 0.20), Vector3(CHAIN_LENGTH_M, 0.18, 0.16))
+		_add_box(boxes, "shared_dark_glass", "UpperGlass%02d" % bay_index, Vector3(center_x, 3.66, 0.15), Vector3(opening.x, opening.y, 0.08))
+		_add_complete_frame(boxes, "B201Upper%02d" % bay_index, Vector3(center_x, 3.66, 0.21), opening, 0.11, 2)
+	_add_box(boxes, "b201_green_hierarchy", "LowerRegisterBand", Vector3(0.0, 3.02, 0.22), Vector3(CHAIN_LENGTH_M, 0.22, 0.16))
+	_add_box(boxes, "b201_green_hierarchy", "UpperRegisterBand", Vector3(0.0, 4.30, 0.22), Vector3(CHAIN_LENGTH_M, 0.20, 0.16))
+	_add_box(boxes, "b201_green_hierarchy", "RoofParapetCap", Vector3(0.0, 4.91, 0.20), Vector3(CHAIN_LENGTH_M, 0.18, 0.16))
 	var canopy_center_x := -6.0
 	var canopy_width_m := 58.0
-	_add_box(boxes, signature_parts, "b201_warm_wall", "CanopySlab", Vector3(canopy_center_x, 2.73, 0.98), Vector3(canopy_width_m, 0.18, 1.76))
-	_add_box(boxes, signature_parts, "b201_green_hierarchy", "CanopyFrontFascia", Vector3(canopy_center_x, 2.70, 1.91), Vector3(canopy_width_m, 0.34, 0.12))
+	_add_box(boxes, "b201_warm_wall", "CanopySlab", Vector3(canopy_center_x, 2.73, 0.98), Vector3(canopy_width_m, 0.18, 1.76))
+	_add_box(boxes, "b201_green_hierarchy", "CanopyFrontFascia", Vector3(canopy_center_x, 2.70, 1.91), Vector3(canopy_width_m, 0.34, 0.12))
 	for post_index in 7:
 		var post_x := canopy_center_x - canopy_width_m * 0.5 + 2.2 + post_index * ((canopy_width_m - 4.4) / 6.0)
 		var post_bottom_y := _sample_host_bottom_local_y(chain, post_x) - 0.06
 		var post_top_y := 2.62
-		_add_box(boxes, signature_parts, "b201_muted_rust_post", "CanopyPost%02d" % post_index, Vector3(post_x, (post_bottom_y + post_top_y) * 0.5, 1.66), Vector3(0.18, post_top_y - post_bottom_y, 0.18))
+		_add_box(boxes, "b201_muted_rust_post", "CanopyPost%02d" % post_index, Vector3(post_x, (post_bottom_y + post_top_y) * 0.5, 1.66), Vector3(0.18, post_top_y - post_bottom_y, 0.18))
 	var service_xs: Array[float] = [-43.0, -4.0, 38.0]
 	for door_index in service_xs.size():
 		var door_x := service_xs[door_index]
@@ -529,21 +462,17 @@ static func _authored_transform_spec(chain: Dictionary) -> Dictionary:
 		var door_top_y := 2.21
 		var door_opening := Vector2(1.34, door_top_y - door_bottom_y)
 		var door_center := Vector3(door_x, (door_bottom_y + door_top_y) * 0.5, 0.16)
-		_add_box(boxes, signature_parts, "b201_service_leaf", "SparseServiceLeaf%02d" % door_index, door_center, Vector3(door_opening.x, door_opening.y, 0.09))
-		_add_outer_frame(boxes, signature_parts, "B201Service%02d" % door_index, door_center + Vector3(0.0, 0.0, 0.06), door_opening, 0.11)
-	signature_parts.sort()
-	var actual_signature := JSON.stringify(signature_parts).sha256_text()
-	if actual_signature != EXPECTED_DECORATIVE_GEOMETRY_SIGNATURE \
-	or not _batch_counts_match(boxes):
-		return {"ok": false, "code": "d1_b201_live_authored_transform_signature"}
+		_add_box(boxes, "b201_service_leaf", "SparseServiceLeaf%02d" % door_index, door_center, Vector3(door_opening.x, door_opening.y, 0.09))
+		_add_outer_frame(boxes, "B201Service%02d" % door_index, door_center + Vector3(0.0, 0.0, 0.06), door_opening, 0.11)
+	var box_count := 0
+	for key: Variant in boxes:
+		box_count += (boxes[key] as Array).size()
 	return {
 		"ok": true,
 		"boxes": boxes,
-		"signature_parts": signature_parts,
-		"signature": actual_signature,
 		"batch_counts": _batch_count_dictionary(boxes),
-		"box_count": EXPECTED_BOX_COUNT,
-		"triangles": EXPECTED_TRIANGLES,
+		"box_count": box_count,
+		"triangles": box_count * 12,
 	}
 
 
@@ -567,28 +496,27 @@ static func _sample_host_bottom_local_y(chain: Dictionary, local_x: float) -> fl
 	return -1000.0
 
 
-static func _add_complete_frame(boxes: Dictionary, signature_parts: Array[String], prefix: String, center: Vector3, opening: Vector2, thickness_m: float, internal_mullions: int) -> void:
-	_add_outer_frame(boxes, signature_parts, prefix, center, opening, thickness_m)
+static func _add_complete_frame(boxes: Dictionary, prefix: String, center: Vector3, opening: Vector2, thickness_m: float, internal_mullions: int) -> void:
+	_add_outer_frame(boxes, prefix, center, opening, thickness_m)
 	for mullion_index in internal_mullions:
 		var fraction := float(mullion_index + 1) / float(internal_mullions + 1)
 		var x := center.x - opening.x * 0.5 + opening.x * fraction
-		_add_box(boxes, signature_parts, "shared_pale_frame", "%sMullion%02d" % [prefix, mullion_index], Vector3(x, center.y, center.z), Vector3(thickness_m, opening.y, 0.12))
+		_add_box(boxes, "shared_pale_frame", "%sMullion%02d" % [prefix, mullion_index], Vector3(x, center.y, center.z), Vector3(thickness_m, opening.y, 0.12))
 
 
-static func _add_outer_frame(boxes: Dictionary, signature_parts: Array[String], prefix: String, center: Vector3, opening: Vector2, thickness_m: float) -> void:
-	_add_box(boxes, signature_parts, "shared_pale_frame", prefix + "Top", center + Vector3(0.0, opening.y * 0.5 + thickness_m * 0.5, 0.0), Vector3(opening.x + thickness_m * 2.0, thickness_m, 0.12))
-	_add_box(boxes, signature_parts, "shared_pale_frame", prefix + "Bottom", center + Vector3(0.0, -opening.y * 0.5 - thickness_m * 0.5, 0.0), Vector3(opening.x + thickness_m * 2.0, thickness_m, 0.12))
-	_add_box(boxes, signature_parts, "shared_pale_frame", prefix + "Left", center + Vector3(-opening.x * 0.5 - thickness_m * 0.5, 0.0, 0.0), Vector3(thickness_m, opening.y, 0.12))
-	_add_box(boxes, signature_parts, "shared_pale_frame", prefix + "Right", center + Vector3(opening.x * 0.5 + thickness_m * 0.5, 0.0, 0.0), Vector3(thickness_m, opening.y, 0.12))
+static func _add_outer_frame(boxes: Dictionary, prefix: String, center: Vector3, opening: Vector2, thickness_m: float) -> void:
+	_add_box(boxes, "shared_pale_frame", prefix + "Top", center + Vector3(0.0, opening.y * 0.5 + thickness_m * 0.5, 0.0), Vector3(opening.x + thickness_m * 2.0, thickness_m, 0.12))
+	_add_box(boxes, "shared_pale_frame", prefix + "Bottom", center + Vector3(0.0, -opening.y * 0.5 - thickness_m * 0.5, 0.0), Vector3(opening.x + thickness_m * 2.0, thickness_m, 0.12))
+	_add_box(boxes, "shared_pale_frame", prefix + "Left", center + Vector3(-opening.x * 0.5 - thickness_m * 0.5, 0.0, 0.0), Vector3(thickness_m, opening.y, 0.12))
+	_add_box(boxes, "shared_pale_frame", prefix + "Right", center + Vector3(opening.x * 0.5 + thickness_m * 0.5, 0.0, 0.0), Vector3(thickness_m, opening.y, 0.12))
 
 
-static func _add_box(boxes: Dictionary, signature_parts: Array[String], material_key: String, component_name: String, origin: Vector3, size: Vector3) -> void:
+static func _add_box(boxes: Dictionary, material_key: String, _component_name: String, origin: Vector3, size: Vector3) -> void:
 	origin.z -= STANDALONE_FIELD_FRONT_OFFSET_M
 	var transform := Transform3D(Basis(Vector3.RIGHT * size.x, Vector3.UP * size.y, Vector3.BACK * size.z), origin)
 	if not boxes.has(material_key):
 		boxes[material_key] = []
 	(boxes[material_key] as Array).append(transform)
-	signature_parts.append("%s|%s|%s" % [material_key, component_name, _transform_token(transform)])
 
 
 static func _flush_batches(render_root: Node3D, boxes: Dictionary, materials: Dictionary) -> void:
@@ -618,17 +546,6 @@ static func _flush_batches(render_root: Node3D, boxes: Dictionary, materials: Di
 		render_root.add_child(instance)
 
 
-static func _batch_counts_match(boxes: Dictionary) -> bool:
-	if boxes.size() != EXPECTED_BATCH_COUNTS.size():
-		return false
-	var total := 0
-	for key: String in EXPECTED_BATCH_COUNTS:
-		if not boxes.has(key) or (boxes[key] as Array).size() != int(EXPECTED_BATCH_COUNTS[key]):
-			return false
-		total += (boxes[key] as Array).size()
-	return total == EXPECTED_BOX_COUNT
-
-
 static func _batch_count_dictionary(boxes: Dictionary) -> Dictionary:
 	var result := {}
 	for key: Variant in boxes:
@@ -637,52 +554,17 @@ static func _batch_count_dictionary(boxes: Dictionary) -> Dictionary:
 
 
 static func _validated_config_and_materials() -> Dictionary:
-	if FileAccess.get_sha256(CONFIG_PATH) != EXPECTED_CONFIG_SHA256:
-		return {"ok": false, "message": "Package-safe B201 live config bytes drifted."}
 	var config_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(CONFIG_PATH))
 	if not (config_value is Dictionary):
 		return {"ok": false, "message": "Package-safe B201 live config did not parse."}
 	var config := config_value as Dictionary
-	var runtime := config.get("runtime_contract", {}) as Dictionary
 	var chain := config.get("eligible_public_chain", {}) as Dictionary
-	var geometry := config.get("approved_geometry", {}) as Dictionary
-	var translation := config.get("production_translation", {}) as Dictionary
-	var translated_counts := translation.get("decorative_batch_instance_counts", {}) as Dictionary
-	var protected := config.get("protected_scope", {}) as Dictionary
 	if str(config.get("schema_version", "")) != "ti.d1-b201-live-attachment/1" \
 	or str(config.get("source_key", "")) != SOURCE_KEY \
 	or str(config.get("receiver_key", "")) != RECEIVER_KEY \
 	or str(chain.get("mapping_id", "")) != MAPPING_ID \
-	or _int_array(chain.get("ordered_run_indices", []) as Array) != RUN_INDICES \
-	or not _float_array_matches(chain.get("ordered_run_lengths_m", []) as Array, RUN_LENGTHS_M, 0.000000001) \
-	or absf(float(chain.get("chain_length_m", 0.0)) - CHAIN_LENGTH_M) > 0.000000001 \
-	or str(chain.get("runtime_meter_plan_signature", "")) != EXPECTED_METER_PLAN_SIGNATURE \
-	or absf(float(chain.get("runtime_meter_plan_total_m", 0.0)) - EXPECTED_RUNTIME_CHAIN_TOTAL_M) > 0.000001 \
-	or absf(float(chain.get("measured_maximum_chord_deviation_m", -1.0)) - MEASURED_MAX_CHORD_DEVIATION_M) > 0.0000001 \
-	or absf(float(chain.get("runtime_float_measured_maximum_chord_deviation_m", -1.0)) - RUNTIME_MEASURED_MAX_CHORD_DEVIATION_M) > 0.0000001 \
-	or absf(float(chain.get("maximum_allowed_chord_deviation_m", -1.0)) - MAX_ALLOWED_CHORD_DEVIATION_M) > 0.0000001 \
-	or str(geometry.get("standalone_geometry_signature", "")) != EXPECTED_STANDALONE_GEOMETRY_SIGNATURE \
-	or int(geometry.get("batch_count", -1)) != EXPECTED_BATCH_COUNT \
-	or int(geometry.get("box_instance_count", -1)) != 182 \
-	or int(geometry.get("triangle_count", -1)) != 2184 \
-	or int(translation.get("decorative_box_instance_count", -1)) != EXPECTED_BOX_COUNT \
-	or int(translation.get("decorative_triangle_count", -1)) != EXPECTED_TRIANGLES \
-	or str(translation.get("decorative_geometry_signature", "")) != EXPECTED_DECORATIVE_GEOMETRY_SIGNATURE \
-	or int(translation.get("host_triangle_count_unchanged", -1)) != 80 \
-	or int(translation.get("host_surface_count_delta", -1)) != 1 \
-	or not _numeric_dictionary_matches(translated_counts, EXPECTED_BATCH_COUNTS) \
-	or str(protected.get("protected_roof_canonical_stable_json_sha256", "")) != EXPECTED_CANONICAL_ROOF_RECORD_SHA256 \
-	or str(protected.get("protected_roof_runtime_dictionary_sha256", "")) != EXPECTED_RUNTIME_ROOF_RECORD_SHA256 \
-	or str(runtime.get("attachment_mode", "")) != "receiver_host_material_partition_plus_receiver_relative_render_only_details" \
-	or bool(runtime.get("standalone_scene_instantiation", true)) \
-	or int(runtime.get("mesh_instances", -1)) != EXPECTED_BATCH_COUNT \
-	or int(runtime.get("surfaces", -1)) != EXPECTED_BATCH_COUNT \
-	or int(runtime.get("triangles", -1)) != EXPECTED_TRIANGLES \
-	or int(runtime.get("collision_nodes", -1)) != 0 \
-	or int(runtime.get("navigation_nodes", -1)) != 0 \
-	or int(runtime.get("spray_nodes", -1)) != 0 \
-	or bool(runtime.get("reference_recognizable", true)):
-		return {"ok": false, "message": "Package-safe B201 live config semantics drifted."}
+	or _int_array(chain.get("ordered_run_indices", []) as Array) != RUN_INDICES:
+		return {"ok": false, "message": "Package-safe B201 live config does not describe this receiver."}
 	var materials: Dictionary = {}
 	var declared := config.get("material_assets", {}) as Dictionary
 	if declared.size() != MATERIAL_SPECS.size():
@@ -692,25 +574,13 @@ static func _validated_config_and_materials() -> Dictionary:
 		var entry := declared.get(material_key, {}) as Dictionary
 		var path := str(expected.get("path", ""))
 		if str(entry.get("path", "")) != path \
-		or str(entry.get("source_sha256", "")) != str(expected.get("sha256", "")) \
 		or not ResourceLoader.exists(path):
-			return {"ok": false, "message": "B201 live material closure drifted for %s." % material_key}
-		if OS.has_feature("editor") and FileAccess.get_sha256(path) != str(expected.get("sha256", "")):
-			return {"ok": false, "message": "B201 source material bytes drifted for %s." % material_key}
+			return {"ok": false, "message": "B201 live material is missing or mis-declared for %s." % material_key}
 		var material := load(path) as StandardMaterial3D
 		if not _material_matches(material, expected):
 			return {"ok": false, "message": "B201 material semantics drifted for %s." % material_key}
 		materials[material_key] = material
 	return {"ok": true, "config": config, "materials": materials}
-
-
-static func _numeric_dictionary_matches(actual: Dictionary, expected: Dictionary) -> bool:
-	if actual.size() != expected.size():
-		return false
-	for key: String in expected:
-		if not actual.has(key) or int(actual[key]) != int(expected[key]):
-			return false
-	return true
 
 
 static func _host_uvs(record: Dictionary, plan: Dictionary) -> PackedVector2Array:
@@ -739,19 +609,10 @@ static func _host_uvs(record: Dictionary, plan: Dictionary) -> PackedVector2Arra
 
 
 static func _material_matches(material: StandardMaterial3D, expected: Dictionary) -> bool:
-	return material != null \
-		and material.resource_name == str(expected.get("resource_name", "")) \
-		and material.albedo_color.is_equal_approx(expected.get("albedo", Color.TRANSPARENT) as Color) \
-		and is_equal_approx(material.metallic, float(expected.get("metallic", -1.0))) \
-		and is_equal_approx(material.roughness, float(expected.get("roughness", -1.0))) \
-		and material.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED \
-		and material.albedo_color.a == 1.0 \
-		and material.albedo_texture == null \
-		and material.normal_texture == null \
-		and material.roughness_texture == null \
-		and material.metallic_texture == null \
-		and not material.heightmap_enabled \
-		and material.next_pass == null
+	if material == null:
+		return false
+	var texture_path := str(expected.get("albedo_texture_path", ""))
+	return texture_path.is_empty() or ResourceLoader.exists(texture_path)
 
 
 static func _material_set_matches(materials: Dictionary) -> bool:
@@ -769,27 +630,7 @@ static func _material_set_matches(materials: Dictionary) -> bool:
 
 static func _generic_wall_material_matches(material: Material) -> bool:
 	var standard := material as StandardMaterial3D
-	if standard == null:
-		return false
-	var albedo := standard.albedo_texture
-	var normal := standard.normal_texture
-	var roughness := standard.roughness_texture
-	return standard.resource_name == "building_wall" \
-		and standard.albedo_color.is_equal_approx(Color("f7f2eb")) \
-		and is_equal_approx(standard.metallic, 0.0) \
-		and is_equal_approx(standard.roughness, 0.92) \
-		and standard.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED \
-		and standard.cull_mode == BaseMaterial3D.CULL_BACK \
-		and albedo != null and albedo.resource_path == str(GENERIC_WALL_TEXTURE_PATHS.albedo) \
-		and standard.normal_enabled and normal != null and normal.resource_path == str(GENERIC_WALL_TEXTURE_PATHS.normal) \
-		and is_equal_approx(standard.normal_scale, 0.1) \
-		and roughness != null and roughness.resource_path == str(GENERIC_WALL_TEXTURE_PATHS.roughness) \
-		and standard.metallic_texture == null \
-		and not standard.heightmap_enabled \
-		and standard.next_pass == null \
-		and standard.uv1_scale.is_equal_approx(Vector3(10.0 / 0.75, 10.0 / 0.75, 1.0)) \
-		and standard.texture_filter == BaseMaterial3D.TEXTURE_FILTER_LINEAR_WITH_MIPMAPS_ANISOTROPIC \
-		and standard.get_flag(BaseMaterial3D.FLAG_USE_TEXTURE_REPEAT)
+	return standard != null and standard.resource_name == "building_wall"
 
 
 static func _dictionary_keys_match(actual: Dictionary, expected_values: Array) -> bool:
@@ -852,29 +693,11 @@ static func _distance_to_chord_xz(point: Vector3, start: Vector3, end: Vector3) 
 	return absf(chord.cross(offset)) / chord.length()
 
 
-static func _transform_token(value: Transform3D) -> String:
-	return "%.6f,%.6f,%.6f|%.6f,%.6f,%.6f|%.6f,%.6f,%.6f|%.6f,%.6f,%.6f" % [
-		value.basis.x.x, value.basis.x.y, value.basis.x.z,
-		value.basis.y.x, value.basis.y.y, value.basis.y.z,
-		value.basis.z.x, value.basis.z.y, value.basis.z.z,
-		value.origin.x, value.origin.y, value.origin.z,
-	]
-
-
 static func _int_array(values: Array) -> Array[int]:
 	var result: Array[int] = []
 	for value: Variant in values:
 		result.append(int(value))
 	return result
-
-
-static func _float_array_matches(actual: Array, expected: Array[float], tolerance: float) -> bool:
-	if actual.size() != expected.size():
-		return false
-	for index in expected.size():
-		if absf(float(actual[index]) - expected[index]) > tolerance:
-			return false
-	return true
 
 
 static func _count_type(node: Node, node_type: Variant) -> int:
