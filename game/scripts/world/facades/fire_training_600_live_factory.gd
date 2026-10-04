@@ -31,8 +31,7 @@ static func _result(root: Node3D) -> Dictionary:
 		var mesh := (node as MeshInstance3D).mesh
 		meshes += 1
 		surfaces += mesh.get_surface_count()
-		for i in mesh.get_surface_count():
-			triangles += mesh.surface_get_array_index_len(i) / 3
+		triangles += mesh.get_faces().size() / 3
 	var bodies := root.find_children("*", "CollisionObject3D", true, false)
 	var shapes := root.find_children("*", "CollisionShape3D", true, false)
 	return {"ok": true, "node": root, "mesh_instances": meshes, "surfaces": surfaces, "triangles": triangles, "static_bodies": bodies.size(), "shapes": shapes.size()}
