@@ -1,6 +1,6 @@
 extends RefCounted
-## Atomic replacement of the supplied source pair, with the original footprint
-## retained and one wall spray receiver plus one opaque non-wall roof receiver.
+## Replaces Building 600's generated wall and roof with the model, seated on the
+## ground records of its chunk.
 const FACTORY := preload("res://game/scripts/world/facades/fire_training_600_live_factory.gd")
 const SOURCE := "w34313548"
 const WALL := "building:w34313548:wall"
@@ -14,7 +14,10 @@ static func claims_record(record: Dictionary) -> bool:
 
 static func prepare_chunk_records(chunk: Dictionary) -> Dictionary:
 	var records := {}
+	var land: Array = []
 	for record: Dictionary in chunk.records:
+		if str(record.get("feature_kind", "")) == "land_ground":
+			land.append(record)
 		var key := str(record.get("object_key", ""))
 		if claims_record(record) or SOURCE in record.get("source_keys", []):
 			if not claims_record(record) or records.has(key) or record.get("source_keys", []) != [SOURCE]:
@@ -26,13 +29,13 @@ static func prepare_chunk_records(chunk: Dictionary) -> Dictionary:
 		return _failure("Building 600 requires its wall and roof together in the source chunk.")
 	if str(records[WALL].get("receiver_kind", "")) != "building_wall" or str(records[ROOF].get("receiver_kind", "")) != "none":
 		return _failure("Building 600 source receiver semantics changed.")
-	return {"ok": true, "contains_target": true, "wall": records[WALL], "roof": records[ROOF]}
+	return {"ok": true, "contains_target": true, "wall": records[WALL], "roof": records[ROOF], "land": land}
 
 
 static func build_chunk_plan(pair: Dictionary) -> Dictionary:
 	if not pair.get("contains_target", false):
 		return {"ok": true, "contains_target": false, "records": {}}
-	var built := FACTORY.build(pair.wall, pair.roof)
+	var built := FACTORY.build(pair.roof, pair.land)
 	if not built.get("ok", false):
 		return _failure(str(built.get("message", "Building 600 construction failed.")))
 	return {"ok": true, "contains_target": true, "records": {WALL: built.wall, ROOF: built.roof}}
