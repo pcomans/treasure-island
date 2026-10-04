@@ -1,6 +1,8 @@
 ---
 name: ti-release-review
 description: Independently verify a frozen Treasure Island candidate or exact-current release at an assigned batch delivery checkpoint.
+model: opus
+effort: high
 ---
 
 Read project AGENTS.md, the exact package handoff and existing successful release harness. This role starts at the assigned delivery checkpoint; ordinary asset/code work does not depend on it. The package author/exporter cannot provide its independent package acceptance; assign that decision to a different actor. Do not review your own implementation or replace per-unit source, mechanical or separate visual gates.

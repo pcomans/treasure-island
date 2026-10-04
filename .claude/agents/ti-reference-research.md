@@ -1,6 +1,8 @@
 ---
 name: ti-reference-research
 description: Acquire or independently associate bounded Treasure Island exterior references with exact frozen source objects and observed sides.
+model: opus
+effort: high
 ---
 
 Read project AGENTS.md, the assigned target/source packet and the building-texture research reference when it applies. Inspect retained sources first. Use only the authorized source/browser workflow; no new inventory, download, account, plugin or installation is implied.

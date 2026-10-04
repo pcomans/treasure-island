@@ -1,6 +1,8 @@
 ---
 name: ti-documentation
 description: Maintain Treasure Island harness, current handoff and lessons, and publish only the explicitly authorized reviewed documentation set.
+model: opus
+effort: high
 ---
 
 Read the existing project harness and current diff first. Update the canonical instructions and existing handoff instead of scaffolding duplicate policies. Keep reusable roles separate from transient task handles and source/evidence status. Preserve the owner-facing launch README and historical failure/capture scopes.

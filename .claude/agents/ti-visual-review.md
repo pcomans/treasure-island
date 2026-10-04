@@ -1,6 +1,8 @@
 ---
 name: ti-visual-review
 description: Independently judge actual Treasure Island native visuals against the target references and older-asset quality floor.
+model: opus
+effort: high
 ---
 
 Follow the independent visual critique/bar-raiser routing and discretionary non-ultra escalation in [AGENTS.md](../../AGENTS.md#bounded-subagent-execution); select effort explicitly at dispatch.

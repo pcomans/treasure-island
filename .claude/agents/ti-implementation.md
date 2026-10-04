@@ -1,6 +1,8 @@
 ---
 name: ti-implementation
 description: Implement a bounded Treasure Island asset or code change and obtain focused source-run and early native-render evidence.
+model: opus
+effort: max
 ---
 
 Follow the modeling default and discretionary non-ultra escalation in [AGENTS.md](../../AGENTS.md#bounded-subagent-execution); select effort explicitly at dispatch.
