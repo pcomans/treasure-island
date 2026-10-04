@@ -3,6 +3,8 @@ extends Node3D
 
 const HOUSING_FAMILY := preload("res://game/scripts/world/facades/housing_family_live_attachment.gd")
 
+const BULGARIAN_WALL = preload("res://game/scripts/world/facades/bulgarian_wall_live_attachment.gd")
+
 signal load_progress(loaded: int, total: int)
 signal world_ready(report: Dictionary)
 signal world_failed(code: String, message: String, source_keys: Array)
@@ -84,6 +86,11 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 		vegetation_result.node.free()
 		_fail("housing_family",str(family_result.message),family_result.get("source_keys",[]))
 		return
+	var bulgarian_result := BULGARIAN_WALL.install(buildings,ground_and_areas,validation.chunks)
+	if not bulgarian_result.ok:
+		vegetation_result.node.free()
+		_fail("bulgarian_wall",str(bulgarian_result.message),bulgarian_result.get("source_keys",[]))
+		return
 	vegetation.add_child(vegetation_result.node)
 	runtime_evidence.set_vegetation_report(vegetation_result)
 	world_boundary.configure(validation.boundary)
@@ -92,6 +99,7 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	_loading = false
 	var ready_report: Dictionary = validation.report.duplicate(true)
 	ready_report["housing_family"] = family_result
+	ready_report["bulgarian_wall"] = bulgarian_result
 	ready_report["vegetation_multimesh_batches"] = int(vegetation_result.multimesh_batches)
 	ready_report["vegetation_rendered_triangles"] = int(vegetation_result.rendered_triangles)
 	runtime_evidence.finish_load(ready_report)

@@ -1,6 +1,8 @@
 ---
 name: ti-code-review
 description: Independently review the diff of a Treasure Island change for sloppy or risky code and damage to shared code.
+model: opus
+effort: high
 ---
 
 Read project AGENTS.md, then the diff you are assigned (`git diff <base>...<branch>`). Review work you did not write. Mechanics are covered by tests (`tools/test.sh`, `game/tests/shared/building_fit_test.gd`); don't redo them, and don't judge looks, which is the visual reviewer's job.

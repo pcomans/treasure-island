@@ -1,11 +1,13 @@
 ---
 name: ti-implementation
 description: Implement a bounded Treasure Island asset or code change and obtain focused source-run and early native-render evidence.
+model: opus
+effort: max
 ---
 
 Follow the modeling default and discretionary non-ultra escalation in [AGENTS.md](../../AGENTS.md#bounded-subagent-execution); select effort explicitly at dispatch.
 
-Read project AGENTS.md and the exact assigned target packet before work. You are an executing subagent, not the root orchestrator. Reuse the proven complete driver and command-local checkout setup; preserve the assigned source, player-control and protected-region boundaries.
+Read project AGENTS.md and the assignment (target building, references, allowed edits) before work. You are an executing subagent, not the root orchestrator. Reuse the proven complete driver and command-local checkout setup; preserve the assigned source, player-control and protected-region boundaries.
 
 Before any new building, read and apply the [canonical building authoring skill](../../.agents/skills/building-texture/SKILL.md#before-every-new-building-compare-and-reuse): compare reference structure with existing assets, reuse a suitable shared family with semantic instance variants, and give the choice in one line of the ordinary handoff. A whole-family owner may author multiple instances; each building retains independent verification.
 
@@ -17,4 +19,4 @@ Keep routine handoffs to short status, actual changed paths, source revision, re
 
 Do not make routine authoring wait for exports. Run `game/tests/shared/building_fit_test.gd` and `building_shots.gd` for the building before handing off. Stop at the assigned handoff; independent review and recognition require their separate assignments. Record a concise named retrospective, coordinating shared-log writes.
 
-Use the maintained [shared geometry check](../../CLAUDE.md#shared-building-study-geometry-verification) for supported producers rather than another copied collector. Configure actual indexed-versus-get_faces semantics, transforms and positive coverage; retain full failed operands in the existing receipt and independently check target ownership/roles. This helper does not replace stock support/rest, visual or release decisions.
+Use the maintained [shared geometry check](../../CLAUDE.md#shared-building-study-geometry-verification) for supported producers rather than another copied collector. Configure actual indexed-versus-get_faces semantics, transforms and positive coverage; report full failed operands and independently check target ownership/roles. This helper does not replace stock support/rest, visual or release decisions.

@@ -1,6 +1,8 @@
 ---
 name: ti-efficiency-review
 description: Independently assess one bounded recent sample of other Treasure Island actors at a meaningful checkpoint.
+model: opus
+effort: high
 ---
 
 Read AGENTS.md’s periodic review boundary and the relevant existing retrospective entries. Inspect actual artifact schemas and bounded task/log slices; do not scan or print a giant session transcript. Exclude your own work from independent evidence.

@@ -10,11 +10,15 @@ curl -fsSL https://claude.ai/install.sh | bash
 sudo apt-get update -qq
 # weston: headless Wayland compositor that lets Godot render on the GPU (see tools/godot).
 # xvfb is deliberately absent: Godot silently falls back to llvmpipe (CPU) under it.
-sudo apt-get install -y -qq tmux unzip git-lfs weston osmium-tool \
+sudo apt-get install -y -qq tmux unzip file git-lfs weston osmium-tool \
   libgl1 libvulkan1 mesa-vulkan-drivers vulkan-tools mesa-utils
 
 # Only evidence AVIs live in LFS; nothing at runtime needs them.
 git lfs install --skip-smudge
+
+# Agents commit as the project's bot account.
+git config user.name pcomans-bot
+git config user.email philipp.comans.agent@gmail.com
 
 # Each workspace logs in to Codex on its own (codex login --device-auth).
 curl -fsSL https://chatgpt.com/codex/install.sh | sh
