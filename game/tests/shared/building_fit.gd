@@ -289,6 +289,7 @@ func _walk_toward(target: Vector3, own: Array[RID] = []) -> String:
 	Input.action_press("move_forward")
 	_touched = []
 	var still_frames := 0
+	var closest := INF
 	for frame in WALK_FRAMES:
 		await _h.tree.physics_frame
 		if evidence.recovery_count != recoveries:
@@ -300,7 +301,11 @@ func _walk_toward(target: Vector3, own: Array[RID] = []) -> String:
 			if body != null and (_h.player.get_slide_collision(i).get_normal().dot(Vector3.UP) < 0.7) and body not in _touched:
 				_touched.append(body)
 		var at := _h.player.global_position
-		if Vector2(at.x, at.z).distance_to(Vector2(target.x, target.z)) < 0.5 or _touched_own(own):
+		var remaining := Vector2(at.x, at.z).distance_to(Vector2(target.x, target.z))
+		closest = minf(closest, remaining)
+		# Stop on arrival, on reaching the building, or once the player has
+		# passed the target and is walking away from it.
+		if remaining < 0.5 or _touched_own(own) or remaining > closest + 1.0:
 			break
 		still_frames = still_frames + 1 if Vector2(_h.player.velocity.x, _h.player.velocity.z).length() < 0.2 else 0
 		if frame > 60 and still_frames > 60:
