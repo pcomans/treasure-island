@@ -15,6 +15,22 @@ export const FAMILY_SHARED_PATHS = Object.freeze([
   "game/resources/housing_family/siding.gdshader",
   "game/resources/housing_family/roof.gdshader",
 ]);
+export const FAMILY_CURRENT_ADDITIONS = Object.freeze([
+  "game/scripts/world/facades/bulgarian_wall_live_attachment.gd",
+  "game/resources/models/bulgarian_wall/neighbor.gd",
+  "game/resources/models/bulgarian_wall/court.gd",
+  "game/resources/models/bulgarian_wall/mural.png.dat",
+  "game/resources/models/bulgarian_wall/concrete.gdshader",
+  "game/resources/models/bulgarian_wall/roof.gdshader",
+  "game/resources/models/bulgarian_wall/siding.gdshader",
+]);
+export function familyDependencyPaths(manifest, current = false) {
+  return [...new Set([...FAMILY_SHARED_PATHS, ...(current ? FAMILY_CURRENT_ADDITIONS : []), FAMILY_MANIFEST_PATH,
+    ...manifest.instances.flatMap(item => [item.config.slice(6), item.chunk.slice(6)]), "generated/world/manifest.json"])].sort();
+}
+export function familyCurrentDependencies(root, manifest) {
+  return Object.fromEntries(familyDependencyPaths(manifest, true).map(path => [path, sha256File(resolve(root, path))]));
+}
 export const FAMILY_ARTIFACT_FIELDS = Object.freeze({
   evidence_manifest_path: "evidence_manifest_sha256",
   motion_telemetry_manifest_path: "motion_telemetry_manifest_sha256",
@@ -111,11 +127,11 @@ export function validateFamilyCapture(root, entry, world) {
   keys(capture, ["project_root", "input_map", "dependencies", "retained_inputs"], "Family frozen capture");
   invariant(typeof capture.project_root === "string" && capture.project_root.startsWith("/") && !capture.project_root.endsWith("/"), "Family capture project root missing");
   const map = bound(root, capture.input_map);
-  const required = familyCapturePaths(root, entry, world);
+  const required = familyCapturePaths(capture.project_root, entry, world);
   invariant(same(Object.keys(capture.dependencies).sort(), required), "Family capture dependency set drifted");
   for (const path of required) {
     const digest = capture.dependencies[path];
-    invariant(hash(digest) && map[`${capture.project_root}/${path}`] === digest && sha256File(resolve(root,path)) === digest, `Family frozen capture dependency drifted: ${path}`);
+    invariant(hash(digest) && map[`${capture.project_root}/${path}`] === digest && sha256File(resolve(capture.project_root,path)) === digest, `Family frozen capture dependency drifted: ${path}`);
   }
   invariant(Array.isArray(capture.retained_inputs) && capture.retained_inputs.length > 0, "Family original capture inputs missing");
   const retained = new Set();
@@ -129,21 +145,22 @@ export function validateFamilyCapture(root, entry, world) {
   return map;
 }
 
-export function familyCurrentBinding(entry, manifest) {
+export function familyCurrentBinding(entry, manifest, dependencies = entry.dependencies, captureDependencies = entry.capture.dependencies) {
   return {unit_id:entry.unit_id, source_key:entry.source_key, receiver_key:entry.receiver_key,
-    config:entry.config, chunk:entry.chunk, dependencies:entry.dependencies,
-    capture_dependencies:entry.capture.dependencies,
+    config:entry.config, chunk:entry.chunk, dependencies,
+    capture_dependencies:captureDependencies,
     instances:manifest.instances, expected_visible_active_topology:manifest.expected_visible_active_topology};
 }
 
 export function familySiteDelta(root, entry, map) {
   // Includes removed and newly added configs, not only today's declared targets.
   const prefix = `${entry.capture.project_root}/`;
-  const paths = new Set([...Object.keys(entry.dependencies), ...readdirSync(resolve(root,"game/resources/housing_family")).filter(p => /^w[0-9]+\.json$/u.test(p)).map(p => `game/resources/housing_family/${p}`), ...Object.keys(map)
+  const currentWorld = read(root,"generated/world/manifest.json");
+  const paths = new Set([...Object.keys(entry.capture.dependencies), ...familyCapturePaths(root,entry,currentWorld), ...Object.keys(entry.dependencies), ...readdirSync(resolve(root,"game/resources/housing_family")).filter(p => /^w[0-9]+\.json$/u.test(p)).map(p => `game/resources/housing_family/${p}`), ...Object.keys(map)
     .filter(p => p.startsWith(`${prefix}game/resources/housing_family/`) && /\/w[0-9]+\.json$/u.test(p))
     .map(p => p.slice(prefix.length))]);
   return [...paths].sort().flatMap(path => {
-    const before = map[prefix+path] ?? null, after = entry.dependencies[path] ?? (existsSync(resolve(root,path)) ? sha256File(resolve(root,path)) : null);
+    const before = map[prefix+path] ?? null, after = existsSync(resolve(root,path)) ? sha256File(resolve(root,path)) : null;
     return before === after ? [] : [{path, capture_sha256:before, current_sha256:after}];
   });
 }
@@ -158,9 +175,10 @@ export function validateFamilyCurrentAttachment(attachment, currentBinding, pckS
   invariant(same(attachment.roles,expected), "Family candidate actual target roles drifted");
 }
 
-export function familyRuntimeSummary(entry) {
+export function familyRuntimeSummary(entry, currentDependencies) {
+  invariant(currentDependencies && Object.values(currentDependencies).every(hash), "Family runtime requires explicit current dependencies");
   return {unit_id: entry.unit_id, source_key: entry.source_key, receiver_key: entry.receiver_key,
-    config: entry.config, chunk: entry.chunk, dependencies: entry.dependencies,
+    config: entry.config, chunk: entry.chunk, dependencies: currentDependencies,
     acceptance_record: entry.acceptance};
 }
 
@@ -179,12 +197,18 @@ export function validateHousingFamilyAuthority(root, entries, {manifest, world, 
     const instance = manifest.instances.find(i => i.source_key === entry.source_key);
     invariant(instance && instance.config === `res://${entry.config.path}` && instance.chunk === `res://${entry.chunk.path}`, "Accepted family target is not installed by normal loader");
     bound(root, entry.config); bound(root, entry.chunk);
-    const requiredPaths = [...new Set([...FAMILY_SHARED_PATHS, FAMILY_MANIFEST_PATH, ...manifest.instances.flatMap(item => [item.config.slice(6), item.chunk.slice(6)]), "generated/world/manifest.json"])].sort();
+    // The immutable acceptance describes its archived candidate world, never the
+    // topology or shared producers in the current release.
+    const archive = entry.capture.project_root;
+    const historicalManifest = read(archive, FAMILY_MANIFEST_PATH);
+    const historicalWorld = read(archive, "generated/world/manifest.json");
+    validateHousingFamilyInstances(archive, historicalManifest, historicalWorld);
+    const requiredPaths = familyDependencyPaths(historicalManifest);
     invariant(same(Object.keys(entry.dependencies).sort(), requiredPaths), "Family executable/config/chunk dependency set drifted");
-    for (const path of requiredPaths) invariant(hash(entry.dependencies[path]) && sha256File(resolve(root, path)) === entry.dependencies[path], `Family dependency drifted: ${path}`);
-    const captureMap = validateFamilyCapture(root,entry,world);
-    const currentBinding = familyCurrentBinding(entry,manifest);
-    const siteDelta = familySiteDelta(root,entry,captureMap);
+    for (const path of requiredPaths) invariant(hash(entry.dependencies[path]) && sha256File(resolve(archive, path)) === entry.dependencies[path], `Family archived dependency drifted: ${path}`);
+    const captureMap = validateFamilyCapture(root,entry,historicalWorld);
+    const currentBinding = familyCurrentBinding(entry,historicalManifest);
+    const siteDelta = familySiteDelta(archive,entry,captureMap);
     const a = entry.acceptance;
     keys(a, [...Object.values(FAMILY_ARTIFACT_FIELDS), "evidence_tree_sha256", "capture_time_recognition_metric", "numerator_effect", "review_id", "review_kind", "status"], "Family seven-artifact acceptance");
     invariant(a.status === "accept" && a.review_kind === "independent_reference_recognition" && a.numerator_effect === 1 && /^\d+\/213$/u.test(a.capture_time_recognition_metric), "Family acceptance semantics drifted");
@@ -231,5 +255,59 @@ export function validateHousingFamilyAuthority(root, entries, {manifest, world, 
     const six = Object.fromEntries(Object.entries(a).filter(([k]) => k.endsWith("_sha256") && k !== "review_receipt_sha256"));
     invariant(review.decision === "PASS" && review.physical_unit_id === entry.unit_id && review.reviewer_id === entry.visual_reviewer_id && same(review.acceptance_bindings, six) && review.evidence_tree_document_sha256 === entry.tree_document_sha256 && same(review.source_binding, sourceBinding), "Family seventh independent reference/visual attestation drifted");
   }
-  return entries.map(familyRuntimeSummary);
+  return entries.map(entry => familyRuntimeSummary(entry, familyCurrentDependencies(root, manifest)));
+}
+
+// Private release input only. Compilation alone never grants current-package
+// approval or changes immutable recognition acceptance.
+export function familyCurrentApplicabilityBinding(root, entry, manifest, world) {
+  const dependencies = familyCurrentDependencies(root, manifest);
+  const captureDependencies = Object.fromEntries(familyCapturePaths(root, entry, world).map(path => [path, sha256File(resolve(root, path))]));
+  return {capture_input_map: entry.capture.input_map,
+    current_binding: familyCurrentBinding(entry, manifest, dependencies, captureDependencies),
+    site_delta: familySiteDelta(root, entry, bound(root, entry.capture.input_map))};
+}
+
+export const FAMILY_CURRENT_AUTHOR_IDS = Object.freeze(["bulgarian_neighbor_refinement", "wall_contract_finish"]);
+export function validateCurrentFamilyApplicability(root, entries, document) {
+  const manifest = read(root, FAMILY_MANIFEST_PATH);
+  const adoptionPath = "game/resources/housing_family/live_adoption.json";
+  const adoption = read(root, adoptionPath);
+  const world = read(root, "generated/world/manifest.json");
+  invariant(document && document.manifest_sha256 === sha256File(resolve(root, FAMILY_MANIFEST_PATH))
+    && document.adoption_sha256 === sha256File(resolve(root, adoptionPath))
+    && same(document.current_dependencies, adoption.dependencies)
+    && same(document.instances, manifest.instances)
+    && same(document.expected_visible_active_topology, manifest.expected_visible_active_topology), "Family current release binding stale");
+  invariant(same(document.current_author_ids, FAMILY_CURRENT_AUTHOR_IDS), "Family relevant current authors binding drifted");
+  for (const [path, digest] of Object.entries(document.current_dependencies)) invariant(hash(digest) && sha256File(resolve(root, relative(path))) === digest, `Family current release dependency drifted: ${path}`);
+  invariant(Array.isArray(document.entries) && same(document.entries.map(row => row.unit_id).sort(), entries.map(entry => entry.unit_id).sort()), "Family current applicability requires every accepted unit exactly once");
+  function reviewFile(binding, parse = true) {
+    keys(binding, ["path", "sha256"], "Family current review binding");
+    invariant(typeof binding.path === "string" && hash(binding.sha256) && sha256File(resolve(root, binding.path)) === binding.sha256, "Family current review/evidence bytes drifted");
+    return parse ? read(root, binding.path) : null;
+  }
+  for (const entry of entries) {
+    const row = document.entries.find(row => row.unit_id === entry.unit_id);
+    const expected = familyCurrentApplicabilityBinding(root, entry, manifest, world);
+    invariant(same({capture_input_map: row.capture_input_map, current_binding: row.current_binding, site_delta: row.site_delta}, expected), "Family current applicability binding/delta stale");
+    invariant(row.site_context_applicable === true && typeof row.site_context_reason === "string" && row.site_context_reason.trim(), "Family current applicability reason missing");
+    invariant(row.mechanical_review && row.visual_review, "Family current independent reviews missing");
+    const mechanical = reviewFile(row.mechanical_review), visual = reviewFile(row.visual_review);
+    invariant(typeof mechanical.reviewer_id === "string" && mechanical.reviewer_id.length > 0 && typeof visual.reviewer_id === "string" && visual.reviewer_id.length > 0
+      && new Set([entry.author_id, mechanical.reviewer_id, visual.reviewer_id]).size === 3
+      && !document.current_author_ids.includes(mechanical.reviewer_id) && !document.current_author_ids.includes(visual.reviewer_id), "Family current reviewers must be independent of author and each other");
+    const changedProducers = expected.site_delta.filter(change => /\.(?:gd|gdshader|dat)$/u.test(change.path)).map(change => change.path).sort();
+    const historicalHashes = new Set([...Object.values(entry.capture.dependencies), ...entry.capture.retained_inputs.map(input => input.file.sha256), ...Object.values(entry.acceptance)]);
+    for (const [review, role] of [[mechanical, "mechanical"], [visual, "visual"]]) {
+      invariant(review.decision === "PASS" && review[`${role}_decision`] === "PASS" && (role !== "mechanical" || review.source_decision === "PASS")
+        && review.unit_id === entry.unit_id && same(review.site_context_binding, expected)
+        && review.site_context_applicable === true && typeof review.site_context_reason === "string" && review.site_context_reason.trim(), "Family current review is missing, stale, or non-PASS");
+      invariant(Array.isArray(review.evidence) && review.evidence.length > 0, "Family current review evidence missing");
+      for (const evidence of review.evidence) reviewFile(evidence, false);
+      invariant(Array.isArray(review.fresh_changed_dependencies) && same([...review.fresh_changed_dependencies].sort(), changedProducers), "Family changed shared producer lacks scoped fresh applicability evidence");
+      invariant(changedProducers.length === 0 || review.evidence.some(evidence => !historicalHashes.has(evidence.sha256)), "Family changed shared producer supported only by historical evidence");
+    }
+  }
+  return true;
 }

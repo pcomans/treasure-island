@@ -24,6 +24,7 @@ import {
   validateRuntimeRegistry,
 } from "./build_facade_recognition_registry.mjs";
 
+import {FAMILY_CURRENT_ADDITIONS, familyCurrentDependencies} from "./lib/housing-family-authority.mjs";
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const ACCEPTED_REFERENCE_UNIT_IDS = [
   "physical-building:r16681702",
@@ -60,6 +61,15 @@ const ACCEPTED_REFERENCE_UNIT_IDS = [
   "physical-building:w96215669",
   "physical-building:w96215646",
   "physical-building:w95934123",
+  "physical-building:w96215693",
+  "physical-building:w96665916",
+  "physical-building:w96215668",
+  "physical-building:w96665893",
+  "physical-building:w96215698",
+  "physical-building:w96665908",
+  "physical-building:w96698619",
+  "physical-building:w96698643",
+  "physical-building:w96698648",
 ].sort();
 const ACTIVE_REVIEW_STATUS_SCOPE = "runtime_asset_original_detail_provenance_only_not_reference_recognition";
 const ACTIVE_RECOGNITION_ACCEPTANCE_AUTHORITY = "physical_unit_claim_and_independent_acceptance_record";
@@ -333,6 +343,7 @@ assert(d21441Unit.acceptance_records.length === 1 && stableJson(d21441Unit.accep
 
 for (const unit of registry.units) {
   const accepted = ACCEPTED_REFERENCE_UNIT_IDS.includes(unit.unit_id);
+  const familyAccepted = registry.housing_family_acceptance.some(entry => entry.unit_id === unit.unit_id);
   assert(unit.claim_status.receiver_complete === "verified", `${unit.unit_id} is not receiver-complete`);
   assert(unit.claim_status.game_distinctive === "not_evaluated", `${unit.unit_id} imported game-distinctive acceptance`);
   assert(unit.claim_status.reference_recognizable === (accepted ? "accepted" : "not_evaluated"), `${unit.unit_id} reference-recognition state does not match the independently accepted physical-unit set`);
@@ -340,7 +351,7 @@ for (const unit of registry.units) {
   assert(unit.recognition_contract.game_only_cues_do_not_prove_real_world_recognition === true, `${unit.unit_id} weakens the real-world claim boundary`);
   assert(unit.recognition_contract.capture_status === (accepted ? "configured" : "unconfigured"), `${unit.unit_id} capture status does not match its acceptance state`);
   assert(unit.capture_contract.status === (accepted ? "configured" : "unconfigured"), `${unit.unit_id} runtime capture contract does not match its acceptance state`);
-  assert(Array.isArray(unit.recognition_cues) && (accepted ? unit.recognition_cues.length >= 2 : unit.recognition_cues.length === 0), `${unit.unit_id} recognition-cue inventory does not match its acceptance state`);
+  assert(Array.isArray(unit.recognition_cues) && (familyAccepted ? unit.recognition_cues.length === 1 : accepted ? unit.recognition_cues.length >= 2 : unit.recognition_cues.length === 0), `${unit.unit_id} recognition-cue inventory does not match its acceptance state`);
   assert(Array.isArray(unit.acceptance_records) && (accepted ? unit.acceptance_records.length === 1 : unit.acceptance_records.length === 0), `${unit.unit_id} acceptance-receipt count does not match its acceptance state`);
   if (accepted) {
     const receipt = unit.acceptance_records[0];
@@ -370,10 +381,10 @@ for (const adapter of registry.active_runtime_adapters) {
 }
 assert(registry.claim_totals.receiver_complete.verified === EXPECTED.recognition_units, "receiver-complete aggregate drifted");
 assert(registry.claim_totals.game_distinctive.accepted === 0, "game-distinctive acceptance must start at zero");
-assert(registry.claim_totals.reference_recognizable.accepted === ACCEPTED_REFERENCE_UNIT_IDS.length && registry.claim_totals.reference_recognizable.not_evaluated === EXPECTED.recognition_units - ACCEPTED_REFERENCE_UNIT_IDS.length, "reference-recognizable aggregate is not exactly 11/213");
+assert(registry.claim_totals.reference_recognizable.accepted === ACCEPTED_REFERENCE_UNIT_IDS.length && registry.claim_totals.reference_recognizable.not_evaluated === EXPECTED.recognition_units - ACCEPTED_REFERENCE_UNIT_IDS.length, "reference-recognizable aggregate is not exactly 43/213");
 assert(registry.claim_totals.as_built_fidelity.claimed === 0 && registry.claim_totals.as_built_fidelity.limited === 0, "as-built fidelity must remain wholly unclaimed");
 assert(JSON.stringify(registry.recognition_metric.accepted_physical_unit_ids) === JSON.stringify(ACCEPTED_REFERENCE_UNIT_IDS), "recognition metric accepted-unit set drifted");
-assert(registry.recognition_metric.numerator === 34 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "34/213", "recognition metric is not exactly 34/213");
+assert(registry.recognition_metric.numerator === 43 && registry.recognition_metric.denominator === 213 && registry.recognition_metric.display === "43/213", "recognition metric is not exactly 43/213");
 assert(JSON.stringify(registry.recognition_metric.isle_house_non_numerator_source_keys) === JSON.stringify(["w1282547786", "w1282547787"]), "Isle House source-part exclusion drifted");
 
 const expectedIdentityCorrections = new Map([
@@ -581,7 +592,7 @@ assert(report.input_hashes.active_d2_1441_adapter_sha256 === "bf51562a211126c0ea
 assert(report.input_hashes.world_chunk_builder_sha256 === inputs.runtimeContracts.acceptedWorldBuilderSha256, "report accepted dispatch provenance hash drifted");
 assert(report.reference_dependencies.identity_or_reference_research_required_unit_count === 60, "reference-dependency count is not 60");
 assert(report.reference_dependencies.unit_ids.length === 60, "reference-dependency unit list is not 60");
-assert(report.reference_recognition_metric.display === "34/213" && JSON.stringify(report.reference_recognition_metric.accepted_physical_unit_ids) === JSON.stringify(ACCEPTED_REFERENCE_UNIT_IDS), "validation report recognition metric is not exactly 34/213");
+assert(report.reference_recognition_metric.display === "43/213" && JSON.stringify(report.reference_recognition_metric.accepted_physical_unit_ids) === JSON.stringify(ACCEPTED_REFERENCE_UNIT_IDS), "validation report recognition metric is not exactly 43/213");
 
 const firstSerialization = stableJson(compiled.registry);
 const secondSerialization = stableJson(compile(catalog, inputs).registry);
@@ -5509,5 +5520,21 @@ for (const d of expectedD5Batch) {
 }
 
 console.log(
-  `PASS facade recognition registry: ${EXPECTED.recognition_units} physical units / ${EXPECTED.direct_wall_receivers} receivers / ${EXPECTED.source_records} source records / ${EXPECTED.visible_wall_runs} runs / 34/213 independently accepted reference-recognizable physical units / ${EXPECTED.legacy_adapter_receivers} claim-neutral legacy adapters + ${EXPECTED.active_runtime_adapter_receivers} exact-current active adapters / ${packageBoundary.projected_direct_asset_count} sanitized asset projections / 2 separated identity corrections / 60 reference dependencies; catalog ${sha256File(PATHS.catalog)}; registry ${registrySha256}`,
+  `PASS facade recognition registry: ${EXPECTED.recognition_units} physical units / ${EXPECTED.direct_wall_receivers} receivers / ${EXPECTED.source_records} source records / ${EXPECTED.visible_wall_runs} runs / 43/213 independently accepted reference-recognizable physical units / ${EXPECTED.legacy_adapter_receivers} claim-neutral legacy adapters + ${EXPECTED.active_runtime_adapter_receivers} exact-current active adapters / ${packageBoundary.projected_direct_asset_count} sanitized asset projections / 2 separated identity corrections / 60 reference dependencies; catalog ${sha256File(PATHS.catalog)}; registry ${registrySha256}`,
 );
+
+// Current dependency agreement must not inherit archived acceptance hashes.
+{
+  const currentRegistry=JSON.parse(readFileSync(resolve(ROOT,"game/resources/facades/facade-runtime-registry.json"),"utf8"));
+  const manifest=JSON.parse(readFileSync(resolve(ROOT,"game/resources/housing_family/live_instances.json"),"utf8"));
+  const expected=familyCurrentDependencies(ROOT,manifest);
+  const loader=readFileSync(resolve(ROOT,"game/scripts/world/facades/facade_runtime_registry_loader.gd"),"utf8");
+  const requiredLine=loader.split("\n").find(line=>line.includes("var required := [") && line.includes("housing_family_live_attachment"));
+  for(const path of FAMILY_CURRENT_ADDITIONS) assert(requiredLine.includes(JSON.stringify(path)),"Native required set omitted current resource: "+path);
+  for(const entry of currentRegistry.housing_family_acceptance) assert(stableJson(entry.dependencies)===stableJson(expected),"Family current dependency summary differs");
+  for(const path of FAMILY_CURRENT_ADDITIONS) {
+    const changed=structuredClone(currentRegistry);delete changed.housing_family_acceptance[0].dependencies[path];
+    let rejected=false;try {validateRuntimeRegistry(changed,JSON.parse(readFileSync(resolve(ROOT,PATHS.adapterContracts),"utf8")));} catch(error) {rejected=/family authority summary/.test(error.message);}
+    assert(rejected,"Omitted current resource accepted: "+path);
+  }
+}

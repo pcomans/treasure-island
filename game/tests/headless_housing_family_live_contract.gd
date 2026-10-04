@@ -45,7 +45,7 @@ func _run_live() -> void:
 		print("FAMILY_SOURCE_RELOAD_CYCLE: "+JSON.stringify({"cycle":cycle,"adoption":result,"connections_once":true,"grounded":true}))
 		if cycle==0: world.load_world()
 	main.free()
-	print("PASS: current 24-instance adoption, existing semantic materials, and actual GameMain reload with single signal connections")
+	print("PASS: current 33-instance adoption, existing semantic materials, and actual GameMain reload with single signal connections")
 	quit(0)
 
 func _connections_once(main: GameMain) -> bool:
