@@ -260,6 +260,12 @@ func _check_routes(routes: Array, box: AABB) -> void:
 			_unsafe = true
 			return
 		for target: Vector2 in [end, start]:
+			if target == start:
+				# Walk back along the same line, from the route's end point.
+				problem = await _h.settle_player(end)
+				if problem != "":
+					_failures.append(_prefix + "route " + route.name + " return setup: " + problem)
+					break
 			problem = await _walk_toward(Vector3(target.x, _h.player.global_position.y + 1.5, target.y))
 			var at := _h.player.global_position
 			var distance := _closest
