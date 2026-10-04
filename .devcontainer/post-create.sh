@@ -36,3 +36,4 @@ fi
 sudo chown vscode:vscode /opt/godot
 bash .devcontainer/setup-godot.sh
 npm ci
+bash .devcontainer/setup-browser.sh
