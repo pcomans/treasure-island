@@ -37,6 +37,11 @@ else
       *.png|*.jpg|*.jpeg|*.webp|*.bmp|*.tga|*.exr|*.avi|*.mp4|*.mov|*.webm|*.pck|*.zip|*.dmg|*.x86_64|*.log)
         junk+="${path}  (screenshots, videos, builds and logs stay out of the repo)"$'\n'; continue ;;
     esac
+    # Renamed media (e.g. a photo saved as .dat) is still media.
+    case "$(file -b --mime-type "${path}")" in
+      image/*|video/*)
+        junk+="${path}  (an image or video, whatever its name; those belong in game/resources/)"$'\n'; continue ;;
+    esac
     if [ "$(stat -c %s "${path}")" -gt 5000000 ]; then
       junk+="${path}  (over 5 MB)"$'\n'
     fi

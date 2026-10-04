@@ -4,11 +4,9 @@
 
 The imported [project agreement](AGENTS.md) is the shared authority. The primary conversation is `/root`: it orchestrates and reviews read-only; named, bounded subagents execute. Other clients should read AGENTS.md directly. Keep one agreement, not separate copies for different assistants.
 
-Follow the current [quota wind-down rule](AGENTS.md#owner-resumption-and-quota-wind-down--updated-2026-09-28): check fresh weekly usage hourly and at major checkpoints; at 50% used / 50% remaining, stop new dispatch, safely checkpoint in-flight work, commit and push MAIN/main, then pause work and the reminder. Reminder activation must be verified, not inferred.
-
 ## Persisted entrypoints
 
-Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra`; explicitly select a supported non-ultra effort instead of inheriting the parent’s effort. That section defines the current routing: Astra Low modeling, GPT-6.1 Sol High independent visual critique/bar-raiser, and Astra Medium other source/mechanical/release review, with discretionary supported non-ultra escalation. Preserve independent review gates; the primary/root setting is unchanged.
+Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra`; explicitly select a supported non-ultra effort instead of inheriting the parent’s effort. That section defines both routings: Codex (Astra Low modeling, GPT-6.1 Sol High visual critique, Astra Medium other roles) and Claude Code (Opus 5.5, effort `max` for modeling and `high` otherwise, set in each role file's frontmatter). Preserve independent review gates; the primary/root setting is unchanged.
 
 | Role prompt | When used |
 |---|---|

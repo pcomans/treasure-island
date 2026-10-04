@@ -16,6 +16,10 @@ sudo apt-get install -y -qq tmux unzip git-lfs weston osmium-tool \
 # Only evidence AVIs live in LFS; nothing at runtime needs them.
 git lfs install --skip-smudge
 
+# Agents commit as the project's bot account.
+git config user.name pcomans-bot
+git config user.email philipp.comans.agent@gmail.com
+
 # Each workspace logs in to Codex on its own (codex login --device-auth).
 curl -fsSL https://chatgpt.com/codex/install.sh | sh
 # Codex's own (bubblewrap) sandbox can't start in this container: it needs
