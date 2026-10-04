@@ -1,0 +1,534 @@
+{
+	"build": {
+		"B": 4.064,
+		"L": 104.121597290039,
+		"W": 17.555757522583,
+		"axis_a": [
+			-0.455870866775513,
+			-0.890045940876007
+		],
+		"axis_b": [
+			0.890045940876007,
+			-0.455870866775513
+		],
+		"ok": true,
+		"origin": [
+			315.832000732422,
+			-282.244995117188
+		]
+	},
+	"chunk_sha256": "432cac0daf8d91ec5c642e040fac0a1f3f65053daca722a07fa0062744d18828",
+	"failures": [],
+	"geometry": {
+		"DetailContact": {
+			"compare_predicates": {
+				"collection": true,
+				"collision_count": true,
+				"ordered_faces_equal": true,
+				"positive_expected_coverage": true,
+				"render_count": true
+			},
+			"expected_vertex_count": 27318,
+			"ok": true,
+			"predicates": {
+				"body_identity": true,
+				"compare": true,
+				"holder_identity": true,
+				"layer": true,
+				"mask": true,
+				"mesh_identity": true,
+				"receiver": true,
+				"render_layer": true,
+				"source": true,
+				"spray_group": true
+			}
+		},
+		"RoofContact": {
+			"compare_predicates": {
+				"collection": true,
+				"collision_count": true,
+				"ordered_faces_equal": true,
+				"positive_expected_coverage": true,
+				"render_count": true
+			},
+			"expected_vertex_count": 1188,
+			"ok": true,
+			"predicates": {
+				"body_identity": true,
+				"compare": true,
+				"holder_identity": true,
+				"layer": true,
+				"mask": true,
+				"mesh_identity": true,
+				"receiver": true,
+				"render_layer": true,
+				"source": true,
+				"spray_group": true
+			}
+		},
+		"WallContact": {
+			"compare_predicates": {
+				"collection": true,
+				"collision_count": true,
+				"ordered_faces_equal": true,
+				"positive_expected_coverage": true,
+				"render_count": true
+			},
+			"expected_vertex_count": 10506,
+			"ok": true,
+			"predicates": {
+				"body_identity": true,
+				"compare": true,
+				"holder_identity": true,
+				"layer": true,
+				"mask": true,
+				"mesh_identity": true,
+				"receiver": true,
+				"render_layer": true,
+				"source": true,
+				"spray_group": true
+			}
+		}
+	},
+	"ground_contacts": [
+		{
+			"a": 0.1,
+			"area_overlay_y": 4.3493197969231,
+			"b": 3.5,
+			"bottom_minus_land": 0.0199999281135206,
+			"bottom_y": 4.31931972503662,
+			"id": "south-door",
+			"land_y": 4.2993197969231,
+			"seated": true
+		},
+		{
+			"a": 1.4,
+			"area_overlay_y": 4.26674378359739,
+			"b": 17.199757522583,
+			"bottom_minus_land": 0.0200001434045589,
+			"bottom_y": 4.23674392700195,
+			"id": "east-low-door-s",
+			"land_y": 4.21674378359739,
+			"seated": true
+		},
+		{
+			"a": 13.8,
+			"area_overlay_y": 4.25265009537343,
+			"b": 17.199757522583,
+			"bottom_minus_land": 0.0199999557435149,
+			"bottom_y": 4.22265005111694,
+			"id": "east-low-door-n",
+			"land_y": 4.20265009537343,
+			"seated": true
+		},
+		{
+			"a": 11.7,
+			"area_overlay_y": 4.16215160369873,
+			"b": 3.2,
+			"bottom_minus_land": 0.0199999999999996,
+			"bottom_y": 4.13215160369873,
+			"id": "passage-north-door-1",
+			"land_y": 4.11215160369873,
+			"seated": true
+		},
+		{
+			"a": 11.7,
+			"area_overlay_y": 4.29267385482788,
+			"b": 10.7,
+			"bottom_minus_land": 0.0199999999999996,
+			"bottom_y": 4.26267385482788,
+			"id": "passage-north-door-2",
+			"land_y": 4.24267385482788,
+			"seated": true
+		},
+		{
+			"a": 4.5,
+			"area_overlay_y": 4.34657123565674,
+			"b": 12.1,
+			"bottom_minus_land": 0.0199999999999996,
+			"bottom_y": 4.31657123565674,
+			"id": "passage-south-door",
+			"land_y": 4.29657123565674,
+			"seated": true
+		},
+		{
+			"a": 5.35,
+			"area_overlay_y": 4.26437564142707,
+			"b": 1.0,
+			"bottom_minus_land": -0.0999999999999996,
+			"bottom_y": 4.11437564142707,
+			"id": "bollard-5.35",
+			"land_y": 4.21437564142707,
+			"seated": true,
+			"top_y": 5.21437564142707
+		},
+		{
+			"a": 6.45,
+			"area_overlay_y": 4.22967986843723,
+			"b": 1.0,
+			"bottom_minus_land": -0.0999999999999996,
+			"bottom_y": 4.07967986843723,
+			"id": "bollard-6.45",
+			"land_y": 4.17967986843723,
+			"seated": true,
+			"top_y": 5.17967986843723
+		},
+		{
+			"a": 7.55,
+			"area_overlay_y": 4.20747797634685,
+			"b": 1.0,
+			"bottom_minus_land": -0.0999999999999996,
+			"bottom_y": 4.05747797634685,
+			"id": "bollard-7.55",
+			"land_y": 4.15747797634685,
+			"seated": true,
+			"top_y": 5.15747797634685
+		},
+		{
+			"a": 8.65,
+			"area_overlay_y": 4.18527714474185,
+			"b": 1.0,
+			"bottom_minus_land": -0.0999999999999996,
+			"bottom_y": 4.03527714474185,
+			"id": "bollard-8.65",
+			"land_y": 4.13527714474185,
+			"seated": true,
+			"top_y": 5.13527714474185
+		},
+		{
+			"a": 9.75,
+			"area_overlay_y": 4.16307525265147,
+			"b": 1.0,
+			"bottom_minus_land": -0.0999999999999996,
+			"bottom_y": 4.01307525265147,
+			"id": "bollard-9.75",
+			"land_y": 4.11307525265147,
+			"seated": true,
+			"top_y": 5.11307525265147
+		},
+		{
+			"a": 10.85,
+			"area_overlay_y": 4.14087336056109,
+			"b": 1.0,
+			"bottom_minus_land": -0.1,
+			"bottom_y": 3.99087336056109,
+			"id": "bollard-10.85",
+			"land_y": 4.09087336056109,
+			"seated": true,
+			"top_y": 5.09087336056109
+		},
+		{
+			"a": 46.825,
+			"area_overlay_y": 4.07524418263829,
+			"b": 0.35,
+			"bottom_minus_land": 0.0200000342806561,
+			"bottom_y": 4.04524421691895,
+			"id": "west-door-bay-5",
+			"land_y": 4.02524418263829,
+			"seated": true
+		},
+		{
+			"a": 77.075,
+			"area_overlay_y": 4.05682533042482,
+			"b": 0.35,
+			"bottom_minus_land": 0.0200000975842158,
+			"bottom_y": 4.02682542800903,
+			"id": "west-door-bay-10",
+			"land_y": 4.00682533042482,
+			"seated": true
+		},
+		{
+			"a": 102.1,
+			"area_overlay_y": 3.77486708641052,
+			"b": 1.9,
+			"bottom_minus_land": 0.02,
+			"bottom_y": 3.74486708641052,
+			"id": "porch-door",
+			"land_y": 3.72486708641052,
+			"seated": true
+		},
+		{
+			"a": 103.771597290039,
+			"area_overlay_y": 3.74265777487931,
+			"b": 0.65,
+			"bottom_minus_land": -0.292657774879308,
+			"bottom_y": 3.4,
+			"id": "porch-pier",
+			"land_y": 3.69265777487931,
+			"seated": true
+		},
+		{
+			"a": 104.071597290039,
+			"area_overlay_y": 3.90881231307983,
+			"b": 12.05,
+			"bottom_minus_land": 0.02,
+			"bottom_y": 3.87881231307983,
+			"id": "north-door",
+			"land_y": 3.85881231307983,
+			"seated": true
+		},
+		{
+			"a": 16.925,
+			"area_overlay_y": 4.22789923689998,
+			"b": 12.95,
+			"bottom_minus_land": 0.0200001046832767,
+			"bottom_y": 4.19789934158325,
+			"id": "east-door-bay-0",
+			"land_y": 4.17789923689998,
+			"seated": true
+		},
+		{
+			"a": 35.075,
+			"area_overlay_y": 4.05575731999152,
+			"b": 12.95,
+			"bottom_minus_land": 0.0199999927831414,
+			"bottom_y": 4.02575731277466,
+			"id": "east-door-bay-3",
+			"land_y": 4.00575731999152,
+			"seated": true
+		},
+		{
+			"a": 54.625,
+			"area_overlay_y": 4.13329831765559,
+			"b": 12.95,
+			"bottom_minus_land": 0.0199998696002694,
+			"bottom_y": 4.10329818725586,
+			"id": "east-door-bay-6",
+			"land_y": 4.08329831765559,
+			"seated": true
+		},
+		{
+			"a": 71.375,
+			"area_overlay_y": 4.19448815199012,
+			"b": 12.95,
+			"bottom_minus_land": 0.0200001635921581,
+			"bottom_y": 4.16448831558228,
+			"id": "east-door-bay-9",
+			"land_y": 4.14448815199012,
+			"seated": true
+		},
+		{
+			"a": 90.525,
+			"area_overlay_y": 4.08343374683209,
+			"b": 12.95,
+			"bottom_minus_land": 0.0200001482789958,
+			"bottom_y": 4.05343389511108,
+			"id": "east-door-bay-12",
+			"land_y": 4.03343374683209,
+			"seated": true
+		},
+		{
+			"a": 101.66079864502,
+			"area_overlay_y": 3.94265027470628,
+			"b": 12.95,
+			"bottom_minus_land": 0.0200000720496973,
+			"bottom_y": 3.91265034675598,
+			"id": "east-door-bay-14",
+			"land_y": 3.89265027470628,
+			"seated": true
+		},
+		{
+			"a": 21.35,
+			"area_overlay_y": 4.17936662000629,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.0999999999999996,
+			"bottom_y": 4.02936662000629,
+			"id": "walkway-post-21.35",
+			"land_y": 4.12936662000629,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 27.4,
+			"area_overlay_y": 4.09082748106885,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.1,
+			"bottom_y": 3.94082748106885,
+			"id": "walkway-post-27.40",
+			"land_y": 4.04082748106885,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 33.45,
+			"area_overlay_y": 4.06467922883558,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.1,
+			"bottom_y": 3.91467922883558,
+			"id": "walkway-post-33.45",
+			"land_y": 4.01467922883558,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 39.5,
+			"area_overlay_y": 4.08794999830188,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.1,
+			"bottom_y": 3.93794999830188,
+			"id": "walkway-post-39.50",
+			"land_y": 4.03794999830188,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 45.55,
+			"area_overlay_y": 4.11005148449367,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.1,
+			"bottom_y": 3.96005148449367,
+			"id": "walkway-post-45.55",
+			"land_y": 4.06005148449367,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 51.6,
+			"area_overlay_y": 4.13215283907839,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.1,
+			"bottom_y": 3.98215283907839,
+			"id": "walkway-post-51.60",
+			"land_y": 4.08215283907839,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 57.65,
+			"area_overlay_y": 4.15425433766795,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.0999999999999996,
+			"bottom_y": 4.00425433766795,
+			"id": "walkway-post-57.65",
+			"land_y": 4.10425433766795,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 63.7,
+			"area_overlay_y": 4.17635569225267,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.0999999999999996,
+			"bottom_y": 4.02635569225267,
+			"id": "walkway-post-63.70",
+			"land_y": 4.12635569225267,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 69.75,
+			"area_overlay_y": 4.19721454309074,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.0999999999999996,
+			"bottom_y": 4.04721454309074,
+			"id": "walkway-post-69.75",
+			"land_y": 4.14721454309074,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 75.8,
+			"area_overlay_y": 4.18448308622674,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.0999999999999996,
+			"bottom_y": 4.03448308622674,
+			"id": "walkway-post-75.80",
+			"land_y": 4.13448308622674,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 81.85,
+			"area_overlay_y": 4.16110661804969,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.0999999999999996,
+			"bottom_y": 4.01110661804969,
+			"id": "walkway-post-81.85",
+			"land_y": 4.11110661804969,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 87.9,
+			"area_overlay_y": 4.13132614939313,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.1,
+			"bottom_y": 3.98132614939313,
+			"id": "walkway-post-87.90",
+			"land_y": 4.08132614939313,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 93.95,
+			"area_overlay_y": 4.10154581043644,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.1,
+			"bottom_y": 3.95154581043644,
+			"id": "walkway-post-93.95",
+			"land_y": 4.05154581043644,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 100.0,
+			"area_overlay_y": 4.02840075168415,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.1,
+			"bottom_y": 3.87840075168415,
+			"id": "walkway-post-100.00",
+			"land_y": 3.97840075168415,
+			"seated": true,
+			"top_y": 6.714
+		},
+		{
+			"a": 103.721597290039,
+			"area_overlay_y": 3.98868282703647,
+			"b": 17.255757522583,
+			"bottom_minus_land": -0.1,
+			"bottom_y": 3.83868282703647,
+			"id": "walkway-post-103.72",
+			"land_y": 3.93868282703647,
+			"seated": true,
+			"top_y": 6.714
+		}
+	],
+	"letters": 29,
+	"min_land_minus_wall_bottom": 0.280581706463499,
+	"min_polygon_margin_m": 0.0033266544342041,
+	"model_sha256": "6f2be1e976109f8885d121b4ce73ceefcd253d0e9edea988bcc9e82d2c891f4c",
+	"nonfinite_vertices": 0,
+	"ok": true,
+	"outside_footprint": [],
+	"roles": {
+		"DetailMesh": {
+			"layers": 1,
+			"surfaces": 13,
+			"triangles": 9106
+		},
+		"RoofMesh": {
+			"layers": 1,
+			"surfaces": 9,
+			"triangles": 396
+		},
+		"SettingMesh": {
+			"layers": 1,
+			"surfaces": 3,
+			"triangles": 408
+		},
+		"VisualMesh": {
+			"layers": 1,
+			"surfaces": 4,
+			"triangles": 676
+		},
+		"WallMesh": {
+			"layers": 2,
+			"surfaces": 11,
+			"triangles": 3502
+		}
+	},
+	"setting_outside_site_area": [],
+	"source_min_wall_bottom_y": 3.66,
+	"wall_bottom_y": 3.4,
+	"winding_violations": 0
+}

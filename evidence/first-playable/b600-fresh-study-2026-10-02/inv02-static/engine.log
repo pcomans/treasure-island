@@ -1,0 +1,34 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+ERROR: Triangulation failed. Make sure the font doesn't contain self-intersecting lines, as these are not supported in TextMesh.
+   at: _generate_glyph_mesh_data (scene/resources/3d/primitive_meshes.cpp:3196)
+   GDScript backtrace (most recent call first):
+       [0] _letter (res://game/scripts/world/facades/b600_fresh_study_model.gd:803)
+       [1] _build_lettering (res://game/scripts/world/facades/b600_fresh_study_model.gd:770)
+       [2] build (res://game/scripts/world/facades/b600_fresh_study_model.gd:160)
+       [3] _initialize (res://game/tests/b600_fresh_study/static_check.gd:36)
+ERROR: Convex decomposing failed. Make sure the font doesn't contain self-intersecting lines, as these are not supported in TextMesh.
+   at: _generate_glyph_mesh_data (scene/resources/3d/primitive_meshes.cpp:3191)
+   GDScript backtrace (most recent call first):
+       [0] _letter (res://game/scripts/world/facades/b600_fresh_study_model.gd:803)
+       [1] _word (res://game/scripts/world/facades/b600_fresh_study_model.gd:788)
+       [2] _build_lettering (res://game/scripts/world/facades/b600_fresh_study_model.gd:774)
+       [3] build (res://game/scripts/world/facades/b600_fresh_study_model.gd:160)
+       [4] _initialize (res://game/tests/b600_fresh_study/static_check.gd:36)
+ERROR: Triangulation failed. Make sure the font doesn't contain self-intersecting lines, as these are not supported in TextMesh.
+   at: _generate_glyph_mesh_data (scene/resources/3d/primitive_meshes.cpp:3196)
+   GDScript backtrace (most recent call first):
+       [0] _letter (res://game/scripts/world/facades/b600_fresh_study_model.gd:803)
+       [1] _word (res://game/scripts/world/facades/b600_fresh_study_model.gd:788)
+       [2] _build_lettering (res://game/scripts/world/facades/b600_fresh_study_model.gd:774)
+       [3] build (res://game/scripts/world/facades/b600_fresh_study_model.gd:160)
+       [4] _initialize (res://game/tests/b600_fresh_study/static_check.gd:36)
+ERROR: Triangulation failed. Make sure the font doesn't contain self-intersecting lines, as these are not supported in TextMesh.
+   at: _generate_glyph_mesh_data (scene/resources/3d/primitive_meshes.cpp:3196)
+   GDScript backtrace (most recent call first):
+       [0] _letter (res://game/scripts/world/facades/b600_fresh_study_model.gd:803)
+       [1] _word (res://game/scripts/world/facades/b600_fresh_study_model.gd:788)
+       [2] _build_lettering (res://game/scripts/world/facades/b600_fresh_study_model.gd:774)
+       [3] build (res://game/scripts/world/facades/b600_fresh_study_model.gd:160)
+       [4] _initialize (res://game/tests/b600_fresh_study/static_check.gd:36)
+B600_STATIC: {"failures":["Every emitted vertex and letter bound inside the frozen footprint"],"ok":false,"roles":{"DetailMesh":{"layers":1,"surfaces":9,"triangles":9112},"RoofMesh":{"layers":1,"surfaces":9,"triangles":330},"VisualMesh":{"layers":1,"surfaces":3,"triangles":636},"WallMesh":{"layers":2,"surfaces":7,"triangles":4110}}}

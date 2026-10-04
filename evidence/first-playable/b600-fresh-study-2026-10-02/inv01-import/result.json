@@ -1,0 +1,16 @@
+{
+  "mode": "import",
+  "terminal": 0,
+  "errors": [],
+  "engine_errors": [],
+  "receipt_ok": null,
+  "receipt_failure": null,
+  "elapsed_seconds": 9.361889249645174,
+  "pid": 13233,
+  "pid_alive_after": false,
+  "slot_released": true,
+  "engines_before": [],
+  "engines_after": [],
+  "ended_utc": "2026-10-03T05:56:49.917124+00:00",
+  "ok": true
+}

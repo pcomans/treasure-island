@@ -1,0 +1,18 @@
+{
+  "mode": "static",
+  "terminal": 1,
+  "errors": [],
+  "engine_errors": [],
+  "receipt_ok": false,
+  "receipt_failure": [
+    "Visual-only setting stays on the school site area surface"
+  ],
+  "elapsed_seconds": 1.377076375298202,
+  "pid": 86235,
+  "pid_alive_after": false,
+  "slot_released": true,
+  "engines_before": [],
+  "engines_after": [],
+  "ended_utc": "2026-10-04T03:53:49.511360+00:00",
+  "ok": false
+}

@@ -1,0 +1,3 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+B600_STATIC: {"failures":[],"ok":true,"roles":{"DetailMesh":{"layers":1,"surfaces":11,"triangles":9452},"RoofMesh":{"layers":1,"surfaces":9,"triangles":330},"VisualMesh":{"layers":1,"surfaces":3,"triangles":636},"WallMesh":{"layers":2,"surfaces":7,"triangles":4110}}}

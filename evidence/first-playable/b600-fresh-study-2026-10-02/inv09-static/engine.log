@@ -1,0 +1,3 @@
+Godot Engine v4.7.2.stable.official.ed1daf0bf - https://godotengine.org
+
+B600_STATIC: {"failures":["Visual-only setting stays on the school site area surface"],"ok":false,"roles":{"DetailMesh":{"layers":1,"surfaces":13,"triangles":9106},"RoofMesh":{"layers":1,"surfaces":9,"triangles":396},"SettingMesh":{"layers":1,"surfaces":3,"triangles":412},"VisualMesh":{"layers":1,"surfaces":4,"triangles":676},"WallMesh":{"layers":2,"surfaces":10,"triangles":3502}}}

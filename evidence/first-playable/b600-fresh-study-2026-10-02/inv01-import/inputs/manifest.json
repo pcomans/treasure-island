@@ -1,0 +1,38 @@
+{
+  "target": {
+    "source_key": "w34313548",
+    "wall_key": "building:w34313548:wall",
+    "roof_key": "building:w34313548:roof",
+    "chunk": "res://generated/world/chunks/x_1__z_-2.json",
+    "frame": "local a = OSM S corner toward N end, b = west face toward east face, heights = above flat base B"
+  },
+  "views": [
+    {"id": "gameplay-portal", "kind": "stock", "phases": "AB", "player_ab": [8.65, -10.5], "aim_abh": [8.65, 0.04, 3.0], "intent": "Approved stock third-person view of the west portal from the Avenue M sidewalk"},
+    {"id": "r07-portal-match", "kind": "stock", "phases": "AB", "camera_ab": [16.07, -24.9], "heading_deg": 78, "pitch_deg": 3, "intent": "Stock camera placed at pano TKrEWRNj (Sep 2025) heading matched to r07/r08"},
+    {"id": "r05-west-mid-match", "kind": "stock", "phases": "AB", "camera_ab": [56.1, -24.38], "heading_deg": 63, "pitch_deg": 5, "intent": "Stock camera at pano SNgVcJp9 (Sep 2025) perpendicular to the west long face, r05"},
+    {"id": "r12-west-oblique-match", "kind": "stock", "phases": "AB", "camera_ab": [96.73, -24.94], "heading_deg": 100, "pitch_deg": 4, "intent": "Stock camera at pano ne4FlBZL (May 2011) oblique along the west face, r12"},
+    {"id": "r13-west-rake-match", "kind": "stock", "phases": "AB", "camera_ab": [96.73, -24.94], "heading_deg": 125, "pitch_deg": 2, "intent": "Stock camera at pano ne4FlBZL raking south along Avenue M, r13"},
+    {"id": "r10-north-end-match", "kind": "stock", "phases": "AB", "camera_ab": [122.27, 9.0], "heading_deg": 156, "pitch_deg": 7, "intent": "Stock camera at pano 3gORoJSc (Sep 2025) toward the banded north end, r09/r10"},
+    {"id": "r14-south-match", "kind": "stock", "phases": "AB", "camera_ab": [-23.94, -23.05], "heading_deg": 18, "pitch_deg": 6, "intent": "Stock camera at pano XxFNKcpP (Mar 2025) toward the south end, r14"},
+    {"id": "gameplay-passage-west", "kind": "stock", "phases": "AB", "player_ab": [8.65, -3.2], "aim_abh": [8.65, 10.0, 2.4], "intent": "Stock view into the walk-through passage from the west entrance (r15 framing)"},
+    {"id": "gameplay-passage-east", "kind": "stock", "phases": "AB", "player_ab": [8.65, 21.8], "aim_abh": [8.65, 6.0, 2.4], "intent": "Stock view from the yard back through the passage and east arch (inference side)"},
+    {"id": "gameplay-yard-east", "kind": "stock", "phases": "AB", "player_ab": [44.0, 32.0], "aim_abh": [44.0, 13.0, 3.0], "intent": "Stock view of the east yard face and covered walkway (aerial-only evidence; inference)"},
+    {"id": "aerial-topdown", "kind": "aerial", "eye_abh": [52.0, 8.8, 150.0], "look_abh": [52.0, 8.8, 0.0], "top_down": true, "fov": 45, "intent": "Non-gameplay study camera comparable to r02 top-down roof"},
+    {"id": "aerial-sw-oblique", "kind": "aerial", "eye_abh": [-35.0, -45.0, 55.0], "look_abh": [45.0, 8.0, 2.0], "fov": 45, "intent": "Non-gameplay oblique roof/west/south view (no angled roof reference exists)"},
+    {"id": "aerial-east-oblique", "kind": "aerial", "eye_abh": [75.0, 70.0, 45.0], "look_abh": [45.0, 9.0, 2.0], "fov": 45, "intent": "Non-gameplay oblique of the yard side and walkway (r03 strip)"}
+  ],
+  "mechanics": {
+    "routes": [
+      {"id": "passage-traverse", "start_ab": [8.65, -5.5], "waypoints_ab": [[8.65, 21.5], [8.65, -5.5]], "capture_at": {"leg": 0, "b": 8.0}},
+      {"id": "walkway-entry", "start_ab": [46.0, 23.0], "waypoints_ab": [[49.0, 15.0], [46.0, 23.0]], "capture_at": {"leg": 0, "b": 15.6}}
+    ],
+    "wall_stops": [
+      {"id": "west-wall-stop", "start_ab": [38.425, -4.0], "toward_ab": [38.425, 5.0], "frames": 150, "face_b": 0.35}
+    ],
+    "sprays": [
+      {"id": "spray-west-wall", "player_ab": [38.425, -2.6], "target_abh": [38.425, 0.35, 2.0], "body": "WallContact", "expect": "placed"},
+      {"id": "spray-maroon-frame", "player_ab": [13.9, -3.0], "target_abh": [13.9, 0.04, 2.7], "body": "WallContact", "expect": "placed"},
+      {"id": "spray-glass-reject", "player_ab": [16.4, -2.6], "target_abh": [16.4, 0.57, 1.6], "body": "DetailContact", "expect": "receiver_rejection"}
+    ]
+  }
+}

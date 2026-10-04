@@ -1,0 +1,16 @@
+{
+  "mode": "static",
+  "terminal": 0,
+  "errors": [],
+  "engine_errors": [],
+  "receipt_ok": true,
+  "receipt_failure": [],
+  "elapsed_seconds": 1.549379165749997,
+  "pid": 16542,
+  "pid_alive_after": false,
+  "slot_released": true,
+  "engines_before": [],
+  "engines_after": [],
+  "ended_utc": "2026-10-03T06:10:09.005419+00:00",
+  "ok": true
+}

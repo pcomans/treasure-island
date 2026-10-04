@@ -1,0 +1,12 @@
+{
+  "pid": 13233,
+  "command": [
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+    "--headless",
+    "--editor",
+    "--path",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.claude/worktrees/root-session",
+    "--quit"
+  ],
+  "started_utc": "2026-10-03T05:56:40.657806+00:00"
+}

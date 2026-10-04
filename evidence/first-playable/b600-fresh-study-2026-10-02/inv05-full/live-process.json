@@ -1,0 +1,25 @@
+{
+  "pid": 15844,
+  "command": [
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.tools/godot/4.7.2/Godot.app/Contents/MacOS/Godot",
+    "--path",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.claude/worktrees/root-session",
+    "--rendering-method",
+    "forward_plus",
+    "--rendering-driver",
+    "metal",
+    "--display-driver",
+    "macos",
+    "--audio-driver",
+    "Dummy",
+    "--resolution",
+    "1440x900",
+    "--script",
+    "/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.claude/worktrees/root-session/game/tests/b600_fresh_study/study.gd",
+    "--",
+    "--manifest=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.claude/worktrees/root-session/game/tests/b600_fresh_study/manifest.json",
+    "--output=/Volumes/Macintosh_HD/Users/user302070/code/treasure-island/.claude/worktrees/root-session/evidence/first-playable/b600-fresh-study-2026-10-02/inv05-full/images",
+    "--mode=full"
+  ],
+  "started_utc": "2026-10-03T06:06:45.949890+00:00"
+}

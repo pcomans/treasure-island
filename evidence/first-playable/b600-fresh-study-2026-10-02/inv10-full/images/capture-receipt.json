@@ -1,0 +1,2485 @@
+{
+	"captures": [
+		{
+			"bytes": 443697,
+			"camera_forward": [
+				0.885738790035248,
+				0.0982550010085106,
+				-0.453665882349014
+			],
+			"camera_position": [
+				297.92236328125,
+				5.48294448852539,
+				-282.172546386719
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "gameplay-portal-A.png",
+			"id": "gameplay-portal-A",
+			"intent": "Approved stock third-person view of the west portal from the Avenue M sidewalk",
+			"pause_overlay_visible": false,
+			"phase": "A-generated-placeholder",
+			"player_position": [
+				302.7939453125,
+				4.02335405349731,
+				-284.667724609375
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.614575684070587,
+			"sample_unique_colors": 215,
+			"settle": {
+				"ground_clearance_m": 0.000404834747314453,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 4.02294921875,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 125,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 7.02294921875,
+				"settled_y": 4.02335405349731
+			},
+			"sha256": "19e0afbd95bbbd433070203da5f1f4658b0f8a5bce0715f97dfc3a071a22f655",
+			"source_key": "w34313548",
+			"view": {
+				"aim_abh": [
+					8.1,
+					0.04,
+					3.0
+				],
+				"id": "gameplay-portal",
+				"intent": "Approved stock third-person view of the west portal from the Avenue M sidewalk",
+				"kind": "stock",
+				"phases": "AB",
+				"player_ab": [
+					8.1,
+					-10.5
+				]
+			}
+		},
+		{
+			"ab_camera_drift_m": 0.0,
+			"bytes": 517860,
+			"camera_forward": [
+				0.885738790035248,
+				0.0982550010085106,
+				-0.453665882349014
+			],
+			"camera_position": [
+				297.92236328125,
+				5.48294448852539,
+				-282.172546386719
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "gameplay-portal-B.png",
+			"id": "gameplay-portal-B",
+			"intent": "Approved stock third-person view of the west portal from the Avenue M sidewalk",
+			"pause_overlay_visible": false,
+			"phase": "B-candidate",
+			"player_position": [
+				302.7939453125,
+				4.02335405349731,
+				-284.667724609375
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.709374934434891,
+			"sample_unique_colors": 227,
+			"settle": {
+				"ground_clearance_m": 0.000404834747314453,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 4.02294921875,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 125,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 7.02294921875,
+				"settled_y": 4.02335405349731
+			},
+			"sha256": "d1951a57ce7bcf13313c8d849f14b389aed3f224a5c55d464f2d84d0da78fbb6",
+			"source_key": "w34313548",
+			"view": {
+				"aim_abh": [
+					8.1,
+					0.04,
+					3.0
+				],
+				"id": "gameplay-portal",
+				"intent": "Approved stock third-person view of the west portal from the Avenue M sidewalk",
+				"kind": "stock",
+				"phases": "AB",
+				"player_ab": [
+					8.1,
+					-10.5
+				]
+			}
+		},
+		{
+			"bytes": 800071,
+			"camera_forward": [
+				0.976807057857513,
+				0.0523359142243862,
+				-0.207626730203629
+			],
+			"camera_position": [
+				286.344055175781,
+				5.40576553344727,
+				-285.196838378906
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "r07-portal-match-A.png",
+			"id": "r07-portal-match-A",
+			"intent": "Stock camera placed at pano TKrEWRNj (Sep 2025) heading matched to r07/r08",
+			"pause_overlay_visible": false,
+			"phase": "A-generated-placeholder",
+			"player_position": [
+				291.716461181641,
+				3.69361162185669,
+				-286.338775634766
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.654005497694016,
+			"sample_unique_colors": 235,
+			"settle": {
+				"ground_clearance_m": 0.000404834747314453,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 3.69320678710938,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 6.69320678710938,
+				"settled_y": 3.69361162185669
+			},
+			"sha256": "038700ca58e651a8718d9ad079149a738c164a9d8a6a42ac99b778beee7aad4c",
+			"source_key": "w34313548",
+			"view": {
+				"camera_ab": [
+					16.07,
+					-24.9
+				],
+				"heading_deg": 78.0,
+				"id": "r07-portal-match",
+				"intent": "Stock camera placed at pano TKrEWRNj (Sep 2025) heading matched to r07/r08",
+				"kind": "stock",
+				"phases": "AB",
+				"pitch_deg": 3.0
+			}
+		},
+		{
+			"ab_camera_drift_m": 0.0,
+			"bytes": 730599,
+			"camera_forward": [
+				0.976807177066803,
+				0.0523359179496765,
+				-0.207626610994339
+			],
+			"camera_position": [
+				286.344055175781,
+				5.40576553344727,
+				-285.196838378906
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "r07-portal-match-B.png",
+			"id": "r07-portal-match-B",
+			"intent": "Stock camera placed at pano TKrEWRNj (Sep 2025) heading matched to r07/r08",
+			"pause_overlay_visible": false,
+			"phase": "B-candidate",
+			"player_position": [
+				291.716461181641,
+				3.69361162185669,
+				-286.338775634766
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.679989039897919,
+			"sample_unique_colors": 224,
+			"settle": {
+				"ground_clearance_m": 0.000404834747314453,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 3.69320678710938,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 6.69320678710938,
+				"settled_y": 3.69361162185669
+			},
+			"sha256": "872ad7f9d249cab5c8f4873ff292bc3d1569d45499b0c18feff51b44c948dd4d",
+			"source_key": "w34313548",
+			"view": {
+				"camera_ab": [
+					16.07,
+					-24.9
+				],
+				"heading_deg": 78.0,
+				"id": "r07-portal-match",
+				"intent": "Stock camera placed at pano TKrEWRNj (Sep 2025) heading matched to r07/r08",
+				"kind": "stock",
+				"phases": "AB",
+				"pitch_deg": 3.0
+			}
+		},
+		{
+			"bytes": 759941,
+			"camera_forward": [
+				0.887616217136383,
+				0.0871558040380478,
+				-0.452262490987778
+			],
+			"camera_position": [
+				268.558349609375,
+				5.42905902862549,
+				-321.062438964844
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "r05-west-mid-match-A.png",
+			"id": "r05-west-mid-match-A",
+			"intent": "Stock camera at pano SNgVcJp9 (Sep 2025) perpendicular to the west long face, r05",
+			"pause_overlay_visible": false,
+			"phase": "A-generated-placeholder",
+			"player_position": [
+				273.440246582031,
+				3.90841555595398,
+				-323.549896240234
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.6660375893116,
+			"sample_unique_colors": 238,
+			"settle": {
+				"ground_clearance_m": 0.0000140666961669922,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 3.90840148925781,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 6.90840148925781,
+				"settled_y": 3.90841555595398
+			},
+			"sha256": "3ed88fc12f53044a6b6ff3372d8a84fef7c39e8f7b58bc86975f0c1777e2c81b",
+			"source_key": "w34313548",
+			"view": {
+				"camera_ab": [
+					56.1,
+					-24.38
+				],
+				"heading_deg": 63.0,
+				"id": "r05-west-mid-match",
+				"intent": "Stock camera at pano SNgVcJp9 (Sep 2025) perpendicular to the west long face, r05",
+				"kind": "stock",
+				"phases": "AB",
+				"pitch_deg": 5.0
+			}
+		},
+		{
+			"ab_camera_drift_m": 0.0,
+			"bytes": 682556,
+			"camera_forward": [
+				0.887616217136383,
+				0.0871558040380478,
+				-0.452262490987778
+			],
+			"camera_position": [
+				268.558349609375,
+				5.42905902862549,
+				-321.062438964844
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "r05-west-mid-match-B.png",
+			"id": "r05-west-mid-match-B",
+			"intent": "Stock camera at pano SNgVcJp9 (Sep 2025) perpendicular to the west long face, r05",
+			"pause_overlay_visible": false,
+			"phase": "B-candidate",
+			"player_position": [
+				273.440246582031,
+				3.90841555595398,
+				-323.549896240234
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.6660375893116,
+			"sample_unique_colors": 205,
+			"settle": {
+				"ground_clearance_m": 0.0000140666961669922,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 3.90840148925781,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 6.90840148925781,
+				"settled_y": 3.90841555595398
+			},
+			"sha256": "ab3ceccac62a5768c3f4ab5efe71fba93b339e0770548a32575125ea501962bb",
+			"source_key": "w34313548",
+			"view": {
+				"camera_ab": [
+					56.1,
+					-24.38
+				],
+				"heading_deg": 63.0,
+				"id": "r05-west-mid-match",
+				"intent": "Stock camera at pano SNgVcJp9 (Sep 2025) perpendicular to the west long face, r05",
+				"kind": "stock",
+				"phases": "AB",
+				"pitch_deg": 5.0
+			}
+		},
+		{
+			"bytes": 768449,
+			"camera_forward": [
+				0.982408702373505,
+				0.0697565302252769,
+				0.173225834965706
+			],
+			"camera_position": [
+				249.537857055664,
+				5.10560178756714,
+				-356.9697265625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "r12-west-oblique-match-A.png",
+			"id": "r12-west-oblique-match-A",
+			"intent": "Stock camera at pano ne4FlBZL (May 2011) oblique along the west face, r12",
+			"pause_overlay_visible": false,
+			"phase": "A-generated-placeholder",
+			"player_position": [
+				254.94108581543,
+				3.48926281929016,
+				-356.016998291016
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.646712958812714,
+			"sample_unique_colors": 217,
+			"settle": {
+				"ground_clearance_m": 0.000111818313598633,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_0__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 3.48915100097656,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 6.48915100097656,
+				"settled_y": 3.48926281929016
+			},
+			"sha256": "8fff94cbee4168ca1062634aca090b66b610a6ba4f60bea18569d758df40d94d",
+			"source_key": "w34313548",
+			"view": {
+				"camera_ab": [
+					96.73,
+					-24.94
+				],
+				"heading_deg": 100.0,
+				"id": "r12-west-oblique-match",
+				"intent": "Stock camera at pano ne4FlBZL (May 2011) oblique along the west face, r12",
+				"kind": "stock",
+				"phases": "AB",
+				"pitch_deg": 4.0
+			}
+		},
+		{
+			"ab_camera_drift_m": 0.0,
+			"bytes": 679541,
+			"camera_forward": [
+				0.982408702373505,
+				0.0697565302252769,
+				0.173225834965706
+			],
+			"camera_position": [
+				249.537857055664,
+				5.10560178756714,
+				-356.9697265625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "r12-west-oblique-match-B.png",
+			"id": "r12-west-oblique-match-B",
+			"intent": "Stock camera at pano ne4FlBZL (May 2011) oblique along the west face, r12",
+			"pause_overlay_visible": false,
+			"phase": "B-candidate",
+			"player_position": [
+				254.94108581543,
+				3.48926281929016,
+				-356.016998291016
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.730197668075562,
+			"sample_unique_colors": 193,
+			"settle": {
+				"ground_clearance_m": 0.000111818313598633,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_0__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 3.48915100097656,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 6.48915100097656,
+				"settled_y": 3.48926281929016
+			},
+			"sha256": "3548656383a693e0232ffa79f7c5ddc67a52a52919949b3806905de891fddb80",
+			"source_key": "w34313548",
+			"view": {
+				"camera_ab": [
+					96.73,
+					-24.94
+				],
+				"heading_deg": 100.0,
+				"id": "r12-west-oblique-match",
+				"intent": "Stock camera at pano ne4FlBZL (May 2011) oblique along the west face, r12",
+				"kind": "stock",
+				"phases": "AB",
+				"pitch_deg": 4.0
+			}
+		},
+		{
+			"bytes": 816437,
+			"camera_forward": [
+				0.818652927875519,
+				0.0348995365202427,
+				0.573227226734161
+			],
+			"camera_position": [
+				249.537841796875,
+				5.30480766296387,
+				-356.9697265625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "r13-west-rake-match-A.png",
+			"id": "r13-west-rake-match-A",
+			"intent": "Stock camera at pano ne4FlBZL raking south along Avenue M, r13",
+			"pause_overlay_visible": false,
+			"phase": "A-generated-placeholder",
+			"player_position": [
+				254.040435791016,
+				3.49675488471985,
+				-353.816986083984
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.734423533082008,
+			"sample_unique_colors": 265,
+			"settle": {
+				"ground_clearance_m": 0.000111818313598633,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_0__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 3.49664306640625,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 6.49664306640625,
+				"settled_y": 3.49675488471985
+			},
+			"sha256": "3bc8b23559c2ca648e17a978a4495bb28c32b5b4ed56c0f13da4a10874443599",
+			"source_key": "w34313548",
+			"view": {
+				"camera_ab": [
+					96.73,
+					-24.94
+				],
+				"heading_deg": 125.0,
+				"id": "r13-west-rake-match",
+				"intent": "Stock camera at pano ne4FlBZL raking south along Avenue M, r13",
+				"kind": "stock",
+				"phases": "AB",
+				"pitch_deg": 2.0
+			}
+		},
+		{
+			"ab_camera_drift_m": 0.0,
+			"bytes": 750507,
+			"camera_forward": [
+				0.818652987480164,
+				0.0348995365202427,
+				0.573227226734161
+			],
+			"camera_position": [
+				249.537841796875,
+				5.30480766296387,
+				-356.9697265625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "r13-west-rake-match-B.png",
+			"id": "r13-west-rake-match-B",
+			"intent": "Stock camera at pano ne4FlBZL raking south along Avenue M, r13",
+			"pause_overlay_visible": false,
+			"phase": "B-candidate",
+			"player_position": [
+				254.040435791016,
+				3.49675488471985,
+				-353.816986083984
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.726863577961922,
+			"sample_unique_colors": 236,
+			"settle": {
+				"ground_clearance_m": 0.000111818313598633,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_0__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 3.49664306640625,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 6.49664306640625,
+				"settled_y": 3.49675488471985
+			},
+			"sha256": "f8cca1ac6da1776e99125b433a2b9d66ec45fef5ce93efcd4aaf37f63a8e6409",
+			"source_key": "w34313548",
+			"view": {
+				"camera_ab": [
+					96.73,
+					-24.94
+				],
+				"heading_deg": 125.0,
+				"id": "r13-west-rake-match",
+				"intent": "Stock camera at pano ne4FlBZL raking south along Avenue M, r13",
+				"kind": "stock",
+				"phases": "AB",
+				"pitch_deg": 2.0
+			}
+		},
+		{
+			"bytes": 714719,
+			"camera_forward": [
+				0.403704404830933,
+				0.121869400143623,
+				0.906736254692078
+			],
+			"camera_position": [
+				268.103088378906,
+				5.05510187149048,
+				-395.173767089844
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "r10-north-end-match-A.png",
+			"id": "r10-north-end-match-A",
+			"intent": "Stock camera at pano 3gORoJSc (Sep 2025) toward the banded north end, r09/r10",
+			"pause_overlay_visible": false,
+			"phase": "A-generated-placeholder",
+			"player_position": [
+				270.323455810547,
+				3.72538328170776,
+				-390.186706542969
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.711884707212448,
+			"sample_unique_colors": 273,
+			"settle": {
+				"ground_clearance_m": 0.000209331512451172,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 3.72517395019531,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 6.72517395019531,
+				"settled_y": 3.72538328170776
+			},
+			"sha256": "31adbd6a0de4ad832507f33de154653f0e6c41661f6f6fb439595f61c37e4753",
+			"source_key": "w34313548",
+			"view": {
+				"camera_ab": [
+					122.27,
+					9.0
+				],
+				"heading_deg": 156.0,
+				"id": "r10-north-end-match",
+				"intent": "Stock camera at pano 3gORoJSc (Sep 2025) toward the banded north end, r09/r10",
+				"kind": "stock",
+				"phases": "AB",
+				"pitch_deg": 7.0
+			}
+		},
+		{
+			"ab_camera_drift_m": 0.0,
+			"bytes": 652518,
+			"camera_forward": [
+				0.403704404830933,
+				0.121869400143623,
+				0.906736254692078
+			],
+			"camera_position": [
+				268.103088378906,
+				5.05510187149048,
+				-395.173767089844
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "r10-north-end-match-B.png",
+			"id": "r10-north-end-match-B",
+			"intent": "Stock camera at pano 3gORoJSc (Sep 2025) toward the banded north end, r09/r10",
+			"pause_overlay_visible": false,
+			"phase": "B-candidate",
+			"player_position": [
+				270.323455810547,
+				3.72538328170776,
+				-390.186706542969
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.711884707212448,
+			"sample_unique_colors": 258,
+			"settle": {
+				"ground_clearance_m": 0.000209331512451172,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 3.72517395019531,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 6.72517395019531,
+				"settled_y": 3.72538328170776
+			},
+			"sha256": "87395158b95a3daa89320a3bb96049d1110fa97ccf898f9f49a646909e4d24ca",
+			"source_key": "w34313548",
+			"view": {
+				"camera_ab": [
+					122.27,
+					9.0
+				],
+				"heading_deg": 156.0,
+				"id": "r10-north-end-match",
+				"intent": "Stock camera at pano 3gORoJSc (Sep 2025) toward the banded north end, r09/r10",
+				"kind": "stock",
+				"phases": "AB",
+				"pitch_deg": 7.0
+			}
+		},
+		{
+			"bytes": 673717,
+			"camera_forward": [
+				0.307324975728989,
+				0.104528464376926,
+				-0.945846259593964
+			],
+			"camera_position": [
+				306.22998046875,
+				5.54424810409546,
+				-250.429489135742
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "r14-south-match-A.png",
+			"id": "r14-south-match-A",
+			"intent": "Stock camera at pano XxFNKcpP (Mar 2025) toward the south end, r14",
+			"pause_overlay_visible": false,
+			"phase": "A-generated-placeholder",
+			"player_position": [
+				307.920257568359,
+				4.11915159225464,
+				-255.631622314453
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.669748187065125,
+			"sample_unique_colors": 190,
+			"settle": {
+				"ground_clearance_m": 0.000209331512451172,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-1",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 4.11894226074219,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 7.11894226074219,
+				"settled_y": 4.11915159225464
+			},
+			"sha256": "5a724b9141a87d730b2bf554ad6039744192e5fe2f6e8dda6aa028406f547b0b",
+			"source_key": "w34313548",
+			"view": {
+				"camera_ab": [
+					-23.94,
+					-23.05
+				],
+				"heading_deg": 18.0,
+				"id": "r14-south-match",
+				"intent": "Stock camera at pano XxFNKcpP (Mar 2025) toward the south end, r14",
+				"kind": "stock",
+				"phases": "AB",
+				"pitch_deg": 6.0
+			}
+		},
+		{
+			"ab_camera_drift_m": 0.0,
+			"bytes": 652099,
+			"camera_forward": [
+				0.307325035333633,
+				0.104528471827507,
+				-0.945846259593964
+			],
+			"camera_position": [
+				306.22998046875,
+				5.54424810409546,
+				-250.429489135742
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "r14-south-match-B.png",
+			"id": "r14-south-match-B",
+			"intent": "Stock camera at pano XxFNKcpP (Mar 2025) toward the south end, r14",
+			"pause_overlay_visible": false,
+			"phase": "B-candidate",
+			"player_position": [
+				307.920257568359,
+				4.11915159225464,
+				-255.631622314453
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.677014082670212,
+			"sample_unique_colors": 192,
+			"settle": {
+				"ground_clearance_m": 0.000209331512451172,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-1",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 4.11894226074219,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 7.11894226074219,
+				"settled_y": 4.11915159225464
+			},
+			"sha256": "8fba8e3b3c4154954ca44c878b80c1d71228ad7e6b1ad7deb9ee64f1e9064131",
+			"source_key": "w34313548",
+			"view": {
+				"camera_ab": [
+					-23.94,
+					-23.05
+				],
+				"heading_deg": 18.0,
+				"id": "r14-south-match",
+				"intent": "Stock camera at pano XxFNKcpP (Mar 2025) toward the south end, r14",
+				"kind": "stock",
+				"phases": "AB",
+				"pitch_deg": 6.0
+			}
+		},
+		{
+			"bytes": 741698,
+			"camera_forward": [
+				0.889656245708466,
+				0.0295707751065493,
+				-0.455672413110733
+			],
+			"camera_position": [
+				304.398162841797,
+				5.91085290908813,
+				-285.489349365234
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "gameplay-passage-west-A.png",
+			"id": "gameplay-passage-west-A",
+			"intent": "Stock view into the walk-through passage from the west entrance (r15 framing)",
+			"pause_overlay_visible": false,
+			"phase": "A-generated-placeholder",
+			"player_position": [
+				309.291290283203,
+				4.07349443435669,
+				-287.995574951172
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.469412535429001,
+			"sample_unique_colors": 242,
+			"settle": {
+				"ground_clearance_m": 0.000404834747314453,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 4.07308959960938,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 7.07308959960938,
+				"settled_y": 4.07349443435669
+			},
+			"sha256": "cfb0d5479489a67870dbf17947cabff7a7c339ca10becde501c0f11f620b3879",
+			"source_key": "w34313548",
+			"view": {
+				"aim_abh": [
+					8.1,
+					10.0,
+					2.4
+				],
+				"id": "gameplay-passage-west",
+				"intent": "Stock view into the walk-through passage from the west entrance (r15 framing)",
+				"kind": "stock",
+				"phases": "AB",
+				"player_ab": [
+					8.1,
+					-3.2
+				]
+			}
+		},
+		{
+			"ab_camera_drift_m": 0.0,
+			"bytes": 769423,
+			"camera_forward": [
+				0.889656245708466,
+				0.0295707806944847,
+				-0.455672413110733
+			],
+			"camera_position": [
+				304.398162841797,
+				5.91085290908813,
+				-285.489349365234
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "gameplay-passage-west-B.png",
+			"id": "gameplay-passage-west-B",
+			"intent": "Stock view into the walk-through passage from the west entrance (r15 framing)",
+			"pause_overlay_visible": false,
+			"phase": "B-candidate",
+			"player_position": [
+				309.291290283203,
+				4.07349443435669,
+				-287.995574951172
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.893056489527225,
+			"sample_unique_colors": 259,
+			"settle": {
+				"ground_clearance_m": 0.000404834747314453,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 4.07308959960938,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 7.07308959960938,
+				"settled_y": 4.07349443435669
+			},
+			"sha256": "d2f05a56f50479bd5a543519c9a3b321d5c0b72bada44e3f663e96addca7fbad",
+			"source_key": "w34313548",
+			"view": {
+				"aim_abh": [
+					8.1,
+					10.0,
+					2.4
+				],
+				"id": "gameplay-passage-west",
+				"intent": "Stock view into the walk-through passage from the west entrance (r15 framing)",
+				"kind": "stock",
+				"phases": "AB",
+				"player_ab": [
+					8.1,
+					-3.2
+				]
+			}
+		},
+		{
+			"bytes": 532508,
+			"camera_forward": [
+				-0.889958500862122,
+				0.0140735702589154,
+				0.455824375152588
+			],
+			"camera_position": [
+				336.437225341797,
+				6.16421127319336,
+				-301.8994140625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "gameplay-passage-east-A.png",
+			"id": "gameplay-passage-east-A",
+			"intent": "Stock view from the yard back through the passage and east arch (inference side)",
+			"pause_overlay_visible": false,
+			"phase": "A-generated-placeholder",
+			"player_position": [
+				331.542449951172,
+				4.24161577224731,
+				-299.392364501953
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.498086273670197,
+			"sample_unique_colors": 206,
+			"settle": {
+				"ground_clearance_m": -0.0000834465026855469,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 4.24169921875,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 7.24169921875,
+				"settled_y": 4.24161577224731
+			},
+			"sha256": "6d1cd064e51a2dad2ef3de2c46f430f00077a11b1ff6031bfaeeff8da4dda776",
+			"source_key": "w34313548",
+			"view": {
+				"aim_abh": [
+					8.1,
+					6.0,
+					2.4
+				],
+				"id": "gameplay-passage-east",
+				"intent": "Stock view from the yard back through the passage and east arch (inference side)",
+				"kind": "stock",
+				"phases": "AB",
+				"player_ab": [
+					8.1,
+					21.8
+				]
+			}
+		},
+		{
+			"ab_camera_drift_m": 0.0,
+			"bytes": 368074,
+			"camera_forward": [
+				-0.889958500862122,
+				0.0140735683962703,
+				0.455824375152588
+			],
+			"camera_position": [
+				336.437225341797,
+				6.16421127319336,
+				-301.8994140625
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "gameplay-passage-east-B.png",
+			"id": "gameplay-passage-east-B",
+			"intent": "Stock view from the yard back through the passage and east arch (inference side)",
+			"pause_overlay_visible": false,
+			"phase": "B-candidate",
+			"player_position": [
+				331.542449951172,
+				4.24161577224731,
+				-299.392364501953
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.736225113272667,
+			"sample_unique_colors": 141,
+			"settle": {
+				"ground_clearance_m": -0.0000834465026855469,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 4.24169921875,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 7.24169921875,
+				"settled_y": 4.24161577224731
+			},
+			"sha256": "e349cd336bcc3f9e7fe0cddf3b85df18648d9b99e68273dbbb1ddb996bd1bc94",
+			"source_key": "w34313548",
+			"view": {
+				"aim_abh": [
+					8.1,
+					6.0,
+					2.4
+				],
+				"id": "gameplay-passage-east",
+				"intent": "Stock view from the yard back through the passage and east arch (inference side)",
+				"kind": "stock",
+				"phases": "AB",
+				"player_ab": [
+					8.1,
+					21.8
+				]
+			}
+		},
+		{
+			"bytes": 288332,
+			"camera_forward": [
+				-0.888863503932953,
+				0.0515489540994167,
+				0.455262988805771
+			],
+			"camera_position": [
+				329.143920898438,
+				5.79974699020386,
+				-338.498809814453
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "gameplay-yard-east-A.png",
+			"id": "gameplay-yard-east-A",
+			"intent": "Stock view of the east yard face and covered walkway (aerial-only evidence; inference)",
+			"pause_overlay_visible": false,
+			"phase": "A-generated-placeholder",
+			"player_position": [
+				324.255157470703,
+				4.08326625823975,
+				-335.994873046875
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.488492608070374,
+			"sample_unique_colors": 118,
+			"settle": {
+				"ground_clearance_m": 0.0000143051147460938,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 4.083251953125,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 7.083251953125,
+				"settled_y": 4.08326625823975
+			},
+			"sha256": "3897a5419aebb3ef952fb92271c731fffde38b95fe343a8dcadd5ac2b5fa3d2f",
+			"source_key": "w34313548",
+			"view": {
+				"aim_abh": [
+					44.0,
+					13.0,
+					3.0
+				],
+				"id": "gameplay-yard-east",
+				"intent": "Stock view of the east yard face and covered walkway (aerial-only evidence; inference)",
+				"kind": "stock",
+				"phases": "AB",
+				"player_ab": [
+					44.0,
+					32.0
+				]
+			}
+		},
+		{
+			"ab_camera_drift_m": 0.0,
+			"bytes": 189808,
+			"camera_forward": [
+				-0.888863503932953,
+				0.05154899507761,
+				0.455262988805771
+			],
+			"camera_position": [
+				329.143920898438,
+				5.79974699020386,
+				-338.498809814453
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "gameplay-yard-east-B.png",
+			"id": "gameplay-yard-east-B",
+			"intent": "Stock view of the east yard face and covered walkway (aerial-only evidence; inference)",
+			"pause_overlay_visible": false,
+			"phase": "B-candidate",
+			"player_position": [
+				324.255157470703,
+				4.08326625823975,
+				-335.994873046875
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.710276141762733,
+			"sample_unique_colors": 88,
+			"settle": {
+				"ground_clearance_m": 0.0000143051147460938,
+				"ground_feature": "land_ground",
+				"ground_object": "land:w26767313:x_1__z_-2",
+				"ground_sources": [
+					"w26767313",
+					"w29399800"
+				],
+				"ground_y": 4.083251953125,
+				"in_boundary": true,
+				"input_driven_after_reset": false,
+				"movement_proof": false,
+				"physics_grounded": true,
+				"scenario_reset": "fixed_player_transform_then_physics_settle",
+				"settle_horizontal_drift_m": 0.0,
+				"settle_physics_frames": 126,
+				"settle_recovery_delta": 0,
+				"settle_spawn_y": 7.083251953125,
+				"settled_y": 4.08326625823975
+			},
+			"sha256": "f94b1328ba36a455ed26ca7750c025134d23f2fe743f36e46a47db355ce90e53",
+			"source_key": "w34313548",
+			"view": {
+				"aim_abh": [
+					44.0,
+					13.0,
+					3.0
+				],
+				"id": "gameplay-yard-east",
+				"intent": "Stock view of the east yard face and covered walkway (aerial-only evidence; inference)",
+				"kind": "stock",
+				"phases": "AB",
+				"player_ab": [
+					44.0,
+					32.0
+				]
+			}
+		},
+		{
+			"camera": "non-gameplay aerial study camera",
+			"camera_forward": [
+				0.0,
+				-1.0,
+				0.0000000437113882867379
+			],
+			"camera_position": [
+				299.959106445312,
+				154.063995361328,
+				-332.539031982422
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "aerial-topdown-A.png",
+			"fov": 45.0,
+			"id": "aerial-topdown-A",
+			"phase": "A-generated-placeholder",
+			"sha256": "53ef95803e99c582f66764a7cd3c7764a0464d097468d94ae8ea5b83ea105265",
+			"view": {
+				"eye_abh": [
+					52.0,
+					8.8,
+					150.0
+				],
+				"fov": 45.0,
+				"id": "aerial-topdown",
+				"intent": "Non-gameplay study camera comparable to r02 top-down roof",
+				"kind": "aerial",
+				"look_abh": [
+					52.0,
+					8.8,
+					0.0
+				],
+				"top_down": true
+			}
+		},
+		{
+			"camera": "non-gameplay aerial study camera",
+			"camera_forward": [
+				0.0,
+				-1.0,
+				0.0000000437113882867379
+			],
+			"camera_position": [
+				299.959106445312,
+				154.063995361328,
+				-332.539031982422
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "aerial-topdown-B.png",
+			"fov": 45.0,
+			"id": "aerial-topdown-B",
+			"phase": "B-candidate",
+			"sha256": "c77bee3b69f1c65b6f318959f3ab1a383e13d64838e789bf17603c4f2734f96b",
+			"view": {
+				"eye_abh": [
+					52.0,
+					8.8,
+					150.0
+				],
+				"fov": 45.0,
+				"id": "aerial-topdown",
+				"intent": "Non-gameplay study camera comparable to r02 top-down roof",
+				"kind": "aerial",
+				"look_abh": [
+					52.0,
+					8.8,
+					0.0
+				],
+				"top_down": true
+			}
+		},
+		{
+			"camera": "non-gameplay aerial study camera",
+			"camera_forward": [
+				0.0976291745901108,
+				-0.483459144830704,
+				-0.869905650615692
+			],
+			"camera_position": [
+				291.735412597656,
+				59.0639991760254,
+				-230.579193115234
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "aerial-sw-oblique-A.png",
+			"fov": 45.0,
+			"id": "aerial-sw-oblique-A",
+			"phase": "A-generated-placeholder",
+			"sha256": "4acd440d2c459ba4b5de615235f1c724a42821655ad04871da95dc36236c1c84",
+			"view": {
+				"eye_abh": [
+					-35.0,
+					-45.0,
+					55.0
+				],
+				"fov": 45.0,
+				"id": "aerial-sw-oblique",
+				"intent": "Non-gameplay oblique roof/west/south view (no angled roof reference exists)",
+				"kind": "aerial",
+				"look_abh": [
+					45.0,
+					8.0,
+					2.0
+				]
+			}
+		},
+		{
+			"camera": "non-gameplay aerial study camera",
+			"camera_forward": [
+				0.0976291745901108,
+				-0.483459144830704,
+				-0.869905650615692
+			],
+			"camera_position": [
+				291.735412597656,
+				59.0639991760254,
+				-230.579193115234
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "aerial-sw-oblique-B.png",
+			"fov": 45.0,
+			"id": "aerial-sw-oblique-B",
+			"phase": "B-candidate",
+			"sha256": "b00146da9cf14a61c5f87b001b1ca0562ab294ba4f6fb9a753391a03bff00d1a",
+			"view": {
+				"eye_abh": [
+					-35.0,
+					-45.0,
+					55.0
+				],
+				"fov": 45.0,
+				"id": "aerial-sw-oblique",
+				"intent": "Non-gameplay oblique roof/west/south view (no angled roof reference exists)",
+				"kind": "aerial",
+				"look_abh": [
+					45.0,
+					8.0,
+					2.0
+				]
+			}
+		},
+		{
+			"camera": "non-gameplay aerial study camera",
+			"camera_forward": [
+				-0.504954695701599,
+				-0.53458446264267,
+				0.677672743797302
+			],
+			"camera_position": [
+				343.944915771484,
+				49.0639991760254,
+				-380.909393310547
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "aerial-east-oblique-A.png",
+			"fov": 45.0,
+			"id": "aerial-east-oblique-A",
+			"phase": "A-generated-placeholder",
+			"sha256": "41efc21e9427a93935504fc801d9b838a77b885446d615734c4854d59bd3198d",
+			"view": {
+				"eye_abh": [
+					75.0,
+					70.0,
+					45.0
+				],
+				"fov": 45.0,
+				"id": "aerial-east-oblique",
+				"intent": "Non-gameplay oblique of the yard side and walkway (r03 strip)",
+				"kind": "aerial",
+				"look_abh": [
+					45.0,
+					9.0,
+					2.0
+				]
+			}
+		},
+		{
+			"camera": "non-gameplay aerial study camera",
+			"camera_forward": [
+				-0.504954695701599,
+				-0.53458446264267,
+				0.677672743797302
+			],
+			"camera_position": [
+				343.944915771484,
+				49.0639991760254,
+				-380.909393310547
+			],
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "aerial-east-oblique-B.png",
+			"fov": 45.0,
+			"id": "aerial-east-oblique-B",
+			"phase": "B-candidate",
+			"sha256": "e6cc5631337a5574f512c55e4b50e01484ae62cdebfb345ee0217b7c21fda3e9",
+			"view": {
+				"eye_abh": [
+					75.0,
+					70.0,
+					45.0
+				],
+				"fov": 45.0,
+				"id": "aerial-east-oblique",
+				"intent": "Non-gameplay oblique of the yard side and walkway (r03 strip)",
+				"kind": "aerial",
+				"look_abh": [
+					45.0,
+					9.0,
+					2.0
+				]
+			}
+		},
+		{
+			"actions": {
+				"jetpack": false,
+				"move_back": false,
+				"move_forward": true,
+				"move_left": false,
+				"move_right": false,
+				"run": false,
+				"spray": false
+			},
+			"bytes": 827509,
+			"camera_forward": [
+				0.890046238899231,
+				0.000000426583483204013,
+				-0.45587033033371
+			],
+			"camera_position": [
+				314.211334228516,
+				6.26566457748413,
+				-290.568725585938
+			],
+			"controller_enabled": true,
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "motion-passage-traverse-leg0-mid.png",
+			"id": "motion-passage-traverse-leg0-mid",
+			"intent": "Sampled actual stock motion/spray: passage-traverse-leg0-mid",
+			"movement_proof": true,
+			"pause_overlay_visible": false,
+			"phase": "passage-traverse-leg0-mid",
+			"physics_frame": 1833,
+			"physics_grounded": true,
+			"player_position": [
+				319.106567382812,
+				4.26566457748413,
+				-293.075988769531
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.78149801492691,
+			"sample_unique_colors": 129,
+			"scope": "Single sampled frame",
+			"sha256": "b6db50fc93c24529b423a978a956ceeac08a66b92c1bdcb694a128c6aa9bf020",
+			"source_key": "w34313548"
+		},
+		{
+			"actions": {
+				"jetpack": false,
+				"move_back": false,
+				"move_forward": true,
+				"move_left": false,
+				"move_right": false,
+				"run": false,
+				"spray": false
+			},
+			"bytes": 437470,
+			"camera_forward": [
+				-0.993443369865417,
+				0.000000430287229846726,
+				0.114325270056725
+			],
+			"camera_position": [
+				312.881774902344,
+				6.06851863861084,
+				-333.362487792969
+			],
+			"controller_enabled": true,
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "motion-walkway-entry-leg0-mid.png",
+			"id": "motion-walkway-entry-leg0-mid",
+			"intent": "Sampled actual stock motion/spray: walkway-entry-leg0-mid",
+			"movement_proof": true,
+			"pause_overlay_visible": false,
+			"phase": "walkway-entry-leg0-mid",
+			"physics_frame": 2729,
+			"physics_grounded": true,
+			"player_position": [
+				307.417846679688,
+				4.06851863861084,
+				-332.733703613281
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.408027440309525,
+			"sample_unique_colors": 90,
+			"scope": "Single sampled frame",
+			"sha256": "9d84fb395ef204e3be2cf7623b6293692b8d88baa8c8137c74438bcfeb463217",
+			"source_key": "w34313548"
+		},
+		{
+			"actions": {
+				"jetpack": false,
+				"move_back": false,
+				"move_forward": false,
+				"move_left": false,
+				"move_right": false,
+				"run": false,
+				"spray": false
+			},
+			"bytes": 872261,
+			"camera_forward": [
+				0.890045881271362,
+				0.000000430291720476816,
+				-0.455871045589447
+			],
+			"camera_position": [
+				293.082794189453,
+				5.96750545501709,
+				-314.527954101562
+			],
+			"controller_enabled": true,
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "motion-west-wall-stop-pushed.png",
+			"id": "motion-west-wall-stop-pushed",
+			"intent": "Sampled actual stock motion/spray: west-wall-stop-pushed",
+			"movement_proof": true,
+			"pause_overlay_visible": false,
+			"phase": "west-wall-stop-pushed",
+			"physics_frame": 3179,
+			"physics_grounded": true,
+			"player_position": [
+				297.978057861328,
+				3.96750521659851,
+				-317.035247802734
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.514467477798462,
+			"sample_unique_colors": 165,
+			"scope": "Single sampled frame",
+			"sha256": "9f2c79b181f5423c3ef1469d9124e469fa369d26d4fe7acfa9c090571cf0c5d1",
+			"source_key": "w34313548"
+		},
+		{
+			"actions": {
+				"jetpack": false,
+				"move_back": false,
+				"move_forward": false,
+				"move_left": false,
+				"move_right": false,
+				"run": false,
+				"spray": false
+			},
+			"bytes": 550041,
+			"camera_forward": [
+				0.889266610145569,
+				0.0418658293783665,
+				-0.455469220876694
+			],
+			"camera_position": [
+				291.110076904297,
+				5.71012926101685,
+				-312.754608154297
+			],
+			"controller_enabled": true,
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "motion-spray-west-wall.png",
+			"id": "motion-spray-west-wall",
+			"intent": "Sampled actual stock motion/spray: spray-west-wall",
+			"movement_proof": true,
+			"pause_overlay_visible": false,
+			"phase": "spray-west-wall",
+			"physics_frame": 3395,
+			"physics_grounded": true,
+			"player_position": [
+				296.001037597656,
+				3.94038891792297,
+				-315.259735107422
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.673831284046173,
+			"sample_unique_colors": 135,
+			"scope": "Single sampled frame",
+			"sha256": "2e9dffac202f6fe9ad637f2b5e5a0c28d91db391c38151045c0adb78d3c9bc18",
+			"source_key": "w34313548"
+		},
+		{
+			"actions": {
+				"jetpack": false,
+				"move_back": false,
+				"move_forward": false,
+				"move_left": false,
+				"move_right": false,
+				"run": false,
+				"spray": false
+			},
+			"bytes": 615047,
+			"camera_forward": [
+				0.882347762584686,
+				0.131229087710381,
+				-0.45193076133728
+			],
+			"camera_position": [
+				302.017944335938,
+				5.23982667922974,
+				-290.674377441406
+			],
+			"controller_enabled": true,
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "motion-spray-maroon-frame.png",
+			"id": "motion-spray-maroon-frame",
+			"intent": "Sampled actual stock motion/spray: spray-maroon-frame",
+			"movement_proof": true,
+			"pause_overlay_visible": false,
+			"phase": "spray-maroon-frame",
+			"physics_frame": 3536,
+			"physics_grounded": true,
+			"player_position": [
+				306.870849609375,
+				3.96158337593079,
+				-293.160003662109
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.871745064854622,
+			"sample_unique_colors": 248,
+			"scope": "Single sampled frame",
+			"sha256": "aabd7269c3e40e4912efcace32e1713390553fd5612d04c7b7d2a375a3bcd5e7",
+			"source_key": "w34313548"
+		},
+		{
+			"actions": {
+				"jetpack": false,
+				"move_back": false,
+				"move_forward": false,
+				"move_left": false,
+				"move_right": false,
+				"run": false,
+				"spray": false
+			},
+			"bytes": 657287,
+			"camera_forward": [
+				0.887242913246155,
+				-0.0792697891592979,
+				-0.454440712928772
+			],
+			"camera_position": [
+				301.161743164062,
+				6.35206985473633,
+				-293.157043457031
+			],
+			"controller_enabled": true,
+			"dimensions": [
+				1440,
+				900
+			],
+			"file": "motion-spray-glass-reject.png",
+			"id": "motion-spray-glass-reject",
+			"intent": "Sampled actual stock motion/spray: spray-glass-reject",
+			"movement_proof": true,
+			"pause_overlay_visible": false,
+			"phase": "spray-glass-reject",
+			"physics_frame": 3677,
+			"physics_grounded": true,
+			"player_position": [
+				306.041595458984,
+				3.91608166694641,
+				-295.656463623047
+			],
+			"region": "w34313548",
+			"sample_luminance_range": 0.832282356917858,
+			"sample_unique_colors": 213,
+			"scope": "Single sampled frame",
+			"sha256": "e1c5e878e7284541ae21c5c0e147b66f53d0505af3b1dfff3a33a993a3ff1617",
+			"source_key": "w34313548"
+		}
+	],
+	"cases": [
+		{
+			"bodies": {
+				"DetailContact": {
+					"compare_predicates": {
+						"collection": true,
+						"collision_count": true,
+						"ordered_faces_equal": true,
+						"positive_expected_coverage": true,
+						"render_count": true
+					},
+					"expected_vertex_count": 27318,
+					"ok": true,
+					"predicates": {
+						"body_local_identity": true,
+						"compare": true,
+						"layer": true,
+						"mask": true,
+						"metadata": true,
+						"render_layer": true,
+						"same_global_as_render": true,
+						"server_transform": true,
+						"shape_owner": true,
+						"spray_group": true
+					}
+				},
+				"RoofContact": {
+					"compare_predicates": {
+						"collection": true,
+						"collision_count": true,
+						"ordered_faces_equal": true,
+						"positive_expected_coverage": true,
+						"render_count": true
+					},
+					"expected_vertex_count": 1188,
+					"ok": true,
+					"predicates": {
+						"body_local_identity": true,
+						"compare": true,
+						"layer": true,
+						"mask": true,
+						"metadata": true,
+						"render_layer": true,
+						"same_global_as_render": true,
+						"server_transform": true,
+						"shape_owner": true,
+						"spray_group": true
+					}
+				},
+				"WallContact": {
+					"compare_predicates": {
+						"collection": true,
+						"collision_count": true,
+						"ordered_faces_equal": true,
+						"positive_expected_coverage": true,
+						"render_count": true
+					},
+					"expected_vertex_count": 10506,
+					"ok": true,
+					"predicates": {
+						"body_local_identity": true,
+						"compare": true,
+						"layer": true,
+						"mask": true,
+						"metadata": true,
+						"render_layer": true,
+						"same_global_as_render": true,
+						"server_transform": true,
+						"shape_owner": true,
+						"spray_group": true
+					}
+				}
+			},
+			"case": "shared-indexed-native-geometry-and-roles",
+			"ok": true
+		},
+		{
+			"case": "passage-traverse",
+			"legs": [
+				{
+					"aim": {
+						"input_route": "Input.parse_input_event_to_stock_PlayerCamera",
+						"ok": true,
+						"pitch_degrees": -0.000000211735860809952,
+						"pitch_error_degrees": 0.000000211735860809952,
+						"yaw_degrees": -62.8789947067042,
+						"yaw_error_degrees": 0.00000288441983790397
+					},
+					"arrived": true,
+					"destination": [
+						331.275421142578,
+						0.0,
+						-299.255615234375
+					],
+					"end": [
+						331.220825195312,
+						4.24549150466919,
+						-299.243408203125
+					],
+					"end_local": [
+						8.11405181884766,
+						4.24549150466919,
+						21.4458427429199
+					],
+					"label": "passage-traverse-leg0",
+					"ok": true,
+					"recovery_delta": 0,
+					"safe_rest": true,
+					"slide_owners": [
+						"land:w26767313:x_1__z_-2"
+					],
+					"start": [
+						307.244171142578,
+						4.05773210525513,
+						-286.947082519531
+					],
+					"support_owners": [
+						"land:w26767313:x_1__z_-2"
+					],
+					"trace_end": 435,
+					"trace_start": 16
+				},
+				{
+					"aim": {
+						"input_route": "Input.parse_input_event_to_stock_PlayerCamera",
+						"ok": true,
+						"pitch_degrees": 0.00000000000000305333242595768,
+						"pitch_error_degrees": 0.00000000000000305333242595768,
+						"yaw_degrees": -242.849179109744,
+						"yaw_error_degrees": 0.00000673694568808272
+					},
+					"arrived": true,
+					"destination": [
+						307.244171142578,
+						0.0,
+						-286.947082519531
+					],
+					"end": [
+						307.305114746094,
+						4.05870294570923,
+						-286.965057373047
+					],
+					"end_local": [
+						8.08823108673096,
+						4.05870294570923,
+						-5.43758106231689
+					],
+					"label": "passage-traverse-leg1",
+					"ok": true,
+					"recovery_delta": 0,
+					"safe_rest": true,
+					"slide_owners": [
+						"land:w26767313:x_1__z_-2"
+					],
+					"start": [
+						331.220825195312,
+						4.24549150466919,
+						-299.243408203125
+					],
+					"support_owners": [
+						"land:w26767313:x_1__z_-2"
+					],
+					"trace_end": 853,
+					"trace_start": 435
+				}
+			],
+			"ok": true,
+			"setup": {
+				"metadata": {
+					"ground_clearance_m": 0.000404834747314453,
+					"ground_feature": "land_ground",
+					"ground_object": "land:w26767313:x_1__z_-2",
+					"ground_sources": [
+						"w26767313",
+						"w29399800"
+					],
+					"ground_y": 4.05732727050781,
+					"in_boundary": true,
+					"input_driven_after_reset": false,
+					"movement_proof": false,
+					"physics_grounded": true,
+					"scenario_reset": "fixed_player_transform_then_physics_settle",
+					"settle_horizontal_drift_m": 0.0,
+					"settle_physics_frames": 125,
+					"settle_recovery_delta": 0,
+					"settle_spawn_y": 7.05732727050781,
+					"settled_y": 4.05773210525513
+				},
+				"ok": true
+			}
+		},
+		{
+			"case": "walkway-entry",
+			"legs": [
+				{
+					"aim": {
+						"input_route": "Input.parse_input_event_to_stock_PlayerCamera",
+						"ok": true,
+						"pitch_degrees": -0.00000000000000000000012132852975,
+						"pitch_error_degrees": 0.00000000000000000000012132852975,
+						"yaw_degrees": -263.435232664379,
+						"yaw_error_degrees": 0.00000155997001328315
+					},
+					"arrived": true,
+					"destination": [
+						306.845001220703,
+						0.0,
+						-332.6953125
+					],
+					"end": [
+						306.922241210938,
+						4.06851863861084,
+						-332.695556640625
+					],
+					"end_local": [
+						48.965015411377,
+						4.06851863861084,
+						15.0688457489014
+					],
+					"label": "walkway-entry-leg0",
+					"ok": true,
+					"recovery_delta": 0,
+					"safe_rest": true,
+					"slide_owners": [
+						"land:w26767313:x_1__z_-2"
+					],
+					"start": [
+						315.3330078125,
+						4.07518482208252,
+						-333.672119140625
+					],
+					"support_owners": [
+						"land:w26767313:x_1__z_-2"
+					],
+					"trace_end": 999,
+					"trace_start": 861
+				},
+				{
+					"aim": {
+						"input_route": "Input.parse_input_event_to_stock_PlayerCamera",
+						"ok": true,
+						"pitch_degrees": 0.00000000000000000000000000000018,
+						"pitch_error_degrees": 0.00000000000000000000000000000018,
+						"yaw_degrees": -443.377140084255,
+						"yaw_error_degrees": 0.0000187204302600696
+					},
+					"arrived": true,
+					"destination": [
+						315.3330078125,
+						0.0,
+						-333.672119140625
+					],
+					"end": [
+						315.266784667969,
+						4.0745997428894,
+						-333.672241210938
+					],
+					"end_local": [
+						46.0302772521973,
+						4.0745997428894,
+						22.9411144256592
+					],
+					"label": "walkway-entry-leg1",
+					"ok": true,
+					"recovery_delta": 0,
+					"safe_rest": true,
+					"slide_owners": [
+						"land:w26767313:x_1__z_-2"
+					],
+					"start": [
+						306.922241210938,
+						4.06851863861084,
+						-332.695556640625
+					],
+					"support_owners": [
+						"land:w26767313:x_1__z_-2"
+					],
+					"trace_end": 1140,
+					"trace_start": 999
+				}
+			],
+			"ok": true,
+			"setup": {
+				"metadata": {
+					"ground_clearance_m": 0.000111579895019531,
+					"ground_feature": "land_ground",
+					"ground_object": "land:w26767313:x_1__z_-2",
+					"ground_sources": [
+						"w26767313",
+						"w29399800"
+					],
+					"ground_y": 4.0750732421875,
+					"in_boundary": true,
+					"input_driven_after_reset": false,
+					"movement_proof": false,
+					"physics_grounded": true,
+					"scenario_reset": "fixed_player_transform_then_physics_settle",
+					"settle_horizontal_drift_m": 0.0,
+					"settle_physics_frames": 125,
+					"settle_recovery_delta": 0,
+					"settle_spawn_y": 7.0750732421875,
+					"settled_y": 4.07518482208252
+				},
+				"ok": true
+			}
+		},
+		{
+			"case": "west-wall-stop",
+			"contact_bodies": [
+				"Collision",
+				"WallContact"
+			],
+			"face_b": 0.35,
+			"final_contacts": [
+				[
+					"WallContact",
+					[
+						-0.482909083366394,
+						0.0,
+						0.875670492649078
+					]
+				],
+				[
+					"WallContact",
+					[
+						-0.890045821666718,
+						0.0,
+						0.455871015787125
+					]
+				]
+			],
+			"ok": true,
+			"pushed_local": [
+				39.1040153503418,
+				3.96750521659851,
+				-0.0309667587280273
+			],
+			"rest": true,
+			"retreat": {
+				"aim": {
+					"input_route": "Input.parse_input_event_to_stock_PlayerCamera",
+					"ok": true,
+					"pitch_degrees": 0.0,
+					"pitch_error_degrees": 0.0,
+					"yaw_degrees": -593.170893036019,
+					"yaw_error_degrees": 0.0000272402049852996
+				},
+				"arrived": true,
+				"destination": [
+					294.754974365234,
+					0.0,
+					-314.621520996094
+				],
+				"end": [
+					294.818420410156,
+					3.93161845207214,
+					-314.661560058594
+				],
+				"end_local": [
+					38.4317092895508,
+					3.93161845207214,
+					-3.92528533935547
+				],
+				"label": "west-wall-stop-retreat",
+				"ok": true,
+				"recovery_delta": 0,
+				"safe_rest": true,
+				"slide_owners": [
+					"land:w26767313:x_1__z_-2"
+				],
+				"start": [
+					297.978057861328,
+					3.96750521659851,
+					-317.035247802734
+				],
+				"support_owners": [
+					"land:w26767313:x_1__z_-2"
+				],
+				"trace_end": 1379,
+				"trace_start": 1306
+			},
+			"slide_owners": [
+				"land:w26767313:x_1__z_-2",
+				"building:w34313548:wall"
+			],
+			"stopped_at_face": true,
+			"trace_start": 1148
+		},
+		{
+			"aim": {
+				"input_route": "Input.parse_input_event_to_stock_PlayerCamera",
+				"ok": true,
+				"pitch_degrees": 2.39941130447963,
+				"pitch_error_degrees": 0.0000000256766839399646,
+				"yaw_degrees": -422.879086686887,
+				"yaw_error_degrees": 0.00000408100238244353
+			},
+			"case": "spray-west-wall",
+			"expected": "placed",
+			"hit": {
+				"body": "/root/Main/WorldRoot/B600FreshStudy/WallContact",
+				"derived_object_key": "building:w34313548:wall",
+				"hit": true,
+				"layer": 5,
+				"normal": [
+					-0.890045940876007,
+					0.0,
+					0.455870866775513
+				],
+				"point": [
+					298.626708984375,
+					6.06400442123413,
+					-316.6044921875
+				],
+				"receiver_kind": "building_wall",
+				"shape_index": 0
+			},
+			"hit_target_distance": 0.0000683741891407408,
+			"ok": true,
+			"player_range": 3.63486790657043,
+			"rest": true,
+			"results": [
+				"placed"
+			],
+			"tag": {
+				"metadata": [
+					"building:w34313548:wall",
+					[
+						"w34313548"
+					]
+				],
+				"origin": [
+					298.613372802734,
+					6.06400442123413,
+					-316.59765625
+				],
+				"size": [
+					1.20000004768372,
+					0.0799999982118607,
+					0.649999976158142
+				]
+			},
+			"tag_count_after": 1,
+			"tag_count_before": 0,
+			"target": [
+				298.626678466797,
+				6.06400012969971,
+				-316.604553222656
+			]
+		},
+		{
+			"aim": {
+				"input_route": "Input.parse_input_event_to_stock_PlayerCamera",
+				"ok": true,
+				"pitch_degrees": 7.54058604652838,
+				"pitch_error_degrees": 0.0000000465261446232316,
+				"yaw_degrees": -422.87881347932,
+				"yaw_error_degrees": 0.00000797673399424831
+			},
+			"case": "spray-maroon-frame",
+			"expected": "placed",
+			"hit": {
+				"body": "/root/Main/WorldRoot/B600FreshStudy/WallContact",
+				"derived_object_key": "building:w34313548:wall",
+				"hit": true,
+				"layer": 5,
+				"normal": [
+					-0.890045940876007,
+					0.0,
+					0.455870866775513
+				],
+				"point": [
+					309.576599121094,
+					6.36400127410889,
+					-294.545867919922
+				],
+				"receiver_kind": "building_wall",
+				"shape_index": 0
+			},
+			"hit_target_distance": 0.00000143051147460938,
+			"ok": true,
+			"player_range": 3.87470149993896,
+			"rest": true,
+			"results": [
+				"placed"
+			],
+			"tag": {
+				"metadata": [
+					"building:w34313548:wall",
+					[
+						"w34313548"
+					]
+				],
+				"origin": [
+					309.563262939453,
+					6.36400127410889,
+					-294.539031982422
+				],
+				"size": [
+					1.20000004768372,
+					0.0799999982118607,
+					0.649999976158142
+				]
+			},
+			"tag_count_after": 2,
+			"tag_count_before": 1,
+			"target": [
+				309.576599121094,
+				6.36399984359741,
+				-294.545867919922
+			]
+		},
+		{
+			"aim": {
+				"input_route": "Input.parse_input_event_to_stock_PlayerCamera",
+				"ok": true,
+				"pitch_degrees": -4.54663964508452,
+				"pitch_error_degrees": 0.0000000115166008488532,
+				"yaw_degrees": -422.878676875537,
+				"yaw_error_degrees": 0.00000774628255380407
+			},
+			"case": "spray-glass-reject",
+			"expected": "receiver_rejection",
+			"hit": {
+				"body": "/root/Main/WorldRoot/B600FreshStudy/DetailContact",
+				"derived_object_key": "building:w34313548:wall",
+				"hit": true,
+				"layer": 5,
+				"normal": [
+					-0.890045940876007,
+					0.0,
+					0.455870866775513
+				],
+				"point": [
+					308.863037109375,
+					5.66400671005249,
+					-297.101623535156
+				],
+				"receiver_kind": "none",
+				"shape_index": 0
+			},
+			"hit_target_distance": 0.0000312392039631959,
+			"ok": true,
+			"player_range": 3.61998105049133,
+			"rest": true,
+			"results": [
+				"receiver_rejection"
+			],
+			"tag_count_after": 2,
+			"tag_count_before": 2,
+			"target": [
+				308.863037109375,
+				5.66400003433228,
+				-297.101593017578
+			]
+		}
+	],
+	"failure": "",
+	"geometry": {
+		"DetailContact": {
+			"compare_predicates": {
+				"collection": true,
+				"collision_count": true,
+				"ordered_faces_equal": true,
+				"positive_expected_coverage": true,
+				"render_count": true
+			},
+			"expected_vertex_count": 27318,
+			"ok": true,
+			"predicates": {
+				"body_local_identity": true,
+				"compare": true,
+				"layer": true,
+				"mask": true,
+				"metadata": true,
+				"render_layer": true,
+				"same_global_as_render": true,
+				"server_transform": true,
+				"shape_owner": true,
+				"spray_group": true
+			}
+		},
+		"RoofContact": {
+			"compare_predicates": {
+				"collection": true,
+				"collision_count": true,
+				"ordered_faces_equal": true,
+				"positive_expected_coverage": true,
+				"render_count": true
+			},
+			"expected_vertex_count": 1188,
+			"ok": true,
+			"predicates": {
+				"body_local_identity": true,
+				"compare": true,
+				"layer": true,
+				"mask": true,
+				"metadata": true,
+				"render_layer": true,
+				"same_global_as_render": true,
+				"server_transform": true,
+				"shape_owner": true,
+				"spray_group": true
+			}
+		},
+		"WallContact": {
+			"compare_predicates": {
+				"collection": true,
+				"collision_count": true,
+				"ordered_faces_equal": true,
+				"positive_expected_coverage": true,
+				"render_count": true
+			},
+			"expected_vertex_count": 10506,
+			"ok": true,
+			"predicates": {
+				"body_local_identity": true,
+				"compare": true,
+				"layer": true,
+				"mask": true,
+				"metadata": true,
+				"render_layer": true,
+				"same_global_as_render": true,
+				"server_transform": true,
+				"shape_owner": true,
+				"spray_group": true
+			}
+		}
+	},
+	"initial_recovery": 0,
+	"mode": "full",
+	"ok": true,
+	"preservation_equal": true,
+	"safe_final": true,
+	"scope": "Isolated B600 study; no production attachment, acceptance or release claim",
+	"target_original": [
+		[
+			"/root/Main/WorldRoot/PlayableWorld/Buildings/x_1__z_-2__building_w34313548_wall/building_w34313548_wall",
+			true,
+			true
+		],
+		[
+			"/root/Main/WorldRoot/PlayableWorld/Buildings/x_1__z_-2__building_w34313548_roof/building_w34313548_roof",
+			true,
+			true
+		],
+		[
+			"/root/Main/WorldRoot/PlayableWorld/Buildings/x_1__z_-2__building_w34313548_wall/building_w34313548_wall/Collision",
+			5,
+			0,
+			true
+		],
+		[
+			"/root/Main/WorldRoot/PlayableWorld/Buildings/x_1__z_-2__building_w34313548_roof/building_w34313548_roof/Collision",
+			5,
+			0,
+			false
+		]
+	],
+	"target_restored": true,
+	"unsafe": false
+}
