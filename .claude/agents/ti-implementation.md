@@ -15,6 +15,6 @@ Adapt complete view dictionaries and their consumers together; preserve missing-
 
 Keep routine handoffs to short status, actual changed paths, source revision, rendered evidence/result and any blocker. Include generated metadata only where an existing contract requires it; do not create another report or binding layer.
 
-Do not make routine authoring wait for exports or release paperwork. Stop at the assigned handoff; batch packaging and recognition require their separate assignments and gates. Record a concise named retrospective, coordinating shared-log writes.
+Do not make routine authoring wait for exports. Run `game/tests/shared/building_fit_test.gd` and `building_shots.gd` for the building before handing off. Stop at the assigned handoff; independent review and recognition require their separate assignments. Record a concise named retrospective, coordinating shared-log writes.
 
 Use the maintained [shared geometry check](../../CLAUDE.md#shared-building-study-geometry-verification) for supported producers rather than another copied collector. Configure actual indexed-versus-get_faces semantics, transforms and positive coverage; retain full failed operands in the existing receipt and independently check target ownership/roles. This helper does not replace stock support/rest, visual or release decisions.

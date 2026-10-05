@@ -1,4 +1,28 @@
-# First-playable test suite
+# Test suite
+
+## Current checks
+
+Run everything through `tools/godot` in the devcontainer (see the [README](../../README.md#develop)):
+
+```sh
+tools/godot --headless --path . --import
+tools/godot --headless --path . --script game/tests/validate_generated_world.gd
+tools/godot --headless --path . --script game/tests/shared/building_fit_test.gd -- --source <key>
+tools/godot --path . --resolution 1600x900 --script game/tests/shared/building_shots.gd -- --source <key> --island --out <dir>
+tools/build-mac.sh   # Mac build + content audit + launch check
+```
+
+`game/tests/shared/` holds the reusable checks; [AGENTS.md](../../AGENTS.md#what-done-means-for-a-building)
+says which ones a building needs. Most other files here are per-building scripts from
+the earlier macOS release process, kept as history.
+
+## Historical notes (macOS release process)
+
+The rest of this file describes the earlier process. Commands that name
+`.tools/godot/4.7.2/Godot.app/...` or `--display-driver macos` ran on the old Mac;
+on Linux use `tools/godot` instead. Several of these tests assert old counts,
+checksums or a macOS/Metal renderer and are expected to fail now.
+
 
 Run from the project root with the exact trusted, self-contained Godot binary recorded in [`INSTALL_LOG.md`](../../INSTALL_LOG.md):
 
