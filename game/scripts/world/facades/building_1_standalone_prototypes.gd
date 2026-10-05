@@ -16,10 +16,7 @@ func _ready() -> void:
 func _build() -> void:
 	var geometry := Node3D.new()
 	geometry.name = "PrototypeGeometry"
-	geometry.set_meta("prototype_only", true)
-	geometry.set_meta("runtime_attachment", false)
 	geometry.set_meta("exact_receiver_calibration", false)
-	geometry.set_meta("review_status", "native_capture_pending_independent_standalone_art_review")
 	geometry.set_meta("one_local_unit_m", 1.0)
 	geometry.set_meta("proof_dimensions_m", PROOF_DIMENSIONS_M)
 	geometry.set_meta("receiver_height_m", 20.0)
@@ -128,7 +125,6 @@ func _module_root(motif_id: String, position_m: Vector3, nominal_bounds_m: Vecto
 	module.set_meta("surveyed_dimensions", false)
 	module.set_meta("surveyed_coordinates", false)
 	module.set_meta("completed_elevation", false)
-	module.set_meta("whole_building_acceptance", false)
 	module.set_meta("description", description)
 	return module
 

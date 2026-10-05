@@ -19,8 +19,6 @@ func _ready() -> void:
 func _build() -> void:
 	var geometry := Node3D.new()
 	geometry.name = "PrototypeGeometry"
-	geometry.set_meta("prototype_only", true)
-	geometry.set_meta("runtime_attachment", false)
 	geometry.set_meta("calibration_state", "not_started")
 	geometry.set_meta("one_local_unit_m", 1.0)
 	geometry.set_meta("proof_dimensions_m", PROOF_DIMENSIONS_M)

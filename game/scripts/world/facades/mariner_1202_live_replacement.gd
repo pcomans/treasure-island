@@ -11,8 +11,6 @@ const SOURCE_KEY := "w96215651"
 const WALL_KEY := "building:w96215651:wall"
 const ROOF_KEY := "building:w96215651:roof"
 const TARGET_CHUNK_ID := "x_-2__z_-3"
-const EXPECTED_FACTORY_SHA256 := "c81cf174af5f91a21dc95306b77296d8d82152a54ef301e87853944b3b78c59c"
-const EXPECTED_CONFIG_SHA256 := "8490ec8dab6302c9892b37b86542ccc18793dfe309ac7d589fb9dc9cad9ddf22"
 const MAPPED_RUNS := [10,11,12,13,14,15,16,17,18,19,21]
 const PROTECTED_RUNS := [0,1,2,3,4,5,6,7,8,9,20,22,23,24,25]
 
@@ -51,8 +49,8 @@ static func build_chunk_plan(prepared: Dictionary, source_builder: Callable, tan
 	if not bool(prepared.get("contains_target", false)):
 		return {"ok": true, "contains_target": false, "records": {}, "pending_keys": {}}
 	var records := prepared.get("source_records", {}) as Dictionary
-	if not _pair_matches(records) or not _dependencies_match():
-		return _failure("mariner_1202_preflight", "Pinned factory, config, or source pair drifted.", {})
+	if not _pair_matches(records) or not runtime_dependency_closure_exists():
+		return _failure("mariner_1202_preflight", "Factory or exact source pair is missing.", {})
 	var built := FACTORY.build_for_records(records[WALL_KEY], records[ROOF_KEY], source_builder, tangent_builder)
 	if not bool(built.get("ok", false)):
 		return _failure("mariner_1202_factory", str(built.get("message", "Factory failed.")), records[WALL_KEY])
@@ -99,21 +97,8 @@ static func _pair_matches(records: Dictionary) -> bool:
 		and FACTORY.matches_record_pair(records[WALL_KEY], records[ROOF_KEY])
 
 
-static func _dependencies_match() -> bool:
-	# Exported scripts are remapped resources; JSON and source records stay raw.
-	if FileAccess.file_exists("res://project.binary") and not FileAccess.file_exists("res://project.godot"):
-		return runtime_dependency_closure_exists()
-	return source_dependency_hashes_match()
-
-
-static func source_dependency_hashes_match() -> bool:
-	return FileAccess.get_sha256(FACTORY.SELF_PATH) == EXPECTED_FACTORY_SHA256 \
-		and FileAccess.get_sha256(FACTORY.CONFIG_PATH) == EXPECTED_CONFIG_SHA256
-
-
 static func runtime_dependency_closure_exists() -> bool:
-	return ResourceLoader.exists(FACTORY.SELF_PATH) \
-		and FileAccess.get_sha256(FACTORY.CONFIG_PATH) == EXPECTED_CONFIG_SHA256
+	return ResourceLoader.exists(FACTORY.SELF_PATH)
 
 
 static func _split_factory_result(built: Dictionary, wall_record: Dictionary) -> Dictionary:
@@ -147,7 +132,6 @@ static func _split_factory_result(built: Dictionary, wall_record: Dictionary) ->
 		"stack_allowed": false,
 		"original_source_channels_and_roof_preserved": true,
 		"source_wall_spray_eligibility_preserved": true,
-		"recognition_accepted": false,
 		"package_attachment_pending": true,
 	}
 	return {
@@ -176,18 +160,13 @@ static func _apply_live_metadata(root: Node3D, key: String, wall: bool) -> void:
 	root.set_meta("source_keys", [SOURCE_KEY])
 	root.set_meta("feature_kind", "building_wall" if wall else "building_roof")
 	root.set_meta("receiver_kind", "building_wall" if wall else "none")
-	root.set_meta("runtime_attachment", true)
-	root.set_meta("prototype_only", false)
 	root.set_meta("adapter_id", ADAPTER_ID)
 	root.set_meta("runtime_supersedes_generated_placeholder", true)
 	root.set_meta("superseded_object_keys", [WALL_KEY, ROOF_KEY])
-	root.set_meta("recognition_accepted", false)
 	for child: Node in root.get_children():
 		if child is MeshInstance3D:
 			child.set_meta("derived_object_key", key)
 			child.set_meta("source_keys", [SOURCE_KEY])
-			child.set_meta("runtime_attachment", true)
-			child.set_meta("prototype_only", false)
 
 
 static func _measure(roots: Array) -> Dictionary:

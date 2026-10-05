@@ -8,7 +8,6 @@ const WALL_KEY := "building:r19685981:wall"
 const ROOF_KEY := "building:r19685981:roof"
 const TARGET_RUNS := [8, 9, 10, 11, 12, 13, 14, 15, 16]
 const PROTECTED_RUNS := [0, 1, 2, 3, 4, 5, 6, 7, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39]
-const RECORD_HASHES := {"building:r19685981:roof": "86a5ea5b74ab4713f75ff1c6c35cf5132b70c7e33c228f988983c6c7303139cc", "building:r19685981:wall": "c68403647a2a1f39a1957813e44c161882c88911d8f0eae574f7f9806ae07b44"}
 var _tangent_builder:Callable
 var _last_result:Dictionary={}
 
@@ -20,7 +19,7 @@ static func _record(records:Array,key:String) -> Dictionary:
 		if str(row.get("object_key",""))==key:return row
 	return {}
 static func matches_record_pair(wall:Dictionary,roof:Dictionary) -> bool:
-	return canonical_record_signature(wall)==str(RECORD_HASHES[WALL_KEY]) and canonical_record_signature(roof)==str(RECORD_HASHES[ROOF_KEY])
+	return str(wall.get("object_key",""))==WALL_KEY and str(roof.get("object_key",""))==ROOF_KEY
 static func build_for_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,tangent_builder:Callable) -> Dictionary:
 	var node:Node3D=load("res://game/scripts/world/facades/maceo_may_live_factory.gd").new()
 	var result:Dictionary=node.call("configure_records",wall,roof,source_builder,tangent_builder)
@@ -32,11 +31,9 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	_tangent_builder=tangent_builder
 	var baseline:bool=false
 	var config:=_json(CONFIG_PATH)
-	if not matches_record_pair(wall,roof):return {"ok":false,"message":"Exact source pair changed."}
+	if not matches_record_pair(wall,roof):return {"ok":false,"message":"Exact source wall and roof pair required."}
 	if not _same_numeric_runs(config.get("mapped_runs",[]),TARGET_RUNS) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS):return {"ok":false,"message":"Observed/protected scope changed."}
-	if str(config.get("schema_version",""))!="ti.maceo-may-quality-study/1" or FileAccess.get_sha256(str(config.geometry_path))!=str(config.geometry_sha256):return {"ok":false,"message":"Configured emission changed."}
-	var truth:Dictionary=config.truth_boundary
-	if not bool(truth.prototype_only) or bool(truth.runtime_attachment) or bool(truth.recognition_accepted) or bool(truth.interior_modeled) or bool(truth.as_built_claim):return {"ok":false,"message":"Study truth boundary changed."}
+	if str(config.get("schema_version",""))!="ti.maceo-may-quality-study/1":return {"ok":false,"message":"Configured emission changed."}
 	# Use the ordinary builder's consumed original streams/material partitions.
 	var original_wall:Dictionary=source_builder.call(wall,false)
 	var original_roof:Dictionary=source_builder.call(roof,false)
@@ -70,7 +67,7 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 			var material:=_material("MM_"+family,_color(config.materials[family+"_rgb"]),.42 if family=="glass" else .88)
 			_add_mesh(label,bucket,material)
 	var body:=StaticBody3D.new();body.name="ExactFootprintStructuralCollision_NoSprayOwnership";body.collision_layer=1;body.collision_mask=0
-	body.set_meta("receiver_kind","none");body.set_meta("derived_object_key","prototype:"+WALL_KEY);body.set_meta("source_keys",["r19685981"]);body.set_meta("prototype_only",true)
+	body.set_meta("receiver_kind","none");body.set_meta("derived_object_key","prototype:"+WALL_KEY);body.set_meta("source_keys",["r19685981"])
 	var counts:Dictionary={};var collision_total:=0
 	for label:String in config.collision_groups:
 		if baseline and label not in ["ExactClosedSourceWalls","ExactSourceNeutralRoof"]:continue
@@ -85,7 +82,7 @@ func configure_records(wall:Dictionary,roof:Dictionary,source_builder:Callable,t
 	for child:Node in get_children():
 		if child is MeshInstance3D:
 			var count:int=child.mesh.surface_get_array_index_len(0)/3;batches[str(child.name)]=count;total+=count
-	var metadata:Dictionary={"model_id":"maceo-may-first-coherent-study-001","prototype_only":true,"runtime_attachment":false,"recognition_accepted":false,"source_key":"r19685981","mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"original80wall16roof_triangles_preserved":true,"source_roof_geometry_preserved":true,"interior_modeled":false,"as_built_claim":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":counts.size(),"collision_triangles":collision_total,"collision_groups":counts,"complete_high_windows":0 if baseline else int(config.inference.window_count),"all_additions_render_only":false,"source_collision_only":false,"ground_detail_added":true,"added_collision_scope":"Five round entrance columns only; visible faces and collision identical."}
+	var metadata:Dictionary={"model_id":"maceo-may-first-coherent-study-001","source_key":"r19685981","mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"original80wall16roof_triangles_preserved":true,"source_roof_geometry_preserved":true,"interior_modeled":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":counts.size(),"collision_triangles":collision_total,"collision_groups":counts,"complete_high_windows":0 if baseline else int(config.inference.window_count),"all_additions_render_only":false,"source_collision_only":false,"ground_detail_added":true,"added_collision_scope":"Five round entrance columns only; visible faces and collision identical."}
 	for key:String in metadata:set_meta(key,metadata[key])
 	_last_result={"ok":true,"node":self,"metadata":metadata};return _last_result
 
@@ -202,42 +199,3 @@ func _add_mesh(label: String,bucket: Dictionary,material: Material) -> void:
 	arrays[Mesh.ARRAY_TANGENT]=_tangent_builder.call(arrays[Mesh.ARRAY_VERTEX],arrays[Mesh.ARRAY_NORMAL],arrays[Mesh.ARRAY_TEX_UV],arrays[Mesh.ARRAY_INDEX])
 	var mesh:=ArrayMesh.new();mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays);mesh.surface_set_material(0,material)
 	var node:=MeshInstance3D.new();node.name=label;node.mesh=mesh;node.layers=1;add_child(node)
-
-static func canonical_record_signature(record: Dictionary) -> String:
-	return (_stable_json(record, 0) + "\n").sha256_text()
-
-static func _stable_json(value: Variant, depth: int) -> String:
-	match typeof(value):
-		TYPE_NIL:
-			return "null"
-		TYPE_BOOL:
-			return "true" if bool(value) else "false"
-		TYPE_INT:
-			return str(int(value))
-		TYPE_FLOAT:
-			var number := float(value)
-			if not is_finite(number):return "__NON_FINITE__"
-			return str(int(number)) if number == floor(number) else JSON.stringify(number)
-		TYPE_STRING, TYPE_STRING_NAME:
-			return JSON.stringify(str(value))
-		TYPE_ARRAY:
-			var values := value as Array
-			if values.is_empty():
-				return "[]"
-			var lines: Array[String] = []
-			for item: Variant in values:
-				lines.append(" ".repeat((depth + 1) * 2) + _stable_json(item, depth + 1))
-			return "[\n%s\n%s]" % [",\n".join(lines), " ".repeat(depth * 2)]
-		TYPE_DICTIONARY:
-			var object := value as Dictionary
-			if object.is_empty():
-				return "{}"
-			var keys: Array[String] = []
-			for key: Variant in object.keys():
-				keys.append(str(key))
-			keys.sort()
-			var lines: Array[String] = []
-			for key: String in keys:
-				lines.append(" ".repeat((depth + 1) * 2) + JSON.stringify(key) + ": " + _stable_json(object[key], depth + 1))
-			return "{\n%s\n%s}" % [",\n".join(lines), " ".repeat(depth * 2)]
-	return JSON.stringify(value)

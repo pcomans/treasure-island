@@ -33,6 +33,7 @@ const NORTHPOINT_1240_LIVE_REPLACEMENT := preload("res://game/scripts/world/faca
 const GATEVIEW_1397_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/gateview_1397_live_replacement.gd")
 const BAYSIDE_1226_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/bayside_1226_live_replacement.gd")
 const BAYSIDE_1215_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/bayside_1215_live_replacement.gd")
+const FIRE_TRAINING600_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/fire_training_600_live_replacement.gd")
 const FIRE_STATION48_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/fire_station48_live_replacement.gd")
 const D5_1317_GATEVIEW_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d5_1317_gateview_live_replacement.gd")
 const D2_1444_CROAKER_LIVE_REPLACEMENT := preload("res://game/scripts/world/facades/d2_1444_croaker_quality_v2_live_replacement.gd")
@@ -112,7 +113,7 @@ var _materials: Dictionary = {}
 func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	var chunk_root := Node3D.new()
 	chunk_root.name = str(chunk.chunk_id).validate_node_name()
-	# Claim the target chunk before per-row dispatch so a drifted/missing B201
+	# Claim the target chunk before per-row dispatch so a malformed/missing B201
 	# wall cannot silently fall through to generic construction.
 	var b201_chunk_validation := D1_B201_LIVE_ATTACHMENT.validate_chunk_records(chunk)
 	if not bool(b201_chunk_validation.get("ok", false)):
@@ -120,7 +121,7 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		return b201_chunk_validation
 	# B225's production attachment is equally exact-target-only. Validate the
 	# complete wall/roof membership before any row from its chunk is staged so a
-	# missing, duplicate, moved, or drifted receiver can never fall back generic.
+	# missing, duplicate, moved, or malformed receiver can never fall back generic.
 	var b225_chunk_validation := D1_B225_LIVE_ATTACHMENT.validate_chunk_records(chunk)
 	if not bool(b225_chunk_validation.get("ok", false)):
 		chunk_root.free()
@@ -161,6 +162,10 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 	if not bool(d5_1317_pair.get("ok", false)):
 		chunk_root.free()
 		return d5_1317_pair
+	var fire_training600_pair := FIRE_TRAINING600_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
+	if not bool(fire_training600_pair.get("ok", false)):
+		chunk_root.free()
+		return fire_training600_pair
 	var fs48_pair := FIRE_STATION48_LIVE_REPLACEMENT.prepare_chunk_records(chunk)
 	if not bool(fs48_pair.get("ok", false)):
 		chunk_root.free()
@@ -283,6 +288,12 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		chunk_root.free()
 		return d5_1317_plan
 	rollback_plans.append({"adapter": D5_1317_GATEVIEW_LIVE_REPLACEMENT, "plan": d5_1317_plan})
+	var fire_training600_plan := FIRE_TRAINING600_LIVE_REPLACEMENT.build_chunk_plan(fire_training600_pair)
+	if not bool(fire_training600_plan.get("ok", false)):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return fire_training600_plan
+	rollback_plans.append({"adapter": FIRE_TRAINING600_LIVE_REPLACEMENT, "plan": fire_training600_plan})
 	var fs48_plan := FIRE_STATION48_LIVE_REPLACEMENT.build_chunk_plan(fs48_pair, Callable(self, "_build_unpaired_record"), Callable(self, "_tangents_for"))
 	if not bool(fs48_plan.get("ok", false)):
 		_free_unconsumed_plans(rollback_plans)
@@ -420,7 +431,11 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 			_free_unconsumed_plans(rollback_plans)
 			chunk_root.free()
 			return {"ok": false, "code": "builder_parent", "message": "Missing world category parent %s." % parent_key, "source_keys": record.source_keys}
-		var record_result := _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)
+		var record_result: Dictionary
+		if FIRE_TRAINING600_LIVE_REPLACEMENT.claims_record(record):
+			record_result = FIRE_TRAINING600_LIVE_REPLACEMENT.consume_record(record, fire_training600_plan)
+		else:
+			record_result = _build_record(record, false, chapel_plan, d2_1441_plan, d2_1439_plan, d2_1444_plan, d5_1308_plan, d5_1394_plan, d5_1317_plan, fs48_plan, maceo_plan, northern_canopy_plan, northpoint_1238_plan, mariner_1206_plan, mariner_1219_plan, mariner_1212_plan, bayside_1220_plan, northpoint_1239_plan, bayside_1222_plan, northpoint_1227_plan, mariner_1202_plan, northpoint_1234_plan, bayside_1215_plan, northpoint_1232_plan, northpoint_1241_plan, mariner_1221_plan, northpoint_1240_plan, gateview_1397_plan, bayside_1226_plan)
 		if not record_result.ok:
 			_free_unconsumed_plans(rollback_plans)
 			chunk_root.free()
@@ -438,6 +453,10 @@ func build_chunk(chunk: Dictionary, category_parents: Dictionary) -> Dictionary:
 		report.shapes += int(record_result.get("shapes", 1 if str(record.collision_kind) == "world_solid" else 0))
 		for key_value: Variant in record.source_keys:
 			report.source_keys[str(key_value)] = true
+	if not FIRE_TRAINING600_LIVE_REPLACEMENT.plan_was_fully_consumed(fire_training600_plan):
+		_free_unconsumed_plans(rollback_plans)
+		chunk_root.free()
+		return {"ok": false, "code": "fire_training600_unconsumed", "message": "Building 600 source pair was not fully consumed.", "source_keys": ["w34313548"]}
 	var chapel_consumed := NAVY_CHAPEL_187_LIVE_REPLACEMENT.plan_was_fully_consumed(chapel_plan)
 	var d2_1441_consumed := D2_1441_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1441_plan)
 	var d2_1439_consumed := D2_1439_CHINOOK_LIVE_REPLACEMENT.plan_was_fully_consumed(d2_1439_plan)

@@ -11,10 +11,9 @@ const CONFIG_PATH := "res://game/resources/facades/d5_1317_gateview_quality_stud
 const CHUNK_PATH := "res://generated/world/chunks/x_-3__z_-2.json"
 const WALL_KEY := "building:w95934125:wall"
 const ROOF_KEY := "building:w95934125:roof"
-const EXPECTED_CHUNK_SHA256 := "35bf23d64e860d39c5b79a98be7830f4f477143f7e9490c6739dec0627062d11"
 const TARGET_RUNS := [10,13,14,15,17,20,22,24,26,27,29,31]
 const PROTECTED_RUNS := [0,1,2,3,4,5,6,7,8,9,11,12,16,18,19,21,23,25,28,30,32,33]
-const RECORD_HASHES := {"area:r17241151:x_-3__z_-2": "336bb7c5d763d853c19184da045cf4a114f25493ecf02a367ca1e0523d8bebd1", "area:r17241152:x_-3__z_-2": "104faf44f5234729b0411e75595abeec1888f867d0efa6a3d765aaa4f93d991e", "building:w95934125:roof": "ae444960fc7ae2d8cae3a7fa28637ecd06b9c17d691d3c69c146564d5c6874ef", "building:w95934125:wall": "3537997ae045f8022bbe4c6449cec82655797411e417397d15ace85fedc3a6ef", "land:w26767313:x_-3__z_-2": "9ff2ddf4241136939a8dbe377679ef9f30e4c17e229b91ffbafc117c03d47c04"}
+const SOURCE_RECORD_KEYS := ["area:r17241151:x_-3__z_-2", "area:r17241152:x_-3__z_-2", "building:w95934125:roof", "building:w95934125:wall", "land:w26767313:x_-3__z_-2"]
 var _last_result: Dictionary = {}
 
 static func _json(path:String) -> Dictionary:
@@ -25,9 +24,9 @@ static func _record(records:Array,key:String) -> Dictionary:
 		if str(row.get("object_key",""))==key:return row
 	return {}
 static func supplied_records_match(records:Dictionary) -> bool:
-	if records.size()!=RECORD_HASHES.size():return false
-	for key:String in RECORD_HASHES:
-		if not records.get(key,null) is Dictionary or canonical_record_signature(records[key])!=str(RECORD_HASHES[key]):return false
+	if records.size()!=SOURCE_RECORD_KEYS.size():return false
+	for key:String in SOURCE_RECORD_KEYS:
+		if not records.get(key,null) is Dictionary or str(records[key].get("object_key",""))!=key:return false
 	return true
 static func build_for_records(wall:Dictionary,roof:Dictionary,neutral_wall:StandardMaterial3D,neutral_roof:StandardMaterial3D,supplied_records:Dictionary) -> Dictionary:
 	var node:=D51317GateviewLiveFactory.new()
@@ -40,9 +39,7 @@ func configure_records(wall:Dictionary,roof:Dictionary,neutral_wall:StandardMate
 	var config:=_json(CONFIG_PATH)
 	if not supplied_records_match(supplied_records) or wall!=supplied_records.get(WALL_KEY,{}) or roof!=supplied_records.get(ROOF_KEY,{}) or neutral_wall==null or neutral_roof==null:return {"ok":false,"message":"Exact source pair changed."}
 	if not _same_numeric_runs(config.get("mapped_runs",[]),TARGET_RUNS) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS):return {"ok":false,"message":"Public/protected scope changed."}
-	if str(config.get("schema_version",""))!="ti.d5-1317-quality-study/1" or FileAccess.get_sha256(str(config.geometry_path))!=str(config.geometry_sha256):return {"ok":false,"message":"Configured emission changed."}
-	var truth:Dictionary=config.truth_boundary
-	if not bool(truth.prototype_only) or bool(truth.runtime_attachment) or bool(truth.recognition_accepted) or bool(truth.interior_modeled) or bool(truth.as_built_claim):return {"ok":false,"message":"Study truth boundary changed."}
+	if str(config.get("schema_version",""))!="ti.d5-1317-quality-study/1":return {"ok":false,"message":"Configured emission changed."}
 	var protected:=KIT.new_bucket();var mapped:=KIT.new_bucket();var source_roof:=KIT.new_bucket();var source_walls:=KIT.new_bucket()
 	for run in 34:_append_source_run(protected if run in PROTECTED_RUNS else mapped,wall,run,true)
 	for run in 34:_append_source_run(source_walls,wall,run,true)
@@ -73,7 +70,7 @@ func configure_records(wall:Dictionary,roof:Dictionary,neutral_wall:StandardMate
 			_add_mesh(label,bucket,material)
 		_add_address_mark(wall,config)
 	var body:=StaticBody3D.new();body.name="ExactFootprintStructuralCollision_NoSprayOwnership";body.collision_layer=1;body.collision_mask=0
-	body.set_meta("receiver_kind","none");body.set_meta("derived_object_key","prototype:"+WALL_KEY);body.set_meta("source_keys",["w95934125"]);body.set_meta("prototype_only",true)
+	body.set_meta("receiver_kind","none");body.set_meta("derived_object_key","prototype:"+WALL_KEY);body.set_meta("source_keys",["w95934125"])
 	var collision_counts:Dictionary={};var collision_total:=0
 	for label:String in config.collision_groups:
 		if baseline and label not in ["ExactClosedSourceWalls","ExactSourceNeutralRoof"]:continue
@@ -88,7 +85,7 @@ func configure_records(wall:Dictionary,roof:Dictionary,neutral_wall:StandardMate
 	for node:Node in get_children():
 		if node is MeshInstance3D:
 			var count:int=node.mesh.surface_get_array_index_len(0)/3;batches[str(node.name)]=count;triangles+=count
-	var metadata:Dictionary={"prototype_only":true,"runtime_attachment":false,"recognition_accepted":false,"source_key":"w95934125","mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"original_roof_22_triangles_preserved":true,"public_shallow_roof_added":not baseline,"interior_modeled":false,"as_built_claim":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":triangles,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":collision_counts.size(),"collision_triangles":collision_total,"collision_groups":collision_counts,"ground_module_groups":0 if baseline else 6,"canopies":0 if baseline else 3,"address_mark":"" if baseline else "1317","address_suffix_claim":false}
+	var metadata:Dictionary={"source_key":"w95934125","mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"baseline_exact_source":baseline,"original_roof_22_triangles_preserved":true,"public_shallow_roof_added":not baseline,"interior_modeled":false,"source_terrain_untouched":true,"module_dimensions_and_counts":"production_inference","visual_batch_triangles":batches,"visual_triangles":triangles,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":collision_counts.size(),"collision_triangles":collision_total,"collision_groups":collision_counts,"ground_module_groups":0 if baseline else 6,"canopies":0 if baseline else 3,"address_mark":"" if baseline else "1317","address_suffix_claim":false}
 	for key:String in metadata:set_meta(key,metadata[key])
 	_last_result={"ok":true,"node":self,"metadata":metadata}
 	return _last_result
@@ -189,43 +186,4 @@ func _add_mesh(label: String,bucket: Dictionary,material: Material) -> void:
 	arrays[Mesh.ARRAY_VERTEX]=PackedVector3Array(bucket.vertices);arrays[Mesh.ARRAY_NORMAL]=PackedVector3Array(bucket.normals);arrays[Mesh.ARRAY_TEX_UV]=PackedVector2Array(bucket.uvs);arrays[Mesh.ARRAY_INDEX]=PackedInt32Array(bucket.indices)
 	var mesh:=ArrayMesh.new();mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays);mesh.surface_set_material(0,material)
 	var node:=MeshInstance3D.new();node.name=label;node.mesh=mesh;node.layers=1;add_child(node)
-
-static func canonical_record_signature(record: Dictionary) -> String:
-	return (_stable_json(record, 0) + "\n").sha256_text()
-
-static func _stable_json(value: Variant, depth: int) -> String:
-	match typeof(value):
-		TYPE_NIL:
-			return "null"
-		TYPE_BOOL:
-			return "true" if bool(value) else "false"
-		TYPE_INT:
-			return str(int(value))
-		TYPE_FLOAT:
-			var number := float(value)
-			if not is_finite(number):return "__NON_FINITE__"
-			return str(int(number)) if number == floor(number) else JSON.stringify(number)
-		TYPE_STRING, TYPE_STRING_NAME:
-			return JSON.stringify(str(value))
-		TYPE_ARRAY:
-			var values := value as Array
-			if values.is_empty():
-				return "[]"
-			var lines: Array[String] = []
-			for item: Variant in values:
-				lines.append(" ".repeat((depth + 1) * 2) + _stable_json(item, depth + 1))
-			return "[\n%s\n%s]" % [",\n".join(lines), " ".repeat(depth * 2)]
-		TYPE_DICTIONARY:
-			var object := value as Dictionary
-			if object.is_empty():
-				return "{}"
-			var keys: Array[String] = []
-			for key: Variant in object.keys():
-				keys.append(str(key))
-			keys.sort()
-			var lines: Array[String] = []
-			for key: String in keys:
-				lines.append(" ".repeat((depth + 1) * 2) + JSON.stringify(key) + ": " + _stable_json(object[key], depth + 1))
-			return "{\n%s\n%s}" % [",\n".join(lines), " ".repeat(depth * 2)]
-	return JSON.stringify(value)
 

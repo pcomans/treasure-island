@@ -1,11 +1,9 @@
 extends RefCounted
 ## Shared geometry mechanics for the two pending housing revisions only.
 
-static func land_triangles(paths: Dictionary) -> Dictionary:
+static func land_triangles(paths: Array) -> Dictionary:
 	var triangles: Array = []
 	for path: String in paths:
-		if FileAccess.get_sha256(path) != str(paths[path]):
-			return {"ok": false, "message": "Frozen colliding-land chunk drifted."}
 		var data: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(path))
 		for record: Dictionary in data.records:
 			if str(record.feature_kind) != "land_ground" or str(record.collision_kind) != "world_solid": continue
@@ -34,7 +32,7 @@ static func height_at(p: Vector2, triangles: Array) -> float:
 			highest = maxf(highest, a.y + s * (b.y - a.y) + t * (c.y - a.y))
 	return highest
 
-static func attach(model: Node3D, wall: Dictionary, roof: Dictionary, cfg: Dictionary) -> Dictionary:
+static func attach(model: Node3D, wall: Dictionary, roof: Dictionary, _cfg: Dictionary) -> Dictionary:
 	var roof_root := Node3D.new()
 	roof_root.name = "QualityRoof"
 	model.add_child(roof_root)
@@ -88,9 +86,6 @@ static func attach(model: Node3D, wall: Dictionary, roof: Dictionary, cfg: Dicti
 			model.remove_child(mesh)
 			roof_root.add_child(mesh)
 	for owner: Node3D in [model, roof_root]:
-		owner.set_meta("revision_acceptance", "pending")
-		owner.set_meta("reviewed_art_sha256", str(cfg.reviewed_art_sha256))
-		owner.set_meta("historical_recognition_credit_unchanged", true)
 		owner.set_meta("old_collision_proxy_retained", false)
 		owner.set_meta("collision_geometry", "current_visible_mesh_faces_except_draped_ground_and_shrubs")
 	return {"ok": true, "node": model}

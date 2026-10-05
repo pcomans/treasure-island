@@ -9,5 +9,4 @@
    - whether walking (4 m/s), running (`Shift`, 20 m/s) and the jetpack (`Space`) feel right;
    - whether spraying (click) lands where you aim.
 
-Controls are in the [README](README.md#controls). The earlier, release-bound
-version of this guide is in [PLAYTEST_HISTORY_2026-10-03.md](PLAYTEST_HISTORY_2026-10-03.md).
+Controls are in the [README](README.md#controls).

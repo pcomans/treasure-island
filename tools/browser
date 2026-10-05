@@ -1,0 +1,53 @@
+#!/usr/bin/env bash
+# Keep a named headed reference browser and its private Weston alive.
+# Usage: tools/browser <session> <url>
+# Run the printed command prefix from another terminal/tool call; stop this
+# foreground handle with Ctrl-C (or TERM) to close both owned processes.
+set -euo pipefail
+export PATH="/usr/local/share/nvm/current/bin:${PATH}"
+if [ "$#" -ne 2 ] || [[ ! "$1" =~ ^[a-zA-Z0-9_-]+$ ]]; then
+  echo "usage: tools/browser <session-name> <url>" >&2
+  exit 2
+fi
+browser_session="$1"
+command -v agent-browser >/dev/null
+command -v weston >/dev/null
+export XDG_RUNTIME_DIR
+XDG_RUNTIME_DIR="$(mktemp -d /tmp/ti-browser-XXXXXX)"
+export WAYLAND_DISPLAY="reference-browser"
+export AGENT_BROWSER_NO_XVFB=1
+weston_pid=""
+browser_started=false
+cleanup() {
+  set +e
+  if [ "${browser_started}" = true ]; then
+    agent-browser --session "${browser_session}" close
+  fi
+  if [ -n "${weston_pid}" ]; then
+    kill "${weston_pid}" 2>/dev/null
+    wait "${weston_pid}" 2>/dev/null
+  fi
+}
+trap cleanup EXIT
+trap 'exit 143' INT TERM
+weston --backend=headless --renderer=gl --socket="${WAYLAND_DISPLAY}" \
+  --width=1600 --height=1000 --idle-time=0 \
+  >"${XDG_RUNTIME_DIR}/weston.log" 2>&1 &
+weston_pid=$!
+for _ in {1..50}; do
+  [ -S "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}" ] && break
+  kill -0 "${weston_pid}" 2>/dev/null || break
+  sleep 0.1
+done
+if [ ! -S "${XDG_RUNTIME_DIR}/${WAYLAND_DISPLAY}" ]; then
+  cat "${XDG_RUNTIME_DIR}/weston.log" >&2
+  exit 1
+fi
+# Set before launch so a partially started browser is closed on failure too.
+browser_started=true
+agent-browser --session "${browser_session}" --headed \
+  --args '--ozone-platform=wayland' open "$2"
+printf 'Browser commands: XDG_RUNTIME_DIR=%q agent-browser --session %q <command>\n' \
+  "${XDG_RUNTIME_DIR}" "${browser_session}"
+printf 'Owned Weston PID: %s; retained log: %s/weston.log\n' "${weston_pid}" "${XDG_RUNTIME_DIR}"
+wait "${weston_pid}"

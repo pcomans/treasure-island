@@ -9,6 +9,9 @@ extends SceneTree
 ## --island: fixed overview views of the whole island (island-*.png), the same
 ##   every run, so before/after shots of a change compare directly.
 ## Both can be passed together. Needs a GPU display; tools/godot provides one.
+## --views FILE adds source-bound focused gameplay views without replacing these
+## defaults: {"source": "KEY", "views": [{"name": "entrance",
+## "player_xz": [x,z], "target_xyz": [x,y,z]}]}.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
 
@@ -35,6 +38,8 @@ func _run() -> void:
 	print("RENDERER: %s / %s" % [RenderingServer.get_video_adapter_name(), DisplayServer.get_name()])
 	if args.has("source"):
 		await _building_shots(str(args.source), out)
+	if args.has("views"):
+		await _focused_views(str(args.get("source", "")), str(args.views), out)
 	if args.has("island"):
 		await _island_shots(out)
 	if _errors.is_empty():
@@ -44,6 +49,52 @@ func _run() -> void:
 			push_error(message)
 	_h.main.queue_free()
 	quit(0 if _errors.is_empty() else 1)
+
+
+func _focused_views(source: String, path: String, out: String) -> void:
+	var plan: Variant = JSON.parse_string(FileAccess.get_file_as_string(path))
+	if not plan is Dictionary or source == "" or plan.get("source", "") != source or not plan.get("views") is Array or plan.views.is_empty():
+		_errors.append("focused views need a nonempty view list bound to --source")
+		return
+	var meshes := _h.visual_meshes(_h.building_nodes(source))
+	if meshes.is_empty():
+		_errors.append("focused views have no source geometry")
+		return
+	var bounds := _h.bounds(meshes).grow(1.0)
+	var names := {}
+	for view: Variant in plan.views:
+		if not view is Dictionary or not view.get("name") is String or not _numbers(view.get("player_xz"), 2) or not _numbers(view.get("target_xyz"), 3):
+			_errors.append("focused view needs name, player_xz and target_xyz")
+			return
+		var name: String = view.name
+		if name == "" or name.validate_filename() != name or names.has(name):
+			_errors.append("focused view names must be unique safe filenames")
+			return
+		names[name] = true
+		var target := Vector3(view.target_xyz[0], view.target_xyz[1], view.target_xyz[2])
+		if not bounds.has_point(target):
+			_errors.append("focused view target lies outside the source building: " + name)
+			return
+		var error := await _h.settle_player(Vector2(view.player_xz[0], view.player_xz[1]))
+		if error != "":
+			_errors.append("focused view " + name + ": " + error)
+			return
+		_h.aim_camera(target)
+		await physics_frame
+		await physics_frame
+		error = await _h.save_screenshot("%s/detail-%s.png" % [out, name])
+		if error != "":
+			_errors.append(error)
+		print("FOCUSED_VIEW %s source=%s player=%s target=%s" % [name, source, _h.player.global_position, target])
+
+
+func _numbers(value: Variant, size: int) -> bool:
+	if not value is Array or value.size() != size:
+		return false
+	for number: Variant in value:
+		if not (number is float or number is int) or not is_finite(float(number)):
+			return false
+	return true
 
 
 func _building_shots(source_key: String, out: String) -> void:

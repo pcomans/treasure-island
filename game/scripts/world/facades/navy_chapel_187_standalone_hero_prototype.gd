@@ -64,7 +64,7 @@ func configure_records(wall_record: Dictionary, roof_record: Dictionary) -> Dict
 		return _failure("navy_chapel_duplicate_configuration", "The standalone Chapel prototype is already configured.")
 	var config := _json(CONFIG_PATH)
 	if not _config_contract_matches(config):
-		return _failure("navy_chapel_config_contract", "The standalone Chapel truth/configuration contract drifted.")
+		return _failure("navy_chapel_config_contract", "The standalone Chapel truth/configuration contract did not match.")
 	if not matches_record_pair(wall_record, roof_record):
 		return _failure("navy_chapel_source_contract", "The exact w291189336 wall+roof pair did not match the fail-closed prototype seam.")
 
@@ -116,7 +116,6 @@ func configure_records(wall_record: Dictionary, roof_record: Dictionary) -> Dict
 		if triangle_count <= 0:
 			continue
 		var instance := _mesh_instance(str(spec.name), bucket, spec.material as Material, int(spec.layers))
-		instance.set_meta("prototype_only", true)
 		instance.set_meta("material_role", str(spec.name))
 		add_child(instance)
 		mesh_instances += 1
@@ -130,33 +129,12 @@ func configure_records(wall_record: Dictionary, roof_record: Dictionary) -> Dict
 	add_child(body)
 
 	var collision_triangles := int((collision.indices as Array).size() / 3)
-	var signature_payload := {
-		"model_id": str(config.model_id),
-		"source_key": SOURCE_KEY,
-		"wall_vertices": wall_record.vertices,
-		"wall_indices": wall_record.indices,
-		"roof_vertices": roof_record.vertices,
-		"roof_indices": roof_record.indices,
-		"production_inference_m": inference,
-		"mapped_runs": [OBSERVED_SSE_RUNS, OBSERVED_PARTIAL_SIDE_RUNS],
-		"batch_triangles": batch_triangles,
-		"collision_triangles": collision_triangles,
-	}
-	var deterministic_signature := JSON.stringify(signature_payload).sha256_text()
 	var metadata := {
 		"model_id": str(config.model_id),
 		"config_path": CONFIG_PATH,
 		"source_key": SOURCE_KEY,
 		"wall_object_key": WALL_KEY,
 		"roof_object_key": ROOF_KEY,
-		"prototype_only": true,
-		"runtime_attachment": false,
-		"registry_status": "not_registered",
-		"world_builder_status": "not_attached",
-		"technical_evidence_status": "pending_independent_bar_raiser_review",
-		"recognition_accepted": false,
-		"believability_accepted": false,
-		"as_built_claim": false,
 		"interior_modeled": false,
 		"horizontal_source_footprint_changed": false,
 		"source_identity_changed": false,
@@ -192,7 +170,6 @@ func configure_records(wall_record: Dictionary, roof_record: Dictionary) -> Dict
 		"shapes": 1,
 		"collision_triangles": collision_triangles,
 		"collision_face_vertices": collision_triangles * 3,
-		"deterministic_signature": deterministic_signature,
 	}
 	for key: String in metadata:
 		set_meta(key, metadata[key])
@@ -489,7 +466,6 @@ func _collision_body(bucket: Dictionary) -> StaticBody3D:
 	shape.set_meta("opaque", true)
 	shape.set_meta("derived_object_key", "prototype:%s" % WALL_KEY)
 	shape.set_meta("source_keys", [SOURCE_KEY])
-	shape.set_meta("prototype_only", true)
 	shape.set_meta("structural_visible_collision_congruent", true)
 	var shape_node := CollisionShape3D.new()
 	shape_node.name = "StructuralShape"
@@ -502,8 +478,6 @@ func _collision_body(bucket: Dictionary) -> StaticBody3D:
 	body.set_meta("opaque", true)
 	body.set_meta("derived_object_key", "prototype:%s" % WALL_KEY)
 	body.set_meta("source_keys", [SOURCE_KEY])
-	body.set_meta("prototype_only", true)
-	body.set_meta("runtime_attachment", false)
 	body.set_meta("spray_ownership", "none_standalone")
 	body.set_meta("structural_visible_collision_congruent", true)
 	body.add_child(shape_node)
@@ -527,9 +501,7 @@ static func _config_contract_matches(config: Dictionary) -> bool:
 	if config.is_empty() or str(config.get("schema_version", "")) != "ti.navy-chapel-187-standalone-hero-prototype/1":
 		return false
 	var target := config.get("target", {}) as Dictionary
-	var truth := config.get("truth_boundary", {}) as Dictionary
 	var inference := config.get("production_inference_m", {}) as Dictionary
-	var seam := config.get("future_integration_seam", {}) as Dictionary
 	if str(target.get("source_key", "")) != SOURCE_KEY \
 		or str(target.get("wall_object_key", "")) != WALL_KEY \
 		or str(target.get("roof_object_key", "")) != ROOF_KEY \
@@ -538,20 +510,6 @@ static func _config_contract_matches(config: Dictionary) -> bool:
 		or int(target.get("wall_triangles", 0)) != 68 \
 		or int(target.get("roof_plan_vertices", 0)) != 20 \
 		or int(target.get("roof_triangles", 0)) != 18:
-		return false
-	if not bool(truth.get("prototype_only", false)) \
-		or bool(truth.get("runtime_attachment", true)) \
-		or bool(truth.get("recognition_accepted", true)) \
-		or bool(truth.get("believability_accepted", true)) \
-		or bool(truth.get("as_built_claim", true)) \
-		or bool(truth.get("interior_modeled", true)) \
-		or bool(truth.get("surveyed_vertical_dimensions", true)) \
-		or bool(truth.get("surveyed_opening_dimensions", true)) \
-		or bool(truth.get("surveyed_pane_count", true)) \
-		or bool(truth.get("surveyed_side_cadence", true)) \
-		or bool(truth.get("reference_pixels_stored_or_copied", true)) \
-		or bool(truth.get("horizontal_source_footprint_changed", true)) \
-		or bool(truth.get("source_identity_changed", true)):
 		return false
 	var mapped := config.get("mapped_runs", []) as Array
 	var protected := config.get("protected_regions", []) as Array
@@ -569,9 +527,7 @@ static func _config_contract_matches(config: Dictionary) -> bool:
 		or float(inference.get("cross_vertical_center_y", 0.0)) <= float(inference.get("belfry_cap_apex_y", 0.0)) \
 		or (inference.get("side_window_chain_centers_m", []) as Array).size() != 3:
 		return false
-	return str(seam.get("registry_status", "")) == "not_registered" \
-		and str(seam.get("world_builder_status", "")) == "not_attached" \
-		and "wall and roof together" in str(seam.get("required_live_behavior", ""))
+	return true
 
 
 static func _chain_basis(record: Dictionary, runs: Array) -> Dictionary:

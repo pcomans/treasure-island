@@ -69,7 +69,7 @@ func _belongs_to(node: Node, source_key: String) -> bool:
 	return (":%s:" % source_key) in str(node.name) or str(node.name).ends_with(":" + source_key)
 
 
-## Visible geometry under the given nodes as [mesh, global transform] pairs,
+## Visible geometry under the given nodes as [mesh, global transform, node name],
 ## expanding MultiMesh instances.
 func visual_meshes(nodes: Array[Node3D]) -> Array:
 	var meshes: Array = []
@@ -80,12 +80,12 @@ func visual_meshes(nodes: Array[Node3D]) -> Array:
 
 func _collect_meshes(node: Node, meshes: Array) -> void:
 	if node is MeshInstance3D and (node as MeshInstance3D).is_visible_in_tree() and (node as MeshInstance3D).mesh != null:
-		meshes.append([(node as MeshInstance3D).mesh, (node as MeshInstance3D).global_transform])
+		meshes.append([(node as MeshInstance3D).mesh, (node as MeshInstance3D).global_transform, str(node.name)])
 	elif node is MultiMeshInstance3D and (node as MultiMeshInstance3D).is_visible_in_tree() and (node as MultiMeshInstance3D).multimesh != null:
 		var multimesh := (node as MultiMeshInstance3D).multimesh
 		if multimesh.mesh != null and multimesh.transform_format == MultiMesh.TRANSFORM_3D:
 			for i in multimesh.visible_instance_count if multimesh.visible_instance_count >= 0 else multimesh.instance_count:
-				meshes.append([multimesh.mesh, (node as MultiMeshInstance3D).global_transform * multimesh.get_instance_transform(i)])
+				meshes.append([multimesh.mesh, (node as MultiMeshInstance3D).global_transform * multimesh.get_instance_transform(i), str(node.name)])
 	for child in node.get_children():
 		_collect_meshes(child, meshes)
 
@@ -100,7 +100,7 @@ func bounds(meshes: Array) -> AABB:
 
 ## Collision bodies under the given nodes (the building's own colliders).
 func collision_rids(nodes: Array[Node3D]) -> Array[RID]:
-	var rids: Array[RID] = [player.get_rid()]
+	var rids: Array[RID] = []
 	for node in nodes:
 		_collect_rids(node, rids)
 	return rids
@@ -113,29 +113,43 @@ func _collect_rids(node: Node, rids: Array[RID]) -> void:
 		_collect_rids(child, rids)
 
 
+## Ray query that never hits the player. Like the player, it doesn't see
+## one-sided collision from behind (the housing roofs were invisible from above).
 func ray(from: Vector3, to: Vector3, mask: int = WORLD_SOLID_MASK, exclude: Array[RID] = []) -> Dictionary:
-	var query := PhysicsRayQueryParameters3D.create(from, to, mask, exclude if not exclude.is_empty() else [player.get_rid()])
+	var query := PhysicsRayQueryParameters3D.create(from, to, mask, exclude + [player.get_rid()])
 	query.collide_with_areas = false
+	query.hit_back_faces = false
 	return player.get_world_3d().direct_space_state.intersect_ray(query)
 
 
-## True when a downward ray hit open land or a road/path, not a roof.
+## True when a downward ray hit open ground (land, road, plaza, park), not a building.
 func is_walkable_ground(hit: Dictionary) -> bool:
 	if hit.is_empty():
 		return false
 	var collider := hit.get("collider") as Node
 	var record := collider.get_parent() if collider != null else null
-	return record != null and str(record.get_meta("feature_kind", "")) in ["land_ground", "road_path"] \
+	var feature := str(record.get_meta("feature_kind", "")) if record != null else ""
+	return feature != "" and not feature.begins_with("building") \
 		and (hit.normal as Vector3).dot(Vector3.UP) >= 0.7
 
 
-## Drops the stock player at xz and lets physics settle it. Returns "" on success.
+## Why settle_player can't place the player somewhere.
+const OFF_ISLAND := "off the island (water or outside the playable boundary)"
+const ON_BUILDING := "on top of a building"
+const STEEP := "too steep to stand"
+const NOT_SETTLED := "did not settle on the ground"
+
+
+## Drops the stock player at xz and lets physics settle it. Returns "" on
+## success, or one of the reasons above.
 func settle_player(xz: Vector2) -> String:
 	if not world.get_boundary().contains_position(Vector3(xz.x, 0.0, xz.y)):
-		return "outside the playable boundary"
-	var hit := ray(Vector3(xz.x, 300.0, xz.y), Vector3(xz.x, -50.0, xz.y))
+		return OFF_ISLAND
+	var hit := ray(Vector3(xz.x, 300.0, xz.y), Vector3(xz.x, -50.0, xz.y), player.collision_mask)
+	if hit.is_empty():
+		return OFF_ISLAND
 	if not is_walkable_ground(hit):
-		return "no open ground (roof, water or steep)"
+		return STEEP if (hit.normal as Vector3).dot(Vector3.UP) < 0.7 else ON_BUILDING
 	var y := float((hit.position as Vector3).y)
 	release_input()
 	player.set_gameplay_enabled(false)
@@ -148,7 +162,7 @@ func settle_player(xz: Vector2) -> String:
 			player.set_gameplay_enabled(false)
 			return ""
 	player.set_gameplay_enabled(false)
-	return "did not settle on the ground"
+	return NOT_SETTLED
 
 
 ## Points the stock gameplay camera at target, within its normal pitch limits.

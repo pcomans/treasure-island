@@ -14,8 +14,8 @@ changed.
 ## Policy
 
 - Record every project-related editor, executable, package-manager operation, package, plug-in, add-on, template, demo, or other software acquisition in this file. Add the entry before installation and complete its verification/result fields immediately afterward.
-- Use only an official publisher, official registry, or a specifically reviewed and user-approved repository. Do not use unknown mirrors, opaque install scripts, or artifacts whose publisher or provenance cannot be established.
-- Pin the exact requested version. For package-manager installs, record the direct packages and versions here and retain the lockfile that identifies transitive packages and integrity hashes.
+- Use only an official publisher, official registry, or a specifically reviewed and user-approved repository. Do not use unknown mirrors, opaque install scripts, or artifacts whose publisher or provenance cannot be established. Exception by owner decision (2026-10-03): the official Claude Code and Codex installers (`claude.ai/install.sh`, `chatgpt.com/codex/install.sh`) run unpinned in the devcontainer.
+- Pin the exact requested version (except the two installers above). For package-manager installs, record the direct packages and versions here and retain the lockfile that identifies transitive packages and integrity hashes.
 - Verify a publisher checksum, signature, notarization, registry integrity field, or equivalent when one is available. Stop on a mismatch, an unexpected publisher, malware warning, or unexplained installer behavior.
 - Keep the install scoped to this project when practical. Record any system-wide effect explicitly and provide tested or publisher-documented removal steps.
 - Never record credentials, access tokens, license keys, hardware identifiers, or other secrets.
@@ -250,13 +250,21 @@ changed.
 
 - Date and time (UTC): 2026-10-03
 - Status: `completed`
-- Exact package and version: Godot Engine `4.7.2-stable` standard Linux x86_64 editor (`Godot_v4.7.2-stable_linux.x86_64.zip`); the same release's `Godot_v4.7.2-stable_export_templates.tpz`, of which only the Linux x86_64 and macOS templates are extracted; Codex CLI `@openai/codex@0.160.0`; Ubuntu packages `weston`, `git-lfs`, Mesa Vulkan drivers; base image `mcr.microsoft.com/devcontainers/base:ubuntu@sha256:edfb983aab9c579a385dc23c57d7d3703f5ec920124d99c16204a2cac465aab4`.
+- Exact package and version: Godot Engine `4.7.2-stable` standard Linux x86_64 editor (`Godot_v4.7.2-stable_linux.x86_64.zip`); the same release's `Godot_v4.7.2-stable_export_templates.tpz`, of which only the Linux x86_64 and macOS templates are extracted; Codex CLI (official installer `https://chatgpt.com/codex/install.sh`, unpinned by owner decision); Ubuntu packages `weston`, `git-lfs`, `osmium-tool` (1.19.0, for the world generator's input checks), Mesa Vulkan drivers; base image `mcr.microsoft.com/devcontainers/base:ubuntu@sha256:edfb983aab9c579a385dc23c57d7d3703f5ec920124d99c16204a2cac465aab4`.
 - Publisher and source URL: Godot official builds, https://github.com/godotengine/godot-builds/releases/tag/4.7.2-stable; npm registry; Ubuntu archive; Microsoft Container Registry.
 - Checksum, signature, notarization, or registry integrity evidence: SHA-256 checked against GitHub's published asset digests: editor `cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4`, templates `f298490b8d44d934be425a5a65a51bf15f422428b229a06a6e11d9ffea248011` (same as the earlier macOS install). npm and apt verify their own registry signatures.
 - Exact command or installation method: `.devcontainer/post-create.sh`, which runs `.devcontainer/setup-godot.sh`; both run automatically when the container is created and skip what is already present.
 - Purpose: develop, test, render and export on the owner's Linux GMKtec instead of a rented Mac.
-- Scope and install location: Godot and templates in the git-ignored `.tools/godot/4.7.2/` (self-contained `_sc_` mode, templates under `editor_data/`); everything else inside the container only.
+- Scope and install location: Godot and templates in `/opt/godot/4.7.2/`, a named podman volume shared by every checkout (self-contained `_sc_` mode, templates under `editor_data/`); everything else inside the container only.
 - Authorizing decision or request: owner, 2026-10-03: move development to the Linux devcontainer.
 - Trust and malware checks: official publishers only; checksum mismatch stops the setup script.
 - Verification and result: `godot --version` reports `4.7.2.stable.official.ed1daf0bf`; headless tests pass; rendering runs report `AMD Radeon 780M Graphics (RADV PHOENIX)`; macOS and Linux exports succeed.
-- Removal steps: delete `.tools/godot/4.7.2/`, or delete the container.
+- Removal steps: `podman volume rm treasure-island-godot`, or delete the container.
+
+### 2026-10-04 — b600_art reference browser
+
+- Owner-authorized project dependency setup, executed through `.devcontainer/setup-browser.sh` and added to `post-create.sh` for rebuilt containers.
+- Installed official Vercel Labs `agent-browser@0.38.2` from npm (repository verified as https://github.com/vercel-labs/agent-browser); its official `install --with-deps` installed Chrome for Testing `154.0.8037.92` from https://storage.googleapis.com/chrome-for-testing-public/154.0.8037.92/linux64/chrome-linux64.zip and Ubuntu browser/font libraries.
+- Setup exited 0. **Street View WORKS**, verified 2026-10-04 with agent-browser 0.38.2 / Chrome154.0.8037.92, headed Wayland on private Weston. From the exact SFFD Building600 Maps place card, enabled Browse Street View images, clicked Avenue M blue coverage and rotated toward the building: actual September2025 panorama `L_00cDY02FaeZrVa3MCCsg` at `37.8264049,-122.3677784` displayed the cream wall, blue windows, red entry and 600 marker. A full resolved `ifdNQ-gh7K1ryx3rVMvW2w` panorama URL also rendered. `tools/browser <session> <place-url>` supplies the reproducible headed launcher; the reference-research role records commands and closure.
+- Preserved failure scope: earlier headed attempts returned metadata HTTP500/tile403; fresh coordinate/API startup later stayed black despite HTTP200. Precise cause remains unproved; headless was not tested in this round. No proxy, account or access bypass was used. The managed Chrome version above is observed, not separately pinned.
+- Scope: container-global CLI and user-local `~/.agent-browser/browsers/`; no account connected, no private reference copied into game/Git. Remove CLI with `npm uninstall --global agent-browser`; browser cache is disposable.

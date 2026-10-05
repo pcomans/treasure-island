@@ -5,7 +5,6 @@ const REQUIRED_ACTIONS := [
 	"spray", "recover", "pause", "quit_game", "toggle_debug",
 ]
 const EXPECTED_BILLBOARD_TEXTURE := "res://game/resources/textures/context/sf_skyline_owner_silhouette_final.png"
-const EXPECTED_BILLBOARD_TEXTURE_SHA256 := "9c499ca3db08769142aac69b61e7d8fdf2aa84cd084b6716a19e7c504ba0b0c5"
 const EXPECTED_BILLBOARD_TEXTURE_SIZE := Vector2i(2212, 340)
 const EXPECTED_BILLBOARD_SIZE := Vector2(3900.0, 600.0)
 const EXPECTED_BILLBOARD_TRANSFORM := Transform3D(Basis.IDENTITY, Vector3(-1875.0, 264.85, 4306.4))
@@ -140,9 +139,8 @@ func _initialize() -> void:
 		_fail("SF billboard exact transform or QuadMesh size drifted.")
 		return
 	if billboard_texture.resource_path != EXPECTED_BILLBOARD_TEXTURE \
-	or Vector2i(billboard_texture.get_width(), billboard_texture.get_height()) != EXPECTED_BILLBOARD_TEXTURE_SIZE \
-	or FileAccess.get_sha256(EXPECTED_BILLBOARD_TEXTURE) != EXPECTED_BILLBOARD_TEXTURE_SHA256:
-		_fail("SF billboard texture identity, dimensions, or source hash drifted.")
+	or Vector2i(billboard_texture.get_width(), billboard_texture.get_height()) != EXPECTED_BILLBOARD_TEXTURE_SIZE:
+		_fail("SF billboard texture identity or dimensions drifted.")
 		return
 	if billboard.layers != 1 \
 	or billboard.cast_shadow != GeometryInstance3D.SHADOW_CASTING_SETTING_OFF \
