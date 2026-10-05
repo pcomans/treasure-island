@@ -13,7 +13,10 @@ var _h: WorldHarness
 var _failures: Array[String] = []
 ## Collision objects the player bumped into during the last _walk_toward.
 var _touched: Array[Object] = []
+## Closest the player came to the target during the last _walk_toward (metres).
+var _closest := INF
 var _prefix := ""
+var _unsafe := false
 
 
 func _init(harness: WorldHarness) -> void:
@@ -23,9 +26,10 @@ func _init(harness: WorldHarness) -> void:
 ## Runs the checks for one building and returns its failures (empty = pass).
 ## The walk-up and stairs are the slow part (seconds of simulated walking each).
 ## stairs: [{"bottom": [x, z], "top": [x, z]}, ...] from the building's catalog entry.
-func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array = []) -> Array[String]:
+func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array = [], routes: Array = []) -> Array[String]:
 	_failures = []
 	_prefix = prefix
+	_unsafe = false
 	var nodes := _h.building_nodes(source_key)
 	var meshes := _h.visual_meshes(nodes)
 	if meshes.is_empty():
@@ -41,7 +45,11 @@ func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array
 	if walk_up:
 		await _check_walk_up(box, own)
 		for stair: Dictionary in stairs:
+			if _unsafe:
+				break
 			await _check_stairs(stair)
+		if not _unsafe:
+			await _check_routes(routes, box)
 	for proxy in proxies:
 		proxy.queue_free()
 	await _h.tree.physics_frame
@@ -170,6 +178,8 @@ func _check_walk_up(box: AABB, own: Array[RID]) -> void:
 	var walked := 0
 	var skipped_on_building := false
 	for side: Vector3 in [Vector3.FORWARD, Vector3.BACK, Vector3.LEFT, Vector3.RIGHT]:
+		if _unsafe:
+			break
 		var half_depth := absf(side.x) * box.size.x * 0.5 + absf(side.z) * box.size.z * 0.5
 		var start := Vector2(center.x, center.z) + Vector2(side.x, side.z) * (half_depth + 5.0)
 		var name := "walk-up from %s" % _side_name(side)
@@ -179,7 +189,8 @@ func _check_walk_up(box: AABB, own: Array[RID]) -> void:
 			continue
 		if placed != "":
 			_failures.append(_prefix + "%s: player can't start at (%.1f, %.1f): %s" % [name, start.x, start.y, placed])
-			continue
+			_unsafe = true
+			break
 		walked += 1
 		var problem := await _walk_toward(Vector3(center.x, _h.player.global_position.y + 1.5, center.z), own)
 		var at := _h.player.global_position
@@ -210,6 +221,7 @@ func _check_stairs(stair: Dictionary) -> void:
 	var error := await _h.settle_player(bottom)
 	if error != "":
 		_failures.append(_prefix + "%s: can't start at the bottom: %s" % [name, error])
+		_unsafe = true
 		return
 	var bottom_y := _h.player.global_position.y
 	for leg: Vector2 in [top, bottom]:
@@ -227,6 +239,55 @@ func _check_stairs(stair: Dictionary) -> void:
 	print("%s%s: walked up and down" % [_prefix, name])
 
 
+func _check_routes(routes: Array, box: AABB) -> void:
+	var names := {}
+	# Validate the complete route list before beginning any new movement case.
+	for route: Variant in routes:
+		if not route is Dictionary or not route.get("name") is String or route.name == "" or names.has(route.name) or not _numbers(route.get("start_xz")) or not _numbers(route.get("end_xz")):
+			_failures.append(_prefix + "routes need unique names and finite start_xz/end_xz pairs")
+			return
+		names[route.name] = true
+		for value: Array in [route.start_xz, route.end_xz]:
+			if not box.grow(15.0).has_point(Vector3(value[0], box.get_center().y, value[1])):
+				_failures.append(_prefix + "route is outside the source building's surroundings: " + route.name)
+				return
+	for route: Dictionary in routes:
+		var start := Vector2(route.start_xz[0], route.start_xz[1])
+		var end := Vector2(route.end_xz[0], route.end_xz[1])
+		var problem := await _h.settle_player(start)
+		if problem != "":
+			_failures.append(_prefix + "route " + route.name + " setup: " + problem)
+			_unsafe = true
+			return
+		for target: Vector2 in [end, start]:
+			if target == start:
+				# Walk back along the same line, from the route's end point.
+				problem = await _h.settle_player(end)
+				if problem != "":
+					_failures.append(_prefix + "route " + route.name + " return setup: " + problem)
+					_unsafe = true
+					return
+			problem = await _walk_toward(Vector3(target.x, _h.player.global_position.y + 1.5, target.y))
+			var at := _h.player.global_position
+			var distance := _closest
+			print("ROUTE %s target=%s arrived=%s distance=%.3f contacts=%s" % [route.name, target, at, distance, _touched.map(func(body: Object) -> String: return str((body as Node).get_path()))])
+			if problem != "" or distance > 0.75:
+				_failures.append(_prefix + "route " + route.name + ": " + (problem if problem != "" else "stopped short of destination"))
+				# The reverse leg depends on reaching the forward destination.
+				break
+		if _unsafe:
+			return
+
+
+func _numbers(value: Variant) -> bool:
+	if not value is Array or value.size() != 2:
+		return false
+	for number: Variant in value:
+		if not (number is float or number is int) or not is_finite(float(number)):
+			return false
+	return true
+
+
 ## Holds forward toward target until the player bumps into the building
 ## (own), arrives, or stops moving; returns a problem or "".
 func _walk_toward(target: Vector3, own: Array[RID] = []) -> String:
@@ -237,14 +298,23 @@ func _walk_toward(target: Vector3, own: Array[RID] = []) -> String:
 	Input.action_press("move_forward")
 	_touched = []
 	var still_frames := 0
+	_closest = INF
 	for frame in WALK_FRAMES:
 		await _h.tree.physics_frame
+		if evidence.recovery_count != recoveries:
+			# Release held input immediately at the recovery boundary; do not
+			# continue driving the respawned player toward the old destination.
+			break
 		for i in _h.player.get_slide_collision_count():
 			var body := _h.player.get_slide_collision(i).get_collider()
 			if body != null and (_h.player.get_slide_collision(i).get_normal().dot(Vector3.UP) < 0.7) and body not in _touched:
 				_touched.append(body)
 		var at := _h.player.global_position
-		if Vector2(at.x, at.z).distance_to(Vector2(target.x, target.z)) < 0.5 or _touched_own(own):
+		var remaining := Vector2(at.x, at.z).distance_to(Vector2(target.x, target.z))
+		_closest = minf(_closest, remaining)
+		# Stop on arrival, on reaching the building, or once the player has
+		# passed the target and is walking away from it.
+		if remaining < 0.5 or _touched_own(own) or remaining > _closest + 1.0:
 			break
 		still_frames = still_frames + 1 if Vector2(_h.player.velocity.x, _h.player.velocity.z).length() < 0.2 else 0
 		if frame > 60 and still_frames > 60:
@@ -252,11 +322,27 @@ func _walk_toward(target: Vector3, own: Array[RID] = []) -> String:
 	_h.release_input()
 	for _frame in 30:
 		await _h.tree.physics_frame
+	# Stock disable clears velocity. Preserve actual active-controller rest and
+	# support before that operation, then independently verify safe teardown.
+	var at := _h.player.global_position
+	var support := _h.ray(at + Vector3.UP * 0.2, at - Vector3.UP * 0.4, _h.player.collision_mask)
+	var released := true
+	for action in ["move_forward", "move_back", "move_left", "move_right", "run", "jetpack"]:
+		released = released and not Input.is_action_pressed(action)
+	var active := _h.player.is_physics_processing()
+	var grounded := _h.player.is_on_floor()
+	var stopped := _h.player.velocity.length() <= 0.05
+	var supported := not support.is_empty() and (support.normal as Vector3).dot(Vector3.UP) >= 0.7
+	print("REST active=%s released=%s grounded=%s supported=%s velocity=%s at=%s support=%s" % [active, released, grounded, supported, _h.player.velocity, at, str((support.collider as Node).get_path()) if supported else "none"])
 	_h.player.set_gameplay_enabled(false)
+	var safe_final := not _h.player.is_physics_processing() and _h.player.velocity == Vector3.ZERO and released
+	print("SAFE_FINAL disabled=%s zero_velocity=%s input_released=%s" % [not _h.player.is_physics_processing(), _h.player.velocity == Vector3.ZERO, released])
+	if not (active and released and grounded and stopped and supported and safe_final):
+		_unsafe = true
+		return "supported active-controller rest or safe disabled final state failed"
 	if evidence.recovery_count != recoveries:
+		_unsafe = true
 		return "player fell and had to be recovered"
-	if not _h.player.is_on_floor():
-		return "player ended up not standing on anything at %s" % _h.player.global_position
 	return ""
 
 

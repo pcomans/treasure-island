@@ -116,6 +116,9 @@ The hangar comparison substituted 2003 HABS photographs after headless/API-locat
 
 The same failure recurred for the Bulgarian Wall neighbor on 2026-10-03 UTC: coordinate/copied-pano deep links had produced black frames, but a fresh headed session entering Street View from the actual Maps pin and road-coverage UI immediately returned September 2025 imagery. Avenue D and Chinook Court supplied March 2025 opposite-side and complete-frontage views, establishing 1445 Chinook Court / w95934121. This repeats the existing lesson, not a new evidence exception; the precise earlier failure cause is still unproved. Apply the headed UI fallback before declaring imagery unavailable, preserving failed originals and actual resolved panorama/date/location.
 
+For Building 600 on 2026-10-04, the initial headed session returned photometa 500/tile 403; a fresh headed session then returned coordinate metadata and tile HTTP 200 but still showed a black viewer. Navigating that session to the complete resolved `/maps/@lat,lon,3a,.../data=...!1s<pano>...` URL rendered September 2025 exterior pixels, and the normal rotation control worked. No browser package, GPU option, proxy, account or access-control change was needed. The precise cause is unproved because session freshness and URL/initialization state differed. After the required UI fallback, inspect network and actual saved pixels; if coordinate/API startup remains black, try the actual full resolved panorama URL once in a fresh headed session before declaring a blocker. HTTP 200 or a resolved pano ID alone does not prove a working viewer.
+A subsequent same-session test also succeeded through the actual Building600 place card: enable Street View, click blue Avenue M coverage, then rotate toward the target; the saved September2025 `L_00cDY02FaeZrVa3MCCsg` pixels confirm that route works. Headless was not tested in this round. Use `tools/browser` for the private headed Weston lifecycle and retain its terminal handle.
+
 ## Condition small polygon calculations locally
 
 The housing roof clipper produced thin positive-area triangles at large projected
@@ -175,3 +178,28 @@ RGBA presence did not guarantee opaque navy: two transparent generated outputs r
 ## Preserve semantic roles independently of sibling names
 
 The Bulgarian Wall / 1445 Chinook integration classified meshes by `Node.name`. Godot auto-renamed repeated siblings, so later driveway/tread meshes escaped intended exclusions and stair treads became wall contacts. Actual stock ascent stalled on those contacts; descent had long airborne intervals. Preserve an explicit semantic label when constructing each mesh and use that metadata for role selection, with the intended positive coverage checked in the existing source review. The corrected 34-tread exclusion restored supported descents; both upper-landing ascents remained held at that stage, so fixing classification did not establish full stair acceptance. Native ordered geometry equality proves the consumed shapes agree, not that they received the intended role.
+
+## Check junction end planes when combining solid building modules
+
+Building 600's roof edge initially coincided with red portal surfaces, causing
+pale slivers in actual gameplay captures. After a full-height classroom return
+was added, source review found a second coincident roof-end/return plane. Bury
+concealed component ends within their receiving solid or omit concealed faces;
+compare both material ownership and exposed planes before capture. Collision
+solidness alone does not establish clean visible junctions. The final roof end
+was recessed 0.18 m into the existing 0.36 m return without changing passage or
+ground-contact geometry.
+
+## Serve remote visual galleries over loopback HTTP
+
+On 2026-10-04, VS Code's integrated browser rejected the Building 600 comparison
+at `/tmp/b600-three-model-comparison/index.html` as outside the trusted folder.
+Serving that directory on `127.0.0.1:8765` and using a VS Code forwarded-port URL
+provided verified HTTP delivery without changing trust settings. Checks returned 200 for
+the index and an original image; actual browser inspection confirmed all 15
+images loaded. The observed restriction concerned remote-file delivery, not a
+broken gallery. For future outside-workspace HTML artifacts, choose an available
+loopback port, verify the actual page/images, and retain explicit live-server
+ownership until viewing is finished. Port 8765 was this run's choice, not a
+requirement. Keep reference privacy intact; do not move photos into Git/game as
+a delivery workaround.

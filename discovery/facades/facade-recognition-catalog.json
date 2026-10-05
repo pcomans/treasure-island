@@ -1600,13 +1600,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "b600-pr5-code-20261005",
+          "review_kind": "independent_code_review",
+          "status": "accept"
+        },
+        {
+          "review_id": "b600-pr5-visual-20261005",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w34313548",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {

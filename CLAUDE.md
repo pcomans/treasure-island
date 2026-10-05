@@ -27,6 +27,21 @@ The maintained [source-surface comparator](tools/source_surface_comparator.py) e
 
 For model comparisons, use the canonical [blind shootout protocol](discovery/MODEL_SHOOTOUT.md): critique HTML and owner vote first, then isolated modeling through the committed `tools/model_shootout/run_capture.py <variant> <phase> --packet-root <private-packet>` renderer (`--godot` overrides the default `tools/godot`). Participants author models, not capture machinery.
 
+### Delivering visual galleries in VS Code
+
+For HTML galleries outside the remote workspace, prefer a static server bound to
+`127.0.0.1` and give the owner its VS Code forwarded-port URL. For example,
+`python3 -m http.server <available-port> --bind 127.0.0.1 --directory <gallery-dir>`;
+forward that port in VS Code's Ports panel and open the displayed localhost URL
+with **Browser: Open Integrated Browser**. Verify the index and image responses,
+then inspect the actual browser page and loaded images using the applicable
+browser skill. Retain the live server handle/PID and name its owner; leave it
+running for the requested viewing session and report how to stop it. Do not
+broaden workspace trust or copy private reference photos into Git/game to make a
+gallery open. `tools/browser` runs the agent's headed verification/reference
+browser; it is separate from the owner's VS Code integrated browser. See the
+[observed remote-file restriction](LEARNINGS.md#serve-remote-visual-galleries-over-loopback-http).
+
 ## Shared building-study geometry verification
 
 `game/tests/support/building_study_geometry.gd` replaces copied face collectors used by Hawkins002/Chapel003-style checks. Configure `collect(mesh, transforms, producer, cutoff)` with `INDEXED_ARRAYS` for the raw indexed producer, or `MESH_GET_FACES` only when the actual collider uses Godot's transformed/snapped TriangleMesh path. Transforms map mesh-local to collision-local, in instance order; MultiMesh callers supply each `instance.transform * multimesh.get_instance_transform(i)`. The optional cutoff defaults to no filtering and must match an existing producer, never a new tolerance. `compare(collection, shape.get_faces(), expected_vertex_count)` requires positive complete coverage and exact ordered equality, returning full observed operands even on failure. Save it into the existing receipt before failing the driver guard.
