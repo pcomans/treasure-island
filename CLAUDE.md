@@ -6,7 +6,7 @@ The imported [project agreement](AGENTS.md) is the shared authority. The primary
 
 ## Persisted entrypoints
 
-Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra`; explicitly select a supported non-ultra effort instead of inheriting the parent’s effort. That section defines both routings: Codex (Astra Low modeling, GPT-6.1 Sol High visual critique, Astra Medium other roles) and Claude Code (Opus 5.5, effort `max` for modeling and `high` otherwise, set in each role file's frontmatter). Preserve independent review gates; the primary/root setting is unchanged.
+Subagent dispatch must follow [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra`; explicitly select a supported non-ultra effort instead of inheriting the parent’s effort. That section defines the routing: modeling in Claude Code on Opus 5.5 (effort `max`; other roles `high`, set in each role file's frontmatter), with `tools/generate-texture` for generated textures; Codex sessions use GPT-6.1 Sol High for visual critique and Astra Medium for other roles. Preserve independent review gates; the primary/root setting is unchanged.
 
 | Role prompt | When used |
 |---|---|

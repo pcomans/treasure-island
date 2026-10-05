@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+# Generates one texture image with Codex's image generation (the owner's
+# ChatGPT plan; Codex must be logged in in this devcontainer).
+#
+#   tools/generate-texture "<what the texture shows>" game/resources/textures/world/<name>.png
+#
+# Codex follows the building-texture skill. stdin is closed: codex exec otherwise
+# waits for more prompt input when it is run from a script or agent shell. The image must be original: never
+# a copy of a reference photo. Prints the path when the PNG exists.
+set -euo pipefail
+root="$(cd "$(dirname "$0")/.." && pwd)"
+export PATH="${HOME}/.local/bin:${PATH}"
+if [ $# -ne 2 ]; then
+  echo "usage: tools/generate-texture \"<description>\" game/resources/<path>.png" >&2
+  exit 2
+fi
+description="$1"
+out="$2"
+case "${out}" in
+  game/resources/*.png) ;;
+  *) echo "tools/generate-texture: the output must be a .png under game/resources/" >&2; exit 2 ;;
+esac
+if ! codex login status >/dev/null 2>&1; then
+  echo "tools/generate-texture: Codex isn't logged in; run: codex login --device-auth" >&2
+  exit 1
+fi
+mkdir -p "${root}/$(dirname "${out}")"
+rm -f "${root}/${out}"
+codex exec --skip-git-repo-check -C "${root}" "Use the building-texture skill (.agents/skills/building-texture/SKILL.md) for a generated texture. Generate exactly one image with your image generation tool: ${description}. Save it as ${root}/${out} (PNG). Do not edit or create any other file. Reply with only the path and its pixel size." </dev/null >&2
+if [ "$(file -b --mime-type "${root}/${out}" 2>/dev/null)" != "image/png" ]; then
+  echo "tools/generate-texture: Codex did not produce ${out}" >&2
+  exit 1
+fi
+echo "${out}"
