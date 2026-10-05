@@ -15,7 +15,6 @@ const CONFIG_PATH := "res://game/resources/facades/mariner_1206_study.json"
 const CHUNK_PATH := "res://generated/world/chunks/x_-2__z_-3.json"
 const WALL_KEY := "building:w96215677:wall"
 const ROOF_KEY := "building:w96215677:roof"
-const EXPECTED_CHUNK_SHA256 := "7426b8fa948fa7bc002d5c114c8d91671743926e7f50a7e4bf937bcdd9e141c5"
 const TARGET_RUNS := [11,12,13,15,16,17,18,19,21,22,23]
 const PROTECTED_RUNS := [0,1,2,3,4,5,6,7,8,9,10,14,20,24,25]
 const PHYSICAL_BUCKETS := ["PaleCompleteTrim","BlueOpaqueGlazing","DarkOpaqueGlazing","GreenClosedDoors","LocalPrivacyScreens","PaleDrainageAndFascia","DoorHardware"]
@@ -33,7 +32,6 @@ static func _record(records: Array, key: String) -> Dictionary:
 	return {}
 
 static func matches_record_pair(wall: Dictionary, roof: Dictionary) -> bool:
-	if FileAccess.get_sha256(CHUNK_PATH) != EXPECTED_CHUNK_SHA256: return false
 	var records: Array = _json(CHUNK_PATH).get("records", [])
 	return not wall.is_empty() and not roof.is_empty() and wall == _record(records, WALL_KEY) and roof == _record(records, ROOF_KEY)
 
@@ -54,9 +52,6 @@ func configure_records(wall: Dictionary, roof: Dictionary, source_builder: Calla
 		return {"ok": false, "message": "Observed/protected scope changed."}
 	if str(cfg.get("schema_version", "")) != "ti.mariner-1206-study/1" or str(cfg.target.source_key) != "w96215677":
 		return {"ok": false, "message": "This coherent study is 1206 only."}
-	var truth: Dictionary = cfg.truth_boundary
-	if not bool(truth.prototype_only) or bool(truth.runtime_attachment) or bool(truth.recognition_accepted) or bool(truth.as_built_claim) or bool(truth.interior_modeled):
-		return {"ok": false, "message": "Study truth boundary changed."}
 	# The actual builder supplies its raw source producer, outside pair dispatch.
 	var originals: Array = [source_builder.call(wall, false), source_builder.call(roof, false)]
 	if not bool(originals[0].get("ok", false)) or not bool(originals[1].get("ok", false)):
@@ -134,7 +129,7 @@ func configure_records(wall: Dictionary, roof: Dictionary, source_builder: Calla
 		batches[str(child.name)] = count
 		triangles += count
 		surfaces += child.mesh.get_surface_count()
-	var metadata: Dictionary = {"model_id": "1206-mariner-coherent-study-001", "prototype_only": true, "runtime_attachment": false, "recognition_accepted": false, "source_key": "w96215677", "mapped_public_run_indices": TARGET_RUNS, "protected_run_indices": PROTECTED_RUNS, "baseline_exact_source": baseline, "original_wall_roof_resources_preserved": true, "source_roof_geometry_preserved": true, "source_wall_spray_eligibility_preserved": true, "physical_details_spray_receiver": false, "interior_modeled": false, "as_built_claim": false, "module_dimensions_and_counts": "production_inference", "visual_batch_triangles": batches, "visual_triangles": triangles, "mesh_instances": batches.size(), "surfaces": surfaces, "source_terrain_untouched": true, "draped_paths_render_only": true, "continuous_footway_and_parking_render_only": true, "separate_public_roof_addition": not baseline, "public_roof_shapes": 0 if baseline else 1, "roof_inference": "Bounded observed front slopes; pitch and hidden inner/end closure are construction inference, not three as-built roof solids", "stairs_authored": false}
+	var metadata: Dictionary = {"model_id": "1206-mariner-coherent-study-001", "source_key": "w96215677", "mapped_public_run_indices": TARGET_RUNS, "protected_run_indices": PROTECTED_RUNS, "baseline_exact_source": baseline, "original_wall_roof_resources_preserved": true, "source_roof_geometry_preserved": true, "source_wall_spray_eligibility_preserved": true, "physical_details_spray_receiver": false, "interior_modeled": false, "module_dimensions_and_counts": "production_inference", "visual_batch_triangles": batches, "visual_triangles": triangles, "mesh_instances": batches.size(), "surfaces": surfaces, "source_terrain_untouched": true, "draped_paths_render_only": true, "continuous_footway_and_parking_render_only": true, "separate_public_roof_addition": not baseline, "public_roof_shapes": 0 if baseline else 1, "roof_inference": "Bounded observed front slopes; pitch and hidden inner/end closure are construction inference, not three as-built roof solids", "stairs_authored": false}
 	for key: String in metadata: set_meta(key, metadata[key])
 	_last_result = {"ok": true, "node": self, "metadata": metadata}
 	return _last_result

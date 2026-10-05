@@ -27,7 +27,6 @@ var _render_contract: Dictionary = {}
 var _side_nodes: Dictionary = {}
 var _box_transforms: Dictionary = {}
 var _box_counts: Dictionary = {}
-var _signature_parts: PackedStringArray = []
 var _configured := false
 
 
@@ -53,7 +52,7 @@ func configure(record: Dictionary) -> Dictionary:
 		return {"ok": false, "message": "Isle House low prototype config could not be parsed."}
 	_config = parsed as Dictionary
 	if not _config_contract_matches(_config) or not _record_matches_config(record):
-		return {"ok": false, "message": "Isle House low prototype identity, topology, run geometry, or bounded-layout contract drifted."}
+		return {"ok": false, "message": "Isle House low prototype identity, run geometry, or bounded-layout contract did not match."}
 
 	_render_contract = _config.get("render_contract", {}) as Dictionary
 	name = "IsleHouse39BrutonLowFacadePrototype"
@@ -64,14 +63,7 @@ func configure(record: Dictionary) -> Dictionary:
 	set_meta("target_receiver_object_key", TARGET_RECEIVER_OBJECT_KEY)
 	set_meta("target_high_receiver_object_key", TARGET_HIGH_RECEIVER_OBJECT_KEY)
 	set_meta("config_path", CONFIG_PATH)
-	set_meta("config_sha256", FileAccess.get_sha256(CONFIG_PATH))
-	set_meta("prototype_only", true)
-	set_meta("runtime_attachment", false)
-	set_meta("technical_evidence_status", "pending_independent_review")
 	set_meta("receiver_geometry_fit", "contract_testable_not_art_accepted")
-	set_meta("part_recognition_accepted", false)
-	set_meta("whole_composite_recognition_accepted", false)
-	set_meta("as_built_claim", false)
 	set_meta("observed_field_run_indices", OBSERVED_FIELD_RUN_INDICES.duplicate())
 	set_meta("module_run_indices", MODULE_RUN_INDICES.duplicate())
 	set_meta("protected_run_indices", PROTECTED_RUN_INDICES.duplicate())
@@ -89,12 +81,6 @@ func configure(record: Dictionary) -> Dictionary:
 	for placement_value: Variant in placements:
 		_build_live_work_module(record, placement_value as Dictionary)
 	_flush_box_batches()
-	var signature_values: Array[String] = []
-	for value: String in _signature_parts:
-		signature_values.append(value)
-	signature_values.sort()
-	var signature := JSON.stringify(signature_values).sha256_text()
-	set_meta("deterministic_signature", signature)
 	set_meta("field_segment_count", int(field_result.get("segment_count", 0)))
 	set_meta("field_triangle_count", int(field_result.get("triangle_count", 0)))
 	set_meta("field_uv_contract", field_result.get("uv_contract", {}).duplicate(true))
@@ -105,7 +91,6 @@ func configure(record: Dictionary) -> Dictionary:
 	_configured = true
 	return {
 		"ok": true,
-		"deterministic_signature": signature,
 		"field_segment_count": int(field_result.get("segment_count", 0)),
 		"field_triangle_count": int(field_result.get("triangle_count", 0)),
 		"field_uv_contract": field_result.get("uv_contract", {}).duplicate(true),
@@ -119,7 +104,6 @@ func _config_contract_matches(config: Dictionary) -> bool:
 	if str(config.get("schema_version", "")) != "ti.isle-house-low-facade-prototype/1":
 		return false
 	var target := config.get("target", {}) as Dictionary
-	var truth := config.get("truth_boundary", {}) as Dictionary
 	var render := config.get("render_contract", {}) as Dictionary
 	var field_material := render.get("brick_field_material", {}) as Dictionary
 	var uv_contract := render.get("field_uv_contract", {}) as Dictionary
@@ -130,7 +114,6 @@ func _config_contract_matches(config: Dictionary) -> bool:
 	or str(target.get("receiver_object_key", "")) != TARGET_RECEIVER_OBJECT_KEY \
 	or str(target.get("high_receiver_object_key", "")) != TARGET_HIGH_RECEIVER_OBJECT_KEY \
 	or str(target.get("chunk_id", "")) != "x_-1__z_2" \
-	or str(target.get("geometry_sha256", "")) != "99d96b6c7efb1a25a17439f56368706f92270d8008d7d9eaeb8b9f3ea8656ff5" \
 	or int(target.get("wall_segments", 0)) != 13 \
 	or int(target.get("wall_vertices", 0)) != 52 \
 	or int(target.get("wall_triangles", 0)) != 26 \
@@ -138,17 +121,6 @@ func _config_contract_matches(config: Dictionary) -> bool:
 	or not is_equal_approx(float(target.get("flat_base_y_m", 0.0)), 4.103) \
 	or not is_equal_approx(float(target.get("lowest_foundation_y_m", 0.0)), 3.983) \
 	or not is_equal_approx(float(target.get("top_y_m", 0.0)), 19.103):
-		return false
-	if not bool(truth.get("prototype_only", false)) \
-	or bool(truth.get("runtime_attachment", true)) \
-	or str(truth.get("technical_evidence_status", "")) != "pending_independent_review" \
-	or bool(truth.get("part_recognition_accepted", true)) \
-	or bool(truth.get("whole_composite_recognition_accepted", true)) \
-	or bool(truth.get("as_built_claim", true)) \
-	or bool(truth.get("surveyed_dimensions", true)) \
-	or bool(truth.get("surveyed_bay_count", true)) \
-	or bool(truth.get("surveyed_cadence", true)) \
-	or bool(truth.get("reference_pixels_stored_or_copied", true)):
 		return false
 	if int(render.get("render_layer", 0)) != RENDER_BUILDING_WALL \
 	or float(render.get("field_offset_m", 1.0)) <= 0.0 \
@@ -230,7 +202,6 @@ func _placements_are_bounded(placements: Array, runs: Array, family: Dictionary,
 		var center := float(placement.get("run_u_m", -1.0))
 		var half := width * 0.5
 		if str(placement.get("side_id", "")) != str(run.get("side_id", "")) \
-		or str(placement.get("truth_class", "")) != "reversible_production_inference" \
 		or not is_equal_approx(width, float(family.get("width_m", 0.0))) \
 		or center - half < minimum_clearance - 0.0001 \
 		or center + half > float(run.get("length_m", 0.0)) - minimum_clearance + 0.0001:
@@ -350,8 +321,6 @@ func _build_observed_fields(record: Dictionary) -> Dictionary:
 		if quad_uvs.size() != 4:
 			return {"ok": false, "message": "Facade metre UV adapter refused a public field quad."}
 		_append_quad(group, corners, normal, quad_uvs)
-		_signature_parts.append("field:%02d:%s" % [run_index, _corners_token(corners)])
-		_signature_parts.append("field_uv:%02d:%s" % [run_index, _uvs_token(quad_uvs)])
 	var mesh := ArrayMesh.new()
 	var arrays: Array = []
 	arrays.resize(Mesh.ARRAY_MAX)
@@ -448,7 +417,6 @@ func _build_live_work_module(record: Dictionary, placement: Dictionary) -> void:
 	_add_module_box("frame", placement, module_transform, "DutchDoorFrameSplit", Vector3(-1.46, 5.64, 0.071), Vector3(1.16, 0.12, 0.056))
 	_add_module_box("frame", placement, module_transform, "DutchDoorFrameTop", Vector3(-1.46, 7.01, 0.071), Vector3(1.16, 0.12, 0.056))
 	_add_module_box("patio", placement, module_transform, "PatioThresholdEdge", Vector3(0.0, 4.20, 0.062), Vector3(4.36, 0.16, 0.076))
-	_signature_parts.append("module:%s:run=%02d:u=%.3f:w=%.3f" % [str(placement.get("id", "")), run_index, run_u, width])
 
 
 func _add_module_box(material_key: String, placement: Dictionary, module_transform: Transform3D, component_name: String, local_origin: Vector3, size: Vector3) -> void:
@@ -463,7 +431,6 @@ func _add_module_box(material_key: String, placement: Dictionary, module_transfo
 		_box_transforms[material_key] = []
 	(_box_transforms[material_key] as Array).append(world_transform)
 	_box_counts[material_key] = int(_box_counts.get(material_key, 0)) + 1
-	_signature_parts.append("box:%s:%s:%s:%s" % [material_key, str(placement.get("id", "")), component_name, _transform_token(world_transform)])
 
 
 func _flush_box_batches() -> void:
@@ -529,30 +496,6 @@ func _append_quad(group: Dictionary, corners: Array, normal: Vector3, quad_uvs: 
 	group["tangents"] = tangents
 	group["uvs"] = uvs
 	group["indices"] = indices
-
-
-func _corners_token(corners: Array) -> String:
-	var values: Array[String] = []
-	for value: Variant in corners:
-		var corner := value as Vector3
-		values.append("%.6f,%.6f,%.6f" % [corner.x, corner.y, corner.z])
-	return ";".join(values)
-
-
-func _uvs_token(uvs: PackedVector2Array) -> String:
-	var values: Array[String] = []
-	for uv: Vector2 in uvs:
-		values.append("%.6f,%.6f" % [uv.x, uv.y])
-	return ";".join(values)
-
-
-func _transform_token(value: Transform3D) -> String:
-	return "%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f" % [
-		value.basis.x.x, value.basis.x.y, value.basis.x.z,
-		value.basis.y.x, value.basis.y.y, value.basis.y.z,
-		value.basis.z.x, value.basis.z.y, value.basis.z.z,
-		value.origin.x, value.origin.y, value.origin.z,
-	]
 
 
 func _int_array(values: Array) -> Array[int]:

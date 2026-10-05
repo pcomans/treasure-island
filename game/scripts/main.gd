@@ -69,6 +69,9 @@ func _on_world_ready(_report: Dictionary) -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	hud.show_world_ready()
 	print("WORLD_READY")
+	# Launch check for exported builds: load the island, then exit cleanly.
+	if OS.get_cmdline_user_args().has("--quit-on-ready"):
+		get_tree().quit(0)
 
 
 func _on_world_failed(code: String, message: String, source_keys: Array) -> void:

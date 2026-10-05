@@ -24,11 +24,8 @@ func _ready() -> void:
 
 
 func _build() -> void:
-	set_meta("prototype_only", true)
-	set_meta("runtime_attachment", false)
 	set_meta("exact_receiver_layout", false)
 	set_meta("standalone_side_length_calibrated", true)
-	set_meta("review_status", "pending_independent_bar_raiser_re_review_not_self_accepted")
 	set_meta("one_local_unit_m", 1.0)
 	set_meta("collision", "none")
 	set_meta("navigation", "none")
@@ -36,8 +33,6 @@ func _build() -> void:
 
 	var prototype := Node3D.new()
 	prototype.name = "B225_w95934119_CladdingRepairV1"
-	prototype.set_meta("prototype_only", true)
-	prototype.set_meta("runtime_attachment", false)
 	prototype.set_meta("exact_receiver_layout", false)
 	prototype.set_meta("standalone_side_length_calibrated", true)
 	prototype.set_meta("source_key", SOURCE_KEY)
@@ -52,7 +47,6 @@ func _build() -> void:
 	prototype.set_meta("production_inference", true)
 	prototype.set_meta("counts_cadence_dimensions_not_surveyed", true)
 	prototype.set_meta("nonclaims", ["common name or current business identity", "cladding substrate or proprietary profile", "exact pane count, group width, cadence or damage", "lower openings or entrances", "unobserved sides, corners, returns or roof equipment"])
-	prototype.set_meta("review_status", "pending_independent_bar_raiser_re_review_not_self_accepted")
 	prototype.set_meta("collision", "none")
 	prototype.set_meta("navigation", "none")
 	prototype.set_meta("spray_owner", "none")

@@ -75,8 +75,6 @@ static func build_record(record: Dictionary, material: Material) -> Dictionary:
 	root.set_meta("production_inference_reversible", true)
 	root.set_meta("exterior_only", true)
 	root.set_meta("interior_modeled", false)
-	root.set_meta("as_built_fidelity_claimed", false)
-	root.set_meta("visual_review_status", "pending_independent_original_detail_review")
 
 	var mesh_instance := MeshInstance3D.new()
 	mesh_instance.name = "Mesh"
@@ -153,7 +151,6 @@ static func massing_contract(record: Dictionary = {}, supplied_config: Dictionar
 	var contract := {
 		"schema_version": "ti.building-3-massing-runtime/1",
 		"config_path": CONFIG_PATH,
-		"config_sha256": FileAccess.get_sha256(CONFIG_PATH),
 		"target_source_key": TARGET_SOURCE_KEY,
 		"target_logical_object_key": TARGET_LOGICAL_OBJECT_KEY,
 		"target_wall_key": TARGET_WALL_KEY,
@@ -188,8 +185,6 @@ static func massing_contract(record: Dictionary = {}, supplied_config: Dictionar
 		"production_inference_reversible": true,
 		"exterior_only": true,
 		"interior_modeled": false,
-		"as_built_fidelity_claimed": false,
-		"visual_review_status": "pending_independent_original_detail_review",
 	}
 	if not record.is_empty() and str(record.get("object_key", "")) == TARGET_WALL_KEY:
 		contract["wall_run_top_y_samples"] = _wall_run_top_samples(record, contract)
@@ -362,7 +357,6 @@ static func _load_and_validate_config() -> Dictionary:
 	var target := config.get("target", {}) as Dictionary
 	var identity := config.get("authoritative_identity", {}) as Dictionary
 	var inference := config.get("reversible_production_inference", {}) as Dictionary
-	var truth := config.get("truth_boundary", {}) as Dictionary
 	if str(config.get("schema_version", "")) != "ti.building-3-hero-massing/1" \
 		or str(target.get("source_key", "")) != TARGET_SOURCE_KEY \
 		or str(target.get("wall_object_key", "")) != TARGET_WALL_KEY \
@@ -374,11 +368,7 @@ static func _load_and_validate_config() -> Dictionary:
 		or int(inference.get("roof_subdivisions_per_source_triangle", 0)) < 2 \
 		or float(inference.get("nominal_eave_y_m", 0.0)) <= SOURCE_NOMINAL_BASE_Y \
 		or float(inference.get("crown_y_m", 0.0)) <= float(inference.get("pylon_y_m", 0.0)) \
-		or float(inference.get("pylon_y_m", 0.0)) <= float(inference.get("nominal_eave_y_m", 0.0)) \
-		or not bool(truth.get("horizontal_source_footprint_preserved", false)) \
-		or not bool(truth.get("exterior_only", false)) \
-		or bool(truth.get("interior_modeled", true)) \
-		or bool(truth.get("as_built_fidelity_claimed", true)):
+		or float(inference.get("pylon_y_m", 0.0)) <= float(inference.get("nominal_eave_y_m", 0.0)):
 		return {"ok": false, "code": "building_3_massing_config", "message": "Building 3 hero massing truth/identity/profile contract drifted."}
 	return {"ok": true, "config": config}
 

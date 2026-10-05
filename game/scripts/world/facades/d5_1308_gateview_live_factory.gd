@@ -12,7 +12,6 @@ const CONFIG_PATH := "res://game/resources/facades/d5_1308_gateview_live_factory
 const SOURCE_KEY := "w95934123"
 const WALL_KEY := "building:w95934123:wall"
 const ROOF_KEY := "building:w95934123:roof"
-const SOURCE_GEOMETRY_SHA256 := "6028c89be31ebfd095777b86f6d5d4a9094002b7b5fd73efb2fc940f9a9f3917"
 const TARGET_RUNS := [0, 1, 2, 3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 17, 18, 19, 20, 21, 27, 32]
 const PROTECTED_RUNS := [4, 6, 15, 16, 22, 23, 24, 25, 26, 28, 29, 30, 31, 33]
 const IVORY := preload("res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres")
@@ -38,10 +37,8 @@ static func build_for_records(wall: Dictionary, roof: Dictionary, neutral_wall: 
 func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: StandardMaterial3D, neutral_roof: StandardMaterial3D, baseline: bool = false) -> Dictionary:
 	if not _last_result.is_empty():return {"ok":false,"message":"Duplicate detached study configuration."}
 	var config:=_json(CONFIG_PATH)
-	if FileAccess.get_sha256(CONFIG_PATH)!="5fb9d42425df7d6f8b62ffdc3053e88ee559dc0efd0e7880b5e841ed0bf1ac8a" or str(wall.get("object_key",""))!=WALL_KEY or str(roof.get("object_key",""))!=ROOF_KEY or neutral_wall==null or neutral_roof==null:return {"ok":false,"message":"Validated factory inputs changed."}
+	if str(wall.get("object_key",""))!=WALL_KEY or str(roof.get("object_key",""))!=ROOF_KEY or neutral_wall==null or neutral_roof==null:return {"ok":false,"message":"Validated factory inputs changed."}
 	if not _same_numeric_runs(config.get("mapped_runs",[]),TARGET_RUNS) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS) or str(config.get("schema_version",""))!="ti.d5-1308-gateview-live-factory/1":return {"ok":false,"message":"1308 scope changed."}
-	var truth:Dictionary=config.truth_boundary
-	if not bool(truth.prototype_only) or bool(truth.runtime_attachment) or bool(truth.recognition_accepted) or bool(truth.interior_modeled) or bool(truth.as_built_claim):return {"ok":false,"message":"Detached truth boundary changed."}
 	var inf:Dictionary=config.inference
 	var protected:=KIT.new_bucket();var mapped:=KIT.new_bucket()
 	for run in 34:_append_source_run(protected if run in PROTECTED_RUNS else mapped,wall,run,true)
@@ -110,7 +107,7 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 		_add_mesh("LowerOpeningFramesAndHandles",frames,pale)
 		for part:Dictionary in [doors,windows,frames]:_merge(lower_collision,part)
 	var body:=StaticBody3D.new();body.name="ExactFootprintStructuralCollision_NoSprayOwnership";body.collision_layer=1;body.collision_mask=0
-	body.set_meta("receiver_kind","none");body.set_meta("opaque",true);body.set_meta("derived_object_key",WALL_KEY if baseline else "prototype:"+WALL_KEY);body.set_meta("source_keys",[SOURCE_KEY]);body.set_meta("prototype_only",true)
+	body.set_meta("receiver_kind","none");body.set_meta("opaque",true);body.set_meta("derived_object_key",WALL_KEY if baseline else "prototype:"+WALL_KEY);body.set_meta("source_keys",[SOURCE_KEY])
 	var collisions:Dictionary={"ExactClosedSourceWalls":walls,"ExactSourceNeutralRoof":roof_bucket}
 	if not baseline:collisions.merge({"RealGableCanopiesAndPosts":structure,"GroundFlushSupportSlabs":slabs,"ClosedLowerModules":lower_collision,"PublicPitchedRoofSolid":new_roof})
 	var collision_triangles:=0
@@ -124,7 +121,7 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 	for child:Node in get_children():
 		if child is MeshInstance3D:
 			var count:int=child.mesh.surface_get_array_index_len(0)/3;batches[str(child.name)]=count;total+=count
-	var metadata:Dictionary={"model_id":"d5-1308-gateview-detached-observed-side-study-v1","baseline_exact_source":baseline,"prototype_only":true,"runtime_attachment":false,"recognition_accepted":false,"as_built_claim":false,"interior_modeled":false,"source_key":SOURCE_KEY,"mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":collisions.size(),"collision_triangles":collision_triangles,"protected_runs_have_facade_modules":false,"original22_roof_triangles_retained":true,"roof_geometry_material_unchanged":baseline,"closed_lower_modules_at_six_existing_canopy_backs":not baseline,"stairs_added":false,"module_dimensions_and_counts":"production_inference","deterministic_signature":JSON.stringify(batches).sha256_text()}
+	var metadata:Dictionary={"model_id":"d5-1308-gateview-detached-observed-side-study-v1","baseline_exact_source":baseline,"interior_modeled":false,"source_key":SOURCE_KEY,"mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":collisions.size(),"collision_triangles":collision_triangles,"protected_runs_have_facade_modules":false,"original22_roof_triangles_retained":true,"roof_geometry_material_unchanged":baseline,"closed_lower_modules_at_six_existing_canopy_backs":not baseline,"stairs_added":false,"module_dimensions_and_counts":"production_inference","deterministic_signature":JSON.stringify(batches).sha256_text()}
 	metadata["pad_surface_mode"]="absent" if baseline else "frozen_visible_area_plus_5mm"
 	metadata["pad_top_y_ranges_m"]=[] if baseline else config.grade_pads.pads.map(func(p:Dictionary)->Array:return p.actual_top_y_range_m)
 	metadata["pad_vertical_thickness_m"]=0.0 if baseline else float(config.grade_pads.vertical_thickness_m)

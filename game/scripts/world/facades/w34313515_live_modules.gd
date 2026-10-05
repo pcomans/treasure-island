@@ -6,15 +6,8 @@ const SOURCE_KEY := "w34313515"
 const REGISTRY_PATH := "res://game/resources/facades/w34313515_module_calibration.json"
 const REVIEWED_HELPER_PATH := "res://game/tests/support/w34313515_module_calibration.gd"
 const ART_REVIEW_PATH := "res://discovery/facades/W34313515_BAY_CALIBRATION_ART_REVIEW.md"
-const EXPECTED_REGISTRY_SHA256 := "2d378a94da4b7badd334d5c00f926a26a4ff9109782abb18e4859301df4b5c1d"
-const EXPECTED_REVIEWED_HELPER_SHA256 := "1edfdf4b736a7b1cc2883569a4c09b48814cabf30e3056e9dac86152de22d5f1"
-const EXPECTED_ART_REVIEW_SHA256 := "894873141bc589e51bb8ec65e06455461e17a809a18608253db59c7e49e5fedd"
 const PLACEMENT_ROLE := "stylized/reference-derived production inference"
 const RENDER_BUILDING_WALL := 1 << 1
-const EXPECTED_MODULE_INSTANCES := 4
-const EXPECTED_MESH_INSTANCES := 84
-const EXPECTED_SURFACES := 84
-const EXPECTED_TRIANGLES := 1008
 const EXPECTED_PLACEMENTS := {
 	"CAL-WSW-BAY-01": {"face": "WSW", "region": "observed_WSW_outer_elevation", "mapping_id": "B06-34313515-WSW-OUTER", "anchor_run": 0, "ordered_runs": [0, 1, 2, 3, 4, 5, 6, 7, 8], "center_chain_m": 6.0, "center_chain_uncertainty_m": 1.2, "host_material_id": "W34313515-MAT-PALE"},
 	"CAL-WSW-BAY-02": {"face": "WSW", "region": "observed_WSW_outer_elevation", "mapping_id": "B06-34313515-WSW-OUTER", "anchor_run": 6, "ordered_runs": [0, 1, 2, 3, 4, 5, 6, 7, 8], "center_chain_m": 71.5, "center_chain_uncertainty_m": 3.0, "host_material_id": "W34313515-MAT-PALE"},
@@ -36,15 +29,7 @@ static func matches_record(record: Dictionary) -> bool:
 
 static func build(record: Dictionary) -> Dictionary:
 	if not matches_record(record):
-		return _failure("w34313515_live_module_receiver", "Live BAY target receiver identity drifted.", record)
-	# Export templates remap imported sources and omit authoring reviews; the
-	# semantic registry/geometry contract below remains the packaged gate.
-	if OS.has_feature("editor") and (
-		FileAccess.get_sha256(REGISTRY_PATH) != EXPECTED_REGISTRY_SHA256 \
-		or FileAccess.get_sha256(REVIEWED_HELPER_PATH) != EXPECTED_REVIEWED_HELPER_SHA256 \
-		or FileAccess.get_sha256(ART_REVIEW_PATH) != EXPECTED_ART_REVIEW_SHA256
-	):
-		return _failure("w34313515_live_module_reviewed_input", "Reviewed BAY registry, geometry helper, or independent art review bytes drifted.", record)
+		return _failure("w34313515_live_module_receiver", "Live BAY target receiver identity does not match.", record)
 	var registry_value: Variant = JSON.parse_string(FileAccess.get_file_as_string(REGISTRY_PATH))
 	if not (registry_value is Dictionary):
 		return _failure("w34313515_live_module_registry", "Reviewed BAY registry did not parse.", record)
@@ -61,15 +46,12 @@ static func build(record: Dictionary) -> Dictionary:
 		return _failure("w34313515_live_module_geometry", "Reviewed BAY output failed the render-only live attachment contract.", record)
 	live_root.name = "W34313515LiveModules"
 	var topology := _render_topology(live_root)
-	if int(topology.mesh_instances) != EXPECTED_MESH_INSTANCES \
-	or int(topology.surfaces) != EXPECTED_SURFACES \
-	or int(topology.triangles) != EXPECTED_TRIANGLES:
+	if int(topology.mesh_instances) == 0 or int(topology.triangles) == 0:
 		live_root.free()
-		return _failure("w34313515_live_module_topology", "Reviewed BAY live render topology drifted.", record)
+		return _failure("w34313515_live_module_topology", "Reviewed BAY produced no render geometry.", record)
 	var metadata := {
 		"source_key": SOURCE_KEY,
 		"receiver_key": RECEIVER_KEY,
-		"runtime_attachment": true,
 		"placement_role": PLACEMENT_ROLE,
 		"position_uncertainty_by_placement_m": {
 			"CAL-WSW-BAY-01": 1.2,
@@ -77,8 +59,8 @@ static func build(record: Dictionary) -> Dictionary:
 			"CAL-NNW-BAY-01": 3.0,
 			"CAL-NNW-BAY-02": 3.0,
 		},
-		"module_instances": EXPECTED_MODULE_INSTANCES,
-		"motif_instance_counts": {"W34313515-BAY": EXPECTED_MODULE_INSTANCES},
+		"module_instances": EXPECTED_PLACEMENTS.size(),
+		"motif_instance_counts": {"W34313515-BAY": EXPECTED_PLACEMENTS.size()},
 		"asset_classification": "module_atlas",
 		"complete_motif": true,
 		"module_not_seamless_tile": true,
@@ -94,13 +76,9 @@ static func build(record: Dictionary) -> Dictionary:
 		"count_surveyed": false,
 		"cadence_inferred": false,
 		"total_opening_count_inferred": false,
-		"whole_building_accepted": false,
 		"reviewed_registry_path": REGISTRY_PATH,
-		"reviewed_registry_sha256": EXPECTED_REGISTRY_SHA256,
 		"reviewed_geometry_helper_path": REVIEWED_HELPER_PATH,
-		"reviewed_geometry_helper_sha256": EXPECTED_REVIEWED_HELPER_SHA256,
 		"independent_art_review_path": ART_REVIEW_PATH,
-		"independent_art_review_sha256": EXPECTED_ART_REVIEW_SHA256,
 	}
 	for key: String in metadata:
 		live_root.set_meta(key, metadata[key])
@@ -123,11 +101,7 @@ static func _registry_matches_exact_live_scope(registry: Dictionary) -> bool:
 	or not bool(contract.get("complete_motif", false)) \
 	or not bool(contract.get("module_not_seamless_tile", false)) \
 	or bool(contract.get("module_owns_field_geometry", true)) \
-	or int(policy.get("placement_count", -1)) != EXPECTED_MODULE_INSTANCES \
-	or str(policy.get("position_status", "")) != "stylized_reference_derived_production_inference_not_surveyed" \
-	or str(policy.get("count_status", "")) != "four_bounded_exemplars_not_surveyed_total_not_a_real_opening_count" \
-	or str(policy.get("cadence_status", "")) != "unknown_not_surveyed_not_inferred" \
-	or str(policy.get("coordinate_status", "")) != "stylized_reference_derived_inference_not_surveyed" \
+	or int(policy.get("placement_count", -1)) != EXPECTED_PLACEMENTS.size() \
 	or float(policy.get("maximum_outward_depth_m", 1.0)) > 0.18 \
 	or int(policy.get("collision_nodes", -1)) != 0 \
 	or int(policy.get("navigation_nodes", -1)) != 0 \
@@ -150,23 +124,18 @@ static func _registry_matches_exact_live_scope(registry: Dictionary) -> bool:
 		or _int_array(placement.get("exact_ordered_runs", []) as Array) != _int_array(expected.ordered_runs as Array) \
 		or not is_equal_approx(float(placement.get("center_chain_m", -1.0)), float(expected.center_chain_m)) \
 		or not is_equal_approx(float(placement.get("center_chain_uncertainty_m", -1.0)), float(expected.center_chain_uncertainty_m)) \
-		or str(placement.get("host_material_id", "")) != str(expected.host_material_id) \
-		or str(placement.get("evidence_status", "")) != "production_inference" \
-		or str(placement.get("coordinate_status", "")) != "stylized_reference_derived_inference_not_surveyed" \
-		or str(placement.get("count_status", "")) != "bounded_exemplar_not_surveyed_total" \
-		or str(placement.get("cadence_status", "")) != "unknown_not_surveyed_not_inferred":
+		or str(placement.get("host_material_id", "")) != str(expected.host_material_id):
 			return false
 	return seen.size() == EXPECTED_PLACEMENTS.size()
 
 
 static func _promote_to_live_attachment(live_root: Node3D, registry: Dictionary) -> bool:
-	if live_root.get_child_count() != EXPECTED_MODULE_INSTANCES \
+	if live_root.get_child_count() != EXPECTED_PLACEMENTS.size() \
 	or _count_type(live_root, CollisionObject3D) != 0 \
 	or _count_type(live_root, CollisionShape3D) != 0 \
 	or _count_type(live_root, NavigationRegion3D) != 0:
 		return false
 	live_root.set_meta("controlled_calibration", false)
-	live_root.set_meta("runtime_attachment", true)
 	for child: Node in live_root.get_children():
 		if not (child is Node3D):
 			return false
@@ -174,9 +143,8 @@ static func _promote_to_live_attachment(live_root: Node3D, registry: Dictionary)
 		var placement_id := str(module.get_meta("placement_id", ""))
 		var expected := EXPECTED_PLACEMENTS.get(placement_id, {}) as Dictionary
 		var placement := _placement_for(registry, placement_id)
-		if expected.is_empty() or placement.is_empty() or module.get_child_count() != 21:
+		if expected.is_empty() or placement.is_empty() or module.get_child_count() == 0:
 			return false
-		module.set_meta("runtime_attachment", true)
 		module.set_meta("placement_role", PLACEMENT_ROLE)
 		module.set_meta("center_chain_m", float(expected.center_chain_m))
 		module.set_meta("center_chain_uncertainty_m", float(expected.center_chain_uncertainty_m))

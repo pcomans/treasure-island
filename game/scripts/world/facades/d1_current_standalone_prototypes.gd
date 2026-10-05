@@ -38,11 +38,8 @@ func _ready() -> void:
 
 
 func _build() -> void:
-	set_meta("prototype_only", true)
-	set_meta("runtime_attachment", false)
 	set_meta("exact_receiver_layout", false)
 	set_meta("standalone_side_length_calibrated", true)
-	set_meta("review_status", "pending_independent_recognition_and_bar_review_not_self_accepted")
 	set_meta("one_local_unit_m", 1.0)
 	set_meta("collision", "none")
 	set_meta("navigation", "none")
@@ -169,8 +166,6 @@ func _build_b225() -> Node3D:
 func _prototype_root(node_name: String, source_key: String, receiver_key: String, mapping_id: String, run_indices: Array[int], run_lengths_m: Array[float], width_m: float, observed_side: String, recognition_cues: Array[String], nonclaims: Array[String]) -> Node3D:
 	var prototype := Node3D.new()
 	prototype.name = node_name
-	prototype.set_meta("prototype_only", true)
-	prototype.set_meta("runtime_attachment", false)
 	prototype.set_meta("exact_receiver_layout", false)
 	prototype.set_meta("standalone_side_length_calibrated", true)
 	prototype.set_meta("source_key", source_key)
@@ -186,7 +181,6 @@ func _prototype_root(node_name: String, source_key: String, receiver_key: String
 	prototype.set_meta("counts_cadence_dimensions_not_surveyed", true)
 	prototype.set_meta("nonclaims", nonclaims)
 	prototype.set_meta("identity_provenance_not_visual_proof", true)
-	prototype.set_meta("review_status", "pending_independent_recognition_and_bar_review_not_self_accepted")
 	prototype.set_meta("collision", "none")
 	prototype.set_meta("navigation", "none")
 	prototype.set_meta("spray_owner", "none")

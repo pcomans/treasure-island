@@ -56,7 +56,6 @@ var _se: Dictionary = {}
 var _ene: Dictionary = {}
 var _boxes_by_material: Dictionary = {}
 var _module_counts: Dictionary = {}
-var _signature_parts: PackedStringArray = []
 var _module_library: Node3D
 var _side_nodes: Dictionary = {}
 
@@ -96,7 +95,7 @@ func configure(record: Dictionary) -> Dictionary:
 	or not _all_runs_match(record, target) \
 	or not _exact_runs_match(record, _se) \
 	or not _exact_runs_match(record, _ene):
-		return {"ok": false, "message": "Isle House layout identity, scoped runs, or high receiver massing drifted."}
+		return {"ok": false, "message": "Isle House layout identity, scoped runs, or high receiver massing did not match."}
 
 	name = "IsleHouse39BrutonHighFacade"
 	set_meta("target_parent_source_key", TARGET_PARENT_SOURCE_KEY)
@@ -105,7 +104,6 @@ func configure(record: Dictionary) -> Dictionary:
 	set_meta("target_logical_object_key", TARGET_LOGICAL_OBJECT_KEY)
 	set_meta("target_receiver_object_key", TARGET_RECEIVER_OBJECT_KEY)
 	set_meta("layout_path", LAYOUT_PATH)
-	set_meta("layout_sha256", FileAccess.get_sha256(LAYOUT_PATH))
 	set_meta("render_only", true)
 	set_meta("collision", "none")
 	set_meta("navigation", "none")
@@ -140,13 +138,11 @@ func configure(record: Dictionary) -> Dictionary:
 	set_meta("module_counts", _module_counts.duplicate(true))
 	set_meta("field_segment_count", int(field_result.segment_count))
 	set_meta("field_quad_count", int(field_result.quad_count))
-	set_meta("deterministic_signature", "|".join(_signature_parts).sha256_text())
 	return {
 		"ok": true,
 		"module_counts": _module_counts.duplicate(true),
 		"field_segment_count": int(field_result.segment_count),
 		"field_quad_count": int(field_result.quad_count),
-		"deterministic_signature": str(get_meta("deterministic_signature")),
 	}
 
 
@@ -258,7 +254,6 @@ func _build_fields(record: Dictionary, target: Dictionary) -> Dictionary:
 	fields.set_meta("shared_tower_field_run_indices", SHARED_TOWER_FIELD_RUN_INDICES.duplicate())
 	fields.set_meta("low_receiver_untouched", true)
 	add_child(fields)
-	_signature_parts.append("fields:all-high:13:23:2")
 	return {"ok": true, "segment_count": 13, "quad_count": 23}
 
 
@@ -341,7 +336,6 @@ func _new_module(kind: String, u: float, y: float, width: float, height: float) 
 	module.set_meta("render_only", true)
 	module.transform = Transform3D(_side_basis(_se), _side_point(_se, u, y, float(_contract.field_offset_m)))
 	(_side_nodes["High_SE_Runs_5_7"] as Node3D).add_child(module)
-	_signature_parts.append("module:%s:%.3f:%.3f:%.3f:%.3f" % [kind, u, y, width, height])
 
 
 func _add_box(material_key: String, u: float, y: float, width: float, height: float, inner: float, outer: float) -> void:
@@ -429,7 +423,6 @@ func _flush_render_batches() -> void:
 		for index in transforms.size():
 			var instance_transform := transforms[index] as Transform3D
 			multimesh.set_instance_transform(index, instance_transform)
-			_signature_parts.append("box:%s:%s" % [material_key, _transform_token(instance_transform)])
 		var instance := MultiMeshInstance3D.new()
 		instance.name = "Batch_%s" % material_key
 		instance.multimesh = multimesh
@@ -467,12 +460,3 @@ func _append_quad(group: Dictionary, corners: Array, normal: Vector3) -> void:
 	group["normals"] = normals
 	group["tangents"] = tangents
 	group["indices"] = indices
-
-
-func _transform_token(value: Transform3D) -> String:
-	return "%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f,%.6f" % [
-		value.basis.x.x, value.basis.x.y, value.basis.x.z,
-		value.basis.y.x, value.basis.y.y, value.basis.y.z,
-		value.basis.z.x, value.basis.z.y, value.basis.z.z,
-		value.origin.x, value.origin.y, value.origin.z,
-	]

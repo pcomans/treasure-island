@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # Installs the pinned Godot 4.7.2 Linux editor and the Linux + macOS export
-# templates into the git-ignored .tools/godot/4.7.2/ (self-contained mode).
+# templates into /opt/godot/4.7.2/ (self-contained mode; a volume, see devcontainer.json).
 # Skips anything already present, so it is safe to re-run.
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -12,7 +12,7 @@ EDITOR_SHA256=cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4
 TEMPLATES_TPZ="Godot_v${VERSION}-stable_export_templates.tpz"
 TEMPLATES_SHA256=f298490b8d44d934be425a5a65a51bf15f422428b229a06a6e11d9ffea248011
 
-DEST=".tools/godot/${VERSION}"
+DEST="/opt/godot/${VERSION}"
 TEMPLATES_DIR="${DEST}/editor_data/export_templates/${VERSION}.stable"
 mkdir -p "${DEST}"
 tmp="$(mktemp -d)"

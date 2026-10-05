@@ -229,7 +229,8 @@ function commandOutput(command, args) {
 function auditToolchain() {
   const osmiumVersionOutput = commandOutput("osmium", ["--version"]);
   const osmiumVersion = osmiumVersionOutput.match(/osmium version (\S+)/u)?.[1];
-  invariant(osmiumVersion === "1.19.1", `Expected Osmium 1.19.1, found ${osmiumVersion ?? "unknown"}`);
+  // Osmium only verifies the input extracts (counts, references); any 1.19 patch release will do.
+  invariant(/^1\.19\.\d+$/u.test(osmiumVersion ?? ""), `Expected Osmium 1.19.x, found ${osmiumVersion ?? "unknown"}`);
   const packageLockPath = resolve(projectRoot, "package-lock.json");
   invariant(existsSync(packageLockPath), "package-lock.json is required before world generation");
   const packageLock = JSON.parse(readFileSync(packageLockPath, "utf8"));

@@ -58,6 +58,27 @@ function main() {
         `Clean generations differ byte-for-byte at ${file.path}`,
       );
     }
+    // The committed world must be exactly what the sources produce. Only the
+    // manifest's record of the local tool versions may differ.
+    const committed = resolve(projectRoot, "generated/world");
+    const withoutTools = (path) => {
+      const manifest = JSON.parse(readFileSync(path, "utf8"));
+      delete manifest.generator;
+      return stableJson(manifest);
+    };
+    const committedFiles = list(committed).filter((path) => path !== ".gdignore");
+    invariant(stableJson(committedFiles) === stableJson(firstInventory.map((file) => file.path)),
+      "Committed generated/world has different files than a fresh build");
+    for (const file of firstInventory) {
+      const fresh = resolve(first, file.path);
+      const kept = resolve(committed, file.path);
+      invariant(
+        file.path === "manifest.json"
+          ? withoutTools(fresh) === withoutTools(kept)
+          : readFileSync(fresh).equals(readFileSync(kept)),
+        `Committed generated/world/${file.path} differs from a fresh build; regenerate with tools/build_godot_world.mjs`,
+      );
+    }
     const vegetationPath = "vegetation.json";
     invariant(firstInventory.some((file) => file.path === vegetationPath), "Clean generation omitted vegetation.json");
     invariant(

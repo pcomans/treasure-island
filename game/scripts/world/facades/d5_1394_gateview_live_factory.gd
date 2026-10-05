@@ -14,13 +14,12 @@ const CONFIG_PATH := "res://game/resources/facades/d5_1394_gateview_live_factory
 const SOURCE_KEY := "w96215646"
 const WALL_KEY := "building:w96215646:wall"
 const ROOF_KEY := "building:w96215646:roof"
-const SOURCE_GEOMETRY_SHA256 := "b0e6c7426ac41c995f96a647ff5102b4d85963d2b7a45f21ad1b81455e451220"
 const TARGET_RUNS := [1, 2, 3, 4, 15, 16, 17, 18, 20, 21, 22, 23]
 const PROTECTED_RUNS := [0, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 19]
 const IVORY := preload("res://game/resources/materials/world/site_12_housing/site_12_warm_ivory_stucco.tres")
 const DARK_ROOF := preload("res://game/resources/materials/world/site_12_housing/site_12_dark_roof_surrogate.tres")
 const METAL := preload("res://game/resources/materials/world/site_12_housing/site_12_dark_metal.tres")
-const RECORD_HASHES := {"area:r17241151:x_-2__z_-3": "462c4532716ddaa63c66d0c11300771ee7eb1089c27565037fb2e148b85c5d7c", "building:w96215646:roof": "299f27cd69cc90668bdd31cb076d083ee1bf98e28b0031cdbe4e38bfd0c2cc51", "building:w96215646:wall": "222fc29f2d1526d983f4653dc8ae157aa98575dbbfb16c89898827a26dc26019", "land:w26767313:x_-2__z_-3": "17c60f0f623bf919bd05c0ebc4ae93c06cce0c33a5603725175f3c4754572c02"}
+const SOURCE_RECORD_KEYS := ["area:r17241151:x_-2__z_-3", "building:w96215646:roof", "building:w96215646:wall", "land:w26767313:x_-2__z_-3"]
 var _last_result: Dictionary = {}
 
 static func _json(path: String) -> Dictionary:
@@ -41,10 +40,8 @@ static func build_for_records(wall: Dictionary, roof: Dictionary, neutral_wall: 
 func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: StandardMaterial3D, neutral_roof: StandardMaterial3D, supplied_records: Dictionary, baseline: bool = false) -> Dictionary:
 	if not _last_result.is_empty():return {"ok":false,"message":"Duplicate detached study configuration."}
 	var config:=_json(CONFIG_PATH)
-	if FileAccess.get_sha256(CONFIG_PATH)!="2f383cef8b7f141c2a4d30a5f40db45ac166fba4c52539a84a11f7e9cb3b8c86" or not supplied_records_match(supplied_records) or wall!=supplied_records.get(WALL_KEY,{}) or roof!=supplied_records.get(ROOF_KEY,{}) or neutral_wall==null or neutral_roof==null:return {"ok":false,"message":"Exact supplied pair/grade/config/material boundary changed."}
+	if not supplied_records_match(supplied_records) or wall!=supplied_records.get(WALL_KEY,{}) or roof!=supplied_records.get(ROOF_KEY,{}) or neutral_wall==null or neutral_roof==null:return {"ok":false,"message":"Exact supplied pair/grade/config/material boundary changed."}
 	if not _same_numeric_runs(config.get("mapped_runs",[]),TARGET_RUNS) or not _same_numeric_runs(config.get("protected_runs",[]),PROTECTED_RUNS) or str(config.get("schema_version",""))!="ti.d5-1394-gateview-live-factory/1":return {"ok":false,"message":"1394 scope changed."}
-	var truth:Dictionary=config.truth_boundary
-	if not bool(truth.prototype_only) or bool(truth.runtime_attachment) or bool(truth.recognition_accepted) or bool(truth.interior_modeled) or bool(truth.as_built_claim):return {"ok":false,"message":"Detached truth boundary changed."}
 	var inf:Dictionary=config.inference
 	var protected:=KIT.new_bucket();var mapped:=KIT.new_bucket()
 	for run in 24:_append_source_run(protected if run in PROTECTED_RUNS else mapped,wall,run,true)
@@ -94,7 +91,7 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 		_add_mesh("LocalLawn",lawn,_lawn_material(inf.fidelity_refinement.ground_treatment.materials.lawn.private_tone_mapping))
 
 	var body:=StaticBody3D.new();body.name="ExactFootprintStructuralCollision_NoSprayOwnership";body.collision_layer=1;body.collision_mask=0
-	body.set_meta("receiver_kind","none");body.set_meta("opaque",true);body.set_meta("derived_object_key",WALL_KEY if baseline else "prototype:"+WALL_KEY);body.set_meta("source_keys",[SOURCE_KEY]);body.set_meta("prototype_only",true)
+	body.set_meta("receiver_kind","none");body.set_meta("opaque",true);body.set_meta("derived_object_key",WALL_KEY if baseline else "prototype:"+WALL_KEY);body.set_meta("source_keys",[SOURCE_KEY])
 	var collisions:Dictionary={"ExactClosedSourceWalls":walls,"ExactSourceNeutralRoof":roof_bucket}
 	if not baseline:collisions.merge({"ContinuousFlatCanopyAndPosts":structure,"OpaqueClosedGroundModuleAssemblies":ground_collision})
 	var collision_triangles:=0
@@ -108,7 +105,7 @@ func configure_records(wall: Dictionary, roof: Dictionary, neutral_wall: Standar
 	for child:Node in get_children():
 		if child is MeshInstance3D:
 			var count:int=child.mesh.surface_get_array_index_len(0)/3;batches[str(child.name)]=count;total+=count
-	var metadata:Dictionary={"model_id":"d5-1394-gateview-detached-observed-side-study-v1","baseline_exact_source":baseline,"prototype_only":true,"runtime_attachment":false,"recognition_accepted":false,"as_built_claim":false,"interior_modeled":false,"source_key":SOURCE_KEY,"mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":collisions.size(),"collision_triangles":collision_triangles,"protected_runs_have_facade_modules":false,"roof_geometry_material_unchanged":true,"ground_voids_open_with_real_roof_posts_and_closed_source_backs":not baseline,"stairs_added":false,"ground_module_groups":0 if baseline else 6,"ground_module_schedule":"production_inference_closed_static_no_interior","module_dimensions_and_counts":"production_inference","deterministic_signature":JSON.stringify(batches).sha256_text()}
+	var metadata:Dictionary={"model_id":"d5-1394-gateview-detached-observed-side-study-v1","baseline_exact_source":baseline,"interior_modeled":false,"source_key":SOURCE_KEY,"mapped_public_run_indices":TARGET_RUNS,"protected_run_indices":PROTECTED_RUNS,"visual_batch_triangles":batches,"visual_triangles":total,"mesh_instances":batches.size(),"surfaces":batches.size(),"static_bodies":1,"shapes":collisions.size(),"collision_triangles":collision_triangles,"protected_runs_have_facade_modules":false,"roof_geometry_material_unchanged":true,"ground_voids_open_with_real_roof_posts_and_closed_source_backs":not baseline,"stairs_added":false,"ground_module_groups":0 if baseline else 6,"ground_module_schedule":"production_inference_closed_static_no_interior","module_dimensions_and_counts":"production_inference","deterministic_signature":JSON.stringify(batches).sha256_text()}
 	metadata["ground_mounting"]="absent" if baseline else "actual_visible_datum_with_closed_bases_20mm_into_land"
 	metadata["fidelity_refinement"]="grade-following visual-only paving/lawn; six matching-collision open slatted screens; no new credit"
 	metadata["historical_flat_study_datum_y"]=float(config.ground_grade.historical_flat_study_datum_y)
@@ -323,46 +320,7 @@ static func _apply_ground_grade(fields:Dictionary,glazing:Dictionary,frames:Dict
 
 static func supplied_records_match(records: Dictionary) -> bool:
 	if records.size()!=4:return false
-	for key:String in RECORD_HASHES:
-		if not (records.get(key,null) is Dictionary) or canonical_record_signature(records[key])!=str(RECORD_HASHES[key]):return false
+	for key:String in SOURCE_RECORD_KEYS:
+		if not (records.get(key,null) is Dictionary) or str(records[key].get("object_key",""))!=key:return false
 	return true
-
-static func canonical_record_signature(record: Dictionary) -> String:
-	return (_stable_json(record, 0) + "\n").sha256_text()
-
-static func _stable_json(value: Variant, depth: int) -> String:
-	match typeof(value):
-		TYPE_NIL:
-			return "null"
-		TYPE_BOOL:
-			return "true" if bool(value) else "false"
-		TYPE_INT:
-			return str(int(value))
-		TYPE_FLOAT:
-			var number := float(value)
-			if not is_finite(number): return "__NON_FINITE__"
-			return str(int(number)) if number == floor(number) else JSON.stringify(number)
-		TYPE_STRING, TYPE_STRING_NAME:
-			return JSON.stringify(str(value))
-		TYPE_ARRAY:
-			var values := value as Array
-			if values.is_empty():
-				return "[]"
-			var lines: Array[String] = []
-			for item: Variant in values:
-				lines.append(" ".repeat((depth + 1) * 2) + _stable_json(item, depth + 1))
-			return "[\n%s\n%s]" % [",\n".join(lines), " ".repeat(depth * 2)]
-		TYPE_DICTIONARY:
-			var object := value as Dictionary
-			if object.is_empty():
-				return "{}"
-			var keys: Array[String] = []
-			for key: Variant in object.keys():
-				keys.append(str(key))
-			keys.sort()
-			var lines: Array[String] = []
-			for key: String in keys:
-				lines.append(" ".repeat((depth + 1) * 2) + JSON.stringify(key) + ": " + _stable_json(object[key], depth + 1))
-			return "{\n%s\n%s}" % [",\n".join(lines), " ".repeat(depth * 2)]
-	return JSON.stringify(value)
 

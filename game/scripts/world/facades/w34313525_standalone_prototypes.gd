@@ -20,8 +20,6 @@ func _ready() -> void:
 func _build() -> void:
 	var geometry := Node3D.new()
 	geometry.name = "PrototypeGeometry"
-	geometry.set_meta("prototype_only", true)
-	geometry.set_meta("runtime_attachment", false)
 	geometry.set_meta("exact_receiver_calibration", false)
 	geometry.set_meta("native_capture_status", "native_capture_pending_owner_session")
 	geometry.set_meta("one_local_unit_m", 1.0)
