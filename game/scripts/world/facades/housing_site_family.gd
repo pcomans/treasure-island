@@ -282,23 +282,12 @@ static func _hip_piece(root: Node3D, polygon: PackedVector2Array, t: Vector2, n:
 			# a positive-area triangulation failure. Area uses local scalar products
 			# to avoid float32 cancellation at large world coordinates.
 			var piece := PackedVector2Array()
-			var collapsed := 0
-			var max_collapse := 0.0
 			for q: Vector2 in clipped:
-				var distance := INF if piece.is_empty() else q.distance_to(piece[-1])
-				if distance>0.0: piece.append(q)
-				else:
-					collapsed += 1
-					max_collapse=maxf(max_collapse,distance)
+				if piece.is_empty() or q.distance_to(piece[-1])>0.0: piece.append(q)
 			if piece.size()>1 and piece[0].distance_to(piece[-1])==0.0:
-				max_collapse=maxf(max_collapse,piece[0].distance_to(piece[-1]))
-				collapsed += 1
 				piece.resize(piece.size()-1)
 			var area := _polygon_area(piece)
-			if collapsed>0:
-				print("FAMILY_ROOF_CLIP_CLEANUP source=",root.get_meta("source_key")," removed_vertices=",collapsed," max_distance_m=",max_collapse," area_before_m2=",_polygon_area(clipped)," area_after_m2=",area)
 			if piece.size()<3 or area==0.0:
-				print("FAMILY_ROOF_DEGENERATE source=",root.get_meta("source_key")," vertices=",piece.size()," area_m2=",area)
 				continue
 			var points: Array = []
 			for q: Vector2 in piece:
@@ -326,8 +315,6 @@ static func _hip_piece(root: Node3D, polygon: PackedVector2Array, t: Vector2, n:
 			PARTS._mesh(root,points,indices,material)
 			var roof_mesh := root.get_child(-1) as MeshInstance3D
 			roof_mesh.name = "HipSurface"
-			var normals: PackedVector3Array = roof_mesh.mesh.surface_get_arrays(0)[Mesh.ARRAY_NORMAL]
-			print("FAMILY_ROOF_GEOMETRY source=",root.get_meta("source_key")," aabb=",roof_mesh.get_aabb()," normal0=",normals[0]," points=",points.size()," triangles=",indices.size()/3)
 	for i in polygon.size():
 		var a := polygon[i]
 		var b := polygon[(i+1)%polygon.size()]
