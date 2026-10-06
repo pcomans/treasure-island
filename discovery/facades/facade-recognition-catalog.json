@@ -11095,13 +11095,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "mersea-041-complete-code-042-source-mechanics-20261006",
+          "review_kind": "independent_code_review",
+          "status": "accept"
+        },
+        {
+          "review_id": "mersea-041-whole-building-042-site-visual-20261006",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w1098437841",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -11693,13 +11704,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "mersea-041-complete-code-042-source-mechanics-20261006",
+          "review_kind": "independent_code_review",
+          "status": "accept"
+        },
+        {
+          "review_id": "mersea-041-whole-building-042-site-visual-20261006",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w1308007112",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -11729,13 +11751,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "mersea-041-complete-code-042-source-mechanics-20261006",
+          "review_kind": "independent_code_review",
+          "status": "accept"
+        },
+        {
+          "review_id": "mersea-041-whole-building-042-site-visual-20261006",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w1308007113",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -11765,13 +11798,24 @@
       "unit_kind": "standalone_building"
     },
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "mersea-041-complete-code-042-source-mechanics-20261006",
+          "review_kind": "independent_code_review",
+          "status": "accept"
+        },
+        {
+          "review_id": "mersea-041-whole-building-042-site-visual-20261006",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w1308007114",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
@@ -11795,6 +11839,28 @@
         {
           "role": "standalone_building_footprint",
           "source_key": "w1308007114"
+        }
+      ],
+      "stairs": [
+        {
+          "bottom": [
+            -416.04086,
+            125.66394
+          ],
+          "top": [
+            -414.60441,
+            128.52342
+          ]
+        },
+        {
+          "bottom": [
+            -420.68751,
+            127.99818
+          ],
+          "top": [
+            -419.25105,
+            130.85765
+          ]
         }
       ],
       "unit_id": "physical-building:w1308007114",

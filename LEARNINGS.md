@@ -2,7 +2,7 @@
 
 Keep this a short, living guide to mistakes worth preventing. Update an applicable lesson when new evidence changes it; preserve uncertainty and useful gains. Routine execution history belongs in `discovery/RETRO_LOG.md`.
 
-Retain the owner-authorized routing in [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra` for subagents; explicitly select effort. Since 2026-10-05, modeling runs on Claude Opus 5.5 (the owner judged its Building 600 the most faithful of three), with textures from Codex via `tools/generate-texture`; see AGENTS.md for the current roles. The Astra/Sol notes below are historical. This small sample does not establish a universal quality, cost or speed ranking; lower Sol effort is untested.
+Retain the owner-authorized routing in [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra` for subagents; explicitly select effort. The current Mersea study uses the task-specific Astra Low modeling and Sol High review override in AGENTS. The general default since 2026-10-05 is modeling on Claude Opus 5.5 (the owner judged its Building 600 the most faithful of three), with textures from Codex via `tools/generate-texture`; see AGENTS.md for the current roles. The Astra/Sol notes below are historical. This small sample does not establish a universal quality, cost or speed ranking; lower Sol effort is untested.
 
 ## Judge the whole visible result after a fix
 
@@ -48,7 +48,7 @@ The 1202 changed-roof reader repeated the already corrected 1227 cross-run insta
 
 1410 study003’s candidate/neutral self-comparison missed original live-builder tangent drift: omitted authored tangent inputs still yielded populated native arrays with different directions and handedness. Check preserved channel values against the actual original live-builder output in the same native representation, including tangent XYZ and W. Nonempty channels or a candidate-derived baseline cannot establish preservation. Reuse existing captured arrays and the affected preservation check; do not add a general audit.
 
-Maceo’s changed-bucket helper compared native PackedVector3Array/PackedInt32Array bytes with ordinary decoded Arrays; Station48’s authority helper compared parsed JSON FLOAT arrays with INT literals. Correct values still failed. Construct expected values in the exact consumed container and element types, retaining strict equality and original failures. Check new comparison boundaries against the actual producer; a prior generic representation lesson does not make a newly adapted assertion correct. M1202 marker captures do not carry every whole-view field: use the actual capture `id` and full site snapshots for the corresponding checks. M1227 placement and saved-marker footprints must each pass; differing pixel corners alone do not invalidate invariant native camera/projector state. Preserve the raw reader failures and their scoped corrections.
+Maceo’s changed-bucket helper compared native PackedVector3Array/PackedInt32Array bytes with ordinary decoded Arrays; Station48’s authority helper compared parsed JSON FLOAT arrays with INT literals. Correct values still failed. Construct expected values in the exact consumed container and element types, retaining strict equality and original failures. Mersea028 temporary pane diagnostic likewise assumed WorldHarness.visual_meshes() yielded nodes, but it yields Array records; property access aborted before capture and required owned-process cleanup. Read the complete helper return contract and an existing consumer before adapting a render loop: visual_meshes yields [Mesh resource, Transform3D, name] for geometry studies, with no scene-instance slot. Material overrides require actual source-bound MeshInstance3D traversal, not record unpacking. Check new comparison boundaries against the actual producer; a prior generic representation lesson does not make a newly adapted assertion correct. M1202 marker captures do not carry every whole-view field: use the actual capture `id` and full site snapshots for the corresponding checks. M1227 placement and saved-marker footprints must each pass; differing pixel corners alone do not invalidate invariant native camera/projector state. Preserve the raw reader failures and their scoped corrections.
 
 1238 readiness001’s source-top-minus-margin test passed while all 12 emitted upper trims intersected emitted fascia by 23.5mm: trim Y/depth envelope was 8.269m and 0.068–0.134m, while fascia began at 8.2455m and spanned 0.015–0.265m. Derive clearance predicates from the complete actual emitters’ Y/depth/width envelopes, including a selected positive gap, rather than a source-top proxy. Preserve the held report and its bounded pre-render scope; this check does not establish a native render or whole-unit result.
 
@@ -156,6 +156,15 @@ The shared-family release adaptation exposed two external-contract assumptions: 
 
 Housing expansion004's new draped parking apron passed a conventional positive-cross-product normal preflight but was backface-culled by Godot SurfaceTool. The existing shared roof producer already used clockwise triangles and explicitly reversed positive-Y cross products.005 reversed the new ground triangle order and the apron became visible. For procedural ground, validate winding against the actual producer's convention (Godot clockwise here), not a generic mathematical upward normal; inspect the first actual render before claiming surface coverage. Preserve the failed run and treat visible fit separately from contact verification.
 
+Mersea study002 repeated this failure on an invisible stair nosing ramp: the
+mathematical +Y triangle order was emitted into Godot, and the stock player
+stalled on supported land before climbing. The second route also placed its
+bottom inside a neighboring frozen footprint. Before a ramp run, check the
+actual emitter's clockwise front face and compare the full start/flight/end
+route with adjacent source polygons; a visually clear platform does not prove
+its test approach is on open land. Failed fit002 remains retained.
+
+
 ## 2026-09-29 —1439 collision coordinate representation
 
 In the reviewed1439 experiment, recentering the same LAND body at(-296,0,17), with366 byte-identical world vertices and unchanged filters, resolved the prior retreat dip across the original133-row approach/retreat campaign. World-equivalent collision coordinates can affect an observed native contact outcome; preserve body identity, world geometry, original route and exact teardown when testing this possibility. This is route-specific evidence, not a universal Jolt root cause or approved loader change. See `evidence/building-quality-drafts/2026-09-29/1439-quality/local-origin009/INDEPENDENT_REVIEW.md`.
@@ -203,3 +212,69 @@ loopback port, verify the actual page/images, and retain explicit live-server
 ownership until viewing is finished. Port 8765 was this run's choice, not a
 requirement. Keep reference privacy intact; do not move photos into Git/game as
 a delivery workaround.
+
+## Separate spatial footprint binding from business identity and sign text
+
+During Mersea study004 the owner questioned “Gold Bar” as a separate destination,
+then acknowledged the relation after ROOT verified Mersea's Golden Hour Bar
+collaboration through official primary pages. The initial wrong-business concern
+was not established. A frozen footprint match, a business collaboration and an
+exact sign transcription remain separate claims: the authored “GOLD BAR • MERSEA”
+text was inferred, not transcribed. Verify readable branding from source pixels
+and provenance; distinguish a dated partner brand at the restaurant from its
+separate destination, and do not treat the owner's initial question as proof of
+misassociation. Preserve completed unaffected evidence while resolving identity.
+
+## Preserve task-specific routing through harness resumption
+
+During the 2026-10-05 Mersea study, the modeler stopped when generic AGENTS Claude routing was re-injected as a newer message, despite the owner's explicit Astra Low modeling and Sol High review override. The canonical routing text lacked that active exception. Record task-specific owner overrides beside the general defaults, including scope, and carry them through resumptions; repeated generic instructions do not imply the owner revoked an explicit override.
+
+## Distinguish reflection availability from convincing glass
+
+Mersea007 matched probe intensity0/1 produced only slight ordinary-glass brightening; one temporary opaque neutral reflective pane showed blurred courtyard colors. Reflection data was contributing, but material opacity/scattering and an empty shell still prevented convincing glass. A shallow backing then removed the through-view but read too dark and opaque. Check a bounded matched optical pilot before wider capture sets; never promote a diagnostic metallic pane as glass or treat elimination of one defect as whole-material acceptance. Rendered-frame waits are not direct probe-ready readback.
+
+Mersea008 incorrectly reversed valid one-sided curtain triangle winding while trying to brighten cloth; the first pilot reduced the cloth to broken edge marks. Independent local-normal/transform review identified the reversal, and restoring the original winding restored visible pale cloth in the second render. Check the exterior normal under the actual positive-determinant facade transform before reversing a one-sided surface; brighter albedo cannot fix backface culling.
+
+
+## Judge glazing at its actual view angle and reflected context
+
+Mersea study011 measured the actual pilot pane normal and gameplay view: N·V=.588 gives approximately 5.14% Schlick reflectance for F0=.04. Both reflected-direction scene proxies contained architectural contrast, while the bar's surface and probe-origin proxies saw different nearby objects. Earlier review over-weighted a sharp readable mirror image; ordinary glass at this angle can have subtle reflections. Check actual angle, transmitted/backing composition and probe parallax before requiring stronger reflections or tuning gain. Scene-context proxies are not cubemap readback or readiness proof, and a dielectric Fresnel estimate does not describe a metallic bar. A box-projection experiment must be judged in matched pixels; an outdoor proxy box is not a measured enclosure.
+
+
+Mersea study012 launched the shared driver with `--path game`, but this repository's project root is `.` and its preloads use `res://game/...`; the invocation failed before world load. Copy the maintained complete donor command and cross-check its working directory, project root and script resource path before launching. Mersea031 also lost its first overhead attempt to --overhead=value: the shared user_args parser requires separate --overhead VALUE tokens. Check the actual parser and copy its supported argument form before a new option launch. A wrong-root failure still consumes the bounded invocation budget; retain its log and use a fresh output path for the corrected run.
+
+
+## Normalize primitive face coordinates before finite material masks
+
+Mersea study016 assumed BoxMesh UVs covered 0–1 on each face. Godot's BoxMesh uses a 3×2 atlas; the resulting glass-edge deposit mask missed right/bottom edges, and the stated brush-band scale was twice the actual front-face count. Check the actual primitive UV layout and physical span before authoring finite edge masks or quoting feature scale. The corrected mask uses per-face coordinates; this fixes semantic coverage, not visual quality by itself.
+
+## Preserve the open/occluded balance when adding window depth
+Mersea017 connected shallow backs and inclined returns correctly, but independent gameplay review found the repeated full backs recreated opaque display panels and a closed sectional shutter. Geometry containment and removal of empty-shell sightlines did not establish glass quality. The partial-back revision recovered openness while retaining visible perimeter depth, with finish still unresolved. Compare the complete glass/cloth/reveal/transmitted-view balance in the first front and oblique render; do not default to identical full backing across every bay.
+
+## Light receiver masks do not isolate reflected context
+Mersea018's temporary key selected only tagged bar metal with render bit8. Independent A/B still found new gold rectangles in pavilion panes: existing probes can capture the illuminated geometry and apply it elsewhere. Also, observing UPDATE_ONCE after its mode switch does not prove its cubemap had finished capturing before a subsequent light change. Label such a test added incident-light response with possible reflected contributions, not specular-only or guaranteed unchanged context; inspect a neighboring reflective context view.
+
+Mersea019 lost its first bounded capture to a mistyped Environment enum before world load. Check unfamiliar static constants and property names against the installed engine commit API before launching; a correct conceptual plan does not prevent a parse failure. A temporary in-memory PackedScene resource override also needs a retained strong reference until the actual instance loads, plus logging of the live environment; a resource-cache assumption alone is insufficient.
+
+## Check pinned dependencies in the actual worktree
+Mersea021's full suite passed its Godot stages but failed Node validation/determinism because /workspaces/content-main lacked earcut and polygon-clipping, despite devcontainer post-create running npm ci in its primary checkout. Existing-lockfile npm ci in the actual worktree resolved the prerequisite; the authorized full retry passed. Inspect dependency installation in a new worktree before expensive complete checks, preserve the pinned lockfile, and distinguish missing tools/packages from source-data failures.
+
+## Update behavioral configuration checks with an approved configuration change
+
+Mersea024 applied the owner-approved procedural Sky but the first full suite still required the previous COLOR ambient source and zero sky contribution. The resulting failure was an obsolete contract, not a missing runtime Sky. Before running the suite after an approved configuration change, inspect the corresponding behavior check and require the new usable resource path (here, actual procedural Sky with active ambient/reflection sources and positive hemisphere energy). Preserve unrelated behavior checks; do not skip a failing case or add pixel/color snapshots to force a pass.
+
+## Check decorative motif height against visible platforms
+
+Mersea025's first lower service rail used the wall-local bottom and was hidden below the existing platform. The source base was3.14m while actual supported platform top was3.9081m; the initial local.225m rail could not appear above it. Before the first render, compare the full detail bounds with both local terrain and raised visible/support surfaces, then check the intended gameplay sightline. Moving the decorative rail above the exposed sheet foot preserved contacts; this was a geometry-visibility revision, not a camera setup repair.
+
+## Preserve thread storage for delegated CLI reviews
+
+Study026 selected `codex exec --ephemeral` for an ad hoc visual review. Required child delegation failed with `invalid thread-store request: no rollout found`; the parent then waited without a reviewer. The authorized persistent replacement produced an actual `SubAgentActivity` started record and named child spawn result. Omit `--ephemeral` for orchestrators that delegate, forward private image paths to the child for actual inspection, and verify spawn identity plus terminal/verdict separately. A role label does not override the root-only orchestration boundary.
+
+## Opaque decoration must preserve visible spray receivers
+
+Study032's nonreceiver fascia covered unchanged wall-layer2 boards; its revised soffit also hid a rear receiver band despite safe front clearance and unchanged collision. Remove broad overlays or preserve the existing visible receiver boundary. Preflight every affected front, rear and side receiver plane using thickness-inclusive transformed bounds and projected occlusion, not only collider/source identity. Mount raised lettering from actual mesh AABB bounds rather than a fixed font-dependent offset. When reference-supported construction should replace an old visible surface, author it as legitimate same-source wall geometry through the existing receiver/contact helper, then run fresh fit and stock spray; do not repeatedly undo useful architecture solely to preserve obsolete decorative coverage. Study036 used this route and passed complete114 fit/stairs plus one actual new-portal decal.
+
+## Compare site axes and furniture groups directly
+
+Mersea042 owner satellite feedback exposed bocce lanes aligned to the wrong container axis and all long tables on one side of the planter despite prior broad-layout PASS. Compare actual north-up reference/render lane axes and relative furniture groups explicitly, not only roof footprints or regional greens. State image-date/anchor uncertainty; retain frozen building identities, infer reversible site placement, and verify changed furniture-support routes with the stock controller.

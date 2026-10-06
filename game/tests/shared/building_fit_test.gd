@@ -18,6 +18,7 @@ extends SceneTree
 ## Prints PASS or FAIL lines and exits non-zero on failure.
 ## Optional --routes FILE: {"source":"KEY", "routes":[{"name":"passage",
 ## "start_xz":[x,z], "end_xz":[x,z]}]}. Each route is walked in both directions.
+## Optional --spray FILE: {"source":"KEY", "player_xz":[x,z], "target_xyz":[x,y,z]}.
 
 const WorldHarness := preload("res://game/tests/shared/world_harness.gd")
 const BuildingFit := preload("res://game/tests/shared/building_fit.gd")
@@ -43,6 +44,14 @@ func _run() -> void:
 			quit(1)
 			return
 		routes = plan.routes
+	var spray_case: Dictionary = {}
+	if args.has("spray"):
+		var plan: Variant = JSON.parse_string(FileAccess.get_file_as_string(str(args.spray)))
+		if not plan is Dictionary or plan.get("source", "") != source_key:
+			push_error("spray needs a source-bound plan")
+			quit(1)
+			return
+		spray_case = plan
 	var h := WorldHarness.new(self)
 	var error := await h.load_world()
 	if error != "":
@@ -50,7 +59,7 @@ func _run() -> void:
 		quit(1)
 		return
 	var stairs: Array = Catalog.unit_for(source_key).get("stairs", [])
-	var failures := await BuildingFit.new(h).check(source_key, true, "", stairs, routes)
+	var failures := await BuildingFit.new(h).check(source_key, true, "", stairs, routes, spray_case)
 	if failures.is_empty():
 		print("PASS: building %s fits and plays" % source_key)
 	else:

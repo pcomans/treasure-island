@@ -1,6 +1,7 @@
 class_name WorldLoader
 extends Node3D
 
+const MERSEA := preload("res://game/scripts/world/facades/mersea_live_attachment.gd")
 const HOUSING_FAMILY := preload("res://game/scripts/world/facades/housing_family_live_attachment.gd")
 
 const BULGARIAN_WALL = preload("res://game/scripts/world/facades/bulgarian_wall_live_attachment.gd")
@@ -90,6 +91,11 @@ func load_world(manifest_path: String = default_manifest_path) -> void:
 	if not bulgarian_result.ok:
 		vegetation_result.node.free()
 		_fail("bulgarian_wall",str(bulgarian_result.message),bulgarian_result.get("source_keys",[]))
+		return
+	var mersea_result := MERSEA.install(buildings, validation.chunks)
+	if not mersea_result.ok:
+		vegetation_result.node.free()
+		_fail("mersea", str(mersea_result.message), [])
 		return
 	vegetation.add_child(vegetation_result.node)
 	runtime_evidence.set_vegetation_report(vegetation_result)

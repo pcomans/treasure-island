@@ -8,7 +8,9 @@ extends SceneTree
 ##   (closeup-*.png) and two raised views showing it in its surroundings (context-*.png).
 ## --island: fixed overview views of the whole island (island-*.png), the same
 ##   every run, so before/after shots of a change compare directly.
-## Both can be passed together. Needs a GPU display; tools/godot provides one.
+## --overhead "center_x,center_z,width,depth": orthographic world -Z-up site view.
+## Pass the flag and comma-separated value as separate arguments.
+## Options can be combined. Needs a GPU display; tools/godot provides one.
 ## --views FILE adds source-bound focused gameplay views without replacing these
 ## defaults: {"source": "KEY", "views": [{"name": "entrance",
 ## "player_xz": [x,z], "target_xyz": [x,y,z]}]}.
@@ -26,8 +28,8 @@ func _initialize() -> void:
 func _run() -> void:
 	var args := WorldHarness.user_args()
 	var out := str(args.get("out", ""))
-	if out == "" or (not args.has("source") and not args.has("island")):
-		_fail("usage: -- [--source KEY] [--island] --out DIR")
+	if out == "" or (not args.has("source") and not args.has("island") and not args.has("overhead")):
+		_fail("usage: -- [--source KEY] [--island] [--overhead center_x,center_z,width,depth] --out DIR")
 		return
 	DirAccess.make_dir_recursive_absolute(out)
 	_h = WorldHarness.new(self)
@@ -42,6 +44,8 @@ func _run() -> void:
 		await _focused_views(str(args.get("source", "")), str(args.views), out)
 	if args.has("island"):
 		await _island_shots(out)
+	if args.has("overhead"):
+		await _overhead_shot(str(args.overhead), out)
 	if _errors.is_empty():
 		print("PASS: screenshots in %s" % out)
 	else:
@@ -187,3 +191,38 @@ func _island_shots(out: String) -> void:
 func _fail(message: String) -> void:
 	push_error(message)
 	quit(1)
+
+
+func _overhead_shot(spec: String, out: String) -> void:
+	var fields := spec.split(",")
+	if fields.size() != 4:
+		_errors.append("overhead requires center_x,center_z,width,depth")
+		return
+	for field in fields:
+		if not field.is_valid_float():
+			_errors.append("overhead fields must be numeric")
+			return
+	var width := float(fields[2])
+	var depth := float(fields[3])
+	if width <= 0.0 or depth <= 0.0:
+		_errors.append("overhead extent must be positive")
+		return
+	var old_size := root.size
+	root.size = Vector2i(roundi(1000.0 * width / depth), 1000)
+	var camera := Camera3D.new()
+	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	camera.size = depth
+	camera.far = 500.0
+	_h.main.add_child(camera)
+	var center := Vector3(float(fields[0]),0.0,float(fields[1]))
+	camera.global_position = center + Vector3.UP * 100.0
+	camera.look_at(center, Vector3.FORWARD)
+	camera.make_current()
+	await process_frame
+	await process_frame
+	var error := await _h.save_screenshot(out.path_join("site-overhead.png"))
+	if error != "": _errors.append(error)
+	print("OVERHEAD center=%s extent=%s north_up=-Z size=%s" % [center, Vector2(width,depth), root.size])
+	camera.queue_free()
+	_h.player.get_camera().make_current()
+	root.size = old_size

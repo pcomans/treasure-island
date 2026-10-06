@@ -1,17 +1,32 @@
-[gd_scene load_steps=8 format=3]
+[gd_scene load_steps=10 format=3]
 
 [ext_resource type="Script" path="res://game/scripts/main.gd" id="1_main"]
 [ext_resource type="PackedScene" path="res://game/scenes/world/world_root.tscn" id="2_world"]
 [ext_resource type="PackedScene" path="res://game/scenes/player/player.tscn" id="3_player"]
 [ext_resource type="PackedScene" path="res://game/scenes/ui/hud.tscn" id="4_hud"]
 
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_daylight"]
+sky_top_color = Color(0.30, 0.47, 0.66, 1)
+sky_horizon_color = Color(0.72, 0.79, 0.83, 1)
+sky_curve = 0.25
+sky_energy_multiplier = 1.0
+ground_bottom_color = Color(0.18, 0.20, 0.17, 1)
+ground_horizon_color = Color(0.72, 0.79, 0.83, 1)
+ground_curve = 0.10
+ground_energy_multiplier = 1.0
+
+[sub_resource type="Sky" id="Sky_daylight"]
+sky_material = SubResource("ProceduralSkyMaterial_daylight")
+
 [sub_resource type="Environment" id="Environment_main"]
-background_mode = 1
+background_mode = 2
+sky = SubResource("Sky_daylight")
 background_color = Color(0.46, 0.69, 0.86, 1)
-ambient_light_source = 2
+ambient_light_source = 3
+reflected_light_source = 2
 ambient_light_color = Color(0.71, 0.77, 0.82, 1)
 ambient_light_energy = 0.65
-ambient_light_sky_contribution = 0.0
+ambient_light_sky_contribution = 1.0
 tonemap_mode = 2
 fog_enabled = true
 fog_light_color = Color(0.72, 0.79, 0.84, 1)
@@ -27,7 +42,7 @@ script = ExtResource("1_main")
 environment = SubResource("Environment_main")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
-rotation_degrees = Vector3(-52, -28, 0)
+rotation_degrees = Vector3(-52, 152, 0)
 shadow_enabled = true
 directional_shadow_max_distance = 800.0
 

@@ -26,7 +26,7 @@ func _init(harness: WorldHarness) -> void:
 ## Runs the checks for one building and returns its failures (empty = pass).
 ## The walk-up and stairs are the slow part (seconds of simulated walking each).
 ## stairs: [{"bottom": [x, z], "top": [x, z]}, ...] from the building's catalog entry.
-func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array = [], routes: Array = []) -> Array[String]:
+func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array = [], routes: Array = [], spray_case: Dictionary = {}) -> Array[String]:
 	_failures = []
 	_prefix = prefix
 	_unsafe = false
@@ -50,6 +50,8 @@ func check(source_key: String, walk_up: bool, prefix: String = "", stairs: Array
 			await _check_stairs(stair)
 		if not _unsafe:
 			await _check_routes(routes, box)
+	if not _unsafe and not spray_case.is_empty():
+		await _check_spray(source_key, spray_case, box)
 	for proxy in proxies:
 		proxy.queue_free()
 	await _h.tree.physics_frame
@@ -288,6 +290,57 @@ func _numbers(value: Variant) -> bool:
 	return true
 
 
+## One optional real stock spray, bound to this source and ordinary camera/player.
+func _check_spray(source: String, plan: Dictionary, bounds: AABB) -> void:
+	if not _numbers(plan.get("player_xz")) or not plan.get("target_xyz") is Array or plan.target_xyz.size()!=3:
+		_failures.append(_prefix+"spray needs finite player_xz/target_xyz")
+		_unsafe=true
+		return
+	for value: Variant in plan.target_xyz:
+		if not (value is float or value is int) or not is_finite(float(value)):
+			_failures.append(_prefix+"spray target must be finite")
+			_unsafe=true
+			return
+	var target:=Vector3(plan.target_xyz[0],plan.target_xyz[1],plan.target_xyz[2])
+	if not bounds.grow(0.5).has_point(target):
+		_failures.append(_prefix+"spray target outside source bounds")
+		_unsafe=true
+		return
+	var error:=await _h.settle_player(Vector2(plan.player_xz[0],plan.player_xz[1]))
+	if error!="":
+		_failures.append(_prefix+"spray setup: "+error)
+		_unsafe=true
+		return
+	var recoveries:=_h.world.get_runtime_evidence().recovery_count
+	_h.aim_camera(target)
+	_h.player.set_gameplay_enabled(true)
+	for _frame in 4:await _h.tree.physics_frame
+	var spray:=_h.player.get_spray_controller()
+	var pool:=spray.tag_instances
+	var before:=pool.get_children()
+	var results: Array[String]=[]
+	var record:=func(code: String) -> void:results.append(code)
+	spray.spray_result.connect(record)
+	if _h.world.get_runtime_evidence().recovery_count==recoveries:spray.attempt_spray()
+	spray.spray_result.disconnect(record)
+	var placed: Array[Decal]=[]
+	for child: Node in pool.get_children():
+		if child is Decal and child not in before:placed.append(child)
+	var valid:=results==["placed"] and placed.size()==1
+	if valid:
+		var tag: Decal=placed[0]
+		valid=tag.get_meta("derived_object_key","")=="building:"+source+":wall" and tag.get_meta("source_keys",[])==[source] and tag.texture_albedo!=null and tag.cull_mask==SprayController.RENDER_BUILDING_WALL
+		print("SPRAY source=%s result=%s decal=%s receiver=%s position=%s" % [source,results,tag.get_path(),tag.get_meta("derived_object_key",""),tag.global_position])
+	var rest_error:=await _rest_and_disable(recoveries)
+	if rest_error!="":_failures.append(_prefix+"spray "+rest_error)
+	if not valid:
+		_failures.append(_prefix+"spray did not place one actual source-bound wall decal: "+str(results))
+		_unsafe=true
+	# A fresh-world case can clear its sole new tag through the pool.
+	# If prior tags exist, preserve the pool (including the new tag) until teardown.
+	if before.is_empty():pool.clear_tags()
+
+
 ## Holds forward toward target until the player bumps into the building
 ## (own), arrives, or stops moving; returns a problem or "".
 func _walk_toward(target: Vector3, own: Array[RID] = []) -> String:
@@ -319,6 +372,11 @@ func _walk_toward(target: Vector3, own: Array[RID] = []) -> String:
 		still_frames = still_frames + 1 if Vector2(_h.player.velocity.x, _h.player.velocity.z).length() < 0.2 else 0
 		if frame > 60 and still_frames > 60:
 			break
+	return await _rest_and_disable(recoveries)
+
+
+func _rest_and_disable(recoveries: int) -> String:
+	var evidence := _h.world.get_runtime_evidence()
 	_h.release_input()
 	for _frame in 30:
 		await _h.tree.physics_frame

@@ -160,14 +160,22 @@ func _initialize() -> void:
 	var world_environment := main.get_node("WorldEnvironment") as WorldEnvironment
 	var environment := world_environment.environment if world_environment != null else null
 	if environment == null \
-	or environment.ambient_light_source != Environment.AMBIENT_SOURCE_COLOR \
-	or not environment.ambient_light_color.is_equal_approx(Color(0.71, 0.77, 0.82, 1.0)) \
+	or environment.background_mode != Environment.BG_SKY \
+	or environment.ambient_light_source != Environment.AMBIENT_SOURCE_SKY \
+	or environment.reflected_light_source != Environment.REFLECTION_SOURCE_SKY \
 	or not is_equal_approx(environment.ambient_light_energy, 0.65) \
-	or not is_zero_approx(environment.ambient_light_sky_contribution):
-		_fail("Main scene must use explicit color ambient fill without a missing Sky dependency.")
+	or not is_equal_approx(environment.ambient_light_sky_contribution, 1.0) \
+	or environment.sky == null:
+		_fail("Main scene must use the approved Sky for background, ambient fill, and reflections.")
+		return
+	var daylight := environment.sky.sky_material as ProceduralSkyMaterial
+	if daylight == null \
+	or daylight.sky_energy_multiplier <= 0.0 \
+	or daylight.ground_energy_multiplier <= 0.0:
+		_fail("Approved daylight needs an editable procedural sky with lit sky and ground hemispheres.")
 		return
 	main.free()
-	print("PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, and ambient fill")
+	print("PASS: gameplay inputs, 4/20 m/s movement defaults, 30/40 m/s^2 response, jetpack defaults, boundary cases, scene hierarchies, water visual-only contract, billboard contract, layer defaults, and procedural daylight")
 	quit(0)
 
 

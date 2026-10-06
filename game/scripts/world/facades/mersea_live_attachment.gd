@@ -1,0 +1,114 @@
+extends RefCounted
+# Atomic replacement of the four frozen Mersea exterior sources.
+const SOURCES := ["w1308007114","w1308007113","w1308007112","w1098437841"]
+const CHUNK := "res://generated/world/chunks/x_-2__z_0.json"
+
+static func record_nodes(buildings: Node3D) -> Dictionary:
+	var found := {}
+	for node: Node in buildings.find_children("*","Node3D",true,false):
+		var key := str(node.get_meta("derived_object_key",""))
+		if key.is_empty() or node is CollisionObject3D:continue
+		var parent := node.get_parent();var nested := false
+		while parent!=null and parent!=buildings:
+			if str(parent.get_meta("derived_object_key",""))==key:nested=true;break
+			parent=parent.get_parent()
+		if not nested:
+			if found.has(key):return {}
+			found[key]=node
+	return found
+
+static func install(buildings: Node3D,chunks: Array,model_script: Script = preload("res://game/scripts/world/facades/mersea_model.gd")) -> Dictionary:
+	var nodes := record_nodes(buildings)
+	var approved: Dictionary=JSON.parse_string(FileAccess.get_file_as_string(CHUNK))
+	var canonical := {};var supplied := {};var land := {}
+	for row: Dictionary in approved.records:canonical[str(row.object_key)]=row
+	for chunk: Dictionary in chunks:
+		for row: Dictionary in chunk.records:
+			var key:=str(row.object_key)
+			if supplied.has(key):return {"ok":false,"message":"Duplicate source record "+key}
+			supplied[key]=row
+	var owners: Array=[]
+	for source: String in SOURCES:
+		for role: String in ["wall","roof"]:
+			var key:="building:"+source+":"+role
+			if not supplied.has(key) or not canonical.has(key) or not nodes.has(key) or supplied[key]!=canonical[key]:return {"ok":false,"message":"Exact frozen pair mismatch "+key}
+			if supplied[key].source_keys!=[source] or str(supplied[key].feature_kind)!="building_"+role:return {"ok":false,"message":"Source ownership mismatch "+key}
+			owners.append(nodes[key])
+	land=canonical["land:w26767313:x_-2__z_0"]
+	var model: Node3D=model_script.build(supplied,land,"res://game/resources/mersea/mural.png")
+	if model==null:return {"ok":false,"message":"Model construction failed"}
+	var groups := {}
+	_collect(model,model,[],"decor","",Transform3D.IDENTITY,groups)
+	if groups.is_empty():model.free();return {"ok":false,"message":"No positive contact coverage"}
+	for key: String in groups:
+		var group: Dictionary=groups[key]
+		var faces: PackedVector3Array=group.faces
+		if faces.is_empty() or faces.size()%3!=0:model.free();return {"ok":false,"message":"Incomplete contact "+key}
+		var body := StaticBody3D.new();body.name="MerseaContact_"+key.validate_node_name()
+		var role: String=group.role;var source: String=group.sources[0]
+		var receiver: bool=role=="wall"
+		body.collision_layer=5 if receiver else 1;body.collision_mask=0
+		if receiver:body.add_to_group("spray_receiver_wall")
+		body.position=faces[0]
+		var local:=PackedVector3Array()
+		for mesh_index in group.meshes.size():
+			var mesh: MeshInstance3D=group.meshes[mesh_index]
+			var relative: Transform3D=group.poses[mesh_index]
+			relative.origin-=body.position
+			for v: Vector3 in mesh.mesh.get_faces():local.append(relative*v)
+		var shape:=ConcavePolygonShape3D.new();shape.set_faces(local)
+		var holder:=CollisionShape3D.new();holder.shape=shape;body.add_child(holder)
+		for object: Object in [body,holder,shape]:
+			object.set_meta("source_keys",group.sources)
+			object.set_meta("derived_object_key",group.object_key)
+			object.set_meta("receiver_kind","building_wall" if receiver else "none")
+			object.set_meta("opaque",role!="glass")
+			object.set_meta("mersea_role",role)
+		body.set_meta("contact_mesh_paths",group.paths)
+		model.add_child(body)
+	var states: Array=[];var hidden: Array=[]
+	# No legacy state changes until every replacement contact has been built.
+	for owner: Node3D in owners:
+		for mesh: MeshInstance3D in owner.find_children("*","MeshInstance3D",true,false):
+			hidden.append({"node":mesh,"visible":mesh.visible})
+		for body: CollisionObject3D in owner.find_children("*","CollisionObject3D",true,false):
+			states.append({"body":body,"layer":body.collision_layer,"mask":body.collision_mask,"spray":body.is_in_group("spray_receiver_wall")})
+	for item: Dictionary in hidden:item.node.visible=false
+	for item: Dictionary in states:
+		item.body.collision_layer=0;item.body.collision_mask=0;item.body.remove_from_group("spray_receiver_wall")
+	model.set_meta("build_valid",true);model.set_meta("poi_source","n8017457805")
+	buildings.add_child(model)
+	return {"ok":true,"model":model,"hidden":hidden,"states":states,"sources":SOURCES,"scope":"Four frozen building sources; POI site; zero recognition credit"}
+
+static func _collect(node: Node3D,root: Node3D,sources: Array,role: String,key: String,pose: Transform3D,groups: Dictionary) -> void:
+	if node!=root:pose=pose*node.transform
+	if node.has_meta("source_keys"):sources=node.get_meta("source_keys")
+	role=str(node.get_meta("mersea_role",role))
+	key=str(node.get_meta("derived_object_key",key))
+	if node is MeshInstance3D and node.mesh!=null:
+		var receiver:=role=="wall"
+		node.layers=4 if role=="glass" else (2 if receiver else 1)
+		# Extra render-only bit does not alter semantic collision or spray ownership.
+		if bool(node.get_meta("mersea_reflective_metal",false)):node.layers |= 8
+		var object_key:=key
+		if not sources.is_empty() and str(sources[0]).begins_with("w"):object_key="building:"+str(sources[0])+ (":roof" if role=="roof" else ":wall")
+		for pair in [["source_keys",sources],["derived_object_key",object_key],["receiver_kind","building_wall" if receiver else "none"],["opaque",role!="glass"],["mersea_role",role]]:node.set_meta(pair[0],pair[1])
+		if role!="decor":
+			var id:=str(sources[0])+"_"+role
+			if not groups.has(id):groups[id]={"faces":PackedVector3Array(),"paths":[],"meshes":[],"poses":[],"sources":sources,"role":role,"object_key":object_key}
+			var group: Dictionary=groups[id];var faces: PackedVector3Array=group.faces
+			for vertex: Vector3 in node.mesh.get_faces():faces.append(pose*vertex)
+			group.faces=faces;group.paths.append(str(root.get_path_to(node)));group.meshes.append(node);group.poses.append(pose);groups[id]=group
+	for child: Node in node.get_children():
+		if child is Node3D:_collect(child,root,sources,role,key,pose,groups)
+
+static func restore(result: Dictionary) -> void:
+	if not result.get("ok",false):return
+	var model: Node3D=result.model
+	for body: CollisionObject3D in model.find_children("*","CollisionObject3D",true,false):
+		body.collision_layer=0;body.collision_mask=0;body.remove_from_group("spray_receiver_wall")
+	model.get_parent().remove_child(model);model.queue_free()
+	for item: Dictionary in result.states:
+		item.body.collision_layer=item.layer;item.body.collision_mask=item.mask
+		if item.spray:item.body.add_to_group("spray_receiver_wall")
+	for item: Dictionary in result.hidden:item.node.visible=item.visible

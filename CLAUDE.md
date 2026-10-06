@@ -27,6 +27,22 @@ The maintained [source-surface comparator](tools/source_surface_comparator.py) e
 
 For model comparisons, use the canonical [blind shootout protocol](discovery/MODEL_SHOOTOUT.md): critique HTML and owner vote first, then isolated modeling through the committed `tools/model_shootout/run_capture.py <variant> <phase> --packet-root <private-packet>` renderer (`--godot` overrides the default `tools/godot`). Participants author models, not capture machinery.
 
+### Codex CLI delegated visual reviews
+
+For an authorized standalone review, launch a **persistent review orchestrator**: omit `--ephemeral`. Codex child delegation needs the parent's saved thread/rollout context. The CLI root still only coordinates; naming it a reviewer does not make it an executing subagent.
+
+Use the installed CLI's supported arguments, current AGENTS routing and an environment-authorized sandbox. For example, with a private bounded prompt already written by an executor:
+
+```bash
+codex exec -m gpt-6.1-sol -c 'model_reasoning_effort="high"' \
+  -C /workspaces/content-main -s workspace-write \
+  -o /tmp/mersea-review-verdict.txt - < /tmp/mersea-review-prompt.txt
+```
+
+Adapt workspace/output paths. The prompt must tell the orchestrator to use its actual `spawn_agent` tool for one named independent visual child, explicitly selecting `gpt-6.1-sol`, `high`, and `fork_turns="none"` where supported. Forward the full bounded assignment, role/skill paths, source identities, dated reference paths, and every required gameplay/before-after view. The child inspects saved originals with its actual `view_image` tool; CLI `-i` attachments to the parent alone do not establish that the child saw them. Only the child's own RETRO append is writable for a read-only review; no engine, implementation, acceptance or external actions are implied.
+
+Verify the actual spawn result and child identity, not an orchestrator's statement that review started. Retain the CLI handle/PID through its terminal result and the child's explicit verdict. A failed spawn or image load is not a visual verdict; do not duplicate a live review. If container sandbox setup fails before execution, report the exact error and use only an explicitly authorized supported sandbox fallback—do not change account/global configuration. Study026 verified persistent child startup after an ephemeral run failed with a missing rollout; this establishes delegation support, not visual completion or a performance claim.
+
 ### Delivering visual galleries in VS Code
 
 For HTML galleries outside the remote workspace, prefer a static server bound to
