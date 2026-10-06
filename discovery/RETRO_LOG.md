@@ -16288,3 +16288,10 @@ Study042 focused site source review, mersea_placement_review: frozen model042.di
 - Next: commit this reviewed patch only; main integration/push is a separate ROOT assignment. Post-suite changes are documentation and lexical JSON only. Complete explicit whitespace checks precede staging; no Mac export or further source work.
 
 Final commit setup: first git commit failed before creating a commit because this worktree lacked author identity. Reused the exact project bot identity from .devcontainer/post-create.sh via per-command git -c only; no global configuration changed, no test/source behavior changed.
+
+
+### mersea_placement_review — local integration and credential blocker, 2026-10-06
+
+- Worked: rechecked clean/unowned main worktree, remote836c00a and local ancestry, then switched content-main to main and fast-forwarded to reviewed817cae5; both commands exited0. The original harness checkout and its unrelated three dirty documents remained untouched. Existing passed042 promoted suite/source/art evidence remains applicable; no source/catalog/test or engine change.
+- Did not: normal non-force git push exited128 before updating the remote because DevPod credential-helper localhost12049 refused the connection. Remote readback remained836c00a. No listener/tunnel, GitHub CLI authentication or accessible forwarded SSH agent supplied a recoverable in-container provider; no retry, secret output/storage or Git configuration change was made.
+- Next: owner reconnects the existing host workspace using devpod ssh treasure-island --start-services=true and keeps it open; installed CLI help confirms that option starts credential helpers. Wait for restored provider/owner readiness, then recheck remote and resume authorized non-force push. Main integration is local only; remote completion and goal closure remain pending. This explicit blocker-only append records the failed round without changing study/gallery completion status; whitespace check and per-command existing bot identity precede the local documentation-only commit.
