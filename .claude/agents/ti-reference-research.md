@@ -23,13 +23,23 @@ version is the observed managed download, not a separately pinned dependency.
    search the exact target name. Click **Browse Street View images**, inspect the
    blue road coverage and click the actual adjacent road. Re-snapshot after UI
    changes. Rotate with the viewer controls to inspect the target.
-3. Wait for visible exterior pixels and the date/location panel, then save a
-   private screenshot and `get url`. Inspect that screenshot before claiming
-   usable coverage. A pano ID or successful HTTP response alone is insufficient.
+3. For Street View, use the printed runtime prefix with
+   `tools/browser capture <session> /absolute/private/reference.png`.
+   This shared guard waits for a resolved panorama/date and checks the actual
+   screenshot's viewer pixels before publishing the requested PNG. It retains
+   rejected attempts as `reference.failed.png` and returns HOLD; use fresh paths.
+   Inspect successful originals for the actual target, side, occlusion and date:
+   the black/flat-image filter is conservative, not architectural validation.
+   Other Maps photographs still require direct pixel/date/source inspection.
+   A pano ID, HTTP200 or page-load completion alone is insufficient.
 4. If the viewer stays black, inspect readiness/network once. A full resolved
    `/maps/@lat,lon,3a,.../data=...!1s<pano>...` URL recovered Building600 after a
    coordinate/API link stayed black, even though metadata/tile returned HTTP200.
-   Try that actual resolved URL once in a fresh headed session; do not invent
+   Use an already verified full locator or the actual place/blue-road UI within
+   the assigned navigation budget. Do not start a second session while the
+   current one owns the slot. A black image/empty pano ID is unresolved; only an
+   explicit Maps no-imagery message supports unavailability for that requested
+   view, never the whole side or area. Try that actual resolved URL once; do not invent
    panorama metadata, loop on unchanged failures or substitute weaker imagery.
 5. Close the named browser, then terminate the retained launcher handle and
    consume its terminal result before releasing the slot. The launcher also

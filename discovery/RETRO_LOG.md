@@ -17065,3 +17065,68 @@ Final narrowly scoped CODE PASS: support eligibility now derives from the stock 
 - Worked: The owner all-side requirement is carried consistently through agreement, reference/author/visual roles, skill guidance and maintained capture entrypoint; current whole-quality reopening retains historical credit and technical invariants.
 - Did not: The recorded earlier ENE/finish scope had not established opposite-side whole quality; complete shell geometry and saved side filenames were insufficient. This docs review did not inspect building pixels or supply new runtime/visual acceptance.
 - Next: Research each side before inference, disclose actual gaps in ordinary notes and judge every gameplay side; use bounded protected-art rescoping and existing focused captures where needed, without a new evidence framework or quota.
+
+### Astra Low — B3 all-side reference recovery (2026-10-07)
+- Worked: inspected all four current gameplay sides and modern ENE originals; recovered and directly inspected two original HABS2003 exterior photographs covering NW/SW and SE/NE. Reuse remains the existing B3 family/approved PBR maps. Private originals and truthful date/occlusion limits are recorded in building3/README.md outside Git.
+- Did not work: four-location Maps session produced only an ambiguously associated June2019 occluded view plus unavailable imagery; old June2015 SSE remains excluded. LOC/thumbnail retrieval failed, but Wikimedia original TIFF retrieval succeeded. Historical black-and-white views do not prove current color or survival of lower annex/opening details.
+- Next: use observed long-side pier/window and southwest crown motifs for bounded all-side completion, with contemporary alterations and inferred cadence explicit; never promote ENE-only finish to whole-building acceptance. Browser22331 deliberately closed terminal143/626838, owned processes/global engines absent and slot released; HTTP86168 terminal0/4e2a99. No art/source implementation or acceptance in this round.
+
+## building2_integrate — B3 reference handoff and B2 remaining-side preparation, 2026-10-07
+
+- Worked: Personally inspecting the recovered HABS B3 originals distinguished useful historical upper pier/window and end-mass evidence from occluded lower walls/current-condition unknowns. Existing B2 source and north/east captures identify the remaining plain sides and shared-material dependencies without another engine run.
+- Did not: My earlier B2 summary repeated the historical seven-panel description; current correction002 source actually removes those panels and emits a plain NNW wall. Existing failed panoramas do not establish blank real facades; archival grayscale does not establish contemporary colors or annex ownership.
+- Next: Feed the recovered side evidence directly into bounded whole-building correction, then independently review the first revised render. Reuse explicit side/source/material bindings, preserve separate annex identities and historical credit, and avoid a redundant review merely to reconfirm the already established whole-quality HOLD.
+
+## building2_integrate — B2 bounded historical exterior recovery, 2026-10-07
+
+- Worked: Two original exterior TIFFs downloaded over HTTP and were inspected after unchanged lossless grayscale conversion; comparison with retained2017/2019 views separated historical northeast-end structure from contemporary color evidence. No browser/GPU slot was used alongside B3 art.
+- Did not: A5/A6 originals returned429 and the A4 metadata page failed; NNW coverage and A4's exact capture date remain unresolved. Default Python lacked Pillow, so conversion reused the author's existing stdlib method only after checking the TIFF encoding; no tools were installed.
+- Next: Keep useful northeast molding/pylon/service-opening evidence distinct from occluded lower details and unverified current condition. Stop at access limits, preserve private originals and let Root assess actual pixels before a bounded B2 correction; titles and series dates cannot substitute for missing evidence.
+
+### Astra Low — B3 all-side study001 first coherent revision (2026-10-07)
+- Worked: reused existing B3 family, modern ENE finish and recovered HABS2003 motifs; complete upper glazing/pier units and west crown/pylons now read on previously generic sides. Canonical wall/roof receive target PBR without a whole-shell visual overlay. Before-source copies retained privately; Museum untouched.
+- Did not work: first source terrain sample omitted neighboring chunks and used wrong feature names; corrected to actual land_ground/major_area/road_path records before capture,60positions covered. Pixels still show broad plain lower flanks and dark segmented trim edges; historic lower attachments/current colors remain limited evidence. Seven TextureRID warnings remain unknown.
+- Next: independent all-side visual/code critique of first coherent render before refinement; fresh mechanics still required. Shared capture72742 actualterminal0/736325,14originals inspected, owned560733/560737/560756/560757/560758 absent/globalengine release. Source frozen,1of3capturebudget used. Existing material003 context baseline predates Museum changes; no wholequality acceptance supplied by this author round.
+
+### Astra Low — B2 NNW reference recovery (2026-10-07)
+- Worked: actual HABS A6 original recovered and directly inspected; catalog2003 and NNW camera/target title verified. It supplies meaningful grouped glazing/pier/central-entry evidence instead of an inferred blank facade. One HTTP original used, existing B2 family remains the reuse choice.
+- Did not work: three Maps captures were black and URLs had empty panoid, but I omitted DOM/readiness/error confirmation. They prove failed capture only, not unavailable imagery. Coordinator now owns the shared workflow diagnosis; exact command sequence and private attempts/log supplied. Browser had already closed before Root's preserve-live message arrived; no restart was made.
+- Next: wait for meaningful loaded-panorama/date UI or explicit failure status before classifying Maps coverage; compare recovered A6 with actual source NNW host under historical/current-condition limits. Browser76973 terminal143/5f1770 and owned processes absent, slot released; HTTP65631 terminal0/2ee4d9. No art/engine implementation in this round; B3 remains frozen for independent review.
+
+### approach_geometry_review — B3 all-sides-001 CODE PASS, 2026-10-07
+
+- CODE PASS for the six frozen B3 paths: target-only shell coating, source-derived host chains, native Box/render correspondence and retained canonical wall/roof identity; no scoped blocker or source edit requested.
+- The low west mass is separate source w1222514685 (roof9.358), sharing B3 WSW runs5–9; do not call it a B3 omission or repaint/copy a neighbor under this scope. Changed party-wall relief still needs actual mechanical checks.
+- Reused unchanged ENE/shared safety evidence; capture72742 is author capture only. Fit/spray/full-suite and independent all-side visual acceptance remain separate; TextureRID warning cause unknown. The original CODE review ran no engine/tests/research; this append records its deferred note only.
+
+### building2_integrate — shared Street View capture readiness fix (2026-10-07)
+
+- Worked: one headed session, four navigations reproduced B2 black output with explicit per-view no-imagery DOM and rendered known Station48 Sep2025/B3 Nov2025 panoramas without GPU/package changes. Guarded captures inspect actual screenshot pixels, date/panorama stability and private fresh paths; meaningful originals were personally inspected.
+- Did not: earlier black/empty-panoid attempts lacked readiness/error evidence and could not establish unavailable coverage. B3 URL canonicalized during the first guarded readback; that attempt correctly stayed HOLD, followed by a successful fresh capture of the same settled navigation. Pixel heuristics are conservative and cannot establish target fidelity or general Maps availability.
+- Next: use the shared guarded command before claiming a reference, retain failed PNGs separately and inspect actual side/date/occlusions. Browser55104 deliberately terminated143/a83e0e after close; wrapper565900/Weston565904/Chrome565946/daemon565927/helpers absent, explicit SLOT RELEASE. Shell/Python syntax and intended-file whitespace passed; independent code review remains required. No Godot/art edits, installs or auth changes.
+
+### approach_geometry_review — shared browser-capture CODE HOLD, 2026-10-07
+
+- Worked: complete source review found named live-session reuse, finite readiness polling, actual detached-canvas screenshot decoding and explicit manual target/side inspection consistent with the reference workflow; installed agent-browser0.38.2 supports the used command forms.
+- Did not: CODE HOLD because repeated black/flat snapshots overwrite the same failed PNG and later success can remove it; a dangling failed-path symlink also bypasses exists-only freshness and can redirect a screenshot into Git. These are source-derived findings, not executed failures by this reviewer.
+- Next: stop after the first pixel rejection and preserve its fresh failed path; reject failed-path symlinks before capture. Re-review those narrow corrections; supplied B2/Station48/B3 runtime evidence remains separate and proves neither universal Maps readiness nor architectural acceptance.
+
+### approach_geometry_review — shared browser-capture correction CODE PASS, 2026-10-07
+
+- Worked: narrow correction CODE PASS: failed.is_symlink() rejects dangling links before screenshot writes; black/flat rejection now exits the polling loop immediately, preserving the first failed PNG through HOLD exit1 without overwrite or promotion.
+- Did not: the earlier CODE HOLD exposed preservation and privacy gaps not exercised by the supplied four-case55104 run. This recheck executed no browser, engine or regression test and does not claim new runtime coverage.
+- Next: reuse the unchanged readiness/session/manual-inspection review; use fresh private paths for any separately authorized settled-session retry. Keep prior failed captures and HOLD history, with actual target/side/date judgment distinct from the heuristic.
+
+Coordinator closure: independent browser CODE HOLD exposed failed-image overwrite and dangling-symlink privacy gaps; the two-line repair received same-child narrow CODE PASS (13899 terminal0/01ba52, own reviewer note/check/release). Two isolated stdlib mock checks then passed: symlink rejection before any browser command, and one black/flat capture retained unchanged with HOLD/no promotion (41ac65). These execute helper control flow without browser/GPU and supplement, not replace, the earlier actual dated-image proof. No new browser invocation or test framework was added.
+
+### chapel_art — Building2 first all-side study, 2026-10-07
+
+- Worked: reused Building2HeroModel and approved plaster maps in two B2-only material resources; added historical-reference-grounded NNW grouped recessed windows/piers and distinct ENE solid-arch molding/service openings, preserving existing WSW/SSE units and source bottoms. Actual native terrain sampling covered 27 threshold/recess positions; no new ground projection. Shared capture79718 finished exit0 (6a393d), WORLD_READY/screenshots PASS; subsequent global Godot/Weston scan empty (8f5e75), SOURCE/ENGINE released. Directly inspected all11 originals (four sides, two contexts, five island views) in private building2-all-sides-001. Actual renderer was Wayland/Vulkan Forward+, AMD Radeon780M RADV PHOENIX.
+- Did not: first pixels remain self-HOLD: ENE molding reads as a dotted dark line, NNW upper recess seams are visible, and coating remains visually quiet. Fourteen Texture RID shutdown warnings have unknown cause. Terrain sampling completed before engine but after initial source construction; no movement/spray/full-suite proof or independent acceptance is claimed. Historical A3/A6 are2003; A4 exact date remains provisional; current colors/dimensions and occluded lower regions remain production inference. Old baseline context predates current B1/B3 changes.
+- Next: independent changed-seam CODE and all-side visual review before further refinement; one of two authorized captures used. Preserve failed Maps captures as unresolved readiness evidence, not proof of unavailable imagery. Keep the three B2 art paths frozen and B1/B3 untouched.
+
+### approach_geometry_review — B2 all-sides-001 CODE PASS, 2026-10-07
+
+- Worked: CODE PASS for the three frozen B2 paths: NNW groups/entry and ENE service openings reuse closed reveals and recessed backs with shared visible/native triangles; exact source hosts/bottoms, canonical receiver ownership and the unchanged roof remain intact. Target-only mineral coating consumes aligned metre UVs/tangents.
+- Did not: supplied capture79718 and threshold sampling do not establish actual stock approach, REST, spray or suite results for the changed surfaces. Author dotted-molding/recess-seam self-HOLD is separate visual evidence; fourteen TextureRID warning causes and A4 exact date remain unresolved.
+- Next: keep current fit/spray/full-suite and independent all-side reference judgment separate from source CODE PASS. Reuse unchanged shared safety evidence without extending source scope, duplicating render work or treating old WSW/SSE recognition as whole-quality acceptance.

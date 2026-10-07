@@ -5,6 +5,10 @@
 # foreground handle with Ctrl-C (or TERM) to close both owned processes.
 set -euo pipefail
 export PATH="/usr/local/share/nvm/current/bin:${PATH}"
+if [ "${1:-}" = capture ]; then
+  shift
+  exec python3 "$(dirname "$0")/browser-capture.py" "$@"
+fi
 if [ "$#" -ne 2 ] || [[ ! "$1" =~ ^[a-zA-Z0-9_-]+$ ]]; then
   echo "usage: tools/browser <session-name> <url>" >&2
   exit 2
