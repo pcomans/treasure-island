@@ -16956,3 +16956,112 @@ Final narrowly scoped CODE PASS: support eligibility now derives from the stock 
 - Worked: reused Building1HeroModel and isolated public coating/trim resources from protected original faces/tower materials. Single capture28826 exited0/chunke650bb with14 originals; owned529305/529309/529330 and helpers absent at release. Preserved exact five source copies privately under `building1-study/study-001/source` before the separately authorized study002 changes.
 - Did not: slimmer frames and fine PBR supplied only modest gain. Actual crescent/south pixels retain heavy base, dominant central height and interrupted thin grids; author whole-building self-HOLD remains. Source analysis found a glass/host intersection and a sharp-return cadence risk. Lowering shared four_story_roof_y would also move the protected separate tower platform, so study001 retained it rather than silently altering tower ownership. Seven TextureRID warnings remain unexplained.
 - Next: authorized study002 addresses the six-metre front roof zone with closed native transition and retained rear/tower support, coherent lower entry band, host-aligned complete bays and distinct material regions. This round is in progress; no study002 render, mechanics or acceptance outcome is claimed here. Keep first-review scope frozen and inspect actual architectural gain, not material-only improvement.
+
+### 2026-10-07 — chapel_art (Astra Low) — Building1 study002
+
+- Worked: source-following finite glazing/bar segments remove the earlier planar host-intersection problem; lower base/canopy/windows form a more coherent entry band. Seven B1-only paths changed, preserving separate tower and Chapel. Capture13522 exited0/chunka264eb; owned534360/534364/534385/helpers absent and engine/source released. All14 originals retained in `building1-study/study-002`.
+- Did not: the retained broad high rear roof produces a dominant6.281m vertical band absent from the reference. That riser also inherited roof material/non-spray role, making it dark; geometry, not merely colour, is the primary failure. Author whole-building HOLD remains. Seven TextureRID warnings persist unknown; no fit or acceptance claimed.
+- Next: Root authorized a localized support following the exact tower platform outline, with cream wall/native wall sides and non-spray roof top, lowering surrounding central roof while leaving tower XYZ unchanged. This is explicit structural production inference; preserve failed002 pixels/source history and judge actual skyline before claiming improvement.
+
+
+### approach_geometry_review — Museum study001/002 OTHER-actor efficiency checkpoint, 2026-10-07
+
+- Worked: Museum author notes and successful first/second capture logs preserve reuse, native preflight, source freezing and actual terminal/PID separation; failed cross-graph clarification was retained without a competing resume. Removing the extra early-verdict editing gate preserves iteration alongside independent review.
+- Did not: Repeated parent running/no-result updates and status requests added little new evidence before the child acknowledged inspection. Parent activity is not image coverage; service causes, timing costs and savings remain unknown. This was an OTHER-actor sample, not an independent assessment of my own review work.
+- Next: ROOT accepted one reversible experiment: use one acknowledged handoff retained through completion, with repeated internal status requests limited to new concrete intervention needs; observe fewer duplicate coordination steps in ordinary RETRO while preserving every runtime, source, review and own-note gate.
+
+### 2026-10-07 — chapel_art (Astra Low) — Building1 study003 localized tower support
+
+- Worked: replaced the failed broad high rear band with a localized cream support following the unchanged tower wall producer's exact ten-point platform-bottom outline, using its actual centroid and1.28scale. Source split points make the outline slightly non-convex; triangulated-outline subtraction preserves them without a bounding-box/convex-hull substitute. Surrounding central roof is20m, support top26.281m meets the unchanged tower platform bottom. Cream support sides use canonical wall emission; top and surrounding roof use paired non-spray roof emission. Forty perimeter samples lay within the existing central roof and source outer footprint; source bottoms/protected runs and tower component stayed unchanged. Study002 seven-path source copies and failed images remain private.
+- Worked: single capture73384 exited0/chunk07d719, with14 actual originals under `/workspaces/landmark-progress-20261007/building1-study/study-003`. Owned wrapper537508/Weston537512/Godot537534/helpers were absent at release. Inspected public-crescent/context originals show the broad dark band removed, lower central/pavilion hierarchy and complete grids retained, with localized tower support visible. Engine and art source writer released; current source frozen for independent code/visual review.
+- Did not: the localized support remains a conspicuous structural production inference, not verified hidden architecture or surveyed dimensions. Seven Texture RID warnings remain unexplained. No current003 fit, suite or recognition acceptance is claimed by this art round; actual reference judgment is pending independent review.
+- Next: independent review must judge the complete architecture against dated originals and check exact support/roof subtraction and native ownership. Do not treat removal of the dark band as whole-building acceptance or camouflage further massing problems with colour.
+
+
+### approach_geometry_review — Building1 study003 CODE HOLD, 2026-10-07
+
+- Worked: Complete producer/caller review verified the exact wall-centroid platform outline, paired native roles, source/protected ownership and B1-only material mapping while reusing unchanged shared evidence.
+- Did not: Localizing the high roof removed the unchanged tower driver's supported approach area; new half-plane subtraction also drops nonzero remainders when a vertex lies exactly on a cut. These are source-derived findings, not executed runtime failures; capture success did not establish these integration/coverage seams.
+- Next: Trace dependent accepted units' native approach/support requirements through roof changes, preserve cut-boundary vertices in both half-plane outputs, and close CODE findings before separately assigned fit/spray, suite and reference-visual acceptance. This reviewer ran no engine/tests and authored no source; this append records the deferred verdict without a new review.
+
+
+### building2_integrate — Museum review coordination and support lesson, 2026-10-07
+
+- Worked: Historical study001 and current study003 stayed separate, with actual independent child verdicts and immutable images. The current CODE HOLD stopped the planned fit before an engine invocation; owner NOTES now link real003 pixels and preserve all HOLDs, while LEARNINGS records the dependent tower support/start-domain seam as source-derived.
+- Did not: A send_message about the author note window did not activate the already completed author; root had to issue followup_task. Also the proposed headless fit contradicted the maintained visible-geometry guard; read-only source inspection corrected the invocation before any failed run.
+- Next: Dispatch new bounded assignments with followup_task and reserve send_message for active-task clarification. In this checkpoint the acknowledged-handoff experiment retained review handles and surfaced meaningful inspection/terminal changes without repeated child status questions; service timing and savings remain unknown. Keep exact support identity and all mechanical/review gates.
+
+## final_b3_visual — Building1 study001 early visual critique, 2026-10-07
+
+- Worked: Dated references and all 14 matched view pairs separated preserved recognition/site composition from the limited finish gain and incomplete public glazing.
+- Did not: Finer frames produced inconsistent visible grids, while the coating amplified alternating panels; cosmetic refinement left the heavy lower frontage unresolved.
+- Next: Review the complete crescent and rear curve at ordinary gameplay poses early, and isolate the public-height parameter from the protected tower before any proportional revision.
+
+
+### 2026-10-07 — chapel_art (Astra Low) — Building1 study004 support and clipping repair
+
+- Worked: preserved study003 seven-path source copies and HOLD images; changed only the B1 producer and public-front JSON this round. A 3m edge-offset landing retains the exact tower at26.281m, with paired parent roof/wall roles and support walls reaching the existing14.75m parent roof where the landing extends beyond the20m central strip. Source-only preflight placed four conservative tower-bounds-plus2m starts and0.36m support discs inside the landing; sampled perimeter stayed inside the frozen outer footprint and at least2.72m from protected runs. Unchanged tower/protected emitters and corrected on-plane endpoints in both clip outputs were checked before rendering.
+- Worked: single shared capture57599 exited0/chunk7159b6, saving14 originals under `/workspaces/landmark-progress-20261007/building1-study/study-004`. Wrapper541645, Weston541649, Godot541670 and helpers541668/541669 were absent, with global Godot/Weston absence verified before ENGINE/SOURCE release. Actual log reports Wayland/Vulkan Forward+ on AMD Radeon780M Graphics (RADV PHOENIX). Inspected public-crescent and both context originals retain the lower central/pavilion hierarchy and show the wider landing's closed rear junction.
+- Did not: the wider block-like support is structural production inference, not surveyed or observed hidden architecture; independent reference judgment remains open. Seven Texture RID warnings remain unexplained. Source-only support containment is not actual stock approach, REST, fit, spray or full-suite proof; none ran in this round. No acceptance is claimed.
+- Next: independently review both CODE repairs before separately authorized current-source mechanics. Judge the complete inferred support silhouette against dated reference pixels rather than treating successful capture or corrected start-domain containment as whole-building fidelity acceptance.
+
+
+### approach_geometry_review — Building1 study004 correction CODE PASS, 2026-10-07
+
+- Worked: A real source-derived parent landing restores room for unchanged tower starts without broadening support eligibility; matching wall/cap native roles and both-output cut-boundary handling close the two003 source findings.
+- Did not: Capture and source containment calculations still cannot establish native capsule/corridor behavior, four actual stock approaches, REST, fit/spray or visual fidelity. This reviewer ran no engine/tests; the inferred wider support remains a separate visual question.
+- Next: Preserve the003 HOLD history, reuse unchanged scoped code/material evidence and require separately assigned actual B1/tower mechanics plus whole-result dated-reference review. Trace dependent native support domains and shared clipping endpoints before roof recomposition.
+
+
+### 2026-10-07 — chapel_art (Astra Low) — next-landmark local preparation
+
+- Worked: bounded local catalog, reference-spec, producer and material inspection identified Maceo May r19685981 and Fire Station48 w764313741 as remaining audited candidates with prior accepted credit. Reuse decision for each: retain its existing live factory/adapter and target geometry/material family, improving observed public architecture and material regions rather than creating a replacement shared base. Frozen source supplies no complete street address for either; none was inferred.
+- Did not: the audit's private gallery was unavailable at its recorded local location, and historical landmark reference pixels point to unavailable temporary paths. Written acceptance and source inspection cannot establish current visual quality. Maceo's public shader has color/rib modulation without mapped fine normal/roughness detail; Station48 uses procedural cladding with uniform roughness, but actual visual deficits require fresh reference/baseline comparison.
+- Next: recover the stored dated Maceo September2025 ENE/SSE or Station48 September2025 WSW/NNW viewpoints before any new design assignment. Preserve Maceo courtyard/unknown sides and Station48 protected runs/original mass; occluded operational details remain unknown. No browsing, downloads, image generation, source edits, engine runs or acceptance occurred; current Museum quality gates remain the active implementation work.
+
+
+### 2026-10-07 — chapel_art (Astra Low) — Station48 bounded HTTP reference recovery
+
+- Worked: official SFFD page supplied an exterior original, recovered privately to `/workspaces/landmark-progress-20261007/fire-station48-references/sffd-station48-undated-original.jpg` and directly inspected. Official station locations corroborate800 Avenue I at10th Street without changing absent frozen address tags. Private REFERENCE_NOTES.md retains page/image URLs, checked date, exact stored panorama locators and coverage limits. Existing Station48 factory/adapter/cladding family remains the reuse choice.
+- Did not: the official image is undated, strongly foreground-occluded and only associated with the premises, not yet exact source faces. Its2021-06 upload path is not a capture date. Browser-free Google access yielded Maps shell HTML/internal-error output, not rendered dated panorama pixels; historical September2025/May2019 dates were not reverified. No map thumbnail was substituted for reference evidence.
+- Next: separately serialize a browser recovery of the stored September2025 WSW/NNW viewpoint before building design; establish exact source association and preserve unknown lower/hidden details. This round used only web/HTTP reads and private source-photo retention, with no GUI/browser process, Weston, Godot, source edits, asset generation or acceptance. Museum source remained frozen.
+
+## final_b3_visual — Building1 study004 rendered fit execution, 2026-10-07
+
+- Worked: The complete maintained rendered driver supported both exact catalog sources; sequential runs proved four ground-level Building1 approaches and four separately qualified local tower approaches with active rest and safe teardown.
+- Did not: Tower roof sampling retained4/44 misses inside the unchanged threshold; startup supplied backend/adapter evidence but no direct getter row, and call1 finished before its live PIDs were captured.
+- Next: Preserve those roof-sampling and local-access limits in promotion decisions, and observe the live handle/PIDs immediately in the launch tool sequence as done for call2.
+
+
+### 2026-10-07 — chapel_art (Astra Low) — Station48 dated browser recovery and design preparation
+
+- Worked: one authorized tools/browser session recovered and directly inspected the stored September2025 WSW/NNW-corner overview/detail and May2019 NNW original with visible capture-date UI. Private fire-station48-references notes retain exact URLs and distinguish the supplementary official undated photo. Owned session8710 deliberately closed via wrapper TERM, actual terminal143/chunk14e609 with Browser closed; wrapper546987, Weston546991, browser547031 and daemon547012 were subsequently absent and the serialized slot released.
+- Did not: fences/screens/vehicles still conceal most lower wall and ground junctions; exact dimensions, substrate and motif anchors remain unmeasured. No photographed neighboring apparatus structure, display, fence, vehicle or tree becomes modeling scope. Existing flat frame/glass response and analytic rib/constant-roughness treatment are source-derived opportunities, not a fresh gameplay verdict.
+- Next: private DESIGN_NOTES.md proposes reuse of the existing Station48 factory/adapter/cladding family, complete public motifs and controlled existing-map PBR while preserving original6m mass, protected runs and native spray identity. Baseline plus one coherent capture is only a proposed later loop, not executed or authorized implementation. No code/assets changed; Museum005 plan-only work takes priority and retains its separate source/engine hold.
+
+
+### chapel_final_visual — Building 1 study003 independent visual review, 2026-10-07
+
+- **What worked well:** All 36 assigned image originals were inspected directly in small batches, separating the real central-height/black-band improvement from unresolved whole-building fidelity and finish. Matched baselines and dated references made that distinction clear; no evidence was missing.
+- **What did not work well:** Closing the backing-band defect exposed a conspicuous inferred support core, while pavilion glazing, blank lower frontage and alternating rear facets still looked schematic. The north-detail pose showed mostly an oblique blank wall rather than the reference-facing pavilion frontage.
+- **What to change next time:** Judge the full public pavilion/base and skyline composition after each geometry fix, using useful existing oblique views and honest side limits. Preserve tower/support invariants, historical HOLDs and separate mechanical gates; prioritize coherent architectural composition over more microsurface detail. This reviewer ran no engines/tests. Shared RETRO was not modified.
+
+## building2_integrate — All-side building harness correction, 2026-10-07
+
+- Worked: Direct inspection of the owner's B3 west original, source material binding and prior scoped verdict distinguished a complete shell from unfinished facade quality; historical credit and successful ENE/mechanical evidence were retained.
+- Did not: ENE-only facade improvement and opposite-side inference had supported a whole-quality claim despite visible generic repetitive walls; the existing side screenshots alone did not prevent that scope promotion.
+- Next: Author/reference/reviewer entrypoints now require research for every side before inference and actual all-side quality judgment. Reuse the shared capture driver and add focused views only for demonstrated obscuration; no new runtime check, image quota or framework. Independent harness review remains required. The historical visual note transport81316 completed before this own append, preserving writer serialization.
+
+
+### 2026-10-07 — chapel_art (Astra Low) — Museum study005 first coherent correction
+
+- Worked: preserved004 seven source files, then composed complete paired pavilion bays/deep pale surrounds, darker grids, joined canopy geometry and host-centered entries within the existing seven-path B1 scope. Source preflight retained exact tower XYZ,004 landing/cut-endpoint helpers, protected/base emitters and unchanged ground-contact parameters. Capture38889 exited0/chunkf8d211,14 originals retained; wrapper553327, Weston553331, Godot553352/helpers553350/553351 and global engines absent before SOURCE/ENGINE release.
+- Did not: self-inspected public-crescent/south-pavilion/north/context originals improve paired glazing but retain broad plain lower frontage, small dark canopy marks, protected rear facets and conspicuous inferred core. Seven Texture RID warnings remain unknown. Capture success is not current fit/spray/suite or independent whole-quality acceptance; first coherent result is frozen for review.
+- Next: independent review should judge complete architecture/material response and changed canopy/entry seams. One of the assigned maximum two captures was used, with further refinement stopped pending critique. Owner redirected priority to B3 all-side research; no Museum second capture or Station48 implementation occurred.
+
+
+### approach_geometry_review — all-side documentation harness CODE PASS, 2026-10-07
+
+- Worked: The owner all-side requirement is carried consistently through agreement, reference/author/visual roles, skill guidance and maintained capture entrypoint; current whole-quality reopening retains historical credit and technical invariants.
+- Did not: The recorded earlier ENE/finish scope had not established opposite-side whole quality; complete shell geometry and saved side filenames were insufficient. This docs review did not inspect building pixels or supply new runtime/visual acceptance.
+- Next: Research each side before inference, disclose actual gaps in ordinary notes and judge every gameplay side; use bounded protected-art rescoping and existing focused captures where needed, without a new evidence framework or quota.

@@ -4,6 +4,12 @@ Keep this a short, living guide to mistakes worth preventing. Update an applicab
 
 Retain the owner-authorized routing in [AGENTS.md](AGENTS.md#bounded-subagent-execution): never use `ultra` for subagents; explicitly select effort. The current Mersea study uses the task-specific Astra Low modeling and Sol High review override in AGENTS. The general default since 2026-10-05 is modeling on Claude Opus 5.5 (the owner judged its Building 600 the most faithful of three), with textures from Codex via `tools/generate-texture`; see AGENTS.md for the current roles. The Astra/Sol notes below are historical. This small sample does not establish a universal quality, cost or speed ranking; lower Sol effort is untested.
 
+## Do not promote one facade's finish to whole-building quality
+
+**Observed:** The owner identified B3 material-003/closeup-west.png: a complete but largely blank arched wall with conspicuous repeating grey plaster. The task changed only observed ENE runs27–35 and left other sides unchanged; the independent material003 PASS limited fidelity to ENE and called opposites inference. Generic wall material remained on the west. These records do not establish reference-supported blank western architecture.
+
+**Cause and prevention:** A scoped facade/finish improvement was promoted to whole quality without resolving the other visible sides. Seek Street View, Maps photographs and web evidence for each exterior side before inference; record useful references or actual search/access gaps in ordinary notes. Review all actual gameplay sides and judge inferred surfaces too. A scoped PASS or protected art boundary cannot exempt visibly unfinished sides; reopen whole-quality work through bounded scope while preserving source/gameplay invariants and historical credit.
+
 ## Judge the whole visible result after a fix
 
 **Observed:** In 1308 fidelity002, ordinary views 06/07 improved roof visibility and lawn coverage, yet the main roof still showed rounded, uneven humps and a heavy pale rim. Junction views 03/04 exposed near-black canopy tops and heavy edges. The dated March 2025 reference showed coherent planar roof surfaces, straight ridge/eave segments and readable gray roofing. The initial review closed the previous two gaps too narrowly; the owner caught the unresolved overall form. A focused sibling check of 1303 fidelity004 views 03/06 found a related uneven crest despite real roof-visibility and apron gains.
@@ -392,3 +398,7 @@ movement or fit credit.
 ## Collect owned nodes before freeing a descendant tree
 
 Chapel study001 iterated a descendant snapshot and freed its StaticBody parent; the later child entry was already invalid when tested with `is`, causing WORLD_FAILED before screenshots. Collect supported owner bodies while all nodes are alive, validate direct-parent ownership/no nested owners, then remove/free them after traversal. Study002 used that order and loaded/captured successfully; this establishes the cleanup repair, not geometry or art acceptance.
+
+## Trace separately scored rooftop support before changing a parent roof
+
+Building1 study003 CODE review found that localizing the parent roof to the exact tower platform outline removed the elevated area used by the separately scored tower’s four local approaches. The unchanged driver proposes starts outside tower bounds and qualifies parent support at the tower base; this was a source-derived integration finding, not an executed fit failure. Before roof recomposition, trace the actual child support binding, native producer outline/elevation and stock start/clearance domain together. Preserve real supported approach space and every existing support/rest check rather than broadening roof eligibility to hide the loss.

@@ -488,3 +488,9 @@ and three headless probes. Existing49/213 credit is unchanged. Observed ENE
 references do not establish unseen-side as-built fidelity; rooftop routes remain
 local support proof with4/44 roof-sample limitations, and rendering-warning
 causes remain unknown. Historical HOLDs above remain part of the record.
+
+## 2026-10-07 owner west-side finding — whole-quality reopened
+
+The owner supplied `material-003/closeup-west.png` from the private building3 progress folder. Direct inspection shows complete arched massing but a largely blank west facade and conspicuous repeating grey plaster. The custom facade/material work above affected observed ENE runs27–35; other walls retain generic `building_wall` material through `world_chunk_builder.gd` and the massing producer. No inspected reference establishes that the real west architecture is blank. The prior material003 independent receipt limits fidelity to ENE and treats opposite sides as inference; that scoped PASS does not resolve current whole-building quality. Historical verdicts, mechanical evidence and catalog recognition credit are retained, but whole-quality completion is reopened.
+
+Next bounded work must seek Street View/Maps-photo/web evidence for every exterior side, record actual evidence gaps before inference, then independently assess all current side images and define a whole-building correction. Existing facade-only boundaries may be rescoped by assignment while preserving frozen XZ/source identity, native integrity and gameplay. No art edits, new runtime proof or acceptance change were performed in this clarification.

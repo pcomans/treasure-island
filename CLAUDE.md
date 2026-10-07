@@ -27,6 +27,10 @@ The maintained [source-surface comparator](tools/source_surface_comparator.py) e
 
 For model comparisons, use the canonical [blind shootout protocol](discovery/MODEL_SHOOTOUT.md): critique HTML and owner vote first, then isolated modeling through the committed `tools/model_shootout/run_capture.py <variant> <phase> --packet-root <private-packet>` renderer (`--godot` overrides the default `tools/godot`). Participants author models, not capture machinery.
 
+### Whole-building capture and review coverage
+
+Apply [all-side exterior coverage](AGENTS.md#whole-building-exterior-coverage) through the author, reference and visual roles above. Seek side-specific Street View/Maps-photo/web evidence before inference. Use the maintained `building_shots.gd -- --source KEY --island --out DIR` for four surrounding gameplay views, context and island views; add its existing `--views FILE` focused views only when the actual originals leave a side or junction obscured. Four filenames alone do not establish coverage: inspect the images. No new driver is needed for this requirement. Whole-quality review must address every exterior side and cannot promote a scoped facade PASS; disclose search gaps/inference in ordinary notes and preserve historical recognition credit.
+
 ### Codex CLI delegated visual reviews
 
 For an authorized standalone review, launch a **persistent review orchestrator**: omit `--ephemeral`. Codex child delegation needs the parent's saved thread/rollout context. The CLI root still only coordinates; naming it a reviewer does not make it an executing subagent.
