@@ -404,3 +404,15 @@ Chapel study001 iterated a descendant snapshot and freed its StaticBody parent; 
 ## Trace separately scored rooftop support before changing a parent roof
 
 Building1 study003 CODE review found that localizing the parent roof to the exact tower platform outline removed the elevated area used by the separately scored tower’s four local approaches. The unchanged driver proposes starts outside tower bounds and qualifies parent support at the tower base; this was a source-derived integration finding, not an executed fit failure. Before roof recomposition, trace the actual child support binding, native producer outline/elevation and stock start/clearance domain together. Preserve real supported approach space and every existing support/rest check rather than broadening roof eligibility to hide the loss.
+
+## Inspect both tool event forms before reporting inactivity
+
+On 2026-10-07 the coordinator reported no recent B3 image inspection because its rollout filter counted `function_call` but omitted `custom_tool_call`/`exec`. Actual image batches ran15:22–15:36 and the reviewer completed33 originals. Inspect both tool forms and their actual inputs/results before distinguishing child execution from parent-only waiting; model metadata, inbound assignments and elapsed silence alone establish neither inspection nor failure. Never restart a retained live task on that incomplete inference.
+
+## Check the complete placement column, not only wall-foot clearance
+
+B3 all-sides001 fit11333 passed four stock approaches but spray setup rejected “on top of a building” before placement. Its reused wall-foot pose was0.358m outward; new upper relief projects0.60m, while the maintained settle helper starts a downward ray atY300. This supports an overhead-hit explanation, but the actual rejected hit identity was not logged. A previously safe low capsule/target does not prove the highest-hit support/drop/camera column remains clear after facade changes. Trace all native geometry above the proposed standing location and preserve the existing setup/support gates; choose an outward-cleared pose or a proven unchanged donor with explicit coverage limits. Source preflight is not fresh runtime ray or spray proof.
+
+## Subdivide the existing sampled boundary when cutting new facade bays
+
+B3 all-sides002 CODE review found an approximately9.5cm run38 wall/roof gap: new recess cuts resampled an analytic height function while the unchanged roof retained its earlier tessellated boundary. Pass the original per-run wall-top samples into the cut emitter and interpolate within their existing intervals, preserving endpoints and knots. The same independent reviewer passed that narrow repair; later current fit/spray passed its sampled native checks, not exhaustive seam coverage or whole-building visual quality. Before changing subdivisions, compare the resulting shared boundary with its actual neighboring emitted geometry rather than assuming the original formula reproduces it.
