@@ -48,6 +48,7 @@ const W291196370_LIVE_MODULES := preload("res://game/scripts/world/facades/w2911
 const W34313520_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313520_live_modules.gd")
 const W34313525_LIVE_MODULES := preload("res://game/scripts/world/facades/w34313525_live_modules.gd")
 const BUILDING_1_HERO_MODEL := preload("res://game/scripts/world/facades/building_1_hero_model.gd")
+const BUILDING_2_HERO_MODEL := preload("res://game/scripts/world/facades/building_2_hero_model.gd")
 const POLYHAVEN_TEXTURE_SETS := {
 	"clean_asphalt": {
 		"albedo": preload("res://game/resources/textures/world/polyhaven/clean_asphalt/clean_asphalt_diff_1k.jpg"),
@@ -604,6 +605,10 @@ func _build_record(record: Dictionary, is_context: bool, chapel_plan: Dictionary
 	# mesh/collision construction so no invisible legacy surfaces survive.
 	if not is_context and BUILDING_1_HERO_MODEL.matches_record(record):
 		return BUILDING_1_HERO_MODEL.build_record(record)
+	# Building 2 (w24274434) replaces its exact wall and roof records together with
+	# reference-grounded arched hangar massing inside the frozen footprint.
+	if not is_context and BUILDING_2_HERO_MODEL.matches_record(record):
+		return BUILDING_2_HERO_MODEL.build_record(record)
 	if not is_context and HAWKINS_MASSING.matches_record(record):
 		return HAWKINS_MASSING.build_record(
 			record,

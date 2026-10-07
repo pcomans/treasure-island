@@ -56,3 +56,36 @@ No interior, truss interior, construction assembly, inaccessible roof detail,
 current long-side opening schedule, or exact pylon section is claimed. No
 source photograph is shipped. The model is exterior-only and must be judged
 from ordinary grounded stock-player views by a reviewer who did not build it.
+
+## 2026-10-06 bounded quality-upgrade preparation
+
+No Building 3 art changed and its existing recognition credit is preserved. The
+current exact wall/roof source remains `w34313540` in `x_1__z_1`, base 3.478 m;
+its native wall is world-solid and a building-wall receiver. Actual November 2025
+ENE pixels were recovered from panorama `KpAYOuZlkIsuNO4uO3rV4A`, resolved at
+37.8201975,-122.364079, heading 230: private originals
+`/workspaces/landmark-progress-20261006/building3-references/ene-nov2025.png`
+and `ene-nov2025-zoom.png` show the curved crown, corner pylons, pale closed
+front panels with seams and a relatively small central blue portal.
+[Exact panorama](https://www.google.com/maps/@37.8201975,-122.364079,3a,30y,230h,92t/data=!3m7!1e1!3m5!1sKpAYOuZlkIsuNO4uO3rV4A!2e0!6shttps:%2F%2Fstreetviewpixels-pa.googleapis.com%2Fv1%2Fthumbnail!7i16384!8i8192).
+ROOT inspected these as sufficient bounded ENE preparation; the zoom's right
+edge is cropped, dimensions are not measured, and no whole-building or hidden-side
+reference sufficiency is claimed. `ene-nov2025-detail.png` is a near-duplicate
+failed UI zoom; `sse-attempt.png` snapped to a June 2015 visitor panorama well away
+from the requested point and is excluded for target/pose ambiguity. Recovery
+stopped after that bounded complementary attempt. Fences are only foreground
+occlusion evidence, not a gameplay-access proposal. No reference photo enters
+Git or the game.
+
+One fresh shared `building_shots.gd -- --source w34313540 --island` run passed,
+with four ordinary views, two context views and five island views in
+`/workspaces/landmark-progress-20261006/building3-baseline/`; terminal log
+`building3-baseline.log` records AMD Radeon 780M Graphics (RADV PHOENIX) / Wayland
+and 14 texture-RID leak warnings. Browser and engine completed and were released.
+This is the current uncommitted worktree, including the held Building 2 study,
+not a clean-main island baseline. The existing September 4 accepted PNG is a
+real local image, not an LFS pointer, but is only historical comparison. The fresh
+ENE game view retains a broad dark rectangular field, shallow band and simple
+pylons; those differences from the dated reference merit independent visual
+review before any new study. No B3 implementation, acceptance, commit or export
+is authorized by this preparation.

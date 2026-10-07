@@ -34,6 +34,15 @@ Bring the first coherent actual source render to the separate visual reviewer be
 
 ## Validate the representation actually consumed
 
+The Building 2 first study repeated an older exact-cardinality guard pattern despite
+the current rule against snapshot-count assertions. Review rejected wall/roof vertex
+counts as validity gates; required indexed facade anchors, complete array strides,
+finite geometry and source/receiver identity are the relevant safety checks. During
+correction a model-session cap interrupted the edit after deleting the count constant,
+leaving a metadata reference undefined. Check removed-symbol references after an
+interruption and keep descriptive counts derived from actual data, rather than using
+them to freeze legitimate world changes.
+
 1439 mechanics002 falsely rejected133 retained roof0 contact rows because `int(shape_index) in allowed_landing_shapes` compared INT against JSON-loaded FLOAT IDs. Godot4.7.2 Array membership uses type-strict hash comparison. Validate that allowed IDs are finite/integral/in range, then normalize both operands to integer identity; keep the exact contact/source/support gate. A false summary flag is not proof of an absent contact—read the original row before diagnosing physics.
 
 1303 roof005 passed emission, edge and collision-congruence checks despite self-crossing rings and overlapping near-coplanar triangles. Validate final rings after cleanup/grid conversion, then check coverage, overlaps and intended bounds in actual emitted native coordinates. Matching authored triangles or closed edges alone does not establish a valid surface. Distinguish a deliberate height transition with closure from duplicate surface coverage; keep checks focused on the affected geometry and preserve original failures.

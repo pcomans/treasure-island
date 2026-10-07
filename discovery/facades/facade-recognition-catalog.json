@@ -796,13 +796,24 @@
   "schema_version": "ti.facade-recognition-catalog/plain-1",
   "units": [
     {
-      "acceptance_records": [],
+      "acceptance_records": [
+        {
+          "review_id": "building2-astra002-code-20261007",
+          "review_kind": "independent_code_review",
+          "status": "accept"
+        },
+        {
+          "review_id": "building2-astra002-whole-building-visual-20261007",
+          "review_kind": "independent_reference_recognition",
+          "status": "accept"
+        }
+      ],
       "anchor_source_key": "w24274434",
       "claim_status": {
         "as_built_fidelity": "unclaimed",
         "game_distinctive": "not_evaluated",
         "receiver_complete": "verified",
-        "reference_recognizable": "not_evaluated"
+        "reference_recognizable": "accepted"
       },
       "human_dependency_ids": [],
       "identity": {
