@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Guard Street View captures in an existing tools/browser session; never navigate."""
+"""Guard Street View captures; optionally reopen one actual resolved panorama."""
 import base64
 import json
 import os
@@ -23,9 +23,13 @@ def command(*args, script=None):
 
 
 def main():
-    if len(sys.argv) != 3 or not re.fullmatch(r"[a-zA-Z0-9_-]+", sys.argv[1]):
-        raise ValueError("usage: tools/browser capture SESSION /absolute/private/reference.png")
-    session, filename = sys.argv[1:]
+    args = sys.argv[1:]
+    recover = len(args) == 3 and args[-1] == "--recover-resolved"
+    if recover:
+        args = args[:-1]
+    if len(args) != 2 or not re.fullmatch(r"[a-zA-Z0-9_-]+", args[0]):
+        raise ValueError("usage: tools/browser capture SESSION /absolute/private/reference.png [--recover-resolved]")
+    session, filename = args
     output = Path(filename)
     project = Path(__file__).resolve().parent.parent
     if not output.is_absolute() or output.suffix.lower() != ".png":
@@ -43,7 +47,8 @@ def main():
     if repository.returncode == 0:
         raise ValueError("reference photographs must remain outside every Git checkout")
     failed = output.with_name(output.stem + ".failed.png")
-    if output.exists() or failed.exists() or failed.is_symlink():
+    recovery_failed = output.with_name(output.stem + ".recovery.failed.png")
+    if any(p.exists() or p.is_symlink() for p in (output, failed, recovery_failed)):
         raise ValueError("use fresh output paths; retained captures are never overwritten")
     if not os.environ.get("XDG_RUNTIME_DIR") or session not in command("session", "list")["sessions"]:
         raise ValueError("use the printed runtime prefix of an already live tools/browser session")
@@ -56,6 +61,7 @@ def main():
     reason = "unresolved viewer readiness"
     state = {}
     previous = None
+    recovered = False
     while True:
         state = evaluate("({url:location.href, text:document.body.innerText, ready:document.readyState})")
         text = state["text"]
@@ -66,9 +72,7 @@ def main():
         if re.search(r"captcha|unusual traffic|verify (?:that )?you are human", text, re.I):
             reason = "access challenge; stop without workaround"
             break
-        if "No Street View imagery available here" in text:
-            reason = "Maps explicitly reports no imagery for this requested view (not the whole area)"
-            break
+        no_imagery = "No Street View imagery available here" in text
         date = re.search(r"Image capture:\s*([A-Za-z]+\s+\d{4})", text)
         panorama = re.search(r"!1s([^!/?&]+)", state["url"])
         current = (state["url"], date.group(1) if date else None)
@@ -102,11 +106,32 @@ def main():
                     break
                 failed.rename(output)
                 print(f"CAPTURE READY (human target/side inspection still required): {output}")
+                if no_imagery:
+                    print("Conflicting Maps no-imagery text: inspect the saved dated panorama; do not infer absence.")
                 print(f"Image capture: {date.group(1)}\nResolved URL: {state['url']}")
                 return 0
             reason = "dated panorama UI present but screenshot viewer remains black/flat"
-            break
-        if time.monotonic() >= deadline:
+        expired = time.monotonic() >= deadline
+        if expired or failed.exists():
+            if no_imagery and not failed.exists():
+                reason = "Maps no-imagery text without verified rendered panorama; availability unresolved"
+            # Opt-in only: preserve the failed frame, then reopen the exact URL
+            # Maps resolved. Never invent a pano ID, change pose, or retry twice.
+            if recover and not recovered and panorama and re.match(r"/maps/@-?\d", url.path):
+                if not failed.exists():
+                    command("--session", session, "screenshot", str(failed))
+                if evaluate("location.href") != state["url"]:
+                    reason = "navigation changed before recovery; unresolved"
+                    break
+                print(f"Retained pre-recovery attempt: {failed}")
+                print(f"Reopening actual resolved panorama once: {state['url']}")
+                command("--session", session, "open", state["url"])
+                recovered = True
+                failed = recovery_failed
+                deadline = time.monotonic() + 30
+                previous = None
+                reason = "unresolved viewer readiness after resolved-panorama recovery"
+                continue
             break
         previous = current
         time.sleep(1)

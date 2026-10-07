@@ -25,22 +25,24 @@ version is the observed managed download, not a separately pinned dependency.
    changes. Rotate with the viewer controls to inspect the target.
 3. For Street View, use the printed runtime prefix with
    `tools/browser capture <session> /absolute/private/reference.png`.
-   This shared guard waits for a resolved panorama/date and checks the actual
-   screenshot's viewer pixels before publishing the requested PNG. It retains
-   rejected attempts as `reference.failed.png` and returns HOLD; use fresh paths.
-   Inspect successful originals for the actual target, side, occlusion and date:
-   the black/flat-image filter is conservative, not architectural validation.
-   Other Maps photographs still require direct pixel/date/source inspection.
-   A pano ID, HTTP200 or page-load completion alone is insufficient.
-4. If the viewer stays black, inspect readiness/network once. A full resolved
-   `/maps/@lat,lon,3a,.../data=...!1s<pano>...` URL recovered Building600 after a
-   coordinate/API link stayed black, even though metadata/tile returned HTTP200.
-   Use an already verified full locator or the actual place/blue-road UI within
-   the assigned navigation budget. Do not start a second session while the
-   current one owns the slot. A black image/empty pano ID is unresolved; only an
-   explicit Maps no-imagery message supports unavailability for that requested
-   view, never the whole side or area. Try that actual resolved URL once; do not invent
-   panorama metadata, loop on unchanged failures or substitute weaker imagery.
+   Default capture waits for stable panorama/date state and checks saved viewer
+   pixels without navigating. Rejected frames remain `reference.failed.png`;
+   always use fresh paths. Inspect actual target, side, occlusion and capture
+   date. Pano ID, HTTP200 and page-load completion alone are insufficient; the
+   black/flat filter is not architectural validation.
+4. If coordinate/API startup stays black, inspect readiness/network once.
+   Within the assigned navigation budget, explicitly add `--recover-resolved`
+   to allow ONE reopening of the exact full panorama URL Maps actually resolved.
+   The first failure is preserved; a second failed frame remains separately as
+   `reference.recovery.failed.png`. No pano/date/pose is invented and no second
+   session is opened. No usable resolved pano means HOLD; use supported place/
+   blue-road UI only within the assigned budget, without an unbounded retry loop.
+   No-imagery body text can conflict with useful dated pixels: inspect the saved
+   panorama manually, preserve usable failed originals and record their actual
+   side/date limits. Black frames or unverified text do not prove absence.
+   Access challenges stop without workaround. The modified helper recovered
+   historical May2011 Chapel pixels in one bounded native run; this is not a
+   guarantee for all Maps requests or a substitute for required current views.
 5. Close the named browser, then terminate the retained launcher handle and
    consume its terminal result before releasing the slot. The launcher also
    closes its browser and waits for its owned Weston on Ctrl-C/TERM. Retained
