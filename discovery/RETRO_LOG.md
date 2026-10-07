@@ -17227,3 +17227,81 @@ Coordinator closure: independent browser CODE HOLD exposed failed-image overwrit
 - Worked: Reviewed the complete three-path documentation delta from main at d53d17a with an empty index, preserving actual B2 pending capture, B3 source/scoped-mechanics PASS with whole visuals open, B1 canopy HOLD and Chapel side-reference gaps. Only LEARNINGS, BUILDING_2_STUDY and the ordinary RETRO are included in this local documentation commit.
 - Did not: These notes cannot close art, current all-side visuals or full-suite gates; the separate live B3 recovery has no delivered current verdict. No universal capacity cause or timing improvement is established.
 - Next: Keep the pending source author and retained review handles under their existing ownership; require their actual handoffs and independent gates before art integration. Preserve unrelated source/assets unstaged and reserve shared-note writes explicitly.
+
+### chapel_art — Museum005 finite canopy repair, 2026-10-07
+
+- Worked: preserved the005 source privately and replaced unrestricted offset miters with finite per-run rectangles plus bounded bevel corner wedges, unioned before top/underside triangulation and perimeter side emission. The same final footprint feeds visible/native roof geometry; canopy elevation, exact tower/support, source bottoms and protected regions remain unchanged. Existing polygon-clipping/earcut source preflight on actual source geometry produced one region/no holes, area122.8862148964m² with triangle-area residual2.76e-12 and minimum positive triangle5e-6m². Finite run40/43 leading edges now progress1.82397/2.33982m. Hero source whitespace passed044c65.
+- Did not: the original shallow-angle miter guard missed short-run reversal and folded native/visible quads. This repair has no executed Godot boolean/triangulation, capture, fit or acceptance evidence; the independent source preflight library is not a claim about Godot runtime semantics.
+- Next: independent narrow code recheck before any separately authorized render/mechanics. Preserve005 HOLD history; inspect corner closure and actual gameplay after runtime authorization. No B2/B3 source changes or engine work occurred in this round.
+
+### chapel_art — Chapel whole-exterior source/reference preparation, 2026-10-07
+
+- Worked: direct inspection of retained Sep2025 SSE/partialENE, Engeo2020 aerial and2016 front pixels plus the actual34-run receiver identifies WSW hall6–8 as a supported tall-window correction. Private all-sides-plan.txt records precise host groups, existing Chapel-family/PBR reuse and paired native recess/roof-boundary risks while preserving accepted SSE/belfry.
+- Did not: NNW27–28 and complete ENE/wing returns lack adequate retained exterior coverage; prior searches did not include live Maps/gallery inspection. Historical images cannot establish current window survival, exact dimensions or unseen blank walls. Legacy protected/neutral routing is an art-scope boundary, not whole-quality completion.
+- Next: attempt targeted real missing-side Maps/web evidence before inferring arrangements. Use the guarded capture workflow, no repeated front-only image; separate actual date/side/occlusion from capture failure. No source, engine, browser or new research ran in this planning round.
+
+### chapel_art — Museum canopy actual Godot compatibility correction, 2026-10-07
+
+- Worked: preserved the failing source and first actual diagnostic log. Headless19596 exit0/a1838b nevertheless asserted and is HOLD: Godot retained seven pieces with near-duplicate corner coordinates. Canopy-only repair computes pieces near a local origin, expands by2mm for positive clipping overlap, unions and contracts by2mm, retaining single-region/no-hole/triangulation assertions and paired visible/native emission. Second check89178 exit0/a5ef15 produced WORLD_READY without errors/assertions; global Godot/Weston scan empty4ead42, SOURCE/ENGINE released before narrative. Two checks used, no retry beyond budget.
+- Did not: external double-precision source union had falsely reassured us about actual Godot compatibility; global float coordinates and near-touching edges produced disconnected pieces. The first process exited0 and WORLD_READY despite assertion, so exit status alone was insufficient. Checks completed before a live PID sample was retained; terminal and empty global scans are the available process evidence, not invented PID receipts.
+- Next: fresh independent review of the actual compatibility patch, then separately authorized rendered and mechanical verification. Clean headless source load proves neither canopy art nor player fit. Preserve earlier failed B2 run as aggregate HOLD; no B2 retry or unrelated source change occurred here.
+
+## building2_integrate — shared source-error propagation patch, 2026-10-07
+
+- Worked: traced B2's apparent target PASS through the unrelated B1 assertion, builder result and world-ready contract. The frozen two-file patch latches native hard errors before readiness and adds a streamed wrapper exit-status backstop. Shell syntax/explicit whitespace passed;15 private fake-engine/fake-Weston cases covered both routing branches, clean/warning/hard-error outputs, preserved nonzero, TERM cleanup and stream failure (81816 terminal0/48b718).
+- Did not: Godot's zero exit and target mechanics did not establish a valid whole world. The actual shutdown line is one WARNING about seven Texture RIDs, not seven ERRORs; no genuine errors are suppressed. Official API/source inspection and mocks do not prove pinned Logger execution, GDScript parsing, safe negative-load ordering or a clean rendered run.
+- Next: independent SolHigh review and separately assigned native negative/clean validation must precede acceptance; require world failure before readiness/approaches/spray, retain the historical aggregate HOLD and original log. Source patch remains frozen; no real engine, art change or commit occurred in this round.
+
+## building2_integrate — source-error guard correction001, 2026-10-07
+
+- Worked: independent review isolated two concrete failure-path gaps. The outer loader now receives Variant, deregisters the Logger and checks its latch before normalizing a Dictionary; evidence completion remains inside the protected body. Wrapper grep status0/1/>1 now distinguishes hard diagnostics, clean output and scan failure while preserving native nonzero status.
+- Did not: the first patch could itself abort on an invalid body return before cleanup, and a failed grep could falsely leave success. Initial mocks did not cover successful output retention followed by failed scanning; source review correctly retained CODE HOLD.
+- Next: four added private failed-scan mocks passed across headless/render routing with native7 preservation (8039b2); shell syntax and explicit two-file whitespace passed (e7fe5a). No native body-abort, Logger callback or before-movement load proof ran. Keep the corrected patch frozen for independent recheck and separately authorized runtime validation; rejected sources and original failure remain retained.
+
+### approach_geometry_review — B2 all-sides-002 source CODE PASS, 2026-10-07
+
+- Worked: Complete donor/current comparison found coherent recursive0.30+0.50m NNW closure and continuous closed ENE chamfer geometry, using shared visible/native faces and exact canonical source ownership; original wall bottoms, roof boundaries and unchanged001 WSW/SSE/material evidence remain intact.
+- Did not: Capture and source-land samples do not establish actual stock approaches, support/REST, spray/Decal or suite results. Dark reveal/head marks and the molding belt remain separate visual questions;14 TextureRID warning causes are unknown. The later independently reported B2 mechanics aggregate HOLD from a B1 source assertion remains distinct from this source PASS.
+- Next: Reuse the bounded CODE PASS for separately assigned clean-world mechanics and whole-result dated-reference review, retaining stock safety and historical scope. Native face agreement is not appearance or movement acceptance.
+
+### approach_geometry_review — Building1 study005 local-frame canopy correction CODE PASS, 2026-10-07
+
+- Worked: Independent source CODE PASS closes the earlier run40/43 folded-canopy HOLD: finite source-run rectangles and bounded bevel wedges replace unrestricted miters; local-coordinate2mm expand/union/contract resolves the complete footprint before slab emission. One triangulation and its perimeter feed matching visible/native top, underside and side faces under the unchanged opaque nonspray roof identity.
+- Did not: This source review executed no Godot compatibility or movement check. Study005 pixels predate the repair; the separately reported author clean headless load is not canopy art, player fit or independent runtime proof by this reviewer.
+- Next: Reuse unchanged tower/support and protected source integration while keeping current fit/spray/stairs/full-suite and independent all-side reference visual gates separate. Preserve the earlier source HOLD and failed load rather than relabeling historical evidence.
+
+### approach_geometry_review — shared source-failure guard initial CODE HOLD, 2026-10-07
+
+- Worked: Complete loader/wrapper and staging/consumer review reused the retained mock matrix and exact severity evidence; the first-error Mutex collector and deferred ready publication address the original nested source assertion without changing stock mechanics or receiver gates.
+- Did not: The outer loader consumed an inferred Dictionary before logger cleanup/error handling, so an aborted body's invalid return could bypass world_failed; the wrapper also treated grep read/scan failure as clean no-match. Both were source-derived findings, not executed regression failures.
+- Next: Guard the body return as Variant and deregister before consuming it; distinguish log scan failure from no-match. Preserve the original source-error-affected B2 aggregate HOLD and require separately authorized pinned negative/clean proof. The shutdown line is one WARNING about seven Texture RIDs, not seven ERRORs.
+
+### approach_geometry_review — shared source-failure guard correction001 CODE PASS, 2026-10-07
+
+- Worked: Narrow source recheck confirms the Variant body-return boundary deregisters Logger and reads the sticky latch before report consumption; evidence finishing stays guarded, and invalid/aborted reports retain world_failed/startup-disabled behavior.
+- Did not: The first patch's two failure-path gaps were not covered by the initial mocks. Both source findings are now closed; four retained successful-tee/failed-scan mocks supplement the reused routing/severity/sink evidence without a redundant rerun, but supply no native Logger or body-abort proof.
+- Next: Keep source CODE PASS separate from authorized pinned Logger/body-abort and rendered negative/clean-world validation. The wrapper now separates grep match, clean no-match and scan failure while preserving native nonzero; preserve the failed B2 run and exact warning severity.
+
+### approach_geometry_review — Chapel2016 photographer lead closure, 2026-10-07
+
+- Worked: One account-free Flickr page and one unchanged published1024x768 image yielded actual51CaliforniaAve/SSE Chapel pixels, resolving the photographer lead and clarifying timber door, sidelight, porch and entry-step construction beyond distant Sep2025 references. The page reports taken2016-12-18 and uploaded2016-12-19; this is a published rendition, not a claimed full-resolution camera original.
+- Did not: This is front-only coverage and supplies no new rear/NNW/full long-side/wing proof or contemporary-condition confirmation. The belfry is cropped and the right frontage partly tree/shadow occluded.
+- Next: Keep front-detail observations distinct from side completeness/current-condition inference; retain earlier WSW2020 evidence and gaps, and separately obtain authorized remaining-side evidence before claiming observed architecture. No art, CODE, runtime or visual acceptance follows from this lead closure; the already-recorded four-query/four-page audit is not repeated.
+
+### chapel_art — Chapel guarded missing-side reference pass, 2026-10-07
+
+- Worked: one headed session/three distinct viewpoints yielded directly inspected Jan2023 WSW hall-window/wing/tower evidence. Retained NNW failed screenshot also contains useful partial rear/tower pixels with Jun2026 capture label, distinct Sep2026 contributor panel. Two useful image originals stay private; exact paths/locators/limits recorded in Chapel README. Browser53926 deliberate owned-wrapper closure gave actual143/5c4d05, owned/global browser/engine absence9fbb05 and explicit release before narrative.
+- Did not: NNW guard HOLD followed a DOM no-imagery message despite real target pixels in its retained screenshot; ENE guard HOLD was genuinely black/loading with unresolved date/readiness. Neither proves global missing-side imagery absence. Fences/vehicles/cropping still obscure lower/full wing details.
+- Next: Root judges actual reference sufficiency with automated status kept separate; preserve failed originals and dates without promoting capture checks into side coverage or acceptance. No source, Godot, accounts or new assets in this research round.
+
+## building2_integrate — B2 current002 status reconciliation, 2026-10-07
+
+- Worked: reconciled the ordinary task note against saved capture, current CODE, aggregate mechanical HOLD, canopy correction and harness recheck reports. Actual11 originals and local four approaches/five REST/Decal observations are retained without promoting a world containing a source assertion.
+- Did not: printed PASS/native exit0 were misleading after the B1 load assertion. Subsequent clean headless compatibility and source CODE PASS do not retroactively repair that B2 run or establish native harness validation; current whole visual review has no final verdict yet.
+- Next: retain historical recognition and dated-side/inference limits, then close separately assigned native harness/clean-world mechanics, independent all-side visual and full-suite gates. This round changed only the ordinary B2 note and my own RETRO; no engine, art, catalog or commit action.
+
+## building2_integrate — current status documentation integration, 2026-10-07
+
+- Worked: inspected HEADa7b9fcb, empty index and the complete approved three-document delta, preserving actual B2 aggregate HOLD, independent source-only corrections, current visual/native-validation limits and other actors' completed own notes. Existing active commit hook is Git LFS post-commit only; no engine hook or bypass is involved.
+- Did not: this documentation commit cannot validate the unaccepted B1/B2/B3 art or pending loader/runtime checks. Configured author identity is absent in this checkout, so the approved devcontainer bot identity is supplied only for this commit rather than changing configuration.
+- Next: keep every art/resource and harness source path unstaged, retain pending reviewers' drafts until their own writer windows, and require current independent/runtime/suite gates before building integration. No engine or push is part of this round.

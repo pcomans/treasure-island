@@ -416,3 +416,8 @@ B3 all-sides001 fit11333 passed four stock approaches but spray setup rejected â
 ## Subdivide the existing sampled boundary when cutting new facade bays
 
 B3 all-sides002 CODE review found an approximately9.5cm run38 wall/roof gap: new recess cuts resampled an analytic height function while the unchanged roof retained its earlier tessellated boundary. Pass the original per-run wall-top samples into the cut emitter and interpolate within their existing intervals, preserving endpoints and knots. The same independent reviewer passed that narrow repair; later current fit/spray passed its sampled native checks, not exhaustive seam coverage or whole-building visual quality. Before changing subdivisions, compare the resulting shared boundary with its actual neighboring emitted geometry rather than assuming the original formula reproduces it.
+
+
+### Finite polygon unions must be checked in the actual geometry runtime
+
+Museum canopy source preflight with polygon-clipping/earcut produced one region, but actual Godot Geometry2D union retained seven near-touching pieces and asserted; global-coordinate results contained corner differences around0.0001m. The precise library/rounding contribution was not isolated. Local-coordinate construction with bounded2mm expand/union/contract resolved the actual load while retaining topology assertions. Prefer local coordinates for such clipping, explicitly bound any tolerance, and check actual Godot semantics before trusting external topology calculations. Read assertion/error output as well as exit status: the failing headless run exited0 and printed WORLD_READY. The successful load is not art or movement proof.
